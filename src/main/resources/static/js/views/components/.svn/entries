@@ -1,0 +1,70 @@
+10
+
+dir
+221
+https://192.168.10.3/public/histramweb/sprintmysql/facturaweb-web/src/main/webapp/scripts/views/components
+https://192.168.10.3/public/histramweb
+
+
+
+2018-03-16T16:18:48.506575Z
+221
+lhernandez
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+e4d97c5b-4a8c-4fa1-aa65-f35e9ffb3918
+
+
+
+
+
+
+0
+
+abono
+dir
+
+categorias
+dir
+
+
+
+add
+
+clientes
+dir
+
+cuentaCobrar
+dir
+
+empresas
+dir
+
+marcas
+dir
+
+
+
+add
+
+sucursales
+dir
+
+usuarios
+dir
+
+vendedores
+dir
+

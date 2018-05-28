@@ -1,0 +1,221 @@
+package com.factura.FacturaElectronica.modelo;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.factura.FacturaElectronica.Utils.Constantes;
+
+/**
+ * Modelo de los clientes de una empresa Cliente.
+ * @author jose.
+ * @since 19 abr. 2018
+ */
+@Entity
+@Table(name = "clientes")
+public class Cliente implements Serializable {
+
+	private static final long	serialVersionUID	= 3716590145404048451L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Integer						id;
+
+	@Column(name = "nombre_completo")
+	private String						nombreCompleto;
+
+	@Column(name = "cedula")
+	private String						cedula;
+
+	@Column(name = "provincia")
+	private String						provincia;
+
+	@Column(name = "celular")
+	private String						celular;
+
+	@Column(name = "telefono")
+	private String						telefono;
+
+	@Column(name = "otraSena")
+	private String						otraSena;
+
+	@Column(name = "correo_electronico")
+	private String						correoElectronico;
+
+	@Column(name = "descuento")
+	private Double							descuento;
+
+	@Column(name = "estado")
+	private String						estado;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
+	@Column(name = "created_at")
+	private Date							created_at;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
+	@Column(name = "updated_at")
+	private Date							updated_at;
+
+	@ManyToOne
+	@JoinColumn(name = "empresa_id")
+	private Empresa					empresa;
+
+	@ManyToOne
+	@JoinColumn(name = "usuario_id")
+	private Usuario						usuario;
+
+	
+	public Cliente(Integer id, String nombreCompleto, String cedula, String provincia, String celular, String telefono, String otraSena, String correoElectronico, Double descuento, String estado, Date created_at, Date updated_at, Empresa empresa, Usuario usuario) {
+		super();
+		this.id = id;
+		this.nombreCompleto = nombreCompleto;
+		this.cedula = cedula;
+		this.provincia = provincia;
+		this.celular = celular;
+		this.telefono = telefono;
+		this.otraSena = otraSena;
+		this.correoElectronico = correoElectronico;
+		this.descuento = descuento;
+		this.estado = estado;
+		this.created_at = created_at;
+		this.updated_at = updated_at;
+		this.empresa = empresa;
+		this.usuario = usuario;
+	}
+
+	public Cliente() {
+		super();
+		this.estado = Constantes.ESTADO_ACTIVO;
+		this.created_at = new Date();
+		this.updated_at = new Date();
+
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getNombreCompleto() {
+		return nombreCompleto;
+	}
+
+	public void setNombreCompleto(String nombreCompleto) {
+		this.nombreCompleto = nombreCompleto;
+	}
+
+	public String getCedula() {
+		return cedula;
+	}
+
+	public void setCedula(String cedula) {
+		this.cedula = cedula;
+	}
+
+	public String getProvincia() {
+		return provincia;
+	}
+
+	public void setProvincia(String provincia) {
+		this.provincia = provincia;
+	}
+
+	public String getCelular() {
+		return celular;
+	}
+
+	public void setCelular(String celular) {
+		this.celular = celular;
+	}
+
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
+
+	public String getOtraSena() {
+		return otraSena;
+	}
+
+	public void setOtraSena(String otraSena) {
+		this.otraSena = otraSena;
+	}
+
+	public String getCorreoElectronico() {
+		return correoElectronico;
+	}
+
+	public void setCorreoElectronico(String correoElectronico) {
+		this.correoElectronico = correoElectronico;
+	}
+
+	public Double getDescuento() {
+		return descuento;
+	}
+
+	public void setDescuento(Double descuento) {
+		this.descuento = descuento;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public Date getCreated_at() {
+		return created_at;
+	}
+
+	public void setCreated_at(Date created_at) {
+		this.created_at = created_at;
+	}
+
+	public Date getUpdated_at() {
+		return updated_at;
+	}
+
+	public void setUpdated_at(Date updated_at) {
+		this.updated_at = updated_at;
+	}
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
+}
