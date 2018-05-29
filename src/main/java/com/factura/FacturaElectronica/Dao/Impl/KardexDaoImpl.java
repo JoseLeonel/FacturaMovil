@@ -63,7 +63,7 @@ public class KardexDaoImpl implements KardexDao {
 	 * Registrar una entrada
 	 * @see com.factura.FacturaElectronica.Dao.KardexDao#entrada(com.factura.FacturaElectronica.modelo.Inventario, java.lang.Double, java.lang.String, java.lang.String, java.lang.String, java.lang.String, com.factura.FacturaElectronica.modelo.Usuario)
 	 */
-	@Override
+	@Override  
 	public void entrada(Inventario inventario, Double cantidad, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
 		Kardex kardex = new Kardex();
 		kardex.setCantidadSolicitada(cantidad);

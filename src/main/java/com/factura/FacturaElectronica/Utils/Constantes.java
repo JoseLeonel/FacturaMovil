@@ -15,6 +15,8 @@ public class Constantes {
 	// Contabiliza el inventario
 	public static final String					CONTABLE_SI														= "Si";
 	public static final String					CONTABLE_NO														= "No";
+	public static final Double					INVENTARIO_MINIMO														= 5d;
+	public static final Double					INVENTARIO_MAXIMO														= 10d;
 	// Cuenta por cobrar
 	public static final String					CUENTA_POR_COBRAR_ESTADO_PENDIENTE		= "Pendiente";
 	public static final String					CUENTA_POR_COBRAR_ESTADO_CERRADO			= "Cerrada";

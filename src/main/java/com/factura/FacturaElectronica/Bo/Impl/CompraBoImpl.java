@@ -77,6 +77,7 @@ public class CompraBoImpl implements CompraBo {
 			compra.setTotalImpuesto(compraCommand.getTotalImpuesto());
 			compra.setUsuarioCreacion(compraCommand.getUsuarioCreacion());
 			compra.setTipoDocumento(compraCommand.getTipoDocumento());
+			compra.setProveedor(compraCommand.getProveedor());
 
 			JSONObject json = null;
 			try {
@@ -90,18 +91,17 @@ public class CompraBoImpl implements CompraBo {
 			if (jsonArrayDetalleCompra != null) {
 				for (int i = 0; i < jsonArrayDetalleCompra.size(); i++) {
 					DetalleCompraCommand detalleCompraCommand = gson.fromJson(jsonArrayDetalleCompra.get(i).toString(), DetalleCompraCommand.class);
-					Articulo articulo  = articuloDao.buscar(detalleCompraCommand.getArticulo_id());
+					Articulo articulo = articuloDao.buscar(detalleCompraCommand.getArticulo_id());
 					detalleCompraCommand.setArticulo(articulo);
-					
+
 					DetalleCompra detalleCompra = new DetalleCompra(detalleCompraCommand);
-					
+
 					compra.addDetalleCompra(detalleCompra);
-					
+
 					Inventario inventario = inventarioDao.findByArticuloAndEstado(detalleCompraCommand.getArticulo(), Constantes.ESTADO_ACTIVO);
-					
-					aplicarInventario(compra, inventario,detalleCompra,articulo);
-					
-					
+
+					aplicarInventario(compra, inventario, detalleCompra, articulo);
+
 				}
 			}
 
@@ -120,33 +120,53 @@ public class CompraBoImpl implements CompraBo {
 	 * @param compra
 	 * @param inventario
 	 */
-	@Override
-	public void aplicarInventario(Compra compra, Inventario inventario,DetalleCompra detalleCompra,Articulo articulo) {
+	public void aplicarInventario(Compra compra, Inventario inventario, DetalleCompra detalleCompra, Articulo articulo) {
 		if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
-				kardexDao.entrada(inventario, detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getProveedor().getNombreCompleto(), compra.getUsuarioCreacion());
-				articulo.setCosto(articuloDao.costoPromedio(articulo.getCosto(), detalleCompra.getCosto(),inventario.getCantidad(), detalleCompra.getCantidad()));
-				articulo.setGananciaPrecioPublico(articuloDao.porcentanjeDeGanancia(articulo.getCosto(),articulo.getIva(), articulo.getPrecioPublico()));
-				articulo.setUpdated_at(new Date());
-				articulo.setUsuario(compra.getUsuarioCreacion());
-				articuloDao.modificar(articulo);
+			//No se encuentra en el inventario
+			if (inventario == null) {
+				inventario = new Inventario();
+				inventario.setArticulo(articulo);
+				inventario.setCantidad(Constantes.ZEROS_DOUBLE);
+				inventario.setMinimo(Constantes.INVENTARIO_MINIMO);
+				inventario.setMaximo(Constantes.INVENTARIO_MAXIMO);
+				inventario.setCreated_at(new Date());
+				inventario.setUpdated_at(new Date());
+				inventario.setUsuario(compra.getUsuarioCreacion());
+				inventario.setEstado(Constantes.ESTADO_ACTIVO);
+				inventarioDao.agregar(inventario);
+
+			}
+
+			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getProveedor().getNombreCompleto();
+			kardexDao.entrada(inventario, detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
+			articulo.setCosto(articuloDao.costoPromedio(articulo.getCosto(), detalleCompra.getCosto(), inventario.getCantidad(), detalleCompra.getCantidad()));
+			articulo.setGananciaPrecioPublico(articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getIva(), articulo.getPrecioPublico()));
+			articulo.setUpdated_at(new Date());
+			articulo.setUsuario(compra.getUsuarioCreacion());
+			articuloDao.modificar(articulo);
+			inventario.setCantidad(inventario.getCantidad() + detalleCompra.getCantidad());
+			inventario.setUsuario(compra.getUsuarioCreacion());
+			inventario.setUpdated_at(new Date());
+			inventarioDao.modificar(inventario);
+
 		}
 
 	}
-	
-/**
- * Modificar una compra
- * @see com.factura.FacturaElectronica.Bo.CompraBo#modificar(com.factura.FacturaElectronica.modelo.Compra)
- */
-@Override
+
+	/**
+	 * Modificar una compra
+	 * @see com.factura.FacturaElectronica.Bo.CompraBo#modificar(com.factura.FacturaElectronica.modelo.Compra)
+	 */
+	@Override
 	public void modificar(Compra compra) {
 		compraDao.modificar(compra);
 	}
 
-/**
- * Eliminar una compra
- * @see com.factura.FacturaElectronica.Bo.CompraBo#eliminar(com.factura.FacturaElectronica.modelo.Compra)
- */
-@Override
+	/**
+	 * Eliminar una compra
+	 * @see com.factura.FacturaElectronica.Bo.CompraBo#eliminar(com.factura.FacturaElectronica.modelo.Compra)
+	 */
+	@Override
 	public void eliminar(Compra compra) {
 		compraDao.eliminar(compra);
 	}
