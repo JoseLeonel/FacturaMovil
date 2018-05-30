@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.factura.FacturaElectronica.Bo.ArticuloBo;
 import com.factura.FacturaElectronica.Dao.ArticuloDao;
-import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.modelo.Articulo;
 import com.factura.FacturaElectronica.modelo.Empresa;
 

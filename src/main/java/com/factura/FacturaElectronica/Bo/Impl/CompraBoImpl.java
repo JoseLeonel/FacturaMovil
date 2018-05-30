@@ -18,6 +18,7 @@ import com.factura.FacturaElectronica.Dao.CompraDao;
 import com.factura.FacturaElectronica.Dao.InventarioDao;
 import com.factura.FacturaElectronica.Dao.KardexDao;
 import com.factura.FacturaElectronica.Utils.Constantes;
+import com.factura.FacturaElectronica.Utils.Utils;
 import com.factura.FacturaElectronica.modelo.Articulo;
 import com.factura.FacturaElectronica.modelo.Compra;
 import com.factura.FacturaElectronica.modelo.DetalleCompra;
@@ -68,8 +69,8 @@ public class CompraBoImpl implements CompraBo {
 			compra.setConsecutivo(compraCommand.getConsecutivo());
 			compra.setEmpresa(compraCommand.getEmpresa());
 			compra.setEstado(compraCommand.getEstado());
-			compra.setFechaCompra(compraCommand.getFechaCompra());
-			compra.setFechaCredito(compraCommand.getFechaCredito());
+			compra.setFechaCompra(Utils.pasarADate(compraCommand.getFechaCompra(),"yyyy-MM-dd"));
+			compra.setFechaCredito(compraCommand.getFechaCredito() == Constantes.EMPTY?null: Utils.pasarADate(compraCommand.getFechaCompra(),"yyyy-MM-dd"));
 			compra.setFormaPago(compraCommand.getFormaPago());
 			compra.setNota(compraCommand.getNota());
 			compra.setTotalCompra(compraCommand.getTotalCompra());

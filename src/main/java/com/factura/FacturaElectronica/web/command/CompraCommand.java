@@ -2,6 +2,11 @@ package com.factura.FacturaElectronica.web.command;
 
 import java.util.Date;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Proveedor;
 import com.factura.FacturaElectronica.modelo.Usuario;
@@ -10,10 +15,10 @@ public class CompraCommand {
 
 	private String		consecutivo;
 
-	private Date			fechaCredito;
+	private String			fechaCredito;
 
 	
-	private Date			fechaCompra;
+	private String			fechaCompra;
 
 	private Integer		tipoDocumento;
 
@@ -39,23 +44,7 @@ public class CompraCommand {
 	
 	
 	
-	public CompraCommand(String consecutivo, Date fechaCredito, Date fechaCompra, Integer tipoDocumento, Integer formaPago, Double totalImpuesto, Double totalDescuento, Double totalCompra, String nota, Integer estado, Proveedor proveedor, String detalleCompra,Empresa empresa, Usuario usuarioCreacion) {
-		super();
-		this.consecutivo = consecutivo;
-		this.fechaCredito = fechaCredito == null?new Date():fechaCredito;
-		this.fechaCompra = fechaCompra;
-		this.tipoDocumento = tipoDocumento;
-		this.formaPago = formaPago;
-		this.totalImpuesto = totalImpuesto;
-		this.totalDescuento = totalDescuento;
-		this.totalCompra = totalCompra;
-		this.nota = nota;
-		this.estado = estado;
-		this.proveedor = proveedor;
-		this.detalleCompra = detalleCompra;
-		this.empresa = empresa;
-		this.usuarioCreacion = usuarioCreacion;
-	}
+	
 
 	public CompraCommand() {
 		super();
@@ -70,19 +59,25 @@ public class CompraCommand {
 		this.consecutivo = consecutivo;
 	}
 
-	public Date getFechaCredito() {
+	
+
+	
+	public String getFechaCredito() {
 		return fechaCredito;
 	}
 
-	public void setFechaCredito(Date fechaCredito) {
+	
+	public void setFechaCredito(String fechaCredito) {
 		this.fechaCredito = fechaCredito;
 	}
 
-	public Date getFechaCompra() {
+	
+	public String getFechaCompra() {
 		return fechaCompra;
 	}
 
-	public void setFechaCompra(Date fechaCompra) {
+	
+	public void setFechaCompra(String fechaCompra) {
 		this.fechaCompra = fechaCompra;
 	}
 

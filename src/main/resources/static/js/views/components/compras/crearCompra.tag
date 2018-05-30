@@ -54,7 +54,7 @@
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div  class="form-group">
                                         <label>{$.i18n.prop("compra.fecha.compra")}</label> 
-                                        <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
+                                        <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
                                             <input type="text" class="form-control" id="fechaCompra" name = "fechaCompra" value="{compra.fechaCompra}" >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
@@ -69,7 +69,7 @@
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div show = {!mostrarCamposIngresoContado || compra.fechaCredito} class="form-group has-success">
                                         <label >{$.i18n.prop("compra.fecha.credito")}</label> 
-                                        <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="dd/mm/yyyy">
+                                        <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
                                             <input type="text" class="form-control" id="fechaCredito" value="{compra.fechaCredito}" >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
@@ -122,8 +122,7 @@
              <div class="box-header with-border">
                  <h3 class="box-title">Modulo para Realizar Compras al Inventario {compra.id>0?' Id#:'+compra.id:'' }</h3>
                   <div class="box-tools pull-right">
-                    
-                    <a href="#" title="Regresar al Listado"> <span class="label label-primary">ir al Listado</span></a>
+                    <a href="#"    onclick = {__Limpiar} title="Limpiar Pantalla"> <span class="label label-primary">Limpiar</span></a>
                   </div>
              </div>
             <div  class="contenedor-compra " >
@@ -133,7 +132,7 @@
                                 <input onkeypress={__addProductToDetail}  id="producto" class="form-control" type="text" placeholder="XXXXXXXXXXX" />
                             </div>
                             <div class="col-md-2">
-                                <button   onclick = {__ListaDeProductos} class="btn btn-primary form-control" id="btn-facturar" >
+                                <button    onclick = {__ListaDeProductos} class="btn btn-primary form-control" id="btn-facturar" >
                                     <i class="glyphicon glyphicon-plus"></i>Buscar
                                 </button>
                             </div>
@@ -141,15 +140,15 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th style="width:40px;">                                               </th>
+                            <th style="width:5%;">                                               </th>
                             <th>{$.i18n.prop("compra.linea.detalle.linea")}                        </th>
                             <th>{$.i18n.prop("compra.linea.detalle.codigo")}                       </th>
-                            <th>{$.i18n.prop("compra.linea.detalle.descripcion")}                  </th>
-                            <th style="width:10%;">{$.i18n.prop("compra.linea.detalle.cantidad")}  </th>
-                            <th style="width:10%;">{$.i18n.prop("compra.linea.detalle.costo")}     </th>
-                            <th style="width:10%;">{$.i18n.prop("compra.linea.detalle.descuento")} </th>
-                            <th style="width:10%;">{$.i18n.prop("compra.linea.detalle.impuesto")}  </th>
-                            <th style="width:10%;">{$.i18n.prop("compra.linea.detalle.subTotal")}  </th>
+                            <th style="width:20%;">{$.i18n.prop("compra.linea.detalle.descripcion")}                  </th>
+                            <th >{$.i18n.prop("compra.linea.detalle.cantidad")}  </th>
+                            <th >{$.i18n.prop("compra.linea.detalle.costo")}     </th>
+                            <th >{$.i18n.prop("compra.linea.detalle.descuento")} </th>
+                            <th >{$.i18n.prop("compra.linea.detalle.impuesto")}  </th>
+                            <th >{$.i18n.prop("compra.linea.detalle.subTotal")}  </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -194,6 +193,7 @@
                                                 <div id="pagarTitulo">{$.i18n.prop("compra.total")}</div>
                                             </td>
                                             <td width="70%" id="">
+                                            
                                                 <div id="">
                                                     <span class="label label-info textShadow" id="total-show">₡ {compra.totalCompra}</span>
                                                 </div>
@@ -205,8 +205,8 @@
                         </article>
                     </aside>
                     <section   class="lista-compras-espera">
-                        <div id="botones"  each={compras_espera}  onclick={__CargarCompraEspera}>
-                            <a href="#" class="compras-espera" title="proveedor:{nombre}-nota:{nota}">C# {id}</a>
+                        <div id="botones"  each={compras_espera.data}  onclick={__CargarCompraEspera}>
+                            <a href="#" class="compras-espera"  title="{proveedor !=null?proveedor.nombreCompleto:""}">C# {id}</a>
                         </div>    
                      </section >
 
@@ -441,7 +441,7 @@
     self.compra                = {
         consecutivo:"",
         fechaCredito    : null,
-        fechaCompra     : new Date(),
+        fechaCompra     : null,
         id : 0,
         totalImpuesto: 0,
         totalCompra:0,
@@ -459,7 +459,7 @@
     self.proveedores           = {data:[]}
     self.detalleCompra         ={data:[]}
     self.proveedor             = {};
-    self.compras_espera         = []  
+    self.compras_espera         = {data:[]}  
     self.informacion_tabla             = []
     self.informacion_tabla_articulo    = []
     self.informacion_tabla_proveedores = []
@@ -474,7 +474,7 @@
         __InicializarTabla('.tableListaProveedor')
         __InicializarTabla('.tableListaInventario')
         agregarInputsCombos_Articulo()
-      //  __ListaComprasEnEspera()
+          __ListaComprasEnEspera()
         __comboFormaPagos()
         __ComboTipoDocumentos()
         __ComboEstados()
@@ -515,12 +515,8 @@ var reglasDeValidacionCompra = function() {
 *  Buscar la Compra Pendiente en espera
 **/
 __CargarCompraEspera(e){
-    self.mensajesBackEnd = []
-    self.error = false
-    self.update()
-   __CompraEnEspera(e.item.id)
+   __CompraEnEspera(e.item)
 }
-
 /**
 ** Se aplica o se crea una compra cargada en la pantalla
 **/
@@ -555,8 +551,13 @@ __AplicarYCrearCompra(){
             }
         });
     }
-   
-    
+}
+/**
+* Limpiar Pantalla
+**/
+__Limpiar(){
+
+    __Init()
 }
 /**
 *  Inicializar las variables de trabajos
@@ -570,7 +571,7 @@ function __Init(){
     self.compra                = {
         consecutivo:"",
         fechaCredito    : null,
-        fechaCompra     : new Date(),
+        fechaCompra     : null,
         id : 0,
         totalImpuesto: 0,
         totalCompra:0,
@@ -581,7 +582,6 @@ function __Init(){
         subTotal:0,  
         totalCompra:0,
         nota:""
-        
     }                  
     self.item                  = null;
     self.articulo              = null;
@@ -602,67 +602,104 @@ function __Init(){
 /**
 *  Compra en espera ,proveedor y sus  detalles desde back end
 **/
-function __CompraEnEspera(idCompra){
+function __CompraEnEspera(compra){
      __Init()
-    self.mensajesBackEnd = []
-    self.error = false
     self.detail         = []
     self.proveedor      = {}         
     self.update()
-    var parametros = {idCompra:idCompra}
     $.ajax({
-        url: baseUrl("compras/getCompraEnEspera"),
-        headers:{'X-CSRF-TOKEN':_token()},
+        url: "MostrarCompraEsperaAjax",
         datatype: "json",
-        method:"GET",
-        data: parametros,
-        success: function (resultado) {
-           console.log(resultado)
-           cargarDetallesCompraEnEspera(resultado.compra)
-           
+        data: compra,
+        method:"POST",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                       self.compra = modeloTabla
+                       self.compra.fechaCompra = __displayDate_detail(self.compra.fechaCompra)
+                       self.compra.fechaCredito = self.compra.fechaCredito !=null?__displayDate_detail(self.compra.fechaCredito):null
+                       self.proveedor = modeloTabla.proveedor
+                       self.update()
+                    });
+                }
+                cargarDetallesCompraEnEspera()
+            }
         },
         error: function (xhr, status) {
-            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+            
         }
     });
 }
+/** 
+*Formato de la fecha con hora
+**/
+function __displayDate_detail(fecha) {
+    var dateTime = new Date(fecha);
+    return moment(dateTime).format('YYYY-MM-DD ');
+}
+
 /**
 *  Cargar detalles Compra Espera
 **/
-function cargarDetallesCompraEnEspera(compra){
-    self.compra.id              = compra.id
-    self.compra.estado          = compra.estado
-    self.compra.tipoDocumento   = compra.tipoDocumento
-    self.compra.formaPago        = compra.formaPago
-    self.compra.nota            = compra.nota
-    self.compra.facturaCompra   = compra.facturaCompra
-    self.compra.fechaCredito    = compra.fechaCredito
-    self.compra.fechaCompra     = compra.fechaCompra
-    self.compra.subTotal        = compra.subtotal
-    self.compra.total           = compra.total
-    self.compra.totalTransporte = compra.totalTransporte  
-    self.compra.otrosGastos     = compra.otrosGastos  
-    self.compra.gastosEnvio     = compra.gastosEnvio  
-    self.compra.totalDescuento  = compra.totalDescuento  
-    self.proveedor              = compra.proveedor
-    compra.detalle_compras.forEach(function(e){
-        self.detail.push({
-            inventario_id   : e.inventario.id,
-            descripcion     : e.inventario.articulo.descripcion,
-            existencia      : e.inventario.cantidad,
-            cantidad        : __valorNumerico(e.cantidad),
-            precio          : __valorNumerico(e.precio) ,
-            costo           : __valorNumerico(e.costo) ,
-            subTotal        : parseFloat(e.costo * e.cantidad)
-        });
+function cargarDetallesCompraEnEspera(){
+    self.detail = []
+    self.update()
     
+    self.compra.detalleCompras.forEach(function(e){
+        self.detail.push({
+            linea           : e.numeroLinea,
+            articulo_id     : e.articulo.id,
+            codigo          : e.articulo.codigo,
+            descripcion     : e.articulo.descripcion,
+            cantidad        : parseFloat(e.cantidad),
+            costo           : parseFloat(e.costo),
+            impuesto        : e.impuesto,
+            descuento       : e.descuento,
+            subTotal        : parseFloat(e.costo * e.cantidad)
+            
+        });
     })
     self.update()
      __calculate(); 
-
 }
 /**
-*  Crear Compra 
+*   agregar Articulos nuevos en el detalle de la Compra
+**/
+function __nuevoArticuloAlDetalle(cantidad){
+    if(self.articulo.descripcion == null){
+        return;
+    }
+    if(self.articulo.descripcion == ""){
+        return;
+    }
+    self.descuento      = 0;
+    self.detail.push({
+       linea           : 0,
+       articulo_id     : self.articulo.id,
+       codigo          : self.articulo.codigo,
+       descripcion     : self.articulo.descripcion,
+       cantidad        : parseFloat(cantidad),
+       costo           : parseFloat(self.articulo.costo),
+       impuesto        : 0,
+       descuento       : 0,
+       subTotal        : parseFloat(self.articulo.costo * cantidad)
+    });
+    var cont = 0;
+    self.detail.forEach(function(elemen){
+            elemen.linea = cont + 1
+            cont = elemen.linea
+        }
+    )
+    self.update()
+}
+/**
+*  Crear Compra nueva
 **/
 function crearCompra(){
     self.detalleCompra.data =self.detail
@@ -682,16 +719,13 @@ function crearCompra(){
         fechaCredito:formaPago.value == 2?fechaCredito.value:new Date(),
         fechaCompra:fechaCompra.value,
         detalleCompra :JSONDetalles
-
      }
-     console.log(informacion)
     $.ajax({
         type : "POST",
         dataType : "json",
         data : informacion,
         url : "CrearCompraAjax.do",
         success : function(data) {
-            console.log(data);
             if (data.status != 200) {
                	serverMessageJsonClase(data);
                 if (data.message != null && data.message.length > 0) {
@@ -707,9 +741,7 @@ function crearCompra(){
 	                confirmButtonText: 'Aceptar',
                 })
                 __Init()
-                //Lista de compras en espera
                 __ListaComprasEnEspera()
-
             }
         },
         error : function(xhr, status) {
@@ -718,34 +750,26 @@ function crearCompra(){
         }
     });
 }
-
 /**
-*  Lista de las compras pendientes pendiente aplicadas hoy por el usuario en la sucursal
+*  Lista de las compras pendientes pendiente por el usuario
 **/
 function __ListaComprasEnEspera(){
-    return
     $.ajax({
-        url: baseUrl("compras/getListaComprasPorUsuarioYSucursalYEspera"),
+        url: 'ListarComprasEsperaActivasAjax',
         datatype: "json",
-        headers:{'X-CSRF-TOKEN':_token()},
         method:"GET",
         success: function (result) {
-           
-            if(result.data.length > 0){
-               self.compras_espera =  result.data;  
+            if(result.aaData.length > 0){
+               self.compras_espera.data =  result.aaData;  
                self.update(); 
             }
-              
- 
-           
-           console.log(result);
         },
         error: function (xhr, status) {
             console.log(xhr);
+            mensajeErrorServidor(xhr, status);
         }
-    });
+    });    
 }
-
 /**
 *  Obtiene el valor de lo digitado en el campo de Impuesto
 **/
@@ -759,7 +783,6 @@ __TotalDeImpuesto(e){
 **/
 __TotalDeDescuento(e){
     self.compra.totalDescuento = __valorNumerico(e.target.value) 
-    
     self.update()
     __calculate()
 }
@@ -773,7 +796,6 @@ _AtrasComprasFinal(){
    self.error = false
    self.update()
 }
-
 /**
 *    Muesta el campo de la fecha de credito
 **/
@@ -827,7 +849,6 @@ function __ListaDeArticulosPorEmpresa(){
         datatype: "json",
         method:"GET",
         success: function (result) {
-            console.log(result)
             if(result.aaData.length > 0){
                 _informacionData_Articulo()
                 self.articulos.data           = result.aaData
@@ -854,8 +875,7 @@ _EscogerProveedores(){
 *  Lista de los Proveedores
 **/
 function __ListaDeProveedores(){
-    
- $.ajax({
+    $.ajax({
         url: 'ListarProveedoresAjax.do',
         datatype: "json",
         method:"GET",
@@ -869,7 +889,6 @@ function __ListaDeProveedores(){
                
                 
             }
-           console.log(result)
         },
         error: function (xhr, status) {
             console.log(xhr);
@@ -946,39 +965,7 @@ function __agregarArticulo(cantidad){
     __calculate(); 
     
 }
-/**
-*   agregar Articulos nuevos en el detalle de la Compra
-**/
-function __nuevoArticuloAlDetalle(cantidad){
-    if(self.articulo.descripcion == null){
-        return;
-    }
-    if(self.articulo.descripcion == ""){
-        return;
-    }
-    //var lineaTemporal = self.detail.length > 0? self.detail.map(item => item.linea).reduce((prev, next) => prev + next):0;
-    self.descuento      = 0;
-    self.detail.push({
-       linea           : 0,
-       articulo_id     : self.articulo.id,
-       codigo          : self.articulo.codigo,
-       descripcion     : self.articulo.descripcion,
-       cantidad        : parseFloat(cantidad),
-       costo           : parseFloat(self.articulo.costo),
-       impuesto        : 0,
-       descuento       : 0,
-       subTotal        : parseFloat(self.articulo.costo * cantidad)
-    });
-    var cont = 0;
-    self.detail.forEach(function(elemen){
-            elemen.linea = cont + 1
-            cont = elemen.linea
-        }
-    )
-    
-    console.log(self.detail);
-    self.update()
-}
+
 /**
 * eliminar un detalle Compra
 **/
@@ -1146,7 +1133,6 @@ function __agregarArticulos() {
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	     }
-   	    console.log(data)
         self.articulo = data;
         self.update();  
 	    __buscarProducto(self.articulo.id,1)
@@ -1193,15 +1179,10 @@ function __seleccionarProveedores() {
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	     }
-   	    console.log(data)
 	    self.proveedor = data
         self.update();
-        
- 
-       
     });
 }
-
 /**
 *  retorna el valor numerico o cero sino es numerico
 **/
@@ -1233,8 +1214,6 @@ function __comboFormaPagos(){
     })
     self.update()
 }
-
-
 /**
 * cargar los tipos de Documento de la compra
 **/
@@ -1269,7 +1248,6 @@ function __ComboEstados(){
     })
     self.update()
 }
-
 /**
 *  Agregar los inpust  y select de las tablas
 **/
@@ -1281,12 +1259,8 @@ function agregarInputsCombos_Articulo(){
         if ( $(this).index() != 4    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
- 
     })
-
 } 
-
-
 /**
 *  Agregar los inpust  y select de las tablas
 **/
@@ -1298,10 +1272,7 @@ function agregarInputsCombos_Proveedores(){
         if ( $(this).index() != 5    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
- 
     })
-
 }                              
-
 </script>
 </compra-proveedores>

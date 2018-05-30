@@ -25,7 +25,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "compras")
@@ -48,7 +48,7 @@ public class Compra implements Serializable {
 	private Date							fechaCredito;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
+	@DateTimeFormat(pattern = "dd/MM/YYYY")
 	@Column(name = "fecha_pago")
 	private Date							fechaPago;
 
@@ -96,24 +96,24 @@ public class Compra implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "proveedor_id")
 	private Proveedor					proveedor;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "empresa_id")
 	private Empresa					empresa;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "usuario_id", nullable = false)
 	private Usuario						usuarioCreacion;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "usuario_ingreso_id", nullable = false)
 	private Usuario						usuarioIngresoInventario;
 	
-	@JsonIgnore
-	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@JsonProperty("detalleCompras")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "compra_id", referencedColumnName = "id")
 	@OrderBy("compra_id DESC")
 	private Set<DetalleCompra>				detalleCompras;
@@ -150,6 +150,8 @@ public class Compra implements Serializable {
 		this.usuarioIngresoInventario = usuarioIngresoInventario;
 		this.detalleCompras = detalleCompras;
 	}
+
+
 
 
 

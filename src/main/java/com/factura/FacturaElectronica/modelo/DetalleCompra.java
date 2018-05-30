@@ -5,7 +5,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,6 +21,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.factura.FacturaElectronica.web.command.DetalleCompraCommand;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Modelo de los productos ingresados al inventario DetalleCompra.
@@ -70,13 +70,14 @@ public class DetalleCompra implements Serializable {
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
 	private Date							updated_at;
-
-	@ManyToOne(fetch = FetchType.LAZY)
+  
+	@JsonIgnore
+	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "compra_id", nullable = false)
 	private Compra						compra;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "articulo_id", nullable = false)
 	private Articulo					articulo;
@@ -107,6 +108,13 @@ public class DetalleCompra implements Serializable {
 		this.created_at = new Date();
 		this.updated_at = new Date();
 
+	}
+
+	
+	
+	
+	public DetalleCompra() {
+		super();
 	}
 
 	public Integer getId() {
