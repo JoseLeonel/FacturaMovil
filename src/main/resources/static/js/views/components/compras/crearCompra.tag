@@ -9,6 +9,7 @@
 					</div>
                     <div class="box-body">
                         <form id="formularioCompra">
+                            <input id="id" name="id" type="hidden" value="{compra.id}">
                             <div class="row">
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
                                     <div class="form-group ">
@@ -661,7 +662,7 @@ function cargarDetallesCompraEnEspera(){
             costo           : parseFloat(e.costo),
             impuesto        : e.impuesto,
             descuento       : e.descuento,
-            subTotal        : parseFloat(e.costo * e.cantidad)
+            subTotal        : parseFloat(e.subTotal)
             
         });
     })
@@ -706,6 +707,7 @@ function crearCompra(){
     self.update()
       var JSONDetalles = JSON.stringify( self.detalleCompra );
     var informacion = {
+        id:self.compra.id,
         nota:nota.value,
         subTotal:__valorNumerico(self.compra.subTotal),
         totalDescuento:__valorNumerico(self.totalDescuentoDetalle),

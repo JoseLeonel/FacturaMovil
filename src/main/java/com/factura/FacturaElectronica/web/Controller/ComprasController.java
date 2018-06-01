@@ -105,9 +105,15 @@ public class ComprasController {
 				compraCommand.setFechaCredito(null);
 			}
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+			if(compraCommand.getConsecutivo().equals(Constantes.EMPTY)) {
+				result.rejectValue("consecutivo", "error.compra.existe.consecutivo");
+			}
 			Compra compraBD = compraBo.findByConsecutivoAndEmpresa(compraCommand.getConsecutivo(), usuarioSesion.getEmpresa());
 			if (compraBD != null) {
-				result.rejectValue("consecutivo", "error.compra.existe.consecutivo");
+				if(!compraBD.getId().equals(compraCommand.getId())) {
+					result.rejectValue("consecutivo", "error.compra.existe.consecutivo");	
+				}
+				
 
 			}
 			if (result.hasErrors()) {

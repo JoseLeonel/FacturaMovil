@@ -14,6 +14,8 @@ public interface CompraDao {
 	Compra findById(Integer id);
 
 	Compra findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa);
+	
+	void eliminarDetalleComprasPorSP(Compra compra);
 
 	
 

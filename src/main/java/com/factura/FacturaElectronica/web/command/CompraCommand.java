@@ -1,19 +1,15 @@
 package com.factura.FacturaElectronica.web.command;
 
-import java.util.Date;
-
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Proveedor;
 import com.factura.FacturaElectronica.modelo.Usuario;
 
 public class CompraCommand {
 
+	
+	private Integer  id;
 	private String		consecutivo;
+	
 
 	private String			fechaCredito;
 
@@ -50,6 +46,25 @@ public class CompraCommand {
 		super();
 		
 	}
+
+	
+	
+	
+	
+	public Integer getId() {
+		return id;
+	}
+
+
+
+
+	
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+
+
 
 	public String getConsecutivo() {
 		return consecutivo;

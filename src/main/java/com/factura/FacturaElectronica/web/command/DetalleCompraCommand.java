@@ -17,20 +17,6 @@ public class DetalleCompraCommand {
 
 	
 	
-	public DetalleCompraCommand(Integer linea, Integer articulo_id, String codigo, String descripcion, Double cantidad, Double costo, Double impuesto, Double descuento, Double subTotal, Articulo articulo) {
-		super();
-		this.linea = linea;
-		this.articulo_id = articulo_id;
-		this.codigo = codigo;
-		this.descripcion = descripcion;
-		this.cantidad = cantidad;
-		this.costo = costo;
-		this.impuesto = impuesto;
-		this.descuento = descuento;
-		this.subTotal = subTotal;
-		this.articulo = articulo;
-	}
-
 
 	public DetalleCompraCommand() {
 		super();

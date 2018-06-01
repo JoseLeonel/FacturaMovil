@@ -22,5 +22,7 @@ public interface CompraBo {
 	void crearCompra(CompraCommand compraCommand) throws Exception;
 
 	void aplicarInventario(Compra compra, Inventario inventario, DetalleCompra detalleCompra, Articulo articulo);
+	
+	void eliminarDetalleComprasPorSP(Compra compra);
 
 }

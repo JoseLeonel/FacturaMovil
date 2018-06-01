@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.factura.FacturaElectronica.Bo.CompraBo;
 import com.factura.FacturaElectronica.Dao.ArticuloDao;
 import com.factura.FacturaElectronica.Dao.CompraDao;
+import com.factura.FacturaElectronica.Dao.DetalleCompraDao;
 import com.factura.FacturaElectronica.Dao.InventarioDao;
 import com.factura.FacturaElectronica.Dao.KardexDao;
 import com.factura.FacturaElectronica.Utils.Constantes;
@@ -40,6 +41,10 @@ public class CompraBoImpl implements CompraBo {
 
 	@Autowired
 	CompraDao				compraDao;
+	
+
+	@Autowired
+	DetalleCompraDao				detalleCompraDao;
 
 	@Autowired
 	ArticuloDao			articuloDao;
@@ -65,7 +70,7 @@ public class CompraBoImpl implements CompraBo {
 	@Override
 	public void crearCompra(CompraCommand compraCommand) throws Exception {
 		try {
-			Compra compra = new Compra();
+			Compra compra = compraCommand.getId() == null || compraCommand.getId() == Constantes.ZEROS ?  new Compra():compraDao.findById(compraCommand.getId());
 			compra.setConsecutivo(compraCommand.getConsecutivo());
 			compra.setEmpresa(compraCommand.getEmpresa());
 			compra.setEstado(compraCommand.getEstado());
@@ -79,7 +84,20 @@ public class CompraBoImpl implements CompraBo {
 			compra.setUsuarioCreacion(compraCommand.getUsuarioCreacion());
 			compra.setTipoDocumento(compraCommand.getTipoDocumento());
 			compra.setProveedor(compraCommand.getProveedor());
+			
+			 if(compra.getId() == 0) {
+	    	 agregar(compra); 
+	     }else {
+	    	 modificar(compra);
+	     }   
+			
+			if(compraCommand.getId() !=null ) {
+				if(compraCommand.getId() > 0) {
+					compraDao.eliminarDetalleComprasPorSP(compra);
+				}
+			}
 
+			
 			JSONObject json = null;
 			try {
 				json = (JSONObject) new JSONParser().parse(compraCommand.getDetalleCompra());
@@ -96,8 +114,9 @@ public class CompraBoImpl implements CompraBo {
 					detalleCompraCommand.setArticulo(articulo);
 
 					DetalleCompra detalleCompra = new DetalleCompra(detalleCompraCommand);
-
-					compra.addDetalleCompra(detalleCompra);
+          detalleCompra.setCompra(compra);
+          detalleCompraDao.agregar(detalleCompra);
+					//compra.addDetalleCompra(detalleCompra);
 
 					Inventario inventario = inventarioDao.findByArticuloAndEstado(detalleCompraCommand.getArticulo(), Constantes.ESTADO_ACTIVO);
 
@@ -105,8 +124,8 @@ public class CompraBoImpl implements CompraBo {
 
 				}
 			}
-
-			agregar(compra);
+    
+			
 
 		} catch (Exception e) {
 			log.info("** Error  crearCompra: " + e.getMessage() + " fecha " + new Date());
@@ -188,6 +207,14 @@ public class CompraBoImpl implements CompraBo {
 	@Override
 	public Compra findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) {
 		return compraDao.findByConsecutivoAndEmpresa(consecutivo, empresa);
+	}
+	
+	/**
+	 * Elimina los detalles de una compra
+	 * @see com.factura.FacturaElectronica.Bo.CompraBo#eliminarDetalleComprasPorSP(com.factura.FacturaElectronica.modelo.Compra)
+	 */
+	public void eliminarDetalleComprasPorSP(Compra compra) {
+		compraDao.eliminarDetalleComprasPorSP(compra);
 	}
 
 }
