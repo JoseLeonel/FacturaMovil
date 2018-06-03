@@ -74,9 +74,13 @@ public class Compra implements Serializable {
 	@Column(name = "total_descuento")
 	private Double						totalDescuento;
 
+	@Column(name = "sub_total")
+	private Double						subTotal;
+
 	@Column(name = "total_compra")
 	private Double						totalCompra;
 
+	
 	@Size(max = 255)
 	@Column(name = "nota")
 	private String						nota;
@@ -127,7 +131,9 @@ public class Compra implements Serializable {
 
 	
 
-	public Compra(Integer id, String consecutivo, Date fechaCredito, Date fechaPago, Date fechaCompra, Date fechaIngreso, Integer tipoDocumento, Integer formaPago, Double totalImpuesto, Double totalDescuento, Double totalCompra, @Size(max = 255) String nota, Integer estado, Date created_at, Date updated_at, Proveedor proveedor, Empresa empresa, Usuario usuarioCreacion, Usuario usuarioIngresoInventario, Set<DetalleCompra> detalleCompras) {
+	
+
+	public Compra(Integer id, String consecutivo, Date fechaCredito, Date fechaPago, Date fechaCompra, Date fechaIngreso, Integer tipoDocumento, Integer formaPago, Double totalImpuesto, Double totalDescuento, Double subTotal, Double totalCompra, @Size(max = 255) String nota, Integer estado, Date created_at, Date updated_at, Proveedor proveedor, Empresa empresa, Usuario usuarioCreacion, Usuario usuarioIngresoInventario, Set<DetalleCompra> detalleCompras) {
 		super();
 		this.id = id;
 		this.consecutivo = consecutivo;
@@ -139,6 +145,7 @@ public class Compra implements Serializable {
 		this.formaPago = formaPago;
 		this.totalImpuesto = totalImpuesto;
 		this.totalDescuento = totalDescuento;
+		this.subTotal = subTotal;
 		this.totalCompra = totalCompra;
 		this.nota = nota;
 		this.estado = estado;
@@ -150,6 +157,10 @@ public class Compra implements Serializable {
 		this.usuarioIngresoInventario = usuarioIngresoInventario;
 		this.detalleCompras = detalleCompras;
 	}
+
+
+
+
 
 
 
@@ -313,6 +324,24 @@ public class Compra implements Serializable {
 
 
 	
+	
+	public Double getSubTotal() {
+		return subTotal;
+	}
+
+
+
+
+
+	
+	public void setSubTotal(Double subTotal) {
+		this.subTotal = subTotal;
+	}
+
+
+
+
+
 	public Empresa getEmpresa() {
 		return empresa;
 	}

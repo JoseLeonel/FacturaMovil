@@ -133,7 +133,41 @@ public class Constantes {
 	public static final Integer					COMPRA_ESTADO_CHEQUEDO_MERCANCIA							= 3;
 	public static final Integer					COMPRA_ESTADO_ANULADA													= 4;
 
+	public static final String					COMPRA_ESTADO_PENDIENTE_STR										= "Pendiente";
+	public static final String					COMPRA_ESTADO_INGRESADA_INVENTARIO_STR				= "Ingresada";
+	public static final String					COMPRA_ESTADO_CHEQUEDO_MERCANCIA_STR					= "Chequeo";
+	public static final String					COMPRA_ESTADO_ANULADA_STR											= "Anulada";
+
+	public static final Integer					COMPRA_TIPO_DOCUMENTO_FACTURA									= 1;
+	public static final Integer					COMPRA_TIPO_DOCUMENTO_BOLETA									= 2;
+
+	public static final String					COMPRA_TIPO_DOCUMENTO_FACTURA_STR							= "Factura";
+	public static final String					COMPRA_TIPO_DOCUMENTO_BOLETA_STR							= "Boleta";
+
 	public static final Integer					COMPRA_FORMA_PAGO_CONTADO											= 1;
-	public static final Integer					COMPRA_FORMA_PAGO_CREDITO											= 1;
+	public static final Integer					COMPRA_FORMA_PAGO_CREDITO											= 2;
+
+	public static final String					COMPRA_FORMA_PAGO_CONTADO_STR									= "Contado";
+	public static final String					COMPRA_FORMA_PAGO_CREDITO_STR									= "Credito";
+
+	// Factura
+	public static final String					FACTURA_CONDICION_VENTA_CONTADO								= "01";
+	public static final String					FACTURA_CONDICION_VENTA_CREDITO								= "02";
+
+	public static final String					FACTURA_CONDICION_VENTA_CONTADO_STR						= "factura.codicion.venta.contado";
+	public static final String					FACTURA_CONDICION_VENTA_CREDITO_STR						= "factura.codicion.venta.credito";
+
+	public static final String					FACTURA_TIPO_DOC_TIQUETE											= "00";
+	public static final String					FACTURA_TIPO_DOC_FACTURA_ELECTRONICA					= "01";
+	public static final String					FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO					= "02";
+	public static final String					FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO					= "03";
+
+	public static final String					FACTURA_TIPO_DOC_TIQUETE_STR									= "factura.tipo.documento.factura.tiquete";
+	public static final String					FACTURA_TIPO_DOC_FACTURA_ELECTRONICA_STR			= "factura.tipo.documento.factura.electronica";
+	public static final String					FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_STR			= "factura.tipo.documento.nota.debito";
+	public static final String					FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO_STR			= "factura.tipo.documento.nota.credito";
+
+	public static final Integer					FACTURA_ESTADO_PENDIENTE											= 1;
+	public static final Integer					FACTURA_ESTADO_FACTURADO											= 2;
 
 }

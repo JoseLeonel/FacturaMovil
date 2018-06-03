@@ -63,7 +63,7 @@ public class ArticuloCommand {
 		this.precioEspecial = articulo.getPrecioEspecial();
 		this.gananciaPrecioEspecial = articulo.getGananciaPrecioEspecial();
 		this.costo = articulo.getCosto();
-		this.iva = articulo.getIva();
+		this.iva = articulo.getIva()  ;
 		this.serie = articulo.getSerie();
 		this.unidadMedida = articulo.getUnidadMedida();
 		this.contable = articulo.getContable();

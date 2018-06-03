@@ -85,7 +85,15 @@ public class CompraBoImpl implements CompraBo {
 			compra.setTipoDocumento(compraCommand.getTipoDocumento());
 			compra.setProveedor(compraCommand.getProveedor());
 			
+			compra.setSubTotal(compraCommand.getSubTotal());
+			
+			if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
+				compra.setFechaIngreso(new Date());
+				compra.setUpdated_at(new Date());
+			}
+			
 			 if(compra.getId() == 0) {
+				 compra.setCreated_at(new Date());
 	    	 agregar(compra); 
 	     }else {
 	    	 modificar(compra);

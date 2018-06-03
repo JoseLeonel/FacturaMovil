@@ -6,7 +6,6 @@
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"></div>
     </div>
-
     <!-- Listado  -->
     <div classs="contenedor-listar container" id="container"  show={mostrarListado}  >
         <div class="row">
@@ -159,43 +158,39 @@
         border-style: solid;
         border-width: 5px;cliente
     }
-        .wrap{
-            max-width:1100px;
-            width:100%;
-        }
-        body {
-            overflow: hidden;
-            background:white;
-            font-size: 12px !important;
-        }
-        .contenedor-listar{
-            width:100%;
-        }
-        .input-table-search{
-            margin-left: 15px;
-            margin-right: 15px;
-            width:100%;
-        }
-        .botonConsulta{
-            margin-top:28px;
-        }
-        
-        table td{ 
-            text-align: center;
-            font-size: 12px;
-            
-                }
-        table th {
-                text-align: center;
-                font-size: 12px;
-        }
-        th, td {
-            white-space: nowrap;
-        }
-
-  </style>
-
-  <script>
+    .wrap{
+        max-width:1100px;
+        width:100%;
+    }
+    body {
+        overflow: hidden;
+        background:white;
+        font-size: 12px !important;
+    }
+    .contenedor-listar{
+        width:100%;
+    }
+    .input-table-search{
+        margin-left: 15px;
+        margin-right: 15px;
+        width:100%;
+    }
+    .botonConsulta{
+        margin-top:28px;
+    }
+    table td{ 
+        text-align: center;
+        font-size: 12px;
+    }
+    table th {
+        text-align: center;
+        font-size: 12px;
+    }
+    th, td {
+        white-space: nowrap;
+    }
+</style>
+<script>
     var self = this;
     self.idiomaDataTable           = []         // idioma de la datatable nuevo
     self.formato_tabla             = []         // Formato del Listado de la Tabla 
@@ -219,9 +214,6 @@
             id:null
         }
         }
-
-
-
 self.on('mount',function(){
     $("#formulario").validate(reglasDeValidacion());
     __InicializarTabla('.tableListar')
@@ -238,8 +230,6 @@ self.on('mount',function(){
         }, false );
 
 })
-
-
 /**
 * Camps requeridos
 **/
@@ -301,7 +291,6 @@ function __ComboEstados(){
 /**
 *  Activar Eventos
 **/
-
 function __Eventos(){
     $("#formulario").validate(reglasDeValidacion());
     $("#nombreCompleto").attr("maxlength", 150);
@@ -334,8 +323,6 @@ function __Eventos(){
 	})
 
 }
-
-
 /**
 *  Regresar al listado
 **/
@@ -370,7 +357,6 @@ __regresarAlListado(){
             }
     });    
 }
-
 /**
 *  Mostrar listado datatable Empresas Activas
 **/
@@ -392,20 +378,15 @@ function __listadoEmpresasActivas(){
         }
     })
 }
-
-
 /**
 ** Modificar la Empresa
 **/
-
 __Modificar(){
     self.error = false;
     self.exito = false;
     self.update();
    __modificarRegistro("#formulario",$.i18n.prop("cliente.mensaje.alert.modificar"),'ModificarClienteAjax.do','ListarClientesAjax.do','#tableListar')
 }
-
-
 /**
 *   Agregar 
 **/
@@ -500,14 +481,7 @@ __agregar(){
         });
         
     }
-
-
-    if(resultado == 1){
-       
-
-    }
 }
-
 
 /**
 *  Mostrar listado datatable
@@ -540,9 +514,6 @@ function __listado(){
         }
     })
 }
-
-
-
 /**
 *Formato del listado de los cambios
 **/
@@ -573,8 +544,6 @@ function __InformacionDataTable(){
     self.update();
    
 }
-
-                                    
 /**
 * Opciones listado de los clientes
 */
@@ -582,7 +551,6 @@ function __Opciones(){
   var modificar  = '<a href="#"  title="Modificar" class="btn btn-warning  btn-edit btnModificar" role="button"> </a>';
   return  modificar ;
 }
-
 /**
  * Funcion para Modificar del Listar
  */
@@ -624,7 +592,6 @@ function __modificarRegistro_Listar(){
 * 1  Mostrar  2  Modificar
 **/
 function __consultar(){
-      
     var formulario = $('#formulario').serialize();
     $.ajax({
         url: "MostrarClienteAjax.do",
@@ -649,7 +616,6 @@ function __consultar(){
                         $('#otraSena').val(null)                        
                         $(".errorServerSideJgrid").remove();
                         $("#formulario").validate(reglasDeValidacion());
-
                         //desahabilita  listado 
                         self.mostrarListado   = false;
                         self.mostrarFormulario  = true 
@@ -679,8 +645,9 @@ function __consultar(){
         }
     });
 }
-
-// Mostrar formulario de mantenimiento Agregar
+/**
+ * Mostrar formulario de mantenimiento Agregar
+ * */
 function __MantenimientoAgregar(){
       //Inicializar el Formulario
     $('.dataTables_wrapper').on('click','.btn-agregar',function(e){
@@ -702,9 +669,7 @@ function __MantenimientoAgregar(){
             correoElectronico:"",
             descuento:0,
             estado:"",
-           
         }
-        
         self.update();
         $('#nombreCompleto').val("")
         $('#cedula').val("")
@@ -720,17 +685,13 @@ function __MantenimientoAgregar(){
    
     })
 }
-
-
 /**
 *Formato de la fecha con hora
 **/
 function __displayDate_detail(fecha) {
-      var dateTime = new Date(fecha);
-      return moment(dateTime).format('DD/MM/YYYY h:mm:ss');
+    var dateTime = new Date(fecha);
+    return moment(dateTime).format('DD/MM/YYYY h:mm:ss');
 }
-
-
 /**
 *  Agregar los inpust  y select de las tablas
 **/
@@ -751,38 +712,41 @@ function __cargaProvincias(){
     self.provincias = []
     self.provincias.push({
         codigo:"1",
-        descripcion:"San jose"
+        descripcion: $.i18n.prop("provincia.sanjose")
     })
     self.provincias.push({
         codigo:"2",
-        descripcion:"Alajuela"
+        descripcion:$.i18n.prop("provincia.alajuela")
     })
 
     self.provincias.push({
         codigo:"3",
-        descripcion:"Cartago"
+        descripcion:$.i18n.prop("provincia.cartago")
     })
 
     self.provincias.push({
         codigo:"4",
-        descripcion:"Heredia"
+        descripcion:$.i18n.prop("provincia.heredia")
     })
 
     self.provincias.push({
         codigo:"5",
-        descripcion:"Guanacaste"
+        descripcion:$.i18n.prop("provincia.guanacaste")
     })
     self.provincias.push({
         codigo:"6",
-        descripcion:"Puntarenas"
+        descripcion:$.i18n.prop("provincia.puntarenas")
     })
     self.provincias.push({
         codigo:"7",
-        descripcion:"Limon"
+        descripcion:$.i18n.prop("provincia.limon")
     })
     self.update()
 
 }
+
+
+
 
 </script>
 </cliente-crud>

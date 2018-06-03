@@ -6,15 +6,12 @@ import com.factura.FacturaElectronica.modelo.Usuario;
 
 public class CompraCommand {
 
-	
-	private Integer  id;
+	private Integer		id;
 	private String		consecutivo;
-	
 
-	private String			fechaCredito;
+	private String		fechaCredito;
 
-	
-	private String			fechaCompra;
+	private String		fechaCompra;
 
 	private Integer		tipoDocumento;
 
@@ -23,6 +20,7 @@ public class CompraCommand {
 	private Double		totalImpuesto;
 
 	private Double		totalDescuento;
+	private Double		subTotal;
 
 	private Double		totalCompra;
 
@@ -33,38 +31,30 @@ public class CompraCommand {
 	private Proveedor	proveedor;
 
 	private String		detalleCompra;
-	
-	private Empresa empresa;
-	private Usuario usuarioCreacion;
 
-	
-	
-	
-	
+	private Empresa		empresa;
+	private Usuario		usuarioCreacion;
 
 	public CompraCommand() {
 		super();
-		
+
 	}
 
-	
-	
-	
-	
+	public Double getSubTotal() {
+		return subTotal;
+	}
+
+	public void setSubTotal(Double subTotal) {
+		this.subTotal = subTotal;
+	}
+
 	public Integer getId() {
 		return id;
 	}
 
-
-
-
-	
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-
-
 
 	public String getConsecutivo() {
 		return consecutivo;
@@ -74,24 +64,18 @@ public class CompraCommand {
 		this.consecutivo = consecutivo;
 	}
 
-	
-
-	
 	public String getFechaCredito() {
 		return fechaCredito;
 	}
 
-	
 	public void setFechaCredito(String fechaCredito) {
 		this.fechaCredito = fechaCredito;
 	}
 
-	
 	public String getFechaCompra() {
 		return fechaCompra;
 	}
 
-	
 	public void setFechaCompra(String fechaCompra) {
 		this.fechaCompra = fechaCompra;
 	}
@@ -168,26 +152,20 @@ public class CompraCommand {
 		this.detalleCompra = detalleCompra;
 	}
 
-	
 	public Empresa getEmpresa() {
 		return empresa;
 	}
 
-	
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
 	}
 
-	
 	public Usuario getUsuarioCreacion() {
 		return usuarioCreacion;
 	}
 
-	
 	public void setUsuarioCreacion(Usuario usuarioCreacion) {
 		this.usuarioCreacion = usuarioCreacion;
 	}
-	
-	
 
 }

@@ -3,6 +3,8 @@ package com.factura.FacturaElectronica.web.command;
 import java.util.Date;
 import java.util.Set;
 
+import com.factura.FacturaElectronica.Utils.Constantes;
+import com.factura.FacturaElectronica.Utils.Utils;
 import com.factura.FacturaElectronica.modelo.Compra;
 import com.factura.FacturaElectronica.modelo.DetalleCompra;
 import com.factura.FacturaElectronica.modelo.Proveedor;
@@ -29,10 +31,14 @@ public class CompraEsperaCommand {
 	private Integer							tipoDocumento;
 
 	private Integer							formaPago;
+	private Double						totalImpuesto;
+	private Double						totalDescuento;
+	private Double						subTotal;
 
 	private Double							totalCompra;
 
 	private String							nota;
+	private String							estadoSTR;
 
 	private Integer							estado;
 	private Proveedor						proveedor;
@@ -54,6 +60,10 @@ public class CompraEsperaCommand {
 		this.estado = compra.getEstado();
 		this.proveedor = compra.getProveedor();
 		this.detalleCompras = compra.getDetalleCompras();
+		this.totalImpuesto = compra.getTotalImpuesto();
+		this.totalDescuento = compra.getTotalDescuento();
+		this.subTotal = compra.getSubTotal();
+		
 
 	}
 
@@ -153,16 +163,101 @@ public class CompraEsperaCommand {
 		this.detalleCompras = detalleCompras;
 	}
 
-	
 	public Proveedor getProveedor() {
 		return proveedor;
 	}
 
-	
 	public void setProveedor(Proveedor proveedor) {
 		this.proveedor = proveedor;
 	}
+
 	
 	
+	public Double getTotalImpuesto() {
+		return totalImpuesto;
+	}
+
+	
+	public void setTotalImpuesto(Double totalImpuesto) {
+		this.totalImpuesto = totalImpuesto;
+	}
+
+	public String getEstadoSTR() {
+		return estadoSTR;
+	}
+
+	
+	public void setEstadoSTR(String estadoSTR) {
+		this.estadoSTR = estadoSTR;
+	}
+	
+	
+	public Double getTotalDescuento() {
+		return totalDescuento;
+	}
+
+	
+	public void setTotalDescuento(Double totalDescuento) {
+		this.totalDescuento = totalDescuento;
+	}
+
+	
+	public Double getSubTotal() {
+		return subTotal;
+	}
+
+	
+	public void setSubTotal(Double subTotal) {
+		this.subTotal = subTotal;
+	}
+
+	public String getDescripcionEstado() {
+		if(this.estado.equals(Constantes.COMPRA_ESTADO_PENDIENTE)) {
+			return Constantes.COMPRA_ESTADO_PENDIENTE_STR;
+		}
+    
+		if(this.estado.equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
+			return Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO_STR;
+		}
+
+		if(this.estado.equals(Constantes.COMPRA_ESTADO_CHEQUEDO_MERCANCIA)) {
+			return Constantes.COMPRA_ESTADO_CHEQUEDO_MERCANCIA_STR;
+		}
+		if(this.estado.equals(Constantes.COMPRA_ESTADO_ANULADA)) {
+			return Constantes.COMPRA_ESTADO_ANULADA_STR;
+		}
+		
+		return Constantes.BLANK;
+		
+	}
+	
+	
+	
+	public String getDescripcionTipoDocumento() {
+		if(this.formaPago.equals(Constantes.COMPRA_TIPO_DOCUMENTO_FACTURA)) {
+			return Constantes.COMPRA_TIPO_DOCUMENTO_FACTURA_STR;
+		}
+		if(this.formaPago.equals(Constantes.COMPRA_TIPO_DOCUMENTO_BOLETA)) {
+			return Constantes.COMPRA_TIPO_DOCUMENTO_FACTURA_STR;
+		}
+		return Constantes.BLANK;
+	}
+	
+	
+	public String getDescripcionFormaPago() {
+		if(this.formaPago.equals(Constantes.COMPRA_FORMA_PAGO_CONTADO)) {
+			return Constantes.COMPRA_FORMA_PAGO_CONTADO_STR;
+		}
+		if(this.formaPago.equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
+			return Constantes.COMPRA_FORMA_PAGO_CREDITO_STR;
+		}
+		return Constantes.BLANK;
+	}
+	
+	
+	
+	public String getFormatoCompraTotal(){
+		return Utils.formatearNumeroListados(this.totalCompra,2);
+	}
 
 }

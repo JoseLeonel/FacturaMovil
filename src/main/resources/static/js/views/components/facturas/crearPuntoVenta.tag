@@ -1,11 +1,12 @@
-<compra-proveedores>
+<punto-venta>
+
 
     <div class="box" show={mostrarFormularioPago}>
         <div class="box-body">
             <div  class="contenedor-compra " >
                 <div class="cabecera-izquierda">
                     <div class="box-header with-border fondoEncabezado">
-						<h3 class="box-title">Formulario de Compra {compra.id>0?' Id#:'+compra.id:'' } </h3>
+						<h3 class="box-title">{$.i18n.prop("factura.resumen.formulario")} {factura.id>0?' Id#:'+factura.id:'' } </h3>
 					</div>
                     <div class="box-body">
                         <form id="formularioCompra">
@@ -13,16 +14,16 @@
                             <div class="row">
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
                                     <div class="form-group ">
-                                        <label>{$.i18n.prop("compra.forma.pago")} </label> 
+                                        <label>{$.i18n.prop("factura.condicion.pago")} </label> 
                                         <select  onchange= {__formaPago} class="form-control" id="formaPago" >
-                                            <option each={comboFormaPagos} value="{estado}" selected="{compra.formaPago ==estado?true:false}" >{descripcion}</option>
+                                            <option each={comboCondicionPagos} value="{estado}" selected="{compra.formaPago ==estado?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>
  
                                 </div>
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
                                     <div class="form-group ">
-                                        <label for="pago_tipoVentaL">{$.i18n.prop("compra.tipo.documento")} </label> 
+                                        <label for="pago_tipoVentaL">{$.i18n.prop("factura.tipo.documento")} </label> 
                                         <select class="form-control" id="tipoDocumento" name="tipoDocumento"   >
                                             <option each={comboTipoDocumentos} value="{estado}" selected="{compra.tipoDocumento ==estado?true:false}" >{descripcion}</option>
                                         </select>
@@ -31,7 +32,7 @@
                                 </div>
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
                                     <div class="form-group ">
-                                        <label for="pago_tipoVentaL">{$.i18n.prop("compra.estado")} </label> 
+                                        <label for="pago_tipoVentaL">{$.i18n.prop("factura.estado")} </label> 
                                         <select class="form-control" id="estado" name="estado"  >
                                             <option each={comboEstados} value="{estado}" selected="{compra.estado ==estado?true:false}" >{descripcion}</option>
                                         </select>
@@ -41,57 +42,74 @@
                             <div class="row">
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div class="form-group ">
-                                        <input   type="hidden" class="form-control" id="proveedor" name="proveedor" value="{proveedor.id}">
-                                        <label>{$.i18n.prop("compra.proveedor")}</label> 
-                                        <input onclick = {_EscogerProveedores}  type="text" id="nombreProveedor" name="nombreProveedor" class="form-control"  value="{proveedor.nombreCompleto}">
+                                        <input   type="hidden" class="form-control" id="cliente" name="cliente" value="{cliente.id}">
+                                        <label>{$.i18n.prop("factura.cliente")}</label> 
+                                        <input onclick = {_EscogerClientes}  type="text" id="nombreCliente" name="nombreCliente" class="form-control"  value="{cliente.nombreCompleto}" readonly>
                                     </div>
                                 </div>
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div class="form-group ">
-                                        <label>{$.i18n.prop("compra.consecutivo")}</label> 
-                                        <input type="text" class="form-control consecutivo" id="consecutivo" name="consecutivo" value="{compra.consecutivo}">
+                                        <label>{$.i18n.prop("cliente.provincia")}</label> 
+                                        <input type="text" class="form-control " value="{cliente.descripcionProvincia}" readonly>
                                     </div>
                                 </div>
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                                    <div  class="form-group">
-                                        <label>{$.i18n.prop("compra.fecha.compra")}</label> 
-                                        <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
-                                            <input type="text" class="form-control" id="fechaCompra" name = "fechaCompra" value="{compra.fechaCompra}" >
-                                            <div class="input-group-addon">
-                                                <span class="glyphicon glyphicon-th"></span>
-                                            </div>
-                                        </div>
-                                    </div>    
+                                    <div class="form-group ">
+                                        <label>{$.i18n.prop("cliente.celular")}</label> 
+                                        <input type="text" class="form-control " value="{cliente.celular}" readonly>
+                                    </div>
                                 </div>
-                            </div>    
-                            <div class="row">
                             </div>    
                             <div class="row">
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                                    <div show = {!mostrarCamposIngresoContado || compra.fechaCredito} class="form-group has-success">
-                                        <label >{$.i18n.prop("compra.fecha.credito")}</label> 
-                                        <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
-                                            <input type="text" class="form-control" id="fechaCredito" value="{compra.fechaCredito}" >
-                                            <div class="input-group-addon">
-                                                <span class="glyphicon glyphicon-th"></span>
-                                            </div>
-                                        </div>
-                                    </div>    
+                                    <div class="form-group ">
+                                        <label>{$.i18n.prop("cliente.telefono")}</label> 
+                                        <input   type="text"  class="form-control"  value="{cliente.telefono}" readonly>
+                                    </div>
                                 </div>
-                            </div>   
+                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                                    <div class="form-group ">
+                                        <label>{$.i18n.prop("cliente.correoElectronico")}</label> 
+                                        <input type="text" class="form-control " value="{cliente.correoElectronico}" readonly>
+                                    </div>
+                                </div>
+                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                                    <div class="form-group ">
+                                        <label>{$.i18n.prop("cliente.descuento")}</label> 
+                                        <input type="text" class="form-control " value="{cliente.descuento}" readonly>
+                                    </div>
+                                </div>
+                            </div>                                
                             <div class="row">
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                     <div class="form-group ">
-                                        <label >{$.i18n.prop("compra.nota")}</label> 
-                                        <input type="text" class="form-control" id="nota" name="nota" value="{compra.nota}">
+                                        <label>{$.i18n.prop("cliente.otraSena")}</label> 
+                                        <input type="text" class="form-control " value="{cliente.otraSena}" readonly>
+                                    </div>
+                                </div>
+                            </div>    
+                            <div class="row">
+                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                    <div class="form-group ">
+                                        <label >{$.i18n.prop("factura.nota")}</label> 
+                                        <input type="text" class="form-control" id="nota" name="nota" value="{factura.direccion}">
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                    <div class="form-group ">
+                                        <label >{$.i18n.prop("factura.direccion")}</label> 
+                                        <input type="text" class="form-control direccion" id="direccion" name="direccion" value="{factura.direccion}">
+                                    </div>
+                                </div>
+                            </div>
+
                         </form>   
                     </div>                    
                     <div class="box-footer">
-                        <button onclick={_AtrasComprasFinal} type="button" class="btn-dark-gray btn-back pull-left"  >{$.i18n.prop("btn.volver")}</button>
-                        <button  onclick={__AplicarYCrearCompra}  class="btn-green btn-edit pull-right " > &nbsp {$.i18n.prop("btn.modificar")}</button>
+                        <button onclick={_AtrasFacturaFinal} type="button" class="btn-dark-gray btn-back pull-left"  >{$.i18n.prop("btn.volver")}</button>
+                        <button  onclick={__AplicarYcrearFactura}  class="btn-green btn-edit pull-right " > &nbsp {$.i18n.prop("btn.aplicar")}</button>
                     </div>
                 </div><!--fin del cabecera-izquierda-->
                 <section class="cabecera-derecha">
@@ -99,14 +117,14 @@
                     <aside class="right-sidebar">
                         <!--Booking details-->
                         <article class="booking-details clearfix">
-                            <h3><span id="lblSCS">Resumen de la Compra</span></h3>
-                            <div class="booking-info">
-                                <p style="text-align:right">Sub Total : <span id="lblSubtotal"> {compra.subTotal.toLocaleString('de-DE')} </span></p>
-                                <p style="text-align:right">Descuento : <span id="lblSubtotal"> {compra.totalDescuento.toLocaleString('de-DE')} </span></p>
-                                <p style="text-align:right">Impuesto  : <span id="lblSubtotal"> {compra.totalImpuesto.toLocaleString('de-DE')} </span></p>
+                            <h3><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h3>
+                            <div class="booking-info tituloTotal">
+                                <p style="text-align:left">{$.i18n.prop("factura.resumen.subTotal")}  <span style="text-align:right"> ₡ {factura.subTotal.toLocaleString('de-DE') }       </span></p>
+                                <p style="text-align:left">{$.i18n.prop("factura.resumen.descuento")} <span style="text-align:right"> ₡ {factura.totalDescuento.toLocaleString('de-DE')} </span></p>
+                                <p style="text-align:left">{$.i18n.prop("factura.resumen.impuesto")}  <span style="text-align:right"> ₡ {factura.totalImpuesto.toLocaleString('de-DE')}  </span></p>
                             </div>
                             <div class="precioTotalFactura">
-                                <p class="total" style="text-align:right;">Total  : <span id="lblTotal">{compra.totalCompra.toLocaleString('de-DE')}</span></p>
+                                <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.total")} <span id="lblTotal">₡ {factura.total.toLocaleString('de-DE')}</span></p>
                             </div>
                         </article>
                     </aside>     
@@ -117,10 +135,11 @@
     <div class="box box-solid box-primary" show={mostarParaCrearNuevaCompra}>
         <div class="box-body">
              <div class="box-header with-border">
-                 <h3 class="box-title">Modulo para Realizar Compras al Inventario {compra.id>0?' Id#:'+compra.id:'' }</h3>
+                 
                   <div class="box-tools pull-right">
                     <a href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("btn.limpiar")}</span></a>
                   </div>
+                  <br>
              </div>
             <div  class="contenedor-compra " >
                 <div class="cabecera-izquierda">
@@ -129,23 +148,24 @@
                                 <input onkeypress={__addProductToDetail}  id="producto" class="form-control" type="text" placeholder="XXXXXXXXXXX" />
                             </div>
                             <div class="col-md-2">
-                                <button    onclick = {__ListaDeProductos} class="btn btn-primary form-control" id="btn-facturar" >
-                                    <i class="glyphicon glyphicon-plus"></i>Buscar
+                                <button    onclick = {__ListaDeProductos} class="btn-green btn-buscar " id="btn-facturar" >
+                                    {$.i18n.prop("btn.consultar")} 
                                 </button>
                             </div>
                     </div>
+                    <br>
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th style="width:5%;">                                               </th>
-                            <th>{$.i18n.prop("compra.linea.detalle.linea")}                        </th>
-                            <th>{$.i18n.prop("compra.linea.detalle.codigo")}                       </th>
-                            <th style="width:20%;">{$.i18n.prop("compra.linea.detalle.descripcion")}                  </th>
-                            <th >{$.i18n.prop("compra.linea.detalle.cantidad")}  </th>
-                            <th >{$.i18n.prop("compra.linea.detalle.costo")}     </th>
-                            <th >{$.i18n.prop("compra.linea.detalle.descuento")} </th>
-                            <th >{$.i18n.prop("compra.linea.detalle.impuesto")}  </th>
-                            <th >{$.i18n.prop("compra.linea.detalle.subTotal")}  </th>
+                            <th style="width:5%;">                                                   </th>
+                            <th>{$.i18n.prop("factura.linea.detalle.linea")}                         </th>
+                            <th>{$.i18n.prop("factura.linea.detalle.codigo")}                        </th>
+                            <th style="width:20%;">{$.i18n.prop("compra.linea.detalle.descripcion")} </th>
+                            <th >{$.i18n.prop("factura.linea.detalle.cantidad")}                     </th>
+                            <th >{$.i18n.prop("factura.linea.detalle.precio")}                       </th>
+                            <th >{$.i18n.prop("factura.linea.detalle.descuento")}                    </th>
+                            <th >{$.i18n.prop("factura.linea.detalle.impuesto")}                     </th>
+                            <th >{$.i18n.prop("factura.linea.detalle.subTotal")}                     </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -160,18 +180,18 @@
                                 <input onkeypress={__recalculacionDelDetalle} id= "cantidadDetalle" class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad} />
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarCosto} class="form-control" type="text"  value = "{costo}" />
+                                <input   class="form-control" type="text"  value = "{precio}" readonly />
                             </td>
                             <td class="text-right">
                                 <input  onkeypress={__actualizarDescuento} class="form-control" type="text"  value = "{descuento}" />
                             </td>
                                                         
                             <td class="text-right">
-                                <input  onkeypress={__actualizarImpuesto}  class="form-control" type="text"  value = "  {impuesto}" />
+                                <input  onkeypress={__actualizarImpuesto}  class="form-control" type="text"  value = "  {impuesto.toLocaleString('de-DE')}" readonly/>
                             </td>
 
                             <td class="text-right">
-                                <input  class="form-control" type="text"  value = "₡  {subTotal}" readonly/>
+                                <input  class="form-control" type="text"  value = "₡  {subTotal.toLocaleString('de-DE')}" readonly/>
                             </td>
                         </tr>
                         </tbody>
@@ -187,12 +207,12 @@
                                     <tbody>
                                         <tr>
                                             <td width="30%" id="">
-                                                <div id="pagarTitulo">{$.i18n.prop("compra.total")}</div>
+                                                <div id="pagarTitulo">{$.i18n.prop("factura.total")}</div>
                                             </td>
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show">₡ {compra.totalCompra}</span>
+                                                    <span class="label label-info textShadow" id="total-show">₡ {factura.total.toLocaleString('de-DE')}</span>
                                                 </div>
                                             </td>
                                         </tr>                     
@@ -202,8 +222,8 @@
                         </article>
                     </aside>
                     <section   class="lista-compras-espera">
-                        <div id="botones"  each={compras_espera.data}  onclick={__CargarCompraEspera}>
-                            <a href="#" class="compras-espera"  title="{proveedor !=null?proveedor.nombreCompleto:""}">C# {id}</a>
+                        <div id="botones"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
+                            <a href="#" class="compras-espera"  title="{cliente !=null?cliente.nombreCompleto:""}">C# {id}</a>
                         </div>    
                      </section >
 
@@ -223,19 +243,19 @@
             <div class="modal-body">
                 <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " cellspacing="0" width="100%">
                     <thead>
-                        <th class="table-header">{$.i18n.prop("articulo.codigo")}      </th>
-                        <th class="table-header">{$.i18n.prop("articulo.descripcion")} </th>
-                        <th class="table-header">{$.i18n.prop("inventario.cantidad")}  </th>
-                        <th class="table-header">{$.i18n.prop("articulo.costo")}       </th>
-                        <th class="table-header">{$.i18n.prop("listado.acciones")}     </th>
+                        <th class="table-header">{$.i18n.prop("articulo.codigo")}        </th>
+                        <th class="table-header">{$.i18n.prop("articulo.descripcion")}   </th>
+                        <th class="table-header">{$.i18n.prop("inventario.cantidad")}    </th>
+                        <th class="table-header">{$.i18n.prop("articulo.precioPublico")} </th>
+                        <th class="table-header">{$.i18n.prop("listado.acciones")}       </th>
                     </thead>
                     <tfoot style="display: table-header-group;">
                         <tr>
-                            <th >{$.i18n.prop("articulo.codigo")}      </th>
-                            <th >{$.i18n.prop("articulo.descripcion")} </th>
-                            <th >{$.i18n.prop("inventario.cantidad")}  </th>
-                            <th >{$.i18n.prop("articulo.costo")}       </th>
-                            <th >                                      </th>
+                            <th >{$.i18n.prop("articulo.codigo")}         </th>
+                            <th >{$.i18n.prop("articulo.descripcion")}   </th>
+                            <th >{$.i18n.prop("inventario.cantidad")}    </th>
+                            <th >{$.i18n.prop("articulo.precioPublico")} </th>
+                            <th >                                        </th>
                         </tr>
                     </tfoot>
                 </table>
@@ -247,30 +267,32 @@
     </div>
 </div>
 <!--fin del modal-->
-<!--Modal mostrar Proveedores de una sucursal -->
-<div id="modalProveedores" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<!--Modal mostrar  -->
+<div id="modalClientes" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header with-border table-header" >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("proveedor.lista")}   </h4>
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("cliente.lista")}   </h4>
             </div>
             <div class="modal-body">
-                <table id="tableListaProveedor" class="table responsive display table-striped table-hover nowrap tableListaProveedor " cellspacing="0" width="100%">
+                <table id="tableListaCliente" class="table responsive display table-striped table-hover nowrap tableListaCliente " cellspacing="0" width="100%">
                    <thead>
-                        <th class="table-header">{$.i18n.prop("proveedor.nombreCompleto")} </th>
-                        <th class="table-header">{$.i18n.prop("proveedor.representante")}  </th>
-                        <th class="table-header">{$.i18n.prop("proveedor.email")}          </th>
-                        <th class="table-header">{$.i18n.prop("proveedor.telefono")}       </th>
-                        <th class="table-header">{$.i18n.prop("proveedor.movil")}          </th>
-                        <th class="table-header">{$.i18n.prop("listado.acciones")}        </th>
+                        <th class="table-header">{$.i18n.prop("cliente.cedula")}            </th>
+                        <th class="table-header">{$.i18n.prop("cliente.nombreCompleto")}    </th>
+                        <th class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
+                        <th class="table-header">{$.i18n.prop("cliente.descuento")}         </th>
+                        <th class="table-header">{$.i18n.prop("cliente.telefono")}          </th>
+                        <th class="table-header">{$.i18n.prop("cliente.celular")}           </th>
+                        <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
                     </thead>
                     <tfoot style="display: table-header-group;">
                         <tr>
-                            <th>{$.i18n.prop("proveedor.nombreCompleto")} </th>
-                            <th>{$.i18n.prop("proveedor.representante")}  </th>
-                            <th>{$.i18n.prop("proveedor.email")}          </th>
-                            <th>{$.i18n.prop("proveedor.telefono")}       </th>
-                            <th>{$.i18n.prop("proveedor.movil")}          </th>
+                            <th>{$.i18n.prop("cliente.cedula")}           </th>
+                            <th>{$.i18n.prop("cliente.nombreCompleto")}   </th>
+                            <th>{$.i18n.prop("cliente.correoElectronico")}</th>
+                            <th>{$.i18n.prop("cliente.descuento")}        </th>
+                            <th>{$.i18n.prop("cliente.telefono")}         </th>
+                            <th>{$.i18n.prop("cliente.celular")}          </th>
                             <th>                                          </th>
                         </tr>
                     </tfoot>                    
@@ -291,6 +313,20 @@
         width:100%;
         display:flex;
         flex-wrap:wrap;
+    }
+    .cabecera-derecha .lista-compras-espera .compras-espera{
+        display:block;
+        width:90%;
+        padding:6px 0;
+        margin-bottom:20px;
+        margin-left:15px;
+        margin-right:5px;
+        background:red;
+        text-align:center;
+        text-decoration:none;
+        color:#ffffff !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
     }
     .label-limpiar{
         font-weight: 600 !important;
@@ -320,20 +356,6 @@
         -ms-transition: background-color 100ms linear;
         transition: background-color 100ms linear;
         
-    }
-    .cabecera-derecha .lista-compras-espera .compras-espera{
-        display:block;
-        width:90%;
-        padding:6px 0;
-        margin-bottom:20px;
-        margin-left:15px;
-        margin-right:5px;
-        background:red;
-        text-align:center;
-        text-decoration:none;
-        color:#ffffff !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
     }
     #pagarTitulo{
         font-weight: 600 !important;
@@ -427,6 +449,7 @@
         border-top: 1px solid #DFDCD1;
         padding: 15px 0 0;
         margin: 15px 0 0;
+        font-size:25px;
         display: inline-block;
         width: 100%;
     }
@@ -436,7 +459,7 @@
     }
     .precioTotalFactura{
         font-weight:bold;
-        font-size:20px;
+        font-size:30px;
         color: #0C9C22;
         border-top: 1px solid #DFDCD1;
         padding: 0 0 5px;
@@ -449,6 +472,9 @@
         margin-bottom: 5px;
         font-weight: 600;
     }
+    .tituloTotal{
+        font-size:30px;
+    }
 </style>
 
 <script>
@@ -458,15 +484,15 @@
     self.mensajesBackEnd       = []
     self.error                 = false
     self.comboEstados          = []
-    self.comboFormaPagos        = []
+    self.comboCondicionPagos        = []
     self.comboTipoDocumentos   = []
-    self.compra                = {
+    self.factura                = {
         consecutivo:"",
         fechaCredito    : null,
         fechaCompra     : null,
         id : 0,
         totalImpuesto: 0,
-        totalCompra:0,
+        total:0,
         estado:0,
         tipoDocumento:0,
         formaPago:0,
@@ -478,13 +504,13 @@
     self.item                  = null;
     self.articulo              = null;
     self.articulos             = {data:[]}
-    self.proveedores           = {data:[]}
-    self.detalleCompra         ={data:[]}
-    self.proveedor             = {};
-    self.compras_espera         = {data:[]}  
+    self.clientes           = {data:[]}
+    self.detalleFactura         ={data:[]}
+    self.cliente             = {};
+    self.facturas_espera         = {data:[]}  
     self.informacion_tabla             = []
     self.informacion_tabla_articulo    = []
-    self.informacion_tabla_proveedores = []
+    self.informacion_tabla_clientes = []
     self.idiomaDataTable       = {}
     self.mostrarFormularioPago = false
     self.mostarParaCrearNuevaCompra = true
@@ -493,15 +519,15 @@
     self.on('mount',function(){
         $("#formularioCompra").validate(reglasDeValidacionCompra());
         __informacionData()
-        __InicializarTabla('.tableListaProveedor')
+        __InicializarTabla('.tableListaCliente')
         __InicializarTabla('.tableListaInventario')
         agregarInputsCombos_Articulo()
           __ListaComprasEnEspera()
-        __comboFormaPagos()
+        __comboCondicionPago()
         __ComboTipoDocumentos()
         __ComboEstados()
         __ListaDeArticulosPorEmpresa();
-        __ListaDeProveedores()
+        __ListaDeClientes()
     })
 /**
 * Camps requeridos
@@ -515,7 +541,7 @@ var reglasDeValidacionCompra = function() {
 			fechaCompra : {
 				required : true,
              },
-             nombreProveedor:{
+             nombreCliente:{
                  required:true
              },
              nota:{
@@ -536,13 +562,13 @@ var reglasDeValidacionCompra = function() {
 /**
 *  Buscar la Compra Pendiente en espera
 **/
-__CargarCompraEspera(e){
-   __CompraEnEspera(e.item)
+__CargarFacturaEspera(e){
+   __FacturaEnEspera(e.item)
 }
 /**
 ** Se aplica o se crea una compra cargada en la pantalla
 **/
-__AplicarYCrearCompra(){
+__AplicarYcrearFactura(){
      if(self.detail.length == 0 ){
         mensajeError($.i18n.prop("compra.alert.sin.detalles"))
         return
@@ -568,7 +594,7 @@ __AplicarYCrearCompra(){
         }).then(function (isConfirm) {
             //Ajax__inicializarTabla();
             if(isConfirm){
-               crearCompra()  
+               crearFactura()  
               
             }
         });
@@ -585,49 +611,57 @@ __Limpiar(){
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
-    fechaCompra.value = null;
-    fechaCredito.value = null
-    nota.value = null
-    consecutivo.value = null
-    self.detail                = [];
-    self.compra                = {
+    self.detail                = []
+    self.mensajesBackEnd       = []
+    self.error                 = false
+    self.comboEstados          = []
+    self.comboCondicionPagos        = []
+    self.comboTipoDocumentos   = []
+    self.factura                = {
         consecutivo:"",
         fechaCredito    : null,
         fechaCompra     : null,
         id : 0,
         totalImpuesto: 0,
-        totalCompra:0,
+        total:0,
         estado:0,
         tipoDocumento:0,
         formaPago:0,
         totalDescuento:0,
         subTotal:0,  
-        totalCompra:0,
+        total:0,
         nota:""
-    }                  
+    }                            
     self.item                  = null;
     self.articulo              = null;
-    self.articulos                     = {data:[]}
-    self.proveedores                   = {data:[]}
-    self.proveedor                     = {};
+    self.articulos             = {data:[]}
+    self.clientes           = {data:[]}
+    self.detalleFactura         ={data:[]}
+    self.cliente             = {};
+    self.facturas_espera         = {data:[]}  
+    self.informacion_tabla             = []
+    self.informacion_tabla_articulo    = []
+    self.informacion_tabla_clientes = []
+    self.idiomaDataTable       = {}
     self.mostrarFormularioPago = false
     self.mostarParaCrearNuevaCompra = true
     self.mostrarCamposIngresoContado = true;
     self.update();
     // Tipo de Pagos
-     __comboFormaPagos()
+     __comboCondicionPago()
      //Tipos de Documentos
       __ComboTipoDocumentos()
       //Estados
       __ComboEstados()
 }
 /**
-*  Compra en espera ,proveedor y sus  detalles desde back end
+*  Compra en espera ,cliente y sus  detalles desde back end
 **/
-function __CompraEnEspera(compra){
+function __FacturaEnEspera(compra){
+    return
      __Init()
     self.detail         = []
-    self.proveedor      = {}         
+    self.cliente      = {}         
     self.update()
     $.ajax({
         url: "MostrarCompraEsperaAjax",
@@ -645,11 +679,11 @@ function __CompraEnEspera(compra){
                        self.compra = modeloTabla
                        self.compra.fechaCompra = __displayDate_detail(self.compra.fechaCompra)
                        self.compra.fechaCredito = self.compra.fechaCredito !=null?__displayDate_detail(self.compra.fechaCredito):null
-                       self.proveedor = modeloTabla.proveedor
+                       self.cliente = modeloTabla.cliente
                        self.update()
                     });
                 }
-                cargarDetallesCompraEnEspera()
+                cargarDetallesFacturaEnEspera()
             }
         },
         error: function (xhr, status) {
@@ -669,11 +703,11 @@ function __displayDate_detail(fecha) {
 /**
 *  Cargar detalles Compra Espera
 **/
-function cargarDetallesCompraEnEspera(){
+function cargarDetallesFacturaEnEspera(){
     self.detail = []
     self.update()
     
-    self.compra.detalleCompras.forEach(function(e){
+    self.compra.detalleFacturas.forEach(function(e){
         self.detail.push({
             linea           : e.numeroLinea,
             articulo_id     : e.articulo.id,
@@ -703,14 +737,15 @@ function __nuevoArticuloAlDetalle(cantidad){
     self.descuento      = 0;
     self.detail.push({
        linea           : 0,
+       iva             : self.articulo.iva,
        articulo_id     : self.articulo.id,
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
        cantidad        : parseFloat(cantidad),
-       costo           : parseFloat(self.articulo.costo),
-       impuesto        : 0,
+       precio          : parseFloat(self.articulo.precioPublico),
+       impuesto        : _calcularImpuesto(self.articulo.precioPublico,self.articulo.iva,cantidad),
        descuento       : 0,
-       subTotal        : parseFloat(self.articulo.costo * cantidad)
+       subTotal        : parseFloat(self.articulo.precioPublico * cantidad)
     });
     var cont = 0;
     self.detail.forEach(function(elemen){
@@ -720,13 +755,24 @@ function __nuevoArticuloAlDetalle(cantidad){
     )
     self.update()
 }
+
+/**
+ * calculo del impuesto iva
+ * */
+function _calcularImpuesto(precioArticulo,iva,cantidad){
+    var impuesto = parseFloat(iva)
+    var impuestoAplicar = impuesto > 0?1+impuesto:0
+    var precio  = parseFloat(precioArticulo)
+    var total =impuesto > 0 ? precio - (precio / impuestoAplicar):0 
+    return total * cantidad
+}
 /**
 *  Crear Compra nueva
 **/
-function crearCompra(){
-    self.detalleCompra.data =self.detail
+function crearFactura(){
+    self.detalleFactura.data =self.detail
     self.update()
-      var JSONDetalles = JSON.stringify( self.detalleCompra );
+      var JSONDetalles = JSON.stringify( self.detalleFactura );
     var informacion = {
         id:self.compra.id,
         nota:nota.value,
@@ -736,18 +782,18 @@ function crearCompra(){
         totalCompra:__valorNumerico(self.compra.totalCompra),
         formaPago:formaPago.value,
         tipoDocumento:tipoDocumento.value,
-        proveedor:self.proveedor.id,
+        cliente:self.cliente.id,
         consecutivo:consecutivo.value,
         estado:estado.value,
         fechaCredito:formaPago.value == 2?fechaCredito.value:new Date(),
         fechaCompra:fechaCompra.value,
-        detalleCompra :JSONDetalles
+        detalleFactura :JSONDetalles
      }
     $.ajax({
         type : "POST",
         dataType : "json",
         data : informacion,
-        url : "CrearCompraAjax.do",
+        url : "crearFacturaAjax.do",
         success : function(data) {
             if (data.status != 200) {
                	serverMessageJsonClase(data);
@@ -777,13 +823,14 @@ function crearCompra(){
 *  Lista de las compras pendientes pendiente por el usuario
 **/
 function __ListaComprasEnEspera(){
+    return
     $.ajax({
         url: 'ListarComprasEsperaActivasAjax',
         datatype: "json",
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
-               self.compras_espera.data =  result.aaData;  
+               self.facturas_espera.data =  result.aaData;  
                self.update(); 
             }
         },
@@ -797,7 +844,7 @@ function __ListaComprasEnEspera(){
 *  Obtiene el valor de lo digitado en el campo de Impuesto
 **/
 __TotalDeImpuesto(e){
-    self.compra.totalImpuesto = __valorNumerico(e.target.value) 
+    self.factura.totalImpuesto = __valorNumerico(e.target.value) 
     self.update()
     __calculate()
 }
@@ -805,17 +852,16 @@ __TotalDeImpuesto(e){
 *  Obtiene el valor de lo digitado en el campo de Descuento
 **/
 __TotalDeDescuento(e){
-    self.compra.totalDescuento = __valorNumerico(e.target.value) 
+    self.factura.totalDescuento = __valorNumerico(e.target.value) 
     self.update()
     __calculate()
 }
 /**
 *   Retrocer a los ingresos de los productos desde el formulario de ingresar el valor dinero a pagar
 **/
-_AtrasComprasFinal(){
+_AtrasFacturaFinal(){
    self.mostrarFormularioPago = false
    self.mostarParaCrearNuevaCompra = true
-   self.mensajesBackEnd = []
    self.error = false
    self.update()
 }
@@ -889,28 +935,26 @@ function __ListaDeArticulosPorEmpresa(){
     });
 }
 /**
-*  Muestra la lista de proveedores
+*  Muestra la lista de clientes
 **/
-_EscogerProveedores(){
-    $('#modalProveedores').modal('show')  
+_EscogerClientes(){
+    $('#modalClientes').modal('show')  
 }
 /**
-*  Lista de los Proveedores
+*  Lista de los clientes
 **/
-function __ListaDeProveedores(){
+function __ListaDeClientes(){
     $.ajax({
-        url: 'ListarProveedoresAjax.do',
+        url: 'ListarClientesActivosAjax.do',
         datatype: "json",
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
                 __informacionData()
-                loadListar(".tableListaProveedor",idioma_espanol,self.informacion_tabla_proveedores,result.aaData)
-                agregarInputsCombos_Proveedores()
-                ActivarEventoFiltro(".tableListaProveedor")
-                __seleccionarProveedores()
-               
-                
+                loadListar(".tableListaCliente",idioma_espanol,self.informacion_tabla_clientes,result.aaData)
+                agregarInputsCombos_Clientes()
+                ActivarEventoFiltro(".tableListaCliente")
+                __seleccionarClientes()
             }
         },
         error: function (xhr, status) {
@@ -970,7 +1014,7 @@ function __agregarArticulo(cantidad){
     }else{//Se busca el articulo si existe se incrementa la cantidad
         for (var count = 0; count < self.detail.length; count++) {
             if (self.detail[count].articulo_id == self.articulo.id ){
-               self.item  = self.detail[count];
+               self.item          = self.detail[count];
                self.item.cantidad = self.item.cantidad + parseFloat(cantidad)
                self.update();
                __actualizarItemArray();
@@ -1024,31 +1068,14 @@ __removeProductFromDetail(e) {
     if(cantidad == 0){
        cantidad = 1;
     }
-    self.item.cantidad = parseFloat(cantidad);  
+    self.item.cantidad = parseFloat(cantidad); 
+    self.item.impuesto =_calcularImpuesto(self.item.precio,self.item.iva,self.item.cantidad)
     __actualizarItemArray();
     self.detail[index] = self.item;
     self.update();
     __calculate();
  }
-/**
-*   Actualizar el costo del producto y recalcular la compra
-**/
-__actualizarCosto(e){
-    if (e.keyCode != 13) {
-        return;
-    } 
-    var costo = e.currentTarget.value;
-    self.item = e.item; 
-    var input = e.input;
-    var index = self.detail.indexOf(self.item);
-    //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
-    costo =__valorNumerico(costo);
-    self.item.costo = parseFloat(costo);  
-    __actualizarItemArray();
-    self.detail[index] = self.item;
-    self.update();
-    __calculate();
-}
+
 /**
 * Actualizar el impuesto del producto
 **/
@@ -1096,35 +1123,34 @@ __actualizarDescuento(e){
 **/
 function __actualizarItemArray(){
     //Subtotal del Detalle
-    self.item.subTotal    = parseFloat(self.item.costo * self.item.cantidad);
+    self.item.subTotal    = parseFloat(self.item.precio * self.item.cantidad);
     self.item.subTotal    = self.item.subTotal-self.item.descuento
-    self.item.subTotal    = self.item.subTotal + self.item.impuesto;
+    self.item.subTotal    = self.item.subTotal;
     self.update()
 }
 /**
 * calculacion de los detalle de la compra 
 **/
 function __calculate() {
-    self.compra.totalCompra     = 0;
-    self.compra.totalDescuento  = 0;
-    self.compra.totalImpuesto   = 0;
-    self.compra.subTotal        = 0;
+    self.factura.total           = 0;
+    self.factura.totalDescuento  = 0;
+    self.factura.totalImpuesto   = 0;
+    self.factura.subTotal        = 0;
     self.update()
-    totalCompra    = 0
+    total          = 0
     subTotal       = 0
     totalDescuento = 0
     totalImpuesto  = 0
     self.detail.forEach(function(e){
-        totalCompra    += e.subTotal >0?e.subTotal:0
+        total          += e.subTotal >0?e.subTotal:0
         subTotal       += e.subTotal >0?e.subTotal + e.descuento:0
         totalDescuento += e.descuento >0?e.descuento:0
         totalImpuesto  += e.impuesto >0?e.impuesto:0
     });
-    self.compra.totalCompra    += totalCompra
-    self.compra.subTotal       += subTotal
-    self.compra.totalDescuento += totalDescuento
-    self.compra.totalImpuesto  += totalImpuesto
-
+    self.factura.total          += total 
+    self.factura.subTotal       += subTotal - totalImpuesto
+    self.factura.totalDescuento += totalDescuento
+    self.factura.totalImpuesto  += totalImpuesto
     self.articulo              = null;
     self.update(); 
     $( "#producto" ).val(null);
@@ -1137,7 +1163,11 @@ function _informacionData_Articulo(){
    self.informacion_tabla_articulo = [	{'data' : 'codigo'         ,"name":"codigo"          ,"title" : $.i18n.prop("articulo.codigo")       ,"autoWidth":false},
                                         {'data' : 'descripcion'    ,"name":"descripcion"     ,"title" : $.i18n.prop("articulo.descripcion")  ,"autoWidth":false},
                                         {'data' : 'cantidad'       ,"name":"cantidad"        ,"title" : $.i18n.prop("inventario.cantidad")   ,"autoWidth":false},
-                                        {'data' : 'costo'          ,"name":"costo"           ,"title" : $.i18n.prop("articulo.costo")        ,"autoWidth":false},
+                                        {'data' : 'precioPublico'  ,"name":"precioPublico"   ,"title" : $.i18n.prop("articulo.precioPublico"),"autoWidth":false,
+                                          "render":function(precioPublico,type, row){
+                                               return  "₡" + precioPublico.toLocaleString('de-DE');
+                                            }
+                                        },
                                         {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
                                             "render":function(id,type, row){
                                                     return __OpcionesArticulos(id,type,row);
@@ -1170,50 +1200,49 @@ function __agregarArticulos() {
         self.articulo = data;
         self.update();  
 	    __buscarProducto(self.articulo.id,1)
-        
- 
-       
     });
 }
 /**
-* formato de la tabla de proveedores
+* formato de la tabla de clientes
 **/
 function __informacionData(){
-
-    self.informacion_tabla_proveedores = [	{'data' : 'nombreCompleto'  ,"name":"nombreCompleto" ,"title" : $.i18n.prop("proveedor.nombreCompleto")         ,"autoWidth":false},
-                                            {'data' : 'representante'   ,"name":"representante"  ,"title" : $.i18n.prop("proveedor.representante")  ,"autoWidth":false},
-                                            {'data' : 'email'           ,"name":"email"          ,"title" : $.i18n.prop("proveedor.email")          ,"autoWidth":false},                                
-                                            {'data' : 'telefono'        ,"name":"telefono"       ,"title" : $.i18n.prop("proveedor.telefono")       ,"autoWidth":false},                                
-                                            {'data' : 'movil'           ,"name":"movil"          ,"title" : $.i18n.prop("proveedor.movil")        ,"autoWidth":false},                                
-                                            {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
+    self.informacion_tabla_clientes = [	
+                                        {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false},
+                                        {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("cliente.nombreCompleto")    ,"autoWidth":false},
+                                        {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("cliente.correoElectronico") ,"autoWidth":false},
+                                        {'data' : 'descuento'        ,"name":"descuento"         ,"title" : $.i18n.prop("cliente.descuento")         ,"autoWidth":false},                                
+                                        {'data' : 'telefono'         ,"name":"telefono"          ,"title" : $.i18n.prop("cliente.telefono")          ,"autoWidth":false},                                
+                                        {'data' : 'celular'          ,"name":"celular"           ,"title" : $.i18n.prop("cliente.celular")           ,"autoWidth":false},                                
+                                        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
 									            "render":function(id,type, row){
-										            return __OpcionesProveedores(id,type,row);
+										            return __Opcionesclientes(id,type,row);
 	 							                }	 
 								            },
                                         ];                              
    
 }
 /**
-* Opciones del modal de Proveedores
+* Opciones del modal de clientes
 */
-function __OpcionesProveedores(){
-  var agregar  = '<a href="#"  title="Seleccionar Proveedor" class="btn btnAgregar btn-success form-control" title="Seleccione el Proveedor de la compra" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
+function __Opcionesclientes(){
+  var agregar  = '<a href="#"  title="Seleccionar Cliente" class="btn btnAgregar btn-success form-control" title="Seleccione el cliente de la factura" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
   return  agregar;
 
 }
 /**
 * Agregar productos a la compra desde modal de articulos
 **/
-function __seleccionarProveedores() {
-     $('#tableListaProveedor').on('click', '.btnAgregar', function (e) {
-         var table = $('#tableListaProveedor').DataTable();
+function __seleccionarClientes() {
+     $('#tableListaCliente').on('click', '.btnAgregar', function (e) {
+         var table = $('#tableListaCliente').DataTable();
 		if(table.row(this).child.isShown()){
 			//cuando el datatable esta en modo responsive
 	       var data = table.row(this).data();
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	     }
-	    self.proveedor = data
+        self.cliente = data
+        self.cliente.descripcionProvincia = __cargaProvincias(self.cliente.provincia)
         self.update();
     });
 }
@@ -1232,19 +1261,15 @@ function isNumber(n) {
 /**
 * cargar los estados de la compra
 **/
-function __comboFormaPagos(){
-    self.comboFormaPagos = []
-    self.comboFormaPagos.push({
-        estado:1,
-        descripcion:$.i18n.prop("combos.formaPago.contado")
+function __comboCondicionPago(){
+    self.comboCondicionPagos = []
+    self.comboCondicionPagos.push({
+        estado:"01",
+        descripcion:$.i18n.prop("factura.codicion.venta.contado")
     })
-    self.comboFormaPagos.push({
-        estado:2,
-        descripcion:$.i18n.prop("combos.formaPago.credito")
-    })
-     self.comboFormaPagos.push({
-        estado:3,
-        descripcion:$.i18n.prop("combos.formaPago.sinCobro")
+    self.comboCondicionPagos.push({
+        estado:"02",
+        descripcion:$.i18n.prop("factura.codicion.venta.credito")
     })
     self.update()
 }
@@ -1254,12 +1279,20 @@ function __comboFormaPagos(){
 function __ComboTipoDocumentos(){
     self.comboTipoDocumentos = []
     self.comboTipoDocumentos.push({
-        estado:1,
-        descripcion:$.i18n.prop("combos.tipoDocumento.factura")
+        estado:"00",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
     })
     self.comboTipoDocumentos.push({
-        estado:2,
-        descripcion:$.i18n.prop("combos.tipoDocumento.boleta")
+         estado:"01",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
+    })
+    self.comboTipoDocumentos.push({
+         estado:"02",
+        descripcion:$.i18n.prop("factura.tipo.documento.nota.debito")
+    })
+    self.comboTipoDocumentos.push({
+         estado:"03",
+        descripcion:$.i18n.prop("factura.tipo.documento.nota.credito")
     })
     self.update()
 }
@@ -1270,16 +1303,13 @@ function __ComboEstados(){
     self.comboEstados = []
     self.comboEstados.push({
         estado:1,
-        descripcion:$.i18n.prop("combo.estado.pendiente")
+        descripcion:$.i18n.prop("factura.estado.pendiente")
     })
     self.comboEstados.push({
         estado:2,
-        descripcion:$.i18n.prop("combo.estado.ingreso.inventario")
+        descripcion:$.i18n.prop("factura.estado.facturado")
     })
-    self.comboEstados.push({
-        estado:3,
-        descripcion:$.i18n.prop("combo.estado.chequeo.mercancia")
-    })
+    
     self.update()
 }
 /**
@@ -1298,15 +1328,44 @@ function agregarInputsCombos_Articulo(){
 /**
 *  Agregar los inpust  y select de las tablas
 **/
-function agregarInputsCombos_Proveedores(){
+function agregarInputsCombos_Clientes(){
      // Agregar los input de busqueda 
-    $('.tableListaProveedor tfoot th').each( function (e) {
-        var title = $('.tableListaProveedor thead th').eq($(this).index()).text();      
+    $('.tableListaCliente tfoot th').each( function (e) {
+        var title = $('.tableListaCliente thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
         if ( $(this).index() != 5    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
-}                              
+}  
+/**
+ * Obtener la provincia 
+ * */
+function __cargaProvincias(provincia){
+    if(provincia =="1"){
+      return $.i18n.prop("provincia.sanjose")
+    }
+    if(provincia =="2"){
+      return $.i18n.prop("provincia.alajuela")
+    }    
+    if(provincia =="3"){
+      return $.i18n.prop("provincia.cartago")
+    }    
+    if(provincia =="4"){
+      return $.i18n.prop("provincia.heredia")
+    }    
+    if(provincia =="5"){
+      return $.i18n.prop("provincia.guanacaste")
+    }    
+    if(provincia =="6"){
+      return $.i18n.prop("provincia.puntarenas")
+    }    
+
+   if(provincia =="7"){
+      return $.i18n.prop("provincia.limon")
+    }    
+    return "No Registrada"
+}
 </script>
-</compra-proveedores>
+
+</punto-venta>

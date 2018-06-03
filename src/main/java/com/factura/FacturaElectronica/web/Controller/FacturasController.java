@@ -1,7 +1,6 @@
 package com.factura.FacturaElectronica.web.Controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -20,9 +18,6 @@ import com.factura.FacturaElectronica.Bo.CompraBo;
 import com.factura.FacturaElectronica.Bo.DataTableBo;
 import com.factura.FacturaElectronica.Bo.UsuarioBo;
 import com.factura.FacturaElectronica.Utils.Constantes;
-import com.factura.FacturaElectronica.Utils.DataTableDelimitador;
-import com.factura.FacturaElectronica.Utils.DataTableFilter;
-import com.factura.FacturaElectronica.Utils.RespuestaServiceDataTable;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
 import com.factura.FacturaElectronica.modelo.Compra;
 import com.factura.FacturaElectronica.modelo.Empresa;
@@ -42,7 +37,7 @@ import com.google.common.base.Function;
  * @since 21 may. 2018
  */
 @Controller
-public class ComprasController {
+public class FacturasController {
 
 	private static final Function<Object, CompraEsperaCommand>	TO_COMMAND	= new Function<Object, CompraEsperaCommand>() {
 
@@ -82,22 +77,19 @@ public class ComprasController {
 	}
 
 	
-	@RequestMapping(value = "/ListaCompras", method = RequestMethod.GET)
-	public String listar(ModelMap model) {
-		return "views/compras/ListarCompras";
-	}
+
 	
 	/**
 	 * Modulo de compras
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/compras", method = RequestMethod.GET)
+	@RequestMapping(value = "/puntoVenta", method = RequestMethod.GET)
 	public String crearCompras(ModelMap model) {
-		return "views/compras/crearCompra";
+		return "views/facturas/puntoVenta";
 	}
 
-	@RequestMapping(value = "/CrearCompraAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/CrearCompraAjax1.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute CompraCommand compraCommand, BindingResult result, SessionStatus status) {
 
@@ -129,94 +121,31 @@ public class ComprasController {
 			compraCommand.setUsuarioCreacion(usuarioSesion);
 			compraBo.crearCompra(compraCommand);
 
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("categoria.agregar.correctamente", compraCommand);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", compraCommand);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
 
-	/**
-	 * Lista las compras pendientes de ingresar al inventario
-	 * @param request
-	 * @param response
-	 * @param idEmpresa
-	 * @return
-	 */
-	@RequestMapping(value = "/ListarComprasEsperaActivasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceDataTable listarActivasAjax(HttpServletRequest request, HttpServletResponse response) {
-
-		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		DataTableDelimitador delimitadores = null;
-		delimitadores = new DataTableDelimitador(request, "Compra");
-		DataTableFilter dataTableFilter = new DataTableFilter("estado", "'" + Constantes.COMPRA_ESTADO_PENDIENTE.toString() + "'", "=");
-		delimitadores.addFiltro(dataTableFilter);
-		dataTableFilter = new DataTableFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
-		delimitadores.addFiltro(dataTableFilter);
-
-		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
-	}
 	
-	/**
-	 * Lista las compras ingresadas al inventario y que no estan pendiente
-	 * @param request
-	 * @param response
-	 * @param idEmpresa
-	 * @return
-	 */
-	@RequestMapping(value = "/ListarComprasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceDataTable listarComprasAjax(HttpServletRequest request, HttpServletResponse response) {
-
-		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		DataTableDelimitador delimitadores = null;
-		delimitadores = new DataTableDelimitador(request, "Compra");
-		DataTableFilter dataTableFilter = new DataTableFilter("estado", "'" + Constantes.COMPRA_ESTADO_PENDIENTE.toString() + "'", "<>");
-		delimitadores.addFiltro(dataTableFilter);
-		dataTableFilter = new DataTableFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
-		delimitadores.addFiltro(dataTableFilter);
-
-		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
-	}
-/**
- * Mostrar la compra
- * @param request
- * @param model
- * @param compra
- * @param result
- * @param status
- * @return
- * @throws Exception
- */
-	@RequestMapping(value = "/MostrarCompraEsperaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam Integer id) {
-		try {
-			Compra compraBD = compraBo.findById(id);
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", compraBD);
-		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
-		}
-	}
 
 	static class RESPONSES {
 
 		private static class OK {
 
-			private static class COMPRA {
+			private static class FACTURA {
 
-				private static final RespuestaServiceValidator	AGREGADO		= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.agregar.correctamente");
-				private static final RespuestaServiceValidator	MODIFICADO	= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.modificado.correctamente");
+				private static final RespuestaServiceValidator	AGREGADO		= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente");
+				private static final RespuestaServiceValidator	MODIFICADO	= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.modificado.correctamente");
 			}
 		}
 
 		private static class ERROR {
 
-			private static class COMPRA {
+			private static class FACTURA {
 
-				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.categoria.noExiste");
+				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.noExiste");
 			}
 		}
 	}
