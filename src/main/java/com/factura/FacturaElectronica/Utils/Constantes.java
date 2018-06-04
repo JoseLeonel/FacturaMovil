@@ -169,5 +169,8 @@ public class Constantes {
 
 	public static final Integer					FACTURA_ESTADO_PENDIENTE											= 1;
 	public static final Integer					FACTURA_ESTADO_FACTURADO											= 2;
+	
+	public static final String					FACTURA_ESTADO_PENDIENTE_STR											= "factura.estado.pendiente";
+	public static final String					FACTURA_ESTADO_FACTURADO_STR											= "factura.estado.facturado";
 
 }

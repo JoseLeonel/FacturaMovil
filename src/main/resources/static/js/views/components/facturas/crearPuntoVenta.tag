@@ -9,14 +9,14 @@
 						<h3 class="box-title">{$.i18n.prop("factura.resumen.formulario")} {factura.id>0?' Id#:'+factura.id:'' } </h3>
 					</div>
                     <div class="box-body">
-                        <form id="formularioCompra">
+                        <form id="formularioFactura">
                             <input id="id" name="id" type="hidden" value="{compra.id}">
                             <div class="row">
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("factura.condicion.pago")} </label> 
-                                        <select  onchange= {__formaPago} class="form-control" id="formaPago" >
-                                            <option each={comboCondicionPagos} value="{estado}" selected="{compra.formaPago ==estado?true:false}" >{descripcion}</option>
+                                        <select  onchange= {__formaPago} class="form-control" id="condicionVenta" >
+                                            <option each={comboCondicionPagos} value="{estado}" selected="{factura.condicionVenta ==estado?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>
  
@@ -24,8 +24,8 @@
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
                                     <div class="form-group ">
                                         <label for="pago_tipoVentaL">{$.i18n.prop("factura.tipo.documento")} </label> 
-                                        <select class="form-control" id="tipoDocumento" name="tipoDocumento"   >
-                                            <option each={comboTipoDocumentos} value="{estado}" selected="{compra.tipoDocumento ==estado?true:false}" >{descripcion}</option>
+                                        <select class="form-control" id="tipoDoc" name="tipoDoc"   >
+                                            <option each={comboTipoDocumentos} value="{estado}" selected="{factura.tipoDoc ==estado?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>
  
@@ -34,7 +34,7 @@
                                     <div class="form-group ">
                                         <label for="pago_tipoVentaL">{$.i18n.prop("factura.estado")} </label> 
                                         <select class="form-control" id="estado" name="estado"  >
-                                            <option each={comboEstados} value="{estado}" selected="{compra.estado ==estado?true:false}" >{descripcion}</option>
+                                            <option each={comboEstados} value="{estado}" selected="{factura.estado ==estado?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -87,7 +87,28 @@
                                         <input type="text" class="form-control " value="{cliente.otraSena}" readonly>
                                     </div>
                                 </div>
-                            </div>    
+                            </div> 
+                            <div class="row">
+                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                                    <div class="form-group ">
+                                        <input   type="hidden" class="form-control" id="vendedor" name="vendedor" value="{vendedor.id}">
+                                        <label>{$.i18n.prop("factura.vendedor")}</label> 
+                                        <input onclick = {_EscogerVendedores}  type="text" id="nombreVendedor" name="nombreVendedor" class="form-control"  value="{vendedor.nombreCompleto}" readonly>
+                                    </div>
+                                </div>
+                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                                    <div class="form-group ">
+                                        <label>{$.i18n.prop("vendedor.correoElectronico")}</label> 
+                                        <input type="text" class="form-control " value="{vendedor.correoElectronico}" readonly>
+                                    </div>
+                                </div>
+                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                                    <div class="form-group ">
+                                        <label>{$.i18n.prop("vendedor.celular")}</label> 
+                                        <input type="text" class="form-control " value="{vendedor.celular}" readonly>
+                                    </div>
+                                </div>
+                            </div>                                
                             <div class="row">
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                     <div class="form-group ">
@@ -117,14 +138,22 @@
                     <aside class="right-sidebar">
                         <!--Booking details-->
                         <article class="booking-details clearfix">
-                            <h3><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h3>
+                            <h3><span class="booking-info tituloTotal">{$.i18n.prop("factura.resumen.venta")}</span></h3>
                             <div class="booking-info tituloTotal">
                                 <p style="text-align:left">{$.i18n.prop("factura.resumen.subTotal")}  <span style="text-align:right"> ₡ {factura.subTotal.toLocaleString('de-DE') }       </span></p>
                                 <p style="text-align:left">{$.i18n.prop("factura.resumen.descuento")} <span style="text-align:right"> ₡ {factura.totalDescuento.toLocaleString('de-DE')} </span></p>
                                 <p style="text-align:left">{$.i18n.prop("factura.resumen.impuesto")}  <span style="text-align:right"> ₡ {factura.totalImpuesto.toLocaleString('de-DE')}  </span></p>
                             </div>
-                            <div class="precioTotalFactura">
-                                <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.total")} <span id="lblTotal">₡ {factura.total.toLocaleString('de-DE')}</span></p>
+                            <div class="booking-info tituloTotal">
+                                <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.total")} <span id="lblTotal">₡ {factura.totalVenta.toLocaleString('de-DE')}</span></p>
+                                <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.efectivo")}</p> 
+                                <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales " id="totalEfectivo" name="totalEfectivo"  value="" >
+                                <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.tarjeta")}</p> 
+                                <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales" id="totalTarjeta" name="totalTarjeta"   >
+                                <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.banco")}</p> 
+                                <input onkeyup={ __TotalDeTarjetaABanco} onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales" id="totalBanco" name="totalBanco"  value="" >
+                                <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">₡ {factura.totalDelCambio.toLocaleString('de-DE')}</span></p>
+
                             </div>
                         </article>
                     </aside>     
@@ -212,7 +241,7 @@
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show">₡ {factura.total.toLocaleString('de-DE')}</span>
+                                                    <span class="label label-info textShadow" id="total-show">₡ {factura.totalVenta.toLocaleString('de-DE')}</span>
                                                 </div>
                                             </td>
                                         </tr>                     
@@ -306,6 +335,44 @@
 </div>
 <!--fin del modal-->
  
+<!--Modal mostrar  -->
+<div id="modalVendedor" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("vendedor.lista")}   </h4>
+            </div>
+            <div class="modal-body">
+                <table id="tableListaVendedor" class="table responsive display table-striped table-hover nowrap tableListaVendedor " cellspacing="0" width="100%">
+                   <thead>
+                        <th class="table-header">{$.i18n.prop("vendedor.cedula")}            </th>
+                        <th class="table-header">{$.i18n.prop("vendedor.nombreCompleto")}    </th>
+                        <th class="table-header">{$.i18n.prop("vendedor.correoElectronico")} </th>
+                        <th class="table-header">{$.i18n.prop("vendedor.telefono")}          </th>
+                        <th class="table-header">{$.i18n.prop("vendedor.celular")}           </th>
+                        <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
+                    </thead>
+                    <tfoot style="display: table-header-group;">
+                        <tr>
+                            <th>{$.i18n.prop("vendedor.cedula")}           </th>
+                            <th>{$.i18n.prop("vendedor.nombreCompleto")}   </th>
+                            <th>{$.i18n.prop("vendedor.correoElectronico")}</th>
+                            <th>{$.i18n.prop("vendedor.telefono")}         </th>
+                            <th>{$.i18n.prop("vendedor.celular")}          </th>
+                            <th>                                           </th>
+                        </tr>
+                    </tfoot>                    
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--fin del modal-->
+ 
+
 
 <style type="text/css">
     /* Lista de facturas en espera*/
@@ -367,6 +434,11 @@
         text-align: left;
         padding-left: 20px;
         line-height: 30px;
+    }
+    .tamanoLetraTotales{
+        font-weight: 600 !important;
+        font-size: 30px !important;
+
     }
     #pagarTable,#pagarTableInfo{
         border-collapse: separate;
@@ -487,20 +559,50 @@
     self.comboCondicionPagos        = []
     self.comboTipoDocumentos   = []
     self.factura                = {
-        consecutivo:"",
-        fechaCredito    : null,
-        fechaCompra     : null,
-        id : 0,
-        totalImpuesto: 0,
-        total:0,
-        estado:0,
-        tipoDocumento:0,
-        formaPago:0,
-        totalDescuento:0,
-        subTotal:0,  
-        total:0,
-        nota:""
-    }                            
+        id:0,
+	   fechaCredito:null,
+	   fechaEmision:null,
+	   condicionVenta:"",
+	    plazoCredito:0,
+	    tipoDoc:"",
+	    medioPago:"",
+	    nombreFactura:"",
+	    direccion:"",
+	    nota:"",
+	    comanda:"",
+	    subTotal:0,
+	    totalTransporte:0,
+	    total:0,
+	    totalServGravados:0,
+	    totalServExentos:0,
+	    totalMercanciasGravadas:0,
+	    totalMercanciasExentas:0,
+	    totalGravado:0,
+	    totalExento:0,
+	    totalVenta:0,
+	    totalDescuentos:0,
+	    totalVentaNeta:0,
+	    totalImpuesto:0,
+	    totalComprobante:0,
+	    totalEfectivo:0,
+        totalTarjeta:0,
+        totalDelCambio:0,
+	    totalBanco:0,
+	    totalCredito:0,
+	    montoCambio:0,
+	    totalCambio:0,
+	    codigoMoneda:"",
+	    estado:0,
+	    cliente:{
+            id:0,
+            nombreCompleto:""
+        },
+	    vendedor:{
+            id:0,
+            nombreCompleto:""
+        }
+
+    }                   
     self.item                  = null;
     self.articulo              = null;
     self.articulos             = {data:[]}
@@ -517,10 +619,12 @@
     self.mostrarCamposIngresoContado = true;
 
     self.on('mount',function(){
-        $("#formularioCompra").validate(reglasDeValidacionCompra());
+        $("#formularioFactura").validate(reglasDeValidacionCompra());
         __informacionData()
+        __informacionData_vendedores()
         __InicializarTabla('.tableListaCliente')
         __InicializarTabla('.tableListaInventario')
+        __InicializarTabla('.tableListaVendedor')
         agregarInputsCombos_Articulo()
           __ListaComprasEnEspera()
         __comboCondicionPago()
@@ -528,6 +632,7 @@
         __ComboEstados()
         __ListaDeArticulosPorEmpresa();
         __ListaDeClientes()
+        __ListaDeVendedores()
     })
 /**
 * Camps requeridos
@@ -535,16 +640,14 @@
 var reglasDeValidacionCompra = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
 		rules : {
-			consecutivo : {
-				required : true,
-         	},                                   
-			fechaCompra : {
-				required : true,
-             },
+			
              nombreCliente:{
                  required:true
              },
              nota:{
+                 maxlength:255,
+             },
+             direccion:{
                  maxlength:255,
              }         
 		},
@@ -553,6 +656,59 @@ var reglasDeValidacionCompra = function() {
 	});
 	return validationOptions;
 };
+
+/**
+*  Obtiene el valor de lo digitado en el campo de efectivo
+**/
+__TotalDeEfectivoAPagar(e){
+    self.factura.totalEfectivo = __valorNumerico(e.target.value) 
+    self.update()
+}
+/**
+*  Obtiene el valor de lo digitado en el campo de Tarjeta
+**/
+__TotalDeTarjetaAPagar(e){
+    self.factura.totalTarjeta = __valorNumerico(e.target.value) 
+    self.update()
+}
+
+/**
+*  Obtiene el valor de lo digitado en el campo de Banco
+**/
+__TotalDeBancoAPagar(e){
+    self.factura.totalBanco = __valorNumerico(e.target.value) 
+    self.update()
+}
+/**
+*   Calculo del cambio entregar en el evento onblur
+**/
+__CalculaCambioAEntregarOnblur(e){
+    var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
+    sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
+    sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
+    self.factura.totalDelCambio = 0
+    self.factura.totalDelCambio = sumaMontosEntregadosParaCambios > self.factura.totalVenta ? sumaMontosEntregadosParaCambios - self.factura.totalVenta:sumaMontosEntregadosParaCambios - self.factura.totalVenta    
+    self.update()
+}
+/**
+*   Calculo del cambio entregar en el evento keyPress
+**/
+__CalculaCambioAEntregarKeyPress(e){
+    var sumaMontosEntregadosParaCambios =0
+    if (e.keyCode == 13) {
+        sumaMontosEntregadosParaCambios  = __valorNumerico(self.factura.totalTarjeta)
+        sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
+        sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
+        self.factura.totalDelCambio = 0
+        self.factura.totalDelCambio = sumaMontosEntregadosParaCambios > self.factura.totalVenta ? sumaMontosEntregadosParaCambios - self.factura.totalVenta:sumaMontosEntregadosParaCambios - self.factura.totalVenta    
+        self.update()
+    }
+}
+
+
+
+
+
  /**
  * Listar productos  llamado del modal para presentar los articulos
  **/   
@@ -570,19 +726,14 @@ __CargarFacturaEspera(e){
 **/
 __AplicarYcrearFactura(){
      if(self.detail.length == 0 ){
-        mensajeError($.i18n.prop("compra.alert.sin.detalles"))
+        mensajeError($.i18n.prop("factura.alert.sin.detalles"))
         return
     }
-    if(formaPago.value == 2  ){
-        if(fechaCredito.value == null || fechaCredito.value.length == 0){
-           mensajeError($.i18n.prop("compra.alert.fechaCredito"))
-            return
-        }
-    }
-    if ($("#formularioCompra").valid()) {
+  
+    if ($("#formularioFactura").valid()) {
         swal({
            title: '',
-           text: $.i18n.prop("compra.alert.crear"),
+           text: $.i18n.prop("factura.alert.crear"),
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: '#00539B',
@@ -618,19 +769,49 @@ function __Init(){
     self.comboCondicionPagos        = []
     self.comboTipoDocumentos   = []
     self.factura                = {
-        consecutivo:"",
-        fechaCredito    : null,
-        fechaCompra     : null,
-        id : 0,
-        totalImpuesto: 0,
-        total:0,
-        estado:0,
-        tipoDocumento:0,
-        formaPago:0,
-        totalDescuento:0,
-        subTotal:0,  
-        total:0,
-        nota:""
+        id:0,
+	    fechaCredito:null,
+	    fechaEmision:null,
+	    condicionVenta:"",
+	    plazoCredito:0,
+	    tipoDoc:"",
+	    medioPago:"",
+	    nombreFactura:"",
+	    direccion:"",
+	    nota:"",
+	    comanda:"",
+	    subTotal:0,
+	    totalTransporte:0,
+	    total:0,
+	    totalServGravados:0,
+	    totalServExentos:0,
+	    totalMercanciasGravadas:0,
+	    totalMercanciasExentas:0,
+	    totalGravado:0,
+	    totalExento:0,
+	    totalVenta:0,
+	    totalDescuentos:0,
+	    totalVentaNeta:0,
+	    totalImpuesto:0,
+	    totalComprobante:0,
+	    totalEfectivo:0,
+        totalTarjeta:0,
+        totalDelCambio:0,
+	    totalBanco:0,
+	    totalCredito:0,
+	    montoCambio:0,
+	    totalCambio:0,
+	    codigoMoneda:"",
+	    estado:0,
+	    cliente:{
+            id:0,
+            nombreCompleto:"",
+        },
+	    vendedor:{
+            id:0,
+            nombreCompleto:""
+        }
+
     }                            
     self.item                  = null;
     self.articulo              = null;
@@ -771,29 +952,50 @@ function _calcularImpuesto(precioArticulo,iva,cantidad){
 **/
 function crearFactura(){
     self.detalleFactura.data =self.detail
-    self.update()
-      var JSONDetalles = JSON.stringify( self.detalleFactura );
+    self.update() 
+     var JSONDetalles = JSON.stringify( self.detalleFactura );
     var informacion = {
-        id:self.compra.id,
-        nota:nota.value,
-        subTotal:__valorNumerico(self.compra.subTotal),
-        totalDescuento:__valorNumerico(self.totalDescuentoDetalle),
-        totalImpuesto:__valorNumerico(self.compra.totalImpuesto),
-        totalCompra:__valorNumerico(self.compra.totalCompra),
-        formaPago:formaPago.value,
-        tipoDocumento:tipoDocumento.value,
-        cliente:self.cliente.id,
-        consecutivo:consecutivo.value,
-        estado:estado.value,
-        fechaCredito:formaPago.value == 2?fechaCredito.value:new Date(),
-        fechaCompra:fechaCompra.value,
-        detalleFactura :JSONDetalles
-     }
+        id:self.factura.id,
+	    fechaCredito:condicionVenta.value == 2?fechaCredito.value:new Date(),
+	    condicionVenta:condicionVenta.value,
+	    plazoCredito:self.factura.plazoCredito,
+	    tipoDoc:tipoDoc.value,
+	    medioPago:self.factura.medioPago,
+	    nombreFactura:self.factura.nombreFactura,
+	    direccion:direccion.value,
+	    nota:nota.value,
+	    comanda:self.factura.comanda,
+	    subTotal:self.factura.subtotal,
+	    totalTransporte:self.factura.totalTransporte,
+	    total:self.factura.total,
+	    totalServGravados:self.factura.totalServGravados,
+	    totalServExentos:self.factura.totalServExentos,
+	    totalMercanciasGravadas:self.factura.totalMercanciasGravadas,
+	    totalMercanciasExentas:self.factura.totalMercanciasExentas,
+	    totalGravado:self.factura.totalGravado,
+	    totalExento:self.factura.totalExento,
+	    totalVenta:self.factura.totalVenta,
+	    totalDescuentos:self.factura.totalDescuento,
+	    totalVentaNeta:self.factura.totalVentaNeta,
+	    totalImpuesto:self.factura.totalImpuesto,
+	    totalComprobante:self.factura.totalComprobante,
+	    totalEfectivo:totalEfectivo.value,
+	    totalTarjeta:totalTarjeta.value,
+	    totalBanco:totalBanco.value,
+	    totalCredito:0,
+	    montoCambio:0,
+	    totalCambio:0,
+	    estado:estado.value,
+	    cliente:cliente.value,
+        vendedor:vendedor.value,
+        detalleFactura :JSONDetalles,
+
+    }                  
     $.ajax({
         type : "POST",
         dataType : "json",
         data : informacion,
-        url : "crearFacturaAjax.do",
+        url : "CrearFacturaAjax",
         success : function(data) {
             if (data.status != 200) {
                	serverMessageJsonClase(data);
@@ -940,6 +1142,39 @@ function __ListaDeArticulosPorEmpresa(){
 _EscogerClientes(){
     $('#modalClientes').modal('show')  
 }
+
+/**
+*  Muestra la lista de vendedores
+**/
+_EscogerVendedores(){
+    $('#modalVendedor').modal('show')  
+}
+
+
+/**
+*  Lista de los vendedores
+**/
+function __ListaDeVendedores(){
+    $.ajax({
+        url: 'ListarVendedoresActivosAjax.do',
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                __informacionData_vendedores()
+                loadListar(".tableListaVendedor",idioma_espanol,self.informacion_tabla_vendedores,result.aaData)
+                agregarInputsCombos_Vendedores()
+                ActivarEventoFiltro(".tableListaVendedor")
+                __seleccionarVendedor()
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+}
+
 /**
 *  Lista de los clientes
 **/
@@ -1137,20 +1372,37 @@ function __calculate() {
     self.factura.totalImpuesto   = 0;
     self.factura.subTotal        = 0;
     self.update()
-    total          = 0
+    totalVenta     = 0
     subTotal       = 0
     totalDescuento = 0
     totalImpuesto  = 0
+    totalMercanciasGravadas = 0
+    totalMercanciasExentas  = 0
+    totalGravado            = 0
+    totalExento             = 0
+    totalComprobante        = 0
     self.detail.forEach(function(e){
-        total          += e.subTotal >0?e.subTotal:0
-        subTotal       += e.subTotal >0?e.subTotal + e.descuento:0
-        totalDescuento += e.descuento >0?e.descuento:0
-        totalImpuesto  += e.impuesto >0?e.impuesto:0
+        totalMercanciasGravadas += e.impuesto > 0?e.subtotal:0
+        totalMercanciasExentas  += e.impuesto == 0?e.subtotal:0
+        totalGravado            += e.impuesto > 0 ?e.subTotal:0
+        totalExento             += e.impuesto == 0?e.subtotal:0
+        totalComprobante        += e.subTotal
+        totalVenta              += e.subTotal >0?e.subTotal:0
+        subTotal                += e.subTotal >0?e.subTotal + e.descuento:0
+        totalDescuento          += e.descuento >0?e.descuento:0
+        totalImpuesto           += e.impuesto >0?e.impuesto:0
     });
-    self.factura.total          += total 
-    self.factura.subTotal       += subTotal - totalImpuesto
-    self.factura.totalDescuento += totalDescuento
-    self.factura.totalImpuesto  += totalImpuesto
+    self.factura.totalMercanciasGravadas = totalMercanciasGravadas
+    self.factura.totalMercanciasExentas  = totalMercanciasExentas
+    self.factura.totalGravado            = totalGravado
+    self.factura.totalExento             = totalExento
+    self.factura.totalVenta              = totalVenta 
+    self.factura.subTotal                = subTotal - totalImpuesto
+    self.factura.totalDescuento          = totalDescuento
+    self.factura.totalImpuesto           = totalImpuesto
+    self.factura.totalVentaNeta          = totalVenta - totalDescuento
+    self.factura.totalComprobante        = totalComprobante
+
     self.articulo              = null;
     self.update(); 
     $( "#producto" ).val(null);
@@ -1202,6 +1454,51 @@ function __agregarArticulos() {
 	    __buscarProducto(self.articulo.id,1)
     });
 }
+
+/**
+* formato de la tabla de clientes
+**/
+function __informacionData_vendedores(){
+    self.informacion_tabla_vendedores = [	
+                                        {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("vendedor.cedula")            ,"autoWidth":false},
+                                        {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("vendedor.nombreCompleto")    ,"autoWidth":false},
+                                        {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("vendedor.correoElectronico") ,"autoWidth":false},
+                                        {'data' : 'telefono'         ,"name":"telefono"          ,"title" : $.i18n.prop("vendedor.telefono")          ,"autoWidth":false},                                
+                                        {'data' : 'celular'          ,"name":"celular"           ,"title" : $.i18n.prop("vendedor.celular")           ,"autoWidth":false},                                
+                                        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
+									            "render":function(id,type, row){
+										            return __OpcionesVendedores(id,type,row);
+	 							                }	 
+								            },
+                                        ];                              
+   
+}
+/**
+* Opciones del modal de clientes
+*/
+function __OpcionesVendedores(){
+  var agregar  = '<a href="#"  title="Seleccionar Vendedor" class="btn btnVendedor btn-success form-control" title="Seleccione el vendedor" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
+  return  agregar;
+
+}
+
+/**
+* Seleccionar el vendedor de la factura
+**/
+function __seleccionarVendedor() {
+     $('#tableListaVendedor').on('click', '.btnVendedor', function (e) {
+         var table = $('#tableListaVendedor').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+         }
+        self.vendedor = data
+        self.update();
+    });
+}
+
 /**
 * formato de la tabla de clientes
 **/
@@ -1337,7 +1634,21 @@ function agregarInputsCombos_Clientes(){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
-}  
+} 
+
+/**
+*  Agregar los inpust  y select de las tablas
+**/
+function agregarInputsCombos_Vendedores(){
+     // Agregar los input de busqueda 
+    $('.tableListaVendedor tfoot th').each( function (e) {
+        var title = $('.tableListaVendedor thead th').eq($(this).index()).text();      
+        //No se toma en cuenta la columna de las acctiones(botones)
+        if ( $(this).index() != 5    ){
+	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	    }
+    })
+} 
 /**
  * Obtener la provincia 
  * */

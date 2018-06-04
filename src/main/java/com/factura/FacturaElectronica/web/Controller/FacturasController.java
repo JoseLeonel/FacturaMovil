@@ -14,21 +14,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.factura.FacturaElectronica.Bo.CompraBo;
 import com.factura.FacturaElectronica.Bo.DataTableBo;
+import com.factura.FacturaElectronica.Bo.FacturaBo;
 import com.factura.FacturaElectronica.Bo.UsuarioBo;
-import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
+import com.factura.FacturaElectronica.modelo.Cliente;
 import com.factura.FacturaElectronica.modelo.Compra;
 import com.factura.FacturaElectronica.modelo.Empresa;
-import com.factura.FacturaElectronica.modelo.Proveedor;
-import com.factura.FacturaElectronica.modelo.Usuario;
-import com.factura.FacturaElectronica.validator.CompraFormValidator;
-import com.factura.FacturaElectronica.web.command.CompraCommand;
+import com.factura.FacturaElectronica.modelo.Vendedor;
+import com.factura.FacturaElectronica.validator.FacturaFormValidator;
 import com.factura.FacturaElectronica.web.command.CompraEsperaCommand;
+import com.factura.FacturaElectronica.web.command.FacturaCommand;
+import com.factura.FacturaElectronica.web.componentes.ClientePropertyEditor;
 import com.factura.FacturaElectronica.web.componentes.EmpresaPropertyEditor;
-import com.factura.FacturaElectronica.web.componentes.ProveedorPropertyEditor;
 import com.factura.FacturaElectronica.web.componentes.StringPropertyEditor;
+import com.factura.FacturaElectronica.web.componentes.VendedorPropertyEditor;
 import com.google.common.base.Function;
 
 /**
@@ -50,37 +50,37 @@ public class FacturasController {
 	@Autowired
 	private DataTableBo																					dataTableBo;
 
-
 	@Autowired
 	private UsuarioBo																						usuarioBo;
 
 	@Autowired
-	private CompraBo																						compraBo;
+	private FacturaBo																						facturaBo;
 
 	@Autowired
 	private EmpresaPropertyEditor																empresaPropertyEditor;
 
 	@Autowired
-	private ProveedorPropertyEditor															proveedorPropertyEditor;
+	private ClientePropertyEditor																clientePropertyEditor;
 
 	@Autowired
-	private CompraFormValidator																	compraFormValidator;
+	private VendedorPropertyEditor															vendedorPropertyEditor;
+
+	@Autowired
+	private FacturaFormValidator																facturaFormValidator;
 
 	@Autowired
 	private StringPropertyEditor																stringPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
-		binder.registerCustomEditor(Proveedor.class, proveedorPropertyEditor);
+		binder.registerCustomEditor(Cliente.class, clientePropertyEditor);
+		binder.registerCustomEditor(Vendedor.class, vendedorPropertyEditor);
 		binder.registerCustomEditor(Empresa.class, empresaPropertyEditor);
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
 
-	
-
-	
 	/**
-	 * Modulo de compras
+	 * Ventas por Mini super
 	 * @param model
 	 * @return
 	 */
@@ -89,46 +89,42 @@ public class FacturasController {
 		return "views/facturas/puntoVenta";
 	}
 
-	@RequestMapping(value = "/CrearCompraAjax1.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/CrearFacturaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute CompraCommand compraCommand, BindingResult result, SessionStatus status) {
+	public RespuestaServiceValidator crearFactura(HttpServletRequest request, ModelMap model, @ModelAttribute FacturaCommand facturaCommand, BindingResult result, SessionStatus status) {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			compraFormValidator.validate(compraCommand, result);
+			facturaFormValidator.validate(facturaCommand, result);
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			if (compraCommand.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
-				compraCommand.setFechaCredito(null);
-			}
-			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-			if(compraCommand.getConsecutivo().equals(Constantes.EMPTY)) {
-				result.rejectValue("consecutivo", "error.compra.existe.consecutivo");
-			}
-			Compra compraBD = compraBo.findByConsecutivoAndEmpresa(compraCommand.getConsecutivo(), usuarioSesion.getEmpresa());
-			if (compraBD != null) {
-				if(!compraBD.getId().equals(compraCommand.getId())) {
-					result.rejectValue("consecutivo", "error.compra.existe.consecutivo");	
-				}
-				
-
-			}
-			if (result.hasErrors()) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
-			}
-			compraCommand.setEmpresa(usuarioSesion.getEmpresa());
-			compraCommand.setUsuarioCreacion(usuarioSesion);
-			compraBo.crearCompra(compraCommand);
-
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", compraCommand);
+			// if (compraCommand.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
+			// compraCommand.setFechaCredito(null);
+			// }
+			// Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+			// if(compraCommand.getConsecutivo().equals(Constantes.EMPTY)) {
+			// result.rejectValue("consecutivo", "error.compra.existe.consecutivo");
+			// }
+			// Compra compraBD = compraBo.findByConsecutivoAndEmpresa(compraCommand.getConsecutivo(), usuarioSesion.getEmpresa());
+			// if (compraBD != null) {
+			// if(!compraBD.getId().equals(compraCommand.getId())) {
+			// result.rejectValue("consecutivo", "error.compra.existe.consecutivo");
+			// }
+			//
+			//
+			// }
+			// if (result.hasErrors()) {
+			// return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			// }
+			// compraCommand.setEmpresa(usuarioSesion.getEmpresa());
+			// compraCommand.setUsuarioCreacion(usuarioSesion);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", facturaCommand);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-
-	
 
 	static class RESPONSES {
 
