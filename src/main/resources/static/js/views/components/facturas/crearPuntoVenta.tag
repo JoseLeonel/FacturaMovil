@@ -151,7 +151,7 @@
                                 <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.tarjeta")}</p> 
                                 <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales" id="totalTarjeta" name="totalTarjeta"   >
                                 <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.banco")}</p> 
-                                <input onkeyup={ __TotalDeTarjetaABanco} onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales" id="totalBanco" name="totalBanco"  value="" >
+                                <input onkeyup={ __TotalDeBancoAPagar} onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales" id="totalBanco" name="totalBanco"  value="" >
                                 <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">₡ {factura.totalDelCambio.toLocaleString('de-DE')}</span></p>
 
                             </div>
@@ -164,19 +164,24 @@
     <div class="box box-solid box-primary" show={mostarParaCrearNuevaCompra}>
         <div class="box-body">
              <div class="box-header with-border">
-                 
-                  <div class="box-tools pull-right">
-                    <a href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("btn.limpiar")}</span></a>
+                <div class="row">
+                  <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">  
+                  <div class="box-tools ">
+                    <a class="pull-right" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("btn.limpiar")}</span></a>
+                    <a  class="pull-right"  href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("btn.tiquete")}</span></a>
+                    <a   class="pull-right" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.cliente")}"> <span class="label label-limpiar">{$.i18n.prop("btn.cliente")}</span></a>
                   </div>
+                  </div>
+                </div>  
                   <br>
              </div>
             <div  class="contenedor-compra " >
                 <div class="cabecera-izquierda">
                     <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-sx-6 col-sm-6 col-md-6 col-lg-10">
                                 <input onkeypress={__addProductToDetail}  id="producto" class="form-control" type="text" placeholder="XXXXXXXXXXX" />
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-sx-6 col-sm-6 col-md-6 col-lg-2">
                                 <button    onclick = {__ListaDeProductos} class="btn-green btn-buscar " id="btn-facturar" >
                                     {$.i18n.prop("btn.consultar")} 
                                 </button>
@@ -228,6 +233,8 @@
                 </div>
                 <section class="cabecera-derecha">
 				    <!--right sidebar-->
+                     <div class="row">
+                            <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
                     <aside class="left-sidebar">
                             <!--Booking details-->
                         <article class="booking-details clearfix">
@@ -250,6 +257,8 @@
                             </div>
                         </article>
                     </aside>
+                    </div>
+                    </div>
                     <section   class="lista-compras-espera">
                         <div id="botones"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
                             <a href="#" class="compras-espera"  title="{cliente !=null?cliente.nombreCompleto:""}">C# {id}</a>
@@ -406,8 +415,6 @@
         padding-left: 20px;
         line-height: 30px;
         border-collapse: separate;
-        background-color: #f2f2f2;
-        color: #000;
         text-align: center;
         cursor: pointer;
         padding: 5px;
