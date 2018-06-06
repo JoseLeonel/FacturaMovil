@@ -91,7 +91,7 @@
                             <div class="row">
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div class="form-group ">
-                                        <input   type="hidden" class="form-control" id="vendedor" name="vendedor" value="{vendedor.id}">
+                                        <input   type="hidden" class="form-control vendedor" id="vendedor" name="vendedor" value="{vendedor.id}">
                                         <label>{$.i18n.prop("factura.vendedor")}</label> 
                                         <input onclick = {_EscogerVendedores}  type="text" id="nombreVendedor" name="nombreVendedor" class="form-control"  value="{vendedor.nombreCompleto}" readonly>
                                     </div>
@@ -108,7 +108,20 @@
                                         <input type="text" class="form-control " value="{vendedor.celular}" readonly>
                                     </div>
                                 </div>
-                            </div>                                
+                            </div>      
+                            <div class="row">
+                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                                    <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group has-success">
+                                        <label >{$.i18n.prop("compra.fecha.credito")}</label> 
+                                        <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
+                                            <input type="text" class="form-control" id="fechaCredito" value="{factura.fechaCredito}" >
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>
+                                    </div>    
+                                </div>
+                            </div>                             
                             <div class="row">
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                     <div class="form-group ">
@@ -145,14 +158,16 @@
                                 <p style="text-align:left">{$.i18n.prop("factura.resumen.impuesto")}  <span style="text-align:right"> ₡ {factura.totalImpuesto.toLocaleString('de-DE')}  </span></p>
                             </div>
                             <div class="booking-info tituloTotal">
-                                <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.total")} <span id="lblTotal">₡ {factura.totalVenta.toLocaleString('de-DE')}</span></p>
-                                <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.efectivo")}</p> 
-                                <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales " id="totalEfectivo" name="totalEfectivo"  value="" >
-                                <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.tarjeta")}</p> 
-                                <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales" id="totalTarjeta" name="totalTarjeta"   >
-                                <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.banco")}</p> 
-                                <input onkeyup={ __TotalDeBancoAPagar} onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales" id="totalBanco" name="totalBanco"  value="" >
-                                <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">₡ {factura.totalDelCambio.toLocaleString('de-DE')}</span></p>
+                                <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.total")} <span id="lblTotal">₡ {factura.totalVentaNeta.toLocaleString('de-DE')}</span></p>
+                                <div show = {mostrarCamposIngresoContado }>
+                                    <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.efectivo")}</p> 
+                                    <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales " id="totalEfectivo" name="totalEfectivo"  value="" >
+                                    <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.tarjeta")}</p> 
+                                    <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales" id="totalTarjeta" name="totalTarjeta"   >
+                                    <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.banco")}</p> 
+                                    <input onkeyup={ __TotalDeBancoAPagar} onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales" id="totalBanco" name="totalBanco"  value="" >
+                                    <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">₡ {factura.totalCambioPagar.toLocaleString('de-DE')}</span></p>
+                                </div>
 
                             </div>
                         </article>
@@ -179,10 +194,10 @@
                 <div class="cabecera-izquierda">
                     <div class="row">
                             <div class="col-sx-6 col-sm-6 col-md-6 col-lg-10">
-                                <input onkeypress={__addProductToDetail}  id="producto" class="form-control" type="text" placeholder="XXXXXXXXXXX" />
+                                <input onkeypress={__addProductToDetail}  id="codigo" class="form-control" type="text" placeholder="XXXXXXXXXXX" />
                             </div>
                             <div class="col-sx-6 col-sm-6 col-md-6 col-lg-2">
-                                <button    onclick = {__ListaDeProductos} class="btn-green btn-buscar " id="btn-facturar" >
+                                <button    onclick = {__ListaDecodigos} class="btn-green btn-buscar " id="btn-facturar" >
                                     {$.i18n.prop("btn.consultar")} 
                                 </button>
                             </div>
@@ -214,18 +229,18 @@
                                 <input onkeypress={__recalculacionDelDetalle} id= "cantidadDetalle" class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad} />
                             </td>
                             <td class="text-right">
-                                <input   class="form-control" type="text"  value = "{precio}" readonly />
+                                <input   class="form-control" type="text"  value = "{precioUnitario.toLocaleString('de-DE')}" readonly />
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarDescuento} class="form-control" type="text"  value = "{descuento}" />
+                                <input  onkeypress={__actualizarDescuento} class="form-control" type="text"  value = "{descuento.toLocaleString('de-DE')}" />
                             </td>
                                                         
                             <td class="text-right">
-                                <input  onkeypress={__actualizarImpuesto}  class="form-control" type="text"  value = "  {impuesto.toLocaleString('de-DE')}" readonly/>
+                                <input  class="form-control" type="text"  value = "{impuesto.toLocaleString('de-DE')}" readonly/>
                             </td>
 
                             <td class="text-right">
-                                <input  class="form-control" type="text"  value = "₡  {subTotal.toLocaleString('de-DE')}" readonly/>
+                                <input  class="form-control" type="text"  value = "₡ {montoTotalLinea.toLocaleString('de-DE')}" readonly/>
                             </td>
                         </tr>
                         </tbody>
@@ -248,7 +263,7 @@
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show">₡ {factura.totalVenta.toLocaleString('de-DE')}</span>
+                                                    <span class="label label-info textShadow" id="total-show">₡ {factura.totalVentaNeta.toLocaleString('de-DE')}</span>
                                                 </div>
                                             </td>
                                         </tr>                     
@@ -593,7 +608,7 @@
 	    totalComprobante:0,
 	    totalEfectivo:0,
         totalTarjeta:0,
-        totalDelCambio:0,
+        totalCambioPagar:0,
 	    totalBanco:0,
 	    totalCredito:0,
 	    montoCambio:0,
@@ -613,17 +628,21 @@
     self.item                  = null;
     self.articulo              = null;
     self.articulos             = {data:[]}
-    self.clientes           = {data:[]}
-    self.detalleFactura         ={data:[]}
-    self.cliente             = {};
-    self.facturas_espera         = {data:[]}  
+    self.clientes              = {data:[]}
+    self.detalleFactura        = {data:[]}
+    self.cliente               = {};
+    self.vendedor              = {
+        id:0,
+        nombreCompleto:""
+    };
+    self.facturas_espera       = {data:[]}  
     self.informacion_tabla             = []
     self.informacion_tabla_articulo    = []
-    self.informacion_tabla_clientes = []
-    self.idiomaDataTable       = {}
-    self.mostrarFormularioPago = false
-    self.mostarParaCrearNuevaCompra = true
-    self.mostrarCamposIngresoContado = true;
+    self.informacion_tabla_clientes    = []
+    self.idiomaDataTable               = {}
+    self.mostrarFormularioPago         = false
+    self.mostarParaCrearNuevaCompra    = true
+    self.mostrarCamposIngresoContado   = true;
 
     self.on('mount',function(){
         $("#formularioFactura").validate(reglasDeValidacionCompra());
@@ -678,7 +697,6 @@ __TotalDeTarjetaAPagar(e){
     self.factura.totalTarjeta = __valorNumerico(e.target.value) 
     self.update()
 }
-
 /**
 *  Obtiene el valor de lo digitado en el campo de Banco
 **/
@@ -693,8 +711,8 @@ __CalculaCambioAEntregarOnblur(e){
     var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
     sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
     sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
-    self.factura.totalDelCambio = 0
-    self.factura.totalDelCambio = sumaMontosEntregadosParaCambios > self.factura.totalVenta ? sumaMontosEntregadosParaCambios - self.factura.totalVenta:sumaMontosEntregadosParaCambios - self.factura.totalVenta    
+    self.factura.totalCambioPagar = 0
+    self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalVenta ? sumaMontosEntregadosParaCambios - self.factura.totalVenta:sumaMontosEntregadosParaCambios - self.factura.totalVenta    
     self.update()
 }
 /**
@@ -706,20 +724,15 @@ __CalculaCambioAEntregarKeyPress(e){
         sumaMontosEntregadosParaCambios  = __valorNumerico(self.factura.totalTarjeta)
         sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
         sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
-        self.factura.totalDelCambio = 0
-        self.factura.totalDelCambio = sumaMontosEntregadosParaCambios > self.factura.totalVenta ? sumaMontosEntregadosParaCambios - self.factura.totalVenta:sumaMontosEntregadosParaCambios - self.factura.totalVenta    
+        self.factura.totalCambioPagar = 0
+        self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalVenta ? sumaMontosEntregadosParaCambios - self.factura.totalVenta:sumaMontosEntregadosParaCambios - self.factura.totalVenta    
         self.update()
     }
 }
-
-
-
-
-
- /**
- * Listar productos  llamado del modal para presentar los articulos
+/**
+ * Listar codigos  llamado del modal para presentar los articulos
  **/   
- __ListaDeProductos(){
+ __ListaDecodigos(){
   $('#modalInventario').modal('show')      
  }
 /**
@@ -735,6 +748,12 @@ __AplicarYcrearFactura(){
      if(self.detail.length == 0 ){
         mensajeError($.i18n.prop("factura.alert.sin.detalles"))
         return
+    }
+     if(condicionVenta.value == "02"  ){
+        if(fechaCredito.value == null || fechaCredito.value.length == 0){
+           mensajeError($.i18n.prop("factura.alert.fechaCredito"))
+            return
+        }
     }
   
     if ($("#formularioFactura").valid()) {
@@ -803,11 +822,12 @@ function __Init(){
 	    totalComprobante:0,
 	    totalEfectivo:0,
         totalTarjeta:0,
-        totalDelCambio:0,
+        totalCambioPagar:0,
 	    totalBanco:0,
 	    totalCredito:0,
 	    montoCambio:0,
 	    totalCambio:0,
+        totalCambioPagar:0,
 	    codigoMoneda:"",
 	    estado:0,
 	    cliente:{
@@ -823,17 +843,21 @@ function __Init(){
     self.item                  = null;
     self.articulo              = null;
     self.articulos             = {data:[]}
-    self.clientes           = {data:[]}
-    self.detalleFactura         ={data:[]}
-    self.cliente             = {};
-    self.facturas_espera         = {data:[]}  
+    self.clientes              = {data:[]}
+    self.detalleFactura        ={data:[]}
+    self.cliente               = {};
+    self.vendedor              = {
+        id:0,
+        nombreCompleto:""
+    }
+    self.facturas_espera       = {data:[]}  
     self.informacion_tabla             = []
     self.informacion_tabla_articulo    = []
-    self.informacion_tabla_clientes = []
-    self.idiomaDataTable       = {}
-    self.mostrarFormularioPago = false
-    self.mostarParaCrearNuevaCompra = true
-    self.mostrarCamposIngresoContado = true;
+    self.informacion_tabla_clientes    = []
+    self.idiomaDataTable               = {}
+    self.mostrarFormularioPago         = false
+    self.mostarParaCrearNuevaCompra    = true
+    self.mostrarCamposIngresoContado   = true;
     self.update();
     // Tipo de Pagos
      __comboCondicionPago()
@@ -897,7 +921,7 @@ function cargarDetallesFacturaEnEspera(){
     
     self.compra.detalleFacturas.forEach(function(e){
         self.detail.push({
-            linea           : e.numeroLinea,
+            numeroLinea     : e.numeroLinea,
             articulo_id     : e.articulo.id,
             codigo          : e.articulo.codigo,
             descripcion     : e.articulo.descripcion,
@@ -912,48 +936,7 @@ function cargarDetallesFacturaEnEspera(){
     self.update()
      __calculate(); 
 }
-/**
-*   agregar Articulos nuevos en el detalle de la Compra
-**/
-function __nuevoArticuloAlDetalle(cantidad){
-    if(self.articulo.descripcion == null){
-        return;
-    }
-    if(self.articulo.descripcion == ""){
-        return;
-    }
-    self.descuento      = 0;
-    self.detail.push({
-       linea           : 0,
-       iva             : self.articulo.iva,
-       articulo_id     : self.articulo.id,
-       codigo          : self.articulo.codigo,
-       descripcion     : self.articulo.descripcion,
-       cantidad        : parseFloat(cantidad),
-       precio          : parseFloat(self.articulo.precioPublico),
-       impuesto        : _calcularImpuesto(self.articulo.precioPublico,self.articulo.iva,cantidad),
-       descuento       : 0,
-       subTotal        : parseFloat(self.articulo.precioPublico * cantidad)
-    });
-    var cont = 0;
-    self.detail.forEach(function(elemen){
-            elemen.linea = cont + 1
-            cont = elemen.linea
-        }
-    )
-    self.update()
-}
 
-/**
- * calculo del impuesto iva
- * */
-function _calcularImpuesto(precioArticulo,iva,cantidad){
-    var impuesto = parseFloat(iva)
-    var impuestoAplicar = impuesto > 0?1+impuesto:0
-    var precio  = parseFloat(precioArticulo)
-    var total =impuesto > 0 ? precio - (precio / impuestoAplicar):0 
-    return total * cantidad
-}
 /**
 *  Crear Compra nueva
 **/
@@ -990,11 +973,12 @@ function crearFactura(){
 	    totalTarjeta:totalTarjeta.value,
 	    totalBanco:totalBanco.value,
 	    totalCredito:0,
+        totalCambioPagar:self.factura.totalCambioPagar,
 	    montoCambio:0,
 	    totalCambio:0,
 	    estado:estado.value,
 	    cliente:cliente.value,
-        vendedor:vendedor.value,
+        vendedor:vendedor.value == null?0:vendedor.value,
         detalleFactura :JSONDetalles,
 
     }                  
@@ -1049,24 +1033,17 @@ function __ListaComprasEnEspera(){
         }
     });    
 }
-/**
-*  Obtiene el valor de lo digitado en el campo de Impuesto
-**/
-__TotalDeImpuesto(e){
-    self.factura.totalImpuesto = __valorNumerico(e.target.value) 
-    self.update()
-    __calculate()
-}
+
 /**
 *  Obtiene el valor de lo digitado en el campo de Descuento
 **/
 __TotalDeDescuento(e){
-    self.factura.totalDescuento = __valorNumerico(e.target.value) 
+    self.factura.porcentajeDesc = __valorNumerico(e.target.value) 
     self.update()
     __calculate()
 }
 /**
-*   Retrocer a los ingresos de los productos desde el formulario de ingresar el valor dinero a pagar
+*   Retrocer a los ingresos de los codigos desde el formulario de ingresar el valor dinero a pagar
 **/
 _AtrasFacturaFinal(){
    self.mostrarFormularioPago = false
@@ -1103,20 +1080,20 @@ __MostrarFormularioDePago(){
 }
 /** 
 *
-*Agregar productos al detalle de la Compra
+*Agregar codigos al detalle de la Compra
 *
 */
 __addProductToDetail(e){
     if (e.keyCode != 13) {
         return;
     } 
-    __buscarProducto(e.currentTarget.value);
+    __buscarcodigo(e.currentTarget.value);
 }
 /**
-* Buscar producto
+* Buscar codigo
 **/
 __agregarArticuloBotonAgregar(){
-   __buscarProducto($( "#producto" ).val(),$( "#quantty" ).val());
+   __buscarcodigo($( "#codigo" ).val(),$( "#quantty" ).val());
 }
 /**
 * mostrar la lista de articulos de la empresa
@@ -1206,15 +1183,15 @@ function __ListaDeClientes(){
     });
 }
 /**
-* Buscar el codigo del producto  en la base de datos
+* Buscar el codigo del codigo  en la base de datos
 **/
-function __buscarProducto(idArticulo,cantidad){
+function __buscarcodigo(idArticulo,cantidad){
     self.articulo = null;
     $.ajax({
         type: 'GET',
         url: 'findArticuloByCodigojax.do',
         method:"GET",
-        data:{idArticulo:idArticulo},
+        data:{codigoArticulo:idArticulo},
         success: function(data){
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
@@ -1230,8 +1207,8 @@ function __buscarProducto(idArticulo,cantidad){
                 }
             }
         },
-	    error:function(data) {
-	        console.log(xhr);
+	    error : function(xhr, status) {
+            console.log(xhr);
             mensajeErrorServidor(xhr, status);
         }
     });
@@ -1267,14 +1244,12 @@ function __agregarArticulo(cantidad){
         }
     
     }
-    // si no existe se agrega como un producto nuevo
+    // si no existe se agrega como un codigo nuevo
     if(encontrado == false){ // add elemen
       __nuevoArticuloAlDetalle(cantidad);
     }
     __calculate(); 
-    
 }
-
 /**
 * eliminar un detalle Compra
 **/
@@ -1291,6 +1266,63 @@ __removeProductFromDetail(e) {
     self.update()
      __calculate();
  }
+
+ /**
+*   agregar Articulos nuevos en el detalle de la Compra
+**/
+function __nuevoArticuloAlDetalle(cantidad){
+    if(self.articulo.descripcion == null){
+        return;
+    }
+    if(self.articulo.descripcion == ""){
+        return;
+    }
+    var precioUnitario  = getPrecioUnitario(self.articulo.precioPublico,self.articulo.iva ==null?0:self.articulo.iva)
+    var montoImpuesto   = _calcularImpuesto(precioUnitario,self.articulo.iva ==null?0:self.articulo.iva,cantidad)
+    var subTotal        = getSubTotal(precioUnitario,cantidad)
+    self.descuento      = 0;
+    self.detail.push({
+       numeroLinea     : 0,
+       iva             : self.articulo.iva,
+       articulo_id     : self.articulo.id,
+       codigo          : self.articulo.codigo,
+       descripcion     : self.articulo.descripcion,
+       cantidad        : parseFloat(cantidad),
+       precioUnitario  : precioUnitario,
+       impuesto        : self.articulo.iva,
+       montoImpuesto   : montoImpuesto,
+       montoDescuento  : 0,
+       porcentajeDesc  : 0,
+       subTotal        : subTotal,
+       montoTotalLinea : subTotal + montoImpuesto,
+       montoTotal      :0
+    });
+    var cont = 0;
+    self.detail.forEach(function(elemen){
+          elemen.linea = cont + 1
+          cont = elemen.linea
+        }
+    )
+    self.update()
+}
+
+/**
+* Obtiene el precio unitario sin descuento sin impuesto
+**/
+function getPrecioUnitario(precio,iva){
+   var valorIva      = parseFloat(1+iva)
+   return precionSinIva = precio /valorIva
+}
+/**
+ * calculo del impuesto iva
+ * */
+function _calcularImpuesto(precio,iva,cantidad){
+    var impuesto = parseFloat(iva)
+    var impuestoAplicar = impuesto > 0?impuesto:0
+    var valor  = parseFloat(precio)
+    var total =impuesto > 0 ? valor * impuestoAplicar:0 
+    return total * cantidad
+}
    
  /**
  * Cuando se aplica un cambio de cantidad en un detalle
@@ -1301,9 +1333,9 @@ __removeProductFromDetail(e) {
         return;
     } 
     var cantidad = e.currentTarget.value;
-    self.item = e.item; 
-    var input = e.input;
-    var index = self.detail.indexOf(self.item);
+    self.item    = e.item; 
+    var input    = e.input;
+    var index    = self.detail.indexOf(self.item);
     
     //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
     cantidad =__valorNumerico(cantidad);
@@ -1311,36 +1343,14 @@ __removeProductFromDetail(e) {
        cantidad = 1;
     }
     self.item.cantidad = parseFloat(cantidad); 
-    self.item.impuesto =_calcularImpuesto(self.item.precio,self.item.iva,self.item.cantidad)
+    self.item.montoImpuesto =_calcularImpuesto(self.item.precioUnitario,self.item.iva,self.item.cantidad)
     __actualizarItemArray();
     self.detail[index] = self.item;
-    self.update();
-    __calculate();
+    self.update()
+    __calculate()
  }
-
 /**
-* Actualizar el impuesto del producto
-**/
-__actualizarImpuesto(e){
-    if (e.keyCode != 13) {
-        return;
-    } 
-    self.item     = e.item; 
-    var index     = self.detail.indexOf(self.item);
-    var impuesto  = e.currentTarget.value;
-    //Impuesto se verifica si es null o espacios por defecto se deja en cero
-    impuesto =__valorNumerico(impuesto);
-
-    if(self.item.impuesto != impuesto){
-       self.item.impuesto =  parseFloat(impuesto);  
-    }    
-    __actualizarItemArray();
-    self.detail[index] = self.item;
-    self.update();
-    __calculate();
-}
-/**
-* Actualizar el descuento del producto
+* Actualizar el descuento del codigo
 **/
 __actualizarDescuento(e){
     if (e.keyCode != 13) {
@@ -1352,8 +1362,8 @@ __actualizarDescuento(e){
     //Descuento se verifica si es null o espacios por defecto se deja en cero
      descuento =__valorNumerico(descuento);
       //Descuento
-    if(self.item.descuento != descuento){
-       self.item.descuento =  parseFloat(descuento);  
+    if(self.item.porcentajeDesc != descuento){
+       self.item.porcentajeDesc =  parseFloat(descuento);  
     }    
     __actualizarItemArray();
     self.detail[index] = self.item;
@@ -1365,10 +1375,37 @@ __actualizarDescuento(e){
 **/
 function __actualizarItemArray(){
     //Subtotal del Detalle
-    self.item.subTotal    = parseFloat(self.item.precio * self.item.cantidad);
-    self.item.subTotal    = self.item.subTotal-self.item.descuento
-    self.item.subTotal    = self.item.subTotal;
+    var montoImpuesto         = self.item.precioUnitario * self.item.impuesto
+        montoImpuesto         = montoImpuesto * self.item.cantidad       
+    var montoDescuento        = getTotalDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc)     
+    self.item.montoImpuesto   = montoImpuesto   
+    self.item.montoDescuento  = montoDescuento
+    self.item.subTotal        = getSubTotal(self.item.precioUnitario,self.item.cantidad)
+    var montoTotalLinea       = getMontoTotalLinea(self.item.subTotal,montoImpuesto,montoDescuento)        
+    self.item.montoTotalLinea = montoTotalLinea
     self.update()
+}
+/**
+* Monto a pagar en la linea el cliente
+**/
+function getMontoTotalLinea(subTotal,montoImpuesto,montoDescuento){
+  var valor = subTotal - montoDescuento
+  return valor + montoImpuesto
+}
+/**
+*  Obtener el subtotal sin el impuesto
+**/
+function getSubTotal(precio,cantidad){
+    var valor = precio * cantidad
+    return valor 
+}
+/**
+* calcular el descuento
+**/
+function getTotalDescuento(precio,cantidad,porcentajeDesc){
+    var porcentaje = porcentajeDesc/100
+    var valor =  precio * porcentaje
+    return valor * cantidad
 }
 /**
 * calculacion de los detalle de la compra 
@@ -1389,30 +1426,30 @@ function __calculate() {
     totalExento             = 0
     totalComprobante        = 0
     self.detail.forEach(function(e){
-        totalMercanciasGravadas += e.impuesto > 0?e.subtotal:0
-        totalMercanciasExentas  += e.impuesto == 0?e.subtotal:0
-        totalGravado            += e.impuesto > 0 ?e.subTotal:0
-        totalExento             += e.impuesto == 0?e.subtotal:0
-        totalComprobante        += e.subTotal
-        totalVenta              += e.subTotal >0?e.subTotal:0
-        subTotal                += e.subTotal >0?e.subTotal + e.descuento:0
-        totalDescuento          += e.descuento >0?e.descuento:0
-        totalImpuesto           += e.impuesto >0?e.impuesto:0
+        totalMercanciasGravadas += e.montoImpuesto > 0?e.montoTotalLinea:0
+        totalMercanciasExentas  += e.impuesto == 0?e.montoTotalLinea:0
+        totalGravado            += e.impuesto > 0 ?e.montoTotalLinea:0
+        totalExento             += e.impuesto == 0?e.montoTotalLinea:0
+        totalComprobante        += e.montoTotalLinea
+        totalVenta              += e.montoTotalLinea >0?e.montoTotalLinea:0
+        subTotal                += e.subTotal >0?e.subTotal:0
+        totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
+        totalImpuesto           += e.montoImpuesto >0?e.montoImpuesto:0
     });
     self.factura.totalMercanciasGravadas = totalMercanciasGravadas
     self.factura.totalMercanciasExentas  = totalMercanciasExentas
     self.factura.totalGravado            = totalGravado
     self.factura.totalExento             = totalExento
     self.factura.totalVenta              = totalVenta 
-    self.factura.subTotal                = subTotal - totalImpuesto
+    self.factura.subTotal                = subTotal 
     self.factura.totalDescuento          = totalDescuento
     self.factura.totalImpuesto           = totalImpuesto
-    self.factura.totalVentaNeta          = totalVenta - totalDescuento
+    self.factura.totalVentaNeta          = totalVenta 
     self.factura.totalComprobante        = totalComprobante
 
     self.articulo              = null;
     self.update(); 
-    $( "#producto" ).val(null);
+    $( "#codigo" ).val(null);
     $( "#quantity" ).val(null);
 }
 /**
@@ -1445,7 +1482,7 @@ function __OpcionesArticulos(){
 
 }
 /**
-* Agregar productos a la compra desde modal de articulos
+* Agregar codigos a la compra desde modal de articulos
 **/
 function __agregarArticulos() {
      $('#tableListarArticulos').on('click', '.btnAgregar', function (e) {
@@ -1458,7 +1495,7 @@ function __agregarArticulos() {
 	     }
         self.articulo = data;
         self.update();  
-	    __buscarProducto(self.articulo.id,1)
+	    __buscarcodigo(self.articulo.codigo,1)
     });
 }
 
@@ -1534,7 +1571,7 @@ function __Opcionesclientes(){
 
 }
 /**
-* Agregar productos a la compra desde modal de articulos
+* Agregar codigos a la compra desde modal de articulos
 **/
 function __seleccionarClientes() {
      $('#tableListaCliente').on('click', '.btnAgregar', function (e) {

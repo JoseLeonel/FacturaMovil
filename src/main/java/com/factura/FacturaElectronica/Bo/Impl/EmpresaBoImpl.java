@@ -69,5 +69,14 @@ public class EmpresaBoImpl implements EmpresaBo {
 	public Empresa buscarPorCedula(String cedula) {
 		return empresaDao.buscarPorCedula(cedula);
 	}
+	
+	/**
+	 * Genera el consecutivo de la factura de una empresa
+	 * @see com.factura.FacturaElectronica.Bo.EmpresaBo#generarConsecutivoFactura(com.factura.FacturaElectronica.modelo.Empresa)
+	 */
+	@Override
+	public Double generarConsecutivoFactura(Empresa empresa) {
+		return empresaDao.generarConsecutivoFactura(empresa);
+	}
 
 }

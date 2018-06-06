@@ -5,9 +5,22 @@ import java.util.ResourceBundle;
 public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																= ResourceBundle.getBundle("factura");
+	// Cliente /VENDEDOR Frecuente de una empresa
+	public static final String 					NOMBRE_CLIENTE_FRECUENTE											     = "CLIENTE_FRECUENTE";
+	public static final String 					CEDULA_CLIENTE_FRECUENTE											     = "99999999999999";
+	public static final String 					CORREO_CLIENTE_FRECUENTE											     = "CLIENTE_FRECUENTE@FRECUENTE.COM";
+	public static final String 					NOMBRE_VENDEDOR_FRECUENTE											     = "VENDEDOR_FRECUENTE";
+	public static final String 					CEDULA_VENDEDOR_FRECUENTE											     = "99999999999999";
+	public static final String 					CORREO_VENDEDOR_FRECUENTE											     = "VENDEDOR_FRECUENTE@FRECUENTE.COM";
+	// Vendedor Frecuente de una empresa
+	
 	// SP del sistema
 	public static final String					SP_ELIMINAR_DETALLES_COMPRAS									= "sp_eliminarDetallesCompra";
 	public static final String					SP_ELIMINAR_DETALLES_COMPRAS_ID_COMPRA_PARAM	= "idCompra_param";
+
+	public static final String					SP_ELIMINAR_DETALLES_FACTURA									= "sp_eliminarDetallesFactura";
+	public static final String					SP_ELIMINAR_DETALLES_FACTURA_ID_FACTURA_PARAM	= "idFactura_param";
+
 	// Kardex
 	public static final String					OBSERVACION_INICIAL_INVENTARIO_NUEVO					= "Ingreso inicial al inventario";
 	public static final String					CONSECUTIVO_INICIAL_INVENTARIO_NUEVO					= "99999";
@@ -15,6 +28,7 @@ public class Constantes {
 	public static final String					KARDEX_TIPO_SALIDA														= "Salida";
 	public static final String					MOTIVO_INICIAL_INVENTARIO_NUEVO								= "Nuevo inventario a la sucursal";
 	public static final String					MOTIVO_INGRESO_INVENTARIO_COMPRA							= "Ingreso del proveedor:";
+	public static final String					MOTIVO_SALIDA_INVENTARIO_VENTA	   						= "Salida por venta:";
 	// Contabiliza el inventario
 	public static final String					CONTABLE_SI																		= "Si";
 	public static final String					CONTABLE_NO																		= "No";

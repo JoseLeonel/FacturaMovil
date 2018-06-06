@@ -116,6 +116,12 @@
                                 <input type="text" class="form-control web" id="web" name="web" value="{empresa.web}"  >
                             </div>
                         </div>
+                        <div class="row">    
+                            <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
+                                <label class="knob-label" >{$.i18n.prop("empresa.numeroConsecutivo")}</label>
+                                <input type="number" class="form-control numeroConsecutivo" id="numeroConsecutivo" name="numeroConsecutivo" value="{empresa.numeroConsecutivo}"  >
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label">{$.i18n.prop("empresa.estado")}</label>
@@ -130,9 +136,9 @@
                     </form>    
                 </div>
                 <div class="box-footer">
-                     <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-left" > &nbsp {$.i18n.prop("btn.modificar")}</button>
-                     <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-left" >&nbsp {$.i18n.prop("btn.agregar")}</button>
-                    <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back  pull-right"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                     <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
+                     <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
+                    <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back  pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
                         {$.i18n.prop("btn.volver")}
                     </button>
 
@@ -276,7 +282,12 @@ var reglasDeValidacion = function() {
                 maxlength:80,
                 minlength:1,
               
-			},                                    
+			},
+            numeroConsecutivo:{
+                minlength:20,
+                required : true,
+
+            }                                    
                         
 		},
 		ignore : []
@@ -322,6 +333,13 @@ function __Eventos(){
     $("#web").attr("maxlength", 80);
     
     $('#codigoPais').mask('000', {
+	    'translation' : {
+            0 : {
+                pattern : /[0-9]/
+            }
+    	}
+    }); 
+    $('#numeroConsecutivo').mask('00000000000000000000', {
 	    'translation' : {
             0 : {
                 pattern : /[0-9]/
@@ -578,6 +596,7 @@ function __InformacionDataTable(){
                             {'data' :'nombreComercial'    ,"name":"nombreComercial"      ,"title" : $.i18n.prop("empresa.nombreComercial")   ,"autoWidth" :false },
                             {'data' :'representante'      ,"name":"representante"        ,"title" : $.i18n.prop("empresa.representante")     ,"autoWidth" :false },
                             {'data' : 'correoElectronico' ,"name":"correoElectronico"    ,"title" : $.i18n.prop("empresa.correoElectronico") ,"autoWidth" :false},
+                            {'data' : 'numeroConsecutivo' ,"name":"numeroConsecutivo"    ,"title" : $.i18n.prop("empresa.numeroConsecutivo") ,"autoWidth" :false},
                             {'data' : 'estado'            ,"name":"estado"               ,"title" : $.i18n.prop("empresa.estado")            ,"autoWidth" :false},
                             {'data' : 'id'                ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){

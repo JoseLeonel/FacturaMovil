@@ -1,5 +1,7 @@
 package com.factura.FacturaElectronica.Bo.Impl;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -7,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.factura.FacturaElectronica.Bo.VendedorBo;
 import com.factura.FacturaElectronica.Dao.VendedorDao;
+import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.modelo.Empresa;
+import com.factura.FacturaElectronica.modelo.Usuario;
 import com.factura.FacturaElectronica.modelo.Vendedor;
 
 /**
@@ -57,6 +61,29 @@ public class VendedorBoImpl implements VendedorBo {
 	@Override
 	public Vendedor buscarPorCedulaYEmpresa(String cedula, Empresa empresa) {
 		return vendedorDao.buscarPorCedulaYEmpresa(cedula, empresa);
+	}
+	
+/**
+ * Vendedor Frecuente
+ * @see com.factura.FacturaElectronica.Bo.VendedorBo#crearVendedorFrecuente(com.factura.FacturaElectronica.modelo.Empresa, com.factura.FacturaElectronica.modelo.Usuario)
+ */
+	@Override
+	public Vendedor crearVendedorFrecuente(Empresa empresa,Usuario usuario) {
+		Vendedor vendedor = new Vendedor();
+		vendedor.setCedula(Constantes.CEDULA_VENDEDOR_FRECUENTE);
+		vendedor.setCorreoElectronico(Constantes.CORREO_VENDEDOR_FRECUENTE);
+		vendedor.setNombreCompleto(Constantes.NOMBRE_VENDEDOR_FRECUENTE);
+		vendedor.setCelular(Constantes.BLANK);
+		vendedor.setTelefono(Constantes.EMPTY);
+		vendedor.setEmpresa(empresa);
+		vendedor.setDescuento(Constantes.ZEROS_DOUBLE);
+		vendedor.setEstado(Constantes.ESTADO_ACTIVO);
+		vendedor.setOtraSena(Constantes.EMPTY);
+		vendedor.setCreated_at(new Date());
+		vendedor.setUpdated_at(new Date());
+		vendedor.setUsuario(usuario);
+		agregar(vendedor);
+		return vendedor;
 	}
 
 }

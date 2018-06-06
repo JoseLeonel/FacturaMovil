@@ -17,5 +17,9 @@ public interface EmpresaBo {
 	Empresa buscarPorNombreComercial(String nombreComercial);
 
 	Empresa buscarPorCedula(String cedula);
+	
+	Double generarConsecutivoFactura(Empresa empresa);
+	
+	
 
 }

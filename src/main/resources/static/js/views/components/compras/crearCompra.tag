@@ -126,10 +126,10 @@
                 <div class="cabecera-izquierda">
                     <div class="row">
                             <div class="col-md-6">
-                                <input onkeypress={__addProductToDetail}  id="producto" class="form-control" type="text" placeholder="XXXXXXXXXXX" />
+                                <input onkeypress={__addProductToDetail}  id="codigo" class="form-control" type="text" placeholder="XXXXXXXXXXX" />
                             </div>
                             <div class="col-md-2">
-                                <button    onclick = {__ListaDeProductos} class="btn btn-primary form-control" id="btn-facturar" >
+                                <button    onclick = {__ListaDecodigos} class="btn btn-primary form-control" id="btn-facturar" >
                                     <i class="glyphicon glyphicon-plus"></i>Buscar
                                 </button>
                             </div>
@@ -528,9 +528,9 @@ var reglasDeValidacionCompra = function() {
 	return validationOptions;
 };
  /**
- * Listar productos  llamado del modal para presentar los articulos
+ * Listar codigos  llamado del modal para presentar los articulos
  **/   
- __ListaDeProductos(){
+ __ListaDecodigos(){
   $('#modalInventario').modal('show')      
  }
 /**
@@ -810,7 +810,7 @@ __TotalDeDescuento(e){
     __calculate()
 }
 /**
-*   Retrocer a los ingresos de los productos desde el formulario de ingresar el valor dinero a pagar
+*   Retrocer a los ingresos de los codigos desde el formulario de ingresar el valor dinero a pagar
 **/
 _AtrasComprasFinal(){
    self.mostrarFormularioPago = false
@@ -848,20 +848,20 @@ __MostrarFormularioDePago(){
 }
 /** 
 *
-*Agregar productos al detalle de la Compra
+*Agregar codigos al detalle de la Compra
 *
 */
 __addProductToDetail(e){
     if (e.keyCode != 13) {
         return;
     } 
-    __buscarProducto(e.currentTarget.value);
+    __buscarcodigo(e.currentTarget.value);
 }
 /**
-* Buscar producto
+* Buscar codigo
 **/
 __agregarArticuloBotonAgregar(){
-   __buscarProducto($( "#producto" ).val(),$( "#quantty" ).val());
+   __buscarcodigo($( "#codigo" ).val(),$( "#quantty" ).val());
 }
 /**
 * mostrar la lista de articulos de la empresa
@@ -920,15 +920,15 @@ function __ListaDeProveedores(){
     });
 }
 /**
-* Buscar el codigo del producto  en la base de datos
+* Buscar el codigo del codigo  en la base de datos
 **/
-function __buscarProducto(idArticulo,cantidad){
+function __buscarcodigo(idArticulo,cantidad){
     self.articulo = null;
     $.ajax({
         type: 'GET',
         url: 'findArticuloByCodigojax.do',
         method:"GET",
-        data:{idArticulo:idArticulo},
+        data:{codigoArticulo:idArticulo},
         success: function(data){
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
@@ -944,8 +944,8 @@ function __buscarProducto(idArticulo,cantidad){
                 }
             }
         },
-	    error:function(data) {
-	        console.log(xhr);
+	    error : function(xhr, status) {
+            console.log(xhr);
             mensajeErrorServidor(xhr, status);
         }
     });
@@ -981,7 +981,7 @@ function __agregarArticulo(cantidad){
         }
     
     }
-    // si no existe se agrega como un producto nuevo
+    // si no existe se agrega como un codigo nuevo
     if(encontrado == false){ // add elemen
       __nuevoArticuloAlDetalle(cantidad);
     }
@@ -1031,7 +1031,7 @@ __removeProductFromDetail(e) {
     __calculate();
  }
 /**
-*   Actualizar el costo del producto y recalcular la compra
+*   Actualizar el costo del codigo y recalcular la compra
 **/
 __actualizarCosto(e){
     if (e.keyCode != 13) {
@@ -1050,7 +1050,7 @@ __actualizarCosto(e){
     __calculate();
 }
 /**
-* Actualizar el impuesto del producto
+* Actualizar el impuesto del codigo
 **/
 __actualizarImpuesto(e){
     if (e.keyCode != 13) {
@@ -1071,7 +1071,7 @@ __actualizarImpuesto(e){
     __calculate();
 }
 /**
-* Actualizar el descuento del producto
+* Actualizar el descuento del codigo
 **/
 __actualizarDescuento(e){
     if (e.keyCode != 13) {
@@ -1127,7 +1127,7 @@ function __calculate() {
 
     self.articulo              = null;
     self.update(); 
-    $( "#producto" ).val(null);
+    $( "#codigo" ).val(null);
     $( "#quantity" ).val(null);
 }
 /**
@@ -1156,7 +1156,7 @@ function __OpcionesArticulos(){
 
 }
 /**
-* Agregar productos a la compra desde modal de articulos
+* Agregar codigos a la compra desde modal de articulos
 **/
 function __agregarArticulos() {
      $('#tableListarArticulos').on('click', '.btnAgregar', function (e) {
@@ -1169,7 +1169,7 @@ function __agregarArticulos() {
 	     }
         self.articulo = data;
         self.update();  
-	    __buscarProducto(self.articulo.id,1)
+	    __buscarcodigo(self.articulo.id,1)
         
  
        
@@ -1202,7 +1202,7 @@ function __OpcionesProveedores(){
 
 }
 /**
-* Agregar productos a la compra desde modal de articulos
+* Agregar codigos a la compra desde modal de articulos
 **/
 function __seleccionarProveedores() {
      $('#tableListaProveedor').on('click', '.btnAgregar', function (e) {

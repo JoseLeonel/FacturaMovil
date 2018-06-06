@@ -1,5 +1,7 @@
 package com.factura.FacturaElectronica.Bo.Impl;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -7,8 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.factura.FacturaElectronica.Bo.ClienteBo;
 import com.factura.FacturaElectronica.Dao.ClienteDao;
+import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.modelo.Cliente;
 import com.factura.FacturaElectronica.modelo.Empresa;
+import com.factura.FacturaElectronica.modelo.Usuario;
+import com.factura.FacturaElectronica.modelo.Vendedor;
 
 /**
  * Clientes asociados a una empresa ClienteBoImpl.
@@ -58,6 +63,28 @@ public class ClienteBoImpl implements ClienteBo {
 	@Override
 	public Cliente buscar(Integer id) {
 		return clienteDao.buscar(id);
+	}
+	/**
+	 * Crear el cliente frecuente
+	 * @see com.factura.FacturaElectronica.Bo.ClienteBo#crearClienteFrecuente(com.factura.FacturaElectronica.modelo.Empresa, com.factura.FacturaElectronica.modelo.Usuario)
+	 */
+	@Override
+	public Cliente crearClienteFrecuente(Empresa empresa,Usuario usuario) {
+		Cliente cliente = new Cliente();
+		cliente.setCedula(Constantes.CEDULA_CLIENTE_FRECUENTE);
+		cliente.setCorreoElectronico(Constantes.CORREO_CLIENTE_FRECUENTE);
+		cliente.setNombreCompleto(Constantes.NOMBRE_CLIENTE_FRECUENTE);
+		cliente.setCelular(Constantes.BLANK);
+		cliente.setTelefono(Constantes.EMPTY);
+		cliente.setEmpresa(empresa);
+		cliente.setDescuento(Constantes.ZEROS_DOUBLE);
+		cliente.setEstado(Constantes.ESTADO_ACTIVO);
+		cliente.setOtraSena(Constantes.EMPTY);
+		cliente.setCreated_at(new Date());
+		cliente.setUpdated_at(new Date());
+		cliente.setUsuario(usuario);
+		agregar(cliente);
+		return cliente;
 	}
 
 }

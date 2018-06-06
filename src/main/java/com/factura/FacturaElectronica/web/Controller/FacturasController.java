@@ -14,13 +14,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.factura.FacturaElectronica.Bo.ClienteBo;
 import com.factura.FacturaElectronica.Bo.DataTableBo;
 import com.factura.FacturaElectronica.Bo.FacturaBo;
 import com.factura.FacturaElectronica.Bo.UsuarioBo;
+import com.factura.FacturaElectronica.Bo.VendedorBo;
+import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
 import com.factura.FacturaElectronica.modelo.Cliente;
 import com.factura.FacturaElectronica.modelo.Compra;
 import com.factura.FacturaElectronica.modelo.Empresa;
+import com.factura.FacturaElectronica.modelo.Usuario;
 import com.factura.FacturaElectronica.modelo.Vendedor;
 import com.factura.FacturaElectronica.validator.FacturaFormValidator;
 import com.factura.FacturaElectronica.web.command.CompraEsperaCommand;
@@ -52,6 +56,12 @@ public class FacturasController {
 
 	@Autowired
 	private UsuarioBo																						usuarioBo;
+
+	@Autowired
+	private VendedorBo																					vendedorBo;
+
+	@Autowired
+	private ClienteBo																						clienteBo;
 
 	@Autowired
 	private FacturaBo																						facturaBo;
@@ -95,30 +105,41 @@ public class FacturasController {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
+			
+			String nombreUsuario = request.getUserPrincipal().getName();
+			Usuario usuario = usuarioBo.buscar(nombreUsuario);
+			if (facturaCommand.getCliente() == null) {
+				Cliente cliente = clienteBo.buscarPorNombreCompletoYEmpresa(Constantes.NOMBRE_CLIENTE_FRECUENTE, usuario.getEmpresa());
+				if (cliente == null) {
+					cliente = clienteBo.crearClienteFrecuente(usuario.getEmpresa(), usuario);
+				} else {
+					facturaCommand.setCliente(cliente);
+				}
+			}
+			if (facturaCommand.getVendedor() == null) {
+				Vendedor vendedor = vendedorBo.buscarPorNombreCompletoYEmpresa(Constantes.NOMBRE_VENDEDOR_FRECUENTE, usuario.getEmpresa());
+				if (vendedor == null) {
+					vendedorBo.crearVendedorFrecuente(usuario.getEmpresa(), usuario);
+				}
+				facturaCommand.setVendedor(vendedor);
+
+			}
+			facturaCommand.setEmpresa(usuario.getEmpresa());
+      
 			facturaFormValidator.validate(facturaCommand, result);
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			// if (compraCommand.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
-			// compraCommand.setFechaCredito(null);
-			// }
-			// Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-			// if(compraCommand.getConsecutivo().equals(Constantes.EMPTY)) {
-			// result.rejectValue("consecutivo", "error.compra.existe.consecutivo");
-			// }
-			// Compra compraBD = compraBo.findByConsecutivoAndEmpresa(compraCommand.getConsecutivo(), usuarioSesion.getEmpresa());
-			// if (compraBD != null) {
-			// if(!compraBD.getId().equals(compraCommand.getId())) {
-			// result.rejectValue("consecutivo", "error.compra.existe.consecutivo");
-			// }
-			//
-			//
-			// }
-			// if (result.hasErrors()) {
-			// return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
-			// }
-			// compraCommand.setEmpresa(usuarioSesion.getEmpresa());
-			// compraCommand.setUsuarioCreacion(usuarioSesion);
+
+			
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
+
+			if (facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+				facturaCommand.setFechaCredito(null);
+			}
+			facturaBo.crearFactura(facturaCommand,usuario);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", facturaCommand);
 
 		} catch (Exception e) {

@@ -2,6 +2,8 @@ package com.factura.FacturaElectronica.Bo;
 
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Factura;
+import com.factura.FacturaElectronica.modelo.Usuario;
+import com.factura.FacturaElectronica.web.command.FacturaCommand;
 
 public interface FacturaBo {
 
@@ -14,6 +16,8 @@ public interface FacturaBo {
 	Factura findById(Integer id);
 
 	Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa);
+	
+	void crearFactura(FacturaCommand facturaCommand,Usuario usuario) throws Exception;
 
 
 }

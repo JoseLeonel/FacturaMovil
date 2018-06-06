@@ -26,6 +26,9 @@ public class Empresa implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer						id;
+	
+	@Column(name = "numero_consecutivo")
+	private Double numeroConsecutivo;
 
 	@Column(name = "nombre")
 	private String						nombre;
@@ -81,9 +84,10 @@ public class Empresa implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
-	public Empresa(Integer id, String nombre, String nombreComercial, String clave, String tipoCedula, String otraSenas, String codigoPais, String telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at) {
+	public Empresa(Integer id, String nombre, String nombreComercial, String clave, String tipoCedula, String otraSenas, String codigoPais, String telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at,Double numeroConsecutivo) {
 		super();
 		this.id = id;
+		this.numeroConsecutivo = numeroConsecutivo;
 		this.nombre = nombre;
 		this.nombreComercial = nombreComercial;
 		this.clave = clave;
@@ -116,6 +120,16 @@ public class Empresa implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	
+	public Double getNumeroConsecutivo() {
+		return numeroConsecutivo;
+	}
+
+	
+	public void setNumeroConsecutivo(Double numeroConsecutivo) {
+		this.numeroConsecutivo = numeroConsecutivo;
 	}
 
 	public String getCedula() {

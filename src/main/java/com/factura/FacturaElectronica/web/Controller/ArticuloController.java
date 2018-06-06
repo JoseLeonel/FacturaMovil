@@ -43,47 +43,45 @@ import com.google.common.base.Function;
 
 /**
  * Control de los articulos de una empresa ArticuloController.
- * 
  * @author jose.
  * @since 19 abr. 2018
  */
 @Controller
 public class ArticuloController {
 
-	private static final Function<Object, ArticuloCommand> TO_COMMAND = new Function<Object, ArticuloCommand>() {
+	private static final Function<Object, ArticuloCommand>	TO_COMMAND	= new Function<Object, ArticuloCommand>() {
 
-		@Override
-		public ArticuloCommand apply(Object f) {
-			return new ArticuloCommand((Articulo) f);
-		};
-	};
-
-	@Autowired
-	private DataTableBo dataTableBo;
+																																				@Override
+																																				public ArticuloCommand apply(Object f) {
+																																					return new ArticuloCommand((Articulo) f);
+																																				};
+																																			};
 
 	@Autowired
-	private ArticuloBo articuloBo;
-
-
-	@Autowired
-	private UsuarioBo usuarioBo;
+	private DataTableBo																			dataTableBo;
 
 	@Autowired
-	private ArticuloPropertyEditor articuloPropertyEditor;
-	@Autowired
-	private InventarioPropertyEditor inventarioPropertyEditor;
+	private ArticuloBo																			articuloBo;
 
 	@Autowired
-	private EmpresaPropertyEditor empresaPropertyEditor;
+	private UsuarioBo																				usuarioBo;
 
 	@Autowired
-	private MarcaPropertyEditor marcaPropertyEditor;
+	private ArticuloPropertyEditor													articuloPropertyEditor;
+	@Autowired
+	private InventarioPropertyEditor												inventarioPropertyEditor;
 
 	@Autowired
-	private CategoriaPropertyEditor categoriaPropertyEditor;
+	private EmpresaPropertyEditor														empresaPropertyEditor;
 
 	@Autowired
-	private StringPropertyEditor stringPropertyEditor;
+	private MarcaPropertyEditor															marcaPropertyEditor;
+
+	@Autowired
+	private CategoriaPropertyEditor													categoriaPropertyEditor;
+
+	@Autowired
+	private StringPropertyEditor														stringPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -99,7 +97,6 @@ public class ArticuloController {
 
 	/**
 	 * Listar JSP de los articulos
-	 * 
 	 * @param model
 	 * @return
 	 */
@@ -110,7 +107,6 @@ public class ArticuloController {
 
 	/**
 	 * Listar Ajax de los articulos de una empresa
-	 * 
 	 * @param request
 	 * @param response
 	 * @return
@@ -133,7 +129,6 @@ public class ArticuloController {
 
 	/**
 	 * Crear un articulo
-	 * 
 	 * @param request
 	 * @param model
 	 * @param articulo
@@ -145,13 +140,12 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/AgregarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model,
-			@ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			articulo.setIva(articulo.getIva() == null ? Constantes.ZEROS_DOUBLE : articulo.getIva());
-			
+
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 			Articulo articuloBd = null;
@@ -179,22 +173,16 @@ public class ArticuloController {
 			}
 
 			if (result.hasErrors()) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion",
-						result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			articulo.setCreated_at(new Date());
 			articulo.setUpdated_at(new Date());
 			articulo.setEstado(Constantes.ESTADO_ACTIVO);
-			articulo.setGananciaPrecioPublico(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getIva(),
-					articulo.getPrecioPublico()));
-			articulo.setGananciaPrecioMayorista(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getIva(),
-					articulo.getPrecioMayorista()));
-			articulo.setGananciaPrecioEspecial(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getIva(),
-					articulo.getPrecioEspecial()));
-			articulo.setPrecioEspecial(
-					articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
-			articulo.setPrecioMayorista(
-					articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
+			articulo.setGananciaPrecioPublico(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getIva(), articulo.getPrecioPublico()));
+			articulo.setGananciaPrecioMayorista(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getIva(), articulo.getPrecioMayorista()));
+			articulo.setGananciaPrecioEspecial(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getIva(), articulo.getPrecioEspecial()));
+			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
+			articulo.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
 			articulo.setUsuario(usuarioSesion);
 			articuloBo.agregar(articulo);
 
@@ -207,7 +195,6 @@ public class ArticuloController {
 
 	/**
 	 * Modificar Articulo
-	 * 
 	 * @param request
 	 * @param model
 	 * @param articulo
@@ -219,8 +206,7 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ModificarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model,
-			@ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			articulo.setIva(articulo.getIva() == null ? Constantes.ZEROS_DOUBLE : articulo.getIva());
 
@@ -228,8 +214,7 @@ public class ArticuloController {
 			Articulo articuloBd = articuloBo.buscar(articulo.getId());
 			Articulo articuloValidar = null;
 			if (!articuloBd.getDescripcion().equals(articulo.getDescripcion())) {
-				articuloValidar = articuloBo.buscarPorDescripcionYEmpresa(articulo.getDescripcion(),
-						articulo.getEmpresa());
+				articuloValidar = articuloBo.buscarPorDescripcionYEmpresa(articulo.getDescripcion(), articulo.getEmpresa());
 				if (articuloValidar != null) {
 					result.rejectValue("descripcion", "error.articulo.descripcion.existe");
 				}
@@ -257,22 +242,16 @@ public class ArticuloController {
 			}
 
 			if (result.hasErrors()) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion",
-						result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			articuloBd.setCreated_at(new Date());
 			articuloBd.setUpdated_at(new Date());
 			articuloBd.setEstado(Constantes.ESTADO_ACTIVO);
-			articuloBd.setGananciaPrecioPublico(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getIva(),
-					articulo.getPrecioPublico()));
-			articuloBd.setGananciaPrecioMayorista(articuloBo.porcentanjeDeGanancia(articulo.getCosto(),
-					articulo.getIva(), articulo.getPrecioMayorista()));
-			articuloBd.setGananciaPrecioEspecial(articuloBo.porcentanjeDeGanancia(articulo.getCosto(),
-					articulo.getIva(), articulo.getPrecioEspecial()));
-			articuloBd.setPrecioEspecial(
-					articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
-			articuloBd.setPrecioMayorista(
-					articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
+			articuloBd.setGananciaPrecioPublico(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getIva(), articulo.getPrecioPublico()));
+			articuloBd.setGananciaPrecioMayorista(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getIva(), articulo.getPrecioMayorista()));
+			articuloBd.setGananciaPrecioEspecial(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getIva(), articulo.getPrecioEspecial()));
+			articuloBd.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
+			articuloBd.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
 			articuloBd.setUsuario(usuarioSesion);
 			articuloBo.modificar(articuloBd);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBd);
@@ -284,7 +263,6 @@ public class ArticuloController {
 
 	/**
 	 * Mostrar articulo por id
-	 * 
 	 * @param request
 	 * @param model
 	 * @param articulo
@@ -296,8 +274,7 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/MostrarArticuloAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model,
-			@ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			ArticuloCommand articuloCommand = new ArticuloCommand(articuloBo.buscar(articulo.getId()));
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", articuloCommand);
@@ -305,7 +282,7 @@ public class ArticuloController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
+
 	/**
 	 * Buscar Articulo por id del inventario
 	 * @param request
@@ -318,9 +295,15 @@ public class ArticuloController {
 	 */
 	@RequestMapping(value = "/findArticuloByCodigojax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer idArticulo) {
+	public RespuestaServiceValidator listarAjax(HttpServletRequest request, ModelMap model,@ModelAttribute Articulo articulo,HttpServletResponse response, @RequestParam String codigoArticulo, BindingResult result, SessionStatus status) {
 		try {
-			ArticuloCommand articuloCommand = new ArticuloCommand(articuloBo.buscar(idArticulo));
+			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Articulo articuloBD = articuloBo.buscarPorCodigoYEmpresa(codigoArticulo,usuarioSesion.getEmpresa());
+			ArticuloCommand articuloCommand = articuloBD == null ?null:new ArticuloCommand(articuloBD);
+			
+			if(articuloCommand == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.codigo.no.existe", result.getAllErrors());
+			}
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", articuloCommand);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
@@ -334,10 +317,8 @@ public class ArticuloController {
 
 			private static class ARTICULO {
 
-				private static final RespuestaServiceValidator AGREGADO = RespuestaServiceValidator.BUNDLE_MSG_SOURCE
-						.OK("articulo.agregar.correctamente");
-				private static final RespuestaServiceValidator MODIFICADO = RespuestaServiceValidator.BUNDLE_MSG_SOURCE
-						.OK("articulo.modificado.correctamente");
+				private static final RespuestaServiceValidator	AGREGADO		= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.agregar.correctamente");
+				private static final RespuestaServiceValidator	MODIFICADO	= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente");
 			}
 		}
 
@@ -345,8 +326,7 @@ public class ArticuloController {
 
 			private static class ARTICULO {
 
-				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE
-						.ERROR("error.articulo.noExiste");
+				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.noExiste");
 			}
 		}
 	}

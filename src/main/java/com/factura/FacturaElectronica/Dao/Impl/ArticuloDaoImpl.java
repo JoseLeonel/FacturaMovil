@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.factura.FacturaElectronica.Dao.ArticuloDao;
 import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.modelo.Articulo;
+import com.factura.FacturaElectronica.modelo.Cliente;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Inventario;
 
@@ -69,7 +70,13 @@ public class ArticuloDaoImpl implements ArticuloDao {
 		Query query = entityManager.createQuery("select obj from Articulo obj where obj.codigo = :codigo and obj.empresa = :empresa");
 		query.setParameter("codigo", codigo);
 		query.setParameter("empresa", empresa);
-		return (Articulo) query.getSingleResult();
+	
+		List<Articulo> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (Articulo) results.get(0);
+		} else {
+			return null;
+		}
 	}
 	/**
 	 * Busca un inventario con el articulo

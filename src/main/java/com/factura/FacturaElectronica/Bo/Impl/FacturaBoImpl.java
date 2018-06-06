@@ -1,14 +1,35 @@
 package com.factura.FacturaElectronica.Bo.Impl;
 
+import java.util.Date;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.factura.FacturaElectronica.Bo.FacturaBo;
+import com.factura.FacturaElectronica.Dao.ArticuloDao;
+import com.factura.FacturaElectronica.Dao.DetalleDao;
+import com.factura.FacturaElectronica.Dao.EmpresaDao;
 import com.factura.FacturaElectronica.Dao.FacturaDao;
+import com.factura.FacturaElectronica.Dao.InventarioDao;
+import com.factura.FacturaElectronica.Dao.KardexDao;
+import com.factura.FacturaElectronica.Utils.Constantes;
+import com.factura.FacturaElectronica.Utils.Utils;
+import com.factura.FacturaElectronica.modelo.Articulo;
+import com.factura.FacturaElectronica.modelo.Detalle;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Factura;
+import com.factura.FacturaElectronica.modelo.Inventario;
+import com.factura.FacturaElectronica.modelo.Usuario;
+import com.factura.FacturaElectronica.web.command.DetalleFacturaCommand;
+import com.factura.FacturaElectronica.web.command.FacturaCommand;
+import com.google.gson.Gson;
 
 @Transactional
 @EnableTransactionManagement
@@ -16,15 +37,30 @@ import com.factura.FacturaElectronica.modelo.Factura;
 public class FacturaBoImpl implements FacturaBo {
 
 	@Autowired
-	FacturaDao				facturaDao;
+	FacturaDao			facturaDao;
+
+	@Autowired
+	DetalleDao			detalleDao;
 	
+	@Autowired
+	EmpresaDao			empresaDao;
+
+	@Autowired
+	ArticuloDao			articuloDao;
+
+	@Autowired
+	KardexDao				kardexDao;
+
+	@Autowired
+	InventarioDao		inventarioDao;
+
+	private Logger	log	= LoggerFactory.getLogger(this.getClass());
 
 	public void agregar(Factura factura) {
 		facturaDao.agregar(factura);
 
 	}
 
-	
 	/**
 	 * Modificar una factura
 	 * @see com.factura.FacturaElectronica.Bo.FacturaBo#modificar(com.factura.FacturaElectronica.modelo.Factura)
@@ -60,6 +96,127 @@ public class FacturaBoImpl implements FacturaBo {
 	public Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) {
 		return facturaDao.findByConsecutivoAndEmpresa(consecutivo, empresa);
 	}
-	
-	
+
+	@Override
+	public void crearFactura(FacturaCommand facturaCommand,Usuario usuario) throws Exception {
+		try {
+			Factura factura = facturaCommand.getId() == null || facturaCommand.getId() == Constantes.ZEROS ? new Factura() : facturaDao.findById(facturaCommand.getId());
+			factura.setCondicionVenta(facturaCommand.getCondicionVenta());
+			//Fecha de credito
+			if(facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO	)) {
+				factura.setFechaCredito(Utils.pasarADate(facturaCommand.getFechaCredito(),"yyyy-MM-dd"));
+				factura.setPlazoCredito(facturaCommand.getPlazoCredito());
+			}else {
+				factura.setFechaCredito(null);
+				factura.setPlazoCredito(Constantes.ZEROS);
+			}
+			
+			if(facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+				factura.setNumeroConsecutivo(empresaDao.generarConsecutivoFactura(facturaCommand.getEmpresa()));
+			}
+			
+			factura.setUsuarioCreacion(usuario);
+			factura.setFechaEmision(new Date());
+
+			
+			factura.setTipoDoc(facturaCommand.getTipoDoc());
+			factura.setMedioPago(facturaCommand.getMedioPago());
+			factura.setNombreFactura(facturaCommand.getNombreFactura());
+			factura.setDireccion(facturaCommand.getDireccion());
+			factura.setNota(facturaCommand.getNota());
+			factura.setComanda(facturaCommand.getComanda());
+			factura.setSubTotal(facturaCommand.getSubTotal() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getSubTotal());
+			factura.setTotalTransporte(facturaCommand.getTotalTransporte() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalTransporte());
+			factura.setTotal(facturaCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotal());
+			factura.setTotalServGravados(facturaCommand.getTotalServGravados() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalServGravados());
+			factura.setTotalServExentos(facturaCommand.getTotalServExentos() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalServExentos());
+			factura.setTotalMercanciasExentas(factura.getTotalMercanciasExentas() == null ? Constantes.ZEROS_DOUBLE : factura.getTotalMercanciasExentas());
+			factura.setTotalMercanciasGravadas(facturaCommand.getTotalMercanciasGravadas() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalMercanciasGravadas());
+			factura.setTotalGravado(facturaCommand.getTotalGravado() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalGravado());
+			factura.setTotalExento(facturaCommand.getTotalExento() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalExento());
+			factura.setTotalVenta(facturaCommand.getTotalVenta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalVenta());
+			factura.setTotalDescuentos(facturaCommand.getTotalDescuentos() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalDescuentos());
+			factura.setTotalVentaNeta(facturaCommand.getTotalVentaNeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalVentaNeta());
+			factura.setTotalImpuesto(facturaCommand.getTotalImpuesto() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalImpuesto());
+			factura.setTotalComprobante(facturaCommand.getTotalComprobante() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalComprobante());
+			factura.setTotalEfectivo(facturaCommand.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalEfectivo());
+			factura.setTotalTarjeta(facturaCommand.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalTarjeta());
+			factura.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
+			factura.setTotalCredito(facturaCommand.getTotalCredito() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCredito());
+			factura.setMontoCambio(facturaCommand.getMontoCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getMontoCambio());
+			factura.setTotalCambio(facturaCommand.getTotalCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambio());
+			factura.setTotalCambioPagar(facturaCommand.getTotalCambioPagar() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambioPagar());
+			factura.setCodigoMoneda(facturaCommand.getCodigoMoneda());
+			factura.setEstado(facturaCommand.getEstado());
+			if (factura.getId() == Constantes.ZEROS) {
+				factura.setCreated_at(new Date());
+			}
+
+			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+				factura.setFechaEmision(new Date());
+				factura.setUpdated_at(new Date());
+			}
+
+			if (factura.getId() == 0) {
+				factura.setCreated_at(new Date());
+				agregar(factura);
+			} else {
+				modificar(factura);
+			}
+
+			// Eliminar detalles si existe
+			if (facturaCommand.getId() != null) {
+				if (facturaCommand.getId() > 0) {
+					facturaDao.eliminarDetalleFacturaPorSP(factura);
+				}
+			}
+
+			JSONObject json = null;
+			try {
+				json = (JSONObject) new JSONParser().parse(facturaCommand.getDetalleFactura());
+			} catch (org.json.simple.parser.ParseException e) {
+				e.printStackTrace();
+			}
+			// Agregar Lineas de Detalle
+			JSONArray jsonArrayDetalleFactura = (JSONArray) json.get("data");
+			Gson gson = new Gson();
+			if (jsonArrayDetalleFactura != null) {
+				for (int i = 0; i < jsonArrayDetalleFactura.size(); i++) {
+					DetalleFacturaCommand detalleFacturaCommand = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), DetalleFacturaCommand.class);
+					Articulo articulo = articuloDao.buscar(detalleFacturaCommand.getArticulo_id());
+					Detalle detalle = new Detalle(detalleFacturaCommand);
+					detalle.setArticulo(articulo);
+
+					detalle.setFactura(factura);
+					detalleDao.agregar(detalle);
+
+					Inventario inventario = inventarioDao.findByArticuloAndEstado(detalle.getArticulo(), Constantes.ESTADO_ACTIVO);
+          if(inventario !=null) {
+          	aplicarInventario(factura, inventario, detalle, articulo);	
+          }
+					
+
+				}
+			}
+
+		} catch (Exception e) {
+			log.info("** Error  crearCompra: " + e.getMessage() + " fecha " + new Date());
+
+			throw e;
+		}
+
+	}
+
+	/**
+	 * Aplicar el inventario si estado de la venta es facturada
+	 */
+	private void aplicarInventario(Factura factura, Inventario inventario, Detalle detalle, Articulo articulo) {
+		if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+			String leyenda = Constantes.MOTIVO_SALIDA_INVENTARIO_VENTA + factura.getNumeroConsecutivo();
+			kardexDao.salida(inventario, detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
+
+		}
+
+	}
+
 }

@@ -3,6 +3,7 @@ package com.factura.FacturaElectronica.web.command;
 import java.util.Date;
 
 import com.factura.FacturaElectronica.modelo.Cliente;
+import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Vendedor;
 
 /**
@@ -14,7 +15,7 @@ public class FacturaCommand {
 
 	private Integer		id;
 
-	private Date			fechaCredito;
+	private String			fechaCredito;
 
 	private Integer		numeroConsecutivo;
 
@@ -75,10 +76,12 @@ public class FacturaCommand {
 	private Double		montoCambio;
 
 	private Double		totalCambio;
+	
+	private Double totalCambioPagar;
 
 	private String		codigoMoneda;
 
-	private String		estado;
+	private Integer		estado;
 
 	private Date			created_at;
 
@@ -88,6 +91,8 @@ public class FacturaCommand {
 
 	private Vendedor	vendedor;
 	private String		detalleFactura;
+	
+	private Empresa empresa;
 
 	public FacturaCommand() {
 		super();
@@ -109,11 +114,15 @@ public class FacturaCommand {
 		this.detalleFactura = detalleFactura;
 	}
 
-	public Date getFechaCredito() {
+	
+
+	
+	public String getFechaCredito() {
 		return fechaCredito;
 	}
 
-	public void setFechaCredito(Date fechaCredito) {
+	
+	public void setFechaCredito(String fechaCredito) {
 		this.fechaCredito = fechaCredito;
 	}
 
@@ -365,11 +374,11 @@ public class FacturaCommand {
 		this.codigoMoneda = codigoMoneda;
 	}
 
-	public String getEstado() {
+	public Integer getEstado() {
 		return estado;
 	}
 
-	public void setEstado(String estado) {
+	public void setEstado(Integer estado) {
 		this.estado = estado;
 	}
 
@@ -404,5 +413,27 @@ public class FacturaCommand {
 	public void setVendedor(Vendedor vendedor) {
 		this.vendedor = vendedor;
 	}
+
+	
+	public Double getTotalCambioPagar() {
+		return totalCambioPagar;
+	}
+
+	
+	public void setTotalCambioPagar(Double totalCambioPagar) {
+		this.totalCambioPagar = totalCambioPagar;
+	}
+
+	
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+	
+	
 
 }

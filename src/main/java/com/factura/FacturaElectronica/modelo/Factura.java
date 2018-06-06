@@ -40,7 +40,7 @@ public class Factura implements Serializable {
 	private Date							fechaCredito;
 
 	@Column(name = "numero_consecutivo")
-	private Integer						numeroConsecutivo;
+	private Double						numeroConsecutivo;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -131,6 +131,9 @@ public class Factura implements Serializable {
 	@Column(name = "total_cambio")
 	private Double						totalCambio;
 
+	@Column(name = "total_cambioPagar")
+	private Double						totalCambioPagar;
+
 	@Column(name = "codigo_moneda")
 	private String						codigoMoneda;
 
@@ -150,20 +153,50 @@ public class Factura implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente						cliente;
+	
+	@ManyToOne
+	@JoinColumn(name = "empresa_id")
+	private Empresa						empresa;
 
 	@ManyToOne
 	@JoinColumn(name = "vendedor_id")
 	private Vendedor					vendedor;
+
+	@ManyToOne
+	@JoinColumn(name = "usuario_id", nullable = false)
+	private Usuario						usuarioCreacion;
 
 	public Factura() {
 		super();
 		this.estado = Constantes.FACTURA_ESTADO_PENDIENTE;
 		this.created_at = new Date();
 		this.updated_at = new Date();
+		this.subTotal = Constantes.ZEROS_DOUBLE;
+		this.totalTransporte = Constantes.ZEROS_DOUBLE;
+		this.total = Constantes.ZEROS_DOUBLE;
+		this.totalServGravados = Constantes.ZEROS_DOUBLE;
+		this.totalServExentos = Constantes.ZEROS_DOUBLE;
+		this.totalMercanciasGravadas = Constantes.ZEROS_DOUBLE;
+		this.totalMercanciasExentas = Constantes.ZEROS_DOUBLE;
+		this.totalGravado = Constantes.ZEROS_DOUBLE;
+		this.totalExento = Constantes.ZEROS_DOUBLE;
+		this.totalVenta = Constantes.ZEROS_DOUBLE;
+		this.totalDescuentos = Constantes.ZEROS_DOUBLE;
+		this.totalVentaNeta = Constantes.ZEROS_DOUBLE;
+		this.totalImpuesto = Constantes.ZEROS_DOUBLE;
+		this.totalComprobante = Constantes.ZEROS_DOUBLE;
+		this.totalEfectivo = Constantes.ZEROS_DOUBLE;
+		this.totalTarjeta = Constantes.ZEROS_DOUBLE;
+		this.totalBanco = Constantes.ZEROS_DOUBLE;
+		this.totalCredito = Constantes.ZEROS_DOUBLE;
+		this.montoCambio = Constantes.ZEROS_DOUBLE;
+		this.totalCambio = Constantes.ZEROS_DOUBLE;
+		this.totalCambioPagar = Constantes.ZEROS_DOUBLE;
 
 	}
 
-	public Factura(Integer id, Date fechaCredito, Integer numeroConsecutivo, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String medioPago, String nombreFactura, String direccion, String nota, String comanda, Double subTotal, Double totalTransporte, Double total, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, String codigoMoneda, Integer estado, Date created_at, Date updated_at, Cliente cliente, Vendedor vendedor) {
+	public Factura(Integer id, Date fechaCredito, Double numeroConsecutivo, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String medioPago, String nombreFactura, String direccion, String nota, String comanda, Double subTotal, Double totalTransporte, Double total, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalCambioPagar, String codigoMoneda, Integer estado, Date created_at, Date updated_at, Cliente cliente,
+			Vendedor vendedor, Usuario usuarioCreacion,Empresa empresa) {
 		super();
 		this.id = id;
 		this.fechaCredito = fechaCredito;
@@ -197,12 +230,15 @@ public class Factura implements Serializable {
 		this.totalCredito = totalCredito;
 		this.montoCambio = montoCambio;
 		this.totalCambio = totalCambio;
+		this.totalCambioPagar = totalCambioPagar;
 		this.codigoMoneda = codigoMoneda;
 		this.estado = estado;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.cliente = cliente;
 		this.vendedor = vendedor;
+		this.usuarioCreacion = usuarioCreacion;
+		this.empresa = empresa;
 	}
 
 	public Integer getId() {
@@ -221,11 +257,11 @@ public class Factura implements Serializable {
 		this.fechaCredito = fechaCredito;
 	}
 
-	public Integer getNumeroConsecutivo() {
+	public Double getNumeroConsecutivo() {
 		return numeroConsecutivo;
 	}
 
-	public void setNumeroConsecutivo(Integer numeroConsecutivo) {
+	public void setNumeroConsecutivo(Double numeroConsecutivo) {
 		this.numeroConsecutivo = numeroConsecutivo;
 	}
 
@@ -508,5 +544,33 @@ public class Factura implements Serializable {
 	public void setVendedor(Vendedor vendedor) {
 		this.vendedor = vendedor;
 	}
+
+	public Double getTotalCambioPagar() {
+		return totalCambioPagar;
+	}
+
+	public void setTotalCambioPagar(Double totalCambioPagar) {
+		this.totalCambioPagar = totalCambioPagar;
+	}
+
+	public Usuario getUsuarioCreacion() {
+		return usuarioCreacion;
+	}
+
+	public void setUsuarioCreacion(Usuario usuarioCreacion) {
+		this.usuarioCreacion = usuarioCreacion;
+	}
+
+	
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+	
+	
 
 }

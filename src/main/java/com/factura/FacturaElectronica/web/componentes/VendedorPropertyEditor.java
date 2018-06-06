@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.factura.FacturaElectronica.Bo.VendedorBo;
-import com.factura.FacturaElectronica.modelo.Cliente;
+import com.factura.FacturaElectronica.modelo.Vendedor;
 
 @Component
 public class VendedorPropertyEditor extends PropertyEditorSupport {
@@ -17,8 +17,8 @@ public class VendedorPropertyEditor extends PropertyEditorSupport {
 
 	@Override
 	public String getAsText() {
-		Cliente cliente = (Cliente) getValue();
-		return (cliente == null ? "" : cliente.getId().toString());
+		Vendedor vendedor = (Vendedor) getValue();
+		return (vendedor == null ? "" : vendedor.getId().toString());
 	}
 
 	@Override

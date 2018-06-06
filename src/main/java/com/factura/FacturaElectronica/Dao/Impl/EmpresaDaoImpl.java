@@ -9,6 +9,7 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.factura.FacturaElectronica.Dao.EmpresaDao;
+import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.modelo.Empresa;
 
 /**
@@ -95,6 +96,21 @@ public class EmpresaDaoImpl implements EmpresaDao {
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * Genera el consecutvio de la Factura de empresa
+	 * @see com.factura.FacturaElectronica.Dao.EmpresaDao#generarConsecutivoFactura(com.factura.FacturaElectronica.modelo.Empresa)
+	 */
+	@Override
+	public Double generarConsecutivoFactura(Empresa empresa) {
+		Double consecutivo = Constantes.ZEROS_DOUBLE;
+		consecutivo = empresa.getNumeroConsecutivo() + 1;
+		empresa.setNumeroConsecutivo(consecutivo);
+		modificar(empresa);
+
+		return consecutivo;
+
 	}
 
 }

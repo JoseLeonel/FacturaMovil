@@ -74,17 +74,17 @@ public class FacturaDaoImpl implements FacturaDao {
 	}
 
 	/**
-	 * Elimina los detalles de una compra para ser reemplazos por detalles nuevos Comparas Pendientes de ingresar el inventario
-	 * @see com.factura.FacturaElectronica.Dao.CompraDao#eliminarDetalleComprasPorSP(com.factura.FacturaElectronica.modelo.Compra)
+	 * Elimina los detalles de una factura para ser reemplazos por detalles nuevos Comparas Pendientes de ingresar el inventario
+	 * @see com.factura.FacturaElectronica.Dao.FacturaDao#eliminarDetalleFacturaPorSP(com.factura.FacturaElectronica.modelo.Factura)
 	 */
 	@Override
 	public void eliminarDetalleFacturaPorSP(Factura factura) {
 		try {
-			log.info("** Inicio de la ejecucion del procedimiento almacendos eliminar detalles de compra : " + " fecha " + new Date());
+			log.info("** Inicio de la ejecucion del procedimiento almacendos eliminar detalles de la factura : " + " fecha " + new Date());
 
-			StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_ELIMINAR_DETALLES_COMPRAS);
-			storedProcedure.registerStoredProcedureParameter(Constantes.SP_ELIMINAR_DETALLES_COMPRAS_ID_COMPRA_PARAM, Integer.class, ParameterMode.IN);
-			storedProcedure.setParameter(Constantes.SP_ELIMINAR_DETALLES_COMPRAS_ID_COMPRA_PARAM, factura.getId());
+			StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_ELIMINAR_DETALLES_FACTURA);
+			storedProcedure.registerStoredProcedureParameter(Constantes.SP_ELIMINAR_DETALLES_FACTURA_ID_FACTURA_PARAM, Integer.class, ParameterMode.IN);
+			storedProcedure.setParameter(Constantes.SP_ELIMINAR_DETALLES_FACTURA_ID_FACTURA_PARAM, factura.getId());
 			
 			storedProcedure.execute();
 

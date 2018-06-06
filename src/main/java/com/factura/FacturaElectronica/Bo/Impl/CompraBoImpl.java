@@ -75,7 +75,7 @@ public class CompraBoImpl implements CompraBo {
 			compra.setEmpresa(compraCommand.getEmpresa());
 			compra.setEstado(compraCommand.getEstado());
 			compra.setFechaCompra(Utils.pasarADate(compraCommand.getFechaCompra(),"yyyy-MM-dd"));
-			compra.setFechaCredito(compraCommand.getFechaCredito() == Constantes.EMPTY?null: Utils.pasarADate(compraCommand.getFechaCompra(),"yyyy-MM-dd"));
+			compra.setFechaCredito(compraCommand.getFechaCredito() == Constantes.EMPTY?null: Utils.pasarADate(compraCommand.getFechaCredito(),"yyyy-MM-dd"));
 			compra.setFormaPago(compraCommand.getFormaPago());
 			compra.setNota(compraCommand.getNota());
 			compra.setTotalCompra(compraCommand.getTotalCompra());
