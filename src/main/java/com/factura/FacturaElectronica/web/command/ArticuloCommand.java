@@ -2,6 +2,7 @@ package com.factura.FacturaElectronica.web.command;
 
 import java.util.Date;
 
+import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.modelo.Articulo;
 import com.factura.FacturaElectronica.modelo.Categoria;
 import com.factura.FacturaElectronica.modelo.Empresa;
@@ -67,7 +68,7 @@ public class ArticuloCommand {
 		this.serie = articulo.getSerie();
 		this.unidadMedida = articulo.getUnidadMedida();
 		this.contable = articulo.getContable();
-		this.cantidad = 0d;
+		this.cantidad = articulo.getInventarios().stream().filter(o->o.getEstado().equals(Constantes.ESTADO_ACTIVO)).mapToDouble(o -> o.getCantidad()).sum();
 	}
 
 	public ArticuloCommand() {

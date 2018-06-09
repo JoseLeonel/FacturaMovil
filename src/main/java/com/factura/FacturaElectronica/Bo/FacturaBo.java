@@ -17,7 +17,7 @@ public interface FacturaBo {
 
 	Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa);
 	
-	void crearFactura(FacturaCommand facturaCommand,Usuario usuario) throws Exception;
+	Factura crearFactura(FacturaCommand facturaCommand,Usuario usuario) throws Exception;
 
 
 }

@@ -46,7 +46,7 @@ public class CuentaCobrar implements Serializable {
 	private String						letraCambio;
 
 	@Column(name = "factura")
-	private Integer						factura;
+	private String						factura;
 
 	@Column(name = "factura_manual")
 	private Integer						facturaManual;
@@ -141,7 +141,7 @@ public class CuentaCobrar implements Serializable {
 
 	}
 
-	public CuentaCobrar(Integer id, String recibo, String letraCambio, Integer factura, Integer facturaManual, Double totalComision, Double descuento, Double cantidadPagos, Double montoCouta, Double total, Double totalAbono, Double totalSaldo, String descripcionArticulo, String nota, String tipo, String estado, Date fechaPlazo, Date fechaEntrega, Date created_at, Date updated_at, Cliente cliente, Usuario usuario, Empresa empresa, Vendedor vendedor, Set<Abono> abonos) {
+	public CuentaCobrar(Integer id, String recibo, String letraCambio, String factura, Integer facturaManual, Double totalComision, Double descuento, Double cantidadPagos, Double montoCouta, Double total, Double totalAbono, Double totalSaldo, String descripcionArticulo, String nota, String tipo, String estado, Date fechaPlazo, Date fechaEntrega, Date created_at, Date updated_at, Cliente cliente, Usuario usuario, Empresa empresa, Vendedor vendedor, Set<Abono> abonos) {
 		super();
 		this.id = id;
 		this.recibo = recibo;
@@ -194,11 +194,11 @@ public class CuentaCobrar implements Serializable {
 		this.letraCambio = letraCambio;
 	}
 
-	public Integer getFactura() {
+	public String getFactura() {
 		return factura;
 	}
 
-	public void setFactura(Integer factura) {
+	public void setFactura(String factura) {
 		this.factura = factura;
 	}
 

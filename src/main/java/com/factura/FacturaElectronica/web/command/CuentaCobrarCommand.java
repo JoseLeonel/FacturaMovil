@@ -15,7 +15,7 @@ public class CuentaCobrarCommand {
 
 	private String		letraCambio;
 
-	private Integer		factura;
+	private String		factura;
 
 	private Integer		facturaManual;
 
@@ -117,11 +117,11 @@ public class CuentaCobrarCommand {
 		this.letraCambio = letraCambio;
 	}
 
-	public Integer getFactura() {
+	public String getFactura() {
 		return factura;
 	}
 
-	public void setFactura(Integer factura) {
+	public void setFactura(String factura) {
 		this.factura = factura;
 	}
 

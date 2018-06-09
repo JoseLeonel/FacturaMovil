@@ -1,6 +1,7 @@
 package com.factura.FacturaElectronica.web.Controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -20,15 +22,18 @@ import com.factura.FacturaElectronica.Bo.FacturaBo;
 import com.factura.FacturaElectronica.Bo.UsuarioBo;
 import com.factura.FacturaElectronica.Bo.VendedorBo;
 import com.factura.FacturaElectronica.Utils.Constantes;
+import com.factura.FacturaElectronica.Utils.DataTableDelimitador;
+import com.factura.FacturaElectronica.Utils.DataTableFilter;
+import com.factura.FacturaElectronica.Utils.RespuestaServiceDataTable;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
 import com.factura.FacturaElectronica.modelo.Cliente;
-import com.factura.FacturaElectronica.modelo.Compra;
 import com.factura.FacturaElectronica.modelo.Empresa;
+import com.factura.FacturaElectronica.modelo.Factura;
 import com.factura.FacturaElectronica.modelo.Usuario;
 import com.factura.FacturaElectronica.modelo.Vendedor;
 import com.factura.FacturaElectronica.validator.FacturaFormValidator;
-import com.factura.FacturaElectronica.web.command.CompraEsperaCommand;
 import com.factura.FacturaElectronica.web.command.FacturaCommand;
+import com.factura.FacturaElectronica.web.command.FacturaEsperaCommand;
 import com.factura.FacturaElectronica.web.componentes.ClientePropertyEditor;
 import com.factura.FacturaElectronica.web.componentes.EmpresaPropertyEditor;
 import com.factura.FacturaElectronica.web.componentes.StringPropertyEditor;
@@ -43,11 +48,11 @@ import com.google.common.base.Function;
 @Controller
 public class FacturasController {
 
-	private static final Function<Object, CompraEsperaCommand>	TO_COMMAND	= new Function<Object, CompraEsperaCommand>() {
+	private static final Function<Object, FacturaEsperaCommand>	TO_COMMAND	= new Function<Object, FacturaEsperaCommand>() {
 
 																																						@Override
-																																						public CompraEsperaCommand apply(Object f) {
-																																							return new CompraEsperaCommand((Compra) f);
+																																						public FacturaEsperaCommand apply(Object f) {
+																																							return new FacturaEsperaCommand((Factura) f);
 																																						};
 																																					};
 
@@ -99,13 +104,43 @@ public class FacturasController {
 		return "views/facturas/puntoVenta";
 	}
 
+	/**
+	 * Facturas En espera de convertirse en factura oficial
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/ListarFacturasEsperaActivasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarActivasAjax(HttpServletRequest request, HttpServletResponse response) {
+
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Factura");
+		DataTableFilter dataTableFilter = new DataTableFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+		dataTableFilter = new DataTableFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+	}
+
+	/**
+	 * Crear la Factura
+	 * @param request
+	 * @param model
+	 * @param facturaCommand
+	 * @param result
+	 * @param status
+	 * @return
+	 */
 	@RequestMapping(value = "/CrearFacturaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator crearFactura(HttpServletRequest request, ModelMap model, @ModelAttribute FacturaCommand facturaCommand, BindingResult result, SessionStatus status) {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			
+
 			String nombreUsuario = request.getUserPrincipal().getName();
 			Usuario usuario = usuarioBo.buscar(nombreUsuario);
 			if (facturaCommand.getCliente() == null) {
@@ -125,23 +160,37 @@ public class FacturasController {
 
 			}
 			facturaCommand.setEmpresa(usuario.getEmpresa());
-      
 			facturaFormValidator.validate(facturaCommand, result);
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-
-			
-			if (result.hasErrors()) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
-			}
-
-			if (facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+			if (!facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 				facturaCommand.setFechaCredito(null);
 			}
-			facturaBo.crearFactura(facturaCommand,usuario);
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", facturaCommand);
+			Factura factura = facturaBo.crearFactura(facturaCommand, usuario);
+			if(factura == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", factura);
 
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+
+	/**
+	 * Mostrar una Factura
+	 * @param request
+	 * @param response
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/MostrarFacturaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer idFactura) {
+		try {
+			Factura facturaBD = facturaBo.findById(idFactura);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", facturaBD);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}

@@ -5,20 +5,16 @@ import java.util.Date;
 import com.factura.FacturaElectronica.modelo.Cliente;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Factura;
+import com.factura.FacturaElectronica.modelo.Usuario;
 import com.factura.FacturaElectronica.modelo.Vendedor;
 
-/**
- * Factura realizada del Front End FacturaCommand.
- * @author jose.
- * @since 3 jun. 2018
- */
-public class FacturaCommand {
+public class FacturaEsperaCommand {
 
 	private Integer		id;
 
-	private String			fechaCredito;
+	private Date			fechaCredito;
 
-	private Integer		numeroConsecutivo;
+	private String		numeroConsecutivo;
 
 	private Date			fechaEmision;
 
@@ -53,13 +49,11 @@ public class FacturaCommand {
 	private Double		totalMercanciasExentas;
 
 	private Double		totalGravado;
-
 	private Double		totalExento;
 
 	private Double		totalVenta;
 
 	private Double		totalDescuentos;
-
 	private Double		totalVentaNeta;
 
 	private Double		totalImpuesto;
@@ -77,8 +71,8 @@ public class FacturaCommand {
 	private Double		montoCambio;
 
 	private Double		totalCambio;
-	
-	private Double totalCambioPagar;
+
+	private Double		totalCambioPagar;
 
 	private String		codigoMoneda;
 
@@ -90,64 +84,56 @@ public class FacturaCommand {
 
 	private Cliente		cliente;
 
+	private Empresa		empresa;
+
 	private Vendedor	vendedor;
-	private String		detalleFactura;
-	
-	private Empresa empresa;
 
-	public FacturaCommand() {
+	private Usuario		usuarioCreacion;
+
+	public FacturaEsperaCommand(Factura factura) {
 		super();
+		this.id = factura.getId();
+		this.fechaCredito = factura.getFechaCredito();
+		this.numeroConsecutivo = factura.getNumeroConsecutivo();
+		this.fechaEmision = factura.getFechaEmision();
+		this.condicionVenta = factura.getCondicionVenta();
+		this.plazoCredito = factura.getPlazoCredito();
+		this.tipoDoc = factura.getTipoDoc();
+		this.medioPago = factura.getMedioPago();
+		this.nombreFactura = factura.getNombreFactura();
+		this.direccion = factura.getDireccion();
+		this.nota = factura.getNota();
+		this.comanda = factura.getComanda();
+		this.subTotal = factura.getSubTotal();
+		this.totalTransporte = factura.getTotalTransporte();
+		this.total = factura.getTotal();
+		this.totalServGravados = factura.getTotalServGravados();
+		this.totalServExentos = factura.getTotalServExentos();
+		this.totalMercanciasGravadas = factura.getTotalMercanciasGravadas();
+		this.totalMercanciasExentas = factura.getTotalMercanciasExentas();
+		this.totalGravado = factura.getTotalGravado();
+		this.totalExento = factura.getTotalExento();
+		this.totalVenta = factura.getTotalVenta();
+		this.totalDescuentos = factura.getTotalDescuentos();
+		this.totalVentaNeta = factura.getTotalVentaNeta();
+		this.totalImpuesto = factura.getTotalImpuesto();
+		this.totalComprobante = factura.getTotalComprobante();
+		this.totalEfectivo = factura.getTotalEfectivo();
+		this.totalTarjeta = factura.getTotalTarjeta();
+		this.totalBanco = factura.getTotalBanco();
+		this.totalCredito = factura.getTotalCredito();
+		this.montoCambio = factura.getMontoCambio();
+		this.totalCambio = factura.getTotalCambio();
+		this.totalCambioPagar = factura.getTotalCambioPagar();
+		this.codigoMoneda = factura.getCodigoMoneda();
+		this.estado = factura.getEstado();
+		this.created_at = factura.getCreated_at();
+		this.updated_at = factura.getUpdated_at();
+		this.cliente = factura.getCliente();
+		this.empresa = factura.getEmpresa();
+		this.vendedor = factura.getVendedor();
+		this.usuarioCreacion = factura.getUsuarioCreacion();
 	}
-	
-	
-
-	public FacturaCommand(Integer id, String fechaCredito, Integer numeroConsecutivo, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String medioPago, String nombreFactura, String direccion, String nota, String comanda, Double subTotal, Double totalTransporte, Double total, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalCambioPagar, String codigoMoneda, Integer estado, Date created_at, Date updated_at,
-			Cliente cliente, Vendedor vendedor, String detalleFactura, Empresa empresa) {
-		super();
-		this.id = id;
-		this.fechaCredito = fechaCredito;
-		this.numeroConsecutivo = numeroConsecutivo;
-		this.fechaEmision = fechaEmision;
-		this.condicionVenta = condicionVenta;
-		this.plazoCredito = plazoCredito;
-		this.tipoDoc = tipoDoc;
-		this.medioPago = medioPago;
-		this.nombreFactura = nombreFactura;
-		this.direccion = direccion;
-		this.nota = nota;
-		this.comanda = comanda;
-		this.subTotal = subTotal;
-		this.totalTransporte = totalTransporte;
-		this.total = total;
-		this.totalServGravados = totalServGravados;
-		this.totalServExentos = totalServExentos;
-		this.totalMercanciasGravadas = totalMercanciasGravadas;
-		this.totalMercanciasExentas = totalMercanciasExentas;
-		this.totalGravado = totalGravado;
-		this.totalExento = totalExento;
-		this.totalVenta = totalVenta;
-		this.totalDescuentos = totalDescuentos;
-		this.totalVentaNeta = totalVentaNeta;
-		this.totalImpuesto = totalImpuesto;
-		this.totalComprobante = totalComprobante;
-		this.totalEfectivo = totalEfectivo;
-		this.totalTarjeta = totalTarjeta;
-		this.totalBanco = totalBanco;
-		this.totalCredito = totalCredito;
-		this.montoCambio = montoCambio;
-		this.totalCambio = totalCambio;
-		this.totalCambioPagar = totalCambioPagar;
-		this.codigoMoneda = codigoMoneda;
-		this.estado = estado;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
-		this.cliente = cliente;
-		this.vendedor = vendedor;
-		this.detalleFactura = detalleFactura;
-		this.empresa = empresa;
-	}
-
-
 
 	public Integer getId() {
 		return id;
@@ -157,31 +143,19 @@ public class FacturaCommand {
 		this.id = id;
 	}
 
-	public String getDetalleFactura() {
-		return detalleFactura;
-	}
-
-	public void setDetalleFactura(String detalleFactura) {
-		this.detalleFactura = detalleFactura;
-	}
-
-	
-
-	
-	public String getFechaCredito() {
+	public Date getFechaCredito() {
 		return fechaCredito;
 	}
 
-	
-	public void setFechaCredito(String fechaCredito) {
+	public void setFechaCredito(Date fechaCredito) {
 		this.fechaCredito = fechaCredito;
 	}
 
-	public Integer getNumeroConsecutivo() {
+	public String getNumeroConsecutivo() {
 		return numeroConsecutivo;
 	}
 
-	public void setNumeroConsecutivo(Integer numeroConsecutivo) {
+	public void setNumeroConsecutivo(String numeroConsecutivo) {
 		this.numeroConsecutivo = numeroConsecutivo;
 	}
 
@@ -417,6 +391,14 @@ public class FacturaCommand {
 		this.totalCambio = totalCambio;
 	}
 
+	public Double getTotalCambioPagar() {
+		return totalCambioPagar;
+	}
+
+	public void setTotalCambioPagar(Double totalCambioPagar) {
+		this.totalCambioPagar = totalCambioPagar;
+	}
+
 	public String getCodigoMoneda() {
 		return codigoMoneda;
 	}
@@ -457,6 +439,14 @@ public class FacturaCommand {
 		this.cliente = cliente;
 	}
 
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
 	public Vendedor getVendedor() {
 		return vendedor;
 	}
@@ -465,26 +455,12 @@ public class FacturaCommand {
 		this.vendedor = vendedor;
 	}
 
-	
-	public Double getTotalCambioPagar() {
-		return totalCambioPagar;
+	public Usuario getUsuarioCreacion() {
+		return usuarioCreacion;
 	}
 
-	
-	public void setTotalCambioPagar(Double totalCambioPagar) {
-		this.totalCambioPagar = totalCambioPagar;
+	public void setUsuarioCreacion(Usuario usuarioCreacion) {
+		this.usuarioCreacion = usuarioCreacion;
 	}
-
-	
-	public Empresa getEmpresa() {
-		return empresa;
-	}
-
-	
-	public void setEmpresa(Empresa empresa) {
-		this.empresa = empresa;
-	}
-	
-	
 
 }

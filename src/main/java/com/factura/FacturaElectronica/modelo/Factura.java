@@ -2,14 +2,19 @@ package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -17,6 +22,7 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.factura.FacturaElectronica.Utils.Constantes;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Factura de ventas a los clientes.
@@ -40,7 +46,7 @@ public class Factura implements Serializable {
 	private Date							fechaCredito;
 
 	@Column(name = "numero_consecutivo")
-	private Double						numeroConsecutivo;
+	private String						numeroConsecutivo;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -153,7 +159,7 @@ public class Factura implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente						cliente;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
 	private Empresa						empresa;
@@ -165,6 +171,12 @@ public class Factura implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "usuario_id", nullable = false)
 	private Usuario						usuarioCreacion;
+
+	@JsonProperty("detalles")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "factura_id", referencedColumnName = "id")
+	@OrderBy("factura_id DESC")
+	private Set<Detalle>			detalles;
 
 	public Factura() {
 		super();
@@ -195,8 +207,8 @@ public class Factura implements Serializable {
 
 	}
 
-	public Factura(Integer id, Date fechaCredito, Double numeroConsecutivo, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String medioPago, String nombreFactura, String direccion, String nota, String comanda, Double subTotal, Double totalTransporte, Double total, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalCambioPagar, String codigoMoneda, Integer estado, Date created_at, Date updated_at, Cliente cliente,
-			Vendedor vendedor, Usuario usuarioCreacion,Empresa empresa) {
+	public Factura(Integer id, Date fechaCredito, String numeroConsecutivo, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String medioPago, String nombreFactura, String direccion, String nota, String comanda, Double subTotal, Double totalTransporte, Double total, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalCambioPagar, String codigoMoneda, Integer estado, Date created_at, Date updated_at, Cliente cliente,
+			Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Set<Detalle> detalles) {
 		super();
 		this.id = id;
 		this.fechaCredito = fechaCredito;
@@ -236,9 +248,10 @@ public class Factura implements Serializable {
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.cliente = cliente;
+		this.empresa = empresa;
 		this.vendedor = vendedor;
 		this.usuarioCreacion = usuarioCreacion;
-		this.empresa = empresa;
+		this.detalles = detalles;
 	}
 
 	public Integer getId() {
@@ -257,11 +270,15 @@ public class Factura implements Serializable {
 		this.fechaCredito = fechaCredito;
 	}
 
-	public Double getNumeroConsecutivo() {
+	
+
+	
+	public String getNumeroConsecutivo() {
 		return numeroConsecutivo;
 	}
 
-	public void setNumeroConsecutivo(Double numeroConsecutivo) {
+	
+	public void setNumeroConsecutivo(String numeroConsecutivo) {
 		this.numeroConsecutivo = numeroConsecutivo;
 	}
 
@@ -561,16 +578,20 @@ public class Factura implements Serializable {
 		this.usuarioCreacion = usuarioCreacion;
 	}
 
-	
 	public Empresa getEmpresa() {
 		return empresa;
 	}
 
-	
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
 	}
-	
-	
+
+	public Set<Detalle> getDetalles() {
+		return detalles;
+	}
+
+	public void setDetalles(Set<Detalle> detalles) {
+		this.detalles = detalles;
+	}
 
 }

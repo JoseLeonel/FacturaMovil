@@ -83,6 +83,7 @@ public class ClienteBoImpl implements ClienteBo {
 		cliente.setCreated_at(new Date());
 		cliente.setUpdated_at(new Date());
 		cliente.setUsuario(usuario);
+		cliente.setProvincia(Constantes.PROVINCIA_SAN_JOSE);
 		agregar(cliente);
 		return cliente;
 	}

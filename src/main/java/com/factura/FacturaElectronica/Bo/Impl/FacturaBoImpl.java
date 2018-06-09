@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.factura.FacturaElectronica.Bo.FacturaBo;
 import com.factura.FacturaElectronica.Dao.ArticuloDao;
+import com.factura.FacturaElectronica.Dao.CuentaCobrarDao;
 import com.factura.FacturaElectronica.Dao.DetalleDao;
 import com.factura.FacturaElectronica.Dao.EmpresaDao;
 import com.factura.FacturaElectronica.Dao.FacturaDao;
@@ -41,7 +42,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 	@Autowired
 	DetalleDao			detalleDao;
-	
+
 	@Autowired
 	EmpresaDao			empresaDao;
 
@@ -50,6 +51,9 @@ public class FacturaBoImpl implements FacturaBo {
 
 	@Autowired
 	KardexDao				kardexDao;
+
+	@Autowired
+	CuentaCobrarDao	cuentaCobrarDao;
 
 	@Autowired
 	InventarioDao		inventarioDao;
@@ -97,28 +101,34 @@ public class FacturaBoImpl implements FacturaBo {
 		return facturaDao.findByConsecutivoAndEmpresa(consecutivo, empresa);
 	}
 
+	/**
+	 * Crear la factura o el tiquete temporal
+	 * @see com.factura.FacturaElectronica.Bo.FacturaBo#crearFactura(com.factura.FacturaElectronica.web.command.FacturaCommand, com.factura.FacturaElectronica.modelo.Usuario)
+	 */
 	@Override
-	public void crearFactura(FacturaCommand facturaCommand,Usuario usuario) throws Exception {
+	public Factura crearFactura(FacturaCommand facturaCommand, Usuario usuario) throws Exception {
+		Factura factura = null;
 		try {
-			Factura factura = facturaCommand.getId() == null || facturaCommand.getId() == Constantes.ZEROS ? new Factura() : facturaDao.findById(facturaCommand.getId());
+			factura = facturaCommand.getId() == null || facturaCommand.getId() == Constantes.ZEROS ? new Factura() : facturaDao.findById(facturaCommand.getId());
 			factura.setCondicionVenta(facturaCommand.getCondicionVenta());
-			//Fecha de credito
-			if(facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO	)) {
-				factura.setFechaCredito(Utils.pasarADate(facturaCommand.getFechaCredito(),"yyyy-MM-dd"));
-				factura.setPlazoCredito(facturaCommand.getPlazoCredito());
-			}else {
+			// Fecha de credito
+			if (facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+				if (facturaCommand.getFechaCredito() != null) {
+					factura.setFechaCredito(Utils.pasarADate(facturaCommand.getFechaCredito(), "yyyy-MM-dd"));
+					factura.setPlazoCredito(facturaCommand.getPlazoCredito());
+
+				}
+			} else {
 				factura.setFechaCredito(null);
 				factura.setPlazoCredito(Constantes.ZEROS);
 			}
-			
-			if(facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-				factura.setNumeroConsecutivo(empresaDao.generarConsecutivoFactura(facturaCommand.getEmpresa()));
-			}
-			
+
 			factura.setUsuarioCreacion(usuario);
+			factura.setEmpresa(usuario.getEmpresa());
+			factura.setVendedor(facturaCommand.getVendedor());
+			factura.setCliente(facturaCommand.getCliente());
 			factura.setFechaEmision(new Date());
 
-			
 			factura.setTipoDoc(facturaCommand.getTipoDoc());
 			factura.setMedioPago(facturaCommand.getMedioPago());
 			factura.setNombreFactura(facturaCommand.getNombreFactura());
@@ -146,7 +156,7 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setMontoCambio(facturaCommand.getMontoCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getMontoCambio());
 			factura.setTotalCambio(facturaCommand.getTotalCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambio());
 			factura.setTotalCambioPagar(facturaCommand.getTotalCambioPagar() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambioPagar());
-			factura.setCodigoMoneda(facturaCommand.getCodigoMoneda());
+			factura.setCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
 			factura.setEstado(facturaCommand.getEstado());
 			if (factura.getId() == Constantes.ZEROS) {
 				factura.setCreated_at(new Date());
@@ -157,7 +167,12 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setUpdated_at(new Date());
 			}
 
-			if (factura.getId() == 0) {
+			// Generar el consecutivo de venta
+			if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+				factura.setNumeroConsecutivo(empresaDao.generarConsecutivoFactura(facturaCommand.getEmpresa(), usuario, factura));
+			}
+
+			if (factura.getId() == null) {
 				factura.setCreated_at(new Date());
 				agregar(factura);
 			} else {
@@ -185,18 +200,22 @@ public class FacturaBoImpl implements FacturaBo {
 					DetalleFacturaCommand detalleFacturaCommand = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), DetalleFacturaCommand.class);
 					Articulo articulo = articuloDao.buscar(detalleFacturaCommand.getArticulo_id());
 					Detalle detalle = new Detalle(detalleFacturaCommand);
+					detalle.setUsuario(usuario);
 					detalle.setArticulo(articulo);
 
 					detalle.setFactura(factura);
 					detalleDao.agregar(detalle);
 
 					Inventario inventario = inventarioDao.findByArticuloAndEstado(detalle.getArticulo(), Constantes.ESTADO_ACTIVO);
-          if(inventario !=null) {
-          	aplicarInventario(factura, inventario, detalle, articulo);	
-          }
-					
+					if (inventario != null) {
+						aplicarInventario(factura, inventario, detalle, articulo);
+					}
 
 				}
+			}
+			// Crear Credito del cliente
+			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) && factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+				cuentaCobrarDao.crearCuentaXCobrar(factura);
 			}
 
 		} catch (Exception e) {
@@ -204,6 +223,8 @@ public class FacturaBoImpl implements FacturaBo {
 
 			throw e;
 		}
+
+		return factura;
 
 	}
 

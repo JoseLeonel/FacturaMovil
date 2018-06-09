@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.factura.FacturaElectronica.Bo.EmpresaBo;
 import com.factura.FacturaElectronica.Dao.EmpresaDao;
 import com.factura.FacturaElectronica.modelo.Empresa;
+import com.factura.FacturaElectronica.modelo.Factura;
+import com.factura.FacturaElectronica.modelo.Usuario;
 
 /**
  * Empresa que realiza las ventas y compras EmpresaBoImpl.
@@ -75,8 +77,8 @@ public class EmpresaBoImpl implements EmpresaBo {
 	 * @see com.factura.FacturaElectronica.Bo.EmpresaBo#generarConsecutivoFactura(com.factura.FacturaElectronica.modelo.Empresa)
 	 */
 	@Override
-	public Double generarConsecutivoFactura(Empresa empresa) {
-		return empresaDao.generarConsecutivoFactura(empresa);
+	public String generarConsecutivoFactura(Empresa empresa,Usuario usuario,Factura factura) {
+		return empresaDao.generarConsecutivoFactura(empresa,usuario,factura);
 	}
 
 }

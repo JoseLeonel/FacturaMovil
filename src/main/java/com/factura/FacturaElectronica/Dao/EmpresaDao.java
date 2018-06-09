@@ -1,6 +1,8 @@
 package com.factura.FacturaElectronica.Dao;
 
 import com.factura.FacturaElectronica.modelo.Empresa;
+import com.factura.FacturaElectronica.modelo.Factura;
+import com.factura.FacturaElectronica.modelo.Usuario;
 
 public interface EmpresaDao {
 
@@ -18,6 +20,6 @@ public interface EmpresaDao {
 
 	Empresa buscarPorCedula(String cedula);
 	
-	Double generarConsecutivoFactura(Empresa empresa);
+	String generarConsecutivoFactura(Empresa empresa,Usuario usuario,Factura factura);
 
 }

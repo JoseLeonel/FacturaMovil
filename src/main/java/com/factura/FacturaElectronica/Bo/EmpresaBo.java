@@ -1,6 +1,8 @@
 package com.factura.FacturaElectronica.Bo;
 
 import com.factura.FacturaElectronica.modelo.Empresa;
+import com.factura.FacturaElectronica.modelo.Factura;
+import com.factura.FacturaElectronica.modelo.Usuario;
 
 public interface EmpresaBo {
 
@@ -18,7 +20,7 @@ public interface EmpresaBo {
 
 	Empresa buscarPorCedula(String cedula);
 	
-	Double generarConsecutivoFactura(Empresa empresa);
+	String generarConsecutivoFactura(Empresa empresa,Usuario usuario,Factura factura);
 	
 	
 

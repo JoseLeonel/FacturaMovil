@@ -1167,6 +1167,7 @@ function listaAbonosPorCuentaPorCobrar(){
     $('.tableListaAbonos').DataTable().destroy();
      $('.tableListaAbonos').dataTable().fnClearTable();
     var parametros = {idCuentaCobrar:self.cuentaCobrar.id}
+
     $.ajax({
         url: "ListarAbonosPorCuentaCobrarAjax.do",
         datatype: "json",
@@ -1183,8 +1184,6 @@ function listaAbonosPorCuentaPorCobrar(){
                 }
                 agregarInputsCombosAbonos();
                 ActivarEventoFiltro(".tableListaAbonos")
-            }else{
-                includeActionsAbono('.dataTables_wrapper','.dataTables_length')  
             } 
             __MantenimientoAgregarAbono()
             __verAbono()

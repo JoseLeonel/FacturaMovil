@@ -26,9 +26,12 @@ public class Empresa implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer						id;
-	
+
 	@Column(name = "numero_consecutivo")
-	private Double numeroConsecutivo;
+	private Integer						numeroConsecutivo;
+
+	@Column(name = "caza_matriz")
+	private String						cazaMatriz;
 
 	@Column(name = "nombre")
 	private String						nombre;
@@ -84,7 +87,7 @@ public class Empresa implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
-	public Empresa(Integer id, String nombre, String nombreComercial, String clave, String tipoCedula, String otraSenas, String codigoPais, String telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at,Double numeroConsecutivo) {
+	public Empresa(Integer id, String nombre, String nombreComercial, String clave, String tipoCedula, String otraSenas, String codigoPais, String telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz) {
 		super();
 		this.id = id;
 		this.numeroConsecutivo = numeroConsecutivo;
@@ -105,6 +108,7 @@ public class Empresa implements Serializable {
 		this.cedula = cedula;
 		this.created_at = new Date();
 		this.updated_at = new Date();
+		this.cazaMatriz = Constantes.CASA_MATRIZ_INICIAL_FACTURA;
 	}
 
 	public Empresa() {
@@ -122,13 +126,11 @@ public class Empresa implements Serializable {
 		this.id = id;
 	}
 
-	
-	public Double getNumeroConsecutivo() {
+	public Integer getNumeroConsecutivo() {
 		return numeroConsecutivo;
 	}
 
-	
-	public void setNumeroConsecutivo(Double numeroConsecutivo) {
+	public void setNumeroConsecutivo(Integer numeroConsecutivo) {
 		this.numeroConsecutivo = numeroConsecutivo;
 	}
 
@@ -266,6 +268,14 @@ public class Empresa implements Serializable {
 
 	public void setUpdated_at(Date updated_at) {
 		this.updated_at = updated_at;
+	}
+
+	public String getCazaMatriz() {
+		return cazaMatriz;
+	}
+
+	public void setCazaMatriz(String cazaMatriz) {
+		this.cazaMatriz = cazaMatriz;
 	}
 
 }

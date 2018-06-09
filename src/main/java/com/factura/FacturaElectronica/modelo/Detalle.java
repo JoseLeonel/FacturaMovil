@@ -14,10 +14,13 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.web.command.DetalleFacturaCommand;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Articulos relacionados a la venta Detalle.
@@ -85,15 +88,20 @@ public class Detalle implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
+	@JsonIgnore
 	@ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "factura_id")
 	private Factura						factura;
 
 	@ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "articulo_id")
 	private Articulo					articulo;
 
+	@JsonIgnore
 	@ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "usuario_id")
 	private Usuario						usuario;
 

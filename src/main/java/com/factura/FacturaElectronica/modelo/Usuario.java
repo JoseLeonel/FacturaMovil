@@ -48,6 +48,9 @@ public class Usuario implements Serializable {
 
 	@Column(name = "segundo_apellido")
 	private String						segundoApellido;
+	
+	@Column(name = "terminal_facturar")
+	private String						terminalFactura;
 
 	@Column(name = "estado")
 	private Integer						estado;
@@ -75,7 +78,7 @@ public class Usuario implements Serializable {
 	private Set<Rol>					roles;
 
 	
-	public Usuario(Integer id, String nombreUsuario, String cedula, String nombre, String primerApellido, String segundoApellido, Integer estado, String password, String passwordConfirm, Date created_at, Date updated_at, Empresa empresa, Set<Rol> roles) {
+	public Usuario(Integer id, String nombreUsuario, String cedula, String nombre, String primerApellido, String segundoApellido, Integer estado, String password, String passwordConfirm, Date created_at, Date updated_at, Empresa empresa, Set<Rol> roles,String terminalFactura) {
 		super();
 		this.id = id;
 		this.nombreUsuario = nombreUsuario;
@@ -90,6 +93,7 @@ public class Usuario implements Serializable {
 		this.updated_at = new Date();
 		this.empresa = empresa;
 		this.roles = roles;
+		this.terminalFactura = Constantes.TERMINAL_INICIAL_FACTURA;
 	}
 
 	public Usuario() {
@@ -223,4 +227,15 @@ public class Usuario implements Serializable {
 		this.updated_at = updated_at;
 	}
 
+	
+	public String getTerminalFactura() {
+		return terminalFactura;
+	}
+
+	
+	public void setTerminalFactura(String terminalFactura) {
+		this.terminalFactura = terminalFactura;
+	}
+
+	
 }

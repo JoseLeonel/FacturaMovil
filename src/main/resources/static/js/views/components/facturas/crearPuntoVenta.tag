@@ -161,7 +161,7 @@
                                 <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.total")} <span id="lblTotal">₡ {factura.totalVentaNeta.toLocaleString('de-DE')}</span></p>
                                 <div show = {mostrarCamposIngresoContado }>
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.efectivo")}</p> 
-                                    <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales " id="totalEfectivo" name="totalEfectivo"  value="" >
+                                    <input onkeyup={ __TotalDeEfectivoAPagar } onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales " id="totalEfectivo" name="totalEfectivo"  value="" >
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.tarjeta")}</p> 
                                     <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales" id="totalTarjeta" name="totalTarjeta"   >
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.banco")}</p> 
@@ -176,15 +176,15 @@
             </div><!--fin del cabecera-derecha-->
         </div><!--fin del cabecera-derecha-->
     </div><!--fin del contenedor-compra-->
-    <div class="box box-solid box-primary" show={mostarParaCrearNuevaCompra}>
+    <div class="box box-solid box-primary" show={mostarParaCrearNuevaFactura}>
         <div class="box-body">
              <div class="box-header with-border">
                 <div class="row">
                   <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">  
                   <div class="box-tools ">
                     <a class="pull-right" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("btn.limpiar")}</span></a>
-                    <a  class="pull-right"  href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("btn.tiquete")}</span></a>
-                    <a   class="pull-right" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.cliente")}"> <span class="label label-limpiar">{$.i18n.prop("btn.cliente")}</span></a>
+                    <a class="pull-right" href="#"    onclick = {__AplicarYcrearFactura} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("btn.tiquete")}</span></a>
+                    <a class="pull-right" href="#"    title="{$.i18n.prop("btn.cliente")}"> <span class="label label-limpiar">{$.i18n.prop("btn.cliente")}</span></a>
                   </div>
                   </div>
                 </div>  
@@ -396,7 +396,7 @@
 </div>
 <!--fin del modal-->
  
-
+<ptv-imprimir></ptv-imprimir>
 
 <style type="text/css">
     /* Lista de facturas en espera*/
@@ -641,7 +641,7 @@
     self.informacion_tabla_clientes    = []
     self.idiomaDataTable               = {}
     self.mostrarFormularioPago         = false
-    self.mostarParaCrearNuevaCompra    = true
+    self.mostarParaCrearNuevaFactura    = true
     self.mostrarCamposIngresoContado   = true;
 
     self.on('mount',function(){
@@ -652,14 +652,20 @@
         __InicializarTabla('.tableListaInventario')
         __InicializarTabla('.tableListaVendedor')
         agregarInputsCombos_Articulo()
-          __ListaComprasEnEspera()
+        __ListaFacturasEnEspera()
+       // setInterval(function() {
+            // triggering the "ready" event will resolve the promise
+        //    __ListaFacturasEnEspera()
+        //}.bind(this), 10000)
+          
         __comboCondicionPago()
         __ComboTipoDocumentos()
         __ComboEstados()
-        __ListaDeArticulosPorEmpresa();
         __ListaDeClientes()
-        __ListaDeVendedores()
+       __ListaDeVendedores()
     })
+
+    
 /**
 * Camps requeridos
 **/
@@ -667,9 +673,6 @@ var reglasDeValidacionCompra = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
 		rules : {
 			
-             nombreCliente:{
-                 required:true
-             },
              nota:{
                  maxlength:255,
              },
@@ -683,6 +686,9 @@ var reglasDeValidacionCompra = function() {
 	return validationOptions;
 };
 
+__Imprimir(){
+    riot.mount('ptv-imprimir',{factura:self.factura});
+}
 /**
 *  Obtiene el valor de lo digitado en el campo de efectivo
 **/
@@ -711,6 +717,10 @@ __CalculaCambioAEntregarOnblur(e){
     var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
     sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
     sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
+    //Si no ingresado montos no realiza las operaciones de calculos
+    if(sumaMontosEntregadosParaCambios == 0){
+        return
+    }
     self.factura.totalCambioPagar = 0
     self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalVenta ? sumaMontosEntregadosParaCambios - self.factura.totalVenta:sumaMontosEntregadosParaCambios - self.factura.totalVenta    
     self.update()
@@ -724,6 +734,9 @@ __CalculaCambioAEntregarKeyPress(e){
         sumaMontosEntregadosParaCambios  = __valorNumerico(self.factura.totalTarjeta)
         sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
         sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
+        if(sumaMontosEntregadosParaCambios == 0){
+            return
+        }
         self.factura.totalCambioPagar = 0
         self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalVenta ? sumaMontosEntregadosParaCambios - self.factura.totalVenta:sumaMontosEntregadosParaCambios - self.factura.totalVenta    
         self.update()
@@ -733,7 +746,7 @@ __CalculaCambioAEntregarKeyPress(e){
  * Listar codigos  llamado del modal para presentar los articulos
  **/   
  __ListaDecodigos(){
-  $('#modalInventario').modal('show')      
+     __ListaDeArticulosPorEmpresa();
  }
 /**
 *  Buscar la Compra Pendiente en espera
@@ -749,13 +762,27 @@ __AplicarYcrearFactura(){
         mensajeError($.i18n.prop("factura.alert.sin.detalles"))
         return
     }
-     if(condicionVenta.value == "02"  ){
+    if(condicionVenta.value == "02"  ){
         if(fechaCredito.value == null || fechaCredito.value.length == 0){
            mensajeError($.i18n.prop("factura.alert.fechaCredito"))
             return
         }
-    }
-  
+    }else{
+        // Si no es credito y el estado no es pendiente se debe verificar si ingresaron el monto a pagar
+        if(estado.value !=1){
+            if(self.factura.totalTarjeta == 0 && self.factura.totalBanco == 0 && self.factura.totalEfectivo == 0){
+                mensajeError($.i18n.prop("error.factura.monto.ingresado"))
+                return
+            }
+            var montoEntregado = self.factura.totalTarjeta + self.factura.totalBanco + self.factura.totalEfectivo
+            montoEntregado = __valorNumerico(montoEntregado)
+            if(self.factura.totalVentaNeta > montoEntregado  ){
+                mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
+                return
+            }
+            
+        }
+    } 
     if ($("#formularioFactura").valid()) {
         swal({
            title: '',
@@ -794,6 +821,7 @@ function __Init(){
     self.comboEstados          = []
     self.comboCondicionPagos        = []
     self.comboTipoDocumentos   = []
+    self.facturas_espera       = {data:[]}  
     self.factura                = {
         id:0,
 	    fechaCredito:null,
@@ -838,7 +866,6 @@ function __Init(){
             id:0,
             nombreCompleto:""
         }
-
     }                            
     self.item                  = null;
     self.articulo              = null;
@@ -850,13 +877,13 @@ function __Init(){
         id:0,
         nombreCompleto:""
     }
-    self.facturas_espera       = {data:[]}  
+   
     self.informacion_tabla             = []
     self.informacion_tabla_articulo    = []
     self.informacion_tabla_clientes    = []
     self.idiomaDataTable               = {}
     self.mostrarFormularioPago         = false
-    self.mostarParaCrearNuevaCompra    = true
+    self.mostarParaCrearNuevaFactura    = true
     self.mostrarCamposIngresoContado   = true;
     self.update();
     // Tipo de Pagos
@@ -867,18 +894,14 @@ function __Init(){
       __ComboEstados()
 }
 /**
-*  Compra en espera ,cliente y sus  detalles desde back end
+*  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
 **/
-function __FacturaEnEspera(compra){
-    return
+function __FacturaEnEspera(factura){
      __Init()
-    self.detail         = []
-    self.cliente      = {}         
-    self.update()
     $.ajax({
-        url: "MostrarCompraEsperaAjax",
+        url: "MostrarFacturaAjax",
         datatype: "json",
-        data: compra,
+        data: {idFactura:factura.id},
         method:"POST",
         success: function (data) {
             if (data.status != 200) {
@@ -888,10 +911,10 @@ function __FacturaEnEspera(compra){
             }else{
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
-                       self.compra = modeloTabla
-                       self.compra.fechaCompra = __displayDate_detail(self.compra.fechaCompra)
-                       self.compra.fechaCredito = self.compra.fechaCredito !=null?__displayDate_detail(self.compra.fechaCredito):null
-                       self.cliente = modeloTabla.cliente
+                       self.factura = modeloTabla
+                       self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
+                       self.cliente  = modeloTabla.cliente
+                       self.vendedor = modeloTabla.vendedor
                        self.update()
                     });
                 }
@@ -904,6 +927,30 @@ function __FacturaEnEspera(compra){
         }
     });
 }
+/**
+*  Cargar detalles Factura en espera
+**/
+function cargarDetallesFacturaEnEspera(){
+    self.factura.detalles.forEach(function(e){
+        self.detail.push({
+            numeroLinea     : e.numeroLinea,
+            articulo_id     : e.articulo.id,
+            codigo          : e.articulo.codigo,
+            descripcion     : e.articulo.descripcion,
+            cantidad        : redondearDecimales(parseFloat(e.cantidad),5),
+            precioUnitario  : redondearDecimales(parseFloat(e.precioUnitario),5),
+            impuesto        : redondearDecimales(parseFloat(e.impuesto),5),
+            montoImpuesto   : redondearDecimales(parseFloat(e.montoImpuesto),5),
+            montoDescuento  : redondearDecimales(parseFloat(e.montoDescuento),5),
+            porcentajeDesc  : redondearDecimales(parseFloat(e.porcentajeDesc),5),
+            subTotal        : redondearDecimales(parseFloat(e.subTotal),5),
+            montoTotalLinea : redondearDecimales(parseFloat(e.montoTotalLinea),5),
+            montoTotal      : redondearDecimales(parseFloat(e.montoTotal),5)
+        });
+    })
+    self.update()
+     __calculate(); 
+}
 /** 
 *Formato de la fecha con hora
 **/
@@ -911,42 +958,17 @@ function __displayDate_detail(fecha) {
     var dateTime = new Date(fecha);
     return moment(dateTime).format('YYYY-MM-DD ');
 }
-
-/**
-*  Cargar detalles Compra Espera
-**/
-function cargarDetallesFacturaEnEspera(){
-    self.detail = []
-    self.update()
-    
-    self.compra.detalleFacturas.forEach(function(e){
-        self.detail.push({
-            numeroLinea     : e.numeroLinea,
-            articulo_id     : e.articulo.id,
-            codigo          : e.articulo.codigo,
-            descripcion     : e.articulo.descripcion,
-            cantidad        : parseFloat(e.cantidad),
-            costo           : parseFloat(e.costo),
-            impuesto        : e.impuesto,
-            descuento       : e.descuento,
-            subTotal        : parseFloat(e.subTotal)
-            
-        });
-    })
-    self.update()
-     __calculate(); 
-}
-
 /**
 *  Crear Compra nueva
 **/
 function crearFactura(){
     self.detalleFactura.data =self.detail
     self.update() 
+    var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
      var JSONDetalles = JSON.stringify( self.detalleFactura );
     var informacion = {
         id:self.factura.id,
-	    fechaCredito:condicionVenta.value == 2?fechaCredito.value:new Date(),
+	    fechaCredito:fechaCreditoTemporal.toString(),
 	    condicionVenta:condicionVenta.value,
 	    plazoCredito:self.factura.plazoCredito,
 	    tipoDoc:tipoDoc.value,
@@ -995,15 +1017,7 @@ function crearFactura(){
                 }
             } else {
                	serverMessageJsonClase(data);
-                swal({
-	                title: '',
-	                text: data.message,
-	                type: 'success',
-	                showCancelButton: false,
-	                confirmButtonText: 'Aceptar',
-                })
-                __Init()
-                __ListaComprasEnEspera()
+                evaluarFactura(data)
             }
         },
         error : function(xhr, status) {
@@ -1012,13 +1026,43 @@ function crearFactura(){
         }
     });
 }
+
 /**
-*  Lista de las compras pendientes pendiente por el usuario
+*Si fue facturada o tiquete
 **/
-function __ListaComprasEnEspera(){
-    return
+function evaluarFactura(data){
+   if (data.message != null && data.message.length > 0) {
+        $.each(data.listaObjetos, function( index, modeloTabla ) {
+            self.facturaImprimir   = modeloTabla
+            self.update()
+            if(self.facturaImprimir.estado == 2){
+                __Init()
+                //Envia a la pantalla de impresion
+                 riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
+            }else{
+                swal({
+	                title: '',
+	                text: data.message,
+	                type: 'success',
+	                showCancelButton: false,
+	                confirmButtonText: $.i18n.prop("btn.aceptar"),
+                })
+                __Init()
+                __ListaFacturasEnEspera()
+            }
+        });
+    }
+
+
+}
+/**
+*  Lista de las facturas pendientes por el usuario
+**/
+function __ListaFacturasEnEspera(){
+     self.facturas_espera       = {data:[]}  
+     self.update()
     $.ajax({
-        url: 'ListarComprasEsperaActivasAjax',
+        url: 'ListarFacturasEsperaActivasAjax',
         datatype: "json",
         method:"GET",
         success: function (result) {
@@ -1033,7 +1077,6 @@ function __ListaComprasEnEspera(){
         }
     });    
 }
-
 /**
 *  Obtiene el valor de lo digitado en el campo de Descuento
 **/
@@ -1047,7 +1090,7 @@ __TotalDeDescuento(e){
 **/
 _AtrasFacturaFinal(){
    self.mostrarFormularioPago = false
-   self.mostarParaCrearNuevaCompra = true
+   self.mostarParaCrearNuevaFactura = true
    self.error = false
    self.update()
 }
@@ -1073,10 +1116,13 @@ __MostrarFormularioDePago(){
         swal("Verificar","No hay detalles en la compra ", "info")
         return
     }
-    self.mostarParaCrearNuevaCompra = false
+    $('#totalEfectivo').val(null)
+    $('#totalTarjeta').val(null)
+    $('#totalBanco').val(null)
+    self.factura.totalCambioPagar =0
+    self.mostarParaCrearNuevaFactura = false
     self.mostrarFormularioPago = true
     self.update()
-  //  $("#pago_efectivo").focus()
 }
 /** 
 *
@@ -1112,6 +1158,7 @@ function __ListaDeArticulosPorEmpresa(){
                 agregarInputsCombos_Articulo()
                 __agregarArticulos()
                 ActivarEventoFiltro(".tableListarArticulos")
+                $('#modalInventario').modal('show')    
             }
         },
         error: function (xhr, status) {
@@ -1133,8 +1180,6 @@ _EscogerClientes(){
 _EscogerVendedores(){
     $('#modalVendedor').modal('show')  
 }
-
-
 /**
 *  Lista de los vendedores
 **/
@@ -1158,7 +1203,6 @@ function __ListaDeVendedores(){
         }
     });
 }
-
 /**
 *  Lista de los clientes
 **/
@@ -1311,7 +1355,7 @@ function __nuevoArticuloAlDetalle(cantidad){
 **/
 function getPrecioUnitario(precio,iva){
    var valorIva      = parseFloat(1+iva)
-   return precionSinIva = precio /valorIva
+   return redondearDecimales(precio /valorIva,5)
 }
 /**
  * calculo del impuesto iva
@@ -1321,7 +1365,7 @@ function _calcularImpuesto(precio,iva,cantidad){
     var impuestoAplicar = impuesto > 0?impuesto:0
     var valor  = parseFloat(precio)
     var total =impuesto > 0 ? valor * impuestoAplicar:0 
-    return total * cantidad
+    return redondearDecimales(total * cantidad,5)
 }
    
  /**
@@ -1375,9 +1419,9 @@ __actualizarDescuento(e){
 **/
 function __actualizarItemArray(){
     //Subtotal del Detalle
-    var montoImpuesto         = self.item.precioUnitario * self.item.impuesto
-        montoImpuesto         = montoImpuesto * self.item.cantidad       
-    var montoDescuento        = getTotalDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc)     
+    var montoImpuesto         = redondearDecimales(self.item.precioUnitario * self.item.impuesto,5)
+        montoImpuesto         = redondearDecimales(montoImpuesto * self.item.cantidad,5)       
+    var montoDescuento        = redondearDecimales(getTotalDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc),5)     
     self.item.montoImpuesto   = montoImpuesto   
     self.item.montoDescuento  = montoDescuento
     self.item.subTotal        = getSubTotal(self.item.precioUnitario,self.item.cantidad)
@@ -1390,14 +1434,14 @@ function __actualizarItemArray(){
 **/
 function getMontoTotalLinea(subTotal,montoImpuesto,montoDescuento){
   var valor = subTotal - montoDescuento
-  return valor + montoImpuesto
+  return redondearDecimales(valor + montoImpuesto,5)
 }
 /**
 *  Obtener el subtotal sin el impuesto
 **/
 function getSubTotal(precio,cantidad){
     var valor = precio * cantidad
-    return valor 
+    return redondearDecimales(valor,5) 
 }
 /**
 * calcular el descuento
@@ -1405,7 +1449,7 @@ function getSubTotal(precio,cantidad){
 function getTotalDescuento(precio,cantidad,porcentajeDesc){
     var porcentaje = porcentajeDesc/100
     var valor =  precio * porcentaje
-    return valor * cantidad
+    return redondearDecimales(valor * cantidad,5)
 }
 /**
 * calculacion de los detalle de la compra 
@@ -1436,21 +1480,30 @@ function __calculate() {
         totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
         totalImpuesto           += e.montoImpuesto >0?e.montoImpuesto:0
     });
-    self.factura.totalMercanciasGravadas = totalMercanciasGravadas
-    self.factura.totalMercanciasExentas  = totalMercanciasExentas
-    self.factura.totalGravado            = totalGravado
-    self.factura.totalExento             = totalExento
-    self.factura.totalVenta              = totalVenta 
-    self.factura.subTotal                = subTotal 
-    self.factura.totalDescuento          = totalDescuento
-    self.factura.totalImpuesto           = totalImpuesto
-    self.factura.totalVentaNeta          = totalVenta 
-    self.factura.totalComprobante        = totalComprobante
+    self.factura.totalMercanciasGravadas = redondearDecimales(__valorNumerico(totalMercanciasGravadas),5)
+    self.factura.totalMercanciasExentas  = redondearDecimales(__valorNumerico(totalMercanciasExentas),5)
+    self.factura.totalGravado            = redondearDecimales(__valorNumerico(totalGravado),5)
+    self.factura.totalExento             = redondearDecimales(__valorNumerico(totalExento),5)
+    self.factura.totalVenta              = redondearDecimales(__valorNumerico(totalVenta),5) 
+    self.factura.subTotal                = redondearDecimales(__valorNumerico(subTotal),5) 
+    self.factura.totalDescuento          = redondearDecimales(__valorNumerico(totalDescuento),5)
+    self.factura.totalImpuesto           = redondearDecimales(__valorNumerico(totalImpuesto),5)
+    self.factura.totalVentaNeta          = redondearDecimales(__valorNumerico(totalVenta),5) 
+    self.factura.totalComprobante        = redondearDecimales(__valorNumerico(totalComprobante),5)
 
     self.articulo              = null;
     self.update(); 
     $( "#codigo" ).val(null);
     $( "#quantity" ).val(null);
+}
+
+function redondearDecimales(numero, decimales) {
+    numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}');   // Expresion regular para numeros con un cierto numero de decimales o mas
+    if (numeroRegexp.test(numero)) {         // Ya que el numero tiene el numero de decimales requeridos o mas, se realiza el redondeo
+        return Number(numero.toFixed(decimales));
+    } else {
+        return Number(numero.toFixed(decimales)) === 0 ? 0 : numero;  // En valores muy bajos, se comprueba si el numero es 0 (con el redondeo deseado), si no lo es se devuelve el numero otra vez.
+    }
 }
 /**
 * Definicion de la tabla articulos 

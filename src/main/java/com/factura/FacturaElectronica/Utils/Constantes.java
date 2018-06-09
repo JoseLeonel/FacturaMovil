@@ -5,15 +5,22 @@ import java.util.ResourceBundle;
 public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																= ResourceBundle.getBundle("factura");
+	// Consecutivo inicial de las empresa
+	public static final Integer					CONSECUTIVO_INICIAL_FACTURA										= 0000000001;
+	public static final String					CASA_MATRIZ_INICIAL_FACTURA										= "001";
+	public static final String					TERMINAL_INICIAL_FACTURA											= "00001";
 	// Cliente /VENDEDOR Frecuente de una empresa
-	public static final String 					NOMBRE_CLIENTE_FRECUENTE											     = "CLIENTE_FRECUENTE";
-	public static final String 					CEDULA_CLIENTE_FRECUENTE											     = "99999999999999";
-	public static final String 					CORREO_CLIENTE_FRECUENTE											     = "CLIENTE_FRECUENTE@FRECUENTE.COM";
-	public static final String 					NOMBRE_VENDEDOR_FRECUENTE											     = "VENDEDOR_FRECUENTE";
-	public static final String 					CEDULA_VENDEDOR_FRECUENTE											     = "99999999999999";
-	public static final String 					CORREO_VENDEDOR_FRECUENTE											     = "VENDEDOR_FRECUENTE@FRECUENTE.COM";
+	public static final String					NOMBRE_CLIENTE_FRECUENTE											= "CLIENTE_FRECUENTE";
+	public static final String					CEDULA_CLIENTE_FRECUENTE											= "99999999999999";
+	public static final String					CORREO_CLIENTE_FRECUENTE											= "CLIENTE_FRECUENTE@FRECUENTE.COM";
+	public static final String					NOMBRE_VENDEDOR_FRECUENTE											= "VENDEDOR_FRECUENTE";
+	public static final String					CEDULA_VENDEDOR_FRECUENTE											= "99999999999999";
+	public static final String					CORREO_VENDEDOR_FRECUENTE											= "VENDEDOR_FRECUENTE@FRECUENTE.COM";
 	// Vendedor Frecuente de una empresa
-	
+
+	// Codigo de moneda
+	public static final String					CODIGO_MONEDA_COSTA_RICA											= "CRC";
+
 	// SP del sistema
 	public static final String					SP_ELIMINAR_DETALLES_COMPRAS									= "sp_eliminarDetallesCompra";
 	public static final String					SP_ELIMINAR_DETALLES_COMPRAS_ID_COMPRA_PARAM	= "idCompra_param";
@@ -28,7 +35,7 @@ public class Constantes {
 	public static final String					KARDEX_TIPO_SALIDA														= "Salida";
 	public static final String					MOTIVO_INICIAL_INVENTARIO_NUEVO								= "Nuevo inventario a la sucursal";
 	public static final String					MOTIVO_INGRESO_INVENTARIO_COMPRA							= "Ingreso del proveedor:";
-	public static final String					MOTIVO_SALIDA_INVENTARIO_VENTA	   						= "Salida por venta:";
+	public static final String					MOTIVO_SALIDA_INVENTARIO_VENTA								= "Salida por venta:";
 	// Contabiliza el inventario
 	public static final String					CONTABLE_SI																		= "Si";
 	public static final String					CONTABLE_NO																		= "No";
@@ -36,6 +43,8 @@ public class Constantes {
 	public static final Double					INVENTARIO_MAXIMO															= 10d;
 	// Cuenta por cobrar
 	public static final String					CUENTA_POR_COBRAR_ESTADO_PENDIENTE						= "Pendiente";
+	public static final String					CUENTA_POR_COBRAR_DESCRIPCION_AUTOMATICO			= "Realizada por ventas";
+	public static final String					CUENTA_POR_COBRAR_NOTA_AUTOMATICO							= "Realizada por ventas";
 	public static final String					CUENTA_POR_COBRAR_ESTADO_CERRADO							= "Cerrada";
 	public static final String					CUENTA_POR_COBRAR_ESTADO_ANULADA							= "Anulada";
 	// Abono
@@ -183,8 +192,8 @@ public class Constantes {
 
 	public static final Integer					FACTURA_ESTADO_PENDIENTE											= 1;
 	public static final Integer					FACTURA_ESTADO_FACTURADO											= 2;
-	
-	public static final String					FACTURA_ESTADO_PENDIENTE_STR											= "factura.estado.pendiente";
-	public static final String					FACTURA_ESTADO_FACTURADO_STR											= "factura.estado.facturado";
+
+	public static final String					FACTURA_ESTADO_PENDIENTE_STR									= "factura.estado.pendiente";
+	public static final String					FACTURA_ESTADO_FACTURADO_STR									= "factura.estado.facturado";
 
 }

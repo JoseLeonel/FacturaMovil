@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import com.factura.FacturaElectronica.Dao.EmpresaDao;
 import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.modelo.Empresa;
+import com.factura.FacturaElectronica.modelo.Factura;
+import com.factura.FacturaElectronica.modelo.Usuario;
 
 /**
  * Empresa es todas las que facturan EmpresaDaoImpl.
@@ -103,13 +105,20 @@ public class EmpresaDaoImpl implements EmpresaDao {
 	 * @see com.factura.FacturaElectronica.Dao.EmpresaDao#generarConsecutivoFactura(com.factura.FacturaElectronica.modelo.Empresa)
 	 */
 	@Override
-	public Double generarConsecutivoFactura(Empresa empresa) {
-		Double consecutivo = Constantes.ZEROS_DOUBLE;
-		consecutivo = empresa.getNumeroConsecutivo() + 1;
+	public String generarConsecutivoFactura(Empresa empresa, Usuario usuario,Factura factura) {
+		Integer consecutivo = Constantes.ZEROS;
+		consecutivo = empresa.getNumeroConsecutivo() == null ? Constantes.CONSECUTIVO_INICIAL_FACTURA : empresa.getNumeroConsecutivo() + 1;
 		empresa.setNumeroConsecutivo(consecutivo);
 		modificar(empresa);
+		// Casa matriz
+		String casaMatriz = Constantes.EMPTY;
+		casaMatriz = empresa.getCazaMatriz() == null ? Constantes.CASA_MATRIZ_INICIAL_FACTURA : empresa.getCazaMatriz();
+		// Terminal donde esta vendiendo el usaurio
+		String terminalUsuario = Constantes.EMPTY;
+		terminalUsuario = usuario.getTerminalFactura() == null ? Constantes.TERMINAL_INICIAL_FACTURA : usuario.getTerminalFactura();
+		String consecutivoFactura = "0000000000".substring(consecutivo.toString().length()) + consecutivo;
 
-		return consecutivo;
+		return casaMatriz + terminalUsuario +factura.getTipoDoc()+ consecutivoFactura;
 
 	}
 
