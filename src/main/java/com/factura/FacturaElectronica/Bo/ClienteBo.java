@@ -3,7 +3,6 @@ package com.factura.FacturaElectronica.Bo;
 import com.factura.FacturaElectronica.modelo.Cliente;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Usuario;
-import com.factura.FacturaElectronica.modelo.Vendedor;
 
 public interface ClienteBo {
 
