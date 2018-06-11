@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.factura.FacturaElectronica.Bo.UsuarioCajaBo;
 import com.factura.FacturaElectronica.Dao.UsuarioCajaDao;
+import com.factura.FacturaElectronica.modelo.Usuario;
 import com.factura.FacturaElectronica.modelo.UsuarioCaja;
 
 @Transactional
@@ -39,6 +40,14 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 		return usuarioCajaDao.buscar(id);
 	}
 
-	
+	/**
+	 * Buscar por usuario y estado
+	 * @see com.factura.FacturaElectronica.Bo.UsuarioCajaBo#findByUsuarioAndEstado(com.factura.FacturaElectronica.modelo.Usuario, java.lang.String)
+	 */
+	@Override
+	public UsuarioCaja findByUsuarioAndEstado(Usuario usuario,String estado) {
+		return usuarioCajaDao.findByUsuarioAndEstado(usuario, estado);
+		
+	}
 	
 }

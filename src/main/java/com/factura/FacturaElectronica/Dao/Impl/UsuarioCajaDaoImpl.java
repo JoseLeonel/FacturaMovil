@@ -9,6 +9,9 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.factura.FacturaElectronica.Dao.UsuarioCajaDao;
+import com.factura.FacturaElectronica.Utils.Constantes;
+import com.factura.FacturaElectronica.modelo.Empresa;
+import com.factura.FacturaElectronica.modelo.Usuario;
 import com.factura.FacturaElectronica.modelo.UsuarioCaja;
 
 @Repository("usuarioCajaDao")
@@ -43,6 +46,25 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 		} else {
 			return null;
 		}
+	}
+	
+	/**
+	 * Buscar por usuario y estado
+	 * @see com.factura.FacturaElectronica.Dao.UsuarioCajaDao#findByUsuarioAndEstado(com.factura.FacturaElectronica.modelo.Usuario, java.lang.String)
+	 */
+	@Override
+	public UsuarioCaja findByUsuarioAndEstado(Usuario usuario,String estado) {
+		
+		Query query = entityManager.createQuery("select obj from UsuarioCaja obj where obj.usuario = :usuario and obj.estado = :estado");
+		query.setParameter("usuario", usuario);
+		query.setParameter("estado", estado);
+		List<UsuarioCaja> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (UsuarioCaja) results.get(0);
+		} else {
+			return null;
+		}
+		
 	}
 
 }

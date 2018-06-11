@@ -28,50 +28,41 @@ import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
 import com.factura.FacturaElectronica.modelo.Caja;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Usuario;
-import com.factura.FacturaElectronica.modelo.UsuarioCaja;
 import com.factura.FacturaElectronica.web.command.CajaCommand;
-import com.factura.FacturaElectronica.web.command.UsuarioCajaCommand;
 import com.factura.FacturaElectronica.web.componentes.EmpresaPropertyEditor;
 import com.factura.FacturaElectronica.web.componentes.StringPropertyEditor;
 import com.google.common.base.Function;
 
 /**
- * Marcas de los articulos MarcasController.
+ * Cajas por empresa CajasController.
  * @author jose.
- * @since 19 abr. 2018
+ * @since 11 jun. 2018
  */
 @Controller
 public class CajasController {
 
-	private static final Function<Object, CajaCommand>				TO_COMMAND													= new Function<Object, CajaCommand>() {
+	private static final Function<Object, CajaCommand>	TO_COMMAND	= new Function<Object, CajaCommand>() {
 
-																																																	@Override
-																																																	public CajaCommand apply(Object f) {
-																																																		return new CajaCommand((Caja) f);
-																																																	};
-																																																};
-	private static final Function<Object, UsuarioCajaCommand>	TO_COMMAND_CAJAS_ABIERTAS_CERRADAS	= new Function<Object, UsuarioCajaCommand>() {
-
-																																																	@Override
-																																																	public UsuarioCajaCommand apply(Object f) {
-																																																		return new UsuarioCajaCommand((UsuarioCaja) f);
-																																																	};
-																																																};
+																																		@Override
+																																		public CajaCommand apply(Object f) {
+																																			return new CajaCommand((Caja) f);
+																																		};
+																																	};
 
 	@Autowired
-	private DataTableBo																				dataTableBo;
+	private DataTableBo																	dataTableBo;
 
 	@Autowired
-	private CajaBo																						cajaBo;
+	private CajaBo																			cajaBo;
 
 	@Autowired
-	private UsuarioBo																					usuarioBo;
+	private UsuarioBo																		usuarioBo;
 
 	@Autowired
-	private EmpresaPropertyEditor															empresaPropertyEditor;
+	private EmpresaPropertyEditor												empresaPropertyEditor;
 
 	@Autowired
-	private StringPropertyEditor															stringPropertyEditor;
+	private StringPropertyEditor												stringPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -90,24 +81,6 @@ public class CajasController {
 		return "views/caja/ListarCajas";
 	}
 
-	@RequestMapping(value = "/AbrirCajas", method = RequestMethod.GET)
-	public String abrirCajas(ModelMap model) {
-		return "views/caja/abrirCajas";
-	}
-
-	@RequestMapping(value = "/ListarUsuariosCajasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceDataTable listarUsuariosCajasAjax(HttpServletRequest request, HttpServletResponse response) {
-
-		DataTableDelimitador delimitadores = null;
-		delimitadores = new DataTableDelimitador(request, "UsuarioCaja");
-		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
-			String nombreUsuario = request.getUserPrincipal().getName();
-		}
-
-		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_CAJAS_ABIERTAS_CERRADAS);
-	}
-
 	/**
 	 * Listar metodo ajax para mostrar las lista de las masrcas
 	 * @param request
@@ -123,6 +96,29 @@ public class CajasController {
 		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
 			String nombreUsuario = request.getUserPrincipal().getName();
 			DataTableFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			delimitadores.addFiltro(dataTableFilter);
+		}
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+	}
+
+	/**
+	 * Listar las cajas activas por empresa
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/ListarCajasActivasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarCajasActivasAjax(HttpServletRequest request, HttpServletResponse response) {
+
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Caja");
+		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+			String nombreUsuario = request.getUserPrincipal().getName();
+			DataTableFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			delimitadores.addFiltro(dataTableFilter);
+			dataTableFilter = new DataTableFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
 		}
 
