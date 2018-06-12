@@ -214,7 +214,7 @@ public class FacturaBoImpl implements FacturaBo {
 				usuarioCaja.setTotalEfectivo(usuarioCaja.getTotalEfectivo()+factura.getTotalEfectivo());
 				usuarioCaja.setTotalTarjeta(usuarioCaja.getTotalTarjeta()+factura.getTotalTarjeta());
 				usuarioCaja.setTotalNeto(usuarioCaja.getTotalNeto()+factura.getTotalEfectivo()+factura.getTotalTarjeta()+factura.getTotalBanco());;
-				
+				usuarioCajaDao.modificar(usuarioCaja);
 			}
 
 			JSONObject json = null;
