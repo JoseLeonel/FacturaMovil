@@ -20,6 +20,8 @@ import com.factura.FacturaElectronica.Dao.EmpresaDao;
 import com.factura.FacturaElectronica.Dao.FacturaDao;
 import com.factura.FacturaElectronica.Dao.InventarioDao;
 import com.factura.FacturaElectronica.Dao.KardexDao;
+import com.factura.FacturaElectronica.Dao.UsuarioCajaDao;
+import com.factura.FacturaElectronica.Dao.UsuarioCajaFacturaDao;
 import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.Utils.Utils;
 import com.factura.FacturaElectronica.modelo.Articulo;
@@ -28,6 +30,8 @@ import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Factura;
 import com.factura.FacturaElectronica.modelo.Inventario;
 import com.factura.FacturaElectronica.modelo.Usuario;
+import com.factura.FacturaElectronica.modelo.UsuarioCaja;
+import com.factura.FacturaElectronica.modelo.UsuarioCajaFactura;
 import com.factura.FacturaElectronica.web.command.DetalleFacturaCommand;
 import com.factura.FacturaElectronica.web.command.FacturaCommand;
 import com.google.gson.Gson;
@@ -54,6 +58,12 @@ public class FacturaBoImpl implements FacturaBo {
 
 	@Autowired
 	CuentaCobrarDao	cuentaCobrarDao;
+	
+	@Autowired
+	UsuarioCajaFacturaDao usuarioCajaFacturaDao;
+	
+	@Autowired
+	UsuarioCajaDao usuarioCajaDao;
 
 	@Autowired
 	InventarioDao		inventarioDao;
@@ -106,7 +116,7 @@ public class FacturaBoImpl implements FacturaBo {
 	 * @see com.factura.FacturaElectronica.Bo.FacturaBo#crearFactura(com.factura.FacturaElectronica.web.command.FacturaCommand, com.factura.FacturaElectronica.modelo.Usuario)
 	 */
 	@Override
-	public Factura crearFactura(FacturaCommand facturaCommand, Usuario usuario) throws Exception {
+	public Factura crearFactura(FacturaCommand facturaCommand, Usuario usuario,UsuarioCaja usuarioCaja) throws Exception {
 		Factura factura = null;
 		try {
 			factura = facturaCommand.getId() == null || facturaCommand.getId() == Constantes.ZEROS ? new Factura() : facturaDao.findById(facturaCommand.getId());
@@ -122,7 +132,7 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setFechaCredito(null);
 				factura.setPlazoCredito(Constantes.ZEROS);
 			}
-
+      
 			factura.setUsuarioCreacion(usuario);
 			factura.setEmpresa(usuario.getEmpresa());
 			factura.setVendedor(facturaCommand.getVendedor());
@@ -165,6 +175,12 @@ public class FacturaBoImpl implements FacturaBo {
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 				factura.setFechaEmision(new Date());
 				factura.setUpdated_at(new Date());
+				UsuarioCajaFactura usuarioCajaFactura = new UsuarioCajaFactura();
+				usuarioCajaFactura.setCreated_at(new Date());
+				usuarioCajaFactura.setUpdated_at(new Date());
+				usuarioCajaFactura.setFactura(factura);
+				usuarioCajaFactura.setUsuarioCaja(usuarioCaja);
+				
 			}
 
 			// Generar el consecutivo de venta
@@ -184,6 +200,21 @@ public class FacturaBoImpl implements FacturaBo {
 				if (facturaCommand.getId() > 0) {
 					facturaDao.eliminarDetalleFacturaPorSP(factura);
 				}
+			}
+			//Se asocia a la caja si la factura pasa de estado pendiente a facturado
+			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+				UsuarioCajaFactura usuarioCajaFactura = new UsuarioCajaFactura();
+				usuarioCajaFactura.setCreated_at(new Date());
+				usuarioCajaFactura.setUpdated_at(new Date());
+				usuarioCajaFactura.setFactura(factura);
+				usuarioCajaFactura.setUsuarioCaja(usuarioCaja);
+				usuarioCajaFacturaDao.agregar(usuarioCajaFactura);
+				usuarioCaja.setTotalCredito(usuarioCaja.getTotalCredito()+factura.getTotalCredito());
+				usuarioCaja.setTotalBanco(usuarioCaja.getTotalBanco()+factura.getTotalBanco());
+				usuarioCaja.setTotalEfectivo(usuarioCaja.getTotalEfectivo()+factura.getTotalEfectivo());
+				usuarioCaja.setTotalTarjeta(usuarioCaja.getTotalTarjeta()+factura.getTotalTarjeta());
+				usuarioCaja.setTotalNeto(usuarioCaja.getTotalNeto()+factura.getTotalEfectivo()+factura.getTotalTarjeta()+factura.getTotalBanco());;
+				
 			}
 
 			JSONObject json = null;

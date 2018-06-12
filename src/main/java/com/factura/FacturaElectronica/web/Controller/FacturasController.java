@@ -20,6 +20,7 @@ import com.factura.FacturaElectronica.Bo.ClienteBo;
 import com.factura.FacturaElectronica.Bo.DataTableBo;
 import com.factura.FacturaElectronica.Bo.FacturaBo;
 import com.factura.FacturaElectronica.Bo.UsuarioBo;
+import com.factura.FacturaElectronica.Bo.UsuarioCajaBo;
 import com.factura.FacturaElectronica.Bo.VendedorBo;
 import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.Utils.DataTableDelimitador;
@@ -30,6 +31,7 @@ import com.factura.FacturaElectronica.modelo.Cliente;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Factura;
 import com.factura.FacturaElectronica.modelo.Usuario;
+import com.factura.FacturaElectronica.modelo.UsuarioCaja;
 import com.factura.FacturaElectronica.modelo.Vendedor;
 import com.factura.FacturaElectronica.validator.FacturaFormValidator;
 import com.factura.FacturaElectronica.web.command.FacturaCommand;
@@ -61,6 +63,8 @@ public class FacturasController {
 
 	@Autowired
 	private UsuarioBo																						usuarioBo;
+	@Autowired
+	UsuarioCajaBo																								usuarioCajaBo;
 
 	@Autowired
 	private VendedorBo																					vendedorBo;
@@ -141,8 +145,15 @@ public class FacturasController {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 
-			String nombreUsuario = request.getUserPrincipal().getName();
-			Usuario usuario = usuarioBo.buscar(nombreUsuario);
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			UsuarioCaja usuarioCajaBd = usuarioCajaBo.findByUsuarioAndEstado(usuario, Constantes.ESTADO_ACTIVO);
+			if(usuarioCajaBd ==null) {
+				if(facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+					
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.factura.no.hay.cajas.abierta", result.getAllErrors());
+				}
+			}
+
 			if (facturaCommand.getCliente() == null) {
 				Cliente cliente = clienteBo.buscarPorNombreCompletoYEmpresa(Constantes.NOMBRE_CLIENTE_FRECUENTE, usuario.getEmpresa());
 				if (cliente == null) {
@@ -167,8 +178,8 @@ public class FacturasController {
 			if (!facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 				facturaCommand.setFechaCredito(null);
 			}
-			Factura factura = facturaBo.crearFactura(facturaCommand, usuario);
-			if(factura == null) {
+			Factura factura = facturaBo.crearFactura(facturaCommand, usuario,usuarioCajaBd);
+			if (factura == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", factura);

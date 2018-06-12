@@ -13,5 +13,7 @@ public interface UsuarioCajaBo {
 
 	UsuarioCaja buscar(Integer id);
 	UsuarioCaja findByUsuarioAndEstado(Usuario usuario,String estado);
+	
+	void cierreCaja(UsuarioCaja usuarioCaja);
 
 }

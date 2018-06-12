@@ -591,6 +591,16 @@ input.cmn-toggle-yes-no:checked + label:after {
     
     }
 
+   .btn-cerrar:before{
+    	font-family: FontAwesome;
+        content: "\f023";
+    
+    }
+    .btn-imprimir:before{
+    	font-family: FontAwesome;
+        content: "\f02f";
+    
+    }
     .btn-back{
         float: left;
     }

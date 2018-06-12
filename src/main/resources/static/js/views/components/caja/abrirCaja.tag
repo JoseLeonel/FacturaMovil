@@ -99,6 +99,8 @@
                 <div class="box-body">
                     <form id = "formularioUsuarioCaja" name ="formularioUsuarioCaja"   class="advanced-search-form ">
                         <input type="hidden" name="id" id="id" value="{usuarioCaja.id}">
+                        <input type="hidden" name="caja" id="caja" value="{usuarioCaja.caja.id}">
+                        
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("usuarioCaja.caja")}  </label>
@@ -146,9 +148,10 @@
                     </form>    
                 </div>
                 <div class="box-footer">
-                    <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left "  >
+                    <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left "  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
                         {$.i18n.prop("btn.volver")}
                     </button>
+
                   
                 </div>
             </div>   
@@ -156,6 +159,7 @@
         <div class="col-md-2 col-lg-2 col-sm-2"></div>
     </div>
 </div>
+<imprimir-caja></imprimir-caja>
 <style type ="text/css">
     .fondoEncabezado {
         background: #00539B;
@@ -335,23 +339,7 @@ function __MantenimientoAgregar(){
    
     })
 }
-/**
- * Funcion para Modificar del Listar
- */
-function __modificarRegistro_Listar(){
-	$('#tableListar').on('click','.btnVerDetalle',function(e){
-    	var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-        self.usuarioCaja  = data
-        self.update()
-        __consultar()
-	});
-}
+
 /**
 *  Consultar  especifico
 * 1  Mostrar  2  Modificar
@@ -482,8 +470,10 @@ function __listado(){
                 __MantenimientoAgregar()
                     //Activar filtros
                 ActivarEventoFiltro(".tableListar")
-                __modificarRegistro_Listar()
+                __VerDetalle()
                 __Eventos()
+                __Imprimir()
+                __cerrarCaja()
              }else{
                  __Eventos()
              } 
@@ -558,12 +548,130 @@ function __displayDate_detail(fecha) {
 /**
 * Opciones listado de los clientes
 */
-function __Opciones(){
+function __Opciones(id,type, row){
   var verDetalle  = '<a href="#"  title="Ver Detalle" class="btn btn-success  btn-buscar btnVerDetalle" role="button"> </a>';
-  return  verDetalle ;
+  var cerrar  = '<a href="#"  title="Cerrar Caja" class="btn btn-danger  btn-cerrar btnCerrarCaja" role="button"> </a>';
+  var imprimir  = '<a href="#"  title="Imprimir" class="btn btn-primary  btn-imprimir btnImprimir" role="button"> </a>';
+  cerrar = row.estado =="Activo"?cerrar:""
+  return  verDetalle +" "+ cerrar +" "+imprimir;
 }
 
+/**
+ * Funcion para Modificar del Listar
+ */
+function __VerDetalle(){
+	$('#tableListar').on('click','.btnVerDetalle',function(e){
+    	var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+        self.usuarioCaja  = data
+        self.update()
+        __consultar()
+	});
+}
 
+/**
+ * Funcion para Modificar del Listar
+ */
+function __Imprimir(){
+	$('#tableListar').on('click','.btnImprimir',function(e){
+    	var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+        self.usuarioCaja  = data
+        self.update()
+        riot.mount('imprimir-caja',{usuarioCaja:self.usuarioCaja});
+	});
+}
+
+/**
+ * Funcion para Modificar del Listar
+ */
+function __cerrarCaja(){
+	$('#tableListar').on('click','.btnCerrarCaja',function(e){
+    	var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+        self.usuarioCaja  = data
+
+        self.update()
+        cerrarCajaAjax()
+       
+	});
+}
+
+/**
+*Cerrar caja
+**/
+function cerrarCajaAjax(){
+         var formulario = $('#formularioUsuarioCaja').serialize();
+        swal({
+           title: '',
+           text: $.i18n.prop("usuarioCaja.mensaje.alert.cerrar"),
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#00539B',
+            cancelButtonColor: '#d33',
+            confirmButtonText:$.i18n.prop("confirmacion.si"),
+            cancelButtonText: $.i18n.prop("confirmacion.no"),
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+        }).then(function (isConfirm) {
+            //Ajax__inicializarTabla();
+            if(isConfirm){
+                $.ajax({
+                    type : "POST",
+                    dataType : "json",
+                    data : formulario,
+                    url : 'CerrarUsuarioCajaAjax.do',
+                    success : function(data) {
+                        console.log(data);
+                        if (data.status != 200) {
+                        	serverMessageJson(data);
+                            if (data.message != null && data.message.length > 0) {
+                            	swal({
+      	                           title: '',
+      	                           text: data.message,
+      	                           type: 'error',
+      	                           showCancelButton: false,
+      	                           confirmButtonText: $.i18n.prop("btn.aceptar"),
+      	                         })
+                            }
+                            
+                        } else {
+                        	serverMessageJson(data);
+                               swal({
+	                           title: '',
+	                           text: data.message,
+	                           type: 'success',
+	                           showCancelButton: false,
+	                           confirmButtonText: $.i18n.prop("btn.aceptar"),
+	                         })
+	                        
+                        }
+                    },
+                    error : function(xhr, status) {
+                        console.log(xhr);
+                        mensajeErrorServidor(xhr, status);
+                    }
+                });
+            }
+        });
+        
+    
+}
 /**
 *  Agregar los inpust  y select de las tablas
 **/

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -28,12 +29,12 @@ import com.factura.FacturaElectronica.modelo.Caja;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Usuario;
 import com.factura.FacturaElectronica.modelo.UsuarioCaja;
-import com.factura.FacturaElectronica.web.command.CajaCommand;
 import com.factura.FacturaElectronica.web.command.UsuarioCajaCommand;
 import com.factura.FacturaElectronica.web.componentes.CajaPropertyEditor;
 import com.factura.FacturaElectronica.web.componentes.EmpresaPropertyEditor;
 import com.factura.FacturaElectronica.web.componentes.StringPropertyEditor;
 import com.factura.FacturaElectronica.web.componentes.UsuarioCajaPropertyEditor;
+import com.factura.FacturaElectronica.web.componentes.UsuarioPropertyEditor;
 import com.google.common.base.Function;
 
 /**
@@ -72,6 +73,9 @@ public class UsuarioCajasController {
 	UsuarioCajaPropertyEditor																	usuarioCajaPropertyEditor;
 
 	@Autowired
+	UsuarioPropertyEditor																	usuarioPropertyEditor;
+
+	@Autowired
 	private StringPropertyEditor															stringPropertyEditor;
 
 	@InitBinder
@@ -79,6 +83,7 @@ public class UsuarioCajasController {
 
 		binder.registerCustomEditor(Empresa.class, empresaPropertyEditor);
 		binder.registerCustomEditor(Caja.class, cajaPropertyEditor);
+		binder.registerCustomEditor(Usuario.class, usuarioPropertyEditor);
 		binder.registerCustomEditor(UsuarioCaja.class, usuarioCajaPropertyEditor);
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
@@ -138,6 +143,37 @@ public class UsuarioCajasController {
 			usuarioCaja.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
 			usuarioCajaBo.agregar(usuarioCaja);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuarioCaja.agregar.correctamente", usuarioCaja);
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+	
+	/**
+	 * Cerrar la cja
+	 * @param request
+	 * @param model
+	 * @param usuarioCaja
+	 * @param result
+	 * @param status
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/CerrarUsuarioCajaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator cerrarCaja(HttpServletRequest request, ModelMap model, @ModelAttribute UsuarioCaja usuarioCaja, BindingResult result, SessionStatus status) throws Exception {
+
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		try {
+			UsuarioCaja usuarioCajaBd = usuarioCajaBo.buscar(usuarioCaja.getId());
+			
+
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
+		
+			usuarioCajaBo.cierreCaja(usuarioCajaBd);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuarioCaja.cierre.correctamente", usuarioCajaBd);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
