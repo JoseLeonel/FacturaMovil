@@ -21,6 +21,8 @@ public class UsuarioCajaCommand {
 
 	private Double	totalNeto;
 
+	private Double	totalAbono;
+
 	private Usuario	usuario;
 
 	private Caja		caja;
@@ -49,6 +51,7 @@ public class UsuarioCajaCommand {
 		this.created_at = usuarioCaja.getCreated_at();
 		this.updated_at = usuarioCaja.getUpdated_at();
 		this.estado = usuarioCaja.getEstado();
+		this.totalAbono = usuarioCaja.getTotalAbono();
 
 	}
 
@@ -146,6 +149,14 @@ public class UsuarioCajaCommand {
 
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+
+	public Double getTotalAbono() {
+		return totalAbono;
+	}
+
+	public void setTotalAbono(Double totalAbono) {
+		this.totalAbono = totalAbono;
 	}
 
 }

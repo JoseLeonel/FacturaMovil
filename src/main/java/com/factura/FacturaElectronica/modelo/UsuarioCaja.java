@@ -50,6 +50,9 @@ public class UsuarioCaja implements Serializable {
 	@Column(name = "total_credito")
 	private Double	totalCredito;
 
+	@Column(name = "total_abono")
+	private Double	totalAbono;
+
 	@Column(name = "total_neto")
 	private Double	totalNeto;
 
@@ -77,7 +80,7 @@ public class UsuarioCaja implements Serializable {
 
 	
 
-	public UsuarioCaja(Integer id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalNeto, Usuario usuario, Caja caja, Date created_at, Date updated_at, String estado) {
+	public UsuarioCaja(Integer id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalNeto, Usuario usuario, Caja caja, Date created_at, Date updated_at, String estado,Double totalAbono) {
 		super();
 		this.id = id;
 		this.totalFondoInicial = totalFondoInicial;
@@ -91,6 +94,7 @@ public class UsuarioCaja implements Serializable {
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.estado = estado;
+		this.totalAbono = totalAbono;
 	}
 
 	public UsuarioCaja() {
@@ -102,6 +106,7 @@ public class UsuarioCaja implements Serializable {
 		this.totalCredito = Constantes.ZEROS_DOUBLE;
 		this.totalNeto = Constantes.ZEROS_DOUBLE;
 		this.estado = Constantes.ESTADO_ACTIVO;
+		this.totalAbono = Constantes.ZEROS_DOUBLE;
 	}
 
 	public Integer getId() {
@@ -201,5 +206,17 @@ public class UsuarioCaja implements Serializable {
 	public void setTotalNeto(Double totalNeto) {
 		this.totalNeto = totalNeto;
 	}
+
+	
+	public Double getTotalAbono() {
+		return totalAbono;
+	}
+
+	
+	public void setTotalAbono(Double totalAbono) {
+		this.totalAbono = totalAbono;
+	}
+	
+	
 
 }

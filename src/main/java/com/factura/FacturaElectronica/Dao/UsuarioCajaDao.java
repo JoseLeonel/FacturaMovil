@@ -14,5 +14,7 @@ public interface UsuarioCajaDao {
 	UsuarioCaja buscar(Integer id);
 	
 	UsuarioCaja findByUsuarioAndEstado(Usuario usuario,String estado);
+	
+	void actualizarCaja(UsuarioCaja usuarioCaja ,Double totalEfectivo,Double totalTarjeta,Double totalBanco,Double totalCredito,Double totalAbono);
 
 }

@@ -20,5 +20,6 @@ public interface FacturaBo {
 	
 	Factura crearFactura(FacturaCommand facturaCommand,Usuario usuario,UsuarioCaja usuarioCaja) throws Exception;
 
+  Double  getTotalEfectivo(FacturaCommand facturaCommand);
 
 }

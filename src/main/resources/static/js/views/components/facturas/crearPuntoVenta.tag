@@ -780,6 +780,14 @@ __AplicarYcrearFactura(){
                 mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
                 return
             }
+            //Si el cliente esta pagando con tajeta, banco debe ser igual a la venta
+            if(self.factura.totalTarjeta != 0 || self.factura.totalBanco !=0){
+                if(self.factura.totalVentaNeta != montoEntregado  ){
+                    mensajeError($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
+                return
+                    
+                }
+            }
             
         }
     } 
@@ -991,9 +999,9 @@ function crearFactura(){
 	    totalVentaNeta:self.factura.totalVentaNeta,
 	    totalImpuesto:self.factura.totalImpuesto,
 	    totalComprobante:self.factura.totalComprobante,
-	    totalEfectivo:totalEfectivo.value,
-	    totalTarjeta:totalTarjeta.value,
-	    totalBanco:totalBanco.value,
+	    totalEfectivo:totalEfectivo.value ==null || totalEfectivo.value ==0?0:totalEfectivo.value,
+	    totalTarjeta:totalTarjeta.value ==null   || totalTarjeta.value ==0?0: totalTarjeta.value,
+	    totalBanco:totalBanco.value == null      || totalBanco.value == 0?0:totalBanco.value ,
 	    totalCredito:0,
         totalCambioPagar:self.factura.totalCambioPagar,
 	    montoCambio:0,

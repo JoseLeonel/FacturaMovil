@@ -141,6 +141,7 @@ public class UsuarioCajasController {
 			usuarioCaja.setTotalEfectivo(Constantes.ZEROS_DOUBLE);
 			usuarioCaja.setTotalNeto(Constantes.ZEROS_DOUBLE);
 			usuarioCaja.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
+			usuarioCaja.setTotalAbono(Constantes.ZEROS_DOUBLE);
 			usuarioCajaBo.agregar(usuarioCaja);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuarioCaja.agregar.correctamente", usuarioCaja);
 

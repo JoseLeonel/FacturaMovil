@@ -47,14 +47,14 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Buscar por usuario y estado
 	 * @see com.factura.FacturaElectronica.Dao.UsuarioCajaDao#findByUsuarioAndEstado(com.factura.FacturaElectronica.modelo.Usuario, java.lang.String)
 	 */
 	@Override
-	public UsuarioCaja findByUsuarioAndEstado(Usuario usuario,String estado) {
-		
+	public UsuarioCaja findByUsuarioAndEstado(Usuario usuario, String estado) {
+
 		Query query = entityManager.createQuery("select obj from UsuarioCaja obj where obj.usuario = :usuario and obj.estado = :estado");
 		query.setParameter("usuario", usuario);
 		query.setParameter("estado", estado);
@@ -64,7 +64,22 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 		} else {
 			return null;
 		}
-		
+
+	}
+
+	/**
+	 * Actualizar Caja
+	 * @see com.factura.FacturaElectronica.Dao.UsuarioCajaDao#actualizarCaja(com.factura.FacturaElectronica.modelo.UsuarioCaja, java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double)
+	 */
+	@Override
+	public void actualizarCaja(UsuarioCaja usuarioCaja, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono) {
+		usuarioCaja.setTotalCredito(usuarioCaja.getTotalCredito() == null ? totalCredito : usuarioCaja.getTotalCredito() + totalCredito);
+		usuarioCaja.setTotalBanco(usuarioCaja.getTotalBanco() == null ? totalBanco : usuarioCaja.getTotalBanco() + totalBanco);
+		usuarioCaja.setTotalEfectivo(usuarioCaja.getTotalEfectivo() == null ? totalEfectivo : usuarioCaja.getTotalEfectivo() + totalEfectivo);
+		usuarioCaja.setTotalTarjeta(usuarioCaja.getTotalTarjeta() == null ? totalTarjeta : usuarioCaja.getTotalTarjeta() + totalTarjeta);
+		usuarioCaja.setTotalAbono(usuarioCaja.getTotalAbono() == null ? totalAbono : usuarioCaja.getTotalAbono() + totalAbono);
+		usuarioCaja.setTotalNeto(usuarioCaja.getTotalNeto() == null ? totalBanco : usuarioCaja.getTotalNeto() + totalEfectivo + totalTarjeta + totalBanco+totalAbono);
+		modificar(usuarioCaja);
 	}
 
 }

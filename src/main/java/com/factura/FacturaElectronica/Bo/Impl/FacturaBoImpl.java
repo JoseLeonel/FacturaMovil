@@ -42,33 +42,33 @@ import com.google.gson.Gson;
 public class FacturaBoImpl implements FacturaBo {
 
 	@Autowired
-	FacturaDao			facturaDao;
+	FacturaDao						facturaDao;
 
 	@Autowired
-	DetalleDao			detalleDao;
+	DetalleDao						detalleDao;
 
 	@Autowired
-	EmpresaDao			empresaDao;
+	EmpresaDao						empresaDao;
 
 	@Autowired
-	ArticuloDao			articuloDao;
+	ArticuloDao						articuloDao;
 
 	@Autowired
-	KardexDao				kardexDao;
+	KardexDao							kardexDao;
 
 	@Autowired
-	CuentaCobrarDao	cuentaCobrarDao;
-	
-	@Autowired
-	UsuarioCajaFacturaDao usuarioCajaFacturaDao;
-	
-	@Autowired
-	UsuarioCajaDao usuarioCajaDao;
+	CuentaCobrarDao				cuentaCobrarDao;
 
 	@Autowired
-	InventarioDao		inventarioDao;
+	UsuarioCajaFacturaDao	usuarioCajaFacturaDao;
 
-	private Logger	log	= LoggerFactory.getLogger(this.getClass());
+	@Autowired
+	UsuarioCajaDao				usuarioCajaDao;
+
+	@Autowired
+	InventarioDao					inventarioDao;
+
+	private Logger				log	= LoggerFactory.getLogger(this.getClass());
 
 	public void agregar(Factura factura) {
 		facturaDao.agregar(factura);
@@ -116,7 +116,7 @@ public class FacturaBoImpl implements FacturaBo {
 	 * @see com.factura.FacturaElectronica.Bo.FacturaBo#crearFactura(com.factura.FacturaElectronica.web.command.FacturaCommand, com.factura.FacturaElectronica.modelo.Usuario)
 	 */
 	@Override
-	public Factura crearFactura(FacturaCommand facturaCommand, Usuario usuario,UsuarioCaja usuarioCaja) throws Exception {
+	public Factura crearFactura(FacturaCommand facturaCommand, Usuario usuario, UsuarioCaja usuarioCaja) throws Exception {
 		Factura factura = null;
 		try {
 			factura = facturaCommand.getId() == null || facturaCommand.getId() == Constantes.ZEROS ? new Factura() : facturaDao.findById(facturaCommand.getId());
@@ -132,7 +132,7 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setFechaCredito(null);
 				factura.setPlazoCredito(Constantes.ZEROS);
 			}
-      
+
 			factura.setUsuarioCreacion(usuario);
 			factura.setEmpresa(usuario.getEmpresa());
 			factura.setVendedor(facturaCommand.getVendedor());
@@ -159,7 +159,7 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setTotalVentaNeta(facturaCommand.getTotalVentaNeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalVentaNeta());
 			factura.setTotalImpuesto(facturaCommand.getTotalImpuesto() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalImpuesto());
 			factura.setTotalComprobante(facturaCommand.getTotalComprobante() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalComprobante());
-			factura.setTotalEfectivo(facturaCommand.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalEfectivo());
+			factura.setTotalEfectivo(getTotalEfectivo(facturaCommand));
 			factura.setTotalTarjeta(facturaCommand.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalTarjeta());
 			factura.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
 			factura.setTotalCredito(facturaCommand.getTotalCredito() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCredito());
@@ -175,12 +175,7 @@ public class FacturaBoImpl implements FacturaBo {
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 				factura.setFechaEmision(new Date());
 				factura.setUpdated_at(new Date());
-				UsuarioCajaFactura usuarioCajaFactura = new UsuarioCajaFactura();
-				usuarioCajaFactura.setCreated_at(new Date());
-				usuarioCajaFactura.setUpdated_at(new Date());
-				usuarioCajaFactura.setFactura(factura);
-				usuarioCajaFactura.setUsuarioCaja(usuarioCaja);
-				
+
 			}
 
 			// Generar el consecutivo de venta
@@ -201,7 +196,7 @@ public class FacturaBoImpl implements FacturaBo {
 					facturaDao.eliminarDetalleFacturaPorSP(factura);
 				}
 			}
-			//Se asocia a la caja si la factura pasa de estado pendiente a facturado
+			// Se asocia a la caja si la factura pasa de estado pendiente a facturado
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 				UsuarioCajaFactura usuarioCajaFactura = new UsuarioCajaFactura();
 				usuarioCajaFactura.setCreated_at(new Date());
@@ -209,12 +204,7 @@ public class FacturaBoImpl implements FacturaBo {
 				usuarioCajaFactura.setFactura(factura);
 				usuarioCajaFactura.setUsuarioCaja(usuarioCaja);
 				usuarioCajaFacturaDao.agregar(usuarioCajaFactura);
-				usuarioCaja.setTotalCredito(usuarioCaja.getTotalCredito()+factura.getTotalCredito());
-				usuarioCaja.setTotalBanco(usuarioCaja.getTotalBanco()+factura.getTotalBanco());
-				usuarioCaja.setTotalEfectivo(usuarioCaja.getTotalEfectivo()+factura.getTotalEfectivo());
-				usuarioCaja.setTotalTarjeta(usuarioCaja.getTotalTarjeta()+factura.getTotalTarjeta());
-				usuarioCaja.setTotalNeto(usuarioCaja.getTotalNeto()+factura.getTotalEfectivo()+factura.getTotalTarjeta()+factura.getTotalBanco());;
-				usuarioCajaDao.modificar(usuarioCaja);
+				usuarioCajaDao.actualizarCaja(usuarioCaja ,factura.getTotalEfectivo(),factura.getTotalTarjeta(),factura.getTotalBanco() ,factura.getTotalCredito(),Constantes.ZEROS_DOUBLE);
 			}
 
 			JSONObject json = null;
@@ -269,6 +259,23 @@ public class FacturaBoImpl implements FacturaBo {
 
 		}
 
+	}
+
+	/**
+	 * Obtiene el efectivo
+	 * @see com.factura.FacturaElectronica.Bo.FacturaBo#getTotalEfectivo(com.factura.FacturaElectronica.web.command.FacturaCommand)
+	 */
+	@Override
+	public Double getTotalEfectivo(FacturaCommand facturaCommand) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+
+		if (facturaCommand.getTotalBanco() > Constantes.ZEROS_DOUBLE || facturaCommand.getTotalTarjeta() > Constantes.ZEROS_DOUBLE) {
+			resultado = facturaCommand.getTotalEfectivo() != Constantes.ZEROS_DOUBLE ? facturaCommand.getTotalEfectivo() : Constantes.ZEROS_DOUBLE;
+		}else {
+			resultado = facturaCommand.getTotalEfectivo() > Constantes.ZEROS_DOUBLE ? facturaCommand.getTotalVentaNeta() : Constantes.ZEROS_DOUBLE;
+		}
+
+		return resultado;
 	}
 
 }

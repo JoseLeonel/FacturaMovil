@@ -15,5 +15,7 @@ public interface UsuarioCajaBo {
 	UsuarioCaja findByUsuarioAndEstado(Usuario usuario,String estado);
 	
 	void cierreCaja(UsuarioCaja usuarioCaja);
+	
+	void actualizarCaja(UsuarioCaja usuarioCaja,Double totalEfectivo,Double totalTarjeta,Double totalBanco,Double totalCredito,Double totalAbono);
 
 }

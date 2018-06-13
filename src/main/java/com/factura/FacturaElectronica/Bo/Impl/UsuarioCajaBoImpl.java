@@ -67,4 +67,13 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 		
 	}
 	
+	/**
+	 * Actualiza Caja activa
+	 * @see com.factura.FacturaElectronica.Bo.UsuarioCajaBo#actualizarCaja(java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double)
+	 */
+	@Override
+	public void actualizarCaja(UsuarioCaja usuarioCaja ,Double totalEfectivo,Double totalTarjeta,Double totalBanco,Double totalCredito,Double totalAbono){
+		usuarioCajaDao.actualizarCaja(usuarioCaja, totalEfectivo, totalTarjeta, totalBanco, totalCredito, totalAbono);
+	}
+	
 }

@@ -329,7 +329,7 @@
         <div class="col-md-2 col-lg-2 col-sm-2"></div>
     </div>
 
-
+<imprimir-abono></imprimir-abono>
 
 <style type ="text/css">
         .fondoEncabezado {
@@ -1188,6 +1188,7 @@ function listaAbonosPorCuentaPorCobrar(){
             __MantenimientoAgregarAbono()
             __verAbono()
             __Anular()
+            __imprimirAbono()
         },
         error: function (xhr, status) {
             mensajeErrorServidor(xhr, status);
@@ -1239,11 +1240,29 @@ function __InformacionTabla_lista_Abonos(){
 function __OpcionesAbonos(id,type,row){
   var verAbono  = '<a href="#"  title="Ver abonos" class="btn btn-success verAbono"  role="button"><i class="fa fa-search-plus"></i></a>';
   var anular  = '<a href="#"  title="Anular abono" class="btn btn-danger anularAbono"  role="button"><i class="fa fa-trash"></i></a>';
+  var imprimir  = '<a href="#"  title="Imprimir" class="btn btn-primary  btn-imprimir btnImprimir" role="button"> </a>';
   anular = row.estado =="Anulado"?"":anular
   self.cuentaCobrar = row.cuentaCobrar
   self.update()
-  return  verAbono + " " + anular;
+  return  verAbono + " " + anular + " "+ imprimir;
 }
+
+/**
+ * mostrar la abono
+ */
+function __imprimirAbono(){
+	$('.tableListaAbonos').on('click','.btnImprimir',function(e){
+		var table = $('#tableListaAbonos').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+        riot.mount('imprimir-abono',{abono:data});
+	});
+}
+
 /**
  * mostrar la abono
  */

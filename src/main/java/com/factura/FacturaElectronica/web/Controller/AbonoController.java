@@ -23,6 +23,7 @@ import com.factura.FacturaElectronica.Bo.AbonoBo;
 import com.factura.FacturaElectronica.Bo.CuentaCobrarBo;
 import com.factura.FacturaElectronica.Bo.DataTableBo;
 import com.factura.FacturaElectronica.Bo.UsuarioBo;
+import com.factura.FacturaElectronica.Bo.UsuarioCajaBo;
 import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.Utils.DataTableDelimitador;
 import com.factura.FacturaElectronica.Utils.DataTableFilter;
@@ -31,6 +32,7 @@ import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
 import com.factura.FacturaElectronica.modelo.Abono;
 import com.factura.FacturaElectronica.modelo.CuentaCobrar;
 import com.factura.FacturaElectronica.modelo.Usuario;
+import com.factura.FacturaElectronica.modelo.UsuarioCaja;
 import com.factura.FacturaElectronica.web.command.AbonoCommand;
 import com.factura.FacturaElectronica.web.componentes.AbonoPropertyEditor;
 import com.factura.FacturaElectronica.web.componentes.CuentaCobrarPropertyEditor;
@@ -61,6 +63,9 @@ public class AbonoController {
 
 	@Autowired
 	private UsuarioBo																		usuarioBo;
+
+	@Autowired
+	private UsuarioCajaBo																usuarioCajaBo;
 
 	@Autowired
 	private AbonoBo																			abonoBo;
@@ -120,6 +125,12 @@ public class AbonoController {
 		try {
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
+			UsuarioCaja usuarioCaja = usuarioCajaBo.findByUsuarioAndEstado(usuarioSesion, Constantes.ESTADO_ACTIVO);
+			if (usuarioCaja == null) {
+
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.factura.no.hay.cajas.abierta", result.getAllErrors());
+			}
+
 			CuentaCobrar cuentaCobrar = cuentaCobrarBo.buscar(idCuentaCobrar);
 			if (cuentaCobrar == null) {
 				respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -148,7 +159,7 @@ public class AbonoController {
 			abono.setCreated_at(new Date());
 			abono.setUpdated_at(new Date());
 			abono.setUsuario(usuarioSesion);
-			
+
 			abono.setEstado(Constantes.ABONO_ESTADO_PAGADO);
 			abono.setCuentaCobrar(cuentaCobrar);
 			abonoBo.modificar(abono);
@@ -157,8 +168,11 @@ public class AbonoController {
 			if (cuentaCobrar.getTotalSaldo().equals(Constantes.ZEROS_DOUBLE)) {
 				cuentaCobrar.setEstado(Constantes.CUENTA_POR_COBRAR_ESTADO_CERRADO);
 			}
-		//	cuentaCobrar.addAbono(abono);
+			// cuentaCobrar.addAbono(abono);
 			cuentaCobrarBo.modificar(cuentaCobrar);
+
+			usuarioCajaBo.actualizarCaja(usuarioCaja, Constantes.ZEROS_DOUBLE, Constantes.ZEROS_DOUBLE, Constantes.ZEROS_DOUBLE, Constantes.ZEROS_DOUBLE, abono.getTotal());
+			
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("abono.agregar.correctamente", abono);
 
 		} catch (Exception e) {
@@ -216,7 +230,7 @@ public class AbonoController {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("all")
-	@RequestMapping(value = "/MostrarAbonoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@RequestMapping(value = "/MostrarAbonoAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Abono abono, BindingResult result, SessionStatus status) throws Exception {
 		try {

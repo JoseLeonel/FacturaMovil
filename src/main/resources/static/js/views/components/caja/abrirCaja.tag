@@ -136,14 +136,19 @@
 
                         </div>
                         <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalNeto")}  </label>
-                                <input type="text" class="form-control "  value="₡ {usuarioCaja.totalNeto.toLocaleString('de-DE')}" readonly >
-                            </div>
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalCredito")}  </label>
                                 <input type="text" class="form-control "  value="₡ {usuarioCaja.totalCredito.toLocaleString('de-DE')}" readonly >
                             </div>
+                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalAbono")}  </label>
+                                <input type="text" class="form-control "  value="₡ {usuarioCaja.totalAbono.toLocaleString('de-DE')}" readonly >
+                            </div>
+                            <div class= "col-md-4 col-sx-12 col-sm-6 col-lg-4">
+                                <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalNeto")}  </label>
+                                <input type="text" class="form-control "  value="₡ {usuarioCaja.totalNeto.toLocaleString('de-DE')}" readonly >
+                            </div>
+                           
                         </div>
                     </form>    
                 </div>
