@@ -21,6 +21,8 @@ import java.util.StringTokenizer;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -1128,5 +1130,29 @@ public final class Utils {
         }
         return null;
     }
+	
+	/**
+	 * Cambiar el formato de fecha
+	 * @param fecha
+	 * @return
+	 */
+	public static XMLGregorianCalendar formatoXMLGregorianCalendar(Date fecha) {
+		/* Create Date Object */
+		Date date = new Date();
+		XMLGregorianCalendar xmlDate = null;
+		GregorianCalendar gc = new GregorianCalendar();
+
+		gc.setTime(date);
+
+		try{
+		    xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
+		}
+		catch(Exception e){
+		    e.printStackTrace();
+		}
+		
+		return xmlDate;
+		
+	}
 	
 }

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<FacturaElectronica xmlns="https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/facturaElectronica" xmlns:ns2="http://www.w3.org/2000/09/xmldsig#">
+    <NumeroConsecutivo>0012</NumeroConsecutivo>
+</FacturaElectronica>
