@@ -1,5 +1,7 @@
 package com.factura.FacturaElectronica.Bo;
 
+import java.math.BigDecimal;
+
 import com.factura.FacturaElectronica.modelo.Usuario;
 import com.factura.FacturaElectronica.modelo.UsuarioCaja;
 
@@ -16,6 +18,6 @@ public interface UsuarioCajaBo {
 	
 	void cierreCaja(UsuarioCaja usuarioCaja);
 	
-	void actualizarCaja(UsuarioCaja usuarioCaja,Double totalEfectivo,Double totalTarjeta,Double totalBanco,Double totalCredito,Double totalAbono);
+	void actualizarCaja(UsuarioCaja usuarioCaja,BigDecimal totalEfectivo,BigDecimal totalTarjeta,BigDecimal totalBanco,BigDecimal totalCredito,BigDecimal totalAbono);
 
 }

@@ -1648,6 +1648,7 @@ function __articuloXInventarios_Listar(){
 * 1  Mostrar  2  Modificar
 **/
 function __consultar(){
+
     var formulario = $('#formulario').serialize();
     $.ajax({
         url: "MostrarArticuloAjax.do",
@@ -1670,10 +1671,10 @@ function __consultar(){
                         self.articulo  =  modeloTabla
                         self.update()
                         __listadoEmpresasActivas()
-                        __listadoCategoriasActivas(self.articulo.empresa.id)
-                        __listadoMarcasActivas(self.articulo.empresa.id)
-                        __ComboContables()
-                        __ComboEstados()
+                      //  __listadoCategoriasActivas(self.articulo.empresa.id)
+                      //  __listadoMarcasActivas(self.articulo.empresa.id)
+                      //  __ComboContables()
+                      //  __ComboEstados()
                          $("#formulario").validate(reglasDeValidacion());
                     });
                 }

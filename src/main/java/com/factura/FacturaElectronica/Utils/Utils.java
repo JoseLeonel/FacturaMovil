@@ -21,8 +21,10 @@ import java.util.StringTokenizer;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -31,10 +33,50 @@ import org.springframework.web.context.ContextLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+import com.factura.FacturaElectronica.modelo.Factura;
+import com.factura.FacturaElectronica.xml.EmisorType;
+import com.factura.FacturaElectronica.xml.FacturaElectronica;
+import com.factura.FacturaElectronica.xml.IdentificacionType;
+import com.factura.FacturaElectronica.xml.TelefonoType;
+
 public final class Utils {
 
 
-	
+
+	public static FacturaElectronica crearFacturaElectronica(Factura factura) {
+		FacturaElectronica facturaElectronica = new FacturaElectronica();
+		// Encabezado
+		// código QR
+		facturaElectronica.setClave(Constantes.BLANK);
+		// Numero consecutivo de la factura
+		facturaElectronica.setNumeroConsecutivo(factura.getNumeroConsecutivo());
+		// Fecha Emision
+		facturaElectronica.setFechaEmision(Utils.formatoXMLGregorianCalendar(factura.getFechaEmision()));
+		facturaElectronica.setCondicionVenta(factura.getCondicionVenta());
+		facturaElectronica.setPlazoCredito(factura.getPlazoCredito().toString());
+		// Emisor de la factura
+		EmisorType emisorType = new EmisorType();
+		emisorType.setNombre(factura.getEmpresa().getNombre());
+		emisorType.setCorreoElectronico(factura.getEmpresa().getCorreoElectronico());
+
+		IdentificacionType identificacionType = new IdentificacionType();
+		identificacionType.setNumero(factura.getEmpresa().getCedula());
+		identificacionType.setTipo(factura.getEmpresa().getTipoCedula());
+		emisorType.setIdentificacion(identificacionType);
+		emisorType.setNombreComercial(factura.getEmpresa().getNombreComercial());
+    //Telefono 
+		TelefonoType telefonoType = new TelefonoType();
+		telefonoType.setNumTelefono(factura.getEmpresa().getTelefono());
+		telefonoType.setCodigoPais(factura.getEmpresa().getCodigoPais());
+
+		JAXBElement<TelefonoType> jaxbElement = new JAXBElement<TelefonoType>(new QName(TelefonoType.class.getSimpleName()), TelefonoType.class, telefonoType);
+		emisorType.setTelefono(jaxbElement);
+		facturaElectronica.setEmisor(emisorType);
+
+		// emisorType.setTelefono(telefonoType);
+
+		return facturaElectronica;
+	}
 	
 	
 	

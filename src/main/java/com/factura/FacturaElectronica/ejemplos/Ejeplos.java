@@ -8,26 +8,21 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.factura.FacturaElectronica.Bo.FacturaBo;
+import com.factura.FacturaElectronica.Utils.GenerarFacturaXML;
+import com.factura.FacturaElectronica.modelo.Factura;
 import com.factura.FacturaElectronica.xml.FacturaElectronica;
 
 public class Ejeplos {
 
+	@Autowired
+	private FacturaBo facturaBo;
+
 	public static void main(String[] args) throws JAXBException, IOException {
 		File file = new File("ejemplo.xml");
-		// necesito hacer un contexto se crea la instancia
-		JAXBContext context = JAXBContext.newInstance(FacturaElectronica.class);
-
-		// Escribir el xml se utiliza el objete marshaller
-		Marshaller marshaller = context.createMarshaller();
-
-		FacturaElectronica facturaElectronica = new FacturaElectronica();
-		facturaElectronica.setNumeroConsecutivo("0012");
-    //tabular el documento xml 
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-		//salida
-		marshaller.marshal(facturaElectronica, System.out);
-		
-		marshaller.marshal(facturaElectronica, new FileWriter("leo.xml"));
+	
 	}
 
 }

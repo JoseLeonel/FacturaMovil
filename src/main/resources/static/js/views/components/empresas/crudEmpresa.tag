@@ -19,6 +19,7 @@
                                 <th class="table-header" >{$.i18n.prop("empresa.nombreComercial")}   </th>
                                 <th class="table-header" >{$.i18n.prop("empresa.representante")}     </th>
                                 <th class="table-header" >{$.i18n.prop("empresa.correoElectronico")} </th>
+                                <th class="table-header" >{$.i18n.prop("empresa.numeroConsecutivo")} </th>
                                 <th class="table-header" >{$.i18n.prop("empresa.estado")}            </th>
                                 <th class="table-header" > {$.i18n.prop("listado.acciones")}         </th>
                             </tr>
@@ -30,8 +31,9 @@
                                 <th>{$.i18n.prop("empresa.nombreComercial")}   </th>
                                 <th>{$.i18n.prop("empresa.representante")}     </th>
                                 <th>{$.i18n.prop("empresa.correoElectronico")} </th>
+                                <th>{$.i18n.prop("empresa.numeroConsecutivo")} </th>
                                 <th>{$.i18n.prop("empresa.estado")}            </th>
-                                <th>                                            </th>
+                                <th>                                           </th>
                             </tr>
                         </tfoot>
                     </table>
@@ -101,6 +103,27 @@
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("empresa.telefono")} </label>
                                 <input type="text" class="form-control telefono" id="telefono" name="telefono" value="{empresa.telefono}"  >
+                            </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("empresa.casa.matriz")} </label>
+                                <input type="text" class="form-control cazaMatriz" id="cazaMatriz" name="cazaMatriz" value="{empresa.cazaMatriz}"  >
+                            </div>
+                            
+                        </div>
+                         <div class="row">    
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("empresa.provincia")}</label>
+                                <select  class="form-control" id="provincia" name="provincia" >
+                                    <option  each={provincias}  value="{codigo}" selected="{empresa.provincia ==codigo?true:false}" >{descripcion}</option>
+                                </select>
+                            </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("empresa.distrito")} </label>
+                                <input type="text" class="form-control distrito" id="distrito" name="distrito" value="{empresa.distrito}"  >
+                            </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("empresa.barrio")} </label>
+                                <input type="text" class="form-control barrio" id="barrio" name="barrio" value="{empresa.barrio}"  >
                             </div>
                             
                         </div>
@@ -213,15 +236,18 @@
     self.botonModificar            = false
     self.botonAgregar              = false
     self.tipoCedulas              = {data:[]}  // definir el data del datatable
+    self.provincias = []
     self.empresa  = {
         id:null,
         nombre:"",
-        nombreComercial:""
+        nombreComercial:"",
+        numeroConsecutivo:000000000000000000001
     }
 
 
 self.on('mount',function(){
     __InicializarTabla('.tableListar')
+    __cargaProvincias()
     agregarInputsCombos()
     ActivarEventoFiltro('.tableListar')
     __listado()
@@ -229,6 +255,7 @@ self.on('mount',function(){
     __Eventos()
     __listadoTipoCedulas()
     __ComboEstados()
+   
     
 })
 
@@ -287,7 +314,23 @@ var reglasDeValidacion = function() {
                 minlength:20,
                 required : true,
 
-            }                                    
+            },
+            provincia:{
+                minlength:1,
+                required : true,
+
+            },
+            canton:{
+                minlength:2,
+                required : true,
+
+            },
+            distrito:{
+                minlength:2,
+                required : true,
+
+            }                
+
                         
 		},
 		ignore : []
@@ -295,6 +338,46 @@ var reglasDeValidacion = function() {
 	});
 	return validationOptions;
 };
+
+/**
+*  Registrar provincias
+**/
+function __cargaProvincias(){
+    self.provincias = []
+    self.provincias.push({
+        codigo:"1",
+        descripcion: $.i18n.prop("provincia.sanjose")
+    })
+    self.provincias.push({
+        codigo:"2",
+        descripcion:$.i18n.prop("provincia.alajuela")
+    })
+
+    self.provincias.push({
+        codigo:"3",
+        descripcion:$.i18n.prop("provincia.cartago")
+    })
+
+    self.provincias.push({
+        codigo:"4",
+        descripcion:$.i18n.prop("provincia.heredia")
+    })
+
+    self.provincias.push({
+        codigo:"5",
+        descripcion:$.i18n.prop("provincia.guanacaste")
+    })
+    self.provincias.push({
+        codigo:"6",
+        descripcion:$.i18n.prop("provincia.puntarenas")
+    })
+    self.provincias.push({
+        codigo:"7",
+        descripcion:$.i18n.prop("provincia.limon")
+    })
+    self.update()
+
+}
 
 
 /**
@@ -331,7 +414,29 @@ function __Eventos(){
     $("#correoElectronico").attr("maxlength", 160);
     $("#representante").attr("maxlength", 80);
     $("#web").attr("maxlength", 80);
-    
+
+    $('#provincia').mask('0', {
+	    'translation' : {
+            0 : {
+                pattern : /[0-9]/
+            }
+    	}
+    }); 
+    $('#canton').mask('00', {
+	    'translation' : {
+            0 : {
+                pattern : /[0-9]/
+            }
+    	}
+    }); 
+    $('#distrito').mask('00', {
+	    'translation' : {
+            0 : {
+                pattern : /[0-9]/
+            }
+    	}
+    }); 
+
     $('#codigoPais').mask('000', {
 	    'translation' : {
             0 : {
@@ -358,6 +463,7 @@ function __Eventos(){
 
     
     }
+    
     
  $('#telefono').mask('0000-0000', {
             'translation' : {
@@ -390,16 +496,22 @@ function __Eventos(){
 *  Mostrar listado datatable TipoCedulas
 **/
 function __listadoTipoCedulas(){
-
     self.tipoCedulas.data.push({
-        valor:"1",
-        descripcion:"Fisica"
+        valor:"01",
+        descripcion:$.i18n.prop("tipo.cedula.fisica")
     })
    self.tipoCedulas.data.push({
-        valor:"3",
-        descripcion:"Juridica"
+        valor:"02",
+        descripcion:$.i18n.prop("tipo.cedula.juridica")
     })
-
+   self.tipoCedulas.data.push({
+        valor:"03",
+        descripcion:$.i18n.prop("tipo.cedula.dimex")
+    })
+     self.tipoCedulas.data.push({
+        valor:"04",
+        descripcion:$.i18n.prop("tipo.cedula.nite")
+    })
 }
 
 /**
@@ -409,11 +521,11 @@ function __ComboEstados(){
     self.estados = []
     self.estados.push({
         codigo:"Activo",
-        descripcion:"Activo"
+        descripcion:$.i18n.prop("combo.estado.Activo")
     })
     self.estados.push({
         codigo:"Inactivo",
-        descripcion:"Inactivo"
+        descripcion:$.i18n.prop("combo.estado.Inactivo")
     })
     self.update()
 }
@@ -470,11 +582,6 @@ function __MantenimientoAgregar(){
    
     })
 }
-
-
-
-
-
 /**
  * Funcion para Modificar del Listar
  */
@@ -632,8 +739,5 @@ function agregarInputsCombos(){
     })
 
 }
-
-
-
 </script>
 </empresa-crud>

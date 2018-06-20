@@ -1,6 +1,7 @@
 package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -32,9 +33,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "detalles_compras")
 public class DetalleCompra implements Serializable {
 
-	
-
-	private static final long serialVersionUID = -7379156339923371149L;
+	private static final long	serialVersionUID	= -7379156339923371149L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,19 +44,19 @@ public class DetalleCompra implements Serializable {
 	private Integer						numeroLinea;
 
 	@Column(name = "costo")
-	private Double							costo;
+	private BigDecimal				costo;
 
 	@Column(name = "cantidad")
-	private Double							cantidad;
+	private BigDecimal				cantidad;
 
 	@Column(name = "impuesto")
-	private Double							impuesto;
+	private BigDecimal				impuesto;
 
 	@Column(name = "descuento")
-	private Double							descuento;
+	private BigDecimal				descuento;
 
 	@Column(name = "sub_total")
-	private Double							subTotal;
+	private BigDecimal				subTotal;
 
 	@CreatedDate
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -70,7 +69,7 @@ public class DetalleCompra implements Serializable {
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
 	private Date							updated_at;
-  
+
 	@JsonIgnore
 	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -81,21 +80,6 @@ public class DetalleCompra implements Serializable {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "articulo_id", nullable = false)
 	private Articulo					articulo;
-
-	public DetalleCompra(Integer id, Integer numeroLinea, Double costo, Double cantidad, Double impuesto, Double descuento, Double subTotal, Date created_at, Date updated_at, Compra compra, Articulo articulo) {
-		super();
-		this.id = id;
-		this.numeroLinea = numeroLinea;
-		this.costo = costo;
-		this.cantidad = cantidad;
-		this.impuesto = impuesto;
-		this.descuento = descuento;
-		this.subTotal = subTotal;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
-		this.compra = compra;
-		this.articulo = articulo;
-	}
 
 	public DetalleCompra(DetalleCompraCommand detalleCompraCommand) {
 		super();
@@ -111,9 +95,6 @@ public class DetalleCompra implements Serializable {
 
 	}
 
-	
-	
-	
 	public DetalleCompra() {
 		super();
 	}
@@ -134,43 +115,43 @@ public class DetalleCompra implements Serializable {
 		this.numeroLinea = numeroLinea;
 	}
 
-	public Double getCosto() {
+	public BigDecimal getCosto() {
 		return costo;
 	}
 
-	public void setCosto(Double costo) {
+	public void setCosto(BigDecimal costo) {
 		this.costo = costo;
 	}
 
-	public Double getCantidad() {
+	public BigDecimal getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(Double cantidad) {
+	public void setCantidad(BigDecimal cantidad) {
 		this.cantidad = cantidad;
 	}
 
-	public Double getImpuesto() {
+	public BigDecimal getImpuesto() {
 		return impuesto;
 	}
 
-	public void setImpuesto(Double impuesto) {
+	public void setImpuesto(BigDecimal impuesto) {
 		this.impuesto = impuesto;
 	}
 
-	public Double getDescuento() {
+	public BigDecimal getDescuento() {
 		return descuento;
 	}
 
-	public void setDescuento(Double descuento) {
+	public void setDescuento(BigDecimal descuento) {
 		this.descuento = descuento;
 	}
 
-	public Double getSubTotal() {
+	public BigDecimal getSubTotal() {
 		return subTotal;
 	}
 
-	public void setSubTotal(Double subTotal) {
+	public void setSubTotal(BigDecimal subTotal) {
 		this.subTotal = subTotal;
 	}
 

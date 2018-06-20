@@ -1,5 +1,7 @@
 package com.factura.FacturaElectronica.Bo.Impl;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -67,7 +69,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 	 * @see com.factura.FacturaElectronica.Bo.ArticuloBo#porcentanjeDeGanancia(java.lang.Double, java.lang.Double, java.lang.Double)
 	 */
 	@Override
-	public Double porcentanjeDeGanancia(Double costo, Double iva, Double precio) {
+	public BigDecimal porcentanjeDeGanancia(BigDecimal costo, BigDecimal iva, BigDecimal precio) {
 		return articuloDao.porcentanjeDeGanancia(costo, iva, precio);
 	}
 

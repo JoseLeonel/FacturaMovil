@@ -1,5 +1,6 @@
 package com.factura.FacturaElectronica.Dao.Impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -9,8 +10,6 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.factura.FacturaElectronica.Dao.UsuarioCajaDao;
-import com.factura.FacturaElectronica.Utils.Constantes;
-import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Usuario;
 import com.factura.FacturaElectronica.modelo.UsuarioCaja;
 
@@ -68,17 +67,26 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 	}
 
 	/**
-	 * Actualizar Caja
-	 * @see com.factura.FacturaElectronica.Dao.UsuarioCajaDao#actualizarCaja(com.factura.FacturaElectronica.modelo.UsuarioCaja, java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double)
+	 * 
+	 * @param usuarioCaja
+	 * @param totalEfectivo
+	 * @param totalTarjeta
+	 * @param totalBanco
+	 * @param totalCredito
+	 * @param totalAbono
 	 */
-	@Override
-	public void actualizarCaja(UsuarioCaja usuarioCaja, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono) {
-		usuarioCaja.setTotalCredito(usuarioCaja.getTotalCredito() == null ? totalCredito : usuarioCaja.getTotalCredito() + totalCredito);
-		usuarioCaja.setTotalBanco(usuarioCaja.getTotalBanco() == null ? totalBanco : usuarioCaja.getTotalBanco() + totalBanco);
-		usuarioCaja.setTotalEfectivo(usuarioCaja.getTotalEfectivo() == null ? totalEfectivo : usuarioCaja.getTotalEfectivo() + totalEfectivo);
-		usuarioCaja.setTotalTarjeta(usuarioCaja.getTotalTarjeta() == null ? totalTarjeta : usuarioCaja.getTotalTarjeta() + totalTarjeta);
-		usuarioCaja.setTotalAbono(usuarioCaja.getTotalAbono() == null ? totalAbono : usuarioCaja.getTotalAbono() + totalAbono);
-		usuarioCaja.setTotalNeto(usuarioCaja.getTotalNeto() == null ? totalBanco : usuarioCaja.getTotalNeto() + totalEfectivo + totalTarjeta + totalBanco+totalAbono);
+	public void actualizarCaja(UsuarioCaja usuarioCaja, BigDecimal totalEfectivo, BigDecimal totalTarjeta, BigDecimal totalBanco, BigDecimal totalCredito, BigDecimal totalAbono) {
+		usuarioCaja.setTotalCredito(usuarioCaja.getTotalCredito().add(totalCredito)  );
+		usuarioCaja.setTotalBanco(usuarioCaja.getTotalBanco().add(totalBanco));
+		usuarioCaja.setTotalEfectivo(usuarioCaja.getTotalEfectivo().add(totalEfectivo));
+		usuarioCaja.setTotalTarjeta(usuarioCaja.getTotalTarjeta().add(totalTarjeta));
+		usuarioCaja.setTotalAbono(usuarioCaja.getTotalAbono().add(totalAbono));
+		BigDecimal resultado  = BigDecimal.ZERO;
+		resultado.add(totalEfectivo);
+		resultado.add(totalTarjeta);
+		resultado.add(totalBanco);
+		resultado.add(totalAbono);
+		usuarioCaja.setTotalNeto(usuarioCaja.getTotalNeto().add(resultado));
 		modificar(usuarioCaja);
 	}
 

@@ -1,5 +1,6 @@
 package com.factura.FacturaElectronica.web.command;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.factura.FacturaElectronica.modelo.Articulo;
@@ -7,20 +8,20 @@ import com.factura.FacturaElectronica.modelo.Inventario;
 
 public class InventarioCommand {
 
-	private Integer		id;
-	private Double			cantidad;
+	private Integer			id;
+	private BigDecimal	cantidad;
 
 	private Double			minimo;
 
 	private Double			maximo;
 
-	private String		estado;
+	private String			estado;
 
-	private Date			created_at;
+	private Date				created_at;
 
-	private Date			updated_at;
+	private Date				updated_at;
 
-	private Articulo	articulo;
+	private Articulo		articulo;
 
 	public InventarioCommand(Inventario inventario) {
 		super();
@@ -44,30 +45,6 @@ public class InventarioCommand {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Double getCantidad() {
-		return cantidad;
-	}
-
-	public void setCantidad(Double cantidad) {
-		this.cantidad = cantidad;
-	}
-
-	public Double getMinimo() {
-		return minimo;
-	}
-
-	public void setMinimo(Double minimo) {
-		this.minimo = minimo;
-	}
-
-	public Double getMaximo() {
-		return maximo;
-	}
-
-	public void setMaximo(Double maximo) {
-		this.maximo = maximo;
 	}
 
 	public String getEstado() {
@@ -100,6 +77,30 @@ public class InventarioCommand {
 
 	public void setArticulo(Articulo articulo) {
 		this.articulo = articulo;
+	}
+
+	public BigDecimal getCantidad() {
+		return cantidad;
+	}
+
+	public void setCantidad(BigDecimal cantidad) {
+		this.cantidad = cantidad;
+	}
+
+	public Double getMinimo() {
+		return minimo;
+	}
+
+	public void setMinimo(Double minimo) {
+		this.minimo = minimo;
+	}
+
+	public Double getMaximo() {
+		return maximo;
+	}
+
+	public void setMaximo(Double maximo) {
+		this.maximo = maximo;
 	}
 
 }

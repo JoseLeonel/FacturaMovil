@@ -1,6 +1,7 @@
 package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -41,7 +42,7 @@ public class Inventario implements Serializable {
 	private Integer						id;
 
 	@Column(name = "cantidad")
-	private Double							cantidad;
+	private BigDecimal							cantidad;
 
 	@Column(name = "minimo")
 	private Double							minimo;
@@ -84,7 +85,8 @@ public class Inventario implements Serializable {
 
 	}
 
-	public Inventario(Integer id, Double cantidad, Double minimo, Double maximo, String estado, Date created_at, Date updated_at, Articulo articulo, Usuario usuario, Set<Kardex> kardexs) {
+
+	public Inventario(Integer id, BigDecimal cantidad, Double minimo, Double maximo, String estado, Date created_at, Date updated_at, Articulo articulo, Usuario usuario, Set<Kardex> kardexs) {
 		super();
 		this.id = id;
 		this.cantidad = cantidad;
@@ -98,6 +100,8 @@ public class Inventario implements Serializable {
 		this.kardexs = kardexs;
 	}
 
+
+
 	public Integer getId() {
 		return id;
 	}
@@ -106,13 +110,21 @@ public class Inventario implements Serializable {
 		this.id = id;
 	}
 
-	public Double getCantidad() {
+	
+
+	
+	public BigDecimal getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(Double cantidad) {
+
+
+	
+	public void setCantidad(BigDecimal cantidad) {
 		this.cantidad = cantidad;
 	}
+
+
 
 	public Double getMinimo() {
 		return minimo;

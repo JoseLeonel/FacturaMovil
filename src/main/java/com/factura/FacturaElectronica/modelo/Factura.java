@@ -1,6 +1,7 @@
 package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
@@ -77,68 +78,71 @@ public class Factura implements Serializable {
 	@Column(name = "comanda")
 	private String						comanda;
 
+	@Column(name = "tipo_cambio")
+	private BigDecimal				tipoCambio;
+
 	@Column(name = "subTotal")
-	private Double						subTotal;
+	private BigDecimal				subTotal;
 
 	@Column(name = "total_transporte")
-	private Double						totalTransporte;
+	private BigDecimal				totalTransporte;
 
 	@Column(name = "total")
-	private Double						total;
+	private BigDecimal				total;
 
 	@Column(name = "total_serv_gravados")
-	private Double						totalServGravados;
+	private BigDecimal				totalServGravados;
 
 	@Column(name = "total_serv_exentos")
-	private Double						totalServExentos;
+	private BigDecimal				totalServExentos;
 
 	@Column(name = "total_mercancias_gravadas")
-	private Double						totalMercanciasGravadas;
+	private BigDecimal				totalMercanciasGravadas;
 
 	@Column(name = "total_mercancias_exentas")
-	private Double						totalMercanciasExentas;
+	private BigDecimal				totalMercanciasExentas;
 
 	@Column(name = "total_gravado")
-	private Double						totalGravado;
+	private BigDecimal				totalGravado;
 
 	@Column(name = "total_exento")
-	private Double						totalExento;
+	private BigDecimal				totalExento;
 
 	@Column(name = "total_venta")
-	private Double						totalVenta;
+	private BigDecimal				totalVenta;
 
 	@Column(name = "total_descuentos")
-	private Double						totalDescuentos;
+	private BigDecimal				totalDescuentos;
 
 	@Column(name = "total_venta_neta")
-	private Double						totalVentaNeta;
+	private BigDecimal				totalVentaNeta;
 
 	@Column(name = "total_impuesto")
-	private Double						totalImpuesto;
+	private BigDecimal				totalImpuesto;
 
 	@Column(name = "total_comprobante")
-	private Double						totalComprobante;
+	private BigDecimal				totalComprobante;
 
 	@Column(name = "total_efectivo")
-	private Double						totalEfectivo;
+	private BigDecimal				totalEfectivo;
 
 	@Column(name = "total_tarjeta")
-	private Double						totalTarjeta;
+	private BigDecimal				totalTarjeta;
 
 	@Column(name = "total_banco")
-	private Double						totalBanco;
+	private BigDecimal				totalBanco;
 
 	@Column(name = "total_credito")
-	private Double						totalCredito;
+	private BigDecimal				totalCredito;
 
 	@Column(name = "monto_cambio")
-	private Double						montoCambio;
+	private BigDecimal				montoCambio;
 
 	@Column(name = "total_cambio")
-	private Double						totalCambio;
+	private BigDecimal				totalCambio;
 
 	@Column(name = "total_cambioPagar")
-	private Double						totalCambioPagar;
+	private BigDecimal				totalCambioPagar;
 
 	@Column(name = "codigo_moneda")
 	private String						codigoMoneda;
@@ -183,32 +187,11 @@ public class Factura implements Serializable {
 		this.estado = Constantes.FACTURA_ESTADO_PENDIENTE;
 		this.created_at = new Date();
 		this.updated_at = new Date();
-		this.subTotal = Constantes.ZEROS_DOUBLE;
-		this.totalTransporte = Constantes.ZEROS_DOUBLE;
-		this.total = Constantes.ZEROS_DOUBLE;
-		this.totalServGravados = Constantes.ZEROS_DOUBLE;
-		this.totalServExentos = Constantes.ZEROS_DOUBLE;
-		this.totalMercanciasGravadas = Constantes.ZEROS_DOUBLE;
-		this.totalMercanciasExentas = Constantes.ZEROS_DOUBLE;
-		this.totalGravado = Constantes.ZEROS_DOUBLE;
-		this.totalExento = Constantes.ZEROS_DOUBLE;
-		this.totalVenta = Constantes.ZEROS_DOUBLE;
-		this.totalDescuentos = Constantes.ZEROS_DOUBLE;
-		this.totalVentaNeta = Constantes.ZEROS_DOUBLE;
-		this.totalImpuesto = Constantes.ZEROS_DOUBLE;
-		this.totalComprobante = Constantes.ZEROS_DOUBLE;
-		this.totalEfectivo = Constantes.ZEROS_DOUBLE;
-		this.totalTarjeta = Constantes.ZEROS_DOUBLE;
-		this.totalBanco = Constantes.ZEROS_DOUBLE;
-		this.totalCredito = Constantes.ZEROS_DOUBLE;
-		this.montoCambio = Constantes.ZEROS_DOUBLE;
-		this.totalCambio = Constantes.ZEROS_DOUBLE;
-		this.totalCambioPagar = Constantes.ZEROS_DOUBLE;
 
 	}
 
-	public Factura(Integer id, Date fechaCredito, String numeroConsecutivo, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String medioPago, String nombreFactura, String direccion, String nota, String comanda, Double subTotal, Double totalTransporte, Double total, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalCambioPagar, String codigoMoneda, Integer estado, Date created_at, Date updated_at, Cliente cliente,
-			Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Set<Detalle> detalles) {
+	public Factura(Integer id, Date fechaCredito, String numeroConsecutivo, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String medioPago, String nombreFactura, String direccion, String nota, String comanda, BigDecimal tipoCambio, BigDecimal subTotal, BigDecimal totalTransporte, BigDecimal total, BigDecimal totalServGravados, BigDecimal totalServExentos, BigDecimal totalMercanciasGravadas, BigDecimal totalMercanciasExentas, BigDecimal totalGravado, BigDecimal totalExento, BigDecimal totalVenta, BigDecimal totalDescuentos, BigDecimal totalVentaNeta, BigDecimal totalImpuesto, BigDecimal totalComprobante, BigDecimal totalEfectivo, BigDecimal totalTarjeta, BigDecimal totalBanco, BigDecimal totalCredito, BigDecimal montoCambio, BigDecimal totalCambio,
+			BigDecimal totalCambioPagar, String codigoMoneda, Integer estado, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Set<Detalle> detalles) {
 		super();
 		this.id = id;
 		this.fechaCredito = fechaCredito;
@@ -222,6 +205,7 @@ public class Factura implements Serializable {
 		this.direccion = direccion;
 		this.nota = nota;
 		this.comanda = comanda;
+		this.tipoCambio = tipoCambio;
 		this.subTotal = subTotal;
 		this.totalTransporte = totalTransporte;
 		this.total = total;
@@ -270,14 +254,10 @@ public class Factura implements Serializable {
 		this.fechaCredito = fechaCredito;
 	}
 
-	
-
-	
 	public String getNumeroConsecutivo() {
 		return numeroConsecutivo;
 	}
 
-	
 	public void setNumeroConsecutivo(String numeroConsecutivo) {
 		this.numeroConsecutivo = numeroConsecutivo;
 	}
@@ -354,164 +334,180 @@ public class Factura implements Serializable {
 		this.comanda = comanda;
 	}
 
-	public Double getSubTotal() {
+	public BigDecimal getTipoCambio() {
+		return tipoCambio;
+	}
+
+	public void setTipoCambio(BigDecimal tipoCambio) {
+		this.tipoCambio = tipoCambio;
+	}
+
+	public BigDecimal getSubTotal() {
 		return subTotal;
 	}
 
-	public void setSubTotal(Double subTotal) {
+	public void setSubTotal(BigDecimal subTotal) {
 		this.subTotal = subTotal;
 	}
 
-	public Double getTotalTransporte() {
+	public BigDecimal getTotalTransporte() {
 		return totalTransporte;
 	}
 
-	public void setTotalTransporte(Double totalTransporte) {
+	public void setTotalTransporte(BigDecimal totalTransporte) {
 		this.totalTransporte = totalTransporte;
 	}
 
-	public Double getTotal() {
+	public BigDecimal getTotal() {
 		return total;
 	}
 
-	public void setTotal(Double total) {
+	public void setTotal(BigDecimal total) {
 		this.total = total;
 	}
 
-	public Double getTotalServGravados() {
+	public BigDecimal getTotalServGravados() {
 		return totalServGravados;
 	}
 
-	public void setTotalServGravados(Double totalServGravados) {
+	public void setTotalServGravados(BigDecimal totalServGravados) {
 		this.totalServGravados = totalServGravados;
 	}
 
-	public Double getTotalServExentos() {
+	public BigDecimal getTotalServExentos() {
 		return totalServExentos;
 	}
 
-	public void setTotalServExentos(Double totalServExentos) {
+	public void setTotalServExentos(BigDecimal totalServExentos) {
 		this.totalServExentos = totalServExentos;
 	}
 
-	public Double getTotalMercanciasGravadas() {
+	public BigDecimal getTotalMercanciasGravadas() {
 		return totalMercanciasGravadas;
 	}
 
-	public void setTotalMercanciasGravadas(Double totalMercanciasGravadas) {
+	public void setTotalMercanciasGravadas(BigDecimal totalMercanciasGravadas) {
 		this.totalMercanciasGravadas = totalMercanciasGravadas;
 	}
 
-	public Double getTotalMercanciasExentas() {
+	public BigDecimal getTotalMercanciasExentas() {
 		return totalMercanciasExentas;
 	}
 
-	public void setTotalMercanciasExentas(Double totalMercanciasExentas) {
+	public void setTotalMercanciasExentas(BigDecimal totalMercanciasExentas) {
 		this.totalMercanciasExentas = totalMercanciasExentas;
 	}
 
-	public Double getTotalGravado() {
+	public BigDecimal getTotalGravado() {
 		return totalGravado;
 	}
 
-	public void setTotalGravado(Double totalGravado) {
+	public void setTotalGravado(BigDecimal totalGravado) {
 		this.totalGravado = totalGravado;
 	}
 
-	public Double getTotalExento() {
+	public BigDecimal getTotalExento() {
 		return totalExento;
 	}
 
-	public void setTotalExento(Double totalExento) {
+	public void setTotalExento(BigDecimal totalExento) {
 		this.totalExento = totalExento;
 	}
 
-	public Double getTotalVenta() {
+	public BigDecimal getTotalVenta() {
 		return totalVenta;
 	}
 
-	public void setTotalVenta(Double totalVenta) {
+	public void setTotalVenta(BigDecimal totalVenta) {
 		this.totalVenta = totalVenta;
 	}
 
-	public Double getTotalDescuentos() {
+	public BigDecimal getTotalDescuentos() {
 		return totalDescuentos;
 	}
 
-	public void setTotalDescuentos(Double totalDescuentos) {
+	public void setTotalDescuentos(BigDecimal totalDescuentos) {
 		this.totalDescuentos = totalDescuentos;
 	}
 
-	public Double getTotalVentaNeta() {
+	public BigDecimal getTotalVentaNeta() {
 		return totalVentaNeta;
 	}
 
-	public void setTotalVentaNeta(Double totalVentaNeta) {
+	public void setTotalVentaNeta(BigDecimal totalVentaNeta) {
 		this.totalVentaNeta = totalVentaNeta;
 	}
 
-	public Double getTotalImpuesto() {
+	public BigDecimal getTotalImpuesto() {
 		return totalImpuesto;
 	}
 
-	public void setTotalImpuesto(Double totalImpuesto) {
+	public void setTotalImpuesto(BigDecimal totalImpuesto) {
 		this.totalImpuesto = totalImpuesto;
 	}
 
-	public Double getTotalComprobante() {
+	public BigDecimal getTotalComprobante() {
 		return totalComprobante;
 	}
 
-	public void setTotalComprobante(Double totalComprobante) {
+	public void setTotalComprobante(BigDecimal totalComprobante) {
 		this.totalComprobante = totalComprobante;
 	}
 
-	public Double getTotalEfectivo() {
+	public BigDecimal getTotalEfectivo() {
 		return totalEfectivo;
 	}
 
-	public void setTotalEfectivo(Double totalEfectivo) {
+	public void setTotalEfectivo(BigDecimal totalEfectivo) {
 		this.totalEfectivo = totalEfectivo;
 	}
 
-	public Double getTotalTarjeta() {
+	public BigDecimal getTotalTarjeta() {
 		return totalTarjeta;
 	}
 
-	public void setTotalTarjeta(Double totalTarjeta) {
+	public void setTotalTarjeta(BigDecimal totalTarjeta) {
 		this.totalTarjeta = totalTarjeta;
 	}
 
-	public Double getTotalBanco() {
+	public BigDecimal getTotalBanco() {
 		return totalBanco;
 	}
 
-	public void setTotalBanco(Double totalBanco) {
+	public void setTotalBanco(BigDecimal totalBanco) {
 		this.totalBanco = totalBanco;
 	}
 
-	public Double getTotalCredito() {
+	public BigDecimal getTotalCredito() {
 		return totalCredito;
 	}
 
-	public void setTotalCredito(Double totalCredito) {
+	public void setTotalCredito(BigDecimal totalCredito) {
 		this.totalCredito = totalCredito;
 	}
 
-	public Double getMontoCambio() {
+	public BigDecimal getMontoCambio() {
 		return montoCambio;
 	}
 
-	public void setMontoCambio(Double montoCambio) {
+	public void setMontoCambio(BigDecimal montoCambio) {
 		this.montoCambio = montoCambio;
 	}
 
-	public Double getTotalCambio() {
+	public BigDecimal getTotalCambio() {
 		return totalCambio;
 	}
 
-	public void setTotalCambio(Double totalCambio) {
+	public void setTotalCambio(BigDecimal totalCambio) {
 		this.totalCambio = totalCambio;
+	}
+
+	public BigDecimal getTotalCambioPagar() {
+		return totalCambioPagar;
+	}
+
+	public void setTotalCambioPagar(BigDecimal totalCambioPagar) {
+		this.totalCambioPagar = totalCambioPagar;
 	}
 
 	public String getCodigoMoneda() {
@@ -554,20 +550,20 @@ public class Factura implements Serializable {
 		this.cliente = cliente;
 	}
 
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
 	public Vendedor getVendedor() {
 		return vendedor;
 	}
 
 	public void setVendedor(Vendedor vendedor) {
 		this.vendedor = vendedor;
-	}
-
-	public Double getTotalCambioPagar() {
-		return totalCambioPagar;
-	}
-
-	public void setTotalCambioPagar(Double totalCambioPagar) {
-		this.totalCambioPagar = totalCambioPagar;
 	}
 
 	public Usuario getUsuarioCreacion() {
@@ -578,14 +574,6 @@ public class Factura implements Serializable {
 		this.usuarioCreacion = usuarioCreacion;
 	}
 
-	public Empresa getEmpresa() {
-		return empresa;
-	}
-
-	public void setEmpresa(Empresa empresa) {
-		this.empresa = empresa;
-	}
-
 	public Set<Detalle> getDetalles() {
 		return detalles;
 	}
@@ -593,5 +581,7 @@ public class Factura implements Serializable {
 	public void setDetalles(Set<Detalle> detalles) {
 		this.detalles = detalles;
 	}
+
+	
 
 }

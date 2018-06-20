@@ -1,5 +1,6 @@
 package com.factura.FacturaElectronica.Bo.Impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.json.simple.JSONArray;
@@ -154,7 +155,7 @@ public class CompraBoImpl implements CompraBo {
 			if (inventario == null) {
 				inventario = new Inventario();
 				inventario.setArticulo(articulo);
-				inventario.setCantidad(Constantes.ZEROS_DOUBLE);
+				inventario.setCantidad(BigDecimal.ZERO);
 				inventario.setMinimo(Constantes.INVENTARIO_MINIMO);
 				inventario.setMaximo(Constantes.INVENTARIO_MAXIMO);
 				inventario.setCreated_at(new Date());
@@ -172,7 +173,7 @@ public class CompraBoImpl implements CompraBo {
 			articulo.setUpdated_at(new Date());
 			articulo.setUsuario(compra.getUsuarioCreacion());
 			articuloDao.modificar(articulo);
-			inventario.setCantidad(inventario.getCantidad() + detalleCompra.getCantidad());
+			inventario.setCantidad(inventario.getCantidad().add(detalleCompra.getCantidad()));
 			inventario.setUsuario(compra.getUsuarioCreacion());
 			inventario.setUpdated_at(new Date());
 			inventarioDao.modificar(inventario);

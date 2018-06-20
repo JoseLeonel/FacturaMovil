@@ -1,5 +1,7 @@
 package com.factura.FacturaElectronica.Dao.Impl;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -9,9 +11,7 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.factura.FacturaElectronica.Dao.ArticuloDao;
-import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.modelo.Articulo;
-import com.factura.FacturaElectronica.modelo.Cliente;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Inventario;
 
@@ -42,35 +42,10 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	 * Buscar el objeto articulo por id
 	 * @see com.factura.dao.ArticuloDao#buscar(java.lang.Integer)
 	 */
-  @Override
+	@Override
 	public Articulo buscar(Integer id) {
 		Query query = entityManager.createQuery("select obj from Articulo obj where obj.id = :id");
 		query.setParameter("id", id);
-		return (Articulo) query.getSingleResult();
-	}
-
-	/**
-	 * Buscar por descripcion la articulo y empresa
-	 * @see com.factura.dao.ArticuloDao#buscarByDescripcionAndEmpresa(java.lang.String, com.factura.domain.Empresa)
-	 */
-@Override	
-	public Articulo buscarPorDescripcionYEmpresa(String descripcion, Empresa empresa) {
-		Query query = entityManager.createQuery("select obj from Articulo obj where obj.descripcion = :descripcion and obj.empresa = :empresa");
-		query.setParameter("descripcion", descripcion);
-		query.setParameter("empresa", empresa);
-		return (Articulo) query.getSingleResult();
-	}
-
-	/**
-	 * Busca por codigo del articulo
-	 * @see com.factura.dao.ArticuloDao#buscarByCodigoAndEmpresa(java.lang.String, com.factura.domain.Empresa)
-	 */
-@Override	
-	public Articulo buscarPorCodigoYEmpresa(String codigo, Empresa empresa) {
-		Query query = entityManager.createQuery("select obj from Articulo obj where obj.codigo = :codigo and obj.empresa = :empresa");
-		query.setParameter("codigo", codigo);
-		query.setParameter("empresa", empresa);
-	
 		List<Articulo> results = query.getResultList();
 		if (!results.isEmpty()) {
 			return (Articulo) results.get(0);
@@ -78,13 +53,49 @@ public class ArticuloDaoImpl implements ArticuloDao {
 			return null;
 		}
 	}
+
+	/**
+	 * Buscar por descripcion la articulo y empresa
+	 * @see com.factura.dao.ArticuloDao#buscarByDescripcionAndEmpresa(java.lang.String, com.factura.domain.Empresa)
+	 */
+	@Override
+	public Articulo buscarPorDescripcionYEmpresa(String descripcion, Empresa empresa) {
+		Query query = entityManager.createQuery("select obj from Articulo obj where obj.descripcion = :descripcion and obj.empresa = :empresa");
+		query.setParameter("descripcion", descripcion);
+		query.setParameter("empresa", empresa);
+		List<Articulo> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (Articulo) results.get(0);
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Busca por codigo del articulo
+	 * @see com.factura.dao.ArticuloDao#buscarByCodigoAndEmpresa(java.lang.String, com.factura.domain.Empresa)
+	 */
+	@Override
+	public Articulo buscarPorCodigoYEmpresa(String codigo, Empresa empresa) {
+		Query query = entityManager.createQuery("select obj from Articulo obj where obj.codigo = :codigo and obj.empresa = :empresa");
+		query.setParameter("codigo", codigo);
+		query.setParameter("empresa", empresa);
+
+		List<Articulo> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (Articulo) results.get(0);
+		} else {
+			return null;
+		}
+	}
+
 	/**
 	 * Busca un inventario con el articulo
 	 * @param articulo
 	 * @return
 	 */
-	
-	public Inventario buscarPorArticulo(Articulo articulo){
+
+	public Inventario buscarPorArticulo(Articulo articulo) {
 		Query query = entityManager.createQuery("select obj from Articulo obj where obj.inventario = :inventario");
 		query.setParameter("articulo", articulo);
 		List<Inventario> results = query.getResultList();
@@ -93,27 +104,41 @@ public class ArticuloDaoImpl implements ArticuloDao {
 		} else {
 			return null;
 		}
-		
+
 	}
+
 	/**
 	 * Porcentaje de ganancia
 	 * @see com.factura.FacturaElectronica.Dao.ArticuloDao#porcentanjeDeGanancia(java.lang.Double, java.lang.Double, java.lang.Double)
 	 */
 	@Override
-	public Double porcentanjeDeGanancia(Double costo, Double iva, Double precio) {
-		Double resultado = Constantes.ZEROS_DOUBLE;
-		Double precioSinImpuesto = Constantes.ZEROS_DOUBLE;
-		costo = costo == null ? 0 : costo;
-		precio = precio == null ? 0 : precio;
-		iva = iva == null ? 0 : iva;
-		if (iva == 0) {
-			resultado = costo > 0 && precio > 0 ? 1 - (costo / precio) : 0;
-		} else {
-			precioSinImpuesto = precio > 0 ? precio / ((iva / 100) + 1) : 0;
-			resultado = (1 - (costo / precioSinImpuesto));
+	public BigDecimal porcentanjeDeGanancia(BigDecimal costo, BigDecimal iva, BigDecimal precio) {
+		if(precio == null || costo == null) {
+			return BigDecimal.ZERO;
 		}
+		BigDecimal resultado = BigDecimal.ZERO;
+		BigDecimal precioSinImpuesto = BigDecimal.ZERO;
+		costo = costo == null ? BigDecimal.ZERO : costo;
+		precio = precio == null ? BigDecimal.ZERO : precio;
+		iva = iva == null ? BigDecimal.ZERO : iva;
+		if (iva.compareTo(BigDecimal.ZERO) == 0) {
+			resultado = costo.divide(precio, 5, RoundingMode.HALF_UP);
+			BigDecimal uno = new BigDecimal("1");
+			resultado = uno.subtract(resultado);
+		} else {
+			BigDecimal porcentaje = new BigDecimal("100");
+			BigDecimal uno = new BigDecimal("1");
+			BigDecimal impuesto = iva.divide(porcentaje,5,RoundingMode.HALF_UP);
+			impuesto = impuesto.add(uno);
 
-		return resultado > 0 ? resultado * 100 : 0;
+			precioSinImpuesto = precio.divide(impuesto,5,RoundingMode.HALF_UP);
+
+			resultado = costo.divide(precioSinImpuesto,5,RoundingMode.HALF_UP);
+			resultado = uno.subtract(resultado);
+		}
+		BigDecimal porcentaje = new BigDecimal("100");
+
+		return resultado.multiply(porcentaje);
 	}
 
 	/**
@@ -121,17 +146,16 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	 * @see com.factura.FacturaElectronica.Dao.ArticuloDao#costoPromedio(java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double)
 	 */
 	@Override
-	public Double costoPromedio(Double costoActual , Double costoNuevo,Double cantidadActual,Double cantidadNueva) {
-		Double resultado = Constantes.ZEROS_DOUBLE;
-		
-		Double totalCostoActual = costoActual * cantidadActual;
-		Double totalCostoNuevo = costoNuevo * cantidadNueva;
-		Double totalProductos  = cantidadActual + cantidadNueva;
-		resultado =(totalCostoActual + totalCostoNuevo);
-		
-			
-		return resultado / totalProductos;
-		
+	public BigDecimal costoPromedio(BigDecimal costoActual, BigDecimal costoNuevo, BigDecimal cantidadActual, BigDecimal cantidadNueva) {
+		BigDecimal resultado = BigDecimal.ZERO;
+
+		BigDecimal totalCostoActual = costoActual.multiply(cantidadActual);
+		BigDecimal totalCostoNuevo = costoNuevo.multiply(cantidadNueva);
+		BigDecimal totalProductos = cantidadActual.multiply(cantidadNueva);
+		resultado = (totalCostoActual.add(totalCostoNuevo));
+
+		return resultado.divide(totalProductos);
+
 	}
-	
+
 }

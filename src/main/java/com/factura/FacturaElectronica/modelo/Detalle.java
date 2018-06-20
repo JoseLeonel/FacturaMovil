@@ -1,6 +1,7 @@
 package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -43,37 +44,37 @@ public class Detalle implements Serializable {
 	private Integer						numeroLinea;
 
 	@Column(name = "precio_unitario")
-	private Double							precioUnitario;
+	private BigDecimal				precioUnitario;
 
 	@Column(name = "cantidad")
-	private Double							cantidad;
+	private BigDecimal				cantidad;
 
 	@Column(name = "monto_total")
-	private Double							montoTotal;
+	private BigDecimal				montoTotal;
 
 	@Column(name = "Monto_descuento")
-	private Double							montoDescuento;
+	private BigDecimal				montoDescuento;
 
 	@Column(name = "naturaleza_descuento")
-	private Double							naturalezaDescuento;
+	private BigDecimal				naturalezaDescuento;
 
 	@Column(name = "sub_total")
-	private Double							subTotal;
+	private BigDecimal				subTotal;
 
 	@Column(name = "impuesto")
-	private Double							impuesto;
+	private BigDecimal				impuesto;
 
 	@Column(name = "monto_impuesto")
-	private Double							montoImpuesto;
+	private BigDecimal				montoImpuesto;
 
 	@Column(name = "monto_total_linea")
-	private Double							montoTotalLinea;
+	private BigDecimal				montoTotalLinea;
 
 	@Column(name = "ganancia")
-	private Double							ganancia;
+	private BigDecimal				ganancia;
 
 	@Column(name = "porcentaje_desc")
-	private Double							porcentajeDesc;
+	private BigDecimal				porcentajeDesc;
 
 	@Column(name = "observacion")
 	private String						observacion;
@@ -112,7 +113,7 @@ public class Detalle implements Serializable {
 
 	}
 
-	public Detalle(Integer id, Integer numeroLinea, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, Double naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double ganancia, Double porcentajeDesc, String observacion, Date created_at, Date updated_at, Factura factura, Articulo articulo, Usuario usuario) {
+	public Detalle(Integer id, Integer numeroLinea, BigDecimal precioUnitario, BigDecimal cantidad, BigDecimal montoTotal, BigDecimal montoDescuento, BigDecimal naturalezaDescuento, BigDecimal subTotal, BigDecimal impuesto, BigDecimal montoImpuesto, BigDecimal montoTotalLinea, BigDecimal ganancia, BigDecimal porcentajeDesc, String observacion, Date created_at, Date updated_at, Factura factura, Articulo articulo, Usuario usuario) {
 		super();
 		this.id = id;
 		this.numeroLinea = numeroLinea;
@@ -134,7 +135,7 @@ public class Detalle implements Serializable {
 		this.articulo = articulo;
 		this.usuario = usuario;
 	}
-	
+
 	public Detalle(DetalleFacturaCommand detalleFacturaCommand) {
 		super();
 		this.created_at = new Date();
@@ -152,7 +153,6 @@ public class Detalle implements Serializable {
 		this.ganancia = detalleFacturaCommand.getGanancia();
 		this.porcentajeDesc = detalleFacturaCommand.getPorcentajeDesc();
 		this.observacion = Constantes.EMPTY;
-		
 
 	}
 
@@ -164,14 +164,6 @@ public class Detalle implements Serializable {
 		this.id = id;
 	}
 
-	public Double getMontoImpuesto() {
-		return montoImpuesto;
-	}
-
-	public void setMontoImpuesto(Double montoImpuesto) {
-		this.montoImpuesto = montoImpuesto;
-	}
-
 	public Integer getNumeroLinea() {
 		return numeroLinea;
 	}
@@ -180,83 +172,91 @@ public class Detalle implements Serializable {
 		this.numeroLinea = numeroLinea;
 	}
 
-	public Double getPrecioUnitario() {
+	public BigDecimal getPrecioUnitario() {
 		return precioUnitario;
 	}
 
-	public void setPrecioUnitario(Double precioUnitario) {
+	public void setPrecioUnitario(BigDecimal precioUnitario) {
 		this.precioUnitario = precioUnitario;
 	}
 
-	public Double getCantidad() {
+	public BigDecimal getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(Double cantidad) {
+	public void setCantidad(BigDecimal cantidad) {
 		this.cantidad = cantidad;
 	}
 
-	public Double getMontoTotal() {
+	public BigDecimal getMontoTotal() {
 		return montoTotal;
 	}
 
-	public void setMontoTotal(Double montoTotal) {
+	public void setMontoTotal(BigDecimal montoTotal) {
 		this.montoTotal = montoTotal;
 	}
 
-	public Double getMontoDescuento() {
+	public BigDecimal getMontoDescuento() {
 		return montoDescuento;
 	}
 
-	public void setMontoDescuento(Double montoDescuento) {
+	public void setMontoDescuento(BigDecimal montoDescuento) {
 		this.montoDescuento = montoDescuento;
 	}
 
-	public Double getNaturalezaDescuento() {
+	public BigDecimal getNaturalezaDescuento() {
 		return naturalezaDescuento;
 	}
 
-	public void setNaturalezaDescuento(Double naturalezaDescuento) {
+	public void setNaturalezaDescuento(BigDecimal naturalezaDescuento) {
 		this.naturalezaDescuento = naturalezaDescuento;
 	}
 
-	public Double getSubTotal() {
+	public BigDecimal getSubTotal() {
 		return subTotal;
 	}
 
-	public void setSubTotal(Double subTotal) {
+	public void setSubTotal(BigDecimal subTotal) {
 		this.subTotal = subTotal;
 	}
 
-	public Double getImpuesto() {
+	public BigDecimal getImpuesto() {
 		return impuesto;
 	}
 
-	public void setImpuesto(Double impuesto) {
+	public void setImpuesto(BigDecimal impuesto) {
 		this.impuesto = impuesto;
 	}
 
-	public Double getMontoTotalLinea() {
+	public BigDecimal getMontoImpuesto() {
+		return montoImpuesto;
+	}
+
+	public void setMontoImpuesto(BigDecimal montoImpuesto) {
+		this.montoImpuesto = montoImpuesto;
+	}
+
+	public BigDecimal getMontoTotalLinea() {
 		return montoTotalLinea;
 	}
 
-	public void setMontoTotalLinea(Double montoTotalLinea) {
+	public void setMontoTotalLinea(BigDecimal montoTotalLinea) {
 		this.montoTotalLinea = montoTotalLinea;
 	}
 
-	public Double getGanancia() {
+	public BigDecimal getGanancia() {
 		return ganancia;
 	}
 
-	public void setGanancia(Double ganancia) {
+	public void setGanancia(BigDecimal ganancia) {
 		this.ganancia = ganancia;
 	}
 
-	public Double getPorcentajeDesc() {
+	public BigDecimal getPorcentajeDesc() {
 		return porcentajeDesc;
 	}
 
-	public void setPorcentajeDesc(Double porcentajeDesc) {
+	public void setPorcentajeDesc(BigDecimal porcentajeDesc) {
 		this.porcentajeDesc = porcentajeDesc;
 	}
 

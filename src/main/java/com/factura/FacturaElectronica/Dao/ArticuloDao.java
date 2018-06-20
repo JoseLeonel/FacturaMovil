@@ -1,5 +1,7 @@
 package com.factura.FacturaElectronica.Dao;
 
+import java.math.BigDecimal;
+
 import com.factura.FacturaElectronica.modelo.Articulo;
 import com.factura.FacturaElectronica.modelo.Empresa;
 
@@ -17,8 +19,8 @@ public interface ArticuloDao {
 
 	Articulo buscarPorCodigoYEmpresa(String codigo, Empresa empresa);
 	
-	Double porcentanjeDeGanancia(Double costo, Double iva, Double precio);
+	BigDecimal porcentanjeDeGanancia(BigDecimal costo, BigDecimal iva, BigDecimal precio);
 	
-	Double costoPromedio(Double costoActual , Double costoNuevo,Double cantidadActual,Double cantidadNueva);
+	BigDecimal costoPromedio(BigDecimal costoActual , BigDecimal costoNuevo,BigDecimal cantidadActual,BigDecimal cantidadNueva);
 
 }

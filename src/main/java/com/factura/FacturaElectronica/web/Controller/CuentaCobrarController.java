@@ -1,5 +1,6 @@
 package com.factura.FacturaElectronica.web.Controller;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -129,18 +130,21 @@ public class CuentaCobrarController {
 
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
-			Double totalCuotas = cuentaCobrar.getMontoCouta() * cuentaCobrar.getCantidadPagos();
-			if (totalCuotas < cuentaCobrar.getTotal() || totalCuotas > cuentaCobrar.getTotal()) {
+			BigDecimal totalCuotas = cuentaCobrar.getMontoCouta().multiply(cuentaCobrar.getCantidadPagos());
+			
+			
+			
+			if (totalCuotas.compareTo(cuentaCobrar.getTotal()) < 0  || totalCuotas.compareTo(cuentaCobrar.getTotal()) > 1 ) {
 				result.rejectValue("montoCouta", "error.cuentaCobrar.montoCuota.menor.total");
 			}
 			if (cuentaCobrar.getCantidadPagos() == null) {
 				result.rejectValue("cantidadPagos", "error.cuentaCobrar.cantidadPagos.requerido");
-			} else if (cuentaCobrar.getCantidadPagos() == Constantes.ZEROS_DOUBLE) {
+			} else if (cuentaCobrar.getCantidadPagos() == BigDecimal.ZERO) {
 				result.rejectValue("cantidadPagos", "error.cuentaCobrar.cantidadPagos.requerido");
 			}
 			if (cuentaCobrar.getMontoCouta() == null) {
 				result.rejectValue("montoCuota", "error.cuentaCobrar.montoCuota.requerido");
-			} else if (cuentaCobrar.getMontoCouta() == Constantes.ZEROS_DOUBLE) {
+			} else if (cuentaCobrar.getMontoCouta() == BigDecimal.ZERO) {
 				result.rejectValue("montoCuota", "error.cuentaCobrar.montoCuota.requerido");
 			}
 			CuentaCobrar cuentaCobrarBD = cuentaCobrarBo.buscarPorLetraCambio(cuentaCobrar.getLetraCambio());
@@ -160,7 +164,7 @@ public class CuentaCobrarController {
 			cuentaCobrar.setUpdated_at(new Date());
 			cuentaCobrar.setTipo(Constantes.CUENTA_POR_COBRAR_TIPO_MANUAL);
 			cuentaCobrar.setEstado(Constantes.CUENTA_POR_COBRAR_ESTADO_PENDIENTE);
-			cuentaCobrar.setTotalAbono(Constantes.ZEROS_DOUBLE);
+			cuentaCobrar.setTotalAbono(BigDecimal.ZERO);
 			cuentaCobrar.setTotalSaldo(cuentaCobrar.getTotal());
 			cuentaCobrar.setUsuario(usuarioSesion);
 			cuentaCobrar.setEmpresa(usuarioSesion.getEmpresa());
@@ -196,18 +200,18 @@ public class CuentaCobrarController {
 				return RESPONSES.ERROR.CUENTACOBRAR.NO_EXISTE;
 			}
 
-			Double totalCuotas = cuentaCobrar.getMontoCouta() * cuentaCobrar.getCantidadPagos();
-			if (totalCuotas < cuentaCobrar.getTotal() || totalCuotas > cuentaCobrar.getTotal()) {
+			BigDecimal totalCuotas = cuentaCobrar.getMontoCouta().multiply(cuentaCobrar.getCantidadPagos());
+			if (totalCuotas.compareTo(cuentaCobrar.getTotal()) == -1 || totalCuotas.compareTo(cuentaCobrar.getTotal()) ==1) {
 				result.rejectValue("montoCouta", "error.cuentaCobrar.montoCuota.menor.total");
 			}
 			if (cuentaCobrar.getCantidadPagos() == null) {
 				result.rejectValue("cantidadPagos", "error.cuentaCobrar.cantidadPagos.requerido");
-			} else if (cuentaCobrar.getCantidadPagos() == Constantes.ZEROS_DOUBLE) {
+			} else if (cuentaCobrar.getCantidadPagos() == BigDecimal.ZERO) {
 				result.rejectValue("cantidadPagos", "error.cuentaCobrar.cantidadPagos.requerido");
 			}
 			if (cuentaCobrar.getMontoCouta() == null) {
 				result.rejectValue("montoCuota", "error.cuentaCobrar.montoCuota.requerido");
-			} else if (cuentaCobrar.getMontoCouta() == Constantes.ZEROS_DOUBLE) {
+			} else if (cuentaCobrar.getMontoCouta() == BigDecimal.ZERO) {
 				result.rejectValue("montoCuota", "error.cuentaCobrar.montoCuota.requerido");
 			}
 			if (!cuentaCobrarBD.getLetraCambio().equals(cuentaCobrar.getLetraCambio())) {

@@ -1,5 +1,7 @@
 package com.factura.FacturaElectronica.web.command;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 
 import com.factura.FacturaElectronica.Utils.Constantes;
@@ -8,37 +10,36 @@ import com.factura.FacturaElectronica.modelo.Empresa;
 
 /**
  * ClienteCommand.
- * 
  * @author jose.
  * @since 17 mar. 2018
  */
 public class ClienteCommand {
 
-	private Integer id;
+	private Integer			id;
 
-	private String nombreCompleto;
+	private String			nombreCompleto;
 
-	private String cedula;
+	private String			cedula;
 
-	private String provincia;
+	private String			provincia;
 
-	private String celular;
+	private String			celular;
 
-	private String telefono;
+	private BigInteger	telefono;
 
-	private String otraSena;
+	private String			otraSena;
 
-	private String correoElectronico;
+	private String			correoElectronico;
 
-	private Double descuento;
+	private BigDecimal	descuento;
 
-	private String estado;
+	private String			estado;
 
-	private Date created_at;
+	private Date				created_at;
 
-	private Date updated_at;
+	private Date				updated_at;
 
-	private Empresa empresa;
+	private Empresa			empresa;
 
 	public ClienteCommand(Cliente cliente) {
 		super();
@@ -102,11 +103,11 @@ public class ClienteCommand {
 		this.celular = celular;
 	}
 
-	public String getTelefono() {
+	public BigInteger getTelefono() {
 		return telefono;
 	}
 
-	public void setTelefono(String telefono) {
+	public void setTelefono(BigInteger telefono) {
 		this.telefono = telefono;
 	}
 
@@ -126,11 +127,11 @@ public class ClienteCommand {
 		this.correoElectronico = correoElectronico;
 	}
 
-	public Double getDescuento() {
+	public BigDecimal getDescuento() {
 		return descuento;
 	}
 
-	public void setDescuento(Double descuento) {
+	public void setDescuento(BigDecimal descuento) {
 		this.descuento = descuento;
 	}
 

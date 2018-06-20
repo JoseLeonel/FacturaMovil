@@ -1,6 +1,7 @@
 package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,96 +32,95 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Table(name = "compras")
 public class Compra implements Serializable {
 
-	private static final long	serialVersionUID	= -827268617562649428L;
+	private static final long		serialVersionUID	= -827268617562649428L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer						id;
+	private Integer							id;
 
 	@Column(name = "consecutivo")
-	private String						consecutivo;
+	private String							consecutivo;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY")
 	@Column(name = "fecha_credito")
 
-	private Date							fechaCredito;
+	private Date								fechaCredito;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY")
 	@Column(name = "fecha_pago")
-	private Date							fechaPago;
+	private Date								fechaPago;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY")
 	@Column(name = "fecha_compra")
-	private Date							fechaCompra;
+	private Date								fechaCompra;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "fecha_ingreso")
-	private Date							fechaIngreso;
+	private Date								fechaIngreso;
 
 	@Column(name = "tipo_documento")
-	private Integer						tipoDocumento;
+	private Integer							tipoDocumento;
 
 	@Column(name = "forma_pago")
-	private Integer						formaPago;
+	private Integer							formaPago;
 
 	@Column(name = "total_impuesto")
-	private Double						totalImpuesto;
+	private BigDecimal					totalImpuesto;
 
 	@Column(name = "total_descuento")
-	private Double						totalDescuento;
+	private BigDecimal					totalDescuento;
 
 	@Column(name = "sub_total")
-	private Double						subTotal;
+	private BigDecimal					subTotal;
 
 	@Column(name = "total_compra")
-	private Double						totalCompra;
+	private BigDecimal					totalCompra;
 
-	
 	@Size(max = 255)
 	@Column(name = "nota")
-	private String						nota;
+	private String							nota;
 
 	@Column(name = "estado")
-	private Integer						estado;
-	
+	private Integer							estado;
+
 	@CreatedDate
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at")
-	private Date							created_at;
+	private Date								created_at;
 
 	@LastModifiedDate
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "updated_at")
-	private Date							updated_at;
+	private Date								updated_at;
 
 	@ManyToOne
 	@JoinColumn(name = "proveedor_id")
-	private Proveedor					proveedor;
+	private Proveedor						proveedor;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
-	private Empresa					empresa;
-	
+	private Empresa							empresa;
+
 	@ManyToOne
 	@JoinColumn(name = "usuario_id", nullable = false)
-	private Usuario						usuarioCreacion;
+	private Usuario							usuarioCreacion;
 
 	@ManyToOne
 	@JoinColumn(name = "usuario_ingreso_id", nullable = false)
-	private Usuario						usuarioIngresoInventario;
-	
+	private Usuario							usuarioIngresoInventario;
+
 	@JsonProperty("detalleCompras")
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "compra_id", referencedColumnName = "id")
 	@OrderBy("compra_id DESC")
-	private Set<DetalleCompra>				detalleCompras;
+	private Set<DetalleCompra>	detalleCompras;
 
 	public Compra() {
 		super();
@@ -129,11 +129,7 @@ public class Compra implements Serializable {
 
 	}
 
-	
-
-	
-
-	public Compra(Integer id, String consecutivo, Date fechaCredito, Date fechaPago, Date fechaCompra, Date fechaIngreso, Integer tipoDocumento, Integer formaPago, Double totalImpuesto, Double totalDescuento, Double subTotal, Double totalCompra, @Size(max = 255) String nota, Integer estado, Date created_at, Date updated_at, Proveedor proveedor, Empresa empresa, Usuario usuarioCreacion, Usuario usuarioIngresoInventario, Set<DetalleCompra> detalleCompras) {
+	public Compra(Integer id, String consecutivo, Date fechaCredito, Date fechaPago, Date fechaCompra, Date fechaIngreso, Integer tipoDocumento, Integer formaPago, BigDecimal totalImpuesto, BigDecimal totalDescuento, BigDecimal subTotal, BigDecimal totalCompra, @Size(max = 255) String nota, Integer estado, Date created_at, Date updated_at, Proveedor proveedor, Empresa empresa, Usuario usuarioCreacion, Usuario usuarioIngresoInventario, Set<DetalleCompra> detalleCompras) {
 		super();
 		this.id = id;
 		this.consecutivo = consecutivo;
@@ -156,25 +152,6 @@ public class Compra implements Serializable {
 		this.usuarioCreacion = usuarioCreacion;
 		this.usuarioIngresoInventario = usuarioIngresoInventario;
 		this.detalleCompras = detalleCompras;
-	}
-
-
-
-
-
-
-
-
-
-	public void addDetalleCompra(DetalleCompra detalleCompra) {
-
-		if (detalleCompra != null) {
-			if (detalleCompras == null) {
-				detalleCompras = new HashSet<DetalleCompra>();
-			}
-			detalleCompra.setCompra(this);
-			detalleCompras.add(detalleCompra);
-		}
 	}
 
 	public Integer getId() {
@@ -209,6 +186,14 @@ public class Compra implements Serializable {
 		this.fechaPago = fechaPago;
 	}
 
+	public Date getFechaCompra() {
+		return fechaCompra;
+	}
+
+	public void setFechaCompra(Date fechaCompra) {
+		this.fechaCompra = fechaCompra;
+	}
+
 	public Date getFechaIngreso() {
 		return fechaIngreso;
 	}
@@ -233,27 +218,35 @@ public class Compra implements Serializable {
 		this.formaPago = formaPago;
 	}
 
-	public Double getTotalImpuesto() {
+	public BigDecimal getTotalImpuesto() {
 		return totalImpuesto;
 	}
 
-	public void setTotalImpuesto(Double totalImpuesto) {
+	public void setTotalImpuesto(BigDecimal totalImpuesto) {
 		this.totalImpuesto = totalImpuesto;
 	}
 
-	public Double getTotalDescuento() {
+	public BigDecimal getTotalDescuento() {
 		return totalDescuento;
 	}
 
-	public void setTotalDescuento(Double totalDescuento) {
+	public void setTotalDescuento(BigDecimal totalDescuento) {
 		this.totalDescuento = totalDescuento;
 	}
 
-	public Double getTotalCompra() {
+	public BigDecimal getSubTotal() {
+		return subTotal;
+	}
+
+	public void setSubTotal(BigDecimal subTotal) {
+		this.subTotal = subTotal;
+	}
+
+	public BigDecimal getTotalCompra() {
 		return totalCompra;
 	}
 
-	public void setTotalCompra(Double totalCompra) {
+	public void setTotalCompra(BigDecimal totalCompra) {
 		this.totalCompra = totalCompra;
 	}
 
@@ -297,6 +290,14 @@ public class Compra implements Serializable {
 		this.proveedor = proveedor;
 	}
 
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
 	public Usuario getUsuarioCreacion() {
 		return usuarioCreacion;
 	}
@@ -313,58 +314,23 @@ public class Compra implements Serializable {
 		this.usuarioIngresoInventario = usuarioIngresoInventario;
 	}
 
-	public Date getFechaCompra() {
-		return fechaCompra;
-	}
-
-	public void setFechaCompra(Date fechaCompra) {
-		this.fechaCompra = fechaCompra;
-	}
-
-
-
-	
-	
-	public Double getSubTotal() {
-		return subTotal;
-	}
-
-
-
-
-
-	
-	public void setSubTotal(Double subTotal) {
-		this.subTotal = subTotal;
-	}
-
-
-
-
-
-	public Empresa getEmpresa() {
-		return empresa;
-	}
-
-
-
-	
-	public void setEmpresa(Empresa empresa) {
-		this.empresa = empresa;
-	}
-
-
-
-	
 	public Set<DetalleCompra> getDetalleCompras() {
 		return detalleCompras;
 	}
 
-
-
-	
 	public void setDetalleCompras(Set<DetalleCompra> detalleCompras) {
 		this.detalleCompras = detalleCompras;
+	}
+
+	public void addDetalleCompra(DetalleCompra detalleCompra) {
+
+		if (detalleCompra != null) {
+			if (detalleCompras == null) {
+				detalleCompras = new HashSet<DetalleCompra>();
+			}
+			detalleCompra.setCompra(this);
+			detalleCompras.add(detalleCompra);
+		}
 	}
 
 }

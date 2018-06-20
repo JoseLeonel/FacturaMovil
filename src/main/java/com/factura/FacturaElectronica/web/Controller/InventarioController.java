@@ -1,5 +1,6 @@
 package com.factura.FacturaElectronica.web.Controller;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -151,7 +152,7 @@ public class InventarioController {
 			}
 
 			if (inventario.getCantidad() != null) {
-				if (inventario.getCantidad() == 0) {
+				if (inventario.getCantidad() == BigDecimal.ZERO) {
 					result.rejectValue("cantidad", "error.inventario.cantidad.cero");
 				}
 			}

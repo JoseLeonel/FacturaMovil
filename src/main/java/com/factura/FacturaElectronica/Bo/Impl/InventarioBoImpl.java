@@ -1,5 +1,7 @@
 package com.factura.FacturaElectronica.Bo.Impl;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -7,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.factura.FacturaElectronica.Bo.InventarioBo;
 import com.factura.FacturaElectronica.Dao.InventarioDao;
-import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.modelo.Articulo;
 import com.factura.FacturaElectronica.modelo.Inventario;
 
@@ -59,8 +60,8 @@ public class InventarioBoImpl implements InventarioBo {
 	 * @see com.factura.bo.InventarioBo#sumarCantidad(com.factura.domain.Inventario, java.lang.Float)
 	 */
 	@Override
-	public Double sumarCantidad(Inventario inventario, Double cantidad) {
-		inventario.setCantidad(inventario.getCantidad() != null ? inventario.getCantidad() + cantidad : cantidad);
+	public BigDecimal sumarCantidad(Inventario inventario, BigDecimal cantidad) {
+		inventario.setCantidad(inventario.getCantidad().add(cantidad));
 		return inventario.getCantidad();
 		
 	}
@@ -70,8 +71,8 @@ public class InventarioBoImpl implements InventarioBo {
 	 * @see com.factura.bo.InventarioBo#restarCantidad(com.factura.domain.Inventario, java.lang.Float)
 	 */
 	@Override
-	public Double restarCantidad(Inventario inventario, Double cantidad) {
-		inventario.setCantidad(inventario.getCantidad() != null ? inventario.getCantidad() - cantidad : Constantes.ZEROS_DOUBLE);
+	public BigDecimal restarCantidad(Inventario inventario, BigDecimal cantidad) {
+		inventario.setCantidad(inventario.getCantidad().subtract(cantidad));
 		return inventario.getCantidad();
 		
 	}

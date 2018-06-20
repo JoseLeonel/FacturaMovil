@@ -1,6 +1,7 @@
 package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -36,25 +37,25 @@ public class UsuarioCaja implements Serializable {
 	private Integer	id;
 
 	@Column(name = "total_fondo_inicial")
-	private Double	totalFondoInicial;
+	private BigDecimal	totalFondoInicial;
 
 	@Column(name = "total_efectivo")
-	private Double	totalEfectivo;
+	private BigDecimal	totalEfectivo;
 
 	@Column(name = "total_tarjeta")
-	private Double	totalTarjeta;
+	private BigDecimal	totalTarjeta;
 
 	@Column(name = "total_banco")
-	private Double	totalBanco;
+	private BigDecimal	totalBanco;
 
 	@Column(name = "total_credito")
-	private Double	totalCredito;
+	private BigDecimal	totalCredito;
 
 	@Column(name = "total_abono")
-	private Double	totalAbono;
+	private BigDecimal	totalAbono;
 
 	@Column(name = "total_neto")
-	private Double	totalNeto;
+	private BigDecimal	totalNeto;
 
 	
 	@ManyToOne
@@ -80,7 +81,9 @@ public class UsuarioCaja implements Serializable {
 
 	
 
-	public UsuarioCaja(Integer id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalNeto, Usuario usuario, Caja caja, Date created_at, Date updated_at, String estado,Double totalAbono) {
+	
+
+	public UsuarioCaja(Integer id, BigDecimal totalFondoInicial, BigDecimal totalEfectivo, BigDecimal totalTarjeta, BigDecimal totalBanco, BigDecimal totalCredito, BigDecimal totalAbono, BigDecimal totalNeto, Usuario usuario, Caja caja, Date created_at, Date updated_at, String estado) {
 		super();
 		this.id = id;
 		this.totalFondoInicial = totalFondoInicial;
@@ -88,25 +91,25 @@ public class UsuarioCaja implements Serializable {
 		this.totalTarjeta = totalTarjeta;
 		this.totalBanco = totalBanco;
 		this.totalCredito = totalCredito;
+		this.totalAbono = totalAbono;
 		this.totalNeto = totalNeto;
 		this.usuario = usuario;
 		this.caja = caja;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.estado = estado;
-		this.totalAbono = totalAbono;
 	}
 
 	public UsuarioCaja() {
 		super();
-		this.totalFondoInicial = Constantes.ZEROS_DOUBLE;
-		this.totalEfectivo = Constantes.ZEROS_DOUBLE;
-		this.totalTarjeta = Constantes.ZEROS_DOUBLE;
-		this.totalBanco = Constantes.ZEROS_DOUBLE;
-		this.totalCredito = Constantes.ZEROS_DOUBLE;
-		this.totalNeto = Constantes.ZEROS_DOUBLE;
+		this.totalFondoInicial = BigDecimal.ZERO;
+		this.totalEfectivo = BigDecimal.ZERO;
+		this.totalTarjeta = BigDecimal.ZERO;
+		this.totalBanco = BigDecimal.ZERO;
+		this.totalCredito = BigDecimal.ZERO;
+		this.totalNeto = BigDecimal.ZERO;
 		this.estado = Constantes.ESTADO_ACTIVO;
-		this.totalAbono = Constantes.ZEROS_DOUBLE;
+		this.totalAbono = BigDecimal.ZERO;
 	}
 
 	public Integer getId() {
@@ -117,46 +120,7 @@ public class UsuarioCaja implements Serializable {
 		this.id = id;
 	}
 
-	public Double getTotalFondoInicial() {
-		return totalFondoInicial;
-	}
-
-	public void setTotalFondoInicial(Double totalFondoInicial) {
-		this.totalFondoInicial = totalFondoInicial;
-	}
-
-	public Double getTotalEfectivo() {
-		return totalEfectivo;
-	}
-
-	public void setTotalEfectivo(Double totalEfectivo) {
-		this.totalEfectivo = totalEfectivo;
-	}
-
-	public Double getTotalTarjeta() {
-		return totalTarjeta;
-	}
-
-	public void setTotalTarjeta(Double totalTarjeta) {
-		this.totalTarjeta = totalTarjeta;
-	}
-
-	public Double getTotalBanco() {
-		return totalBanco;
-	}
-
-	public void setTotalBanco(Double totalBanco) {
-		this.totalBanco = totalBanco;
-	}
-
-	public Double getTotalCredito() {
-		return totalCredito;
-	}
-
-	public void setTotalCredito(Double totalCredito) {
-		this.totalCredito = totalCredito;
-	}
-
+	
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -198,25 +162,76 @@ public class UsuarioCaja implements Serializable {
 	}
 
 	
-	public Double getTotalNeto() {
-		return totalNeto;
+	public BigDecimal getTotalFondoInicial() {
+		return totalFondoInicial;
 	}
 
 	
-	public void setTotalNeto(Double totalNeto) {
-		this.totalNeto = totalNeto;
+	public void setTotalFondoInicial(BigDecimal totalFondoInicial) {
+		this.totalFondoInicial = totalFondoInicial;
 	}
 
 	
-	public Double getTotalAbono() {
+	public BigDecimal getTotalEfectivo() {
+		return totalEfectivo;
+	}
+
+	
+	public void setTotalEfectivo(BigDecimal totalEfectivo) {
+		this.totalEfectivo = totalEfectivo;
+	}
+
+	
+	public BigDecimal getTotalTarjeta() {
+		return totalTarjeta;
+	}
+
+	
+	public void setTotalTarjeta(BigDecimal totalTarjeta) {
+		this.totalTarjeta = totalTarjeta;
+	}
+
+	
+	public BigDecimal getTotalBanco() {
+		return totalBanco;
+	}
+
+	
+	public void setTotalBanco(BigDecimal totalBanco) {
+		this.totalBanco = totalBanco;
+	}
+
+	
+	public BigDecimal getTotalCredito() {
+		return totalCredito;
+	}
+
+	
+	public void setTotalCredito(BigDecimal totalCredito) {
+		this.totalCredito = totalCredito;
+	}
+
+	
+	public BigDecimal getTotalAbono() {
 		return totalAbono;
 	}
 
 	
-	public void setTotalAbono(Double totalAbono) {
+	public void setTotalAbono(BigDecimal totalAbono) {
 		this.totalAbono = totalAbono;
 	}
+
 	
+	public BigDecimal getTotalNeto() {
+		return totalNeto;
+	}
+
 	
+	public void setTotalNeto(BigDecimal totalNeto) {
+		this.totalNeto = totalNeto;
+	}
+
+	
+		
 
 }

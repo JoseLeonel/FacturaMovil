@@ -1,6 +1,7 @@
 package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -52,16 +53,19 @@ public class Empresa implements Serializable {
 	private String						otraSenas;
 
 	@Column(name = "codigo_pais")
-	private String						codigoPais;
+	private BigInteger				codigoPais;
 
 	@Column(name = "telefono")
-	private String						telefono;
+	private BigInteger				telefono;
 
 	@Column(name = "correo_electronico")
 	private String						correoElectronico;
 
 	@Column(name = "provincia")
 	private String						provincia;
+
+	@Column(name = "canton")
+	private String						canton;
 
 	@Column(name = "distrito")
 	private String						distrito;
@@ -87,7 +91,7 @@ public class Empresa implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
-	public Empresa(Integer id, String nombre, String nombreComercial, String clave, String tipoCedula, String otraSenas, String codigoPais, String telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz) {
+	public Empresa(Integer id, String nombre, String nombreComercial, String clave, String tipoCedula, String otraSenas, BigInteger codigoPais, BigInteger telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton) {
 		super();
 		this.id = id;
 		this.numeroConsecutivo = numeroConsecutivo;
@@ -109,6 +113,7 @@ public class Empresa implements Serializable {
 		this.created_at = new Date();
 		this.updated_at = new Date();
 		this.cazaMatriz = Constantes.CASA_MATRIZ_INICIAL_FACTURA;
+		this.canton = canton;
 	}
 
 	public Empresa() {
@@ -182,19 +187,19 @@ public class Empresa implements Serializable {
 		this.otraSenas = otraSenas;
 	}
 
-	public String getCodigoPais() {
+	public BigInteger getCodigoPais() {
 		return codigoPais;
 	}
 
-	public void setCodigoPais(String codigoPais) {
+	public void setCodigoPais(BigInteger codigoPais) {
 		this.codigoPais = codigoPais;
 	}
 
-	public String getTelefono() {
+	public BigInteger getTelefono() {
 		return telefono;
 	}
 
-	public void setTelefono(String telefono) {
+	public void setTelefono(BigInteger telefono) {
 		this.telefono = telefono;
 	}
 
@@ -276,6 +281,14 @@ public class Empresa implements Serializable {
 
 	public void setCazaMatriz(String cazaMatriz) {
 		this.cazaMatriz = cazaMatriz;
+	}
+
+	public String getCanton() {
+		return canton;
+	}
+
+	public void setCanton(String canton) {
+		this.canton = canton;
 	}
 
 }

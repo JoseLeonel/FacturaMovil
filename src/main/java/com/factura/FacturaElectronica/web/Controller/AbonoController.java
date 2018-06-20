@@ -1,5 +1,6 @@
 package com.factura.FacturaElectronica.web.Controller;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -139,22 +140,22 @@ public class AbonoController {
 			}
 
 			// abono a crear no puede ser mayor al saldo de la cuenta por cobrar
-			if (abono.getTotal() > cuentaCobrar.getTotalSaldo()) {
+			if (abono.getTotal().compareTo(cuentaCobrar.getTotalSaldo()) == -1) {
 				result.rejectValue("montoCouta", "error.abono.total.mayor.totalSaldo");
 			}
-			if (abono.getTotal() == Constantes.ZEROS_DOUBLE) {
+			if (abono.getTotal() == BigDecimal.ZERO) {
 				result.rejectValue("montoCouta", "error.abono.total.cero");
 			}
-			if (abono.getTotal() < Constantes.ZEROS_DOUBLE) {
+			if (abono.getTotal().compareTo(BigDecimal.ZERO) ==-1) {
 				result.rejectValue("montoCouta", "error.abono.total.cero");
 			}
 
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			abono.setTotalBanco(abono.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : abono.getTotalBanco());
-			abono.setTotalEfectivo(abono.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : abono.getTotalEfectivo());
-			abono.setTotalTarjeta(abono.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : abono.getTotalTarjeta());
+			abono.setTotalBanco(abono.getTotalBanco() == null ? BigDecimal.ZERO : abono.getTotalBanco());
+			abono.setTotalEfectivo(abono.getTotalEfectivo() == null ? BigDecimal.ZERO : abono.getTotalEfectivo());
+			abono.setTotalTarjeta(abono.getTotalTarjeta() == null ? BigDecimal.ZERO : abono.getTotalTarjeta());
 
 			abono.setCreated_at(new Date());
 			abono.setUpdated_at(new Date());
@@ -163,15 +164,15 @@ public class AbonoController {
 			abono.setEstado(Constantes.ABONO_ESTADO_PAGADO);
 			abono.setCuentaCobrar(cuentaCobrar);
 			abonoBo.modificar(abono);
-			cuentaCobrar.setTotalAbono(abono.getTotal() + cuentaCobrar.getTotalAbono());
-			cuentaCobrar.setTotalSaldo(cuentaCobrar.getTotalSaldo() - abono.getTotal());
-			if (cuentaCobrar.getTotalSaldo().equals(Constantes.ZEROS_DOUBLE)) {
+			cuentaCobrar.setTotalAbono(abono.getTotal().add(cuentaCobrar.getTotalAbono()));
+			cuentaCobrar.setTotalSaldo(cuentaCobrar.getTotalSaldo().subtract(abono.getTotal()));
+			if (cuentaCobrar.getTotalSaldo().equals(BigDecimal.ZERO)) {
 				cuentaCobrar.setEstado(Constantes.CUENTA_POR_COBRAR_ESTADO_CERRADO);
 			}
 			// cuentaCobrar.addAbono(abono);
 			cuentaCobrarBo.modificar(cuentaCobrar);
 
-			usuarioCajaBo.actualizarCaja(usuarioCaja, Constantes.ZEROS_DOUBLE, Constantes.ZEROS_DOUBLE, Constantes.ZEROS_DOUBLE, Constantes.ZEROS_DOUBLE, abono.getTotal());
+			usuarioCajaBo.actualizarCaja(usuarioCaja, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, abono.getTotal());
 			
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("abono.agregar.correctamente", abono);
 
@@ -209,8 +210,8 @@ public class AbonoController {
 			abonoBD.setUsuario(usuarioSesion);
 			abonoBo.modificar(abonoBD);
 			CuentaCobrar cuentaCobrar = cuentaCobrarBo.buscar(abonoBD.getCuentaCobrar().getId());
-			cuentaCobrar.setTotalAbono(cuentaCobrar.getTotalAbono() - abono.getTotal());
-			cuentaCobrar.setTotalSaldo(cuentaCobrar.getTotalSaldo() + abono.getTotal());
+			cuentaCobrar.setTotalAbono(cuentaCobrar.getTotalAbono().subtract(abono.getTotal()));
+			cuentaCobrar.setTotalSaldo(cuentaCobrar.getTotalSaldo().add(abono.getTotal()));
 			cuentaCobrarBo.modificar(cuentaCobrar);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("abono.anulado.correctamente", abonoBD);
 

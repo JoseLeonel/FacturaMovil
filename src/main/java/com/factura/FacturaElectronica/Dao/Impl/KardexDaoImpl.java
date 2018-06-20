@@ -1,5 +1,6 @@
 package com.factura.FacturaElectronica.Dao.Impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.EntityManager;
@@ -37,7 +38,7 @@ public class KardexDaoImpl implements KardexDao {
 	 * @see com.factura.FacturaElectronica.Dao.KardexDao#salida(com.factura.FacturaElectronica.modelo.Inventario, java.lang.Double, java.lang.String, java.lang.String, java.lang.String, java.lang.String, com.factura.FacturaElectronica.modelo.Usuario)
 	 */
 	@Override
-	public void salida(Inventario inventario, Double cantidad, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
+	public void salida(Inventario inventario, BigDecimal cantidad, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
 
 		Kardex kardex = new Kardex();
 		kardex.setCantidadSolicitada(cantidad);
@@ -46,9 +47,9 @@ public class KardexDaoImpl implements KardexDao {
 		kardex.setTotalCostoActual(inventarioDao.getTotalCosto(inventario, inventario.getCantidad()));
 		kardex.setCodigo(inventario.getArticulo().getCodigo());
 		kardex.setObservacion(observacion);
-		kardex.setCantidadNueva(inventario.getCantidad() - cantidad);
+		kardex.setCantidadNueva(inventario.getCantidad().subtract(cantidad));
 		kardex.setCostoNuevo(inventario.getArticulo().getCosto());
-		kardex.setTotalCostoNuevo(inventarioDao.getTotalCosto(inventario, inventario.getCantidad() - cantidad));
+		kardex.setTotalCostoNuevo(inventarioDao.getTotalCosto(inventario, inventario.getCantidad().subtract( cantidad)));
 		kardex.setConsecutivo(consecutivo);
 		kardex.setTipo(tipo);
 		kardex.setMotivo(motivo);
@@ -64,7 +65,7 @@ public class KardexDaoImpl implements KardexDao {
 	 * @see com.factura.FacturaElectronica.Dao.KardexDao#entrada(com.factura.FacturaElectronica.modelo.Inventario, java.lang.Double, java.lang.String, java.lang.String, java.lang.String, java.lang.String, com.factura.FacturaElectronica.modelo.Usuario)
 	 */
 	@Override  
-	public void entrada(Inventario inventario, Double cantidad, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
+	public void entrada(Inventario inventario, BigDecimal cantidad, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
 		Kardex kardex = new Kardex();
 		kardex.setCantidadSolicitada(cantidad);
 		kardex.setCantidadActual(inventario.getCantidad());
@@ -72,9 +73,9 @@ public class KardexDaoImpl implements KardexDao {
 		kardex.setTotalCostoActual(inventarioDao.getTotalCosto(inventario, inventario.getCantidad()));
 		kardex.setCodigo(inventario.getArticulo().getCodigo());
 		kardex.setObservacion(observacion);
-		kardex.setCantidadNueva(cantidad + inventario.getCantidad());
+		kardex.setCantidadNueva( inventario.getCantidad().add(cantidad));
 		kardex.setCostoNuevo(inventario.getArticulo().getCosto());
-		kardex.setTotalCostoNuevo(inventarioDao.getTotalCosto(inventario, cantidad + inventario.getCantidad()));
+		kardex.setTotalCostoNuevo(inventarioDao.getTotalCosto(inventario, inventario.getCantidad().add(cantidad)));
 		kardex.setConsecutivo(consecutivo);
 		kardex.setTipo(tipo);
 		kardex.setMotivo(motivo);

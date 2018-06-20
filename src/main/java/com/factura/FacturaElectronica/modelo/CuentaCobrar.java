@@ -1,6 +1,7 @@
 package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
@@ -52,25 +53,25 @@ public class CuentaCobrar implements Serializable {
 	private Integer						facturaManual;
 
 	@Column(name = "total_comision")
-	private Double						totalComision;
+	private BigDecimal				totalComision;
 
 	@Column(name = "descuento")
-	private Double						descuento;
+	private BigDecimal				descuento;
 
 	@Column(name = "cantidad_pagos")
-	private Double						cantidadPagos;
+	private BigDecimal				cantidadPagos;
 
 	@Column(name = "monto_couta")
-	private Double						montoCouta;
+	private BigDecimal				montoCouta;
 
 	@Column(name = "total")
-	private Double						total;
+	private BigDecimal				total;
 
 	@Column(name = "total_abono")
-	private Double						totalAbono;
+	private BigDecimal				totalAbono;
 
 	@Column(name = "total_saldo")
-	private Double						totalSaldo;
+	private BigDecimal				totalSaldo;
 
 	@Column(name = "descripcion_articulo")
 	private String						descripcionArticulo;
@@ -130,18 +131,14 @@ public class CuentaCobrar implements Serializable {
 		super();
 		this.estado = Constantes.ESTADO_ACTIVO;
 		this.tipo = Constantes.CUENTA_POR_COBRAR_TIPO_Automatica;
-		this.totalSaldo = Constantes.ZEROS_DOUBLE;
-		this.totalAbono = Constantes.ZEROS_DOUBLE;
-		this.montoCouta = Constantes.ZEROS_DOUBLE;
-		this.cantidadPagos = Constantes.ZEROS_DOUBLE;
-		this.totalComision = Constantes.ZEROS_DOUBLE;
+
 		this.created_at = new Date();
 		this.updated_at = new Date();
 		this.abonos = null;
 
 	}
 
-	public CuentaCobrar(Integer id, String recibo, String letraCambio, String factura, Integer facturaManual, Double totalComision, Double descuento, Double cantidadPagos, Double montoCouta, Double total, Double totalAbono, Double totalSaldo, String descripcionArticulo, String nota, String tipo, String estado, Date fechaPlazo, Date fechaEntrega, Date created_at, Date updated_at, Cliente cliente, Usuario usuario, Empresa empresa, Vendedor vendedor, Set<Abono> abonos) {
+	public CuentaCobrar(Integer id, String recibo, String letraCambio, String factura, Integer facturaManual, BigDecimal totalComision, BigDecimal descuento, BigDecimal cantidadPagos, BigDecimal montoCouta, BigDecimal total, BigDecimal totalAbono, BigDecimal totalSaldo, String descripcionArticulo, String nota, String tipo, String estado, Date fechaPlazo, Date fechaEntrega, Date created_at, Date updated_at, Cliente cliente, Usuario usuario, Empresa empresa, Vendedor vendedor, Set<Abono> abonos) {
 		super();
 		this.id = id;
 		this.recibo = recibo;
@@ -210,20 +207,60 @@ public class CuentaCobrar implements Serializable {
 		this.facturaManual = facturaManual;
 	}
 
-	public Date getFechaPlazo() {
-		return fechaPlazo;
+	public BigDecimal getTotalComision() {
+		return totalComision;
 	}
 
-	public void setFechaPlazo(Date fechaPlazo) {
-		this.fechaPlazo = fechaPlazo;
+	public void setTotalComision(BigDecimal totalComision) {
+		this.totalComision = totalComision;
 	}
 
-	public Date getFechaEntrega() {
-		return fechaEntrega;
+	public BigDecimal getDescuento() {
+		return descuento;
 	}
 
-	public void setFechaEntrega(Date fechaEntrega) {
-		this.fechaEntrega = fechaEntrega;
+	public void setDescuento(BigDecimal descuento) {
+		this.descuento = descuento;
+	}
+
+	public BigDecimal getCantidadPagos() {
+		return cantidadPagos;
+	}
+
+	public void setCantidadPagos(BigDecimal cantidadPagos) {
+		this.cantidadPagos = cantidadPagos;
+	}
+
+	public BigDecimal getMontoCouta() {
+		return montoCouta;
+	}
+
+	public void setMontoCouta(BigDecimal montoCouta) {
+		this.montoCouta = montoCouta;
+	}
+
+	public BigDecimal getTotal() {
+		return total;
+	}
+
+	public void setTotal(BigDecimal total) {
+		this.total = total;
+	}
+
+	public BigDecimal getTotalAbono() {
+		return totalAbono;
+	}
+
+	public void setTotalAbono(BigDecimal totalAbono) {
+		this.totalAbono = totalAbono;
+	}
+
+	public BigDecimal getTotalSaldo() {
+		return totalSaldo;
+	}
+
+	public void setTotalSaldo(BigDecimal totalSaldo) {
+		this.totalSaldo = totalSaldo;
 	}
 
 	public String getDescripcionArticulo() {
@@ -258,6 +295,22 @@ public class CuentaCobrar implements Serializable {
 		this.estado = estado;
 	}
 
+	public Date getFechaPlazo() {
+		return fechaPlazo;
+	}
+
+	public void setFechaPlazo(Date fechaPlazo) {
+		this.fechaPlazo = fechaPlazo;
+	}
+
+	public Date getFechaEntrega() {
+		return fechaEntrega;
+	}
+
+	public void setFechaEntrega(Date fechaEntrega) {
+		this.fechaEntrega = fechaEntrega;
+	}
+
 	public Date getCreated_at() {
 		return created_at;
 	}
@@ -282,22 +335,6 @@ public class CuentaCobrar implements Serializable {
 		this.cliente = cliente;
 	}
 
-	public Vendedor getVendedor() {
-		return vendedor;
-	}
-
-	public void setVendedor(Vendedor vendedor) {
-		this.vendedor = vendedor;
-	}
-
-	public Set<Abono> getAbonos() {
-		return abonos;
-	}
-
-	public void setAbonos(Set<Abono> abonos) {
-		this.abonos = abonos;
-	}
-
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -314,60 +351,20 @@ public class CuentaCobrar implements Serializable {
 		this.empresa = empresa;
 	}
 
-	public Double getTotalComision() {
-		return totalComision;
+	public Vendedor getVendedor() {
+		return vendedor;
 	}
 
-	public void setTotalComision(Double totalComision) {
-		this.totalComision = totalComision;
+	public void setVendedor(Vendedor vendedor) {
+		this.vendedor = vendedor;
 	}
 
-	public Double getDescuento() {
-		return descuento;
+	public Set<Abono> getAbonos() {
+		return abonos;
 	}
 
-	public void setDescuento(Double descuento) {
-		this.descuento = descuento;
-	}
-
-	public Double getCantidadPagos() {
-		return cantidadPagos;
-	}
-
-	public void setCantidadPagos(Double cantidadPagos) {
-		this.cantidadPagos = cantidadPagos;
-	}
-
-	public Double getMontoCouta() {
-		return montoCouta;
-	}
-
-	public void setMontoCouta(Double montoCouta) {
-		this.montoCouta = montoCouta;
-	}
-
-	public Double getTotal() {
-		return total;
-	}
-
-	public void setTotal(Double total) {
-		this.total = total;
-	}
-
-	public Double getTotalAbono() {
-		return totalAbono;
-	}
-
-	public void setTotalAbono(Double totalAbono) {
-		this.totalAbono = totalAbono;
-	}
-
-	public Double getTotalSaldo() {
-		return totalSaldo;
-	}
-
-	public void setTotalSaldo(Double totalSaldo) {
-		this.totalSaldo = totalSaldo;
+	public void setAbonos(Set<Abono> abonos) {
+		this.abonos = abonos;
 	}
 
 }

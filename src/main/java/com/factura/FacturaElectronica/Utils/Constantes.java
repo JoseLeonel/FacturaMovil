@@ -144,6 +144,16 @@ public class Constantes {
 	public static final String					DATE_FORMAT_TIME2															= "HH:mm";
 	public static final String					DATE_FORMAT_MIN																= "00/00/0000 ";
 
+	// Tipo de cedula
+	public static final String					TIPO_CEDULA_FISICA														= "01";
+	public static final String					TIPO_CEDULA_JURIDICA													= "02";
+	public static final String					TIPO_CEDULA_DIMEX															= "03";
+	public static final String					TIPO_CEDULA_NITE															= "04";
+	
+	public static final String					TIPO_CEDULA_FISICA_STR														= "tipo.cedula.fisica";
+	public static final String					TIPO_CEDULA_JURIDICA_STR													= "tipo.cedula.juridica";
+	public static final String					TIPO_CEDULA_DIMEX_STR															= "tipo.cedula.dimex";
+	public static final String					TIPO_CEDULA_NITE_STR															= "tipo.cedula.nite";
 	// usuario
 	public static final Integer					USUARIO_ESTADO_ACTIVO													= 1;
 	public static final Integer					USUARIO_ESTADO_INACTIVO												= 2;
@@ -189,6 +199,10 @@ public class Constantes {
 	public static final String					FACTURA_TIPO_DOC_FACTURA_ELECTRONICA_STR			= "factura.tipo.documento.factura.electronica";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_STR			= "factura.tipo.documento.nota.debito";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO_STR			= "factura.tipo.documento.nota.credito";
+
+	public static final String					FACTURA_MEDIO_PAGO_EFECTIVO										= "01";
+	public static final String					FACTURA_MEDIO_PAGO_TARJETA										= "02";
+	public static final String					FACTURA_MEDIO_PAGO_CHEQUE											= "03";
 
 	public static final Integer					FACTURA_ESTADO_PENDIENTE											= 1;
 	public static final Integer					FACTURA_ESTADO_FACTURADO											= 2;

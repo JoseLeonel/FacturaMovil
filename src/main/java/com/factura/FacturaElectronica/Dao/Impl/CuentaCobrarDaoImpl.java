@@ -1,5 +1,6 @@
 package com.factura.FacturaElectronica.Dao.Impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -104,20 +105,20 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 			cuentaCobrar.setCliente(factura.getCliente());
 			cuentaCobrar.setFactura(factura.getNumeroConsecutivo());
 			cuentaCobrar.setFacturaManual(Constantes.ZEROS);
-			cuentaCobrar.setCantidadPagos(Constantes.ZEROS_DOUBLE);
+			cuentaCobrar.setCantidadPagos(BigDecimal.ZERO);
 			cuentaCobrar.setEstado(Constantes.CUENTA_POR_COBRAR_ESTADO_PENDIENTE);
 			cuentaCobrar.setFechaEntrega(factura.getFechaEmision());
 			cuentaCobrar.setFechaPlazo(factura.getFechaCredito());
 			cuentaCobrar.setLetraCambio(Constantes.EMPTY);
-			cuentaCobrar.setMontoCouta(Constantes.ZEROS_DOUBLE);
+			cuentaCobrar.setMontoCouta(BigDecimal.ZERO);
 			cuentaCobrar.setNota(factura.getNota() == null?Constantes.CUENTA_POR_COBRAR_NOTA_AUTOMATICO:factura.getNota());
 			cuentaCobrar.setRecibo(Constantes.EMPTY);
 			cuentaCobrar.setTipo(Constantes.CUENTA_POR_COBRAR_TIPO_Automatica);
 			cuentaCobrar.setTotal(factura.getTotalVentaNeta());
-			cuentaCobrar.setTotalAbono(Constantes.ZEROS_DOUBLE);
-			cuentaCobrar.setTotalComision(Constantes.ZEROS_DOUBLE);
+			cuentaCobrar.setTotalAbono(BigDecimal.ZERO);
+			cuentaCobrar.setTotalComision(BigDecimal.ZERO);
 			cuentaCobrar.setTotalSaldo(factura.getTotalVentaNeta());
-			cuentaCobrar.setDescuento(Constantes.ZEROS_DOUBLE);
+			cuentaCobrar.setDescuento(BigDecimal.ZERO);
 			cuentaCobrar.setUsuario(factura.getUsuarioCreacion());
 			cuentaCobrar.setVendedor(factura.getVendedor());
 			agregar(cuentaCobrar);

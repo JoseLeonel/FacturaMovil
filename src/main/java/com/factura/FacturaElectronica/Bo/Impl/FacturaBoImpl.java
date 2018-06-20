@@ -1,5 +1,6 @@
 package com.factura.FacturaElectronica.Bo.Impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.json.simple.JSONArray;
@@ -145,27 +146,27 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setDireccion(facturaCommand.getDireccion());
 			factura.setNota(facturaCommand.getNota());
 			factura.setComanda(facturaCommand.getComanda());
-			factura.setSubTotal(facturaCommand.getSubTotal() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getSubTotal());
-			factura.setTotalTransporte(facturaCommand.getTotalTransporte() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalTransporte());
-			factura.setTotal(facturaCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotal());
-			factura.setTotalServGravados(facturaCommand.getTotalServGravados() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalServGravados());
-			factura.setTotalServExentos(facturaCommand.getTotalServExentos() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalServExentos());
-			factura.setTotalMercanciasExentas(factura.getTotalMercanciasExentas() == null ? Constantes.ZEROS_DOUBLE : factura.getTotalMercanciasExentas());
-			factura.setTotalMercanciasGravadas(facturaCommand.getTotalMercanciasGravadas() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalMercanciasGravadas());
-			factura.setTotalGravado(facturaCommand.getTotalGravado() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalGravado());
-			factura.setTotalExento(facturaCommand.getTotalExento() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalExento());
-			factura.setTotalVenta(facturaCommand.getTotalVenta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalVenta());
-			factura.setTotalDescuentos(facturaCommand.getTotalDescuentos() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalDescuentos());
-			factura.setTotalVentaNeta(facturaCommand.getTotalVentaNeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalVentaNeta());
-			factura.setTotalImpuesto(facturaCommand.getTotalImpuesto() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalImpuesto());
-			factura.setTotalComprobante(facturaCommand.getTotalComprobante() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalComprobante());
+			factura.setSubTotal(facturaCommand.getSubTotal() == null ? BigDecimal.ZERO : facturaCommand.getSubTotal());
+			factura.setTotalTransporte(facturaCommand.getTotalTransporte() == null ? BigDecimal.ZERO : facturaCommand.getTotalTransporte());
+			factura.setTotal(facturaCommand.getTotal() == null ? BigDecimal.ZERO : facturaCommand.getTotal());
+			factura.setTotalServGravados(facturaCommand.getTotalServGravados() == null ? BigDecimal.ZERO : facturaCommand.getTotalServGravados());
+			factura.setTotalServExentos(facturaCommand.getTotalServExentos() == null ? BigDecimal.ZERO : facturaCommand.getTotalServExentos());
+			factura.setTotalMercanciasExentas(factura.getTotalMercanciasExentas() == null ? BigDecimal.ZERO : factura.getTotalMercanciasExentas());
+			factura.setTotalMercanciasGravadas(facturaCommand.getTotalMercanciasGravadas() == null ? BigDecimal.ZERO : facturaCommand.getTotalMercanciasGravadas());
+			factura.setTotalGravado(facturaCommand.getTotalGravado() == null ? BigDecimal.ZERO : facturaCommand.getTotalGravado());
+			factura.setTotalExento(facturaCommand.getTotalExento() == null ? BigDecimal.ZERO : facturaCommand.getTotalExento());
+			factura.setTotalVenta(facturaCommand.getTotalVenta() == null ? BigDecimal.ZERO : facturaCommand.getTotalVenta());
+			factura.setTotalDescuentos(facturaCommand.getTotalDescuentos() == null ? BigDecimal.ZERO : facturaCommand.getTotalDescuentos());
+			factura.setTotalVentaNeta(facturaCommand.getTotalVentaNeta() == null ? BigDecimal.ZERO : facturaCommand.getTotalVentaNeta());
+			factura.setTotalImpuesto(facturaCommand.getTotalImpuesto() == null ? BigDecimal.ZERO : facturaCommand.getTotalImpuesto());
+			factura.setTotalComprobante(facturaCommand.getTotalComprobante() == null ? BigDecimal.ZERO : facturaCommand.getTotalComprobante());
 			factura.setTotalEfectivo(getTotalEfectivo(facturaCommand));
-			factura.setTotalTarjeta(facturaCommand.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalTarjeta());
-			factura.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
-			factura.setTotalCredito(facturaCommand.getTotalCredito() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCredito());
-			factura.setMontoCambio(facturaCommand.getMontoCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getMontoCambio());
-			factura.setTotalCambio(facturaCommand.getTotalCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambio());
-			factura.setTotalCambioPagar(facturaCommand.getTotalCambioPagar() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambioPagar());
+			factura.setTotalTarjeta(facturaCommand.getTotalTarjeta() == null ? BigDecimal.ZERO : facturaCommand.getTotalTarjeta());
+			factura.setTotalBanco(facturaCommand.getTotalBanco() == null ? BigDecimal.ZERO : facturaCommand.getTotalBanco());
+			factura.setTotalCredito(facturaCommand.getTotalCredito() == null ? BigDecimal.ZERO : facturaCommand.getTotalCredito());
+			factura.setMontoCambio(facturaCommand.getMontoCambio() == null ? BigDecimal.ZERO : facturaCommand.getMontoCambio());
+			factura.setTotalCambio(facturaCommand.getTotalCambio() == null ? BigDecimal.ZERO : facturaCommand.getTotalCambio());
+			factura.setTotalCambioPagar(facturaCommand.getTotalCambioPagar() == null ? BigDecimal.ZERO : facturaCommand.getTotalCambioPagar());
 			factura.setCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
 			factura.setEstado(facturaCommand.getEstado());
 			if (factura.getId() == Constantes.ZEROS) {
@@ -204,7 +205,7 @@ public class FacturaBoImpl implements FacturaBo {
 				usuarioCajaFactura.setFactura(factura);
 				usuarioCajaFactura.setUsuarioCaja(usuarioCaja);
 				usuarioCajaFacturaDao.agregar(usuarioCajaFactura);
-				usuarioCajaDao.actualizarCaja(usuarioCaja ,factura.getTotalEfectivo(),factura.getTotalTarjeta(),factura.getTotalBanco() ,factura.getTotalCredito(),Constantes.ZEROS_DOUBLE);
+				usuarioCajaDao.actualizarCaja(usuarioCaja ,factura.getTotalEfectivo(),factura.getTotalTarjeta(),factura.getTotalBanco() ,factura.getTotalCredito(),BigDecimal.ZERO);
 			}
 
 			JSONObject json = null;
@@ -266,13 +267,13 @@ public class FacturaBoImpl implements FacturaBo {
 	 * @see com.factura.FacturaElectronica.Bo.FacturaBo#getTotalEfectivo(com.factura.FacturaElectronica.web.command.FacturaCommand)
 	 */
 	@Override
-	public Double getTotalEfectivo(FacturaCommand facturaCommand) {
-		Double resultado = Constantes.ZEROS_DOUBLE;
+	public BigDecimal getTotalEfectivo(FacturaCommand facturaCommand) {
+		BigDecimal resultado = BigDecimal.ZERO;
 
-		if (facturaCommand.getTotalBanco() > Constantes.ZEROS_DOUBLE || facturaCommand.getTotalTarjeta() > Constantes.ZEROS_DOUBLE) {
-			resultado = facturaCommand.getTotalEfectivo() != Constantes.ZEROS_DOUBLE ? facturaCommand.getTotalEfectivo() : Constantes.ZEROS_DOUBLE;
+		if (facturaCommand.getTotalBanco().doubleValue() > Constantes.ZEROS_DOUBLE || facturaCommand.getTotalTarjeta().doubleValue() > Constantes.ZEROS_DOUBLE) {
+			resultado = facturaCommand.getTotalEfectivo().doubleValue() != Constantes.ZEROS_DOUBLE ? facturaCommand.getTotalEfectivo() : BigDecimal.ZERO;
 		}else {
-			resultado = facturaCommand.getTotalEfectivo() > Constantes.ZEROS_DOUBLE ? facturaCommand.getTotalVentaNeta() : Constantes.ZEROS_DOUBLE;
+			resultado = facturaCommand.getTotalEfectivo().doubleValue() > Constantes.ZEROS_DOUBLE ? facturaCommand.getTotalVentaNeta() : BigDecimal.ZERO;
 		}
 
 		return resultado;

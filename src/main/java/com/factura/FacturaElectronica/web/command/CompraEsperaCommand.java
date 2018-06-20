@@ -1,5 +1,6 @@
 package com.factura.FacturaElectronica.web.command;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
@@ -31,11 +32,11 @@ public class CompraEsperaCommand {
 	private Integer							tipoDocumento;
 
 	private Integer							formaPago;
-	private Double						totalImpuesto;
-	private Double						totalDescuento;
-	private Double						subTotal;
+	private BigDecimal					totalImpuesto;
+	private BigDecimal					totalDescuento;
+	private BigDecimal					subTotal;
 
-	private Double							totalCompra;
+	private BigDecimal					totalCompra;
 
 	private String							nota;
 	private String							estadoSTR;
@@ -63,7 +64,6 @@ public class CompraEsperaCommand {
 		this.totalImpuesto = compra.getTotalImpuesto();
 		this.totalDescuento = compra.getTotalDescuento();
 		this.subTotal = compra.getSubTotal();
-		
 
 	}
 
@@ -131,14 +131,6 @@ public class CompraEsperaCommand {
 		this.formaPago = formaPago;
 	}
 
-	public Double getTotalCompra() {
-		return totalCompra;
-	}
-
-	public void setTotalCompra(Double totalCompra) {
-		this.totalCompra = totalCompra;
-	}
-
 	public String getNota() {
 		return nota;
 	}
@@ -171,93 +163,88 @@ public class CompraEsperaCommand {
 		this.proveedor = proveedor;
 	}
 
-	
-	
-	public Double getTotalImpuesto() {
+	public BigDecimal getTotalImpuesto() {
 		return totalImpuesto;
 	}
 
-	
-	public void setTotalImpuesto(Double totalImpuesto) {
+	public void setTotalImpuesto(BigDecimal totalImpuesto) {
 		this.totalImpuesto = totalImpuesto;
+	}
+
+	public BigDecimal getTotalDescuento() {
+		return totalDescuento;
+	}
+
+	public void setTotalDescuento(BigDecimal totalDescuento) {
+		this.totalDescuento = totalDescuento;
+	}
+
+	public BigDecimal getSubTotal() {
+		return subTotal;
+	}
+
+	public void setSubTotal(BigDecimal subTotal) {
+		this.subTotal = subTotal;
+	}
+
+	public BigDecimal getTotalCompra() {
+		return totalCompra;
+	}
+
+	public void setTotalCompra(BigDecimal totalCompra) {
+		this.totalCompra = totalCompra;
 	}
 
 	public String getEstadoSTR() {
 		return estadoSTR;
 	}
 
-	
 	public void setEstadoSTR(String estadoSTR) {
 		this.estadoSTR = estadoSTR;
 	}
-	
-	
-	public Double getTotalDescuento() {
-		return totalDescuento;
-	}
-
-	
-	public void setTotalDescuento(Double totalDescuento) {
-		this.totalDescuento = totalDescuento;
-	}
-
-	
-	public Double getSubTotal() {
-		return subTotal;
-	}
-
-	
-	public void setSubTotal(Double subTotal) {
-		this.subTotal = subTotal;
-	}
 
 	public String getDescripcionEstado() {
-		if(this.estado.equals(Constantes.COMPRA_ESTADO_PENDIENTE)) {
+		if (this.estado.equals(Constantes.COMPRA_ESTADO_PENDIENTE)) {
 			return Constantes.COMPRA_ESTADO_PENDIENTE_STR;
 		}
-    
-		if(this.estado.equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
+
+		if (this.estado.equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
 			return Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO_STR;
 		}
 
-		if(this.estado.equals(Constantes.COMPRA_ESTADO_CHEQUEDO_MERCANCIA)) {
+		if (this.estado.equals(Constantes.COMPRA_ESTADO_CHEQUEDO_MERCANCIA)) {
 			return Constantes.COMPRA_ESTADO_CHEQUEDO_MERCANCIA_STR;
 		}
-		if(this.estado.equals(Constantes.COMPRA_ESTADO_ANULADA)) {
+		if (this.estado.equals(Constantes.COMPRA_ESTADO_ANULADA)) {
 			return Constantes.COMPRA_ESTADO_ANULADA_STR;
 		}
-		
+
 		return Constantes.BLANK;
-		
+
 	}
-	
-	
-	
+
 	public String getDescripcionTipoDocumento() {
-		if(this.formaPago.equals(Constantes.COMPRA_TIPO_DOCUMENTO_FACTURA)) {
+		if (this.formaPago.equals(Constantes.COMPRA_TIPO_DOCUMENTO_FACTURA)) {
 			return Constantes.COMPRA_TIPO_DOCUMENTO_FACTURA_STR;
 		}
-		if(this.formaPago.equals(Constantes.COMPRA_TIPO_DOCUMENTO_BOLETA)) {
+		if (this.formaPago.equals(Constantes.COMPRA_TIPO_DOCUMENTO_BOLETA)) {
 			return Constantes.COMPRA_TIPO_DOCUMENTO_FACTURA_STR;
 		}
 		return Constantes.BLANK;
 	}
-	
-	
+
 	public String getDescripcionFormaPago() {
-		if(this.formaPago.equals(Constantes.COMPRA_FORMA_PAGO_CONTADO)) {
+		if (this.formaPago.equals(Constantes.COMPRA_FORMA_PAGO_CONTADO)) {
 			return Constantes.COMPRA_FORMA_PAGO_CONTADO_STR;
 		}
-		if(this.formaPago.equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
+		if (this.formaPago.equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
 			return Constantes.COMPRA_FORMA_PAGO_CREDITO_STR;
 		}
 		return Constantes.BLANK;
 	}
-	
-	
-	
-	public String getFormatoCompraTotal(){
-		return Utils.formatearNumeroListados(this.totalCompra,2);
+
+	public String getFormatoCompraTotal() {
+		return Utils.formatearNumeroListados(this.totalCompra, 2);
 	}
 
 }

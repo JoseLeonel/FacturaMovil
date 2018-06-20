@@ -1,5 +1,7 @@
 package com.factura.FacturaElectronica.Bo;
 
+import java.math.BigDecimal;
+
 import com.factura.FacturaElectronica.modelo.Articulo;
 import com.factura.FacturaElectronica.modelo.Inventario;
 
@@ -15,7 +17,7 @@ public interface InventarioBo {
 
 	Inventario buscarPorArticulo(Articulo articulo);
 
-	Double sumarCantidad(Inventario inventario, Double cantidad);
+	BigDecimal sumarCantidad(Inventario inventario, BigDecimal cantidad);
 
-	Double restarCantidad(Inventario inventario, Double cantidad);
+	BigDecimal restarCantidad(Inventario inventario, BigDecimal cantidad);
 }

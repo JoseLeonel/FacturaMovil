@@ -28,31 +28,29 @@ import com.google.common.base.Function;
 
 /**
  * EmpresasController. Empresas asociadas al sistema para la facturacion
- * 
  * @author jose.
  * @since 16 mar. 2018
  */
 @Controller
 public class EmpresasController {
 
-	private static final Function<Object, EmpresaCommand> TO_COMMAND = new Function<Object, EmpresaCommand>() {
+	private static final Function<Object, EmpresaCommand>	TO_COMMAND	= new Function<Object, EmpresaCommand>() {
 
-		@Override
-		public EmpresaCommand apply(Object f) {
-			return new EmpresaCommand((Empresa) f);
-		};
+																																			@Override
+																																			public EmpresaCommand apply(Object f) {
+																																				return new EmpresaCommand((Empresa) f);
+																																			};
 
-	};
-
-	@Autowired
-	private EmpresaBo empresaBo;
+																																		};
 
 	@Autowired
-	private DataTableBo dataTableBo;
+	private EmpresaBo																			empresaBo;
+
+	@Autowired
+	private DataTableBo																		dataTableBo;
 
 	/**
 	 * Mostrar el html de la lista de empresa
-	 * 
 	 * @param model
 	 * @return
 	 */
@@ -64,7 +62,6 @@ public class EmpresasController {
 
 	/**
 	 * Metodo json para ser llamado de un ajax
-	 * 
 	 * @param request
 	 * @param response
 	 * @return
@@ -82,22 +79,63 @@ public class EmpresasController {
 
 	/**
 	 * Lista de las empresas activas
-	 * 
 	 * @param request
 	 * @param response
 	 * @return
 	 */
 	@RequestMapping(value = "/ListarEmpresasActivasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarEmpresasActivasAjax(HttpServletRequest request,
-			HttpServletResponse response) {
+	public RespuestaServiceDataTable listarEmpresasActivasAjax(HttpServletRequest request, HttpServletResponse response) {
 
 		DataTableDelimitador delimitadores = new DataTableDelimitador(request, "Empresa");
-		DataTableFilter dataTableFilter = new DataTableFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'",
-				"=");
+		DataTableFilter dataTableFilter = new DataTableFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+	}
+/**
+ * Agregar Empresa
+ * @param request
+ * @param model
+ * @param empresa
+ * @param result
+ * @param status
+ * @return
+ * @throws Exception
+ */
+	@RequestMapping(value = "/AgregarEmpresaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator agregarEmpresaAjax(HttpServletRequest request, ModelMap model, @ModelAttribute Empresa empresa, BindingResult result, SessionStatus status) throws Exception {
+		try {
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("empresa.no.modificado", result.getAllErrors());
+			}
+			Empresa empresaValidar = empresaBo.buscarPorNombre(empresa.getNombre());
+			if (empresaValidar != null) {
+				result.rejectValue("nombre", "error.empresa.existe.nombre");
+			}
+			empresaValidar = empresaBo.buscarPorNombreComercial(empresa.getNombreComercial());
+			if (empresaValidar != null) {
+				result.rejectValue("nombreComercial", "error.empresa.existe.nombreComercial");
+			}
+			empresaValidar = empresaBo.buscarPorCedula(empresa.getCedula());
+			if (empresaValidar != null) {
+				result.rejectValue("cedula", "error.empresa.existe.cedula");
+			}
+
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
+			empresa.setUpdated_at(new Date());
+			empresa.setCreated_at(new Date());
+			empresa.setEstado(Constantes.ESTADO_ACTIVO);
+
+			empresaBo.agregar(empresa);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("empresa.modificado.correctamente", empresa);
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
 	}
 
 	/**
@@ -112,12 +150,10 @@ public class EmpresasController {
 	 */
 	@RequestMapping(value = "/ModificarEmpresaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model,
-			@ModelAttribute Empresa empresa, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Empresa empresa, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			if (result.hasErrors()) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("empresa.no.modificado",
-						result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("empresa.no.modificado", result.getAllErrors());
 			}
 			Empresa empresaBD = empresaBo.buscar(empresa.getId());
 
@@ -148,8 +184,7 @@ public class EmpresasController {
 				}
 
 				if (result.hasErrors()) {
-					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion",
-							result.getAllErrors());
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 				}
 				empresaBD.setTipoCedula(empresa.getTipoCedula());
 				empresaBD.setCedula(empresa.getCedula());
@@ -172,6 +207,7 @@ public class EmpresasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
+
 	/**
 	 * Mostrar por codigo de la empresa
 	 * @param request
@@ -199,10 +235,8 @@ public class EmpresasController {
 
 			private static class EMPRESA {
 
-				private static final RespuestaServiceValidator AGREGADO = RespuestaServiceValidator.BUNDLE_MSG_SOURCE
-						.OK("empresa.agregar.correctamente");
-				private static final RespuestaServiceValidator MODIFICADO = RespuestaServiceValidator.BUNDLE_MSG_SOURCE
-						.OK("empresa.modificado.correctamente");
+				private static final RespuestaServiceValidator	AGREGADO		= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("empresa.agregar.correctamente");
+				private static final RespuestaServiceValidator	MODIFICADO	= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("empresa.modificado.correctamente");
 			}
 		}
 
@@ -210,8 +244,7 @@ public class EmpresasController {
 
 			private static class EMPRESA {
 
-				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE
-						.ERROR("error.empresa.noExiste");
+				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.empresa.noExiste");
 			}
 		}
 	}

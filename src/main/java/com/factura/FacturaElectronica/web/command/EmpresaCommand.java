@@ -9,6 +9,7 @@ public class EmpresaCommand {
 	private String nombre;
 
 	private String nombreComercial;
+	private Integer						numeroConsecutivo;
 
 	private String clave;
 
@@ -45,8 +46,8 @@ public class EmpresaCommand {
 		this.tipoCedula = empresa.getTipoCedula();
 		this.cedula = empresa.getCedula();
 		this.otraSenas = empresa.getOtraSenas();
-		this.codigoPais = empresa.getCodigoPais();
-		this.telefono = empresa.getTelefono();
+//		this.codigoPais = empresa.getCodigoPais();
+//		this.telefono = empresa.getTelefono();
 		this.correoElectronico = empresa.getCorreoElectronico();
 		this.provincia = empresa.getProvincia();
 		this.distrito = empresa.getDistrito();
@@ -54,6 +55,7 @@ public class EmpresaCommand {
 		this.logo = empresa.getLogo();
 		this.representante = empresa.getRepresentante();
 		this.estado = empresa.getEstado();
+		this.numeroConsecutivo = empresa.getNumeroConsecutivo();
 
 	}
 
@@ -188,5 +190,17 @@ public class EmpresaCommand {
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
+
+	
+	public Integer getNumeroConsecutivo() {
+		return numeroConsecutivo;
+	}
+
+	
+	public void setNumeroConsecutivo(Integer numeroConsecutivo) {
+		this.numeroConsecutivo = numeroConsecutivo;
+	}
+	
+	
 
 }

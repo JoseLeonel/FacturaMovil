@@ -1,5 +1,6 @@
 package com.factura.FacturaElectronica.web.command;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.factura.FacturaElectronica.Utils.Constantes;
@@ -18,22 +19,22 @@ public class ArticuloCommand {
 	private String serie;
 	private String unidadMedida;
 	private String contable;
-	private Double costo;
-	private Double cantidad;
+	private BigDecimal costo;
+	private BigDecimal cantidad;
 
-	private Double iva;
+	private BigDecimal iva;
 
-	private Double precioPublico;
+	private BigDecimal precioPublico;
 
-	private Double gananciaPrecioPublico;
+	private BigDecimal gananciaPrecioPublico;
 
-	private Double precioMayorista;
+	private BigDecimal precioMayorista;
 
-	private Double gananciaPrecioMayorista;
+	private BigDecimal gananciaPrecioMayorista;
 
-	private Double precioEspecial;
+	private BigDecimal precioEspecial;
 
-	private Double gananciaPrecioEspecial;
+	private BigDecimal gananciaPrecioEspecial;
 	private String estado;
 
 	private Date created_at;
@@ -68,182 +69,224 @@ public class ArticuloCommand {
 		this.serie = articulo.getSerie();
 		this.unidadMedida = articulo.getUnidadMedida();
 		this.contable = articulo.getContable();
-		this.cantidad = articulo.getInventarios().stream().filter(o->o.getEstado().equals(Constantes.ESTADO_ACTIVO)).mapToDouble(o -> o.getCantidad()).sum();
+		Double resultado =articulo.getInventarios().stream().filter(o->o.getEstado().equals(Constantes.ESTADO_ACTIVO)).mapToDouble(o -> o.getCantidad().doubleValue()).sum();
+		this.cantidad = BigDecimal.valueOf(resultado);
 	}
 
 	public ArticuloCommand() {
 		super();
 	}
 
+	
 	public Integer getId() {
 		return id;
 	}
 
+	
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-
-	public String getSerie() {
-		return serie;
-	}
-
-	public void setSerie(String serie) {
-		this.serie = serie;
-	}
-
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
-	public Date getCreated_at() {
-		return created_at;
-	}
-
-	public void setCreated_at(Date created_at) {
-		this.created_at = created_at;
-	}
-
-	public Date getUpdated_at() {
-		return updated_at;
-	}
-
-	public void setUpdated_at(Date updated_at) {
-		this.updated_at = updated_at;
-	}
-
-	public Empresa getEmpresa() {
-		return empresa;
-	}
-
-	public void setEmpresa(Empresa empresa) {
-		this.empresa = empresa;
-	}
-
+	
 	public String getCodigo() {
 		return codigo;
 	}
 
+	
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
 
+	
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	
+	public String getSerie() {
+		return serie;
+	}
+
+	
+	public void setSerie(String serie) {
+		this.serie = serie;
+	}
+
+	
 	public String getUnidadMedida() {
 		return unidadMedida;
 	}
 
+	
 	public void setUnidadMedida(String unidadMedida) {
 		this.unidadMedida = unidadMedida;
 	}
 
-	public Marca getMarca() {
-		return marca;
-	}
-
-	public void setMarca(Marca marca) {
-		this.marca = marca;
-	}
-
-	public Categoria getCategoria() {
-		return categoria;
-	}
-
-	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
-	}
-
-	public Double getCosto() {
-		return costo;
-	}
-
-	public void setCosto(Double costo) {
-		this.costo = costo;
-	}
-
-	public Double getIva() {
-		return iva;
-	}
-
-	public void setIva(Double iva) {
-		this.iva = iva;
-	}
-
-	public Double getPrecioPublico() {
-		return precioPublico;
-	}
-
-	public void setPrecioPublico(Double precioPublico) {
-		this.precioPublico = precioPublico;
-	}
-
-	public Double getGananciaPrecioPublico() {
-		return gananciaPrecioPublico;
-	}
-
-	public void setGananciaPrecioPublico(Double gananciaPrecioPublico) {
-		this.gananciaPrecioPublico = gananciaPrecioPublico;
-	}
-
-	public Double getPrecioMayorista() {
-		return precioMayorista;
-	}
-
-	public void setPrecioMayorista(Double precioMayorista) {
-		this.precioMayorista = precioMayorista;
-	}
-
-	public Double getGananciaPrecioMayorista() {
-		return gananciaPrecioMayorista;
-	}
-
-	public void setGananciaPrecioMayorista(Double gananciaPrecioMayorista) {
-		this.gananciaPrecioMayorista = gananciaPrecioMayorista;
-	}
-
-	public Double getPrecioEspecial() {
-		return precioEspecial;
-	}
-
-	public void setPrecioEspecial(Double precioEspecial) {
-		this.precioEspecial = precioEspecial;
-	}
-
-	public Double getGananciaPrecioEspecial() {
-		return gananciaPrecioEspecial;
-	}
-
-	public void setGananciaPrecioEspecial(Double gananciaPrecioEspecial) {
-		this.gananciaPrecioEspecial = gananciaPrecioEspecial;
-	}
-
+	
 	public String getContable() {
 		return contable;
 	}
 
+	
 	public void setContable(String contable) {
 		this.contable = contable;
 	}
 
 	
-	public Double getCantidad() {
+	public BigDecimal getCosto() {
+		return costo;
+	}
+
+	
+	public void setCosto(BigDecimal costo) {
+		this.costo = costo;
+	}
+
+	
+	public BigDecimal getCantidad() {
 		return cantidad;
 	}
 
 	
-	public void setCantidad(Double cantidad) {
+	public void setCantidad(BigDecimal cantidad) {
 		this.cantidad = cantidad;
 	}
+
 	
+	public BigDecimal getIva() {
+		return iva;
+	}
+
+	
+	public void setIva(BigDecimal iva) {
+		this.iva = iva;
+	}
+
+	
+	public BigDecimal getPrecioPublico() {
+		return precioPublico;
+	}
+
+	
+	public void setPrecioPublico(BigDecimal precioPublico) {
+		this.precioPublico = precioPublico;
+	}
+
+	
+	public BigDecimal getGananciaPrecioPublico() {
+		return gananciaPrecioPublico;
+	}
+
+	
+	public void setGananciaPrecioPublico(BigDecimal gananciaPrecioPublico) {
+		this.gananciaPrecioPublico = gananciaPrecioPublico;
+	}
+
+	
+	public BigDecimal getPrecioMayorista() {
+		return precioMayorista;
+	}
+
+	
+	public void setPrecioMayorista(BigDecimal precioMayorista) {
+		this.precioMayorista = precioMayorista;
+	}
+
+	
+	public BigDecimal getGananciaPrecioMayorista() {
+		return gananciaPrecioMayorista;
+	}
+
+	
+	public void setGananciaPrecioMayorista(BigDecimal gananciaPrecioMayorista) {
+		this.gananciaPrecioMayorista = gananciaPrecioMayorista;
+	}
+
+	
+	public BigDecimal getPrecioEspecial() {
+		return precioEspecial;
+	}
+
+	
+	public void setPrecioEspecial(BigDecimal precioEspecial) {
+		this.precioEspecial = precioEspecial;
+	}
+
+	
+	public BigDecimal getGananciaPrecioEspecial() {
+		return gananciaPrecioEspecial;
+	}
+
+	
+	public void setGananciaPrecioEspecial(BigDecimal gananciaPrecioEspecial) {
+		this.gananciaPrecioEspecial = gananciaPrecioEspecial;
+	}
+
+	
+	public String getEstado() {
+		return estado;
+	}
+
+	
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	
+	public Date getCreated_at() {
+		return created_at;
+	}
+
+	
+	public void setCreated_at(Date created_at) {
+		this.created_at = created_at;
+	}
+
+	
+	public Date getUpdated_at() {
+		return updated_at;
+	}
+
+	
+	public void setUpdated_at(Date updated_at) {
+		this.updated_at = updated_at;
+	}
+
+	
+	public Marca getMarca() {
+		return marca;
+	}
+
+	
+	public void setMarca(Marca marca) {
+		this.marca = marca;
+	}
+
+	
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
+	
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
+		
 
 }

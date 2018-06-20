@@ -1,6 +1,8 @@
 package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -37,17 +39,38 @@ public class Cliente implements Serializable {
 	@Column(name = "nombre_completo")
 	private String						nombreCompleto;
 
+	@Column(name = "nombre_comercial")
+	private String						nombreComercial;
+
+	@Column(name = "tipo_cedula")
+	private String						tipoCedula;
+
 	@Column(name = "cedula")
 	private String						cedula;
+
+	@Column(name = "identificacion_Extranjero")
+	private String						identificacionExtranjero;
 
 	@Column(name = "provincia")
 	private String						provincia;
 
+	@Column(name = "canton")
+	private String						canton;
+
+	@Column(name = "distrito")
+	private String						distrito;
+
+	@Column(name = "barrio")
+	private String						barrio;
+
 	@Column(name = "celular")
 	private String						celular;
 
+	@Column(name = "codigo_pais")
+	private BigInteger				codigoPais;
+
 	@Column(name = "telefono")
-	private String						telefono;
+	private BigInteger				telefono;
 
 	@Column(name = "otraSena")
 	private String						otraSena;
@@ -56,7 +79,7 @@ public class Cliente implements Serializable {
 	private String						correoElectronico;
 
 	@Column(name = "descuento")
-	private Double							descuento;
+	private BigDecimal				descuento;
 
 	@Column(name = "estado")
 	private String						estado;
@@ -73,20 +96,26 @@ public class Cliente implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
-	private Empresa					empresa;
+	private Empresa						empresa;
 
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
 	private Usuario						usuario;
 
-	
-	public Cliente(Integer id, String nombreCompleto, String cedula, String provincia, String celular, String telefono, String otraSena, String correoElectronico, Double descuento, String estado, Date created_at, Date updated_at, Empresa empresa, Usuario usuario) {
+	public Cliente(Integer id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, String identificacionExtranjero, String provincia, String canton, String distrito, String barrio, String celular, BigInteger codigoPais, BigInteger telefono, String otraSena, String correoElectronico, BigDecimal descuento, String estado, Date created_at, Date updated_at, Empresa empresa, Usuario usuario) {
 		super();
 		this.id = id;
 		this.nombreCompleto = nombreCompleto;
+		this.nombreComercial = nombreComercial;
+		this.tipoCedula = tipoCedula;
 		this.cedula = cedula;
+		this.identificacionExtranjero = identificacionExtranjero;
 		this.provincia = provincia;
+		this.canton = canton;
+		this.distrito = distrito;
+		this.barrio = barrio;
 		this.celular = celular;
+		this.codigoPais = codigoPais;
 		this.telefono = telefono;
 		this.otraSena = otraSena;
 		this.correoElectronico = correoElectronico;
@@ -154,14 +183,6 @@ public class Cliente implements Serializable {
 		this.celular = celular;
 	}
 
-	public String getTelefono() {
-		return telefono;
-	}
-
-	public void setTelefono(String telefono) {
-		this.telefono = telefono;
-	}
-
 	public String getOtraSena() {
 		return otraSena;
 	}
@@ -178,11 +199,11 @@ public class Cliente implements Serializable {
 		this.correoElectronico = correoElectronico;
 	}
 
-	public Double getDescuento() {
+	public BigDecimal getDescuento() {
 		return descuento;
 	}
 
-	public void setDescuento(Double descuento) {
+	public void setDescuento(BigDecimal descuento) {
 		this.descuento = descuento;
 	}
 
@@ -216,6 +237,70 @@ public class Cliente implements Serializable {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public String getNombreComercial() {
+		return nombreComercial;
+	}
+
+	public void setNombreComercial(String nombreComercial) {
+		this.nombreComercial = nombreComercial;
+	}
+
+	public String getTipoCedula() {
+		return tipoCedula;
+	}
+
+	public void setTipoCedula(String tipoCedula) {
+		this.tipoCedula = tipoCedula;
+	}
+
+	public String getIdentificacionExtranjero() {
+		return identificacionExtranjero;
+	}
+
+	public void setIdentificacionExtranjero(String identificacionExtranjero) {
+		this.identificacionExtranjero = identificacionExtranjero;
+	}
+
+	public String getCanton() {
+		return canton;
+	}
+
+	public void setCanton(String canton) {
+		this.canton = canton;
+	}
+
+	public String getDistrito() {
+		return distrito;
+	}
+
+	public void setDistrito(String distrito) {
+		this.distrito = distrito;
+	}
+
+	public String getBarrio() {
+		return barrio;
+	}
+
+	public void setBarrio(String barrio) {
+		this.barrio = barrio;
+	}
+
+	public BigInteger getCodigoPais() {
+		return codigoPais;
+	}
+
+	public void setCodigoPais(BigInteger codigoPais) {
+		this.codigoPais = codigoPais;
+	}
+
+	public BigInteger getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(BigInteger telefono) {
+		this.telefono = telefono;
 	}
 
 }

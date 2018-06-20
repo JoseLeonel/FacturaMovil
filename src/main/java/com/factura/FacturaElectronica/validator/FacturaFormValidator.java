@@ -20,11 +20,7 @@ public class FacturaFormValidator implements Validator {
 	public void validate(Object obj, Errors errors) {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "condicionVenta", Constantes.RESOURCE_BUNDLE.getString(Constantes.KEY_REQUERIDO));
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "tipoDoc", Constantes.RESOURCE_BUNDLE.getString(Constantes.KEY_REQUERIDO));
-		AbstractValidationUtils.rejectIfNonNumeric(errors, "totalImpuesto", Constantes.RESOURCE_BUNDLE.getString(Constantes.KEY_NO_NUMERICO));
-		AbstractValidationUtils.rejectIfNonNumeric(errors, "totalDescuento", Constantes.RESOURCE_BUNDLE.getString(Constantes.KEY_NO_NUMERICO));
-		AbstractValidationUtils.rejectIfNonNumeric(errors, "subTotal", Constantes.RESOURCE_BUNDLE.getString(Constantes.KEY_NO_NUMERICO));
-		AbstractValidationUtils.rejectIfNonNumeric(errors, "totalVenta", Constantes.RESOURCE_BUNDLE.getString(Constantes.KEY_NO_NUMERICO));
-		AbstractValidationUtils.rejectIfNonNumeric(errors, "totalVentaNeta", Constantes.RESOURCE_BUNDLE.getString(Constantes.KEY_NO_NUMERICO));
+		
 
 	}
 

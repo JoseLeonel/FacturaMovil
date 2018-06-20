@@ -1,5 +1,6 @@
 package com.factura.FacturaElectronica.Bo.Impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,12 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 	public void cierreCaja(UsuarioCaja usuarioCaja) {
 		usuarioCaja.setUpdated_at(new Date());
 		usuarioCaja.setEstado(Constantes.ESTADO_INACTIVO);
-		usuarioCaja.setTotalNeto(usuarioCaja.getTotalBanco() + usuarioCaja.getTotalEfectivo()+ usuarioCaja.getTotalTarjeta()+usuarioCaja.getTotalFondoInicial());
+		BigDecimal resultado = BigDecimal.ZERO;
+		resultado.add(usuarioCaja.getTotalBanco());
+		resultado.add(usuarioCaja.getTotalEfectivo());
+		resultado.add(usuarioCaja.getTotalTarjeta());
+		resultado.add(usuarioCaja.getTotalFondoInicial());
+		usuarioCaja.setTotalNeto( resultado);
 		agregar(usuarioCaja);
 		
 		
@@ -72,7 +78,7 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 	 * @see com.factura.FacturaElectronica.Bo.UsuarioCajaBo#actualizarCaja(java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double)
 	 */
 	@Override
-	public void actualizarCaja(UsuarioCaja usuarioCaja ,Double totalEfectivo,Double totalTarjeta,Double totalBanco,Double totalCredito,Double totalAbono){
+	public void actualizarCaja(UsuarioCaja usuarioCaja ,BigDecimal totalEfectivo,BigDecimal totalTarjeta,BigDecimal totalBanco,BigDecimal totalCredito,BigDecimal totalAbono){
 		usuarioCajaDao.actualizarCaja(usuarioCaja, totalEfectivo, totalTarjeta, totalBanco, totalCredito, totalAbono);
 	}
 	

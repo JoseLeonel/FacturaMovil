@@ -1,7 +1,11 @@
 package com.factura.FacturaElectronica.web.Controller;
 
+import java.io.FileWriter;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +31,7 @@ import com.factura.FacturaElectronica.Utils.DataTableDelimitador;
 import com.factura.FacturaElectronica.Utils.DataTableFilter;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceDataTable;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
+import com.factura.FacturaElectronica.Utils.Utils;
 import com.factura.FacturaElectronica.modelo.Cliente;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Factura;
@@ -40,6 +45,7 @@ import com.factura.FacturaElectronica.web.componentes.ClientePropertyEditor;
 import com.factura.FacturaElectronica.web.componentes.EmpresaPropertyEditor;
 import com.factura.FacturaElectronica.web.componentes.StringPropertyEditor;
 import com.factura.FacturaElectronica.web.componentes.VendedorPropertyEditor;
+import com.factura.FacturaElectronica.xml.FacturaElectronica;
 import com.google.common.base.Function;
 
 /**
@@ -109,6 +115,15 @@ public class FacturasController {
 	}
 
 	/**
+	 * Listado de facturas anuladas y facturadas
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/ListaFacturas", method = RequestMethod.GET)
+	public String listaFacturas(ModelMap model) {
+		return "views/facturas/listaFacturas";
+	}
+	/**
 	 * Facturas En espera de convertirse en factura oficial
 	 * @param request
 	 * @param response
@@ -129,6 +144,24 @@ public class FacturasController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
+
+	@RequestMapping(value = "/ListarFacturasActivasAndAnuladasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response) {
+
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Factura");
+		DataTableFilter dataTableFilter = new DataTableFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "<>");
+		delimitadores.addFiltro(dataTableFilter);
+		dataTableFilter = new DataTableFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+	}
+
+	
+	
 	/**
 	 * Crear la Factura
 	 * @param request
@@ -201,6 +234,20 @@ public class FacturasController {
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer idFactura) {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
+			// necesito hacer un contexto se crea la instancia
+			JAXBContext context = JAXBContext.newInstance(FacturaElectronica.class);
+
+			// Escribir el xml se utiliza el objete marshaller
+			Marshaller marshaller = context.createMarshaller();
+			FacturaElectronica facturaElectronica = Utils.crearFacturaElectronica(facturaBD);
+		//	facturaElectronica.setNumeroConsecutivo("0012");
+	    //tabular el documento xml 
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			//salida
+			marshaller.marshal(facturaElectronica, System.out);
+			
+			marshaller.marshal(facturaElectronica, new FileWriter("leo.xml"));
+			
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", facturaBD);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);

@@ -1,5 +1,6 @@
 package com.factura.FacturaElectronica.web.command;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.factura.FacturaElectronica.modelo.Abono;
@@ -7,36 +8,35 @@ import com.factura.FacturaElectronica.modelo.CuentaCobrar;
 
 /**
  * ClienteCommand.
- * 
  * @author jose.
  * @since 17 mar. 2018
  */
 public class AbonoCommand {
 
-	private Integer id;
+	private Integer				id;
 
-	private String nota;
+	private String				nota;
 
-	private String recibo;
+	private String				recibo;
 
-	private String transferencia;
+	private String				transferencia;
 
-	private Date fechaPago;
+	private Date					fechaPago;
 
-	private Double totalEfectivo;
+	private BigDecimal		totalEfectivo;
 
-	private Double totalTarjeta;
-	private Double totalBanco;
+	private BigDecimal		totalTarjeta;
+	private BigDecimal		totalBanco;
 
-	private Double total;
+	private BigDecimal		total;
 
-	private String estado;
+	private String				estado;
 
-	private Date created_at;
+	private Date					created_at;
 
-	private Date updated_at;
+	private Date					updated_at;
 
-	private CuentaCobrar cuentaCobrar;
+	private CuentaCobrar	cuentaCobrar;
 
 	public AbonoCommand(Abono abono) {
 		super();
@@ -100,35 +100,35 @@ public class AbonoCommand {
 		this.fechaPago = fechaPago;
 	}
 
-	public Double getTotalEfectivo() {
+	public BigDecimal getTotalEfectivo() {
 		return totalEfectivo;
 	}
 
-	public void setTotalEfectivo(Double totalEfectivo) {
+	public void setTotalEfectivo(BigDecimal totalEfectivo) {
 		this.totalEfectivo = totalEfectivo;
 	}
 
-	public Double getTotalTarjeta() {
+	public BigDecimal getTotalTarjeta() {
 		return totalTarjeta;
 	}
 
-	public void setTotalTarjeta(Double totalTarjeta) {
+	public void setTotalTarjeta(BigDecimal totalTarjeta) {
 		this.totalTarjeta = totalTarjeta;
 	}
 
-	public Double getTotalBanco() {
+	public BigDecimal getTotalBanco() {
 		return totalBanco;
 	}
 
-	public void setTotalBanco(Double totalBanco) {
+	public void setTotalBanco(BigDecimal totalBanco) {
 		this.totalBanco = totalBanco;
 	}
 
-	public Double getTotal() {
+	public BigDecimal getTotal() {
 		return total;
 	}
 
-	public void setTotal(Double total) {
+	public void setTotal(BigDecimal total) {
 		this.total = total;
 	}
 

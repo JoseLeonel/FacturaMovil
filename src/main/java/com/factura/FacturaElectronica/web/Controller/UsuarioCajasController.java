@@ -1,5 +1,6 @@
 package com.factura.FacturaElectronica.web.Controller;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -137,11 +138,11 @@ public class UsuarioCajasController {
 			usuarioCaja.setUpdated_at(new Date());
 			usuarioCaja.setEstado(Constantes.ESTADO_ACTIVO);
 			usuarioCaja.setUsuario(usuario);
-			usuarioCaja.setTotalBanco(Constantes.ZEROS_DOUBLE);
-			usuarioCaja.setTotalEfectivo(Constantes.ZEROS_DOUBLE);
-			usuarioCaja.setTotalNeto(Constantes.ZEROS_DOUBLE);
-			usuarioCaja.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
-			usuarioCaja.setTotalAbono(Constantes.ZEROS_DOUBLE);
+			usuarioCaja.setTotalBanco(BigDecimal.ZERO);
+			usuarioCaja.setTotalEfectivo(BigDecimal.ZERO);
+			usuarioCaja.setTotalNeto(BigDecimal.ZERO);
+			usuarioCaja.setTotalTarjeta(BigDecimal.ZERO);
+			usuarioCaja.setTotalAbono(BigDecimal.ZERO);
 			usuarioCajaBo.agregar(usuarioCaja);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuarioCaja.agregar.correctamente", usuarioCaja);
 

@@ -1,6 +1,7 @@
 package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -49,15 +50,15 @@ public class Abono implements Serializable {
 	private Date							fechaPago;
 
 	@Column(name = "total_efectivo")
-	private Double						totalEfectivo;
+	private BigDecimal						totalEfectivo;
 
 	@Column(name = "total_tarjeta")
-	private Double						totalTarjeta;
+	private BigDecimal						totalTarjeta;
 	@Column(name = "total_banco")
-	private Double						totalBanco;
+	private BigDecimal						totalBanco;
 
 	@Column(name = "total")
-	private Double						total;
+	private BigDecimal						total;
 
 	@Column(name = "estado")
 	private String						estado;
@@ -83,10 +84,7 @@ public class Abono implements Serializable {
 	public Abono() {
 		super();
 		this.estado = Constantes.ABONO_ESTADO_PAGADO;
-		this.totalBanco = Constantes.ZEROS_DOUBLE;
-		this.totalEfectivo = Constantes.ZEROS_DOUBLE;
-		this.totalTarjeta = Constantes.ZEROS_DOUBLE;
-		this.total = Constantes.ZEROS_DOUBLE;
+	
 		this.transferencia = Constantes.EMPTY;
 		this.recibo = Constantes.EMPTY;
 		this.nota = Constantes.EMPTY;
@@ -95,39 +93,7 @@ public class Abono implements Serializable {
 
 	}
 
-	public Abono(Integer id, String nota, String recibo, String transferencia, Date fechaPago, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double total, String estado, Date created_at, Date updated_at, CuentaCobrar cuentaCobrar, Usuario usuario) {
-		super();
-		this.id = id;
-		this.nota = nota;
-		this.recibo = recibo;
-		this.transferencia = transferencia;
-		this.fechaPago = fechaPago;
-		this.totalEfectivo = totalEfectivo;
-		this.totalTarjeta = totalTarjeta;
-		this.totalBanco = totalBanco;
-		this.total = total;
-		this.estado = estado;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
-		this.cuentaCobrar = cuentaCobrar;
-		this.usuario = usuario;
-	}
-
-	public void setTotalEfectivo(Double totalEfectivo) {
-		this.totalEfectivo = totalEfectivo;
-	}
-
-	public void setTotalTarjeta(Double totalTarjeta) {
-		this.totalTarjeta = totalTarjeta;
-	}
-
-	public void setTotalBanco(Double totalBanco) {
-		this.totalBanco = totalBanco;
-	}
-
-	public void setTotal(Double total) {
-		this.total = total;
-	}
+	
 
 	public Integer getId() {
 		return id;
@@ -142,24 +108,6 @@ public class Abono implements Serializable {
 	}
 
 	
-	public Double getTotalEfectivo() {
-		return totalEfectivo;
-	}
-
-	
-	public Double getTotalTarjeta() {
-		return totalTarjeta;
-	}
-
-	
-	public Double getTotalBanco() {
-		return totalBanco;
-	}
-
-	
-	public Double getTotal() {
-		return total;
-	}
 
 	public void setNota(String nota) {
 		this.nota = nota;
@@ -227,6 +175,62 @@ public class Abono implements Serializable {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+
+
+	
+	public BigDecimal getTotalEfectivo() {
+		return totalEfectivo;
+	}
+
+
+
+	
+	public void setTotalEfectivo(BigDecimal totalEfectivo) {
+		this.totalEfectivo = totalEfectivo;
+	}
+
+
+
+	
+	public BigDecimal getTotalTarjeta() {
+		return totalTarjeta;
+	}
+
+
+
+	
+	public void setTotalTarjeta(BigDecimal totalTarjeta) {
+		this.totalTarjeta = totalTarjeta;
+	}
+
+
+
+	
+	public BigDecimal getTotalBanco() {
+		return totalBanco;
+	}
+
+
+
+	
+	public void setTotalBanco(BigDecimal totalBanco) {
+		this.totalBanco = totalBanco;
+	}
+
+
+
+	
+	public BigDecimal getTotal() {
+		return total;
+	}
+
+
+
+	
+	public void setTotal(BigDecimal total) {
+		this.total = total;
 	}
 
 }
