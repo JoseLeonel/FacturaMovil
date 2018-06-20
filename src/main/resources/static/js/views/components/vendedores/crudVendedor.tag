@@ -234,8 +234,8 @@ var reglasDeValidacion = function() {
 		rules : {
 			cedula : {
 				required : true,
-                maxlength:10,
-                minlength:1,
+                maxlength:18,
+                minlength:9,
 			},
 
 			nombreCompleto : {
@@ -276,7 +276,7 @@ var reglasDeValidacion = function() {
 function __Eventos(){
     $("#formulario").validate(reglasDeValidacion());
     $("#nombreCompleto").attr("maxlength", 150);
-    $("#cedula").attr("maxlength", 10);
+    $("#cedula").attr("maxlength", 18);
     $("#correoElectronico").attr("maxlength", 200);
     $("#direccion").attr("maxlength", 160);
     $("#telefono").attr("maxlength", 9);

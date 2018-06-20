@@ -57,8 +57,8 @@ public class Articulo implements Serializable {
 	@Column(name = "costo")
 	private BigDecimal				costo;
 
-	@Column(name = "iva")
-	private BigDecimal				iva;
+	@Column(name = "impuesto")
+	private BigDecimal				impuesto;
 
 	@Column(name = "precio_publico")
 	private BigDecimal				precioPublico;
@@ -80,6 +80,9 @@ public class Articulo implements Serializable {
 
 	@Column(name = "estado")
 	private String						estado;
+	
+	@Column(name = "tipo_impuesto")
+	private String						tipoImpuesto;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -112,6 +115,35 @@ public class Articulo implements Serializable {
 	@JoinColumn(name = "articulo_id", referencedColumnName = "id")
 	@OrderBy("id DESC")
 	private Set<Inventario>		inventarios;
+	
+	
+
+	public Articulo(Integer id, String codigo, String descripcion, String serie, String unidadMedida, String contable, BigDecimal costo, BigDecimal impuesto, BigDecimal precioPublico, BigDecimal gananciaPrecioPublico, BigDecimal precioMayorista, BigDecimal gananciaPrecioMayorista, BigDecimal precioEspecial, BigDecimal gananciaPrecioEspecial, String estado, String tipoImpuesto, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa, Set<Inventario> inventarios) {
+		super();
+		this.id = id;
+		this.codigo = codigo;
+		this.descripcion = descripcion;
+		this.serie = serie;
+		this.unidadMedida = unidadMedida;
+		this.contable = contable;
+		this.costo = costo;
+		this.impuesto = impuesto;
+		this.precioPublico = precioPublico;
+		this.gananciaPrecioPublico = gananciaPrecioPublico;
+		this.precioMayorista = precioMayorista;
+		this.gananciaPrecioMayorista = gananciaPrecioMayorista;
+		this.precioEspecial = precioEspecial;
+		this.gananciaPrecioEspecial = gananciaPrecioEspecial;
+		this.estado = estado;
+		this.tipoImpuesto = tipoImpuesto;
+		this.created_at = created_at;
+		this.updated_at = updated_at;
+		this.marca = marca;
+		this.usuario = usuario;
+		this.categoria = categoria;
+		this.empresa = empresa;
+		this.inventarios = inventarios;
+	}
 
 	public Articulo() {
 		super();
@@ -165,12 +197,16 @@ public class Articulo implements Serializable {
 		this.costo = costo;
 	}
 
-	public BigDecimal getIva() {
-		return iva;
+	
+
+	
+	public BigDecimal getImpuesto() {
+		return impuesto;
 	}
 
-	public void setIva(BigDecimal iva) {
-		this.iva = iva;
+	
+	public void setImpuesto(BigDecimal impuesto) {
+		this.impuesto = impuesto;
 	}
 
 	public BigDecimal getPrecioPublico() {
@@ -291,6 +327,16 @@ public class Articulo implements Serializable {
 
 	public void setInventarios(Set<Inventario> inventarios) {
 		this.inventarios = inventarios;
+	}
+
+	
+	public String getTipoImpuesto() {
+		return tipoImpuesto;
+	}
+
+	
+	public void setTipoImpuesto(String tipoImpuesto) {
+		this.tipoImpuesto = tipoImpuesto;
 	}
 
 }

@@ -26,6 +26,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 	ArticuloDao articuloDao;
 
 	public void agregar(Articulo articulo) {
+		
 		articuloDao.agregar(articulo);
 	}
 

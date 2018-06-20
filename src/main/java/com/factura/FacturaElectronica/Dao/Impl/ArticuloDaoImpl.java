@@ -116,6 +116,9 @@ public class ArticuloDaoImpl implements ArticuloDao {
 		if(precio == null || costo == null) {
 			return BigDecimal.ZERO;
 		}
+		if(precio.compareTo(BigDecimal.ZERO) == 0) {
+			return BigDecimal.ZERO;
+		}
 		BigDecimal resultado = BigDecimal.ZERO;
 		BigDecimal precioSinImpuesto = BigDecimal.ZERO;
 		costo = costo == null ? BigDecimal.ZERO : costo;

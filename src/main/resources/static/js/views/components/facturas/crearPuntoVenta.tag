@@ -1329,19 +1329,19 @@ function __nuevoArticuloAlDetalle(cantidad){
     if(self.articulo.descripcion == ""){
         return;
     }
-    var precioUnitario  = getPrecioUnitario(self.articulo.precioPublico,self.articulo.iva ==null?0:self.articulo.iva)
-    var montoImpuesto   = _calcularImpuesto(precioUnitario,self.articulo.iva ==null?0:self.articulo.iva,cantidad)
+    var precioUnitario  = getPrecioUnitario(self.articulo.precioPublico,self.articulo.impuesto ==null?0:self.articulo.impuesto)
+    var montoImpuesto   = _calcularImpuesto(precioUnitario,self.articulo.impuesto ==null?0:self.articulo.impuesto,cantidad)
     var subTotal        = getSubTotal(precioUnitario,cantidad)
     self.descuento      = 0;
     self.detail.push({
        numeroLinea     : 0,
-       iva             : self.articulo.iva,
+       iva             : self.articulo.impuesto,
        articulo_id     : self.articulo.id,
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
        cantidad        : parseFloat(cantidad),
        precioUnitario  : precioUnitario,
-       impuesto        : self.articulo.iva,
+       impuesto        : self.articulo.impuesto,
        montoImpuesto   : montoImpuesto,
        montoDescuento  : 0,
        porcentajeDesc  : 0,

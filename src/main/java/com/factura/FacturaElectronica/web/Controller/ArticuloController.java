@@ -145,7 +145,7 @@ public class ArticuloController {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			articulo.setIva(articulo.getIva() == null ? BigDecimal.ZERO : articulo.getIva());
+			articulo.setImpuesto(articulo.getImpuesto() == null ? BigDecimal.ZERO : articulo.getImpuesto());
 
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
@@ -179,11 +179,12 @@ public class ArticuloController {
 			articulo.setCreated_at(new Date());
 			articulo.setUpdated_at(new Date());
 			articulo.setEstado(Constantes.ESTADO_ACTIVO);
-			articulo.setGananciaPrecioPublico(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getIva(), articulo.getPrecioPublico()));
-			articulo.setGananciaPrecioMayorista(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getIva(), articulo.getPrecioMayorista()));
-			articulo.setGananciaPrecioEspecial(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getIva(), articulo.getPrecioEspecial()));
+			articulo.setGananciaPrecioPublico(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioPublico()));
+			articulo.setGananciaPrecioMayorista(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioMayorista()));
+			articulo.setGananciaPrecioEspecial(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioEspecial()));
 			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null ? BigDecimal.ZERO : articulo.getPrecioEspecial());
 			articulo.setPrecioMayorista(articulo.getPrecioMayorista() == null ? BigDecimal.ZERO : articulo.getPrecioMayorista());
+			articulo.setImpuesto(articulo.getImpuesto()==null?BigDecimal.ZERO:articulo.getImpuesto());
 			articulo.setUsuario(usuarioSesion);
 			articuloBo.agregar(articulo);
 
@@ -209,7 +210,7 @@ public class ArticuloController {
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 		try {
-			articulo.setIva(articulo.getIva() == null ? BigDecimal.ZERO : articulo.getIva());
+			articulo.setImpuesto(articulo.getImpuesto() == null ? BigDecimal.ZERO : articulo.getImpuesto());
 
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			Articulo articuloBd = articuloBo.buscar(articulo.getId());
@@ -248,12 +249,14 @@ public class ArticuloController {
 			articuloBd.setCreated_at(new Date());
 			articuloBd.setUpdated_at(new Date());
 			articuloBd.setEstado(Constantes.ESTADO_ACTIVO);
-			articuloBd.setGananciaPrecioPublico(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getIva(), articulo.getPrecioPublico()));
-			articuloBd.setGananciaPrecioMayorista(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getIva(), articulo.getPrecioMayorista()));
-			articuloBd.setGananciaPrecioEspecial(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getIva(), articulo.getPrecioEspecial()));
+			articuloBd.setGananciaPrecioPublico(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioPublico()));
+			articuloBd.setGananciaPrecioMayorista(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioMayorista()));
+			articuloBd.setGananciaPrecioEspecial(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioEspecial()));
 			articuloBd.setPrecioEspecial(articulo.getPrecioEspecial() == null ? BigDecimal.ZERO : articulo.getPrecioEspecial());
 			articuloBd.setPrecioMayorista(articulo.getPrecioMayorista() == null ? BigDecimal.ZERO : articulo.getPrecioMayorista());
 			articuloBd.setUsuario(usuarioSesion);
+			articuloBd.setTipoImpuesto(articulo.getTipoImpuesto());
+			articuloBd.setImpuesto(articulo.getImpuesto()==null?BigDecimal.ZERO:articulo.getImpuesto());
 			articuloBo.modificar(articuloBd);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBd);
 
