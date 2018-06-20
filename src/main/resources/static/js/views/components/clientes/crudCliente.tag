@@ -70,18 +70,31 @@
                         </div>
                         
                         <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cliente.nombreCompleto")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" class="form-control nombreCompleto" id="nombreCompleto" name="nombreCompleto" value="{cliente.nombreCompleto}"  >
 
                             </div>
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("cliente.tipoCedula")}  <span class="requeridoDato">*</span></label>
+                                 <select  class="form-control" id="tipoCedula" name="tipoCedula" >
+                                    <option  each={tipoCedulas.data}  value="{valor}" selected="{cliente.tipoCedula ==valor?true:false}"  >{descripcion}</option>
+                                </select>
+                            </div>                            
+                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cliente.cedula")} <span class="requeridoDato">*</span></label>
                                 <input type="text" class="form-control cedula" id="cedula" name="cedula" value="{cliente.cedula}"  >
                             </div>
-                            
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("cliente.codigoPais")}</label>
+                                <input type="text" class="form-control codigoPais" id="codigoPais" name="codigoPais" value="{cliente.codigoPais}"  >
+                            </div>
                         </div>
                         <div class="row">
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("cliente.codigoPais")} </label>
+                                <input type="text" class="form-control codigoPais" id="codigoPais" name="codigoPais" value="{cliente.codigoPais}"  >
+                            </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cliente.telefono")} </label>
                                 <input type="text" class="form-control telefono" id="telefono" name="telefono" value="{cliente.telefono}"  >
@@ -90,6 +103,14 @@
                                 <label class="knob-label" >{$.i18n.prop("cliente.celular")} </label>
                                 <input type="text" class="form-control celular" id="celular" name="celular" value="{cliente.celular}"  >
                             </div>
+                        
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("cliente.descuento")} </label>
+                                <input type="number" class="form-control descuento" id="descuento" name="descuento" value="{cliente.descuento}"  >
+                            </div>
+
+                        </div>
+                        <div class="row">
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cliente.provincia")} </label>
                                 <select  class="form-control" id="provincia" name="provincia" >
@@ -97,13 +118,21 @@
                                 </select>
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("cliente.descuento")} </label>
-                                <input type="number" class="form-control descuento" id="descuento" name="descuento" value="{cliente.descuento}"  >
+                                <label class="knob-label" >{$.i18n.prop("cliente.distrito")} </label>
+                                <input type="text" class="form-control distrito" id="distrito" name="distrito" value="{cliente.distrito}"  >
                             </div>
-
-                        </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("cliente.barrio")} </label>
+                                <input type="text" class="form-control barrio" id="barrio" name="barrio" value="{cliente.barrio}"  >
+                            </div>                        
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("cliente.identificacionExtranjero")}</label>
+                                <input type="text" class="form-control identificacionExtranjero" id="identificacionExtranjero" name="identificacionExtranjero" value="{cliente.identificacionExtranjero}"  >
+                            </div>
+                        </div>                        
                         <div class="row">    
-                            <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
+                            
+                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("cliente.correoElectronico")}</label>
                                 <input type="text" class="form-control correoElectronico" id="correoElectronico" name="correoElectronico" value="{cliente.correoElectronico}"  >
                             </div>
@@ -196,6 +225,7 @@
     self.formato_tabla             = []         // Formato del Listado de la Tabla 
     self.provincias                = []
     self.empresas                = {aaData:[]}
+    self.tipoCedulas              = {data:[]}  // definir el data del datatable
     self.mostrarListado            = true 
     self.botonModificar            = false
     self.botonAgregar              = false
@@ -224,12 +254,34 @@ self.on('mount',function(){
     includeActions('.dataTables_wrapper','.dataTables_length')
     __MantenimientoAgregar()
     __ComboEstados()
+    __listadoTipoCedulas()
     agregarInputsCombos();
     window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
 
 })
+/**
+*  Mostrar listado datatable TipoCedulas
+**/
+function __listadoTipoCedulas(){
+    self.tipoCedulas.data.push({
+        valor:"01",
+        descripcion:$.i18n.prop("tipo.cedula.fisica")
+    })
+   self.tipoCedulas.data.push({
+        valor:"02",
+        descripcion:$.i18n.prop("tipo.cedula.juridica")
+    })
+   self.tipoCedulas.data.push({
+        valor:"03",
+        descripcion:$.i18n.prop("tipo.cedula.dimex")
+    })
+     self.tipoCedulas.data.push({
+        valor:"04",
+        descripcion:$.i18n.prop("tipo.cedula.nite")
+    })
+}
 /**
 * Camps requeridos
 **/

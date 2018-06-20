@@ -11,39 +11,39 @@
 <div classs="contenedor-listar container" id="container"  show={mostrarListado}  >
         <div class="row">
             <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
-                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th class="table-header" >{$.i18n.prop("empresa.cedula")}            </th>
-                                <th class="table-header" >{$.i18n.prop("empresa.nombre")}            </th>
-                                <th class="table-header" >{$.i18n.prop("empresa.nombreComercial")}   </th>
-                                <th class="table-header" >{$.i18n.prop("empresa.representante")}     </th>
-                                <th class="table-header" >{$.i18n.prop("empresa.correoElectronico")} </th>
-                                <th class="table-header" >{$.i18n.prop("empresa.numeroConsecutivo")} </th>
-                                <th class="table-header" >{$.i18n.prop("empresa.estado")}            </th>
-                                <th class="table-header" > {$.i18n.prop("listado.acciones")}         </th>
-                            </tr>
+                <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="table-header" >{$.i18n.prop("empresa.cedula")}            </th>
+                            <th class="table-header" >{$.i18n.prop("empresa.nombre")}            </th>
+                            <th class="table-header" >{$.i18n.prop("empresa.nombreComercial")}   </th>
+                            <th class="table-header" >{$.i18n.prop("empresa.representante")}     </th>
+                            <th class="table-header" >{$.i18n.prop("empresa.correoElectronico")} </th>
+                            <th class="table-header" >{$.i18n.prop("empresa.numeroConsecutivo")} </th>
+                            <th class="table-header" >{$.i18n.prop("empresa.estado")}            </th>
+                            <th class="table-header" > {$.i18n.prop("listado.acciones")}         </th>
+                        </tr>
                         </thead>
-                        <tfoot style="display: table-header-group;">
-                            <tr>
-                                <th>{$.i18n.prop("empresa.cedula")}            </th>
-                                <th>{$.i18n.prop("empresa.nombre")}            </th>
-                                <th>{$.i18n.prop("empresa.nombreComercial")}   </th>
-                                <th>{$.i18n.prop("empresa.representante")}     </th>
-                                <th>{$.i18n.prop("empresa.correoElectronico")} </th>
-                                <th>{$.i18n.prop("empresa.numeroConsecutivo")} </th>
-                                <th>{$.i18n.prop("empresa.estado")}            </th>
-                                <th>                                           </th>
-                            </tr>
-                        </tfoot>
-                    </table>
+                    <tfoot style="display: table-header-group;">
+                        <tr>
+                            <th>{$.i18n.prop("empresa.cedula")}            </th>
+                            <th>{$.i18n.prop("empresa.nombre")}            </th>
+                            <th>{$.i18n.prop("empresa.nombreComercial")}   </th>
+                            <th>{$.i18n.prop("empresa.representante")}     </th>
+                            <th>{$.i18n.prop("empresa.correoElectronico")} </th>
+                            <th>{$.i18n.prop("empresa.numeroConsecutivo")} </th>
+                            <th>{$.i18n.prop("empresa.estado")}            </th>
+                            <th>                                           </th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>    
 </div>
 <!-- Fin del Listado -->
 
-<div  >
-    <div class="row center " show ={mostrarFormulario} >
+
+<div class="row center " show ={mostrarFormulario} >
     <div class="col-md-2 col-sx-12 col-lg-2 col-sm-2"></div>
         <div class="col-md-8 col-lg-8 col-sx-12 col-sm-8">
             <div class="box box-solid box-primary">
@@ -56,20 +56,17 @@
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 left">
                                 <label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>
-                               
                             </div>
-                            
                         </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("empresa.clave")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" class="form-control clave" id="clave" name="clave" value="{empresa.clave}"  >
-
                             </div>
                              <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("empresa.tipoCedula")}  <span class="requeridoDato">*</span></label>
                                  <select  class="form-control" id="tipoCedula" name="tipoCedula" >
-                                    <option  each={tipoCedulas.data}  value="{valor}"  >{descripcion}</option>
+                                    <option  each={tipoCedulas.data}  value="{valor}" selected="{empresa.tipoCedula ==valor?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
                         </div>
@@ -82,10 +79,8 @@
                                 <label class="knob-label" >{$.i18n.prop("empresa.nombre")} <span class="requeridoDato">*</span></label>
                                 <input type="text" class="form-control nombre" id="nombre" name="nombre" value="{empresa.nombre}"  >
                             </div>
-
                         </div>
-
-                         <div class="row">
+                        <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("empresa.nombreComercial")}</span></label>
                                 <input type="text" class="form-control nombreComercial" id="nombreComercial" name="nombreComercial" value="{empresa.nombreComercial}"  >
@@ -108,13 +103,12 @@
                                 <label class="knob-label" >{$.i18n.prop("empresa.casa.matriz")} </label>
                                 <input type="text" class="form-control cazaMatriz" id="cazaMatriz" name="cazaMatriz" value="{empresa.cazaMatriz}"  >
                             </div>
-                            
                         </div>
-                         <div class="row">    
+                        <div class="row">    
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("empresa.provincia")}</label>
-                                <select  class="form-control" id="provincia" name="provincia" >
-                                    <option  each={provincias}  value="{codigo}" selected="{empresa.provincia ==codigo?true:false}" >{descripcion}</option>
+                                 <label class="knob-label" >{$.i18n.prop("cliente.provincia")} </label>
+                                 <select  class="form-control" id="provincia"  >
+                                    <option  each={comboProvincias}  value="{codigo}" selected="{empresa.provincia ==codigo?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
@@ -152,10 +146,7 @@
                                     <option  each={estados}  value="{codigo}" selected="{empresa.estado ==codigo?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
-                            
-
                         </div>
-
                     </form>    
                 </div>
                 <div class="box-footer">
@@ -164,8 +155,6 @@
                     <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back  pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
                         {$.i18n.prop("btn.volver")}
                     </button>
-
-                  
                 </div>
             </div>   
         </div>
@@ -236,7 +225,7 @@
     self.botonModificar            = false
     self.botonAgregar              = false
     self.tipoCedulas              = {data:[]}  // definir el data del datatable
-    self.provincias = []
+    self.comboProvincias = []
     self.empresa  = {
         id:null,
         nombre:"",
@@ -255,7 +244,9 @@ self.on('mount',function(){
     __Eventos()
     __listadoTipoCedulas()
     __ComboEstados()
-   
+   window.addEventListener( "keydown", function(evento){
+             $(".errorServerSideJgrid").remove();
+        }, false );
     
 })
 
@@ -343,43 +334,42 @@ var reglasDeValidacion = function() {
 *  Registrar provincias
 **/
 function __cargaProvincias(){
-    self.provincias = []
-    self.provincias.push({
+    self.comboProvincias = []
+    self.update()
+    self.comboProvincias.push({
         codigo:"1",
         descripcion: $.i18n.prop("provincia.sanjose")
     })
-    self.provincias.push({
+    self.comboProvincias.push({
         codigo:"2",
-        descripcion:$.i18n.prop("provincia.alajuela")
+        descripcion: $.i18n.prop("provincia.alajuela")
     })
 
-    self.provincias.push({
+    self.comboProvincias.push({
         codigo:"3",
         descripcion:$.i18n.prop("provincia.cartago")
     })
 
-    self.provincias.push({
+    self.comboProvincias.push({
         codigo:"4",
-        descripcion:$.i18n.prop("provincia.heredia")
+        descripcion: $.i18n.prop("provincia.heredia")
     })
 
-    self.provincias.push({
+    self.comboProvincias.push({
         codigo:"5",
         descripcion:$.i18n.prop("provincia.guanacaste")
     })
-    self.provincias.push({
+    self.comboProvincias.push({
         codigo:"6",
         descripcion:$.i18n.prop("provincia.puntarenas")
     })
-    self.provincias.push({
-        codigo:"7",
+    self.comboProvincias.push({
+                codigo:"7",
         descripcion:$.i18n.prop("provincia.limon")
     })
     self.update()
 
 }
-
-
 /**
 *  Crear el combo de estados
 **/
@@ -399,7 +389,6 @@ function __ComboEstados(){
 /**
 *  Activar Eventos
 **/
-
 function __Eventos(){
     $("#formulario").validate(reglasDeValidacion());
     //$("#nombre").attr("maxlength", 78);
@@ -415,13 +404,7 @@ function __Eventos(){
     $("#representante").attr("maxlength", 80);
     $("#web").attr("maxlength", 80);
 
-    $('#provincia').mask('0', {
-	    'translation' : {
-            0 : {
-                pattern : /[0-9]/
-            }
-    	}
-    }); 
+   
     $('#canton').mask('00', {
 	    'translation' : {
             0 : {
@@ -629,6 +612,7 @@ function __consultar(){
                         // habilita el formulario
                         self.botonAgregar     = false;                        
                         self.empresa  =  modeloTabla
+                        self.empresa.numeroConsecutivo = zfill(self.empresa.numeroConsecutivo,20)
                         self.update()
                         __ComboEstados()
                     });
@@ -643,6 +627,26 @@ function __consultar(){
     });
 }
 
+function zfill(number, width) {
+    number = number ==null?0:number
+    var numberOutput = Math.abs(number); /* Valor absoluto del número */
+    var length = number.toString().length; /* Largo del número */ 
+    var zero = "0"; /* String de cero */  
+    
+    if (width <= length) {
+        if (number < 0) {
+             return ("-" + numberOutput.toString()); 
+        } else {
+             return numberOutput.toString(); 
+        }
+    } else {
+        if (number < 0) {
+            return ("-" + (zero.repeat(width - length)) + numberOutput.toString()); 
+        } else {
+            return ((zero.repeat(width - length)) + numberOutput.toString()); 
+        }
+    }
+}
 
 /**
 *   Agregar 

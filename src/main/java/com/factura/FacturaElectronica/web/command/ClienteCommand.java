@@ -22,6 +22,10 @@ public class ClienteCommand {
 	private String			cedula;
 
 	private String			provincia;
+	private String			canton;
+	private String			distrito;
+	private String			barrio;
+	private BigInteger	codigoPais;
 
 	private String			celular;
 
@@ -38,6 +42,7 @@ public class ClienteCommand {
 	private Date				created_at;
 
 	private Date				updated_at;
+	private String						identificacionExtranjero;
 
 	private Empresa			empresa;
 
@@ -47,6 +52,10 @@ public class ClienteCommand {
 		this.nombreCompleto = cliente.getNombreCompleto();
 		this.cedula = cliente.getCedula();
 		this.provincia = cliente.getProvincia();
+    this.distrito = cliente.getDistrito();
+    this.barrio = cliente.getBarrio();
+    this.codigoPais = cliente.getCodigoPais();
+    
 		this.celular = cliente.getCelular();
 		this.telefono = cliente.getTelefono();
 		this.otraSena = cliente.getOtraSena();
@@ -56,6 +65,7 @@ public class ClienteCommand {
 		this.created_at = cliente.getCreated_at();
 		this.updated_at = cliente.getUpdated_at();
 		this.empresa = cliente.getEmpresa();
+		this.identificacionExtranjero = cliente.getIdentificacionExtranjero();
 
 	}
 
@@ -194,4 +204,56 @@ public class ClienteCommand {
 
 		return this.provincia;
 	}
+
+	
+	public String getCanton() {
+		return canton;
+	}
+
+	
+	public void setCanton(String canton) {
+		this.canton = canton;
+	}
+
+	
+	public String getDistrito() {
+		return distrito;
+	}
+
+	
+	public void setDistrito(String distrito) {
+		this.distrito = distrito;
+	}
+
+	
+	public String getBarrio() {
+		return barrio;
+	}
+
+	
+	public void setBarrio(String barrio) {
+		this.barrio = barrio;
+	}
+
+	
+	public BigInteger getCodigoPais() {
+		return codigoPais;
+	}
+
+	
+	public void setCodigoPais(BigInteger codigoPais) {
+		this.codigoPais = codigoPais;
+	}
+
+	
+	public String getIdentificacionExtranjero() {
+		return identificacionExtranjero;
+	}
+
+	
+	public void setIdentificacionExtranjero(String identificacionExtranjero) {
+		this.identificacionExtranjero = identificacionExtranjero;
+	}
+	
+	
 }

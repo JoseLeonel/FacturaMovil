@@ -232,6 +232,12 @@ public class ClientesController {
 			clienteBD.setTelefono(cliente.getTelefono());
 			clienteBD.setCelular(cliente.getCelular());
 			clienteBD.setUsuario(usuarioSesion);
+			clienteBD.setBarrio(cliente.getBarrio());
+			clienteBD.setCanton(cliente.getCanton());
+			clienteBD.setCodigoPais(cliente.getCodigoPais());
+			clienteBD.setDistrito(cliente.getDistrito());
+			clienteBD.setIdentificacionExtranjero(cliente.getIdentificacionExtranjero());
+			
 			clienteBo.modificar(clienteBD);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("cliente.modificado.correctamente", clienteBD);
