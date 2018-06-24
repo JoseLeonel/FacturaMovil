@@ -8,6 +8,7 @@ import com.factura.FacturaElectronica.modelo.Articulo;
 import com.factura.FacturaElectronica.modelo.Categoria;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Marca;
+import com.factura.FacturaElectronica.modelo.Usuario;
 
 public class ArticuloCommand {
 
@@ -16,26 +17,32 @@ public class ArticuloCommand {
 	private String			codigo;
 
 	private String			descripcion;
+
 	private String			serie;
+
 	private String			unidadMedida;
+
 	private String			contable;
-	private BigDecimal	costo;
-	private BigDecimal	cantidad;
 
-	private BigDecimal	impuesto;
+	private Double			costo;
 
-	private BigDecimal	precioPublico;
+	private Double			impuesto;
 
-	private BigDecimal	gananciaPrecioPublico;
+	private Double			precioPublico;
 
-	private BigDecimal	precioMayorista;
+	private Double			gananciaPrecioPublico;
 
-	private BigDecimal	gananciaPrecioMayorista;
+	private Double			precioMayorista;
 
-	private BigDecimal	precioEspecial;
+	private Double			gananciaPrecioMayorista;
 
-	private BigDecimal	gananciaPrecioEspecial;
+	private Double			precioEspecial;
+
+	private Double			gananciaPrecioEspecial;
+
 	private String			estado;
+
+	private String			tipoImpuesto;
 
 	private Date				created_at;
 
@@ -43,9 +50,12 @@ public class ArticuloCommand {
 
 	private Marca				marca;
 
+	private Usuario			usuario;
+
 	private Categoria		categoria;
 
 	private Empresa			empresa;
+	private BigDecimal	cantidad;
 
 	public ArticuloCommand(Articulo articulo) {
 		super();
@@ -71,6 +81,8 @@ public class ArticuloCommand {
 		this.contable = articulo.getContable();
 		Double resultado = articulo.getInventarios().stream().filter(o -> o.getEstado().equals(Constantes.ESTADO_ACTIVO)).mapToDouble(o -> o.getCantidad().doubleValue()).sum();
 		this.cantidad = BigDecimal.valueOf(resultado);
+		this.tipoImpuesto = articulo.getTipoImpuesto();
+		this.usuario = articulo.getUsuario();
 	}
 
 	public ArticuloCommand() {
@@ -125,75 +137,67 @@ public class ArticuloCommand {
 		this.contable = contable;
 	}
 
-	public BigDecimal getCosto() {
+	public Double getCosto() {
 		return costo;
 	}
 
-	public void setCosto(BigDecimal costo) {
+	public void setCosto(Double costo) {
 		this.costo = costo;
 	}
 
-	public BigDecimal getCantidad() {
-		return cantidad;
-	}
-
-	public void setCantidad(BigDecimal cantidad) {
-		this.cantidad = cantidad;
-	}
-
-	public BigDecimal getImpuesto() {
+	public Double getImpuesto() {
 		return impuesto;
 	}
 
-	public void setImpuesto(BigDecimal impuesto) {
+	public void setImpuesto(Double impuesto) {
 		this.impuesto = impuesto;
 	}
 
-	public BigDecimal getPrecioPublico() {
+	public Double getPrecioPublico() {
 		return precioPublico;
 	}
 
-	public void setPrecioPublico(BigDecimal precioPublico) {
+	public void setPrecioPublico(Double precioPublico) {
 		this.precioPublico = precioPublico;
 	}
 
-	public BigDecimal getGananciaPrecioPublico() {
+	public Double getGananciaPrecioPublico() {
 		return gananciaPrecioPublico;
 	}
 
-	public void setGananciaPrecioPublico(BigDecimal gananciaPrecioPublico) {
+	public void setGananciaPrecioPublico(Double gananciaPrecioPublico) {
 		this.gananciaPrecioPublico = gananciaPrecioPublico;
 	}
 
-	public BigDecimal getPrecioMayorista() {
+	public Double getPrecioMayorista() {
 		return precioMayorista;
 	}
 
-	public void setPrecioMayorista(BigDecimal precioMayorista) {
+	public void setPrecioMayorista(Double precioMayorista) {
 		this.precioMayorista = precioMayorista;
 	}
 
-	public BigDecimal getGananciaPrecioMayorista() {
+	public Double getGananciaPrecioMayorista() {
 		return gananciaPrecioMayorista;
 	}
 
-	public void setGananciaPrecioMayorista(BigDecimal gananciaPrecioMayorista) {
+	public void setGananciaPrecioMayorista(Double gananciaPrecioMayorista) {
 		this.gananciaPrecioMayorista = gananciaPrecioMayorista;
 	}
 
-	public BigDecimal getPrecioEspecial() {
+	public Double getPrecioEspecial() {
 		return precioEspecial;
 	}
 
-	public void setPrecioEspecial(BigDecimal precioEspecial) {
+	public void setPrecioEspecial(Double precioEspecial) {
 		this.precioEspecial = precioEspecial;
 	}
 
-	public BigDecimal getGananciaPrecioEspecial() {
+	public Double getGananciaPrecioEspecial() {
 		return gananciaPrecioEspecial;
 	}
 
-	public void setGananciaPrecioEspecial(BigDecimal gananciaPrecioEspecial) {
+	public void setGananciaPrecioEspecial(Double gananciaPrecioEspecial) {
 		this.gananciaPrecioEspecial = gananciaPrecioEspecial;
 	}
 
@@ -203,6 +207,14 @@ public class ArticuloCommand {
 
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+
+	public String getTipoImpuesto() {
+		return tipoImpuesto;
+	}
+
+	public void setTipoImpuesto(String tipoImpuesto) {
+		this.tipoImpuesto = tipoImpuesto;
 	}
 
 	public Date getCreated_at() {
@@ -229,6 +241,14 @@ public class ArticuloCommand {
 		this.marca = marca;
 	}
 
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
 	public Categoria getCategoria() {
 		return categoria;
 	}
@@ -243,6 +263,14 @@ public class ArticuloCommand {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public BigDecimal getCantidad() {
+		return cantidad;
+	}
+
+	public void setCantidad(BigDecimal cantidad) {
+		this.cantidad = cantidad;
 	}
 
 }

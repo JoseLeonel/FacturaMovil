@@ -1,6 +1,5 @@
 package com.factura.FacturaElectronica.web.command;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import com.factura.FacturaElectronica.modelo.Articulo;
@@ -8,20 +7,20 @@ import com.factura.FacturaElectronica.modelo.Inventario;
 
 public class InventarioCommand {
 
-	private Integer			id;
-	private BigDecimal	cantidad;
+	private Integer		id;
+	private Double		cantidad;
 
-	private Double			minimo;
+	private Double		minimo;
 
-	private Double			maximo;
+	private Double		maximo;
 
-	private String			estado;
+	private String		estado;
 
-	private Date				created_at;
+	private Date			created_at;
 
-	private Date				updated_at;
+	private Date			updated_at;
 
-	private Articulo		articulo;
+	private Articulo	articulo;
 
 	public InventarioCommand(Inventario inventario) {
 		super();
@@ -79,11 +78,11 @@ public class InventarioCommand {
 		this.articulo = articulo;
 	}
 
-	public BigDecimal getCantidad() {
+	public Double getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(BigDecimal cantidad) {
+	public void setCantidad(Double cantidad) {
 		this.cantidad = cantidad;
 	}
 

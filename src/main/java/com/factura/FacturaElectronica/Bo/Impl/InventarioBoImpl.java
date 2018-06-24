@@ -60,8 +60,8 @@ public class InventarioBoImpl implements InventarioBo {
 	 * @see com.factura.bo.InventarioBo#sumarCantidad(com.factura.domain.Inventario, java.lang.Float)
 	 */
 	@Override
-	public BigDecimal sumarCantidad(Inventario inventario, BigDecimal cantidad) {
-		inventario.setCantidad(inventario.getCantidad().add(cantidad));
+	public Double sumarCantidad(Inventario inventario, Double cantidad) {
+		inventario.setCantidad(inventario.getCantidad() +cantidad);
 		return inventario.getCantidad();
 		
 	}
@@ -71,8 +71,8 @@ public class InventarioBoImpl implements InventarioBo {
 	 * @see com.factura.bo.InventarioBo#restarCantidad(com.factura.domain.Inventario, java.lang.Float)
 	 */
 	@Override
-	public BigDecimal restarCantidad(Inventario inventario, BigDecimal cantidad) {
-		inventario.setCantidad(inventario.getCantidad().subtract(cantidad));
+	public Double restarCantidad(Inventario inventario, Double cantidad) {
+		inventario.setCantidad(inventario.getCantidad() - cantidad);
 		return inventario.getCantidad();
 		
 	}

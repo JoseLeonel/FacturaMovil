@@ -1,7 +1,5 @@
 package com.factura.FacturaElectronica.Bo;
 
-import java.math.BigDecimal;
-
 import com.factura.FacturaElectronica.modelo.Usuario;
 import com.factura.FacturaElectronica.modelo.UsuarioCaja;
 
@@ -16,8 +14,8 @@ public interface UsuarioCajaBo {
 	UsuarioCaja buscar(Integer id);
 	UsuarioCaja findByUsuarioAndEstado(Usuario usuario,String estado);
 	
-	void cierreCaja(UsuarioCaja usuarioCaja);
+	void cierreCaja(UsuarioCaja usuarioCaja) throws Exception;
 	
-	void actualizarCaja(UsuarioCaja usuarioCaja,BigDecimal totalEfectivo,BigDecimal totalTarjeta,BigDecimal totalBanco,BigDecimal totalCredito,BigDecimal totalAbono);
+	void actualizarCaja(UsuarioCaja usuarioCaja,Double totalEfectivo,Double totalTarjeta,Double totalBanco,Double totalCredito,Double totalAbono)throws Exception;
 
 }

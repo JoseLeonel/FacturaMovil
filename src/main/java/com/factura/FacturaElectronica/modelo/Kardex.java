@@ -1,7 +1,6 @@
 package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -34,16 +33,16 @@ public class Kardex implements Serializable {
 	private Integer						id;
 
 	@Column(name = "cantidad_solicitada")
-	private BigDecimal				cantidadSolicitada;
+	private Double						cantidadSolicitada;
 
 	@Column(name = "cantidad_actual")
-	private BigDecimal				cantidadActual;
+	private Double						cantidadActual;
 
 	@Column(name = "costo_actual")
-	private BigDecimal				costoActual;
+	private Double						costoActual;
 
 	@Column(name = "total_costo_actual")
-	private BigDecimal				totalCostoActual;
+	private Double						totalCostoActual;
 
 	@Column(name = "codigo")
 	private String						codigo;
@@ -52,13 +51,13 @@ public class Kardex implements Serializable {
 	private String						observacion;
 
 	@Column(name = "cantidad_nueva")
-	private BigDecimal				cantidadNueva;
+	private Double						cantidadNueva;
 
 	@Column(name = "costo_nuevo")
-	private BigDecimal				costoNuevo;
+	private Double						costoNuevo;
 
 	@Column(name = "total_costo_nuevo")
-	private BigDecimal				totalCostoNuevo;
+	private Double						totalCostoNuevo;
 
 	@Column(name = "consecutivo")
 	private String						consecutivo;
@@ -94,15 +93,7 @@ public class Kardex implements Serializable {
 
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Kardex(Integer id, BigDecimal cantidadSolicitada, BigDecimal cantidadActual, BigDecimal costoActual, BigDecimal totalCostoActual, String codigo, String observacion, BigDecimal cantidadNueva, BigDecimal costoNuevo, BigDecimal totalCostoNuevo, String consecutivo, String tipo, String motivo, Date created_at, Date updated_at, Inventario inventario, Usuario usuario) {
+	public Kardex(Integer id, Double cantidadSolicitada, Double cantidadActual, Double costoActual, Double totalCostoActual, String codigo, String observacion, Double cantidadNueva, Double costoNuevo, Double totalCostoNuevo, String consecutivo, String tipo, String motivo, Date created_at, Date updated_at, Inventario inventario, Usuario usuario) {
 		super();
 		this.id = id;
 		this.cantidadSolicitada = cantidadSolicitada;
@@ -123,35 +114,43 @@ public class Kardex implements Serializable {
 		this.usuario = usuario;
 	}
 
-	public BigDecimal getCantidadSolicitada() {
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Double getCantidadSolicitada() {
 		return cantidadSolicitada;
 	}
 
-	public void setCantidadSolicitada(BigDecimal cantidadSolicitada) {
+	public void setCantidadSolicitada(Double cantidadSolicitada) {
 		this.cantidadSolicitada = cantidadSolicitada;
 	}
 
-	public BigDecimal getCantidadActual() {
+	public Double getCantidadActual() {
 		return cantidadActual;
 	}
 
-	public void setCantidadActual(BigDecimal cantidadActual) {
+	public void setCantidadActual(Double cantidadActual) {
 		this.cantidadActual = cantidadActual;
 	}
 
-	public BigDecimal getCostoActual() {
+	public Double getCostoActual() {
 		return costoActual;
 	}
 
-	public void setCostoActual(BigDecimal costoActual) {
+	public void setCostoActual(Double costoActual) {
 		this.costoActual = costoActual;
 	}
 
-	public BigDecimal getTotalCostoActual() {
+	public Double getTotalCostoActual() {
 		return totalCostoActual;
 	}
 
-	public void setTotalCostoActual(BigDecimal totalCostoActual) {
+	public void setTotalCostoActual(Double totalCostoActual) {
 		this.totalCostoActual = totalCostoActual;
 	}
 
@@ -171,27 +170,27 @@ public class Kardex implements Serializable {
 		this.observacion = observacion;
 	}
 
-	public BigDecimal getCantidadNueva() {
+	public Double getCantidadNueva() {
 		return cantidadNueva;
 	}
 
-	public void setCantidadNueva(BigDecimal cantidadNueva) {
+	public void setCantidadNueva(Double cantidadNueva) {
 		this.cantidadNueva = cantidadNueva;
 	}
 
-	public BigDecimal getCostoNuevo() {
+	public Double getCostoNuevo() {
 		return costoNuevo;
 	}
 
-	public void setCostoNuevo(BigDecimal costoNuevo) {
+	public void setCostoNuevo(Double costoNuevo) {
 		this.costoNuevo = costoNuevo;
 	}
 
-	public BigDecimal getTotalCostoNuevo() {
+	public Double getTotalCostoNuevo() {
 		return totalCostoNuevo;
 	}
 
-	public void setTotalCostoNuevo(BigDecimal totalCostoNuevo) {
+	public void setTotalCostoNuevo(Double totalCostoNuevo) {
 		this.totalCostoNuevo = totalCostoNuevo;
 	}
 

@@ -83,12 +83,11 @@ public class CompraDaoImpl implements CompraDao {
 			log.info("** Inicio de la ejecucion del procedimiento almacendos eliminar detalles de compra : " + " fecha " + new Date());
 
 			StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_ELIMINAR_DETALLES_COMPRAS);
-			storedProcedure.registerStoredProcedureParameter(Constantes.SP_ELIMINAR_DETALLES_COMPRAS_ID_COMPRA_PARAM, Integer.class, ParameterMode.IN);
-			storedProcedure.setParameter(Constantes.SP_ELIMINAR_DETALLES_COMPRAS_ID_COMPRA_PARAM, compra.getId());
-			
+			storedProcedure.registerStoredProcedureParameter(0, Integer.class, ParameterMode.IN);
+			storedProcedure.setParameter(0, compra.getId());
 			storedProcedure.execute();
 
-			log.info("** Inicio de la ejecucion del procedimiento almacendos eliminar detalles de compra : " + " fecha " + new Date());
+			log.info("** Fin de la ejecucion del procedimiento almacendos eliminar detalles de compra : " + " fecha " + new Date());
 
 		} catch (Exception e) {
 			log.error("** Error ejecutar el procedimineto almacenados de eliminar detalles de una compra : " + e.getMessage() + " fecha " + new Date());

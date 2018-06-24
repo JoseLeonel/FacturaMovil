@@ -1,7 +1,6 @@
 package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -17,8 +16,6 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.factura.FacturaElectronica.Utils.Constantes;
-
 /**
  * Modelo para abrir cajas a usuarios para facturar UsuarioCaja.
  * @author jose.
@@ -28,62 +25,56 @@ import com.factura.FacturaElectronica.Utils.Constantes;
 @Table(name = "usuarios_cajas")
 public class UsuarioCaja implements Serializable {
 
-	
-	private static final long serialVersionUID = 8895530294398977996L;
+	private static final long	serialVersionUID	= 8895530294398977996L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer	id;
+	private Integer						id;
 
 	@Column(name = "total_fondo_inicial")
-	private BigDecimal	totalFondoInicial;
+	private Double						totalFondoInicial;
 
 	@Column(name = "total_efectivo")
-	private BigDecimal	totalEfectivo;
+	private Double						totalEfectivo;
 
 	@Column(name = "total_tarjeta")
-	private BigDecimal	totalTarjeta;
+	private Double						totalTarjeta;
 
 	@Column(name = "total_banco")
-	private BigDecimal	totalBanco;
+	private Double						totalBanco;
 
 	@Column(name = "total_credito")
-	private BigDecimal	totalCredito;
+	private Double						totalCredito;
 
 	@Column(name = "total_abono")
-	private BigDecimal	totalAbono;
+	private Double						totalAbono;
 
 	@Column(name = "total_neto")
-	private BigDecimal	totalNeto;
+	private Double						totalNeto;
 
-	
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
-	private Usuario	usuario;
+	private Usuario						usuario;
 
 	@ManyToOne
 	@JoinColumn(name = "caja_id")
-	private Caja		caja;
+	private Caja							caja;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "created_at")
-	private Date		created_at;
+	private Date							created_at;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
-	private Date		updated_at;
+	private Date							updated_at;
 
 	@Column(name = "estado")
-	private String	estado;
+	private String						estado;
 
-	
-
-	
-
-	public UsuarioCaja(Integer id, BigDecimal totalFondoInicial, BigDecimal totalEfectivo, BigDecimal totalTarjeta, BigDecimal totalBanco, BigDecimal totalCredito, BigDecimal totalAbono, BigDecimal totalNeto, Usuario usuario, Caja caja, Date created_at, Date updated_at, String estado) {
+	public UsuarioCaja(Integer id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalNeto, Usuario usuario, Caja caja, Date created_at, Date updated_at, String estado) {
 		super();
 		this.id = id;
 		this.totalFondoInicial = totalFondoInicial;
@@ -102,14 +93,6 @@ public class UsuarioCaja implements Serializable {
 
 	public UsuarioCaja() {
 		super();
-		this.totalFondoInicial = BigDecimal.ZERO;
-		this.totalEfectivo = BigDecimal.ZERO;
-		this.totalTarjeta = BigDecimal.ZERO;
-		this.totalBanco = BigDecimal.ZERO;
-		this.totalCredito = BigDecimal.ZERO;
-		this.totalNeto = BigDecimal.ZERO;
-		this.estado = Constantes.ESTADO_ACTIVO;
-		this.totalAbono = BigDecimal.ZERO;
 	}
 
 	public Integer getId() {
@@ -120,7 +103,62 @@ public class UsuarioCaja implements Serializable {
 		this.id = id;
 	}
 
-	
+	public Double getTotalFondoInicial() {
+		return totalFondoInicial;
+	}
+
+	public void setTotalFondoInicial(Double totalFondoInicial) {
+		this.totalFondoInicial = totalFondoInicial;
+	}
+
+	public Double getTotalEfectivo() {
+		return totalEfectivo;
+	}
+
+	public void setTotalEfectivo(Double totalEfectivo) {
+		this.totalEfectivo = totalEfectivo;
+	}
+
+	public Double getTotalTarjeta() {
+		return totalTarjeta;
+	}
+
+	public void setTotalTarjeta(Double totalTarjeta) {
+		this.totalTarjeta = totalTarjeta;
+	}
+
+	public Double getTotalBanco() {
+		return totalBanco;
+	}
+
+	public void setTotalBanco(Double totalBanco) {
+		this.totalBanco = totalBanco;
+	}
+
+	public Double getTotalCredito() {
+		return totalCredito;
+	}
+
+	public void setTotalCredito(Double totalCredito) {
+		this.totalCredito = totalCredito;
+	}
+
+	public Double getTotalAbono() {
+		return totalAbono;
+	}
+
+	public void setTotalAbono(Double totalAbono) {
+		this.totalAbono = totalAbono;
+	}
+
+	public Double getTotalNeto() {
+		return totalNeto;
+	}
+
+	public void setTotalNeto(Double totalNeto) {
+		this.totalNeto = totalNeto;
+	}
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -160,78 +198,5 @@ public class UsuarioCaja implements Serializable {
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
-
-	
-	public BigDecimal getTotalFondoInicial() {
-		return totalFondoInicial;
-	}
-
-	
-	public void setTotalFondoInicial(BigDecimal totalFondoInicial) {
-		this.totalFondoInicial = totalFondoInicial;
-	}
-
-	
-	public BigDecimal getTotalEfectivo() {
-		return totalEfectivo;
-	}
-
-	
-	public void setTotalEfectivo(BigDecimal totalEfectivo) {
-		this.totalEfectivo = totalEfectivo;
-	}
-
-	
-	public BigDecimal getTotalTarjeta() {
-		return totalTarjeta;
-	}
-
-	
-	public void setTotalTarjeta(BigDecimal totalTarjeta) {
-		this.totalTarjeta = totalTarjeta;
-	}
-
-	
-	public BigDecimal getTotalBanco() {
-		return totalBanco;
-	}
-
-	
-	public void setTotalBanco(BigDecimal totalBanco) {
-		this.totalBanco = totalBanco;
-	}
-
-	
-	public BigDecimal getTotalCredito() {
-		return totalCredito;
-	}
-
-	
-	public void setTotalCredito(BigDecimal totalCredito) {
-		this.totalCredito = totalCredito;
-	}
-
-	
-	public BigDecimal getTotalAbono() {
-		return totalAbono;
-	}
-
-	
-	public void setTotalAbono(BigDecimal totalAbono) {
-		this.totalAbono = totalAbono;
-	}
-
-	
-	public BigDecimal getTotalNeto() {
-		return totalNeto;
-	}
-
-	
-	public void setTotalNeto(BigDecimal totalNeto) {
-		this.totalNeto = totalNeto;
-	}
-
-	
-		
 
 }

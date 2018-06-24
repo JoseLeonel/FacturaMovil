@@ -4,55 +4,60 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div  class= "wrap">
-        <h1>{$.i18n.prop("tikect.titulo")} {factura.numeroConsecutivo}<h1>
+        <h1>{$.i18n.prop("tikect.encabezado.numeroFactura")} {facturaImpresa.numeroConsecutivo}<h1>
         <div class="pantalla-imprimir">
             <div class="botones-imprimir">
-                <a href="#" class="boton-imprimir"  onclick = {__ImprimirFactura} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir(F8)</a>
+                <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir(F8)</a>
                 <a href="#" class="boton-imprimir" id="boton-regresar" onclick = {__RegresarVentaImprimir}><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Regresar(Esc)</a>
             </div>
             <section class="zona-impresion" id="imprimeme">
                 <div class="forma-impresion">
                     <div class="ticket" > 
-                        <div class="encabezado"><strong> {factura.empresa.nombre}                </strong><br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.cedula")}       </strong>{factura.empresa.cedula}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.telefono")}     </strong>{factura.empresa.telefono}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.celular")}      </strong>{factura.empresa.celular}<br></div>                                                 
-                        <div class="encabezado"></strong>{factura.empresa.direccion}<br>                 </strong></div>
-                        <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.numeroFactura")} </strong>{factura.numeroConsecutivo}</div>
-                        <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.fecha.emision")} </strong>{factura.fechaEmision}</div>
+                        <div class="encabezado"><strong> {factura.empresa.nombre}                        </strong><br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.cedula")}       </strong>{facturaImpresa.empresa.cedula}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.telefono")}     </strong>{facturaImpresa.empresa.telefono}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.celular")}      </strong>{facturaImpresa.empresa.celular}<br></div>                                                 
+                        
+                        <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.numeroFactura")} </strong>{facturaImpresa.numeroConsecutivo}</div>
+                        <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.fecha.emision")} </strong>{facturaImpresa.fechaEmision}</div>
+                        <div class="encabezado"></strong>{facturaImpresa.empresa.direccion}                     </strong></div><br>
                         <table class = "forma-table"  >
                             <thead>
                                 <tr class = "forma-table">
                                     <th class="cantidad">{$.i18n.prop("tikect.detalle.cantidad")}  </th>
                                     <th class="producto">{$.i18n.prop("tikect.detalle.descripcion")}</th>
-                                    <th class="precio">  ₡{$.i18n.prop("tikect.detalle.subTotal")}</th>
+                                    <th class="precio"> {$.i18n.prop("tikect.detalle.subTotal")}</th>
                                 </tr>
                             </thead>
                         <tbody>
-                            <tr class = "" each={factura.detalles}>
+                            <tr class = "" each={detalles} class="detalleTables">
                                 <td class="cantidad">{cantidad}</td>
                                 <td class="producto">{articulo.descripcion}</td>
-                                <td class="precio">{montoTotalLinea.toLocaleString('de-DE')}</td>
+                                <td class="precio">₡{montoTotalLinea.toLocaleString('de-DE')}</td>
+                            </tr>
+                            </tr>
+                            <tr>
+                            <td colspan="3"></td>
                             </tr>
                             <tr class = "forma-table">
                             <td></td>
-                            <td>{$.i18n.prop("tikect.detalle.subTotal")}</td>
-                            <td>₡ {factura.subTotal.toLocaleString('de-DE') }  </td>
+                            <td ><strong>{$.i18n.prop("tikect.detalle.subTotal")}</strong></td>
+                            <td ><strong>₡{facturaImpresa.subTotal.toLocaleString('de-DE') } </strong>  </td>
                             </tr>
                             <tr>
                             <td></td>
-                            <td>{$.i18n.prop("tikect.detalle.descuento")}</td>
-                            <td>₡ {factura.totalDescuento.toLocaleString('de-DE')}</td>
+                            <td ><strong>{$.i18n.prop("tikect.detalle.descuento")}</strong></td>
+                            <td ><strong>₡{facturaImpresa.totalDescuento.toLocaleString('de-DE')}</strong></td>
                             </tr>
                             <tr>
                             <td></td>
-                            <td>{$.i18n.prop("tikect.detalle.impuesto")}</td>
-                            <td>₡ {factura.totalImpuesto.toLocaleString('de-DE')}</td>
+                            <td><strong>{$.i18n.prop("tikect.detalle.impuesto")}</strong></td>
+                            <td><strong>₡{facturaImpresa.totalImpuesto.toLocaleString('de-DE')}</strong></td>
                             </tr>
                             <tr>
                             <td></td>
-                            <td>{$.i18n.prop("tikect.detalle.total")}</td>
-                            <td>₡ {factura.totalVentaNeta.toLocaleString('de-DE')}</td>
+                            <td ><strong>{$.i18n.prop("tikect.detalle.total")}</strong></td>
+                            <td ><strong>₡{facturaImpresa.totalVentaNeta.toLocaleString('de-DE')}</strong></td>
                             </tr>
                             <tr>
                             <td colspan="3"></td>
@@ -78,147 +83,163 @@
 
 
 <style type="text/css">
-  .fondoEncabezado {
+    .fondoEncabezado
+    {
         background: #00539B;
         color: #f9fafc;
     }
-    
-    .wrap{
-        max-width:1100;
-        width:90%;
-        margin:auto;
+    .wrap
+    {
+        margin: auto;
+        max-width: 1100;
+        width: 90%;
     }
-    .wrap >h1{
+    .wrap >h1
+    {
         color: #494B4D;
-        font-weight: 400;
         display: flex;
         flex-direction: column;
-        text-align: center;
+        font-weight: 400;
         margin: 15px 0px;
+        text-align: center;
     }
-    .wrap > h1:after{
-        content: '';
-        width: 100%;
-        height: 1px;
+    .wrap > h1:after
+    {
         background: #C7C7C7;
-	    margin: 20px 0;
+        content: '';
+        height: 1px;
+        margin: 20px 0;
+        width: 100%;
     }
-    .pantalla-imprimir{
+    .pantalla-imprimir
+    {
         display: flex;
-	    flex-wrap: wrap;
+        flex-wrap: wrap;
     }
-    .botones-imprimir{
+    .botones-imprimir
+    {
         display: flex;
-	    flex-direction: column;
-	    width: 20%;
+        flex-direction: column;
+        width: 20%;
     }
-    .botones-imprimir .boton-imprimir{
-        cursor: pointer;
-        padding: 10px;
-        margin: 15px;
-        border: none;
-        color: #fff;
-        text-decoration:none;
-        font-size: 18px;  
-        padding-top:8px !important; 
-        padding-bottom:8px !important; 
-        margin-bottom: 8px;
-        text-align: center !important;
+    .botones-imprimir .boton-imprimir
+    {
         background-color: #6dca42 !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 5px 0 rgba(0, 0, 0, 0.20);
+        border: none;
         border-radius: 30px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 5px 0 rgba(0, 0, 0, 0.20);
+        color: #fff;
+        cursor: pointer;
+        font-size: 18px;
+        margin: 15px;
+        margin-bottom: 8px;
+        moz-transition: background-color 100ms linear;
+        ms-transition: background-color 100ms linear;
+        o-transition: background-color 100ms linear;
+        padding: 10px;
+        padding-bottom: 8px !important;
+        padding-top: 8px !important;
+        text-align: center !important;
+        text-decoration: none;
         transition: background-color 100ms linear;
-     }
-   .ticket {
-        height: auto;
-        width: 377px;
-        margin: 0px;
-        padding: 0px;
-        float: left;
-        font-style: normal;
-        line-height: normal;
-        font-weight: normal;
-        font-variant: normal;
-        text-transform: none;
+        webkit-transition: background-color 100ms linear;
+    }
+
+  
+    .ticket
+    {
         color: #000;
-        font-size: 14px;
+        float: left;
         font-family: 'Times New Roman';
-        
+        font-size: 14px;
+        font-style: normal;
+        font-variant: normal;
+        font-weight: normal;
+        height: auto;
+        line-height: normal;
+        margin: 0px;
         max-width: 377px;
-       
+        padding: 0px;
+        text-transform: none;
+        width: 377px;
     }
-    .ticket > table{
+    .ticket > table
+    {
+        border-collapse: collapse;
         border-top: 0px solid black;
-        border-collapse: collapse;
     }
-    .forma-table {
-        border-top:1px solid black;
+    .forma-table
+    {
         border-collapse: collapse;
+        border-top: 1px solid black;
     }
-    .ticket > td.producto,th.producto {
-        width: 377px;
+    .ticket > td.producto,th.producto
+    {
         max-width: 75px;
+        width: 377px;
     }
-    .ticket > td.cantidad,th.cantidad {
+    .ticket > td.cantidad,th.cantidad
+    {
         width: 377px;
         word-break: break-all;
     }
-    .ticket > td.precio,th.precio {
+    .ticket > td.precio,th.precio
+    {
         width: 377px;
         word-break: break-all;
     }
-    .encabezado {
-        text-align: left;
+    .encabezado
+    {
         align-content: left;
+        text-align: left;
     }
-    .ticket > img {
+    .ticket > img
+    {
         max-width: inherit;
         width: inherit;
     }
-    @page{
-       margin: 0;
-       
+    @page
+    {
+        margin: 0;
     }
-    
-    .zona-impresion{
-        width: 80%;
-	    display: flex;
-	    flex-wrap: wrap;
-     }
-     .zona-impresion .forma-impresion{
-        width: 80%;
-        margin-left: 1%;
-        margin-bottom: 45px;
-        box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.70);
+    .zona-impresion
+    {
         display: flex;
-        flex-direction: column;
+        flex-wrap: wrap;
+        width: 80%;
+    }
+    .zona-impresion .forma-impresion
+    {
         align-items: center;
         align-self: flex-start;
         background-color: white !important;
+        box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.70);
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 45px;
+        margin-left: 1%;
         transition: all .4s;
-     
+        width: 80%;
     }
-    .encabezado {
-        text-align: left;
+    .encabezado
+    {
         align-content: left;
+        text-align: left;
     }
-    
 
 </style>    
-
 <script>
 
 var self = this;
-self.factura   = opts.factura;  
-
+self.facturaImpresa   = opts.factura;  
+self.detalles = []
 
 self.on('mount',function(){
-    if(self.factura.id > 0){
-        self.factura.fechaEmision = displayDate_detail(self.factura.fechaEmision)
+    
+    if(self.facturaImpresa.id > 0){
+        self.detalles = []
+        self.detalles =self.facturaImpresa.detalles
+        self.facturaImpresa.fechaEmision = displayDate_detail(self.facturaImpresa.fechaEmision)
         self.update()
        $('.imprimirModal').modal('show'); 
     }
@@ -231,41 +252,39 @@ self.on('mount',function(){
 **/      
 function __Teclas(){
     window.addEventListener( "keydown", function(evento){
-        var tecla = evento.keyCode; 
-    if(tecla ==119){
-        //Pantalla de imprimir F8 imprimir
-        var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
-        var ventana=window.open('','_blank');  //abrimos una ventana vacía nueva
-        ventana.document.write(objeto.innerHTML);  //imprimimos el HTML del objeto en la nueva ventana
-        ventana.document.close();  //cerramos el documento
-        ventana.print();  //imprimimos la ventana
-        ventana.close();  //cerramos la ventana
-         }    
-
-    
+       var tecla = evento.keyCode; 
+        if(tecla ==119){
+            __imprimir()
+        }    
     }, false );
-  
-   
-
+ 
 }
 
-
+/**
+*Formato de Fecha
+**/
 function displayDate_detail(fecha) {
     return fecha == null?"":moment(fecha).format('DD/MM/YYYY h:mm:ss a');
 }
 
 /**
-*Imprimir factura
+*Imprimir facturaImpresa
 **/    
-__ImprimirFactura(){
-    var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
-          var ventana=window.open('','_blank');  //abrimos una ventana vacía nueva
-          ventana.document.write(objeto.innerHTML);  //imprimimos el HTML del objeto en la nueva ventana
-          ventana.document.close();  //cerramos el documento
-          ventana.print();  //imprimimos la ventana
-          ventana.close();  //cerramos la ventana
+__ImprimirfacturaImpresa(){
+    __imprimir()
+    $("#boton-regresar").focus()
+}
 
-           $("#boton-regresar").focus()
+/**
+*imprimir
+**/
+function __imprimir(){
+    var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
+    var ventana=window.open('','_blank');  //abrimos una ventana vacía nueva
+    ventana.document.write(objeto.innerHTML);  //imprimimos el HTML del objeto en la nueva ventana
+    ventana.document.close();  //cerramos el documento
+    ventana.print();  //imprimimos la ventana
+    ventana.close();  //cerramos la ventana
 }
 
 </script>

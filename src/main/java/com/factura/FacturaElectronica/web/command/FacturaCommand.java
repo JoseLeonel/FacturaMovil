@@ -1,6 +1,5 @@
 package com.factura.FacturaElectronica.web.command;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import com.factura.FacturaElectronica.modelo.Cliente;
@@ -38,47 +37,47 @@ public class FacturaCommand {
 
 	private String		comanda;
 
-	private BigDecimal		subTotal;
+	private Double		subTotal;
 
-	private BigDecimal		totalTransporte;
+	private Double		totalTransporte;
 
-	private BigDecimal		total;
+	private Double		total;
 
-	private BigDecimal		totalServGravados;
+	private Double		totalServGravados;
 
-	private BigDecimal		totalServExentos;
+	private Double		totalServExentos;
 
-	private BigDecimal		totalMercanciasGravadas;
+	private Double		totalMercanciasGravadas;
 
-	private BigDecimal		totalMercanciasExentas;
+	private Double		totalMercanciasExentas;
 
-	private BigDecimal		totalGravado;
+	private Double		totalGravado;
 
-	private BigDecimal		totalExento;
+	private Double		totalExento;
 
-	private BigDecimal		totalVenta;
+	private Double		totalVenta;
 
-	private BigDecimal		totalDescuentos;
+	private Double		totalDescuentos;
 
-	private BigDecimal		totalVentaNeta;
+	private Double		totalVentaNeta;
 
-	private BigDecimal		totalImpuesto;
+	private Double		totalImpuesto;
 
-	private BigDecimal		totalComprobante;
+	private Double		totalComprobante;
 
-	private BigDecimal		totalEfectivo;
+	private Double		totalEfectivo;
 
-	private BigDecimal		totalTarjeta;
+	private Double		totalTarjeta;
 
-	private BigDecimal		totalBanco;
+	private Double		totalBanco;
 
-	private BigDecimal		totalCredito;
+	private Double		totalCredito;
 
-	private BigDecimal		montoCambio;
+	private Double		montoCambio;
 
-	private BigDecimal		totalCambio;
+	private Double		totalCambio;
 	
-	private BigDecimal totalCambioPagar;
+	private Double totalCambioPagar;
 
 	private String		codigoMoneda;
 
@@ -101,7 +100,7 @@ public class FacturaCommand {
 	
 	
 
-	public FacturaCommand(Integer id, String fechaCredito, Integer numeroConsecutivo, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String medioPago, String nombreFactura, String direccion, String nota, String comanda, BigDecimal subTotal, BigDecimal totalTransporte, BigDecimal total, BigDecimal totalServGravados, BigDecimal totalServExentos, BigDecimal totalMercanciasGravadas, BigDecimal totalMercanciasExentas, BigDecimal totalGravado, BigDecimal totalExento, BigDecimal totalVenta, BigDecimal totalDescuentos, BigDecimal totalVentaNeta, BigDecimal totalImpuesto, BigDecimal totalComprobante, BigDecimal totalEfectivo, BigDecimal totalTarjeta, BigDecimal totalBanco, BigDecimal totalCredito, BigDecimal montoCambio, BigDecimal totalCambio, BigDecimal totalCambioPagar, String codigoMoneda, Integer estado, Date created_at, Date updated_at,
+	public FacturaCommand(Integer id, String fechaCredito, Integer numeroConsecutivo, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String medioPago, String nombreFactura, String direccion, String nota, String comanda, Double subTotal, Double totalTransporte, Double total, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalCambioPagar, String codigoMoneda, Integer estado, Date created_at, Date updated_at,
 			Cliente cliente, Vendedor vendedor, String detalleFactura, Empresa empresa) {
 		super();
 		this.id = id;
@@ -257,163 +256,163 @@ public class FacturaCommand {
 		this.comanda = comanda;
 	}
 
-	public BigDecimal getSubTotal() {
+	public Double getSubTotal() {
 		return subTotal;
 	}
 
-	public void setSubTotal(BigDecimal subTotal) {
+	public void setSubTotal(Double subTotal) {
 		this.subTotal = subTotal;
 	}
 
-	public BigDecimal getTotalTransporte() {
+	public Double getTotalTransporte() {
 		return totalTransporte;
 	}
 
-	public void setTotalTransporte(BigDecimal totalTransporte) {
+	public void setTotalTransporte(Double totalTransporte) {
 		this.totalTransporte = totalTransporte;
 	}
 
-	public BigDecimal getTotal() {
+	public Double getTotal() {
 		return total;
 	}
 
-	public void setTotal(BigDecimal total) {
+	public void setTotal(Double total) {
 		this.total = total;
 	}
 
-	public BigDecimal getTotalServGravados() {
+	public Double getTotalServGravados() {
 		return totalServGravados;
 	}
 
-	public void setTotalServGravados(BigDecimal totalServGravados) {
+	public void setTotalServGravados(Double totalServGravados) {
 		this.totalServGravados = totalServGravados;
 	}
 
-	public BigDecimal getTotalServExentos() {
+	public Double getTotalServExentos() {
 		return totalServExentos;
 	}
 
-	public void setTotalServExentos(BigDecimal totalServExentos) {
+	public void setTotalServExentos(Double totalServExentos) {
 		this.totalServExentos = totalServExentos;
 	}
 
-	public BigDecimal getTotalMercanciasGravadas() {
+	public Double getTotalMercanciasGravadas() {
 		return totalMercanciasGravadas;
 	}
 
-	public void setTotalMercanciasGravadas(BigDecimal totalMercanciasGravadas) {
+	public void setTotalMercanciasGravadas(Double totalMercanciasGravadas) {
 		this.totalMercanciasGravadas = totalMercanciasGravadas;
 	}
 
-	public BigDecimal getTotalMercanciasExentas() {
+	public Double getTotalMercanciasExentas() {
 		return totalMercanciasExentas;
 	}
 
-	public void setTotalMercanciasExentas(BigDecimal totalMercanciasExentas) {
+	public void setTotalMercanciasExentas(Double totalMercanciasExentas) {
 		this.totalMercanciasExentas = totalMercanciasExentas;
 	}
 
-	public BigDecimal getTotalGravado() {
+	public Double getTotalGravado() {
 		return totalGravado;
 	}
 
-	public void setTotalGravado(BigDecimal totalGravado) {
+	public void setTotalGravado(Double totalGravado) {
 		this.totalGravado = totalGravado;
 	}
 
-	public BigDecimal getTotalExento() {
+	public Double getTotalExento() {
 		return totalExento;
 	}
 
-	public void setTotalExento(BigDecimal totalExento) {
+	public void setTotalExento(Double totalExento) {
 		this.totalExento = totalExento;
 	}
 
-	public BigDecimal getTotalVenta() {
+	public Double getTotalVenta() {
 		return totalVenta;
 	}
 
-	public void setTotalVenta(BigDecimal totalVenta) {
+	public void setTotalVenta(Double totalVenta) {
 		this.totalVenta = totalVenta;
 	}
 
-	public BigDecimal getTotalDescuentos() {
+	public Double getTotalDescuentos() {
 		return totalDescuentos;
 	}
 
-	public void setTotalDescuentos(BigDecimal totalDescuentos) {
+	public void setTotalDescuentos(Double totalDescuentos) {
 		this.totalDescuentos = totalDescuentos;
 	}
 
-	public BigDecimal getTotalVentaNeta() {
+	public Double getTotalVentaNeta() {
 		return totalVentaNeta;
 	}
 
-	public void setTotalVentaNeta(BigDecimal totalVentaNeta) {
+	public void setTotalVentaNeta(Double totalVentaNeta) {
 		this.totalVentaNeta = totalVentaNeta;
 	}
 
-	public BigDecimal getTotalImpuesto() {
+	public Double getTotalImpuesto() {
 		return totalImpuesto;
 	}
 
-	public void setTotalImpuesto(BigDecimal totalImpuesto) {
+	public void setTotalImpuesto(Double totalImpuesto) {
 		this.totalImpuesto = totalImpuesto;
 	}
 
-	public BigDecimal getTotalComprobante() {
+	public Double getTotalComprobante() {
 		return totalComprobante;
 	}
 
-	public void setTotalComprobante(BigDecimal totalComprobante) {
+	public void setTotalComprobante(Double totalComprobante) {
 		this.totalComprobante = totalComprobante;
 	}
 
-	public BigDecimal getTotalEfectivo() {
+	public Double getTotalEfectivo() {
 		return totalEfectivo;
 	}
 
-	public void setTotalEfectivo(BigDecimal totalEfectivo) {
+	public void setTotalEfectivo(Double totalEfectivo) {
 		this.totalEfectivo = totalEfectivo;
 	}
 
-	public BigDecimal getTotalTarjeta() {
+	public Double getTotalTarjeta() {
 		return totalTarjeta;
 	}
 
-	public void setTotalTarjeta(BigDecimal totalTarjeta) {
+	public void setTotalTarjeta(Double totalTarjeta) {
 		this.totalTarjeta = totalTarjeta;
 	}
 
-	public BigDecimal getTotalBanco() {
+	public Double getTotalBanco() {
 		return totalBanco;
 	}
 
-	public void setTotalBanco(BigDecimal totalBanco) {
+	public void setTotalBanco(Double totalBanco) {
 		this.totalBanco = totalBanco;
 	}
 
-	public BigDecimal getTotalCredito() {
+	public Double getTotalCredito() {
 		return totalCredito;
 	}
 
-	public void setTotalCredito(BigDecimal totalCredito) {
+	public void setTotalCredito(Double totalCredito) {
 		this.totalCredito = totalCredito;
 	}
 
-	public BigDecimal getMontoCambio() {
+	public Double getMontoCambio() {
 		return montoCambio;
 	}
 
-	public void setMontoCambio(BigDecimal montoCambio) {
+	public void setMontoCambio(Double montoCambio) {
 		this.montoCambio = montoCambio;
 	}
 
-	public BigDecimal getTotalCambio() {
+	public Double getTotalCambio() {
 		return totalCambio;
 	}
 
-	public void setTotalCambio(BigDecimal totalCambio) {
+	public void setTotalCambio(Double totalCambio) {
 		this.totalCambio = totalCambio;
 	}
 
@@ -466,12 +465,12 @@ public class FacturaCommand {
 	}
 
 	
-	public BigDecimal getTotalCambioPagar() {
+	public Double getTotalCambioPagar() {
 		return totalCambioPagar;
 	}
 
 	
-	public void setTotalCambioPagar(BigDecimal totalCambioPagar) {
+	public void setTotalCambioPagar(Double totalCambioPagar) {
 		this.totalCambioPagar = totalCambioPagar;
 	}
 

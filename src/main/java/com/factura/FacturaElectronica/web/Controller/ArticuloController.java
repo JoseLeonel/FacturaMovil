@@ -145,7 +145,7 @@ public class ArticuloController {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			articulo.setImpuesto(articulo.getImpuesto() == null ? BigDecimal.ZERO : articulo.getImpuesto());
+			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
@@ -163,13 +163,13 @@ public class ArticuloController {
 			if (articulo.getCosto() == null) {
 				result.rejectValue("costo", "error.articulo.costo.mayorCero");
 			}
-			if (articulo.getCosto().compareTo(BigDecimal.ZERO) == 0) {
+			if (articulo.getCosto() == 0) {
 				result.rejectValue("costo", "error.articulo.costo.mayorCero");
 			}
 			if (articulo.getPrecioPublico() == null) {
 				result.rejectValue("costo", "error.articulo.precioPublico.mayorCero");
 			}
-			if (articulo.getPrecioPublico().compareTo(BigDecimal.ZERO) == 0) {
+			if (articulo.getPrecioPublico() == 0) {
 				result.rejectValue("costo", "error.articulo.precioPublico.mayorCero");
 			}
 
@@ -182,9 +182,9 @@ public class ArticuloController {
 			articulo.setGananciaPrecioPublico(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioPublico()));
 			articulo.setGananciaPrecioMayorista(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioMayorista()));
 			articulo.setGananciaPrecioEspecial(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioEspecial()));
-			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null ? BigDecimal.ZERO : articulo.getPrecioEspecial());
-			articulo.setPrecioMayorista(articulo.getPrecioMayorista() == null ? BigDecimal.ZERO : articulo.getPrecioMayorista());
-			articulo.setImpuesto(articulo.getImpuesto()==null?BigDecimal.ZERO:articulo.getImpuesto());
+			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null ?Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
+			articulo.setPrecioMayorista(articulo.getPrecioMayorista() == null ?Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
+			articulo.setImpuesto(articulo.getImpuesto()==null?Constantes.ZEROS_DOUBLE:articulo.getImpuesto());
 			articulo.setUsuario(usuarioSesion);
 			articuloBo.agregar(articulo);
 
@@ -210,7 +210,7 @@ public class ArticuloController {
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 		try {
-			articulo.setImpuesto(articulo.getImpuesto() == null ? BigDecimal.ZERO : articulo.getImpuesto());
+			articulo.setImpuesto(articulo.getImpuesto() == null ?Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			Articulo articuloBd = articuloBo.buscar(articulo.getId());
@@ -233,13 +233,13 @@ public class ArticuloController {
 			if (articulo.getCosto() == null) {
 				result.rejectValue("costo", "error.articulo.costo.mayorCero");
 			}
-			if (articulo.getCosto().compareTo(BigDecimal.ZERO) == 0) {
+			if (articulo.getCosto() == 0) {
 				result.rejectValue("costo", "error.articulo.costo.mayorCero");
 			}
 			if (articulo.getPrecioPublico() == null) {
 				result.rejectValue("costo", "error.articulo.precioPublico.mayorCero");
 			}
-			if (articulo.getPrecioPublico().compareTo(BigDecimal.ZERO) == 0) {
+			if (articulo.getPrecioPublico() == 0) {
 				result.rejectValue("costo", "error.articulo.precioPublico.mayorCero");
 			}
 
@@ -248,15 +248,19 @@ public class ArticuloController {
 			}
 			articuloBd.setCreated_at(new Date());
 			articuloBd.setUpdated_at(new Date());
+			articuloBd.setMarca(articulo.getMarca());
+			articuloBd.setCategoria(articulo.getCategoria());
+			articuloBd.setUnidadMedida(articulo.getUnidadMedida());
+			
 			articuloBd.setEstado(Constantes.ESTADO_ACTIVO);
 			articuloBd.setGananciaPrecioPublico(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioPublico()));
 			articuloBd.setGananciaPrecioMayorista(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioMayorista()));
 			articuloBd.setGananciaPrecioEspecial(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioEspecial()));
-			articuloBd.setPrecioEspecial(articulo.getPrecioEspecial() == null ? BigDecimal.ZERO : articulo.getPrecioEspecial());
-			articuloBd.setPrecioMayorista(articulo.getPrecioMayorista() == null ? BigDecimal.ZERO : articulo.getPrecioMayorista());
+			articuloBd.setPrecioEspecial(articulo.getPrecioEspecial() == null ?Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
+			articuloBd.setPrecioMayorista(articulo.getPrecioMayorista() == null ?Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
 			articuloBd.setUsuario(usuarioSesion);
 			articuloBd.setTipoImpuesto(articulo.getTipoImpuesto());
-			articuloBd.setImpuesto(articulo.getImpuesto()==null?BigDecimal.ZERO:articulo.getImpuesto());
+			articuloBd.setImpuesto(articulo.getImpuesto()==null?Constantes.ZEROS_DOUBLE:articulo.getImpuesto());
 			articuloBo.modificar(articuloBd);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBd);
 

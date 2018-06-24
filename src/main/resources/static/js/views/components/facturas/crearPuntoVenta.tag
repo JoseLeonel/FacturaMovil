@@ -232,7 +232,7 @@
                                 <input   class="form-control" type="text"  value = "{precioUnitario.toLocaleString('de-DE')}" readonly />
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarDescuento} class="form-control" type="text"  value = "{descuento.toLocaleString('de-DE')}" />
+                                <input  onkeypress={__actualizarDescuento} class="form-control" type="text"  value = "{porcentajeDesc.toLocaleString('de-DE')}" />
                             </td>
                                                         
                             <td class="text-right">
@@ -396,7 +396,7 @@
 </div>
 <!--fin del modal-->
  
-<ptv-imprimir></ptv-imprimir>
+
 
 <style type="text/css">
     /* Lista de facturas en espera*/
@@ -645,6 +645,8 @@
     self.mostrarCamposIngresoContado   = true;
 
     self.on('mount',function(){
+         
+         
         $("#formularioFactura").validate(reglasDeValidacionCompra());
         __informacionData()
         __informacionData_vendedores()
@@ -687,7 +689,8 @@ var reglasDeValidacionCompra = function() {
 };
 
 __Imprimir(){
-    riot.mount('ptv-imprimir',{factura:self.factura});
+    var factura = self.factura
+    riot.mount('ptv-imprimir',{factura:factura});
 }
 /**
 *  Obtiene el valor de lo digitado en el campo de efectivo
@@ -823,6 +826,7 @@ __Limpiar(){
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
+    
     self.detail                = []
     self.mensajesBackEnd       = []
     self.error                 = false
@@ -900,6 +904,7 @@ function __Init(){
       __ComboTipoDocumentos()
       //Estados
       __ComboEstados()
+     __ListaFacturasEnEspera()
 }
 /**
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
@@ -939,6 +944,8 @@ function __FacturaEnEspera(factura){
 *  Cargar detalles Factura en espera
 **/
 function cargarDetallesFacturaEnEspera(){
+    self.detail = [];
+    self.update()
     self.factura.detalles.forEach(function(e){
         self.detail.push({
             numeroLinea     : e.numeroLinea,
@@ -950,6 +957,8 @@ function cargarDetallesFacturaEnEspera(){
             impuesto        : redondearDecimales(parseFloat(e.impuesto),5),
             montoImpuesto   : redondearDecimales(parseFloat(e.montoImpuesto),5),
             montoDescuento  : redondearDecimales(parseFloat(e.montoDescuento),5),
+            totalImpuesto   : e.montoImpuesto * e.cantidad,
+            totalDescuento  : e.montoDescuento * e.cantidad,
             porcentajeDesc  : redondearDecimales(parseFloat(e.porcentajeDesc),5),
             subTotal        : redondearDecimales(parseFloat(e.subTotal),5),
             montoTotalLinea : redondearDecimales(parseFloat(e.montoTotalLinea),5),
@@ -959,6 +968,9 @@ function cargarDetallesFacturaEnEspera(){
     self.update()
      __calculate(); 
 }
+
+
+
 /** 
 *Formato de la fecha con hora
 **/
@@ -1047,6 +1059,7 @@ function evaluarFactura(data){
                 __Init()
                 //Envia a la pantalla de impresion
                  riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
+                 
             }else{
                 swal({
 	                title: '',
@@ -1330,7 +1343,8 @@ function __nuevoArticuloAlDetalle(cantidad){
         return;
     }
     var precioUnitario  = getPrecioUnitario(self.articulo.precioPublico,self.articulo.impuesto ==null?0:self.articulo.impuesto)
-    var montoImpuesto   = _calcularImpuesto(precioUnitario,self.articulo.impuesto ==null?0:self.articulo.impuesto,cantidad)
+    var montoImpuesto   = _calcularImpuesto(self.articulo.precioPublico,self.articulo.impuesto ==null?0:self.articulo.impuesto)
+    var totalImpuesto   = montoImpuesto * cantidad
     var subTotal        = getSubTotal(precioUnitario,cantidad)
     self.descuento      = 0;
     self.detail.push({
@@ -1345,8 +1359,10 @@ function __nuevoArticuloAlDetalle(cantidad){
        montoImpuesto   : montoImpuesto,
        montoDescuento  : 0,
        porcentajeDesc  : 0,
+       totalImpuesto   : totalImpuesto,
+       totalDescuento  : 0,
        subTotal        : subTotal,
-       montoTotalLinea : subTotal + montoImpuesto,
+       montoTotalLinea : subTotal + totalImpuesto,
        montoTotal      :0
     });
     var cont = 0;
@@ -1362,23 +1378,26 @@ function __nuevoArticuloAlDetalle(cantidad){
 * Obtiene el precio unitario sin descuento sin impuesto
 **/
 function getPrecioUnitario(precio,iva){
-   var valorIva      = parseFloat(1+iva)
+    if(iva > 0){
+        valorImpuesto = iva/100
+    }
+   var valorIva      = parseFloat(1+valorImpuesto)
    return redondearDecimales(precio /valorIva,5)
 }
 /**
  * calculo del impuesto iva
  * */
-function _calcularImpuesto(precio,iva,cantidad){
-    var impuesto = parseFloat(iva)
-    var impuestoAplicar = impuesto > 0?impuesto:0
-    var valor  = parseFloat(precio)
-    var total =impuesto > 0 ? valor * impuestoAplicar:0 
-    return redondearDecimales(total * cantidad,5)
+function _calcularImpuesto(precio,iva){
+    var impuesto = parseFloat(iva)/100
+    impuesto = impuesto + 1
+    var precioSinImpuesto  = parseFloat(precio) / impuesto
+    var total = precio - precioSinImpuesto
+    return redondearDecimales(total ,5)
 }
    
  /**
  * Cuando se aplica un cambio de cantidad en un detalle
- * Se aplica una recalculacion de todo el detalle y Compra
+ * Se aplica una recalculacion de todo el detalle y Factura
  **/ 
  __recalculacionDelDetalle(e){
     if (e.keyCode != 13) {
@@ -1395,7 +1414,9 @@ function _calcularImpuesto(precio,iva,cantidad){
        cantidad = 1;
     }
     self.item.cantidad = parseFloat(cantidad); 
-    self.item.montoImpuesto =_calcularImpuesto(self.item.precioUnitario,self.item.iva,self.item.cantidad)
+    self.item.totalImpuesto = self.item.cantidad * self.item.montoImpuesto; 
+    self.item.totalDescuento = self.item.cantidad * self.item.montoDescuento; 
+    self.update()
     __actualizarItemArray();
     self.detail[index] = self.item;
     self.update()
@@ -1417,6 +1438,18 @@ __actualizarDescuento(e){
     if(self.item.porcentajeDesc != descuento){
        self.item.porcentajeDesc =  parseFloat(descuento);  
     }    
+    
+    //Total del descuento
+    var montoDescuento        =  self.item.precioUnitario  * (self.item.porcentajeDesc/100)
+    self.item.montoDescuento  = montoDescuento 
+    self.item.totalDescuento  = montoDescuento * self.item.cantidad
+    var porcentaje =  self.item.impuesto /100
+    var montoImpuesto   = self.item.precioUnitario * porcentaje
+    var totalImpuesto   = montoImpuesto * self.item.cantidad
+    self.item.montoImpuesto = montoImpuesto
+    self.item.totalImpuesto = totalImpuesto
+    self.update()
+
     __actualizarItemArray();
     self.detail[index] = self.item;
     self.update();
@@ -1426,23 +1459,24 @@ __actualizarDescuento(e){
 * Actualizar item en el array
 **/
 function __actualizarItemArray(){
-    //Subtotal del Detalle
-    var montoImpuesto         = redondearDecimales(self.item.precioUnitario * self.item.impuesto,5)
-        montoImpuesto         = redondearDecimales(montoImpuesto * self.item.cantidad,5)       
-    var montoDescuento        = redondearDecimales(getTotalDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc),5)     
-    self.item.montoImpuesto   = montoImpuesto   
-    self.item.montoDescuento  = montoDescuento
-    self.item.subTotal        = getSubTotal(self.item.precioUnitario,self.item.cantidad)
-    var montoTotalLinea       = getMontoTotalLinea(self.item.subTotal,montoImpuesto,montoDescuento)        
+    var subTotal  = getSubTotal(self.item.precioUnitario,self.item.cantidad)
+    self.item.totalDescuento = self.item.montoDescuento * self.item.cantidad
+    subTotal = subTotal 
+    self.item.subTotal        = subTotal
+    self.item.totalImpuesto   = self.item.montoImpuesto * self.item.cantidad
+    self.update()
+    var montoTotalLinea       = getMontoTotalLinea(self.item.subTotal - self.item.totalDescuento,self.item.totalImpuesto)    
+
     self.item.montoTotalLinea = montoTotalLinea
+    self.item.montoImpuesto   = montoTotalLinea == 0?0:self.item.montoImpuesto
+    self.item.totalImpuesto   = montoTotalLinea == 0?0:self.item.totalImpuesto
     self.update()
 }
 /**
 * Monto a pagar en la linea el cliente
 **/
-function getMontoTotalLinea(subTotal,montoImpuesto,montoDescuento){
-  var valor = subTotal - montoDescuento
-  return redondearDecimales(valor + montoImpuesto,5)
+function getMontoTotalLinea(subTotal,totalImpuesto){
+  return subTotal == 0?0:redondearDecimales(subTotal + totalImpuesto,5)
 }
 /**
 *  Obtener el subtotal sin el impuesto
@@ -1485,16 +1519,16 @@ function __calculate() {
         totalComprobante        += e.montoTotalLinea
         totalVenta              += e.montoTotalLinea >0?e.montoTotalLinea:0
         subTotal                += e.subTotal >0?e.subTotal:0
-        totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
-        totalImpuesto           += e.montoImpuesto >0?e.montoImpuesto:0
+        totalDescuento          += e.totalDescuento >0?e.totalDescuento:0
+        totalImpuesto           += e.totalImpuesto >0?e.totalImpuesto:0
     });
     self.factura.totalMercanciasGravadas = redondearDecimales(__valorNumerico(totalMercanciasGravadas),5)
     self.factura.totalMercanciasExentas  = redondearDecimales(__valorNumerico(totalMercanciasExentas),5)
     self.factura.totalGravado            = redondearDecimales(__valorNumerico(totalGravado),5)
     self.factura.totalExento             = redondearDecimales(__valorNumerico(totalExento),5)
     self.factura.totalVenta              = redondearDecimales(__valorNumerico(totalVenta),5) 
-    self.factura.subTotal                = redondearDecimales(__valorNumerico(subTotal),5) 
     self.factura.totalDescuento          = redondearDecimales(__valorNumerico(totalDescuento),5)
+    self.factura.subTotal                = subTotal
     self.factura.totalImpuesto           = redondearDecimales(__valorNumerico(totalImpuesto),5)
     self.factura.totalVentaNeta          = redondearDecimales(__valorNumerico(totalVenta),5) 
     self.factura.totalComprobante        = redondearDecimales(__valorNumerico(totalComprobante),5)

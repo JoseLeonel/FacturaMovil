@@ -1,7 +1,6 @@
 package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -70,16 +69,16 @@ public class Compra implements Serializable {
 	private Integer							formaPago;
 
 	@Column(name = "total_impuesto")
-	private BigDecimal					totalImpuesto;
+	private Double							totalImpuesto;
 
 	@Column(name = "total_descuento")
-	private BigDecimal					totalDescuento;
+	private Double							totalDescuento;
 
 	@Column(name = "sub_total")
-	private BigDecimal					subTotal;
+	private Double							subTotal;
 
 	@Column(name = "total_compra")
-	private BigDecimal					totalCompra;
+	private Double							totalCompra;
 
 	@Size(max = 255)
 	@Column(name = "nota")
@@ -129,7 +128,10 @@ public class Compra implements Serializable {
 
 	}
 
-	public Compra(Integer id, String consecutivo, Date fechaCredito, Date fechaPago, Date fechaCompra, Date fechaIngreso, Integer tipoDocumento, Integer formaPago, BigDecimal totalImpuesto, BigDecimal totalDescuento, BigDecimal subTotal, BigDecimal totalCompra, @Size(max = 255) String nota, Integer estado, Date created_at, Date updated_at, Proveedor proveedor, Empresa empresa, Usuario usuarioCreacion, Usuario usuarioIngresoInventario, Set<DetalleCompra> detalleCompras) {
+	
+	
+	
+	public Compra(Integer id, String consecutivo, Date fechaCredito, Date fechaPago, Date fechaCompra, Date fechaIngreso, Integer tipoDocumento, Integer formaPago, Double totalImpuesto, Double totalDescuento, Double subTotal, Double totalCompra, @Size(max = 255) String nota, Integer estado, Date created_at, Date updated_at, Proveedor proveedor, Empresa empresa, Usuario usuarioCreacion, Usuario usuarioIngresoInventario, Set<DetalleCompra> detalleCompras) {
 		super();
 		this.id = id;
 		this.consecutivo = consecutivo;
@@ -153,6 +155,9 @@ public class Compra implements Serializable {
 		this.usuarioIngresoInventario = usuarioIngresoInventario;
 		this.detalleCompras = detalleCompras;
 	}
+
+
+
 
 	public Integer getId() {
 		return id;
@@ -218,35 +223,35 @@ public class Compra implements Serializable {
 		this.formaPago = formaPago;
 	}
 
-	public BigDecimal getTotalImpuesto() {
+	public Double getTotalImpuesto() {
 		return totalImpuesto;
 	}
 
-	public void setTotalImpuesto(BigDecimal totalImpuesto) {
+	public void setTotalImpuesto(Double totalImpuesto) {
 		this.totalImpuesto = totalImpuesto;
 	}
 
-	public BigDecimal getTotalDescuento() {
+	public Double getTotalDescuento() {
 		return totalDescuento;
 	}
 
-	public void setTotalDescuento(BigDecimal totalDescuento) {
+	public void setTotalDescuento(Double totalDescuento) {
 		this.totalDescuento = totalDescuento;
 	}
 
-	public BigDecimal getSubTotal() {
+	public Double getSubTotal() {
 		return subTotal;
 	}
 
-	public void setSubTotal(BigDecimal subTotal) {
+	public void setSubTotal(Double subTotal) {
 		this.subTotal = subTotal;
 	}
 
-	public BigDecimal getTotalCompra() {
+	public Double getTotalCompra() {
 		return totalCompra;
 	}
 
-	public void setTotalCompra(BigDecimal totalCompra) {
+	public void setTotalCompra(Double totalCompra) {
 		this.totalCompra = totalCompra;
 	}
 

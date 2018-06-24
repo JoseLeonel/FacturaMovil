@@ -83,12 +83,12 @@ public class FacturaDaoImpl implements FacturaDao {
 			log.info("** Inicio de la ejecucion del procedimiento almacendos eliminar detalles de la factura : " + " fecha " + new Date());
 
 			StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_ELIMINAR_DETALLES_FACTURA);
-			storedProcedure.registerStoredProcedureParameter(Constantes.SP_ELIMINAR_DETALLES_FACTURA_ID_FACTURA_PARAM, Integer.class, ParameterMode.IN);
-			storedProcedure.setParameter(Constantes.SP_ELIMINAR_DETALLES_FACTURA_ID_FACTURA_PARAM, factura.getId());
+			storedProcedure.registerStoredProcedureParameter(0, Integer.class, ParameterMode.IN);
+			storedProcedure.setParameter(0, factura.getId().intValue());
 			
 			storedProcedure.execute();
 
-			log.info("** Inicio de la ejecucion del procedimiento almacendos eliminar detalles de la factura : " + " fecha " + new Date());
+			log.info("** find de la ejecucion del procedimiento almacendos eliminar detalles de la factura : " + " fecha " + new Date());
 
 		} catch (Exception e) {
 			log.error("** Error ejecutar el procedimineto almacenados de eliminar detalles de la factura : " + e.getMessage() + " fecha " + new Date());

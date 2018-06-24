@@ -1,7 +1,6 @@
 package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
@@ -53,25 +52,25 @@ public class CuentaCobrar implements Serializable {
 	private Integer						facturaManual;
 
 	@Column(name = "total_comision")
-	private BigDecimal				totalComision;
+	private Double						totalComision;
 
 	@Column(name = "descuento")
-	private BigDecimal				descuento;
+	private Double						descuento;
 
 	@Column(name = "cantidad_pagos")
-	private BigDecimal				cantidadPagos;
+	private Double						cantidadPagos;
 
 	@Column(name = "monto_couta")
-	private BigDecimal				montoCouta;
+	private Double						montoCouta;
 
 	@Column(name = "total")
-	private BigDecimal				total;
+	private Double						total;
 
 	@Column(name = "total_abono")
-	private BigDecimal				totalAbono;
+	private Double						totalAbono;
 
 	@Column(name = "total_saldo")
-	private BigDecimal				totalSaldo;
+	private Double						totalSaldo;
 
 	@Column(name = "descripcion_articulo")
 	private String						descripcionArticulo;
@@ -138,7 +137,7 @@ public class CuentaCobrar implements Serializable {
 
 	}
 
-	public CuentaCobrar(Integer id, String recibo, String letraCambio, String factura, Integer facturaManual, BigDecimal totalComision, BigDecimal descuento, BigDecimal cantidadPagos, BigDecimal montoCouta, BigDecimal total, BigDecimal totalAbono, BigDecimal totalSaldo, String descripcionArticulo, String nota, String tipo, String estado, Date fechaPlazo, Date fechaEntrega, Date created_at, Date updated_at, Cliente cliente, Usuario usuario, Empresa empresa, Vendedor vendedor, Set<Abono> abonos) {
+	public CuentaCobrar(Integer id, String recibo, String letraCambio, String factura, Integer facturaManual, Double totalComision, Double descuento, Double cantidadPagos, Double montoCouta, Double total, Double totalAbono, Double totalSaldo, String descripcionArticulo, String nota, String tipo, String estado, Date fechaPlazo, Date fechaEntrega, Date created_at, Date updated_at, Cliente cliente, Usuario usuario, Empresa empresa, Vendedor vendedor, Set<Abono> abonos) {
 		super();
 		this.id = id;
 		this.recibo = recibo;
@@ -207,59 +206,59 @@ public class CuentaCobrar implements Serializable {
 		this.facturaManual = facturaManual;
 	}
 
-	public BigDecimal getTotalComision() {
+	public Double getTotalComision() {
 		return totalComision;
 	}
 
-	public void setTotalComision(BigDecimal totalComision) {
+	public void setTotalComision(Double totalComision) {
 		this.totalComision = totalComision;
 	}
 
-	public BigDecimal getDescuento() {
+	public Double getDescuento() {
 		return descuento;
 	}
 
-	public void setDescuento(BigDecimal descuento) {
+	public void setDescuento(Double descuento) {
 		this.descuento = descuento;
 	}
 
-	public BigDecimal getCantidadPagos() {
+	public Double getCantidadPagos() {
 		return cantidadPagos;
 	}
 
-	public void setCantidadPagos(BigDecimal cantidadPagos) {
+	public void setCantidadPagos(Double cantidadPagos) {
 		this.cantidadPagos = cantidadPagos;
 	}
 
-	public BigDecimal getMontoCouta() {
+	public Double getMontoCouta() {
 		return montoCouta;
 	}
 
-	public void setMontoCouta(BigDecimal montoCouta) {
+	public void setMontoCouta(Double montoCouta) {
 		this.montoCouta = montoCouta;
 	}
 
-	public BigDecimal getTotal() {
+	public Double getTotal() {
 		return total;
 	}
 
-	public void setTotal(BigDecimal total) {
+	public void setTotal(Double total) {
 		this.total = total;
 	}
 
-	public BigDecimal getTotalAbono() {
+	public Double getTotalAbono() {
 		return totalAbono;
 	}
 
-	public void setTotalAbono(BigDecimal totalAbono) {
+	public void setTotalAbono(Double totalAbono) {
 		this.totalAbono = totalAbono;
 	}
 
-	public BigDecimal getTotalSaldo() {
+	public Double getTotalSaldo() {
 		return totalSaldo;
 	}
 
-	public void setTotalSaldo(BigDecimal totalSaldo) {
+	public void setTotalSaldo(Double totalSaldo) {
 		this.totalSaldo = totalSaldo;
 	}
 

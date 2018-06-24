@@ -33,9 +33,11 @@
 	<script src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script>
 	
 	<!-- MANTENIMIENTO DE COMPRAS -->
+	<script type="text/javascript" src="/js/jQuery.print.js"></script>
 	<script type="text/javascript" src="/js/views/facturas/puntoVenta.js"></script>
 	<script type = "riot/tag"  src="/js/views/components/facturas/crearPuntoVenta.tag" ></script>
 	<script type = "riot/tag"  src="/js/views/components/facturas/imprimirPTV.tag" ></script>
+    
     
 </head>
 <body>
@@ -45,6 +47,7 @@
 </section>
 <div layout:fragment="content">
     <punto-venta></punto-venta>
+    <ptv-imprimir></ptv-imprimir>
 </div>
 
 </body>

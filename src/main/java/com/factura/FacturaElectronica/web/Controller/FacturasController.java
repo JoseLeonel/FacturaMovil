@@ -39,6 +39,7 @@ import com.factura.FacturaElectronica.modelo.Usuario;
 import com.factura.FacturaElectronica.modelo.UsuarioCaja;
 import com.factura.FacturaElectronica.modelo.Vendedor;
 import com.factura.FacturaElectronica.validator.FacturaFormValidator;
+import com.factura.FacturaElectronica.web.command.CategoriaCommand;
 import com.factura.FacturaElectronica.web.command.FacturaCommand;
 import com.factura.FacturaElectronica.web.command.FacturaEsperaCommand;
 import com.factura.FacturaElectronica.web.componentes.ClientePropertyEditor;
@@ -234,19 +235,21 @@ public class FacturasController {
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer idFactura) {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
-			// necesito hacer un contexto se crea la instancia
-			JAXBContext context = JAXBContext.newInstance(FacturaElectronica.class);
-
-			// Escribir el xml se utiliza el objete marshaller
-			Marshaller marshaller = context.createMarshaller();
-			FacturaElectronica facturaElectronica = Utils.crearFacturaElectronica(facturaBD);
-		//	facturaElectronica.setNumeroConsecutivo("0012");
-	    //tabular el documento xml 
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-			//salida
-			marshaller.marshal(facturaElectronica, System.out);
+//			// necesito hacer un contexto se crea la instancia
+//			JAXBContext context = JAXBContext.newInstance(FacturaElectronica.class);
+//
+//			// Escribir el xml se utiliza el objete marshaller
+//			Marshaller marshaller = context.createMarshaller();
+//			FacturaElectronica facturaElectronica = Utils.crearFacturaElectronica(facturaBD);
+//		//	facturaElectronica.setNumeroConsecutivo("0012");
+//	    //tabular el documento xml 
+//			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+//			//salida
+//			marshaller.marshal(facturaElectronica, System.out);
+//			
+//			marshaller.marshal(facturaElectronica, new FileWriter("leo.xml"));
 			
-			marshaller.marshal(facturaElectronica, new FileWriter("leo.xml"));
+			
 			
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", facturaBD);
 		} catch (Exception e) {

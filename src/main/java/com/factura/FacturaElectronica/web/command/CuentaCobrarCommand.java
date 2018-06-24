@@ -1,6 +1,5 @@
 package com.factura.FacturaElectronica.web.command;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import com.factura.FacturaElectronica.modelo.Cliente;
@@ -10,50 +9,50 @@ import com.factura.FacturaElectronica.modelo.Vendedor;
 
 public class CuentaCobrarCommand {
 
-	private Integer			id;
+	private Integer		id;
 
-	private String			recibo;
+	private String		recibo;
 
-	private String			letraCambio;
+	private String		letraCambio;
 
-	private String			factura;
+	private String		factura;
 
-	private Integer			facturaManual;
+	private Integer		facturaManual;
 
-	private BigDecimal	totalComision;
+	private Double		totalComision;
 
-	private BigDecimal	descuento;
+	private Double		descuento;
 
-	private BigDecimal	cantidadPagos;
+	private Double		cantidadPagos;
 
-	private BigDecimal	montoCouta;
+	private Double		montoCouta;
 
-	private BigDecimal	total;
+	private Double		total;
 
-	private BigDecimal	totalAbono;
+	private Double		totalAbono;
 
-	private BigDecimal	totalSaldo;
+	private Double		totalSaldo;
 
-	private String			descripcionArticulo;
+	private String		descripcionArticulo;
 
-	private String			nota;
+	private String		nota;
 
-	private String			tipo;
+	private String		tipo;
 
-	private String			estado;
+	private String		estado;
 
-	private Date				fechaPlazo;
+	private Date			fechaPlazo;
 
-	private Date				fechaEntrega;
+	private Date			fechaEntrega;
 
-	private Date				created_at;
+	private Date			created_at;
 
-	private Date				updated_at;
+	private Date			updated_at;
 
-	private Cliente			cliente;
-	private Vendedor		vendedor;
+	private Cliente		cliente;
+	private Vendedor	vendedor;
 
-	private Empresa			empresa;
+	private Empresa		empresa;
 
 	public CuentaCobrarCommand(CuentaCobrar cuentaCobrar) {
 		super();
@@ -124,62 +123,6 @@ public class CuentaCobrarCommand {
 
 	public void setFacturaManual(Integer facturaManual) {
 		this.facturaManual = facturaManual;
-	}
-
-	public BigDecimal getTotalComision() {
-		return totalComision;
-	}
-
-	public void setTotalComision(BigDecimal totalComision) {
-		this.totalComision = totalComision;
-	}
-
-	public BigDecimal getDescuento() {
-		return descuento;
-	}
-
-	public void setDescuento(BigDecimal descuento) {
-		this.descuento = descuento;
-	}
-
-	public BigDecimal getCantidadPagos() {
-		return cantidadPagos;
-	}
-
-	public void setCantidadPagos(BigDecimal cantidadPagos) {
-		this.cantidadPagos = cantidadPagos;
-	}
-
-	public BigDecimal getMontoCouta() {
-		return montoCouta;
-	}
-
-	public void setMontoCouta(BigDecimal montoCouta) {
-		this.montoCouta = montoCouta;
-	}
-
-	public BigDecimal getTotal() {
-		return total;
-	}
-
-	public void setTotal(BigDecimal total) {
-		this.total = total;
-	}
-
-	public BigDecimal getTotalAbono() {
-		return totalAbono;
-	}
-
-	public void setTotalAbono(BigDecimal totalAbono) {
-		this.totalAbono = totalAbono;
-	}
-
-	public BigDecimal getTotalSaldo() {
-		return totalSaldo;
-	}
-
-	public void setTotalSaldo(BigDecimal totalSaldo) {
-		this.totalSaldo = totalSaldo;
 	}
 
 	public String getDescripcionArticulo() {
@@ -268,6 +211,62 @@ public class CuentaCobrarCommand {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public Double getTotalComision() {
+		return totalComision;
+	}
+
+	public void setTotalComision(Double totalComision) {
+		this.totalComision = totalComision;
+	}
+
+	public Double getDescuento() {
+		return descuento;
+	}
+
+	public void setDescuento(Double descuento) {
+		this.descuento = descuento;
+	}
+
+	public Double getCantidadPagos() {
+		return cantidadPagos;
+	}
+
+	public void setCantidadPagos(Double cantidadPagos) {
+		this.cantidadPagos = cantidadPagos;
+	}
+
+	public Double getMontoCouta() {
+		return montoCouta;
+	}
+
+	public void setMontoCouta(Double montoCouta) {
+		this.montoCouta = montoCouta;
+	}
+
+	public Double getTotal() {
+		return total;
+	}
+
+	public void setTotal(Double total) {
+		this.total = total;
+	}
+
+	public Double getTotalAbono() {
+		return totalAbono;
+	}
+
+	public void setTotalAbono(Double totalAbono) {
+		this.totalAbono = totalAbono;
+	}
+
+	public Double getTotalSaldo() {
+		return totalSaldo;
+	}
+
+	public void setTotalSaldo(Double totalSaldo) {
+		this.totalSaldo = totalSaldo;
 	}
 
 }

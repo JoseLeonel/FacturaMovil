@@ -1,8 +1,9 @@
 package com.factura.FacturaElectronica.Bo.Impl;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -21,6 +22,8 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 
 	@Autowired
 	UsuarioCajaDao usuarioCajaDao;
+	
+	private Logger	log	= LoggerFactory.getLogger(this.getClass());
 
 	public void agregar(UsuarioCaja usuarioCaja) {
 		usuarioCajaDao.agregar(usuarioCaja);
@@ -49,37 +52,39 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 	 * @see com.factura.FacturaElectronica.Bo.UsuarioCajaBo#findByUsuarioAndEstado(com.factura.FacturaElectronica.modelo.Usuario, java.lang.String)
 	 */
 	@Override
-	public UsuarioCaja findByUsuarioAndEstado(Usuario usuario,String estado) {
+	public UsuarioCaja findByUsuarioAndEstado(Usuario usuario, String estado) {
 		return usuarioCajaDao.findByUsuarioAndEstado(usuario, estado);
-		
+
 	}
-	
-/**
- * Cerrar la caja
- * @see com.factura.FacturaElectronica.Bo.UsuarioCajaBo#cierreCaja(com.factura.FacturaElectronica.modelo.UsuarioCaja)
- */
+
+	/**
+	 * Cerrar la caja
+	 * @see com.factura.FacturaElectronica.Bo.UsuarioCajaBo#cierreCaja(com.factura.FacturaElectronica.modelo.UsuarioCaja)
+	 */
 	@Override
-	public void cierreCaja(UsuarioCaja usuarioCaja) {
-		usuarioCaja.setUpdated_at(new Date());
-		usuarioCaja.setEstado(Constantes.ESTADO_INACTIVO);
-		BigDecimal resultado = BigDecimal.ZERO;
-		resultado.add(usuarioCaja.getTotalBanco());
-		resultado.add(usuarioCaja.getTotalEfectivo());
-		resultado.add(usuarioCaja.getTotalTarjeta());
-		resultado.add(usuarioCaja.getTotalFondoInicial());
-		usuarioCaja.setTotalNeto( resultado);
-		agregar(usuarioCaja);
-		
-		
+	public void cierreCaja(UsuarioCaja usuarioCaja) throws Exception {
+		try {
+			usuarioCaja.setUpdated_at(new Date());
+			usuarioCaja.setEstado(Constantes.ESTADO_INACTIVO);
+			Double resultado = Constantes.ZEROS_DOUBLE;
+			resultado = usuarioCaja.getTotalBanco() +  usuarioCaja.getTotalEfectivo() +  usuarioCaja.getTotalTarjeta() + usuarioCaja.getTotalFondoInicial();
+			usuarioCaja.setTotalNeto(resultado);
+			agregar(usuarioCaja);
+
+		} catch (Exception e) {
+			log.info("** Error  aplicar cierreCaja : " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+
 	}
-	
+
 	/**
 	 * Actualiza Caja activa
 	 * @see com.factura.FacturaElectronica.Bo.UsuarioCajaBo#actualizarCaja(java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double)
 	 */
 	@Override
-	public void actualizarCaja(UsuarioCaja usuarioCaja ,BigDecimal totalEfectivo,BigDecimal totalTarjeta,BigDecimal totalBanco,BigDecimal totalCredito,BigDecimal totalAbono){
+	public void actualizarCaja(UsuarioCaja usuarioCaja, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono) throws Exception {
 		usuarioCajaDao.actualizarCaja(usuarioCaja, totalEfectivo, totalTarjeta, totalBanco, totalCredito, totalAbono);
 	}
-	
+
 }

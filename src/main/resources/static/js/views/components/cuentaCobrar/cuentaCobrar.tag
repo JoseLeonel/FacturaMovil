@@ -1184,7 +1184,12 @@ function listaAbonosPorCuentaPorCobrar(){
                 }
                 agregarInputsCombosAbonos();
                 ActivarEventoFiltro(".tableListaAbonos")
-            } 
+            }else{
+                includeActionsAbono('.dataTables_wrapper','.dataTables_length')  
+                agregarInputsCombosAbonos();
+                ActivarEventoFiltro(".tableListaAbonos")
+
+            }
             __MantenimientoAgregarAbono()
             __verAbono()
             __Anular()

@@ -1,6 +1,5 @@
 package com.factura.FacturaElectronica.Dao.Impl;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,6 +9,7 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.factura.FacturaElectronica.Dao.InventarioDao;
+import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.modelo.Articulo;
 import com.factura.FacturaElectronica.modelo.Inventario;
 
@@ -89,10 +89,10 @@ public class InventarioDaoImpl implements InventarioDao {
 	 * @param inventario
 	 * @return
 	 */
-	public BigDecimal getTotalCosto(Inventario inventario, BigDecimal cantidad) {
-		BigDecimal resultado = BigDecimal.ZERO;
+	public Double getTotalCosto(Inventario inventario, Double cantidad) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
 
-		resultado = inventario.getArticulo().getCosto().multiply(cantidad);
+		resultado = inventario.getArticulo().getCosto() * cantidad;
 
 		return resultado;
 	}

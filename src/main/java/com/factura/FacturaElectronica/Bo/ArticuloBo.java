@@ -1,7 +1,5 @@
 package com.factura.FacturaElectronica.Bo;
 
-import java.math.BigDecimal;
-
 import com.factura.FacturaElectronica.modelo.Articulo;
 import com.factura.FacturaElectronica.modelo.Empresa;
 
@@ -19,6 +17,6 @@ public interface ArticuloBo {
 
 	Articulo buscarPorCodigoYEmpresa(String codigo, Empresa empresa);
 
-	BigDecimal porcentanjeDeGanancia(BigDecimal costo, BigDecimal iva, BigDecimal precio);
+	Double porcentanjeDeGanancia(Double costo, Double iva, Double precio);
 
 }

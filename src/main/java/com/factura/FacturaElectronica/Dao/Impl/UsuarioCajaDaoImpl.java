@@ -1,12 +1,14 @@
 package com.factura.FacturaElectronica.Dao.Impl;
 
-import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.factura.FacturaElectronica.Dao.UsuarioCajaDao;
@@ -17,7 +19,9 @@ import com.factura.FacturaElectronica.modelo.UsuarioCaja;
 public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 
 	@PersistenceContext
-	EntityManager entityManager;
+	EntityManager		entityManager;
+
+	private Logger	log	= LoggerFactory.getLogger(this.getClass());
 
 	public void agregar(UsuarioCaja marca) {
 		entityManager.persist(marca);
@@ -67,7 +71,6 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 	}
 
 	/**
-	 * 
 	 * @param usuarioCaja
 	 * @param totalEfectivo
 	 * @param totalTarjeta
@@ -75,19 +78,42 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 	 * @param totalCredito
 	 * @param totalAbono
 	 */
-	public void actualizarCaja(UsuarioCaja usuarioCaja, BigDecimal totalEfectivo, BigDecimal totalTarjeta, BigDecimal totalBanco, BigDecimal totalCredito, BigDecimal totalAbono) {
-		usuarioCaja.setTotalCredito(usuarioCaja.getTotalCredito().add(totalCredito)  );
-		usuarioCaja.setTotalBanco(usuarioCaja.getTotalBanco().add(totalBanco));
-		usuarioCaja.setTotalEfectivo(usuarioCaja.getTotalEfectivo().add(totalEfectivo));
-		usuarioCaja.setTotalTarjeta(usuarioCaja.getTotalTarjeta().add(totalTarjeta));
-		usuarioCaja.setTotalAbono(usuarioCaja.getTotalAbono().add(totalAbono));
-		BigDecimal resultado  = BigDecimal.ZERO;
-		resultado.add(totalEfectivo);
-		resultado.add(totalTarjeta);
-		resultado.add(totalBanco);
-		resultado.add(totalAbono);
-		usuarioCaja.setTotalNeto(usuarioCaja.getTotalNeto().add(resultado));
-		modificar(usuarioCaja);
+	@Override
+	public void actualizarCaja(UsuarioCaja usuarioCaja, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono) throws Exception {
+		try {
+			Double resultadoTotalBanco  = totalBanco + usuarioCaja.getTotalBanco();
+			Double resultadoTotalEfectivo = totalEfectivo + usuarioCaja.getTotalEfectivo();
+			Double resultadoTarjeta = totalTarjeta + usuarioCaja.getTotalTarjeta();
+			Double resultadoAbono = totalAbono + usuarioCaja.getTotalAbono();
+			Double resultadoNeto  = getTotalNeto(resultadoTotalEfectivo.doubleValue(),resultadoTarjeta.doubleValue(),resultadoTotalBanco.doubleValue(),resultadoAbono.doubleValue());
+			usuarioCaja.setTotalCredito(sumarTotalCredito(totalCredito.doubleValue(),usuarioCaja.getTotalCredito().doubleValue()));
+			usuarioCaja.setTotalBanco(resultadoTotalBanco);
+			usuarioCaja.setTotalEfectivo(resultadoTotalEfectivo);
+			usuarioCaja.setTotalTarjeta(resultadoTarjeta);
+			usuarioCaja.setTotalAbono(resultadoAbono);
+			usuarioCaja.setTotalNeto(resultadoNeto);
+			modificar(usuarioCaja);
+
+		} catch (Exception e) {
+			log.info("** Error  aplicar getTotalEfectivo : " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+
+	}
+	
+	private Double getTotalNeto( Double totalEfectivo, Double totalTarjeta, Double totalBanco,  Double totalAbono) {
+		
+		Double total  = totalEfectivo + totalTarjeta + totalBanco + totalAbono;
+		Double totalNeto=  new Double(total.toString());
+		
+		return totalNeto;
+		
+	}
+	
+	private Double sumarTotalCredito(Double totalCredito,Double monto) {
+		Double resultado = totalCredito + monto;
+		
+		return new Double(resultado.toString());
 	}
 
 }

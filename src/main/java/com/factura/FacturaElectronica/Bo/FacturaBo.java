@@ -1,7 +1,5 @@
 package com.factura.FacturaElectronica.Bo;
 
-import java.math.BigDecimal;
-
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Factura;
 import com.factura.FacturaElectronica.modelo.Usuario;
@@ -18,10 +16,10 @@ public interface FacturaBo {
 
 	Factura findById(Integer id);
 
-	Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa);
+	Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) throws Exception;
 	
 	Factura crearFactura(FacturaCommand facturaCommand,Usuario usuario,UsuarioCaja usuarioCaja) throws Exception;
 
-	BigDecimal  getTotalEfectivo(FacturaCommand facturaCommand);
+	Double  getTotalEfectivo(FacturaCommand facturaCommand) throws Exception;
 
 }

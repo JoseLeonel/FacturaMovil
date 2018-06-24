@@ -66,28 +66,28 @@
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("articulo.empresa")}  <span class="requeridoDato">*</span></label>
-                                 <select  class="form-control selectEmpresa" onchange= {__cargarCombos} data-live-search="true" name="empresa"   >
-                                    <option data-tokens="{nombre}" each={empresas.aaData}  value="{id}" selected="{articulo.empresa.id ==id?true:false}" >{nombre}</option>
+                                 <select  class="form-control selectEmpresa" onchange= {__cargarCombos}  name="empresa"   >
+                                    <option  each={empresas.aaData}  value="{id}" selected="{articulo.empresa.id ==id?true:false}" >{nombre}</option>
                                 </select>
                             </div>
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("articulo.categoria")}  <span class="requeridoDato">*</span></label>
-                                 <select  class="form-control selectCategoria"  data-live-search="true" name="categoria">
-                                    <option data-tokens="{descripcion}" each={categorias.aaData}  value="{id}" selected="{articulo.categoria.id ==id?true:false}" >{descripcion}</option>
+                                 <select  class="form-control selectCategoria"   name="categoria" >
+                                    <option  each={categorias.aaData}  value="{id}" selected="{articulo.categoria.id ==id?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
                         </div>    
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("articulo.marca")}  <span class="requeridoDato">*</span></label>
-                                 <select  class="form-control selectMarca" data-live-search="true" name="marca">
-                                    <option data-tokens="{descripcion}" each={marcas.aaData}  value="{id}" selected="{articulo.marca.id ==id?true:false}"  >{descripcion}</option>
+                                 <select  class="form-control selectMarca"  name="marca">
+                                    <option  each={marcas.aaData}  value="{id}" selected="{articulo.marca.id ==id?true:false}"  >{descripcion}</option>
                                 </select>
                             </div>
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("articulo.unidadMedida")}  <span class="requeridoDato">*</span></label>
-                                 <select  class="form-control selecTipoUnidad" name="unidadMedida" data-live-search="true">
-                                    <option data-tokens="{descripcion}"  each={tipoUnidades.aaData}  value="{codigo}"  selected="{articulo.unidadMedida ==codigo?true:false}" >{descripcion}</option>
+                                 <select  class="form-control selecTipoUnidad" name="unidadMedida" >
+                                    <option   each={tipoUnidades.aaData}  value="{codigo}"  selected="{articulo.unidadMedida ==codigo?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
                         </div>    
@@ -173,8 +173,8 @@
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label">{$.i18n.prop("articulo.tipoImpuesto")}</label>
-                                <select  class="form-control selectTipoImpuesto" id="tipoImpuesto" name="tipoImpuesto" data-live-search="true" >
-                                    <option  each={impuestos}  value="{codigo}" selected="{articulo.tipoImpuesto ==codigo?true:false}" >{descripcion}</option>
+                                <select  class="form-control selectTipoImpuesto" id="tipoImpuesto" name="tipoImpuesto"  >
+                                    <option  each={impuestos}  value="{codigo}" selected="{articulo.tipoImpuesto ==codigo?true:false}"  >{descripcion}</option>
                                 </select>
                             </div>
                       
@@ -587,7 +587,12 @@ self.on('mount',function(){
     __ComboContables()
     __listadoTipoUnidadesActivas()   
     __Impuestos() 
-    $('.selectTipoImpuesto').selectpicker();
+    
+    $('.selectTipoImpuesto').prop("selectedIndex", 0);
+    $('.selecTipoUnidad').prop("selectedIndex", 0);
+    $('.selectMarca').prop("selectedIndex", 0);
+    $('.selectCategoria').prop("selectedIndex", 0);
+    $('.selectEmpresa').prop("selectedIndex", 0);
 })
 /**
 *  Envia  a llamar a los eventos ajax de cada combo para actualizarlo de acuerdo a la empresa
@@ -1234,7 +1239,7 @@ function _ListaMotivoSalidasActivas(empresa){
             if(result.aaData.length > 0){
                 self.motivoSalidas.data =  result.aaData
                 self.update();
-                $('.selectMotivoSalida').selectpicker();
+               
             }            
         },
         error: function (xhr, status) {
@@ -1257,7 +1262,7 @@ function _ListaMotivoEntradasActivas(empresa){
             if(result.aaData.length > 0){
                 self.motivoEntradas.data =  result.aaData
                 self.update();
-                $('.selectEntrada').selectpicker();
+              
             }            
         },
         error: function (xhr, status) {
@@ -1426,9 +1431,7 @@ function __listadoEmpresasActivas(){
                 self.empresas.aaData =  result.aaData
                 self.update();
                  enviarCargarCombos()
-                 $('.selectEmpresa').selectpicker();
-                   
-                 
+              
             }            
         },
         error: function (xhr, status) {
@@ -1452,7 +1455,7 @@ function __listadoCategoriasActivas(empresa){
              if(result.aaData.length > 0){
                 self.categorias.aaData =  result.aaData
                 self.update();
-                $('.selectCategoria').selectpicker();
+               
                 
                 
                  
@@ -1479,7 +1482,7 @@ function __listadoMarcasActivas(empresa){
             if(result.aaData.length > 0){
                 self.marcas.aaData =  result.aaData
                 self.update();
-                $('.selectMarca').selectpicker();
+            
             }            
         },
         error: function (xhr, status) {
@@ -1500,8 +1503,7 @@ function __listadoTipoUnidadesActivas(){
              if(result.aaData.length > 0){
                 self.tipoUnidades.aaData =  result.aaData
                 self.update();
-                // To style only <select>s with the selectpicker class
-                $('.selecTipoUnidad').selectpicker();
+            
 
             }            
         },
@@ -1548,39 +1550,39 @@ function __ComboContables(){
 function __Impuestos(){
     self.impuestos =[]
     self.impuestos.push({
-        codigo: "01",
+        codigo: '01',
         descripcion:$.i18n.prop("tipo.impuesto.ventas")
      });
     self.impuestos.push({
-        codigo: "02",
+        codigo: '02',
         descripcion:$.i18n.prop("tipo.impuesto.consumo")
      });
     self.impuestos.push({
-        codigo: "03",
+        codigo: '03',
         descripcion:$.i18n.prop("tipo.impuesto.combustible")
      });
     self.impuestos.push({
-        codigo: "04",
+        codigo: '04',
         descripcion:$.i18n.prop("tipo.impuesto.bebidas.alcoholicas")
      });
     self.impuestos.push({
-        codigo: "05",
+        codigo: '05',
         descripcion:$.i18n.prop("tipo.impuesto.bebidas.envasadas")
      });
     self.impuestos.push({
-        codigo: "06",
+        codigo: '06',
         descripcion:$.i18n.prop("tipo.impuesto.tabaco")
      });
     self.impuestos.push({
-        codigo: "07",
+        codigo: '07',
         descripcion:$.i18n.prop("tipo.impuesto.servicio")
      });
     self.impuestos.push({
-        codigo: "12",
+        codigo: '12',
         descripcion:$.i18n.prop("tipo.impuesto.cemento")
      });
     self.impuestos.push({
-        codigo: "98",
+        codigo: '98',
         descripcion:$.i18n.prop("tipo.impuesto.otros")
      });
    
@@ -1648,6 +1650,7 @@ function __MantenimientoAgregar(){
         $('#gananciaPrecioMayorista').val(null)
         $('#precioEspecial').val(null)
         $('#gananciaPrecioEspecial').val(null)
+        $("#tipoImpuesto").val(null)
        __Eventos()
         $("#formulario").validate(reglasDeValidacion());
     })
@@ -1667,6 +1670,7 @@ function __modificarRegistro_Listar(){
 	    }
         self.articulo  = data
         self.update()
+    
         __consultar()
 	});
 }
@@ -1697,6 +1701,7 @@ function __articuloXInventarios_Listar(){
         self.mostrarTituloInventario  = true
         self.mostrarFormularioInventario = false
         self.update()
+
          agregarInputsCombosInventario();
         __listadoInventario()
 	});
@@ -1733,7 +1738,13 @@ function __consultar(){
                         __listadoMarcasActivas(self.articulo.empresa.id)
                         __ComboContables()
                         __ComboEstados()
-                         $("#formulario").validate(reglasDeValidacion());
+                        __Impuestos() 
+                        $('.selectTipoImpuesto').val(self.articulo.tipoImpuesto);  
+                        $('.selecTipoUnidad').val(self.articulo.unidadMedida) 
+                        $('.selectMarca').val(self.articulo.marca.id)
+                        $('.selectCategoria').val(self.articulo.categoria.id)
+                        $('.selectEmpresa').val(self.articulo.empresa.id)
+                        $("#formulario").validate(reglasDeValidacion());
                     });
                 }
             }

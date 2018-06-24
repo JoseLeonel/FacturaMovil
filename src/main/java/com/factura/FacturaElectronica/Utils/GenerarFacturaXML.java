@@ -150,19 +150,19 @@ public final class GenerarFacturaXML {
 	private FacturaElectronica.ResumenFactura getResumen(Factura factura) {
 		FacturaElectronica.ResumenFactura resumenFactura = new FacturaElectronica.ResumenFactura();
 		resumenFactura.setCodigoMoneda(factura.getCodigoMoneda());
-		resumenFactura.setTipoCambio(factura.getTipoCambio());
-		resumenFactura.setTotalServGravados(factura.getTotalServGravados());
-		resumenFactura.setTotalServExentos(factura.getTotalServExentos());
-		resumenFactura.setTotalMercanciasGravadas(factura.getTotalMercanciasGravadas());
-		resumenFactura.setTotalMercanciasExentas(factura.getTotalMercanciasExentas());
-		resumenFactura.setTotalGravado(factura.getTotalGravado());
-		resumenFactura.setTotalExento(factura.getTotalExento());
-		resumenFactura.setTotalVenta(factura.getTotalVenta());
-		resumenFactura.setTotalDescuentos(factura.getTotalDescuentos());
-		resumenFactura.setTotalVentaNeta(factura.getTotalVentaNeta());
-		resumenFactura.setTotalImpuesto(factura.getTotalImpuesto());
-		resumenFactura.setTotalComprobante(factura.getTotalComprobante());
-		resumenFactura.setTotalExento(factura.getTotalExento());
+//		resumenFactura.setTipoCambio(factura.getTipoCambio());
+//		resumenFactura.setTotalServGravados(factura.getTotalServGravados());
+//		resumenFactura.setTotalServExentos(factura.getTotalServExentos());
+//		resumenFactura.setTotalMercanciasGravadas(factura.getTotalMercanciasGravadas());
+//		resumenFactura.setTotalMercanciasExentas(factura.getTotalMercanciasExentas());
+//		resumenFactura.setTotalGravado(factura.getTotalGravado());
+//		resumenFactura.setTotalExento(factura.getTotalExento());
+//		resumenFactura.setTotalVenta(factura.getTotalVenta());
+//		resumenFactura.setTotalDescuentos(factura.getTotalDescuentos());
+//		resumenFactura.setTotalVentaNeta(factura.getTotalVentaNeta());
+//		resumenFactura.setTotalImpuesto(factura.getTotalImpuesto());
+//		resumenFactura.setTotalComprobante(factura.getTotalComprobante());
+//		resumenFactura.setTotalExento(factura.getTotalExento());
 
 		return resumenFactura;
 	}

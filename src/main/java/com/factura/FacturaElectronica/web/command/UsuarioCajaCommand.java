@@ -1,6 +1,5 @@
 package com.factura.FacturaElectronica.web.command;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import com.factura.FacturaElectronica.modelo.Caja;
@@ -10,19 +9,19 @@ import com.factura.FacturaElectronica.modelo.UsuarioCaja;
 public class UsuarioCajaCommand {
 
 	private Integer	id;
-	private BigDecimal	totalFondoInicial;
+	private Double	totalFondoInicial;
 
-	private BigDecimal	totalEfectivo;
+	private Double	totalEfectivo;
 
-	private BigDecimal	totalTarjeta;
+	private Double	totalTarjeta;
 
-	private BigDecimal	totalBanco;
+	private Double	totalBanco;
 
-	private BigDecimal	totalCredito;
+	private Double	totalCredito;
 
-	private BigDecimal	totalNeto;
+	private Double	totalNeto;
 
-	private BigDecimal	totalAbono;
+	private Double	totalAbono;
 
 	private Usuario	usuario;
 
@@ -105,74 +104,76 @@ public class UsuarioCajaCommand {
 	}
 
 	
-	public BigDecimal getTotalFondoInicial() {
+	public Double getTotalFondoInicial() {
 		return totalFondoInicial;
 	}
 
 	
-	public void setTotalFondoInicial(BigDecimal totalFondoInicial) {
+	public void setTotalFondoInicial(Double totalFondoInicial) {
 		this.totalFondoInicial = totalFondoInicial;
 	}
 
 	
-	public BigDecimal getTotalEfectivo() {
+	public Double getTotalEfectivo() {
 		return totalEfectivo;
 	}
 
 	
-	public void setTotalEfectivo(BigDecimal totalEfectivo) {
+	public void setTotalEfectivo(Double totalEfectivo) {
 		this.totalEfectivo = totalEfectivo;
 	}
 
 	
-	public BigDecimal getTotalTarjeta() {
+	public Double getTotalTarjeta() {
 		return totalTarjeta;
 	}
 
 	
-	public void setTotalTarjeta(BigDecimal totalTarjeta) {
+	public void setTotalTarjeta(Double totalTarjeta) {
 		this.totalTarjeta = totalTarjeta;
 	}
 
 	
-	public BigDecimal getTotalBanco() {
+	public Double getTotalBanco() {
 		return totalBanco;
 	}
 
 	
-	public void setTotalBanco(BigDecimal totalBanco) {
+	public void setTotalBanco(Double totalBanco) {
 		this.totalBanco = totalBanco;
 	}
 
 	
-	public BigDecimal getTotalCredito() {
+	public Double getTotalCredito() {
 		return totalCredito;
 	}
 
 	
-	public void setTotalCredito(BigDecimal totalCredito) {
+	public void setTotalCredito(Double totalCredito) {
 		this.totalCredito = totalCredito;
 	}
 
 	
-	public BigDecimal getTotalNeto() {
+	public Double getTotalNeto() {
 		return totalNeto;
 	}
 
 	
-	public void setTotalNeto(BigDecimal totalNeto) {
+	public void setTotalNeto(Double totalNeto) {
 		this.totalNeto = totalNeto;
 	}
 
 	
-	public BigDecimal getTotalAbono() {
+	public Double getTotalAbono() {
 		return totalAbono;
 	}
 
 	
-	public void setTotalAbono(BigDecimal totalAbono) {
+	public void setTotalAbono(Double totalAbono) {
 		this.totalAbono = totalAbono;
 	}
 
+	
+	
 
 }

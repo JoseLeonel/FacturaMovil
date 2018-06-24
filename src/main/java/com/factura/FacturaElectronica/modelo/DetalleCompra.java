@@ -1,7 +1,6 @@
 package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -44,19 +43,19 @@ public class DetalleCompra implements Serializable {
 	private Integer						numeroLinea;
 
 	@Column(name = "costo")
-	private BigDecimal				costo;
+	private Double						costo;
 
 	@Column(name = "cantidad")
-	private BigDecimal				cantidad;
+	private Double						cantidad;
 
 	@Column(name = "impuesto")
-	private BigDecimal				impuesto;
+	private Double						impuesto;
 
 	@Column(name = "descuento")
-	private BigDecimal				descuento;
+	private Double						descuento;
 
 	@Column(name = "sub_total")
-	private BigDecimal				subTotal;
+	private Double						subTotal;
 
 	@CreatedDate
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -81,23 +80,38 @@ public class DetalleCompra implements Serializable {
 	@JoinColumn(name = "articulo_id", nullable = false)
 	private Articulo					articulo;
 
-	public DetalleCompra(DetalleCompraCommand detalleCompraCommand) {
+	public DetalleCompra(Integer id, Integer numeroLinea, Double costo, Double cantidad, Double impuesto, Double descuento, Double subTotal, Date created_at, Date updated_at, Compra compra, Articulo articulo) {
 		super();
-		this.numeroLinea = detalleCompraCommand.getLinea();
-		this.costo = detalleCompraCommand.getCosto();
-		this.cantidad = detalleCompraCommand.getCantidad();
-		this.articulo = detalleCompraCommand.getArticulo();
-		this.descuento = detalleCompraCommand.getDescuento();
-		this.impuesto = detalleCompraCommand.getImpuesto();
-		this.subTotal = detalleCompraCommand.getSubTotal();
-		this.created_at = new Date();
-		this.updated_at = new Date();
-
+		this.id = id;
+		this.numeroLinea = numeroLinea;
+		this.costo = costo;
+		this.cantidad = cantidad;
+		this.impuesto = impuesto;
+		this.descuento = descuento;
+		this.subTotal = subTotal;
+		this.created_at = created_at;
+		this.updated_at = updated_at;
+		this.compra = compra;
+		this.articulo = articulo;
 	}
 
 	public DetalleCompra() {
 		super();
 	}
+
+	public DetalleCompra(DetalleCompraCommand detalleCompraCommand) {
+		super();
+
+		this.numeroLinea = detalleCompraCommand.getLinea();
+		this.costo = detalleCompraCommand.getCosto();
+    this.cantidad = detalleCompraCommand.getCantidad();
+    this.impuesto = detalleCompraCommand.getImpuesto();
+    this.descuento = detalleCompraCommand.getDescuento();
+    this.subTotal = detalleCompraCommand.getSubTotal();
+    
+	}
+
+	
 
 	public Integer getId() {
 		return id;
@@ -115,43 +129,43 @@ public class DetalleCompra implements Serializable {
 		this.numeroLinea = numeroLinea;
 	}
 
-	public BigDecimal getCosto() {
+	public Double getCosto() {
 		return costo;
 	}
 
-	public void setCosto(BigDecimal costo) {
+	public void setCosto(Double costo) {
 		this.costo = costo;
 	}
 
-	public BigDecimal getCantidad() {
+	public Double getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(BigDecimal cantidad) {
+	public void setCantidad(Double cantidad) {
 		this.cantidad = cantidad;
 	}
 
-	public BigDecimal getImpuesto() {
+	public Double getImpuesto() {
 		return impuesto;
 	}
 
-	public void setImpuesto(BigDecimal impuesto) {
+	public void setImpuesto(Double impuesto) {
 		this.impuesto = impuesto;
 	}
 
-	public BigDecimal getDescuento() {
+	public Double getDescuento() {
 		return descuento;
 	}
 
-	public void setDescuento(BigDecimal descuento) {
+	public void setDescuento(Double descuento) {
 		this.descuento = descuento;
 	}
 
-	public BigDecimal getSubTotal() {
+	public Double getSubTotal() {
 		return subTotal;
 	}
 
-	public void setSubTotal(BigDecimal subTotal) {
+	public void setSubTotal(Double subTotal) {
 		this.subTotal = subTotal;
 	}
 

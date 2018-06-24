@@ -1,7 +1,5 @@
 package com.factura.FacturaElectronica.Dao.Impl;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -11,6 +9,7 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.factura.FacturaElectronica.Dao.ArticuloDao;
+import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.modelo.Articulo;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Inventario;
@@ -112,36 +111,35 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	 * @see com.factura.FacturaElectronica.Dao.ArticuloDao#porcentanjeDeGanancia(java.lang.Double, java.lang.Double, java.lang.Double)
 	 */
 	@Override
-	public BigDecimal porcentanjeDeGanancia(BigDecimal costo, BigDecimal iva, BigDecimal precio) {
+	public Double porcentanjeDeGanancia(Double costo, Double iva, Double precio) {
 		if(precio == null || costo == null) {
-			return BigDecimal.ZERO;
+			return Constantes.ZEROS_DOUBLE;
 		}
-		if(precio.compareTo(BigDecimal.ZERO) == 0) {
-			return BigDecimal.ZERO;
+		if(precio == 0) {
+			return Constantes.ZEROS_DOUBLE;
 		}
-		BigDecimal resultado = BigDecimal.ZERO;
-		BigDecimal precioSinImpuesto = BigDecimal.ZERO;
-		costo = costo == null ? BigDecimal.ZERO : costo;
-		precio = precio == null ? BigDecimal.ZERO : precio;
-		iva = iva == null ? BigDecimal.ZERO : iva;
-		if (iva.compareTo(BigDecimal.ZERO) == 0) {
-			resultado = costo.divide(precio, 5, RoundingMode.HALF_UP);
-			BigDecimal uno = new BigDecimal("1");
-			resultado = uno.subtract(resultado);
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		Double precioSinImpuesto = Constantes.ZEROS_DOUBLE;
+		costo = costo == null ? Constantes.ZEROS_DOUBLE : costo;
+		precio = precio == null ? Constantes.ZEROS_DOUBLE: precio;
+		iva = iva == null ? Constantes.ZEROS_DOUBLE : iva;
+		if (iva == 0) {
+			resultado = costo/precio;
+			resultado = 1-resultado;
 		} else {
-			BigDecimal porcentaje = new BigDecimal("100");
-			BigDecimal uno = new BigDecimal("1");
-			BigDecimal impuesto = iva.divide(porcentaje,5,RoundingMode.HALF_UP);
-			impuesto = impuesto.add(uno);
+			Double porcentaje = 100d;
+			Double uno = 1d;
+			Double impuesto = iva/porcentaje;
+			impuesto = impuesto+ uno;
 
-			precioSinImpuesto = precio.divide(impuesto,5,RoundingMode.HALF_UP);
+			precioSinImpuesto = precio/impuesto;
 
-			resultado = costo.divide(precioSinImpuesto,5,RoundingMode.HALF_UP);
-			resultado = uno.subtract(resultado);
+			resultado = costo/precioSinImpuesto;
+			resultado = uno-resultado;
 		}
-		BigDecimal porcentaje = new BigDecimal("100");
+		Double porcentaje = 100d;
 
-		return resultado.multiply(porcentaje);
+		return resultado * porcentaje;
 	}
 
 	/**
@@ -149,15 +147,15 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	 * @see com.factura.FacturaElectronica.Dao.ArticuloDao#costoPromedio(java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double)
 	 */
 	@Override
-	public BigDecimal costoPromedio(BigDecimal costoActual, BigDecimal costoNuevo, BigDecimal cantidadActual, BigDecimal cantidadNueva) {
-		BigDecimal resultado = BigDecimal.ZERO;
+	public Double costoPromedio(Double costoActual, Double costoNuevo, Double cantidadActual, Double cantidadNueva) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
 
-		BigDecimal totalCostoActual = costoActual.multiply(cantidadActual);
-		BigDecimal totalCostoNuevo = costoNuevo.multiply(cantidadNueva);
-		BigDecimal totalProductos = cantidadActual.multiply(cantidadNueva);
-		resultado = (totalCostoActual.add(totalCostoNuevo));
+		Double totalCostoActual = costoActual * cantidadActual;
+		Double totalCostoNuevo = costoNuevo * cantidadNueva;
+		Double totalProductos = cantidadActual * cantidadNueva;
+		resultado = (totalCostoActual + totalCostoNuevo);
 
-		return resultado.divide(totalProductos);
+		return resultado / totalProductos;
 
 	}
 

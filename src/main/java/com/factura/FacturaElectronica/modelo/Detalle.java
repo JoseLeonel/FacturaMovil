@@ -1,7 +1,6 @@
 package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -19,7 +18,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.web.command.DetalleFacturaCommand;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -44,37 +42,37 @@ public class Detalle implements Serializable {
 	private Integer						numeroLinea;
 
 	@Column(name = "precio_unitario")
-	private BigDecimal				precioUnitario;
+	private Double						precioUnitario;
 
 	@Column(name = "cantidad")
-	private BigDecimal				cantidad;
+	private Double						cantidad;
 
 	@Column(name = "monto_total")
-	private BigDecimal				montoTotal;
+	private Double						montoTotal;
 
 	@Column(name = "Monto_descuento")
-	private BigDecimal				montoDescuento;
+	private Double						montoDescuento;
 
 	@Column(name = "naturaleza_descuento")
-	private BigDecimal				naturalezaDescuento;
+	private Double						naturalezaDescuento;
 
 	@Column(name = "sub_total")
-	private BigDecimal				subTotal;
+	private Double						subTotal;
 
 	@Column(name = "impuesto")
-	private BigDecimal				impuesto;
+	private Double						impuesto;
 
 	@Column(name = "monto_impuesto")
-	private BigDecimal				montoImpuesto;
+	private Double						montoImpuesto;
 
 	@Column(name = "monto_total_linea")
-	private BigDecimal				montoTotalLinea;
+	private Double						montoTotalLinea;
 
 	@Column(name = "ganancia")
-	private BigDecimal				ganancia;
+	private Double						ganancia;
 
 	@Column(name = "porcentaje_desc")
-	private BigDecimal				porcentajeDesc;
+	private Double						porcentajeDesc;
 
 	@Column(name = "observacion")
 	private String						observacion;
@@ -113,7 +111,7 @@ public class Detalle implements Serializable {
 
 	}
 
-	public Detalle(Integer id, Integer numeroLinea, BigDecimal precioUnitario, BigDecimal cantidad, BigDecimal montoTotal, BigDecimal montoDescuento, BigDecimal naturalezaDescuento, BigDecimal subTotal, BigDecimal impuesto, BigDecimal montoImpuesto, BigDecimal montoTotalLinea, BigDecimal ganancia, BigDecimal porcentajeDesc, String observacion, Date created_at, Date updated_at, Factura factura, Articulo articulo, Usuario usuario) {
+	public Detalle(Integer id, Integer numeroLinea, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, Double naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double ganancia, Double porcentajeDesc, String observacion, Date created_at, Date updated_at, Factura factura, Articulo articulo, Usuario usuario) {
 		super();
 		this.id = id;
 		this.numeroLinea = numeroLinea;
@@ -138,22 +136,19 @@ public class Detalle implements Serializable {
 
 	public Detalle(DetalleFacturaCommand detalleFacturaCommand) {
 		super();
-		this.created_at = new Date();
-		this.updated_at = new Date();
+		this.id = detalleFacturaCommand.getId();
 		this.numeroLinea = detalleFacturaCommand.getNumeroLinea();
 		this.precioUnitario = detalleFacturaCommand.getPrecioUnitario();
-		this.cantidad = detalleFacturaCommand.getCantidad();
-		this.montoTotal = detalleFacturaCommand.getMontoTotal();
-		this.montoDescuento = detalleFacturaCommand.getMontoDescuento();
-		this.naturalezaDescuento = detalleFacturaCommand.getNaturalezaDescuento();
-		this.subTotal = detalleFacturaCommand.getSubTotal();
-		this.impuesto = detalleFacturaCommand.getImpuesto();
-		this.montoImpuesto = detalleFacturaCommand.getMontoImpuesto();
-		this.montoTotalLinea = detalleFacturaCommand.getMontoTotalLinea();
-		this.ganancia = detalleFacturaCommand.getGanancia();
-		this.porcentajeDesc = detalleFacturaCommand.getPorcentajeDesc();
-		this.observacion = Constantes.EMPTY;
-
+    this.cantidad = detalleFacturaCommand.getCantidad();
+		this.montoTotal =detalleFacturaCommand.getMontoTotal();
+    this.montoDescuento = detalleFacturaCommand.getMontoDescuento();
+		this.naturalezaDescuento =  detalleFacturaCommand.getNaturalezaDescuento();
+    this.subTotal = detalleFacturaCommand.getSubTotal();
+    this.impuesto = detalleFacturaCommand.getImpuesto();
+    this.montoImpuesto = detalleFacturaCommand.getMontoImpuesto();
+    this.montoTotalLinea = detalleFacturaCommand.getMontoTotalLinea();
+    this.ganancia = detalleFacturaCommand.getGanancia();
+    this.porcentajeDesc = detalleFacturaCommand.getPorcentajeDesc();
 	}
 
 	public Integer getId() {
@@ -172,91 +167,91 @@ public class Detalle implements Serializable {
 		this.numeroLinea = numeroLinea;
 	}
 
-	public BigDecimal getPrecioUnitario() {
+	public Double getPrecioUnitario() {
 		return precioUnitario;
 	}
 
-	public void setPrecioUnitario(BigDecimal precioUnitario) {
+	public void setPrecioUnitario(Double precioUnitario) {
 		this.precioUnitario = precioUnitario;
 	}
 
-	public BigDecimal getCantidad() {
+	public Double getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(BigDecimal cantidad) {
+	public void setCantidad(Double cantidad) {
 		this.cantidad = cantidad;
 	}
 
-	public BigDecimal getMontoTotal() {
+	public Double getMontoTotal() {
 		return montoTotal;
 	}
 
-	public void setMontoTotal(BigDecimal montoTotal) {
+	public void setMontoTotal(Double montoTotal) {
 		this.montoTotal = montoTotal;
 	}
 
-	public BigDecimal getMontoDescuento() {
+	public Double getMontoDescuento() {
 		return montoDescuento;
 	}
 
-	public void setMontoDescuento(BigDecimal montoDescuento) {
+	public void setMontoDescuento(Double montoDescuento) {
 		this.montoDescuento = montoDescuento;
 	}
 
-	public BigDecimal getNaturalezaDescuento() {
+	public Double getNaturalezaDescuento() {
 		return naturalezaDescuento;
 	}
 
-	public void setNaturalezaDescuento(BigDecimal naturalezaDescuento) {
+	public void setNaturalezaDescuento(Double naturalezaDescuento) {
 		this.naturalezaDescuento = naturalezaDescuento;
 	}
 
-	public BigDecimal getSubTotal() {
+	public Double getSubTotal() {
 		return subTotal;
 	}
 
-	public void setSubTotal(BigDecimal subTotal) {
+	public void setSubTotal(Double subTotal) {
 		this.subTotal = subTotal;
 	}
 
-	public BigDecimal getImpuesto() {
+	public Double getImpuesto() {
 		return impuesto;
 	}
 
-	public void setImpuesto(BigDecimal impuesto) {
+	public void setImpuesto(Double impuesto) {
 		this.impuesto = impuesto;
 	}
 
-	public BigDecimal getMontoImpuesto() {
+	public Double getMontoImpuesto() {
 		return montoImpuesto;
 	}
 
-	public void setMontoImpuesto(BigDecimal montoImpuesto) {
+	public void setMontoImpuesto(Double montoImpuesto) {
 		this.montoImpuesto = montoImpuesto;
 	}
 
-	public BigDecimal getMontoTotalLinea() {
+	public Double getMontoTotalLinea() {
 		return montoTotalLinea;
 	}
 
-	public void setMontoTotalLinea(BigDecimal montoTotalLinea) {
+	public void setMontoTotalLinea(Double montoTotalLinea) {
 		this.montoTotalLinea = montoTotalLinea;
 	}
 
-	public BigDecimal getGanancia() {
+	public Double getGanancia() {
 		return ganancia;
 	}
 
-	public void setGanancia(BigDecimal ganancia) {
+	public void setGanancia(Double ganancia) {
 		this.ganancia = ganancia;
 	}
 
-	public BigDecimal getPorcentajeDesc() {
+	public Double getPorcentajeDesc() {
 		return porcentajeDesc;
 	}
 
-	public void setPorcentajeDesc(BigDecimal porcentajeDesc) {
+	public void setPorcentajeDesc(Double porcentajeDesc) {
 		this.porcentajeDesc = porcentajeDesc;
 	}
 

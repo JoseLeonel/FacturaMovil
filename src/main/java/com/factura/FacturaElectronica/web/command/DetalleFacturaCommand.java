@@ -1,7 +1,5 @@
 package com.factura.FacturaElectronica.web.command;
 
-import java.math.BigDecimal;
-
 /**
  * Linea de detalles que viene en la venta desde el front end
  * DetalleFacturaCommand.
@@ -15,27 +13,27 @@ public class DetalleFacturaCommand {
 
 	private Integer	numeroLinea;
 
-	private BigDecimal		precioUnitario;
+	private Double		precioUnitario;
 
-	private BigDecimal		cantidad;
+	private Double		cantidad;
 
-	private BigDecimal		montoTotal;
+	private Double		montoTotal;
 
-	private BigDecimal		montoDescuento;
+	private Double		montoDescuento;
 
-	private BigDecimal		naturalezaDescuento;
+	private Double		naturalezaDescuento;
 
-	private BigDecimal		subTotal;
+	private Double		subTotal;
 
-	private BigDecimal		impuesto;
+	private Double		impuesto;
 
-	private BigDecimal		montoImpuesto;
+	private Double		montoImpuesto;
 
-	private BigDecimal		montoTotalLinea;
+	private Double		montoTotalLinea;
 
-	private BigDecimal		ganancia;
+	private Double		ganancia;
 
-	private BigDecimal		porcentajeDesc;
+	private Double		porcentajeDesc;
 
 	public DetalleFacturaCommand() {
 		super();
@@ -72,112 +70,112 @@ public class DetalleFacturaCommand {
 	}
 
 	
-	public BigDecimal getPrecioUnitario() {
+	public Double getPrecioUnitario() {
 		return precioUnitario;
 	}
 
 	
-	public void setPrecioUnitario(BigDecimal precioUnitario) {
+	public void setPrecioUnitario(Double precioUnitario) {
 		this.precioUnitario = precioUnitario;
 	}
 
 	
-	public BigDecimal getCantidad() {
+	public Double getCantidad() {
 		return cantidad;
 	}
 
 	
-	public void setCantidad(BigDecimal cantidad) {
+	public void setCantidad(Double cantidad) {
 		this.cantidad = cantidad;
 	}
 
 	
-	public BigDecimal getMontoTotal() {
+	public Double getMontoTotal() {
 		return montoTotal;
 	}
 
 	
-	public void setMontoTotal(BigDecimal montoTotal) {
+	public void setMontoTotal(Double montoTotal) {
 		this.montoTotal = montoTotal;
 	}
 
 	
-	public BigDecimal getMontoDescuento() {
+	public Double getMontoDescuento() {
 		return montoDescuento;
 	}
 
 	
-	public void setMontoDescuento(BigDecimal montoDescuento) {
+	public void setMontoDescuento(Double montoDescuento) {
 		this.montoDescuento = montoDescuento;
 	}
 
 	
-	public BigDecimal getNaturalezaDescuento() {
+	public Double getNaturalezaDescuento() {
 		return naturalezaDescuento;
 	}
 
 	
-	public void setNaturalezaDescuento(BigDecimal naturalezaDescuento) {
+	public void setNaturalezaDescuento(Double naturalezaDescuento) {
 		this.naturalezaDescuento = naturalezaDescuento;
 	}
 
 	
-	public BigDecimal getSubTotal() {
+	public Double getSubTotal() {
 		return subTotal;
 	}
 
 	
-	public void setSubTotal(BigDecimal subTotal) {
+	public void setSubTotal(Double subTotal) {
 		this.subTotal = subTotal;
 	}
 
 	
-	public BigDecimal getImpuesto() {
+	public Double getImpuesto() {
 		return impuesto;
 	}
 
 	
-	public void setImpuesto(BigDecimal impuesto) {
+	public void setImpuesto(Double impuesto) {
 		this.impuesto = impuesto;
 	}
 
 	
-	public BigDecimal getMontoImpuesto() {
+	public Double getMontoImpuesto() {
 		return montoImpuesto;
 	}
 
 	
-	public void setMontoImpuesto(BigDecimal montoImpuesto) {
+	public void setMontoImpuesto(Double montoImpuesto) {
 		this.montoImpuesto = montoImpuesto;
 	}
 
 	
-	public BigDecimal getMontoTotalLinea() {
+	public Double getMontoTotalLinea() {
 		return montoTotalLinea;
 	}
 
 	
-	public void setMontoTotalLinea(BigDecimal montoTotalLinea) {
+	public void setMontoTotalLinea(Double montoTotalLinea) {
 		this.montoTotalLinea = montoTotalLinea;
 	}
 
 	
-	public BigDecimal getGanancia() {
+	public Double getGanancia() {
 		return ganancia;
 	}
 
 	
-	public void setGanancia(BigDecimal ganancia) {
+	public void setGanancia(Double ganancia) {
 		this.ganancia = ganancia;
 	}
 
 	
-	public BigDecimal getPorcentajeDesc() {
+	public Double getPorcentajeDesc() {
 		return porcentajeDesc;
 	}
 
 	
-	public void setPorcentajeDesc(BigDecimal porcentajeDesc) {
+	public void setPorcentajeDesc(Double porcentajeDesc) {
 		this.porcentajeDesc = porcentajeDesc;
 	}
 

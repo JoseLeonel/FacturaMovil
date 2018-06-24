@@ -1,0 +1,71 @@
+
+   .ticket1 {
+        height: auto;
+        width: 377px;
+        margin: 0px;
+        padding: 0px;
+        float: left;
+        font-style: normal;
+        line-height: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        color: #000;
+        font-size: 14px;
+        font-family: 'Times New Roman';
+        
+        max-width: 377px;
+       
+    }
+    .ticket1 > table{
+        border-top: 0px solid black;
+        border-collapse: collapse;
+    }
+    .forma-table1 {
+        border-top:1px solid black;
+        border-collapse: collapse;
+    }
+    .ticket1 > td.producto,th.producto {
+        width: 377px;
+        max-width: 75px;
+    }
+    .ticket1 > td.cantidad,th.cantidad {
+        width: 377px;
+        word-break: break-all;
+    }
+    .ticket1 > td.precio,th.precio {
+        width: 377px;
+        word-break: break-all;
+    }
+    .encabezado1 {
+        text-align: left;
+        align-content: left;
+    }
+    .ticket1 > img {
+        max-width: inherit;
+        width: inherit;
+    }
+    
+    .zona-impresion1{
+        width: 80%;
+	    display: flex;
+	    flex-wrap: wrap;
+     }
+     .zona-impresion1 .forma-impresion1{
+        width: 80%;
+        margin-left: 1%;
+        margin-bottom: 45px;
+        box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.70);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        align-self: flex-start;
+        background-color: white !important;
+        transition: all .4s;
+     
+    }
+    .encabezado1 {
+        text-align: left;
+        align-content: left;
+    }
+    

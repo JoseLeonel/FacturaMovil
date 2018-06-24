@@ -1,7 +1,5 @@
 package com.factura.FacturaElectronica.web.command;
 
-import java.math.BigDecimal;
-
 import com.factura.FacturaElectronica.modelo.Articulo;
 
 public class DetalleCompraCommand {
@@ -10,11 +8,11 @@ public class DetalleCompraCommand {
 	private Integer			articulo_id;
 	private String			codigo;
 	private String			descripcion;
-	private BigDecimal	cantidad;
-	private BigDecimal	costo;
-	private BigDecimal	impuesto;
-	private BigDecimal	descuento;
-	private BigDecimal	subTotal;
+	private Double	cantidad;
+	private Double	costo;
+	private Double	impuesto;
+	private Double	descuento;
+	private Double	subTotal;
 	private Articulo		articulo;
 
 	public DetalleCompraCommand() {
@@ -53,43 +51,43 @@ public class DetalleCompraCommand {
 		this.descripcion = descripcion;
 	}
 
-	public BigDecimal getCantidad() {
+	public Double getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(BigDecimal cantidad) {
+	public void setCantidad(Double cantidad) {
 		this.cantidad = cantidad;
 	}
 
-	public BigDecimal getCosto() {
+	public Double getCosto() {
 		return costo;
 	}
 
-	public void setCosto(BigDecimal costo) {
+	public void setCosto(Double costo) {
 		this.costo = costo;
 	}
 
-	public BigDecimal getImpuesto() {
+	public Double getImpuesto() {
 		return impuesto;
 	}
 
-	public void setImpuesto(BigDecimal impuesto) {
+	public void setImpuesto(Double impuesto) {
 		this.impuesto = impuesto;
 	}
 
-	public BigDecimal getDescuento() {
+	public Double getDescuento() {
 		return descuento;
 	}
 
-	public void setDescuento(BigDecimal descuento) {
+	public void setDescuento(Double descuento) {
 		this.descuento = descuento;
 	}
 
-	public BigDecimal getSubTotal() {
+	public Double getSubTotal() {
 		return subTotal;
 	}
 
-	public void setSubTotal(BigDecimal subTotal) {
+	public void setSubTotal(Double subTotal) {
 		this.subTotal = subTotal;
 	}
 

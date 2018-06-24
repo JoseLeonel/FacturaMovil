@@ -1,7 +1,5 @@
 package com.factura.FacturaElectronica.Dao;
 
-import java.math.BigDecimal;
-
 import com.factura.FacturaElectronica.modelo.Usuario;
 import com.factura.FacturaElectronica.modelo.UsuarioCaja;
 
@@ -17,6 +15,6 @@ public interface UsuarioCajaDao {
 	
 	UsuarioCaja findByUsuarioAndEstado(Usuario usuario,String estado);
 	
-	void actualizarCaja(UsuarioCaja usuarioCaja ,BigDecimal totalEfectivo,BigDecimal totalTarjeta,BigDecimal totalBanco,BigDecimal totalCredito,BigDecimal totalAbono);
+	void actualizarCaja(UsuarioCaja usuarioCaja ,Double totalEfectivo,Double totalTarjeta,Double totalBanco,Double totalCredito,Double totalAbono)throws Exception;
 
 }

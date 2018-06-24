@@ -20,7 +20,7 @@ public interface EmpresaBo {
 
 	Empresa buscarPorCedula(String cedula);
 	
-	String generarConsecutivoFactura(Empresa empresa,Usuario usuario,Factura factura);
+	String generarConsecutivoFactura(Empresa empresa,Usuario usuario,Factura factura)throws Exception;
 	
 	
 

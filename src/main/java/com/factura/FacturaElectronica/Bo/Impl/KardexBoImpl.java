@@ -1,7 +1,5 @@
 package com.factura.FacturaElectronica.Bo.Impl;
 
-import java.math.BigDecimal;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -44,7 +42,7 @@ public class KardexBoImpl implements KardexBo {
 	 * @param motivo
 	 * @param usuarioSesion
 	 */
-	public void entrada(Inventario inventario, BigDecimal cantidad, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
+	public void entrada(Inventario inventario, Double cantidad, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
 
 		kardexDao.entrada(inventario, cantidad, observacion, consecutivo, tipo, motivo, usuarioSesion);
 	}
@@ -58,7 +56,7 @@ public class KardexBoImpl implements KardexBo {
 	 * @param tipo
 	 * @param motivo
 	 */
-	public void salida(Inventario inventario, BigDecimal cantidad, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
+	public void salida(Inventario inventario, Double cantidad, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
 		kardexDao.salida(inventario, cantidad, observacion, consecutivo, tipo, motivo, usuarioSesion);
 
 	}

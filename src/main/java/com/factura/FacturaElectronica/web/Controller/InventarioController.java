@@ -24,6 +24,7 @@ import com.factura.FacturaElectronica.Bo.ArticuloBo;
 import com.factura.FacturaElectronica.Bo.DataTableBo;
 import com.factura.FacturaElectronica.Bo.InventarioBo;
 import com.factura.FacturaElectronica.Bo.KardexBo;
+import com.factura.FacturaElectronica.Bo.UsuarioBo;
 import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.Utils.DataTableDelimitador;
 import com.factura.FacturaElectronica.Utils.DataTableFilter;
@@ -65,6 +66,9 @@ public class InventarioController {
 
 	@Autowired
 	private ArticuloBo																				articuloBo;
+	
+	@Autowired
+	private UsuarioBo																				usuarioBo;
 
 	@Autowired
 	private KardexBo																					kardexBo;
@@ -140,7 +144,7 @@ public class InventarioController {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			Usuario usuarioSesion = (Usuario) WebUtils.getSessionAttribute(request, Constantes.WEB_SESSION_USUARIO);
+			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			Articulo articulo = articuloBo.buscar(IdArticulo);
 			if (articulo == null) {
 				respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -152,7 +156,7 @@ public class InventarioController {
 			}
 
 			if (inventario.getCantidad() != null) {
-				if (inventario.getCantidad() == BigDecimal.ZERO) {
+				if (inventario.getCantidad() == Constantes.ZEROS_DOUBLE) {
 					result.rejectValue("cantidad", "error.inventario.cantidad.cero");
 				}
 			}
@@ -196,7 +200,7 @@ public class InventarioController {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 
-			Usuario usuarioSesion = (Usuario) WebUtils.getSessionAttribute(request, Constantes.WEB_SESSION_USUARIO);
+			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 			Articulo articulo = articuloBo.buscar(IdArticulo);
 			if (articulo == null) {

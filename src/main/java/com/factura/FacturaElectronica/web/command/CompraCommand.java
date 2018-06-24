@@ -1,7 +1,5 @@
 package com.factura.FacturaElectronica.web.command;
 
-import java.math.BigDecimal;
-
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Proveedor;
 import com.factura.FacturaElectronica.modelo.Usuario;
@@ -19,12 +17,12 @@ public class CompraCommand {
 
 	private Integer		formaPago;
 
-	private BigDecimal		totalImpuesto;
+	private Double		totalImpuesto;
 
-	private BigDecimal		totalDescuento;
-	private BigDecimal		subTotal;
+	private Double		totalDescuento;
+	private Double		subTotal;
 
-	private BigDecimal		totalCompra;
+	private Double		totalCompra;
 
 	private String		nota;
 
@@ -103,42 +101,42 @@ public class CompraCommand {
 	}
 
 	
-	public BigDecimal getTotalImpuesto() {
+	public Double getTotalImpuesto() {
 		return totalImpuesto;
 	}
 
 	
-	public void setTotalImpuesto(BigDecimal totalImpuesto) {
+	public void setTotalImpuesto(Double totalImpuesto) {
 		this.totalImpuesto = totalImpuesto;
 	}
 
 	
-	public BigDecimal getTotalDescuento() {
+	public Double getTotalDescuento() {
 		return totalDescuento;
 	}
 
 	
-	public void setTotalDescuento(BigDecimal totalDescuento) {
+	public void setTotalDescuento(Double totalDescuento) {
 		this.totalDescuento = totalDescuento;
 	}
 
 	
-	public BigDecimal getSubTotal() {
+	public Double getSubTotal() {
 		return subTotal;
 	}
 
 	
-	public void setSubTotal(BigDecimal subTotal) {
+	public void setSubTotal(Double subTotal) {
 		this.subTotal = subTotal;
 	}
 
 	
-	public BigDecimal getTotalCompra() {
+	public Double getTotalCompra() {
 		return totalCompra;
 	}
 
 	
-	public void setTotalCompra(BigDecimal totalCompra) {
+	public void setTotalCompra(Double totalCompra) {
 		this.totalCompra = totalCompra;
 	}
 
