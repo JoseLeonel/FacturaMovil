@@ -139,14 +139,14 @@ public class AbonoController {
 			}
 
 			// abono a crear no puede ser mayor al saldo de la cuenta por cobrar
-			if (abono.getTotal().compareTo(cuentaCobrar.getTotalSaldo()) == -1) {
-				result.rejectValue("montoCouta", "error.abono.total.mayor.totalSaldo");
+			if (abono.getTotal() > cuentaCobrar.getTotalSaldo()) {
+				result.rejectValue("total", "error.abono.total.mayor.totalSaldo");
 			}
 			if (abono.getTotal() == Constantes.ZEROS_DOUBLE) {
-				result.rejectValue("montoCouta", "error.abono.total.cero");
+				result.rejectValue("total", "error.abono.total.cero");
 			}
-			if (abono.getTotal().compareTo(Constantes.ZEROS_DOUBLE) ==-1) {
-				result.rejectValue("montoCouta", "error.abono.total.cero");
+			if (abono.getTotal()  == Constantes.ZEROS_DOUBLE) {
+				result.rejectValue("total", "error.abono.total.cero");
 			}
 
 			if (result.hasErrors()) {
