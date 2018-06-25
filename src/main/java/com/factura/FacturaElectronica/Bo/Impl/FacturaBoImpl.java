@@ -293,7 +293,7 @@ public class FacturaBoImpl implements FacturaBo {
 				return resultado;
 			}
 			if (facturaCommand.getTotalBanco() == 0 || facturaCommand.getTotalTarjeta() == 0) {
-				resultado = facturaCommand.getTotalEfectivo() - facturaCommand.getTotalCambio();
+				resultado = facturaCommand.getTotalEfectivo() - facturaCommand.getTotalCambioPagar();
 			} else {
 				resultado = facturaCommand.getTotalVentaNeta();
 			}
