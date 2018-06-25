@@ -33,8 +33,8 @@
 	<script src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script>
 	
 	<!-- MANTENIMIENTO DE TIPO DE CAMBIOS -->
-	<script type="text/javascript" src="/js/views/caja/cajas.js"></script>
-	<script type = "riot/tag"  src="/js/views/components/caja/crudCaja.tag" ></script>
+	<script type="text/javascript" src="/js/views/tipoCambio/tipoCambio.js"></script>
+	<script type = "riot/tag"  src="/js/views/components/tipoCambio/crearTipoCambio.tag" ></script>
     
 </head>
 <body>
@@ -42,11 +42,11 @@
 
 <ol class="breadcrumb">
     <li><a href="/"><i class="fa fa-dashboard"></i> Inicio</a></li>
-    <li class="active">Cajas</li>
+    <li class="active">Cambio Moneda Dolar</li>
 </ol>
 </section>
 <div layout:fragment="content">
- 	<caja-crud></caja-crud>
+	<tipo-CambioMoneda></tipo-CambioMoneda>
 </div>
 
 </body>

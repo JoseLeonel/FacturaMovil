@@ -76,7 +76,7 @@ public class TipoCambiosController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = "/ListarCajasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@RequestMapping(value = "/ListarTipoCambioAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
 
