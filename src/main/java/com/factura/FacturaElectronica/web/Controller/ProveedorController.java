@@ -22,7 +22,7 @@ import com.factura.FacturaElectronica.Bo.ProveedorBo;
 import com.factura.FacturaElectronica.Bo.UsuarioBo;
 import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.Utils.DataTableDelimitador;
-import com.factura.FacturaElectronica.Utils.DataTableFilter;
+import com.factura.FacturaElectronica.Utils.JqGridFilter;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceDataTable;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
 import com.factura.FacturaElectronica.modelo.Empresa;
@@ -99,7 +99,7 @@ public class ProveedorController {
 		delimitadores = new DataTableDelimitador(request, "Proveedor");
 		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
 			String nombreUsuario = request.getUserPrincipal().getName();
-			DataTableFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
 

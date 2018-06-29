@@ -7,26 +7,21 @@
                 <i class="fa fa-dashboard"></i> <span>Inicio</span>
             </a>
         </li>
-          
-
-	        <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"  >
-
-	            <a href="#">
-	                <i class="fa fa-edit"></i>
-	                <span>Administrativo</span>
-	                <i class="fa fa-angle-left pull-right"></i>
-	            </a>
-	            <ul class="treeview-menu">
-		                <li sec:authorize="hasAnyAuthority('Administrador_Sistema')" >                       <a href="/ListarUsuario">    <i class="fa fa-circle-o"></i> Usuarios  </a></li>
-		                <li sec:authorize="hasAnyAuthority('Administrador_Sistema')">                        <a href="/ListarEmpresas">   <i class="fa fa-circle-o"></i> Empresas  </a></li>
-		                <li sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><a href="/ListarClientes">   <i class="fa fa-circle-o"></i> Clientes  </a></li>
-		                <li sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><a href="/ListarVendedores"> <i class="fa fa-circle-o"></i> Vendedores</a></li>
-  		                <li sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><a href="/ListarCajas">      <i class="fa fa-circle-o"></i> Cajas     </a></li>
-	            </ul>
-	        </li>
-	            
-
-		         <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')">
+		        <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"  >
+		            <a href="#">
+		                <i class="fa fa-edit"></i>
+		                <span>Administrativo</span>
+		                <i class="fa fa-angle-left pull-right"></i>
+		            </a>
+		            <ul class="treeview-menu">
+			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema')" >                       <a href="/ListarUsuario">    <i class="fa fa-circle-o"></i> Usuarios  </a></li>
+			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema')">                        <a href="/ListarEmpresas">   <i class="fa fa-circle-o"></i> Empresas  </a></li>
+			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><a href="/ListarClientes">   <i class="fa fa-circle-o"></i> Clientes  </a></li>
+			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><a href="/ListarVendedores"> <i class="fa fa-circle-o"></i> Vendedores</a></li>
+	  		          <li sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><a href="/ListarCajas">      <i class="fa fa-circle-o"></i> Cajas     </a></li>
+		            </ul>
+		        </li>
+		  <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')">
 		            <a href="#">
 		                <i class="fa fa-calculator"></i>
 		                <span>Inventarios</span>
@@ -38,6 +33,7 @@
 		                <li><a href="/ListarMotivoSalidas"  sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><i class="fa fa-circle-o"></i> Motivo de Salidas</a></li>
 		                <li><a href="/ListarMotivoEntradas" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><i class="fa fa-circle-o"></i> Motivo de Entradas</a></li>
 		                <li><a href="/ListarArticulos"      sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><i class="fa fa-circle-o"></i> Articulos        </a></li>
+		                <li><a href="/ListarKardex"         sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><i class="fa fa-circle-o"></i> Kardex           </a></li>
 		            </ul>
 		        </li>
         <li class="treeview">

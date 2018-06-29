@@ -1,6 +1,6 @@
 package com.factura.FacturaElectronica.Bo;
 
-import com.factura.FacturaElectronica.Utils.DataTableFilter;
+import com.factura.FacturaElectronica.Utils.JqGridFilter;
 import com.factura.FacturaElectronica.modelo.Usuario;
 
 public interface UsuarioBo {
@@ -19,6 +19,6 @@ public interface UsuarioBo {
 
 	Usuario buscarPorNombreYPrimerApellidoYSegundoApellido(String nombre, String primerApellido, String segundoApellido);
 	
-	DataTableFilter filtroPorEmpresa(String nombreUsuario);
+	JqGridFilter filtroPorEmpresa(String nombreUsuario);
 
 }

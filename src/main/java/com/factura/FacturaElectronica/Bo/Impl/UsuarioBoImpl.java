@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.factura.FacturaElectronica.Bo.UsuarioBo;
 import com.factura.FacturaElectronica.Dao.UsuarioDao;
-import com.factura.FacturaElectronica.Utils.DataTableFilter;
+import com.factura.FacturaElectronica.Utils.JqGridFilter;
 import com.factura.FacturaElectronica.modelo.Usuario;
 
 /**
@@ -71,9 +71,9 @@ public class UsuarioBoImpl implements UsuarioBo {
 	 * Obtener la empresa asociada de un usuario que no es superadministrador
 	 */
 	@Override
-	public DataTableFilter filtroPorEmpresa(String nombreUsuario) {
+	public JqGridFilter filtroPorEmpresa(String nombreUsuario) {
 		   Usuario usuarioSesion = buscar(nombreUsuario); 
-		  return  new DataTableFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
+		  return  new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
 
 		
 	}

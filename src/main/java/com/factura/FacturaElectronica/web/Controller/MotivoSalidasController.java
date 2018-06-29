@@ -24,7 +24,7 @@ import com.factura.FacturaElectronica.Bo.MotivoSalidaBo;
 import com.factura.FacturaElectronica.Bo.UsuarioBo;
 import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.Utils.DataTableDelimitador;
-import com.factura.FacturaElectronica.Utils.DataTableFilter;
+import com.factura.FacturaElectronica.Utils.JqGridFilter;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceDataTable;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
 import com.factura.FacturaElectronica.modelo.Empresa;
@@ -105,7 +105,7 @@ public class MotivoSalidasController {
 		delimitadores = new DataTableDelimitador(request, "MotivoSalida");
 		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
 			String nombreUsuario = request.getUserPrincipal().getName();
-			DataTableFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
 
@@ -125,9 +125,9 @@ public class MotivoSalidasController {
 		DataTableDelimitador delimitadores = null;
 		if (empresa != null) {
 			delimitadores = new DataTableDelimitador(request, "MotivoSalida");
-			DataTableFilter dataTableFilter = new DataTableFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
+			JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
-			dataTableFilter = new DataTableFilter("empresa.id", "'" + empresa.getId().toString() + "'", "=");
+			dataTableFilter = new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
 
 		}

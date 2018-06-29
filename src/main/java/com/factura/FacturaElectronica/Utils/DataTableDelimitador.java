@@ -18,7 +18,7 @@ public class DataTableDelimitador {
 	private String											searchValue;
 	private Integer											length;
 	private ArrayList<String>						listaLeftJoin;
-	private ArrayList<DataTableFilter>	filtros;
+	private ArrayList<JqGridFilter>	filtros;
 	private int													maxParamsToCheck	= 0;
 
 	public DataTableDelimitador(HttpServletRequest request, String tabla) {
@@ -85,7 +85,7 @@ public class DataTableDelimitador {
 			if (!valor.equals(null) && !valor.isEmpty()) {
 				campo = request.getParameter("columns[" + i + "][name]");
 				valor = request.getParameter("columns[" + i + "][search][value]");
-				addFiltro(new DataTableFilter(campo, valor, operadorBusqueda));
+				addFiltro(new JqGridFilter(campo, valor, operadorBusqueda));
 			}
 		}
 
@@ -110,7 +110,7 @@ public class DataTableDelimitador {
 			campo = "";
 			valor = this.searchValue;
 			campo = request.getParameter("columns[" + i + "][name]");
-			addFiltro(new DataTableFilter(campo, valor, operadorBusqueda));
+			addFiltro(new JqGridFilter(campo, valor, operadorBusqueda));
 		}
 
 	}
@@ -134,14 +134,14 @@ public class DataTableDelimitador {
 		}
 		return lstOfParams.size();
 	}
-
-	public void addFiltro(DataTableFilter filtro) {
+	public void addFiltro(JqGridFilter filtro) {
 		if (filtros == null) {
-			filtros = new ArrayList<DataTableFilter>();
+			filtros = new ArrayList<JqGridFilter>();
 		}
 		filtros.add(filtro);
 	}
 
+	
 	public void addLeftJoin(String leftJoin) {
 		if (listaLeftJoin == null) {
 			listaLeftJoin = new ArrayList<String>();
@@ -213,11 +213,11 @@ public class DataTableDelimitador {
 		this.columnOrderDir = columnOrderDir;
 	}
 
-	public ArrayList<DataTableFilter> getFiltros() {
+	public ArrayList<JqGridFilter> getFiltros() {
 		return filtros;
 	}
 
-	public void setFiltros(ArrayList<DataTableFilter> filtros) {
+	public void setFiltros(ArrayList<JqGridFilter> filtros) {
 		this.filtros = filtros;
 	}
 

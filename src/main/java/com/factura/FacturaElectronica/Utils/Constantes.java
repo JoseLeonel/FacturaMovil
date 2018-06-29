@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																= ResourceBundle.getBundle("factura");
+
 	// Consecutivo inicial de las empresa
 	public static final Integer					CONSECUTIVO_INICIAL_FACTURA										= 0000000001;
 	public static final String					CASA_MATRIZ_INICIAL_FACTURA										= "001";
@@ -20,6 +21,7 @@ public class Constantes {
 
 	// Codigo de moneda
 	public static final String					CODIGO_MONEDA_COSTA_RICA											= "CRC";
+	public static final String					CODIGO_MONEDA_DOLAR														= "US";
 
 	// SP del sistema
 	public static final String					SP_ELIMINAR_DETALLES_COMPRAS									= "sp_eliminarDetallesCompra";
@@ -149,11 +151,11 @@ public class Constantes {
 	public static final String					TIPO_CEDULA_JURIDICA													= "02";
 	public static final String					TIPO_CEDULA_DIMEX															= "03";
 	public static final String					TIPO_CEDULA_NITE															= "04";
-	
-	public static final String					TIPO_CEDULA_FISICA_STR														= "tipo.cedula.fisica";
-	public static final String					TIPO_CEDULA_JURIDICA_STR													= "tipo.cedula.juridica";
-	public static final String					TIPO_CEDULA_DIMEX_STR															= "tipo.cedula.dimex";
-	public static final String					TIPO_CEDULA_NITE_STR															= "tipo.cedula.nite";
+
+	public static final String					TIPO_CEDULA_FISICA_STR												= "tipo.cedula.fisica";
+	public static final String					TIPO_CEDULA_JURIDICA_STR											= "tipo.cedula.juridica";
+	public static final String					TIPO_CEDULA_DIMEX_STR													= "tipo.cedula.dimex";
+	public static final String					TIPO_CEDULA_NITE_STR													= "tipo.cedula.nite";
 	// usuario
 	public static final Integer					USUARIO_ESTADO_ACTIVO													= 1;
 	public static final Integer					USUARIO_ESTADO_INACTIVO												= 2;

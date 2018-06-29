@@ -35,6 +35,7 @@ public class TipoCambiosCommand {
 		this.created_at = tipoCambio.getCreated_at();
 		this.updated_at = tipoCambio.getUpdated_at();
 		this.usuario = tipoCambio.getUsuario();
+		this.total = tipoCambio.getTotal();
 	}
 
 	

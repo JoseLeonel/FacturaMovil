@@ -1,6 +1,5 @@
 package com.factura.FacturaElectronica.web.Controller;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +23,7 @@ import com.factura.FacturaElectronica.Bo.DataTableBo;
 import com.factura.FacturaElectronica.Bo.UsuarioBo;
 import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.Utils.DataTableDelimitador;
-import com.factura.FacturaElectronica.Utils.DataTableFilter;
+import com.factura.FacturaElectronica.Utils.JqGridFilter;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceDataTable;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
 import com.factura.FacturaElectronica.modelo.Articulo;
@@ -105,6 +104,11 @@ public class ArticuloController {
 	public String listar(ModelMap model) {
 		return "views/articulos/ListarArticulos";
 	}
+	
+	@RequestMapping(value = "/ListarKardex", method = RequestMethod.GET)
+	public String listarKardex(ModelMap model) {
+		return "views/articulos/ListarKardex";
+	}
 
 	/**
 	 * Listar Ajax de los articulos de una empresa
@@ -121,7 +125,7 @@ public class ArticuloController {
 		delimitadores = new DataTableDelimitador(request, "Articulo");
 		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
 			String nombreUsuario = request.getUserPrincipal().getName();
-			DataTableFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
 

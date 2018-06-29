@@ -25,6 +25,7 @@ import com.factura.FacturaElectronica.modelo.Compra;
 import com.factura.FacturaElectronica.modelo.DetalleCompra;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Inventario;
+import com.factura.FacturaElectronica.modelo.Usuario;
 import com.factura.FacturaElectronica.web.command.CompraCommand;
 import com.factura.FacturaElectronica.web.command.DetalleCompraCommand;
 import com.google.gson.Gson;
@@ -68,15 +69,21 @@ public class CompraBoImpl implements CompraBo {
 	 * @throws Exception
 	 */
 	@Override
-	public void crearCompra(CompraCommand compraCommand) throws Exception {
+	public void crearCompra(CompraCommand compraCommand,Usuario usuario) throws Exception {
 		try {
 			Compra compra = compraCommand.getId() == null || compraCommand.getId() == Constantes.ZEROS ?  new Compra():compraDao.findById(compraCommand.getId());
 			compra.setConsecutivo(compraCommand.getConsecutivo());
 			compra.setEmpresa(compraCommand.getEmpresa());
 			compra.setEstado(compraCommand.getEstado());
-			compra.setFechaCompra(Utils.pasarADate(compraCommand.getFechaCompra(),"yyyy-MM-dd"));
-			compra.setFechaCredito(compraCommand.getFechaCredito() == Constantes.EMPTY?null: Utils.pasarADate(compraCommand.getFechaCredito(),"yyyy-MM-dd"));
 			compra.setFormaPago(compraCommand.getFormaPago());
+			compra.setFechaCompra(Utils.pasarADate(compraCommand.getFechaCompra(),"yyyy-MM-dd"));
+			if(compra.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)){
+				compra.setFechaCredito(Utils.pasarADate(compraCommand.getFechaCredito(),"yyyy-MM-dd")); 	
+			}else {
+				compra.setFechaCredito(null);
+			}
+			
+			
 			compra.setNota(compraCommand.getNota());
 			compra.setTotalCompra(compraCommand.getTotalCompra());
 			compra.setTotalDescuento(compraCommand.getTotalDescuento());
@@ -92,10 +99,15 @@ public class CompraBoImpl implements CompraBo {
 				compra.setUpdated_at(new Date());
 			}
 			
-			 if(compra.getId() == 0) {
+			 if(compra.getId() == null) {
 				 compra.setCreated_at(new Date());
+				 compra.setUpdated_at(new Date());
+				 compra.setUsuarioCreacion(usuario);
+				 compra.setUsuarioIngresoInventario(usuario);
 	    	 agregar(compra); 
 	     }else {
+	    	 compra.setCreated_at(new Date());
+	    	 compra.setUsuarioIngresoInventario(usuario);
 	    	 modificar(compra);
 	     }   
 			
@@ -119,9 +131,10 @@ public class CompraBoImpl implements CompraBo {
 				for (int i = 0; i < jsonArrayDetalleCompra.size(); i++) {
 					DetalleCompraCommand detalleCompraCommand = gson.fromJson(jsonArrayDetalleCompra.get(i).toString(), DetalleCompraCommand.class);
 					Articulo articulo = articuloDao.buscar(detalleCompraCommand.getArticulo_id());
-					detalleCompraCommand.setArticulo(articulo);
+					
 
 					DetalleCompra detalleCompra = new DetalleCompra(detalleCompraCommand);
+					detalleCompra.setArticulo(articulo);
           detalleCompra.setCompra(compra);
           detalleCompra.setCreated_at(new Date());
           detalleCompra.setUpdated_at(new Date());

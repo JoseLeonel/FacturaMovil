@@ -23,6 +23,7 @@ import com.factura.FacturaElectronica.Bo.UsuarioBo;
 import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.Utils.DataTableDelimitador;
 import com.factura.FacturaElectronica.Utils.DataTableFilter;
+import com.factura.FacturaElectronica.Utils.JqGridFilter;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceDataTable;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
 import com.factura.FacturaElectronica.modelo.Cliente;
@@ -100,7 +101,7 @@ public class ClientesController {
 		delimitadores = new DataTableDelimitador(request, "Cliente");
 		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
 			String nombreUsuario = request.getUserPrincipal().getName();
-			DataTableFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
 
@@ -120,7 +121,7 @@ public class ClientesController {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Cliente");
-		DataTableFilter dataTableFilter = new DataTableFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
+		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
 			String nombreUsuario = request.getUserPrincipal().getName();

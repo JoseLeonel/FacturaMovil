@@ -53,7 +53,7 @@
                 </div>
                 <div class="box-body">
                     <form id = "formulario" name ="formulario "   class="advanced-search-form">
-                        <input type="hidden" name="id" id="id" value="{caja.id}">
+                        <input type="hidden" name="id" id="id" value="{usuarioCaja.id}">
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 left">
                                 <label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>

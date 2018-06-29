@@ -6,6 +6,67 @@
         </div>
         <div class=" col-sm-4 col-md-4 col-lg-4 text-right"></div>
     </div>
+  <br>
+    <br><br>
+    <!-- Inicio Filtros-->
+    <div>
+        <div class="row" show={mostrarListado}>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div onclick={__mostrarFiltros} class="text-left advanced-search-grid" style="margin-bottom : {valorMarginBottom}; padding : 2px;">
+                    <h4> <i class="fa fa-filter" style="padding-left : 5px;"></i>&nbsp{$.i18n.prop("filtro")} <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4>
+                </div>  
+                <div  show={mostrarFiltros}  class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
+                    <form id="filtros" name="filtros">              
+                        <div class= "row">
+                            <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                                <div class="form-group">
+                                    <label class="knob-label" >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
+                                    <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
+                                        <input type="text" class="form-control fechaInicio" id="fechaInicio"  name= "fechaInicio" readonly>
+                                        <div class="input-group-addon">
+                                            <span class="glyphicon glyphicon-th"></span>
+                                        </div>
+                                    </div>	                             
+                                </div>  
+                            </div>             
+                            <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label class="knob-label" >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
+                                        <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
+                                            <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>	                             
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2">
+                                <div class="form-group">
+                                    <label>{$.i18n.prop("cliente.titulo")} </label>  
+                                    <select  class="form-control selectCliente" id="cliente" name="cliente" data-live-search="true">
+                                        <option  data-tokens="{$.i18n.prop("todos.select")}"  value="0"  >{$.i18n.prop("todos.select")}</option>
+                                        <option  data-tokens="{nombreCompleto}" each={clientes.data}  value="{id}"  >{nombreCompleto}</option>
+                                    </select>
+                                </div>  
+                            </div>                      
+                        </div>
+                    </form>  
+                </div>
+            </div>
+            <div class="col-xs-12 text-right">
+                <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
+                <a onclick ={__crearArchivoExcel} id="btnDownload" class="btn btn-success" title ="Descargar" > <i class="fa fa-download"></i></a>
+            	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
+            </div>
+        </div>
+    </div>    
+<!-- Fin Filtros-->
+<br>
+
+
+
 <!-- Listado de abonos  -->
 <div classs="contenedor-listar container" id="container"  show={mostrarListadoAbonos}   >
         <div class="row">
@@ -166,6 +227,7 @@
                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
                         <thead>
                             <tr>
+                                <th class="table-header">{$.i18n.prop("cuentaCobrar.created_at")} </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.id")}         </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.cliente")}    </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.factura")}    </th>
@@ -179,6 +241,7 @@
                         </thead>
                         <tfoot style="display: table-header-group;">
                             <tr>
+                                <th >{$.i18n.prop("cuentaCobrar.created_at")} </th> 
                                 <th>{$.i18n.prop("cuentaCobrar.id")}         </th>
                                 <th>{$.i18n.prop("cuentaCobrar.cliente")}    </th>
                                 <th>{$.i18n.prop("cuentaCobrar.factura")}    </th>
@@ -439,12 +502,12 @@
        }
     }
     self.on('mount',function(){
+        $("#filtros").validate(reglasDeValidacionParametros());
         $("#formulario").validate(reglasDeValidacion());
         $("#formularioAbono").validate(reglasDeValidacionAbono());
         __InicializarTabla('.tableListar')
         __InicializarTabla  ('.tableListaAbonos')
         includeActionsCuenta('.dataTables_wrapper','.dataTables_length')
-        __listado()
         agregarInputsCombos();
          __MantenimientoAgregar()
         listaClientesActivos() 
@@ -557,7 +620,100 @@ var reglasDeValidacionAbono = function() {
 
 	});
 	return validationOptions;
+}
+
+/**
+* Camps requeridos
+**/
+var reglasDeValidacionParametros = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			fechaInicial : {
+				required : true,
+			},
+			fechaFinal : {
+				required : true,
+			}                                   
+                        
+		},
+		ignore : []
+
+	});
+	return validationOptions;
 };
+
+/*
+ * Muestra los filtros avanzados
+ */
+ __mostrarFiltros(){
+    if(self.mostrarFiltros){
+        self.mostrarFiltros = false;
+        self.valorMarginBottom  = '10px'
+    }else{
+        self.mostrarFiltros = true;
+        self.valorMarginBottom  = '0px'
+    }
+    self.update();
+}
+
+/**
+* limpiar los filtros
+**/
+__limpiarFiltros(){
+    $('#fechaInicio').val(null)
+    $('#fechaFinal').val(null)
+}
+
+/**
+*  Busqueda de la informacion por rango de fechas
+**/
+__Busqueda(){
+	$("#filtros").validate(reglasDeValidacion());
+     if ($("#filtros").valid()) {
+         listadoConsulta()
+
+     }
+
+}
+
+function listadoConsulta(){
+        var parametros = {
+            fechaInicio:formatoFecha($('#fechaInicio').val()),
+            fechaFin:formatoFecha($('#fechaFinal').val()),
+            idCliente:$('#cliente').val(),
+        };
+        $("#tableListar").dataTable().fnClearTable(); 
+        __InicializarTabla('.tableListar')  
+        $.ajax({
+            url: "ListarCuentaCobrarAjax.do",
+            datatype: "json",
+            data:parametros ,
+            method:"GET",
+            success: function (result) {
+                if(result.aaData.length > 0){
+                    __InformacionDataTable();
+                    loadListar(".tableListar",idioma_espanol,self.informacion_tabla,result.aaData)
+                    includeActionsCuenta('.dataTables_wrapper','.dataTables_length')
+                    agregarInputsCombos();
+                    ActivarEventoFiltro(".tableListar")
+                    __MantenimientoAgregar()
+                    __modificarRegistro_Listar()
+                    __mostrarListadoAbonos()
+                    __MantenimientoAgregarAbono()
+                }else{
+                    __InformacionDataTable();
+                     agregarInputsCombos();
+
+                }           
+            },
+            error: function (xhr, status) {
+                mensajeErrorServidor(xhr, status);
+                console.log(xhr);
+            }
+        });
+
+}
+
 /**
 *  Suma del monto de tarjeta
 **/
@@ -644,7 +800,7 @@ __regresarAlListado(){
                 self.mostrarListadoAbonos = false
                 self.mostrarCrearAbono    = false
                 self.update()
-                __listado();
+                listadoConsulta();
 
             }
     });    
@@ -886,6 +1042,12 @@ function listaVendedoresActivos(){
 **/
 function __InformacionDataTable(){
     self.informacion_tabla = [ 
+                            {'data' :'created_at'             ,"name":"created_at"              ,"title" : $.i18n.prop("cuentaCobrar.created_at")   ,"autoWidth" :true ,
+                                "render":function(created_at,type, row){
+								    return __displayDate_detail(created_at);
+	 							}
+                            
+                            },
                             {'data' :'id'                     ,"name":"id"                      ,"title" : $.i18n.prop("cuentaCobrar.id")           ,"autoWidth" :true },
                             {'data' :'cliente.nombreCompleto' ,"name":"cliente.nombreCompleto"  ,"title" : $.i18n.prop("cuentaCobrar.cliente")      ,"autoWidth" :false },
                             {'data' :'factura'                ,"name":"factura"                 ,"title" : $.i18n.prop("cuentaCobrar.factura")      ,"autoWidth" :false },
@@ -917,6 +1079,15 @@ function __InformacionDataTable(){
     self.update();
    
 }
+
+/**
+*Formato de la fecha con hora
+**/
+function __displayDate_detail(fecha) {
+    var dateTime = new Date(fecha);
+    return moment(dateTime).format('DD/MM/YYYY ');
+}
+
 /**
 *Limpiar cuentas por cobrar
 **/
@@ -1375,7 +1546,7 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 8    ){
+        if ( $(this).index() != 9    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
  

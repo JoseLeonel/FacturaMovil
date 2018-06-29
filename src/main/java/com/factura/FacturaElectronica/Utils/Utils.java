@@ -78,10 +78,42 @@ public final class Utils {
 		return facturaElectronica;
 	}
 	
+	public static Date sumarDiasFecha(Date fecha, int dias) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(fecha);
+		calendar.add(Calendar.DAY_OF_YEAR, dias);
+		return calendar.getTime();
+	}
 	
 	
-	
-	
+	/**
+	 * @param dateString
+	 *            An input String, presumably from a user or a database table.
+	 * @param formats
+	 *            An array of date formats that we have allowed for.
+	 * @return A Date (java.util.Date) reference. The reference will be null if
+	 *         we could not match any of the known formats.
+	 */
+	public static Date parseDate(String dateString) {
+		Date date = null;
+		SimpleDateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT2);
+
+		try {
+			// parse() will throw an exception if the given dateString doesn't
+			// match
+			// the current format
+			date = dateFormat.parse(dateString);
+			date = new SimpleDateFormat("ddMMyyyyhhmmss").parse(dateString);
+
+		} catch (ParseException e) {
+			// don't do anything. just let the loop continue.
+			// we may miss on 99 format attempts, but match on one format,
+			// but that's all we need.
+		}
+
+		return date;
+	}
+
 	
 	
 	

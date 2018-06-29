@@ -1,6 +1,5 @@
 package com.factura.FacturaElectronica.web.Controller;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.util.WebUtils;
 
 import com.factura.FacturaElectronica.Bo.ArticuloBo;
 import com.factura.FacturaElectronica.Bo.DataTableBo;
@@ -27,7 +25,7 @@ import com.factura.FacturaElectronica.Bo.KardexBo;
 import com.factura.FacturaElectronica.Bo.UsuarioBo;
 import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.Utils.DataTableDelimitador;
-import com.factura.FacturaElectronica.Utils.DataTableFilter;
+import com.factura.FacturaElectronica.Utils.JqGridFilter;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceDataTable;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
 import com.factura.FacturaElectronica.modelo.Articulo;
@@ -120,7 +118,7 @@ public class InventarioController {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Inventario");
-		DataTableFilter dataTableFilter = new DataTableFilter("articulo.id", "'" + articulo.getId().toString() + "'", "=");
+		JqGridFilter dataTableFilter = new JqGridFilter("articulo.id", "'" + articulo.getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);

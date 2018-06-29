@@ -27,6 +27,7 @@ import com.factura.FacturaElectronica.Bo.UsuarioCajaBo;
 import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.Utils.DataTableDelimitador;
 import com.factura.FacturaElectronica.Utils.DataTableFilter;
+import com.factura.FacturaElectronica.Utils.JqGridFilter;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceDataTable;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
 import com.factura.FacturaElectronica.modelo.Abono;
@@ -99,7 +100,7 @@ public class AbonoController {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Abono");
-		DataTableFilter dataTableFilter = new DataTableFilter("cuentaCobrar.id", "'" + idCuentaCobrar.toString() + "'", "=");
+		JqGridFilter dataTableFilter = new JqGridFilter("cuentaCobrar.id", "'" + idCuentaCobrar.toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);

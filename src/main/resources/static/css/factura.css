@@ -14,6 +14,13 @@ header{
     width: 100%;
 }
 
+.advanced-search-grid {
+    background-color: #e7e7e7;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+}
 
 div.errorServerSideJgrid {
 	color: red;

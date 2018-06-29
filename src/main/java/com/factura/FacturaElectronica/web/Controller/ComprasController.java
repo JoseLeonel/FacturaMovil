@@ -1,5 +1,9 @@
 package com.factura.FacturaElectronica.web.Controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,12 +22,14 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.factura.FacturaElectronica.Bo.CompraBo;
 import com.factura.FacturaElectronica.Bo.DataTableBo;
+import com.factura.FacturaElectronica.Bo.ProveedorBo;
 import com.factura.FacturaElectronica.Bo.UsuarioBo;
 import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.Utils.DataTableDelimitador;
-import com.factura.FacturaElectronica.Utils.DataTableFilter;
+import com.factura.FacturaElectronica.Utils.JqGridFilter;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceDataTable;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
+import com.factura.FacturaElectronica.Utils.Utils;
 import com.factura.FacturaElectronica.modelo.Compra;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Proveedor;
@@ -55,9 +61,11 @@ public class ComprasController {
 	@Autowired
 	private DataTableBo																					dataTableBo;
 
-
 	@Autowired
 	private UsuarioBo																						usuarioBo;
+
+	@Autowired
+	private ProveedorBo																					proveedorBo;
 
 	@Autowired
 	private CompraBo																						compraBo;
@@ -81,12 +89,11 @@ public class ComprasController {
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
 
-	
 	@RequestMapping(value = "/ListaCompras", method = RequestMethod.GET)
 	public String listar(ModelMap model) {
 		return "views/compras/ListarCompras";
 	}
-	
+
 	/**
 	 * Modulo de compras
 	 * @param model
@@ -111,15 +118,14 @@ public class ComprasController {
 				compraCommand.setFechaCredito(null);
 			}
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-			if(compraCommand.getConsecutivo().equals(Constantes.EMPTY)) {
+			if (compraCommand.getConsecutivo().equals(Constantes.EMPTY)) {
 				result.rejectValue("consecutivo", "error.compra.existe.consecutivo");
 			}
 			Compra compraBD = compraBo.findByConsecutivoAndEmpresa(compraCommand.getConsecutivo(), usuarioSesion.getEmpresa());
 			if (compraBD != null) {
-				if(!compraBD.getId().equals(compraCommand.getId())) {
-					result.rejectValue("consecutivo", "error.compra.existe.consecutivo");	
+				if (!compraBD.getId().equals(compraCommand.getId())) {
+					result.rejectValue("consecutivo", "error.compra.existe.consecutivo");
 				}
-				
 
 			}
 			if (result.hasErrors()) {
@@ -127,7 +133,7 @@ public class ComprasController {
 			}
 			compraCommand.setEmpresa(usuarioSesion.getEmpresa());
 			compraCommand.setUsuarioCreacion(usuarioSesion);
-			compraBo.crearCompra(compraCommand);
+			compraBo.crearCompra(compraCommand, usuarioSesion);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("categoria.agregar.correctamente", compraCommand);
 
@@ -150,14 +156,14 @@ public class ComprasController {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Compra");
-		DataTableFilter dataTableFilter = new DataTableFilter("estado", "'" + Constantes.COMPRA_ESTADO_PENDIENTE.toString() + "'", "=");
+		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.COMPRA_ESTADO_PENDIENTE.toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
-		dataTableFilter = new DataTableFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
+		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
-	
+
 	/**
 	 * Lista las compras ingresadas al inventario y que no estan pendiente
 	 * @param request
@@ -167,37 +173,69 @@ public class ComprasController {
 	 */
 	@RequestMapping(value = "/ListarComprasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarComprasAjax(HttpServletRequest request, HttpServletResponse response) {
+	public RespuestaServiceDataTable listarComprasAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer idProveedor) {
 
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		DataTableDelimitador delimitadores = null;
-		delimitadores = new DataTableDelimitador(request, "Compra");
-		DataTableFilter dataTableFilter = new DataTableFilter("estado", "'" + Constantes.COMPRA_ESTADO_PENDIENTE.toString() + "'", "<>");
-		delimitadores.addFiltro(dataTableFilter);
-		dataTableFilter = new DataTableFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
-		delimitadores.addFiltro(dataTableFilter);
+		Proveedor proveedor = proveedorBo.buscar(idProveedor);
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, proveedor, usuarioSesion.getEmpresa());
 
-		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
-/**
- * Mostrar la compra
- * @param request
- * @param model
- * @param compra
- * @param result
- * @param status
- * @return
- * @throws Exception
- */
+
+	/**
+	 * Mostrar la compra
+	 * @param request
+	 * @param model
+	 * @param compra
+	 * @param result
+	 * @param status
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/MostrarCompraEsperaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam Integer id) {
+	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer id) {
 		try {
 			Compra compraBD = compraBo.findById(id);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", compraBD);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+
+	private static class DelimitadorBuilder {
+
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Proveedor proveedor, Empresa empresa) {
+			// Consulta por fechas
+			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Compra");
+			Date fechaInicio = new Date();
+			Date fechaFinal = new Date();
+
+			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.COMPRA_ESTADO_PENDIENTE.toString() + "'", "<>"));
+			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
+
+			if (proveedor != null) {
+				delimitador.addFiltro(new JqGridFilter("proveedor.id", "'" + proveedor.getId().toString() + "'", "="));
+			}
+			if (!inicio.equals(Constantes.EMPTY) && !fin.equals(Constantes.EMPTY)) {
+				fechaInicio = Utils.parseDate(inicio);
+				fechaFinal = Utils.parseDate(fin);
+				if (fechaFinal == null) {
+					fechaFinal = new Date(System.currentTimeMillis());
+				}
+				if (fechaFinal != null && fechaFinal != null) {
+					fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
+				}
+
+				DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT2);
+
+				inicio = dateFormat.format(fechaInicio);
+				fin = dateFormat.format(fechaFinal);
+
+				delimitador.addFiltro(new JqGridFilter("created_at", inicio, "date>="));
+				delimitador.addFiltro(new JqGridFilter("created_at", fin, "dateFinal<="));
+			}
+			return delimitador;
 		}
 	}
 

@@ -1,6 +1,7 @@
 package com.factura.FacturaElectronica.web.Controller;
 
-import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,17 +16,20 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.factura.FacturaElectronica.Bo.ClienteBo;
 import com.factura.FacturaElectronica.Bo.CuentaCobrarBo;
 import com.factura.FacturaElectronica.Bo.DataTableBo;
 import com.factura.FacturaElectronica.Bo.UsuarioBo;
 import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.Utils.DataTableDelimitador;
-import com.factura.FacturaElectronica.Utils.DataTableFilter;
+import com.factura.FacturaElectronica.Utils.JqGridFilter;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceDataTable;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
+import com.factura.FacturaElectronica.Utils.Utils;
 import com.factura.FacturaElectronica.modelo.Cliente;
 import com.factura.FacturaElectronica.modelo.CuentaCobrar;
 import com.factura.FacturaElectronica.modelo.Empresa;
@@ -59,6 +63,9 @@ public class CuentaCobrarController {
 
 	@Autowired
 	private DataTableBo																					dataTableBo;
+	
+	@Autowired
+	private ClienteBo																					clienteBo;
 
 	@Autowired
 	private CuentaCobrarBo																			cuentaCobrarBo;
@@ -98,18 +105,12 @@ public class CuentaCobrarController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarCuentaCobrarAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
+	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer idCliente) {
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Cliente cliente = clienteBo.buscar(idCliente);
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cliente, usuarioSesion.getEmpresa());
 
-		DataTableDelimitador delimitadores = null;
-		delimitadores = new DataTableDelimitador(request, "CuentaCobrar");
-		
-		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
-			String nombreUsuario = request.getUserPrincipal().getName();
-			DataTableFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
-			delimitadores.addFiltro(dataTableFilter);
-		}
-
-		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
 
 	/**
@@ -279,6 +280,42 @@ public class CuentaCobrarController {
 		}
 	}
 
+	private static class DelimitadorBuilder {
+
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Cliente cliente, Empresa empresa) {
+			// Consulta por fechas
+			DataTableDelimitador delimitador = new DataTableDelimitador(request, "CuentaCobrar");
+			Date fechaInicio = new Date();
+			Date fechaFinal = new Date();
+
+//			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.cuen.FACTURA_ESTADO_PENDIENTE.toString() + "'", "<>"));
+			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
+
+			if (cliente != null) {
+				delimitador.addFiltro(new JqGridFilter("cliente.id", "'" + cliente.getId().toString() + "'", "="));
+			}
+			if (!inicio.equals(Constantes.EMPTY) && !fin.equals(Constantes.EMPTY)) {
+				fechaInicio = Utils.parseDate(inicio);
+				fechaFinal = Utils.parseDate(fin);
+				if (fechaFinal == null) {
+					fechaFinal = new Date(System.currentTimeMillis());
+				}
+				if (fechaFinal != null && fechaFinal != null) {
+					fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
+				}
+
+				DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT2);
+
+				inicio = dateFormat.format(fechaInicio);
+				fin = dateFormat.format(fechaFinal);
+
+				delimitador.addFiltro(new JqGridFilter("created_at", inicio, "date>="));
+				delimitador.addFiltro(new JqGridFilter("created_at", fin, "dateFinal<="));
+			}
+			return delimitador;
+		}
+	}
+	
 	@SuppressWarnings("all")
 	private static class RESPONSES {
 

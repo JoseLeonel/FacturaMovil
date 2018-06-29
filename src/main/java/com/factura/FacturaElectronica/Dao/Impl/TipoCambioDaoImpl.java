@@ -9,6 +9,7 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.factura.FacturaElectronica.Dao.TipoCambioDao;
+import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.TipoCambio;
 
 /**
@@ -38,10 +39,22 @@ public class TipoCambioDaoImpl implements TipoCambioDao {
 	 * @param id
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
+	@Override
 	public TipoCambio buscar(Integer id) {
 		Query query = entityManager.createQuery("select obj from TipoCambio obj where obj.id = :id");
 		query.setParameter("id", id);
+		List<TipoCambio> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (TipoCambio) results.get(0);
+		} else {
+			return null;
+		}
+	}
+	@Override
+	public TipoCambio findByEstadoAndEmpresa(String estado,Empresa empresa) {
+		Query query = entityManager.createQuery("select obj from TipoCambio obj where obj.estado = :estado and obj.empresa = :empresa");
+		query.setParameter("estado", estado);
+		query.setParameter("empresa", empresa);
 		List<TipoCambio> results = query.getResultList();
 		if (!results.isEmpty()) {
 			return (TipoCambio) results.get(0);

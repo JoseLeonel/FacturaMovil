@@ -1,11 +1,11 @@
 package com.factura.FacturaElectronica.web.Controller;
 
-import java.io.FileWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +28,7 @@ import com.factura.FacturaElectronica.Bo.UsuarioCajaBo;
 import com.factura.FacturaElectronica.Bo.VendedorBo;
 import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.Utils.DataTableDelimitador;
-import com.factura.FacturaElectronica.Utils.DataTableFilter;
+import com.factura.FacturaElectronica.Utils.JqGridFilter;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceDataTable;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
 import com.factura.FacturaElectronica.Utils.Utils;
@@ -39,14 +39,12 @@ import com.factura.FacturaElectronica.modelo.Usuario;
 import com.factura.FacturaElectronica.modelo.UsuarioCaja;
 import com.factura.FacturaElectronica.modelo.Vendedor;
 import com.factura.FacturaElectronica.validator.FacturaFormValidator;
-import com.factura.FacturaElectronica.web.command.CategoriaCommand;
 import com.factura.FacturaElectronica.web.command.FacturaCommand;
 import com.factura.FacturaElectronica.web.command.FacturaEsperaCommand;
 import com.factura.FacturaElectronica.web.componentes.ClientePropertyEditor;
 import com.factura.FacturaElectronica.web.componentes.EmpresaPropertyEditor;
 import com.factura.FacturaElectronica.web.componentes.StringPropertyEditor;
 import com.factura.FacturaElectronica.web.componentes.VendedorPropertyEditor;
-import com.factura.FacturaElectronica.xml.FacturaElectronica;
 import com.google.common.base.Function;
 
 /**
@@ -124,6 +122,7 @@ public class FacturasController {
 	public String listaFacturas(ModelMap model) {
 		return "views/facturas/listaFacturas";
 	}
+
 	/**
 	 * Facturas En espera de convertirse en factura oficial
 	 * @param request
@@ -137,32 +136,25 @@ public class FacturasController {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Factura");
-		DataTableFilter dataTableFilter = new DataTableFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "=");
+		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
-		dataTableFilter = new DataTableFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
+		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
-
-	@RequestMapping(value = "/ListarFacturasActivasAndAnuladasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
+	@RequestMapping(value = "/ListarFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response) {
-
+	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer idCliente) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		DataTableDelimitador delimitadores = null;
-		delimitadores = new DataTableDelimitador(request, "Factura");
-		DataTableFilter dataTableFilter = new DataTableFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "<>");
-		delimitadores.addFiltro(dataTableFilter);
-		dataTableFilter = new DataTableFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
-		delimitadores.addFiltro(dataTableFilter);
-
-		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+		Cliente cliente = clienteBo.buscar(idCliente);
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cliente, usuarioSesion.getEmpresa());
+		
+		
+		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
 
-	
-	
 	/**
 	 * Crear la Factura
 	 * @param request
@@ -181,9 +173,9 @@ public class FacturasController {
 
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			UsuarioCaja usuarioCajaBd = usuarioCajaBo.findByUsuarioAndEstado(usuario, Constantes.ESTADO_ACTIVO);
-			if(usuarioCajaBd ==null) {
-				if(facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-					
+			if (usuarioCajaBd == null) {
+				if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.factura.no.hay.cajas.abierta", result.getAllErrors());
 				}
 			}
@@ -212,7 +204,7 @@ public class FacturasController {
 			if (!facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 				facturaCommand.setFechaCredito(null);
 			}
-			Factura factura = facturaBo.crearFactura(facturaCommand, usuario,usuarioCajaBd);
+			Factura factura = facturaBo.crearFactura(facturaCommand, usuario, usuarioCajaBd);
 			if (factura == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
@@ -235,25 +227,59 @@ public class FacturasController {
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer idFactura) {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
-//			// necesito hacer un contexto se crea la instancia
-//			JAXBContext context = JAXBContext.newInstance(FacturaElectronica.class);
-//
-//			// Escribir el xml se utiliza el objete marshaller
-//			Marshaller marshaller = context.createMarshaller();
-//			FacturaElectronica facturaElectronica = Utils.crearFacturaElectronica(facturaBD);
-//		//	facturaElectronica.setNumeroConsecutivo("0012");
-//	    //tabular el documento xml 
-//			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-//			//salida
-//			marshaller.marshal(facturaElectronica, System.out);
-//			
-//			marshaller.marshal(facturaElectronica, new FileWriter("leo.xml"));
-			
-			
-			
+			// // necesito hacer un contexto se crea la instancia
+			// JAXBContext context = JAXBContext.newInstance(FacturaElectronica.class);
+			//
+			// // Escribir el xml se utiliza el objete marshaller
+			// Marshaller marshaller = context.createMarshaller();
+			// FacturaElectronica facturaElectronica = Utils.crearFacturaElectronica(facturaBD);
+			// // facturaElectronica.setNumeroConsecutivo("0012");
+			// //tabular el documento xml
+			// marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			// //salida
+			// marshaller.marshal(facturaElectronica, System.out);
+			//
+			// marshaller.marshal(facturaElectronica, new FileWriter("leo.xml"));
+
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", facturaBD);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+
+	private static class DelimitadorBuilder {
+
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Cliente cliente, Empresa empresa) {
+			// Consulta por fechas
+			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Factura");
+			Date fechaInicio = new Date();
+			Date fechaFinal = new Date();
+
+			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "<>"));
+			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
+
+			if (cliente != null) {
+				delimitador.addFiltro(new JqGridFilter("cliente.id", "'" + cliente.getId().toString() + "'", "="));
+			}
+			if (!inicio.equals(Constantes.EMPTY) && !fin.equals(Constantes.EMPTY)) {
+				fechaInicio = Utils.parseDate(inicio);
+				fechaFinal = Utils.parseDate(fin);
+				if (fechaFinal == null) {
+					fechaFinal = new Date(System.currentTimeMillis());
+				}
+				if (fechaFinal != null && fechaFinal != null) {
+					fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
+				}
+
+				DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT2);
+
+				inicio = dateFormat.format(fechaInicio);
+				fin = dateFormat.format(fechaFinal);
+
+				delimitador.addFiltro(new JqGridFilter("fechaEmision", inicio, "date>="));
+				delimitador.addFiltro(new JqGridFilter("fechaEmision", fin, "dateFinal<="));
+			}
+			return delimitador;
 		}
 	}
 

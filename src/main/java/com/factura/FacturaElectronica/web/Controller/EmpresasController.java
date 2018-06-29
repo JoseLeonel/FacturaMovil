@@ -19,7 +19,7 @@ import com.factura.FacturaElectronica.Bo.DataTableBo;
 import com.factura.FacturaElectronica.Bo.EmpresaBo;
 import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.Utils.DataTableDelimitador;
-import com.factura.FacturaElectronica.Utils.DataTableFilter;
+import com.factura.FacturaElectronica.Utils.JqGridFilter;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceDataTable;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
 import com.factura.FacturaElectronica.modelo.Empresa;
@@ -88,7 +88,7 @@ public class EmpresasController {
 	public RespuestaServiceDataTable listarEmpresasActivasAjax(HttpServletRequest request, HttpServletResponse response) {
 
 		DataTableDelimitador delimitadores = new DataTableDelimitador(request, "Empresa");
-		DataTableFilter dataTableFilter = new DataTableFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
+		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);

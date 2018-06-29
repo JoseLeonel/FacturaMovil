@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import com.factura.FacturaElectronica.Dao.DataTableDao;
 import com.factura.FacturaElectronica.Utils.DataTableDelimitador;
 import com.factura.FacturaElectronica.Utils.DataTableFilter;
+import com.factura.FacturaElectronica.Utils.JqGridFilter;
 
 /**
  * Clase para realizar listados con el objeto enviado es una clase generica
@@ -72,8 +73,8 @@ public class DataTableDaoImpl implements DataTableDao {
 		hql.append(" where 1 = 1 ");
 
 		if (delimitador.getFiltros() != null) {
-			for (Iterator<DataTableFilter> iterator = delimitador.getFiltros().iterator(); iterator.hasNext();) {
-				DataTableFilter filter = (DataTableFilter) iterator.next();
+			for (Iterator<JqGridFilter> iterator = delimitador.getFiltros().iterator(); iterator.hasNext();) {
+				JqGridFilter filter = (JqGridFilter) iterator.next();
 				// Se buscar por el campo y valor indicado
 				if (StringUtils.hasText(filter.getCampo()) && StringUtils.hasText(filter.getValor())) {
 					String toAppend = " and UPPER(obj." + filter.getCampo() + ") " + valorConOperador(filter.getOperadorBusqueda(), filter.getValor());
@@ -125,8 +126,8 @@ public class DataTableDaoImpl implements DataTableDao {
 	 * @return
 	 */
 	private static String dateCondition(String op, String val) {
-		String fecha = "to_date('" + val + "','dd/MM/yyyy')";
-		return op.substring(4) + " trunc(" + fecha + ",'DD')";
+		String fecha = "'" + val + "'";
+		return op.substring(4) + fecha  ;
 	}
 
 	/**
@@ -136,8 +137,8 @@ public class DataTableDaoImpl implements DataTableDao {
 	 * @return
 	 */
 	private static String dateConditionFinal(String op, String val) {
-		String fecha = "to_date('" + val + "','dd/MM/yyyy')";
-		String dateCondition = op.substring(9) + " trunc(" + fecha + ",'MI')";
+		String fecha = "'" + val + "'";
+		String dateCondition = op.substring(9) + " " + fecha ;
 		return dateCondition;
 	}
 }

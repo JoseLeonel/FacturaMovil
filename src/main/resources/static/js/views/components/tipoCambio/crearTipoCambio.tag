@@ -45,11 +45,11 @@
         <div class="col-md-8 col-lg-8 col-sx-12 col-sm-8">
             <div class="box box-solid box-primary">
                 <div class="box-header with-border">
-                    <h1 class="box-title"><i class="fa fa-edit"></i>&nbsp {$.i18n.prop("titulo.agregar.usuarioCaja")}     </h1>
+                    <h1 class="box-title"><i class="fa fa-edit"></i>&nbsp {$.i18n.prop("titulo.agregar.tipoCambio")}     </h1>
                 </div>
                 <div class="box-body">
                     <form id = "formulario" name ="formulario "   class="advanced-search-form">
-                        <input type="hidden" name="id" id="id" value="{caja.id}">
+                        <input type="hidden" name="id" id="id" value="{tipoCambio.id}">
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 left">
                                 <label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>
@@ -57,16 +57,8 @@
                         </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("usuarioCaja.caja")}  <span class="requeridoDato">*</span></label>
-                                 <select  class="form-control" id="caja" name="caja" >
-                                    <option  each={cajas.aaData}  value="{id}"  >{descripcion}</option>
-                                </select>
-                            </div>
-                        </div>    
-                        <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("usuarioCaja.fondoIncial")}  <span class="requeridoDato">*</span></label>
-                                <input type="number" step="any" class="form-control totalFondoInicial" id="totalFondoInicial" name="totalFondoInicial" value="{usuarioCaja.totalFondoInicial}"  >
+                                <label class="knob-label" >{$.i18n.prop("tipoCambio.total")}  <span class="requeridoDato">*</span></label>
+                                <input type="number" step="any" class="form-control total" id="total" name="total" value="{tipoCambio.total}"  >
                             </div>
                         </div>
                     </form>    
@@ -93,7 +85,7 @@
                     <h1 class="box-title"><i class="fa fa-search"></i>&nbsp {$.i18n.prop("titulo.mostrar.usuarioCaja")}     </h1>
                 </div>
                 <div class="box-body">
-                    <form id = "formularioUsuarioCaja" name ="formularioUsuarioCaja"   class="advanced-search-form ">
+                    <form id = "formulario" name ="formulario"   class="advanced-search-form ">
                         <input type="hidden" name="id" id="id" value="{usuarioCaja.id}">
                         <input type="hidden" name="caja" id="caja" value="{usuarioCaja.caja.id}">
                         
@@ -215,9 +207,9 @@
     self.botonModificar            = false
     self.botonAgregar              = false
     self.mostrarVerDetalle         = false
-    self.caja = {
-        id:0,
-        descripcion:"",
+    self.tipoCambio = {
+        id:null,
+        total:"",
         estado:""
     }
 self.on('mount',function(){
@@ -236,16 +228,11 @@ self.on('mount',function(){
 var reglasDeValidacion = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
 		rules : {
-			descripcion : {
+			total : {
 				required : true,
-                maxlength:80,
+                maxlength:7,
                 minlength:1,
-			},                                   
-            terminal : {
-				required : true,
-                maxlength:3,
-                minlength:3,
-			}                             
+			}                        
 		},
 		ignore : []
 
@@ -260,8 +247,7 @@ var reglasDeValidacion = function() {
 **/
 function __Eventos(){
     $("#formulario").validate(reglasDeValidacion());
-    $("#descripcion").attr("maxlength", 80);
-    $('#terminal').mask('000', {
+    $('#total').mask('000.000', {
 		'translation' : {
 			0 : {
 				pattern : /[0-9]/
@@ -301,7 +287,6 @@ __regresarAlListado(){
 function __MantenimientoAgregar(){
       //Inicializar el Formulario
     $('.dataTables_wrapper').on('click','.btn-agregar',function(e){
-        self.caja    = {};                // modelo o domain   
         
         //desahabilita  listado 
         self.mostrarListado   = false;
@@ -310,6 +295,11 @@ function __MantenimientoAgregar(){
         self.botonModificar   = false;
         // habilita el formulario
         self.botonAgregar     = true;
+         self.tipoCambio = {
+            id:null,
+            total:"",
+            estado:""
+            }
         self.update();
         //Inicializar el Formulario
         $(".errorServerSideJgrid").remove();
@@ -318,40 +308,7 @@ function __MantenimientoAgregar(){
     })
 }
 
-/**
-*  Consultar  especifico
-* 1  Mostrar  2  Modificar
-**/
-function __consultar(){
-    var formulario = $('#formularioUsuarioCaja').serialize();
-    $.ajax({
-        url: "MostrarUsuarioCajaAjax.do",
-        datatype: "json",
-        data: formulario,
-        method:"GET",
-        success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                        self.mostrarVerDetalle = true
-                        self.mostrarListado   = false;
-                        self.usuarioCaja  = modeloTabla
-                        self.update()
-                    });
-                }
-            }
-            
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
-        }
-    });
-}
+
 /**
 *   Agregar 
 **/
@@ -362,7 +319,7 @@ __agregar(){
         var formulario = $("#formulario").serialize();
         swal({
            title: '',
-           text: $.i18n.prop("caja.mensaje.alert.agregar"),
+           text: $.i18n.prop("tipoCambio.mensaje.alert.agregar"),
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: '#00539B',
@@ -378,7 +335,7 @@ __agregar(){
                     type : "POST",
                     dataType : "json",
                     data : formulario,
-                    url : 'AgregarUsuarioCajaAjax.do',
+                    url : 'AgregarTipoCambioAjax.do',
                     success : function(data) {
                         console.log(data);
                         if (data.status != 200) {
@@ -510,7 +467,7 @@ function __displayDate_detail(fecha) {
 * Opciones listado de los clientes
 */
 function __Opciones(id,type, row){
-  var cerrar  = '<a href="#"  title="Cerrar Caja" class="btn btn-danger  btn-cerrar btnCerrarCaja" role="button"> </a>';
+  var cerrar  = '<a href="#"  title="Desactivar Cambio Moneda" class="btn btn-danger  btn-cerrar btnCerrarTipoCambio" role="button"> </a>';
   cerrar = row.estado =="Activo"?cerrar:""
   return  cerrar ;
 }
@@ -520,7 +477,7 @@ function __Opciones(id,type, row){
  * Funcion para Modificar del Listar
  */
 function __cerrarCaja(){
-	$('#tableListar').on('click','.btnCerrarCaja',function(e){
+	$('#tableListar').on('click','.btnCerrarTipoCambio',function(e){
     	var table = $('#tableListar').DataTable();
 		if(table.row(this).child.isShown()){
 			//cuando el datatable esta en modo responsive
@@ -528,10 +485,10 @@ function __cerrarCaja(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        self.usuarioCaja  = data
+        self.tipoCambio  = data
 
         self.update()
-        cerrarCajaAjax()
+        cerrarTipoCambioAjax()
        
 	});
 }
@@ -539,11 +496,11 @@ function __cerrarCaja(){
 /**
 *Cerrar caja
 **/
-function cerrarCajaAjax(){
-         var formulario = $('#formularioUsuarioCaja').serialize();
+function cerrarTipoCambioAjax(){
+         var formulario = $('#formulario').serialize();
         swal({
            title: '',
-           text: $.i18n.prop("usuarioCaja.mensaje.alert.cerrar"),
+           text: $.i18n.prop("tipoCambio.mensaje.alert.desactivar"),
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: '#00539B',
@@ -559,7 +516,7 @@ function cerrarCajaAjax(){
                     type : "POST",
                     dataType : "json",
                     data : formulario,
-                    url : 'CerrarUsuarioCajaAjax.do',
+                    url : 'DesactivarTipoCambioAjax.do',
                     success : function(data) {
                         console.log(data);
                         if (data.status != 200) {
@@ -583,7 +540,7 @@ function cerrarCajaAjax(){
 	                           showCancelButton: false,
 	                           confirmButtonText: $.i18n.prop("btn.aceptar"),
 	                         })
-	                        
+	                        __listado()
                         }
                     },
                     error : function(xhr, status) {

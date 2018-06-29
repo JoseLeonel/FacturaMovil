@@ -7,6 +7,65 @@
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
         </div>
     </div>
+     <br>
+    <br><br>
+    <!-- Inicio Filtros-->
+    <div>
+        <div class="row" show={mostrarListado}>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div onclick={__mostrarFiltros} class="text-left advanced-search-grid" style="margin-bottom : {valorMarginBottom}; padding : 2px;">
+                    <h4> <i class="fa fa-filter" style="padding-left : 5px;"></i>&nbsp{$.i18n.prop("filtro")} <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4>
+                </div>  
+                <div  show={mostrarFiltros}  class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
+                    <form id="filtros" name="filtros">              
+                        <div class= "row">
+                            <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                                <div class="form-group">
+                                    <label class="knob-label" >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
+                                    <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
+                                        <input type="text" class="form-control fechaInicio" id="fechaInicio"  name= "fechaInicio" readonly>
+                                        <div class="input-group-addon">
+                                            <span class="glyphicon glyphicon-th"></span>
+                                        </div>
+                                    </div>	                             
+                                </div>  
+                            </div>             
+                            <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label class="knob-label" >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
+                                        <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
+                                            <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>	                             
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2">
+                                <div class="form-group">
+                                    <label>{$.i18n.prop("proveedor.titulo")} </label>  
+                                    <select  class="form-control selectCliente" id="proveedor" name="proveedor" data-live-search="true">
+                                        <option  data-tokens="{$.i18n.prop("todos.select")}"   value="0"  >{$.i18n.prop("todos.select")}</option>
+                                        <option  data-tokens="{nombreCompleto}" each={proveedores.data}  value="{id}"  >{nombreCompleto}</option>
+                                    </select>
+                                </div>  
+                            </div>                      
+                        </div>
+                    </form>  
+                </div>
+            </div>
+            <div class="col-xs-12 text-right">
+                <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
+                <a onclick ={__crearArchivoExcel} id="btnDownload" class="btn btn-success" title ="Descargar" > <i class="fa fa-download"></i></a>
+            	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
+            </div>
+        </div>
+    </div>    
+<!-- Fin Filtros-->
+
+    
     <br>
   <!-- Listado  -->
     <div classs="contenedor-listar "  show={mostrarListado} >
@@ -453,6 +512,7 @@
 self = this
 self.formato_tabla         = []
 self.detail                = []
+self.proveedores           = {data:[]}    
 self.compra                = {
         consecutivo:"",
         fechaCredito    : null,
@@ -475,35 +535,20 @@ self.on('mount',function(){
     __InformacionDataTable()
     __InicializarTabla('.tableListar')
     agregarInputsCombos()
-    __listado()
+   
+    __ListaProveedores()
 
 })
 
 /**
- * Regresar al listado
- * **/
-__Regresar(){
-    self.detail                = []
-    self.compra                = {
-            consecutivo:"",
-            fechaCredito    : null,
-            fechaCompra     : null,
-            id : 0,
-            totalImpuesto: 0,
-            totalCompra:0,
-            estado:0,
-            tipoDocumento:0,
-            formaPago:0,
-            totalDescuento:0,
-            subTotal:0,  
-            total:0,
-            nota:""
-        }              
-
-    self.mostrarCompra         = false
-   self.mostrarListado        = true
-   self.update()
+* limpiar los filtros
+**/
+__limpiarFiltros(){
+    $('#fechaInicio').val(null)
+    $('#fechaFinal').val(null)
 }
+
+
 
 /** Listado de inventario **/  
 function __listado(){
@@ -530,6 +575,109 @@ function __listado(){
         }
     })
 }
+
+/**
+*  Busqueda de la informacion por rango de fechas
+**/
+__Busqueda(){
+
+     if ($("#filtros").valid()) {
+        var parametros = {
+            fechaInicio:formatoFecha($('#fechaInicio').val()),
+            fechaFin:formatoFecha($('#fechaFinal').val()),
+            idProveedor:$('#proveedor').val(),
+        };
+        $("#tableListar").dataTable().fnClearTable(); 
+        __InicializarTabla('.tableListar')  
+        $.ajax({
+            url: "ListarComprasAjax",
+            datatype: "json",
+            data:parametros ,
+            method:"GET",
+            success: function (result) {
+                if(result.aaData.length > 0){
+                    __InformacionDataTable();
+                    loadListar(".tableListar",idioma_espanol,self.formato_tabla,result.aaData)
+                    agregarInputsCombos();
+                    ActivarEventoFiltro(".tableListar")
+                    __MostrarCompra()
+                }else{
+                    __InformacionDataTable();
+                     agregarInputsCombos();
+
+                }           
+            },
+            error: function (xhr, status) {
+                mensajeErrorServidor(xhr, status);
+                console.log(xhr);
+            }
+        });
+
+     }
+
+}
+
+
+/*
+ * Muestra los filtros avanzados
+ */
+ __mostrarFiltros(){
+    if(self.mostrarFiltros){
+        self.mostrarFiltros = false;
+        self.valorMarginBottom  = '10px'
+    }else{
+        self.mostrarFiltros = true;
+        self.valorMarginBottom  = '0px'
+    }
+    self.update();
+}
+
+/**
+*  Lista de los Proveedores
+**/
+function __ListaProveedores(){
+    $.ajax({
+        url: 'ListarProveedoresAjax.do',
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+               self.proveedores.data = result.aaData
+               self.update()
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+}
+/**
+ * Regresar al listado
+ * **/
+__Regresar(){
+    self.detail                = []
+    self.compra                = {
+            consecutivo:"",
+            fechaCredito    : null,
+            fechaCompra     : null,
+            id : 0,
+            totalImpuesto: 0,
+            totalCompra:0,
+            estado:0,
+            tipoDocumento:0,
+            formaPago:0,
+            totalDescuento:0,
+            subTotal:0,  
+            total:0,
+            nota:""
+        }              
+
+    self.mostrarCompra         = false
+   self.mostrarListado        = true
+   self.update()
+}
+
 
 
   
