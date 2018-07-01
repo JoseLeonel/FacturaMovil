@@ -1572,7 +1572,7 @@ function _informacionData_Articulo(){
 * Opciones del modal de articulos
 */
 function __OpcionesArticulos(){
-  var agregar  = '<a href="#"  title="Agregar" class="btn btnAgregar btn-success form-control" title="Modificar" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
+  var agregar  = '<a href="#"  class="btn btnAgregar btn-success form-control" title="Seleccionar" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
   return  agregar;
 
 }

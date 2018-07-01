@@ -2,10 +2,7 @@ package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,8 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,7 +17,6 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.factura.FacturaElectronica.Utils.Constantes;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Modelo de inventarios por almacen
@@ -70,11 +64,7 @@ public class Inventario implements Serializable {
 	@JoinColumn(name = "usuario_id")
 	private Usuario						usuario;
 
-	@JsonIgnore
-	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
-	@JoinColumn(name = "inventario_id", referencedColumnName = "id")
-	@OrderBy("id DESC")
-	private Set<Kardex>				kardexs;
+	
 
 	public Inventario() {
 		super();
@@ -84,7 +74,9 @@ public class Inventario implements Serializable {
 
 	}
 
-	public Inventario(Integer id, Double cantidad, Double minimo, Double maximo, String estado, Date created_at, Date updated_at, Articulo articulo, Usuario usuario, Set<Kardex> kardexs) {
+	
+
+	public Inventario(Integer id, Double cantidad, Double minimo, Double maximo, String estado, Date created_at, Date updated_at, Articulo articulo, Usuario usuario) {
 		super();
 		this.id = id;
 		this.cantidad = cantidad;
@@ -95,8 +87,9 @@ public class Inventario implements Serializable {
 		this.updated_at = updated_at;
 		this.articulo = articulo;
 		this.usuario = usuario;
-		this.kardexs = kardexs;
 	}
+
+
 
 	public Integer getId() {
 		return id;
@@ -162,30 +155,9 @@ public class Inventario implements Serializable {
 		this.articulo = articulo;
 	}
 
-	public Set<Kardex> getKardexs() {
-		return kardexs;
-	}
 
-	public void setKardexs(Set<Kardex> kardexs) {
-		this.kardexs = kardexs;
-	}
 
-	/**
-	 * Asociar Kardex a un inventario
-	 * @param inventarioAsociar
-	 */
-	public void addKardex(Kardex kardexAsociar) {
-
-		if (kardexAsociar != null) {
-			if (kardexs == null) {
-				kardexs = new HashSet<Kardex>();
-			}
-			kardexAsociar.setInventario(this);
-
-			kardexs.add(kardexAsociar);
-		}
-	}
-
+	
 	public Usuario getUsuario() {
 		return usuario;
 	}

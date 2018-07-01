@@ -270,7 +270,7 @@ public class FacturaBoImpl implements FacturaBo {
 		try {
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 				String leyenda = Constantes.MOTIVO_SALIDA_INVENTARIO_VENTA + factura.getNumeroConsecutivo();
-				kardexDao.salida(inventario, detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
+				kardexDao.salida(inventario,inventario.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
 
 			}
 

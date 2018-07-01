@@ -2,6 +2,7 @@ package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -114,8 +115,16 @@ public class Articulo implements Serializable {
 	@JoinColumn(name = "articulo_id", referencedColumnName = "id")
 	@OrderBy("id DESC")
 	private Set<Inventario>		inventarios;
+	
+	@JsonIgnore
+	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@JoinColumn(name = "inventario_id", referencedColumnName = "id")
+	@OrderBy("id DESC")
+	private Set<Kardex>				kardexs;
 
-	public Articulo(Integer id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, String estado, String tipoImpuesto, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa, Set<Inventario> inventarios) {
+	
+
+	public Articulo(Integer id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, String estado, String tipoImpuesto, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa, Set<Inventario> inventarios, Set<Kardex> kardexs) {
 		super();
 		this.id = id;
 		this.codigo = codigo;
@@ -140,6 +149,7 @@ public class Articulo implements Serializable {
 		this.categoria = categoria;
 		this.empresa = empresa;
 		this.inventarios = inventarios;
+		this.kardexs = kardexs;
 	}
 
 	public Articulo() {
@@ -329,5 +339,34 @@ public class Articulo implements Serializable {
 	public void setInventarios(Set<Inventario> inventarios) {
 		this.inventarios = inventarios;
 	}
+	
+	
+	
+	
+	public Set<Kardex> getKardexs() {
+		return kardexs;
+	}
+
+	
+	public void setKardexs(Set<Kardex> kardexs) {
+		this.kardexs = kardexs;
+	}
+
+	/**
+	 * Asociar Kardex a un inventario
+	 * @param inventarioAsociar
+	 */
+	public void addKardex(Kardex kardexAsociar) {
+
+		if (kardexAsociar != null) {
+			if (kardexs == null) {
+				kardexs = new HashSet<Kardex>();
+			}
+			kardexAsociar.setArticulo(this);;
+
+			kardexs.add(kardexAsociar);
+		}
+	}
+
 
 }

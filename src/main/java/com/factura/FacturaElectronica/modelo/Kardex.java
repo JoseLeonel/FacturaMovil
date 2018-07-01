@@ -79,8 +79,8 @@ public class Kardex implements Serializable {
 	private Date							updated_at;
 
 	@ManyToOne
-	@JoinColumn(name = "inventario_id")
-	private Inventario				inventario;
+	@JoinColumn(name = "articulo_id")
+	private Articulo					articulo;
 
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
@@ -93,7 +93,7 @@ public class Kardex implements Serializable {
 
 	}
 
-	public Kardex(Integer id, Double cantidadSolicitada, Double cantidadActual, Double costoActual, Double totalCostoActual, String codigo, String observacion, Double cantidadNueva, Double costoNuevo, Double totalCostoNuevo, String consecutivo, String tipo, String motivo, Date created_at, Date updated_at, Inventario inventario, Usuario usuario) {
+	public Kardex(Integer id, Double cantidadSolicitada, Double cantidadActual, Double costoActual, Double totalCostoActual, String codigo, String observacion, Double cantidadNueva, Double costoNuevo, Double totalCostoNuevo, String consecutivo, String tipo, String motivo, Date created_at, Date updated_at, Articulo articulo, Usuario usuario) {
 		super();
 		this.id = id;
 		this.cantidadSolicitada = cantidadSolicitada;
@@ -110,7 +110,7 @@ public class Kardex implements Serializable {
 		this.motivo = motivo;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
-		this.inventario = inventario;
+		this.articulo = articulo;
 		this.usuario = usuario;
 	}
 
@@ -234,12 +234,12 @@ public class Kardex implements Serializable {
 		this.updated_at = updated_at;
 	}
 
-	public Inventario getInventario() {
-		return inventario;
+	public Articulo getArticulo() {
+		return articulo;
 	}
 
-	public void setInventario(Inventario inventario) {
-		this.inventario = inventario;
+	public void setArticulo(Articulo articulo) {
+		this.articulo = articulo;
 	}
 
 	public Usuario getUsuario() {

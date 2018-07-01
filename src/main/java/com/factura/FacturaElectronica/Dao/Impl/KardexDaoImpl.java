@@ -8,8 +8,10 @@ import javax.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.factura.FacturaElectronica.Dao.ArticuloDao;
 import com.factura.FacturaElectronica.Dao.InventarioDao;
 import com.factura.FacturaElectronica.Dao.KardexDao;
+import com.factura.FacturaElectronica.modelo.Articulo;
 import com.factura.FacturaElectronica.modelo.Inventario;
 import com.factura.FacturaElectronica.modelo.Kardex;
 import com.factura.FacturaElectronica.modelo.Usuario;
@@ -27,6 +29,10 @@ public class KardexDaoImpl implements KardexDao {
 
 	@Autowired
 	InventarioDao	inventarioDao;
+	
+	@Autowired
+	ArticuloDao	articuloDao;
+
 
 	public void agregar(Kardex kardex) {
 		entityManager.persist(kardex);
@@ -37,18 +43,16 @@ public class KardexDaoImpl implements KardexDao {
 	 * @see com.factura.FacturaElectronica.Dao.KardexDao#salida(com.factura.FacturaElectronica.modelo.Inventario, java.lang.Double, java.lang.String, java.lang.String, java.lang.String, java.lang.String, com.factura.FacturaElectronica.modelo.Usuario)
 	 */
 	@Override
-	public void salida(Inventario inventario, Double cantidad, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
-		Double cantidadNueva = inventario.getCantidad();
-    cantidadNueva = cantidadNueva-cantidad;
-    Double costoNuevo = inventarioDao.getTotalCosto(inventario, cantidadNueva);
+	public void salida(Inventario inventario, Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
+    Double costoNuevo = inventarioDao.getTotalCosto(inventario, cantidadActual - cantidadNueva);
 		Kardex kardex = new Kardex();
-		kardex.setCantidadSolicitada(cantidad);
-		kardex.setCantidadActual(inventario.getCantidad());
+		kardex.setCantidadSolicitada(cantidadNueva);
+		kardex.setCantidadActual(cantidadActual);
 		kardex.setCostoActual(inventario.getArticulo().getCosto());
-		kardex.setTotalCostoActual(inventarioDao.getTotalCosto(inventario, inventario.getCantidad()));
+		kardex.setTotalCostoActual(inventarioDao.getTotalCosto(inventario, cantidadActual));
 		kardex.setCodigo(inventario.getArticulo().getCodigo());
 		kardex.setObservacion(observacion);
-		kardex.setCantidadNueva(cantidadNueva);
+		kardex.setCantidadNueva(cantidadActual- cantidadNueva);
 		kardex.setCostoNuevo(inventario.getArticulo().getCosto());
 		kardex.setTotalCostoNuevo(costoNuevo);
 		kardex.setConsecutivo(consecutivo);
@@ -57,9 +61,13 @@ public class KardexDaoImpl implements KardexDao {
 		kardex.setCreated_at(new Date());
 		kardex.setUpdated_at(new Date());
 		kardex.setUsuario(usuarioSesion);
-		inventario.setCantidad(cantidadNueva);
-		inventario.addKardex(kardex);
+		kardex.setArticulo(inventario.getArticulo());
+		inventario.setCantidad(cantidadActual-cantidadNueva);
 		inventarioDao.modificar(inventario);
+		Articulo articulo = articuloDao.buscar(inventario.getArticulo().getId());
+		articulo.addKardex(kardex);
+		articuloDao.modificar(articulo);
+		
 	}
 
 	/**
@@ -67,19 +75,18 @@ public class KardexDaoImpl implements KardexDao {
 	 * @see com.factura.FacturaElectronica.Dao.KardexDao#entrada(com.factura.FacturaElectronica.modelo.Inventario, java.lang.Double, java.lang.String, java.lang.String, java.lang.String, java.lang.String, com.factura.FacturaElectronica.modelo.Usuario)
 	 */
 	@Override  
-	public void entrada(Inventario inventario, Double cantidad, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
+	public void entrada(Inventario inventario,Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
 		Kardex kardex = new Kardex();
-		Double cantidadNueva =inventario.getCantidad();
-		cantidadNueva =cantidadNueva + cantidad;
-		Double costoNuevo = inventarioDao.getTotalCosto(inventario, cantidadNueva);
 		
-		kardex.setCantidadSolicitada(cantidad);
-		kardex.setCantidadActual(inventario.getCantidad());
+		Double costoNuevo = inventarioDao.getTotalCosto(inventario, cantidadNueva + cantidadActual);
+		
+		kardex.setCantidadSolicitada(cantidadNueva);
+		kardex.setCantidadActual(cantidadActual);
 		kardex.setCostoActual(inventario.getArticulo().getCosto());
-		kardex.setTotalCostoActual(inventarioDao.getTotalCosto(inventario, inventario.getCantidad()));
+		kardex.setTotalCostoActual(inventarioDao.getTotalCosto(inventario, cantidadActual));
 		kardex.setCodigo(inventario.getArticulo().getCodigo());
 		kardex.setObservacion(observacion);
-		kardex.setCantidadNueva(inventario.getCantidad()+ cantidad);
+		kardex.setCantidadNueva(cantidadNueva +  cantidadActual);
 		kardex.setCostoNuevo(inventario.getArticulo().getCosto());
 		kardex.setTotalCostoNuevo(costoNuevo);
 		kardex.setConsecutivo(consecutivo);
@@ -88,8 +95,12 @@ public class KardexDaoImpl implements KardexDao {
 		kardex.setCreated_at(new Date());
 		kardex.setUpdated_at(new Date());
 		kardex.setUsuario(usuarioSesion);
-		inventario.addKardex(kardex);
-		inventario.setCantidad(cantidadNueva);
+		kardex.setArticulo(inventario.getArticulo());
+		inventario.setCantidad(cantidadActual + cantidadNueva );
 		inventarioDao.modificar(inventario);
+		Articulo articulo = articuloDao.buscar(inventario.getArticulo().getId());
+		articulo.addKardex(kardex);
+		articuloDao.modificar(articulo);
+
 	}
 }

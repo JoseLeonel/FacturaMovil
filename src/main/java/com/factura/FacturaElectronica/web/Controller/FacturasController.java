@@ -271,7 +271,7 @@ public class FacturasController {
 					fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
 				}
 
-				DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT2);
+				DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 
 				inicio = dateFormat.format(fechaInicio);
 				fin = dateFormat.format(fechaFinal);

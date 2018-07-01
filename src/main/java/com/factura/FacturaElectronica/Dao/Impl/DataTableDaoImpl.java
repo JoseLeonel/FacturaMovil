@@ -92,7 +92,7 @@ public class DataTableDaoImpl implements DataTableDao {
 		}
 
 		// else {
-		// hql.append(" order by obj.id desc");
+		hql.append(" order by obj.id asc");
 		// }
 		return entityManager.createQuery(hql.toString());
 	}

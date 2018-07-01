@@ -141,6 +141,7 @@ public class Constantes {
 	public static final String					DATE_1900																			= "01/01/1990 00:00:00.0";
 	public static final String					DATE_FORMAT2																	= "dd/MM/yyyy";
 	public static final String					DATE_FORMAT3																	= "dd-MM-yyyy";
+	public static final String					DATE_FORMAT5																	= "yyyy-MM-dd 00:00:00";
 	public static final String					DATE_FORMAT4																	= "yyyyMMdd";
 	public static final String					DATE_FORMAT_TIME															= "HH:mm:ss";
 	public static final String					DATE_FORMAT_TIME2															= "HH:mm";

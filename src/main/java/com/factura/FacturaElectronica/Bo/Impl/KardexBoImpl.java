@@ -34,17 +34,11 @@ public class KardexBoImpl implements KardexBo {
 
 	/**
 	 * Ingresar Cantidad al inventario
-	 * @param inventario
-	 * @param cantidad
-	 * @param observacion
-	 * @param consecutivo
-	 * @param tipo
-	 * @param motivo
-	 * @param usuarioSesion
+	 * @see com.factura.FacturaElectronica.Bo.KardexBo#entrada(com.factura.FacturaElectronica.modelo.Inventario, java.lang.Double, java.lang.Double, java.lang.String, java.lang.String, java.lang.String, java.lang.String, com.factura.FacturaElectronica.modelo.Usuario)
 	 */
-	public void entrada(Inventario inventario, Double cantidad, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
+	public void entrada(Inventario inventario,Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
 
-		kardexDao.entrada(inventario, cantidad, observacion, consecutivo, tipo, motivo, usuarioSesion);
+		kardexDao.entrada(inventario, cantidadActual, cantidadNueva, observacion, consecutivo, tipo, motivo, usuarioSesion);
 	}
 
 	/**
@@ -56,8 +50,8 @@ public class KardexBoImpl implements KardexBo {
 	 * @param tipo
 	 * @param motivo
 	 */
-	public void salida(Inventario inventario, Double cantidad, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
-		kardexDao.salida(inventario, cantidad, observacion, consecutivo, tipo, motivo, usuarioSesion);
+	public void salida(Inventario inventario, Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
+		kardexDao.salida(inventario, cantidadActual, cantidadNueva, observacion, consecutivo, tipo, motivo, usuarioSesion);
 
 	}
 

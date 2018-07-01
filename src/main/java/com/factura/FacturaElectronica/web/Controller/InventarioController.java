@@ -173,7 +173,7 @@ public class InventarioController {
 			inventario.setUsuario(usuarioSesion);
 
 			inventarioBo.agregar(inventario);
-			kardexBo.entrada(inventario, inventario.getCantidad(), Constantes.OBSERVACION_INICIAL_INVENTARIO_NUEVO, Constantes.CONSECUTIVO_INICIAL_INVENTARIO_NUEVO, Constantes.KARDEX_TIPO_ENTRADA, Constantes.MOTIVO_INICIAL_INVENTARIO_NUEVO, usuarioSesion);
+			kardexBo.entrada(inventario, Constantes.ZEROS_DOUBLE,inventario.getCantidad(), Constantes.OBSERVACION_INICIAL_INVENTARIO_NUEVO, Constantes.CONSECUTIVO_INICIAL_INVENTARIO_NUEVO, Constantes.KARDEX_TIPO_ENTRADA, Constantes.MOTIVO_INICIAL_INVENTARIO_NUEVO, usuarioSesion);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("inventario.agregar.correctamente", inventario);
 
 		} catch (Exception e) {

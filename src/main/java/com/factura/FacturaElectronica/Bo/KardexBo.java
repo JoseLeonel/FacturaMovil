@@ -8,7 +8,7 @@ public interface KardexBo {
 
 	void agregar(Kardex kardex);
 
-	void entrada(Inventario inventario, Double cantidad, String observacion, String consecutivo, String tipo, String motivo,Usuario usuario);
-	void salida(Inventario inventario, Double cantidad, String observacion, String consecutivo, String tipo, String motivo,Usuario usuario);
+	void entrada(Inventario inventario,Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion);
+	void salida(Inventario inventario, Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion);
 
 }

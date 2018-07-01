@@ -1,47 +1,106 @@
 package com.factura.FacturaElectronica.web.Controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.util.WebUtils;
 
+import com.factura.FacturaElectronica.Bo.ArticuloBo;
+import com.factura.FacturaElectronica.Bo.DataTableBo;
 import com.factura.FacturaElectronica.Bo.InventarioBo;
 import com.factura.FacturaElectronica.Bo.KardexBo;
 import com.factura.FacturaElectronica.Bo.UsuarioBo;
 import com.factura.FacturaElectronica.Utils.Constantes;
+import com.factura.FacturaElectronica.Utils.DataTableDelimitador;
+import com.factura.FacturaElectronica.Utils.JqGridFilter;
+import com.factura.FacturaElectronica.Utils.RespuestaServiceDataTable;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
+import com.factura.FacturaElectronica.Utils.Utils;
+import com.factura.FacturaElectronica.modelo.Articulo;
 import com.factura.FacturaElectronica.modelo.Inventario;
 import com.factura.FacturaElectronica.modelo.Kardex;
 import com.factura.FacturaElectronica.modelo.Usuario;
+import com.factura.FacturaElectronica.web.command.FiltroKardexCommand;
+import com.factura.FacturaElectronica.web.command.KardexCommand;
+import com.factura.FacturaElectronica.web.componentes.ArticuloPropertyEditor;
+import com.factura.FacturaElectronica.web.componentes.StringPropertyEditor;
+import com.google.common.base.Function;
 
 /**
- * Registrar la entrada al inventario  y  Registrar una salida al inventario
- * KardexController.
+ * Registrar la entrada al inventario y Registrar una salida al inventario KardexController.
  * @author jose.
  * @since 13 abr. 2018
  */
 @Controller
 public class KardexController {
 
-	@Autowired
-	private KardexBo			kardexBo;
+	private static final Function<Object, KardexCommand>	TO_COMMAND	= new Function<Object, KardexCommand>() {
+
+																																			@Override
+																																			public KardexCommand apply(Object f) {
+																																				return new KardexCommand((Kardex) f);
+																																			};
+																																		};
 
 	@Autowired
-	private InventarioBo	inventarioBo;
-	
+	private KardexBo																			kardexBo;
+
 	@Autowired
-	private UsuarioBo	usuarioBo;
-	
-	
+	private ArticuloBo																		articuloBo;
+
+	@Autowired
+	private DataTableBo																		dataTableBo;
+
+	@Autowired
+	private InventarioBo																	inventarioBo;
+
+	@Autowired
+	private UsuarioBo																			usuarioBo;
+
+	@Autowired
+	private StringPropertyEditor													stringPropertyEditor;
+	@Autowired
+	private ArticuloPropertyEditor												articuloPropertyEditor;
+
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+
+		binder.registerCustomEditor(Articulo.class, articuloPropertyEditor);
+		binder.registerCustomEditor(String.class, stringPropertyEditor);
+	}
+
+	/**
+	 * Listar el kardex
+	 * @param request
+	 * @param response
+	 * @param fechaInicio
+	 * @param fechaFin
+	 * @param idArticulo
+	 * @return
+	 */
+	@RequestMapping(value = "/ListarKardexAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam String fechaInicio, @RequestParam String fechaFinal, @RequestParam Integer idArticulo) {
+		Articulo articulo = articuloBo.buscar(idArticulo);
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFinal, articulo);
+
+		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
+	}
 
 	/**
 	 * Agregar una entrada al inventario de un articulo
@@ -69,7 +128,7 @@ public class KardexController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-			kardexBo.entrada(inventario, kardex.getCantidadNueva(), kardex.getObservacion(), Constantes.CONSECUTIVO_INICIAL_INVENTARIO_NUEVO, Constantes.KARDEX_TIPO_ENTRADA, kardex.getMotivo(),usuarioSesion);
+			kardexBo.entrada(inventario,inventario.getCantidad(), kardex.getCantidadNueva(), kardex.getObservacion(), Constantes.CONSECUTIVO_INICIAL_INVENTARIO_NUEVO, Constantes.KARDEX_TIPO_ENTRADA, kardex.getMotivo(), usuarioSesion);
 			inventario.setCantidad(inventarioBo.sumarCantidad(inventario, kardex.getCantidadNueva()));
 			inventarioBo.modificar(inventario);
 
@@ -102,14 +161,14 @@ public class KardexController {
 			if (inventario == null) {
 				result.rejectValue("codigo", "error.kardex.articulo.no.existe");
 			}
-			if(inventario.getCantidad().compareTo(kardex.getCantidadNueva()) ==-1){
+			if (inventario.getCantidad().compareTo(kardex.getCantidadNueva()) == -1) {
 				result.rejectValue("cantidadNueva", "error.kardex.articulo.cantidad.mayor.cantidaDelIventario");
 			}
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-			kardexBo.salida(inventario, kardex.getCantidadNueva(), kardex.getObservacion(), Constantes.CONSECUTIVO_INICIAL_INVENTARIO_NUEVO, Constantes.KARDEX_TIPO_SALIDA, kardex.getMotivo(),usuarioSesion);
+			kardexBo.salida(inventario,inventario.getCantidad(), kardex.getCantidadNueva(), kardex.getObservacion(), Constantes.CONSECUTIVO_INICIAL_INVENTARIO_NUEVO, Constantes.KARDEX_TIPO_SALIDA,  kardex.getObservacion(), usuarioSesion);
 			inventario.setCantidad(inventarioBo.restarCantidad(inventario, kardex.getCantidadNueva()));
 			inventarioBo.modificar(inventario);
 
@@ -120,5 +179,36 @@ public class KardexController {
 		}
 	}
 
-	
+	private static class DelimitadorBuilder {
+
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Articulo articulo) {
+			// Consulta por fechas
+			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Kardex");
+			Date fechaInicio = new Date();
+			Date fechaFinal = new Date();
+
+			if (articulo != null) {
+				delimitador.addFiltro(new JqGridFilter("articulo.id", "'" + articulo.getId().toString() + "'", "="));
+			}
+			if (!inicio.equals(Constantes.EMPTY) && !fin.equals(Constantes.EMPTY)) {
+				fechaInicio = Utils.parseDate(inicio);
+				fechaFinal = Utils.parseDate(fin);
+				if (fechaFinal == null) {
+					fechaFinal = new Date(System.currentTimeMillis());
+				}
+				if (fechaFinal != null && fechaFinal != null) {
+					fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
+				}
+			  DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+
+				inicio = dateFormat.format(fechaInicio);
+				fin = dateFormat.format(fechaFinal);
+				delimitador.addFiltro(new JqGridFilter("created_at", inicio, "date>="));
+				delimitador.addFiltro(new JqGridFilter("created_at", fin, "dateFinal<="));
+				
+			}
+			return delimitador;
+		}
+	}
+
 }
