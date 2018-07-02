@@ -626,6 +626,7 @@ function __Init(){
 **/
 function __CompraEnEspera(compra){
      __Init()
+     self.compras_espera         = {data:[]}  
     self.detail         = []
     self.proveedor      = {}         
     self.update()
@@ -706,11 +707,11 @@ function __nuevoArticuloAlDetalle(cantidad){
        articulo_id     : self.articulo.id,
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
-       cantidad        : parseFloat(cantidad),
-       costo           : parseFloat(self.articulo.costo),
+       cantidad        : redondearDecimales(parseFloat(cantidad),2),
+       costo           : redondearDecimales(parseFloat(self.articulo.costo),2),
        impuesto        : 0,
        descuento       : 0,
-       subTotal        : parseFloat(self.articulo.costo * cantidad)
+       subTotal        : redondearDecimales(parseFloat(self.articulo.costo * cantidad),2)
     });
     var cont = 0;
     self.detail.forEach(function(elemen){
@@ -719,6 +720,15 @@ function __nuevoArticuloAlDetalle(cantidad){
         }
     )
     self.update()
+}
+
+function redondearDecimales(numero, decimales) {
+    numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}');   // Expresion regular para numeros con un cierto numero de decimales o mas
+    if (numeroRegexp.test(numero)) {         // Ya que el numero tiene el numero de decimales requeridos o mas, se realiza el redondeo
+        return Number(numero.toFixed(decimales));
+    } else {
+        return Number(numero.toFixed(decimales)) === 0 ? 0 : numero;  // En valores muy bajos, se comprueba si el numero es 0 (con el redondeo deseado), si no lo es se devuelve el numero otra vez.
+    }
 }
 /**
 *  Crear Compra nueva
@@ -777,6 +787,7 @@ function crearCompra(){
 *  Lista de las compras pendientes pendiente por el usuario
 **/
 function __ListaComprasEnEspera(){
+    self.compras_espera         = {data:[]}  
     $.ajax({
         url: 'ListarComprasEsperaActivasAjax',
         datatype: "json",

@@ -161,7 +161,7 @@
                                 <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.total")} <span id="lblTotal">₡ {factura.totalVentaNeta.toLocaleString('de-DE')}</span></p>
                                 <div show = {mostrarCamposIngresoContado }>
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.efectivo")}</p> 
-                                    <input onkeyup={ __TotalDeEfectivoAPagar } onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales " id="totalEfectivo" name="totalEfectivo"  value="" >
+                                    <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales " id="totalEfectivo" name="totalEfectivo"  value="" >
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.tarjeta")}</p> 
                                     <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales" id="totalTarjeta" name="totalTarjeta"   >
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.banco")}</p> 
@@ -184,7 +184,6 @@
                   <div class="box-tools ">
                     <a class="pull-right" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("btn.limpiar")}</span></a>
                     <a class="pull-right" href="#"    onclick = {__AplicarYcrearFactura} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("btn.tiquete")}</span></a>
-                    <a class="pull-right" href="#"    title="{$.i18n.prop("btn.cliente")}"> <span class="label label-limpiar">{$.i18n.prop("btn.cliente")}</span></a>
                   </div>
                   </div>
                 </div>  
@@ -232,7 +231,7 @@
                                 <input   class="form-control" type="text"  value = "{precioUnitario.toLocaleString('de-DE')}" readonly />
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarDescuento} class="form-control" type="text"  value = "{porcentajeDesc.toLocaleString('de-DE')}" />
+                                <input  onkeypress={__actualizarDescuento} onBlur = "__actualizarDescuentoBlur"  class="form-control" type="text"  value = "{porcentajeDesc.toLocaleString('de-DE')}" />
                             </td>
                                                         
                             <td class="text-right">
@@ -665,6 +664,7 @@
         __ComboEstados()
         __ListaDeClientes()
        __ListaDeVendedores()
+       __Teclas()
     })
 
     
@@ -761,7 +761,11 @@ __CargarFacturaEspera(e){
 ** Se aplica o se crea una compra cargada en la pantalla
 **/
 __AplicarYcrearFactura(){
-     if(self.detail.length == 0 ){
+ aplicarFactura()
+}
+
+function aplicarFactura(){
+    if(self.detail.length == 0 ){
         mensajeError($.i18n.prop("factura.alert.sin.detalles"))
         return
     }
@@ -997,7 +1001,7 @@ function crearFactura(){
 	    direccion:direccion.value,
 	    nota:nota.value,
 	    comanda:self.factura.comanda,
-	    subTotal:self.factura.subtotal,
+	    subTotal:self.factura.subTotal,
 	    totalTransporte:self.factura.totalTransporte,
 	    total:self.factura.total,
 	    totalServGravados:self.factura.totalServGravados,
@@ -1132,11 +1136,17 @@ __formaPago(e){
 *   funcion para grabar la compra en el back end
 **/
 __MostrarFormularioDePago(){
+    mostrarPAgo()
+}
+
+
+function mostrarPAgo(){
      //No hay detalles registrados en la compra
     if(self.detail.length == 0 ){
         swal("Verificar","No hay detalles en la compra ", "info")
         return
     }
+    
     $('#totalEfectivo').val(null)
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
@@ -1144,6 +1154,8 @@ __MostrarFormularioDePago(){
     self.mostarParaCrearNuevaFactura = false
     self.mostrarFormularioPago = true
     self.update()
+    $('#totalEfectivo').focus()
+
 }
 /** 
 *
@@ -1374,6 +1386,8 @@ function __nuevoArticuloAlDetalle(cantidad){
     self.update()
 }
 
+
+
 /**
 * Obtiene el precio unitario sin descuento sin impuesto
 **/
@@ -1429,6 +1443,17 @@ __actualizarDescuento(e){
     if (e.keyCode != 13) {
         return;
     } 
+    _actualizarDesc(e)
+
+}
+
+__actualizarDescuentoBlur(e){
+    _actualizarDesc(e)
+
+}
+
+
+function _actualizarDesc(e){
     self.item     = e.item; 
     var index     = self.detail.indexOf(self.item);
     var descuento = e.currentTarget.value;
@@ -1528,7 +1553,7 @@ function __calculate() {
     self.factura.totalExento             = redondearDecimales(__valorNumerico(totalExento),5)
     self.factura.totalVenta              = redondearDecimales(__valorNumerico(totalVenta),5) 
     self.factura.totalDescuento          = redondearDecimales(__valorNumerico(totalDescuento),5)
-    self.factura.subTotal                = subTotal
+    self.factura.subTotal                = redondearDecimales(__valorNumerico(subTotal),5)
     self.factura.totalImpuesto           = redondearDecimales(__valorNumerico(totalImpuesto),5)
     self.factura.totalVentaNeta          = redondearDecimales(__valorNumerico(totalVenta),5) 
     self.factura.totalComprobante        = redondearDecimales(__valorNumerico(totalComprobante),5)
@@ -1816,6 +1841,31 @@ function __cargaProvincias(provincia){
     }    
     return "No Registrada"
 }
+
+
+
+/**
+*  teclas de la pantalla
+**/      
+function __Teclas(){
+    window.addEventListener( "keydown", function(evento){
+        var tecla = evento.keyCode; 
+    if(tecla ==119){
+      mostrarPAgo()     
+   
+    }   
+    //aplicar crear Factura
+    if (self.mostrarFormularioPago == true ){
+   //    aplicarFactura()   
+    } 
+
+   
+    }, false );
+  
+   
+
+}
+
 </script>
 
 </punto-venta>

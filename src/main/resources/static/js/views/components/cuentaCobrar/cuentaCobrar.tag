@@ -9,7 +9,6 @@
   <br>
     <br><br>
     <!-- Inicio Filtros-->
-    <div>
         <div class="row" show={mostrarListado}>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div onclick={__mostrarFiltros} class="text-left advanced-search-grid" style="margin-bottom : {valorMarginBottom}; padding : 2px;">
@@ -45,7 +44,7 @@
                             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2">
                                 <div class="form-group">
                                     <label>{$.i18n.prop("cliente.titulo")} </label>  
-                                    <select  class="form-control selectCliente" id="cliente" name="cliente" data-live-search="true">
+                                    <select  class="form-control selectCliente" id="idCliente" name="idCliente" data-live-search="true">
                                         <option  data-tokens="{$.i18n.prop("todos.select")}"  value="0"  >{$.i18n.prop("todos.select")}</option>
                                         <option  data-tokens="{nombreCompleto}" each={clientes.data}  value="{id}"  >{nombreCompleto}</option>
                                     </select>
@@ -61,7 +60,7 @@
             	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
             </div>
         </div>
-    </div>    
+  
 <!-- Fin Filtros-->
 <br>
 
@@ -628,7 +627,7 @@ var reglasDeValidacionAbono = function() {
 var reglasDeValidacionParametros = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
 		rules : {
-			fechaInicial : {
+			fechaInicio : {
 				required : true,
 			},
 			fechaFinal : {
@@ -677,17 +676,14 @@ __Busqueda(){
 }
 
 function listadoConsulta(){
-        var parametros = {
-            fechaInicio:formatoFecha($('#fechaInicio').val()),
-            fechaFin:formatoFecha($('#fechaFinal').val()),
-            idCliente:$('#cliente').val(),
-        };
+       
+        var formulario = $("#filtros").serialize();
         $("#tableListar").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListar')  
         $.ajax({
             url: "ListarCuentaCobrarAjax.do",
             datatype: "json",
-            data:parametros ,
+            data:formulario ,
             method:"GET",
             success: function (result) {
                 if(result.aaData.length > 0){
@@ -957,36 +953,7 @@ function __ComboEstadosCuentaCobrarPendiente(){
      self.update();
 
 }
-/**
-*  Mostrar listado cuentas por cobrar
-**/
-function __listado(){
-    $("#tableListar").dataTable().fnClearTable(); 
-    $.ajax({
-        url: "ListarCuentaCobrarAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-             if(result.aaData.length > 0){
-                __InformacionDataTable();
-                loadListar(".tableListar",idioma_espanol,self.informacion_tabla,result.aaData)
-                includeActionsCuenta('.dataTables_wrapper','.dataTables_length')
-                
-                agregarInputsCombos();
-                    //Activar filtros
-                ActivarEventoFiltro(".tableListar")
-                 __MantenimientoAgregar()
-                 __modificarRegistro_Listar()
-                 __mostrarListadoAbonos()
-                 __MantenimientoAgregarAbono()
-             } 
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
-        }
-    })
-}
+
 /**
 *  Obtiene la lista de los clientes activos
 **/

@@ -152,7 +152,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 
 		Double totalCostoActual = costoActual * cantidadActual;
 		Double totalCostoNuevo = costoNuevo * cantidadNueva;
-		Double totalProductos = cantidadActual * cantidadNueva;
+		Double totalProductos = cantidadActual + cantidadNueva;
 		resultado = (totalCostoActual + totalCostoNuevo);
 
 		return resultado / totalProductos;

@@ -707,7 +707,7 @@ self.on('mount',function(){
 var reglasDeValidacion = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
 		rules : {
-			fechaInicial : {
+			fechaInicio : {
 				required : true,
 			},
 			fechaFinal : {

@@ -105,10 +105,10 @@ public class CuentaCobrarController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarCuentaCobrarAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer idCliente) {
+	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam String fechaInicio, @RequestParam String fechaFinal, @RequestParam Integer idCliente) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Cliente cliente = clienteBo.buscar(idCliente);
-		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cliente, usuarioSesion.getEmpresa());
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFinal, cliente, usuarioSesion.getEmpresa());
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
@@ -304,7 +304,7 @@ public class CuentaCobrarController {
 					fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
 				}
 
-				DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT2);
+				DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 
 				inicio = dateFormat.format(fechaInicio);
 				fin = dateFormat.format(fechaFinal);

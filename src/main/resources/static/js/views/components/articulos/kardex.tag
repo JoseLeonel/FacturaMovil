@@ -243,7 +243,7 @@ function agregarInputsCombos(){
 var reglasDeValidacionParametros = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
 		rules : {
-			fechaInicial : {
+			fechaInicio : {
 				required : true,
 			},
 			fechaFinal : {

@@ -141,7 +141,7 @@ public class CompraBoImpl implements CompraBo {
           //detalleCompraDao.agregar(detalleCompra);
 					compra.addDetalleCompra(detalleCompra);
 					compraDao.modificar(compra); 
-					Inventario inventario = inventarioDao.findByArticuloAndEstado(detalleCompraCommand.getArticulo(), Constantes.ESTADO_ACTIVO);
+					Inventario inventario = inventarioDao.findByArticuloAndEstado(articulo, Constantes.ESTADO_ACTIVO);
 
 					aplicarInventario(compra, inventario, detalleCompra, articulo);
 
@@ -179,15 +179,16 @@ public class CompraBoImpl implements CompraBo {
 				inventarioDao.agregar(inventario);
 
 			}
+			Double cantidadTotal = inventario.getCantidad() + detalleCompra.getCantidad();
 
 			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getProveedor().getNombreCompleto();
-			kardexDao.entrada(inventario,Constantes.ZEROS_DOUBLE, detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
+			kardexDao.entrada(inventario,inventario.getCantidad(), detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
 			articulo.setCosto(articuloDao.costoPromedio(articulo.getCosto(), detalleCompra.getCosto(), inventario.getCantidad(), detalleCompra.getCantidad()));
 			articulo.setGananciaPrecioPublico(articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioPublico()));
 			articulo.setUpdated_at(new Date());
 			articulo.setUsuario(compra.getUsuarioCreacion());
 			articuloDao.modificar(articulo);
-			inventario.setCantidad(inventario.getCantidad()+detalleCompra.getCantidad());
+			inventario.setCantidad(cantidadTotal);
 			inventario.setUsuario(compra.getUsuarioCreacion());
 			inventario.setUpdated_at(new Date());
 			inventarioDao.modificar(inventario);

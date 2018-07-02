@@ -35,7 +35,7 @@
                                     <div class="form-group">
                                         <label class="knob-label" >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
                                         <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
-                                            <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
+                                            <input type="text" class="form-control fechaFin" id="fechaFin"  name= "fechaFin" readonly>
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
                                             </div>
@@ -46,7 +46,7 @@
                             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2">
                                 <div class="form-group">
                                     <label>{$.i18n.prop("proveedor.titulo")} </label>  
-                                    <select  class="form-control selectCliente" id="proveedor" name="proveedor" data-live-search="true">
+                                    <select  class="form-control selectCliente" id="idProveedor" name="idProveedor" data-live-search="true">
                                         <option  data-tokens="{$.i18n.prop("todos.select")}"   value="0"  >{$.i18n.prop("todos.select")}</option>
                                         <option  data-tokens="{nombreCompleto}" each={proveedores.data}  value="{id}"  >{nombreCompleto}</option>
                                     </select>
@@ -532,6 +532,7 @@ self.detalleCompra         ={data:[]}
 self.mostrarCompra         = false
 self.mostrarListado        = true
 self.on('mount',function(){
+    $("#filtros").validate(reglasDeValidacion());
     __InformacionDataTable()
     __InicializarTabla('.tableListar')
     agregarInputsCombos()
@@ -541,40 +542,35 @@ self.on('mount',function(){
 })
 
 /**
+* Camps requeridos
+**/
+var reglasDeValidacion = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			fechaFin : {
+				required : true,
+			},
+			fechaFin : {
+				required : true,
+			}                                   
+                        
+		},
+		ignore : []
+
+	});
+	return validationOptions;
+};
+
+/**
 * limpiar los filtros
 **/
 __limpiarFiltros(){
-    $('#fechaInicio').val(null)
-    $('#fechaFinal').val(null)
+    $('#fechaFin').val(null)
+    $('#fechaFin').val(null)
 }
 
 
 
-/** Listado de inventario **/  
-function __listado(){
-    $("#tableListar").dataTable().fnClearTable(); 
-    __InicializarTabla('.tableListar')  
-    $.ajax({
-        url: "ListarComprasAjax",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            console.log(result)
-             if(result.aaData.length > 0){
-                __InformacionDataTable();
-                loadListar(".tableListar",idioma_espanol,self.formato_tabla,result.aaData)
-                agregarInputsCombos();
-                ActivarEventoFiltro(".tableListar")
-                __MostrarCompra()
-
-             }
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
-        }
-    })
-}
 
 /**
 *  Busqueda de la informacion por rango de fechas
@@ -582,17 +578,13 @@ function __listado(){
 __Busqueda(){
 
      if ($("#filtros").valid()) {
-        var parametros = {
-            fechaInicio:formatoFecha($('#fechaInicio').val()),
-            fechaFin:formatoFecha($('#fechaFinal').val()),
-            idProveedor:$('#proveedor').val(),
-        };
+       var formulario = $("#filtros").serialize();
         $("#tableListar").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListar')  
         $.ajax({
             url: "ListarComprasAjax",
             datatype: "json",
-            data:parametros ,
+            data:formulario ,
             method:"GET",
             success: function (result) {
                 if(result.aaData.length > 0){

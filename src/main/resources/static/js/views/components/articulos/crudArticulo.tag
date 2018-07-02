@@ -14,22 +14,20 @@
                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th class="table-header" >{$.i18n.prop("articulo.empresa")}       </th>
-                                <th class="table-header" >{$.i18n.prop("articulo.codigo")}          </th>
+                                <th class="table-header" style ="width:5%" >{$.i18n.prop("articulo.codigo")}          </th>
                                 <th class="table-header" >{$.i18n.prop("articulo.descripcion")}     </th>
                                 <th class="table-header" >{$.i18n.prop("articulo.costo")}           </th>
-                                <th class="table-header" >{$.i18n.prop("articulo.impuesto")}             </th>
+                                <th class="table-header" style ="width:8%">{$.i18n.prop("articulo.impuesto")}             </th>
                                 <th class="table-header" >{$.i18n.prop("articulo.precioPublico")}   </th>
                                 <th class="table-header" >{$.i18n.prop("articulo.precioMayorista")} </th>
                                 <th class="table-header" >{$.i18n.prop("articulo.precioEspecial")}  </th>
-                                <th class="table-header" >{$.i18n.prop("articulo.contable")}        </th>
+                                <th class="table-header" style ="width:6%">{$.i18n.prop("articulo.contable")}        </th>
                                 <th class="table-header" >{$.i18n.prop("articulo.estado")}          </th>
                                 <th class="table-header" > {$.i18n.prop("listado.acciones")}        </th>
                             </tr>
                         </thead>
                         <tfoot style="display: table-header-group;">
                             <tr>
-                                <th>{$.i18n.prop("articulo.empresa")}       </th>
                                 <th>{$.i18n.prop("articulo.codigo")}          </th>
                                 <th>{$.i18n.prop("articulo.descripcion")}     </th>
                                 <th>{$.i18n.prop("articulo.costo")}           </th>
@@ -496,7 +494,7 @@
         }
         
         table td{ 
-            text-align: center;
+            text-align: left;
             font-size: 12px;
             
                 }
@@ -576,7 +574,7 @@
 self.on('mount',function(){
     __InicializarTabla('.tableListar')
     agregarInputsCombos()
-    ActivarEventoFiltro('.tableListar')
+    ActivarEventoFiltroArticulo('.tableListar')
     __listado()
     includeActionsArticulo('.dataTables_wrapper','.dataTables_length')
     __listadoEmpresasActivas()
@@ -1858,7 +1856,7 @@ function __listado(){
                 agregarInputsCombos();
                 __MantenimientoAgregar()
                     //Actimpuestor filtros
-                ActivarEventoFiltro(".tableListar")
+                ActivarEventoFiltroArticulo(".tableListar")
                 __modificarRegistro_Listar()
                 __Eventos()
                 __articuloXInventarios_Listar()
@@ -1877,11 +1875,10 @@ function __listado(){
 **/
 function __InformacionDataTable(){
     self.informacion_tabla = [ 
-                               {'data' :'empresa.nombre'   ,"name":"empresa.nombre"  ,"title" : $.i18n.prop("articulo.empresa")        ,"autoWidth" :true },
                                {'data' :'codigo'                  ,"name":"codigo"                 ,"title" : $.i18n.prop("articulo.codigo")           ,"autoWidth" :true },
                                {'data' :'descripcion'             ,"name":"descripcion"            ,"title" : $.i18n.prop("articulo.descripcion")      ,"autoWidth" :true },
                                {'data' :'costo'                   ,"name":"costo"                  ,"title" : $.i18n.prop("articulo.costo")            ,"autoWidth" :true },
-                               {'data' :'impuesto'                     ,"name":"impuesto"                    ,"title" : $.i18n.prop("articulo.impuesto")              ,"autoWidth" :true },
+                               {'data' :'impuesto'                     ,"name":"impuesto"          ,"title" : $.i18n.prop("articulo.impuesto")              ,"autoWidth" :true },
                                {'data' :'precioPublico'           ,"name":"precioPublico"          ,"title" : $.i18n.prop("articulo.precioPublico")    ,"autoWidth" :true },
                                {'data' :'precioMayorista'         ,"name":"precioMayorista"        ,"title" : $.i18n.prop("articulo.precioMayorista")  ,"autoWidth" :true },
                                {'data' :'precioEspecial'          ,"name":"precioEspecial"         ,"title" : $.i18n.prop("articulo.precioEspecial")   ,"autoWidth" :true },
@@ -1958,10 +1955,62 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 11    ){
+        if ( $(this).index() != 9    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
+           // Select
+    	if ($(this).index() == 8  ){
+    	    var select = $('<select id="combo" class="form-control"><option value="">Todos</option></select>');
+    	    // se cargan los valores por defecto que existen en el combo
+    	   	select.append( '<option value="'+$.i18n.prop("estado.Activo")+'">'+$.i18n.prop("estado.Activo")+'</option>' );
+            select.append( '<option value="'+$.i18n.prop("estado.Inactivo")+'">'+$.i18n.prop("estado.Inactivo")+'</option>' );
+    	   	$(this).html(select);
+    	}
     })
+}
+// Cuando se presiona el keypress para los inputs en los filtros y select
+// estandar
+function ActivarEventoFiltroArticulo(){
+	// Busquedas por Inpus
+	var table = $('#tableListar').DataTable();
+    table.columns().every( function () {
+        var dataTableColumns = this
+ 
+        $( 'input', this.footer() ).keypress(function (event) {
+     	         if ( dataTableColumns.search() !== this.value ) {
+             	   dataTableColumns.search( this.value ).draw();
+                }
+     	   
+        } );
+    
+        var searchTextBoxes = $(this.header()).find('input');
+        searchTextBoxes.on('keyup change',function(){
+     	   dataTableColumns.search(this.value).draw();
+        });
+          
+        $( 'select', this.footer() ).click(function (event) {
+            if ( dataTableColumns.search() !== this.value ) {
+            	
+           	   dataTableColumns .search("^"+this.value, true, false ).draw();
+            }
+         } );
+     
+        
+        
+        var searchTextBoxesSelect = $(this.header()).find('select');
+        searchTextBoxes.on('keyup change',function(){
+     	   dataTableColumns.search(this.value).draw();
+        });
+
+        searchTextBoxesSelect.on('click',function(e){
+     	   e.stopPrapagation();
+        });
+        searchTextBoxes.on('click',function(e){
+      	   e.stopPrapagation();
+         });
+
+        
+    } );
 }
 </script>
 </articulo-crud>
