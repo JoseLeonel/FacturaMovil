@@ -60,6 +60,22 @@
                             <td ><strong>₡{facturaImpresa.totalVentaNeta.toLocaleString('de-DE')}</strong></td>
                             </tr>
                             <tr>
+                            <td></td>
+                            <td ><strong>{$.i18n.prop("tikect.totalCambioPagar")}</strong></td>
+                            <td ><strong>₡{facturaImpresa.totalCambioPagar.toLocaleString('de-DE')}</strong></td>
+                            </tr>                            
+                            <tr>
+                            <td></td>
+                            <td ><strong>{$.i18n.prop("tikect.tipoCambio")}</strong></td>
+                            <td ><strong>₡{facturaImpresa.tipoCambio.toLocaleString('de-DE')}</strong></td>
+                            </tr>                            
+                            <tr>
+                            <td></td>
+                            <td ><strong>{$.i18n.prop("tikect.Cambio")}</strong></td>
+                            <td ><strong>₡{facturaImpresa.cambioMoneda.toLocaleString('de-DE')}</strong></td>
+                            </tr>                            
+
+                            <tr>
                             <td colspan="3"></td>
                             </tr>
                             

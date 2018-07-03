@@ -142,6 +142,9 @@ public class Factura implements Serializable {
 
 	@Column(name = "total_cambioPagar")
 	private Double				totalCambioPagar;
+	
+	@Column(name = "cambio_moneda")
+	private Double				cambioMoneda;
 
 	@Column(name = "codigo_moneda")
 	private String						codigoMoneda;
@@ -764,6 +767,18 @@ public class Factura implements Serializable {
 
 			detalles.add(detalle);
 		}
+	}
+
+
+	
+	public Double getCambioMoneda() {
+		return cambioMoneda;
+	}
+
+
+	
+	public void setCambioMoneda(Double cambioMoneda) {
+		this.cambioMoneda = cambioMoneda;
 	}
 
 }

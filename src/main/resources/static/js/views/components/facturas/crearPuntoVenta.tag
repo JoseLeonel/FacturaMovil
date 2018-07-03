@@ -159,6 +159,8 @@
                             </div>
                             <div class="booking-info tituloTotal">
                                 <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.total")} <span id="lblTotal">₡ {factura.totalVentaNeta.toLocaleString('de-DE')}</span></p>
+                                <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("tipoCambio.cambioDolar")} <span id="lblTotal">{tipoCambio.total.toLocaleString('de-DE')}</span></p>
+                                <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.totalDolar")} <span id="lblTotal">{factura.cambioMoneda.toLocaleString('de-DE')}</span></p>
                                 <div show = {mostrarCamposIngresoContado }>
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.efectivo")}</p> 
                                     <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales " id="totalEfectivo" name="totalEfectivo"  value="" >
@@ -665,6 +667,7 @@
         __ListaDeClientes()
        __ListaDeVendedores()
        __Teclas()
+       __TipoCambio()
     })
 
     
@@ -687,6 +690,38 @@ var reglasDeValidacionCompra = function() {
 	});
 	return validationOptions;
 };
+
+/**
+* Tipo Cambio de moneda
+**/
+function __TipoCambio(){
+    self.tipoCambio = {}
+    self.update()
+    $.ajax({
+        url: "MostrarTipoCambioActivoAjax.do",
+        datatype: "json",
+        method:"GET",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                       self.tipoCambio = modeloTabla
+                       self.update()
+                    });
+                }
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+
+}
 
 __Imprimir(){
     var factura = self.factura
@@ -893,7 +928,7 @@ function __Init(){
         id:0,
         nombreCompleto:""
     }
-   
+    self.tipoCambio                    = {}
     self.informacion_tabla             = []
     self.informacion_tabla_articulo    = []
     self.informacion_tabla_clientes    = []
@@ -909,7 +944,11 @@ function __Init(){
       //Estados
       __ComboEstados()
      __ListaFacturasEnEspera()
+    
 }
+
+
+
 /**
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
 **/
@@ -1155,6 +1194,8 @@ function mostrarPAgo(){
     self.mostrarFormularioPago = true
     self.update()
     $('#totalEfectivo').focus()
+    self.factura.cambioMoneda = self.factura.totalVentaNeta / self.tipoCambio.total
+    self.update()
 
 }
 /** 

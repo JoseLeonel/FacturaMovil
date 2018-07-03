@@ -13,5 +13,7 @@ public interface TipoCambioBo {
 
 	TipoCambio buscar(Integer id);
 	TipoCambio findByEstadoAndEmpresa(String estado,Empresa empresa);
+	
+	Double conversionMoneda(Double total,TipoCambio tipoCambio);
 
 }

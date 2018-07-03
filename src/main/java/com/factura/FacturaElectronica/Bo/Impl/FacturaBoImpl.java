@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.factura.FacturaElectronica.Bo.FacturaBo;
+import com.factura.FacturaElectronica.Bo.TipoCambioBo;
 import com.factura.FacturaElectronica.Dao.ArticuloDao;
 import com.factura.FacturaElectronica.Dao.CuentaCobrarDao;
 import com.factura.FacturaElectronica.Dao.DetalleDao;
@@ -29,6 +30,7 @@ import com.factura.FacturaElectronica.modelo.Detalle;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Factura;
 import com.factura.FacturaElectronica.modelo.Inventario;
+import com.factura.FacturaElectronica.modelo.TipoCambio;
 import com.factura.FacturaElectronica.modelo.Usuario;
 import com.factura.FacturaElectronica.modelo.UsuarioCaja;
 import com.factura.FacturaElectronica.modelo.UsuarioCajaFactura;
@@ -45,6 +47,9 @@ public class FacturaBoImpl implements FacturaBo {
 	@Autowired
 	FacturaDao						facturaDao;
 
+	@Autowired
+	TipoCambioBo						tipoCambioBo;
+	
 	@Autowired
 	DetalleDao						detalleDao;
 
@@ -128,7 +133,7 @@ public class FacturaBoImpl implements FacturaBo {
 	 * @see com.factura.FacturaElectronica.Bo.FacturaBo#crearFactura(com.factura.FacturaElectronica.web.command.FacturaCommand, com.factura.FacturaElectronica.modelo.Usuario)
 	 */
 	@Override
-	public Factura crearFactura(FacturaCommand facturaCommand, Usuario usuario, UsuarioCaja usuarioCaja) throws Exception {
+	public Factura crearFactura(FacturaCommand facturaCommand, Usuario usuario, UsuarioCaja usuarioCaja , TipoCambio tipoCambio) throws Exception {
 		Factura factura = null;
 		try {
 			factura = facturaCommand.getId() == null || facturaCommand.getId() == Constantes.ZEROS ? new Factura() : facturaDao.findById(facturaCommand.getId());
@@ -178,6 +183,9 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setMontoCambio(facturaCommand.getMontoCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getMontoCambio());
 			factura.setTotalCambio(facturaCommand.getTotalCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambio());
 			factura.setTotalCambioPagar(facturaCommand.getTotalCambioPagar() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambioPagar());
+			
+			factura.setTipoCambio(tipoCambio.getTotal());
+			factura.setCambioMoneda(tipoCambioBo.conversionMoneda(factura.getTotalVentaNeta(), tipoCambio));
 			factura.setCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
 			factura.setEstado(facturaCommand.getEstado());
 			if (factura.getId() == Constantes.ZEROS) {

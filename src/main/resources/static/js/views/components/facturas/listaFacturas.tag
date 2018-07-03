@@ -23,7 +23,7 @@
                                 <div class="form-group">
                                     <label class="knob-label" >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
                                     <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
-                                        <input type="text" class="form-control fechaInicio" id="fechaInicio"  name= "fechaInicio" readonly>
+                                        <input type="text" class="form-control fechaInicial" id="fechaInicial"  name= "fechaInicial" readonly>
                                         <div class="input-group-addon">
                                             <span class="glyphicon glyphicon-th"></span>
                                         </div>
@@ -707,7 +707,7 @@ self.on('mount',function(){
 var reglasDeValidacion = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
 		rules : {
-			fechaInicio : {
+			fechaInicial : {
 				required : true,
 			},
 			fechaFinal : {
@@ -725,7 +725,7 @@ var reglasDeValidacion = function() {
 * limpiar los filtros
 **/
 __limpiarFiltros(){
-    $('#fechaInicio').val(null)
+    $('#fechaInicial').val(null)
     $('#fechaFinal').val(null)
 }
 
@@ -733,11 +733,11 @@ __limpiarFiltros(){
 *  Busqueda de la informacion por rango de fechas
 **/
 __Busqueda(){
-
+    var inicial  =$('.fechaInicial').val()
      if ($("#filtros").valid()) {
         var parametros = {
-            fechaInicio:formatoFecha($('#fechaInicio').val()),
-            fechaFin:formatoFecha($('#fechaFinal').val()),
+            fechaInicio:inicial,
+            fechaFin:$('.fechaFinal').val(),
             idCliente:$('#cliente').val(),
         };
         $("#tableListar").dataTable().fnClearTable(); 

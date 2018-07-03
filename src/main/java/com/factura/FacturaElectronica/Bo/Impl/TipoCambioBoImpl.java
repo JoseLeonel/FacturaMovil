@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.factura.FacturaElectronica.Bo.TipoCambioBo;
 import com.factura.FacturaElectronica.Dao.TipoCambioDao;
+import com.factura.FacturaElectronica.Utils.Constantes;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.TipoCambio;
 
@@ -47,6 +48,22 @@ public class TipoCambioBoImpl implements TipoCambioBo {
 	@Override
 	public TipoCambio findByEstadoAndEmpresa(String estado,Empresa empresa){
 		return tipoCambioDao.findByEstadoAndEmpresa(estado,empresa);
+	}
+	
+	/**
+	 * Conversion de la moneda
+	 * @see com.factura.FacturaElectronica.Bo.TipoCambioBo#conversionMoneda(java.lang.Double, com.factura.FacturaElectronica.modelo.Empresa)
+	 */
+	@Override
+	public Double conversionMoneda(Double total,TipoCambio tipoCambio) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+	
+		if(tipoCambio != null) {
+			resultado = total / tipoCambio.getTotal();
+		}
+		
+		 return resultado;
+		
 	}
 	
 }

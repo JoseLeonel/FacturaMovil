@@ -23,6 +23,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.factura.FacturaElectronica.Bo.ClienteBo;
 import com.factura.FacturaElectronica.Bo.DataTableBo;
 import com.factura.FacturaElectronica.Bo.FacturaBo;
+import com.factura.FacturaElectronica.Bo.TipoCambioBo;
 import com.factura.FacturaElectronica.Bo.UsuarioBo;
 import com.factura.FacturaElectronica.Bo.UsuarioCajaBo;
 import com.factura.FacturaElectronica.Bo.VendedorBo;
@@ -35,6 +36,7 @@ import com.factura.FacturaElectronica.Utils.Utils;
 import com.factura.FacturaElectronica.modelo.Cliente;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Factura;
+import com.factura.FacturaElectronica.modelo.TipoCambio;
 import com.factura.FacturaElectronica.modelo.Usuario;
 import com.factura.FacturaElectronica.modelo.UsuarioCaja;
 import com.factura.FacturaElectronica.modelo.Vendedor;
@@ -68,6 +70,10 @@ public class FacturasController {
 
 	@Autowired
 	private UsuarioBo																						usuarioBo;
+
+	@Autowired
+	private TipoCambioBo																				tipoCambioBo;
+
 	@Autowired
 	UsuarioCajaBo																								usuarioCajaBo;
 
@@ -146,12 +152,11 @@ public class FacturasController {
 
 	@RequestMapping(value = "/ListarFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer idCliente) {
+	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer idCliente) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Cliente cliente = clienteBo.buscar(idCliente);
 		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cliente, usuarioSesion.getEmpresa());
-		
-		
+
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
 
@@ -176,8 +181,13 @@ public class FacturasController {
 			if (usuarioCajaBd == null) {
 				if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 
-					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.factura.no.hay.cajas.abierta", result.getAllErrors());
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.cajas.abierta", result.getAllErrors());
 				}
+			}
+			TipoCambio tipoCambio = tipoCambioBo.findByEstadoAndEmpresa(Constantes.ESTADO_ACTIVO, usuario.getEmpresa());
+			if (tipoCambio == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.tipo.cambio.dolar.activo", result.getAllErrors());
+
 			}
 
 			if (facturaCommand.getCliente() == null) {
@@ -204,7 +214,7 @@ public class FacturasController {
 			if (!facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 				facturaCommand.setFechaCredito(null);
 			}
-			Factura factura = facturaBo.crearFactura(facturaCommand, usuario, usuarioCajaBd);
+			Factura factura = facturaBo.crearFactura(facturaCommand, usuario, usuarioCajaBd,tipoCambio);
 			if (factura == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}

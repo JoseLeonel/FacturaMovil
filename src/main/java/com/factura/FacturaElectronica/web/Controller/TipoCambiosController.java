@@ -151,6 +151,30 @@ public class TipoCambiosController {
 		}
 	}
 	
+	@RequestMapping(value = "/MostrarTipoCambioActivoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute TipoCambio tipoCambio, BindingResult result, SessionStatus status) throws Exception {
+
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		try {
+			
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			TipoCambio tipoCambioBD = tipoCambioBo.findByEstadoAndEmpresa(Constantes.ESTADO_ACTIVO,usuario.getEmpresa());
+			if (tipoCambioBD == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.tipo.cambio.dolar.activo", result.getAllErrors());
+
+			}
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
+		
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("tipoCambio.consulto.correctamente", tipoCambioBD);
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+	
 	@SuppressWarnings("all")
 	private static class RESPONSES {
 
