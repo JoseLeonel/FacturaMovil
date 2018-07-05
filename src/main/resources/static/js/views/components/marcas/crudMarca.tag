@@ -56,16 +56,8 @@
                         </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("marca.empresa")}  <span class="requeridoDato">*</span></label>
-                                 <select  class="form-control" id="empresa" name="empresa" >
-                                    <option  each={empresas.aaData}  value="{id}"  >{nombre}</option>
-                                </select>
-                            </div>
-                        </div>    
-                        <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("marca.descripcion")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control descripcion" id="descripcion" name="descripcion" value="{marca.descripcion}"  >
+                                <input type="text" class="form-control descripcion" placeHolder ="{$.i18n.prop("marca.descripcion")}" id="descripcion" name="descripcion" value="{marca.descripcion}"  >
 
                             </div>
                         </div>
@@ -152,7 +144,7 @@
     self.botonModificar            = false
     self.botonAgregar              = false
     self.marca = {
-        id:0,
+        id:null,
         descripcion:"",
         estado:""
     }
@@ -164,10 +156,10 @@ self.on('mount',function(){
     ActivarEventoFiltro('.tableListar')
     __listado()
     includeActions('.dataTables_wrapper','.dataTables_length')
-    __listadoEmpresasActivas()
     __MantenimientoAgregar()
     __Eventos()
     __ComboEstados()
+    Limpiar()
     
 })
 
@@ -190,27 +182,20 @@ var reglasDeValidacion = function() {
 	return validationOptions;
 };
 
-
 /**
-*  Mostrar listado datatable Empresas Activas
+* Limpiar
 **/
-function __listadoEmpresasActivas(){
-    $.ajax({
-         url: "ListarEmpresasActivasAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            console.log(result)
-            if(result.aaData.length > 0){
-                self.empresas.aaData =  result.aaData
-                self.update();
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
+function Limpiar(){
+    $("#descripcion").val(null)
+    $(".errorServerSideJgrid").remove();
+    $("#formulario").validate(reglasDeValidacion());
+    self.marca = {
+        id:null,
+        descripcion:"",
+        estado:""
+    }
+    self.update()
+    __ComboEstados()
 }
 
 /**
@@ -260,6 +245,7 @@ __regresarAlListado(){
                 self.botonModificar     = false;
                 self.mostrarFormulario  = false 
                 self.update()
+                Limpiar()
                 __listado();
 
             }
@@ -281,8 +267,7 @@ function __MantenimientoAgregar(){
         self.botonAgregar     = true;
         self.update();
         //Inicializar el Formulario
-        $(".errorServerSideJgrid").remove();
-        $("#formulario").validate(reglasDeValidacion());
+        Limpiar()
    
     })
 }
@@ -302,10 +287,9 @@ function __modificarRegistro_Listar(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
+        Limpiar()
         self.marca  = data
         self.update()
-        $("#formulario").validate(reglasDeValidacion());
-        $(".errorServerSideJgrid").remove();
         $("#descripcion").val(self.marca.descripcion);
         __Eventos()
         __consultar()
@@ -331,6 +315,7 @@ function __consultar(){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                     //desahabilita  listado 
+                        Limpiar()
                         self.mostrarListado   = false;
                         self.mostrarFormulario  = true 
                         //desahabilita boton modificar
@@ -339,8 +324,6 @@ function __consultar(){
                         self.botonAgregar     = false;                        
                         self.marca  =  modeloTabla
                         self.update()
-                        $("#formulario").validate(reglasDeValidacion());
-                        $(".errorServerSideJgrid").remove();
                         $("#descripcion").val(self.marca.descripcion);
                         __Eventos()
                         __ComboEstados()
@@ -410,9 +393,7 @@ __agregar(){
 	                           confirmButtonText: 'Aceptar',
 	                                	  
 	                         })
-	                        $("#formulario").validate(reglasDeValidacion());
-                            $(".errorServerSideJgrid").remove();
-                            $("#descripcion").val(null);
+                             Limpiar()
                               __Eventos()
                             
                         }
@@ -468,8 +449,6 @@ function __listado(){
         }
     })
 }
-
-
 /**
 *Formato del listado de los cambios
 **/
@@ -503,7 +482,6 @@ function __displayDate_detail(fecha) {
       var dateTime = new Date(fecha);
       return moment(dateTime).format('DD/MM/YYYY h:mm:ss');
 }
-                                    
 /**
 * Opciones listado de los clientes
 */
@@ -511,8 +489,6 @@ function __Opciones(){
   var modificar  = '<a href="#"  title="Modificar" class="btn btn-warning  btn-edit btnModificar" role="button"> </a>';
   return  modificar ;
 }
-
-
 /**
 *  Agregar los inpust  y select de las tablas
 **/
@@ -544,8 +520,7 @@ function ActivarEventoFiltro(){
 	var table = $('#tableListar').DataTable();
     table.columns().every( function () {
         var dataTableColumns = this
- 
-        $( 'input', this.footer() ).keypress(function (event) {
+         $( 'input', this.footer() ).keypress(function (event) {
      	         if ( dataTableColumns.search() !== this.value ) {
              	   dataTableColumns.search( this.value ).draw();
                 }

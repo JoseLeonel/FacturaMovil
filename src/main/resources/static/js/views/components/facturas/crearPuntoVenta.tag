@@ -227,13 +227,13 @@
                             <td>{codigo}</td>
                             <td>{descripcion}</td>
                             <td class="text-right">
-                                <input onkeypress={__recalculacionDelDetalle} id= "cantidadDetalle" class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad} />
+                                <input onclick={__CambiarCantidad} id= "cantidadDetalle" class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad} readonly />
                             </td>
                             <td class="text-right">
                                 <input   class="form-control" type="text"  value = "{precioUnitario.toLocaleString('de-DE')}" readonly />
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarDescuento} onBlur = "__actualizarDescuentoBlur"  class="form-control" type="text"  value = "{porcentajeDesc.toLocaleString('de-DE')}" />
+                                <input  onclick={__CambiarDescuento} class="form-control" type="text"  value = "{porcentajeDesc.toLocaleString('de-DE')}" readonly/>
                             </td>
                                                         
                             <td class="text-right">
@@ -398,6 +398,58 @@
 <!--fin del modal-->
  
 
+<!--Modal Cambiar Cantidad-->
+<div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+       <div class="modal-content">
+            <div class="modal-header with-border " >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.cantidad")}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
+                        <div class="form-group has-success">
+                            <label >Cantidad:</label>
+                            <input  type="number" class="form-control cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus">
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick ="{__recalculacionDelDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Fin Cambiar Cantidad-->
+
+
+<!--Modal Cambiar Descuento-->
+<div id='modalCambiarDescuento' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+       <div class="modal-content">
+            <div class="modal-header with-border " >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descuento")}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
+                        <div class="form-group has-success">
+                            <label >{$.i18n.prop("factura.linea.detalle.descuento")}</label>
+                            <input  type="number" class="form-control aplicarDescuento" id="aplicarDescuento" name = "aplicarDescuento" autofocus="autofocus">
+                        </div>
+                    </div>
+                </div> 
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick ="{__actualizarDescuento}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Fin Cambiar Descuento-->
 
 <style type="text/css">
     /* Lista de facturas en espera*/
@@ -690,6 +742,27 @@ var reglasDeValidacionCompra = function() {
 	});
 	return validationOptions;
 };
+
+/**
+* Aplicar el descuento
+**/
+__CambiarDescuento(e){
+    self.item = e.item; 
+    self.update()
+    $('#modalCambiarDescuento').modal('show')      
+}
+
+/**
+*Cambiar Cantidad del Articulo
+**/
+__CambiarCantidad(e){
+   var cantidad = e.currentTarget.value;
+   self.item = e.item; 
+   self.update()
+   $( "#cambiarCantidadArticulo" ).focus()
+   $( "#cambiarCantidadArticulo" ).val(cantidad)
+   $('#modalCambiarCantidad').modal('show')      
+}
 
 /**
 * Tipo Cambio de moneda
@@ -1318,9 +1391,18 @@ function __buscarcodigo(idArticulo,cantidad){
             }else{
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
+                        //Articulo no puede agregarse si no hay en el inventario
+                        if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
+                            mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
+                            return
+                        }
+                        if(modeloTabla.cantidad < cantidad ){
+                            mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
+                            return
+                        }
                         self.articulo  = modeloTabla
-                        __agregarArticulo(cantidad)
                         self.update()
+                        __agregarArticulo(cantidad)
                     });
                 }
             }
@@ -1435,6 +1517,8 @@ function __nuevoArticuloAlDetalle(cantidad){
 function getPrecioUnitario(precio,iva){
     if(iva > 0){
         valorImpuesto = iva/100
+    }else{
+      return redondearDecimales(precio,5)     
     }
    var valorIva      = parseFloat(1+valorImpuesto)
    return redondearDecimales(precio /valorIva,5)
@@ -1443,8 +1527,11 @@ function getPrecioUnitario(precio,iva){
  * calculo del impuesto iva
  * */
 function _calcularImpuesto(precio,iva){
-    var impuesto = parseFloat(iva)/100
-    impuesto = impuesto + 1
+    if(iva == 0){
+        return 0;
+    }
+    var impuesto = iva > 0 ?parseFloat(iva)/100:0
+    impuesto = impuesto > 0 ?impuesto + 1:0
     var precioSinImpuesto  = parseFloat(precio) / impuesto
     var total = precio - precioSinImpuesto
     return redondearDecimales(total ,5)
@@ -1455,49 +1542,94 @@ function _calcularImpuesto(precio,iva){
  * Se aplica una recalculacion de todo el detalle y Factura
  **/ 
  __recalculacionDelDetalle(e){
-    if (e.keyCode != 13) {
-        return;
-    } 
-    var cantidad = e.currentTarget.value;
-    self.item    = e.item; 
-    var input    = e.input;
-    var index    = self.detail.indexOf(self.item);
+   // if (e.keyCode != 13) {
+   //     return;
+   // } 
+    var cantidad = $(".cambiarCantidadArticulo").val();
+  //  self.item    = e.item; 
+//    var input    = e.input;
+   
     
     //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
     cantidad =__valorNumerico(cantidad);
     if(cantidad == 0){
        cantidad = 1;
     }
+    __ValidarCantidadArticulo(self.item.codigo,cantidad)
+    
+     
+ }
+
+/**
+* Buscar el codigo del codigo  en la base de datos
+**/
+function __ValidarCantidadArticulo(idArticulo,cantidad){
+   
+    $.ajax({
+        type: 'GET',
+        url: 'findArticuloByCodigojax.do',
+        method:"GET",
+        data:{codigoArticulo:idArticulo},
+        success: function(data){
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    swal('',data.message,'error');
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                        //Articulo no puede agregarse si no hay en el inventario
+                        if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
+                            mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
+                            return 
+                        }
+                        if(modeloTabla.cantidad < cantidad ){
+                            mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
+                            return 
+                        }
+                        agregarCantidadAlaVenta(cantidad)
+                    })
+                }
+            }
+        },
+	    error : function(xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+}
+
+function agregarCantidadAlaVenta(cantidad){
     self.item.cantidad = parseFloat(cantidad); 
     self.item.totalImpuesto = self.item.cantidad * self.item.montoImpuesto; 
     self.item.totalDescuento = self.item.cantidad * self.item.montoDescuento; 
     self.update()
+    var index    = self.detail.indexOf(self.item);
     __actualizarItemArray();
     self.detail[index] = self.item;
     self.update()
     __calculate()
- }
+    cambiarCantidadArticulo.value = 0
+    $('#modalCambiarCantidad').modal('hide') 
+}
+
 /**
 * Actualizar el descuento del codigo
 **/
 __actualizarDescuento(e){
-    if (e.keyCode != 13) {
-        return;
-    } 
+    //if (e.keyCode != 13) {
+    //    return;
+    //} 
     _actualizarDesc(e)
 
 }
 
-__actualizarDescuentoBlur(e){
-    _actualizarDesc(e)
-
-}
 
 
 function _actualizarDesc(e){
-    self.item     = e.item; 
+//    self.item     = e.item; 
     var index     = self.detail.indexOf(self.item);
-    var descuento = e.currentTarget.value;
+    var descuento = $(".aplicarDescuento").val();
     //Descuento se verifica si es null o espacios por defecto se deja en cero
      descuento =__valorNumerico(descuento);
       //Descuento
@@ -1520,6 +1652,8 @@ function _actualizarDesc(e){
     self.detail[index] = self.item;
     self.update();
     __calculate();
+    $('#modalCambiarDescuento').modal('hide') 
+    aplicarDescuento.value = 0
 }
 /**
 * Actualizar item en el array

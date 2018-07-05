@@ -30,6 +30,7 @@ import com.factura.FacturaElectronica.Utils.RespuestaServiceDataTable;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
 import com.factura.FacturaElectronica.modelo.Categoria;
 import com.factura.FacturaElectronica.modelo.Empresa;
+import com.factura.FacturaElectronica.modelo.Usuario;
 import com.factura.FacturaElectronica.web.command.CategoriaCommand;
 import com.factura.FacturaElectronica.web.componentes.CategoriaPropertyEditor;
 import com.factura.FacturaElectronica.web.componentes.EmpresaPropertyEditor;
@@ -177,6 +178,8 @@ public class CategoriasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion",
 						result.getAllErrors());
 			}
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			categoria.setEmpresa(usuario.getEmpresa());
 			categoria.setCreated_at(new Date());
 			categoria.setUpdated_at(new Date());
 			categoria.setEstado(Constantes.ESTADO_ACTIVO);

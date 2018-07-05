@@ -150,7 +150,8 @@ public class VendedorController {
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute Vendedor vendedor, BindingResult result, SessionStatus status) throws Exception {
 		try {
-			Usuario usuarioSesion = (Usuario) WebUtils.getSessionAttribute(request, Constantes.WEB_SESSION_USUARIO);
+			String nombreUsuario = request.getUserPrincipal().getName();
+			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
 			Vendedor vendedorValidar = null;
 
 			vendedorValidar = vendedorBo.buscarPorCedulaYEmpresa(vendedor.getCedula(), vendedor.getEmpresa());
@@ -158,14 +159,11 @@ public class VendedorController {
 				result.rejectValue("cedula", "error.vendedor.existe.cedula");
 			}
 
-			vendedorValidar = vendedorBo.buscarPorNombreCompletoYEmpresa(vendedor.getNombreCompleto(), vendedor.getEmpresa());
-			if (vendedorValidar != null) {
-				result.rejectValue("nombreCompleto", "error.vendedor.existe.nombreCompleto");
-			}
-
+		
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+			vendedor.setEmpresa(usuarioSesion.getEmpresa());
 
 			vendedor.setCreated_at(new Date());
 			vendedor.setUpdated_at(new Date());
@@ -193,7 +191,9 @@ public class VendedorController {
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Vendedor vendedor, BindingResult result, SessionStatus status) throws Exception {
 		try {
-			Usuario usuarioSesion = (Usuario) WebUtils.getSessionAttribute(request, Constantes.WEB_SESSION_USUARIO);
+			String nombreUsuario = request.getUserPrincipal().getName();
+			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
+
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("vendedor.no.modificado", result.getAllErrors());
 			}
@@ -210,12 +210,7 @@ public class VendedorController {
 				}
 			}
 
-			if (!vendedor.getNombreCompleto().equals(vendedorBD.getNombreCompleto())) {
-				vendedorValidar = vendedorBo.buscarPorNombreCompletoYEmpresa(vendedor.getNombreCompleto(), vendedor.getEmpresa());
-				if (vendedorValidar != null) {
-					result.rejectValue("nombreCompleto", "error.vendedor.existe.nombreCompleto");
-				}
-			}
+			
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
@@ -227,7 +222,6 @@ public class VendedorController {
 			vendedorBD.setOtraSena(vendedor.getOtraSena());
 			vendedorBD.setDescuento(vendedor.getDescuento());
 			vendedorBD.setUpdated_at(new Date());
-			vendedorBD.setEmpresa(vendedor.getEmpresa());
 			vendedorBD.setEstado(vendedor.getEstado());
 			vendedorBD.setTelefono(vendedor.getTelefono());
 			vendedorBD.setCelular(vendedor.getCelular());

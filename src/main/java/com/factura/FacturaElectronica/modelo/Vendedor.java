@@ -41,10 +41,10 @@ public class Vendedor implements Serializable {
 	private String						cedula;
 
 	@Column(name = "celular")
-	private String						celular;
+	private Integer						celular;
 
 	@Column(name = "telefono")
-	private String						telefono;
+	private Integer						telefono;
 
 	@Column(name = "correo_electronico")
 	private String						correoElectronico;
@@ -88,7 +88,9 @@ public class Vendedor implements Serializable {
 
 	}
 
-	public Vendedor(Integer id, String nombreCompleto, String cedula, String celular, String telefono, String correoElectronico, String otraSena, Double descuento, Double porcentajeComision, String estado, Date created_at, Date updated_at, Empresa empresa, Usuario usuario) {
+	
+
+	public Vendedor(Integer id, String nombreCompleto, String cedula, Integer celular, Integer telefono, String correoElectronico, String otraSena, Double descuento, Double porcentajeComision, String estado, Date created_at, Date updated_at, Empresa empresa, Usuario usuario) {
 		super();
 		this.id = id;
 		this.nombreCompleto = nombreCompleto;
@@ -106,6 +108,8 @@ public class Vendedor implements Serializable {
 		this.usuario = usuario;
 	}
 
+
+
 	public Integer getId() {
 		return id;
 	}
@@ -114,21 +118,7 @@ public class Vendedor implements Serializable {
 		this.id = id;
 	}
 
-	public String getCelular() {
-		return celular;
-	}
-
-	public void setCelular(String celular) {
-		this.celular = celular;
-	}
-
-	public String getTelefono() {
-		return telefono;
-	}
-
-	public void setTelefono(String telefono) {
-		this.telefono = telefono;
-	}
+	
 
 	public String getCorreoElectronico() {
 		return correoElectronico;
@@ -216,6 +206,34 @@ public class Vendedor implements Serializable {
 
 	public void setOtraSena(String otraSena) {
 		this.otraSena = otraSena;
+	}
+
+
+
+	
+	public Integer getCelular() {
+		return celular;
+	}
+
+
+
+	
+	public void setCelular(Integer celular) {
+		this.celular = celular;
+	}
+
+
+
+	
+	public Integer getTelefono() {
+		return telefono;
+	}
+
+
+
+	
+	public void setTelefono(Integer telefono) {
+		this.telefono = telefono;
 	}
 
 }

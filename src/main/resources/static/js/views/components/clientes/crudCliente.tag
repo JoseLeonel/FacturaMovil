@@ -60,19 +60,10 @@
                                 <label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>
                             </div>
                         </div>
-                        <div class="row">    
-                            <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label" >{$.i18n.prop("cliente.empresa")}</label>
-                                <select  class="form-control empresa" id="empresa" name="empresa" >
-                                    <option  each={empresas.aaData}  value="{id}" selected="{cliente.empresa.id ==id?true:false}" >{nombre}</option>
-                                </select>
-                            </div>
-                        </div>
-                        
                         <div class="row">
                              <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cliente.nombreCompleto")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control nombreCompleto" id="nombreCompleto" name="nombreCompleto" value="{cliente.nombreCompleto}"  >
+                                <input type="text" class="form-control nombreCompleto" placeHolder ="{$.i18n.prop("cliente.nombreCompleto")}" id="nombreCompleto" name="nombreCompleto" value="{cliente.nombreCompleto}"  >
 
                             </div>
                              <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
@@ -83,30 +74,31 @@
                             </div>                            
                              <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cliente.cedula")} <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control cedula" id="cedula" name="cedula" value="{cliente.cedula}"  >
+                                <input type="text" class="form-control cedula" id="cedula" name="cedula" placeHolder ="{$.i18n.prop("cliente.cedula")}" value="{cliente.cedula}"  >
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("cliente.codigoPais")}</label>
-                                <input type="text" class="form-control codigoPais" id="codigoPais" name="codigoPais" value="{cliente.codigoPais}"  >
+                                <label class="knob-label" >{$.i18n.prop("cliente.nombreComercial")} </label>
+                                <input type="text" class="form-control nombreComercial" placeHolder ="{$.i18n.prop("cliente.nombreComercial")}" id="nombreComercial" name="nombreComercial" value="{cliente.nombreComercial}"  >
                             </div>
+                            
                         </div>
                         <div class="row">
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("cliente.codigoPais")} </label>
-                                <input type="text" class="form-control codigoPais" id="codigoPais" name="codigoPais" value="{cliente.codigoPais}"  >
+                                <label class="knob-label" >{$.i18n.prop("cliente.codigoPais")} <span class="requeridoDato">*</span> </label>
+                                <input type="text" class="form-control codigoPais" placeHolder ="{$.i18n.prop("cliente.codigoPais.ejemplo")}" id="codigoPais" name="codigoPais" value="{cliente.codigoPais}"  >
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cliente.telefono")} </label>
-                                <input type="text" class="form-control telefono" id="telefono" name="telefono" value="{cliente.telefono}"  >
+                                <input type="text" class="form-control telefono" placeHolder ="{$.i18n.prop("cliente.telefono")}" id="telefono" name="telefono" value="{cliente.telefono}"  >
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cliente.celular")} </label>
-                                <input type="text" class="form-control celular" id="celular" name="celular" value="{cliente.celular}"  >
+                                <input type="text" class="form-control celular" placeHolder ="{$.i18n.prop("cliente.celular")}" id="celular" name="celular" value="{cliente.celular}"  >
                             </div>
                         
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cliente.descuento")} </label>
-                                <input type="number" class="form-control descuento" id="descuento" name="descuento" value="{cliente.descuento}"  >
+                                <input type="number" class="form-control descuento" placeHolder ="{$.i18n.prop("cliente.descuento")}" id="descuento" name="descuento" value="{cliente.descuento}"  >
                             </div>
 
                         </div>
@@ -119,29 +111,29 @@
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cliente.distrito")} </label>
-                                <input type="text" class="form-control distrito" id="distrito" name="distrito" value="{cliente.distrito}"  >
+                                <input type="text" class="form-control distrito" placeHolder ="{$.i18n.prop("cliente.distrito")}" id="distrito" name="distrito" value="{cliente.distrito}"  >
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cliente.barrio")} </label>
-                                <input type="text" class="form-control barrio" id="barrio" name="barrio" value="{cliente.barrio}"  >
+                                <input type="text" class="form-control barrio" placeHolder ="{$.i18n.prop("cliente.barrio")}" id="barrio" name="barrio" value="{cliente.barrio}"  >
                             </div>                        
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cliente.identificacionExtranjero")}</label>
-                                <input type="text" class="form-control identificacionExtranjero" id="identificacionExtranjero" name="identificacionExtranjero" value="{cliente.identificacionExtranjero}"  >
+                                <input type="text" class="form-control identificacionExtranjero" placeHolder ="{$.i18n.prop("cliente.identificacionExtranjero")}" id="identificacionExtranjero" name="identificacionExtranjero" value="{cliente.identificacionExtranjero}"  >
                             </div>
                         </div>                        
                         <div class="row">    
                             
                              <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("cliente.correoElectronico")}</label>
-                                <input type="text" class="form-control correoElectronico" id="correoElectronico" name="correoElectronico" value="{cliente.correoElectronico}"  >
+                                <input type="text" class="form-control correoElectronico" placeHolder ="{$.i18n.prop("cliente.correoElectronico")}" id="correoElectronico" name="correoElectronico" value="{cliente.correoElectronico}"  >
                             </div>
                         </div>
 
                         <div class="row">    
                             <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("cliente.otraSena")}</label>
-                                <input type="text" class="form-control otraSena" id="otraSena" name="otraSena" value="{cliente.otraSena}"  >
+                                <input type="text" class="form-control otraSena" placeHolder ="{$.i18n.prop("cliente.otraSena")}" id="otraSena" name="otraSena" value="{cliente.otraSena}"  >
                             </div>
                         </div>
 
@@ -224,7 +216,6 @@
     self.idiomaDataTable           = []         // idioma de la datatable nuevo
     self.formato_tabla             = []         // Formato del Listado de la Tabla 
     self.provincias                = []
-    self.empresas                = {aaData:[]}
     self.tipoCedulas              = {data:[]}  // definir el data del datatable
     self.mostrarListado            = true 
     self.botonModificar            = false
@@ -245,11 +236,10 @@
         }
         }
 self.on('mount',function(){
-    $("#formulario").validate(reglasDeValidacion());
+    _incializarCampos()
     __InicializarTabla('.tableListar')
     __listado()
     __cargaProvincias()
-    __listadoEmpresasActivas()
     __Eventos()
     includeActions('.dataTables_wrapper','.dataTables_length')
     __MantenimientoAgregar()
@@ -258,9 +248,50 @@ self.on('mount',function(){
     agregarInputsCombos();
     window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
-        }, false );
-
+    }, false );
 })
+/**
+* Limpiar campos
+**/
+function _incializarCampos(){
+    $("#provincia").val($("#provincia option:first").val());
+    $("#tipoCedula").val($("#tipoCedula option:first").val());
+    $('.nombreCompleto').val(null)
+    $('.cedula').val(null)
+    $('.identificacionExtranjero').val(null)
+    $('.barrio').val(null)
+    $('.distrito').val(null)
+    $('.descuento').val(null)
+    $('.celular').val(null)
+    $('.telefono').val(null)
+    $('.codigoPais').val(null)
+    $('.correoElectronico').val(null)
+    $('.otraSena').val(null)
+    $('.nombreComercial').val(null)
+    $(".errorServerSideJgrid").remove();
+    $("#formulario").validate(reglasDeValidacion());
+    self.cliente = {
+        id:null,
+        nombreCompleto:"",
+        identificacionExtranjero:"",
+        barrio:"",
+        distrito:"",
+        codigoPais:"",
+        cedula:"",
+        provincia:"",
+        celular:"",
+        telefono:"",
+        otraSena:"",
+        correoElectronico:"",
+        descuento:0,
+        estado:"",
+        sucursal:{
+           id:null
+        }
+    }
+    self.update()
+}
+
 /**
 *  Mostrar listado datatable TipoCedulas
 **/
@@ -291,32 +322,50 @@ var reglasDeValidacion = function() {
 			cedula : {
 				required : true,
                 maxlength:20,
-                minlength:1,
+                minlength:9,
 			},
 
 			nombreCompleto : {
 				required : true,
-                maxlength:150,
+                maxlength:255,
                 minlength:1,
 			},
 			otraSenas : {
-                maxlength:160,
+                maxlength:255,
                 minlength:1,
 			},
 			correoElectronico : {
-                maxlength:200,
+                maxlength:255,
                 minlength:1,
                 email:true
 			},
             telefono : {
-                maxlength:9,
-                minlength:1,
+                maxlength:8,
+                minlength:8,
                 telefonoFormat:true
 			},
+            barrio : {
+                maxlength:3,
+                minlength:3,
+			},
             celular : {
-                maxlength:9,
-                minlength:1,
+                maxlength:8,
+                minlength:8,
                 telefonoFormat:true
+
+			},
+            codigoPais : {
+                required : true,
+                minlength:3,
+
+			},
+            distrito : {
+                maxlength:3,
+                minlength:3,
+			},
+            identificacionExtranjero : {
+                maxlength:20,
+                minlength:9,
 			}                       
 		},
 		ignore : []
@@ -345,13 +394,16 @@ function __ComboEstados(){
 **/
 function __Eventos(){
     $("#formulario").validate(reglasDeValidacion());
-    $("#nombreCompleto").attr("maxlength", 150);
+    $("#nombreCompleto").attr("maxlength", 255);
+    $("#nombreComercial").attr("maxlength", 255);
     $("#cedula").attr("maxlength", 20);
-    $("#correoElectronico").attr("maxlength", 200);
-    $("#otraSenas").attr("maxlength", 160);
-    $("#telefono").attr("maxlength", 9);
-    $("#celular").attr("maxlength", 9);
-
+    $("#identificacionExtranjero").attr("maxlength", 20);
+    $("#correoElectronico").attr("maxlength", 255);
+    $("#otraSenas").attr("maxlength", 255);
+    $("#telefono").attr("maxlength", 8);
+    $("#celular").attr("maxlength", 8);
+    $("#barrio").attr("maxlength", 3);
+    $("#distrito").attr("maxlength", 3);
     $('#descuento').mask('000', {
 		'translation' : {
 			0 : {
@@ -359,21 +411,27 @@ function __Eventos(){
 			}
 		}
 	});
-    $('#telefono').mask('0000-0000', {
+    $('#codigoPais').mask('000', {
+		'translation' : {
+			0 : {
+				pattern : /[0-9]/
+			}
+		}
+	});
+    $('#telefono').mask('00000000', {
             'translation' : {
                 0 : {
                     pattern : /[0-9]/
                 }
             }
 	})
-    $('#celular').mask('0000-0000', {
+    $('#celular').mask('00000000', {
             'translation' : {
                 0 : {
                     pattern : /[0-9]/
                 }
             }
 	})
-
 }
 /**
 *  Regresar al listado
@@ -397,39 +455,13 @@ __regresarAlListado(){
                 self.botonModificar     = false;
                 self.mostrarFormulario  = false 
                 self.update()
-                $('#nombreCompleto').val(null)
-                $('#cedula').val(null)
-                $('#telefono').val(null)
-                $('#celular').val("")
-                $('#descuento').val(0)
-                $('#correoElectronico').val("")
-                $('#otraSenas').val(null)
+               _incializarCampos()
                 __listado();
 
             }
     });    
 }
-/**
-*  Mostrar listado datatable Empresas Activas
-**/
-function __listadoEmpresasActivas(){
-    $.ajax({
-         url: "ListarEmpresasActivasAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            if(result.aaData.length > 0){
-                self.empresas.aaData =  result.aaData
-                self.update();
-                
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
-}
+
 /**
 ** Modificar la Empresa
 **/
@@ -479,13 +511,9 @@ __agregar(){
       	                           confirmButtonText: 'Aceptar',
       	                                	  
       	                         })
-                                
                             }
-                            
                         } else {
                         	serverMessageJson(data);
-                            
-                           
                              swal({
 	                           title: '',
 	                           text: data.message,
@@ -494,34 +522,10 @@ __agregar(){
 	                           confirmButtonText: 'Aceptar',
 	                                	  
 	                         })
-	                         $('#nombreCompleto').val(null)
-                             $('#cedula').val(null)
-                             $('#telefono').val(null)
-                             $('#celular').val(null)
-                             $('#descuento').val(null)
-                             $('#correoElectronico').val(null)
-                             $('#otraSena').val(null)
-                                self.cliente = {
-                                    id:null,
-                                    nombreCompleto:"",
-                                    cedula:"",
-                                    provincia:"",
-                                    celular:"",
-                                    telefono:"",
-                                    otraSena:"",
-                                    correoElectronico:"",
-                                    descuento:0,
-                                    estado:"",
-                                    sucursal:{
-                                        id:null
-                                        }
-                                }
-                                self.cliente = data
-                                self.update()
-                                $(".errorServerSideJgrid").remove();
-                                $("#formulario").validate(reglasDeValidacion());
-                                __Eventos()
- 
+	                         _incializarCampos()
+                            self.cliente = data
+                            self.update()
+                            __Eventos()
                         }
                     },
                     error : function(xhr, status) {
@@ -608,8 +612,6 @@ function __Opciones(){
  */
 function __modificarRegistro_Listar(){
 	$('#tableListar').on('click','.btnModificar',function(e){
-        $("#formulario").validate(reglasDeValidacion());
-        $(".errorServerSideJgrid").remove();
 		var table = $('#tableListar').DataTable();
 		if(table.row(this).child.isShown()){
 			//cuando el datatable esta en modo responsive
@@ -617,23 +619,7 @@ function __modificarRegistro_Listar(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        self.cliente = {
-            id:null,
-            nombreCompleto:"",
-            cedula:"",
-            provincia:"",
-            celular:"",
-            telefono:"",
-            otraSena:"",
-            correoElectronico:"",
-            descuento:0,
-            estado:"",
-            sucursal:{
-                id:null
-                }
-        }
-        
-          
+        _incializarCampos()
         self.cliente = data
         self.update()
         __consultar()
@@ -659,15 +645,7 @@ function __consultar(){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         //Inicializar el Formulario
-                        $('#nombreCompleto').val(null)
-                        $('#cedula').val(null)
-                        $('#telefono').val(null)
-                        $('#celular').val(null)
-                        $('#descuento').val(null)
-                        $('#correoElectronico').val(null)
-                        $('#otraSena').val(null)                        
-                        $(".errorServerSideJgrid").remove();
-                        $("#formulario").validate(reglasDeValidacion());
+                        _incializarCampos()
                         //desahabilita  listado 
                         self.mostrarListado   = false;
                         self.mostrarFormulario  = true 
@@ -684,6 +662,11 @@ function __consultar(){
                         $('#descuento').val(self.cliente.descuento)
                         $('#correoElectronico').val(self.cliente.correoElectronico)
                         $('#otraSena').val(self.cliente.otraSena)
+                        $('.identificacionExtranjero').val(self.cliente.identificacionExtranjero)
+                        $('.barrio').val(self.cliente.barrio)
+                        $('.distrito').val(self.cliente.distrito)
+                        $('.codigoPais').val(self.cliente.codigoPais)
+                        $('.nombreComercial').val(self.cliente.nombreComercial)
                         __ComboEstados()
                         __Eventos()
                     });
@@ -710,30 +693,7 @@ function __MantenimientoAgregar(){
         self.botonModificar   = false;
         // habilita el formulario
         self.botonAgregar     = true;
-        self.cliente ={
-            id:null,
-            nombreCompleto:"",
-            cedula:"",
-            provincia:"",
-            celular:"",
-            telefono:"",
-            otraSena:"",
-            correoElectronico:"",
-            descuento:0,
-            estado:"",
-        }
-        self.update();
-        $('#nombreCompleto').val("")
-        $('#cedula').val("")
-        $('#telefono').val("")
-        $('#celular').val("")
-        $('#descuento').val(0)
-        $('#correoElectronico').val("")
-        $('#otraSenas').val("")
-         
-        //Inicializar el Formulario
-        $(".errorServerSideJgrid").remove();
-        $("#formulario").validate(reglasDeValidacion());
+        _incializarCampos()
    
     })
 }

@@ -54,22 +54,12 @@
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 left">
                                 <label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>
-                               
                             </div>
-                            
                         </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("categoria.empresa")}  <span class="requeridoDato">*</span></label>
-                                 <select  class="form-control" id="empresa" name="empresa" >
-                                    <option  each={empresas.aaData}  value="{id}"  >{nombre}</option>
-                                </select>
-                            </div>
-                        </div>    
-                        <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("categoria.descripcion")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control descripcion" id="descripcion" name="descripcion" value="{categoria.descripcion}"  >
+                                <input type="text" class="form-control descripcion" placeHolder ="{$.i18n.prop("categoria.descripcion")}" id="descripcion" name="descripcion" value="{categoria.descripcion}"  >
 
                             </div>
                         </div>
@@ -80,10 +70,7 @@
                                     <option  each={estados}  value="{codigo}" selected="{categoria.estado ==codigo?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
-                            
-
                         </div>
-
                     </form>    
                 </div>
                 <div class="box-footer">
@@ -99,11 +86,6 @@
         <div class="col-md-2 col-lg-2 col-sm-2"></div>
     </div>
 </div>
- 
-
-
-
-
 <style type ="text/css">
     .fondoEncabezado {
         background: #00539B;
@@ -164,7 +146,7 @@
     self.botonModificar            = false
     self.botonAgregar              = false
     self.categoria = {
-        id:0,
+        id:null,
         descripcion:"",
         estado:""
     }
@@ -203,29 +185,21 @@ var reglasDeValidacion = function() {
 	return validationOptions;
 };
 
-
 /**
-*  Mostrar listado datatable Empresas Activas
+* Limpiar
 **/
-function __listadoEmpresasActivas(){
-    $.ajax({
-         url: "ListarEmpresasActivasAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            console.log(result)
-            if(result.aaData.length > 0){
-                self.empresas.aaData =  result.aaData
-                self.update();
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
+function Limpiar(){
+    $("#descripcion").val(null)
+    $(".errorServerSideJgrid").remove();
+    $("#formulario").validate(reglasDeValidacion());
+     self.categoria = {
+        id:null,
+        descripcion:"",
+        estado:""
+    }
+    self.update()
+    __ComboEstados()
 }
-
 /**
 *  Crear el combo de estados
 **/
@@ -273,6 +247,7 @@ __regresarAlListado(){
                 self.botonModificar     = false;
                 self.mostrarFormulario  = false 
                 self.update()
+                Limpiar()
                 __listado();
 
             }
@@ -283,8 +258,6 @@ __regresarAlListado(){
 function __MantenimientoAgregar(){
       //Inicializar el Formulario
     $('.dataTables_wrapper').on('click','.btn-agregar',function(e){
-        self.categoria    = {};                // modelo o domain   
-        
         //desahabilita  listado 
         self.mostrarListado   = false;
         self.mostrarFormulario  = true 
@@ -294,9 +267,7 @@ function __MantenimientoAgregar(){
         self.botonAgregar     = true;
         self.update();
         //Inicializar el Formulario
-        $("#descripcion").val(null);
-        $(".errorServerSideJgrid").remove();
-        $("#formulario").validate(reglasDeValidacion());
+        Limpiar()
         __Eventos()
    
     })
@@ -317,6 +288,7 @@ function __modificarRegistro_Listar(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
+        Limpiar()
         self.categoria  = data
         self.update()
         $("#descripcion").val(self.categoria.descripcion);
@@ -343,6 +315,7 @@ function __consultar(){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                     //desahabilita  listado 
+                        Limpiar()
                         self.mostrarListado   = false;
                         self.mostrarFormulario  = true 
                         //desahabilita boton modificar
@@ -419,9 +392,7 @@ __agregar(){
 	                           confirmButtonText: 'Aceptar',
 	                                	  
 	                         })
-	                        $("#formulario").validate(reglasDeValidacion());
-                            $(".errorServerSideJgrid").remove();
-                            $("#descripcion").val(null);
+                            Limpiar()
                             
                         }
                     },

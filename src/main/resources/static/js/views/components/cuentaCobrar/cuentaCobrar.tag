@@ -158,7 +158,7 @@
                             <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label class="knob-label">{$.i18n.prop("abono.fechaPago")} <span class="requeridoDato">*</span></label>
                                  <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
-                                    <input type="text" class="form-control fechaPago" id="fechaPago" name="fechaPago"  value="{abono.fechaPago}"  readonly={abono.id > 0}>
+                                    <input type="text" class="form-control fechaPago" placeHolder ="{$.i18n.prop("abono.fechaPago")}" id="fechaPago" name="fechaPago"  value="{abono.fechaPago}"  readonly={abono.id > 0}>
                                     <div class="input-group-addon">
                                         <span class="glyphicon glyphicon-th"></span>
                                     </div>
@@ -166,11 +166,11 @@
                             </div>
                             <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4">
                                 <label class="knob-label">{$.i18n.prop("abono.recibo")} <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control recibo"  id="recibo" name="recibo"  value="{abono.recibo}" readonly={abono.id > 0}>                        
+                                <input type="text" class="form-control recibo" placeHolder ="{$.i18n.prop("abono.recibo")}"  id="recibo" name="recibo"  value="{abono.recibo}" readonly={abono.id > 0}>                        
                             </div>
                             <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4">
                                 <label class="knob-label">{$.i18n.prop("abono.transferencia")} </label>
-                                <input type="text" class="form-control transferencia" id="transferencia" name="transferencia" value="{abono.transferencia}" readonly={abono.id > 0}>                        
+                                <input type="text" class="form-control transferencia" placeHolder ="{$.i18n.prop("abono.transferencia")}" id="transferencia" name="transferencia" value="{abono.transferencia}" readonly={abono.id > 0}>                        
                             </div>
                             <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4">
                             </div>
@@ -178,31 +178,31 @@
                         <div class="row">
                             <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4">
                                 <label class="knob-label">{$.i18n.prop("cuentaCobrar.totalSaldo")} </label>
-                                <input  type="number" step="any" class="form-control"  value="{ cuentaCobrar.totalSaldo.toLocaleString('de-DE')}" readonly>                        
+                                <input  type="number" step="any" class="form-control" placeHolder ="{$.i18n.prop("abono.totalSaldo")}"  value="{ cuentaCobrar.totalSaldo.toLocaleString('de-DE')}" readonly>                        
                             </div>
                             <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4">
                                 <label class="knob-label">{$.i18n.prop("abono.totalEfectivo")}</span> </label>
-                                <input  type="number" step="any" id="totalEfectivo" name="totalEfectivo" onkeyup = {__TotalEfectivo}  class="form-control totalEfectivo"   value="{abono.totalEfectivo}" readonly={abono.id > 0}>                        
+                                <input  type="number" step="any" placeHolder ="{$.i18n.prop("abono.totalEfectivo")}" id="totalEfectivo" name="totalEfectivo" onkeyup = {__TotalEfectivo}  class="form-control totalEfectivo"   value="{abono.totalEfectivo}" readonly={abono.id > 0}>                        
                             </div>
                             <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4">
                                 <label class="knob-label">{$.i18n.prop("abono.totalTarjeta")}</span> </label>
-                                <input  type="number" step="any" class="form-control totalTarjeta"  id="totalTarjeta" name="totalTarjeta" onkeyup = {__TotalTarjeta} value="{abono.totalTarjeta}" readonly={abono.id > 0}>                        
+                                <input  type="number" step="any" class="form-control totalTarjeta" placeHolder ="{$.i18n.prop("abono.totalTarjeta")}"  id="totalTarjeta" name="totalTarjeta" onkeyup = {__TotalTarjeta} value="{abono.totalTarjeta}" readonly={abono.id > 0}>                        
                             </div>
                         </div>    
                         <div class="row">    
                             <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4">
                                 <label class="knob-label">{$.i18n.prop("abono.totalBanco")}</span> </label>
-                                <input  type="number" step="any" class="form-control totalBanco"  id="totalBanco" name="totalBanco" onkeyup = {__TotalBanco}  value="{abono.totalBanco}" readonly={abono.id > 0}>                        
+                                <input  type="number" step="any" class="form-control totalBanco" placeHolder ="{$.i18n.prop("abono.totalBanco")}"  id="totalBanco" name="totalBanco" onkeyup = {__TotalBanco}  value="{abono.totalBanco}" readonly={abono.id > 0}>                        
                             </div>
                             <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4">
                                 <label class="knob-label">{$.i18n.prop("abono.total")} <span class="requeridoDato">*</span> </label>
-                                <input  type="number" step="any" class="form-control total" id="total" name="total"  value="{abono.total.toLocaleString('de-DE')}"   readonly>                        
+                                <input  type="number" step="any" class="form-control total" placeHolder ="{$.i18n.prop("abono.total")}" id="total" name="total"  value="{abono.total.toLocaleString('de-DE')}"   readonly>                        
                             </div>
                         </div>
                         <div class="row">
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("abono.nota")} </label>
-                                <input type="textArea" class="form-control nota" id="nota" name="nota" value="{abono.nota}"  readonly={abono.id > 0}>
+                                <input type="textArea" class="form-control nota" placeHolder ="{$.i18n.prop("abono.nota")}" id="nota" name="nota" value="{abono.nota}"  readonly={abono.id > 0}>
                             </div>
                         </div>
                         <br>
@@ -293,7 +293,7 @@
                             <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3">
                                     <label class="knob-label" >{$.i18n.prop("cuentaCobrar.fechaEntrega")} <span class="requeridoDato">*</span></label>
                                     <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
-                                        <input type="text" class="form-control fechaEntrega" id="fechaEntrega"  name= "fechaEntrega" value="{cuentaCobrar.fechaEntrega}"  disabled="{cuenta.estado == 'Cerrada'}">
+                                        <input type="text" class="form-control fechaEntrega" placeHolder ="{$.i18n.prop("cuentaCobrar.fechaEntrega")}"  id="fechaEntrega"  name= "fechaEntrega" value="{cuentaCobrar.fechaEntrega}"  disabled="{cuenta.estado == 'Cerrada'}">
                                         <div class="input-group-addon">
                                             <span class="glyphicon glyphicon-th"></span>
                                         </div>
@@ -302,7 +302,7 @@
                             <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.fechaPlazo")} <span class="requeridoDato">*</span></label>
                                 <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="dd/mm/yyyy">
-                                    <input type="text" class="form-control" id="fechaPlazo" name="fechaPlazo"  value="{cuentaCobrar.fechaPlazo}" disabled="{cuenta.estado == 'Cerrada'}">
+                                    <input type="text" class="form-control" placeHolder ="{$.i18n.prop("cuentaCobrar.fechaPlazo")}" id="fechaPlazo" name="fechaPlazo"  value="{cuentaCobrar.fechaPlazo}" disabled="{cuenta.estado == 'Cerrada'}">
                                     <div class="input-group-addon">
                                         <span class="glyphicon glyphicon-th"></span>
                                     </div>
@@ -310,7 +310,7 @@
                             </div>                            
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.recibo")}  </label>
-                                <input type="text" class="form-control recibo crearCuenta_recibo" id="recibo" name="recibo" value="{cuentaCobrar.recibo}"  >
+                                <input type="text" class="form-control recibo crearCuenta_recibo" placeHolder ="{$.i18n.prop("cuentaCobrar.recibo")}" id="recibo" name="recibo" value="{cuentaCobrar.recibo}"  >
                             </div>
 
                         </div>
@@ -318,16 +318,16 @@
 
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.letraCambio")} <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control letraCambio" id="letraCambio" name="letraCambio" value="{cuentaCobrar.letraCambio}"  readonly={cuentaCobrar.id > 0?true:false}>
+                                <input type="text" class="form-control letraCambio" placeHolder ="{$.i18n.prop("cuentaCobrar.letraCambio")}" id="letraCambio" name="letraCambio" value="{cuentaCobrar.letraCambio}"  readonly={cuentaCobrar.id > 0?true:false}>
                             </div>
 
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.facturaManual")} </label>
-                                <input type="text" class="form-control facturaManual" id="facturaManual" name="facturaManual" value="{cuentaCobrar.facturaManual}" readonly={cuentaCobrar.id > 0?true:false} >
+                                <input type="text" class="form-control facturaManual" placeHolder ="{$.i18n.prop("cuentaCobrar.facturaManual")}" id="facturaManual" name="facturaManual" value="{cuentaCobrar.facturaManual}" readonly={cuentaCobrar.id > 0?true:false} >
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.totalComision")} </label>
-                                <input type="text" class="form-control totalComision" id="totalComision" name="totalComision" value="{cuentaCobrar.totalComision}"  >
+                                <input type="text" class="form-control totalComision" placeHolder ="{$.i18n.prop("cuentaCobrar.totalComision")}" id="totalComision" name="totalComision" value="{cuentaCobrar.totalComision}"  >
                             </div>
 
                         </div>
@@ -335,36 +335,36 @@
                         <div class="row">    
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.descuento")} </label>
-                                <input type="text" class="form-control descuento" id="descuento" name="descuento" value="{cuentaCobrar.descuento}"  >
+                                <input type="text" class="form-control descuento" placeHolder ="{$.i18n.prop("cuentaCobrar.descuento")}" id="descuento" name="descuento" value="{cuentaCobrar.descuento}"  >
 
                             </div>
 
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.cantidadPagos")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" onkeyup= {__MontoCuota} class="form-control cantidadPagos" id="cantidadPagos" name="cantidadPagos" value="{cuentaCobrar.cantidadPagos}"  >
+                                <input type="text" onkeyup= {__MontoCuota} class="form-control cantidadPagos" placeHolder ="{$.i18n.prop("cuentaCobrar.cantidadPagos")}" id="cantidadPagos" name="cantidadPagos" value="{cuentaCobrar.cantidadPagos}"  >
                             </div>
 
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.montoCouta")}  <span class="requeridoDato">*</span></label>
-                                <input type="text"  class="form-control montoCouta" id="montoCouta" name="montoCouta" value="{cuentaCobrar.montoCouta}"  >
+                                <input type="text"  class="form-control montoCouta" placeHolder ="{$.i18n.prop("cuentaCobrar.montoCouta")}" id="montoCouta" name="montoCouta" value="{cuentaCobrar.montoCouta}"  >
                             </div>
 
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.total")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" onkeyup= {__MontoCuota} class="form-control total_cuentaCobrar" id="total" name="total" value="{cuentaCobrar.total}"  readonly={cuentaCobrar.id > 0?true:false}>
+                                <input type="text" onkeyup= {__MontoCuota} class="form-control total_cuentaCobrar" placeHolder ="{$.i18n.prop("cuentaCobrar.total")}" id="total" name="total" value="{cuentaCobrar.total}"  readonly={cuentaCobrar.id > 0?true:false}>
                             </div>
 
                         </div>
                         <div class="row">    
                             <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.descripcionArticulo")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control descripcionArticulo" id="descripcionArticulo" name="descripcionArticulo" value="{cuentaCobrar.descripcionArticulo}"  >
+                                <input type="text" class="form-control descripcionArticulo" placeHolder ="{$.i18n.prop("cuentaCobrar.descripcionArticulo")}" id="descripcionArticulo" name="descripcionArticulo" value="{cuentaCobrar.descripcionArticulo}"  >
                             </div>
                         </div>
                         <div class="row">    
                             <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.nota")}</label>
-                                <input type="text" class="form-control nota" id="nota" name="nota" value="{cuentaCobrar.nota}"  >
+                                <input type="text" class="form-control nota" placeHolder ="{$.i18n.prop("cuentaCobrar.nota")}" id="nota" name="nota" value="{cuentaCobrar.nota}"  >
                             </div>
                         </div>
                         <div class="row">

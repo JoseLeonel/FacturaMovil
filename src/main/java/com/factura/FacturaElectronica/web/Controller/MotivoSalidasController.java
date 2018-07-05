@@ -161,6 +161,7 @@ public class MotivoSalidasController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+			motivoSalida.setEmpresa(usuarioSesion.getEmpresa());
 			motivoSalida.setCreated_at(new Date());
 			motivoSalida.setUpdated_at(new Date());
 			motivoSalida.setEstado(Constantes.ESTADO_ACTIVO);
@@ -210,8 +211,9 @@ public class MotivoSalidasController {
 				}
 				motivoSalidaBD.setDescripcion(motivoSalida.getDescripcion());
 				motivoSalidaBD.setUpdated_at(new Date());
-				motivoSalidaBo.modificar(motivoSalidaBD);
 				motivoSalida.setUsuario(usuarioSesion);
+				motivoSalidaBo.modificar(motivoSalidaBD);
+				
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("motivoSalida.modificado.correctamente", motivoSalidaBD);
 			}
 

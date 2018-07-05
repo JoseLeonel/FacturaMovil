@@ -76,10 +76,10 @@ public class ClienteBoImpl implements ClienteBo {
 		cliente.setCedula(Constantes.CEDULA_CLIENTE_FRECUENTE);
 		cliente.setCorreoElectronico(Constantes.CORREO_CLIENTE_FRECUENTE);
 		cliente.setNombreCompleto(Constantes.NOMBRE_CLIENTE_FRECUENTE);
-		cliente.setCelular(Constantes.BLANK);
-		cliente.setTelefono(BigInteger.ZERO);
+		cliente.setCelular(Constantes.ZEROS);
+		cliente.setTelefono(Constantes.ZEROS);
 		cliente.setEmpresa(empresa);
-		cliente.setDescuento(BigDecimal.ZERO);
+		cliente.setDescuento(Constantes.ZEROS);
 		cliente.setEstado(Constantes.ESTADO_ACTIVO);
 		cliente.setOtraSena(Constantes.EMPTY);
 		cliente.setCreated_at(new Date());

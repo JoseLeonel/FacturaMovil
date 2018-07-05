@@ -52,18 +52,10 @@
                                 <label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>
                             </div>
                         </div>
-                        <div class="row">    
-                            <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label" >{$.i18n.prop("motivoSalida.empresa")}</label>
-                                <select  class="form-control empresa" id="empresa" name="empresa" >
-                                    <option  each={empresas.aaData}  value="{id}" selected="{motivoSalida.empresa.id ==id?true:false}" >{nombre}</option>
-                                </select>
-                            </div>
-                        </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("motivoSalida.descripcion")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control descripcion" id="descripcion" name="descripcion" value="{motivoSalida.descripcion}"  >
+                                <input type="text" class="form-control descripcion" placeHolder ="{$.i18n.prop("motivoSalida.descripcion")}" id="descripcion" name="descripcion" value="{motivoSalida.descripcion}"  >
 
                             </div>
                         </div>
@@ -167,6 +159,7 @@ self.on('mount',function(){
     __Eventos()
     __ComboEstados()
      __listadoEmpresasActivas()
+     Limpiar()
 })
 /**
 * Camps requeridos
@@ -186,6 +179,22 @@ var reglasDeValidacion = function() {
 	});
 	return validationOptions;
 };
+
+/**
+* Limpiar
+**/
+function Limpiar(){
+    $("#descripcion").val(null)
+    $(".errorServerSideJgrid").remove();
+    $("#formulario").validate(reglasDeValidacion());
+      self.motivoSalida = {
+        id:null,
+        descripcion:"",
+        estado:""
+    }
+    self.update()
+    __ComboEstados()
+}
 /**
 *  Mostrar listado datatable Empresas Activas
 **/
@@ -252,6 +261,7 @@ __regresarAlListado(){
                 self.botonModificar     = false;
                 self.mostrarFormulario  = false 
                 self.update()
+                Limpiar()
                 __listado();
             }
     });    
@@ -272,9 +282,7 @@ function __MantenimientoAgregar(){
         self.botonAgregar     = true;
         self.update();
         //Inicializar el Formulario
-        $(".errorServerSideJgrid").remove();
-        $("#formulario").validate(reglasDeValidacion());
-        $("#descripcion").val(null);
+        Limpiar()
         __Eventos()
     })
 }
@@ -292,6 +300,7 @@ function __modificarRegistro_Listar(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
+        Limpiar()
         self.motivoSalida  = data
         self.update()
         __consultar()
@@ -316,7 +325,8 @@ function __consultar(){
             }else{
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
-                    //desahabilita  listado 
+                        //desahabilita  listado 
+                        Limpiar() 
                         self.mostrarListado   = false;
                         self.mostrarFormulario  = true 
                         //desahabilita boton modificar
@@ -326,7 +336,7 @@ function __consultar(){
                         self.motivoSalida  =  modeloTabla
                         self.update()
                         __ComboEstados()
-                    });
+                     });
                 }
             }
             
@@ -386,10 +396,8 @@ __agregar(){
 	                           showCancelButton: false,
 	                           confirmButtonText: 'Aceptar',
 	                         })
-	                        $("#formulario").validate(reglasDeValidacion());
-                            $(".errorServerSideJgrid").remove();
-                            $("#descripcion").val(null);
-                              __Eventos()
+                            Limpiar() 
+                            __Eventos()
                             
                         }
                     },

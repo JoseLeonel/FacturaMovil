@@ -132,7 +132,7 @@ public class CajasController {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-			Caja cajaBd = cajaBo.findByDescripcionAndEmpresa(caja.getDescripcion(), caja.getEmpresa());
+			Caja cajaBd = cajaBo.findByDescripcionAndEmpresa(caja.getDescripcion(), usuario.getEmpresa());
 			if (cajaBd != null) {
 				result.rejectValue("descripcion", "error.caja.descripcion.existe");
 			}
@@ -145,6 +145,7 @@ public class CajasController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+			caja.setEmpresa(usuario.getEmpresa());
 			caja.setCreated_at(new Date());
 			caja.setUpdated_at(new Date());
 			caja.setEstado(Constantes.ESTADO_ACTIVO);

@@ -135,8 +135,8 @@ public final class GenerarFacturaXML {
 		ubicacionType.setOtrasSenas(cliente.getOtraSena());
 		receptorType.setUbicacion(ubicacionType);
 		TelefonoType telefonoType = new TelefonoType();
-		telefonoType.setCodigoPais(cliente.getCodigoPais());
-		telefonoType.setNumTelefono(cliente.getTelefono());
+//		telefonoType.setCodigoPais(cliente.getCodigoPais());
+//		telefonoType.setNumTelefono(cliente.getTelefono());
 		receptorType.setTelefono(telefonoType);
 
 		return receptorType;

@@ -52,18 +52,10 @@
                                 <label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>
                             </div>
                         </div>
-                        <div class="row">    
-                            <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label" >{$.i18n.prop("motivoEntrada.empresa")}</label>
-                                <select  class="form-control empresa" id="empresa" name="empresa" >
-                                    <option  each={empresas.aaData}  value="{id}" selected="{motivoEntrada.empresa.id ==id?true:false}" >{nombre}</option>
-                                </select>
-                            </div>
-                        </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("motivoEntrada.descripcion")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control descripcion" id="descripcion" name="descripcion" value="{motivoEntrada.descripcion}"  >
+                                <input type="text" class="form-control descripcion" placeHolder ="{$.i18n.prop("motivoEntrada.descripcion")}" id="descripcion" name="descripcion" value="{motivoEntrada.descripcion}"  >
 
                             </div>
                         </div>
@@ -165,7 +157,25 @@ self.on('mount',function(){
     __Eventos()
     __ComboEstados()
     __listadoEmpresasActivas()
+    Limpiar()
 })
+
+/**
+* Limpiar
+**/
+function Limpiar(){
+    $("#descripcion").val(null)
+    $(".errorServerSideJgrid").remove();
+    $("#formulario").validate(reglasDeValidacion());
+    self.motivoEntrada = {
+        id:null,
+        descripcion:"",
+        estado:""
+    }
+    self.update()
+    __ComboEstados()
+}
+
 /**
 * Camps requeridos
 **/
@@ -183,27 +193,7 @@ var reglasDeValidacion = function() {
 	});
 	return validationOptions;
 };
-/**
-*  Mostrar listado datatable Empresas Activas
-**/
-function __listadoEmpresasActivas(){
-    $.ajax({
-         url: "ListarEmpresasActivasAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            if(result.aaData.length > 0){
-                self.empresas.aaData =  result.aaData
-                self.update();
-                
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
-}
+
 /**
 *  Crear el combo de estados
 **/
@@ -266,9 +256,7 @@ function __MantenimientoAgregar(){
         self.botonAgregar     = true;
         self.update();
         //Inicializar el Formulario
-        $(".errorServerSideJgrid").remove();
-        $("#formulario").validate(reglasDeValidacion());
-        $("#descripcion").val(null);
+        Limpiar()
         __Eventos()
     })
 }
@@ -286,10 +274,9 @@ function __modificarRegistro_Listar(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
+        Limpiar()
         self.motivoEntrada  = data
         self.update()
-        $("#formulario").validate(reglasDeValidacion());
-        $(".errorServerSideJgrid").remove();
         __Eventos()
         __consultar()
 	});
@@ -314,6 +301,7 @@ function __consultar(){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                     //desahabilita  listado 
+                        Limpiar()
                         self.mostrarListado   = false;
                         self.mostrarFormulario  = true 
                         //desahabilita boton modificar
@@ -383,9 +371,7 @@ __agregar(){
 	                           showCancelButton: false,
 	                           confirmButtonText: 'Aceptar',
 	                         })
-	                        $("#formulario").validate(reglasDeValidacion());
-                            $(".errorServerSideJgrid").remove();
-                            $("#descripcion").val(null);
+                             Limpiar()
                               __Eventos()
                             
                         }

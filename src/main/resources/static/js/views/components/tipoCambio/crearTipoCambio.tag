@@ -58,7 +58,7 @@
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("tipoCambio.total")}  <span class="requeridoDato">*</span></label>
-                                <input type="number" step="any" class="form-control total" id="total" name="total" value="{tipoCambio.total}"  >
+                                <input type="number" step="any" class="form-control total" placeHolder ="{$.i18n.prop("tipoCambio.total")}" id="total" name="total" value="{tipoCambio.total}"  >
                             </div>
                         </div>
                     </form>    

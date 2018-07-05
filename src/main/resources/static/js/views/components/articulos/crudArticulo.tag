@@ -63,12 +63,6 @@
                         </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("articulo.empresa")}  <span class="requeridoDato">*</span></label>
-                                 <select  class="form-control selectEmpresa" onchange= {__cargarCombos}  name="empresa"   >
-                                    <option  each={empresas.aaData}  value="{id}" selected="{articulo.empresa.id ==id?true:false}" >{nombre}</option>
-                                </select>
-                            </div>
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("articulo.categoria")}  <span class="requeridoDato">*</span></label>
                                  <select  class="form-control selectCategoria"   name="categoria" >
                                     <option  each={categorias.aaData}  value="{id}" selected="{articulo.categoria.id ==id?true:false}" >{descripcion}</option>
@@ -109,40 +103,40 @@
 
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("articulo.costo")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control costo" id="costo" name="costo" value="{articulo.costo}"  onkeyup ={__ActualizarPreciosCosto}>
+                                <input type="number" step="any" class="form-control costo" id="costo" name="costo" value="{articulo.costo}"  onkeyup ={__ActualizarPreciosCosto}>
                             </div>
                         </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("articulo.impuesto")}  </label>
-                                <input type="text" class="form-control impuesto" id="impuesto" name="impuesto" value="{articulo.impuesto}"  onkeyup ={__ActualizarPreciosImpuestos}>
+                                <input type="number" step="any" class="form-control impuesto" id="impuesto" name="impuesto" value="{articulo.impuesto}"  onkeyup ={__ActualizarPreciosImpuestos}>
                             </div>
 
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("articulo.precioPublico")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control precioPublico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoGananciaPublico} value="{articulo.precioPublico}"  >
+                                <input type="number" step="any" class="form-control precioPublico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoGananciaPublico} value="{articulo.precioPublico}"  >
                             </div>
                         </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("articulo.gananciaPrecioPublico")}  </label>
-                                <input type="text" class="form-control gananciaPrecioPublico" id="gananciaPrecioPublico" name="gananciaPrecioPublico" value="{articulo.gananciaPrecioPublico}"  readonly>
+                                <input type="number" step="any" class="form-control gananciaPrecioPublico" id="gananciaPrecioPublico" name="gananciaPrecioPublico" value="{articulo.gananciaPrecioPublico}"  readonly>
                             </div>
 
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("articulo.precioMayorista")}  </label>
-                                <input type="text" class="form-control precioMayorista" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista}" onkeyup={__CalculoGananciaMayorista} >
+                                <input type="number" step="any" class="form-control precioMayorista" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista}" onkeyup={__CalculoGananciaMayorista} >
                             </div>
                         </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("articulo.gananciaPrecioMayorista")}  </label>
-                                <input type="text" class="form-control gananciaPrecioMayorista" id="gananciaPrecioMayorista" name="gananciaPrecioMayorista" value="{articulo.gananciaPrecioMayorista}"  readonly>
+                                <input type="number" step="any" class="form-control gananciaPrecioMayorista" id="gananciaPrecioMayorista" name="gananciaPrecioMayorista" value="{articulo.gananciaPrecioMayorista}"  readonly>
                             </div>
 
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("articulo.precioEspecial")}  </label>
-                                <input type="text" class="form-control precioEspecial" id="precioEspecial" name="precioEspecial" value="{articulo.precioEspecial}"  onkeyup={__CalculoGananciaEspecial}>
+                                <input type="number" step="any" class="form-control precioEspecial" id="precioEspecial" name="precioEspecial" value="{articulo.precioEspecial}"  onkeyup={__CalculoGananciaEspecial}>
                             </div>
                         </div>
 
@@ -585,13 +579,66 @@ self.on('mount',function(){
     __ComboContables()
     __listadoTipoUnidadesActivas()   
     __Impuestos() 
+    LimpiarArticulo()
     
-    $('.selectTipoImpuesto').prop("selectedIndex", 0);
-    $('.selecTipoUnidad').prop("selectedIndex", 0);
-    $('.selectMarca').prop("selectedIndex", 0);
-    $('.selectCategoria').prop("selectedIndex", 0);
-    $('.selectEmpresa').prop("selectedIndex", 0);
+   
 })
+
+/**
+* Limpiar Articulo
+**/
+function LimpiarArticulo(){
+   self.articulo = {
+		id:null,
+        codigo:"",
+		descripcion:"",
+        serie:"",
+		unidadMedida:"",
+		costo:"",
+		impuesto:0,
+        minimo:0,
+        maximo:0,
+		precioPublico:null,
+		gananciaPrecioPublico:null,
+		precioMayorista:null,
+		gananciaPrecioMayorista:null,
+		precioEspecial:null,
+		gananciaPrecioEspecial:null,
+		estado:"",
+		marca:{
+            id:null
+        },
+		categoria:{
+            id:null
+        },
+		empresa:{
+            id:null
+        }
+    }    
+    self.update() 
+   $('.selectTipoImpuesto').prop("selectedIndex", 0);
+   $('.selecTipoUnidad').prop("selectedIndex", 0);
+   $('.selectMarca').prop("selectedIndex", 0);
+   $('.selectCategoria').prop("selectedIndex", 0);
+   $('.selectEmpresa').prop("selectedIndex", 0);   
+   $("#categoria").val($("#categoria option:first").val()); 
+   $("#marca").val($("#marca option:first").val()); 
+   $("#unidadMedida").val($("#unidadMedida option:first").val()); 
+   $("#contable").val($("#contable option:first").val()); 
+   $('.codigo').val(null)
+   $('.descripcion').val(null)
+   $('.serie').val(null)
+   $('.costo').val(null)
+   $('.impuesto').val(null)
+   $('.precioPublico').val(null)
+   $('.gananciaPrecioPublico').val(null)
+   $('.precioMayorista').val(null)
+   $('.gananciaPrecioMayorista').val(null)
+   $('.precioEspecial').val(null)
+   $('.gananciaPrecioEspecial').val(null)
+    $(".errorServerSideJgrid").remove();
+    $("#formulario").validate(reglasDeValidacion());
+}
 /**
 *  Envia  a llamar a los eventos ajax de cada combo para actualizarlo de acuerdo a la empresa
 **/
@@ -1615,6 +1662,7 @@ __regresarAlListado(){
                 self.mostrarFormularioSalida     = false
 
                 self.update()
+                LimpiarArticulo()
                 __listado();
 
             }
@@ -1636,19 +1684,7 @@ function __MantenimientoAgregar(){
         self.mostrarFormularioEntrada    = false
         self.mostrarFormularioSalida     = false
         self.update();
-        $(".errorServerSideJgrid").remove();
-        $('#codigo').val(null)
-        $('#descripcion').val(null)
-        $('#serie').val(null)
-        $('#costo').val(null)
-        $('#impuesto').val(null)
-        $('#precioPublico').val(null)
-        $('#gananciaPrecioPublico').val(null)
-        $('#precioMayorista').val(null)
-        $('#gananciaPrecioMayorista').val(null)
-        $('#precioEspecial').val(null)
-        $('#gananciaPrecioEspecial').val(null)
-        $("#tipoImpuesto").val(null)
+        LimpiarArticulo()
        __Eventos()
         $("#formulario").validate(reglasDeValidacion());
     })
@@ -1666,6 +1702,7 @@ function __modificarRegistro_Listar(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
+        LimpiarArticulo()
         self.articulo  = data
         self.update()
     

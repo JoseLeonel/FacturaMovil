@@ -30,6 +30,7 @@ import com.factura.FacturaElectronica.Utils.RespuestaServiceDataTable;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Marca;
+import com.factura.FacturaElectronica.modelo.Usuario;
 import com.factura.FacturaElectronica.web.command.MarcaCommand;
 import com.factura.FacturaElectronica.web.componentes.EmpresaPropertyEditor;
 import com.factura.FacturaElectronica.web.componentes.MarcaPropertyEditor;
@@ -158,6 +159,8 @@ public class MarcasController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			marca.setEmpresa(usuario.getEmpresa());
 			marca.setCreated_at(new Date());
 			marca.setUpdated_at(new Date());
 			marca.setEstado(Constantes.ESTADO_ACTIVO);

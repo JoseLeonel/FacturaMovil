@@ -130,10 +130,8 @@ public class ArticuloDaoImpl implements ArticuloDao {
 			Double porcentaje = 100d;
 			Double uno = 1d;
 			Double impuesto = iva/porcentaje;
-			impuesto = impuesto+ uno;
-
+			impuesto = impuesto + uno;
 			precioSinImpuesto = precio/impuesto;
-
 			resultado = costo/precioSinImpuesto;
 			resultado = uno-resultado;
 		}

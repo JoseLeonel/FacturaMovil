@@ -153,6 +153,7 @@ public class MotivoEntradasController {
 			motivoEntrada.setUpdated_at(new Date());
 			motivoEntrada.setEstado(Constantes.ESTADO_ACTIVO);
 			motivoEntrada.setUsuario(usuarioSesion);
+			motivoEntrada.setEmpresa(usuarioSesion.getEmpresa());
 			motivoEntradaBo.agregar(motivoEntrada);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("motivoEntrada.agregar.correctamente", motivoEntrada);
 

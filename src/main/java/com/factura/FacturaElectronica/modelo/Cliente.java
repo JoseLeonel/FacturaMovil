@@ -1,8 +1,6 @@
 package com.factura.FacturaElectronica.modelo;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -64,13 +62,13 @@ public class Cliente implements Serializable {
 	private String						barrio;
 
 	@Column(name = "celular")
-	private String						celular;
+	private Integer						celular;
 
 	@Column(name = "codigo_pais")
-	private BigInteger				codigoPais;
+	private Integer				codigoPais;
 
 	@Column(name = "telefono")
-	private BigInteger				telefono;
+	private Integer				telefono;
 
 	@Column(name = "otraSena")
 	private String						otraSena;
@@ -79,7 +77,7 @@ public class Cliente implements Serializable {
 	private String						correoElectronico;
 
 	@Column(name = "descuento")
-	private BigDecimal				descuento;
+	private Integer				descuento;
 
 	@Column(name = "estado")
 	private String						estado;
@@ -102,7 +100,8 @@ public class Cliente implements Serializable {
 	@JoinColumn(name = "usuario_id")
 	private Usuario						usuario;
 
-	public Cliente(Integer id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, String identificacionExtranjero, String provincia, String canton, String distrito, String barrio, String celular, BigInteger codigoPais, BigInteger telefono, String otraSena, String correoElectronico, BigDecimal descuento, String estado, Date created_at, Date updated_at, Empresa empresa, Usuario usuario) {
+	
+	public Cliente(Integer id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, String identificacionExtranjero, String provincia, String canton, String distrito, String barrio, Integer celular, Integer codigoPais, Integer telefono, String otraSena, String correoElectronico, Integer descuento, String estado, Date created_at, Date updated_at, Empresa empresa, Usuario usuario) {
 		super();
 		this.id = id;
 		this.nombreCompleto = nombreCompleto;
@@ -175,13 +174,7 @@ public class Cliente implements Serializable {
 		this.provincia = provincia;
 	}
 
-	public String getCelular() {
-		return celular;
-	}
-
-	public void setCelular(String celular) {
-		this.celular = celular;
-	}
+	
 
 	public String getOtraSena() {
 		return otraSena;
@@ -199,13 +192,7 @@ public class Cliente implements Serializable {
 		this.correoElectronico = correoElectronico;
 	}
 
-	public BigDecimal getDescuento() {
-		return descuento;
-	}
-
-	public void setDescuento(BigDecimal descuento) {
-		this.descuento = descuento;
-	}
+	
 
 	public String getEstado() {
 		return estado;
@@ -287,20 +274,45 @@ public class Cliente implements Serializable {
 		this.barrio = barrio;
 	}
 
-	public BigInteger getCodigoPais() {
+	
+	public Integer getCodigoPais() {
 		return codigoPais;
 	}
 
-	public void setCodigoPais(BigInteger codigoPais) {
+	
+	public void setCodigoPais(Integer codigoPais) {
 		this.codigoPais = codigoPais;
 	}
 
-	public BigInteger getTelefono() {
+	
+	public Integer getTelefono() {
 		return telefono;
 	}
 
-	public void setTelefono(BigInteger telefono) {
+	
+	public void setTelefono(Integer telefono) {
 		this.telefono = telefono;
+	}
+
+	
+	public Integer getDescuento() {
+		return descuento;
+	}
+
+	
+	public void setDescuento(Integer descuento) {
+		this.descuento = descuento;
+	}
+
+
+	
+	public void setCelular(Integer celular) {
+		this.celular = celular;
+	}
+
+	
+	public Integer getCelular() {
+		return celular;
 	}
 
 }

@@ -57,23 +57,15 @@
                         </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("caja.empresa")}  <span class="requeridoDato">*</span></label>
-                                 <select  class="form-control" id="empresa" name="empresa" >
-                                    <option  each={empresas.aaData}  value="{id}"  >{nombre}</option>
-                                </select>
-                            </div>
-                        </div>    
-                        <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("caja.descripcion")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control descripcion" id="descripcion" name="descripcion" value="{caja.descripcion}"  >
+                                <input type="text" class="form-control descripcion" placeHolder ="{$.i18n.prop("caja.descripcion")}" id="descripcion" name="descripcion" value="{caja.descripcion}"  >
 
                             </div>
                         </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("caja.terminal")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control terminal" id="terminal" name="terminal" value="{caja.terminal}"  >
+                                <input type="text" class="form-control terminal" placeHolder ="{$.i18n.prop("caja.terminal")}" id="terminal" name="terminal" value="{caja.terminal}"  >
 
                             </div>
                         </div>
@@ -155,7 +147,7 @@
     self.botonModificar            = false
     self.botonAgregar              = false
     self.caja = {
-        id:0,
+        id:null,
         descripcion:"",
         estado:""
     }
@@ -165,8 +157,7 @@ self.on('mount',function(){
     ActivarEventoFiltro('.tableListar')
     __listado()
     includeActions('.dataTables_wrapper','.dataTables_length')
-    __listadoEmpresasActivas()
-    __MantenimientoAgregar()
+     __MantenimientoAgregar()
     __Eventos()
     __ComboEstados()
     
@@ -193,26 +184,23 @@ var reglasDeValidacion = function() {
 	});
 	return validationOptions;
 };
+
+
 /**
-*  Mostrar listado datatable Empresas Activas
+* Limpiar campos
 **/
-function __listadoEmpresasActivas(){
-    $.ajax({
-         url: "ListarEmpresasActivasAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            console.log(result)
-            if(result.aaData.length > 0){
-                self.empresas.aaData =  result.aaData
-                self.update();
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
+function Limpiar(){
+
+    $("#terminal").val(null)
+    $("#descripcion").val(null)
+    $(".errorServerSideJgrid").remove();
+    $("#formulario").validate(reglasDeValidacion());
+     self.caja = {
+        id:null,
+        descripcion:"",
+        estado:""
+    }
+    self.update()
 }
 /**
 *  Crear el combo de estados
@@ -265,6 +253,7 @@ __regresarAlListado(){
                 self.botonModificar     = false;
                 self.mostrarFormulario  = false 
                 self.update()
+                Limpiar()
                 __listado();
 
             }
@@ -284,9 +273,7 @@ function __MantenimientoAgregar(){
         // habilita el formulario
         self.botonAgregar     = true;
         self.update();
-        //Inicializar el Formulario
-        $(".errorServerSideJgrid").remove();
-        $("#formulario").validate(reglasDeValidacion());
+        Limpiar()
    
     })
 }
@@ -305,11 +292,12 @@ function __modificarRegistro_Listar(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
+        Limpiar()
         self.caja  = data
         self.update()
-        $("#formulario").validate(reglasDeValidacion());
-        $(".errorServerSideJgrid").remove();
+        
         $("#descripcion").val(self.caja.descripcion);
+        $("#descripcion").val(self.caja.terminal);
         __Eventos()
         __consultar()
 	});
@@ -340,11 +328,12 @@ function __consultar(){
                         self.botonModificar   = true;
                         // habilita el formulario
                         self.botonAgregar     = false;                        
+                        Limpiar()
                         self.caja  =  modeloTabla
                         self.update()
-                        $("#formulario").validate(reglasDeValidacion());
-                        $(".errorServerSideJgrid").remove();
+                        
                         $("#descripcion").val(self.caja.descripcion);
+                        $("#terminal").val(self.caja.terminal);
                         __Eventos()
                         __ComboEstados()
                     });
@@ -408,10 +397,7 @@ __agregar(){
 	                           showCancelButton: false,
 	                           confirmButtonText: $.i18n.prop("btn.aceptar"),
 	                         })
-	                        $("#formulario").validate(reglasDeValidacion());
-                            $(".errorServerSideJgrid").remove();
-                            $("#descripcion").val(null);
-                            $("#terminal").val(null);
+                            Limpiar() 
                               __Eventos()
                         }
                     },

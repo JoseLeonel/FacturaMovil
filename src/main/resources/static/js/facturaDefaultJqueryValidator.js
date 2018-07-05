@@ -44,9 +44,9 @@ $.validator.addMethod("lettersOnly",
 $.validator.addMethod("telefonoFormat",
         function(value, element) {
 	       
-		    return this.optional(element) || value.length == 9;
+		    return this.optional(element) || value.length == 8;
         },
-        "Formato v\u00E1lido. Ejemplo: 8888-8888"
+        "Formato v\u00E1lido. Ejemplo: 88888888"
 );
 
 $.validator.addMethod("numeroMayorCero",

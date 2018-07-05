@@ -57,15 +57,6 @@
                                 <label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>
                             </div>
                         </div>
-                        <div class="row">    
-                            <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label" >{$.i18n.prop("vendedor.empresa")}</label>
-                                <select  class="form-control empresa" id="empresa" name="empresa" >
-                                    <option  each={empresas.aaData}  value="{id}" selected="{dataTable.empresa.id ==id?true:false}" >{nombre}</option>
-                                </select>
-                            </div>
-                        </div>
-
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("vendedor.nombreCompleto")} <span class="requeridoDato">*</span></label>
@@ -73,7 +64,7 @@
                             </div>
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("vendedor.cedula")} <span class="requeridoDato">*</span></label>
-                                <input type="text" placeHolder ="{$.i18n.prop("vendedor.cedula")}" class="form-control nombre" id="cedula" name="cedula" value='{dataTable.cedula}'  >
+                                <input type="text" placeHolder ="{$.i18n.prop("vendedor.cedula")}" class="form-control cedula" id="cedula" name="cedula" value='{dataTable.cedula}'  >
                             </div>
                             
                         </div>
@@ -215,14 +206,15 @@
 
 
 self.on('mount',function(){
-    $("#formulario").validate(reglasDeValidacion());
+   
+
+    _inicializarCampos()
     __InicializarTabla('.tableListar')
     agregarInputsCombos()
     ActivarEventoFiltro('.tableListar')
       includeActions('.dataTables_wrapper','.dataTables_length')
     __listado()
     __MantenimientoAgregar()
-    __listadoEmpresasActivas()
     __ComboEstados()
   
 })
@@ -234,31 +226,31 @@ var reglasDeValidacion = function() {
 		rules : {
 			cedula : {
 				required : true,
-                maxlength:18,
+                maxlength:20,
                 minlength:9,
 			},
 
 			nombreCompleto : {
 				required : true,
-                maxlength:150,
+                maxlength:255,
                 minlength:1,
 			},
 			otraSenas : {
-                maxlength:160,
+                maxlength:255,
                 minlength:1,
 			},
 			correoElectronico : {
-                maxlength:200,
+                maxlength:255,
                 minlength:1,
                 email:true
 			},
             telefono : {
-                maxlength:9,
+                maxlength:8,
                 minlength:1,
                 telefonoFormat:true
 			},
             celular : {
-                maxlength:9,
+                maxlength:8,
                 minlength:1,
                 telefonoFormat:true
 			}                       
@@ -270,17 +262,53 @@ var reglasDeValidacion = function() {
 };
 
 /**
+*  Limpiar campos
+**/
+function _inicializarCampos(){
+    $(".nombreCompleto").val(null)
+    $(".cedula").val(null)
+    $('.telefono').val(null)
+    $('.celular').val(null)
+    $('.descuento').val(null)
+    $('.porcentajeComision').val(null)
+    $('.correoElectronico').val(null)
+    $('.otraSena').val(null)
+    $(".errorServerSideJgrid").remove();
+    $("#formulario").validate(reglasDeValidacion());
+    
+    self.dataTable  = {
+		id:null,
+		nombreCompleto:"",
+        cedula:"",
+        celular:"",
+        telefono:"",
+        correoElectronico:"",
+        otraSena:"",
+        descuento:0,
+        porcentajeComision:0,
+        estado:"",
+        created_at:null,
+		updated_at:null,
+		sucursal:{
+            id:0
+        }
+    }
+    self.update()
+
+}
+
+/**
 *  Activar Eventos
 **/
 
 function __Eventos(){
     $("#formulario").validate(reglasDeValidacion());
-    $("#nombreCompleto").attr("maxlength", 150);
-    $("#cedula").attr("maxlength", 18);
-    $("#correoElectronico").attr("maxlength", 200);
-    $("#direccion").attr("maxlength", 160);
-    $("#telefono").attr("maxlength", 9);
-    $("#celular").attr("maxlength", 9);
+    $("#nombreCompleto").attr("maxlength", 255);
+    $("#cedula").attr("maxlength", 20);
+    $("#correoElectronico").attr("maxlength", 255);
+    $("#direccion").attr("maxlength", 255);
+    $("#telefono").attr("maxlength", 8);
+    $("#celular").attr("maxlength", 8);
     
     $('.descuento').mask('000', {
 		'translation' : {
@@ -296,14 +324,14 @@ function __Eventos(){
 			}
 		}
 	});
-    $('#telefono').mask('0000-0000', {
+    $('#telefono').mask('00000000', {
             'translation' : {
                 0 : {
                     pattern : /[0-9]/
                 }
             }
 	})   
-    $('#celular').mask('0000-0000', {
+    $('#celular').mask('00000000', {
             'translation' : {
                 0 : {
                     pattern : /[0-9]/
@@ -335,7 +363,7 @@ __regresarAlListado(){
                 self.botonModificar     = false;
                 self.mostrarFormulario  = false 
                 self.update()
-                
+                _inicializarCampos()
                 __listado();
 
             }
@@ -412,18 +440,7 @@ __agregar(){
 	                           confirmButtonText: 'Aceptar',
 	                                	  
 	                         })
-                            $("#nombreCompleto").val(null);
-                            $("#cedula").val(null);
-                            $("#correoElectronico").val(null);
-                            $("#direccion").val(null);
-                            $("#telefono").val(null);
-                            $("#celular").val(null);
-                            $('.descuento').val(null);
-                            $("#porcentajeComision").val(null)
-                            $("#otraSena").val(null)
-                            $(".errorServerSideJgrid").remove();
-                            $("#formulario").validate(reglasDeValidacion());
-
+                             _inicializarCampos()
                             __Eventos()
 
                         }
@@ -447,27 +464,6 @@ __Modificar(){
     self.exito = false;
     self.update();
     __modificarRegistro("#formulario",$.i18n.prop("vendedor.mensaje.alert.modificar"),'ModificarVendedorAjax.do','ListarVendedoresAjax.do','#tableListar')
-}
-/**
-*  Mostrar listado datatable Empresas Activas
-**/
-function __listadoEmpresasActivas(){
-    $.ajax({
-         url: "ListarEmpresasActivasAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            if(result.aaData.length > 0){
-                self.empresas.aaData =  result.aaData
-                self.update();
-                
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
 }
 
 /**
@@ -541,27 +537,9 @@ function __MantenimientoAgregar(){
         self.botonModificar   = false;
         // habilita el formulario
         self.botonAgregar     = true;
-        self.dataTable                 = {
-            id:null,
-            nombreCompleto:"",
-            cedula:"",
-            celular:"",
-            telefono:"",
-            correoElectronico:"",
-            otraSena:"",
-            descuento:0,
-            porcentajeComision:0,
-            estado:"",
-            created_at:null,
-            updated_at:null,
-            sucursal:{
-                id:0
-            }
-        }        
         self.update();
-        //Inicializar el Formulario
-        $(".errorServerSideJgrid").remove();
-        $("#formulario").validate(reglasDeValidacion());
+
+        _inicializarCampos()
         __Eventos()
    
     })
@@ -580,35 +558,7 @@ function __modificarRegistro_Listar(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
         }
-       
-        $("#nombreCompleto").val(null);
-        $("#cedula").val(null);
-        $("#correoElectronico").val(null);
-        $("#direccion").val(null);
-        $("#telefono").val(null);
-        $("#celular").val(null);
-        $('.descuento').val(null);
-        $("#porcentajeComision").val(null)
-        $("#otraSena").val(null)
-        $(".errorServerSideJgrid").remove();
-        $("#formulario").validate(reglasDeValidacion());
- self.dataTable                 = {
-            id:null,
-            nombreCompleto:"",
-            cedula:"",
-            celular:"",
-            telefono:"",
-            correoElectronico:"",
-            otraSena:"",
-            descuento:0,
-            estado:"",
-            created_at:null,
-            updated_at:null,
-            sucursal:{
-                id:0
-            }
-        }        
-        
+        _inicializarCampos()
 	    self.dataTable = data
         self.update()
         __Eventos()        
@@ -647,17 +597,7 @@ function __consultar(){
                         self.botonModificar   = true;
                         // habilita el formulario
                         self.botonAgregar     = false;
-                        self.dataTable                 = {
-                            id:null,
-                            nombreCompleto:"",
-                            cedula:"",
-                            celular:"",
-                            telefono:"",
-                            correoElectronico:"",
-                            otraSena:"",
-                            descuento:0,
-                            estado:"",
-                        }        
+                        _inicializarCampos()
                          self.dataTable  =  modeloTabla
                         self.update()
                          $("#nombreCompleto").val(self.dataTable.nombreCompleto);

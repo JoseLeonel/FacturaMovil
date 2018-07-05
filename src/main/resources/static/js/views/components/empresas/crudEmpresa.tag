@@ -61,7 +61,7 @@
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("empresa.clave")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control clave" id="clave" name="clave" value="{empresa.clave}"  >
+                                <input type="text" class="form-control clave" placeHolder ="{$.i18n.prop("empresa.clave")}" id="clave" name="clave" value="{empresa.clave}"  >
                             </div>
                              <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("empresa.tipoCedula")}  <span class="requeridoDato">*</span></label>
@@ -73,35 +73,35 @@
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("empresa.cedula")} <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control cedula" id="cedula" name="cedula" value="{empresa.cedula}"  >
+                                <input type="text" class="form-control cedula" placeHolder ="{$.i18n.prop("empresa.cedula")}" id="cedula" name="cedula" value="{empresa.cedula}"  >
                             </div>
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("empresa.nombre")} <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control nombre" id="nombre" name="nombre" value="{empresa.nombre}"  >
+                                <input type="text" class="form-control nombre" placeHolder ="{$.i18n.prop("empresa.nombre")}" id="nombre" name="nombre" value="{empresa.nombre}"  >
                             </div>
                         </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("empresa.nombreComercial")}</span></label>
-                                <input type="text" class="form-control nombreComercial" id="nombreComercial" name="nombreComercial" value="{empresa.nombreComercial}"  >
+                                <input type="text" class="form-control nombreComercial" placeHolder ="{$.i18n.prop("empresa.nombreComercial")}"  id="nombreComercial" name="nombreComercial" value="{empresa.nombreComercial}"  >
                             </div>
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("empresa.representante")}</label>
-                                <input type="text" class="form-control representante" id="representante" name="representante" value="{empresa.representante}"  >
+                                <input type="text" class="form-control representante" placeHolder ="{$.i18n.prop("empresa.representante")}" id="representante" name="representante" value="{empresa.representante}"  >
                             </div>
                         </div>
                         <div class="row">    
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("empresa.codigoPais")}</label>
-                                <input type="text" class="form-control codigoPais" id="codigoPais" name="codigoPais" value="{empresa.codigoPais}"  >
+                                <input type="text" class="form-control codigoPais" placeHolder ="{$.i18n.prop("cliente.codigoPais.ejemplo")}" id="codigoPais" name="codigoPais" value="{empresa.codigoPais}"  >
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("empresa.telefono")} </label>
-                                <input type="text" class="form-control telefono" id="telefono" name="telefono" value="{empresa.telefono}"  >
+                                <input type="text" class="form-control telefono" placeHolder ="{$.i18n.prop("empresa.telefono")}" id="telefono" name="telefono" value="{empresa.telefono}"  >
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("empresa.casa.matriz")} </label>
-                                <input type="text" class="form-control cazaMatriz" id="cazaMatriz" name="cazaMatriz" value="{empresa.cazaMatriz}"  >
+                                <input type="text" class="form-control cazaMatriz" placeHolder ="{$.i18n.prop("empresa.casa.matriz")}" id="cazaMatriz" name="cazaMatriz" value="{empresa.cazaMatriz}"  >
                             </div>
                         </div>
                         <div class="row">    
@@ -113,30 +113,30 @@
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("empresa.distrito")} </label>
-                                <input type="text" class="form-control distrito" id="distrito" name="distrito" value="{empresa.distrito}"  >
+                                <input type="text" class="form-control distrito" placeHolder ="{$.i18n.prop("empresa.distrito")}" id="distrito" name="distrito" value="{empresa.distrito}"  >
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("empresa.barrio")} </label>
-                                <input type="text" class="form-control barrio" id="barrio" name="barrio" value="{empresa.barrio}"  >
+                                <input type="text" class="form-control barrio" placeHolder ="{$.i18n.prop("empresa.barrio")}" id="barrio" name="barrio" value="{empresa.barrio}"  >
                             </div>
                             
                         </div>
                         <div class="row">    
                             <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("empresa.otraSenas")}</label>
-                                <input type="text" class="form-control otraSenas" id="otraSenas" name="otraSenas" value="{empresa.otraSenas}"  >
+                                <input type="text" class="form-control otraSenas" placeHolder ="{$.i18n.prop("empresa.otraSenas")}" id="otraSenas" name="otraSenas" value="{empresa.otraSenas}"  >
                             </div>
                         </div>
                         <div class="row">    
                             <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("empresa.pagina.web")}</label>
-                                <input type="text" class="form-control web" id="web" name="web" value="{empresa.web}"  >
+                                <input type="text" class="form-control web" placeHolder ="{$.i18n.prop("empresa.pagina.web")}" id="web" name="web" value="{empresa.web}"  >
                             </div>
                         </div>
                         <div class="row">    
                             <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("empresa.numeroConsecutivo")}</label>
-                                <input type="number" class="form-control numeroConsecutivo" id="numeroConsecutivo" name="numeroConsecutivo" value="{empresa.numeroConsecutivo}"  >
+                                <input type="number" class="form-control numeroConsecutivo" placeHolder ="{$.i18n.prop("empresa.numeroConsecutivo")}" id="numeroConsecutivo" name="numeroConsecutivo" value="{empresa.numeroConsecutivo}"  >
                             </div>
                         </div>
                         <div class="row">

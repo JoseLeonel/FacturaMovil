@@ -73,8 +73,8 @@ public class VendedorBoImpl implements VendedorBo {
 		vendedor.setCedula(Constantes.CEDULA_VENDEDOR_FRECUENTE);
 		vendedor.setCorreoElectronico(Constantes.CORREO_VENDEDOR_FRECUENTE);
 		vendedor.setNombreCompleto(Constantes.NOMBRE_VENDEDOR_FRECUENTE);
-		vendedor.setCelular(Constantes.BLANK);
-		vendedor.setTelefono(Constantes.EMPTY);
+		vendedor.setCelular(Constantes.ZEROS);
+		vendedor.setTelefono(Constantes.ZEROS);
 		vendedor.setEmpresa(empresa);
 		vendedor.setDescuento(Constantes.ZEROS_DOUBLE);
 		vendedor.setEstado(Constantes.ESTADO_ACTIVO);

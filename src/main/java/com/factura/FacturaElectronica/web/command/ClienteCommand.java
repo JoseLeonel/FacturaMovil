@@ -1,7 +1,5 @@
 package com.factura.FacturaElectronica.web.command;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 
 import com.factura.FacturaElectronica.Utils.Constantes;
@@ -15,36 +13,37 @@ import com.factura.FacturaElectronica.modelo.Empresa;
  */
 public class ClienteCommand {
 
-	private Integer			id;
+	private Integer	id;
 
-	private String			nombreCompleto;
+	private String	nombreCompleto;
 
-	private String			cedula;
+	private String	cedula;
 
-	private String			provincia;
-	private String			canton;
-	private String			distrito;
-	private String			barrio;
-	private BigInteger	codigoPais;
+	private String	provincia;
+	private String	canton;
+	private String	distrito;
+	private String	barrio;
+	private Integer	codigoPais;
+	private String	nombreComercial;
 
-	private String			celular;
+	private Integer	celular;
 
-	private BigInteger	telefono;
+	private Integer	telefono;
 
-	private String			otraSena;
+	private String	otraSena;
 
-	private String			correoElectronico;
+	private String	correoElectronico;
 
-	private BigDecimal	descuento;
+	private Integer	descuento;
 
-	private String			estado;
+	private String	estado;
 
-	private Date				created_at;
+	private Date		created_at;
 
-	private Date				updated_at;
-	private String						identificacionExtranjero;
+	private Date		updated_at;
+	private String	identificacionExtranjero;
 
-	private Empresa			empresa;
+	private Empresa	empresa;
 
 	public ClienteCommand(Cliente cliente) {
 		super();
@@ -52,10 +51,10 @@ public class ClienteCommand {
 		this.nombreCompleto = cliente.getNombreCompleto();
 		this.cedula = cliente.getCedula();
 		this.provincia = cliente.getProvincia();
-    this.distrito = cliente.getDistrito();
-    this.barrio = cliente.getBarrio();
-    this.codigoPais = cliente.getCodigoPais();
-    
+		this.distrito = cliente.getDistrito();
+		this.barrio = cliente.getBarrio();
+		this.codigoPais = cliente.getCodigoPais();
+
 		this.celular = cliente.getCelular();
 		this.telefono = cliente.getTelefono();
 		this.otraSena = cliente.getOtraSena();
@@ -66,6 +65,7 @@ public class ClienteCommand {
 		this.updated_at = cliente.getUpdated_at();
 		this.empresa = cliente.getEmpresa();
 		this.identificacionExtranjero = cliente.getIdentificacionExtranjero();
+		this.nombreComercial = cliente.getNombreComercial();
 
 	}
 
@@ -105,20 +105,12 @@ public class ClienteCommand {
 		this.provincia = provincia;
 	}
 
-	public String getCelular() {
+	public Integer getCelular() {
 		return celular;
 	}
 
-	public void setCelular(String celular) {
+	public void setCelular(Integer celular) {
 		this.celular = celular;
-	}
-
-	public BigInteger getTelefono() {
-		return telefono;
-	}
-
-	public void setTelefono(BigInteger telefono) {
-		this.telefono = telefono;
 	}
 
 	public String getOtraSena() {
@@ -135,14 +127,6 @@ public class ClienteCommand {
 
 	public void setCorreoElectronico(String correoElectronico) {
 		this.correoElectronico = correoElectronico;
-	}
-
-	public BigDecimal getDescuento() {
-		return descuento;
-	}
-
-	public void setDescuento(BigDecimal descuento) {
-		this.descuento = descuento;
 	}
 
 	public String getEstado() {
@@ -205,55 +189,68 @@ public class ClienteCommand {
 		return this.provincia;
 	}
 
-	
 	public String getCanton() {
 		return canton;
 	}
 
-	
 	public void setCanton(String canton) {
 		this.canton = canton;
 	}
 
-	
 	public String getDistrito() {
 		return distrito;
 	}
 
-	
 	public void setDistrito(String distrito) {
 		this.distrito = distrito;
 	}
 
-	
 	public String getBarrio() {
 		return barrio;
 	}
 
-	
 	public void setBarrio(String barrio) {
 		this.barrio = barrio;
 	}
 
-	
-	public BigInteger getCodigoPais() {
-		return codigoPais;
-	}
-
-	
-	public void setCodigoPais(BigInteger codigoPais) {
-		this.codigoPais = codigoPais;
-	}
-
-	
 	public String getIdentificacionExtranjero() {
 		return identificacionExtranjero;
 	}
 
-	
 	public void setIdentificacionExtranjero(String identificacionExtranjero) {
 		this.identificacionExtranjero = identificacionExtranjero;
 	}
-	
-	
+
+	public Integer getCodigoPais() {
+		return codigoPais;
+	}
+
+	public void setCodigoPais(Integer codigoPais) {
+		this.codigoPais = codigoPais;
+	}
+
+	public Integer getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(Integer telefono) {
+		this.telefono = telefono;
+	}
+
+	public Integer getDescuento() {
+		return descuento;
+	}
+
+	public void setDescuento(Integer descuento) {
+		this.descuento = descuento;
+	}
+
+	public String getNombreComercial() {
+		return nombreComercial;
+	}
+
+	public void setNombreComercial(String nombreComercial) {
+		this.nombreComercial = nombreComercial;
+	}
+
 }

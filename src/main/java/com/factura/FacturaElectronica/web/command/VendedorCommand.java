@@ -13,9 +13,9 @@ public class VendedorCommand {
 
 	private String	cedula;
 
-	private String	celular;
+	private Integer	celular;
 
-	private String	telefono;
+	private Integer	telefono;
 
 	private String	correoElectronico;
 
@@ -79,19 +79,25 @@ public class VendedorCommand {
 		this.cedula = cedula;
 	}
 
-	public String getCelular() {
+	
+
+	
+	public Integer getCelular() {
 		return celular;
 	}
 
-	public void setCelular(String celular) {
+	
+	public void setCelular(Integer celular) {
 		this.celular = celular;
 	}
 
-	public String getTelefono() {
+	
+	public Integer getTelefono() {
 		return telefono;
 	}
 
-	public void setTelefono(String telefono) {
+	
+	public void setTelefono(Integer telefono) {
 		this.telefono = telefono;
 	}
 

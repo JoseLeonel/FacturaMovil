@@ -104,6 +104,9 @@ public class ClientesController {
 			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
+		JqGridFilter dataTableFilter = new JqGridFilter("cedula", "'" + Constantes.CEDULA_CLIENTE_FRECUENTE + "'", "<>");
+		delimitadores.addFiltro(dataTableFilter);
+		
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
@@ -128,6 +131,8 @@ public class ClientesController {
 			dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
+		dataTableFilter = new JqGridFilter("cedula", "'" + Constantes.CEDULA_CLIENTE_FRECUENTE + "'", "<>");
+		delimitadores.addFiltro(dataTableFilter);
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
@@ -158,15 +163,12 @@ public class ClientesController {
 				result.rejectValue("cedula", "error.cliente.existe.cedula");
 			}
 
-			clienteValidar = clienteBo.buscarPorNombreCompletoYEmpresa(cliente.getNombreCompleto(), cliente.getEmpresa());
-			if (clienteValidar != null) {
-				result.rejectValue("nombreCompleto", "error.cliente.existe.nombreCompleto");
-			}
+			
 
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-
+      cliente.setEmpresa(usuarioSesion.getEmpresa());
 			cliente.setCreated_at(new Date());
 			cliente.setUpdated_at(new Date());
 			cliente.setUsuario(usuarioSesion);
@@ -211,12 +213,7 @@ public class ClientesController {
 				}
 			}
 
-			if (!cliente.getNombreCompleto().equals(clienteBD.getNombreCompleto())) {
-				clienteValidar = clienteBo.buscarPorNombreCompletoYEmpresa(cliente.getNombreCompleto(), cliente.getEmpresa());
-				if (clienteValidar != null) {
-					result.rejectValue("nombreCompleto", "error.cliente.existe.nombreCompleto");
-				}
-			}
+			
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
@@ -227,8 +224,8 @@ public class ClientesController {
 			clienteBD.setDescuento(cliente.getDescuento());
 			clienteBD.setOtraSena(cliente.getOtraSena());
 			clienteBD.setProvincia(cliente.getProvincia());
+			clienteBD.setNombreComercial(cliente.getNombreComercial());
 			clienteBD.setUpdated_at(new Date());
-			clienteBD.setEmpresa(cliente.getEmpresa());
 			clienteBD.setEstado(cliente.getEstado());
 			clienteBD.setTelefono(cliente.getTelefono());
 			clienteBD.setCelular(cliente.getCelular());
