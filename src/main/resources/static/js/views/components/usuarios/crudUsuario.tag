@@ -203,7 +203,7 @@
       //crea los filtros inputs o select
 	    agregarInputsCombos();
         //Activar filtros
-        ActivarEventoFiltro()
+        ActivarEventoFiltro('.tableListar')
         __listado()
 
          //crear vector estados
@@ -359,7 +359,7 @@ function __listado(){
                  loadListar(".tableListar",idioma_espanol,self.informacion_tabla,result.aaData)
                  includeActionsUsuario('.dataTables_wrapper','.dataTables_length')
                 agregarInputsCombos();
-                ActivarEventoFiltro()
+                ActivarEventoFiltro('.tableListar')
                 __mostrarFormularioAgregar() 
                 __modificarRegistro_Listar()
 
@@ -513,42 +513,7 @@ function agregarInputsCombos(){
 
 }
 
-/**
-*  Activar Filtros del listado 
-**/
-function ActivarEventoFiltro(){
 
-	// Busquedas por Inpus
-	var table = $('.tableListar').DataTable();
-    table.columns().every( function () {
-        var dataTableColumns = this
-        $( 'input', this.footer() ).keypress(function (event) {
-            if ( dataTableColumns.search() !== this.value ) {
-             	dataTableColumns.search( this.value ).draw();
-            }
-        } );
-        var searchTextBoxes = $(this.header()).find('input');
-        searchTextBoxes.on('keyup change',function(){
-     	   dataTableColumns.search(this.value).draw();
-        });
-        $( 'select', this.footer() ).click(function (event) {
-            if ( dataTableColumns.search() !== this.value ) {
-            	
-           	   dataTableColumns .search("^"+this.value, true, false ).draw();
-            }
-         } );
-        
-        var searchTextBoxesSelect = $(this.header()).find('select');
-        searchTextBoxes.on('keyup change',function(){
-     	   dataTableColumns.search(this.value).draw();
-        });
-
-        searchTextBoxesSelect.on('click',function(e){
-     	   e.stopPrapagation();
-        });
-        
-    } );
-}
 /**
 *  Mostrar el formulario de Agregar
 **/

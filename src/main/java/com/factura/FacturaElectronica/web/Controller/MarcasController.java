@@ -148,7 +148,8 @@ public class MarcasController {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			Marca marcaBd = marcaBo.buscarPorDescripcionYEmpresa(marca.getDescripcion(), marca.getEmpresa());
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Marca marcaBd = marcaBo.buscarPorDescripcionYEmpresa(marca.getDescripcion(), usuario.getEmpresa());
 			if (marcaBd != null) {
 				result.rejectValue("descripcion", "error.marca.descripcion.existe");
 			}
@@ -156,7 +157,7 @@ public class MarcasController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			
 			marca.setEmpresa(usuario.getEmpresa());
 			marca.setCreated_at(new Date());
 			marca.setUpdated_at(new Date());
@@ -187,13 +188,13 @@ public class MarcasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("marca.no.modificado", result.getAllErrors());
 			}
 			Marca marcaBD = marcaBo.buscar(marca.getId());
-
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			if (marcaBD == null) {
 				return RESPONSES.ERROR.MARCA.NO_EXISTE;
 			} else {
 				Marca marcaValidar = null;
 				if (!marca.getDescripcion().equals(marcaBD.getDescripcion())) {
-					marcaValidar = marcaBo.buscarPorDescripcionYEmpresa(marca.getDescripcion(), marca.getEmpresa());
+					marcaValidar = marcaBo.buscarPorDescripcionYEmpresa(marca.getDescripcion(), usuario.getEmpresa());
 					if (marcaValidar != null) {
 						result.rejectValue("descripcion", "error.marca.descripcion.existe");
 					}

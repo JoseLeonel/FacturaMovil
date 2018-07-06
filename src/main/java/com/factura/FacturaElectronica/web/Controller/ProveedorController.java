@@ -27,6 +27,7 @@ import com.factura.FacturaElectronica.Utils.RespuestaServiceDataTable;
 import com.factura.FacturaElectronica.Utils.RespuestaServiceValidator;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Proveedor;
+import com.factura.FacturaElectronica.modelo.Usuario;
 import com.factura.FacturaElectronica.web.command.ProveedorCommand;
 import com.factura.FacturaElectronica.web.componentes.EmpresaPropertyEditor;
 import com.factura.FacturaElectronica.web.componentes.ProveedorPropertyEditor;
@@ -122,8 +123,8 @@ public class ProveedorController {
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute Proveedor proveedor, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			Proveedor proveedorValidar = null;
-
-			proveedorValidar = proveedorBo.buscarPorCedulaYEmpresa(proveedor.getCedula(), proveedor.getEmpresa());
+			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+			proveedorValidar = proveedorBo.buscarPorCedulaYEmpresa(proveedor.getCedula(), usuarioSesion.getEmpresa());
 			if (proveedorValidar != null) {
 				result.rejectValue("cedula", "error.proveedor.cedula.existe");
 			}
@@ -136,7 +137,7 @@ public class ProveedorController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-
+      proveedor.setEmpresa(usuarioSesion.getEmpresa());
 			proveedor.setCreated_at(new Date());
 			proveedor.setUpdated_at(new Date());
 			proveedorBo.agregar(proveedor);
@@ -166,20 +167,20 @@ public class ProveedorController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("proveedor.no.modificado", result.getAllErrors());
 			}
 			Proveedor proveedorBD = proveedorBo.buscar(proveedor.getId());
-
+			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			if (proveedorBD == null) {
 				return RESPONSES.ERROR.PROVEEDOR.NO_EXISTE;
 			}
 			Proveedor proveedorValidar = null;
 			if (!proveedor.getCedula().equals(proveedorBD.getCedula())) {
-				proveedorValidar = proveedorBo.buscarPorCedulaYEmpresa(proveedor.getCedula(), proveedor.getEmpresa());
+				proveedorValidar = proveedorBo.buscarPorCedulaYEmpresa(proveedor.getCedula(), usuarioSesion.getEmpresa());
 				if (proveedorValidar != null) {
 					result.rejectValue("cedula", "error.proveedor.cedula.existe");
 				}
 			}
 
 			if (!proveedor.getNombreCompleto().equals(proveedorBD.getNombreCompleto())) {
-				proveedorValidar = proveedorBo.buscarPorNombreCompletoYEmpresa(proveedor.getNombreCompleto(), proveedor.getEmpresa());
+				proveedorValidar = proveedorBo.buscarPorNombreCompletoYEmpresa(proveedor.getNombreCompleto(), usuarioSesion.getEmpresa());
 				if (proveedorValidar != null) {
 					result.rejectValue("nombreCompleto", "error.proveedor.nombreCompleto.existe");
 				}
@@ -191,7 +192,7 @@ public class ProveedorController {
 			proveedorBD.setCedula(proveedor.getCedula());
 			proveedorBD.setNombreCompleto(proveedor.getNombreCompleto());
 			proveedorBD.setEmail(proveedor.getEmail());
-			proveedorBD.setEmpresa(proveedor.getEmpresa());
+			proveedorBD.setEmpresa(usuarioSesion.getEmpresa());
 			proveedorBD.setMovil(proveedor.getMovil());
 			proveedorBD.setDireccion(proveedor.getDireccion());
 			proveedorBD.setRazonSocial(proveedor.getRazonSocial());

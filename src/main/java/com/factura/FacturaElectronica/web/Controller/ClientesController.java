@@ -158,7 +158,7 @@ public class ClientesController {
 
 			Cliente clienteValidar = null;
 
-			clienteValidar = clienteBo.buscarPorCedulaYEmpresa(cliente.getCedula(), cliente.getEmpresa());
+			clienteValidar = clienteBo.buscarPorCedulaYEmpresa(cliente.getCedula().trim(), usuarioSesion.getEmpresa());
 			if (clienteValidar != null) {
 				result.rejectValue("cedula", "error.cliente.existe.cedula");
 			}
@@ -207,7 +207,7 @@ public class ClientesController {
 			}
 			Cliente clienteValidar = null;
 			if (!cliente.getCedula().equals(clienteBD.getCedula())) {
-				clienteValidar = clienteBo.buscarPorCedulaYEmpresa(cliente.getCedula(), cliente.getEmpresa());
+				clienteValidar = clienteBo.buscarPorCedulaYEmpresa(cliente.getCedula(), usuarioSesion.getEmpresa());
 				if (clienteValidar != null) {
 					result.rejectValue("cedula", "error.cliente.existe.cedula");
 				}

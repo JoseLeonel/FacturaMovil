@@ -327,15 +327,15 @@ var reglasDeValidacion = function() {
 
 			nombreCompleto : {
 				required : true,
-                maxlength:255,
+                maxlength:250,
                 minlength:1,
 			},
 			otraSenas : {
-                maxlength:255,
+                maxlength:250,
                 minlength:1,
 			},
 			correoElectronico : {
-                maxlength:255,
+                maxlength:250,
                 minlength:1,
                 email:true
 			},
@@ -394,12 +394,12 @@ function __ComboEstados(){
 **/
 function __Eventos(){
     $("#formulario").validate(reglasDeValidacion());
-    $("#nombreCompleto").attr("maxlength", 255);
-    $("#nombreComercial").attr("maxlength", 255);
+    $("#nombreCompleto").attr("maxlength", 250);
+    $("#nombreComercial").attr("maxlength", 250);
     $("#cedula").attr("maxlength", 20);
     $("#identificacionExtranjero").attr("maxlength", 20);
-    $("#correoElectronico").attr("maxlength", 255);
-    $("#otraSenas").attr("maxlength", 255);
+    $("#correoElectronico").attr("maxlength", 250);
+    $("#otraSenas").attr("maxlength", 250);
     $("#telefono").attr("maxlength", 8);
     $("#celular").attr("maxlength", 8);
     $("#barrio").attr("maxlength", 3);
@@ -728,50 +728,7 @@ function agregarInputsCombos(){
 
 }
 
-// Cuando se presiona el keypress para los inputs en los filtros y select
-// estandar
-function ActivarEventoFiltro(){
-	// Busquedas por Inpus
-	var table = $('#tableListar').DataTable();
-    table.columns().every( function () {
-        var dataTableColumns = this
- 
-        $( 'input', this.footer() ).keypress(function (event) {
-     	         if ( dataTableColumns.search() !== this.value ) {
-             	   dataTableColumns.search( this.value ).draw();
-                }
-     	   
-        } );
-    
-        var searchTextBoxes = $(this.header()).find('input');
-        searchTextBoxes.on('keyup change',function(){
-     	   dataTableColumns.search(this.value).draw();
-        });
-          
-        $( 'select', this.footer() ).click(function (event) {
-            if ( dataTableColumns.search() !== this.value ) {
-            	
-           	   dataTableColumns .search("^"+this.value, true, false ).draw();
-            }
-         } );
-     
-        
-        
-        var searchTextBoxesSelect = $(this.header()).find('select');
-        searchTextBoxes.on('keyup change',function(){
-     	   dataTableColumns.search(this.value).draw();
-        });
 
-        searchTextBoxesSelect.on('click',function(e){
-     	   e.stopPrapagation();
-        });
-        searchTextBoxes.on('click',function(e){
-      	   e.stopPrapagation();
-         });
-
-        
-    } );
-}
 
 function __cargaProvincias(){
     self.provincias = []

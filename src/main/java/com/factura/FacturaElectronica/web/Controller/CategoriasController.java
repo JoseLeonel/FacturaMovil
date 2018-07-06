@@ -154,7 +154,8 @@ public class CategoriasController {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			Categoria categoriaBd = categoriaBo.buscarPorDescripcionYEmpresa(categoria.getDescripcion(), categoria.getEmpresa());
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Categoria categoriaBd = categoriaBo.buscarPorDescripcionYEmpresa(categoria.getDescripcion(), usuario.getEmpresa());
 			if (categoriaBd != null) {
 				result.rejectValue("descripcion", "error.categoria.descripcion.existe");
 			}
@@ -162,7 +163,6 @@ public class CategoriasController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			categoria.setEmpresa(usuario.getEmpresa());
 			categoria.setCreated_at(new Date());
 			categoria.setUpdated_at(new Date());
@@ -186,6 +186,7 @@ public class CategoriasController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("categoria.no.modificado", result.getAllErrors());
 			}
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			Categoria categoriaBD = categoriaBo.buscar(categoria.getId());
 
 			if (categoriaBD == null) {
@@ -193,7 +194,7 @@ public class CategoriasController {
 			} else {
 				Categoria categoriaValidar = null;
 				if (!categoria.getDescripcion().equals(categoriaBD.getDescripcion())) {
-					categoriaValidar = categoriaBo.buscarPorDescripcionYEmpresa(categoria.getDescripcion(), categoria.getEmpresa());
+					categoriaValidar = categoriaBo.buscarPorDescripcionYEmpresa(categoria.getDescripcion(), usuario.getEmpresa());
 					if (categoriaValidar != null) {
 						result.rejectValue("descripcion", "error.categoria.descripcion.existe");
 					}

@@ -149,7 +149,7 @@ public class MotivoSalidasController {
 		try {
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
-			MotivoSalida motivoSalidaBd = motivoSalidaBo.buscarPorDescripcionYEmpresa(motivoSalida.getDescripcion(), motivoSalida.getEmpresa());
+			MotivoSalida motivoSalidaBd = motivoSalidaBo.buscarPorDescripcionYEmpresa(motivoSalida.getDescripcion(), usuarioSesion.getEmpresa());
 			if (motivoSalidaBd != null) {
 				result.rejectValue("descripcion", "error.motivoSalida.descripcion.existe");
 			}
@@ -196,7 +196,7 @@ public class MotivoSalidasController {
 			} else {
 				MotivoSalida motivoSalidaValidar = null;
 				if (!motivoSalida.getDescripcion().equals(motivoSalidaBD.getDescripcion())) {
-					motivoSalidaValidar = motivoSalidaBo.buscarPorDescripcionYEmpresa(motivoSalida.getDescripcion(), motivoSalida.getEmpresa());
+					motivoSalidaValidar = motivoSalidaBo.buscarPorDescripcionYEmpresa(motivoSalida.getDescripcion(), usuarioSesion.getEmpresa());
 					if (motivoSalidaValidar != null) {
 						result.rejectValue("descripcion", "error.motivoSalida.descripcion.existe");
 					}

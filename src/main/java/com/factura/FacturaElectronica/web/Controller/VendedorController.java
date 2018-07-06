@@ -154,7 +154,7 @@ public class VendedorController {
 			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
 			Vendedor vendedorValidar = null;
 
-			vendedorValidar = vendedorBo.buscarPorCedulaYEmpresa(vendedor.getCedula(), vendedor.getEmpresa());
+			vendedorValidar = vendedorBo.buscarPorCedulaYEmpresa(vendedor.getCedula(), usuarioSesion.getEmpresa());
 			if (vendedorValidar != null) {
 				result.rejectValue("cedula", "error.vendedor.existe.cedula");
 			}
@@ -204,7 +204,7 @@ public class VendedorController {
 			}
 			Vendedor vendedorValidar = null;
 			if (!vendedor.getCedula().equals(vendedorBD.getCedula())) {
-				vendedorValidar = vendedorBo.buscarPorCedulaYEmpresa(vendedor.getCedula(), vendedor.getEmpresa());
+				vendedorValidar = vendedorBo.buscarPorCedulaYEmpresa(vendedor.getCedula(), usuarioSesion.getEmpresa());
 				if (vendedorValidar != null) {
 					result.rejectValue("cedula", "error.vendedor.existe.cedula");
 				}
