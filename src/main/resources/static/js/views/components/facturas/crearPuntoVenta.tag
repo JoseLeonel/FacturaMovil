@@ -161,7 +161,9 @@
                                 <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.total")} <span id="lblTotal">₡ {factura.totalVentaNeta.toLocaleString('de-DE')}</span></p>
                                 <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("tipoCambio.cambioDolar")} <span id="lblTotal">{tipoCambio.total.toLocaleString('de-DE')}</span></p>
                                 <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.totalDolar")} <span id="lblTotal">{factura.cambioMoneda.toLocaleString('de-DE')}</span></p>
+                                <br>
                                 <div show = {mostrarCamposIngresoContado }>
+
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.efectivo")}</p> 
                                     <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales " id="totalEfectivo" name="totalEfectivo"  value="" >
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.tarjeta")}</p> 

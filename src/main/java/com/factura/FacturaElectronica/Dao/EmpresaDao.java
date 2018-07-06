@@ -19,7 +19,9 @@ public interface EmpresaDao {
 	Empresa buscarPorNombreComercial(String nombreComercial);
 
 	Empresa buscarPorCedula(String cedula);
-	
-	String generarConsecutivoFactura(Empresa empresa,Usuario usuario,Factura factura) throws Exception;
+
+	String generarConsecutivoFactura(Empresa empresa, Usuario usuario, Factura factura) throws Exception;
+
+	String generaClaveFacturaTributacion(Empresa empresa, String consecutivoFactura, Integer comprobanteElectronico) throws Exception;
 
 }

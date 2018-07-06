@@ -175,8 +175,8 @@ var reglasDeValidacion = function() {
 			},                                   
             terminal : {
 				required : true,
-                maxlength:3,
-                minlength:3,
+                maxlength:5,
+                minlength:5,
 			}                             
 		},
 		ignore : []
@@ -223,7 +223,7 @@ function __ComboEstados(){
 function __Eventos(){
     $("#formulario").validate(reglasDeValidacion());
     $("#descripcion").attr("maxlength", 80);
-    $('#terminal').mask('000', {
+    $('#terminal').mask('00000', {
 		'translation' : {
 			0 : {
 				pattern : /[0-9]/

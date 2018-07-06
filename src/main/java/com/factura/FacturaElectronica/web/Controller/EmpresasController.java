@@ -196,7 +196,7 @@ public class EmpresasController {
 				empresaBD.setProvincia(empresa.getProvincia());
 				empresaBD.setDistrito(empresa.getDistrito());
 				empresaBD.setCazaMatriz(empresa.getCazaMatriz());
-         
+        empresaBD.setNumeroConsecutivo(empresa.getNumeroConsecutivo());
 				empresaBD.setRepresentante(empresa.getRepresentante());
 				empresaBD.setTelefono(empresa.getTelefono());
 				empresaBD.setOtraSenas(empresa.getOtraSenas());

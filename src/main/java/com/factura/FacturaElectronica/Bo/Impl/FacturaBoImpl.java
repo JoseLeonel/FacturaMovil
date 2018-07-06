@@ -24,6 +24,7 @@ import com.factura.FacturaElectronica.Dao.KardexDao;
 import com.factura.FacturaElectronica.Dao.UsuarioCajaDao;
 import com.factura.FacturaElectronica.Dao.UsuarioCajaFacturaDao;
 import com.factura.FacturaElectronica.Utils.Constantes;
+import com.factura.FacturaElectronica.Utils.FacturaElectronicaUtils;
 import com.factura.FacturaElectronica.Utils.Utils;
 import com.factura.FacturaElectronica.modelo.Articulo;
 import com.factura.FacturaElectronica.modelo.Detalle;
@@ -201,6 +202,7 @@ public class FacturaBoImpl implements FacturaBo {
 			// Generar el consecutivo de venta
 			if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 				factura.setNumeroConsecutivo(empresaDao.generarConsecutivoFactura(facturaCommand.getEmpresa(), usuario, factura));
+				factura.setClave(empresaDao.generaClaveFacturaTributacion(factura.getEmpresa(), factura.getNumeroConsecutivo(),FacturaElectronicaUtils.COMPROBANTE_ELECTRONICO_NORMAL));
 			}
 
 			if (factura.getId() == null) {

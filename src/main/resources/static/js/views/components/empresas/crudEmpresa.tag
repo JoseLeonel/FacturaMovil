@@ -136,7 +136,7 @@
                         <div class="row">    
                             <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("empresa.numeroConsecutivo")}</label>
-                                <input type="number" class="form-control numeroConsecutivo" placeHolder ="{$.i18n.prop("empresa.numeroConsecutivo")}" id="numeroConsecutivo" name="numeroConsecutivo" value="{empresa.numeroConsecutivo}"  >
+                                <input type="text" class="form-control numeroConsecutivo" placeHolder ="{$.i18n.prop("empresa.numeroConsecutivo")}" id="numeroConsecutivo" name="numeroConsecutivo" value="{empresa.numeroConsecutivo}"  >
                             </div>
                         </div>
                         <div class="row">
@@ -230,7 +230,7 @@
         id:null,
         nombre:"",
         nombreComercial:"",
-        numeroConsecutivo:000000000000000000001
+        numeroConsecutivo:0000000000
     }
 
 
@@ -268,11 +268,19 @@ var reglasDeValidacion = function() {
 			},
 			clave : {
 				required : true,
-                maxlength:50,
+                maxlength:8,
                 minlength:1,
+                numeroMayorCero:true,
 			},
 			tipoCedula : {
 				required : true,
+			},
+            
+			cedula : {
+				required : true,
+                maxlength:12,
+                minlength:1,
+
 			},
 			otraSenas : {
                 maxlength:160,
@@ -280,7 +288,9 @@ var reglasDeValidacion = function() {
 			},
 			codigoPais : {
                 maxlength:3,
-                minlength:1,
+                minlength:3,
+                required : true,
+                numeroMayorCero:true,
 			},
             telefono : {
                 maxlength:9,
@@ -288,7 +298,7 @@ var reglasDeValidacion = function() {
                 telefonoFormat:true
 			},  
            correoElectronico : {
-                maxlength:160,
+                maxlength:255,
                 minlength:1,
                 email:true,
 			},   
@@ -302,8 +312,9 @@ var reglasDeValidacion = function() {
               
 			},
             numeroConsecutivo:{
-                minlength:20,
+                minlength:10,
                 required : true,
+                numeroMayorCero:true,
 
             },
             provincia:{
@@ -318,9 +329,19 @@ var reglasDeValidacion = function() {
             },
             distrito:{
                 minlength:2,
-                required : true,
+               
 
-            }                
+            },
+            cazaMatriz:{
+                minlength:3,
+                maxlength:3,
+                required : true,
+                numeroMayorCero:true,
+
+            },
+
+
+                            
 
                         
 		},
@@ -329,6 +350,37 @@ var reglasDeValidacion = function() {
 	});
 	return validationOptions;
 };
+
+
+function _limpiar(){
+   $('#clave').val(null)
+   $("#tipoCedula").val($("#tipoCedula option:first").val());
+   $('#cedula').val(null)
+   $("#nombre").val(null)
+   $("#nombreComercial").val(null)
+   $("#representante").val(null)
+   $("#codigoPais").val(null)
+   $("#telefono").val(null)
+   $("#cazaMatriz").val(null)
+   $("#provincia").val($("#provincia option:first").val());
+   $("#distrito").val(null)
+   $("#barrio").val(null)
+   $("#otraSenas").val(null)
+   $("#web").val(null)
+   $("#numeroConsecutivo").val()
+   $(".errorServerSideJgrid").remove();
+   $("#formulario").validate(reglasDeValidacion())
+    self.empresa  = {
+        id:null,
+        nombre:"",
+        nombreComercial:"",
+        numeroConsecutivo:0000000000
+    }
+    self.update()
+
+
+}
+
 
 /**
 *  Registrar provincias
@@ -396,14 +448,30 @@ function __Eventos(){
     $("#cedula").attr("maxlength", 12);
     
     $("#nombreComercial").attr("maxlength", 80);
-    $("#clave").attr("maxlength", 50);
+    $("#clave").attr("maxlength", 8);
     $("#otraSenas").attr("maxlength", 160);
     $("#codigoPais").attr("maxlength", 3);
+    $("#cazaMatriz").attr("maxlength", 3);
     
     $("#correoElectronico").attr("maxlength", 160);
     $("#representante").attr("maxlength", 80);
     $("#web").attr("maxlength", 80);
 
+    $('#cazaMatriz').mask('000', {
+	    'translation' : {
+            0 : {
+                pattern : /[0-9]/
+            }
+    	}
+    }); 
+   
+   $('#clave').mask('000000000', {
+	    'translation' : {
+            0 : {
+                pattern : /[0-9]/
+            }
+    	}
+    }); 
    
     $('#canton').mask('00', {
 	    'translation' : {
@@ -427,7 +495,7 @@ function __Eventos(){
             }
     	}
     }); 
-    $('#numeroConsecutivo').mask('00000000000000000000', {
+    $('#numeroConsecutivo').mask('0000000000', {
 	    'translation' : {
             0 : {
                 pattern : /[0-9]/
@@ -436,7 +504,7 @@ function __Eventos(){
     });         
 
     if($("#tipoCedula").val() == "01" ){
-        $('#cedula').mask('0-0000-0000', {
+        $('#cedula').mask('000000000000', {
             'translation' : {
                 0 : {
                     pattern : /[0-9]/
@@ -448,7 +516,7 @@ function __Eventos(){
     }
     
     
- $('#telefono').mask('0000-0000', {
+ $('#telefono').mask('00000000', {
             'translation' : {
                 0 : {
                     pattern : /[0-9]/
@@ -459,13 +527,13 @@ function __Eventos(){
     $("#tipoCedula").click(function() {
         // tipos de formato de cedula
         
-        $("#tipoCedula").val() == "01" ? $('#cedula').mask('0-0000-0000', {
+        $("#tipoCedula").val() == "01" ? $('#cedula').mask('000000000000', {
             'translation' : {
                 0 : {
                     pattern : /[0-9]/
                 }
             }
-        }) : $('#cedula').mask('000000000000000000', {
+        }) : $('#cedula').mask('000000000000', {
             'translation' : {
                 0 : {
                     pattern : /[A-Za-z0-9]/
@@ -536,6 +604,7 @@ __regresarAlListado(){
                 self.botonModificar     = false;
                 self.mostrarFormulario  = false 
                 self.update()
+                _limpiar()
                 __listado();
 
             }
@@ -546,11 +615,7 @@ __regresarAlListado(){
 function __MantenimientoAgregar(){
       //Inicializar el Formulario
     $('.dataTables_wrapper').on('click','.btn-agregar',function(e){
-        self.empresa  = {
-            id:null,
-            nombre:"",
-            nombreComercial:""
-        }
+       
         //desahabilita  listado 
         self.mostrarListado   = false;
         self.mostrarFormulario  = true 
@@ -559,9 +624,7 @@ function __MantenimientoAgregar(){
         // habilita el formulario
         self.botonAgregar     = true;
         self.update();
-        //Inicializar el Formulario
-        $(".errorServerSideJgrid").remove();
-        $("#formulario").validate(reglasDeValidacion());
+        _limpiar()
    
     })
 }
@@ -580,6 +643,7 @@ function __modificarRegistro_Listar(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
+        _limpiar()
         self.empresa  = data
         self.update()
         __consultar()
@@ -605,6 +669,7 @@ function __consultar(){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                     //desahabilita  listado 
+                        _limpiar()
                         self.mostrarListado   = false;
                         self.mostrarFormulario  = true 
                         //desahabilita boton modificar
@@ -612,7 +677,7 @@ function __consultar(){
                         // habilita el formulario
                         self.botonAgregar     = false;                        
                         self.empresa  =  modeloTabla
-                        self.empresa.numeroConsecutivo = zfill(self.empresa.numeroConsecutivo,20)
+                        self.empresa.numeroConsecutivo = zfill(self.empresa.numeroConsecutivo,10)
                         self.update()
                         __ComboEstados()
                     });

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.factura.FacturaElectronica.Dao.EmpresaDao;
 import com.factura.FacturaElectronica.Utils.Constantes;
+import com.factura.FacturaElectronica.Utils.FacturaElectronicaUtils;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Factura;
 import com.factura.FacturaElectronica.modelo.Usuario;
@@ -135,4 +136,24 @@ public class EmpresaDaoImpl implements EmpresaDao {
 		return resultado;
 	}
 
+	/**
+	 * Clave de la factura para tributacion
+	 * @see com.factura.FacturaElectronica.Dao.EmpresaDao#generaClaveFacturaTributacion(com.factura.FacturaElectronica.modelo.Empresa, java.lang.String, java.lang.Integer)
+	 */
+	@Override
+	public String generaClaveFacturaTributacion(Empresa empresa,String consecutivoFactura,Integer comprobanteElectronico) throws Exception{
+		
+		String resultado = Constantes.EMPTY;
+		try {
+			resultado = FacturaElectronicaUtils.claveFactura(empresa.getCedula(), consecutivoFactura, comprobanteElectronico, empresa.getClave());
+			
+		} catch (Exception e) {
+			log.info("** Error  generarClaveFacturaTributaria: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+			
+		}
+		
+		return resultado;
+	}
+	
 }

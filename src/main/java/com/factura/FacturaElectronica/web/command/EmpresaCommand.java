@@ -1,43 +1,42 @@
 package com.factura.FacturaElectronica.web.command;
 
-import java.math.BigInteger;
-
 import com.factura.FacturaElectronica.modelo.Empresa;
 
 public class EmpresaCommand {
 
-	private Integer			id;
+	private Integer	id;
 
-	private String			nombre;
+	private String	nombre;
 
-	private String			nombreComercial;
-	private Integer			numeroConsecutivo;
+	private String	nombreComercial;
+	private Integer	numeroConsecutivo;
 
-	private String			clave;
+	private Integer	clave;
 
-	private String			tipoCedula;
+	private String	tipoCedula;
 
-	private String			cedula;
+	private String	cedula;
 
-	private String			otraSenas;
+	private String	otraSenas;
 
-	private BigInteger	codigoPais;
+	private Integer	codigoPais;
 
-	private BigInteger	telefono;
+	private Integer	telefono;
 
-	private String			correoElectronico;
+	private String	correoElectronico;
 
-	private String			provincia;
+	private String	provincia;
 
-	private String			distrito;
+	private String	distrito;
 
-	private String			barrio;
+	private String	barrio;
 
-	private String			logo;
+	private String	logo;
 
-	private String			representante;
+	private String	representante;
 
-	private String			estado;
+	private String	estado;
+	private String	cazaMatriz;
 
 	public EmpresaCommand(Empresa empresa) {
 		super();
@@ -58,6 +57,7 @@ public class EmpresaCommand {
 		this.representante = empresa.getRepresentante();
 		this.estado = empresa.getEstado();
 		this.numeroConsecutivo = empresa.getNumeroConsecutivo();
+		this.cazaMatriz = empresa.getCazaMatriz();
 
 	}
 
@@ -89,11 +89,11 @@ public class EmpresaCommand {
 		this.nombreComercial = nombreComercial;
 	}
 
-	public String getClave() {
+	public Integer getClave() {
 		return clave;
 	}
 
-	public void setClave(String clave) {
+	public void setClave(Integer clave) {
 		this.clave = clave;
 	}
 
@@ -121,19 +121,19 @@ public class EmpresaCommand {
 		this.otraSenas = otraSenas;
 	}
 
-	public BigInteger getCodigoPais() {
+	public Integer getCodigoPais() {
 		return codigoPais;
 	}
 
-	public void setCodigoPais(BigInteger codigoPais) {
+	public void setCodigoPais(Integer codigoPais) {
 		this.codigoPais = codigoPais;
 	}
 
-	public BigInteger getTelefono() {
+	public Integer getTelefono() {
 		return telefono;
 	}
 
-	public void setTelefono(BigInteger telefono) {
+	public void setTelefono(Integer telefono) {
 		this.telefono = telefono;
 	}
 
@@ -199,6 +199,14 @@ public class EmpresaCommand {
 
 	public void setNumeroConsecutivo(Integer numeroConsecutivo) {
 		this.numeroConsecutivo = numeroConsecutivo;
+	}
+
+	public String getCazaMatriz() {
+		return cazaMatriz;
+	}
+
+	public void setCazaMatriz(String cazaMatriz) {
+		this.cazaMatriz = cazaMatriz;
 	}
 
 }

@@ -41,7 +41,7 @@ public class Empresa implements Serializable {
 	private String						nombreComercial;
 
 	@Column(name = "clave")
-	private String						clave;
+	private Integer						clave;
 
 	@Column(name = "tipo_cedula")
 	private String						tipoCedula;
@@ -53,10 +53,10 @@ public class Empresa implements Serializable {
 	private String						otraSenas;
 
 	@Column(name = "codigo_pais")
-	private BigInteger				codigoPais;
+	private Integer						codigoPais;
 
 	@Column(name = "telefono")
-	private BigInteger				telefono;
+	private Integer						telefono;
 
 	@Column(name = "correo_electronico")
 	private String						correoElectronico;
@@ -91,7 +91,7 @@ public class Empresa implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
-	public Empresa(Integer id, String nombre, String nombreComercial, String clave, String tipoCedula, String otraSenas, BigInteger codigoPais, BigInteger telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton) {
+	public Empresa(Integer id, String nombre, String nombreComercial, Integer clave, String tipoCedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton) {
 		super();
 		this.id = id;
 		this.numeroConsecutivo = numeroConsecutivo;
@@ -163,11 +163,11 @@ public class Empresa implements Serializable {
 		this.nombreComercial = nombreComercial;
 	}
 
-	public String getClave() {
+	public Integer getClave() {
 		return clave;
 	}
 
-	public void setClave(String clave) {
+	public void setClave(Integer clave) {
 		this.clave = clave;
 	}
 
@@ -187,19 +187,19 @@ public class Empresa implements Serializable {
 		this.otraSenas = otraSenas;
 	}
 
-	public BigInteger getCodigoPais() {
+	public Integer getCodigoPais() {
 		return codigoPais;
 	}
 
-	public void setCodigoPais(BigInteger codigoPais) {
+	public void setCodigoPais(Integer codigoPais) {
 		this.codigoPais = codigoPais;
 	}
 
-	public BigInteger getTelefono() {
+	public Integer getTelefono() {
 		return telefono;
 	}
 
-	public void setTelefono(BigInteger telefono) {
+	public void setTelefono(Integer telefono) {
 		this.telefono = telefono;
 	}
 

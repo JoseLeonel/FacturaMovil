@@ -66,8 +66,8 @@ public final class Utils {
 		emisorType.setNombreComercial(factura.getEmpresa().getNombreComercial());
     //Telefono 
 		TelefonoType telefonoType = new TelefonoType();
-		telefonoType.setNumTelefono(factura.getEmpresa().getTelefono());
-		telefonoType.setCodigoPais(factura.getEmpresa().getCodigoPais());
+//		telefonoType.setNumTelefono(factura.getEmpresa().getTelefono());
+//		telefonoType.setCodigoPais(factura.getEmpresa().getCodigoPais());
 
 		JAXBElement<TelefonoType> jaxbElement = new JAXBElement<TelefonoType>(new QName(TelefonoType.class.getSimpleName()), TelefonoType.class, telefonoType);
 		emisorType.setTelefono(jaxbElement);
@@ -84,6 +84,7 @@ public final class Utils {
 		calendar.add(Calendar.DAY_OF_YEAR, dias);
 		return calendar.getTime();
 	}
+	
 	
 	
 	/**

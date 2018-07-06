@@ -92,8 +92,8 @@ public final class GenerarFacturaXML {
 		emisorType.setNombreComercial(empresa.getNombreComercial());
 		// Telefono
 		TelefonoType telefonoType = new TelefonoType();
-		telefonoType.setNumTelefono(empresa.getTelefono());
-		telefonoType.setCodigoPais(empresa.getCodigoPais());
+//		telefonoType.setNumTelefono(empresa.getTelefono());
+//		telefonoType.setCodigoPais(empresa.getCodigoPais());
 
 		JAXBElement<TelefonoType> jaxbElement = new JAXBElement<TelefonoType>(new QName(TelefonoType.class.getSimpleName()), TelefonoType.class, telefonoType);
 		emisorType.setTelefono(jaxbElement);
