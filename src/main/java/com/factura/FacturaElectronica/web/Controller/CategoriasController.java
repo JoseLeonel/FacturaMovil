@@ -39,43 +39,40 @@ import com.google.common.base.Function;
 
 /**
  * Control de los departamentos de cada articulo CategoriasController.
- * 
  * @author jose.
  * @since 19 abr. 2018
  */
 @Controller
 public class CategoriasController {
 
-	private static final Function<Object, CategoriaCommand> TO_COMMAND = new Function<Object, CategoriaCommand>() {
+	private static final Function<Object, CategoriaCommand>	TO_COMMAND	= new Function<Object, CategoriaCommand>() {
 
-		@Override
-		public CategoriaCommand apply(Object f) {
-			return new CategoriaCommand((Categoria) f);
-		};
-	};
-
-	
-	@Autowired
-	private DataTableBo dataTableBo;
+																																				@Override
+																																				public CategoriaCommand apply(Object f) {
+																																					return new CategoriaCommand((Categoria) f);
+																																				};
+																																			};
 
 	@Autowired
-	private CategoriaBo categoriaBo;
+	private DataTableBo																			dataTableBo;
 
 	@Autowired
-	private EmpresaBo empresaBo;
-
-	
-	@Autowired
-	private UsuarioBo usuarioBo;
+	private CategoriaBo																			categoriaBo;
 
 	@Autowired
-	private CategoriaPropertyEditor categoriaPropertyEditor;
+	private EmpresaBo																				empresaBo;
 
 	@Autowired
-	private EmpresaPropertyEditor empresaPropertyEditor;
+	private UsuarioBo																				usuarioBo;
 
 	@Autowired
-	private StringPropertyEditor stringPropertyEditor;
+	private CategoriaPropertyEditor													categoriaPropertyEditor;
+
+	@Autowired
+	private EmpresaPropertyEditor														empresaPropertyEditor;
+
+	@Autowired
+	private StringPropertyEditor														stringPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -87,7 +84,6 @@ public class CategoriasController {
 
 	/**
 	 * Listar de las categorias
-	 * 
 	 * @param model
 	 * @return
 	 */
@@ -109,19 +105,17 @@ public class CategoriasController {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Categoria");
-		  if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
-			    String nombreUsuario=request.getUserPrincipal().getName();
-			    JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario); 
-				delimitadores.addFiltro(dataTableFilter);
-		    }
-		
+		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+			String nombreUsuario = request.getUserPrincipal().getName();
+			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			delimitadores.addFiltro(dataTableFilter);
+		}
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
 	/**
 	 * Categorias activas por empresa
-	 * 
 	 * @param request
 	 * @param response
 	 * @return
@@ -129,28 +123,21 @@ public class CategoriasController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarCategoriasActivasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarActivasAjax(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam Integer idEmpresa) {
+	public RespuestaServiceDataTable listarActivasAjax(HttpServletRequest request, HttpServletResponse response) {
 
-		Empresa empresa = idEmpresa != null ? empresaBo.buscar(idEmpresa) : null;
 		DataTableDelimitador delimitadores = null;
-		if (empresa != null) {
-			delimitadores = new DataTableDelimitador(request, "Categoria");
-			JqGridFilter dataTableFilter = new JqGridFilter("estado",
-					"'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
-			delimitadores.addFiltro(dataTableFilter);
-			dataTableFilter = new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "=");
-			delimitadores.addFiltro(dataTableFilter);
-
-		}
+		delimitadores = new DataTableDelimitador(request, "Categoria");
+		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+		String nombreUsuario = request.getUserPrincipal().getName();
+		dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+		delimitadores.addFiltro(dataTableFilter);
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
 	/**
-	 * Incluir una categoria a una empresa , las categorias es la division de los
-	 * articulos
-	 * 
+	 * Incluir una categoria a una empresa , las categorias es la division de los articulos
 	 * @param request
 	 * @param model
 	 * @param idEmpresa
@@ -163,20 +150,17 @@ public class CategoriasController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/AgregarCategoriaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model,
-			@ModelAttribute Categoria categoria, BindingResult result, SessionStatus status) {
+	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute Categoria categoria, BindingResult result, SessionStatus status) {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			Categoria categoriaBd = categoriaBo.buscarPorDescripcionYEmpresa(categoria.getDescripcion(),
-					categoria.getEmpresa());
+			Categoria categoriaBd = categoriaBo.buscarPorDescripcionYEmpresa(categoria.getDescripcion(), categoria.getEmpresa());
 			if (categoriaBd != null) {
 				result.rejectValue("descripcion", "error.categoria.descripcion.existe");
 			}
 
 			if (result.hasErrors()) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion",
-						result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			categoria.setEmpresa(usuario.getEmpresa());
@@ -197,12 +181,10 @@ public class CategoriasController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ModificarCategoriaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model,
-			@ModelAttribute Categoria categoria, BindingResult result, SessionStatus status) {
+	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Categoria categoria, BindingResult result, SessionStatus status) {
 		try {
 			if (result.hasErrors()) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("categoria.no.modificado",
-						result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("categoria.no.modificado", result.getAllErrors());
 			}
 			Categoria categoriaBD = categoriaBo.buscar(categoria.getId());
 
@@ -211,22 +193,19 @@ public class CategoriasController {
 			} else {
 				Categoria categoriaValidar = null;
 				if (!categoria.getDescripcion().equals(categoriaBD.getDescripcion())) {
-					categoriaValidar = categoriaBo.buscarPorDescripcionYEmpresa(categoria.getDescripcion(),
-							categoria.getEmpresa());
+					categoriaValidar = categoriaBo.buscarPorDescripcionYEmpresa(categoria.getDescripcion(), categoria.getEmpresa());
 					if (categoriaValidar != null) {
 						result.rejectValue("descripcion", "error.categoria.descripcion.existe");
 					}
 				}
 
 				if (result.hasErrors()) {
-					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion",
-							result.getAllErrors());
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 				}
 				categoriaBD.setDescripcion(categoria.getDescripcion());
 				categoriaBD.setUpdated_at(new Date());
 				categoriaBo.modificar(categoriaBD);
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("categoria.modificado.correctamente",
-						categoriaBD);
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("categoria.modificado.correctamente", categoriaBD);
 			}
 
 		} catch (Exception e) {
@@ -236,7 +215,6 @@ public class CategoriasController {
 
 	/**
 	 * Mostrar la categoria
-	 * 
 	 * @param request
 	 * @param model
 	 * @param categoria
@@ -248,8 +226,7 @@ public class CategoriasController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/MostrarCategoriaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model,
-			@ModelAttribute Categoria categoria, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Categoria categoria, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			CategoriaCommand categoriaCommand = new CategoriaCommand(categoriaBo.buscar(categoria.getId()));
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", categoriaCommand);
@@ -265,10 +242,8 @@ public class CategoriasController {
 
 			private static class CATEGORIA {
 
-				private static final RespuestaServiceValidator AGREGADO = RespuestaServiceValidator.BUNDLE_MSG_SOURCE
-						.OK("categoria.agregar.correctamente");
-				private static final RespuestaServiceValidator MODIFICADO = RespuestaServiceValidator.BUNDLE_MSG_SOURCE
-						.OK("categoria.modificado.correctamente");
+				private static final RespuestaServiceValidator	AGREGADO		= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("categoria.agregar.correctamente");
+				private static final RespuestaServiceValidator	MODIFICADO	= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("categoria.modificado.correctamente");
 			}
 		}
 
@@ -276,8 +251,7 @@ public class CategoriasController {
 
 			private static class CATEGORIA {
 
-				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE
-						.ERROR("error.categoria.noExiste");
+				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.categoria.noExiste");
 			}
 		}
 	}

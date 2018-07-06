@@ -120,18 +120,14 @@ public class MotivoSalidasController {
 	 */
 	@RequestMapping(value = "/ListarMotivoSalidasActivasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listaraActivasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer idEmpresa) {
-		Empresa empresa = idEmpresa != null ? empresaBo.buscar(idEmpresa) : null;
+	public RespuestaServiceDataTable listaraActivasAjax(HttpServletRequest request, HttpServletResponse response) {
 		DataTableDelimitador delimitadores = null;
-		if (empresa != null) {
 			delimitadores = new DataTableDelimitador(request, "MotivoSalida");
 			JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
-			dataTableFilter = new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "=");
+			String nombreUsuario = request.getUserPrincipal().getName();
+			 dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
-
-		}
-
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 

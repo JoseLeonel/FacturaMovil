@@ -504,7 +504,6 @@
     var self = this;
     self.idiomaDataTable           = []         // idioma de la datatable nuevo
     self.formato_tabla             = []         // Formato del Listado de la Tabla 
-    self.empresas                  = {aaData:[]}
     self.categorias                = {aaData:[]}
     self.marcas                    = {aaData:[]}
     self.tipoUnidades              = {aaData:[]}
@@ -571,7 +570,6 @@ self.on('mount',function(){
     ActivarEventoFiltroArticulo('.tableListar')
     __listado()
     includeActionsArticulo('.dataTables_wrapper','.dataTables_length')
-    __listadoEmpresasActivas()
     __MantenimientoAgregarInventario()
     __MantenimientoAgregar()
     __Eventos()
@@ -620,7 +618,6 @@ function LimpiarArticulo(){
    $('.selecTipoUnidad').prop("selectedIndex", 0);
    $('.selectMarca').prop("selectedIndex", 0);
    $('.selectCategoria').prop("selectedIndex", 0);
-   $('.selectEmpresa').prop("selectedIndex", 0);   
    $("#categoria").val($("#categoria option:first").val()); 
    $("#marca").val($("#marca option:first").val()); 
    $("#unidadMedida").val($("#unidadMedida option:first").val()); 
@@ -638,6 +635,7 @@ function LimpiarArticulo(){
    $('.gananciaPrecioEspecial').val(null)
     $(".errorServerSideJgrid").remove();
     $("#formulario").validate(reglasDeValidacion());
+    enviarCargarCombos()
 }
 /**
 *  Envia  a llamar a los eventos ajax de cada combo para actualizarlo de acuerdo a la empresa
@@ -649,8 +647,8 @@ __cargarCombos(){
 * Enviar a consultar al back end 
 **/
 function enviarCargarCombos(){
-    __listadoCategoriasActivas($('.selectEmpresa').val())
-    __listadoMarcasActivas($('.selectEmpresa').val())
+    __listadoCategoriasActivas()
+    __listadoMarcasActivas()
 }
 /**
 * incluir el boton agregar en cada mantenimiento 
@@ -1151,7 +1149,7 @@ function __agregarEntradaAlInventario(){
         self.mostrarFormularioEntrada    = true
         self.mostrarFormularioSalida     = false
         self.update()
-        _ListaMotivoEntradasActivas(self.inventario.articulo.empresa.id)
+        _ListaMotivoEntradasActivas()
 	});
 }
 /**
@@ -1182,7 +1180,7 @@ function __agregarSalidaAlInventario(){
         self.mostrarFormularioEntrada    = false
         self.mostrarFormularioSalida     = true
         self.update()
-        _ListaMotivoSalidasActivas(self.inventario.articulo.empresa.id)
+        _ListaMotivoSalidasActivas()
 	});
 }
 /**
@@ -1273,13 +1271,12 @@ function inicializar_inventario(){
 /**
 *  Lista de motivos de Salidas activas 
 **/
-function _ListaMotivoSalidasActivas(empresa){
+function _ListaMotivoSalidasActivas(){
     $.ajax({
          url: "ListarMotivoSalidasActivasAjax.do",
         datatype: "json",
         method:"GET",
         contentType: "application/json; charset=utf-8",
-        data:{idEmpresa:empresa},
         success: function (result) {
             if(result.aaData.length > 0){
                 self.motivoSalidas.data =  result.aaData
@@ -1296,12 +1293,11 @@ function _ListaMotivoSalidasActivas(empresa){
 /**
 *  Lista de motivos de Entradas activas 
 **/
-function _ListaMotivoEntradasActivas(empresa){
+function _ListaMotivoEntradasActivas(){
     $.ajax({
          url: "ListarMotivoActivasEntradasAjax.do",
         datatype: "json",
         method:"GET",
-        data:{idEmpresa:empresa},
         contentType: "application/json; charset=utf-8",
         success: function (result) {
             if(result.aaData.length > 0){
@@ -1463,39 +1459,17 @@ function __Eventos(){
 	});
 
 }
-/**
-*  Mostrar listado datatable Empresas activas
-**/
-function __listadoEmpresasActivas(){
-    $.ajax({
-         url: "ListarEmpresasActivasAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            if(result.aaData.length > 0){
-                self.empresas.aaData =  result.aaData
-                self.update();
-                 enviarCargarCombos()
-              
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
-}
+
 /**
 *  Mostrar listado datatable Categorias activas
 **/
-function __listadoCategoriasActivas(empresa){
+function __listadoCategoriasActivas(){
      self.categorias                = {aaData:[]}
      self.update()
     $.ajax({
          url: "ListarCategoriasActivasAjax.do",
         datatype: "json",
         method:"GET",
-        data:{idEmpresa:empresa},
         success: function (result) {
              if(result.aaData.length > 0){
                 self.categorias.aaData =  result.aaData
@@ -1515,14 +1489,13 @@ function __listadoCategoriasActivas(empresa){
 /**
 *  Mostrar listado datatable Categorias Actimpuestos
 **/
-function __listadoMarcasActivas(empresa){
+function __listadoMarcasActivas(){
     self.marcas                    = {aaData:[]}
     self.update()
     $.ajax({
          url: "ListarMarcasActivasAjax.do",
         datatype: "json",
         method:"GET",
-        data:{idEmpresa:empresa},
         success: function (result) {
             if(result.aaData.length > 0){
                 self.marcas.aaData =  result.aaData
@@ -1768,9 +1741,8 @@ function __consultar(){
                         self.botonAgregar     = false;                        
                         self.articulo  =  modeloTabla
                         self.update()
-                      //  __listadoEmpresasActivas()
-                        __listadoCategoriasActivas(self.articulo.empresa.id)
-                        __listadoMarcasActivas(self.articulo.empresa.id)
+                        __listadoCategoriasActivas()
+                        __listadoMarcasActivas()
                         __ComboContables()
                         __ComboEstados()
                         __Impuestos() 
@@ -1778,7 +1750,6 @@ function __consultar(){
                         $('.selecTipoUnidad').val(self.articulo.unidadMedida) 
                         $('.selectMarca').val(self.articulo.marca.id)
                         $('.selectCategoria').val(self.articulo.categoria.id)
-                        $('.selectEmpresa').val(self.articulo.empresa.id)
                         $("#formulario").validate(reglasDeValidacion());
                     });
                 }

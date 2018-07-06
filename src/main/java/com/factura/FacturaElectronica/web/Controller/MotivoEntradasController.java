@@ -95,17 +95,15 @@ public class MotivoEntradasController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarMotivoActivasEntradasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarActivasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer idEmpresa) {
-		Empresa empresa = idEmpresa != null ? empresaBo.buscar(idEmpresa) : null;
+	public RespuestaServiceDataTable listarActivasAjax(HttpServletRequest request, HttpServletResponse response) {
 		DataTableDelimitador delimitadores = null;
-		if (empresa != null) {
-			delimitadores = new DataTableDelimitador(request, "MotivoEntrada");
-			JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
-			delimitadores.addFiltro(dataTableFilter);
-			dataTableFilter = new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "=");
-			delimitadores.addFiltro(dataTableFilter);
+		delimitadores = new DataTableDelimitador(request, "MotivoEntrada");
+		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
 
-		}
+		String nombreUsuario = request.getUserPrincipal().getName();
+		dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+		delimitadores.addFiltro(dataTableFilter);
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
@@ -140,7 +138,7 @@ public class MotivoEntradasController {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-			
+
 			MotivoEntrada motivoEntradaBd = motivoEntradaBo.buscarPorDescripcionYEmpresa(motivoEntrada.getDescripcion(), motivoEntrada.getEmpresa());
 			if (motivoEntradaBd != null) {
 				result.rejectValue("descripcion", "error.motivoEntrada.descripcion.existe");
