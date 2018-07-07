@@ -1,4 +1,4 @@
-package com.factura.FacturaElectronica.Utils;
+package com.factura.FacturaElectronica.fisco;
 
 import java.util.Calendar;
 
@@ -20,6 +20,7 @@ public final class FacturaElectronicaUtils {
 	public static final String	FORMATO_CODIGO_SEGURIDAD							= "00000000";
 
 	/**
+	 * Clave de la Factura para tributacion directa
 	 * Codigo del Pais :Los primeros tres dígitos corresponden al código del país (506). Del cuarto al quinto dígito, corresponde al día en que se genere el comprobante electrónico. Del sexto al séptimo dígito, corresponde al mes en que se genere el comprobante electrónico. Del octavo al noveno dígito, corresponde al año en que se genere el comprobante electrónico. Del décimo al vigésimo primero dígito, corresponde al número de cédula del emisor. Del vigésimo segundo al cuadragésimo primero dígito, corresponde a la numeración consecutiva del comprobante electrónico. El cuadragésimo segundo le corresponde a la situación del comprobante electrónico para el cual se debe de utilizar la siguiente codificación: 1= Normal 2=Contigencia 3= Sin Internet
 	 * @param cedulaEmisor
 	 * @param consecutivoFactura

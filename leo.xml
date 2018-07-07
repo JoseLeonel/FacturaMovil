@@ -1,16 +1,72 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <FacturaElectronica xmlns="https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/facturaElectronica" xmlns:ns2="http://www.w3.org/2000/09/xmldsig#">
-    <Clave> </Clave>
-    <FechaEmision>2018-06-21T11:25:03.940-06:00</FechaEmision>
+    <Clave>50606072018000110010978001001000000000180112345678</Clave>
+    <NumeroConsecutivo>001001000000000180</NumeroConsecutivo>
+    <FechaEmision>2018-07-06T19:01:19.165-06:00</FechaEmision>
     <Emisor>
         <Nombre>Empresa I</Nombre>
         <Identificacion>
-            <Tipo>1</Tipo>
+            <Tipo>01</Tipo>
             <Numero>110010978</Numero>
         </Identificacion>
         <NombreComercial>emprendesoftcr</NombreComercial>
-        <TelefonoType xmlns="" xmlns:ns3="https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/facturaElectronica"/>
+        <Ubicacion>
+            <Barrio></Barrio>
+            <OtrasSenas>BARRIO LAS LUISAS SABANA NORTE DE LA DOLE 500 MTS N AL COSTADO DE IGLESIA CATOL</OtrasSenas>
+        </Ubicacion>
+        <TelefonoType xmlns="" xmlns:ns3="https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/facturaElectronica">
+            <ns3:CodigoPais>506</ns3:CodigoPais>
+            <ns3:NumTelefono>0</ns3:NumTelefono>
+        </TelefonoType>
     </Emisor>
+    <Receptor>
+        <Nombre>CLIENTE_FRECUENTE</Nombre>
+        <Identificacion>
+            <Numero>99999999999999</Numero>
+        </Identificacion>
+        <Ubicacion>
+            <Provincia>1</Provincia>
+            <OtrasSenas></OtrasSenas>
+        </Ubicacion>
+        <Telefono>
+            <CodigoPais>0</CodigoPais>
+            <NumTelefono>0</NumTelefono>
+        </Telefono>
+        <CorreoElectronico>CLIENTE_FRECUENTE@FRECUENTE.COM</CorreoElectronico>
+    </Receptor>
     <CondicionVenta>01</CondicionVenta>
     <PlazoCredito>0</PlazoCredito>
+    <DetalleServicio>
+        <LineaDetalle>
+            <NumeroLinea>0</NumeroLinea>
+            <Codigo>
+                <Tipo>01</Tipo>
+                <Codigo>02</Codigo>
+            </Codigo>
+            <Cantidad>1.0</Cantidad>
+            <UnidadMedida>Unid</UnidadMedida>
+            <UnidadMedidaComercial></UnidadMedidaComercial>
+            <Detalle>producto 2</Detalle>
+            <PrecioUnitario>6000.0</PrecioUnitario>
+            <MontoTotal>0.0</MontoTotal>
+            <MontoDescuento>0.0</MontoDescuento>
+            <NaturalezaDescuento></NaturalezaDescuento>
+            <SubTotal>6000.0</SubTotal>
+        </LineaDetalle>
+    </DetalleServicio>
+    <ResumenFactura>
+        <CodigoMoneda>CRC</CodigoMoneda>
+        <TipoCambio>555.555</TipoCambio>
+        <TotalServGravados>0.0</TotalServGravados>
+        <TotalServExentos>0.0</TotalServExentos>
+        <TotalMercanciasGravadas>0.0</TotalMercanciasGravadas>
+        <TotalMercanciasExentas>0.0</TotalMercanciasExentas>
+        <TotalGravado>0.0</TotalGravado>
+        <TotalExento>6000.0</TotalExento>
+        <TotalVenta>6000.0</TotalVenta>
+        <TotalDescuentos>0.0</TotalDescuentos>
+        <TotalVentaNeta>6000.0</TotalVentaNeta>
+        <TotalImpuesto>0.0</TotalImpuesto>
+        <TotalComprobante>6000.0</TotalComprobante>
+    </ResumenFactura>
 </FacturaElectronica>

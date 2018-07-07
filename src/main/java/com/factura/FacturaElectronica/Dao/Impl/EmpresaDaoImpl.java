@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.factura.FacturaElectronica.Dao.EmpresaDao;
 import com.factura.FacturaElectronica.Utils.Constantes;
-import com.factura.FacturaElectronica.Utils.FacturaElectronicaUtils;
+import com.factura.FacturaElectronica.fisco.FacturaElectronicaUtils;
 import com.factura.FacturaElectronica.modelo.Empresa;
 import com.factura.FacturaElectronica.modelo.Factura;
 import com.factura.FacturaElectronica.modelo.Usuario;

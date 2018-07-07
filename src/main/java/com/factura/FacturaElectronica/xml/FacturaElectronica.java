@@ -951,6 +951,7 @@ public class FacturaElectronica {
             }
             return this.lineaDetalle;
         }
+        
 
 
         /**
@@ -1107,6 +1108,14 @@ public class FacturaElectronica {
                 }
                 return this.codigo;
             }
+            
+            public List<CodigoType> setCodigo(CodigoType codigoType) {
+              if (codigo == null) {
+                  codigo = new ArrayList<CodigoType>();
+                  codigo.add(codigoType);
+              }
+              return this.codigo;
+          }
 
             /**
              * Obtiene el valor de la propiedad cantidad.
