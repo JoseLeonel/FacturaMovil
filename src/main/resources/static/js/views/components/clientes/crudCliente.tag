@@ -105,26 +105,39 @@
                         <div class="row">
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cliente.provincia")} </label>
-                                <select  class="form-control" id="provincia" name="provincia" >
-                                    <option  each={provincias}  value="{codigo}" selected="{cliente.provincia ==codigo?true:false}" >{descripcion}</option>
+                                <select onchange= {__cargaCantones}  class="form-control" id="provincia" name="provincia" >
+                                    <option  each={provincias.data}  value="{codigo}" selected="{cliente.provincia ==codigo?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("cliente.canton")} </label>
+                                <select onchange= {__cargaDistritos}    class="form-control" id="canton" name="canton" >
+                                    <option  each={cantones.data}  value="{codigo}" selected="{cliente.canton ==codigo?true:false}" >{descripcion}</option>
+                                </select>
+                            </div>
+
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cliente.distrito")} </label>
-                                <input type="text" class="form-control distrito" placeHolder ="{$.i18n.prop("cliente.distrito")}" id="distrito" name="distrito" value="{cliente.distrito}"  >
+                                <select  onchange= {__cargaBarrios}    class="form-control" id="distrito" name="distrito" >
+                                    <option  each={distritos.data}  value="{codigo}" selected="{cliente.distrito ==codigo?true:false}" >{descripcion}</option>
+                                </select>
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cliente.barrio")} </label>
-                                <input type="text" class="form-control barrio" placeHolder ="{$.i18n.prop("cliente.barrio")}" id="barrio" name="barrio" value="{cliente.barrio}"  >
+                                <select     class="form-control" id="barrio" name="barrio" >
+                                    <option  each={barrios.data}  value="{codigo}" selected="{cliente.barrio ==codigo?true:false}" >{descripcion}</option>
+                                </select>
                             </div>                        
+
+                        </div>                        
+                        <div class="row">    
+
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("cliente.identificacionExtranjero")}</label>
                                 <input type="text" class="form-control identificacionExtranjero" placeHolder ="{$.i18n.prop("cliente.identificacionExtranjero")}" id="identificacionExtranjero" name="identificacionExtranjero" value="{cliente.identificacionExtranjero}"  >
                             </div>
-                        </div>                        
-                        <div class="row">    
                             
-                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                             <div class= "col-md-9 col-sx-12 col-sm-9 col-lg-9">
                                 <label class="knob-label" >{$.i18n.prop("cliente.correoElectronico")}</label>
                                 <input type="text" class="form-control correoElectronico" placeHolder ="{$.i18n.prop("cliente.correoElectronico")}" id="correoElectronico" name="correoElectronico" value="{cliente.correoElectronico}"  >
                             </div>
@@ -138,7 +151,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label">{$.i18n.prop("cliente.estado")}</label>
                                 <select  class="form-control" id="estado" name="estado" >
                                     <option  each={estados}  value="{codigo}" selected="{cliente.estado ==codigo?true:false}" >{descripcion}</option>
@@ -216,7 +229,11 @@
     self.idiomaDataTable           = []         // idioma de la datatable nuevo
     self.formato_tabla             = []         // Formato del Listado de la Tabla 
     self.provincias                = []
-    self.tipoCedulas              = {data:[]}  // definir el data del datatable
+    self.tipoCedulas               = {data:[]}  // definir el data del datatable
+    self.provincias                = {data:[]}  // definir el data del datatable
+    self.cantones                  = {data:[]}  // definir el data del datatable
+    self.distritos                  = {data:[]}  // definir el data del datatable
+    self.barrios                  = {data:[]}  // definir el data del datatable
     self.mostrarListado            = true 
     self.botonModificar            = false
     self.botonAgregar              = false
@@ -250,17 +267,162 @@ self.on('mount',function(){
              $(".errorServerSideJgrid").remove();
     }, false );
 })
+
+/**
+*  Provincias
+**/
+function __cargaProvincias(){
+    self.provincias = []
+     $.ajax({
+         url: "ListarProvinciasAjax.do",
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.provincias.data =  result.aaData
+                self.update();
+                _ConsultarCantonesByProvincias()
+            
+
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+
+}
+
+/**
+* cuando cambia la provincia cambia los cantones
+**/
+__cargaCantones(){
+    _ConsultarCantonesByProvincias()
+}
+/**
+*  Cantones
+**/
+function _ConsultarCantonesByProvincias(){
+    var provincia = {
+        id:null,
+        codigo:$('#provincia').val(),
+        descripcion:""
+    }
+    self.cantones  = {data:[]}
+    self.update()
+     $.ajax({
+         url: "ListarCantonesAjax.do",
+        datatype: "json",
+        method:"GET",
+        data : provincia,
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.cantones.data =  result.aaData
+                self.update();
+                _ConsultarDistritosByCanton()
+
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+
+}
+
+/**
+* cuando cambia los cantones cambia los distritos
+**/
+
+__cargaDistritos(){
+    _ConsultarDistritosByCanton()
+
+}
+
+/**
+*  Cantones
+**/
+function _ConsultarDistritosByCanton(){
+    var canton = {
+        id:null,
+        codigo:$('#canton').val(),
+        codigo_provincia:$('#provincia').val(),
+        descripcion:""
+    }
+    self.distritos  = {data:[]}
+    self.update()
+     $.ajax({
+         url: "ListarDistritosAjax.do",
+        datatype: "json",
+        method:"GET",
+        data : canton,
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.distritos.data =  result.aaData
+                self.update();
+                _ConsultarBarriosByDistrito()
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+
+}
+/**
+* cuando cambia los distritos cambia los barrios
+**/
+__cargaBarrios(){
+    _ConsultarBarriosByDistrito()
+
+}
+
+/**
+*  Cantones
+**/
+function _ConsultarBarriosByDistrito(){
+    var distrito = {
+        id:null,
+        codigo:$('#distrito').val(),
+        codigoProvincia:$('#provincia').val(),
+        codigoCanton:$('#canton').val(),
+        descripcion:""
+    }
+    self.barrios  = {data:[]}
+    self.update()
+     $.ajax({
+         url: "ListarBarriosAjax.do",
+        datatype: "json",
+        method:"GET",
+        data : distrito,
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.barrios.data =  result.aaData
+                self.update();
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+
+}
 /**
 * Limpiar campos
 **/
 function _incializarCampos(){
     $("#provincia").val($("#provincia option:first").val());
     $("#tipoCedula").val($("#tipoCedula option:first").val());
+    $("#canton").val($("#canton option:first").val());
+    $("#distrito").val($("#distrito option:first").val());
+    $("#barrio").val($("#barrio option:first").val());
     $('.nombreCompleto').val(null)
     $('.cedula').val(null)
     $('.identificacionExtranjero').val(null)
-    $('.barrio').val(null)
-    $('.distrito').val(null)
     $('.descuento').val(null)
     $('.celular').val(null)
     $('.telefono').val(null)
@@ -344,10 +506,7 @@ var reglasDeValidacion = function() {
                 minlength:8,
                 telefonoFormat:true
 			},
-            barrio : {
-                maxlength:3,
-                minlength:3,
-			},
+            
             celular : {
                 maxlength:8,
                 minlength:8,
@@ -358,10 +517,6 @@ var reglasDeValidacion = function() {
                 required : true,
                 minlength:3,
 
-			},
-            distrito : {
-                maxlength:3,
-                minlength:3,
 			},
             identificacionExtranjero : {
                 maxlength:20,
@@ -402,8 +557,6 @@ function __Eventos(){
     $("#otraSenas").attr("maxlength", 250);
     $("#telefono").attr("maxlength", 8);
     $("#celular").attr("maxlength", 8);
-    $("#barrio").attr("maxlength", 3);
-    $("#distrito").attr("maxlength", 3);
     $('#descuento').mask('000', {
 		'translation' : {
 			0 : {
@@ -664,6 +817,8 @@ function __consultar(){
                         $('#otraSena').val(self.cliente.otraSena)
                         $('.identificacionExtranjero').val(self.cliente.identificacionExtranjero)
                         $('.barrio').val(self.cliente.barrio)
+                        $('.provincia').val(self.cliente.provincia)
+                        $('.canton').val(self.cliente.canton)
                         $('.distrito').val(self.cliente.distrito)
                         $('.codigoPais').val(self.cliente.codigoPais)
                         $('.nombreComercial').val(self.cliente.nombreComercial)
@@ -730,42 +885,6 @@ function agregarInputsCombos(){
 
 
 
-function __cargaProvincias(){
-    self.provincias = []
-    self.provincias.push({
-        codigo:"1",
-        descripcion: $.i18n.prop("provincia.sanjose")
-    })
-    self.provincias.push({
-        codigo:"2",
-        descripcion:$.i18n.prop("provincia.alajuela")
-    })
-
-    self.provincias.push({
-        codigo:"3",
-        descripcion:$.i18n.prop("provincia.cartago")
-    })
-
-    self.provincias.push({
-        codigo:"4",
-        descripcion:$.i18n.prop("provincia.heredia")
-    })
-
-    self.provincias.push({
-        codigo:"5",
-        descripcion:$.i18n.prop("provincia.guanacaste")
-    })
-    self.provincias.push({
-        codigo:"6",
-        descripcion:$.i18n.prop("provincia.puntarenas")
-    })
-    self.provincias.push({
-        codigo:"7",
-        descripcion:$.i18n.prop("provincia.limon")
-    })
-    self.update()
-
-}
 
 
 

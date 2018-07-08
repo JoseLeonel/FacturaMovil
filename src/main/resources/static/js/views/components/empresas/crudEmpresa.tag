@@ -93,7 +93,7 @@
                         <div class="row">    
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("empresa.codigoPais")}</label>
-                                <input type="text" class="form-control codigoPais" placeHolder ="{$.i18n.prop("cliente.codigoPais.ejemplo")}" id="codigoPais" name="codigoPais" value="{empresa.codigoPais}"  >
+                                <input type="text" class="form-control codigoPais" placeHolder ="{$.i18n.prop("empresa.codigoPais.ejemplo")}" id="codigoPais" name="codigoPais" value="{empresa.codigoPais}"  >
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("empresa.telefono")} </label>
@@ -103,42 +103,62 @@
                                 <label class="knob-label" >{$.i18n.prop("empresa.casa.matriz")} </label>
                                 <input type="text" class="form-control cazaMatriz" placeHolder ="{$.i18n.prop("empresa.casa.matriz")}" id="cazaMatriz" name="cazaMatriz" value="{empresa.cazaMatriz}"  >
                             </div>
-                        </div>
-                        <div class="row">    
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                 <label class="knob-label" >{$.i18n.prop("cliente.provincia")} </label>
-                                 <select  class="form-control" id="provincia"  >
-                                    <option  each={comboProvincias}  value="{codigo}" selected="{empresa.provincia ==codigo?true:false}" >{descripcion}</option>
-                                </select>
-                            </div>
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("empresa.distrito")} </label>
-                                <input type="text" class="form-control distrito" placeHolder ="{$.i18n.prop("empresa.distrito")}" id="distrito" name="distrito" value="{empresa.distrito}"  >
-                            </div>
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("empresa.barrio")} </label>
-                                <input type="text" class="form-control barrio" placeHolder ="{$.i18n.prop("empresa.barrio")}" id="barrio" name="barrio" value="{empresa.barrio}"  >
-                            </div>
-                            
-                        </div>
-                        <div class="row">    
-                            <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label" >{$.i18n.prop("empresa.otraSenas")}</label>
-                                <input type="text" class="form-control otraSenas" placeHolder ="{$.i18n.prop("empresa.otraSenas")}" id="otraSenas" name="otraSenas" value="{empresa.otraSenas}"  >
-                            </div>
-                        </div>
-                        <div class="row">    
-                            <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label" >{$.i18n.prop("empresa.pagina.web")}</label>
-                                <input type="text" class="form-control web" placeHolder ="{$.i18n.prop("empresa.pagina.web")}" id="web" name="web" value="{empresa.web}"  >
-                            </div>
-                        </div>
-                        <div class="row">    
-                            <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("empresa.numeroConsecutivo")}</label>
                                 <input type="text" class="form-control numeroConsecutivo" placeHolder ="{$.i18n.prop("empresa.numeroConsecutivo")}" id="numeroConsecutivo" name="numeroConsecutivo" value="{empresa.numeroConsecutivo}"  >
                             </div>
                         </div>
+                        <div class="row">    
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("empresa.provincia")} </label>
+                                <select onchange= {__cargaCantones}  class="form-control" id="provincia" name="provincia" >
+                                    <option  each={provincias.data}  value="{codigo}" selected="{empresa.provincia ==codigo?true:false}" >{descripcion}</option>
+                                </select>
+                            </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("empresa.canton")} </label>
+                                <select onchange= {__cargaDistritos}    class="form-control" id="canton" name="canton" >
+                                    <option  each={cantones.data}  value="{codigo}" selected="{empresa.canton ==codigo?true:false}" >{descripcion}</option>
+                                </select>
+                            </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("empresa.distrito")} </label>
+                                <select  onchange= {__cargaBarrios}    class="form-control" id="distrito" name="distrito" >
+                                    <option  each={distritos.data}  value="{codigo}" selected="{empresa.distrito ==codigo?true:false}" >{descripcion}</option>
+                                </select>
+                            </div>
+                            
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("empresa.barrio")} </label>
+                                <select     class="form-control" id="barrio" name="barrio" >
+                                    <option  each={barrios.data}  value="{codigo}" selected="{empresa.barrio ==codigo?true:false}" >{descripcion}</option>
+                                </select>
+                            </div>
+                            
+                        </div>
+                        <div class="row">    
+                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                                <label class="knob-label" >{$.i18n.prop("empresa.llave.criptografica")}</label>
+                                <input type="text" class="form-control nombreLlaveCriptografica" placeHolder ="{$.i18n.prop("empresa.llave.criptografica.ejemplo")}" id="nombreLlaveCriptografica" name="nombreLlaveCriptografica" value="{empresa.nombreLlaveCriptografica}"  >
+                            </div>
+                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                                <label class="knob-label" >{$.i18n.prop("empresa.clave.llave.criptografica")}</label>
+                                <input type="text" class="form-control claveLlaveCriptografica" placeHolder ="{$.i18n.prop("empresa.clave.llave.criptografica.ejemplo")}" id="claveLlaveCriptografica" name="claveLlaveCriptografica" value="{empresa.claveLlaveCriptografica}"  >
+                            </div>
+
+                        </div>
+
+                        <div class="row">    
+                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                                <label class="knob-label" >{$.i18n.prop("empresa.otraSenas")}</label>
+                                <input type="text" class="form-control otraSenas" placeHolder ="{$.i18n.prop("empresa.otraSenas")}" id="otraSenas" name="otraSenas" value="{empresa.otraSenas}"  >
+                            </div>
+                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                                <label class="knob-label" >{$.i18n.prop("empresa.pagina.web")}</label>
+                                <input type="text" class="form-control web" placeHolder ="{$.i18n.prop("empresa.pagina.web")}" id="web" name="web" value="{empresa.web}"  >
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label">{$.i18n.prop("empresa.estado")}</label>
@@ -224,7 +244,12 @@
     self.mostrarListado            = true 
     self.botonModificar            = false
     self.botonAgregar              = false
-    self.tipoCedulas              = {data:[]}  // definir el data del datatable
+    self.tipoCedulas               = {data:[]}  // definir el data del datatable
+    self.provincias                = {data:[]}  // definir el data del datatable
+    self.cantones                  = {data:[]}  // definir el data del datatable
+    self.distritos                 = {data:[]}  // definir el data del datatable
+    self.barrios                   = {data:[]}  // definir el data del datatable
+      
     self.comboProvincias = []
     self.empresa  = {
         id:null,
@@ -250,6 +275,150 @@ self.on('mount',function(){
     
 })
 
+/**
+*  Provincias
+**/
+function __cargaProvincias(){
+    self.provincias                = {data:[]}  // definir el data del datatable
+    self.update()
+     $.ajax({
+         url: "ListarProvinciasAjax.do",
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.provincias.data =  result.aaData
+                self.update();
+                _ConsultarCantonesByProvincias()
+            
+
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+
+}
+
+/**
+* cuando cambia la provincia cambia los cantones
+**/
+__cargaCantones(){
+    _ConsultarCantonesByProvincias()
+}
+/**
+*  Cantones
+**/
+function _ConsultarCantonesByProvincias(){
+    var provincia = {
+        id:null,
+        codigo:$('#provincia').val(),
+        descripcion:""
+    }
+    self.cantones  = {data:[]}
+    self.update()
+     $.ajax({
+         url: "ListarCantonesAjax.do",
+        datatype: "json",
+        method:"GET",
+        data : provincia,
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.cantones.data =  result.aaData
+                self.update();
+                _ConsultarDistritosByCanton()
+
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+
+}
+
+/**
+* cuando cambia los cantones cambia los distritos
+**/
+
+__cargaDistritos(){
+    _ConsultarDistritosByCanton()
+
+}
+
+/**
+*  Cantones
+**/
+function _ConsultarDistritosByCanton(){
+    var canton = {
+        id:null,
+        codigo:$('#canton').val(),
+        codigo_provincia:$('#provincia').val(),
+        descripcion:""
+    }
+    self.distritos  = {data:[]}
+    self.update()
+     $.ajax({
+         url: "ListarDistritosAjax.do",
+        datatype: "json",
+        method:"GET",
+        data : canton,
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.distritos.data =  result.aaData
+                self.update();
+                _ConsultarBarriosByDistrito()
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+
+}
+/**
+* cuando cambia los distritos cambia los barrios
+**/
+__cargaBarrios(){
+    _ConsultarBarriosByDistrito()
+
+}
+
+/**
+*  Cantones
+**/
+function _ConsultarBarriosByDistrito(){
+    var distrito = {
+        id:null,
+        codigo:$('#distrito').val(),
+        codigoProvincia:$('#provincia').val(),
+        codigoCanton:$('#canton').val(),
+        descripcion:""
+    }
+    self.barrios  = {data:[]}
+    self.update()
+     $.ajax({
+         url: "ListarBarriosAjax.do",
+        datatype: "json",
+        method:"GET",
+        data : distrito,
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.barrios.data =  result.aaData
+                self.update();
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+
+}
 /**
 * Camps requeridos
 **/
@@ -309,41 +478,24 @@ var reglasDeValidacion = function() {
             web : {
                 maxlength:80,
                 minlength:1,
-              
 			},
             numeroConsecutivo:{
                 minlength:10,
                 required : true,
                 numeroMayorCero:true,
-
-            },
-            provincia:{
-                minlength:1,
-                required : true,
-
-            },
-            canton:{
-                minlength:2,
-                required : true,
-
-            },
-            distrito:{
-                minlength:2,
-               
-
             },
             cazaMatriz:{
                 minlength:3,
                 maxlength:3,
                 required : true,
                 numeroMayorCero:true,
-
             },
-
-
-                            
-
-                        
+            nombreLlaveCriptografica:{
+                required : true,
+            },
+            claveLlaveCriptografica:{
+                required : true,
+            }
 		},
 		ignore : []
 
@@ -355,19 +507,23 @@ var reglasDeValidacion = function() {
 function _limpiar(){
    $('#clave').val(null)
    $("#tipoCedula").val($("#tipoCedula option:first").val());
+   $("#provincia").val($("#provincia option:first").val());
+   $("#canton").val($("#canton option:first").val());
+   $("#distrito").val($("#distrito option:first").val());
+   $("#barrio").val($("#barrio option:first").val());
+
    $('#cedula').val(null)
    $("#nombre").val(null)
    $("#nombreComercial").val(null)
    $("#representante").val(null)
-   $("#codigoPais").val(null)
+   $("#codigoPais").val(506)
    $("#telefono").val(null)
    $("#cazaMatriz").val(null)
-   $("#provincia").val($("#provincia option:first").val());
-   $("#distrito").val(null)
-   $("#barrio").val(null)
    $("#otraSenas").val(null)
    $("#web").val(null)
-   $("#numeroConsecutivo").val()
+   $("#numeroConsecutivo").val(null)
+   $("#nombreLlaveCriptografica").val(null)
+   $("#claveLlaveCriptografica").val(null)
    $(".errorServerSideJgrid").remove();
    $("#formulario").validate(reglasDeValidacion())
     self.empresa  = {
@@ -382,46 +538,7 @@ function _limpiar(){
 }
 
 
-/**
-*  Registrar provincias
-**/
-function __cargaProvincias(){
-    self.comboProvincias = []
-    self.update()
-    self.comboProvincias.push({
-        codigo:"1",
-        descripcion: $.i18n.prop("provincia.sanjose")
-    })
-    self.comboProvincias.push({
-        codigo:"2",
-        descripcion: $.i18n.prop("provincia.alajuela")
-    })
 
-    self.comboProvincias.push({
-        codigo:"3",
-        descripcion:$.i18n.prop("provincia.cartago")
-    })
-
-    self.comboProvincias.push({
-        codigo:"4",
-        descripcion: $.i18n.prop("provincia.heredia")
-    })
-
-    self.comboProvincias.push({
-        codigo:"5",
-        descripcion:$.i18n.prop("provincia.guanacaste")
-    })
-    self.comboProvincias.push({
-        codigo:"6",
-        descripcion:$.i18n.prop("provincia.puntarenas")
-    })
-    self.comboProvincias.push({
-                codigo:"7",
-        descripcion:$.i18n.prop("provincia.limon")
-    })
-    self.update()
-
-}
 /**
 *  Crear el combo de estados
 **/
@@ -471,22 +588,17 @@ function __Eventos(){
                 pattern : /[0-9]/
             }
     	}
+    });
+
+    $('#claveLlaveCriptografica').mask('0000', {
+	    'translation' : {
+            0 : {
+                pattern : /[0-9]/
+            }
+    	}
     }); 
    
-    $('#canton').mask('00', {
-	    'translation' : {
-            0 : {
-                pattern : /[0-9]/
-            }
-    	}
-    }); 
-    $('#distrito').mask('00', {
-	    'translation' : {
-            0 : {
-                pattern : /[0-9]/
-            }
-    	}
-    }); 
+   
 
     $('#codigoPais').mask('000', {
 	    'translation' : {
@@ -678,7 +790,26 @@ function __consultar(){
                         self.botonAgregar     = false;                        
                         self.empresa  =  modeloTabla
                         self.empresa.numeroConsecutivo = zfill(self.empresa.numeroConsecutivo,10)
+
                         self.update()
+                        $('#clave').val(self.empresa.clave)
+                        $("#tipoCedula").val(self.empresa.tipoCedula);
+                        $("#provincia").val(self.empresa.provincia);
+                        $("#canton").val(self.empresa.canton);
+                        $("#distrito").val(self.empresa.distrito);
+                        $("#barrio").val(self.empresa.barrio);
+                        $('#cedula').val(self.empresa.cedula)
+                        $("#nombre").val(self.empresa.nombre)
+                        $("#nombreComercial").val(self.empresa.nombreComercial)
+                        $("#representante").val(self.empresa.representante)
+                        $("#codigoPais").val(self.empresa.codigoPais)
+                        $("#telefono").val(self.empresa.telefono)
+                        $("#cazaMatriz").val(self.empresa.cazaMatriz)
+                        $("#otraSenas").val(self.empresa.otraSenas)
+                        $("#web").val(self.empresa.web)
+                        $("#nombreLlaveCriptografica").val(self.empresa.nombreLlaveCriptografica)
+                        $("#claveLlaveCriptografica").val(self.empresa.claveLlaveCriptografica)
+                        $("#numeroConsecutivo").val(self.empresa.numeroConsecutivo)
                         __ComboEstados()
                     });
                 }
@@ -785,7 +916,7 @@ function __InformacionDataTable(){
 
                                     
 /**
-* Opciones listado de los clientes
+* Opciones listado de los empresas
 */
 function __Opciones(){
   var modificar  = '<a href="#"  title="Modificar" class="btn btn-warning  btn-edit btnModificar" role="button"> </a>';

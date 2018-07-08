@@ -605,12 +605,13 @@ input.cmn-toggle-yes-no:checked + label:after {
         float: left;
     }
    .titulo-encabezado{
-        margin-bottom: 1px;
+        margin-bottom: 1px !important;
 
     }
     .contenedor-listar{
-        margin-left: 15px;
-        margin-right: 15px;
+        margin-left: 10px;
+        margin-right: 10px;
+        
         width:100%;
      
     }
@@ -625,7 +626,7 @@ input.cmn-toggle-yes-no:checked + label:after {
        border-top: solid;
         border-bottom: solid;
         border-top-right-radius: 120px;
-        border-top-width: 15px;
+        border-top-width: 10px;
         border-bottom-width: 2px;
         padding: 70px;
         border-color: #cfdde9;
