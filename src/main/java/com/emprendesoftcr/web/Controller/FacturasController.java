@@ -53,6 +53,8 @@ import com.emprendesoftcr.web.componentes.StringPropertyEditor;
 import com.emprendesoftcr.web.componentes.VendedorPropertyEditor;
 import com.google.common.base.Function;
 
+import xades4j.production.XadesSigner;
+
 /**
  * Compras realizadas por la empresa y ingresan al inventario ComprasController.
  * @author jose.
@@ -71,8 +73,8 @@ public class FacturasController {
 	@Autowired
 	private FacturaXMLServices																	facturaXMLServices;
 
-//	@Autowired
-//	private LlaveCriptograficaService														llaveCriptograficaService;
+	@Autowired
+	private LlaveCriptograficaService														llaveCriptograficaService;
 
 	@Autowired
 	private DataTableBo																					dataTableBo;
@@ -246,14 +248,19 @@ public class FacturasController {
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer idFactura) {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
+			String xml = facturaXMLServices.generarFacturaElectronicaXML(facturaBD);
+			facturaXMLServices.generarFacturaElectronicaTributacionXML(xml,facturaBD);
+			
 //			KeyStore keyStore = null;
 //			LlaveCriptografica llaveCriptografica = new LlaveCriptografica();
 //			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			
 //			llaveCriptografica.setPassSignature(usuario.getEmpresa().getClaveLlaveCriptografica().toString());
-//			llaveCriptografica.setPathSignature(Constantes.LLAVES_CRIPTOGRAFICAS +  usuario.getEmpresa().getNombreLlaveCriptografica());
-//			keyStore = llaveCriptograficaService.getKeyStore(llaveCriptografica);
+//			llaveCriptografica.setPathSignature(usuario.getEmpresa().getNombreLlaveCriptografica());
+//   			XadesSigner xadesSigner = llaveCriptograficaService.getSigner(usuario.getEmpresa().getNombreLlaveCriptografica(),usuario.getEmpresa().getClaveLlaveCriptografica().toString());
+//			 keyStore = llaveCriptograficaService.getKeyStore(llaveCriptografica);
 
-			// facturaXMLServices.generarFacturaElectronicaTributacionXML(facturaBD);
+//			 facturaXMLServices.generarFacturaElectronicaTributacionXML(facturaBD);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", facturaBD);
 		} catch (Exception e) {

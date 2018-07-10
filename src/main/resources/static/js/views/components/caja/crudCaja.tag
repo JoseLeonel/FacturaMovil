@@ -80,11 +80,19 @@
                     </form>    
                 </div>
                 <div class="box-footer">
-                     <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
-                     <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
-                    <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left "  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-                        {$.i18n.prop("btn.volver")}
-                    </button>
+                    <div class="row">
+                       <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left "  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                                {$.i18n.prop("btn.volver")}
+                            </button>
+                       </div>
+                       <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" >  {$.i18n.prop("btn.modificar")}</button>
+                            <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" > {$.i18n.prop("btn.agregar")}</button>
+                       </div>
+                    </div>   
+                       
+                
                   
                 </div>
             </div>   
@@ -207,12 +215,13 @@ function Limpiar(){
 **/
 function __ComboEstados(){
     self.estados =[]
+    self.update()
     self.estados.push({
-        codigo: 1,
+        codigo: $.i18n.prop("combo.estado.Activo"),
         descripcion:$.i18n.prop("combo.estado.Activo")
      });
     self.estados.push({
-        codigo: 2,
+        codigo: $.i18n.prop("combo.estado.Inactivo"),
         descripcion: $.i18n.prop("combo.estado.Inactivo")
      });
      self.update();

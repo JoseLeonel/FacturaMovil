@@ -59,7 +59,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("proveedor.empresa")}  <span class="requeridoDato">*</span></label>
                                  <select  class="form-control" id="empresa" name="empresa" >
                                     <option  each={empresas.aaData}  value="{id}"  >{nombre}</option>
@@ -80,29 +80,29 @@
                             
                         </div>
                         <div class="row">
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label class="knob-label" >{$.i18n.prop("proveedor.telefono")} </label>
                                 <input type="text" class="form-control telefono" placeHolder ="{$.i18n.prop("proveedor.telefono")}" id="telefono" name="telefono" value="{proveedor.telefono}"  >
                             </div>
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label class="knob-label" >{$.i18n.prop("proveedor.movil")} </label>
                                 <input type="text" class="form-control movil" placeHolder ="{$.i18n.prop("proveedor.movil")}" id="movil" name="movil" value="{proveedor.movil}"  >
                             </div>
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label class="knob-label" >{$.i18n.prop("proveedor.representante")} </label>
                                 <input type="text" class="form-control representante" placeHolder ="{$.i18n.prop("proveedor.representante")}" id="representante" name="representante" value="{proveedor.representante}"  >
                             </div>
 
                         </div>
                         <div class="row">    
-                            <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("proveedor.email")}</label>
                                 <input type="text" class="form-control email" placeHolder ="{$.i18n.prop("proveedor.email")}" id="email" name="email" value="{proveedor.email}"  >
                             </div>
                         </div>
 
                         <div class="row">    
-                            <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("proveedor.direccion")}</label>
                                 <input type="text" class="form-control direccion" placeHolder ="{$.i18n.prop("proveedor.direccion")}" id="direccion" name="direccion" value="{proveedor.direccion}"  >
                             </div>
@@ -120,11 +120,17 @@
                     </form>    
                 </div>
                 <div class="box-footer">
-                    <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-                        {$.i18n.prop("btn.volver")}
-                    </button>
-                     <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
-                     <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
+                    <div class="row">
+                       <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                                {$.i18n.prop("btn.volver")}
+                            </button>
+                       </div>
+                       <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" >  {$.i18n.prop("btn.modificar")}</button>
+                            <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" > {$.i18n.prop("btn.agregar")}</button>
+                       </div>
+                    </div>   
                   
                 </div>
             </div>   

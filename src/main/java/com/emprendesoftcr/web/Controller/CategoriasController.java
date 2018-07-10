@@ -165,7 +165,7 @@ public class CategoriasController {
 			categoria.setEmpresa(usuario.getEmpresa());
 			categoria.setCreated_at(new Date());
 			categoria.setUpdated_at(new Date());
-			categoria.setEstado(Constantes.ESTADO_ACTIVO);
+			
 			categoriaBo.agregar(categoria);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("categoria.agregar.correctamente", categoria);
 
@@ -204,6 +204,7 @@ public class CategoriasController {
 				}
 				categoriaBD.setDescripcion(categoria.getDescripcion());
 				categoriaBD.setUpdated_at(new Date());
+				categoriaBD.setEstado(categoria.getEstado());
 				categoriaBo.modificar(categoriaBD);
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("categoria.modificado.correctamente", categoriaBD);
 			}

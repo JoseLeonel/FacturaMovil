@@ -166,6 +166,7 @@
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label">{$.i18n.prop("articulo.tipoImpuesto")}</label>
                                 <select  class="form-control selectTipoImpuesto" id="tipoImpuesto" name="tipoImpuesto"  >
+                                    <option  value=" " >Seleccionar</option>
                                     <option  each={impuestos}  value="{codigo}" selected="{articulo.tipoImpuesto ==codigo?true:false}"  >{descripcion}</option>
                                 </select>
                             </div>
@@ -566,10 +567,11 @@
 
 self.on('mount',function(){
     __InicializarTabla('.tableListar')
-    agregarInputsCombos()
-    ActivarEventoFiltroArticulo('.tableListar')
-    __listado()
     includeActionsArticulo('.dataTables_wrapper','.dataTables_length')
+    agregarInputsCombos()
+    ActivarEventoFiltro('.tableListar')
+    __listado()
+    
     __MantenimientoAgregarInventario()
     __MantenimientoAgregar()
     __Eventos()
@@ -668,6 +670,7 @@ function includeActionsArticulo(dataTables_wrapper,dataTables_length) {
 *incluir el boton agreagar de inventario
 **/
 function includeActionsInventario(dataTables_wrapper,dataTables_length) {
+    
     $( ".btn-agregarInventario" ).remove();
     $( ".btn-agregar" ).remove();
     var parent = $(dataTables_wrapper);
@@ -1000,7 +1003,6 @@ function __listadoInventario(){
      var formulario = $('#formulario').serialize();
     $("#tableListarInventario").dataTable().fnClearTable(); 
     __InicializarTabla('.tableListarInventario')  
-    __MantenimientoAgregarInventario()
     $.ajax({
         url: "ListarInventarioAjax.do",
         datatype: "json",
@@ -1021,6 +1023,8 @@ function __listadoInventario(){
 
              }else{
                  includeActionsInventario('.dataTables_wrapper','.dataTables_length')
+                  __MantenimientoAgregarInventario()
+                  
              }
         },
         error: function (xhr, status) {
@@ -1474,10 +1478,6 @@ function __listadoCategoriasActivas(){
              if(result.aaData.length > 0){
                 self.categorias.aaData =  result.aaData
                 self.update();
-               
-                
-                
-                 
             }            
         },
         error: function (xhr, status) {
@@ -1500,7 +1500,6 @@ function __listadoMarcasActivas(){
             if(result.aaData.length > 0){
                 self.marcas.aaData =  result.aaData
                 self.update();
-            
             }            
         },
         error: function (xhr, status) {
@@ -1536,6 +1535,7 @@ function __listadoTipoUnidadesActivas(){
 **/
 function __ComboEstados(){
     self.estados =[]
+    self.update()
     self.estados.push({
         codigo: $.i18n.prop("combo.estado.Activo"),
         descripcion:$.i18n.prop("combo.estado.Activo")
@@ -1551,6 +1551,7 @@ function __ComboEstados(){
 **/
 function __ComboContables(){
     self.contables =[]
+    self.update()
     self.contables.push({
         codigo: $.i18n.prop("boolean.si"),
         descripcion:$.i18n.prop("boolean.si")
@@ -1567,6 +1568,7 @@ function __ComboContables(){
 **/
 function __Impuestos(){
     self.impuestos =[]
+    self.update()
     self.impuestos.push({
         codigo: '01',
         descripcion:$.i18n.prop("tipo.impuesto.ventas")
@@ -1719,7 +1721,6 @@ function __articuloXInventarios_Listar(){
 * 1  Mostrar  2  Modificar
 **/
 function __consultar(){
-
     var formulario = $('#formulario').serialize();
     $.ajax({
         url: "MostrarArticuloAjax.do",
@@ -1765,6 +1766,12 @@ function __consultar(){
 *   Agregar 
 **/
 __agregar(){
+       if ($('#tipoImpuesto').val() == " "){
+           if($('#impuesto').val()>0){
+              mensajeError($.i18n.prop("error.articulo.indicar.tipo.impuesto"))
+              return 
+         }
+       }
          if ($("#formulario").valid()) {
         // Permite obtener todos los valores de los elementos del form del jsp
         var formulario = $("#formulario").serialize();
@@ -1851,7 +1858,7 @@ __Modificar(){
 *  Mostrar listado datatable
 **/
 function __listado(){
-    $("#tableListar").dataTable().fnClearTable(); 
+   // $("#tableListar").dataTable().fnClearTable(); 
     $.ajax({
         url: "ListarArticuloAjax.do",
         datatype: "json",
@@ -1864,11 +1871,13 @@ function __listado(){
                 agregarInputsCombos();
                 __MantenimientoAgregar()
                     //Actimpuestor filtros
-                ActivarEventoFiltroArticulo(".tableListar")
+                ActivarEventoFiltro(".tableListar")
                 __modificarRegistro_Listar()
                 __Eventos()
                 __articuloXInventarios_Listar()
              }else{
+                  includeActionsArticulo('.dataTables_wrapper','.dataTables_length')
+                  __MantenimientoAgregar()
                  __Eventos()
              } 
         },

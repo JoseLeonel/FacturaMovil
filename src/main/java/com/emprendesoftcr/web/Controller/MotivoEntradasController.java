@@ -59,9 +59,6 @@ public class MotivoEntradasController {
 	private MotivoEntradaBo																			motivoEntradaBo;
 
 	@Autowired
-	private EmpresaBo																						empresaBo;
-
-	@Autowired
 	private UsuarioBo																						usuarioBo;
 
 	@Autowired
@@ -149,7 +146,7 @@ public class MotivoEntradasController {
 			}
 			motivoEntrada.setCreated_at(new Date());
 			motivoEntrada.setUpdated_at(new Date());
-			motivoEntrada.setEstado(Constantes.ESTADO_ACTIVO);
+			
 			motivoEntrada.setUsuario(usuarioSesion);
 			motivoEntrada.setEmpresa(usuarioSesion.getEmpresa());
 			motivoEntradaBo.agregar(motivoEntrada);
@@ -198,6 +195,7 @@ public class MotivoEntradasController {
 				motivoEntradaBD.setDescripcion(motivoEntrada.getDescripcion());
 				motivoEntradaBD.setUpdated_at(new Date());
 				motivoEntradaBD.setUsuario(usuarioSesion);
+				motivoEntradaBD.setEstado(motivoEntrada.getEstado());
 				motivoEntradaBo.modificar(motivoEntradaBD);
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("motivoEntrada.modificado.correctamente", motivoEntradaBD);
 			}

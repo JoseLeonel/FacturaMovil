@@ -146,7 +146,7 @@
                         <div class="row">    
                             <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("cliente.otraSena")}</label>
-                                <input type="text" class="form-control otraSena" placeHolder ="{$.i18n.prop("cliente.otraSena")}" id="otraSena" name="otraSena" value="{cliente.otraSena}"  >
+                                <textarea maxlength="250" placeHolder ="{$.i18n.prop("cliente.otraSena")}" class="form-control otraSena" id="otraSena" name="otraSena" value="{cliente.otraSena}" > </textarea> 
                             </div>
                         </div>
 
@@ -162,11 +162,18 @@
                     </form>    
                 </div>
                 <div class="box-footer">
-                    <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-                        {$.i18n.prop("btn.volver")}
-                    </button>
-                     <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
-                     <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
+                    <div class="row">
+                        <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                                {$.i18n.prop("btn.volver")}
+                            </button>
+                        </div>
+                        <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" > {$.i18n.prop("btn.modificar")}</button>
+                            <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" > {$.i18n.prop("btn.agregar")}</button>
+                        </div>
+                    </div>    
+                               
                   
                 </div>
             </div>   
@@ -458,6 +465,8 @@ function _incializarCampos(){
 *  Mostrar listado datatable TipoCedulas
 **/
 function __listadoTipoCedulas(){
+    self.tipoCedulas               = {data:[]}  // definir el data del datatable
+    self.update()
     self.tipoCedulas.data.push({
         valor:"01",
         descripcion:$.i18n.prop("tipo.cedula.fisica")
@@ -474,6 +483,7 @@ function __listadoTipoCedulas(){
         valor:"04",
         descripcion:$.i18n.prop("tipo.cedula.nite")
     })
+    self.update()
 }
 /**
 * Camps requeridos
@@ -533,6 +543,7 @@ var reglasDeValidacion = function() {
 **/
 function __ComboEstados(){
     self.estados =[]
+    self.update()
     self.estados.push({
         codigo: "Activo",
         descripcion:$.i18n.prop("combo.estado.Activo")
@@ -882,12 +893,5 @@ function agregarInputsCombos(){
     })
 
 }
-
-
-
-
-
-
-
 </script>
 </cliente-crud>

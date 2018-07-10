@@ -143,7 +143,7 @@
                     </div>                    
                     <div class="box-footer">
                         <button onclick={_AtrasFacturaFinal} type="button" class="btn-dark-gray btn-back pull-left"  >{$.i18n.prop("btn.volver")}</button>
-                        <button  onclick={__AplicarYcrearFactura}  class="btn-green btn-edit pull-right " > &nbsp {$.i18n.prop("btn.aplicar")}</button>
+                        <button  onclick={__AplicarYcrearFactura}  class="btn-green btn-edit pull-right " >  {$.i18n.prop("btn.aplicar")}</button>
                     </div>
                 </div><!--fin del cabecera-izquierda-->
                 <section class="cabecera-derecha">
@@ -196,10 +196,10 @@
             <div  class="contenedor-compra " >
                 <div class="cabecera-izquierda">
                     <div class="row">
-                            <div class="col-sx-6 col-sm-6 col-md-6 col-lg-10">
+                            <div class="col-sx-12 col-sm-6 col-md-6 col-lg-10">
                                 <input onkeypress={__addProductToDetail}  id="codigo" class="form-control" type="text" placeholder="XXXXXXXXXXX" />
                             </div>
-                            <div class="col-sx-6 col-sm-6 col-md-6 col-lg-2">
+                            <div class="col-sx-12 col-sm-6 col-md-6 col-lg-2">
                                 <button    onclick = {__ListaDecodigos} class="btn-green btn-buscar " id="btn-facturar" >
                                     {$.i18n.prop("btn.consultar")} 
                                 </button>

@@ -69,20 +69,20 @@
                             
                         </div>
                         <div class="row">
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("vendedor.telefono")} </label>
                                 <input type="text" class="form-control telefono" placeHolder ="{$.i18n.prop("vendedor.telefono")}" id="telefono" name="telefono" value="{dataTable.telefono}"  >
                             </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("vendedor.celular")} </label>
                                 <input type="text" placeHolder ="{$.i18n.prop("vendedor.celular")}" class="form-control celular" id="celular" name="celular" value="{dataTable.celular}"  >
                             </div>
 
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("vendedor.descuento")} </label>
                                 <input type="text" placeHolder ="{$.i18n.prop("vendedor.descuento")}" class="form-control descuento" id="descuento" name="descuento" value="{dataTable.descuento}"  >
                             </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("vendedor.porcentajeComision")} </label>
                                 <input type="text" placeHolder ="{$.i18n.prop("vendedor.porcentajeComision")}" class="form-control porcentajeComision" id="porcentajeComision" name="porcentajeComision" value="{dataTable.porcentajeComision}"  >
                             </div>
@@ -98,7 +98,7 @@
                         <div class="row">
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("vendedor.otraSena")}</label>
-                                <input type="text" placeHolder ="{$.i18n.prop("vendedor.otraSena")}" class="form-control otraSena" id="otraSena" name="otraSena" value="{dataTable.otraSena}"  >
+                                <textarea maxlength="250" placeHolder ="{$.i18n.prop("vendedor.otraSena")}" class="form-control otraSena" id="otraSena" name="otraSena" value="{dataTable.otraSena}" > </textarea> 
                             </div>
                         </div>
 
@@ -229,7 +229,6 @@ var reglasDeValidacion = function() {
                 maxlength:20,
                 minlength:9,
 			},
-
 			nombreCompleto : {
 				required : true,
                 maxlength:255,
@@ -253,7 +252,8 @@ var reglasDeValidacion = function() {
                 maxlength:8,
                 minlength:1,
                 telefonoFormat:true
-			}                       
+			}   
+
 		},
 		ignore : []
 
@@ -275,7 +275,6 @@ function _inicializarCampos(){
     $('.otraSena').val(null)
     $(".errorServerSideJgrid").remove();
     $("#formulario").validate(reglasDeValidacion());
-    
     self.dataTable  = {
 		id:null,
 		nombreCompleto:"",
@@ -294,7 +293,6 @@ function _inicializarCampos(){
         }
     }
     self.update()
-
 }
 
 /**
@@ -305,7 +303,8 @@ function __Eventos(){
     $("#formulario").validate(reglasDeValidacion());
     $("#nombreCompleto").attr("maxlength", 255);
     $("#cedula").attr("maxlength", 20);
-    $("#correoElectronico").attr("maxlength", 255);
+    $("#correoElectronico").attr("maxlength", 250);
+    $("#otraSenas").attr("maxlength", 250);
     $("#direccion").attr("maxlength", 255);
     $("#telefono").attr("maxlength", 8);
     $("#celular").attr("maxlength", 8);
@@ -340,7 +339,6 @@ function __Eventos(){
 	})   
 
 }
-
 /**
 *  Regresar al listado
 **/
@@ -369,8 +367,6 @@ __regresarAlListado(){
             }
     });    
 }
-
-
 /**
 *  Crear el combo de estados
 **/
@@ -406,7 +402,6 @@ __agregar(){
             confirmButtonClass: 'btn btn-success',
             cancelButtonClass: 'btn btn-danger',
         }).then(function (isConfirm) {
-            //Ajax__inicializarTabla();
             if(isConfirm){
                 $.ajax({
                     type : "POST",
@@ -424,11 +419,8 @@ __agregar(){
       	                           type: 'error',
       	                           showCancelButton: false,
       	                           confirmButtonText: 'Aceptar',
-      	                                	  
       	                         })
-                                
                             }
-                            
                         } else {
                         	serverMessageJson(data);
                            

@@ -38,8 +38,8 @@
 <!-- Fin del Listado -->
 <div  >
     <div class="row center " show ={mostrarFormulario} >
-    <div class="col-md-2 col-lg-2 col-sm-2"></div>
-        <div class="col-md-8 col-lg-8 col-sx-12 col-sm-8">
+    <div class=" col-lg-4 "></div>
+        <div class="col-md-12 col-lg-4 col-sx-12 col-sm-12">
             <div class="box box-solid box-primary">
                 <div class="box-header with-border">
                     <h1 class="box-title"><i class="fa fa-edit"></i>&nbsp {motivoSalida.id > 0 ? $.i18n.prop("motivoSalida.modificar")   :$.i18n.prop("motivoSalida.agregar")}     </h1>
@@ -53,14 +53,13 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("motivoSalida.descripcion")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" class="form-control descripcion" placeHolder ="{$.i18n.prop("motivoSalida.descripcion")}" id="descripcion" name="descripcion" value="{motivoSalida.descripcion}"  >
-
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label">{$.i18n.prop("motivoSalida.estado")}</label>
                                 <select  class="form-control" id="estado" name="estado" >
                                     <option  each={estados}  value="{codigo}" selected="{motivoSalida.estado ==codigo?true:false}" >{descripcion}</option>
@@ -70,17 +69,21 @@
                     </form>    
                 </div>
                 <div class="box-footer">
-                    <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left "  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-                        {$.i18n.prop("btn.volver")}
-                    </button>
-
-                     <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
-                     <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
-                  
+                    <div class="row">
+                       <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left "  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                                {$.i18n.prop("btn.volver")}
+                            </button>
+                       </div>
+                       <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" >  {$.i18n.prop("btn.modificar")}</button>
+                            <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" > {$.i18n.prop("btn.agregar")}</button>
+                       </div>
+                    </div>   
                 </div>
             </div>   
         </div>
-        <div class="col-md-2 col-lg-2 col-sm-2"></div>
+        <div class=" col-lg-4 "></div>
     </div>
 </div>
 <style type ="text/css">
@@ -185,6 +188,7 @@ var reglasDeValidacion = function() {
 **/
 function Limpiar(){
     $("#descripcion").val(null)
+    $("#estado").val(null)
     $(".errorServerSideJgrid").remove();
     $("#formulario").validate(reglasDeValidacion());
       self.motivoSalida = {
@@ -220,12 +224,13 @@ function __listadoEmpresasActivas(){
 **/
 function __ComboEstados(){
     self.estados =[]
+    self.update()
     self.estados.push({
-        codigo: 1,
+        codigo: $.i18n.prop("combo.estado.Activo"),
         descripcion:$.i18n.prop("combo.estado.Activo")
      });
     self.estados.push({
-        codigo: 2,
+        codigo: $.i18n.prop("combo.estado.Inactivo"),
         descripcion: $.i18n.prop("combo.estado.Inactivo")
      });
      self.update();
@@ -327,6 +332,7 @@ function __consultar(){
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         //desahabilita  listado 
                         Limpiar() 
+                        
                         self.mostrarListado   = false;
                         self.mostrarFormulario  = true 
                         //desahabilita boton modificar
@@ -335,7 +341,9 @@ function __consultar(){
                         self.botonAgregar     = false;                        
                         self.motivoSalida  =  modeloTabla
                         self.update()
+                        $('#descripcion').val(self.motivoSalida.descripcion)
                         __ComboEstados()
+                        
                      });
                 }
             }

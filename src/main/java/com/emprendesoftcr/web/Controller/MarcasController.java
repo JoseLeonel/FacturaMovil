@@ -161,7 +161,7 @@ public class MarcasController {
 			marca.setEmpresa(usuario.getEmpresa());
 			marca.setCreated_at(new Date());
 			marca.setUpdated_at(new Date());
-			marca.setEstado(Constantes.ESTADO_ACTIVO);
+	
 			marcaBo.agregar(marca);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("marca.agregar.correctamente", marca);
 
@@ -205,6 +205,7 @@ public class MarcasController {
 				}
 				marcaBD.setDescripcion(marca.getDescripcion());
 				marcaBD.setUpdated_at(new Date());
+				marcaBD.setEstado(marca.getEstado());
 				marcaBo.modificar(marcaBD);
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("marca.modificado.correctamente", marcaBD);
 			}

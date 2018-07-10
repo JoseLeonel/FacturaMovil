@@ -53,14 +53,14 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("motivoEntrada.descripcion")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" class="form-control descripcion" placeHolder ="{$.i18n.prop("motivoEntrada.descripcion")}" id="descripcion" name="descripcion" value="{motivoEntrada.descripcion}"  >
 
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <div class="col-md-6 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label">{$.i18n.prop("motivoEntrada.estado")}</label>
                                 <select  class="form-control" id="estado" name="estado" >
                                     <option  each={estados}  value="{codigo}" selected="{motivoEntrada.estado ==codigo?true:false}" >{descripcion}</option>
@@ -70,16 +70,23 @@
                     </form>    
                 </div>
                 <div class="box-footer">
-                    <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-                        {$.i18n.prop("btn.volver")}
-                    </button>
-                     <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
-                     <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
+                    <div class="row">
+                       <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                                {$.i18n.prop("btn.volver")}
+                            </button>
+                       </div>
+                       <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" >  {$.i18n.prop("btn.modificar")}</button>
+                            <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" > {$.i18n.prop("btn.agregar")}</button>
+                       </div>
+                    </div>   
+
                   
                 </div>
             </div>   
         </div>
-        <div class="col-md-2 col-lg-2 col-sm-2"></div>
+        <div class="col-lg-4 "></div>
     </div>
 </div>
 
@@ -199,12 +206,13 @@ var reglasDeValidacion = function() {
 **/
 function __ComboEstados(){
     self.estados =[]
+    self.update()
     self.estados.push({
-        codigo: 1,
+        codigo: $.i18n.prop("combo.estado.Activo"),
         descripcion:$.i18n.prop("combo.estado.Activo")
      });
     self.estados.push({
-        codigo: 2,
+        codigo: $.i18n.prop("combo.estado.Inactivo"),
         descripcion: $.i18n.prop("combo.estado.Inactivo")
      });
      self.update();

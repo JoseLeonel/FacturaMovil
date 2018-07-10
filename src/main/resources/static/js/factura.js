@@ -502,17 +502,31 @@ function includeActions(dataTables_wrapper,dataTables_length) {
 function ActivarEventoFiltro(tabla){
 	// Busquedas por Inpus
 	var table = $(tabla).DataTable();
-    // Apply the search
+   // Busquedas por Inpus
+
     table.columns().every( function () {
-        var that = this;
- 
-        $( 'input', this.footer() ).on( 'keyup change', function () {
-            if ( that.search() !== this.value ) {
-                that
-                    .search( this.value )
-                    .draw();
+        var dataTableColumns = this
+   
+        var searchTextBoxes = $(this.footer()).find('input');
+        searchTextBoxes.on('keyup change',function(){
+     	   dataTableColumns.search(this.value).draw();
+        });
+        $( 'select', this.footer() ).click(function (event) {
+            if ( dataTableColumns.search() !== this.value ) {
+            	
+           	   dataTableColumns .search("^"+this.value, true, false ).draw();
             }
-        } );
+         } );
+        
+        var searchTextBoxesSelect = $(this.header()).find('select');
+        searchTextBoxes.on('keyup change',function(){
+     	   dataTableColumns.search(this.value).draw();
+        });
+
+        searchTextBoxesSelect.on('click',function(e){
+     	   e.stopPrapagation();
+        });
+        
     } );
 }
 

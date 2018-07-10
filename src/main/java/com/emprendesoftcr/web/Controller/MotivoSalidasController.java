@@ -58,8 +58,7 @@ public class MotivoSalidasController {
 	@Autowired
 	private MotivoSalidaBo																			motivoSalidaBo;
 
-	@Autowired
-	private EmpresaBo																						empresaBo;
+	
 
 	@Autowired
 	private UsuarioBo																						usuarioBo;
@@ -160,7 +159,7 @@ public class MotivoSalidasController {
 			motivoSalida.setEmpresa(usuarioSesion.getEmpresa());
 			motivoSalida.setCreated_at(new Date());
 			motivoSalida.setUpdated_at(new Date());
-			motivoSalida.setEstado(Constantes.ESTADO_ACTIVO);
+		
 			motivoSalida.setUsuario(usuarioSesion);
 			motivoSalidaBo.agregar(motivoSalida);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("motivoSalida.agregar.correctamente", motivoSalida);
@@ -207,7 +206,8 @@ public class MotivoSalidasController {
 				}
 				motivoSalidaBD.setDescripcion(motivoSalida.getDescripcion());
 				motivoSalidaBD.setUpdated_at(new Date());
-				motivoSalida.setUsuario(usuarioSesion);
+				motivoSalidaBD.setUsuario(usuarioSesion);
+				motivoSalidaBD.setEstado(motivoSalida.getEstado());
 				motivoSalidaBo.modificar(motivoSalidaBD);
 				
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("motivoSalida.modificado.correctamente", motivoSalidaBD);

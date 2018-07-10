@@ -5,6 +5,8 @@ import com.emprendesoftcr.modelo.Factura;
 public interface FacturaXMLServices {
 	
 	
-	void generarFacturaElectronicaTributacionXML(Factura factura);
+	void generarFacturaElectronicaTributacionXML(String xmlString,Factura factura);
+	
+	 String  generarFacturaElectronicaXML(Factura factura);
 
 }

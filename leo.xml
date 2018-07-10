@@ -2,7 +2,7 @@
 <FacturaElectronica xmlns="https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/facturaElectronica" xmlns:ns2="http://www.w3.org/2000/09/xmldsig#">
     <Clave>50606072018000110010978001001000000000180112345678</Clave>
     <NumeroConsecutivo>001001000000000180</NumeroConsecutivo>
-    <FechaEmision>2018-07-07T00:42:14.866-06:00</FechaEmision>
+    <FechaEmision>2018-07-08T00:13:34.775-06:00</FechaEmision>
     <Emisor>
         <Nombre>Empresa I</Nombre>
         <Identificacion>
@@ -11,7 +11,9 @@
         </Identificacion>
         <NombreComercial>emprendesoftcr</NombreComercial>
         <Ubicacion>
-            <Barrio></Barrio>
+            <Provincia>1</Provincia>
+            <Canton>1</Canton>
+            <Barrio>1</Barrio>
             <OtrasSenas>BARRIO LAS LUISAS SABANA NORTE DE LA DOLE 500 MTS N AL COSTADO DE IGLESIA CATOL</OtrasSenas>
         </Ubicacion>
         <Telefono>
@@ -77,4 +79,9 @@
     <Otros>
         <OtroTexto codigo="Obs">Ventas de productos</OtroTexto>
     </Otros>
+    <ns2:Signature>
+        <ns2:SignedInfo>
+            <ns2:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+        </ns2:SignedInfo>
+    </ns2:Signature>
 </FacturaElectronica>

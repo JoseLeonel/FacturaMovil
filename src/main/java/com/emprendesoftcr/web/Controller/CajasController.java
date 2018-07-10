@@ -137,7 +137,7 @@ public class CajasController {
 				result.rejectValue("descripcion", "error.caja.descripcion.existe");
 			}
 
-			cajaBd = cajaBo.findByTerminalAndEmpresa(caja.getTerminal(), caja.getEmpresa());
+			cajaBd = cajaBo.findByTerminalAndEmpresa(caja.getTerminal(), usuario.getEmpresa());
 			if (cajaBd != null) {
 				result.rejectValue("terminal", "error.caja.terminal.existe");
 			}
@@ -148,7 +148,7 @@ public class CajasController {
 			caja.setEmpresa(usuario.getEmpresa());
 			caja.setCreated_at(new Date());
 			caja.setUpdated_at(new Date());
-			caja.setEstado(Constantes.ESTADO_ACTIVO);
+			
 			caja.setUsuario(usuario);
 			cajaBo.agregar(caja);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("caja.agregar.correctamente", caja);
@@ -165,6 +165,7 @@ public class CajasController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("caja.no.modificado", result.getAllErrors());
 			}
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			Caja cajaBD = cajaBo.buscar(caja.getId());
 
 			if (cajaBD == null) {
@@ -172,15 +173,15 @@ public class CajasController {
 			} else {
 				Caja cajaValidar = null;
 				if (!caja.getDescripcion().equals(cajaBD.getDescripcion())) {
-					cajaValidar = cajaBo.findByDescripcionAndEmpresa(caja.getDescripcion(), caja.getEmpresa());
+					cajaValidar = cajaBo.findByDescripcionAndEmpresa(caja.getDescripcion(), usuario.getEmpresa());
 					if (cajaValidar != null) {
 						result.rejectValue("descripcion", "error.caja.descripcion.existe");
 					}
 				}
 				if (!caja.getTerminal().equals(cajaBD.getTerminal())) {
-					cajaValidar = cajaBo.findByTerminalAndEmpresa(caja.getTerminal(), caja.getEmpresa());
+					cajaValidar = cajaBo.findByTerminalAndEmpresa(caja.getTerminal(), usuario.getEmpresa());
 					if (cajaValidar != null) {
-						result.rejectValue("terminal", "error.caja.descripcion.existe");
+						result.rejectValue("terminal", "error.caja.terminal.existe");
 					}
 
 				}
@@ -191,6 +192,7 @@ public class CajasController {
 				cajaBD.setDescripcion(caja.getDescripcion());
 				cajaBD.setTerminal(caja.getTerminal());
 				cajaBD.setUpdated_at(new Date());
+				cajaBD.setEstado(caja.getEstado());
 				cajaBo.modificar(cajaBD);
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("caja.modificado.correctamente", cajaBD);
 			}

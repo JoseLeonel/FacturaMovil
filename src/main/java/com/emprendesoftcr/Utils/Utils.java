@@ -21,10 +21,8 @@ import java.util.StringTokenizer;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -33,33 +31,53 @@ import org.springframework.web.context.ContextLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import com.emprendesoftcr.modelo.Factura;
-import com.emprendesoftcr.xml.EmisorType;
-import com.emprendesoftcr.xml.FacturaElectronica;
-import com.emprendesoftcr.xml.IdentificacionType;
-import com.emprendesoftcr.xml.TelefonoType;
+import com.google.common.base.Strings;
 
 public final class Utils {
 
-
-
-	
 	public static Date sumarDiasFecha(Date fecha, int dias) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(fecha);
 		calendar.add(Calendar.DAY_OF_YEAR, dias);
 		return calendar.getTime();
 	}
+
 	
-	
-	
+  /**
+   * A�ade ceros a la izquierda de un valor para que este alcance n longitud
+   * @param num Valor a ser completado con ceros a la izquierda
+   * @param places Longitud que tendr� el valor una vez completado
+   * @return String con el nuevo valor
+   */
+  public static String zeroPad(int num, int places) {
+      return String.format("%0" + Integer.toString(places) + "d", num);
+  }
+
+  /**
+   * A�ade ceros a la izquierda de un valor para que este alcance n longitud
+   * @param num Valor a ser completado con ceros a la izquierda
+   * @param places Longitud que tendr� el valor una vez completado
+   * @return String con el nuevo valor
+   */
+  public static String zeroPad(long num, int places) {
+      return Strings.padStart(Long.toString(num), places, '0');
+  }
+
+  /**
+   * A�ade ceros a la izquierda de un valor para que este alcance n longitud
+   * @param num Valor a ser completado con ceros a la izquierda
+   * @param places Longitud que tendr� el valor una vez completado
+   * @return String con el nuevo valor
+   */
+  public static String zeroPad(String num, int places) {
+      return Strings.padStart(num, places, '0');
+  }
+
+
 	/**
-	 * @param dateString
-	 *            An input String, presumably from a user or a database table.
-	 * @param formats
-	 *            An array of date formats that we have allowed for.
-	 * @return A Date (java.util.Date) reference. The reference will be null if
-	 *         we could not match any of the known formats.
+	 * @param dateString An input String, presumably from a user or a database table.
+	 * @param formats An array of date formats that we have allowed for.
+	 * @return A Date (java.util.Date) reference. The reference will be null if we could not match any of the known formats.
 	 */
 	public static Date parseDate(String dateString) {
 		Date date = null;
@@ -81,9 +99,6 @@ public final class Utils {
 		return date;
 	}
 
-	
-	
-	
 	public static Boolean stringIsNullOrEmpty(String valor) {
 
 		if (valor == null) {
@@ -101,7 +116,7 @@ public final class Utils {
 		calendar.add(Calendar.DAY_OF_YEAR, dias);
 		return calendar.getTime();
 	}
-	
+
 	/**
 	 * Retorna la fecha en el formato especificado. Pueden ser: yyyyMMdd, yyyy-MM-dd, dd-MM-yyyy, etc
 	 * @param date
@@ -109,9 +124,9 @@ public final class Utils {
 	 */
 	public static String getFecha(Date date, String format) {
 		SimpleDateFormat sd1 = new SimpleDateFormat(format);
-		
+
 		return sd1.format(date);
-   }
+	}
 
 	// /////////////////////////////////////////////////////////
 
@@ -125,9 +140,7 @@ public final class Utils {
 	/* Metodos utilitarios globales */
 
 	/**
-	 * Metodo utilizado para normalizar el nombre de un property durante el proceso de Sort en un reporte. Si una propiedad 'name' de tipo numerico se quiere mostrar como una descripcion de la misma, se
-	 * crea un metodo 'getStrName' y se usa en la tabla del reporte. Al usar ordenamiento, el component retorna el nombre de la propiedad como 'strName'. Este metodo se encarga de pasar el 'strName' a
-	 * 'name'
+	 * Metodo utilizado para normalizar el nombre de un property durante el proceso de Sort en un reporte. Si una propiedad 'name' de tipo numerico se quiere mostrar como una descripcion de la misma, se crea un metodo 'getStrName' y se usa en la tabla del reporte. Al usar ordenamiento, el component retorna el nombre de la propiedad como 'strName'. Este metodo se encarga de pasar el 'strName' a 'name'
 	 */
 	public static String normalizarNombreProperty(String property, String prefijo) {
 		if (property.startsWith(prefijo)) {
@@ -759,9 +772,7 @@ public final class Utils {
 	}
 
 	/**
-	 * Metodo para imprimir en el log, un mensaje de acuerdo a su origen Si obj es una Excepcion, se determina el mensaje y el metodo donde ocurrio el error Si es un String, se determina si corresponde
-	 * a una llave en el archivo de properties para los mensajes en el codigo java. Si no es asi, se envia como mensaje sin modificar Si no es ninguno de los casos anteriores, se envia a imprimir el
-	 * toString del objeto
+	 * Metodo para imprimir en el log, un mensaje de acuerdo a su origen Si obj es una Excepcion, se determina el mensaje y el metodo donde ocurrio el error Si es un String, se determina si corresponde a una llave en el archivo de properties para los mensajes en el codigo java. Si no es asi, se envia como mensaje sin modificar Si no es ninguno de los casos anteriores, se envia a imprimir el toString del objeto
 	 * @param obj La Excepcion con la informacion del Stack de llamadas, un mensaje o una llave para obtener el mensaje desde un archivo de properties
 	 * @param clazz La clase desde la cual se hace la llamada
 	 */
@@ -774,9 +785,7 @@ public final class Utils {
 	}
 
 	/**
-	 * Metodo para imprimir en el log, un mensaje de acuerdo a su origen Si obj es una Excepcion, se determina el mensaje y el metodo donde ocurrio el error Si es un String, se determina si corresponde
-	 * a una llave en el archivo de properties para los mensajes en el codigo java. Si no es asi, se envia como mensaje sin modificar Si no es ninguno de los casos anteriores, se envia a imprimir el
-	 * toString del objeto
+	 * Metodo para imprimir en el log, un mensaje de acuerdo a su origen Si obj es una Excepcion, se determina el mensaje y el metodo donde ocurrio el error Si es un String, se determina si corresponde a una llave en el archivo de properties para los mensajes en el codigo java. Si no es asi, se envia como mensaje sin modificar Si no es ninguno de los casos anteriores, se envia a imprimir el toString del objeto
 	 * @param obj La Excepcion con la informacion del Stack de llamadas, un mensaje o una llave para obtener el mensaje desde un archivo de properties
 	 * @param clazz La clase desde la cual se hace la llamada
 	 */
@@ -788,12 +797,10 @@ public final class Utils {
 		}
 	}
 
-	private static int	QUEUE_LENGHT	= 500;
+	private static int QUEUE_LENGHT = 500;
 
 	/**
-	 * Metodo para imprimir en el log, un mensaje de acuerdo a su origen Si obj es una Excepcion, se determina el mensaje y el metodo donde ocurrio el error Si es un String, se determina si corresponde
-	 * a una llave en el archivo de properties para los mensajes en el codigo java. Si no es asi, se envia como mensaje sin modificar Si no es ninguno de los casos anteriores, se envia a imprimir el
-	 * toString del objeto
+	 * Metodo para imprimir en el log, un mensaje de acuerdo a su origen Si obj es una Excepcion, se determina el mensaje y el metodo donde ocurrio el error Si es un String, se determina si corresponde a una llave en el archivo de properties para los mensajes en el codigo java. Si no es asi, se envia como mensaje sin modificar Si no es ninguno de los casos anteriores, se envia a imprimir el toString del objeto
 	 * @param obj La Excepcion con la informacion del Stack de llamadas, un mensaje o una llave para obtener el mensaje desde un archivo de properties
 	 * @param clazz La clase desde la cual se hace la llamada
 	 * @param level Si se va a imprimir como 0-INFO, 1-ERROR
@@ -1055,7 +1062,7 @@ public final class Utils {
 
 		return anolist;
 	}
-	
+
 	public static String getMesStr(Integer mesParam) {
 		String mesDesc = "N/A";
 		switch (mesParam) {
@@ -1105,47 +1112,46 @@ public final class Utils {
 	 * El metodo retorna fecha con formato
 	 * @param
 	 * @return
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public static String getFechaFormato(Integer fecha) {
-		 DateFormat originalFormat = new SimpleDateFormat("yyyyMMdd");
-     DateFormat targetFormat = new SimpleDateFormat("yyyy-MM-dd");    
+		DateFormat originalFormat = new SimpleDateFormat("yyyyMMdd");
+		DateFormat targetFormat = new SimpleDateFormat("yyyy-MM-dd");
 		try {
 			Date date = originalFormat.parse(fecha.toString());
-			String formattedDate = targetFormat.format(date); 
+			String formattedDate = targetFormat.format(date);
 			return formattedDate;
-			
+
 		} catch (ParseException e) {
 			e.printStackTrace();
-			
-		}
-		return null;
-	}	
-	
-	/**
-	 * El metodo retorna hora con formato
-	 * @param
-	 * @return 
-	 */
-	public static String getHoraFormato(Integer hora) {
-		 DateFormat originalFormat = new SimpleDateFormat("hhmmssmm");
-     DateFormat targetFormat = new SimpleDateFormat("hh:mm:ss");    
-		try {
-			Date date = originalFormat.parse(hora.toString());
-			String formattedDate = targetFormat.format(date); 
-			return formattedDate;
-			
-		} catch (ParseException e) {
-			e.printStackTrace();
-			
+
 		}
 		return null;
 	}
-	
-	
-	public static String normalizarNombreArchivoExcel(String value) {		
+
+	/**
+	 * El metodo retorna hora con formato
+	 * @param
+	 * @return
+	 */
+	public static String getHoraFormato(Integer hora) {
+		DateFormat originalFormat = new SimpleDateFormat("hhmmssmm");
+		DateFormat targetFormat = new SimpleDateFormat("hh:mm:ss");
+		try {
+			Date date = originalFormat.parse(hora.toString());
+			String formattedDate = targetFormat.format(date);
+			return formattedDate;
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+
+		}
+		return null;
+	}
+
+	public static String normalizarNombreArchivoExcel(String value) {
 		if (value.contains("Excel")) {
-			value = value.replace("Excel"," ");
+			value = value.replace("Excel", " ");
 		}
 		return value.trim();
 	}
@@ -1153,25 +1159,25 @@ public final class Utils {
 	/**
 	 * El metodo retorna fecha y hora del sistema
 	 * @param
-	 * @return 
+	 * @return
 	 */
 	public static String formatoFechaDelSistema(String dateStr) {
-        SimpleDateFormat readFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+		SimpleDateFormat readFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
 
-        SimpleDateFormat writeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = null;
-        try {
-            date = readFormat.parse(dateStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+		SimpleDateFormat writeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = null;
+		try {
+			date = readFormat.parse(dateStr);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
-        if (date != null) {
-            return writeFormat.format(date);
-        }
-        return null;
-    }
-	
+		if (date != null) {
+			return writeFormat.format(date);
+		}
+		return null;
+	}
+
 	/**
 	 * Cambiar el formato de fecha
 	 * @param fecha
@@ -1185,15 +1191,14 @@ public final class Utils {
 
 		gc.setTime(date);
 
-		try{
-		    xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
+		try {
+			xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		catch(Exception e){
-		    e.printStackTrace();
-		}
-		
+
 		return xmlDate;
-		
+
 	}
-	
+
 }

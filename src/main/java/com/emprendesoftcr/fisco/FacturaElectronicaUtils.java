@@ -1,6 +1,39 @@
 package com.emprendesoftcr.fisco;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.InvalidKeyException;
+import java.security.KeyFactory;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.Signature;
+import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Scanner;
+import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.json.JSONObject;
+
+import com.emprendesoftcr.error.SignException;
+import com.google.common.base.Charsets;
+import com.google.common.collect.ImmutableList;
+import com.google.common.hash.Hashing;
+import com.google.common.io.BaseEncoding;
+import com.google.common.io.Files;
 
 public final class FacturaElectronicaUtils {
 
@@ -56,5 +89,167 @@ public final class FacturaElectronicaUtils {
 	public static String replazarConZeros(String valor, String formato) {
 		return formato.substring(valor.toString().length()) + valor;
 	}
+
+	 /**
+   * Codifica un texto usando sha256 retornandolo en base64
+   * @param txt Texto a ser codificado
+   * @return Texto codificado en base64
+   */
+  public static String digest(String txt) {
+      return BaseEncoding.base64().encode(Hashing.sha256()
+          .hashString(txt, StandardCharsets.UTF_8)
+          .asBytes());
+  }
+
+  /**
+   * Transforma un texto a su expresi�n en base64
+   * @param text Texto a ser transformado a base64
+   * @return Texto transformado a base64
+   */
+  public static String base64Decode(String text) {
+      return new String(BaseEncoding.base64().decode(text), StandardCharsets.UTF_8);
+  }
+
+  /**
+   * Transforma un arreglo de bytes a su expresi�n en base64
+   * @param btext Arreglo de bytes a ser transformado a base64
+   * @return Arreglo de bytes transformado a base64
+   */
+  public static String base64Encode(byte[] btext) {
+      return BaseEncoding.base64().encode(btext);
+  }
+
+  /**
+   * Codifica el texto de un archivo usando sha256 retornandolo en base64
+   * @param strFile Archivo que contiene el texto a ser transformado a base64
+   * @return Texto codificado en base64
+   * @throws IOException Excepci�n arrojada por el procesamiento del archivo
+   * @throws NoSuchAlgorithmException Excepci�n arrojada si el algoritmo no existe
+   */
+  public static String sha256(String strFile) throws IOException, NoSuchAlgorithmException {
+      File f = new File(strFile);
+      InputStream stream = Files.asByteSource(f).openStream();
+      final byte[] buffer = new byte[1024 * 1024];
+      final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+      int bytesRead = 0;
+      while ((bytesRead = stream.read(buffer)) >= 0) {
+          if (bytesRead > 0) {
+              sha256.update(buffer, 0, bytesRead);
+          }
+      }
+      return BaseEncoding.base64().encode(sha256.digest());
+  }
+
+  /**
+   * Compara un texto contra una expresi�n regular y retorna el primer match
+   * @param txt Texto a ser comparado
+   * @param reg Expresi�n regular
+   * @return Primer match arrojado por la comparatica, null en caso de que no haya match
+   */
+  public static String match(String txt, String reg) {
+      ImmutableList.Builder<String> bmtcs = ImmutableList.builder();
+      Matcher matcher = Pattern.compile(reg).matcher(txt);
+      while ( matcher.find() ) {
+          bmtcs.add(matcher.group(1));
+      }        
+      ImmutableList<String> mtcs = bmtcs.build();        
+      return mtcs.size() > 0 ? mtcs.get(0) : null;
+  }
+
+  /**
+   * Lee un archivo y retorna su contenido
+   * @param filePath Archivo a ser leido
+   * @return Contenido del archivo
+   * @throws IOException Excepci�n arrojada por el procesamiento del archivo
+   */
+  public static String readFile(String filePath) throws IOException {
+      File file = new File(filePath);
+      return Files.asCharSource(file, Charsets.UTF_8).read();
+  }
+
+  /**
+   * Convierte una fecha a su expresi�n en ISO 8601
+   * @param date Fecha a ser convertida
+   * @return Fecha en su expresi�n ISO 8601
+   */
+  public static String toISO8601String(Date date) {
+      DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+      dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+      return dateFormat.format(date);
+  }
+
+  /**
+   * Firma un texto utilizando una llave privada
+   * @param input Texto a ser firmado
+   * @param privateKey Llave privada con que se firmar� el texto
+   * @return Texto cifrado con la llave especificada
+   * @throws SignException Excepci�n del componente para contener excepciones en la firma
+   */
+  public static String signSHA256RSA(String input, String privateKey) throws SignException {
+      try {
+          String realPK = privateKey.replaceAll("-----END PRIVATE KEY-----", "")
+              .replaceAll("-----BEGIN PRIVATE KEY-----", "")
+              .replaceAll("\n", "");
+          byte[] b1 = Base64.getDecoder().decode(realPK);
+          PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(b1);
+          KeyFactory kf = KeyFactory.getInstance("RSA");
+          Signature privateSignature = Signature.getInstance("SHA256withRSA");
+          privateSignature.initSign(kf.generatePrivate(spec));
+          privateSignature.update(input.getBytes("UTF-8"));
+          byte[] s = privateSignature.sign();
+          return Base64.getEncoder().encodeToString(s);
+      } catch(NoSuchAlgorithmException | InvalidKeySpecException | InvalidKeyException | UnsupportedEncodingException | SignatureException exc) {
+          throw SignException.instance(exc.getMessage(), exc.getCause());
+      }
+  }
+  /**
+   * Normaliza una direcci�n en disco
+   * @param input Direcci�n en disco a ser normalizada
+   * @return Direcci�n en disco normaliza
+   */
+  public static String normalize(String input) {
+      Path path = Paths.get("/", input).normalize();
+      String newPath = path.toString();
+      return newPath.endsWith("/") || newPath.endsWith("\\") 
+              ? newPath.substring(0, newPath.length() - 1) : newPath;
+  }
+  /**
+   * Extrae el texto de un objeto Process
+   * @param prc Proceso desde el que se extraer� el texto
+   * @return Texto contenido en el objeto Process
+   */
+  public static String processToString(Process prc) { 
+      Scanner s = new Scanner(prc.getInputStream()).useDelimiter("\\A");
+      return s.hasNext() ? s.next() : "";
+  }
+  
+  /**
+   * Da formato a un valor para ser utilizado en la impresi�n del json
+   * @param value Texto a ser formateado
+   * @param isKey Indica si el valor es un key o un valor en el json
+   * @return Texto formateado
+   */
+  public static String jsonElement(String value, boolean isKey) {
+      return "\"" + value + "\"" + (isKey ? ": " : "");
+  }
+
+  /**
+   * Retorna un elemento de tipo objeto en su expresi�n json
+   * @param object Objeto a ser retornado
+   * @return Expresi�n json del objeto
+   */
+  public static String jsonObject(Object object) {
+      return object == null ? "null" : object.toString();
+  }
+
+  /**
+   * Valida si un elemento se encuentra dentro de un json y si no es null
+   * @param jsonObject Objeto json
+   * @param key Key a ser validado dentro del objeto json
+   * @return Booleano que indica si el key existe y no es null
+   */
+  public static boolean getJsonObject(JSONObject jsonObject, String key) {
+      return jsonObject.has(key) && !jsonObject.isNull(key);
+  }
 
 }

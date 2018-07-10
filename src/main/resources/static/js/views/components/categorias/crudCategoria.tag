@@ -42,8 +42,8 @@
 
 <div  >
     <div class="row center " show ={mostrarFormulario} >
-    <div class="col-md-2 col-sx-12 col-lg-2 col-sm-2"></div>
-        <div class="col-md-8 col-lg-8 col-sx-12 col-sm-8">
+    <div class=" col-sx-12 col-lg-4 "></div>
+        <div class="col-md-12 col-lg-4 col-sx-12 col-sm-12">
             <div class="box box-solid box-primary">
                 <div class="box-header with-border">
                     <h1 class="box-title"><i class="fa fa-edit"></i>&nbsp {categoria.id > 0 ? $.i18n.prop("categoria.modificar")   :$.i18n.prop("categoria.agregar")}     </h1>
@@ -57,14 +57,14 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("categoria.descripcion")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" class="form-control descripcion" placeHolder ="{$.i18n.prop("categoria.descripcion")}" id="descripcion" name="descripcion" value="{categoria.descripcion}"  >
 
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label">{$.i18n.prop("categoria.estado")}</label>
                                 <select  class="form-control" id="estado" name="estado" >
                                     <option  each={estados}  value="{codigo}" selected="{categoria.estado ==codigo?true:false}" >{descripcion}</option>
@@ -74,16 +74,22 @@
                     </form>    
                 </div>
                 <div class="box-footer">
-                     <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right " > &nbsp {$.i18n.prop("btn.modificar")}</button>
-                     <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
-                    <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-                        {$.i18n.prop("btn.volver")}
-                    </button>
+                    <div class="row">
+                       <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                                {$.i18n.prop("btn.volver")}
+                            </button>
+                       </div>
+                       <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right " >  {$.i18n.prop("btn.modificar")}</button>
+                            <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" > {$.i18n.prop("btn.agregar")}</button>
+                       </div>
+                    </div>   
                   
                 </div>
             </div>   
         </div>
-        <div class="col-md-2 col-lg-2 col-sm-2"></div>
+        <div class="col-lg-4 "></div>
     </div>
 </div>
 <style type ="text/css">
@@ -205,12 +211,13 @@ function Limpiar(){
 **/
 function __ComboEstados(){
     self.estados =[]
+    self.update()
     self.estados.push({
-        codigo: 1,
+        codigo: $.i18n.prop("combo.estado.Activo"),
         descripcion:$.i18n.prop("combo.estado.Activo")
      });
     self.estados.push({
-        codigo: 2,
+        codigo: $.i18n.prop("combo.estado.Inactivo"),
         descripcion: $.i18n.prop("combo.estado.Inactivo")
      });
      self.update();

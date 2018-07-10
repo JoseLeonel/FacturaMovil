@@ -274,7 +274,7 @@
                             </div>
                         </div>
                         <div class="row">    
-                            <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12" >
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.cliente")}  <span class="requeridoDato">*</span></label>
                                 <select  class="form-control selectCliente" id="cliente" name="cliente" data-live-search="true">
                                     <option  data-tokens="{nombreCompleto}" each={clientes.data}  value="{id}" selected="{cuentaCobrar.cliente.id ==id?true:false}" >{nombreCompleto}</option>
@@ -282,7 +282,7 @@
                             </div>
                         </div>
                         <div class="row">    
-                            <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.vendedor")}  <span class="requeridoDato">*</span></label>
                                 <select  class="form-control selectVendedor" id="vendedor" name="vendedor"  data-live-search="true">
                                     <option  data-tokens="{nombreCompleto}" each={vendedores.data}  value="{id}" selected="{cuentaCobrar.vendedor.id ==id?true:false}" >{nombreCompleto}</option>
@@ -290,7 +290,7 @@
                             </div>
                         </div>
                         <div class="row">    
-                            <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                     <label class="knob-label" >{$.i18n.prop("cuentaCobrar.fechaEntrega")} <span class="requeridoDato">*</span></label>
                                     <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
                                         <input type="text" class="form-control fechaEntrega" placeHolder ="{$.i18n.prop("cuentaCobrar.fechaEntrega")}"  id="fechaEntrega"  name= "fechaEntrega" value="{cuentaCobrar.fechaEntrega}"  disabled="{cuenta.estado == 'Cerrada'}">
@@ -299,7 +299,7 @@
                                         </div>
                                     </div>
                             </div>
-                            <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.fechaPlazo")} <span class="requeridoDato">*</span></label>
                                 <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="dd/mm/yyyy">
                                     <input type="text" class="form-control" placeHolder ="{$.i18n.prop("cuentaCobrar.fechaPlazo")}" id="fechaPlazo" name="fechaPlazo"  value="{cuentaCobrar.fechaPlazo}" disabled="{cuenta.estado == 'Cerrada'}">
@@ -308,7 +308,7 @@
                                     </div>
                                 </div>
                             </div>                            
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.recibo")}  </label>
                                 <input type="text" class="form-control recibo crearCuenta_recibo" placeHolder ="{$.i18n.prop("cuentaCobrar.recibo")}" id="recibo" name="recibo" value="{cuentaCobrar.recibo}"  >
                             </div>
@@ -316,16 +316,16 @@
                         </div>
                         <div class="row">
 
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.letraCambio")} <span class="requeridoDato">*</span></label>
                                 <input type="text" class="form-control letraCambio" placeHolder ="{$.i18n.prop("cuentaCobrar.letraCambio")}" id="letraCambio" name="letraCambio" value="{cuentaCobrar.letraCambio}"  readonly={cuentaCobrar.id > 0?true:false}>
                             </div>
 
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.facturaManual")} </label>
                                 <input type="text" class="form-control facturaManual" placeHolder ="{$.i18n.prop("cuentaCobrar.facturaManual")}" id="facturaManual" name="facturaManual" value="{cuentaCobrar.facturaManual}" readonly={cuentaCobrar.id > 0?true:false} >
                             </div>
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.totalComision")} </label>
                                 <input type="text" class="form-control totalComision" placeHolder ="{$.i18n.prop("cuentaCobrar.totalComision")}" id="totalComision" name="totalComision" value="{cuentaCobrar.totalComision}"  >
                             </div>
@@ -356,13 +356,13 @@
 
                         </div>
                         <div class="row">    
-                            <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.descripcionArticulo")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" class="form-control descripcionArticulo" placeHolder ="{$.i18n.prop("cuentaCobrar.descripcionArticulo")}" id="descripcionArticulo" name="descripcionArticulo" value="{cuentaCobrar.descripcionArticulo}"  >
                             </div>
                         </div>
                         <div class="row">    
-                            <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("cuentaCobrar.nota")}</label>
                                 <input type="text" class="form-control nota" placeHolder ="{$.i18n.prop("cuentaCobrar.nota")}" id="nota" name="nota" value="{cuentaCobrar.nota}"  >
                             </div>
@@ -379,11 +379,18 @@
                     </form>    
                 </div>
                 <div class="box-footer">
-                    <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-                        {$.i18n.prop("btn.volver")}
-                    </button>
-                     <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
-                     <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
+                    <div class="row">
+                       <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                                {$.i18n.prop("btn.volver")}
+                            </button>
+                       </div>
+                       <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <button  onclick={__Modificar} show={botonModificar}  class="btn-green btn-edit pull-right" > {$.i18n.prop("btn.modificar")}</button>
+                            <button show = {botonAgregar}   onclick={__agregar}   class="btn-green btn-add pull-right" > {$.i18n.prop("btn.agregar")}</button>
+                       </div>
+                    </div>   
+                
                   
                 </div>
             </div>   
@@ -946,6 +953,7 @@ function __Eventos_Abonos(){
 **/
 function __ComboEstadosCuentaCobrarPendiente(){
     self.estados =[]
+    self.update()
     self.estados.push({
         codigo: "Pendiente",
         descripcion:$.i18n.prop("cuentaCobrar.estado.pendiente")
@@ -1264,6 +1272,7 @@ function __displayDate_detail(fecha) {
 **/
 function __ComboEstadosCuentaCobrarModificar(){
     self.estados =[]
+    self.update()
     self.estados.push({
         codigo: "Pendiente",
         descripcion:$.i18n.prop("cuentaCobrar.estado.pendiente")

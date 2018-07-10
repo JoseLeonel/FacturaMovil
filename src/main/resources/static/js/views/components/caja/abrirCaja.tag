@@ -45,8 +45,8 @@
 <!-- Fin del Listado -->
 <div >
     <div class="row center " show ={mostrarFormulario} >
-    <div class="col-md-2 col-sx-12 col-lg-2 col-sm-2"></div>
-        <div class="col-md-8 col-lg-8 col-sx-12 col-sm-8">
+    <div class="col-md-2 col-sx-12 col-lg-4 col-sm-2"></div>
+        <div class="col-md-12 col-lg-4 col-sx-12 col-sm-12">
             <div class="box box-solid box-primary">
                 <div class="box-header with-border">
                     <h1 class="box-title"><i class="fa fa-edit"></i>&nbsp {$.i18n.prop("titulo.agregar.usuarioCaja")}     </h1>
@@ -60,7 +60,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <div class= "col-md-6 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("usuarioCaja.caja")}  <span class="requeridoDato">*</span></label>
                                  <select  class="form-control" id="caja" name="caja" >
                                     <option  each={cajas.aaData}  value="{id}"  >{descripcion}</option>
@@ -68,7 +68,7 @@
                             </div>
                         </div>    
                         <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <div class= "col-md-6 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("usuarioCaja.fondoIncial")}  <span class="requeridoDato">*</span></label>
                                 <input type="number" step="any" class="form-control totalFondoInicial" id="totalFondoInicial" name="totalFondoInicial" value="{usuarioCaja.totalFondoInicial}"  >
                             </div>
@@ -76,15 +76,22 @@
                     </form>    
                 </div>
                 <div class="box-footer">
-                     <button onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
-                    <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left " >
-                        {$.i18n.prop("btn.volver")}
-                    </button>
+                    <div class="row">
+                       <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <button onclick ={__regresarAlListado} type="button" class="btn-dark-gray btn-back pull-left " >
+                                {$.i18n.prop("btn.volver")}
+                            </button>
+                       </div>
+                        <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                          <button onclick={__agregar} class="btn-green btn-add pull-right" > {$.i18n.prop("btn.agregar")}</button>
+                        </div>
+                        
+                    </div>   
                   
                 </div>
             </div>   
         </div>
-        <div class="col-md-2 col-lg-2 col-sm-2"></div>
+        <div class=" col-lg-4 "></div>
     </div>
 </div>
 
