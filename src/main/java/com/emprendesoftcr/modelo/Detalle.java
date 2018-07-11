@@ -54,7 +54,7 @@ public class Detalle implements Serializable {
 	private Double						montoDescuento;
 
 	@Column(name = "naturaleza_descuento")
-	private Double						naturalezaDescuento;
+	private String						naturalezaDescuento;
 
 	@Column(name = "sub_total")
 	private Double						subTotal;
@@ -111,7 +111,7 @@ public class Detalle implements Serializable {
 
 	}
 
-	public Detalle(Integer id, Integer numeroLinea, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, Double naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double ganancia, Double porcentajeDesc, String observacion, Date created_at, Date updated_at, Factura factura, Articulo articulo, Usuario usuario) {
+	public Detalle(Integer id, Integer numeroLinea, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, String naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double ganancia, Double porcentajeDesc, String observacion, Date created_at, Date updated_at, Factura factura, Articulo articulo, Usuario usuario) {
 		super();
 		this.id = id;
 		this.numeroLinea = numeroLinea;
@@ -199,11 +199,11 @@ public class Detalle implements Serializable {
 		this.montoDescuento = montoDescuento;
 	}
 
-	public Double getNaturalezaDescuento() {
+	public String getNaturalezaDescuento() {
 		return naturalezaDescuento;
 	}
 
-	public void setNaturalezaDescuento(Double naturalezaDescuento) {
+	public void setNaturalezaDescuento(String naturalezaDescuento) {
 		this.naturalezaDescuento = naturalezaDescuento;
 	}
 

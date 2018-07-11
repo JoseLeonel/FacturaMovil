@@ -12,7 +12,7 @@
                         <form id="formularioFactura">
                             <input id="id" name="id" type="hidden" value="{compra.id}">
                             <div class="row">
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
+                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("factura.condicion.pago")} </label> 
                                         <select  onchange= {__formaPago} class="form-control" id="condicionVenta" >
@@ -21,7 +21,7 @@
                                     </div>
  
                                 </div>
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
+                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                     <div class="form-group ">
                                         <label for="pago_tipoVentaL">{$.i18n.prop("factura.tipo.documento")} </label> 
                                         <select class="form-control" id="tipoDoc" name="tipoDoc"   >
@@ -30,7 +30,7 @@
                                     </div>
  
                                 </div>
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
+                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                     <div class="form-group ">
                                         <label for="pago_tipoVentaL">{$.i18n.prop("factura.estado")} </label> 
                                         <select class="form-control" id="estado" name="estado"  >
@@ -38,45 +38,99 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                    <div class="form-group ">
+                                        <label>{$.i18n.prop("factura.plazoCredito")}</label> 
+                                        <input type="number" id = "plazoCredito"  name "plazoCredito" class="form-control " value="{factura.plazoCredito}" >
+                                    </div>
+                                </div>
                             </div>    
                             <div class="row">
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                    <div class="form-group ">
+                                        <label >{$.i18n.prop("factura.nota")}</label> 
+                                        <input type="text" class="form-control" id="nota" name="nota" value="{factura.direccion}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                    <div class="form-group ">
+                                        <label >{$.i18n.prop("factura.direccion")}</label> 
+                                        <input type="text" class="form-control direccion" id="direccion" name="direccion" value="{factura.direccion}">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                   <h3> <p>{$.i18n.prop("factura.emisor")}</p></h3>
+                                </div>
+                                <div class= "col-md-9 col-sm-9 col-lg-9"></div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                     <div class="form-group ">
                                         <input   type="hidden" class="form-control" id="cliente" name="cliente" value="{cliente.id}">
                                         <label>{$.i18n.prop("factura.cliente")}</label> 
                                         <input onclick = {_EscogerClientes}  type="text" id="nombreCliente" name="nombreCliente" class="form-control"  value="{cliente.nombreCompleto}" readonly>
                                     </div>
                                 </div>
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("cliente.provincia")}</label> 
-                                        <input type="text" class="form-control " value="{cliente.descripcionProvincia}" readonly>
-                                    </div>
-                                </div>
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("cliente.celular")}</label> 
                                         <input type="text" class="form-control " value="{cliente.celular}" readonly>
                                     </div>
                                 </div>
-                            </div>    
-                            <div class="row">
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("cliente.telefono")}</label> 
                                         <input   type="text"  class="form-control"  value="{cliente.telefono}" readonly>
                                     </div>
                                 </div>
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("cliente.correoElectronico")}</label> 
-                                        <input type="text" class="form-control " value="{cliente.correoElectronico}" readonly>
-                                    </div>
-                                </div>
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("cliente.descuento")}</label> 
                                         <input type="text" class="form-control " value="{cliente.descuento}" readonly>
+                                    </div>
+                                </div>
+
+                            </div>    
+                          <div class="row">
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label  >{$.i18n.prop("cliente.provincia")} </label>
+                                <select onchange= {__cargaCantones}  class="form-control" id="provincia" name="provincia"  disabled>
+                                    <option  each={provincias.data}  value="{codigo}" selected="{cliente.provincia ==codigo?true:false}" >{descripcion}</option>
+                                </select>
+                            </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label  >{$.i18n.prop("cliente.canton")} </label>
+                                <select onchange= {__cargaDistritos}    class="form-control" id="canton" name="canton" disabled>
+                                    <option  each={cantones.data}  value="{codigo}" selected="{cliente.canton ==codigo?true:false}" >{descripcion}</option>
+                                </select>
+                            </div>
+
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label  >{$.i18n.prop("cliente.distrito")} </label>
+                                <select  onchange= {__cargaBarrios}    class="form-control" id="distrito" name="distrito" disabled >
+                                    <option  each={distritos.data}  value="{codigo}" selected="{cliente.distrito ==codigo?true:false}" >{descripcion}</option>
+                                </select>
+                            </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label  >{$.i18n.prop("cliente.barrio")} </label>
+                                <select     class="form-control" id="barrio" name="barrio"  disabled>
+                                    <option  each={barrios.data}  value="{codigo}" selected="{cliente.barrio ==codigo?true:false}" >{descripcion}</option>
+                                </select>
+                            </div>                        
+
+                        </div>                        
+
+                            <div class="row">
+                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                    <div class="form-group ">
+                                        <label>{$.i18n.prop("cliente.correoElectronico")}</label> 
+                                        <input type="text" class="form-control " value="{cliente.correoElectronico}" readonly>
                                     </div>
                                 </div>
                             </div>                                
@@ -88,6 +142,13 @@
                                     </div>
                                 </div>
                             </div> 
+                            <div class="row">
+                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                   <h3> <p>{$.i18n.prop("factura.titulo.vendedor")}</p></h3>
+                                </div>
+                                <div class= "col-md-9 col-sm-9 col-lg-9"></div>
+                            </div>
+                            <br>                            
                             <div class="row">
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div class="form-group ">
@@ -122,23 +183,7 @@
                                     </div>    
                                 </div>
                             </div>                             
-                            <div class="row">
-                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                    <div class="form-group ">
-                                        <label >{$.i18n.prop("factura.nota")}</label> 
-                                        <input type="text" class="form-control" id="nota" name="nota" value="{factura.direccion}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                    <div class="form-group ">
-                                        <label >{$.i18n.prop("factura.direccion")}</label> 
-                                        <input type="text" class="form-control direccion" id="direccion" name="direccion" value="{factura.direccion}">
-                                    </div>
-                                </div>
-                            </div>
-
+       
                         </form>   
                     </div>                    
                     <div class="box-footer">
@@ -722,9 +767,11 @@
        __ListaDeVendedores()
        __Teclas()
        __TipoCambio()
+       __cargaProvincias()
     })
 
-    
+
+
 /**
 * Camps requeridos
 **/
@@ -744,6 +791,150 @@ var reglasDeValidacionCompra = function() {
 	});
 	return validationOptions;
 };
+
+/**
+*  Provincias
+**/
+function __cargaProvincias(){
+    self.provincias = []
+     $.ajax({
+         url: "ListarProvinciasAjax.do",
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.provincias.data =  result.aaData
+                self.update();
+                _ConsultarCantonesByProvincias()
+            
+
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+
+}
+
+/**
+* cuando cambia la provincia cambia los cantones
+**/
+__cargaCantones(){
+    _ConsultarCantonesByProvincias()
+}
+/**
+*  Cantones
+**/
+function _ConsultarCantonesByProvincias(){
+    var provincia = {
+        id:null,
+        codigo:$('#provincia').val(),
+        descripcion:""
+    }
+    self.cantones  = {data:[]}
+    self.update()
+     $.ajax({
+         url: "ListarCantonesAjax.do",
+        datatype: "json",
+        method:"GET",
+        data : provincia,
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.cantones.data =  result.aaData
+                self.update();
+                _ConsultarDistritosByCanton()
+
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+
+}
+
+/**
+* cuando cambia los cantones cambia los distritos
+**/
+
+__cargaDistritos(){
+    _ConsultarDistritosByCanton()
+
+}
+
+/**
+*  Cantones
+**/
+function _ConsultarDistritosByCanton(){
+    var canton = {
+        id:null,
+        codigo:$('#canton').val(),
+        codigo_provincia:$('#provincia').val(),
+        descripcion:""
+    }
+    self.distritos  = {data:[]}
+    self.update()
+     $.ajax({
+         url: "ListarDistritosAjax.do",
+        datatype: "json",
+        method:"GET",
+        data : canton,
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.distritos.data =  result.aaData
+                self.update();
+                _ConsultarBarriosByDistrito()
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+
+}
+/**
+* cuando cambia los distritos cambia los barrios
+**/
+__cargaBarrios(){
+    _ConsultarBarriosByDistrito()
+
+}
+
+/**
+*  Cantones
+**/
+function _ConsultarBarriosByDistrito(){
+    var distrito = {
+        id:null,
+        codigo:$('#distrito').val(),
+        codigoProvincia:$('#provincia').val(),
+        codigoCanton:$('#canton').val(),
+        descripcion:""
+    }
+    self.barrios  = {data:[]}
+    self.update()
+     $.ajax({
+         url: "ListarBarriosAjax.do",
+        datatype: "json",
+        method:"GET",
+        data : distrito,
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.barrios.data =  result.aaData
+                self.update();
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+
+}
 
 /**
 * Aplicar el descuento
@@ -879,14 +1070,18 @@ function aplicarFactura(){
         mensajeError($.i18n.prop("factura.alert.sin.detalles"))
         return
     }
-    if(condicionVenta.value == "02"  ){
-        if(fechaCredito.value == null || fechaCredito.value.length == 0){
+    if($('#condicionVenta').val() == "02"  ){
+        if($('#fechaCredito').val() == null || $('#fechaCredito').val() == 0){
            mensajeError($.i18n.prop("factura.alert.fechaCredito"))
+            return
+        }
+        if($('#plazoCredito').val() < 0 || $('#plazoCredito').val() == null || $('#plazoCredito').val() == 0){
+           mensajeError($.i18n.prop("factura.alert.plazoCredito"))
             return
         }
     }else{
         // Si no es credito y el estado no es pendiente se debe verificar si ingresaron el monto a pagar
-        if(estado.value !=1){
+        if($('#estado').val() !=1){
             if(self.factura.totalTarjeta == 0 && self.factura.totalBanco == 0 && self.factura.totalEfectivo == 0){
                 mensajeError($.i18n.prop("error.factura.monto.ingresado"))
                 return
@@ -1107,13 +1302,13 @@ function crearFactura(){
     var informacion = {
         id:self.factura.id,
 	    fechaCredito:fechaCreditoTemporal.toString(),
-	    condicionVenta:condicionVenta.value,
-	    plazoCredito:self.factura.plazoCredito,
-	    tipoDoc:tipoDoc.value,
-	    medioPago:self.factura.medioPago,
+	    condicionVenta:$('#condicionVenta').val(),
+	    plazoCredito:$('#plazoCredito').val(),
+	    tipoDoc:$('#tipoDoc').val(),
+	    medioPago:$('#medioPago').val(),
 	    nombreFactura:self.factura.nombreFactura,
-	    direccion:direccion.value,
-	    nota:nota.value,
+	    direccion:$('#direccion').val(),
+	    nota:$('#nota').val(),
 	    comanda:self.factura.comanda,
 	    subTotal:self.factura.subTotal,
 	    totalTransporte:self.factura.totalTransporte,
@@ -1129,16 +1324,16 @@ function crearFactura(){
 	    totalVentaNeta:self.factura.totalVentaNeta,
 	    totalImpuesto:self.factura.totalImpuesto,
 	    totalComprobante:self.factura.totalComprobante,
-	    totalEfectivo:totalEfectivo.value ==null || totalEfectivo.value ==0?0:totalEfectivo.value,
-	    totalTarjeta:totalTarjeta.value ==null   || totalTarjeta.value ==0?0: totalTarjeta.value,
-	    totalBanco:totalBanco.value == null      || totalBanco.value == 0?0:totalBanco.value ,
+	    totalEfectivo:$('#totalEfectivo').val() ==null || $('#totalEfectivo').val() ==0?0:$('#totalEfectivo').val(),
+	    totalTarjeta:$('#totalTarjeta').val() ==null   || $('#totalTarjeta').val() ==0?0: $('#totalTarjeta').val(),
+	    totalBanco:$('#totalBanco').val() == null      || $('#totalBanco').val() == 0?0:$('#totalBanco').val() ,
 	    totalCredito:0,
         totalCambioPagar:self.factura.totalCambioPagar,
 	    montoCambio:0,
 	    totalCambio:0,
-	    estado:estado.value,
-	    cliente:cliente.value,
-        vendedor:vendedor.value == null?0:vendedor.value,
+	    estado:$('#estado').val(),
+	    cliente:$('#cliente').val(),
+        vendedor:$('#vendedor').val() == null?0:$('#vendedor').val(),
         detalleFactura :JSONDetalles,
 
     }                  
@@ -1901,6 +2096,7 @@ function isNumber(n) {
 **/
 function __comboCondicionPago(){
     self.comboCondicionPagos = []
+    self.update()
     self.comboCondicionPagos.push({
         estado:"01",
         descripcion:$.i18n.prop("factura.codicion.venta.contado")
@@ -1916,8 +2112,9 @@ function __comboCondicionPago(){
 **/
 function __ComboTipoDocumentos(){
     self.comboTipoDocumentos = []
+    self.update()
     self.comboTipoDocumentos.push({
-        estado:"00",
+        estado:"04",
         descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
     })
     self.comboTipoDocumentos.push({
@@ -1990,34 +2187,7 @@ function agregarInputsCombos_Vendedores(){
 	    }
     })
 } 
-/**
- * Obtener la provincia 
- * */
-function __cargaProvincias(provincia){
-    if(provincia =="1"){
-      return $.i18n.prop("provincia.sanjose")
-    }
-    if(provincia =="2"){
-      return $.i18n.prop("provincia.alajuela")
-    }    
-    if(provincia =="3"){
-      return $.i18n.prop("provincia.cartago")
-    }    
-    if(provincia =="4"){
-      return $.i18n.prop("provincia.heredia")
-    }    
-    if(provincia =="5"){
-      return $.i18n.prop("provincia.guanacaste")
-    }    
-    if(provincia =="6"){
-      return $.i18n.prop("provincia.puntarenas")
-    }    
 
-   if(provincia =="7"){
-      return $.i18n.prop("provincia.limon")
-    }    
-    return "No Registrada"
-}
 
 
 

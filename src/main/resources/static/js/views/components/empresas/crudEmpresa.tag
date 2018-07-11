@@ -59,11 +59,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("empresa.clave")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control clave" placeHolder ="{$.i18n.prop("empresa.clave")}" id="clave" name="clave" value="{empresa.clave}"  >
-                            </div>
-                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("empresa.tipoCedula")}  <span class="requeridoDato">*</span></label>
                                  <select  class="form-control" id="tipoCedula" name="tipoCedula" >
                                     <option  each={tipoCedulas.data}  value="{valor}" selected="{empresa.tipoCedula ==valor?true:false}" >{descripcion}</option>
@@ -137,13 +133,21 @@
                             
                         </div>
                         <div class="row">    
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("empresa.llave.criptografica")}</label>
                                 <input type="text" class="form-control nombreLlaveCriptografica" placeHolder ="{$.i18n.prop("empresa.llave.criptografica.ejemplo")}" id="nombreLlaveCriptografica" name="nombreLlaveCriptografica" value="{empresa.nombreLlaveCriptografica}"  >
                             </div>
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("empresa.clave.llave.criptografica")}</label>
                                 <input type="text" class="form-control claveLlaveCriptografica" placeHolder ="{$.i18n.prop("empresa.clave.llave.criptografica.ejemplo")}" id="claveLlaveCriptografica" name="claveLlaveCriptografica" value="{empresa.claveLlaveCriptografica}"  >
+                            </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("empresa.codigoSeguridad")}</label>
+                                <input type="text" class="form-control codigoSeguridad" placeHolder ="{$.i18n.prop("empresa.codigoSeguridad.ejemplo")}" id="codigoSeguridad" name="codigoSeguridad" value="{empresa.codigoSeguridad}"  >
+                            </div>
+                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("empresa.correoElectronico")}</label>
+                                <input type="text" class="form-control correoElectronico" placeHolder ="{$.i18n.prop("empresa.correoElectronico")}" id="correoElectronico" name="correoElectronico" value="{empresa.correoElectronico}"  >
                             </div>
 
                         </div>
@@ -443,12 +447,6 @@ var reglasDeValidacion = function() {
                 maxlength:80,
                 minlength:1,
 			},
-			clave : {
-				required : true,
-                maxlength:8,
-                minlength:1,
-                numeroMayorCero:true,
-			},
 			tipoCedula : {
 				required : true,
 			},
@@ -503,6 +501,12 @@ var reglasDeValidacion = function() {
             },
             claveLlaveCriptografica:{
                 required : true,
+            },
+            codigoSeguridad:{
+                required : true,
+                minlength:8,
+                numeroMayorCero:true,
+
             }
 		},
 		ignore : []
@@ -513,7 +517,7 @@ var reglasDeValidacion = function() {
 
 
 function _limpiar(){
-   $('#clave').val(null)
+   
    $("#tipoCedula").val($("#tipoCedula option:first").val());
    $("#provincia").val($("#provincia option:first").val());
    $("#canton").val($("#canton option:first").val());
@@ -532,6 +536,7 @@ function _limpiar(){
    $("#numeroConsecutivo").val(null)
    $("#nombreLlaveCriptografica").val(null)
    $("#claveLlaveCriptografica").val(null)
+   $("#codigoSeguridad").val(null)
    $(".errorServerSideJgrid").remove();
    $("#formulario").validate(reglasDeValidacion())
     self.empresa  = {
@@ -574,7 +579,7 @@ function __Eventos(){
     $("#cedula").attr("maxlength", 12);
     
     $("#nombreComercial").attr("maxlength", 80);
-    $("#clave").attr("maxlength", 8);
+    
     $("#otraSenas").attr("maxlength", 250);
     $("#codigoPais").attr("maxlength", 3);
     $("#cazaMatriz").attr("maxlength", 3);
@@ -582,6 +587,7 @@ function __Eventos(){
     $("#correoElectronico").attr("maxlength", 250);
     $("#representante").attr("maxlength", 80);
     $("#web").attr("maxlength", 80);
+    $("#codigoSeguridad").attr("maxlength", 8);
 
     $('#cazaMatriz').mask('000', {
 	    'translation' : {
@@ -590,14 +596,16 @@ function __Eventos(){
             }
     	}
     }); 
-   
-   $('#clave').mask('000000000', {
+   $('#codigoSeguridad').mask('00000000', {
 	    'translation' : {
             0 : {
                 pattern : /[0-9]/
             }
     	}
     });
+
+
+   
 
     $('#claveLlaveCriptografica').mask('0000', {
 	    'translation' : {
@@ -805,11 +813,12 @@ function __consultar(){
                         self.empresa.numeroConsecutivo = zfill(self.empresa.numeroConsecutivo,10)
 
                         self.update()
-                        $('#clave').val(self.empresa.clave)
+                       
                         $("#tipoCedula").val(self.empresa.tipoCedula);
                         $("#provincia").val(self.empresa.provincia);
                         $("#canton").val(self.empresa.canton);
                         $("#distrito").val(self.empresa.distrito);
+                        $("#codigoSeguridad").val(zfill(self.empresa.codigoSeguridad,8));
                         $("#barrio").val(self.empresa.barrio);
                         $('#cedula').val(self.empresa.cedula)
                         $("#nombre").val(self.empresa.nombre)

@@ -73,8 +73,7 @@ public class FacturasController {
 	@Autowired
 	private FacturaXMLServices																	facturaXMLServices;
 
-	@Autowired
-	private LlaveCriptograficaService														llaveCriptograficaService;
+	
 
 	@Autowired
 	private DataTableBo																					dataTableBo;

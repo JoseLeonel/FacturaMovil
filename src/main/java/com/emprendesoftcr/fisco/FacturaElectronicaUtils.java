@@ -67,7 +67,7 @@ public final class FacturaElectronicaUtils {
 		Integer mes = fecha.get(Calendar.MONTH)+1 ;
 		Integer dia = fecha.get(Calendar.DAY_OF_MONTH);
 
-		String primeroTress = FacturaElectronicaUtils.CODIGO_PAIS.toString().toString();
+		String primeroTress = "000".substring(FacturaElectronicaUtils.CODIGO_PAIS.toString().length()) ;
 		String cuartoQuito = replazarConZeros(dia.toString(), FORMATO_DIA);
 		String sextoAlSeptimo = replazarConZeros(mes.toString(), FORMATO_MES);
 		String octavoNoveno = replazarConZeros(ano.toString(), FORMATO_ANO);

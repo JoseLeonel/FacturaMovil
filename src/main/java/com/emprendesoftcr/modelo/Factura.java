@@ -89,8 +89,7 @@ public class Factura implements Serializable {
 	@Column(name = "total_transporte")
 	private Double						totalTransporte;
 
-	@Column(name = "total")
-	private Double						total;
+
 
 	@Column(name = "total_serv_gravados")
 	private Double						totalServGravados;
@@ -194,7 +193,7 @@ public class Factura implements Serializable {
 
 	}
 
-	public Factura(Integer id, Date fechaCredito, String numeroConsecutivo, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String medioPago, String nombreFactura, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double total, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda,
+	public Factura(Integer id, Date fechaCredito, String numeroConsecutivo, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String medioPago, String nombreFactura, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda,
 			Integer estado, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Set<Detalle> detalles) {
 		super();
 		this.id = id;
@@ -213,7 +212,7 @@ public class Factura implements Serializable {
 		this.tipoCambio = tipoCambio;
 		this.subTotal = subTotal;
 		this.totalTransporte = totalTransporte;
-		this.total = total;
+		
 		this.totalServGravados = totalServGravados;
 		this.totalServExentos = totalServExentos;
 		this.totalMercanciasGravadas = totalMercanciasGravadas;
@@ -364,13 +363,7 @@ public class Factura implements Serializable {
 		this.totalTransporte = totalTransporte;
 	}
 
-	public Double getTotal() {
-		return total;
-	}
-
-	public void setTotal(Double total) {
-		this.total = total;
-	}
+	
 
 	public Double getTotalServGravados() {
 		return totalServGravados;

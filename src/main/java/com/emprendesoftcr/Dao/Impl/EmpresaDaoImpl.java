@@ -145,7 +145,7 @@ public class EmpresaDaoImpl implements EmpresaDao {
 		
 		String resultado = Constantes.EMPTY;
 		try {
-			resultado = FacturaElectronicaUtils.claveFactura(empresa.getCedula(), consecutivoFactura, comprobanteElectronico, empresa.getClave());
+			resultado = FacturaElectronicaUtils.claveFactura(empresa.getCedula(), consecutivoFactura, comprobanteElectronico, empresa.getCodigoSeguridad());
 			
 		} catch (Exception e) {
 			log.info("** Error  generarClaveFacturaTributaria: " + e.getMessage() + " fecha " + new Date());

@@ -32,6 +32,10 @@ public class Empresa implements Serializable {
 
 	@Column(name = "caza_matriz")
 	private String						cazaMatriz;
+	
+	@Column(name = "codigo_seguridad")
+	private Integer						codigoSeguridad;
+
 
 	@Column(name = "nombre")
 	private String						nombre;
@@ -39,8 +43,7 @@ public class Empresa implements Serializable {
 	@Column(name = "nombre_comercial")
 	private String						nombreComercial;
 
-	@Column(name = "clave")
-	private Integer						clave;
+	
 
 	@Column(name = "tipo_cedula")
 	private String						tipoCedula;
@@ -96,13 +99,13 @@ public class Empresa implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
-	public Empresa(Integer id, String nombre, String nombreComercial, Integer clave, String tipoCedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton, String nombreLlaveCriptografica, Integer claveLlaveCriptografica) {
+	public Empresa(Integer id, String nombre, String nombreComercial, String tipoCedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton, String nombreLlaveCriptografica, Integer claveLlaveCriptografica,Integer codigoSeguridad) {
 		super();
 		this.id = id;
 		this.numeroConsecutivo = numeroConsecutivo;
 		this.nombre = nombre;
 		this.nombreComercial = nombreComercial;
-		this.clave = clave;
+	
 		this.tipoCedula = tipoCedula;
 		this.otraSenas = otraSenas;
 		this.codigoPais = codigoPais;
@@ -119,6 +122,7 @@ public class Empresa implements Serializable {
 		this.updated_at = new Date();
 		this.cazaMatriz = Constantes.CASA_MATRIZ_INICIAL_FACTURA;
 		this.canton = canton;
+		this.codigoSeguridad = codigoSeguridad;
 		this.nombreLlaveCriptografica = nombreLlaveCriptografica;
 		this.claveLlaveCriptografica = claveLlaveCriptografica;
 	}
@@ -170,13 +174,7 @@ public class Empresa implements Serializable {
 		this.nombreComercial = nombreComercial;
 	}
 
-	public Integer getClave() {
-		return clave;
-	}
-
-	public void setClave(Integer clave) {
-		this.clave = clave;
-	}
+	
 
 	public String getTipoCedula() {
 		return tipoCedula;
@@ -313,5 +311,17 @@ public class Empresa implements Serializable {
 	public void setClaveLlaveCriptografica(Integer claveLlaveCriptografica) {
 		this.claveLlaveCriptografica = claveLlaveCriptografica;
 	}
+
+	
+	public Integer getCodigoSeguridad() {
+		return codigoSeguridad;
+	}
+
+	
+	public void setCodigoSeguridad(Integer codigoSeguridad) {
+		this.codigoSeguridad = codigoSeguridad;
+	}
+	
+	
 
 }

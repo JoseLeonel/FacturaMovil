@@ -190,7 +190,7 @@ public class EmpresasController {
 				empresaBD.setCedula(empresa.getCedula());
 				empresaBD.setNombre(empresa.getNombre());
 				empresaBD.setNombreComercial(empresa.getNombreComercial());
-				empresaBD.setClave(empresa.getClave());
+				
 				empresaBD.setCodigoPais(empresa.getCodigoPais());
 				empresaBD.setCorreoElectronico(empresa.getCorreoElectronico());
 				empresaBD.setProvincia(empresa.getProvincia());
@@ -205,6 +205,7 @@ public class EmpresasController {
 				empresaBD.setUpdated_at(new Date());
 				empresaBD.setClaveLlaveCriptografica(empresa.getClaveLlaveCriptografica());
 				empresaBD.setNombreLlaveCriptografica(empresa.getNombreLlaveCriptografica());
+				empresaBD.setCodigoSeguridad(empresa.getCodigoSeguridad());;
 				empresaBo.modificar(empresaBD);
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("empresa.modificado.correctamente", empresaBD);
 			}

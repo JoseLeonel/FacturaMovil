@@ -3,6 +3,8 @@ package com.emprendesoftcr.service.impl;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.security.cert.CertificateException;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -73,22 +75,22 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
  xmlReceptor(factura) +
      "<CondicionVenta>" + factura.getCondicionVenta() + "</CondicionVenta>" +
      "<MedioPago>" + factura.getMedioPago() + "</MedioPago>" +
-      "<PlazoCredito>" + PLAZO_CREDITO + "</PlazoCredito>"  +
+      "<PlazoCredito>" + factura.getPlazoCredito() + "</PlazoCredito>"  +
      "<DetalleServicio>" + xmlDetalleServicio(factura) + "</DetalleServicio>" +
      "<ResumenFactura>" +
          "<CodigoMoneda>" + factura.getCodigoMoneda() + "</CodigoMoneda>" +
          "<TipoCambio>" + factura.getTipoCambio() + "</TipoCambio>" +
-         "<TotalServGravados>" + factura.getTotalServGravados() + "</TotalServGravados>" +
-         "<TotalServExentos>" + factura.getTotalServExentos() + "</TotalServExentos>" +
-         "<TotalMercanciasGravadas>" + factura.getTotalMercanciasGravadas() + "</TotalMercanciasGravadas>" +
-         "<TotalMercanciasExentas>" + factura.getTotalMercanciasExentas() + "</TotalMercanciasExentas>" +
-         "<TotalGravado>" + factura.getTotalGravado() + "</TotalGravado>" +
-         "<TotalExento>" + factura.getTotalExento() + "</TotalExento>" +
-         "<TotalVenta>" + factura.getTotalVenta() + "</TotalVenta>" +
-         "<TotalDescuentos>" + factura.getTotalDescuentos() + "</TotalDescuentos>" +
-         "<TotalVentaNeta>" + factura.getTotalVentaNeta() + "</TotalVentaNeta>" +
-         "<TotalImpuesto>" + factura.getTotalImpuesto() + "</TotalImpuesto>" +
-         "<TotalComprobante>" + factura.getTotalComprobante() + "</TotalComprobante>" +
+         "<TotalServGravados>" +  new BigDecimal(factura.getTotalServGravados()) + "</TotalServGravados>" +
+         "<TotalServExentos>" +  new BigDecimal(factura.getTotalServExentos()) + "</TotalServExentos>" +
+         "<TotalMercanciasGravadas>" +  new BigDecimal(factura.getTotalMercanciasGravadas()) + "</TotalMercanciasGravadas>" +
+         "<TotalMercanciasExentas>" +  new BigDecimal(factura.getTotalMercanciasExentas()) + "</TotalMercanciasExentas>" +
+         "<TotalGravado>" +  new BigDecimal(factura.getTotalGravado()) + "</TotalGravado>" +
+         "<TotalExento>" +  new BigDecimal(factura.getTotalExento()) + "</TotalExento>" +
+         "<TotalVenta>" +  new BigDecimal(factura.getTotalVenta()) + "</TotalVenta>" +
+         "<TotalDescuentos>" +  new BigDecimal(factura.getTotalDescuentos()) + "</TotalDescuentos>" +
+         "<TotalVentaNeta>" +  new BigDecimal(factura.getTotalVentaNeta()) + "</TotalVentaNeta>" +
+         "<TotalImpuesto>" +  new BigDecimal(factura.getTotalImpuesto()) + "</TotalImpuesto>" +
+         "<TotalComprobante>" +  new BigDecimal(factura.getTotalComprobante()) + "</TotalComprobante>" +
      "</ResumenFactura>" +
      "<Normativa>" +
          "<NumeroResolucion>" + FECHA_RESOLUCION + "</NumeroResolucion>" +
@@ -105,21 +107,21 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
     String lineas = "";
     for(Detalle detalle : factura.getDetalles()) {
     	lineas += "<LineaDetalle>" +
-          "<NumeroLinea>" + detalle.getNumeroLinea().toString() + "</NumeroLinea>" +
+          "<NumeroLinea>" + new BigInteger(detalle.getNumeroLinea().toString()) + "</NumeroLinea>" +
           "<Codigo>" +
           "<Tipo>" + CODIGO_PRODUCTO_VENDEDOR + "</Tipo>" +
           "<Codigo>" + detalle.getArticulo().getCodigo() + "</Codigo>" +
           "</Codigo>" +
-          "<Cantidad>" + detalle.getCantidad() + "</Cantidad>" +
+          "<Cantidad>" + new BigDecimal(detalle.getCantidad().toString()) + "</Cantidad>" +
           "<UnidadMedida>" + detalle.getArticulo().getUnidadMedida() + "</UnidadMedida>" +
           "<Detalle>" + detalle.getArticulo().getDescripcion().trim() + "</Detalle>" +
-          "<PrecioUnitario>" + detalle.getPrecioUnitario() + "</PrecioUnitario>" +
-          "<MontoTotal>" + detalle.getMontoTotal() + "</MontoTotal>" +
-          "<MontoDescuento>" + detalle.getMontoDescuento() + "</MontoDescuento>" +
-          "<NaturalezaDescuento>" + detalle.getNaturalezaDescuento() + "</NaturalezaDescuento>" +
-          "<SubTotal>" + detalle.getSubTotal() + "</SubTotal>" +
+          "<PrecioUnitario>" +  new BigDecimal(detalle.getPrecioUnitario().toString()) + "</PrecioUnitario>" +
+          "<MontoTotal>" +  new BigDecimal(detalle.getMontoTotal().toString()) + "</MontoTotal>" +
+          "<MontoDescuento>" +  new BigDecimal(detalle.getMontoDescuento().toString()) + "</MontoDescuento>" +
+          "<NaturalezaDescuento>" +  detalle.getNaturalezaDescuento().trim() + "</NaturalezaDescuento>" +
+          "<SubTotal>" +  new BigDecimal(detalle.getSubTotal().toString()) + "</SubTotal>" +
           xmlImpuestos(detalle) +
-          "<MontoTotalLinea>" + detalle.getMontoTotalLinea() + "</MontoTotalLinea>" +
+          "<MontoTotalLinea>" +  new BigDecimal(detalle.getMontoTotalLinea().toString()) + "</MontoTotalLinea>" +
           "</LineaDetalle>";
     }
     
@@ -129,15 +131,15 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
   private String xmlImpuestos(Detalle detalle) {
     String imp = "<Impuesto>" +
         "<Codigo>" + Utils.zeroPad(detalle.getArticulo().getTipoImpuesto(), 2) + "</Codigo>" +
-        "<Tarifa>" + detalle.getArticulo().getImpuesto() + "</Tarifa>" +
-        "<Monto>" + detalle.getMontoImpuesto() + "</Monto>";
+        "<Tarifa>" + new BigDecimal(detalle.getArticulo().getImpuesto()) + "</Tarifa>" +
+        "<Monto>" +  new BigDecimal(detalle.getMontoImpuesto()) + "</Monto>";
         imp += "<Exoneracion>" +
             "<TipoDocumento>" + Constantes.ZEROS + "</TipoDocumento>" +
             "<NumeroDocumento>" + Constantes.ZEROS + "</NumeroDocumento>" +
             "<NombreInstitucion>" + Constantes.ZEROS + "</NombreInstitucion>" +
             "<FechaEmision>" + Constantes.ZEROS + "</FechaEmision>" +
-            "<MontoImpuesto>" + Constantes.ZEROS + "</MontoImpuesto>" +
-            "<PorcentajeCompra>" + Constantes.ZEROS + "</PorcentajeCompra>" +
+            "<MontoImpuesto>" + new BigDecimal(Constantes.ZEROS) + "</MontoImpuesto>" +
+            "<PorcentajeCompra>" + new BigDecimal(Constantes.ZEROS) + "</PorcentajeCompra>" +
         "</Exoneracion>";
     
     imp += "</Impuesto>";

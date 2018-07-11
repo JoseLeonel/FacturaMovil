@@ -38,7 +38,7 @@ public class FacturaEsperaCommand {
 
 	private Double		totalTransporte;
 
-	private Double		total;
+	
 
 	private Double		totalServGravados;
 
@@ -106,7 +106,7 @@ public class FacturaEsperaCommand {
 		this.comanda = factura.getComanda();
 		this.subTotal = factura.getSubTotal();
 		this.totalTransporte = factura.getTotalTransporte();
-		this.total = factura.getTotal();
+		
 		this.totalServGravados = factura.getTotalServGravados();
 		this.totalServExentos = factura.getTotalServExentos();
 		this.totalMercanciasGravadas = factura.getTotalMercanciasGravadas();
@@ -247,13 +247,7 @@ public class FacturaEsperaCommand {
 		this.totalTransporte = totalTransporte;
 	}
 
-	public Double getTotal() {
-		return total;
-	}
-
-	public void setTotal(Double total) {
-		this.total = total;
-	}
+	
 
 	public Double getTotalServGravados() {
 		return totalServGravados;

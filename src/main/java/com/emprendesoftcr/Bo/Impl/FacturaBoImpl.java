@@ -156,7 +156,8 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setVendedor(facturaCommand.getVendedor());
 			factura.setCliente(facturaCommand.getCliente());
 			factura.setFechaEmision(new Date());
-
+			factura.setMedioPago(facturaCommand.getMedioPago());
+      
 			factura.setTipoDoc(facturaCommand.getTipoDoc());
 			factura.setMedioPago(facturaCommand.getMedioPago());
 			factura.setNombreFactura(facturaCommand.getNombreFactura());
@@ -165,7 +166,6 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setComanda(facturaCommand.getComanda());
 			factura.setSubTotal(facturaCommand.getSubTotal() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getSubTotal());
 			factura.setTotalTransporte(facturaCommand.getTotalTransporte() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalTransporte());
-			factura.setTotal(facturaCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotal());
 			factura.setTotalServGravados(facturaCommand.getTotalServGravados() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalServGravados());
 			factura.setTotalServExentos(facturaCommand.getTotalServExentos() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalServExentos());
 			factura.setTotalMercanciasExentas(factura.getTotalMercanciasExentas() == null ? Constantes.ZEROS_DOUBLE : factura.getTotalMercanciasExentas());
@@ -245,6 +245,8 @@ public class FacturaBoImpl implements FacturaBo {
 					Detalle detalle = new Detalle(detalleFacturaCommand);
 					detalle.setUsuario(usuario);
 					detalle.setArticulo(articulo);
+					detalle.setNaturalezaDescuento(Constantes.BLANK);
+					
 					detalle.setCreated_at(new Date());
 					detalle.setUpdated_at(new Date());
 

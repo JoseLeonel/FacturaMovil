@@ -21,7 +21,7 @@ public class DetalleFacturaCommand {
 
 	private Double		montoDescuento;
 
-	private Double		naturalezaDescuento;
+	private String		naturalezaDescuento;
 
 	private Double		subTotal;
 
@@ -110,12 +110,12 @@ public class DetalleFacturaCommand {
 	}
 
 	
-	public Double getNaturalezaDescuento() {
+	public String getNaturalezaDescuento() {
 		return naturalezaDescuento;
 	}
 
 	
-	public void setNaturalezaDescuento(Double naturalezaDescuento) {
+	public void setNaturalezaDescuento(String naturalezaDescuento) {
 		this.naturalezaDescuento = naturalezaDescuento;
 	}
 

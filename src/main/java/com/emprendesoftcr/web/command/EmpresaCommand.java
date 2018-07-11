@@ -1,7 +1,5 @@
 package com.emprendesoftcr.web.command;
 
-import javax.persistence.Column;
-
 import com.emprendesoftcr.modelo.Empresa;
 
 public class EmpresaCommand {
@@ -13,8 +11,7 @@ public class EmpresaCommand {
 	private String	nombreComercial;
 	private Integer	numeroConsecutivo;
 
-	private Integer	clave;
-
+	
 	private String	tipoCedula;
 
 	private String	cedula;
@@ -44,15 +41,17 @@ public class EmpresaCommand {
 	private String	nombreLlaveCriptografica;
 
 	private Integer	claveLlaveCriptografica;
+	private Integer	codigoSeguridad;
 
 	public EmpresaCommand(Empresa empresa) {
 		super();
 		this.nombreLlaveCriptografica = empresa.getNombreLlaveCriptografica();
 		this.claveLlaveCriptografica = empresa.getClaveLlaveCriptografica();
+		this.codigoSeguridad = empresa.getCodigoSeguridad();
 		this.id = empresa.getId();
 		this.nombre = empresa.getNombre();
 		this.nombreComercial = empresa.getNombreComercial();
-		this.clave = empresa.getClave();
+		
 		this.tipoCedula = empresa.getTipoCedula();
 		this.cedula = empresa.getCedula();
 		this.otraSenas = empresa.getOtraSenas();
@@ -68,6 +67,7 @@ public class EmpresaCommand {
 		this.estado = empresa.getEstado();
 		this.numeroConsecutivo = empresa.getNumeroConsecutivo();
 		this.cazaMatriz = empresa.getCazaMatriz();
+		
 
 	}
 
@@ -99,13 +99,7 @@ public class EmpresaCommand {
 		this.nombreComercial = nombreComercial;
 	}
 
-	public Integer getClave() {
-		return clave;
-	}
 
-	public void setClave(Integer clave) {
-		this.clave = clave;
-	}
 
 	public String getTipoCedula() {
 		return tipoCedula;
@@ -242,5 +236,17 @@ public class EmpresaCommand {
 	public void setClaveLlaveCriptografica(Integer claveLlaveCriptografica) {
 		this.claveLlaveCriptografica = claveLlaveCriptografica;
 	}
+
+	
+	public Integer getCodigoSeguridad() {
+		return codigoSeguridad;
+	}
+
+	
+	public void setCodigoSeguridad(Integer codigoSeguridad) {
+		this.codigoSeguridad = codigoSeguridad;
+	}
+	
+	
 
 }

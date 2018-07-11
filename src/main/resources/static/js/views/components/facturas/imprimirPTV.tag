@@ -72,7 +72,7 @@
                             <tr>
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.Cambio")}</strong></td>
-                            <td ><strong>₡{facturaImpresa.cambioMoneda.toLocaleString('de-DE')}</strong></td>
+                            <td ><strong>$ {facturaImpresa.cambioMoneda.toLocaleString('de-DE')}</strong></td>
                             </tr>                            
 
                             <tr>

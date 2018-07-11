@@ -1,7 +1,5 @@
 package com.emprendesoftcr.Bo.Impl;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
-import com.emprendesoftcr.modelo.Vendedor;
 
 /**
  * Clientes asociados a una empresa ClienteBoImpl.
