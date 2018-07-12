@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,6 +31,7 @@ import java.util.regex.Pattern;
 
 import org.json.JSONObject;
 
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.error.SignException;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
@@ -46,11 +50,11 @@ public final class FacturaElectronicaUtils {
 	// Formatos
 	public static final String	FORMATO_DIA														= "00";
 	public static final String	FORMATO_MES														= "00";
-	public static final String	FORMATO_ANO														= "0000";
+	public static final String	FORMATO_ANO														= "00";
 
 	public static final String	FORMATO_CEDULA												= "000000000000";
 
-	public static final String	FORMATO_CODIGO_SEGURIDAD							= "15278059";
+	public static final String	FORMATO_CODIGO_SEGURIDAD							= "00000000";
 
 	/**
 	 * Clave de la Factura para tributacion directa
@@ -63,11 +67,11 @@ public final class FacturaElectronicaUtils {
 	public static String claveFactura(String cedulaEmisor, String consecutivoFactura, Integer comprobanteElectronico, Integer codigoSeguridad) {
 		// Fecha actual desglosada:
 		Calendar fecha = Calendar.getInstance();
-		Integer ano = fecha.get(Calendar.YEAR);
+		Integer ano = fecha.get(Calendar.YEAR)-2000;
 		Integer mes = fecha.get(Calendar.MONTH)+1 ;
 		Integer dia = fecha.get(Calendar.DAY_OF_MONTH);
 
-		String primeroTress = "000".substring(FacturaElectronicaUtils.CODIGO_PAIS.toString().length()) ;
+		String primeroTress = FacturaElectronicaUtils.replazarConZeros(CODIGO_PAIS.toString(),"000") ;
 		String cuartoQuito = replazarConZeros(dia.toString(), FORMATO_DIA);
 		String sextoAlSeptimo = replazarConZeros(mes.toString(), FORMATO_MES);
 		String octavoNoveno = replazarConZeros(ano.toString(), FORMATO_ANO);
@@ -75,11 +79,24 @@ public final class FacturaElectronicaUtils {
 		String cuadraGesimoSegundo = consecutivoFactura;
 		String cuadraGesimoTerceroQuicuegimo = comprobanteElectronico.toString();
 		String cuadraGesimoQuincuagesimo = replazarConZeros(codigoSeguridad.toString(), FORMATO_CODIGO_SEGURIDAD);
+	
 
 		return primeroTress + cuartoQuito + sextoAlSeptimo + octavoNoveno + decimoVegesimo + cuadraGesimoSegundo + cuadraGesimoTerceroQuicuegimo + cuadraGesimoQuincuagesimo;
 
 	}
 
+	/**
+	 * Convertir a 5 decimales para la factura
+	 * @param valor
+	 * @return
+	 */
+	public static BigDecimal getConvertirBigDecimal(Double valor) {
+		valor= valor == null? Constantes.ZEROS_DOUBLE : valor;
+		 BigDecimal bd = new BigDecimal(Double.toString(valor));
+		 bd = bd.setScale(5, RoundingMode.HALF_UP);
+		return bd;
+	}
+	
 	/**
 	 * Formateador de numeros en string rellena los campos con el formato indicado
 	 * @param valor

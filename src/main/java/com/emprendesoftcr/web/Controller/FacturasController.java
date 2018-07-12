@@ -204,6 +204,7 @@ public class FacturasController {
 				Cliente cliente = clienteBo.buscarPorNombreCompletoYEmpresa(Constantes.NOMBRE_CLIENTE_FRECUENTE, usuario.getEmpresa());
 				if (cliente == null) {
 					cliente = clienteBo.crearClienteFrecuente(usuario.getEmpresa(), usuario);
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.intente.nuevo", result.getAllErrors());
 				} else {
 					facturaCommand.setCliente(cliente);
 				}
@@ -212,6 +213,7 @@ public class FacturasController {
 				Vendedor vendedor = vendedorBo.buscarPorNombreCompletoYEmpresa(Constantes.NOMBRE_VENDEDOR_FRECUENTE, usuario.getEmpresa());
 				if (vendedor == null) {
 					vendedorBo.crearVendedorFrecuente(usuario.getEmpresa(), usuario);
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.intente.nuevo", result.getAllErrors());
 				}
 				facturaCommand.setVendedor(vendedor);
 

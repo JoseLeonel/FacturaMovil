@@ -9,7 +9,7 @@ public class Constantes {
 	// Consecutivo inicial de las empresa
 	public static final Integer					CONSECUTIVO_INICIAL_FACTURA										= 0000000001;
 	public static final String					CASA_MATRIZ_INICIAL_FACTURA										= "001";
-	public static final String					TERMINAL_INICIAL_FACTURA											= "001";
+	public static final String					TERMINAL_INICIAL_FACTURA											= "00001";
 
 	public static final String					DOCXMLS																				= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/facturaElectronica";
 	public static final String					PRIVATE_KEY																		= "privateKey";
@@ -20,7 +20,7 @@ public class Constantes {
 
 	// Cliente /VENDEDOR Frecuente de una empresa
 	public static final String					NOMBRE_CLIENTE_FRECUENTE											= "CLIENTE_FRECUENTE";
-	public static final String					CEDULA_CLIENTE_FRECUENTE											= "99999999999999";
+	public static final String					CEDULA_CLIENTE_FRECUENTE											= "999999999999";
 	public static final String					CORREO_CLIENTE_FRECUENTE											= "CLIENTE_FRECUENTE@FRECUENTE.COM";
 	public static final String					NOMBRE_VENDEDOR_FRECUENTE											= "VENDEDOR_FRECUENTE";
 	public static final String					CEDULA_VENDEDOR_FRECUENTE											= "99999999999999";

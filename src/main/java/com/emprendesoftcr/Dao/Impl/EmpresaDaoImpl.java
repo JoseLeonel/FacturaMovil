@@ -123,7 +123,7 @@ public class EmpresaDaoImpl implements EmpresaDao {
 			casaMatriz = empresa.getCazaMatriz() == null ? Constantes.CASA_MATRIZ_INICIAL_FACTURA : empresa.getCazaMatriz();
 			// Terminal donde esta vendiendo el usaurio
 			String terminalUsuario = Constantes.EMPTY;
-			terminalUsuario = usuario.getTerminalFactura() == null ? Constantes.TERMINAL_INICIAL_FACTURA : usuario.getTerminalFactura();
+			terminalUsuario = usuario.getTerminalFactura() == null ? Constantes.TERMINAL_INICIAL_FACTURA : FacturaElectronicaUtils.replazarConZeros(usuario.getTerminalFactura(),"00000");
 			String consecutivoFactura = "0000000000".substring(consecutivo.toString().length()) + consecutivo;
 
 			resultado = casaMatriz + terminalUsuario +factura.getTipoDoc()+ consecutivoFactura;

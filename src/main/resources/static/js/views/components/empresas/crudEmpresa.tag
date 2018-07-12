@@ -470,6 +470,7 @@ var reglasDeValidacion = function() {
             telefono : {
                 maxlength:9,
                 minlength:1,
+                required : true,
                 telefonoFormat:true
 			},  
            correoElectronico : {

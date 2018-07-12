@@ -71,6 +71,8 @@ public class ClienteBoImpl implements ClienteBo {
 	public Cliente crearClienteFrecuente(Empresa empresa,Usuario usuario) {
 		Cliente cliente = new Cliente();
 		cliente.setCedula(Constantes.CEDULA_CLIENTE_FRECUENTE);
+		cliente.setTipoCedula(Constantes.TIPO_CEDULA_FISICA);
+		cliente.setCodigoPais(506);
 		cliente.setCorreoElectronico(Constantes.CORREO_CLIENTE_FRECUENTE);
 		cliente.setNombreCompleto(Constantes.NOMBRE_CLIENTE_FRECUENTE);
 		cliente.setCelular(Constantes.ZEROS);
@@ -82,7 +84,12 @@ public class ClienteBoImpl implements ClienteBo {
 		cliente.setCreated_at(new Date());
 		cliente.setUpdated_at(new Date());
 		cliente.setUsuario(usuario);
-		cliente.setProvincia(Constantes.PROVINCIA_SAN_JOSE);
+		cliente.setProvincia(Constantes.ZEROS.toString());
+		cliente.setDistrito(Constantes.ZEROS.toString());
+		cliente.setCanton(Constantes.ZEROS.toString());
+		cliente.setBarrio(Constantes.ZEROS.toString());
+		cliente.setIdentificacionExtranjero(Constantes.EMPTY);
+		cliente.setNombreComercial(Constantes.EMPTY);
 		agregar(cliente);
 		return cliente;
 	}
