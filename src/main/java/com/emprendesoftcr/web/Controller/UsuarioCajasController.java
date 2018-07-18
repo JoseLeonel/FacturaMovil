@@ -1,13 +1,13 @@
 package com.emprendesoftcr.web.Controller;
 
-import java.math.BigDecimal;
+
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -31,11 +31,11 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.web.command.UsuarioCajaCommand;
-import com.emprendesoftcr.web.componentes.CajaPropertyEditor;
-import com.emprendesoftcr.web.componentes.EmpresaPropertyEditor;
-import com.emprendesoftcr.web.componentes.StringPropertyEditor;
-import com.emprendesoftcr.web.componentes.UsuarioCajaPropertyEditor;
-import com.emprendesoftcr.web.componentes.UsuarioPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.CajaPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.UsuarioCajaPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.UsuarioPropertyEditor;
 import com.google.common.base.Function;
 
 /**

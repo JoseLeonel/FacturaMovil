@@ -33,12 +33,12 @@ import com.emprendesoftcr.modelo.Inventario;
 import com.emprendesoftcr.modelo.Marca;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.ArticuloCommand;
-import com.emprendesoftcr.web.componentes.ArticuloPropertyEditor;
-import com.emprendesoftcr.web.componentes.CategoriaPropertyEditor;
-import com.emprendesoftcr.web.componentes.EmpresaPropertyEditor;
-import com.emprendesoftcr.web.componentes.InventarioPropertyEditor;
-import com.emprendesoftcr.web.componentes.MarcaPropertyEditor;
-import com.emprendesoftcr.web.componentes.StringPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.ArticuloPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.CategoriaPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.InventarioPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.MarcaPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
 
 /**

@@ -270,7 +270,7 @@
                             <td>
                                 <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
                             </td>
-                            <td>{linea}</td>
+                            <td>{numeroLinea}</td>
                             <td>{codigo}</td>
                             <td>{descripcion}</td>
                             <td class="text-right">
@@ -1277,6 +1277,7 @@ function cargarDetallesFacturaEnEspera(){
             montoTotalLinea : redondearDecimales(parseFloat(e.montoTotalLinea),5),
             montoTotal      : redondearDecimales(parseFloat(e.montoTotal),5)
         });
+        self.update()
     })
     self.update()
      __calculate(); 
@@ -1656,8 +1657,8 @@ __removeProductFromDetail(e) {
     this.detail.splice(index, 1);
     var cont = 0 ;
     self.detail.forEach(function(elemen){
-            elemen.linea = cont + 1
-            cont = elemen.linea
+            elemen.numeroLinea = cont + 1
+            cont = elemen.numeroLinea
         }
     )
     self.update()
@@ -1680,7 +1681,7 @@ function __nuevoArticuloAlDetalle(cantidad){
     var subTotal        = getSubTotal(precioUnitario,cantidad)
     self.descuento      = 0;
     self.detail.push({
-       numeroLinea     : 0,
+       numeroLinea     : 1,
        iva             : self.articulo.impuesto,
        articulo_id     : self.articulo.id,
        codigo          : self.articulo.codigo,
@@ -1699,8 +1700,8 @@ function __nuevoArticuloAlDetalle(cantidad){
     });
     var cont = 0;
     self.detail.forEach(function(elemen){
-          elemen.linea = cont + 1
-          cont = elemen.linea
+          elemen.numeroLinea = cont + 1
+          cont = elemen.numeroLinea
         }
     )
     self.update()

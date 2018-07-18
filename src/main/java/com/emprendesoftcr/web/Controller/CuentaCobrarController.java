@@ -36,11 +36,11 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.web.command.CuentaCobrarCommand;
-import com.emprendesoftcr.web.componentes.ClientePropertyEditor;
-import com.emprendesoftcr.web.componentes.CuentaCobrarPropertyEditor;
-import com.emprendesoftcr.web.componentes.EmpresaPropertyEditor;
-import com.emprendesoftcr.web.componentes.StringPropertyEditor;
-import com.emprendesoftcr.web.componentes.VendedorPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.CuentaCobrarPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.VendedorPropertyEditor;
 import com.google.common.base.Function;
 
 /**

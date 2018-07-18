@@ -26,8 +26,8 @@ import com.emprendesoftcr.web.command.BarriosCommand;
 import com.emprendesoftcr.web.command.CantonCommand;
 import com.emprendesoftcr.web.command.DistritoCommand;
 import com.emprendesoftcr.web.command.ProvinciaCommand;
-import com.emprendesoftcr.web.componentes.ProvinciaPropertyEditor;
-import com.emprendesoftcr.web.componentes.StringPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.ProvinciaPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
 
 /**

@@ -35,9 +35,9 @@ import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.web.command.AbonoCommand;
-import com.emprendesoftcr.web.componentes.AbonoPropertyEditor;
-import com.emprendesoftcr.web.componentes.CuentaCobrarPropertyEditor;
-import com.emprendesoftcr.web.componentes.StringPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.AbonoPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.CuentaCobrarPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
 
 /**

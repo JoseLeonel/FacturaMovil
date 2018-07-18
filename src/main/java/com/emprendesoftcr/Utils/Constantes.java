@@ -26,6 +26,13 @@ public class Constantes {
 	public static final String					CEDULA_VENDEDOR_FRECUENTE											= "99999999999999";
 	public static final String					CORREO_VENDEDOR_FRECUENTE											= "VENDEDOR_FRECUENTE@FRECUENTE.COM";
 	public static final String					LLAVES_CRIPTOGRAFICAS													= "/home/jose/Escritorio/Proyecto Factura Electronica/";
+
+	// Hacienda Estados
+	public static final Integer					HACIENDA_ESTADO_PENDIENTE_FIRMAR							= 1;
+	public static final Integer					HACIENDA_ESTADO_FIRMARDO_XML									= 2;
+	public static final Integer					HACIENDA_ESTADO_ENVIADO_HACIENDA  						= 3;
+	public static final Integer					HACIENDA_ESTADO_ACEPTADO_HACIENDA  						= 4;
+
 	// Vendedor Frecuente de una empresa
 
 	// Codigo de moneda

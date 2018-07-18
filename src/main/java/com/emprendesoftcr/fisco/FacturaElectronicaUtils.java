@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -18,6 +17,8 @@ import java.security.Signature;
 import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
@@ -28,6 +29,8 @@ import java.util.Scanner;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.sql.rowset.serial.SerialException;
 
 import org.json.JSONObject;
 
@@ -267,6 +270,21 @@ public final class FacturaElectronicaUtils {
    */
   public static boolean getJsonObject(JSONObject jsonObject, String key) {
       return jsonObject.has(key) && !jsonObject.isNull(key);
+  }
+  
+  
+  public static Blob convertirStringToblod(String valor) throws SerialException, SQLException {
+  	Blob b = new javax.sql.rowset.serial.SerialBlob(valor.getBytes());
+  	return b;
+  }
+  
+  public static String convertirBlodToString(Blob valor) throws SerialException, SQLException {
+  
+  	byte[] bdata = valor.getBytes(1, (int) valor.length());
+  	String text = new String(bdata);
+  	
+  	return text;
+  	
   }
 
 }

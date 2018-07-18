@@ -37,8 +37,8 @@ import com.emprendesoftcr.modelo.Kardex;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.FiltroKardexCommand;
 import com.emprendesoftcr.web.command.KardexCommand;
-import com.emprendesoftcr.web.componentes.ArticuloPropertyEditor;
-import com.emprendesoftcr.web.componentes.StringPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.ArticuloPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
 
 /**

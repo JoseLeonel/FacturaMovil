@@ -1,6 +1,6 @@
 package com.emprendesoftcr.web.Controller;
 
-import java.security.KeyStore;
+import java.sql.Blob;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,6 +24,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.FacturaBo;
+import com.emprendesoftcr.Bo.HaciendaBo;
 import com.emprendesoftcr.Bo.TipoCambioBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Bo.UsuarioCajaBo;
@@ -34,26 +35,25 @@ import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.Utils.Utils;
-import com.emprendesoftcr.fisco.LlaveCriptografica;
+import com.emprendesoftcr.components.OpenIDConnectHaciendaComponent;
+import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.service.FacturaXMLServices;
-import com.emprendesoftcr.service.LlaveCriptograficaService;
 import com.emprendesoftcr.validator.FacturaFormValidator;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
-import com.emprendesoftcr.web.componentes.ClientePropertyEditor;
-import com.emprendesoftcr.web.componentes.EmpresaPropertyEditor;
-import com.emprendesoftcr.web.componentes.StringPropertyEditor;
-import com.emprendesoftcr.web.componentes.VendedorPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.VendedorPropertyEditor;
 import com.google.common.base.Function;
-
-import xades4j.production.XadesSigner;
 
 /**
  * Compras realizadas por la empresa y ingresan al inventario ComprasController.
@@ -73,10 +73,14 @@ public class FacturasController {
 	@Autowired
 	private FacturaXMLServices																	facturaXMLServices;
 
-	
+	@Autowired
+	private HaciendaBo																					haciendaBo;
 
 	@Autowired
 	private DataTableBo																					dataTableBo;
+
+	// @Autowired
+	// private CertificadoBo certificadoBo;
 
 	@Autowired
 	private UsuarioBo																						usuarioBo;
@@ -230,6 +234,34 @@ public class FacturasController {
 			if (factura == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+			// Si es Facturada se crea pendiente de firmar
+			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+				// Crear XMl sin firma
+				String comprobanteXML = facturaXMLServices.getCrearXMLSinFirma(factura);
+				//firmar el documento
+				comprobanteXML = facturaXMLServices.getFirmarXML(comprobanteXML, factura.getEmpresa());
+				Hacienda hacienda = new Hacienda();
+				hacienda.setCedulaEmisor(factura.getEmpresa().getCedula());
+				hacienda.setTipoEmisor(factura.getEmpresa().getTipoCedula());
+				// no se graba el cliente si es frecuente
+				if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+					hacienda.setCedulaReceptor(factura.getCliente().getCedula());
+					hacienda.setTipoReceptor(factura.getCliente().getTipoCedula());
+				}
+				hacienda.setEmpresa(factura.getEmpresa());
+
+				hacienda.setClave(factura.getClave());
+				hacienda.setFechaEmisor(factura.getFechaEmision());
+				Blob b = FacturaElectronicaUtils.convertirStringToblod(comprobanteXML);
+				hacienda.setComprobanteXML(b);
+				hacienda.setCreated_at(new Date());
+				hacienda.setUpdated_at(new Date());
+				hacienda.setStatus(Constantes.ZEROS);
+				hacienda.setEstado(Constantes.HACIENDA_ESTADO_FIRMARDO_XML);
+				hacienda.setConsecutivo(factura.getNumeroConsecutivo());
+				haciendaBo.agregar(hacienda);
+
+			}
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", factura);
 
 		} catch (Exception e) {
@@ -244,24 +276,27 @@ public class FacturasController {
 	 * @param id
 	 * @return
 	 */
+	@Autowired
+	private OpenIDConnectHaciendaComponent openIDConnectHaciendaComponent;
+
 	@RequestMapping(value = "/MostrarFacturaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer idFactura) {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
-			String xml = facturaXMLServices.generarFacturaElectronicaXML(facturaBD);
-			facturaXMLServices.generarFacturaElectronicaTributacionXML(xml,facturaBD);
-			
-//			KeyStore keyStore = null;
-//			LlaveCriptografica llaveCriptografica = new LlaveCriptografica();
-//			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-			
-//			llaveCriptografica.setPassSignature(usuario.getEmpresa().getClaveLlaveCriptografica().toString());
-//			llaveCriptografica.setPathSignature(usuario.getEmpresa().getNombreLlaveCriptografica());
-//   			XadesSigner xadesSigner = llaveCriptograficaService.getSigner(usuario.getEmpresa().getNombreLlaveCriptografica(),usuario.getEmpresa().getClaveLlaveCriptografica().toString());
-//			 keyStore = llaveCriptograficaService.getKeyStore(llaveCriptografica);
 
-//			 facturaXMLServices.generarFacturaElectronicaTributacionXML(facturaBD);
+			 Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+
+			// certificadoBo.agregar(usuario.getEmpresa(),usuario.getEmpresa().getClaveLlaveCriptografica().toString(),usuario.getEmpresa().getNombreLlaveCriptografica());
+			 String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);
+			 facturaXMLServices.getFirmarXML(xml,facturaBD.getEmpresa());
+
+			// KeyStore keyStore = null;
+
+			// llaveCriptografica.setPassSignature(usuario.getEmpresa().getClaveLlaveCriptografica().toString());
+			// llaveCriptografica.setPathSignature(usuario.getEmpresa().getNombreLlaveCriptografica());
+			// XadesSigner xadesSigner = llaveCriptograficaService.getSigner(usuario.getEmpresa().getNombreLlaveCriptografica(),usuario.getEmpresa().getClaveLlaveCriptografica().toString());
+			// keyStore = llaveCriptograficaService.getKeyStore(llaveCriptografica);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", facturaBD);
 		} catch (Exception e) {

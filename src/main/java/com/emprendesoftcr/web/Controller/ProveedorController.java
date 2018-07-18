@@ -29,9 +29,9 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.ProveedorCommand;
-import com.emprendesoftcr.web.componentes.EmpresaPropertyEditor;
-import com.emprendesoftcr.web.componentes.ProveedorPropertyEditor;
-import com.emprendesoftcr.web.componentes.StringPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.ProveedorPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
 
 /**

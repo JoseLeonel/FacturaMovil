@@ -16,7 +16,7 @@ import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.modelo.TipoUnidad;
 import com.emprendesoftcr.web.command.TipoUnidadCommand;
-import com.emprendesoftcr.web.componentes.StringPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
 
 /**

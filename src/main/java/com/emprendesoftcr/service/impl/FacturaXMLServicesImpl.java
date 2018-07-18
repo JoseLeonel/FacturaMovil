@@ -3,7 +3,6 @@ package com.emprendesoftcr.service.impl;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.cert.CertificateException;
 import java.sql.Timestamp;
@@ -18,26 +17,42 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
+import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.error.SignException;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.fisco.P12Utils;
+import com.emprendesoftcr.modelo.Certificado;
 import com.emprendesoftcr.modelo.Detalle;
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.service.FacturaXMLServices;
 import com.emprendesoftcr.type.CertificateInfo;
 import com.google.common.collect.ImmutableList;
 
+/**
+ * Proceso de armado del XML
+ * Firmado del XML
+ * FacturaXMLServicesImpl.
+ * @author jose.
+ * @since 13 jul. 2018
+ */
 @Service("facturaXMLServices")
 @Transactional
 public class FacturaXMLServicesImpl implements FacturaXMLServices {
+	
+
+	@Autowired
+	private CertificadoBo																					certificadoBo;
+
 
 	public static final String CODIGO_PRODUCTO_VENDEDOR = "01";
 	public static final Integer PLAZO_CREDITO = 15;
@@ -51,10 +66,24 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 	public static final String FECHA_RESOLUCION = "20-02-2017 13:22:22";
 	public static final String LLAVES_CRIPTOGRAFICAS = "empresas/";
 	public static final String DOCXMLNS_FACTURA_ELECTRONICA = "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/facturaElectronica";
+	public static final String FORMATO_PROVINCIA = "0";
+	public static final String FORMATO_CANTON = "00";
+	public static final String FORMATO_DISTRITO = "00";
+	public static final String FORMATO_BARRIO = "00";
+	public static final String FORMATO_TELEFONO = "00000000";
+  public static final String FORMATO_CODIGO_PAIS = "000";
+  public static final String FORMATO_MEDIOPAGO = "00";
+  public static final String FORMATO_PLAZO_CREDITO = "00";
+
+
 	
+	/**
+	 * 
+	 * @see com.emprendesoftcr.service.FacturaXMLServices#getCrearXML(com.emprendesoftcr.modelo.Factura)
+	 */
 	@Override
-	public String generarFacturaElectronicaXML(Factura factura){
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+	public String getCrearXMLSinFirma(Factura factura){
+		
     String date = FacturaElectronicaUtils.toISO8601String(factura.getFechaEmision());
 		 String xml = "<FacturaElectronica xmlns=\"" + Constantes.DOCXMLS + "\" " +
          "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
@@ -69,10 +98,10 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
      "</Identificacion>" +
      "<NombreComercial>" + factura.getEmpresa().getNombreComercial() + "</NombreComercial>" +
      "<Ubicacion>" +
-         "<Provincia>" + factura.getEmpresa().getProvincia() + "</Provincia>" +
-         "<Canton>" + factura.getEmpresa().getCanton() + "</Canton>" +
-         "<Distrito>" + factura.getEmpresa().getDistrito() + "</Distrito>" +
-         "<Barrio>" + factura.getEmpresa().getBarrio() + "</Barrio>" +
+         "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getProvincia(),FORMATO_PROVINCIA) + "</Provincia>" +
+         "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getCanton(),FORMATO_CANTON) + "</Canton>" +
+         "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getDistrito(),FORMATO_DISTRITO) + "</Distrito>" +
+         "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getBarrio(),FORMATO_BARRIO) + "</Barrio>" +
          "<OtrasSenas>" + factura.getEmpresa().getOtraSenas() + "</OtrasSenas>" +
      "</Ubicacion>" +
      getTelefono(factura.getEmpresa().getTelefono(),factura.getEmpresa().getCodigoPais())+
@@ -81,8 +110,8 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
  "</Emisor>" +
  xmlReceptor(factura) +
      "<CondicionVenta>" + factura.getCondicionVenta() + "</CondicionVenta>" +
-     "<PlazoCredito>" + new BigInteger(factura.getPlazoCredito().toString()) + "</PlazoCredito>"  +
-     "<MedioPago>" + getMedioPago(factura) + "</MedioPago>" +
+     "<PlazoCredito>" + FacturaElectronicaUtils.replazarConZeros(factura.getPlazoCredito().toString(),FORMATO_PLAZO_CREDITO) + "</PlazoCredito>"  
+      + getMedioPago(factura) +
      "<DetalleServicio>" + xmlDetalleServicio(factura) + "</DetalleServicio>" +
      "<ResumenFactura>" +
          "<CodigoMoneda>" + factura.getCodigoMoneda() + "</CodigoMoneda>" +
@@ -112,6 +141,51 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 		
 	}
 	
+	/**
+   * Firma de la Factura electronica
+   * @see com.emprendesoftcr.service.FacturaXMLServices#getFirmarXML(java.lang.String, com.emprendesoftcr.modelo.Factura)
+   */
+@Override
+	public String getFirmarXML(String xmlString,Empresa empresa) {
+		String resultado = Constantes.EMPTY;
+		try {
+
+			Certificado certificado  = certificadoBo.findByEmpresa(empresa);
+			
+			
+			String firmadoFactura = sign(xmlString,certificado); 
+			firmadoFactura = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + firmadoFactura;
+//			String valor = FacturaElectronicaUtils.base64Encode(firmadoFactura.getBytes("UTF-8"));
+      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+      DocumentBuilder builder;
+      builder = factory.newDocumentBuilder();
+          // Use String reader
+          Document document = builder.parse( new InputSource(
+                  new StringReader( firmadoFactura ) ) );
+
+          TransformerFactory tranFactory = TransformerFactory.newInstance();
+          Transformer aTransformer = tranFactory.newTransformer();
+          Source src = new DOMSource( document );
+          Result dest = new StreamResult( new File( "prueba.xml" ) );
+          aTransformer.transform( src, dest );
+     
+			
+     resultado = firmadoFactura;
+			
+			        
+		} catch (Exception e) {
+			
+		}
+		
+		return resultado;
+	}
+	
+	/**
+	 * 
+	 * @param factura
+	 * @return
+	 */
 	private String getMedioPago(Factura factura) {
 		String resultado = Constantes.EMPTY;
 		
@@ -124,17 +198,22 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 			valor = MEDIO_PAGO_BANCO;
 		}
 
-		resultado = "<MedioPago>" + valor ;         
+		resultado = "<MedioPago>" + FacturaElectronicaUtils.replazarConZeros(valor,FORMATO_MEDIOPAGO) ;         
    
        resultado += "</MedioPago>";
        return resultado;
 	}
-	
+	/**
+	 * 
+	 * @param telefono
+	 * @param codigoPais
+	 * @return
+	 */
 	private String getTelefono(Integer telefono,Integer codigoPais) {
 		String resultado = Constantes.EMPTY;
 		 resultado = "<Telefono>" +
-	          "<CodigoPais>" + new BigInteger(codigoPais.toString()) + "</CodigoPais>" +
-		        "<NumTelefono>" + new BigInteger(telefono.toString())  + "</NumTelefono>";
+	          "<CodigoPais>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(codigoPais.toString()).toString(),FORMATO_CODIGO_PAIS) + "</CodigoPais>" +
+		        "<NumTelefono>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(telefono.toString()).toString(),FORMATO_TELEFONO)  + "</NumTelefono>";
 		     
 	    
 	        resultado += "</Telefono>";
@@ -142,19 +221,27 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 		return resultado;
 	}
 	
-
+/**
+ * 
+ * @param telefono
+ * @param codigoPais
+ * @return
+ */
 	private String getFax(Integer telefono,Integer codigoPais) {
 		String resultado = Constantes.EMPTY;
 		 resultado = "<Fax>" +
-	          "<CodigoPais>" + new BigInteger(codigoPais.toString()) + "</CodigoPais>" +
-		        "<NumTelefono>" + new BigInteger(telefono.toString())  + "</NumTelefono>";
-		     
-	    
+	          "<CodigoPais>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(codigoPais.toString()).toString(),FORMATO_CODIGO_PAIS) + "</CodigoPais>" +
+		        "<NumTelefono>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(telefono.toString()).toString(),FORMATO_TELEFONO)  + "</NumTelefono>";
 	        resultado += "</Fax>";
 		
 		return resultado;
 	}
 	
+	/**
+	 * 
+	 * @param factura
+	 * @return
+	 */
   private String xmlDetalleServicio(Factura factura) {
     
     String lineas = "";
@@ -181,7 +268,11 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
     
     return lineas;
 }
-  
+  /**
+   * 
+   * @param detalle
+   * @return
+   */
   private String xmlImpuestos(Detalle detalle) {
     String imp = "<Impuesto>" +
         "<Codigo>" + Utils.zeroPad(detalle.getArticulo().getTipoImpuesto(), 2) + "</Codigo>" +
@@ -200,7 +291,11 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
     return imp;
 }
 
-	
+	/**
+	 * 
+	 * @param factura
+	 * @return
+	 */
   private String xmlReceptor(Factura factura) {
     if (factura.getCliente() != null) {
         return "<Receptor>" +
@@ -209,10 +304,10 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
                 "<IdentificacionExtranjero>" + factura.getCliente().getIdentificacionExtranjero() + "</IdentificacionExtranjero>" +
                 "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
                 "<Ubicacion>" +
-                    "<Provincia>" + factura.getCliente().getProvincia() + "</Provincia>" +
-                    "<Canton>" + factura.getCliente().getCanton() + "</Canton>" +
-                    "<Distrito>" + factura.getCliente().getDistrito() + "</Distrito>" +
-                    "<Barrio>" + factura.getCliente().getDistrito() + "</Barrio>" +
+                    "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getProvincia(),FORMATO_PROVINCIA) + "</Provincia>" +
+                    "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getCanton(),FORMATO_CANTON) + "</Canton>" +
+                    "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getDistrito(),FORMATO_DISTRITO) + "</Distrito>" +
+                    "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getBarrio(),FORMATO_BARRIO) + "</Barrio>" +
                     "<OtrasSenas>" + factura.getCliente().getOtraSena() + "</OtrasSenas>" +
                 "</Ubicacion>" +
                 getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
@@ -237,59 +332,26 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
   }
   
   
-
-	public void generarFacturaElectronicaTributacionXML(String xmlString,Factura factura) {
-		try {
-//			String xmlString = generarFacturaElectronicaXML(factura);
-			
-			CertificateInfo certificateInfo  = getCertificateInfo(factura.getEmpresa().getNombreLlaveCriptografica(),factura.getEmpresa().getClaveLlaveCriptografica().toString()); 
-			String firmadoFactura = sign(xmlString,certificateInfo); 
-			firmadoFactura = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + firmadoFactura;
-			FacturaElectronicaUtils.base64Encode(firmadoFactura.getBytes("UTF-8"));
-      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
-      DocumentBuilder builder;
-      builder = factory.newDocumentBuilder();
-          // Use String reader
-          Document document = builder.parse( new InputSource(
-                  new StringReader( firmadoFactura ) ) );
-
-          TransformerFactory tranFactory = TransformerFactory.newInstance();
-          Transformer aTransformer = tranFactory.newTransformer();
-          Source src = new DOMSource( document );
-          Result dest = new StreamResult( new File( "xmlFileName.xml" ) );
-          aTransformer.transform( src, dest );
-     
-			
-//			// necesito hacer un contexto se crea la instancia
-//			JAXBContext context = JAXBContext.newInstance(FacturaElectronica.class);
-//
-//			// Escribir el xml se utiliza el objete marshaller
-//			Marshaller marshaller = context.createMarshaller();
-//			FacturaElectronica facturaElectronica = crearFacturaElectronica(factura);
-//			// tabular el documento xml
-//			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-//			// salida
-//			marshaller.marshal(facturaElectronica, System.out);
-//
-//			marshaller.marshal(facturaElectronica, new FileWriter("leo.xml"));
-//			Document sourceDoc =    (Document) facturaElectronica;
-			
-			        
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-	}
+  
 	
+
+	/**
+	 * 
+	 * @param keyPath
+	 * @param password
+	 * @return
+	 * @throws CertificateException
+	 * @throws IOException
+	 */
 	private  CertificateInfo getCertificateInfo(String keyPath, String password) throws CertificateException, IOException {
 		CertificateInfo certificateInfo = null;
 		
 		
 		try {
-			ClassPathResource cpr = new ClassPathResource("static/llaves/"+keyPath);
-		
+			ClassPathResource cpr = new ClassPathResource("/home/jose/dev/workspaceMaven/FacturaElectronica/src/main/resources/static/llaves/011001097813.p12" );
+		  String path =  new ClassPathResource("/home/jose/dev/workspaceMaven/FacturaElectronica/tmp/").getPath();
 			
-				certificateInfo = P12Utils.dataFromP12(cpr.getPath(), password);
+				certificateInfo = P12Utils.dataFromP12(path,cpr.getPath(), password);
 			
 
 		} catch (Exception e) {
@@ -298,6 +360,8 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 
 		return certificateInfo;
 	}
+	
+	
 
 	/**
 	 * Proceso de Firmado
@@ -307,19 +371,24 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 	 * @return
 	 * @throws SignException
 	 */
-	 private String sign( String content, CertificateInfo certificateInfo) throws SignException {
+	 private String sign( String content, Certificado certificado) throws SignException {
      String signature = "";
      String docXmlns = DOCXMLNS_FACTURA_ELECTRONICA;
-     String qualifyingProperties = generateQualifyingProperties(certificateInfo, docXmlns);
+     String qualifyingProperties = generateQualifyingProperties(certificado, docXmlns);
      String _signInfo = createInfo(content, qualifyingProperties, docXmlns);
      signature += _signInfo;
-     signature += signInfo(_signInfo, certificateInfo.privateKey());
-     signature += x509(ImmutableList.<String>of(certificateInfo.certificate())) + qualifyingProperties;
+     signature += signInfo(_signInfo, certificado.getPrivateKey());
+     signature += x509(ImmutableList.<String>of(certificado.getCertificate())) + qualifyingProperties;
      return envelope(content, signature);
  }
 
-	
-	 private String generateQualifyingProperties (CertificateInfo certificateInfo, String docXmlns) {
+	/**
+	 * 
+	 * @param certificado
+	 * @param docXmlns
+	 * @return
+	 */
+	 private String generateQualifyingProperties (Certificado certificado, String docXmlns) {
      Timestamp timestamp = new Timestamp(System.currentTimeMillis());
      String date = FacturaElectronicaUtils.toISO8601String(new Date(timestamp.getTime() - 21600000));
      return "<ds:Object>" +
@@ -332,11 +401,11 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
          "<xades:Cert>" +
          "<xades:CertDigest>" +
          "<ds:DigestMethod Algorithm=\"http://www.w3.org/2001/04/xmlenc#sha256\"></ds:DigestMethod>" +
-         "<ds:DigestValue>" + certificateInfo.certHash() + "</ds:DigestValue>" +
+         "<ds:DigestValue>" + certificado.getCerthash() + "</ds:DigestValue>" +
          "</xades:CertDigest>" +
          "<xades:IssuerSerial>" +
-         "<ds:X509IssuerName>" + certificateInfo.x509IssuerName() + "</ds:X509IssuerName>" +
-         "<ds:X509SerialNumber>" + Long.parseLong(certificateInfo.x509SerialNumber(), 16) + "</ds:X509SerialNumber>" +
+         "<ds:X509IssuerName>" + certificado.getX509issuerName() + "</ds:X509IssuerName>" +
+         "<ds:X509SerialNumber>" + Long.parseLong(certificado.getX509serialNumber(), 16) + "</ds:X509SerialNumber>" +
          "</xades:IssuerSerial>" +
          "</xades:Cert>" +
          "</xades:SigningCertificate>" +
@@ -348,7 +417,13 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
          "</xades:QualifyingProperties>" +
          "</ds:Object>";
  }
- 
+ /**
+  * 
+  * @param content
+  * @param qualifyingProperties
+  * @param docXmlns
+  * @return
+  */
  private String createInfo(String content, String qualifyingProperties, String docXmlns) {
      return "<ds:SignedInfo xmlns=\"" + DOCXMLNS_FACTURA_ELECTRONICA + "\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
          "<ds:CanonicalizationMethod Algorithm=\"http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments\"></ds:CanonicalizationMethod>" +
@@ -367,11 +442,23 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
          "</ds:SignedInfo>";
  }
  
+ /**
+  * 
+  * @param info
+  * @param privateKey
+  * @return
+  * @throws SignException
+  */
  private String signInfo(String info, String privateKey) throws SignException {
      String signInf = FacturaElectronicaUtils.signSHA256RSA(info, privateKey);
      return "<ds:SignatureValue>" + signInf + "</ds:SignatureValue>";
  }
  
+ /**
+  * 
+  * @param certificates
+  * @return
+  */
  private String x509(ImmutableList<String> certificates) {
      String cerout = "";
      for (String certificate : certificates) {
@@ -380,6 +467,12 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
      return "<ds:KeyInfo><ds:X509Data>" + cerout + "</ds:X509Data></ds:KeyInfo>";
  }
  
+ /**
+  * 
+  * @param content
+  * @param signature
+  * @return
+  */
  private String envelope(String content, String signature) {
      String sign = "<ds:Signature Id=\"id-b950d386377a\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\">" +
          signature + "</ds:Signature>" + "$1";

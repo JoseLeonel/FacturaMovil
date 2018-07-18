@@ -42,6 +42,8 @@ public class EmpresaCommand {
 
 	private Integer	claveLlaveCriptografica;
 	private Integer	codigoSeguridad;
+	private String	usuarioEnvioComprobante;
+	private String	passwordEnvioComprobante;
 
 	public EmpresaCommand(Empresa empresa) {
 		super();
@@ -67,6 +69,8 @@ public class EmpresaCommand {
 		this.estado = empresa.getEstado();
 		this.numeroConsecutivo = empresa.getNumeroConsecutivo();
 		this.cazaMatriz = empresa.getCazaMatriz();
+		this.passwordEnvioComprobante = empresa.getPasswordEnvioComprobante();
+		this.usuarioEnvioComprobante = empresa.getUsuarioEnvioComprobante();
 		
 
 	}
@@ -245,6 +249,26 @@ public class EmpresaCommand {
 	
 	public void setCodigoSeguridad(Integer codigoSeguridad) {
 		this.codigoSeguridad = codigoSeguridad;
+	}
+
+	
+	public String getUsuarioEnvioComprobante() {
+		return usuarioEnvioComprobante;
+	}
+
+	
+	public void setUsuarioEnvioComprobante(String usuarioEnvioComprobante) {
+		this.usuarioEnvioComprobante = usuarioEnvioComprobante;
+	}
+
+	
+	public String getPasswordEnvioComprobante() {
+		return passwordEnvioComprobante;
+	}
+
+	
+	public void setPasswordEnvioComprobante(String passwordEnvioComprobante) {
+		this.passwordEnvioComprobante = passwordEnvioComprobante;
 	}
 	
 	

@@ -96,6 +96,7 @@ public class LlaveCriptograficaServiceImpl implements LlaveCriptograficaService 
 
 			ks = KeyStore.getInstance("PKCS12");
 			ks.load(new FileInputStream(file.getPath()), llaveCriptografica.getPassSignature().toCharArray());
+			
 		} catch (KeyStoreException e) {
 			throw new IOException("Error: " + e.getMessage());
 		} catch (NoSuchAlgorithmException e) {

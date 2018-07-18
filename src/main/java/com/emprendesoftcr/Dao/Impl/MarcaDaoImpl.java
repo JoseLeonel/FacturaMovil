@@ -27,10 +27,12 @@ public class MarcaDaoImpl implements MarcaDao {
 		entityManager.persist(marca);
 	}
 
+	@Override
 	public void modificar(Marca marca) {
 		entityManager.merge(marca);
 	}
 
+	@Override
 	public void eliminar(Marca marca) {
 		entityManager.remove(marca);
 	}
@@ -39,6 +41,7 @@ public class MarcaDaoImpl implements MarcaDao {
 	 * Buscar el objeto marca por id
 	 * @see com.factura.dao.MarcaDao#buscar(java.lang.Integer)
 	 */
+	@Override
 	public Marca buscar(Integer id) {
 		Query query = entityManager.createQuery("select obj from Marca obj where obj.id = :id");
 		query.setParameter("id", id);
@@ -54,6 +57,7 @@ public class MarcaDaoImpl implements MarcaDao {
 	 * Buscar por descripcion la marca y empresa
 	 * @see com.factura.dao.MarcaDao#buscarByDescripcionAndEmpresa(java.lang.String, com.factura.domain.Empresa)
 	 */
+	@Override
 	public Marca buscarPorDescripcionYEmpresa(String descripcion, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Marca obj where obj.descripcion = :descripcion and obj.empresa = :empresa");
 		query.setParameter("descripcion", descripcion);
@@ -65,6 +69,5 @@ public class MarcaDaoImpl implements MarcaDao {
 			return null;
 		}
 	}
-
 
 }

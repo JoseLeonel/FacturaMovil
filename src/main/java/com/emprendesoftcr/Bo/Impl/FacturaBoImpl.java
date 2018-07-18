@@ -239,6 +239,7 @@ public class FacturaBoImpl implements FacturaBo {
 			JSONArray jsonArrayDetalleFactura = (JSONArray) json.get("data");
 			Gson gson = new Gson();
 			if (jsonArrayDetalleFactura != null) {
+				Integer numeroLinea = 1;
 				for (int i = 0; i < jsonArrayDetalleFactura.size(); i++) {
 					DetalleFacturaCommand detalleFacturaCommand = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), DetalleFacturaCommand.class);
 					Articulo articulo = articuloDao.buscar(detalleFacturaCommand.getArticulo_id());
@@ -246,10 +247,10 @@ public class FacturaBoImpl implements FacturaBo {
 					detalle.setUsuario(usuario);
 					detalle.setArticulo(articulo);
 					detalle.setNaturalezaDescuento(Constantes.BLANK);
-					
+					detalle.setNumeroLinea(numeroLinea);
 					detalle.setCreated_at(new Date());
 					detalle.setUpdated_at(new Date());
-
+					numeroLinea +=1;
 					factura.addDetalle(detalle);
 					modificar(factura);
 

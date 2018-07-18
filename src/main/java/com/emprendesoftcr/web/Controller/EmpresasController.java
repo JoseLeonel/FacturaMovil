@@ -187,10 +187,11 @@ public class EmpresasController {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 				}
 				empresaBD.setTipoCedula(empresa.getTipoCedula());
+				empresaBD.setPasswordEnvioComprobante(empresa.getPasswordEnvioComprobante());
+				empresaBD.setUsuarioEnvioComprobante(empresa.getUsuarioEnvioComprobante());
 				empresaBD.setCedula(empresa.getCedula());
 				empresaBD.setNombre(empresa.getNombre());
 				empresaBD.setNombreComercial(empresa.getNombreComercial());
-				
 				empresaBD.setCodigoPais(empresa.getCodigoPais());
 				empresaBD.setCorreoElectronico(empresa.getCorreoElectronico());
 				empresaBD.setProvincia(empresa.getProvincia());

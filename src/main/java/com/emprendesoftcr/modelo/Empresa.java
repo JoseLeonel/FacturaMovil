@@ -86,7 +86,14 @@ public class Empresa implements Serializable {
 
 	@Column(name = "clave_llaveCriptografica")
 	private Integer						claveLlaveCriptografica;
+	
+	@Column(name = "usuario_envio_comprobante")
+	private String						usuarioEnvioComprobante;
 
+	@Column(name = "password_envio_comprobante")
+	private String						passwordEnvioComprobante;
+
+	
 	@Column(name = "estado")
 	private String						estado;
 	@Temporal(TemporalType.TIMESTAMP)
@@ -99,7 +106,7 @@ public class Empresa implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
-	public Empresa(Integer id, String nombre, String nombreComercial, String tipoCedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton, String nombreLlaveCriptografica, Integer claveLlaveCriptografica,Integer codigoSeguridad) {
+	public Empresa(Integer id, String nombre, String nombreComercial, String tipoCedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton, String nombreLlaveCriptografica, Integer claveLlaveCriptografica,Integer codigoSeguridad,String usuarioEnvioComprobante,String passwordEnvioComprobante) {
 		super();
 		this.id = id;
 		this.numeroConsecutivo = numeroConsecutivo;
@@ -125,6 +132,9 @@ public class Empresa implements Serializable {
 		this.codigoSeguridad = codigoSeguridad;
 		this.nombreLlaveCriptografica = nombreLlaveCriptografica;
 		this.claveLlaveCriptografica = claveLlaveCriptografica;
+		
+		this.passwordEnvioComprobante = passwordEnvioComprobante;
+		this.usuarioEnvioComprobante = usuarioEnvioComprobante;
 	}
 
 	public Empresa() {
@@ -320,6 +330,26 @@ public class Empresa implements Serializable {
 	
 	public void setCodigoSeguridad(Integer codigoSeguridad) {
 		this.codigoSeguridad = codigoSeguridad;
+	}
+
+	
+	public String getUsuarioEnvioComprobante() {
+		return usuarioEnvioComprobante;
+	}
+
+	
+	public void setUsuarioEnvioComprobante(String usuarioEnvioComprobante) {
+		this.usuarioEnvioComprobante = usuarioEnvioComprobante;
+	}
+
+	
+	public String getPasswordEnvioComprobante() {
+		return passwordEnvioComprobante;
+	}
+
+	
+	public void setPasswordEnvioComprobante(String passwordEnvioComprobante) {
+		this.passwordEnvioComprobante = passwordEnvioComprobante;
 	}
 	
 	

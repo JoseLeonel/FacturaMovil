@@ -27,9 +27,9 @@ import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.UsuarioCommand;
-import com.emprendesoftcr.web.componentes.EmpresaPropertyEditor;
-import com.emprendesoftcr.web.componentes.StringPropertyEditor;
-import com.emprendesoftcr.web.componentes.UsuarioPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.UsuarioPropertyEditor;
 import com.google.common.base.Function;
 
 /**

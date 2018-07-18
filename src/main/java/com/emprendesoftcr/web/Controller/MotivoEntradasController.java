@@ -31,9 +31,9 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.MotivoEntrada;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.MotivoEntradaCommand;
-import com.emprendesoftcr.web.componentes.EmpresaPropertyEditor;
-import com.emprendesoftcr.web.componentes.MotivoEntradaPropertyEditor;
-import com.emprendesoftcr.web.componentes.StringPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.MotivoEntradaPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
 
 /**

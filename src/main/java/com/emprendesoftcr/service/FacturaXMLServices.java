@@ -1,12 +1,13 @@
 package com.emprendesoftcr.service;
 
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 
 public interface FacturaXMLServices {
 	
 	
-	void generarFacturaElectronicaTributacionXML(String xmlString,Factura factura);
+	String getFirmarXML(String xmlString,Empresa empresa);
 	
-	 String  generarFacturaElectronicaXML(Factura factura);
+	 String  getCrearXMLSinFirma(Factura factura);
 
 }

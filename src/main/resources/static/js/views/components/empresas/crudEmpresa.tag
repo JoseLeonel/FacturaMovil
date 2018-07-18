@@ -154,6 +154,17 @@
 
                         <div class="row">    
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                <label class="knob-label" >{$.i18n.prop("empresa.usuarioEnvioComprobante")}</label>
+                                <input type="text" class="form-control usuarioEnvioComprobante" placeHolder ="{$.i18n.prop("empresa.usuarioEnvioComprobante.ejemplo")}" id="usuarioEnvioComprobante" name="usuarioEnvioComprobante" value="{empresa.usuarioEnvioComprobante}"  >
+                            </div>
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                <label class="knob-label" >{$.i18n.prop("empresa.passwordEnvioComprobante")}</label>
+                                <input type="text" class="form-control passwordEnvioComprobante" placeHolder ="{$.i18n.prop("empresa.passwordEnvioComprobante.ejemplo")}" id="passwordEnvioComprobante" name="passwordEnvioComprobante" value="{empresa.passwordEnvioComprobante}"  >
+                            </div>
+                        </div>
+
+                        <div class="row">    
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label" >{$.i18n.prop("empresa.otraSenas")}</label>
                                 <textarea maxlength="250" placeHolder ="{$.i18n.prop("empresa.otraSenas")}" class="form-control otraSenas" id="otraSenas" name="otraSenas" value="{empresa.otraSenas}" > </textarea> 
                             </div>
@@ -508,6 +519,14 @@ var reglasDeValidacion = function() {
                 minlength:8,
                 numeroMayorCero:true,
 
+            },
+            usuarioEnvioComprobante:{
+                required : true,
+                maxlength:250,
+            },
+            passwordEnvioComprobante:{
+                required : true,
+                maxlength:250,
             }
 		},
 		ignore : []
@@ -525,6 +544,8 @@ function _limpiar(){
    $("#distrito").val($("#distrito option:first").val());
    $("#barrio").val($("#barrio option:first").val());
 
+   $('#usuarioEnvioComprobante').val(null)
+   $('#passwordEnvioComprobante').val(null)
    $('#cedula').val(null)
    $("#nombre").val(null)
    $("#nombreComercial").val(null)
@@ -580,6 +601,8 @@ function __Eventos(){
     $("#cedula").attr("maxlength", 12);
     
     $("#nombreComercial").attr("maxlength", 80);
+    $("#usuarioEnvioComprobante").attr("maxlength",250);
+    $("#passwordEnvioComprobante").attr("maxlength",250);
     
     $("#otraSenas").attr("maxlength", 250);
     $("#codigoPais").attr("maxlength", 3);
@@ -814,7 +837,8 @@ function __consultar(){
                         self.empresa.numeroConsecutivo = zfill(self.empresa.numeroConsecutivo,10)
 
                         self.update()
-                       
+                       $("#tipoCedula").val(self.empresa.usuarioEnvioComprobante);
+                       $("#tipoCedula").val(self.empresa.passwordEnvioComprobante);
                         $("#tipoCedula").val(self.empresa.tipoCedula);
                         $("#provincia").val(self.empresa.provincia);
                         $("#canton").val(self.empresa.canton);
