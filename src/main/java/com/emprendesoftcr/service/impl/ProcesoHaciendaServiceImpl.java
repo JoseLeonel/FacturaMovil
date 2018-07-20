@@ -1,10 +1,6 @@
 package com.emprendesoftcr.service.impl;
 
-import static com.emprendesoftcr.fisco.Keys.CLAVE;
-import static com.emprendesoftcr.fisco.Keys.DETALLE_MENSAJE;
 import static com.emprendesoftcr.fisco.Keys.ERROR;
-import static com.emprendesoftcr.fisco.Keys.ESTADO;
-import static com.emprendesoftcr.fisco.Keys.FECHA;
 import static com.emprendesoftcr.fisco.Keys.POST_RESPONSE;
 
 import java.util.Collection;
@@ -20,8 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.HaciendaBo;
+import com.emprendesoftcr.Bo.SemaforoBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.components.EnvioHaciendaComponent;
 import com.emprendesoftcr.components.OpenIDConnectHaciendaComponent;
@@ -31,12 +27,11 @@ import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.fisco.OpenIDConnectHacienda;
 import com.emprendesoftcr.fisco.Recepcion;
 import com.emprendesoftcr.fisco.ReceptorHacienda;
-import com.emprendesoftcr.modelo.Certificado;
 import com.emprendesoftcr.modelo.Hacienda;
+import com.emprendesoftcr.modelo.Semaforo;
 import com.emprendesoftcr.service.ProcesoHaciendaService;
 import com.emprendesoftcr.type.RespuestaHacienda;
 import com.emprendesoftcr.type.json.RespuestaHaciendaJson;
-import com.google.common.collect.ImmutableMap;
 
 /**
  * Servicio de envio de los documentos de hacienda
@@ -51,7 +46,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	private HaciendaBo											haciendaBo;
 
 	@Autowired
-	private CertificadoBo										certificadoBo;
+	private SemaforoBo											semaforoBo;
 
 	@Autowired
 	private OpenIDConnectHaciendaComponent	openIDConnect;
@@ -60,71 +55,71 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	private EnvioHaciendaComponent					envioHaciendaComponent;
 
 	/**
-	 * Proceso automatico para ejecutar el llamado de hacienda de los documentos xml ya firmados
+	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-//	@Scheduled(cron = "*/1 * * * * ?")
-	public synchronized void taskHacienda() throws Exception {
+	// @Scheduled(cron = "*/5 * * * * ?")
+	@Scheduled(cron = "0 0/2 * * * ?")
+	@Override
+	public synchronized void taskHaciendaEnvio() throws Exception {
 		try {
+			Semaforo semaforo = null;
+			// Listado de los documentos Pendientes de enviar hacienda
+			Collection<Hacienda> listaHacienda = haciendaBo.findByEstado(Constantes.HACIENDA_ESTADO_FIRMARDO_XML, Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR);
+			for (Hacienda hacienda : listaHacienda) {
+				semaforo = semaforo == null ? semaforo = semaforoBo.findByEmpresa(hacienda.getEmpresa(), Constantes.SEMAFORO_ESTADO_ACTIVO) : semaforo;
+				if (semaforo != null) {
+					// Si esta activo el semaforo y el numero de reintentos es menor al permitido
+					if (semaforo.getEstado().equals(Constantes.SEMAFORO_ESTADO_ACTIVO)) {
+						if (hacienda.getReintentos() < semaforo.getMaximoReintentosEnviar()) {
+							envioHacienda(hacienda);
+						} else {// Si alcanza el maximo reintentos no se envia mas a la hacienda
+							hacienda.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_TOPE_REINTENTOS);
+							hacienda.setUpdated_at(new Date());
+							haciendaBo.modificar(hacienda);
+						}
 
-			// Listado de las empresas que estan asociadas a tributacion
-			Collection<Certificado> listaCertificados = certificadoBo.findByAll();
-			for (Certificado certificado : listaCertificados) {
-				ejecutarEnvio(certificado);
+					}
+				}
+
 			}
 
 		} catch (Exception e) {
-			log.info("** Error  findByConsecutivoAndEmpresa: " + e.getMessage() + " fecha " + new Date());
+			log.info("** Error  taskHaciendaEnvio: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
 	}
 
-	private void ejecutarEnvio(Certificado certificado) throws Exception {
+	/**
+	 * Comunicacion con Hacienda para aceptar el documento
+	 * @param hacienda
+	 * @throws Exception
+	 */
+	private void envioHacienda(Hacienda hacienda) throws Exception {
 		try {
 			OpenIDConnectHacienda openIDConnectHacienda = null;
-			Collection<Hacienda> listaFacturas = haciendaBo.findByEmpresaAndEstado(certificado.getEmpresa(), Constantes.HACIENDA_ESTADO_FIRMARDO_XML);
-			for (Hacienda hacienda : listaFacturas) {
-				// Obtener el token para enviar los documentos
-				if (openIDConnectHacienda == null) {
-					openIDConnectHacienda = openIDConnect.getToken(certificado.getEmpresa());
-				}
+			// Obtener el token en hacienda para enviar los documentos
+			openIDConnectHacienda = openIDConnect.getToken(hacienda.getEmpresa());
+			// Se obtuvo el token de accienda
+			if (openIDConnectHacienda.getAccess_token().length() > 0) {
 
-				// Se obtuvo el token de accienda
-				if (openIDConnectHacienda.getAccess_token().length() > 0) {
-					// Enviar xml a hacienda
-					envioHaciendaFacturas(hacienda, openIDConnectHacienda);
+				envioHaciendaFacturas(hacienda, openIDConnectHacienda);
 
-					Map response = envioHaciendaComponent.comprobarDocumentoElectronico(hacienda.getClave(), openIDConnectHacienda);
-					String body = (String) response.get(POST_RESPONSE);
-					if (body != null && body != "") {
-						RespuestaHacienda ra = RespuestaHaciendaJson.from(body);
-						String status = getHaciendaStatus(ra.indEstado());
-						ImmutableMap<String, String> arguments = ImmutableMap.of(CLAVE, ra.clave(), FECHA, ra.fecha(), ESTADO, status, DETALLE_MENSAJE, status.equals(ERROR) ? ra.mensajeHacienda().detalleMensaje() : "");
-					}
-
-				}
 			}
 			// Desconectar token de hacienda
 			if (openIDConnectHacienda != null) {
 				if (openIDConnectHacienda.getRefresh_token().length() > 0) {
-					openIDConnect.desconectarToken(certificado.getEmpresa(),openIDConnectHacienda);
+					openIDConnect.desconectarToken(hacienda.getEmpresa(), openIDConnectHacienda);
 				}
 
 			}
 
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			log.info("** Error  ejecutarEnvio: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
 
-	}
-
-	/**
-	 * Retorna el status de la respuesta de hacienda
-	 * @param indEstado Elemento ind-estado de la respuesta de hacienda
-	 * @return Estado de la respuesta de hacienda OK o ERROR
-	 */
-	public static String getHaciendaStatus(String indEstado) {
-		return MapEnums.ENUM_CODIGO_RESPUESTA_HACIENDA.containsKey(indEstado) ? MapEnums.ENUM_CODIGO_RESPUESTA_HACIENDA.get(indEstado) : ERROR;
 	}
 
 	/**
@@ -137,7 +132,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			// Crea el objeto recepción que se enviará a los APIs.
 			Recepcion recepcion = new Recepcion();
 
-			ReceptorHacienda receptor = new ReceptorHacienda(hacienda.getTipoReceptor(), hacienda.getCedulaReceptor());
+			ReceptorHacienda receptor = new ReceptorHacienda(hacienda.getTipoReceptor() == null ? Constantes.EMPTY : hacienda.getTipoReceptor(), hacienda.getCedulaReceptor() == null ? Constantes.EMPTY : hacienda.getCedulaReceptor());
 
 			EmisorHacienda emisor = new EmisorHacienda(hacienda.getTipoEmisor(), hacienda.getCedulaEmisor());
 
@@ -159,58 +154,107 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				String base64 = FacturaElectronicaUtils.base64Encode(valor.trim().getBytes("UTF-8"));
 				recepcion.setComprobanteXml(base64);
 
-				// HaciendaDocJson.Builder hib = new HaciendaDocJson.Builder();
-				// HaciendaDoc hd = hib.callbackUrl(Constantes.EMPTY).clave(hacienda.getClave().trim()).
-				// comprobanteXml(length).
-				// fecha(date).
-				// identificacion(documentoFirmado.identificacion()).build();
-				//
 				ObjectMapper mapperObj = new ObjectMapper();
 				String jsonStr = mapperObj.writeValueAsString(recepcion);
-				System.out.println(jsonStr);
 
-				Map response = envioHaciendaComponent.enviarDocumentoElectronico(jsonStr, openIDConnectHacienda);
-				String body = (String) response.get(POST_RESPONSE);
+				envioHaciendaComponent.enviarDocumentoElectronico(jsonStr, openIDConnectHacienda, hacienda);
 
 			}
 
-			//
-			// Client client = ClientBuilder.newClient();
-			// WebTarget target = client.target(URI + "recepcion/");
-			// Invocation.Builder request = target.request();
-			// // Se deberá brindar una cabecera (header) "Authorization" con el valor del access token obtenido anteriormente.
-			// request.header("Accept" + " application/json" + " Authorization=Bearer " , openIDConnectHacienda.getAccess_token()+
-			// " User-Agent" + " Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
-			//
-
-			// // Se envía un POST. con los datos del documento que deseamos registrar, observe que colocamos como
-			// // atributo el objeto que configuramos en el apartado de 'Preparación'
-			// Response response = request.post(Entity.json(jsonStr));
-			// switch (response.getStatus()) {
-			// case 202:
-			// // Éste código de retorno se da por recibido a la plataforma el documento. Posteriormente
-			// // debe validarse su estado de aceptación o rechazo. Es importante hacer notar que se
-			// // regresa un header "Location" que corresponde a un URL. donde se puede validar el
-			// // estado del documento, por ejemplo:
-			// // https://api.comprobanteselectronicos.go.cr/recepcion-sandbox/v1/recepcion/50601011600310112345600100010100000000011999999999/
-			//
-			// hacienda.setStatus(response.getStatus());
-			// haciendaBo.modificar(hacienda);
-			//
-			// break;
-			// case 400:
-			// // Se da si se detecta un error en las validaciones, por ejemplo: si intento enviar más de una
-			// // vez un documento. El encabezado "X-Error-Cause" indica la causa del problema.
-			// String xErrorCause = response.getHeaderString("X-Error-Cause");
-			// hacienda.setStatus(response.getStatus());
-			// hacienda.setxErrorCause(FacturaElectronicaUtils.convertirStringToblod(xErrorCause));
-			// haciendaBo.modificar(hacienda);
-			//
-			// break;
-			// }
-
 		} catch (Exception e) {
 			log.info("** Error  envioHaciendaFacturas: " + e.getMessage() + " fecha " + new Date() + " Hacienta:" + hacienda.getEmpresa().getNombre());
+			throw e;
+		}
+
+	}
+
+	/**
+	 * Retorna el status de la respuesta de hacienda
+	 * @param indEstado Elemento ind-estado de la respuesta de hacienda
+	 * @return Estado de la respuesta de hacienda OK o ERROR
+	 */
+	private static String getHaciendaStatus(String indEstado) {
+		return MapEnums.ENUM_CODIGO_RESPUESTA_HACIENDA.containsKey(indEstado) ? MapEnums.ENUM_CODIGO_RESPUESTA_HACIENDA.get(indEstado) : ERROR;
+	}
+
+	/**
+	 * http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html
+	 * Proceso automatico para ejecutar aceptacion del documento
+	 */
+	@Scheduled(cron = "0 0/1 * * * ?")
+	@Override
+	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
+		try {
+			log.info("The time is now {}", new Date());
+			Semaforo semaforo = null;
+			// Listado de los documentos Pendientes de aceptar por hacienda
+			Collection<Hacienda> listaHacienda = haciendaBo.findByEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA, Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA);
+			for (Hacienda hacienda : listaHacienda) {
+				semaforo = semaforo == null ? semaforo = semaforoBo.findByEmpresa(hacienda.getEmpresa(), Constantes.SEMAFORO_ESTADO_ACTIVO) : semaforo;
+				if (semaforo != null) {
+					// Si esta activo el semaforo y el numero de reintentos es menor al permitido
+					if (semaforo.getEstado().equals(Constantes.SEMAFORO_ESTADO_ACTIVO)) {
+						if (hacienda.getReintentosAceptacion() < semaforo.getMaximoReintentosEnviar()) {
+							aceptarDocumento(hacienda);
+						} else {// Si alcanza el maximo reintentos de aceptacion mas a la hacienda
+							hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTACION_HACIENDA_TOPE_REINTENTOS);
+							hacienda.setUpdated_at(new Date());
+							haciendaBo.modificar(hacienda);
+						}
+
+					}
+				}
+
+			}
+
+		} catch (Exception e) {
+			log.info("** Error  taskHaciendaComprobacionDocumentos: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+	}
+
+	/**
+	 * Aceptar documentos
+	 * @param hacienda
+	 */
+	private void aceptarDocumento(Hacienda hacienda) throws Exception {
+		try {
+			OpenIDConnectHacienda openIDConnectHacienda = null;
+			// Obtener el token en hacienda para enviar los documentos
+			openIDConnectHacienda = openIDConnect.getToken(hacienda.getEmpresa());
+			// Se obtuvo el token de accienda
+			if (openIDConnectHacienda.getAccess_token().length() > 0) {
+				Map response = envioHaciendaComponent.comprobarDocumentoElectronico(hacienda.getClave(), openIDConnectHacienda);
+				String body = (String) response.get(POST_RESPONSE);
+				if (body != null && body != "") {
+					RespuestaHacienda respuestaHacienda = RespuestaHaciendaJson.from(body);
+					String status = getHaciendaStatus(respuestaHacienda.indEstado());
+					hacienda.setUpdated_at(new Date());
+					ObjectMapper mapperObj = new ObjectMapper();
+				//	String jsonStr = mapperObj.writeValueAsString(respuestaHacienda.mensajeHacienda());
+				//	hacienda.setMensajeHacienda(FacturaElectronicaUtils.convertirStringToblod(jsonStr));
+					if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
+						hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+					}
+					if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
+						hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+					}
+					haciendaBo.modificar(hacienda);
+				} else {// sumar reintententos
+					hacienda.setReintentosAceptacion(hacienda.getReintentosAceptacion() == null ? 1 : hacienda.getReintentosAceptacion() + 1);
+					haciendaBo.modificar(hacienda);
+				}
+			}
+			// Desconectar token de hacienda
+			if (openIDConnectHacienda != null) {
+				if (openIDConnectHacienda.getRefresh_token().length() > 0) {
+					openIDConnect.desconectarToken(hacienda.getEmpresa(), openIDConnectHacienda);
+				}
+
+			}
+
+		} catch (Exception e) {
+			log.info("** Error  aceptarDocumento: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
 

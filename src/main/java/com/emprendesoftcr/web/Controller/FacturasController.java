@@ -259,6 +259,9 @@ public class FacturasController {
 				hacienda.setStatus(Constantes.ZEROS);
 				hacienda.setEstado(Constantes.HACIENDA_ESTADO_FIRMARDO_XML);
 				hacienda.setConsecutivo(factura.getNumeroConsecutivo());
+				hacienda.setReintentos(Constantes.ZEROS);
+				hacienda.setReintentosAceptacion(Constantes.ZEROS);
+				
 				haciendaBo.agregar(hacienda);
 
 			}

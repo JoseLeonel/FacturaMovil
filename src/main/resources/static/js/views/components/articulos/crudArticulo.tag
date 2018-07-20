@@ -1344,7 +1344,7 @@ __CalculoGananciaMayorista(e){
   }
   let impuesto      = __valorNumerico($('#impuesto').val())
   let costo         = __valorNumerico($('#costo').val())
-  self.articulo.gananciaPrecioMayorista  = costo > 0? _porcentajeGanancia(costo,impuesto,precio):0
+  self.articulo.gananciaPrecioMayorista  = costo > 0? _porcentajeGanancia(costo,0,precio):0
   self.articulo.precioMayorista = precio
   self.update()
     
@@ -1359,7 +1359,7 @@ __CalculoGananciaEspecial(e){
   }
   let impuesto = __valorNumerico($('#impuesto').val())
   let costo    = __valorNumerico($('#costo').val())
-  self.articulo.gananciaPrecioEspecial  = costo > 0?_porcentajeGanancia(costo,impuesto,precio):0
+  self.articulo.gananciaPrecioEspecial  = costo > 0?_porcentajeGanancia(costo,0,precio):0
   self.articulo.precioEspecial = precio
   self.update()
 }
@@ -1372,9 +1372,9 @@ __ActualizarPreciosImpuestos(e){
         return
     }
     let costo     =  __valorNumerico($('#costo').val())
-    self.articulo.gananciaPrecioEspecial   = self.articulo.precioEspecial > 0 ? _porcentajeGanancia(costo,impuesto,self.articulo.precioEspecial):0
-    self.articulo.gananciaPrecioMayorista  = self.articulo.precioMayorista > 0 ? _porcentajeGanancia(costo,impuesto,self.articulo.precioMayorista):0
-    self.articulo.gananciaPrecioPublico    = self.articulo.precioPublico > 0 ? _porcentajeGanancia(costo,impuesto,self.articulo.precioPublico):0
+    self.articulo.gananciaPrecioEspecial   = self.articulo.precioEspecial > 0 ? _porcentajeGanancia(costo,0,self.articulo.precioEspecial):0
+    self.articulo.gananciaPrecioMayorista  = self.articulo.precioMayorista > 0 ? _porcentajeGanancia(costo,0,self.articulo.precioMayorista):0
+    self.articulo.gananciaPrecioPublico    = self.articulo.precioPublico > 0 ? _porcentajeGanancia(costo,0,self.articulo.precioPublico):0
     self.update()
 }
 /**
@@ -1387,7 +1387,7 @@ __CalculoGananciaPublico(e){
     }
     let impuesto      = __valorNumerico($('#impuesto').val())
     let costo         = __valorNumerico($('#costo').val())
-    self.articulo.gananciaPrecioPublico  = costo > 0 ?_porcentajeGanancia(costo,impuesto,precioPublico):0
+    self.articulo.gananciaPrecioPublico  = costo > 0 ?_porcentajeGanancia(costo,0,precioPublico):0
     self.articulo.precioPublico = precioPublico
     self.update()
 }
@@ -1405,9 +1405,9 @@ __ActualizarPreciosCosto(e){
     }
     let impuesto =  __valorNumerico($('#impuesto').val())
     self.articulo.costo = costo 
-    self.articulo.gananciaPrecioEspecial   = self.articulo.precioEspecial > 0?_porcentajeGanancia(costo,impuesto,self.articulo.precioEspecial):0
-    self.articulo.gananciaPrecioMayorista  = self.articulo.precioMayorista>0?_porcentajeGanancia(costo,impuesto,self.articulo.precioMayorista):0
-    self.articulo.gananciaPrecioPublico    = self.articulo.precioPublico >0?_porcentajeGanancia(costo,impuesto,self.articulo.precioPublico):0
+    self.articulo.gananciaPrecioEspecial   = self.articulo.precioEspecial > 0?_porcentajeGanancia(costo,0,self.articulo.precioEspecial):0
+    self.articulo.gananciaPrecioMayorista  = self.articulo.precioMayorista>0?_porcentajeGanancia(costo,0,self.articulo.precioMayorista):0
+    self.articulo.gananciaPrecioPublico    = self.articulo.precioPublico >0?_porcentajeGanancia(costo,0,self.articulo.precioPublico):0
     self.update()
 }
 /**

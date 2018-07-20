@@ -188,6 +188,7 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setTipoCambio(tipoCambio.getTotal());
 			factura.setCambioMoneda(tipoCambioBo.conversionMoneda(factura.getTotalVentaNeta(), tipoCambio));
 			factura.setCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
+			factura.setTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
 			factura.setEstado(facturaCommand.getEstado());
 			if (factura.getId() == Constantes.ZEROS) {
 				factura.setCreated_at(new Date());

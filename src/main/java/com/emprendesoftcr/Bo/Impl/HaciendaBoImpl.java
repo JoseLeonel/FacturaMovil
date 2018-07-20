@@ -52,4 +52,9 @@ public class HaciendaBoImpl implements HaciendaBo {
 		return haciendaDao.findByEmpresaAndEstado(empresa, estado);
 	}
 
+	@Override
+	public Collection<Hacienda> findByEstado( Integer estado,Integer estadoError) {
+
+		return haciendaDao.findByEstado(estado,estadoError);
+	}
 }

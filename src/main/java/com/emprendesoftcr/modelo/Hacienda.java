@@ -18,6 +18,8 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.emprendesoftcr.Utils.Constantes;
+
 /**
  * Archivos XML enviados hacienda Hacienda.
  * @author jose.
@@ -65,6 +67,20 @@ public class Hacienda implements Serializable {
 
 	@Column(name = "status")
 	private Integer						status;
+	
+	@Column(name = "reintentos")
+	private Integer						reintentos;
+	
+	@Column(name = "reintentos_aceptacion")
+	private Integer						reintentosAceptacion;
+	
+	@Column(name = "mensaje_Hacienda")
+	@Lob
+	private Blob						mensajeHacienda;
+	
+	
+	
+	
 
 	@Column(name = "xErrorCause")
 	@Lob
@@ -84,7 +100,13 @@ public class Hacienda implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
-	public Hacienda(Integer id, Date fechaEmisor, String clave, String tipoEmisor, String cedulaEmisor, String tipoReceptor, String cedulaReceptor, Blob comprobanteXML, String consecutivo, Integer estado, Integer status, Blob xErrorCause, Empresa empresa, Date created_at, Date updated_at) {
+	
+
+	
+	
+	
+	
+	public Hacienda(Integer id, Date fechaEmisor, String clave, String tipoEmisor, String cedulaEmisor, String tipoReceptor, String cedulaReceptor, Blob comprobanteXML, String consecutivo, Integer estado, Integer status, Integer reintentos, Integer reintentosAceptacion, Blob mensajeHacienda, Blob xErrorCause, Empresa empresa, Date created_at, Date updated_at) {
 		super();
 		this.id = id;
 		this.fechaEmisor = fechaEmisor;
@@ -97,6 +119,9 @@ public class Hacienda implements Serializable {
 		this.consecutivo = consecutivo;
 		this.estado = estado;
 		this.status = status;
+		this.reintentos = reintentos;
+		this.reintentosAceptacion = reintentosAceptacion;
+		this.mensajeHacienda = mensajeHacienda;
 		this.xErrorCause = xErrorCause;
 		this.empresa = empresa;
 		this.created_at = created_at;
@@ -105,6 +130,11 @@ public class Hacienda implements Serializable {
 
 	public Hacienda() {
 		super();
+		this.reintentos = Constantes.ZEROS;
+		this.created_at = new Date();
+		this.updated_at = new Date();
+		this.estado = Constantes.HACIENDA_ESTADO_PENDIENTE_FIRMAR;
+
 	}
 
 	public Integer getId() {
@@ -226,5 +256,37 @@ public class Hacienda implements Serializable {
 	public void setxErrorCause(Blob xErrorCause) {
 		this.xErrorCause = xErrorCause;
 	}
+
+	
+	public Integer getReintentos() {
+		return reintentos;
+	}
+
+	
+	public void setReintentos(Integer reintentos) {
+		this.reintentos = reintentos;
+	}
+
+	
+	public Integer getReintentosAceptacion() {
+		return reintentosAceptacion;
+	}
+
+	
+	public void setReintentosAceptacion(Integer reintentosAceptacion) {
+		this.reintentosAceptacion = reintentosAceptacion;
+	}
+
+	
+	public Blob getMensajeHacienda() {
+		return mensajeHacienda;
+	}
+
+	
+	public void setMensajeHacienda(Blob mensajeHacienda) {
+		this.mensajeHacienda = mensajeHacienda;
+	}
+	
+	
 
 }

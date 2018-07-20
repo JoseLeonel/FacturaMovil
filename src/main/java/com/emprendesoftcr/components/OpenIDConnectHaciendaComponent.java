@@ -72,6 +72,7 @@ public class OpenIDConnectHaciendaComponent {
 		OpenIDConnectHacienda openIDConnectHacienda = new OpenIDConnectHacienda();
 		try {
 			TokenInfo tokenInfo = getTokenUrlHacienda(empresa);
+			
 			openIDConnectHacienda.setAccess_token(tokenInfo.getAccessToken());
 			openIDConnectHacienda.setRefresh_token(tokenInfo.getRefreshToken());
 			

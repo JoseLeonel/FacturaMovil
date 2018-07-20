@@ -50,5 +50,14 @@ public class HaciendaDaoImpl implements HaciendaDao {
 		query.setParameter("empresa", empresa);
 		return query.getResultList();
 	}
+	
+	@Override
+	public Collection<Hacienda> findByEstado(Integer estado,Integer estadoError) {
+		Query query = entityManager.createQuery("select obj from Hacienda obj where obj.estado = :estado or obj.estado = :estadoError ");
+		query.setParameter("estado", estado);
+		query.setParameter("estadoError", estadoError);
+		
+		return query.getResultList();
+	}
 
 }

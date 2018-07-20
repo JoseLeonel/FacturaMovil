@@ -18,6 +18,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -142,13 +143,13 @@ public class Detalle implements Serializable {
     this.cantidad = detalleFacturaCommand.getCantidad();
 		this.montoTotal =detalleFacturaCommand.getMontoTotal();
     this.montoDescuento = detalleFacturaCommand.getMontoDescuento();
-		this.naturalezaDescuento =  detalleFacturaCommand.getNaturalezaDescuento();
+		this.naturalezaDescuento =  detalleFacturaCommand.getNaturalezaDescuento() == null?Constantes.EMPTY:detalleFacturaCommand.getNaturalezaDescuento();
     this.subTotal = detalleFacturaCommand.getSubTotal();
     this.impuesto = detalleFacturaCommand.getImpuesto();
-    this.montoImpuesto = detalleFacturaCommand.getMontoImpuesto();
+    this.montoImpuesto = detalleFacturaCommand.getMontoImpuesto() ;
     this.montoTotalLinea = detalleFacturaCommand.getMontoTotalLinea();
-    this.ganancia = detalleFacturaCommand.getGanancia();
-    this.porcentajeDesc = detalleFacturaCommand.getPorcentajeDesc();
+    this.ganancia = Constantes.ZEROS_DOUBLE;
+    this.porcentajeDesc = detalleFacturaCommand.getPorcentajeDesc() != null?detalleFacturaCommand.getPorcentajeDesc():Constantes.ZEROS_DOUBLE;
 	}
 
 	public Integer getId() {

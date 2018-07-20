@@ -6,6 +6,11 @@ public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																= ResourceBundle.getBundle("factura");
 
+	// Semaforo
+	public static final Integer					SEMAFORO_ESTADO_ACTIVO												= 1;
+	public static final Integer					SEMAFORO_ESTADO_INACTIVO											= 2;
+	public static final Integer					SEMAFORO_ESTADO_REINTENTOS										= 3;
+
 	// Consecutivo inicial de las empresa
 	public static final Integer					CONSECUTIVO_INICIAL_FACTURA										= 0000000001;
 	public static final String					CASA_MATRIZ_INICIAL_FACTURA										= "001";
@@ -30,13 +35,22 @@ public class Constantes {
 	// Hacienda Estados
 	public static final Integer					HACIENDA_ESTADO_PENDIENTE_FIRMAR							= 1;
 	public static final Integer					HACIENDA_ESTADO_FIRMARDO_XML									= 2;
-	public static final Integer					HACIENDA_ESTADO_ENVIADO_HACIENDA  						= 3;
-	public static final Integer					HACIENDA_ESTADO_ACEPTADO_HACIENDA  						= 4;
+	public static final Integer					HACIENDA_ESTADO_ENVIADO_HACIENDA							= 3;
+	public static final Integer					HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR				= 4;
+	public static final Integer					HACIENDA_ESTADO_ENVIADO_HACIENDA_TOPE_REINTENTOS				= 5;
+	public static final Integer					HACIENDA_ESTADO_ACEPTADO_HACIENDA							= 6;
+	public static final Integer					HACIENDA_ESTADO_ACEPTADO_RECHAZADO							= 7;
+	public static final String					HACIENDA_ESTADO_ENVIADO_HACIENDA_str							= "Documento eviado a hacienda.";
+	public static final String					HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR							= "OK";
+	public static final String					HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR							= "ERROR";
+	public static final Integer					HACIENDA_ESTADO_ACEPTACION_HACIENDA_TOPE_REINTENTOS				= 8;
+	
 
 	// Vendedor Frecuente de una empresa
 
 	// Codigo de moneda
 	public static final String					CODIGO_MONEDA_COSTA_RICA											= "CRC";
+	public static final Double					CODIGO_MONEDA_COSTA_RICA_CAMBIO								= 1.000d;
 	public static final String					CODIGO_MONEDA_DOLAR														= "USD";
 
 	// SP del sistema

@@ -16,5 +16,7 @@ public interface HaciendaDao {
 	Hacienda findById(Integer id);	
 	
 	Collection<Hacienda> findByEmpresaAndEstado(Empresa empresa,Integer estado);
+	
+	Collection<Hacienda> findByEstado(Integer estado,Integer estadoError);
 
 }

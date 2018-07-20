@@ -33,7 +33,7 @@
                             <tr class = "" each={detalles} class="detalleTables">
                                 <td class="cantidad">{cantidad}</td>
                                 <td class="producto">{articulo.descripcion}</td>
-                                <td class="precio">₡{montoTotalLinea.toLocaleString('de-DE')}</td>
+                                <td class="precio">₡{subTotal.toLocaleString('de-DE')}</td>
                             </tr>
                             </tr>
                             <tr>
@@ -42,7 +42,7 @@
                             <tr class = "forma-table">
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.detalle.subTotal")}</strong></td>
-                            <td ><strong>₡{facturaImpresa.subTotal.toLocaleString('de-DE') } </strong>  </td>
+                            <td ><strong>₡{subTotalGeneral.toLocaleString('de-DE') } </strong>  </td>
                             </tr>
                             <tr>
                             <td></td>
@@ -57,7 +57,7 @@
                             <tr>
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.detalle.total")}</strong></td>
-                            <td ><strong>₡{facturaImpresa.totalVentaNeta.toLocaleString('de-DE')}</strong></td>
+                            <td ><strong>₡{facturaImpresa.totalComprobante.toLocaleString('de-DE')}</strong></td>
                             </tr>
                             <tr>
                             <td></td>
@@ -249,6 +249,7 @@
 var self = this;
 self.facturaImpresa   = opts.factura;  
 self.detalles = []
+self.subTotalGeneral = 0
 
 self.on('mount',function(){
     
@@ -259,9 +260,17 @@ self.on('mount',function(){
         self.update()
        $('.imprimirModal').modal('show'); 
     }
+    getSubTotalGeneral()
    __Teclas()
 
 })
+
+
+function getSubTotalGeneral(){
+    var resultado = __valorNumerico(self.facturaImpresa.subTotal) + __valorNumerico(self.facturaImpresa.totalDescuento)
+    self.subTotalGeneral = redondearDecimales(resultado,5)
+    self.update()
+}
 
 /**
 *  teclas de la pantalla
@@ -301,6 +310,28 @@ function __imprimir(){
     ventana.document.close();  //cerramos el documento
     ventana.print();  //imprimimos la ventana
     ventana.close();  //cerramos la ventana
+}
+
+/**
+*  retorna el valor numerico o cero sino es numerico
+**/
+function __valorNumerico(valor){
+    return isNumber(valor)?parseFloat(valor):0 ;
+}
+/**
+*  Validar si es numero
+**/
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+function redondearDecimales(numero, decimales) {
+    numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}');   // Expresion regular para numeros con un cierto numero de decimales o mas
+    if (numeroRegexp.test(numero)) {         // Ya que el numero tiene el numero de decimales requeridos o mas, se realiza el redondeo
+        return Number(numero.toFixed(decimales));
+    } else {
+        return Number(numero.toFixed(decimales)) === 0 ? 0 : numero;  // En valores muy bajos, se comprueba si el numero es 0 (con el redondeo deseado), si no lo es se devuelve el numero otra vez.
+    }
 }
 
 </script>
