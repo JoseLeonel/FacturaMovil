@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -46,6 +47,10 @@ import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.service.FacturaXMLServices;
+import com.emprendesoftcr.service.FirmaElectronicaService;
+import com.emprendesoftcr.service.NotaCreditoXMLServices;
+import com.emprendesoftcr.service.NotaDebitoXMLService;
+import com.emprendesoftcr.service.TiqueteXMLService;
 import com.emprendesoftcr.validator.FacturaFormValidator;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
@@ -70,12 +75,27 @@ public class FacturasController {
 																																							return new FacturaEsperaCommand((Factura) f);
 																																						};
 																																					};
+	@Lazy
 	@Autowired
 	private FacturaXMLServices																	facturaXMLServices;
 
+	@Lazy
+	@Autowired
+	TiqueteXMLService																						tiqueteXMLService;
+
+	@Lazy
+	@Autowired
+	NotaCreditoXMLServices																			notaCreditoXMLServices;
+
+	@Lazy
+	@Autowired
+	NotaDebitoXMLService																				notaDebitoXMLService;
+
+	@Lazy
 	@Autowired
 	private HaciendaBo																					haciendaBo;
 
+	
 	@Autowired
 	private DataTableBo																					dataTableBo;
 
@@ -91,15 +111,19 @@ public class FacturasController {
 	@Autowired
 	UsuarioCajaBo																								usuarioCajaBo;
 
+	@Lazy
 	@Autowired
 	private VendedorBo																					vendedorBo;
 
+	@Lazy
 	@Autowired
 	private ClienteBo																						clienteBo;
 
+	@Lazy
 	@Autowired
 	private FacturaBo																						facturaBo;
 
+	@Lazy
 	@Autowired
 	private EmpresaPropertyEditor																empresaPropertyEditor;
 
@@ -236,10 +260,31 @@ public class FacturasController {
 			}
 			// Si es Facturada se crea pendiente de firmar
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-				// Crear XMl sin firma
-				String comprobanteXML = facturaXMLServices.getCrearXMLSinFirma(factura);
-				//firmar el documento
-				comprobanteXML = facturaXMLServices.getFirmarXML(comprobanteXML, factura.getEmpresa());
+				String comprobanteXML = Constantes.EMPTY;
+				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
+					// Crear XMl sin firma
+					comprobanteXML = facturaXMLServices.getCrearXMLSinFirma(factura);
+					// firmar el documento
+					comprobanteXML = facturaXMLServices.getFirmarXML(comprobanteXML, factura.getEmpresa());
+				} else if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
+					// Crear XMl sin firma
+					comprobanteXML = tiqueteXMLService.getCrearXMLSinFirma(factura);
+					// firmar el documento
+					comprobanteXML = tiqueteXMLService.getFirmarXML(comprobanteXML, factura.getEmpresa());
+				} else if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+					// Crear XMl sin firma
+					comprobanteXML = notaCreditoXMLServices.getCrearXMLSinFirma(factura);
+					// firmar el documento
+					comprobanteXML = notaCreditoXMLServices.getFirmarXML(comprobanteXML, factura.getEmpresa());
+
+				} else if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+					// Crear XMl sin firma
+					comprobanteXML = notaDebitoXMLService.getCrearXMLSinFirma(factura);
+					// firmar el documento
+					comprobanteXML = notaDebitoXMLService.getFirmarXML(comprobanteXML, factura.getEmpresa());
+
+				}
+
 				Hacienda hacienda = new Hacienda();
 				hacienda.setCedulaEmisor(factura.getEmpresa().getCedula());
 				hacienda.setTipoEmisor(factura.getEmpresa().getTipoCedula());
@@ -261,7 +306,7 @@ public class FacturasController {
 				hacienda.setConsecutivo(factura.getNumeroConsecutivo());
 				hacienda.setReintentos(Constantes.ZEROS);
 				hacienda.setReintentosAceptacion(Constantes.ZEROS);
-				
+
 				haciendaBo.agregar(hacienda);
 
 			}
@@ -288,11 +333,11 @@ public class FacturasController {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
 
-			 Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 			// certificadoBo.agregar(usuario.getEmpresa(),usuario.getEmpresa().getClaveLlaveCriptografica().toString(),usuario.getEmpresa().getNombreLlaveCriptografica());
-			 String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);
-			 facturaXMLServices.getFirmarXML(xml,facturaBD.getEmpresa());
+			String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);
+			facturaXMLServices.getFirmarXML(xml, facturaBD.getEmpresa());
 
 			// KeyStore keyStore = null;
 

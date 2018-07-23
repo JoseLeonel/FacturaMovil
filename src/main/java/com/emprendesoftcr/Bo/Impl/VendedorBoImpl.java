@@ -3,6 +3,7 @@ package com.emprendesoftcr.Bo.Impl;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +20,13 @@ import com.emprendesoftcr.modelo.Vendedor;
  * @author jose.
  * @since 17 mar. 2018
  */
+@Lazy
 @Transactional
 @EnableTransactionManagement
 @Service("vendedorBo")
 public class VendedorBoImpl implements VendedorBo {
 
+	@Lazy
 	@Autowired
 	VendedorDao vendedorDao;
 

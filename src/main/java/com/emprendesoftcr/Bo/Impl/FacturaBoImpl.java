@@ -8,6 +8,7 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,41 +41,53 @@ import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.google.gson.Gson;
 
+@Lazy
 @Transactional
 @EnableTransactionManagement
 @Service("facturaBo")
 public class FacturaBoImpl implements FacturaBo {
 
+	@Lazy
 	@Autowired
 	FacturaDao						facturaDao;
 
+	@Lazy
 	@Autowired
-	TipoCambioBo						tipoCambioBo;
-	
+	TipoCambioBo					tipoCambioBo;
+
+	@Lazy
 	@Autowired
 	DetalleDao						detalleDao;
 
+	@Lazy
 	@Autowired
 	EmpresaDao						empresaDao;
 
+	@Lazy
 	@Autowired
 	ArticuloDao						articuloDao;
 
+	@Lazy
 	@Autowired
 	DetallesService				detallesService;
 
+	@Lazy
 	@Autowired
 	KardexDao							kardexDao;
 
+	@Lazy
 	@Autowired
 	CuentaCobrarDao				cuentaCobrarDao;
 
+	@Lazy
 	@Autowired
 	UsuarioCajaFacturaDao	usuarioCajaFacturaDao;
 
+	@Lazy
 	@Autowired
 	UsuarioCajaDao				usuarioCajaDao;
 
+	@Lazy
 	@Autowired
 	InventarioDao					inventarioDao;
 
@@ -134,7 +147,7 @@ public class FacturaBoImpl implements FacturaBo {
 	 * @see com.emprendesoftcr.Bo.FacturaBo#crearFactura(com.emprendesoftcr.web.command.FacturaCommand, com.emprendesoftcr.modelo.Usuario)
 	 */
 	@Override
-	public Factura crearFactura(FacturaCommand facturaCommand, Usuario usuario, UsuarioCaja usuarioCaja , TipoCambio tipoCambio) throws Exception {
+	public Factura crearFactura(FacturaCommand facturaCommand, Usuario usuario, UsuarioCaja usuarioCaja, TipoCambio tipoCambio) throws Exception {
 		Factura factura = null;
 		try {
 			factura = facturaCommand.getId() == null || facturaCommand.getId() == Constantes.ZEROS ? new Factura() : facturaDao.findById(facturaCommand.getId());
@@ -157,7 +170,7 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setCliente(facturaCommand.getCliente());
 			factura.setFechaEmision(new Date());
 			factura.setMedioPago(facturaCommand.getMedioPago());
-      
+
 			factura.setTipoDoc(facturaCommand.getTipoDoc());
 			factura.setMedioPago(facturaCommand.getMedioPago());
 			factura.setNombreFactura(facturaCommand.getNombreFactura());
@@ -184,12 +197,27 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setMontoCambio(facturaCommand.getMontoCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getMontoCambio());
 			factura.setTotalCambio(facturaCommand.getTotalCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambio());
 			factura.setTotalCambioPagar(facturaCommand.getTotalCambioPagar() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambioPagar());
-			
+
 			factura.setTipoCambio(tipoCambio.getTotal());
 			factura.setCambioMoneda(tipoCambioBo.conversionMoneda(factura.getTotalVentaNeta(), tipoCambio));
 			factura.setCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
 			factura.setTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
 			factura.setEstado(facturaCommand.getEstado());
+
+			if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+				factura.setReferenciaTipoDoc(facturaCommand.getReferenciaTipoDoc());
+				factura.setReferenciaNumero(facturaCommand.getReferenciaNumero());
+				factura.setReferenciaCodigo(facturaCommand.getReferenciaCodigo());
+				factura.setReferenciaRazon(facturaCommand.getReferenciaRazon());
+				factura.setReferenciaFechaEmision(facturaCommand.getReferenciaFechaEmision());
+			} else {
+				factura.setReferenciaTipoDoc(Constantes.EMPTY);
+				factura.setReferenciaNumero(Constantes.EMPTY);
+				factura.setReferenciaCodigo(Constantes.EMPTY);
+				factura.setReferenciaRazon(Constantes.EMPTY);
+
+			}
+
 			if (factura.getId() == Constantes.ZEROS) {
 				factura.setCreated_at(new Date());
 			}
@@ -203,7 +231,7 @@ public class FacturaBoImpl implements FacturaBo {
 			// Generar el consecutivo de venta
 			if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 				factura.setNumeroConsecutivo(empresaDao.generarConsecutivoFactura(facturaCommand.getEmpresa(), usuario, factura));
-				factura.setClave(empresaDao.generaClaveFacturaTributacion(factura.getEmpresa(), factura.getNumeroConsecutivo(),FacturaElectronicaUtils.COMPROBANTE_ELECTRONICO_NORMAL));
+				factura.setClave(empresaDao.generaClaveFacturaTributacion(factura.getEmpresa(), factura.getNumeroConsecutivo(), FacturaElectronicaUtils.COMPROBANTE_ELECTRONICO_NORMAL));
 			}
 
 			if (factura.getId() == null) {
@@ -251,7 +279,7 @@ public class FacturaBoImpl implements FacturaBo {
 					detalle.setNumeroLinea(numeroLinea);
 					detalle.setCreated_at(new Date());
 					detalle.setUpdated_at(new Date());
-					numeroLinea +=1;
+					numeroLinea += 1;
 					factura.addDetalle(detalle);
 					modificar(factura);
 
@@ -284,7 +312,7 @@ public class FacturaBoImpl implements FacturaBo {
 		try {
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 				String leyenda = Constantes.MOTIVO_SALIDA_INVENTARIO_VENTA + factura.getNumeroConsecutivo();
-				kardexDao.salida(inventario,inventario.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
+				kardexDao.salida(inventario, inventario.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
 
 			}
 

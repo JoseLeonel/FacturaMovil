@@ -1,6 +1,7 @@
 package com.emprendesoftcr.Bo.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +17,13 @@ import com.emprendesoftcr.modelo.TipoCambio;
  * @author jose.
  * @since 19 abr. 2018
  */
+@Lazy
 @Transactional
 @EnableTransactionManagement
 @Service("tipoCambioBo")
 public class TipoCambioBoImpl implements TipoCambioBo {
 
+	@Lazy
 	@Autowired
 	TipoCambioDao tipoCambioDao;
 

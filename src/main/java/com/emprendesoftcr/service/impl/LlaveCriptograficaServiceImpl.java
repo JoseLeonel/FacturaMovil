@@ -28,7 +28,6 @@ import xades4j.production.XadesSigner;
 import xades4j.properties.ObjectIdentifier;
 import xades4j.properties.SignaturePolicyBase;
 import xades4j.properties.SignaturePolicyIdentifierProperty;
-import xades4j.providers.BasicSignatureOptionsProvider;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.SignaturePolicyInfoProvider;
 import xades4j.providers.SigningCertChainException;
@@ -69,9 +68,7 @@ public class LlaveCriptograficaServiceImpl implements LlaveCriptograficaService 
 				return new SignaturePolicyIdentifierProperty(new ObjectIdentifier("https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/facturaElectronica"), new ByteArrayInputStream("Politica de Factura Digital".getBytes()));
 			}
 		};
-//		BasicSignatureOptionsProvider basicSignatureOptionsProvider = null;
 		XadesEpesSigningProfile p = new XadesEpesSigningProfile(keyingProvider, policyInfoProvider);
-//		p.withBasicSignatureOptionsProvider(basicSignatureOptionsProvider);
 		return p.newSigner();
 	}
 

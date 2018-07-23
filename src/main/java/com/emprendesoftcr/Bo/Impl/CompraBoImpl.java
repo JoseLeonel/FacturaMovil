@@ -8,6 +8,7 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,24 +36,30 @@ import com.google.gson.Gson;
  * @author jose.
  * @since 27 may. 2018
  */
+@Lazy
 @Transactional
 @EnableTransactionManagement
 @Service("compraBo")
 public class CompraBoImpl implements CompraBo {
 
+	@Lazy
 	@Autowired
 	CompraDao				compraDao;
 	
 
+	@Lazy
 	@Autowired
 	DetalleCompraDao				detalleCompraDao;
 
+	@Lazy
 	@Autowired
 	ArticuloDao			articuloDao;
 
+	@Lazy
 	@Autowired
 	KardexDao				kardexDao;
 
+	@Lazy
 	@Autowired
 	InventarioDao		inventarioDao;
 

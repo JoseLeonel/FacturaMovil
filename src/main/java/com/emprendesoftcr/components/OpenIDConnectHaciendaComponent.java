@@ -14,19 +14,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.fisco.ClientPost;
 import com.emprendesoftcr.fisco.OpenIDConnectHacienda;
@@ -46,6 +43,8 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
  * @since 13 jul. 2018
  */
 @Component
+@Transactional
+@EnableTransactionManagement
 public class OpenIDConnectHaciendaComponent {
 
 	private Logger				log	= LoggerFactory.getLogger(this.getClass());
@@ -169,9 +168,6 @@ public class OpenIDConnectHaciendaComponent {
 			}
 	 }
 			
-	// private boolean isSuccessful(Response response) {
-	// return response.getStatus() / 100 == 2;
-	// }
 
 	
 

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -14,14 +15,15 @@ import com.emprendesoftcr.Dao.CertificadoDao;
 import com.emprendesoftcr.fisco.P12Utils;
 import com.emprendesoftcr.modelo.Certificado;
 import com.emprendesoftcr.modelo.Empresa;
-import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.type.CertificateInfo;
 
+@Lazy
 @Transactional
 @EnableTransactionManagement
 @Service("certificadoBo")
 public class CertificadoBoImpl implements CertificadoBo {
 
+	@Lazy
 	@Autowired
 	CertificadoDao certificadoDao;
 

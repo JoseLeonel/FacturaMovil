@@ -9,10 +9,17 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.Response;
 
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.emprendesoftcr.fisco.OpenIDConnectHacienda;
+import com.emprendesoftcr.service.OpenIDConnectHaciendaService;
 
-
-public class OpenIDConnectHaciendaServiceImpl {
+@Lazy
+@Service("openIDConnectHaciendaService")
+@Transactional
+public class OpenIDConnectHaciendaServiceImpl implements OpenIDConnectHaciendaService {
 	
 	private static final String IDP_URI = "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut-stag/protocol/openid-connect";
   private static final String IDP_CLIENT_ID = "api-stag";

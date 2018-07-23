@@ -65,6 +65,23 @@ public class Factura implements Serializable {
 	@Column(name = "tipo_doc")
 	private String						tipoDoc;
 
+	@Column(name = "ref_tipo_doc")
+	private String						referenciaTipoDoc;
+
+	@Column(name = "ref_numero")
+	private String						referenciaNumero;
+
+	@Column(name = "ref_codigo")
+	private String						referenciaCodigo;
+
+	@Column(name = "ref_razon")
+	private String						referenciaRazon;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
+	@Column(name = "ref_fecha_emision")
+	private Date							referenciaFechaEmision;
+
 	@Column(name = "medio_pago")
 	private String						medioPago;
 
@@ -88,8 +105,6 @@ public class Factura implements Serializable {
 
 	@Column(name = "total_transporte")
 	private Double						totalTransporte;
-
-
 
 	@Column(name = "total_serv_gravados")
 	private Double						totalServGravados;
@@ -193,8 +208,8 @@ public class Factura implements Serializable {
 
 	}
 
-	public Factura(Integer id, Date fechaCredito, String numeroConsecutivo, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String medioPago, String nombreFactura, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda,
-			Integer estado, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Set<Detalle> detalles) {
+	public Factura(Integer id, Date fechaCredito, String numeroConsecutivo, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon, Date referenciaFechaEmision, String medioPago, String nombreFactura, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito,
+			Double montoCambio, Double totalCambio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Set<Detalle> detalles) {
 		super();
 		this.id = id;
 		this.fechaCredito = fechaCredito;
@@ -204,6 +219,11 @@ public class Factura implements Serializable {
 		this.condicionVenta = condicionVenta;
 		this.plazoCredito = plazoCredito;
 		this.tipoDoc = tipoDoc;
+		this.referenciaTipoDoc = referenciaTipoDoc;
+		this.referenciaNumero = referenciaNumero;
+		this.referenciaCodigo = referenciaCodigo;
+		this.referenciaRazon = referenciaRazon;
+		this.referenciaFechaEmision = referenciaFechaEmision;
 		this.medioPago = medioPago;
 		this.nombreFactura = nombreFactura;
 		this.direccion = direccion;
@@ -212,7 +232,6 @@ public class Factura implements Serializable {
 		this.tipoCambio = tipoCambio;
 		this.subTotal = subTotal;
 		this.totalTransporte = totalTransporte;
-		
 		this.totalServGravados = totalServGravados;
 		this.totalServExentos = totalServExentos;
 		this.totalMercanciasGravadas = totalMercanciasGravadas;
@@ -362,8 +381,6 @@ public class Factura implements Serializable {
 	public void setTotalTransporte(Double totalTransporte) {
 		this.totalTransporte = totalTransporte;
 	}
-
-	
 
 	public Double getTotalServGravados() {
 		return totalServGravados;
@@ -607,6 +624,46 @@ public class Factura implements Serializable {
 
 	public void setClave(String clave) {
 		this.clave = clave;
+	}
+
+	public String getReferenciaTipoDoc() {
+		return referenciaTipoDoc;
+	}
+
+	public void setReferenciaTipoDoc(String referenciaTipoDoc) {
+		this.referenciaTipoDoc = referenciaTipoDoc;
+	}
+
+	public String getReferenciaNumero() {
+		return referenciaNumero;
+	}
+
+	public void setReferenciaNumero(String referenciaNumero) {
+		this.referenciaNumero = referenciaNumero;
+	}
+
+	public String getReferenciaCodigo() {
+		return referenciaCodigo;
+	}
+
+	public void setReferenciaCodigo(String referenciaCodigo) {
+		this.referenciaCodigo = referenciaCodigo;
+	}
+
+	public String getReferenciaRazon() {
+		return referenciaRazon;
+	}
+
+	public void setReferenciaRazon(String referenciaRazon) {
+		this.referenciaRazon = referenciaRazon;
+	}
+
+	public Date getReferenciaFechaEmision() {
+		return referenciaFechaEmision;
+	}
+
+	public void setReferenciaFechaEmision(Date referenciaFechaEmision) {
+		this.referenciaFechaEmision = referenciaFechaEmision;
 	}
 
 }

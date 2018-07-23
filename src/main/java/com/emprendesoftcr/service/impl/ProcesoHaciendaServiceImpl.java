@@ -13,6 +13,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -36,21 +37,26 @@ import com.emprendesoftcr.type.json.RespuestaHaciendaJson;
 /**
  * Servicio de envio de los documentos de hacienda
  **/
+@Lazy
 @Service("procesoHaciendaService")
 @Transactional
 public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	private Logger													log	= LoggerFactory.getLogger(this.getClass());
 
+	@Lazy
 	@Autowired
 	private HaciendaBo											haciendaBo;
 
+	@Lazy
 	@Autowired
 	private SemaforoBo											semaforoBo;
 
+	@Lazy
 	@Autowired
 	private OpenIDConnectHaciendaComponent	openIDConnect;
 
+	@Lazy
 	@Autowired
 	private EnvioHaciendaComponent					envioHaciendaComponent;
 

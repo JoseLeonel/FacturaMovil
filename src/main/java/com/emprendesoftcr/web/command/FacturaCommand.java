@@ -15,7 +15,7 @@ public class FacturaCommand {
 
 	private Integer		id;
 
-	private String			fechaCredito;
+	private String		fechaCredito;
 
 	private Integer		numeroConsecutivo;
 
@@ -32,6 +32,16 @@ public class FacturaCommand {
 	private String		nombreFactura;
 
 	private String		direccion;
+
+	private String		referenciaTipoDoc;
+
+	private String		referenciaNumero;
+
+	private String		referenciaCodigo;
+
+	private String		referenciaRazon;
+
+	private Date			referenciaFechaEmision;
 
 	private String		nota;
 
@@ -76,8 +86,8 @@ public class FacturaCommand {
 	private Double		montoCambio;
 
 	private Double		totalCambio;
-	
-	private Double totalCambioPagar;
+
+	private Double		totalCambioPagar;
 
 	private String		codigoMoneda;
 
@@ -91,62 +101,14 @@ public class FacturaCommand {
 
 	private Vendedor	vendedor;
 	private String		detalleFactura;
-	
-	private Empresa empresa;
+
+	private Empresa		empresa;
 
 	public FacturaCommand() {
 		super();
 	}
+
 	
-	
-
-	public FacturaCommand(Integer id, String fechaCredito, Integer numeroConsecutivo, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String medioPago, String nombreFactura, String direccion, String nota, String comanda, Double subTotal, Double totalTransporte, Double total, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalCambioPagar, String codigoMoneda, Integer estado, Date created_at, Date updated_at,
-			Cliente cliente, Vendedor vendedor, String detalleFactura, Empresa empresa) {
-		super();
-		this.id = id;
-		this.fechaCredito = fechaCredito;
-		this.numeroConsecutivo = numeroConsecutivo;
-		this.fechaEmision = fechaEmision;
-		this.condicionVenta = condicionVenta;
-		this.plazoCredito = plazoCredito;
-		this.tipoDoc = tipoDoc;
-		this.medioPago = medioPago;
-		this.nombreFactura = nombreFactura;
-		this.direccion = direccion;
-		this.nota = nota;
-		this.comanda = comanda;
-		this.subTotal = subTotal;
-		this.totalTransporte = totalTransporte;
-		this.total = total;
-		this.totalServGravados = totalServGravados;
-		this.totalServExentos = totalServExentos;
-		this.totalMercanciasGravadas = totalMercanciasGravadas;
-		this.totalMercanciasExentas = totalMercanciasExentas;
-		this.totalGravado = totalGravado;
-		this.totalExento = totalExento;
-		this.totalVenta = totalVenta;
-		this.totalDescuentos = totalDescuentos;
-		this.totalVentaNeta = totalVentaNeta;
-		this.totalImpuesto = totalImpuesto;
-		this.totalComprobante = totalComprobante;
-		this.totalEfectivo = totalEfectivo;
-		this.totalTarjeta = totalTarjeta;
-		this.totalBanco = totalBanco;
-		this.totalCredito = totalCredito;
-		this.montoCambio = montoCambio;
-		this.totalCambio = totalCambio;
-		this.totalCambioPagar = totalCambioPagar;
-		this.codigoMoneda = codigoMoneda;
-		this.estado = estado;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
-		this.cliente = cliente;
-		this.vendedor = vendedor;
-		this.detalleFactura = detalleFactura;
-		this.empresa = empresa;
-	}
-
-
 
 	public Integer getId() {
 		return id;
@@ -164,14 +126,50 @@ public class FacturaCommand {
 		this.detalleFactura = detalleFactura;
 	}
 
-	
+	public String getReferenciaTipoDoc() {
+		return referenciaTipoDoc;
+	}
 
-	
+	public void setReferenciaTipoDoc(String referenciaTipoDoc) {
+		this.referenciaTipoDoc = referenciaTipoDoc;
+	}
+
+	public String getReferenciaNumero() {
+		return referenciaNumero;
+	}
+
+	public void setReferenciaNumero(String referenciaNumero) {
+		this.referenciaNumero = referenciaNumero;
+	}
+
+	public String getReferenciaCodigo() {
+		return referenciaCodigo;
+	}
+
+	public void setReferenciaCodigo(String referenciaCodigo) {
+		this.referenciaCodigo = referenciaCodigo;
+	}
+
+	public String getReferenciaRazon() {
+		return referenciaRazon;
+	}
+
+	public void setReferenciaRazon(String referenciaRazon) {
+		this.referenciaRazon = referenciaRazon;
+	}
+
+	public Date getReferenciaFechaEmision() {
+		return referenciaFechaEmision;
+	}
+
+	public void setReferenciaFechaEmision(Date referenciaFechaEmision) {
+		this.referenciaFechaEmision = referenciaFechaEmision;
+	}
+
 	public String getFechaCredito() {
 		return fechaCredito;
 	}
 
-	
 	public void setFechaCredito(String fechaCredito) {
 		this.fechaCredito = fechaCredito;
 	}
@@ -464,26 +462,20 @@ public class FacturaCommand {
 		this.vendedor = vendedor;
 	}
 
-	
 	public Double getTotalCambioPagar() {
 		return totalCambioPagar;
 	}
 
-	
 	public void setTotalCambioPagar(Double totalCambioPagar) {
 		this.totalCambioPagar = totalCambioPagar;
 	}
 
-	
 	public Empresa getEmpresa() {
 		return empresa;
 	}
 
-	
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
 	}
-	
-	
 
 }

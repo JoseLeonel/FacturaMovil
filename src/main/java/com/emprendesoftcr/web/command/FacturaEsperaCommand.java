@@ -38,8 +38,6 @@ public class FacturaEsperaCommand {
 
 	private Double		totalTransporte;
 
-	
-
 	private Double		totalServGravados;
 
 	private Double		totalServExentos;
@@ -90,6 +88,16 @@ public class FacturaEsperaCommand {
 
 	private Usuario		usuarioCreacion;
 
+	private String		referenciaTipoDoc;
+
+	private String		referenciaNumero;
+
+	private String		referenciaCodigo;
+
+	private String		referenciaRazon;
+
+	private Date			referenciaFechaEmision;
+
 	public FacturaEsperaCommand(Factura factura) {
 		super();
 		this.id = factura.getId();
@@ -106,7 +114,6 @@ public class FacturaEsperaCommand {
 		this.comanda = factura.getComanda();
 		this.subTotal = factura.getSubTotal();
 		this.totalTransporte = factura.getTotalTransporte();
-		
 		this.totalServGravados = factura.getTotalServGravados();
 		this.totalServExentos = factura.getTotalServExentos();
 		this.totalMercanciasGravadas = factura.getTotalMercanciasGravadas();
@@ -133,6 +140,11 @@ public class FacturaEsperaCommand {
 		this.empresa = factura.getEmpresa();
 		this.vendedor = factura.getVendedor();
 		this.usuarioCreacion = factura.getUsuarioCreacion();
+		this.referenciaTipoDoc = factura.getReferenciaTipoDoc();
+		this.referenciaNumero = factura.getReferenciaNumero();
+		this.referenciaCodigo = factura.getReferenciaCodigo();
+		this.referenciaRazon = factura.getReferenciaRazon();
+		this.referenciaFechaEmision = factura.getReferenciaFechaEmision();
 	}
 
 	public Integer getId() {
@@ -246,8 +258,6 @@ public class FacturaEsperaCommand {
 	public void setTotalTransporte(Double totalTransporte) {
 		this.totalTransporte = totalTransporte;
 	}
-
-	
 
 	public Double getTotalServGravados() {
 		return totalServGravados;
@@ -455,6 +465,46 @@ public class FacturaEsperaCommand {
 
 	public void setUsuarioCreacion(Usuario usuarioCreacion) {
 		this.usuarioCreacion = usuarioCreacion;
+	}
+
+	public String getReferenciaTipoDoc() {
+		return referenciaTipoDoc;
+	}
+
+	public void setReferenciaTipoDoc(String referenciaTipoDoc) {
+		this.referenciaTipoDoc = referenciaTipoDoc;
+	}
+
+	public String getReferenciaNumero() {
+		return referenciaNumero;
+	}
+
+	public void setReferenciaNumero(String referenciaNumero) {
+		this.referenciaNumero = referenciaNumero;
+	}
+
+	public String getReferenciaCodigo() {
+		return referenciaCodigo;
+	}
+
+	public void setReferenciaCodigo(String referenciaCodigo) {
+		this.referenciaCodigo = referenciaCodigo;
+	}
+
+	public String getReferenciaRazon() {
+		return referenciaRazon;
+	}
+
+	public void setReferenciaRazon(String referenciaRazon) {
+		this.referenciaRazon = referenciaRazon;
+	}
+
+	public Date getReferenciaFechaEmision() {
+		return referenciaFechaEmision;
+	}
+
+	public void setReferenciaFechaEmision(Date referenciaFechaEmision) {
+		this.referenciaFechaEmision = referenciaFechaEmision;
 	}
 
 }
