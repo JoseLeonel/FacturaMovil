@@ -133,10 +133,13 @@ public class EnvioHaciendaComponent {
 			
 			ImmutableMap headersResponse = ImmutableMap.copyOf(response.getHeaders());
 			String strResponse = response.getEntity(String.class);
-			if (response.getStatus() < 500) {//Si es mayor de 500 problemas de comunicacion
+			if (response.getStatus() > 299) {//Si es mayor de 500 problemas de comunicacion
+				if (response.getStatus() < 500) {//Si es mayor de 500 problemas de comunicacion
+					
 				List err = (List) headersResponse.get(POST_X_ERROR_CAUSE);
 				String headerError = err != null && err.size() > 0 ? (String) err.get(0) : null;
 				strResponse = headerError != null && headerError != "" ? headerError : strResponse;
+				}
 			}
 			return ImmutableMap.of(POST_RESPONSE, strResponse, POST_STATUS_CODE, response.getStatus(), POST_HEADERS, headersResponse);
 		} catch (ClientHandlerException exc) {
@@ -144,5 +147,8 @@ public class EnvioHaciendaComponent {
 
 		}
 	}
+	
+	
+	 
 
 }

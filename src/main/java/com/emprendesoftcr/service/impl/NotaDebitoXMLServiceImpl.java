@@ -35,10 +35,8 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
 	public String getFirmarXML(String xmlString, Empresa empresa) {
 		String resultado = Constantes.EMPTY;
 		try {
-			String firmadoFactura = Constantes.EMPTY ; 
-			firmadoFactura = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + firmadoFactura;
-			Certificado certificado  = certificadoBo.findByEmpresa(empresa);
-			resultado = firmaElectronicaService.getFirmarDocumento(certificado, firmadoFactura, Constantes.DOCXMLS_NOTA_CREDITO);
+				Certificado certificado  = certificadoBo.findByEmpresa(empresa);
+			resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_NOTA_DEBITO);
 		} catch (Exception e) {
 			
 		}
@@ -239,6 +237,9 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
 	 */
   private String xmlReceptor(Factura factura) {
     if (factura.getCliente() != null) {
+     	if(factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+    		return Constantes.EMPTY;
+    	}
         return "<Receptor>" +
                 "<Nombre>" + factura.getCliente().getNombreCompleto() + "</Nombre>" +
                 xmlIdentificacion(factura) +

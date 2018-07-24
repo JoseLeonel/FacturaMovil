@@ -17,10 +17,10 @@ public class Constantes {
 	public static final String					TERMINAL_INICIAL_FACTURA														= "00001";
 
 	public static final String					DOCXMLS_FACTURA																			= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/facturaElectronica";
-	public static final String					DOCXMLS_NOTA_DEBITO	  															= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaDebitoElectronica";
+	public static final String					DOCXMLS_NOTA_DEBITO																	= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaDebitoElectronica";
 	public static final String					DOCXMLS_NOTA_CREDITO																= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaCreditoElectronica";
-	
-	
+	public static final String					DOCXMLS_RESPUESTA_HACIENDA													= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/mensajeHacienda";
+
 	public static final String					DOCXMLS_TIQUETE																			= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/tiqueteElectronico";
 
 	public static final String					PRIVATE_KEY																					= "privateKey";
@@ -250,7 +250,7 @@ public class Constantes {
 	public static final String					FACTURA_CONDICION_VENTA_CONTADO_STR									= "factura.codicion.venta.contado";
 	public static final String					FACTURA_CONDICION_VENTA_CREDITO_STR									= "factura.codicion.venta.credito";
 
-	public static final String					FACTURA_TIPO_DOC_TIQUETE														= "00";
+	public static final String					FACTURA_TIPO_DOC_TIQUETE														= "04";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_ELECTRONICA								= "01";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO								= "02";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO								= "03";

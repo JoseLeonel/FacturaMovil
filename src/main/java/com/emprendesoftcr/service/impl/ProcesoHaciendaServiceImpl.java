@@ -28,16 +28,17 @@ import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.fisco.OpenIDConnectHacienda;
 import com.emprendesoftcr.fisco.Recepcion;
 import com.emprendesoftcr.fisco.ReceptorHacienda;
+import com.emprendesoftcr.fisco.RespuestaHaciendaXML;
 import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.Semaforo;
 import com.emprendesoftcr.service.ProcesoHaciendaService;
+import com.emprendesoftcr.service.RespuestaHaciendaXMLService;
 import com.emprendesoftcr.type.RespuestaHacienda;
 import com.emprendesoftcr.type.json.RespuestaHaciendaJson;
 
 /**
  * Servicio de envio de los documentos de hacienda
  **/
-@Lazy
 @Service("procesoHaciendaService")
 @Transactional
 public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
@@ -47,6 +48,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Lazy
 	@Autowired
 	private HaciendaBo											haciendaBo;
+	
+	@Lazy
+	@Autowired
+	private RespuestaHaciendaXMLService											respuestaHaciendaXMLService;
 
 	@Lazy
 	@Autowired
@@ -64,7 +69,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
 	// @Scheduled(cron = "*/5 * * * * ?")
-	@Scheduled(cron = "0 0/2 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 		try {
@@ -137,9 +142,12 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 			// Crea el objeto recepción que se enviará a los APIs.
 			Recepcion recepcion = new Recepcion();
-
-			ReceptorHacienda receptor = new ReceptorHacienda(hacienda.getTipoReceptor() == null ? Constantes.EMPTY : hacienda.getTipoReceptor(), hacienda.getCedulaReceptor() == null ? Constantes.EMPTY : hacienda.getCedulaReceptor());
-
+			ReceptorHacienda receptor = null;
+			if(hacienda.getCedulaReceptor()!=null) {
+				receptor = new ReceptorHacienda(hacienda.getTipoReceptor() == null ? Constantes.EMPTY : hacienda.getTipoReceptor(), hacienda.getCedulaReceptor() == null ? Constantes.EMPTY : hacienda.getCedulaReceptor());
+			}
+				
+		
 			EmisorHacienda emisor = new EmisorHacienda(hacienda.getTipoEmisor(), hacienda.getCedulaEmisor());
 
 			recepcion.setClave(hacienda.getClave().trim());
@@ -184,10 +192,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	}
 
 	/**
-	 * http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html
-	 * Proceso automatico para ejecutar aceptacion del documento
+	 * http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html Proceso automatico para ejecutar aceptacion del documento
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/2 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		try {
@@ -234,16 +241,32 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				String body = (String) response.get(POST_RESPONSE);
 				if (body != null && body != "") {
 					RespuestaHacienda respuestaHacienda = RespuestaHaciendaJson.from(body);
+					
+					
 					String status = getHaciendaStatus(respuestaHacienda.indEstado());
 					hacienda.setUpdated_at(new Date());
-					ObjectMapper mapperObj = new ObjectMapper();
-				//	String jsonStr = mapperObj.writeValueAsString(respuestaHacienda.mensajeHacienda());
-				//	hacienda.setMensajeHacienda(FacturaElectronicaUtils.convertirStringToblod(jsonStr));
+					RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();	
+					respuesta.setClave(respuestaHacienda.clave());
+					respuesta.setFecha(respuestaHacienda.fecha());
+					respuesta.setIndEstado(respuestaHacienda.indEstado());
+					respuesta.setMensaje(respuestaHacienda.mensajeHacienda().mensaje());
+					respuesta.setDetalleMensaje(respuestaHacienda.mensajeHacienda().detalleMensaje());
+					respuesta.setMontoTotalImpuesto(respuestaHacienda.mensajeHacienda().montoTotalImpuesto());
+					respuesta.setNombreEmisor(respuestaHacienda.mensajeHacienda().nombreEmisor());
+					respuesta.setNombreReceptor(respuestaHacienda.mensajeHacienda().nombreReceptor());
+					respuesta.setNumeroCedulaEmisor(respuestaHacienda.mensajeHacienda().numeroCedulaEmisor());
+					respuesta.setNumeroCedulaReceptor(respuestaHacienda.mensajeHacienda().numeroCedulaReceptor());
+					respuesta.setTipoIdentificacionEmisor(respuestaHacienda.mensajeHacienda().tipoIdentificacionEmisor());
+					respuesta.setTipoIdentificacionReceptor(respuestaHacienda.mensajeHacienda().tipoIdentificacionReceptor());
+					respuesta.setTotalFactura(respuestaHacienda.mensajeHacienda().totalFactura());
+					String xmlSinFirmarRespuesta  = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
+					String xmlFirmadoRespuesta    = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
+					 hacienda.setMensajeHacienda(FacturaElectronicaUtils.convertirStringToblod(xmlFirmadoRespuesta));
 					if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
 						hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
 					}
 					if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
-						hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+						hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
 					}
 					haciendaBo.modificar(hacienda);
 				} else {// sumar reintententos

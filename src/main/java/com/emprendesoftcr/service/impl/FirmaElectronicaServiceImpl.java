@@ -38,21 +38,23 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
 		try {
 			String firmadoFactura = sign(xmlSinFimar,certificado,urlXMLNS); 
 			firmadoFactura = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + firmadoFactura;
-      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
-      DocumentBuilder builder;
-      builder = factory.newDocumentBuilder();
-          Document document = builder.parse( new InputSource(
-                  new StringReader( firmadoFactura ) ) );
-
-          TransformerFactory tranFactory = TransformerFactory.newInstance();
-          Transformer aTransformer = tranFactory.newTransformer();
-          Source src = new DOMSource( document );
-          Result dest = new StreamResult( new File( "prueba.xml" ) );
-          aTransformer.transform( src, dest );
+			 
+			resultado = firmadoFactura;
+//      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//
+//      DocumentBuilder builder;
+//      builder = factory.newDocumentBuilder();
+//          Document document = builder.parse( new InputSource(
+//                  new StringReader( firmadoFactura ) ) );
+//
+//          TransformerFactory tranFactory = TransformerFactory.newInstance();
+//          Transformer aTransformer = tranFactory.newTransformer();
+//          Source src = new DOMSource( document );
+//          Result dest = new StreamResult( new File( "prueba.xml" ) );
+//          aTransformer.transform( src, dest );
+//     
+//			
      
-			
-     resultado = firmadoFactura;
 			
 			        
 		} catch (Exception e) {
@@ -70,16 +72,18 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
 	 * @return
 	 * @throws SignException
 	 */
-	 private String sign( String content, Certificado certificado,String urlXMLNS) throws SignException {
+	 private String sign( String xmlSinFirmar, Certificado certificado,String urlXMLNS) throws SignException {
      String signature = "";
-     String docXmlns = urlXMLNS;
-     String qualifyingProperties = generateQualifyingProperties(certificado, docXmlns,urlXMLNS);
-     String _signInfo = createInfo(content, qualifyingProperties, docXmlns,urlXMLNS);
+   
+     String qualifyingProperties = generateQualifyingProperties(certificado, urlXMLNS);
+     String _signInfo = createInfo(xmlSinFirmar, qualifyingProperties, urlXMLNS);
      signature += _signInfo;
      signature += signInfo(_signInfo, certificado.getPrivateKey());
      signature += x509(ImmutableList.<String>of(certificado.getCertificate())) + qualifyingProperties;
-     return envelope(content, signature);
+     return envelope(xmlSinFirmar, signature);
  }
+	 
+
 
 	/**
 	 * 
@@ -87,7 +91,7 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
 	 * @param docXmlns
 	 * @return
 	 */
-	 private String generateQualifyingProperties (Certificado certificado, String docXmlns,String urlXMLNS) {
+	 private String generateQualifyingProperties (Certificado certificado, String urlXMLNS) {
      Timestamp timestamp = new Timestamp(System.currentTimeMillis());
      String date = FacturaElectronicaUtils.toISO8601String(new Date(timestamp.getTime() - 21600000));
      return "<ds:Object>" +
@@ -123,7 +127,7 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
   * @param docXmlns
   * @return
   */
- private String createInfo(String content, String qualifyingProperties, String docXmlns,String urlXMLNS) {
+ private String createInfo(String xmlSinFirmar, String qualifyingProperties, String urlXMLNS) {
      return "<ds:SignedInfo xmlns=\"" + urlXMLNS + "\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
          "<ds:CanonicalizationMethod Algorithm=\"http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments\"></ds:CanonicalizationMethod>" +
          "<ds:SignatureMethod Algorithm=\"http://www.w3.org/2001/04/xmldsig-more#rsa-sha256\"></ds:SignatureMethod>" +
@@ -132,7 +136,7 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
          "<ds:Transform Algorithm=\"http://www.w3.org/2000/09/xmldsig#enveloped-signature\"></ds:Transform>" +
          "</ds:Transforms>" +
          "<ds:DigestMethod Algorithm=\"http://www.w3.org/2001/04/xmlenc#sha256\"></ds:DigestMethod>" +
-         "<ds:DigestValue>" + FacturaElectronicaUtils.digest(content) + "</ds:DigestValue>" +
+         "<ds:DigestValue>" + FacturaElectronicaUtils.digest(xmlSinFirmar) + "</ds:DigestValue>" +
          "</ds:Reference>" +				
          "<ds:Reference Type=\"http://uri.etsi.org/01903#SignedProperties\" URI=\"#xades-id-b950d386377a\">" +
          "<ds:DigestMethod Algorithm=\"http://www.w3.org/2001/04/xmlenc#sha256\"></ds:DigestMethod>" +
