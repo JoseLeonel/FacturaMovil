@@ -2,12 +2,18 @@ package com.emprendesoftcr.service.impl;
 
 
 
+import java.io.StringReader;
 import java.math.BigInteger;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Utils.Constantes;
@@ -17,6 +23,7 @@ import com.emprendesoftcr.modelo.Certificado;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.service.FacturaXMLServices;
 import com.emprendesoftcr.service.FirmaElectronicaService;
 
@@ -280,11 +287,33 @@ private String xmlIdentificacion (Factura factura) {
 }
   
   
-  
-	
+/**
+ * Leer un String y transformarlo en un XML Factura
+ * @see com.emprendesoftcr.service.FacturaXMLServices#getFacturaAPDF(java.lang.String)
+ */
+  @Override
+	public  FacturaElectronica getFacturaAPDF(String xmlString) {
+		FacturaElectronica facturaElectronica = null;
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();  
+		DocumentBuilder builder;
+		try {
+			
+			 builder = factory.newDocumentBuilder();  
+		   Document document = builder.parse(new InputSource(new StringReader(xmlString)));
+		   
+		   
+		   
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return facturaElectronica;
+		
+		
+	}
 
 	
-
 
 	
 }

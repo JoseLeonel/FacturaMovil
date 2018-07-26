@@ -203,6 +203,7 @@ public class EmpresasController {
 				empresaBD.setRepresentante(empresa.getRepresentante());
 				empresaBD.setTelefono(empresa.getTelefono());
 				empresaBD.setOtraSenas(empresa.getOtraSenas());
+				empresaBD.setLogo(empresa.getLogo());
 				empresaBD.setUpdated_at(new Date());
 				empresaBD.setClaveLlaveCriptografica(empresa.getClaveLlaveCriptografica());
 				empresaBD.setNombreLlaveCriptografica(empresa.getNombreLlaveCriptografica());

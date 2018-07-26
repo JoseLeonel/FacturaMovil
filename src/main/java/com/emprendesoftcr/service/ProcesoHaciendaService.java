@@ -11,6 +11,10 @@ public interface ProcesoHaciendaService {
 	//Verificar Documentos firmados
 	void taskHaciendaComprobacionDocumentos()throws Exception;
 	
+	
+	//Envios de correos Electronicos de los documentos aceptados por Hacienda
+	void taskHaciendaEnvioDeCorreos()throws Exception;
+	
 
 	
 }

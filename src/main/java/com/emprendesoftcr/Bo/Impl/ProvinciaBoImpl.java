@@ -26,5 +26,6 @@ public class ProvinciaBoImpl implements ProvinciaBo {
 		return provinciaDao.findByCodigo(codigo);
 	}
 
+
 	
 }

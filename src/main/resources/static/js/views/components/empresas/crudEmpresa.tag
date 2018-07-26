@@ -175,7 +175,12 @@
                                 <input type="text" class="form-control web" placeHolder ="{$.i18n.prop("empresa.pagina.web")}" id="web" name="web" value="{empresa.web}"  >
                             </div>
                         </div>
-
+                        <div class="row">   
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                <label class="knob-label" >{$.i18n.prop("empresa.logo")}</label>
+                                <input type="text" class="form-control logo" placeHolder ="{$.i18n.prop("empresa.logo")}" id="logo" name="logo" value="{empresa.logo}"  >
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label">{$.i18n.prop("empresa.estado")}</label>
@@ -524,6 +529,10 @@ var reglasDeValidacion = function() {
                 required : true,
                 maxlength:250,
             },
+            logo:{
+                required : true,
+                maxlength:250,
+            },
             passwordEnvioComprobante:{
                 required : true,
                 maxlength:250,
@@ -547,6 +556,7 @@ function _limpiar(){
    $('#usuarioEnvioComprobante').val(null)
    $('#passwordEnvioComprobante').val(null)
    $('#cedula').val(null)
+   $('#logo').val(null)
    $("#nombre").val(null)
    $("#nombreComercial").val(null)
    $("#representante").val(null)
@@ -605,6 +615,7 @@ function __Eventos(){
     $("#passwordEnvioComprobante").attr("maxlength",250);
     
     $("#otraSenas").attr("maxlength", 250);
+    $("#logo").attr("maxlength", 250);
     $("#codigoPais").attr("maxlength", 3);
     $("#cazaMatriz").attr("maxlength", 3);
     
@@ -846,6 +857,7 @@ function __consultar(){
                         $("#codigoSeguridad").val(zfill(self.empresa.codigoSeguridad,8));
                         $("#barrio").val(self.empresa.barrio);
                         $('#cedula').val(self.empresa.cedula)
+                        $('#logo').val(self.empresa.logo)
                         $("#nombre").val(self.empresa.nombre)
                         $("#nombreComercial").val(self.empresa.nombreComercial)
                         $("#representante").val(self.empresa.representante)

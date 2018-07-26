@@ -1,9 +1,16 @@
 package com.emprendesoftcr.web.Controller;
 
+import static java.util.stream.Collectors.toList;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.sql.Blob;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +33,7 @@ import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Bo.HaciendaBo;
+import com.emprendesoftcr.Bo.ProvinciaBo;
 import com.emprendesoftcr.Bo.TipoCambioBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Bo.UsuarioCajaBo;
@@ -47,6 +55,7 @@ import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.Vendedor;
+import com.emprendesoftcr.pdf.App;
 import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.service.FacturaXMLServices;
@@ -61,8 +70,7 @@ import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.VendedorPropertyEditor;
 import com.google.common.base.Function;
-
-import antlr.collections.List;
+import com.itextpdf.text.DocumentException;
 
 /**
  * Compras realizadas por la empresa y ingresan al inventario ComprasController.
@@ -71,6 +79,8 @@ import antlr.collections.List;
  */
 @Controller
 public class FacturasController {
+
+	private static final Function<String, String>											BIND_CONDICION_VENTA						= (id) -> id.equals("01") ? "Contado" : id.equals("02") ? "Credito" : id.equals("03") ? "Consignacion" : id.equals("04") ? "Apartado" : id.equals("05") ? "Arrendamiento con opcion de compra" : id.equals("06") ? "Arrendamiento en funcion financiera" : "Otros";
 
 	private static final Function<Object, FacturaEsperaCommand>				TO_COMMAND											= new Function<Object, FacturaEsperaCommand>() {
 
@@ -88,54 +98,66 @@ public class FacturasController {
 																																																			detalleFacturaElectronica.setCantidad(d.getCantidad());
 																																																			detalleFacturaElectronica.setDescripcion(d.getArticulo().getDescripcion());
 																																																			detalleFacturaElectronica.setPrecioU(d.getPrecioUnitario());
-																																																			detalleFacturaElectronica.setMonto(d.getMontoTotal()));
+																																																			detalleFacturaElectronica.setMonto(d.getMontoTotal());
 																																																			detalleFacturaElectronica.setDescuento(d.getMontoDescuento());
 																																																			detalleFacturaElectronica.setSubtotal(detalleFacturaElectronica.getMonto() - (d.getMontoDescuento()));
-																																																			detalleFacturaElectronica.setTarifaIva(d.getTarifaImpuesto());
+																																																			detalleFacturaElectronica.setTarifaIva(d.getImpuesto());
 																																																			detalleFacturaElectronica.setImpuesto(d.getMontoImpuesto());
-																																																			detalleFacturaElectronica.setExento(Constantes.EMPTY);
+																																																			// detalleFacturaElectronica.setExento(Constantes.EMPTY);
 																																																			detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
 																																																			//
 																																																			return detalleFacturaElectronica;
 																																																		};
-//	private static final Function<Factura, FacturaElectronica>			DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
-//																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
-//																																																			// Emisor
-//																																																			facturaElectronica.setEmisorNombre(d.getEmpresa().getNombre());
-//																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
-//																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getTelCodPais() + "-" + d.getEmpresa().getTelefono().toString());
-//																																																			facturaElectronica.setEmisorFax(d.getEmpresa().getFaxCodPais() + "-" + d.getEmpresa().getFax().toString());
-//																																																			facturaElectronica.setEmisorCorreo(d.getEmpresa().getEmail());
-//																																																			// Cliente
-//																																																			facturaElectronica.setClienteNombre(d.getReceptor().getNombre());
-//																																																			facturaElectronica.setClienteNombreComercial(d.getReceptor().getNombreComercial());
-//																																																			facturaElectronica.setClienteCorreo(d.getReceptor().getEmail());
-//																																																			facturaElectronica.setClienteCedula(d.getReceptor().getTipo() + "-" + d.getReceptor().getCedula());
-//																																																			facturaElectronica.setClienteTelefono(String.format("%s-%s", d.getReceptor().getTelefono().toString().substring(0, 4), d.getReceptor().getTelefono().toString().substring(4, 8)));
-//																																																			facturaElectronica.setClienteCtaGrupo("620102151015-0002");
-////																																																			facturaElectronica.setClienteMesCobro(TO_MESCOBRO.apply(d.getMesCobro()));
-//																																																			facturaElectronica.setClientePeriodoCobro("01 ABRIL 2018 AL 01 MAYO 2018");
-//																																																			facturaElectronica.setClienteFechaVence("07 MAYO 2018");
-//																																																			facturaElectronica.setClientePaqueteComercial("KOLBI PROFESIONAL IV, QUE INCLUYE: 60 MINUTOS VOZ, 100 MSG, INTERNET DE MG");
-//																																																			// Otros
-//																																																//			facturaElectronica.setTipoDocumento(BIND_TIPO_DOCUMENTO.apply(d.getIdTipoDoc()));
-//																																																			facturaElectronica.setClave(d.getClave());
-//																																																			facturaElectronica.setConsecutivo(d.getConsecutivo());
-//																																																			facturaElectronica.setFechaEmision(d.getFechaRegistro().toString());
-//																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito());
-//																																																	//		facturaElectronica.setCondicionVenta(BIND_CONDICION_VENTA.apply(d.getCondicionVenta()));
-//																																																		//	facturaElectronica.setMedioPago(BIND_MEDIO_PAGO.apply(d.getMedioPago()));
-//																																																			facturaElectronica.setMoneda("CRC-Colones Costa Rica");
-//																																																			facturaElectronica.setTipoCambio("567.65");
-//																																																			// Nota Credito y Nota Debito
-//																																																			if (!d.getIdTipoDoc().equals("FE")) {
-//																																																				facturaElectronica.setReferencia(d.getIdDocRef());
-//																																																			}
-//																																																			// Agrega sus detalles
-//																																																			List<DetalleFacturaElectronica> detalles = d .stream().map(TO_DETALLE).collect(toList());
-//																																																			facturaElectronica.setDetalleFacturaElectronica(detalles);
-//																																																			return facturaElectronica;
-//																																																		};
+	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
+																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
+																																																			// Emisor
+																																																			
+																																																			facturaElectronica.setEmisorNombre(d.getEmpresa().getNombre());
+																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
+																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
+																																																			facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
+																																																			// Cliente
+																																																			if (!d.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+																																																				facturaElectronica.setClienteNombre(d.getCliente().getNombreCompleto());
+																																																				facturaElectronica.setClienteNombreComercial(d.getCliente().getNombreComercial());
+																																																				facturaElectronica.setClienteCorreo(d.getCliente().getCorreoElectronico());
+																																																				facturaElectronica.setClienteCedula(d.getCliente().getTipoCedula() + "-" + d.getCliente().getCedula());
+																																																				facturaElectronica.setClienteTelefono(String.format("%s-%s", d.getCliente().getTelefono().toString().substring(0, 4), d.getCliente().getTelefono().toString().substring(4, 8)));
+
+																																																			}
+																																																			// facturaElectronica.setClienteMesCobro(TO_MESCOBRO.apply(d.getMesCobro()));
+																																																			//Ubicacion
+																																																			facturaElectronica.set_logo(d.getEmpresa().getLogo());
+																																																			facturaElectronica.set_clienteDireccion(d.getDireccion());
+																																																			// Otros
+																																																			facturaElectronica.setTipoDocumento(FacturaElectronicaUtils.getTipoDocumento(d.getTipoDoc()));
+																																																			facturaElectronica.setClave(d.getClave());
+																																																			facturaElectronica.setConsecutivo(d.getNumeroConsecutivo());
+																																																			facturaElectronica.setFechaEmision(d.getFechaEmision().toString());
+																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito().toString());
+																																																			facturaElectronica.setCondicionVenta(BIND_CONDICION_VENTA.apply(d.getCondicionVenta()));
+																																																			facturaElectronica.setMedioBanco(d.getMedioBanco() != null ? Constantes.FACTURA_MEDIO_PAGO_TRANSFERENCIA_STR : Constantes.EMPTY);
+																																																			facturaElectronica.setMedioEfectivo(d.getMedioEfectivo() != null ? Constantes.FACTURA_MEDIO_PAGO_EFECTIVO_STR : Constantes.EMPTY);
+																																																			facturaElectronica.setMedioTarjeta(d.getMedioTarjeta() != null ? Constantes.FACTURA_MEDIO_PAGO_TARJETA_STR : Constantes.EMPTY);
+
+																																																			facturaElectronica.setMoneda(FacturaElectronicaUtils.getMoneda(d.getCodigoMoneda()));
+																																																			facturaElectronica.setTipoCambio(d.getTipoCambio().toString());
+																																																			// Nota Credito y Nota Debito
+																																																			 if (d.getReferenciaCodigo() !=null) {
+																																																				 if(!d.getReferenciaCodigo().equals(Constantes.EMPTY)) {
+																																																					 facturaElectronica.setReferencia(d.getReferenciaCodigo());	 
+																																																				 }
+																																																			 
+																																																			 }else {
+																																																				 facturaElectronica.setReferencia(Constantes.EMPTY);
+																																																			 }
+																																																			// Agrega sus detalles
+																																																			List<DetalleFacturaElectronica> detalles = d.getDetalles().stream().map(TO_DETALLE).collect(toList());
+																																																			facturaElectronica.setDetalleFacturaElectronica(detalles);
+																																																			return facturaElectronica;
+																																																		};
+	
+
 	@Lazy
 	@Autowired
 	private FacturaXMLServices																				facturaXMLServices;
@@ -143,6 +165,10 @@ public class FacturasController {
 	@Lazy
 	@Autowired
 	TiqueteXMLService																									tiqueteXMLService;
+
+	@Lazy
+	@Autowired
+	ProvinciaBo																												provinciaBo;
 
 	@Lazy
 	@Autowired
@@ -225,6 +251,43 @@ public class FacturasController {
 	@RequestMapping(value = "/ListaFacturas", method = RequestMethod.GET)
 	public String listaFacturas(ModelMap model) {
 		return "views/facturas/listaFacturas";
+	}
+
+	/**
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @param id
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/generaFacturaPDF", method = RequestMethod.GET, headers = "Accept=application/json")
+	public void generarFacturaPDF(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Integer idFactura) throws IOException {
+		try {
+			Factura factura = facturaBo.findById(idFactura);
+			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
+			ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
+			int BUFFER_SIZE = 4096;
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
+			response.setContentType("application/octet-stream");
+			response.setContentLength((int) namePDF.toByteArray().length);
+			String headerKey = "Content-Disposition";
+			String headerValue = String.format("attachment; filename=\"%s\"", factura.getTipoDoc() + "-" + factura.getNumeroConsecutivo() + ".pdf");
+			response.setHeader(headerKey, headerValue);
+			OutputStream outStream = response.getOutputStream();
+			byte[] buffer = new byte[BUFFER_SIZE];
+			int bytesRead = -1;
+			while ((bytesRead = inputStream.read(buffer)) != -1) {
+				outStream.write(buffer, 0, bytesRead);
+			}
+			inputStream.close();
+			outStream.close();
+		} catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (com.google.zxing.WriterException ex) {
+
+		}
+
 	}
 
 	/**
@@ -368,6 +431,7 @@ public class FacturasController {
 				hacienda.setConsecutivo(factura.getNumeroConsecutivo());
 				hacienda.setReintentos(Constantes.ZEROS);
 				hacienda.setReintentosAceptacion(Constantes.ZEROS);
+				hacienda.setTipoDoc(factura.getTipoDoc());
 
 				haciendaBo.agregar(hacienda);
 

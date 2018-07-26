@@ -82,9 +82,16 @@ public class Factura implements Serializable {
 	@Column(name = "ref_fecha_emision")
 	private Date							referenciaFechaEmision;
 
-	@Column(name = "medio_pago")
-	private String						medioPago;
+	@Column(name = "medio_efectivo")
+	private String						medioEfectivo;
+	
+	@Column(name = "medio_tarjeta")
+	private String						medioTarjeta;
 
+	@Column(name = "medio_banco")
+	private String						medioBanco;
+
+	
 	@Column(name = "nombre_factura")
 	private String						nombreFactura;
 
@@ -208,8 +215,10 @@ public class Factura implements Serializable {
 
 	}
 
-	public Factura(Integer id, Date fechaCredito, String numeroConsecutivo, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon, Date referenciaFechaEmision, String medioPago, String nombreFactura, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito,
-			Double montoCambio, Double totalCambio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Set<Detalle> detalles) {
+	
+
+	public Factura(Integer id, Date fechaCredito, String numeroConsecutivo, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon, Date referenciaFechaEmision, String medioEfectivo, String medioTarjeta, String medioBanco, String nombreFactura, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta,
+			Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Set<Detalle> detalles) {
 		super();
 		this.id = id;
 		this.fechaCredito = fechaCredito;
@@ -224,7 +233,9 @@ public class Factura implements Serializable {
 		this.referenciaCodigo = referenciaCodigo;
 		this.referenciaRazon = referenciaRazon;
 		this.referenciaFechaEmision = referenciaFechaEmision;
-		this.medioPago = medioPago;
+		this.medioEfectivo = medioEfectivo;
+		this.medioTarjeta = medioTarjeta;
+		this.medioBanco = medioBanco;
 		this.nombreFactura = nombreFactura;
 		this.direccion = direccion;
 		this.nota = nota;
@@ -261,6 +272,8 @@ public class Factura implements Serializable {
 		this.usuarioCreacion = usuarioCreacion;
 		this.detalles = detalles;
 	}
+
+
 
 	public Integer getId() {
 		return id;
@@ -318,13 +331,7 @@ public class Factura implements Serializable {
 		this.tipoDoc = tipoDoc;
 	}
 
-	public String getMedioPago() {
-		return medioPago;
-	}
-
-	public void setMedioPago(String medioPago) {
-		this.medioPago = medioPago;
-	}
+	
 
 	public String getNombreFactura() {
 		return nombreFactura;
@@ -665,5 +672,49 @@ public class Factura implements Serializable {
 	public void setReferenciaFechaEmision(Date referenciaFechaEmision) {
 		this.referenciaFechaEmision = referenciaFechaEmision;
 	}
+
+
+
+	
+	public String getMedioEfectivo() {
+		return medioEfectivo;
+	}
+
+
+
+	
+	public void setMedioEfectivo(String medioEfectivo) {
+		this.medioEfectivo = medioEfectivo;
+	}
+
+
+
+	
+	public String getMedioTarjeta() {
+		return medioTarjeta;
+	}
+
+
+
+	
+	public void setMedioTarjeta(String medioTarjeta) {
+		this.medioTarjeta = medioTarjeta;
+	}
+
+
+
+	
+	public String getMedioBanco() {
+		return medioBanco;
+	}
+
+
+
+	
+	public void setMedioBanco(String medioBanco) {
+		this.medioBanco = medioBanco;
+	}
+	
+	
 
 }

@@ -2,13 +2,21 @@ package com.emprendesoftcr.service.impl;
 
 import static com.emprendesoftcr.fisco.Keys.ERROR;
 import static com.emprendesoftcr.fisco.Keys.POST_RESPONSE;
+import static java.util.stream.Collectors.toList;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.mail.util.ByteArrayDataSource;
 import javax.transaction.Transactional;
 
+import org.apache.velocity.VelocityContext;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +25,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.emprendesoftcr.Bo.CorreosBo;
+import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Bo.HaciendaBo;
 import com.emprendesoftcr.Bo.SemaforoBo;
 import com.emprendesoftcr.Utils.Constantes;
@@ -29,47 +39,134 @@ import com.emprendesoftcr.fisco.OpenIDConnectHacienda;
 import com.emprendesoftcr.fisco.Recepcion;
 import com.emprendesoftcr.fisco.ReceptorHacienda;
 import com.emprendesoftcr.fisco.RespuestaHaciendaXML;
+import com.emprendesoftcr.modelo.Attachment;
+import com.emprendesoftcr.modelo.Detalle;
+import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.Semaforo;
+import com.emprendesoftcr.pdf.App;
+import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
+import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.service.ProcesoHaciendaService;
 import com.emprendesoftcr.service.RespuestaHaciendaXMLService;
 import com.emprendesoftcr.type.RespuestaHacienda;
 import com.emprendesoftcr.type.json.RespuestaHaciendaJson;
+import com.google.common.base.Function;
+import com.google.zxing.WriterException;
+import com.itextpdf.text.DocumentException;
 
 /**
  * Servicio de envio de los documentos de hacienda
  **/
+
+@Transactional(rollbackOn = Exception.class)
 @Service("procesoHaciendaService")
-@Transactional
 public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
-	private Logger													log	= LoggerFactory.getLogger(this.getClass());
+	private static final Function<String, String>											BIND_CONDICION_VENTA						= (id) -> id.equals("01") ? "Contado" : id.equals("02") ? "Credito" : id.equals("03") ? "Consignacion" : id.equals("04") ? "Apartado" : id.equals("05") ? "Arrendamiento con opcion de compra" : id.equals("06") ? "Arrendamiento en funcion financiera" : "Otros";
+
+	private static final Function<Detalle, DetalleFacturaElectronica>	TO_DETALLE											= (d) -> {
+																																																			//
+																																																			DetalleFacturaElectronica detalleFacturaElectronica = new DetalleFacturaElectronica();
+																																																			detalleFacturaElectronica.setLinea(Integer.parseInt(d.getNumeroLinea().toString()));
+																																																			detalleFacturaElectronica.setCodigo(d.getArticulo().getCodigo());
+																																																			detalleFacturaElectronica.setUnidad(d.getArticulo().getUnidadMedida());
+																																																			detalleFacturaElectronica.setCantidad(d.getCantidad());
+																																																			detalleFacturaElectronica.setDescripcion(d.getArticulo().getDescripcion());
+																																																			detalleFacturaElectronica.setPrecioU(d.getPrecioUnitario());
+																																																			detalleFacturaElectronica.setMonto(d.getMontoTotal());
+																																																			detalleFacturaElectronica.setDescuento(d.getMontoDescuento());
+																																																			detalleFacturaElectronica.setSubtotal(detalleFacturaElectronica.getMonto() - (d.getMontoDescuento()));
+																																																			detalleFacturaElectronica.setTarifaIva(d.getImpuesto());
+																																																			detalleFacturaElectronica.setImpuesto(d.getMontoImpuesto());
+																																																			// detalleFacturaElectronica.setExento(Constantes.EMPTY);
+																																																			detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
+																																																			//
+																																																			return detalleFacturaElectronica;
+																																																		};
+	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
+																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
+																																																			// Emisor
+
+																																																			facturaElectronica.setEmisorNombre(d.getEmpresa().getNombre());
+																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
+																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
+																																																			facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
+																																																			// Cliente
+																																																			if (!d.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+																																																				facturaElectronica.setClienteNombre(d.getCliente().getNombreCompleto());
+																																																				facturaElectronica.setClienteNombreComercial(d.getCliente().getNombreComercial());
+																																																				facturaElectronica.setClienteCorreo(d.getCliente().getCorreoElectronico());
+																																																				facturaElectronica.setClienteCedula(d.getCliente().getTipoCedula() + "-" + d.getCliente().getCedula());
+																																																				facturaElectronica.setClienteTelefono(String.format("%s-%s", d.getCliente().getTelefono().toString().substring(0, 4), d.getCliente().getTelefono().toString().substring(4, 8)));
+
+																																																			}
+																																																			// facturaElectronica.setClienteMesCobro(TO_MESCOBRO.apply(d.getMesCobro()));
+																																																			// Ubicacion
+																																																			facturaElectronica.set_logo(d.getEmpresa().getLogo());
+																																																			facturaElectronica.set_clienteDireccion(d.getDireccion());
+																																																			// Otros
+																																																			facturaElectronica.setTipoDocumento(FacturaElectronicaUtils.getTipoDocumento(d.getTipoDoc()));
+																																																			facturaElectronica.setClave(d.getClave());
+																																																			facturaElectronica.setConsecutivo(d.getNumeroConsecutivo());
+																																																			facturaElectronica.setFechaEmision(d.getFechaEmision().toString());
+																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito().toString());
+																																																			facturaElectronica.setCondicionVenta(BIND_CONDICION_VENTA.apply(d.getCondicionVenta()));
+																																																			facturaElectronica.setMedioBanco(d.getMedioBanco() != null ? Constantes.FACTURA_MEDIO_PAGO_TRANSFERENCIA_STR : Constantes.EMPTY);
+																																																			facturaElectronica.setMedioEfectivo(d.getMedioEfectivo() != null ? Constantes.FACTURA_MEDIO_PAGO_EFECTIVO_STR : Constantes.EMPTY);
+																																																			facturaElectronica.setMedioTarjeta(d.getMedioTarjeta() != null ? Constantes.FACTURA_MEDIO_PAGO_TARJETA_STR : Constantes.EMPTY);
+
+																																																			facturaElectronica.setMoneda(FacturaElectronicaUtils.getMoneda(d.getCodigoMoneda()));
+																																																			facturaElectronica.setTipoCambio(d.getTipoCambio().toString());
+																																																			// Nota Credito y Nota Debito
+																																																			if (d.getReferenciaCodigo() != null) {
+																																																				if (!d.getReferenciaCodigo().equals(Constantes.EMPTY)) {
+																																																					facturaElectronica.setReferencia(d.getReferenciaCodigo());
+																																																				}
+
+																																																			} else {
+																																																				facturaElectronica.setReferencia(Constantes.EMPTY);
+																																																			}
+																																																			// Agrega sus detalles
+																																																			List<DetalleFacturaElectronica> detalles = d.getDetalles().stream().map(TO_DETALLE).collect(toList());
+																																																			facturaElectronica.setDetalleFacturaElectronica(detalles);
+																																																			return facturaElectronica;
+																																																		};
+
+	private Logger																										log															= LoggerFactory.getLogger(this.getClass());
 
 	@Lazy
 	@Autowired
-	private HaciendaBo											haciendaBo;
+	HaciendaBo																												haciendaBo;
+
+	@Lazy
+	@Autowired
+	RespuestaHaciendaXMLService																				respuestaHaciendaXMLService;
+
+	@Lazy
+	@Autowired
+	SemaforoBo																												semaforoBo;
+
+	@Lazy
+	@Autowired
+	CorreosBo																													correosBo;
+
+	@Lazy
+	@Autowired
+	OpenIDConnectHaciendaComponent																		openIDConnect;
+
+	@Lazy
+	@Autowired
+	EnvioHaciendaComponent																						envioHaciendaComponent;
 	
-	@Lazy
 	@Autowired
-	private RespuestaHaciendaXMLService											respuestaHaciendaXMLService;
-
-	@Lazy
-	@Autowired
-	private SemaforoBo											semaforoBo;
-
-	@Lazy
-	@Autowired
-	private OpenIDConnectHaciendaComponent	openIDConnect;
-
-	@Lazy
-	@Autowired
-	private EnvioHaciendaComponent					envioHaciendaComponent;
+	FacturaBo																													facturaBo;
 
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
 	// @Scheduled(cron = "*/5 * * * * ?")
-	@Scheduled(cron = "0 0/1 * * * ?")
+	//@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 		try {
@@ -143,11 +240,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			// Crea el objeto recepción que se enviará a los APIs.
 			Recepcion recepcion = new Recepcion();
 			ReceptorHacienda receptor = null;
-			if(hacienda.getCedulaReceptor()!=null) {
+			if (hacienda.getCedulaReceptor() != null) {
 				receptor = new ReceptorHacienda(hacienda.getTipoReceptor() == null ? Constantes.EMPTY : hacienda.getTipoReceptor(), hacienda.getCedulaReceptor() == null ? Constantes.EMPTY : hacienda.getCedulaReceptor());
 			}
-				
-		
+
 			EmisorHacienda emisor = new EmisorHacienda(hacienda.getTipoEmisor(), hacienda.getCedulaEmisor());
 
 			recepcion.setClave(hacienda.getClave().trim());
@@ -194,7 +290,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html Proceso automatico para ejecutar aceptacion del documento
 	 */
-	@Scheduled(cron = "0 0/2 * * * ?")
+	//@Scheduled(cron = "0 0/2 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		try {
@@ -241,11 +337,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				String body = (String) response.get(POST_RESPONSE);
 				if (body != null && body != "") {
 					RespuestaHacienda respuestaHacienda = RespuestaHaciendaJson.from(body);
-					
-					
+
 					String status = getHaciendaStatus(respuestaHacienda.indEstado());
 					hacienda.setUpdated_at(new Date());
-					RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();	
+					RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();
 					respuesta.setClave(respuestaHacienda.clave());
 					respuesta.setFecha(respuestaHacienda.fecha());
 					respuesta.setIndEstado(respuestaHacienda.indEstado());
@@ -259,9 +354,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					respuesta.setTipoIdentificacionEmisor(respuestaHacienda.mensajeHacienda().tipoIdentificacionEmisor());
 					respuesta.setTipoIdentificacionReceptor(respuestaHacienda.mensajeHacienda().tipoIdentificacionReceptor());
 					respuesta.setTotalFactura(respuestaHacienda.mensajeHacienda().totalFactura());
-					String xmlSinFirmarRespuesta  = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
-					String xmlFirmadoRespuesta    = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
-					 hacienda.setMensajeHacienda(FacturaElectronicaUtils.convertirStringToblod(xmlFirmadoRespuesta));
+					String xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
+					String xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
+					hacienda.setMensajeHacienda(FacturaElectronicaUtils.convertirStringToblod(xmlFirmadoRespuesta));
 					if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
 						hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
 					}
@@ -288,5 +383,84 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 
 	}
+
+	/**
+	 * Enviar correos a los clientes que Tributacion acepto documento
+	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
+	 */
+	@Scheduled(cron = "0 0/1 * * * ?")
+	@Override
+	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
+		try {
+			
+			// Listado de los documentos Pendientes de aceptar por hacienda
+			Collection<Hacienda> listaHacienda = haciendaBo.findByEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA, Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+			for (Hacienda hacienda : listaHacienda) {
+				   Factura factura = facturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
+				   if(factura !=null) {
+				  	 enviarCorreos(factura);
+				   }
+			}
+			
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+	}
+
+	private void enviarCorreos(Factura factura) {
+		try {
+			String xmlData = Constantes.EMPTY;
+			// Documento documento = documentoBo.findBy(id);
+			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
+			ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
+
+			String name = getConsecutivo("01", "00000");
+			Collection<Attachment> attachments = createAttachments(XML_Attach(name, asText(xmlData)), PDF_Attach(name, asPDF(namePDF)));
+
+			VelocityContext velocityContext = new VelocityContext();
+			velocityContext.put("clave", "0000001");
+			 Map<String, Object> modelEmail = new HashMap<>();
+			String to = "josehernandezchaverri@gmail.com";
+			String from = "FISCO_No_Reply@ice.go.cr";
+			String subject = "Documento PDF y XML";
+	//
+			correosBo.enviarConAttach(attachments, to, from, subject, "email/emailHacienda.vm", modelEmail);
+			//
+		} catch (IOException | DocumentException | WriterException ex) {
+			Thread.currentThread().interrupt();
+		}
+	}
+	
+  private  Collection<Attachment> createAttachments(Attachment... attachments) {
+    return Arrays.asList(attachments);
+}
+
+	
+  private  Attachment PDF_Attach(String name, ByteArrayDataSource data) {
+    return attachment(name, ".pdf", data);
+}
+
+	private  String getConsecutivo(String tipoDoc, String consecutivo) {
+		return tipoDoc + "-" + consecutivo;
+	}
+
+	private  ByteArrayDataSource asText(String text) throws IOException {
+		return new ByteArrayDataSource(text, "text/plain");
+	}
+
+	private  Attachment XML_Attach(String name, ByteArrayDataSource data) {
+		return attachment(name, ".xml", data);
+	}
+
+	private  Attachment attachment(String name, String ext, ByteArrayDataSource data) {
+		return new Attachment(name + ext, data);
+	}
+	
+  private  ByteArrayDataSource asPDF(ByteArrayOutputStream stream) {
+    return new ByteArrayDataSource(stream.toByteArray(), "text/pdf");
+}
 
 }

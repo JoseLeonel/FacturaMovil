@@ -263,6 +263,13 @@ public class Constantes {
 	public static final String					FACTURA_MEDIO_PAGO_EFECTIVO													= "01";
 	public static final String					FACTURA_MEDIO_PAGO_TARJETA													= "02";
 	public static final String					FACTURA_MEDIO_PAGO_CHEQUE														= "03";
+	public static final String					FACTURA_MEDIO_PAGO_TRANSFERENCIA										= "04";
+	
+	public static final String					FACTURA_MEDIO_PAGO_EFECTIVO_STR													= "Efectivo";
+	public static final String					FACTURA_MEDIO_PAGO_TARJETA_STR													= "Tarjeta";
+	public static final String					FACTURA_MEDIO_PAGO_CHEQUE_STR														= "Cheque";
+	public static final String					FACTURA_MEDIO_PAGO_TRANSFERENCIA_STR										= "Transferencia";
+	
 
 	public static final Integer					FACTURA_ESTADO_PENDIENTE														= 1;
 	public static final Integer					FACTURA_ESTADO_FACTURADO														= 2;

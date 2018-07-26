@@ -26,7 +26,7 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
 	
 	@Lazy
 	@Autowired
-	private CertificadoBo																					certificadoBo;
+	CertificadoBo																					certificadoBo;
 	
 	@Lazy
 	@Autowired

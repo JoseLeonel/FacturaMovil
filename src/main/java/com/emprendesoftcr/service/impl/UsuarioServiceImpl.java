@@ -16,7 +16,7 @@ import com.emprendesoftcr.service.UsuarioService;
 public class UsuarioServiceImpl implements UsuarioService {
 
 	@Autowired
-	private UsuarioRepository usuarioRepository;
+	UsuarioRepository usuarioRepository;
 	
 	
 

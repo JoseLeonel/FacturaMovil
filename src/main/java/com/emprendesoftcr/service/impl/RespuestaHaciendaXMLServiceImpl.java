@@ -19,7 +19,7 @@ import com.emprendesoftcr.service.RespuestaHaciendaXMLService;
 public class RespuestaHaciendaXMLServiceImpl implements RespuestaHaciendaXMLService {
 	@Lazy
 	@Autowired
-	private CertificadoBo																					certificadoBo;
+	CertificadoBo																					certificadoBo;
 	
 	@Lazy
 	@Autowired

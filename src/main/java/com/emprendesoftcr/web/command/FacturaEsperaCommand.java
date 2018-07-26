@@ -2,6 +2,8 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
@@ -24,7 +26,11 @@ public class FacturaEsperaCommand {
 
 	private String		tipoDoc;
 
-	private String		medioPago;
+	private String						medioEfectivo;
+	
+	private String						medioTarjeta;
+
+	private String						medioBanco;
 
 	private String		nombreFactura;
 
@@ -107,7 +113,9 @@ public class FacturaEsperaCommand {
 		this.condicionVenta = factura.getCondicionVenta();
 		this.plazoCredito = factura.getPlazoCredito();
 		this.tipoDoc = factura.getTipoDoc();
-		this.medioPago = factura.getMedioPago();
+		this.medioBanco = factura.getMedioBanco();
+		this.medioEfectivo = factura.getMedioEfectivo();
+		this.medioTarjeta = factura.getMedioTarjeta();
 		this.nombreFactura = factura.getNombreFactura();
 		this.direccion = factura.getDireccion();
 		this.nota = factura.getNota();
@@ -203,13 +211,7 @@ public class FacturaEsperaCommand {
 		this.tipoDoc = tipoDoc;
 	}
 
-	public String getMedioPago() {
-		return medioPago;
-	}
-
-	public void setMedioPago(String medioPago) {
-		this.medioPago = medioPago;
-	}
+	
 
 	public String getNombreFactura() {
 		return nombreFactura;
@@ -507,4 +509,36 @@ public class FacturaEsperaCommand {
 		this.referenciaFechaEmision = referenciaFechaEmision;
 	}
 
+	
+	public String getMedioEfectivo() {
+		return medioEfectivo;
+	}
+
+	
+	public void setMedioEfectivo(String medioEfectivo) {
+		this.medioEfectivo = medioEfectivo;
+	}
+
+	
+	public String getMedioTarjeta() {
+		return medioTarjeta;
+	}
+
+	
+	public void setMedioTarjeta(String medioTarjeta) {
+		this.medioTarjeta = medioTarjeta;
+	}
+
+	
+	public String getMedioBanco() {
+		return medioBanco;
+	}
+
+	
+	public void setMedioBanco(String medioBanco) {
+		this.medioBanco = medioBanco;
+	}
+
+	
+	
 }

@@ -169,10 +169,22 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setVendedor(facturaCommand.getVendedor());
 			factura.setCliente(facturaCommand.getCliente());
 			factura.setFechaEmision(new Date());
-			factura.setMedioPago(facturaCommand.getMedioPago());
+			factura.setMedioEfectivo(Constantes.EMPTY);
+			
+			if(facturaCommand.getTotalEfectivo() > Constantes.ZEROS_DOUBLE) {
+				  factura.setMedioEfectivo(Constantes.MEDIO_PAGO_EFECTIVO);
+			}
+			factura.setMedioBanco(Constantes.EMPTY);
+			if(facturaCommand.getTotalBanco() > Constantes.ZEROS_DOUBLE) {
+				factura.setMedioBanco(Constantes.FACTURA_MEDIO_PAGO_TRANSFERENCIA);
+			}
+			factura.setMedioTarjeta(Constantes.EMPTY);
+			if(facturaCommand.getTotalTarjeta()> Constantes.ZEROS_DOUBLE) {
+				factura.setMedioTarjeta(Constantes.FACTURA_MEDIO_PAGO_TARJETA);
+			}
 
 			factura.setTipoDoc(facturaCommand.getTipoDoc());
-			factura.setMedioPago(facturaCommand.getMedioPago());
+			
 			factura.setNombreFactura(facturaCommand.getNombreFactura());
 			factura.setDireccion(facturaCommand.getDireccion());
 			factura.setNota(facturaCommand.getNota());

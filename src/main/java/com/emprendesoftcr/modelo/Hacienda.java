@@ -35,6 +35,9 @@ public class Hacienda implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer						id;
+	
+	@Column(name = "tipo_doc")
+	private String						tipoDoc;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd’T’HH:mm:ssZ")
@@ -102,13 +105,11 @@ public class Hacienda implements Serializable {
 
 	
 
-	
-	
-	
-	
-	public Hacienda(Integer id, Date fechaEmisor, String clave, String tipoEmisor, String cedulaEmisor, String tipoReceptor, String cedulaReceptor, Blob comprobanteXML, String consecutivo, Integer estado, Integer status, Integer reintentos, Integer reintentosAceptacion, Blob mensajeHacienda, Blob xErrorCause, Empresa empresa, Date created_at, Date updated_at) {
+
+	public Hacienda(Integer id, String tipoDoc, Date fechaEmisor, String clave, String tipoEmisor, String cedulaEmisor, String tipoReceptor, String cedulaReceptor, Blob comprobanteXML, String consecutivo, Integer estado, Integer status, Integer reintentos, Integer reintentosAceptacion, Blob mensajeHacienda, Blob xErrorCause, Empresa empresa, Date created_at, Date updated_at) {
 		super();
 		this.id = id;
+		this.tipoDoc = tipoDoc;
 		this.fechaEmisor = fechaEmisor;
 		this.clave = clave;
 		this.tipoEmisor = tipoEmisor;
@@ -285,6 +286,16 @@ public class Hacienda implements Serializable {
 	
 	public void setMensajeHacienda(Blob mensajeHacienda) {
 		this.mensajeHacienda = mensajeHacienda;
+	}
+
+	
+	public String getTipoDoc() {
+		return tipoDoc;
+	}
+
+	
+	public void setTipoDoc(String tipoDoc) {
+		this.tipoDoc = tipoDoc;
 	}
 	
 	

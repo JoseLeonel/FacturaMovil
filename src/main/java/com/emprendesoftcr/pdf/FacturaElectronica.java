@@ -11,573 +11,584 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-
-
 public class FacturaElectronica {
-    private String _emisorNombre;
-    private String _emisorCedula;
-    private String _emisorTelefono;
-    private String _emisorCorreo;
-    private String _emisorFax;
-    private String _emisorProvincia;
-    private String _emisorDistrito;
-    private String _emisorCanton;
-    
-    private String _clienteNombre;
-    private String _clienteNombreComercial;
-    private String _clienteCorreo;
-    private String _clienteCedula;
-    private String _clienteTelefono;
-    private String _clienteCtaGrupo;
-    private String _clienteMesCobro;
-    private String _clientePeriodoCobro;
-    private String _clienteFechaVence;
-    private String _clientePaqueteComercial;
-    
-    private String _tipoDocumento;
-    private String _clave;
-    private String _consecutivo;
-    private String _fechaEmision;
-    private String _plazoCredito;
-    private String _condicionVenta;
-    private String _medioPago;
-    private String _moneda;
-    private String _tipoCambio;
-    private String _referencia;
-    
-    private String _footerObservaciones;
-    private String _footerFormaPago;
-    private String _footerMoneda;
-    private String _footerCondicionVenta;
-    
-    private double _footerTipoCambio;
-    private double _footerTotalServiciosGravados;
-    private double _footerTotalMercanciasGravadas;
-    private double _footerTotalServiciosExentos;
-    private double _footerTotalGravado;
-    private double _footerTotalExento;
-    private double _footerTotalVenta;
-    private double _footerTotalDescuento;
-    private double _footerTotalImpuesto;
-    private double _footerTotalVentaNeta;
-    private double _footerTotalComprobante;
-    
-    private List<DetalleFacturaElectronica> _detalleFacturaElectronica;
+  private String                          _logo;
+	private String													_emisorNombre;
+	private String													_emisorCedula;
+	private String													_emisorTelefono;
+	private String													_emisorCorreo;
+	private String													_emisorFax;
+	private String													_emisorProvincia;
+	private String													_emisorDistrito;
+	private String													_emisorCanton;
 
-    public FacturaElectronica(){
-        this._detalleFacturaElectronica = new ArrayList<DetalleFacturaElectronica>();
-    }
-    
-    public String getEmisorNombre() {
-        return _emisorNombre;
-    }
+	private String													_clienteNombre;
+	private String													_clienteNombreComercial;
+	private String													_clienteCorreo;
+	private String													_clienteCedula;
+	private String													_clienteTelefono;
+	private String													_clienteProvincia;
+	private String													_clienteCanton;
+	private String													_clienteDistrito;
+	private String													_clienteBarrio;
+	private String													_clienteDireccion;
 
-    public void setEmisorNombre(String _emisorNombre) {
-        this._emisorNombre = _emisorNombre;
-    }
+	private String													_tipoDocumento;
+	private String													_clave;
+	private String													_consecutivo;
+	private String													_fechaEmision;
+	private String													_plazoCredito;
+	private String													_condicionVenta;
+	private String													medioEfectivo;
 
-    public String getEmisorCorreo() {
-        return _emisorCorreo;
-    }
+	private String													medioTarjeta;
 
-    public void setEmisorCorreo(String _emisorCorreo) {
-        this._emisorCorreo = _emisorCorreo;
-    }
+	private String													medioBanco;
+	private String													_moneda;
+	private String													_tipoCambio;
+	private String													_referencia;
 
-    public String getEmisorProvincia() {
-        return _emisorProvincia;
-    }
+	private String													_footerObservaciones;
+	private String													_footerFormaPago;
+	private String													_footerMoneda;
+	private String													_footerCondicionVenta;
 
-    public void setEmisorProvincia(String _emisorProvincia) {
-        this._emisorProvincia = _emisorProvincia;
-    }
+	private double													_footerTipoCambio;
+	private double													_footerTotalServiciosGravados;
+	private double													_footerTotalMercanciasGravadas;
+	private double													_footerTotalServiciosExentos;
+	private double													_footerTotalGravado;
+	private double													_footerTotalExento;
+	private double													_footerTotalVenta;
+	private double													_footerTotalDescuento;
+	private double													_footerTotalImpuesto;
+	private double													_footerTotalVentaNeta;
+	private double													_footerTotalComprobante;
 
-    public String getEmisorDistrito() {
-        return _emisorDistrito;
-    }
+	private List<DetalleFacturaElectronica>	_detalleFacturaElectronica;
 
-    public void setEmisorDistrito(String _emisorDistrito) {
-        this._emisorDistrito = _emisorDistrito;
-    }
+	public FacturaElectronica() {
+		this._detalleFacturaElectronica = new ArrayList<DetalleFacturaElectronica>();
+	}
 
-    public String getEmisorCedula() {
-        return _emisorCedula;
-    }
+	public String getEmisorNombre() {
+		return _emisorNombre;
+	}
 
-    public void setEmisorCedula(String _emisorCedula) {
-        this._emisorCedula = _emisorCedula;
-    }
+	public void setEmisorNombre(String _emisorNombre) {
+		this._emisorNombre = _emisorNombre;
+	}
 
-    public String getEmisorTelefono() {
-        return _emisorTelefono;
-    }
+	public String getEmisorCorreo() {
+		return _emisorCorreo;
+	}
 
-    public void setEmisorTelefono(String _emisorTelefono) {
-        this._emisorTelefono = _emisorTelefono;
-    }
+	public void setEmisorCorreo(String _emisorCorreo) {
+		this._emisorCorreo = _emisorCorreo;
+	}
 
-    public String getEmisorCanton() {
-        return _emisorCanton;
-    }
+	public String getEmisorProvincia() {
+		return _emisorProvincia;
+	}
 
-    public void setEmisorCanton(String _emisorCanton) {
-        this._emisorCanton = _emisorCanton;
-    }
+	public void setEmisorProvincia(String _emisorProvincia) {
+		this._emisorProvincia = _emisorProvincia;
+	}
 
-    public String getClienteNombre() {
-        return _clienteNombre;
-    }
+	public String getEmisorDistrito() {
+		return _emisorDistrito;
+	}
 
-    public void setClienteNombre(String _clienteNombre) {
-        this._clienteNombre = _clienteNombre;
-    }
+	public void setEmisorDistrito(String _emisorDistrito) {
+		this._emisorDistrito = _emisorDistrito;
+	}
 
-    public String getClienteCedula() {
-        return _clienteCedula;
-    }
+	public String getEmisorCedula() {
+		return _emisorCedula;
+	}
 
-    public void setClienteCedula(String _clienteCedula) {
-        this._clienteCedula = _clienteCedula;
-    }
+	public void setEmisorCedula(String _emisorCedula) {
+		this._emisorCedula = _emisorCedula;
+	}
 
-    public String getFooterObservaciones() {
-        return _footerObservaciones;
-    }
+	public String getEmisorTelefono() {
+		return _emisorTelefono;
+	}
 
-    public void setFooterObservaciones(String _footerObservaciones) {
-        this._footerObservaciones = _footerObservaciones;
-    }
+	public void setEmisorTelefono(String _emisorTelefono) {
+		this._emisorTelefono = _emisorTelefono;
+	}
 
-    public String getFooterFormaPago() {
-        return _footerFormaPago;
-    }
+	public String getEmisorCanton() {
+		return _emisorCanton;
+	}
 
-    public void setFooterFormaPago(String _footerFormaPago) {
-        this._footerFormaPago = _footerFormaPago;
-    }
+	public void setEmisorCanton(String _emisorCanton) {
+		this._emisorCanton = _emisorCanton;
+	}
 
-    public String getFooterMoneda() {
-        return _footerMoneda;
-    }
+	public String getClienteNombre() {
+		return _clienteNombre;
+	}
 
-    public void setFooterMoneda(String _footerMoneda) {
-        this._footerMoneda = _footerMoneda;
-    }
+	public void setClienteNombre(String _clienteNombre) {
+		this._clienteNombre = _clienteNombre;
+	}
 
-    public double getFooterTipoCambio() {
-        return _footerTipoCambio;
-    }
+	public String getClienteCedula() {
+		return _clienteCedula;
+	}
 
-    public void setFooterTipoCambio(double _footerTipoCambio) {
-        this._footerTipoCambio = _footerTipoCambio;
-    }
+	public void setClienteCedula(String _clienteCedula) {
+		this._clienteCedula = _clienteCedula;
+	}
 
-    public double getFooterTotalServiciosGravados() {
-        return _footerTotalServiciosGravados;
-    }
+	public String getFooterObservaciones() {
+		return _footerObservaciones;
+	}
 
-    public void setFooterTotalServiciosGravados(double _footerTotalServiciosGravados) {
-        this._footerTotalServiciosGravados = _footerTotalServiciosGravados;
-    }
+	public void setFooterObservaciones(String _footerObservaciones) {
+		this._footerObservaciones = _footerObservaciones;
+	}
 
-    public double getFooterTotalMercanciasGravadas() {
-        return _footerTotalMercanciasGravadas;
-    }
+	public String getFooterFormaPago() {
+		return _footerFormaPago;
+	}
 
-    public void setFooterTotalMercanciasGravadas(double _footerTotalMercanciasGravadas) {
-        this._footerTotalMercanciasGravadas = _footerTotalMercanciasGravadas;
-    }
+	public void setFooterFormaPago(String _footerFormaPago) {
+		this._footerFormaPago = _footerFormaPago;
+	}
 
-    public double getFooterTotalServiciosExentos() {
-        return _footerTotalServiciosExentos;
-    }
+	public String getFooterMoneda() {
+		return _footerMoneda;
+	}
 
-    public void setFooterTotalServiciosExentos(double _footerTotalServiciosExentos) {
-        this._footerTotalServiciosExentos = _footerTotalServiciosExentos;
-    }
+	public void setFooterMoneda(String _footerMoneda) {
+		this._footerMoneda = _footerMoneda;
+	}
 
-    public double getFooterTotalGravado() {
-        return _footerTotalGravado;
-    }
+	public double getFooterTipoCambio() {
+		return _footerTipoCambio;
+	}
 
-    public void setFooterTotalGravado(double _footerTotalGravado) {
-        this._footerTotalGravado = _footerTotalGravado;
-    }
+	public void setFooterTipoCambio(double _footerTipoCambio) {
+		this._footerTipoCambio = _footerTipoCambio;
+	}
 
-    public double getFooterTotalExento() {
-        return _footerTotalExento;
-    }
+	public double getFooterTotalServiciosGravados() {
+		return _footerTotalServiciosGravados;
+	}
 
-    public void setFooterTotalExento(double _footerTotalExento) {
-        this._footerTotalExento = _footerTotalExento;
-    }
+	public void setFooterTotalServiciosGravados(double _footerTotalServiciosGravados) {
+		this._footerTotalServiciosGravados = _footerTotalServiciosGravados;
+	}
 
-    public double getFooterTotalVenta() {
-        return _footerTotalVenta;
-    }
+	public double getFooterTotalMercanciasGravadas() {
+		return _footerTotalMercanciasGravadas;
+	}
 
-    public void setFooterTotalVenta(double _footerTotalVenta) {
-        this._footerTotalVenta = _footerTotalVenta;
-    }
+	public void setFooterTotalMercanciasGravadas(double _footerTotalMercanciasGravadas) {
+		this._footerTotalMercanciasGravadas = _footerTotalMercanciasGravadas;
+	}
 
-    public double getFooterTotalDescuento() {
-        return _footerTotalDescuento;
-    }
+	public double getFooterTotalServiciosExentos() {
+		return _footerTotalServiciosExentos;
+	}
 
-    public void setFooterTotalDescuento(double _footerTotalDescuento) {
-        this._footerTotalDescuento = _footerTotalDescuento;
-    }
+	public void setFooterTotalServiciosExentos(double _footerTotalServiciosExentos) {
+		this._footerTotalServiciosExentos = _footerTotalServiciosExentos;
+	}
 
-    public double getFooterTotalImpuesto() {
-        return _footerTotalImpuesto;
-    }
+	public double getFooterTotalGravado() {
+		return _footerTotalGravado;
+	}
 
-    public void setFooterTotalImpuesto(double _footerTotalImpuesto) {
-        this._footerTotalImpuesto = _footerTotalImpuesto;
-    }
+	public void setFooterTotalGravado(double _footerTotalGravado) {
+		this._footerTotalGravado = _footerTotalGravado;
+	}
 
-    public double getFooterTotalVentaNeta() {
-        return _footerTotalVentaNeta;
-    }
+	public double getFooterTotalExento() {
+		return _footerTotalExento;
+	}
 
-    public void setFooterTotalVentaNeta(double _footerTotalVentaNeta) {
-        this._footerTotalVentaNeta = _footerTotalVentaNeta;
-    }
+	public void setFooterTotalExento(double _footerTotalExento) {
+		this._footerTotalExento = _footerTotalExento;
+	}
 
-    public double getFooterTotalComprobante() {
-        return _footerTotalComprobante;
-    }
+	public double getFooterTotalVenta() {
+		return _footerTotalVenta;
+	}
 
-    public void setFooterTotalComprobante(double _footerTotalComprobante) {
-        this._footerTotalComprobante = _footerTotalComprobante;
-    }
+	public void setFooterTotalVenta(double _footerTotalVenta) {
+		this._footerTotalVenta = _footerTotalVenta;
+	}
 
-    public List<DetalleFacturaElectronica> getDetalleFacturaElectronica() {
-        return _detalleFacturaElectronica;
-    }
+	public double getFooterTotalDescuento() {
+		return _footerTotalDescuento;
+	}
 
-    public void setDetalleFacturaElectronica(List<DetalleFacturaElectronica> _detalleFacturaElectronica) {
-        this._detalleFacturaElectronica = _detalleFacturaElectronica;
-    }
-    
-    public String getFooterCondicionVenta() {
-        return _footerCondicionVenta;
-    }
+	public void setFooterTotalDescuento(double _footerTotalDescuento) {
+		this._footerTotalDescuento = _footerTotalDescuento;
+	}
 
-    public void setFooterCondicionVenta(String _footerCondicionVenta) {
-        this._footerCondicionVenta = _footerCondicionVenta;
-    }
-        
-		public String getEmisorFax() {
-			return _emisorFax;
+	public double getFooterTotalImpuesto() {
+		return _footerTotalImpuesto;
+	}
+
+	public void setFooterTotalImpuesto(double _footerTotalImpuesto) {
+		this._footerTotalImpuesto = _footerTotalImpuesto;
+	}
+
+	public double getFooterTotalVentaNeta() {
+		return _footerTotalVentaNeta;
+	}
+
+	public void setFooterTotalVentaNeta(double _footerTotalVentaNeta) {
+		this._footerTotalVentaNeta = _footerTotalVentaNeta;
+	}
+
+	public double getFooterTotalComprobante() {
+		return _footerTotalComprobante;
+	}
+
+	public void setFooterTotalComprobante(double _footerTotalComprobante) {
+		this._footerTotalComprobante = _footerTotalComprobante;
+	}
+
+	public List<DetalleFacturaElectronica> getDetalleFacturaElectronica() {
+		return _detalleFacturaElectronica;
+	}
+
+	public void setDetalleFacturaElectronica(List<DetalleFacturaElectronica> _detalleFacturaElectronica) {
+		this._detalleFacturaElectronica = _detalleFacturaElectronica;
+	}
+
+	public String getFooterCondicionVenta() {
+		return _footerCondicionVenta;
+	}
+
+	public void setFooterCondicionVenta(String _footerCondicionVenta) {
+		this._footerCondicionVenta = _footerCondicionVenta;
+	}
+
+	public String getEmisorFax() {
+		return _emisorFax;
+	}
+
+	public void setEmisorFax(String _emisorFax) {
+		this._emisorFax = _emisorFax;
+	}
+
+	public String getClienteNombreComercial() {
+		return _clienteNombreComercial;
+	}
+
+	public void setClienteNombreComercial(String _clienteNombreComercial) {
+		this._clienteNombreComercial = _clienteNombreComercial;
+	}
+
+	public String getClienteCorreo() {
+		return _clienteCorreo;
+	}
+
+	public void setClienteCorreo(String _clienteCorreo) {
+		this._clienteCorreo = _clienteCorreo;
+	}
+
+	public String getClienteTelefono() {
+		return _clienteTelefono;
+	}
+
+	public void setClienteTelefono(String _clienteTelefono) {
+		this._clienteTelefono = _clienteTelefono;
+	}
+
+	
+
+	
+	public String get_clienteProvincia() {
+		return _clienteProvincia;
+	}
+
+	
+	public void set_clienteProvincia(String _clienteProvincia) {
+		this._clienteProvincia = _clienteProvincia;
+	}
+
+	
+	public String get_clienteCanton() {
+		return _clienteCanton;
+	}
+
+	
+	public void set_clienteCanton(String _clienteCanton) {
+		this._clienteCanton = _clienteCanton;
+	}
+
+	
+	public String get_clienteDistrito() {
+		return _clienteDistrito;
+	}
+
+	
+	public void set_clienteDistrito(String _clienteDistrito) {
+		this._clienteDistrito = _clienteDistrito;
+	}
+
+	
+	public String get_clienteBarrio() {
+		return _clienteBarrio;
+	}
+
+	
+	public void set_clienteBarrio(String _clienteBarrio) {
+		this._clienteBarrio = _clienteBarrio;
+	}
+
+	
+	public String get_clienteDireccion() {
+		return _clienteDireccion;
+	}
+
+	
+	public void set_clienteDireccion(String _clienteDireccion) {
+		this._clienteDireccion = _clienteDireccion;
+	}
+
+	public String getTipoDocumento() {
+		return _tipoDocumento;
+	}
+
+	public void setTipoDocumento(String _tipoDocumento) {
+		this._tipoDocumento = _tipoDocumento;
+	}
+
+	public String getClave() {
+		return _clave;
+	}
+
+	public void setClave(String _clave) {
+		this._clave = _clave;
+	}
+
+	public String getConsecutivo() {
+		return _consecutivo;
+	}
+
+	public void setConsecutivo(String _consecutivo) {
+		this._consecutivo = _consecutivo;
+	}
+
+	public String getFechaEmision() {
+		return _fechaEmision;
+	}
+
+	public void setFechaEmision(String _fechaEmision) {
+		this._fechaEmision = _fechaEmision;
+	}
+
+	public String getPlazoCredito() {
+		return _plazoCredito;
+	}
+
+	public void setPlazoCredito(String _plazoCredito) {
+		this._plazoCredito = _plazoCredito;
+	}
+
+	public String getCondicionVenta() {
+		return _condicionVenta;
+	}
+
+	public void setCondicionVenta(String _condicionVenta) {
+		this._condicionVenta = _condicionVenta;
+	}
+
+
+
+	
+	public String getMedioEfectivo() {
+		return medioEfectivo;
+	}
+
+	
+	public void setMedioEfectivo(String medioEfectivo) {
+		this.medioEfectivo = medioEfectivo;
+	}
+
+	
+	public String getMedioTarjeta() {
+		return medioTarjeta;
+	}
+
+	
+	public void setMedioTarjeta(String medioTarjeta) {
+		this.medioTarjeta = medioTarjeta;
+	}
+
+	
+	public String getMedioBanco() {
+		return medioBanco;
+	}
+
+	
+	public void setMedioBanco(String medioBanco) {
+		this.medioBanco = medioBanco;
+	}
+
+	public String getMoneda() {
+		return _moneda;
+	}
+
+	public void setMoneda(String _moneda) {
+		this._moneda = _moneda;
+	}
+
+	public String getTipoCambio() {
+		return _tipoCambio;
+	}
+
+	public void setTipoCambio(String _tipoCambio) {
+		this._tipoCambio = _tipoCambio;
+	}
+
+	public String getReferencia() {
+		return _referencia;
+	}
+
+	public void setReferencia(String _referencia) {
+		this._referencia = _referencia;
+	}
+
+	
+	
+	
+	public String get_logo() {
+		return _logo;
+	}
+
+	
+	public void set_logo(String _logo) {
+		this._logo = _logo;
+	}
+
+	public static FacturaElectronica Foo() {
+		FacturaElectronica f = new FacturaElectronica();
+		f.setEmisorNombre("EFIKASOLUTIONS SOCIEDAD ANONIMA");
+		f.setEmisorCorreo("info@efka.com");
+		;
+		f.setEmisorProvincia("Heredia");
+		f.setEmisorDistrito("Ulloa");
+		f.setEmisorCedula("3101733521");
+		f.setEmisorTelefono("84661931");
+		f.setEmisorCanton("Heredia");
+
+		f.setClienteNombre("Sysco Consultores de Sistemas S.A");
+		f.setClienteCedula("3101195395");
+
+		f.setFooterObservaciones("FOO Testing Tools");
+
+		f.setFooterFormaPago("Transf");
+		f.setFooterCondicionVenta("Contado");
+		f.setFooterMoneda("USD");
+		f.setFooterTipoCambio(567);
+		f.setFooterTotalServiciosGravados(5500);
+		f.setFooterTotalMercanciasGravadas(0);
+		f.setFooterTotalServiciosExentos(0);
+		f.setFooterTotalGravado(0);
+		f.setFooterTotalExento(0);
+		f.setFooterTotalVenta(5500);
+		f.setFooterTotalDescuento(0);
+		f.setFooterTotalImpuesto(0);
+		f.setFooterTotalVentaNeta(0);
+		f.setFooterTotalComprobante(5500);
+
+		for (int x = 1; x <= 25; x++) {
+			f.getDetalleFacturaElectronica().add(DetalleFacturaElectronica.Foo(x));
 		}
-		
-		public void setEmisorFax(String _emisorFax) {
-			this._emisorFax = _emisorFax;
-		}
-		
-		
-		public String getClienteNombreComercial() {
-			return _clienteNombreComercial;
+
+		return f;
+	}
+
+	public TableModel getDataArray() {
+
+		DefaultTableModel modelo = new DefaultTableModel();
+
+		List<Object> nombreColumnas = new ArrayList<Object>();
+		nombreColumnas.add("EmisorName");
+		nombreColumnas.add("EmisorMail");
+		nombreColumnas.add("EmisorProvince");
+		nombreColumnas.add("EmisorDistrict");
+		nombreColumnas.add("EmisorCedula");
+		nombreColumnas.add("EmisorPhone");
+		nombreColumnas.add("EmisorCanton");
+		nombreColumnas.add("ClienteName");
+		nombreColumnas.add("ClienteCedula");
+		nombreColumnas.add("DetLinea");
+		nombreColumnas.add("DetCodigo");
+		nombreColumnas.add("DetDescripcion");
+		nombreColumnas.add("DetPrecioU");
+		nombreColumnas.add("DetCantidad");
+		nombreColumnas.add("DetDescuento");
+		nombreColumnas.add("DetImpuesto");
+		nombreColumnas.add("DetTotal");
+		nombreColumnas.add("Observacion");
+		nombreColumnas.add("FormaPago");
+		nombreColumnas.add("CondicionVenta");
+		nombreColumnas.add("Moneda");
+		nombreColumnas.add("TipoCambio");
+		nombreColumnas.add("TotalServGravado");
+		nombreColumnas.add("TotalMercGravada");
+		nombreColumnas.add("TotalServExentas");
+		nombreColumnas.add("TotalGravado");
+		nombreColumnas.add("TotalExento");
+		nombreColumnas.add("TotalVenta");
+		nombreColumnas.add("TotalDescuento");
+		nombreColumnas.add("TotalImpuesto");
+		nombreColumnas.add("TotalVentaNeta");
+		nombreColumnas.add("TotalComprobante");
+
+		modelo.setColumnIdentifiers(nombreColumnas.toArray());
+		modelo.setNumRows(this.getDetalleFacturaElectronica().size());
+		int row = 0;
+		for (DetalleFacturaElectronica det : this.getDetalleFacturaElectronica()) {
+			modelo.setValueAt(this.getEmisorNombre(), row, 0);
+			modelo.setValueAt(this.getEmisorCedula(), row, 1);
+			modelo.setValueAt(this.getEmisorProvincia(), row, 2);
+			modelo.setValueAt(this.getEmisorDistrito(), row, 3);
+			modelo.setValueAt(this.getEmisorCedula(), row, 4);
+			modelo.setValueAt(this.getEmisorTelefono(), row, 5);
+			modelo.setValueAt(this.getEmisorCanton(), row, 6);
+			modelo.setValueAt(this.getClienteNombre(), row, 7);
+			modelo.setValueAt(this.getClienteCedula(), row, 8);
+
+			modelo.setValueAt(det.getLinea(), row, 9);
+			modelo.setValueAt(det.getCodigo(), row, 10);
+			modelo.setValueAt(det.getDescripcion(), row, 11);
+			modelo.setValueAt(det.getPrecioU(), row, 12);
+			modelo.setValueAt(det.getCantidad(), row, 13);
+			modelo.setValueAt(det.getDescuento(), row, 14);
+			modelo.setValueAt(det.getImpuesto(), row, 15);
+			modelo.setValueAt(det.getTotal(), row, 16);
+
+			modelo.setValueAt(this.getFooterObservaciones(), row, 17);
+			modelo.setValueAt(this.getFooterFormaPago(), row, 18);
+			modelo.setValueAt(this.getFooterCondicionVenta(), row, 19);
+			modelo.setValueAt(this.getFooterMoneda(), row, 20);
+			modelo.setValueAt(this.getFooterTipoCambio(), row, 21);
+			modelo.setValueAt(this.getFooterTotalServiciosGravados(), row, 22);
+			modelo.setValueAt(this.getFooterTotalMercanciasGravadas(), row, 23);
+			modelo.setValueAt(this.getFooterTotalServiciosExentos(), row, 24);
+			modelo.setValueAt(this.getFooterTotalGravado(), row, 25);
+			modelo.setValueAt(this.getFooterTotalExento(), row, 26);
+			modelo.setValueAt(this.getFooterTotalVenta(), row, 27);
+			modelo.setValueAt(this.getFooterTotalDescuento(), row, 28);
+			modelo.setValueAt(this.getFooterTotalImpuesto(), row, 29);
+			modelo.setValueAt(this.getFooterTotalVentaNeta(), row, 30);
+			modelo.setValueAt(this.getFooterTotalComprobante(), row, 31);
+			row++;
 		}
 
-		
-		public void setClienteNombreComercial(String _clienteNombreComercial) {
-			this._clienteNombreComercial = _clienteNombreComercial;
-		}
+		return modelo;
+	}
 
-		
-		public String getClienteCorreo() {
-			return _clienteCorreo;
-		}
-
-		
-		public void setClienteCorreo(String _clienteCorreo) {
-			this._clienteCorreo = _clienteCorreo;
-		}
-		
-		public String getClienteTelefono() {
-			return _clienteTelefono;
-		}
-
-		
-		public void setClienteTelefono(String _clienteTelefono) {
-			this._clienteTelefono = _clienteTelefono;
-		}
-
-		
-		public String getClienteCtaGrupo() {
-			return _clienteCtaGrupo;
-		}
-
-		
-		public void setClienteCtaGrupo(String _clienteCtaGrupo) {
-			this._clienteCtaGrupo = _clienteCtaGrupo;
-		}
-
-		
-		public String getClienteMesCobro() {
-			return _clienteMesCobro;
-		}
-
-		
-		public void setClienteMesCobro(String _clienteMesCobro) {
-			this._clienteMesCobro = _clienteMesCobro;
-		}
-
-		
-		public String getClientePeriodoCobro() {
-			return _clientePeriodoCobro;
-		}
-
-		
-		public void setClientePeriodoCobro(String _clientePeriodoCobro) {
-			this._clientePeriodoCobro = _clientePeriodoCobro;
-		}
-
-		
-		public String getClienteFechaVence() {
-			return _clienteFechaVence;
-		}
-
-		
-		public void setClienteFechaVence(String _clienteFechaVence) {
-			this._clienteFechaVence = _clienteFechaVence;
-		}
-
-		
-		public String getClientePaqueteComercial() {
-			return _clientePaqueteComercial;
-		}
-
-		
-		public void setClientePaqueteComercial(String _clientePaqueteComercial) {
-			this._clientePaqueteComercial = _clientePaqueteComercial;
-		}
-		
-		public String getTipoDocumento() {
-			return _tipoDocumento;
-		}
-
-		
-		public void setTipoDocumento(String _tipoDocumento) {
-			this._tipoDocumento = _tipoDocumento;
-		}
-
-		
-		public String getClave() {
-			return _clave;
-		}
-
-		
-		public void setClave(String _clave) {
-			this._clave = _clave;
-		}
-
-		
-		public String getConsecutivo() {
-			return _consecutivo;
-		}
-
-		
-		public void setConsecutivo(String _consecutivo) {
-			this._consecutivo = _consecutivo;
-		}
-
-		
-		public String getFechaEmision() {
-			return _fechaEmision;
-		}
-
-		
-		public void setFechaEmision(String _fechaEmision) {
-			this._fechaEmision = _fechaEmision;
-		}
-
-		
-		public String getPlazoCredito() {
-			return _plazoCredito;
-		}
-
-		
-		public void setPlazoCredito(String _plazoCredito) {
-			this._plazoCredito = _plazoCredito;
-		}
-
-		
-		public String getCondicionVenta() {
-			return _condicionVenta;
-		}
-
-		
-		public void setCondicionVenta(String _condicionVenta) {
-			this._condicionVenta = _condicionVenta;
-		}
-
-		
-		public String getMedioPago() {
-			return _medioPago;
-		}
-
-		
-		public void setMedioPago(String _medioPago) {
-			this._medioPago = _medioPago;
-		}
-
-		
-		public String getMoneda() {
-			return _moneda;
-		}
-
-		
-		public void setMoneda(String _moneda) {
-			this._moneda = _moneda;
-		}
-
-		
-		public String getTipoCambio() {
-			return _tipoCambio;
-		}
-
-		
-		public void setTipoCambio(String _tipoCambio) {
-			this._tipoCambio = _tipoCambio;
-		}
-		
-		
-		public String getReferencia() {
-			return _referencia;
-		}
-
-		
-		public void setReferencia(String _referencia) {
-			this._referencia = _referencia;
-		}
-
-		public static FacturaElectronica Foo(){
-        FacturaElectronica f = new FacturaElectronica();
-        f.setEmisorNombre("EFIKASOLUTIONS SOCIEDAD ANONIMA");
-        f.setEmisorCorreo("info@efka.com");;
-        f.setEmisorProvincia("Heredia");
-        f.setEmisorDistrito("Ulloa");
-        f.setEmisorCedula("3101733521");
-        f.setEmisorTelefono("84661931");
-        f.setEmisorCanton("Heredia");
-        
-        f.setClienteNombre("Sysco Consultores de Sistemas S.A");
-        f.setClienteCedula("3101195395");
-        
-        f.setFooterObservaciones("FOO Testing Tools");
-        
-        f.setFooterFormaPago("Transf");
-        f.setFooterCondicionVenta("Contado");
-        f.setFooterMoneda("USD");
-        f.setFooterTipoCambio(567);
-        f.setFooterTotalServiciosGravados(5500);
-        f.setFooterTotalMercanciasGravadas(0);
-        f.setFooterTotalServiciosExentos(0);
-        f.setFooterTotalGravado(0);
-        f.setFooterTotalExento(0);
-        f.setFooterTotalVenta(5500);
-        f.setFooterTotalDescuento(0);
-        f.setFooterTotalImpuesto(0);
-        f.setFooterTotalVentaNeta(0);
-        f.setFooterTotalComprobante(5500);
-    
-        for(int x =1; x <=25; x++){
-            f.getDetalleFacturaElectronica().add(DetalleFacturaElectronica.Foo(x));
-        }
-
-        return f;
-    }
-    
-    public TableModel getDataArray(){
-        
-        DefaultTableModel modelo = new DefaultTableModel();
-        
-        List<Object> nombreColumnas = new ArrayList<Object>();
-        nombreColumnas.add("EmisorName");
-        nombreColumnas.add("EmisorMail");
-        nombreColumnas.add("EmisorProvince");
-        nombreColumnas.add("EmisorDistrict");
-        nombreColumnas.add("EmisorCedula");
-        nombreColumnas.add("EmisorPhone");
-        nombreColumnas.add("EmisorCanton");
-        nombreColumnas.add("ClienteName");
-        nombreColumnas.add("ClienteCedula");
-        nombreColumnas.add("DetLinea");
-        nombreColumnas.add("DetCodigo");
-        nombreColumnas.add("DetDescripcion");
-        nombreColumnas.add("DetPrecioU");
-        nombreColumnas.add("DetCantidad");
-        nombreColumnas.add("DetDescuento");
-        nombreColumnas.add("DetImpuesto");
-        nombreColumnas.add("DetTotal");
-        nombreColumnas.add("Observacion");
-        nombreColumnas.add("FormaPago");
-        nombreColumnas.add("CondicionVenta");
-        nombreColumnas.add("Moneda");
-        nombreColumnas.add("TipoCambio");
-        nombreColumnas.add("TotalServGravado");
-        nombreColumnas.add("TotalMercGravada");
-        nombreColumnas.add("TotalServExentas");
-        nombreColumnas.add("TotalGravado");
-        nombreColumnas.add("TotalExento");
-        nombreColumnas.add("TotalVenta");
-        nombreColumnas.add("TotalDescuento");
-        nombreColumnas.add("TotalImpuesto");
-        nombreColumnas.add("TotalVentaNeta");
-        nombreColumnas.add("TotalComprobante");
-        
-        modelo.setColumnIdentifiers(nombreColumnas.toArray());
-        modelo.setNumRows(this.getDetalleFacturaElectronica().size());
-        int row=0;
-        for(DetalleFacturaElectronica det : this.getDetalleFacturaElectronica())
-        {
-            modelo.setValueAt(this.getEmisorNombre(), row, 0);
-            modelo.setValueAt(this.getEmisorCedula(), row, 1);
-            modelo.setValueAt(this.getEmisorProvincia(), row, 2);
-            modelo.setValueAt(this.getEmisorDistrito(), row, 3);
-            modelo.setValueAt(this.getEmisorCedula(), row, 4);
-            modelo.setValueAt(this.getEmisorTelefono(), row, 5);
-            modelo.setValueAt(this.getEmisorCanton(), row, 6);
-            modelo.setValueAt(this.getClienteNombre(), row, 7);
-            modelo.setValueAt(this.getClienteCedula(), row, 8);
-            
-            modelo.setValueAt(det.getLinea(), row, 9);
-            modelo.setValueAt(det.getCodigo(), row, 10);
-            modelo.setValueAt(det.getDescripcion(), row, 11);
-            modelo.setValueAt(det.getPrecioU(), row, 12);
-            modelo.setValueAt(det.getCantidad(), row, 13);
-            modelo.setValueAt(det.getDescuento(), row, 14);
-            modelo.setValueAt(det.getImpuesto(), row, 15);
-            modelo.setValueAt(det.getTotal(), row, 16);
-            
-            modelo.setValueAt(this.getFooterObservaciones(), row, 17);
-            modelo.setValueAt(this.getFooterFormaPago(), row, 18);
-            modelo.setValueAt(this.getFooterCondicionVenta(), row, 19);
-            modelo.setValueAt(this.getFooterMoneda(), row, 20);
-            modelo.setValueAt(this.getFooterTipoCambio(), row, 21);
-            modelo.setValueAt(this.getFooterTotalServiciosGravados(), row, 22);
-            modelo.setValueAt(this.getFooterTotalMercanciasGravadas(), row, 23);
-            modelo.setValueAt(this.getFooterTotalServiciosExentos(), row, 24);
-            modelo.setValueAt(this.getFooterTotalGravado(), row, 25);
-            modelo.setValueAt(this.getFooterTotalExento(), row, 26);
-            modelo.setValueAt(this.getFooterTotalVenta(), row, 27);
-            modelo.setValueAt(this.getFooterTotalDescuento(), row, 28);
-            modelo.setValueAt(this.getFooterTotalImpuesto(), row, 29);
-            modelo.setValueAt(this.getFooterTotalVentaNeta(), row, 30);
-            modelo.setValueAt(this.getFooterTotalComprobante(), row, 31);
-            row++;
-        }
-        
-        
-    
-    
-        
-    
-        return modelo;
-    }
-    
 }
-

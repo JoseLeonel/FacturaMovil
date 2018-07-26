@@ -8,6 +8,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+
 @SpringBootApplication()
 @EnableAutoConfiguration 
 @EnableScheduling
@@ -25,5 +26,8 @@ public class FacturaElectronicaApplication extends SpringBootServletInitializer 
 		return application.sources(FacturaElectronicaApplication.class);
 	}
 	
+	
+	 
+	 
 
 }

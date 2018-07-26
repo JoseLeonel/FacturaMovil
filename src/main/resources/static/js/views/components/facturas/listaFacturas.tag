@@ -838,12 +838,15 @@ __regresarAlListado(){
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
 **/
 function __FacturaEnEspera(factura){
-  
+
+    location.href = "generaFacturaPDF?idFactura=" + factura.id
+  return
     $.ajax({
-        url: "MostrarFacturaAjax",
+  //      url: "MostrarFacturaAjax",
+        url: "generaFacturaPDF",
         datatype: "json",
         data: {idFactura:factura.id},
-        method:"POST",
+        method:"GET",
         success: function (data) {
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
