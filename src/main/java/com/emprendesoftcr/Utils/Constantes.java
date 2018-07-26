@@ -72,6 +72,9 @@ public class Constantes {
 	public static final String					HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR								= "OK";
 	public static final String					HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR							= "ERROR";
 	public static final Integer					HACIENDA_ESTADO_ACEPTACION_HACIENDA_TOPE_REINTENTOS	= 8;
+	// Hacienda
+	public static final Integer					HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE								= 1;
+	public static final Integer					HACIENDA_NOTIFICAR_CLIENTE_ENVIADO									= 2;
 
 	// Vendedor Frecuente de una empresa
 
@@ -264,12 +267,11 @@ public class Constantes {
 	public static final String					FACTURA_MEDIO_PAGO_TARJETA													= "02";
 	public static final String					FACTURA_MEDIO_PAGO_CHEQUE														= "03";
 	public static final String					FACTURA_MEDIO_PAGO_TRANSFERENCIA										= "04";
-	
-	public static final String					FACTURA_MEDIO_PAGO_EFECTIVO_STR													= "Efectivo";
-	public static final String					FACTURA_MEDIO_PAGO_TARJETA_STR													= "Tarjeta";
-	public static final String					FACTURA_MEDIO_PAGO_CHEQUE_STR														= "Cheque";
-	public static final String					FACTURA_MEDIO_PAGO_TRANSFERENCIA_STR										= "Transferencia";
-	
+
+	public static final String					FACTURA_MEDIO_PAGO_EFECTIVO_STR											= "Efectivo";
+	public static final String					FACTURA_MEDIO_PAGO_TARJETA_STR											= "Tarjeta";
+	public static final String					FACTURA_MEDIO_PAGO_CHEQUE_STR												= "Cheque";
+	public static final String					FACTURA_MEDIO_PAGO_TRANSFERENCIA_STR								= "Transferencia";
 
 	public static final Integer					FACTURA_ESTADO_PENDIENTE														= 1;
 	public static final Integer					FACTURA_ESTADO_FACTURADO														= 2;

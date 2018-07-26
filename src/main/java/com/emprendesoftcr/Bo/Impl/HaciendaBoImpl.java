@@ -58,4 +58,8 @@ public class HaciendaBoImpl implements HaciendaBo {
 
 		return haciendaDao.findByEstado(estado,estadoError);
 	}
+	@Override
+	public Collection<Hacienda> findByEstadoAndNotificacion(Integer estado, Integer notificacion){
+		return haciendaDao.findByEstadoAndNotificacion(estado,notificacion);
+	}
 }

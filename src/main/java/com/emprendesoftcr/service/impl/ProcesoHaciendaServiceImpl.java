@@ -6,6 +6,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -14,9 +15,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.mail.util.ByteArrayDataSource;
+import javax.sql.rowset.serial.SerialException;
 import javax.transaction.Transactional;
 
-import org.apache.velocity.VelocityContext;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -158,7 +159,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Lazy
 	@Autowired
 	EnvioHaciendaComponent																						envioHaciendaComponent;
-	
+
 	@Autowired
 	FacturaBo																													facturaBo;
 
@@ -166,7 +167,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
 	// @Scheduled(cron = "*/5 * * * * ?")
-	//@Scheduled(cron = "0 0/1 * * * ?")
+	// @Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 		try {
@@ -178,12 +179,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				if (semaforo != null) {
 					// Si esta activo el semaforo y el numero de reintentos es menor al permitido
 					if (semaforo.getEstado().equals(Constantes.SEMAFORO_ESTADO_ACTIVO)) {
-						if (hacienda.getReintentos() < semaforo.getMaximoReintentosEnviar()) {
-							envioHacienda(hacienda);
+						Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
+						if (haciendaBD.getReintentos() < semaforo.getMaximoReintentosEnviar()) {
+							envioHacienda(haciendaBD);
 						} else {// Si alcanza el maximo reintentos no se envia mas a la hacienda
-							hacienda.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_TOPE_REINTENTOS);
-							hacienda.setUpdated_at(new Date());
-							haciendaBo.modificar(hacienda);
+							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_TOPE_REINTENTOS);
+							haciendaBD.setUpdated_at(new Date());
+							haciendaBo.modificar(haciendaBD);
 						}
 
 					}
@@ -290,7 +292,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html Proceso automatico para ejecutar aceptacion del documento
 	 */
-	//@Scheduled(cron = "0 0/2 * * * ?")
+	// @Scheduled(cron = "0 0/2 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		try {
@@ -303,12 +305,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				if (semaforo != null) {
 					// Si esta activo el semaforo y el numero de reintentos es menor al permitido
 					if (semaforo.getEstado().equals(Constantes.SEMAFORO_ESTADO_ACTIVO)) {
-						if (hacienda.getReintentosAceptacion() < semaforo.getMaximoReintentosEnviar()) {
+						Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
+						if (haciendaBD.getReintentosAceptacion() < semaforo.getMaximoReintentosEnviar()) {
 							aceptarDocumento(hacienda);
 						} else {// Si alcanza el maximo reintentos de aceptacion mas a la hacienda
-							hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTACION_HACIENDA_TOPE_REINTENTOS);
-							hacienda.setUpdated_at(new Date());
-							haciendaBo.modificar(hacienda);
+							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTACION_HACIENDA_TOPE_REINTENTOS);
+							haciendaBD.setUpdated_at(new Date());
+							haciendaBo.modificar(haciendaBD);
 						}
 
 					}
@@ -356,14 +359,15 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					respuesta.setTotalFactura(respuestaHacienda.mensajeHacienda().totalFactura());
 					String xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
 					String xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
-					hacienda.setMensajeHacienda(FacturaElectronicaUtils.convertirStringToblod(xmlFirmadoRespuesta));
+					Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
+					haciendaBD.setMensajeHacienda(FacturaElectronicaUtils.convertirStringToblod(xmlFirmadoRespuesta));
 					if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
-						hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+						haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
 					}
 					if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
-						hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+						haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
 					}
-					haciendaBo.modificar(hacienda);
+					haciendaBo.modificar(haciendaBD);
 				} else {// sumar reintententos
 					hacienda.setReintentosAceptacion(hacienda.getReintentosAceptacion() == null ? 1 : hacienda.getReintentosAceptacion() + 1);
 					haciendaBo.modificar(hacienda);
@@ -392,75 +396,87 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
-			
+
 			// Listado de los documentos Pendientes de aceptar por hacienda
-			Collection<Hacienda> listaHacienda = haciendaBo.findByEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA, Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+			Collection<Hacienda> listaHacienda = haciendaBo.findByEstadoAndNotificacion(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA, Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
 			for (Hacienda hacienda : listaHacienda) {
-				   Factura factura = facturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
-				   if(factura !=null) {
-				  	 enviarCorreos(factura);
-				   }
+					Factura factura = facturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
+					Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
+					if (factura != null) {
+						enviarCorreos(factura, hacienda);
+						haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
+						haciendaBo.modificar(haciendaBD);
+					}
+
 			}
-			
-			
-			
+
 		} catch (Exception e) {
-			// TODO: handle exception
+			log.info("** Error  taskHaciendaEnvioDeCorreos: " + e.getMessage() + " fecha " + new Date());
+			throw e;
 		}
 
 	}
 
-	private void enviarCorreos(Factura factura) {
+	private void enviarCorreos(Factura factura, Hacienda hacienda) throws Exception {
 		try {
-			String xmlData = Constantes.EMPTY;
-			// Documento documento = documentoBo.findBy(id);
+			String xmlFactura = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
+			String xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(hacienda.getMensajeHacienda());
+
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
 			ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 
-			String name = getConsecutivo("01", "00000");
-			Collection<Attachment> attachments = createAttachments(XML_Attach(name, asText(xmlData)), PDF_Attach(name, asPDF(namePDF)));
+			String clave = getConsecutivo(factura.getTipoDoc(), factura.getNumeroConsecutivo());
+			Collection<Attachment> attachments = createAttachments(XML_Attach(clave, factura.getEmpresa().getCedula(), asText(xmlFactura)), PDF_Attach(clave,factura.getEmpresa().getCedula(), asPDF(namePDF)), XML_AttachRespuestaHacienda(clave, factura.getEmpresa().getCedula(),asText(xmlRespuesta)));
 
-			VelocityContext velocityContext = new VelocityContext();
-			velocityContext.put("clave", "0000001");
-			 Map<String, Object> modelEmail = new HashMap<>();
+			Map<String, Object> modelEmail = new HashMap<>();
+
+			modelEmail.put("clave", clave);
+			modelEmail.put("nombreEmpresa", factura.getEmpresa().getNombre());
+			modelEmail.put("correo", factura.getEmpresa().getCorreoElectronico());
+			modelEmail.put("telefono", factura.getEmpresa().getTelefono());
 			String to = "josehernandezchaverri@gmail.com";
-			String from = "FISCO_No_Reply@ice.go.cr";
-			String subject = "Documento PDF y XML";
-	//
+			String from = "FISCO_No_Reply@emprendesoftcr.com";
+			String subject = "Factura Electrónica N° " + clave + " del Emisor: " + factura.getEmpresa().getNombre();
+
+			//
 			correosBo.enviarConAttach(attachments, to, from, subject, "email/emailHacienda.vm", modelEmail);
 			//
-		} catch (IOException | DocumentException | WriterException ex) {
-			Thread.currentThread().interrupt();
+		} catch (Exception e) {
+			log.info("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date());
+			throw e;
 		}
 	}
-	
-  private  Collection<Attachment> createAttachments(Attachment... attachments) {
-    return Arrays.asList(attachments);
-}
 
-	
-  private  Attachment PDF_Attach(String name, ByteArrayDataSource data) {
-    return attachment(name, ".pdf", data);
-}
+	private Collection<Attachment> createAttachments(Attachment... attachments) {
+		return Arrays.asList(attachments);
+	}
 
-	private  String getConsecutivo(String tipoDoc, String consecutivo) {
+	private Attachment PDF_Attach(String name,String cedula, ByteArrayDataSource data) {
+		return attachment("Factura_PDF_"+cedula+"_"+name, ".pdf", data);
+	}
+
+	private String getConsecutivo(String tipoDoc, String consecutivo) {
 		return tipoDoc + "-" + consecutivo;
 	}
 
-	private  ByteArrayDataSource asText(String text) throws IOException {
+	private ByteArrayDataSource asText(String text) throws IOException {
 		return new ByteArrayDataSource(text, "text/plain");
 	}
 
-	private  Attachment XML_Attach(String name, ByteArrayDataSource data) {
-		return attachment(name, ".xml", data);
+	private Attachment XML_Attach(String name, String cedula, ByteArrayDataSource data) {
+		return attachment("Factura_XML_" + cedula + "_" + name, ".xml", data);
 	}
 
-	private  Attachment attachment(String name, String ext, ByteArrayDataSource data) {
+	private Attachment XML_AttachRespuestaHacienda(String name,String cedula, ByteArrayDataSource data) {
+		return attachment("Respuesta_XML_" + cedula + "_" + name  , ".xml", data);
+	}
+
+	private Attachment attachment(String name, String ext, ByteArrayDataSource data) {
 		return new Attachment(name + ext, data);
 	}
-	
-  private  ByteArrayDataSource asPDF(ByteArrayOutputStream stream) {
-    return new ByteArrayDataSource(stream.toByteArray(), "text/pdf");
-}
+
+	private ByteArrayDataSource asPDF(ByteArrayOutputStream stream) {
+		return new ByteArrayDataSource(stream.toByteArray(), "text/pdf");
+	}
 
 }

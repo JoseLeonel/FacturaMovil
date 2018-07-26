@@ -59,5 +59,13 @@ public class HaciendaDaoImpl implements HaciendaDao {
 		
 		return query.getResultList();
 	}
+	@Override
+	public Collection<Hacienda> findByEstadoAndNotificacion(Integer estado, Integer notificacion){
+		Query query = entityManager.createQuery("select obj from Hacienda obj where obj.estado = :estado and obj.notificacion = :notificacion ");
+		query.setParameter("estado", estado);
+		query.setParameter("notificacion", notificacion);
+		
+		return query.getResultList();
+	}
 
 }

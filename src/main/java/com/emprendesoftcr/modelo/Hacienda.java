@@ -35,7 +35,7 @@ public class Hacienda implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer						id;
-	
+
 	@Column(name = "tipo_doc")
 	private String						tipoDoc;
 
@@ -70,20 +70,19 @@ public class Hacienda implements Serializable {
 
 	@Column(name = "status")
 	private Integer						status;
-	
+
 	@Column(name = "reintentos")
 	private Integer						reintentos;
-	
+
 	@Column(name = "reintentos_aceptacion")
 	private Integer						reintentosAceptacion;
-	
+
 	@Column(name = "mensaje_Hacienda")
 	@Lob
-	private Blob						mensajeHacienda;
-	
-	
-	
-	
+	private Blob							mensajeHacienda;
+
+	@Column(name = "notificacion")
+	private Integer						notificacion;
 
 	@Column(name = "xErrorCause")
 	@Lob
@@ -103,10 +102,7 @@ public class Hacienda implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
-	
-
-
-	public Hacienda(Integer id, String tipoDoc, Date fechaEmisor, String clave, String tipoEmisor, String cedulaEmisor, String tipoReceptor, String cedulaReceptor, Blob comprobanteXML, String consecutivo, Integer estado, Integer status, Integer reintentos, Integer reintentosAceptacion, Blob mensajeHacienda, Blob xErrorCause, Empresa empresa, Date created_at, Date updated_at) {
+	public Hacienda(Integer id, String tipoDoc, Date fechaEmisor, String clave, String tipoEmisor, String cedulaEmisor, String tipoReceptor, String cedulaReceptor, Blob comprobanteXML, String consecutivo, Integer estado, Integer status, Integer reintentos, Integer reintentosAceptacion, Blob mensajeHacienda, Integer notificacion, Blob xErrorCause, Empresa empresa, Date created_at, Date updated_at) {
 		super();
 		this.id = id;
 		this.tipoDoc = tipoDoc;
@@ -123,6 +119,7 @@ public class Hacienda implements Serializable {
 		this.reintentos = reintentos;
 		this.reintentosAceptacion = reintentosAceptacion;
 		this.mensajeHacienda = mensajeHacienda;
+		this.notificacion = notificacion;
 		this.xErrorCause = xErrorCause;
 		this.empresa = empresa;
 		this.created_at = created_at;
@@ -135,6 +132,7 @@ public class Hacienda implements Serializable {
 		this.created_at = new Date();
 		this.updated_at = new Date();
 		this.estado = Constantes.HACIENDA_ESTADO_PENDIENTE_FIRMAR;
+		this.notificacion = Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE;
 
 	}
 
@@ -258,46 +256,44 @@ public class Hacienda implements Serializable {
 		this.xErrorCause = xErrorCause;
 	}
 
-	
 	public Integer getReintentos() {
 		return reintentos;
 	}
 
-	
 	public void setReintentos(Integer reintentos) {
 		this.reintentos = reintentos;
 	}
 
-	
 	public Integer getReintentosAceptacion() {
 		return reintentosAceptacion;
 	}
 
-	
 	public void setReintentosAceptacion(Integer reintentosAceptacion) {
 		this.reintentosAceptacion = reintentosAceptacion;
 	}
 
-	
 	public Blob getMensajeHacienda() {
 		return mensajeHacienda;
 	}
 
-	
 	public void setMensajeHacienda(Blob mensajeHacienda) {
 		this.mensajeHacienda = mensajeHacienda;
 	}
 
-	
 	public String getTipoDoc() {
 		return tipoDoc;
 	}
 
-	
 	public void setTipoDoc(String tipoDoc) {
 		this.tipoDoc = tipoDoc;
 	}
-	
-	
+
+	public Integer getNotificacion() {
+		return notificacion;
+	}
+
+	public void setNotificacion(Integer notificacion) {
+		this.notificacion = notificacion;
+	}
 
 }

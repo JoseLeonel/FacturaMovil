@@ -14,7 +14,9 @@ public interface HaciendaBo {
 	Hacienda findById(Integer id);
 
 	Collection<Hacienda> findByEmpresaAndEstado(Empresa empresa, Integer estado);
-	
-	Collection<Hacienda> findByEstado( Integer estado,Integer estadoError);
+
+	Collection<Hacienda> findByEstadoAndNotificacion(Integer estado, Integer notificacion);
+
+	Collection<Hacienda> findByEstado(Integer estado, Integer estadoError);
 
 }
