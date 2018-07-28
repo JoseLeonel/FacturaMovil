@@ -12,7 +12,7 @@ public interface ClienteBo {
 
 	void eliminar(Cliente cliente);
 
-	Cliente buscar(Integer id);
+	Cliente buscar(Long id);
 
 	Cliente buscarPorNombreCompletoYEmpresa(String nombreCompleto, Empresa empresa);
 

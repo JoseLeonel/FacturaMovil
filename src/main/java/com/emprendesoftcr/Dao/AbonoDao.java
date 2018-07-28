@@ -12,7 +12,7 @@ public interface AbonoDao {
 
 	void eliminar(Abono abono);
 
-	Abono buscar(Integer id);	
+	Abono buscar(Long id);	
 	
 	Collection<Abono> buscarPorCuentaCobrar();
 

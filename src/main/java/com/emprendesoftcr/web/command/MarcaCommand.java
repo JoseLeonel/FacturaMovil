@@ -12,7 +12,7 @@ import com.emprendesoftcr.modelo.Marca;
  */
 public class MarcaCommand {
 
-	private Integer	id;
+	private Long	id;
 
 	private String	descripcion;
 
@@ -39,11 +39,15 @@ public class MarcaCommand {
 		super();
 	}
 
-	public Integer getId() {
+	
+
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
 

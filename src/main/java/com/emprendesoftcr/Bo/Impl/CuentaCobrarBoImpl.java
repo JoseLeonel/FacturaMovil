@@ -43,7 +43,7 @@ public class CuentaCobrarBoImpl implements CuentaCobrarBo {
 	 * @see com.factura.bo.CuentaCobrarBo#buscar(java.lang.Integer)
 	 */
 	@Override
-	public CuentaCobrar buscar(Integer id) {
+	public CuentaCobrar buscar(Long id) {
 		return cuentaCobrarDao.buscar(id);
 	}
 	

@@ -27,7 +27,7 @@ public class MotivoSalidaPropertyEditor extends PropertyEditorSupport {
 			setValue(null);
 		} else {
 
-			setValue(motivoSalidaBo.buscar(Integer.parseInt(idMotivoSalida)));
+			setValue(motivoSalidaBo.buscar(Long.parseLong(idMotivoSalida)));
 
 		}
 	}

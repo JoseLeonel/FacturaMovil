@@ -11,7 +11,7 @@ public interface VendedorDao {
 
 	void eliminar(Vendedor vendedor);
 
-	Vendedor buscar(Integer id);
+	Vendedor buscar(Long id);
 
 	Vendedor buscarPorNombreCompletoYEmpresa(String nombreCompleto, Empresa empresa);
 

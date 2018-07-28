@@ -40,7 +40,7 @@ public class VendedorDaoImpl implements VendedorDao {
 	 * @see com.factura.dao.VendedorDao#buscar(java.lang.Integer)
 	 */
 	@SuppressWarnings("unchecked")
-	public Vendedor buscar(Integer id) {
+	public Vendedor buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from Vendedor obj where obj.id = :id");
 		query.setParameter("id", id);
 		List<Vendedor> results = query.getResultList();

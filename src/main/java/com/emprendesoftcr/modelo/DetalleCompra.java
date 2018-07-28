@@ -37,7 +37,7 @@ public class DetalleCompra implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer						id;
+	private Long						id;
 
 	@Column(name = "numero_linea")
 	private Integer						numeroLinea;
@@ -80,7 +80,9 @@ public class DetalleCompra implements Serializable {
 	@JoinColumn(name = "articulo_id", nullable = false)
 	private Articulo					articulo;
 
-	public DetalleCompra(Integer id, Integer numeroLinea, Double costo, Double cantidad, Double impuesto, Double descuento, Double subTotal, Date created_at, Date updated_at, Compra compra, Articulo articulo) {
+	
+
+	public DetalleCompra(Long id, Integer numeroLinea, Double costo, Double cantidad, Double impuesto, Double descuento, Double subTotal, Date created_at, Date updated_at, Compra compra, Articulo articulo) {
 		super();
 		this.id = id;
 		this.numeroLinea = numeroLinea;
@@ -113,11 +115,15 @@ public class DetalleCompra implements Serializable {
 
 	
 
-	public Integer getId() {
+	
+
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
 

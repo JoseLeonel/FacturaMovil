@@ -12,7 +12,7 @@ import com.emprendesoftcr.modelo.Usuario;
 
 public class ArticuloCommand {
 
-	private Integer			id;
+	private Long			id;
 
 	private String			codigo;
 
@@ -43,6 +43,7 @@ public class ArticuloCommand {
 	private String			estado;
 
 	private String			tipoImpuesto;
+	private String						tipoCodigo;
 
 	private Date				created_at;
 
@@ -83,17 +84,22 @@ public class ArticuloCommand {
 		this.cantidad = BigDecimal.valueOf(resultado);
 		this.tipoImpuesto = articulo.getTipoImpuesto();
 		this.usuario = articulo.getUsuario();
+		this.tipoCodigo = articulo.getTipoCodigo();
 	}
 
 	public ArticuloCommand() {
 		super();
 	}
 
-	public Integer getId() {
+	
+
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -272,5 +278,17 @@ public class ArticuloCommand {
 	public void setCantidad(BigDecimal cantidad) {
 		this.cantidad = cantidad;
 	}
+
+	
+	public String getTipoCodigo() {
+		return tipoCodigo;
+	}
+
+	
+	public void setTipoCodigo(String tipoCodigo) {
+		this.tipoCodigo = tipoCodigo;
+	}
+	
+	
 
 }

@@ -32,7 +32,7 @@ public class MotivoEntrada implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer						id;
+	private Long						id;
 
 	@Column(name = "descripcion")
 	private String						descripcion;
@@ -66,7 +66,8 @@ public class MotivoEntrada implements Serializable {
 
 	}
 
-	public MotivoEntrada(Integer id, String descripcion, String estado, Date created_at, Date updated_at, Empresa empresa, Usuario usuario) {
+	
+	public MotivoEntrada(Long id, String descripcion, String estado, Date created_at, Date updated_at, Empresa empresa, Usuario usuario) {
 		super();
 		this.id = id;
 		this.descripcion = descripcion;
@@ -77,6 +78,7 @@ public class MotivoEntrada implements Serializable {
 		this.usuario = usuario;
 	}
 
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -85,13 +87,19 @@ public class MotivoEntrada implements Serializable {
 		this.usuario = usuario;
 	}
 
-	public Integer getId() {
+	
+
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
+
 
 	public String getDescripcion() {
 		return descripcion;

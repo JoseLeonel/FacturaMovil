@@ -52,7 +52,7 @@ public class MotivoEntradaBoImpl implements MotivoEntradaBo {
 	 * @see com.factura.bo.MotivoEntradaBo#buscar(java.lang.Integer)
 	 */
 	@Override
-	public MotivoEntrada buscar(Integer id) {
+	public MotivoEntrada buscar(Long id) {
 		return motivoEntradaDao.buscar(id);
 	}
 

@@ -11,7 +11,7 @@ public interface UsuarioCajaDao {
 
 	void eliminar(UsuarioCaja usuarioCaja);
 
-	UsuarioCaja buscar(Integer id);
+	UsuarioCaja buscar(Long id);
 	
 	UsuarioCaja findByUsuarioAndEstado(Usuario usuario,String estado);
 	

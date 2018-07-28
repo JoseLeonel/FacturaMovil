@@ -138,7 +138,7 @@ public class InventarioController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/AgregarInventarioAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @RequestParam("IdArticulo") Integer IdArticulo, @ModelAttribute Inventario inventario, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @RequestParam("IdArticulo") Long IdArticulo, @ModelAttribute Inventario inventario, BindingResult result, SessionStatus status) throws Exception {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
@@ -194,7 +194,7 @@ public class InventarioController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ModificarInventarioAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @RequestParam("IdArticulo") Integer IdArticulo, @ModelAttribute Inventario inventario, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @RequestParam("IdArticulo") Long IdArticulo, @ModelAttribute Inventario inventario, BindingResult result, SessionStatus status) throws Exception {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 

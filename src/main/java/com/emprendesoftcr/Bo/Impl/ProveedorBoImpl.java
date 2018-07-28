@@ -61,7 +61,7 @@ public class ProveedorBoImpl implements ProveedorBo {
 	 * @see com.factura.bo.ProveedorBo#buscar(java.lang.Integer)
 	 */
 	@Override
-	public Proveedor buscar(Integer id) {
+	public Proveedor buscar(Long id) {
 		return proveedorDao.buscar(id);
 	}
 

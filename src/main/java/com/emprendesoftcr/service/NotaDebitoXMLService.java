@@ -5,6 +5,6 @@ import com.emprendesoftcr.modelo.Factura;
 
 public interface NotaDebitoXMLService {
 
-	String getFirmarXML(String xmlString,Empresa empresa);
-	String getCrearXMLSinFirma(Factura factura);
+	String getFirmarXML(String xmlString,Empresa empresa) throws Exception;;
+	String getCrearXMLSinFirma(Factura factura) throws Exception;;
 }

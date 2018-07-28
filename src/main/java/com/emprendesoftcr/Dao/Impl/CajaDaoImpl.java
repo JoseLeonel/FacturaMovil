@@ -35,7 +35,7 @@ public class CajaDaoImpl implements CajaDao {
 	 * @see com.emprendesoftcr.Dao.CajaDao#buscar(java.lang.Long)
 	 */
 	@Override
-	public Caja buscar(Integer id) {
+	public Caja buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from Caja obj where obj.id = :id");
 		query.setParameter("id", id);
 		List<Caja> results = query.getResultList();

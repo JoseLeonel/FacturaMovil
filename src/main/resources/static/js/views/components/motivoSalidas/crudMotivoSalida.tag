@@ -163,6 +163,9 @@ self.on('mount',function(){
     __ComboEstados()
      __listadoEmpresasActivas()
      Limpiar()
+     window.addEventListener( "keydown", function(evento){
+             $(".errorServerSideJgrid").remove();
+        }, false );
 })
 /**
 * Camps requeridos

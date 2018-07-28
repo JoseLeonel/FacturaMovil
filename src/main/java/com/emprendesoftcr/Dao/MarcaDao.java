@@ -11,7 +11,7 @@ public interface MarcaDao {
 
 	void eliminar(Marca marca);
 
-	Marca buscar(Integer id);
+	Marca buscar(Long id);
 
 	Marca buscarPorDescripcionYEmpresa(String descripcion, Empresa empresa);
 	

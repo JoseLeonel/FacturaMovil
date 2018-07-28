@@ -38,7 +38,7 @@ public class Factura implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer						id;
+	private Long							id;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -84,14 +84,13 @@ public class Factura implements Serializable {
 
 	@Column(name = "medio_efectivo")
 	private String						medioEfectivo;
-	
+
 	@Column(name = "medio_tarjeta")
 	private String						medioTarjeta;
 
 	@Column(name = "medio_banco")
 	private String						medioBanco;
 
-	
 	@Column(name = "nombre_factura")
 	private String						nombreFactura;
 
@@ -215,9 +214,7 @@ public class Factura implements Serializable {
 
 	}
 
-	
-
-	public Factura(Integer id, Date fechaCredito, String numeroConsecutivo, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon, Date referenciaFechaEmision, String medioEfectivo, String medioTarjeta, String medioBanco, String nombreFactura, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta,
+	public Factura(Long id, Date fechaCredito, String numeroConsecutivo, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon, Date referenciaFechaEmision, String medioEfectivo, String medioTarjeta, String medioBanco, String nombreFactura, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta,
 			Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Set<Detalle> detalles) {
 		super();
 		this.id = id;
@@ -273,13 +270,11 @@ public class Factura implements Serializable {
 		this.detalles = detalles;
 	}
 
-
-
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -330,8 +325,6 @@ public class Factura implements Serializable {
 	public void setTipoDoc(String tipoDoc) {
 		this.tipoDoc = tipoDoc;
 	}
-
-	
 
 	public String getNombreFactura() {
 		return nombreFactura;
@@ -673,48 +666,28 @@ public class Factura implements Serializable {
 		this.referenciaFechaEmision = referenciaFechaEmision;
 	}
 
-
-
-	
 	public String getMedioEfectivo() {
 		return medioEfectivo;
 	}
 
-
-
-	
 	public void setMedioEfectivo(String medioEfectivo) {
 		this.medioEfectivo = medioEfectivo;
 	}
 
-
-
-	
 	public String getMedioTarjeta() {
 		return medioTarjeta;
 	}
 
-
-
-	
 	public void setMedioTarjeta(String medioTarjeta) {
 		this.medioTarjeta = medioTarjeta;
 	}
 
-
-
-	
 	public String getMedioBanco() {
 		return medioBanco;
 	}
 
-
-
-	
 	public void setMedioBanco(String medioBanco) {
 		this.medioBanco = medioBanco;
 	}
-	
-	
 
 }

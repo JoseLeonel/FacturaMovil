@@ -11,7 +11,7 @@ public interface ProveedorDao {
 
 	void eliminar(Proveedor proveedor);
 
-	Proveedor buscar(Integer id);
+	Proveedor buscar(Long id);
 
 	Proveedor buscarPorNombreCompletoYEmpresa(String nombreCompleto, Empresa empresa);
 

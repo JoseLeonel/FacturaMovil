@@ -12,7 +12,7 @@ import com.emprendesoftcr.modelo.CuentaCobrar;
  */
 public class AbonoCommand {
 
-	private Integer				id;
+	private Long				id;
 
 	private String				nota;
 
@@ -61,7 +61,12 @@ public class AbonoCommand {
 		
 	}
 
-	public AbonoCommand(Integer id, String nota, String recibo, String transferencia, Date fechaPago, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double total, String estado, Date created_at, Date updated_at, CuentaCobrar cuentaCobrar) {
+	
+	
+	
+	
+	
+	public AbonoCommand(Long id, String nota, String recibo, String transferencia, Date fechaPago, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double total, String estado, Date created_at, Date updated_at, CuentaCobrar cuentaCobrar) {
 		super();
 		this.id = id;
 		this.nota = nota;
@@ -78,17 +83,15 @@ public class AbonoCommand {
 		this.cuentaCobrar = cuentaCobrar;
 	}
 
-	
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
 	
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	
 	public String getNota() {
 		return nota;
 	}

@@ -78,7 +78,7 @@ public class CompraBoImpl implements CompraBo {
 	@Override
 	public void crearCompra(CompraCommand compraCommand,Usuario usuario) throws Exception {
 		try {
-			Compra compra = compraCommand.getId() == null || compraCommand.getId() == Constantes.ZEROS ?  new Compra():compraDao.findById(compraCommand.getId());
+			Compra compra = compraCommand.getId() == null || compraCommand.getId() == Constantes.ZEROS_LONG ?  new Compra():compraDao.findById(compraCommand.getId());
 			compra.setConsecutivo(compraCommand.getConsecutivo());
 			compra.setEmpresa(compraCommand.getEmpresa());
 			compra.setEstado(compraCommand.getEstado());
@@ -227,7 +227,7 @@ public class CompraBoImpl implements CompraBo {
 	 * @see com.emprendesoftcr.Bo.CompraBo#findById(java.lang.Integer)
 	 */
 	@Override
-	public Compra findById(Integer id) {
+	public Compra findById(Long id) {
 		return compraDao.findById(id);
 	}
 

@@ -36,7 +36,7 @@ public class Compra implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer							id;
+	private Long							id;
 
 	@Column(name = "consecutivo")
 	private String							consecutivo;
@@ -131,7 +131,9 @@ public class Compra implements Serializable {
 	
 	
 	
-	public Compra(Integer id, String consecutivo, Date fechaCredito, Date fechaPago, Date fechaCompra, Date fechaIngreso, Integer tipoDocumento, Integer formaPago, Double totalImpuesto, Double totalDescuento, Double subTotal, Double totalCompra, @Size(max = 255) String nota, Integer estado, Date created_at, Date updated_at, Proveedor proveedor, Empresa empresa, Usuario usuarioCreacion, Usuario usuarioIngresoInventario, Set<DetalleCompra> detalleCompras) {
+	
+	
+	public Compra(Long id, String consecutivo, Date fechaCredito, Date fechaPago, Date fechaCompra, Date fechaIngreso, Integer tipoDocumento, Integer formaPago, Double totalImpuesto, Double totalDescuento, Double subTotal, Double totalCompra, @Size(max = 255) String nota, Integer estado, Date created_at, Date updated_at, Proveedor proveedor, Empresa empresa, Usuario usuarioCreacion, Usuario usuarioIngresoInventario, Set<DetalleCompra> detalleCompras) {
 		super();
 		this.id = id;
 		this.consecutivo = consecutivo;
@@ -159,13 +161,24 @@ public class Compra implements Serializable {
 
 
 
-	public Integer getId() {
+
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+
+
+
+
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
+
+
+
+
 
 	public String getConsecutivo() {
 		return consecutivo;

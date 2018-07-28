@@ -11,7 +11,7 @@ public interface ArticuloBo {
 
 	void eliminar(Articulo articulo);
 
-	Articulo buscar(Integer id);
+	Articulo buscar(Long id);
 
 	Articulo buscarPorDescripcionYEmpresa(String descripcion, Empresa empresa);
 

@@ -40,7 +40,7 @@ public class TipoCambioDaoImpl implements TipoCambioDao {
 	 * @return
 	 */
 	@Override
-	public TipoCambio buscar(Integer id) {
+	public TipoCambio buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from TipoCambio obj where obj.id = :id");
 		query.setParameter("id", id);
 		List<TipoCambio> results = query.getResultList();

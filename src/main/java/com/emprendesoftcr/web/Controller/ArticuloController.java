@@ -225,16 +225,13 @@ public class ArticuloController {
 				if (articuloValidar != null) {
 					result.rejectValue("descripcion", "error.articulo.descripcion.existe");
 				}
-
 			}
 			if (!articuloBd.getCodigo().equals(articulo.getCodigo())) {
 				articuloValidar = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo(), articulo.getEmpresa());
 				if (articuloValidar != null) {
 					result.rejectValue("codigo", "error.articulo.codigo.existe");
 				}
-
 			}
-
 			if (articulo.getCosto() == null) {
 				result.rejectValue("costo", "error.articulo.costo.mayorCero");
 			}
@@ -256,7 +253,7 @@ public class ArticuloController {
 			articuloBd.setMarca(articulo.getMarca());
 			articuloBd.setCategoria(articulo.getCategoria());
 			articuloBd.setUnidadMedida(articulo.getUnidadMedida());
-			
+			articuloBd.setTipoCodigo(articulo.getTipoCodigo());
 			articuloBd.setEstado(Constantes.ESTADO_ACTIVO);
 			articuloBd.setGananciaPrecioPublico(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioPublico()));
 			articuloBd.setGananciaPrecioMayorista(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioMayorista()));

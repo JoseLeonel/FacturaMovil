@@ -12,7 +12,7 @@ import com.emprendesoftcr.modelo.Vendedor;
 
 public class FacturaEsperaCommand {
 
-	private Integer		id;
+	private Long		id;
 
 	private Date			fechaCredito;
 
@@ -155,13 +155,21 @@ public class FacturaEsperaCommand {
 		this.referenciaFechaEmision = factura.getReferenciaFechaEmision();
 	}
 
-	public Integer getId() {
+	
+
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+
+
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
+
+
 
 	public Date getFechaCredito() {
 		return fechaCredito;

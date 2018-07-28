@@ -5,7 +5,7 @@ import com.emprendesoftcr.modelo.Articulo;
 public class DetalleCompraCommand {
 
 	private Integer			linea;
-	private Integer			articulo_id;
+	private Long			articulo_id;
 	private String			codigo;
 	private String			descripcion;
 	private Double	cantidad;
@@ -27,11 +27,15 @@ public class DetalleCompraCommand {
 		this.linea = linea;
 	}
 
-	public Integer getArticulo_id() {
+
+
+	
+	public Long getArticulo_id() {
 		return articulo_id;
 	}
 
-	public void setArticulo_id(Integer articulo_id) {
+	
+	public void setArticulo_id(Long articulo_id) {
 		this.articulo_id = articulo_id;
 	}
 

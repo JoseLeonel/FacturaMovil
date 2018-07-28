@@ -52,7 +52,7 @@ public class MotivoSalidaBoImpl implements MotivoSalidaBo {
 	 * @see com.factura.bo.MotivoSalidaBo#buscar(java.lang.Integer)
 	 */
 	@Override
-	public MotivoSalida buscar(Integer id) {
+	public MotivoSalida buscar(Long id) {
 		return motivoSalidaDao.buscar(id);
 	}
 

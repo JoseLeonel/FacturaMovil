@@ -32,7 +32,7 @@ public class Vendedor implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer						id;
+	private Long						id;
 
 	@Column(name = "nombre_completo")
 	private String						nombreCompleto;
@@ -90,7 +90,10 @@ public class Vendedor implements Serializable {
 
 	
 
-	public Vendedor(Integer id, String nombreCompleto, String cedula, Integer celular, Integer telefono, String correoElectronico, String otraSena, Double descuento, Double porcentajeComision, String estado, Date created_at, Date updated_at, Empresa empresa, Usuario usuario) {
+	
+
+
+	public Vendedor(Long id, String nombreCompleto, String cedula, Integer celular, Integer telefono, String correoElectronico, String otraSena, Double descuento, Double porcentajeComision, String estado, Date created_at, Date updated_at, Empresa empresa, Usuario usuario) {
 		super();
 		this.id = id;
 		this.nombreCompleto = nombreCompleto;
@@ -110,15 +113,30 @@ public class Vendedor implements Serializable {
 
 
 
-	public Integer getId() {
+
+
+
+	
+
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+
+
+
+
+
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	
+
+
+
+
 
 	public String getCorreoElectronico() {
 		return correoElectronico;

@@ -40,7 +40,7 @@ public class CategoriaDaoImpl implements CategoriaDao {
  * @see com.factura.dao.CategoriaDao#buscar(java.lang.Integer)
  */
 	@SuppressWarnings("unchecked")
-	public Categoria buscar(Integer id) {
+	public Categoria buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from Categoria obj where obj.id = :id");
 		query.setParameter("id", id);
 		List<Categoria> results = query.getResultList();

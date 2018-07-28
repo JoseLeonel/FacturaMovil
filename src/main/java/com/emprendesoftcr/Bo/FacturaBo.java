@@ -15,7 +15,7 @@ public interface FacturaBo {
 
 	void eliminar(Factura factura);
 
-	Factura findById(Integer id);
+	Factura findById(Long id);
 
 	Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) throws Exception;
 	

@@ -11,7 +11,7 @@ public interface TipoCambioBo {
 
 	void eliminar(TipoCambio tipoCambio);
 
-	TipoCambio buscar(Integer id);
+	TipoCambio buscar(Long id);
 	TipoCambio findByEstadoAndEmpresa(String estado,Empresa empresa);
 	
 	Double conversionMoneda(Double total,TipoCambio tipoCambio);

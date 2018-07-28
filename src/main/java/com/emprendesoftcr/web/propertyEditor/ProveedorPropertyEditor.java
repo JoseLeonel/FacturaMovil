@@ -27,7 +27,7 @@ public class ProveedorPropertyEditor extends PropertyEditorSupport {
 			setValue(null);
 		} else {
 
-			setValue(proveedorBo.buscar(Integer.parseInt(idProveedor)));
+			setValue(proveedorBo.buscar(Long.parseLong(idProveedor)));
 
 		}
 	}

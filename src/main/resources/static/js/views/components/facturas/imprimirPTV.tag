@@ -10,80 +10,95 @@
                 <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir(F8)</a>
                 <a href="#" class="boton-imprimir" id="boton-regresar" onclick = {__RegresarVentaImprimir}><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Regresar(Esc)</a>
             </div>
-            <section class="zona-impresion" id="imprimeme">
+            <section class="zona-impresion" id="imprimeme" name ="imprimeme">
                 <div class="forma-impresion">
-                    <div class="ticket" > 
+                    <div class="ticket" id="ticket" name="ticket" > 
                         <div class="encabezado"><strong> {factura.empresa.nombre}                        </strong><br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.cedula")}       </strong>{facturaImpresa.empresa.cedula}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.telefono")}     </strong>{facturaImpresa.empresa.telefono}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.celular")}      </strong>{facturaImpresa.empresa.celular}<br></div>                                                 
-                        
-                        <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.numeroFactura")} </strong>{facturaImpresa.numeroConsecutivo}</div>
                         <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.fecha.emision")} </strong>{facturaImpresa.fechaEmision}</div>
-                        <div class="encabezado"></strong>{facturaImpresa.empresa.direccion}                     </strong></div><br>
+                        <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.condicion.venta")} </strong>{facturaImpresa.condicionVenta}</div>
+                        <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.plazo.credito")} </strong>{facturaImpresa.plazoCredito}</div>
+                        <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>{facturaImpresa.tipoDoc}</div>
+                        <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.moneda")}        </strong>{facturaImpresa.codigoMoneda}</div>
+                        <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.numeroFactura")} </strong>{facturaImpresa.numeroConsecutivo}</div>
+                        
+                        <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.cliente.nombreCompleto}</div>
+                        <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.receptor.cedula")}     </strong>{facturaImpresa.cliente.cedula}</div>
                         <table class = "forma-table"  >
                             <thead>
                                 <tr class = "forma-table">
                                     <th class="cantidad">{$.i18n.prop("tikect.detalle.cantidad")}  </th>
                                     <th class="producto">{$.i18n.prop("tikect.detalle.descripcion")}</th>
-                                    <th class="precio"> {$.i18n.prop("tikect.detalle.subTotal")}</th>
+                                    <th class="precio"> {$.i18n.prop("tikect.total.linea")}</th>
                                 </tr>
                             </thead>
                         <tbody>
                             <tr class = "" each={detalles} class="detalleTables">
                                 <td class="cantidad">{cantidad}</td>
-                                <td class="producto">{articulo.descripcion}</td>
-                                <td class="precio">₡{subTotal.toLocaleString('de-DE')}</td>
+                                <td class="producto">{descripcion}</td>
+                                <td class="precio">{montoTotalLinea.toLocaleString('de-DE')}</td>
                             </tr>
                             </tr>
                             <tr>
                             <td colspan="3"></td>
                             </tr>
                             <tr class = "forma-table">
+                            <td>*********</td>
+                            <td >{$.i18n.prop("tikect.ultima.linea")}</td>
+                            <td > *********  </td>
+                            </tr>
+                            <tr >
                             <td></td>
-                            <td ><strong>{$.i18n.prop("tikect.detalle.subTotal")}</strong></td>
-                            <td ><strong>₡{subTotalGeneral.toLocaleString('de-DE') } </strong>  </td>
+                            <td ><strong>{$.i18n.prop("tikect.total.venta")}</strong></td>
+                            <td ><strong>{facturaImpresa.totalVenta.toLocaleString('de-DE') } </strong>  </td>
+                            </tr>
+
+                            <tr>
+                            <td></td>
+                            <td ><strong>{$.i18n.prop("tikect.total.descuento")}</strong></td>
+                            <td ><strong>{facturaImpresa.totalDescuento.toLocaleString('de-DE')}</strong></td>
                             </tr>
                             <tr>
                             <td></td>
-                            <td ><strong>{$.i18n.prop("tikect.detalle.descuento")}</strong></td>
-                            <td ><strong>₡{facturaImpresa.totalDescuento.toLocaleString('de-DE')}</strong></td>
+                            <td><strong>{$.i18n.prop("tikect.total.venta.neta")}</strong></td>
+                            <td><strong>{facturaImpresa.totalVentaNeta.toLocaleString('de-DE')}</strong></td>
                             </tr>
                             <tr>
                             <td></td>
-                            <td><strong>{$.i18n.prop("tikect.detalle.impuesto")}</strong></td>
-                            <td><strong>₡{facturaImpresa.totalImpuesto.toLocaleString('de-DE')}</strong></td>
+                            <td ><strong>{$.i18n.prop("tikect.total.impuesto")}</strong></td>
+                            <td ><strong>{facturaImpresa.totalImpuesto.toLocaleString('de-DE')}</strong></td>
                             </tr>
                             <tr>
                             <td></td>
-                            <td ><strong>{$.i18n.prop("tikect.detalle.total")}</strong></td>
-                            <td ><strong>₡{facturaImpresa.totalComprobante.toLocaleString('de-DE')}</strong></td>
+                            <td ><strong>{$.i18n.prop("tikect.total.exento")}</strong></td>
+                            <td ><strong>{facturaImpresa.totalExento.toLocaleString('de-DE')}</strong></td>
                             </tr>
+                            <tr>
+                            <td></td>
+                            <td ><strong>{$.i18n.prop("tikect.total.comprobante")}</strong></td>
+                            <td ><strong>{facturaImpresa.totalComprobante.toLocaleString('de-DE')}</strong></td>
+                            </tr>
+
                             <tr>
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.totalCambioPagar")}</strong></td>
-                            <td ><strong>₡{facturaImpresa.totalCambioPagar.toLocaleString('de-DE')}</strong></td>
+                            <td ><strong>{facturaImpresa.totalCambioPagar.toLocaleString('de-DE')}</strong></td>
                             </tr>                            
-                            <tr>
-                            <td></td>
-                            <td ><strong>{$.i18n.prop("tikect.tipoCambio")}</strong></td>
-                            <td ><strong>₡{facturaImpresa.tipoCambio.toLocaleString('de-DE')}</strong></td>
-                            </tr>                            
-                            <tr>
-                            <td></td>
-                            <td ><strong>{$.i18n.prop("tikect.Cambio")}</strong></td>
-                            <td ><strong>$ {facturaImpresa.cambioMoneda.toLocaleString('de-DE')}</strong></td>
-                            </tr>                            
+                                                 
 
                             <tr>
-                            <td colspan="3"></td>
+                            <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
                             </tr>
                             
                         </tbody>
                         </table> 
+                        
+                        <br>
                         <p  align="left">{$.i18n.prop("tikect.autorizado.parte.uno")}  <br>
                                          {$.i18n.prop("tikect.autorizado.parte.dos")}   
-                                            <br>{$.i18n.prop("tikect.autorizado.parte.tres")}</p>
+                                            <br>{$.i18n.prop("tikect.autorizado.parte.tres")}
+                                            <br>{$.i18n.prop("tikect.autorizado.parte.cuatro")}</p>
                         <br>
                         <div class="encabezado">{$.i18n.prop("tikect.final")}</div>           
                     </div>
@@ -96,6 +111,9 @@
     </div>
   </div>
 </div>
+
+ 
+
 
 
 <style type="text/css">
@@ -242,6 +260,17 @@
         align-content: left;
         text-align: left;
     }
+  @media print {
+* {
+    -webkit-print-color-adjust: exact !important; /*Chrome, Safari */
+    color-adjust: exact !important;  /*Firefox*/
+  }
+}
+@media only print
+{
+    body * { display: none !important; }
+    body:after { content: "Don't waste paper!"; }
+}
 
 </style>    
 <script>
@@ -261,10 +290,35 @@ self.on('mount',function(){
        $('.imprimirModal').modal('show'); 
     }
     getSubTotalGeneral()
+    getMoneda()
+    __ComboTipoDocumentos()
+    buscarTipoDocumento()
+    __comboCondicionPago()
+    buscarCondicionPago()
+   // $(".divQR").qrcode({
+   //     render:'canvas',
+   //     width:100,
+   //     height:100,
+    //    color:'#343',
+    //    text:self.facturaImpresa.clave
+   // })
+
    __Teclas()
 
 })
 
+
+function getMoneda() {
+	var resultado = "CRC-Colones Costa Rica";
+	if(self.facturaImpresa.codigoMoneda == "CRC") {
+		resultado = "CRC-Colones Costa Rica";
+	}else if(self.facturaImpresa.codigoMoneda == "USD") {
+		resultado = "USD-Dolares";
+	}
+	
+    self.facturaImpresa.codigoMoneda = resultado
+    self.update()
+}
 
 function getSubTotalGeneral(){
     var resultado = __valorNumerico(self.facturaImpresa.subTotal) + __valorNumerico(self.facturaImpresa.totalDescuento)
@@ -301,16 +355,99 @@ __ImprimirfacturaImpresa(){
 }
 
 /**
+ * Buscar la condicion de Pago
+ * **/
+function buscarCondicionPago(){
+    for (var count = 0; count < self.comboCondicionPagos.length; count++) {
+        if (self.comboCondicionPagos[count].estado == self.facturaImpresa.condicionVenta ){// Si existe actualiza la cantidad
+            self.facturaImpresa.condicionVenta =self.comboCondicionPagos[count].descripcion
+            self.update()
+            break;
+        }
+    }
+
+}
+
+/**
+* cargar los estados de la factura
+**/
+function __comboCondicionPago(){
+    self.comboCondicionPagos = []
+    self.update()
+    self.comboCondicionPagos.push({
+        estado:"01",
+        descripcion:$.i18n.prop("factura.codicion.venta.contado")
+    })
+    self.comboCondicionPagos.push({
+        estado:"02",
+        descripcion:$.i18n.prop("factura.codicion.venta.credito")
+    })
+    self.update()
+}
+
+
+/**
+ * Buscar el tipo de documento
+ * **/
+function buscarTipoDocumento(){
+    for (var count = 0; count < self.comboTipoDocumentos.length; count++) {
+        if (self.comboTipoDocumentos[count].estado == self.facturaImpresa.tipoDoc ){// Si existe actualiza la cantidad
+            self.facturaImpresa.tipoDoc =self.comboTipoDocumentos[count].descripcion
+            self.update()
+            break;
+        }
+    }
+}
+
+/**
+* cargar los tipos de Documento de la factura
+**/
+function __ComboTipoDocumentos(){
+    self.comboTipoDocumentos = []
+    self.update()
+    self.comboTipoDocumentos.push({
+        estado:"04",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
+    })
+    self.comboTipoDocumentos.push({
+         estado:"01",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
+    })
+    self.comboTipoDocumentos.push({
+         estado:"02",
+        descripcion:$.i18n.prop("factura.tipo.documento.nota.debito")
+    })
+    self.comboTipoDocumentos.push({
+         estado:"03",
+        descripcion:$.i18n.prop("factura.tipo.documento.nota.credito")
+    })
+    self.update()
+}
+
+/**
 *imprimir
 **/
 function __imprimir(){
     var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
-    var ventana=window.open('','_blank');  //abrimos una ventana vacía nueva
-    ventana.document.write(objeto.innerHTML);  //imprimimos el HTML del objeto en la nueva ventana
-    ventana.document.close();  //cerramos el documento
-    ventana.print();  //imprimimos la ventana
-    ventana.close();  //cerramos la ventana
+     var div = document.querySelector("#imprimeme");
+    imprimirElemento(div)
+
 }
+
+
+function imprimirElemento(elemento){
+  var ventana = window.open('', 'PRINT', 'height=400,width=600');
+  ventana.document.write('<html><head><title>' + "" + '</title>');
+  ventana.document.write('</head><body >');
+  ventana.document.write(elemento.innerHTML);
+  ventana.document.write('</body></html>');
+  ventana.document.close();
+  ventana.focus();
+  ventana.print();
+  ventana.close();
+  return true;
+}
+
 
 /**
 *  retorna el valor numerico o cero sino es numerico

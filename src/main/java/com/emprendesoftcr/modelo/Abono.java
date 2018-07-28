@@ -32,7 +32,7 @@ public class Abono implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer						id;
+	private Long						id;
 
 	@Column(name = "nota")
 	private String						nota;
@@ -93,16 +93,50 @@ public class Abono implements Serializable {
 	}
 
 	
-	public Integer getId() {
+	
+
+	
+	
+	public Abono(Long id, String nota, String recibo, String transferencia, Date fechaPago, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double total, String estado, Date created_at, Date updated_at, CuentaCobrar cuentaCobrar, Usuario usuario) {
+		super();
+		this.id = id;
+		this.nota = nota;
+		this.recibo = recibo;
+		this.transferencia = transferencia;
+		this.fechaPago = fechaPago;
+		this.totalEfectivo = totalEfectivo;
+		this.totalTarjeta = totalTarjeta;
+		this.totalBanco = totalBanco;
+		this.total = total;
+		this.estado = estado;
+		this.created_at = created_at;
+		this.updated_at = updated_at;
+		this.cuentaCobrar = cuentaCobrar;
+		this.usuario = usuario;
+	}
+
+
+
+
+
+
+	public Long getId() {
 		return id;
 	}
 
+
+
+
+
 	
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	
+
+
+
+
 	public String getNota() {
 		return nota;
 	}

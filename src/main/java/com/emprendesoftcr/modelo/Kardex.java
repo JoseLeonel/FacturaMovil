@@ -30,7 +30,7 @@ public class Kardex implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer						id;
+	private Long						id;
 
 	@Column(name = "cantidad_solicitada")
 	private Double						cantidadSolicitada;
@@ -93,7 +93,9 @@ public class Kardex implements Serializable {
 
 	}
 
-	public Kardex(Integer id, Double cantidadSolicitada, Double cantidadActual, Double costoActual, Double totalCostoActual, String codigo, String observacion, Double cantidadNueva, Double costoNuevo, Double totalCostoNuevo, String consecutivo, String tipo, String motivo, Date created_at, Date updated_at, Articulo articulo, Usuario usuario) {
+	
+
+	public Kardex(Long id, Double cantidadSolicitada, Double cantidadActual, Double costoActual, Double totalCostoActual, String codigo, String observacion, Double cantidadNueva, Double costoNuevo, Double totalCostoNuevo, String consecutivo, String tipo, String motivo, Date created_at, Date updated_at, Articulo articulo, Usuario usuario) {
 		super();
 		this.id = id;
 		this.cantidadSolicitada = cantidadSolicitada;
@@ -114,13 +116,21 @@ public class Kardex implements Serializable {
 		this.usuario = usuario;
 	}
 
-	public Integer getId() {
+
+
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+
+
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
+
+
 
 	public Double getCantidadSolicitada() {
 		return cantidadSolicitada;

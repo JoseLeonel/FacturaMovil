@@ -53,7 +53,7 @@ public class ArticuloBoImpl implements ArticuloBo {
 	 * @see com.factura.bo.ArticuloBo#buscar(java.lang.Integer)
 	 */
 	@Override
-	public Articulo buscar(Integer id) {
+	public Articulo buscar(Long id) {
 		return articuloDao.buscar(id);
 	}
 

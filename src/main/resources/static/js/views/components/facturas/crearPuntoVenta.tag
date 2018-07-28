@@ -15,7 +15,7 @@
                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("factura.condicion.pago")} </label> 
-                                        <select  onchange= {__formaPago} class="form-control" id="condicionVenta" >
+                                        <select  onchange= {__formaPago} class="form-control condicionVenta" id="condicionVenta" name="condicionVenta">
                                             <option each={comboCondicionPagos} value="{estado}" selected="{factura.condicionVenta ==estado?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>
@@ -24,7 +24,7 @@
                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                     <div class="form-group ">
                                         <label for="pago_tipoVentaL">{$.i18n.prop("factura.tipo.documento")} </label> 
-                                        <select class="form-control" id="tipoDoc" name="tipoDoc"   >
+                                        <select onchange= {__formaReferencias} class="form-control tipoDoc" id="tipoDoc" name="tipoDoc"   >
                                             <option each={comboTipoDocumentos} value="{estado}" selected="{factura.tipoDoc ==estado?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>
@@ -33,23 +33,36 @@
                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                     <div class="form-group ">
                                         <label for="pago_tipoVentaL">{$.i18n.prop("factura.estado")} </label> 
-                                        <select class="form-control" id="estado" name="estado"  >
+                                        <select class="form-control estado" id="estado" name="estado"  >
                                             <option each={comboEstados} value="{estado}" selected="{factura.estado ==estado?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                    <div class="form-group ">
+                                    <div class="form-group has-success " show = {!mostrarCamposIngresoContado || factura.fechaCredito}>
                                         <label>{$.i18n.prop("factura.plazoCredito")}</label> 
-                                        <input type="number" id = "plazoCredito"  name "plazoCredito" class="form-control " value="{factura.plazoCredito}" >
+                                        <input type="number" id = "plazoCredito"  name "plazoCredito" class="form-control plazoCredito" value="{factura.plazoCredito}" >
                                     </div>
                                 </div>
-                            </div>    
+                            </div>   
+                            <div class="row">
+                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                                    <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group has-success">
+                                        <label >{$.i18n.prop("factura.fecha.credito")}</label> 
+                                        <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
+                                            <input type="text" class="form-control fechaCredito" name="fechaCredito" id="fechaCredito" value="{factura.fechaCredito}" >
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>
+                                    </div>    
+                                </div>
+                            </div>        
                             <div class="row">
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                     <div class="form-group ">
                                         <label >{$.i18n.prop("factura.nota")}</label> 
-                                        <input type="text" class="form-control" id="nota" name="nota" value="{factura.direccion}">
+                                        <input type="text" class="form-control nota" id="nota" name="nota" value="{factura.nota}">
                                     </div>
                                 </div>
                             </div>
@@ -64,9 +77,13 @@
                             
                             <div class="row">
                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                   <h3> <p>{$.i18n.prop("factura.emisor")}</p></h3>
+                                   <h3> <p class="text-primary">{$.i18n.prop("factura.emisor")}</p></h3>
+                                  
                                 </div>
-                                <div class= "col-md-9 col-sm-9 col-lg-9"></div>
+                                <div class= "col-md-9 col-sm-9 col-lg-9 pull-right">
+                                    <a class="pull-right" href="#" onclick = {__LimpiarFormulario} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("btn.limpiar")}</span></a>
+                                
+                                </div>
                             </div>
                             <br>
                             <div class="row">
@@ -100,20 +117,20 @@
                           <div class="row">
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label  >{$.i18n.prop("cliente.provincia")} </label>
-                                <select onchange= {__cargaCantones}  class="form-control" id="provincia" name="provincia"  disabled>
+                                <select onchange= {__cargaCantones}  class="form-control provincia" id="provincia" name="provincia"  disabled>
                                     <option  each={provincias.data}  value="{codigo}" selected="{cliente.provincia ==codigo?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label  >{$.i18n.prop("cliente.canton")} </label>
-                                <select onchange= {__cargaDistritos}    class="form-control" id="canton" name="canton" disabled>
+                                <select onchange= {__cargaDistritos}    class="form-control canton" id="canton" name="canton" disabled>
                                     <option  each={cantones.data}  value="{codigo}" selected="{cliente.canton ==codigo?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
 
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label  >{$.i18n.prop("cliente.distrito")} </label>
-                                <select  onchange= {__cargaBarrios}    class="form-control" id="distrito" name="distrito" disabled >
+                                <select  onchange= {__cargaBarrios}    class="form-control distrito" id="distrito" name="distrito" disabled >
                                     <option  each={distritos.data}  value="{codigo}" selected="{cliente.distrito ==codigo?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
@@ -124,8 +141,7 @@
                                 </select>
                             </div>                        
 
-                        </div>                        
-
+                          </div>                        
                             <div class="row">
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                     <div class="form-group ">
@@ -142,9 +158,60 @@
                                     </div>
                                 </div>
                             </div> 
+                            <div show={mostrarReferencias}>
+                                <div class="row">
+                                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                        <div class="form-group ">
+                                            <h3><label class="text-primary">{$.i18n.prop("informacion.referencias")}</label> </h3>
+                                        </div>
+                                    </div>
+                                </div> 
+                            
+                                <div class="row">
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                        <div class="form-group ">
+                                            <label>{$.i18n.prop("informacion.numero")}</label> 
+                                            <input type="text" onkeypress={__consultarConsecutivo} name = "referenciaNumero" id="referenciaNumero" class="form-control has-success referenciaNumero" value="{factura.referenciaNumero}" >
+                                        </div>
+                                    </div> 
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                        <div class="form-group ">
+                                            <label>{$.i18n.prop("informacion.TipoDoc")}</label> 
+                                            <select class="form-control has-success" id="referenciaTipoDoc" name="referenciaTipoDoc"   >
+                                                <option each={comboTipoDocumentos} value="{estado}" selected="{factura.referenciaTipoDoc ==estado?true:false}" >{descripcion}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                        <div class="form-group ">
+                                            <label>{$.i18n.prop("informacion.FechaEmision")}</label> 
+                                            <input type="text" class="form-control has-success " id = "referenciaFechaEmision" name = "referenciaFechaEmision" value="{factura.referenciaFechaEmision}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                        <div class="form-group ">
+                                            <label>{$.i18n.prop("informacion.codigo")}</label> 
+                                            <select class="form-control has-success" id="referenciaCodigo" name="referenciaCodigo" >
+                                                <option each={codigosReferencias}  value="{estado}" selected="{factura.referenciaCodigo ==estado?true:false}" >{descripcion}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div> 
+                                <div class="row">
+                                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                        <div class="form-group ">
+                                            <label>{$.i18n.prop("informacion.razon")}</label> 
+                                            <input type="text" class="form-control " id"referenciaRazon" name= "referenciaRazon" value="{factura.referenciaRazon}" max="250" >
+                                        </div>
+                                    </div>
+
+                                </div>      
+                            </div>
+                                          
                             <div class="row">
                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                   <h3> <p>{$.i18n.prop("factura.titulo.vendedor")}</p></h3>
+                                   <h3> <p class="text-primary">{$.i18n.prop("factura.titulo.vendedor")}</p></h3>
                                 </div>
                                 <div class= "col-md-9 col-sm-9 col-lg-9"></div>
                             </div>
@@ -170,19 +237,26 @@
                                     </div>
                                 </div>
                             </div>      
-                            <div class="row">
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                                    <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group has-success">
-                                        <label >{$.i18n.prop("factura.fecha.credito")}</label> 
-                                        <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
-                                            <input type="text" class="form-control" id="fechaCredito" value="{factura.fechaCredito}" >
-                                            <div class="input-group-addon">
-                                                <span class="glyphicon glyphicon-th"></span>
-                                            </div>
-                                        </div>
-                                    </div>    
-                                </div>
-                            </div>                             
+                            <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
+                            <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
+                            <input type="hidden" id='subTotal'                name='subTotal'                value="{factura.subTotal}" >
+                            <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
+                            <input type="hidden" id='totalComprobante'        name='totalComprobante'        value="{factura.totalComprobante}" >
+                            <input type="hidden" id='totalServGravados'       name='totalServGravados'       value="{factura.totalServGravados}" >
+                            <input type="hidden" id='totalServExentos'        name='totalServExentos'        value="{factura.totalServExentos}" >
+                            <input type="hidden" id='totalMercanciasGravadas' name='totalMercanciasGravadas' value="{factura.totalMercanciasGravadas}" >
+                            <input type="hidden" id='totalMercanciasExentas'  name='totalMercanciasExentas'  value="{factura.totalMercanciasExentas}" >
+                            <input type="hidden" id='totalGravado'            name='totalGravado'            value="{factura.totalGravado}" >
+                            <input type="hidden" id='totalExento'             name='totalExento'             value="{factura.totalExento}" >
+                            <input type="hidden" id='totalVenta'              name='totalVenta'              value="{factura.totalVenta}" >
+                            <input type="hidden" id='totalDescuento'          name='totalDescuento'          value="{factura.totalDescuento}" >
+                            <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
+                            <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           value="{factura.totalImpuesto}" >
+                            <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
+                            <input type="hidden" id='totalTarjeta'            name='totalTarjeta'            value="{factura.totalTarjeta}" >
+                            <input type="hidden" id='totalBanco'              name='totalBanco'              value="{factura.totalBanco}" >
+                            <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
+                            <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
        
                         </form>   
                     </div>                    
@@ -204,17 +278,15 @@
                             </div>
                             <div class="booking-info tituloTotal">
                                 <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.total")} <span id="lblTotal">₡ {factura.totalComprobante.toLocaleString('de-DE')}</span></p>
-                                <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("tipoCambio.cambioDolar")} <span id="lblTotal">{tipoCambio.total.toLocaleString('de-DE')}</span></p>
-                                <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.totalDolar")} <span id="lblTotal">{factura.cambioMoneda.toLocaleString('de-DE')}</span></p>
                                 <br>
                                 <div show = {mostrarCamposIngresoContado }>
 
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.efectivo")}</p> 
-                                    <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales " id="totalEfectivo" name="totalEfectivo"  value="" >
+                                    <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalBanco " id="totalEfectivo" name="totalEfectivo"  value="" >
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.tarjeta")}</p> 
-                                    <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales" id="totalTarjeta" name="totalTarjeta"   >
+                                    <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"   >
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.banco")}</p> 
-                                    <input onkeyup={ __TotalDeBancoAPagar} onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales" id="totalBanco" name="totalBanco"  value="" >
+                                    <input onkeyup={ __TotalDeBancoAPagar} onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalBanco" id="totalBanco" name="totalBanco"  value="" >
                                     <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">₡ {factura.totalCambioPagar.toLocaleString('de-DE')}</span></p>
                                 </div>
 
@@ -667,7 +739,7 @@
         font-weight: 600;
     }
     .tituloTotal{
-        font-size:30px;
+        font-size:25px;
     }
 </style>
 
@@ -743,12 +815,14 @@
     self.mostrarFormularioPago         = false
     self.mostarParaCrearNuevaFactura   = true
     self.mostrarCamposIngresoContado   = true
+    self.mostrarReferencias            = false 
     self.subTotalGeneral               = 0
 
     self.on('mount',function(){
          
          
         $("#formularioFactura").validate(reglasDeValidacionFactura());
+         
         __informacionData()
         __informacionData_vendedores()
         __InicializarTabla('.tableListaCliente')
@@ -769,9 +843,56 @@
        __Teclas()
        __TipoCambio()
        __cargaProvincias()
+       __comboCondicionPagoRef()
+         window.addEventListener( "keydown", function(evento){
+             $(".errorServerSideJgrid").remove();
+        }, false );
+     
     })
 
+__LimpiarFormulario(){
+    $(".plazoCredito").val(null)   
+    $(".fechaCredito").val(null)   
+    
+    $(".nota").val(null)   
+    $(".direccion").val(null)   
+    $(".referenciaFechaEmision").val(null)
+    $('.referenciaNumero').val(null)
+    $('.referenciaRazon').val(null)
+    $('.referenciaTipoDoc').prop("selectedIndex", 0);
+    $('.referenciaCodigo').prop("selectedIndex", 0);
+    $('.provincia').prop("selectedIndex", 0);
+    $('.canton').prop("selectedIndex", 0);
+    $('.distrito').prop("selectedIndex", 0);
+    $('.barrio').prop("selectedIndex", 0);
+    $('.condicionVenta').prop("selectedIndex", 0);
+    $('.tipoDoc').prop("selectedIndex", 0);
+    self.cliente               = {}
+    self.vendedor              = {
+        id:0,
+        nombreCompleto:""
+    };
+    self.mostrarCamposIngresoContado = true
+    self.update()
+     
+}
 
+__formaReferencias(e){
+    if($('#tipoDoc').val() !="01" && $('#tipoDoc').val() !="04"){
+       self.mostrarReferencias            = true
+       self.update()  
+    }else{
+        self.mostrarReferencias            = false
+        self.update()
+        $(".referenciaFechaEmision").val(null)
+        $('.referenciaNumero').val(null)
+        $('.referenciaRazon').val(null)
+        $('.referenciaTipoDoc').prop("selectedIndex", 0);
+        $('.referenciaCodigo').prop("selectedIndex", 0);
+    }
+    
+    
+}
 
 /**
 * Camps requeridos
@@ -792,6 +913,59 @@ var reglasDeValidacionFactura = function() {
 	});
 	return validationOptions;
 };
+
+
+
+
+__consultarConsecutivo(e){
+    if (e.keyCode != 13) {
+        return;
+    } 
+    __referenciaConsecutivo(e.currentTarget.value);
+}
+
+/**
+*  Informacion del consecutivo de la factura para las notas de creditos y debito
+**/
+function __referenciaConsecutivo(consecutivo){
+   
+    $(".referenciaFechaEmision").val(null)
+    $('.referenciaTipoDoc').prop("selectedIndex", 0);
+    $('.referenciaCodigo').prop("selectedIndex", 0);
+     
+   $.ajax({
+        url: "ConsultarConsecutivoAjax",
+        datatype: "json",
+        data: {consecutivo:consecutivo},
+        method:"POST",
+        success: function (data) {
+            if (data.status != 200) {
+                serverMessageJsonClase(data);
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                serverMessageJsonClase(data);
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                       self.factura.referenciaFechaEmision = modeloTabla.fechaEmision
+                       self.factura.referenciaTipoDoc      = modeloTabla.referenciaTipoDoc
+                       self.update()
+                        
+                        $("referenciaFechaEmision").val(modeloTabla.fechaEmision)
+                    });
+                }
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+}
+
+
+
 
 /**
 *  Provincias
@@ -860,12 +1034,9 @@ function _ConsultarCantonesByProvincias(){
 /**
 * cuando cambia los cantones cambia los distritos
 **/
-
 __cargaDistritos(){
     _ConsultarDistritosByCanton()
-
 }
-
 /**
 *  Cantones
 **/
@@ -990,6 +1161,9 @@ function __TipoCambio(){
 
 }
 
+/**
+* Imprimir 
+**/
 __Imprimir(){
     var factura = self.factura
     riot.mount('ptv-imprimir',{factura:factura});
@@ -1066,6 +1240,9 @@ __AplicarYcrearFactura(){
  aplicarFactura()
 }
 
+/**
+* Aplicar la factura
+**/
 function aplicarFactura(){
     if(self.detail.length == 0 ){
         mensajeError($.i18n.prop("factura.alert.sin.detalles"))
@@ -1104,7 +1281,7 @@ function aplicarFactura(){
             
         }
     } 
-    if ($("#formularioFactura").valid()) {
+if ($("#formularioFactura").valid()) {
         swal({
            title: '',
            text: $.i18n.prop("factura.alert.crear"),
@@ -1124,7 +1301,11 @@ function aplicarFactura(){
             }
         });
     }
+
+
 }
+
+
 /**
 * Limpiar Pantalla
 **/
@@ -1208,8 +1389,28 @@ function __Init(){
     self.mostarParaCrearNuevaFactura    = true
     self.mostrarCamposIngresoContado   = true;
     self.update();
+    $(".referenciaNumero").val(null)
+    $(".referenciaFechaEmision").val(null)
+    $('.referenciaTipoDoc').prop("selectedIndex", 0);
+    $('.referenciaCodigo').prop("selectedIndex", 0);
+    $('#condicionVenta').prop("selectedIndex", 0);
+    $('#tipoDoc').prop("selectedIndex", 0);
+    $('#estado').prop("selectedIndex", 0);
+    $('#provincia').prop("selectedIndex", 0);
+    $('#canton').prop("selectedIndex", 0);
+    $('#distrito').prop("selectedIndex", 0);
+    $('#barrio').prop("selectedIndex", 0);
+
+    $("#plazoCredito").val(null)
+    $("#nota").val(null)
+    $("#fechaCredito").val(null)
+    $("#cambiarCantidadArticulo").val(null)
+    $("#aplicarDescuento").val(null)
+
+    
     // Tipo de Pagos
      __comboCondicionPago()
+     __comboCondicionPagoRef()
      //Tipos de Documentos
       __ComboTipoDocumentos()
       //Estados
@@ -1217,8 +1418,6 @@ function __Init(){
      __ListaFacturasEnEspera()
     
 }
-
-
 
 /**
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
@@ -1254,6 +1453,7 @@ function __FacturaEnEspera(factura){
         }
     });
 }
+
 /**
 *  Cargar detalles Factura en espera
 **/
@@ -1262,10 +1462,8 @@ function cargarDetallesFacturaEnEspera(){
     self.update()
     self.factura.detalles.forEach(function(e){
         self.detail.push({
-            numeroLinea     : e.numeroLinea,
-            articulo_id     : e.articulo.id,
-            codigo          : e.articulo.codigo,
-            descripcion     : e.articulo.descripcion,
+            codigo          : e.codigo,
+            descripcion     : e.descripcion,
             cantidad        : redondearDecimales(parseFloat(e.cantidad),5),
             precioUnitario  : redondearDecimales(parseFloat(e.precioUnitario),5),
             impuesto        : redondearDecimales(parseFloat(e.impuesto),5),
@@ -1298,49 +1496,26 @@ function crearFactura(){
     self.detalleFactura.data =self.detail
     self.update() 
     var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
+    var fechaReferencia =$('#referenciaFechaEmision').val() !=null?referenciaFechaEmision.value:new Date() 
      var JSONDetalles = JSON.stringify( self.detalleFactura );
-    var informacion = {
-        id:self.factura.id,
-	    fechaCredito:fechaCreditoTemporal.toString(),
-	    condicionVenta:$('#condicionVenta').val(),
-	    plazoCredito:$('#plazoCredito').val(),
-	    tipoDoc:$('#tipoDoc').val(),
-	    medioPago:$('#medioPago').val(),
-	    nombreFactura:self.factura.nombreFactura,
-	    direccion:$('#direccion').val(),
-	    nota:$('#nota').val(),
-	    comanda:self.factura.comanda,
-	    subTotal:self.factura.subTotal,
-	    totalTransporte:self.factura.totalTransporte,
-	    total:self.factura.total,
-	    totalServGravados:self.factura.totalServGravados,
-	    totalServExentos:self.factura.totalServExentos,
-	    totalMercanciasGravadas:self.factura.totalMercanciasGravadas,
-	    totalMercanciasExentas:self.factura.totalMercanciasExentas,
-	    totalGravado:self.factura.totalGravado,
-	    totalExento:self.factura.totalExento,
-	    totalVenta:self.factura.totalVenta,
-	    totalDescuentos:self.factura.totalDescuento,
-	    totalVentaNeta:self.factura.totalVentaNeta,
-	    totalImpuesto:self.factura.totalImpuesto,
-	    totalComprobante:self.factura.totalComprobante,
-	    totalEfectivo:$('#totalEfectivo').val() ==null || $('#totalEfectivo').val() ==0?0:$('#totalEfectivo').val(),
-	    totalTarjeta:$('#totalTarjeta').val() ==null   || $('#totalTarjeta').val() ==0?0: $('#totalTarjeta').val(),
-	    totalBanco:$('#totalBanco').val() == null      || $('#totalBanco').val() == 0?0:$('#totalBanco').val() ,
-	    totalCredito:0,
-        totalCambioPagar:self.factura.totalCambioPagar,
-	    montoCambio:0,
-	    totalCambio:0,
-	    estado:$('#estado').val(),
-	    cliente:$('#cliente').val(),
-        vendedor:$('#vendedor').val() == null?0:$('#vendedor').val(),
-        detalleFactura :JSONDetalles,
-
-    }                  
+    
+    self.factura.id = self.factura.id
+    self.factura.condicionVenta = $('#condicionVenta').val()
+    self.factura.fechaCredito =fechaCreditoTemporal.toString()
+    self.factura.referenciaFechaEmision =fechaReferencia
+    self.factura.totalEfectivo =$('#totalEfectivo').val()
+    self.factura.totalTarjeta = redondearDecimales(__valorNumerico($('#totalTarjeta').val())) 
+    self.factura.totalBanco = redondearDecimales(__valorNumerico($('#totalBanco').val()))
+    self.factura.detalleFactura =JSONDetalles
+    self.update();
+    
+    var formulario = $("#formularioFactura").serialize();
+     
+                    
     $.ajax({
         type : "POST",
         dataType : "json",
-        data : informacion,
+        data : formulario,
         url : "CrearFacturaAjax",
         success : function(data) {
             if (data.status != 200) {
@@ -1681,17 +1856,16 @@ function __nuevoArticuloAlDetalle(cantidad){
     var montoDescuento  = 0
     var naturalezaDescuento = ""
     var subTotal        = montoTotal
-    var montoImpuesto   = _calcularImpuesto(subTotal,self.articulo.impuesto ==null?0:self.articulo.impuesto)
+    var montoImpuesto   = _calcularImpuesto(subTotal,parseFloat(self.articulo.impuesto) ==null?0:parseFloat(self.articulo.impuesto))
     var montoTotalLinea = subTotal + montoImpuesto 
     self.detail.push({
        numeroLinea     : 1,
-       iva             : self.articulo.impuesto,
-       articulo_id     : self.articulo.id,
+       iva             : parseFloat(self.articulo.impuesto),
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
        cantidad        : parseFloat(cantidad),
        precioUnitario  : precioUnitario,
-       impuesto        : self.articulo.impuesto,
+       impuesto        : parseFloat(self.articulo.impuesto),
        montoImpuesto   : montoImpuesto,
        montoDescuento  : 0,
        porcentajeDesc  : 0,
@@ -2093,6 +2267,41 @@ function __comboCondicionPago(){
         estado:"02",
         descripcion:$.i18n.prop("factura.codicion.venta.credito")
     })
+    self.update()
+}
+
+
+/**
+* cargar los codigos de referencias
+**/
+function __comboCondicionPagoRef(){
+    self.codigosReferencias = []
+    self.update()
+    self.codigosReferencias.push({
+        estado:"01",
+        descripcion:$.i18n.prop("referencia.anula.documento")
+    })
+    self.codigosReferencias.push({
+        estado:"02",
+        descripcion:$.i18n.prop("referencia.corrige.texto.documento")
+    })    
+    self.codigosReferencias.push({
+        estado:"03",
+        descripcion:$.i18n.prop("referencia.corrige.texto.documento")
+    })   
+    self.codigosReferencias.push({
+        estado:"04",
+        descripcion:$.i18n.prop("referencia.otro.documento")
+    })    
+    self.codigosReferencias.push({
+        estado:"05",
+        descripcion:$.i18n.prop("referencia.sustituye.comprobante.documento")
+    })    
+    self.codigosReferencias.push({
+        estado:"99",
+        descripcion:$.i18n.prop("referencia.otros.documento")
+    })    
+
     self.update()
 }
 /**

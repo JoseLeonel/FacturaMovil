@@ -11,7 +11,7 @@ public interface InventarioBo {
 
 	void eliminar(Inventario inventario);
 
-	Inventario buscar(Integer id);
+	Inventario buscar(Long id);
 
 	Inventario buscarPorArticulo(Articulo articulo);
 

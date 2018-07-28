@@ -27,7 +27,7 @@ public class ArticuloPropertyEditor extends PropertyEditorSupport {
 			setValue(null);
 		} else {
 
-			setValue(articuloBo.buscar(Integer.parseInt(idArticulo)));
+			setValue(articuloBo.buscar(Long.parseLong(idArticulo)));
 
 		}
 	}

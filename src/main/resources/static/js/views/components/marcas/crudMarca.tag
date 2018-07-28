@@ -165,6 +165,9 @@ self.on('mount',function(){
     __Eventos()
     __ComboEstados()
     Limpiar()
+    window.addEventListener( "keydown", function(evento){
+             $(".errorServerSideJgrid").remove();
+        }, false );
     
 })
 
@@ -209,11 +212,11 @@ function Limpiar(){
 function __ComboEstados(){
     self.estados =[]
     self.estados.push({
-        codigo: 1,
+        codigo: $.i18n.prop("combo.estado.Activo"),
         descripcion:$.i18n.prop("combo.estado.Activo")
      });
     self.estados.push({
-        codigo: 2,
+        codigo: $.i18n.prop("combo.estado.Inactivo"),
         descripcion: $.i18n.prop("combo.estado.Inactivo")
      });
      self.update();

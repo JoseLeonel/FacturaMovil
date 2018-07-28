@@ -25,7 +25,7 @@ public class Caja implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer						id;
+	private Long							id;
 
 	@Column(name = "descripcion")
 	private String						descripcion;
@@ -54,7 +54,7 @@ public class Caja implements Serializable {
 	@JoinColumn(name = "usuario_id")
 	private Usuario						usuario;
 
-	public Caja(Integer id, String descripcion, String terminal, String estado, Date created_at, Date updated_at, Empresa empresa, Usuario usuario) {
+	public Caja(Long id, String descripcion, String terminal, String estado, Date created_at, Date updated_at, Empresa empresa, Usuario usuario) {
 		super();
 		this.id = id;
 		this.descripcion = descripcion;
@@ -66,17 +66,15 @@ public class Caja implements Serializable {
 		this.usuario = usuario;
 	}
 
-	
 	public Caja() {
 		super();
 	}
 
-
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

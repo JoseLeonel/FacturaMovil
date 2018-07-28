@@ -46,6 +46,7 @@ import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.components.OpenIDConnectHaciendaComponent;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
+import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
@@ -93,10 +94,10 @@ public class FacturasController {
 																																																			//
 																																																			DetalleFacturaElectronica detalleFacturaElectronica = new DetalleFacturaElectronica();
 																																																			detalleFacturaElectronica.setLinea(Integer.parseInt(d.getNumeroLinea().toString()));
-																																																			detalleFacturaElectronica.setCodigo(d.getArticulo().getCodigo());
-																																																			detalleFacturaElectronica.setUnidad(d.getArticulo().getUnidadMedida());
+																																																			detalleFacturaElectronica.setCodigo(d.getCodigo());
+																																																			detalleFacturaElectronica.setUnidad(d.getUnidadMedida());
 																																																			detalleFacturaElectronica.setCantidad(d.getCantidad());
-																																																			detalleFacturaElectronica.setDescripcion(d.getArticulo().getDescripcion());
+																																																			detalleFacturaElectronica.setDescripcion(d.getDescripcion());
 																																																			detalleFacturaElectronica.setPrecioU(d.getPrecioUnitario());
 																																																			detalleFacturaElectronica.setMonto(d.getMontoTotal());
 																																																			detalleFacturaElectronica.setDescuento(d.getMontoDescuento());
@@ -261,7 +262,7 @@ public class FacturasController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/generaFacturaPDF", method = RequestMethod.GET, headers = "Accept=application/json")
-	public void generarFacturaPDF(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Integer idFactura) throws IOException {
+	public void generarFacturaPDF(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura) throws IOException {
 		try {
 			Factura factura = facturaBo.findById(idFactura);
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
@@ -313,7 +314,7 @@ public class FacturasController {
 
 	@RequestMapping(value = "/ListarFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer idCliente) {
+	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Cliente cliente = clienteBo.buscar(idCliente);
 		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cliente, usuarioSesion.getEmpresa());
@@ -342,6 +343,20 @@ public class FacturasController {
 
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.cajas.abierta", result.getAllErrors());
 				}
+			}
+			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
+				if(facturaCommand.getReferenciaNumero() !=null) {
+					Factura facturaTem = facturaBo.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(),usuario.getEmpresa());
+					if(facturaTem ==null) {
+						result.rejectValue("referenciaNumero", "mensajes.no.existe.consecutivo");	
+					}else {
+						
+						facturaCommand.setReferenciaTipoDoc(facturaCommand.getTipoDoc());
+						
+					}
+					
+				}
+				
 			}
 			TipoCambio tipoCambio = tipoCambioBo.findByEstadoAndEmpresa(Constantes.ESTADO_ACTIVO, usuario.getEmpresa());
 			if (tipoCambio == null) {
@@ -455,7 +470,7 @@ public class FacturasController {
 
 	@RequestMapping(value = "/MostrarFacturaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer idFactura) {
+	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idFactura) {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
 
@@ -471,6 +486,35 @@ public class FacturasController {
 			// llaveCriptografica.setPathSignature(usuario.getEmpresa().getNombreLlaveCriptografica());
 			// XadesSigner xadesSigner = llaveCriptograficaService.getSigner(usuario.getEmpresa().getNombreLlaveCriptografica(),usuario.getEmpresa().getClaveLlaveCriptografica().toString());
 			// keyStore = llaveCriptograficaService.getKeyStore(llaveCriptografica);
+
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", facturaBD);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param request
+	 * @param response
+	 * @param consecutivo
+	 * @param result
+	 * @param status
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/ConsultarConsecutivoAjax", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator consultarConsecutivo(HttpServletRequest request, ModelMap model,@ModelAttribute Factura factura,HttpServletResponse response, @RequestParam String consecutivo, BindingResult result, SessionStatus status) {
+		try {
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Factura facturaBD = facturaBo.findByConsecutivoAndEmpresa(consecutivo,usuario.getEmpresa());
+			if(facturaBD == null) {
+				result.rejectValue("referenciaNumero", "mensajes.no.existe.consecutivo");
+			}
+		  if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", facturaBD);
 		} catch (Exception e) {

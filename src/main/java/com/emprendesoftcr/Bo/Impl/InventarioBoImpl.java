@@ -44,7 +44,7 @@ public class InventarioBoImpl implements InventarioBo {
 	 * @see com.factura.bo.InventarioBo#buscar(java.lang.Integer)
 	 */
 	@Override
-	public Inventario buscar(Integer id) {
+	public Inventario buscar(Long id) {
 		return inventarioDao.buscar(id);
 	}
 /**

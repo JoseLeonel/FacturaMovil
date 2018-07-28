@@ -50,7 +50,7 @@ public class CategoriaBoImpl implements CategoriaBo {
 	 * @see com.factura.bo.CategoriaBo#buscar(java.lang.Integer)
 	 */
 	@Override
-	public Categoria buscar(Integer id) {
+	public Categoria buscar(Long id) {
 		return categoriaDao.buscar(id);
 	}
 

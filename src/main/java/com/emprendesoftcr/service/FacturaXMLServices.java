@@ -7,11 +7,11 @@ import com.emprendesoftcr.pdf.FacturaElectronica;
 public interface FacturaXMLServices {
 	
 	
-	String getFirmarXML(String xmlString,Empresa empresa);
+	String getFirmarXML(String xmlString,Empresa empresa) throws Exception ;
 	
-	 String  getCrearXMLSinFirma(Factura factura);
+	 String  getCrearXMLSinFirma(Factura factura) throws Exception;
 	 
-	 FacturaElectronica getFacturaAPDF(String xml);
+	 FacturaElectronica getFacturaAPDF(String xml) throws Exception;
 	 
 	 
 	 ;

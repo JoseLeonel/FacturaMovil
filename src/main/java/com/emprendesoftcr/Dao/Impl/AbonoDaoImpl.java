@@ -40,7 +40,7 @@ public class AbonoDaoImpl implements AbonoDao {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public Abono buscar(Integer id) {
+	public Abono buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from Abono obj where obj.id = :id");
 		query.setParameter("id", id);
 		List<Abono> results = query.getResultList();

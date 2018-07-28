@@ -11,7 +11,7 @@ public interface HaciendaBo {
 
 	void modificar(Hacienda hacienda);
 
-	Hacienda findById(Integer id);
+	Hacienda findById(Long id);
 
 	Collection<Hacienda> findByEmpresaAndEstado(Empresa empresa, Integer estado);
 

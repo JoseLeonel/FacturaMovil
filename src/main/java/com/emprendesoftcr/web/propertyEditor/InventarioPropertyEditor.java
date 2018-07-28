@@ -27,7 +27,7 @@ public class InventarioPropertyEditor extends PropertyEditorSupport {
 			setValue(null);
 		} else {
 
-			setValue(inventarioBo.buscar(Integer.parseInt(idInventario)));
+			setValue(inventarioBo.buscar(Long.parseLong(idInventario)));
 
 		}
 	}

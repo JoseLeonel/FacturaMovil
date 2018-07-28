@@ -37,7 +37,7 @@ public class ProveedorDaoImpl implements ProveedorDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Proveedor buscar(Integer id) {
+	public Proveedor buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from Proveedor obj where obj.id = :id");
 		query.setParameter("id", id);
 		List<Proveedor> results = query.getResultList();

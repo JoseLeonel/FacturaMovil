@@ -6,7 +6,7 @@ import com.emprendesoftcr.modelo.Factura;
 public interface TiqueteXMLService {
 
 	
-	String getFirmarXML(String xmlString,Empresa empresa);
+	String getFirmarXML(String xmlString,Empresa empresa) throws Exception;;
 	
-	 String  getCrearXMLSinFirma(Factura factura);
+	 String  getCrearXMLSinFirma(Factura factura) throws Exception;;
 }

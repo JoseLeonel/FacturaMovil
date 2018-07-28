@@ -53,7 +53,7 @@ public class MarcaBoImpl implements MarcaBo {
 	 * @see com.factura.bo.MarcaBo#buscar(java.lang.Integer)
 	 */
 	@Override
-	public Marca buscar(Integer id) {
+	public Marca buscar(Long id) {
 		return marcaDao.buscar(id);
 	}
 

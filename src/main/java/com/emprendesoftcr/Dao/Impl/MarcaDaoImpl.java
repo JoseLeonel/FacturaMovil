@@ -42,7 +42,7 @@ public class MarcaDaoImpl implements MarcaDao {
 	 * @see com.factura.dao.MarcaDao#buscar(java.lang.Integer)
 	 */
 	@Override
-	public Marca buscar(Integer id) {
+	public Marca buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from Marca obj where obj.id = :id");
 		query.setParameter("id", id);
 		List<Marca> results = query.getResultList();

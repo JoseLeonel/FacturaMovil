@@ -165,10 +165,12 @@ self.on('mount',function(){
 
     __listado()
     includeActions('.dataTables_wrapper','.dataTables_length')
-    __listadoEmpresasActivas()
     __MantenimientoAgregar()
     __Eventos()
     __ComboEstados()
+    window.addEventListener( "keydown", function(evento){
+             $(".errorServerSideJgrid").remove();
+        }, false );
     
 })
 

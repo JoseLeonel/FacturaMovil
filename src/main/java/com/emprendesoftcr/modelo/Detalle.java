@@ -26,6 +26,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * Articulos relacionados a la venta Detalle.
  * @author jose.
  * @since 22 abr. 2018
+ * Tomo la decision de hacer la relacion de articulo porque pensando en manejar la factura como un servicio aparte
+ * en el futuro dividir el proyecto en administrativo y ventas
  */
 
 @Entity
@@ -37,10 +39,25 @@ public class Detalle implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer						id;
+	private Long						id;
 
 	@Column(name = "numero_linea")
 	private Integer						numeroLinea;
+
+	@Column(name = "codigo")
+	private String						codigo;
+
+	@Column(name = "descripcion")
+	private String						descripcion;
+
+	@Column(name = "tipo_codigo")
+	private String						tipoCodigo;
+	
+	@Column(name = "tipo_impuesto")
+	private String						tipoImpuesto;
+
+	@Column(name = "unidad_medida")
+	private String						unidadMedida;
 
 	@Column(name = "precio_unitario")
 	private Double						precioUnitario;
@@ -94,11 +111,7 @@ public class Detalle implements Serializable {
 	@JoinColumn(name = "factura_id")
 	private Factura						factura;
 
-	@ManyToOne
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JoinColumn(name = "articulo_id")
-	private Articulo					articulo;
-
+	
 	@JsonIgnore
 	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -112,52 +125,87 @@ public class Detalle implements Serializable {
 
 	}
 
-	public Detalle(Integer id, Integer numeroLinea, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, String naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double ganancia, Double porcentajeDesc, String observacion, Date created_at, Date updated_at, Factura factura, Articulo articulo, Usuario usuario) {
-		super();
-		this.id = id;
-		this.numeroLinea = numeroLinea;
-		this.precioUnitario = precioUnitario;
-		this.cantidad = cantidad;
-		this.montoTotal = montoTotal;
-		this.montoDescuento = montoDescuento;
-		this.naturalezaDescuento = naturalezaDescuento;
-		this.subTotal = subTotal;
-		this.impuesto = impuesto;
-		this.montoImpuesto = montoImpuesto;
-		this.montoTotalLinea = montoTotalLinea;
-		this.ganancia = ganancia;
-		this.porcentajeDesc = porcentajeDesc;
-		this.observacion = observacion;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
-		this.factura = factura;
-		this.articulo = articulo;
-		this.usuario = usuario;
-	}
-
 	public Detalle(DetalleFacturaCommand detalleFacturaCommand) {
 		super();
 		this.id = detalleFacturaCommand.getId();
 		this.numeroLinea = detalleFacturaCommand.getNumeroLinea();
 		this.precioUnitario = detalleFacturaCommand.getPrecioUnitario();
-    this.cantidad = detalleFacturaCommand.getCantidad();
-		this.montoTotal =detalleFacturaCommand.getMontoTotal();
-    this.montoDescuento = detalleFacturaCommand.getMontoDescuento();
-		this.naturalezaDescuento =  detalleFacturaCommand.getNaturalezaDescuento() == null?Constantes.EMPTY:detalleFacturaCommand.getNaturalezaDescuento();
-    this.subTotal = detalleFacturaCommand.getSubTotal();
-    this.impuesto = detalleFacturaCommand.getImpuesto();
-    this.montoImpuesto = detalleFacturaCommand.getMontoImpuesto() ;
-    this.montoTotalLinea = detalleFacturaCommand.getMontoTotalLinea();
-    this.ganancia = Constantes.ZEROS_DOUBLE;
-    this.porcentajeDesc = detalleFacturaCommand.getPorcentajeDesc() != null?detalleFacturaCommand.getPorcentajeDesc():Constantes.ZEROS_DOUBLE;
-	}
+		this.cantidad = detalleFacturaCommand.getCantidad();
+		this.montoTotal = detalleFacturaCommand.getMontoTotal();
+		this.montoDescuento = detalleFacturaCommand.getMontoDescuento();
+		this.naturalezaDescuento = detalleFacturaCommand.getNaturalezaDescuento() == null ? Constantes.EMPTY : detalleFacturaCommand.getNaturalezaDescuento();
+		this.subTotal = detalleFacturaCommand.getSubTotal();
+		this.impuesto = detalleFacturaCommand.getImpuesto();
+		this.montoImpuesto = detalleFacturaCommand.getMontoImpuesto();
+		this.montoTotalLinea = detalleFacturaCommand.getMontoTotalLinea();
+		this.ganancia = Constantes.ZEROS_DOUBLE;
+		this.porcentajeDesc = detalleFacturaCommand.getPorcentajeDesc() != null ? detalleFacturaCommand.getPorcentajeDesc() : Constantes.ZEROS_DOUBLE;
+		this.descripcion = detalleFacturaCommand.getDescripcion();
+		this.tipoCodigo = detalleFacturaCommand.getTipoCodigo();
+		this.codigo = detalleFacturaCommand.getCodigo();
+		this.unidadMedida = detalleFacturaCommand.getUnidadMedida();
+		this.tipoImpuesto = detalleFacturaCommand.getTipoImpuesto();
 
-	public Integer getId() {
+	}
+	
+	
+
+
+
+
+
+	
+	
+	
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	
+	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getTipoImpuesto() {
+		return tipoImpuesto;
+	}
+
+	
+	public void setTipoImpuesto(String tipoImpuesto) {
+		this.tipoImpuesto = tipoImpuesto;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+
+	public String getUnidadMedida() {
+		return unidadMedida;
+	}
+
+	public void setUnidadMedida(String unidadMedida) {
+		this.unidadMedida = unidadMedida;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public String getTipoCodigo() {
+		return tipoCodigo;
+	}
+
+	public void setTipoCodigo(String tipoCodigo) {
+		this.tipoCodigo = tipoCodigo;
 	}
 
 	public Integer getNumeroLinea() {
@@ -288,14 +336,7 @@ public class Detalle implements Serializable {
 		this.factura = factura;
 	}
 
-	public Articulo getArticulo() {
-		return articulo;
-	}
-
-	public void setArticulo(Articulo articulo) {
-		this.articulo = articulo;
-	}
-
+	
 	public Usuario getUsuario() {
 		return usuario;
 	}

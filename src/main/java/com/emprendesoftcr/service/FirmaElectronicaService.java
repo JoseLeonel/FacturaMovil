@@ -4,6 +4,6 @@ import com.emprendesoftcr.modelo.Certificado;
 
 public interface FirmaElectronicaService {
 	
-	String getFirmarDocumento(Certificado certificado,String xmlSinFimar,String urlXMLNS);
+	String getFirmarDocumento(Certificado certificado,String xmlSinFimar,String urlXMLNS) throws Exception;
 
 }

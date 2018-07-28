@@ -27,7 +27,7 @@ public class CuentaCobrarPropertyEditor extends PropertyEditorSupport {
 			setValue(null);
 		} else {
 
-			setValue(cuentaCobrarBo.buscar(Integer.parseInt(idCobrar)));
+			setValue(cuentaCobrarBo.buscar(Long.parseLong(idCobrar)));
 
 		}
 	}

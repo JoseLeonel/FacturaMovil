@@ -32,7 +32,7 @@ public class UsuarioCajaPropertyEditor extends PropertyEditorSupport {
 			setValue(null);
 		} else {
 
-			setValue(usuarioCajaBo.buscar(Integer.parseInt(idUsuarioCaja)));
+			setValue(usuarioCajaBo.buscar(Long.parseLong(idUsuarioCaja)));
 
 		}
 	}

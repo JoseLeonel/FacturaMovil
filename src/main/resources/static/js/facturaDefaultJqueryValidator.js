@@ -17,7 +17,7 @@ jQuery.extend(jQuery.validator.messages, {
     number: "Ingrese n\u00FAmero v\u00E1lido",
     digits: "Ingrese solo d\u00EDgitos.",    
     equalTo: "Ingrese el mismo valor de nuevo.",  
-    maxlength: jQuery.validator.format("Ingrese maximo {0} caracteres."),
+    maxlength: jQuery.validator.format("Ingrese {0} caracteres."),
     minlength: jQuery.validator.format("Ingrese al menos {0} caracteres."),
     rangelength: jQuery.validator.format("Ingrese un valor entre {0} y {1} caracteres."),
     range: jQuery.validator.format("Ingrese un valor entre {0} y {1} caracteres."),

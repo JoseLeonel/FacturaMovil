@@ -11,7 +11,7 @@ public interface CategoriaDao {
 
 	void eliminar(Categoria categoria);
 
-	Categoria buscar(Integer id);
+	Categoria buscar(Long id);
 
 	Categoria buscarPorDescripcionYEmpresa(String descripcion, Empresa empresa);
 

@@ -11,7 +11,7 @@ public interface CajaBo {
 
 	void eliminar(Caja caja);
 
-	Caja buscar(Integer id);
+	Caja buscar(Long id);
 	
 	Caja findByDescripcionAndEmpresa(String descripcion, Empresa empresa);
 

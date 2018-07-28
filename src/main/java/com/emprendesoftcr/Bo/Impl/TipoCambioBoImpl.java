@@ -44,7 +44,7 @@ public class TipoCambioBoImpl implements TipoCambioBo {
 	 * @see com.factura.bo.CuentaCobrarBo#buscar(java.lang.Integer)
 	 */
 	@Override
-	public TipoCambio buscar(Integer id) {
+	public TipoCambio buscar(Long id) {
 		return tipoCambioDao.buscar(id);
 	}
 

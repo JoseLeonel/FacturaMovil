@@ -10,6 +10,6 @@ public interface UsuarioCajaFacturaDao {
 
 	void eliminar(UsuarioCajaFactura usuarioCajaFactura);
 
-	UsuarioCajaFactura buscar(Integer id);
+	UsuarioCajaFactura buscar(Long id);
 
 }

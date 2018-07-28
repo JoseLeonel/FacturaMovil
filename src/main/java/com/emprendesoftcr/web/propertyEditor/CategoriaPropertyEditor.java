@@ -27,7 +27,7 @@ public class CategoriaPropertyEditor extends PropertyEditorSupport {
 			setValue(null);
 		} else {
 
-			setValue(categoriaBo.buscar(Integer.parseInt(idCategoria)));
+			setValue(categoriaBo.buscar(Long.parseLong(idCategoria)));
 
 		}
 	}

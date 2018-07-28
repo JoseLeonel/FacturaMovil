@@ -28,7 +28,7 @@ public class TipoCambio implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer	id;
+	private Long	id;
 
 	@Column(name = "moneda")
 	private String	moneda;
@@ -60,7 +60,9 @@ public class TipoCambio implements Serializable{
 	
 	
 
-	public TipoCambio(Integer id, String moneda, Double total, String estado, Date created_at, Date updated_at, Usuario usuario, Empresa empresa) {
+	
+
+	public TipoCambio(Long id, String moneda, Double total, String estado, Date created_at, Date updated_at, Usuario usuario, Empresa empresa) {
 		super();
 		this.id = id;
 		this.moneda = moneda;
@@ -76,11 +78,15 @@ public class TipoCambio implements Serializable{
 		super();
 	}
 
-	public Integer getId() {
+	
+
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
 

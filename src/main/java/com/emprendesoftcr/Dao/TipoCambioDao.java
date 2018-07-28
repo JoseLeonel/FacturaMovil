@@ -11,7 +11,7 @@ public interface TipoCambioDao {
 
 	void eliminar(TipoCambio tipoCambio);
 
-	TipoCambio buscar(Integer id);
+	TipoCambio buscar(Long id);
 	TipoCambio findByEstadoAndEmpresa(String estado,Empresa empresa);
 
 }

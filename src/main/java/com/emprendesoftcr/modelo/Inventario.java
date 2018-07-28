@@ -32,7 +32,7 @@ public class Inventario implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer						id;
+	private Long							id;
 
 	@Column(name = "cantidad")
 	private Double						cantidad;
@@ -64,8 +64,6 @@ public class Inventario implements Serializable {
 	@JoinColumn(name = "usuario_id")
 	private Usuario						usuario;
 
-	
-
 	public Inventario() {
 		super();
 		this.estado = Constantes.ESTADO_ACTIVO;
@@ -74,9 +72,7 @@ public class Inventario implements Serializable {
 
 	}
 
-	
-
-	public Inventario(Integer id, Double cantidad, Double minimo, Double maximo, String estado, Date created_at, Date updated_at, Articulo articulo, Usuario usuario) {
+	public Inventario(Long id, Double cantidad, Double minimo, Double maximo, String estado, Date created_at, Date updated_at, Articulo articulo, Usuario usuario) {
 		super();
 		this.id = id;
 		this.cantidad = cantidad;
@@ -89,13 +85,11 @@ public class Inventario implements Serializable {
 		this.usuario = usuario;
 	}
 
-
-
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -155,9 +149,6 @@ public class Inventario implements Serializable {
 		this.articulo = articulo;
 	}
 
-
-
-	
 	public Usuario getUsuario() {
 		return usuario;
 	}

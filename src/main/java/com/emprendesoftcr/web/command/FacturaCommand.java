@@ -13,7 +13,7 @@ import com.emprendesoftcr.modelo.Vendedor;
  */
 public class FacturaCommand {
 
-	private Integer		id;
+	private Long		id;
 
 	private String		fechaCredito;
 
@@ -41,7 +41,7 @@ public class FacturaCommand {
 
 	private String		referenciaRazon;
 
-	private Date			referenciaFechaEmision;
+	private String			referenciaFechaEmision;
 
 	private String		nota;
 
@@ -110,13 +110,22 @@ public class FacturaCommand {
 
 	
 
-	public Integer getId() {
+
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+
+
+
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
+
+
+
 
 	public String getDetalleFactura() {
 		return detalleFactura;
@@ -158,13 +167,21 @@ public class FacturaCommand {
 		this.referenciaRazon = referenciaRazon;
 	}
 
-	public Date getReferenciaFechaEmision() {
+	
+
+	
+	public String getReferenciaFechaEmision() {
 		return referenciaFechaEmision;
 	}
 
-	public void setReferenciaFechaEmision(Date referenciaFechaEmision) {
+
+
+	
+	public void setReferenciaFechaEmision(String referenciaFechaEmision) {
 		this.referenciaFechaEmision = referenciaFechaEmision;
 	}
+
+
 
 	public String getFechaCredito() {
 		return fechaCredito;

@@ -30,7 +30,7 @@ public class UsuarioCaja implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer						id;
+	private Long						id;
 
 	@Column(name = "total_fondo_inicial")
 	private Double						totalFondoInicial;
@@ -74,7 +74,9 @@ public class UsuarioCaja implements Serializable {
 	@Column(name = "estado")
 	private String						estado;
 
-	public UsuarioCaja(Integer id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalNeto, Usuario usuario, Caja caja, Date created_at, Date updated_at, String estado) {
+	
+
+	public UsuarioCaja(Long id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalNeto, Usuario usuario, Caja caja, Date created_at, Date updated_at, String estado) {
 		super();
 		this.id = id;
 		this.totalFondoInicial = totalFondoInicial;
@@ -91,17 +93,27 @@ public class UsuarioCaja implements Serializable {
 		this.estado = estado;
 	}
 
+
+
 	public UsuarioCaja() {
 		super();
 	}
 
-	public Integer getId() {
+	
+
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+
+
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
+
+
 
 	public Double getTotalFondoInicial() {
 		return totalFondoInicial;

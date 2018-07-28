@@ -42,7 +42,7 @@ public class HaciendaBoImpl implements HaciendaBo {
 	}
 
 	@Override
-	public Hacienda findById(Integer id) {
+	public Hacienda findById(Long id) {
 
 		return haciendaDao.findById(id);
 	}

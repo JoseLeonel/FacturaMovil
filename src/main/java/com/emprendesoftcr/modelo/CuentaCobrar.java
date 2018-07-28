@@ -37,7 +37,7 @@ public class CuentaCobrar implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer						id;
+	private Long						id;
 
 	@Column(name = "recibo")
 	private String						recibo;
@@ -137,7 +137,9 @@ public class CuentaCobrar implements Serializable {
 
 	}
 
-	public CuentaCobrar(Integer id, String recibo, String letraCambio, String factura, Integer facturaManual, Double totalComision, Double descuento, Double cantidadPagos, Double montoCouta, Double total, Double totalAbono, Double totalSaldo, String descripcionArticulo, String nota, String tipo, String estado, Date fechaPlazo, Date fechaEntrega, Date created_at, Date updated_at, Cliente cliente, Usuario usuario, Empresa empresa, Vendedor vendedor, Set<Abono> abonos) {
+
+
+	public CuentaCobrar(Long id, String recibo, String letraCambio, String factura, Integer facturaManual, Double totalComision, Double descuento, Double cantidadPagos, Double montoCouta, Double total, Double totalAbono, Double totalSaldo, String descripcionArticulo, String nota, String tipo, String estado, Date fechaPlazo, Date fechaEntrega, Date created_at, Date updated_at, Cliente cliente, Usuario usuario, Empresa empresa, Vendedor vendedor, Set<Abono> abonos) {
 		super();
 		this.id = id;
 		this.recibo = recibo;
@@ -166,13 +168,21 @@ public class CuentaCobrar implements Serializable {
 		this.abonos = abonos;
 	}
 
-	public Integer getId() {
+
+
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+
+
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
+
+
 
 	public String getRecibo() {
 		return recibo;

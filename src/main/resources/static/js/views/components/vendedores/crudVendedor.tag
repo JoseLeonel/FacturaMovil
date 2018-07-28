@@ -216,6 +216,10 @@ self.on('mount',function(){
     __listado()
     __MantenimientoAgregar()
     __ComboEstados()
+
+    window.addEventListener( "keydown", function(evento){
+             $(".errorServerSideJgrid").remove();
+        }, false );
   
 })
 /**

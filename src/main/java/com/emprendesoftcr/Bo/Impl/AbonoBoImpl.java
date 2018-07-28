@@ -44,7 +44,7 @@ public class AbonoBoImpl implements AbonoBo {
 	 * @see com.factura.bo.CuentaCobrarBo#buscar(java.lang.Integer)
 	 */
 	@Override
-	public Abono buscar(Integer id) {
+	public Abono buscar(Long id) {
 		return abonoDao.buscar(id);
 	}
 

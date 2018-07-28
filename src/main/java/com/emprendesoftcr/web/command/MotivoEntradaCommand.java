@@ -7,7 +7,7 @@ import com.emprendesoftcr.modelo.MotivoEntrada;
 
 public class MotivoEntradaCommand {
 
-	private Integer	id;
+	private Long	id;
 
 	private String	descripcion;
 
@@ -34,11 +34,14 @@ public class MotivoEntradaCommand {
 		super();
 	}
 
-	public Integer getId() {
+	
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
 

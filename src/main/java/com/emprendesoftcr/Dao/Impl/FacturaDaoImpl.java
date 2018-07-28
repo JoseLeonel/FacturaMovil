@@ -43,7 +43,7 @@ public class FacturaDaoImpl implements FacturaDao {
 	 * @return
 	 */
 	@Override
-	public Factura findById(Integer id) {
+	public Factura findById(Long id) {
 		Query query = entityManager.createQuery("select obj from Factura obj where obj.id = :id");
 		query.setParameter("id", id);
 		List<Factura> results = query.getResultList();

@@ -31,7 +31,7 @@ public class UsuarioCajaFactura implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer						id;
+	private Long						id;
 
 	@ManyToOne
 	@JoinColumn(name = "usuarioCaja_id")
@@ -51,7 +51,14 @@ public class UsuarioCajaFactura implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
-	public UsuarioCajaFactura(Integer id, UsuarioCaja usuarioCaja, Factura factura, Date created_at, Date updated_at) {
+	
+	public UsuarioCajaFactura() {
+		super();
+	}
+
+	
+
+	public UsuarioCajaFactura(Long id, UsuarioCaja usuarioCaja, Factura factura, Date created_at, Date updated_at) {
 		super();
 		this.id = id;
 		this.usuarioCaja = usuarioCaja;
@@ -60,17 +67,21 @@ public class UsuarioCajaFactura implements Serializable {
 		this.updated_at = updated_at;
 	}
 
-	public UsuarioCajaFactura() {
-		super();
-	}
 
-	public Integer getId() {
+
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+
+
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
+
+
 
 	public UsuarioCaja getUsuarioCaja() {
 		return usuarioCaja;

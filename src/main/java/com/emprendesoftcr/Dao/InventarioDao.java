@@ -11,7 +11,7 @@ public interface InventarioDao {
 
 	void eliminar(Inventario inventario);
 
-	Inventario buscar(Integer id);
+	Inventario buscar(Long id);
 
 	Inventario buscarPorArticulo(Articulo articulo);
 	Inventario findByArticuloAndEstado(Articulo articulo,String estado);

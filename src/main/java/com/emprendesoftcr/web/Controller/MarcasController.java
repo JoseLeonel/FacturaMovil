@@ -124,7 +124,7 @@ public class MarcasController {
 	public RespuestaServiceDataTable listarActivasAjax(HttpServletRequest request, HttpServletResponse response) {
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Marca");
-		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
+		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 		String nombreUsuario = request.getUserPrincipal().getName();
 		dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);

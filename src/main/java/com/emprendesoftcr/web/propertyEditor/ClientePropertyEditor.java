@@ -27,7 +27,7 @@ public class ClientePropertyEditor extends PropertyEditorSupport {
 			setValue(null);
 		} else {
 
-			setValue(clienteBo.buscar(Integer.parseInt(idCliente)));
+			setValue(clienteBo.buscar(Long.parseLong(idCliente)));
 
 		}
 	}

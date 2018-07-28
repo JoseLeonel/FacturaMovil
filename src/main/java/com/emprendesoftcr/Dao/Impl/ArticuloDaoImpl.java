@@ -42,7 +42,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	 * @see com.factura.dao.ArticuloDao#buscar(java.lang.Integer)
 	 */
 	@Override
-	public Articulo buscar(Integer id) {
+	public Articulo buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from Articulo obj where obj.id = :id");
 		query.setParameter("id", id);
 		List<Articulo> results = query.getResultList();
@@ -52,6 +52,8 @@ public class ArticuloDaoImpl implements ArticuloDao {
 			return null;
 		}
 	}
+	
+	
 
 	/**
 	 * Buscar por descripcion la articulo y empresa

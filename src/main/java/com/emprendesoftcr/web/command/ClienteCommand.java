@@ -13,7 +13,7 @@ import com.emprendesoftcr.modelo.Empresa;
  */
 public class ClienteCommand {
 
-	private Integer	id;
+	private Long	id;
 
 	private String	nombreCompleto;
 
@@ -73,11 +73,15 @@ public class ClienteCommand {
 		super();
 	}
 
-	public Integer getId() {
+	
+
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
 

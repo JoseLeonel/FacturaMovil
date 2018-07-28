@@ -95,7 +95,7 @@ public class KardexController {
 	 */
 	@RequestMapping(value = "/ListarKardexAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam String fechaInicio, @RequestParam String fechaFinal, @RequestParam Integer idArticulo) {
+	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam String fechaInicio, @RequestParam String fechaFinal, @RequestParam Long idArticulo) {
 		Articulo articulo = articuloBo.buscar(idArticulo);
 		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFinal, articulo);
 
@@ -116,7 +116,7 @@ public class KardexController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/AgregarEntradaKardex.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator agregarEntrada(HttpServletRequest request, ModelMap model, @RequestParam("IdInventario") Integer IdInventario, @ModelAttribute Kardex kardex, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator agregarEntrada(HttpServletRequest request, ModelMap model, @RequestParam("IdInventario") Long IdInventario, @ModelAttribute Kardex kardex, BindingResult result, SessionStatus status) throws Exception {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
@@ -153,7 +153,7 @@ public class KardexController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/AgregarSalidaKardex.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator agregarSalida(HttpServletRequest request, ModelMap model, @RequestParam("IdInventario") Integer IdInventario, @ModelAttribute Kardex kardex, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator agregarSalida(HttpServletRequest request, ModelMap model, @RequestParam("IdInventario") Long IdInventario, @ModelAttribute Kardex kardex, BindingResult result, SessionStatus status) throws Exception {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {

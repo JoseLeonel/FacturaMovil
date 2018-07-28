@@ -6,7 +6,6 @@ import static java.util.stream.Collectors.toList;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.mail.util.ByteArrayDataSource;
-import javax.sql.rowset.serial.SerialException;
 import javax.transaction.Transactional;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -53,8 +51,6 @@ import com.emprendesoftcr.service.RespuestaHaciendaXMLService;
 import com.emprendesoftcr.type.RespuestaHacienda;
 import com.emprendesoftcr.type.json.RespuestaHaciendaJson;
 import com.google.common.base.Function;
-import com.google.zxing.WriterException;
-import com.itextpdf.text.DocumentException;
 
 /**
  * Servicio de envio de los documentos de hacienda
@@ -70,10 +66,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																			//
 																																																			DetalleFacturaElectronica detalleFacturaElectronica = new DetalleFacturaElectronica();
 																																																			detalleFacturaElectronica.setLinea(Integer.parseInt(d.getNumeroLinea().toString()));
-																																																			detalleFacturaElectronica.setCodigo(d.getArticulo().getCodigo());
-																																																			detalleFacturaElectronica.setUnidad(d.getArticulo().getUnidadMedida());
+																																																			detalleFacturaElectronica.setCodigo(d.getCodigo());
+																																																			detalleFacturaElectronica.setUnidad(d.getUnidadMedida());
 																																																			detalleFacturaElectronica.setCantidad(d.getCantidad());
-																																																			detalleFacturaElectronica.setDescripcion(d.getArticulo().getDescripcion());
+																																																			detalleFacturaElectronica.setDescripcion(d.getDescripcion());
 																																																			detalleFacturaElectronica.setPrecioU(d.getPrecioUnitario());
 																																																			detalleFacturaElectronica.setMonto(d.getMontoTotal());
 																																																			detalleFacturaElectronica.setDescuento(d.getMontoDescuento());
@@ -167,7 +163,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
 	// @Scheduled(cron = "*/5 * * * * ?")
-	// @Scheduled(cron = "0 0/1 * * * ?")
+ 	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 		try {
@@ -292,7 +288,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html Proceso automatico para ejecutar aceptacion del documento
 	 */
-	// @Scheduled(cron = "0 0/2 * * * ?")
+  @Scheduled(cron = "0 0/2 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		try {
@@ -392,7 +388,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	//@Scheduled(cron = "0 0/2 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {

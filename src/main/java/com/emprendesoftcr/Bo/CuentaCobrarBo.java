@@ -10,7 +10,7 @@ public interface CuentaCobrarBo {
 
 	void eliminar(CuentaCobrar cuentaCobrar);
 
-	CuentaCobrar buscar(Integer id);
+	CuentaCobrar buscar(Long id);
 
 	CuentaCobrar buscarPorLetraCambio(String letraCambio);
 

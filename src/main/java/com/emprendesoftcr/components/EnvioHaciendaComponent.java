@@ -118,7 +118,7 @@ public class EnvioHaciendaComponent {
 	 * Envia hacia hacienda
 	 * @return
 	 */
-	public Map comprobarDocumentoElectronico(final String clave, final OpenIDConnectHacienda openIDConnectHacienda) {
+	public Map comprobarDocumentoElectronico(final String clave, final OpenIDConnectHacienda openIDConnectHacienda)  {
 		try {
 			ImmutableMap<String, String> headers = ImmutableMap.of("Accept", "application/json", "Authorization", ("Bearer " + openIDConnectHacienda.getAccess_token()), "User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 

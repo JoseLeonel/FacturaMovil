@@ -16,7 +16,7 @@ public interface CompraBo {
 
 	void eliminar(Compra compra);
 
-	Compra findById(Integer id);
+	Compra findById(Long id);
 
 	Compra findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa);
 

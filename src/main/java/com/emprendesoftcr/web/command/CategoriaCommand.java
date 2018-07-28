@@ -13,7 +13,7 @@ import com.emprendesoftcr.modelo.Empresa;
  */
 public class CategoriaCommand {
 
-	private Integer	id;
+	private Long	id;
 
 	private String	descripcion;
 
@@ -40,15 +40,19 @@ public class CategoriaCommand {
 		super();
 	}
 
-	public Integer getId() {
+	
+
+	
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	
 	public String getDescripcion() {
 		return descripcion;
 	}

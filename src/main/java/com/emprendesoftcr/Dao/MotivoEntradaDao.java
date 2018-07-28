@@ -11,7 +11,7 @@ public interface MotivoEntradaDao {
 
 	void eliminar(MotivoEntrada motivoEntrada);
 
-	MotivoEntrada buscar(Integer id);
+	MotivoEntrada buscar(Long id);
 
 	MotivoEntrada buscarPorDescripcionYEmpresa(String descripcion, Empresa empresa);
 

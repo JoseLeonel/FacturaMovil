@@ -106,6 +106,8 @@ public class VendedorController {
 			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
+		JqGridFilter dataTableFilter = new JqGridFilter("cedula", "'" + Constantes.CEDULA_VENDEDOR_FRECUENTE + "'", "<>");
+		delimitadores.addFiltro(dataTableFilter);
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}

@@ -225,6 +225,9 @@ self.on('mount',function(){
     includeActions('.dataTables_wrapper','.dataTables_length')
     __MantenimientoAgregar()
     __Eventos()
+    window.addEventListener( "keydown", function(evento){
+             $(".errorServerSideJgrid").remove();
+        }, false );
    
 })
 /**

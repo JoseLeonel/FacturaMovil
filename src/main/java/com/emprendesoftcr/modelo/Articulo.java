@@ -21,6 +21,7 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.emprendesoftcr.Utils.Constantes;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -37,7 +38,7 @@ public class Articulo implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer						id;
+	private Long						id;
 
 	@Column(name = "codigo")
 	private String						codigo;
@@ -83,6 +84,9 @@ public class Articulo implements Serializable {
 
 	@Column(name = "tipo_impuesto")
 	private String						tipoImpuesto;
+	//Tipo de codigo del producto
+	@Column(name = "tipo_codigo")
+	private String						tipoCodigo;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -124,7 +128,10 @@ public class Articulo implements Serializable {
 
 	
 
-	public Articulo(Integer id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, String estado, String tipoImpuesto, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa, Set<Inventario> inventarios, Set<Kardex> kardexs) {
+
+
+
+	public Articulo(Long id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, String estado, String tipoImpuesto, String tipoCodigo, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa, Set<Inventario> inventarios, Set<Kardex> kardexs) {
 		super();
 		this.id = id;
 		this.codigo = codigo;
@@ -142,6 +149,7 @@ public class Articulo implements Serializable {
 		this.gananciaPrecioEspecial = gananciaPrecioEspecial;
 		this.estado = estado;
 		this.tipoImpuesto = tipoImpuesto;
+		this.tipoCodigo = tipoCodigo;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.marca = marca;
@@ -154,13 +162,28 @@ public class Articulo implements Serializable {
 
 	public Articulo() {
 		super();
+		this.costo = Constantes.ZEROS_DOUBLE;
+		this.impuesto = Constantes.ZEROS_DOUBLE;
+		this.precioPublico = Constantes.ZEROS_DOUBLE;
+		this.gananciaPrecioPublico = Constantes.ZEROS_DOUBLE;
+		this.precioMayorista = Constantes.ZEROS_DOUBLE;
+		this.gananciaPrecioMayorista = Constantes.ZEROS_DOUBLE;
+		this.precioEspecial = Constantes.ZEROS_DOUBLE;
+		this.gananciaPrecioEspecial = Constantes.ZEROS_DOUBLE;
+		this.created_at = new Date();
+		this.updated_at = new Date();
+		
 	}
 
-	public Integer getId() {
+	
+
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -366,6 +389,16 @@ public class Articulo implements Serializable {
 
 			kardexs.add(kardexAsociar);
 		}
+	}
+
+	
+	public String getTipoCodigo() {
+		return tipoCodigo;
+	}
+
+	
+	public void setTipoCodigo(String tipoCodigo) {
+		this.tipoCodigo = tipoCodigo;
 	}
 
 

@@ -32,7 +32,7 @@ public class CajaPropertyEditor extends PropertyEditorSupport {
 			setValue(null);
 		} else {
 
-			setValue(cajaBo.buscar(Integer.parseInt(idCaja)));
+			setValue(cajaBo.buscar(Long.parseLong(idCaja)));
 
 		}
 	}

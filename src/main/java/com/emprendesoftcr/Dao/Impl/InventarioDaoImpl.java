@@ -41,7 +41,7 @@ public class InventarioDaoImpl implements InventarioDao {
 	 * @see com.factura.dao.InventarioDao#buscar(java.lang.Integer)
 	 */
 
-	public Inventario buscar(Integer id) {
+	public Inventario buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from Inventario obj where obj.id = :id");
 		query.setParameter("id", id);
 		List<Inventario> results = query.getResultList();

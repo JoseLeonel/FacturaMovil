@@ -2,6 +2,8 @@ package com.emprendesoftcr.service.impl;
 
 
 
+import java.util.Date;
+
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -9,6 +11,8 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.Response;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,9 +27,9 @@ public class OpenIDConnectHaciendaServiceImpl implements OpenIDConnectHaciendaSe
 	
 	private static final String IDP_URI = "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut-stag/protocol/openid-connect";
   private static final String IDP_CLIENT_ID = "api-stag";
-  
+  private Logger	log= LoggerFactory.getLogger(this.getClass());
 
-	public OpenIDConnectHacienda findbyAcceso(String usuario, String clave) {
+	public OpenIDConnectHacienda findbyAcceso(String usuario, String clave) throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
 		try {
 			
@@ -39,7 +43,8 @@ public class OpenIDConnectHaciendaServiceImpl implements OpenIDConnectHaciendaSe
 		  Response response = target.request().post(Entity.form(form));
 			
 		} catch (Exception e) {
-			// TODO: handle exception
+			log.info("** Error  findbyAcceso: " + e.getMessage() + " fecha " + new Date());
+			throw e;
 		}
 		
 		return openIDConnectHacienda;

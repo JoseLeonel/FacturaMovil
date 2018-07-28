@@ -8,7 +8,7 @@ import com.emprendesoftcr.modelo.UsuarioCaja;
 
 public class UsuarioCajaCommand {
 
-	private Integer	id;
+	private Long	id;
 	private Double	totalFondoInicial;
 
 	private Double	totalEfectivo;
@@ -55,11 +55,15 @@ public class UsuarioCajaCommand {
 
 	}
 
-	public Integer getId() {
+	
+
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
 

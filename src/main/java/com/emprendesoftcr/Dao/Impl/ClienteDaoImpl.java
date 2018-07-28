@@ -40,7 +40,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	 * @see com.factura.dao.ClienteDao#buscar(java.lang.Integer)
 	 */
 
-	public Cliente buscar(Integer id) {
+	public Cliente buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from Cliente obj where obj.id = :id");
 		query.setParameter("id", id);
 		List<Cliente> results = query.getResultList();

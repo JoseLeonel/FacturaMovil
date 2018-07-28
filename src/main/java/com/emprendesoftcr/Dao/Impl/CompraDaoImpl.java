@@ -43,7 +43,7 @@ public class CompraDaoImpl implements CompraDao {
 	 * @return
 	 */
 	@Override
-	public Compra findById(Integer id) {
+	public Compra findById(Long id) {
 		Query query = entityManager.createQuery("select obj from Compra obj where obj.id = :id");
 		query.setParameter("id", id);
 		List<Compra> results = query.getResultList();

@@ -7,7 +7,7 @@ import com.emprendesoftcr.modelo.Proveedor;
 
 public class ProveedorCommand {
 
-	private Integer	id;
+	private Long	id;
 
 	private String	cedula;
 
@@ -55,11 +55,15 @@ public class ProveedorCommand {
 		super();
 	}
 
-	public Integer getId() {
+
+
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
 

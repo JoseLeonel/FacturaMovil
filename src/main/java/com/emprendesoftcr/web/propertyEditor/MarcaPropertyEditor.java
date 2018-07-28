@@ -27,7 +27,7 @@ public class MarcaPropertyEditor extends PropertyEditorSupport {
 			setValue(null);
 		} else {
 
-			setValue(marcaBo.buscar(Integer.parseInt(idMarca)));
+			setValue(marcaBo.buscar(Long.parseLong(idMarca)));
 
 		}
 	}

@@ -13,7 +13,7 @@ import com.emprendesoftcr.modelo.Usuario;
  */
 public class CajaCommand {
 
-	private Integer	id;
+	private Long	id;
 
 	private String	descripcion;
 	private String	terminal;
@@ -44,11 +44,15 @@ public class CajaCommand {
 		super();
 	}
 
-	public Integer getId() {
+	
+
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
 

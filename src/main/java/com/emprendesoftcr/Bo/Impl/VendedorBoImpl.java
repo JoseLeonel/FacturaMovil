@@ -46,7 +46,7 @@ public class VendedorBoImpl implements VendedorBo {
  * @see com.factura.bo.VendedorBo#buscar(java.lang.Integer)
  */
 	@Override
-	public Vendedor buscar(Integer id) {
+	public Vendedor buscar(Long id) {
 		return vendedorDao.buscar(id);
 	}
 /**

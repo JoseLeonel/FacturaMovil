@@ -39,7 +39,7 @@ public class CajaBoImpl implements CajaBo {
 	 * @return
 	 */
 	@Override
-	public Caja buscar(Integer id) {
+	public Caja buscar(Long id) {
 		return cajaDao.buscar(id);
 	}
 

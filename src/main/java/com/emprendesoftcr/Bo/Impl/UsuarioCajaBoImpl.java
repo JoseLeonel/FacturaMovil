@@ -46,7 +46,7 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 	 * @return
 	 */
 	@Override
-	public UsuarioCaja buscar(Integer id) {
+	public UsuarioCaja buscar(Long id) {
 		return usuarioCajaDao.buscar(id);
 	}
 

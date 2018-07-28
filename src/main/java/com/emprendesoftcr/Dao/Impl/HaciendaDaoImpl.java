@@ -32,7 +32,7 @@ public class HaciendaDaoImpl implements HaciendaDao {
 	}
 
 	@Override
-	public Hacienda findById(Integer id) {
+	public Hacienda findById(Long id) {
 		Query query = entityManager.createQuery("select obj from Hacienda obj where obj.id = :id");
 		query.setParameter("id", id);
 		List<Hacienda> results = query.getResultList();

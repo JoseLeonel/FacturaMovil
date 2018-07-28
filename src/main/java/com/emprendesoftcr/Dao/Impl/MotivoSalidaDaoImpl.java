@@ -41,7 +41,7 @@ public class MotivoSalidaDaoImpl implements MotivoSalidaDao {
 	 * @see com.factura.dao.MotivoSalidaDao#buscar(java.lang.Integer)
 	 */
 	@SuppressWarnings("unchecked")
-	public MotivoSalida buscar(Integer id) {
+	public MotivoSalida buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from MotivoSalida obj where obj.id = :id");
 		query.setParameter("id", id);
 		List<MotivoSalida> results = query.getResultList();

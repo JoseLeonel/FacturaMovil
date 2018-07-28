@@ -19,8 +19,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.emprendesoftcr.Utils.Constantes;
 
 /**
- * 
- * Semaforo.  Si una empresa tiene problemas con los envios de tributacion se bloquea y no se envia hasta que se solucione el problema
+ * Semaforo. Si una empresa tiene problemas con los envios de tributacion se bloquea y no se envia hasta que se solucione el problema
  * @author jose.
  * @since 19 jul. 2018
  */
@@ -28,41 +27,37 @@ import com.emprendesoftcr.Utils.Constantes;
 @Table(name = "semaforos")
 public class Semaforo implements Serializable {
 
-	
-	private static final long serialVersionUID = -3968492647575905798L;
-
-	
+	private static final long	serialVersionUID	= -3968492647575905798L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer	id;
+	private Integer						id;
 
 	@Column(name = "descripcion")
-	private String	descripcion;
+	private String						descripcion;
 
 	@Column(name = "estado")
-	private Integer	estado;
-	
+	private Integer						estado;
 
 	@Column(name = "maxi_reintentos")
-	private Integer	maximoReintentosEnviar;
+	private Integer						maximoReintentosEnviar;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "created_at")
-	private Date		created_at;
+	private Date							created_at;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
-	private Date		updated_at;
+	private Date							updated_at;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
-	private Empresa	empresa;
+	private Empresa						empresa;
 
-	public Semaforo(Integer id, String descripcion, Integer estado, Date created_at, Date updated_at, Empresa empresa,Integer maximoReintentosEnviar) {
+	public Semaforo(Integer id, String descripcion, Integer estado, Date created_at, Date updated_at, Empresa empresa, Integer maximoReintentosEnviar) {
 		super();
 		this.id = id;
 		this.descripcion = descripcion;
@@ -130,16 +125,12 @@ public class Semaforo implements Serializable {
 		this.empresa = empresa;
 	}
 
-	
 	public Integer getMaximoReintentosEnviar() {
 		return maximoReintentosEnviar;
 	}
 
-	
 	public void setMaximoReintentosEnviar(Integer maximoReintentosEnviar) {
 		this.maximoReintentosEnviar = maximoReintentosEnviar;
 	}
 
-	
-	
 }

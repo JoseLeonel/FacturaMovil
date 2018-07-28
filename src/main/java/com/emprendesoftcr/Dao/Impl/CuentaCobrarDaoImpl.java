@@ -46,7 +46,7 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 	 * @see com.factura.dao.CuentaCobrarDao#buscar(java.lang.Integer)
 	 */
 	@SuppressWarnings("unchecked")
-	public CuentaCobrar buscar(Integer id) {
+	public CuentaCobrar buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from CuentaCobrar obj where obj.id = :id");
 		query.setParameter("id", id);
 		List<CuentaCobrar> results = query.getResultList();

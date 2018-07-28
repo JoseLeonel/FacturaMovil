@@ -34,7 +34,7 @@ public class UsuarioCajaFacturaDaoImpl implements UsuarioCajaFacturaDao {
 	 * @see com.emprendesoftcr.Dao.UsuarioCajaFacturaDao#buscar(java.lang.Long)
 	 */
 	@Override
-	public UsuarioCajaFactura buscar(Integer id) {
+	public UsuarioCajaFactura buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from UsuarioCajaFactura obj where obj.id = :id");
 		query.setParameter("id", id);
 		List<UsuarioCajaFactura> results = query.getResultList();

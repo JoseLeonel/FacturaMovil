@@ -27,7 +27,7 @@ public class AbonoPropertyEditor extends PropertyEditorSupport {
 			setValue(null);
 		} else {
 
-			setValue(abonoBo.buscar(Integer.parseInt(idAbono)));
+			setValue(abonoBo.buscar(Long.parseLong(idAbono)));
 
 		}
 	}

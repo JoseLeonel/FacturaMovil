@@ -62,26 +62,48 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label class="knob-label" >{$.i18n.prop("articulo.categoria")}  <span class="requeridoDato">*</span></label>
                                  <select  class="form-control selectCategoria"   name="categoria" >
                                     <option  each={categorias.aaData}  value="{id}" selected="{articulo.categoria.id ==id?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
+                            <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label class="knob-label">{$.i18n.prop("articulo.tipoImpuesto")}</label>
+                                <select  class="form-control selectTipoImpuesto" id="tipoImpuesto" name="tipoImpuesto"  >
+                                    <option  value=" " >Seleccionar</option>
+                                    <option  each={impuestos}  value="{codigo}" selected="{articulo.tipoImpuesto ==codigo?true:false}"  >{descripcion}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label class="knob-label">{$.i18n.prop("articulo.tipoCodigo")}</label>
+                                <select  class="form-control selectTipoCodigo" id="tipoCodigo" name="tipoCodigo"  >
+                                    <option  each={tipoCodigos}  value="{codigo}" selected="{articulo.tipoCodigo ==codigo?true:false}"  >{descripcion}</option>
+                                </select>
+                            </div>
+
                         </div>    
+
                         <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label class="knob-label" >{$.i18n.prop("articulo.marca")}  <span class="requeridoDato">*</span></label>
                                  <select  class="form-control selectMarca"  name="marca">
                                     <option  each={marcas.aaData}  value="{id}" selected="{articulo.marca.id ==id?true:false}"  >{descripcion}</option>
                                 </select>
                             </div>
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label class="knob-label" >{$.i18n.prop("articulo.unidadMedida")}  <span class="requeridoDato">*</span></label>
                                  <select  class="form-control selecTipoUnidad" name="unidadMedida" >
                                     <option   each={tipoUnidades.aaData}  value="{codigo}"  selected="{articulo.unidadMedida ==codigo?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
+                            <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label class="knob-label">{$.i18n.prop("articulo.contable")}</label>
+                                <select  class="form-control" id="contable" name="contable" >
+                                    <option  each={contables}  value="{codigo}" selected="{articulo.contable ==codigo?true:false}" >{descripcion}</option>
+                                </select>
+                            </div>
+                        
                         </div>    
 
                         <div class="row">
@@ -142,37 +164,18 @@
 
                         <div class="row">
                             
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("articulo.gananciaPrecioEspecial")}  </label>
                                 <input type="text" class="form-control gananciaPrecioEspecial" id="gananciaPrecioEspecial" name="gananciaPrecioEspecial" value="{articulo.gananciaPrecioEspecial}"  readonly>
                             </div>
-                            <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label">{$.i18n.prop("articulo.contable")}</label>
-                                <select  class="form-control" id="contable" name="contable" >
-                                    <option  each={contables}  value="{codigo}" selected="{articulo.contable ==codigo?true:false}" >{descripcion}</option>
-                                </select>
-                            </div>
-                        
-                            <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                            
+                            
+                            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label">{$.i18n.prop("articulo.estado")}</label>
                                 <select  class="form-control" id="estado" name="estado"  >
                                     <option  each={estados}  value="{codigo}" selected="{articulo.estado ==codigo?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
-                            
-
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label">{$.i18n.prop("articulo.tipoImpuesto")}</label>
-                                <select  class="form-control selectTipoImpuesto" id="tipoImpuesto" name="tipoImpuesto"  >
-                                    <option  value=" " >Seleccionar</option>
-                                    <option  each={impuestos}  value="{codigo}" selected="{articulo.tipoImpuesto ==codigo?true:false}"  >{descripcion}</option>
-                                </select>
-                            </div>
-                      
-                            
-
                         </div>
                     </form>    
                 </div>
@@ -510,7 +513,8 @@
     self.tipoUnidades              = {aaData:[]}
     self.motivoEntradas              = {data:[]}
     self.motivoSalidas              = {data:[]}
-      self.impuestos =[]
+    self.impuestos =[]
+    self.tipoCodigos =[]
     self.contables                 = []
     self.estados                   = []
     self.mostrarListado            = true 
@@ -578,8 +582,13 @@ self.on('mount',function(){
     __ComboEstados()
     __ComboContables()
     __listadoTipoUnidadesActivas()   
+    __listadoMarcasActivas()
     __Impuestos() 
+    __tipoCodigo()
     LimpiarArticulo()
+    window.addEventListener( "keydown", function(evento){
+             $(".errorServerSideJgrid").remove();
+        }, false );
     
    
 })
@@ -591,6 +600,7 @@ function LimpiarArticulo(){
    self.articulo = {
 		id:null,
         codigo:"",
+        tipoCodigo:"",
 		descripcion:"",
         serie:"",
 		unidadMedida:"",
@@ -617,6 +627,7 @@ function LimpiarArticulo(){
     }    
     self.update() 
    $('.selectTipoImpuesto').prop("selectedIndex", 0);
+   $('.selectTipoCodigo').prop("selectedIndex", 0);
    $('.selecTipoUnidad').prop("selectedIndex", 0);
    $('.selectMarca').prop("selectedIndex", 0);
    $('.selectCategoria').prop("selectedIndex", 0);
@@ -1608,6 +1619,37 @@ function __Impuestos(){
    
      self.update();
 }
+
+/**
+* Tipo codigo del producto/servicio del articulo
+**/
+function __tipoCodigo(){
+    self.tipoCodigos =[]
+    self.update()
+    self.tipoCodigos.push({
+        codigo: '01',
+        descripcion:$.i18n.prop("articulo.tipo.codigo.vendedor")
+     });
+
+    self.tipoCodigos.push({
+        codigo: '02',
+        descripcion:$.i18n.prop("articulo.tipo.codigo.comprador")
+     });
+    self.tipoCodigos.push({
+        codigo: '03',
+        descripcion:$.i18n.prop("articulo.tipo.codigo.asignado.por.industria")
+     });
+    self.tipoCodigos.push({
+        codigo: '04',
+        descripcion:$.i18n.prop("articulo.tipo.codigo.uso.interno")
+     });
+    self.tipoCodigos.push({
+        codigo: '99',
+        descripcion:$.i18n.prop("articulo.tipo.codigo.otros")
+     });
+   
+     self.update();
+}
 /**
 *  Regresar al listado
 **/
@@ -1748,6 +1790,7 @@ function __consultar(){
                         __ComboEstados()
                         __Impuestos() 
                         $('.selectTipoImpuesto').val(self.articulo.tipoImpuesto);  
+                        $('.selectTipoCodigo').val(self.articulo.tipoCodigo);  
                         $('.selecTipoUnidad').val(self.articulo.unidadMedida) 
                         $('.selectMarca').val(self.articulo.marca.id)
                         $('.selectCategoria').val(self.articulo.categoria.id)
@@ -1938,6 +1981,7 @@ function _inicializarArticulo(){
     self.articulo = {
 		id:null,
         codigo:"",
+        tipoCodigo :"",
 		descripcion:"",
         serie:"",
 		unidadMedida:"",

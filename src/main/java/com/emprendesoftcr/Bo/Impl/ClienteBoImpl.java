@@ -63,7 +63,7 @@ public class ClienteBoImpl implements ClienteBo {
 	 * @see com.factura.bo.ClienteBo#buscar(java.lang.Integer)
 	 */
 	@Override
-	public Cliente buscar(Integer id) {
+	public Cliente buscar(Long id) {
 		return clienteDao.buscar(id);
 	}
 	/**
