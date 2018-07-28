@@ -38,14 +38,14 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3" show={mostrarReferencias == false}>
                                     <div class="form-group has-success " show = {!mostrarCamposIngresoContado || factura.fechaCredito}>
                                         <label>{$.i18n.prop("factura.plazoCredito")}</label> 
                                         <input type="number" id = "plazoCredito"  name "plazoCredito" class="form-control plazoCredito" value="{factura.plazoCredito}" >
                                     </div>
                                 </div>
                             </div>   
-                            <div class="row">
+                            <div class="row" show={mostrarReferencias == false}>
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group has-success">
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 
@@ -58,7 +58,7 @@
                                     </div>    
                                 </div>
                             </div>        
-                            <div class="row">
+                            <div class="row" show={mostrarReferencias == false}>
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                     <div class="form-group ">
                                         <label >{$.i18n.prop("factura.nota")}</label> 
@@ -66,7 +66,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row" show={mostrarReferencias == false}>
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                     <div class="form-group ">
                                         <label >{$.i18n.prop("factura.direccion")}</label> 
@@ -75,8 +75,8 @@
                                 </div>
                             </div>
                             
-                            <div class="row">
-                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                            <div class="row" show={mostrarReferencias == false}>
+                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3" >
                                    <h3> <p class="text-primary">{$.i18n.prop("factura.emisor")}</p></h3>
                                   
                                 </div>
@@ -86,7 +86,7 @@
                                 </div>
                             </div>
                             <br>
-                            <div class="row">
+                            <div class="row" show={mostrarReferencias == false}>
                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                     <div class="form-group ">
                                         <input   type="hidden" class="form-control" id="cliente" name="cliente" value="{cliente.id}">
@@ -114,7 +114,7 @@
                                 </div>
 
                             </div>    
-                          <div class="row">
+                          <div class="row" show={mostrarReferencias == false}>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label  >{$.i18n.prop("cliente.provincia")} </label>
                                 <select onchange= {__cargaCantones}  class="form-control provincia" id="provincia" name="provincia"  disabled>
@@ -142,7 +142,7 @@
                             </div>                        
 
                           </div>                        
-                            <div class="row">
+                            <div class="row" show={mostrarReferencias == false}>
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("cliente.correoElectronico")}</label> 
@@ -150,7 +150,7 @@
                                     </div>
                                 </div>
                             </div>                                
-                            <div class="row">
+                            <div class="row" show={mostrarReferencias == false}>
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("cliente.otraSena")}</label> 
@@ -177,7 +177,7 @@
                                     <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <div class="form-group ">
                                             <label>{$.i18n.prop("informacion.TipoDoc")}</label> 
-                                            <select class="form-control has-success" id="referenciaTipoDoc" name="referenciaTipoDoc"   >
+                                            <select class="form-control has-success" id="referenciaTipoDoc" name="referenciaTipoDoc"  disabled  >
                                                 <option each={comboTipoDocumentos} value="{estado}" selected="{factura.referenciaTipoDoc ==estado?true:false}" >{descripcion}</option>
                                             </select>
                                         </div>
@@ -209,14 +209,14 @@
                                 </div>      
                             </div>
                                           
-                            <div class="row">
+                            <div class="row" show={mostrarReferencias == false}>
                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                    <h3> <p class="text-primary">{$.i18n.prop("factura.titulo.vendedor")}</p></h3>
                                 </div>
                                 <div class= "col-md-9 col-sm-9 col-lg-9"></div>
                             </div>
                             <br>                            
-                            <div class="row">
+                            <div class="row" show={mostrarReferencias == false}>
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div class="form-group ">
                                         <input   type="hidden" class="form-control vendedor" id="vendedor" name="vendedor" value="{vendedor.id}">
@@ -950,6 +950,7 @@ function __referenciaConsecutivo(consecutivo){
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                        self.factura.referenciaFechaEmision = modeloTabla.fechaEmision
                        self.factura.referenciaTipoDoc      = modeloTabla.referenciaTipoDoc
+                      
                        self.update()
                         
                         $("referenciaFechaEmision").val(modeloTabla.fechaEmision)

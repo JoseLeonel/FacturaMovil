@@ -344,26 +344,13 @@ public class FacturasController {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.cajas.abierta", result.getAllErrors());
 				}
 			}
-			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
-				if(facturaCommand.getReferenciaNumero() !=null) {
-					Factura facturaTem = facturaBo.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(),usuario.getEmpresa());
-					if(facturaTem ==null) {
-						result.rejectValue("referenciaNumero", "mensajes.no.existe.consecutivo");	
-					}else {
-						
-						facturaCommand.setReferenciaTipoDoc(facturaCommand.getTipoDoc());
-						
-					}
-					
-				}
-				
-			}
+		
 			TipoCambio tipoCambio = tipoCambioBo.findByEstadoAndEmpresa(Constantes.ESTADO_ACTIVO, usuario.getEmpresa());
 			if (tipoCambio == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.tipo.cambio.dolar.activo", result.getAllErrors());
 
 			}
-			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
+			if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
 				if (facturaCommand.getCliente() == null) {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.incluir.cliente", result.getAllErrors());
 				}
@@ -387,6 +374,24 @@ public class FacturasController {
 				}
 				facturaCommand.setVendedor(vendedor);
 
+			}
+			
+			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
+				if(facturaCommand.getReferenciaNumero() !=null) {
+					Factura facturaTem = facturaBo.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(),usuario.getEmpresa());
+					if(facturaTem ==null) {
+						result.rejectValue("referenciaNumero", "mensajes.no.existe.consecutivo");	
+					}else {
+						// El tipo documento fecha emision  y  el cliente se asignan automatico para la factura
+							facturaCommand.setReferenciaTipoDoc(facturaTem.getTipoDoc());
+							facturaCommand.setReferenciaFechaEmision(facturaTem.getFechaEmision().toString());
+							facturaCommand.setCliente(facturaTem.getCliente());
+						
+						
+					}
+					
+				}
+				
 			}
 			facturaCommand.setEmpresa(usuario.getEmpresa());
 			facturaFormValidator.validate(facturaCommand, result);
