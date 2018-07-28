@@ -66,7 +66,6 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
 	        "<Clave>" + factura.getClave() + "</Clave>" +
 	        "<NumeroConsecutivo>" + factura.getNumeroConsecutivo() + "</NumeroConsecutivo>" +
 	        "<FechaEmision>" + date + "</FechaEmision>" +
-	        "<FechaEmision>" + date + "</FechaEmision>" +
 	        "<Emisor>" +
 	            "<Nombre>" + factura.getEmpresa().getNombre() + "</Nombre>" +
 	            "<Identificacion>" +
