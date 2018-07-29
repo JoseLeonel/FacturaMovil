@@ -132,6 +132,25 @@ public class ProvinciasController {
 	}
 
 	/**
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/ListarCantonesTodosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarCatonesTodosAjax(HttpServletRequest request, HttpServletResponse response) {
+
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Canton");
+
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_CANTON);
+	}
+
+	
+	
+	/**
 	 * Distritos
 	 * @param request
 	 * @param response
@@ -156,6 +175,26 @@ public class ProvinciasController {
 	}
 
 	/**
+	 * 
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @param canton
+	 * @return
+	 */
+	@RequestMapping(value = "/ListarDistritosTodosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarDistritosTodosAjax(HttpServletRequest request, HttpServletResponse response) {
+
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Distrito");
+
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_DISTRITO);
+	}
+	
+	
+	/**
 	 * Barrios
 	 * @param request
 	 * @param response
@@ -178,6 +217,24 @@ public class ProvinciasController {
 
 		dataTableFilter = new JqGridFilter("codigoDistrito", "'" + distrito.getCodigo() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_BARRIO);
+	}
+	
+	
+	/**
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/ListarBarriosTodosAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarBarriosTodosAjax(HttpServletRequest request, HttpServletResponse response ) {
+
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Barrio");
+
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_BARRIO);
 	}

@@ -51,6 +51,7 @@ public class ClienteCommand {
 		this.nombreCompleto = cliente.getNombreCompleto();
 		this.cedula = cliente.getCedula();
 		this.provincia = cliente.getProvincia();
+		this.canton = cliente.getCanton();
 		this.distrito = cliente.getDistrito();
 		this.barrio = cliente.getBarrio();
 		this.codigoPais = cliente.getCodigoPais();
