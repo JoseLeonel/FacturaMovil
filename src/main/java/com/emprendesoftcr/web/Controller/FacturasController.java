@@ -452,6 +452,9 @@ public class FacturasController {
 				hacienda.setReintentos(Constantes.ZEROS);
 				hacienda.setReintentosAceptacion(Constantes.ZEROS);
 				hacienda.setTipoDoc(factura.getTipoDoc());
+				hacienda.setNombreReceptor(factura.getCliente().getNombreCompleto());
+				hacienda.setCorreoReceptor(factura.getCliente().getCorreoElectronico());
+				hacienda.setTotalReceptor(factura.getTotalComprobante());
 				hacienda.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
 				haciendaBo.agregar(hacienda);
 

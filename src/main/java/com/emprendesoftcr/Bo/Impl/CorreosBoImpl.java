@@ -29,17 +29,18 @@ public class CorreosBoImpl implements CorreosBo {
 	VelocityEngine	velocityEngine;
 
 	@Override
-	public void enviarConAttach(final Collection<Attachment> attachments, String to, final String from, final String subjet, final String email, final Map<String, Object> model) {
+	public void enviarConAttach(final Collection<Attachment> attachments,  ArrayList<String> correoList, final String from, final String subjet, final String email, final Map<String, Object> model) {
 		MimeMessagePreparator preparator = new MimeMessagePreparator() {
 
 			public void prepare(MimeMessage mimeMessage) throws Exception {
 				MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-				ArrayList<String> correoList = new ArrayList<String>(Arrays.asList(to.split(",")));
 				for (Iterator<String> iterator = correoList.iterator(); iterator.hasNext();) {
 					String correo = (String) iterator.next();
 					message.addTo(correo);
 				}
+				
+				
 				message.setFrom(from);
 				message.setSubject(subjet);
 

@@ -11,7 +11,6 @@ public class EmpresaCommand {
 	private String	nombreComercial;
 	private Integer	numeroConsecutivo;
 
-	
 	private String	tipoCedula;
 
 	private String	cedula;
@@ -21,6 +20,11 @@ public class EmpresaCommand {
 	private Integer	codigoPais;
 
 	private Integer	telefono;
+
+	private Integer	notadConsecutivo;
+	private Integer	notacConsecutivo;
+
+	private Integer	tiqueteConsecutivo;
 
 	private String	correoElectronico;
 
@@ -53,7 +57,7 @@ public class EmpresaCommand {
 		this.id = empresa.getId();
 		this.nombre = empresa.getNombre();
 		this.nombreComercial = empresa.getNombreComercial();
-		
+
 		this.tipoCedula = empresa.getTipoCedula();
 		this.cedula = empresa.getCedula();
 		this.otraSenas = empresa.getOtraSenas();
@@ -71,7 +75,10 @@ public class EmpresaCommand {
 		this.cazaMatriz = empresa.getCazaMatriz();
 		this.passwordEnvioComprobante = empresa.getPasswordEnvioComprobante();
 		this.usuarioEnvioComprobante = empresa.getUsuarioEnvioComprobante();
+		this.notacConsecutivo = empresa.getNotacConsecutivo();
+		this.notadConsecutivo = empresa.getNotadConsecutivo();
 		
+		this.tiqueteConsecutivo = empresa.getTiqueteConsecutivo();
 
 	}
 
@@ -102,8 +109,6 @@ public class EmpresaCommand {
 	public void setNombreComercial(String nombreComercial) {
 		this.nombreComercial = nombreComercial;
 	}
-
-
 
 	public String getTipoCedula() {
 		return tipoCedula;
@@ -241,36 +246,55 @@ public class EmpresaCommand {
 		this.claveLlaveCriptografica = claveLlaveCriptografica;
 	}
 
-	
 	public Integer getCodigoSeguridad() {
 		return codigoSeguridad;
 	}
 
-	
 	public void setCodigoSeguridad(Integer codigoSeguridad) {
 		this.codigoSeguridad = codigoSeguridad;
 	}
 
-	
 	public String getUsuarioEnvioComprobante() {
 		return usuarioEnvioComprobante;
 	}
 
-	
 	public void setUsuarioEnvioComprobante(String usuarioEnvioComprobante) {
 		this.usuarioEnvioComprobante = usuarioEnvioComprobante;
 	}
 
-	
 	public String getPasswordEnvioComprobante() {
 		return passwordEnvioComprobante;
 	}
 
-	
 	public void setPasswordEnvioComprobante(String passwordEnvioComprobante) {
 		this.passwordEnvioComprobante = passwordEnvioComprobante;
 	}
-	
-	
 
+	public Integer getNotadConsecutivo() {
+		return notadConsecutivo;
+	}
+
+	public void setNotadConsecutivo(Integer notadConsecutivo) {
+		this.notadConsecutivo = notadConsecutivo;
+	}
+
+	public Integer getNotacConsecutivo() {
+		return notacConsecutivo;
+	}
+
+	public void setNotacConsecutivo(Integer notacConsecutivo) {
+		this.notacConsecutivo = notacConsecutivo;
+	}
+
+	
+	public Integer getTiqueteConsecutivo() {
+		return tiqueteConsecutivo;
+	}
+
+	
+	public void setTiqueteConsecutivo(Integer tiqueteConsecutivo) {
+		this.tiqueteConsecutivo = tiqueteConsecutivo;
+	}
+
+	
 }

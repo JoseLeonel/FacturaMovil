@@ -27,9 +27,9 @@ import com.emprendesoftcr.modelo.Usuario;
 public class EmpresaDaoImpl implements EmpresaDao {
 
 	@PersistenceContext
-	EntityManager entityManager;
-	
-	private Logger				log	= LoggerFactory.getLogger(this.getClass());
+	EntityManager		entityManager;
+
+	private Logger	log	= LoggerFactory.getLogger(this.getClass());
 
 	public void agregar(Empresa empresa) {
 		entityManager.persist(empresa);
@@ -111,23 +111,41 @@ public class EmpresaDaoImpl implements EmpresaDao {
 	 * @see com.emprendesoftcr.Dao.EmpresaDao#generarConsecutivoFactura(com.emprendesoftcr.modelo.Empresa)
 	 */
 	@Override
-	public String generarConsecutivoFactura(Empresa empresa, Usuario usuario,Factura factura)  throws Exception{
-    String resultado = Constantes.EMPTY;
+	public String generarConsecutivoFactura(Empresa empresa, Usuario usuario, Factura factura) throws Exception {
+		String resultado = Constantes.EMPTY;
 		try {
 			Integer consecutivo = Constantes.ZEROS;
-			consecutivo = empresa.getNumeroConsecutivo() == null ? Constantes.CONSECUTIVO_INICIAL_FACTURA : empresa.getNumeroConsecutivo() + 1;
-			empresa.setNumeroConsecutivo(consecutivo);
+			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
+					consecutivo = empresa.getTiqueteConsecutivo();
+					empresa.setTiqueteConsecutivo(empresa.getTiqueteConsecutivo() + 1);
+				
+			}
+			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
+
+					consecutivo = empresa.getNumeroConsecutivo();
+					empresa.setNumeroConsecutivo(empresa.getNumeroConsecutivo() + 1);
+
+			}
+			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+					consecutivo = empresa.getNotacConsecutivo();
+					empresa.setNumeroConsecutivo(empresa.getNotacConsecutivo() + 1);
+			}
+			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+					consecutivo = empresa.getNotadConsecutivo();
+					empresa.setNotadConsecutivo(empresa.getNotadConsecutivo() + 1);
+			}
+
 			modificar(empresa);
 			// Casa matriz
 			String casaMatriz = Constantes.EMPTY;
 			casaMatriz = empresa.getCazaMatriz() == null ? Constantes.CASA_MATRIZ_INICIAL_FACTURA : empresa.getCazaMatriz();
 			// Terminal donde esta vendiendo el usaurio
 			String terminalUsuario = Constantes.EMPTY;
-			terminalUsuario = usuario.getTerminalFactura() == null ? Constantes.TERMINAL_INICIAL_FACTURA : FacturaElectronicaUtils.replazarConZeros(usuario.getTerminalFactura(),"00000");
+			terminalUsuario = usuario.getTerminalFactura() == null ? Constantes.TERMINAL_INICIAL_FACTURA : FacturaElectronicaUtils.replazarConZeros(usuario.getTerminalFactura(), "00000");
 			String consecutivoFactura = "0000000000".substring(consecutivo.toString().length()) + consecutivo;
 
-			resultado = casaMatriz + terminalUsuario +factura.getTipoDoc()+ consecutivoFactura;
-			
+			resultado = casaMatriz + terminalUsuario + factura.getTipoDoc() + consecutivoFactura;
+
 		} catch (Exception e) {
 			log.info("** Error  generarConsecutivoFactura: " + e.getMessage() + " fecha " + new Date());
 			throw e;
@@ -141,19 +159,19 @@ public class EmpresaDaoImpl implements EmpresaDao {
 	 * @see com.emprendesoftcr.Dao.EmpresaDao#generaClaveFacturaTributacion(com.emprendesoftcr.modelo.Empresa, java.lang.String, java.lang.Integer)
 	 */
 	@Override
-	public String generaClaveFacturaTributacion(Empresa empresa,String consecutivoFactura,Integer comprobanteElectronico) throws Exception{
-		
+	public String generaClaveFacturaTributacion(Empresa empresa, String consecutivoFactura, Integer comprobanteElectronico) throws Exception {
+
 		String resultado = Constantes.EMPTY;
 		try {
 			resultado = FacturaElectronicaUtils.claveFactura(empresa.getCedula(), consecutivoFactura, comprobanteElectronico, empresa.getCodigoSeguridad());
-			
+
 		} catch (Exception e) {
 			log.info("** Error  generarClaveFacturaTributaria: " + e.getMessage() + " fecha " + new Date());
 			throw e;
-			
+
 		}
-		
+
 		return resultado;
 	}
-	
+
 }

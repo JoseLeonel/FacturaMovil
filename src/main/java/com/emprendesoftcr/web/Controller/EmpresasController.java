@@ -207,7 +207,10 @@ public class EmpresasController {
 				empresaBD.setUpdated_at(new Date());
 				empresaBD.setClaveLlaveCriptografica(empresa.getClaveLlaveCriptografica());
 				empresaBD.setNombreLlaveCriptografica(empresa.getNombreLlaveCriptografica());
-				empresaBD.setCodigoSeguridad(empresa.getCodigoSeguridad());;
+				empresaBD.setCodigoSeguridad(empresa.getCodigoSeguridad());
+				empresaBD.setNotacConsecutivo(empresa.getNotacConsecutivo());
+				empresaBD.setNotadConsecutivo(empresa.getNotadConsecutivo());
+				empresaBD.setTiqueteConsecutivo(empresa.getTiqueteConsecutivo());
 				empresaBo.modificar(empresaBD);
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("empresa.modificado.correctamente", empresaBD);
 			}

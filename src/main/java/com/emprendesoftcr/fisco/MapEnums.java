@@ -9,6 +9,18 @@ import com.google.common.collect.ImmutableMap;
 
 public class MapEnums {
 
+   public static final Map<Integer, String> ENUM_ESTADO_HACIENTA = ImmutableMap.<Integer, String>builder()
+  		.put(1, "Pendiente Firmar xml").
+       put(2, "Firmado XML").
+       put(3, "Enviado").
+       put(4, "Enviado con Error").
+       put(5, "Tope Envios").
+       put(6, "Aceptado").
+       put(7, "Rechazado").
+       put(8, "Tope Aceptacion")
+       .build();
+
+	
     public static final Map<String, String> ENUM_TIPOS_IDENTIFICACION = ImmutableMap.of("01", "Cedula Fisica",
             "02", "Cedula Juridica",
             "03", "DIMEX",

@@ -30,20 +30,27 @@ public class Empresa implements Serializable {
 	@Column(name = "numero_consecutivo")
 	private Integer						numeroConsecutivo;
 
+	@Column(name = "notac_consecutivo")
+	private Integer						notacConsecutivo;
+
+	@Column(name = "notad_consecutivo")
+	private Integer						notadConsecutivo;
+	
+	@Column(name = "tiq_consecutivo")
+	private Integer						tiqueteConsecutivo;
+
+
 	@Column(name = "caza_matriz")
 	private String						cazaMatriz;
-	
+
 	@Column(name = "codigo_seguridad")
 	private Integer						codigoSeguridad;
-
 
 	@Column(name = "nombre")
 	private String						nombre;
 
 	@Column(name = "nombre_comercial")
 	private String						nombreComercial;
-
-	
 
 	@Column(name = "tipo_cedula")
 	private String						tipoCedula;
@@ -86,14 +93,13 @@ public class Empresa implements Serializable {
 
 	@Column(name = "clave_llaveCriptografica")
 	private Integer						claveLlaveCriptografica;
-	
+
 	@Column(name = "usuario_envio_comprobante")
 	private String						usuarioEnvioComprobante;
 
 	@Column(name = "password_envio_comprobante")
 	private String						passwordEnvioComprobante;
 
-	
 	@Column(name = "estado")
 	private String						estado;
 	@Temporal(TemporalType.TIMESTAMP)
@@ -106,13 +112,13 @@ public class Empresa implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
-	public Empresa(Integer id, String nombre, String nombreComercial, String tipoCedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton, String nombreLlaveCriptografica, Integer claveLlaveCriptografica,Integer codigoSeguridad,String usuarioEnvioComprobante,String passwordEnvioComprobante) {
+	public Empresa(Integer id, String nombre, String nombreComercial, String tipoCedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, Integer codigoSeguridad, String usuarioEnvioComprobante, String passwordEnvioComprobante, Integer notacConsecutivo, Integer notadConsecutivo,Integer tiqueteConsecutivo) {
 		super();
 		this.id = id;
 		this.numeroConsecutivo = numeroConsecutivo;
 		this.nombre = nombre;
 		this.nombreComercial = nombreComercial;
-	
+
 		this.tipoCedula = tipoCedula;
 		this.otraSenas = otraSenas;
 		this.codigoPais = codigoPais;
@@ -132,9 +138,12 @@ public class Empresa implements Serializable {
 		this.codigoSeguridad = codigoSeguridad;
 		this.nombreLlaveCriptografica = nombreLlaveCriptografica;
 		this.claveLlaveCriptografica = claveLlaveCriptografica;
-		
+
 		this.passwordEnvioComprobante = passwordEnvioComprobante;
 		this.usuarioEnvioComprobante = usuarioEnvioComprobante;
+		this.notacConsecutivo = notacConsecutivo;
+		this.notadConsecutivo = notadConsecutivo;
+		this.tiqueteConsecutivo = tiqueteConsecutivo;
 	}
 
 	public Empresa() {
@@ -183,8 +192,6 @@ public class Empresa implements Serializable {
 	public void setNombreComercial(String nombreComercial) {
 		this.nombreComercial = nombreComercial;
 	}
-
-	
 
 	public String getTipoCedula() {
 		return tipoCedula;
@@ -322,34 +329,54 @@ public class Empresa implements Serializable {
 		this.claveLlaveCriptografica = claveLlaveCriptografica;
 	}
 
-	
 	public Integer getCodigoSeguridad() {
 		return codigoSeguridad;
 	}
 
-	
 	public void setCodigoSeguridad(Integer codigoSeguridad) {
 		this.codigoSeguridad = codigoSeguridad;
 	}
 
-	
 	public String getUsuarioEnvioComprobante() {
 		return usuarioEnvioComprobante;
 	}
 
-	
 	public void setUsuarioEnvioComprobante(String usuarioEnvioComprobante) {
 		this.usuarioEnvioComprobante = usuarioEnvioComprobante;
 	}
 
-	
 	public String getPasswordEnvioComprobante() {
 		return passwordEnvioComprobante;
 	}
 
-	
 	public void setPasswordEnvioComprobante(String passwordEnvioComprobante) {
 		this.passwordEnvioComprobante = passwordEnvioComprobante;
+	}
+
+	public Integer getNotacConsecutivo() {
+		return notacConsecutivo;
+	}
+
+	public void setNotacConsecutivo(Integer notacConsecutivo) {
+		this.notacConsecutivo = notacConsecutivo;
+	}
+
+	public Integer getNotadConsecutivo() {
+		return notadConsecutivo;
+	}
+
+	public void setNotadConsecutivo(Integer notadConsecutivo) {
+		this.notadConsecutivo = notadConsecutivo;
+	}
+
+	
+	public Integer getTiqueteConsecutivo() {
+		return tiqueteConsecutivo;
+	}
+
+	
+	public void setTiqueteConsecutivo(Integer tiqueteConsecutivo) {
+		this.tiqueteConsecutivo = tiqueteConsecutivo;
 	}
 	
 	

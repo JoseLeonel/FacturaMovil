@@ -58,7 +58,17 @@ public class Hacienda implements Serializable {
 
 	@Column(name = "cedula_receptor")
 	private String						cedulaReceptor;
+	
+	@Column(name = "nombre_receptor")
+	private String						nombreReceptor;
+	
+	@Column(name = "correo_receptor")
+	private String						correoReceptor;
 
+	@Column(name = "total_receptor")
+	private Double						totalReceptor;
+
+	
 	@Column(name = "comprobante_xml")
 	@Lob
 	private Blob							comprobanteXML;
@@ -104,7 +114,9 @@ public class Hacienda implements Serializable {
 
 	
 
-	public Hacienda(Long id, String tipoDoc, Date fechaEmisor, String clave, String tipoEmisor, String cedulaEmisor, String tipoReceptor, String cedulaReceptor, Blob comprobanteXML, String consecutivo, Integer estado, Integer status, Integer reintentos, Integer reintentosAceptacion, Blob mensajeHacienda, Integer notificacion, Blob xErrorCause, Empresa empresa, Date created_at, Date updated_at) {
+
+
+	public Hacienda(Long id, String tipoDoc, Date fechaEmisor, String clave, String tipoEmisor, String cedulaEmisor, String tipoReceptor, String cedulaReceptor, String nombreReceptor, String correoReceptor, Double totalReceptor, Blob comprobanteXML, String consecutivo, Integer estado, Integer status, Integer reintentos, Integer reintentosAceptacion, Blob mensajeHacienda, Integer notificacion, Blob xErrorCause, Empresa empresa, Date created_at, Date updated_at) {
 		super();
 		this.id = id;
 		this.tipoDoc = tipoDoc;
@@ -114,6 +126,9 @@ public class Hacienda implements Serializable {
 		this.cedulaEmisor = cedulaEmisor;
 		this.tipoReceptor = tipoReceptor;
 		this.cedulaReceptor = cedulaReceptor;
+		this.nombreReceptor = nombreReceptor;
+		this.correoReceptor = correoReceptor;
+		this.totalReceptor = totalReceptor;
 		this.comprobanteXML = comprobanteXML;
 		this.consecutivo = consecutivo;
 		this.estado = estado;
@@ -127,6 +142,9 @@ public class Hacienda implements Serializable {
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 	}
+
+
+
 
 	public Hacienda() {
 		super();
@@ -302,4 +320,54 @@ public class Hacienda implements Serializable {
 		this.notificacion = notificacion;
 	}
 
+
+
+
+	
+	public String getNombreReceptor() {
+		return nombreReceptor;
+	}
+
+
+
+
+	
+	public void setNombreReceptor(String nombreReceptor) {
+		this.nombreReceptor = nombreReceptor;
+	}
+
+
+
+
+	
+	public String getCorreoReceptor() {
+		return correoReceptor;
+	}
+
+
+
+
+	
+	public void setCorreoReceptor(String correoReceptor) {
+		this.correoReceptor = correoReceptor;
+	}
+
+
+
+
+	
+	public Double getTotalReceptor() {
+		return totalReceptor;
+	}
+
+
+
+
+	
+	public void setTotalReceptor(Double totalReceptor) {
+		this.totalReceptor = totalReceptor;
+	}
+
+	
+	
 }

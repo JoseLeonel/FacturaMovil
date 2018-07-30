@@ -6,6 +6,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -21,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.emprendesoftcr.Bo.CorreosBo;
@@ -163,7 +163,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
 	// @Scheduled(cron = "*/5 * * * * ?")
- 	@Scheduled(cron = "0 0/1 * * * ?")
+ //	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 		try {
@@ -200,7 +200,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * @param hacienda
 	 * @throws Exception
 	 */
-	private void envioHacienda(Hacienda hacienda) throws Exception {
+	@Override
+	public void envioHacienda(Hacienda hacienda) throws Exception {
 		try {
 			OpenIDConnectHacienda openIDConnectHacienda = null;
 			// Obtener el token en hacienda para enviar los documentos
@@ -288,7 +289,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html Proceso automatico para ejecutar aceptacion del documento
 	 */
-  @Scheduled(cron = "0 0/2 * * * ?")
+ // @Scheduled(cron = "0 0/2 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		try {
@@ -325,7 +326,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Aceptar documentos
 	 * @param hacienda
 	 */
-	private void aceptarDocumento(Hacienda hacienda) throws Exception {
+	@Override
+	public void aceptarDocumento(Hacienda hacienda) throws Exception {
 		try {
 			OpenIDConnectHacienda openIDConnectHacienda = null;
 			// Obtener el token en hacienda para enviar los documentos
@@ -388,7 +390,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	//@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -413,7 +415,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	}
 
-	private void enviarCorreos(Factura factura, Hacienda hacienda) throws Exception {
+	@Override
+	public  void enviarCorreos(Factura factura, Hacienda hacienda) throws Exception {
 		try {
 			String xmlFactura = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
 			String xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(hacienda.getMensajeHacienda());
@@ -430,12 +433,17 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			modelEmail.put("nombreEmpresa", factura.getEmpresa().getNombre());
 			modelEmail.put("correo", factura.getEmpresa().getCorreoElectronico());
 			modelEmail.put("telefono", factura.getEmpresa().getTelefono());
-			String to = "josehernandezchaverri@gmail.com";
+			ArrayList<String> listaCorreos = new ArrayList<String>();
+			if(!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+				listaCorreos.add(factura.getCliente().getCorreoElectronico());	
+			}
+			listaCorreos.add(factura.getEmpresa().getCorreoElectronico());
+			
 			String from = "FISCO_No_Reply@emprendesoftcr.com";
 			String subject = "Factura Electrónica N° " + clave + " del Emisor: " + factura.getEmpresa().getNombre();
 
 			//
-			correosBo.enviarConAttach(attachments, to, from, subject, "email/emailHacienda.vm", modelEmail);
+			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailHacienda.vm", modelEmail);
 			//
 		} catch (Exception e) {
 			log.info("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date());

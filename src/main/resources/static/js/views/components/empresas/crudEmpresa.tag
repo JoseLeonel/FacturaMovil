@@ -87,23 +87,40 @@
                             </div>
                         </div>
                         <div class="row">    
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label class="knob-label" >{$.i18n.prop("empresa.codigoPais")}</label>
                                 <input type="text" class="form-control codigoPais" placeHolder ="{$.i18n.prop("empresa.codigoPais.ejemplo")}" id="codigoPais" name="codigoPais" value="{empresa.codigoPais}"  >
                             </div>
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label class="knob-label" >{$.i18n.prop("empresa.telefono")} </label>
                                 <input type="text" class="form-control telefono" placeHolder ="{$.i18n.prop("empresa.telefono")}" id="telefono" name="telefono" value="{empresa.telefono}"  >
                             </div>
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label class="knob-label" >{$.i18n.prop("empresa.casa.matriz")} </label>
                                 <input type="text" class="form-control cazaMatriz" placeHolder ="{$.i18n.prop("empresa.casa.matriz")}" id="cazaMatriz" name="cazaMatriz" value="{empresa.cazaMatriz}"  >
                             </div>
+                        </div>
+
+                        <div class="row">    
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("empresa.numeroConsecutivo")}</label>
                                 <input type="text" class="form-control numeroConsecutivo" placeHolder ="{$.i18n.prop("empresa.numeroConsecutivo")}" id="numeroConsecutivo" name="numeroConsecutivo" value="{empresa.numeroConsecutivo}"  >
                             </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("empresa.notacConsecutivo")}</label>
+                                <input type="text" class="form-control notacConsecutivo" placeHolder ="{$.i18n.prop("empresa.notacConsecutivo")}" id="notacConsecutivo" name="notacConsecutivo" value="{empresa.notacConsecutivo}"  >
+                            </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("empresa.notadConsecutivo")}</label>
+                                <input type="text" class="form-control notadConsecutivo" placeHolder ="{$.i18n.prop("empresa.notadConsecutivo")}" id="notadConsecutivo" name="notadConsecutivo" value="{empresa.notadConsecutivo}"  >
+                            </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >{$.i18n.prop("empresa.tiqueteConsecutivo")}</label>
+                                <input type="text" class="form-control tiqueteConsecutivo" placeHolder ="{$.i18n.prop("empresa.tiqueteConsecutivo")}" id="tiqueteConsecutivo" name="tiqueteConsecutivo" value="{empresa.tiqueteConsecutivo}"  >
+                            </div>
+
                         </div>
+
                         <div class="row">    
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("empresa.provincia")} </label>
@@ -507,6 +524,21 @@ var reglasDeValidacion = function() {
                 required : true,
                 numeroMayorCero:true,
             },
+            notacConsecutivo:{
+                minlength:10,
+                required : true,
+                numeroMayorCero:true,
+            },
+            notadConsecutivo:{
+                minlength:10,
+                required : true,
+                numeroMayorCero:true,
+            },
+            tiqueteConsecutivo:{
+                minlength:10,
+                required : true,
+                numeroMayorCero:true,
+            },
             cazaMatriz:{
                 minlength:3,
                 maxlength:3,
@@ -566,6 +598,10 @@ function _limpiar(){
    $("#otraSenas").val(null)
    $("#web").val(null)
    $("#numeroConsecutivo").val(null)
+   $("#notacConsecutivo").val(null)
+   $("#notadConsecutivo").val(null)
+   $("#tiqueteConsecutivo").val(null)
+   
    $("#nombreLlaveCriptografica").val(null)
    $("#claveLlaveCriptografica").val(null)
    $("#codigoSeguridad").val(null)
@@ -578,12 +614,7 @@ function _limpiar(){
         numeroConsecutivo:0000000000
     }
     self.update()
-
-
 }
-
-
-
 /**
 *  Crear el combo de estados
 **/
@@ -599,7 +630,6 @@ function __ComboEstados(){
         descripcion: $.i18n.prop("combo.estado.Inactivo")
      });
      self.update();
-
 }
 /**
 *  Activar Eventos
@@ -609,21 +639,17 @@ function __Eventos(){
     //$("#nombre").attr("maxlength", 78);
     $("#telefono").attr("maxlength", 9);
     $("#cedula").attr("maxlength", 12);
-    
     $("#nombreComercial").attr("maxlength", 80);
     $("#usuarioEnvioComprobante").attr("maxlength",250);
     $("#passwordEnvioComprobante").attr("maxlength",250);
-    
     $("#otraSenas").attr("maxlength", 250);
     $("#logo").attr("maxlength", 250);
     $("#codigoPais").attr("maxlength", 3);
     $("#cazaMatriz").attr("maxlength", 3);
-    
     $("#correoElectronico").attr("maxlength", 250);
     $("#representante").attr("maxlength", 80);
     $("#web").attr("maxlength", 80);
     $("#codigoSeguridad").attr("maxlength", 8);
-
     $('#cazaMatriz').mask('000', {
 	    'translation' : {
             0 : {
@@ -638,10 +664,6 @@ function __Eventos(){
             }
     	}
     });
-
-
-   
-
     $('#claveLlaveCriptografica').mask('0000', {
 	    'translation' : {
             0 : {
@@ -649,9 +671,6 @@ function __Eventos(){
             }
     	}
     }); 
-   
-   
-
     $('#codigoPais').mask('000', {
 	    'translation' : {
             0 : {
@@ -660,6 +679,28 @@ function __Eventos(){
     	}
     }); 
     $('#numeroConsecutivo').mask('0000000000', {
+	    'translation' : {
+            0 : {
+                pattern : /[0-9]/
+            }
+    	}
+    }); 
+    $('#notacConsecutivo').mask('0000000000', {
+	    'translation' : {
+            0 : {
+                pattern : /[0-9]/
+            }
+    	}
+    });         
+    $('#notadConsecutivo').mask('0000000000', {
+	    'translation' : {
+            0 : {
+                pattern : /[0-9]/
+            }
+    	}
+    });  
+
+     $('#tiqueteConsecutivo').mask('0000000000', {
 	    'translation' : {
             0 : {
                 pattern : /[0-9]/
@@ -678,9 +719,7 @@ function __Eventos(){
 
     
     }
-    
-    
- $('#telefono').mask('00000000', {
+    $('#telefono').mask('00000000', {
             'translation' : {
                 0 : {
                     pattern : /[0-9]/
@@ -731,7 +770,6 @@ function __listadoTipoCedulas(){
     })
     self.update()
 }
-
 /**
 * Carga de estados 
 **/    
@@ -748,8 +786,6 @@ function __ComboEstados(){
     })
     self.update()
 }
-
-
 /**
 *  Regresar al listado
 **/
@@ -781,9 +817,7 @@ __regresarAlListado(){
 
 // Mostrar formulario de mantenimiento Agregar
 function __MantenimientoAgregar(){
-      //Inicializar el Formulario
     $('.dataTables_wrapper').on('click','.btn-agregar',function(e){
-       
         //desahabilita  listado 
         self.mostrarListado   = false;
         self.mostrarFormulario  = true 
@@ -846,10 +880,13 @@ function __consultar(){
                         self.botonAgregar     = false;                        
                         self.empresa  =  modeloTabla
                         self.empresa.numeroConsecutivo = zfill(self.empresa.numeroConsecutivo,10)
+                        self.empresa.notacConsecutivo = zfill(self.empresa.notacConsecutivo,10)
+                        self.empresa.notadConsecutivo = zfill(self.empresa.notadConsecutivo,10)
+                        self.empresa.tiqueteConsecutivo = zfill(self.empresa.tiqueteConsecutivo,10)
 
                         self.update()
-                       $("#tipoCedula").val(self.empresa.usuarioEnvioComprobante);
-                       $("#tipoCedula").val(self.empresa.passwordEnvioComprobante);
+                       $("#usuarioEnvioComprobante").val(self.empresa.usuarioEnvioComprobante);
+                       $("#passwordEnvioComprobante").val(self.empresa.passwordEnvioComprobante);
                         $("#tipoCedula").val(self.empresa.tipoCedula);
                         $("#provincia").val(self.empresa.provincia);
                         $("#canton").val(self.empresa.canton);
@@ -869,6 +906,10 @@ function __consultar(){
                         $("#nombreLlaveCriptografica").val(self.empresa.nombreLlaveCriptografica)
                         $("#claveLlaveCriptografica").val(self.empresa.claveLlaveCriptografica)
                         $("#numeroConsecutivo").val(self.empresa.numeroConsecutivo)
+                        $("#notadConsecutivo").val(self.empresa.notadConsecutivo)
+                        $("#notacConsecutivo").val(self.empresa.notacConsecutivo)
+                        $("#tiqueteConsecutivo").val(self.empresa.tiqueteConsecutivo)
+                        
                         __ComboEstados()
                     });
                 }

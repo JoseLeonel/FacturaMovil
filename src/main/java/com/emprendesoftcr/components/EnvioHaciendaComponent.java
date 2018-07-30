@@ -80,12 +80,21 @@ public class EnvioHaciendaComponent {
 					List err = (List) headersResponse.get(POST_X_ERROR_CAUSE);
 					String headerError = err != null && err.size() > 0 ? (String) err.get(0) : null;
 					strResponse = headerError != null && headerError != "" ? headerError : strResponse;
-					hacienda.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR);
-					hacienda.setUpdated_at(new Date());
-					hacienda.setxErrorCause(FacturaElectronicaUtils.convertirStringToblod(headerError));
-					hacienda.setStatus(response.getStatus());
-					hacienda.setReintentos(hacienda.getReintentos() != null?hacienda.getReintentos() + 1:1);
-					haciendaBo.modificar(hacienda);
+					if(!strResponse.contains("ya fue recibido anteriormente.")) {
+						hacienda.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR);
+						hacienda.setUpdated_at(new Date());
+						hacienda.setxErrorCause(FacturaElectronicaUtils.convertirStringToblod(headerError));
+						hacienda.setStatus(response.getStatus());
+						hacienda.setReintentos(hacienda.getReintentos() != null?hacienda.getReintentos() + 1:1);
+						haciendaBo.modificar(hacienda);
+						
+					}else {
+						hacienda.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA);
+						hacienda.setUpdated_at(new Date());
+						hacienda.setxErrorCause(FacturaElectronicaUtils.convertirStringToblod(strResponse));
+						hacienda.setReintentos(Constantes.ZEROS);
+						haciendaBo.modificar(hacienda);
+					}
 					
 				}
 
