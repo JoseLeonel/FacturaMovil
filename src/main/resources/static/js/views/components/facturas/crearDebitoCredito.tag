@@ -1,5 +1,5 @@
-<punto-venta>
-
+<debito-credito>
+<!--Se creo para no dejarlo a la venta comun sino para casos especiales no valida la cantidad del articulo en el invetario-->
 
     <div class="box" show={mostrarFormularioPago}>
         <div class="box-body">
@@ -39,7 +39,7 @@
                                     </div>
                                 </div>
                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3" show={mostrarReferencias == false}>
-                                    <div class="form-group has-success " show = {!mostrarCamposIngresoContado || factura.fechaCredito}>
+                                    <div class="form-group  " show = {!mostrarCamposIngresoContado || factura.fechaCredito}>
                                         <label>{$.i18n.prop("factura.plazoCredito")}</label> 
                                         <input type="number" id = "plazoCredito"  name "plazoCredito" class="form-control plazoCredito" value="{factura.plazoCredito}" >
                                     </div>
@@ -47,7 +47,7 @@
                             </div>   
                             <div class="row" show={mostrarReferencias == false}>
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                                    <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group has-success">
+                                    <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group ">
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 
                                         <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
                                             <input type="text" class="form-control fechaCredito" name="fechaCredito" id="fechaCredito" value="{factura.fechaCredito}" >
@@ -58,7 +58,7 @@
                                     </div>    
                                 </div>
                             </div>        
-                            <div class="row" show={mostrarReferencias == false}>
+                            <div class="row" >
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                     <div class="form-group ">
                                         <label >{$.i18n.prop("factura.nota")}</label> 
@@ -66,7 +66,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" show={mostrarReferencias == false}>
+                            <div class="row" >
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                     <div class="form-group ">
                                         <label >{$.i18n.prop("factura.direccion")}</label> 
@@ -75,7 +75,7 @@
                                 </div>
                             </div>
                             
-                            <div class="row" show={mostrarReferencias == false}>
+                            <div class="row" >
                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3" >
                                    <h3> <p class="text-primary">{$.i18n.prop("factura.emisor")}</p></h3>
                                   
@@ -86,7 +86,7 @@
                                 </div>
                             </div>
                             <br>
-                            <div class="row" show={mostrarReferencias == false}>
+                            <div class="row" >
                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                     <div class="form-group ">
                                         <input   type="hidden" class="form-control" id="cliente" name="cliente" value="{cliente.id}">
@@ -114,7 +114,24 @@
                                 </div>
 
                             </div>    
-                            <div show={mostrarReferencias}>
+                                     
+                            <div class="row" >
+                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                    <div class="form-group ">
+                                        <label>{$.i18n.prop("cliente.correoElectronico")}</label> 
+                                        <input type="text" class="form-control " value="{cliente.correoElectronico}" readonly>
+                                    </div>
+                                </div>
+                            </div>                                
+                            <div class="row" >
+                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                    <div class="form-group ">
+                                        <label>{$.i18n.prop("cliente.otraSena")}</label> 
+                                        <input type="text" class="form-control " value="{cliente.otraSena}" readonly>
+                                    </div>
+                                </div>
+                            </div> 
+                            <div >
                                 <div class="row">
                                     <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                         <div class="form-group ">
@@ -133,13 +150,13 @@
                                     <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <div class="form-group ">
                                             <label>{$.i18n.prop("informacion.TipoDoc")}</label> 
-                                            <select class="form-control has-success" id="referenciaTipoDoc" name="referenciaTipoDoc"  disabled  >
-                                                <option each={comboTipoDocumentos} value="{estado}" selected="{factura.referenciaTipoDoc ==estado?true:false}" >{descripcion}</option>
+                                            <select class="form-control has-success" id="referenciaTipoDoc" name="referenciaTipoDoc"    >
+                                                <option each={comboTipoDocumentosRef} value="{estado}" selected="{factura.referenciaTipoDoc ==estado?true:false}" >{descripcion}</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                            <div  class="form-group has-success">
+                                            <div  class="form-group">
                                                 <label >{$.i18n.prop("informacion.FechaEmision")}</label> 
                                                 <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
                                                     <input type="text" class="form-control referenciaFechaEmision" name="referenciaFechaEmision" id="referenciaFechaEmision" value="{factura.referenciaFechaEmision}" >
@@ -149,10 +166,11 @@
                                                 </div>
                                             </div>    
                                     </div>
+
                                     <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <div class="form-group ">
                                             <label>{$.i18n.prop("informacion.codigo")}</label> 
-                                            <select class="form-control has-success" id="referenciaCodigo" name="referenciaCodigo" >
+                                            <select class="form-control " id="referenciaCodigo" name="referenciaCodigo" >
                                                 <option each={codigosReferencias}  value="{estado}" selected="{factura.referenciaCodigo ==estado?true:false}" >{descripcion}</option>
                                             </select>
                                         </div>
@@ -163,7 +181,7 @@
                                     <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                         <div class="form-group ">
                                             <label>{$.i18n.prop("informacion.razon")}</label> 
-                                            <input type="text" class="form-control " id"referenciaRazon" name= "referenciaRazon" value="{factura.referenciaRazon}" max="250" >
+                                            <input type="text" class="form-control " id"referenciaRazon" name= "referenciaRazon" value="{factura.referenciaRazon}"  >
                                         </div>
                                     </div>
 
@@ -177,7 +195,7 @@
                                 <div class= "col-md-9 col-sm-9 col-lg-9"></div>
                             </div>
                             <br>                            
-                            <div class="row" show={mostrarReferencias == false}>
+                            <div class="row" >
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div class="form-group ">
                                         <input   type="hidden" class="form-control vendedor" id="vendedor" name="vendedor" value="{vendedor.id}">
@@ -207,8 +225,6 @@
                             <input type="hidden" id='totalServExentos'        name='totalServExentos'        value="{factura.totalServExentos}" >
                             <input type="hidden" id='totalMercanciasGravadas' name='totalMercanciasGravadas' value="{factura.totalMercanciasGravadas}" >
                             <input type="hidden" id='totalMercanciasExentas'  name='totalMercanciasExentas'  value="{factura.totalMercanciasExentas}" >
-                            <input type="hidden" id='totalServGravados'       name='totalServGravados'       value="{factura.totalServGravados}" >
-                            <input type="hidden" id='totalServExentos'        name='totalServExentos'        value="{factura.totalServExentos}" >
                             <input type="hidden" id='totalGravado'            name='totalGravado'            value="{factura.totalGravado}" >
                             <input type="hidden" id='totalExento'             name='totalExento'             value="{factura.totalExento}" >
                             <input type="hidden" id='totalVenta'              name='totalVenta'              value="{factura.totalVenta}" >
@@ -245,7 +261,7 @@
                                 <div show = {mostrarCamposIngresoContado }>
 
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.efectivo")}</p> 
-                                    <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo"  value="" >
+                                    <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalBanco " id="totalEfectivo" name="totalEfectivo"  value="" >
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.tarjeta")}</p> 
                                     <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"   >
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.banco")}</p> 
@@ -266,7 +282,7 @@
                 <div class="row">
                   <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">  
                   <div class="box-tools ">
-                    <a class="pull-left" href="#"     title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("crear.ventas")}</span></a>
+                    <a class="pull-left" href="#"     title="{$.i18n.prop("crear.documentos.especiales")}"> <span class="label label-limpiar">{$.i18n.prop("crear.documentos.especiales")}</span></a>
                     <a class="pull-right" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("btn.limpiar")}</span></a>
                     <a class="pull-right" href="#"    onclick = {__AplicarYcrearFactura} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("btn.tiquete")}</span></a>
                   </div>
@@ -275,6 +291,7 @@
                   <br>
              </div>
             <div  class="contenedor-factura " >
+                
                 <div class="cabecera-izquierda">
                     <div class="row">
                             <div class="col-sx-12 col-sm-6 col-md-6 col-lg-10">
@@ -792,7 +809,7 @@
 
     self.on('mount',function(){
          
-         
+         _INIT()
         $("#formularioFactura").validate(reglasDeValidacionFactura());
          
         __informacionData()
@@ -823,9 +840,12 @@
     })
 
 __LimpiarFormulario(){
+     _INIT()    
+}
+
+function _INIT(){
     $(".plazoCredito").val(null)   
     $(".fechaCredito").val(null)   
-    
     $(".nota").val(null)   
     $(".direccion").val(null)   
     $(".referenciaFechaEmision").val(null)
@@ -835,6 +855,7 @@ __LimpiarFormulario(){
     $('.referenciaCodigo').prop("selectedIndex", 0);
     $('.condicionVenta').prop("selectedIndex", 0);
     $('.tipoDoc').prop("selectedIndex", 0);
+    $("#referenciaRazon").attr("maxlength", 200);
     self.cliente               = {}
     self.vendedor              = {
         id:0,
@@ -847,7 +868,7 @@ __LimpiarFormulario(){
     self.barrios                       = []
 
     self.update()
-     
+
 }
 
 __formaReferencias(e){
@@ -1060,6 +1081,9 @@ function _consultarBarriosByCantoAndProvinciaAndDistritos(idProvincia,idCanton,i
     self.update();
 
 }
+
+
+
 /**
 * Aplicar el descuento
 **/
@@ -1324,8 +1348,6 @@ function __Init(){
     }                            
     self.item                  = null;
     self.articulo              = null;
-    self.articulos             = {data:[]}
-    self.clientes              = {data:[]}
     self.detalleFactura        ={data:[]}
     self.cliente               = {};
     self.vendedor              = {
@@ -1718,14 +1740,7 @@ function __buscarcodigo(idArticulo,cantidad){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         //Articulo no puede agregarse si no hay en el inventario
-                        if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
-                            mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
-                            return
-                        }
-                        if(modeloTabla.cantidad < cantidad ){
-                            mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
-                            return
-                        }
+                       
                         self.articulo  = modeloTabla
                         self.update()
                         __agregarArticulo(cantidad)
@@ -1758,7 +1773,7 @@ function __agregarArticulo(cantidad){
         encontrado = true;
     }else{//Se busca el articulo si existe se incrementa la cantidad
         for (var count = 0; count < self.detail.length; count++) {
-            if (self.detail[count].codigo == self.articulo.codigo ){
+            if (self.detail[count].articulo_id == self.articulo.id ){
                self.item          = self.detail[count];
                self.item.cantidad = self.item.cantidad + parseFloat(cantidad)
                self.update();
@@ -1813,7 +1828,6 @@ function __nuevoArticuloAlDetalle(cantidad){
     var montoTotalLinea = subTotal + montoImpuesto 
     self.detail.push({
        numeroLinea     : 1,
-       tipoImpuesto    : self.articulo.tipoImpuesto,
        iva             : parseFloat(self.articulo.impuesto),
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
@@ -2272,17 +2286,37 @@ function __comboCondicionPagoRef(){
 **/
 function __ComboTipoDocumentos(){
     self.comboTipoDocumentos = []
+    self.comboTipoDocumentosRef = []
     self.update()
+    
     self.comboTipoDocumentos.push({
-        estado:"04",
-        descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
+         estado:"02",
+        descripcion:$.i18n.prop("factura.tipo.documento.nota.debito")
     })
     self.comboTipoDocumentos.push({
+         estado:"03",
+        descripcion:$.i18n.prop("factura.tipo.documento.nota.credito")
+    })
+    self.update()
+   self.comboTipoDocumentosRef.push({
          estado:"01",
         descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
     })
+    self.comboTipoDocumentosRef.push({
+         estado:"02",
+        descripcion:$.i18n.prop("factura.tipo.documento.nota.debito")
+    })
+    self.comboTipoDocumentosRef.push({
+         estado:"03",
+        descripcion:$.i18n.prop("factura.tipo.documento.nota.credito")
+    })
+     self.comboTipoDocumentosRef.push({
+        estado:"04",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
+    })
     
     self.update()
+
 }
 /**
 * cargar los estados de la factura
@@ -2321,7 +2355,7 @@ function agregarInputsCombos_Clientes(){
     $('.tableListaCliente tfoot th').each( function (e) {
         var title = $('.tableListaCliente thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 5    ){
+        if ( $(this).index() != 6    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
@@ -2368,4 +2402,4 @@ function __Teclas(){
 
 </script>
 
-</punto-venta>
+</debito-credito>

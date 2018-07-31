@@ -243,6 +243,26 @@ public class FacturasController {
 	public String crearCompras(ModelMap model) {
 		return "views/facturas/puntoVenta";
 	}
+	
+	/**
+	 * Ventas por servicios por profeccionates
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/ventasPorServicio", method = RequestMethod.GET)
+	public String ventasPorServicios(ModelMap model) {
+		return "views/facturas/ventasPorServicios";
+	}
+	
+	/**
+	 * Crear Notas de Credito y debito
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/creditoDebito", method = RequestMethod.GET)
+	public String creditoDebito(ModelMap model) {
+		return "views/facturas/creditoDebito";
+	}
 
 	/**
 	 * Listado de facturas anuladas y facturadas

@@ -1,5 +1,7 @@
 package com.emprendesoftcr.service;
 
+import java.util.ArrayList;
+
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Hacienda;
 
@@ -24,5 +26,5 @@ public interface ProcesoHaciendaService {
 	//Enviar documento hacienda
 	 void envioHacienda(Hacienda hacienda) throws Exception;
 	 
-	 void enviarCorreos(Factura factura, Hacienda hacienda) throws Exception;
+	 void enviarCorreos(Factura factura, Hacienda hacienda,ArrayList<String> listaCorreos) throws Exception;
 }

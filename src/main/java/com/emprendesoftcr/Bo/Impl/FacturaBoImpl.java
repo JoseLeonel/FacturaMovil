@@ -327,7 +327,10 @@ public class FacturaBoImpl implements FacturaBo {
 
 					Inventario inventario = inventarioDao.findByArticuloAndEstado(articulo, Constantes.ESTADO_ACTIVO);
 					if (inventario != null) {
-						aplicarInventario(factura, inventario, detalle, articulo);
+						if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+							aplicarInventario(factura, inventario, detalle, articulo);	
+						}
+						
 					}
 
 				}

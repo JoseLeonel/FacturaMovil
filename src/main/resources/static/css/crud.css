@@ -581,6 +581,11 @@ input.cmn-toggle-yes-no:checked + label:after {
         font-family: FontAwesome;
         content: "\f040 ";
     }
+    
+      .btn-correo:before{
+        font-family: FontAwesome;
+        content: "\f003 ";
+    }
     .btn-back:before{
         font-family: FontAwesome;
         content: "\f053 ";
@@ -588,6 +593,11 @@ input.cmn-toggle-yes-no:checked + label:after {
     .btn-buscar:before{
     	font-family: FontAwesome;
         content: "\f00e ";
+    
+    }
+    .btn-siguiente:before{
+    	font-family: FontAwesome;
+        content: "\f054 ";
     
     }
 

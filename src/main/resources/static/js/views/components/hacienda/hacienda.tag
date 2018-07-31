@@ -59,7 +59,6 @@
             </div>
             <div class="col-xs-12 text-right">
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
-                <a onclick ={__crearArchivoExcel} id="btnDownload" class="btn btn-success" title ="Descargar" > <i class="fa fa-download"></i></a>
             	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
             </div>
         </div>
@@ -111,6 +110,42 @@
         </div>
     </div>
     <!-- Fin del Listado -->
+<!-- Modal -->
+<div class="modal fade" id="ModalCorreoAlternativo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          
+                <h1 class="box-title"><i class="btn-correo"></i>&nbsp {$.i18n.prop("hacienda.titulo.correo.alternativo")}     </h1>
+          
+      </div>
+      <div class="modal-body">
+        <form id = "formulario" name ="formulario "   class="advanced-search-form">
+            <div class="row">   
+                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                    <label class="knob-label" >{$.i18n.prop("hacienda.correo")}</label>
+                    <input type="email" class="form-control correoAlternativo" placeHolder ="{$.i18n.prop("hacienda.correo.ejemplo")}" id="correoAlternativo" name="correoAlternativo" value=""  >
+                </div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <div class="row">
+            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back  pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                    {$.i18n.prop("btn.volver")}
+                </button>
+            </div>
+            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                <button  onclick={__Enviar}   class="btn-green btn-correo pull-right" >  {$.i18n.prop("btn.enviar.correo")}</button>
+            </div>
+         </div>
+       
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <script>
     self = this
@@ -119,11 +154,35 @@
     self.mostrarDetalle        = false
 
 self.on('mount',function(){
+    $("#formulario").validate(reglasDeValidacion());
      __InicializarTabla('.tableListar')
     agregarInputsCombos() 
     listaClientesActivos()
+     window.addEventListener( "keydown", function(evento){
+             $(".errorServerSideJgrid").remove();
+        }, false );
 
 })   
+
+/**
+* Camps requeridos
+**/
+var reglasDeValidacion = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			correoAlternativo : {
+				required : true,
+                email:true,
+                maxlength:240,
+                minlength:1,
+			}                                   
+                        
+		},
+		ignore : []
+
+	});
+	return validationOptions;
+};
 
 function agregarInputsCombos(){
      // Agregar los input de busqueda 
@@ -135,6 +194,18 @@ function agregarInputsCombos(){
 	    }
     })
 } 
+
+/**
+* Enviar el correo
+**/
+__Enviar(){
+
+     if ($("#formulario").valid()) {
+         enviarCorreoAlternativo()
+     }
+
+}
+
 
 /*
  * Muestra los filtros avanzados
@@ -192,11 +263,7 @@ __regresarAlListado(){
         cancelButtonClass: 'btn btn-danger'
         }).then(function (isConfirm) {
             if(isConfirm){
-                self.detail                = []
-                self.mostrarListado        = true
-                self.mostrarDetalle        = false
-                self.update()
-                __listado();
+                $('#ModalCorreoAlternativo').modal('hide')
 
             }
     });    
@@ -238,6 +305,9 @@ __Busqueda(){
                     __EnviarAceptarHacienda()
                     __EnviarCorreos()
                     __BajarDocumentoXML()
+                    __RespuestaHacienda()
+                    __BajarPDFHacienda()
+                    __CorreoAlternativo()
                 }else{
                     __InformacionDataTable()
                     agregarInputsCombos()
@@ -297,14 +367,94 @@ function __Opciones(id,type,row){
     
     menu += '<li><a href="#"  title="Aceptacion Manual a Tributacion" class="  btnAceptacionManual" >Aceptacion Manual</a></li>'
     menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Envio Correo al Cliente</a></li>'
-    menu += '<li><a href="#"  title="Bajar XML" class="  btnBajarXML" >Bajar XML</a></li>'
-    menu += '<li><a href="#"  title="Bajar PDF" class="  btnBajarPDF" >Bajar PDF</a></li>'
-    menu += '<li><a href="#"  title="Bajar XML Aceptacion de Triburacion" class="  btnMostrar" >Bajar XML Aceptacion</a></li>'
+    menu += '<li><a href="#"  title="Bajar XML" class="  btnBajarXML" >XML Documentos</a></li>'
+    menu += '<li><a href="#"  title="Bajar XML Respuesta de Triburacion" class="  btnRespuestaHacienda" >XML Respuesta</a></li>'
+    menu += '<li><a href="#"  title="Bajar PDF" class="  btnBajarPDF" >PDF Documentos</a></li>'
     menu += '<li><a href="#"  title="Envio de correo Alternativo" class="  btnEnvioCorreoAlternativo" >Envio de correo Alternativo</a></li>'
     
     menu += "</ul></div>"  
 
      return menu;          
+}
+
+/**
+*  Enviar a correo alternativo
+**/
+function __CorreoAlternativo(){
+	$('.tableListar').on('click','.btnEnvioCorreoAlternativo',function(e){
+		var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+        self.hacienda = data
+        self.update()
+        $('.correoAlternativo').val(null)
+        $('#ModalCorreoAlternativo').modal('show')      
+	});
+}
+
+/**
+* Enviar correo
+**/
+function enviarCorreoAlternativo(){
+    $.ajax({
+        url: "EnviarCorreoAlternativoAjax",
+        datatype: "json",
+        data: {idHacienda:self.hacienda.id,correo:$('.correoAlternativo').val()},
+        method:"GET",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                sweetAlert("", data.message, "info");
+            }
+            
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
+        }
+    });
+}
+
+
+
+/**
+ * Bajar PDF
+ */
+function __BajarPDFHacienda(){
+	$('.tableListar').on('click','.btnBajarPDF',function(e){
+		var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+        BajarArchivos("bajarPDFComprobanteAjax",data)
+	});
+}
+
+
+/**
+ * Respuesta de Hacienda
+ */
+function __RespuestaHacienda(){
+	$('.tableListar').on('click','.btnRespuestaHacienda',function(e){
+		var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+        BajarArchivos("bajarXMLRespuestaAjax",data)
+	});
 }
 
 
@@ -369,7 +519,7 @@ function __BajarDocumentoXML(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        alert(1)
+        
         BajarArchivos("bajarXMLComprobanteAjax",data)
 	});
 }
