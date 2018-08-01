@@ -184,16 +184,14 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setPlazoCredito(Constantes.ZEROS);
 			}
 
-			if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-				Factura facturaTem = facturaDao.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa());
-				if (facturaTem != null) {
-
+		//	if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+		//		Factura facturaTem = facturaDao.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa());
+		if(facturaCommand.getReferenciaCodigo() !=null) {
 					factura.setReferenciaTipoDoc(facturaCommand.getReferenciaTipoDoc());
 					factura.setReferenciaNumero(facturaCommand.getReferenciaNumero());
 					factura.setReferenciaCodigo(facturaCommand.getReferenciaCodigo());
 					factura.setReferenciaRazon(facturaCommand.getReferenciaRazon());
-					factura.setReferenciaFechaEmision(facturaTem.getFechaEmision());
-				}
+					factura.setReferenciaFechaEmision(Utils.parseDate2(facturaCommand.getReferenciaFechaEmision()));
 			} else {
 				factura.setReferenciaTipoDoc(Constantes.EMPTY);
 				factura.setReferenciaNumero(Constantes.EMPTY);
@@ -327,7 +325,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 					Inventario inventario = inventarioDao.findByArticuloAndEstado(articulo, Constantes.ESTADO_ACTIVO);
 					if (inventario != null) {
-						if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+						if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) ) {
 							aplicarInventario(factura, inventario, detalle, articulo);	
 						}
 						
@@ -352,12 +350,19 @@ public class FacturaBoImpl implements FacturaBo {
 
 	/**
 	 * Aplicar el inventario si estado de la venta es facturada
+	 * Toda nota credito se devuelve al inventario los productos
 	 */
 	private void aplicarInventario(Factura factura, Inventario inventario, Detalle detalle, Articulo articulo) throws Exception {
 		try {
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-				String leyenda = Constantes.MOTIVO_SALIDA_INVENTARIO_VENTA + factura.getNumeroConsecutivo();
-				kardexDao.salida(inventario, inventario.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
+				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)){
+					String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO + factura.getNumeroConsecutivo();
+					kardexDao.entrada(inventario, inventario.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
+				}else {
+					String leyenda = Constantes.MOTIVO_SALIDA_INVENTARIO_VENTA + factura.getNumeroConsecutivo();
+					kardexDao.salida(inventario, inventario.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
+					
+				}
 
 			}
 

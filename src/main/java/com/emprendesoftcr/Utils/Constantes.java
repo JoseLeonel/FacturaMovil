@@ -97,6 +97,7 @@ public class Constantes {
 	public static final String					KARDEX_TIPO_SALIDA																	= "Salida";
 	public static final String					MOTIVO_INICIAL_INVENTARIO_NUEVO											= "Nuevo inventario a la sucursal";
 	public static final String					MOTIVO_INGRESO_INVENTARIO_COMPRA										= "Ingreso del proveedor:";
+	public static final String					MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO							= "Ingreso por nota de credito:";
 	public static final String					MOTIVO_SALIDA_INVENTARIO_VENTA											= "Salida por venta:";
 	// Contabiliza el inventario
 	public static final String					CONTABLE_SI																					= "Si";
@@ -203,7 +204,9 @@ public class Constantes {
 	public static final String					DATE_FORMAT2																				= "dd/MM/yyyy";
 	public static final String					DATE_FORMAT3																				= "dd-MM-yyyy";
 	public static final String					DATE_FORMAT5																				= "yyyy-MM-dd 00:00:00";
+	public static final String					DATE_FORMAT6																				= "yyyy-MM-dd";
 	public static final String					DATE_FORMAT4																				= "yyyyMMdd";
+	
 	public static final String					DATE_FORMAT_TIME																		= "HH:mm:ss";
 	public static final String					DATE_FORMAT_TIME2																		= "HH:mm";
 	public static final String					DATE_FORMAT_MIN																			= "00/00/0000 ";

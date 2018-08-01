@@ -99,6 +99,26 @@ public final class Utils {
 		return date;
 	}
 
+	public static Date parseDate2(String dateString) {
+		Date date = null;
+		SimpleDateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT6);
+
+		try {
+			// parse() will throw an exception if the given dateString doesn't
+			// match
+			// the current format
+			date = dateFormat.parse(dateString);
+			date = new SimpleDateFormat(Constantes.DATE_FORMAT1).parse(dateString);
+
+		} catch (ParseException e) {
+			// don't do anything. just let the loop continue.
+			// we may miss on 99 format attempts, but match on one format,
+			// but that's all we need.
+		}
+
+		return date;
+	}
+	
 	public static Boolean stringIsNullOrEmpty(String valor) {
 
 		if (valor == null) {

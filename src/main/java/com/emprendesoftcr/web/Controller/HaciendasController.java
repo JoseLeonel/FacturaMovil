@@ -43,6 +43,7 @@ import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
+import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
@@ -120,14 +121,19 @@ public class HaciendasController {
 																																																			facturaElectronica.setMoneda(FacturaElectronicaUtils.getMoneda(d.getCodigoMoneda()));
 																																																			facturaElectronica.setTipoCambio(d.getTipoCambio().toString());
 																																																			// Nota Credito y Nota Debito
-																																																			if (d.getReferenciaCodigo() != null) {
-																																																				if (!d.getReferenciaCodigo().equals(Constantes.EMPTY)) {
-																																																					facturaElectronica.setReferencia(d.getReferenciaCodigo());
-																																																				}
-
-																																																			} else {
-																																																				facturaElectronica.setReferencia(Constantes.EMPTY);
-																																																			}
+																																																			 if (d.getReferenciaCodigo() !=null) {
+																																																				 if(!d.getReferenciaCodigo().equals(Constantes.EMPTY)) {
+																																																					 facturaElectronica.setReferenciaCodigo( MapEnums.ENUM_CODIGO_REFERENCIA.get(d.getReferenciaCodigo()));
+																																																					 facturaElectronica.setReferenciaNumero(d.getReferenciaNumero());
+																																																					 facturaElectronica.setReferenciaRazon(d.getReferenciaRazon());
+																																																					 facturaElectronica.setReferenciaTipoDoc(MapEnums.ENUM_TIPO_DOC.get(d.getReferenciaTipoDoc()));
+																																																					 facturaElectronica.setReferenciaFechaEmision(d.getReferenciaFechaEmision().toString());
+																																																					 facturaElectronica.setReferenciaCodigo(Constantes.EMPTY);
+																																																				 }
+																																																			 
+																																																			 }else {
+																																																				 facturaElectronica.setReferencia(Constantes.EMPTY);
+																																																			 }
 																																																			// Agrega sus detalles
 																																																			List<DetalleFacturaElectronica> detalles = d.getDetalles().stream().map(TO_DETALLE).collect(toList());
 																																																			facturaElectronica.setDetalleFacturaElectronica(detalles);

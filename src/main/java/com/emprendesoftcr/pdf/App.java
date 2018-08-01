@@ -131,20 +131,20 @@ public class App {
 		img.scaleToFit(100, 100);
 		cb.addImage(img);
 		//
-		addText(cb, "Nombre", font14, leftColTitle, firstRow, Element.ALIGN_LEFT);
-		addText(cb, "Identificacion", font14, leftColTitle, secondRow, Element.ALIGN_LEFT);
-		addText(cb, "Telefono", font14, leftColTitle, thirdRow, Element.ALIGN_LEFT);
-		addText(cb, "Fax", font14, leftColTitle, fourthRow, Element.ALIGN_LEFT);
-		addText(cb, "Correo", font14, leftColTitle, fiveRow, Element.ALIGN_LEFT);
-		addText(cb, "Tipo Documento", font14, rightColTitle, firstRow, Element.ALIGN_LEFT);
-		addText(cb, "No.Clave", font14, rightColTitle, secondRow, Element.ALIGN_LEFT);
-		addText(cb, "No.Consecutivo", font14, rightColTitle, thirdRow, Element.ALIGN_LEFT);
-		addText(cb, "Fecha emsion", font14, rightColTitle, fourthRow, Element.ALIGN_LEFT);
-		addText(cb, "Plazo credito", font14, rightColTitle, fiveRow, Element.ALIGN_LEFT);
-		addText(cb, "Condicion venta", font14, rightColTitle, sixRow, Element.ALIGN_LEFT);
-		addText(cb, "Medio pago", font14, rightColTitle, sevenRow, Element.ALIGN_LEFT);
-		addText(cb, "Moneda", font14, rightColTitle, eightRow, Element.ALIGN_LEFT);
-		addText(cb, "Tipo cambio ", font14, rightColTitle, nineRow, Element.ALIGN_LEFT);
+		addText(cb, "Nombre", font12, leftColTitle, firstRow, Element.ALIGN_LEFT);
+		addText(cb, "Identificación", font12, leftColTitle, secondRow, Element.ALIGN_LEFT);
+		addText(cb, "Teléfono", font12, leftColTitle, thirdRow, Element.ALIGN_LEFT);
+		addText(cb, "Fax", font12, leftColTitle, fourthRow, Element.ALIGN_LEFT);
+		addText(cb, "Correo", font12, leftColTitle, fiveRow, Element.ALIGN_LEFT);
+		addText(cb, "Tipo Documento", font12, rightColTitle, firstRow, Element.ALIGN_LEFT);
+		addText(cb, "No.Clave", font12, rightColTitle, secondRow, Element.ALIGN_LEFT);
+		addText(cb, "No.Consecutivo", font12, rightColTitle, thirdRow, Element.ALIGN_LEFT);
+		addText(cb, "Fecha emisión", font12, rightColTitle, fourthRow, Element.ALIGN_LEFT);
+		addText(cb, "Plazo crédito", font12, rightColTitle, fiveRow, Element.ALIGN_LEFT);
+		addText(cb, "Condición venta", font12, rightColTitle, sixRow, Element.ALIGN_LEFT);
+		addText(cb, "Medio pago", font12, rightColTitle, sevenRow, Element.ALIGN_LEFT);
+		addText(cb, "Moneda", font12, rightColTitle, eightRow, Element.ALIGN_LEFT);
+		addText(cb, "Tipo cambio ", font12, rightColTitle, nineRow, Element.ALIGN_LEFT);
 		//
 		cb.setColorFill(BaseColor.BLACK);
 		//
@@ -162,40 +162,25 @@ public class App {
 		addText(cb, facturaElectronica.getMedioEfectivo() != null ? facturaElectronica.getMedioEfectivo() : Constantes.EMPTY, font12, rightColContent, sevenRow, Element.ALIGN_LEFT);
 		addText(cb, facturaElectronica.getMoneda() != null ? facturaElectronica.getMoneda() : Constantes.EMPTY, font12, rightColContent, eightRow, Element.ALIGN_LEFT);
 		addText(cb, facturaElectronica.getTipoCambio() != null ? facturaElectronica.getTipoCambio() : Constantes.EMPTY, font12, rightColContent, nineRow, Element.ALIGN_LEFT);
-		// Referencia en caso que sea nota de credito o nota de debito
-		// Cuadro 4
-		if (!facturaElectronica.getTipoDocumento().equals("Factura electrónico") && !facturaElectronica.getTipoDocumento().equals("Tiquete electrónico")) {
+		cb.setColorFill(BaseColor.BLACK);
+		addText(cb, "Referencia:", font14, 20, PageSize.TABLOID.rotate().getHeight() - 145, Element.ALIGN_LEFT);
+		addText(cb, facturaElectronica.getReferenciaCodigo(), font12, 102, PageSize.TABLOID.rotate().getHeight() - 145, Element.ALIGN_LEFT);
+		addText(cb, "Tipo documento:", font14, 20, PageSize.TABLOID.rotate().getHeight() - 160, Element.ALIGN_LEFT);
+		addText(cb, facturaElectronica.getReferenciaTipoDoc(), font12, 102, PageSize.TABLOID.rotate().getHeight() - 160, Element.ALIGN_LEFT);
+		addText(cb, "No.Consecutivo:", font14, 240, PageSize.TABLOID.rotate().getHeight() - 160, Element.ALIGN_LEFT);
+		addText(cb, facturaElectronica.getReferenciaNumero(), font12, 325, PageSize.TABLOID.rotate().getHeight() - 160, Element.ALIGN_LEFT);
 
-			// Referencia de documentos cuando es una nota de credito o debito
-			if (facturaElectronica.getReferencia() != null) {
-				if (!facturaElectronica.getReferencia().equals(Constantes.EMPTY)) {
-					cb.setColorStroke(bColor);
-					cb.setColorFill(BaseColor.WHITE);
-					cb.setLineWidth(1f);
-					cb.roundRectangle(660, PageSize.TABLOID.rotate().getHeight() - 300, 555, 100, 5);
-					cb.fillStroke();
-					//// Fondo
-					cb.setColorFill(bColor);
-					cb.roundRectangle(660, PageSize.TABLOID.rotate().getHeight() - 300, 115, 100, 5);
-					cb.fill();
-					cb.setColorFill(BaseColor.BLACK);
-					addText(cb, "Referencia", font14, rightColTitle, tenRow, Element.ALIGN_LEFT);
-					addText(cb, "Tipo documento", font14, rightColTitle, elevenRow, Element.ALIGN_LEFT);
-					addText(cb, "No.Clave", font14, rightColTitle, twelveRow, Element.ALIGN_LEFT);
-					addText(cb, "No.Consecutivo", font14, rightColTitle, thirteenRow, Element.ALIGN_LEFT);
-					addText(cb, "Fecha emsion", font14, rightColTitle, fourteenRow, Element.ALIGN_LEFT);
-					//
-					cb.setColorFill(BaseColor.BLACK);
-					addText(cb, facturaElectronica.getTipoDocumento() != null ? facturaElectronica.getTipoDocumento() : Constantes.EMPTY, font12, rightColContent, elevenRow, Element.ALIGN_LEFT);
-					addText(cb, facturaElectronica.getReferencia() != null ? facturaElectronica.getReferencia() : Constantes.EMPTY, font12, rightColContent, twelveRow, Element.ALIGN_LEFT);
-					addText(cb, facturaElectronica.getConsecutivo() != null ? facturaElectronica.getConsecutivo() : Constantes.EMPTY, font12, rightColContent, thirteenRow, Element.ALIGN_LEFT);
-					addText(cb, facturaElectronica.getFechaEmision() != null ? facturaElectronica.getFechaEmision() : Constantes.EMPTY, font12, rightColContent, fourteenRow, Element.ALIGN_LEFT);
+		addText(cb, "Fecha emisión:", font14, 460, PageSize.TABLOID.rotate().getHeight() - 160, Element.ALIGN_LEFT);
+		addText(cb, facturaElectronica.getReferenciaFechaEmision(), font12, 530, PageSize.TABLOID.rotate().getHeight() - 160, Element.ALIGN_LEFT);
 
-				}
+		addText(cb, "Razón:", font14, 20, PageSize.TABLOID.rotate().getHeight() - 180, Element.ALIGN_LEFT);
+		addText(cb, facturaElectronica.getReferenciaRazon(), font12, 55, PageSize.TABLOID.rotate().getHeight() - 180, Element.ALIGN_LEFT);
 
-			}
-		}
+		cb.setColorFill(BaseColor.BLACK);
+
 	}
+
+	// }
 
 	private void addClient(PdfContentByte cb, Font font14, Font font12, FacturaElectronica facturaElectronica) {
 		addLine(cb, BaseColor.BLACK, 1215, PageSize.TABLOID.rotate().getHeight() - 184, 10, PageSize.TABLOID.rotate().getHeight() - 184);
@@ -217,7 +202,7 @@ public class App {
 		addText(cb, facturaElectronica.getClienteCedula() != null ? facturaElectronica.getClienteCedula() : Constantes.EMPTY, font12, colCedulaCliente, firstRow, Element.ALIGN_LEFT);
 		addText(cb, "Correo:", font14, colLabelCorreo, firstRow, Element.ALIGN_LEFT);
 		addText(cb, facturaElectronica.getClienteCorreo() != null ? facturaElectronica.getClienteCorreo() : Constantes.EMPTY, font12, colCorreo, firstRow, Element.ALIGN_LEFT);
-		addText(cb, "Telefono:", font14, colLabelTelefono, firstRow, Element.ALIGN_LEFT);
+		addText(cb, "Teléfono:", font14, colLabelTelefono, firstRow, Element.ALIGN_LEFT);
 		addText(cb, facturaElectronica.getClienteTelefono() != null ? facturaElectronica.getClienteTelefono() : Constantes.EMPTY, font12, colTelefono, firstRow, Element.ALIGN_LEFT);
 
 	}
@@ -285,7 +270,7 @@ public class App {
 		List<DetalleFacturaElectronica> detalleFacturaElectronica = facturaElectronica.getDetalleFacturaElectronica();
 		for (int i = 0; i < detalleFacturaElectronica.size(); i++) {
 			contadorLinea += 1;
-			if (contadorLinea > 24) {
+			if (contadorLinea > 32) {
 				row = 245;
 				document.newPage();
 				contadorLinea = 1;
@@ -410,14 +395,53 @@ public class App {
 		// Cuadro 6
 		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 230, 10, PageSize.TABLOID.rotate().getHeight() - 230);
 		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 710, 1215, PageSize.TABLOID.rotate().getHeight() - 230);
-		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 350, 10, PageSize.TABLOID.rotate().getHeight() - 350);
+		// linea1
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 247, 10, PageSize.TABLOID.rotate().getHeight() - 247);
+		// linea2
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 263, 10, PageSize.TABLOID.rotate().getHeight() - 263);
+		// linea3
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 277, 10, PageSize.TABLOID.rotate().getHeight() - 277);
+
+		// linea4
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 293, 10, PageSize.TABLOID.rotate().getHeight() - 293);
+
+		// linea5
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 308, 10, PageSize.TABLOID.rotate().getHeight() - 308);
+		// linea6
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 324, 10, PageSize.TABLOID.rotate().getHeight() - 324);
+
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 340, 10, PageSize.TABLOID.rotate().getHeight() - 340);
+
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 354, 10, PageSize.TABLOID.rotate().getHeight() - 354);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 370, 10, PageSize.TABLOID.rotate().getHeight() - 370);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 384, 10, PageSize.TABLOID.rotate().getHeight() - 384);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 400, 10, PageSize.TABLOID.rotate().getHeight() - 400);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 414, 10, PageSize.TABLOID.rotate().getHeight() - 414);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 428, 10, PageSize.TABLOID.rotate().getHeight() - 428);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 442, 10, PageSize.TABLOID.rotate().getHeight() - 442);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 458, 10, PageSize.TABLOID.rotate().getHeight() - 458);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 472, 10, PageSize.TABLOID.rotate().getHeight() - 472);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 488, 10, PageSize.TABLOID.rotate().getHeight() - 488);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 504, 10, PageSize.TABLOID.rotate().getHeight() - 504);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 518, 10, PageSize.TABLOID.rotate().getHeight() - 518);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 534, 10, PageSize.TABLOID.rotate().getHeight() - 534);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 548, 10, PageSize.TABLOID.rotate().getHeight() - 548);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 564, 10, PageSize.TABLOID.rotate().getHeight() - 564);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 578, 10, PageSize.TABLOID.rotate().getHeight() - 578);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 592, 10, PageSize.TABLOID.rotate().getHeight() - 592);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 607, 10, PageSize.TABLOID.rotate().getHeight() - 607);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 622, 10, PageSize.TABLOID.rotate().getHeight() - 622);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 637, 10, PageSize.TABLOID.rotate().getHeight() - 637);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 652, 10, PageSize.TABLOID.rotate().getHeight() - 652);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 667, 10, PageSize.TABLOID.rotate().getHeight() - 667);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 682, 10, PageSize.TABLOID.rotate().getHeight() - 682);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 696, 10, PageSize.TABLOID.rotate().getHeight() - 696);
+		addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 711, 10, PageSize.TABLOID.rotate().getHeight() - 711);
+
 		addLine(cb, BaseColor.GRAY, 10, PageSize.TABLOID.rotate().getHeight() - 710, 10, PageSize.TABLOID.rotate().getHeight() - 230);
 		// Lineas verticales
-		Integer linea = 250;// Donde inicia y cantidad de lineas verticales
-		for (int i = 0; i < 24; i++) {
-			addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - linea, 10, PageSize.TABLOID.rotate().getHeight() - linea);
-			linea += 20;
-		}
+		// addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 230, 10, PageSize.TABLOID.rotate().getHeight() - 20);
+		// addLine(cb, BaseColor.GRAY, 1215, PageSize.TABLOID.rotate().getHeight() - 230, 10, PageSize.TABLOID.rotate().getHeight() - 20);
 		// Lineas Horizontales
 
 		addLine(cb, BaseColor.GRAY, 34, PageSize.TABLOID.rotate().getHeight() - 230, 34, PageSize.TABLOID.rotate().getHeight() - 710);

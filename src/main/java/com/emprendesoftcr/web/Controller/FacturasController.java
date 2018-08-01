@@ -46,7 +46,7 @@ import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.components.OpenIDConnectHaciendaComponent;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
-import com.emprendesoftcr.modelo.Articulo;
+import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
@@ -112,7 +112,7 @@ public class FacturasController {
 	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
 																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
 																																																			// Emisor
-																																																			
+
 																																																			facturaElectronica.setEmisorNombre(d.getEmpresa().getNombre());
 																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
 																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
@@ -127,7 +127,7 @@ public class FacturasController {
 
 																																																			}
 																																																			// facturaElectronica.setClienteMesCobro(TO_MESCOBRO.apply(d.getMesCobro()));
-																																																			//Ubicacion
+																																																			// Ubicacion
 																																																			facturaElectronica.set_logo(d.getEmpresa().getLogo());
 																																																			facturaElectronica.set_clienteDireccion(d.getDireccion());
 																																																			// Otros
@@ -144,20 +144,24 @@ public class FacturasController {
 																																																			facturaElectronica.setMoneda(FacturaElectronicaUtils.getMoneda(d.getCodigoMoneda()));
 																																																			facturaElectronica.setTipoCambio(d.getTipoCambio().toString());
 																																																			// Nota Credito y Nota Debito
-																																																			 if (d.getReferenciaCodigo() !=null) {
-																																																				 if(!d.getReferenciaCodigo().equals(Constantes.EMPTY)) {
-																																																					 facturaElectronica.setReferencia(d.getReferenciaCodigo());	 
-																																																				 }
-																																																			 
-																																																			 }else {
-																																																				 facturaElectronica.setReferencia(Constantes.EMPTY);
-																																																			 }
+																																																			if (d.getReferenciaCodigo() != null) {
+																																																				if (!d.getReferenciaCodigo().equals(Constantes.EMPTY)) {
+																																																					facturaElectronica.setReferenciaCodigo(MapEnums.ENUM_CODIGO_REFERENCIA.get(d.getReferenciaCodigo()));
+																																																					facturaElectronica.setReferenciaNumero(d.getReferenciaNumero());
+																																																					facturaElectronica.setReferenciaRazon(d.getReferenciaRazon());
+																																																					facturaElectronica.setReferenciaTipoDoc(MapEnums.ENUM_TIPO_DOC.get(d.getReferenciaTipoDoc()));
+																																																					facturaElectronica.setReferenciaFechaEmision(d.getReferenciaFechaEmision().toString());
+																																																					facturaElectronica.setReferenciaCodigo(Constantes.EMPTY);
+																																																				}
+
+																																																			} else {
+																																																				facturaElectronica.setReferencia(Constantes.EMPTY);
+																																																			}
 																																																			// Agrega sus detalles
 																																																			List<DetalleFacturaElectronica> detalles = d.getDetalles().stream().map(TO_DETALLE).collect(toList());
 																																																			facturaElectronica.setDetalleFacturaElectronica(detalles);
 																																																			return facturaElectronica;
 																																																		};
-	
 
 	@Lazy
 	@Autowired
@@ -243,7 +247,7 @@ public class FacturasController {
 	public String crearCompras(ModelMap model) {
 		return "views/facturas/puntoVenta";
 	}
-	
+
 	/**
 	 * Ventas por servicios por profeccionates
 	 * @param model
@@ -253,7 +257,7 @@ public class FacturasController {
 	public String ventasPorServicios(ModelMap model) {
 		return "views/facturas/ventasPorServicios";
 	}
-	
+
 	/**
 	 * Crear Notas de Credito y debito
 	 * @param model
@@ -291,8 +295,25 @@ public class FacturasController {
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
 			response.setContentType("application/octet-stream");
 			response.setContentLength((int) namePDF.toByteArray().length);
+			String fileName = Constantes.EMPTY;
+
+			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
+				fileName = "TiquetePDF_" + factura.getTipoDoc() + "-" + factura.getNumeroConsecutivo();
+			}
+
+			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
+				fileName = "FacturaPDF_" + factura.getTipoDoc() + "-" + factura.getNumeroConsecutivo();
+			}
+
+			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+				fileName = "NotaCreditoPDF_" + factura.getTipoDoc() + "-" + factura.getNumeroConsecutivo();
+			}
+			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+				fileName = "NotaDebitoPDF_" + factura.getTipoDoc() + "-" + factura.getNumeroConsecutivo();
+			}
+
 			String headerKey = "Content-Disposition";
-			String headerValue = String.format("attachment; filename=\"%s\"", factura.getTipoDoc() + "-" + factura.getNumeroConsecutivo() + ".pdf");
+			String headerValue = String.format("attachment; filename=\"%s\"", fileName + ".pdf");
 			response.setHeader(headerKey, headerValue);
 			OutputStream outStream = response.getOutputStream();
 			byte[] buffer = new byte[BUFFER_SIZE];
@@ -326,11 +347,42 @@ public class FacturasController {
 		delimitadores = new DataTableDelimitador(request, "Factura");
 		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
+		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO.toString() + "'", "<>");
+		delimitadores.addFiltro(dataTableFilter);
+		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO.toString() + "'", "<>");
+		delimitadores.addFiltro(dataTableFilter);
+
 		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
+	/**
+	 * Solo facturas de credito y debito en espera
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/ListarNotasCreditoAndDebitoEsperaActivasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarNotasDebidoAndCreditoActivasAjax(HttpServletRequest request, HttpServletResponse response) {
+
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Factura");
+		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA.toString() + "'", "<>");
+		delimitadores.addFiltro(dataTableFilter);
+		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_TIQUETE.toString() + "'", "<>");
+		delimitadores.addFiltro(dataTableFilter);
+		
+		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+	}
+	
 
 	@RequestMapping(value = "/ListarFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -364,7 +416,7 @@ public class FacturasController {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.cajas.abierta", result.getAllErrors());
 				}
 			}
-		
+
 			TipoCambio tipoCambio = tipoCambioBo.findByEstadoAndEmpresa(Constantes.ESTADO_ACTIVO, usuario.getEmpresa());
 			if (tipoCambio == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.tipo.cambio.dolar.activo", result.getAllErrors());
@@ -395,24 +447,22 @@ public class FacturasController {
 				facturaCommand.setVendedor(vendedor);
 
 			}
-			
-			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
-				if(facturaCommand.getReferenciaNumero() !=null) {
-					Factura facturaTem = facturaBo.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(),usuario.getEmpresa());
-					if(facturaTem ==null) {
-						result.rejectValue("referenciaNumero", "mensajes.no.existe.consecutivo");	
-					}else {
-						// El tipo documento fecha emision  y  el cliente se asignan automatico para la factura
-							facturaCommand.setReferenciaTipoDoc(facturaTem.getTipoDoc());
-							facturaCommand.setReferenciaFechaEmision(facturaTem.getFechaEmision().toString());
-							facturaCommand.setCliente(facturaTem.getCliente());
-						
-						
-					}
-					
-				}
-				
-			}
+
+			// if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
+			// if(facturaCommand.getReferenciaNumero() !=null) {
+			// Factura facturaTem = facturaBo.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(),usuario.getEmpresa());
+			// if(facturaTem !=null) {
+			// // El tipo documento fecha emision y el cliente se asignan automatico para la factura
+			// facturaCommand.setReferenciaTipoDoc(facturaTem.getTipoDoc());
+			// facturaCommand.setReferenciaFechaEmision(facturaTem.getFechaEmision().toString());
+			// facturaCommand.setCliente(facturaTem.getCliente());
+			//
+			//
+			// }
+			//
+			// }
+			//
+			// }
 			facturaCommand.setEmpresa(usuario.getEmpresa());
 			facturaFormValidator.validate(facturaCommand, result);
 			if (result.hasErrors()) {
@@ -520,9 +570,8 @@ public class FacturasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
+
 	/**
-	 * 
 	 * @param request
 	 * @param response
 	 * @param consecutivo
@@ -533,14 +582,14 @@ public class FacturasController {
 	 */
 	@RequestMapping(value = "/ConsultarConsecutivoAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator consultarConsecutivo(HttpServletRequest request, ModelMap model,@ModelAttribute Factura factura,HttpServletResponse response, @RequestParam String consecutivo, BindingResult result, SessionStatus status) {
+	public RespuestaServiceValidator consultarConsecutivo(HttpServletRequest request, ModelMap model, @ModelAttribute Factura factura, HttpServletResponse response, @RequestParam String consecutivo, BindingResult result, SessionStatus status) {
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-			Factura facturaBD = facturaBo.findByConsecutivoAndEmpresa(consecutivo,usuario.getEmpresa());
-			if(facturaBD == null) {
+			Factura facturaBD = facturaBo.findByConsecutivoAndEmpresa(consecutivo, usuario.getEmpresa());
+			if (facturaBD == null) {
 				result.rejectValue("referenciaNumero", "mensajes.no.existe.consecutivo");
 			}
-		  if (result.hasErrors()) {
+			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 

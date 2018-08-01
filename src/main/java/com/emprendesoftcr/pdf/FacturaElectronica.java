@@ -6,13 +6,16 @@
 package com.emprendesoftcr.pdf;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 public class FacturaElectronica {
-  private String                          _logo;
+
+	private String													_logo;
 	private String													_emisorNombre;
 	private String													_emisorCedula;
 	private String													_emisorTelefono;
@@ -47,6 +50,13 @@ public class FacturaElectronica {
 	private String													_moneda;
 	private String													_tipoCambio;
 	private String													_referencia;
+	private String													referenciaTipoDoc;
+
+	private String													referenciaNumero;
+
+	private String													referenciaCodigo;
+	private String													referenciaRazon;
+	private String														referenciaFechaEmision;
 
 	private String													_footerObservaciones;
 	private String													_footerFormaPago;
@@ -70,6 +80,34 @@ public class FacturaElectronica {
 	public FacturaElectronica() {
 		this._detalleFacturaElectronica = new ArrayList<DetalleFacturaElectronica>();
 	}
+
+	
+	
+	
+	
+
+
+	
+	public String getReferenciaFechaEmision() {
+		return referenciaFechaEmision;
+	}
+
+
+
+
+
+
+
+	
+	public void setReferenciaFechaEmision(String referenciaFechaEmision) {
+		this.referenciaFechaEmision = referenciaFechaEmision;
+	}
+
+
+
+
+
+
 
 	public String getEmisorNombre() {
 		return _emisorNombre;
@@ -303,54 +341,42 @@ public class FacturaElectronica {
 		this._clienteTelefono = _clienteTelefono;
 	}
 
-	
-
-	
 	public String get_clienteProvincia() {
 		return _clienteProvincia;
 	}
 
-	
 	public void set_clienteProvincia(String _clienteProvincia) {
 		this._clienteProvincia = _clienteProvincia;
 	}
 
-	
 	public String get_clienteCanton() {
 		return _clienteCanton;
 	}
 
-	
 	public void set_clienteCanton(String _clienteCanton) {
 		this._clienteCanton = _clienteCanton;
 	}
 
-	
 	public String get_clienteDistrito() {
 		return _clienteDistrito;
 	}
 
-	
 	public void set_clienteDistrito(String _clienteDistrito) {
 		this._clienteDistrito = _clienteDistrito;
 	}
 
-	
 	public String get_clienteBarrio() {
 		return _clienteBarrio;
 	}
 
-	
 	public void set_clienteBarrio(String _clienteBarrio) {
 		this._clienteBarrio = _clienteBarrio;
 	}
 
-	
 	public String get_clienteDireccion() {
 		return _clienteDireccion;
 	}
 
-	
 	public void set_clienteDireccion(String _clienteDireccion) {
 		this._clienteDireccion = _clienteDireccion;
 	}
@@ -403,34 +429,26 @@ public class FacturaElectronica {
 		this._condicionVenta = _condicionVenta;
 	}
 
-
-
-	
 	public String getMedioEfectivo() {
 		return medioEfectivo;
 	}
 
-	
 	public void setMedioEfectivo(String medioEfectivo) {
 		this.medioEfectivo = medioEfectivo;
 	}
 
-	
 	public String getMedioTarjeta() {
 		return medioTarjeta;
 	}
 
-	
 	public void setMedioTarjeta(String medioTarjeta) {
 		this.medioTarjeta = medioTarjeta;
 	}
 
-	
 	public String getMedioBanco() {
 		return medioBanco;
 	}
 
-	
 	public void setMedioBanco(String medioBanco) {
 		this.medioBanco = medioBanco;
 	}
@@ -459,14 +477,10 @@ public class FacturaElectronica {
 		this._referencia = _referencia;
 	}
 
-	
-	
-	
 	public String get_logo() {
 		return _logo;
 	}
 
-	
 	public void set_logo(String _logo) {
 		this._logo = _logo;
 	}
@@ -589,6 +603,38 @@ public class FacturaElectronica {
 		}
 
 		return modelo;
+	}
+
+	public String getReferenciaTipoDoc() {
+		return referenciaTipoDoc;
+	}
+
+	public void setReferenciaTipoDoc(String referenciaTipoDoc) {
+		this.referenciaTipoDoc = referenciaTipoDoc;
+	}
+
+	public String getReferenciaNumero() {
+		return referenciaNumero;
+	}
+
+	public void setReferenciaNumero(String referenciaNumero) {
+		this.referenciaNumero = referenciaNumero;
+	}
+
+	public String getReferenciaCodigo() {
+		return referenciaCodigo;
+	}
+
+	public void setReferenciaCodigo(String referenciaCodigo) {
+		this.referenciaCodigo = referenciaCodigo;
+	}
+
+	public String getReferenciaRazon() {
+		return referenciaRazon;
+	}
+
+	public void setReferenciaRazon(String referenciaRazon) {
+		this.referenciaRazon = referenciaRazon;
 	}
 
 }

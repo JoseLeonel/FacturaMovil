@@ -245,11 +245,11 @@
                                 <div show = {mostrarCamposIngresoContado }>
 
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.efectivo")}</p> 
-                                    <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo"  value="" >
+                                    <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo"   >
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.tarjeta")}</p> 
                                     <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"   >
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.banco")}</p> 
-                                    <input onkeyup={ __TotalDeBancoAPagar} onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalBanco" id="totalBanco" name="totalBanco"  value="" >
+                                    <input onkeyup={ __TotalDeBancoAPagar} onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalBanco" id="totalBanco" name="totalBanco"   >
                                     <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">₡ {factura.totalCambioPagar.toLocaleString('de-DE')}</span></p>
                                 </div>
 
@@ -267,6 +267,7 @@
                   <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">  
                   <div class="box-tools ">
                     <a class="pull-left" href="#"     title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("crear.ventas")}</span></a>
+                    
                     <a class="pull-right" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("btn.limpiar")}</span></a>
                     <a class="pull-right" href="#"    onclick = {__AplicarYcrearFactura} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("btn.tiquete")}</span></a>
                   </div>
@@ -825,6 +826,10 @@
 __LimpiarFormulario(){
     $(".plazoCredito").val(null)   
     $(".fechaCredito").val(null)   
+     $(".totalEfectivo").val(null)   
+    $(".totalTarjeta").val(null)   
+    $(".totalBanco").val(null)   
+
     
     $(".nota").val(null)   
     $(".direccion").val(null)   
@@ -1352,6 +1357,10 @@ function __Init(){
     $('#canton').prop("selectedIndex", 0);
     $('#distrito').prop("selectedIndex", 0);
     $('#barrio').prop("selectedIndex", 0);
+     $(".totalBanco").val(null)   
+    $(".totalTarjeta").val(null)   
+    $(".totalEfectivo").val(null)   
+
 
     $("#plazoCredito").val(null)
     $("#nota").val(null)

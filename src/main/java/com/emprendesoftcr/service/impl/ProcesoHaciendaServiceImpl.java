@@ -117,14 +117,21 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																			facturaElectronica.setMoneda(FacturaElectronicaUtils.getMoneda(d.getCodigoMoneda()));
 																																																			facturaElectronica.setTipoCambio(d.getTipoCambio().toString());
 																																																			// Nota Credito y Nota Debito
-																																																			if (d.getReferenciaCodigo() != null) {
-																																																				if (!d.getReferenciaCodigo().equals(Constantes.EMPTY)) {
-																																																					facturaElectronica.setReferencia(d.getReferenciaCodigo());
-																																																				}
-
-																																																			} else {
-																																																				facturaElectronica.setReferencia(Constantes.EMPTY);
-																																																			}
+																																																			// Nota Credito y Nota Debito
+																																																			 if (d.getReferenciaCodigo() !=null) {
+																																																				 if(!d.getReferenciaCodigo().equals(Constantes.EMPTY)) {
+																																																					 facturaElectronica.setReferenciaCodigo( MapEnums.ENUM_CODIGO_REFERENCIA.get(d.getReferenciaCodigo()));
+																																																					 facturaElectronica.setReferenciaNumero(d.getReferenciaNumero());
+																																																					 facturaElectronica.setReferenciaRazon(d.getReferenciaRazon());
+																																																					 facturaElectronica.setReferenciaTipoDoc(MapEnums.ENUM_TIPO_DOC.get(d.getReferenciaTipoDoc()));
+																																																					 facturaElectronica.setReferenciaFechaEmision(d.getReferenciaFechaEmision().toString());
+																																																					 
+																																																				 }
+																																																			 
+																																																			 }else {
+																																																				 facturaElectronica.setReferencia(Constantes.EMPTY);
+																																																				 facturaElectronica.setReferenciaCodigo(Constantes.EMPTY);
+																																																			 }
 																																																			// Agrega sus detalles
 																																																			List<DetalleFacturaElectronica> detalles = d.getDetalles().stream().map(TO_DETALLE).collect(toList());
 																																																			facturaElectronica.setDetalleFacturaElectronica(detalles);
@@ -391,7 +398,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	//@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/2 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {

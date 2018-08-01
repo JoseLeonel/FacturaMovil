@@ -154,12 +154,12 @@ public class ArticuloController {
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 			Articulo articuloBd = null;
-			articuloBd = articuloBo.buscarPorDescripcionYEmpresa(articulo.getDescripcion(), articulo.getEmpresa());
+			articuloBd = articuloBo.buscarPorDescripcionYEmpresa(articulo.getDescripcion(), usuarioSesion.getEmpresa());
 			if (articuloBd != null) {
 				result.rejectValue("descripcion", "error.articulo.descripcion.existe");
 			}
 
-			articuloBd = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo(), articulo.getEmpresa());
+			articuloBd = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo(), usuarioSesion.getEmpresa());
 			if (articuloBd != null) {
 				result.rejectValue("codigo", "error.articulo.codigo.existe");
 			}
@@ -227,7 +227,7 @@ public class ArticuloController {
 				}
 			}
 			if (!articuloBd.getCodigo().equals(articulo.getCodigo())) {
-				articuloValidar = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo(), articulo.getEmpresa());
+				articuloValidar = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo().trim(), articulo.getEmpresa());
 				if (articuloValidar != null) {
 					result.rejectValue("codigo", "error.articulo.codigo.existe");
 				}
@@ -261,6 +261,7 @@ public class ArticuloController {
 			articuloBd.setPrecioEspecial(articulo.getPrecioEspecial() == null ?Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
 			articuloBd.setPrecioMayorista(articulo.getPrecioMayorista() == null ?Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
 			articuloBd.setUsuario(usuarioSesion);
+			articuloBd.setCodigo(articulo.getCodigo().trim());
 			articuloBd.setTipoImpuesto(articulo.getTipoImpuesto());
 			articuloBd.setImpuesto(articulo.getImpuesto()==null?Constantes.ZEROS_DOUBLE:articulo.getImpuesto());
 			articuloBo.modificar(articuloBd);

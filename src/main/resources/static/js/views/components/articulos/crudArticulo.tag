@@ -576,8 +576,7 @@ self.on('mount',function(){
     ActivarEventoFiltro('.tableListar')
     __listado()
     
-    __MantenimientoAgregarInventario()
-    __MantenimientoAgregar()
+   
     __Eventos()
     __ComboEstados()
     __ComboContables()

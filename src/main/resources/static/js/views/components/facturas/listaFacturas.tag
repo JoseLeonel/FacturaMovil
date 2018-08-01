@@ -58,7 +58,6 @@
             </div>
             <div class="col-xs-12 text-right">
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
-                <a onclick ={__crearArchivoExcel} id="btnDownload" class="btn btn-success" title ="Descargar" > <i class="fa fa-download"></i></a>
             	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
             </div>
         </div>
@@ -280,7 +279,7 @@
                                 <input  class="form-control" type="text"  value = "{impuesto.toLocaleString('de-DE')}" readonly/>
                             </td>
 
-                            <td class="text-righself.cliente.provincia =__cargaProvincias(provincia)t">
+                            <td class="text-righ">
                                 <input  class="form-control" type="text"  value = "₡ {montoTotalLinea.toLocaleString('de-DE')}" readonly/>
                             </td>
                         </tr>
@@ -308,7 +307,7 @@
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show">₡ {factura.totalVentaNeta.toLocaleString('de-DE')}</span>
+                                                    <span class="label label-info textShadow" id="total-show">₡ {factura.totalComprobante.toLocaleString('de-DE')}</span>
                                                 </div>
                                             </td>
                                         </tr>                     
@@ -754,6 +753,7 @@ __Busqueda(){
                     agregarInputsCombos();
                     ActivarEventoFiltro(".tableListar")
                     __VerDetalle()
+                    __BajarPDF()
                 }else{
                     __InformacionDataTable();
                      agregarInputsCombos();
@@ -839,14 +839,12 @@ __regresarAlListado(){
 **/
 function __FacturaEnEspera(factura){
 
-    location.href = "generaFacturaPDF?idFactura=" + factura.id
-  return
+ 
     $.ajax({
-  //      url: "MostrarFacturaAjax",
-        url: "generaFacturaPDF",
+        url: "MostrarFacturaAjax",
         datatype: "json",
         data: {idFactura:factura.id},
-        method:"GET",
+        method:"POST",
         success: function (data) {
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
@@ -882,9 +880,8 @@ function cargarDetallesFacturaEnEspera(){
     self.factura.detalles.forEach(function(e){
         self.detail.push({
             numeroLinea     : e.numeroLinea,
-            articulo_id     : e.articulo.id,
-            codigo          : e.articulo.codigo,
-            descripcion     : e.articulo.descripcion,
+            codigo          : e.codigo,
+            descripcion     : e.descripcion,
             cantidad        : redondearDecimales(parseFloat(e.cantidad),5),
             precioUnitario  : redondearDecimales(parseFloat(e.precioUnitario),5),
             impuesto        : redondearDecimales(parseFloat(e.impuesto),5),
@@ -989,17 +986,17 @@ function __InformacionDataTable(){
                                },
                                {'data' :'totalImpuesto'       ,"name":"totalImpuesto"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true ,
                                     "render":function(totalImpuesto,type, row){
-									    return "₡" + totalImpuesto.toLocaleString('de-DE');
+									    return  totalImpuesto.toLocaleString('de-DE');
 	 							    }
                                },
                                {'data' :'totalDescuentos'                ,"name":"totalDescuentos"                 ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true ,
                                     "render":function(totalDescuentos,type, row){
-									    return "₡" + totalDescuentos.toLocaleString('de-DE');
+									    return  totalDescuentos.toLocaleString('de-DE');
 	 							    }
                                },
-                               {'data' :'totalVentaNeta'               ,"name":"totalVentaNeta"                ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true ,
-                                    "render":function(totalVentaNeta,type, row){
-									    return "₡" + totalVentaNeta.toLocaleString('de-DE');;
+                               {'data' :'totalComprobante'               ,"name":"totalComprobante"                ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true ,
+                                    "render":function(totalComprobante,type, row){
+									    return  totalComprobante.toLocaleString('de-DE');;
 	 							    }
                                },
                                {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
@@ -1014,7 +1011,7 @@ function __InformacionDataTable(){
 function __TipoDocumentos(numeroConsecutivo,row){
 
     switch(row.tipoDoc) {
-    case "00":
+    case "04":
           return  "Tiq:"+numeroConsecutivo
         break;
     case "01":
@@ -1043,6 +1040,7 @@ function __Opciones(id,type,row){
     menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
     
     menu += '<li><a href="#"  title="Mostrar" class="  btnMostrar" >Mostrar</a></li>'
+    menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
     menu += "</ul></div>"  
 
      return menu;          
@@ -1068,6 +1066,21 @@ function __VerDetalle(){
 	});
 }
 
+/**
+ * mostrar la abono
+ */
+function __BajarPDF(){
+	$('.tableListar').on('click','.btnPDF',function(e){
+		var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+        location.href = "generaFacturaPDF?idFactura=" + data.id
+	});
+}
 
 
 /**

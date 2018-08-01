@@ -159,7 +159,7 @@
                                             <div  class="form-group">
                                                 <label >{$.i18n.prop("informacion.FechaEmision")}</label> 
                                                 <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
-                                                    <input type="text" class="form-control referenciaFechaEmision" name="referenciaFechaEmision" id="referenciaFechaEmision" value="{factura.referenciaFechaEmision}" >
+                                                    <input type="text" class="form-control referenciaFechaEmision" name="referenciaFechaEmision" id="referenciaFechaEmision"  >
                                                     <div class="input-group-addon">
                                                         <span class="glyphicon glyphicon-th"></span>
                                                     </div>
@@ -261,7 +261,7 @@
                                 <div show = {mostrarCamposIngresoContado }>
 
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.efectivo")}</p> 
-                                    <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalBanco " id="totalEfectivo" name="totalEfectivo"  value="" >
+                                    <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo"  value="" >
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.tarjeta")}</p> 
                                     <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"   >
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.banco")}</p> 
@@ -833,6 +833,7 @@
        __TipoCambio()
        __cargaUbicacion()
        __comboCondicionPagoRef()
+       __Eventos()
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
@@ -844,6 +845,11 @@ __LimpiarFormulario(){
 }
 
 function _INIT(){
+  $(".totalBanco").val(null)   
+    $(".totalTarjeta").val(null)   
+    $(".totalEfectivo").val(null)   
+
+
     $(".plazoCredito").val(null)   
     $(".fechaCredito").val(null)   
     $(".nota").val(null)   
@@ -868,6 +874,7 @@ function _INIT(){
     self.barrios                       = []
 
     self.update()
+    __Eventos()
 
 }
 
@@ -889,6 +896,24 @@ __formaReferencias(e){
 }
 
 /**
+*  Actimpuestor validaciones del formulario
+**/
+function __Eventos(){
+    $("#formularioFactura").validate(reglasDeValidacionFactura());
+    $("#referenciaRazon").attr("maxlength", 240);
+    $("#codigo").attr("maxlength", 20);
+    $('#referenciaNumero').mask('00000000000000000000', {
+		'translation' : {
+			0 : {
+				pattern : /[0-9]/
+			}
+		}
+    });
+    $('.referenciaFechaEmision').mask('0000-00-00');
+
+}
+
+/**
 * Camps requeridos
 **/
 var reglasDeValidacionFactura = function() {
@@ -900,7 +925,23 @@ var reglasDeValidacionFactura = function() {
              },
              direccion:{
                  maxlength:255,
-             }         
+             },
+             referenciaRazon:{
+                 required : true,
+                 maxlength:240,
+             },
+             referenciaFechaEmision:{
+                 required : true,
+             },
+             referenciaTipoDoc:{
+                 required : true,
+                 
+             },
+             referenciaNumero:{
+                 required : true,
+                 maxlength:20,
+             }    
+
 		},
 		ignore : []
 
@@ -1363,6 +1404,11 @@ function __Init(){
     self.mostarParaCrearNuevaFactura    = true
     self.mostrarCamposIngresoContado   = true;
     self.update();
+    $(".totalBanco").val(null)   
+    $(".totalTarjeta").val(null)   
+    $(".totalEfectivo").val(null)   
+ 
+
     $(".referenciaNumero").val(null)
     $(".referenciaFechaEmision").val(null)
     $('.referenciaTipoDoc').prop("selectedIndex", 0);
@@ -1464,6 +1510,9 @@ function __displayDate_detail(fecha) {
     var dateTime = new Date(fecha);
     return moment(dateTime).format('YYYY-MM-DD ');
 }
+function formatoFechaHora(fecha) {
+    return fecha == null?"":moment(fecha).format('YYYY-MM-DD HH:mm:ss');
+}
 /**
 *  Crear Factura nueva
 **/
@@ -1471,7 +1520,7 @@ function crearFactura(){
     self.detalleFactura.data =self.detail
     self.update() 
     var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
-    var fechaReferencia =$('#referenciaFechaEmision').val() !=null?referenciaFechaEmision.value:new Date() 
+    var fechaReferencia =$('#referenciaFechaEmision').val() !=null?formatoFechaHora(referenciaFechaEmision.value):new Date() 
      var JSONDetalles = JSON.stringify( self.detalleFactura );
     
     self.factura.id = self.factura.id
@@ -1546,7 +1595,7 @@ function __ListaFacturasEnEspera(){
      self.facturas_espera       = {data:[]}  
      self.update()
     $.ajax({
-        url: 'ListarFacturasEsperaActivasAjax',
+        url: 'ListarNotasCreditoAndDebitoEsperaActivasAjax',
         datatype: "json",
         method:"GET",
         success: function (result) {
@@ -2252,7 +2301,7 @@ function __comboCondicionPago(){
 * cargar los codigos de referencias
 **/
 function __comboCondicionPagoRef(){
-    self.codigosReferencias = []
+     self.codigosReferencias = []
     self.update()
     self.codigosReferencias.push({
         estado:"01",
@@ -2264,7 +2313,7 @@ function __comboCondicionPagoRef(){
     })    
     self.codigosReferencias.push({
         estado:"03",
-        descripcion:$.i18n.prop("referencia.corrige.texto.documento")
+        descripcion:$.i18n.prop("referencia.corrige.monto.documento")
     })   
     self.codigosReferencias.push({
         estado:"04",
@@ -2278,7 +2327,6 @@ function __comboCondicionPagoRef(){
         estado:"99",
         descripcion:$.i18n.prop("referencia.otros.documento")
     })    
-
     self.update()
 }
 /**
@@ -2300,21 +2348,41 @@ function __ComboTipoDocumentos(){
     self.update()
    self.comboTipoDocumentosRef.push({
          estado:"01",
-        descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
+        descripcion:$.i18n.prop("referencia.tipo.documento.factura.electronica")
     })
     self.comboTipoDocumentosRef.push({
          estado:"02",
-        descripcion:$.i18n.prop("factura.tipo.documento.nota.debito")
+        descripcion:$.i18n.prop("referencia.tipo.documento.nota.debito")
     })
     self.comboTipoDocumentosRef.push({
          estado:"03",
-        descripcion:$.i18n.prop("factura.tipo.documento.nota.credito")
+        descripcion:$.i18n.prop("referencia.tipo.documento.nota.credito")
     })
      self.comboTipoDocumentosRef.push({
         estado:"04",
-        descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
+        descripcion:$.i18n.prop("referencia.tipo.documento.factura.tiquete")
     })
-    
+
+     self.comboTipoDocumentosRef.push({
+        estado:"05",
+        descripcion:$.i18n.prop("referencia.tipo.documento.factura.nota.despacho")
+    })
+    self.comboTipoDocumentosRef.push({
+        estado:"06",
+        descripcion:$.i18n.prop("referencia.tipo.documento.factura.contrato")
+    })
+    self.comboTipoDocumentosRef.push({
+        estado:"07",
+        descripcion:$.i18n.prop("referencia.tipo.documento.factura.procedimiento")
+    })
+    self.comboTipoDocumentosRef.push({
+        estado:"08",
+        descripcion:$.i18n.prop("referencia.tipo.documento.factura.comprobante.contigencia")
+    })
+    self.comboTipoDocumentosRef.push({
+        estado:"99",
+        descripcion:$.i18n.prop("referencia.tipo.documento.factura.otros")
+    })
     self.update()
 
 }

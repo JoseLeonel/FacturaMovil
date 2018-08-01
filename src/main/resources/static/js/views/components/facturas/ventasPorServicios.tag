@@ -392,7 +392,7 @@ self.on('mount',function(){
     __comboCondicionPago()
     __ListaDeClientes()
     __comboCondicionPago()
-    __comboCondicionPagoRef()
+    __combocodigosReferencia()
     
    
     window.addEventListener( "keydown", function(evento){
@@ -914,34 +914,46 @@ _EscogerClientes(){
 /**
 * cargar los codigos de referencias
 **/
-function __comboCondicionPagoRef(){
+function __combocodigosReferencia(){
     self.codigosReferencias = []
     self.update()
     self.codigosReferencias.push({
-        estado:"01",
-        descripcion:$.i18n.prop("referencia.anula.documento")
+         estado:"01",
+        descripcion:$.i18n.prop("referencia.tipo.documento.factura.electronica")
     })
     self.codigosReferencias.push({
-        estado:"02",
-        descripcion:$.i18n.prop("referencia.corrige.texto.documento")
-    })    
+         estado:"02",
+        descripcion:$.i18n.prop("referencia.tipo.documento.nota.debito")
+    })
     self.codigosReferencias.push({
-        estado:"03",
-        descripcion:$.i18n.prop("referencia.corrige.texto.documento")
-    })   
-    self.codigosReferencias.push({
+         estado:"03",
+        descripcion:$.i18n.prop("referencia.tipo.documento.nota.credito")
+    })
+     self.codigosReferencias.push({
         estado:"04",
-        descripcion:$.i18n.prop("referencia.otro.documento")
-    })    
-    self.codigosReferencias.push({
+        descripcion:$.i18n.prop("referencia.tipo.documento.factura.tiquete")
+    })
+
+     self.codigosReferencias.push({
         estado:"05",
-        descripcion:$.i18n.prop("referencia.sustituye.comprobante.documento")
-    })    
+        descripcion:$.i18n.prop("referencia.tipo.documento.factura.nota.despacho")
+    })
+    self.codigosReferencias.push({
+        estado:"06",
+        descripcion:$.i18n.prop("referencia.tipo.documento.factura.contrato")
+    })
+    self.codigosReferencias.push({
+        estado:"07",
+        descripcion:$.i18n.prop("referencia.tipo.documento.factura.procedimiento")
+    })
+    self.codigosReferencias.push({
+        estado:"08",
+        descripcion:$.i18n.prop("referencia.tipo.documento.factura.comprobante.contigencia")
+    })
     self.codigosReferencias.push({
         estado:"99",
-        descripcion:$.i18n.prop("referencia.otros.documento")
-    })    
-
+        descripcion:$.i18n.prop("referencia.tipo.documento.factura.otros")
+    })
     self.update()
 }
 
