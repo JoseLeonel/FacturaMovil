@@ -282,12 +282,12 @@
                                     <tbody>
                                         <tr>
                                             <td width="30%" id="">
-                                                <div id="pagarTitulo">{$.i18n.prop("factura.total")}</div>
+                                                <div id="pagarTitulo">{$.i18n.prop("factura.total")}: </div>
                                             </td>
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show">₡ {factura.totalComprobante.toLocaleString('de-DE')}</span>
+                                                    <span class="label label-info textShadow" id="total-show"> {factura.totalComprobante.toLocaleString('de-DE')}</span>
                                                 </div>
                                             </td>
                                         </tr>                     
