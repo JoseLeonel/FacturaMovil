@@ -127,12 +127,18 @@ public class HaciendasController {
 																																																					 facturaElectronica.setReferenciaNumero(d.getReferenciaNumero());
 																																																					 facturaElectronica.setReferenciaRazon(d.getReferenciaRazon());
 																																																					 facturaElectronica.setReferenciaTipoDoc(MapEnums.ENUM_TIPO_DOC.get(d.getReferenciaTipoDoc()));
-																																																					 facturaElectronica.setReferenciaFechaEmision(d.getReferenciaFechaEmision().toString());
-																																																					 facturaElectronica.setReferenciaCodigo(Constantes.EMPTY);
+																																																					 facturaElectronica.setReferenciaFechaEmision(d.getReferenciaFechaEmision() != null?d.getReferenciaFechaEmision().toString():Constantes.EMPTY);
+																																																					 
 																																																				 }
 																																																			 
 																																																			 }else {
 																																																				 facturaElectronica.setReferencia(Constantes.EMPTY);
+																																																				 facturaElectronica.setReferenciaCodigo( Constantes.EMPTY);
+																																																				 facturaElectronica.setReferenciaNumero(Constantes.EMPTY);
+																																																				 facturaElectronica.setReferenciaRazon(Constantes.EMPTY);
+																																																				 facturaElectronica.setReferenciaTipoDoc(Constantes.EMPTY);
+																																																				 facturaElectronica.setReferenciaFechaEmision(Constantes.EMPTY);
+																																																				 
 																																																			 }
 																																																			// Agrega sus detalles
 																																																			List<DetalleFacturaElectronica> detalles = d.getDetalles().stream().map(TO_DETALLE).collect(toList());

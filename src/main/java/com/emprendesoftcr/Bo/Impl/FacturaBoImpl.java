@@ -184,9 +184,7 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setPlazoCredito(Constantes.ZEROS);
 			}
 
-		//	if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-		//		Factura facturaTem = facturaDao.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa());
-		if(facturaCommand.getReferenciaCodigo() !=null) {
+			if(!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
 					factura.setReferenciaTipoDoc(facturaCommand.getReferenciaTipoDoc());
 					factura.setReferenciaNumero(facturaCommand.getReferenciaNumero());
 					factura.setReferenciaCodigo(facturaCommand.getReferenciaCodigo());
@@ -197,6 +195,7 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setReferenciaNumero(Constantes.EMPTY);
 				factura.setReferenciaCodigo(Constantes.EMPTY);
 				factura.setReferenciaRazon(Constantes.EMPTY);
+				factura.setFechaEmision(null);
 
 			}
 

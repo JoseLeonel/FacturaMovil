@@ -106,7 +106,7 @@
                                             </tr>
                                         </tfoot>
                                     </table>
-                                     <h2 class="pull-right"> {$.i18n.prop("cuentaCobrar.totalAbono")}: {cuentaCobrar.totalAbono} </h2>
+                                     <h2 class="pull-right"> {$.i18n.prop("cuentaCobrar.totalAbono")}: {cuentaCobrar.totalAbono.toLocaleString('de-DE')} </h2>
                                 </div>    
                             </div>
                         </div>    
@@ -128,8 +128,8 @@
         <div class="col-md-12 col-lg-12 col-sx-12 col-sm-1">
             <div class="box box-solid box-primary">
                 <div class="box-header with-border">
-                    <h1 class="box-title" show={abono.id == null}><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.agregar")} {cuentaCobrar.id}  {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total}  {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo} </h1>
-                    <h1 class="box-title" show={abono.id != null}><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.id")} {abono.id} {$.i18n.prop("abono.detalle.cuenta")} {cuentaCobrar.id} {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total} {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo}</h1>
+                    <h1 class="box-title" show={abono.id == null}><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.agregar")} {cuentaCobrar.id}  {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total}  {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo.toLocaleString('de-DE')} </h1>
+                    <h1 class="box-title" show={abono.id != null}><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.id")} {abono.id} {$.i18n.prop("abono.detalle.cuenta")} {cuentaCobrar.id} {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total.toLocaleString('de-DE')} {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo.toLocaleString('de-DE')}</h1>
                 </div>
                 <div class="box-body">
                     <form id = "formularioAbono" name ="formularioAbono " class="advanced-search-form">
@@ -196,7 +196,7 @@
                             </div>
                             <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4">
                                 <label class="knob-label">{$.i18n.prop("abono.total")} <span class="requeridoDato">*</span> </label>
-                                <input  type="number" step="any" class="form-control total" placeHolder ="{$.i18n.prop("abono.total")}" id="total" name="total"  value="{abono.total.toLocaleString('de-DE')}"   readonly>                        
+                                <input  type="number" step="any" class="form-control total" placeHolder ="{$.i18n.prop("abono.total")}" id="total" name="total"  value="{abono.total}"   readonly>                        
                             </div>
                         </div>
                         <div class="row">
@@ -429,7 +429,7 @@
         .contenedor-listar{
             width:100%;
         }
-        .input-table-search{
+        .input-table-search{.toLocaleString('de-DE')
             margin-left: 15px;
             margin-right: 15px;
             width:100%;
@@ -1029,19 +1029,19 @@ function __InformacionDataTable(){
                             {'data' :'tipo'                   ,"name":"tipo"                    ,"title" : $.i18n.prop("cuentaCobrar.tipo")         ,"autoWidth" :false },
                             {'data' : 'total'                 ,"name":"total"                   ,"title" : $.i18n.prop("cuentaCobrar.total")        ,"autoWidth" :false,
                                 "render":function(total,type, row){
-                                      return "₡" + total.toLocaleString('de-DE');
+                                      return total.toLocaleString('de-DE');
                                  }
 
                             },
                             {'data' : 'totalAbono'            ,"name":"totalAbono"              ,"title" : $.i18n.prop("cuentaCobrar.totalAbono")   ,"autoWidth" :false,
                                 "render":function(totalAbono,type, row){
-                                      return "₡" + totalAbono.toLocaleString('de-DE');
+                                      return  totalAbono.toLocaleString('de-DE');
                                  }
                             
                             },
                             {'data' : 'totalSaldo'            ,"name":"totalSaldo"              ,"title" : $.i18n.prop("cuentaCobrar.totalSaldo")   ,"autoWidth" :false,
                                 "render":function(totalSaldo,type, row){
-                                      return "₡" + totalSaldo.toLocaleString('de-DE');
+                                      return  totalSaldo.toLocaleString('de-DE');
                                  }
                             
                             },
@@ -1364,7 +1364,7 @@ function __InformacionTabla_lista_Abonos(){
                                        {'data' : 'recibo'         ,"name":"recibo"        ,"title" : $.i18n.prop("abono.recibo")},
                                        {'data' : 'total'          ,"name":"total"         ,"title" : $.i18n.prop("abono.total"),
                                             "render":function(total,type, row){
-                                                return "₡" + total.toLocaleString('de-DE');
+                                                return total.toLocaleString('de-DE');
                                             }
                                        
                                        },

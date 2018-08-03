@@ -1,85 +1,42 @@
 <venta-factura>
 
 
-<!--fin listado de facturas del usuario de las ventas que ha realizado-->
-
-<div show= {mostrarFacturaImprimir} class= "wrap">
-    <h1>Imprimir la Factura del Cliente :{factura.numeroFactura}<h1>
-    <div class="pantalla-imprimir">
-        <div class="botones-imprimir">
-            <a href="#" class="boton-imprimir"  onclick = {__ImprimirFactura} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir(F8)</a>
-            <a href="#" class="boton-imprimir" id="boton-regresar" onclick = {__RegresarVentaImprimir}><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Regresar(Esc)</a>
-        </div>
-        <section class="zona-impresion">
-            <div class="forma-impresion">
-                <div class="ticket" id="imprimeme"> 
-                    <div class="encabezado" ><strong>{factura.sucursal.web}</strong><br></div>
-                    <div class="encabezado"><strong>Telefono: </strong>{factura.sucursal.telefono}<br></div>
-                    <div class="encabezado"><strong>Cedula: </strong>{factura.sucursal.empresa.razonSocial}<br></div>                                                 
-                    <div class="encabezado"></strong>{factura.sucursal.empresa.direccion}<br></strong></div>
-                    <div class="encabezado"><strong>Documento: </strong>{factura.numeroFactura}</div>
-                    <div class="encabezado"><strong>Estado: </strong>{factura.estado}</div>
-                    <div class="encabezado"><strong>Fecha: </strong>{factura.created_at} <br></div>    
-                    <div class="encabezado"><strong>Nota: </strong>{factura.nota} <br></div>    
-                    <table class = "forma-table"  >
-                         <thead>
-                            <tr class = "forma-table"  >
-                                <th class="cantidad">CANT</th>
-                                <th class="producto">PRODUCTO</th>
-                                <th class="precio">Sub Total</th>
-                            </tr>
-                            
-
-                        </thead>
-                    <tbody>
-                        <tr class = "" each={factura.detalles}>
-                            <td class="cantidad">{cantidad}</td>
-                            <td class="producto">{inventario.articulo.descripcion}</td>
-                            <td class="precio">{subTotal}</td>
-                        </tr>
-                        <tr class = "forma-table">
-                           <td></td>
-                           <td>Sub Total</td>
-                           <td>{factura.subTotal}</td>
-                        </tr>
-                        <tr>
-                           <td></td>
-                           <td>Descuento</td>
-                           <td>{factura.totalDescuento}</td>
-                        </tr>
-                        <tr>
-                           <td></td>
-                           <td>Impuesto</td>
-                           <td>{factura.iva}</td>
-                        </tr>
-                        <tr show={factura.totalTransporte > 0}>
-                           <td></td>
-                           <td>Transporte</td>
-                           <td>{factura.totalTransporte}</td>
-                        </tr>
-                        <tr>
-                           <td></td>
-                           <td>Total</td>
-                           <td>{factura.total}</td>
-                        </tr>
-                          <tr>
-                           <td colspan="3"></td>
-                        </tr>
-                        
-                    </tbody>
-                    </table> 
-                    <p  align="left">Autorizado mediante resolucion No. 11-97  <br>
-                                        del 12 de Agosto de 1997 de la Direccion 
-                                        <br>General de Tributacion de San Jose</p>
-                    <br>
-                    <div class="encabezado">¡GRACIAS POR SU COMPRA!</div>           
-                </div>
+<!--Modal mostrar  -->
+<div id="modalVendedor" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("vendedor.lista")}   </h4>
             </div>
-        </section>
-        
+            <div class="modal-body">
+                <table id="tableListaVendedor" class="table responsive display table-striped table-hover nowrap tableListaVendedor " cellspacing="0" width="100%">
+                   <thead>
+                        <th class="table-header">{$.i18n.prop("vendedor.cedula")}            </th>
+                        <th class="table-header">{$.i18n.prop("vendedor.nombreCompleto")}    </th>
+                        <th class="table-header">{$.i18n.prop("vendedor.correoElectronico")} </th>
+                        <th class="table-header">{$.i18n.prop("vendedor.telefono")}          </th>
+                        <th class="table-header">{$.i18n.prop("vendedor.celular")}           </th>
+                        <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
+                    </thead>
+                    <tfoot style="display: table-header-group;">
+                        <tr>
+                            <th>{$.i18n.prop("vendedor.cedula")}           </th>
+                            <th>{$.i18n.prop("vendedor.nombreCompleto")}   </th>
+                            <th>{$.i18n.prop("vendedor.correoElectronico")}</th>
+                            <th>{$.i18n.prop("vendedor.telefono")}         </th>
+                            <th>{$.i18n.prop("vendedor.celular")}          </th>
+                            <th>                                           </th>
+                        </tr>
+                    </tfoot>                    
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+            </div>
+        </div>
     </div>
-</div>    
-
+</div>
+<!--fin del modal-->
 
 <!--Inicio de la Venta-->
 <div show={mostarParaCrearNuevaVentas}>
@@ -114,16 +71,16 @@
                                         <span onclick ={__CambiarCantidad} class="label label-success cantidad">{cantidad.toFixed(3)}</span>
                                         </td>
                                         <td class="contCalc">
-                                        <span class="label label-success precio-prod" >{precio.toLocaleString('de-DE')}</span>
+                                        <span class="label label-success precio-prod" >{precioUnitario.toLocaleString('de-DE')}</span>
                                         </td>
                                         <td class="contCalc">
-                                        <span onclick ={__CambiarDescuento} class="label label-success precio-prod" >{descuento}</span>
+                                        <span onclick ={__CambiarDescuento} class="label label-success precio-prod" >{porcentajeDesc.toLocaleString('de-DE')}</span>
                                         </td>
                                         <td class="contCalc">
                                         <span class="label label-success " >{impuesto}</span>
                                         </td>
                                         <td>
-                                        <span class="precio-calc">{subTotal.toLocaleString('de-DE')}</span>
+                                        <span class="precio-calc">{montoTotalLinea.toLocaleString('de-DE')}</span>
                                         </td>
                                         <td>
                                             <button  onclick={__removeProductFromDetail} class="btn_eliminar_detalle btn-danger btn-xs btn-block">X</button>
@@ -138,18 +95,18 @@
                                 <tbody>
                                     <tr style="height:30px;">
                                         <td width="30%" id="bordeBevelLeft"> 
-                                            <span id="pagarInfo"> Subtotal: </span>
-                                            <span id="cantidad-total">{factura.subTotal.toLocaleString('de-DE')} </span> 
+                                            <span id="pagarInfo"> {$.i18n.prop("factura.resumen.subTotal")}: </span>
+                                            <span id="cantidad-total">{subTotalGeneral.toLocaleString('de-DE')  } </span> 
                                         </td>
                                         <td width="35%" id="bordeBevelLeft"> 
-                                            <span id="pagarInfo">Desc: </span>
-                                            <span id="sigPeso">₡   </span>
+                                            <span id="pagarInfo">{$.i18n.prop("factura.resumen.descuento")} : </span>
+                                            <span id="sigPeso">   </span>
                                             <span id="iva-total">{factura.totalDescuento.toLocaleString('de-DE')}</span> 
                                         </td>
                                         <td width="35%" id="bordeBevelRight"> 
-                                            <span id="pagarInfo">IVA  </span>
-                                            <span id="sigPeso">₡      </span>
-                                            <span id="subtotal">{factura.iva.toLocaleString('de-DE')}</span> 
+                                            <span id="pagarInfo">{$.i18n.prop("factura.resumen.impuesto")}  </span>
+                                            <span id="sigPeso">      </span>
+                                            <span id="subtotal">{factura.totalImpuesto.toLocaleString('de-DE')}</span> 
                                         </td>
                                     </tr>
                                 </tbody>
@@ -161,12 +118,12 @@
                                 <tbody>
                                     <tr>
                                         <td width="30%" id="">
-                                            <div id="pagarTitulo">Pagar</div>
+                                            <div id="pagarTitulo">{$.i18n.prop("factura.total")}</div>
                                         </td>
                                         <td width="70%" id="">
                                             <div id="">
-                                                <span id="total_show_peso" class="textShadow"> ₡ </span>
-                                                <span class="label label-info textShadow" id="total-show">{factura.total.toLocaleString('de-DE')}</span>
+                                                <span id="total_show_peso" class="textShadow">  </span>
+                                                <span class="label label-info textShadow" id="total-show">{factura.totalComprobante.toLocaleString('de-DE')}</span>
                                             </div>
                                         </td>
                                     </tr>                     
@@ -185,7 +142,7 @@
                                     <small class="fa fa-plus" style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
                                     <span class="fa fa-user" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"></span> 
                                 </span>
-                                <input onclick={__BuscarEnListaClientes} type="text"  placeholder="Cliente" value="{cliente.nombreCompleto}"  name="datos_cliente" id="datos_cliente" autocomplete="off" >
+                                <input onclick={_EscogerClientes} type="text"  placeholder="Cliente" value="{cliente.nombreCompleto}"  name="datos_cliente" id="datos_cliente" autocomplete="off" >
                             </div>
                             <!--Fin Cliente o Nuevo Cliente-->
                             <!--Vendedor o Nuevo Vendedor-->
@@ -193,7 +150,7 @@
                                 <span title="Vendedor" class="input-group-addon " > 
                                     <span class="fa fa-user" aria-hidden="true" style="margin:3px 4px 0px 2px"></span> 
                                 </span>
-                                <input type="text" onclick={__BuscarEnListaVendedores} placeholder="Vendedor" value="{vendedor.nombreCompleto}"  name="v_vendedor" id="v_vendedor" autocomplete="off" >
+                                <input type="text" onclick={_EscogerVendedores} placeholder="Vendedor" value="{vendedor.nombreCompleto}"  name="v_vendedor" id="v_vendedor" autocomplete="off" >
                             </div>
                         </div>
                     </div> 
@@ -202,16 +159,13 @@
                         <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 " >   
                             <section class="contenedor-opciones">
                                 
-                                <a href="#" class="opciones-menu" onclick = {__crearTiqueteEnEspera} >
-                                    <i class="fa fa-clock-o">Ventas en Espera</i>
+                                <a href="#" class="opciones-menu" onclick = {__AplicarYcrearFactura} >
+                                    <i class="fa fa-clock-o">{$.i18n.prop("venta.en.espera")}</i>
                                 </a>
 
-                                <a href="#"  class="opciones-menu" onclick = {__MostrarFormularioParaAgregarNotaAFactura} >
-                                   <i class="fa fa-pencil">Nota</i>
-                                </a>
-
-                                <a  href="#" class="opciones-limpiar" onclick = {__Limpieza_General_Todo} >
-                                    <i class="fa fa-trash">Limpiar</i>
+                            
+                                <a  href="#" class="opciones-limpiar" onclick = {__Limpiar} >
+                                    <i class="fa fa-trash">{$.i18n.prop("btn.limpiar")}</i>
                                 </a>                              
                             </section>
                         </div>    
@@ -219,9 +173,9 @@
                     <div  class="row">
                         <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12" >
                             <section class="lista-facturas-espera">
-                                <div id="botones"  each={ventas_espera}  onclick={__CargarFacturaEspera}>
-                                    <a href="#" class="factura-espera" title="{nombreCompleto}-{nota}">Venta # {id} - {total}</a>
-                                </div>          
+                                <div id="botones"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
+                                    <a href="#" class="factura-espera"  title="{cliente !=null?cliente.nombreCompleto:""}">T# {id}</a>
+                                </div>         
                             </section>
                         </div>
                     </div>    
@@ -233,9 +187,9 @@
                         <div class="row-form panel newPanel newContNavegacion" style="padding-left: 0px;padding-right: 0px; padding-top:6px;">
                             <form>
                                 <ul id="tipo-busqueda">
-                                    <li id="buscalo"  onclick = {__ListaDeProductos} class="">
+                                    <li id="buscalo"  onclick = {__ListaDecodigos} class="">
                                         <h3><i class="glyphicon glyphicon-search" aria-hidden="true"></i>
-                                            <img  src="{urlImagenBuscador}" width="45px" height="15px" >&nbsp;&nbsp; BUSCADOR 
+                                            <img  src="{urlImagenBuscador}" width="45px" height="15px" >&nbsp;&nbsp; {$.i18n.prop("btn.consultar")}  
                                         </h3>
                                     </li>
                                     <li onclick = {__PantallaCodigoBarra} id="codificalo" class=""> <h3>
@@ -284,7 +238,7 @@
                     <!--Seccion de codigo de barra-->
                     <section show={mostrarCodigoBarra} class="codigo-barra" >
                         <div class="barra">
-                           <input onkeypress = {__agregarInventarioCogigoBarra} type="text" class="form-control" id="codigoBarra" autofocus="autofocus" placeholder="Digite codigo Barra...">
+                           <input onkeypress = {__addProductToDetail} type="text" class="form-control" id="codigoBarra" autofocus="autofocus" placeholder="Digite codigo Barra...">
                        </div>    
                        
                     </section>
@@ -304,20 +258,20 @@
     <div class="modal-dialog modal-sm">
        <div class="modal-content">
             <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>Cambiar Cantidad </h4>
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.cantidad")}</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
                         <div class="form-group has-success">
                             <label >Cantidad:</label>
-                            <input  onkeypress={__recalculacionDelDetalle} type="number" class="form-control" id="cambiarCantidad" autofocus="autofocus">
+                            <input  type="number" class="form-control cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus">
                         </div>
                     </div>
                 </div> 
             </div>
             <div class="modal-footer">
-                <button onclick={__recalculacionDelDetalle} onkeypress={__recalculacionDelDetalle}  type="button" class="btn btn-basic" style="float: right;" ><i class="fa fa-arrow-right"></i>Cambiar</button>
+                <button type="button" onclick ="{__recalculacionDelDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
             </div>
         </div>
     </div>
@@ -325,244 +279,110 @@
 
 <!--Fin Cambiar Cantidad-->
 
-<!--Modal Cambiar Cantidad-->
+
+<!--Modal Cambiar Descuento-->
 <div id='modalCambiarDescuento' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
        <div class="modal-content">
             <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>Descuento</h4>
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descuento")}</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
                         <div class="form-group has-success">
-                            <label >Cantidad:</label>
-                            <input  onkeypress={__actualizarDescuento} type="number" class="form-control" id="aplicarDescuento" autofocus="autofocus">
+                            <label >{$.i18n.prop("factura.linea.detalle.descuento")}</label>
+                            <input  type="number" class="form-control aplicarDescuento" id="aplicarDescuento" name = "aplicarDescuento" autofocus="autofocus">
                         </div>
                     </div>
                 </div> 
 
             </div>
             <div class="modal-footer">
-                <button onclick={__actualizarDescuento} onkeypress={__actualizarDescuento} type="button" class="btn-dark-gray btn-back pull-left" style="float: right;" >Volver</button>
+                <button type="button" onclick ="{__actualizarDescuento}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
             </div>
         </div>
     </div>
 </div>
-<!--Fin Cambiar Cantidad-->
+<!--Fin Cambiar Descuento-->
 
-<!--Modal mostrar Articulos de una sucursal -->
+<!--Modal mostrar Articulos de la empresa -->
 <div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-       <div class="modal-content">
-            <div class="modal-header with-border fondoEncabezado" >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>Lista los Articulos del inventario </h4>
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("articulo.listar")} </h4>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
-                        <table id="tableListaInventario" class="table blueTable responsive display table-striped table-hover nowrap tableListaInventario " cellspacing="0" width="100%">
-                            <thead>
-                                <th>Codigo          </th>
-                                <th>Descripcion     </th>
-                                <th>Cantidad        </th>
-                                <th>Precio Publico  </th>
-                                <th>Precio Mayorista</th>
-                                <th>Precio Especial </th>
-                                <th>Opciones        </th>
-                            </thead>
-                        </table>
-                    </div>
-                </div>        
+                <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " cellspacing="0" width="100%">
+                    <thead>
+                        <th class="table-header">{$.i18n.prop("articulo.codigo")}        </th>
+                        <th class="table-header">{$.i18n.prop("articulo.descripcion")}   </th>
+                        <th class="table-header">{$.i18n.prop("inventario.cantidad")}    </th>
+                        <th class="table-header">{$.i18n.prop("articulo.precioPublico")} </th>
+                        <th class="table-header">{$.i18n.prop("listado.acciones")}       </th>
+                    </thead>
+                    <tfoot style="display: table-header-group;">
+                        <tr>
+                            <th >{$.i18n.prop("articulo.codigo")}         </th>
+                            <th >{$.i18n.prop("articulo.descripcion")}   </th>
+                            <th >{$.i18n.prop("inventario.cantidad")}    </th>
+                            <th >{$.i18n.prop("articulo.precioPublico")} </th>
+                            <th >                                        </th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left" style="float: right;" data-dismiss="modal">Volver</button>
+                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
             </div>
         </div>
     </div>
 </div>
 <!--fin del modal-->
 <!--Modal mostrar Clientes de una sucursal -->
-<div id='modalClientes' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg ">
-       <div class="modal-content">
-            <div class="modal-header with-border fondoEncabezado" >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-users'></i> Listar del Clientes  </h4>
+<<div id="modalClientes" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("cliente.lista")}   </h4>
             </div>
             <div class="modal-body">
-                <table id="tableListaClientes" class="table responsive display table-striped table-bordered tableListaClientes " cellspacing="0" width="100%">
-                    <thead>
-                        <th class = "fondoEncabezado">{$.i18n.prop("cliente.cedula")}            </th>
-                        <th class = "fondoEncabezado">{$.i18n.prop("cliente.nombreCompleto")}    </th>
-                        <th class = "fondoEncabezado">{$.i18n.prop("cliente.celular")}           </th>
-                        <th class = "fondoEncabezado">{$.i18n.prop("cliente.telefono")}          </th>
-                        <th class = "fondoEncabezado">{$.i18n.prop("cliente.correoElectronico")} </th>
-                        <th class = "fondoEncabezado">{$.i18n.prop("listado.acciones")}          </th>
+                <table id="tableListaCliente" class="table responsive display table-striped table-hover nowrap tableListaCliente " cellspacing="0" width="100%">
+                   <thead>
+                        <th class="table-header">{$.i18n.prop("cliente.cedula")}            </th>
+                        <th class="table-header">{$.i18n.prop("cliente.nombreCompleto")}    </th>
+                        <th class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
+                        <th class="table-header">{$.i18n.prop("cliente.descuento")}         </th>
+                        <th class="table-header">{$.i18n.prop("cliente.telefono")}          </th>
+                        <th class="table-header">{$.i18n.prop("cliente.celular")}           </th>
+                        <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
                     </thead>
                     <tfoot style="display: table-header-group;">
                         <tr>
-                            <th>{$.i18n.prop("cliente.cedula")}            </th>
-                            <th>{$.i18n.prop("cliente.nombreCompleto")}    </th>
-                            <th>{$.i18n.prop("cliente.celular")}           </th>
-                            <th>{$.i18n.prop("cliente.telefono")}          </th>
-                            <th>{$.i18n.prop("cliente.correoElectronico")} </th>
-                            <th>      </th>                        
-                        <tr>
-
-                </table>
-            </div>
-        </div>
-    </div>
-  
-</div>
-<!--fin del modal-->
-
-
-<!--Modal mostrar venedores de una sucursal -->
-<div id='modalListaDeVendedores' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg ">
-       <div class="modal-content">
-            <div class="modal-header with-border fondoEncabezado " >
-                <h4 class="box-title" > <i class='fa fa-users'></i> {$.i18n.prop("titulo.listar.vendedor")} </h4>
-            </div>
-            <div class="modal-body">
-                <table id="tableListaVendedores" class="table responsive display table-striped table-bordered tableListaVendedores " cellspacing="0" width="100%">
-                    <thead>
-                        <th class = "fondoEncabezado">{$.i18n.prop("vendedor.nombreCompleto")}    </th>
-                        <th class = "fondoEncabezado">{$.i18n.prop("vendedor.correoElectronico")} </th>
-                        <th class = "fondoEncabezado">{$.i18n.prop("vendedor.telefono")}          </th>
-                        <th class = "fondoEncabezado">{$.i18n.prop("vendedor.celular")}           </th>
-                        <th class = "fondoEncabezado">{$.i18n.prop("vendedor.descuento")}         </th>
-                        <th class = "fondoEncabezado">{$.i18n.prop("listado.acciones")}           </th>
-                    </thead>
-                    <tfoot style="display: table-header-group;">
-                        <tr>
-                            <th>{$.i18n.prop("vendedor.nombreCompleto")}    </th>
-                            <th>{$.i18n.prop("vendedor.correoElectronico")} </th>
-                            <th>{$.i18n.prop("vendedor.telefono")}          </th>
-                            <th>{$.i18n.prop("vendedor.celular")}           </th>
-                            <th>{$.i18n.prop("vendedor.descuento")}         </th>
-                            <th>  </th>
+                            <th>{$.i18n.prop("cliente.cedula")}           </th>
+                            <th>{$.i18n.prop("cliente.nombreCompleto")}   </th>
+                            <th>{$.i18n.prop("cliente.correoElectronico")}</th>
+                            <th>{$.i18n.prop("cliente.descuento")}        </th>
+                            <th>{$.i18n.prop("cliente.telefono")}         </th>
+                            <th>{$.i18n.prop("cliente.celular")}          </th>
+                            <th>                                          </th>
                         </tr>
-                    </tfoot>
+                    </tfoot>                    
                 </table>
-            </div>
-        </div>
-    </div>
-</div>
-<!--fin del modal-->
-
-
-<!--Modal agregar Clientes nuevos de una sucursal -->
-<div id='modalAgregarClienteNuevo' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-lg">
-       <div class="modal-content">
-            <div class="modal-header with-border titulos-modal-vender" >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-users'></i>Agregar Nuevo Cliente  </h4>
-            </div>
-            <div class="modal-body">
-                <div show={mostrarErrorClienteNuevo} class="alert alert-warning" >
-                    <div each={errorClientes}><strong>{campo}:</strong> {mensaje}</div>
-                </div>
-                <form id= "formularioCliente" name = "formularioCliente" class="advanced-search-form">
-                    <div class="row-fluid">
-                        <div class="span12">
-                            Todos campos son requeridos.
-                        </div>
-                    </div>
-                    <div class="row">
-                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label" >Cedula <span class="requeridoDato">*</span> </label>
-                                <input type="text" class="form-control cedula" id="cedula" name="cedula" value="{cliente.cedula}"  required>
-                            </div>
-    
-                        </div>
-                        <div class="row">
-                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label" >Nombre <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control nombreCompleto" id="nombreCompleto" name="nombreCompleto" value="{cliente.nombreCompleto}"  >
-                            </div>
-    
-                        </div>
-                        <div class="row">
-                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label" >correo </label>
-                                <input type="text" class="form-control correoElectronico" id="correoElectronico" name="correoElectronico" value="{cliente.correoElectronico}"  >
-                            </div>
-
-                        </div>
-
-                        <div class="row">
-                            <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3">
-                                <label class="knob-label" >Telefono </label>
-                                <input type="text" class="form-control telefono" id="telefono" name="telefono" value="{cliente.telefono}"  >
-                            </div>
-                            <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3">
-                                <label class="knob-label" >Fax </label>
-                                <input type="text"  class="form-control fax" id="fax" name="fax" value="{cliente.fax}" >
-                            </div>
-                            <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3">
-                                <label class="knob-label" >Descuento <span class="requeridoDato">%</span></label>
-                                <input type="number" step="any" class="form-control descuento" id="descuento" name="descuento" value="{cliente.descuento}"  >
-                            </div>
-
-                        </div>                    
-                        <div class="row">
-                            <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3">
-                                <label class="knob-label" >Celular </label>
-                                <input type="text"  class="form-control movil" id="movil" name="movil" value="{cliente.movil}"  >
-                            </div>
-                            <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3">
-                                <label class="knob-label" >codigo Pais </label>
-                                <input type="text"  class="form-control codigoPais" id="codigoPais" name="codigoPais" value="{cliente.codigoPais}"  >
-                            </div>
-                            <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3">
-                                <label class="knob-label">Provincia</label>
-                                <select  class="form-control" id="provincia" name="provincia" >
-                                    <option  each={provincias}  value="{codigo}"  selected="{cliente.provincia ==codigo?true:false}" >{descripcion}</option>
-                                </select>
-                            </div>
-
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3">
-                                <label class="knob-label">Estado</label>
-                                <select  class="form-control" id="estado" name="estado" >
-                                    <option  each={estados}  value="{codigo}" selected="{cliente.estado ==codigo?true:false}" >{descripcion}</option>
-                                </select>
-                            </div>
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label">Tipo Cedula</label>
-                                <select  class="form-control" id="estado" name="estado" >
-                                    <option  each={tipoCedulas}  value="{codigo}" selected="{cliente.tipoCedula ==codigo?true:false}" >{descripcion}</option>
-                                </select>
-                            </div>
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6"></div>
-
-                        </div>
-                    <div class="row">
-                        <div class= "col-md-9 col-sx-12 col-sm-9 col-lg-9">
-                            <label class="knob-label" >Direccion </label>
-                             <textarea class="form-control otraSena" rows="5" id="otraSena" name = "otraSena" value="{cliente.otraSena}"></textarea>
-                        </div>
-                    </div>
-                        <br>
-                    <div show={errorCliente}>
-                        <div  class="alert alert-info" role="alert"  >
-                            <h4 each={errorsCliente}> {mensaje} </h4>
-                        </div>
-                    </div>
-                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left" style="float: left;" data-dismiss="modal">Volver</button>
-                <button onclick = {__AgregarNuevoCliente} type="button" class="btn-green btn-add pull-right" style="float: right;" >Agregar</button>
+                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
             </div>
         </div>
     </div>
-  
 </div>
 <!--fin del modal-->
+
+
+
+
+
 
 
 <!--Modal agregar Nota a la factura -->
@@ -606,96 +426,107 @@
 			<div class="col-md-8 col-sm-8 col-lg-8 col-sx-12 ">
 				<div class="box">
 					<div class="box-header with-border fondoEncabezado">
-						<h3 class="box-title">Facturar la Venta  </h3>
-                        <h3 class="box-title pull-right ">Tipo Cambio {tipoCambio} </h3>
+						<h3 class="box-title">{$.i18n.prop("ventas.titulo")} </h3>
+                        <h3 class="box-title pull-right ">{$.i18n.prop("ventas.tipo.cambio.titulo")} {tipoCambio.total} </h3>
 					</div>
 					<div class="box-body">
-                        <form>
+                        <form id="formularioFactura">
                             <div class="row">
                                 <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
                                     <div class="row">
                                         <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
-                                            <div class="form-group has-success">
-                                                <label > Forma Pago </label> 
-                                                <select  onchange= {__tipoCobro} class="form-control" id="pago_tipoPago" >
-                                                    <option each={comboTipoPagos} value="{estado}" selected="{factura.tipoPago ==estado?true:false}" >{descripcion}</option>
+                                            <div class="form-group ">
+                                                <label>{$.i18n.prop("factura.condicion.pago")} </label> 
+                                                <select  onchange= {__formaPago} class="form-control condicionVenta" id="condicionVenta" name="condicionVenta">
+                                                    <option each={comboCondicionPagos} value="{estado}" selected="{factura.condicionVenta ==estado?true:false}" >{descripcion}</option>
                                                 </select>
                                             </div>
                                         </div>    
                                         <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
-                                            <div class="form-group has-success">
-                                                <label for="pago_tipoVentaL">Tipo Documento </label> 
-                                                <select class="form-control" id="pago_tipoVenta" name="pago_tipoVenta"  >
-                                                    <option each={comboTipoDocumentos} value="{estado}" selected="{factura.tipoDocumento ==estado?true:false}" >{descripcion}</option>                                        
+                                            <div class="form-group ">
+                                                <label for="pago_tipoVentaL">{$.i18n.prop("factura.tipo.documento")} </label> 
+                                                <select onchange= {__formaReferencias} class="form-control tipoDoc" id="tipoDoc" name="tipoDoc"   >
+                                                    <option each={comboTipoDocumentos} value="{estado}" selected="{factura.tipoDoc ==estado?true:false}" >{descripcion}</option>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6" show={mostrarCamposIngresoContado == false}>
-                                            <div class="form-group has-success">
-                                                <label > #Recibo </label> 
-                                                <input type="text" class="form-control" id="pago_reciboDinero" name="pago_reciboDinero" >
-                                            </div>
-                                        </div>    
-                                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
-                                            <div class="form-group has-success">
-                                                <label for="pago_tipoVentaL">#Transferencia </label> 
-                                                <input type="text" class="form-control" id="pago_transferencia" name="pago_transferencia" >
-                                            </div>
-                                        </div>
+                                    <div class="form-group ">
+                                        <label >{$.i18n.prop("factura.nota")}</label> 
+                                        <input type="text" class="form-control nota" id="nota" name="nota" value="{factura.nota}">
                                     </div>
-
-                                    <div class="form-group has-success">
-                                        <label for="pago_nombrefacturaL">Nombre Factura </label> 
-                                        <input type="text" class="form-control" id="pago_nombrefactura" name="pago_nombrefactura" value="{cliente.nombreCompleto}">
+                                    <h3> <p class="text-primary">{$.i18n.prop("factura.emisor")}</p></h3>
+                                    <div class="form-group ">
+                                        <input   type="hidden" class="form-control" id="cliente" name="cliente" value="{cliente.id}">
+                                        <label>{$.i18n.prop("factura.cliente")}</label> 
+                                        <input onclick = {_EscogerClientes}  type="text" id="nombreCliente" name="nombreCliente" class="form-control"  value="{cliente.nombreCompleto}" readonly>
                                     </div>
-                                    <div  class="form-group has-success" show={mostrarCamposIngresoContado == false}>
-                                        <label >Fecha Credito</label> 
-                                        <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy/mm/dd">
-                                            <input type="text" class="form-control" id="pago_fechaCredito" value="" >
+                                    <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group ">
+                                        <label >{$.i18n.prop("factura.fecha.credito")}</label> 
+                                        <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
+                                            <input type="text" class="form-control fechaCredito" name="fechaCredito" id="fechaCredito" value="{factura.fechaCredito}" >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
                                             </div>
                                         </div>
                                     </div>    
-                                    <div class="form-group has-success">
-                                        <label >Direccion </label> 
-                                        <input type="text" class="form-control" id="pago_direccion" name="pago_direccion">
+                                    <div class="form-group " show = {!mostrarCamposIngresoContado || factura.fechaCredito}>
+                                        <label>{$.i18n.prop("factura.plazoCredito")}</label> 
+                                        <input type="number" id = "plazoCredito"  name "plazoCredito" class="form-control plazoCredito" value="{factura.plazoCredito}" >
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="pago_tipoVentaL">{$.i18n.prop("factura.estado")} </label> 
+                                        <select class="form-control estado" id="estado" name="estado"  >
+                                            <option each={comboEstados} value="{estado}" selected="{factura.estado ==estado?true:false}" >{descripcion}</option>
+                                        </select>
                                     </div>
                                    
 
                                 </div>
                                 <div  class= "col-md-6 col-sx-6 col-sm-6 col-lg-6" >
-                                    <div class="form-group has-success" show={mostrarCamposIngresoContado == false}>
-                                        <label >#Contrato </label> 
-                                        <input type="text" class="form-control" id="pago_Contrato" name="pago_Contrato">
-                                    </div>
                                     <div class="form-group has-success">
-                                        <label for="pago_transporteL">Transporte </label> 
-                                        <input onkeyup={ __TotalDeTransporte } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any" class="form-control" id="pago_transporte"  value="{factura.totalTransporte}">
+                                        <label for="pago_transporteL">{$.i18n.prop("factura.resumen.efectivo")} </label> 
+                                        <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo">
                                     </div>
                                     <div  class="form-group has-success">
-                                        <label for="pago_efectivoL">Efectivo </label> 
-                                        <input onkeyup={ __TotalDeEfectivo } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="form-control" id="pago_efectivo"  value="{factura.totalEfectivo}">
+                                        <label for="pago_efectivoL">{$.i18n.prop("factura.resumen.tarjeta")} </label> 
+                                        <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"   >
                                     </div>
                                     <div  class="form-group has-success">
-                                        <label for="pago_tarjetaL">Tarjeta </label> 
+                                        <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
                                         <input onkeyup={ __TotalDeTarjeta } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="form-control" id="pago_tarjeta"  value="{factura.totalTarjeta}">
-                                    </div>
-                                    <div  class="form-group has-success">
-                                        <label for="pago_bancoL">Bancos</label> 
-                                        <input onkeyup={ __TotalDeBanco } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="form-control" id="pago_banco"  value="{factura.totalBanco}">
                                     </div>
 
                                     
                                 </div>
                             </div>
+                            <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
+                            <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
+                            <input type="hidden" id='subTotal'                name='subTotal'                value="{factura.subTotal}" >
+                            <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
+                            <input type="hidden" id='totalComprobante'        name='totalComprobante'        value="{factura.totalComprobante}" >
+                            <input type="hidden" id='totalServGravados'       name='totalServGravados'       value="{factura.totalServGravados}" >
+                            <input type="hidden" id='totalServExentos'        name='totalServExentos'        value="{factura.totalServExentos}" >
+                            <input type="hidden" id='totalMercanciasGravadas' name='totalMercanciasGravadas' value="{factura.totalMercanciasGravadas}" >
+                            <input type="hidden" id='totalMercanciasExentas'  name='totalMercanciasExentas'  value="{factura.totalMercanciasExentas}" >
+                            <input type="hidden" id='totalServGravados'       name='totalServGravados'       value="{factura.totalServGravados}" >
+                            <input type="hidden" id='totalServExentos'        name='totalServExentos'        value="{factura.totalServExentos}" >
+                            <input type="hidden" id='totalGravado'            name='totalGravado'            value="{factura.totalGravado}" >
+                            <input type="hidden" id='totalExento'             name='totalExento'             value="{factura.totalExento}" >
+                            <input type="hidden" id='totalVenta'              name='totalVenta'              value="{factura.totalVenta}" >
+                            <input type="hidden" id='totalDescuento'          name='totalDescuento'          value="{factura.totalDescuento}" >
+                            <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
+                            <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           value="{factura.totalImpuesto}" >
+                            <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
+                            <input type="hidden" id='totalTarjeta'            name='totalTarjeta'            value="{factura.totalTarjeta}" >
+                            <input type="hidden" id='totalBanco'              name='totalBanco'              value="{factura.totalBanco}" >
+                            <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
+                            <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
                         </form>   
                     </div>
                     <div class="box-footer">
-                        <button onclick={_AtrasFacturarFinal} class="btn-dark-gray btn-back pull-left">  Volver</button>
-                        <button onclick={__AplicarYCrearFacturaNueva}  class="btn-green btn-add pull-right"> </i> Finalizar Venta(F8)</button>
+                        <button onclick={_AtrasFacturaFinal} class="btn-dark-gray btn-back pull-left">  {$.i18n.prop("btn.volver")}</button>
+                        <button onclick={__AplicarYcrearFactura}  class="btn-green btn-add pull-right"> </i> {$.i18n.prop("btn.aplicar")}</button>
                     </div>
                 </div>
             </div>
@@ -707,20 +538,19 @@
                         <aside class="right-sidebar">
                             <!--Booking details-->
                             <article class="booking-details clearfix">
-                                <h3><span id="lblSCS">Resumen de la Venta</span></h3>
+                                <h3><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h3>
                                     <div class="booking-info">
-                                        <p style="text-align:right">Sub Total : <span id="lblSubtotal"> {factura.subTotal.toLocaleString('de-DE')} </span></p>
-                                        <p style="text-align:right">Descuento : <span id="lblSubtotal"> {factura.totalDescuento.toLocaleString('de-DE')} </span></p>
-                                        <p style="text-align:right">Impuesto  : <span id="lblSubtotal"> {factura.iva.toLocaleString('de-DE')} </span></p>
-                                        <p style="text-align:right">Transporte: <span id="lblSubtotal"> {factura.totalTransporte.toLocaleString('de-DE')} </span></p>
+                                        <p style="text-align:right">{$.i18n.prop("factura.resumen.subTotal")} : <span id="lblSubtotal"> {subTotalGeneral.toLocaleString('de-DE')  } </span></p>
+                                        <p style="text-align:right">{$.i18n.prop("factura.resumen.descuento")} : <span id="lblSubtotal"> {factura.totalDescuento.toLocaleString('de-DE')} </span></p>
+                                        <p style="text-align:right">{$.i18n.prop("factura.resumen.impuesto")}  : <span id="lblSubtotal"> {factura.totalImpuesto.toLocaleString('de-DE')} </span></p>
+                                        
                                     </div>
                                     <div class="precioTotalFactura">
-                                        <p class="total" style="text-align:right;">Total  : <span id="lblTotal">{factura.total.toLocaleString('de-DE')}</span></p>
+                                        <p class="total" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}  : <span id="lblTotal">{factura.totalComprobante.toLocaleString('de-DE')}</span></p>
                                         
                                     </div>
                                     <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado}>
-                                        <p class="total" style="text-align:right;">Pago con : <span id="lblTotal">{totalPagoCon.toLocaleString('de-DE')}</span></p>    
-                                        <p class="total" style="text-align:right;">Cambio : <span id="lblTotal">{totalPagoCon !=0?totalCambio.toLocaleString('de-DE'):0}</span></p>    
+                                        <p class="total" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{factura.totalCambioPagar.toLocaleString('de-DE')}</span></p>    
                                     </div>
                             </article>
                         </aside>
@@ -2029,384 +1859,120 @@
 <script>
     var self = this;
     // Detalle de la factura es una coleccion de articulos
-    self.detail                = [];
-    self.provincias                =[];
-    self.estados                   =[];
-    self.tipoCedulas               =[];
-
-    self.nota                  = {notaFactura:null,
-                                  notaComanda:null}    //Notas a la factura  
-    self.factura               = {
-        id : 0,
-        tipoDocumento:0,
-        tipoPago:0,
-        iva: 0,
-        totalDescuento:0,
-        subTotal:0,  
-        total:0,
-        totalTarjeta:0,
-        totalEfectivo:0,
-        totalBanco:0,
-        totalTransporte:0,
-        sucursal:{
-            empresa:{}
-        }
-    }   
-    self.comboTipoDocumentos   = []        
-    self.comboTipoPagos        = []                       
-    self.totalCambio           = 0         // Total del Cambio de  la factura
-    self.item                  = null;      // item temporal para crear una lidea detalle en la factura
-    self.inventario            = null;      // articulo consultado para incluir en el detalle
-    self.inventarios             = {data:[]}   //Lista de los articulos por almacen
-    self.clientes              = {data:[]}   // lista de los clientes por alamacen    
-    self.vendedores            = {data:[]}   // lista de los vendedores por almancen 
-    self.facturas              = {data:[]}   // lista de las facturas por almancen y usuario 
-    self.listaFacturasPorUsuario  = {data:[]}   // lista de las facturas por usuario
-    self.cliente               = {};         // Objeto del cliente para asociar a la factura            
-    self.vendedor               = {};        // objeto del vendedor para asociar a la factura  
-    self.errorClientes         = []          // vector de errores para cuando se agrega un cliente nuevo
-    self.ventas_espera         = []   // lista de facturas en espera por sucursal y usuario
-    self.informacion_tabla     = []          // mapeo generico de una tabla
-    self.informacion_tabla_clientes = []     // mapeo de los clientes en el datatable
-    self.informacion_tabla_vendedores = []   // mapeo de los vendedores en el datatable
-    self.informacion_tabla_facturas = []     // mapeo de los facturas en el datatable
-    self.idiomaDataTable       = {}          // Idioma del datatable
-    self.mostrarFormularioPago = false       // mostrar el formulario de pago de la factura y creacion
-    self.mostrarErrorClienteNuevo = false    // mostrar los errores al ingresar un cliente nuevo
-    self.mostrarCamposIngresoContado = true
-    
-    self.mostarParaCrearNuevaVentas  = true //muestra modulo de crear una nueva venta
+    self.mostarParaCrearNuevaVentas = true
+    self.mostrarCodigoBarra    = true
     self.mostrarCodigoBarra          = true;
-    self.mostrarNavegador            = false
-    self.mostrarCategorias           = false //muestra la pantalla de imagenes de articulos   
-    self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
-    self.mostrarFacturaImprimir      = false
-    self.errorCliente                     = false
-    self.errorsCliente                    = [];
-
-    self.categorias                  = {
-        data:[],
-        pagination:{
-            total:0,
-            current_page:0,
-            per_page:0,
-            last_page:0,
-            from:0,
-            to:0
-        }
-    }
-    self.categoria = {
-        id:0,
-        descripcion:""
-    }
-    self.inventariosXCategoria = {
-        data:[],
-        pagination:{
-            total:0,
-            current_page:0,
-            per_page:0,
-            last_page:0,
-            from:0,
-            to:0
-        }
-    }
-    self.botonAnteriorCategoria      = 0     // boton para pedir el anterior de las categorias
-    self.botonSiguienteCategoria     = 0
-    self.totalCategorias             = 0
-    
-    self.urlImagenNavegador   = 'img/navegador.png';
-    self.urlImagenLector      = 'img/codigo_barra.png';
-    self.urlImagenBuscador    = 'img/buscador.png';
-    self.claseCambioDinero    = 'entregarCambioPositivo'
-       
-    self.totalPagoCon         = 0;
-    self.on('mount',function(){
-    __informacionData()
-    __InformacionTabla_lista_clientes()
-    __InformacionTabla_lista_articulos()
-    __InformacionTablaVendedores()
-    
-    __InicializarTabla('.tableListaInventario')
-    __InicializarTabla('.tableListaClientes')
-    __InicializarTabla('.tableListaVendedores')
-    __InicializarTabla('.tableListaFacturas')
-    
-    agregarInputsCombos()
-    ActivarEventoFiltro('.tableListaVendedores')
-    // evento de agregar en el modal de articulos del inventario
-    __agregarInventarios()
-    //** evento del datatable clientes para seleccionar un cliente
-     __seleccionarCliente()
-    // evento del datatable vendedores  para seleciconar un vendedor 
-    __seleccionarVendedores()
-    // Listar de clientes asociados a una sucursal
-    __ListaClientes()
-     // Listar de clientes asociados a una sucursal
-    __ListaVendedores()
-    //Lista de Facturas en espera
-    __ListaFacturasEnEspera()
-    // Tipo de Pagos
-    __ComboTipoPagos()
-    //Tipos de Documentos
-    __ComboTipoDocumentos()
-    //Imprimr Factura
-    __seleccionarImprimir()
-
-    //funciones de teclas
-    __Teclas()
-    //carag de billetes
-
-    cargaBilletes()
-    $('.telefono').mask('0000-0000');
-    $('.movil').mask('0000-0000');
-    $('.fax').mask('0000-0000');
-    $('.descuento').mask('000');
-    $('.codigoPais').mask('00');
-    $(".cedula").attr("maxlength",18);
-    $(".nombreCompleto").attr("maxlength",100);
-    $(".correoElectronico").attr("maxlength",100);
-    $(".otraSena").attr("maxlength",180);
-    __cargaProvincia()
-    __CargaEstados()
-    __CargaTipoCedulas()
-    
-
- })
-
-/**
-*  Agregar los inpust  y select de las tablas
-**/
-function agregarInputsCombos(){
-     // Agregar los input de busqueda 
-    $('.tableListaVendedores tfoot th').each( function (e) {
-        var title = $('.tableListar thead th').eq($(this).index()).text();      
-        //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 5    ){
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
-	    }
- 
-    })
-
-}
-
- /**
-* Carga de tipo Cedulas
-**/    
-function __CargaTipoCedulas(){
-    self.tipoCedulas = []
-    self.tipoCedulas.push({
-        codigo:"01",
-        descripcion:"Fisica"
-    })
-    self.tipoCedulas.push({
-        codigo:"02",
-        descripcion:"Juridica"
-    })
-    self.tipoCedulas.push({
-        codigo:"03",
-        descripcion:"Pasaporte"
-    })
-
-    self.update()
-}
-
-/**
-* Carga de estados 
-**/    
-function __CargaEstados(){
-    self.estados = []
-    self.estados.push({
-        codigo:"Activo",
-        descripcion:"Activo"
-    })
-    self.estados.push({
-        codigo:"Inactivo",
-        descripcion:"Inactivo"
-    })
-    self.update()
-}
-/**
-*  Carga las provincias  de Costa Rica
-**/    
-function __cargaProvincia(){
-    self.provincias = []
-    self.update()
-    __Provincias("01","San Jose")
-    __Provincias("02","Alajuela")
-    __Provincias("03","Cartago")
-    __Provincias("04","Heredia")
-    __Provincias("05","Guanacaste")
-    __Provincias("06","Puntarenas")
-    __Provincias("07","Limon")
-    self.update()
-}
-
-function __Provincias(codigo,descripcion){
-    
-    
-    self.provincias.push({
-        codigo:codigo,
-        descripcion:descripcion
-    })
-    self.update()
-}
-
-/**
-* Contabilizar los billetes de acuerdo a como se vayan dando click en la pantalla
-*/
-_sumarBilletes(e){
-    
-    var item = e.item
-    if(item.valor == 0 ){
-       self.factura.totalEfectivo = 0
-       self.factura.totalTarjeta  = 0
-       self.factura.totalEfectivo = 0
-       self.totalCambio           = 0
-       self.totalPagoCon          = 0
-       self.claseCambioDinero     = 0 
-
-    }else{
-        self.factura.totalEfectivo = __valorNumerico(self.factura.totalEfectivo) + __valorNumerico(item.valor) 
-        self.update()
-        var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
-        sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
-        sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
-        self.totalCambio = 0
-        self.totalCambio = sumaMontosEntregadosParaCambios > self.factura.total ? sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.total):sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.total)    
-        self.claseCambioDinero  = __valorNumerico(sumaMontosEntregadosParaCambios) > __valorNumerico(self.factura.total)?'entregarCambioPositivo':'entregarCambioNegativo'
-        self.totalPagoCon = sumaMontosEntregadosParaCambios
-
-    }
-    
-    self.update()
-    
-    
-
-}
-
-/**
-* Regresar a la venta despues de imprimir
-**/    
-__RegresarVentaImprimir(){
-    self.mostrarCamposIngresoContado = false
-    
-    self.mostarParaCrearNuevaVentas  = true 
-    self.mostrarFacturaImprimir      = false
-    self.nota                  = {notaFactura:null,
-                                  notaComanda:null}    //Notas a la factura  
     self.detail                = []
-    self.factura               = {
-        id : 0,
-        tipoDocumento:0,
-        tipoPago:0,
-        iva: 0,
-        totalDescuento:0,
-        subTotal:0,  
-        total:0,
-        totalTarjeta:0,
-        totalEfectivo:0,
-        totalBanco:0,
-        totalTransporte:0,
-        sucursal:{
-            empresa:{}
-        }
-    }   
-     
-    self.update()
-    $( "#codigoBarra" ).val(null)
-    $( "#codigoBarra" ).focus()
-    cargaBilletes()
-}
-
-
-
-/**
-*Imprimir factura
-**/    
-__ImprimirFactura(){
-    var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
-          var ventana=window.open('','_blank');  //abrimos una ventana vacía nueva
-          ventana.document.write(objeto.innerHTML);  //imprimimos el HTML del objeto en la nueva ventana
-          ventana.document.close();  //cerramos el documento
-          ventana.print();  //imprimimos la ventana
-          ventana.close();  //cerramos la ventana
-
-           $("#boton-regresar").focus()
-}
-
-/**
-*  boton anterior de la pantalla de categorias or articulos
-**/    
-__BotonAnterior(){
-    
-    if(self.categoria.id == 0){//cuando esta usando la pantalla de categorias
-        self.categorias.pagination.current_page = self.categorias.pagination.current_page - 1
-        self.categorias.pagination.current_page = self.categorias.pagination.current_page > 1?self.categorias.pagination.current_page:1;
-        self.update()
-        __ListaCategorias()
-
-    }else{// cuando esta usando la pantalla de articulos
-        self.inventariosXCategoria.pagination.current_page = self.inventariosXCategoria.pagination.current_page - 1
-        self.inventariosXCategoria.pagination.current_page = self.inventariosXCategoria.pagination.current_page > 1?self.inventariosXCategoria.pagination.current_page:1;
-        self.update()
-        __ListaArticulosXCategorias()
-
-    }
-            
-}
-
-/**
-*  boton siguiente de la pantalla de categorias or articulos
-**/    
-__BotonSiguiente(){
-    if(self.categoria.id == 0){//cuando esta usando la pantalla de categorias
-        if(self.categorias.pagination.current_page <  self.categorias.pagination.last_page){
-        self.categorias.pagination.current_page = self.categorias.pagination.current_page + 1
-        self.update()
-        __ListaCategorias()
-
-        }
-
-    }else{ //cuando esta usando la pantalla de articulos
-        if(self.inventariosXCategoria.pagination.current_page <  self.inventariosXCategoria.pagination.last_page){
-        self.inventariosXCategoria.pagination.current_page = self.inventariosXCategoria.pagination.current_page + 1
-        self.update()
-        __ListaArticulosXCategorias()
-
-        }
-    }
-            
-}
-
-
-/**
-*  Mostrar pantalla de codigo de barra
-**/
-__PantallaCategorias(){
-    self.categoria = {
+    self.mensajesBackEnd       = []
+    self.error                 = false
+    self.comboEstados          = []
+    self.comboCondicionPagos        = []
+    self.comboTipoDocumentos   = []
+    self.factura                = {
         id:0,
-        descripcion:""
-    }
-
-     self.categorias  = {
-        data:[],
-        pagination:{
-            total:0,
-            current_page:0,
-            per_page:0,
-            last_page:0,
-            from:0,
-            to:0
+	   fechaCredito:null,
+	   fechaEmision:null,
+	   condicionVenta:"",
+	    plazoCredito:0,
+	    tipoDoc:"",
+	    medioPago:"",
+	    nombreFactura:"",
+	    direccion:"",
+	    nota:"",
+	    comanda:"",
+	    subTotal:0,
+	    totalTransporte:0,
+	    total:0,
+	    totalServGravados:0,
+	    totalServExentos:0,
+	    totalMercanciasGravadas:0,
+	    totalMercanciasExentas:0,
+	    totalGravado:0,
+	    totalExento:0,
+	    totalVenta:0,
+	    totalDescuentos:0,
+	    totalVentaNeta:0,
+	    totalImpuesto:0,
+	    totalComprobante:0,
+	    totalEfectivo:0,
+        totalTarjeta:0,
+        totalCambioPagar:0,
+	    totalBanco:0,
+	    totalCredito:0,
+	    montoCambio:0,
+	    totalCambio:0,
+	    codigoMoneda:"",
+	    estado:0,
+	    cliente:{
+            id:0,
+            nombreCompleto:""
+        },
+	    vendedor:{
+            id:0,
+            nombreCompleto:""
         }
-    }
-    self.mostrarNavegador            = true
-    self.mostrarCategorias           = false //muestra la pantalla de imagenes de articulos   
-    self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
-   
-    self.update()
-    __ListaCategorias()
-   
-}
+
+    }                   
+    self.item                  = null;
+    self.articulo              = null;
+    self.articulos             = {data:[]}
+    self.clientes              = {data:[]}
+    self.detalleFactura        = {data:[]}
+    self.cliente               = {}
+    self.vendedor              = {
+        id:0,
+        nombreCompleto:""
+    };
+    self.facturas_espera       = {data:[]}  
+    self.informacion_tabla             = []
+    self.informacion_tabla_articulo    = []
+    self.informacion_tabla_clientes    = []
+    self.idiomaDataTable               = {}
+    self.mostrarFormularioPago         = false
+    self.mostarParaCrearNuevaFactura   = true
+    self.mostrarCamposIngresoContado   = true
+    self.mostrarReferencias            = false 
+    self.subTotalGeneral               = 0
+    self.todasProvincias               = {data:[]}
+    self.todosCantones                 = {data:[]}
+    self.todosDistritos                = {data:[]}
+    self.todosBarrios                  = {data:[]}
+    self.cantones                      = []
+    self.distritos                     = []
+    self.barrios                       = []
+
+
+    self.on('mount',function(){
+         
+         
+        $("#formularioFactura").validate(reglasDeValidacionFactura());
+         
+        __informacionData()
+        __informacionData_vendedores()
+        __InicializarTabla('.tableListaCliente')
+        __InicializarTabla('.tableListaInventario')
+        __InicializarTabla('.tableListaVendedor')
+        agregarInputsCombos_Articulo()
+        __ListaFacturasEnEspera()
+       // setInterval(function() {
+            // triggering the "ready" event will resolve the promise
+        //    __ListaFacturasEnEspera()
+        //}.bind(this), 10000)
+          
+        __comboCondicionPago()
+        __ComboTipoDocumentos()
+        __ComboEstados()
+        __ListaDeClientes()
+       __ListaDeVendedores()
+       __Teclas()
+       __TipoCambio()
+       __cargaUbicacion()
+       __comboCondicionPagoRef()
+         window.addEventListener( "keydown", function(evento){
+             $(".errorServerSideJgrid").remove();
+        }, false );
+     
+    })
 
 /**
 *  Mostrar pantalla de codigo de barra
@@ -2418,320 +1984,330 @@ __PantallaCodigoBarra(){
     self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
    
     self.update()
-    
+    $('#codigoBarra').focus()
 
 }
 
-/**
-*  Mostrar si escoge una categorias
-**/
-__ArticulosXCategorias(e){
+__LimpiarFormulario(){
+    $(".plazoCredito").val(null)   
+    $(".fechaCredito").val(null)   
+     $(".totalEfectivo").val(null)   
+    $(".totalTarjeta").val(null)   
+    $(".totalBanco").val(null)   
+
     
-    var item = e.item
-    self.categoria = item
+    $(".nota").val(null)   
+    $(".direccion").val(null)   
+    $(".referenciaFechaEmision").val(null)
+    $('.referenciaNumero').val(null)
+    $('.referenciaRazon').val(null)
+    $('.referenciaTipoDoc').prop("selectedIndex", 0);
+    $('.referenciaCodigo').prop("selectedIndex", 0);
+    $('.condicionVenta').prop("selectedIndex", 0);
+    $('.tipoDoc').prop("selectedIndex", 0);
+    self.cliente               = {}
+    self.vendedor              = {
+        id:0,
+        nombreCompleto:""
+    };
+    self.mostrarCamposIngresoContado = true
+    self.todosBarrios                  = {data:[]}
+    self.cantones                      = []
+    self.distritos                     = []
+    self.barrios                       = []
+
     self.update()
      
-    __ListaArticulosXCategorias()
 }
 
-/**
-* agregar producto desde la pantalla de articulos
-**/
-
-__AgregarProductoDePantalla(e){
-    
-    var item =  e.item
-    self.inventario = item;
-    self.update()
-    
-    __buscarProducto(self.inventario.codigo,1);
-}
-
-
-/**
-*    Muesta los campos de efectivo , banco, tarjeta cuando es al contado pero si es a Credito no muestra dicho valores
-**/
-__tipoCobro(e){
-    //Contado
-    if(e.currentTarget.value == 'Contado'){
-        self.mostrarCamposIngresoContado = true
+__formaReferencias(e){
+    if($('#tipoDoc').val() !="01" && $('#tipoDoc').val() !="04"){
+       self.mostrarReferencias            = true
+       self.update()  
+    }else{
+        self.mostrarReferencias            = false
+        self.update()
+        $(".referenciaFechaEmision").val(null)
+        $('.referenciaNumero').val(null)
+        $('.referenciaRazon').val(null)
+        $('.referenciaTipoDoc').prop("selectedIndex", 0);
+        $('.referenciaCodigo').prop("selectedIndex", 0);
     }
-    //Credito
-    if(e.currentTarget.value == 'Credito'){
-        self.mostrarCamposIngresoContado = false
-    }
-}
-/**
-*  Limpieza de los valores excenciales de  la Creacion de la factura
-**/
-
-__Limpieza_General_Todo(){
-   __Init();
-}
-/**
-*  Al darle click en cualquier factura en espera llava a la funciona
-* para realizar la carga de la factura en el front end
-**/
-__CargarFacturaEspera(e){
-    __FacturaEnEspera(e.item.id) 
+    
     
 }
 
 /**
-*  cambiar el cliente onchange
+* Camps requeridos
 **/
-__cambiarCliente(e){
-    self.cliente =  {}
-    self.update()
-}
-/**
-*   Retrocer a los ingresos de los productos desde el formulario de ingresar el valor dinero a pagar
-**/
-_AtrasFacturarFinal(){
-   self.mostrarFormularioPago = false
-   self.mostarParaCrearNuevaVentas = true
-   self.update()
-}
-/**
-*   Buscar un cliente de lista
-**/
-__BuscarEnListaClientes(){
-   $('#modalClientes').modal('show');  
-}
+var reglasDeValidacionFactura = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			
+             nota:{
+                 maxlength:255,
+             },
+             direccion:{
+                 maxlength:255,
+             }         
+		},
+		ignore : []
 
-/**
-*     Agregar Nota a la Factura
-**/
-__MostrarFormularioParaAgregarNotaAFactura(){
-   $('#modalNotaNuevo').modal('show');  
-}
-/**
-*  Agregar Nota a la factura 
-**/
-__AgregarNotaALaFactura(){
-  self.nota.notaFactura = nota_factura.value
-  self.nota.notaComanda = nota_comanda.value
-  self.update()
-  $('#modalNotaNuevo').modal('hide') 
-}
-/**
-*   Lista de vendedores
-**/
-__BuscarEnListaVendedores(){
-   $('#modalListaDeVendedores').modal('show');  
-}
-/**
-*   Agregar un cliente nuevo desde un formulario modal
-**/
-__MostrarFormularioNuevoCliente(){
-    self.errorsCliente = []
-    self.errorCliente = false
-    self.mostrarErrorClienteNuevo = false
-    self.update()
-    $('#modalAgregarClienteNuevo').modal('show');  
-}
-/**
-*        Agregar nuevo Cliente 
-**/
-/**
-*   Agregar 
-**/
-__AgregarNuevoCliente(){
-    self.error        = false
-    self.errors       = [];
-    self.update()
+	});
+	return validationOptions;
+};
 
-    if(nombreCompleto.value == null || nombreCompleto.value.length == 0  ){
-        swal("Nombre"," Digite el nombre  ", "info")
-        return 
-    }   
-     if(cedula.value == null || cedula.value.length == 0  ){
-        swal("Codigo"," Digite la cedula  ", "info")
-        return 
-    }   
-
-    swal({
-      title: "Esta seguro?", 
-      text: "Esta seguro que quiere agregar?", 
-      type: "warning",
-      showCancelButton: true,
-      closeOnConfirm: false,
-      confirmButtonText: "Si, Agregar!",
-      confirmButtonColor: "#ec6c62",
-      showLoaderOnConfirm: true,
-    }, function() {
-        var formulario = $('#formularioCliente').serialize();
-        $.ajax({
-           type: 'get',
-            url: ('clientes/agregarNuevoAjax'),
-            datatype:'json',
-            data: formulario,
-            success: function(resultado){
-                console.log(resultado)
-                if ((resultado.errors)) {
-                   __Error_Incluir_Mensajes(resultado.errors)
-                    swal("Se presento un incoveniente .", "");
-                    return
-                } 
-                if(resultado.errorCrear){
-                    swal(resultado.msg, "error");
-                }
-                if(resultado.exito != null){
-                    swal({
-                        position: 'top-right',
-                        type: 'success',
-                        title: resultado.exito,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                  
-                }
-                 swal("Agregar!", "Su transaccion fue realizada exitosamente !", "success");
-                
-            },          
-            error:function(data) {
-               console.log(data);          
-               swal("", "Disculpa el incoveniente pero tenemos un problema con el Servidor!", "error");
-            }
-        
-      });
-    });     
-    
-}
 
 
 /**
-*  generar el listado de categorias de acuerdo a la pagina solicitada
+Consultar el consecutivo que se hace referencia
 **/
-function __ListaCategorias(){
-    
-    $.ajax({
-        type: 'GET',
-        url: 'categorias/listadoCategorias',
-        datatype:'json',
-        data: {page:self.categorias.pagination.current_page},
-        success: function(resultado){
-            
-            self.categorias.data =resultado.categorias.data
-            self.categorias.pagination =resultado.pagination
-            self.mostrarCodigoBarra          = false;
-            self.mostrarNavegador            = true
-            self.mostrarCategorias           = true //muestra la pantalla de imagenes de articulos   
-            self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
-
-            
-            self.update()
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-        }
-    });
-}
-
-/**
-*  generar el listado de articulos por categoria
-**/
-function __ListaArticulosXCategorias(){
-    
-    $.ajax({
-        type: 'GET',
-        url: 'inventarios/listadoInventariosByCategoria',
-        datatype:'json',
-        data: {idCategoria:self.categoria.id,page:self.inventariosXCategoria.pagination.current_page},
-        success: function(resultado){
-            self.inventariosXCategoria.data       = resultado.inventarios.data
-            self.inventariosXCategoria.pagination = resultado.pagination
-            self.mostrarCodigoBarra          = false;
-            self.mostrarNavegador            = true
-            self.mostrarCategorias           = false //muestra la pantalla de imagenes de articulos   
-            self.mostrarArticulosXCategoria  = true //muestra la pantalla de imagenes de categorias   
-            
-            self.update()
-            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-        }
-    });
-}
-
-/**
-*        Incluir mensajes de errores retornados del back end
-**/
-function __Error_Incluir_Mensajes(errores){
-    self.errorCliente                     = false
-    self.errorsCliente = []
-    for (var i=0; i < errores.Mensaje.length; i++){
-       self.errorsCliente.push({
-            mensaje:errores.Mensaje[i]
-        })
-    }
-    self.errorCliente = true
-    self.update()
-}
-
-/**
-*   funcion para grabar la factura en el back end
-**/
-__MostrarFormularioDePago(){
-     //No hay detalles registrados en la factura
-    if(self.detail.length == 0 ){
-        swal("Verificar","No hay detalles en la factura ", "info")
-        return
-    }
-    self.mostarParaCrearNuevaVentas = false;
-    self.mostrarFormularioPago = true
-    self.mostrarCamposIngresoContado = true
-    self.update()
-    $("#pago_efectivo").focus()
-}
-/** 
-*
-*Agregar productos al detalle de la factura
-*
-*/
-__agregarInventarioCogigoBarra(e){
+__consultarConsecutivo(e){
     if (e.keyCode != 13) {
         return;
     } 
-    __buscarProducto(e.currentTarget.value);
-    $( "#codigoBarra" ).val(null)
-    $( "#codigoBarra" ).focus()
-}
-/**
-** Boton para agregar el producto a la factura desde listado de productos
-**/
-__agregarInventarioBotonAgregar(){
-   __buscarProducto($( "#producto" ).val(),$( "#quantty" ).val());
+    __referenciaConsecutivo(e.currentTarget.value);
 }
 
 /**
-*  Obtiene el valor de lo digitado en el campo de transporte
+*  Informacion del consecutivo de la factura para las notas de creditos y debito
 **/
-__TotalDeTransporte(e){
-    self.factura.totalTransporte = __valorNumerico(e.target.value) 
+function __referenciaConsecutivo(consecutivo){
+   
+    $(".referenciaFechaEmision").val(null)
+    $('.referenciaTipoDoc').prop("selectedIndex", 0);
+    $('.referenciaCodigo').prop("selectedIndex", 0);
+     
+   $.ajax({
+        url: "ConsultarConsecutivoAjax",
+        datatype: "json",
+        data: {consecutivo:consecutivo},
+        method:"POST",
+        success: function (data) {
+            if (data.status != 200) {
+                serverMessageJsonClase(data);
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                serverMessageJsonClase(data);
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                       self.factura.referenciaFechaEmision = modeloTabla.fechaEmision
+                       self.factura.referenciaTipoDoc      = modeloTabla.referenciaTipoDoc
+                      
+                       self.update()
+                        
+                        $("referenciaFechaEmision").val(modeloTabla.fechaEmision)
+                    });
+                }
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+}
+/**
+*  Consulta la provicias , cantonces y distritos en uno solo 
+**/
+function __cargaUbicacion(){
+      self.todasProvincias  = {data:[]}
+      self.update()
+     $.ajax({
+         url: "ListarProvinciasAjax.do",
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.todasProvincias.data =  result.aaData
+                self.update();
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+   self.todosCantones  = {data:[]}
     self.update()
-    __calculate()
+     $.ajax({
+         url: "ListarCantonesTodosAjax.do",
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.todosCantones.data =  result.aaData
+                self.update()
+                 
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+    self.todosDistritos  = {data:[]}
+    self.update()
+     $.ajax({
+         url: "ListarDistritosTodosAjax.do",
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.todosDistritos.data =  result.aaData
+                self.update()
+               
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+    self.todosBarrios  = {data:[]}
+    self.update()
+     $.ajax({
+         url: "ListarDistritosTodosAjax.do",
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.todosBarrios.data =  result.aaData
+                self.update()
+               
+            
+
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+   
+
+}
+
+
+
+function _provincias(){
+    self.provincias = self.todasProvincias.data
+    self.update()
+}
+
+/**
+*  Cantones
+**/
+function _ConsultarCantonesByProvincias(idProvincia){
+    let lista     = self.todosCantones.data;
+    self.cantones  = []
+    self.update()
+    self.cantones = jsonPath(lista,"$[?(@.codigo_provincia=='"+idProvincia+"')]");
+    self.update();
+
+}
+
+/**
+* buscar los distritos por canton y provincia
+**/
+
+function _consultarDistritosByCantoAndProvincia(idProvincia,idCanton){
+    let lista     = self.todosDistritos.data;
+    self.distritos  = []
+    self.update()
+    self.distritos = jsonPath(lista,"$[?(@.codigoProvincia=='"+idProvincia+"' && @.codigoCanton=='"+idCanton+"')]");
+    self.update();
+
+}
+
+function _consultarBarriosByCantoAndProvinciaAndDistritos(idProvincia,idCanton,idDistritos){
+    let lista     = self.todosBarrios.data;
+    self.barrios  = []
+    self.update()
+    self.barrios = jsonPath(lista,"$[?(@.codigoProvincia=='"+idProvincia+"' && @.codigoCanton=='"+idCanton+"' && @.codigoDistrito=='"+idDistritos+"')]");
+    self.update();
+
+}
+/**
+* Aplicar el descuento
+**/
+__CambiarDescuento(e){
+    self.item = e.item; 
+    self.update()
+    $('#modalCambiarDescuento').modal('show')      
+}
+
+/**
+*Cambiar Cantidad del Articulo
+**/
+__CambiarCantidad(e){
+   var cantidad = e.currentTarget.value;
+   self.item = e.item; 
+   self.update()
+   $( "#cambiarCantidadArticulo" ).focus()
+   $( "#cambiarCantidadArticulo" ).val(cantidad)
+   $('#modalCambiarCantidad').modal('show')      
+}
+
+/**
+* Tipo Cambio de moneda
+**/
+function __TipoCambio(){
+    self.tipoCambio = {}
+    self.update()
+    $.ajax({
+        url: "MostrarTipoCambioActivoAjax.do",
+        datatype: "json",
+        method:"GET",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                       self.tipoCambio = modeloTabla
+                       self.update()
+                    });
+                }
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+
+}
+
+/**
+* Imprimir 
+**/
+__Imprimir(){
+    var factura = self.factura
+    riot.mount('ptv-imprimir',{factura:factura});
 }
 /**
 *  Obtiene el valor de lo digitado en el campo de efectivo
 **/
-__TotalDeEfectivo(e){
+__TotalDeEfectivoAPagar(e){
     self.factura.totalEfectivo = __valorNumerico(e.target.value) 
     self.update()
 }
 /**
 *  Obtiene el valor de lo digitado en el campo de Tarjeta
 **/
-__TotalDeTarjeta(e){
+__TotalDeTarjetaAPagar(e){
     self.factura.totalTarjeta = __valorNumerico(e.target.value) 
     self.update()
 }
-
 /**
 *  Obtiene el valor de lo digitado en el campo de Banco
 **/
-__TotalDeBanco(e){
+__TotalDeBancoAPagar(e){
     self.factura.totalBanco = __valorNumerico(e.target.value) 
     self.update()
 }
@@ -2742,10 +2318,12 @@ __CalculaCambioAEntregarOnblur(e){
     var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
     sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
     sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
-    self.totalCambio = 0
-    self.totalCambio = sumaMontosEntregadosParaCambios > self.factura.total ? sumaMontosEntregadosParaCambios - self.factura.total:sumaMontosEntregadosParaCambios - self.factura.total    
-    self.claseCambioDinero  = __valorNumerico(sumaMontosEntregadosParaCambios) > __valorNumerico(self.factura.total)?'entregarCambioPositivo':'entregarCambioNegativo'
-    self.totalPagoCon = sumaMontosEntregadosParaCambios
+    //Si no ingresado montos no realiza las operaciones de calculos
+    if(sumaMontosEntregadosParaCambios == 0){
+        return
+    }
+    self.factura.totalCambioPagar = 0
+    self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalComprobante ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
     self.update()
 }
 /**
@@ -2757,465 +2335,593 @@ __CalculaCambioAEntregarKeyPress(e){
         sumaMontosEntregadosParaCambios  = __valorNumerico(self.factura.totalTarjeta)
         sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
         sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
-        self.totalCambio = 0
-        self.totalCambio = sumaMontosEntregadosParaCambios > self.factura.total ? sumaMontosEntregadosParaCambios - self.factura.total:sumaMontosEntregadosParaCambios - self.factura.total    
-        self.claseCambioDinero  = __valorNumerico(sumaMontosEntregadosParaCambios) > __valorNumerico(self.factura.total)?'entregarCambioPositivo':'entregarCambioNegativo'
-        self.totalPagoCon = sumaMontosEntregadosParaCambios
+        if(sumaMontosEntregadosParaCambios == 0){
+            return
+        }
+        self.factura.totalCambioPagar = 0
+        self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalComprobante ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
         self.update()
     }
 }
-/** 
-*  Inicializar
+/**
+ * Listar codigos  llamado del modal para presentar los articulos
+ **/   
+ __ListaDecodigos(){
+     __ListaDeArticulosPorEmpresa();
+ }
+/**
+*  Buscar la Factura Pendiente en espera
 **/
-function __Init(){
-     // Detalle de la factura es una coleccion de articulos de inventario
-    self.detail                = []
-    self.factura               = {
-        id : 0,
-        tipoDocumento:0,
-        tipoPago:0,
-        iva: 0,
-        totalDescuento:0,
-        subTotal:0,  
-        total:0,
-        totalTarjeta:0,
-        totalEfectivo:0,
-        totalBanco:0,
-        totalTransporte:0,
-        sucursal:{
-            empresa:{}
-        }
-    }   
-    self.comboTipoDocumentos   = []
-    self.comboTipoPagos        = []
-    self.nota                  = {notaFactura:null,
-                                  notaComanda:null}    //Notas a la factura  
-    self.totalCambio           = 0         // Total del Cambio de  la factura
-    self.item                  = null      // item temporal para crear una lidea detalle en la factura
-    self.inventario            = null      // articulo consultado para incluir en el detalle
-    self.inventarios           = {data:[]}   //Lista de los articulos por almacen
-    self.clientes              = {data:[]}   // lista de los clientes por alamacen    
-    self.vendedores            = {data:[]}   // lista de los vendedores por almancen 
-    self.listaFacturasPorUsuario  = {data:[]}   // lista de las facturas por usuario
-    self.cliente               = {}         // Objeto del cliente para asociar a la factura            
-    self.vendedor               = {}        // objeto del vendedor para asociar a la factura  
-    self.errorClientes         = []          // vector de errores para cuando se agrega un cliente nuevo
-    self.informacion_tabla     = []          // mapeo generico de una tabla
-    self.informacion_tabla_clientes = []     // mapeo de los clientes en el datatable
-    self.informacion_tabla_vendedores = []   // mapeo de los vendedores en el datatable
-    self.informacion_tabla_facturas = []   // mapeo de los vendedores en el datatable
-    self.idiomaDataTable       = {}          // Idioma del datatable
-    self.mostrarFormularioPago = false       // mostrar el formulario de pago de la factura y creacion
-    self.mostrarErrorClienteNuevo = false    // mostrar los errores al ingresar un cliente nuevo
-    self.update()
-    pago_transporte.value               = null
-    pago_efectivo.value                 =null
-    pago_tarjeta.value                  = null
-    pago_banco.value                    = null
-    pago_direccion.value                = null
-    pago_nombrefactura.value            = null
-    aplicarDescuento.value              = null
-    nombreCompleto.value   = null
-    email.value            = null
-    celular.value          = null
-    telefono.value         = null
-    descuento.value        = null
-    // Tipo de Pagos
-    __ComboTipoPagos()
-    //Tipos de Documentos
-    __ComboTipoDocumentos()
-
-    
+__CargarFacturaEspera(e){
+   __FacturaEnEspera(e.item)
 }
 /**
-*  Validar si es numero
+** Se aplica o se crea una Factura cargada en la pantalla
 **/
-function isNumber(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
+__AplicarYcrearFactura(){
+ aplicarFactura()
 }
 
 /**
-**         Se aplica o se crea una factura cargada en la pantalla
+* Aplicar la factura
 **/
-__AplicarYCrearFacturaNueva(){
-    crearFactura(pago_tipoVenta.value,"Creacion de la Factura de Venta");
-}
-
-/**
-**         Se aplica o se crea una factura cargada en la pantalla
-**/
-__crearTiqueteEnEspera(){
-    crearFactura('Tiquete',"Creacion del tiquete en Espera");
-    //Inicializar Pantalla despues de crear
-   //  __Init()
-
-    //Lista de Facturas en espera
-    __ListaFacturasEnEspera()
-}
-
-/**
-*  Crear Factura  parametros estado , mensaje
-**/
-
-function crearFactura(tipoDocumento,mensaje){
-//No hay detalles registrados en la factura
+function aplicarFactura(){
     if(self.detail.length == 0 ){
-        swal("Verificar","No hay detalles en la factura ", "info")
+        mensajeError($.i18n.prop("factura.alert.sin.detalles"))
         return
     }
-    //validar la fecha credito
-    if(tipoDocumento =='Factura'){
-        if(pago_tipoPago.value == 'Credito'  ){
-            if(pago_fechaCredito.value == null || pago_fechaCredito.value.length == 0){
-                swal("Verificar","Debes indicar la fecha de credito ", "error")
+    if($('#condicionVenta').val() == "02"  ){
+        if($('#fechaCredito').val() == null || $('#fechaCredito').val() == 0){
+           mensajeError($.i18n.prop("factura.alert.fechaCredito"))
+            return
+        }
+        if($('#plazoCredito').val() < 0 || $('#plazoCredito').val() == null || $('#plazoCredito').val() == 0){
+           mensajeError($.i18n.prop("factura.alert.plazoCredito"))
+            return
+        }
+    }else{
+        // Si no es credito y el estado no es pendiente se debe verificar si ingresaron el monto a pagar
+        if($('#estado').val() !=1){
+            if(self.factura.totalTarjeta == 0 && self.factura.totalBanco == 0 && self.factura.totalEfectivo == 0){
+                mensajeError($.i18n.prop("error.factura.monto.ingresado"))
                 return
             }
-        }
-    }
-    if(tipoDocumento =='Factura'){
-        //Contado
-        if(pago_tipoPago.value == 'Contado'  ){
-            var montoEntregado = 0
-            var total          = __valorNumerico(self.factura.total)
-            montoEntregado += __valorNumerico(pago_efectivo.value)
-            montoEntregado += __valorNumerico(pago_tarjeta.value)
-            montoEntregado += __valorNumerico(pago_banco.value)
-            if(montoEntregado < total ){
-                swal("Verificar","El dinero entregado deber ser igual o mayor al monto total ", "error")
+            var montoEntregado = self.factura.totalTarjeta + self.factura.totalBanco + self.factura.totalEfectivo
+            montoEntregado = __valorNumerico(montoEntregado)
+            if(self.factura.totalVentaNeta > montoEntregado  ){
+                mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
                 return
             }
-        }
-    }
-    
-    var informacion = {
-        id:self.factura.id,       
-        nota:            self.nota.notaFactura,
-        comanda:         self.nota.notaComanda,
-        subTotal:        __valorNumerico(self.factura.subTotal),
-        totalDescuento:  __valorNumerico(self.totalDescuentoDetalle),
-        iva:             __valorNumerico(self.factura.iva),
-        total:           __valorNumerico(self.factura.total),
-        tipoPago:        pago_tipoPago.value,
-        totalTransporte: pago_transporte.value !=null?__valorNumerico(pago_transporte.value):0,
-        totalEfectivo:   pago_efectivo.value !=null?__valorNumerico(pago_efectivo.value):0,
-        totalTarjeta:    pago_tarjeta.value !=null?__valorNumerico(pago_tarjeta.value):0,
-        totalBanco:      pago_banco.value  !=null?__valorNumerico(pago_banco.value):0,
-        totalCredito:    0,
-        direccion:       pago_direccion.value,
-        tipoDocumento:   tipoDocumento,
-        cliente_id:      self.cliente.id,
-        vendedor_id:     self.vendedor.id,
-        nombreFactura:   pago_nombrefactura.value,
-        estado:pago_tipoVenta.value == 'Factura'?'Aplicada':'Pendiente',
-        fechaCredito:pago_fechaCredito.value,
-        detail :         self.detail,
-        reciboDinero:pago_reciboDinero.value,
-        transferencia:pago_transferencia.value,
-
-
-     }
-     
-
-     $.ajax({
-            type: 'post',
-            url: 'facturas/saves',
-            datatype:'json',
-            data: informacion,
-            success: function(resultado){
-                if(resultado.exito != null){
-                    swal({
-                        position: 'top-right',
-                        type: 'success',
-                        title: mensaje,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                    self.mostrarFormularioPago = false       // mostrar el formulario de pago de la factura y creacion
-                    self.mostrarErrorClienteNuevo = false    // mostrar los errores al ingresar un cliente nuevo
-                    self.mostrarCamposIngresoContado = false
-                   
-                    self.mostarParaCrearNuevaVentas  = tipoDocumento == 'Factura' || tipoDocumento == 'Proforma' || tipoDocumento == 'Orden' ?false:true //muestra modulo de crear una nueva venta
-                    self.mostrarCodigoBarra          = true;
-                    self.mostrarNavegador            = false
-                    self.mostrarCategorias           = false //muestra la pantalla de imagenes de articulos   
-                    self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
-                    self.mostrarFacturaImprimir      = tipoDocumento == 'Factura' || tipoDocumento == 'Proforma' || tipoDocumento == 'Orden' ?true:false  
-                    self.factura                     = resultado.factura                 
-                     self.update()
-                    __FacturaEnEspera(resultado.factura.id)
-                    __ListaFacturasEnEspera()
-                    $("#boton-regresar").focus()
+            //Si el cliente esta pagando con tajeta, banco debe ser igual a la venta
+            if(self.factura.totalTarjeta != 0 || self.factura.totalBanco !=0){
+                if(self.factura.totalVentaNeta != montoEntregado  ){
+                    mensajeError($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
+                return
+                    
                 }
-            },
-	         error: function (xhr, status) {
-	              console.log(xhr);
-        }
-       });
-}
-
-
-
-/**
-*    Inicializar las tablas
-**/
-function __Inicializar_Tablas(nombreTabla){
-    $(nombreTabla).dataTable({
-        destroy: true,
-        "sDom": 'lfrtip',
-        "lengthMenu": [[5,10, 25, 50, -1], [5,10, 25, 50, "All"]],
-        "order": [0, 'desc'],
-        "bPaginate": true,
-        'responsive': true,
-        "bAutoWidth": true,
-        "lengthChange": true,
-         "language" : self.idiomaDataTable,
-     });
-}
-
-/**
-*  Lista de los clientes
-**/
-function __ListaClientes(){
-    return
- $.ajax({
-        url: "clientes/getClientes",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            if(result.data.length > 0){
-                $("#tableListaClientes").dataTable().fnClearTable();
-                $('#tableListaClientes').DataTable().destroy();
-                $('#tableListaClientes').dataTable({
-                    destroy: true,
-                    "language": self.idiomaDataTable,
-                    "lengthMenu": [[5,10, 25, 50, -1], [5,10, 25, 50, "All"]],
-                    "sDom": 'lfrtip',
-                    "order": [0, 'desc'],
-                    "bPaginate": true,
-                    'responsive': true,
-                    "bAutoWidth": true,
-                    "lengthChange": true,
-                    "columns": self.informacion_tabla_clientes,
-                })
-                __InformacionTabla_lista_clientes()
-               self.clientes.data =  result.data;  
-               self.update(); 
-               $("#tableListaClientes").dataTable().fnAddData(self.clientes.data)
-                 
             }
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            swal("Oops", "Disculpa el incoveniente pero tenemos un problema con el Servidor!", "error");
+            
         }
-    });
-}
-
-/**
-*  Lista de los clientes
-**/
-function __ListaVendedores(){
- $.ajax({
-        url: "ListarVendedoresActivosAjax.do", 
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-           if(result.aaData.length > 0){
-                __InformacionTablaVendedores()
-                loadListar(".tableListaVendedores",idioma_espanol,self.informacion_tabla_vendedores,result.aaData)
-               self.vendedores.data =  result.data;  
-               self.update(); 
-               agregarInputsCombos()
-                ActivarEventoFiltro('.tableListaVendedores')
-           }
-            else{
-                $('#tableListaVendedores').dataTable().fnClearTable();
+    } 
+if ($("#formularioFactura").valid()) {
+        swal({
+           title: '',
+           text: $.i18n.prop("factura.alert.crear"),
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#00539B',
+            cancelButtonColor: '#d33',
+            confirmButtonText:$.i18n.prop("confirmacion.si"),
+            cancelButtonText: $.i18n.prop("confirmacion.no"),
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+        }).then(function (isConfirm) {
+            //Ajax__inicializarTabla();
+            if(isConfirm){
+               crearFactura()  
+              
             }
+        });
+    }
 
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            swal("Oops", "Disculpa el incoveniente pero tenemos un problema con el Servidor!", "error");
-        }
-    });
+
+}
+
+
+/**
+* Limpiar Pantalla
+**/
+__Limpiar(){
+
+    __Init()
 }
 /**
-*  Lista de las facturas en espera estado pendiente aplicadas hoy por el usuario en la sucursal
+*  Inicializar las variables de trabajos
 **/
-function __ListaFacturasEnEspera(){
-    return
+function __Init(){
+    
+    self.detail                = []
+    self.mensajesBackEnd       = []
+    self.error                 = false
+    self.comboEstados          = []
+    self.comboCondicionPagos        = []
+    self.comboTipoDocumentos   = []
+    self.facturas_espera       = {data:[]}  
+    self.factura                = {
+        id:0,
+	    fechaCredito:null,
+	    fechaEmision:null,
+	    condicionVenta:"",
+	    plazoCredito:0,
+	    tipoDoc:"",
+	    medioPago:"",
+	    nombreFactura:"",
+	    direccion:"",
+	    nota:"",
+	    comanda:"",
+	    subTotal:0,
+	    totalTransporte:0,
+	    total:0,
+	    totalServGravados:0,
+	    totalServExentos:0,
+	    totalMercanciasGravadas:0,
+	    totalMercanciasExentas:0,
+	    totalGravado:0,
+	    totalExento:0,
+	    totalVenta:0,
+	    totalDescuentos:0,
+	    totalVentaNeta:0,
+	    totalImpuesto:0,
+	    totalComprobante:0,
+	    totalEfectivo:0,
+        totalTarjeta:0,
+        totalCambioPagar:0,
+	    totalBanco:0,
+	    totalCredito:0,
+	    montoCambio:0,
+	    totalCambio:0,
+        totalCambioPagar:0,
+	    codigoMoneda:"",
+	    estado:0,
+	    cliente:{
+            id:0,
+            nombreCompleto:"",
+        },
+	    vendedor:{
+            id:0,
+            nombreCompleto:""
+        }
+    }                            
+    self.item                  = null;
+    self.articulo              = null;
+    self.articulos             = {data:[]}
+    self.clientes              = {data:[]}
+    self.detalleFactura        ={data:[]}
+    self.cliente               = {};
+    self.vendedor              = {
+        id:0,
+        nombreCompleto:""
+    }
+    self.tipoCambio                    = {}
+    self.informacion_tabla             = []
+    self.informacion_tabla_articulo    = []
+    self.informacion_tabla_clientes    = []
+    self.idiomaDataTable               = {}
+    self.mostrarFormularioPago         = false
+    self.mostarParaCrearNuevaFactura    = true
+    self.mostrarCamposIngresoContado   = true;
+    self.update();
+    $(".referenciaNumero").val(null)
+    $(".referenciaFechaEmision").val(null)
+    $('.referenciaTipoDoc').prop("selectedIndex", 0);
+    $('.referenciaCodigo').prop("selectedIndex", 0);
+    $('#condicionVenta').prop("selectedIndex", 0);
+    $('#tipoDoc').prop("selectedIndex", 0);
+    $('#estado').prop("selectedIndex", 0);
+    $('#provincia').prop("selectedIndex", 0);
+    $('#canton').prop("selectedIndex", 0);
+    $('#distrito').prop("selectedIndex", 0);
+    $('#barrio').prop("selectedIndex", 0);
+     $(".totalBanco").val(null)   
+    $(".totalTarjeta").val(null)   
+    $(".totalEfectivo").val(null)   
+
+
+    $("#plazoCredito").val(null)
+    $("#nota").val(null)
+    $("#fechaCredito").val(null)
+    $("#cambiarCantidadArticulo").val(null)
+    $("#aplicarDescuento").val(null)
+
+    
+    // Tipo de Pagos
+     __comboCondicionPago()
+     __comboCondicionPagoRef()
+     //Tipos de Documentos
+      __ComboTipoDocumentos()
+      //Estados
+      __ComboEstados()
+     __ListaFacturasEnEspera()
+    
+}
+
+/**
+*  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
+**/
+function __FacturaEnEspera(factura){
+     __Init()
     $.ajax({
-        url: "facturas/getListaFacturasPorUsuarioYSucursalYEspera",
+        url: "MostrarFacturaAjax",
         datatype: "json",
-        method:"GET",
-        success: function (result) {
-            if(result.data.length > 0){
-               self.ventas_espera =  result.data;  
-               self.update(); 
+        data: {idFactura:factura.id},
+        method:"POST",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                       self.factura = modeloTabla
+                       self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
+                       self.cliente  = modeloTabla.cliente
+                       self.vendedor = modeloTabla.vendedor
+                       self.update()
+                    });
+                }
+                cargarDetallesFacturaEnEspera()
             }
         },
         error: function (xhr, status) {
-            console.log(xhr);
-            swal("Oops", "Disculpa el incoveniente pero tenemos un problema con el Servidor!", "error");
+            mensajeErrorServidor(xhr, status);
+            
         }
     });
 }
+
 /**
-*  Factura en espera ,cliente y sus  detalles desde back end
+*  Cargar detalles Factura en espera
 **/
-function __FacturaEnEspera(idFactura){
-    self.detail         = []
-    self.nota           = {notaFactura:null,
-                                  notaComanda:null}  
-    self.cliente        = {}         
-    self.vendedor       = {}        
-    self.totalCambio    = 0         
+function cargarDetallesFacturaEnEspera(){
+    self.detail = [];
     self.update()
-    var parametros = {idFactura:idFactura}
-    $.ajax({
-        url: "facturas/getFacturaEnEspera",
-        datatype: "json",
-        method:"GET",
-        data: parametros,
-        success: function (resultado) {
-           
-           cargarDetallesFacturaEnEspera(resultado.factura)
-           
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            swal("Oops", "Disculpa el incoveniente pero tenemos un problema con el Servidor!", "error");
-        }
-    });
-}
-
-/**
-*  Cargar detalles Factura Espera
-**/
-function cargarDetallesFacturaEnEspera(factura){
-    self.factura.id              = factura.id
-    self.factura.consecutivo     = factura.consecutivo
-    self.nota.notaFactura        = factura.nota
-    self.factura.iva             = factura.iva
-    self.factura.tipoDocumento   = factura.tipoDocumento
-    self.factura.tipoPago        = factura.tipoPago
-    self.factura.subTotal        = factura.subtotal
-    self.factura.totalDescuento  = factura.totalDescuento
-    self.factura.total           = factura.total
-    self.factura.totalTransporte = factura.totalTransporte  
-    self.cliente          = factura.cliente
-    self.vendedor         = factura.vendedor  
-    factura.detalles.forEach(function(e){
+    self.factura.detalles.forEach(function(e){
         self.detail.push({
-            id_inventario   : e.inventario.id,
-            costo           : __valorNumerico(e.inventario.costo) ,
-            descripcion     : e.inventario.articulo.descripcion,
-            descuento       : e.porcentajeDesc,
-            totalDescuentoDetalle  : e.totalDesc,
-            iva             : __ObtenerImpuestoByProducto(e.inventario.impuesto,e.inventario.precioPublico,e.cantidad),
-            cantidad        : __valorNumerico(e.cantidad),
-            precio          : __valorNumerico(e.inventario.precioPublico) ,
-            subTotal        : __valorNumerico(e.inventario.precioPublico) * __valorNumerico(e.cantidad) 
-        })
+            codigo          : e.codigo,
+            tipoImpuesto    : e.tipoImpuesto,
+            descripcion     : e.descripcion,
+            cantidad        : redondearDecimales(parseFloat(e.cantidad),5),
+            precioUnitario  : redondearDecimales(parseFloat(e.precioUnitario),5),
+            impuesto        : redondearDecimales(parseFloat(e.impuesto),5),
+            montoImpuesto   : redondearDecimales(parseFloat(e.montoImpuesto),5),
+            montoDescuento  : redondearDecimales(parseFloat(e.montoDescuento),5),
+            porcentajeDesc  : redondearDecimales(parseFloat(e.porcentajeDesc),5),
+            subTotal        : redondearDecimales(parseFloat(e.subTotal),5),
+            montoTotalLinea : redondearDecimales(parseFloat(e.montoTotalLinea),5),
+            montoTotal      : redondearDecimales(parseFloat(e.montoTotal),5)
+        });
+        self.update()
     })
     self.update()
      __calculate(); 
 }
 
-/**
-*Cambiar Cantidad del Articulo
-**/
-__CambiarCantidad(e){
-   self.item = e.item; 
-   self.update()
-   $( "#cambiarCantidad" ).focus()
-   $('#modalCambiarCantidad').modal('show')      
-}
 
-/**
-* Aplicar el descuento
+
+/** 
+*Formato de la fecha con hora
 **/
-__CambiarDescuento(e){
-    self.item = e.item; 
-    self.update()
-    $('#modalCambiarDescuento').modal('show')      
+function __displayDate_detail(fecha) {
+    var dateTime = new Date(fecha);
+    return moment(dateTime).format('YYYY-MM-DD ');
 }
 /**
-* mostrar la lista de articulos de la empresa
+*  Crear Factura nueva
 **/
-__ListaDeProductos(){
+function crearFactura(){
+    self.detalleFactura.data =self.detail
+    self.update() 
+    var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
+    var fechaReferencia =$('#referenciaFechaEmision').val() !=null?referenciaFechaEmision.value:new Date() 
+     var JSONDetalles = JSON.stringify( self.detalleFactura );
+    
+    self.factura.id = self.factura.id
+    self.factura.condicionVenta = $('#condicionVenta').val()
+    self.factura.fechaCredito =fechaCreditoTemporal.toString()
+    self.factura.referenciaFechaEmision =fechaReferencia
+    self.factura.totalEfectivo =$('#totalEfectivo').val()
+    self.factura.totalTarjeta = redondearDecimales(__valorNumerico($('#totalTarjeta').val())) 
+    self.factura.totalBanco = redondearDecimales(__valorNumerico($('#totalBanco').val()))
+    self.factura.detalleFactura =JSONDetalles
+    self.update();
+    
+    var formulario = $("#formularioFactura").serialize();
+     
+                    
     $.ajax({
-        url: "inventarios/getListaInventarioPorAlmacen",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            if(result.data.length > 0){
-                $("#tableListaInventario").dataTable().fnClearTable();
-                $('#tableListaInventario').DataTable().destroy();
-                $('#tableListaInventario').dataTable({
-                    destroy: true,
-                    "lengthMenu": [[5,10, 25, 50, -1], [5,10, 25, 50, "All"]],
-                    "language": self.idiomaDataTable,
-                    "sDom": 'lfrtip',
-                    "order": [0, 'desc'],
-                    "bPaginate": true,
-                    'responsive': true,
-                    "bAutoWidth": true,
-                    "lengthChange": true,
-                    "columns": self.informacion_tabla,
-                })
-                __InformacionTabla_lista_articulos()
-               self.inventarios.data =  result.data;  
-               self.update(); 
-               $("#tableListaInventario").dataTable().fnAddData(self.inventarios.data)
-               $('#modalInventario').modal('show')      
+        type : "POST",
+        dataType : "json",
+        data : formulario,
+        url : "CrearFacturaAjax",
+        success : function(data) {
+            if (data.status != 200) {
+               	serverMessageJsonClase(data);
+                if (data.message != null && data.message.length > 0) {
+                    mensajeError(data.message)
+                }
+            } else {
+               	serverMessageJsonClase(data);
+                evaluarFactura(data)
             }
         },
-        error: function (xhr, status) {
+        error : function(xhr, status) {
             console.log(xhr);
-            swal("Oops", "Disculpa el incoveniente pero tenemos un problema con el Servidor!", "error");
+            mensajeErrorServidor(xhr, status);
         }
     });
 }
 
+/**
+*Si fue facturada o tiquete
+**/
+function evaluarFactura(data){
+   if (data.message != null && data.message.length > 0) {
+        $.each(data.listaObjetos, function( index, modeloTabla ) {
+            self.facturaImprimir   = modeloTabla
+            self.update()
+            if(self.facturaImprimir.estado == 2){
+                __Init()
+                //Envia a la pantalla de impresion
+                 riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
+                 
+            }else{
+                swal({
+	                title: '',
+	                text: data.message,
+	                type: 'success',
+	                showCancelButton: false,
+	                confirmButtonText: $.i18n.prop("btn.aceptar"),
+                })
+                __Init()
+                __ListaFacturasEnEspera()
+            }
+        });
+    }
+
+
+}
+/**
+*  Lista de las facturas pendientes por el usuario
+**/
+function __ListaFacturasEnEspera(){
+     self.facturas_espera       = {data:[]}  
+     self.update()
+    $.ajax({
+        url: 'ListarFacturasEsperaActivasAjax',
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+               self.facturas_espera.data =  result.aaData;  
+               self.update(); 
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });    
+}
+/**
+*  Obtiene el valor de lo digitado en el campo de Descuento
+**/
+__TotalDeDescuento(e){
+    self.factura.porcentajeDesc = __valorNumerico(e.target.value) 
+    self.update()
+    __calculate()
+}
+/**
+*   Retrocer a los ingresos de los codigos desde el formulario de ingresar el valor dinero a pagar
+**/
+_AtrasFacturaFinal(){
+   self.mostrarFormularioPago = false
+   self.mostarParaCrearNuevaVentas = true;
+   self.mostarParaCrearNuevaFactura = true
+   self.error = false
+   self.update()
+}
+/**
+*    Muesta el campo de la fecha de credito
+**/
+__formaPago(e){
+    //Contado /sin cobro
+    if(e.currentTarget.value == 1 || e.currentTarget.value == 3){
+        self.mostrarCamposIngresoContado = true
+    }
+    //Credito
+    if(e.currentTarget.value == 2){
+        self.mostrarCamposIngresoContado = false
+    }
+}
+/**
+*   funcion para grabar la Factura en el back end
+**/
+__MostrarFormularioDePago(){
+    self.mostarParaCrearNuevaVentas = false
+    mostrarPAgo()
+}
+
+
+function mostrarPAgo(){
+     //No hay detalles registrados en la Factura
+    if(self.detail.length == 0 ){
+        swal("Verificar","No hay detalles en la factura ", "info")
+        return
+    }
+    
+    $('#totalEfectivo').val(null)
+    $('#totalTarjeta').val(null)
+    $('#totalBanco').val(null)
+    getSubTotalGeneral()
+    self.factura.totalCambioPagar =0
+    self.mostarParaCrearNuevaFactura = false
+    self.mostrarFormularioPago = true
+    self.update()
+    $('#totalEfectivo').focus()
+    self.factura.cambioMoneda = self.factura.totalVentaNeta / self.tipoCambio.total
+    self.update()
+
+}
+/** 
+*
+*Agregar codigos al detalle de la Factura
+*
+*/
+__addProductToDetail(e){
+    if (e.keyCode != 13) {
+        return;
+    } 
+    __buscarcodigo(e.currentTarget.value);
+    $('#codigoBarra').val(null)
+    $('#codigoBarra').focus()
+}
+/**
+* Buscar codigo
+**/
+__agregarArticuloBotonAgregar(){
+   __buscarcodigo($( "#codigo" ).val(),$( "#quantty" ).val());
+}
+/**
+* mostrar la lista de articulos de la empresa
+**/
+function __ListaDeArticulosPorEmpresa(){
+    $.ajax({
+        url: 'ListarArticuloAjax.do',
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                _informacionData_Articulo()
+                self.articulos.data           = result.aaData
+                self.update()
+                loadListar(".tableListarArticulos",idioma_espanol,self.informacion_tabla_articulo,self.articulos.data)
+                agregarInputsCombos_Articulo()
+                __agregarArticulos()
+                ActivarEventoFiltro(".tableListarArticulos")
+                $('#modalInventario').modal('show')    
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+}
+/**
+*  Muestra la lista de clientes
+**/
+_EscogerClientes(){
+    $('#modalClientes').modal('show')  
+}
 
 /**
-* Buscar el codigo del producto  en la base de datos
+*  Muestra la lista de vendedores
 **/
-
-function __buscarProducto(codigo,cantidad){
-    
-    self.inventario  = null;
+_EscogerVendedores(){
+    $('#modalVendedor').modal('show')  
+}
+/**
+*  Lista de los vendedores
+**/
+function __ListaDeVendedores(){
     $.ajax({
-            type: 'get',
-            url: "inventarios/buscarArticuloAndInventarioByCodigo",
-            datatype:'json',
-            data: {
-               'codigo': codigo,
-             },
-            success: function(data){
-                console.log(data)
-                $.each(data, function( index, inventario ) {
-                    self.inventario = inventario;
-                    self.update();
-                });
-                if(self.inventario !=null){
-                  __agregarInventario(cantidad)
+        url: 'ListarVendedoresActivosAjax.do',
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                __informacionData_vendedores()
+                loadListar(".tableListaVendedor",idioma_espanol,self.informacion_tabla_vendedores,result.aaData)
+                agregarInputsCombos_Vendedores()
+                ActivarEventoFiltro(".tableListaVendedor")
+                __seleccionarVendedor()
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+}
+/**
+*  Lista de los clientes
+**/
+function __ListaDeClientes(){
+    $.ajax({
+        url: 'ListarClientesActivosAjax.do',
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                __informacionData()
+                loadListar(".tableListaCliente",idioma_espanol,self.informacion_tabla_clientes,result.aaData)
+                agregarInputsCombos_Clientes()
+                ActivarEventoFiltro(".tableListaCliente")
+                __seleccionarClientes()
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+}
+/**
+* Buscar el codigo del codigo  en la base de datos
+**/
+function __buscarcodigo(idArticulo,cantidad){
+    self.articulo = null;
+    $.ajax({
+        type: 'GET',
+        url: 'findArticuloByCodigojax.do',
+        method:"GET",
+        data:{codigoArticulo:idArticulo},
+        success: function(data){
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    swal('',data.message,'error');
                 }
-            },
-	        error:function(data) {
-	              console.log("error:"+data);
-                  swal("Oops", "Disculpa el incoveniente pero tenemos un problema con el Servidor!", "error");
-	    
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                        //Articulo no puede agregarse si no hay en el inventario
+                        if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
+                            mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
+                            return
+                        }
+                        if(modeloTabla.cantidad < cantidad ){
+                            mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
+                            return
+                        }
+                        self.articulo  = modeloTabla
+                        self.update()
+                        __agregarArticulo(cantidad)
+                    });
+                }
+            }
+        },
+	    error : function(xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
         }
     });
 }
 /**
 *  Agregar un articulo si existe se suma la cantidad y no existe se agrega en el detalle
 **/
-function __agregarInventario(cantidad){
-    
-    if(self.inventario == null){
+function __agregarArticulo(cantidad){
+    if(self.articulo == null){
         return;
     }
     if(cantidad == null){
@@ -3226,23 +2932,15 @@ function __agregarInventario(cantidad){
     }
     var encontrado = false;
      if(self.detail[0] == null){ // first element
-        
-        __nuevoInventarioAlDetalle(cantidad);
+        __nuevoArticuloAlDetalle(cantidad);
         encontrado = true;
     }else{//Se busca el articulo si existe se incrementa la cantidad
         for (var count = 0; count < self.detail.length; count++) {
-            if (self.detail[count].id_inventario == self.inventario.idInventario ){
+            if (self.detail[count].codigo == self.articulo.codigo ){
                self.item          = self.detail[count];
-               self.item.cantidad = __valorNumerico(self.item.cantidad) + __valorNumerico(cantidad)
-               
-               //Verificar si aplica impuesto al producto
-               if(self.inventario.iva =="Activo"){
-                 self.item.iva = __ObtenerImpuestoByProducto(self.inventario.impuesto,self.item.precio,self.item.cantidad)
-               }else{
-                 self.item.iva = 0
-               }
+               self.item.cantidad = self.item.cantidad + parseFloat(cantidad)
                self.update();
-               __actualizarItemArray();
+               ActualizarLineaDEtalle()
                self.detail[count] = self.item;
                encontrado = true;
               self.update();
@@ -3250,513 +2948,583 @@ function __agregarInventario(cantidad){
         }
     
     }
-    // si no existe se agrega como un producto nuevo
+    // si no existe se agrega como un codigo nuevo
     if(encontrado == false){ // add elemen
-       
-      __nuevoInventarioAlDetalle(cantidad);
+      __nuevoArticuloAlDetalle(cantidad);
     }
-    
     __calculate(); 
-    
 }
-
-/**
-*  retorna el valor numerico o cero sino es numerico
-**/
-function __valorNumerico(valor){
-    
-    return isNumber(valor)?parseFloat(valor):0 ;
-}
-
-/**
-*   agregar Articulos nuevos en el detalle de la factura
-**/
-function __nuevoInventarioAlDetalle(cantidad){
-    if(self.inventario.descripcion == null){
-        return;
-    }
-    if(self.inventario.descripcion == ""){
-        return;
-    }
-    self.descuento      = 0;
-    var impuestos       = 0;
-    self.detail.push({
-       id_inventario   : self.inventario.idInventario,
-       costo           : __valorNumerico(self.inventario.costo) ,
-       descripcion     : self.inventario.descripcion,
-       descuento       : 0,
-       totalDescuentoDetalle  : 0,
-       iva             : __ObtenerImpuestoByProducto(self.inventario.impuesto,self.inventario.precioPublico,cantidad),
-       cantidad        : __valorNumerico(cantidad),
-       precio          : __valorNumerico(self.inventario.precioPublico) ,
-       subTotal        : __valorNumerico(self.inventario.precioPublico) * __valorNumerico(cantidad) 
-    });
-    self.update()
-}
-
-/**
-*       Obtener el impuesto de un producto 
-        Se debe conocer el costo y la ganancia
-**/
-
-function __ObtenerImpuestoByProducto(impuesto,precio,cantidad){
-   var precioSinImpuesto = 0
-   //Si el articulo no tiene el procentaje del impuesto se retorna cero
-   if(impuesto == 0){
-       return 0;
-   }else{
-      precioSinImpuesto = __valorNumerico(precio)  / (1+ __valorNumerico(impuesto/100))
-      totalImpuestos    = __valorNumerico(precio)  -  __valorNumerico(precioSinImpuesto) 
-      return totalImpuestos * __valorNumerico(cantidad)
-   }
-}
-
 /**
 * eliminar un detalle factura
 **/
 __removeProductFromDetail(e) {
-    var item = e.item,
+    var item = e.item;
     index = this.detail.indexOf(item);
     this.detail.splice(index, 1);
+    var cont = 0 ;
+    self.detail.forEach(function(elemen){
+            elemen.numeroLinea = cont + 1
+            cont = elemen.numeroLinea
+        }
+    )
+    self.update()
      __calculate();
  }
+
+ /**
+*   agregar Articulos nuevos en el detalle de la factura
+**/
+function __nuevoArticuloAlDetalle(cantidad){
+    if(self.articulo.descripcion == null){
+        return;
+    }
+    if(self.articulo.descripcion == ""){
+        return;
+    }
+    var precioUnitario  = getPrecioUnitario(self.articulo.precioPublico)
+    
+    var montoTotal      = getMontoTotal(precioUnitario,cantidad)
+    var montoDescuento  = 0
+    var naturalezaDescuento = ""
+    var subTotal        = montoTotal
+    var montoImpuesto   = _calcularImpuesto(subTotal,parseFloat(self.articulo.impuesto) ==null?0:parseFloat(self.articulo.impuesto))
+    var montoTotalLinea = subTotal + montoImpuesto 
+    self.detail.push({
+       numeroLinea     : 1,
+       tipoImpuesto    : self.articulo.tipoImpuesto,
+       iva             : parseFloat(self.articulo.impuesto),
+       codigo          : self.articulo.codigo,
+       descripcion     : self.articulo.descripcion,
+       cantidad        : parseFloat(cantidad),
+       precioUnitario  : precioUnitario,
+       impuesto        : parseFloat(self.articulo.impuesto),
+       montoImpuesto   : montoImpuesto,
+       montoDescuento  : 0,
+       porcentajeDesc  : 0,
+       subTotal        : subTotal,
+       montoTotalLinea : montoTotalLinea,
+       montoTotal      :montoTotal
+    });
+    var cont = 0;
+    self.detail.forEach(function(elemen){
+          elemen.numeroLinea = cont + 1
+          cont = elemen.numeroLinea
+        }
+    )
+    self.update()
+}
+
+function getMontoTotal(precioUnitario,cantidad){
+    var resultado = parseFloat(precioUnitario) * parseFloat(cantidad)
+    return redondearDecimales(resultado ,5);
+}
+
+
+/**
+* Obtiene el precio unitario sin descuento sin impuesto
+**/
+function getPrecioUnitario(precio){
+   return redondearDecimales(precio,5)     
+  
+}
+/**
+ * calculo del impuesto iva
+ * */
+function _calcularImpuesto(precio,iva){
+    if(iva == 0){
+        return 0;
+    }
+    var impuesto = iva > 0 ?parseFloat(iva)/100:0
+    impuesto = impuesto > 0 ?impuesto:0
+    var total = precio * impuesto
+    return redondearDecimales(total ,5)
+}
    
  /**
  * Cuando se aplica un cambio de cantidad en un detalle
- * Se aplica una recalculacion de todo el detalle y factura
+ * Se aplica una recalculacion de todo el detalle y Factura
  **/ 
  __recalculacionDelDetalle(e){
-     if (e.keyCode != 13) {
-        return;
-    } 
-    var cantidad = cambiarCantidad.value
-    var index = self.detail.indexOf(self.item);
+      var cantidad = $(".cambiarCantidadArticulo").val();
     //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
-    if(cantidad == ""){
+    cantidad =__valorNumerico(cantidad);
+    if(cantidad == 0){
        cantidad = 1;
     }
-    if(cantidad == null){
-       cantidad = 1; 
-    }
-    self.item.cantidad = parseFloat(cantidad);  
-    __actualizarItemArray();
-    self.detail[index] = self.item;
-    self.update();
-     $('#modalCambiarCantidad').modal('hide') 
-     cambiarCantidad.value = 0
- }
+    __ValidarCantidadArticulo(self.item.codigo,cantidad)
+  }
+
 /**
-* Actualizar el descuento del producto
+* Buscar el codigo del codigo  en la base de datos
 **/
-__actualizarDescuento(e){
-    if (e.keyCode != 13) {
-        return;
-    } 
-    var descuento = __valorNumerico(aplicarDescuento.value) 
-    //Si es mayor al 100 % no se acepta el descuento
-    if(descuento >100){
-        return
-    }
-    var index     = self.detail.indexOf(self.item);
-    //Descuento se verifica si es null o espacios por defecto se deja en cero
-    if(descuento == ""){
-       descuento = 0;
-    }
-    if(descuento == null){
-       descuento = 0; 
-    }
-    //Descuento
-    if(self.item.descuento != descuento){
-       self.item.descuento =  __valorNumerico(descuento)  
-    }    
-    __actualizarItemArray();
+function __ValidarCantidadArticulo(idArticulo,cantidad){
+   
+    $.ajax({
+        type: 'GET',
+        url: 'findArticuloByCodigojax.do',
+        method:"GET",
+        data:{codigoArticulo:idArticulo},
+        success: function(data){
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    swal('',data.message,'error');
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                        //Articulo no puede agregarse si no hay en el inventario
+                        if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
+                            mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
+                            return 
+                        }
+                        if(modeloTabla.cantidad < cantidad ){
+                            mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
+                            return 
+                        }
+                        agregarCantidadAlaVenta(cantidad)
+                    })
+                }
+            }
+        },
+	    error : function(xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+}
+
+function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc){
+    var porcentaje = porcentajeDesc / 100;
+    var total =  precioUnitario * cantidad
+    var resultado = total * porcentaje
+
+    return redondearDecimales(resultado ,5)
+}
+
+function ActualizarLineaDEtalle(){
+    var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
+    var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc)
+    var subTotal               = redondearDecimales(montoTotal - montoDescuento,5)
+    var montoImpuesto          = _calcularImpuesto(subTotal,self.item.iva ==null?0:self.item.iva)
+    var montoTotalLinea        = redondearDecimales(subTotal + montoImpuesto,5)    
+    self.item.montoTotal       = redondearDecimales(montoTotal,5)
+    self.item.montoDescuento   = redondearDecimales(montoDescuento,5)
+    self.item.subTotal         = redondearDecimales(subTotal,5)
+    self.item.montoImpuesto    = redondearDecimales(montoImpuesto,5)
+    self.item.montoTotalLinea  = redondearDecimales(montoTotalLinea ,5)
+    self.update()
+}
+
+function agregarCantidadAlaVenta(cantidad){
+    self.item.cantidad = cantidad
+    self.update()
+    ActualizarLineaDEtalle()
+    aplicarCambioLineaDetalle() 
+    cambiarCantidadArticulo.value = 0
+    $('#modalCambiarCantidad').modal('hide') 
+}
+
+function aplicarCambioLineaDetalle(){
+    var index    = self.detail.indexOf(self.item);
     self.detail[index] = self.item;
-    self.update();
-      $('#modalCambiarDescuento').modal('hide') 
-     aplicarDescuento.value = 0
+    self.update()
+    __calculate()
 }
 
 /**
-* Actualizar item en el array
+* Actualizar el descuento del codigo
 **/
-function __actualizarItemArray(){
-    // se convierte en decimal el porcentaje del descuento
-    self.item.totalDescuentoDetalle = parseFloat((self.item.precio * (self.item.descuento / 100)) * self.item.cantidad );
-    //Subtotal del Detalle
-    self.item.subTotal    = parseFloat((self.item.precio * self.item.cantidad) - self.item.totalDescuentoDetalle);
+__actualizarDescuento(e){
+    _actualizarDesc(e)
+}
+
+
+
+function _actualizarDesc(e){
+//    self.item     = e.item; 
+    var index     = self.detail.indexOf(self.item);
+    var descuento = $(".aplicarDescuento").val();
+    //Descuento se verifica si es null o espacios por defecto se deja en cero
+     descuento =__valorNumerico(descuento);
+      //Descuento
+    if(self.item.porcentajeDesc != descuento){
+       self.item.porcentajeDesc =  parseFloat(descuento);  
+    }    
     self.update()
-    //calculo de la factura de todos los items
-    __calculate();
+    ActualizarLineaDEtalle()  
+    aplicarCambioLineaDetalle()
+    $('#modalCambiarDescuento').modal('hide') 
+    aplicarDescuento.value = 0
+}
+
+/**
+* Monto a pagar en la linea el cliente
+**/
+function getMontoTotalLinea(subTotal,totalImpuesto){
+  return subTotal == 0?0:redondearDecimales(subTotal + totalImpuesto,5)
+}
+/**
+*  Obtener el subtotal sin el impuesto
+**/
+function getSubTotal(precio,cantidad){
+    var valor = __valorNumerico(precio) * __valorNumerico(cantidad)
+    return redondearDecimales(valor,5) 
+}
+/**
+* calcular el descuento
+**/
+function getTotalDescuento(precio,cantidad,porcentajeDesc){
+    var porcentaje = __valorNumerico(porcentajeDesc)/100
+    var valor =  __valorNumerico(precio) * porcentaje
+    return redondearDecimales(valor * cantidad,5)
 }
 /**
 * calculacion de los detalle de la factura 
 **/
 function __calculate() {
-    self.factura.subTotal = 0;
-    self.factura.total    = 0;
-    self.factura.iva      = 0;
-    self.totalDescuentoDetalle =0;
+    self.factura.total           = 0;
+    self.factura.totalDescuento  = 0;
+    self.factura.totalImpuesto   = 0;
+    self.factura.subTotal        = 0;
     self.update()
+    totalVenta     = 0
+    subTotal       = 0
+    totalDescuento = 0
+    totalImpuesto  = 0
+    totalMercanciasGravadas = 0
+    totalMercanciasExentas  = 0
+    totalServGravados       = 0
+    totalServExentos        = 0
+
+    totalGravado            = 0
+    totalExento             = 0
+    totalComprobante        = 0
+    totalventaNeta          = 0
     self.detail.forEach(function(e){
-         self.factura.subTotal      += e.subTotal >0?e.subTotal:0
-         self.factura.iva           += e.iva >0?e.iva:0
-         self.totalDescuentoDetalle += e.totalDescuentoDetalle >0?e.totalDescuentoDetalle:0
+        totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.subTotal:0
+        totalMercanciasExentas  += e.impuesto == 0 && e.tipoImpuesto != "07"?e.subTotal:0
+        totalServGravados       += e.montoImpuesto > 0 && e.tipoImpuesto == "07"?e.subTotal:0
+        totalServExentos        += e.impuesto == 0 && e.tipoImpuesto == "07"?e.subTotal:0
+        totalGravado            += e.impuesto > 0 ?e.subTotal:0
+        totalExento             += e.impuesto == 0?e.subTotal:0
+        totalComprobante        += e.montoTotalLinea
+        subTotal                += e.subTotal >0?e.subTotal:0
+        totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
+        totalImpuesto           += e.montoImpuesto >0?e.montoImpuesto:0
+        totalVenta              += e.montoTotal
     });
-    self.factura.subTotal = self.factura.subTotal - self.factura.iva ;
-    self.factura.subTotal = self.factura.subTotal - self.totalDescuentoDetalle ;
-    self.factura.total    = self.factura.subTotal + self.factura.iva + self.factura.totalTransporte ;
+    self.factura.totalMercanciasGravadas = redondearDecimales(__valorNumerico(totalMercanciasGravadas),5)
+    self.factura.totalMercanciasExentas  = redondearDecimales(__valorNumerico(totalMercanciasExentas),5)
+    self.factura.totalServGravados       = redondearDecimales(__valorNumerico(totalServGravados),5)
+    self.factura.totalServExentos        = redondearDecimales(__valorNumerico(totalServExentos),5)
 
-    self.id_inventario = 0;
-    self.precio        = 0;
-    self.inventario    = null;
-    self.descripcion   = '';
+    self.factura.totalGravado            = redondearDecimales(__valorNumerico(totalGravado),5)
+    self.factura.totalExento             = redondearDecimales(__valorNumerico(totalExento),5)
+    self.factura.totalVenta              = redondearDecimales(totalVenta,5)
+    self.factura.totalDescuento          = redondearDecimales(__valorNumerico(totalDescuento),5)
+    self.factura.subTotal                = redondearDecimales(__valorNumerico(subTotal),5)
+    self.factura.totalImpuesto           = redondearDecimales(__valorNumerico(totalImpuesto),5)
+    self.factura.totalVentaNeta          = redondearDecimales(__valorNumerico(subTotal),5)
+    self.factura.totalComprobante        = redondearDecimales(__valorNumerico(totalComprobante),5)
+    self.articulo              = null;
     self.update(); 
-    $( "#producto" ).val(null);
+    $( "#codigo" ).val(null);
     $( "#quantity" ).val(null);
+    getSubTotalGeneral()
 }
 
-
-/**
-*-----------------Funciones para agregar articulos desde modal de articulos por sucursal
-**/
-
-function __informacionData(){
-    self.idiomaDataTable = {
-                "sProcessing":     "Procesando...",
-                "sLengthMenu":     "Mostrar _MENU_ registros",
-                "sZeroRecords":    "No se encontraron resultados",
-                "sEmptyTable":     "Ningún dato disponible en esta tabla",
-                "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                "sInfoPostFix":    "",
-                "sSearch":         "Buscar:",
-                "sUrl":            "",
-                "sInfoThousands":  ",",
-                "sLoadingRecords": "Cargando...",
-                "oPaginate": {
-                    "sFirst":    "Primero",
-                    "sLast":     "Último",
-                    "sNext":     "Siguiente",
-                    "sPrevious": "Anterior"
-                },
-                "oAria": {
-                    "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                }
-    }                              
-    self.update()                      
+function getSubTotalGeneral(){
+    var resultado = __valorNumerico(self.factura.subTotal) + __valorNumerico(self.factura.totalDescuento)
+    self.subTotalGeneral = redondearDecimales(resultado,5)
+    self.update()
 }
 
-
+function redondearDecimales(numero, decimales) {
+    numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}');   // Expresion regular para numeros con un cierto numero de decimales o mas
+    if (numeroRegexp.test(numero)) {         // Ya que el numero tiene el numero de decimales requeridos o mas, se realiza el redondeo
+        return Number(numero.toFixed(decimales));
+    } else {
+        return Number(numero.toFixed(decimales)) === 0 ? 0 : numero;  // En valores muy bajos, se comprueba si el numero es 0 (con el redondeo deseado), si no lo es se devuelve el numero otra vez.
+    }
+}
 /**
-*  Informacion de la lista de articulos
+* Definicion de la tabla articulos 
 **/
-function __InformacionTabla_lista_articulos(){
- self.informacion_tabla = [	 {'data' : 'articulo'         ,"name":"articulo"         ,"title" : "Codigo"         ,"autoWidth":false,
-                                    'render': function (articulo) {
-                                             return articulo.codigo;
-                                    }
-                                },                                
-                                {'data' : 'articulo'     ,"name":"articulo"     ,"title" : "Descripcion"     ,"autoWidth":false,
-                                    'render': function (articulo) {
-                                             return articulo.descripcion;
-                                    }
-                                },
-                                {'data' : 'cantidad'        ,"name":"cantidad"        ,"title" : "Cantidad"        ,"autoWidth":false},
-                                {'data' : 'precioPublico'   ,"name":"precioPublico"   ,"title" : "Precio Publico"  ,"autoWidth":false},
-                                {'data' : 'precioMayorista' ,"name":"precioMayorista" ,"title" : "Precio Mayorista"  ,"autoWidth":false},
-                                {'data' : 'precioEspecial'  ,"name":"precioEspecial"  ,"title" : "Precio Especial"  ,"autoWidth":false},
-                                {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
-									 "render":function(id,type, row){
-										    return __OpcionesInventarios(id,type,row);
-	 							         }	 
-								},
-                                
+function _informacionData_Articulo(){
+   self.informacion_tabla_articulo = [	{'data' : 'codigo'         ,"name":"codigo"          ,"title" : $.i18n.prop("articulo.codigo")       ,"autoWidth":false},
+                                        {'data' : 'descripcion'    ,"name":"descripcion"     ,"title" : $.i18n.prop("articulo.descripcion")  ,"autoWidth":false},
+                                        {'data' : 'cantidad'       ,"name":"cantidad"        ,"title" : $.i18n.prop("inventario.cantidad")   ,"autoWidth":false},
+                                        {'data' : 'precioPublico'  ,"name":"precioPublico"   ,"title" : $.i18n.prop("articulo.precioPublico"),"autoWidth":false,
+                                          "render":function(precioPublico,type, row){
+                                               return  "₡" + precioPublico.toLocaleString('de-DE');
+                                            }
+                                        },
+                                        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
+                                            "render":function(id,type, row){
+                                                    return __OpcionesArticulos(id,type,row);
+                                                }	 
+                                        },
                               ];
+    
+ self.update()        
 }
-
-
-/**
-*  Informacion de la lista de los clientes 
-**/
-function __InformacionTabla_lista_clientes(){
-    self.informacion_tabla_clientes = [	
-                                    {'data' : 'nombreCompleto'  ,"name":"nombreCompleto" ,"title" : "Nombre"   ,"autoWidth":false},
-                                    {'data' : 'correoElectronico'           ,"name":"correoElectronico"          ,"title" : "Email"    ,"autoWidth":false},                                
-                                    {'data' : 'telefono'        ,"name":"telefono"       ,"title" : "Telefono" ,"autoWidth":false},                                
-                                    {'data' : 'movil'           ,"name":"movil"        ,"title" : "Celular"  ,"autoWidth":false},                                
-                                    {'data' : 'descuento'       ,"name":"descuento"      ,"title" : "Descuento" ,"autoWidth":false},                                
-                                    {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
-									     "render":function(id,type, row){
-										    return __OpcionesClientes(id,type,row);
-	 							         }	 
-								    },
-                              ];     
-
-    self.update()
-}
-
-
-
-/**
-*   Valores de Tipo Documento
-**/
-
-function __ValorTipoDocumento(tipoDocumento){
-    if(tipoDocumento == "Tiquete"){
-        return '<span class="label label-success">'+ "Tiquete" +'</span>';
-    }
-
-    if(tipoDocumento == "Proforma"){
-        return '<span class="label label-success">'+ "Proforma" +'</span>';
-    }
-
-    if(tipoDocumento == "Factura"){
-        return '<span class="label label-success">'+ "Factura" +'</span>';
-    }
-    if(tipoDocumento == "Orden"){
-        return '<span class="label label-success">'+ "Orden" +'</span>';
-    }
-
-    return tipoDocumento
-
-}
-
-/**
-*   Valores del Estado
-**/
-
-function __ValorEstado(estado){
-    if(estado == 'Pendiente'){
-        return '<span class="label label-success">'+ "Pendiente" +'</span>';
-    }
-    if(estado == 'Aplicada'){
-        return '<span class="label label-success">'+ "Aplicada" +'</span>';
-    }
-    if(estado == 'Anulada'){
-        return '<span class="label label-success">'+ "Anulada" +'</span>';
-    }
-    return estado
-}
-/**
-*   Valores del Medio Pago
-**/
-
-function __ValorTipoPago(tipoPago){
-    if(tipoPago == 'Contado'){
-        return '<span class="label label-success">'+ "Contado" +'</span>';
-    }
-    if(tipoPago == 'Credito'){
-        return '<span class="label label-success">'+ "Credito" +'</span>';
-    }
-
-    return tipoPago
-}
-
-/**
-*    informacion de vendedores
-**/
-function  __InformacionTablaVendedores(){
-    self.informacion_tabla_vendedores  = [	
-                                    {'data' : 'nombreCompleto'     ,"name":"nombreCompleto"     ,"title" : $.i18n.prop("vendedor.nombreCompleto")   ,"autoWidth":false},
-                                    {'data' : 'correoElectronico'  ,"name":"correoElectronico"  ,"title" : $.i18n.prop("vendedor.correoElectronico")    ,"autoWidth":false},                                
-                                    {'data' : 'telefono'           ,"name":"telefono"           ,"title" : $.i18n.prop("vendedor.telefono") ,"autoWidth":false},                                
-                                    {'data' : 'celular'            ,"name":"celular"            ,"title" : $.i18n.prop("vendedor.celular")  ,"autoWidth":false},                                
-                                    {'data' : 'descuento'          ,"name":"descuento"          ,"title" : $.i18n.prop("vendedor.descuento") ,"autoWidth":false},                                
-                                    {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
-									     "render":function(id,type, row){
-										    return __OpcionesVendedores(id,type,row);
-	 							         }	 
-								    },
-                              ];                                                            
-
-    self.update()
-
-}
-
 /**
 * Opciones del modal de articulos
 */
-function __OpcionesClientes(){
-  var agregar  = '<a href="#"  title="Seleccionar Cliente" class="btn btnAgregar btn-success form-control" title="Seleccione el cliente de la factura" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
+function __OpcionesArticulos(){
+  var agregar  = '<a href="#"  class="btn btnAgregar btn-success form-control" title="Seleccionar" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
   return  agregar;
+
+}
+/**
+* Agregar codigos a la Factura desde modal de articulos
+**/
+function __agregarArticulos() {
+     $('#tableListarArticulos').on('click', '.btnAgregar', function (e) {
+         var table = $('#tableListarArticulos').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	     }
+        self.articulo = data;
+        self.update();  
+	    __buscarcodigo(self.articulo.codigo,1)
+    });
 }
 
 /**
-* Opciones del modal de articulos
-*/
-function __OpcionesInventarios(){
-  var agregar  = '<a href="#"  title="Agregar" class="btn btnAgregar btn-success form-control" title="Modificar" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
-  return  agregar;
+* formato de la tabla de clientes
+**/
+function __informacionData_vendedores(){
+    self.informacion_tabla_vendedores = [	
+                                        {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("vendedor.cedula")            ,"autoWidth":false},
+                                        {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("vendedor.nombreCompleto")    ,"autoWidth":false},
+                                        {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("vendedor.correoElectronico") ,"autoWidth":false},
+                                        {'data' : 'telefono'         ,"name":"telefono"          ,"title" : $.i18n.prop("vendedor.telefono")          ,"autoWidth":false},                                
+                                        {'data' : 'celular'          ,"name":"celular"           ,"title" : $.i18n.prop("vendedor.celular")           ,"autoWidth":false},                                
+                                        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
+									            "render":function(id,type, row){
+										            return __OpcionesVendedores(id,type,row);
+	 							                }	 
+								            },
+                                        ];                              
+   
 }
-
 /**
-* Opciones del modal de vendedores
+* Opciones del modal de clientes
 */
 function __OpcionesVendedores(){
-  var agregar  = '<a href="#"  title="Agregar" class="btn btnAgregar btn-success form-control" title="Agregar Factura un Vendedor" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
+  var agregar  = '<a href="#"  title="Seleccionar Vendedor" class="btn btnVendedor btn-success form-control" title="Seleccione el vendedor" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
   return  agregar;
+
 }
 
-
-
 /**
-* Agregar productos a la factura desde modal de articulos
+* Seleccionar el vendedor de la factura
 **/
-function __agregarInventarios() {
-     $('#tableListaInventario').on('click', '.btnAgregar', function (e) {
-         var table = $('#tableListaInventario').DataTable();
+function __seleccionarVendedor() {
+     $('#tableListaVendedor').on('click', '.btnVendedor', function (e) {
+         var table = $('#tableListaVendedor').DataTable();
 		if(table.row(this).child.isShown()){
 			//cuando el datatable esta en modo responsive
 	       var data = table.row(this).data();
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
-	     }
-	    __buscarProducto(data.articulo.codigo)
-    });
-}
-
-/**
-* Agregar productos a la factura desde modal de articulos
-**/
-function __seleccionarCliente() {
-     $('#tableListaClientes').on('click', '.btnAgregar', function (e) {
-         var table = $('#tableListaClientes').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	     }
-	    self.cliente = data
+         }
+        self.vendedor = data
         self.update();
-        $('#modalClientes').modal('hide') 
     });
 }
 
-
 /**
-* Agregar productos a la factura desde modal de articulos
+* formato de la tabla de clientes
 **/
-function __seleccionarVendedores() {
-    $('#tableListaVendedores').on('click', '.btnAgregar', function (e) {
-         var table = $('#tableListaVendedores').DataTable();
+function __informacionData(){
+    self.informacion_tabla_clientes = [	
+                                        {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false},
+                                        {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("cliente.nombreCompleto")    ,"autoWidth":false},
+                                        {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("cliente.correoElectronico") ,"autoWidth":false},
+                                        {'data' : 'descuento'        ,"name":"descuento"         ,"title" : $.i18n.prop("cliente.descuento")         ,"autoWidth":false},                                
+                                        {'data' : 'telefono'         ,"name":"telefono"          ,"title" : $.i18n.prop("cliente.telefono")          ,"autoWidth":false},                                
+                                        {'data' : 'celular'          ,"name":"celular"           ,"title" : $.i18n.prop("cliente.celular")           ,"autoWidth":false},                                
+                                        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
+									            "render":function(id,type, row){
+										            return __Opcionesclientes(id,type,row);
+	 							                }	 
+								            },
+                                        ];                              
+   
+}
+/**
+* Opciones del modal de clientes
+*/
+function __Opcionesclientes(){
+  var agregar  = '<a href="#"  title="Seleccionar Cliente" class="btn btnAgregar btn-success form-control" title="Seleccione el cliente de la factura" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
+  return  agregar;
+
+}
+/**
+* Agregar codigos a la factura desde modal de articulos
+**/
+function __seleccionarClientes() {
+     $('#tableListaCliente').on('click', '.btnAgregar', function (e) {
+         var table = $('#tableListaCliente').DataTable();
 		if(table.row(this).child.isShown()){
 			//cuando el datatable esta en modo responsive
 	       var data = table.row(this).data();
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	     }
-	    self.vendedor = data
+        self.cliente = data
+        _provincias()  
+        _ConsultarCantonesByProvincias(self.cliente.provincia)
+        _consultarDistritosByCantoAndProvincia(self.cliente.provincia,self.cliente.canton)
+        _consultarBarriosByCantoAndProvinciaAndDistritos(self.cliente.provincia,self.cliente.canton,self.cliente.distrito)
+        self.cliente = data
         self.update();
-        $('#modalListaDeVendedores').modal('hide') 
- 
-       
     });
 }
-
-
 /**
-* Imprimir Factura
+*  retorna el valor numerico o cero sino es numerico
 **/
-function __seleccionarImprimir() {
-    $('#tableListaFacturas').on('click', '.btnImprimir', function (e) {
-         var table = $('#tableListaFacturas').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	     }
-	   
-        
-        self.mostarParaCrearNuevaVentas  = false //muestra modulo de crear una nueva venta
-        self.mostrarCodigoBarra          = true;
-        self.mostrarNavegador            = false
-        self.mostrarCategorias           = false //muestra la pantalla de imagenes de articulos   
-        self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
-        self.mostrarFacturaImprimir      = true
-        self.update()
-        $("#boton-regresar").focus()
-       
-    });
+function __valorNumerico(valor){
+    return isNumber(valor)?parseFloat(valor):0 ;
 }
-
-
 /**
-* cargar los estados de la compra
+*  Validar si es numero
 **/
-function __ComboTipoPagos(){
-    self.comboTipoPagos = []
-    self.comboTipoPagos.push({
-        estado:'Contado',
-        descripcion:"Contado"
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+/**
+* cargar los estados de la factura
+**/
+function __comboCondicionPago(){
+    self.comboCondicionPagos = []
+    self.update()
+    self.comboCondicionPagos.push({
+        estado:"01",
+        descripcion:$.i18n.prop("factura.codicion.venta.contado")
     })
-    self.comboTipoPagos.push({
-        estado:'Credito',
-        descripcion:"Credito"
+    self.comboCondicionPagos.push({
+        estado:"02",
+        descripcion:$.i18n.prop("factura.codicion.venta.credito")
     })
     self.update()
 }
 
 
 /**
-* cargar los tipos de Documento de la compra
+* cargar los codigos de referencias
+**/
+function __comboCondicionPagoRef(){
+    self.codigosReferencias = []
+    self.update()
+    self.codigosReferencias.push({
+        estado:"01",
+        descripcion:$.i18n.prop("referencia.anula.documento")
+    })
+    self.codigosReferencias.push({
+        estado:"02",
+        descripcion:$.i18n.prop("referencia.corrige.texto.documento")
+    })    
+    self.codigosReferencias.push({
+        estado:"03",
+        descripcion:$.i18n.prop("referencia.corrige.texto.documento")
+    })   
+    self.codigosReferencias.push({
+        estado:"04",
+        descripcion:$.i18n.prop("referencia.otro.documento")
+    })    
+    self.codigosReferencias.push({
+        estado:"05",
+        descripcion:$.i18n.prop("referencia.sustituye.comprobante.documento")
+    })    
+    self.codigosReferencias.push({
+        estado:"99",
+        descripcion:$.i18n.prop("referencia.otros.documento")
+    })    
+
+    self.update()
+}
+/**
+* cargar los tipos de Documento de la factura
 **/
 function __ComboTipoDocumentos(){
     self.comboTipoDocumentos = []
+    self.update()
     self.comboTipoDocumentos.push({
-        estado:'Factura',
-        descripcion:"Factura"
+        estado:"04",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
     })
-
+    self.comboTipoDocumentos.push({
+         estado:"01",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
+    })
     
-    self.comboTipoDocumentos.push({
-        estado:'Proforma',
-        descripcion:"Proforma"
-    })
-    self.comboTipoDocumentos.push({
-        estado:'Orden',
-        descripcion:"Orden"
-    })
-
-
     self.update()
 }
-
-
-function cargaBilletes(){
-    self.billetes = []
+/**
+* cargar los estados de la factura
+**/
+function __ComboEstados(){
+    self.comboEstados = []
+    self.comboEstados.push({
+        estado:1,
+        descripcion:$.i18n.prop("factura.estado.pendiente")
+    })
+    self.comboEstados.push({
+        estado:2,
+        descripcion:$.i18n.prop("factura.estado.facturado")
+    })
+    
     self.update()
-    _incluirBilletes("₡","50,000",50000,'img/billete50000.jpg')
-    _incluirBilletes("₡","20,000",20000,'img/billete20000.jpg')
-    _incluirBilletes("₡","10,000",10000,'img/billete10000.jpg')
-    _incluirBilletes("₡","5,000",5000,'img/billete5000.jpg')
-    _incluirBilletes("₡","2,000",2000,'img/billete2000.jpg')
-    _incluirBilletes("₡","1000",1000,'img/billete1000.jpg')
-    _incluirBilletes("","Limpiar",0,'img/limpiar.png')
-
 }
-
+/**
+*  Agregar los inpust  y select de las tablas
+**/
+function agregarInputsCombos_Articulo(){
+     // Agregar los input de busqueda 
+    $('.tableListarArticulos tfoot th').each( function (e) {
+        var title = $('.tableListarArticulos thead th').eq($(this).index()).text();      
+        //No se toma en cuenta la columna de las acctiones(botones)
+        if ( $(this).index() != 4    ){
+	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	    }
+    })
+} 
+/**
+*  Agregar los inpust  y select de las tablas
+**/
+function agregarInputsCombos_Clientes(){
+     // Agregar los input de busqueda 
+    $('.tableListaCliente tfoot th').each( function (e) {
+        var title = $('.tableListaCliente thead th').eq($(this).index()).text();      
+        //No se toma en cuenta la columna de las acctiones(botones)
+        if ( $(this).index() != 5    ){
+	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	    }
+    })
+} 
 
 /**
-*    Incluir a los billetes
+*  Agregar los inpust  y select de las tablas
 **/
+function agregarInputsCombos_Vendedores(){
+     // Agregar los input de busqueda 
+    $('.tableListaVendedor tfoot th').each( function (e) {
+        var title = $('.tableListaVendedor thead th').eq($(this).index()).text();      
+        //No se toma en cuenta la columna de las acctiones(botones)
+        if ( $(this).index() != 5    ){
+	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	    }
+    })
+} 
 
-function _incluirBilletes(modena,descripcion,valor,imagen){
 
-    
-    self.billetes.push(
-        {
-            modena:modena,
-            descripcion:descripcion,
-            imagen:imagen,
-            valor:valor
-        }
-    )
-    self.update()
-}
+
 
 /**
 *  teclas de la pantalla
@@ -3765,51 +3533,15 @@ function __Teclas(){
     window.addEventListener( "keydown", function(evento){
         var tecla = evento.keyCode; 
     if(tecla ==119){
-        //Pantalla de imprimir F8 imprimir
-        if( self.mostrarFacturaImprimir == true ){
-          var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
-          var ventana=window.open('','_blank');  //abrimos una ventana vacía nueva
-          ventana.document.write(objeto.innerHTML);  //imprimimos el HTML del objeto en la nueva ventana
-          ventana.document.close();  //cerramos el documento
-          ventana.print();  //imprimimos la ventana
-          ventana.close();  //cerramos la ventana
-           $("#boton-regresar").focus()
-        }
-        // Facturar Modo de Pago
-        if(self.mostrarFormularioPago == true){
-          crearFactura(2,"Creacion de la Factura de Venta");  
-        } 
+      mostrarPAgo()     
+   
+    }   
+    //aplicar crear Factura
+    if (self.mostrarFormularioPago == true ){
+   //    aplicarFactura()   
+    } 
 
-        //llamar al modulo de pago desde la venta
-        if(self.mostarParaCrearNuevaVentas == true){
-             //No hay detalles registrados en la factura
-            if(self.detail.length == 0 ){
-                swal("Verificar","No hay detalles en la factura ", "info")
-                return
-            }
-            self.mostarParaCrearNuevaVentas = false;
-            self.mostrarFormularioPago = true
-            self.update()
-            $("#pago_efectivo").focus()
-
-        }
-        
-
-
-    }    
-
-    if(tecla ==27){//ESC
-        //Pantalla imprimir regresar
-        if( self.mostrarFacturaImprimir == true ){
-            self.mostrarCamposIngresoContado = false
-            
-            self.mostarParaCrearNuevaVentas  = true 
-            self.mostrarFacturaImprimir      = false
-            
-            self.update()
-        }
-
-    }
+   
     }, false );
   
    

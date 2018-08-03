@@ -124,13 +124,17 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																					 facturaElectronica.setReferenciaNumero(d.getReferenciaNumero());
 																																																					 facturaElectronica.setReferenciaRazon(d.getReferenciaRazon());
 																																																					 facturaElectronica.setReferenciaTipoDoc(MapEnums.ENUM_TIPO_DOC.get(d.getReferenciaTipoDoc()));
-																																																					 facturaElectronica.setReferenciaFechaEmision(d.getReferenciaFechaEmision().toString());
+																																																					 facturaElectronica.setReferenciaFechaEmision(d.getReferenciaFechaEmision() !=null?d.getReferenciaFechaEmision().toString():Constantes.EMPTY);
 																																																					 
 																																																				 }
 																																																			 
 																																																			 }else {
 																																																				 facturaElectronica.setReferencia(Constantes.EMPTY);
-																																																				 facturaElectronica.setReferenciaCodigo(Constantes.EMPTY);
+																																																				 facturaElectronica.setReferenciaCodigo( Constantes.EMPTY);
+																																																				 facturaElectronica.setReferenciaNumero(Constantes.EMPTY);
+																																																				 facturaElectronica.setReferenciaRazon(Constantes.EMPTY);
+																																																				 facturaElectronica.setReferenciaTipoDoc(Constantes.EMPTY);
+																																																				 facturaElectronica.setReferenciaFechaEmision(Constantes.EMPTY);
 																																																			 }
 																																																			// Agrega sus detalles
 																																																			List<DetalleFacturaElectronica> detalles = d.getDetalles().stream().map(TO_DETALLE).collect(toList());
@@ -398,7 +402,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/2 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {

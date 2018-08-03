@@ -30,6 +30,24 @@ public class MailConfig {
 		javaMailProperties.put("mail.smtp.connectiontimeout", 10000);
 		mailSender.setJavaMailProperties(javaMailProperties);
 
+//		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+//		mailSender.setHost("mail.emprendesoftcr.com ");
+//		mailSender.setPort(110);
+//		mailSender.setUsername("gobookingcr@emprendesoftcr.com");
+//		mailSender.setPassword("simo9090");
+//
+//		Properties javaMailProperties = new Properties();
+//
+//		javaMailProperties.put("mail.transport.protocol", "smtp");
+//		javaMailProperties.put("mail.smtp.auth", true);
+//
+//		javaMailProperties.put("mail.smtp.starttls.enable", true);
+//		javaMailProperties.put("mail.debug", true);
+//		javaMailProperties.put("mail.smtp.connectiontimeout", 10000);
+//		mailSender.setJavaMailProperties(javaMailProperties);
+
+		
+		
 		return mailSender;
 	}
 	

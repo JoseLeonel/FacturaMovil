@@ -235,12 +235,12 @@
                         <article class="booking-details clearfix">
                             <h3><span class="booking-info tituloTotal">{$.i18n.prop("factura.resumen.venta")}</span></h3>
                             <div class="booking-info tituloTotal">
-                                <p style="text-align:left">{$.i18n.prop("factura.resumen.subTotal")}  <span style="text-align:right"> ₡ {subTotalGeneral.toLocaleString('de-DE')  }       </span></p>
-                                <p style="text-align:left">{$.i18n.prop("factura.resumen.descuento")} <span style="text-align:right"> ₡ {factura.totalDescuento.toLocaleString('de-DE')} </span></p>
-                                <p style="text-align:left">{$.i18n.prop("factura.resumen.impuesto")}  <span style="text-align:right"> ₡ {factura.totalImpuesto.toLocaleString('de-DE')}  </span></p>
+                                <p style="text-align:left">{$.i18n.prop("factura.resumen.subTotal")}  <span style="text-align:right">  {subTotalGeneral.toLocaleString('de-DE')  }       </span></p>
+                                <p style="text-align:left">{$.i18n.prop("factura.resumen.descuento")} <span style="text-align:right">  {factura.totalDescuento.toLocaleString('de-DE')} </span></p>
+                                <p style="text-align:left">{$.i18n.prop("factura.resumen.impuesto")}  <span style="text-align:right">  {factura.totalImpuesto.toLocaleString('de-DE')}  </span></p>
                             </div>
                             <div class="booking-info tituloTotal">
-                                <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.total")} <span id="lblTotal">₡ {factura.totalComprobante.toLocaleString('de-DE')}</span></p>
+                                <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.total")} <span id="lblTotal"> {factura.totalComprobante.toLocaleString('de-DE')}</span></p>
                                 <br>
                                 <div show = {mostrarCamposIngresoContado }>
 
@@ -250,7 +250,7 @@
                                     <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"   >
                                     <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.banco")}</p> 
                                     <input onkeyup={ __TotalDeBancoAPagar} onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalBanco" id="totalBanco" name="totalBanco"   >
-                                    <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">₡ {factura.totalCambioPagar.toLocaleString('de-DE')}</span></p>
+                                    <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal"> {factura.totalCambioPagar.toLocaleString('de-DE')}</span></p>
                                 </div>
 
                             </div>
@@ -325,7 +325,7 @@
                             </td>
 
                             <td class="text-right">
-                                <input  class="form-control" type="text"  value = "₡ {montoTotalLinea.toLocaleString('de-DE')}" readonly/>
+                                <input  class="form-control" type="text"  value = "{montoTotalLinea.toLocaleString('de-DE')}" readonly/>
                             </td>
                         </tr>
                         </tbody>
@@ -348,7 +348,7 @@
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show">₡ {factura.totalComprobante.toLocaleString('de-DE')}</span>
+                                                    <span class="label label-info textShadow" id="total-show"> {factura.totalComprobante.toLocaleString('de-DE')}</span>
                                                 </div>
                                             </td>
                                         </tr>                     
@@ -1158,7 +1158,7 @@ __CalculaCambioAEntregarOnblur(e){
         return
     }
     self.factura.totalCambioPagar = 0
-    self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalVenta ? sumaMontosEntregadosParaCambios - self.factura.totalVenta:sumaMontosEntregadosParaCambios - self.factura.totalVenta    
+    self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalComprobante ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
     self.update()
 }
 /**
@@ -1174,7 +1174,7 @@ __CalculaCambioAEntregarKeyPress(e){
             return
         }
         self.factura.totalCambioPagar = 0
-        self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalVenta ? sumaMontosEntregadosParaCambios - self.factura.totalVenta:sumaMontosEntregadosParaCambios - self.factura.totalVenta    
+        self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalComprobante ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
         self.update()
     }
 }
@@ -1771,7 +1771,7 @@ function __agregarArticulo(cantidad){
                self.item          = self.detail[count];
                self.item.cantidad = self.item.cantidad + parseFloat(cantidad)
                self.update();
-
+               ActualizarLineaDEtalle()
                self.detail[count] = self.item;
                encontrado = true;
               self.update();
@@ -2024,6 +2024,9 @@ function __calculate() {
     totalImpuesto  = 0
     totalMercanciasGravadas = 0
     totalMercanciasExentas  = 0
+    totalServGravados       = 0
+    totalServExentos        = 0
+
     totalGravado            = 0
     totalExento             = 0
     totalComprobante        = 0

@@ -1218,7 +1218,7 @@ __CalculaCambioAEntregarOnblur(e){
         return
     }
     self.factura.totalCambioPagar = 0
-    self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalVenta ? sumaMontosEntregadosParaCambios - self.factura.totalVenta:sumaMontosEntregadosParaCambios - self.factura.totalVenta    
+    self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalComprobante ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
     self.update()
 }
 /**
@@ -1234,7 +1234,7 @@ __CalculaCambioAEntregarKeyPress(e){
             return
         }
         self.factura.totalCambioPagar = 0
-        self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalVenta ? sumaMontosEntregadosParaCambios - self.factura.totalVenta:sumaMontosEntregadosParaCambios - self.factura.totalVenta    
+        self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalComprobante ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
         self.update()
     }
 }
@@ -1826,7 +1826,7 @@ function __agregarArticulo(cantidad){
                self.item          = self.detail[count];
                self.item.cantidad = self.item.cantidad + parseFloat(cantidad)
                self.update();
-
+               ActualizarLineaDEtalle()
                self.detail[count] = self.item;
                encontrado = true;
               self.update();
@@ -2078,6 +2078,9 @@ function __calculate() {
     totalImpuesto  = 0
     totalMercanciasGravadas = 0
     totalMercanciasExentas  = 0
+    totalServGravados       = 0
+    totalServExentos        = 0
+
     totalGravado            = 0
     totalExento             = 0
     totalComprobante        = 0
