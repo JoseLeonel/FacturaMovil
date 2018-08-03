@@ -1,52 +1,59 @@
 <debito-credito>
+
+
+
 <!--Se creo para no dejarlo a la venta comun sino para casos especiales no valida la cantidad del articulo en el invetario-->
 
-    <div class="box" show={mostrarFormularioPago}>
-        <div class="box-body">
-            <div  class="contenedor-factura " >
-                <div class="cabecera-izquierda">
-                    <div class="box-header with-border fondoEncabezado">
-						<h3 class="box-title">{$.i18n.prop("factura.resumen.formulario")} {factura.id>0?' Id#:'+factura.id:'' } </h3>
+
+<!--Formulario de Pago-->
+<!---Datos Final cuando no es un venta de Crucero -->
+<div show={mostrarFormularioPago}>
+		<div class="row" >
+			<div class="col-md-8 col-sm-8 col-lg-8 col-sx-12 ">
+				<div class="box">
+					<div class="box-header with-border fondoEncabezado">
+						<h3 class="box-title">{$.i18n.prop("ventas.titulo")} </h3>
+                        <h3 class="box-title pull-right ">{$.i18n.prop("ventas.tipo.cambio.titulo")} {tipoCambio.total} </h3>
 					</div>
-                    <div class="box-body">
+					<div class="box-body">
                         <form id="formularioFactura">
-                            <input id="id" name="id" type="hidden" value="{factura.id}">
                             <div class="row">
-                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("factura.condicion.pago")} </label> 
-                                        <select  onchange= {__formaPago} class="form-control condicionVenta" id="condicionVenta" name="condicionVenta">
-                                            <option each={comboCondicionPagos} value="{estado}" selected="{factura.condicionVenta ==estado?true:false}" >{descripcion}</option>
-                                        </select>
+                                <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
+                                    <div class="row">
+                                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
+                                            <div class="form-group ">
+                                                <label>{$.i18n.prop("factura.condicion.pago")} </label> 
+                                                <select  onchange= {__formaPago} class="form-control condicionVenta" id="condicionVenta" name="condicionVenta">
+                                                    <option each={comboCondicionPagos} value="{estado}" selected="{factura.condicionVenta ==estado?true:false}" >{descripcion}</option>
+                                                </select>
+                                            </div>
+                                        </div>    
+                                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
+                                            <div class="form-group ">
+                                                <label for="pago_tipoVentaL">{$.i18n.prop("factura.tipo.documento")} </label> 
+                                                <select onchange= {__formaReferencias} class="form-control tipoDoc" id="tipoDoc" name="tipoDoc"   >
+                                                    <option each={comboTipoDocumentos} value="{estado}" selected="{factura.tipoDoc ==estado?true:false}" >{descripcion}</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
- 
-                                </div>
-                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                    <div class="form-group ">
-                                        <label for="pago_tipoVentaL">{$.i18n.prop("factura.tipo.documento")} </label> 
-                                        <select onchange= {__formaReferencias} class="form-control tipoDoc" id="tipoDoc" name="tipoDoc"   >
-                                            <option each={comboTipoDocumentos} value="{estado}" selected="{factura.tipoDoc ==estado?true:false}" >{descripcion}</option>
-                                        </select>
-                                    </div>
- 
-                                </div>
-                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                     <div class="form-group ">
                                         <label for="pago_tipoVentaL">{$.i18n.prop("factura.estado")} </label> 
                                         <select class="form-control estado" id="estado" name="estado"  >
                                             <option each={comboEstados} value="{estado}" selected="{factura.estado ==estado?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>
-                                </div>
-                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3" show={mostrarReferencias == false}>
-                                    <div class="form-group  " show = {!mostrarCamposIngresoContado || factura.fechaCredito}>
-                                        <label>{$.i18n.prop("factura.plazoCredito")}</label> 
-                                        <input type="number" id = "plazoCredito"  name "plazoCredito" class="form-control plazoCredito" value="{factura.plazoCredito}" >
+
+                                    <div class="form-group ">
+                                        <label >{$.i18n.prop("factura.nota")}</label> 
+                                        <input type="text" class="form-control nota" id="nota" name="nota" value="{factura.nota}">
                                     </div>
-                                </div>
-                            </div>   
-                            <div class="row" show={mostrarReferencias == false}>
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                                    <h3> <p class="text-primary">{$.i18n.prop("factura.emisor")}</p></h3>
+                                    <div class="form-group ">
+                                        <input   type="hidden" class="form-control" id="cliente" name="cliente" value="{cliente.id}">
+                                        <label>{$.i18n.prop("factura.cliente")}</label> 
+                                        <input onclick = {_EscogerClientes}  type="text" id="nombreCliente" name="nombreCliente" class="form-control"  value="{cliente.nombreCompleto}" readonly>
+                                    </div>
                                     <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group ">
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 
                                         <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
@@ -56,166 +63,67 @@
                                             </div>
                                         </div>
                                     </div>    
-                                </div>
-                            </div>        
-                            <div class="row" >
-                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                    <div class="form-group ">
-                                        <label >{$.i18n.prop("factura.nota")}</label> 
-                                        <input type="text" class="form-control nota" id="nota" name="nota" value="{factura.nota}">
+                                    <div class="form-group " show = {!mostrarCamposIngresoContado || factura.fechaCredito}>
+                                        <label>{$.i18n.prop("factura.plazoCredito")}</label> 
+                                        <input type="number" id = "plazoCredito"  name "plazoCredito" class="form-control plazoCredito" value="{factura.plazoCredito}" >
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row" >
-                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                    <div class="form-group ">
-                                        <label >{$.i18n.prop("factura.direccion")}</label> 
-                                        <input type="text" class="form-control direccion" id="direccion" name="direccion" value="{factura.direccion}">
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="row" >
-                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3" >
-                                   <h3> <p class="text-primary">{$.i18n.prop("factura.emisor")}</p></h3>
-                                  
-                                </div>
-                                <div class= "col-md-9 col-sm-9 col-lg-9 pull-right">
-                                    <a class="pull-right" href="#" onclick = {__LimpiarFormulario} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("btn.limpiar")}</span></a>
-                                
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row" >
-                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                    <div class="form-group ">
-                                        <input   type="hidden" class="form-control" id="cliente" name="cliente" value="{cliente.id}">
-                                        <label>{$.i18n.prop("factura.cliente")}</label> 
-                                        <input onclick = {_EscogerClientes}  type="text" id="nombreCliente" name="nombreCliente" class="form-control"  value="{cliente.nombreCompleto}" readonly>
-                                    </div>
-                                </div>
-                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("cliente.celular")}</label> 
-                                        <input type="text" class="form-control " value="{cliente.celular}" readonly>
-                                    </div>
-                                </div>
-                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("cliente.telefono")}</label> 
-                                        <input   type="text"  class="form-control"  value="{cliente.telefono}" readonly>
-                                    </div>
-                                </div>
-                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("cliente.descuento")}</label> 
-                                        <input type="text" class="form-control " value="{cliente.descuento}" readonly>
-                                    </div>
-                                </div>
-
-                            </div>    
-                                     
-                            <div class="row" >
-                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("cliente.correoElectronico")}</label> 
                                         <input type="text" class="form-control " value="{cliente.correoElectronico}" readonly>
                                     </div>
-                                </div>
-                            </div>                                
-                            <div class="row" >
-                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                     <div class="form-group ">
-                                        <label>{$.i18n.prop("cliente.otraSena")}</label> 
-                                        <input type="text" class="form-control " value="{cliente.otraSena}" readonly>
+                                        <h3><label class="text-primary">{$.i18n.prop("informacion.referencias")}</label> </h3>
                                     </div>
+
+                                    <div class="form-group ">
+                                        <label>{$.i18n.prop("informacion.numero")}</label> 
+                                        <input type="text" onkeypress={__consultarConsecutivo} name = "referenciaNumero" id="referenciaNumero" class="form-control has-success referenciaNumero" value="{factura.referenciaNumero}" >
+                                    </div>
+                                    <div class="form-group ">
+                                        <label>{$.i18n.prop("informacion.TipoDoc")}</label> 
+                                        <select class="form-control has-success" id="referenciaTipoDoc" name="referenciaTipoDoc"    >
+                                            <option each={comboTipoDocumentosRef} value="{estado}" selected="{factura.referenciaTipoDoc ==estado?true:false}" >{descripcion}</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label>{$.i18n.prop("informacion.codigo")}</label> 
+                                        <select class="form-control " id="referenciaCodigo" name="referenciaCodigo" >
+                                            <option each={codigosReferencias}  value="{estado}" selected="{factura.referenciaCodigo ==estado?true:false}" >{descripcion}</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label>{$.i18n.prop("informacion.razon")}</label> 
+                                        <input type="text" class="form-control " id"referenciaRazon" name= "referenciaRazon" value="{factura.referenciaRazon}"  >
+                                    </div>
+                                    <div  class="form-group">
+                                        <label >{$.i18n.prop("informacion.FechaEmision")}</label> 
+                                        <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                            <input type="text" class="form-control referenciaFechaEmision" name="referenciaFechaEmision" id="referenciaFechaEmision"  >
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>
+                                    </div>    
+                                    
+
                                 </div>
-                            </div> 
-                            <div >
-                                <div class="row">
-                                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                        <div class="form-group ">
-                                            <h3><label class="text-primary">{$.i18n.prop("informacion.referencias")}</label> </h3>
-                                        </div>
+                                <div  class= "col-md-6 col-sx-6 col-sm-6 col-lg-6" >
+                                    <div class="form-group has-success">
+                                        <label for="pago_transporteL">{$.i18n.prop("factura.resumen.efectivo")} </label> 
+                                        <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo">
                                     </div>
-                                </div> 
-                            
-                                <div class="row">
-                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                        <div class="form-group ">
-                                            <label>{$.i18n.prop("informacion.numero")}</label> 
-                                            <input type="text" onkeypress={__consultarConsecutivo} name = "referenciaNumero" id="referenciaNumero" class="form-control has-success referenciaNumero" value="{factura.referenciaNumero}" >
-                                        </div>
-                                    </div> 
-                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                        <div class="form-group ">
-                                            <label>{$.i18n.prop("informacion.TipoDoc")}</label> 
-                                            <select class="form-control has-success" id="referenciaTipoDoc" name="referenciaTipoDoc"    >
-                                                <option each={comboTipoDocumentosRef} value="{estado}" selected="{factura.referenciaTipoDoc ==estado?true:false}" >{descripcion}</option>
-                                            </select>
-                                        </div>
+                                    <div  class="form-group has-success">
+                                        <label for="pago_efectivoL">{$.i18n.prop("factura.resumen.tarjeta")} </label> 
+                                        <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"   >
                                     </div>
-                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                            <div  class="form-group">
-                                                <label >{$.i18n.prop("informacion.FechaEmision")}</label> 
-                                                <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
-                                                    <input type="text" class="form-control referenciaFechaEmision" name="referenciaFechaEmision" id="referenciaFechaEmision"  >
-                                                    <div class="input-group-addon">
-                                                        <span class="glyphicon glyphicon-th"></span>
-                                                    </div>
-                                                </div>
-                                            </div>    
+                                    <div  class="form-group has-success">
+                                        <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
+                                        <input onkeyup={ __TotalDeTarjeta } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="form-control" id="pago_tarjeta"  value="{factura.totalTarjeta}">
                                     </div>
 
-                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                        <div class="form-group ">
-                                            <label>{$.i18n.prop("informacion.codigo")}</label> 
-                                            <select class="form-control " id="referenciaCodigo" name="referenciaCodigo" >
-                                                <option each={codigosReferencias}  value="{estado}" selected="{factura.referenciaCodigo ==estado?true:false}" >{descripcion}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                </div> 
-                                <div class="row">
-                                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                        <div class="form-group ">
-                                            <label>{$.i18n.prop("informacion.razon")}</label> 
-                                            <input type="text" class="form-control " id"referenciaRazon" name= "referenciaRazon" value="{factura.referenciaRazon}"  >
-                                        </div>
-                                    </div>
-
-                                </div>      
+                                    
+                                </div>
                             </div>
-                                          
-                            <div class="row" show={mostrarReferencias == false}>
-                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                   <h3> <p class="text-primary">{$.i18n.prop("factura.titulo.vendedor")}</p></h3>
-                                </div>
-                                <div class= "col-md-9 col-sm-9 col-lg-9"></div>
-                            </div>
-                            <br>                            
-                            <div class="row" >
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                                    <div class="form-group ">
-                                        <input   type="hidden" class="form-control vendedor" id="vendedor" name="vendedor" value="{vendedor.id}">
-                                        <label>{$.i18n.prop("factura.vendedor")}</label> 
-                                        <input onclick = {_EscogerVendedores}  type="text" id="nombreVendedor" name="nombreVendedor" class="form-control"  value="{vendedor.nombreCompleto}" readonly>
-                                    </div>
-                                </div>
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("vendedor.correoElectronico")}</label> 
-                                        <input type="text" class="form-control " value="{vendedor.correoElectronico}" readonly>
-                                    </div>
-                                </div>
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("vendedor.celular")}</label> 
-                                        <input type="text" class="form-control " value="{vendedor.celular}" readonly>
-                                    </div>
-                                </div>
-                            </div>      
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='subTotal'                name='subTotal'                value="{factura.subTotal}" >
@@ -225,6 +133,8 @@
                             <input type="hidden" id='totalServExentos'        name='totalServExentos'        value="{factura.totalServExentos}" >
                             <input type="hidden" id='totalMercanciasGravadas' name='totalMercanciasGravadas' value="{factura.totalMercanciasGravadas}" >
                             <input type="hidden" id='totalMercanciasExentas'  name='totalMercanciasExentas'  value="{factura.totalMercanciasExentas}" >
+                            <input type="hidden" id='totalServGravados'       name='totalServGravados'       value="{factura.totalServGravados}" >
+                            <input type="hidden" id='totalServExentos'        name='totalServExentos'        value="{factura.totalServExentos}" >
                             <input type="hidden" id='totalGravado'            name='totalGravado'            value="{factura.totalGravado}" >
                             <input type="hidden" id='totalExento'             name='totalExento'             value="{factura.totalExento}" >
                             <input type="hidden" id='totalVenta'              name='totalVenta'              value="{factura.totalVenta}" >
@@ -236,46 +146,59 @@
                             <input type="hidden" id='totalBanco'              name='totalBanco'              value="{factura.totalBanco}" >
                             <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
                             <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
-       
                         </form>   
-                    </div>                    
-                    <div class="box-footer">
-                        <button onclick={_AtrasFacturaFinal} type="button" class="btn-dark-gray btn-back pull-left"  >{$.i18n.prop("btn.volver")}</button>
-                        <button  onclick={__AplicarYcrearFactura}  class="btn-green btn-edit pull-right " >  {$.i18n.prop("btn.aplicar")}</button>
                     </div>
-                </div><!--fin del cabecera-izquierda-->
-                <section class="cabecera-derecha">
-                    <!--right sidebar-->
-                    <aside class="right-sidebar">
-                        <!--Booking details-->
-                        <article class="booking-details clearfix">
-                            <h3><span class="booking-info tituloTotal">{$.i18n.prop("factura.resumen.venta")}</span></h3>
-                            <div class="booking-info tituloTotal">
-                                <p style="text-align:left">{$.i18n.prop("factura.resumen.subTotal")}  <span style="text-align:right"> ₡ {subTotalGeneral.toLocaleString('de-DE')  }       </span></p>
-                                <p style="text-align:left">{$.i18n.prop("factura.resumen.descuento")} <span style="text-align:right"> ₡ {factura.totalDescuento.toLocaleString('de-DE')} </span></p>
-                                <p style="text-align:left">{$.i18n.prop("factura.resumen.impuesto")}  <span style="text-align:right"> ₡ {factura.totalImpuesto.toLocaleString('de-DE')}  </span></p>
-                            </div>
-                            <div class="booking-info tituloTotal">
-                                <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.total")} <span id="lblTotal">₡ {factura.totalComprobante.toLocaleString('de-DE')}</span></p>
-                                <br>
-                                <div show = {mostrarCamposIngresoContado }>
-
-                                    <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.efectivo")}</p> 
-                                    <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo"  value="" >
-                                    <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.tarjeta")}</p> 
-                                    <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"   >
-                                    <p class="tituloTotal from-control" >{$.i18n.prop("factura.resumen.banco")}</p> 
-                                    <input onkeyup={ __TotalDeBancoAPagar} onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalBanco" id="totalBanco" name="totalBanco"  value="" >
-                                    <p class="tituloTotal" style="text-align:left;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">₡ {factura.totalCambioPagar.toLocaleString('de-DE')}</span></p>
+                    <div class="box-footer">
+                        <button onclick={_AtrasFacturaFinal} class="btn-dark-gray btn-back pull-left">  {$.i18n.prop("btn.volver")}</button>
+                        <button onclick={__AplicarYcrearFactura}  class="btn-green btn-add pull-right"> </i> {$.i18n.prop("btn.aplicar")}</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-4 col-lg-4 col-sx-12 ">
+		        <div class="box">
+				    <div class="box-header with-border"><h1 class="box-title">Detalles Facturacion</h1></div>
+				    <div class="box-body">
+                        <aside class="right-sidebar">
+                            <!--Booking details-->
+                            <article class="booking-details clearfix">
+                                <h3><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h3>
+                                <div class="booking-info">
+                                    <p style="text-align:right">{$.i18n.prop("factura.resumen.subTotal")} : <span id="lblSubtotal"> {subTotalGeneral.toLocaleString('de-DE')  } </span></p>
+                                    <p style="text-align:right">{$.i18n.prop("factura.resumen.descuento")} : <span id="lblSubtotal"> {factura.totalDescuento.toLocaleString('de-DE')} </span></p>
+                                    <p style="text-align:right">{$.i18n.prop("factura.resumen.impuesto")}  : <span id="lblSubtotal"> {factura.totalImpuesto.toLocaleString('de-DE')} </span></p>
                                 </div>
+                                <div class="precioTotalFactura">
+                                    <p class="total" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}  : <span id="lblTotal">{factura.totalComprobante.toLocaleString('de-DE')}</span></p>
+                                </div>
+                                <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado}>
+                                    <p class="total" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{factura.totalCambioPagar.toLocaleString('de-DE')}</span></p>    
+                                </div>
+                            </article>
+                        </aside>
+                    </div><!-- fin box-body-->
+				</div><!-- fin box -->
+		    </div>
+        </div>  
+          <!--Ventana de los billetes-->
+        <div class="container">
+            <div class="row">
+                <div   class="col-sx-12 col-sm-7 col-md-7 col-lg-7 " >
+                    <!--Seccion de Billetes-->
+                    <section  class="lista-articulos" >
+                        <div class="product-item" each={billetes}   onclick={_sumarBilletes}>
+                            <img style = "height:100px;width:250px" alt="" class="img-responsive " src="{imagen}">
+                            <a href="#">{modena} {descripcion}</a>
+                        </div>
+                    </section>
+                   <!--Fin Seccion de Billetes-->
+                </div> 
+            </div>       
+        </div>
+        <!--Fin Ventana de los billetes-->      
+</div>  
+<!--Fin Ventana de los billetes-->      
 
-                            </div>
-                        </article>
-                    </aside>     
-                </section>               
-            </div><!--fin del cabecera-derecha-->
-        </div><!--fin del cabecera-derecha-->
-    </div><!--fin del contenedor-factura-->
+  
     <div class="box box-solid box-primary" show={mostarParaCrearNuevaFactura}>
         <div class="box-body">
              <div class="box-header with-border">

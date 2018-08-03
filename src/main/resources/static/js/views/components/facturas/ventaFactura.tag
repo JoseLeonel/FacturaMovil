@@ -200,7 +200,7 @@
                                     <li onclick = {__PantallaCategorias} id="navegador" class=""> <h3>
                                         <i class="glyphicon glyphicon-refresh" aria-hidden="true"></i>
                                         <img  src="{urlImagenNavegador}" width="40px" height="15px">
-                                        &nbsp;DEPARTAMENTOS</h3>  
+                                        &nbsp;CATEGORIAS</h3>  
                                     </li>
                                 </ul>
                             </form>
@@ -557,7 +557,7 @@
                     </div><!-- fin box-body-->
 				</div><!-- fin box -->
 		    </div>
-        <div>  
+        </div>  
           <!--Ventana de los billetes-->
         <div class="container">
             <div class="row">
