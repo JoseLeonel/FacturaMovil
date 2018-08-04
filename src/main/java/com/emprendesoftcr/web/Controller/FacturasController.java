@@ -420,6 +420,22 @@ public class FacturasController {
 	public RespuestaServiceValidator crearFactura(HttpServletRequest request, ModelMap model, @ModelAttribute FacturaCommand facturaCommand, BindingResult result, SessionStatus status) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
+			facturaCommand.setTotalBanco(facturaCommand.getTotalBanco() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalBanco());
+			facturaCommand.setTotalEfectivo(facturaCommand.getTotalEfectivo() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalEfectivo());
+			facturaCommand.setTotalTarjeta(facturaCommand.getTotalTarjeta() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalTarjeta());
+			facturaCommand.setTotalTransporte(facturaCommand.getTotalTransporte() == null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalTransporte());
+			facturaCommand.setTotalDescuentos(facturaCommand.getTotalDescuentos() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalDescuentos());;
+			facturaCommand.setTotalExento(facturaCommand.getTotalExento() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalExento());
+			facturaCommand.setTotalGravado(facturaCommand.getTotalGravado() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalGravado());
+			facturaCommand.setTotalCambioPagar(facturaCommand.getTotalCambioPagar() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalCambioPagar());
+			facturaCommand.setTotalMercanciasExentas(facturaCommand.getTotalMercanciasExentas() == null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalMercanciasExentas());
+			facturaCommand.setTotalMercanciasGravadas(facturaCommand.getTotalMercanciasGravadas() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalMercanciasGravadas());
+			facturaCommand.setTotalCredito(facturaCommand.getTotalCredito() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalCredito());
+			facturaCommand.setTotalServExentos(facturaCommand.getTotalServExentos() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalServExentos());
+			facturaCommand.setTotalServGravados(facturaCommand.getTotalServGravados() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalServGravados());
+			facturaCommand.setTotalVenta(facturaCommand.getTotalVenta() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalVenta());
+			facturaCommand.setTotalVentaNeta(facturaCommand.getTotalVentaNeta() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalVentaNeta());
+			
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			UsuarioCaja usuarioCajaBd = usuarioCajaBo.findByUsuarioAndEstado(usuario, Constantes.ESTADO_ACTIVO);
 			if (usuarioCajaBd == null) {
@@ -427,6 +443,14 @@ public class FacturasController {
 
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.cajas.abierta", result.getAllErrors());
 				}
+			}
+			
+			if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+				if(facturaCommand.getTotalBanco().equals(Constantes.ZEROS_DOUBLE) && facturaCommand.getTotalEfectivo().equals(Constantes.ZEROS_DOUBLE) && facturaCommand.getTotalTarjeta().equals(Constantes.ZEROS_DOUBLE)) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.ingreso.dinero", result.getAllErrors());	
+				}
+
+				
 			}
 
 			TipoCambio tipoCambio = tipoCambioBo.findByEstadoAndEmpresa(Constantes.ESTADO_ACTIVO, usuario.getEmpresa());

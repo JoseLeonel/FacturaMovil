@@ -32,6 +32,7 @@ import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.CategoriaCommand;
+import com.emprendesoftcr.web.command.ParametrosPaginacion;
 import com.emprendesoftcr.web.propertyEditor.CategoriaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
@@ -113,6 +114,28 @@ public class CategoriasController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarPaginacionCategoriasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarArticulosAjax(HttpServletRequest request, ModelMap model, @ModelAttribute ParametrosPaginacion parametrosPaginacion) {
+	
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Categoria");
+		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+			String nombreUsuario = request.getUserPrincipal().getName();	
+			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			delimitadores.addFiltro(dataTableFilter);
+		}
+		JqGridFilter categoriaFilter=   new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "="); 
+		delimitadores.addFiltro(categoriaFilter);
+
+		delimitadores.setLength( parametrosPaginacion.getCantidadPorPagina());
+
+		delimitadores.setStart(parametrosPaginacion.getPaginaActual());
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+	}
+	
 	/**
 	 * Categorias activas por empresa
 	 * @param request

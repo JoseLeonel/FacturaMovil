@@ -7,7 +7,7 @@
                 <i class="fa fa-dashboard"></i> <span>Inicio</span>
             </a>
         </li>
-		        <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"  >
+		        <li class="treeview" sec:authorize="hasRole('Administrador_Sistema')"  >
 		            <a href="#">
 		                <i class="fa fa-edit"></i>
 		                <span>Administrativo</span>

@@ -1,5 +1,14 @@
 <venta-factura>
+<div>
+<form id="FormPaginacion">
+     <input type="hidden" name="id" id="id" value="{parametrosPaginacion.cantidadPorPagina}">
 
+     <input type="hidden" name="cantidadPorPagina" id="cantidadPorPagina" value="{parametrosPaginacion.cantidadPorPagina}">
+     <input type="hidden" name="paginaActual" id="paginaActual" value="{parametrosPaginacion.paginaActual}">
+     <input type="hidden" name="total" id="total" value="{parametrosPaginacion.total}">
+     <input type="hidden" name="categoria" id="categoria" value="{categoria.id}">
+</form>
+</div>
 
 <!--Modal mostrar  -->
 <div id="modalVendedor" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -159,7 +168,7 @@
                         <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 " >   
                             <section class="contenedor-opciones">
                                 
-                                <a href="#" class="opciones-menu" onclick = {__AplicarYcrearFactura} >
+                                <a href="#" class="opciones-menu" onclick = {__CrearFacturaTemporal} >
                                     <i class="fa fa-clock-o">{$.i18n.prop("venta.en.espera")}</i>
                                 </a>
 
@@ -211,20 +220,18 @@
             </div>
         </div>
         <!--Ventana de los productos-->
-        <div class="container">
-            <div class="row">
                 <div   class="col-sx-12 col-sm-7 col-md-7 col-lg-7 " >
                     <!--Seccion de categorias-->
                     <section show= {mostrarCategorias} class="lista-articulos" >
                         <div show= {mostrarCategorias} id="item-categorias"class="product-item"  each ={categorias.data}  onclick={__ArticulosXCategorias}>
-                            <img  style = "width:150px;" alt="" class="img-responsive " src="https://pos.vendty.com/uploads/81LcrgMpIcL._SL1500__4.jpg">
+                            <img  style = "width:150px;" alt="" class="img-responsive " src="/dist/img/carrito1.png">
                             <a href="#">{descripcion}</a>
                         </div>
                     </section>
                     <!--Seccion de articulos-->
                     <section show= {mostrarArticulosXCategoria} class="lista-articulos" >
                         <div class="product-item"  each ={inventariosXCategoria.data}   onclick={__AgregarProductoDePantalla}>
-                            <img  style = "width:150px;" alt="" class="img-responsive " src="https://pos.vendty.com/uploads/81LcrgMpIcL._SL1500__4.jpg">
+                            <img  style = "width:150px;" alt="" class="img-responsive " src="/dist/img/carrito3.png">
                             <a href="#">{descripcion}</a>
                         </div>
                     </section>
@@ -249,8 +256,7 @@
         </div>
         <!--Fin Ventana de los productos-->
 
-    </div>    
-</div>
+  
 
 
 <!--Modal Cambiar Cantidad-->
@@ -486,20 +492,21 @@
                                 <div  class= "col-md-6 col-sx-6 col-sm-6 col-lg-6" >
                                     <div class="form-group has-success">
                                         <label for="pago_transporteL">{$.i18n.prop("factura.resumen.efectivo")} </label> 
-                                        <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo">
+                                        <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo" value="{factura.totalEfectivo}">
                                     </div>
                                     <div  class="form-group has-success">
                                         <label for="pago_efectivoL">{$.i18n.prop("factura.resumen.tarjeta")} </label> 
-                                        <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"   >
+                                        <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"   value="{factura.totalTarjeta}">
                                     </div>
                                     <div  class="form-group has-success">
                                         <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
-                                        <input onkeyup={ __TotalDeTarjeta } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="form-control" id="pago_tarjeta"  value="{factura.totalTarjeta}">
+                                        <input onkeyup={ __TotalDeTarjeta } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="form-control totalBanco" id="totalBanco" name = "totalBanco"  value="{factura.totalBanco}">
                                     </div>
 
                                     
                                 </div>
                             </div>
+                            <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='subTotal'                name='subTotal'                value="{factura.subTotal}" >
@@ -529,6 +536,23 @@
                         <button onclick={__AplicarYcrearFactura}  class="btn-green btn-add pull-right"> </i> {$.i18n.prop("btn.aplicar")}</button>
                     </div>
                 </div>
+                    <!--Ventana de los billetes-->
+                    <div class="container">
+                        <div class="row">
+                            <div   class="col-sx-12 col-sm-12 col-md-12 col-lg-12 " >
+                                <!--Seccion de Billetes-->
+                                <section  class="lista-articulos" >
+                                    <div class="product-item" each={billetes}   onclick={_sumarBilletes}>
+                                        <img style = "height:100px;width:250px" alt="" class="img-responsive " src="{imagen}">
+                                        <a href="#">{modena} {descripcion}</a>
+                                    </div>
+                                </section>
+                            <!--Fin Seccion de Billetes-->
+                            </div> 
+                        </div>       
+                    </div>
+                    <!--Fin Ventana de los billetes-->      
+                
             </div>
             <div class="col-md-4 col-sm-4 col-lg-4 col-sx-12 ">
 		        <div class="box">
@@ -556,24 +580,10 @@
                         </aside>
                     </div><!-- fin box-body-->
 				</div><!-- fin box -->
+
 		    </div>
+
         </div>  
-          <!--Ventana de los billetes-->
-        <div class="container">
-            <div class="row">
-                <div   class="col-sx-12 col-sm-7 col-md-7 col-lg-7 " >
-                    <!--Seccion de Billetes-->
-                    <section  class="lista-articulos" >
-                        <div class="product-item" each={billetes}   onclick={_sumarBilletes}>
-                            <img style = "height:100px;width:250px" alt="" class="img-responsive " src="{imagen}">
-                            <a href="#">{modena} {descripcion}</a>
-                        </div>
-                    </section>
-                   <!--Fin Seccion de Billetes-->
-                </div> 
-            </div>       
-        </div>
-        <!--Fin Ventana de los billetes-->      
 </div>  
 <!--Fin Ventana de los billetes-->      
 
@@ -781,7 +791,7 @@
         text-decoration:none;
     }
 
-    .codigo-barra .barra input {
+    .codigo-barra .barra input {__AgregarProductoDePantalla
         width: 100%;
         padding: 30px 20px;
         margin: 8px 0;
@@ -1940,7 +1950,43 @@
     self.cantones                      = []
     self.distritos                     = []
     self.barrios                       = []
+    self.parametrosPaginacion = {
+        id:null,
+        paginaActual:0,
+        cantidadPorPagina:10,
+        total:0
 
+    }
+    self.categorias                  = {
+        data:[],
+        pagination:{
+            total:0,
+            current_page:0,
+            per_page:0,
+            last_page:0,
+            from:0,
+            to:0
+        }
+    }
+    self.categoria = {
+        id:0,
+        descripcion:""
+    }
+    self.inventariosXCategoria = {
+        data:[],
+        pagination:{
+            total:0,
+            current_page:0,
+            per_page:0,
+            last_page:0,
+            from:0,
+            to:0
+        }
+    }
+
+    self.urlImagenNavegador   = '/dist/img/navegador.png';
+    self.urlImagenLector      = '/dist/img/codigo_barra.png';
+    self.urlImagenBuscador    = '/dist/img/buscador.png';
 
     self.on('mount',function(){
          
@@ -1968,11 +2014,232 @@
        __TipoCambio()
        __cargaUbicacion()
        __comboCondicionPagoRef()
+
+        cargaBilletes()
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
      
     })
+
+ /**
+* agregar producto desde la pantalla de articulos
+**/
+
+__AgregarProductoDePantalla(e){
+    
+    var item =  e.item
+    self.articulo = item;
+    self.update()
+    __buscarcodigo(self.articulo.codigo,1);
+    $('#codigoBarra').val(null)
+    
+    
+    
+}   
+
+/**
+*  Mostrar si escoge una categorias
+**/
+__ArticulosXCategorias(e){
+    
+    var item = e.item
+    self.categoria = item
+    self.update()
+     
+    __ListaArticulosXCategorias()
+}
+
+/**
+*  boton anterior de la pantalla de categorias or articulos
+**/    
+__BotonAnterior(){
+    
+    if(self.categoria.id == 0){//cuando esta usando la pantalla de categorias
+        self.categorias.pagination.current_page = self.categorias.pagination.current_page - 1
+        self.categorias.pagination.current_page = self.categorias.pagination.current_page > 1?self.categorias.pagination.current_page:1;
+        self.parametrosPaginacion.paginaActual = self.parametrosPaginacion.paginaActual > 1?self.parametrosPaginacion.paginaActual - 12:0 
+        self.update()
+        __ListaCategorias()
+
+    }else{// cuando esta usando la pantalla de articulos
+        self.inventariosXCategoria.pagination.current_page = self.inventariosXCategoria.pagination.current_page - 1
+        self.inventariosXCategoria.pagination.current_page = self.inventariosXCategoria.pagination.current_page > 1?self.inventariosXCategoria.pagination.current_page:1;
+         self.parametrosPaginacion.paginaActual = self.parametrosPaginacion.paginaActual > 1?self.parametrosPaginacion.paginaActual - 12:0 
+
+
+        self.update()
+        __ListaArticulosXCategorias()
+
+    }
+            
+}
+
+/**
+*  boton siguiente de la pantalla de categorias or articulos
+**/    
+__BotonSiguiente(){
+    if(self.categoria.id == 0){//cuando esta usando la pantalla de categorias
+        if(self.categorias.pagination.current_page <  self.categorias.pagination.last_page){
+        self.categorias.pagination.current_page = self.categorias.pagination.current_page + 1
+        self.parametrosPaginacion.paginaActual += 12
+        self.update()
+        __ListaCategorias()
+
+        }
+
+    }else{ //cuando esta usando la pantalla de articulos
+        if(self.inventariosXCategoria.pagination.current_page <  self.inventariosXCategoria.pagination.last_page){
+        self.inventariosXCategoria.pagination.current_page = self.inventariosXCategoria.pagination.current_page + 1
+         self.parametrosPaginacion.paginaActual += 12
+        self.update()
+        __ListaArticulosXCategorias()
+
+        }
+    }
+            
+}
+
+/**
+*  Lista de los clientes
+**/
+function __ListaCategorias(){
+    
+    //Primera vez 
+    if( self.categorias.pagination.current_page == 0){
+        self.inventariosXCategoria.pagination.current_page = 0    
+        self.parametrosPaginacion.cantidadPorPagina = 12
+        self.parametrosPaginacion.paginaActual = 0
+        self.parametrosPaginacion.total = 0
+        self.update()
+
+    }
+    $('#cantidadPorPagina').val(self.parametrosPaginacion.cantidadPorPagina)
+    $('#paginadaActual').val(self.parametrosPaginacion.paginaActual )
+
+    var formulario = $('#FormPaginacion').serialize();
+
+    $.ajax({
+        url: 'ListarPaginacionCategoriasAjax.do',
+        datatype: "json",
+        data: formulario,
+        method:"POST",
+        success: function (result) {
+            if(result.aaData.length > 0){
+               self.categorias.data = result.aaData
+               self.categorias.pagination.total = result.recordsTotal
+               self.categorias.pagination.last_page = Math.round(result.recordsTotal/10)
+               self.mostrarCodigoBarra          = false;
+               self.mostrarNavegador            = true
+               self.mostrarCategorias           = true //muestra la pantalla de imagenes de articulos   
+               self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
+
+               self.update()
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+}
+
+
+/**
+
+*  Lista de los clientes
+**/
+function __ListaArticulosXCategorias(){
+    //Primera vez 
+    if( self.inventariosXCategoria.pagination.current_page == 0){
+        self.inventariosXCategoria.pagination.current_page = 0    
+        self.parametrosPaginacion.cantidadPorPagina = 12
+        self.parametrosPaginacion.paginaActual = 0
+        self.parametrosPaginacion.total = 0
+        self.update()
+
+    }
+    $('#cantidadPorPagina').val(self.parametrosPaginacion.cantidadPorPagina)
+    $('#paginadaActual').val(self.parametrosPaginacion.paginaActual )
+    $('#categoria').val(self.categoria.id )
+
+    var formulario = $('#FormPaginacion').serialize();
+    $.ajax({
+        url: 'ListarPaginacionArticuloAjax.do',
+        datatype: "json",
+        data: formulario,
+        method:"POST",
+        success: function (result) {
+            if(result.aaData.length > 0){
+               self.inventariosXCategoria.pagination.total = result.recordsTotal
+               self.inventariosXCategoria.pagination.last_page = Math.round(result.recordsTotal/10)
+
+               self.inventariosXCategoria.data = result.aaData
+               self.mostrarCodigoBarra          = false;
+               self.mostrarNavegador            = true
+               self.mostrarCategorias           = false //muestra la pantalla de imagenes de articulos   
+               self.mostrarArticulosXCategoria  = true //muestra la pantalla de imagenes de categorias                  
+               self.update()
+            }else{
+                sweetAlert("",$.i18n.prop("articulo.por.categoria"), "info");
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+}
+
+function getCantidadDePaginas(total){
+    
+    return total / 10;
+}
+
+
+
+/**
+*  Mostrar pantalla de codigo de barra
+**/
+__PantallaCategorias(){
+    self.categoria = {
+        id:0,
+        descripcion:""
+    }
+
+     self.categorias  = {
+        data:[],
+        pagination:{
+            total:0,
+            current_page:0,
+            per_page:0,
+            last_page:0,
+            from:0,
+            to:0
+        }
+    }
+     self.inventariosXCategoria = {
+        data:[],
+        pagination:{
+            total:0,
+            current_page:0,
+            per_page:0,
+            last_page:0,
+            from:0,
+            to:0
+        }
+    }
+    
+    self.mostrarNavegador            = true
+    self.mostrarCategorias           = true //muestra la pantalla de imagenes de articulos   
+    self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
+    self.mostrarCodigoBarra          = false
+   
+    self.update()
+    __ListaCategorias()
+   
+}
+
 
 /**
 *  Mostrar pantalla de codigo de barra
@@ -2355,6 +2622,14 @@ __CalculaCambioAEntregarKeyPress(e){
 __CargarFacturaEspera(e){
    __FacturaEnEspera(e.item)
 }
+
+/**
+*  Crear la factura temporal o espera
+**/
+__CrearFacturaTemporal(){
+   $('#estado').val(1) 
+   aplicarFactura()   
+}
 /**
 ** Se aplica o se crea una Factura cargada en la pantalla
 **/
@@ -2510,7 +2785,56 @@ function __Init(){
     self.mostrarFormularioPago         = false
     self.mostarParaCrearNuevaFactura    = true
     self.mostrarCamposIngresoContado   = true;
+
+    self.mostarParaCrearNuevaVentas = true
+    self.mostrarCodigoBarra    = true
+    self.mostrarCodigoBarra          = true;
+
+    self.mostrarFormularioPago         = false
+    self.mostarParaCrearNuevaFactura   = true
+    self.mostrarCamposIngresoContado   = true
+    self.mostrarReferencias            = false 
+
+    self.parametrosPaginacion = {
+            id:null,
+            paginaActual:0,
+            cantidadPorPagina:10,
+            total:0
+
+        }
+        self.categorias                  = {
+            data:[],
+            pagination:{
+                total:0,
+                current_page:0,
+                per_page:0,
+                last_page:0,
+                from:0,
+                to:0
+            }
+        }
+        self.categoria = {
+            id:0,
+            descripcion:""
+        }
+        self.inventariosXCategoria = {
+            data:[],
+            pagination:{
+                total:0,
+                current_page:0,
+                per_page:0,
+                last_page:0,
+                from:0,
+                to:0
+            }
+        }
+
+    self.urlImagenNavegador   = '/dist/img/navegador.png';
+    self.urlImagenLector      = '/dist/img/codigo_barra.png';
+    self.urlImagenBuscador    = '/dist/img/buscador.png';
+
     self.update();
+
     $(".referenciaNumero").val(null)
     $(".referenciaFechaEmision").val(null)
     $('.referenciaTipoDoc').prop("selectedIndex", 0);
@@ -2564,6 +2888,10 @@ function __FacturaEnEspera(factura){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                        self.factura = modeloTabla
+                       self.factura.totalEfectivo = 0
+                       self.factura.totalBanco = 0
+                       self.factura.totalTarjeta = 0
+                       self.factura.totalCambioPagar = 0
                        self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
                        self.cliente  = modeloTabla.cliente
                        self.vendedor = modeloTabla.vendedor
@@ -2673,6 +3001,10 @@ function evaluarFactura(data){
             if(self.facturaImprimir.estado == 2){
                 __Init()
                 //Envia a la pantalla de impresion
+                __ListaFacturasEnEspera()
+                self.facturaImprimir   = modeloTabla
+                self.update()
+            
                  riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
                  
             }else{
@@ -2782,7 +3114,7 @@ __addProductToDetail(e){
     if (e.keyCode != 13) {
         return;
     } 
-    __buscarcodigo(e.currentTarget.value);
+    __buscarcodigo(e.currentTarget.value,1);
     $('#codigoBarra').val(null)
     $('#codigoBarra').focus()
 }
@@ -2790,7 +3122,7 @@ __addProductToDetail(e){
 * Buscar codigo
 **/
 __agregarArticuloBotonAgregar(){
-   __buscarcodigo($( "#codigo" ).val(),$( "#quantty" ).val());
+   __buscarcodigo($( "#codigo" ).val(),1);
 }
 /**
 * mostrar la lista de articulos de la empresa
@@ -3472,12 +3804,12 @@ function __ComboTipoDocumentos(){
 function __ComboEstados(){
     self.comboEstados = []
     self.comboEstados.push({
-        estado:1,
-        descripcion:$.i18n.prop("factura.estado.pendiente")
-    })
-    self.comboEstados.push({
         estado:2,
         descripcion:$.i18n.prop("factura.estado.facturado")
+    })
+    self.comboEstados.push({
+        estado:1,
+        descripcion:$.i18n.prop("factura.estado.pendiente")
     })
     
     self.update()
@@ -3546,6 +3878,70 @@ function __Teclas(){
   
    
 
+}
+
+/**
+* Contabilizar los billetes de acuerdo a como se vayan dando click en la pantalla
+*/
+_sumarBilletes(e){
+    
+    var item = e.item
+    if(item.valor == 0 ){
+       self.factura.totalEfectivo = 0
+       self.factura.totalTarjeta  = 0
+       self.factura.totalBanco    = 0
+       self.factura.totalCambioPagar  = 0
+       self.claseCambioDinero     = "entregarCambioPositivo"
+
+    }else{
+        self.factura.totalEfectivo = __valorNumerico(self.factura.totalEfectivo) + __valorNumerico(item.valor) 
+        self.update()
+        var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
+        sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
+        sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
+        self.factura.totalCambioPagar = 0
+        self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalComprobante ? sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.totalComprobante):sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.totalComprobante)    
+        self.claseCambioDinero  = __valorNumerico(sumaMontosEntregadosParaCambios) > __valorNumerico(self.factura.totalComprobante)?'entregarCambioPositivo':'entregarCambioNegativo'
+        
+
+    }
+    
+    self.update()
+    
+    
+
+}
+
+function cargaBilletes(){
+    self.billetes = []
+    self.update()
+    _incluirBilletes("₡","50,000",50000,'/dist/img/billete50000.jpg')
+    _incluirBilletes("₡","20,000",20000,'/dist/img/billete20000.jpg')
+    _incluirBilletes("₡","10,000",10000,'/dist/img/billete10000.jpg')
+    _incluirBilletes("₡","5,000",5000,'/dist/img/billete5000.jpg')
+    _incluirBilletes("₡","2,000",2000,'/dist/img/billete2000.jpg')
+    _incluirBilletes("₡","1000",1000,'/dist/img/billete1000.jpg')
+    _incluirBilletes("","Limpiar",0,'/dist/img/limpiar.png')
+
+}
+
+
+/**
+*    Incluir a los billetes
+**/
+
+function _incluirBilletes(modena,descripcion,valor,imagen){
+
+    
+    self.billetes.push(
+        {
+            modena:modena,
+            descripcion:descripcion,
+            imagen:imagen,
+            valor:valor
+        }
+    )
+    self.update()
 }
 
 </script>

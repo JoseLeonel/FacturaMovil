@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Bo.DataTableBo;
+import com.emprendesoftcr.Bo.JqGridBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
@@ -33,6 +35,7 @@ import com.emprendesoftcr.modelo.Inventario;
 import com.emprendesoftcr.modelo.Marca;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.ArticuloCommand;
+import com.emprendesoftcr.web.command.ParametrosPaginacion;
 import com.emprendesoftcr.web.propertyEditor.ArticuloPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.CategoriaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
@@ -57,29 +60,41 @@ public class ArticuloController {
 																																				};
 																																			};
 
+	@Lazy
+	@Autowired
+	private JqGridBo																				jqGridBo;
 	@Autowired
 	private DataTableBo																			dataTableBo;
 
+	@Lazy
 	@Autowired
 	private ArticuloBo																			articuloBo;
 
+	@Lazy
 	@Autowired
 	private UsuarioBo																				usuarioBo;
 
+	@Lazy
 	@Autowired
 	private ArticuloPropertyEditor													articuloPropertyEditor;
+	
+	@Lazy
 	@Autowired
 	private InventarioPropertyEditor												inventarioPropertyEditor;
 
+	@Lazy
 	@Autowired
 	private EmpresaPropertyEditor														empresaPropertyEditor;
 
+	@Lazy
 	@Autowired
 	private MarcaPropertyEditor															marcaPropertyEditor;
 
+	@Lazy
 	@Autowired
 	private CategoriaPropertyEditor													categoriaPropertyEditor;
 
+	@Lazy
 	@Autowired
 	private StringPropertyEditor														stringPropertyEditor;
 
@@ -104,7 +119,7 @@ public class ArticuloController {
 	public String listar(ModelMap model) {
 		return "views/articulos/ListarArticulos";
 	}
-	
+
 	@RequestMapping(value = "/ListarKardex", method = RequestMethod.GET)
 	public String listarKardex(ModelMap model) {
 		return "views/articulos/ListarKardex";
@@ -128,6 +143,38 @@ public class ArticuloController {
 			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
+
+	
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+	}
+
+	/**
+	 * Paginacion de la venta
+	 * @param request
+	 * @param model
+	 * @param parametrosPaginacion
+	 * @return
+	 */
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarPaginacionArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarArticulosAjax(HttpServletRequest request, ModelMap model, @ModelAttribute ParametrosPaginacion parametrosPaginacion) {
+	
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Articulo");
+		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+			String nombreUsuario = request.getUserPrincipal().getName();	
+			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			delimitadores.addFiltro(dataTableFilter);
+			
+		}
+		JqGridFilter categoriaFilter=   new JqGridFilter("categoria.id", "'" + parametrosPaginacion.getCategoria().getId().toString() + "'", "=");
+		delimitadores.addFiltro(categoriaFilter);
+		categoriaFilter=   new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "="); 
+		delimitadores.addFiltro(categoriaFilter);
+		delimitadores.setLength( parametrosPaginacion.getCantidadPorPagina());
+		delimitadores.setStart(parametrosPaginacion.getPaginaActual());
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
@@ -187,9 +234,9 @@ public class ArticuloController {
 			articulo.setGananciaPrecioPublico(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioPublico()));
 			articulo.setGananciaPrecioMayorista(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioMayorista()));
 			articulo.setGananciaPrecioEspecial(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioEspecial()));
-			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null ?Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
-			articulo.setPrecioMayorista(articulo.getPrecioMayorista() == null ?Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
-			articulo.setImpuesto(articulo.getImpuesto()==null?Constantes.ZEROS_DOUBLE:articulo.getImpuesto());
+			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
+			articulo.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
+			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articulo.setUsuario(usuarioSesion);
 			articuloBo.agregar(articulo);
 
@@ -215,7 +262,7 @@ public class ArticuloController {
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 		try {
-			articulo.setImpuesto(articulo.getImpuesto() == null ?Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
+			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			Articulo articuloBd = articuloBo.buscar(articulo.getId());
@@ -258,12 +305,12 @@ public class ArticuloController {
 			articuloBd.setGananciaPrecioPublico(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioPublico()));
 			articuloBd.setGananciaPrecioMayorista(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioMayorista()));
 			articuloBd.setGananciaPrecioEspecial(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioEspecial()));
-			articuloBd.setPrecioEspecial(articulo.getPrecioEspecial() == null ?Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
-			articuloBd.setPrecioMayorista(articulo.getPrecioMayorista() == null ?Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
+			articuloBd.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
+			articuloBd.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
 			articuloBd.setUsuario(usuarioSesion);
 			articuloBd.setCodigo(articulo.getCodigo().trim());
 			articuloBd.setTipoImpuesto(articulo.getTipoImpuesto());
-			articuloBd.setImpuesto(articulo.getImpuesto()==null?Constantes.ZEROS_DOUBLE:articulo.getImpuesto());
+			articuloBd.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articuloBo.modificar(articuloBd);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBd);
 
@@ -306,13 +353,13 @@ public class ArticuloController {
 	 */
 	@RequestMapping(value = "/findArticuloByCodigojax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator listarAjax(HttpServletRequest request, ModelMap model,@ModelAttribute Articulo articulo,HttpServletResponse response, @RequestParam String codigoArticulo, BindingResult result, SessionStatus status) {
+	public RespuestaServiceValidator listarAjax(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, HttpServletResponse response, @RequestParam String codigoArticulo, BindingResult result, SessionStatus status) {
 		try {
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-			Articulo articuloBD = articuloBo.buscarPorCodigoYEmpresa(codigoArticulo,usuarioSesion.getEmpresa());
-			ArticuloCommand articuloCommand = articuloBD == null ?null:new ArticuloCommand(articuloBD);
-			
-			if(articuloCommand == null) {
+			Articulo articuloBD = articuloBo.buscarPorCodigoYEmpresa(codigoArticulo, usuarioSesion.getEmpresa());
+			ArticuloCommand articuloCommand = articuloBD == null ? null : new ArticuloCommand(articuloBD);
+
+			if (articuloCommand == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.codigo.no.existe", result.getAllErrors());
 			}
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", articuloCommand);

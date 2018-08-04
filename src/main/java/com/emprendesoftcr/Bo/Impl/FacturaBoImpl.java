@@ -150,6 +150,7 @@ public class FacturaBoImpl implements FacturaBo {
 	public Factura crearFactura(FacturaCommand facturaCommand, Usuario usuario, UsuarioCaja usuarioCaja, TipoCambio tipoCambio) throws Exception {
 		Factura factura = null;
 		try {
+			factura = facturaCommand.getId() == null || facturaCommand.getId() == Constantes.ZEROS_LONG ? new Factura() : facturaDao.findById(facturaCommand.getId());
 			facturaCommand.setTotal(facturaCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotal());
 			facturaCommand.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
 			facturaCommand.setTotalCambio(facturaCommand.getTotalCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambio());
@@ -170,7 +171,7 @@ public class FacturaBoImpl implements FacturaBo {
 			facturaCommand.setCodigoMoneda(facturaCommand.getCodigoMoneda() !=null?facturaCommand.getCodigoMoneda():Constantes.CODIGO_MONEDA_COSTA_RICA);
 			facturaCommand.setTotalTarjeta(facturaCommand.getTotalTarjeta() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalTarjeta());
 
-			factura = facturaCommand.getId() == null || facturaCommand.getId() == Constantes.ZEROS_LONG ? new Factura() : facturaDao.findById(facturaCommand.getId());
+			
 			factura.setCondicionVenta(facturaCommand.getCondicionVenta());
 			// Fecha de credito
 			if (facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {

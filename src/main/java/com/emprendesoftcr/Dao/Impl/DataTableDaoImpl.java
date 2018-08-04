@@ -12,7 +12,6 @@ import org.springframework.util.StringUtils;
 
 import com.emprendesoftcr.Dao.DataTableDao;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
-import com.emprendesoftcr.Utils.DataTableFilter;
 import com.emprendesoftcr.Utils.JqGridFilter;
 
 /**

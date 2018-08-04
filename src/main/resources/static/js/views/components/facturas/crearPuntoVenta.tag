@@ -80,6 +80,7 @@
                                     
                                 </div>
                             </div>
+                            <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='subTotal'                name='subTotal'                value="{factura.subTotal}" >
@@ -1513,12 +1514,14 @@ __addProductToDetail(e){
         return;
     } 
     __buscarcodigo(e.currentTarget.value);
+    $('#codigo').val(null)
+    $('#codigo').focus()
 }
 /**
 * Buscar codigo
 **/
 __agregarArticuloBotonAgregar(){
-   __buscarcodigo($( "#codigo" ).val(),$( "#quantty" ).val());
+   __buscarcodigo($( "#codigo" ).val(),1);
 }
 /**
 * mostrar la lista de articulos de la empresa
