@@ -7,9 +7,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.KardexBo;
-import com.emprendesoftcr.Dao.InventarioDao;
+import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.KardexDao;
-import com.emprendesoftcr.modelo.Inventario;
+import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Kardex;
 import com.emprendesoftcr.modelo.Usuario;
 
@@ -26,11 +26,11 @@ public class KardexBoImpl implements KardexBo {
 
 	@Lazy
 	@Autowired
-	KardexDao			kardexDao;
+	KardexDao		kardexDao;
 
 	@Lazy
 	@Autowired
-	InventarioDao	inventarioDao;
+	ArticuloDao	articuloDao;
 
 	public void agregar(Kardex kardex) {
 		kardexDao.agregar(kardex);
@@ -40,9 +40,9 @@ public class KardexBoImpl implements KardexBo {
 	 * Ingresar Cantidad al inventario
 	 * @see com.emprendesoftcr.Bo.KardexBo#entrada(com.emprendesoftcr.modelo.Inventario, java.lang.Double, java.lang.Double, java.lang.String, java.lang.String, java.lang.String, java.lang.String, com.emprendesoftcr.modelo.Usuario)
 	 */
-	public void entrada(Inventario inventario,Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
+	public void entrada(Articulo articulo, Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
 
-		kardexDao.entrada(inventario, cantidadActual, cantidadNueva, observacion, consecutivo, tipo, motivo, usuarioSesion);
+		kardexDao.entrada(articulo, cantidadActual, cantidadNueva, observacion, consecutivo, tipo, motivo, usuarioSesion);
 	}
 
 	/**
@@ -54,8 +54,8 @@ public class KardexBoImpl implements KardexBo {
 	 * @param tipo
 	 * @param motivo
 	 */
-	public void salida(Inventario inventario, Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
-		kardexDao.salida(inventario, cantidadActual, cantidadNueva, observacion, consecutivo, tipo, motivo, usuarioSesion);
+	public void salida(Articulo articulo, Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
+		kardexDao.salida(articulo, cantidadActual, cantidadNueva, observacion, consecutivo, tipo, motivo, usuarioSesion);
 
 	}
 

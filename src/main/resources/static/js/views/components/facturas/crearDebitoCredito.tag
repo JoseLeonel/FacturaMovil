@@ -1793,7 +1793,7 @@ function __nuevoArticuloAlDetalle(cantidad){
     if(self.articulo.descripcion == ""){
         return;
     }
-    var precioUnitario  = getPrecioUnitario(self.articulo.precioPublico)
+    var precioUnitario  = getPrecioUnitario(self.articulo.precioPublico,self.articulo.impuesto)
     
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
     var montoDescuento  = 0
@@ -1834,8 +1834,16 @@ function getMontoTotal(precioUnitario,cantidad){
 /**
 * Obtiene el precio unitario sin descuento sin impuesto
 **/
-function getPrecioUnitario(precio){
-   return redondearDecimales(precio,5)     
+function getPrecioUnitario(precio ,impuesto){
+    var porcentajeImpuesto = 0
+    var resultado  = 0
+    if(impuesto > 0){
+      porcentajeImpuesto = impuesto / 100
+      porcentajeImpuesto =  porcentajeImpuesto + 1
+      resultado  =  precio  / porcentajeImpuesto
+    }
+
+   return redondearDecimales(resultado,5)     
   
 }
 /**

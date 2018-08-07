@@ -20,7 +20,6 @@ import com.emprendesoftcr.Dao.CuentaCobrarDao;
 import com.emprendesoftcr.Dao.DetalleDao;
 import com.emprendesoftcr.Dao.EmpresaDao;
 import com.emprendesoftcr.Dao.FacturaDao;
-import com.emprendesoftcr.Dao.InventarioDao;
 import com.emprendesoftcr.Dao.KardexDao;
 import com.emprendesoftcr.Dao.UsuarioCajaDao;
 import com.emprendesoftcr.Dao.UsuarioCajaFacturaDao;
@@ -31,7 +30,6 @@ import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
-import com.emprendesoftcr.modelo.Inventario;
 import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
@@ -87,9 +85,7 @@ public class FacturaBoImpl implements FacturaBo {
 	@Autowired
 	UsuarioCajaDao				usuarioCajaDao;
 
-	@Lazy
-	@Autowired
-	InventarioDao					inventarioDao;
+	
 
 	private Logger				log	= LoggerFactory.getLogger(this.getClass());
 
@@ -323,10 +319,10 @@ public class FacturaBoImpl implements FacturaBo {
 					factura.addDetalle(detalle);
 					modificar(factura);
 
-					Inventario inventario = inventarioDao.findByArticuloAndEstado(articulo, Constantes.ESTADO_ACTIVO);
-					if (inventario != null) {
+				
+					if (articulo != null) {
 						if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) ) {
-							aplicarInventario(factura, inventario, detalle, articulo);	
+							aplicarInventario(factura, detalle, articulo);	
 						}
 						
 					}
@@ -352,15 +348,15 @@ public class FacturaBoImpl implements FacturaBo {
 	 * Aplicar el inventario si estado de la venta es facturada
 	 * Toda nota credito se devuelve al inventario los productos
 	 */
-	private void aplicarInventario(Factura factura, Inventario inventario, Detalle detalle, Articulo articulo) throws Exception {
+	private void aplicarInventario(Factura factura, Detalle detalle, Articulo articulo) throws Exception {
 		try {
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)){
 					String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO + factura.getNumeroConsecutivo();
-					kardexDao.entrada(inventario, inventario.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
+					kardexDao.entrada(articulo, articulo.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
 				}else {
 					String leyenda = Constantes.MOTIVO_SALIDA_INVENTARIO_VENTA + factura.getNumeroConsecutivo();
-					kardexDao.salida(inventario, inventario.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
+					kardexDao.salida(articulo, articulo.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
 					
 				}
 

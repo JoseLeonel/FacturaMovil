@@ -3228,13 +3228,16 @@ function __buscarcodigo(idArticulo,cantidad){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         //Articulo no puede agregarse si no hay en el inventario
-                        if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
-                            mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
-                            return
-                        }
-                        if(modeloTabla.cantidad < cantidad ){
-                            mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
-                            return
+                        if(modeloTabla.contable == "Si"){
+                            if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
+                                mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
+                                return
+                            }
+                            if(modeloTabla.cantidad < cantidad ){
+                                mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
+                                return
+                            }
+
                         }
                         self.articulo  = modeloTabla
                         self.update()
@@ -3313,7 +3316,7 @@ function __nuevoArticuloAlDetalle(cantidad){
     if(self.articulo.descripcion == ""){
         return;
     }
-    var precioUnitario  = getPrecioUnitario(self.articulo.precioPublico)
+    var precioUnitario  = getPrecioUnitario(self.articulo.precioPublico,self.articulo.impuesto)
     
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
     var montoDescuento  = 0
@@ -3355,8 +3358,16 @@ function getMontoTotal(precioUnitario,cantidad){
 /**
 * Obtiene el precio unitario sin descuento sin impuesto
 **/
-function getPrecioUnitario(precio){
-   return redondearDecimales(precio,5)     
+function getPrecioUnitario(precio ,impuesto){
+    var porcentajeImpuesto = 0
+    var resultado  = 0
+    if(impuesto > 0){
+      porcentajeImpuesto = impuesto / 100
+      porcentajeImpuesto =  porcentajeImpuesto + 1
+      resultado  =  precio  / porcentajeImpuesto
+    }
+
+   return redondearDecimales(resultado,5)     
   
 }
 /**
@@ -3622,7 +3633,12 @@ function __agregarArticulos() {
 	     }
         self.articulo = data;
         self.update();  
-	    __buscarcodigo(self.articulo.codigo,1)
+        if(self.articulo.contable == "Si"){
+          __buscarcodigo(self.articulo.codigo,1)
+        }else{
+           __agregarArticulo(1)
+        }
+	    
     });
 }
 

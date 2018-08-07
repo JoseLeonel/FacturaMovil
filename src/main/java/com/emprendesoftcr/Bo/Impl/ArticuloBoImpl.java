@@ -75,4 +75,19 @@ public class ArticuloBoImpl implements ArticuloBo {
 		return articuloDao.porcentanjeDeGanancia(costo, iva, precio);
 	}
 
+	
+	@Override
+	public Double sumarCantidad(Articulo articulo, Double cantidad) {
+		articulo.setCantidad(articulo.getCantidad() +cantidad);
+		return articulo.getCantidad();
+		
+	}
+	
+	@Override
+	public Double restarCantidad(Articulo articulo, Double cantidad) {
+		articulo.setCantidad(articulo.getCantidad() - cantidad);
+		return articulo.getCantidad();
+		
+	}
+	
 }

@@ -20,5 +20,5 @@ public interface ArticuloDao {
 	Double porcentanjeDeGanancia(Double costo, Double iva, Double precio);
 	
 	Double costoPromedio(Double costoActual , Double costoNuevo,Double cantidadActual,Double cantidadNueva);
-
+	Double getTotalCosto(Articulo articulo, Double cantidad);
 }

@@ -17,7 +17,6 @@ import com.emprendesoftcr.Bo.CompraBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.CompraDao;
 import com.emprendesoftcr.Dao.DetalleCompraDao;
-import com.emprendesoftcr.Dao.InventarioDao;
 import com.emprendesoftcr.Dao.KardexDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
@@ -25,7 +24,6 @@ import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Empresa;
-import com.emprendesoftcr.modelo.Inventario;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.DetalleCompraCommand;
@@ -59,9 +57,7 @@ public class CompraBoImpl implements CompraBo {
 	@Autowired
 	KardexDao				kardexDao;
 
-	@Lazy
-	@Autowired
-	InventarioDao		inventarioDao;
+	
 
 	private Logger	log	= LoggerFactory.getLogger(this.getClass());
 
@@ -148,9 +144,8 @@ public class CompraBoImpl implements CompraBo {
           //detalleCompraDao.agregar(detalleCompra);
 					compra.addDetalleCompra(detalleCompra);
 					compraDao.modificar(compra); 
-					Inventario inventario = inventarioDao.findByArticuloAndEstado(articulo, Constantes.ESTADO_ACTIVO);
-
-					aplicarInventario(compra, inventario, detalleCompra, articulo);
+					
+					aplicarInventario(compra,  detalleCompra, articulo);
 
 				}
 			}
@@ -170,35 +165,20 @@ public class CompraBoImpl implements CompraBo {
 	 * @param compra
 	 * @param inventario
 	 */
-	public void aplicarInventario(Compra compra, Inventario inventario, DetalleCompra detalleCompra, Articulo articulo) {
+	public void aplicarInventario(Compra compra,  DetalleCompra detalleCompra, Articulo articulo) {
 		if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
-			//No se encuentra en el inventario
-			if (inventario == null) {
-				inventario = new Inventario();
-				inventario.setArticulo(articulo);
-				inventario.setCantidad(Constantes.ZEROS_DOUBLE);
-				inventario.setMinimo(Constantes.INVENTARIO_MINIMO);
-				inventario.setMaximo(Constantes.INVENTARIO_MAXIMO);
-				inventario.setCreated_at(new Date());
-				inventario.setUpdated_at(new Date());
-				inventario.setUsuario(compra.getUsuarioCreacion());
-				inventario.setEstado(Constantes.ESTADO_ACTIVO);
-				inventarioDao.agregar(inventario);
-
-			}
-			Double cantidadTotal = inventario.getCantidad() + detalleCompra.getCantidad();
+			
+			Double cantidadTotal = articulo.getCantidad() + detalleCompra.getCantidad();
 
 			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getProveedor().getNombreCompleto();
-			kardexDao.entrada(inventario,inventario.getCantidad(), detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
-			articulo.setCosto(articuloDao.costoPromedio(articulo.getCosto(), detalleCompra.getCosto(), inventario.getCantidad(), detalleCompra.getCantidad()));
+			kardexDao.entrada(articulo,articulo.getCantidad(), detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
+			articulo.setCosto(articuloDao.costoPromedio(articulo.getCosto(), detalleCompra.getCosto(), articulo.getCantidad(), detalleCompra.getCantidad()));
 			articulo.setGananciaPrecioPublico(articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioPublico()));
 			articulo.setUpdated_at(new Date());
 			articulo.setUsuario(compra.getUsuarioCreacion());
+			articulo.setCantidad(cantidadTotal);
 			articuloDao.modificar(articulo);
-			inventario.setCantidad(cantidadTotal);
-			inventario.setUsuario(compra.getUsuarioCreacion());
-			inventario.setUpdated_at(new Date());
-			inventarioDao.modificar(inventario);
+			
 
 		}
 

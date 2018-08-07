@@ -80,8 +80,8 @@ public class ArticuloCommand {
 		this.serie = articulo.getSerie();
 		this.unidadMedida = articulo.getUnidadMedida();
 		this.contable = articulo.getContable();
-		Double resultado = articulo.getInventarios().stream().filter(o -> o.getEstado().equals(Constantes.ESTADO_ACTIVO)).mapToDouble(o -> o.getCantidad().doubleValue()).sum();
-		this.cantidad = BigDecimal.valueOf(resultado);
+		Double resultado = articulo.getCantidad();
+		this.cantidad = BigDecimal.valueOf(resultado !=null?resultado:Constantes.ZEROS_DOUBLE);
 		this.tipoImpuesto = articulo.getTipoImpuesto();
 		this.usuario = articulo.getUsuario();
 		this.tipoCodigo = articulo.getTipoCodigo();

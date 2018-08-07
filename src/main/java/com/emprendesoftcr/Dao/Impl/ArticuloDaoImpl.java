@@ -6,13 +6,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Empresa;
-import com.emprendesoftcr.modelo.Inventario;
 
 /**
  * Mantenimiento de Articulos de los articulos del almacen ArticuloDaoImpl.
@@ -96,12 +96,12 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	 * @return
 	 */
 
-	public Inventario buscarPorArticulo(Articulo articulo) {
-		Query query = entityManager.createQuery("select obj from Articulo obj where obj.inventario = :inventario");
-		query.setParameter("articulo", articulo);
-		List<Inventario> results = query.getResultList();
+	public Articulo buscarPorArticulo(Articulo articulo) {
+		Query query = entityManager.createQuery("select obj from Articulo obj where obj.id = :id");
+		query.setParameter("id", articulo.getId());
+		List<Articulo> results = query.getResultList();
 		if (!results.isEmpty()) {
-			return (Inventario) results.get(0);
+			return (Articulo) results.get(0);
 		} else {
 			return null;
 		}
@@ -157,6 +157,15 @@ public class ArticuloDaoImpl implements ArticuloDao {
 
 		return resultado / totalProductos;
 
+	}
+	
+	@Override
+	public Double getTotalCosto(Articulo articulo, Double cantidad) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+
+		resultado = articulo.getCosto() * cantidad;
+
+		return resultado;
 	}
 
 }

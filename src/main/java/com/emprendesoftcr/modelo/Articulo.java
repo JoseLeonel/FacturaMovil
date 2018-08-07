@@ -75,9 +75,19 @@ public class Articulo implements Serializable {
 
 	@Column(name = "precio_especial")
 	private Double						precioEspecial;
+	
 
 	@Column(name = "ganancia_precio_especial")
 	private Double						gananciaPrecioEspecial;
+	
+	@Column(name = "cantidad")
+	private Double						cantidad;
+
+	@Column(name = "minimo")
+	private Double						minimo;
+
+	@Column(name = "maximo")
+	private Double						maximo;
 
 	@Column(name = "estado")
 	private String						estado;
@@ -114,15 +124,11 @@ public class Articulo implements Serializable {
 	@JoinColumn(name = "empresa_id")
 	private Empresa						empresa;
 
-	@JsonIgnore
-	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
-	@JoinColumn(name = "articulo_id", referencedColumnName = "id")
-	@OrderBy("id DESC")
-	private Set<Inventario>		inventarios;
+	
 	
 	@JsonIgnore
 	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
-	@JoinColumn(name = "inventario_id", referencedColumnName = "id")
+	@JoinColumn(name = "articulo_id", referencedColumnName = "id")
 	@OrderBy("id DESC")
 	private Set<Kardex>				kardexs;
 
@@ -131,7 +137,9 @@ public class Articulo implements Serializable {
 
 
 
-	public Articulo(Long id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, String estado, String tipoImpuesto, String tipoCodigo, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa, Set<Inventario> inventarios, Set<Kardex> kardexs) {
+	
+
+	public Articulo(Long id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, Double cantidad, Double minimo, Double maximo, String estado, String tipoImpuesto, String tipoCodigo, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa,  Set<Kardex> kardexs) {
 		super();
 		this.id = id;
 		this.codigo = codigo;
@@ -147,6 +155,9 @@ public class Articulo implements Serializable {
 		this.gananciaPrecioMayorista = gananciaPrecioMayorista;
 		this.precioEspecial = precioEspecial;
 		this.gananciaPrecioEspecial = gananciaPrecioEspecial;
+		this.cantidad = cantidad;
+		this.minimo = minimo;
+		this.maximo = maximo;
 		this.estado = estado;
 		this.tipoImpuesto = tipoImpuesto;
 		this.tipoCodigo = tipoCodigo;
@@ -156,9 +167,12 @@ public class Articulo implements Serializable {
 		this.usuario = usuario;
 		this.categoria = categoria;
 		this.empresa = empresa;
-		this.inventarios = inventarios;
+	
 		this.kardexs = kardexs;
 	}
+
+
+
 
 	public Articulo() {
 		super();
@@ -172,6 +186,9 @@ public class Articulo implements Serializable {
 		this.gananciaPrecioEspecial = Constantes.ZEROS_DOUBLE;
 		this.created_at = new Date();
 		this.updated_at = new Date();
+		this.maximo = Constantes.ZEROS_DOUBLE;
+		this.minimo = Constantes.ZEROS_DOUBLE;
+		this.cantidad = Constantes.ZEROS_DOUBLE;
 		
 	}
 
@@ -186,6 +203,8 @@ public class Articulo implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	
 
 	public String getCodigo() {
 		return codigo;
@@ -355,13 +374,6 @@ public class Articulo implements Serializable {
 		this.empresa = empresa;
 	}
 
-	public Set<Inventario> getInventarios() {
-		return inventarios;
-	}
-
-	public void setInventarios(Set<Inventario> inventarios) {
-		this.inventarios = inventarios;
-	}
 	
 	
 	
@@ -399,6 +411,54 @@ public class Articulo implements Serializable {
 	
 	public void setTipoCodigo(String tipoCodigo) {
 		this.tipoCodigo = tipoCodigo;
+	}
+
+
+
+
+	
+	public Double getCantidad() {
+		return cantidad;
+	}
+
+
+
+
+	
+	public void setCantidad(Double cantidad) {
+		this.cantidad = cantidad;
+	}
+
+
+
+
+	
+	public Double getMinimo() {
+		return minimo;
+	}
+
+
+
+
+	
+	public void setMinimo(Double minimo) {
+		this.minimo = minimo;
+	}
+
+
+
+
+	
+	public Double getMaximo() {
+		return maximo;
+	}
+
+
+
+
+	
+	public void setMaximo(Double maximo) {
+		this.maximo = maximo;
 	}
 
 

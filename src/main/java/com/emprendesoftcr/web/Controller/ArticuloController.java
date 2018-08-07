@@ -22,6 +22,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.JqGridBo;
+import com.emprendesoftcr.Bo.KardexBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
@@ -30,8 +31,6 @@ import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
-import com.emprendesoftcr.modelo.Empresa;
-import com.emprendesoftcr.modelo.Inventario;
 import com.emprendesoftcr.modelo.Marca;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.ArticuloCommand;
@@ -39,7 +38,6 @@ import com.emprendesoftcr.web.command.ParametrosPaginacion;
 import com.emprendesoftcr.web.propertyEditor.ArticuloPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.CategoriaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
-import com.emprendesoftcr.web.propertyEditor.InventarioPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.MarcaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
@@ -72,16 +70,18 @@ public class ArticuloController {
 
 	@Lazy
 	@Autowired
+	private KardexBo																			kardexBo;
+
+	
+	@Lazy
+	@Autowired
 	private UsuarioBo																				usuarioBo;
 
 	@Lazy
 	@Autowired
 	private ArticuloPropertyEditor													articuloPropertyEditor;
 	
-	@Lazy
-	@Autowired
-	private InventarioPropertyEditor												inventarioPropertyEditor;
-
+	
 	@Lazy
 	@Autowired
 	private EmpresaPropertyEditor														empresaPropertyEditor;
@@ -102,8 +102,7 @@ public class ArticuloController {
 	public void initBinder(WebDataBinder binder) {
 
 		binder.registerCustomEditor(Articulo.class, articuloPropertyEditor);
-		binder.registerCustomEditor(Inventario.class, inventarioPropertyEditor);
-		binder.registerCustomEditor(Empresa.class, empresaPropertyEditor);
+		
 
 		binder.registerCustomEditor(Marca.class, marcaPropertyEditor);
 		binder.registerCustomEditor(Categoria.class, categoriaPropertyEditor);
@@ -223,11 +222,24 @@ public class ArticuloController {
 			if (articulo.getPrecioPublico() == 0) {
 				result.rejectValue("costo", "error.articulo.precioPublico.mayorCero");
 			}
-
+			if (articulo.getCantidad() != null) {
+				if (articulo.getCantidad() == Constantes.ZEROS_DOUBLE) {
+					result.rejectValue("cantidad", "error.inventario.cantidad.cero");
+				}
+			}
+			if (articulo.getCantidad() == null) {
+				result.rejectValue("cantidad", "error.inventario.cantidad.cero");
+			}
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			articulo.setCreated_at(new Date());
+			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null?Constantes.ZEROS_DOUBLE:articulo.getPrecioEspecial());
+			articulo.setPrecioMayorista(articulo.getPrecioMayorista() == null?Constantes.ZEROS_DOUBLE:articulo.getPrecioMayorista());
+			articulo.setGananciaPrecioEspecial(articulo.getGananciaPrecioEspecial() == null?Constantes.ZEROS_DOUBLE:articulo.getGananciaPrecioEspecial());
+			articulo.setGananciaPrecioMayorista(articulo.getGananciaPrecioMayorista() ==null?Constantes.ZEROS_DOUBLE:articulo.getGananciaPrecioMayorista());
+			articulo.setCantidad(articulo.getCantidad() ==null?Constantes.ZEROS_DOUBLE:articulo.getCantidad());
+			
 			articulo.setEmpresa(usuarioSesion.getEmpresa());
 			articulo.setUpdated_at(new Date());
 			articulo.setEstado(Constantes.ESTADO_ACTIVO);
@@ -239,7 +251,7 @@ public class ArticuloController {
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articulo.setUsuario(usuarioSesion);
 			articuloBo.agregar(articulo);
-
+			kardexBo.entrada(articulo, Constantes.ZEROS_DOUBLE,articulo.getCantidad(), Constantes.OBSERVACION_INICIAL_INVENTARIO_NUEVO, Constantes.CONSECUTIVO_INICIAL_INVENTARIO_NUEVO, Constantes.KARDEX_TIPO_ENTRADA, Constantes.MOTIVO_INICIAL_INVENTARIO_NUEVO, usuarioSesion);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.agregar.correctamente", articulo);
 
 		} catch (Exception e) {
@@ -295,9 +307,14 @@ public class ArticuloController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+			articulo.setMaximo(articulo.getMaximo() ==null?Constantes.ZEROS_DOUBLE:articulo.getMaximo());
+			articulo.setMinimo(articulo.getMinimo() ==null?Constantes.ZEROS_DOUBLE:articulo.getMinimo());
 			articuloBd.setCreated_at(new Date());
 			articuloBd.setUpdated_at(new Date());
+			articuloBd.setMaximo(articulo.getMaximo());
+			articuloBd.setMinimo(articulo.getMinimo());
 			articuloBd.setMarca(articulo.getMarca());
+			articuloBd.setContable(articulo.getContable());
 			articuloBd.setCategoria(articulo.getCategoria());
 			articuloBd.setUnidadMedida(articulo.getUnidadMedida());
 			articuloBd.setTipoCodigo(articulo.getTipoCodigo());
@@ -305,6 +322,7 @@ public class ArticuloController {
 			articuloBd.setGananciaPrecioPublico(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioPublico()));
 			articuloBd.setGananciaPrecioMayorista(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioMayorista()));
 			articuloBd.setGananciaPrecioEspecial(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioEspecial()));
+			articuloBd.setPrecioPublico(articulo.getPrecioPublico());
 			articuloBd.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
 			articuloBd.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
 			articuloBd.setUsuario(usuarioSesion);
@@ -312,6 +330,9 @@ public class ArticuloController {
 			articuloBd.setTipoImpuesto(articulo.getTipoImpuesto());
 			articuloBd.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articuloBo.modificar(articuloBd);
+			
+			
+			
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBd);
 
 		} catch (Exception e) {

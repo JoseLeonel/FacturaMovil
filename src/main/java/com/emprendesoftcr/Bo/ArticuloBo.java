@@ -18,5 +18,9 @@ public interface ArticuloBo {
 	Articulo buscarPorCodigoYEmpresa(String codigo, Empresa empresa);
 
 	Double porcentanjeDeGanancia(Double costo, Double iva, Double precio);
+	
+	Double sumarCantidad(Articulo articulo, Double cantidad);
+	
+	Double restarCantidad(Articulo articulo, Double cantidad);
 
 }
