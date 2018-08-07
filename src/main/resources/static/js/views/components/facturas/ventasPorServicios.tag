@@ -723,13 +723,16 @@ function getMontoTotal(precioUnitario,cantidad){
 * Obtiene el precio unitario sin descuento sin impuesto
 **/
 function getPrecioUnitario(precio ,impuesto){
-    var porcentajeImpuesto = 0
-    var resultado  = 0
-    if(impuesto > 0){
+   var porcentajeImpuesto = 0
+   var resultado  = 0
+   if(impuesto > 0){
       porcentajeImpuesto = impuesto / 100
       porcentajeImpuesto =  porcentajeImpuesto + 1
       resultado  =  precio  / porcentajeImpuesto
-    }
+   }else{
+       resultado  =  precio
+   }
+
 
    return redondearDecimales(resultado,5)     
   

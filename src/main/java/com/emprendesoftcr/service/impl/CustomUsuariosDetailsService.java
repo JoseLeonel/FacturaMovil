@@ -25,7 +25,7 @@ public class CustomUsuariosDetailsService implements UserDetailsService {
 
 		optionalUsuario.orElseThrow(() -> new UsernameNotFoundException("Username not found"));
 		
-	//	return new org.springframework.security.core.userdetails.User(optionalUsuario.map(CustomUsuarioDetails::new).get().getNombreUsuario(), optionalUsuario.map(CustomUsuarioDetails::new).get().getPassword(),optionalUsuario.map(CustomUsuarioDetails::new).get().getAuthorities());
-		return optionalUsuario.map(CustomUsuarioDetails::new).get();
+		return new org.springframework.security.core.userdetails.User(optionalUsuario.map(CustomUsuarioDetails::new).get().getNombreUsuario(), optionalUsuario.map(CustomUsuarioDetails::new).get().getPassword(),optionalUsuario.map(CustomUsuarioDetails::new).get().getAuthorities());
+	//	return optionalUsuario.map(CustomUsuarioDetails::new).get();
 	}
 }

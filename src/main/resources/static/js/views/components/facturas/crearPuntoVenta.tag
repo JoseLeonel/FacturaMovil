@@ -1764,6 +1764,8 @@ function getPrecioUnitario(precio ,impuesto){
       porcentajeImpuesto = impuesto / 100
       porcentajeImpuesto =  porcentajeImpuesto + 1
       resultado  =  precio  / porcentajeImpuesto
+   }else{
+       resultado  =  precio
    }
 
 

@@ -73,6 +73,7 @@ public class Usuario implements Serializable {
 	@JoinColumn(name = "empresa_id")
 	private Empresa						empresa;
 
+	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "usuario_role", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
 	private Set<Rol>					roles;
