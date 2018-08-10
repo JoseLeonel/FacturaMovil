@@ -1,7 +1,10 @@
 package com.emprendesoftcr.Bo;
 
+import java.util.Collection;
+
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
@@ -22,5 +25,12 @@ public interface FacturaBo {
 	Factura crearFactura(FacturaCommand facturaCommand,Usuario usuario,UsuarioCaja usuarioCaja,TipoCambio tipoCambio) throws Exception;
 
 	Double  getTotalEfectivo(FacturaCommand facturaCommand) throws Exception;
+	
+	void eliminarDetalleFacturaPorSP(Factura factura)throws Exception;
+	
+	
+	
+	Collection<Factura> findByEstadoFirma(Integer estadoFirma);
+	
 
 }

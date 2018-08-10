@@ -1,7 +1,6 @@
 package com.emprendesoftcr.Bo.Impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -23,10 +22,10 @@ import com.emprendesoftcr.modelo.Attachment;
 public class CorreosBoImpl implements CorreosBo {
 
 	@Autowired
-	JavaMailSender	mailSender;
+	private JavaMailSender	mailSender;
 
 	@Autowired
-	VelocityEngine	velocityEngine;
+	private VelocityEngine	velocityEngine;
 
 	@Override
 	public void enviarConAttach(final Collection<Attachment> attachments,  ArrayList<String> correoList, final String from, final String subjet, final String email, final Map<String, Object> model) {

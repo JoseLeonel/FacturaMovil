@@ -89,7 +89,7 @@ public class HaciendasController {
 	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
 																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
 																																																			// Emisor
-
+																																																		
 																																																			facturaElectronica.setEmisorNombre(d.getEmpresa().getNombre());
 																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
 																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
@@ -107,9 +107,11 @@ public class HaciendasController {
 																																																			// Ubicacion
 																																																			facturaElectronica.set_logo(d.getEmpresa().getLogo());
 																																																			facturaElectronica.set_clienteDireccion(d.getDireccion());
+																																																			
 																																																			// Otros
 																																																			facturaElectronica.setTipoDocumento(FacturaElectronicaUtils.getTipoDocumento(d.getTipoDoc()));
 																																																			facturaElectronica.setClave(d.getClave());
+																																																			
 																																																			facturaElectronica.setConsecutivo(d.getNumeroConsecutivo());
 																																																			facturaElectronica.setFechaEmision(d.getFechaEmision().toString());
 																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito().toString());
@@ -117,6 +119,7 @@ public class HaciendasController {
 																																																			facturaElectronica.setMedioBanco(d.getMedioBanco() != null ? Constantes.FACTURA_MEDIO_PAGO_TRANSFERENCIA_STR : Constantes.EMPTY);
 																																																			facturaElectronica.setMedioEfectivo(d.getMedioEfectivo() != null ? Constantes.FACTURA_MEDIO_PAGO_EFECTIVO_STR : Constantes.EMPTY);
 																																																			facturaElectronica.setMedioTarjeta(d.getMedioTarjeta() != null ? Constantes.FACTURA_MEDIO_PAGO_TARJETA_STR : Constantes.EMPTY);
+																																																			
 
 																																																			facturaElectronica.setMoneda(FacturaElectronicaUtils.getMoneda(d.getCodigoMoneda()));
 																																																			facturaElectronica.setTipoCambio(d.getTipoCambio().toString());
@@ -132,6 +135,7 @@ public class HaciendasController {
 																																																				 }
 																																																			 
 																																																			 }else {
+																																																				 
 																																																				 facturaElectronica.setReferencia(Constantes.EMPTY);
 																																																				 facturaElectronica.setReferenciaCodigo( Constantes.EMPTY);
 																																																				 facturaElectronica.setReferenciaNumero(Constantes.EMPTY);
@@ -156,25 +160,20 @@ public class HaciendasController {
 
 	private Logger																										log															= LoggerFactory.getLogger(this.getClass());
 
-	@Lazy
 	@Autowired
 	DataTableBo																												dataTableBo;
 
-	@Lazy
 	@Autowired
-	FacturaBo																													facturaBo;
+	private FacturaBo																													facturaBo;
 
-	@Lazy
 	@Autowired
-	ProcesoHaciendaService																						procesoHaciendaService;
+	private ProcesoHaciendaService																						procesoHaciendaService;
 
-	@Lazy
 	@Autowired
-	HaciendaBo																												haciendaBo;
+	private HaciendaBo																												haciendaBo;
 
-	@Lazy
 	@Autowired
-	UsuarioBo																													usuarioBo;
+	private UsuarioBo																													usuarioBo;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {

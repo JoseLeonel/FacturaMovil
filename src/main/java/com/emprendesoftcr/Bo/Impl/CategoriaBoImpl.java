@@ -22,7 +22,7 @@ import com.emprendesoftcr.modelo.Empresa;
 public class CategoriaBoImpl implements CategoriaBo {
 
 	@Autowired
-	CategoriaDao categoriaDao;
+	private CategoriaDao categoriaDao;
 
 	public void agregar(Categoria categoria) {
 		categoriaDao.agregar(categoria);

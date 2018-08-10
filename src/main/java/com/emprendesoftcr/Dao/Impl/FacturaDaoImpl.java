@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Dao.Impl;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -94,6 +95,18 @@ public class FacturaDaoImpl implements FacturaDao {
 			log.error("** Error ejecutar el procedimineto almacenados de eliminar detalles de la factura : " + e.getMessage() + " fecha " + new Date());
 		}
 
+	}
+
+	/**
+	 * Todas las facturas que no se le a creado la firma
+	 * @see com.emprendesoftcr.Dao.FacturaDao#findByEstadoFirma(java.lang.Integer)
+	 */
+	@Override
+	public Collection<Factura> findByEstadoFirma(Integer estadoFirma){
+		Query query = entityManager.createQuery("select obj from Factura obj where obj.estadoFirma = :estadoFirma ");
+		query.setParameter("estadoFirma", estadoFirma);
+		
+		return query.getResultList();
 	}
 
 }

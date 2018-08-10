@@ -15,7 +15,7 @@ import com.emprendesoftcr.Utils.DataTableDelimitador;
 public class DataTableBoImpl implements DataTableBo {
 
 	@Autowired
-	DataTableDao dataTableDao;
+	private DataTableDao dataTableDao;
 
         @Override
 	public Long contar(DataTableDelimitador delimitadores) {

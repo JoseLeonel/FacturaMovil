@@ -480,12 +480,7 @@
                                         <label>{$.i18n.prop("factura.plazoCredito")}</label> 
                                         <input type="number" id = "plazoCredito"  name "plazoCredito" class="form-control plazoCredito" value="{factura.plazoCredito}" >
                                     </div>
-                                    <div class="form-group ">
-                                        <label for="pago_tipoVentaL">{$.i18n.prop("factura.estado")} </label> 
-                                        <select class="form-control estado" id="estado" name="estado"  >
-                                            <option each={comboEstados} value="{estado}" selected="{factura.estado ==estado?true:false}" >{descripcion}</option>
-                                        </select>
-                                    </div>
+                                  
                                    
 
                                 </div>
@@ -507,6 +502,7 @@
                                 </div>
                             </div>
                             <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
+                            <input type="hidden" id='estado'                  name='estado'                      value="{factura.estado}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='subTotal'                name='subTotal'                value="{factura.subTotal}" >
@@ -1912,7 +1908,7 @@
 	    montoCambio:0,
 	    totalCambio:0,
 	    codigoMoneda:"",
-	    estado:0,
+	    estado:1,
 	    cliente:{
             id:0,
             nombreCompleto:""
@@ -2007,7 +2003,6 @@
           
         __comboCondicionPago()
         __ComboTipoDocumentos()
-        __ComboEstados()
         __ListaDeClientes()
        __ListaDeVendedores()
        __Teclas()
@@ -2627,20 +2622,20 @@ __CargarFacturaEspera(e){
 *  Crear la factura temporal o espera
 **/
 __CrearFacturaTemporal(){
-   $('#estado').val(1) 
-   aplicarFactura()   
+   
+   aplicarFactura(1)   
 }
 /**
 ** Se aplica o se crea una Factura cargada en la pantalla
 **/
 __AplicarYcrearFactura(){
- aplicarFactura()
+ aplicarFactura(2)
 }
 
 /**
 * Aplicar la factura
 **/
-function aplicarFactura(){
+function aplicarFactura(estado){
     if(self.detail.length == 0 ){
         mensajeError($.i18n.prop("factura.alert.sin.detalles"))
         return
@@ -2656,7 +2651,7 @@ function aplicarFactura(){
         }
     }else{
         // Si no es credito y el estado no es pendiente se debe verificar si ingresaron el monto a pagar
-        if($('#estado').val() !=1){
+        if(estado !=1){
             if(self.factura.totalTarjeta == 0 && self.factura.totalBanco == 0 && self.factura.totalEfectivo == 0){
                 mensajeError($.i18n.prop("error.factura.monto.ingresado"))
                 return
@@ -2693,7 +2688,7 @@ if ($("#formularioFactura").valid()) {
         }).then(function (isConfirm) {
             //Ajax__inicializarTabla();
             if(isConfirm){
-               crearFactura()  
+               crearFactura(estado)  
               
             }
         });
@@ -2947,7 +2942,7 @@ function __displayDate_detail(fecha) {
 /**
 *  Crear Factura nueva
 **/
-function crearFactura(){
+function crearFactura(estado){
     self.detalleFactura.data =self.detail
     self.update() 
     var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
@@ -2962,6 +2957,7 @@ function crearFactura(){
     self.factura.totalTarjeta = redondearDecimales(__valorNumerico($('#totalTarjeta').val())) 
     self.factura.totalBanco = redondearDecimales(__valorNumerico($('#totalBanco').val()))
     self.factura.detalleFactura =JSONDetalles
+    self.factura.estado = estado
     self.update();
     
     var formulario = $("#formularioFactura").serialize();
@@ -3096,6 +3092,7 @@ function mostrarPAgo(){
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
     getSubTotalGeneral()
+    self.mostarParaCrearNuevaVentas = false
     self.factura.totalCambioPagar =0
     self.mostarParaCrearNuevaFactura = false
     self.mostrarFormularioPago = true
@@ -3449,12 +3446,12 @@ function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc){
 }
 
 function ActualizarLineaDEtalle(){
-    var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
+  var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
     var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc)
     var subTotal               = redondearDecimales(montoTotal - montoDescuento,5)
     var montoImpuesto          = _calcularImpuesto(subTotal,self.item.iva ==null?0:self.item.iva)
     var montoTotalLinea        = redondearDecimales(subTotal + montoImpuesto,5)    
-    self.item.montoTotal       = redondearDecimales(montoTotal,5)
+    self.item.montoTotal       = montoTotal
     self.item.montoDescuento   = redondearDecimales(montoDescuento,5)
     self.item.subTotal         = redondearDecimales(subTotal,5)
     self.item.montoImpuesto    = redondearDecimales(montoImpuesto,5)
@@ -3530,7 +3527,7 @@ function getTotalDescuento(precio,cantidad,porcentajeDesc){
 **/
 function __calculate() {
     self.factura.total           = 0;
-    self.factura.totalDescuento  = 0;
+    self.factura.totalDescuentos  = 0;
     self.factura.totalImpuesto   = 0;
     self.factura.subTotal        = 0;
     self.update()
@@ -3548,12 +3545,12 @@ function __calculate() {
     totalComprobante        = 0
     totalventaNeta          = 0
     self.detail.forEach(function(e){
-        totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.subTotal:0
-        totalMercanciasExentas  += e.impuesto == 0 && e.tipoImpuesto != "07"?e.subTotal:0
-        totalServGravados       += e.montoImpuesto > 0 && e.tipoImpuesto == "07"?e.subTotal:0
-        totalServExentos        += e.impuesto == 0 && e.tipoImpuesto == "07"?e.subTotal:0
-        totalGravado            += e.impuesto > 0 ?e.subTotal:0
-        totalExento             += e.impuesto == 0?e.subTotal:0
+        totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.montoTotal:0
+        totalMercanciasExentas  += e.impuesto == 0 && e.tipoImpuesto != "07"?e.montoTotal:0
+        totalServGravados       += e.montoImpuesto > 0 && e.tipoImpuesto == "07"?e.montoTotal:0
+        totalServExentos        += e.impuesto == 0 && e.tipoImpuesto == "07"?e.montoTotal:0
+        totalGravado            += e.impuesto > 0 ?e.montoTotal:0
+        totalExento             += e.impuesto == 0?e.montoTotal:0
         totalComprobante        += e.montoTotalLinea
         subTotal                += e.subTotal >0?e.subTotal:0
         totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
@@ -3567,11 +3564,12 @@ function __calculate() {
 
     self.factura.totalGravado            = redondearDecimales(__valorNumerico(totalGravado),5)
     self.factura.totalExento             = redondearDecimales(__valorNumerico(totalExento),5)
-    self.factura.totalVenta              = redondearDecimales(totalVenta,5)
-    self.factura.totalDescuento          = redondearDecimales(__valorNumerico(totalDescuento),5)
+    //cuando se aplica descuentos
+    self.factura.totalVenta              = redondearDecimales(__valorNumerico(totalVenta),5)
+    self.factura.totalDescuentos          = redondearDecimales(__valorNumerico(totalDescuento),5)
     self.factura.subTotal                = redondearDecimales(__valorNumerico(subTotal),5)
     self.factura.totalImpuesto           = redondearDecimales(__valorNumerico(totalImpuesto),5)
-    self.factura.totalVentaNeta          = redondearDecimales(__valorNumerico(subTotal),5)
+    self.factura.totalVentaNeta          = redondearDecimales(__valorNumerico(totalVenta-totalDescuento),5)
     self.factura.totalComprobante        = redondearDecimales(__valorNumerico(totalComprobante),5)
     self.articulo              = null;
     self.update(); 

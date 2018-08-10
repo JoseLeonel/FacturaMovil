@@ -146,7 +146,7 @@ public class AbonoController {
 			if (abono.getTotal() == Constantes.ZEROS_DOUBLE) {
 				result.rejectValue("total", "error.abono.total.cero");
 			}
-			if (abono.getTotal()  == Constantes.ZEROS_DOUBLE) {
+			if (abono.getTotal() == Constantes.ZEROS_DOUBLE) {
 				result.rejectValue("total", "error.abono.total.cero");
 			}
 
@@ -173,7 +173,7 @@ public class AbonoController {
 			cuentaCobrarBo.modificar(cuentaCobrar);
 
 			usuarioCajaBo.actualizarCaja(usuarioCaja, Constantes.ZEROS_DOUBLE, Constantes.ZEROS_DOUBLE, Constantes.ZEROS_DOUBLE, Constantes.ZEROS_DOUBLE, abono.getTotal());
-			
+
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("abono.agregar.correctamente", abono);
 
 		} catch (Exception e) {
@@ -210,7 +210,7 @@ public class AbonoController {
 			abonoBD.setUsuario(usuarioSesion);
 			abonoBo.modificar(abonoBD);
 			CuentaCobrar cuentaCobrar = cuentaCobrarBo.buscar(abonoBD.getCuentaCobrar().getId());
-			cuentaCobrar.setTotalAbono(cuentaCobrar.getTotalAbono()- abono.getTotal());
+			cuentaCobrar.setTotalAbono(cuentaCobrar.getTotalAbono() - abono.getTotal());
 			cuentaCobrar.setTotalSaldo(cuentaCobrar.getTotalSaldo() + abono.getTotal());
 			cuentaCobrarBo.modificar(cuentaCobrar);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("abono.anulado.correctamente", abonoBD);

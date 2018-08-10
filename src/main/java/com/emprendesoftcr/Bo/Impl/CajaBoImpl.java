@@ -1,7 +1,6 @@
 package com.emprendesoftcr.Bo.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,15 +10,13 @@ import com.emprendesoftcr.Dao.CajaDao;
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.Empresa;
 
-@Lazy
 @Transactional
 @EnableTransactionManagement
 @Service("cajaBo")
 public class CajaBoImpl implements CajaBo {
 
-	@Lazy
 	@Autowired
-	CajaDao cajaDao;
+	private CajaDao cajaDao;
 
 	public void agregar(Caja caja) {
 		cajaDao.agregar(caja);
@@ -60,5 +57,5 @@ public class CajaBoImpl implements CajaBo {
 	public Caja findByTerminalAndEmpresa(String terminal, Empresa empresa) {
 		return cajaDao.findByTerminalAndEmpresa(terminal, empresa);
 	}
-	
+
 }

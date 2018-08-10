@@ -14,17 +14,14 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.DataTableBo;
-import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Bo.MarcaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
-import com.emprendesoftcr.Utils.DataTableFilter;
 import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
@@ -59,9 +56,7 @@ public class MarcasController {
 	@Autowired
 	private MarcaBo																			marcaBo;
 
-	@Autowired
-	private EmpresaBo																		empresaBo;
-
+	
 	@Autowired
 	private UsuarioBo																		usuarioBo;
 

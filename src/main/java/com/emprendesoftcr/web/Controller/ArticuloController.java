@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Bo.DataTableBo;
-import com.emprendesoftcr.Bo.JqGridBo;
 import com.emprendesoftcr.Bo.KardexBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
@@ -37,7 +35,6 @@ import com.emprendesoftcr.web.command.ArticuloCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacion;
 import com.emprendesoftcr.web.propertyEditor.ArticuloPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.CategoriaPropertyEditor;
-import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.MarcaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
@@ -58,43 +55,27 @@ public class ArticuloController {
 																																				};
 																																			};
 
-	@Lazy
-	@Autowired
-	private JqGridBo																				jqGridBo;
 	@Autowired
 	private DataTableBo																			dataTableBo;
 
-	@Lazy
 	@Autowired
 	private ArticuloBo																			articuloBo;
 
-	@Lazy
 	@Autowired
-	private KardexBo																			kardexBo;
+	private KardexBo																				kardexBo;
 
-	
-	@Lazy
 	@Autowired
 	private UsuarioBo																				usuarioBo;
 
-	@Lazy
 	@Autowired
 	private ArticuloPropertyEditor													articuloPropertyEditor;
-	
-	
-	@Lazy
-	@Autowired
-	private EmpresaPropertyEditor														empresaPropertyEditor;
 
-	@Lazy
 	@Autowired
 	private MarcaPropertyEditor															marcaPropertyEditor;
 
-	@Lazy
 	@Autowired
 	private CategoriaPropertyEditor													categoriaPropertyEditor;
 
-	@Lazy
 	@Autowired
 	private StringPropertyEditor														stringPropertyEditor;
 
@@ -102,7 +83,6 @@ public class ArticuloController {
 	public void initBinder(WebDataBinder binder) {
 
 		binder.registerCustomEditor(Articulo.class, articuloPropertyEditor);
-		
 
 		binder.registerCustomEditor(Marca.class, marcaPropertyEditor);
 		binder.registerCustomEditor(Categoria.class, categoriaPropertyEditor);
@@ -143,8 +123,6 @@ public class ArticuloController {
 			delimitadores.addFiltro(dataTableFilter);
 		}
 
-	
-
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
@@ -159,20 +137,20 @@ public class ArticuloController {
 	@RequestMapping(value = "/ListarPaginacionArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarArticulosAjax(HttpServletRequest request, ModelMap model, @ModelAttribute ParametrosPaginacion parametrosPaginacion) {
-	
+
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Articulo");
 		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
-			String nombreUsuario = request.getUserPrincipal().getName();	
+			String nombreUsuario = request.getUserPrincipal().getName();
 			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
-			
+
 		}
-		JqGridFilter categoriaFilter=   new JqGridFilter("categoria.id", "'" + parametrosPaginacion.getCategoria().getId().toString() + "'", "=");
+		JqGridFilter categoriaFilter = new JqGridFilter("categoria.id", "'" + parametrosPaginacion.getCategoria().getId().toString() + "'", "=");
 		delimitadores.addFiltro(categoriaFilter);
-		categoriaFilter=   new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "="); 
+		categoriaFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
 		delimitadores.addFiltro(categoriaFilter);
-		delimitadores.setLength( parametrosPaginacion.getCantidadPorPagina());
+		delimitadores.setLength(parametrosPaginacion.getCantidadPorPagina());
 		delimitadores.setStart(parametrosPaginacion.getPaginaActual());
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
@@ -234,12 +212,12 @@ public class ArticuloController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			articulo.setCreated_at(new Date());
-			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null?Constantes.ZEROS_DOUBLE:articulo.getPrecioEspecial());
-			articulo.setPrecioMayorista(articulo.getPrecioMayorista() == null?Constantes.ZEROS_DOUBLE:articulo.getPrecioMayorista());
-			articulo.setGananciaPrecioEspecial(articulo.getGananciaPrecioEspecial() == null?Constantes.ZEROS_DOUBLE:articulo.getGananciaPrecioEspecial());
-			articulo.setGananciaPrecioMayorista(articulo.getGananciaPrecioMayorista() ==null?Constantes.ZEROS_DOUBLE:articulo.getGananciaPrecioMayorista());
-			articulo.setCantidad(articulo.getCantidad() ==null?Constantes.ZEROS_DOUBLE:articulo.getCantidad());
-			
+			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
+			articulo.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
+			articulo.setGananciaPrecioEspecial(articulo.getGananciaPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getGananciaPrecioEspecial());
+			articulo.setGananciaPrecioMayorista(articulo.getGananciaPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getGananciaPrecioMayorista());
+			articulo.setCantidad(articulo.getCantidad() == null ? Constantes.ZEROS_DOUBLE : articulo.getCantidad());
+
 			articulo.setEmpresa(usuarioSesion.getEmpresa());
 			articulo.setUpdated_at(new Date());
 			articulo.setEstado(Constantes.ESTADO_ACTIVO);
@@ -251,7 +229,7 @@ public class ArticuloController {
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articulo.setUsuario(usuarioSesion);
 			articuloBo.agregar(articulo);
-			kardexBo.entrada(articulo, Constantes.ZEROS_DOUBLE,articulo.getCantidad(), Constantes.OBSERVACION_INICIAL_INVENTARIO_NUEVO, Constantes.CONSECUTIVO_INICIAL_INVENTARIO_NUEVO, Constantes.KARDEX_TIPO_ENTRADA, Constantes.MOTIVO_INICIAL_INVENTARIO_NUEVO, usuarioSesion);
+			kardexBo.entrada(articulo, Constantes.ZEROS_DOUBLE, articulo.getCantidad(), Constantes.OBSERVACION_INICIAL_INVENTARIO_NUEVO, Constantes.CONSECUTIVO_INICIAL_INVENTARIO_NUEVO, Constantes.KARDEX_TIPO_ENTRADA, Constantes.MOTIVO_INICIAL_INVENTARIO_NUEVO, usuarioSesion);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.agregar.correctamente", articulo);
 
 		} catch (Exception e) {
@@ -307,8 +285,8 @@ public class ArticuloController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			articulo.setMaximo(articulo.getMaximo() ==null?Constantes.ZEROS_DOUBLE:articulo.getMaximo());
-			articulo.setMinimo(articulo.getMinimo() ==null?Constantes.ZEROS_DOUBLE:articulo.getMinimo());
+			articulo.setMaximo(articulo.getMaximo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMaximo());
+			articulo.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMinimo());
 			articuloBd.setCreated_at(new Date());
 			articuloBd.setUpdated_at(new Date());
 			articuloBd.setMaximo(articulo.getMaximo());
@@ -330,9 +308,7 @@ public class ArticuloController {
 			articuloBd.setTipoImpuesto(articulo.getTipoImpuesto());
 			articuloBd.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articuloBo.modificar(articuloBd);
-			
-			
-			
+
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBd);
 
 		} catch (Exception e) {

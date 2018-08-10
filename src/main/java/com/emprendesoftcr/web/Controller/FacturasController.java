@@ -6,7 +6,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.sql.Blob;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -31,9 +29,8 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.DataTableBo;
+import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.FacturaBo;
-import com.emprendesoftcr.Bo.HaciendaBo;
-import com.emprendesoftcr.Bo.ProvinciaBo;
 import com.emprendesoftcr.Bo.TipoCambioBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Bo.UsuarioCajaBo;
@@ -51,7 +48,6 @@ import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
-import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
@@ -59,10 +55,6 @@ import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.pdf.App;
 import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
-import com.emprendesoftcr.service.FacturaXMLServices;
-import com.emprendesoftcr.service.NotaCreditoXMLServices;
-import com.emprendesoftcr.service.NotaDebitoXMLService;
-import com.emprendesoftcr.service.TiqueteXMLService;
 import com.emprendesoftcr.validator.FacturaFormValidator;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
@@ -112,7 +104,7 @@ public class FacturasController {
 	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
 																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
 																																																			// Emisor
-
+																																																			
 																																																			facturaElectronica.setEmisorNombre(d.getEmpresa().getNombre());
 																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
 																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
@@ -143,6 +135,7 @@ public class FacturasController {
 
 																																																			facturaElectronica.setMoneda(FacturaElectronicaUtils.getMoneda(d.getCodigoMoneda()));
 																																																			facturaElectronica.setTipoCambio(d.getTipoCambio().toString());
+																																																			
 																																																			// Nota Credito y Nota Debito
 																																																			if (d.getReferenciaCodigo() != null) {
 																																																				if (!d.getReferenciaCodigo().equals(Constantes.EMPTY)) {
@@ -150,18 +143,18 @@ public class FacturasController {
 																																																					facturaElectronica.setReferenciaNumero(d.getReferenciaNumero());
 																																																					facturaElectronica.setReferenciaRazon(d.getReferenciaRazon());
 																																																					facturaElectronica.setReferenciaTipoDoc(MapEnums.ENUM_TIPO_DOC.get(d.getReferenciaTipoDoc()));
-																																																					facturaElectronica.setReferenciaFechaEmision(d.getReferenciaFechaEmision() != null?d.getReferenciaFechaEmision().toString():Constantes.EMPTY);
-																																																					
+																																																					facturaElectronica.setReferenciaFechaEmision(d.getReferenciaFechaEmision() != null ? d.getReferenciaFechaEmision().toString() : Constantes.EMPTY);
+
 																																																				}
 
 																																																			} else {
-																																																				 facturaElectronica.setReferencia(Constantes.EMPTY);
-																																																				 facturaElectronica.setReferenciaCodigo( Constantes.EMPTY);
-																																																				 facturaElectronica.setReferenciaNumero(Constantes.EMPTY);
-																																																				 facturaElectronica.setReferenciaRazon(Constantes.EMPTY);
-																																																				 facturaElectronica.setReferenciaTipoDoc(Constantes.EMPTY);
-																																																				 facturaElectronica.setReferenciaFechaEmision(Constantes.EMPTY);
-																																																				 
+																																																				facturaElectronica.setReferencia(Constantes.EMPTY);
+																																																				facturaElectronica.setReferenciaCodigo(Constantes.EMPTY);
+																																																				facturaElectronica.setReferenciaNumero(Constantes.EMPTY);
+																																																				facturaElectronica.setReferenciaRazon(Constantes.EMPTY);
+																																																				facturaElectronica.setReferenciaTipoDoc(Constantes.EMPTY);
+																																																				facturaElectronica.setReferenciaFechaEmision(Constantes.EMPTY);
+
 																																																			}
 																																																			// Agrega sus detalles
 																																																			List<DetalleFacturaElectronica> detalles = d.getDetalles().stream().map(TO_DETALLE).collect(toList());
@@ -169,30 +162,11 @@ public class FacturasController {
 																																																			return facturaElectronica;
 																																																		};
 
-	@Lazy
+	
 	@Autowired
-	private FacturaXMLServices																				facturaXMLServices;
+	private DetalleBo																								detalleBo;
 
-	@Lazy
-	@Autowired
-	TiqueteXMLService																									tiqueteXMLService;
-
-	@Lazy
-	@Autowired
-	ProvinciaBo																												provinciaBo;
-
-	@Lazy
-	@Autowired
-	NotaCreditoXMLServices																						notaCreditoXMLServices;
-
-	@Lazy
-	@Autowired
-	NotaDebitoXMLService																							notaDebitoXMLService;
-
-	@Lazy
-	@Autowired
-	private HaciendaBo																								haciendaBo;
-
+	
 	@Autowired
 	private DataTableBo																								dataTableBo;
 
@@ -206,21 +180,17 @@ public class FacturasController {
 	private TipoCambioBo																							tipoCambioBo;
 
 	@Autowired
-	UsuarioCajaBo																											usuarioCajaBo;
+	private UsuarioCajaBo																							usuarioCajaBo;
 
-	@Lazy
 	@Autowired
 	private VendedorBo																								vendedorBo;
 
-	@Lazy
 	@Autowired
 	private ClienteBo																									clienteBo;
 
-	@Lazy
 	@Autowired
 	private FacturaBo																									facturaBo;
 
-	@Lazy
 	@Autowired
 	private EmpresaPropertyEditor																			empresaPropertyEditor;
 
@@ -248,8 +218,7 @@ public class FacturasController {
 	public String postVenta(ModelMap model) {
 		return "views/facturas/postVenta";
 	}
-	
-	
+
 	/**
 	 * Ventas por Mini super
 	 * @param model
@@ -257,6 +226,7 @@ public class FacturasController {
 	 */
 	@RequestMapping(value = "/puntoVenta", method = RequestMethod.GET)
 	public String crearCompras(ModelMap model) {
+		
 		return "views/facturas/puntoVenta";
 	}
 
@@ -369,6 +339,7 @@ public class FacturasController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
+
 	/**
 	 * Solo facturas de credito y debito en espera
 	 * @param request
@@ -388,13 +359,12 @@ public class FacturasController {
 		delimitadores.addFiltro(dataTableFilter);
 		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_TIQUETE.toString() + "'", "<>");
 		delimitadores.addFiltro(dataTableFilter);
-		
+
 		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
-	
 
 	@RequestMapping(value = "/ListarFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -420,22 +390,23 @@ public class FacturasController {
 	public RespuestaServiceValidator crearFactura(HttpServletRequest request, ModelMap model, @ModelAttribute FacturaCommand facturaCommand, BindingResult result, SessionStatus status) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			facturaCommand.setTotalBanco(facturaCommand.getTotalBanco() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalBanco());
-			facturaCommand.setTotalEfectivo(facturaCommand.getTotalEfectivo() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalEfectivo());
-			facturaCommand.setTotalTarjeta(facturaCommand.getTotalTarjeta() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalTarjeta());
-			facturaCommand.setTotalTransporte(facturaCommand.getTotalTransporte() == null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalTransporte());
-			facturaCommand.setTotalDescuentos(facturaCommand.getTotalDescuentos() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalDescuentos());;
-			facturaCommand.setTotalExento(facturaCommand.getTotalExento() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalExento());
-			facturaCommand.setTotalGravado(facturaCommand.getTotalGravado() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalGravado());
-			facturaCommand.setTotalCambioPagar(facturaCommand.getTotalCambioPagar() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalCambioPagar());
-			facturaCommand.setTotalMercanciasExentas(facturaCommand.getTotalMercanciasExentas() == null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalMercanciasExentas());
-			facturaCommand.setTotalMercanciasGravadas(facturaCommand.getTotalMercanciasGravadas() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalMercanciasGravadas());
-			facturaCommand.setTotalCredito(facturaCommand.getTotalCredito() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalCredito());
-			facturaCommand.setTotalServExentos(facturaCommand.getTotalServExentos() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalServExentos());
-			facturaCommand.setTotalServGravados(facturaCommand.getTotalServGravados() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalServGravados());
-			facturaCommand.setTotalVenta(facturaCommand.getTotalVenta() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalVenta());
-			facturaCommand.setTotalVentaNeta(facturaCommand.getTotalVentaNeta() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalVentaNeta());
-			
+			facturaCommand.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
+			facturaCommand.setTotalEfectivo(facturaCommand.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalEfectivo());
+			facturaCommand.setTotalTarjeta(facturaCommand.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalTarjeta());
+			facturaCommand.setTotalTransporte(facturaCommand.getTotalTransporte() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalTransporte());
+			facturaCommand.setTotalDescuentos(facturaCommand.getTotalDescuentos() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalDescuentos());
+			;
+			facturaCommand.setTotalExento(facturaCommand.getTotalExento() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalExento());
+			facturaCommand.setTotalGravado(facturaCommand.getTotalGravado() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalGravado());
+			facturaCommand.setTotalCambioPagar(facturaCommand.getTotalCambioPagar() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambioPagar());
+			facturaCommand.setTotalMercanciasExentas(facturaCommand.getTotalMercanciasExentas() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalMercanciasExentas());
+			facturaCommand.setTotalMercanciasGravadas(facturaCommand.getTotalMercanciasGravadas() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalMercanciasGravadas());
+			facturaCommand.setTotalCredito(facturaCommand.getTotalCredito() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCredito());
+			facturaCommand.setTotalServExentos(facturaCommand.getTotalServExentos() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalServExentos());
+			facturaCommand.setTotalServGravados(facturaCommand.getTotalServGravados() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalServGravados());
+			facturaCommand.setTotalVenta(facturaCommand.getTotalVenta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalVenta());
+			facturaCommand.setTotalVentaNeta(facturaCommand.getTotalVentaNeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalVentaNeta());
+
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			UsuarioCaja usuarioCajaBd = usuarioCajaBo.findByUsuarioAndEstado(usuario, Constantes.ESTADO_ACTIVO);
 			if (usuarioCajaBd == null) {
@@ -444,13 +415,12 @@ public class FacturasController {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.cajas.abierta", result.getAllErrors());
 				}
 			}
-			
+
 			if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-				if(facturaCommand.getTotalBanco().equals(Constantes.ZEROS_DOUBLE) && facturaCommand.getTotalEfectivo().equals(Constantes.ZEROS_DOUBLE) && facturaCommand.getTotalTarjeta().equals(Constantes.ZEROS_DOUBLE)) {
-					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.ingreso.dinero", result.getAllErrors());	
+				if (facturaCommand.getTotalBanco().equals(Constantes.ZEROS_DOUBLE) && facturaCommand.getTotalEfectivo().equals(Constantes.ZEROS_DOUBLE) && facturaCommand.getTotalTarjeta().equals(Constantes.ZEROS_DOUBLE)) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.ingreso.dinero", result.getAllErrors());
 				}
 
-				
 			}
 
 			TipoCambio tipoCambio = tipoCambioBo.findByEstadoAndEmpresa(Constantes.ESTADO_ACTIVO, usuario.getEmpresa());
@@ -484,21 +454,6 @@ public class FacturasController {
 
 			}
 
-			// if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
-			// if(facturaCommand.getReferenciaNumero() !=null) {
-			// Factura facturaTem = facturaBo.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(),usuario.getEmpresa());
-			// if(facturaTem !=null) {
-			// // El tipo documento fecha emision y el cliente se asignan automatico para la factura
-			// facturaCommand.setReferenciaTipoDoc(facturaTem.getTipoDoc());
-			// facturaCommand.setReferenciaFechaEmision(facturaTem.getFechaEmision().toString());
-			// facturaCommand.setCliente(facturaTem.getCliente());
-			//
-			//
-			// }
-			//
-			// }
-			//
-			// }
 			facturaCommand.setEmpresa(usuario.getEmpresa());
 			facturaFormValidator.validate(facturaCommand, result);
 			if (result.hasErrors()) {
@@ -507,64 +462,20 @@ public class FacturasController {
 			if (!facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 				facturaCommand.setFechaCredito(null);
 			}
+			Factura facturaBD = facturaCommand.getId() == null || facturaCommand.getId() == Constantes.ZEROS_LONG ? null : facturaBo.findById(facturaCommand.getId());
+			// Eliminar detalles si existe
+			Integer eliminar = Constantes.ZEROS;
+			if (facturaBD != null) {
+				facturaBo.eliminarDetalleFacturaPorSP(facturaBD);
+				eliminar = detalleBo.eliminarDetalleFactura(facturaBD);
+			}
 			Factura factura = facturaBo.crearFactura(facturaCommand, usuario, usuarioCajaBd, tipoCambio);
 			if (factura == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			String comprobanteXML = Constantes.EMPTY;
-			// Si es Facturada se crea pendiente de firmar
-			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-
-				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
-					// Crear XMl sin firma
-					comprobanteXML = facturaXMLServices.getCrearXMLSinFirma(factura);
-					// firmar el documento
-					comprobanteXML = facturaXMLServices.getFirmarXML(comprobanteXML, factura.getEmpresa());
-				} else if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
-					// Crear XMl sin firma
-					comprobanteXML = tiqueteXMLService.getCrearXMLSinFirma(factura);
-					// firmar el documento
-					comprobanteXML = tiqueteXMLService.getFirmarXML(comprobanteXML, factura.getEmpresa());
-				} else if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-					// Crear XMl sin firma
-					comprobanteXML = notaCreditoXMLServices.getCrearXMLSinFirma(factura);
-					// firmar el documento
-					comprobanteXML = notaCreditoXMLServices.getFirmarXML(comprobanteXML, factura.getEmpresa());
-
-				} else if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
-					// Crear XMl sin firma
-					comprobanteXML = notaDebitoXMLService.getCrearXMLSinFirma(factura);
-					// firmar el documento
-					comprobanteXML = notaDebitoXMLService.getFirmarXML(comprobanteXML, factura.getEmpresa());
-				}
-				Hacienda hacienda = new Hacienda();
-				hacienda.setCedulaEmisor(factura.getEmpresa().getCedula());
-				hacienda.setTipoEmisor(factura.getEmpresa().getTipoCedula());
-				// no se graba el cliente si es frecuente
-				if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
-					hacienda.setCedulaReceptor(factura.getCliente().getCedula());
-					hacienda.setTipoReceptor(factura.getCliente().getTipoCedula());
-				}
-				hacienda.setEmpresa(factura.getEmpresa());
-				hacienda.setClave(factura.getClave());
-				hacienda.setFechaEmisor(factura.getFechaEmision());
-				Blob b = FacturaElectronicaUtils.convertirStringToblod(comprobanteXML);
-				hacienda.setComprobanteXML(b);
-				hacienda.setCreated_at(new Date());
-				hacienda.setUpdated_at(new Date());
-				hacienda.setStatus(Constantes.ZEROS);
-				hacienda.setEstado(Constantes.HACIENDA_ESTADO_FIRMARDO_XML);
-				hacienda.setConsecutivo(factura.getNumeroConsecutivo());
-				hacienda.setReintentos(Constantes.ZEROS);
-				hacienda.setReintentosAceptacion(Constantes.ZEROS);
-				hacienda.setTipoDoc(factura.getTipoDoc());
-				hacienda.setNombreReceptor(factura.getCliente().getNombreCompleto());
-				hacienda.setCorreoReceptor(factura.getCliente().getCorreoElectronico());
-				hacienda.setTotalReceptor(factura.getTotalComprobante());
-				hacienda.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
-				haciendaBo.agregar(hacienda);
-
-			}
+			
+			
+			
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", factura);
 
 		} catch (Exception e) {

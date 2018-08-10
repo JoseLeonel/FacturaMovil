@@ -537,7 +537,6 @@ var reglasDeValidacion = function() {
                 minlength:1,
 			},
             letraCambio : {
-                required : true,
                 maxlength:25,
                 minlength:1,
 			},
@@ -592,7 +591,6 @@ var reglasDeValidacionAbono = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
 		rules : {
 			recibo : {
-                required : true,
                 maxlength:25,
                 minlength:1,
 			},

@@ -174,6 +174,9 @@ public class Factura implements Serializable {
 
 	@Column(name = "estado")
 	private Integer						estado;
+	
+	@Column(name = "estado_firma")
+	private Integer						estadoFirma;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -214,8 +217,10 @@ public class Factura implements Serializable {
 
 	}
 
+	
+
 	public Factura(Long id, Date fechaCredito, String numeroConsecutivo, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon, Date referenciaFechaEmision, String medioEfectivo, String medioTarjeta, String medioBanco, String nombreFactura, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta,
-			Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Set<Detalle> detalles) {
+			Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Set<Detalle> detalles) {
 		super();
 		this.id = id;
 		this.fechaCredito = fechaCredito;
@@ -261,6 +266,7 @@ public class Factura implements Serializable {
 		this.cambioMoneda = cambioMoneda;
 		this.codigoMoneda = codigoMoneda;
 		this.estado = estado;
+		this.estadoFirma = estadoFirma;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.cliente = cliente;
@@ -269,6 +275,8 @@ public class Factura implements Serializable {
 		this.usuarioCreacion = usuarioCreacion;
 		this.detalles = detalles;
 	}
+
+
 
 	public Long getId() {
 		return id;
@@ -690,4 +698,20 @@ public class Factura implements Serializable {
 		this.medioBanco = medioBanco;
 	}
 
+
+
+	
+	public Integer getEstadoFirma() {
+		return estadoFirma;
+	}
+
+
+
+	
+	public void setEstadoFirma(Integer estadoFirma) {
+		this.estadoFirma = estadoFirma;
+	}
+
+	
+	
 }

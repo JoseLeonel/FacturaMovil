@@ -17,7 +17,7 @@ import com.emprendesoftcr.modelo.TipoCambio;
  * @author jose.
  * @since 19 abr. 2018
  */
-@Lazy
+
 @Transactional
 @EnableTransactionManagement
 @Service("tipoCambioBo")

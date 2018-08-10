@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Bo.Impl;
 
+import java.util.Collection;
 import java.util.Date;
 
 import org.json.simple.JSONArray;
@@ -8,7 +9,6 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +17,6 @@ import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Bo.TipoCambioBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.CuentaCobrarDao;
-import com.emprendesoftcr.Dao.DetalleDao;
 import com.emprendesoftcr.Dao.EmpresaDao;
 import com.emprendesoftcr.Dao.FacturaDao;
 import com.emprendesoftcr.Dao.KardexDao;
@@ -34,56 +33,41 @@ import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.UsuarioCajaFactura;
-import com.emprendesoftcr.service.DetallesService;
 import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.google.gson.Gson;
 
-@Lazy
+
 @Transactional
 @EnableTransactionManagement
 @Service("facturaBo")
 public class FacturaBoImpl implements FacturaBo {
 
-	@Lazy
 	@Autowired
-	FacturaDao						facturaDao;
+  FacturaDao						facturaDao;
 
-	@Lazy
 	@Autowired
-	TipoCambioBo					tipoCambioBo;
+	private TipoCambioBo					tipoCambioBo;
 
-	@Lazy
+	
 	@Autowired
-	DetalleDao						detalleDao;
+	private EmpresaDao						empresaDao;
 
-	@Lazy
 	@Autowired
-	EmpresaDao						empresaDao;
+	private ArticuloDao						articuloDao;
 
-	@Lazy
+	
 	@Autowired
-	ArticuloDao						articuloDao;
+	private KardexDao							kardexDao;
 
-	@Lazy
 	@Autowired
-	DetallesService				detallesService;
+	private CuentaCobrarDao				cuentaCobrarDao;
 
-	@Lazy
 	@Autowired
-	KardexDao							kardexDao;
+	private UsuarioCajaFacturaDao	usuarioCajaFacturaDao;
 
-	@Lazy
 	@Autowired
-	CuentaCobrarDao				cuentaCobrarDao;
-
-	@Lazy
-	@Autowired
-	UsuarioCajaFacturaDao	usuarioCajaFacturaDao;
-
-	@Lazy
-	@Autowired
-	UsuarioCajaDao				usuarioCajaDao;
+	private UsuarioCajaDao				usuarioCajaDao;
 
 	
 
@@ -137,6 +121,22 @@ public class FacturaBoImpl implements FacturaBo {
 		}
 		return factura;
 	}
+	
+	@Override
+	public void eliminarDetalleFacturaPorSP(Factura factura)throws Exception{
+		try {
+			facturaDao.eliminarDetalleFacturaPorSP(factura);
+		} catch (Exception e) {
+			log.info("** Error  eliminarDetalleFacturaPorSP: " + e.getMessage() + " fecha " + new Date());
+
+			throw e;
+		}
+	}
+	
+	@Override
+	public Collection<Factura> findByEstadoFirma(Integer estadoFirma){
+		return facturaDao.findByEstadoFirma(estadoFirma);
+	}
 
 	/**
 	 * Crear la factura o el tiquete temporal
@@ -178,7 +178,7 @@ public class FacturaBoImpl implements FacturaBo {
 				}
 			} else {
 				factura.setFechaCredito(null);
-				factura.setPlazoCredito(Constantes.ZEROS);
+ 				factura.setPlazoCredito(Constantes.ZEROS);
 			}
 
 			if(!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
@@ -188,7 +188,7 @@ public class FacturaBoImpl implements FacturaBo {
 					factura.setReferenciaRazon(facturaCommand.getReferenciaRazon());
 					factura.setReferenciaFechaEmision(Utils.parseDate2(facturaCommand.getReferenciaFechaEmision()));
 			} else {
-				factura.setReferenciaTipoDoc(Constantes.EMPTY);
+ 				factura.setReferenciaTipoDoc(Constantes.EMPTY);
 				factura.setReferenciaNumero(Constantes.EMPTY);
 				factura.setReferenciaCodigo(Constantes.EMPTY);
 				factura.setReferenciaRazon(Constantes.EMPTY);
@@ -247,6 +247,7 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
 			factura.setTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
 			factura.setEstado(facturaCommand.getEstado());
+			factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
 
 			if (factura.getId() == Constantes.ZEROS_LONG) {
 				factura.setCreated_at(new Date());
@@ -271,12 +272,7 @@ public class FacturaBoImpl implements FacturaBo {
 				modificar(factura);
 			}
 
-			// Eliminar detalles si existe
-			if (facturaCommand.getId() != null) {
-				if (facturaCommand.getId() > 0) {
-					facturaDao.eliminarDetalleFacturaPorSP(factura);
-				}
-			}
+			
 			// Se asocia a la caja si la factura pasa de estado pendiente a facturado
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 				UsuarioCajaFactura usuarioCajaFactura = new UsuarioCajaFactura();
@@ -305,7 +301,7 @@ public class FacturaBoImpl implements FacturaBo {
 					Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(detalleFacturaCommand.getCodigo(), usuario.getEmpresa());
 					Detalle detalle = new Detalle(detalleFacturaCommand);
 					detalle.setUsuario(usuario);
-
+          
 					detalle.setNaturalezaDescuento(Constantes.FORMATO_NATURALEZA_DESCUENTO);
 					detalle.setNumeroLinea(numeroLinea);
 					detalle.setCreated_at(new Date());

@@ -3,7 +3,6 @@ package com.emprendesoftcr.Bo.Impl;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,13 +16,11 @@ import com.emprendesoftcr.modelo.Abono;
  * @author jose.
  * @since 19 abr. 2018
  */
-@Lazy
 @Transactional
 @EnableTransactionManagement
 @Service("abonoBo")
 public class AbonoBoImpl implements AbonoBo {
 
-	@Lazy
 	@Autowired
 	AbonoDao abonoDao;
 

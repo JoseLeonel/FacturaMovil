@@ -8,7 +8,6 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.emprendesoftcr.Bo.CompraBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.CompraDao;
-import com.emprendesoftcr.Dao.DetalleCompraDao;
 import com.emprendesoftcr.Dao.KardexDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
@@ -34,28 +32,21 @@ import com.google.gson.Gson;
  * @author jose.
  * @since 27 may. 2018
  */
-@Lazy
 @Transactional
 @EnableTransactionManagement
 @Service("compraBo")
 public class CompraBoImpl implements CompraBo {
 
-	@Lazy
 	@Autowired
-	CompraDao				compraDao;
+	private CompraDao				compraDao;
 	
 
-	@Lazy
-	@Autowired
-	DetalleCompraDao				detalleCompraDao;
 
-	@Lazy
 	@Autowired
-	ArticuloDao			articuloDao;
+	private ArticuloDao			articuloDao;
 
-	@Lazy
 	@Autowired
-	KardexDao				kardexDao;
+	private KardexDao				kardexDao;
 
 	
 

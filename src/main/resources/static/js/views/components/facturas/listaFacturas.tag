@@ -72,6 +72,7 @@
                 <div class="box">
                     <div class="box-body">
                         <div class="planel-body" >
+                        
                             <div class="row" >        
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
                                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
@@ -98,8 +99,12 @@
                                             </tr>
                                         </tfoot>
                                     </table>
+
+                                    <h2 class="pull-right">{$.i18n.prop("factura.linea.detalle.impuesto")}:{totalImpuestos.toLocaleString('de-DE')} {$.i18n.prop("factura.linea.detalle.descuento")}:{totalDescuentos.toLocaleString('de-DE')} {$.i18n.prop("factura.total")}:{total.toLocaleString('de-DE')}  </h2>
                                 </div>   
-                            </div>   
+
+                            </div> 
+  
                         </div>    
                     </div>
                 </div>
@@ -126,21 +131,21 @@
                         <form id="formularioFactura">
                             <input id="id" name="id" type="hidden" value="{compra.id}">
                             <div class="row">
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
+                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("factura.condicion.pago")} </label> 
                                         <input type="text" class="form-control"  value="{factura.condicionVenta}"  readonly>
                                     </div>
  
                                 </div>
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
+                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div class="form-group ">
                                         <label for="pago_tipoVentaL">{$.i18n.prop("factura.tipo.documento")} </label> 
                                        <input type="text" class="form-control"  value="{factura.tipoDoc}" readonly >
                                     </div>
  
                                 </div>
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
+                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div class="form-group ">
                                         <label for="pago_tipoVentaL">{$.i18n.prop("factura.estado")} </label> 
                                         <input type="text" class="form-control"  value="{factura.estado}" readonly >
@@ -686,6 +691,9 @@
 self = this
 
 self.detail                = []
+self.totalDescuentos       = 0
+self.totalImpuestos        = 0
+self.total                 = 0
 
 self.mostrarListado        = true
 self.mostrarDetalle        = false
@@ -697,8 +705,13 @@ self.on('mount',function(){
     agregarInputsCombos()
 
     listaClientesActivos()
+    sumar()
 
 })
+
+
+
+
 
 /**
 * Camps requeridos
@@ -732,6 +745,8 @@ __limpiarFiltros(){
 *  Busqueda de la informacion por rango de fechas
 **/
 __Busqueda(){
+    self.listaFacturas = []
+    self.update()
     var inicial  =$('.fechaInicial').val()
      if ($("#filtros").valid()) {
         var parametros = {
@@ -750,10 +765,13 @@ __Busqueda(){
                 if(result.aaData.length > 0){
                     __InformacionDataTable();
                     loadListar(".tableListar",idioma_espanol,self.formato_tabla,result.aaData)
+                    self.listaFacturas = result.aaData
+                    self.update()
                     agregarInputsCombos();
                     ActivarEventoFiltro(".tableListar")
                     __VerDetalle()
                     __BajarPDF()
+                    sumar()
                 }else{
                     __InformacionDataTable();
                      agregarInputsCombos();
@@ -769,6 +787,36 @@ __Busqueda(){
      }
 
 }
+
+function sumar(){
+          self.totalImpuestos = 0
+          self.total = 0
+          self.totalDescuentos = 0
+          self.update()
+
+    $.each(self.listaFacturas, function( index, modeloTabla ) {
+          self.totalImpuestos += modeloTabla.totalImpuesto
+          self.total += modeloTabla.totalComprobante
+          self.totalDescuentos += modeloTabla.totalDescuentos
+          
+
+    })
+    self.totalImpuestos  = redondearDecimales(self.totalImpuestos,2)
+    self.total           = redondearDecimales(self.total,2)
+    self.totalDescuentos = redondearDecimales(self.totalDescuentos,2)
+    
+    self.update()
+}
+
+function redondearDecimales(numero, decimales) {
+    numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}');   // Expresion regular para numeros con un cierto numero de decimales o mas
+    if (numeroRegexp.test(numero)) {         // Ya que el numero tiene el numero de decimales requeridos o mas, se realiza el redondeo
+        return Number(numero.toFixed(decimales));
+    } else {
+        return Number(numero.toFixed(decimales)) === 0 ? 0 : numero;  // En valores muy bajos, se comprueba si el numero es 0 (con el redondeo deseado), si no lo es se devuelve el numero otra vez.
+    }
+}
+
 
 /**
 *  Obtiene la lista de los clientes activos

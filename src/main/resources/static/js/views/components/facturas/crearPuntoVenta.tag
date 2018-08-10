@@ -54,33 +54,29 @@
                                         <label>{$.i18n.prop("factura.plazoCredito")}</label> 
                                         <input type="number" id = "plazoCredito"  name "plazoCredito" class="form-control plazoCredito" value="{factura.plazoCredito}" >
                                     </div>
-                                    <div class="form-group ">
-                                        <label for="pago_tipoVentaL">{$.i18n.prop("factura.estado")} </label> 
-                                        <select class="form-control estado" id="estado" name="estado"  >
-                                            <option each={comboEstados} value="{estado}" selected="{factura.estado ==estado?true:false}" >{descripcion}</option>
-                                        </select>
-                                    </div>
+                                    
                                    
 
                                 </div>
                                 <div  class= "col-md-6 col-sx-6 col-sm-6 col-lg-6" >
                                     <div class="form-group has-success">
                                         <label for="pago_transporteL">{$.i18n.prop("factura.resumen.efectivo")} </label> 
-                                        <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo">
+                                        <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo" value="{factura.totalEfectivo}">
                                     </div>
                                     <div  class="form-group has-success">
                                         <label for="pago_efectivoL">{$.i18n.prop("factura.resumen.tarjeta")} </label> 
-                                        <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"   >
+                                        <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"  value="{factura.totalTarjeta}" >
                                     </div>
                                     <div  class="form-group has-success">
                                         <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
-                                        <input onkeyup={ __TotalDeTarjeta } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="form-control" id="pago_tarjeta"  value="{factura.totalTarjeta}">
+                                        <input onkeyup={ __TotalDeTarjeta } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="form-control" id="totalBanco"  value="{factura.totalBanco}"  value="{factura.totalBanco}">
                                     </div>
 
                                     
                                 </div>
                             </div>
                             <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
+                            <input type="hidden" id='estado'                  name='estado'                  value="{factura.estado}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='subTotal'                name='subTotal'                value="{factura.subTotal}" >
@@ -95,7 +91,7 @@
                             <input type="hidden" id='totalGravado'            name='totalGravado'            value="{factura.totalGravado}" >
                             <input type="hidden" id='totalExento'             name='totalExento'             value="{factura.totalExento}" >
                             <input type="hidden" id='totalVenta'              name='totalVenta'              value="{factura.totalVenta}" >
-                            <input type="hidden" id='totalDescuento'          name='totalDescuento'          value="{factura.totalDescuento}" >
+                            <input type="hidden" id='totalDescuentos'         name='totalDescuentos'        value="{factura.totalDescuentos}" >
                             <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
                             <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           value="{factura.totalImpuesto}" >
                             <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
@@ -110,6 +106,22 @@
                         <button onclick={__AplicarYcrearFactura}  class="btn-green btn-add pull-right"> </i> {$.i18n.prop("btn.aplicar")}</button>
                     </div>
                 </div>
+                 <!--Ventana de los billetes-->
+        <div class="container">
+            <div class="row">
+                <div   class="col-sx-12 col-sm-12 col-md-12 col-lg-12 " >
+                    <!--Seccion de Billetes-->
+                    <section  class="lista-articulos" >
+                        <div class="product-item" each={billetes}   onclick={_sumarBilletes}>
+                            <img style = "height:100px;width:250px" alt="" class="img-responsive " src="{imagen}">
+                            <a href="#">{modena} {descripcion}</a>
+                        </div>
+                    </section>
+                   <!--Fin Seccion de Billetes-->
+                </div> 
+            </div>       
+        </div>
+        <!--Fin Ventana de los billetes-->      
             </div>
             <div class="col-md-4 col-sm-4 col-lg-4 col-sx-12 ">
 		        <div class="box">
@@ -121,7 +133,7 @@
                                 <h3><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h3>
                                 <div class="booking-info">
                                     <p style="text-align:right">{$.i18n.prop("factura.resumen.subTotal")} : <span id="lblSubtotal"> {subTotalGeneral.toLocaleString('de-DE')  } </span></p>
-                                    <p style="text-align:right">{$.i18n.prop("factura.resumen.descuento")} : <span id="lblSubtotal"> {factura.totalDescuento.toLocaleString('de-DE')} </span></p>
+                                    <p style="text-align:right">{$.i18n.prop("factura.resumen.descuento")} : <span id="lblSubtotal"> {factura.totalDescuentos.toLocaleString('de-DE')} </span></p>
                                     <p style="text-align:right">{$.i18n.prop("factura.resumen.impuesto")}  : <span id="lblSubtotal"> {factura.totalImpuesto.toLocaleString('de-DE')} </span></p>
                                 </div>
                                 <div class="precioTotalFactura">
@@ -136,22 +148,7 @@
 				</div><!-- fin box -->
 		    </div>
         </div>  
-          <!--Ventana de los billetes-->
-        <div class="container">
-            <div class="row">
-                <div   class="col-sx-12 col-sm-7 col-md-7 col-lg-7 " >
-                    <!--Seccion de Billetes-->
-                    <section  class="lista-articulos" >
-                        <div class="product-item" each={billetes}   onclick={_sumarBilletes}>
-                            <img style = "height:100px;width:250px" alt="" class="img-responsive " src="{imagen}">
-                            <a href="#">{modena} {descripcion}</a>
-                        </div>
-                    </section>
-                   <!--Fin Seccion de Billetes-->
-                </div> 
-            </div>       
-        </div>
-        <!--Fin Ventana de los billetes-->      
+         
 </div>  
 <!--Fin Ventana de los billetes-->      
 
@@ -167,7 +164,7 @@
                     <a class="pull-left" href="#"     title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("crear.ventas")}</span></a>
                     
                     <a class="pull-right" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("btn.limpiar")}</span></a>
-                    <a class="pull-right" href="#"    onclick = {__AplicarYcrearFactura} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("btn.tiquete")}</span></a>
+                    <a class="pull-right" href="#"    onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("btn.tiquete")}</span></a>
                   </div>
                   </div>
                 </div>  
@@ -434,6 +431,35 @@
 <!--Fin Cambiar Descuento-->
 
 <style type="text/css">
+ .lista-articulos{
+        width:100%;
+
+        display:flex;
+        flex-wrap:wrap;
+    }
+    .lista-articulos .product-item{
+        width:22%;
+        margin-left:1%;
+        margin-bottom:25px;
+        box-shadow:0px 0px 6px 0px rgba(0,0,0,0.22);
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        align-self:flex-start;
+    }
+    .lista-articulos .product-item img{
+        width:100%;
+    }
+
+    .lista-articulos .product-item a{
+        display:block;
+        width:100%;
+        padding:8px 0;
+        background:#2D3E50;
+        color:#fff;
+        text-align:center;
+        text-decoration:none;
+    }
     /* Lista de facturas en espera*/
     .cabecera-derecha .lista-factura-espera{
         width:100%;
@@ -612,7 +638,6 @@
     self.detail                = []
     self.mensajesBackEnd       = []
     self.error                 = false
-    self.comboEstados          = []
     self.comboCondicionPagos        = []
     self.comboTipoDocumentos   = []
     self.factura                = {
@@ -649,7 +674,7 @@
 	    montoCambio:0,
 	    totalCambio:0,
 	    codigoMoneda:"",
-	    estado:0,
+	    estado:1,
 	    cliente:{
             id:0,
             nombreCompleto:""
@@ -708,13 +733,13 @@
           
         __comboCondicionPago()
         __ComboTipoDocumentos()
-        __ComboEstados()
-        __ListaDeClientes()
+          __ListaDeClientes()
        __ListaDeVendedores()
        __Teclas()
        __TipoCambio()
        __cargaUbicacion()
        __comboCondicionPagoRef()
+       cargaBilletes()
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
@@ -1092,13 +1117,18 @@ __CargarFacturaEspera(e){
 ** Se aplica o se crea una Factura cargada en la pantalla
 **/
 __AplicarYcrearFactura(){
- aplicarFactura()
+ aplicarFactura(2)
 }
+
+__AplicarYcrearFacturaTemporal(){
+ aplicarFactura(1)
+}
+
 
 /**
 * Aplicar la factura
 **/
-function aplicarFactura(){
+function aplicarFactura(estado){
     if(self.detail.length == 0 ){
         mensajeError($.i18n.prop("factura.alert.sin.detalles"))
         return
@@ -1114,7 +1144,7 @@ function aplicarFactura(){
         }
     }else{
         // Si no es credito y el estado no es pendiente se debe verificar si ingresaron el monto a pagar
-        if($('#estado').val() !=1){
+        if(estado == 2){
             if(self.factura.totalTarjeta == 0 && self.factura.totalBanco == 0 && self.factura.totalEfectivo == 0){
                 mensajeError($.i18n.prop("error.factura.monto.ingresado"))
                 return
@@ -1133,8 +1163,9 @@ function aplicarFactura(){
                     
                 }
             }
-            
+
         }
+            
     } 
 if ($("#formularioFactura").valid()) {
         swal({
@@ -1151,7 +1182,7 @@ if ($("#formularioFactura").valid()) {
         }).then(function (isConfirm) {
             //Ajax__inicializarTabla();
             if(isConfirm){
-               crearFactura()  
+               crearFactura(estado)  
               
             }
         });
@@ -1176,7 +1207,6 @@ function __Init(){
     self.detail                = []
     self.mensajesBackEnd       = []
     self.error                 = false
-    self.comboEstados          = []
     self.comboCondicionPagos        = []
     self.comboTipoDocumentos   = []
     self.facturas_espera       = {data:[]}  
@@ -1215,7 +1245,7 @@ function __Init(){
 	    totalCambio:0,
         totalCambioPagar:0,
 	    codigoMoneda:"",
-	    estado:0,
+	    estado:1,
 	    cliente:{
             id:0,
             nombreCompleto:"",
@@ -1250,12 +1280,7 @@ function __Init(){
     $('.referenciaCodigo').prop("selectedIndex", 0);
     $('#condicionVenta').prop("selectedIndex", 0);
     $('#tipoDoc').prop("selectedIndex", 0);
-    $('#estado').prop("selectedIndex", 0);
-    $('#provincia').prop("selectedIndex", 0);
-    $('#canton').prop("selectedIndex", 0);
-    $('#distrito').prop("selectedIndex", 0);
-    $('#barrio').prop("selectedIndex", 0);
-     $(".totalBanco").val(null)   
+         $(".totalBanco").val(null)   
     $(".totalTarjeta").val(null)   
     $(".totalEfectivo").val(null)   
 
@@ -1272,8 +1297,6 @@ function __Init(){
      __comboCondicionPagoRef()
      //Tipos de Documentos
       __ComboTipoDocumentos()
-      //Estados
-      __ComboEstados()
      __ListaFacturasEnEspera()
     
 }
@@ -1352,7 +1375,7 @@ function __displayDate_detail(fecha) {
 /**
 *  Crear Factura nueva
 **/
-function crearFactura(){
+function crearFactura(estado){
     self.detalleFactura.data =self.detail
     self.update() 
     var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
@@ -1367,6 +1390,7 @@ function crearFactura(){
     self.factura.totalTarjeta = redondearDecimales(__valorNumerico($('#totalTarjeta').val())) 
     self.factura.totalBanco = redondearDecimales(__valorNumerico($('#totalBanco').val()))
     self.factura.detalleFactura =JSONDetalles
+    self.factura.estado = estado
     self.update();
     
     var formulario = $("#formularioFactura").serialize();
@@ -1847,12 +1871,12 @@ function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc){
 }
 
 function ActualizarLineaDEtalle(){
-    var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
+  var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
     var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc)
     var subTotal               = redondearDecimales(montoTotal - montoDescuento,5)
     var montoImpuesto          = _calcularImpuesto(subTotal,self.item.iva ==null?0:self.item.iva)
     var montoTotalLinea        = redondearDecimales(subTotal + montoImpuesto,5)    
-    self.item.montoTotal       = redondearDecimales(montoTotal,5)
+    self.item.montoTotal       = montoTotal
     self.item.montoDescuento   = redondearDecimales(montoDescuento,5)
     self.item.subTotal         = redondearDecimales(subTotal,5)
     self.item.montoImpuesto    = redondearDecimales(montoImpuesto,5)
@@ -1928,7 +1952,7 @@ function getTotalDescuento(precio,cantidad,porcentajeDesc){
 **/
 function __calculate() {
     self.factura.total           = 0;
-    self.factura.totalDescuento  = 0;
+    self.factura.totalDescuentos  = 0;
     self.factura.totalImpuesto   = 0;
     self.factura.subTotal        = 0;
     self.update()
@@ -1946,12 +1970,12 @@ function __calculate() {
     totalComprobante        = 0
     totalventaNeta          = 0
     self.detail.forEach(function(e){
-        totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.subTotal:0
-        totalMercanciasExentas  += e.impuesto == 0 && e.tipoImpuesto != "07"?e.subTotal:0
-        totalServGravados       += e.montoImpuesto > 0 && e.tipoImpuesto == "07"?e.subTotal:0
-        totalServExentos        += e.impuesto == 0 && e.tipoImpuesto == "07"?e.subTotal:0
-        totalGravado            += e.impuesto > 0 ?e.subTotal:0
-        totalExento             += e.impuesto == 0?e.subTotal:0
+        totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.montoTotal:0
+        totalMercanciasExentas  += e.impuesto == 0 && e.tipoImpuesto != "07"?e.montoTotal:0
+        totalServGravados       += e.montoImpuesto > 0 && e.tipoImpuesto == "07"?e.montoTotal:0
+        totalServExentos        += e.impuesto == 0 && e.tipoImpuesto == "07"?e.montoTotal:0
+        totalGravado            += e.impuesto > 0 ?e.montoTotal:0
+        totalExento             += e.impuesto == 0?e.montoTotal:0
         totalComprobante        += e.montoTotalLinea
         subTotal                += e.subTotal >0?e.subTotal:0
         totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
@@ -1965,20 +1989,22 @@ function __calculate() {
 
     self.factura.totalGravado            = redondearDecimales(__valorNumerico(totalGravado),5)
     self.factura.totalExento             = redondearDecimales(__valorNumerico(totalExento),5)
-    self.factura.totalVenta              = redondearDecimales(totalVenta,5)
-    self.factura.totalDescuento          = redondearDecimales(__valorNumerico(totalDescuento),5)
+    //cuando se aplica descuentos
+    self.factura.totalVenta              = redondearDecimales(__valorNumerico(totalVenta),5)
+    self.factura.totalDescuentos          = redondearDecimales(__valorNumerico(totalDescuento),5)
     self.factura.subTotal                = redondearDecimales(__valorNumerico(subTotal),5)
     self.factura.totalImpuesto           = redondearDecimales(__valorNumerico(totalImpuesto),5)
-    self.factura.totalVentaNeta          = redondearDecimales(__valorNumerico(subTotal),5)
+    self.factura.totalVentaNeta          = redondearDecimales(__valorNumerico(totalVenta-totalDescuento),5)
     self.factura.totalComprobante        = redondearDecimales(__valorNumerico(totalComprobante),5)
     self.articulo              = null;
     self.update(); 
     $( "#codigo" ).val(null);
     $( "#quantity" ).val(null);
+    getSubTotalGeneral()
 }
 
 function getSubTotalGeneral(){
-    var resultado = __valorNumerico(self.factura.subTotal) + __valorNumerico(self.factura.totalDescuento)
+    var resultado = __valorNumerico(self.factura.subTotal) + __valorNumerico(self.factura.totalDescuentos)
     self.subTotalGeneral = redondearDecimales(resultado,5)
     self.update()
 }
@@ -2215,22 +2241,7 @@ function __ComboTipoDocumentos(){
     
     self.update()
 }
-/**
-* cargar los estados de la factura
-**/
-function __ComboEstados(){
-    self.comboEstados = []
-    self.comboEstados.push({
-        estado:1,
-        descripcion:$.i18n.prop("factura.estado.pendiente")
-    })
-    self.comboEstados.push({
-        estado:2,
-        descripcion:$.i18n.prop("factura.estado.facturado")
-    })
-    
-    self.update()
-}
+
 /**
 *  Agregar los inpust  y select de las tablas
 **/
@@ -2296,6 +2307,72 @@ function __Teclas(){
    
 
 }
+
+
+/**
+* Contabilizar los billetes de acuerdo a como se vayan dando click en la pantalla
+*/
+_sumarBilletes(e){
+    
+    var item = e.item
+    if(item.valor == 0 ){
+       self.factura.totalEfectivo = 0
+       self.factura.totalTarjeta  = 0
+       self.factura.totalBanco    = 0
+       self.factura.totalCambioPagar  = 0
+       self.claseCambioDinero     = "entregarCambioPositivo"
+
+    }else{
+        self.factura.totalEfectivo = __valorNumerico(self.factura.totalEfectivo) + __valorNumerico(item.valor) 
+        self.update()
+        var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
+        sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
+        sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
+        self.factura.totalCambioPagar = 0
+        self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalComprobante ? sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.totalComprobante):sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.totalComprobante)    
+        self.claseCambioDinero  = __valorNumerico(sumaMontosEntregadosParaCambios) > __valorNumerico(self.factura.totalComprobante)?'entregarCambioPositivo':'entregarCambioNegativo'
+        
+
+    }
+    
+    self.update()
+    
+    
+
+}
+
+function cargaBilletes(){
+    self.billetes = []
+    self.update()
+    _incluirBilletes("₡","50,000",50000,'/dist/img/billete50000.jpg')
+    _incluirBilletes("₡","20,000",20000,'/dist/img/billete20000.jpg')
+    _incluirBilletes("₡","10,000",10000,'/dist/img/billete10000.jpg')
+    _incluirBilletes("₡","5,000",5000,'/dist/img/billete5000.jpg')
+    _incluirBilletes("₡","2,000",2000,'/dist/img/billete2000.jpg')
+    _incluirBilletes("₡","1000",1000,'/dist/img/billete1000.jpg')
+    _incluirBilletes("","Limpiar",0,'/dist/img/limpiar.png')
+
+}
+
+
+/**
+*    Incluir a los billetes
+**/
+
+function _incluirBilletes(modena,descripcion,valor,imagen){
+
+    
+    self.billetes.push(
+        {
+            modena:modena,
+            descripcion:descripcion,
+            imagen:imagen,
+            valor:valor
+        }
+    )
+    self.update()
+}
+
 
 </script>
 

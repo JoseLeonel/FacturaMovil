@@ -1,5 +1,7 @@
 package com.emprendesoftcr.Dao;
 
+import java.util.Collection;
+
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 
@@ -16,6 +18,10 @@ public interface FacturaDao {
 	Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa);
 	
 	void eliminarDetalleFacturaPorSP(Factura factura);
+	
+	Collection<Factura> findByEstadoFirma(Integer estadoFirma);
+	
+	
 
 	
 

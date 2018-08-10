@@ -41,9 +41,11 @@
                             </tr>
                         </tfoot>
                     </table>
+                    <h2 class="pull-right">{$.i18n.prop("articulo.costo")}:{totalCosto.toLocaleString('de-DE')} {$.i18n.prop("articulo.precioPublico")}:{totalPrecioPublico.toLocaleString('de-DE')}   </h2>
             </div>
         </div>    
 </div>
+
 <!-- Fin del Listado -->
 <div  >
     <div class="row center " show ={mostrarFormulario} >
@@ -1348,6 +1350,10 @@ function __consultar(){
         }
     });
 }
+
+
+
+
 /**
 *   Agregar 
 **/
@@ -1445,6 +1451,8 @@ __Modificar(){
 **/
 function __listado(){
    // $("#tableListar").dataTable().fnClearTable(); 
+   self.listaArticulos = []
+   self.update()
     $.ajax({
         url: "ListarArticuloAjax.do",
         datatype: "json",
@@ -1462,6 +1470,9 @@ function __listado(){
                 __agregarEntradaAlInventario()
                 __agregarSalidaAlInventario() 
                 __Eventos()
+                self.listaArticulos = result.aaData
+                self.update()
+                sumar()
              }else{
                   includeActionsArticulo('.dataTables_wrapper','.dataTables_length')
                   __MantenimientoAgregar()
@@ -1473,6 +1484,32 @@ function __listado(){
             console.log(xhr);
         }
     })
+}
+
+function sumar(){
+          self.totalCosto = 0
+          self.totalPrecioPublico = 0
+          self.update()
+
+    $.each(self.listaArticulos, function( index, modeloTabla ) {
+          self.totalCosto += modeloTabla.costo
+          self.totalPrecioPublico += modeloTabla.precioPublico
+          
+
+    })
+    self.totalCosto         = redondearDecimales(self.totalCosto,2)
+    self.totalPrecioPublico = redondearDecimales(self.totalPrecioPublico,2)
+    
+    self.update()
+}
+
+function redondearDecimales(numero, decimales) {
+    numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}');   // Expresion regular para numeros con un cierto numero de decimales o mas
+    if (numeroRegexp.test(numero)) {         // Ya que el numero tiene el numero de decimales requeridos o mas, se realiza el redondeo
+        return Number(numero.toFixed(decimales));
+    } else {
+        return Number(numero.toFixed(decimales)) === 0 ? 0 : numero;  // En valores muy bajos, se comprueba si el numero es 0 (con el redondeo deseado), si no lo es se devuelve el numero otra vez.
+    }
 }
 /**
 *Formato del listado de los cambios

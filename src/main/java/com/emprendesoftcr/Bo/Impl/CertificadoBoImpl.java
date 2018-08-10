@@ -23,20 +23,18 @@ import com.emprendesoftcr.type.CertificateInfo;
 @Service("certificadoBo")
 public class CertificadoBoImpl implements CertificadoBo {
 
-	@Lazy
 	@Autowired
-	CertificadoDao certificadoDao;
+	private CertificadoDao certificadoDao;
 
 	@Override
-	public void agregar(Empresa empresa,String password,String nombrep12) {
+	public void agregar(Empresa empresa, String password, String nombrep12) {
 		CertificateInfo certificateInfo = null;
-		
-		
+
 		try {
-			ClassPathResource cpr = new ClassPathResource("/home/jose/dev/workspaceMaven/FacturaElectronica/src/main/resources/static/llaves/"+nombrep12 );
-		  String path =  new ClassPathResource("/home/jose/dev/workspaceMaven/FacturaElectronica/tmp/").getPath();
-			certificateInfo = P12Utils.dataFromP12(path,cpr.getPath(), password);
-			
+			ClassPathResource cpr = new ClassPathResource("/home/jose/dev/workspaceMaven/FacturaElectronica/src/main/resources/static/llaves/" + nombrep12);
+			String path = new ClassPathResource("/home/jose/dev/workspaceMaven/FacturaElectronica/tmp/").getPath();
+			certificateInfo = P12Utils.dataFromP12(path, cpr.getPath(), password);
+
 			Certificado certificado = new Certificado();
 			certificado.setEmpresa(empresa);
 			certificado.setCerthash(certificateInfo.certHash());
@@ -48,12 +46,10 @@ public class CertificadoBoImpl implements CertificadoBo {
 			certificado.setUpdated_at(new Date());
 			certificadoDao.agregar(certificado);
 
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
+
 	}
 
 	@Override
@@ -67,7 +63,7 @@ public class CertificadoBoImpl implements CertificadoBo {
 
 		return certificadoDao.findByEmpresa(empresa);
 	}
-	
+
 	@Override
 	public Collection<Certificado> findByAll() {
 

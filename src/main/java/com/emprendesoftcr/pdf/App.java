@@ -45,7 +45,7 @@ public class App {
 		BaseFont sansBold = BaseFont.createFont(fontSansBold, BaseFont.WINANSI, BaseFont.EMBEDDED);
 		Font font10 = new Font(sansRegular, 10);
 		Font font10B = new Font(sansBold, 10);
-
+		
 		// Logo
 		app.addLogo(cb, dir, document, facturaElectronica.get_logo());
 		// Emisor
@@ -105,11 +105,7 @@ public class App {
 		float sevenRow = PageSize.TABLOID.rotate().getHeight() - 120;
 		float eightRow = PageSize.TABLOID.rotate().getHeight() - 135;
 		float nineRow = PageSize.TABLOID.rotate().getHeight() - 150;
-		float tenRow = PageSize.TABLOID.rotate().getHeight() - 220;
-		float elevenRow = PageSize.TABLOID.rotate().getHeight() - 240;
-		float twelveRow = PageSize.TABLOID.rotate().getHeight() - 255;
-		float thirteenRow = PageSize.TABLOID.rotate().getHeight() - 270;
-		float fourteenRow = PageSize.TABLOID.rotate().getHeight() - 285;
+	
 		// Cuadro 2
 		cb.setColorStroke(bColor);
 		cb.setColorFill(BaseColor.WHITE);
@@ -379,7 +375,7 @@ public class App {
 			descuento = descuento + (double) Math.round(detalleFacturaElectronica.get(i).getDescuento() * 100000d) / 100000d;
 			subTotal = subTotal + (double) Math.round(detalleFacturaElectronica.get(i).getSubtotal() * 100000d) / 100000d;
 			impuesto = impuesto + (double) Math.round(detalleFacturaElectronica.get(i).getImpuesto() * 100000d) / 100000d;
-			exento = exento + (double) Math.round(detalleFacturaElectronica.get(i).getExento() * 100000d) / 100000d;
+			exento = exento + (double) Math.round(detalleFacturaElectronica.get(i).getImpuesto() ==  Constantes.ZEROS_DOUBLE?detalleFacturaElectronica.get(i).getTotal() * 100000d:Constantes.ZEROS_DOUBLE) / 100000d;
 			total = total + (double) Math.round(detalleFacturaElectronica.get(i).getTotal() * 100000d) / 100000d;
 		}
 		addText(cb, String.format("%.5f", monto), font, col1, row2, Element.ALIGN_RIGHT);
