@@ -168,6 +168,12 @@ public class ClientesController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+	
+			cliente.setProvincia(cliente.getProvincia().equals("0")?Constantes.EMPTY:cliente.getProvincia());
+			cliente.setDistrito(cliente.getDistrito().equals("0")?Constantes.EMPTY:cliente.getDistrito());
+			cliente.setCanton(cliente.getCanton().equals("0")?Constantes.EMPTY:cliente.getCanton());
+			cliente.setBarrio(cliente.getBarrio().equals("0")?Constantes.EMPTY:cliente.getBarrio());
+			
       cliente.setEmpresa(usuarioSesion.getEmpresa());
 			cliente.setCreated_at(new Date());
 			cliente.setUpdated_at(new Date());
@@ -217,6 +223,10 @@ public class ClientesController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+			clienteBD.setProvincia(cliente.getProvincia().equals("0")?Constantes.EMPTY:cliente.getProvincia());
+			clienteBD.setDistrito(cliente.getDistrito().equals("0")?Constantes.EMPTY:cliente.getDistrito());
+			clienteBD.setCanton(cliente.getCanton().equals("0")?Constantes.EMPTY:cliente.getCanton());
+			clienteBD.setBarrio(cliente.getBarrio().equals("0")?Constantes.EMPTY:cliente.getBarrio());
 
 			clienteBD.setCedula(cliente.getCedula());
 			clienteBD.setNombreCompleto(cliente.getNombreCompleto());

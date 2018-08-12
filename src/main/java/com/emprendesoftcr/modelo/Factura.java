@@ -94,6 +94,9 @@ public class Factura implements Serializable {
 	@Column(name = "nombre_factura")
 	private String						nombreFactura;
 
+	@Column(name = "correo_alternativo")
+	private String						correoAlternativo;
+
 	@Column(name = "direccion")
 	private String						direccion;
 
@@ -174,7 +177,7 @@ public class Factura implements Serializable {
 
 	@Column(name = "estado")
 	private Integer						estado;
-	
+
 	@Column(name = "estado_firma")
 	private Integer						estadoFirma;
 
@@ -217,10 +220,8 @@ public class Factura implements Serializable {
 
 	}
 
-	
-
-	public Factura(Long id, Date fechaCredito, String numeroConsecutivo, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon, Date referenciaFechaEmision, String medioEfectivo, String medioTarjeta, String medioBanco, String nombreFactura, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta,
-			Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Set<Detalle> detalles) {
+	public Factura(Long id, Date fechaCredito, String numeroConsecutivo, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon, Date referenciaFechaEmision, String medioEfectivo, String medioTarjeta, String medioBanco, String nombreFactura, String correoAlternativo, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo,
+			Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Set<Detalle> detalles) {
 		super();
 		this.id = id;
 		this.fechaCredito = fechaCredito;
@@ -239,6 +240,7 @@ public class Factura implements Serializable {
 		this.medioTarjeta = medioTarjeta;
 		this.medioBanco = medioBanco;
 		this.nombreFactura = nombreFactura;
+		this.correoAlternativo = correoAlternativo;
 		this.direccion = direccion;
 		this.nota = nota;
 		this.comanda = comanda;
@@ -275,8 +277,6 @@ public class Factura implements Serializable {
 		this.usuarioCreacion = usuarioCreacion;
 		this.detalles = detalles;
 	}
-
-
 
 	public Long getId() {
 		return id;
@@ -698,20 +698,20 @@ public class Factura implements Serializable {
 		this.medioBanco = medioBanco;
 	}
 
-
-
-	
 	public Integer getEstadoFirma() {
 		return estadoFirma;
 	}
 
-
-
-	
 	public void setEstadoFirma(Integer estadoFirma) {
 		this.estadoFirma = estadoFirma;
 	}
 
-	
-	
+	public String getCorreoAlternativo() {
+		return correoAlternativo;
+	}
+
+	public void setCorreoAlternativo(String correoAlternativo) {
+		this.correoAlternativo = correoAlternativo;
+	}
+
 }

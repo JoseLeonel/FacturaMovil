@@ -2499,6 +2499,7 @@ __CambiarDescuento(e){
     self.item = e.item; 
     self.update()
     $('#modalCambiarDescuento').modal('show')      
+    $('#aplicarDescuento').focus()
 }
 
 /**

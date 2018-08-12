@@ -41,6 +41,15 @@
                                         <label>{$.i18n.prop("factura.cliente")}</label> 
                                         <input onclick = {_EscogerClientes}  type="text" id="nombreCliente" name="nombreCliente" class="form-control"  value="{cliente.nombreCompleto}" readonly>
                                     </div>
+                                    <div class="form-group ">
+                                        <label>{$.i18n.prop("cliente.correoElectronico")}</label> 
+                                        <input  type="text"  class="form-control"  value="{cliente.correoElectronico}" readonly>
+                                    </div>                                    
+                                   <div class="form-group ">
+                                        <label>{$.i18n.prop("factura.correoAlternativo")}</label> 
+                                        <input type="email" id="correoAlternativo" name="correoAlternativo" class="form-control"  value="" >
+                                    </div>
+                                    
                                     <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group ">
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 
                                         <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
@@ -431,35 +440,6 @@
 <!--Fin Cambiar Descuento-->
 
 <style type="text/css">
- .lista-articulos{
-        width:100%;
-
-        display:flex;
-        flex-wrap:wrap;
-    }
-    .lista-articulos .product-item{
-        width:22%;
-        margin-left:1%;
-        margin-bottom:25px;
-        box-shadow:0px 0px 6px 0px rgba(0,0,0,0.22);
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        align-self:flex-start;
-    }
-    .lista-articulos .product-item img{
-        width:100%;
-    }
-
-    .lista-articulos .product-item a{
-        display:block;
-        width:100%;
-        padding:8px 0;
-        background:#2D3E50;
-        color:#fff;
-        text-align:center;
-        text-decoration:none;
-    }
     /* Lista de facturas en espera*/
     .cabecera-derecha .lista-factura-espera{
         width:100%;
@@ -630,8 +610,36 @@
     .tituloTotal{
         font-size:25px;
     }
-</style>
+    .lista-articulos{
+        width:100%;
 
+        display:flex;
+        flex-wrap:wrap;
+    }
+    .lista-articulos .product-item{
+        width:22%;
+        margin-left:1%;
+        margin-bottom:25px;
+        box-shadow:0px 0px 6px 0px rgba(0,0,0,0.22);
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        align-self:flex-start;
+    }
+    .lista-articulos .product-item img{
+        width:100%;
+    }
+
+    .lista-articulos .product-item a{
+        display:block;
+        width:100%;
+        padding:8px 0;
+        background:#2D3E50;
+        color:#fff;
+        text-align:center;
+        text-decoration:none;
+    }
+</style>
 <script>
     var self = this;
     // Detalle de la factura es una coleccion de articulos
@@ -641,7 +649,7 @@
     self.comboCondicionPagos        = []
     self.comboTipoDocumentos   = []
     self.factura                = {
-        id:0,
+        id:null,
 	   fechaCredito:null,
 	   fechaEmision:null,
 	   condicionVenta:"",
@@ -740,6 +748,7 @@
        __cargaUbicacion()
        __comboCondicionPagoRef()
        cargaBilletes()
+       ("#codigo").focus()
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
@@ -1211,7 +1220,7 @@ function __Init(){
     self.comboTipoDocumentos   = []
     self.facturas_espera       = {data:[]}  
     self.factura                = {
-        id:0,
+        id:null,
 	    fechaCredito:null,
 	    fechaEmision:null,
 	    condicionVenta:"",

@@ -279,6 +279,7 @@ public class Constantes {
 	public static final String					FACTURA_MEDIO_PAGO_TRANSFERENCIA_STR								= "Transferencia";
 
 	public static final Integer					FACTURA_ESTADO_PENDIENTE														= 1;
+	public static final Integer					FACTURA_ESTADO_PROFORMAS														= 3;
 	public static final Integer					FACTURA_ESTADO_FACTURADO														= 2;
 
 	public static final Integer					FACTURA_ESTADO_FIRMA_PENDIENTE														= 1;

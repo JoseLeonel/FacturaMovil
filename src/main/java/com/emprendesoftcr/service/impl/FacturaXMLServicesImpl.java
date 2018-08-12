@@ -313,13 +313,7 @@ private String xmlImpuestos(Detalle detalle)throws Exception {
                   xmlIdentificacion(factura) +
                   "<IdentificacionExtranjero>" + factura.getCliente().getIdentificacionExtranjero() + "</IdentificacionExtranjero>" +
                   "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
-                  "<Ubicacion>" +
-                      "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
-                      "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
-                      "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
-                      "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
-                      "<OtrasSenas>" + factura.getCliente().getOtraSena() + "</OtrasSenas>" +
-                  "</Ubicacion>" +
+                  ubicacionReceptor(factura)+
                   getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
                   getFax(0,factura.getCliente().getCodigoPais()) +    
                   "<CorreoElectronico>" + factura.getCliente().getCorreoElectronico() + "</CorreoElectronico>" +
@@ -334,6 +328,25 @@ private String xmlImpuestos(Detalle detalle)throws Exception {
 		}
   	return resultado;
 }
+  
+  private String ubicacionReceptor(Factura factura) {
+  	
+  	String resultado = Constantes.EMPTY;
+  	if(factura.getCliente().getProvincia() !=null ) {
+  		if(!factura.getCliente().getProvincia().equals(Constantes.EMPTY)) {
+  	    resultado = "<Ubicacion>" +
+  	        "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
+  	        "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
+  	        "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
+  	        "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
+  	        "<OtrasSenas>" + factura.getCliente().getOtraSena() + "</OtrasSenas>" +
+  	        "</Ubicacion>" ;
+  		}
+  	}
+
+  	return resultado;
+  }
+  
 private String xmlIdentificacion (Factura factura) throws Exception {
 	String resultado = Constantes.EMPTY;
 	try {

@@ -13,7 +13,7 @@ import com.emprendesoftcr.modelo.Vendedor;
  */
 public class FacturaCommand {
 
-	private Long		id;
+	private Long			id;
 
 	private String		fechaCredito;
 
@@ -32,6 +32,7 @@ public class FacturaCommand {
 	private String		nombreFactura;
 
 	private String		direccion;
+	private String		correoAlternativo;
 
 	private String		referenciaTipoDoc;
 
@@ -41,7 +42,7 @@ public class FacturaCommand {
 
 	private String		referenciaRazon;
 
-	private String			referenciaFechaEmision;
+	private String		referenciaFechaEmision;
 
 	private String		nota;
 
@@ -108,24 +109,23 @@ public class FacturaCommand {
 		super();
 	}
 
-	
-
-
-	
 	public Long getId() {
 		return id;
 	}
 
-
-
-
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
 
+	
+	public String getCorreoAlternativo() {
+		return correoAlternativo;
+	}
 
-
+	
+	public void setCorreoAlternativo(String correoAlternativo) {
+		this.correoAlternativo = correoAlternativo;
+	}
 
 	public String getDetalleFactura() {
 		return detalleFactura;
@@ -167,21 +167,13 @@ public class FacturaCommand {
 		this.referenciaRazon = referenciaRazon;
 	}
 
-	
-
-	
 	public String getReferenciaFechaEmision() {
 		return referenciaFechaEmision;
 	}
 
-
-
-	
 	public void setReferenciaFechaEmision(String referenciaFechaEmision) {
 		this.referenciaFechaEmision = referenciaFechaEmision;
 	}
-
-
 
 	public String getFechaCredito() {
 		return fechaCredito;

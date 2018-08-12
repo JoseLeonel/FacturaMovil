@@ -166,7 +166,7 @@ public class FacturaBoImpl implements FacturaBo {
 			facturaCommand.setPlazoCredito(facturaCommand.getPlazoCredito() == null ? Constantes.ZEROS : facturaCommand.getPlazoCredito());
 			facturaCommand.setCodigoMoneda(facturaCommand.getCodigoMoneda() !=null?facturaCommand.getCodigoMoneda():Constantes.CODIGO_MONEDA_COSTA_RICA);
 			facturaCommand.setTotalTarjeta(facturaCommand.getTotalTarjeta() ==null?Constantes.ZEROS_DOUBLE:facturaCommand.getTotalTarjeta());
-
+      
 			
 			factura.setCondicionVenta(facturaCommand.getCondicionVenta());
 			// Fecha de credito
@@ -195,7 +195,7 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setFechaEmision(null);
 
 			}
-
+      factura.setCorreoAlternativo(facturaCommand.getCorreoAlternativo());
 			factura.setUsuarioCreacion(usuario);
 			factura.setEmpresa(usuario.getEmpresa());
 			factura.setVendedor(facturaCommand.getVendedor());
@@ -306,7 +306,6 @@ public class FacturaBoImpl implements FacturaBo {
 					detalle.setNumeroLinea(numeroLinea);
 					detalle.setCreated_at(new Date());
 					detalle.setUpdated_at(new Date());
-					detalle.setDescripcion(articulo.getDescripcion());
 					detalle.setTipoCodigo(articulo.getTipoCodigo());
 					detalle.setCodigo(articulo.getCodigo());
 					detalle.setUnidadMedida(articulo.getUnidadMedida());

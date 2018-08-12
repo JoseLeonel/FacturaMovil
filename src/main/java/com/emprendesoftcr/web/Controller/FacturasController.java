@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleBo;
@@ -104,7 +105,7 @@ public class FacturasController {
 	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
 																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
 																																																			// Emisor
-																																																			
+
 																																																			facturaElectronica.setEmisorNombre(d.getEmpresa().getNombre());
 																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
 																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
@@ -135,7 +136,7 @@ public class FacturasController {
 
 																																																			facturaElectronica.setMoneda(FacturaElectronicaUtils.getMoneda(d.getCodigoMoneda()));
 																																																			facturaElectronica.setTipoCambio(d.getTipoCambio().toString());
-																																																			
+
 																																																			// Nota Credito y Nota Debito
 																																																			if (d.getReferenciaCodigo() != null) {
 																																																				if (!d.getReferenciaCodigo().equals(Constantes.EMPTY)) {
@@ -162,16 +163,14 @@ public class FacturasController {
 																																																			return facturaElectronica;
 																																																		};
 
-	
 	@Autowired
-	private DetalleBo																								detalleBo;
+	private DetalleBo																									detalleBo;
 
-	
 	@Autowired
 	private DataTableBo																								dataTableBo;
 
-	// @Autowired
-	// private CertificadoBo certificadoBo;
+	@Autowired
+	private CertificadoBo																							certificadoBo;
 
 	@Autowired
 	private UsuarioBo																									usuarioBo;
@@ -226,7 +225,7 @@ public class FacturasController {
 	 */
 	@RequestMapping(value = "/puntoVenta", method = RequestMethod.GET)
 	public String crearCompras(ModelMap model) {
-		
+
 		return "views/facturas/puntoVenta";
 	}
 
@@ -473,9 +472,7 @@ public class FacturasController {
 			if (factura == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			
-			
-			
+
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", factura);
 
 		} catch (Exception e) {
@@ -499,9 +496,9 @@ public class FacturasController {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
 
-			// Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		//	Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
-			// certificadoBo.agregar(usuario.getEmpresa(),usuario.getEmpresa().getClaveLlaveCriptografica().toString(),usuario.getEmpresa().getNombreLlaveCriptografica());
+		//	certificadoBo.agregar(usuario.getEmpresa(), usuario.getEmpresa().getClaveLlaveCriptografica().toString(), usuario.getEmpresa().getNombreLlaveCriptografica());
 			// String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);
 			// facturaXMLServices.getFirmarXML(xml, facturaBD.getEmpresa());
 
