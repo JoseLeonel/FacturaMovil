@@ -170,10 +170,11 @@
                 <div class="row">
                   <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">  
                   <div class="box-tools ">
-                    <a class="pull-left" href="#"     title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("crear.ventas")}</span></a>
+                    <a class="pull-left" href="#"     title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
+                    <a class="pull-left" href="#"    onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
+                    <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
+                    <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
                     
-                    <a class="pull-right" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("btn.limpiar")}</span></a>
-                    <a class="pull-right" href="#"    onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("btn.tiquete")}</span></a>
                   </div>
                   </div>
                 </div>  
@@ -183,7 +184,7 @@
                 <div class="cabecera-izquierda">
                     <div class="row">
                             <div class="col-sx-12 col-sm-6 col-md-6 col-lg-10">
-                                <input onkeypress={__addProductToDetail}  id="codigo" class="form-control" type="text" placeholder="XXXXXXXXXXX" />
+                                <input onkeypress={__addProductToDetail}  id="codigo" name ="codigo" class="form-control codigo" type="text" placeholder="XXXXXXXXXXX" />
                             </div>
                             <div class="col-sx-12 col-sm-6 col-md-6 col-lg-2">
                                 <button    onclick = {__ListaDecodigos} class="btn-green btn-buscar " id="btn-facturar" >
@@ -487,6 +488,33 @@
         transition: background-color 100ms linear;
         
     }
+    .label-articulos{
+        font-weight: 600 !important;
+        font-size: 20px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        padding-left: 20px;
+        line-height: 30px;
+        border-collapse: separate;
+        text-align: center;
+        cursor: pointer;
+        padding: 5px;
+        margin: 10px;
+        border: none;
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+        
+    }
     #pagarTitulo{
         font-weight: 600 !important;
         font-size: 30px !important;
@@ -648,6 +676,7 @@
     self.error                 = false
     self.comboCondicionPagos        = []
     self.comboTipoDocumentos   = []
+    self.descripcionArticulo = ""
     self.factura                = {
         id:null,
 	   fechaCredito:null,
@@ -748,7 +777,7 @@
        __cargaUbicacion()
        __comboCondicionPagoRef()
        cargaBilletes()
-       ("#codigo").focus()
+      
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
@@ -782,7 +811,7 @@ __LimpiarFormulario(){
     self.cantones                      = []
     self.distritos                     = []
     self.barrios                       = []
-
+    self.descripcionArticulo = ""
     self.update()
      
 }
@@ -1176,26 +1205,7 @@ function aplicarFactura(estado){
         }
             
     } 
-if ($("#formularioFactura").valid()) {
-        swal({
-           title: '',
-           text: $.i18n.prop("factura.alert.crear"),
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: '#00539B',
-            cancelButtonColor: '#d33',
-            confirmButtonText:$.i18n.prop("confirmacion.si"),
-            cancelButtonText: $.i18n.prop("confirmacion.no"),
-            confirmButtonClass: 'btn btn-success',
-            cancelButtonClass: 'btn btn-danger',
-        }).then(function (isConfirm) {
-            //Ajax__inicializarTabla();
-            if(isConfirm){
-               crearFactura(estado)  
-              
-            }
-        });
-    }
+    crearFactura(estado)  
 
 
 }
@@ -1266,6 +1276,7 @@ function __Init(){
     }                            
     self.item                  = null;
     self.articulo              = null;
+    self.descripcionArticulo   = ""
     self.articulos             = {data:[]}
     self.clientes              = {data:[]}
     self.detalleFactura        ={data:[]}
@@ -1289,7 +1300,7 @@ function __Init(){
     $('.referenciaCodigo').prop("selectedIndex", 0);
     $('#condicionVenta').prop("selectedIndex", 0);
     $('#tipoDoc').prop("selectedIndex", 0);
-         $(".totalBanco").val(null)   
+    $(".totalBanco").val(null)   
     $(".totalTarjeta").val(null)   
     $(".totalEfectivo").val(null)   
 
@@ -1307,6 +1318,7 @@ function __Init(){
      //Tipos de Documentos
       __ComboTipoDocumentos()
      __ListaFacturasEnEspera()
+      $(".codigo").focus()
     
 }
 
@@ -1395,7 +1407,7 @@ function crearFactura(estado){
     self.factura.condicionVenta = $('#condicionVenta').val()
     self.factura.fechaCredito =fechaCreditoTemporal.toString()
     self.factura.referenciaFechaEmision =fechaReferencia
-    self.factura.totalEfectivo =$('#totalEfectivo').val()
+    self.factura.totalEfectivo =redondearDecimales(__valorNumerico($('#totalEfectivo').val()))
     self.factura.totalTarjeta = redondearDecimales(__valorNumerico($('#totalTarjeta').val())) 
     self.factura.totalBanco = redondearDecimales(__valorNumerico($('#totalBanco').val()))
     self.factura.detalleFactura =JSONDetalles
@@ -1546,10 +1558,29 @@ __addProductToDetail(e){
     if (e.keyCode != 13) {
         return;
     } 
-    __buscarcodigo(e.currentTarget.value);
+    var codigo = e.currentTarget.value
+    var codigoActual = ""
+    var cantidadAct =""
+    var existe = false
+    for(i=0; i<codigo.length; i++){
+       if(existe == false){
+          existe = codigo.charAt(i) == "*"?true : false  
+          if(codigo.charAt(i) !="*"){
+              codigoActual = codigoActual + codigo.charAt(i)  
+
+          }
+       }else{
+           cantidadAct = cantidadAct + codigo.charAt(i)
+       }
+        console.log("pos=", i, "valor=", codigo.charAt(i));
+    }
+
+    __buscarcodigo(codigoActual,__valorNumerico(cantidadAct));
     $('#codigo').val(null)
     $('#codigo').focus()
 }
+
+
 /**
 * Buscar codigo
 **/
@@ -1568,6 +1599,7 @@ function __ListaDeArticulosPorEmpresa(){
             if(result.aaData.length > 0){
                 _informacionData_Articulo()
                 self.articulos.data           = result.aaData
+                
                 self.update()
                 loadListar(".tableListarArticulos",idioma_espanol,self.informacion_tabla_articulo,self.articulos.data)
                 agregarInputsCombos_Articulo()
@@ -1672,6 +1704,7 @@ function __buscarcodigo(idArticulo,cantidad){
 
                         }
                         self.articulo  = modeloTabla
+                        self.descripcionArticulo = modeloTabla.descripcion
                         self.update()
                         __agregarArticulo(cantidad)
                     });
@@ -2301,14 +2334,24 @@ function agregarInputsCombos_Vendedores(){
 function __Teclas(){
     window.addEventListener( "keydown", function(evento){
         var tecla = evento.keyCode; 
+        //alert(tecla)
     if(tecla ==119){
-      mostrarPAgo()     
-   
+      if(self.mostrarFormularioPago == false && self.mostarParaCrearNuevaFactura == true){
+         mostrarPAgo()     
+      }else if (self.mostrarFormularioPago == true && self.mostarParaCrearNuevaFactura == false ){
+            aplicarFactura(2)   
+        } 
     }   
-    //aplicar crear Factura
-    if (self.mostrarFormularioPago == true ){
-   //    aplicarFactura()   
-    } 
+    //Factura en espera
+    if(tecla ==120){
+      aplicarFactura(1)   
+    }
+    
+    //Limpiar
+    if(tecla ==121){
+      __Init()
+    }
+
 
    
     }, false );

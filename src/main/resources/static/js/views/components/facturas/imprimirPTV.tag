@@ -7,8 +7,8 @@
         <h1>{$.i18n.prop("tikect.encabezado.numeroFactura")} {facturaImpresa.numeroConsecutivo}<h1>
         <div class="pantalla-imprimir">
             <div class="botones-imprimir">
-                <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir(F8)</a>
-                <a href="#" class="boton-imprimir" id="boton-regresar" onclick = {__RegresarVentaImprimir}><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Regresar(Esc)</a>
+                <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
+                
             </div>
             <section class="zona-impresion" id="imprimeme" name ="imprimeme">
                 <div class="forma-impresion">
@@ -57,7 +57,7 @@
                             <tr>
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.total.descuento")}</strong></td>
-                            <td ><strong>{facturaImpresa.totalDescuento.toLocaleString('de-DE')}</strong></td>
+                            <td ><strong>{facturaImpresa.totalDescuentos.toLocaleString('de-DE')}</strong></td>
                             </tr>
                             <tr>
                             <td></td>
@@ -295,15 +295,8 @@ self.on('mount',function(){
     buscarTipoDocumento()
     __comboCondicionPago()
     buscarCondicionPago()
-   // $(".divQR").qrcode({
-   //     render:'canvas',
-   //     width:100,
-   //     height:100,
-    //    color:'#343',
-    //    text:self.facturaImpresa.clave
-   // })
-
-   __Teclas()
+   
+   
 
 })
 
@@ -321,23 +314,12 @@ function getMoneda() {
 }
 
 function getSubTotalGeneral(){
-    var resultado = __valorNumerico(self.facturaImpresa.subTotal) + __valorNumerico(self.facturaImpresa.totalDescuento)
+    var resultado = __valorNumerico(self.facturaImpresa.subTotal) + __valorNumerico(self.facturaImpresa.totalDescuentos)
     self.subTotalGeneral = redondearDecimales(resultado,5)
     self.update()
 }
 
-/**
-*  teclas de la pantalla
-**/      
-function __Teclas(){
-    window.addEventListener( "keydown", function(evento){
-       var tecla = evento.keyCode; 
-        if(tecla ==119){
-            __imprimir()
-        }    
-    }, false );
- 
-}
+
 
 /**
 *Formato de Fecha

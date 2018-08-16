@@ -436,6 +436,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				Factura factura = facturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
 				Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
 				if (factura != null) {
+					
 					ArrayList<String> listaCorreos = new ArrayList<String>();
 					if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
 						listaCorreos.add(factura.getCliente().getCorreoElectronico());

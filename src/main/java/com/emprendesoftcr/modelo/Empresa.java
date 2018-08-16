@@ -84,6 +84,12 @@ public class Empresa implements Serializable {
 
 	@Column(name = "logo")
 	private String						logo;
+	
+	@Column(name = "tiene_inventario")
+	private String						tieneInventario;
+
+	@Column(name = "enviar_tiquete")
+	private String						enviarTiquete;
 
 	@Column(name = "representante")
 	private String						representante;
@@ -112,7 +118,7 @@ public class Empresa implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
-	public Empresa(Integer id, String nombre, String nombreComercial, String tipoCedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, Integer codigoSeguridad, String usuarioEnvioComprobante, String passwordEnvioComprobante, Integer notacConsecutivo, Integer notadConsecutivo,Integer tiqueteConsecutivo) {
+	public Empresa(Integer id, String nombre, String nombreComercial, String tipoCedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, Integer codigoSeguridad, String usuarioEnvioComprobante, String passwordEnvioComprobante, Integer notacConsecutivo, Integer notadConsecutivo,Integer tiqueteConsecutivo,String tieneInventario,String enviarTiquete) {
 		super();
 		this.id = id;
 		this.numeroConsecutivo = numeroConsecutivo;
@@ -144,6 +150,8 @@ public class Empresa implements Serializable {
 		this.notacConsecutivo = notacConsecutivo;
 		this.notadConsecutivo = notadConsecutivo;
 		this.tiqueteConsecutivo = tiqueteConsecutivo;
+		this.enviarTiquete = Constantes.ESTADO_ACTIVO;
+		this.tieneInventario = Constantes.ESTADO_ACTIVO;
 	}
 
 	public Empresa() {
@@ -151,6 +159,8 @@ public class Empresa implements Serializable {
 		this.created_at = new Date();
 		this.updated_at = new Date();
 		this.estado = Constantes.ESTADO_ACTIVO;
+		this.enviarTiquete = Constantes.ESTADO_ACTIVO;
+		this.tieneInventario = Constantes.ESTADO_ACTIVO;
 	}
 
 	public Integer getId() {
@@ -377,6 +387,26 @@ public class Empresa implements Serializable {
 	
 	public void setTiqueteConsecutivo(Integer tiqueteConsecutivo) {
 		this.tiqueteConsecutivo = tiqueteConsecutivo;
+	}
+
+	
+	public String getTieneInventario() {
+		return tieneInventario;
+	}
+
+	
+	public void setTieneInventario(String tieneInventario) {
+		this.tieneInventario = tieneInventario;
+	}
+
+	
+	public String getEnviarTiquete() {
+		return enviarTiquete;
+	}
+
+	
+	public void setEnviarTiquete(String enviarTiquete) {
+		this.enviarTiquete = enviarTiquete;
 	}
 	
 	

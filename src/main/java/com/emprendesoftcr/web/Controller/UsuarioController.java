@@ -166,6 +166,11 @@ public class UsuarioController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 
 			}
+			
+			PasswordEncoder encoder = new BCryptPasswordEncoder();
+			String encodedPassword = encoder.encode(usuario.getPassword());
+			usuario.setPassword(encodedPassword);
+			usuario.setPasswordConfirm(encodedPassword);
 
 			usuarioBo.agregar(usuario);
 			usuarioBD = usuarioBo.buscar(usuario.getNombreUsuario());
@@ -213,6 +218,10 @@ public class UsuarioController {
 				usuarioBD.setNombreUsuario(usuario.getNombreUsuario());
 				usuarioBD.setPrimerApellido(usuario.getPrimerApellido());
 				usuarioBD.setSegundoApellido(usuario.getSegundoApellido());
+				PasswordEncoder encoder = new BCryptPasswordEncoder();
+				String encodedPassword = encoder.encode(usuario.getPassword());
+				usuarioBD.setPassword(encodedPassword);
+				usuarioBD.setPasswordConfirm(encodedPassword);
 				usuarioBo.modificar(usuarioBD);
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuario.modificado.correctamente", usuarioBD);
 			}

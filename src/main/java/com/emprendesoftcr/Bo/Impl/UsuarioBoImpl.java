@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Dao.UsuarioDao;
 import com.emprendesoftcr.Utils.JqGridFilter;
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 
 /**
@@ -42,6 +43,7 @@ public class UsuarioBoImpl implements UsuarioBo {
 	 * Buscar por estado y usuario
 	 * @see com.factura.bo.UsuarioBo#buscar(java.lang.String, java.lang.Integer)
 	 */
+	@Override
 	public Usuario buscar(String nombreUsuario, Integer estado) {
 		return usuarioDao.buscar(nombreUsuario, estado);
 	}
@@ -50,6 +52,7 @@ public class UsuarioBoImpl implements UsuarioBo {
 	 * Buscar por usuario
 	 * @see com.factura.bo.UsuarioBo#buscar(java.lang.String)
 	 */
+	@Override
 	public Usuario buscar(String nombreUsuario) {
 		return usuarioDao.buscar(nombreUsuario);
 	};
@@ -58,6 +61,7 @@ public class UsuarioBoImpl implements UsuarioBo {
 	 * Buscar por nombre completo del usuario
 	 * @see com.factura.bo.UsuarioBo#findByNombreAndPrimerApellidoAndSegundoApellido(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Usuario buscarPorNombreYPrimerApellidoYSegundoApellido(String nombre, String primerApellido, String segundoApellido) {
 		return usuarioDao.buscarPorNombreYPrimerApellidoYSegundoApellido(nombre, primerApellido, segundoApellido);
 	}
@@ -80,5 +84,11 @@ public class UsuarioBoImpl implements UsuarioBo {
 
 		
 	}
+	
+	@Override
+	public Usuario buscar(String nombreUsuario,Empresa empresa) {
+		return usuarioDao.buscar(nombreUsuario, empresa);
+	}
+	
 
 }

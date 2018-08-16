@@ -139,7 +139,7 @@
                             <input type="hidden" id='totalGravado'            name='totalGravado'            value="{factura.totalGravado}" >
                             <input type="hidden" id='totalExento'             name='totalExento'             value="{factura.totalExento}" >
                             <input type="hidden" id='totalVenta'              name='totalVenta'              value="{factura.totalVenta}" >
-                            <input type="hidden" id='totalDescuento'          name='totalDescuento'          value="{factura.totalDescuento}" >
+                            <input type="hidden" id='totalDescuentos'          name='totalDescuentos'        value="{factura.totalDescuentos}" >
                             <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
                             <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           value="{factura.totalImpuesto}" >
                             <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
@@ -165,7 +165,7 @@
                                 <h3><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h3>
                                 <div class="booking-info">
                                     <p style="text-align:right">{$.i18n.prop("factura.resumen.subTotal")} : <span id="lblSubtotal"> {subTotalGeneral.toLocaleString('de-DE')  } </span></p>
-                                    <p style="text-align:right">{$.i18n.prop("factura.resumen.descuento")} : <span id="lblSubtotal"> {factura.totalDescuento.toLocaleString('de-DE')} </span></p>
+                                    <p style="text-align:right">{$.i18n.prop("factura.resumen.descuento")} : <span id="lblSubtotal"> {factura.totalDescuentos.toLocaleString('de-DE')} </span></p>
                                     <p style="text-align:right">{$.i18n.prop("factura.resumen.impuesto")}  : <span id="lblSubtotal"> {factura.totalImpuesto.toLocaleString('de-DE')} </span></p>
                                 </div>
                                 <div class="precioTotalFactura">
@@ -1451,7 +1451,7 @@ function crearFactura(){
     self.factura.condicionVenta = $('#condicionVenta').val()
     self.factura.fechaCredito =fechaCreditoTemporal.toString()
     self.factura.referenciaFechaEmision =fechaReferencia
-    self.factura.totalEfectivo =$('#totalEfectivo').val()
+    self.factura.totalEfectivo =redondearDecimales(__valorNumerico($('#totalEfectivo').val()))
     self.factura.totalTarjeta = redondearDecimales(__valorNumerico($('#totalTarjeta').val())) 
     self.factura.totalBanco = redondearDecimales(__valorNumerico($('#totalBanco').val()))
     self.factura.detalleFactura =JSONDetalles
@@ -1601,7 +1601,24 @@ __addProductToDetail(e){
     if (e.keyCode != 13) {
         return;
     } 
-    __buscarcodigo(e.currentTarget.value);
+    var codigo = e.currentTarget.value
+    var codigoActual = ""
+    var cantidadAct =""
+    var existe = false
+    for(i=0; i<codigo.length; i++){
+       if(existe == false){
+          existe = codigo.charAt(i) == "*"?true : false  
+          if(codigo.charAt(i) !="*"){
+              codigoActual = codigoActual + codigo.charAt(i)  
+
+          }
+       }else{
+           cantidadAct = cantidadAct + codigo.charAt(i)
+       }
+        console.log("pos=", i, "valor=", codigo.charAt(i));
+    }
+
+    __buscarcodigo(codigoActual,__valorNumerico(cantidadAct));
     $('#codigo').val(null)
     $('#codigo').focus()
 }

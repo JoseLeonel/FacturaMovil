@@ -1,13 +1,13 @@
 <venta-factura>
 <div>
-<form id="FormPaginacion">
-     <input type="hidden" name="id" id="id" value="{parametrosPaginacion.cantidadPorPagina}">
+    <form id="FormPaginacion">
+        <input type="hidden" name="id" id="id" value="{parametrosPaginacion.cantidadPorPagina}">
 
-     <input type="hidden" name="cantidadPorPagina" id="cantidadPorPagina" value="{parametrosPaginacion.cantidadPorPagina}">
-     <input type="hidden" name="paginaActual" id="paginaActual" value="{parametrosPaginacion.paginaActual}">
-     <input type="hidden" name="total" id="total" value="{parametrosPaginacion.total}">
-     <input type="hidden" name="categoria" id="categoria" value="{categoria.id}">
-</form>
+        <input type="hidden" name="cantidadPorPagina" id="cantidadPorPagina" value="{parametrosPaginacion.cantidadPorPagina}">
+        <input type="hidden" name="paginaActual" id="paginaActual" value="{parametrosPaginacion.paginaActual}">
+        <input type="hidden" name="total" id="total" value="{parametrosPaginacion.total}">
+        <input type="hidden" name="categoria" id="categoria" value="{categoria.id}">
+    </form>
 </div>
 
 <!--Modal mostrar  -->
@@ -57,7 +57,7 @@
                     <hr style="margin: 2px 0px 0px 0px; border-color: #e4e4e4; margin-top: 0px">
                     <div class="data-fluid">
                         <div id="listaProductos" style="height:200px; overflow-x: hidden; width:100%">
-                        <table id="tablaListaProductos" cellpadding="0" cellspacing="0" width="100%" class="dtable lcnp">
+                            <table id="tablaListaProductos" cellpadding="0" cellspacing="0" width="100%" class="dtable lcnp">
                                 <thead>
                                     <tr style=" display: none">
                                         <td width="50%"></td>
@@ -71,31 +71,31 @@
                                     </tr>
                                 </thead>
                                 <tbody height="50px" id="productos-detail">
-                                <tr style="" each={detail}>
-                                    <td>
-                                        <span class="title-detalle text-info">
-                                        <input type="hidden" value="0" class="detalles-impuesto">{descripcion}</span>
+                                    <tr style="" each={detail}>
+                                        <td>
+                                            <span onclick ={__CambiarDescripcion} class="title-detalle text-info">
+                                            {descripcion}</span>
                                         </td>
                                         <td >
-                                        <span onclick ={__CambiarCantidad} class="label label-success cantidad">{cantidad.toFixed(3)}</span>
+                                            <span onclick ={__CambiarCantidad} class="label label-success cantidad">{cantidad.toFixed(3)}</span>
                                         </td>
                                         <td class="contCalc">
-                                        <span class="label label-success precio-prod" >{precioUnitario.toLocaleString('de-DE')}</span>
+                                            <span onclick ={__CambiarPrecio}  class="label label-success precio-prod" >{precioUnitario.toLocaleString('de-DE')}</span>
                                         </td>
                                         <td class="contCalc">
-                                        <span onclick ={__CambiarDescuento} class="label label-success precio-prod" >{porcentajeDesc.toLocaleString('de-DE')}</span>
+                                            <span onclick ={__CambiarDescuento} class="label label-success precio-prod" >{porcentajeDesc.toLocaleString('de-DE')}</span>
                                         </td>
                                         <td class="contCalc">
-                                        <span class="label label-success " >{impuesto}</span>
+                                            <span class="label label-success " >{impuesto}</span>
                                         </td>
                                         <td>
-                                        <span class="precio-calc">{montoTotalLinea.toLocaleString('de-DE')}</span>
+                                            <span class="precio-calc">{montoTotalLinea.toLocaleString('de-DE')}</span>
                                         </td>
                                         <td>
                                             <button  onclick={__removeProductFromDetail} class="btn_eliminar_detalle btn-danger btn-xs btn-block">X</button>
                                         </td>
                                     </tr>
-                                    </tbody>
+                                </tbody>
                             </table>
                         </div>
                         <hr style="margin: 0px; border-color: #e4e4e4;">
@@ -110,7 +110,7 @@
                                         <td width="35%" id="bordeBevelLeft"> 
                                             <span id="pagarInfo">{$.i18n.prop("factura.resumen.descuento")} : </span>
                                             <span id="sigPeso">   </span>
-                                            <span id="iva-total">{factura.totalDescuento.toLocaleString('de-DE')}</span> 
+                                            <span id="iva-total">{factura.totalDescuentos.toLocaleString('de-DE')}</span> 
                                         </td>
                                         <td width="35%" id="bordeBevelRight"> 
                                             <span id="pagarInfo">{$.i18n.prop("factura.resumen.impuesto")}  </span>
@@ -127,7 +127,7 @@
                                 <tbody>
                                     <tr>
                                         <td width="30%" id="">
-                                            <div id="pagarTitulo">{$.i18n.prop("factura.total")}</div>
+                                            <div id="pagarTitulo">{$.i18n.prop("factura.total")}:</div>
                                         </td>
                                         <td width="70%" id="">
                                             <div id="">
@@ -138,9 +138,7 @@
                                     </tr>                     
                                 </tbody>
                             </table>
-                        
                         </div>
-                    
                         <hr style="margin: 0px; border-color: #e4e4e4;">
                     </div>
                     <div  class="row  ">
@@ -167,12 +165,9 @@
                     <div  class="row  ">
                         <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 " >   
                             <section class="contenedor-opciones">
-                                
                                 <a href="#" class="opciones-menu" onclick = {__CrearFacturaTemporal} >
                                     <i class="fa fa-clock-o">{$.i18n.prop("venta.en.espera")}</i>
                                 </a>
-
-                            
                                 <a  href="#" class="opciones-limpiar" onclick = {__Limpiar} >
                                     <i class="fa fa-trash">{$.i18n.prop("btn.limpiar")}</i>
                                 </a>                              
@@ -215,7 +210,6 @@
                             </form>
                         </div>
                     </div>
-                    
                 </div>    
             </div>
         </div>
@@ -252,8 +246,8 @@
                     <!--Fin Seccion de codigo de barra-->
                             
                 </div> 
-            </div>       
-        </div>
+    </div>       
+</div>
         <!--Fin Ventana de los productos-->
 
   
@@ -284,6 +278,61 @@
 </div>
 
 <!--Fin Cambiar Cantidad-->
+
+
+<!--Modal Cambiar Descripcion-->
+<div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+       <div class="modal-content">
+            <div class="modal-header with-border " >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descripcion")}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
+                        <div class="form-group has-success">
+                            <label >Descripcion:</label>
+                            <input  type="text" class="form-control cambiarDescripcionArticulo" id="cambiarDescripcionArticulo" name = "cambiarDescripcionArticulo" autofocus="autofocus">
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick ="{__cambiarDescripcionDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Fin Cambiar descripcion-->
+
+
+
+<!--Modal Cambiar precio-->
+<div id='modalCambiarPrecio' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+       <div class="modal-content">
+            <div class="modal-header with-border " >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.precio")}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
+                        <div class="form-group has-success">
+                            <label >Precio:</label>
+                            <input  type="number" class="form-control cambiarprecioArticulo" id="cambiarprecioArticulo" name = "cambiarprecioArticulo" autofocus="autofocus">
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick ="{__cambiarElPrecio}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Fin Cambiar precio-->
 
 
 <!--Modal Cambiar Descuento-->
@@ -517,7 +566,7 @@
                             <input type="hidden" id='totalGravado'            name='totalGravado'            value="{factura.totalGravado}" >
                             <input type="hidden" id='totalExento'             name='totalExento'             value="{factura.totalExento}" >
                             <input type="hidden" id='totalVenta'              name='totalVenta'              value="{factura.totalVenta}" >
-                            <input type="hidden" id='totalDescuento'          name='totalDescuento'          value="{factura.totalDescuento}" >
+                            <input type="hidden" id='totalDescuentos'          name='totalDescuentos'          value="{factura.totalDescuentos}" >
                             <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
                             <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           value="{factura.totalImpuesto}" >
                             <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
@@ -2506,12 +2555,35 @@ __CambiarDescuento(e){
 *Cambiar Cantidad del Articulo
 **/
 __CambiarCantidad(e){
-   var cantidad = e.currentTarget.value;
    self.item = e.item; 
    self.update()
    $( "#cambiarCantidadArticulo" ).focus()
-   $( "#cambiarCantidadArticulo" ).val(cantidad)
+   $( "#cambiarCantidadArticulo" ).val(self.item.cantidad)
    $('#modalCambiarCantidad').modal('show')      
+}
+
+/**
+*Cambiar descripcion
+**/
+__CambiarDescripcion(e){
+   self.item = e.item; 
+   self.update()
+   $( "#cambiarDescripcionArticulo" ).focus()
+   $( "#cambiarDescripcionArticulo" ).val(self.item.descripcion)
+   $('#modalCambiarDescripcion').modal('show')      
+}
+
+
+
+/**
+*Cambiar precio del producto
+**/
+__CambiarPrecio(e){
+   self.item = e.item; 
+   self.update()
+   $( "#cambiarprecioArticulo" ).focus()
+   $( "#cambiarprecioArticulo" ).val( e.item.precioUnitario)
+   $('#modalCambiarPrecio').modal('show')      
 }
 
 /**
@@ -3112,7 +3184,24 @@ __addProductToDetail(e){
     if (e.keyCode != 13) {
         return;
     } 
-    __buscarcodigo(e.currentTarget.value,1);
+    var codigo = e.currentTarget.value
+    var codigoActual = ""
+    var cantidadAct =""
+    var existe = false
+    for(i=0; i<codigo.length; i++){
+       if(existe == false){
+          existe = codigo.charAt(i) == "*"?true : false  
+          if(codigo.charAt(i) !="*"){
+              codigoActual = codigoActual + codigo.charAt(i)  
+
+          }
+       }else{
+           cantidadAct = cantidadAct + codigo.charAt(i)
+       }
+        console.log("pos=", i, "valor=", codigo.charAt(i));
+    }
+
+    __buscarcodigo(codigoActual,__valorNumerico(cantidadAct));
     $('#codigoBarra').val(null)
     $('#codigoBarra').focus()
 }
@@ -3399,10 +3488,43 @@ function _calcularImpuesto(precio,iva){
     __ValidarCantidadArticulo(self.item.codigo,cantidad)
   }
 
+
+/**
+* Cambiar el precio del detalle de la factura
+**/
+__cambiarDescripcionDetalle(e){
+    var descripcion = $(".cambiarDescripcionArticulo").val();
+    self.item.descripcion = descripcion
+    self.update()
+    $(".cambiarDescripcionArticulo").val(null);
+    $('#modalCambiarDescripcion').modal('hide') 
+    
+}
+
+/**
+* Cambiar el precio del detalle de la factura
+**/
+__cambiarElPrecio(e){
+    var precio = $(".cambiarprecioArticulo").val();
+    agregarPrecioAlDetalle(precio)
+}
+
+
+function agregarPrecioAlDetalle(precio){
+    self.item.precioUnitario = precio
+    self.update()
+    ActualizarLineaDEtalle()
+    aplicarCambioLineaDetalle() 
+    $(".cambiarprecioArticulo").val(null);
+    $('#modalCambiarPrecio').modal('hide') 
+}
+
 /**
 * Buscar el codigo del codigo  en la base de datos
 **/
 function __ValidarCantidadArticulo(idArticulo,cantidad){
+    agregarCantidadAlaVenta(cantidad)
+    return
    
     $.ajax({
         type: 'GET',

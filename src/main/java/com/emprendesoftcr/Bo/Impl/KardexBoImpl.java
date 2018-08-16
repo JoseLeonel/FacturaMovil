@@ -1,13 +1,15 @@
 package com.emprendesoftcr.Bo.Impl;
 
+import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.KardexBo;
-import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.KardexDao;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Kardex;
@@ -18,19 +20,15 @@ import com.emprendesoftcr.modelo.Usuario;
  * @author jose.
  * @since 12 abr. 2018
  */
-@Lazy
 @Transactional
 @EnableTransactionManagement
 @Service("kardexBo")
 public class KardexBoImpl implements KardexBo {
+	private Logger				log	= LoggerFactory.getLogger(this.getClass());
 
-	@Lazy
 	@Autowired
-	KardexDao		kardexDao;
+	private KardexDao		kardexDao;
 
-	@Lazy
-	@Autowired
-	ArticuloDao	articuloDao;
 
 	public void agregar(Kardex kardex) {
 		kardexDao.agregar(kardex);
@@ -38,11 +36,19 @@ public class KardexBoImpl implements KardexBo {
 
 	/**
 	 * Ingresar Cantidad al inventario
+	 * @throws Exception 
 	 * @see com.emprendesoftcr.Bo.KardexBo#entrada(com.emprendesoftcr.modelo.Inventario, java.lang.Double, java.lang.Double, java.lang.String, java.lang.String, java.lang.String, java.lang.String, com.emprendesoftcr.modelo.Usuario)
 	 */
-	public void entrada(Articulo articulo, Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
+	public void entrada(Articulo articulo, Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) throws Exception {
+		try {
+			kardexDao.entrada(articulo, cantidadActual, cantidadNueva, observacion, consecutivo, tipo, motivo, usuarioSesion);	
+		} catch (Exception e) {
+			log.info("** Error  entrada kardex: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		
+		}
 
-		kardexDao.entrada(articulo, cantidadActual, cantidadNueva, observacion, consecutivo, tipo, motivo, usuarioSesion);
+		
 	}
 
 	/**
@@ -53,9 +59,16 @@ public class KardexBoImpl implements KardexBo {
 	 * @param consecutivo
 	 * @param tipo
 	 * @param motivo
+	 * @throws Exception 
 	 */
-	public void salida(Articulo articulo, Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) {
-		kardexDao.salida(articulo, cantidadActual, cantidadNueva, observacion, consecutivo, tipo, motivo, usuarioSesion);
+	public void salida(Articulo articulo, Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) throws Exception {
+		try {
+			kardexDao.salida(articulo, cantidadActual, cantidadNueva, observacion, consecutivo, tipo, motivo, usuarioSesion);	
+		} catch (Exception e) {
+			log.info("** Error  salida kardex: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+		
 
 	}
 

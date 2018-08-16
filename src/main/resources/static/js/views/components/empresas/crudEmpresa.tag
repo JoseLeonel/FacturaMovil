@@ -170,14 +170,28 @@
                         </div>
 
                         <div class="row">    
-                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("empresa.usuarioEnvioComprobante")}</label>
                                 <input type="text" class="form-control usuarioEnvioComprobante" placeHolder ="{$.i18n.prop("empresa.usuarioEnvioComprobante.ejemplo")}" id="usuarioEnvioComprobante" name="usuarioEnvioComprobante" value="{empresa.usuarioEnvioComprobante}"  >
                             </div>
-                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("empresa.passwordEnvioComprobante")}</label>
                                 <input type="text" class="form-control passwordEnvioComprobante" placeHolder ="{$.i18n.prop("empresa.passwordEnvioComprobante.ejemplo")}" id="passwordEnvioComprobante" name="passwordEnvioComprobante" value="{empresa.passwordEnvioComprobante}"  >
                             </div>
+                            <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label">{$.i18n.prop("empresa.enviarTiquete")}</label>
+                                <select  class="form-control" id="enviarTiquete" name="enviarTiquete" >
+                                    <option  each={estados}  value="{codigo}" selected="{empresa.enviarTiquete ==codigo?true:false}" >{descripcion}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label">{$.i18n.prop("empresa.tieneInventario")}</label>
+                                <select  class="form-control" id="tieneInventario" name="tieneInventario" >
+                                
+                                    <option  each={estados}  value="{codigo}" selected="{empresa.tieneInventario ==codigo?true:false}" >{descripcion}</option>
+                                </select>
+                            </div>
+
                         </div>
 
                         <div class="row">    

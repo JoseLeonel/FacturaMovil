@@ -220,7 +220,7 @@
                             <input type="hidden" id='totalGravado'            name='totalGravado'            value="{factura.totalGravado}" >
                             <input type="hidden" id='totalExento'             name='totalExento'             value="{factura.totalExento}" >
                             <input type="hidden" id='totalVenta'              name='totalVenta'              value="{factura.totalVenta}" >
-                            <input type="hidden" id='totalDescuento'          name='totalDescuento'          value="{factura.totalDescuento}" >
+                            <input type="hidden" id='totalDescuentos'          name='totalDescuentos'          value="{factura.totalDescuentos}" >
                             <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
                             <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           value="{factura.totalImpuesto}" >
                             <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
@@ -756,7 +756,7 @@ function _calcularImpuesto(precio,iva){
 **/
 function __calculate() {
     self.factura.total           = 0;
-    self.factura.totalDescuento  = 0;
+    self.factura.totalDescuentos  = 0;
     self.factura.totalImpuesto   = 0;
     self.factura.subTotal        = 0;
     self.update()
@@ -794,7 +794,7 @@ function __calculate() {
     self.factura.totalGravado            = redondearDecimales(__valorNumerico(totalGravado),5)
     self.factura.totalExento             = redondearDecimales(__valorNumerico(totalExento),5)
     self.factura.totalVenta              = redondearDecimales(totalVenta,5)
-    self.factura.totalDescuento          = redondearDecimales(__valorNumerico(totalDescuento),5)
+    self.factura.totalDescuentos          = redondearDecimales(__valorNumerico(totalDescuento),5)
     self.factura.subTotal                = redondearDecimales(__valorNumerico(subTotal),5)
     self.factura.totalImpuesto           = redondearDecimales(__valorNumerico(totalImpuesto),5)
     self.factura.totalVentaNeta          = redondearDecimales(__valorNumerico(subTotal),5)

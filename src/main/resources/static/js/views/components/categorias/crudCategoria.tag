@@ -238,29 +238,14 @@ function __Eventos(){
 *  Regresar al listado
 **/
 __regresarAlListado(){
-    swal({
-        title: "", 
-        text: $.i18n.prop("mensaje.alert.regresar.listado"), 
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: '#00539B',
-        cancelButtonColor: '#d33',
-        confirmButtonText:$.i18n.prop("confirmacion.si"),
-        cancelButtonText: $.i18n.prop("confirmacion.no"),
-        confirmButtonClass: 'btn btn-success',
-        cancelButtonClass: 'btn btn-danger'
-        }).then(function (isConfirm) {
-            if(isConfirm){
-                self.mostrarListado     = true;
-                self.botonAgregar       = false;
-                self.botonModificar     = false;
-                self.mostrarFormulario  = false 
-                self.update()
-                Limpiar()
-                __listado();
+    self.mostrarListado     = true;
+    self.botonAgregar       = false;
+    self.botonModificar     = false;
+    self.mostrarFormulario  = false 
+    self.update()
+    Limpiar()
+    __listado();
 
-            }
-    });    
 }
 
 // Mostrar formulario de mantenimiento Agregar

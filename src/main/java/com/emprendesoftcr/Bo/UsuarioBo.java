@@ -1,6 +1,7 @@
 package com.emprendesoftcr.Bo;
 
 import com.emprendesoftcr.Utils.JqGridFilter;
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 
 public interface UsuarioBo {
@@ -16,6 +17,7 @@ public interface UsuarioBo {
 	Usuario buscar(String nombreUsuario);
 
 	Usuario buscar(Integer id);
+	Usuario buscar(String nombreUsuario,Empresa empresa);
 
 	Usuario buscarPorNombreYPrimerApellidoYSegundoApellido(String nombre, String primerApellido, String segundoApellido);
 	

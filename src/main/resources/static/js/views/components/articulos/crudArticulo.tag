@@ -131,7 +131,7 @@
                             
 
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label" >{$.i18n.prop("articulo.costo")}  <span class="requeridoDato">*</span></label>
+                                <label class="knob-label" >{$.i18n.prop("articulo.costo")} </label>
                                 <input type="number" step="any" class="form-control costo" id="costo" name="costo" value="{articulo.costo}"  onkeyup ={__ActualizarPreciosCosto}>
                             </div>
                         </div>
@@ -586,12 +586,7 @@ var reglasDeValidacion = function() {
 				required : true,
                 maxlength:20,
                 minlength:1,
-			} ,
-            costo : {
-				required : true,
-                numeroMayorCero:true,
-                number:true,
-			} ,                                                
+			},                                                
             marca : {
 				required : true,
 			},                                                
@@ -606,9 +601,7 @@ var reglasDeValidacion = function() {
                 numeroMayorCero:true,
                 number:true,
 			} ,                                                
-            gananciaPrecioPublico : {
-				required : true,
-			}                                              
+                                                       
                         
 		},
 		ignore : []
@@ -669,20 +662,6 @@ __agregarEntradaInventario(){
       if ($("#formularioEntrada").valid()) {
         // Permite obtener todos los valores de los elementos del form del jsp
         var formulario = $("#formularioEntrada").serialize();
-        swal({
-           title: '',
-           text: $.i18n.prop("kardex.mensaje.alert.agregar.entrada"),
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: '#00539B',
-            cancelButtonColor: '#d33',
-            confirmButtonText:$.i18n.prop("confirmacion.si"),
-            cancelButtonText: $.i18n.prop("confirmacion.no"),
-            confirmButtonClass: 'btn btn-success',
-            cancelButtonClass: 'btn btn-danger',
-        }).then(function (isConfirm) {
-            //Ajax__inicializarTabla();
-            if(isConfirm){
                 $.ajax({
                     type : "POST",
                     dataType : "json",
@@ -729,10 +708,7 @@ __agregarEntradaInventario(){
                         mensajeErrorServidor(xhr, status);
                     }
                 });
-            }
-        });
-        
-    }
+      }            
 }
 /**
 *  Agregar salida al inventario 
@@ -741,21 +717,7 @@ __agregarSalidaInventario(){
    if ($("#formularioSalida").valid()) {
         // Permite obtener todos los valores de los elementos del form del jsp
         var formulario = $("#formularioSalida").serialize();
-        swal({
-           title: '',
-           text: $.i18n.prop("kardex.mensaje.alert.agregar.salida"),
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: '#00539B',
-            cancelButtonColor: '#d33',
-            confirmButtonText:$.i18n.prop("confirmacion.si"),
-            cancelButtonText: $.i18n.prop("confirmacion.no"),
-            confirmButtonClass: 'btn btn-success',
-            cancelButtonClass: 'btn btn-danger',
-        }).then(function (isConfirm) {
-            //Ajax__inicializarTabla();
-            if(isConfirm){
-                $.ajax({
+        $.ajax({
                     type : "POST",
                     dataType : "json",
                     data : formulario,
@@ -800,8 +762,6 @@ __agregarSalidaInventario(){
                         mensajeErrorServidor(xhr, status);
                     }
                 });
-            }
-        });
         
     }
 }
@@ -935,7 +895,7 @@ __CalculoGananciaMayorista(e){
   }
   let impuesto      = __valorNumerico($('#impuesto').val())
   let costo         = __valorNumerico($('#costo').val())
-  self.articulo.gananciaPrecioMayorista  = costo > 0? _porcentajeGanancia(costo,impuesto,precio):0
+  self.articulo.gananciaPrecioMayorista  = _porcentajeGanancia(costo,impuesto,precio)
   self.articulo.precioMayorista = precio
   self.update()
     
@@ -950,7 +910,7 @@ __CalculoGananciaEspecial(e){
   }
   let impuesto = __valorNumerico($('#impuesto').val())
   let costo    = __valorNumerico($('#costo').val())
-  self.articulo.gananciaPrecioEspecial  = costo > 0?_porcentajeGanancia(costo,impuesto,precio):0
+  self.articulo.gananciaPrecioEspecial  = _porcentajeGanancia(costo,impuesto,precio)
   self.articulo.precioEspecial = precio
   self.update()
 }
@@ -978,7 +938,7 @@ __CalculoGananciaPublico(e){
     }
     let impuesto      = __valorNumerico($('#impuesto').val())
     let costo         = __valorNumerico($('#costo').val())
-    self.articulo.gananciaPrecioPublico  = costo > 0 ?_porcentajeGanancia(costo,impuesto,precioPublico):0
+    self.articulo.gananciaPrecioPublico  = _porcentajeGanancia(costo,impuesto,precioPublico)
     self.articulo.precioPublico = precioPublico
     self.update()
 }
@@ -987,13 +947,7 @@ __CalculoGananciaPublico(e){
 **/
 __ActualizarPreciosCosto(e){
     let costo    = __valorNumerico(e.target.value)
-    if(costo == 0){
-        self.articulo.gananciaPrecioEspecial   = 0
-        self.articulo.gananciaPrecioMayorista  = 0
-        self.articulo.gananciaPrecioPublico    = 0
-        self.update()
-        return
-    }
+    
     let impuesto =  __valorNumerico($('#impuesto').val())
     self.articulo.costo = costo 
     self.articulo.gananciaPrecioEspecial   = self.articulo.precioEspecial > 0?_porcentajeGanancia(costo,impuesto,self.articulo.precioEspecial):0
@@ -1009,9 +963,7 @@ __ActualizarPreciosCosto(e){
 function _porcentajeGanancia(costo,impuesto,precioVenta) {
   let porcentajeGanancia = 0;
   let precioSinImpuesto  = 0;
-  if(costo == 0){
-    return 0;
-  }
+ 
   if(precioVenta == 0){
     return 0;
   }
@@ -1234,33 +1186,16 @@ function __tipoCodigo(){
 *  Regresar al listado
 **/
 __regresarAlListado(){
-    swal({
-        title: "", 
-        text: $.i18n.prop("mensaje.alert.regresar.listado"), 
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: '#00539B',
-        cancelButtonColor: '#d33',
-        confirmButtonText:$.i18n.prop("confirmacion.si"),
-        cancelButtonText: $.i18n.prop("confirmacion.no"),
-        confirmButtonClass: 'btn btn-success',
-        cancelButtonClass: 'btn btn-danger'
-        }).then(function (isConfirm) {
-            if(isConfirm){
-                self.mostrarTituloArticulo = true
-                self.mostrarListado     = true;
-                self.botonAgregar       = false;
-                self.botonModificar     = false;
-                self.mostrarFormulario  = false 
-                self.mostrarFormularioEntrada    = false
-                self.mostrarFormularioSalida     = false
-
-                self.update()
-                LimpiarArticulo()
-                __listado();
-
-            }
-    });    
+    self.mostrarTituloArticulo = true
+    self.mostrarListado     = true;
+    self.botonAgregar       = false;
+    self.botonModificar     = false;
+    self.mostrarFormulario  = false 
+    self.mostrarFormularioEntrada    = false
+    self.mostrarFormularioSalida     = false
+    self.update()
+    LimpiarArticulo()
+    __listado();
 }
 /**
 * Mostrar formulario de mantenimiento Agregar
@@ -1367,20 +1302,6 @@ __agregar(){
          if ($("#formulario").valid()) {
         // Permite obtener todos los valores de los elementos del form del jsp
         var formulario = $("#formulario").serialize();
-        swal({
-           title: '',
-           text: $.i18n.prop("articulo.mensaje.alert.agregar"),
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: '#00539B',
-            cancelButtonColor: '#d33',
-            confirmButtonText:$.i18n.prop("confirmacion.si"),
-            cancelButtonText: $.i18n.prop("confirmacion.no"),
-            confirmButtonClass: 'btn btn-success',
-            cancelButtonClass: 'btn btn-danger',
-        }).then(function (isConfirm) {
-            //Ajax__inicializarTabla();
-            if(isConfirm){
                 $.ajax({
                     type : "POST",
                     dataType : "json",
@@ -1431,9 +1352,6 @@ __agregar(){
                         mensajeErrorServidor(xhr, status);
                     }
                 });
-            }
-        });
-        
     }
 }
 
@@ -1487,19 +1405,15 @@ function __listado(){
 }
 
 function sumar(){
-          self.totalCosto = 0
-          self.totalPrecioPublico = 0
-          self.update()
-
+    self.totalCosto = 0
+    self.totalPrecioPublico = 0
+    self.update()
     $.each(self.listaArticulos, function( index, modeloTabla ) {
           self.totalCosto += modeloTabla.costo
           self.totalPrecioPublico += modeloTabla.precioPublico
-          
-
     })
     self.totalCosto         = redondearDecimales(self.totalCosto,2)
     self.totalPrecioPublico = redondearDecimales(self.totalPrecioPublico,2)
-    
     self.update()
 }
 

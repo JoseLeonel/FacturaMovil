@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Dao;
 
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 
 
@@ -13,6 +14,7 @@ public interface UsuarioDao {
 
 	Usuario buscar(String nombreUsuario, Integer estado);
 	Usuario buscar(String nombreUsuario);
+	Usuario buscar(String nombreUsuario,Empresa empresa);
 	
 	Usuario buscar(Integer id);
 

@@ -1,5 +1,7 @@
 package com.emprendesoftcr.web.command;
 
+import javax.persistence.Column;
+
 import com.emprendesoftcr.modelo.Empresa;
 
 public class EmpresaCommand {
@@ -48,6 +50,9 @@ public class EmpresaCommand {
 	private Integer	codigoSeguridad;
 	private String	usuarioEnvioComprobante;
 	private String	passwordEnvioComprobante;
+	private String						tieneInventario;
+
+	private String						enviarTiquete;
 
 	public EmpresaCommand(Empresa empresa) {
 		super();
@@ -79,6 +84,9 @@ public class EmpresaCommand {
 		this.notadConsecutivo = empresa.getNotadConsecutivo();
 		
 		this.tiqueteConsecutivo = empresa.getTiqueteConsecutivo();
+		this.enviarTiquete = empresa.getEnviarTiquete();
+		this.tieneInventario = empresa.getTieneInventario();
+		
 
 	}
 
@@ -294,6 +302,26 @@ public class EmpresaCommand {
 	
 	public void setTiqueteConsecutivo(Integer tiqueteConsecutivo) {
 		this.tiqueteConsecutivo = tiqueteConsecutivo;
+	}
+
+	
+	public String getTieneInventario() {
+		return tieneInventario;
+	}
+
+	
+	public void setTieneInventario(String tieneInventario) {
+		this.tieneInventario = tieneInventario;
+	}
+
+	
+	public String getEnviarTiquete() {
+		return enviarTiquete;
+	}
+
+	
+	public void setEnviarTiquete(String enviarTiquete) {
+		this.enviarTiquete = enviarTiquete;
 	}
 
 	

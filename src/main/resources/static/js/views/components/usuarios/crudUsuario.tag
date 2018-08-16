@@ -60,14 +60,15 @@
                         </div>
                         <div class="col-md-6 col-sx-6 col-sm-6 col-lg-6"></div>
                     </div>
-                      <div class="row">
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("categoria.empresa")}  <span class="requeridoDato">*</span></label>
-                                 <select  class="form-control selectEmpresa" id="empresa" name="empresa" data-live-search="true" >
-                                    <option  data-tokens="{nombre}" each={empresas.aaData}  value="{id}"  >{nombre}</option>
-                                </select>
-                            </div>
-                        </div>    
+                    <div class="row">
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label class="knob-label" >{$.i18n.prop("categoria.empresa")}  <span class="requeridoDato">*</span></label>
+                            <select  class="form-control selectEmpresa" id="empresa" name="empresa" data-live-search="true" >
+                               <option  data-tokens="{nombre}" each={empresas.aaData}  value="{id}"  >{nombre}</option>
+                           </select>
+                        </div>
+
+                    </div>    
                     <div class="row">
                         <div class="col-md-6 col-sx-6 col-sm-6 col-lg-6">
                             <label class="knob-label">{$.i18n.prop("usuario.nombre")} &nbsp<span class="requeridoDato">*</span></label>
@@ -96,7 +97,11 @@
                                 <option each={estados} value="{codigo}"  selected = "{modeloTabla.estado == codigo}" >{descripcion}</option>
                             </select>
                         </div>
-                        <div class="col-md-6 col-sx-7 col-sm-6 col-lg-6"></div>
+                        <div class="col-md-6 col-sx-7 col-sm-6 col-lg-6">
+                            <label class="knob-label">{$.i18n.prop("usuario.password")}&nbsp<span class="requeridoDato">*</span></label>
+                            <input  type="text" class="form-control password " placeholder = "{$.i18n.prop("usuario.password")}" title="{$.i18n.prop("usuario.password")}" name="password" id= "password"   value='{modeloTabla.password}' maxlength="250">
+                        
+                        </div>
                     </div>
                 </form>    
             </div>
@@ -175,15 +180,16 @@
     self.formato               = {}
     self.estados               = []
     //Modelo a modificar a agregar 
-    self.modeloTabla               = {
+    self.modeloTabla           = {
         nombre:"",
         primerApellido:"",
         segundoApellido:"",
         nombreUsuario:""
     }
-      self.informacion_tabla     = []         // Formato del Listado de la Tabla Usuario
+      self.informacion_tabla   = []         // Formato del Listado de la Tabla Usuario
     self.usuarios              = {data:[]}  // definir el data del datatable Usuario 
-    self.empresas                  = {aaData:[]}
+    self.empresas              = {aaData:[]}
+    self.roles                 = {aaData:[]}
     self.mostrarListado        = true       // Muestra el formulario  
     self.mostrarFormulario     = false      // Muestra el formulario  
     self.btnAgregar            = false      // boton agregar
@@ -213,6 +219,7 @@
         //Modificar
         __modificarRegistro_Listar()
       __listadoEmpresasActivas()
+      
 
         window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
@@ -222,6 +229,9 @@
 
         
     });
+
+
+
 
 
 /**
@@ -280,41 +290,24 @@ var reglasDeValidacion = function() {
 *  Regresa al listado
 **/
 __regresarAlListado(){
-
-   swal({
-        title: "", 
-        text: $.i18n.prop("mensaje.alert.regresar.listado"), 
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: '#00539B',
-        cancelButtonColor: '#d33',
-        confirmButtonText: "Si",
-        cancelButtonText: 'No',
-        confirmButtonClass: 'btn btn-success',
-        cancelButtonClass: 'btn btn-danger',
-        }).then(function (isConfirm) {
-            if(isConfirm){
-                self.mostrarListado        = true       // Muestra el formulario  
-                self.mostrarFormulario     = false      // Muestra el formulario  
-                self.btnAgregar            = false      // boton agregar
-                self.btnModificar          = false      // boton modificar
-                self.mostrarListadoSucursales = false
-                self.mostarTituloUsuario      = true
-                self.mostarTituloSucursal     = false
-                self.mostrarFormularioAsociarSucursal = false
-
-                //modeloTabla a modificar a agregar 
-                self.modeloTabla               = {
-                    id:null,
-                    nombre:"",
-                    primerApellido:"",
-                    segundoApellido:"",
-                    nombreUsuario:""
-                }
-                self.update()
-                __listado()
-            }
-    });    
+    self.mostrarListado        = true       // Muestra el formulario  
+    self.mostrarFormulario     = false      // Muestra el formulario  
+    self.btnAgregar            = false      // boton agregar
+    self.btnModificar          = false      // boton modificar
+    self.mostrarListadoSucursales = false
+    self.mostarTituloUsuario      = true
+    self.mostarTituloSucursal     = false
+    self.mostrarFormularioAsociarSucursal = false
+    self.modeloTabla               = {
+        id:null,
+        nombre:"",
+        primerApellido:"",
+        segundoApellido:"",
+        nombreUsuario:""
+    }
+    self.update()
+    __listado()
+  
 }
 
 /**

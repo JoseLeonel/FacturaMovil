@@ -1,5 +1,9 @@
 package com.emprendesoftcr.Bo.Impl;
 
+import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -20,6 +24,8 @@ import com.emprendesoftcr.modelo.Empresa;
 @Service("articuloBo")
 public class ArticuloBoImpl implements ArticuloBo {
 
+	private Logger			log	= LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	ArticuloDao articuloDao;
 
@@ -65,25 +71,44 @@ public class ArticuloBoImpl implements ArticuloBo {
 
 	/**
 	 * Obtener la Ganancia
+	 * @throws Exception 
 	 * @see com.emprendesoftcr.Bo.ArticuloBo#porcentanjeDeGanancia(java.lang.Double, java.lang.Double, java.lang.Double)
 	 */
 	@Override
-	public Double porcentanjeDeGanancia(Double costo, Double iva, Double precio) {
-		return articuloDao.porcentanjeDeGanancia(costo, iva, precio);
+	public Double porcentanjeDeGanancia(Double costo, Double iva, Double precio) throws Exception {
+		try {
+			return articuloDao.porcentanjeDeGanancia(costo, iva, precio);	
+		} catch (Exception e) {
+			log.info("** Error  porcentanjeDeGanancia: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+		
 	}
 
 	
 	@Override
-	public Double sumarCantidad(Articulo articulo, Double cantidad) {
-		articulo.setCantidad(articulo.getCantidad() +cantidad);
-		return articulo.getCantidad();
+	public Double sumarCantidad(Articulo articulo, Double cantidad) throws Exception{
+	 try {
+			articulo.setCantidad(articulo.getCantidad() +cantidad);
+			return articulo.getCantidad();
+		
+	} catch (Exception e) {
+		log.info("** Error  sumarCantidad: " + e.getMessage() + " fecha " + new Date());
+		throw e;
+	}
 		
 	}
 	
 	@Override
-	public Double restarCantidad(Articulo articulo, Double cantidad) {
-		articulo.setCantidad(articulo.getCantidad() - cantidad);
-		return articulo.getCantidad();
+	public Double restarCantidad(Articulo articulo, Double cantidad)throws Exception {
+		try {
+			articulo.setCantidad(articulo.getCantidad() - cantidad);
+			return articulo.getCantidad();
+			
+		} catch (Exception e) {
+			log.info("** Error  restarCantidad: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
 		
 	}
 	

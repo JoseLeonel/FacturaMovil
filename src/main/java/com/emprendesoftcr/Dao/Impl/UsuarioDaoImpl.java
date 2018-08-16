@@ -9,6 +9,7 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.UsuarioDao;
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 
 /**
@@ -38,7 +39,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 	 * Buscar por codigo de usuario y estado
 	 * @see com.factura.dao.UsuarioDao#buscar(java.lang.String, java.lang.Integer)
 	 */
-	@SuppressWarnings("unchecked")
+	@Override
 	public Usuario buscar(String nombreUsuario, Integer estado) {
 		Query query = entityManager.createQuery("select usuario from Usuario usuario where usuario.nombreUsuario = :nombreUsuario and usuario.estado = :estado");
 		query.setParameter("nombreUsuario", nombreUsuario);
@@ -55,7 +56,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 	 * Buscar por codigo de usuario
 	 * @see com.factura.dao.UsuarioDao#buscar(java.lang.String)
 	 */
-	@SuppressWarnings("unchecked")
+	@Override
 	public Usuario buscar(String nombreUsuario) {
 		Query query = entityManager.createQuery("select usuario from Usuario usuario where usuario.nombreUsuario = :nombreUsuario ");
 		query.setParameter("nombreUsuario", nombreUsuario);
@@ -71,7 +72,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 	 * Buscar por ID
 	 * @see com.factura.dao.UsuarioDao#buscar(java.lang.Long)
 	 */
-	@SuppressWarnings("unchecked")
+	@Override
 	public Usuario buscar(Integer id) {
 		Query query = entityManager.createQuery("select obj from Usuario obj where obj.id = :id");
 		query.setParameter("id", id);
@@ -86,7 +87,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 	/**
 	 * @see com.factura.dao.UsuarioDao#buscarPorNombreYPrimerApellidoYSegundoApellido(java.lang.String, java.lang.String, java.lang.String)
 	 */
-	@SuppressWarnings("unchecked")
+	@Override
 	public Usuario buscarPorNombreYPrimerApellidoYSegundoApellido(String nombre, String primerApellido, String segundoApellido) {
 		Query query = entityManager.createQuery("select usuario from Usuario usuario where usuario.nombre = :nombre and usuario.primerApellido = :primerApellido and usuario.segundoApellido = :segundoApellido");
 		query.setParameter("nombre", nombre);
@@ -98,6 +99,18 @@ public class UsuarioDaoImpl implements UsuarioDao {
 		} else {
 			return null;
 		}
+	}
+	@Override
+	public Usuario buscar(String nombreUsuario,Empresa empresa) {
+		Query query = entityManager.createQuery("select usuario from Usuario usuario where usuario.empresa = :empresa ");
+		query.setParameter("empresa", empresa);
+		List<Usuario> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (Usuario) results.get(0);
+		} else {
+			return null;
+		}
+		
 	}
 
 }

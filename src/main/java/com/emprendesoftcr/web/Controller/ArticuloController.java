@@ -188,12 +188,12 @@ public class ArticuloController {
 				result.rejectValue("codigo", "error.articulo.codigo.existe");
 			}
 
-			if (articulo.getCosto() == null) {
-				result.rejectValue("costo", "error.articulo.costo.mayorCero");
-			}
-			if (articulo.getCosto() == 0) {
-				result.rejectValue("costo", "error.articulo.costo.mayorCero");
-			}
+//			if (articulo.getCosto() == null) {
+//				result.rejectValue("costo", "error.articulo.costo.mayorCero");
+//			}
+//			if (articulo.getCosto() == 0) {
+//				result.rejectValue("costo", "error.articulo.costo.mayorCero");
+//			}
 			if (articulo.getPrecioPublico() == null) {
 				result.rejectValue("costo", "error.articulo.precioPublico.mayorCero");
 			}
@@ -202,15 +202,16 @@ public class ArticuloController {
 			}
 			if (articulo.getCantidad() != null) {
 				if (articulo.getCantidad() == Constantes.ZEROS_DOUBLE) {
-					result.rejectValue("cantidad", "error.inventario.cantidad.cero");
+					 articulo.setCantidad(Constantes.ZEROS_DOUBLE);
 				}
 			}
 			if (articulo.getCantidad() == null) {
-				result.rejectValue("cantidad", "error.inventario.cantidad.cero");
+				articulo.setCantidad(Constantes.ZEROS_DOUBLE);
 			}
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+			
 			articulo.setCreated_at(new Date());
 			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
 			articulo.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
@@ -229,7 +230,15 @@ public class ArticuloController {
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articulo.setUsuario(usuarioSesion);
 			articuloBo.agregar(articulo);
-			kardexBo.entrada(articulo, Constantes.ZEROS_DOUBLE, articulo.getCantidad(), Constantes.OBSERVACION_INICIAL_INVENTARIO_NUEVO, Constantes.CONSECUTIVO_INICIAL_INVENTARIO_NUEVO, Constantes.KARDEX_TIPO_ENTRADA, Constantes.MOTIVO_INICIAL_INVENTARIO_NUEVO, usuarioSesion);
+			
+			if(usuarioSesion.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
+				if(!articulo.getCantidad().equals(Constantes.ZEROS_DOUBLE)) {
+					kardexBo.entrada(articulo, Constantes.ZEROS_DOUBLE, articulo.getCantidad(), Constantes.OBSERVACION_INICIAL_INVENTARIO_NUEVO, Constantes.CONSECUTIVO_INICIAL_INVENTARIO_NUEVO, Constantes.KARDEX_TIPO_ENTRADA, Constantes.MOTIVO_INICIAL_INVENTARIO_NUEVO, usuarioSesion);
+					
+				}
+				
+			}
+			
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.agregar.correctamente", articulo);
 
 		} catch (Exception e) {
@@ -269,12 +278,12 @@ public class ArticuloController {
 					result.rejectValue("codigo", "error.articulo.codigo.existe");
 				}
 			}
-			if (articulo.getCosto() == null) {
-				result.rejectValue("costo", "error.articulo.costo.mayorCero");
-			}
-			if (articulo.getCosto() == 0) {
-				result.rejectValue("costo", "error.articulo.costo.mayorCero");
-			}
+//			if (articulo.getCosto() == null) {
+//				result.rejectValue("costo", "error.articulo.costo.mayorCero");
+//			}
+//			if (articulo.getCosto() == 0) {
+//				result.rejectValue("costo", "error.articulo.costo.mayorCero");
+//			}
 			if (articulo.getPrecioPublico() == null) {
 				result.rejectValue("costo", "error.articulo.precioPublico.mayorCero");
 			}
@@ -289,9 +298,11 @@ public class ArticuloController {
 			articulo.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMinimo());
 			articuloBd.setCreated_at(new Date());
 			articuloBd.setUpdated_at(new Date());
+			articuloBd.setCosto(articulo.getCosto() == null?Constantes.ZEROS_DOUBLE:articulo.getCosto());
 			articuloBd.setMaximo(articulo.getMaximo());
 			articuloBd.setMinimo(articulo.getMinimo());
 			articuloBd.setMarca(articulo.getMarca());
+			articuloBd.setDescripcion(articulo.getDescripcion());
 			articuloBd.setContable(articulo.getContable());
 			articuloBd.setCategoria(articulo.getCategoria());
 			articuloBd.setUnidadMedida(articulo.getUnidadMedida());

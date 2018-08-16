@@ -16,9 +16,10 @@ public interface ArticuloDao {
 	Articulo buscarPorDescripcionYEmpresa(String descripcion, Empresa empresa);
 
 	Articulo buscarPorCodigoYEmpresa(String codigo, Empresa empresa);
-	
-	Double porcentanjeDeGanancia(Double costo, Double iva, Double precio);
-	
-	Double costoPromedio(Double costoActual , Double costoNuevo,Double cantidadActual,Double cantidadNueva);
-	Double getTotalCosto(Articulo articulo, Double cantidad);
+
+	Double porcentanjeDeGanancia(Double costo, Double iva, Double precio) throws Exception;
+
+	Double costoPromedio(Double costoActual, Double costoNuevo, Double cantidadActual, Double cantidadNueva) throws Exception;
+
+	Double getTotalCosto(Articulo articulo, Double cantidad) throws Exception;
 }

@@ -155,8 +155,10 @@ public class CompraBoImpl implements CompraBo {
 	 * Aplicar el inventario si estado de la compras es ingresar al inventario
 	 * @param compra
 	 * @param inventario
+	 * @throws Exception 
 	 */
-	public void aplicarInventario(Compra compra,  DetalleCompra detalleCompra, Articulo articulo) {
+	@Override
+	public void aplicarInventario(Compra compra,  DetalleCompra detalleCompra, Articulo articulo) throws Exception {
 		if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
 			
 			Double cantidadTotal = articulo.getCantidad() + detalleCompra.getCantidad();
@@ -215,7 +217,7 @@ public class CompraBoImpl implements CompraBo {
 	 * Elimina los detalles de una compra
 	 * @see com.emprendesoftcr.Bo.CompraBo#eliminarDetalleComprasPorSP(com.emprendesoftcr.modelo.Compra)
 	 */
-	public void eliminarDetalleComprasPorSP(Compra compra) {
+	public void eliminarDetalleComprasPorSP(Compra compra) throws Exception{
 		compraDao.eliminarDetalleComprasPorSP(compra);
 	}
 

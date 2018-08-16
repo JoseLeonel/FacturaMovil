@@ -211,6 +211,8 @@ public class EmpresasController {
 				empresaBD.setNotacConsecutivo(empresa.getNotacConsecutivo());
 				empresaBD.setNotadConsecutivo(empresa.getNotadConsecutivo());
 				empresaBD.setTiqueteConsecutivo(empresa.getTiqueteConsecutivo());
+				empresaBD.setEnviarTiquete(empresa.getEnviarTiquete());
+				empresaBD.setTieneInventario(empresa.getTieneInventario());
 				empresaBo.modificar(empresaBD);
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("empresa.modificado.correctamente", empresaBD);
 			}

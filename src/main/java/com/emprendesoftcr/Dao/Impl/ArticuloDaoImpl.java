@@ -1,11 +1,14 @@
 package com.emprendesoftcr.Dao.Impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -23,7 +26,9 @@ import com.emprendesoftcr.modelo.Empresa;
 public class ArticuloDaoImpl implements ArticuloDao {
 
 	@PersistenceContext
-	EntityManager entityManager;
+	EntityManager		entityManager;
+
+	private Logger	log	= LoggerFactory.getLogger(this.getClass());
 
 	public void agregar(Articulo articulo) {
 		entityManager.persist(articulo);
@@ -52,8 +57,6 @@ public class ArticuloDaoImpl implements ArticuloDao {
 			return null;
 		}
 	}
-	
-	
 
 	/**
 	 * Buscar por descripcion la articulo y empresa
@@ -113,33 +116,39 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	 * @see com.emprendesoftcr.Dao.ArticuloDao#porcentanjeDeGanancia(java.lang.Double, java.lang.Double, java.lang.Double)
 	 */
 	@Override
-	public Double porcentanjeDeGanancia(Double costo, Double iva, Double precio) {
-		if(precio == null || costo == null) {
-			return Constantes.ZEROS_DOUBLE;
-		}
-		if(precio == 0) {
-			return Constantes.ZEROS_DOUBLE;
-		}
-		Double resultado = Constantes.ZEROS_DOUBLE;
-		Double precioSinImpuesto = Constantes.ZEROS_DOUBLE;
-		costo = costo == null ? Constantes.ZEROS_DOUBLE : costo;
-		precio = precio == null ? Constantes.ZEROS_DOUBLE: precio;
-		iva = iva == null ? Constantes.ZEROS_DOUBLE : iva;
-		if (iva == 0) {
-			resultado = costo/precio;
-			resultado = 1-resultado;
-		} else {
+	public Double porcentanjeDeGanancia(Double costo, Double iva, Double precio) throws Exception {
+		try {
+			if (precio == null || costo == null) {
+				return Constantes.ZEROS_DOUBLE;
+			}
+			if (precio == 0) {
+				return Constantes.ZEROS_DOUBLE;
+			}
+			Double resultado = Constantes.ZEROS_DOUBLE;
+			Double precioSinImpuesto = Constantes.ZEROS_DOUBLE;
+			costo = costo == null ? Constantes.ZEROS_DOUBLE : costo;
+			precio = precio == null ? Constantes.ZEROS_DOUBLE : precio;
+			iva = iva == null ? Constantes.ZEROS_DOUBLE : iva;
+			if (iva == 0) {
+				resultado = costo / precio;
+				resultado = 1 - resultado;
+			} else {
+				Double porcentaje = 100d;
+				Double uno = 1d;
+				Double impuesto = iva / porcentaje;
+				impuesto = impuesto + uno;
+				precioSinImpuesto = precio / impuesto;
+				resultado = costo / precioSinImpuesto;
+				resultado = uno - resultado;
+			}
 			Double porcentaje = 100d;
-			Double uno = 1d;
-			Double impuesto = iva/porcentaje;
-			impuesto = impuesto + uno;
-			precioSinImpuesto = precio/impuesto;
-			resultado = costo/precioSinImpuesto;
-			resultado = uno-resultado;
-		}
-		Double porcentaje = 100d;
 
-		return resultado * porcentaje;
+			return resultado * porcentaje;
+
+		} catch (Exception e) {
+			log.info("** Error  porcentanjeDeGanancia: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
 	}
 
 	/**
@@ -147,25 +156,44 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	 * @see com.emprendesoftcr.Dao.ArticuloDao#costoPromedio(java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double)
 	 */
 	@Override
-	public Double costoPromedio(Double costoActual, Double costoNuevo, Double cantidadActual, Double cantidadNueva) {
-		Double resultado = Constantes.ZEROS_DOUBLE;
+	public Double costoPromedio(Double costoActual, Double costoNuevo, Double cantidadActual, Double cantidadNueva) throws Exception {
+		try {
+			Double resultado = Constantes.ZEROS_DOUBLE;
+			costoActual = costoActual == null ? Constantes.ZEROS_DOUBLE : costoActual;
+			costoNuevo = costoNuevo == null ? Constantes.ZEROS_DOUBLE : costoNuevo;
+			cantidadNueva = cantidadNueva == null ? Constantes.ZEROS_DOUBLE : cantidadNueva;
 
-		Double totalCostoActual = costoActual * cantidadActual;
-		Double totalCostoNuevo = costoNuevo * cantidadNueva;
-		Double totalProductos = cantidadActual + cantidadNueva;
-		resultado = (totalCostoActual + totalCostoNuevo);
+			Double totalCostoActual = costoActual * cantidadActual;
+			Double totalCostoNuevo = costoNuevo * cantidadNueva;
+			Double totalProductos = cantidadActual + cantidadNueva;
+			resultado = (totalCostoActual + totalCostoNuevo);
 
-		return resultado / totalProductos;
+			return resultado / totalProductos;
+
+		} catch (Exception e) {
+			log.info("** Error  costoPromedio: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
 
 	}
-	
+
 	@Override
-	public Double getTotalCosto(Articulo articulo, Double cantidad) {
-		Double resultado = Constantes.ZEROS_DOUBLE;
+	public Double getTotalCosto(Articulo articulo, Double cantidad) throws Exception {
+		try {
+			Double resultado = Constantes.ZEROS_DOUBLE;
 
-		resultado = articulo.getCosto() * cantidad;
+			cantidad = cantidad == null ? Constantes.ZEROS_DOUBLE : cantidad;
 
-		return resultado;
+			Double costo = articulo.getCosto() == null ? Constantes.ZEROS_DOUBLE : articulo.getCosto();
+
+			resultado = costo * cantidad;
+
+			return resultado;
+
+		} catch (Exception e) {
+			log.info("** Error  getTotalCosto: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
 	}
 
 }

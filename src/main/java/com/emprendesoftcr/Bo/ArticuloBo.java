@@ -17,10 +17,10 @@ public interface ArticuloBo {
 
 	Articulo buscarPorCodigoYEmpresa(String codigo, Empresa empresa);
 
-	Double porcentanjeDeGanancia(Double costo, Double iva, Double precio);
-	
-	Double sumarCantidad(Articulo articulo, Double cantidad);
-	
-	Double restarCantidad(Articulo articulo, Double cantidad);
+	Double porcentanjeDeGanancia(Double costo, Double iva, Double precio) throws Exception;
+
+	Double sumarCantidad(Articulo articulo, Double cantidad) throws Exception;
+
+	Double restarCantidad(Articulo articulo, Double cantidad) throws Exception;
 
 }
