@@ -19,9 +19,9 @@
                 <div  show={mostrarFiltros}  class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
                     <form id="filtros" name="filtros">              
                         <div class= "row">
-                            <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
-                                    <label class="knob-label" >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
+                                    <label  >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
                                     <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
                                         <input type="text" class="form-control fechaInicio" id="fechaInicio"  name= "fechaInicio" readonly>
                                         <div class="input-group-addon">
@@ -30,10 +30,10 @@
                                     </div>	                             
                                 </div>  
                             </div>             
-                            <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <div class="form-group">
-                                        <label class="knob-label" >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
+                                        <label  >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
                                         <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
                                             <input type="text" class="form-control fechaFin" id="fechaFin"  name= "fechaFin" readonly>
                                             <div class="input-group-addon">
@@ -43,7 +43,7 @@
                                     </div>
                                 </div>  
                             </div>
-                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label>{$.i18n.prop("proveedor.titulo")} </label>  
                                     <select  class="form-control selectCliente" id="idProveedor" name="idProveedor" data-live-search="true">

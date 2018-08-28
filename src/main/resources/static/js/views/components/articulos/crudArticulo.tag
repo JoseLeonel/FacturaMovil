@@ -1,52 +1,5 @@
 <articulo-crud>
-    <!-- Titulos -->
-    <div  class="row titulo-encabezado"  >
-        <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <h1 show = {mostrarTituloArticulo}><i class="fa fa-cog"></i>&nbsp {$.i18n.prop("articulo.titulo")}  </h1>
-            <h1 show = {mostrarTituloInventario}><i class="fa fa-cog"></i>&nbsp {$.i18n.prop("inventario.titulo")}  </h1>
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"></div>
-    </div>
-<!-- Listado  -->
-<div classs="contenedor-listar container" id="container"  show={mostrarListado}  >
-        <div class="row">
-            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
-                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th class="table-header" style ="width:5%" >{$.i18n.prop("articulo.codigo")}          </th>
-                                <th class="table-header" >{$.i18n.prop("articulo.descripcion")}     </th>
-                                <th class="table-header" >{$.i18n.prop("articulo.costo")}           </th>
-                                <th class="table-header" style ="width:8%">{$.i18n.prop("articulo.impuesto")}             </th>
-                                <th class="table-header" >{$.i18n.prop("articulo.precioPublico")}   </th>
-                                <th class="table-header" >{$.i18n.prop("articulo.precioMayorista")} </th>
-                                <th class="table-header" >{$.i18n.prop("inventario.cantidad")}  </th>
-                                <th class="table-header" style ="width:6%">{$.i18n.prop("articulo.contable")}        </th>
-                                <th class="table-header" >{$.i18n.prop("articulo.estado")}          </th>
-                                <th class="table-header" > {$.i18n.prop("listado.acciones")}        </th>
-                            </tr>
-                        </thead>
-                        <tfoot style="display: table-header-group;">
-                            <tr>
-                                <th>{$.i18n.prop("articulo.codigo")}          </th>
-                                <th>{$.i18n.prop("articulo.descripcion")}     </th>
-                                <th>{$.i18n.prop("articulo.costo")}           </th>
-                                <th>{$.i18n.prop("articulo.impuesto")}             </th>
-                                <th>{$.i18n.prop("articulo.precioPublico")}   </th>
-                                <th>{$.i18n.prop("articulo.precioMayorista")} </th>
-                                <th>{$.i18n.prop("inventario.cantidad")}  </th>
-                                <th>{$.i18n.prop("articulo.contable")}        </th>
-                                <th>{$.i18n.prop("articulo.estado")}          </th>
-                                <th >                                         </th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    <h2 class="pull-right">{$.i18n.prop("articulo.costo")}:{totalCosto.toLocaleString('de-DE')} {$.i18n.prop("articulo.precioPublico")}:{totalPrecioPublico.toLocaleString('de-DE')}   </h2>
-            </div>
-        </div>    
-</div>
-
-<!-- Fin del Listado -->
+   
 <div  >
     <div class="row center " show ={mostrarFormulario} >
    
@@ -65,20 +18,20 @@
                         </div>
                         <div class="row">
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label" >{$.i18n.prop("articulo.categoria")}  <span class="requeridoDato">*</span></label>
+                                <label  >{$.i18n.prop("articulo.categoria")}  <span class="requeridoDato">*</span></label>
                                  <select  class="form-control selectCategoria"   name="categoria" >
                                     <option  each={categorias.aaData}  value="{id}" selected="{articulo.categoria.id ==id?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
                             <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label">{$.i18n.prop("articulo.tipoImpuesto")}</label>
+                                <label >{$.i18n.prop("articulo.tipoImpuesto")}</label>
                                 <select  class="form-control selectTipoImpuesto" id="tipoImpuesto" name="tipoImpuesto"  >
                                     <option  value=" " >Seleccionar</option>
                                     <option  each={impuestos}  value="{codigo}" selected="{articulo.tipoImpuesto ==codigo?true:false}"  >{descripcion}</option>
                                 </select>
                             </div>
                             <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label">{$.i18n.prop("articulo.tipoCodigo")}</label>
+                                <label >{$.i18n.prop("articulo.tipoCodigo")}</label>
                                 <select  class="form-control selectTipoCodigo" id="tipoCodigo" name="tipoCodigo"  >
                                     <option  each={tipoCodigos}  value="{codigo}" selected="{articulo.tipoCodigo ==codigo?true:false}"  >{descripcion}</option>
                                 </select>
@@ -88,19 +41,19 @@
 
                         <div class="row">
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label" >{$.i18n.prop("articulo.marca")}  <span class="requeridoDato">*</span></label>
+                                <label  >{$.i18n.prop("articulo.marca")}  <span class="requeridoDato">*</span></label>
                                  <select  class="form-control selectMarca"  name="marca">
                                     <option  each={marcas.aaData}  value="{id}" selected="{articulo.marca.id ==id?true:false}"  >{descripcion}</option>
                                 </select>
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label" >{$.i18n.prop("articulo.unidadMedida")}  <span class="requeridoDato">*</span></label>
+                                <label  >{$.i18n.prop("articulo.unidadMedida")}  <span class="requeridoDato">*</span></label>
                                  <select  class="form-control selecTipoUnidad" name="unidadMedida" >
                                     <option   each={tipoUnidades.aaData}  value="{codigo}"  selected="{articulo.unidadMedida ==codigo?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
                             <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label">{$.i18n.prop("articulo.contable")}</label>
+                                <label >{$.i18n.prop("articulo.contable")}</label>
                                 <select  class="form-control" id="contable" name="contable" >
                                     <option  each={contables}  value="{codigo}" selected="{articulo.contable ==codigo?true:false}" >{descripcion}</option>
                                 </select>
@@ -110,60 +63,60 @@
 
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("articulo.codigo")}  <span class="requeridoDato">*</span></label>
+                                <label  >{$.i18n.prop("articulo.codigo")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" class="form-control codigo" id="codigo" name="codigo" value="{articulo.codigo}"  >
                             </div>
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("articulo.descripcion")}  <span class="requeridoDato">*</span></label>
+                                <label  >{$.i18n.prop("articulo.descripcion")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" class="form-control descripcion" id="descripcion" name="descripcion" value="{articulo.descripcion}"  >
                             </div>
                         </div>
 
                         <div class="row">
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label" >{$.i18n.prop("articulo.serie")}  </label>
+                                <label  >{$.i18n.prop("articulo.serie")}  </label>
                                 <input type="text" class="form-control serie" id="serie" name="serie" value="{articulo.serie}" >
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label" >{$.i18n.prop("inventario.cantidad")} </label>
+                                <label  >{$.i18n.prop("inventario.cantidad")} </label>
                                 <input type="number" step="any" class="form-control cantidad" id="cantidad" name="cantidad" value="{articulo.cantidad}" readonly = "{articulo.id>0?true:false}" >
                             </div>                        
                             
 
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label" >{$.i18n.prop("articulo.costo")} </label>
+                                <label  >{$.i18n.prop("articulo.costo")} </label>
                                 <input type="number" step="any" class="form-control costo" id="costo" name="costo" value="{articulo.costo}"  onkeyup ={__ActualizarPreciosCosto}>
                             </div>
                         </div>
                         <div class="row">
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label" >{$.i18n.prop("articulo.impuesto")}  </label>
+                                <label  >{$.i18n.prop("articulo.impuesto")}  </label>
                                 <input type="number" step="any" class="form-control impuesto" id="impuesto" name="impuesto" value="{articulo.impuesto}"  onkeyup ={__ActualizarPreciosImpuestos}>
                             </div>
 
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label" >{$.i18n.prop("articulo.gananciaPrecioPublico")}  </label>
+                                <label  >{$.i18n.prop("articulo.gananciaPrecioPublico")}  </label>
                                 <input type="number" step="any" class="form-control gananciaPrecioPublico" id="gananciaPrecioPublico" name="gananciaPrecioPublico" value="{articulo.gananciaPrecioPublico}"  readonly>
                             </div>
 
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label" >{$.i18n.prop("articulo.precioPublico")}  <span class="requeridoDato">*</span></label>
+                                <label  >{$.i18n.prop("articulo.precioPublico")}  <span class="requeridoDato">*</span></label>
                                 <input type="number" step="any" class="form-control precioPublico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoGananciaPublico} value="{articulo.precioPublico}"  >
                             </div>
                         </div>
                         <div class="row">
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label" >{$.i18n.prop("inventario.minimo")} </label>
+                                <label  >{$.i18n.prop("inventario.minimo")} </label>
                                 <input type="number" step="any" class="form-control minimo" id="minimo" name="minimo" value="{articulo.minimo}"  >
                             </div>
                            
                             <div class= "col-col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label" >{$.i18n.prop("articulo.gananciaPrecioEspecial")}  </label>
+                                <label  >{$.i18n.prop("articulo.gananciaPrecioEspecial")}  </label>
                                 <input type="text" class="form-control gananciaPrecioEspecial" id="gananciaPrecioEspecial" name="gananciaPrecioEspecial" value="{articulo.gananciaPrecioEspecial}"  readonly>
                             </div>
 
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label" >{$.i18n.prop("articulo.precioEspecial")}  </label>
+                                <label  >{$.i18n.prop("articulo.precioEspecial")}  </label>
                                 <input type="number" step="any" class="form-control precioEspecial" id="precioEspecial" name="precioEspecial" value="{articulo.precioEspecial}"  onkeyup={__CalculoGananciaEspecial}>
                             </div>
                           
@@ -171,15 +124,15 @@
                         </div>
                         <div class="row">
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label" >{$.i18n.prop("inventario.maximo")} </label>
+                                <label  >{$.i18n.prop("inventario.maximo")} </label>
                                 <input type="number" step="any" class="form-control maximo" id="maximo" name="maximo" value="{articulo.maximo}"  >
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label" >{$.i18n.prop("articulo.gananciaPrecioMayorista")}  </label>
+                                <label  >{$.i18n.prop("articulo.gananciaPrecioMayorista")}  </label>
                                 <input type="number" step="any" class="form-control gananciaPrecioMayorista" id="gananciaPrecioMayorista" name="gananciaPrecioMayorista" value="{articulo.gananciaPrecioMayorista}"  readonly>
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label" >{$.i18n.prop("articulo.precioMayorista")}  </label>
+                                <label  >{$.i18n.prop("articulo.precioMayorista")}  </label>
                                 <input type="number" step="any" class="form-control precioMayorista" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista}" onkeyup={__CalculoGananciaMayorista} >
                             </div>                            
 
@@ -192,7 +145,7 @@
                             
                             
                             <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label class="knob-label">{$.i18n.prop("articulo.estado")}</label>
+                                <label >{$.i18n.prop("articulo.estado")}</label>
                                 <select  class="form-control" id="estado" name="estado"  >
                                     <option  each={estados}  value="{codigo}" selected="{articulo.estado ==codigo?true:false}" >{descripcion}</option>
                                 </select>
@@ -234,14 +187,14 @@
                         </div>
                         <div class="row">
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label" >{$.i18n.prop("articulo.codigo")}</label>
+                                <label class="form-control" >{$.i18n.prop("articulo.codigo")}</label>
                                 <input type="text" class="form-control"   value="{articulo.codigo}"   readonly>
                             </div>
 
                         </div>
                         <div class="row">
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label" >{$.i18n.prop("articulo.descripcion")}</label>
+                                <label class="form-control" >{$.i18n.prop("articulo.descripcion")}</label>
                                 <input type="textArea" class="form-control" value="{articulo.descripcion}" readonly>
                             </div>
 
@@ -249,7 +202,7 @@
 
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label">{$.i18n.prop("kardex.motivos")} <span class="requeridoDato">*</span></label>
+                                <label class="form-control">{$.i18n.prop("kardex.motivos")} <span class="requeridoDato">*</span></label>
                                 <select  class="form-control selectEntrada" id="motivo" name="motivo" data-live-search="true">
                                     <option data-tokens="{descripcion}" each={motivoEntradas.data}  value="{descripcion}"  >{descripcion}</option>
                                 </select>
@@ -258,18 +211,18 @@
                         </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("kardex.cantidadActual")}</label>
+                                <label class="form-control" >{$.i18n.prop("kardex.cantidadActual")}</label>
                                 <input type="number" step="any" class="form-control"  value="{articulo.cantidad}"  readonly >
                             </div>
                             <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("kardex.cantidadNueva")}<span class="requeridoDato">*</span> </label>
+                                <label class="form-control" >{$.i18n.prop("kardex.cantidadNueva")}<span class="requeridoDato">*</span> </label>
                                 <input onkeyup= {MostrarBotonAgregarEntrada} type="number" step="any"  class="form-control cantidadNueva_entrada" id="cantidadNueva" name="cantidadNueva"   >
                             </div>
 
                         </div>
                         <div class="row">
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label" > {$.i18n.prop("kardex.observacion")}<span class="requeridoDato">*</span></label>
+                                <label class="form-control" > {$.i18n.prop("kardex.observacion")}<span class="requeridoDato">*</span></label>
                                 <textarea class="form-control observacion_entrada " rows="5" id="observacion" name="observacion"></textarea>
                             </div>
                         </div>
@@ -310,19 +263,19 @@
                         </div>
                         <div class="row">
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label" >{$.i18n.prop("articulo.codigo")}  </label>
+                                <label class="form-control" >{$.i18n.prop("articulo.codigo")}  </label>
                                 <input type="text" class="form-control"  value="{articulo.codigo}"  readonly>
                             </div>
                         </div>
                         <div class="row">
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label" >{$.i18n.prop("articulo.descripcion")}</label>
+                                <label class="form-control" >{$.i18n.prop("articulo.descripcion")}</label>
                                 <input type="text" class="form-control " value="{articulo.descripcion}"  readonly>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label">{$.i18n.prop("kardex.motivos")} <span class="requeridoDato">*</span></label>
+                                <label class="form-control">{$.i18n.prop("kardex.motivos")} <span class="requeridoDato">*</span></label>
                                 <select  class="form-control selectMotivoSalida" id="motivo" name="motivo" data-live-search="true">
                                     <option data-tokens="{descripcion}"  each={motivoSalidas.data}  value="{descripcion}"  >{descripcion}</option>
                                 </select>
@@ -330,17 +283,17 @@
                         </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("kardex.cantidadActual")} </label>
+                                <label class="form-control" >{$.i18n.prop("kardex.cantidadActual")} </label>
                                 <input type="number" step="any" class="form-control" id="cantidadActual" name="cantidadActual" value="{articulo.cantidad}" disabled readonly >
                             </div>
                             <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
-                                <label class="knob-label" >{$.i18n.prop("kardex.cantidadDismunuir")}<span class="requeridoDato">*</span> </label>
+                                <label class="form-control" >{$.i18n.prop("kardex.cantidadDismunuir")}<span class="requeridoDato">*</span> </label>
                                 <input onkeyup= {MostrarBotonAgregarSalida} type="number" step="any"  class="form-control cantidadNueva_salida cantidadNueva" id="cantidadNueva" name="cantidadNueva"   >
                             </div>
                         </div>
                         <div class="row">
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label" >{$.i18n.prop("kardex.observacion")} <span class="requeridoDato">*</span></label>
+                                <label class="form-control" >{$.i18n.prop("kardex.observacion")} <span class="requeridoDato">*</span></label>
                                 <textarea class="form-control observacion_salida" rows="5" id="observacion" name="observacion"></textarea>
                             </div>
                         </div>
@@ -413,6 +366,7 @@
     </style>
 <script>
     var self = this;
+    self.parametros   = opts.parametros;  
     self.idiomaDataTable           = []         // idioma de la datatable nuevo
     self.formato_tabla             = []         // Formato del Listado de la Tabla 
     self.categorias                = {aaData:[]}
@@ -424,7 +378,6 @@
     self.tipoCodigos =[]
     self.contables                 = []
     self.estados                   = []
-    self.mostrarListado            = true 
     self.botonModificar            = false
     self.botonAgregar              = false
     self.mostrarTituloArticulo     = true
@@ -464,13 +417,6 @@
    
 
 self.on('mount',function(){
-    __InicializarTabla('.tableListar')
-    includeActionsArticulo('.dataTables_wrapper','.dataTables_length')
-    agregarInputsCombos()
-    ActivarEventoFiltro('.tableListar')
-    __listado()
-    
-   
     __Eventos()
     __ComboEstados()
     __ComboContables()
@@ -479,6 +425,70 @@ self.on('mount',function(){
     __Impuestos() 
     __tipoCodigo()
     LimpiarArticulo()
+   //Agregar
+      if(self.parametros.tipoEjecucion ==1){
+          self.mostrarTituloArticulo     = true  
+          self.mostrarFormulario = true
+          self.botonAgregar = true
+          self.update()
+      }   
+
+       //modificar
+      if(self.parametros.tipoEjecucion ==2){
+          self.mostrarTituloArticulo     = true  
+          self.mostrarFormulario = true
+          self.botonModificar = true
+          self.mostrarFormulario  = true 
+          self.botonModificar   = true;
+          self.mostrarFormularioEntrada    = false
+          self.botonAgregar     = false;                        
+          self.articulo  =  self.parametros.articulo
+          self.update()
+          $('.selectTipoImpuesto').val(self.articulo.tipoImpuesto);  
+          $('.selectTipoCodigo').val(self.articulo.tipoCodigo);  
+          $('.selecTipoUnidad').val(self.articulo.unidadMedida) 
+          $('.selectMarca').val(self.articulo.marca.id)
+          $('.selectCategoria').val(self.articulo.categoria.id)
+          $("#formulario").validate(reglasDeValidacion());           
+      }  
+      
+      //Entrada
+      if(self.parametros.tipoEjecucion ==3){
+        $("#formularioEntrada").validate(reglasDeValidacionEntrada());
+        $(".errorServerSideJgrid").remove();
+
+        $(".observacion_entrada").val(null)
+        $(".cantidadNueva_entrada").val(null)
+        self.articulo  = self.parametros.articulo
+        self.mostrarFormularioEntrada = true
+        self.mostrarListado            = false 
+        self.botonModificar            = false
+        self.botonAgregar              = false
+        self.mostrarFormularioEntrada    = true
+        self.mostrarFormularioSalida     = false
+        self.update()
+        _ListaMotivoEntradasActivas()
+      }
+      //Salida
+      if(self.parametros.tipoEjecucion ==4){
+              $("#formularioSalida").validate(reglasDeValidacionSalida());
+        $(".errorServerSideJgrid").remove();
+
+      $(".observacion_salida").val(null)
+        $(".cantidadNueva_salida").val(null)
+        self.articulo  = self.parametros.articulo
+        self.mostrarListado            = false 
+        self.botonModificar            = false
+        self.botonAgregar              = false
+        self.mostrarTituloArticulo     = false
+        // variables para modulo de inventario 
+        self.mostrarFormularioEntrada    = false
+        self.mostrarFormularioSalida     = true
+        self.update()
+        _ListaMotivoSalidasActivas()
+      }
+   
+   
     window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
@@ -556,20 +566,7 @@ function enviarCargarCombos(){
     __listadoCategoriasActivas()
     __listadoMarcasActivas()
 }
-/**
-* incluir el boton agregar en cada mantenimiento 
-**/
-function includeActionsArticulo(dataTables_wrapper,dataTables_length) {
-    $( ".btn-agregar" ).remove();
-    $( ".btn-agregarInventario" ).remove();
-    var parent = $(dataTables_wrapper);
-    var header_pointer = $(dataTables_length);
-    var header_length = header_pointer.html();
-    var new_header = "<div  class='new-header-with-actions' style='padding-top:0px; padding-bottom:0px;'>";
-    new_header += "<div class='add-new btn-agregar' ><i class='fa fa-plus'></i> Agregar</div>";
-    new_header += "</div>";
-    parent.prepend(new_header);
-}
+
 
 /**
 * Camps requeridos
@@ -700,7 +697,8 @@ __agregarEntradaInventario(){
                             self.mostrarFormularioEntrada    = false
                             self.mostrarFormularioSalida     = false
                            self.update()
-                            __listado();                            
+                           __mostrarListado()
+                                           
                         }
                     },
                     error : function(xhr, status) {
@@ -754,7 +752,8 @@ __agregarSalidaInventario(){
                             self.mostrarFormularioEntrada    = false
                             self.mostrarFormularioSalida     = false
                             self.update()
-                            __listado();                            
+                            __mostrarListado()
+                                                   
                         }
                     },
                     error : function(xhr, status) {
@@ -766,60 +765,6 @@ __agregarSalidaInventario(){
     }
 }
 
-/**
- * Funcion agregar una entrada
- */
-function __agregarEntradaAlInventario(){
-	$('#tableListar').on('click','.btnEntrada',function(e){
-        $("#formularioEntrada").validate(reglasDeValidacionEntrada());
-        $(".errorServerSideJgrid").remove();
-		var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-        $(".observacion_entrada").val(null)
-        $(".cantidadNueva_entrada").val(null)
-        self.articulo  = data
-        self.mostrarListado            = false 
-        self.botonModificar            = false
-        self.botonAgregar              = false
-        self.mostrarFormularioEntrada    = true
-        self.mostrarFormularioSalida     = false
-        self.update()
-        _ListaMotivoEntradasActivas()
-	});
-}
-/**
- * Funcion agregar una entrada
- */
-function __agregarSalidaAlInventario(){
-	$('#tableListar').on('click','.btnSalida',function(e){
-        $("#formularioSalida").validate(reglasDeValidacionSalida());
-        $(".errorServerSideJgrid").remove();
-		var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-        $(".observacion_salida").val(null)
-        $(".cantidadNueva_salida").val(null)
-        self.articulo  = data
-        self.mostrarListado            = false 
-        self.botonModificar            = false
-        self.botonAgregar              = false
-        self.mostrarTituloArticulo     = false
-        // variables para modulo de inventario 
-        self.mostrarFormularioEntrada    = false
-        self.mostrarFormularioSalida     = true
-        self.update()
-        _ListaMotivoSalidasActivas()
-	});
-}
 
 
 
@@ -1096,13 +1041,14 @@ function __ComboContables(){
     self.contables =[]
     self.update()
     self.contables.push({
-        codigo: $.i18n.prop("boolean.si"),
-        descripcion:$.i18n.prop("boolean.si")
-     });
-    self.contables.push({
         codigo: $.i18n.prop("boolean.no"),
         descripcion: $.i18n.prop("boolean.no")
      });
+    self.contables.push({
+        codigo: $.i18n.prop("boolean.si"),
+        descripcion:$.i18n.prop("boolean.si")
+     });
+    
      self.update();
 }
 
@@ -1194,97 +1140,14 @@ __regresarAlListado(){
     self.mostrarFormularioEntrada    = false
     self.mostrarFormularioSalida     = false
     self.update()
+    //articulo.js se encuentra rutina
+    __mostrarListado()
     LimpiarArticulo()
-    __listado();
-}
-/**
-* Mostrar formulario de mantenimiento Agregar
-**/
-function __MantenimientoAgregar(){
-      //Inicializar el Formulario
-    $('.dataTables_wrapper').on('click','.btn-agregar',function(e){
-        _inicializarArticulo()             // modelo o domain   
-        self.mostrarListado   = false;
-        self.mostrarFormulario  = true 
-        self.botonModificar   = false;
-        self.botonAgregar     = true;
-        self.mostrarFormularioEntrada    = false
-        self.mostrarFormularioSalida     = false
-        self.update();
-        LimpiarArticulo()
-       __Eventos()
-        $("#formulario").validate(reglasDeValidacion());
-    })
-}
-/**
- * Funcion para Modificar del Listar
- */
-function __modificarRegistro_Listar(){
-	$('#tableListar').on('click','.btnModificar',function(e){
-        $("#formulario").validate(reglasDeValidacion());
-        $(".errorServerSideJgrid").remove();
-		var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-        LimpiarArticulo()
-        self.articulo  = data
-        self.update()
-    
-        __consultar()
-	});
+  
 }
 
 
-/**
-*  Consultar  especifico
-* 1  Mostrar  2  Modificar
-**/
-function __consultar(){
-    var formulario = $('#formulario').serialize();
-    $.ajax({
-        url: "MostrarArticuloAjax.do",
-        datatype: "json",
-        data: formulario,
-        method:"GET",
-        success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                        self.mostrarListado   = false;
-                        self.mostrarFormulario  = true 
-                        self.botonModificar   = true;
-                        self.mostrarFormularioEntrada    = false
-                        self.botonAgregar     = false;                        
-                        self.articulo  =  modeloTabla
-                        self.update()
-                        __listadoCategoriasActivas()
-                        __listadoMarcasActivas()
-                        __ComboContables()
-                        __ComboEstados()
-                        __Impuestos() 
-                        $('.selectTipoImpuesto').val(self.articulo.tipoImpuesto);  
-                        $('.selectTipoCodigo').val(self.articulo.tipoCodigo);  
-                        $('.selecTipoUnidad').val(self.articulo.unidadMedida) 
-                        $('.selectMarca').val(self.articulo.marca.id)
-                        $('.selectCategoria').val(self.articulo.categoria.id)
-                        $("#formulario").validate(reglasDeValidacion());
-                    });
-                }
-            }
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
-        }
-    });
-}
+
 
 
 
@@ -1364,53 +1227,15 @@ __Modificar(){
     self.update();
     __modificarRegistro("#formulario",$.i18n.prop("articulo.mensaje.alert.modificar"),'ModificarArticuloAjax.do','ListarArticuloAjax.do','#tableListar')
 }
-/**
-*  Mostrar listado datatable
-**/
-function __listado(){
-   // $("#tableListar").dataTable().fnClearTable(); 
-   self.listaArticulos = []
-   self.update()
-    $.ajax({
-        url: "ListarArticuloAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-             if(result.aaData.length > 0){
-                __InformacionDataTable();
-                loadListar(".tableListar",idioma_espanol,self.informacion_tabla,result.aaData)
-                includeActionsArticulo('.dataTables_wrapper','.dataTables_length')
-                agregarInputsCombos();
-                __MantenimientoAgregar()
-                    //Actimpuestor filtros
-                ActivarEventoFiltro(".tableListar")
-                __modificarRegistro_Listar()
-                __agregarEntradaAlInventario()
-                __agregarSalidaAlInventario() 
-                __Eventos()
-                self.listaArticulos = result.aaData
-                self.update()
-                sumar()
-             }else{
-                  includeActionsArticulo('.dataTables_wrapper','.dataTables_length')
-                  __MantenimientoAgregar()
-                 __Eventos()
-             } 
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
-        }
-    })
-}
+
 
 function sumar(){
     self.totalCosto = 0
     self.totalPrecioPublico = 0
     self.update()
     $.each(self.listaArticulos, function( index, modeloTabla ) {
-          self.totalCosto += modeloTabla.costo
-          self.totalPrecioPublico += modeloTabla.precioPublico
+          self.totalCosto += modeloTabla.costo * modeloTabla.cantidad
+          self.totalPrecioPublico += modeloTabla.precioPublico * modeloTabla.cantidad
     })
     self.totalCosto         = redondearDecimales(self.totalCosto,2)
     self.totalPrecioPublico = redondearDecimales(self.totalPrecioPublico,2)
@@ -1425,52 +1250,7 @@ function redondearDecimales(numero, decimales) {
         return Number(numero.toFixed(decimales)) === 0 ? 0 : numero;  // En valores muy bajos, se comprueba si el numero es 0 (con el redondeo deseado), si no lo es se devuelve el numero otra vez.
     }
 }
-/**
-*Formato del listado de los cambios
-**/
-function __InformacionDataTable(){
-    self.informacion_tabla = [ 
-                               {'data' :'codigo'                  ,"name":"codigo"                 ,"title" : $.i18n.prop("articulo.codigo")           ,"autoWidth" :true },
-                               {'data' :'descripcion'             ,"name":"descripcion"            ,"title" : $.i18n.prop("articulo.descripcion")      ,"autoWidth" :true },
-                               {'data' :'costo'                   ,"name":"costo"                  ,"title" : $.i18n.prop("articulo.costo")            ,"autoWidth" :true },
-                               {'data' :'impuesto'                ,"name":"impuesto"               ,"title" : $.i18n.prop("articulo.impuesto")              ,"autoWidth" :true },
-                               {'data' :'precioPublico'           ,"name":"precioPublico"          ,"title" : $.i18n.prop("articulo.precioPublico")    ,"autoWidth" :true },
-                               {'data' :'precioMayorista'         ,"name":"precioMayorista"        ,"title" : $.i18n.prop("articulo.precioMayorista")  ,"autoWidth" :true },
-                               {'data' :'cantidad'                ,"name":"cantidad"               ,"title" : $.i18n.prop("inventario.cantidad")   ,"autoWidth" :true },
-                               {'data' :'contable'                ,"name":"contable"               ,"title" : $.i18n.prop("articulo.contable")         ,"autoWidth" :false },
-                               {'data' : 'estado'                 ,"name":"estado"          ,"title" : $.i18n.prop("articulo.estado")      ,"autoWidth" :false},
-                               {'data' : 'id'            ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
-                                "render":function(id,type, row){
-                                      return __Opciones(id,type,row);
-                                 }
-	      		            }];
-    self.update();
-}
-/**
-*Formato de la fecha con hora
-**/
-function __displayDate_detail(fecha) {
-      var dateTime = new Date(fecha);
-      return moment(dateTime).format('DD/MM/YYYY h:mm:ss');
-}
-/**
-* Opciones listado de los clientes
-*/
-function __Opciones(id,type,row){
-    let menu = ' <div class="dropdown"> ' 
-    menu += '       <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' 
-    menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>' 
-    menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
-    
-    menu += '<li><a href="#"  title="Modificar" class="  btnModificar" >Modificar</a></li>'
-    menu += '<li><a href="#"  title="Entrada al inventario"  class="  btnEntrada" >Entrada</a></li>'
-    if(row.cantidad > 0 ){
-       menu += '<li><a href="#"  title="Salida al inventario" class="  btnSalida" >Salida</a></li>'
-    }
 
-     menu += "</ul></div>"  
-     return menu;          
-}
 /**
 * Inicializar el articulo
 **/
@@ -1505,27 +1285,7 @@ function _inicializarArticulo(){
     }    
     self.update()
 }
-/**
-*  Agregar los inpust  y select de las tablas
-**/
-function agregarInputsCombos(){
-     // Agregar los input de busqueda 
-    $('.tableListar tfoot th').each( function (e) {
-        var title = $('.tableListar thead th').eq($(this).index()).text();      
-        //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 9    ){
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
-	    }
-           // Select
-    	if ($(this).index() == 8  ){
-    	    var select = $('<select id="combo" class="form-control"><option value="">Todos</option></select>');
-    	    // se cargan los valores por defecto que existen en el combo
-    	   	select.append( '<option value="'+$.i18n.prop("estado.Activo")+'">'+$.i18n.prop("estado.Activo")+'</option>' );
-            select.append( '<option value="'+$.i18n.prop("estado.Inactivo")+'">'+$.i18n.prop("estado.Inactivo")+'</option>' );
-    	   	$(this).html(select);
-    	}
-    })
-}
+
 
 </script>
 </articulo-crud>

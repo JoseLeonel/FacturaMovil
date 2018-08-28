@@ -49,6 +49,10 @@
                                         <label>{$.i18n.prop("factura.correoAlternativo")}</label> 
                                         <input type="email" id="correoAlternativo" name="correoAlternativo" class="form-control"  value="" >
                                     </div>
+                                    <div class="form-group ">
+                                        <label>{$.i18n.prop("factura.nombreFactura")}</label> 
+                                        <input type="text" id="nombreFactura" name="nombreFactura" class="form-control"  value="{factura.nombreFactura}" >
+                                    </div>
                                     
                                     <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group ">
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 
@@ -78,7 +82,7 @@
                                     </div>
                                     <div  class="form-group has-success">
                                         <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
-                                        <input onkeyup={ __TotalDeTarjeta } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="form-control" id="totalBanco"  value="{factura.totalBanco}"  value="{factura.totalBanco}">
+                                        <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="form-control" id="totalBanco"  value="{factura.totalBanco}"  value="{factura.totalBanco}">
                                     </div>
 
                                     
@@ -170,8 +174,10 @@
                 <div class="row">
                   <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">  
                   <div class="box-tools ">
+                   <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
                     <a class="pull-left" href="#"     title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
                     <a class="pull-left" href="#"    onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
+                    
                     <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
                     <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
                     
@@ -183,10 +189,14 @@
             <div  class="contenedor-factura " >
                 <div class="cabecera-izquierda">
                     <div class="row">
-                            <div class="col-sx-12 col-sm-6 col-md-6 col-lg-10">
+                            <div class="col-sx-12 col-sm-6 col-md-6 col-lg-6">
                                 <input onkeypress={__addProductToDetail}  id="codigo" name ="codigo" class="form-control codigo" type="text" placeholder="XXXXXXXXXXX" />
                             </div>
-                            <div class="col-sx-12 col-sm-6 col-md-6 col-lg-2">
+                            <div class="col-sx-12 col-sm-4 col-md-4 col-lg-4">
+                                <input onkeypress={__addPrecioDetail}  id="precioVenta" name ="precioVenta" class="form-control precioVenta" type="number" step="any"  placeholder="Precio Ejemplo:600" />
+                            </div>
+
+                            <div class="col-sx-12 col-sm-2 col-md-2 col-lg-2">
                                 <button    onclick = {__ListaDecodigos} class="btn-green btn-buscar " id="btn-facturar" >
                                     {$.i18n.prop("btn.consultar")} 
                                 </button>
@@ -310,6 +320,46 @@
     </div>
 </div>
 <!--fin del modal-->
+<!--Modal mostrar Facturas del Dias -->
+<div id='modalFacturasDia' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("factura.listar.dia")} </h4>
+            </div>
+            <div class="modal-body">
+                <table id="tableListarFacturasDia" class="display table responsive table-hover nowrap table-condensed tableListarFacturasDia "   cellspacing="0" width="100%">
+                   <thead>
+                    <tr>
+                        <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}            </th>
+                        <th class = "table-header" >{$.i18n.prop("factura.documento")}                </th>
+                        <th class = "table-header" >{$.i18n.prop("factura.cliente")}                  </th>
+                        <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
+                        <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
+                        <th class = "table-header" >{$.i18n.prop("factura.total")}                    </th>
+                        <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
+                    </tr>
+                    </thead>
+                        <tfoot style="display: table-header-group;">
+                            <tr>
+                                <th>{$.i18n.prop("factura.fecha.emision")}            </th>
+                                <th>{$.i18n.prop("factura.documento")}                </th>
+                                <th>{$.i18n.prop("factura.cliente")}                  </th>
+                                <th>{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
+                                <th>{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
+                                <th>{$.i18n.prop("factura.total")}                    </th>
+                                <th>                                                  </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!--Modal mostrar  -->
 <div id="modalClientes" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -749,6 +799,8 @@
     self.cantones                      = []
     self.distritos                     = []
     self.barrios                       = []
+    self.mostrarListadoArticulos == false
+    self.empresa              = {}
 
 
     self.on('mount',function(){
@@ -761,6 +813,8 @@
         __InicializarTabla('.tableListaCliente')
         __InicializarTabla('.tableListaInventario')
         __InicializarTabla('.tableListaVendedor')
+        __InicializarTabla('.tableListarFacturasDia')
+        
         agregarInputsCombos_Articulo()
         __ListaFacturasEnEspera()
        // setInterval(function() {
@@ -770,19 +824,56 @@
           
         __comboCondicionPago()
         __ComboTipoDocumentos()
-          __ListaDeClientes()
-       __ListaDeVendedores()
        __Teclas()
        __TipoCambio()
        __cargaUbicacion()
        __comboCondicionPagoRef()
        cargaBilletes()
+       __InformacionDataTableDia()
+      // __ListaDeArticulosPorEmpresa()
+          __ListaDeClientes()
+       __ListaDeVendedores()
+       _Empresa()
+       
       
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
      
     })
+
+function _Empresa(){
+
+     $.ajax({
+        url: "ParametrosEmpresaAjax.do",
+        datatype: "json",
+        method:"GET",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                       self.empresa =   modeloTabla
+                       self.update()
+       
+                   
+                        
+                        
+                    });
+                }
+            }
+            
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
+        }
+    });
+
+}
 
 __LimpiarFormulario(){
     $(".plazoCredito").val(null)   
@@ -853,7 +944,166 @@ var reglasDeValidacionFactura = function() {
 	return validationOptions;
 };
 
+_ListaFacturasDia(){
+    ListadoFacturasDelDia()
+}
 
+/**
+*  Facturas del Dia
+**/
+function ListadoFacturasDelDia(){
+      $("#tableListarFacturasDia").dataTable().fnClearTable(); 
+        __InicializarTabla('.tableListarFacturasDia')  
+        $.ajax({
+            url: "ListarFacturasDelDiaAjax.do",
+            datatype: "json",
+            method:"GET",
+            success: function (result) {
+                if(result.aaData.length > 0){
+                    __InformacionDataTableDia();
+                    loadListar(".tableListarFacturasDia",idioma_espanol,self.formato_tabla_dias,result.aaData)
+                    agregarInputsCombos_Facturas_Dias();
+                    ActivarEventoFiltro(".tableListarFacturasDia")
+                     $('#modalFacturasDia').modal('show')    
+                     __reimprimir()
+                }else{
+                    __InformacionDataTableDia();
+                     agregarInputsCombos_Facturas_Dias();
+                }           
+            },
+            error: function (xhr, status) {
+                mensajeErrorServidor(xhr, status);
+                console.log(xhr);
+            }
+        });
+}
+
+/**
+* formato del listado de facturas del dia
+**/
+/**
+*Formato del listado 
+**/
+function __InformacionDataTableDia(){
+    self.formato_tabla_dias = [ 
+                               {'data' :'fechaEmision'   ,"name":"fechaEmision"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true ,
+                                  "render":function(fechaEmision,type, row){
+									    return __displayDate_detail(fechaEmision);
+	 							    }
+                               },
+                             
+                               {'data' :'numeroConsecutivo'                    ,"name":"numeroConsecutivo"                     ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
+                                   "render":function(numeroConsecutivo,type, row){
+									    return __TipoDocumentos(numeroConsecutivo,row)
+	 							    }
+                               },
+                               {'data' :'cliente'                    ,"name":"cliente"                     ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
+                                   "render":function(cliente,type, row){
+									    return cliente ==null?"":cliente.nombreCompleto;
+	 							    }
+                               },
+                               {'data' :'totalImpuesto'       ,"name":"totalImpuesto"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true ,
+                                    "render":function(totalImpuesto,type, row){
+									    return  totalImpuesto.toLocaleString('de-DE');
+	 							    }
+                               },
+                               {'data' :'totalDescuentos'                ,"name":"totalDescuentos"                 ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true ,
+                                    "render":function(totalDescuentos,type, row){
+									    return  totalDescuentos.toLocaleString('de-DE');
+	 							    }
+                               },
+                               {'data' :'totalComprobante'               ,"name":"totalComprobante"                ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true ,
+                                    "render":function(totalComprobante,type, row){
+									    return  totalComprobante.toLocaleString('de-DE');;
+	 							    }
+                               },
+                               {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
+                                "render":function(id,type, row){
+                                      return __Opciones(id,type,row);
+                                 }
+	      		            }];
+    self.update();
+   
+}
+function __Opciones(){
+var agregar  = '<a href="#"  class="btn btnReimprimir btn-primary form-control" title="Imprimir" role="button"> <i class="glyphicon glyphicon glyphicon-print"></i></a>';
+  return  agregar;
+}
+
+
+function __reimprimir(){
+	$('#tableListarFacturasDia').on('click','.btnReimprimir',function(e){
+		var table = $('#tableListarFacturasDia').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+        consultaFactura(data)
+       
+        
+	});
+}
+
+function consultaFactura(data){
+
+     $.ajax({
+        url: "MostrarFacturaAjax",
+        datatype: "json",
+        data: {idFactura:data.id},
+        method:"POST",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                    //   $('#modalFacturasDia').modal('hide') 
+                       riot.mount('ptv-imprimir',{factura:modeloTabla});
+                    });
+                }
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+}
+
+
+
+
+
+function __TipoDocumentos(numeroConsecutivo,row){
+
+    switch(row.tipoDoc) {
+    case "04":
+          return  "Tiq:"+numeroConsecutivo
+        break;
+    case "01":
+        return  "Fact:"+numeroConsecutivo
+        break;
+    case "02":
+        return  "N.Debito:"+numeroConsecutivo
+        break;
+    case "03":
+        return  "N.Credito:"+numeroConsecutivo
+        break;
+    case "88":
+        return  "Proforma:"+row.id
+        break;
+    case "87":
+        return  "TiqueteInterno:"+row.id
+        break;
+
+    default:
+        return  numeroConsecutivo
+}
+}
 
 /**
 Consultar el consecutivo que se hace referencia
@@ -1111,6 +1361,7 @@ __TotalDeBancoAPagar(e){
 *   Calculo del cambio entregar en el evento onblur
 **/
 __CalculaCambioAEntregarOnblur(e){
+    
     var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
     sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
     sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
@@ -1120,6 +1371,8 @@ __CalculaCambioAEntregarOnblur(e){
     }
     self.factura.totalCambioPagar = 0
     self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalComprobante ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
+     
+
     self.update()
 }
 /**
@@ -1143,6 +1396,8 @@ __CalculaCambioAEntregarKeyPress(e){
  * Listar codigos  llamado del modal para presentar los articulos
  **/   
  __ListaDecodigos(){
+     self.mostrarListadoArticulos = true
+     self.update()
      __ListaDeArticulosPorEmpresa();
  }
 /**
@@ -1182,24 +1437,27 @@ function aplicarFactura(estado){
         }
     }else{
         // Si no es credito y el estado no es pendiente se debe verificar si ingresaron el monto a pagar
-        if(estado == 2){
-            if(self.factura.totalTarjeta == 0 && self.factura.totalBanco == 0 && self.factura.totalEfectivo == 0){
-                mensajeError($.i18n.prop("error.factura.monto.ingresado"))
-                return
-            }
-            var montoEntregado = self.factura.totalTarjeta + self.factura.totalBanco + self.factura.totalEfectivo
-            montoEntregado = __valorNumerico(montoEntregado)
-            if(self.factura.totalVentaNeta > montoEntregado  ){
-                mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
-                return
-            }
-            //Si el cliente esta pagando con tajeta, banco debe ser igual a la venta
-            if(self.factura.totalTarjeta != 0 || self.factura.totalBanco !=0){
-                if(self.factura.totalVentaNeta != montoEntregado  ){
-                    mensajeError($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
-                return
-                    
+        if($("#tipoDoc").val() !="88"){
+            if(estado == 2){
+                if(self.factura.totalTarjeta == 0 && self.factura.totalBanco == 0 && self.factura.totalEfectivo == 0){
+                    mensajeError($.i18n.prop("error.factura.monto.ingresado"))
+                    return
                 }
+                var montoEntregado = self.factura.totalTarjeta + self.factura.totalBanco + self.factura.totalEfectivo
+                montoEntregado = __valorNumerico(montoEntregado)
+                if(self.factura.totalComprobante > montoEntregado  ){
+                    mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
+                    return
+                }
+                //Si el cliente esta pagando con tajeta, banco debe ser igual a la venta
+                if(self.factura.totalTarjeta != 0 || self.factura.totalBanco !=0){
+                    if(self.factura.totalComprobante != montoEntregado  ){
+                        mensajeError($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
+                    return
+                        
+                    }
+                }
+
             }
 
         }
@@ -1223,6 +1481,7 @@ __Limpiar(){
 **/
 function __Init(){
     
+    self.mostrarListadoArticulos == false
     self.detail                = []
     self.mensajesBackEnd       = []
     self.error                 = false
@@ -1277,7 +1536,7 @@ function __Init(){
     self.item                  = null;
     self.articulo              = null;
     self.descripcionArticulo   = ""
-    self.articulos             = {data:[]}
+  //  self.articulos             = {data:[]}
     self.clientes              = {data:[]}
     self.detalleFactura        ={data:[]}
     self.cliente               = {};
@@ -1304,7 +1563,7 @@ function __Init(){
     $(".totalTarjeta").val(null)   
     $(".totalEfectivo").val(null)   
 
-
+$('.precioVenta').val(null)
     $("#plazoCredito").val(null)
     $("#nota").val(null)
     $("#fechaCredito").val(null)
@@ -1448,10 +1707,11 @@ function evaluarFactura(data){
         $.each(data.listaObjetos, function( index, modeloTabla ) {
             self.facturaImprimir   = modeloTabla
             self.update()
-            if(self.facturaImprimir.estado == 2){
+            if(self.facturaImprimir.estado == 2 || self.facturaImprimir.estado == 3 || self.facturaImprimir.estado == 4){
                 __Init()
                 //Envia a la pantalla de impresion
-                 riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
+               riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
+                 
                  
             }else{
                 swal({
@@ -1555,14 +1815,20 @@ function mostrarPAgo(){
 *
 */
 __addProductToDetail(e){
+    if(self.empresa.tieneLector !="Activo"){
+        return
+    }
     if (e.keyCode != 13) {
         return;
     } 
+    
     var codigo = e.currentTarget.value
     var codigoActual = ""
     var cantidadAct =""
     var existe = false
+     var existeMas = false
     for(i=0; i<codigo.length; i++){
+         existeMas = codigo.charAt(i) == "+"?true : false
        if(existe == false){
           existe = codigo.charAt(i) == "*"?true : false  
           if(codigo.charAt(i) !="*"){
@@ -1574,10 +1840,104 @@ __addProductToDetail(e){
        }
         console.log("pos=", i, "valor=", codigo.charAt(i));
     }
+// esto es para cuando un cliente quiere sumar varios productos
+    if(existeMas == true){
+       __sumarMasArticulo(codigo,0)
+       $('.precioVenta').val(null)
+        $('.codigo').val(null)
+        $('.codigo').focus()
+        $('.codigo').focus()
+       return  
+    }
+    __buscarcodigo(codigoActual,__valorNumerico(cantidadAct),0);
+    
+    $('.precioVenta').val(null)
+    $('.codigo').val(null)
+    $('.codigo').focus()
+    $('.codigo').focus()
+}
 
-    __buscarcodigo(codigoActual,__valorNumerico(cantidadAct));
-    $('#codigo').val(null)
-    $('#codigo').focus()
+/**
+*  cambiar el precio
+**/
+__addPrecioDetail(e){
+    if (e.keyCode != 13) {
+        return;
+    } 
+     var codigo = $('#codigo').val()
+    var codigoActual = ""
+    var cantidadAct =""
+    var existe = false
+     var existeMas = false
+    for(i=0; i<codigo.length; i++){
+         existeMas = codigo.charAt(i) == "+"?true : false
+       if(existe == false){
+          existe = codigo.charAt(i) == "*"?true : false  
+          if(codigo.charAt(i) !="*"){
+              codigoActual = codigoActual + codigo.charAt(i)  
+
+          }
+       }else{
+           cantidadAct = cantidadAct + codigo.charAt(i)
+       }
+        console.log("pos=", i, "valor=", codigo.charAt(i));
+    }
+    var valor = __valorNumerico(cantidadAct)
+
+    var precio = e.currentTarget.value
+    // esto es para cuando un cliente quiere sumar varios productos
+    if(existeMas == true){
+       __sumarMasArticulo(codigo,0)
+       $('.precioVenta').val(null)
+        $('.codigo').val(null)
+        $('.codigo').focus()
+        $('.codigo').focus()
+       return  
+    }
+    
+    __buscarcodigo(codigoActual,__valorNumerico(valor),__valorNumerico(precio));
+    $('.precioVenta').val(null)
+    $('.codigo').val(null)
+    $('.codigo').focus()
+    $('.codigo').focus()
+  
+}
+
+
+
+/**
+*sumar mas cantidad al ultimor articulo ingresado
+**/
+function __sumarMasArticulo(codigo,precio){
+    if(self.articulo == null){
+
+        return;
+    }
+    var valorPrecio =  parseFloat(precio)
+    var cantidadAct =""
+    var existe = false
+    for(i=0; i<codigo.length; i++){
+       existe = codigo.charAt(i) == "+"?true : false
+       if(existe == false){
+          cantidadAct = cantidadAct + codigo.charAt(i)
+            
+       }
+        console.log("pos=", i, "valor=", codigo.charAt(i));
+    }
+   for (var count = 0; count < self.detail.length; count++) {
+        if (self.detail[count].codigo == self.articulo.codigo ){
+            self.item          = self.detail[count];
+            self.item.cantidad = self.item.cantidad + parseFloat(cantidadAct)
+            self.item.precioUnitario = valorPrecio >0?valorPrecio:self.item.precioUnitario
+            
+            self.update();
+            ActualizarLineaDEtalle()
+            self.detail[count] = self.item;
+            self.update();
+        }
+    }
+  
+    __calculate(); 
 }
 
 
@@ -1585,16 +1945,17 @@ __addProductToDetail(e){
 * Buscar codigo
 **/
 __agregarArticuloBotonAgregar(){
-   __buscarcodigo($( "#codigo" ).val(),1);
+   __buscarcodigo($( "#codigo" ).val(),1,0);
 }
 /**
 * mostrar la lista de articulos de la empresa
 **/
 function __ListaDeArticulosPorEmpresa(){
+    if(self.articulos.data.length == 0){
     $.ajax({
-        url: 'ListarArticuloAjax.do',
+        url: 'ListarArticulosActivosAjax.do',
         datatype: "json",
-        method:"GET",
+        method:"POST",
         success: function (result) {
             if(result.aaData.length > 0){
                 _informacionData_Articulo()
@@ -1605,7 +1966,10 @@ function __ListaDeArticulosPorEmpresa(){
                 agregarInputsCombos_Articulo()
                 __agregarArticulos()
                 ActivarEventoFiltro(".tableListarArticulos")
-                $('#modalInventario').modal('show')    
+                if(self.mostrarListadoArticulos == true){
+                  $('#modalInventario').modal('show')    
+                }
+                
             }
         },
         error: function (xhr, status) {
@@ -1613,12 +1977,17 @@ function __ListaDeArticulosPorEmpresa(){
             mensajeErrorServidor(xhr, status);
         }
     });
+    }else{
+        $('#modalInventario').modal('show')    
+
+    }
 }
 /**
 *  Muestra la lista de clientes
 **/
 _EscogerClientes(){
     $('#modalClientes').modal('show')  
+   
 }
 
 /**
@@ -1626,6 +1995,7 @@ _EscogerClientes(){
 **/
 _EscogerVendedores(){
     $('#modalVendedor').modal('show')  
+   
 }
 /**
 *  Lista de los vendedores
@@ -1649,6 +2019,7 @@ function __ListaDeVendedores(){
             mensajeErrorServidor(xhr, status);
         }
     });
+    return
 }
 /**
 *  Lista de los clientes
@@ -1672,12 +2043,30 @@ function __ListaDeClientes(){
             mensajeErrorServidor(xhr, status);
         }
     });
+    return
 }
 /**
 * Buscar el codigo del codigo  en la base de datos
 **/
-function __buscarcodigo(idArticulo,cantidad){
-    self.articulo = null;
+function __buscarcodigo(idArticulo,cantidad,precio){
+    
+   // let lista     = self.articulos.data;
+   // self.articulo  = {}
+   // self.update()
+   // var articuloEncontrado = jsonPath(lista,"$[?(@.codigo=='"+idArticulo+"')]");
+   // articuloEncontrado.forEach(function(e){
+   //     self.articulo = e
+   //     self.articulo.precioUnitario = precio > 0 ?precio:e.precioUnitario
+   //     self.articulo.precioPublico = precio > 0 ?precio:e.precioPublico
+   //     self.descripcionArticulo = e.precioPublico
+   //     
+   //     self.update();
+   //      __agregarArticulo(cantidad)
+
+    //})
+   // return
+
+    //self.articulo = null;
     $.ajax({
         type: 'GET',
         url: 'findArticuloByCodigojax.do',
@@ -1703,7 +2092,9 @@ function __buscarcodigo(idArticulo,cantidad){
                             }
 
                         }
-                        self.articulo  = modeloTabla
+                       self.articulo  = modeloTabla
+                        self.articulo.precioUnitario = precio > 0 ?precio:self.articulo.precioUnitario
+                        self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
                         self.descripcionArticulo = modeloTabla.descripcion
                         self.update()
                         __agregarArticulo(cantidad)
@@ -1713,9 +2104,10 @@ function __buscarcodigo(idArticulo,cantidad){
         },
 	    error : function(xhr, status) {
             console.log(xhr);
-            mensajeErrorServidor(xhr, status);
+          mensajeErrorServidor(xhr, status);
         }
     });
+   return 
 }
 /**
 *  Agregar un articulo si existe se suma la cantidad y no existe se agrega en el detalle
@@ -1753,6 +2145,7 @@ function __agregarArticulo(cantidad){
       __nuevoArticuloAlDetalle(cantidad);
     }
     __calculate(); 
+    return encontrado
 }
 /**
 * eliminar un detalle factura
@@ -1884,14 +2277,14 @@ function __ValidarCantidadArticulo(idArticulo,cantidad){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         //Articulo no puede agregarse si no hay en el inventario
-                        if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
-                            mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
-                            return 
-                        }
-                        if(modeloTabla.cantidad < cantidad ){
-                            mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
-                            return 
-                        }
+           //             if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
+           //                 mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
+           //                 return 
+           //             }
+           //             if(modeloTabla.cantidad < cantidad ){
+           //                 mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
+           //                 return 
+           //             }
                         agregarCantidadAlaVenta(cantidad)
                     })
                 }
@@ -2038,7 +2431,7 @@ function __calculate() {
     self.factura.totalImpuesto           = redondearDecimales(__valorNumerico(totalImpuesto),5)
     self.factura.totalVentaNeta          = redondearDecimales(__valorNumerico(totalVenta-totalDescuento),5)
     self.factura.totalComprobante        = redondearDecimales(__valorNumerico(totalComprobante),5)
-    self.articulo              = null;
+   // self.articulo              = null;
     self.update(); 
     $( "#codigo" ).val(null);
     $( "#quantity" ).val(null);
@@ -2102,8 +2495,8 @@ function __agregarArticulos() {
 	     }
         self.articulo = data;
         self.update();  
-        if(self.articulo.contable == si){
-           __buscarcodigo(self.articulo.codigo,1)
+        if(self.articulo.contable == "si"){
+           __buscarcodigo(self.articulo.codigo,1,0)
         }else{
             __agregarArticulo(1)
         }
@@ -2280,6 +2673,16 @@ function __ComboTipoDocumentos(){
          estado:"01",
         descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
     })
+
+    self.comboTipoDocumentos.push({
+         estado:"88",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
+    })
+
+    self.comboTipoDocumentos.push({
+         estado:"87",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")
+    })
     
     self.update()
 }
@@ -2306,6 +2709,20 @@ function agregarInputsCombos_Clientes(){
         var title = $('.tableListaCliente thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
         if ( $(this).index() != 5    ){
+	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	    }
+    })
+} 
+
+/**
+*  Agregar los inpust  y select de las tablas
+**/
+function agregarInputsCombos_Facturas_Dias(){
+     // Agregar los input de busqueda 
+    $('.tableListarFacturasDia tfoot th').each( function (e) {
+        var title = $('.tableListarFacturasDia thead th').eq($(this).index()).text();      
+        //No se toma en cuenta la columna de las acctiones(botones)
+        if ( $(this).index() != 6    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })

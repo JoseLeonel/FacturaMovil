@@ -51,6 +51,8 @@ public class EmpresaCommand {
 	private String	usuarioEnvioComprobante;
 	private String	passwordEnvioComprobante;
 	private String						tieneInventario;
+	private String						tieneLector;
+	private String						cambiarPrecio;
 
 	private String						enviarTiquete;
 
@@ -86,6 +88,8 @@ public class EmpresaCommand {
 		this.tiqueteConsecutivo = empresa.getTiqueteConsecutivo();
 		this.enviarTiquete = empresa.getEnviarTiquete();
 		this.tieneInventario = empresa.getTieneInventario();
+		this.tieneLector = empresa.getTieneLector();
+		this.cambiarPrecio = empresa.getCambiarPrecio();
 		
 
 	}
@@ -100,6 +104,16 @@ public class EmpresaCommand {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	
+	public String getTieneLector() {
+		return tieneLector;
+	}
+
+	
+	public void setTieneLector(String tieneLector) {
+		this.tieneLector = tieneLector;
 	}
 
 	public String getNombre() {
@@ -322,6 +336,16 @@ public class EmpresaCommand {
 	
 	public void setEnviarTiquete(String enviarTiquete) {
 		this.enviarTiquete = enviarTiquete;
+	}
+
+	
+	public String getCambiarPrecio() {
+		return cambiarPrecio;
+	}
+
+	
+	public void setCambiarPrecio(String cambiarPrecio) {
+		this.cambiarPrecio = cambiarPrecio;
 	}
 
 	

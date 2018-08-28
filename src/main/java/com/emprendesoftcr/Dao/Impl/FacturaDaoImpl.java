@@ -82,12 +82,15 @@ public class FacturaDaoImpl implements FacturaDao {
 	public void eliminarDetalleFacturaPorSP(Factura factura) {
 		try {
 			log.info("** Inicio de la ejecucion del procedimiento almacendos eliminar detalles de la factura : " + " fecha " + new Date());
-
-			StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_ELIMINAR_DETALLES_FACTURA);
-			storedProcedure.registerStoredProcedureParameter(0, Integer.class, ParameterMode.IN);
-			storedProcedure.setParameter(0, factura.getId().intValue());
+			Query query = entityManager.createQuery("Delete from Detalle obj where obj.factura = :factura ");
+			query.setParameter("factura", factura);
+			int deletedCount = query.executeUpdate();
 			
-			storedProcedure.execute();
+//			StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_ELIMINAR_DETALLES_FACTURA);
+//			storedProcedure.registerStoredProcedureParameter(0, Integer.class, ParameterMode.IN);
+//			storedProcedure.setParameter(0, factura.getId().intValue());
+//			
+//			storedProcedure.execute();
 
 			log.info("** find de la ejecucion del procedimiento almacendos eliminar detalles de la factura : " + " fecha " + new Date());
 
@@ -105,6 +108,7 @@ public class FacturaDaoImpl implements FacturaDao {
 	public Collection<Factura> findByEstadoFirma(Integer estadoFirma){
 		Query query = entityManager.createQuery("select obj from Factura obj where obj.estadoFirma = :estadoFirma ");
 		query.setParameter("estadoFirma", estadoFirma);
+		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
 		
 		return query.getResultList();
 	}

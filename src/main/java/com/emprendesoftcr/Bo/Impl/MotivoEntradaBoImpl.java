@@ -16,13 +16,11 @@ import com.emprendesoftcr.modelo.MotivoEntrada;
  * @author jose.
  * @since 19 abr. 2018
  */
-@Lazy
 @Transactional
 @EnableTransactionManagement
 @Service
 public class MotivoEntradaBoImpl implements MotivoEntradaBo {
 
-	@Lazy
 	@Autowired
 	MotivoEntradaDao motivoEntradaDao;
 

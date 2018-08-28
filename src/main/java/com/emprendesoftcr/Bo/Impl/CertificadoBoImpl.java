@@ -17,7 +17,6 @@ import com.emprendesoftcr.modelo.Certificado;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.type.CertificateInfo;
 
-@Lazy
 @Transactional
 @EnableTransactionManagement
 @Service("certificadoBo")
@@ -31,8 +30,13 @@ public class CertificadoBoImpl implements CertificadoBo {
 		CertificateInfo certificateInfo = null;
 
 		try {
-			ClassPathResource cpr = new ClassPathResource("/home/jose/dev/workspaceMaven/FacturaElectronica/src/main/resources/static/llaves/" + nombrep12);
-			String path = new ClassPathResource("/home/jose/dev/workspaceMaven/FacturaElectronica/tmp/").getPath();
+		//desarrollo
+			//ClassPathResource cpr = new ClassPathResource("/home/jose/Escritorio/llaves/" + nombrep12);
+			
+			nombrep12 ="115600416732.p12";
+			password = "9878";
+			ClassPathResource cpr = new ClassPathResource("/home/jose/Escritorio/llaves/produccion/" + nombrep12);
+			String path = new ClassPathResource("/home/jose/Escritorio/llaves/tmp/").getPath();
 			certificateInfo = P12Utils.dataFromP12(path, cpr.getPath(), password);
 
 			Certificado certificado = new Certificado();

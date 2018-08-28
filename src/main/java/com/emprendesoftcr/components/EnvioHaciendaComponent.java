@@ -66,7 +66,15 @@ public class EnvioHaciendaComponent {
 		try {
 			ImmutableMap<String, String> headers = ImmutableMap.of("Accept", "application/json", "Authorization", ("Bearer " + openIDConnectHacienda.getAccess_token()), "User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 			Client client = Client.create();
-			WebResource webResource = client.resource(this.IDP_URI);
+			String idp_uri_documentos = Constantes.EMPTY;
+			if(hacienda.getEmpresa().getEstadoProduccion() !=null) {
+				if(hacienda.getEmpresa().getEstadoProduccion().equals(Constantes.ESTADO_ACTIVO)) {
+					idp_uri_documentos = Constantes.IDP_URI_DOCUMENTOS_PRODUCCION;
+				}else {
+					idp_uri_documentos = this.IDP_URI;
+				}
+			}
+			WebResource webResource = client.resource(idp_uri_documentos);
 			WebResource.Builder resBuilder = webResource.type(this.contentype);
 			for (Map.Entry<String, String> entry : headers.entrySet()) {
 				resBuilder = resBuilder.header(entry.getKey(), entry.getValue());
@@ -127,12 +135,17 @@ public class EnvioHaciendaComponent {
 	 * Envia hacia hacienda
 	 * @return
 	 */
-	public Map comprobarDocumentoElectronico(final String clave, final OpenIDConnectHacienda openIDConnectHacienda)  {
+	public Map comprobarDocumentoElectronico(final String url, final String clave, final OpenIDConnectHacienda openIDConnectHacienda)  {
 		try {
 			ImmutableMap<String, String> headers = ImmutableMap.of("Accept", "application/json", "Authorization", ("Bearer " + openIDConnectHacienda.getAccess_token()), "User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
-
+      String url_doc = Constantes.EMPTY;   
 			Client client = Client.create();
-			WebResource webResource = client.resource(this.IDP_URI + "/" + clave);
+      if(url.equals(Constantes.EMPTY)) {
+      	url_doc = this.IDP_URI;
+      }else {
+      	url_doc =url;
+      }
+			WebResource webResource = client.resource(url_doc + "/" + clave);
 			WebResource.Builder resBuilder = webResource.type(this.contentype);
 			for (Map.Entry<String, String> entry : headers.entrySet()) {
 				resBuilder = resBuilder.header(entry.getKey(), entry.getValue());

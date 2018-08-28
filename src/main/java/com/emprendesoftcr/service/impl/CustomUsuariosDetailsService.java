@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.modelo.CustomUsuarioDetails;
@@ -15,6 +16,7 @@ import com.emprendesoftcr.repository.UsuarioRepository;
 
 @Service
 @Transactional
+@EnableTransactionManagement
 public class CustomUsuariosDetailsService implements UserDetailsService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;

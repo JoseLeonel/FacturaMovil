@@ -114,7 +114,7 @@ public class ComprasController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			if (compraCommand.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
+			if (!compraCommand.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
 				compraCommand.setFechaCredito(null);
 			}
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());

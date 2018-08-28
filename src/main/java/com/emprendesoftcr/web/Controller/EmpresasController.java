@@ -17,12 +17,14 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.EmpresaBo;
+import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.EmpresaCommand;
 import com.google.common.base.Function;
 
@@ -48,6 +50,11 @@ public class EmpresasController {
 
 	@Autowired
 	private DataTableBo																		dataTableBo;
+	
+	@Autowired
+	private UsuarioBo																		usuarioBo;
+
+	
 
 	/**
 	 * Mostrar el html de la lista de empresa
@@ -213,6 +220,8 @@ public class EmpresasController {
 				empresaBD.setTiqueteConsecutivo(empresa.getTiqueteConsecutivo());
 				empresaBD.setEnviarTiquete(empresa.getEnviarTiquete());
 				empresaBD.setTieneInventario(empresa.getTieneInventario());
+				empresaBD.setTieneLector(empresa.getTieneLector());
+				empresaBD.setCambiarPrecio(empresa.getCambiarPrecio());
 				empresaBo.modificar(empresaBD);
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("empresa.modificado.correctamente", empresaBD);
 			}
@@ -243,6 +252,21 @@ public class EmpresasController {
 		}
 	}
 
+	@RequestMapping(value = "/ParametrosEmpresaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator parametros(HttpServletRequest request, ModelMap model, @ModelAttribute Empresa empresa, BindingResult result, SessionStatus status) throws Exception {
+		try {
+			String nombreUsuario = request.getUserPrincipal().getName();
+			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
+
+			EmpresaCommand empresaCommand = new EmpresaCommand(usuarioSesion.getEmpresa());
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", empresaCommand);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+	
+	
 	private static class RESPONSES {
 
 		private static class OK {

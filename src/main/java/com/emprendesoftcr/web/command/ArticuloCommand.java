@@ -3,6 +3,8 @@ package com.emprendesoftcr.web.command;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.Column;
+
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
@@ -12,7 +14,7 @@ import com.emprendesoftcr.modelo.Usuario;
 
 public class ArticuloCommand {
 
-	private Long			id;
+	private Long				id;
 
 	private String			codigo;
 
@@ -42,8 +44,12 @@ public class ArticuloCommand {
 
 	private String			estado;
 
+	private Double			minimo;
+
+	private Double			maximo;
+
 	private String			tipoImpuesto;
-	private String						tipoCodigo;
+	private String			tipoCodigo;
 
 	private Date				created_at;
 
@@ -81,24 +87,22 @@ public class ArticuloCommand {
 		this.unidadMedida = articulo.getUnidadMedida();
 		this.contable = articulo.getContable();
 		Double resultado = articulo.getCantidad();
-		this.cantidad = BigDecimal.valueOf(resultado !=null?resultado:Constantes.ZEROS_DOUBLE);
+		this.cantidad = BigDecimal.valueOf(resultado != null ? resultado : Constantes.ZEROS_DOUBLE);
 		this.tipoImpuesto = articulo.getTipoImpuesto();
 		this.usuario = articulo.getUsuario();
 		this.tipoCodigo = articulo.getTipoCodigo();
+		this.minimo = articulo.getMinimo();
+		this.maximo = articulo.getMaximo();
 	}
 
 	public ArticuloCommand() {
 		super();
 	}
 
-	
-
-	
 	public Long getId() {
 		return id;
 	}
 
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -279,16 +283,32 @@ public class ArticuloCommand {
 		this.cantidad = cantidad;
 	}
 
-	
 	public String getTipoCodigo() {
 		return tipoCodigo;
 	}
 
-	
 	public void setTipoCodigo(String tipoCodigo) {
 		this.tipoCodigo = tipoCodigo;
 	}
+
 	
+	public Double getMinimo() {
+		return minimo;
+	}
+
 	
+	public void setMinimo(Double minimo) {
+		this.minimo = minimo;
+	}
+
+	
+	public Double getMaximo() {
+		return maximo;
+	}
+
+	
+	public void setMaximo(Double maximo) {
+		this.maximo = maximo;
+	}
 
 }

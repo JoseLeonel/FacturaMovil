@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Dao.DetalleDao;
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Factura;
 

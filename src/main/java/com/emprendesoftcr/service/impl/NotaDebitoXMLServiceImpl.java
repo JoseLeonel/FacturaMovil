@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
@@ -27,20 +28,18 @@ import com.emprendesoftcr.service.NotaDebitoXMLService;
  * @author jose.
  * @since 27 jul. 2018
  */
-@Lazy
 @Service("notaDebitoXMLService")
 @Transactional
+@EnableTransactionManagement
 public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
 
 	private Logger	log= LoggerFactory.getLogger(this.getClass());
 	
-	@Lazy
 	@Autowired
-	CertificadoBo																					certificadoBo;
+	private CertificadoBo																					certificadoBo;
 	
-	@Lazy
 	@Autowired
-	FirmaElectronicaService firmaElectronicaService;
+	private FirmaElectronicaService firmaElectronicaService;
 
 	@Override
 	public String getFirmarXML(String xmlString, Empresa empresa) throws Exception{
@@ -72,16 +71,16 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
 	                "<Tipo>" + factura.getEmpresa().getTipoCedula() + "</Tipo>" +
 	                "<Numero>" + factura.getEmpresa().getCedula() + "</Numero>" +
 	            "</Identificacion>" +
-	            "<NombreComercial>" + factura.getEmpresa().getNombreComercial() + "</NombreComercial>" +    
+	         //   "<NombreComercial>" + factura.getEmpresa().getNombreComercial() + "</NombreComercial>" +    
 	            "<Ubicacion>" +
 			            "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
 			            "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
 			            "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
-			            "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
+			   //         "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
 			            "<OtrasSenas>" + factura.getEmpresa().getOtraSenas() + "</OtrasSenas>" +
 	           "</Ubicacion>" +
-	           getTelefono(factura.getEmpresa().getTelefono(),factura.getEmpresa().getCodigoPais())+
-	           getFax(0,factura.getEmpresa().getCodigoPais()) +
+	     //      getTelefono(factura.getEmpresa().getTelefono(),factura.getEmpresa().getCodigoPais())+
+	     //      getFax(0,factura.getEmpresa().getCodigoPais()) +
 	            "<CorreoElectronico>" + factura.getEmpresa().getCorreoElectronico() + "</CorreoElectronico>" +
 	        "</Emisor>" +
 	        xmlReceptor(factura) +
@@ -127,6 +126,8 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
     return xml;
 	}
 	
+	
+	
 
 	/**
 	 * 
@@ -147,7 +148,7 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
             "</Codigo>" +
             "<Cantidad>" + FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getCantidad()) + "</Cantidad>" +
             "<UnidadMedida>" + detalle.getUnidadMedida() + "</UnidadMedida>" +
-            "<UnidadMedidaComercial>" + detalle.getUnidadMedida() + "</UnidadMedidaComercial>" +
+    //        "<UnidadMedidaComercial>" + detalle.getUnidadMedida() + "</UnidadMedidaComercial>" +
             "<Detalle>" + detalle.getDescripcion().trim() + "</Detalle>" +
             "<PrecioUnitario>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getPrecioUnitario()) + "</PrecioUnitario>" +
             "<MontoTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotal()) + "</MontoTotal>" +
@@ -286,10 +287,10 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
                   "<Nombre>" + factura.getCliente().getNombreCompleto() + "</Nombre>" +
                   xmlIdentificacion(factura) +
                   "<IdentificacionExtranjero>" + factura.getCliente().getIdentificacionExtranjero() + "</IdentificacionExtranjero>" +
-                  "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
+        //          "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
                   ubicacionReceptor(factura)+
-                  getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
-                  getFax(0,factura.getCliente().getCodigoPais()) +    
+         //         getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
+  //                getFax(0,factura.getCliente().getCodigoPais()) +    
                   "<CorreoElectronico>" + factura.getCliente().getCorreoElectronico() + "</CorreoElectronico>" +
               "</Receptor>";
       }
@@ -310,7 +311,7 @@ private String ubicacionReceptor(Factura factura) {
   	        "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
   	        "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
   	        "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
-  	        "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
+  //	        "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
   	        "<OtrasSenas>" + factura.getCliente().getOtraSena() + "</OtrasSenas>" +
   	        "</Ubicacion>" ;
   		}

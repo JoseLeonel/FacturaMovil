@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
@@ -17,18 +18,16 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.service.FirmaElectronicaService;
 import com.emprendesoftcr.service.RespuestaHaciendaXMLService;
 
-@Lazy
 @Service("respuestaHaciendaXMLService")
 @Transactional
+@EnableTransactionManagement
 public class RespuestaHaciendaXMLServiceImpl implements RespuestaHaciendaXMLService {
 	private Logger	log= LoggerFactory.getLogger(this.getClass());
-	@Lazy
 	@Autowired
-	CertificadoBo																					certificadoBo;
+	private CertificadoBo																					certificadoBo;
 	
-	@Lazy
-	@Autowired
-	FirmaElectronicaService firmaElectronicaService;
+		@Autowired
+	private FirmaElectronicaService firmaElectronicaService;
 	
 	@Override
 	public String getFirmarXML(String xmlString, Empresa empresa) throws Exception{

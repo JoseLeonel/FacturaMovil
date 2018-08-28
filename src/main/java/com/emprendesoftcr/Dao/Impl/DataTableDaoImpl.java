@@ -91,7 +91,7 @@ public class DataTableDaoImpl implements DataTableDao {
 		}
 
 		// else {
-		hql.append(" order by obj.id asc");
+	//	hql.append(" order by obj.id asc");
 		// }
 		return entityManager.createQuery(hql.toString());
 	}
@@ -104,7 +104,7 @@ public class DataTableDaoImpl implements DataTableDao {
 	 */
 	private static String valorConOperador(String op, String val) {
 
-		if (op.equals("like")) {
+		if (op.contains("like")) {
 			return op + " '%" + val + "%'"; // like
 		}
 		if (op.equals("date<=") || op.equals("date=<") || op.equals("date>=") || op.equals("date=>")) {

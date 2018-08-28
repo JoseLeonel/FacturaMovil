@@ -61,7 +61,7 @@ public class Semaforo implements Serializable {
 		super();
 		this.id = id;
 		this.descripcion = descripcion;
-		this.estado = Constantes.SEMAFORO_ESTADO_ACTIVO;
+		this.estado = Constantes.SEMAFORO_ESTADO_FIRMADO;
 		this.created_at = new Date();
 		this.updated_at = new Date();
 		this.empresa = empresa;
@@ -70,7 +70,7 @@ public class Semaforo implements Serializable {
 
 	public Semaforo() {
 		super();
-		this.estado = Constantes.SEMAFORO_ESTADO_ACTIVO;
+		this.estado = Constantes.SEMAFORO_ESTADO_FIRMADO;
 		this.created_at = new Date();
 		this.updated_at = new Date();
 		this.maximoReintentosEnviar = Constantes.SEMAFORO_ESTADO_REINTENTOS;

@@ -44,6 +44,9 @@ public class DetalleCompra implements Serializable {
 
 	@Column(name = "costo")
 	private Double						costo;
+	
+	@Column(name = "precio")
+	private Double						precio;
 
 	@Column(name = "cantidad")
 	private Double						cantidad;
@@ -82,7 +85,7 @@ public class DetalleCompra implements Serializable {
 
 	
 
-	public DetalleCompra(Long id, Integer numeroLinea, Double costo, Double cantidad, Double impuesto, Double descuento, Double subTotal, Date created_at, Date updated_at, Compra compra, Articulo articulo) {
+	public DetalleCompra(Long id, Integer numeroLinea, Double costo, Double cantidad, Double impuesto, Double descuento, Double subTotal, Date created_at, Date updated_at, Compra compra, Articulo articulo,Double precio) {
 		super();
 		this.id = id;
 		this.numeroLinea = numeroLinea;
@@ -95,6 +98,7 @@ public class DetalleCompra implements Serializable {
 		this.updated_at = updated_at;
 		this.compra = compra;
 		this.articulo = articulo;
+		this.precio = precio;
 	}
 
 	public DetalleCompra() {
@@ -110,7 +114,7 @@ public class DetalleCompra implements Serializable {
     this.impuesto = detalleCompraCommand.getImpuesto();
     this.descuento = detalleCompraCommand.getDescuento();
     this.subTotal = detalleCompraCommand.getSubTotal();
-    
+    this.precio = detalleCompraCommand.getPrecio();
 	}
 
 	
@@ -206,5 +210,17 @@ public class DetalleCompra implements Serializable {
 	public void setArticulo(Articulo articulo) {
 		this.articulo = articulo;
 	}
+
+	
+	public Double getPrecio() {
+		return precio;
+	}
+
+	
+	public void setPrecio(Double precio) {
+		this.precio = precio;
+	}
+	
+	
 
 }

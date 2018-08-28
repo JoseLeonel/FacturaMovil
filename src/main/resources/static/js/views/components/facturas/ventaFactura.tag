@@ -1,4 +1,17 @@
 <venta-factura>
+   <div class="row">
+        <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+        <div class="box-tools ">
+            <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
+            <a class="pull-left" href="#"     title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
+            <a class="pull-left" href="#"    onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
+            <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
+            <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
+        </div>
+        </div>      
+    </div>              
+
+ 
 <div>
     <form id="FormPaginacion">
         <input type="hidden" name="id" id="id" value="{parametrosPaginacion.cantidadPorPagina}">
@@ -14,6 +27,7 @@
 <div id="modalVendedor" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
+
             <div class="modal-header with-border table-header" >
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("vendedor.lista")}   </h4>
             </div>
@@ -49,11 +63,12 @@
 
 <!--Inicio de la Venta-->
 <div show={mostarParaCrearNuevaVentas}>
+
     <div class="content">
-        <div class="row-fluid no-space">
+           <div class="row-fluid no-space">
             <div class="col-md-5 col-sm-5 col-lg-5 col-xs-12 pull-right" style="padding: 0px 10px">
                 <div class="block panel newPanel newContPrecio">                    
-                    <div id="listadoProdcutos">Listado Productos {factura.id>0?' Id:'+factura.id:'' }</div>
+                    <div id="listadoProdcutos">{$.i18n.prop("titulo.listado.venta")}   {factura.id>0?' Id:'+factura.id:'' }</div>
                     <hr style="margin: 2px 0px 0px 0px; border-color: #e4e4e4; margin-top: 0px">
                     <div class="data-fluid">
                         <div id="listaProductos" style="height:200px; overflow-x: hidden; width:100%">
@@ -168,7 +183,10 @@
                                 <a href="#" class="opciones-menu" onclick = {__CrearFacturaTemporal} >
                                     <i class="fa fa-clock-o">{$.i18n.prop("venta.en.espera")}</i>
                                 </a>
-                                <a  href="#" class="opciones-limpiar" onclick = {__Limpiar} >
+                                <a  href="#" class="opciones-limpiar" onclick = {__ImprimirTiquete} >
+                                    <i class="fa fa-print">Tiquete</i>
+                                </a> 
+                                 <a  href="#" class="opciones-limpiar" onclick = {__Limpiar} >
                                     <i class="fa fa-trash">{$.i18n.prop("btn.limpiar")}</i>
                                 </a>                              
                             </section>
@@ -199,12 +217,12 @@
                                     <li onclick = {__PantallaCodigoBarra} id="codificalo" class=""> <h3>
                                         <i class="glyphicon glyphicon-barcode" aria-hidden="true"></i>
                                         <img  src="{urlImagenLector}" width="40px" height="15px">
-                                        &nbsp;&nbsp; LECTOR </h3> 
+                                        &nbsp;&nbsp; {$.i18n.prop("titulo.lector")} </h3> 
                                     </li>
                                     <li onclick = {__PantallaCategorias} id="navegador" class=""> <h3>
                                         <i class="glyphicon glyphicon-refresh" aria-hidden="true"></i>
                                         <img  src="{urlImagenNavegador}" width="40px" height="15px">
-                                        &nbsp;CATEGORIAS</h3>  
+                                        &nbsp;{$.i18n.prop("titulo.categoria")}</h3>  
                                     </li>
                                 </ul>
                             </form>
@@ -230,16 +248,16 @@
                         </div>
                     </section>
                     <div onclick = {__BotonAnterior} show= {mostrarNavegador}  class="pull-left btnNavegacion " >
-                        <i class="fa fa-arrow-left"></i>Anterior
+                        <i class="fa fa-arrow-left"></i>{$.i18n.prop("btn.Anterior")}
                     </div>
                     <div onclick = {__BotonSiguiente} show= {mostrarNavegador}  class="pull-right btnNavegacion " >
-                        <i class="fa fa-arrow-right"></i>Siguiente
+                        <i class="fa fa-arrow-right"></i>{$.i18n.prop("btn.siguiente")}
                     </div>
                     <!--Fin Seccion de articulos-->
                     <!--Seccion de codigo de barra-->
                     <section show={mostrarCodigoBarra} class="codigo-barra" >
                         <div class="barra">
-                           <input onkeypress = {__addProductToDetail} type="text" class="form-control" id="codigoBarra" autofocus="autofocus" placeholder="Digite codigo Barra...">
+                           <input onkeypress = {__addProductToDetail} type="text" class="form-control" id="codigoBarra" autofocus="autofocus" placeholder="{$.i18n.prop('titulo.digite.codigo.barra')}">
                        </div>    
                        
                     </section>
@@ -516,6 +534,14 @@
                                         <label>{$.i18n.prop("factura.cliente")}</label> 
                                         <input onclick = {_EscogerClientes}  type="text" id="nombreCliente" name="nombreCliente" class="form-control"  value="{cliente.nombreCompleto}" readonly>
                                     </div>
+                                     <div class="form-group ">
+                                        <label>{$.i18n.prop("factura.nombreFactura")}</label> 
+                                        <input type="text" id="nombreFactura" name="nombreFactura" class="form-control"  value="{factura.nombreFactura}" >
+                                    </div>
+                                    <div class="form-group ">
+                                        <label>{$.i18n.prop("factura.correoAlternativo")}</label> 
+                                        <input type="email" id="correoAlternativo" name="correoAlternativo" class="form-control"  value="" >
+                                    </div>
                                     <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group ">
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 
                                         <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
@@ -544,7 +570,7 @@
                                     </div>
                                     <div  class="form-group has-success">
                                         <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
-                                        <input onkeyup={ __TotalDeTarjeta } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="form-control totalBanco" id="totalBanco" name = "totalBanco"  value="{factura.totalBanco}">
+                                        <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="form-control totalBanco" id="totalBanco" name = "totalBanco"  value="{factura.totalBanco}">
                                     </div>
 
                                     
@@ -637,6 +663,60 @@
 
 
 <style type="text/css">
+ .label-limpiar{
+        font-weight: 600 !important;
+        font-size: 20px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #ffffff !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        padding-left: 20px;
+        line-height: 30px;
+        border-collapse: separate;
+        text-align: center;
+        cursor: pointer;
+        padding: 5px;
+        margin: 10px;
+        border: none;
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+        
+    }
+    .label-articulos{
+        font-weight: 600 !important;
+        font-size: 20px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        padding-left: 20px;
+        line-height: 30px;
+        border-collapse: separate;
+        text-align: center;
+        cursor: pointer;
+        padding: 5px;
+        margin: 10px;
+        border: none;
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+        
+    }
   .fondoEncabezado {
         background: #00539B;
         color: #f9fafc;
@@ -1995,6 +2075,7 @@
     self.cantones                      = []
     self.distritos                     = []
     self.barrios                       = []
+     self.mostrarListadoArticulos == false
     self.parametrosPaginacion = {
         id:null,
         paginaActual:0,
@@ -2052,6 +2133,7 @@
           
         __comboCondicionPago()
         __ComboTipoDocumentos()
+        __ListaDeArticulosPorEmpresa()
         __ListaDeClientes()
        __ListaDeVendedores()
        __Teclas()
@@ -2305,7 +2387,7 @@ __LimpiarFormulario(){
      $(".totalEfectivo").val(null)   
     $(".totalTarjeta").val(null)   
     $(".totalBanco").val(null)   
-
+     
     
     $(".nota").val(null)   
     $(".direccion").val(null)   
@@ -2326,7 +2408,7 @@ __LimpiarFormulario(){
     self.cantones                      = []
     self.distritos                     = []
     self.barrios                       = []
-
+  
     self.update()
      
 }
@@ -2367,6 +2449,122 @@ var reglasDeValidacionFactura = function() {
 	});
 	return validationOptions;
 };
+
+_ListaFacturasDia(){
+    ListadoFacturasDelDia()
+}
+
+/**
+*  Facturas del Dia
+**/
+function ListadoFacturasDelDia(){
+      $("#tableListarFacturasDia").dataTable().fnClearTable(); 
+        __InicializarTabla('.tableListarFacturasDia')  
+        $.ajax({
+            url: "ListarFacturasDelDiaAjax.do",
+            datatype: "json",
+            method:"GET",
+            success: function (result) {
+                if(result.aaData.length > 0){
+                    __InformacionDataTableDia();
+                    loadListar(".tableListarFacturasDia",idioma_espanol,self.formato_tabla_dias,result.aaData)
+                    agregarInputsCombos_Facturas_Dias();
+                    ActivarEventoFiltro(".tableListarFacturasDia")
+                     $('#modalFacturasDia').modal('show')    
+                     __reimprimir()
+                }else{
+                    __InformacionDataTableDia();
+                     agregarInputsCombos_Facturas_Dias();
+                }           
+            },
+            error: function (xhr, status) {
+                mensajeErrorServidor(xhr, status);
+                console.log(xhr);
+            }
+        });
+}
+
+/**
+*  Agregar los inpust  y select de las tablas
+**/
+function agregarInputsCombos_Facturas_Dias(){
+     // Agregar los input de busqueda 
+    $('.tableListarFacturasDia tfoot th').each( function (e) {
+        var title = $('.tableListarFacturasDia thead th').eq($(this).index()).text();      
+        //No se toma en cuenta la columna de las acctiones(botones)
+        if ( $(this).index() != 5    ){
+	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	    }
+    })
+} 
+/**
+* formato del listado de facturas del dia
+**/
+/**
+*Formato del listado 
+**/
+function __InformacionDataTableDia(){
+    self.formato_tabla_dias = [ 
+                               {'data' :'fechaEmision'   ,"name":"fechaEmision"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true ,
+                                  "render":function(fechaEmision,type, row){
+									    return __displayDate_detail(fechaEmision);
+	 							    }
+                               },
+                             
+                               {'data' :'numeroConsecutivo'                    ,"name":"numeroConsecutivo"                     ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
+                                   "render":function(numeroConsecutivo,type, row){
+									    return __TipoDocumentos(numeroConsecutivo,row)
+	 							    }
+                               },
+                               {'data' :'cliente'                    ,"name":"cliente"                     ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
+                                   "render":function(cliente,type, row){
+									    return cliente ==null?"":cliente.nombreCompleto;
+	 							    }
+                               },
+                               {'data' :'totalImpuesto'       ,"name":"totalImpuesto"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true ,
+                                    "render":function(totalImpuesto,type, row){
+									    return  totalImpuesto.toLocaleString('de-DE');
+	 							    }
+                               },
+                               {'data' :'totalDescuentos'                ,"name":"totalDescuentos"                 ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true ,
+                                    "render":function(totalDescuentos,type, row){
+									    return  totalDescuentos.toLocaleString('de-DE');
+	 							    }
+                               },
+                               {'data' :'totalComprobante'               ,"name":"totalComprobante"                ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true ,
+                                    "render":function(totalComprobante,type, row){
+									    return  totalComprobante.toLocaleString('de-DE');;
+	 							    }
+                               },
+                               {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
+                                "render":function(id,type, row){
+                                      return __Opciones(id,type,row);
+                                 }
+	      		            }];
+    self.update();
+   
+}
+function __Opciones(){
+var agregar  = '<a href="#"  class="btn btnReimprimir btn-primary form-control" title="Imprimir" role="button"> <i class="glyphicon glyphicon glyphicon-print"></i></a>';
+  return  agregar;
+}
+
+
+function __reimprimir(){
+	$('#tableListarFacturasDia').on('click','.btnReimprimir',function(e){
+		var table = $('#tableListarFacturasDia').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+        var factura = data
+        $('#modalCambiarCantidad').modal('hide') 
+        riot.mount('ptv-imprimir',{factura:factura});
+        
+	});
+}
 
 
 
@@ -2626,6 +2824,13 @@ __Imprimir(){
     riot.mount('ptv-imprimir',{factura:factura});
 }
 /**
+* Imprimir tikete
+**/
+__ImprimirTiquete(){
+    var factura = self.factura
+    riot.mount('tiquete-imprimir',{factura:factura});
+}
+/**
 *  Obtiene el valor de lo digitado en el campo de efectivo
 **/
 __TotalDeEfectivoAPagar(e){
@@ -2649,7 +2854,11 @@ __TotalDeBancoAPagar(e){
 /**
 *   Calculo del cambio entregar en el evento onblur
 **/
+/**
+*   Calculo del cambio entregar en el evento onblur
+**/
 __CalculaCambioAEntregarOnblur(e){
+    
     var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
     sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
     sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
@@ -2682,6 +2891,8 @@ __CalculaCambioAEntregarKeyPress(e){
  * Listar codigos  llamado del modal para presentar los articulos
  **/   
  __ListaDecodigos(){
+     self.mostrarListadoArticulos = true
+     self.update()
      __ListaDeArticulosPorEmpresa();
  }
 /**
@@ -2731,13 +2942,13 @@ function aplicarFactura(estado){
             }
             var montoEntregado = self.factura.totalTarjeta + self.factura.totalBanco + self.factura.totalEfectivo
             montoEntregado = __valorNumerico(montoEntregado)
-            if(self.factura.totalVentaNeta > montoEntregado  ){
+            if(self.factura.totalComprobante > montoEntregado  ){
                 mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
                 return
             }
             //Si el cliente esta pagando con tajeta, banco debe ser igual a la venta
             if(self.factura.totalTarjeta != 0 || self.factura.totalBanco !=0){
-                if(self.factura.totalVentaNeta != montoEntregado  ){
+                if(self.factura.totalComprobante != montoEntregado  ){
                     mensajeError($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
                 return
                     
@@ -2747,25 +2958,8 @@ function aplicarFactura(estado){
         }
     } 
 if ($("#formularioFactura").valid()) {
-        swal({
-           title: '',
-           text: $.i18n.prop("factura.alert.crear"),
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: '#00539B',
-            cancelButtonColor: '#d33',
-            confirmButtonText:$.i18n.prop("confirmacion.si"),
-            cancelButtonText: $.i18n.prop("confirmacion.no"),
-            confirmButtonClass: 'btn btn-success',
-            cancelButtonClass: 'btn btn-danger',
-        }).then(function (isConfirm) {
-            //Ajax__inicializarTabla();
-            if(isConfirm){
-               crearFactura(estado)  
-              
-            }
-        });
-    }
+    crearFactura(estado)  
+ }
 
 
 }
@@ -2782,7 +2976,7 @@ __Limpiar(){
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
-    
+     self.mostrarListadoArticulos == false
     self.detail                = []
     self.mensajesBackEnd       = []
     self.error                 = false
@@ -2790,6 +2984,7 @@ function __Init(){
     self.comboCondicionPagos        = []
     self.comboTipoDocumentos   = []
     self.facturas_espera       = {data:[]}  
+    self.descripcionArticulo = ""
     self.factura                = {
         id:0,
 	    fechaCredito:null,
@@ -2837,7 +3032,7 @@ function __Init(){
     }                            
     self.item                  = null;
     self.articulo              = null;
-    self.articulos             = {data:[]}
+   // self.articulos             = {data:[]}
     self.clientes              = {data:[]}
     self.detalleFactura        ={data:[]}
     self.cliente               = {};
@@ -2934,6 +3129,8 @@ function __Init(){
       //Estados
       __ComboEstados()
      __ListaFacturasEnEspera()
+     $('#codigoBarra').val(null)
+     $('#codigoBarra').focus()
     
 }
 
@@ -2974,6 +3171,8 @@ function __FacturaEnEspera(factura){
             
         }
     });
+    $('#codigoBarra').val(null)
+     $('#codigoBarra').focus()
 }
 
 /**
@@ -3188,7 +3387,9 @@ __addProductToDetail(e){
     var codigoActual = ""
     var cantidadAct =""
     var existe = false
+    var existeMas = ""
     for(i=0; i<codigo.length; i++){
+        existeMas = codigo.charAt(i) == "+"?true : false
        if(existe == false){
           existe = codigo.charAt(i) == "*"?true : false  
           if(codigo.charAt(i) !="*"){
@@ -3200,25 +3401,63 @@ __addProductToDetail(e){
        }
         console.log("pos=", i, "valor=", codigo.charAt(i));
     }
+    // esto es para cuando un cliente quiere sumar varios productos
+    if(existeMas == true){
+       __sumarMasArticulo(codigo)
+       return  
+    }
 
     __buscarcodigo(codigoActual,__valorNumerico(cantidadAct));
     $('#codigoBarra').val(null)
     $('#codigoBarra').focus()
 }
+
+/**
+*sumar mas cantidad al ultimor articulo ingresado
+**/
+function __sumarMasArticulo(codigo){
+    if(self.articulo == null){
+        return;
+    }
+    var cantidadAct =""
+    var existe = false
+    for(i=0; i<codigo.length; i++){
+       existe = codigo.charAt(i) == "+"?true : false
+       if(existe == false){
+          cantidadAct = cantidadAct + codigo.charAt(i)
+            
+       }
+        console.log("pos=", i, "valor=", codigo.charAt(i));
+    }
+   for (var count = 0; count < self.detail.length; count++) {
+        if (self.detail[count].codigo == self.articulo.codigo ){
+            self.item          = self.detail[count];
+            self.item.cantidad = self.item.cantidad + parseFloat(cantidadAct)
+            self.update();
+            ActualizarLineaDEtalle()
+            self.detail[count] = self.item;
+            self.update();
+        }
+    }
+  
+    __calculate(); 
+}
+
+
 /**
 * Buscar codigo
 **/
 __agregarArticuloBotonAgregar(){
-   __buscarcodigo($( "#codigo" ).val(),1);
+   __buscarcodigo($( "#codigoBarra" ).val(),1);
 }
 /**
 * mostrar la lista de articulos de la empresa
 **/
 function __ListaDeArticulosPorEmpresa(){
     $.ajax({
-        url: 'ListarArticuloAjax.do',
+        url: 'ListarArticulosActivosAjax.do',
         datatype: "json",
-        method:"GET",
+        method:"POST",
         success: function (result) {
             if(result.aaData.length > 0){
                 _informacionData_Articulo()
@@ -3228,7 +3467,9 @@ function __ListaDeArticulosPorEmpresa(){
                 agregarInputsCombos_Articulo()
                 __agregarArticulos()
                 ActivarEventoFiltro(".tableListarArticulos")
-                $('#modalInventario').modal('show')    
+                if(self.mostrarListadoArticulos == true){
+                  $('#modalInventario').modal('show')    
+                }
             }
         },
         error: function (xhr, status) {
@@ -3300,7 +3541,19 @@ function __ListaDeClientes(){
 * Buscar el codigo del codigo  en la base de datos
 **/
 function __buscarcodigo(idArticulo,cantidad){
-    self.articulo = null;
+   //   let lista     = self.articulos.data;
+    ///self.articulo  = {}
+   // self.update()
+   // var articuloEncontrado = jsonPath(lista,"$[?(@.codigo=='"+idArticulo+"')]");
+   // articuloEncontrado.forEach(function(e){
+    //    self.descripcionArticulo = e.precioPublico
+    //    self.articulo = e
+     //   self.update();
+     //    __agregarArticulo(cantidad)
+
+    //})
+    //return
+   // self.articulo = null;
     $.ajax({
         type: 'GET',
         url: 'findArticuloByCodigojax.do',
@@ -3315,18 +3568,19 @@ function __buscarcodigo(idArticulo,cantidad){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         //Articulo no puede agregarse si no hay en el inventario
-                        if(modeloTabla.contable == "Si"){
-                            if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
-                                mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
-                                return
-                            }
-                            if(modeloTabla.cantidad < cantidad ){
-                                mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
-                                return
-                            }
+//                        if(modeloTabla.contable == "Si"){
+//                            if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
+//                                mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
+//                                return
+//                            }
+//                            if(modeloTabla.cantidad < cantidad ){
+//                                mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
+//                                return
+//                            }
 
-                        }
+//                        }
                         self.articulo  = modeloTabla
+                         self.descripcionArticulo = modeloTabla.descripcion
                         self.update()
                         __agregarArticulo(cantidad)
                     });
@@ -3540,14 +3794,7 @@ function __ValidarCantidadArticulo(idArticulo,cantidad){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         //Articulo no puede agregarse si no hay en el inventario
-                        if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
-                            mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
-                            return 
-                        }
-                        if(modeloTabla.cantidad < cantidad ){
-                            mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
-                            return 
-                        }
+               
                         agregarCantidadAlaVenta(cantidad)
                     })
                 }
@@ -3694,9 +3941,9 @@ function __calculate() {
     self.factura.totalImpuesto           = redondearDecimales(__valorNumerico(totalImpuesto),5)
     self.factura.totalVentaNeta          = redondearDecimales(__valorNumerico(totalVenta-totalDescuento),5)
     self.factura.totalComprobante        = redondearDecimales(__valorNumerico(totalComprobante),5)
-    self.articulo              = null;
+  //  self.articulo              = null;
     self.update(); 
-    $( "#codigo" ).val(null);
+    $( "#codigoBarra" ).val(null);
     $( "#quantity" ).val(null);
     getSubTotalGeneral()
 }
@@ -4006,13 +4253,23 @@ function __Teclas(){
     window.addEventListener( "keydown", function(evento){
         var tecla = evento.keyCode; 
     if(tecla ==119){
-      mostrarPAgo()     
+      if(self.mostrarFormularioPago == false && self.mostarParaCrearNuevaVentas == true){
+         mostrarPAgo()     
+      }else if (self.mostrarFormularioPago == true && self.mostarParaCrearNuevaVentas == false ){
+            aplicarFactura(2)   
+        }  
    
     }   
-    //aplicar crear Factura
-    if (self.mostrarFormularioPago == true ){
-   //    aplicarFactura()   
-    } 
+     //Factura en espera
+    if(tecla ==120){
+      aplicarFactura(1)   
+    }
+    
+    //Limpiar
+    if(tecla ==121){
+      __Init()
+    }
+
 
    
     }, false );

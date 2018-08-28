@@ -328,7 +328,7 @@ a:focus {
   background: transparent;
   margin-top: 0;
   margin-bottom: 0;
-  font-size: 12px;
+  font-size: 14px;
   padding: 7px 5px;
   position: absolute;
   top: 15px;
@@ -1668,7 +1668,7 @@ a:focus {
   text-align: center;
   color: #333;
   font-weight: 100;
-  font-size: 12px;
+  font-size: 14px;
   margin-bottom: 0.3em;
 }
 .box > .overlay,

@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.FacturaBo;
@@ -61,7 +62,8 @@ import com.google.common.base.Function;
  * Servicio de envio de los documentos de hacienda
  **/
 
-@Transactional(rollbackOn = Exception.class)
+@Transactional
+@EnableTransactionManagement
 @Service("procesoHaciendaService")
 public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
@@ -90,19 +92,19 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
 																																																			// Emisor
 
-																																																			facturaElectronica.setEmisorNombre(d.getEmpresa().getNombre());
+																																																			facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? d.getEmpresa().getNombreComercial() : d.getEmpresa().getNombre());
 																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
 																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
 																																																			facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
 																																																			// Cliente
-																																																			if (!d.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
-																																																				facturaElectronica.setClienteNombre(d.getCliente().getNombreCompleto());
-																																																				facturaElectronica.setClienteNombreComercial(d.getCliente().getNombreComercial());
-																																																				facturaElectronica.setClienteCorreo(d.getCliente().getCorreoElectronico());
-																																																				facturaElectronica.setClienteCedula(d.getCliente().getTipoCedula() + "-" + d.getCliente().getCedula());
-																																																				facturaElectronica.setClienteTelefono(String.format("%s-%s", d.getCliente().getTelefono().toString().substring(0, 4), d.getCliente().getTelefono().toString().substring(4, 8)));
+																																																			// if (!d.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+																																																			facturaElectronica.setClienteNombre(d.getCliente().getNombreCompleto());
+																																																			facturaElectronica.setClienteNombreComercial(d.getCliente().getNombreComercial());
+																																																			facturaElectronica.setClienteCorreo(d.getCliente().getCorreoElectronico());
+																																																			facturaElectronica.setClienteCedula(d.getCliente().getTipoCedula() + "-" + d.getCliente().getCedula());
+																																																			facturaElectronica.setClienteTelefono(d.getCliente().getTelefono() != null ? d.getCliente().getTelefono().toString() : Constantes.EMPTY);
 
-																																																			}
+																																																			// }
 																																																			// facturaElectronica.setClienteMesCobro(TO_MESCOBRO.apply(d.getMesCobro()));
 																																																			// Ubicacion
 																																																			facturaElectronica.set_logo(d.getEmpresa().getLogo());
@@ -110,7 +112,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																			// Otros
 																																																			facturaElectronica.setTipoDocumento(FacturaElectronicaUtils.getTipoDocumento(d.getTipoDoc()));
 																																																			facturaElectronica.setClave(d.getClave());
-																																																			facturaElectronica.setConsecutivo(d.getNumeroConsecutivo());
+																																																			facturaElectronica.setConsecutivo(d.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ? d.getId().toString() : d.getNumeroConsecutivo());
 																																																			facturaElectronica.setFechaEmision(d.getFechaEmision().toString());
 																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito().toString());
 																																																			facturaElectronica.setCondicionVenta(BIND_CONDICION_VENTA.apply(d.getCondicionVenta()));
@@ -120,7 +122,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 																																																			facturaElectronica.setMoneda(FacturaElectronicaUtils.getMoneda(d.getCodigoMoneda()));
 																																																			facturaElectronica.setTipoCambio(d.getTipoCambio().toString());
-																																																			// Nota Credito y Nota Debito
+
 																																																			// Nota Credito y Nota Debito
 																																																			if (d.getReferenciaCodigo() != null) {
 																																																				if (!d.getReferenciaCodigo().equals(Constantes.EMPTY)) {
@@ -139,6 +141,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																				facturaElectronica.setReferenciaRazon(Constantes.EMPTY);
 																																																				facturaElectronica.setReferenciaTipoDoc(Constantes.EMPTY);
 																																																				facturaElectronica.setReferenciaFechaEmision(Constantes.EMPTY);
+
 																																																			}
 																																																			// Agrega sus detalles
 																																																			List<DetalleFacturaElectronica> detalles = d.getDetalles().stream().map(TO_DETALLE).collect(toList());
@@ -168,14 +171,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	@Autowired
 	private FacturaBo																									facturaBo;
-	
+
 	@Autowired
 	private FacturaXMLServices																				facturaXMLServices;
 
 	@Autowired
 	private TiqueteXMLService																					tiqueteXMLService;
 
-	
 	@Autowired
 	private NotaCreditoXMLServices																		notaCreditoXMLServices;
 
@@ -186,31 +188,34 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
 	// @Scheduled(cron = "*/5 * * * * ?")
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/2 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 		try {
-			Semaforo semaforo = null;
-			// Listado de los documentos Pendientes de enviar hacienda
-			Collection<Hacienda> listaHacienda = haciendaBo.findByEstado(Constantes.HACIENDA_ESTADO_FIRMARDO_XML, Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR);
-			for (Hacienda hacienda : listaHacienda) {
-				semaforo = semaforo == null ? semaforo = semaforoBo.findByEmpresa(hacienda.getEmpresa(), Constantes.SEMAFORO_ESTADO_ACTIVO) : semaforo;
-				if (semaforo != null) {
-					// Si esta activo el semaforo y el numero de reintentos es menor al permitido
-					if (semaforo.getEstado().equals(Constantes.SEMAFORO_ESTADO_ACTIVO)) {
-						Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
-						if (haciendaBD.getReintentos() < semaforo.getMaximoReintentosEnviar()) {
-							envioHacienda(haciendaBD);
-						} else {// Si alcanza el maximo reintentos no se envia mas a la hacienda
-							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_TOPE_REINTENTOS);
-							haciendaBD.setUpdated_at(new Date());
-							haciendaBo.modificar(haciendaBD);
-						}
+			Boolean encontro = false;
+			Semaforo semaforo = semaforoBo.findByEstado(Constantes.SEMAFORO_ESTADO_ENVIO);
+			if (semaforo != null) {
 
+				// Listado de los documentos Pendientes de enviar hacienda
+				Collection<Hacienda> listaHacienda = haciendaBo.findByEstado(Constantes.HACIENDA_ESTADO_FIRMARDO_XML, Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR);
+				for (Hacienda hacienda : listaHacienda) {
+					Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
+					if (haciendaBD.getReintentos() < semaforo.getMaximoReintentosEnviar()) {
+						envioHacienda(haciendaBD);
+					} else {// Si alcanza el maximo reintentos no se envia mas a la hacienda
+						haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_TOPE_REINTENTOS);
+						haciendaBD.setUpdated_at(new Date());
+						haciendaBo.modificar(haciendaBD);
 					}
+					encontro = true;
 				}
-
+				//Si encontro uno se pasa al bloque siguiente del proceso
+				if(encontro) {
+					semaforo.setEstado(Constantes.SEMAFORO_ESTADO_COMPROBAR_DOCUMENTOS);
+					semaforoBo.modificar(semaforo);
+				}
 			}
+		
 
 		} catch (Exception e) {
 			log.info("** Error  taskHaciendaEnvio: " + e.getMessage() + " fecha " + new Date());
@@ -230,9 +235,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			// Obtener el token en hacienda para enviar los documentos
 			openIDConnectHacienda = openIDConnect.getToken(hacienda.getEmpresa());
 			// Se obtuvo el token de accienda
-			if (openIDConnectHacienda.getAccess_token().length() > 0) {
-
-				envioHaciendaFacturas(hacienda, openIDConnectHacienda);
+			if (openIDConnectHacienda != null) {
+				if (openIDConnectHacienda.getAccess_token().length() > 0) {
+					envioHaciendaFacturas(hacienda, openIDConnectHacienda);
+				}
 
 			}
 			// Desconectar token de hacienda
@@ -240,7 +246,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				if (openIDConnectHacienda.getRefresh_token().length() > 0) {
 					openIDConnect.desconectarToken(hacienda.getEmpresa(), openIDConnectHacienda);
 				}
-
 			}
 
 		} catch (
@@ -316,28 +321,33 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		try {
-			log.info("The time is now {}", new Date());
-			Semaforo semaforo = null;
-			// Listado de los documentos Pendientes de aceptar por hacienda
-			Collection<Hacienda> listaHacienda = haciendaBo.findByEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA, Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA);
-			for (Hacienda hacienda : listaHacienda) {
-				semaforo = semaforo == null ? semaforo = semaforoBo.findByEmpresa(hacienda.getEmpresa(), Constantes.SEMAFORO_ESTADO_ACTIVO) : semaforo;
-				if (semaforo != null) {
-					// Si esta activo el semaforo y el numero de reintentos es menor al permitido
-					if (semaforo.getEstado().equals(Constantes.SEMAFORO_ESTADO_ACTIVO)) {
-						Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
-						if (haciendaBD.getReintentosAceptacion() < semaforo.getMaximoReintentosEnviar()) {
-							aceptarDocumento(hacienda);
-						} else {// Si alcanza el maximo reintentos de aceptacion mas a la hacienda
-							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTACION_HACIENDA_TOPE_REINTENTOS);
-							haciendaBD.setUpdated_at(new Date());
-							haciendaBo.modificar(haciendaBD);
-						}
-
+			log.info("Inicio Proceso de comprobacion de documentos  {}", new Date());
+      Boolean encontro = false;
+			Semaforo semaforo = semaforoBo.findByEstado(Constantes.SEMAFORO_ESTADO_COMPROBAR_DOCUMENTOS);
+			if (semaforo != null) {
+				// Listado de los documentos Pendientes de aceptar por hacienda
+				Collection<Hacienda> listaHacienda = haciendaBo.findByEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA, Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA);
+				for (Hacienda hacienda : listaHacienda) {
+					Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
+					if (haciendaBD.getReintentosAceptacion() < semaforo.getMaximoReintentosEnviar()) {
+						aceptarDocumento(hacienda);
+					} else {// Si alcanza el maximo reintentos de aceptacion mas a la hacienda
+						haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTACION_HACIENDA_TOPE_REINTENTOS);
+						haciendaBD.setUpdated_at(new Date());
+						haciendaBo.modificar(haciendaBD);
 					}
+					encontro = true;
+				}
+        //Encontro elementos continua con el proceso de envios de correos 
+				if(encontro) {
+					semaforo.setEstado(Constantes.SEMAFORO_ESTADO_FIRMADO);
+					semaforoBo.modificar(semaforo);
+					
 				}
 
+
 			}
+			log.info("Fin Proceso de comprobacion de documentos  {}", new Date());
 
 		} catch (Exception e) {
 			log.info("** Error  taskHaciendaComprobacionDocumentos: " + e.getMessage() + " fecha " + new Date());
@@ -355,61 +365,71 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			OpenIDConnectHacienda openIDConnectHacienda = null;
 			// Obtener el token en hacienda para enviar los documentos
 			openIDConnectHacienda = openIDConnect.getToken(hacienda.getEmpresa());
-			// Se obtuvo el token de accienda
-			if (openIDConnectHacienda.getAccess_token().length() > 0) {
-				Map response = envioHaciendaComponent.comprobarDocumentoElectronico(hacienda.getClave(), openIDConnectHacienda);
-				String body = (String) response.get(POST_RESPONSE);
-				if (body != null && body != "") {
-
-					RespuestaHacienda respuestaHacienda = RespuestaHaciendaJson.from(body);
-
-					String status = getHaciendaStatus(respuestaHacienda.indEstado());
-					hacienda.setUpdated_at(new Date());
-					RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();
-					respuesta.setClave(respuestaHacienda.clave());
-					respuesta.setFecha(respuestaHacienda.fecha());
-					respuesta.setIndEstado(respuestaHacienda.indEstado());
-					respuesta.setMensaje(respuestaHacienda.mensajeHacienda() !=null?respuestaHacienda.mensajeHacienda().mensaje():Constantes.EMPTY);
-					respuesta.setDetalleMensaje(respuestaHacienda.mensajeHacienda() !=null?respuestaHacienda.mensajeHacienda().detalleMensaje():Constantes.EMPTY);
-					respuesta.setMontoTotalImpuesto(respuestaHacienda.mensajeHacienda() !=null?respuestaHacienda.mensajeHacienda().montoTotalImpuesto():Constantes.ZEROS_DOUBLE);
-					respuesta.setNombreEmisor(respuestaHacienda.mensajeHacienda() !=null?respuestaHacienda.mensajeHacienda().nombreEmisor():Constantes.EMPTY);
-					respuesta.setNombreReceptor(respuestaHacienda.mensajeHacienda() !=null?respuestaHacienda.mensajeHacienda().nombreReceptor():Constantes.EMPTY);
-					respuesta.setNumeroCedulaEmisor(respuestaHacienda.mensajeHacienda() !=null?respuestaHacienda.mensajeHacienda().numeroCedulaEmisor():Constantes.EMPTY);
-					respuesta.setNumeroCedulaReceptor(respuestaHacienda.mensajeHacienda() !=null?respuestaHacienda.mensajeHacienda().numeroCedulaReceptor():Constantes.EMPTY);
-					respuesta.setTipoIdentificacionEmisor(respuestaHacienda.mensajeHacienda() !=null?respuestaHacienda.mensajeHacienda().tipoIdentificacionEmisor():Constantes.EMPTY);
-					respuesta.setTipoIdentificacionReceptor(respuestaHacienda.mensajeHacienda() !=null?respuestaHacienda.mensajeHacienda().tipoIdentificacionReceptor():Constantes.EMPTY);
-					respuesta.setTotalFactura(respuestaHacienda.mensajeHacienda() !=null?respuestaHacienda.mensajeHacienda().totalFactura():Constantes.ZEROS_DOUBLE);
-					String xmlSinFirmarRespuesta = Constantes.EMPTY;
-					String xmlFirmadoRespuesta = Constantes.EMPTY;
-
-					if(!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECIBIDO)) {
-						xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
-						xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
-						
-					}
-					Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
-					if(xmlFirmadoRespuesta != Constantes.EMPTY) {
-						haciendaBD.setMensajeHacienda(FacturaElectronicaUtils.convertirStringToblod(xmlFirmadoRespuesta));	
-					}
-					/**
-					 * Esperar el correo FE para saber que ese estado de recibido
-					 */
-				if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)  ) {
-						haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
-					}
-					if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
-						haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
-					}
-					haciendaBo.modificar(haciendaBD);
-				} else {// sumar reintententos
-					hacienda.setReintentosAceptacion(hacienda.getReintentosAceptacion() == null ? 1 : hacienda.getReintentosAceptacion() + 1);
-					haciendaBo.modificar(hacienda);
-				}
-			}
-			// Desconectar token de hacienda
 			if (openIDConnectHacienda != null) {
-				if (openIDConnectHacienda.getRefresh_token().length() > 0) {
-					openIDConnect.desconectarToken(hacienda.getEmpresa(), openIDConnectHacienda);
+				// Se obtuvo el token de accienda
+				if (openIDConnectHacienda.getAccess_token().length() > 0) {
+					String idp_uri_documentos = Constantes.EMPTY;
+					if (hacienda.getEmpresa().getEstadoProduccion() != null) {
+						if (hacienda.getEmpresa().getEstadoProduccion().equals(Constantes.ESTADO_ACTIVO)) {
+							idp_uri_documentos = Constantes.IDP_URI_DOCUMENTOS_PRODUCCION;
+						}
+					}
+					Map response = envioHaciendaComponent.comprobarDocumentoElectronico(idp_uri_documentos, hacienda.getClave(), openIDConnectHacienda);
+
+					String body = (String) response.get(POST_RESPONSE);
+					if (body != null && body != "") {
+
+						RespuestaHacienda respuestaHacienda = RespuestaHaciendaJson.from(body);
+
+						String status = getHaciendaStatus(respuestaHacienda.indEstado());
+						hacienda.setUpdated_at(new Date());
+						RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();
+						respuesta.setClave(respuestaHacienda.clave());
+						respuesta.setFecha(respuestaHacienda.fecha());
+						respuesta.setIndEstado(respuestaHacienda.indEstado());
+						respuesta.setMensaje(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().mensaje() : Constantes.EMPTY);
+						respuesta.setDetalleMensaje(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().detalleMensaje() : Constantes.EMPTY);
+						respuesta.setMontoTotalImpuesto(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().montoTotalImpuesto() : Constantes.ZEROS_DOUBLE);
+						respuesta.setNombreEmisor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().nombreEmisor() : Constantes.EMPTY);
+						respuesta.setNombreReceptor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().nombreReceptor() : Constantes.EMPTY);
+						respuesta.setNumeroCedulaEmisor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().numeroCedulaEmisor() : Constantes.EMPTY);
+						respuesta.setNumeroCedulaReceptor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().numeroCedulaReceptor() : Constantes.EMPTY);
+						respuesta.setTipoIdentificacionEmisor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().tipoIdentificacionEmisor() : Constantes.EMPTY);
+						respuesta.setTipoIdentificacionReceptor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().tipoIdentificacionReceptor() : Constantes.EMPTY);
+						respuesta.setTotalFactura(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().totalFactura() : Constantes.ZEROS_DOUBLE);
+						String xmlSinFirmarRespuesta = Constantes.EMPTY;
+						String xmlFirmadoRespuesta = Constantes.EMPTY;
+
+						if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECIBIDO)) {
+							xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
+							xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
+
+						}
+						Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
+						if (xmlFirmadoRespuesta != Constantes.EMPTY) {
+							haciendaBD.setMensajeHacienda(FacturaElectronicaUtils.convertirStringToblod(xmlFirmadoRespuesta));
+						}
+						/**
+						 * Esperar el correo FE para saber que ese estado de recibido
+						 */
+						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
+							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+						}
+						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
+							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+						}
+						haciendaBo.modificar(haciendaBD);
+					} else {// sumar reintententos
+						hacienda.setReintentosAceptacion(hacienda.getReintentosAceptacion() == null ? 1 : hacienda.getReintentosAceptacion() + 1);
+						haciendaBo.modificar(hacienda);
+					}
+				}
+				// Desconectar token de hacienda
+				if (openIDConnectHacienda != null) {
+					if (openIDConnectHacienda.getRefresh_token().length() > 0) {
+						openIDConnect.desconectarToken(hacienda.getEmpresa(), openIDConnectHacienda);
+					}
+
 				}
 
 			}
@@ -425,30 +445,38 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/2 * * * ?")
+	@Scheduled(cron = "0 0/6 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
+			log.info("Inicio Proceso de envios de correos  {}", new Date());
 
-			// Listado de los documentos Pendientes de aceptar por hacienda
-			Collection<Hacienda> listaHacienda = haciendaBo.findByEstadoAndNotificacion(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA, Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
-			for (Hacienda hacienda : listaHacienda) {
-				Factura factura = facturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
-				Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
-				if (factura != null) {
-					
-					ArrayList<String> listaCorreos = new ArrayList<String>();
-					if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
-						listaCorreos.add(factura.getCliente().getCorreoElectronico());
-						listaCorreos.add(factura.getCorreoAlternativo());
+				// Listado de los documentos Pendientes de aceptar por hacienda
+				Collection<Hacienda> listaHacienda = haciendaBo.findByEstadoAndNotificacion(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA, Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
+				for (Hacienda hacienda : listaHacienda) {
+					Factura factura = facturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
+					Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
+					if (factura != null) {
+
+						ArrayList<String> listaCorreos = new ArrayList<String>();
+						if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+							listaCorreos.add(factura.getCliente().getCorreoElectronico());
+							if (factura.getCorreoAlternativo() != null) {
+								if (!factura.getCorreoAlternativo().equals(Constantes.EMPTY)) {
+									listaCorreos.add(factura.getCorreoAlternativo());
+								}
+							}
+
+						}
+						listaCorreos.add(factura.getEmpresa().getCorreoElectronico());
+						enviarCorreos(factura, hacienda, listaCorreos);
+						haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
+						haciendaBo.modificar(haciendaBD);
 					}
-					listaCorreos.add(factura.getEmpresa().getCorreoElectronico());
-					enviarCorreos(factura, hacienda, listaCorreos);
-					haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
-					haciendaBo.modificar(haciendaBD);
-				}
+
 
 			}
+			log.info("Fin Proceso de envios de correos  {}", new Date());
 
 		} catch (Exception e) {
 			log.info("** Error  taskHaciendaEnvioDeCorreos: " + e.getMessage() + " fecha " + new Date());
@@ -472,12 +500,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			Map<String, Object> modelEmail = new HashMap<>();
 
 			modelEmail.put("clave", clave);
-			modelEmail.put("nombreEmpresa", factura.getEmpresa().getNombre());
+			modelEmail.put("nombreEmpresa", factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial());
 			modelEmail.put("correo", factura.getEmpresa().getCorreoElectronico());
 			modelEmail.put("telefono", factura.getEmpresa().getTelefono());
 
 			String from = "FISCO_No_Reply@emprendesoftcr.com";
-			String subject = "Factura Electrónica N° " + clave + " del Emisor: " + factura.getEmpresa().getNombre();
+			String nombre = factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial();
+			String subject = "Documento Electrónico N° " + clave + " del Emisor: " + nombre;
 
 			//
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailHacienda.vm", modelEmail);
@@ -519,81 +548,96 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	private ByteArrayDataSource asPDF(ByteArrayOutputStream stream) {
 		return new ByteArrayDataSource(stream.toByteArray(), "text/pdf");
 	}
-	
+
+	/**
+	 * Firmado de documentos
+	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
+	 */
 	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
-	public synchronized void procesoFirmado()throws Exception{
+	public synchronized void procesoFirmado() throws Exception {
 		try {
-			
-			Collection<Factura> lista = facturaBo.findByEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
-			for (Factura factura : lista) {
-				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-					String comprobanteXML = Constantes.EMPTY;
-					if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
-						// Crear XMl sin firma
-						comprobanteXML = facturaXMLServices.getCrearXMLSinFirma(factura);
-						// firmar el documento
-						comprobanteXML = facturaXMLServices.getFirmarXML(comprobanteXML, factura.getEmpresa());
-					} else if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
-						// Crear XMl sin firma
-						comprobanteXML = tiqueteXMLService.getCrearXMLSinFirma(factura);
-						// firmar el documento
-						comprobanteXML = tiqueteXMLService.getFirmarXML(comprobanteXML, factura.getEmpresa());
-					} else if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-						// Crear XMl sin firma
-						comprobanteXML = notaCreditoXMLServices.getCrearXMLSinFirma(factura);
-						// firmar el documento
-						comprobanteXML = notaCreditoXMLServices.getFirmarXML(comprobanteXML, factura.getEmpresa());
+			log.info("Inicio el proceso de firmado  {}", new Date());
+			Boolean encontro = false;
+			 Semaforo semaforo = semaforoBo.findByEstado(Constantes.SEMAFORO_ESTADO_FIRMADO) ;
+			if (semaforo != null) {
+				Collection<Factura> lista = facturaBo.findByEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
+				for (Factura factura : lista) {
+					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+						String comprobanteXML = Constantes.EMPTY;
+						if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
+							// Crear XMl sin firma
+							comprobanteXML = facturaXMLServices.getCrearXMLSinFirma(factura);
+							// firmar el documento
+							comprobanteXML = facturaXMLServices.getFirmarXML(comprobanteXML, factura.getEmpresa());
+						} else if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
+							// Crear XMl sin firma
+							comprobanteXML = tiqueteXMLService.getCrearXMLSinFirma(factura);
+							// firmar el documento
+							comprobanteXML = tiqueteXMLService.getFirmarXML(comprobanteXML, factura.getEmpresa());
+						} else if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+							// Crear XMl sin firma
+							comprobanteXML = notaCreditoXMLServices.getCrearXMLSinFirma(factura);
+							// firmar el documento
+							comprobanteXML = notaCreditoXMLServices.getFirmarXML(comprobanteXML, factura.getEmpresa());
 
-					} else if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
-						// Crear XMl sin firma
-						comprobanteXML = notaDebitoXMLService.getCrearXMLSinFirma(factura);
-						// firmar el documento
-						comprobanteXML = notaDebitoXMLService.getFirmarXML(comprobanteXML, factura.getEmpresa());
+						} else if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+							// Crear XMl sin firma
+							comprobanteXML = notaDebitoXMLService.getCrearXMLSinFirma(factura);
+							// firmar el documento
+							comprobanteXML = notaDebitoXMLService.getFirmarXML(comprobanteXML, factura.getEmpresa());
+						}
+						Hacienda hacienda = new Hacienda();
+						hacienda.setCedulaEmisor(factura.getEmpresa().getCedula());
+						hacienda.setTipoEmisor(factura.getEmpresa().getTipoCedula());
+						// no se graba el cliente si es frecuente
+						if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+							hacienda.setCedulaReceptor(factura.getCliente().getCedula());
+							hacienda.setTipoReceptor(factura.getCliente().getTipoCedula());
+						}
+						hacienda.setEmpresa(factura.getEmpresa());
+						hacienda.setClave(factura.getClave());
+						hacienda.setFechaEmisor(factura.getFechaEmision());
+						Blob b = FacturaElectronicaUtils.convertirStringToblod(comprobanteXML);
+						hacienda.setComprobanteXML(b);
+						hacienda.setCreated_at(new Date());
+						hacienda.setUpdated_at(new Date());
+						hacienda.setStatus(Constantes.ZEROS);
+						hacienda.setEstado(Constantes.HACIENDA_ESTADO_FIRMARDO_XML);
+						hacienda.setConsecutivo(factura.getNumeroConsecutivo());
+						hacienda.setReintentos(Constantes.ZEROS);
+						hacienda.setReintentosAceptacion(Constantes.ZEROS);
+						hacienda.setTipoDoc(factura.getTipoDoc());
+						hacienda.setNombreReceptor(factura.getCliente().getNombreCompleto());
+						hacienda.setCorreoReceptor(factura.getCliente().getCorreoElectronico());
+						hacienda.setTotalReceptor(factura.getTotalComprobante());
+						hacienda.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
+						haciendaBo.agregar(hacienda);
+						factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
+						factura = factura.getId() == null || factura.getId() == Constantes.ZEROS_LONG ? null : facturaBo.findById(factura.getId());
+						if (factura != null) {
+							facturaBo.modificar(factura);
+						}
+						 encontro = true;
+
 					}
-					Hacienda hacienda = new Hacienda();
-					hacienda.setCedulaEmisor(factura.getEmpresa().getCedula());
-					hacienda.setTipoEmisor(factura.getEmpresa().getTipoCedula());
-					// no se graba el cliente si es frecuente
-					if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
-						hacienda.setCedulaReceptor(factura.getCliente().getCedula());
-						hacienda.setTipoReceptor(factura.getCliente().getTipoCedula());
-					}
-					hacienda.setEmpresa(factura.getEmpresa());
-					hacienda.setClave(factura.getClave());
-					hacienda.setFechaEmisor(factura.getFechaEmision());
-					Blob b = FacturaElectronicaUtils.convertirStringToblod(comprobanteXML);
-					hacienda.setComprobanteXML(b);
-					hacienda.setCreated_at(new Date());
-					hacienda.setUpdated_at(new Date());
-					hacienda.setStatus(Constantes.ZEROS);
-					hacienda.setEstado(Constantes.HACIENDA_ESTADO_FIRMARDO_XML);
-					hacienda.setConsecutivo(factura.getNumeroConsecutivo());
-					hacienda.setReintentos(Constantes.ZEROS);
-					hacienda.setReintentosAceptacion(Constantes.ZEROS);
-					hacienda.setTipoDoc(factura.getTipoDoc());
-					hacienda.setNombreReceptor(factura.getCliente().getNombreCompleto());
-					hacienda.setCorreoReceptor(factura.getCliente().getCorreoElectronico());
-					hacienda.setTotalReceptor(factura.getTotalComprobante());
-					hacienda.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
-					haciendaBo.agregar(hacienda);
-					factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
-					factura = factura.getId() == null || factura.getId() == Constantes.ZEROS_LONG ? null : facturaBo.findById(factura.getId());
-					if(factura !=null) {
-						facturaBo.modificar(factura);	
-					}
-					
 
 				}
-				
+				if(encontro) {
+					semaforo.setEstado(Constantes.SEMAFORO_ESTADO_ENVIO);
+					semaforoBo.modificar(semaforo);
+					
+				}
+
+
 			}
-			
+			log.info("Fin el proceso de firmado  {}", new Date());
+
 		} catch (Exception e) {
 			log.info("** Error  proceso de firmado: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
-		
+
 	}
-	
 
 }

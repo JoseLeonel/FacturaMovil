@@ -23,5 +23,15 @@ public class SemaforoBoImpl implements SemaforoBo {
 		
 		return semaforoDao.findByEmpresa(empresa,estado);
 	}
+	
+	@Override
+	public Semaforo findByEstado(Integer estado) {
+		return semaforoDao.findByEstado(estado);
+	}
+	
+	@Override
+	public void modificar(Semaforo semaforo) {
+		semaforoDao.modificar(semaforo);
+	}
 
 }

@@ -1,0 +1,121 @@
+<!-- sidebar: style can be found in sidebar.less -->
+<section class="sidebar">
+    <!-- sidebar menu: : style can be found in sidebar.less -->
+    <ul class="sidebar-menu">
+        <li class="active treeview">
+            <a href="#">
+                <i class="fa fa-dashboard"></i> <span>Inicio</span>
+            </a>
+        </li>
+		        <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"  >
+		            <a href="#">
+		                <i class="fa fa-edit"></i>
+		                <span>Administrativo</span>
+		                <i class="fa fa-angle-left pull-right"></i>
+		            </a>
+		            <ul class="treeview-menu">
+			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema')" >                       <a href="/ListarUsuario">    <i class="fa fa-circle-o"></i> Usuarios  </a></li>
+			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema')">                        <a href="/ListarEmpresas">   <i class="fa fa-circle-o"></i> Empresas  </a></li>
+			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><a href="/ListarClientes">   <i class="fa fa-circle-o"></i> Clientes  </a></li>
+			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><a href="/ListarVendedores"> <i class="fa fa-circle-o"></i> Vendedores</a></li>
+	  		          <li sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><a href="/ListarCajas">      <i class="fa fa-circle-o"></i> Cajas     </a></li>
+		            </ul>
+		        </li>
+		  <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')">
+		            <a href="#">
+		                <i class="fa fa-calculator"></i>
+		                <span>Inventarios</span>
+		                <i class="fa fa-angle-left pull-right"></i>
+		            </a>
+		            <ul class="treeview-menu">
+		                <li><a href="/ListarCategorias"     sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><i class="fa fa-circle-o"></i> Categorias       </a></li>
+		                <li><a href="/ListarMarcas"         sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><i class="fa fa-circle-o"></i> Marcas           </a></li>
+		                <li><a href="/ListarMotivoSalidas"  sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><i class="fa fa-circle-o"></i> Motivo de Salidas</a></li>
+		                <li><a href="/ListarMotivoEntradas" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><i class="fa fa-circle-o"></i> Motivo de Entradas</a></li>
+		                <li><a href="/ListarArticulos"      sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><i class="fa fa-circle-o"></i> Articulos        </a></li>
+		                <li><a href="/ListarKardex"         sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><i class="fa fa-circle-o"></i> Kardex           </a></li>
+		            </ul>
+		        </li>
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-folder"></i>
+                <span>Compras</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="/compras"><i class="fa fa-circle-o"></i> Nueva</a></li>
+                
+                <li><a href="/ListarProveedores"><i class="fa fa-circle-o"></i> Proveedores</a></li>
+            </ul>
+        </li>
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-shopping-cart"></i>
+                <span>Ventas</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="/puntoVenta"><i class="fa fa-circle-o"></i> Nueva</a></li>
+                <li><a href="/creditoDebito"><i class="fa fa-circle-o"></i> Notas Credito y Debito</a></li>
+                <li><a href="/ventasPorServicio"><i class="fa fa-circle-o"></i>Por Servicios </a></li>
+                <li><a href="/postVenta"><i class="fa fa-circle-o"></i>Venta POS </a></li>
+            </ul>
+        </li>
+ 		<li class="treeview">
+            <a href="#">
+                <i class="fa fa-credit-card"></i>
+                <span>Cuentas</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="/ListarCuentaCobrar"><i class="fa fa-circle-o"></i> Cobrar</a></li>
+            </ul>
+        </li>
+ 		<li class="active treeview">
+            <a href="/CambioClave">
+                <i class="fa fa-user-o"></i> <span>Cambio Clave</span>
+            </a>
+        </li>    
+        <li class="active treeview">
+            <a href="/AbrirCajas">
+                <i class="fa fa-unlock"></i> <span>Abrir Caja</span>
+            </a>
+        </li>  
+ 		<li class="active treeview">
+            <a href="/ListarTipoCambios">
+                <i class="fa fa-balance-scale"></i> <span>Tipo Cambio</span>
+            </a>
+        </li>          
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-shopping-cart"></i>
+                <span>Consultas</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="/ListaFacturas"><i class="fa fa-circle-o"></i>Listado de Facturas</a></li>
+                <li><a href="/ListaCompras"><i  class="fa fa-circle-o"></i>Listado de compras</a></li>
+            </ul>
+        </li>
+		<li class="active treeview">
+            <a href="/ListaProformas">
+                <i class="fa fa-file-archive-o"></i> <span>Proformas</span>
+            </a>
+        </li>    
+		
+		<li class="active treeview">
+            <a href="/ListarHacienda">
+                <i class="fa fa-share"></i> <span>Tributacion</span>
+            </a>
+        </li>               
+         <li class="active treeview">
+            <a href="/logout">
+                <i class="fa fa-sign-out"></i> <span>Salir</span>
+            </a>
+        </li>
+        
+     
+       
+    </ul>
+</section>
+<!-- /.sidebar -->

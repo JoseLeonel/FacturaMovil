@@ -15,13 +15,11 @@ import com.emprendesoftcr.modelo.Rol;
  * @author jose.
  * @since 19 abr. 2018
  */
-@Lazy
 @Transactional
 @EnableTransactionManagement
 @Service("rolBo")
 public class RolBoImpl implements RolBo {
 
-	@Lazy
 	@Autowired
 	RolDao rolDao;
 

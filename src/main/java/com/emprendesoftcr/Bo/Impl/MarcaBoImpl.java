@@ -17,13 +17,11 @@ import com.emprendesoftcr.modelo.Marca;
  * @author jose.
  * @since 17 mar. 2018
  */
-@Lazy
 @Transactional
 @EnableTransactionManagement
 @Service("marcaBo")
 public class MarcaBoImpl implements MarcaBo {
 
-	@Lazy
 	@Autowired
 	MarcaDao marcaDao;
 

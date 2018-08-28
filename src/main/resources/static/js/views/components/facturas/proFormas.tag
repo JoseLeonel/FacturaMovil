@@ -1,68 +1,14 @@
-<lista-facturas>
+<lista-proformas>
    <!-- Titulos -->
     <div  class="row " show="mostrarListado" >
         <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <h1><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("facturas.facturas")} </h1>
+            <h1><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("facturas.proformas")} </h1>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
         </div>
     </div>
     <br>
-    <br><br>
-    <!-- Inicio Filtros-->
-    <div>
-        <div class="row" show={mostrarListado}>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div onclick={__mostrarFiltros} class="text-left advanced-search-grid" style="margin-bottom : {valorMarginBottom}; padding : 2px;">
-                    <h4> <i class="fa fa-filter" style="padding-left : 5px;"></i>&nbsp{$.i18n.prop("filtro")} <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4>
-                </div>  
-                <div  show={mostrarFiltros}  class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
-                    <form id="filtros" name="filtros">              
-                        <div class= "row">
-                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                                <div class="form-group">
-                                    <label class="knob-label" >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
-                                    <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
-                                        <input type="text" class="form-control fechaInicial" id="fechaInicial"  name= "fechaInicial" readonly>
-                                        <div class="input-group-addon">
-                                            <span class="glyphicon glyphicon-th"></span>
-                                        </div>
-                                    </div>	                             
-                                </div>  
-                            </div>             
-                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <label class="knob-label" >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
-                                        <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
-                                            <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
-                                            <div class="input-group-addon">
-                                                <span class="glyphicon glyphicon-th"></span>
-                                            </div>
-                                        </div>	                             
-                                    </div>
-                                </div>  
-                            </div>
-                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                                <div class="form-group">
-                                    <label>{$.i18n.prop("cliente.titulo")} </label>  
-                                    <select  class="form-control selectCliente" id="cliente" name="cliente" data-live-search="true">
-                                        <option  data-tokens="{$.i18n.prop("todos.select")}"   value="0"  >{$.i18n.prop("todos.select")}</option>
-                                        <option  data-tokens="{nombreCompleto}" each={clientes.data}  value="{id}"  >{nombreCompleto}</option>
-                                    </select>
-                                </div>  
-                            </div>                      
-                        </div>
-                    </form>  
-                </div>
-            </div>
-            <div class="col-xs-12 text-right">
-                <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
-            	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
-            </div>
-        </div>
-    </div>    
-<!-- Fin Filtros-->
+  
 
     <br>
   <!-- Listado  -->
@@ -367,6 +313,8 @@
     </div>
   </div>
 </div>
+
+
 <style type="text/css">
     .btn-success {
         color: #e7e7e7;
@@ -731,19 +679,16 @@ self.total                 = 0
 
 self.mostrarListado        = true
 self.mostrarDetalle        = false
-self.clientes                  = {data:[]}
 self.on('mount',function(){
-    $("#filtros").validate(reglasDeValidacion());
     $("#formulario").validate(reglasDeValidacionCorreo());
     __InformacionDataTable()
     __InicializarTabla('.tableListar')
     agregarInputsCombos()
 
-    listaClientesActivos()
     sumar()
+    listado()
 
 })
-
 
 /**
 *  Regresar al listado
@@ -786,54 +731,22 @@ __Enviar(){
 
 
 
-/**
-* Camps requeridos
-**/
-var reglasDeValidacion = function() {
-	var validationOptions = $.extend({}, formValidationDefaults, {
-		rules : {
-			fechaInicial : {
-				required : true,
-			},
-			fechaFinal : {
-				required : true,
-			}                                   
-                        
-		},
-		ignore : []
 
-	});
-	return validationOptions;
-};
 
-/**
-* limpiar los filtros
-**/
-__limpiarFiltros(){
-    $('#fechaInicial').val(null)
-    $('#fechaFinal').val(null)
-}
 
-/**
-*  Busqueda de la informacion por rango de fechas
-**/
-__Busqueda(){
+
+
+function listado(){
+    __InformacionDataTable();
     self.listaFacturas = []
     self.update()
-    var inicial  =$('.fechaInicial').val()
-     if ($("#filtros").valid()) {
-        var parametros = {
-            fechaInicio:inicial,
-            fechaFin:$('.fechaFinal').val(),
-            idCliente:$('#cliente').val(),
-        };
+         
         $("#tableListar").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListar')  
         $.ajax({
-            url: "ListarFacturasActivasAndAnuladasAjax.do",
+            url: "ListarProformasActivasAjax.do",
             datatype: "json",
-            data:parametros ,
-            method:"GET",
+              method:"GET",
             success: function (result) {
                 if(result.aaData.length > 0){
                     __InformacionDataTable();
@@ -844,8 +757,9 @@ __Busqueda(){
                     ActivarEventoFiltro(".tableListar")
                     __VerDetalle()
                     __BajarPDF()
-                    sumar()
                     __CorreoAlternativo()
+                    __CambiarEstado()
+                    sumar()
                     __EnviarCorreos()
                 }else{
                     __InformacionDataTable();
@@ -858,9 +772,6 @@ __Busqueda(){
                 console.log(xhr);
             }
         });
-
-     }
-
 }
 
 function sumar(){
@@ -893,29 +804,7 @@ function redondearDecimales(numero, decimales) {
 }
 
 
-/**
-*  Obtiene la lista de los clientes activos
-**/
-function listaClientesActivos(){
-    self.clientes                  = {data:[]}
-    self.update()
-    $.ajax({
-        url: "ListarClientesActivosAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-             if(result.aaData.length > 0){
-                 self.clientes.data = result.aaData
-                 self.update()
-                   $('.selectCliente').selectpicker();
-             } 
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
-        }
-    })
-}
+
 /*
  * Muestra los filtros avanzados
  */
@@ -983,7 +872,7 @@ function __FacturaEnEspera(factura){
 *  Cargar detalles Factura en espera
 **/
 function cargarDetallesFacturaEnEspera(){
-    self.factura.tipoDoc = __TipoDocumentos(self.factura.numeroConsecutivo,self.factura)
+    self.factura.tipoDoc = __TipoDocumentos(self.factura.id,self.factura)
     self.detail                = []
     self.factura.detalles.forEach(function(e){
         self.detail.push({
@@ -1001,12 +890,14 @@ function cargarDetallesFacturaEnEspera(){
             montoTotal      : redondearDecimales(parseFloat(e.montoTotal),5)
         });
     })
+    
     self.update()
     __comboCondicionPago()
     __ComboEstados()
     
      
 }
+
 
 
 /**
@@ -1020,6 +911,9 @@ function __ComboEstados(){
         break;
     case 2:
          self.factura.estado=  $.i18n.prop("factura.estado.facturado")
+        break;
+    case 3:
+         self.factura.estado=  $.i18n.prop("factura.estado.proforma")
         break;
 
     default:
@@ -1053,9 +947,9 @@ function __InformacionDataTable(){
 	 							    }
                                },
                              
-                               {'data' :'numeroConsecutivo'                    ,"name":"numeroConsecutivo"                     ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
-                                   "render":function(numeroConsecutivo,type, row){
-									    return __TipoDocumentos(numeroConsecutivo,row)
+                               {'data' :'id'                    ,"name":"id"                     ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
+                                   "render":function(id,type, row){
+									    return __TipoDocumentos(id,row)
 	 							    }
                                },
                                {'data' :'cliente'                    ,"name":"cliente"                     ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
@@ -1102,7 +996,9 @@ function __TipoDocumentos(numeroConsecutivo,row){
     case "03":
         return  "N.Credito:"+numeroConsecutivo
         break;
-
+    case "88":
+        return  "Proforma:"+numeroConsecutivo
+        break;
     default:
         return  numeroConsecutivo
 }
@@ -1119,13 +1015,56 @@ function __Opciones(id,type,row){
     menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
     
     menu += '<li><a href="#"  title="Mostrar" class="  btnMostrar" >Mostrar</a></li>'
-    menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
+    menu += '<li><a href="#"  title="Cambia el Estado Proforma a Venta en espera" class="  btnPendiente" >Cambiar a venta en espera</a></li>'
     menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Envio Correo</a></li>'
+    menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
     menu += '<li><a href="#"  title="Envio de correo Alternativo" class="  btnEnvioCorreoAlternativo" >Envio de correo Alternativo</a></li>'
-   menu += "</ul></div>"  
-
+    menu += "</ul></div>"  
 
      return menu;          
+}
+
+
+/**
+*  Cambiar Estado de Proforma a venta en espera
+**/
+function __CambiarEstado(){
+	$('.tableListar').on('click','.btnPendiente',function(e){
+		var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+        self.factura = data
+        self.update()
+        _actualizarEstado()
+	});
+}
+
+function _actualizarEstado(){
+    $.ajax({
+        url: "CambiarEstadoProformaAPedienteAjax.do",
+        datatype: "json",
+        data: {idFactura:self.factura.id},
+        method:"POST",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                sweetAlert("", data.message, "info");
+                listado()
+            }
+            
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
+        }
+    });
 }
 
 /**
@@ -1171,7 +1110,7 @@ function __EnviarCorreos(){
 **/
 function enviarCorreoAlternativo(){
     $.ajax({
-        url: "EnviarCorreoAlternativoFacturaAjax.do",
+        url: "EnviarCorreoAlternativoProformaAjax.do",
         datatype: "json",
         data: {idFactura:self.factura.id,correo:$('.correoAlternativo').val()},
         method:"GET",
@@ -1225,7 +1164,7 @@ function __BajarPDF(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        location.href = "generaFacturaPDF?idFactura=" + data.id
+        location.href = "generaProformasPDF.do?idFactura=" + data.id
 	});
 }
 
@@ -1259,4 +1198,4 @@ function redondearDecimales(numero, decimales) {
 }
 
 </script>
-</lista-facturas>
+</lista-proformas>

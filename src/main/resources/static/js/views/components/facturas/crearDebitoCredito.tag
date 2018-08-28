@@ -118,7 +118,7 @@
                                     </div>
                                     <div  class="form-group has-success">
                                         <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
-                                        <input onkeyup={ __TotalDeTarjeta } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="form-control" id="pago_tarjeta"  value="{factura.totalTarjeta}">
+                                        <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="form-control" id="pago_tarjeta"  value="{factura.totalTarjeta}">
                                     </div>
 
                                     
@@ -1605,7 +1605,9 @@ __addProductToDetail(e){
     var codigoActual = ""
     var cantidadAct =""
     var existe = false
+     var existeMas = ""
     for(i=0; i<codigo.length; i++){
+         existeMas = codigo.charAt(i) == "+"?true : false
        if(existe == false){
           existe = codigo.charAt(i) == "*"?true : false  
           if(codigo.charAt(i) !="*"){
@@ -1617,11 +1619,48 @@ __addProductToDetail(e){
        }
         console.log("pos=", i, "valor=", codigo.charAt(i));
     }
-
+// esto es para cuando un cliente quiere sumar varios productos
+    if(existeMas == true){
+       __sumarMasArticulo(codigo)
+       return  
+    }
     __buscarcodigo(codigoActual,__valorNumerico(cantidadAct));
     $('#codigo').val(null)
     $('#codigo').focus()
 }
+
+
+/**
+*sumar mas cantidad al ultimor articulo ingresado
+**/
+function __sumarMasArticulo(codigo){
+    if(self.articulo == null){
+        return;
+    }
+    var cantidadAct =""
+    var existe = false
+    for(i=0; i<codigo.length; i++){
+       existe = codigo.charAt(i) == "+"?true : false
+       if(existe == false){
+          cantidadAct = cantidadAct + codigo.charAt(i)
+            
+       }
+        console.log("pos=", i, "valor=", codigo.charAt(i));
+    }
+   for (var count = 0; count < self.detail.length; count++) {
+        if (self.detail[count].codigo == self.articulo.codigo ){
+            self.item          = self.detail[count];
+            self.item.cantidad = self.item.cantidad + parseFloat(cantidadAct)
+            self.update();
+            ActualizarLineaDEtalle()
+            self.detail[count] = self.item;
+            self.update();
+        }
+    }
+  
+    __calculate(); 
+}
+
 /**
 * Buscar codigo
 **/
@@ -1632,10 +1671,11 @@ __agregarArticuloBotonAgregar(){
 * mostrar la lista de articulos de la empresa
 **/
 function __ListaDeArticulosPorEmpresa(){
+    if(self.articulos.data.length == 0){
     $.ajax({
-        url: 'ListarArticuloAjax.do',
+        url: 'ListarArticulosActivosAjax.do',
         datatype: "json",
-        method:"GET",
+        method:"POST",
         success: function (result) {
             if(result.aaData.length > 0){
                 _informacionData_Articulo()
@@ -1653,6 +1693,11 @@ function __ListaDeArticulosPorEmpresa(){
             mensajeErrorServidor(xhr, status);
         }
     });
+    }else{
+        $('#modalInventario').modal('show')    
+        
+    }
+
 }
 /**
 *  Muestra la lista de clientes
@@ -1717,7 +1762,7 @@ function __ListaDeClientes(){
 * Buscar el codigo del codigo  en la base de datos
 **/
 function __buscarcodigo(idArticulo,cantidad){
-    self.articulo = null;
+  //  self.articulo = null;
     $.ajax({
         type: 'GET',
         url: 'findArticuloByCodigojax.do',
@@ -1765,7 +1810,7 @@ function __agregarArticulo(cantidad){
         encontrado = true;
     }else{//Se busca el articulo si existe se incrementa la cantidad
         for (var count = 0; count < self.detail.length; count++) {
-            if (self.detail[count].articulo_id == self.articulo.id ){
+            if (self.detail[count].codigo == self.articulo.codigo ){
                self.item          = self.detail[count];
                self.item.cantidad = self.item.cantidad + parseFloat(cantidad)
                self.update();
@@ -2070,7 +2115,7 @@ function __calculate() {
     self.factura.totalImpuesto           = redondearDecimales(__valorNumerico(totalImpuesto),5)
     self.factura.totalVentaNeta          = redondearDecimales(__valorNumerico(totalVenta-totalDescuento),5)
     self.factura.totalComprobante        = redondearDecimales(__valorNumerico(totalComprobante),5)
-    self.articulo              = null;
+   // self.articulo              = null;
     self.update(); 
     $( "#codigo" ).val(null);
     $( "#quantity" ).val(null);
@@ -2134,7 +2179,11 @@ function __agregarArticulos() {
 	     }
         self.articulo = data;
         self.update();  
-	    __buscarcodigo(self.articulo.codigo,1)
+	     if(self.articulo.contable == "si"){
+           __buscarcodigo(self.articulo.codigo,1)
+        }else{
+            __agregarArticulo(1)
+        }
     });
 }
 

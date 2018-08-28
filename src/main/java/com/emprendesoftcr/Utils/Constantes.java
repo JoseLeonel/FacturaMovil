@@ -7,9 +7,17 @@ public class Constantes {
 	public static final ResourceBundle	RESOURCE_BUNDLE																			= ResourceBundle.getBundle("factura");
 
 	// Semaforo
-	public static final Integer					SEMAFORO_ESTADO_ACTIVO															= 1;
-	public static final Integer					SEMAFORO_ESTADO_INACTIVO														= 2;
-	public static final Integer					SEMAFORO_ESTADO_REINTENTOS													= 3;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 30;
+	
+	public static final Integer					SEMAFORO_ESTADO_REINTENTOS															= 3;
+	public static final Integer					SEMAFORO_ESTADO_FIRMADO															= 1;
+	public static final Integer					SEMAFORO_ESTADO_ENVIO																= 2;
+	public static final Integer					SEMAFORO_ESTADO_COMPROBAR_DOCUMENTOS								= 3;
+	public static final Integer					SEMAFORO_ESTADO_ENVIAR_CORREOS											= 4;
+
+	public static final String					IDP_URI_PRODUCCION																	= "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut/protocol/openid-connect";
+	public static final String					IDP_URI_DOCUMENTOS_PRODUCCION												= "https://api.comprobanteselectronicos.go.cr/recepcion/v1/recepcion";
+	public static final String					IDP_CLIENT_ID_PRODUCCION														= "api-prod";
 
 	// Consecutivo inicial de las empresa
 	public static final Integer					CONSECUTIVO_INICIAL_FACTURA													= 0000000001;
@@ -71,7 +79,7 @@ public class Constantes {
 	public static final String					HACIENDA_ESTADO_ENVIADO_HACIENDA_str								= "Documento eviado a hacienda.";
 	public static final String					HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR								= "OK";
 	public static final String					HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR							= "ERROR";
-	public static final String					HACIENDA_ESTADO_ACEPTADO_RECIBIDO							= "recibido";
+	public static final String					HACIENDA_ESTADO_ACEPTADO_RECIBIDO										= "recibido";
 	public static final Integer					HACIENDA_ESTADO_ACEPTACION_HACIENDA_TOPE_REINTENTOS	= 8;
 	// Hacienda
 	public static final Integer					HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE								= 1;
@@ -142,7 +150,7 @@ public class Constantes {
 	public static final String					EMPTY																								= "";
 	public static final String					BLANK																								= " ";
 	public static final Integer					ZEROS																								= 0;
-	public static final Long					ZEROS_LONG																								= 0l;
+	public static final Long						ZEROS_LONG																					= 0l;
 	public static final Float						ZEROS_FLOAT																					= 0F;
 	public static final Double					ZEROS_DOUBLE																				= 0D;
 	public static final String					SEMI_COLON																					= ";";
@@ -207,7 +215,7 @@ public class Constantes {
 	public static final String					DATE_FORMAT5																				= "yyyy-MM-dd 00:00:00";
 	public static final String					DATE_FORMAT6																				= "yyyy-MM-dd";
 	public static final String					DATE_FORMAT4																				= "yyyyMMdd";
-	
+
 	public static final String					DATE_FORMAT_TIME																		= "HH:mm:ss";
 	public static final String					DATE_FORMAT_TIME2																		= "HH:mm";
 	public static final String					DATE_FORMAT_MIN																			= "00/00/0000 ";
@@ -259,11 +267,14 @@ public class Constantes {
 	public static final String					FACTURA_CONDICION_VENTA_CREDITO_STR									= "factura.codicion.venta.credito";
 
 	public static final String					FACTURA_TIPO_DOC_TIQUETE														= "04";
+	public static final String					FACTURA_TIPO_DOC_PROFORMAS													= "88";
+	public static final String					FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO								= "87";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_ELECTRONICA								= "01";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO								= "02";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO								= "03";
-
 	public static final String					FACTURA_TIPO_DOC_TIQUETE_STR												= "factura.tipo.documento.factura.tiquete";
+	public static final String					FACTURA_TIPO_DOC_PROFORMAS_STR											= "factura.tipo.documento.factura.proforma";
+	public static final String					FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO_STR						= "factura.tipo.documento.factura.tiquete.uso.interno";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_ELECTRONICA_STR						= "factura.tipo.documento.factura.electronica";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_STR						= "factura.tipo.documento.nota.debito";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO_STR						= "factura.tipo.documento.nota.credito";
@@ -281,11 +292,11 @@ public class Constantes {
 	public static final Integer					FACTURA_ESTADO_PENDIENTE														= 1;
 	public static final Integer					FACTURA_ESTADO_PROFORMAS														= 3;
 	public static final Integer					FACTURA_ESTADO_FACTURADO														= 2;
+	public static final Integer					FACTURA_ESTADO_TIQUETE_USO_INTERNO									= 4;
 
-	public static final Integer					FACTURA_ESTADO_FIRMA_PENDIENTE														= 1;
-	public static final Integer					FACTURA_ESTADO_FIRMA_COMPLETO														= 2;
+	public static final Integer					FACTURA_ESTADO_FIRMA_PENDIENTE											= 1;
+	public static final Integer					FACTURA_ESTADO_FIRMA_COMPLETO												= 2;
 
-	
 	public static final String					FACTURA_ESTADO_PENDIENTE_STR												= "factura.estado.pendiente";
 	public static final String					FACTURA_ESTADO_FACTURADO_STR												= "factura.estado.facturado";
 

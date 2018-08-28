@@ -10,7 +10,6 @@ import com.emprendesoftcr.Bo.ProvinciaBo;
 import com.emprendesoftcr.Dao.ProvinciaDao;
 import com.emprendesoftcr.modelo.Provincia;
 
-@Lazy
 @Transactional
 @EnableTransactionManagement
 @Service("provinciaBo")

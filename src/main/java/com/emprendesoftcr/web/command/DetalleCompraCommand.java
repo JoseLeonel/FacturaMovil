@@ -10,6 +10,7 @@ public class DetalleCompraCommand {
 	private String			descripcion;
 	private Double	cantidad;
 	private Double	costo;
+	private Double	precio;
 	private Double	impuesto;
 	private Double	descuento;
 	private Double	subTotal;
@@ -102,5 +103,17 @@ public class DetalleCompraCommand {
 	public void setArticulo(Articulo articulo) {
 		this.articulo = articulo;
 	}
+
+	
+	public Double getPrecio() {
+		return precio;
+	}
+
+	
+	public void setPrecio(Double precio) {
+		this.precio = precio;
+	}
+	
+	
 
 }

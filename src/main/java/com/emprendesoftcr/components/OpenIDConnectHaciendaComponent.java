@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.fisco.ClientPost;
 import com.emprendesoftcr.fisco.OpenIDConnectHacienda;
 import com.emprendesoftcr.fisco.TokenInfo;
@@ -72,6 +73,8 @@ public class OpenIDConnectHaciendaComponent {
 		try {
 			TokenInfo tokenInfo = getTokenUrlHacienda(empresa);
 			
+			
+			
 			openIDConnectHacienda.setAccess_token(tokenInfo.getAccessToken());
 			openIDConnectHacienda.setRefresh_token(tokenInfo.getRefreshToken());
 			
@@ -87,8 +90,18 @@ public class OpenIDConnectHaciendaComponent {
 	private TokenInfo getTokenUrlHacienda(Empresa empresa) {
 		ClientPost clientPost = null;
 		MultivaluedMap multivaluedMap = asMap(empresa);
-
-		Map response = send(this.IDP_URI + "/token", multivaluedMap, MediaType.APPLICATION_FORM_URLENCODED_TYPE, ImmutableMap.of("Accept", "application/json", "User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2"));
+    
+		String idp_uri = Constantes.EMPTY;
+		
+		if(empresa.getEstadoProduccion() !=null) {
+			if(empresa.getEstadoProduccion().equals(Constantes.ESTADO_ACTIVO)) {
+				idp_uri = Constantes.IDP_URI_PRODUCCION;
+			}else {
+				idp_uri = this.IDP_URI;
+			}
+		}
+		
+		Map response = send(idp_uri + "/token", multivaluedMap, MediaType.APPLICATION_FORM_URLENCODED_TYPE, ImmutableMap.of("Accept", "application/json", "User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2"));
 		String body = (String) response.get(POST_RESPONSE);
 		int statusCode = (int) response.get(POST_STATUS_CODE);
 		if (statusCode < 300) {
@@ -130,8 +143,16 @@ public class OpenIDConnectHaciendaComponent {
 	 */
 	private MultivaluedMap asMap(Empresa empresa) {
 		MultivaluedMap<String, String> formData = new MultivaluedMapImpl();
+		String idp_client_id = Constantes.EMPTY;
+		if(empresa.getEstadoProduccion() !=null) {
+			if(empresa.getEstadoProduccion().equals(Constantes.ESTADO_ACTIVO)) {
+				idp_client_id = Constantes.IDP_CLIENT_ID_PRODUCCION;
+			}else {
+				idp_client_id = this.IDP_CLIENT_ID;
+			}
+		}
 		formData.add(GRANT_TYPE, "password");
-		formData.add(CLIENT_ID, IDP_CLIENT_ID);
+		formData.add(CLIENT_ID, idp_client_id);
 		formData.add(USER_NAME, empresa.getUsuarioEnvioComprobante());
 		formData.add(PASSWORD, empresa.getPasswordEnvioComprobante());
 		return formData;
@@ -149,7 +170,16 @@ public class OpenIDConnectHaciendaComponent {
 				ImmutableMap<String, String> headers = ImmutableMap.of("Accept", "application/json", "Authorization", ("Bearer " + openIDConnectHacienda.getAccess_token()), "User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 				MultivaluedMap multivaluedMap = asMap(empresa);
 				Client client = Client.create();
-				WebResource webResource = client.resource(this.IDP_URI+"//logout");
+				String idp_uri = Constantes.EMPTY;
+				if(empresa.getEstadoProduccion() !=null) {
+					if(empresa.getEstadoProduccion().equals(Constantes.ESTADO_ACTIVO)) {
+						idp_uri = Constantes.IDP_URI_PRODUCCION;
+					}else {
+						idp_uri = this.IDP_URI;
+					}
+				}
+				
+				WebResource webResource = client.resource(this.IDP_URI+"/logout");
 				WebResource.Builder resBuilder = webResource.type(MediaType.APPLICATION_FORM_URLENCODED_TYPE);
 				for (Map.Entry<String, String> entry : headers.entrySet()) {
 					resBuilder = resBuilder.header(entry.getKey(), entry.getValue());

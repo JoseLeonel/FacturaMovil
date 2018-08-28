@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.modelo.Usuario;
@@ -13,10 +14,11 @@ import com.emprendesoftcr.service.UsuarioService;
 
 @Service("usuarioService")
 @Transactional
+@EnableTransactionManagement
 public class UsuarioServiceImpl implements UsuarioService {
 
 	@Autowired
-	UsuarioRepository usuarioRepository;
+	private UsuarioRepository usuarioRepository;
 	
 	
 

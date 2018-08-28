@@ -32,4 +32,21 @@ public class SemaforoDaoImp implements SemaforoDao {
 		}
 	}
 
+	@Override
+	public Semaforo findByEstado(Integer estado) {
+		Query query = entityManager.createQuery("select obj from Semaforo obj where obj.estado = :estado");
+		query.setParameter("estado", estado);
+		List<Semaforo> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (Semaforo) results.get(0);
+		} else {
+			return null;
+		}
+		
+	}
+@Override	
+public 	void modificar(Semaforo semaforo) {
+		entityManager.merge(semaforo);
+		
+	}
 }

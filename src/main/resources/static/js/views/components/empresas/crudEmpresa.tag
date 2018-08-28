@@ -213,10 +213,24 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label">{$.i18n.prop("empresa.estado")}</label>
                                 <select  class="form-control" id="estado" name="estado" >
                                     <option  each={estados}  value="{codigo}" selected="{empresa.estado ==codigo?true:false}" >{descripcion}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label">{$.i18n.prop("empresa.lector")}</label>
+                                <select  class="form-control" id="tieneLector" name="tieneLector" >
+                                
+                                    <option  each={estados}  value="{codigo}" selected="{empresa.tieneLector ==codigo?true:false}" >{descripcion}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label">{$.i18n.prop("empresa.cambia.precio")}</label>
+                                <select  class="form-control" id="cambiarPrecio" name="cambiarPrecio" >
+                                
+                                    <option  each={estados}  value="{codigo}" selected="{empresa.cambiarPrecio ==codigo?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
                         </div>

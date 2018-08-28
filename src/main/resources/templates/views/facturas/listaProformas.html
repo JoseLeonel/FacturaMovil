@@ -5,21 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <!-- Meta -->
 	<meta http-equiv="Content-Type" content="text/html; UTF-8">
-    <title>Ventas</title>
+    <title>Lista de Facturas</title>
     
        <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
 
 	<!-- jQuery UI 1.11.4 -->
 	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 	<!-- JQUERY Properties-->
-	<script th:src="@{/dist/js/jquery-qrcode-0.14.0.js}"></script>
-	<script type="text/javascript" src="js/jquery.i18n.js"></script>
+	<script type="text/javascript" src="@{js/jquery.i18n.js}"></script>
 	<script type="text/javascript" th:src="@{webjars/jquery-i18n-properties/1.10.2/jquery.i18n.properties.min.js}"></script>
-    <script type="text/javascript" src="/js/jquery.blockUI.js"></script>
-	<script type="text/javascript" src="/js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="@{/js/jquery.blockUI.js}"></script>
+	<script type="text/javascript" src="@{/js/jquery.validate.min.js}"></script>
 	 
 	 <!-- MASK -->
-	 <script type="text/javascript" src="js/jquery.mask.js"></script>
+	 <script type="text/javascript" src="@{js/jquery.mask.js}"></script>
+	 
+	 <script th:src="@{/js/jsonPath.js}"></script>
 	 
 	 
    <!-- SWEERT ALERT -->
@@ -27,20 +28,15 @@
 
  
     <!-- RIOT -->
-	<script src="/riot/riot.js"></script>
-	<script src="/riot/riot-compiler.min.js"></script>
-	<script src="/riot/riot.csp.js"></script>
+	<script src="@{/riot/riot.js}"></script>
+	<script src="@{/riot/riot-compiler.min.js}"></script>
+	<script src="@{/riot/riot.csp.js}"></script>
 	<!-- include riot.js and the compiler -->
 	<script src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script>
 	
-	<!-- MANTENIMIENTO DE COMPRAS -->
-	<script type="text/javascript" src="/js/jQuery.print.js"></script>
-	
 	<!-- LISTADO DE FACTURAS -->
-	<script type="text/javascript" src="/js/views/facturas/postVenta.js"></script>
-	<script type = "riot/tag"  src="/js/views/components/facturas/ventaFactura.tag" ></script>
-	<script type = "riot/tag"  src="/js/views/components/facturas/imprimirPTV.tag" ></script>
-	<script type = "riot/tag"  src="/js/views/components/facturas/imprimirTiquete.tag" ></script>
+	<script type="text/javascript" src="/js/views/facturas/listarProformas.js"></script>
+	<script type = "riot/tag"  src="/js/views/components/facturas/proFormas.tag" ></script>
 	
     
 </head>
@@ -50,9 +46,7 @@
 
 </section>
 <div layout:fragment="content">
-    <venta-factura></venta-factura>
-    <ptv-imprimir></ptv-imprimir>
-    <tiquete-imprimir></tiquete-imprimir>
+    <lista-proformas></lista-proformas>
 </div>
 
 </body>

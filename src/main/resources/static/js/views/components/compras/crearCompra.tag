@@ -14,7 +14,7 @@
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("compra.forma.pago")} </label> 
-                                        <select  onchange= {__formaPago} class="form-control" id="formaPago" >
+                                        <select  onchange= {__formaPago} class="form-control formaPago" id="formaPago" >
                                             <option each={comboFormaPagos} value="{estado}" selected="{compra.formaPago ==estado?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>
@@ -23,7 +23,7 @@
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
                                     <div class="form-group ">
                                         <label for="pago_tipoVentaL">{$.i18n.prop("compra.tipo.documento")} </label> 
-                                        <select class="form-control" id="tipoDocumento" name="tipoDocumento"   >
+                                        <select class="form-control tipoDocumento" id="tipoDocumento" name="tipoDocumento"   >
                                             <option each={comboTipoDocumentos} value="{estado}" selected="{compra.tipoDocumento ==estado?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>
@@ -32,7 +32,7 @@
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
                                     <div class="form-group ">
                                         <label for="pago_tipoVentaL">{$.i18n.prop("compra.estado")} </label> 
-                                        <select class="form-control" id="estado" name="estado"  >
+                                        <select class="form-control estado" id="estado" name="estado"  >
                                             <option each={comboEstados} value="{estado}" selected="{compra.estado ==estado?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>
@@ -43,7 +43,7 @@
                                     <div class="form-group ">
                                         <input   type="hidden" class="form-control" id="proveedor" name="proveedor" value="{proveedor.id}">
                                         <label>{$.i18n.prop("compra.proveedor")}</label> 
-                                        <input onclick = {_EscogerProveedores}  type="text" id="nombreProveedor" name="nombreProveedor" class="form-control"  value="{proveedor.nombreCompleto}">
+                                        <input onclick = {_EscogerProveedores}  type="text" id="nombreProveedor" name="nombreProveedor" class="proveedor form-control"  value="{proveedor.nombreCompleto}">
                                     </div>
                                 </div>
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
@@ -56,7 +56,7 @@
                                     <div  class="form-group">
                                         <label>{$.i18n.prop("compra.fecha.compra")}</label> 
                                         <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
-                                            <input type="text" class="form-control" id="fechaCompra" name = "fechaCompra" value="{compra.fechaCompra}" >
+                                            <input type="text" class="form-control fechaCompra" id="fechaCompra" name = "fechaCompra" value="{compra.fechaCompra}" >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
                                             </div>
@@ -71,7 +71,7 @@
                                     <div show = {!mostrarCamposIngresoContado || compra.fechaCredito} class="form-group has-success">
                                         <label >{$.i18n.prop("compra.fecha.credito")}</label> 
                                         <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
-                                            <input type="text" class="form-control" id="fechaCredito" value="{compra.fechaCredito}" >
+                                            <input type="text" class="form-control fechaCredito" id="fechaCredito" value="{compra.fechaCredito}" >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
                                             </div>
@@ -83,7 +83,7 @@
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                     <div class="form-group ">
                                         <label >{$.i18n.prop("compra.nota")}</label> 
-                                        <input type="text" class="form-control" id="nota" name="nota" value="{compra.nota}">
+                                        <input type="text" class="form-control nota" id="nota" name="nota" value="{compra.nota}">
                                     </div>
                                 </div>
                             </div>
@@ -143,6 +143,7 @@
                             <th style="width:20%;">{$.i18n.prop("compra.linea.detalle.descripcion")}                  </th>
                             <th >{$.i18n.prop("compra.linea.detalle.cantidad")}  </th>
                             <th >{$.i18n.prop("compra.linea.detalle.costo")}     </th>
+                             <th >{$.i18n.prop("compra.linea.detalle.precio")}     </th>
                             <th >{$.i18n.prop("compra.linea.detalle.descuento")} </th>
                             <th >{$.i18n.prop("compra.linea.detalle.impuesto")}  </th>
                             <th >{$.i18n.prop("compra.linea.detalle.subTotal")}  </th>
@@ -163,6 +164,9 @@
                                 <input  onkeypress={__actualizarCosto} class="form-control" type="text"  value = "{costo}" />
                             </td>
                             <td class="text-right">
+                                <input  onkeypress={__actualizarPrecio} class="form-control" type="text"  value = "{precio}" />
+                            </td>
+                            <td class="text-right">
                                 <input  onkeypress={__actualizarDescuento} class="form-control" type="text"  value = "{descuento}" />
                             </td>
                                                         
@@ -171,7 +175,7 @@
                             </td>
 
                             <td class="text-right">
-                                <input  class="form-control" type="text"  value = "₡  {subTotal}" readonly/>
+                                <input  class="form-control" type="text"  value = "{subTotal}" readonly/>
                             </td>
                         </tr>
                         </tbody>
@@ -192,7 +196,7 @@
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show">₡ {compra.totalCompra}</span>
+                                                    <span class="label label-info textShadow" id="total-show">{compra.totalCompra}</span>
                                                 </div>
                                             </td>
                                         </tr>                     
@@ -585,10 +589,10 @@ __Limpiar(){
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
-    fechaCompra.value = null;
-    fechaCredito.value = null
-    nota.value = null
-    consecutivo.value = null
+    $('.fechaCompra').val(null);
+    $('.fechaCredito').val(null)
+    $('.nota').val(null)
+    $('.consecutivo').val(null)
     self.detail                = [];
     self.compra                = {
         consecutivo:"",
@@ -682,6 +686,7 @@ function cargarDetallesCompraEnEspera(){
             descripcion     : e.articulo.descripcion,
             cantidad        : parseFloat(e.cantidad),
             costo           : parseFloat(e.costo),
+            precio          : parseFloat(e.precio),
             impuesto        : e.impuesto,
             descuento       : e.descuento,
             subTotal        : parseFloat(e.subTotal)
@@ -709,6 +714,7 @@ function __nuevoArticuloAlDetalle(cantidad){
        descripcion     : self.articulo.descripcion,
        cantidad        : redondearDecimales(parseFloat(cantidad),2),
        costo           : redondearDecimales(parseFloat(self.articulo.costo),2),
+       precio          : redondearDecimales(parseFloat(self.articulo.precioPublico),2),
        impuesto        : 0,
        descuento       : 0,
        subTotal        : redondearDecimales(parseFloat(self.articulo.costo * cantidad),2)
@@ -739,18 +745,18 @@ function crearCompra(){
       var JSONDetalles = JSON.stringify( self.detalleCompra );
     var informacion = {
         id:self.compra.id,
-        nota:nota.value,
+        nota:$('.nota').val(),
         subTotal:__valorNumerico(self.compra.subTotal),
         totalDescuento:__valorNumerico(self.totalDescuentoDetalle),
         totalImpuesto:__valorNumerico(self.compra.totalImpuesto),
         totalCompra:__valorNumerico(self.compra.totalCompra),
-        formaPago:formaPago.value,
-        tipoDocumento:tipoDocumento.value,
+        formaPago:$('.formaPago').val(),
+        tipoDocumento:$('.tipoDocumento').val(),
         proveedor:self.proveedor.id,
-        consecutivo:consecutivo.value,
-        estado:estado.value,
-        fechaCredito:formaPago.value == 2?fechaCredito.value:new Date(),
-        fechaCompra:fechaCompra.value,
+        consecutivo:$('.consecutivo').val(),
+        estado:$('.estado').val(),
+        fechaCredito:$('.formaPago').val() == 2?$('.fechaCredito').val():new Date(),
+        fechaCompra:$('.fechaCompra').val(),
         detalleCompra :JSONDetalles
      }
     $.ajax({
@@ -879,7 +885,7 @@ __agregarArticuloBotonAgregar(){
 **/
 function __ListaDeArticulosPorEmpresa(){
     $.ajax({
-        url: 'ListarArticuloAjax.do',
+        url: 'ListarArticulosActivosAjax.do',
         datatype: "json",
         method:"GET",
         success: function (result) {
@@ -1055,6 +1061,26 @@ __actualizarCosto(e){
     //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
     costo =__valorNumerico(costo);
     self.item.costo = parseFloat(costo);  
+    __actualizarItemArray();
+    self.detail[index] = self.item;
+    self.update();
+    __calculate();
+}
+
+/**
+*   Actualizar el costo del codigo y recalcular la compra
+**/
+__actualizarPrecio(e){
+    if (e.keyCode != 13) {
+        return;
+    } 
+    var precio = e.currentTarget.value;
+    self.item = e.item; 
+    var input = e.input;
+    var index = self.detail.indexOf(self.item);
+    //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
+    precio =__valorNumerico(precio);
+    self.item.precio = parseFloat(precio);  
     __actualizarItemArray();
     self.detail[index] = self.item;
     self.update();

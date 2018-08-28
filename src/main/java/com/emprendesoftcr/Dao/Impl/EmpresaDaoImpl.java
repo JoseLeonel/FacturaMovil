@@ -128,7 +128,7 @@ public class EmpresaDaoImpl implements EmpresaDao {
 			}
 			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
 					consecutivo = empresa.getNotacConsecutivo();
-					empresa.setNumeroConsecutivo(empresa.getNotacConsecutivo() + 1);
+					empresa.setNotacConsecutivo(empresa.getNotacConsecutivo() + 1);
 			}
 			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
 					consecutivo = empresa.getNotadConsecutivo();

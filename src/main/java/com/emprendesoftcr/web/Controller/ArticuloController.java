@@ -1,6 +1,11 @@
 package com.emprendesoftcr.web.Controller;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,6 +43,8 @@ import com.emprendesoftcr.web.propertyEditor.CategoriaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.MarcaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
+
+
 
 /**
  * Control de los articulos de una empresa ArticuloController.
@@ -103,6 +110,24 @@ public class ArticuloController {
 	public String listarKardex(ModelMap model) {
 		return "views/articulos/ListarKardex";
 	}
+	
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarArticulosActivosAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarArticulosActivosAjax(HttpServletRequest request, HttpServletResponse response) {
+
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Articulo");
+		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+			String nombreUsuario = request.getUserPrincipal().getName();	
+			 dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			delimitadores.addFiltro(dataTableFilter);
+		}
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+	}
 
 	/**
 	 * Listar Ajax de los articulos de una empresa
@@ -111,7 +136,7 @@ public class ArticuloController {
 	 * @return
 	 */
 	@SuppressWarnings("all")
-	@RequestMapping(value = "/ListarArticuloAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@RequestMapping(value = "/ListarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
 
@@ -122,8 +147,31 @@ public class ArticuloController {
 			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
+		Long total = dataTableBo.contar(delimitadores);
+		Collection<Object> objetos = dataTableBo.listar(delimitadores);
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+    List<Object> solicitudList = new ArrayList<Object>();
+    for (Iterator<Object> iterator = objetos.iterator(); iterator.hasNext();) {
+      Articulo object = (Articulo) iterator.next();
+      // no se carga el usuario del sistema el id -1
+      if(object.getId().longValue() > 0L){ 
+              solicitudList.add(new ArticuloCommand(object));
+      }
+}
+    
+		
 
-		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+    respuestaService.setRecordsTotal(total);
+    respuestaService.setRecordsFiltered(total);
+    if (!request.getParameter("draw").equals(" ")) {
+            respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+
+    }
+
+    respuestaService.setAaData(solicitudList);
+
+    return respuestaService;
+
 	}
 
 	/**

@@ -5,10 +5,10 @@ import com.emprendesoftcr.modelo.Semaforo;
 
 public interface SemaforoDao {
 
-	
-	
-	Semaforo findByEmpresa(Empresa empresa,Integer estado);
-	
-	
+	void modificar(Semaforo semaforo);
+
+	Semaforo findByEmpresa(Empresa empresa, Integer estado);
+
+	Semaforo findByEstado(Integer estado);
 
 }

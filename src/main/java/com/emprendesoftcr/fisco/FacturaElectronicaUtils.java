@@ -120,6 +120,9 @@ public final class FacturaElectronicaUtils {
 	 * @return
 	 */
 	public static String replazarConZeros(String valor, String formato) {
+		if(valor == null) {
+			return Constantes.EMPTY;
+		}
 		return formato.substring(valor.toString().length()) + valor;
 	}
 
@@ -223,7 +226,7 @@ public final class FacturaElectronicaUtils {
           String realPK = privateKey.replaceAll("-----END PRIVATE KEY-----", "")
               .replaceAll("-----BEGIN PRIVATE KEY-----", "")
               .replaceAll("\n", "");
-          byte[] b1 = Base64.getDecoder().decode(realPK);
+          byte[] b1 = Base64.getDecoder().decode(realPK.getBytes(StandardCharsets.UTF_8));
           PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(b1);
           KeyFactory kf = KeyFactory.getInstance("RSA");
           Signature privateSignature = Signature.getInstance("SHA256withRSA");
@@ -314,6 +317,8 @@ public final class FacturaElectronicaUtils {
   	}else if(valor.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
   		return "Nota de débito";
   		
+  	}else if(valor.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+  		return "Proforma";
   	}
   	
   	return Constantes.EMPTY;

@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.FacturaBo;
-import com.emprendesoftcr.Bo.TipoCambioBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.CuentaCobrarDao;
 import com.emprendesoftcr.Dao.EmpresaDao;
@@ -45,8 +44,6 @@ public class FacturaBoImpl implements FacturaBo {
 	@Autowired
 	FacturaDao										facturaDao;
 
-	@Autowired
-	private TipoCambioBo					tipoCambioBo;
 
 	@Autowired
 	private EmpresaDao						empresaDao;
@@ -174,8 +171,18 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setFechaCredito(null);
 				factura.setPlazoCredito(Constantes.ZEROS);
 			}
+			// Proformas
+			if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+				facturaCommand.setEstado(Constantes.FACTURA_ESTADO_PROFORMAS);
 
-			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
+			}
+			// TIQUETE USO INTERNO
+			if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO)) {
+				facturaCommand.setEstado(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO);
+
+			}
+
+			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				factura.setReferenciaTipoDoc(facturaCommand.getReferenciaTipoDoc());
 				factura.setReferenciaNumero(facturaCommand.getReferenciaNumero());
 				factura.setReferenciaCodigo(facturaCommand.getReferenciaCodigo());
@@ -196,6 +203,7 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setCliente(facturaCommand.getCliente());
 			factura.setFechaEmision(new Date());
 			factura.setMedioEfectivo(Constantes.EMPTY);
+			factura.setNombreFactura(facturaCommand.getNombreFactura());
 
 			if (facturaCommand.getTotalEfectivo() > Constantes.ZEROS_DOUBLE) {
 				factura.setMedioEfectivo(Constantes.MEDIO_PAGO_EFECTIVO);
@@ -236,25 +244,26 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setTotalCambio(facturaCommand.getTotalCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambio());
 			factura.setTotalCambioPagar(facturaCommand.getTotalCambioPagar() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambioPagar());
 
-			factura.setTipoCambio(tipoCambio.getTotal());
-			factura.setCambioMoneda(tipoCambioBo.conversionMoneda(factura.getTotalVentaNeta(), tipoCambio));
 			factura.setCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
 			factura.setTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
 			factura.setEstado(facturaCommand.getEstado());
-			factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
+			
+			if(factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO) || facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ) {
+				factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);	
+			}else {
+				factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
+			}
+			
 
 			if (factura.getId() == Constantes.ZEROS_LONG) {
 				factura.setCreated_at(new Date());
 			}
 
-			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-				factura.setFechaEmision(new Date());
-				factura.setUpdated_at(new Date());
-
-			}
+			factura.setFechaEmision(new Date());
 
 			// Generar el consecutivo de venta
 			if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+					
 				factura.setNumeroConsecutivo(empresaDao.generarConsecutivoFactura(facturaCommand.getEmpresa(), usuario, factura));
 				factura.setClave(empresaDao.generaClaveFacturaTributacion(factura.getEmpresa(), factura.getNumeroConsecutivo(), FacturaElectronicaUtils.COMPROBANTE_ELECTRONICO_NORMAL));
 			}
@@ -267,7 +276,7 @@ public class FacturaBoImpl implements FacturaBo {
 			}
 
 			// Se asocia a la caja si la factura
-			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
 				if (factura.getTotalEfectivo().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalBanco().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalTarjeta().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalCredito().equals(Constantes.ZEROS_DOUBLE)) {
 					if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 						factura.setTotalEfectivo(facturaCommand.getTotalEfectivo());
@@ -280,7 +289,10 @@ public class FacturaBoImpl implements FacturaBo {
 				usuarioCajaFactura.setFactura(factura);
 				usuarioCajaFactura.setUsuarioCaja(usuarioCaja);
 				usuarioCajaFacturaDao.agregar(usuarioCajaFactura);
-				usuarioCajaDao.actualizarCaja(usuarioCaja, factura.getTotalEfectivo(), factura.getTotalTarjeta(), factura.getTotalBanco(), factura.getTotalCredito(), Constantes.ZEROS_DOUBLE);
+				if (!factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
+					usuarioCajaDao.actualizarCaja(usuarioCaja, factura.getTotalEfectivo(), factura.getTotalTarjeta(), factura.getTotalBanco(), factura.getTotalCredito(), Constantes.ZEROS_DOUBLE);
+				}
+
 			}
 
 			JSONObject json = null;
@@ -312,9 +324,21 @@ public class FacturaBoImpl implements FacturaBo {
 					numeroLinea += 1;
 					factura.addDetalle(detalle);
 					modificar(factura);
+					//Si el lector esta activo modifica el precio
+					if(factura.getEmpresa().getCambiarPrecio().equals(Constantes.ESTADO_ACTIVO)) {
+						Double resultadoImpuesto = Constantes.ZEROS_DOUBLE;
+						Double precioUnitario = detalle.getPrecioUnitario();
+						if(detalle.getImpuesto() > Constantes.ZEROS_DOUBLE) {
+							resultadoImpuesto = detalle.getMontoImpuesto() / detalle.getCantidad();
+						}
+						precioUnitario = precioUnitario + resultadoImpuesto;
+						articulo.setPrecioPublico(precioUnitario);
+						articuloDao.modificar(articulo);
+					}
+					
 
 					if (articulo != null) {
-						if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+						if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
 							aplicarInventario(factura, detalle, articulo);
 						}
 
@@ -323,8 +347,11 @@ public class FacturaBoImpl implements FacturaBo {
 				}
 			}
 			// Crear Credito del cliente
-			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) && factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
-				cuentaCobrarDao.crearCuentaXCobrar(factura);
+			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
+				if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+					cuentaCobrarDao.crearCuentaXCobrar(factura);
+				}
+				
 			}
 
 		} catch (Exception e) {
@@ -343,7 +370,7 @@ public class FacturaBoImpl implements FacturaBo {
 	private void aplicarInventario(Factura factura, Detalle detalle, Articulo articulo) throws Exception {
 		try {
 			if (factura.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
-				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
 					if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
 						String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO + factura.getNumeroConsecutivo();
 						kardexDao.entrada(articulo, articulo.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());

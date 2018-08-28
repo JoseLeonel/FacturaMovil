@@ -13,16 +13,17 @@ import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Lazy;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.fisco.OpenIDConnectHacienda;
 import com.emprendesoftcr.service.OpenIDConnectHaciendaService;
 
-@Lazy
 @Service("openIDConnectHaciendaService")
 @Transactional
+@EnableTransactionManagement
 public class OpenIDConnectHaciendaServiceImpl implements OpenIDConnectHaciendaService {
 	
 	private static final String IDP_URI = "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut-stag/protocol/openid-connect";

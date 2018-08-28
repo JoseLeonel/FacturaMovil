@@ -10,13 +10,13 @@
                 <form id = "formulario" name ="formulario " class="advanced-search-form">
                     <div class="row">
                         <div class="col-md-6 col-sx-6 col-sm-6 col-lg-6">
-                            <label class="knob-label">{$.i18n.prop("usuario.contrasena")} &nbsp<span class="requeridoDato">*</span></label>
+                            <label >{$.i18n.prop("usuario.contrasena")} &nbsp<span class="requeridoDato">*</span></label>
                             <input type="text" class="form-control " placeholder = "{$.i18n.prop("usuario.contrasena")}" title="{$.i18n.prop("usuario.contrasena")}" name="password" id= "password"   maxlength="55">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sx-6 col-sm-6 col-lg-6">
-                            <label class="knob-label">{$.i18n.prop("usuario.contrasena.confirmar")} &nbsp<span class="requeridoDato">*</span></label>
+                            <label >{$.i18n.prop("usuario.contrasena.confirmar")} &nbsp<span class="requeridoDato">*</span></label>
                             <input type="text" class="form-control " placeholder = "{$.i18n.prop("usuario.contrasena.confirmar")}" title="{$.i18n.prop("usuario.contrasena.confirmar")}" name="passwordConfirm" id= "passwordConfirm"    maxlength="55">
                         </div>
                     </div>

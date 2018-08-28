@@ -56,14 +56,14 @@
                         </div>
                         <div class="row">
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label" >{$.i18n.prop("marca.descripcion")}  <span class="requeridoDato">*</span></label>
+                                <label  >{$.i18n.prop("marca.descripcion")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" class="form-control descripcion" placeHolder ="{$.i18n.prop("marca.descripcion")}" id="descripcion" name="descripcion" value="{marca.descripcion}"  >
 
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label">{$.i18n.prop("marca.estado")}</label>
+                                <label >{$.i18n.prop("marca.estado")}</label>
                                 <select  class="form-control" id="estado" name="estado" >
                                     <option  each={estados}  value="{codigo}" selected="{marca.estado ==codigo?true:false}" >{descripcion}</option>
                                 </select>

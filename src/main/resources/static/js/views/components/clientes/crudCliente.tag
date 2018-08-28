@@ -13,7 +13,6 @@
                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th class="table-header" >{$.i18n.prop("cliente.provincia")}         </th>
                                 <th class="table-header" >{$.i18n.prop("cliente.empresa")}          </th>
                                 <th class="table-header" >{$.i18n.prop("cliente.cedula")}            </th>
                                 <th class="table-header" >{$.i18n.prop("cliente.nombreCompleto")}    </th>
@@ -27,7 +26,6 @@
                         </thead>
                         <tfoot style="display: table-header-group;">
                             <tr>
-                                <th>{$.i18n.prop("cliente.provincia")}         </th>
                                 <th>{$.i18n.prop("cliente.empresa")}          </th>
                                 <th>{$.i18n.prop("cliente.cedula")}            </th>
                                 <th>{$.i18n.prop("cliente.nombreCompleto")}    </th>
@@ -62,56 +60,56 @@
                         </div>
                         <div class="row">
                              <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("cliente.nombreCompleto")}  <span class="requeridoDato">*</span></label>
+                                <label  >{$.i18n.prop("cliente.nombreCompleto")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" class="form-control nombreCompleto" placeHolder ="{$.i18n.prop("cliente.nombreCompleto")}" id="nombreCompleto" name="nombreCompleto" value="{cliente.nombreCompleto}"  >
 
                             </div>
                              <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("cliente.tipoCedula")}  <span class="requeridoDato">*</span></label>
+                                <label  >{$.i18n.prop("cliente.tipoCedula")}  <span class="requeridoDato">*</span></label>
                                  <select  class="form-control" id="tipoCedula" name="tipoCedula" >
                                     <option  each={tipoCedulas.data}  value="{valor}" selected="{cliente.tipoCedula ==valor?true:false}"  >{descripcion}</option>
                                 </select>
                             </div>                            
                              <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("cliente.cedula")} <span class="requeridoDato">*</span></label>
+                                <label  >{$.i18n.prop("cliente.cedula")} <span class="requeridoDato">*</span></label>
                                 <input type="text" class="form-control cedula" id="cedula" name="cedula" placeHolder ="{$.i18n.prop("cliente.cedula")}" value="{cliente.cedula}"  >
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("cliente.nombreComercial")} </label>
+                                <label  >{$.i18n.prop("cliente.nombreComercial")} </label>
                                 <input type="text" class="form-control nombreComercial" placeHolder ="{$.i18n.prop("cliente.nombreComercial")}" id="nombreComercial" name="nombreComercial" value="{cliente.nombreComercial}"  >
                             </div>
                             
                         </div>
                         <div class="row">
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("cliente.codigoPais")} <span class="requeridoDato">*</span> </label>
+                                <label  >{$.i18n.prop("cliente.codigoPais")} <span class="requeridoDato">*</span> </label>
                                 <input type="text" class="form-control codigoPais" placeHolder ="{$.i18n.prop("cliente.codigoPais.ejemplo")}" id="codigoPais" name="codigoPais" value="{cliente.codigoPais}"  >
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("cliente.telefono")} </label>
+                                <label  >{$.i18n.prop("cliente.telefono")} </label>
                                 <input type="text" class="form-control telefono" placeHolder ="{$.i18n.prop("cliente.telefono")}" id="telefono" name="telefono" value="{cliente.telefono}"  >
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("cliente.celular")} </label>
+                                <label  >{$.i18n.prop("cliente.celular")} </label>
                                 <input type="text" class="form-control celular" placeHolder ="{$.i18n.prop("cliente.celular")}" id="celular" name="celular" value="{cliente.celular}"  >
                             </div>
                         
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("cliente.descuento")} </label>
+                                <label  >{$.i18n.prop("cliente.descuento")} </label>
                                 <input type="number" class="form-control descuento" placeHolder ="{$.i18n.prop("cliente.descuento")}" id="descuento" name="descuento" value="{cliente.descuento}"  >
                             </div>
 
                         </div>
                         <div class="row">
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("cliente.provincia")} </label>
+                                <label  >{$.i18n.prop("cliente.provincia")} </label>
                                 <select onchange= {__cargaCantones}  class="form-control" id="provincia" name="provincia" >
                                     <option    value="0"  >{$.i18n.prop("combo.seleccionar")}</option>
                                     <option  each={provincias.data}  value="{codigo}" selected="{cliente.provincia ==codigo?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("cliente.canton")} </label>
+                                <label  >{$.i18n.prop("cliente.canton")} </label>
                                 <select onchange= {__cargaDistritos}    class="form-control" id="canton" name="canton" >
                                     <option    value="0"  >{$.i18n.prop("combo.seleccionar")}</option>
                                     <option  each={cantones.data}  value="{codigo}" selected="{cliente.canton ==codigo?true:false}" >{descripcion}</option>
@@ -119,14 +117,14 @@
                             </div>
 
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("cliente.distrito")} </label>
+                                <label  >{$.i18n.prop("cliente.distrito")} </label>
                                 <select  onchange= {__cargaBarrios}    class="form-control" id="distrito" name="distrito" >
                                     <option    value="0"  >{$.i18n.prop("combo.seleccionar")}</option>
                                     <option  each={distritos.data}  value="{codigo}" selected="{cliente.distrito ==codigo?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("cliente.barrio")} </label>
+                                <label  >{$.i18n.prop("cliente.barrio")} </label>
                                 <select     class="form-control" id="barrio" name="barrio" >
                                     <option    value="0"  >{$.i18n.prop("combo.seleccionar")}</option>
                                     <option  each={barrios.data}  value="{codigo}" selected="{cliente.barrio ==codigo?true:false}" >{descripcion}</option>
@@ -137,26 +135,26 @@
                         <div class="row">    
 
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("cliente.identificacionExtranjero")}</label>
+                                <label  >{$.i18n.prop("cliente.identificacionExtranjero")}</label>
                                 <input type="text" class="form-control identificacionExtranjero" placeHolder ="{$.i18n.prop("cliente.identificacionExtranjero")}" id="identificacionExtranjero" name="identificacionExtranjero" value="{cliente.identificacionExtranjero}"  >
                             </div>
                             
                              <div class= "col-md-9 col-sx-12 col-sm-9 col-lg-9">
-                                <label class="knob-label" >{$.i18n.prop("cliente.correoElectronico")}</label>
+                                <label  >{$.i18n.prop("cliente.correoElectronico")}</label>
                                 <input type="text" class="form-control correoElectronico" placeHolder ="{$.i18n.prop("cliente.correoElectronico")}" id="correoElectronico" name="correoElectronico" value="{cliente.correoElectronico}"  >
                             </div>
                         </div>
 
                         <div class="row">    
                             <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label" >{$.i18n.prop("cliente.otraSena")}</label>
+                                <label  >{$.i18n.prop("cliente.otraSena")}</label>
                                 <textarea maxlength="250" placeHolder ="{$.i18n.prop("cliente.otraSena")}" class="form-control otraSena" id="otraSena" name="otraSena" value="{cliente.otraSena}" > </textarea> 
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label">{$.i18n.prop("cliente.estado")}</label>
+                                <label >{$.i18n.prop("cliente.estado")}</label>
                                 <select  class="form-control" id="estado" name="estado" >
                                     <option  each={estados}  value="{codigo}" selected="{cliente.estado ==codigo?true:false}" >{descripcion}</option>
                                 </select>
@@ -614,19 +612,7 @@ function __Eventos(){
 *  Regresar al listado
 **/
 __regresarAlListado(){
-    swal({
-        title: "", 
-        text: $.i18n.prop("mensaje.alert.regresar.listado"), 
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: '#00539B',
-        cancelButtonColor: '#d33',
-        confirmButtonText:$.i18n.prop("confirmacion.si"),
-        cancelButtonText: $.i18n.prop("confirmacion.no"),
-        confirmButtonClass: 'btn btn-success',
-        cancelButtonClass: 'btn btn-danger'
-        }).then(function (isConfirm) {
-            if(isConfirm){
+  
                 self.mostrarListado     = true;
                 self.botonAgregar       = false;
                 self.botonModificar     = false;
@@ -635,8 +621,6 @@ __regresarAlListado(){
                _incializarCampos()
                 __listado();
 
-            }
-    });    
 }
 
 /**
@@ -752,7 +736,6 @@ function __listado(){
 **/
 function __InformacionDataTable(){
     self.informacion_tabla = [ 
-                            {'data' :'provinciaSTR'       ,"name":"provinciaSTR"         ,"title" : $.i18n.prop("cliente.provincia")          ,"autoWidth" :true },
                             {'data' :'empresa.nombre'     ,"name":"empresa.nombre"       ,"title" : $.i18n.prop("cliente.empresa")           ,"autoWidth" :false },
                             {'data' :'cedula'             ,"name":"cedula"               ,"title" : $.i18n.prop("cliente.cedula")             ,"autoWidth" :false },
                             {'data' :'nombreCompleto'     ,"name":"nombreCompleto"       ,"title" : $.i18n.prop("cliente.nombreCompleto")     ,"autoWidth" :false },
@@ -845,9 +828,18 @@ function __consultar(){
                         $('.nombreComercial').val(self.cliente.nombreComercial)
                         __ComboEstados()
                         __Eventos()
-                        _ConsultarCantonesByProvincias(self.cliente.provincia)
-                        _ConsultarDistritosByCanton(self.cliente.provincia,self.cliente.canton)
-                        _ConsultarBarriosByDistrito(self.cliente.provincia,self.cliente.distrito,self.cliente.canton)
+                        if(self.cliente.provincia.length > 0){
+                          _ConsultarCantonesByProvincias(self.cliente.provincia)
+                            if(self.cliente.canton.length > 0){
+                            _ConsultarDistritosByCanton(self.cliente.provincia,self.cliente.canton)
+                            }
+                            if(self.cliente.canton.length > 0){
+                              _ConsultarBarriosByDistrito(self.cliente.provincia,self.cliente.distrito,self.cliente.canton) 
+                            }
+
+                        }
+                        
+                        
                     });
                 }
             }
@@ -891,11 +883,11 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 9    ){
+        if ( $(this).index() != 8    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
          // Select
-    	if ($(this).index() == 8  ){
+    	if ($(this).index() == 7  ){
     	    var select = $('<select id="combo" class="form-control"><option value="">Todos</option></select>');
     	    // se cargan los valores por defecto que existen en el combo
     	   	select.append( '<option value="'+$.i18n.prop("estado.Activo")+'">'+$.i18n.prop("estado.Activo")+'</option>' );

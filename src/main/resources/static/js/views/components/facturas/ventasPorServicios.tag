@@ -1132,9 +1132,9 @@ function __ListaDeArticulosPorEmpresa(){
     self.articulos             = {data:[]}
     self.update()
     $.ajax({
-        url: 'ListarArticuloAjax.do',
+        url: 'ListarArticulosActivosAjax.do',
         datatype: "json",
-        method:"GET",
+        method:"POST",
         success: function (result) {
             if(result.aaData.length > 0){
                 self.articulos.data           = result.aaData
