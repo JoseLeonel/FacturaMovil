@@ -251,7 +251,6 @@ private String getDescuento(Double descuento) throws Exception {
    */
 private String xmlImpuestos(Detalle detalle) throws Exception {
   	String resultado = Constantes.EMPTY;
-  	String valorTipoImpuesto = Constantes.EMPTY;
   	try {
     	if(detalle.getMontoImpuesto()>0) {
         resultado = "<Impuesto>" +

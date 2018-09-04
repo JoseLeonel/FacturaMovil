@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.UsuarioCajaDao;
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 
@@ -102,18 +103,18 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 	}
 	
 	private Double getTotalNeto( Double totalEfectivo, Double totalTarjeta, Double totalBanco,  Double totalAbono) {
-		
-		Double total  = totalEfectivo + totalTarjeta + totalBanco + totalAbono;
-		Double totalNeto=  new Double(total.toString());
-		
-		return totalNeto;
+		Double resultado = totalEfectivo ==null?Constantes.ZEROS_DOUBLE:totalEfectivo;
+		resultado +=totalTarjeta ==null?Constantes.ZEROS_DOUBLE:totalTarjeta;
+		resultado += totalAbono ==null?Constantes.ZEROS_DOUBLE:totalAbono;
+		resultado += totalBanco ==null?Constantes.ZEROS_DOUBLE:totalBanco;
+		return resultado;
 		
 	}
 	
 	private Double sumarTotalCredito(Double totalCredito,Double monto) {
-		Double resultado = totalCredito + monto;
-		
-		return new Double(resultado.toString());
+		Double resultado = totalCredito ==null?Constantes.ZEROS_DOUBLE:totalCredito;
+		resultado +=monto ==null?Constantes.ZEROS_DOUBLE:monto;
+		return resultado;
 	}
 
 }

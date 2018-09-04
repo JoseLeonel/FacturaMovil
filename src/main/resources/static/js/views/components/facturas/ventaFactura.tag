@@ -3,8 +3,9 @@
         <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
         <div class="box-tools ">
             <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
-            <a class="pull-left" href="#"     onclick = {__MostrarFormularioDePago}  title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
-            <a class="pull-left" href="#"    onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
+            <a class="pull-left" href="#"    onclick = {__ImprimirTiquete}  title="{$.i18n.prop("imprimir.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f7")}</span></a>
+            <a class="pull-left" href="#"    onclick = {__MostrarFormularioDePago}  title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
+            <a class="pull-left" href="#"    onclick= { __CrearFacturaTemporal}  title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
             <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
             <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
         </div>
@@ -312,6 +313,46 @@
 
 
 <!--Modal Cambiar Cantidad-->
+
+
+<!-- Modal correo alternativo-->
+<div class="modal fade" id="ModalAgregarNombreTiquete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          
+                <h1 class="box-title"><i class="btn-correo"></i>&nbsp {$.i18n.prop("hacienda.titulo.correo.alternativo")}     </h1>
+          
+      </div>
+      <div class="modal-body">
+        <form id = "formulario" name ="formulario "   class="advanced-search-form">
+            <div class="row">   
+                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                    <label class="knob-label" >{$.i18n.prop("hacienda.correo")}</label>
+                    <input type="email" class="form-control correoAlternativo" placeHolder ="{$.i18n.prop("hacienda.correo.ejemplo")}" id="correoAlternativo" name="correoAlternativo" value=""  >
+                </div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <div class="row">
+            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                <button onclick ={__regresarAlListadoAlternativo}  type="button" class="btn-dark-gray btn-back  pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                    {$.i18n.prop("btn.volver")}
+                </button>
+            </div>
+            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                <button  onclick={__Enviar}   class="btn-green btn-correo pull-right" >  {$.i18n.prop("btn.enviar.correo")}</button>
+            </div>
+         </div>
+       
+      </div>
+    </div>
+  </div>
+</div>
+<!--fin Modal agregar el nombre de el tiquete temporal-->
+
+<!--Modal Cambiar Cantidad-->
 <div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
        <div class="modal-content">
@@ -454,7 +495,7 @@
 </div>
 <!--fin del modal-->
 <!--Modal mostrar Clientes de una sucursal -->
-<<div id="modalClientes" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div id="modalClientes" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header with-border table-header" >
@@ -706,139 +747,139 @@
 
 
 
-.label-totales{
-        font-weight: 600 !important;
-        font-size: 30px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #30ed17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        padding-left: 20px;
-        line-height: 30px;
-        border-collapse: separate;
+    .label-totales{
+            font-weight: 600 !important;
+            font-size: 30px !important;
+            font-family: Roboto,sans-serif !important;
+            color: #30ed17 !important;
+            text-shadow: 0px 0px 1px #ffffff;
+            font-style: italic;
+            text-align: left;
+            padding-left: 20px;
+            line-height: 30px;
+            border-collapse: separate;
+            text-align: center;
+            cursor: pointer;
+            padding: 10px;
+            margin: 20px;
+            border: none;
+            text-align: center !important;
+            background-color: black !important;
+            box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+            border-radius: 5px;
+            -webkit-transition: background-color 100ms linear;
+            -moz-transition: background-color 100ms linear;
+            -o-transition: background-color 100ms linear;
+            -ms-transition: background-color 100ms linear;
+            transition: background-color 100ms linear;
+            
+        }
+    .label-limpiar{
+            font-weight: 600 !important;
+            font-size: 20px !important;
+            font-family: Roboto,sans-serif !important;
+            color: #ffffff !important;
+            text-shadow: 0px 0px 1px #ffffff;
+            font-style: italic;
+            text-align: left;
+            padding-left: 20px;
+            line-height: 30px;
+            border-collapse: separate;
+            text-align: center;
+            cursor: pointer;
+            padding: 5px;
+            margin: 10px;
+            border: none;
+            text-align: center !important;
+            background-color: black !important;
+            box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+            border-radius: 5px;
+            -webkit-transition: background-color 100ms linear;
+            -moz-transition: background-color 100ms linear;
+            -o-transition: background-color 100ms linear;
+            -ms-transition: background-color 100ms linear;
+            transition: background-color 100ms linear;
+            
+        }
+        .label-articulos{
+            font-weight: 300 !important;
+            font-size: 10px !important;
+            font-family: Roboto,sans-serif !important;
+            color: #30ed17 !important;
+            text-shadow: 0px 0px 1px #ffffff;
+            font-style: italic;
+            text-align: left;
+            padding-left: 5px;
+            line-height: 10px;
+            border-collapse: separate;
+            text-align: left;
+            cursor: pointer;
+            padding: 5px;
+            margin: 10px;
+            border: none;
+            text-align: left !important;
+            background-color: black !important;
+            box-shadow: 0 0px 2px 0 rgba(0, 0, 0, 0.1), 0 1px 4px 0 rgba(0, 0, 0, 0.20);
+            border-radius: 1px;
+            -webkit-transition: background-color 100ms linear;
+            -moz-transition: background-color 100ms linear;
+            -o-transition: background-color 100ms linear;
+            -ms-transition: background-color 100ms linear;
+            transition: background-color 100ms linear;
+            
+        }
+        .label-titulos-articulo{
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            font-family: Roboto,sans-serif !important;
+            color: #30ed17 !important;
+            text-shadow: 0px 0px 1px #ffffff;
+            font-style: italic;
+            text-align: left;
+            padding-left: 15px;
+            line-height: 25px;
+            border-collapse: separate;
+            text-align: center;
+            cursor: pointer;
+            padding: 5px;
+            margin: 10px;
+            border: none;
+            text-align: center !important;
+            background-color: black !important;
+            box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+            border-radius: 5px;
+            -webkit-transition: background-color 100ms linear;
+            -moz-transition: background-color 100ms linear;
+            -o-transition: background-color 100ms linear;
+            -ms-transition: background-color 100ms linear;
+            transition: background-color 100ms linear;
+            
+        }
+    .fondoEncabezado {
+            background: #00539B;
+            color: #f9fafc;
+        }
+        
+        .wrap{
+            max-width:1100;
+            width:90%;
+            margin:auto;
+        }
+        .wrap >h1{
+            color: #494B4D;
+        font-weight: 400;
+        display: flex;
+        flex-direction: column;
         text-align: center;
-        cursor: pointer;
-        padding: 10px;
-        margin: 20px;
-        border: none;
-        text-align: center !important;
-        background-color: black !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 5px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-        
+        margin: 15px 0px;
+        }
+        .wrap > h1:after{
+        content: '';
+        width: 100%;
+        height: 1px;
+        background: #C7C7C7;
+        margin: 20px 0;
     }
- .label-limpiar{
-        font-weight: 600 !important;
-        font-size: 20px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #ffffff !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        padding-left: 20px;
-        line-height: 30px;
-        border-collapse: separate;
-        text-align: center;
-        cursor: pointer;
-        padding: 5px;
-        margin: 10px;
-        border: none;
-        text-align: center !important;
-        background-color: black !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 5px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-        
-    }
-    .label-articulos{
-        font-weight: 300 !important;
-        font-size: 10px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #30ed17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        padding-left: 5px;
-        line-height: 10px;
-        border-collapse: separate;
-        text-align: left;
-        cursor: pointer;
-        padding: 5px;
-        margin: 10px;
-        border: none;
-        text-align: left !important;
-        background-color: black !important;
-        box-shadow: 0 0px 2px 0 rgba(0, 0, 0, 0.1), 0 1px 4px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 1px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-        
-    }
-    .label-titulos-articulo{
-        font-weight: 600 !important;
-        font-size: 14px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #30ed17 !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        padding-left: 15px;
-        line-height: 25px;
-        border-collapse: separate;
-        text-align: center;
-        cursor: pointer;
-        padding: 5px;
-        margin: 10px;
-        border: none;
-        text-align: center !important;
-        background-color: black !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 5px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-        
-    }
-  .fondoEncabezado {
-        background: #00539B;
-        color: #f9fafc;
-    }
-    
-    .wrap{
-        max-width:1100;
-        width:90%;
-        margin:auto;
-    }
-    .wrap >h1{
-        color: #494B4D;
-	font-weight: 400;
-	display: flex;
-	flex-direction: column;
-	text-align: center;
-	margin: 15px 0px;
-    }
-    .wrap > h1:after{
-	content: '';
-	width: 100%;
-	height: 1px;
-	background: #C7C7C7;
-	margin: 20px 0;
-}
     .pantalla-imprimir{
         display: flex;
 	    flex-wrap: wrap;
@@ -2956,8 +2997,15 @@ __Imprimir(){
 * Imprimir tikete
 **/
 __ImprimirTiquete(){
+    imprimirTiquete()
+}
+/**
+*imprimir tiquete
+**/
+function imprimirTiquete(){
     var factura = self.factura
     riot.mount('tiquete-imprimir',{factura:factura});
+    
 }
 /**
 *  Obtiene el valor de lo digitado en el campo de efectivo
@@ -3478,7 +3526,7 @@ __formaPago(e){
 *   funcion para grabar la Factura en el back end
 **/
 __MostrarFormularioDePago(){
-    self.mostarParaCrearNuevaVentas = false
+    
     mostrarPAgo()
 }
 
@@ -3489,7 +3537,7 @@ function mostrarPAgo(){
         swal("Verificar","No hay detalles en la factura ", "info")
         return
     }
-    
+    self.mostarParaCrearNuevaVentas = false
     $('#totalEfectivo').val(null)
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
@@ -4389,12 +4437,18 @@ function __Teclas(){
             aplicarFactura(2)   
         }  
    
-    }   
+    }  
+    //alert(tecla) 
      //Factura en espera
     if(tecla ==120){
       aplicarFactura(1)   
     }
+    //F7
+    if(tecla ==118){
+      imprimirTiquete()   
+    }
     
+
     //Limpiar
     if(tecla ==121){
       __Init()
