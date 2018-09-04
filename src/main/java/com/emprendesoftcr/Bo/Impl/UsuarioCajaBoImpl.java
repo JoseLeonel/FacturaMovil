@@ -70,9 +70,13 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 			usuarioCaja.setUpdated_at(new Date());
 			usuarioCaja.setEstado(Constantes.ESTADO_INACTIVO);
 			Double resultado = Constantes.ZEROS_DOUBLE;
-			resultado = usuarioCaja.getTotalBanco() +  usuarioCaja.getTotalEfectivo() +  usuarioCaja.getTotalTarjeta() + usuarioCaja.getTotalFondoInicial();
+			Double totalEfectivo = usuarioCaja.getTotalEfectivo() == null?Constantes.ZEROS_DOUBLE:usuarioCaja.getTotalEfectivo();
+			Double totalBanco = usuarioCaja.getTotalBanco() == null?Constantes.ZEROS_DOUBLE:usuarioCaja.getTotalBanco();
+			Double fondoInicial = usuarioCaja.getTotalFondoInicial() ==null?Constantes.ZEROS_DOUBLE:usuarioCaja.getTotalFondoInicial();
+			Double totalTarjeta = usuarioCaja.getTotalTarjeta() ==null?Constantes.ZEROS_DOUBLE:usuarioCaja.getTotalTarjeta();
+			resultado = totalEfectivo+totalEfectivo+totalTarjeta+fondoInicial+totalBanco;
 			usuarioCaja.setTotalNeto(resultado);
-			agregar(usuarioCaja);
+			modificar(usuarioCaja);
 
 		} catch (Exception e) {
 			log.info("** Error  aplicar cierreCaja : " + e.getMessage() + " fecha " + new Date());

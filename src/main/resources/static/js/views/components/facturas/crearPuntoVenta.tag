@@ -33,13 +33,13 @@
                                     </div>
                                     <div class="form-group ">
                                         <label >{$.i18n.prop("factura.nota")}</label> 
-                                        <input type="text" class="form-control nota" id="nota" name="nota" value="{factura.nota}">
+                                        <input type="text" class="campo nota" id="nota" name="nota" value="{factura.nota}">
                                     </div>
                                     <h3> <p class="text-primary">{$.i18n.prop("factura.emisor")}</p></h3>
                                     <div class="form-group ">
                                         <input   type="hidden" class="form-control" id="cliente" name="cliente" value="{cliente.id}">
                                         <label>{$.i18n.prop("factura.cliente")}</label> 
-                                        <input onclick = {_EscogerClientes}  type="text" id="nombreCliente" name="nombreCliente" class="form-control"  value="{cliente.nombreCompleto}" readonly>
+                                        <input onclick = {_EscogerClientes}  type="text" id="nombreCliente" name="nombreCliente" class="campo"  value="{cliente.nombreCompleto}" readonly>
                                     </div>
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("cliente.correoElectronico")}</label> 
@@ -47,17 +47,17 @@
                                     </div>                                    
                                    <div class="form-group ">
                                         <label>{$.i18n.prop("factura.correoAlternativo")}</label> 
-                                        <input type="email" id="correoAlternativo" name="correoAlternativo" class="form-control"  value="" >
+                                        <input type="email" id="correoAlternativo" name="correoAlternativo" class="campo"  value="" >
                                     </div>
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("factura.nombreFactura")}</label> 
-                                        <input type="text" id="nombreFactura" name="nombreFactura" class="form-control"  value="{factura.nombreFactura}" >
+                                        <input type="text" id="nombreFactura" name="nombreFactura" class="campo"  value="{factura.nombreFactura}" >
                                     </div>
                                     
                                     <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group ">
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 
                                         <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
-                                            <input type="text" class="form-control fechaCredito" name="fechaCredito" id="fechaCredito" value="{factura.fechaCredito}" >
+                                            <input type="text" class="campo fechaCredito" name="fechaCredito" id="fechaCredito" value="{factura.fechaCredito}" >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
                                             </div>
@@ -65,7 +65,7 @@
                                     </div>    
                                     <div class="form-group " show = {!mostrarCamposIngresoContado || factura.fechaCredito}>
                                         <label>{$.i18n.prop("factura.plazoCredito")}</label> 
-                                        <input type="number" id = "plazoCredito"  name "plazoCredito" class="form-control plazoCredito" value="{factura.plazoCredito}" >
+                                        <input type="number" id = "plazoCredito"  name "plazoCredito" class="campo plazoCredito" value="{factura.plazoCredito}" >
                                     </div>
                                     
                                    
@@ -74,15 +74,15 @@
                                 <div  class= "col-md-6 col-sx-6 col-sm-6 col-lg-6" >
                                     <div class="form-group has-success">
                                         <label for="pago_transporteL">{$.i18n.prop("factura.resumen.efectivo")} </label> 
-                                        <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo" value="{factura.totalEfectivo}">
+                                        <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="campo tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo" value="{factura.totalEfectivo}">
                                     </div>
                                     <div  class="form-group has-success">
                                         <label for="pago_efectivoL">{$.i18n.prop("factura.resumen.tarjeta")} </label> 
-                                        <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"  value="{factura.totalTarjeta}" >
+                                        <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="campo tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"  value="{factura.totalTarjeta}" >
                                     </div>
                                     <div  class="form-group has-success">
                                         <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
-                                        <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="form-control" id="totalBanco"  value="{factura.totalBanco}"  value="{factura.totalBanco}">
+                                        <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="campo" id="totalBanco"  value="{factura.totalBanco}"  value="{factura.totalBanco}">
                                     </div>
 
                                     
@@ -143,17 +143,17 @@
                         <aside class="right-sidebar">
                             <!--Booking details-->
                             <article class="booking-details clearfix">
-                                <h3><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h3>
+                                <h1><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h1>
                                 <div class="booking-info">
-                                    <p style="text-align:right">{$.i18n.prop("factura.resumen.subTotal")} : <span id="lblSubtotal"> {subTotalGeneral.toLocaleString('de-DE')  } </span></p>
-                                    <p style="text-align:right">{$.i18n.prop("factura.resumen.descuento")} : <span id="lblSubtotal"> {factura.totalDescuentos.toLocaleString('de-DE')} </span></p>
-                                    <p style="text-align:right">{$.i18n.prop("factura.resumen.impuesto")}  : <span id="lblSubtotal"> {factura.totalImpuesto.toLocaleString('de-DE')} </span></p>
+                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.subTotal")}  <span id="lblSubtotal"> {subTotalGeneral.toLocaleString('de-DE')  } </span></p>
+                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {factura.totalDescuentos.toLocaleString('de-DE')} </span></p>
+                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {factura.totalImpuesto.toLocaleString('de-DE')} </span></p>
                                 </div>
                                 <div class="precioTotalFactura">
-                                    <p class="total" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}  : <span id="lblTotal">{factura.totalComprobante.toLocaleString('de-DE')}</span></p>
+                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{factura.totalComprobante.toLocaleString('de-DE')}</span></p>
                                 </div>
                                 <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado}>
-                                    <p class="total" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{factura.totalCambioPagar.toLocaleString('de-DE')}</span></p>    
+                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{factura.totalCambioPagar.toLocaleString('de-DE')}</span></p>    
                                 </div>
                             </article>
                         </aside>
@@ -175,7 +175,7 @@
                   <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">  
                   <div class="box-tools ">
                    <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
-                    <a class="pull-left" href="#"     title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
+                    <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago}   title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
                     <a class="pull-left" href="#"    onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
                     
                     <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
@@ -189,11 +189,11 @@
             <div  class="contenedor-factura " >
                 <div class="cabecera-izquierda">
                     <div class="row">
-                            <div class="col-sx-12 col-sm-6 col-md-6 col-lg-6">
-                                <input onkeypress={__addProductToDetail}  id="codigo" name ="codigo" class="form-control codigo" type="text" placeholder="XXXXXXXXXXX" />
+                            <div class="col-sx-12 col-sm-6 col-md-6 col-lg-6 has-success">
+                                <input onkeypress={__addProductToDetail}  id="codigo" name ="codigo" class="campo codigo" type="text" placeholder="XXXXXXXXXXX" />
                             </div>
-                            <div class="col-sx-12 col-sm-4 col-md-4 col-lg-4">
-                                <input onkeypress={__addPrecioDetail}  id="precioVenta" name ="precioVenta" class="form-control precioVenta" type="number" step="any"  placeholder="Precio Ejemplo:600" />
+                            <div class="col-sx-12 col-sm-4 col-md-4 col-lg-4 has-success">
+                                <input onkeypress={__addPrecioDetail}  id="precioVenta" name ="precioVenta" class="campo precioVenta" type="number" step="any"  placeholder="Precio Ejemplo:600" />
                             </div>
 
                             <div class="col-sx-12 col-sm-2 col-md-2 col-lg-2">
@@ -207,14 +207,14 @@
                         <thead>
                         <tr>
                             <th style="width:5%;">                                                   </th>
-                            <th>{$.i18n.prop("factura.linea.detalle.linea")}                         </th>
-                            <th>{$.i18n.prop("factura.linea.detalle.codigo")}                        </th>
-                            <th style="width:20%;">{$.i18n.prop("factura.linea.detalle.descripcion")} </th>
-                            <th >{$.i18n.prop("factura.linea.detalle.cantidad")}                     </th>
-                            <th >{$.i18n.prop("factura.linea.detalle.precio")}                       </th>
-                            <th >{$.i18n.prop("factura.linea.detalle.descuento")}                    </th>
-                            <th >{$.i18n.prop("factura.linea.detalle.impuesto")}                     </th>
-                            <th >{$.i18n.prop("factura.linea.detalle.subTotal")}                     </th>
+                            <th><h1>{$.i18n.prop("factura.linea.detalle.linea")}</h1>                     </h1>    </th>
+                            <th><h1>{$.i18n.prop("factura.linea.detalle.codigo")}                        </h1></th>
+                            <th style="width:20%;"><h1>{$.i18n.prop("factura.linea.detalle.descripcion")} </h1></th>
+                            <th style="width:8%;"><h1>{$.i18n.prop("factura.linea.detalle.cantidad")}                    </h1> </th>
+                            <th ><h1>{$.i18n.prop("factura.linea.detalle.precio")}                       </h1></th>
+                            <th ><h1>{$.i18n.prop("factura.linea.detalle.descuento")}                    </h1></th>
+                            <th ><h1>{$.i18n.prop("factura.linea.detalle.impuesto")}                     </h1></th>
+                            <th ><h1>{$.i18n.prop("factura.linea.detalle.subTotal")}                    </h1> </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -222,25 +222,25 @@
                             <td>
                                 <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
                             </td>
-                            <td>{numeroLinea}</td>
-                            <td>{codigo}</td>
-                            <td>{descripcion}</td>
-                            <td class="text-right">
-                                <input onclick={__CambiarCantidad} id= "cantidadDetalle" class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad} readonly />
+                            <td><h1>{numeroLinea}</h1></td>
+                            <td><h2>{codigo}</h1></td>
+                            <td><h2>{descripcion}</h2></td>
+                            <td class="text-right" style="width:8%;">
+                                <input onclick={__CambiarCantidad} id= "cantidadDetalle" class="campo " type="number" placeholder="Cantidad Detalle" value = {cantidad} readonly />
                             </td>
                             <td class="text-right">
-                                <input   class="form-control" type="text"  value = "{precioUnitario.toLocaleString('de-DE')}" readonly />
+                                <input   class="campo" type="text"  value = "{precioUnitario.toLocaleString('de-DE')}" readonly />
                             </td>
                             <td class="text-right">
-                                <input  onclick={__CambiarDescuento} class="form-control" type="text"  value = "{porcentajeDesc.toLocaleString('de-DE')}" readonly/>
+                                <input  onclick={__CambiarDescuento} class="campo" type="text"  value = "{porcentajeDesc.toLocaleString('de-DE')}" readonly/>
                             </td>
                                                         
                             <td class="text-right">
-                                <input  class="form-control" type="text"  value = "{impuesto.toLocaleString('de-DE')}" readonly/>
+                                <input  class="campo" type="text"  value = "{impuesto.toLocaleString('de-DE')}" readonly/>
                             </td>
 
                             <td class="text-right">
-                                <input  class="form-control" type="text"  value = "{montoTotalLinea.toLocaleString('de-DE')}" readonly/>
+                                <input  class="campo" type="text"  value = "{montoTotalLinea.toLocaleString('de-DE')}" readonly/>
                             </td>
                         </tr>
                         </tbody>
@@ -425,7 +425,7 @@
                             <th>{$.i18n.prop("vendedor.celular")}          </th>
                             <th>                                           </th>
                         </tr>
-                    </tfoot>                    
+                    </tfoot>                0046500005602    
                 </table>
             </div>
             <div class="modal-footer">
@@ -491,6 +491,30 @@
 <!--Fin Cambiar Descuento-->
 
 <style type="text/css">
+    .campo {
+        display: block;
+        width: 100%;
+        height: 45px;
+        padding: 8px 18px;
+        font-size: 10px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        background-color: #fcfcfc;
+        border: 1px solid #ccc;
+        font: 20px verdana, arial, helvetica, sans-serif;
+        margin: 2px 0;
+        padding: 1px 2px;
+        overflow: visible;
+    }
     /* Lista de facturas en espera*/
     .cabecera-derecha .lista-factura-espera{
         width:100%;
@@ -553,6 +577,34 @@
         cursor: pointer;
         padding: 5px;
         margin: 10px;
+        border: none;
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+        
+    }
+
+    .label-totales{
+        font-weight: 600 !important;
+        font-size: 30px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        padding-left: 20px;
+        line-height: 30px;
+        border-collapse: separate;
+        text-align: center;
+        cursor: pointer;
+        padding: 10px;
+        margin: 20px;
         border: none;
         text-align: center !important;
         background-color: black !important;
@@ -672,12 +724,12 @@
     }
     .precioTotalFactura{
         font-weight:bold;
-        font-size:30px;
+        font-size:45px;
         color: #0C9C22;
         border-top: 1px solid #DFDCD1;
         padding: 0 0 5px;
-        padding: 15px 0 0;
-        margin: 10px 0 0;
+        padding: 25px 0 0;
+        margin: 15px 0 0;
     }
     label {
         display: inline-block;
@@ -875,6 +927,12 @@ function _Empresa(){
 
 }
 
+
+
+
+/**
+* LLimpiar Formulario
+**/
 __LimpiarFormulario(){
     $(".plazoCredito").val(null)   
     $(".fechaCredito").val(null)   
@@ -1445,13 +1503,16 @@ function aplicarFactura(estado){
                 }
                 var montoEntregado = self.factura.totalTarjeta + self.factura.totalBanco + self.factura.totalEfectivo
                 montoEntregado = __valorNumerico(montoEntregado)
-                if(self.factura.totalComprobante > montoEntregado  ){
+                var resultado = __valorNumerico(self.factura.totalComprobante)
+                if(resultado > montoEntregado  ){
                     mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
                     return
                 }
                 //Si el cliente esta pagando con tajeta, banco debe ser igual a la venta
-                if(self.factura.totalTarjeta != 0 || self.factura.totalBanco !=0){
-                    if(self.factura.totalComprobante != montoEntregado  ){
+                var tarjeta = __valorNumerico(self.factura.totalTarjeta)
+                var banco = __valorNumerico(self.factura.totalBanco)
+                if(tarjeta != 0 || banco !=0){
+                    if(resultado != montoEntregado  ){
                         mensajeError($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
                     return
                         
@@ -1864,7 +1925,7 @@ __addPrecioDetail(e){
     if (e.keyCode != 13) {
         return;
     } 
-     var codigo = $('#codigo').val()
+    var codigo = $('#codigo').val()
     var codigoActual = ""
     var cantidadAct =""
     var existe = false
@@ -2204,6 +2265,14 @@ function __nuevoArticuloAlDetalle(cantidad){
           cont = elemen.numeroLinea
         }
     )
+   // self.detail.sort(function(a,b) {
+   // if ( a.numeroLinea > b.numeroLinea )
+   //     return -1;
+   // if ( a.numeroLinea < b.numeroLinea )
+   //     return 1;
+   // return 0;
+//} );
+   
     self.update()
 }
 
@@ -2679,10 +2748,6 @@ function __ComboTipoDocumentos(){
         descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
     })
 
-    self.comboTipoDocumentos.push({
-         estado:"87",
-        descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")
-    })
     
     self.update()
 }
@@ -2751,7 +2816,7 @@ function agregarInputsCombos_Vendedores(){
 function __Teclas(){
     window.addEventListener( "keydown", function(evento){
         var tecla = evento.keyCode; 
-        //alert(tecla)
+      // alert(tecla)
     if(tecla ==119){
       if(self.mostrarFormularioPago == false && self.mostarParaCrearNuevaFactura == true){
          mostrarPAgo()     
@@ -2769,6 +2834,10 @@ function __Teclas(){
       __Init()
     }
 
+  if(tecla ==27){
+      $(".codigo").focus()
+      $(".codigo").focus()
+    }
 
    
     }, false );

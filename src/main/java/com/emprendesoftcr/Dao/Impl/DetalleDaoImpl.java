@@ -32,6 +32,7 @@ public class DetalleDaoImpl implements DetalleDao {
 
 	public void eliminar(Detalle detalle) {
 		entityManager.remove(detalle);
+		entityManager.flush();
 	}
 
 	@Override

@@ -227,8 +227,9 @@
     self.botonModificar            = false
     self.botonAgregar              = false
     self.mostrarVerDetalle         = false
+   
     self.caja = {
-        id:0,
+        id:null,
         descripcion:"",
         estado:""
     }
@@ -307,19 +308,7 @@ function __Eventos(){
 *  Regresar al listado
 **/
 __regresarAlListado(){
-    swal({
-        title: "", 
-        text: $.i18n.prop("mensaje.alert.regresar.listado"), 
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: '#00539B',
-        cancelButtonColor: '#d33',
-        confirmButtonText:$.i18n.prop("confirmacion.si"),
-        cancelButtonText: $.i18n.prop("confirmacion.no"),
-        confirmButtonClass: 'btn btn-success',
-        cancelButtonClass: 'btn btn-danger'
-        }).then(function (isConfirm) {
-            if(isConfirm){
+   
                 self.mostrarListado     = true;
                 self.botonAgregar       = false;
                 self.botonModificar     = false;
@@ -328,14 +317,17 @@ __regresarAlListado(){
                 self.update()
                 __listado();
 
-            }
-    });    
+   
 }
 // Mostrar formulario de mantenimiento Agregar
 function __MantenimientoAgregar(){
       //Inicializar el Formulario
     $('.dataTables_wrapper').on('click','.btn-agregar',function(e){
         self.caja    = {};                // modelo o domain   
+        self.usuarioCaja = {
+            id:null,
+            totalFondoInicial:0
+        }
         
         //desahabilita  listado 
         self.mostrarListado   = false;
@@ -394,20 +386,8 @@ __agregar(){
     if ($("#formulario").valid()) {
         // Permite obtener todos los valores de los elementos del form del jsp
         var formulario = $("#formulario").serialize();
-        swal({
-           title: '',
-           text: $.i18n.prop("caja.mensaje.alert.agregar"),
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: '#00539B',
-            cancelButtonColor: '#d33',
-            confirmButtonText:$.i18n.prop("confirmacion.si"),
-            cancelButtonText: $.i18n.prop("confirmacion.no"),
-            confirmButtonClass: 'btn btn-success',
-            cancelButtonClass: 'btn btn-danger',
-        }).then(function (isConfirm) {
-            //Ajax__inicializarTabla();
-            if(isConfirm){
+       
+          
                 $.ajax({
                     type : "POST",
                     dataType : "json",
@@ -448,8 +428,8 @@ __agregar(){
                         mensajeErrorServidor(xhr, status);
                     }
                 });
-            }
-        });
+          
+     
         
     }
 }
@@ -526,17 +506,17 @@ function __InformacionDataTable(){
                                },
                                {'data' : 'totalFondoInicial'        ,"name":"totalFondoInicial"  ,"title" : $.i18n.prop("usuarioCaja.fondoIncial")  ,"autoWidth" :false,
                                     "render":function(totalFondoInicial,type, row){
-                                        return "₡" + totalFondoInicial.toLocaleString('de-DE');
+                                        return    FormatoMontos(totalFondoInicial);
                                     }
                                 },
                                {'data' : 'totalNeto'     ,"name":"totalNeto"        ,"title" : $.i18n.prop("usuarioCaja.totalNeto")      ,"autoWidth" :false,
                                     "render":function(totalNeto,type, row){
-                                        return "₡" + totalNeto.toLocaleString('de-DE');
+                                        return FormatoMontos(totalNeto);
                                     }
                                },
                                {'data' : 'totalCredito'  ,"name":"totalCredito"     ,"title" : $.i18n.prop("usuarioCaja.totalCredito")      ,"autoWidth" :false,
                                     "render":function(totalCredito,type, row){
-                                        return "₡" + totalCredito.toLocaleString('de-DE');
+                                        return FormatoMontos(totalCredito);
                                     }
                                
                                },
@@ -548,6 +528,24 @@ function __InformacionDataTable(){
 	      		            }];
     self.update();
    
+}
+function FormatoMontos(valor){
+    var resultado = __valorNumerico(valor)
+
+    return resultado.toLocaleString('de-DE');
+}
+
+/**
+*  retorna el valor numerico o cero sino es numerico
+**/
+function __valorNumerico(valor){
+    return isNumber(valor)?parseFloat(valor):0 ;
+}
+/**
+*  Validar si es numero
+**/
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
 }
 /**
 *Formato de la fecha con hora
@@ -671,6 +669,7 @@ function cerrarCajaAjax(){
 	                           showCancelButton: false,
 	                           confirmButtonText: $.i18n.prop("btn.aceptar"),
 	                         })
+                             __listado()
 	                        
                         }
                     },

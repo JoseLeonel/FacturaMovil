@@ -16,7 +16,7 @@ import com.emprendesoftcr.modelo.Semaforo;
 public class SemaforoBoImpl implements SemaforoBo {
 	
 	@Autowired
-	private SemaforoDao semaforoDao;
+	SemaforoDao semaforoDao;
 
 	@Override
 	public Semaforo findByEmpresa(Empresa empresa,Integer estado) {

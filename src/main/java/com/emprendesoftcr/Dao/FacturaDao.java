@@ -19,7 +19,7 @@ public interface FacturaDao {
 	
 	void eliminarDetalleFacturaPorSP(Factura factura);
 	
-	Collection<Factura> findByEstadoFirma(Integer estadoFirma);
+	Collection<Factura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma);
 	
 	
 

@@ -468,7 +468,7 @@
         consecutivo:"",
         fechaCredito    : null,
         fechaCompra     : null,
-        id : 0,
+        id : null,
         totalImpuesto: 0,
         totalCompra:0,
         estado:0,
@@ -504,7 +504,7 @@
         __comboFormaPagos()
         __ComboTipoDocumentos()
         __ComboEstados()
-        __ListaDeArticulosPorEmpresa();
+        
         __ListaDeProveedores()
     })
 /**
@@ -598,7 +598,7 @@ function __Init(){
         consecutivo:"",
         fechaCredito    : null,
         fechaCompra     : null,
-        id : 0,
+        id : null,
         totalImpuesto: 0,
         totalCompra:0,
         estado:0,
@@ -872,7 +872,7 @@ __addProductToDetail(e){
     if (e.keyCode != 13) {
         return;
     } 
-    __buscarcodigo(e.currentTarget.value);
+    __buscarcodigo(e.currentTarget.value,1);
 }
 /**
 * Buscar codigo
@@ -887,7 +887,7 @@ function __ListaDeArticulosPorEmpresa(){
     $.ajax({
         url: 'ListarArticulosActivosAjax.do',
         datatype: "json",
-        method:"GET",
+        method:"POST",
         success: function (result) {
             if(result.aaData.length > 0){
                 _informacionData_Articulo()
@@ -942,7 +942,7 @@ function __ListaDeProveedores(){
 function __buscarcodigo(idArticulo,cantidad){
     self.articulo = null;
     $.ajax({
-        type: 'GET',
+         datatype: "json",
         url: 'findArticuloByCodigojax.do',
         method:"GET",
         data:{codigoArticulo:idArticulo},
@@ -1206,7 +1206,7 @@ function __agregarArticulos() {
 	     }
         self.articulo = data;
         self.update();  
-	    __buscarcodigo(self.articulo.id,1)
+	    __buscarcodigo(self.articulo.codigo,1)
         
  
        

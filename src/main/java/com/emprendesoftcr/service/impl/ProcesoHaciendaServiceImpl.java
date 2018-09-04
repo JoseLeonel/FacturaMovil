@@ -152,70 +152,69 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	private Logger																										log															= LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private HaciendaBo																								haciendaBo;
+	HaciendaBo																												haciendaBo;
 
 	@Autowired
-	private RespuestaHaciendaXMLService																respuestaHaciendaXMLService;
+	RespuestaHaciendaXMLService																				respuestaHaciendaXMLService;
 
 	@Autowired
-	private SemaforoBo																								semaforoBo;
+	SemaforoBo																												semaforoBo;
 
 	@Autowired
-	private CorreosBo																									correosBo;
+	CorreosBo																													correosBo;
 
 	@Autowired
-	private OpenIDConnectHaciendaComponent														openIDConnect;
+	OpenIDConnectHaciendaComponent																		openIDConnect;
 
 	@Autowired
-	private EnvioHaciendaComponent																		envioHaciendaComponent;
+	EnvioHaciendaComponent																						envioHaciendaComponent;
 
 	@Autowired
-	private FacturaBo																									facturaBo;
+	FacturaBo																													facturaBo;
 
 	@Autowired
-	private FacturaXMLServices																				facturaXMLServices;
+	FacturaXMLServices																								facturaXMLServices;
 
 	@Autowired
-	private TiqueteXMLService																					tiqueteXMLService;
+	TiqueteXMLService																									tiqueteXMLService;
 
 	@Autowired
-	private NotaCreditoXMLServices																		notaCreditoXMLServices;
+	NotaCreditoXMLServices																						notaCreditoXMLServices;
 
 	@Autowired
-	private NotaDebitoXMLService																			notaDebitoXMLService;
+	NotaDebitoXMLService																							notaDebitoXMLService;
 
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
 	// @Scheduled(cron = "*/5 * * * * ?")
-	@Scheduled(cron = "0 0/2 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 		try {
-			Boolean encontro = false;
-			Semaforo semaforo = semaforoBo.findByEstado(Constantes.SEMAFORO_ESTADO_ENVIO);
-			if (semaforo != null) {
+			log.info("Inicio Proceso de Envio de documentos  {}", new Date());
+//			Semaforo semaforo = semaforoBo.findByEstado(Constantes.SEMAFORO_ESTADO_ENVIO);
+			//if (semaforo != null) {
 
 				// Listado de los documentos Pendientes de enviar hacienda
 				Collection<Hacienda> listaHacienda = haciendaBo.findByEstado(Constantes.HACIENDA_ESTADO_FIRMARDO_XML, Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR);
 				for (Hacienda hacienda : listaHacienda) {
 					Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
-					if (haciendaBD.getReintentos() < semaforo.getMaximoReintentosEnviar()) {
-						envioHacienda(haciendaBD);
-					} else {// Si alcanza el maximo reintentos no se envia mas a la hacienda
-						haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_TOPE_REINTENTOS);
-						haciendaBD.setUpdated_at(new Date());
-						haciendaBo.modificar(haciendaBD);
-					}
-					encontro = true;
+//					if (haciendaBD.getReintentos() < semaforo.getMaximoReintentosEnviar()) {
+						envioHacienda(haciendaBD);	
+						
+
+//					} else {// Si alcanza el maximo reintentos no se envia mas a la hacienda
+//						haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_TOPE_REINTENTOS);
+//						haciendaBD.setUpdated_at(new Date());
+//						haciendaBo.modificar(haciendaBD);
+//					}
+
 				}
-				//Si encontro uno se pasa al bloque siguiente del proceso
-				if(encontro) {
-					semaforo.setEstado(Constantes.SEMAFORO_ESTADO_COMPROBAR_DOCUMENTOS);
-					semaforoBo.modificar(semaforo);
-				}
-			}
-		
+//				semaforo.setEstado(Constantes.SEMAFORO_ESTADO_COMPROBAR_DOCUMENTOS);
+//				semaforoBo.modificar(semaforo);
+			//}
+				log.info("Finaliza Proceso de Envio de documentos  {}", new Date());
 
 		} catch (Exception e) {
 			log.info("** Error  taskHaciendaEnvio: " + e.getMessage() + " fecha " + new Date());
@@ -231,6 +230,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Override
 	public void envioHacienda(Hacienda hacienda) throws Exception {
 		try {
+
 			OpenIDConnectHacienda openIDConnectHacienda = null;
 			// Obtener el token en hacienda para enviar los documentos
 			openIDConnectHacienda = openIDConnect.getToken(hacienda.getEmpresa());
@@ -239,6 +239,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				if (openIDConnectHacienda.getAccess_token().length() > 0) {
 					envioHaciendaFacturas(hacienda, openIDConnectHacienda);
 				}
+
+			} else {
+				log.info("** Error no se encontro el token   " + "Empresa:" + hacienda.getEmpresa().getNombre() + " fecha " + new Date());
 
 			}
 			// Desconectar token de hacienda
@@ -254,6 +257,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			log.info("** Error  ejecutarEnvio: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
+
 
 	}
 
@@ -322,31 +326,25 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		try {
 			log.info("Inicio Proceso de comprobacion de documentos  {}", new Date());
-      Boolean encontro = false;
-			Semaforo semaforo = semaforoBo.findByEstado(Constantes.SEMAFORO_ESTADO_COMPROBAR_DOCUMENTOS);
-			if (semaforo != null) {
+//			Semaforo semaforo = semaforoBo.findByEstado(Constantes.SEMAFORO_ESTADO_COMPROBAR_DOCUMENTOS);
+//			if (semaforo != null) {
 				// Listado de los documentos Pendientes de aceptar por hacienda
 				Collection<Hacienda> listaHacienda = haciendaBo.findByEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA, Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA);
 				for (Hacienda hacienda : listaHacienda) {
 					Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
-					if (haciendaBD.getReintentosAceptacion() < semaforo.getMaximoReintentosEnviar()) {
-						aceptarDocumento(hacienda);
-					} else {// Si alcanza el maximo reintentos de aceptacion mas a la hacienda
-						haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTACION_HACIENDA_TOPE_REINTENTOS);
-						haciendaBD.setUpdated_at(new Date());
-						haciendaBo.modificar(haciendaBD);
-					}
-					encontro = true;
+//					if (haciendaBD.getReintentosAceptacion() < semaforo.getMaximoReintentosEnviar()) {
+						aceptarDocumento(haciendaBD);
+//					} else {// Si alcanza el maximo reintentos de aceptacion mas a la hacienda
+//						haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTACION_HACIENDA_TOPE_REINTENTOS);
+//						haciendaBD.setUpdated_at(new Date());
+//						haciendaBo.modificar(haciendaBD);
+//					}
 				}
-        //Encontro elementos continua con el proceso de envios de correos 
-				if(encontro) {
-					semaforo.setEstado(Constantes.SEMAFORO_ESTADO_FIRMADO);
-					semaforoBo.modificar(semaforo);
-					
-				}
-
-
-			}
+//				// Encontro elementos continua con el proceso de envios de correos
+//					semaforo.setEstado(Constantes.SEMAFORO_ESTADO_FIRMADO);
+//					semaforoBo.modificar(semaforo);
+//
+//			}
 			log.info("Fin Proceso de comprobacion de documentos  {}", new Date());
 
 		} catch (Exception e) {
@@ -445,35 +443,34 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/6 * * * ?")
+	@Scheduled(cron = "0 0/2 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
 			log.info("Inicio Proceso de envios de correos  {}", new Date());
 
-				// Listado de los documentos Pendientes de aceptar por hacienda
-				Collection<Hacienda> listaHacienda = haciendaBo.findByEstadoAndNotificacion(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA, Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
-				for (Hacienda hacienda : listaHacienda) {
-					Factura factura = facturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
-					Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
-					if (factura != null) {
+			// Listado de los documentos Pendientes de aceptar por hacienda
+			Collection<Hacienda> listaHacienda = haciendaBo.findByEstadoAndNotificacion(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA, Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
+			for (Hacienda hacienda : listaHacienda) {
+				Factura factura = facturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
+				Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
+				if (factura != null) {
 
-						ArrayList<String> listaCorreos = new ArrayList<String>();
-						if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
-							listaCorreos.add(factura.getCliente().getCorreoElectronico());
-							if (factura.getCorreoAlternativo() != null) {
-								if (!factura.getCorreoAlternativo().equals(Constantes.EMPTY)) {
-									listaCorreos.add(factura.getCorreoAlternativo());
-								}
+					ArrayList<String> listaCorreos = new ArrayList<String>();
+					if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+						listaCorreos.add(factura.getCliente().getCorreoElectronico());
+						if (factura.getCorreoAlternativo() != null) {
+							if (!factura.getCorreoAlternativo().equals(Constantes.EMPTY)) {
+								listaCorreos.add(factura.getCorreoAlternativo());
 							}
-
 						}
-						listaCorreos.add(factura.getEmpresa().getCorreoElectronico());
-						enviarCorreos(factura, hacienda, listaCorreos);
-						haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
-						haciendaBo.modificar(haciendaBD);
-					}
 
+					}
+					listaCorreos.add(factura.getEmpresa().getCorreoElectronico());
+					enviarCorreos(factura, hacienda, listaCorreos);
+					haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
+					haciendaBo.modificar(haciendaBD);
+				}
 
 			}
 			log.info("Fin Proceso de envios de correos  {}", new Date());
@@ -558,10 +555,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	public synchronized void procesoFirmado() throws Exception {
 		try {
 			log.info("Inicio el proceso de firmado  {}", new Date());
-			Boolean encontro = false;
-			 Semaforo semaforo = semaforoBo.findByEstado(Constantes.SEMAFORO_ESTADO_FIRMADO) ;
-			if (semaforo != null) {
-				Collection<Factura> lista = facturaBo.findByEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
+//			Semaforo semaforo = semaforoBo.findByEstado(Constantes.SEMAFORO_ESTADO_FIRMADO);
+//			if (semaforo != null) {
+				Collection<Factura> lista = facturaBo.findByEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE, Constantes.FACTURA_ESTADO_REFIRMAR_DOCUMENTO);
 				for (Factura factura : lista) {
 					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 						String comprobanteXML = Constantes.EMPTY;
@@ -618,17 +614,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						if (factura != null) {
 							facturaBo.modificar(factura);
 						}
-						 encontro = true;
 
 					}
 
-				}
-				if(encontro) {
-					semaforo.setEstado(Constantes.SEMAFORO_ESTADO_ENVIO);
-					semaforoBo.modificar(semaforo);
-					
-				}
-
+//				}
+//					semaforo.setEstado(Constantes.SEMAFORO_ESTADO_ENVIO);
+//					semaforoBo.modificar(semaforo);
+//
 
 			}
 			log.info("Fin el proceso de firmado  {}", new Date());

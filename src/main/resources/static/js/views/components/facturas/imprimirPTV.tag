@@ -288,11 +288,7 @@ self.subTotalGeneral = 0
 self.on('mount',function(){
     
     if(self.facturaImpresa.id > 0){
-        self.detalles = []
-        self.detalles =self.facturaImpresa.detalles
-        self.facturaImpresa.fechaEmision = displayDate_detail(self.facturaImpresa.fechaEmision)
-        self.update()
-       $('.imprimirModal').modal('show'); 
+       consultaFactura(self.facturaImpresa.id)
     }
     getSubTotalGeneral()
     getMoneda()
@@ -304,6 +300,41 @@ self.on('mount',function(){
    
 
 })
+
+function consultaFactura(idFactura){
+
+     $.ajax({
+        url: "MostrarFacturaAjax",
+        datatype: "json",
+        data: {idFactura:idFactura},
+        method:"POST",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                    self.facturaImpresa = modeloTabla
+                    self.update()
+                     self.detalles = []
+                     self.detalles =self.facturaImpresa.detalles
+                    self.facturaImpresa.fechaEmision = displayDate_detail(self.facturaImpresa.fechaEmision)
+                    self.update()
+                  
+                    });
+                }
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+      $('.imprimirModal').modal('show'); 
+}
+
 
 
 function getMoneda() {

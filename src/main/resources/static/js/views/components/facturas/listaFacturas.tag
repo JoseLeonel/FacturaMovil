@@ -267,7 +267,7 @@
                         </thead>
                         <tbody>
                         <tr each={detail}>
-                            <td>{linea}</td>
+                            <td>{numeroLinea}</td>
                             <td>{codigo}</td>
                             <td>{descripcion}</td>
                             <td class="text-right">

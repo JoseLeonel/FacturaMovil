@@ -1,6 +1,6 @@
 <tiquete-imprimir>
 
-<div class="modal fade imprimirModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade imprimirModalTiquete" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div  class= "wrap">
@@ -238,7 +238,7 @@ self.on('mount',function(){
         self.detalles =self.facturaImpresa.detalles
         self.facturaImpresa.fechaEmision = displayDate_detail(self.facturaImpresa.fechaEmision)
         self.update()
-       $('.imprimirModal').modal('show'); 
+       $('.imprimirModalTiquete').modal('show'); 
     }
     getSubTotalGeneral()
     getMoneda()

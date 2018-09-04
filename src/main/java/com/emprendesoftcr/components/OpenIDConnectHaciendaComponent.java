@@ -71,12 +71,14 @@ public class OpenIDConnectHaciendaComponent {
 	public OpenIDConnectHacienda getToken(Empresa empresa) throws IOException {
 		OpenIDConnectHacienda openIDConnectHacienda = new OpenIDConnectHacienda();
 		try {
-			TokenInfo tokenInfo = getTokenUrlHacienda(empresa);
-			
-			
-			
-			openIDConnectHacienda.setAccess_token(tokenInfo.getAccessToken());
-			openIDConnectHacienda.setRefresh_token(tokenInfo.getRefreshToken());
+   		TokenInfo tokenInfo = getTokenUrlHacienda(empresa);
+			if(tokenInfo !=null) {
+				openIDConnectHacienda.setAccess_token(tokenInfo.getAccessToken());
+				openIDConnectHacienda.setRefresh_token(tokenInfo.getRefreshToken());
+				
+			}else {
+				log.info("** Error  NO SE OCTUVO EL TOKEN: "  + " fecha " + new Date() + " empresa:" + empresa.getNombre());
+			}
 			
 		} catch (Exception e) {
 			log.info("** Error  getToken: " + e.getMessage() + " fecha " + new Date() + " empresa:" + empresa.getNombre());
@@ -107,7 +109,7 @@ public class OpenIDConnectHaciendaComponent {
 		if (statusCode < 300) {
 			return TokenInfoJson.from(body);
 		} else if (statusCode >= 500 && statusCode < 600) {
-
+			log.info("** Error  getTokenUrlHacienda: "  + " fecha " + new Date() + " empresa:" + empresa.getNombre());          
 		} else {
 
 		}

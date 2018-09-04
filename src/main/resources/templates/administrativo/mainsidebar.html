@@ -18,7 +18,7 @@
 			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema')">                        <a href="/ListarEmpresas">   <i class="fa fa-circle-o"></i> Empresas  </a></li>
 			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><a href="/ListarClientes">   <i class="fa fa-circle-o"></i> Clientes  </a></li>
 			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><a href="/ListarVendedores"> <i class="fa fa-circle-o"></i> Vendedores</a></li>
-	  		          <li sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><a href="/ListarCajas">      <i class="fa fa-circle-o"></i> Cajas     </a></li>
+	  		          <li sec:authorize="hasAnyAuthority('Administrador_Sistema')"><a href="/ListarCajas">      <i class="fa fa-circle-o"></i> Cajas     </a></li>
 		            </ul>
 		        </li>
 		  <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')">
@@ -36,6 +36,14 @@
 		                <li><a href="/ListarKardex"         sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><i class="fa fa-circle-o"></i> Kardex           </a></li>
 		            </ul>
 		        </li>
+		        
+        <li class="active treeview">
+            <a href="/CambiarPrecio">
+                <i class="fa fa-pencil-square"></i> <span>Cambio Precio</span>
+            </a>
+        </li>    
+
+
         <li class="treeview">
             <a href="#">
                 <i class="fa fa-folder"></i>
@@ -71,11 +79,6 @@
                 <li><a href="/ListarCuentaCobrar"><i class="fa fa-circle-o"></i> Cobrar</a></li>
             </ul>
         </li>
- 		<li class="active treeview">
-            <a href="/CambioClave">
-                <i class="fa fa-user-o"></i> <span>Cambio Clave</span>
-            </a>
-        </li>    
         <li class="active treeview">
             <a href="/AbrirCajas">
                 <i class="fa fa-unlock"></i> <span>Abrir Caja</span>

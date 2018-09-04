@@ -3,7 +3,7 @@
         <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
         <div class="box-tools ">
             <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
-            <a class="pull-left" href="#"     title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
+            <a class="pull-left" href="#"     onclick = {__MostrarFormularioDePago}  title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
             <a class="pull-left" href="#"    onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
             <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
             <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
@@ -85,7 +85,7 @@
                                         <td width="10%"></td>
                                     </tr>
                                 </thead>
-                                <tbody height="50px" id="productos-detail">
+                                <tbody height="70px" id="productos-detail">
                                     <tr style="" each={detail}>
                                         <td>
                                             <span onclick ={__CambiarDescripcion} class="title-detalle text-info">
@@ -94,13 +94,13 @@
                                         <td >
                                             <span onclick ={__CambiarCantidad} class="label label-success cantidad">{cantidad.toFixed(3)}</span>
                                         </td>
-                                        <td class="contCalc">
+                                        <td >
                                             <span onclick ={__CambiarPrecio}  class="label label-success precio-prod" >{precioUnitario.toLocaleString('de-DE')}</span>
                                         </td>
-                                        <td class="contCalc">
+                                        <td >
                                             <span onclick ={__CambiarDescuento} class="label label-success precio-prod" >{porcentajeDesc.toLocaleString('de-DE')}</span>
                                         </td>
-                                        <td class="contCalc">
+                                        <td >
                                             <span class="label label-success " >{impuesto}</span>
                                         </td>
                                         <td>
@@ -119,11 +119,11 @@
                                 <tbody>
                                     <tr style="height:30px;">
                                         <td width="30%" id="bordeBevelLeft"> 
-                                            <span id="pagarInfo"> {$.i18n.prop("factura.resumen.subTotal")}: </span>
+                                            <span id="pagarInfo"> {$.i18n.prop("factura.resumen.subTotal")} </span>
                                             <span id="cantidad-total">{subTotalGeneral.toLocaleString('de-DE')  } </span> 
                                         </td>
                                         <td width="35%" id="bordeBevelLeft"> 
-                                            <span id="pagarInfo">{$.i18n.prop("factura.resumen.descuento")} : </span>
+                                            <span id="pagarInfo">{$.i18n.prop("factura.resumen.descuento")}  </span>
                                             <span id="sigPeso">   </span>
                                             <span id="iva-total">{factura.totalDescuentos.toLocaleString('de-DE')}</span> 
                                         </td>
@@ -236,15 +236,15 @@
                     <!--Seccion de categorias-->
                     <section show= {mostrarCategorias} class="lista-articulos" >
                         <div show= {mostrarCategorias} id="item-categorias"class="product-item"  each ={categorias.data}  onclick={__ArticulosXCategorias}>
-                            <img  style = "width:150px;" alt="" class="img-responsive " src="/dist/img/carrito1.png">
-                            <a href="#">{descripcion}</a>
+                            <img  style = "width:120px;" alt="" class="img-responsive " src="/dist/img/carrito1.png">
+                             <span class="label-titulos-articulo">{descripcion}</span>
                         </div>
                     </section>
                     <!--Seccion de articulos-->
                     <section show= {mostrarArticulosXCategoria} class="lista-articulos" >
                         <div class="product-item"  each ={inventariosXCategoria.data}   onclick={__AgregarProductoDePantalla}>
-                            <img  style = "width:150px;" alt="" class="img-responsive " src="/dist/img/carrito3.png">
-                            <a href="#">{descripcion}</a>
+                            <img  style = "width:80px;" alt="" class="img-responsive " src="/dist/img/carrito3.png">
+                            <span class="label-titulos-articulo">{descripcion}</span>
                         </div>
                     </section>
                     <div onclick = {__BotonAnterior} show= {mostrarNavegador}  class="pull-left btnNavegacion " >
@@ -268,7 +268,47 @@
 </div>
         <!--Fin Ventana de los productos-->
 
-  
+<!--Modal mostrar Facturas del Dias -->
+<div id='modalFacturasDia' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("factura.listar.dia")} </h4>
+            </div>
+            <div class="modal-body">
+                <table id="tableListarFacturasDia" class="display table responsive table-hover nowrap table-condensed tableListarFacturasDia "   cellspacing="0" width="100%">
+                   <thead>
+                    <tr>
+                        <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}            </th>
+                        <th class = "table-header" >{$.i18n.prop("factura.documento")}                </th>
+                        <th class = "table-header" >{$.i18n.prop("factura.cliente")}                  </th>
+                        <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
+                        <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
+                        <th class = "table-header" >{$.i18n.prop("factura.total")}                    </th>
+                        <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
+                    </tr>
+                    </thead>
+                        <tfoot style="display: table-header-group;">
+                            <tr>
+                                <th>{$.i18n.prop("factura.fecha.emision")}            </th>
+                                <th>{$.i18n.prop("factura.documento")}                </th>
+                                <th>{$.i18n.prop("factura.cliente")}                  </th>
+                                <th>{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
+                                <th>{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
+                                <th>{$.i18n.prop("factura.total")}                    </th>
+                                <th>                                                  </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal mostrar  -->  
 
 
 <!--Modal Cambiar Cantidad-->
@@ -615,7 +655,7 @@
                                 <section  class="lista-articulos" >
                                     <div class="product-item" each={billetes}   onclick={_sumarBilletes}>
                                         <img style = "height:100px;width:250px" alt="" class="img-responsive " src="{imagen}">
-                                        <a href="#">{modena} {descripcion}</a>
+                                        <a href="#" class="label-totales">{modena} {descripcion}</a>
                                     </div>
                                 </section>
                             <!--Fin Seccion de Billetes-->
@@ -633,19 +673,19 @@
                         <aside class="right-sidebar">
                             <!--Booking details-->
                             <article class="booking-details clearfix">
-                                <h3><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h3>
+                                <h1><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h1>
                                     <div class="booking-info">
-                                        <p style="text-align:right">{$.i18n.prop("factura.resumen.subTotal")} : <span id="lblSubtotal"> {subTotalGeneral.toLocaleString('de-DE')  } </span></p>
-                                        <p style="text-align:right">{$.i18n.prop("factura.resumen.descuento")} : <span id="lblSubtotal"> {factura.totalDescuento.toLocaleString('de-DE')} </span></p>
-                                        <p style="text-align:right">{$.i18n.prop("factura.resumen.impuesto")}  : <span id="lblSubtotal"> {factura.totalImpuesto.toLocaleString('de-DE')} </span></p>
+                                        <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.subTotal")}  <span id="lblSubtotal"> {subTotalGeneral.toLocaleString('de-DE')  } </span></p>
+                                        <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {factura.totalDescuento.toLocaleString('de-DE')} </span></p>
+                                        <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {factura.totalImpuesto.toLocaleString('de-DE')} </span></p>
                                         
                                     </div>
                                     <div class="precioTotalFactura">
-                                        <p class="total" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}  : <span id="lblTotal">{factura.totalComprobante.toLocaleString('de-DE')}</span></p>
+                                        <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{factura.totalComprobante.toLocaleString('de-DE')}</span></p>
                                         
                                     </div>
                                     <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado}>
-                                        <p class="total" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{factura.totalCambioPagar.toLocaleString('de-DE')}</span></p>    
+                                        <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{factura.totalCambioPagar.toLocaleString('de-DE')}</span></p>    
                                     </div>
                             </article>
                         </aside>
@@ -663,6 +703,36 @@
 
 
 <style type="text/css">
+
+
+
+.label-totales{
+        font-weight: 600 !important;
+        font-size: 30px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        padding-left: 20px;
+        line-height: 30px;
+        border-collapse: separate;
+        text-align: center;
+        cursor: pointer;
+        padding: 10px;
+        margin: 20px;
+        border: none;
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+        
+    }
  .label-limpiar{
         font-weight: 600 !important;
         font-size: 20px !important;
@@ -691,15 +761,42 @@
         
     }
     .label-articulos{
-        font-weight: 600 !important;
-        font-size: 20px !important;
+        font-weight: 300 !important;
+        font-size: 10px !important;
         font-family: Roboto,sans-serif !important;
         color: #30ed17 !important;
         text-shadow: 0px 0px 1px #ffffff;
         font-style: italic;
         text-align: left;
-        padding-left: 20px;
-        line-height: 30px;
+        padding-left: 5px;
+        line-height: 10px;
+        border-collapse: separate;
+        text-align: left;
+        cursor: pointer;
+        padding: 5px;
+        margin: 10px;
+        border: none;
+        text-align: left !important;
+        background-color: black !important;
+        box-shadow: 0 0px 2px 0 rgba(0, 0, 0, 0.1), 0 1px 4px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 1px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+        
+    }
+    .label-titulos-articulo{
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        padding-left: 15px;
+        line-height: 25px;
         border-collapse: separate;
         text-align: center;
         cursor: pointer;
@@ -1099,7 +1196,7 @@
     }
 
     #item-nombre{
-        font-size: 10px !important;
+        font-size: 14px !important;
         color: #ec6400 !important;
     }
     
@@ -1147,7 +1244,7 @@
             line-height: 40px;
         }
         width: 53%;
-        font-size: 12px;
+        font-size: 14px;
         padding-left: 7px;
         text-align: left;
        
@@ -1161,7 +1258,7 @@
         -moz-border-radius: 8px;
         border-radius: 8px;
         margin-right: 3px;
-        font-size: 13px;
+        font-size: 14px;
         /*   background: red;*/
     }
 
@@ -1593,9 +1690,9 @@
         }
 
         #tablaListaProductos td a {        
-            font-size: 10px;
+            font-size: 40px;
             margin: 0px;
-            padding-bottom: 2px !important;
+            padding-bottom: 4px !important;
         }
 
 
@@ -1604,7 +1701,7 @@
             color: #C22439;
             background-color: #f4f4f4 !important;
             padding: 3px 5px 0px 5px;
-            border-radius: 4px;
+            border-radius: 8px;
 
             -webkit-transition: color 200ms linear, background-color 200ms linear;
             -moz-transition: color 200ms linear, background-color 200ms linear;
@@ -1897,7 +1994,7 @@
 
         #tablaListaProductos .text-info {
             color: #232323;
-            font-size: 11px;
+            font-size: 18px;
             font-weight: 400;
         }
         #tablaListaProductos .precio-calc {
@@ -2004,7 +2101,7 @@
     self.comboCondicionPagos        = []
     self.comboTipoDocumentos   = []
     self.factura                = {
-        id:0,
+        id:null,
 	   fechaCredito:null,
 	   fechaEmision:null,
 	   condicionVenta:"",
@@ -2055,7 +2152,7 @@
     self.detalleFactura        = {data:[]}
     self.cliente               = {}
     self.vendedor              = {
-        id:0,
+        id:null,
         nombreCompleto:""
     };
     self.facturas_espera       = {data:[]}  
@@ -2095,7 +2192,7 @@
         }
     }
     self.categoria = {
-        id:0,
+        id:null,
         descripcion:""
     }
     self.inventariosXCategoria = {
@@ -2133,7 +2230,7 @@
           
         __comboCondicionPago()
         __ComboTipoDocumentos()
-        __ListaDeArticulosPorEmpresa()
+        
         __ListaDeClientes()
        __ListaDeVendedores()
        __Teclas()
@@ -2454,6 +2551,8 @@ _ListaFacturasDia(){
     ListadoFacturasDelDia()
 }
 
+
+
 /**
 *  Facturas del Dia
 **/
@@ -2483,6 +2582,7 @@ function ListadoFacturasDelDia(){
             }
         });
 }
+
 
 /**
 *  Agregar los inpust  y select de las tablas
@@ -2550,6 +2650,35 @@ var agregar  = '<a href="#"  class="btn btnReimprimir btn-primary form-control" 
 }
 
 
+
+
+function __TipoDocumentos(numeroConsecutivo,row){
+
+    switch(row.tipoDoc) {
+    case "04":
+          return  "Tiq:"+numeroConsecutivo
+        break;
+    case "01":
+        return  "Fact:"+numeroConsecutivo
+        break;
+    case "02":
+        return  "N.Debito:"+numeroConsecutivo
+        break;
+    case "03":
+        return  "N.Credito:"+numeroConsecutivo
+        break;
+    case "88":
+        return  "Proforma:"+row.id
+        break;
+    case "87":
+        return  "TiqueteInterno:"+row.id
+        break;
+
+    default:
+        return  numeroConsecutivo
+}
+}
+
 function __reimprimir(){
 	$('#tableListarFacturasDia').on('click','.btnReimprimir',function(e){
 		var table = $('#tableListarFacturasDia').DataTable();
@@ -2560,7 +2689,7 @@ function __reimprimir(){
 	       var data = table.row($(this).parents("tr")).data();
 	    }
         var factura = data
-        $('#modalCambiarCantidad').modal('hide') 
+        $('#modalFacturasDia').modal('hide') 
         riot.mount('ptv-imprimir',{factura:factura});
         
 	});
@@ -2942,7 +3071,8 @@ function aplicarFactura(estado){
             }
             var montoEntregado = self.factura.totalTarjeta + self.factura.totalBanco + self.factura.totalEfectivo
             montoEntregado = __valorNumerico(montoEntregado)
-            if(self.factura.totalComprobante > montoEntregado  ){
+             var resultado = __valorNumerico(self.factura.totalComprobante)
+            if(resultado > montoEntregado  ){
                 mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
                 return
             }

@@ -105,9 +105,10 @@ public class FacturaDaoImpl implements FacturaDao {
 	 * @see com.emprendesoftcr.Dao.FacturaDao#findByEstadoFirma(java.lang.Integer)
 	 */
 	@Override
-	public Collection<Factura> findByEstadoFirma(Integer estadoFirma){
-		Query query = entityManager.createQuery("select obj from Factura obj where obj.estadoFirma = :estadoFirma ");
+	public Collection<Factura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma){
+		Query query = entityManager.createQuery("select obj from Factura obj where obj.estadoFirma = :estadoFirma or  obj.estadoFirma = :reEstadoFirma");
 		query.setParameter("estadoFirma", estadoFirma);
+		query.setParameter("reEstadoFirma", reEstadoFirma);
 		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
 		
 		return query.getResultList();

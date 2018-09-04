@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
+import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
@@ -30,14 +31,20 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 	private CertificadoBo							certificadoBo;
 	
 	@Autowired
+	private FacturaBo							facturaBo;
+	
+	@Autowired
 	private FirmaElectronicaService firmaElectronicaService;
 
 	@Override
 	public String getFirmarXML(String xmlString, Empresa empresa) throws Exception {
 		String resultado = Constantes.EMPTY;
-		try {
+		try			{
 			Certificado certificado  = certificadoBo.findByEmpresa(empresa);
-			resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_TIQUETE);
+			if(certificado !=null) {
+				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_TIQUETE);	
+			}
+			
 		} catch (Exception e) {
 			log.info("** Error  getFirmarXML: " + e.getMessage() + " fecha " + new Date());
 			throw e;
@@ -49,7 +56,10 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 	public String getCrearXMLSinFirma(Factura factura) throws Exception{
 		String resultado = Constantes.EMPTY;
 		try {
-			 String date = FacturaElectronicaUtils.toISO8601String(factura.getFechaEmision());
+			Date fecha = new Date();
+			factura.setFechaEmision(fecha);
+			facturaBo.modificar(factura);
+			 String date = FacturaElectronicaUtils.toISO8601String(fecha);
 		   resultado = "<TiqueteElectronico xmlns=\"" + Constantes.DOCXMLS_TIQUETE + "\" " +
 		                "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
 		        "<Clave>" + factura.getClave() + "</Clave>" +
@@ -241,6 +251,7 @@ private String getDescuento(Double descuento) throws Exception {
    */
 private String xmlImpuestos(Detalle detalle) throws Exception {
   	String resultado = Constantes.EMPTY;
+  	String valorTipoImpuesto = Constantes.EMPTY;
   	try {
     	if(detalle.getMontoImpuesto()>0) {
         resultado = "<Impuesto>" +
@@ -251,7 +262,7 @@ private String xmlImpuestos(Detalle detalle) throws Exception {
     	}
 			
 		} catch (Exception e) {
-			log.info("** Error  xmlImpuestos: " + e.getMessage() + " fecha " + new Date());
+			log.info("** Error  xmlImpuestos Factura :" + detalle.getFactura().getId()  + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
     return resultado;

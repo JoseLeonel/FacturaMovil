@@ -126,8 +126,8 @@ public class FacturaBoImpl implements FacturaBo {
 	}
 
 	@Override
-	public Collection<Factura> findByEstadoFirma(Integer estadoFirma) {
-		return facturaDao.findByEstadoFirma(estadoFirma);
+	public Collection<Factura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma) {
+		return facturaDao.findByEstadoFirma(estadoFirma,reEstadoFirma);
 	}
 
 	/**

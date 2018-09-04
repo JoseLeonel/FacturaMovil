@@ -31,3 +31,5 @@ public interface ProcesoHaciendaService {
 	 //Proceso de firmar las facturas  y crear el registro de hacienda
 	 void procesoFirmado()throws Exception;
 }
+
+

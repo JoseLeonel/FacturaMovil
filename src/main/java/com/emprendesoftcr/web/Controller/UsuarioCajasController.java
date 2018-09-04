@@ -117,6 +117,9 @@ public class UsuarioCajasController {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		JqGridFilter dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);	
+		
+		dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
 				
 	
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_CAJAS_ABIERTAS_CERRADAS);

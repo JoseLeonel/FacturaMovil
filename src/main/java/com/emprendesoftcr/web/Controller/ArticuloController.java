@@ -34,6 +34,7 @@ import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
+import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Marca;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.ArticuloCommand;
@@ -110,6 +111,13 @@ public class ArticuloController {
 	public String listarKardex(ModelMap model) {
 		return "views/articulos/ListarKardex";
 	}
+	
+	@RequestMapping(value = "/CambiarPrecio", method = RequestMethod.GET)
+	public String cambiarPrecio(ModelMap model) {
+		return "views/articulos/CambioPrecio";
+	}
+	
+	
 	
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticulosActivosAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -396,7 +404,89 @@ public class ArticuloController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
+	
+	@RequestMapping(value = "/MostrarPorCodigoAjax", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response,  ModelMap model, @ModelAttribute Articulo articulo,@RequestParam Double precioPublico , @RequestParam String codigo,BindingResult result, SessionStatus status) throws Exception {
+		try {
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Articulo articuloBD = articuloBo.buscarPorCodigoYEmpresa(codigo, usuario.getEmpresa());
+			
+			if (articuloBD == null) {
+				result.rejectValue("codigo", "error.articulo.codigo.no.existe");
+			}
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
+			 
 
+
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", articuloBD);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+
+	@RequestMapping(value = "/CambiarPrecioAjax", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator cambiarPrecio(HttpServletRequest request, HttpServletResponse response,  ModelMap model, @ModelAttribute Articulo articulo,@RequestParam Double precioPublico , @RequestParam String codigo,BindingResult result, SessionStatus status) throws Exception {
+		try {
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Articulo articuloBD = articuloBo.buscarPorCodigoYEmpresa(codigo, usuario.getEmpresa());
+			
+			if (articuloBD == null) {
+				result.rejectValue("codigo", "error.articulo.codigo.no.existe");
+			}
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
+			
+			articuloBD.setPrecioPublico(precioPublico);
+			
+			articuloBo.modificar(articuloBD);
+			
+			 
+
+
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBD);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+
+	
+	
+	
+
+//	@RequestMapping(value = "/CambiarPrecioAjax", method = RequestMethod.POST, headers = "Accept=application/json")
+//	@ResponseBody
+//	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idFactura) {
+//		try {
+//			//Factura facturaBD = facturaBo.findById(idFactura);
+//
+//			 Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+//
+//			// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave criptografica desde linux
+////			 certificadoBo.agregar(usuario.getEmpresa(), usuario.getEmpresa().getClaveLlaveCriptografica().toString(), usuario.getEmpresa().getNombreLlaveCriptografica());
+//			// String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);
+//			// facturaXMLServices.getFirmarXML(xml, facturaBD.getEmpresa());
+//
+//			// KeyStore keyStore = null;
+//			// LlaveCriptografica llaveCriptografica = new LlaveCriptografica();
+//			//
+//			// llaveCriptografica.setPassSignature(usuario.getEmpresa().getClaveLlaveCriptografica().toString());
+//			// llaveCriptografica.setPathSignature(usuario.getEmpresa().getNombreLlaveCriptografica());
+//			// XadesSigner xadesSigner = llaveCriptograficaService.getSigner(usuario.getEmpresa().getNombreLlaveCriptografica(),usuario.getEmpresa().getClaveLlaveCriptografica().toString());
+//			// keyStore = llaveCriptograficaService.getKeyStore(llaveCriptografica);
+//
+//			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", facturaBD);
+//		} catch (Exception e) {
+//			return RespuestaServiceValidator.ERROR(e);
+//		}
+//	}
+
+	
+	
 	/**
 	 * Buscar Articulo por id del inventario
 	 * @param request
