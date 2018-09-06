@@ -145,15 +145,15 @@
                             <article class="booking-details clearfix">
                                 <h1><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h1>
                                 <div class="booking-info">
-                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.subTotal")}  <span id="lblSubtotal"> {subTotalGeneral.toLocaleString('de-DE')  } </span></p>
-                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {factura.totalDescuentos.toLocaleString('de-DE')} </span></p>
-                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {factura.totalImpuesto.toLocaleString('de-DE')} </span></p>
+                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.subTotal")}  <span id="lblSubtotal"> {subTotalGeneral} </span></p>
+                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos} </span></p>
+                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {totalImpuesto} </span></p>
                                 </div>
                                 <div class="precioTotalFactura">
-                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{factura.totalComprobante.toLocaleString('de-DE')}</span></p>
+                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}</span></p>
                                 </div>
                                 <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado}>
-                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{factura.totalCambioPagar.toLocaleString('de-DE')}</span></p>    
+                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{factura.totalCambioPagar.toLocaleString()}</span></p>    
                                 </div>
                             </article>
                         </aside>
@@ -229,18 +229,18 @@
                                 <input onclick={__CambiarCantidad} id= "cantidadDetalle" class="campo " type="number" placeholder="Cantidad Detalle" value = {cantidad} readonly />
                             </td>
                             <td class="text-right">
-                                <input   class="campo" type="text"  value = "{precioUnitario.toLocaleString('de-DE')}" readonly />
+                                <input   class="campo" type="text"  value = "{precioUnitario.toLocaleString()}" readonly />
                             </td>
                             <td class="text-right">
-                                <input  onclick={__CambiarDescuento} class="campo" type="text"  value = "{porcentajeDesc.toLocaleString('de-DE')}" readonly/>
+                                <input  onclick={__CambiarDescuento} class="campo" type="text"  value = "{porcentajeDesc.toLocaleString()}" readonly/>
                             </td>
                                                         
                             <td class="text-right">
-                                <input  class="campo" type="text"  value = "{impuesto.toLocaleString('de-DE')}" readonly/>
+                                <input  class="campo" type="text"  value = "{impuesto.toLocaleString()}" readonly/>
                             </td>
 
                             <td class="text-right">
-                                <input  class="campo" type="text"  value = "{montoTotalLinea.toLocaleString('de-DE')}" readonly/>
+                                <input  class="campo" type="text"  value = "{montoTotalLinea.toLocaleString()}" readonly/>
                             </td>
                         </tr>
                         </tbody>
@@ -263,7 +263,7 @@
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show"> {factura.totalComprobante.toLocaleString('de-DE')}</span>
+                                                    <span class="label label-info textShadow" id="total-show"> {totalComprobante}</span>
                                                 </div>
                                             </td>
                                         </tr>                     
@@ -778,6 +778,9 @@
     self.error                 = false
     self.comboCondicionPagos        = []
     self.comboTipoDocumentos   = []
+    self.subTotalGeneral       = 0
+    self.totalDescuentos       = 0
+    self.totalImpuesto         = 0
     self.descripcionArticulo = ""
     self.factura                = {
         id:null,
@@ -853,6 +856,11 @@
     self.barrios                       = []
     self.mostrarListadoArticulos == false
     self.empresa              = {}
+    self.subTotalGeneral               = 0
+    self.totalDescuentos               = 0
+    self.totalImpuesto                 = 0
+    self.totalComprobante              = 0
+
 
 
     self.on('mount',function(){
@@ -1062,17 +1070,17 @@ function __InformacionDataTableDia(){
                                },
                                {'data' :'totalImpuesto'       ,"name":"totalImpuesto"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true ,
                                     "render":function(totalImpuesto,type, row){
-									    return  totalImpuesto.toLocaleString('de-DE');
+									    return  formatoDecimales(totalImpuesto,2);
 	 							    }
                                },
                                {'data' :'totalDescuentos'                ,"name":"totalDescuentos"                 ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true ,
                                     "render":function(totalDescuentos,type, row){
-									    return  totalDescuentos.toLocaleString('de-DE');
+									    return  formatoDecimales(totalDescuentos,2);
 	 							    }
                                },
                                {'data' :'totalComprobante'               ,"name":"totalComprobante"                ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true ,
                                     "render":function(totalComprobante,type, row){
-									    return  totalComprobante.toLocaleString('de-DE');;
+									    return  formatoDecimales(totalComprobante,2);;
 	 							    }
                                },
                                {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
@@ -1294,46 +1302,6 @@ function __cargaUbicacion(){
 
 }
 
-
-
-function _provincias(){
-    self.provincias = self.todasProvincias.data
-    self.update()
-}
-
-/**
-*  Cantones
-**/
-function _ConsultarCantonesByProvincias(idProvincia){
-    let lista     = self.todosCantones.data;
-    self.cantones  = []
-    self.update()
-    self.cantones = jsonPath(lista,"$[?(@.codigo_provincia=='"+idProvincia+"')]");
-    self.update();
-
-}
-
-/**
-* buscar los distritos por canton y provincia
-**/
-
-function _consultarDistritosByCantoAndProvincia(idProvincia,idCanton){
-    let lista     = self.todosDistritos.data;
-    self.distritos  = []
-    self.update()
-    self.distritos = jsonPath(lista,"$[?(@.codigoProvincia=='"+idProvincia+"' && @.codigoCanton=='"+idCanton+"')]");
-    self.update();
-
-}
-
-function _consultarBarriosByCantoAndProvinciaAndDistritos(idProvincia,idCanton,idDistritos){
-    let lista     = self.todosBarrios.data;
-    self.barrios  = []
-    self.update()
-    self.barrios = jsonPath(lista,"$[?(@.codigoProvincia=='"+idProvincia+"' && @.codigoCanton=='"+idCanton+"' && @.codigoDistrito=='"+idDistritos+"')]");
-    self.update();
-
-}
 /**
 * Aplicar el descuento
 **/
@@ -1420,17 +1388,17 @@ __TotalDeBancoAPagar(e){
 **/
 __CalculaCambioAEntregarOnblur(e){
     
-    var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
+      var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
     sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
     sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
     //Si no ingresado montos no realiza las operaciones de calculos
     if(sumaMontosEntregadosParaCambios == 0){
+        self.factura.totalCambioPagar = self.factura.totalComprobante * -1
+        self.update()
         return
     }
     self.factura.totalCambioPagar = 0
-    self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalComprobante ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
-     
-
+    self.factura.totalCambioPagar = redondeoDecimales(sumaMontosEntregadosParaCambios,2) > redondeoDecimales(self.factura.totalComprobante,2) ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
     self.update()
 }
 /**
@@ -1443,10 +1411,12 @@ __CalculaCambioAEntregarKeyPress(e){
         sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
         sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
         if(sumaMontosEntregadosParaCambios == 0){
+            self.factura.totalCambioPagar = self.factura.totalComprobante * -1
+            self.update()
             return
         }
         self.factura.totalCambioPagar = 0
-        self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalComprobante ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
+        self.factura.totalCambioPagar = redondeoDecimales(sumaMontosEntregadosParaCambios,2) > redondeoDecimales(self.factura.totalComprobante,2) ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
         self.update()
     }
 }
@@ -1502,9 +1472,9 @@ function aplicarFactura(estado){
                     return
                 }
                 var montoEntregado = self.factura.totalTarjeta + self.factura.totalBanco + self.factura.totalEfectivo
-                montoEntregado = __valorNumerico(montoEntregado)
-                var resultado = __valorNumerico(self.factura.totalComprobante)
-                if(resultado > montoEntregado  ){
+                montoEntregado = redondeoDecimales(__valorNumerico(montoEntregado),2)
+                var resultado  = redondeoDecimales( __valorNumerico(self.factura.totalComprobante),2)
+                if(__valorNumerico(resultado) > __valorNumerico(montoEntregado)  ){
                     mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
                     return
                 }
@@ -1613,6 +1583,11 @@ function __Init(){
     self.mostrarFormularioPago         = false
     self.mostarParaCrearNuevaFactura    = true
     self.mostrarCamposIngresoContado   = true;
+    self.subTotalGeneral               = 0
+    self.totalDescuentos               = 0
+    self.totalImpuesto                 = 0
+    self.totalComprobante              = 0
+
     self.update();
     $(".referenciaNumero").val(null)
     $(".referenciaFechaEmision").val(null)
@@ -1982,8 +1957,8 @@ function __sumarMasArticulo(codigo,precio){
        if(existe == false){
           cantidadAct = cantidadAct + codigo.charAt(i)
             
-       }
-        console.log("pos=", i, "valor=", codigo.charAt(i));
+        }
+      // console.log("pos=", i, "valor=", codigo.charAt(i));
     }
    for (var count = 0; count < self.detail.length; count++) {
         if (self.detail[count].codigo == self.articulo.codigo ){
@@ -2265,13 +2240,13 @@ function __nuevoArticuloAlDetalle(cantidad){
           cont = elemen.numeroLinea
         }
     )
-   // self.detail.sort(function(a,b) {
-   // if ( a.numeroLinea > b.numeroLinea )
-   //     return -1;
-   // if ( a.numeroLinea < b.numeroLinea )
-   //     return 1;
-   // return 0;
-//} );
+    self.detail.sort(function(a,b) {
+    if ( a.numeroLinea > b.numeroLinea )
+        return -1;
+    if ( a.numeroLinea < b.numeroLinea )
+        return 1;
+    return 0;
+    } );
    
     self.update()
 }
@@ -2500,6 +2475,10 @@ function __calculate() {
     self.factura.totalImpuesto           = redondearDecimales(__valorNumerico(totalImpuesto),5)
     self.factura.totalVentaNeta          = redondearDecimales(__valorNumerico(totalVenta-totalDescuento),5)
     self.factura.totalComprobante        = redondearDecimales(__valorNumerico(totalComprobante),5)
+    self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
+    self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
+    self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
+
    // self.articulo              = null;
     self.update(); 
     $( "#codigo" ).val(null);
@@ -2509,7 +2488,10 @@ function __calculate() {
 
 function getSubTotalGeneral(){
     var resultado = __valorNumerico(self.factura.subTotal) + __valorNumerico(self.factura.totalDescuentos)
-    self.subTotalGeneral = redondearDecimales(resultado,5)
+    self.subTotalGeneral = formatoDecimales(resultado,2)
+    self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2)
+    self.totalImpuesto   = formatoDecimales(self.factura.totalImpuesto,2)
+
     self.update()
 }
 
@@ -2656,11 +2638,6 @@ function __seleccionarClientes() {
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	     }
-        self.cliente = data
-        _provincias()  
-        _ConsultarCantonesByProvincias(self.cliente.provincia)
-        _consultarDistritosByCantoAndProvincia(self.cliente.provincia,self.cliente.canton)
-        _consultarBarriosByCantoAndProvinciaAndDistritos(self.cliente.provincia,self.cliente.canton,self.cliente.distrito)
         self.cliente = data
         self.update();
     });

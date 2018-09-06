@@ -28,7 +28,7 @@
                             <tr class = "" each={detalles} class="detalleTables">
                                 <td class="cantidad">{cantidad}</td>
                                 <td class="producto">{descripcion}</td>
-                                <td class="precio">{montoTotalLinea.toLocaleString('de-DE')}</td>
+                                <td class="precio">{montoTotalLinea}</td>
                             </tr>
                             </tr>
                             <tr>
@@ -42,7 +42,7 @@
                             <tr>
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.total.comprobante")}</strong></td>
-                            <td ><strong>{facturaImpresa.totalComprobante.toLocaleString('de-DE')}</strong></td>
+                            <td ><strong>{facturaImpresa.totalComprobante}</strong></td>
                             </tr>
                             <tr>
                             <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
@@ -246,6 +246,15 @@ self.on('mount',function(){
     buscarTipoDocumento()
     __comboCondicionPago()
     buscarCondicionPago()
+    self.facturaImpresa.totalComprobante = formatoDecimales(self.facturaImpresa.totalComprobante,2);
+    self.detalles.forEach(function(elemen){
+            elemen.montoTotalLinea = formatoDecimales(elemen.montoTotalLinea,2);
+           
+        }
+    )
+    self.update()
+
+
    
    
 

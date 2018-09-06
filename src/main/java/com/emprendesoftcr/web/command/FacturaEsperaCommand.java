@@ -31,6 +31,7 @@ public class FacturaEsperaCommand {
 	private String						medioTarjeta;
 
 	private String						medioBanco;
+	
 
 	private String		nombreFactura;
 

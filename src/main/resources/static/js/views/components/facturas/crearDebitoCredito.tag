@@ -71,6 +71,10 @@
                                         <label>{$.i18n.prop("cliente.correoElectronico")}</label> 
                                         <input type="text" class="form-control " value="{cliente.correoElectronico}" readonly>
                                     </div>
+                                    
+
+                                </div>
+                                <div  class= "col-md-6 col-sx-6 col-sm-6 col-lg-6" >
                                     <div class="form-group ">
                                         <h3><label class="text-primary">{$.i18n.prop("informacion.referencias")}</label> </h3>
                                     </div>
@@ -104,21 +108,18 @@
                                             </div>
                                         </div>
                                     </div>    
-                                    
 
-                                </div>
-                                <div  class= "col-md-6 col-sx-6 col-sm-6 col-lg-6" >
                                     <div class="form-group has-success">
                                         <label for="pago_transporteL">{$.i18n.prop("factura.resumen.efectivo")} </label> 
-                                        <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo">
+                                        <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class=" tamanoLetraTotales totalEfectivo campo " id="totalEfectivo" name="totalEfectivo">
                                     </div>
                                     <div  class="form-group has-success">
                                         <label for="pago_efectivoL">{$.i18n.prop("factura.resumen.tarjeta")} </label> 
-                                        <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"   >
+                                        <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="tamanoLetraTotales totalTarjeta campo" id="totalTarjeta" name="totalTarjeta"   >
                                     </div>
                                     <div  class="form-group has-success">
                                         <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
-                                        <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="form-control" id="pago_tarjeta"  value="{factura.totalTarjeta}">
+                                        <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="campo tamanoLetraTotales " id="pago_tarjeta"  value="{factura.totalTarjeta}">
                                     </div>
 
                                     
@@ -164,15 +165,15 @@
                             <article class="booking-details clearfix">
                                 <h3><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h3>
                                 <div class="booking-info">
-                                    <p style="text-align:right">{$.i18n.prop("factura.resumen.subTotal")} : <span id="lblSubtotal"> {subTotalGeneral.toLocaleString('de-DE')  } </span></p>
-                                    <p style="text-align:right">{$.i18n.prop("factura.resumen.descuento")} : <span id="lblSubtotal"> {factura.totalDescuentos.toLocaleString('de-DE')} </span></p>
-                                    <p style="text-align:right">{$.i18n.prop("factura.resumen.impuesto")}  : <span id="lblSubtotal"> {factura.totalImpuesto.toLocaleString('de-DE')} </span></p>
+                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.subTotal")}  <span id="lblSubtotal"> {subTotalGeneral  } </span></p>
+                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos} </span></p>
+                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {totalImpuesto} </span></p>
                                 </div>
                                 <div class="precioTotalFactura">
-                                    <p class="total" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}  : <span id="lblTotal">{factura.totalComprobante.toLocaleString('de-DE')}</span></p>
+                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}</span></p>
                                 </div>
                                 <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado}>
-                                    <p class="total" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{factura.totalCambioPagar.toLocaleString('de-DE')}</span></p>    
+                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{factura.totalCambioPagar.toLocaleString()}</span></p>    
                                 </div>
                             </article>
                         </aside>
@@ -217,6 +218,13 @@
                 
                 <div class="cabecera-izquierda">
                     <div class="row">
+                        <div class="col-sx-12 col-sm-6 col-md-6 col-lg-10">
+                            <label>Ingrese el Consecutivo</label>
+                            <input onkeypress={__agregarArticulosFactura}  id="consecutivoFactura" class="form-control consecutivoFactura" type="text" placeholder="Consecutivo:XXXXXXXXXXXX" />
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
                             <div class="col-sx-12 col-sm-6 col-md-6 col-lg-10">
                                 <input onkeypress={__addProductToDetail}  id="codigo" class="form-control" type="text" placeholder="XXXXXXXXXXX" />
                             </div>
@@ -231,14 +239,14 @@
                         <thead>
                         <tr>
                             <th style="width:5%;">                                                   </th>
-                            <th>{$.i18n.prop("factura.linea.detalle.linea")}                         </th>
-                            <th>{$.i18n.prop("factura.linea.detalle.codigo")}                        </th>
-                            <th style="width:20%;">{$.i18n.prop("factura.linea.detalle.descripcion")} </th>
-                            <th >{$.i18n.prop("factura.linea.detalle.cantidad")}                     </th>
-                            <th >{$.i18n.prop("factura.linea.detalle.precio")}                       </th>
-                            <th >{$.i18n.prop("factura.linea.detalle.descuento")}                    </th>
-                            <th >{$.i18n.prop("factura.linea.detalle.impuesto")}                     </th>
-                            <th >{$.i18n.prop("factura.linea.detalle.subTotal")}                     </th>
+                            <th><h1>{$.i18n.prop("factura.linea.detalle.linea")}</h1>                         </th>
+                            <th><h1>{$.i18n.prop("factura.linea.detalle.codigo")}</h1>                        </th>
+                            <th style="width:20%;"><h1>{$.i18n.prop("factura.linea.detalle.descripcion")}</h1> </th>
+                            <th ><h1>{$.i18n.prop("factura.linea.detalle.cantidad")}</h1>                     </th>
+                            <th ><h1>{$.i18n.prop("factura.linea.detalle.precio")}</h1>                       </th>
+                            <th ><h1>{$.i18n.prop("factura.linea.detalle.descuento")}</h1>                    </th>
+                            <th ><h1>{$.i18n.prop("factura.linea.detalle.impuesto")}</h1>                     </th>
+                            <th ><h1>{$.i18n.prop("factura.linea.detalle.subTotal")}</h1>                     </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -253,18 +261,18 @@
                                 <input onclick={__CambiarCantidad} id= "cantidadDetalle" class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad} readonly />
                             </td>
                             <td class="text-right">
-                                <input   class="form-control" type="text"  value = "{precioUnitario.toLocaleString('de-DE')}" readonly />
+                                <input   class="form-control" type="text"  value = "{precioUnitario.toLocaleString()}" readonly />
                             </td>
                             <td class="text-right">
-                                <input  onclick={__CambiarDescuento} class="form-control" type="text"  value = "{porcentajeDesc.toLocaleString('de-DE')}" readonly/>
+                                <input  onclick={__CambiarDescuento} class="campo" type="text"  value = "{porcentajeDesc.toLocaleString()}" readonly/>
                             </td>
                                                         
                             <td class="text-right">
-                                <input  class="form-control" type="text"  value = "{impuesto.toLocaleString('de-DE')}" readonly/>
+                                <input  class="campo" type="text"  value = "{impuesto.toLocaleString()}" readonly/>
                             </td>
 
                             <td class="text-right">
-                                <input  class="form-control" type="text"  value = "₡ {montoTotalLinea.toLocaleString('de-DE')}" readonly/>
+                                <input  class="campo" type="text"  value = "₡ {montoTotalLinea.toLocaleString()}" readonly/>
                             </td>
                         </tr>
                         </tbody>
@@ -287,7 +295,7 @@
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show"> {factura.totalComprobante.toLocaleString('de-DE')}</span>
+                                                    <span class="label label-info textShadow" id="total-show"> {totalComprobante}</span>
                                                 </div>
                                             </td>
                                         </tr>                     
@@ -476,6 +484,57 @@
 
 <style type="text/css">
     /* Lista de facturas en espera*/
+    .label-totales{
+            font-weight: 600 !important;
+            font-size: 30px !important;
+            font-family: Roboto,sans-serif !important;
+            color: #30ed17 !important;
+            text-shadow: 0px 0px 1px #ffffff;
+            font-style: italic;
+            text-align: left;
+            padding-left: 20px;
+            line-height: 30px;
+            border-collapse: separate;
+            text-align: center;
+            cursor: pointer;
+            padding: 10px;
+            margin: 20px;
+            border: none;
+            text-align: center !important;
+            background-color: black !important;
+            box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+            border-radius: 5px;
+            -webkit-transition: background-color 100ms linear;
+            -moz-transition: background-color 100ms linear;
+            -o-transition: background-color 100ms linear;
+            -ms-transition: background-color 100ms linear;
+            transition: background-color 100ms linear;
+            
+        }
+    .campo {
+        display: block;
+        width: 100%;
+        height: 45px;
+        padding: 8px 18px;
+        font-size: 10px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        background-color: #fcfcfc;
+        border: 1px solid #ccc;
+        font: 20px verdana, arial, helvetica, sans-serif;
+        margin: 2px 0;
+        padding: 1px 2px;
+        overflow: visible;
+    }
     .cabecera-derecha .lista-factura-espera{
         width:100%;
         display:flex;
@@ -728,6 +787,10 @@
     self.cantones                      = []
     self.distritos                     = []
     self.barrios                       = []
+    self.subTotalGeneral               = 0
+    self.totalDescuentos               = 0
+    self.totalImpuesto                 = 0
+    self.totalComprobante              = 0
 
 
     self.on('mount',function(){
@@ -754,7 +817,6 @@
        __ListaDeVendedores()
        __Teclas()
        __TipoCambio()
-       __cargaUbicacion()
        __comboCondicionPagoRef()
        __Eventos()
          window.addEventListener( "keydown", function(evento){
@@ -791,10 +853,6 @@ function _INIT(){
         nombreCompleto:""
     };
     self.mostrarCamposIngresoContado = true
-    self.todosBarrios                  = {data:[]}
-    self.cantones                      = []
-    self.distritos                     = []
-    self.barrios                       = []
 
     self.update()
     __Eventos()
@@ -826,6 +884,14 @@ function __Eventos(){
     $("#referenciaRazon").attr("maxlength", 240);
     $("#codigo").attr("maxlength", 20);
     $('#referenciaNumero').mask('00000000000000000000', {
+		'translation' : {
+			0 : {
+				pattern : /[0-9]/
+			}
+		}
+    });
+
+     $('#consecutivoFactura').mask('00000000000000000000', {
 		'translation' : {
 			0 : {
 				pattern : /[0-9]/
@@ -924,128 +990,6 @@ function __referenciaConsecutivo(consecutivo){
         }
     });
 }
-/**
-*  Consulta la provicias , cantonces y distritos en uno solo 
-**/
-function __cargaUbicacion(){
-      self.todasProvincias  = {data:[]}
-      self.update()
-     $.ajax({
-         url: "ListarProvinciasAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-             if(result.aaData.length > 0){
-                self.todasProvincias.data =  result.aaData
-                self.update();
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
-   self.todosCantones  = {data:[]}
-    self.update()
-     $.ajax({
-         url: "ListarCantonesTodosAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-             if(result.aaData.length > 0){
-                self.todosCantones.data =  result.aaData
-                self.update()
-                 
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
-    self.todosDistritos  = {data:[]}
-    self.update()
-     $.ajax({
-         url: "ListarDistritosTodosAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-             if(result.aaData.length > 0){
-                self.todosDistritos.data =  result.aaData
-                self.update()
-               
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
-    self.todosBarrios  = {data:[]}
-    self.update()
-     $.ajax({
-         url: "ListarDistritosTodosAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-             if(result.aaData.length > 0){
-                self.todosBarrios.data =  result.aaData
-                self.update()
-               
-            
-
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
-   
-
-}
-
-
-
-function _provincias(){
-    self.provincias = self.todasProvincias.data
-    self.update()
-}
-
-/**
-*  Cantones
-**/
-function _ConsultarCantonesByProvincias(idProvincia){
-    let lista     = self.todosCantones.data;
-    self.cantones  = []
-    self.update()
-    self.cantones = jsonPath(lista,"$[?(@.codigo_provincia=='"+idProvincia+"')]");
-    self.update();
-
-}
-
-/**
-* buscar los distritos por canton y provincia
-**/
-
-function _consultarDistritosByCantoAndProvincia(idProvincia,idCanton){
-    let lista     = self.todosDistritos.data;
-    self.distritos  = []
-    self.update()
-    self.distritos = jsonPath(lista,"$[?(@.codigoProvincia=='"+idProvincia+"' && @.codigoCanton=='"+idCanton+"')]");
-    self.update();
-
-}
-
-function _consultarBarriosByCantoAndProvinciaAndDistritos(idProvincia,idCanton,idDistritos){
-    let lista     = self.todosBarrios.data;
-    self.barrios  = []
-    self.update()
-    self.barrios = jsonPath(lista,"$[?(@.codigoProvincia=='"+idProvincia+"' && @.codigoCanton=='"+idCanton+"' && @.codigoDistrito=='"+idDistritos+"')]");
-    self.update();
-
-}
-
 
 
 /**
@@ -1133,15 +1077,18 @@ __TotalDeBancoAPagar(e){
 *   Calculo del cambio entregar en el evento onblur
 **/
 __CalculaCambioAEntregarOnblur(e){
+    
     var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
     sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
     sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
     //Si no ingresado montos no realiza las operaciones de calculos
     if(sumaMontosEntregadosParaCambios == 0){
+        self.factura.totalCambioPagar = self.factura.totalComprobante * -1
+        self.update()
         return
     }
     self.factura.totalCambioPagar = 0
-    self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalComprobante ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
+    self.factura.totalCambioPagar = redondeoDecimales(sumaMontosEntregadosParaCambios,2) > redondeoDecimales(self.factura.totalComprobante,2) ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
     self.update()
 }
 /**
@@ -1154,10 +1101,12 @@ __CalculaCambioAEntregarKeyPress(e){
         sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
         sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
         if(sumaMontosEntregadosParaCambios == 0){
+            self.factura.totalCambioPagar = self.factura.totalComprobante * -1
+            self.update()
             return
         }
         self.factura.totalCambioPagar = 0
-        self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalComprobante ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
+        self.factura.totalCambioPagar = redondeoDecimales(sumaMontosEntregadosParaCambios,2) > redondeoDecimales(self.factura.totalComprobante,2) ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
         self.update()
     }
 }
@@ -1205,13 +1154,16 @@ function aplicarFactura(){
                 return
             }
             var montoEntregado = self.factura.totalTarjeta + self.factura.totalBanco + self.factura.totalEfectivo
-            montoEntregado = __valorNumerico(montoEntregado)
-            if(self.factura.totalVentaNeta > montoEntregado  ){
-                mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
-                return
-            }
+                montoEntregado = redondeoDecimales(__valorNumerico(montoEntregado),2)
+                var resultado  = redondeoDecimales( __valorNumerico(self.factura.totalComprobante),2)
+                if(__valorNumerico(resultado) > __valorNumerico(montoEntregado)  ){
+                    mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
+                    return
+                }
             //Si el cliente esta pagando con tajeta, banco debe ser igual a la venta
-            if(self.factura.totalTarjeta != 0 || self.factura.totalBanco !=0){
+                var tarjeta = __valorNumerico(self.factura.totalTarjeta)
+                var banco = __valorNumerico(self.factura.totalBanco)
+                if(tarjeta != 0 || banco !=0){
                 if(self.factura.totalVentaNeta != montoEntregado  ){
                     mensajeError($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
                 return
@@ -1327,6 +1279,10 @@ function __Init(){
     self.mostrarFormularioPago         = false
     self.mostarParaCrearNuevaFactura    = true
     self.mostrarCamposIngresoContado   = true;
+    self.subTotalGeneral               = 0
+    self.totalDescuentos               = 0
+    self.totalImpuesto                 = 0
+    self.totalComprobante              = 0
     self.update();
     $(".totalBanco").val(null)   
     $(".totalTarjeta").val(null)   
@@ -1340,11 +1296,7 @@ function __Init(){
     $('#condicionVenta').prop("selectedIndex", 0);
     $('#tipoDoc').prop("selectedIndex", 0);
     $('#estado').prop("selectedIndex", 0);
-    $('#provincia').prop("selectedIndex", 0);
-    $('#canton').prop("selectedIndex", 0);
-    $('#distrito').prop("selectedIndex", 0);
-    $('#barrio').prop("selectedIndex", 0);
-
+    
     $("#plazoCredito").val(null)
     $("#nota").val(null)
     $("#fechaCredito").val(null)
@@ -1590,6 +1542,54 @@ function mostrarPAgo(){
     $('#totalEfectivo').focus()
     self.factura.cambioMoneda = self.factura.totalVentaNeta / self.tipoCambio.total
     self.update()
+
+}
+
+/**
+* Consultar el consecutivo de una factura para agregar los articulos relacionados
+**/
+__agregarArticulosFactura(e){
+     if (e.keyCode != 13) {
+        return;
+    } 
+    var numero  = $('.consecutivoFactura').val()
+    $.ajax({
+        url: "MostrarFacturaPorConsecutivoAjax",
+        datatype: "json",
+        data: {consecutivo:numero},
+        method:"POST",
+        success: function (data) {
+            if (data.status != 200) {
+                sweetAlert("", $.i18n.prop("error.factura.no.existe"), "error");
+
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    self.factura = {
+                        id:null
+                    }
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                       self.factura = modeloTabla
+                       self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
+                       self.cliente  = modeloTabla.cliente
+                       self.vendedor = modeloTabla.vendedor
+                       self.factura.referenciaNumero = numero
+                       
+                       self.update()
+                       $('.referenciaNumero').val(numero)
+                    });
+                    if(self.factura.id == null){
+                         sweetAlert("", $.i18n.prop("error.factura.no.existe"), "error");
+                    }
+                }
+                cargarDetallesFacturaEnEspera()
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+
 
 }
 /** 
@@ -2115,6 +2115,9 @@ function __calculate() {
     self.factura.totalImpuesto           = redondearDecimales(__valorNumerico(totalImpuesto),5)
     self.factura.totalVentaNeta          = redondearDecimales(__valorNumerico(totalVenta-totalDescuento),5)
     self.factura.totalComprobante        = redondearDecimales(__valorNumerico(totalComprobante),5)
+    self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
+    self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
+    self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);  
    // self.articulo              = null;
     self.update(); 
     $( "#codigo" ).val(null);
@@ -2465,8 +2468,8 @@ function __Teclas(){
     window.addEventListener( "keydown", function(evento){
         var tecla = evento.keyCode; 
     if(tecla ==119){
-      mostrarPAgo()     
-   
+            mostrarPAgo()     
+      
     }   
     //aplicar crear Factura
     if (self.mostrarFormularioPago == true ){

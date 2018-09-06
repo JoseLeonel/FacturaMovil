@@ -169,10 +169,10 @@ public class ClientesController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 	
-			cliente.setProvincia(cliente.getProvincia().equals("0")?Constantes.EMPTY:cliente.getProvincia());
-			cliente.setDistrito(cliente.getDistrito().equals("0")?Constantes.EMPTY:cliente.getDistrito());
-			cliente.setCanton(cliente.getCanton().equals("0")?Constantes.EMPTY:cliente.getCanton());
-			cliente.setBarrio(cliente.getBarrio().equals("0")?Constantes.EMPTY:cliente.getBarrio());
+			cliente.setProvincia(Constantes.EMPTY);
+			cliente.setDistrito(Constantes.EMPTY);
+			cliente.setCanton(Constantes.EMPTY);
+			cliente.setBarrio(Constantes.EMPTY);
 			
       cliente.setEmpresa(usuarioSesion.getEmpresa());
 			cliente.setCreated_at(new Date());
@@ -223,27 +223,24 @@ public class ClientesController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			clienteBD.setProvincia(cliente.getProvincia().equals("0")?Constantes.EMPTY:cliente.getProvincia());
-			clienteBD.setDistrito(cliente.getDistrito().equals("0")?Constantes.EMPTY:cliente.getDistrito());
-			clienteBD.setCanton(cliente.getCanton().equals("0")?Constantes.EMPTY:cliente.getCanton());
-			clienteBD.setBarrio(cliente.getBarrio().equals("0")?Constantes.EMPTY:cliente.getBarrio());
+			clienteBD.setProvincia(Constantes.EMPTY);
+			clienteBD.setDistrito(Constantes.EMPTY);
+			clienteBD.setCanton(Constantes.EMPTY);
+			clienteBD.setBarrio(Constantes.EMPTY);
 
 			clienteBD.setCedula(cliente.getCedula());
 			clienteBD.setNombreCompleto(cliente.getNombreCompleto());
 			clienteBD.setCorreoElectronico(cliente.getCorreoElectronico());
 			clienteBD.setDescuento(cliente.getDescuento());
 			clienteBD.setOtraSena(cliente.getOtraSena());
-			clienteBD.setProvincia(cliente.getProvincia());
+			
 			clienteBD.setNombreComercial(cliente.getNombreComercial());
 			clienteBD.setUpdated_at(new Date());
 			clienteBD.setEstado(cliente.getEstado());
 			clienteBD.setTelefono(cliente.getTelefono());
 			clienteBD.setCelular(cliente.getCelular());
 			clienteBD.setUsuario(usuarioSesion);
-			clienteBD.setBarrio(cliente.getBarrio());
-			clienteBD.setCanton(cliente.getCanton());
 			clienteBD.setCodigoPais(cliente.getCodigoPais());
-			clienteBD.setDistrito(cliente.getDistrito());
 			clienteBD.setIdentificacionExtranjero(cliente.getIdentificacionExtranjero());
 			
 			clienteBo.modificar(clienteBD);

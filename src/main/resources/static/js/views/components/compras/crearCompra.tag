@@ -126,7 +126,7 @@
                 <div class="cabecera-izquierda">
                     <div class="row">
                             <div class="col-md-6">
-                                <input onkeypress={__addProductToDetail}  id="codigo" class="form-control" type="text" placeholder="XXXXXXXXXXX" />
+                                <input onkeypress={__addProductToDetail}  id="codigo" class="campo" type="text" placeholder="XXXXXXXXXXX" />
                             </div>
                             <div class="col-md-2">
                                 <button    onclick = {__ListaDecodigos} class="btn btn-primary form-control" id="btn-facturar" >
@@ -158,20 +158,20 @@
                             <td>{codigo}</td>
                             <td>{descripcion}</td>
                             <td class="text-right">
-                                <input onkeypress={__recalculacionDelDetalle} id= "cantidadDetalle" class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad} />
+                                <input onkeypress={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalle} id= "cantidadDetalle" class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad} />
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarCosto} class="form-control" type="text"  value = "{costo}" />
+                                <input  onkeypress={__actualizarCosto} onBlur={__actualizarCosto} class="form-control" type="text"  value = "{costo}" />
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarPrecio} class="form-control" type="text"  value = "{precio}" />
+                                <input  onkeypress={__actualizarPrecio} onBlur={__actualizarPrecio} class="form-control" type="text"  value = "{precio}" />
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarDescuento} class="form-control" type="text"  value = "{descuento}" />
+                                <input  onkeypress={__actualizarDescuento} onBlur={__actualizarDescuento} class="form-control" type="text"  value = "{descuento}" />
                             </td>
                                                         
                             <td class="text-right">
-                                <input  onkeypress={__actualizarImpuesto}  class="form-control" type="text"  value = "  {impuesto}" />
+                                <input  onkeypress={__actualizarImpuesto}  onBlur ={__actualizarImpuesto} class="form-control" type="text"  value = "  {impuesto}" />
                             </td>
 
                             <td class="text-right">
@@ -296,6 +296,7 @@
         display:flex;
         flex-wrap:wrap;
     }
+    
     .label-limpiar{
         font-weight: 600 !important;
         font-size: 20px !important;
@@ -453,6 +454,30 @@
         margin-bottom: 5px;
         font-weight: 600;
     }
+    .campo {
+        display: block;
+        width: 100%;
+        height: 45px;
+        padding: 8px 18px;
+        font-size: 10px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        background-color: #fcfcfc;
+        border: 1px solid #ccc;
+        font: 20px verdana, arial, helvetica, sans-serif;
+        margin: 2px 0;
+        padding: 1px 2px;
+        overflow: visible;
+    }
 </style>
 
 <script>
@@ -506,6 +531,7 @@
         __ComboEstados()
         
         __ListaDeProveedores()
+        __ListaDeArticulosPorEmpresa()
     })
 /**
 * Camps requeridos

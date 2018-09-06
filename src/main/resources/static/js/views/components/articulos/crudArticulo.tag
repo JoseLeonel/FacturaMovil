@@ -1185,7 +1185,7 @@ __agregar(){
                 
             }
 
-            var = 1;
+            
         // Permite obtener todos los valores de los elementos del form del jsp
         var formulario = $("#formulario").serialize();
                 $.ajax({

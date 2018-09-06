@@ -100,38 +100,7 @@
                             </div>
 
                         </div>
-                        <div class="row">
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label  >{$.i18n.prop("cliente.provincia")} </label>
-                                <select onchange= {__cargaCantones}  class="form-control" id="provincia" name="provincia" >
-                                    <option    value="0"  >{$.i18n.prop("combo.seleccionar")}</option>
-                                    <option  each={provincias.data}  value="{codigo}" selected="{cliente.provincia ==codigo?true:false}" >{descripcion}</option>
-                                </select>
-                            </div>
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label  >{$.i18n.prop("cliente.canton")} </label>
-                                <select onchange= {__cargaDistritos}    class="form-control" id="canton" name="canton" >
-                                    <option    value="0"  >{$.i18n.prop("combo.seleccionar")}</option>
-                                    <option  each={cantones.data}  value="{codigo}" selected="{cliente.canton ==codigo?true:false}" >{descripcion}</option>
-                                </select>
-                            </div>
-
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label  >{$.i18n.prop("cliente.distrito")} </label>
-                                <select  onchange= {__cargaBarrios}    class="form-control" id="distrito" name="distrito" >
-                                    <option    value="0"  >{$.i18n.prop("combo.seleccionar")}</option>
-                                    <option  each={distritos.data}  value="{codigo}" selected="{cliente.distrito ==codigo?true:false}" >{descripcion}</option>
-                                </select>
-                            </div>
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label  >{$.i18n.prop("cliente.barrio")} </label>
-                                <select     class="form-control" id="barrio" name="barrio" >
-                                    <option    value="0"  >{$.i18n.prop("combo.seleccionar")}</option>
-                                    <option  each={barrios.data}  value="{codigo}" selected="{cliente.barrio ==codigo?true:false}" >{descripcion}</option>
-                                </select>
-                            </div>                        
-
-                        </div>                        
+                                              
                         <div class="row">    
 
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
@@ -265,7 +234,7 @@ self.on('mount',function(){
     _incializarCampos()
     __InicializarTabla('.tableListar')
     __listado()
-__cargaProvincias()
+
     __Eventos()
     includeActions('.dataTables_wrapper','.dataTables_length')
     __MantenimientoAgregar()
@@ -277,161 +246,12 @@ __cargaProvincias()
     }, false );
 })
 
-/**
-*  Provincias
-**/
-function __cargaProvincias(){
-    self.provincias = []
-     $.ajax({
-         url: "ListarProvinciasAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-             if(result.aaData.length > 0){
-                self.provincias.data =  result.aaData
-                self.update();
-                
-            
 
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
-
-}
-
-/**
-* cuando cambia la provincia cambia los cantones
-**/
-__cargaCantones(e){
-    var codigo = e.currentTarget.value
-    _ConsultarCantonesByProvincias(codigo)
-}
-/**
-*  Cantones
-**/
-function _ConsultarCantonesByProvincias(provincia){
-    var provincias = {
-        id:null,
-        codigo:provincia,
-        descripcion:""
-    }
-    self.cantones  = {data:[]}
-    self.update()
-     $.ajax({
-         url: "ListarCantonesAjax.do",
-        datatype: "json",
-        method:"GET",
-        data : provincias,
-        success: function (result) {
-             if(result.aaData.length > 0){
-                self.cantones.data =  result.aaData
-                self.update();
-                
-
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
-
-}
-
-/**
-* cuando cambia los cantones cambia los distritos
-**/
-
-__cargaDistritos(e){
-        var codigo = e.currentTarget.value
-
-    _ConsultarDistritosByCanton($('#provincia').val(),codigo)
-
-}
-
-/**
-*  Cantones
-**/
-function _ConsultarDistritosByCanton(provincia,canton){
-    var cantones = {
-        id:null,
-        codigo:canton,
-        codigo_provincia:provincia,
-        descripcion:""
-    }
-    self.distritos  = {data:[]}
-    self.update()
-     $.ajax({
-         url: "ListarDistritosAjax.do",
-        datatype: "json",
-        method:"GET",
-        data : cantones,
-        success: function (result) {
-             if(result.aaData.length > 0){
-                self.distritos.data =  result.aaData
-                self.update();
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
-
-}
-/**
-* cuando cambia los distritos cambia los barrios
-**/
-__cargaBarrios(e){
-     var codigo = e.currentTarget.value
-    _ConsultarBarriosByDistrito($('#provincia').val(),codigo,$("#canton").val())
-
-}
-
-/**
-*  Cantones
-**/
-function _ConsultarBarriosByDistrito(provincia,distrito,canton){
-    var distritos = {
-        id:null,
-        codigo:distrito,
-        codigoProvincia:provincia,
-        codigoCanton:canton,
-        descripcion:""
-    }
-    self.barrios  = {data:[]}
-    self.update()
-     $.ajax({
-         url: "ListarBarriosAjax.do",
-        datatype: "json",
-        method:"GET",
-        data : distritos,
-        success: function (result) {
-             if(result.aaData.length > 0){
-                self.barrios.data =  result.aaData
-                self.update();
-            }            
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-             mensajeErrorServidor(xhr, status);
-        }
-    })
-
-}
 /**
 * Limpiar campos
 **/
 function _incializarCampos(){
-    $("#provincia").val($("#provincia option:first").val());
     $("#tipoCedula").val($("#tipoCedula option:first").val());
-    $("#canton").val($("#canton option:first").val());
-    $("#distrito").val($("#distrito option:first").val());
-    $("#barrio").val($("#barrio option:first").val());
     $('.nombreCompleto').val(null)
     $('.cedula').val(null)
     $('.identificacionExtranjero').val(null)
@@ -593,14 +413,14 @@ function __Eventos(){
 			}
 		}
 	});
-    $('#telefono').mask('00000000', {
+    $('.telefono').mask('00000000', {
             'translation' : {
                 0 : {
                     pattern : /[0-9]/
                 }
             }
 	})
-    $('#celular').mask('00000000', {
+    $('.celular').mask('00000000', {
             'translation' : {
                 0 : {
                     pattern : /[0-9]/

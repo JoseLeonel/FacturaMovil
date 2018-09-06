@@ -228,9 +228,9 @@ public class FacturasController {
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
 
-	@RequestMapping(value = "/ListaProformas", method = RequestMethod.GET)
+	@RequestMapping(value = "/proformas.do", method = RequestMethod.GET)
 	public String listaProformas(ModelMap model) {
-		return "/views/facturas/listaProformas.html";
+		return "views/facturas/proformas";
 	}
 
 	@RequestMapping(value = "/postVenta", method = RequestMethod.GET)
@@ -635,6 +635,19 @@ public class FacturasController {
 	}
 
 	
+	@RequestMapping(value = "/MostrarFacturaPorConsecutivoAjax", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator MostrarFacturaPorConsecutivo(HttpServletRequest request, HttpServletResponse response, @RequestParam String consecutivo) {
+		try {
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Factura facturaBD = facturaBo.findByConsecutivoAndEmpresa(consecutivo, usuario.getEmpresa());
+
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", facturaBD);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+	
 
 	
 	
@@ -676,7 +689,6 @@ public class FacturasController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("all")
 	@RequestMapping(value = "/CambiarEstadoProformaAPedienteAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator cambiarEstadoProforma(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura) throws Exception {
@@ -688,6 +700,10 @@ public class FacturasController {
 			}
 
 			facturaBD.setEstado(Constantes.FACTURA_ESTADO_PENDIENTE);
+			facturaBD.setTipoDoc(Constantes.FACTURA_TIPO_DOC_TIQUETE);
+			facturaBD.setTotalCambioPagar(Constantes.ZEROS_DOUBLE);
+			facturaBD.setTotalEfectivo(Constantes.ZEROS_DOUBLE);
+			facturaBD.setTotalBanco(Constantes.ZEROS_DOUBLE);
 			facturaBD.setUpdated_at(new Date());
 			facturaBo.modificar(facturaBD);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.modificado.correctamente", facturaBD);

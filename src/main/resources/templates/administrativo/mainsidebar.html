@@ -19,6 +19,7 @@
 			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><a href="/ListarClientes">   <i class="fa fa-circle-o"></i> Clientes  </a></li>
 			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><a href="/ListarVendedores"> <i class="fa fa-circle-o"></i> Vendedores</a></li>
 	  		          <li sec:authorize="hasAnyAuthority('Administrador_Sistema')"><a href="/ListarCajas">      <i class="fa fa-circle-o"></i> Cajas     </a></li>
+	  		          <li sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><a href="/ListarMesas">      <i class="fa fa-circle-o"></i> Mesas     </a></li>
 		            </ul>
 		        </li>
 		  <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')">
@@ -101,7 +102,7 @@
             </ul>
         </li>
 		<li class="active treeview">
-            <a href="/ListaProformas">
+            <a href="/proformas.do">
                 <i class="fa fa-file-archive-o"></i> <span>Proformas</span>
             </a>
         </li>    
