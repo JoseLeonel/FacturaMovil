@@ -12,8 +12,6 @@
         </div>
         </div>      
     </div>              
-
- 
 <div>
     <form id="FormPaginacion">
         <input type="hidden" name="id" id="id" value="{parametrosPaginacion.cantidadPorPagina}">
@@ -24,7 +22,6 @@
         <input type="hidden" name="categoria" id="categoria" value="{categoria.id}">
     </form>
 </div>
-
 <!--Modal mostrar  -->
 <div id="modalVendedor" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -62,10 +59,8 @@
     </div>
 </div>
 <!--fin del modal-->
-
 <!--Inicio de la Venta-->
 <div show={mostarParaCrearNuevaVentas}>
-
     <div class="content">
            <div class="row-fluid no-space">
             <div class="col-md-5 col-sm-5 col-lg-5 col-xs-12 pull-right" style="padding: 0px 10px">
@@ -97,16 +92,16 @@
                                             <span onclick ={__CambiarCantidad} class="label label-success cantidad">{cantidad.toFixed(3)}</span>
                                         </td>
                                         <td >
-                                            <span onclick ={__CambiarPrecio}  class="label label-success precio-prod" >{precioUnitario.toLocaleString('de-DE')}</span>
+                                            <span onclick ={__CambiarPrecio}  class="label label-success precio-prod" >{precioUnitario.toFixed(2)}</span>
                                         </td>
                                         <td >
-                                            <span onclick ={__CambiarDescuento} class="label label-success precio-prod" >{porcentajeDesc.toLocaleString('de-DE')}</span>
+                                            <span onclick ={__CambiarDescuento} class="label label-success precio-prod" >{porcentajeDesc.toFixed(2)}</span>
                                         </td>
                                         <td >
-                                            <span class="label label-success " >{impuesto}</span>
+                                            <span class="label label-success " >{impuesto.toFixed(2)}</span>
                                         </td>
                                         <td>
-                                            <span class="precio-calc">{montoTotalLinea.toLocaleString()}</span>
+                                            <span class="precio-calc">{montoTotalLinea.toFixed(2)}</span>
                                         </td>
                                         <td>
                                             <button  onclick={__removeProductFromDetail} class="btn_eliminar_detalle btn-danger btn-xs btn-block">X</button>
@@ -266,15 +261,12 @@
                         <div class="barra">
                            <input onkeypress = {__addProductToDetail} type="text" class="form-control" id="codigoBarra" autofocus="autofocus" placeholder="{$.i18n.prop('titulo.digite.codigo.barra')}">
                        </div>    
-                       
                     </section>
                     <!--Fin Seccion de codigo de barra-->
-                            
                 </div> 
     </div>       
 </div>
-        <!--Fin Ventana de los productos-->
-
+<!--Fin Ventana de los productos-->
 <!--Modal mostrar Facturas del Dias -->
 <div id='modalFacturasDia' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -316,11 +308,6 @@
     </div>
 </div>
 <!--Modal mostrar  -->  
-
-
-<!--Modal Cambiar Cantidad-->
-
-
 <!-- Modal correo alternativo-->
 <div class="modal fade" id="ModalAgregarNombreTiquete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -350,10 +337,6 @@
      </div>
 </div>
 <!--fin Modal agregar el nombre de el tiquete temporal-->
-
-
-
-
 <!--Modal Cambiar Cantidad-->
 <div class="modal fade" id="modalCambiarCantidad" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -381,12 +364,7 @@
         </div>
      </div>
 </div>
-
-
-
 <!--Fin Cambiar Cantidad-->
-
-
 <!--Modal Cambiar Descripcion-->
 <div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -411,11 +389,7 @@
         </div>
     </div>
 </div>
-
 <!--Fin Cambiar descripcion-->
-
-
-
 <!--Modal Cambiar precio-->
 <div id='modalCambiarPrecio' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -542,15 +516,6 @@
 </div>
 <!--fin del modal-->
 
-
-
-
-
-
-
-
-
-
 <!--Formulario de Pago-->
 <!---Datos Final cuando no es un venta de Crucero -->
 <div show={mostrarFormularioPago}>
@@ -577,7 +542,7 @@
                                         <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
                                             <div class="form-group ">
                                                 <label for="pago_tipoVentaL">{$.i18n.prop("factura.tipo.documento")} </label> 
-                                                <select onchange= {__formaReferencias} class="form-control tipoDoc" id="tipoDoc" name="tipoDoc"   >
+                                                <select class="form-control tipoDoc" id="tipoDoc" name="tipoDoc"   >
                                                     <option each={comboTipoDocumentos} value="{estado}" selected="{factura.tipoDoc ==estado?true:false}" >{descripcion}</option>
                                                 </select>
                                             </div>
@@ -682,7 +647,6 @@
                         </div>       
                     </div>
                     <!--Fin Ventana de los billetes-->      
-                
             </div>
             <div class="col-md-4 col-sm-4 col-lg-4 col-sx-12 ">
 		        <div class="box">
@@ -704,1464 +668,16 @@
                                         
                                     </div>
                                     <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado}>
-                                        <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{factura.totalCambioPagar.toLocaleString('de-DE')}</span></p>    
+                                        <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagar}</span></p>    
                                     </div>
                             </article>
                         </aside>
                     </div><!-- fin box-body-->
 				</div><!-- fin box -->
-
 		    </div>
-
         </div>  
 </div>  
 <!--Fin Ventana de los billetes-->      
-
-
-
-
-
-<style type="text/css">
-
-
-
-    .label-totales{
-            font-weight: 600 !important;
-            font-size: 30px !important;
-            font-family: Roboto,sans-serif !important;
-            color: #30ed17 !important;
-            text-shadow: 0px 0px 1px #ffffff;
-            font-style: italic;
-            text-align: left;
-            padding-left: 20px;
-            line-height: 30px;
-            border-collapse: separate;
-            text-align: center;
-            cursor: pointer;
-            padding: 10px;
-            margin: 20px;
-            border: none;
-            text-align: center !important;
-            background-color: black !important;
-            box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-            border-radius: 5px;
-            -webkit-transition: background-color 100ms linear;
-            -moz-transition: background-color 100ms linear;
-            -o-transition: background-color 100ms linear;
-            -ms-transition: background-color 100ms linear;
-            transition: background-color 100ms linear;
-            
-        }
-    .label-limpiar{
-            font-weight: 600 !important;
-            font-size: 20px !important;
-            font-family: Roboto,sans-serif !important;
-            color: #ffffff !important;
-            text-shadow: 0px 0px 1px #ffffff;
-            font-style: italic;
-            text-align: left;
-            padding-left: 20px;
-            line-height: 30px;
-            border-collapse: separate;
-            text-align: center;
-            cursor: pointer;
-            padding: 5px;
-            margin: 10px;
-            border: none;
-            text-align: center !important;
-            background-color: black !important;
-            box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-            border-radius: 5px;
-            -webkit-transition: background-color 100ms linear;
-            -moz-transition: background-color 100ms linear;
-            -o-transition: background-color 100ms linear;
-            -ms-transition: background-color 100ms linear;
-            transition: background-color 100ms linear;
-            
-        }
-        .label-articulos{
-            font-weight: 300 !important;
-            font-size: 10px !important;
-            font-family: Roboto,sans-serif !important;
-            color: #30ed17 !important;
-            text-shadow: 0px 0px 1px #ffffff;
-            font-style: italic;
-            text-align: left;
-            padding-left: 5px;
-            line-height: 10px;
-            border-collapse: separate;
-            text-align: left;
-            cursor: pointer;
-            padding: 5px;
-            margin: 10px;
-            border: none;
-            text-align: left !important;
-            background-color: black !important;
-            box-shadow: 0 0px 2px 0 rgba(0, 0, 0, 0.1), 0 1px 4px 0 rgba(0, 0, 0, 0.20);
-            border-radius: 1px;
-            -webkit-transition: background-color 100ms linear;
-            -moz-transition: background-color 100ms linear;
-            -o-transition: background-color 100ms linear;
-            -ms-transition: background-color 100ms linear;
-            transition: background-color 100ms linear;
-            
-        }
-         .label-nombreFactura{
-            font-weight: 400 !important;
-            font-size: 18px !important;
-            font-family: Roboto,sans-serif !important;
-            color: #30ed17 !important;
-            text-shadow: 0px 0px 1px #ffffff;
-            font-style: italic;
-            text-align: left;
-            padding-left:10px;
-            line-height: 15px;
-            border-collapse: separate;
-            text-align: left;
-            cursor: pointer;
-            padding: 10px;
-            margin: 15px;
-            border: none;
-            text-align: left !important;
-            background-color: black !important;
-            box-shadow: 0 0px 2px 0 rgba(0, 0, 0, 0.1), 0 1px 4px 0 rgba(0, 0, 0, 0.20);
-            border-radius: 1px;
-            -webkit-transition: background-color 100ms linear;
-            -moz-transition: background-color 100ms linear;
-            -o-transition: background-color 100ms linear;
-            -ms-transition: background-color 100ms linear;
-            transition: background-color 100ms linear;
-            
-        }
-        .label-titulos-articulo{
-            font-weight: 600 !important;
-            font-size: 14px !important;
-            font-family: Roboto,sans-serif !important;
-            color: #30ed17 !important;
-            text-shadow: 0px 0px 1px #ffffff;
-            font-style: italic;
-            text-align: left;
-            padding-left: 15px;
-            line-height: 25px;
-            border-collapse: separate;
-            text-align: center;
-            cursor: pointer;
-            padding: 5px;
-            margin: 10px;
-            border: none;
-            text-align: center !important;
-            background-color: black !important;
-            box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-            border-radius: 5px;
-            -webkit-transition: background-color 100ms linear;
-            -moz-transition: background-color 100ms linear;
-            -o-transition: background-color 100ms linear;
-            -ms-transition: background-color 100ms linear;
-            transition: background-color 100ms linear;
-            
-        }
-    .fondoEncabezado {
-            background: #00539B;
-            color: #f9fafc;
-        }
-        
-        .wrap{
-            max-width:1100;
-            width:90%;
-            margin:auto;
-        }
-        .wrap >h1{
-            color: #494B4D;
-        font-weight: 400;
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-        margin: 15px 0px;
-        }
-        .wrap > h1:after{
-        content: '';
-        width: 100%;
-        height: 1px;
-        background: #C7C7C7;
-        margin: 20px 0;
-    }
-    .pantalla-imprimir{
-        display: flex;
-	    flex-wrap: wrap;
-    }
-    .botones-imprimir{
-        display: flex;
-	    flex-direction: column;
-	    width: 20%;
-    }
-     .botones-imprimir .boton-imprimir{
-        cursor: pointer;
-        padding: 10px;
-        margin: 15px;
-        border: none;
-        color: #fff;
-        text-decoration:none;
-        font-size: 30px;  
-        padding-top:8px !important; 
-        padding-bottom:8px !important; 
-        margin-bottom: 8px;
-        text-align: center !important;
-        background-color: #6dca42 !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 5px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 30px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-     }
-
-
-     .zona-impresion{
-        width: 80%;
-	    display: flex;
-	    flex-wrap: wrap;
-      
-     }
-     .zona-impresion .forma-impresion{
-	width: 80%;
-	margin-left: 1%;
-	margin-bottom: 45px;
-	box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.70);
-
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	align-self: flex-start;
-    background-color: white !important;
-	transition: all .4s;
-     
-}
-  .campo {
-        display: block;
-        width: 100%;
-        height: 45px;
-        padding: 8px 18px;
-        font-size: 10px;
-        line-height: 1.42857143;
-        color: #555;
-        background-color: #fff;
-        background-image: none;
-        border: 1px solid #ccc;
-        border-radius: 2px;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        background-color: #fcfcfc;
-        border: 1px solid #ccc;
-        font: 20px verdana, arial, helvetica, sans-serif;
-        margin: 2px 0;
-        padding: 1px 2px;
-        overflow: visible;
-    }
-
-.tamanoLetraTotales{
-        font-weight: 600 !important;
-        font-size: 30px !important;
-
-    }
-
-    .ticket {
-        height: auto;
-        width: 377px;
-        margin: 0px;
-        padding: 0px;
-        float: left;
-        font-style: normal;
-        line-height: normal;
-        font-weight: normal;
-        font-variant: normal;
-        text-transform: none;
-        color: #000;
-        font-size: 14px;
-        font-family: 'Times New Roman';
-        
-        max-width: 377px;
-       
-    }
-    .ticket > table{
-        border-top: 0px solid black;
-        border-collapse: collapse;
-    }
-    .forma-table {
-    border-top:1px solid black;
-    border-collapse: collapse;
-    }
-    .ticket > td.producto,th.producto {
-    width: 377px;
-    max-width: 75px;
-    }
-    .ticket > td.cantidad,th.cantidad {
-    width: 377px;
-    
-    word-break: break-all;
-    }
-    .ticket > td.precio,th.precio {
-    width: 377px;
-    
-    word-break: break-all;
-    }
-    .encabezado {
-    text-align: left;
-    align-content: left;
-    }
-    .ticket > img {
-    max-width: inherit;
-    width: inherit;
-    }
-    
-    @page{
-    margin: 0;
-    }
-    /* manejar las opciones nota , limpiar Venta en espera*/
-    .contenedor-opciones{
-        padding: 12px 20px 12px 20px;
-
-    }
-
-    .contenedor-opciones {
-        width:100%;
-        flex-wrap:wrap;
-         display:flex;
-    }
-
-    .contenedor-opciones .opciones-menu {
-        width:30%;
-        margin-left:3%;
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        align-self:flex-start;
-        font-weight: 400;
-        font-size: 14px;
-        float: left !important; 
-        color : #5eaf38;
-    }
-    .contenedor-opciones .opciones-limpiar {
-        width:30%;
-        margin-left:3%;
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        align-self:flex-start;
-        font-weight: 400;
-        font-size: 14px;
-        float: left !important; 
-        color : red;
-    }
-    /* pantalla de los articulos*/
-   
-    .lista-articulos{
-        width:100%;
-
-        display:flex;
-        flex-wrap:wrap;
-    }
-    .lista-articulos .product-item{
-        width:22%;
-        margin-left:1%;
-        margin-bottom:25px;
-        box-shadow:0px 0px 6px 0px rgba(0,0,0,0.22);
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        align-self:flex-start;
-    }
-    .lista-articulos .product-item img{
-        width:100%;
-    }
-
-    .lista-articulos .product-item a{
-        display:block;
-        width:100%;
-        padding:8px 0;
-        background:#2D3E50;
-        color:#fff;
-        text-align:center;
-        text-decoration:none;
-    }
-
-    .codigo-barra .barra input {__AgregarProductoDePantalla
-        width: 100%;
-        padding: 30px 20px;
-        margin: 8px 0;
-        border: 2px solid 2D3E50;
-        box-sizing: border-box;
-        color:black;
-        text-align:left;
-        text-decoration:none;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        font-size:40px;
-        
-    
-    }
-    /* Lista de facturas en espera*/
-        .lista-facturas-espera{
-            width:90%;
-            display:flex;
-            flex-wrap:wrap;
-
-        }
-        .lista-facturas-espera .factura-espera{
-            display:block;
-            width:90%;
-            padding:6px 0;
-            margin-bottom:5px;
-            margin-left:10px;
-            margin-right:10px;
-            background:#6dca42 !important;;
-            text-align:center;
-            text-decoration:none;
-            color:#ffffff !important;
-            text-shadow: 0px 0px 1px #ffffff;
-            font-style: italic;
-        }
-
-        .btnNavegacion{
-            cursor: pointer;
-            padding: 10px;
-            margin: 15px;
-            border: none;
-            color: #fff;
-            text-decoration:none;
-            font-size: 25px;  
-            padding-top:8px !important; 
-            padding-bottom:8px !important; 
-            margin-bottom: 8px;
-            text-align: center !important;
-            background-color: #6dca42 !important;
-            box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 5px 0 rgba(0, 0, 0, 0.20);
-            border-radius: 10px;
-
-            -webkit-transition: background-color 100ms linear;
-            -moz-transition: background-color 100ms linear;
-            -o-transition: background-color 100ms linear;
-            -ms-transition: background-color 100ms linear;
-            transition: background-color 100ms linear;
-
-        } 
-
-         
-
-
-    /*fin de la lisa de facturas en espera*/
-
- .vertical-scrollbar
-    {
-    overflow-x: auto; /*for hiding horizontal scroll bar*/
-    overflow-y: auto; /*for vertical scroll bar*/
-    white-space: nowrap;
-    overflow-y:scroll;
-        width:00px;
-        height:500px;
-    }
-    @media (min-width: 992px) {
-    .container-scroll > .row {
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-    .container-scroll > .row > .col-md-2 {
-        display: inline-block;
-        float: none;
-    }
-    }
-
-    .container-scroll > .row {
-    margin-top: 40px;
-    }
-    .container-scroll > .row > .col-md-2 {
-    font-weight: bold;
-    text-align: center;
-    }
-
-    /* The heart of the matter */
-    .testimonial-group > .row {
-    overflow-x: auto;
-    overflow-y: scroll; /* se habilita el scroll vertical */
-    white-space: nowrap;
-    }
-    .testimonial-group > .row > .col-xs-4 {
-    display: inline-block;
-    float: none;
-    }
-    .floating-box {
-        float: left;
-        width: 150px;
-        height: 75px;
-        margin: 10px;
-    
-    }
-
-
-
-    #cod-item{
-        text-align: center;
-    }
-
-    #cod-item-descripcion{
-        text-align: center;
-        margin-left: 10px;
-    }
-
-    #cod-item-descripcion strong{
-        margin-right: 5px;
-        font-weight: 700;
-    }
-
-    #cod-container img{
-        width: 266px;
-        height: 232px;
-        border:2px dotted #EBEBEB;/*//68af27*/
-    }
-
-    #cod-container #cod-nombre{
-        color: #68AF27;
-        margin-top: 0px;
-        margin-bottom: 0px;
-    }
-
-    #cod-container #cod-precio{
-        margin-top: 3px;
-        color: rgb(41, 41, 173);
-        text-align: center;
-        display: block;
-        background: #5327AF;
-        color: white;/*
-        -webkit-border-radius: 8px;
-        -moz-border-radius: 8px;
-        border-radius: 8px;*/
-        padding-top: 5px;
-        padding-bottom: 5px;
-        width: 95%;
-    }
-
-    #vitrina{
-        display: none;
-        padding-bottom: 30px;
-    }
-
-    #contenedor-vitrina #cbx-category{
-        margin-top: -10px;
-        margin-bottom:10px; 
-        display: none;
-    }
-
-    .vitrina-item{
-        border:1px solid #EBEBEB;
-        float: left;
-        margin-left: 7px;
-        margin-top: 8px;
-        cursor:pointer; cursor: hand;
-        width: 134px;
-        height: 175px;
-    }
-
-    .vitrina-item:hover{
-        -webkit-box-shadow: 1px 0px 5px 0px rgba(117,117,117,0.5);
-        -moz-box-shadow: 1px 0px 5px 0px rgba(117,117,117,0.5);
-        box-shadow: 1px 0px 5px 0px rgba(117,117,117,0.5);
-    }
-
-    #item-nombre{
-        font-size: 14px !important;
-        color: #ec6400 !important;
-    }
-    
-
-    .#pie-item{
-        margin-top: 0px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        text-align: center;
-        color: white;
-        background: rgba(104,175,39,0.9); 
-        overflow: hidden;
-    }
-
-    #item-nombre,#item-precio{
-        float: left;
-    }
-
-    #item-nombre{#total-show {
-            padding: 0px;
-            font-weight: 400;
-            background: none!important;
-            font-size: 40px;
-            color: #ffffff !important;
-            text-shadow: 0px 0px 1px #ffffff;
-            padding-top#total-show {
-            padding: 0px;
-            font-weight: 400;
-            background: none!important;
-            font-size: 40px;
-            color: #ffffff !important;
-            text-shadow: 0px 0px 1px #ffffff;
-            padding-top: 0px;
-            line-height: 40px;
-        }#total-show {
-            padding: 0px;
-            font-weight: 400;
-            background: none!important;
-            font-size: 40px;
-            color: #ffffff !important;
-            text-shadow: 0px 0px 1px #ffffff;
-            padding-top: 0px;
-            line-height: 40px;
-        }: 0px;
-            line-height: 40px;
-        }
-        width: 53%;
-        font-size: 14px;
-        padding-left: 7px;
-        text-align: left;
-       
-    }
-    #item-precio{
-        width: 39%;
-        display: block;
-        background: #5327AF;
-        color: white;
-        -webkit-border-radius: 8px;
-        -moz-border-radius: 8px;
-        border-radius: 8px;
-        margin-right: 3px;
-        font-size: 14px;
-        /*   background: red;*/
-    }
-
-    #vitrina{
-        overflow: hidden;
-    }#total-show {
-            padding: 0px;
-            font-weight: 400;
-            background: none!important;
-            font-size: 40px;
-            color: #ffffff !important;
-            text-shadow: 0px 0px 1px #ffffff;
-            padding-top: 0px;
-            line-height: 40px;
-        }
-
-    .vitrina-item img{
-        width: 170px;
-        height: 130px;
-    }
-
-    .vitrina-item h5{
-        margin: 0;
-    }#total-show {
-            padding: 0px;
-            font-weight: 400;
-            background: none!important;
-            font-size: 40px;
-            color: #ffffff !important;
-            text-shadow: 0px 0px 1px #ffffff;
-            padding-top: 0px;
-            line-height: 40px;
-        }
-
-    #tipo-busqueda{
-        list-style: none;
-        margin-left: 0px;
-        overflow: hidden;
-    }
-
-    #tipo-busqueda li{
-        height: 65px;
-        background: #68AF27;
-        width: 33.1%;
-        float: left;
-        text-align: center;
-        color: white;
-        border-left: white 1px solid;
-        cursor:pointer; cursor: hand;
-    }
-
-    #tipo-busqueda li.active{
-        background: #316800!important;
-    }
-
-    #tipo-busqueda li h3{
-        font-family: "Segoe UI", arial, sans-serif;
-        font-weight: 400;
-    }
-    #total-show {
-            padding: 0px;
-            font-weight: 400;
-            background: #total-show {
-            padding: 0px;
-            font-weight: 400;
-            background: none!important;
-            font-size: 40px;
-            color: #ffffff !important;
-            text-shadow: 0px 0px 1px #ffffff;
-            padding-top: 0px;
-            line-height: 40px;
-        }none!important;
-            font-size: 40px;
-            color: #ffffff !important;
-            text-shadow: 0px 0px 1px #ffffff;
-            padding-top: 0px;
-            line-height: 40px;
-        }
-    #categorias{#total-show {
-            padding: 0px;
-            font-weight: 400;
-            background: none!important;
-            font-size: 40px;
-            color: #ffffff !important;
-            text-shadow: 0px 0px 1px #ffffff;
-            padding-top: 0px;
-            line-height: 40px;
-        }
-        padding-top: 15px;
-        padding-bottom: 15px;
-        font-size: 14px;
-        background: #4C8D13;
-        overflow: hidden;
-        display: none;
-    }
-
-    #nav-categoria{
-
-        list-style: none;
-        margin: 0;
-        overflow: hidden;
-        float: left;
-        margin-left: 10px;
-        width: 91%;
-
-    }
-
-    #nav-categoria li{
-        float: left;
-        background: #67AF27;
-        margin-right: 10px;
-        height: 90px;
-        color: white;
-        cursor:pointer; cursor: hand;
-        text-align: center;
-        width: 12%;
-    }
-
-    #nav-categoria li:hover{
-        background: #83C44A;
-    }
-
-    #nav-categoria li img{
-        width: 100%;
-        height: 70px;
-    }
-
-    .btn-control{
-        width: 4%;
-        height: 100px;
-        float: left;
-        background: #83C44A;
-    }
-
-   
- </style>   
-<style type="text/css">
-    .precioTotalFactura{
-        font-weight:bold;
-        font-size:20px;
-        color: #0C9C22;
-        border-top: 1px solid #DFDCD1;
-        padding: 0 0 5px;
-        padding: 15px 0 0;
-        margin: 10px 0 0;
-
-    }
-    .entregarCambioPositivo{
-        font-weight:bold;
-        font-size:20px;
-        color: #0C9C22;
-        border-top: 1px solid #DFDCD1;
-        padding: 0 0 5px;
-        padding: 15px 0 0;
-        margin: 10px 0 0;
-
-    }
-    .entregarCambioNegativo{
-        font-weight:bold;
-        font-size:20px;
-        color: #ff0000;
-        border-top: 1px solid #DFDCD1;
-        padding: 0 0 5px;
-        padding: 15px 0 0;
-        margin: 10px 0 0;
-
-    }
-    .total{
-        font-weight:bold;
-        font-size:20px;
-
-    }
-
-    .booking-details h1 {
-        font-size: 1.5em;
-        color: #666;
-        text-shadow: none;
-    }
-    .booking-details .booking-info {
-        border-top: 1px solid #DFDCD1;
-        padding: 15px 0 0;
-        margin: 15px 0 0;
-        display: inline-block;
-        width: 100%;
-    }
-
-   
-
-    .titulos-modal-vender{
-            position: relative;
-            color: #fff;
-            box-shadow: 0 1px 0 #fff;
-            background: #28cc28;
-            -moz-border-radius: 4px 4px 0px 0px;
-            -webkit-border-radius: 4px 4px 0px 0px;
-            border-radius: 4px 4px 0px 0px;
-            padding: 15px 10px;
-            text-align: left;
-        }
-        body {
-            overflow-x: hidden;
-        }
-
-        .ui-dialog{
-            z-index: 10000!important;
-        }
-
-        #total-show{
-            font-weight: bold;
-            background: none!important;
-            font-size: 20px;
-        }
-
-        #contenedor-lista-clientes{
-            display: none;
-            position: absolute;
-            width: 247px;
-        }
-        #buscar-cliente{
-            width: 217px!important;
-        }
-
-        
-
-        #cod-container{
-            display: none;
-            width: 40%;
-            padding: 10px 7px;
-            border:1px solid #EBEBEB;
-            overflow: hidden;
-            color: #757575;
-            margin-left: 25%;
-        }
-
-        #cod-container:hover{
-            background: #F9F9F9;
-            cursor:pointer; cursor: hand;
-        }
-
-        #cod-item,#cod-item-descripcion{
-            overflow: hidden;
-        }
-
-        #cod-item{
-            text-align: center;
-        }
-
-        #cod-item-descripcion{
-            text-align: center;
-            margin-left: 10px;
-        }
-
-        #cod-item-descripcion strong{
-            margin-right: 5px;
-            font-weight: 700;
-        }
-
-        #cod-container img{
-            width: 266px;
-            height: 232px;
-            border:2px dotted #EBEBEB;/*//68af27*/
-        }
-
-        #cod-container #cod-nombre{
-            color: #68AF27;
-            margin-top: 0px;
-            margin-bottom: 0px;
-        }
-
-        #cod-container #cod-precio{
-            margin-top: 3px;
-            color: rgb(41, 41, 173);
-            text-align: center;
-            display: block;
-            background: #5327AF;
-            color: white;/*
-            -webkit-border-radius: 8px;
-            -moz-border-radius: 8px;
-            border-radius: 8px;*/
-            padding-top: 5px;
-            padding-bottom: 5px;
-            width: 95%;
-        }
-
-        
-
-        #item-nombre,#item-precio{
-            float: left;
-        }
-
-        #item-nombre{
-            width: 53%;
-            font-size: 12px;
-            padding-left: 7px;
-            text-align: left;
-            /*  background: blue;*/
-        }
-        #item-precio{
-            width: 39%;
-            display: block;
-            background: #5327AF;
-            color: white;
-            -webkit-border-radius: 8px;
-            -moz-border-radius: 8px;
-            border-radius: 8px;
-            margin-right: 3px;
-            font-size: 13px;
-            /*   background: red;*/
-        }
-
-        
-
-        #tipo-busqueda{
-            list-style: none;
-            margin-left: 0px;
-            overflow: hidden;
-        }
-
-        #tipo-busqueda li{
-            height: 65px;
-            background: #68AF27;
-            width: 33.1%;
-            float: left;
-            text-align: center;
-            color: white;
-            border-left: white 1px solid;
-            cursor:pointer; cursor: hand;
-        }
-
-        #tipo-busqueda li.active{
-            background: #316800!important;
-        }
-
-        #tipo-busqueda li h3{
-            font-family: "Segoe UI", arial, sans-serif;
-            font-weight: 400;
-        }
-
-        
-
-        .btn-control{
-            width: 4%;
-            height: 100px;
-            float: left;
-            background: #83C44A;
-        }
-
-    
-
-</style>
-
-
-<style type="text/css">
-
-        #v2Cont.panel {margin-bottom: 0px !important; border: none !important; box-shadow: none !important;}
-        #v2Cont.panel,.body,.wrapper
-        {
-            margin: 0px;
-            padding: 0px;
-            background-color: transparent;
-        }
-
-        .panel-title{
-            padding: 5px;
-        }
-
-    
-    
-        #cod-barras-sep{
-            border-color: #dedede !important;
-        }
-        #cod-container #cod-img{
-            margin-bottom: 10px;
-        }
-
-        #cod-precio{
-            background-color: transparent !important;
-            color: rgb(98, 203, 49) !important;
-            font-weight: 500;
-            font-size: 28px !important;
-            padding: 0px !important;
-            margin: 0px !important;
-            width: 100% !important;
-        }
-        #cod-item-descripcion{
-            margin: 0px !important;
-        }
-
-        
-        .nombre_producto{
-            font-weight: 500 !important;
-            color: #000;
-        }
-
-    
-
-        #tipo-busqueda h3{
-            color: #131212 !important;
-        }
-
-        #botones .popover-content{
-            padding: 10px;
-            margin-bottom: 10px;
-            height: 40px;
-        }
-        #botones .popover-content .btn-warning{
-            background-color: #c74646 !important;
-            margin-left: 4px;
-        }
-        #botones .popover-content .btn{
-            padding: 3px 6px;
-        }
-
-        .funcLista{
-            text-decoration: none !important;
-            color: #53a52a;
-        }
-        .funcLista:hover span.textFunc{
-            text-decoration: underline;
-        }
-        .textFunc{
-            margin-left: 4px;
-            font-weight: 400;
-            text-decoration: none !important;
-        }
-
-        #faqSearch{
-            padding-bottom: 1px;
-        }
-
-        #tablaListaProductos td a {        
-            font-size: 40px;
-            margin: 0px;
-            padding-bottom: 4px !important;
-        }
-
-
-
-        #tablaListaProductos td a {
-            color: #C22439;
-            background-color: #f4f4f4 !important;
-            padding: 3px 5px 0px 5px;
-            border-radius: 8px;
-
-            -webkit-transition: color 200ms linear, background-color 200ms linear;
-            -moz-transition: color 200ms linear, background-color 200ms linear;
-            -o-transition: color 200ms linear, background-color 200ms linear;
-            -ms-transition: color 200ms linear, background-color 200ms linear;
-            transition: color 200ms linear, background-color 200ms linear;
-
-        }
-
-        #tablaListaProductos td a:hover {
-            background-color: #C22439 !important;
-            color: #fff  !important;
-        }
-
-
-
-        .label-success, .badge-success, .green {
-            background: #797979 !important;
-        }
-
-        .label-success:hover{
-            background: #68AF27 !important;
-            -webkit-transition: background-color 200ms linear;
-            -moz-transition: background-color 200ms linear;
-            -o-transition: background-color 200ms linear;
-            -ms-transition: background-color 200ms linear;
-            transition: background-color 200ms linear;
-        }
-
-
-        #categorias{
-            background-color: #fff;
-        }    
-
-        .newPanel{
-            background-color: #fff;
-        }
-
-        .newContNavegacion{
-            padding: 5px 0px 5px 0px;
-            margin-bottom: 5px !important;
-        }
-
-        #nav-categoria li{
-            background-color: #f6f6f6 !important;
-            color: #555;
-        }
-
-        #next,#next-triangulo{ background-color: #eee !important; }    
-        #next-triangulo{ border-color: transparent transparent transparent #ccc; }    
-
-        #next:hover,#next:hover #next-triangulo{ background-color: #ddd !important; }
-        #next:hover #next-triangulo{ border-color: transparent transparent transparent #bbb; }
-
-        #nav-categoria li:hover{
-            background-color: #eee !important;
-        }    
-
-        .newTexto{
-            color: #555 !important;
-            height: 25px !important;
-        }
-
-        .block .head.green *{
-            color: #555 !important;
-            font-size: 14px;
-        }    
-
-        
-        #buscalo,#codificalo,#navegador{
-            background-color: transparent !important;
-            height: auto !important;
-            border-left: transparent 0px solid !important;        
-        }    
-
-        #tipo-busqueda li.active {
-            background-color: transparent !important;
-        }
-        #tipo-busqueda li.active h3{
-            color: #66B12F !important;
-        }    
-
-        #codificalo{
-            border-left: rgba(0,0,0,0.1) 1px solid !important;
-            border-right: rgba(0,0,0,0.1) 1px solid !important;
-        }
-
-        #tipo-busqueda{
-            height: auto !important;
-            margin: 0px !important;
-        }
-        #tipo-busqueda li {
-            height: 30px !important;
-            padding-top: 6px;
-        }
-        #tipo-busqueda li h3 {
-            margin: 0px !important;
-            padding: 0px !important;
-            font-size: 16px !important;
-            transition: color 0.1s linear !important;
-        }
-        #tipo-busqueda li h3:hover {
-            color: #66B12F !important;
-        }
-
-
-        #tipo-busqueda img{
-            display: none;
-        }
-
-        .text-info {
-            color: #68AF27;
-        }    
-
-            
-
-        .head.green.well tr td:first-child span{
-            font-size: 40px !important;
-            font-weight: bold !important;
-        }
-        .site-navbar {
-            /*display: none !important;*/
-        }
-        .navbar .btn, .navbar .btn-group {
-            margin-top: 0px;
-        }
-
-
-        .btn-nuevaFactura {
-            border-color: #008CBA;
-            color: #008CBA !important;
-            border-radius: 8px;
-            
-        }
-        .btn-nuevaFactura:hover {
-           background-color: #008CBA;
-            color: white !important;
-        }
-
-        .btn_eliminar_detalle {
-            border-color: #bc4044;
-            background: #bc4044 !important;
-            margin-bottom: 0px !important;
-            color: #fff !important;
-        }
-
-        #pagar{
-            color:#fff;
-            background-color: #006699 !important;
-            float: none !important;
-
-        }
-
-
-        #cancelarVenta{
-            color: #c5272d !important;
-        }
-
-        .clearBoth{
-            clear: both;
-        }
-
-        .newPanel{
-            margin-bottom: 10px !important;
-        }
-
-        .textShadow{
-            text-shadow: 0px 0px 1px #000000;
-            color: #ffffff !important;
-            text-shadow: 0px 0px 1px #ffffff;
-        }
-        #pagarTitulo{
-            font-weight: 600 !important;
-            font-size: 30px !important;
-            font-family: Roboto,sans-serif !important;
-            color: #ffffff !important;
-            text-shadow: 0px 0px 1px #ffffff;
-            font-style: italic;
-            text-align: left;
-            padding-left: 20px;
-            line-height: 30px;
-        }
-
-        #pagarTable,#pagarTableInfo{
-            border-collapse: separate;
-        }
-        #pagarTableInfo{
-            background-color: #f2f2f2;
-            color: #000;
-            text-align: center;
-        }
-
-        #bordeBevelLeft{
-            border-top: none;
-            border-bottom: none;
-            border-left: none;
-            border-right: 1px solid #DBDBDB !important;
-        }
-        #bordeBevelRight{
-            border-top: none;
-            border-bottom: none;
-            border-left: 1px solid #FFFFFF !important;
-            border-right: none;
-        }
-        #bordeBevelTop{
-            border-top: 1px solid #FFFFFF !important;   
-
-        }
-        #bordeBevelBottom{
-            border-bottom: 1px solid #DBDBDB !important;
-        }    
-        #total-show {
-            padding: 0px;
-            font-weight: 400;
-            background: none!important;
-            font-size: 40px;
-            color: #ffffff !important;
-            text-shadow: 0px 0px 1px #ffffff;
-            padding-top: 0px;
-            line-height: 40px;
-        }
-
-        #total_show_peso{
-            font-size: 28px !important;
-            color: #ffffff !important;
-            text-shadow: 0px 0px 1px #ffffff;
-            line-height: 10px;
-        }
-        
-        #btnGrandePagar,#btnGrandePagar2{
-            cursor: pointer;
-            padding: 0px;
-            margin: 10px;
-            border: none;
-
-            text-align: center !important;
-            background-color: #6dca42 !important;
-            box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-            border-radius: 5px;
-
-            -webkit-transition: background-color 100ms linear;
-            -moz-transition: background-color 100ms linear;
-            -o-transition: background-color 100ms linear;
-            -ms-transition: background-color 100ms linear;
-            transition: background-color 100ms linear;
-
-        } 
-
-
-        #pagarInfo,#iva-total,#subtotal,#sigPeso{
-            font-weight: 100 !important;
-            font-size: 14px !important;
-        }
-        #pagarInfo{
-            font-size: 12px !important;
-        }
-        #sigPeso{
-            margin-left: 8px;
-            margin-right: 2px;
-        }
-        #sigPeso,#iva-total,#subtotal{
-            font-weight: 500 !important;
-        }
-
-        #listaProductos{
-            background-color: #f9f9f9;
-        }
-
-        tr.nothing td{
-            text-align: center;
-            padding-top: 100px !important;
-            height:100px !important;
-            color: #aaa !important;
-        }
-
-        #tablaListaProductos {   
-            border-collapse: separate !important;
-            overflow-x: hidden !important;
-        }  
-
-        #tablaListaProductos td{
-            height: 30px;
-            border-bottom: 1px solid #e2e2e2 !important;
-            border-top: 1px solid #fff !important;
-            background-color: #f4f4f4;
-            padding-left: 12px;
-        }
-
-
-
-        #tablaListaProductos .text-info {
-            color: #232323;
-            font-size: 18px;
-            font-weight: 400;
-        }
-        #tablaListaProductos .precio-calc {
-            color: #232323;
-        }    
-
-        #tablaListaProductos tr.nothing td{
-            border-bottom: none !important;
-            background-color: transparent;
-            border: none;
-        }
-
-        #tablaListaProductos tr td:first-child {
-            padding-left: 20px;
-        }
-
-        #tablaListaProductos tr td:last-child {
-            padding-top: 3px;
-            padding-left: 0px;
-        }
-        #tablaListaProductos tr td:last-child {
-            width: 30px;
-        }
-        #tablaListaProductos .title-detalle {
-            word-break: break-all !important;
-        }
-
-
-        .input-group-addon{
-            padding: 5px 12px 5px 12px;
-        }
-
-        .input-group-addon.btnClientes{
-            color: #66b12f;
-            cursor: pointer;
-        }
-
-        .input-group input{
-            background-color: #f9fcfd !important;
-            height: 30px;
-            border-radius: 0px 3px 3px 0px;
-            border: 1px solid #eaeaea;
-            z-index: -1;
-        }
-        .input-group .wb-user{
-            font-size:14px !important;
-        }
-
-        #formLeft{
-            border-right: 1px solid #eaeaea;
-        }
-        #botones div.btn{
-            border: none;
-            background: #545454 !important;
-            width: inherit !important;
-            height: inherit !important;
-            padding: 4px 10px !important;
-            font-size: 12px;
-
-            -webkit-transition: background-color 200ms linear;
-            -moz-transition: background-color 200ms linear;
-            -o-transition: background-color 200ms linear;
-            -ms-transition: background-color 200ms linear;
-            transition: background-color 200ms linear;
-        }
-        #botones div.btn:active,
-        #botones div.btn:visited,
-        #botones div.btn:focus{
-            background: #545454 !important;        
-        } 
-        #botones div.btn:hover{
-            background: #5E8C47 !important;        
-        }    
-        #botones table{
-            display:none;
-        }
-        .btn.funcLista{
-            width: 80%;
-            text-decoration: none;
-            background: #6dca42 !important;
-            margin-top: 5px;
-            padding: 2px;
-        }
-        #listadoProdcutos{
-            color: #555;
-            text-align: center;
-            padding: 6px;
-            font-weight: 400;
-            font-size: 18px;
-        }
-        
-</style>
 
 <script>
     var self = this;
@@ -2243,6 +759,7 @@
     self.totalDescuentos               = 0
     self.totalImpuesto                 = 0
     self.totalComprobante              = 0;
+    self.totalCambioPagar              = 0;
     self.todasProvincias               = {data:[]}
     self.todosCantones                 = {data:[]}
     self.todosDistritos                = {data:[]}
@@ -2290,10 +807,7 @@
     self.urlImagenBuscador    = '/dist/img/buscador.png';
 
     self.on('mount',function(){
-         
-         
         $("#formularioFactura").validate(reglasDeValidacionFactura());
-         
         __informacionData()
         __informacionData_vendedores()
         __InicializarTabla('.tableListaCliente')
@@ -2314,9 +828,9 @@
        __Teclas()
        __TipoCambio()
        
-       __comboCondicionPagoRef()
-
+     
         cargaBilletes()
+        mostrarCategorias()
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
@@ -2343,11 +857,9 @@ __AgregarProductoDePantalla(e){
 *  Mostrar si escoge una categorias
 **/
 __ArticulosXCategorias(e){
-    
     var item = e.item
     self.categoria = item
     self.update()
-     
     __ListaArticulosXCategorias()
 }
 
@@ -2367,13 +879,10 @@ __BotonAnterior(){
         self.inventariosXCategoria.pagination.current_page = self.inventariosXCategoria.pagination.current_page - 1
         self.inventariosXCategoria.pagination.current_page = self.inventariosXCategoria.pagination.current_page > 1?self.inventariosXCategoria.pagination.current_page:1;
          self.parametrosPaginacion.paginaActual = self.parametrosPaginacion.paginaActual > 1?self.parametrosPaginacion.paginaActual - 12:0 
-
-
         self.update()
         __ListaArticulosXCategorias()
-
     }
-            
+           
 }
 
 /**
@@ -2386,9 +895,7 @@ __BotonSiguiente(){
         self.parametrosPaginacion.paginaActual += 12
         self.update()
         __ListaCategorias()
-
         }
-
     }else{ //cuando esta usando la pantalla de articulos
         if(self.inventariosXCategoria.pagination.current_page <  self.inventariosXCategoria.pagination.last_page){
         self.inventariosXCategoria.pagination.current_page = self.inventariosXCategoria.pagination.current_page + 1
@@ -2405,7 +912,6 @@ __BotonSiguiente(){
 *  Lista de los clientes
 **/
 function __ListaCategorias(){
-    
     //Primera vez 
     if( self.categorias.pagination.current_page == 0){
         self.inventariosXCategoria.pagination.current_page = 0    
@@ -2413,13 +919,10 @@ function __ListaCategorias(){
         self.parametrosPaginacion.paginaActual = 0
         self.parametrosPaginacion.total = 0
         self.update()
-
     }
     $('#cantidadPorPagina').val(self.parametrosPaginacion.cantidadPorPagina)
     $('#paginadaActual').val(self.parametrosPaginacion.paginaActual )
-
     var formulario = $('#FormPaginacion').serialize();
-
     $.ajax({
         url: 'ListarPaginacionCategoriasAjax.do',
         datatype: "json",
@@ -2434,7 +937,6 @@ function __ListaCategorias(){
                self.mostrarNavegador            = true
                self.mostrarCategorias           = true //muestra la pantalla de imagenes de articulos   
                self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
-
                self.update()
             }
         },
@@ -2444,10 +946,7 @@ function __ListaCategorias(){
         }
     });
 }
-
-
 /**
-
 *  Lista de los clientes
 **/
 function __ListaArticulosXCategorias(){
@@ -2458,7 +957,6 @@ function __ListaArticulosXCategorias(){
         self.parametrosPaginacion.paginaActual = 0
         self.parametrosPaginacion.total = 0
         self.update()
-
     }
     $('#cantidadPorPagina').val(self.parametrosPaginacion.cantidadPorPagina)
     $('#paginadaActual').val(self.parametrosPaginacion.paginaActual )
@@ -2474,7 +972,6 @@ function __ListaArticulosXCategorias(){
             if(result.aaData.length > 0){
                self.inventariosXCategoria.pagination.total = result.recordsTotal
                self.inventariosXCategoria.pagination.last_page = Math.round(result.recordsTotal/10)
-
                self.inventariosXCategoria.data = result.aaData
                self.mostrarCodigoBarra          = false;
                self.mostrarNavegador            = true
@@ -2491,24 +988,24 @@ function __ListaArticulosXCategorias(){
         }
     });
 }
-
 function getCantidadDePaginas(total){
-    
     return total / 10;
 }
-
-
-
 /**
-*  Mostrar pantalla de codigo de barra
+*  Evento click para mostrar las categorias de los productos
 **/
 __PantallaCategorias(){
+    mostrarCategorias()
+}
+/**
+*  Mostrar las categorias de los productos
+**/
+function mostrarCategorias(){
     self.categoria = {
         id:0,
         descripcion:""
     }
-
-     self.categorias  = {
+    self.categorias  = {
         data:[],
         pagination:{
             total:0,
@@ -2530,18 +1027,14 @@ __PantallaCategorias(){
             to:0
         }
     }
-    
     self.mostrarNavegador            = true
     self.mostrarCategorias           = true //muestra la pantalla de imagenes de articulos   
     self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
     self.mostrarCodigoBarra          = false
-   
     self.update()
     __ListaCategorias()
-   
+
 }
-
-
 /**
 *  Mostrar pantalla de codigo de barra
 **/
@@ -2550,27 +1043,20 @@ __PantallaCodigoBarra(){
     self.mostrarNavegador            = false
     self.mostrarCategorias           = false //muestra la pantalla de imagenes de articulos   
     self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
-   
     self.update()
     $('#codigoBarra').focus()
-
 }
-
+/**
+*  Limpiar Formulario
+**/
 __LimpiarFormulario(){
     $(".plazoCredito").val(null)   
     $(".fechaCredito").val(null)   
      $(".totalEfectivo").val(null)   
     $(".totalTarjeta").val(null)   
     $(".totalBanco").val(null)   
-     
-    
     $(".nota").val(null)   
     $(".direccion").val(null)   
-    $(".referenciaFechaEmision").val(null)
-    $('.referenciaNumero').val(null)
-    $('.referenciaRazon').val(null)
-    $('.referenciaTipoDoc').prop("selectedIndex", 0);
-    $('.referenciaCodigo').prop("selectedIndex", 0);
     $('.condicionVenta').prop("selectedIndex", 0);
     $('.tipoDoc').prop("selectedIndex", 0);
     self.cliente               = {}
@@ -2583,28 +1069,8 @@ __LimpiarFormulario(){
     self.cantones                      = []
     self.distritos                     = []
     self.barrios                       = []
-  
     self.update()
-     
 }
-
-__formaReferencias(e){
-    if($('#tipoDoc').val() !="01" && $('#tipoDoc').val() !="04"){
-       self.mostrarReferencias            = true
-       self.update()  
-    }else{
-        self.mostrarReferencias            = false
-        self.update()
-        $(".referenciaFechaEmision").val(null)
-        $('.referenciaNumero').val(null)
-        $('.referenciaRazon').val(null)
-        $('.referenciaTipoDoc').prop("selectedIndex", 0);
-        $('.referenciaCodigo').prop("selectedIndex", 0);
-    }
-    
-    
-}
-
 /**
 * Camps requeridos
 **/
@@ -2625,12 +1091,12 @@ var reglasDeValidacionFactura = function() {
 	return validationOptions;
 };
 
+/**
+* Facturas por Dia
+**/
 _ListaFacturasDia(){
     ListadoFacturasDelDia()
 }
-
-
-
 /**
 *  Facturas del Dia
 **/
@@ -2660,8 +1126,6 @@ function ListadoFacturasDelDia(){
             }
         });
 }
-
-
 /**
 *  Agregar los inpust  y select de las tablas
 **/
@@ -2677,9 +1141,6 @@ function agregarInputsCombos_Facturas_Dias(){
 } 
 /**
 * formato del listado de facturas del dia
-**/
-/**
-*Formato del listado 
 **/
 function __InformacionDataTableDia(){
     self.formato_tabla_dias = [ 
@@ -2720,15 +1181,12 @@ function __InformacionDataTableDia(){
                                  }
 	      		            }];
     self.update();
-   
+ 
 }
 function __Opciones(){
 var agregar  = '<a href="#"  class="btn btnReimprimir btn-primary form-control" title="Imprimir" role="button"> <i class="glyphicon glyphicon glyphicon-print"></i></a>';
   return  agregar;
 }
-
-
-
 /**
 *  tipo de documento
 **/
@@ -2756,9 +1214,11 @@ function __TipoDocumentos(numeroConsecutivo,row){
 
     default:
         return  numeroConsecutivo
+    }
 }
-}
-
+/**
+* Reimprimir factura
+**/
 function __reimprimir(){
 	$('#tableListarFacturasDia').on('click','.btnReimprimir',function(e){
 		var table = $('#tableListarFacturasDia').DataTable();
@@ -2769,15 +1229,14 @@ function __reimprimir(){
 	       var data = table.row($(this).parents("tr")).data();
 	    }
         var factura = data
-      //  $('#modalFacturasDia').modal('hide') 
-       consultaParaReimprimir(data)
-       
-        
+        consultaParaReimprimir(data)
 	});
 }
 
+/**
+*Consulta la Reimprimir
+**/
 function consultaParaReimprimir(data){
-
      $.ajax({
         url: "MostrarFacturaAjax",
         datatype: "json",
@@ -2803,64 +1262,6 @@ function consultaParaReimprimir(data){
         }
     });
 }
-
-
-
-/**
-Consultar el consecutivo que se hace referencia
-**/
-__consultarConsecutivo(e){
-    if (e.keyCode != 13) {
-        return;
-    } 
-    __referenciaConsecutivo(e.currentTarget.value);
-}
-
-/**
-*  Informacion del consecutivo de la factura para las notas de creditos y debito
-**/
-function __referenciaConsecutivo(consecutivo){
-   
-    $(".referenciaFechaEmision").val(null)
-    $('.referenciaTipoDoc').prop("selectedIndex", 0);
-    $('.referenciaCodigo').prop("selectedIndex", 0);
-     
-   $.ajax({
-        url: "ConsultarConsecutivoAjax",
-        datatype: "json",
-        data: {consecutivo:consecutivo},
-        method:"POST",
-        success: function (data) {
-            if (data.status != 200) {
-                serverMessageJsonClase(data);
-                if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
-                }
-            }else{
-                serverMessageJsonClase(data);
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                       self.factura.referenciaFechaEmision = modeloTabla.fechaEmision
-                       self.factura.referenciaTipoDoc      = modeloTabla.referenciaTipoDoc
-                      
-                       self.update()
-                        
-                        $("referenciaFechaEmision").val(modeloTabla.fechaEmision)
-                    });
-                }
-            }
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            
-        }
-    });
-}
-
-
-
-
-
 /**
 * Aplicar el descuento
 **/
@@ -2870,7 +1271,6 @@ __CambiarDescuento(e){
     $('#modalCambiarDescuento').modal('show')      
     $('#aplicarDescuento').focus()
 }
-
 /**
 *Cambiar Cantidad del Articulo
 **/
@@ -2881,7 +1281,6 @@ __CambiarCantidad(e){
    $( "#cambiarCantidadArticulo" ).val(self.item.cantidad)
    $('#modalCambiarCantidad').modal('show')      
 }
-
 /**
 *Cambiar descripcion
 **/
@@ -2892,9 +1291,6 @@ __CambiarDescripcion(e){
    $( "#cambiarDescripcionArticulo" ).val(self.item.descripcion)
    $('#modalCambiarDescripcion').modal('show')      
 }
-
-
-
 /**
 *Cambiar precio del producto
 **/
@@ -2905,7 +1301,6 @@ __CambiarPrecio(e){
    $( "#cambiarprecioArticulo" ).val( e.item.precioUnitario)
    $('#modalCambiarPrecio').modal('show')      
 }
-
 /**
 * Tipo Cambio de moneda
 **/
@@ -2936,9 +1331,7 @@ function __TipoCambio(){
             
         }
     });
-
 }
-
 /**
 * Imprimir 
 **/
@@ -2958,7 +1351,6 @@ __ImprimirTiquete(){
 function imprimirTiquete(){
     var factura = self.factura
     riot.mount('tiquete-imprimir',{factura:factura});
-    
 }
 /**
 *  Obtiene el valor de lo digitado en el campo de efectivo
@@ -2984,11 +1376,7 @@ __TotalDeBancoAPagar(e){
 /**
 *   Calculo del cambio entregar en el evento onblur
 **/
-/**
-*   Calculo del cambio entregar en el evento onblur
-**/
 __CalculaCambioAEntregarOnblur(e){
-    
     var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
     sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
     sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
@@ -2999,7 +1387,13 @@ __CalculaCambioAEntregarOnblur(e){
         return
     }
     self.factura.totalCambioPagar = 0
-    self.factura.totalCambioPagar = redondeoDecimales(sumaMontosEntregadosParaCambios,2) > redondeoDecimales(self.factura.totalComprobante,2) ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
+    var totalEntregado = redondeoDecimales(sumaMontosEntregadosParaCambios,2)
+    var totalFactura   = redondeoDecimales(self.factura.totalComprobante,2)
+    totalEntregado     = __valorNumerico(totalEntregado)
+    totalFactura       = __valorNumerico(totalFactura)  
+    self.factura.totalCambioPagar = totalEntregado - totalFactura
+    self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)   
+    self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
     self.update()
 }
 /**
@@ -3017,7 +1411,13 @@ __CalculaCambioAEntregarKeyPress(e){
             return
         }
         self.factura.totalCambioPagar = 0
-        self.factura.totalCambioPagar = redondeoDecimales(sumaMontosEntregadosParaCambios,2) > redondeoDecimales(self.factura.totalComprobante,2) ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
+        var totalEntregado = redondeoDecimales(sumaMontosEntregadosParaCambios,2)
+        var totalFactura   = redondeoDecimales(self.factura.totalComprobante,2)
+        totalEntregado     = __valorNumerico(totalEntregado)
+        totalFactura       = __valorNumerico(totalFactura)  
+        self.factura.totalCambioPagar = totalEntregado - totalFactura
+        self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)   
+        self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
         self.update()
     }
 }
@@ -3035,7 +1435,6 @@ __CalculaCambioAEntregarKeyPress(e){
 __CargarFacturaEspera(e){
    __FacturaEnEspera(e.item)
 }
-
 /**
 *  Crear la factura temporal o espera
 **/
@@ -3048,7 +1447,6 @@ __CrearFacturaTemporal(){
        aplicarFactura(1)    
     }
 }
-
 /**
 *  Agregar el nombre a la factura temporal
 **/
@@ -3062,7 +1460,6 @@ __AgregarNombreFacturaTemporal(){
 __AplicarYcrearFactura(){
  aplicarFactura(2)
 }
-
 /**
 * Aplicar la factura
 **/
@@ -3071,7 +1468,6 @@ function aplicarFactura(estado){
         mensajeError($.i18n.prop("factura.alert.sin.detalles"))
         return
     }
-    
     if($('#condicionVenta').val() == "02"  ){
         if($('#fechaCredito').val() == null || $('#fechaCredito').val() == 0){
            mensajeError($.i18n.prop("factura.alert.fechaCredito"))
@@ -3089,7 +1485,6 @@ function aplicarFactura(estado){
                 return
             }
             var montoEntregado = self.factura.totalTarjeta + self.factura.totalBanco + self.factura.totalEfectivo
-
             montoEntregado = redondeoDecimales(__valorNumerico(montoEntregado),2)
             var resultado  = redondeoDecimales( __valorNumerico(self.factura.totalComprobante),2)
             if(__valorNumerico(resultado) > __valorNumerico(montoEntregado)  ){
@@ -3107,26 +1502,21 @@ function aplicarFactura(estado){
             
         }
     } 
-if ($("#formularioFactura").valid()) {
-    crearFactura(estado)  
- }
-
-
+    if ($("#formularioFactura").valid()) {
+        crearFactura(estado)  
+    }
 }
-
-
 /**
 * Limpiar Pantalla
 **/
 __Limpiar(){
-
     __Init()
 }
 /**
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
-     self.mostrarListadoArticulos == false
+    self.mostrarListadoArticulos == false
     self.detail                = []
     self.mensajesBackEnd       = []
     self.error                 = false
@@ -3183,15 +1573,13 @@ function __Init(){
     }                            
     self.item                  = null;
     self.articulo              = null;
-   // self.articulos             = {data:[]}
     self.clientes              = {data:[]}
     self.detalleFactura        ={data:[]}
     self.cliente               = {};
-    self.vendedor              = {
+    self.vendedor = {
         id:0,
         nombreCompleto:""
     }
-    
     self.informacion_tabla             = []
     self.informacion_tabla_articulo    = []
     self.informacion_tabla_clientes    = []
@@ -3199,24 +1587,20 @@ function __Init(){
     self.mostrarFormularioPago         = false
     self.mostarParaCrearNuevaFactura    = true
     self.mostrarCamposIngresoContado   = true;
-
     self.mostarParaCrearNuevaVentas = true
     self.mostrarCodigoBarra    = true
     self.mostrarCodigoBarra          = true;
-
     self.mostrarFormularioPago         = false
     self.mostarParaCrearNuevaFactura   = true
     self.mostrarCamposIngresoContado   = true
     self.mostrarReferencias            = false 
-
     self.parametrosPaginacion = {
             id:null,
             paginaActual:0,
             cantidadPorPagina:10,
             total:0
-
         }
-        self.categorias                  = {
+        self.categorias = {
             data:[],
             pagination:{
                 total:0,
@@ -3242,7 +1626,6 @@ function __Init(){
                 to:0
             }
         }
-
     self.urlImagenNavegador   = '/dist/img/navegador.png';
     self.urlImagenLector      = '/dist/img/codigo_barra.png';
     self.urlImagenBuscador    = '/dist/img/buscador.png';
@@ -3252,46 +1635,30 @@ function __Init(){
     self.totalComprobante =0;
     self.totalDescuentos  =0;
     self.totalImpuesto    =0;
+    self.totalCambioPagar =0;
     self.update()
-
-    self.update();
-
-    $(".referenciaNumero").val(null)
-    $(".referenciaFechaEmision").val(null)
-    $('.referenciaTipoDoc').prop("selectedIndex", 0);
-    $('.referenciaCodigo').prop("selectedIndex", 0);
     $('#condicionVenta').prop("selectedIndex", 0);
     $('#tipoDoc').prop("selectedIndex", 0);
     $('#estado').prop("selectedIndex", 0);
-    $('#provincia').prop("selectedIndex", 0);
-    $('#canton').prop("selectedIndex", 0);
-    $('#distrito').prop("selectedIndex", 0);
-    $('#barrio').prop("selectedIndex", 0);
-     $(".totalBanco").val(null)   
+    $(".totalBanco").val(null)   
     $(".totalTarjeta").val(null)   
     $(".totalEfectivo").val(null)   
-
-
     $("#plazoCredito").val(null)
     $("#nota").val(null)
     $("#fechaCredito").val(null)
     $("#cambiarCantidadArticulo").val(null)
     $("#aplicarDescuento").val(null)
-
-    
     // Tipo de Pagos
      __comboCondicionPago()
-     __comboCondicionPagoRef()
      //Tipos de Documentos
       __ComboTipoDocumentos()
       //Estados
       __ComboEstados()
      __ListaFacturasEnEspera()
+     mostrarCategorias()
      $('#codigoBarra').val(null)
      $('#codigoBarra').focus()
-    
 }
-
 /**
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
 **/
@@ -3331,9 +1698,8 @@ function __FacturaEnEspera(factura){
         }
     });
     $('#codigoBarra').val(null)
-     $('#codigoBarra').focus()
+    $('#codigoBarra').focus()
 }
-
 /**
 *  Cargar detalles Factura en espera
 **/
@@ -3360,9 +1726,6 @@ function cargarDetallesFacturaEnEspera(){
     self.update()
      __calculate(); 
 }
-
-
-
 /** 
 *Formato de la fecha con hora
 **/
@@ -3378,23 +1741,19 @@ function crearFactura(estado){
     self.update() 
     var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
     var fechaReferencia =$('#referenciaFechaEmision').val() !=null?referenciaFechaEmision.value:new Date() 
-     var JSONDetalles = JSON.stringify( self.detalleFactura );
-    
+    var JSONDetalles = JSON.stringify( self.detalleFactura );
     self.factura.id = self.factura.id
     self.factura.nombreFactura = $('.cambioNombreFactura').val()==null?"":$('.cambioNombreFactura').val();
     self.factura.condicionVenta = $('#condicionVenta').val()
     self.factura.fechaCredito =fechaCreditoTemporal.toString()
     self.factura.referenciaFechaEmision =fechaReferencia
     self.factura.totalEfectivo =$('#totalEfectivo').val()
-    self.factura.totalTarjeta = redondearDecimales(__valorNumerico($('#totalTarjeta').val())) 
-    self.factura.totalBanco = redondearDecimales(__valorNumerico($('#totalBanco').val()))
+    self.factura.totalTarjeta = __valorNumerico($('#totalTarjeta').val()) 
+    self.factura.totalBanco = __valorNumerico($('#totalBanco').val())
     self.factura.detalleFactura =JSONDetalles
     self.factura.estado = estado
     self.update();
-    
     var formulario = $("#formularioFactura").serialize();
-     
-                    
     $.ajax({
         type : "POST",
         dataType : "json",
@@ -3409,8 +1768,6 @@ function crearFactura(estado){
             } else {
                	serverMessageJsonClase(data);
                 evaluarFactura(data)
-              
-
             }
         },
         error : function(xhr, status) {
@@ -3419,7 +1776,6 @@ function crearFactura(estado){
         }
     });
 }
-
 /**
 *Si fue facturada o tiquete
 **/
@@ -3434,8 +1790,7 @@ function evaluarFactura(data){
                 __ListaFacturasEnEspera()
                 self.facturaImprimir   = modeloTabla
                 self.update()
-            
-                 riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
+                riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
                  
             }else{
                 swal({
@@ -3450,8 +1805,6 @@ function evaluarFactura(data){
             }
         });
     }
-
-
 }
 /**
 *  Lista de las facturas pendientes por el usuario
@@ -3510,11 +1863,12 @@ __formaPago(e){
 *   funcion para grabar la Factura en el back end
 **/
 __MostrarFormularioDePago(){
-    
     mostrarPAgo()
 }
 
-
+/**
+* Mostrar el pago
+**/
 function mostrarPAgo(){
      //No hay detalles registrados en la Factura
     if(self.detail.length == 0 ){
@@ -3534,12 +1888,9 @@ function mostrarPAgo(){
     $('#totalEfectivo').focus()
     self.factura.cambioMoneda = self.factura.totalVentaNeta / self.tipoCambio.total
     self.update()
-
 }
 /** 
-*
 *Agregar codigos al detalle de la Factura
-*
 */
 __addProductToDetail(e){
     if (e.keyCode != 13) {
@@ -3556,24 +1907,20 @@ __addProductToDetail(e){
           existe = codigo.charAt(i) == "*"?true : false  
           if(codigo.charAt(i) !="*"){
               codigoActual = codigoActual + codigo.charAt(i)  
-
           }
        }else{
            cantidadAct = cantidadAct + codigo.charAt(i)
        }
-        console.log("pos=", i, "valor=", codigo.charAt(i));
     }
     // esto es para cuando un cliente quiere sumar varios productos
     if(existeMas == true){
        __sumarMasArticulo(codigo)
        return  
     }
-
     __buscarcodigo(codigoActual,__valorNumerico(cantidadAct));
     $('#codigoBarra').val(null)
     $('#codigoBarra').focus()
 }
-
 /**
 *sumar mas cantidad al ultimor articulo ingresado
 **/
@@ -3587,9 +1934,7 @@ function __sumarMasArticulo(codigo){
        existe = codigo.charAt(i) == "+"?true : false
        if(existe == false){
           cantidadAct = cantidadAct + codigo.charAt(i)
-            
        }
-        console.log("pos=", i, "valor=", codigo.charAt(i));
     }
    for (var count = 0; count < self.detail.length; count++) {
         if (self.detail[count].codigo == self.articulo.codigo ){
@@ -3601,11 +1946,8 @@ function __sumarMasArticulo(codigo){
             self.update();
         }
     }
-  
     __calculate(); 
 }
-
-
 /**
 * Buscar codigo
 **/
@@ -3646,7 +1988,6 @@ function __ListaDeArticulosPorEmpresa(){
 _EscogerClientes(){
     $('#modalClientes').modal('show')  
 }
-
 /**
 *  Muestra la lista de vendedores
 **/
@@ -3703,19 +2044,6 @@ function __ListaDeClientes(){
 * Buscar el codigo del codigo  en la base de datos
 **/
 function __buscarcodigo(idArticulo,cantidad){
-   //   let lista     = self.articulos.data;
-    ///self.articulo  = {}
-   // self.update()
-   // var articuloEncontrado = jsonPath(lista,"$[?(@.codigo=='"+idArticulo+"')]");
-   // articuloEncontrado.forEach(function(e){
-    //    self.descripcionArticulo = e.precioPublico
-    //    self.articulo = e
-     //   self.update();
-     //    __agregarArticulo(cantidad)
-
-    //})
-    //return
-   // self.articulo = null;
     $.ajax({
         type: 'GET',
         url: 'findArticuloByCodigojax.do',
@@ -3729,18 +2057,6 @@ function __buscarcodigo(idArticulo,cantidad){
             }else{
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
-                        //Articulo no puede agregarse si no hay en el inventario
-//                        if(modeloTabla.contable == "Si"){
-//                            if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
-//                                mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
-//                                return
-//                            }
-//                            if(modeloTabla.cantidad < cantidad ){
-//                                mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
-//                                return
-//                            }
-
-//                        }
                         self.articulo  = modeloTabla
                          self.descripcionArticulo = modeloTabla.descripcion
                         self.update()
@@ -3808,8 +2124,7 @@ __removeProductFromDetail(e) {
     self.update()
      __calculate();
  }
-
- /**
+/**
 *   agregar Articulos nuevos en el detalle de la factura
 **/
 function __nuevoArticuloAlDetalle(cantidad){
@@ -3820,7 +2135,6 @@ function __nuevoArticuloAlDetalle(cantidad){
         return;
     }
     var precioUnitario  = getPrecioUnitario(self.articulo.precioPublico,self.articulo.impuesto)
-    
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
     var montoDescuento  = 0
     var naturalezaDescuento = ""
@@ -3851,14 +2165,13 @@ function __nuevoArticuloAlDetalle(cantidad){
     )
     self.update()
 }
-
+/**
+* Monto Total de la Facturra 
+**/
 function getMontoTotal(precioUnitario,cantidad){
     var resultado = parseFloat(precioUnitario) * parseFloat(cantidad)
-    return redondearDecimales(resultado ,5);
+    return resultado ;
 }
-
-
-
 /**
 * Obtiene el precio unitario sin descuento sin impuesto
 **/
@@ -3872,10 +2185,7 @@ function getPrecioUnitario(precio ,impuesto){
    }else{
        resultado  =  precio
    }
-
-
-   return redondearDecimales(resultado,5)     
-  
+   return resultado     
 }
 /**
  * calculo del impuesto iva
@@ -3887,9 +2197,8 @@ function _calcularImpuesto(precio,iva){
     var impuesto = iva > 0 ?parseFloat(iva)/100:0
     impuesto = impuesto > 0 ?impuesto:0
     var total = precio * impuesto
-    return redondearDecimales(total ,5)
+    return total
 }
-   
  /**
  * Cuando se aplica un cambio de cantidad en un detalle
  * Se aplica una recalculacion de todo el detalle y Factura
@@ -3903,8 +2212,6 @@ function _calcularImpuesto(precio,iva){
     }
     __ValidarCantidadArticulo(self.item.codigo,cantidad)
   }
-
-
 /**
 * Cambiar el precio del detalle de la factura
 **/
@@ -3916,7 +2223,6 @@ __cambiarDescripcionDetalle(e){
     $('#modalCambiarDescripcion').modal('hide') 
     
 }
-
 /**
 * Cambiar el precio del detalle de la factura
 **/
@@ -3924,8 +2230,9 @@ __cambiarElPrecio(e){
     var precio = $(".cambiarprecioArticulo").val();
     agregarPrecioAlDetalle(precio)
 }
-
-
+/**
+* Cambiar el precio en el detalle
+**/
 function agregarPrecioAlDetalle(precio){
     self.item.precioUnitario = precio
     self.update()
@@ -3934,63 +2241,41 @@ function agregarPrecioAlDetalle(precio){
     $(".cambiarprecioArticulo").val(null);
     $('#modalCambiarPrecio').modal('hide') 
 }
-
 /**
 * Buscar el codigo del codigo  en la base de datos
 **/
 function __ValidarCantidadArticulo(idArticulo,cantidad){
     agregarCantidadAlaVenta(cantidad)
     return
-   
-    $.ajax({
-        type: 'GET',
-        url: 'findArticuloByCodigojax.do',
-        method:"GET",
-        data:{codigoArticulo:idArticulo},
-        success: function(data){
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    swal('',data.message,'error');
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                        //Articulo no puede agregarse si no hay en el inventario
-               
-                        agregarCantidadAlaVenta(cantidad)
-                    })
-                }
-            }
-        },
-	    error : function(xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
 }
-
+/**
+*Monto en el descuento
+**/
 function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc){
     var porcentaje = porcentajeDesc / 100;
     var total =  precioUnitario * cantidad
     var resultado = total * porcentaje
-
-    return redondearDecimales(resultado ,5)
+    return resultado
 }
-
+/**
+*Actualizar linea en el detalle
+**/
 function ActualizarLineaDEtalle(){
   var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
     var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc)
-    var subTotal               = redondearDecimales(montoTotal - montoDescuento,5)
+    var subTotal               = montoTotal - montoDescuento
     var montoImpuesto          = _calcularImpuesto(subTotal,self.item.iva ==null?0:self.item.iva)
-    var montoTotalLinea        = redondearDecimales(subTotal + montoImpuesto,5)    
+    var montoTotalLinea        = subTotal + montoImpuesto    
     self.item.montoTotal       = montoTotal
-    self.item.montoDescuento   = redondearDecimales(montoDescuento,5)
-    self.item.subTotal         = redondearDecimales(subTotal,5)
-    self.item.montoImpuesto    = redondearDecimales(montoImpuesto,5)
-    self.item.montoTotalLinea  = redondearDecimales(montoTotalLinea ,5)
+    self.item.montoDescuento   = montoDescuento
+    self.item.subTotal         = subTotal
+    self.item.montoImpuesto    = montoImpuesto
+    self.item.montoTotalLinea  = montoTotalLinea
     self.update()
 }
-
+/**
+* Agregar en la cantidad la Venta
+**/
 function agregarCantidadAlaVenta(cantidad){
     self.item.cantidad = cantidad
     self.update()
@@ -3999,25 +2284,25 @@ function agregarCantidadAlaVenta(cantidad){
     cambiarCantidadArticulo.value = 0
     $('#modalCambiarCantidad').modal('hide') 
 }
-
+/**
+* Aplicar cambios linea Detalle
+**/
 function aplicarCambioLineaDetalle(){
     var index    = self.detail.indexOf(self.item);
     self.detail[index] = self.item;
     self.update()
     __calculate()
 }
-
 /**
 * Actualizar el descuento del codigo
 **/
 __actualizarDescuento(e){
     _actualizarDesc(e)
 }
-
-
-
+/**
+*Actualizar el descuento
+**/
 function _actualizarDesc(e){
-//    self.item     = e.item; 
     var index     = self.detail.indexOf(self.item);
     var descuento = $(".aplicarDescuento").val();
     //Descuento se verifica si es null o espacios por defecto se deja en cero
@@ -4032,19 +2317,18 @@ function _actualizarDesc(e){
     $('#modalCambiarDescuento').modal('hide') 
     aplicarDescuento.value = 0
 }
-
 /**
 * Monto a pagar en la linea el cliente
 **/
 function getMontoTotalLinea(subTotal,totalImpuesto){
-  return subTotal == 0?0:redondearDecimales(subTotal + totalImpuesto,5)
+  return subTotal == 0?0:subTotal + totalImpuesto
 }
 /**
 *  Obtener el subtotal sin el impuesto
 **/
 function getSubTotal(precio,cantidad){
     var valor = __valorNumerico(precio) * __valorNumerico(cantidad)
-    return redondearDecimales(valor,5) 
+    return valor 
 }
 /**
 * calcular el descuento
@@ -4052,16 +2336,16 @@ function getSubTotal(precio,cantidad){
 function getTotalDescuento(precio,cantidad,porcentajeDesc){
     var porcentaje = __valorNumerico(porcentajeDesc)/100
     var valor =  __valorNumerico(precio) * porcentaje
-    return redondearDecimales(valor * cantidad,5)
+    return valor * cantidad
 }
 /**
 * calculacion de los detalle de la factura 
 **/
 function __calculate() {
-    self.factura.total           = 0;
+    self.factura.total            = 0;
     self.factura.totalDescuentos  = 0;
-    self.factura.totalImpuesto   = 0;
-    self.factura.subTotal        = 0;
+    self.factura.totalImpuesto    = 0;
+    self.factura.subTotal         = 0;
     self.update()
     totalVenta     = 0
     subTotal       = 0
@@ -4089,20 +2373,19 @@ function __calculate() {
         totalImpuesto           += e.montoImpuesto >0?e.montoImpuesto:0
         totalVenta              += e.montoTotal
     });
-    self.factura.totalMercanciasGravadas = redondearDecimales(__valorNumerico(totalMercanciasGravadas),5)
-    self.factura.totalMercanciasExentas  = redondearDecimales(__valorNumerico(totalMercanciasExentas),5)
-    self.factura.totalServGravados       = redondearDecimales(__valorNumerico(totalServGravados),5)
-    self.factura.totalServExentos        = redondearDecimales(__valorNumerico(totalServExentos),5)
-
-    self.factura.totalGravado            = redondearDecimales(__valorNumerico(totalGravado),5)
-    self.factura.totalExento             = redondearDecimales(__valorNumerico(totalExento),5)
+    self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)
+    self.factura.totalMercanciasExentas  = __valorNumerico(totalMercanciasExentas)
+    self.factura.totalServGravados       = __valorNumerico(totalServGravados)
+    self.factura.totalServExentos        = __valorNumerico(totalServExentos)
+    self.factura.totalGravado            = __valorNumerico(totalGravado)
+    self.factura.totalExento             = __valorNumerico(totalExento)
     //cuando se aplica descuentos
-    self.factura.totalVenta              = redondearDecimales(__valorNumerico(totalVenta),5)
-    self.factura.totalDescuentos          = redondearDecimales(__valorNumerico(totalDescuento),5)
-    self.factura.subTotal                = redondearDecimales(__valorNumerico(subTotal),5)
-    self.factura.totalImpuesto           = redondearDecimales(__valorNumerico(totalImpuesto),5)
-    self.factura.totalVentaNeta          = redondearDecimales(__valorNumerico(totalVenta-totalDescuento),5)
-    self.factura.totalComprobante        = redondearDecimales(__valorNumerico(totalComprobante),5)
+    self.factura.totalVenta              = __valorNumerico(totalVenta)
+    self.factura.totalDescuentos         = __valorNumerico(totalDescuento)
+    self.factura.subTotal                = __valorNumerico(subTotal)
+    self.factura.totalImpuesto           = __valorNumerico(totalImpuesto)
+    self.factura.totalVentaNeta          = __valorNumerico(totalVenta-totalDescuento)
+    self.factura.totalComprobante        = __valorNumerico(totalComprobante)
     self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
     self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
     self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
@@ -4112,23 +2395,15 @@ function __calculate() {
     $( "#quantity" ).val(null);
     getSubTotalGeneral()
 }
-
+/**
+*  Sub Total Generar de la factura
+**/
 function getSubTotalGeneral(){
     var resultado = __valorNumerico(self.factura.subTotal) + __valorNumerico(self.factura.totalDescuentos)
     self.subTotalGeneral = formatoDecimales(resultado,2)
     self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2)
     self.totalImpuesto   = formatoDecimales(self.factura.totalImpuesto,2)
     self.update()
-}
-
-function redondearDecimales(numero, decimales) {
- //   return numero;
-    numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}');   // Expresion regular para numeros con un cierto numero de decimales o mas
-    if (numeroRegexp.test(numero)) {         // Ya que el numero tiene el numero de decimales requeridos o mas, se realiza el redondeo
-        return Number(numero.toFixed(decimales));
-    } else {
-        return Number(numero.toFixed(decimales)) === 0 ? 0 : numero;  // En valores muy bajos, se comprueba si el numero es 0 (con el redondeo deseado), si no lo es se devuelve el numero otra vez.
-    }
 }
 /**
 * Definicion de la tabla articulos 
@@ -4181,7 +2456,6 @@ function __agregarArticulos() {
 	    
     });
 }
-
 /**
 * formato de la tabla de clientes
 **/
@@ -4208,7 +2482,6 @@ function __OpcionesVendedores(){
   return  agregar;
 
 }
-
 /**
 * Seleccionar el vendedor de la factura
 **/
@@ -4225,7 +2498,6 @@ function __seleccionarVendedor() {
         self.update();
     });
 }
-
 /**
 * formato de la tabla de clientes
 **/
@@ -4251,7 +2523,6 @@ function __informacionData(){
 function __Opcionesclientes(){
   var agregar  = '<a href="#"  title="Seleccionar Cliente" class="btn btnAgregar btn-success form-control" title="Seleccione el cliente de la factura" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
   return  agregar;
-
 }
 /**
 * Agregar codigos a la factura desde modal de articulos
@@ -4271,18 +2542,6 @@ function __seleccionarClientes() {
     });
 }
 /**
-*  retorna el valor numerico o cero sino es numerico
-**/
-function __valorNumerico(valor){
-    return isNumber(valor)?parseFloat(valor):0 ;
-}
-/**
-*  Validar si es numero
-**/
-function isNumber(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-}
-/**
 * cargar los estados de la factura
 **/
 function __comboCondicionPago(){
@@ -4296,41 +2555,6 @@ function __comboCondicionPago(){
         estado:"02",
         descripcion:$.i18n.prop("factura.codicion.venta.credito")
     })
-    self.update()
-}
-
-
-/**
-* cargar los codigos de referencias
-**/
-function __comboCondicionPagoRef(){
-    self.codigosReferencias = []
-    self.update()
-    self.codigosReferencias.push({
-        estado:"01",
-        descripcion:$.i18n.prop("referencia.anula.documento")
-    })
-    self.codigosReferencias.push({
-        estado:"02",
-        descripcion:$.i18n.prop("referencia.corrige.texto.documento")
-    })    
-    self.codigosReferencias.push({
-        estado:"03",
-        descripcion:$.i18n.prop("referencia.corrige.texto.documento")
-    })   
-    self.codigosReferencias.push({
-        estado:"04",
-        descripcion:$.i18n.prop("referencia.otro.documento")
-    })    
-    self.codigosReferencias.push({
-        estado:"05",
-        descripcion:$.i18n.prop("referencia.sustituye.comprobante.documento")
-    })    
-    self.codigosReferencias.push({
-        estado:"99",
-        descripcion:$.i18n.prop("referencia.otros.documento")
-    })    
-
     self.update()
 }
 /**
@@ -4347,7 +2571,6 @@ function __ComboTipoDocumentos(){
          estado:"01",
         descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
     })
-    
     self.update()
 }
 /**
@@ -4363,7 +2586,6 @@ function __ComboEstados(){
         estado:1,
         descripcion:$.i18n.prop("factura.estado.pendiente")
     })
-    
     self.update()
 }
 /**
@@ -4392,7 +2614,6 @@ function agregarInputsCombos_Clientes(){
 	    }
     })
 } 
-
 /**
 *  Agregar los inpust  y select de las tablas
 **/
@@ -4406,10 +2627,6 @@ function agregarInputsCombos_Vendedores(){
 	    }
     })
 } 
-
-
-
-
 /**
 *  teclas de la pantalla
 **/      
@@ -4422,10 +2639,8 @@ function __Teclas(){
       }else if (self.mostrarFormularioPago == true && self.mostarParaCrearNuevaVentas == false ){
             aplicarFactura(2)   
         }  
-   
     }  
-    //alert(tecla) 
-     //Factura en espera
+    //Factura en espera
     if(tecla ==120){
       aplicarFactura(1)   
     }
@@ -4433,26 +2648,16 @@ function __Teclas(){
     if(tecla ==118){
       imprimirTiquete()   
     }
-    
-
     //Limpiar
     if(tecla ==121){
       __Init()
     }
-
-
-   
     }, false );
-  
-   
-
 }
-
 /**
 * Contabilizar los billetes de acuerdo a como se vayan dando click en la pantalla
 */
 _sumarBilletes(e){
-    
     var item = e.item
     if(item.valor == 0 ){
        self.factura.totalEfectivo = 0
@@ -4460,7 +2665,6 @@ _sumarBilletes(e){
        self.factura.totalBanco    = 0
        self.factura.totalCambioPagar  = 0
        self.claseCambioDinero     = "entregarCambioPositivo"
-
     }else{
         self.factura.totalEfectivo = __valorNumerico(self.factura.totalEfectivo) + __valorNumerico(item.valor) 
         self.update()
@@ -4468,18 +2672,16 @@ _sumarBilletes(e){
         sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
         sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
         self.factura.totalCambioPagar = 0
-        self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalComprobante ? sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.totalComprobante):sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.totalComprobante)    
+        self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.totalComprobante)
         self.claseCambioDinero  = __valorNumerico(sumaMontosEntregadosParaCambios) > __valorNumerico(self.factura.totalComprobante)?'entregarCambioPositivo':'entregarCambioNegativo'
-        
+        self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
 
     }
-    
     self.update()
-    
-    
-
 }
-
+/**
+* Cargar Billetes
+**/
 function cargaBilletes(){
     self.billetes = []
     self.update()
@@ -4492,15 +2694,10 @@ function cargaBilletes(){
     _incluirBilletes("","Limpiar",0,'/dist/img/limpiar.png')
 
 }
-
-
 /**
 *    Incluir a los billetes
 **/
-
 function _incluirBilletes(modena,descripcion,valor,imagen){
-
-    
     self.billetes.push(
         {
             modena:modena,
@@ -4511,6 +2708,5 @@ function _incluirBilletes(modena,descripcion,valor,imagen){
     )
     self.update()
 }
-
 </script>
 </venta-factura>

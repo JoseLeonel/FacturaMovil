@@ -82,6 +82,33 @@ function formatoDecimales(amount, decimals){
 		return amount_parts.join('.');
 	}
 
+
+/**
+*  retorna el valor numerico o cero sino es numerico
+**/
+function __valorNumerico(valor){
+    return isNumber(valor)?parseFloat(valor):0 ;
+}
+/**
+*  Validar si es numero
+**/
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+
+/**
+*
+**/
+function redondearDecimales(numero, decimales) {
+    numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}');   // Expresion regular para numeros con un cierto numero de decimales o mas
+    if (numeroRegexp.test(numero)) {         // Ya que el numero tiene el numero de decimales requeridos o mas, se realiza el redondeo
+        return Number(numero.toFixed(decimales));
+    } else {
+        return Number(numero.toFixed(decimales)) === 0 ? 0 : numero;  // En valores muy bajos, se comprueba si el numero es 0 (con el redondeo deseado), si no lo es se devuelve el numero otra vez.
+    }
+}
+
 //Modal o redirect en caso de error
 function mensajeErrorServidor(xhr, status) {
 	console.log(status);

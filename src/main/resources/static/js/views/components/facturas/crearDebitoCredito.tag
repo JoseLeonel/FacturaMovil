@@ -173,7 +173,7 @@
                                     <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}</span></p>
                                 </div>
                                 <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado}>
-                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{factura.totalCambioPagar.toLocaleString()}</span></p>    
+                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagar}</span></p>    
                                 </div>
                             </article>
                         </aside>
@@ -258,21 +258,21 @@
                             <td>{codigo}</td>
                             <td>{descripcion}</td>
                             <td class="text-right">
-                                <input onclick={__CambiarCantidad} id= "cantidadDetalle" class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad} readonly />
+                                <input onclick={__CambiarCantidad} id= "cantidadDetalle" class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad.toFixed(3)} readonly />
                             </td>
                             <td class="text-right">
-                                <input   class="form-control" type="text"  value = "{precioUnitario.toLocaleString()}" readonly />
+                                <input   class="form-control" type="text"  value = "{precioUnitario.toFixed(2)}" readonly />
                             </td>
                             <td class="text-right">
-                                <input  onclick={__CambiarDescuento} class="campo" type="text"  value = "{porcentajeDesc.toLocaleString()}" readonly/>
+                                <input  onclick={__CambiarDescuento} class="campo" type="text"  value = "{porcentajeDesc.toFixed(2)}" readonly/>
                             </td>
                                                         
                             <td class="text-right">
-                                <input  class="campo" type="text"  value = "{impuesto.toLocaleString()}" readonly/>
+                                <input  class="campo" type="text"  value = "{impuesto.toFixed(2)}" readonly/>
                             </td>
 
                             <td class="text-right">
-                                <input  class="campo" type="text"  value = "₡ {montoTotalLinea.toLocaleString()}" readonly/>
+                                <input  class="campo" type="text"  value = "₡ {montoTotalLinea.toFixed(2)}" readonly/>
                             </td>
                         </tr>
                         </tbody>
@@ -482,229 +482,6 @@
 </div>
 <!--Fin Cambiar Descuento-->
 
-<style type="text/css">
-    /* Lista de facturas en espera*/
-    .label-totales{
-            font-weight: 600 !important;
-            font-size: 30px !important;
-            font-family: Roboto,sans-serif !important;
-            color: #30ed17 !important;
-            text-shadow: 0px 0px 1px #ffffff;
-            font-style: italic;
-            text-align: left;
-            padding-left: 20px;
-            line-height: 30px;
-            border-collapse: separate;
-            text-align: center;
-            cursor: pointer;
-            padding: 10px;
-            margin: 20px;
-            border: none;
-            text-align: center !important;
-            background-color: black !important;
-            box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-            border-radius: 5px;
-            -webkit-transition: background-color 100ms linear;
-            -moz-transition: background-color 100ms linear;
-            -o-transition: background-color 100ms linear;
-            -ms-transition: background-color 100ms linear;
-            transition: background-color 100ms linear;
-            
-        }
-    .campo {
-        display: block;
-        width: 100%;
-        height: 45px;
-        padding: 8px 18px;
-        font-size: 10px;
-        line-height: 1.42857143;
-        color: #555;
-        background-color: #fff;
-        background-image: none;
-        border: 1px solid #ccc;
-        border-radius: 2px;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        background-color: #fcfcfc;
-        border: 1px solid #ccc;
-        font: 20px verdana, arial, helvetica, sans-serif;
-        margin: 2px 0;
-        padding: 1px 2px;
-        overflow: visible;
-    }
-    .cabecera-derecha .lista-factura-espera{
-        width:100%;
-        display:flex;
-        flex-wrap:wrap;
-    }
-    .cabecera-derecha .lista-factura-espera .factura-espera{
-        display:block;
-        width:90%;
-        padding:6px 0;
-        margin-bottom:20px;
-        margin-left:15px;
-        margin-right:5px;
-        background:red;
-        text-align:center;
-        text-decoration:none;
-        color:#ffffff !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-    }
-    .label-limpiar{
-        font-weight: 600 !important;
-        font-size: 20px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #ffffff !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        padding-left: 20px;
-        line-height: 30px;
-        border-collapse: separate;
-        text-align: center;
-        cursor: pointer;
-        padding: 5px;
-        margin: 10px;
-        border: none;
-        text-align: center !important;
-        background-color: black !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 5px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-        
-    }
-    #pagarTitulo{
-        font-weight: 600 !important;
-        font-size: 30px !important;
-        font-family: Roboto,sans-serif !important;
-        color: #ffffff !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        font-style: italic;
-        text-align: left;
-        padding-left: 20px;
-        line-height: 30px;
-    }
-    .tamanoLetraTotales{
-        font-weight: 600 !important;
-        font-size: 30px !important;
-
-    }
-    #pagarTable,#pagarTableInfo{
-        border-collapse: separate;
-    }
-    #pagarTableInfo{
-        background-color: #f2f2f2;
-        color: #000;
-        text-align: center;
-    }
-    #total-show {
-        padding: 0px;
-        font-weight: 400;
-        background: none!important;
-        font-size: 30px;
-        color: #ffffff !important;
-        text-shadow: 0px 0px 1px #ffffff;
-        padding-top: 0px;
-        line-height: 40px;
-    }
-    #btnGrandePagar,#btnGrandePagar2{
-        cursor: pointer;
-        padding: 0px;
-        margin: 10px;
-        border: none;
-        text-align: center !important;
-        background-color: #6dca42 !important;
-        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-        border-radius: 5px;
-        -webkit-transition: background-color 100ms linear;
-        -moz-transition: background-color 100ms linear;
-        -o-transition: background-color 100ms linear;
-        -ms-transition: background-color 100ms linear;
-        transition: background-color 100ms linear;
-    } 
-    #pagarInfo,#iva-total,#subtotal,#sigPeso{
-        font-weight: 100 !important;
-        font-size: 14px !important;
-    }
-    #pagarInfo{
-        font-size: 12px !important;
-    }
-    *{
-       margin:0;
-       padding:0;
-       box-sizing:border-box;
-    }
-    body{
-        background:white;
-    }
-    .wrap{
-        max-width:1100px;
-        width:100%;
-        margin:auto;
-    }
-    .contenedor-factura {
-        display:flex;
-        width:100%;
-        margin :auto;
-    }
-    .cabecera-izquierda {
-       margin-right:5%;
-       width:85%;disabled
-    }
-
-    .cabecera-derecha {
-        width:25%;
-    }
-    .contenedor-detalle   {
-        display:flex;
-        width:100%;
-        margin :auto;
-    }
-
-    .booking-details h1 {
-        font-size: 1.5em;
-        color: #666;
-        text-shadow: none;
-    }
-    .booking-details .booking-info {
-        border-top: 1px solid #DFDCD1;
-        padding: 15px 0 0;
-        margin: 15px 0 0;
-        font-size:25px;
-        display: inline-block;
-        width: 100%;
-    }
-    .total{
-        font-weight:bold;
-        font-size:20px;
-    }
-    .precioTotalFactura{
-        font-weight:bold;
-        font-size:30px;
-        color: #0C9C22;
-        border-top: 1px solid #DFDCD1;
-        padding: 0 0 5px;
-        padding: 15px 0 0;
-        margin: 10px 0 0;
-    }
-    label {
-        display: inline-block;
-        max-width: 100%;
-        margin-bottom: 5px;
-        font-weight: 600;
-    }
-    .tituloTotal{
-        font-size:25px;
-    }
-</style>
 
 <script>
     var self = this;
@@ -716,7 +493,7 @@
     self.comboCondicionPagos        = []
     self.comboTipoDocumentos   = []
     self.factura                = {
-        id:0,
+        id:null,
 	   fechaCredito:null,
 	   fechaEmision:null,
 	   condicionVenta:"",
@@ -751,11 +528,11 @@
 	    codigoMoneda:"",
 	    estado:0,
 	    cliente:{
-            id:0,
+            id:null,
             nombreCompleto:""
         },
 	    vendedor:{
-            id:0,
+            id:null,
             nombreCompleto:""
         }
 
@@ -767,7 +544,7 @@
     self.detalleFactura        = {data:[]}
     self.cliente               = {}
     self.vendedor              = {
-        id:0,
+        id:null,
         nombreCompleto:""
     };
     self.facturas_espera       = {data:[]}  
@@ -780,24 +557,14 @@
     self.mostrarCamposIngresoContado   = true
     self.mostrarReferencias            = false 
     self.subTotalGeneral               = 0
-    self.todasProvincias               = {data:[]}
-    self.todosCantones                 = {data:[]}
-    self.todosDistritos                = {data:[]}
-    self.todosBarrios                  = {data:[]}
-    self.cantones                      = []
-    self.distritos                     = []
-    self.barrios                       = []
     self.subTotalGeneral               = 0
     self.totalDescuentos               = 0
     self.totalImpuesto                 = 0
     self.totalComprobante              = 0
-
-
+    self.totalCambioPagar              = 0
     self.on('mount',function(){
-         
-         _INIT()
+        _INIT()
         $("#formularioFactura").validate(reglasDeValidacionFactura());
-         
         __informacionData()
         __informacionData_vendedores()
         __InicializarTabla('.tableListaCliente')
@@ -805,11 +572,6 @@
         __InicializarTabla('.tableListaVendedor')
         agregarInputsCombos_Articulo()
         __ListaFacturasEnEspera()
-       // setInterval(function() {
-            // triggering the "ready" event will resolve the promise
-        //    __ListaFacturasEnEspera()
-        //}.bind(this), 10000)
-          
         __comboCondicionPago()
         __ComboTipoDocumentos()
         __ComboEstados()
@@ -824,11 +586,9 @@
         }, false );
      
     })
-
 __LimpiarFormulario(){
      _INIT()    
 }
-
 function _INIT(){
   $(".totalBanco").val(null)   
     $(".totalTarjeta").val(null)   
@@ -858,7 +618,6 @@ function _INIT(){
     __Eventos()
 
 }
-
 __formaReferencias(e){
     if($('#tipoDoc').val() !="01" && $('#tipoDoc').val() !="04"){
        self.mostrarReferencias            = true
@@ -872,10 +631,7 @@ __formaReferencias(e){
         $('.referenciaTipoDoc').prop("selectedIndex", 0);
         $('.referenciaCodigo').prop("selectedIndex", 0);
     }
-    
-    
 }
-
 /**
 *  Actimpuestor validaciones del formulario
 **/
@@ -901,7 +657,6 @@ function __Eventos(){
     $('.referenciaFechaEmision').mask('0000-00-00');
 
 }
-
 /**
 * Camps requeridos
 **/
@@ -937,9 +692,6 @@ var reglasDeValidacionFactura = function() {
 	});
 	return validationOptions;
 };
-
-
-
 /**
 Consultar el consecutivo que se hace referencia
 **/
@@ -949,12 +701,10 @@ __consultarConsecutivo(e){
     } 
     __referenciaConsecutivo(e.currentTarget.value);
 }
-
 /**
 *  Informacion del consecutivo de la factura para las notas de creditos y debito
 **/
 function __referenciaConsecutivo(consecutivo){
-   
     $(".referenciaFechaEmision").val(null)
     $('.referenciaTipoDoc').prop("selectedIndex", 0);
     $('.referenciaCodigo').prop("selectedIndex", 0);
@@ -990,8 +740,6 @@ function __referenciaConsecutivo(consecutivo){
         }
     });
 }
-
-
 /**
 * Aplicar el descuento
 **/
@@ -1000,7 +748,6 @@ __CambiarDescuento(e){
     self.update()
     $('#modalCambiarDescuento').modal('show')      
 }
-
 /**
 *Cambiar Cantidad del Articulo
 **/
@@ -1012,7 +759,6 @@ __CambiarCantidad(e){
    $( "#cambiarCantidadArticulo" ).val(cantidad)
    $('#modalCambiarCantidad').modal('show')      
 }
-
 /**
 * Tipo Cambio de moneda
 **/
@@ -1039,12 +785,10 @@ function __TipoCambio(){
         },
         error: function (xhr, status) {
             mensajeErrorServidor(xhr, status);
-            
+           
         }
     });
-
 }
-
 /**
 * Imprimir 
 **/
@@ -1077,7 +821,6 @@ __TotalDeBancoAPagar(e){
 *   Calculo del cambio entregar en el evento onblur
 **/
 __CalculaCambioAEntregarOnblur(e){
-    
     var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
     sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
     sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
@@ -1088,7 +831,13 @@ __CalculaCambioAEntregarOnblur(e){
         return
     }
     self.factura.totalCambioPagar = 0
-    self.factura.totalCambioPagar = redondeoDecimales(sumaMontosEntregadosParaCambios,2) > redondeoDecimales(self.factura.totalComprobante,2) ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
+    var totalEntregado = redondeoDecimales(sumaMontosEntregadosParaCambios,2)
+    var totalFactura   = redondeoDecimales(self.factura.totalComprobante,2)
+    totalEntregado     = __valorNumerico(totalEntregado)
+    totalFactura       = __valorNumerico(totalFactura)  
+    self.factura.totalCambioPagar = totalEntregado - totalFactura
+    self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)   
+    self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
     self.update()
 }
 /**
@@ -1106,7 +855,13 @@ __CalculaCambioAEntregarKeyPress(e){
             return
         }
         self.factura.totalCambioPagar = 0
-        self.factura.totalCambioPagar = redondeoDecimales(sumaMontosEntregadosParaCambios,2) > redondeoDecimales(self.factura.totalComprobante,2) ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
+        var totalEntregado = redondeoDecimales(sumaMontosEntregadosParaCambios,2)
+        var totalFactura   = redondeoDecimales(self.factura.totalComprobante,2)
+        totalEntregado     = __valorNumerico(totalEntregado)
+        totalFactura       = __valorNumerico(totalFactura)  
+        self.factura.totalCambioPagar = totalEntregado - totalFactura
+        self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)   
+        self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
         self.update()
     }
 }
@@ -1173,7 +928,7 @@ function aplicarFactura(){
             
         }
     } 
-if ($("#formularioFactura").valid()) {
+    if ($("#formularioFactura").valid()) {
         swal({
            title: '',
            text: $.i18n.prop("factura.alert.crear"),
@@ -1193,11 +948,7 @@ if ($("#formularioFactura").valid()) {
             }
         });
     }
-
-
 }
-
-
 /**
 * Limpiar Pantalla
 **/
@@ -1268,7 +1019,7 @@ function __Init(){
     self.detalleFactura        ={data:[]}
     self.cliente               = {};
     self.vendedor              = {
-        id:0,
+        id:null,
         nombreCompleto:""
     }
     self.tipoCambio                    = {}
@@ -1287,8 +1038,6 @@ function __Init(){
     $(".totalBanco").val(null)   
     $(".totalTarjeta").val(null)   
     $(".totalEfectivo").val(null)   
- 
-
     $(".referenciaNumero").val(null)
     $(".referenciaFechaEmision").val(null)
     $('.referenciaTipoDoc').prop("selectedIndex", 0);
@@ -1296,14 +1045,11 @@ function __Init(){
     $('#condicionVenta').prop("selectedIndex", 0);
     $('#tipoDoc').prop("selectedIndex", 0);
     $('#estado').prop("selectedIndex", 0);
-    
     $("#plazoCredito").val(null)
     $("#nota").val(null)
     $("#fechaCredito").val(null)
     $("#cambiarCantidadArticulo").val(null)
     $("#aplicarDescuento").val(null)
-
-    
     // Tipo de Pagos
      __comboCondicionPago()
      __comboCondicionPagoRef()
@@ -1312,9 +1058,7 @@ function __Init(){
       //Estados
       __ComboEstados()
      __ListaFacturasEnEspera()
-    
 }
-
 /**
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
 **/
@@ -1349,7 +1093,6 @@ function __FacturaEnEspera(factura){
         }
     });
 }
-
 /**
 *  Cargar detalles Factura en espera
 **/
@@ -1361,24 +1104,21 @@ function cargarDetallesFacturaEnEspera(){
             codigo          : e.codigo,
             tipoImpuesto    : e.tipoImpuesto,
             descripcion     : e.descripcion,
-            cantidad        : redondearDecimales(parseFloat(e.cantidad),5),
-            precioUnitario  : redondearDecimales(parseFloat(e.precioUnitario),5),
-            impuesto        : redondearDecimales(parseFloat(e.impuesto),5),
-            montoImpuesto   : redondearDecimales(parseFloat(e.montoImpuesto),5),
-            montoDescuento  : redondearDecimales(parseFloat(e.montoDescuento),5),
-            porcentajeDesc  : redondearDecimales(parseFloat(e.porcentajeDesc),5),
-            subTotal        : redondearDecimales(parseFloat(e.subTotal),5),
-            montoTotalLinea : redondearDecimales(parseFloat(e.montoTotalLinea),5),
-            montoTotal      : redondearDecimales(parseFloat(e.montoTotal),5)
+            cantidad        : parseFloat(e.cantidad),
+            precioUnitario  : parseFloat(e.precioUnitario),
+            impuesto        : parseFloat(e.impuesto),
+            montoImpuesto   : parseFloat(e.montoImpuesto),
+            montoDescuento  : parseFloat(e.montoDescuento),
+            porcentajeDesc  : parseFloat(e.porcentajeDesc),
+            subTotal        : parseFloat(e.subTotal),
+            montoTotalLinea : parseFloat(e.montoTotalLinea),
+            montoTotal      : parseFloat(e.montoTotal)
         });
         self.update()
     })
     self.update()
      __calculate(); 
 }
-
-
-
 /** 
 *Formato de la fecha con hora
 **/
@@ -1397,8 +1137,7 @@ function crearFactura(){
     self.update() 
     var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
     var fechaReferencia =$('#referenciaFechaEmision').val() !=null?formatoFechaHora(referenciaFechaEmision.value):new Date() 
-     var JSONDetalles = JSON.stringify( self.detalleFactura );
-    
+    var JSONDetalles = JSON.stringify( self.detalleFactura );
     self.factura.id = self.factura.id
     self.factura.condicionVenta = $('#condicionVenta').val()
     self.factura.fechaCredito =fechaCreditoTemporal.toString()
@@ -1408,10 +1147,7 @@ function crearFactura(){
     self.factura.totalBanco = redondearDecimales(__valorNumerico($('#totalBanco').val()))
     self.factura.detalleFactura =JSONDetalles
     self.update();
-    
     var formulario = $("#formularioFactura").serialize();
-     
-                    
     $.ajax({
         type : "POST",
         dataType : "json",
@@ -1434,7 +1170,6 @@ function crearFactura(){
         }
     });
 }
-
 /**
 *Si fue facturada o tiquete
 **/
@@ -1461,8 +1196,6 @@ function evaluarFactura(data){
             }
         });
     }
-
-
 }
 /**
 *  Lista de las facturas pendientes por el usuario
@@ -1522,8 +1255,9 @@ __formaPago(e){
 __MostrarFormularioDePago(){
     mostrarPAgo()
 }
-
-
+/**
+* Mostrar Pago
+**/
 function mostrarPAgo(){
      //No hay detalles registrados en la Factura
     if(self.detail.length == 0 ){
@@ -1544,7 +1278,6 @@ function mostrarPAgo(){
     self.update()
 
 }
-
 /**
 * Consultar el consecutivo de una factura para agregar los articulos relacionados
 **/
@@ -1589,8 +1322,6 @@ __agregarArticulosFactura(e){
             
         }
     });
-
-
 }
 /** 
 *
@@ -1628,8 +1359,6 @@ __addProductToDetail(e){
     $('#codigo').val(null)
     $('#codigo').focus()
 }
-
-
 /**
 *sumar mas cantidad al ultimor articulo ingresado
 **/
@@ -1660,7 +1389,6 @@ function __sumarMasArticulo(codigo){
   
     __calculate(); 
 }
-
 /**
 * Buscar codigo
 **/
@@ -1844,8 +1572,7 @@ __removeProductFromDetail(e) {
     self.update()
      __calculate();
  }
-
- /**
+/**
 *   agregar Articulos nuevos en el detalle de la factura
 **/
 function __nuevoArticuloAlDetalle(cantidad){
@@ -1887,15 +1614,13 @@ function __nuevoArticuloAlDetalle(cantidad){
     )
     self.update()
 }
-
+/**
+* Actualizar Monto Total
+**/
 function getMontoTotal(precioUnitario,cantidad){
     var resultado = parseFloat(precioUnitario) * parseFloat(cantidad)
-    return redondearDecimales(resultado ,5);
+    return resultado;
 }
-
-
-
-
 /**
 * Obtiene el precio unitario sin descuento sin impuesto
 **/
@@ -1909,10 +1634,8 @@ function getPrecioUnitario(precio ,impuesto){
    }else{
        resultado  =  precio
    }
-
-
-   return redondearDecimales(resultado,5)     
-  
+   return resultado     
+ 
 }
 /**
  * calculo del impuesto iva
@@ -1926,7 +1649,6 @@ function _calcularImpuesto(precio,iva){
     var total = precio * impuesto
     return redondearDecimales(total ,5)
 }
-   
  /**
  * Cuando se aplica un cambio de cantidad en un detalle
  * Se aplica una recalculacion de todo el detalle y Factura
@@ -1940,12 +1662,10 @@ function _calcularImpuesto(precio,iva){
     }
     __ValidarCantidadArticulo(self.item.codigo,cantidad)
   }
-
 /**
 * Buscar el codigo del codigo  en la base de datos
 **/
 function __ValidarCantidadArticulo(idArticulo,cantidad){
-   
     $.ajax({
         type: 'GET',
         url: 'findArticuloByCodigojax.do',
@@ -1979,30 +1699,34 @@ function __ValidarCantidadArticulo(idArticulo,cantidad){
         }
     });
 }
-
+/**
+* Monto del descuento
+**/
 function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc){
     var porcentaje = porcentajeDesc / 100;
     var total =  precioUnitario * cantidad
     var resultado = total * porcentaje
-
-    return redondearDecimales(resultado ,5)
+    return resultado
 }
-
+/**
+* Actualizar la linea de detalle
+**/
 function ActualizarLineaDEtalle(){
   var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
     var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc)
-    var subTotal               = redondearDecimales(montoTotal - montoDescuento,5)
+    var subTotal               = montoTotal - montoDescuento
     var montoImpuesto          = _calcularImpuesto(subTotal,self.item.iva ==null?0:self.item.iva)
-    var montoTotalLinea        = redondearDecimales(subTotal + montoImpuesto,5)    
+    var montoTotalLinea        = subTotal + montoImpuesto    
     self.item.montoTotal       = montoTotal
-    self.item.montoDescuento   = redondearDecimales(montoDescuento,5)
-    self.item.subTotal         = redondearDecimales(subTotal,5)
-    self.item.montoImpuesto    = redondearDecimales(montoImpuesto,5)
-    self.item.montoTotalLinea  = redondearDecimales(montoTotalLinea ,5)
+    self.item.montoDescuento   = montoDescuento
+    self.item.subTotal         = subTotal
+    self.item.montoImpuesto    = montoImpuesto
+    self.item.montoTotalLinea  = montoTotalLinea
     self.update()
 }
-
-
+/**
+* Agregar la cantidad nueva
+**/
 function agregarCantidadAlaVenta(cantidad){
     self.item.cantidad = cantidad
     self.update()
@@ -2011,25 +1735,25 @@ function agregarCantidadAlaVenta(cantidad){
     cambiarCantidadArticulo.value = 0
     $('#modalCambiarCantidad').modal('hide') 
 }
-
+/**
+* Actualizar el cambio de linea de detalle
+**/
 function aplicarCambioLineaDetalle(){
     var index    = self.detail.indexOf(self.item);
     self.detail[index] = self.item;
     self.update()
     __calculate()
 }
-
 /**
 * Actualizar el descuento del codigo
 **/
 __actualizarDescuento(e){
     _actualizarDesc(e)
 }
-
-
-
+/**
+* Actualizar el Descuento
+**/
 function _actualizarDesc(e){
-//    self.item     = e.item; 
     var index     = self.detail.indexOf(self.item);
     var descuento = $(".aplicarDescuento").val();
     //Descuento se verifica si es null o espacios por defecto se deja en cero
@@ -2049,14 +1773,14 @@ function _actualizarDesc(e){
 * Monto a pagar en la linea el cliente
 **/
 function getMontoTotalLinea(subTotal,totalImpuesto){
-  return subTotal == 0?0:redondearDecimales(subTotal + totalImpuesto,5)
+  return subTotal == 0?0:subTotal + totalImpuesto
 }
 /**
 *  Obtener el subtotal sin el impuesto
 **/
 function getSubTotal(precio,cantidad){
     var valor = __valorNumerico(precio) * __valorNumerico(cantidad)
-    return redondearDecimales(valor,5) 
+    return valor 
 }
 /**
 * calcular el descuento
@@ -2064,7 +1788,7 @@ function getSubTotal(precio,cantidad){
 function getTotalDescuento(precio,cantidad,porcentajeDesc){
     var porcentaje = __valorNumerico(porcentajeDesc)/100
     var valor =  __valorNumerico(precio) * porcentaje
-    return redondearDecimales(valor * cantidad,5)
+    return valor * cantidad
 }
 /**
 * calculacion de los detalle de la factura 
@@ -2083,7 +1807,6 @@ function __calculate() {
     totalMercanciasExentas  = 0
     totalServGravados       = 0
     totalServExentos        = 0
-
     totalGravado            = 0
     totalExento             = 0
     totalComprobante        = 0
@@ -2105,10 +1828,8 @@ function __calculate() {
     self.factura.totalMercanciasExentas  = redondearDecimales(__valorNumerico(totalMercanciasExentas),5)
     self.factura.totalServGravados       = redondearDecimales(__valorNumerico(totalServGravados),5)
     self.factura.totalServExentos        = redondearDecimales(__valorNumerico(totalServExentos),5)
-
     self.factura.totalGravado            = redondearDecimales(__valorNumerico(totalGravado),5)
     self.factura.totalExento             = redondearDecimales(__valorNumerico(totalExento),5)
-    //cuando se aplica descuentos
     self.factura.totalVenta              = redondearDecimales(__valorNumerico(totalVenta),5)
     self.factura.totalDescuentos          = redondearDecimales(__valorNumerico(totalDescuento),5)
     self.factura.subTotal                = redondearDecimales(__valorNumerico(subTotal),5)
@@ -2118,26 +1839,18 @@ function __calculate() {
     self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
     self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
     self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);  
-   // self.articulo              = null;
     self.update(); 
     $( "#codigo" ).val(null);
     $( "#quantity" ).val(null);
     getSubTotalGeneral()
 }
-
+/**
+* Actualizar el Total General
+**/
 function getSubTotalGeneral(){
     var resultado = __valorNumerico(self.factura.subTotal) + __valorNumerico(self.factura.totalDescuentos)
     self.subTotalGeneral = redondearDecimales(resultado,5)
     self.update()
-}
-
-function redondearDecimales(numero, decimales) {
-    numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}');   // Expresion regular para numeros con un cierto numero de decimales o mas
-    if (numeroRegexp.test(numero)) {         // Ya que el numero tiene el numero de decimales requeridos o mas, se realiza el redondeo
-        return Number(numero.toFixed(decimales));
-    } else {
-        return Number(numero.toFixed(decimales)) === 0 ? 0 : numero;  // En valores muy bajos, se comprueba si el numero es 0 (con el redondeo deseado), si no lo es se devuelve el numero otra vez.
-    }
 }
 /**
 * Definicion de la tabla articulos 
@@ -2216,7 +1929,6 @@ function __OpcionesVendedores(){
   return  agregar;
 
 }
-
 /**
 * Seleccionar el vendedor de la factura
 **/
@@ -2233,7 +1945,6 @@ function __seleccionarVendedor() {
         self.update();
     });
 }
-
 /**
 * formato de la tabla de clientes
 **/
@@ -2274,25 +1985,8 @@ function __seleccionarClientes() {
 	       var data = table.row($(this).parents("tr")).data();
 	     }
         self.cliente = data
-        _provincias()  
-        _ConsultarCantonesByProvincias(self.cliente.provincia)
-        _consultarDistritosByCantoAndProvincia(self.cliente.provincia,self.cliente.canton)
-        _consultarBarriosByCantoAndProvinciaAndDistritos(self.cliente.provincia,self.cliente.canton,self.cliente.distrito)
-        self.cliente = data
         self.update();
     });
-}
-/**
-*  retorna el valor numerico o cero sino es numerico
-**/
-function __valorNumerico(valor){
-    return isNumber(valor)?parseFloat(valor):0 ;
-}
-/**
-*  Validar si es numero
-**/
-function isNumber(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
 }
 /**
 * cargar los estados de la factura
@@ -2310,8 +2004,6 @@ function __comboCondicionPago(){
     })
     self.update()
 }
-
-
 /**
 * cargar los codigos de referencias
 **/
@@ -2443,7 +2135,6 @@ function agregarInputsCombos_Clientes(){
 	    }
     })
 } 
-
 /**
 *  Agregar los inpust  y select de las tablas
 **/
@@ -2457,10 +2148,6 @@ function agregarInputsCombos_Vendedores(){
 	    }
     })
 } 
-
-
-
-
 /**
 *  teclas de la pantalla
 **/      
@@ -2468,21 +2155,9 @@ function __Teclas(){
     window.addEventListener( "keydown", function(evento){
         var tecla = evento.keyCode; 
     if(tecla ==119){
-            mostrarPAgo()     
-      
+        mostrarPAgo()     
     }   
-    //aplicar crear Factura
-    if (self.mostrarFormularioPago == true ){
-   //    aplicarFactura()   
-    } 
-
-   
     }, false );
-  
-   
-
 }
-
 </script>
-
 </debito-credito>
