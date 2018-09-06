@@ -4122,6 +4122,7 @@ function getSubTotalGeneral(){
 }
 
 function redondearDecimales(numero, decimales) {
+ //   return numero;
     numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}');   // Expresion regular para numeros con un cierto numero de decimales o mas
     if (numeroRegexp.test(numero)) {         // Ya que el numero tiene el numero de decimales requeridos o mas, se realiza el redondeo
         return Number(numero.toFixed(decimales));

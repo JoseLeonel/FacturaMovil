@@ -1398,7 +1398,7 @@ __CalculaCambioAEntregarOnblur(e){
         return
     }
     self.factura.totalCambioPagar = 0
-    self.factura.totalCambioPagar = redondeoDecimales(sumaMontosEntregadosParaCambios,2) > redondeoDecimales(self.factura.totalComprobante,2) ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
+    self.factura.totalCambioPagar = redondeoDecimales(sumaMontosEntregadosParaCambios,2) > redondeoDecimales(self.factura.totalComprobante,2) ? sumaMontosEntregadosParaCambios - redondeoDecimales(self.factura.totalComprobante,2):sumaMontosEntregadosParaCambios - redondeoDecimales(self.factura.totalComprobante,2)    
     self.update()
 }
 /**
@@ -1415,8 +1415,9 @@ __CalculaCambioAEntregarKeyPress(e){
             self.update()
             return
         }
+        var valor = redondeoDecimales(self.factura.totalComprobante,2);
         self.factura.totalCambioPagar = 0
-        self.factura.totalCambioPagar = redondeoDecimales(sumaMontosEntregadosParaCambios,2) > redondeoDecimales(self.factura.totalComprobante,2) ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
+        self.factura.totalCambioPagar = redondeoDecimales(sumaMontosEntregadosParaCambios,2) > redondeoDecimales(self.factura.totalComprobante,2) ? sumaMontosEntregadosParaCambios - redondeoDecimales(self.factura.totalComprobante,2):sumaMontosEntregadosParaCambios - redondeoDecimales(self.factura.totalComprobante,2)    
         self.update()
     }
 }
@@ -2496,6 +2497,7 @@ function getSubTotalGeneral(){
 }
 
 function redondearDecimales(numero, decimales) {
+    return numero;
     numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}');   // Expresion regular para numeros con un cierto numero de decimales o mas
     if (numeroRegexp.test(numero)) {         // Ya que el numero tiene el numero de decimales requeridos o mas, se realiza el redondeo
         return Number(numero.toFixed(decimales));
