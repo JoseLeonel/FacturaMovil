@@ -262,6 +262,9 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
  */
 private String getDescuento(Double descuento) throws Exception{
 		String resultado = Constantes.EMPTY;
+		if(descuento ==null) {
+			return resultado;
+		}
 		try {
 			 resultado ="<MontoDescuento>" + FacturaElectronicaUtils.getConvertirBigDecimal(descuento) + "</MontoDescuento>" +
 		        "<NaturalezaDescuento>" + Constantes.FORMATO_NATURALEZA_DESCUENTO + "</NaturalezaDescuento>";
