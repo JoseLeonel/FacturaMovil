@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.modelo.Hacienda;
 
@@ -21,6 +22,8 @@ public class HaciendaCommand {
 	private String						tipoDoc;
 
 	private Date							fechaEmisor;
+	
+	private String							fechaEmisorSTR;
 
 	private String						clave;
 
@@ -45,6 +48,7 @@ public class HaciendaCommand {
 	
 	public HaciendaCommand(Hacienda hacienda) {
 		this.id = hacienda.getId();
+		this.fechaEmisorSTR = Utils.getFechaGeneraReporte(hacienda.getFechaEmisor());
 		this.fechaEmisor = hacienda.getFechaEmisor();
 		this.clave = hacienda.getClave();
 		this.consecutivo= hacienda.getConsecutivo();
@@ -78,6 +82,13 @@ public class HaciendaCommand {
 	}
 
 	
+	
+
+	
+	
+
+
+	
 	public Date getFechaEmisor() {
 		return fechaEmisor;
 	}
@@ -88,6 +99,15 @@ public class HaciendaCommand {
 	}
 
 	
+	public String getFechaEmisorSTR() {
+		return fechaEmisorSTR;
+	}
+
+	
+	public void setFechaEmisorSTR(String fechaEmisorSTR) {
+		this.fechaEmisorSTR = fechaEmisorSTR;
+	}
+
 	public String getClave() {
 		return clave;
 	}

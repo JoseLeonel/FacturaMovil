@@ -159,7 +159,7 @@ public class EmpresaDaoImpl implements EmpresaDao {
 	 * @see com.emprendesoftcr.Dao.EmpresaDao#generaClaveFacturaTributacion(com.emprendesoftcr.modelo.Empresa, java.lang.String, java.lang.Integer)
 	 */
 	@Override
-	public String generaClaveFacturaTributacion(Empresa empresa, String consecutivoFactura, Integer comprobanteElectronico) throws Exception {
+	public  String generaClaveFacturaTributacion(Empresa empresa, String consecutivoFactura, Integer comprobanteElectronico) throws Exception {
 
 		String resultado = Constantes.EMPTY;
 		try {

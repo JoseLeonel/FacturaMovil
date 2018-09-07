@@ -77,6 +77,7 @@ public class EmpresaBoImpl implements EmpresaBo {
 	 * @see com.emprendesoftcr.Bo.EmpresaBo#generarConsecutivoFactura(com.emprendesoftcr.modelo.Empresa)
 	 */
 	@Override
+	@Transactional
 	public String generarConsecutivoFactura(Empresa empresa,Usuario usuario,Factura factura)  throws Exception{
 		return empresaDao.generarConsecutivoFactura(empresa,usuario,factura);
 	}

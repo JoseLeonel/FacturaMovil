@@ -8,8 +8,8 @@ public class Constantes {
 
 	// Semaforo
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 30;
-	
-	public static final Integer					SEMAFORO_ESTADO_REINTENTOS															= 3;
+
+	public static final Integer					SEMAFORO_ESTADO_REINTENTOS													= 3;
 	public static final Integer					SEMAFORO_ESTADO_FIRMADO															= 1;
 	public static final Integer					SEMAFORO_ESTADO_ENVIO																= 2;
 	public static final Integer					SEMAFORO_ESTADO_COMPROBAR_DOCUMENTOS								= 3;
@@ -76,6 +76,7 @@ public class Constantes {
 	public static final Integer					HACIENDA_ESTADO_ENVIADO_HACIENDA_TOPE_REINTENTOS		= 5;
 	public static final Integer					HACIENDA_ESTADO_ACEPTADO_HACIENDA										= 6;
 	public static final Integer					HACIENDA_ESTADO_ACEPTADO_RECHAZADO									= 7;
+	public static final Integer					HACIENDA_ESTADO_ACEPTADO_PARCIAL										= 8;
 	public static final String					HACIENDA_ESTADO_ENVIADO_HACIENDA_str								= "Documento eviado a hacienda.";
 	public static final String					HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR								= "OK";
 	public static final String					HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR							= "ERROR";
@@ -84,6 +85,10 @@ public class Constantes {
 	// Hacienda
 	public static final Integer					HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE								= 1;
 	public static final Integer					HACIENDA_NOTIFICAR_CLIENTE_ENVIADO									= 2;
+
+	public static final String					ESTADO_HACIENDA_ACEPTADO														= "1";
+	public static final String					ESTADO_HACIENDA_ACEPTADO_PARCIAL										= "2";
+	public static final String					ESTADO_HACIENDA_RECHAZADO														= "3";
 
 	// Vendedor Frecuente de una empresa
 

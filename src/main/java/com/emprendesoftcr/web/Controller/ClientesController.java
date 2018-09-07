@@ -233,7 +233,7 @@ public class ClientesController {
 			clienteBD.setCorreoElectronico(cliente.getCorreoElectronico());
 			clienteBD.setDescuento(cliente.getDescuento());
 			clienteBD.setOtraSena(cliente.getOtraSena());
-			
+			clienteBD.setTipoCedula(cliente.getTipoCedula());
 			clienteBD.setNombreComercial(cliente.getNombreComercial());
 			clienteBD.setUpdated_at(new Date());
 			clienteBD.setEstado(cliente.getEstado());

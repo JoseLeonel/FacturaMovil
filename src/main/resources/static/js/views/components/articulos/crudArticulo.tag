@@ -589,11 +589,13 @@ var reglasDeValidacion = function() {
 				required : true,
                 maxlength:80,
                 minlength:1,
+                lettersOnly : true
 			},
             codigo : {
 				required : true,
                 maxlength:20,
                 minlength:1,
+                lettersOnly : true
 			},                                                
             marca : {
 				required : true,

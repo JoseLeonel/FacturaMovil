@@ -35,9 +35,9 @@ $.validator.addMethod("emailFormat",
 
 $.validator.addMethod("lettersOnly",
         function(value, element) {
-                return this.optional(element) || /^[a-z,A-Z,Ñ,ñ,Á,á,É,é,Í,í,Ó,ó,Ú,ú,Ü,ü	\s]+$/ig.test(value);
+                return this.optional(element) || /^[0-9,a-z,A-Z,Ñ,ñ,Á,á,É,é,Í,í,Ó,ó,Ú,ú,Ü,ü	\s]+$/ig.test(value);
         },
-        "Ingrese solo letras o espacios."
+        "Ingrese solo letras , numeros  o espacios."
 );
 
 

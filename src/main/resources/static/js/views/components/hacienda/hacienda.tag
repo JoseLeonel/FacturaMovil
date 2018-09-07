@@ -314,18 +314,14 @@ __Busqueda(){
 **/
 function __InformacionDataTable(){
     self.formato_tabla = [ 
-                               {'data' :'fechaEmisor'   ,"name":"fechaEmisor"    ,"title" : $.i18n.prop("hacienda.fechaEmision")     ,"autoWidth" :true ,
-                                  "render":function(fechaEmisor,type, row){
-									    return displayDate_detail(fechaEmisor);
-	 							    }
-                               },
+                               {'data' :'fechaEmisorSTR'   ,"name":"fechaEmisorSTR"    ,"title" : $.i18n.prop("hacienda.fechaEmision")     ,"autoWidth" :true },
                              
-                               {'data' :'tipoDoc'   ,"name":"tipoDoc"      ,"title" : $.i18n.prop("hacienda.tipoDocumento")   ,"autoWidth" :true },
+                               {'data' :'tipoDoc'        ,"name":"tipoDoc"      ,"title" : $.i18n.prop("hacienda.tipoDocumento")   ,"autoWidth" :true },
                                {'data' :'consecutivo'    ,"name":"consecutivo"    ,"title" : $.i18n.prop("hacienda.consecutivo") ,"autoWidth" :true},
                                {'data' :'nombreReceptor' ,"name":"nombreReceptor" ,"title" : $.i18n.prop("hacienda.cliente")     ,"autoWidth" :true},
                                {'data' :'totalReceptor'  ,"name":"totalReceptor"  ,"title" : $.i18n.prop("hacienta.monto")       ,"autoWidth" :true ,
                                     "render":function(totalReceptor,type, row){
-									    return "₡" + totalReceptor.toLocaleString('de-DE');
+									    return redondeoDecimales(totalReceptor,2);
 	 							    }
                                },
                                {'data' :'estado' ,"name":"estado" ,"title" : $.i18n.prop("hacienda.estado")     ,"autoWidth" :true},
@@ -561,17 +557,9 @@ function BajarArchivos(url,objeto){
 /**
 *Formato de la fecha con hora
 **/
-function displayDate_detail(fecha) {
+function formatoFechaHora(fecha) {
     return fecha == null?"":moment(fecha).format('DD/MM/YYYY h:mm:ss a');
 }
 
-function redondearDecimales(numero, decimales) {
-    numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}');   // Expresion regular para numeros con un cierto numero de decimales o mas
-    if (numeroRegexp.test(numero)) {         // Ya que el numero tiene el numero de decimales requeridos o mas, se realiza el redondeo
-        return Number(numero.toFixed(decimales));
-    } else {
-        return Number(numero.toFixed(decimales)) === 0 ? 0 : numero;  // En valores muy bajos, se comprueba si el numero es 0 (con el redondeo deseado), si no lo es se devuelve el numero otra vez.
-    }
-}
 </script>
 </resultado-hacienda>

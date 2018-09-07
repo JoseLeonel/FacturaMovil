@@ -18,6 +18,7 @@ public class ClienteCommand {
 	private String	nombreCompleto;
 
 	private String	cedula;
+	private String	tipoCedula;
 
 	private String	provincia;
 	private String	canton;
@@ -55,7 +56,7 @@ public class ClienteCommand {
 		this.distrito = cliente.getDistrito();
 		this.barrio = cliente.getBarrio();
 		this.codigoPais = cliente.getCodigoPais();
-
+    this.tipoCedula = cliente.getTipoCedula();
 		this.celular = cliente.getCelular();
 		this.telefono = cliente.getTelefono();
 		this.otraSena = cliente.getOtraSena();
@@ -82,6 +83,16 @@ public class ClienteCommand {
 	}
 
 	
+	
+	public String getTipoCedula() {
+		return tipoCedula;
+	}
+
+	
+	public void setTipoCedula(String tipoCedula) {
+		this.tipoCedula = tipoCedula;
+	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}

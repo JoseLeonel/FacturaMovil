@@ -1197,6 +1197,29 @@ public final class Utils {
 		}
 		return null;
 	}
+	
+	public static String getFechaGeneraReporte(Date date) {
+		DateFormat fechaCompleta = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		return fechaCompleta.format(date);
+	}
+
+	public static String getFechaStr(Date date) {
+		DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy");
+		return fecha.format(date);
+	}
+
+	public static String getHoraStr(Date date) {
+		DateFormat hora = new SimpleDateFormat("HH:mm:ss");
+		return hora.format(date);
+	}
+	
+	public static String getFechaHoraStr(Date date) {
+		DateFormat fecha = new SimpleDateFormat("yyyyMMdd");
+		DateFormat hora  = new SimpleDateFormat("hhmmss");
+		String fechaStr  = fecha.format(date);
+		String horaStr   = hora.format(date);
+		return fechaStr + "-" + horaStr;
+	}
 
 	/**
 	 * Cambiar el formato de fecha

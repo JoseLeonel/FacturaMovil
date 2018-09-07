@@ -66,7 +66,7 @@
                             </div>
                              <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label  >{$.i18n.prop("cliente.tipoCedula")}  <span class="requeridoDato">*</span></label>
-                                 <select  class="form-control" id="tipoCedula" name="tipoCedula" >
+                                 <select  class="form-control tipoCedula " id="tipoCedula" name="tipoCedula" >
                                     <option  each={tipoCedulas.data}  value="{valor}" selected="{cliente.tipoCedula ==valor?true:false}"  >{descripcion}</option>
                                 </select>
                             </div>                            
@@ -326,10 +326,12 @@ var reglasDeValidacion = function() {
 				required : true,
                 maxlength:250,
                 minlength:1,
+                lettersOnly : true
 			},
 			otraSenas : {
                 maxlength:250,
                 minlength:1,
+                lettersOnly : true
 			},
 			correoElectronico : {
                 maxlength:250,
@@ -413,6 +415,13 @@ function __Eventos(){
 			}
 		}
 	});
+    $('#cedula').mask('000000000000', {
+		'translation' : {
+			0 : {
+				pattern : /[0-9]/
+			}
+		}
+	});
     $('.telefono').mask('00000000', {
             'translation' : {
                 0 : {
@@ -433,13 +442,13 @@ function __Eventos(){
 **/
 __regresarAlListado(){
   
-                self.mostrarListado     = true;
-                self.botonAgregar       = false;
-                self.botonModificar     = false;
-                self.mostrarFormulario  = false 
-                self.update()
-               _incializarCampos()
-                __listado();
+    self.mostrarListado     = true;
+    self.botonAgregar       = false;
+    self.botonModificar     = false;
+    self.mostrarFormulario  = false 
+    self.update()
+    _incializarCampos()
+    __listado();
 
 }
 
@@ -602,6 +611,7 @@ function __modificarRegistro_Listar(){
         _incializarCampos()
         self.cliente = data
         self.update()
+
         __consultar()
 	});
 }
@@ -645,19 +655,12 @@ function __consultar(){
                         $('.identificacionExtranjero').val(self.cliente.identificacionExtranjero)
                         
                         $('.codigoPais').val(self.cliente.codigoPais)
+                       
                         $('.nombreComercial').val(self.cliente.nombreComercial)
                         __ComboEstados()
                         __Eventos()
-                        if(self.cliente.provincia.length > 0){
-                          _ConsultarCantonesByProvincias(self.cliente.provincia)
-                            if(self.cliente.canton.length > 0){
-                            _ConsultarDistritosByCanton(self.cliente.provincia,self.cliente.canton)
-                            }
-                            if(self.cliente.canton.length > 0){
-                              _ConsultarBarriosByDistrito(self.cliente.provincia,self.cliente.distrito,self.cliente.canton) 
-                            }
-
-                        }
+                        
+                         $('.tipoCedula').val(self.cliente.tipoCedula)
                         
                         
                     });

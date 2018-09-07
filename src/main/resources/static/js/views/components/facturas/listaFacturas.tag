@@ -1047,11 +1047,7 @@ function __comboCondicionPago(){
 **/
 function __InformacionDataTable(){
     self.formato_tabla = [ 
-                               {'data' :'fechaEmision'   ,"name":"fechaEmision"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true ,
-                                  "render":function(fechaEmision,type, row){
-									    return __displayDate_detail(fechaEmision);
-	 							    }
-                               },
+                               {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true },
                              
                                {'data' :'numeroConsecutivo'                    ,"name":"numeroConsecutivo"                     ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
                                    "render":function(numeroConsecutivo,type, row){

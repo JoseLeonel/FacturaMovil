@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
@@ -19,6 +20,7 @@ public class FacturaEsperaCommand {
 	private String		numeroConsecutivo;
 
 	private Date			fechaEmision;
+	private String			fechaEmisionSTR;
 
 	private String		condicionVenta;
 
@@ -109,6 +111,7 @@ public class FacturaEsperaCommand {
 		super();
 		this.id = factura.getId();
 		this.fechaCredito = factura.getFechaCredito();
+		this.fechaEmisionSTR = Utils.getFechaGeneraReporte(factura.getFechaEmision());
 		this.numeroConsecutivo = factura.getNumeroConsecutivo();
 		this.fechaEmision = factura.getFechaEmision();
 		this.condicionVenta = factura.getCondicionVenta();
@@ -169,6 +172,22 @@ public class FacturaEsperaCommand {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+
+
+	
+	public String getFechaEmisionSTR() {
+		return fechaEmisionSTR;
+	}
+
+
+
+
+	
+	public void setFechaEmisionSTR(String fechaEmisionSTR) {
+		this.fechaEmisionSTR = fechaEmisionSTR;
+	}
+
 
 
 
