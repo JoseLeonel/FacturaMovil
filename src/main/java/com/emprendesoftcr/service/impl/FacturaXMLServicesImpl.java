@@ -280,6 +280,7 @@ private String getDescuento(Double descuento) throws Exception{
 private String xmlImpuestos(Detalle detalle)throws Exception {
   	String resultado = Constantes.EMPTY;
   	try {
+  		if(detalle.getMontoImpuesto() != null && detalle.getTipoImpuesto() !=null) {
     	if(detalle.getMontoImpuesto()>0) {
         resultado = "<Impuesto>" +
             "<Codigo>" + Utils.zeroPad(detalle.getTipoImpuesto(), 2) + "</Codigo>" +
@@ -288,6 +289,7 @@ private String xmlImpuestos(Detalle detalle)throws Exception {
         resultado += "</Impuesto>";
     		
     	}
+  		}
 			
 		} catch (Exception e) {
 			log.info("** Error  xmlImpuestos: " + e.getMessage() + " fecha " + new Date());
