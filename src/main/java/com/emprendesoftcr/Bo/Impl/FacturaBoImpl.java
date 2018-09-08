@@ -322,6 +322,15 @@ public class FacturaBoImpl implements FacturaBo {
 					detalle.setCodigo(articulo.getCodigo());
 					detalle.setUnidadMedida(articulo.getUnidadMedida());
 					detalle.setTipoImpuesto(articulo.getTipoImpuesto());
+					//Se aplica el redondeo hasta que se facture porque puede ser venta en espera y se necesita la presicion de los decimales
+					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)){
+						detalle.setMontoDescuento(detalle.getMontoDescuento() ==null?Constantes.ZEROS_DOUBLE:Math.round(detalle.getMontoDescuento()));
+						detalle.setMontoImpuesto(detalle.getMontoImpuesto()==null?Constantes.ZEROS_DOUBLE:Math.round(detalle.getMontoImpuesto()));
+						detalle.setPrecioUnitario(detalle.getPrecioUnitario()==null?Constantes.ZEROS_DOUBLE:Math.round(detalle.getPrecioUnitario()));
+						detalle.setSubTotal(detalle.getSubTotal()==null?Constantes.ZEROS_DOUBLE:Math.round(detalle.getSubTotal()));
+						detalle.setMontoTotalLinea(detalle.getMontoTotalLinea()==null?Constantes.ZEROS_DOUBLE:Math.round(detalle.getMontoTotalLinea()));
+						detalle.setMontoTotal(detalle.getMontoTotal()==null?Constantes.ZEROS_DOUBLE:Math.round(detalle.getMontoTotal()));
+					}
 					numeroLinea += 1;
 					factura.addDetalle(detalle);
 					modificar(factura);

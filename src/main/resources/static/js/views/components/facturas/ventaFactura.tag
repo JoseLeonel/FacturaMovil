@@ -1711,15 +1711,15 @@ function cargarDetallesFacturaEnEspera(){
             codigo          : e.codigo,
             tipoImpuesto    : e.tipoImpuesto,
             descripcion     : e.descripcion,
-            cantidad        : redondearDecimales(parseFloat(e.cantidad),5),
-            precioUnitario  : redondearDecimales(parseFloat(e.precioUnitario),5),
-            impuesto        : redondearDecimales(parseFloat(e.impuesto),5),
-            montoImpuesto   : redondearDecimales(parseFloat(e.montoImpuesto),5),
-            montoDescuento  : redondearDecimales(parseFloat(e.montoDescuento),5),
-            porcentajeDesc  : redondearDecimales(parseFloat(e.porcentajeDesc),5),
-            subTotal        : redondearDecimales(parseFloat(e.subTotal),5),
-            montoTotalLinea : redondearDecimales(parseFloat(e.montoTotalLinea),5),
-            montoTotal      : redondearDecimales(parseFloat(e.montoTotal),5)
+            cantidad        : parseFloat(e.cantidad),
+            precioUnitario  : parseFloat(e.precioUnitario),
+            impuesto        : parseFloat(e.impuesto),
+            montoImpuesto   : parseFloat(e.montoImpuesto),
+            montoDescuento  : parseFloat(e.montoDescuento),
+            porcentajeDesc  : parseFloat(e.porcentajeDesc),
+            subTotal        : parseFloat(e.subTotal),
+            montoTotalLinea : parseFloat(e.montoTotalLinea),
+            montoTotal      : parseFloat(e.montoTotal)
         });
         self.update()
     })
@@ -1737,6 +1737,7 @@ function __displayDate_detail(fecha) {
 *  Crear Factura nueva
 **/
 function crearFactura(estado){
+    
     self.detalleFactura.data =self.detail
     self.update() 
     var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
@@ -2170,7 +2171,7 @@ function __nuevoArticuloAlDetalle(cantidad){
 **/
 function getMontoTotal(precioUnitario,cantidad){
     var resultado = parseFloat(precioUnitario) * parseFloat(cantidad)
-    return resultado ;
+    return resultado;
 }
 /**
 * Obtiene el precio unitario sin descuento sin impuesto
@@ -2185,7 +2186,7 @@ function getPrecioUnitario(precio ,impuesto){
    }else{
        resultado  =  precio
    }
-   return resultado     
+   return resultado    
 }
 /**
  * calculo del impuesto iva
@@ -2195,8 +2196,9 @@ function _calcularImpuesto(precio,iva){
         return 0;
     }
     var impuesto = iva > 0 ?parseFloat(iva)/100:0
-    impuesto = impuesto > 0 ?impuesto:0
+    impuesto = impuesto > 0 ?impuesto+1:0
     var total = precio * impuesto
+    var total = total - precio 
     return total
 }
  /**
@@ -2261,7 +2263,7 @@ function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc){
 *Actualizar linea en el detalle
 **/
 function ActualizarLineaDEtalle(){
-  var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
+  var montoTotal               = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
     var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc)
     var subTotal               = montoTotal - montoDescuento
     var montoImpuesto          = _calcularImpuesto(subTotal,self.item.iva ==null?0:self.item.iva)
@@ -2328,7 +2330,7 @@ function getMontoTotalLinea(subTotal,totalImpuesto){
 **/
 function getSubTotal(precio,cantidad){
     var valor = __valorNumerico(precio) * __valorNumerico(cantidad)
-    return valor 
+    return valor
 }
 /**
 * calcular el descuento
@@ -2355,7 +2357,6 @@ function __calculate() {
     totalMercanciasExentas  = 0
     totalServGravados       = 0
     totalServExentos        = 0
-
     totalGravado            = 0
     totalExento             = 0
     totalComprobante        = 0
@@ -2373,19 +2374,18 @@ function __calculate() {
         totalImpuesto           += e.montoImpuesto >0?e.montoImpuesto:0
         totalVenta              += e.montoTotal
     });
-    self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)
-    self.factura.totalMercanciasExentas  = __valorNumerico(totalMercanciasExentas)
-    self.factura.totalServGravados       = __valorNumerico(totalServGravados)
-    self.factura.totalServExentos        = __valorNumerico(totalServExentos)
-    self.factura.totalGravado            = __valorNumerico(totalGravado)
-    self.factura.totalExento             = __valorNumerico(totalExento)
-    //cuando se aplica descuentos
-    self.factura.totalVenta              = __valorNumerico(totalVenta)
-    self.factura.totalDescuentos         = __valorNumerico(totalDescuento)
-    self.factura.subTotal                = __valorNumerico(subTotal)
-    self.factura.totalImpuesto           = __valorNumerico(totalImpuesto)
-    self.factura.totalVentaNeta          = __valorNumerico(totalVenta-totalDescuento)
-    self.factura.totalComprobante        = __valorNumerico(totalComprobante)
+    self.factura.totalMercanciasGravadas = Math.round(__valorNumerico(totalMercanciasGravadas))
+    self.factura.totalMercanciasExentas  = Math.round(__valorNumerico(totalMercanciasExentas))
+    self.factura.totalServGravados       = Math.round(__valorNumerico(totalServGravados))
+    self.factura.totalServExentos        = Math.round(__valorNumerico(totalServExentos))
+    self.factura.totalGravado            = Math.round(__valorNumerico(totalGravado))
+    self.factura.totalExento             = Math.round(__valorNumerico(totalExento))
+    self.factura.totalVenta              = Math.round(__valorNumerico(totalVenta))
+    self.factura.totalDescuentos         = Math.round(__valorNumerico(totalDescuento))
+    self.factura.subTotal                = Math.round(__valorNumerico(subTotal))
+    self.factura.totalImpuesto           = Math.round(__valorNumerico(totalImpuesto))
+    self.factura.totalVentaNeta          = Math.round(__valorNumerico(totalVenta-totalDescuento))
+    self.factura.totalComprobante        = Math.round(__valorNumerico(totalComprobante))
     self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
     self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
     self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
@@ -2395,6 +2395,8 @@ function __calculate() {
     $( "#quantity" ).val(null);
     getSubTotalGeneral()
 }
+
+
 /**
 *  Sub Total Generar de la factura
 **/

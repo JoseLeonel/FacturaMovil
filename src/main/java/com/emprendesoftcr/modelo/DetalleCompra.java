@@ -37,19 +37,28 @@ public class DetalleCompra implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long						id;
+	private Long							id;
 
 	@Column(name = "numero_linea")
 	private Integer						numeroLinea;
 
 	@Column(name = "costo")
 	private Double						costo;
-	
+
 	@Column(name = "precio")
 	private Double						precio;
 
 	@Column(name = "cantidad")
 	private Double						cantidad;
+
+	@Column(name = "porcentaje_impuesto")
+	private Double						porcentajeImpuesto;
+
+	@Column(name = "total_impuesto")
+	private Double						totalImpuesto;
+
+	@Column(name = "total_descuento")
+	private Double						totalDescuento;
 
 	@Column(name = "impuesto")
 	private Double						impuesto;
@@ -57,8 +66,8 @@ public class DetalleCompra implements Serializable {
 	@Column(name = "descuento")
 	private Double						descuento;
 
-	@Column(name = "sub_total")
-	private Double						subTotal;
+	@Column(name = "monto_total_linea")
+	private Double						montoTotalLinea;
 
 	@CreatedDate
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -83,24 +92,6 @@ public class DetalleCompra implements Serializable {
 	@JoinColumn(name = "articulo_id", nullable = false)
 	private Articulo					articulo;
 
-	
-
-	public DetalleCompra(Long id, Integer numeroLinea, Double costo, Double cantidad, Double impuesto, Double descuento, Double subTotal, Date created_at, Date updated_at, Compra compra, Articulo articulo,Double precio) {
-		super();
-		this.id = id;
-		this.numeroLinea = numeroLinea;
-		this.costo = costo;
-		this.cantidad = cantidad;
-		this.impuesto = impuesto;
-		this.descuento = descuento;
-		this.subTotal = subTotal;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
-		this.compra = compra;
-		this.articulo = articulo;
-		this.precio = precio;
-	}
-
 	public DetalleCompra() {
 		super();
 	}
@@ -110,23 +101,36 @@ public class DetalleCompra implements Serializable {
 
 		this.numeroLinea = detalleCompraCommand.getLinea();
 		this.costo = detalleCompraCommand.getCosto();
-    this.cantidad = detalleCompraCommand.getCantidad();
-    this.impuesto = detalleCompraCommand.getImpuesto();
-    this.descuento = detalleCompraCommand.getDescuento();
-    this.subTotal = detalleCompraCommand.getSubTotal();
-    this.precio = detalleCompraCommand.getPrecio();
+		this.cantidad = detalleCompraCommand.getCantidad();
+		this.impuesto = detalleCompraCommand.getImpuesto();
+		this.descuento = detalleCompraCommand.getDescuento();
+
+		this.precio = detalleCompraCommand.getPrecio();
 	}
 
-	
+	public DetalleCompra(Long id, Integer numeroLinea, Double costo, Double precio, Double cantidad, Double porcentajeImpuesto, Double totalImpuesto, Double totalDescuento, Double impuesto, Double descuento, Double montoTotalLinea, Date created_at, Date updated_at, Compra compra, Articulo articulo) {
+		super();
+		this.id = id;
+		this.numeroLinea = numeroLinea;
+		this.costo = costo;
+		this.precio = precio;
+		this.cantidad = cantidad;
+		this.porcentajeImpuesto = porcentajeImpuesto;
+		this.totalImpuesto = totalImpuesto;
+		this.totalDescuento = totalDescuento;
+		this.impuesto = impuesto;
+		this.descuento = descuento;
+		this.montoTotalLinea = montoTotalLinea;
+		this.created_at = created_at;
+		this.updated_at = updated_at;
+		this.compra = compra;
+		this.articulo = articulo;
+	}
 
-	
-
-	
 	public Long getId() {
 		return id;
 	}
 
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -171,12 +175,36 @@ public class DetalleCompra implements Serializable {
 		this.descuento = descuento;
 	}
 
-	public Double getSubTotal() {
-		return subTotal;
+	public Double getPorcentajeImpuesto() {
+		return porcentajeImpuesto;
 	}
 
-	public void setSubTotal(Double subTotal) {
-		this.subTotal = subTotal;
+	public void setPorcentajeImpuesto(Double porcentajeImpuesto) {
+		this.porcentajeImpuesto = porcentajeImpuesto;
+	}
+
+	public Double getTotalImpuesto() {
+		return totalImpuesto;
+	}
+
+	public void setTotalImpuesto(Double totalImpuesto) {
+		this.totalImpuesto = totalImpuesto;
+	}
+
+	public Double getTotalDescuento() {
+		return totalDescuento;
+	}
+
+	public void setTotalDescuento(Double totalDescuento) {
+		this.totalDescuento = totalDescuento;
+	}
+
+	public Double getMontoTotalLinea() {
+		return montoTotalLinea;
+	}
+
+	public void setMontoTotalLinea(Double montoTotalLinea) {
+		this.montoTotalLinea = montoTotalLinea;
 	}
 
 	public Date getCreated_at() {
@@ -211,16 +239,12 @@ public class DetalleCompra implements Serializable {
 		this.articulo = articulo;
 	}
 
-	
 	public Double getPrecio() {
 		return precio;
 	}
 
-	
 	public void setPrecio(Double precio) {
 		this.precio = precio;
 	}
-	
-	
 
 }

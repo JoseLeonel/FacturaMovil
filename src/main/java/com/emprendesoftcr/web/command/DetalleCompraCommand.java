@@ -4,17 +4,20 @@ import com.emprendesoftcr.modelo.Articulo;
 
 public class DetalleCompraCommand {
 
-	private Integer			linea;
+	private Integer		linea;
+	private Double		porcentajeImpuesto;
 	private Long			articulo_id;
-	private String			codigo;
-	private String			descripcion;
-	private Double	cantidad;
-	private Double	costo;
-	private Double	precio;
-	private Double	impuesto;
-	private Double	descuento;
-	private Double	subTotal;
-	private Articulo		articulo;
+	private String		codigo;
+	private String		descripcion;
+	private Double		cantidad;
+	private Double		costo;
+	private Double		precio;
+	private Double		totalImpuesto;
+	private Double		totalDescuento;
+	private Double		impuesto;
+	private Double		descuento;
+	private Double		montoTotalLinea;
+	private Articulo	articulo;
 
 	public DetalleCompraCommand() {
 		super();
@@ -28,14 +31,10 @@ public class DetalleCompraCommand {
 		this.linea = linea;
 	}
 
-
-
-	
 	public Long getArticulo_id() {
 		return articulo_id;
 	}
 
-	
 	public void setArticulo_id(Long articulo_id) {
 		this.articulo_id = articulo_id;
 	}
@@ -88,14 +87,6 @@ public class DetalleCompraCommand {
 		this.descuento = descuento;
 	}
 
-	public Double getSubTotal() {
-		return subTotal;
-	}
-
-	public void setSubTotal(Double subTotal) {
-		this.subTotal = subTotal;
-	}
-
 	public Articulo getArticulo() {
 		return articulo;
 	}
@@ -104,16 +95,44 @@ public class DetalleCompraCommand {
 		this.articulo = articulo;
 	}
 
-	
 	public Double getPrecio() {
 		return precio;
 	}
 
-	
 	public void setPrecio(Double precio) {
 		this.precio = precio;
 	}
-	
-	
+
+	public Double getPorcentajeImpuesto() {
+		return porcentajeImpuesto;
+	}
+
+	public void setPorcentajeImpuesto(Double porcentajeImpuesto) {
+		this.porcentajeImpuesto = porcentajeImpuesto;
+	}
+
+	public Double getTotalImpuesto() {
+		return totalImpuesto;
+	}
+
+	public void setTotalImpuesto(Double totalImpuesto) {
+		this.totalImpuesto = totalImpuesto;
+	}
+
+	public Double getTotalDescuento() {
+		return totalDescuento;
+	}
+
+	public void setTotalDescuento(Double totalDescuento) {
+		this.totalDescuento = totalDescuento;
+	}
+
+	public Double getMontoTotalLinea() {
+		return montoTotalLinea;
+	}
+
+	public void setMontoTotalLinea(Double montoTotalLinea) {
+		this.montoTotalLinea = montoTotalLinea;
+	}
 
 }

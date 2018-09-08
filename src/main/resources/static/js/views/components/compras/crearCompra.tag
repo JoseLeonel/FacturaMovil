@@ -101,12 +101,11 @@
                         <article class="booking-details clearfix">
                             <h3><span id="lblSCS">Resumen de la Compra</span></h3>
                             <div class="booking-info">
-                                <p style="text-align:right">Sub Total : <span id="lblSubtotal"> {compra.subTotal.toLocaleString('de-DE')} </span></p>
-                                <p style="text-align:right">Descuento : <span id="lblSubtotal"> {compra.totalDescuento.toLocaleString('de-DE')} </span></p>
-                                <p style="text-align:right">Impuesto  : <span id="lblSubtotal"> {compra.totalImpuesto.toLocaleString('de-DE')} </span></p>
+                                <p style="text-align:right">Descuento : <span id="lblSubtotal"> {totalGeneralDescuento} </span></p>
+                                <p style="text-align:right">Impuesto  : <span id="lblSubtotal"> {totalGeneralImpuesto} </span></p>
                             </div>
                             <div class="precioTotalFactura">
-                                <p class="total" style="text-align:right;">Total  : <span id="lblTotal">{compra.totalCompra.toLocaleString('de-DE')}</span></p>
+                                <p class="total" style="text-align:right;">Total  : <span id="lblTotal">{totalGeneralCompra}</span></p>
                             </div>
                         </article>
                     </aside>     
@@ -137,16 +136,16 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th style="width:5%;">                                               </th>
-                            <th>{$.i18n.prop("compra.linea.detalle.linea")}                        </th>
-                            <th>{$.i18n.prop("compra.linea.detalle.codigo")}                       </th>
-                            <th style="width:20%;">{$.i18n.prop("compra.linea.detalle.descripcion")}                  </th>
-                            <th >{$.i18n.prop("compra.linea.detalle.cantidad")}  </th>
-                            <th >{$.i18n.prop("compra.linea.detalle.costo")}     </th>
-                             <th >{$.i18n.prop("compra.linea.detalle.precio")}     </th>
-                            <th >{$.i18n.prop("compra.linea.detalle.descuento")} </th>
-                            <th >{$.i18n.prop("compra.linea.detalle.impuesto")}  </th>
-                            <th >{$.i18n.prop("compra.linea.detalle.subTotal")}  </th>
+                            <th style="width:5%;">                                                      </h1></th>
+                            <th><h1>{$.i18n.prop("compra.linea.detalle.linea")}                         </h1></th>
+                            <th><h1>{$.i18n.prop("compra.linea.detalle.codigo")}                        </h1></th>
+                            <th style="width:20%;"><h1>{$.i18n.prop("compra.linea.detalle.descripcion")}</h1></th>
+                            <th><h1>{$.i18n.prop("compra.linea.detalle.cantidad")}                      </h1></th>
+                            <th><h1>{$.i18n.prop("compra.linea.detalle.costo")}                         </h1></th>
+                            <th><h1>{$.i18n.prop("compra.linea.detalle.precio")}                        </h1></th>
+                            <th><h1>{$.i18n.prop("compra.linea.detalle.descuento")}                     </h1></th>
+                            <th><h1>{$.i18n.prop("compra.linea.detalle.impuesto")}                      </h1></th>
+                            <th><h1>{$.i18n.prop("compra.linea.detalle.total")}                        </h1></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -154,28 +153,29 @@
                             <td>
                                 <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
                             </td>
-                            <td>{linea}</td>
-                            <td>{codigo}</td>
-                            <td>{descripcion}</td>
+                            <td><h2>{linea}</h2></td>
+                            <td><h2>{codigo}</h2></td>
+                            <td><h2>{descripcion}</h2></td>
                             <td class="text-right">
-                                <input onkeypress={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalle} id= "cantidadDetalle" class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad} />
+                                <input onkeypress={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalle} id= "cantidadDetalle" class="campo" type="number" step="any" placeholder="Cantidad Detalle" value = {cantidad} />
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarCosto} onBlur={__actualizarCosto} class="form-control" type="text"  value = "{costo}" />
+                                <input  onkeypress={__actualizarCosto} onBlur={__actualizarCosto} class="campo" type="number" step="any"  value = "{costo}" />
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarPrecio} onBlur={__actualizarPrecio} class="form-control" type="text"  value = "{precio}" />
+                                <input  onkeypress={__actualizarPrecio} onBlur={__actualizarPrecio} class="campo" type="number" step="any"  value = "{precio}" />
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarDescuento} onBlur={__actualizarDescuento} class="form-control" type="text"  value = "{descuento}" />
+                                <input  onkeypress={__actualizarDescuento} onBlur={__actualizarDescuento} class="campo" type="number" step="any"  value = "{descuento}" />
                             </td>
                                                         
                             <td class="text-right">
-                                <input  onkeypress={__actualizarImpuesto}  onBlur ={__actualizarImpuesto} class="form-control" type="text"  value = "  {impuesto}" />
+                                 <input  class="campo" type="number" step="any"  value = "{totalImpuesto}"  readonly/>
+                                
                             </td>
 
                             <td class="text-right">
-                                <input  class="form-control" type="text"  value = "{subTotal}" readonly/>
+                                <input  class="campo" type="number" step="any"  value = "{montoTotalLinea}" readonly/>
                             </td>
                         </tr>
                         </tbody>
@@ -191,12 +191,12 @@
                                     <tbody>
                                         <tr>
                                             <td width="30%" id="">
-                                                <div id="pagarTitulo">{$.i18n.prop("compra.total")}</div>
+                                                <div id="pagarTitulo">{$.i18n.prop("compra.total")}:</div>
                                             </td>
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show">{compra.totalCompra}</span>
+                                                    <span class="label label-info textShadow" id="total-show">{totalGeneralCompra}</span>
                                                 </div>
                                             </td>
                                         </tr>                     
@@ -518,6 +518,10 @@
     self.mostrarFormularioPago = false
     self.mostarParaCrearNuevaCompra = true
     self.mostrarCamposIngresoContado = true;
+    self.totalGeneralDescuento = 0;
+    self.totalGeneralImpuesto  = 0;
+    self.totalGeneralCompra    = 0; 
+
 
     self.on('mount',function(){
         $("#formularioCompra").validate(reglasDeValidacionCompra());
@@ -643,6 +647,10 @@ function __Init(){
     self.mostrarFormularioPago = false
     self.mostarParaCrearNuevaCompra = true
     self.mostrarCamposIngresoContado = true;
+    self.totalGeneralDescuento = 0;
+    self.totalGeneralImpuesto  = 0;
+    self.totalGeneralCompra    = 0; 
+
     self.update();
     // Tipo de Pagos
      __comboFormaPagos()
@@ -721,37 +729,6 @@ function cargarDetallesCompraEnEspera(){
     })
     self.update()
      __calculate(); 
-}
-/**
-*   agregar Articulos nuevos en el detalle de la Compra
-**/
-function __nuevoArticuloAlDetalle(cantidad){
-    if(self.articulo.descripcion == null){
-        return;
-    }
-    if(self.articulo.descripcion == ""){
-        return;
-    }
-    self.descuento      = 0;
-    self.detail.push({
-       linea           : 0,
-       articulo_id     : self.articulo.id,
-       codigo          : self.articulo.codigo,
-       descripcion     : self.articulo.descripcion,
-       cantidad        : redondearDecimales(parseFloat(cantidad),2),
-       costo           : redondearDecimales(parseFloat(self.articulo.costo),2),
-       precio          : redondearDecimales(parseFloat(self.articulo.precioPublico),2),
-       impuesto        : 0,
-       descuento       : 0,
-       subTotal        : redondearDecimales(parseFloat(self.articulo.costo * cantidad),2)
-    });
-    var cont = 0;
-    self.detail.forEach(function(elemen){
-            elemen.linea = cont + 1
-            cont = elemen.linea
-        }
-    )
-    self.update()
 }
 
 function redondearDecimales(numero, decimales) {
@@ -1033,6 +1010,100 @@ function __agregarArticulo(cantidad){
 }
 
 /**
+*   agregar Articulos nuevos en el detalle de la Compra
+**/
+function __nuevoArticuloAlDetalle(cantidad){
+    if(self.articulo.descripcion == null){
+        return;
+    }
+    if(self.articulo.descripcion == ""){
+        return;
+    }
+    var iva =  __valorNumerico(self.articulo.impuesto/100)
+    var montoImpuestoV    = Math.round(__valorNumerico(self.articulo.costo * iva))
+    self.descuento      = 0;
+    self.detail.push({
+       linea           : 0,
+       porcentajeImpuesto :iva,
+       articulo_id     : self.articulo.id,
+       codigo          : self.articulo.codigo,
+       descripcion     : self.articulo.descripcion,
+       cantidad        : parseFloat(cantidad),
+       costo           : self.articulo.costo,
+       precio          : self.articulo.precioPublico,
+       totalImpuesto   : montoImpuestoV * cantidad,
+       totalDescuento  :0,
+       impuesto        : montoImpuestoV,
+       descuento       : 0,
+       montoTotalLinea : Math.round(__valorNumerico(self.articulo.costo * cantidad))
+    });
+    var cont = 0;
+    self.detail.forEach(function(elemen){
+            elemen.linea = cont + 1
+            cont = elemen.linea
+        }
+    )
+    self.update()
+    self.detail.sort(function(a,b) {
+    if ( a.linea > b.linea )
+        return -1;
+    if ( a.linea < b.linea )
+        return 1;
+    return 0;
+    } );
+    self.update()
+}
+/**
+*   Actualizar el costo del codigo y recalcular la compra
+**/
+__actualizarCosto(e){
+    if (e.keyCode != 13) {
+        return;
+    } 
+    var costo = e.currentTarget.value;
+    self.item = e.item; 
+    var input = e.input;
+    var index = self.detail.indexOf(self.item);
+    //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
+    costo =__valorNumerico(costo);
+    self.item.costo = parseFloat(costo);  
+    _cambiaImpuesto()
+    __actualizarItemArray();
+    self.detail[index] = self.item;
+    self.update();
+    __calculate();
+}
+/**
+* Actualiza el impuesto si cambia el costo
+**/
+function _cambiaImpuesto(){
+    if(self.item.impuesto ==0){
+        return 0
+    }
+    var costoProducto = 0
+    if(self.item.descuento > 0){
+        var valor = self.item.descuento /100
+        var resultado = self.item.costo * valor
+        costoProducto = self.item.costo - resultado
+    }else{
+        costoProducto = self.item.costo
+    }
+    var valor = costoProducto * self.item.porcentajeImpuesto
+    self.item.impuesto      = Math.round(__valorNumerico(valor))
+    self.item.totalImpuesto = Math.round(__valorNumerico(self.item.impuesto *  self.item.cantidad))
+    self.update()
+}
+/**
+* Actualizar item en el array
+**/
+function __actualizarItemArray(){
+    //Subtotal del Detalle
+    self.item.montoTotalLinea = Math.round(__valorNumerico(self.item.costo * self.item.cantidad));
+    self.item.montoTotalLinea = Math.round(__valorNumerico(self.item.montoTotalLinea-self.item.totalDescuento))
+    self.item.montoTotalLinea = Math.round(__valorNumerico(self.item.montoTotalLinea + self.item.totalImpuesto));
+    self.update()
+}
+/**
 * eliminar un detalle Compra
 **/
 __removeProductFromDetail(e) {
@@ -1068,31 +1139,12 @@ __removeProductFromDetail(e) {
        cantidad = 1;
     }
     self.item.cantidad = parseFloat(cantidad);  
+    _cambiaImpuesto()
     __actualizarItemArray();
     self.detail[index] = self.item;
     self.update();
     __calculate();
  }
-/**
-*   Actualizar el costo del codigo y recalcular la compra
-**/
-__actualizarCosto(e){
-    if (e.keyCode != 13) {
-        return;
-    } 
-    var costo = e.currentTarget.value;
-    self.item = e.item; 
-    var input = e.input;
-    var index = self.detail.indexOf(self.item);
-    //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
-    costo =__valorNumerico(costo);
-    self.item.costo = parseFloat(costo);  
-    __actualizarItemArray();
-    self.detail[index] = self.item;
-    self.update();
-    __calculate();
-}
-
 /**
 *   Actualizar el costo del codigo y recalcular la compra
 **/
@@ -1113,27 +1165,6 @@ __actualizarPrecio(e){
     __calculate();
 }
 /**
-* Actualizar el impuesto del codigo
-**/
-__actualizarImpuesto(e){
-    if (e.keyCode != 13) {
-        return;
-    } 
-    self.item     = e.item; 
-    var index     = self.detail.indexOf(self.item);
-    var impuesto  = e.currentTarget.value;
-    //Impuesto se verifica si es null o espacios por defecto se deja en cero
-    impuesto =__valorNumerico(impuesto);
-
-    if(self.item.impuesto != impuesto){
-       self.item.impuesto =  parseFloat(impuesto);  
-    }    
-    __actualizarItemArray();
-    self.detail[index] = self.item;
-    self.update();
-    __calculate();
-}
-/**
 * Actualizar el descuento del codigo
 **/
 __actualizarDescuento(e){
@@ -1148,22 +1179,18 @@ __actualizarDescuento(e){
       //Descuento
     if(self.item.descuento != descuento){
        self.item.descuento =  parseFloat(descuento);  
-    }    
+    } 
+    var valor = self.item.descuento /100
+    var resultado = self.item.costo * valor
+    self.item.totalDescuento =  Math.round(__valorNumerico(resultado * self.item.cantidad))
+    self.update()   
+    _cambiaImpuesto()
     __actualizarItemArray();
     self.detail[index] = self.item;
     self.update();
     __calculate();
 }
-/**
-* Actualizar item en el array
-**/
-function __actualizarItemArray(){
-    //Subtotal del Detalle
-    self.item.subTotal    = parseFloat(self.item.costo * self.item.cantidad);
-    self.item.subTotal    = self.item.subTotal-self.item.descuento
-    self.item.subTotal    = self.item.subTotal + self.item.impuesto;
-    self.update()
-}
+
 /**
 * calculacion de los detalle de la compra 
 **/
@@ -1173,21 +1200,22 @@ function __calculate() {
     self.compra.totalImpuesto   = 0;
     self.compra.subTotal        = 0;
     self.update()
-    totalCompra    = 0
-    subTotal       = 0
-    totalDescuento = 0
-    totalImpuesto  = 0
+    var totalCompra    = 0
+    var montoTotalLinea= 0
+    var totalDescuento = 0
+    var totalImpuesto  = 0
     self.detail.forEach(function(e){
-        totalCompra    += e.subTotal >0?e.subTotal:0
-        subTotal       += e.subTotal >0?e.subTotal + e.descuento:0
-        totalDescuento += e.descuento >0?e.descuento:0
-        totalImpuesto  += e.impuesto >0?e.impuesto:0
+        totalCompra      += e.montoTotalLinea >0?e.montoTotalLinea:0
+        montoTotalLinea  += e.montoTotalLinea >0?e.montoTotalLinea + e.descuento:0
+        totalDescuento   += e.descuento >0?e.descuento:0
+        totalImpuesto    += e.totalImpuesto >0?e.totalImpuesto:0
     });
     self.compra.totalCompra    += totalCompra
-    self.compra.subTotal       += subTotal
     self.compra.totalDescuento += totalDescuento
     self.compra.totalImpuesto  += totalImpuesto
-
+    self.totalGeneralDescuento = formatoDecimales(totalDescuento,2)
+    self.totalGeneralImpuesto  = formatoDecimales(totalDescuento,2)
+    self.totalGeneralCompra    = formatoDecimales(totalCompra,2)
     self.articulo              = null;
     self.update(); 
     $( "#codigo" ).val(null);
@@ -1233,9 +1261,6 @@ function __agregarArticulos() {
         self.articulo = data;
         self.update();  
 	    __buscarcodigo(self.articulo.codigo,1)
-        
- 
-       
     });
 }
 /**

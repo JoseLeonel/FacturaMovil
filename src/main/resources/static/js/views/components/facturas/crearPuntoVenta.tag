@@ -197,8 +197,8 @@
                             </div>
 
                             <div class="col-sx-12 col-sm-2 col-md-2 col-lg-2">
-                                <button    onclick = {__ListaDecodigos} class="btn-green btn-buscar " id="btn-facturar" >
-                                    {$.i18n.prop("btn.consultar")} 
+                                <button    onclick = {__ListaDecodigos} class="btn btn-primary form-control " id="btn-facturar" >
+                                   <i class="glyphicon glyphicon-plus"></i>{$.i18n.prop("btn.consultar")} 
                                 </button>
                             </div>
                     </div>
@@ -206,15 +206,15 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th style="width:5%;">                                                   </th>
-                            <th><h1>{$.i18n.prop("factura.linea.detalle.linea")}</h1>                     </h1>    </th>
+                            <th style="width:5%;">                                                        </th>
+                            <th><h1>{$.i18n.prop("factura.linea.detalle.linea")}                         </h1></th>
                             <th><h1>{$.i18n.prop("factura.linea.detalle.codigo")}                        </h1></th>
-                            <th style="width:20%;"><h1>{$.i18n.prop("factura.linea.detalle.descripcion")} </h1></th>
-                            <th style="width:8%;"><h1>{$.i18n.prop("factura.linea.detalle.cantidad")}                    </h1> </th>
+                            <th style="width:20%;"><h1>{$.i18n.prop("factura.linea.detalle.descripcion")}</h1></th>
+                            <th style="width:8%;"><h1>{$.i18n.prop("factura.linea.detalle.cantidad")}    </h1> </th>
                             <th ><h1>{$.i18n.prop("factura.linea.detalle.precio")}                       </h1></th>
                             <th ><h1>{$.i18n.prop("factura.linea.detalle.descuento")}                    </h1></th>
                             <th ><h1>{$.i18n.prop("factura.linea.detalle.impuesto")}                     </h1></th>
-                            <th ><h1>{$.i18n.prop("factura.linea.detalle.subTotal")}                    </h1> </th>
+                            <th ><h1>{$.i18n.prop("factura.linea.detalle.subTotal")}                     </h1> </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -222,8 +222,8 @@
                             <td>
                                 <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
                             </td>
-                            <td><h1>{numeroLinea}</h1></td>
-                            <td><h2>{codigo}</h1></td>
+                            <td><h2>{numeroLinea}</h2></td>
+                            <td><h2>{codigo}</h2></td>
                             <td><h2>{descripcion}</h2></td>
                             <td class="text-right" style="width:8%;">
                                 <input onclick={__CambiarCantidad} id= "cantidadDetalle" class="campo " type="number" placeholder="Cantidad Detalle" value = {cantidad.toFixed(3)} readonly />
@@ -382,7 +382,7 @@
                         <tr>
                             <th>{$.i18n.prop("cliente.cedula")}           </th>
                             <th>{$.i18n.prop("cliente.nombreCompleto")}   </th>
-                            <th>{$.i18n.prop("cliente.correoElectronico")}</th>
+                            <th>{$.i18n.prop("cliente.correoElectronico")}</th>.toFixed(2)
                             <th>{$.i18n.prop("cliente.descuento")}        </th>
                             <th>{$.i18n.prop("cliente.telefono")}         </th>
                             <th>{$.i18n.prop("cliente.celular")}          </th>
@@ -425,7 +425,7 @@
                             <th>{$.i18n.prop("vendedor.celular")}          </th>
                             <th>                                           </th>
                         </tr>
-                    </tfoot>                0046500005602    
+                    </tfoot>                    
                 </table>
             </div>
             <div class="modal-footer">
@@ -1764,8 +1764,9 @@ function _calcularImpuesto(precio,iva){
         return 0;
     }
     var impuesto = iva > 0 ?parseFloat(iva)/100:0
-    impuesto = impuesto > 0 ?impuesto:0
+    impuesto = impuesto > 0 ?impuesto+1:0
     var total = precio * impuesto
+    var total = total - precio 
     return total
 }
  /**
@@ -1890,7 +1891,7 @@ function getMontoTotalLinea(subTotal,totalImpuesto){
 **/
 function getSubTotal(precio,cantidad){
     var valor = __valorNumerico(precio) * __valorNumerico(cantidad)
-    return valor 
+    return valor
 }
 /**
 * calcular el descuento
@@ -1904,10 +1905,10 @@ function getTotalDescuento(precio,cantidad,porcentajeDesc){
 * calculacion de los detalle de la factura 
 **/
 function __calculate() {
-    self.factura.total           = 0;
+    self.factura.total            = 0;
     self.factura.totalDescuentos  = 0;
-    self.factura.totalImpuesto   = 0;
-    self.factura.subTotal        = 0;
+    self.factura.totalImpuesto    = 0;
+    self.factura.subTotal         = 0;
     self.update()
     totalVenta     = 0
     subTotal       = 0
@@ -1935,19 +1936,19 @@ function __calculate() {
         totalImpuesto           += e.montoImpuesto >0?e.montoImpuesto:0
         totalVenta              += e.montoTotal
     });
-    self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)
-    self.factura.totalMercanciasExentas  = __valorNumerico(totalMercanciasExentas)
-    self.factura.totalServGravados       = __valorNumerico(totalServGravados)
-    self.factura.totalServExentos        = __valorNumerico(totalServExentos)
-    self.factura.totalGravado            = __valorNumerico(totalGravado)
-    self.factura.totalExento             = __valorNumerico(totalExento)
+    self.factura.totalMercanciasGravadas = Math.round(__valorNumerico(totalMercanciasGravadas))
+    self.factura.totalMercanciasExentas  = Math.round(__valorNumerico(totalMercanciasExentas))
+    self.factura.totalServGravados       = Math.round(__valorNumerico(totalServGravados))
+    self.factura.totalServExentos        = Math.round(__valorNumerico(totalServExentos))
+    self.factura.totalGravado            = Math.round(__valorNumerico(totalGravado))
+    self.factura.totalExento             = Math.round(__valorNumerico(totalExento))
     //cuando se aplica descuentos
-    self.factura.totalVenta              = __valorNumerico(totalVenta)
-    self.factura.totalDescuentos         = __valorNumerico(totalDescuento)
-    self.factura.subTotal                = __valorNumerico(subTotal)
-    self.factura.totalImpuesto           = __valorNumerico(totalImpuesto)
-    self.factura.totalVentaNeta          = __valorNumerico(totalVenta-totalDescuento)
-    self.factura.totalComprobante        = __valorNumerico(totalComprobante)
+    self.factura.totalVenta              = Math.round(__valorNumerico(totalVenta))
+    self.factura.totalDescuentos         = Math.round(__valorNumerico(totalDescuento))
+    self.factura.subTotal                = Math.round(__valorNumerico(subTotal))
+    self.factura.totalImpuesto           = Math.round(__valorNumerico(totalImpuesto))
+    self.factura.totalVentaNeta          = Math.round(__valorNumerico(totalVenta-totalDescuento))
+    self.factura.totalComprobante        = Math.round(__valorNumerico(totalComprobante))
     self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
     self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
     self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);

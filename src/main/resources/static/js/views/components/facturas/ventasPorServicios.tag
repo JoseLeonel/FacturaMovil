@@ -76,12 +76,6 @@
         <div class="col-lg-2 "></div>
     </div>
 </div>
-
-
-
-
- 
-
 <div  show={formularioSegundoPaso}>
     <div class="row center "  >
         <div class=" col-sx-12 col-lg-2 "></div>
@@ -248,12 +242,6 @@
       
     </div>
 </div>
-
-
-
-
-
-
 <!--Modal mostrar  -->
 <div id="modalClientes" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -288,8 +276,6 @@
     </div>
 </div>
 <!--fin del modal-->
-
-
 <STYLE TYPE="text/css" rel="stylesheet" type="text/css" media="all" >
 
         .formItem {
@@ -373,7 +359,6 @@
     self.formularioDetalle     = false
     self.mostrarProductos      = true
     self.formularioSegundoPaso = false
-    
     self.mostrarCamposIngresoCredito = false
     self.articulo             = {}
     self.detail                = []
@@ -381,8 +366,6 @@
     self.clientes              = {data:[]}
     self.detalleFactura        = {data:[]}
     self.cliente               = {}
-    
-
 self.on('mount',function(){
     limpiar()
      $("#formulario").validate(reglasDeValidacion());
@@ -400,7 +383,6 @@ self.on('mount',function(){
         }, false );
     
 })
-
 /**
 *  Obtiene el valor de lo digitado en el campo de efectivo
 **/
@@ -431,10 +413,18 @@ __CalculaCambioAEntregarOnblur(e){
     sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
     //Si no ingresado montos no realiza las operaciones de calculos
     if(sumaMontosEntregadosParaCambios == 0){
+        self.factura.totalCambioPagar = self.factura.totalComprobante * -1
+        self.update()
         return
     }
     self.factura.totalCambioPagar = 0
-    self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalComprobante ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
+    var totalEntregado = redondeoDecimales(sumaMontosEntregadosParaCambios,2)
+    var totalFactura   = redondeoDecimales(self.factura.totalComprobante,2)
+    totalEntregado     = __valorNumerico(totalEntregado)
+    totalFactura       = __valorNumerico(totalFactura)  
+    self.factura.totalCambioPagar = totalEntregado - totalFactura
+    self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)   
+    self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
     self.update()
 }
 /**
@@ -447,14 +437,21 @@ __CalculaCambioAEntregarKeyPress(e){
         sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
         sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
         if(sumaMontosEntregadosParaCambios == 0){
+            self.factura.totalCambioPagar = self.factura.totalComprobante * -1
+            self.update()
             return
         }
         self.factura.totalCambioPagar = 0
-        self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios > self.factura.totalComprobante ? sumaMontosEntregadosParaCambios - self.factura.totalComprobante:sumaMontosEntregadosParaCambios - self.factura.totalComprobante    
+        var totalEntregado = redondeoDecimales(sumaMontosEntregadosParaCambios,2)
+        var totalFactura   = redondeoDecimales(self.factura.totalComprobante,2)
+        totalEntregado     = __valorNumerico(totalEntregado)
+        totalFactura       = __valorNumerico(totalFactura)  
+        self.factura.totalCambioPagar = totalEntregado - totalFactura
+        self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)   
+        self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
         self.update()
     }
 }
-
 /**
 * Camps requeridos
 **/
@@ -479,9 +476,9 @@ var reglasDeValidacion = function() {
 	});
 	return validationOptions;
 };
-
-
-
+/**
+* Datos de referencia cuando se aplica una nota de credito
+**/
 __formaReferencias(e){
 if($('#tipoDoc').val() !="01" && $('#tipoDoc').val() !="04"){
        self.mostrarReferencias            = true
@@ -496,8 +493,9 @@ if($('#tipoDoc').val() !="01" && $('#tipoDoc').val() !="04"){
         $('.referenciaCodigo').prop("selectedIndex", 0);
     }
 }   
-
-
+/**
+limpiar datos
+**/
 function limpiar(){
     $(".referenciaFechaEmision").val(null)
     $('.referenciaNumero').val(null)
@@ -519,8 +517,7 @@ function limpiar(){
     self.factura = {}
     self.cliente = {}
     self.update()
-
-      
+   
 }
 
 /**
@@ -569,8 +566,6 @@ if ($("#formularioPaso2").valid()) {
             }
         });
     }
-
-
 }
 
 /**
@@ -596,10 +591,7 @@ function crearFactura(){
     self.factura.totalBanco = redondearDecimales(__valorNumerico($('#totalBanco').val()))
     self.factura.detalleFactura =JSONDetalles
     self.update();
-    
     var formulario = $("#formularioPaso2").serialize();
-     
-                    
     $.ajax({
         type : "POST",
         dataType : "json",
@@ -630,7 +622,6 @@ function crearFactura(){
         }
     });
 }
-
 /**
 *Si fue facturada o tiquete
 **/
@@ -712,13 +703,13 @@ function __nuevoArticuloAlDetalle(cantidad){
     )
     self.update()
 }
-
+/**
+* Calcular el monto Total
+**/
 function getMontoTotal(precioUnitario,cantidad){
     var resultado = parseFloat(precioUnitario) * parseFloat(cantidad)
-    return redondearDecimales(resultado ,5);
+    return resultado ;
 }
-
-
 /**
 * Obtiene el precio unitario sin descuento sin impuesto
 **/
@@ -732,10 +723,7 @@ function getPrecioUnitario(precio ,impuesto){
    }else{
        resultado  =  precio
    }
-
-
-   return redondearDecimales(resultado,5)     
-  
+   return resultado     
 }
 /**
  * calculo del impuesto iva
@@ -745,12 +733,11 @@ function _calcularImpuesto(precio,iva){
         return 0;
     }
     var impuesto = iva > 0 ?parseFloat(iva)/100:0
-    impuesto = impuesto > 0 ?impuesto:0
+    impuesto = impuesto > 0 ?impuesto+1:0
     var total = precio * impuesto
-    return redondearDecimales(total ,5)
+    var total = total - precio 
+    return total
 }
-
-
 /**
 * calculacion de los detalle de la factura 
 **/
@@ -766,7 +753,6 @@ function __calculate() {
     totalImpuesto  = 0
     totalMercanciasGravadas = 0
     totalMercanciasExentas  = 0
-
     totalServGravados       = 0
     totalServGravados       = 0
     totalGravado            = 0
@@ -786,47 +772,20 @@ function __calculate() {
         totalImpuesto           += e.montoImpuesto >0?e.montoImpuesto:0
         totalVenta              += e.montoTotal
     });
-    self.factura.totalMercanciasGravadas = redondearDecimales(__valorNumerico(totalMercanciasGravadas),5)
-    self.factura.totalMercanciasExentas  = redondearDecimales(__valorNumerico(totalMercanciasExentas),5)
-    self.factura.totalServGravados       = redondearDecimales(__valorNumerico(totalServGravados),5)
-    self.factura.totalServExentos        = redondearDecimales(__valorNumerico(totalServExentos),5)
-
-    self.factura.totalGravado            = redondearDecimales(__valorNumerico(totalGravado),5)
-    self.factura.totalExento             = redondearDecimales(__valorNumerico(totalExento),5)
-    self.factura.totalVenta              = redondearDecimales(totalVenta,5)
-    self.factura.totalDescuentos          = redondearDecimales(__valorNumerico(totalDescuento),5)
-    self.factura.subTotal                = redondearDecimales(__valorNumerico(subTotal),5)
-    self.factura.totalImpuesto           = redondearDecimales(__valorNumerico(totalImpuesto),5)
-    self.factura.totalVentaNeta          = redondearDecimales(__valorNumerico(subTotal),5)
-    self.factura.totalComprobante        = redondearDecimales(__valorNumerico(totalComprobante),5)
+    self.factura.totalMercanciasGravadas = Math.round(__valorNumerico(totalMercanciasGravadas))
+    self.factura.totalMercanciasExentas  = Math.round(__valorNumerico(totalMercanciasExentas))
+    self.factura.totalServGravados       = Math.round(__valorNumerico(totalServGravados))
+    self.factura.totalServExentos        = Math.round(__valorNumerico(totalServExentos))
+    self.factura.totalGravado            = Math.round(__valorNumerico(totalGravado))
+    self.factura.totalExento             = Math.round(__valorNumerico(totalExento))
+    self.factura.totalVenta              = Math.round(totalVenta)
+    self.factura.totalDescuentos         = Math.round(__valorNumerico(totalDescuento))
+    self.factura.subTotal                = Math.round(__valorNumerico(subTotal))
+    self.factura.totalImpuesto           = Math.round(__valorNumerico(totalImpuesto))
+    self.factura.totalVentaNeta          = Math.round(__valorNumerico(subTotal))
+    self.factura.totalComprobante        = Math.round(__valorNumerico(totalComprobante))
     self.update(); 
 }
-
-
-
-
-function redondearDecimales(numero, decimales) {
-    numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}');   // Expresion regular para numeros con un cierto numero de decimales o mas
-    if (numeroRegexp.test(numero)) {         // Ya que el numero tiene el numero de decimales requeridos o mas, se realiza el redondeo
-        return Number(numero.toFixed(decimales));
-    } else {
-        return Number(numero.toFixed(decimales)) === 0 ? 0 : numero;  // En valores muy bajos, se comprueba si el numero es 0 (con el redondeo deseado), si no lo es se devuelve el numero otra vez.
-    }
-}   
-
-/**
-*  retorna el valor numerico o cero sino es numerico
-**/
-function __valorNumerico(valor){
-    return isNumber(valor)?parseFloat(valor):0 ;
-}
-/**
-*  Validar si es numero
-**/
-function isNumber(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-}
-
 /**
 *    Muesta el campo de la fecha de credito
 **/
@@ -844,6 +803,9 @@ __regresarProductos(){
 
   __regresarProductosF()
 }
+/**
+*Regresar a la pantalla de producto
+**/
 function __regresarProductosF(){
     self.mostrarProductos  = true
     self.formularioSegundoPaso = false
@@ -852,34 +814,34 @@ function __regresarProductosF(){
     self.articulo ={}
     self.update()
     limpiar()
-
 }
-
+/**
+* Regresar al paso 2
+**/
 __regresarPaso1(){
-    
-        self.formularioSegundoPaso = false
-        self.formularioDetalle = true
-        self.update()
-
-     
+    self.formularioSegundoPaso = false
+    self.formularioDetalle = true
+    self.update()
 }
-
+/**
+* Formulario de detalle
+**/
 __formularioDetalle(e){
     self.articulo =e.item;
     self.formularioDetalle = true
     self.mostrarProductos  = false
     self.update()
     __agregarArticulo(1)
-
 }
-
-
+/**
+* Primer paso 
+**/
 _PrimerPaso(){
    validar()    
-
-
 }
-
+/**
+* validaciones
+**/
 function validar(){
     if($('.precio').val() == null){
          mensajeError($.i18n.prop("factura.error.precio.igual.cero"))
@@ -908,21 +870,19 @@ function validar(){
 
 }
 
+/**
+* Segundo paso
+**/
 _SegundoPaso(){
-   
     self.formularioSegundoPaso = false
     self.update()
-
 }
-
 /**
 *  Muestra la lista de clientes
 **/
 _EscogerClientes(){
     $('#modalClientes').modal('show')  
 }
-
-
 /**
 * cargar los codigos de referencias
 **/
@@ -945,7 +905,6 @@ function __combocodigosReferencia(){
         estado:"04",
         descripcion:$.i18n.prop("referencia.tipo.documento.factura.tiquete")
     })
-
      self.codigosReferencias.push({
         estado:"05",
         descripcion:$.i18n.prop("referencia.tipo.documento.factura.nota.despacho")
@@ -968,7 +927,6 @@ function __combocodigosReferencia(){
     })
     self.update()
 }
-
 /**
 * cargar los estados de la factura
 **/
@@ -1008,7 +966,6 @@ function __ListaDeClientes(){
         }
     });
 }
-
 /**
 * formato de la tabla de clientes
 **/
@@ -1050,7 +1007,6 @@ function __seleccionarClientes() {
         self.update();
     });
 }
-
 /**
 *  Agregar los inpust  y select de las tablas
 **/
@@ -1064,7 +1020,9 @@ function agregarInputsCombos_Clientes(){
 	    }
     })
 } 
-
+/**
+*Condicion de Pago
+**/
 function __comboCondicionPago(){
     self.comboCondicionPagos = []
     self.update()
@@ -1078,8 +1036,6 @@ function __comboCondicionPago(){
     })
     self.update()
 }
-
-
 /**
 * cargar los codigos de tipo de documentos
 **/
@@ -1105,8 +1061,6 @@ function __ComboTipoDocumentos(){
     
     self.update()
 }
-
-
 /**
 * cargar los codigos de monedas
 **/
@@ -1121,10 +1075,8 @@ function __comboMonedas(){
         estado:"USD",
         descripcion:$.i18n.prop("factura.moneda.dollar")
     })    
- 
     self.update()
 }
-
 /**
 * mostrar la lista de articulos de la empresa
 **/
@@ -1139,7 +1091,6 @@ function __ListaDeArticulosPorEmpresa(){
             if(result.aaData.length > 0){
                 self.articulos.data           = result.aaData
                 self.update()
-                
             }
         },
         error: function (xhr, status) {

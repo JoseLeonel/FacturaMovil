@@ -1645,9 +1645,10 @@ function _calcularImpuesto(precio,iva){
         return 0;
     }
     var impuesto = iva > 0 ?parseFloat(iva)/100:0
-    impuesto = impuesto > 0 ?impuesto:0
+    impuesto = impuesto > 0 ?impuesto+1:0
     var total = precio * impuesto
-    return redondearDecimales(total ,5)
+    var total = total - precio 
+    return total
 }
  /**
  * Cuando se aplica un cambio de cantidad en un detalle
