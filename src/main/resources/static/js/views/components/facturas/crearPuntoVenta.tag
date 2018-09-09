@@ -1936,12 +1936,12 @@ function __calculate() {
         totalImpuesto           += e.montoImpuesto >0?e.montoImpuesto:0
         totalVenta              += e.montoTotal
     });
-    self.factura.totalMercanciasGravadas = Math.round(__valorNumerico(totalMercanciasGravadas))
-    self.factura.totalMercanciasExentas  = Math.round(__valorNumerico(totalMercanciasExentas))
-    self.factura.totalServGravados       = Math.round(__valorNumerico(totalServGravados))
-    self.factura.totalServExentos        = Math.round(__valorNumerico(totalServExentos))
-    self.factura.totalGravado            = Math.round(__valorNumerico(totalGravado))
-    self.factura.totalExento             = Math.round(__valorNumerico(totalExento))
+    self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)
+    self.factura.totalMercanciasExentas  = __valorNumerico(totalMercanciasExentas)
+    self.factura.totalServGravados       = __valorNumerico(totalServGravados)
+    self.factura.totalServExentos        = __valorNumerico(totalServExentos)
+    self.factura.totalGravado            = __valorNumerico(totalGravado)
+    self.factura.totalExento             = __valorNumerico(totalExento)
     //cuando se aplica descuentos
     self.factura.totalVenta              = Math.round(__valorNumerico(totalVenta))
     self.factura.totalDescuentos         = Math.round(__valorNumerico(totalDescuento))

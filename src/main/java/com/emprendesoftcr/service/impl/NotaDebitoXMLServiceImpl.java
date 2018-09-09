@@ -187,7 +187,7 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
   	String resultado = Constantes.EMPTY;
   	try {
   		if(detalle.getMontoImpuesto() != null && detalle.getTipoImpuesto() !=null) {
-  		if(detalle.getMontoImpuesto()>0) {
+  		if(detalle.getMontoImpuesto()>Constantes.ZEROS_DOUBLE) {
         resultado = "<Impuesto>" +
             "<Codigo>" + Utils.zeroPad(detalle.getTipoImpuesto(), 2) + "</Codigo>" +
             "<Tarifa>" + FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getImpuesto() ) + "</Tarifa>" +
@@ -239,7 +239,7 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
 	private String getTelefono(Integer telefono,Integer codigoPais) throws Exception {
 		String resultado = Constantes.EMPTY;
 		try {
-			 if(telefono > 0) {
+			 if(telefono > Constantes.ZEROS) {
 				 resultado = "<Telefono>" +
 		        "<CodigoPais>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(codigoPais.toString()).toString(),Constantes.FORMATO_CODIGO_PAIS) + "</CodigoPais>" +
 			        "<NumTelefono>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(telefono.toString()).toString(),Constantes.FORMATO_TELEFONO) + "</NumTelefono>";
@@ -262,7 +262,7 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
 	private String getFax(Integer telefono,Integer codigoPais) throws Exception  {
 		String resultado = Constantes.EMPTY;
 		try {
-			if(telefono > 0) {
+			if(telefono > Constantes.ZEROS) {
 				 resultado = "<Fax>" +
 		          "<CodigoPais>" + FacturaElectronicaUtils.replazarConZeros(new BigInteger(codigoPais.toString()).toString(),Constantes.FORMATO_CODIGO_PAIS) + "</CodigoPais>" +
 			        "<NumTelefono>" +FacturaElectronicaUtils.replazarConZeros(new BigInteger(telefono.toString()).toString(),Constantes.FORMATO_TELEFONO)  + "</NumTelefono>";

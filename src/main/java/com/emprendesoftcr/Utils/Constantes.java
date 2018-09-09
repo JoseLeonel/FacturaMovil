@@ -6,6 +6,9 @@ public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																			= ResourceBundle.getBundle("factura");
 
+	//Tipo de codigos de productos
+	public static final String					TIPO_CODIGO_ARTICULO_POR_SERVICIO											= "07";
+	
 	// Semaforo
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 30;
 

@@ -58,6 +58,7 @@ import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.modelo.Marca;
 import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
@@ -648,6 +649,28 @@ public class FacturasController {
 		}
 	}
 	
+/**
+ * Cambiar el nombre del tiquete	
+ * @param request
+ * @param response
+ * @param idFactura
+ * @param nombreFactura
+ * @return
+ */
+	@RequestMapping(value = "/ModificarNombreTiquteAjax", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator ModificarNombreTiquete(HttpServletRequest request, ModelMap model, @ModelAttribute Factura factura, HttpServletResponse response, @RequestParam Long idFactura,@RequestParam String nombreFactura, BindingResult result, SessionStatus status) {
+		try {
+			
+			Factura facturaBD = facturaBo.findById(idFactura);
+			facturaBD.setNombreFactura(nombreFactura);
+			facturaBo.modificar(facturaBD);
+
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.tiquete.modificado.correctamente", facturaBD);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
 
 	
 	

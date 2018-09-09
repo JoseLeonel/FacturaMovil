@@ -3,6 +3,7 @@ package com.emprendesoftcr.Utils;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -1243,5 +1244,18 @@ public final class Utils {
 		return xmlDate;
 
 	}
+	/**
+	 * Redondeo de los detalles de la factura y resumen
+	 * @param value
+	 * @param places
+	 * @return
+	 */
+	public static double roundFactura(double value, int places) {
+    if (places < 0) throw new IllegalArgumentException();
+ 
+    BigDecimal bd = new BigDecimal(Double.toString(value));
+    bd = bd.setScale(places, RoundingMode.HALF_UP);
+    return bd.doubleValue();
+}
 
 }

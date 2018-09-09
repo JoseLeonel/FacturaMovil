@@ -65,7 +65,7 @@
            <div class="row-fluid no-space">
             <div class="col-md-5 col-sm-5 col-lg-5 col-xs-12 pull-right" style="padding: 0px 10px">
                 <div class="block panel newPanel newContPrecio">                    
-                    <div id="listadoProdcutos">{$.i18n.prop("titulo.listado.venta")}   {factura.id>0?' Id:'+factura.id:'' }</div>
+                    <div id="listadoProdcutos">{$.i18n.prop("titulo.listado.venta")}   {factura.id>0?factura.id:'' } {factura.nombreFactura}</div>
                     <hr style="margin: 2px 0px 0px 0px; border-color: #e4e4e4; margin-top: 0px">
                     <div class="data-fluid">
                         <div id="listaProductos" style="height:200px; overflow-x: hidden; width:100%">
@@ -157,7 +157,7 @@
                         <div class="col-md-12 "  style="padding:10px 15px 18px 15px; ">
                             <!--Cliente o Nuevo Cliente-->
                             <div class="input-group">
-                                <span onclick = {__MostrarFormularioNuevoCliente} title="Nuevo Cliente" class="input-group-addon btnClientes" id="add-new-client"> 
+                                <span onclick = {__CambiarNombreTiquete} title="Cambiar Nombre Tiquete" class="input-group-addon btnClientes" id="add-new-client"> 
                                     <small class="fa fa-plus" style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
                                     <span class="fa fa-user" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"></span> 
                                 </span>
@@ -171,7 +171,7 @@
                                 </span>
                                 <input type="text" onclick={_EscogerVendedores} placeholder="Vendedor" value="{vendedor.nombreCompleto}"  name="v_vendedor" id="v_vendedor" autocomplete="off" >
                             </div>
-                            <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-nombreFactura">Tikete a :{factura.nombreFactura}</span></a>
+                            <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label-titulos-articulo">Tikete a :{factura.nombreFactura}</span></a>
                         </div>
                     </div> 
                     <hr style="margin: 0px; border-color: #e4e4e4;">
@@ -186,16 +186,18 @@
                                 </a> 
                                  <a  href="#" class="opciones-limpiar" onclick = {__Limpiar} >
                                     <i class="fa fa-trash">{$.i18n.prop("btn.limpiar")}</i>
-                                </a>  
+                                </a> 
                                                             
                             </section>
                         </div>    
                     </div> 
+
                     <div  class="row">
                         <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12" >
                             <section class="lista-facturas-espera">
                                 <div id="botones"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
-                                    <a href="#" class="factura-espera"  title="{nombreFactura}">T# {id} - {nombreFactura}</a>
+                                  
+                                     <span class="label-titulos-espera">T# {id} - {nombreFactura}</span>
                                 </div>         
                                  
                             </section>
@@ -308,6 +310,39 @@
     </div>
 </div>
 <!--Modal mostrar  -->  
+
+<!-- Modal cambiar nombre del tiquete-->
+<div class="modal fade" id="ModalCambiarNombreTiquete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="box-title"><i class="fa fa-user-o"></i>&nbsp {$.i18n.prop("factura.digite.nombreFactura")}     </h1>
+            </div>
+            <div class="modal-body">
+                <form id = "formularioModalCambiarNombreTiquete" name ="formularioModalCambiarNombreTiquete "   class="advanced-search-form">
+                    <input type="hidden" id='idFactura'  name='idFactura'  value="{factura.id}" >
+                    <input type="hidden" id='nombreFactura'  name='nombreFactura'  value="{factura.nombreFactura}" >
+                    <div class="row">   
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="knob-label" >{$.i18n.prop("factura.nombreFactura")}</label>
+                            <input type="text" class="campo tamanoLetraTotales cambioNombreTiquete"  id="cambioNombreTiquete" name="cambioNombreTiquete" autofocus="autofocus" >
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                        <button  onclick={__ModificarNombreTiquete}   class="btn-green btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+</div>
+<!--fin Modal agregar el nombre de el tiquete temporal-->
+
 <!-- Modal correo alternativo-->
 <div class="modal fade" id="ModalAgregarNombreTiquete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -316,7 +351,7 @@
                 <h1 class="box-title"><i class="fa fa-user-o"></i>&nbsp {$.i18n.prop("factura.digite.nombreFactura")}     </h1>
             </div>
             <div class="modal-body">
-                <form id = "formulario" name ="formulario "   class="advanced-search-form">
+                <form id = "formularioAgregarNombreTiquete" name ="formularioAgregarNombreTiquete "   class="advanced-search-form">
                     <div class="row">   
                         <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                             <label class="knob-label" >{$.i18n.prop("factura.nombreFactura")}</label>
@@ -808,6 +843,8 @@
 
     self.on('mount',function(){
         $("#formularioFactura").validate(reglasDeValidacionFactura());
+        $("#formularioAgregarNombreTiquete").validate(reglasAgregarNombre());
+        $("#formularioModalCambiarNombreTiquete").validate(reglasCambiarNombre());
         __informacionData()
         __informacionData_vendedores()
         __InicializarTabla('.tableListaCliente')
@@ -1084,6 +1121,38 @@ var reglasDeValidacionFactura = function() {
              direccion:{
                  maxlength:255,
              }         
+		},
+		ignore : []
+
+	});
+	return validationOptions;
+};
+
+var reglasAgregarNombre = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			
+            cambioNombreFactura : {
+				required : true,
+                maxlength:200,
+                minlength:2,
+			},   
+		},
+		ignore : []
+
+	});
+	return validationOptions;
+};
+
+var reglasCambiarNombre = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			
+            cambioNombreTiquete : {
+				required : true,
+                maxlength:200,
+                minlength:2,
+			},   
 		},
 		ignore : []
 
@@ -1435,6 +1504,20 @@ __CalculaCambioAEntregarKeyPress(e){
 __CargarFacturaEspera(e){
    __FacturaEnEspera(e.item)
 }
+
+/**
+* Cambiar Nombre del tiquete
+**/
+__CambiarNombreTiquete(){
+    if(self.factura.id ==null){
+        return
+    }
+    $('#ModalCambiarNombreTiquete').modal('show') 
+    $('.cambioNombreTiquete').focus()
+    $('.cambioNombreTiquete').val(self.factura.nombreFactura)
+    
+}
+
 /**
 *  Crear la factura temporal o espera
 **/
@@ -1447,11 +1530,64 @@ __CrearFacturaTemporal(){
        aplicarFactura(1)    
     }
 }
+
+/**
+* cCambiar el nombre de la factura
+**/
+__ModificarNombreTiquete(){
+  
+    if ($("#formularioModalCambiarNombreTiquete").valid()) {
+    self.factura.nombreFactura = $('.cambioNombreTiquete').val()
+    self.update()
+
+    var formulario = $("#formularioModalCambiarNombreTiquete").serialize();
+    if(self.factura.id == null){
+        return
+    }
+      $.ajax({
+        url: "ModificarNombreTiquteAjax",
+        datatype: "json",
+        data: formulario,
+        method:"POST",
+        success: function (data) {
+            if (data.status != 200) {
+                sweetAlert("", $.i18n.prop("error.factura.no.existe"), "error");
+
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    self.factura = {
+                        id:null
+                    }
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                       self.factura = modeloTabla
+                       self.update()
+                    });
+                    if(self.factura.id == null){
+                         sweetAlert("", $.i18n.prop("error.factura.no.existe"), "error");
+                    }else{
+                        sweetAlert("", data.message, "info");
+                    }
+                }
+                 $('#ModalCambiarNombreTiquete').modal('hide') 
+                __ListaFacturasEnEspera()
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+    }
+}
+
+
 /**
 *  Agregar el nombre a la factura temporal
 **/
 __AgregarNombreFacturaTemporal(){
     $('#ModalAgregarNombreTiquete').modal('hide') 
+    self.factura.nombreFactura = $('.cambioNombreFactura').val()==null?"":$('.cambioNombreFactura').val();
+    self.update()
   aplicarFactura(1)      
 }
 /**
@@ -1744,7 +1880,7 @@ function crearFactura(estado){
     var fechaReferencia =$('#referenciaFechaEmision').val() !=null?referenciaFechaEmision.value:new Date() 
     var JSONDetalles = JSON.stringify( self.detalleFactura );
     self.factura.id = self.factura.id
-    self.factura.nombreFactura = $('.cambioNombreFactura').val()==null?"":$('.cambioNombreFactura').val();
+   
     self.factura.condicionVenta = $('#condicionVenta').val()
     self.factura.fechaCredito =fechaCreditoTemporal.toString()
     self.factura.referenciaFechaEmision =fechaReferencia
@@ -1841,6 +1977,13 @@ __TotalDeDescuento(e){
 *   Retrocer a los ingresos de los codigos desde el formulario de ingresar el valor dinero a pagar
 **/
 _AtrasFacturaFinal(){
+    $('.totalEfectivo').val(null)
+    $('.totalTarjeta').val(null)
+    $('.totalBanco').val(null)
+    self.factura.totalEfectivo =0
+    self.factura.totalTarjeta =0
+    self.factura.totalBanco =0
+    self.totalCambioPagar =0
    self.mostrarFormularioPago = false
    self.mostarParaCrearNuevaVentas = true;
    self.mostarParaCrearNuevaFactura = true
@@ -2374,12 +2517,13 @@ function __calculate() {
         totalImpuesto           += e.montoImpuesto >0?e.montoImpuesto:0
         totalVenta              += e.montoTotal
     });
-    self.factura.totalMercanciasGravadas = Math.round(__valorNumerico(totalMercanciasGravadas))
-    self.factura.totalMercanciasExentas  = Math.round(__valorNumerico(totalMercanciasExentas))
-    self.factura.totalServGravados       = Math.round(__valorNumerico(totalServGravados))
-    self.factura.totalServExentos        = Math.round(__valorNumerico(totalServExentos))
-    self.factura.totalGravado            = Math.round(__valorNumerico(totalGravado))
-    self.factura.totalExento             = Math.round(__valorNumerico(totalExento))
+    self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)
+    self.factura.totalMercanciasExentas  = __valorNumerico(totalMercanciasExentas)
+    self.factura.totalServGravados       = __valorNumerico(totalServGravados)
+    self.factura.totalServExentos        = __valorNumerico(totalServExentos)
+    self.factura.totalGravado            = __valorNumerico(totalGravado)
+    self.factura.totalExento             = __valorNumerico(totalExento)
+    //cuando se aplica descuentos
     self.factura.totalVenta              = Math.round(__valorNumerico(totalVenta))
     self.factura.totalDescuentos         = Math.round(__valorNumerico(totalDescuento))
     self.factura.subTotal                = Math.round(__valorNumerico(subTotal))
@@ -2389,6 +2533,7 @@ function __calculate() {
     self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
     self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
     self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
+
   //  self.articulo              = null;
     self.update(); 
     $( "#codigoBarra" ).val(null);

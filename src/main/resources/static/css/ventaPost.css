@@ -616,7 +616,7 @@ tr.nothing td {
 	font-weight: 600 !important;
 	font-size: 14px !important;
 	font-family: Roboto, sans-serif !important;
-	color: #30ed17 !important;
+	color: #ffffff !important;
 	text-shadow: 0px 0px 1px #ffffff;
 	font-style: italic;
 	text-align: left;
@@ -899,24 +899,51 @@ th.precio {
 /* Lista de facturas en espera*/
 
 .lista-facturas-espera {
-	width: 90%;
+	width: 98%;
 	display: flex;
 	flex-wrap: wrap;
+}
+
+.label-titulos-espera {
+    font-weight: 600 !important;
+    font-size: 16px !important;
+    font-family: Roboto, sans-serif !important;
+    color: #ffffff !important;
+    text-shadow: 0px 0px 1px #ffffff;
+    font-style: italic;
+    text-align: left;
+    padding-left: 1px;
+    line-height: 25px;
+    border-collapse: separate;
+    text-align: center;
+    cursor: pointer;
+    padding: 3px;
+    margin: 2px;
+    border: none;
+    text-align: center !important;
+    background-color: black !important;
+    box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+    border-radius: 5px;
+    -webkit-transition: background-color 100ms linear;
+    -moz-transition: background-color 100ms linear;
+    -o-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
 }
 
 .lista-facturas-espera .factura-espera {
 	display: block;
 	width: 90%;
-	padding: 6px 0;
-	margin-bottom: 5px;
-	margin-left: 10px;
-	margin-right: 10px;
+	padding: 1px 0;
+	margin-bottom: 10px;
+	margin-left: 1px;
+	margin-right: 5px;
 	background: #6dca42 !important;
 	;
 	text-align: center;
 	text-decoration: none;
 	color: #ffffff !important;
-	text-shadow: 0px 0px 1px #ffffff;
+	text-shadow: 0px 0px 2px #ffffff;
 	font-style: italic;
 }
 
