@@ -80,6 +80,7 @@ public class Constantes {
 	public static final Integer					HACIENDA_ESTADO_ACEPTADO_HACIENDA										= 6;
 	public static final Integer					HACIENDA_ESTADO_ACEPTADO_RECHAZADO									= 7;
 	public static final Integer					HACIENDA_ESTADO_ACEPTADO_PARCIAL										= 8;
+	public static final Integer					HACIENDA_ESTADO_ANULADA															= 9;
 	public static final String					HACIENDA_ESTADO_ENVIADO_HACIENDA_str								= "Documento eviado a hacienda.";
 	public static final String					HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR								= "OK";
 	public static final String					HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR							= "ERROR";
@@ -301,10 +302,11 @@ public class Constantes {
 	public static final Integer					FACTURA_ESTADO_PROFORMAS														= 3;
 	public static final Integer					FACTURA_ESTADO_FACTURADO														= 2;
 	public static final Integer					FACTURA_ESTADO_TIQUETE_USO_INTERNO									= 4;
+	public static final Integer					FACTURA_ESTADO_ANULADO															= 5;
 
 	public static final Integer					FACTURA_ESTADO_FIRMA_PENDIENTE											= 1;
-	public static final Integer					FACTURA_ESTADO_REFIRMAR_DOCUMENTO										= 8;
 	public static final Integer					FACTURA_ESTADO_FIRMA_COMPLETO												= 2;
+	public static final Integer					FACTURA_ESTADO_REFIRMAR_DOCUMENTO										= 8;
 
 	public static final String					FACTURA_ESTADO_PENDIENTE_STR												= "factura.estado.pendiente";
 	public static final String					FACTURA_ESTADO_FACTURADO_STR												= "factura.estado.facturado";
