@@ -186,7 +186,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+//	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 		try {
@@ -304,11 +304,11 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html Proceso automatico para ejecutar aceptacion del documento
 	 */
-	@Scheduled(cron = "0 0/3 * * * ?")
+//	@Scheduled(cron = "0 0/3 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		try {
-			log.info("Inicio Proceso de comprobacion de documentos  {}", new Date());
+			log.info("Inicio Comprobacion de documentos  {}", new Date());
 			// Semaforo semaforo = semaforoBo.findByEstado(Constantes.SEMAFORO_ESTADO_COMPROBAR_DOCUMENTOS);
 			// Listado de los documentos Pendientes de aceptar por hacienda
 			Collection<Hacienda> listaHacienda = haciendaBo.findByEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA, Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA);
@@ -316,10 +316,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
 				aceptarDocumento(haciendaBD);
 			}
-			log.info("Fin Proceso de comprobacion de documentos  {}", new Date());
+			log.info("Fin Comprobacion de documentos  {}", new Date());
 
 		} catch (Exception e) {
-			log.info("** Error  taskHaciendaComprobacionDocumentos: " + e.getMessage() + " fecha " + new Date());
+			log.info("** Error  ComprobacionDocumentos: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
 	}
@@ -373,12 +373,15 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 							xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
 							xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
 						} else {
-							if (respuestaHacienda.mensajeHacienda().mensaje() != null) {
-								if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO)) {
-									xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
-									xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
+							if (respuestaHacienda.mensajeHacienda() != null) {
+								if (respuestaHacienda.mensajeHacienda().mensaje() != null) {
+									if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO)) {
+										xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
+										xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
 
+									}
 								}
+
 							}
 
 						}
@@ -395,14 +398,22 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
 							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
 						}
-						if (respuestaHacienda.mensajeHacienda().mensaje() != null) {
-							if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO)) {
-								haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
-							} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_RECHAZADO)) {
-								haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
-							} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO_PARCIAL)) {
-								haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_PARCIAL);
+						// Hacienda no envia mensaje
+						if (respuestaHacienda.mensajeHacienda() != null) {
+							if (respuestaHacienda.mensajeHacienda().mensaje() != null) {
+								if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO)) {
+									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+								} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_RECHAZADO)) {
+									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+								} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO_PARCIAL)) {
+									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_PARCIAL);
+								}
 							}
+						} else {
+							if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
+								haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
+							}
+
 						}
 
 						haciendaBo.modificar(haciendaBD);
@@ -422,7 +433,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			}
 
 		} catch (Exception e) {
-			log.info("** Error  aceptarDocumento: " + e.getMessage() + " fecha " + new Date());
+			log.info("** Error  aceptarDocumento: " + e.getMessage() + " fecha " + new Date()+ " Empresa :"+hacienda.getEmpresa().getNombre());
 			throw e;
 		}
 
@@ -432,11 +443,11 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/5 * * * ?")
+	//@Scheduled(cron = "0 0/2 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
-			log.info("Inicio Proceso de envios de correos  {}", new Date());
+			log.info("Inicio Envios de correos  {}", new Date());
 
 			// Listado de los documentos Pendientes de aceptar por hacienda
 			Collection<Hacienda> listaHacienda = haciendaBo.findByEstadoAndNotificacion(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA, Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
@@ -462,7 +473,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				}
 
 			}
-			log.info("Fin Proceso de envios de correos  {}", new Date());
+			log.info("Fin Envios de correos  {}", new Date());
 
 		} catch (Exception e) {
 			log.info("** Error  taskHaciendaEnvioDeCorreos: " + e.getMessage() + " fecha " + new Date());
@@ -471,6 +482,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	}
 
+	/**
+	 * Envios de correos
+	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#enviarCorreos(com.emprendesoftcr.modelo.Factura, com.emprendesoftcr.modelo.Hacienda, java.util.ArrayList)
+	 */
 	@Override
 	public void enviarCorreos(Factura factura, Hacienda hacienda, ArrayList<String> listaCorreos) throws Exception {
 		try {
@@ -498,7 +513,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailHacienda.vm", modelEmail);
 			//
 		} catch (Exception e) {
-			log.info("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date());
+			log.info("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date()+ " Empresa :"+hacienda.getEmpresa().getNombre());
 			throw e;
 		}
 	}
@@ -539,7 +554,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	//@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -608,8 +623,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					}
 
 				}
-
-				
 
 			}
 			log.info("Fin el proceso de firmado  {}", new Date());

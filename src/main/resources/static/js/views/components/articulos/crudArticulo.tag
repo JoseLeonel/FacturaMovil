@@ -26,7 +26,7 @@
                             <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                 <label >{$.i18n.prop("articulo.tipoImpuesto")}</label>
                                 <select onchange= {__asignarImpuesto} class="form-control selectTipoImpuesto" id="tipoImpuesto" name="tipoImpuesto"  >
-                                    <option  value=" " >Sin Impuesto</option>
+                                   
                                     <option  each={impuestos}  value="{codigo}" selected="{articulo.tipoImpuesto ==codigo?true:false}"  >{descripcion}</option>
                                 </select>
                             </div>
@@ -1071,10 +1071,16 @@ function __ComboContables(){
 function __Impuestos(){
     self.impuestos =[]
     self.update()
+     self.impuestos.push({
+        codigo: ' ',
+        descripcion:"Sin impuesto"
+     });
+
     self.impuestos.push({
         codigo: '01',
         descripcion:$.i18n.prop("tipo.impuesto.ventas")
      });
+
   //  self.impuestos.push({
   //      codigo: '02',
  //       descripcion:$.i18n.prop("tipo.impuesto.consumo")

@@ -323,7 +323,10 @@ public class FacturaBoImpl implements FacturaBo {
 
 					Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(detalleFacturaCommand.getCodigo(), usuario.getEmpresa());
 					Detalle detalle = new Detalle(detalleFacturaCommand);
-					detalle.setUsuario(usuario);
+					detalle.setUsuario(usuario); 
+					if(articulo.getTipoImpuesto()==null) {
+						detalle.setTipoImpuesto(Constantes.EMPTY);
+					}
 
 					detalle.setNaturalezaDescuento(Constantes.FORMATO_NATURALEZA_DESCUENTO);
 					detalle.setNumeroLinea(numeroLinea);
@@ -347,16 +350,16 @@ public class FacturaBoImpl implements FacturaBo {
 						// Con impuesto
 						if (detalle.getMontoImpuesto() > Constantes.ZEROS_DOUBLE) {
 							// Cuando es por servicios
-							if (detalle.getTipoImpuesto().equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
+							if (detalle.getTipoImpuesto() == Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO) {
 								totalServGravados = detalle.getMontoTotal() != null ? totalServGravados + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
 							} else {
 								totalMercanciasGravadas = detalle.getMontoTotal() != null ? totalMercanciasGravadas + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
 								totalGravado = detalle.getMontoTotal() != null ? totalGravado + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
 								totalImpuesto = totalImpuesto + detalle.getMontoImpuesto();
 							}
-						} else if (detalle.getMontoImpuesto() == Constantes.ZEROS_DOUBLE) { // Sin Impuesto
+						} else if (detalle.getMontoImpuesto().equals(Constantes.ZEROS_DOUBLE)) { // Sin Impuesto
 							// Cuando es por servicios
-							if (detalle.getTipoImpuesto().equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
+							if (detalle.getTipoImpuesto() == Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO) {
 								totalServExentos = detalle.getMontoTotal() != null ? totalServExentos + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
 							} else {
 								totalMercanciasExentas = detalle.getMontoTotal() != null ? totalMercanciasExentas + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
@@ -417,7 +420,7 @@ public class FacturaBoImpl implements FacturaBo {
 			}
 
 		} catch (Exception e) {
-			log.info("** Error  crearCompra: " + e.getMessage() + " fecha " + new Date());
+			log.info("** Error  crear la factura: " + e.getMessage() + " fecha " + new Date());
 
 			throw e;
 		}

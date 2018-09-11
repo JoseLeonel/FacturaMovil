@@ -2287,7 +2287,7 @@ function __nuevoArticuloAlDetalle(cantidad){
     var montoTotalLinea = subTotal + montoImpuesto 
     self.detail.push({
        numeroLinea     : 1,
-       tipoImpuesto    : self.articulo.tipoImpuesto,
+        tipoImpuesto    : self.articulo.tipoImpuesto ==null?" ":self.articulo.tipoImpuesto,
        iva             : parseFloat(self.articulo.impuesto),
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,

@@ -132,11 +132,11 @@ public class Detalle implements Serializable {
 		this.precioUnitario = detalleFacturaCommand.getPrecioUnitario();
 		this.cantidad = detalleFacturaCommand.getCantidad();
 		this.montoTotal = detalleFacturaCommand.getMontoTotal();
-		this.montoDescuento = detalleFacturaCommand.getMontoDescuento();
+		this.montoDescuento = detalleFacturaCommand.getMontoDescuento() ==null?Constantes.ZEROS_DOUBLE:detalleFacturaCommand.getMontoDescuento();
 		this.naturalezaDescuento = detalleFacturaCommand.getNaturalezaDescuento() == null ? Constantes.EMPTY : detalleFacturaCommand.getNaturalezaDescuento();
 		this.subTotal = detalleFacturaCommand.getSubTotal();
-		this.impuesto = detalleFacturaCommand.getImpuesto();
-		this.montoImpuesto = detalleFacturaCommand.getMontoImpuesto();
+		this.impuesto = detalleFacturaCommand.getImpuesto() ==null?Constantes.ZEROS_DOUBLE:detalleFacturaCommand.getImpuesto();
+		this.montoImpuesto = detalleFacturaCommand.getMontoImpuesto() ==null?Constantes.ZEROS_DOUBLE:detalleFacturaCommand.getMontoImpuesto();
 		this.montoTotalLinea = detalleFacturaCommand.getMontoTotalLinea();
 		this.ganancia = Constantes.ZEROS_DOUBLE;
 		this.porcentajeDesc = detalleFacturaCommand.getPorcentajeDesc() != null ? detalleFacturaCommand.getPorcentajeDesc() : Constantes.ZEROS_DOUBLE;
@@ -144,7 +144,7 @@ public class Detalle implements Serializable {
 		this.tipoCodigo = detalleFacturaCommand.getTipoCodigo();
 		this.codigo = detalleFacturaCommand.getCodigo();
 		this.unidadMedida = detalleFacturaCommand.getUnidadMedida();
-		this.tipoImpuesto = detalleFacturaCommand.getTipoImpuesto();
+		this.tipoImpuesto = detalleFacturaCommand.getTipoImpuesto() ==null?Constantes.EMPTY:detalleFacturaCommand.getTipoImpuesto();
 
 	}
 	

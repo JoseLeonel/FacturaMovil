@@ -42,7 +42,7 @@ public class DetalleFacturaCommand {
 
 	private String	unidadMedida;
 
-	@Column(name = "tipo_impuesto")
+	
 	private String	tipoImpuesto;
 
 	public DetalleFacturaCommand() {

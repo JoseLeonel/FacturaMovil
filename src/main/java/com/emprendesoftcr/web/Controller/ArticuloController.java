@@ -269,6 +269,7 @@ public class ArticuloController {
 			}
 			
 			articulo.setCreated_at(new Date());
+			articulo.setTipoImpuesto(articulo.getTipoImpuesto() ==null?Constantes.EMPTY:articulo.getTipoImpuesto());
 			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
 			articulo.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
 			articulo.setGananciaPrecioEspecial(articulo.getGananciaPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getGananciaPrecioEspecial());
@@ -372,7 +373,7 @@ public class ArticuloController {
 			articuloBd.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
 			articuloBd.setUsuario(usuarioSesion);
 			articuloBd.setCodigo(articulo.getCodigo().trim());
-			articuloBd.setTipoImpuesto(articulo.getTipoImpuesto());
+			articuloBd.setTipoImpuesto(articulo.getTipoImpuesto() ==null?Constantes.EMPTY:articulo.getTipoImpuesto());
 			articuloBd.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articuloBo.modificar(articuloBd);
 

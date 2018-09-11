@@ -19,7 +19,9 @@ public class MapEnums {
        put(5, "Tope Envios").
        put(6, "Aceptado").
        put(7, "Rechazado").
-       put(8, "Tope Aceptacion")
+       put(8, "Tope Aceptacion").
+       put(9, "Anulado").
+       put(10, "Con Error")
        .build();
 
 	

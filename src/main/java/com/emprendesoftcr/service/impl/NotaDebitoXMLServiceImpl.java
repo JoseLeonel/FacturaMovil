@@ -186,7 +186,6 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
   private String xmlImpuestos(Detalle detalle) throws Exception {
   	String resultado = Constantes.EMPTY;
   	try {
-  		if(detalle.getMontoImpuesto() != null && detalle.getTipoImpuesto() !=null) {
   		if(detalle.getMontoImpuesto()>Constantes.ZEROS_DOUBLE) {
         resultado = "<Impuesto>" +
             "<Codigo>" + Utils.zeroPad(detalle.getTipoImpuesto(), 2) + "</Codigo>" +
@@ -194,7 +193,6 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
             "<Monto>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoImpuesto()) + "</Monto>";
         resultado += "</Impuesto>";
     	}			
-  		}
 		} catch (Exception e) {
 			log.info("** Error  xmlImpuestos: " + e.getMessage() + " fecha " + new Date());
 			throw e;

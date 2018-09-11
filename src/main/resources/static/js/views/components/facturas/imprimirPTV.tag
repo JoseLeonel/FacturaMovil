@@ -16,20 +16,22 @@
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc == '88'}"><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.id}                       </strong><br></div>
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc == '87'}"><strong> {$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")} {facturaImpresa.id}                       </strong><br></div>
                         <div class="encabezado"><strong> {facturaImpresa.empresa.nombreComercial}                        </strong><br></div>
+                        <div class="encabezado"><strong> {facturaImpresa.empresa.nombre}                        </strong><br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.cedula")}       </strong>{facturaImpresa.empresa.cedula}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.telefono")}     </strong>{facturaImpresa.empresa.telefono}<br></div>
                         <div class="encabezado">{facturaImpresa.empresa.otraSenas}                        <br></div>
                         <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.fecha.emision")} </strong>{facturaImpresa.fechaEmision}</div>
                         <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.condicion.venta")} </strong>{facturaImpresa.condicionVenta}</div>
-                        <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.plazo.credito")} </strong>{facturaImpresa.plazoCredito}</div>
+                        <div class="encabezado" show ="{facturaImpresa.plazoCredito > 0}"><strong>{$.i18n.prop("tikect.encabezado.plazo.credito")} </strong>{facturaImpresa.plazoCredito}</div>
                         <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>{facturaImpresa.tipoDoc}</div>
                         <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.moneda")}        </strong>{facturaImpresa.codigoMoneda}</div>
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc != '88'}"><strong>{$.i18n.prop("tikect.encabezado.numeroFactura")} </strong>{facturaImpresa.numeroConsecutivo}</div>
                         <div class=" encabezado" show = "{facturaImpresa.tipoDoc != '88'}"><strong>{$.i18n.prop("tikect.encabezado.clave")}</strong> </div>
-                        <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88'}">{facturaImpresa.clave}</div>
-                        <div class="encabezado" show ="{facturaImpresa.nombreFactura !=null}"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.nombreFactura}</div>
-                        <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null}"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.cliente.nombreCompleto}</div>
-                        <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null}"><strong>{$.i18n.prop("tikect.encabezado.receptor.cedula")}     </strong>{facturaImpresa.cliente.cedula}</div>
+                        <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88'}">{claveParteUno}</div>
+                        <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88'}">{claveParteDos}</div>
+                        <div class="encabezado" show ="{facturaImpresa.nombreFactura != ""}"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.nombreFactura}</div>
+                        <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == "" }"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.cliente.nombreCompleto}</div>
+                        <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == ""}"><strong>{$.i18n.prop("tikect.encabezado.receptor.cedula")}     </strong>{facturaImpresa.cliente.cedula}</div>
                         <table class = "forma-table"  >
                             <thead>
                                 <tr class = "forma-table">
@@ -291,6 +293,8 @@ self.facturaImpresa   = opts.factura;
 self.detalles = []
 self.subTotalGeneral = 0
 self.titulo = ""
+self.claveParteUno =""
+self.claveParteDos =""
 
 self.on('mount',function(){
     
@@ -332,6 +336,8 @@ function consultaFactura(idFactura){
                     self.facturaImpresa.totalExento      = formatoDecimales(self.facturaImpresa.totalExento,2);
                     self.facturaImpresa.totalComprobante = formatoDecimales(self.facturaImpresa.totalComprobante,2);
                     self.facturaImpresa.totalCambioPagar = formatoDecimales(self.facturaImpresa.totalCambioPagar,2);
+                    self.claveParteUno= self.facturaImpresa.clave.substring(0,24)
+                    self.claveParteDos= self.facturaImpresa.clave.substring(25,51)
                     //detalles
                     self.facturaImpresa.detalles.forEach(function(elemen){
                         elemen.montoTotalLinea = formatoDecimales(elemen.montoTotalLinea,2);
