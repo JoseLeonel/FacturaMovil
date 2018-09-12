@@ -311,7 +311,7 @@ public class App {
 				addText(cb, Utils.formatearNumeroListados(detalleFacturaElectronica.get(i).getTotal(),2), font, col12, row1, Element.ALIGN_RIGHT);
 				//
 				DateFormat fechaCompleta = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-				addText(cb, "Emitida conforme lo establecido en la resolución de Facturación Electrónica, N° DGT-02-09 nueve de enero de dos mil nueve de la Dirección General de Tributación, a las " + fechaCompleta.format(new Date()) + " horas", font, col20, row20, Element.ALIGN_LEFT);
+				addText(cb, "Emitida conforme lo establecido en la resolución de Facturación Electrónica, N° DGT-R-48-2016 del 7/10/16 08:00:00 , a las " + fechaCompleta.format(new Date()) + " horas", font, col20, row20, Element.ALIGN_LEFT);
 				addText(cb, "Pag: " + pag, font, 1180, row20, Element.ALIGN_LEFT);
 				//
 

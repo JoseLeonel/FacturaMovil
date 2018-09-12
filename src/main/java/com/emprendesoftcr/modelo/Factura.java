@@ -166,6 +166,11 @@ public class Factura implements Serializable {
 	@Column(name = "total_cambio")
 	private Double						totalCambio;
 
+	//Impuesto del servicio cuando aplica
+	@Column(name = "total_servicio")
+	private Double						totalImpuestoServicio;
+
+	
 	@Column(name = "total_cambioPagar")
 	private Double						totalCambioPagar;
 
@@ -180,6 +185,9 @@ public class Factura implements Serializable {
 
 	@Column(name = "estado_firma")
 	private Integer						estadoFirma;
+
+	@Column(name = "tiene_is")
+	private Integer						tieneIS;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -220,8 +228,11 @@ public class Factura implements Serializable {
 
 	}
 
+	
+
+	
 	public Factura(Long id, Date fechaCredito, String numeroConsecutivo, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon, Date referenciaFechaEmision, String medioEfectivo, String medioTarjeta, String medioBanco, String nombreFactura, String correoAlternativo, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo,
-			Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Set<Detalle> detalles) {
+			Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Integer tieneIS, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Set<Detalle> detalles) {
 		super();
 		this.id = id;
 		this.fechaCredito = fechaCredito;
@@ -264,11 +275,13 @@ public class Factura implements Serializable {
 		this.totalCredito = totalCredito;
 		this.montoCambio = montoCambio;
 		this.totalCambio = totalCambio;
+		this.totalImpuestoServicio = totalImpuestoServicio;
 		this.totalCambioPagar = totalCambioPagar;
 		this.cambioMoneda = cambioMoneda;
 		this.codigoMoneda = codigoMoneda;
 		this.estado = estado;
 		this.estadoFirma = estadoFirma;
+		this.tieneIS = tieneIS;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.cliente = cliente;
@@ -277,6 +290,22 @@ public class Factura implements Serializable {
 		this.usuarioCreacion = usuarioCreacion;
 		this.detalles = detalles;
 	}
+
+
+
+
+	public Double getTotalImpuestoServicio() {
+		return totalImpuestoServicio;
+	}
+
+
+
+	
+	public void setTotalImpuestoServicio(Double totalImpuestoServicio) {
+		this.totalImpuestoServicio = totalImpuestoServicio;
+	}
+
+
 
 	public Long getId() {
 		return id;
@@ -712,6 +741,14 @@ public class Factura implements Serializable {
 
 	public void setCorreoAlternativo(String correoAlternativo) {
 		this.correoAlternativo = correoAlternativo;
+	}
+
+	public Integer getTieneIS() {
+		return tieneIS;
+	}
+
+	public void setTieneIS(Integer tieneIS) {
+		this.tieneIS = tieneIS;
 	}
 
 }

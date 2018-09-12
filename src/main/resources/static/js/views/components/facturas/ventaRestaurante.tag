@@ -631,7 +631,13 @@
                                         <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
                                         <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="campo tamanoLetraTotales totalBanco" id="totalBanco" name = "totalBanco"  value="{factura.totalBanco}">
                                     </div>
-                               
+                                    <div class="form-group has-success">
+                                        <label>{$.i18n.prop("factura.impuesto.servicio")} </label> 
+                                        <select  onchange= {__ImpuestoServicio} class="form-control impuestoServicio" id="impuestoServicio" name="impuestoServicio">
+                                            <option each={comboImpuestoServicio} value="{estado}" selected="{factura.tieneIS ==estado?true:false}" >{descripcion}</option>
+                                         </select>
+                                    </div>
+
                                     
                                 </div>
                             </div>
@@ -695,6 +701,7 @@
                                     <div class="booking-info">
                                         <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.subTotal")}  <span id="lblSubtotal"> {subTotalGeneral} </span></p>
                                         <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos} </span></p>
+                                        <p class="total label-totales " show "{mostrarImpuestoServicio}" style="text-align:right">{$.i18n.prop("factura.resumen.impuesto.servicio")}   <span id="lblSubtotal"> {totalImpuestoServicio} </span></p>
                                         <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {totalImpuesto} </span></p>
                                     </div>
                                     <div class="precioTotalFactura">
@@ -864,7 +871,7 @@
        __ListaDeVendedores()
        __Teclas()
        __TipoCambio()
-       
+       __comboImpuestoServicio()
        
      
         cargaBilletes()
@@ -1793,7 +1800,7 @@ function __Init(){
       __ComboEstados()
      __ListaFacturasEnEspera()
      mostrarCategorias()
-     
+     __comboImpuestoServicio()
      $('#codigoBarra').val(null)
      $('#codigoBarra').focus()
 }
@@ -2707,7 +2714,22 @@ function __comboCondicionPago(){
     self.update()
 }
 
-
+/**
+* cargar con impuesto de servicio
+**/
+function __comboImpuestoServicio(){
+    self.comboImpuestoServicio = []
+    self.update()
+    self.comboImpuestoServicio.push({
+        estado:1,
+        descripcion: $.i18n.prop("boolean.no")
+    })
+    self.comboImpuestoServicio.push({
+        estado:2,
+        descripcion:$.i18n.prop("boolean.si")
+    })
+    self.update()
+}
 /**
 * cargar los tipos de Documento de la factura
 **/

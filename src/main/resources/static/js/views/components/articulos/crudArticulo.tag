@@ -440,11 +440,7 @@ self.on('mount',function(){
           self.botonAgregar     = false;                        
           self.articulo  =  self.parametros.articulo
           self.update()
-          $('.selectTipoImpuesto').val(self.articulo.tipoImpuesto);  
-          $('.selectTipoCodigo').val(self.articulo.tipoCodigo);  
-          $('.selecTipoUnidad').val(self.articulo.unidadMedida) 
-          $('.selectMarca').val(self.articulo.marca.id)
-          $('.selectCategoria').val(self.articulo.categoria.id)
+        
           $("#formulario").validate(reglasDeValidacion());           
       }  
       
@@ -784,7 +780,7 @@ __agregarSalidaInventario(){
 /**
 *  Lista de motivos de Salidas activas 
 **/
-function _ListaMotivoSalidasActivas(){
+function _ListaMotivoSalidasActivas(){comboCondicionPagos
     $.ajax({
          url: "ListarMotivoSalidasActivasAjax.do",
         datatype: "json",
@@ -1072,7 +1068,7 @@ function __Impuestos(){
     self.impuestos =[]
     self.update()
      self.impuestos.push({
-        codigo: ' ',
+        codigo: "",
         descripcion:"Sin impuesto"
      });
 

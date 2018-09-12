@@ -53,6 +53,10 @@ public class UsuarioCaja implements Serializable {
 	@Column(name = "total_neto")
 	private Double						totalNeto;
 
+	@Column(name = "impuesto_servicio")
+	private Double						totalServicio;
+
+	
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
 	private Usuario						usuario;
