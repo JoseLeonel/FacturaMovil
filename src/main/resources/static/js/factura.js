@@ -596,6 +596,7 @@ function loadListar(table,idioma,formatoTabla,data){
         'responsive': true,
         "bAutoWidth": true,
         "lengthChange": true,
+       
         "columns": formatoTabla,
     });  
     $(table).dataTable().fnClearTable();

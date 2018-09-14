@@ -2,7 +2,7 @@
 <!--Formulario de Pago-->
 <!---Datos Final cuando no es un venta de Crucero -->
 <div show={mostrarFormularioPago}>
-		<div class="row" >
+		<div class="row " >
 			<div class="col-md-8 col-sm-8 col-lg-8 col-sx-12 ">
 				<div class="box">
 					<div class="box-header with-border fondoEncabezado">
@@ -176,10 +176,9 @@
                   <div class="box-tools ">
                    <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
                     <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago}   title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
-                    <a class="pull-left" href="#"    onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
-                    
-                    <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
-                    <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
+                    <a class="pull-left" href="#"   onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
+                    <a class="pull-left" href="#"   onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
+                    <a class="pull-right" href="#"  title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
                     
                   </div>
                   </div>
@@ -249,7 +248,7 @@
                 <section class="cabecera-derecha">
 				    <!--right sidebar-->
                      <div class="row">
-                            <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="col-sx-12 col-sm-12 col-md-12 col-lg-8">
                     <aside class="left-sidebar">
                             <!--Booking details-->
                         <article class="booking-details clearfix">
@@ -294,6 +293,19 @@
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("articulo.listar")} </h4>
             </div>
             <div class="modal-body">
+                <form id="formularioParametros" name ="formularioParametros" >
+                    <div class="row">
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label  >{$.i18n.prop("articulo.codigo")}  </label>
+                            <input type="text" class="form-control" id="codigoArt" name="codigoArt"  onkeypress={__ConsultarProductosCod} >
+                        </div>
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label  >{$.i18n.prop("articulo.descripcion")}</label>
+                            <input type="text" class="form-control "   id="descArticulo" name="descArticulo" onkeypress={__ConsultarProductosDesc}>
+                        </div>
+                    </div> 
+                </form>    
+                <br>                   
                 <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " cellspacing="0" width="100%">
                     <thead>
                         <th class="table-header">{$.i18n.prop("articulo.codigo")}        </th>
@@ -608,6 +620,10 @@
         }, false );
      
     })
+
+
+
+
 /**
 * Consultar la empresa
 **/
@@ -974,7 +990,7 @@ __CalculaCambioAEntregarKeyPress(e){
  __ListaDecodigos(){
      self.mostrarListadoArticulos = true
      self.update()
-     __ListaDeArticulosPorEmpresa();
+   $('#modalInventario').modal('show')   
  }
 /**
 *  Buscar la Factura Pendiente en espera
@@ -1326,6 +1342,8 @@ _AtrasFacturaFinal(){
    self.mostarParaCrearNuevaFactura = true
    self.error = false
    self.update()
+   $('.codigo').val(null)
+   $('.codigo').focus()
 }
 /**
 *    Muesta el campo de la fecha de credito
@@ -1359,6 +1377,7 @@ function mostrarPAgo(){
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
     getSubTotalGeneral()
+    self.totalCambioPagar =0
     self.factura.totalCambioPagar =0
     self.mostarParaCrearNuevaFactura = false
     self.mostrarFormularioPago = true
@@ -1489,28 +1508,53 @@ function __sumarMasArticulo(codigo,precio){
 __agregarArticuloBotonAgregar(){
    __buscarcodigo($( "#codigo" ).val(),1,0);
 }
+
+
+/**
+* consultando por descripcion
+**/
+__ConsultarProductosDesc(e){
+ if (e.keyCode != 13) {
+        return;
+    } 
+ __ListaDeArticulosPorDescripcion($("#codigoArt").val(),e.currentTarget.value)   
+}    
+
+/**
+*Consultando por codigo
+**/
+__ConsultarProductosCod(e){
+ if (e.keyCode != 13) {
+        return;
+    } 
+ __ListaDeArticulosPorDescripcion(e.currentTarget.value,$("#descArticulo").val())   
+}   
+
 /**
 * mostrar la lista de articulos de la empresa
 **/
-function __ListaDeArticulosPorEmpresa(){
-    if(self.articulos.data.length == 0){
+function __ListaDeArticulosPorDescripcion(){
+    if($('#codigoArt').val() =='' && $('#descArticulo').val() =='' ){
+        return
+    }
+    $(".tableListarArticulos").dataTable().fnClearTable();
+    $(".tableListarArticulos").DataTable().destroy();
+    var formulario = $('#formularioParametros').serialize();
     $.ajax({
-        url: 'ListarArticulosActivosAjax.do',
+        url: 'ListarPorDescripcionCodigoArticuloAjax.do',
         datatype: "json",
-        method:"POST",
+        method:"GET",
+        data :formulario,
         success: function (result) {
             if(result.aaData.length > 0){
                 _informacionData_Articulo()
                 self.articulos.data           = result.aaData
-                
                 self.update()
                 loadListar(".tableListarArticulos",idioma_espanol,self.informacion_tabla_articulo,self.articulos.data)
                 agregarInputsCombos_Articulo()
                 __agregarArticulos()
                 ActivarEventoFiltro(".tableListarArticulos")
-                if(self.mostrarListadoArticulos == true){
-                  $('#modalInventario').modal('show')    
-                }
+             
                 
             }
         },
@@ -1519,10 +1563,6 @@ function __ListaDeArticulosPorEmpresa(){
             mensajeErrorServidor(xhr, status);
         }
     });
-    }else{
-        $('#modalInventario').modal('show')    
-
-    }
 }
 /**
 *  Muestra la lista de clientes
@@ -1643,6 +1683,8 @@ function __agregarArticulo(cantidad){
         cantidad = 1
     }
     var encontrado = false;
+    //uso interno
+    
      if(self.detail[0] == null){ // first element
         __nuevoArticuloAlDetalle(cantidad);
         encontrado = true;
@@ -1970,6 +2012,9 @@ function getSubTotalGeneral(){
 
     self.update()
 }
+
+
+
 /**
 * Definicion de la tabla articulos 
 **/

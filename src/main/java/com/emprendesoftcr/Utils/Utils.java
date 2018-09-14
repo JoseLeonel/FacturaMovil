@@ -82,7 +82,7 @@ public final class Utils {
 	 */
 	public static Date parseDate(String dateString) {
 		Date date = null;
-		SimpleDateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT2);
+		SimpleDateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
 
 		try {
 			// parse() will throw an exception if the given dateString doesn't
@@ -1215,11 +1215,11 @@ public final class Utils {
 	}
 	
 	public static String getFechaHoraStr(Date date) {
-		DateFormat fecha = new SimpleDateFormat("yyyyMMdd");
-		DateFormat hora  = new SimpleDateFormat("hhmmss");
+		DateFormat fecha = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat hora  = new SimpleDateFormat("hh:mm:ss");
 		String fechaStr  = fecha.format(date);
 		String horaStr   = hora.format(date);
-		return fechaStr + "-" + horaStr;
+		return fechaStr + " " + horaStr;
 	}
 
 	/**

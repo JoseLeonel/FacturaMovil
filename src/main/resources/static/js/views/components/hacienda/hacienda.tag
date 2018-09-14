@@ -23,7 +23,7 @@
                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label class="knob-label" >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
-                                    <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
+                                    <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
                                         <input type="text" class="form-control fechaInicial" id="fechaInicial"  name= "fechaInicial" readonly>
                                         <div class="input-group-addon">
                                             <span class="glyphicon glyphicon-th"></span>
@@ -35,7 +35,7 @@
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label class="knob-label" >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
-                                        <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
+                                        <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
                                             <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
@@ -154,6 +154,7 @@
     self.mostrarDetalle        = false
 
 self.on('mount',function(){
+    $("#filtros").validate(reglasDeValidacionParametros());
     $("#formulario").validate(reglasDeValidacion());
      __InicializarTabla('.tableListar')
     agregarInputsCombos() 
@@ -163,6 +164,26 @@ self.on('mount',function(){
         }, false );
 
 })   
+
+/**
+* Camps requeridos
+**/
+var reglasDeValidacionParametros = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			fechaInicial : {
+				required : true,
+			},
+			fechaFinal : {
+				required : true,
+			}                                   
+                        
+		},
+		ignore : []
+
+	});
+	return validationOptions;
+};
 
 /**
 * Camps requeridos
@@ -321,7 +342,7 @@ function __InformacionDataTable(){
                                {'data' :'nombreReceptor' ,"name":"nombreReceptor" ,"title" : $.i18n.prop("hacienda.cliente")     ,"autoWidth" :true},
                                {'data' :'totalReceptor'  ,"name":"totalReceptor"  ,"title" : $.i18n.prop("hacienta.monto")       ,"autoWidth" :true ,
                                     "render":function(totalReceptor,type, row){
-									    return redondeoDecimales(totalReceptor,2);
+									    return formatoDecimales(totalReceptor,2);
 	 							    }
                                },
                                {'data' :'estado' ,"name":"estado" ,"title" : $.i18n.prop("hacienda.estado")     ,"autoWidth" :true},
@@ -554,12 +575,7 @@ function BajarArchivos(url,objeto){
 }
 
 
-/**
-*Formato de la fecha con hora
-**/
-function formatoFechaHora(fecha) {
-    return fecha == null?"":moment(fecha).format('DD/MM/YYYY h:mm:ss a');
-}
+
 
 </script>
 </resultado-hacienda>

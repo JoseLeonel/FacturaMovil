@@ -173,6 +173,7 @@ public class ClientesController {
 			cliente.setDistrito(Constantes.EMPTY);
 			cliente.setCanton(Constantes.EMPTY);
 			cliente.setBarrio(Constantes.EMPTY);
+			cliente.setCelular(Constantes.ZEROS);
 			
       cliente.setEmpresa(usuarioSesion.getEmpresa());
 			cliente.setCreated_at(new Date());
@@ -227,6 +228,9 @@ public class ClientesController {
 			clienteBD.setDistrito(Constantes.EMPTY);
 			clienteBD.setCanton(Constantes.EMPTY);
 			clienteBD.setBarrio(Constantes.EMPTY);
+			clienteBD.setCorreoElectronico1(cliente.getCorreoElectronico1());
+			clienteBD.setCorreoElectronico2(cliente.getCorreoElectronico2());
+			clienteBD.setCorreoElectronico3(cliente.getCorreoElectronico3());
 
 			clienteBD.setCedula(cliente.getCedula());
 			clienteBD.setNombreCompleto(cliente.getNombreCompleto());

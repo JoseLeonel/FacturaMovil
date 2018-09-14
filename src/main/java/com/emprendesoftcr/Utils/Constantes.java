@@ -11,6 +11,8 @@ public class Constantes {
 	
 	// Semaforo
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 30;
+	//48 horas cada 5 minutos
+	public static final Integer					MAXIMO_REINTENTOS_ACEPTACION												= 576;
 
 	public static final Integer					SEMAFORO_ESTADO_REINTENTOS													= 3;
 	public static final Integer					SEMAFORO_ESTADO_FIRMADO															= 1;
@@ -225,6 +227,7 @@ public class Constantes {
 	public static final String					DATE_FORMAT5																				= "yyyy-MM-dd 00:00:00";
 	public static final String					DATE_FORMAT6																				= "yyyy-MM-dd";
 	public static final String					DATE_FORMAT4																				= "yyyyMMdd";
+	public static final String					DATE_FORMAT7																				= "yyyy-MM-dd";
 
 	public static final String					DATE_FORMAT_TIME																		= "HH:mm:ss";
 	public static final String					DATE_FORMAT_TIME2																		= "HH:mm";

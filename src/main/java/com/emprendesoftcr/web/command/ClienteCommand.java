@@ -34,6 +34,9 @@ public class ClienteCommand {
 	private String	otraSena;
 
 	private String	correoElectronico;
+	private String	correoElectronico1;
+	private String	correoElectronico2;
+	private String	correoElectronico3;
 
 	private Integer	descuento;
 
@@ -68,6 +71,9 @@ public class ClienteCommand {
 		this.empresa = cliente.getEmpresa();
 		this.identificacionExtranjero = cliente.getIdentificacionExtranjero();
 		this.nombreComercial = cliente.getNombreComercial();
+		this.correoElectronico1 = cliente.getCorreoElectronico1();
+		this.correoElectronico2 = cliente.getCorreoElectronico2();
+		this.correoElectronico3 = cliente.getCorreoElectronico3();
 
 	}
 
@@ -268,5 +274,37 @@ public class ClienteCommand {
 	public void setNombreComercial(String nombreComercial) {
 		this.nombreComercial = nombreComercial;
 	}
+
+	
+	public String getCorreoElectronico1() {
+		return correoElectronico1;
+	}
+
+	
+	public void setCorreoElectronico1(String correoElectronico1) {
+		this.correoElectronico1 = correoElectronico1;
+	}
+
+	
+	public String getCorreoElectronico2() {
+		return correoElectronico2;
+	}
+
+	
+	public void setCorreoElectronico2(String correoElectronico2) {
+		this.correoElectronico2 = correoElectronico2;
+	}
+
+	
+	public String getCorreoElectronico3() {
+		return correoElectronico3;
+	}
+
+	
+	public void setCorreoElectronico3(String correoElectronico3) {
+		this.correoElectronico3 = correoElectronico3;
+	}
+	
+	
 
 }
