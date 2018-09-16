@@ -182,6 +182,43 @@ public class ArticuloController {
 
 	}
 
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarPorDescripcionCodigoArticuloAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarDescripcionCodigoArticulosAjax(HttpServletRequest request, ModelMap model,@ModelAttribute Articulo articulo,  @ModelAttribute String descArticulo,@RequestParam String codigoArt) {
+
+		DataTableDelimitador delimitadores = null;
+		String valorDescripcion = request.getParameter("descArticulo");
+		delimitadores = new DataTableDelimitador(request, "Articulo");
+		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+			String nombreUsuario = request.getUserPrincipal().getName();
+			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			delimitadores.addFiltro(dataTableFilter);
+
+		}
+		JqGridFilter categoriaFilter =null;
+		if(codigoArt !=null) {
+			if(!codigoArt.equals(Constantes.EMPTY)) {
+				categoriaFilter = new JqGridFilter("codigo", "'" + codigoArt + "'", "=");
+				delimitadores.addFiltro(categoriaFilter);
+			}
+		}
+		if(valorDescripcion !=null) {
+			if(!valorDescripcion.equals(Constantes.EMPTY)){
+				categoriaFilter = new JqGridFilter("descripcion",  valorDescripcion , " like ");
+				delimitadores.addFiltro(categoriaFilter);
+				
+			}
+			
+		}
+
+		categoriaFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
+		delimitadores.addFiltro(categoriaFilter);
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+	}
+
+	
 	/**
 	 * Paginacion de la venta
 	 * @param request
@@ -267,7 +304,9 @@ public class ArticuloController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			
+			if(articulo.getTipoImpuesto() !=null) {
+				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Sin impuesto") ?Constantes.EMPTY:articulo.getTipoImpuesto());
+			}
 			articulo.setCreated_at(new Date());
 			articulo.setTipoImpuesto(articulo.getTipoImpuesto() ==null?Constantes.EMPTY:articulo.getTipoImpuesto());
 			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
@@ -321,6 +360,12 @@ public class ArticuloController {
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+			if(articulo.getTipoImpuesto() !=null) {
+				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Sin impuesto") ?Constantes.EMPTY:articulo.getTipoImpuesto());
+			}
+			if(articulo.getTipoCodigo() == null) {
+				 articulo.setTipoCodigo("04");
+			}
 			Articulo articuloBd = articuloBo.buscar(articulo.getId());
 			Articulo articuloValidar = null;
 			if (!articuloBd.getDescripcion().equals(articulo.getDescripcion())) {
@@ -335,12 +380,6 @@ public class ArticuloController {
 					result.rejectValue("codigo", "error.articulo.codigo.existe");
 				}
 			}
-//			if (articulo.getCosto() == null) {
-//				result.rejectValue("costo", "error.articulo.costo.mayorCero");
-//			}
-//			if (articulo.getCosto() == 0) {
-//				result.rejectValue("costo", "error.articulo.costo.mayorCero");
-//			}
 			if (articulo.getPrecioPublico() == null) {
 				result.rejectValue("costo", "error.articulo.precioPublico.mayorCero");
 			}
@@ -430,7 +469,7 @@ public class ArticuloController {
 
 	@RequestMapping(value = "/CambiarPrecioAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator cambiarPrecio(HttpServletRequest request, HttpServletResponse response,  ModelMap model, @ModelAttribute Articulo articulo,@RequestParam Double precioPublico , @RequestParam String codigo,BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator cambiarPrecio(HttpServletRequest request, HttpServletResponse response,  ModelMap model, @ModelAttribute Articulo articulo,@RequestParam Double precioPublico , @RequestParam String codigo, @RequestParam String tipoImpuesto, @RequestParam Double impuesto, @RequestParam String descripcion,@RequestParam String tipoCodigo,String unidadMedida,BindingResult result, SessionStatus status) throws Exception {
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			Articulo articuloBD = articuloBo.buscarPorCodigoYEmpresa(codigo, usuario.getEmpresa());
@@ -438,11 +477,28 @@ public class ArticuloController {
 			if (articuloBD == null) {
 				result.rejectValue("codigo", "error.articulo.codigo.no.existe");
 			}
+		
+			Articulo articuloValidar = null;
+			if (!articuloBD.getDescripcion().equals(descripcion)) {
+				articuloValidar = articuloBo.buscarPorDescripcionYEmpresa(descripcion, usuario.getEmpresa());
+				if (articuloValidar != null) {
+					result.rejectValue("descripcion", "error.articulo.descripcion.existe");
+				}
+			}
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			
+			if(tipoCodigo == null) {
+				articuloBD.setTipoCodigo("04");
+			}else {
+				articuloBD.setTipoCodigo(tipoCodigo);
+			}	
 			articuloBD.setPrecioPublico(precioPublico);
+			articuloBD.setUnidadMedida(unidadMedida);
+			articuloBD.setDescripcion(descripcion);
+			articuloBD.setTipoImpuesto(tipoImpuesto);
+			articuloBD.setImpuesto(impuesto);
 			
 			articuloBo.modificar(articuloBD);
 			

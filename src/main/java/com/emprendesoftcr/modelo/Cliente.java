@@ -76,6 +76,14 @@ public class Cliente implements Serializable {
 	@Column(name = "correo_electronico")
 	private String						correoElectronico;
 
+	@Column(name = "correo_electronico1")
+	private String						correoElectronico1;
+	@Column(name = "correo_electronico2")
+	private String						correoElectronico2;
+	@Column(name = "correo_electronico3")
+	private String						correoElectronico3;
+
+	
 	@Column(name = "descuento")
 	private Integer				descuento;
 
@@ -103,7 +111,8 @@ public class Cliente implements Serializable {
 	
 
 
-	public Cliente(Long id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, String identificacionExtranjero, String provincia, String canton, String distrito, String barrio, Integer celular, Integer codigoPais, Integer telefono, String otraSena, String correoElectronico, Integer descuento, String estado, Date created_at, Date updated_at, Empresa empresa, Usuario usuario) {
+
+	public Cliente(Long id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, String identificacionExtranjero, String provincia, String canton, String distrito, String barrio, Integer celular, Integer codigoPais, Integer telefono, String otraSena, String correoElectronico, String correoElectronico1, String correoElectronico2, String correoElectronico3, Integer descuento, String estado, Date created_at, Date updated_at, Empresa empresa, Usuario usuario) {
 		super();
 		this.id = id;
 		this.nombreCompleto = nombreCompleto;
@@ -120,6 +129,9 @@ public class Cliente implements Serializable {
 		this.telefono = telefono;
 		this.otraSena = otraSena;
 		this.correoElectronico = correoElectronico;
+		this.correoElectronico1 = correoElectronico1;
+		this.correoElectronico2 = correoElectronico2;
+		this.correoElectronico3 = correoElectronico3;
 		this.descuento = descuento;
 		this.estado = estado;
 		this.created_at = created_at;
@@ -320,5 +332,37 @@ public class Cliente implements Serializable {
 	public Integer getCelular() {
 		return celular;
 	}
+
+	
+	public String getCorreoElectronico1() {
+		return correoElectronico1;
+	}
+
+	
+	public void setCorreoElectronico1(String correoElectronico1) {
+		this.correoElectronico1 = correoElectronico1;
+	}
+
+	
+	public String getCorreoElectronico2() {
+		return correoElectronico2;
+	}
+
+	
+	public void setCorreoElectronico2(String correoElectronico2) {
+		this.correoElectronico2 = correoElectronico2;
+	}
+
+	
+	public String getCorreoElectronico3() {
+		return correoElectronico3;
+	}
+
+	
+	public void setCorreoElectronico3(String correoElectronico3) {
+		this.correoElectronico3 = correoElectronico3;
+	}
+	
+	
 
 }

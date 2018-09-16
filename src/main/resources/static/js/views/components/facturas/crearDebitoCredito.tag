@@ -326,6 +326,19 @@
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("articulo.listar")} </h4>
             </div>
             <div class="modal-body">
+               <form id="formularioParametros" name ="formularioParametros" >
+                    <div class="row">
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label  >{$.i18n.prop("articulo.codigo")}  </label>
+                            <input type="text" class="form-control" id="codigoArt" name="codigoArt"  onkeypress={__ConsultarProductosCod} >
+                        </div>
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label  >{$.i18n.prop("articulo.descripcion")}</label>
+                            <input type="text" class="form-control "   id="descArticulo" name="descArticulo" onkeypress={__ConsultarProductosDesc}>
+                        </div>
+                    </div> 
+                </form>    
+                <br>             
                 <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " cellspacing="0" width="100%">
                     <thead>
                         <th class="table-header">{$.i18n.prop("articulo.codigo")}        </th>
@@ -869,7 +882,7 @@ __CalculaCambioAEntregarKeyPress(e){
  * Listar codigos  llamado del modal para presentar los articulos
  **/   
  __ListaDecodigos(){
-     __ListaDeArticulosPorEmpresa();
+      $('#modalInventario').modal('show')   
  }
 /**
 *  Buscar la Factura Pendiente en espera
@@ -1396,14 +1409,40 @@ __agregarArticuloBotonAgregar(){
    __buscarcodigo($( "#codigo" ).val(),1);
 }
 /**
+* consultando por descripcion
+**/
+__ConsultarProductosDesc(e){
+ if (e.keyCode != 13) {
+        return;
+    } 
+ __ListaDeArticulosPorDescripcion($("#codigoArt").val(),e.currentTarget.value)   
+}    
+
+/**
+*Consultando por codigo
+**/
+__ConsultarProductosCod(e){
+ if (e.keyCode != 13) {
+        return;
+    } 
+ __ListaDeArticulosPorDescripcion(e.currentTarget.value,$("#descArticulo").val())   
+}   
+
+/**
 * mostrar la lista de articulos de la empresa
 **/
-function __ListaDeArticulosPorEmpresa(){
-    if(self.articulos.data.length == 0){
+function __ListaDeArticulosPorDescripcion(){
+    if($('#codigoArt').val() =='' && $('#descArticulo').val() =='' ){
+        return
+    }
+    $(".tableListarArticulos").dataTable().fnClearTable();
+    $(".tableListarArticulos").DataTable().destroy();
+    var formulario = $('#formularioParametros').serialize();
     $.ajax({
-        url: 'ListarArticulosActivosAjax.do',
+        url: 'ListarPorDescripcionCodigoArticuloAjax.do',
         datatype: "json",
-        method:"POST",
+        method:"GET",
+        data :formulario,
         success: function (result) {
             if(result.aaData.length > 0){
                 _informacionData_Articulo()
@@ -1413,7 +1452,8 @@ function __ListaDeArticulosPorEmpresa(){
                 agregarInputsCombos_Articulo()
                 __agregarArticulos()
                 ActivarEventoFiltro(".tableListarArticulos")
-                $('#modalInventario').modal('show')    
+             
+                
             }
         },
         error: function (xhr, status) {
@@ -1421,11 +1461,6 @@ function __ListaDeArticulosPorEmpresa(){
             mensajeErrorServidor(xhr, status);
         }
     });
-    }else{
-        $('#modalInventario').modal('show')    
-        
-    }
-
 }
 /**
 *  Muestra la lista de clientes

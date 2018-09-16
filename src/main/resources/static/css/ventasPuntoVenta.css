@@ -23,7 +23,7 @@
      overflow: visible;
 }
 /* Lista de facturas en espera*/
- .cabecera-derecha .lista-factura-espera{
+ .cabecera-derecha .lista-factura-espera {
      width:100%;
      display:flex;
      flex-wrap:wrap;

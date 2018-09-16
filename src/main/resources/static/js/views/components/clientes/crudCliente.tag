@@ -53,6 +53,8 @@
                 <div class="box-body">
                     <form id = "formulario" name ="formulario "   class="advanced-search-form">
                         <input type="hidden" name="id" id="id" value="{cliente.id}">
+                        <input type="hidden" id="descuento" name="descuento" value="{cliente.descuento}"  >
+                        <input type="hidden"  id="celular" name="celular" value="{cliente.celular}"  >
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 left">
                                 <label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>
@@ -81,41 +83,45 @@
                             
                         </div>
                         <div class="row">
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label  >{$.i18n.prop("cliente.codigoPais")} <span class="requeridoDato">*</span> </label>
                                 <input type="text" class="form-control codigoPais" placeHolder ="{$.i18n.prop("cliente.codigoPais.ejemplo")}" id="codigoPais" name="codigoPais" value="{cliente.codigoPais}"  >
                             </div>
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label  >{$.i18n.prop("cliente.telefono")} </label>
                                 <input type="text" class="form-control telefono" placeHolder ="{$.i18n.prop("cliente.telefono")}" id="telefono" name="telefono" value="{cliente.telefono}"  >
                             </div>
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label  >{$.i18n.prop("cliente.celular")} </label>
-                                <input type="text" class="form-control celular" placeHolder ="{$.i18n.prop("cliente.celular")}" id="celular" name="celular" value="{cliente.celular}"  >
-                            </div>
-                        
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label  >{$.i18n.prop("cliente.descuento")} </label>
-                                <input type="number" class="form-control descuento" placeHolder ="{$.i18n.prop("cliente.descuento")}" id="descuento" name="descuento" value="{cliente.descuento}"  >
-                            </div>
-
-                        </div>
-                                              
-                        <div class="row">    
-
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label  >{$.i18n.prop("cliente.identificacionExtranjero")}</label>
-                                <input type="text" class="form-control identificacionExtranjero" placeHolder ="{$.i18n.prop("cliente.identificacionExtranjero")}" id="identificacionExtranjero" name="identificacionExtranjero" value="{cliente.identificacionExtranjero}"  >
-                            </div>
-                            
-                             <div class= "col-md-9 col-sx-12 col-sm-9 col-lg-9">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label  >{$.i18n.prop("cliente.correoElectronico")}</label>
                                 <input type="text" class="form-control correoElectronico" placeHolder ="{$.i18n.prop("cliente.correoElectronico")}" id="correoElectronico" name="correoElectronico" value="{cliente.correoElectronico}"  >
                             </div>
+                         
+                        </div>
+                                              
+                        <div class="row">    
+                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label  >{$.i18n.prop("cliente.correoElectronico1")}</label>
+                                <input type="text" class="form-control correoElectronico1" placeHolder ="{$.i18n.prop("cliente.correoElectronico1")}" id="correoElectronico1" name="correoElectronico1" value="{cliente.correoElectronico1}"  >
+                            </div>
+                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label  >{$.i18n.prop("cliente.correoElectronico2")}</label>
+                                <input type="text" class="form-control correoElectronico2" placeHolder ="{$.i18n.prop("cliente.correoElectronico2")}" id="correoElectronico2" name="correoElectronico2" value="{cliente.correoElectronico2}"  >
+                            </div>
+                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label  >{$.i18n.prop("cliente.correoElectronico1")}</label>
+                                <input type="text" class="form-control correoElectronico3" placeHolder ="{$.i18n.prop("cliente.correoElectronico3")}" id="correoElectronico3" name="correoElectronico3" value="{cliente.correoElectronico3}"  >
+                            </div>
+                              
                         </div>
 
                         <div class="row">    
-                            <div class= "col-md-3 col-sx-12 col-sm-12 col-lg-12">
+
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label  >{$.i18n.prop("cliente.identificacionExtranjero")}</label>
+                                <input type="text" class="form-control identificacionExtranjero" placeHolder ="{$.i18n.prop("cliente.identificacionExtranjero")}" id="identificacionExtranjero" name="identificacionExtranjero" value="{cliente.identificacionExtranjero}"  >
+                            </div>
+
+                            <div class= "col-md-8 col-sx-12 col-sm-8 col-lg-8">
                                 <label  >{$.i18n.prop("cliente.otraSena")}</label>
                                 <textarea maxlength="250" placeHolder ="{$.i18n.prop("cliente.otraSena")}" class="form-control otraSena" id="otraSena" name="otraSena" value="{cliente.otraSena}" > </textarea> 
                             </div>
@@ -162,7 +168,7 @@
             color: red;
             text-align: left;
             font-weight: 500;
-            font-size: 13px;
+            font-size: 16px;
     }
     .fondoFacturacion {
         background: rgb(247, 244, 244);
@@ -224,6 +230,9 @@
 		telefono:"",
 		otraSena:"",
 		correoElectronico:"",
+        correoElectronico1:"",
+        correoElectronico2:"",
+        correoElectronico3:"",
      	descuento:0,
 		estado:"",
 		sucursal:{
@@ -255,11 +264,12 @@ function _incializarCampos(){
     $('.nombreCompleto').val(null)
     $('.cedula').val(null)
     $('.identificacionExtranjero').val(null)
-    $('.descuento').val(null)
-    $('.celular').val(null)
     $('.telefono').val(null)
     $('.codigoPais').val(null)
     $('.correoElectronico').val(null)
+    $('.correoElectronico1').val(null)
+    $('.correoElectronico2').val(null)
+    $('.correoElectronico3').val(null)
     $('.otraSena').val(null)
     $('.nombreComercial').val(null)
     $(".errorServerSideJgrid").remove();
@@ -277,6 +287,9 @@ function _incializarCampos(){
         telefono:"",
         otraSena:"",
         correoElectronico:"",
+        correoElectronico1:"",
+        correoElectronico2:"",
+        correoElectronico3:"",
         descuento:0,
         estado:"",
         sucursal:{
@@ -338,27 +351,30 @@ var reglasDeValidacion = function() {
                 minlength:1,
                 email:true
 			},
+            
+			correoElectronico1 : {
+                maxlength:250,
+                minlength:1,
+                email:true
+			},
+			correoElectronico2 : {
+                maxlength:250,
+                minlength:1,
+                email:true
+			},
+			correoElectronico3 : {
+                maxlength:250,
+                minlength:1,
+                email:true
+			},
             telefono : {
                 maxlength:8,
                 minlength:8,
                 telefonoFormat:true
 			},
-            
-            celular : {
-                maxlength:8,
-                minlength:8,
-                telefonoFormat:true
-
-			},
             codigoPais : {
                 required : true,
                 minlength:3,
-
-			},
-            correoElectronico : {
-                required : true,
-                email:true,
-                maxlength:250,
 
 			},
             identificacionExtranjero : {
@@ -400,14 +416,6 @@ function __Eventos(){
     $("#correoElectronico").attr("maxlength", 250);
     $("#otraSenas").attr("maxlength", 250);
     $("#telefono").attr("maxlength", 8);
-    $("#celular").attr("maxlength", 8);
-    $('#descuento').mask('000', {
-		'translation' : {
-			0 : {
-				pattern : /[0-9]/
-			}
-		}
-	});
     $('#codigoPais').mask('000', {
 		'translation' : {
 			0 : {
@@ -423,13 +431,6 @@ function __Eventos(){
 		}
 	});
     $('.telefono').mask('00000000', {
-            'translation' : {
-                0 : {
-                    pattern : /[0-9]/
-                }
-            }
-	})
-    $('.celular').mask('00000000', {
             'translation' : {
                 0 : {
                     pattern : /[0-9]/
@@ -648,9 +649,10 @@ function __consultar(){
                         $('#nombreCompleto').val(self.cliente.nombreCompleto)
                         $('#cedula').val(self.cliente.cedula)
                         $('#telefono').val(self.cliente.telefono)
-                        $('#celular').val(self.cliente.celular)
-                        $('#descuento').val(self.cliente.descuento)
                         $('#correoElectronico').val(self.cliente.correoElectronico)
+                        $('#correoElectronico1').val(self.cliente.correoElectronico1)
+                        $('#correoElectronico2').val(self.cliente.correoElectronico2)
+                        $('#correoElectronico3').val(self.cliente.correoElectronico3)
                         $('#otraSena').val(self.cliente.otraSena)
                         $('.identificacionExtranjero').val(self.cliente.identificacionExtranjero)
                         

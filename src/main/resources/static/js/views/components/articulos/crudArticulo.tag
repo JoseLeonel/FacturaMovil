@@ -567,7 +567,7 @@ __asignarImpuesto(){
       self.articulo.tipoImpuesto ="01"
       self.articulo.impuesto = 13
    }else{
-      self.articulo.tipoImpuesto =$('.selectTipoImpuesto').val()
+      self.articulo.tipoImpuesto =$('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
       self.articulo.impuesto = 0
    }
    self.update()
@@ -1077,26 +1077,7 @@ function __Impuestos(){
         descripcion:$.i18n.prop("tipo.impuesto.ventas")
      });
 
-  //  self.impuestos.push({
-  //      codigo: '02',
- //       descripcion:$.i18n.prop("tipo.impuesto.consumo")
-  //   });
-  //  self.impuestos.push({
-  //      codigo: '03',
-  //      descripcion:$.i18n.prop("tipo.impuesto.combustible")
-  //   });
-  //  self.impuestos.push({
-  //      codigo: '04',
-  //      descripcion:$.i18n.prop("tipo.impuesto.bebidas.alcoholicas")
-  //   });
-  //  self.impuestos.push({
-  //      codigo: '05',
-  //      descripcion:$.i18n.prop("tipo.impuesto.bebidas.envasadas")
-  //   });
-  //  self.impuestos.push({
-  //      codigo: '06',
-  //      descripcion:$.i18n.prop("tipo.impuesto.tabaco")
-  //   });
+  
     self.impuestos.push({
         codigo: '07',
         descripcion:$.i18n.prop("tipo.impuesto.servicio")
@@ -1171,11 +1152,10 @@ __regresarAlListado(){
 *   Agregar 
 **/
 __agregar(){
-    
-
+     
         if ($("#formulario").valid()) {
-            var tipo = $('#tipoImpuesto').val();
-            if ($('#tipoImpuesto').val() !=" "){
+            var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
+            if (tipo !=" "){
                 if($('#impuesto').val()==0){
                     mensajeError($.i18n.prop("error.articulo.indicar.tipo.impuesto"))
                     return 
@@ -1188,7 +1168,7 @@ __agregar(){
                 }
                 
             }
-
+          
             
         // Permite obtener todos los valores de los elementos del form del jsp
         var formulario = $("#formulario").serialize();
@@ -1249,8 +1229,10 @@ __agregar(){
 ** Modificar la Empresa
 **/
 __Modificar(){
-    var tipo = $('#tipoImpuesto').val();
-    if ($('#tipoImpuesto').val() !=" "){
+     var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
+     
+
+    if (tipo !=""){
         if($('#impuesto').val()==0){
             mensajeError($.i18n.prop("error.articulo.indicar.tipo.impuesto"))
             return 
@@ -1263,6 +1245,7 @@ __Modificar(){
         }
         
     }
+   
     self.error = false;
     self.exito = false;
     self.update();

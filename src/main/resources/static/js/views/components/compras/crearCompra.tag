@@ -116,11 +116,19 @@
     <div class="box box-solid box-primary" show={mostarParaCrearNuevaCompra}>
         <div class="box-body">
              <div class="box-header with-border">
-                 <h3 class="box-title">Modulo para Realizar Compras al Inventario {compra.id>0?' Id#:'+compra.id:'' }</h3>
-                  <div class="box-tools pull-right">
-                    <a href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("btn.limpiar")}</span></a>
-                  </div>
-             </div>
+                <div class="row">
+                  <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">  
+                    <div class="box-tools ">
+                            <a class="pull-left" href="#"   title="Modulo de Compras"><span class="label label-limpiar ">Compras</span></a>
+                            <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago}       title="Aplicar la compra"> <span class="label label-limpiar">{$.i18n.prop("comprar.f8")}</span></a>
+                            <a class="pull-left" href="#"   onclick = {__AplicarYcrearFacturaTemporal}  title="Compra en espera"> <span class="label label-limpiar">{$.i18n.prop("comprar.f9")}</span></a>
+                            <a class="pull-left" href="#"   onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
+                            <a class="pull-right" href="#"  title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
+                        </div>
+                    </div>
+                </div>  
+                  <br>
+
             <div  class="contenedor-compra " >
                 <div class="cabecera-izquierda">
                     <div class="row">
@@ -225,6 +233,19 @@
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("articulo.listar")} </h4>
             </div>
             <div class="modal-body">
+                <form id="formularioParametros" name ="formularioParametros" >
+                    <div class="row">
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label  >{$.i18n.prop("articulo.codigo")}  </label>
+                            <input type="text" class="form-control" id="codigoArt" name="codigoArt"  onkeypress={__ConsultarProductosCod} >
+                        </div>
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label  >{$.i18n.prop("articulo.descripcion")}</label>
+                            <input type="text" class="form-control "   id="descArticulo" name="descArticulo" onkeypress={__ConsultarProductosDesc}>
+                        </div>
+                    </div> 
+                </form>    
+                <br>       
                 <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " cellspacing="0" width="100%">
                     <thead>
                         <th class="table-header">{$.i18n.prop("articulo.codigo")}      </th>
@@ -535,7 +556,7 @@
         __ComboEstados()
         
         __ListaDeProveedores()
-        __ListaDeArticulosPorEmpresa()
+        
     })
 /**
 * Camps requeridos
@@ -883,24 +904,54 @@ __addProductToDetail(e){
 __agregarArticuloBotonAgregar(){
    __buscarcodigo($( "#codigo" ).val(),$( "#quantty" ).val());
 }
+
+/**
+* consultando por descripcion
+**/
+__ConsultarProductosDesc(e){
+ if (e.keyCode != 13) {
+        return;
+    } 
+ __ListaDeArticulosPorDescripcion($("#codigoArt").val(),e.currentTarget.value)   
+}    
+
+/**
+*Consultando por codigo
+**/
+__ConsultarProductosCod(e){
+ if (e.keyCode != 13) {
+        return;
+    } 
+ __ListaDeArticulosPorDescripcion(e.currentTarget.value,$("#descArticulo").val())   
+}    
 /**
 * mostrar la lista de articulos de la empresa
 **/
-function __ListaDeArticulosPorEmpresa(){
+function __ListaDeArticulosPorDescripcion(cod,desc){
+    if($('#codigoArt').val() =='' && $('#descArticulo').val() =='' ){
+        return
+    }
+     $(".tableListarArticulos").dataTable().fnClearTable();
+     $(".tableListarArticulos").DataTable().destroy();
+    var formulario = $('#formularioParametros').serialize();
     $.ajax({
-        url: 'ListarArticulosActivosAjax.do',
+        url: 'ListarPorDescripcionCodigoArticuloAjax.do',
         datatype: "json",
-        method:"POST",
+        method:"GET",
+        data :formulario,
         success: function (result) {
             if(result.aaData.length > 0){
-                _informacionData_Articulo()
+            _informacionData_Articulo()
+
                 self.articulos.data           = result.aaData
                 self.update()
-                loadListar(".tableListarArticulos",idioma_espanol,self.informacion_tabla_articulo,self.articulos.data)
+              loadListar(".tableListarArticulos",idioma_espanol,self.informacion_tabla_articulo,self.articulos.data)
                 agregarInputsCombos_Articulo()
                 __agregarArticulos()
                 ActivarEventoFiltro(".tableListarArticulos")
             }
+              
+
         },
         error: function (xhr, status) {
             console.log(xhr);
@@ -944,6 +995,7 @@ function __ListaDeProveedores(){
 **/
 function __buscarcodigo(idArticulo,cantidad){
     self.articulo = null;
+    self.update()
     $.ajax({
          datatype: "json",
         url: 'findArticuloByCodigojax.do',
@@ -1006,6 +1058,9 @@ function __agregarArticulo(cantidad){
       __nuevoArticuloAlDetalle(cantidad);
     }
     __calculate(); 
+    self.articulo = null;
+    self.update()
+
     
 }
 
