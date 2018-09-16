@@ -275,6 +275,8 @@
         </div>
     </div>
 </div>
+
+
 <!--fin del modal-->
 <STYLE TYPE="text/css" rel="stylesheet" type="text/css" media="all" >
 
@@ -605,7 +607,7 @@ function crearFactura(){
                 }
             } else {
                	serverMessageJsonClase(data);
-                //evaluarFactura(data)
+                evaluarFactura(data)
                  swal({
 	                title: '',
 	                text: $.i18n.prop("factura.creacion.exitosa"),
@@ -633,7 +635,7 @@ function evaluarFactura(data){
             if(self.facturaImprimir.estado == 2){
                 limpiar()
                 //Envia a la pantalla de impresion
-                 riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
+                 riot.mount('fact-servImprimir',{factura:self.facturaImprimir});
                  
             }else{
                 swal({

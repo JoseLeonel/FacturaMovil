@@ -92,7 +92,7 @@
                                             <span onclick ={__CambiarCantidad} class="label label-success cantidad">{cantidad.toFixed(3)}</span>
                                         </td>
                                         <td >
-                                            <span onclick ={__CambiarPrecio}  class="label label-success precio-prod" >{precioUnitario.toFixed(2)}</span>
+                                            <span   class="label label-success precio-prod" >{precioUnitario.toFixed(2)}</span>
                                         </td>
                                         <td >
                                             <span onclick ={__CambiarDescuento} class="label label-success precio-prod" >{porcentajeDesc.toFixed(2)}</span>
@@ -1861,6 +1861,7 @@ function cargarDetallesFacturaEnEspera(){
         });
         self.update()
     })
+    self.totalCambioPagar = 0
     self.update()
      __calculate(); 
 }
@@ -2030,6 +2031,7 @@ function mostrarPAgo(){
     self.factura.totalCambioPagar =0
     self.mostarParaCrearNuevaFactura = false
     self.mostrarFormularioPago = true
+    self.totalCambioPagar =0
     self.update()
     $('#totalEfectivo').focus()
     self.factura.cambioMoneda = self.factura.totalVentaNeta / self.tipoCambio.total
@@ -2411,7 +2413,7 @@ function ActualizarLineaDEtalle(){
   var montoTotal               = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
     var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc)
     var subTotal               = montoTotal - montoDescuento
-    var montoImpuesto          = _calcularImpuesto(subTotal,self.item.iva ==null?0:self.item.iva)
+    var montoImpuesto          = _calcularImpuesto(subTotal,self.item.impuesto ==null?0:self.item.impuesto)
     var montoTotalLinea        = subTotal + montoImpuesto    
     self.item.montoTotal       = montoTotal
     self.item.montoDescuento   = montoDescuento

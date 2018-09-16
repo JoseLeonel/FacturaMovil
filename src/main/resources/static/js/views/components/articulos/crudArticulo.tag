@@ -917,7 +917,9 @@ __ActualizarPreciosCosto(e){
 function _porcentajeGanancia(costo,impuesto,precioVenta) {
   let porcentajeGanancia = 0;
   let precioSinImpuesto  = 0;
- 
+  if(costo == 0){
+      return 0
+  } 
   if(precioVenta == 0){
     return 0;
   }
@@ -1152,10 +1154,9 @@ __regresarAlListado(){
 *   Agregar 
 **/
 __agregar(){
-     
         if ($("#formulario").valid()) {
-            var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
-            if (tipo !=" "){
+             var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
+            if (tipo !=""){
                 if($('#impuesto').val()==0){
                     mensajeError($.i18n.prop("error.articulo.indicar.tipo.impuesto"))
                     return 
@@ -1163,13 +1164,10 @@ __agregar(){
             }else{
                 if($('#impuesto').val()>0){
                     mensajeError($.i18n.prop("error.articulo.no.tipo.impuesto"))
-                
                     return 
-                }
-                
             }
-          
-            
+                
+        }
         // Permite obtener todos los valores de los elementos del form del jsp
         var formulario = $("#formulario").serialize();
                 $.ajax({
@@ -1229,9 +1227,7 @@ __agregar(){
 ** Modificar la Empresa
 **/
 __Modificar(){
-     var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
-     
-
+    var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
     if (tipo !=""){
         if($('#impuesto').val()==0){
             mensajeError($.i18n.prop("error.articulo.indicar.tipo.impuesto"))
@@ -1240,10 +1236,8 @@ __Modificar(){
     }else{
         if($('#impuesto').val()>0){
             mensajeError($.i18n.prop("error.articulo.no.tipo.impuesto"))
-        
             return 
         }
-        
     }
    
     self.error = false;
