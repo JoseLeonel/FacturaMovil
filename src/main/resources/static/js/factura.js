@@ -163,9 +163,11 @@ function serverMessageJson(data) {
         data.listaObjetos.forEach(function(fieldError) {
 				// Id del campo en el formulario
 				var selector = "#" + fieldError.field;
+        		console.log(selector);
 				// Leonel Para poder borrar los mensajes de error al presionar
 				// el clic
 				var selectorMensaje = "error" + fieldError.field;
+        		console.log(selectorMensaje);
 				// Se recorren los mensajes para cada propiedad se buscan los
 				// mensajes que coinciden
 				var encontrado = false;
@@ -200,11 +202,14 @@ function serverMessageJsonClase(data) {
 	// Si existe un error se despliega debajo de cada campo
 	if (data.status != null && data.status != 200) {
         data.listaObjetos.forEach(function(fieldError) {
+        		console.log(fieldError);
 				// Id del campo en el formulario
 				var selector = "." + fieldError.field;
+        		console.log(selector);
 				// Leonel Para poder borrar los mensajes de error al presionar
 				// el clic
 				var selectorMensaje = "error" + fieldError.field;
+        		console.log(selectorMensaje);
 				// Se recorren los mensajes para cada propiedad se buscan los
 				// mensajes que coinciden
 				var encontrado = false;

@@ -2,6 +2,7 @@ package com.emprendesoftcr.Bo;
 
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.Usuario;
 
 public interface EmpresaBo {
@@ -22,6 +23,6 @@ public interface EmpresaBo {
 	
 	String generarConsecutivoFactura(Empresa empresa,Usuario usuario,Factura factura)throws Exception;
 	
-	
+	String generarConsecutivoRecepcionFactura(Empresa empresa, Usuario usuario, RecepcionFactura recepcionFactura) throws Exception;
 
 }

@@ -229,7 +229,7 @@
 		sucursal:{
             id:null
         }
-        }
+    }
 self.on('mount',function(){
     _incializarCampos()
     __InicializarTabla('.tableListar')

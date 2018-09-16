@@ -24,6 +24,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Calendar;
@@ -40,6 +41,7 @@ import javax.sql.rowset.serial.SerialException;
 import org.json.JSONObject;
 
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.DateTime;
 import com.emprendesoftcr.error.SignException;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
@@ -214,6 +216,18 @@ public final class FacturaElectronicaUtils {
       return dateFormat.format(date);
   }
 
+  /**
+   * Convierte un string de fecha a su expresion en ISO 8601
+   * @param string Fecha a ser convertida
+   * @return Date en su expresion ISO 8601
+   * @throws ParseException 
+   */
+  public static Date parseStringtoISO8601Date(String date) throws ParseException {
+  		DateTime dateTime = DateTime.parseRfc3339(date);
+      long millis = dateTime.getValue();
+      return new Date(millis);
+  }
+  
   /**
    * Firma un texto utilizando una llave privada
    * @param input Texto a ser firmado
