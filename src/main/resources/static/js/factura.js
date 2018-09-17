@@ -470,20 +470,6 @@ function __modificarRegistro(formulario,mensajeAlerModificar,urlModificar,urlLis
             // Permite obtener todos los valores de los elementos del form del jsp
         var formulario = $(formulario).serialize();
         console.log(formulario)
-        swal({
-                title: "", 
-                text: mensajeAlerModificar, 
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: '#00539B',
-                cancelButtonColor: '#d33',
-                confirmButtonText:$.i18n.prop("confirmacion.si"),
-                cancelButtonText: $.i18n.prop("confirmacion.no"),
-                confirmButtonClass: 'btn btn-success',
-                cancelButtonClass: 'btn btn-danger',
-                }).then(function (isConfirm) {
-                    //Ajax
-                    if(isConfirm){
                         $.ajax({
                             type : "POST",
                             dataType : "json",
@@ -526,8 +512,6 @@ function __modificarRegistro(formulario,mensajeAlerModificar,urlModificar,urlLis
                             mensajeErrorServidor(xhr, status);
                         }
                     });
-                }
-            });    
         
     }
 }

@@ -488,7 +488,7 @@ public class FacturasController {
 		
 	
     Date fechahoy = new Date();
-    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+    DateFormat df = new SimpleDateFormat(Constantes.DATE_FORMAT7);
     String reportDate = df.format(fechahoy);
 				
 		DataTableDelimitador query = DelimitadorBuilder.get(request, reportDate, reportDate, cliente, usuarioSesion.getEmpresa());
@@ -976,7 +976,7 @@ public class FacturasController {
 					fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
 				}
 
-				DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+				DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
 
 				inicio = dateFormat.format(fechaInicio);
 				fin = dateFormat.format(fechaFinal);

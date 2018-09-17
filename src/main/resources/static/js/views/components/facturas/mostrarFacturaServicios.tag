@@ -1,18 +1,20 @@
-<ptv-imprimir>
+<fact-servImprimir>
 
-<div id="imprimirModal" class="modal fade imprimirModal" tabindex="-1" role="dialog" aria-labelledby="imprimirModal" aria-hidden="true">
+
+
+<div id="imprimirServModal" class="modal fade imprimirServModal" tabindex="-1" role="dialog" aria-labelledby="imprimirServModal" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div  class= "wrap">
-        <h1 >{titulo}<h1>
-        <div class="pantalla-imprimir">
-            <div class="botones-imprimir">
-                <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
-                
-            </div>
+       
+        <div class="pantalla-imprimir row">
+                                  
             <section class="zona-impresion" id="imprimeme" name ="imprimeme">
+
                 <div class="forma-impresion">
+       
                     <div class="ticket" id="ticket" name="ticket" > 
+                      <br>
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc == '88'}"><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.id}                       </strong><br></div>
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc == '87'}"><strong> {$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")} {facturaImpresa.id}                       </strong><br></div>
                         <div class="encabezado"><strong> {facturaImpresa.empresa.nombreComercial}                        </strong><br></div>
@@ -109,7 +111,9 @@
                         <br>
                         <div class="encabezado">{$.i18n.prop("tikect.final")}</div>           
                     </div>
+       
                 </div>
+
             </section>
             
         </div>
@@ -141,7 +145,7 @@
     {
         color: #494B4D;
         display: flex;
-        flex-direction: column;
+       
         font-weight: 400;
         margin: 15px 0px;
         text-align: center;
@@ -175,7 +179,7 @@
         cursor: pointer;
         font-size: 18px;
         margin: 15px;
-        margin-bottom: 8px;
+       
         moz-transition: background-color 100ms linear;
         ms-transition: background-color 100ms linear;
         o-transition: background-color 100ms linear;
@@ -216,7 +220,7 @@
     .forma-table
     {
         border-collapse: collapse;
-        border-top: 1px solid black;
+        border-top: 0px solid black;
     }
     .ticket > td.producto,th.producto
     {
@@ -255,14 +259,11 @@
     }
     .zona-impresion .forma-impresion
     {
-        align-items: center;
         align-self: flex-start;
         background-color: white !important;
-        box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.70);
         display: flex;
-        flex-direction: column;
         margin-bottom: 45px;
-        margin-left: 1%;
+        margin-left: 5%;
         transition: all .4s;
         width: 80%;
     }
@@ -363,7 +364,7 @@ function consultaFactura(idFactura){
                     self.update()
                   
                     });
-                     $('.imprimirModal').modal('show'); 
+                     $('.imprimirServModal').modal('show'); 
                 }
             }
         },
@@ -539,4 +540,4 @@ function redondearDecimales(numero, decimales) {
 }
 
 </script>
-</ptv-imprimir>
+</fact-servImprimir>

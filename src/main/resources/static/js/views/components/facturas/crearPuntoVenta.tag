@@ -106,7 +106,7 @@
                             <input type="hidden" id='totalVenta'              name='totalVenta'              value="{factura.totalVenta}" >
                             <input type="hidden" id='totalDescuentos'         name='totalDescuentos'        value="{factura.totalDescuentos}" >
                             <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
-                            <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           value="{factura.totalImpuesto}" >
+                            <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           valmodalue="{factura.totalImpuesto}" >
                             <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
                             <input type="hidden" id='totalTarjeta'            name='totalTarjeta'            value="{factura.totalTarjeta}" >
                             <input type="hidden" id='totalBanco'              name='totalBanco'              value="{factura.totalBanco}" >
@@ -248,7 +248,7 @@
                 <section class="cabecera-derecha">
 				    <!--right sidebar-->
                      <div class="row">
-                            <div class="col-sx-12 col-sm-12 col-md-12 col-lg-8">
+                            <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
                     <aside class="left-sidebar">
                             <!--Booking details-->
                         <article class="booking-details clearfix">
@@ -706,6 +706,7 @@ _ListaFacturasDia(){
 *  Facturas del Dia
 **/
 function ListadoFacturasDelDia(){
+    
       $("#tableListarFacturasDia").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListarFacturasDia')  
         $.ajax({
@@ -718,6 +719,7 @@ function ListadoFacturasDelDia(){
                     loadListar(".tableListarFacturasDia",idioma_espanol,self.formato_tabla_dias,result.aaData)
                     agregarInputsCombos_Facturas_Dias();
                     ActivarEventoFiltro(".tableListarFacturasDia")
+                     
                      $('#modalFacturasDia').modal('show')    
                      __reimprimir()
                 }else{
@@ -816,7 +818,11 @@ function consultaFactura(data){
             }else{
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
-                    //   $('#modalFacturasDia').modal('hide') 
+                     //  $('#modalFacturasDia').modal('hide') 
+
+
+                       //$('#modalFacturasDia').remove();
+                     
                        riot.mount('ptv-imprimir',{factura:modeloTabla});
                     });
                 }
@@ -1222,6 +1228,8 @@ function cargarDetallesFacturaEnEspera(){
         });
         self.update()
     })
+    self.factura.totalCambioPagar = 0;
+    self.totalCambioPagar = 0
     self.update()
      __calculate(); 
 }
@@ -1378,6 +1386,7 @@ function mostrarPAgo(){
     $('#totalBanco').val(null)
     getSubTotalGeneral()
     self.totalCambioPagar =0
+    
     self.factura.totalCambioPagar =0
     self.mostarParaCrearNuevaFactura = false
     self.mostrarFormularioPago = true
@@ -1570,6 +1579,7 @@ function __ListaDeArticulosPorDescripcion(){
 _EscogerClientes(){
     $('#modalClientes').modal('show')  
  }
+
 /**
 *  Muestra la lista de vendedores
 **/
@@ -1624,6 +1634,7 @@ function __ListaDeClientes(){
     });
     return
 }
+
 /**
 * Buscar el codigo del codigo  en la base de datos
 **/
@@ -1868,7 +1879,7 @@ function ActualizarLineaDEtalle(){
   var montoTotal               = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
     var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc)
     var subTotal               = montoTotal - montoDescuento
-    var montoImpuesto          = _calcularImpuesto(subTotal,self.item.iva ==null?0:self.item.iva)
+    var montoImpuesto          = _calcularImpuesto(subTotal,self.item.impuesto ==null?0:self.item.impuesto)
     var montoTotalLinea        = subTotal + montoImpuesto    
     self.item.montoTotal       = montoTotal
     self.item.montoDescuento   = montoDescuento
@@ -2250,6 +2261,7 @@ function __Teclas(){
       // alert(tecla)
     if(tecla ==119){
       if(self.mostrarFormularioPago == false && self.mostarParaCrearNuevaFactura == true){
+          
          mostrarPAgo()     
       }else if (self.mostrarFormularioPago == true && self.mostarParaCrearNuevaFactura == false ){
             aplicarFactura(2)   
