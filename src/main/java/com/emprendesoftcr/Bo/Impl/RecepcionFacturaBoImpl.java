@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.RecepcionFacturaBo;
 import com.emprendesoftcr.Dao.RecepcionFacturaDao;
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 
 @Transactional
@@ -35,6 +36,11 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 	@Override
 	public RecepcionFactura findById(Long id) {
 		return recepcionFacturaDao.findById(id);
+	}
+
+	@Override
+	public RecepcionFactura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) throws Exception {
+		return recepcionFacturaDao.findByConsecutivoAndEmpresa(consecutivo, empresa);
 	}
 
 	@Override

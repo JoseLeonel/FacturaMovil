@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Hacienda;
+import com.emprendesoftcr.modelo.RecepcionFactura;
 
 public interface ProcesoHaciendaService {
 
@@ -24,9 +25,12 @@ public interface ProcesoHaciendaService {
 
 	void enviarCorreos(Factura factura, Hacienda hacienda, ArrayList<String> listaCorreos) throws Exception;
 
+	void enviarCorreosRecepcion(RecepcionFactura recepcionFactura, Hacienda hacienda, ArrayList<String> listaCorreos) throws Exception;
+
 	// Proceso de firmar las facturas y crear el registro de hacienda
 	void procesoFirmado() throws Exception;
 
 	// Proceso para firmar las facturas recibidas y aceptadas en el sistema
 	void procesoFirmadoRecepcionFactura() throws Exception;
+
 }

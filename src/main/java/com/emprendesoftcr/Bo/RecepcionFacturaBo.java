@@ -2,6 +2,7 @@ package com.emprendesoftcr.Bo;
 
 import java.util.Collection;
 
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 
 public interface RecepcionFacturaBo {
@@ -11,6 +12,8 @@ public interface RecepcionFacturaBo {
 	void modificar(RecepcionFactura recepcionFactura);
 
 	RecepcionFactura findById(Long id);
+
+	RecepcionFactura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) throws Exception;
 
 	Collection<RecepcionFactura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma);
 	
