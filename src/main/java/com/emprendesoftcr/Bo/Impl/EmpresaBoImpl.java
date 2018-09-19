@@ -9,6 +9,7 @@ import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Dao.EmpresaDao;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.Usuario;
 
 /**
@@ -80,6 +81,11 @@ public class EmpresaBoImpl implements EmpresaBo {
 	@Transactional
 	public String generarConsecutivoFactura(Empresa empresa,Usuario usuario,Factura factura)  throws Exception{
 		return empresaDao.generarConsecutivoFactura(empresa,usuario,factura);
+	}
+
+	@Override
+	public String generarConsecutivoRecepcionFactura(Empresa empresa, Usuario usuario, RecepcionFactura recepcionFactura) throws Exception {
+		return empresaDao.generarConsecutivoRecepcionFactura(empresa, usuario, recepcionFactura);
 	}
 
 }

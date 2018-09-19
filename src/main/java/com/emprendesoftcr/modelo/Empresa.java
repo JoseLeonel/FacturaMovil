@@ -20,115 +20,122 @@ import com.emprendesoftcr.Utils.Constantes;
 @Table(name = "empresas")
 public class Empresa implements Serializable {
 
-	private static final long	serialVersionUID	= 2782215506581188984L;
+	private static final long serialVersionUID = 2782215506581188984L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer						id;
+	private Integer id;
 
 	@Column(name = "numero_consecutivo")
-	private Integer						numeroConsecutivo;
+	private Integer numeroConsecutivo;
 
 	@Column(name = "notac_consecutivo")
-	private Integer						notacConsecutivo;
+	private Integer notacConsecutivo;
 
 	@Column(name = "notad_consecutivo")
-	private Integer						notadConsecutivo;
-	
-	@Column(name = "tiq_consecutivo")
-	private Integer						tiqueteConsecutivo;
+	private Integer notadConsecutivo;
 
+	@Column(name = "tiq_consecutivo")
+	private Integer tiqueteConsecutivo;
 
 	@Column(name = "caza_matriz")
-	private String						cazaMatriz;
+	private String cazaMatriz;
 
 	@Column(name = "codigo_seguridad")
-	private Integer						codigoSeguridad;
+	private Integer codigoSeguridad;
 
 	@Column(name = "nombre")
-	private String						nombre;
+	private String nombre;
 
 	@Column(name = "nombre_comercial")
-	private String						nombreComercial;
+	private String nombreComercial;
 
 	@Column(name = "tipo_cedula")
-	private String						tipoCedula;
+	private String tipoCedula;
 
 	@Column(name = "cedula")
-	private String						cedula;
+	private String cedula;
 
 	@Column(name = "otra_senas")
-	private String						otraSenas;
+	private String otraSenas;
 
 	@Column(name = "codigo_pais")
-	private Integer						codigoPais;
+	private Integer codigoPais;
 
 	@Column(name = "telefono")
-	private Integer						telefono;
+	private Integer telefono;
 
 	@Column(name = "correo_electronico")
-	private String						correoElectronico;
+	private String correoElectronico;
 
 	@Column(name = "provincia")
-	private String						provincia;
+	private String provincia;
 
 	@Column(name = "canton")
-	private String						canton;
+	private String canton;
 
 	@Column(name = "distrito")
-	private String						distrito;
+	private String distrito;
 
 	@Column(name = "barrio")
-	private String						barrio;
+	private String barrio;
 
 	@Column(name = "logo")
-	private String						logo;
-	
+	private String logo;
+
 	@Column(name = "tiene_inventario")
-	private String						tieneInventario;
-	
+	private String tieneInventario;
+
 	@Column(name = "tiene_lector")
-	private String						tieneLector;
-	
+	private String tieneLector;
+
 	@Column(name = "cambiar_precio")
-	private String						cambiarPrecio;
+	private String cambiarPrecio;
 
 	@Column(name = "estado_produccion")
-	private String						estadoProduccion;
+	private String estadoProduccion;
 
-	
 	@Column(name = "enviar_tiquete")
-	private String						enviarTiquete;
+	private String enviarTiquete;
 
 	@Column(name = "representante")
-	private String						representante;
+	private String representante;
 
 	@Column(name = "nombre_llaveCriptografica")
-	private String						nombreLlaveCriptografica;
+	private String nombreLlaveCriptografica;
 
 	@Column(name = "clave_llaveCriptografica")
-	private Integer						claveLlaveCriptografica;
+	private Integer claveLlaveCriptografica;
 
 	@Column(name = "usuario_envio_comprobante")
-	private String						usuarioEnvioComprobante;
+	private String usuarioEnvioComprobante;
 
 	@Column(name = "password_envio_comprobante")
-	private String						passwordEnvioComprobante;
+	private String passwordEnvioComprobante;
 
 	@Column(name = "estado")
-	private String						estado;
+	private String	estado;
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "created_at")
-	private Date							created_at;
+	private Date		created_at;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
-	private Date							updated_at;
+	private Date updated_at;
 
-	public Empresa(Integer id, String nombre, String nombreComercial, String tipoCedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, Integer codigoSeguridad, String usuarioEnvioComprobante, String passwordEnvioComprobante, Integer notacConsecutivo, Integer notadConsecutivo,Integer tiqueteConsecutivo,String tieneInventario,String enviarTiquete,String estadoProduccion,String tieneLector,String cambiarPrecio) {
+	@Column(name = "acept_consecutivo")
+	private Integer aceptadoConsecutivo;
+
+	@Column(name = "acept_parcial_consecutivo")
+	private Integer aceptadoParcialConsecutivo;
+
+	@Column(name = "recha_consecutivo")
+	private Integer rechazadoConsecutivo;
+
+	public Empresa(Integer id, String nombre, String nombreComercial, String tipoCedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, Integer codigoSeguridad, String usuarioEnvioComprobante, String passwordEnvioComprobante, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String tieneInventario, String enviarTiquete, String estadoProduccion, String tieneLector, String cambiarPrecio) {
 		super();
 		this.id = id;
 		this.numeroConsecutivo = numeroConsecutivo;
@@ -394,66 +401,76 @@ public class Empresa implements Serializable {
 		this.notadConsecutivo = notadConsecutivo;
 	}
 
-	
 	public Integer getTiqueteConsecutivo() {
 		return tiqueteConsecutivo;
 	}
 
-	
 	public void setTiqueteConsecutivo(Integer tiqueteConsecutivo) {
 		this.tiqueteConsecutivo = tiqueteConsecutivo;
 	}
 
-	
 	public String getTieneInventario() {
 		return tieneInventario;
 	}
 
-	
 	public void setTieneInventario(String tieneInventario) {
 		this.tieneInventario = tieneInventario;
 	}
 
-	
 	public String getEnviarTiquete() {
 		return enviarTiquete;
 	}
 
-	
 	public void setEnviarTiquete(String enviarTiquete) {
 		this.enviarTiquete = enviarTiquete;
 	}
 
-	
 	public String getEstadoProduccion() {
 		return estadoProduccion;
 	}
 
-	
 	public void setEstadoProduccion(String estadoProduccion) {
 		this.estadoProduccion = estadoProduccion;
 	}
 
-	
 	public String getTieneLector() {
 		return tieneLector;
 	}
 
-	
 	public void setTieneLector(String tieneLector) {
 		this.tieneLector = tieneLector;
 	}
 
-	
 	public String getCambiarPrecio() {
 		return cambiarPrecio;
 	}
 
-	
 	public void setCambiarPrecio(String cambiarPrecio) {
 		this.cambiarPrecio = cambiarPrecio;
 	}
-	
-	
+
+	public Integer getAceptadoConsecutivo() {
+		return aceptadoConsecutivo;
+	}
+
+	public void setAceptadoConsecutivo(Integer aceptadoConsecutivo) {
+		this.aceptadoConsecutivo = aceptadoConsecutivo;
+	}
+
+	public Integer getAceptadoParcialConsecutivo() {
+		return aceptadoParcialConsecutivo;
+	}
+
+	public void setAceptadoParcialConsecutivo(Integer aceptadoParcialConsecutivo) {
+		this.aceptadoParcialConsecutivo = aceptadoParcialConsecutivo;
+	}
+
+	public Integer getRechazadoConsecutivo() {
+		return rechazadoConsecutivo;
+	}
+
+	public void setRechazadoConsecutivo(Integer rechazadoConsecutivo) {
+		this.rechazadoConsecutivo = rechazadoConsecutivo;
+	}
 
 }

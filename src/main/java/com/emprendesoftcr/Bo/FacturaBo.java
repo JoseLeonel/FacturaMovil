@@ -27,8 +27,6 @@ public interface FacturaBo {
 	
 	void eliminarDetalleFacturaPorSP(Factura factura)throws Exception;
 	
-	
-	
 	Collection<Factura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma);
 	
 

@@ -16,6 +16,7 @@ import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.Usuario;
 
 /**
@@ -151,6 +152,52 @@ public class EmpresaDaoImpl implements EmpresaDao {
 			throw e;
 		}
 
+		return resultado;
+	}
+	
+	
+	/**
+	 * Genera el consecutvio de la Factura de empresa
+	 * @see com.emprendesoftcr.Dao.EmpresaDao#generarConsecutivoFactura(com.emprendesoftcr.modelo.Empresa)
+	 */
+	public String generarConsecutivoRecepcionFactura(Empresa empresa, Usuario usuario, RecepcionFactura recepcionFactura) throws Exception {
+		String resultado = Constantes.EMPTY;
+		String tipoDoc 	 = "00";
+		try {
+			Integer consecutivo = Constantes.ZEROS;
+			if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_ACEPTADO)) {
+					consecutivo = empresa.getAceptadoConsecutivo();
+					consecutivo = consecutivo == null ? 1 : consecutivo;
+					empresa.setAceptadoConsecutivo(consecutivo + 1);
+					tipoDoc = Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO;
+			}
+			if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_ACEPTADO_PARCIAL)) {
+					consecutivo = empresa.getAceptadoParcialConsecutivo();
+					consecutivo = consecutivo == null ? 1 : consecutivo;
+					empresa.setAceptadoParcialConsecutivo(consecutivo + 1);
+					tipoDoc = Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_PARCIAL;
+			}
+			if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_RECHAZADO)) {
+					consecutivo = empresa.getRechazadoConsecutivo();
+					consecutivo = consecutivo == null ? 1 : consecutivo;
+					empresa.setRechazadoConsecutivo(consecutivo + 1);
+					tipoDoc = Constantes.RECEPCION_FACTURA_TIPO_DOC_RECHAZADO;
+			}
+			modificar(empresa); 
+		
+			// Casa matriz
+			String casaMatriz = Constantes.EMPTY;
+			casaMatriz = empresa.getCazaMatriz() == null ? Constantes.CASA_MATRIZ_INICIAL_FACTURA : empresa.getCazaMatriz();
+			
+			// Terminal donde esta vendiendo el usaurio
+			String terminalUsuario = Constantes.EMPTY;
+			terminalUsuario = usuario.getTerminalFactura() == null ? Constantes.TERMINAL_INICIAL_FACTURA : FacturaElectronicaUtils.replazarConZeros(usuario.getTerminalFactura(), "00000");
+			String consecutivoFactura = "0000000000".substring(consecutivo.toString().length()) + consecutivo;
+			resultado = casaMatriz + terminalUsuario + tipoDoc + consecutivoFactura;
+		} catch (Exception e) {
+			log.info("** Error  generarConsecutivoFactura: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
 		return resultado;
 	}
 

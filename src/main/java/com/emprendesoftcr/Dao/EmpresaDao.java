@@ -2,6 +2,7 @@ package com.emprendesoftcr.Dao;
 
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.Usuario;
 
 public interface EmpresaDao {
@@ -22,6 +23,8 @@ public interface EmpresaDao {
 
 	String generarConsecutivoFactura(Empresa empresa, Usuario usuario, Factura factura) throws Exception;
 
+	String generarConsecutivoRecepcionFactura(Empresa empresa, Usuario usuario, RecepcionFactura recepcionFactura) throws Exception; 
+	
 	String generaClaveFacturaTributacion(Empresa empresa, String consecutivoFactura, Integer comprobanteElectronico) throws Exception;
 
 }

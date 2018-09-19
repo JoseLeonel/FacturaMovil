@@ -49,10 +49,6 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 	@Autowired
 	private FirmaElectronicaService firmaElectronicaService;
 
-
-
-
-
 	
 	/**
 	 * 
