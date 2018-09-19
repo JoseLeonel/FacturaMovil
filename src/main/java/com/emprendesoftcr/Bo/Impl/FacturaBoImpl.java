@@ -18,6 +18,7 @@ import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.CuentaCobrarDao;
 import com.emprendesoftcr.Dao.EmpresaDao;
 import com.emprendesoftcr.Dao.FacturaDao;
+import com.emprendesoftcr.Dao.HaciendaDao;
 import com.emprendesoftcr.Dao.KardexDao;
 import com.emprendesoftcr.Dao.UsuarioCajaDao;
 import com.emprendesoftcr.Dao.UsuarioCajaFacturaDao;
@@ -28,6 +29,7 @@ import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
@@ -49,6 +51,9 @@ public class FacturaBoImpl implements FacturaBo {
 
 	@Autowired
 	private ArticuloDao						articuloDao;
+
+	@Autowired
+	private HaciendaDao						haciendaDao;
 
 	@Autowired
 	private KardexDao							kardexDao;
@@ -323,8 +328,8 @@ public class FacturaBoImpl implements FacturaBo {
 
 					Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(detalleFacturaCommand.getCodigo(), usuario.getEmpresa());
 					Detalle detalle = new Detalle(detalleFacturaCommand);
-					detalle.setUsuario(usuario); 
-					if(articulo.getTipoImpuesto()==null) {
+					detalle.setUsuario(usuario);
+					if (articulo.getTipoImpuesto() == null) {
 						detalle.setTipoImpuesto(Constantes.EMPTY);
 					}
 
@@ -363,7 +368,6 @@ public class FacturaBoImpl implements FacturaBo {
 								totalServExentos = detalle.getMontoTotal() != null ? totalServExentos + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
 							} else {
 								totalMercanciasExentas = detalle.getMontoTotal() != null ? totalMercanciasExentas + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
-								
 
 							}
 							totalExento = detalle.getMontoTotal() != null ? totalExento + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
@@ -416,6 +420,30 @@ public class FacturaBoImpl implements FacturaBo {
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
 				if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 					cuentaCobrarDao.crearCuentaXCobrar(factura);
+				}
+			}
+
+			// Anulacion de la factura anterior
+			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+				if (factura.getReferenciaNumero() != null) {
+					if (factura.getReferenciaNumero() != Constantes.EMPTY) {
+						Factura facturaAnterior = findByConsecutivoAndEmpresa(factura.getReferenciaNumero(), usuario.getEmpresa());
+						if (facturaAnterior != null) {
+							facturaAnterior.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
+							modificar(facturaAnterior);
+							if (facturaAnterior.getClave() != null) {
+								Hacienda hacienda = haciendaDao.findByEmpresaAndClave(usuario.getEmpresa(), facturaAnterior.getClave());
+								if (hacienda != null) {
+									hacienda.setEstado(Constantes.HACIENDA_ESTADO_ANULADA);
+									haciendaDao.modificar(hacienda);
+								}
+
+							}
+
+						}
+
+					}
+
 				}
 			}
 
