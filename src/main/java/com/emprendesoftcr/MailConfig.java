@@ -14,21 +14,21 @@ public class MailConfig {
 
 	@Bean
 	public JavaMailSender mailSender() {
-//		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-//		mailSender.setHost("smtp.gmail.com");
-//		mailSender.setPort(587);
-//		mailSender.setUsername("josehernandezchaverri@gmail.com");
-//		mailSender.setPassword("simo9292");
-//
-//		Properties javaMailProperties = new Properties();
-//
-//		javaMailProperties.put("mail.transport.protocol", "smtp");
-//		javaMailProperties.put("mail.smtp.auth", true);
-//
-//		javaMailProperties.put("mail.smtp.starttls.enable", true);
-//		javaMailProperties.put("mail.debug", true);
-//		javaMailProperties.put("mail.smtp.connectiontimeout", 10000);
-//		mailSender.setJavaMailProperties(javaMailProperties);
+		/*JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+		mailSender.setHost("smtp.gmail.com");
+		mailSender.setPort(587);
+		mailSender.setUsername("josehernandezchaverri@gmail.com");
+		mailSender.setPassword("simo9292");
+
+		Properties javaMailProperties = new Properties();
+
+		javaMailProperties.put("mail.transport.protocol", "smtp");
+		javaMailProperties.put("mail.smtp.auth", true);
+
+		javaMailProperties.put("mail.smtp.starttls.enable", true);
+		javaMailProperties.put("mail.debug", true);
+		javaMailProperties.put("mail.smtp.connectiontimeout", 10000);
+		mailSender.setJavaMailProperties(javaMailProperties);*/
 
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		mailSender.setHost("mail.emprendesoftcr.com");
@@ -44,6 +44,8 @@ public class MailConfig {
 		javaMailProperties.put("mail.smtp.starttls.enable", true);
 		javaMailProperties.put("mail.debug", true);
 		javaMailProperties.put("mail.smtp.connectiontimeout", 10000);
+		javaMailProperties.put("mail.smtp.ssl.trust", "mail.emprendesoftcr.com");
+
 		mailSender.setJavaMailProperties(javaMailProperties);
 
 		

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.RecepcionFacturaDao;
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 
 @Repository("recepcionFacturaDao")
@@ -45,6 +47,20 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public RecepcionFactura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) throws Exception {
+		Query query = entityManager.createQuery("select obj from RecepcionFactura obj where obj.numeroConsecutivoReceptor = :consecutivo and obj.empresa = :empresa");
+		query.setParameter("consecutivo", consecutivo);
+		query.setParameter("empresa", empresa);
+		List<RecepcionFactura> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (RecepcionFactura) results.get(0);
+		} else {
+			return null;
+		}
+	}
+
 	/**
 	 * Todas las facturas que no se le a creado la firma
 	 * @see com.emprendesoftcr.Dao.FacturaDao#findByEstadoFirma(java.lang.Integer)
