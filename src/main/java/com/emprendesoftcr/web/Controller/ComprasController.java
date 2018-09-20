@@ -135,7 +135,7 @@ public class ComprasController {
 			compraCommand.setUsuarioCreacion(usuarioSesion);
 			compraBo.crearCompra(compraCommand, usuarioSesion);
 
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("categoria.agregar.correctamente", compraCommand);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.agregar.correctamente", compraCommand);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);

@@ -1,4 +1,41 @@
 <compra-proveedores>
+<!--Modal mostrar Proveedores de una sucursal -->
+<div id="modalProveedores" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("proveedor.lista")}   </h4>
+            </div>
+            <div class="modal-body">
+                <table id="tableListaProveedor" class="table responsive display table-striped table-hover nowrap tableListaProveedor " cellspacing="0" width="100%">
+                   <thead>
+                        <th class="table-header">{$.i18n.prop("proveedor.nombreCompleto")} </th>
+                        <th class="table-header">{$.i18n.prop("proveedor.representante")}  </th>
+                        <th class="table-header">{$.i18n.prop("proveedor.email")}          </th>
+                        <th class="table-header">{$.i18n.prop("proveedor.telefono")}       </th>
+                        <th class="table-header">{$.i18n.prop("proveedor.movil")}          </th>
+                        <th class="table-header">{$.i18n.prop("listado.acciones")}        </th>
+                    </thead>
+                    <tfoot style="display: table-header-group;">
+                        <tr>
+                            <th>{$.i18n.prop("proveedor.nombreCompleto")} </th>
+                            <th>{$.i18n.prop("proveedor.representante")}  </th>
+                            <th>{$.i18n.prop("proveedor.email")}          </th>
+                            <th>{$.i18n.prop("proveedor.telefono")}       </th>
+                            <th>{$.i18n.prop("proveedor.movil")}          </th>
+                            <th>                                          </th>
+                        </tr>
+                    </tfoot>                    
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--fin del modal-->
+ 
 
     <div class="box" show={mostrarFormularioPago}>
         <div class="box-body">
@@ -14,7 +51,7 @@
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("compra.forma.pago")} </label> 
-                                        <select  onchange= {__formaPago} class="form-control formaPago" id="formaPago" >
+                                        <select  onchange= {__formaPago} class="form-control formaPago campo" id="formaPago" >
                                             <option each={comboFormaPagos} value="{estado}" selected="{compra.formaPago ==estado?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>
@@ -23,17 +60,8 @@
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
                                     <div class="form-group ">
                                         <label for="pago_tipoVentaL">{$.i18n.prop("compra.tipo.documento")} </label> 
-                                        <select class="form-control tipoDocumento" id="tipoDocumento" name="tipoDocumento"   >
+                                        <select class="form-control tipoDocumento campo" id="tipoDocumento" name="tipoDocumento"   >
                                             <option each={comboTipoDocumentos} value="{estado}" selected="{compra.tipoDocumento ==estado?true:false}" >{descripcion}</option>
-                                        </select>
-                                    </div>
- 
-                                </div>
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
-                                    <div class="form-group ">
-                                        <label for="pago_tipoVentaL">{$.i18n.prop("compra.estado")} </label> 
-                                        <select class="form-control estado" id="estado" name="estado"  >
-                                            <option each={comboEstados} value="{estado}" selected="{compra.estado ==estado?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -41,22 +69,22 @@
                             <div class="row">
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div class="form-group ">
-                                        <input   type="hidden" class="form-control" id="proveedor" name="proveedor" value="{proveedor.id}">
+                                        <input   type="hidden" class="form-control campo" id="proveedor" name="proveedor" value="{proveedor.id}">
                                         <label>{$.i18n.prop("compra.proveedor")}</label> 
-                                        <input onclick = {_EscogerProveedores}  type="text" id="nombreProveedor" name="nombreProveedor" class="proveedor form-control"  value="{proveedor.nombreCompleto}">
+                                        <input onclick = {_EscogerProveedores}  type="text" id="nombreProveedor" name="nombreProveedor" class="campo proveedor form-control"  value="{proveedor.nombreCompleto}">
                                     </div>
                                 </div>
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("compra.consecutivo")}</label> 
-                                        <input type="text" class="form-control consecutivo" id="consecutivo" name="consecutivo" value="{compra.consecutivo}">
+                                        <input type="text" class="form-control consecutivo campo" id="consecutivo" name="consecutivo" value="{compra.consecutivo}">
                                     </div>
                                 </div>
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div  class="form-group">
                                         <label>{$.i18n.prop("compra.fecha.compra")}</label> 
-                                        <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
-                                            <input type="text" class="form-control fechaCompra" id="fechaCompra" name = "fechaCompra" value="{compra.fechaCompra}" >
+                                        <div  class="form-group input-group date " data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                            <input type="text" class="form-control fechaCompra campo" id="fechaCompra" name = "fechaCompra" value="{compra.fechaCompra}" >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
                                             </div>
@@ -71,7 +99,7 @@
                                     <div show = {!mostrarCamposIngresoContado || compra.fechaCredito} class="form-group has-success">
                                         <label >{$.i18n.prop("compra.fecha.credito")}</label> 
                                         <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
-                                            <input type="text" class="form-control fechaCredito" id="fechaCredito" value="{compra.fechaCredito}" >
+                                            <input type="text" class="form-control fechaCredito campo" id="fechaCredito" value="{compra.fechaCredito}" >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
                                             </div>
@@ -83,7 +111,7 @@
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                     <div class="form-group ">
                                         <label >{$.i18n.prop("compra.nota")}</label> 
-                                        <input type="text" class="form-control nota" id="nota" name="nota" value="{compra.nota}">
+                                        <input type="text" class="form-control nota campo" id="nota" name="nota" value="{compra.nota}">
                                     </div>
                                 </div>
                             </div>
@@ -119,9 +147,9 @@
                 <div class="row">
                   <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">  
                     <div class="box-tools ">
-                            <a class="pull-left" href="#"   title="Modulo de Compras"><span class="label label-limpiar ">Compras</span></a>
+                            <a class="pull-left" href="#"   onclick = {}    title="Modulo de Compras"><span class="label label-limpiar ">Compras a proveedores </span></a>
                             <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago}       title="Aplicar la compra"> <span class="label label-limpiar">{$.i18n.prop("comprar.f8")}</span></a>
-                            <a class="pull-left" href="#"   onclick = {__AplicarYcrearFacturaTemporal}  title="Compra en espera"> <span class="label label-limpiar">{$.i18n.prop("comprar.f9")}</span></a>
+                            <a class="pull-left" href="#"   onclick = {__crearCompraEnEspera}  title="Compra en espera"> <span class="label label-limpiar">{$.i18n.prop("comprar.f9")}</span></a>
                             <a class="pull-left" href="#"   onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
                             <a class="pull-right" href="#"  title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
                         </div>
@@ -132,14 +160,14 @@
             <div  class="contenedor-compra " >
                 <div class="cabecera-izquierda">
                     <div class="row">
-                            <div class="col-md-6">
-                                <input onkeypress={__addProductToDetail}  id="codigo" class="campo" type="text" placeholder="XXXXXXXXXXX" />
-                            </div>
-                            <div class="col-md-2">
-                                <button    onclick = {__ListaDecodigos} class="btn btn-primary form-control" id="btn-facturar" >
-                                    <i class="glyphicon glyphicon-plus"></i>Buscar
-                                </button>
-                            </div>
+                        <div class="col-sx-6 col-sm-6 col-md-6 col-lg-6">
+                            <input onkeypress={__addProductToDetail}  id="codigo" class="campo" type="text" placeholder="XXXXXXXXXXX" />
+                        </div>
+                        <div class="col-sx-2 col-sm-2 col-md-2 col-lg-2">
+                            <button    onclick = {__ListaDecodigos} class="btn btn-primary boton-consultar" id="btn-facturar" >
+                                <i class="glyphicon glyphicon-plus"></i>Buscar
+                            </button>
+                        </div>
                     </div>
                     <table class="table table-striped">
                         <thead>
@@ -176,12 +204,9 @@
                             <td class="text-right">
                                 <input  onkeypress={__actualizarDescuento} onBlur={__actualizarDescuento} class="campo" type="number" step="any"  value = "{descuento}" />
                             </td>
-                                                        
                             <td class="text-right">
                                  <input  class="campo" type="number" step="any"  value = "{totalImpuesto}"  readonly/>
-                                
                             </td>
-
                             <td class="text-right">
                                 <input  class="campo" type="number" step="any"  value = "{montoTotalLinea}" readonly/>
                             </td>
@@ -272,45 +297,28 @@
     </div>
 </div>
 <!--fin del modal-->
-<!--Modal mostrar Proveedores de una sucursal -->
-<div id="modalProveedores" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header with-border table-header" >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("proveedor.lista")}   </h4>
-            </div>
-            <div class="modal-body">
-                <table id="tableListaProveedor" class="table responsive display table-striped table-hover nowrap tableListaProveedor " cellspacing="0" width="100%">
-                   <thead>
-                        <th class="table-header">{$.i18n.prop("proveedor.nombreCompleto")} </th>
-                        <th class="table-header">{$.i18n.prop("proveedor.representante")}  </th>
-                        <th class="table-header">{$.i18n.prop("proveedor.email")}          </th>
-                        <th class="table-header">{$.i18n.prop("proveedor.telefono")}       </th>
-                        <th class="table-header">{$.i18n.prop("proveedor.movil")}          </th>
-                        <th class="table-header">{$.i18n.prop("listado.acciones")}        </th>
-                    </thead>
-                    <tfoot style="display: table-header-group;">
-                        <tr>
-                            <th>{$.i18n.prop("proveedor.nombreCompleto")} </th>
-                            <th>{$.i18n.prop("proveedor.representante")}  </th>
-                            <th>{$.i18n.prop("proveedor.email")}          </th>
-                            <th>{$.i18n.prop("proveedor.telefono")}       </th>
-                            <th>{$.i18n.prop("proveedor.movil")}          </th>
-                            <th>                                          </th>
-                        </tr>
-                    </tfoot>                    
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--fin del modal-->
- 
-
 <style type="text/css">
+    .boton-consultar {
+        display: block;
+        display: inline-block;
+            margin-bottom: 0;
+        width: 100%;
+        border-radius: 3px;
+        height: 47px;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #fff;
+        background-color: #3c8dbc;
+        border-color: #367fa9;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    }
     /* Lista de facturas en espera*/
     .cabecera-derecha .lista-compras-espera{
         width:100%;
@@ -542,8 +550,6 @@
     self.totalGeneralDescuento = 0;
     self.totalGeneralImpuesto  = 0;
     self.totalGeneralCompra    = 0; 
-
-
     self.on('mount',function(){
         $("#formularioCompra").validate(reglasDeValidacionCompra());
         __informacionData()
@@ -553,8 +559,7 @@
           __ListaComprasEnEspera()
         __comboFormaPagos()
         __ComboTipoDocumentos()
-        __ComboEstados()
-        
+        __Teclas()
         __ListaDeProveedores()
         
     })
@@ -594,6 +599,13 @@ var reglasDeValidacionCompra = function() {
 __CargarCompraEspera(e){
    __CompraEnEspera(e.item)
 }
+
+/**
+* Crear Compra en espera
+**/
+__crearCompraEnEspera(){
+ crearCompra(1)  
+}
 /**
 ** Se aplica o se crea una compra cargada en la pantalla
 **/
@@ -623,7 +635,7 @@ __AplicarYCrearCompra(){
         }).then(function (isConfirm) {
             //Ajax__inicializarTabla();
             if(isConfirm){
-               crearCompra()  
+               crearCompra(2)  
               
             }
         });
@@ -633,7 +645,6 @@ __AplicarYCrearCompra(){
 * Limpiar Pantalla
 **/
 __Limpiar(){
-
     __Init()
 }
 /**
@@ -677,15 +688,13 @@ function __Init(){
      __comboFormaPagos()
      //Tipos de Documentos
       __ComboTipoDocumentos()
-      //Estados
-      __ComboEstados()
+     
 }
 /**
 *  Compra en espera ,proveedor y sus  detalles desde back end
 **/
 function __CompraEnEspera(compra){
      __Init()
-     self.compras_espera         = {data:[]}  
     self.detail         = []
     self.proveedor      = {}         
     self.update()
@@ -732,10 +741,10 @@ function __displayDate_detail(fecha) {
 function cargarDetallesCompraEnEspera(){
     self.detail = []
     self.update()
-    
     self.compra.detalleCompras.forEach(function(e){
         self.detail.push({
             linea           : e.numeroLinea,
+            porcentajeImpuesto :e.iva,
             articulo_id     : e.articulo.id,
             codigo          : e.articulo.codigo,
             descripcion     : e.articulo.descripcion,
@@ -744,26 +753,19 @@ function cargarDetallesCompraEnEspera(){
             precio          : parseFloat(e.precio),
             impuesto        : e.impuesto,
             descuento       : e.descuento,
-            subTotal        : parseFloat(e.subTotal)
-            
+            totalDescuento  : e.totalDescuento,
+            totalImpuesto   : e.totalImpuesto,
+            subTotal        : parseFloat(e.subTotal),
+            montoTotalLinea : e.montoTotalLinea
         });
     })
     self.update()
      __calculate(); 
 }
-
-function redondearDecimales(numero, decimales) {
-    numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}');   // Expresion regular para numeros con un cierto numero de decimales o mas
-    if (numeroRegexp.test(numero)) {         // Ya que el numero tiene el numero de decimales requeridos o mas, se realiza el redondeo
-        return Number(numero.toFixed(decimales));
-    } else {
-        return Number(numero.toFixed(decimales)) === 0 ? 0 : numero;  // En valores muy bajos, se comprueba si el numero es 0 (con el redondeo deseado), si no lo es se devuelve el numero otra vez.
-    }
-}
 /**
 *  Crear Compra nueva
 **/
-function crearCompra(){
+function crearCompra(estadoCompra){
     self.detalleCompra.data =self.detail
     self.update()
       var JSONDetalles = JSON.stringify( self.detalleCompra );
@@ -778,7 +780,7 @@ function crearCompra(){
         tipoDocumento:$('.tipoDocumento').val(),
         proveedor:self.proveedor.id,
         consecutivo:$('.consecutivo').val(),
-        estado:$('.estado').val(),
+        estado:estadoCompra,
         fechaCredito:$('.formaPago').val() == 2?$('.fechaCredito').val():new Date(),
         fechaCompra:$('.fechaCompra').val(),
         detalleCompra :JSONDetalles
@@ -818,6 +820,7 @@ function crearCompra(){
 **/
 function __ListaComprasEnEspera(){
     self.compras_espera         = {data:[]}  
+    self.update()
     $.ajax({
         url: 'ListarComprasEsperaActivasAjax',
         datatype: "json",
@@ -877,6 +880,10 @@ __formaPago(e){
 *   funcion para grabar la compra en el back end
 **/
 __MostrarFormularioDePago(){
+    mostrarFormaPago()
+}
+
+function mostrarFormaPago(){
      //No hay detalles registrados en la compra
     if(self.detail.length == 0 ){
         swal("Verificar","No hay detalles en la compra ", "info")
@@ -885,7 +892,7 @@ __MostrarFormularioDePago(){
     self.mostarParaCrearNuevaCompra = false
     self.mostrarFormularioPago = true
     self.update()
-  //  $("#pago_efectivo").focus()
+
 }
 /** 
 *
@@ -1245,7 +1252,6 @@ __actualizarDescuento(e){
     self.update();
     __calculate();
 }
-
 /**
 * calculacion de los detalle de la compra 
 **/
@@ -1269,7 +1275,7 @@ function __calculate() {
     self.compra.totalDescuento += totalDescuento
     self.compra.totalImpuesto  += totalImpuesto
     self.totalGeneralDescuento = formatoDecimales(totalDescuento,2)
-    self.totalGeneralImpuesto  = formatoDecimales(totalDescuento,2)
+    self.totalGeneralImpuesto  = formatoDecimales(totalImpuesto,2)
     self.totalGeneralCompra    = formatoDecimales(totalCompra,2)
     self.articulo              = null;
     self.update(); 
@@ -1361,18 +1367,6 @@ function __seleccionarProveedores() {
     });
 }
 /**
-*  retorna el valor numerico o cero sino es numerico
-**/
-function __valorNumerico(valor){
-    return isNumber(valor)?parseFloat(valor):0 ;
-}
-/**
-*  Validar si es numero
-**/
-function isNumber(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-}
-/**
 * cargar los estados de la compra
 **/
 function __comboFormaPagos(){
@@ -1407,25 +1401,6 @@ function __ComboTipoDocumentos(){
     self.update()
 }
 /**
-* cargar los estados de la compra
-**/
-function __ComboEstados(){
-    self.comboEstados = []
-    self.comboEstados.push({
-        estado:1,
-        descripcion:$.i18n.prop("combo.estado.pendiente")
-    })
-    self.comboEstados.push({
-        estado:2,
-        descripcion:$.i18n.prop("combo.estado.ingreso.inventario")
-    })
-    self.comboEstados.push({
-        estado:3,
-        descripcion:$.i18n.prop("combo.estado.chequeo.mercancia")
-    })
-    self.update()
-}
-/**
 *  Agregar los inpust  y select de las tablas
 **/
 function agregarInputsCombos_Articulo(){
@@ -1450,6 +1425,33 @@ function agregarInputsCombos_Proveedores(){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
-}                              
+}     
+
+/**
+*  teclas de la pantalla
+**/      
+function __Teclas(){
+    window.addEventListener( "keydown", function(evento){
+    var tecla = evento.keyCode; 
+    if(tecla ==119){
+        self.mostrarFormularioPago = true
+        mostrarFormaPago()     
+    }   
+    //Compra en espera
+    if(tecla ==120){
+      crearCompra(1)   
+    }
+    
+    //Limpiar
+    if(tecla ==121){
+      __Init()
+    }
+
+  if(tecla ==27){
+      $(".codigo").focus()
+      $(".codigo").focus()
+    }
+    }, false );
+}                         
 </script>
 </compra-proveedores>

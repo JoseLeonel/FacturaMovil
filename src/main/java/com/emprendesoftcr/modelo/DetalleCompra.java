@@ -104,6 +104,11 @@ public class DetalleCompra implements Serializable {
 		this.cantidad = detalleCompraCommand.getCantidad();
 		this.impuesto = detalleCompraCommand.getImpuesto();
 		this.descuento = detalleCompraCommand.getDescuento();
+		this.totalDescuento = detalleCompraCommand.getTotalDescuento();
+		this.totalImpuesto = detalleCompraCommand.getTotalImpuesto();
+		this.montoTotalLinea = detalleCompraCommand.getMontoTotalLinea();
+		this.porcentajeImpuesto = detalleCompraCommand.getPorcentajeImpuesto();
+		
 
 		this.precio = detalleCompraCommand.getPrecio();
 	}

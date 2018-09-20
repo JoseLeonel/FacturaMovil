@@ -12,6 +12,7 @@ public interface HaciendaBo {
 	void modificar(Hacienda hacienda);
 
 	Hacienda findById(Long id);
+	Hacienda findByEmpresaAndClave(Empresa empresa,String clave);
 
 	Collection<Hacienda> findByEmpresaAndEstado(Empresa empresa, Integer estado);
 

@@ -44,6 +44,12 @@ public class HaciendaBoImpl implements HaciendaBo {
 	}
 
 	@Override
+	public Hacienda findByEmpresaAndClave(Empresa empresa,String clave) {
+		return haciendaDao.findByEmpresaAndClave(empresa, clave);
+	}
+	
+	
+	@Override
 	public Collection<Hacienda> findByEmpresaAndEstado(Empresa empresa, Integer estado) {
 
 		return haciendaDao.findByEmpresaAndEstado(empresa, estado);

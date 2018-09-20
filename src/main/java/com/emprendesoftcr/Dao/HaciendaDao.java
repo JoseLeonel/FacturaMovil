@@ -13,7 +13,8 @@ public interface HaciendaDao {
 
 	
 
-	Hacienda findById(Long id);	
+	Hacienda findById(Long id);
+	Hacienda findByEmpresaAndClave(Empresa empresa,String clave);	
 	
 	Collection<Hacienda> findByEmpresaAndEstado(Empresa empresa,Integer estado);
 	
