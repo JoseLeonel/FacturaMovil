@@ -20,6 +20,7 @@ import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -506,10 +507,10 @@ public class FacturasController {
 	 * @param status
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/CrearFacturaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator crearFactura(HttpServletRequest request, ModelMap model, @ModelAttribute FacturaCommand facturaCommand, BindingResult result, SessionStatus status) {
-		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			facturaCommand.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
 			facturaCommand.setTotalEfectivo(facturaCommand.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalEfectivo());
@@ -591,13 +592,10 @@ public class FacturasController {
 			}
 			Factura facturaBD = facturaCommand.getId() == null || facturaCommand.getId() == Constantes.ZEROS_LONG ? null : facturaBo.findById(facturaCommand.getId());
 			// Eliminar detalles si existe
-			Integer eliminar = Constantes.ZEROS;
 			if (facturaBD != null) {
 				facturaBo.eliminarDetalleFacturaPorSP(facturaBD);
-				eliminar = detalleBo.eliminarDetalleFactura(facturaBD);
 				for (Detalle detalle : facturaBD.getDetalles() ) {
 					 detalleBo.eliminar(detalle);
-					
 				}
 			}
 			Factura factura = facturaBo.crearFactura(facturaCommand, usuario, usuarioCajaBd, tipoCambio);
@@ -613,6 +611,17 @@ public class FacturasController {
 		}
 	}
 
+	@RequestMapping(value = "/service/CrearFacturaServiceAjax", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	@SuppressWarnings("rawtypes")
+	public RespuestaServiceValidator crearFactura(HttpServletRequest request, @ModelAttribute FacturaCommand facturaCommand,  BindingResult result) throws ParseException {		
+		return this.agregarFactura(request, facturaCommand, result);
+	}
+
+	@SuppressWarnings("rawtypes")
+	private RespuestaServiceValidator agregarFactura(HttpServletRequest request, FacturaCommand facturaCommand, BindingResult result) {
+		return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", "5500000000002252");
+	}
 	
 	/**
 	 * Recibir factura de otro emisor
