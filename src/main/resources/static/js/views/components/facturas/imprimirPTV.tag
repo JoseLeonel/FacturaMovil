@@ -410,6 +410,8 @@ function displayDate_detail(fecha) {
 __ImprimirfacturaImpresa(){
     __imprimir()
     $("#boton-regresar").focus()
+    $('.codigo').select()
+    $(".codigo").focus() 
 }
 
 /**

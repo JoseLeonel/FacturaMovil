@@ -959,17 +959,20 @@ function __InformacionDataTable(){
                                },
                                {'data' :'totalImpuesto'       ,"name":"totalImpuesto"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true ,
                                     "render":function(totalImpuesto,type, row){
-									    return  totalImpuesto.toLocaleString('de-DE');
+                                         var resultaldo = formatoDecimales(__valorNumerico(totalImpuesto))
+									    return  resultado;
 	 							    }
                                },
                                {'data' :'totalDescuentos'                ,"name":"totalDescuentos"                 ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true ,
                                     "render":function(totalDescuentos,type, row){
-									    return  totalDescuentos.toLocaleString('de-DE');
+                                        var resultaldo = formatoDecimales(__valorNumerico(totalDescuentos))
+									    return  resultado;
 	 							    }
                                },
                                {'data' :'totalComprobante'               ,"name":"totalComprobante"                ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true ,
                                     "render":function(totalComprobante,type, row){
-									    return  totalComprobante.toLocaleString('de-DE');;
+                                        var resultaldo = formatoDecimales(__valorNumerico(totalComprobante))
+									    return  resultado;
 	 							    }
                                },
                                {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,

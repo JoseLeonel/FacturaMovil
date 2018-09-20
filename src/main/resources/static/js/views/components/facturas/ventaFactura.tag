@@ -197,7 +197,7 @@
                             <section class="lista-facturas-espera">
                                 <div id="botones"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
                                   
-                                     <span class="label-titulos-espera">T# {id} - {nombreFactura}</span>
+                                     <span class="label-titulos-espera"> {nombreFactura ==null?"T#"+id:""}  {nombreFactura}</span>
                                 </div>         
                                  
                             </section>
@@ -1503,6 +1503,24 @@ __CalculaCambioAEntregarKeyPress(e){
 *  Buscar la Factura Pendiente en espera
 **/
 __CargarFacturaEspera(e){
+    self.factEspera = e.item
+    self.update()
+    if(self.factura.id !=null){
+      if(self.seIncluyoUnArticulo !=null){
+        aplicarFactura(1)  
+        self.seIncluyoUnArticulo =null
+        self.update()
+      }  
+      
+    }else{
+        if(self.detail.length != 0 ){
+            $('#ModalAgregarNombreTiquete').modal('show') 
+            $('.cambioNombreFactura').focus()
+            return
+         }
+       
+    }
+    
    __FacturaEnEspera(e.item)
 }
 
@@ -1524,12 +1542,20 @@ __CambiarNombreTiquete(){
 **/
 __CrearFacturaTemporal(){
     if(self.factura.id ==null){
-        $('#ModalAgregarNombreTiquete').modal('show') 
-        $('.cambioNombreFactura').focus()
-        return
+        
+        if(self.detail.length != 0 ){
+            $('#ModalAgregarNombreTiquete').modal('show') 
+            $('.cambioNombreFactura').focus()
+            return
+        }
     }else{
+        self.seIncluyoUnArticulo = 1
+        self.update()
        aplicarFactura(1)    
     }
+   // __FacturaEnEspera(self.factEspera)
+    self.factEspera =null
+    self.update()
 }
 
 /**
@@ -1589,7 +1615,14 @@ __AgregarNombreFacturaTemporal(){
     $('#ModalAgregarNombreTiquete').modal('hide') 
     self.factura.nombreFactura = $('.cambioNombreFactura').val()==null?"":$('.cambioNombreFactura').val();
     self.update()
-  aplicarFactura(1)      
+    aplicarFactura(1)      
+    if(self.factEspera !=null){
+      __FacturaEnEspera(self.factEspera) 
+    }
+    self.factEspera =null
+    self.update()
+    
+
 }
 /**
 ** Se aplica o se crea una Factura cargada en la pantalla
@@ -1801,6 +1834,9 @@ function __Init(){
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
 **/
 function __FacturaEnEspera(factura){
+    if(factura ==null){
+        return
+    }
      __Init()
     $.ajax({
         url: "MostrarFacturaAjax",
@@ -1933,13 +1969,7 @@ function evaluarFactura(data){
                 riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
                  
             }else{
-                swal({
-	                title: '',
-	                text: data.message,
-	                type: 'success',
-	                showCancelButton: false,
-	                confirmButtonText: $.i18n.prop("btn.aceptar"),
-                })
+               
                 __Init()
                 __ListaFacturasEnEspera()
             }
@@ -2023,7 +2053,7 @@ function mostrarPAgo(){
         return
     }
     self.mostarParaCrearNuevaVentas = false
-    $('#totalEfectivo').val(null)
+     $('#totalEfectivo').val(self.factura.totalComprobante)
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
     getSubTotalGeneral()
@@ -2034,6 +2064,7 @@ function mostrarPAgo(){
     self.totalCambioPagar =0
     self.update()
     $('#totalEfectivo').focus()
+    $('#totalEfectivo').select()
     self.factura.cambioMoneda = self.factura.totalVentaNeta / self.tipoCambio.total
     self.update()
 }
@@ -2235,6 +2266,8 @@ function __agregarArticulo(cantidad){
     var encontrado = false;
      if(self.detail[0] == null){ // first element
         __nuevoArticuloAlDetalle(cantidad);
+        self.seIncluyoUnArticulo = 0
+        self.update()
         encontrado = true;
     }else{//Se busca el articulo si existe se incrementa la cantidad
         for (var count = 0; count < self.detail.length; count++) {
@@ -2245,13 +2278,17 @@ function __agregarArticulo(cantidad){
                ActualizarLineaDEtalle()
                self.detail[count] = self.item;
                encontrado = true;
-              self.update();
+               self.seIncluyoUnArticulo = 0
+               self.update()
             }
         }
     
     }
     // si no existe se agrega como un codigo nuevo
     if(encontrado == false){ // add elemen
+       self.seIncluyoUnArticulo = 0
+       self.update()
+
       __nuevoArticuloAlDetalle(cantidad);
     }
     __calculate(); 
@@ -2269,6 +2306,7 @@ __removeProductFromDetail(e) {
             cont = elemen.numeroLinea
         }
     )
+    self.seIncluyoUnArticulo = 1
     self.update()
      __calculate();
  }
@@ -2788,6 +2826,9 @@ function __Teclas(){
         var tecla = evento.keyCode; 
     if(tecla ==119){
       if(self.mostrarFormularioPago == false && self.mostarParaCrearNuevaVentas == true){
+        self.factura.totalCambioPagar =__valorNumerico(self.factura.totalComprobante)   
+        self.totalCambioPagar = redondeoDecimales(self.factura.totalComprobante,2)
+        self.update()
          mostrarPAgo()     
       }else if (self.mostrarFormularioPago == true && self.mostarParaCrearNuevaVentas == false ){
             aplicarFactura(2)   

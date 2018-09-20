@@ -22,7 +22,7 @@
                             <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
                                 <div class="form-group">
                                     <label class="knob-label" >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
-                                    <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
+                                    <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
                                         <input type="text" class="form-control fechaInicio" id="fechaInicio"  name= "fechaInicio" >
                                         <div class="input-group-addon">
                                             <span class="glyphicon glyphicon-th"></span>
@@ -34,7 +34,7 @@
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label class="knob-label" >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
-                                        <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
+                                        <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
                                             <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
@@ -46,7 +46,7 @@
                             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2">
                                 <div class="form-group">
                                     <label>{$.i18n.prop("articulo.articulo")} </label>  
-                                    <input onclick = {__ListaDecodigos}   class="form-control" type="text" value="{articulo.descripcion}" placeholder="XXXXXXXXXXX" readonly/>
+                                    <input onclick = {__ListaDecodigos}  id="codigoArticulo" name="codigoArticulo" class="form-control" type="text" value="{articulo.descripcion}" placeholder="XXXXXXXXXXX" readonly/>
                                     <input  type="hidden"   class="form-control" id="idArticulo" name="idArticulo" value="{articulo.id}"/>
                                 </div>  
                             </div>                      
@@ -56,7 +56,6 @@
             </div>
             <div class="col-xs-12 text-right">
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
-                <a onclick ={__crearArchivoExcel} id="btnDownload" class="btn btn-success" title ="Descargar" > <i class="fa fa-download"></i></a>
             	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
             </div>
         </div>
@@ -251,7 +250,13 @@ var reglasDeValidacionParametros = function() {
 			},
             articulo : {
 				required : true,
-			}  
+            }
+            ,
+            codigoArticulo : {
+                required : true,
+                maxlength:20
+            }  
+            
                         
 		},
 		ignore : []
@@ -342,23 +347,27 @@ function _informacionData_Kardex(){
                                         {'data' : 'cantidadActual'     ,"name":"cantidadActual"     ,"title" : $.i18n.prop("kardez.listado.cantidad.actual")   ,"autoWidth":false},
                                         {'data' : 'costoActual'        ,"name":"costoActual"        ,"title" : $.i18n.prop("kardez.listado.costo.actual"),"autoWidth":false,
                                           "render":function(costoActual,type, row){
-                                               return  "₡" + costoActual.toLocaleString('de-DE');
+                                                var resultado = formatoDecimales(__valorNumerico(costoActual))
+                                               return resultado;
                                             }
                                         },
                                         {'data' : 'totalCostoActual' ,"name":"totalCostoActual"     ,"title" : $.i18n.prop("kardez.listado.totalCosto.actual"),"autoWidth":false,
                                           "render":function(totalCostoActual,type, row){
-                                               return  "₡" + totalCostoActual.toLocaleString('de-DE');
+                                              var resultado = formatoDecimales(__valorNumerico(totalCostoActual))
+                                               return  resultado;
                                             }
                                         },
                                         {'data' : 'cantidadNueva'      ,"name":"cantidadNueva"      ,"title" : $.i18n.prop("kardez.listado.cantidad.nueva")   ,"autoWidth":false},
                                         {'data' : 'costoNuevo'         ,"name":"costoNuevo"         ,"title" : $.i18n.prop("kardez.listado.costo.nuevo"),"autoWidth":false,
                                           "render":function(costoNuevo,type, row){
-                                               return  "₡" + costoNuevo.toLocaleString('de-DE');
+                                              var resultado = formatoDecimales(__valorNumerico(costoNuevo))
+                                               return  resultado;
                                             }
                                         },
                                         {'data' : 'totalCostoNuevo' ,"name":"totalCostoNuevo"       ,"title" : $.i18n.prop("kardez.listado.totalCosto.nuevo"),"autoWidth":false,
                                           "render":function(totalCostoNuevo,type, row){
-                                               return  "₡" + totalCostoNuevo.toLocaleString('de-DE');
+                                              var resultado = formatoDecimales(__valorNumerico(totalCostoNuevo))
+                                               return  resultado;
                                             }
                                         },
                                         {'data' : 'motivo'      ,"name":"motivo"                   ,"title" : $.i18n.prop("kardez.listado.observacion")  ,"autoWidth":false},  
@@ -414,7 +423,8 @@ function _informacionData_Articulo(){
                                         {'data' : 'cantidad'       ,"name":"cantidad"        ,"title" : $.i18n.prop("inventario.cantidad")   ,"autoWidth":false},
                                         {'data' : 'precioPublico'  ,"name":"precioPublico"   ,"title" : $.i18n.prop("articulo.precioPublico"),"autoWidth":false,
                                           "render":function(precioPublico,type, row){
-                                               return  "₡" + precioPublico.toLocaleString('de-DE');
+                                              var resultado = formatoDecimales(__valorNumerico(precioPublico))
+                                               return  resultado;
                                             }
                                         },
                                         {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",

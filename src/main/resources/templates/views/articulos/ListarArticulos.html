@@ -71,8 +71,7 @@
 <body>
 
 <div layout:fragment="content">
- 	
- 	
+
  	 <!-- Titulos -->
 <div id="mostrarListado" class="mostrarListado" >	 
     <div  class="row titulo-encabezado "  >
@@ -81,23 +80,19 @@
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"></div>
     </div>
-    
-    
-    
     <!-- Listado  -->
-   <div classs="contenedor-listar container " id="container"  >
+   <div classs="container">
         <div class="row">
             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 " style="width:98.50%;">
                  <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
                         <thead>
                             <tr>
+                                <th class="table-header" style ="width:5%" >Categoria   </th>
                                 <th class="table-header" style ="width:5%" >Codigo   </th>
                                 <th class="table-header" >Descripcion                </th>
                                 <th class="table-header" >Costo                     </th>
                                 <th class="table-header" style ="width:8%">Impuesto  </th>
                                 <th class="table-header" >Precio              </th>
-                                <th class="table-header" >Minimo                     </th>
-                                <th class="table-header" >Maximo                     </th>
                                 <th class="table-header" >Cantidad                 </th>
                                 <th class="table-header" style ="width:6%">Contable  </th>
                                 <th class="table-header" >Estado                     </th>
@@ -106,13 +101,12 @@
                         </thead>
                         <tfoot style="display: table-header-group;">
                             <tr>
+                                <th>Categoria          </th>
                                 <th>Codigo          </th>
                                 <th>Descripcion     </th>
                                 <th>Costo           </th>
                                 <th>Impuesto        </th>
-                                <th>Precio   </th>
-                                <th>Minimo        </th>
-                                <th>Maximo        </th>
+                                <th>Precio        </th>
                                 <th>Cantidad      </th>
                                 <th>Contable        </th>
                                 <th>Estado          </th>

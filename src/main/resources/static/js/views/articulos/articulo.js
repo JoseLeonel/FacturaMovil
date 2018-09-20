@@ -102,14 +102,16 @@ function EventoFiltro(){
 *Formato del listado de los cambios
 **/
 var informacion_tabla = [ 
+                               {'data' :'categoria'               ,"name":"categoria"              ,"title" : "Categoria"        ,"autoWidth" :true,
+                               "render":function(categoria,type, row){
+                                     return categoria ==null?"Sin Cantegoria":categoria.descripcion;
+                                }},
                                {'data' :'codigo'                  ,"name":"codigo"                 ,"title" : "Codigo"           ,"autoWidth" :true },
                                {'data' :'descripcion'             ,"name":"descripcion"            ,"title" : "Descripcion"      ,"autoWidth" :true },
                                {'data' :'costo'                   ,"name":"costo"                  ,"title" : "Costo"            ,"autoWidth" :true },
-                               {'data' :'impuesto'                ,"name":"impuesto"               ,"title" : "Impuesto"              ,"autoWidth" :true },
-                               {'data' :'precioPublico'           ,"name":"precioPublico"          ,"title" : "Precio"    ,"autoWidth" :true },
-                               {'data' :'minimo'                  ,"name":"minimo"                 ,"title" : "Minimo"  ,"autoWidth" :true },
-                               {'data' :'maximo'                  ,"name":"maximo"                 ,"title" : "Maximo"  ,"autoWidth" :true },
-                               {'data' :'cantidad'                ,"name":"cantidad"               ,"title" : "Cantidad"   ,"autoWidth" :true },
+                               {'data' :'impuesto'                ,"name":"impuesto"               ,"title" : "Impuesto"         ,"autoWidth" :true },
+                               {'data' :'precioPublico'           ,"name":"precioPublico"          ,"title" : "Precio"           ,"autoWidth" :true },
+                               {'data' :'cantidad'                ,"name":"cantidad"               ,"title" : "Cantidad"         ,"autoWidth" :true },
                                {'data' :'contable'                ,"name":"contable"               ,"title" : "Contable"         ,"autoWidth" :false },
                                {'data' : 'estado'                 ,"name":"estado"          ,"title" : "Estado"      ,"autoWidth" :false},
                                {'data' : 'id'            ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,

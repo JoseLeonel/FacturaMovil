@@ -170,7 +170,7 @@
                         </div> 
                         <div class="row" >
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="knob-label ">{$.i18n.prop("factura.resumen.total")}</label> 
+                                <label class="knob-label ">{$.i18n.prop("factura.resumen.total.servicios")}</label> 
                                 <input type="number" step="any"  class="form-control "  value="{factura.totalComprobante.toLocaleString('de-DE')}" readonly>
                             </div>
                         </div>    

@@ -22,7 +22,7 @@
                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label  >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
-                                    <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
+                                    <div  class="form-group input-group date" data-provide="datepicker"    data-date-format="yyyy-mm-dd">
                                         <input type="text" class="form-control fechaInicio" id="fechaInicio"  name= "fechaInicio" readonly>
                                         <div class="input-group-addon">
                                             <span class="glyphicon glyphicon-th"></span>
@@ -34,7 +34,7 @@
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label  >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
-                                        <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
+                                        <div  class="form-group input-group date" data-provide="datepicker"    data-date-format="yyyy-mm-dd">
                                             <input type="text" class="form-control fechaFin" id="fechaFin"  name= "fechaFin" readonly>
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
@@ -551,7 +551,8 @@ var reglasDeValidacion = function() {
 			},
 			fechaFin : {
 				required : true,
-			}                                   
+            }   
+                                            
                         
 		},
 		ignore : []
@@ -709,7 +710,8 @@ function __InformacionDataTable(){
                                },
                                {'data' :'totalCompra'         ,"name":"totalCompra"          ,"title" : $.i18n.prop("compra.listado.total")         ,"autoWidth" :true ,
                                     "render":function(totalCompra,type, row){
-                                        return  "₡" + totalCompra.toLocaleString('de-DE');
+                                        var resultado = formatoDecimales(__valorNumerico(totalCompra))
+                                        return resultado;
                                     }
                                },
                                {'data' :'descripcionEstado'          ,"name":"descripcionEstado"           ,"title" : $.i18n.prop("compra.listado.estado")        ,"autoWidth" :true },

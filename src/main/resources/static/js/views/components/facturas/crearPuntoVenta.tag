@@ -126,7 +126,7 @@
                     <!--Seccion de Billetes-->
                     <section  class="lista-articulos" >
                         <div class="product-item" each={billetes}   onclick={_sumarBilletes}>
-                            <img style = "height:100px;width:250px" alt="" class="img-responsive " src="{imagen}">
+                            <img style = "height:100px;width:200px" alt="" class="img-responsive " src="{imagen}">
                             <a href="#">{modena} {descripcion}</a>
                         </div>
                     </section>
@@ -174,7 +174,8 @@
                 <div class="row">
                   <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">  
                   <div class="box-tools ">
-                   <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
+                    <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
+                    <a class="pull-left" href="#"    onclick = {_ReimprimirFactura} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f6")}</span></a>
                     <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago}   title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
                     <a class="pull-left" href="#"   onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
                     <a class="pull-left" href="#"   onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
@@ -196,7 +197,7 @@
                             </div>
 
                             <div class="col-sx-12 col-sm-2 col-md-2 col-lg-2">
-                                <button    onclick = {__ListaDecodigos} class="btn btn-primary form-control " id="btn-facturar" >
+                                <button    onclick = {__ListaDecodigos} class="btn btn-primary boton-consultar " id="btn-facturar" >
                                    <i class="glyphicon glyphicon-plus"></i>{$.i18n.prop("btn.consultar")} 
                                 </button>
                             </div>
@@ -615,14 +616,25 @@
        __ListaDeClientes()
        __ListaDeVendedores()
        _Empresa()
+        $('.codigo').select()
+        $(".codigo").focus()
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
      
     })
 
-
-
+/**
+ * Reimprime la factura
+ **/
+_ReimprimirFactura(){
+  if(self.facturaReimprimir ==null){
+      return
+  }
+  riot.mount('ptv-imprimir',{factura:self.facturaReimprimir});
+  $('.codigo').select()
+  $(".codigo").focus() 
+}
 
 /**
 * Consultar la empresa
@@ -672,6 +684,7 @@ __LimpiarFormulario(){
         id:0,
         nombreCompleto:""
     };
+
     self.mostrarCamposIngresoContado = true
     self.descripcionArticulo = ""
     self.update()
@@ -913,13 +926,7 @@ function __TipoCambio(){
     });
 
 }
-/**
-* Imprimir 
-**/
-__Imprimir(){
-    var factura = self.factura
-    riot.mount('ptv-imprimir',{factura:factura});
-}
+
 /**
 *  Obtiene el valor de lo digitado en el campo de efectivo
 **/
@@ -1153,6 +1160,9 @@ function __Init(){
     self.totalComprobante              = 0
     self.totalCambioPagar              = 0
     self.update();
+    $('.codigo').select()
+    $(".codigo").focus()
+
     $('#condicionVenta').prop("selectedIndex", 0);
     $('#tipoDoc').prop("selectedIndex", 0);
     $(".totalBanco").val(null)   
@@ -1169,7 +1179,9 @@ function __Init(){
      //Tipos de Documentos
       __ComboTipoDocumentos()
      __ListaFacturasEnEspera()
-      $(".codigo").focus()
+    $('.codigo').select()
+    $(".codigo").focus()
+
 }
 /**
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
@@ -1297,7 +1309,16 @@ function evaluarFactura(data){
             if(self.facturaImprimir.estado == 2 || self.facturaImprimir.estado == 3 || self.facturaImprimir.estado == 4){
                 __Init()
                 //Envia a la pantalla de impresion
-               riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
+                self.facturaReimprimir = modeloTabla
+                self.update()
+                swal({
+                    position: 'top-end',
+                    type: 'success',
+                    title: "Consecutivo creado:" + self.facturaReimprimir.numeroConsecutivo,
+                    showConfirmButton: false,
+                    timer: 1500
+                    })
+               //riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
             }else{
                 swal({
 	                title: '',
@@ -1351,6 +1372,7 @@ _AtrasFacturaFinal(){
    self.error = false
    self.update()
    $('.codigo').val(null)
+   $('.codigo').select()
    $('.codigo').focus()
 }
 /**
@@ -1381,7 +1403,7 @@ function mostrarPAgo(){
         swal("Verificar","No hay detalles en la factura ", "info")
         return
     }
-    $('#totalEfectivo').val(null)
+    $('#totalEfectivo').val(self.factura.totalComprobante)
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
     getSubTotalGeneral()
@@ -1392,6 +1414,7 @@ function mostrarPAgo(){
     self.mostrarFormularioPago = true
     self.update()
     $('#totalEfectivo').focus()
+    $('#totalEfectivo').select()
     self.factura.cambioMoneda = self.factura.totalVentaNeta / self.tipoCambio.total
     self.update()
 }
@@ -1429,14 +1452,18 @@ __addProductToDetail(e){
        __sumarMasArticulo(codigo,0)
        $('.precioVenta').val(null)
         $('.codigo').val(null)
+        
         $('.codigo').focus()
        return  
     }
     __buscarcodigo(codigoActual,__valorNumerico(cantidadAct),0);
-    
-    $('.precioVenta').val(null)
-    $('.codigo').val(null)
-    $('.codigo').focus()
+    if(self.articulo.tipoCodigo !="04"){
+      $('.precioVenta').val(null)
+      $('.codigo').val(null)
+      $('.codigo').select()
+      $('.codigo').focus()
+
+    }
 }
 /**
 *  cambiar el precio
@@ -1469,12 +1496,14 @@ __addPrecioDetail(e){
        __sumarMasArticulo(codigo,0)
        $('.precioVenta').val(null)
         $('.codigo').val(null)
+        
         $('.codigo').focus()
        return  
     }
-    __buscarcodigo(codigoActual,__valorNumerico(valor),__valorNumerico(precio));
+    __buscarcodigoPrecio(codigoActual,__valorNumerico(valor),__valorNumerico(precio));
     $('.precioVenta').val(null)
     $('.codigo').val(null)
+    
     $('.codigo').focus()
   
 }
@@ -1485,6 +1514,9 @@ function __sumarMasArticulo(codigo,precio){
     if(self.articulo == null){
 
         return;
+    }
+    if(self.articulo.tipoCodigo =="04"){
+        return
     }
     var valorPrecio =  parseFloat(precio)
     var cantidadAct =""
@@ -1635,10 +1667,12 @@ function __ListaDeClientes(){
     return
 }
 
+
+
 /**
-* Buscar el codigo del codigo  en la base de datos
+* Buscar el codigo del codigo si esta input de precio aplica esto cuando es codigo de uso interno
 **/
-function __buscarcodigo(idArticulo,cantidad,precio){
+function __buscarcodigoPrecio(idArticulo,cantidad,precio){
     $.ajax({
         type: 'GET',
         url: 'findArticuloByCodigojax.do',
@@ -1680,6 +1714,58 @@ function __buscarcodigo(idArticulo,cantidad,precio){
     });
    return 
 }
+
+/**
+* Buscar el codigo del codigo  en la base de datos
+**/
+function __buscarcodigo(idArticulo,cantidad,precio){
+    $.ajax({
+        type: 'GET',
+        url: 'findArticuloByCodigojax.do',
+        method:"GET",
+        data:{codigoArticulo:idArticulo},
+        success: function(data){
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    swal('',data.message,'error');
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                        //Articulo no puede agregarse si no hay en el inventario
+                        if(modeloTabla.contable == "Si"){
+                            if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
+                                mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
+                                return
+                            }
+                            if(modeloTabla.cantidad < cantidad ){
+                                mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
+                                return
+                            }
+                        }
+                        self.articulo  = modeloTabla
+                        self.articulo.precioUnitario = precio > 0 ?precio:self.articulo.precioUnitario
+                        self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
+                        self.descripcionArticulo = modeloTabla.descripcion
+                        self.update()
+                        if(self.articulo.tipoCodigo =="04"){
+                            $('#precioVenta').val(self.articulo.precioPublico)
+                            $('#precioVenta').select()
+                            $("#precioVenta").focus()
+                            return
+                        }
+                        __agregarArticulo(cantidad)
+                    });
+                }
+            }
+        },
+	    error : function(xhr, status) {
+            console.log(xhr);
+          mensajeErrorServidor(xhr, status);
+        }
+    });
+   return 
+}
 /**
 *  Agregar un articulo si existe se suma la cantidad y no existe se agrega en el detalle
 **/
@@ -1695,27 +1781,34 @@ function __agregarArticulo(cantidad){
     }
     var encontrado = false;
     //uso interno
-    
-     if(self.detail[0] == null){ // first element
+    if(self.articulo.tipoCodigo =="04"){
         __nuevoArticuloAlDetalle(cantidad);
         encontrado = true;
-    }else{//Se busca el articulo si existe se incrementa la cantidad
-        for (var count = 0; count < self.detail.length; count++) {
-            if (self.detail[count].codigo == self.articulo.codigo ){
-               self.item          = self.detail[count];
-               self.item.cantidad = self.item.cantidad + parseFloat(cantidad)
-               self.update();
-               ActualizarLineaDEtalle()
-               self.detail[count] = self.item;
-               encontrado = true;
-              self.update();
-            }
-        }
-    
     }
-    // si no existe se agrega como un codigo nuevo
-    if(encontrado == false){ // add elemen
-      __nuevoArticuloAlDetalle(cantidad);
+
+    if( encontrado ==false){
+        if(self.detail[0] == null){ // first element
+            __nuevoArticuloAlDetalle(cantidad);
+            encontrado = true;
+        }else{//Se busca el articulo si existe se incrementa la cantidad
+            for (var count = 0; count < self.detail.length; count++) {
+                if (self.detail[count].codigo == self.articulo.codigo ){
+                self.item          = self.detail[count];
+                self.item.cantidad = self.item.cantidad + parseFloat(cantidad)
+                self.update();
+                ActualizarLineaDEtalle()
+                self.detail[count] = self.item;
+                encontrado = true;
+                self.update();
+                }
+            }
+        
+        }
+        // si no existe se agrega como un codigo nuevo
+        if(encontrado == false){ // add elemen
+        __nuevoArticuloAlDetalle(cantidad);
+        }
+
     }
     __calculate(); 
     return encontrado
@@ -2035,7 +2128,8 @@ function _informacionData_Articulo(){
                                         {'data' : 'cantidad'       ,"name":"cantidad"        ,"title" : $.i18n.prop("inventario.cantidad")   ,"autoWidth":false},
                                         {'data' : 'precioPublico'  ,"name":"precioPublico"   ,"title" : $.i18n.prop("articulo.precioPublico"),"autoWidth":false,
                                           "render":function(precioPublico,type, row){
-                                               return  "₡" + precioPublico.toLocaleString('de-DE');
+                                              var resultado = formatoDecimales(__valorNumerico(precioPublico))
+                                               return  resultado;
                                             }
                                         },
                                         {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
@@ -2259,8 +2353,12 @@ function __Teclas(){
     window.addEventListener( "keydown", function(evento){
         var tecla = evento.keyCode; 
       // alert(tecla)
+   
     if(tecla ==119){
       if(self.mostrarFormularioPago == false && self.mostarParaCrearNuevaFactura == true){
+        self.factura.totalCambioPagar =__valorNumerico(self.factura.totalComprobante)   
+        self.totalCambioPagar = redondeoDecimales(self.factura.totalComprobante,2)
+        self.update()
           
          mostrarPAgo()     
       }else if (self.mostrarFormularioPago == true && self.mostarParaCrearNuevaFactura == false ){
@@ -2275,10 +2373,12 @@ function __Teclas(){
     //Limpiar
     if(tecla ==121){
       __Init()
+       $('.codigo').select()
+      $(".codigo").focus()
     }
 
   if(tecla ==27){
-      $(".codigo").focus()
+      $('.codigo').select()
       $(".codigo").focus()
     }
     }, false );
