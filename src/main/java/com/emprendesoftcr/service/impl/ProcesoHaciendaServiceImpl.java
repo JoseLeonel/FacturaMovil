@@ -347,6 +347,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						String status = getHaciendaStatus(respuestaHacienda.indEstado());
 						hacienda.setUpdated_at(new Date());
 						RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();
+						//hacienda.setxErrorCause(FacturaElectronicaUtils.convertirStringToblod(respuesta.getDetalleMensaje()==null?Constantes.EMPTY:respuesta.getDetalleMensaje()));
 						respuesta.setClave(respuestaHacienda.clave());
 						respuesta.setFecha(respuestaHacienda.fecha());
 						respuesta.setIndEstado(respuestaHacienda.indEstado());
@@ -454,13 +455,14 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				} else {
 					Factura factura = facturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
 					if (factura != null) {
+						if (factura.getCorreoAlternativo() != null) {
+							if (!factura.getCorreoAlternativo().equals(Constantes.EMPTY)) {
+								listaCorreos.add(factura.getCorreoAlternativo());
+							}
+						}
+
 						if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
 
-							if (factura.getCorreoAlternativo() != null) {
-								if (!factura.getCorreoAlternativo().equals(Constantes.EMPTY)) {
-									listaCorreos.add(factura.getCorreoAlternativo());
-								}
-							}
 							if (factura.getCliente().getCorreoElectronico() != null) {
 								listaCorreos.add(factura.getCliente().getCorreoElectronico());
 							}

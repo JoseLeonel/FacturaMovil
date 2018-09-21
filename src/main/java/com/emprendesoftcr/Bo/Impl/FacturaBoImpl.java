@@ -395,7 +395,7 @@ public class FacturaBoImpl implements FacturaBo {
 					}
 
 					if (articulo != null) {
-						if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
+						if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
 							aplicarInventario(factura, detalle, articulo);
 						}
 

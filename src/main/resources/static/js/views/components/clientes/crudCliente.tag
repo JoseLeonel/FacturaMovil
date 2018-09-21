@@ -13,26 +13,20 @@
                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th class="table-header" >{$.i18n.prop("cliente.empresa")}          </th>
                                 <th class="table-header" >{$.i18n.prop("cliente.cedula")}            </th>
                                 <th class="table-header" >{$.i18n.prop("cliente.nombreCompleto")}    </th>
                                 <th class="table-header" style= "width:6%;" >{$.i18n.prop("cliente.celular")}           </th>
                                 <th class="table-header" style= "width:6%;">{$.i18n.prop("cliente.telefono")}          </th>
-                                <th class="table-header" >{$.i18n.prop("cliente.created_at")}        </th>
-                                <th class="table-header" >{$.i18n.prop("cliente.updated_at")}        </th>
                                 <th class="table-header" >{$.i18n.prop("empresa.estado")}            </th>
                                 <th class="table-header" > {$.i18n.prop("listado.acciones")}         </th>
                             </tr>
                         </thead>
                         <tfoot style="display: table-header-group;">
                             <tr>
-                                <th>{$.i18n.prop("cliente.empresa")}          </th>
                                 <th>{$.i18n.prop("cliente.cedula")}            </th>
                                 <th>{$.i18n.prop("cliente.nombreCompleto")}    </th>
                                 <th>{$.i18n.prop("cliente.celular")}           </th>
                                 <th>{$.i18n.prop("cliente.telefono")}          </th>
-                                <th>{$.i18n.prop("cliente.created_at")}        </th>
-                                <th>{$.i18n.prop("cliente.updated_at")}        </th>
                                 <th>{$.i18n.prop("cliente.estado")}            </th>
                                 <th>      </th>
                             </tr>
@@ -108,7 +102,7 @@
                                 <input type="text" class="form-control correoElectronico2" placeHolder ="{$.i18n.prop("cliente.correoElectronico2")}" id="correoElectronico2" name="correoElectronico2" value="{cliente.correoElectronico2}"  >
                             </div>
                              <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label  >{$.i18n.prop("cliente.correoElectronico1")}</label>
+                                <label  >{$.i18n.prop("cliente.correoElectronico3")}</label>
                                 <input type="text" class="form-control correoElectronico3" placeHolder ="{$.i18n.prop("cliente.correoElectronico3")}" id="correoElectronico3" name="correoElectronico3" value="{cliente.correoElectronico3}"  >
                             </div>
                               
@@ -347,6 +341,7 @@ var reglasDeValidacion = function() {
                 lettersOnly : true
 			},
 			correoElectronico : {
+                required : true,
                 maxlength:250,
                 minlength:1,
                 email:true
@@ -368,6 +363,7 @@ var reglasDeValidacion = function() {
                 email:true
 			},
             telefono : {
+                required : true,
                 maxlength:8,
                 minlength:8,
                 telefonoFormat:true
@@ -566,21 +562,10 @@ function __listado(){
 **/
 function __InformacionDataTable(){
     self.informacion_tabla = [ 
-                            {'data' :'empresa.nombre'     ,"name":"empresa.nombre"       ,"title" : $.i18n.prop("cliente.empresa")           ,"autoWidth" :false },
                             {'data' :'cedula'             ,"name":"cedula"               ,"title" : $.i18n.prop("cliente.cedula")             ,"autoWidth" :false },
                             {'data' :'nombreCompleto'     ,"name":"nombreCompleto"       ,"title" : $.i18n.prop("cliente.nombreCompleto")     ,"autoWidth" :false },
                             {'data' : 'celular'           ,"name":"celular"              ,"title" : $.i18n.prop("cliente.celular")             ,"autoWidth" :false},
                             {'data' : 'telefono'          ,"name":"telefono"             ,"title" : $.i18n.prop("cliente.telefono")           ,"autoWidth" :false},
-                            {'data' : 'created_at'        ,"name":"created_at"           ,"title" : $.i18n.prop("cliente.created_at")         ,"autoWidth" :false,
-                                "render":function(created_at,type, row){
-                                      return __displayDate_detail(created_at);
-                                 }
-	      		            },
-                            {'data' : 'updated_at'        ,"name":"updated_at"           ,"title" : $.i18n.prop("cliente.updated_at")         ,"autoWidth" :false,
-                                "render":function(updated_at,type, row){
-                                      return __displayDate_detail(updated_at);
-                                 }
-	      		            },
                             {'data' : 'estado'            ,"name":"estado"               ,"title" : $.i18n.prop("cliente.estado")            ,"autoWidth" :false},
                             {'data' : 'id'                ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
@@ -708,11 +693,11 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 8    ){
+        if ( $(this).index() != 5    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
          // Select
-    	if ($(this).index() == 7  ){
+    	if ($(this).index() == 4  ){
     	    var select = $('<select id="combo" class="form-control"><option value="">Todos</option></select>');
     	    // se cargan los valores por defecto que existen en el combo
     	   	select.append( '<option value="'+$.i18n.prop("estado.Activo")+'">'+$.i18n.prop("estado.Activo")+'</option>' );

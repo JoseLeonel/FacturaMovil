@@ -18,8 +18,6 @@
                                 <th class="table-header" >{$.i18n.prop("proveedor.nombreCompleto")}    </th>
                                 <th class="table-header" >{$.i18n.prop("proveedor.movil")}             </th>
                                 <th class="table-header" >{$.i18n.prop("proveedor.telefono")}          </th>
-                                <th class="table-header" >{$.i18n.prop("proveedor.created_at")}        </th>
-                                <th class="table-header" >{$.i18n.prop("proveedor.updated_at")}        </th>
                                 <th class="table-header" >{$.i18n.prop("proveedor.estado")}            </th>
                                 <th class="table-header" > {$.i18n.prop("listado.acciones")}           </th>
                             </tr>
@@ -30,8 +28,6 @@
                                 <th>{$.i18n.prop("proveedor.nombreCompleto")}    </th>
                                 <th>{$.i18n.prop("proveedor.movil")}             </th>
                                 <th>{$.i18n.prop("proveedor.telefono")}          </th>
-                                <th>{$.i18n.prop("proveedor.created_at")}        </th>
-                                <th>{$.i18n.prop("proveedor.updated_at")}        </th>
                                 <th>{$.i18n.prop("proveedor.estado")}            </th>
                                 <th> </th>
 
@@ -304,20 +300,21 @@ function __Eventos(){
     $("#direccion").attr("maxlength", 160);
     $("#telefono").attr("maxlength", 9);
     $("#movil").attr("maxlength", 9);
-    $('#telefono').mask('0000-0000', {
+    $('#telefono').mask('00000000', {
             'translation' : {
                 0 : {
                     pattern : /[0-9]/
                 }
             }
 	})   
-    $('#movil').mask('0000-0000', {
+    $('#movil').mask('00000000', {
             'translation' : {
                 0 : {
                     pattern : /[0-9]/
                 }
             }
 	})   
+    
 }
 
 
@@ -414,16 +411,6 @@ function __InformacionDataTable(){
                             {'data' :'nombreCompleto'     ,"name":"nombreCompleto"     ,"title" : $.i18n.prop("proveedor.nombreCompleto")     ,"autoWidth" :false },
                             {'data' :'movil'              ,"name":"movil"              ,"title" : $.i18n.prop("proveedor.movil")              ,"autoWidth" :false},
                             {'data' :'telefono'           ,"name":"telefono"           ,"title" : $.i18n.prop("proveedor.telefono")           ,"autoWidth" :false},
-                            {'data' :'created_at'         ,"name":"created_at"         ,"title" : $.i18n.prop("proveedor.created_at")         ,"autoWidth" :false,
-                                "render":function(created_at,type, row){
-                                      return __displayDate_detail(created_at);
-                                 }
-	      		            },
-                            {'data' : 'updated_at'        ,"name":"updated_at"           ,"title" : $.i18n.prop("proveedor.updated_at")         ,"autoWidth" :false,
-                                "render":function(updated_at,type, row){
-                                      return __displayDate_detail(updated_at);
-                                 }
-	      		            },
                             {'data' : 'estado'            ,"name":"estado"               ,"title" : $.i18n.prop("proveedor.estado")            ,"autoWidth" :false},
                             {'data' : 'id'                ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
@@ -536,13 +523,6 @@ function __MantenimientoAgregar(){
 }
 
 
-/**
-*Formato de la fecha con hora
-**/
-function __displayDate_detail(fecha) {
-      var dateTime = new Date(fecha);
-      return moment(dateTime).format('DD/MM/YYYY h:mm:ss');
-}
 
 
 /**
@@ -553,11 +533,11 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 7    ){
+        if ( $(this).index() != 5    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
          // Select
-    	if ($(this).index() == 6  ){
+    	if ($(this).index() == 4  ){
     	    var select = $('<select id="combo" class="form-control"><option value="">Todos</option></select>');
     	    // se cargan los valores por defecto que existen en el combo
     	   	select.append( '<option value="'+$.i18n.prop("estado.Activo")+'">'+$.i18n.prop("estado.Activo")+'</option>' );

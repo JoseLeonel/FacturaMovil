@@ -14,20 +14,14 @@
                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th class="table-header" >{$.i18n.prop("marca.empresa")}       </th>
                                 <th class="table-header" >{$.i18n.prop("marca.descripcion")}   </th>
-                                <th class="table-header" >{$.i18n.prop("marca.created_at")}    </th>
-                                <th class="table-header" >{$.i18n.prop("marca.updated_at")}    </th>
                                 <th class="table-header" >{$.i18n.prop("marca.estado")}        </th>
                                 <th class="table-header" > {$.i18n.prop("listado.acciones")}   </th>
                             </tr>
                         </thead>
                         <tfoot style="display: table-header-group;">
                             <tr>
-                                <th>{$.i18n.prop("marca.empresa")}       </th>
                                 <th>{$.i18n.prop("marca.descripcion")}   </th>
-                                <th>{$.i18n.prop("marca.created_at")}    </th>
-                                <th>{$.i18n.prop("marca.updated_at")}    </th>
                                 <th>{$.i18n.prop("marca.estado")}        </th>
                                 <th>  </th>
                             </tr>
@@ -343,20 +337,6 @@ __agregar(){
     if ($("#formulario").valid()) {
         // Permite obtener todos los valores de los elementos del form del jsp
         var formulario = $("#formulario").serialize();
-        swal({
-           title: '',
-           text: $.i18n.prop("marca.mensaje.alert.agregar"),
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: '#00539B',
-            cancelButtonColor: '#d33',
-            confirmButtonText:$.i18n.prop("confirmacion.si"),
-            cancelButtonText: $.i18n.prop("confirmacion.no"),
-            confirmButtonClass: 'btn btn-success',
-            cancelButtonClass: 'btn btn-danger',
-        }).then(function (isConfirm) {
-            //Ajax__inicializarTabla();
-            if(isConfirm){
                 $.ajax({
                     type : "POST",
                     dataType : "json",
@@ -399,9 +379,6 @@ __agregar(){
                     }
                 });
             }
-        });
-        
-    }
 }
 
 /**
@@ -449,18 +426,7 @@ function __listado(){
 **/
 function __InformacionDataTable(){
     self.informacion_tabla = [ 
-                               {'data' :'empresa.nombre' ,"name":"empresa.nombre"  ,"title" : $.i18n.prop("marca.empresa")     ,"autoWidth" :true },
                                {'data' :'descripcion'    ,"name":"descripcion"     ,"title" : $.i18n.prop("marca.descripcion") ,"autoWidth" :true },
-                               {'data' : 'created_at'        ,"name":"created_at"  ,"title" : $.i18n.prop("marca.created_at")  ,"autoWidth" :false,
-                                    "render":function(created_at,type, row){
-                                        return __displayDate_detail(created_at);
-                                    }
-                                },
-                                {'data' : 'updated_at'        ,"name":"updated_at" ,"title" : $.i18n.prop("marca.updated_at")  ,"autoWidth" :false,
-                                    "render":function(updated_at,type, row){
-                                        return __displayDate_detail(updated_at);
-                                    }
-                                },
                                {'data' : 'estado'        ,"name":"estado"          ,"title" : $.i18n.prop("marca.estado")      ,"autoWidth" :false},
                                {'data' : 'id'            ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
@@ -469,13 +435,6 @@ function __InformacionDataTable(){
 	      		            }];
     self.update();
    
-}
-/**
-*Formato de la fecha con hora
-**/
-function __displayDate_detail(fecha) {
-      var dateTime = new Date(fecha);
-      return moment(dateTime).format('DD/MM/YYYY h:mm:ss');
 }
 /**
 * Opciones listado de los clientes
@@ -492,11 +451,11 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 5    ){
+        if ( $(this).index() != 2    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
         // Select
-    	if ($(this).index() == 4  ){
+    	if ($(this).index() == 1  ){
     	    var select = $('<select id="combo" class="form-control"><option value="">Todos</option></select>');
     	    // se cargan los valores por defecto que existen en el combo
     	   	select.append( '<option value="'+$.i18n.prop("estado.Activo")+'">'+$.i18n.prop("estado.Activo")+'</option>' );

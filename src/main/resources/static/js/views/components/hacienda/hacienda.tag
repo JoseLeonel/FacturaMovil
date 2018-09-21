@@ -339,7 +339,7 @@ function __InformacionDataTable(){
                              
                                {'data' :'tipoDoc'        ,"name":"tipoDoc"      ,"title" : $.i18n.prop("hacienda.tipoDocumento")   ,"autoWidth" :true },
                                {'data' :'consecutivo'    ,"name":"consecutivo"    ,"title" : $.i18n.prop("hacienda.consecutivo") ,"autoWidth" :true},
-                               {'data' :'nombreReceptor' ,"name":"nombreReceptor" ,"title" : $.i18n.prop("hacienda.cliente")     ,"autoWidth" :true},
+                               {'data' :'nombreReceptor' ,"name":"nombreReceptor" ,"title" : "Receptor"     ,"autoWidth" :true},
                                {'data' :'totalReceptor'  ,"name":"totalReceptor"  ,"title" : $.i18n.prop("hacienta.monto")       ,"autoWidth" :true ,
                                     "render":function(totalReceptor,type, row){
 									    return formatoDecimales(totalReceptor,2);
@@ -374,6 +374,11 @@ function __Opciones(id,type,row){
         menu += '<li><a href="#"  title="Bajar XML" class="  btnBajarXML" >XML Documentos</a></li>'
         menu += '<li><a href="#"  title="Bajar XML Respuesta de Triburacion" class="  btnRespuestaHacienda" >XML Respuesta</a></li>'
        menu += '<li><a href="#"  title="Envio de correo Alternativo" class="  btnEnvioCorreoAlternativo" >Envio de correo Alternativo</a></li>'
+
+    }
+    if(row.estado == "Rechazado"){
+        menu += '<li><a href="#"  title="Bajar XML" class="  btnBajarXML" >XML Documentos</a></li>'
+        menu += '<li><a href="#"  title="Bajar XML Respuesta de Triburacion" class="  btnRespuestaHacienda" >XML Respuesta</a></li>'
 
     }
     if(row.estado == "Enviado"){

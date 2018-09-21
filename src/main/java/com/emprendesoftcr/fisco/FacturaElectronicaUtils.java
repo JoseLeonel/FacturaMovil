@@ -304,6 +304,7 @@ public final class FacturaElectronicaUtils {
   
   
   public static Blob convertirStringToblod(String valor) throws SerialException, SQLException {
+  	
   	Blob b = new javax.sql.rowset.serial.SerialBlob(valor.getBytes());
   	return b;
   }

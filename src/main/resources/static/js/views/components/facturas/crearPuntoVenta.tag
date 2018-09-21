@@ -240,7 +240,7 @@
                             </td>
 
                             <td class="text-right">
-                                <input  class="campo" type="text"  value = "{montoTotalLinea.toFixed(2)}" readonly/>
+                                <input  class="campo" type="text"  value = "{montoTotalLinea.toFixed(2)}" readonly />
                             </td>
                         </tr>
                         </tbody>
@@ -628,6 +628,10 @@
  * Reimprime la factura
  **/
 _ReimprimirFactura(){
+    reimprimirFacturaEnMomento()
+
+}
+function reimprimirFacturaEnMomento(){
   if(self.facturaReimprimir ==null){
       return
   }
@@ -635,7 +639,6 @@ _ReimprimirFactura(){
   $('.codigo').select()
   $(".codigo").focus() 
 }
-
 /**
 * Consultar la empresa
 **/
@@ -1028,7 +1031,20 @@ __AplicarYcrearFacturaTemporal(){
 **/
 function aplicarFactura(estado){
     if(self.detail.length == 0 ){
-        mensajeError($.i18n.prop("factura.alert.sin.detalles"))
+         $('.precioVenta').val(null)
+        $('.codigo').val(null)
+        $('.codigo').focus()
+         swal({
+                position: 'top-end',
+                type: 'error',
+                title:$.i18n.prop("factura.alert.sin.detalles"),
+                showConfirmButton: false,
+                timer: 1500
+                })
+        $('.precioVenta').val(null)
+        $('.codigo').val(null)
+        $('.codigo').focus()
+        
         return
     }
     if($('#condicionVenta').val() == "02"  ){
@@ -1240,9 +1256,14 @@ function cargarDetallesFacturaEnEspera(){
         });
         self.update()
     })
-    self.factura.totalCambioPagar = 0;
-    self.totalCambioPagar = 0
+    self.factura.totalCambioPagar = self.factura.totalComprobante;
+    self.totalCambioPagar = self.factura.totalComprobante
     self.update()
+    $('#totalEfectivo').val(self.factura.totalComprobante)
+    $('#totalTarjeta').val(null)
+    $('#totalBanco').val(null)
+    $('#totalEfectivo').focus()
+    $('#totalEfectivo').select()
      __calculate(); 
 }
 /** 
@@ -1311,21 +1332,22 @@ function evaluarFactura(data){
                 //Envia a la pantalla de impresion
                 self.facturaReimprimir = modeloTabla
                 self.update()
+                var mensaje = "Cons# :"+   self.facturaImprimir.numeroConsecutivo        
                 swal({
-                    position: 'top-end',
-                    type: 'success',
-                    title: "Consecutivo creado:" + self.facturaReimprimir.numeroConsecutivo,
-                    showConfirmButton: false,
-                    timer: 1500
-                    })
+                position: 'top-end',
+                type: 'success',
+                title: mensaje,
+                showConfirmButton: false,
+                timer: 1500
+                })
                //riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
             }else{
                 swal({
-	                title: '',
-	                text: data.message,
-	                type: 'success',
-	                showCancelButton: false,
-	                confirmButtonText: $.i18n.prop("btn.aceptar"),
+                position: 'top-end',
+                type: 'success',
+                title:data.message,
+                showConfirmButton: false,
+                timer: 1000
                 })
                 __Init()
                 __ListaFacturasEnEspera()
@@ -1400,7 +1422,19 @@ __MostrarFormularioDePago(){
 function mostrarPAgo(){
      //No hay detalles registrados en la Factura
     if(self.detail.length == 0 ){
-        swal("Verificar","No hay detalles en la factura ", "info")
+        $('.precioVenta').val(null)
+        $('.codigo').val(null)
+        $('.codigo').focus()
+        swal({
+            position: 'top-end',
+            type: 'error',
+            title:$.i18n.prop("factura.alert.sin.detalles"),
+            showConfirmButton: false,
+            timer: 1500
+        })
+        $('.precioVenta').val(null)
+        $('.codigo').val(null)
+        $('.codigo').focus()
         return
     }
     $('#totalEfectivo').val(self.factura.totalComprobante)
@@ -1424,6 +1458,7 @@ function mostrarPAgo(){
 *
 */
 __addProductToDetail(e){
+    $('.precioVenta').val(null)
     if(self.empresa.tieneLector !="Activo"){
         return
     }
@@ -1457,13 +1492,16 @@ __addProductToDetail(e){
        return  
     }
     __buscarcodigo(codigoActual,__valorNumerico(cantidadAct),0);
-    if(self.articulo.tipoCodigo !="04"){
-      $('.precioVenta').val(null)
-      $('.codigo').val(null)
-      $('.codigo').select()
-      $('.codigo').focus()
+    if(self.articulo !=null){
+        if(self.articulo.tipoCodigo !="04"){
+            $('.precioVenta').val(null)
+            $('.codigo').val(null)
+            $('.codigo').select()
+            $('.codigo').focus()
 
+        }
     }
+
 }
 /**
 *  cambiar el precio
@@ -1673,6 +1711,9 @@ function __ListaDeClientes(){
 * Buscar el codigo del codigo si esta input de precio aplica esto cuando es codigo de uso interno
 **/
 function __buscarcodigoPrecio(idArticulo,cantidad,precio){
+    if(idArticulo ==null){
+        return
+    }
     $.ajax({
         type: 'GET',
         url: 'findArticuloByCodigojax.do',
@@ -1719,6 +1760,9 @@ function __buscarcodigoPrecio(idArticulo,cantidad,precio){
 * Buscar el codigo del codigo  en la base de datos
 **/
 function __buscarcodigo(idArticulo,cantidad,precio){
+    if(idArticulo ==null){
+        return
+    }
     $.ajax({
         type: 'GET',
         url: 'findArticuloByCodigojax.do',
@@ -1749,6 +1793,7 @@ function __buscarcodigo(idArticulo,cantidad,precio){
                         self.descripcionArticulo = modeloTabla.descripcion
                         self.update()
                         if(self.articulo.tipoCodigo =="04"){
+                            $('.codigo').val(self.articulo.codigo)
                             $('#precioVenta').val(self.articulo.precioPublico)
                             $('#precioVenta').select()
                             $("#precioVenta").focus()
@@ -2101,8 +2146,10 @@ function __calculate() {
 
    // self.articulo              = null;
     self.update(); 
-    $( "#codigo" ).val(null);
-    $( "#quantity" ).val(null);
+     $('.precioVenta').val(null)
+            $('.codigo').val(null)
+            $('.codigo').select()
+            $('.codigo').focus()
     getSubTotalGeneral()
 }
 /**
@@ -2352,7 +2399,7 @@ function agregarInputsCombos_Vendedores(){
 function __Teclas(){
     window.addEventListener( "keydown", function(evento){
         var tecla = evento.keyCode; 
-      // alert(tecla)
+     //  alert(tecla)
    
     if(tecla ==119){
       if(self.mostrarFormularioPago == false && self.mostarParaCrearNuevaFactura == true){
@@ -2369,7 +2416,11 @@ function __Teclas(){
     if(tecla ==120){
       aplicarFactura(1)   
     }
-    
+     //Reimprimir Factura
+    if(tecla ==117){
+     reimprimirFacturaEnMomento()
+    }
+
     //Limpiar
     if(tecla ==121){
       __Init()
@@ -2377,7 +2428,7 @@ function __Teclas(){
       $(".codigo").focus()
     }
 
-  if(tecla ==27){
+   if(tecla ==27){
       $('.codigo').select()
       $(".codigo").focus()
     }

@@ -55,6 +55,7 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 	@Override
 	public String getCrearXMLSinFirma(Factura factura) throws Exception{
 		String resultado = Constantes.EMPTY;
+		
 		try {
 			Date fecha = new Date();
 			factura.setFechaEmision(fecha);

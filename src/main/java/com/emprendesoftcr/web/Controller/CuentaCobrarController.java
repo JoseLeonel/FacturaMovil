@@ -304,7 +304,7 @@ public class CuentaCobrarController {
 					fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
 				}
 
-				DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+				DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
 
 				inicio = dateFormat.format(fechaInicio);
 				fin = dateFormat.format(fechaFinal);

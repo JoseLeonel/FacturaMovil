@@ -19,6 +19,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
+import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
@@ -48,6 +49,8 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 	
 	@Autowired
 	private FirmaElectronicaService firmaElectronicaService;
+	@Autowired
+	private FacturaBo							facturaBo;
 
 	
 	/**
@@ -57,6 +60,9 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 	@Override
 	public String getCrearXMLSinFirma(Factura factura) throws Exception{
 		String xml = Constantes.EMPTY;
+		Date fecha = new Date();
+		factura.setFechaEmision(fecha);
+		facturaBo.modificar(factura);
 		try {
 			String date = FacturaElectronicaUtils.toISO8601String(factura.getFechaEmision());
 			 xml = "<FacturaElectronica xmlns=\"" + Constantes.DOCXMLS_FACTURA + "\" " +

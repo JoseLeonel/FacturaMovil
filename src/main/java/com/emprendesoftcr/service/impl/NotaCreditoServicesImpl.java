@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
+import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
@@ -34,6 +35,9 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
 	
 	@Autowired
 	private FirmaElectronicaService firmaElectronicaService;
+	
+	@Autowired
+	private FacturaBo							facturaBo;
 	
 	
 	/**
@@ -58,7 +62,11 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
 
 	@Override
 	public String getCrearXMLSinFirma(Factura factura) throws Exception {
+		
 		String xml = Constantes.EMPTY;
+		Date fecha = new Date();
+		factura.setFechaEmision(fecha);
+		facturaBo.modificar(factura);
 		try {
 			String date = FacturaElectronicaUtils.toISO8601String(factura.getFechaEmision());
 			String datereferenciaEmision = FacturaElectronicaUtils.toISO8601String(factura.getReferenciaFechaEmision());
