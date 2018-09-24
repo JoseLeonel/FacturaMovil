@@ -295,11 +295,11 @@
 	    self.mostrarCargaArchivo  = true;
 		self.mostrarFormulario    = false;	    
 	    self.mostrarDetalle       = false;
-
 		self.tipoCedulas	   	  = {data:[]} 
 		self.mediosPago	   		  = {data:[]}
 		self.condicionesVenta	  = {data:[]}
 		self.tiposMensajes		  = {data:[]}
+<<<<<<< HEAD
 		
 		self.archivo ={				
 				emisorNombre:"",
@@ -355,6 +355,9 @@
 				cedulaReceptor:"",
 				numeroConsecutivoReceptor:"",				
 		}
+=======
+		__limpiarValores();
+>>>>>>> 6ec011b22dfdbda9d45ca02fea0be91c78ef9bd2
 		
 		//Se cargan al montar el tag
 		self.on('mount',function(){
@@ -367,6 +370,7 @@
 		    __listadoTiposMensajes();
 		    
 		});
+
 		//Se actualiza la pagina
 		self.update();
 
@@ -384,6 +388,64 @@
 		    self.mostrarFormulario   = false;
 		    self.mostrarDetalle      = true;
 		    self.update();			
+		}
+		
+		function __limpiarValores(){			
+			self.archivo ={				
+					emisorNombre:"",
+					emisorCedula:"",
+					emisorTipoCedula:"",
+					emisorCorreo:"",
+					emisorCodigoProvincia:"0",
+					emisorProvincia:"",
+					emisorCanton:"",
+					emisorCodigoCanton:"",
+					emisorDistrito:"",
+					emisorCodigoDistrito:"",
+					emisorCorreo:"",
+					emisorOtraSena:"",
+					receptorNombre:"",
+					receptorCedula:"",
+					receptorTipoCedula:"",
+					receptorCorreo:"",
+					receptorProvincia:"",
+					receptorCodigoProvincia:"",
+					receptorCanton:"",
+					receptorCodigoCanton:"",
+					receptorDistrito:"",
+					receptorCodigoDistrito:"",
+					receptorOtraSena:"",
+					receptorTelefono:"0",
+					receptorNombreComercial:"",
+					facturaConsecutivo:"",
+					facturaClave:"",
+					facturaFechaEmision:"",
+					facturaCondicionVenta:"0",
+					facturaMedioPago:"0",
+					facturaCodigoMoneda:"0",
+					facturaTipoCambio:"0",
+					facturaTotalServExentos:"0",
+					facturaTotalExento:"0",
+					facturaTotalVenta:"0",
+					facturaTotalVentaNeta:"0",
+					facturaTotalComprobante:"0",
+					facturaTotalImpuestos:"0",
+			}
+			
+			self.recepcionFactura ={
+					id:"0",
+					clave:"",
+					cedulaEmisor:"",
+					emisorTipoCedula:"",
+					fechaEmision:"",
+					mensaje:"0",
+					detalleMensaje:"",
+					totalImpuestos:"0",
+					totalFactura:"0",
+					cedulaReceptor:"",
+					numeroConsecutivoReceptor:"",				
+			}
+			
 		}
 		
 		//Se muestra los tipos de cedulas	
@@ -497,114 +559,122 @@
 		}
 		
 		function __cargarXML(xml) {
+<<<<<<< HEAD
 			limpiar()
             self.archivo ={}
 			self.update()
+=======
+			
+			__limpiarValores();
+            
+>>>>>>> 6ec011b22dfdbda9d45ca02fea0be91c78ef9bd2
 			//Se limpian los errores
 			$(".errorServerSideJgrid").remove();
 
             //Se carga el xml en los campos
-			var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xml)$/;
-	        if (regex.test($("#fileUpload").val().toLowerCase())) {
-	            if (typeof (FileReader) != "undefined") {
-	                var reader = new FileReader();
-	                reader.onload = function (e) {
+			//var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xml)$/;
+            //alert($("#fileUpload").val().toLowerCase());
+	        //if (regex.test($("#fileUpload").val().toLowerCase())) {
+	        //} else {
+	            //alert("El archivo seleccionado no es un XML valido");
+	        //}
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+                reader.onload = function (e) {
 
-	                	//Se carga el XML
-	                	var xmlDoc = $.parseXML(e.target.result);
+                	//Se carga el XML
+                	var xmlDoc = $.parseXML(e.target.result);
 
-	                	//Se cargan los datos para presentar el detalle de una factura
-	                	
-	                    //Se cargan los datos del emisor
-	                    var emisor = $(xmlDoc).find("Emisor");
-	                    self.archivo.emisorNombre = emisor.find("Nombre").text();
-	                    self.archivo.emisorCedula = emisor.find("Identificacion").find("Numero").text();
-	                    self.archivo.emisorTipoCedula = emisor.find("Identificacion").find("Tipo").text();
-	                    self.archivo.emisorCorreo = emisor.find("CorreoElectronico").text();
-	                    self.archivo.emisorCodigoProvincia = emisor.find("Ubicacion").find("Provincia").text();
-	                    self.archivo.emisorCodigoCanton = emisor.find("Ubicacion").find("Canton").text();
-	                    self.archivo.emisorCodigoDistrito = emisor.find("Ubicacion").find("Distrito").text();
-	                    self.archivo.emisorOtraSena = emisor.find("Ubicacion").find("OtrasSenas").text();
+                	//Se cargan los datos para presentar el detalle de una factura
+                	
+                    //Se cargan los datos del emisor
+                    var emisor = $(xmlDoc).find("Emisor");
+                    self.archivo.emisorNombre = emisor.find("Nombre").text();
+                    self.archivo.emisorCedula = emisor.find("Identificacion").find("Numero").text();
+                    self.archivo.emisorTipoCedula = emisor.find("Identificacion").find("Tipo").text();
+                    self.archivo.emisorCorreo = emisor.find("CorreoElectronico").text();
+                    self.archivo.emisorCodigoProvincia = emisor.find("Ubicacion").find("Provincia").text();
+                    self.archivo.emisorCodigoCanton = emisor.find("Ubicacion").find("Canton").text();
+                    self.archivo.emisorCodigoDistrito = emisor.find("Ubicacion").find("Distrito").text();
+                    self.archivo.emisorOtraSena = emisor.find("Ubicacion").find("OtrasSenas").text();
 
-	                   //Se cargan los datos del emisor
-	                    var receptor = $(xmlDoc).find("Receptor");
-	                    self.archivo.receptorNombre = receptor.find("Nombre").text();
-	                    self.archivo.receptorCedula = receptor.find("Identificacion").find("Numero").text();
-	                    self.archivo.receptorTipoCedula = receptor.find("Identificacion").find("Tipo").text();
-	                    self.archivo.receptorCorreo = receptor.find("CorreoElectronico").text();
-	                    self.archivo.receptorCodigoProvincia = receptor.find("Ubicacion").find("Provincia").text();
-	                    self.archivo.receptorCodigoCanton = receptor.find("Ubicacion").find("Canton").text();
-	                    self.archivo.receptorCodigoDistrito = receptor.find("Ubicacion").find("Distrito").text();
-	                    self.archivo.receptorOtraSena = receptor.find("Ubicacion").find("OtrasSenas").text();
-	                    self.archivo.receptorTelefono = receptor.find("Telefono").find("NumTelefono").text();
-	                    self.archivo.receptorNombreComercial = receptor.find("NombreComercial").text();
-	                      
-	                    //Se cargan los datos de la factura
-	                    self.archivo.facturaConsecutivo = $(xmlDoc).find("NumeroConsecutivo").text();
-	                    self.archivo.facturaClave = $(xmlDoc).find("Clave").text();
-	                    self.archivo.facturaFechaEmision = $(xmlDoc).find("FechaEmision").text();
-	                    self.archivo.facturaCondicionVenta = $(xmlDoc).find("CondicionVenta").text();
-	                    self.archivo.facturaMedioPago = $(xmlDoc).find("MedioPago").text();
-	                    
-	                    //Se carga el detalle de la factura
-	                    var detalles = $(xmlDoc).find("DetalleServicio");
-	                    $(detalles).each(function () {
-	                    	$(this).children().each(function () {
-			                    var row = "<tr>" + 
-				                    		  "<td>" + $(this).find("Cantidad").text() + "</td>" + 
-				                    		  "<td>" + $(this).find("UnidadMedida").text() + "</td>" + 
-				                    		  "<td>" + $(this).find("Detalle").text() + "</td>" + 
-				                    		  "<td>" + $(this).find("PrecioUnitario").text() + "</td>" + 
-				                    		  "<td>" + $(this).find("MontoTotal").text() + "</td>" + 
-				                    		  "<td>" + $(this).find("SubTotal").text() + "</td>" + 
-				                    		  "<td>" + $(this).find("MontoTotalLinea").text() + "</td>" +
-			                    		  "</tr>";
-			      	            $('#detalleFactura tr:last').after(row);
-	                        });
-	                    });
-	                    
-	                    //Se carga el resumen de la factura
-	                    var resumenFactura = $(xmlDoc).find("ResumenFactura");
-	                    self.archivo.facturaCodigoMoneda = resumenFactura.find("CodigoMoneda").text();
-	                    self.archivo.facturaTipoCambio = resumenFactura.find("TipoCambio").text();
-	                    self.archivo.facturaTotalServExentos = resumenFactura.find("TotalServExentos").text();
-	                    self.archivo.facturaTotalExento = resumenFactura.find("TotalExento").text();
-	                    self.archivo.facturaTotalVenta = resumenFactura.find("TotalVenta").text();
-	                    self.archivo.facturaTotalVentaNeta = resumenFactura.find("TotalVentaNeta").text();
-	                    self.archivo.facturaTotalComprobante = resumenFactura.find("TotalComprobante").text();
-	                    self.archivo.facturaTotalImpuestos = resumenFactura.find("TotalImpuesto").text();
-	                    self.update();
+                   //Se cargan los datos del emisor
+                    var receptor = $(xmlDoc).find("Receptor");
+                    self.archivo.receptorNombre = receptor.find("Nombre").text();
+                    self.archivo.receptorCedula = receptor.find("Identificacion").find("Numero").text();
+                    self.archivo.receptorTipoCedula = receptor.find("Identificacion").find("Tipo").text();
+                    self.archivo.receptorCorreo = receptor.find("CorreoElectronico").text();
+                    self.archivo.receptorCodigoProvincia = receptor.find("Ubicacion").find("Provincia").text();
+                    self.archivo.receptorCodigoCanton = receptor.find("Ubicacion").find("Canton").text();
+                    self.archivo.receptorCodigoDistrito = receptor.find("Ubicacion").find("Distrito").text();
+                    self.archivo.receptorOtraSena = receptor.find("Ubicacion").find("OtrasSenas").text();
+                    self.archivo.receptorTelefono = receptor.find("Telefono").find("NumTelefono").text();
+                    self.archivo.receptorNombreComercial = receptor.find("NombreComercial").text();
+                      
+                    //Se cargan los datos de la factura
+                    self.archivo.facturaConsecutivo = $(xmlDoc).find("NumeroConsecutivo").text();
+                    self.archivo.facturaClave = $(xmlDoc).find("Clave").text();
+                    self.archivo.facturaFechaEmision = $(xmlDoc).find("FechaEmision").text();
+                    self.archivo.facturaCondicionVenta = $(xmlDoc).find("CondicionVenta").text();
+                    self.archivo.facturaMedioPago = $(xmlDoc).find("MedioPago").text();
+                    
+                    //Se carga el detalle de la factura
+					$("#detalleFactura").find("tr:gt(0)").remove();
+                    var detalles = $(xmlDoc).find("DetalleServicio");
+                    $(detalles).each(function () {
+                    	$(this).children().each(function () {
+		                    var row = "<tr>" + 
+			                    		  "<td>" + $(this).find("Cantidad").text() + "</td>" + 
+			                    		  "<td>" + $(this).find("UnidadMedida").text() + "</td>" + 
+			                    		  "<td>" + $(this).find("Detalle").text() + "</td>" + 
+			                    		  "<td>" + $(this).find("PrecioUnitario").text() + "</td>" + 
+			                    		  "<td>" + $(this).find("MontoTotal").text() + "</td>" + 
+			                    		  "<td>" + $(this).find("SubTotal").text() + "</td>" + 
+			                    		  "<td>" + $(this).find("MontoTotalLinea").text() + "</td>" +
+		                    		  "</tr>";
+		      	            $('#detalleFactura tr:last').after(row);
+                        });
+                    });
+                    
+                    //Se carga el resumen de la factura
+                    var resumenFactura = $(xmlDoc).find("ResumenFactura");
+                    self.archivo.facturaCodigoMoneda = resumenFactura.find("CodigoMoneda").text();
+                    self.archivo.facturaTipoCambio = resumenFactura.find("TipoCambio").text();
+                    self.archivo.facturaTotalServExentos = resumenFactura.find("TotalServExentos").text();
+                    self.archivo.facturaTotalExento = resumenFactura.find("TotalExento").text();
+                    self.archivo.facturaTotalVenta = resumenFactura.find("TotalVenta").text();
+                    self.archivo.facturaTotalVentaNeta = resumenFactura.find("TotalVentaNeta").text();
+                    self.archivo.facturaTotalComprobante = resumenFactura.find("TotalComprobante").text();
+                    self.archivo.facturaTotalImpuestos = resumenFactura.find("TotalImpuesto").text();
+                    self.update();
 
-	                    
-	                    __buscaProvincias();
-	                    __buscaCantones();
-	                    __buscaDistritos();
-	                    
-	                    
-	                	//Se cargan los datos principales
-	                    self.recepcionFactura.clave = $(xmlDoc).find("Clave").text();
-	                	self.recepcionFactura.cedulaEmisor=emisor.find("Identificacion").find("Numero").text();
-	                	self.recepcionFactura.emisorTipoCedula = emisor.find("Identificacion").find("Tipo").text();
-	                    self.recepcionFactura.fechaEmision = $(xmlDoc).find("FechaEmision").text();
-	                    self.recepcionFactura.totalImpuestos = $(xmlDoc).find("TotalImpuesto").text();
-	                    self.recepcionFactura.totalFactura = resumenFactura.find("TotalComprobante").text();
-	                    self.recepcionFactura.cedulaReceptor = receptor.find("Identificacion").find("Numero").text();
-		                self.recepcionFactura.totalImpuestos = $(xmlDoc).find("TotalImpuesto").text();
-	                }
-	                
-	                reader.readAsText($("#fileUpload")[0].files[0]);
+                    
+                    __buscaProvincias();
+                    __buscaCantones();
+                    __buscaDistritos();
+                    
+                    
+                	//Se cargan los datos principales
+                    self.recepcionFactura.clave = $(xmlDoc).find("Clave").text();
+                	self.recepcionFactura.cedulaEmisor=emisor.find("Identificacion").find("Numero").text();
+                	self.recepcionFactura.emisorTipoCedula = emisor.find("Identificacion").find("Tipo").text();
+                    self.recepcionFactura.fechaEmision = $(xmlDoc).find("FechaEmision").text();
+                    self.recepcionFactura.totalImpuestos = $(xmlDoc).find("TotalImpuesto").text();
+                    self.recepcionFactura.totalFactura = resumenFactura.find("TotalComprobante").text();
+                    self.recepcionFactura.cedulaReceptor = receptor.find("Identificacion").find("Numero").text();
+	                self.recepcionFactura.totalImpuestos = $(xmlDoc).find("TotalImpuesto").text();
+                }
+                
+                reader.readAsText($("#fileUpload")[0].files[0]);
 
-	                //Se muestra la pantalla
-	    		    self.mostrarFormulario     = true;
-	    		    self.mostrarCargaArchivo   = true;
-	    		    self.update();
+                //Se muestra la pantalla
+    		    self.mostrarFormulario     = true;
+    		    self.mostrarCargaArchivo   = true;
+    		    self.update();
 
-	            } else {
-	                alert("Se presento un problema al intentar cargar el archivo, su browser no soporta HTML 5");
-	            }
-	        } else {
-	            alert("El archivo seleccionado no es un XML valido");
-	        }
+            } else {
+                alert("Se presento un problema al intentar cargar el archivo, su browser no soporta HTML 5");
+            }
 		}
 
 		function limpiar(){
@@ -665,100 +735,116 @@
 		self.update()
 		}
 		
+		
 		function __buscaProvincias(){
-			$.ajax({
-		        url: "BuscaProvinciaAjax.do",
-		        datatype: "json",
-		        data: { "codigoProvincia": self.archivo.emisorCodigoProvincia},
-		        method:"GET",
-		        success: function (data) {
-		        	self.archivo.emisorProvincia = data.descripcion;
-				    self.update();
-		        },
-		        error: function (xhr, status) {
-		            console.log(xhr);
-		            mensajeErrorServidor(xhr, status);
-		        }
-		    });
+			
+			
+			if(self.archivo.emisorCodigoProvincia > 0){
+				$.ajax({
+			        url: "BuscaProvinciaAjax.do",
+			        datatype: "json",
+			        data: { "codigoProvincia": self.archivo.emisorCodigoProvincia},
+			        method:"GET",
+			        success: function (data) {
+			        	self.archivo.emisorProvincia = data.descripcion;
+					    self.update();
+			        },
+			        error: function (xhr, status) {
+			            console.log(xhr);
+			            mensajeErrorServidor(xhr, status);
+			        }
+			    });				
+			}
+			
 
-			$.ajax({
-		        url: "BuscaProvinciaAjax.do",
-		        datatype: "json",
-		        data: { "codigoProvincia": self.archivo.receptorCodigoProvincia},
-		        method:"GET",
-		        success: function (data) {
-		        	self.archivo.receptorProvincia = data.descripcion;
-				    self.update();
-		        },
-		        error: function (xhr, status) {
-		            console.log(xhr);
-		            mensajeErrorServidor(xhr, status);
-		        }
-		    });
+			if(self.archivo.receptorCodigoProvincia > 0){
+				$.ajax({
+			        url: "BuscaProvinciaAjax.do",
+			        datatype: "json",
+			        data: { "codigoProvincia": self.archivo.receptorCodigoProvincia},
+			        method:"GET",
+			        success: function (data) {
+			        	self.archivo.receptorProvincia = data.descripcion;
+					    self.update();
+			        },
+			        error: function (xhr, status) {
+			            console.log(xhr);
+			            mensajeErrorServidor(xhr, status);
+			        }
+			    });
+			}
 		}
 
 		function __buscaCantones(){
-			$.ajax({
-		        url: "BuscaCantonAjax.do",
-		        datatype: "json",
-		        data: { "codigoProvincia": self.archivo.emisorCodigoProvincia, "codigoCanton": self.archivo.emisorCodigoCanton},
-		        method:"GET",
-		        success: function (data) {
-		        	self.archivo.emisorCanton = data.descripcion;
-				    self.update();
-		        },
-		        error: function (xhr, status) {
-		            console.log(xhr);
-		            mensajeErrorServidor(xhr, status);
-		        }
-		    });
-
-			$.ajax({
-		        url: "BuscaCantonAjax.do",
-		        datatype: "json",
-		        data: { "codigoProvincia": self.archivo.receptorCodigoProvincia, "codigoCanton": self.archivo.receptorCodigoCanton},
-		        method:"GET",
-		        success: function (data) {
-		        	self.archivo.receptorCanton = data.descripcion;
-				    self.update();
-		        },
-		        error: function (xhr, status) {
-		            console.log(xhr);
-		            mensajeErrorServidor(xhr, status);
-		        }
-		    });
+			if(self.archivo.emisorCodigoProvincia > 0 && self.archivo.emisorCodigoCanton > 0){
+				$.ajax({
+			        url: "BuscaCantonAjax.do",
+			        datatype: "json",
+			        data: { "codigoProvincia": self.archivo.emisorCodigoProvincia, "codigoCanton": self.archivo.emisorCodigoCanton},
+			        method:"GET",
+			        success: function (data) {
+			        	self.archivo.emisorCanton = data.descripcion;
+					    self.update();
+			        },
+			        error: function (xhr, status) {
+			            console.log(xhr);
+			            mensajeErrorServidor(xhr, status);
+			        }
+			    });
+			}
+			
+			if(self.archivo.receptorCodigoProvincia > 0 && self.archivo.receptorCodigoCanton > 0){
+				$.ajax({
+			        url: "BuscaCantonAjax.do",
+			        datatype: "json",
+			        data: { "codigoProvincia": self.archivo.receptorCodigoProvincia, "codigoCanton": self.archivo.receptorCodigoCanton},
+			        method:"GET",
+			        success: function (data) {
+			        	self.archivo.receptorCanton = data.descripcion;
+					    self.update();
+			        },
+			        error: function (xhr, status) {
+			            console.log(xhr);
+			            mensajeErrorServidor(xhr, status);
+			        }
+			    });
+			}
 		}
 		
 		function __buscaDistritos(){
-			$.ajax({
-		        url: "BuscaDistritoAjax.do",
-		        datatype: "json",
-		        data: { "codigoProvincia": self.archivo.emisorCodigoProvincia, "codigoCanton": self.archivo.emisorCodigoCanton, "codigoDistrito": self.archivo.emisorCodigoDistrito},
-		        method:"GET",
-		        success: function (data) {
-		        	self.archivo.emisorDistrito = data.descripcion;
-				    self.update();
-		        },
-		        error: function (xhr, status) {
-		            console.log(xhr);
-		            mensajeErrorServidor(xhr, status);
-		        }
-		    });
+			if(self.archivo.emisorCodigoProvincia > 0 && self.archivo.emisorCodigoCanton > 0 && self.archivo.emisorCodigoDistrito > 0){				
+				$.ajax({
+			        url: "BuscaDistritoAjax.do",
+			        datatype: "json",
+			        data: { "codigoProvincia": self.archivo.emisorCodigoProvincia, "codigoCanton": self.archivo.emisorCodigoCanton, "codigoDistrito": self.archivo.emisorCodigoDistrito},
+			        method:"GET",
+			        success: function (data) {
+			        	self.archivo.emisorDistrito = data.descripcion;
+					    self.update();
+			        },
+			        error: function (xhr, status) {
+			            console.log(xhr);
+			            mensajeErrorServidor(xhr, status);
+			        }
+			    });
+			}
 
-			$.ajax({
-		        url: "BuscaDistritoAjax.do",
-		        datatype: "json",
-		        data: { "codigoProvincia": self.archivo.receptorCodigoProvincia, "codigoCanton": self.archivo.receptorCodigoCanton, "codigoDistrito": self.archivo.receptorCodigoDistrito},
-		        method:"GET",
-		        success: function (data) {
-		        	self.archivo.receptorDistrito = data.descripcion;
-				    self.update();
-		        },
-		        error: function (xhr, status) {
-		            console.log(xhr);
-		            mensajeErrorServidor(xhr, status);
-		        }
-		    });
+			if(self.archivo.receptorCodigoProvincia > 0 && self.archivo.receptorCodigoCanton > 0 && self.archivo.receptorCodigoDistrito > 0){
+				$.ajax({
+			        url: "BuscaDistritoAjax.do",
+			        datatype: "json",
+			        data: { "codigoProvincia": self.archivo.receptorCodigoProvincia, "codigoCanton": self.archivo.receptorCodigoCanton, "codigoDistrito": self.archivo.receptorCodigoDistrito},
+			        method:"GET",
+			        success: function (data) {
+			        	self.archivo.receptorDistrito = data.descripcion;
+					    self.update();
+			        },
+			        error: function (xhr, status) {
+			            console.log(xhr);
+			            mensajeErrorServidor(xhr, status);
+			        }
+			    });
+			}
 		}
 
 		/**
