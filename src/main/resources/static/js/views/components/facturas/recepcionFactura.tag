@@ -299,7 +299,6 @@
 		self.mediosPago	   		  = {data:[]}
 		self.condicionesVenta	  = {data:[]}
 		self.tiposMensajes		  = {data:[]}
-<<<<<<< HEAD
 		
 		self.archivo ={				
 				emisorNombre:"",
@@ -355,9 +354,6 @@
 				cedulaReceptor:"",
 				numeroConsecutivoReceptor:"",				
 		}
-=======
-		__limpiarValores();
->>>>>>> 6ec011b22dfdbda9d45ca02fea0be91c78ef9bd2
 		
 		//Se cargan al montar el tag
 		self.on('mount',function(){
@@ -559,15 +555,9 @@
 		}
 		
 		function __cargarXML(xml) {
-<<<<<<< HEAD
 			limpiar()
             self.archivo ={}
 			self.update()
-=======
-			
-			__limpiarValores();
-            
->>>>>>> 6ec011b22dfdbda9d45ca02fea0be91c78ef9bd2
 			//Se limpian los errores
 			$(".errorServerSideJgrid").remove();
 
