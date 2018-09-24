@@ -54,6 +54,8 @@ import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.service.ProcesoHaciendaService;
 import com.emprendesoftcr.web.command.HaciendaCommand;
+import com.emprendesoftcr.web.propertyEditor.FechaPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
 import com.itextpdf.text.DocumentException;
 
@@ -89,8 +91,8 @@ public class HaciendasController {
 	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
 																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
 																																																			// Emisor
-																																																		
-																																																			facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ?d.getEmpresa().getNombreComercial(): d.getEmpresa().getNombre());
+
+																																																			facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? d.getEmpresa().getNombreComercial() : d.getEmpresa().getNombre());
 																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
 																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
 																																																			facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
@@ -107,11 +109,11 @@ public class HaciendasController {
 																																																			// Ubicacion
 																																																			facturaElectronica.set_logo(d.getEmpresa().getLogo());
 																																																			facturaElectronica.set_clienteDireccion(d.getDireccion());
-																																																			
+
 																																																			// Otros
 																																																			facturaElectronica.setTipoDocumento(FacturaElectronicaUtils.getTipoDocumento(d.getTipoDoc()));
 																																																			facturaElectronica.setClave(d.getClave());
-																																																			
+
 																																																			facturaElectronica.setConsecutivo(d.getNumeroConsecutivo());
 																																																			facturaElectronica.setFechaEmision(d.getFechaEmision().toString());
 																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito().toString());
@@ -119,31 +121,30 @@ public class HaciendasController {
 																																																			facturaElectronica.setMedioBanco(d.getMedioBanco() != null ? Constantes.FACTURA_MEDIO_PAGO_TRANSFERENCIA_STR : Constantes.EMPTY);
 																																																			facturaElectronica.setMedioEfectivo(d.getMedioEfectivo() != null ? Constantes.FACTURA_MEDIO_PAGO_EFECTIVO_STR : Constantes.EMPTY);
 																																																			facturaElectronica.setMedioTarjeta(d.getMedioTarjeta() != null ? Constantes.FACTURA_MEDIO_PAGO_TARJETA_STR : Constantes.EMPTY);
-																																																			
 
 																																																			facturaElectronica.setMoneda(FacturaElectronicaUtils.getMoneda(d.getCodigoMoneda()));
 																																																			facturaElectronica.setTipoCambio(d.getTipoCambio().toString());
 																																																			// Nota Credito y Nota Debito
-																																																			 if (d.getReferenciaCodigo() !=null) {
-																																																				 if(!d.getReferenciaCodigo().equals(Constantes.EMPTY)) {
-																																																					 facturaElectronica.setReferenciaCodigo( MapEnums.ENUM_CODIGO_REFERENCIA.get(d.getReferenciaCodigo()));
-																																																					 facturaElectronica.setReferenciaNumero(d.getReferenciaNumero());
-																																																					 facturaElectronica.setReferenciaRazon(d.getReferenciaRazon());
-																																																					 facturaElectronica.setReferenciaTipoDoc(MapEnums.ENUM_TIPO_DOC.get(d.getReferenciaTipoDoc()));
-																																																					 facturaElectronica.setReferenciaFechaEmision(d.getReferenciaFechaEmision() != null?d.getReferenciaFechaEmision().toString():Constantes.EMPTY);
-																																																					 
-																																																				 }
-																																																			 
-																																																			 }else {
-																																																				 
-																																																				 facturaElectronica.setReferencia(Constantes.EMPTY);
-																																																				 facturaElectronica.setReferenciaCodigo( Constantes.EMPTY);
-																																																				 facturaElectronica.setReferenciaNumero(Constantes.EMPTY);
-																																																				 facturaElectronica.setReferenciaRazon(Constantes.EMPTY);
-																																																				 facturaElectronica.setReferenciaTipoDoc(Constantes.EMPTY);
-																																																				 facturaElectronica.setReferenciaFechaEmision(Constantes.EMPTY);
-																																																				 
-																																																			 }
+																																																			if (d.getReferenciaCodigo() != null) {
+																																																				if (!d.getReferenciaCodigo().equals(Constantes.EMPTY)) {
+																																																					facturaElectronica.setReferenciaCodigo(MapEnums.ENUM_CODIGO_REFERENCIA.get(d.getReferenciaCodigo()));
+																																																					facturaElectronica.setReferenciaNumero(d.getReferenciaNumero());
+																																																					facturaElectronica.setReferenciaRazon(d.getReferenciaRazon());
+																																																					facturaElectronica.setReferenciaTipoDoc(MapEnums.ENUM_TIPO_DOC.get(d.getReferenciaTipoDoc()));
+																																																					facturaElectronica.setReferenciaFechaEmision(d.getReferenciaFechaEmision() != null ? d.getReferenciaFechaEmision().toString() : Constantes.EMPTY);
+
+																																																				}
+
+																																																			} else {
+
+																																																				facturaElectronica.setReferencia(Constantes.EMPTY);
+																																																				facturaElectronica.setReferenciaCodigo(Constantes.EMPTY);
+																																																				facturaElectronica.setReferenciaNumero(Constantes.EMPTY);
+																																																				facturaElectronica.setReferenciaRazon(Constantes.EMPTY);
+																																																				facturaElectronica.setReferenciaTipoDoc(Constantes.EMPTY);
+																																																				facturaElectronica.setReferenciaFechaEmision(Constantes.EMPTY);
+
+																																																			}
 																																																			// Agrega sus detalles
 																																																			List<DetalleFacturaElectronica> detalles = d.getDetalles().stream().map(TO_DETALLE).collect(toList());
 																																																			facturaElectronica.setDetalleFacturaElectronica(detalles);
@@ -164,20 +165,28 @@ public class HaciendasController {
 	DataTableBo																												dataTableBo;
 
 	@Autowired
-	private FacturaBo																													facturaBo;
+	private FacturaBo																									facturaBo;
 
 	@Autowired
-	private ProcesoHaciendaService																						procesoHaciendaService;
+	private ProcesoHaciendaService																		procesoHaciendaService;
 
 	@Autowired
-	private HaciendaBo																												haciendaBo;
+	private HaciendaBo																								haciendaBo;
 
 	@Autowired
-	private UsuarioBo																													usuarioBo;
+	private UsuarioBo																									usuarioBo;
+
+	@Autowired
+	private FechaPropertyEditor																				fechaPropertyEditor;
+
+	@Autowired
+	private StringPropertyEditor																			stringPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 
+		binder.registerCustomEditor(String.class, stringPropertyEditor);
+		binder.registerCustomEditor(Date.class, fechaPropertyEditor);
 	}
 
 	@RequestMapping(value = "/ListarHacienda", method = RequestMethod.GET)
@@ -298,11 +307,11 @@ public class HaciendasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.error.factura.no.existe");
 			}
 			ArrayList<String> listaCorreos = new ArrayList<String>();
-			if(!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
-				listaCorreos.add(factura.getCliente().getCorreoElectronico());	
+			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+				listaCorreos.add(factura.getCliente().getCorreoElectronico());
 			}
 			listaCorreos.add(factura.getEmpresa().getCorreoElectronico());
-			procesoHaciendaService.enviarCorreos(factura, haciendaBD,listaCorreos);
+			procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
 
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
@@ -324,7 +333,7 @@ public class HaciendasController {
 	 */
 	@RequestMapping(value = "/EnviarCorreoAlternativoAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator enviarCorreoAlternativo(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idHacienda,@RequestParam String correo) {
+	public RespuestaServiceValidator enviarCorreoAlternativo(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idHacienda, @RequestParam String correo) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
@@ -342,7 +351,7 @@ public class HaciendasController {
 			}
 			ArrayList<String> listaCorreos = new ArrayList<String>();
 			listaCorreos.add(correo);
-			procesoHaciendaService.enviarCorreos(factura, haciendaBD,listaCorreos);
+			procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
 
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));

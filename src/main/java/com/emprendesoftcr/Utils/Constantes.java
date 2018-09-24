@@ -10,9 +10,10 @@ public class Constantes {
 	public static final String					TIPO_CODIGO_ARTICULO_POR_SERVICIO										= "07";
 
 	// Semaforo
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 30;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 200;
 	// 48 horas cada 5 minutos
-	public static final Integer					MAXIMO_REINTENTOS_ACEPTACION												= 576;
+	public static final Integer					MAXIMO_REINTENTOS_ACEPTACION												= 60;
+	public static final String					MAXIMO_REINTENTOS_ACEPTACION_STR												= "Tope de intentos de aceptacion,no envio respuesta";
 
 	public static final Integer					SEMAFORO_ESTADO_REINTENTOS													= 3;
 	public static final Integer					SEMAFORO_ESTADO_FIRMADO															= 1;

@@ -43,6 +43,8 @@ public class EmpresaCommand {
 
 	private String	estado;
 	private String	cazaMatriz;
+	
+	private Integer vueltoImprimir;
 
 	private String	nombreLlaveCriptografica;
 
@@ -90,6 +92,7 @@ public class EmpresaCommand {
 		this.tieneInventario = empresa.getTieneInventario();
 		this.tieneLector = empresa.getTieneLector();
 		this.cambiarPrecio = empresa.getCambiarPrecio();
+		this.vueltoImprimir = empresa.getVueltoImprimir();
 		
 
 	}
@@ -346,6 +349,16 @@ public class EmpresaCommand {
 	
 	public void setCambiarPrecio(String cambiarPrecio) {
 		this.cambiarPrecio = cambiarPrecio;
+	}
+
+	
+	public Integer getVueltoImprimir() {
+		return vueltoImprimir;
+	}
+
+	
+	public void setVueltoImprimir(Integer vueltoImprimir) {
+		this.vueltoImprimir = vueltoImprimir;
 	}
 
 	

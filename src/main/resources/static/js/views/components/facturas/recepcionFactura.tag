@@ -343,7 +343,7 @@
 		}
 		
 		self.recepcionFactura ={
-				id:"0",
+				id:null,
 				clave:"",
 				cedulaEmisor:"",
 				emisorTipoCedula:"",
@@ -497,7 +497,9 @@
 		}
 		
 		function __cargarXML(xml) {
-            
+			limpiar()
+            self.archivo ={}
+			self.update()
 			//Se limpian los errores
 			$(".errorServerSideJgrid").remove();
 
@@ -603,6 +605,64 @@
 	        } else {
 	            alert("El archivo seleccionado no es un XML valido");
 	        }
+		}
+
+		function limpiar(){
+			self.archivo ={				
+				emisorNombre:"",
+				emisorCedula:"",
+				emisorTipoCedula:"",
+				emisorCorreo:"",
+				emisorCodigoProvincia:"0",
+				emisorProvincia:"",
+				emisorCanton:"",
+				emisorCodigoCanton:"",
+				emisorDistrito:"",
+				emisorCodigoDistrito:"",
+				emisorCorreo:"",
+				emisorOtraSena:"",
+				receptorNombre:"",
+				receptorCedula:"",
+				receptorTipoCedula:"",
+				receptorCorreo:"",
+				receptorProvincia:"",
+				receptorCodigoProvincia:"",
+				receptorCanton:"",
+				receptorCodigoCanton:"",
+				receptorDistrito:"",
+				receptorCodigoDistrito:"",
+				receptorOtraSena:"",
+				receptorTelefono:"0",
+				receptorNombreComercial:"",
+				facturaConsecutivo:"",
+				facturaClave:"",
+				facturaFechaEmision:"",
+				facturaCondicionVenta:"0",
+				facturaMedioPago:"0",
+				facturaCodigoMoneda:"0",
+				facturaTipoCambio:"0",
+				facturaTotalServExentos:"0",
+				facturaTotalExento:"0",
+				facturaTotalVenta:"0",
+				facturaTotalVentaNeta:"0",
+				facturaTotalComprobante:"0",
+				facturaTotalImpuestos:"0",
+		}
+		
+		self.recepcionFactura ={
+				id:null,
+				clave:"",
+				cedulaEmisor:"",
+				emisorTipoCedula:"",
+				fechaEmision:"",
+				mensaje:"0",
+				detalleMensaje:"",
+				totalImpuestos:"0",
+				totalFactura:"0",
+				cedulaReceptor:"",
+				numeroConsecutivoReceptor:"",				
+		}
+		self.update()
 		}
 		
 		function __buscaProvincias(){

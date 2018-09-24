@@ -254,6 +254,7 @@ self.on('mount',function(){
 * Limpiar campos
 **/
 function _incializarCampos(){
+    
     $("#tipoCedula").val($("#tipoCedula option:first").val());
     $('.nombreCompleto').val(null)
     $('.cedula').val(null)
@@ -291,6 +292,7 @@ function _incializarCampos(){
         }
     }
     self.update()
+    
 }
 
 /**
@@ -433,6 +435,8 @@ function __Eventos(){
                 }
             }
 	})
+
+
 }
 /**
 *  Regresar al listado
@@ -449,10 +453,64 @@ __regresarAlListado(){
 
 }
 
+function validarTamanosCedulas(){
+    //fisicas
+    if($("#tipoCedula").val()=="01"){
+        var resul = $("#cedula").val()
+        if(resul.length < 9 || resul.length > 9  ){
+            swal({
+      	        title: '',
+      	        text: "Formato Invalido , Cedula Fisica es de 9 digitos",
+      	        type: 'error',
+      	        showCancelButton: false,
+      	        confirmButtonText: 'Aceptar',
+            })
+            return true
+
+        }
+    }
+
+     //juridicas
+    if($("#tipoCedula").val()=="02"){
+        var resul = $("#cedula").val()
+        if(resul.length < 10 || resul.length > 10  ){
+            swal({
+      	        title: '',
+      	        text: "Formato Invalido , Cedula Juridicas es de 10 digitos",
+      	        type: 'error',
+      	        showCancelButton: false,
+      	        confirmButtonText: 'Aceptar',
+            })
+            return true
+
+        }
+    }
+     //juridicas
+    if($("#tipoCedula").val()=="03"){
+        var resul = $("#cedula").val()
+        if(resul.length < 12 || resul.length > 12  ){
+            swal({
+      	        title: '',
+      	        text: "Formato Invalido , Cedula Dimex es de 12 digitos",
+      	        type: 'error',
+      	        showCancelButton: false,
+      	        confirmButtonText: 'Aceptar',
+            })
+            return true
+
+        }
+    }
+
+    return false
+}
+
 /**
 ** Modificar la Empresa
 **/
 __Modificar(){
+    if(validarTamanosCedulas()){
+        return
+    }
     self.error = false;
     self.exito = false;
     self.update();
@@ -462,6 +520,9 @@ __Modificar(){
 *   Agregar 
 **/
 __agregar(){
+    if(validarTamanosCedulas()){
+        return
+    }
     resultado = __agregarRegistro("#formulario",$.i18n.prop("cliente.mensaje.alert.agregar"),'AgregarClienteAjax.do','ListarClientesAjax.do','#tableListar')
      if ($("#formulario").valid()) {
         // Permite obtener todos los valores de los elementos del form del jsp
@@ -678,13 +739,7 @@ function __MantenimientoAgregar(){
    
     })
 }
-/**
-*Formato de la fecha con hora
-**/
-function __displayDate_detail(fecha) {
-    var dateTime = new Date(fecha);
-    return moment(dateTime).format('DD/MM/YYYY h:mm:ss');
-}
+
 /**
 *  Agregar los inpust  y select de las tablas
 **/

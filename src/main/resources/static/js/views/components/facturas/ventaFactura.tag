@@ -92,7 +92,7 @@
                                             <span onclick ={__CambiarCantidad} class="label label-success cantidad">{cantidad.toFixed(3)}</span>
                                         </td>
                                         <td >
-                                            <span   class="label label-success precio-prod" >{precioUnitario.toFixed(2)}</span>
+                                            <span    class="label label-success precio-prod" >{precioUnitario.toFixed(2)}</span>
                                         </td>
                                         <td >
                                             <span onclick ={__CambiarDescuento} class="label label-success precio-prod" >{porcentajeDesc.toFixed(2)}</span>
@@ -1214,10 +1214,7 @@ function agregarInputsCombos_Facturas_Dias(){
 **/
 function __InformacionDataTableDia(){
     self.formato_tabla_dias = [ 
-                               {'data' :'fechaEmision'   ,"name":"fechaEmision"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true ,
-                                  "render":function(fechaEmision,type, row){
-									    return __displayDate_detail(fechaEmision);
-	 							    }
+                               {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true 
                                },
                              
                                {'data' :'numeroConsecutivo'                    ,"name":"numeroConsecutivo"                     ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,

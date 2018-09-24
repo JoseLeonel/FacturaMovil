@@ -48,7 +48,7 @@ public class HaciendaCommand {
 	
 	public HaciendaCommand(Hacienda hacienda) {
 		this.id = hacienda.getId();
-		this.fechaEmisorSTR = Utils.getFechaHoraStr(hacienda.getFechaEmisor());
+		this.fechaEmisorSTR = Utils.getFechaGeneraReporte(hacienda.getFechaEmisor());
 		this.fechaEmisor = hacienda.getFechaEmisor();
 		this.clave = hacienda.getClave();
 		this.consecutivo= hacienda.getConsecutivo();

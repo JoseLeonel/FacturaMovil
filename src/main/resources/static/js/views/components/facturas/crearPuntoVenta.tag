@@ -511,6 +511,7 @@
     self.comboCondicionPagos   = []
     self.comboTipoDocumentos   = []
     self.subTotalGeneral       = 0
+    self.codigoBarraFueraPantalla = ""
     self.totalDescuentos       = 0
     self.totalImpuesto         = 0
     self.descripcionArticulo = ""
@@ -579,6 +580,7 @@
     self.mostrarCamposIngresoContado   = true
     self.mostrarReferencias            = false 
     self.subTotalGeneral               = 0
+    self.vueltoImprimir               = 0
     self.todasProvincias               = {data:[]}
     self.todosCantones                 = {data:[]}
     self.todosDistritos                = {data:[]}
@@ -656,6 +658,7 @@ function _Empresa(){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                        self.empresa =   modeloTabla
+                       self.vueltoImprimir = modeloTabla.vueltoImprimir
                        self.update()
                     });
                 }
@@ -755,10 +758,7 @@ function ListadoFacturasDelDia(){
 **/
 function __InformacionDataTableDia(){
     self.formato_tabla_dias = [ 
-                               {'data' :'fechaEmision'   ,"name":"fechaEmision"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true ,
-                                  "render":function(fechaEmision,type, row){
-									    return __displayDate_detail(fechaEmision);
-	 							    }
+                               {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true ,
                                },
                              
                                {'data' :'numeroConsecutivo'                    ,"name":"numeroConsecutivo"                     ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
@@ -1176,8 +1176,7 @@ function __Init(){
     self.totalComprobante              = 0
     self.totalCambioPagar              = 0
     self.update();
-    $('.codigo').select()
-    $(".codigo").focus()
+   
 
     $('#condicionVenta').prop("selectedIndex", 0);
     $('#tipoDoc').prop("selectedIndex", 0);
@@ -1197,6 +1196,7 @@ function __Init(){
      __ListaFacturasEnEspera()
     $('.codigo').select()
     $(".codigo").focus()
+
 
 }
 /**
@@ -1332,15 +1332,19 @@ function evaluarFactura(data){
                 //Envia a la pantalla de impresion
                 self.facturaReimprimir = modeloTabla
                 self.update()
-                var mensaje = "Cons# :"+   self.facturaImprimir.numeroConsecutivo        
-                swal({
-                position: 'top-end',
-                type: 'success',
-                title: mensaje,
-                showConfirmButton: false,
-                timer: 1500
-                })
-               //riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
+                if(self.vueltoImprimir == 0){
+                    var mensaje = "Cons# :"+   self.facturaImprimir.numeroConsecutivo        
+                    swal({
+                        position: 'top-end',
+                        type: 'success',
+                        title: mensaje,
+                        showConfirmButton: false,
+                        timer: 1500
+                     })
+                }else{
+                    riot.mount('ptv-imprimir',{factura:self.facturaImprimir}); 
+                }
+               
             }else{
                 swal({
                 position: 'top-end',
@@ -1437,9 +1441,17 @@ function mostrarPAgo(){
         $('.codigo').focus()
         return
     }
-    $('#totalEfectivo').val(self.factura.totalComprobante)
-    $('#totalTarjeta').val(null)
-    $('#totalBanco').val(null)
+    if(self.vueltoImprimir == 0){
+        $('#totalEfectivo').val(self.factura.totalComprobante)
+        $('#totalTarjeta').val(null)
+        $('#totalBanco').val(null)
+
+    }else{
+        $('#totalEfectivo').val(null)
+        $('#totalTarjeta').val(null)
+        $('#totalBanco').val(null)
+
+    }
     getSubTotalGeneral()
     self.totalCambioPagar =0
     
@@ -1714,6 +1726,9 @@ function __buscarcodigoPrecio(idArticulo,cantidad,precio){
     if(idArticulo ==null){
         return
     }
+    if(idArticulo.length ==0){
+        return
+    }
     $.ajax({
         type: 'GET',
         url: 'findArticuloByCodigojax.do',
@@ -1725,7 +1740,10 @@ function __buscarcodigoPrecio(idArticulo,cantidad,precio){
                     swal('',data.message,'error');
                 }
             }else{
+                self.articulo  = null
+                self.update()
                 if (data.message != null && data.message.length > 0) {
+                    self.articulo =null
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         //Articulo no puede agregarse si no hay en el inventario
                         if(modeloTabla.contable == "Si"){
@@ -1737,13 +1755,18 @@ function __buscarcodigoPrecio(idArticulo,cantidad,precio){
                                 mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
                                 return
                             }
+
                         }
                         self.articulo  = modeloTabla
-                        self.articulo.precioUnitario = precio > 0 ?precio:self.articulo.precioUnitario
-                        self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
-                        self.descripcionArticulo = modeloTabla.descripcion
                         self.update()
-                        __agregarArticulo(cantidad)
+                        if(self.articulo !=null){
+                            self.articulo.precioUnitario = precio > 0 ?precio:self.articulo.precioUnitario
+                            self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
+                            self.descripcionArticulo = modeloTabla.descripcion
+                            self.update()
+                            __agregarArticulo(cantidad)
+
+                        }
                     });
                 }
             }
@@ -1763,6 +1786,9 @@ function __buscarcodigo(idArticulo,cantidad,precio){
     if(idArticulo ==null){
         return
     }
+      if(idArticulo.length ==0){
+        return
+    }
     $.ajax({
         type: 'GET',
         url: 'findArticuloByCodigojax.do',
@@ -1774,6 +1800,8 @@ function __buscarcodigo(idArticulo,cantidad,precio){
                     swal('',data.message,'error');
                 }
             }else{
+                self.articulo  = null
+                self.update()
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         //Articulo no puede agregarse si no hay en el inventario
@@ -1792,14 +1820,17 @@ function __buscarcodigo(idArticulo,cantidad,precio){
                         self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
                         self.descripcionArticulo = modeloTabla.descripcion
                         self.update()
-                        if(self.articulo.tipoCodigo =="04"){
-                            $('.codigo').val(self.articulo.codigo)
-                            $('#precioVenta').val(self.articulo.precioPublico)
-                            $('#precioVenta').select()
-                            $("#precioVenta").focus()
-                            return
+                        if(self.articulo !=null){
+                            if(self.articulo.tipoCodigo =="04"){
+                                $('#codigo').val(self.articulo.codigo)
+                                $('#precioVenta').val(self.articulo.precioPublico)
+                                $('#precioVenta').select()
+                                $("#precioVenta").focus()
+                                return
+                            }
                         }
                         __agregarArticulo(cantidad)
+
                     });
                 }
             }
@@ -2146,10 +2177,10 @@ function __calculate() {
 
    // self.articulo              = null;
     self.update(); 
-     $('.precioVenta').val(null)
-            $('.codigo').val(null)
-            $('.codigo').select()
-            $('.codigo').focus()
+    $('.precioVenta').val(null)
+    $('.codigo').val(null)
+    $('.codigo').select()
+    $('.codigo').focus()
     getSubTotalGeneral()
 }
 /**
@@ -2399,19 +2430,20 @@ function agregarInputsCombos_Vendedores(){
 function __Teclas(){
     window.addEventListener( "keydown", function(evento){
         var tecla = evento.keyCode; 
-     //  alert(tecla)
-   
     if(tecla ==119){
       if(self.mostrarFormularioPago == false && self.mostarParaCrearNuevaFactura == true){
-        self.factura.totalCambioPagar =__valorNumerico(self.factura.totalComprobante)   
-        self.totalCambioPagar = redondeoDecimales(self.factura.totalComprobante,2)
-        self.update()
+        if(self.vueltoImprimir == 0){
+            self.factura.totalCambioPagar =__valorNumerico(self.factura.totalComprobante)   
+            self.totalCambioPagar = redondeoDecimales(self.factura.totalComprobante,2)
+            self.update()
+        }  
           
          mostrarPAgo()     
       }else if (self.mostrarFormularioPago == true && self.mostarParaCrearNuevaFactura == false ){
             aplicarFactura(2)   
         } 
     }   
+    
     //Factura en espera
     if(tecla ==120){
       aplicarFactura(1)   
@@ -2424,8 +2456,9 @@ function __Teclas(){
     //Limpiar
     if(tecla ==121){
       __Init()
-       $('.codigo').select()
-      $(".codigo").focus()
+     // $('.codigo').select()
+     // $(".codigo").focus()
+      //return
     }
 
    if(tecla ==27){
@@ -2434,6 +2467,8 @@ function __Teclas(){
     }
     }, false );
 }
+
+
 /**
 * Contabilizar los billetes de acuerdo a como se vayan dando click en la pantalla
 */
@@ -2468,12 +2503,14 @@ _sumarBilletes(e){
 function cargaBilletes(){
     self.billetes = []
     self.update()
-    _incluirBilletes("₡","50,000",50000,'/dist/img/billete50000.jpg')
-    _incluirBilletes("₡","20,000",20000,'/dist/img/billete20000.jpg')
-    _incluirBilletes("₡","10,000",10000,'/dist/img/billete10000.jpg')
-    _incluirBilletes("₡","5,000",5000,'/dist/img/billete5000.jpg')
-    _incluirBilletes("₡","2,000",2000,'/dist/img/billete2000.jpg')
     _incluirBilletes("₡","1000",1000,'/dist/img/billete1000.jpg')
+    _incluirBilletes("₡","2,000",2000,'/dist/img/billete2000.jpg')
+    _incluirBilletes("₡","5,000",5000,'/dist/img/billete5000.jpg')
+    _incluirBilletes("₡","10,000",10000,'/dist/img/billete10000.jpg')
+    _incluirBilletes("₡","20,000",20000,'/dist/img/billete20000.jpg')
+
+    _incluirBilletes("₡","50,000",50000,'/dist/img/billete50000.jpg')
+
     _incluirBilletes("","Limpiar",0,'/dist/img/limpiar.png')
 }
 /**

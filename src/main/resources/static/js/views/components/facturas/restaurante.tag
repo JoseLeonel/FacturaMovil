@@ -1,4 +1,4 @@
-<venta-factura>
+<venta-restaurante>
    <div class="row">
         <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
         <div class="box-tools ">
@@ -92,7 +92,7 @@
                                             <span onclick ={__CambiarCantidad} class="label label-success cantidad">{cantidad.toFixed(3)}</span>
                                         </td>
                                         <td >
-                                            <span onclick ={__CambiarPrecio}  class="label label-success precio-prod" >{precioUnitario.toFixed(2)}</span>
+                                            <span   class="label label-success precio-prod" >{precioUnitario.toFixed(2)}</span>
                                         </td>
                                         <td >
                                             <span onclick ={__CambiarDescuento} class="label label-success precio-prod" >{porcentajeDesc.toFixed(2)}</span>
@@ -197,7 +197,7 @@
                             <section class="lista-facturas-espera">
                                 <div id="botones"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
                                   
-                                     <span class="label-titulos-espera">T# {id} - {nombreFactura}</span>
+                                     <span class="label-titulos-espera"> {nombreFactura ==null?"T#"+id:""}  {nombreFactura}</span>
                                 </div>         
                                  
                             </section>
@@ -207,25 +207,31 @@
                     </div>    
                 </div>
             </div>  
-            <div class="col-md-7 col-sm-7 col-lg-7 col-xs-12" style="padding: 0px 10px">
+            <div class="col-md-7 col-sm-12 col-lg-7 col-xs-12" style="padding: 0px 10px">
                 <div class="block ">
-                    <div class="head" style="text-align: center;">
-                        <div class="row-form panel newPanel newContNavegacion" style="padding-left: 0px;padding-right: 0px; padding-top:6px;">
+                    <div class="head" >
+                        <div class="panel newPanel newContNavegacion" style="padding-left: 0px;padding-right: 0px; padding-top:2px;">
                             <form>
                                 <ul id="tipo-busqueda">
                                     <li id="buscalo"  onclick = {__ListaDecodigos} class="">
                                         <h3><i class="glyphicon glyphicon-search" aria-hidden="true"></i>
-                                            <img  src="{urlImagenBuscador}" width="45px" height="15px" >&nbsp;&nbsp; {$.i18n.prop("btn.consultar")}  
+                                            <img  src="{urlImagenBuscador}" width="30px" height="15px" >&nbsp;&nbsp; {$.i18n.prop("btn.consultar")}  
                                         </h3>
                                     </li>
                                     <li onclick = {__PantallaCodigoBarra} id="codificalo" class=""> <h3>
                                         <i class="glyphicon glyphicon-barcode" aria-hidden="true"></i>
-                                        <img  src="{urlImagenLector}" width="40px" height="15px">
+                                        <img  src="{urlImagenLector}" width="30px" height="15px">
                                         &nbsp;&nbsp; {$.i18n.prop("titulo.lector")} </h3> 
                                     </li>
+                                    <li onclick = {__PantallaCodigoBarra} id="codificalo" class=""> <h3>
+                                        <i class="glyphicon glyphicon-barcode" aria-hidden="true"></i>
+                                        <img  src="{urlImagenLector}" width="30px" height="15px">
+                                        &nbsp;&nbsp; Mesas </h3> 
+                                    </li>
+
                                     <li onclick = {__PantallaCategorias} id="navegador" class=""> <h3>
                                         <i class="glyphicon glyphicon-refresh" aria-hidden="true"></i>
-                                        <img  src="{urlImagenNavegador}" width="40px" height="15px">
+                                        <img  src="{urlImagenNavegador}" width="30px" height="15px">
                                         &nbsp;{$.i18n.prop("titulo.categoria")}</h3>  
                                     </li>
                                 </ul>
@@ -631,13 +637,7 @@
                                         <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
                                         <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="campo tamanoLetraTotales totalBanco" id="totalBanco" name = "totalBanco"  value="{factura.totalBanco}">
                                     </div>
-                                    <div class="form-group has-success">
-                                        <label>{$.i18n.prop("factura.impuesto.servicio")} </label> 
-                                        <select  onchange= {__ImpuestoServicio} class="form-control impuestoServicio" id="impuestoServicio" name="impuestoServicio">
-                                            <option each={comboImpuestoServicio} value="{estado}" selected="{factura.tieneIS ==estado?true:false}" >{descripcion}</option>
-                                         </select>
-                                    </div>
-
+                               
                                     
                                 </div>
                             </div>
@@ -701,7 +701,6 @@
                                     <div class="booking-info">
                                         <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.subTotal")}  <span id="lblSubtotal"> {subTotalGeneral} </span></p>
                                         <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos} </span></p>
-                                        <p class="total label-totales " show "{mostrarImpuestoServicio}" style="text-align:right">{$.i18n.prop("factura.resumen.impuesto.servicio")}   <span id="lblSubtotal"> {totalImpuestoServicio} </span></p>
                                         <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {totalImpuesto} </span></p>
                                     </div>
                                     <div class="precioTotalFactura">
@@ -871,7 +870,7 @@
        __ListaDeVendedores()
        __Teclas()
        __TipoCambio()
-       __comboImpuestoServicio()
+       
        
      
         cargaBilletes()
@@ -1510,6 +1509,24 @@ __CalculaCambioAEntregarKeyPress(e){
 *  Buscar la Factura Pendiente en espera
 **/
 __CargarFacturaEspera(e){
+    self.factEspera = e.item
+    self.update()
+    if(self.factura.id !=null){
+      if(self.seIncluyoUnArticulo !=null){
+        aplicarFactura(1)  
+        self.seIncluyoUnArticulo =null
+        self.update()
+      }  
+      
+    }else{
+        if(self.detail.length != 0 ){
+            $('#ModalAgregarNombreTiquete').modal('show') 
+            $('.cambioNombreFactura').focus()
+            return
+         }
+       
+    }
+    
    __FacturaEnEspera(e.item)
 }
 
@@ -1531,12 +1548,20 @@ __CambiarNombreTiquete(){
 **/
 __CrearFacturaTemporal(){
     if(self.factura.id ==null){
-        $('#ModalAgregarNombreTiquete').modal('show') 
-        $('.cambioNombreFactura').focus()
-        return
+        
+        if(self.detail.length != 0 ){
+            $('#ModalAgregarNombreTiquete').modal('show') 
+            $('.cambioNombreFactura').focus()
+            return
+        }
     }else{
+        self.seIncluyoUnArticulo = 1
+        self.update()
        aplicarFactura(1)    
     }
+   // __FacturaEnEspera(self.factEspera)
+    self.factEspera =null
+    self.update()
 }
 
 /**
@@ -1596,7 +1621,14 @@ __AgregarNombreFacturaTemporal(){
     $('#ModalAgregarNombreTiquete').modal('hide') 
     self.factura.nombreFactura = $('.cambioNombreFactura').val()==null?"":$('.cambioNombreFactura').val();
     self.update()
-  aplicarFactura(1)      
+    aplicarFactura(1)      
+    if(self.factEspera !=null){
+      __FacturaEnEspera(self.factEspera) 
+    }
+    self.factEspera =null
+    self.update()
+    
+
 }
 /**
 ** Se aplica o se crea una Factura cargada en la pantalla
@@ -1800,7 +1832,7 @@ function __Init(){
       __ComboEstados()
      __ListaFacturasEnEspera()
      mostrarCategorias()
-     __comboImpuestoServicio()
+     
      $('#codigoBarra').val(null)
      $('#codigoBarra').focus()
 }
@@ -1808,6 +1840,9 @@ function __Init(){
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
 **/
 function __FacturaEnEspera(factura){
+    if(factura ==null){
+        return
+    }
      __Init()
     $.ajax({
         url: "MostrarFacturaAjax",
@@ -1868,6 +1903,7 @@ function cargarDetallesFacturaEnEspera(){
         });
         self.update()
     })
+    self.totalCambioPagar = 0
     self.update()
      __calculate(); 
 }
@@ -1939,13 +1975,7 @@ function evaluarFactura(data){
                 riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
                  
             }else{
-                swal({
-	                title: '',
-	                text: data.message,
-	                type: 'success',
-	                showCancelButton: false,
-	                confirmButtonText: $.i18n.prop("btn.aceptar"),
-                })
+               
                 __Init()
                 __ListaFacturasEnEspera()
             }
@@ -2029,7 +2059,7 @@ function mostrarPAgo(){
         return
     }
     self.mostarParaCrearNuevaVentas = false
-    $('#totalEfectivo').val(null)
+     $('#totalEfectivo').val(self.factura.totalComprobante)
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
     getSubTotalGeneral()
@@ -2037,8 +2067,10 @@ function mostrarPAgo(){
     self.factura.totalCambioPagar =0
     self.mostarParaCrearNuevaFactura = false
     self.mostrarFormularioPago = true
+    self.totalCambioPagar =0
     self.update()
     $('#totalEfectivo').focus()
+    $('#totalEfectivo').select()
     self.factura.cambioMoneda = self.factura.totalVentaNeta / self.tipoCambio.total
     self.update()
 }
@@ -2240,6 +2272,8 @@ function __agregarArticulo(cantidad){
     var encontrado = false;
      if(self.detail[0] == null){ // first element
         __nuevoArticuloAlDetalle(cantidad);
+        self.seIncluyoUnArticulo = 0
+        self.update()
         encontrado = true;
     }else{//Se busca el articulo si existe se incrementa la cantidad
         for (var count = 0; count < self.detail.length; count++) {
@@ -2250,13 +2284,17 @@ function __agregarArticulo(cantidad){
                ActualizarLineaDEtalle()
                self.detail[count] = self.item;
                encontrado = true;
-              self.update();
+               self.seIncluyoUnArticulo = 0
+               self.update()
             }
         }
     
     }
     // si no existe se agrega como un codigo nuevo
     if(encontrado == false){ // add elemen
+       self.seIncluyoUnArticulo = 0
+       self.update()
+
       __nuevoArticuloAlDetalle(cantidad);
     }
     __calculate(); 
@@ -2274,6 +2312,7 @@ __removeProductFromDetail(e) {
             cont = elemen.numeroLinea
         }
     )
+    self.seIncluyoUnArticulo = 1
     self.update()
      __calculate();
  }
@@ -2714,22 +2753,7 @@ function __comboCondicionPago(){
     self.update()
 }
 
-/**
-* cargar con impuesto de servicio
-**/
-function __comboImpuestoServicio(){
-    self.comboImpuestoServicio = []
-    self.update()
-    self.comboImpuestoServicio.push({
-        estado:1,
-        descripcion: $.i18n.prop("boolean.no")
-    })
-    self.comboImpuestoServicio.push({
-        estado:2,
-        descripcion:$.i18n.prop("boolean.si")
-    })
-    self.update()
-}
+
 /**
 * cargar los tipos de Documento de la factura
 **/
@@ -2808,6 +2832,9 @@ function __Teclas(){
         var tecla = evento.keyCode; 
     if(tecla ==119){
       if(self.mostrarFormularioPago == false && self.mostarParaCrearNuevaVentas == true){
+        self.factura.totalCambioPagar =__valorNumerico(self.factura.totalComprobante)   
+        self.totalCambioPagar = redondeoDecimales(self.factura.totalComprobante,2)
+        self.update()
          mostrarPAgo()     
       }else if (self.mostrarFormularioPago == true && self.mostarParaCrearNuevaVentas == false ){
             aplicarFactura(2)   
@@ -2882,4 +2909,4 @@ function _incluirBilletes(modena,descripcion,valor,imagen){
     self.update()
 }
 </script>
-</venta-factura>
+</venta-restaurante>

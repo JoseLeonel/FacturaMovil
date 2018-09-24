@@ -250,7 +250,13 @@ public class FacturasController {
 	public String postVenta(ModelMap model) {
 		return "views/facturas/postVenta";
 	}
+	
+	@RequestMapping(value = "/postRestaurante", method = RequestMethod.GET)
+	public String postpostRestaurante(ModelMap model) {
+		return "views/facturas/postRestaurante";
+	}
 
+	
 	@RequestMapping(value = "/recepcionFactura", method = RequestMethod.GET)
 	public String recepcionFactura(ModelMap model) {
 		return "views/facturas/recepcionFactura";
@@ -691,10 +697,10 @@ public class FacturasController {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
 
-		//	 Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			 //Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 			// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave criptografica desde linux
-	//  	certificadoBo.agregar(usuario.getEmpresa(), usuario.getEmpresa().getClaveLlaveCriptografica().toString(), usuario.getEmpresa().getNombreLlaveCriptografica());
+	  	//certificadoBo.agregar(usuario.getEmpresa(), usuario.getEmpresa().getClaveLlaveCriptografica().toString(), usuario.getEmpresa().getNombreLlaveCriptografica());
 			// String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);
 			// facturaXMLServices.getFirmarXML(xml, facturaBD.getEmpresa());
 

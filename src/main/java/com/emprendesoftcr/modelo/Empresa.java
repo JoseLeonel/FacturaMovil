@@ -134,8 +134,11 @@ public class Empresa implements Serializable {
 
 	@Column(name = "recha_consecutivo")
 	private Integer rechazadoConsecutivo;
+	
+	@Column(name = "vuelto_imprimir")
+	private Integer vueltoImprimir;
 
-	public Empresa(Integer id, String nombre, String nombreComercial, String tipoCedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, Integer codigoSeguridad, String usuarioEnvioComprobante, String passwordEnvioComprobante, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String tieneInventario, String enviarTiquete, String estadoProduccion, String tieneLector, String cambiarPrecio) {
+	public Empresa(Integer id, String nombre, String nombreComercial, String tipoCedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, Integer codigoSeguridad, String usuarioEnvioComprobante, String passwordEnvioComprobante, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String tieneInventario, String enviarTiquete, String estadoProduccion, String tieneLector, String cambiarPrecio,Integer vueltoImprimir) {
 		super();
 		this.id = id;
 		this.numeroConsecutivo = numeroConsecutivo;
@@ -172,6 +175,7 @@ public class Empresa implements Serializable {
 		this.cambiarPrecio = Constantes.ESTADO_INACTIVO;
 		this.estadoProduccion = estadoProduccion;
 		this.tieneLector = tieneLector;
+		this.vueltoImprimir = vueltoImprimir;
 	}
 
 	public Empresa() {
@@ -183,6 +187,7 @@ public class Empresa implements Serializable {
 		this.tieneInventario = Constantes.ESTADO_ACTIVO;
 		this.tieneLector = Constantes.ESTADO_ACTIVO;
 		this.cambiarPrecio = Constantes.ESTADO_INACTIVO;
+		this.vueltoImprimir = Constantes.ZEROS;
 	}
 
 	public Integer getId() {
@@ -191,6 +196,16 @@ public class Empresa implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	
+	public Integer getVueltoImprimir() {
+		return vueltoImprimir;
+	}
+
+	
+	public void setVueltoImprimir(Integer vueltoImprimir) {
+		this.vueltoImprimir = vueltoImprimir;
 	}
 
 	public Integer getNumeroConsecutivo() {
