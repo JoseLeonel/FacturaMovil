@@ -4,7 +4,7 @@ $(document).ready(function() {
 } );/*fin document*/
 
 var _Init = function () {
-	cargaMantenimientoCajas()
+	cargaMantenimiento()
 }
 
 
@@ -12,11 +12,7 @@ var _Init = function () {
  * LLamar al componente Riot 
  * @returns
  */
-function cargaMantenimientoCajas() {
-
-	
-	riot.mount('abrir-caja');
+function cargaMantenimiento() {
+  riot.mount('venta-restaurante');
 }
-
-
 

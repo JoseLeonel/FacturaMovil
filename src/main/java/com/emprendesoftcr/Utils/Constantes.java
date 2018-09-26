@@ -8,6 +8,7 @@ public class Constantes {
 
 	// Tipo de codigos de productos
 	public static final String					TIPO_CODIGO_ARTICULO_POR_SERVICIO										= "07";
+	public static final String					TIPO_CODIGO_ARTICULO_USO_INTERNO										= "04";
 
 	// Semaforo
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 200;

@@ -570,7 +570,8 @@
         id:0,
         nombreCompleto:""
     };
-    self.facturas_espera       = {data:[]}  
+    self.facturas_espera       = {data:[]}
+    self.articulos_uso_interno      = {data:[]}  
     self.informacion_tabla             = []
     self.informacion_tabla_articulo    = []
     self.informacion_tabla_clientes    = []
@@ -616,6 +617,7 @@
        cargaBilletes()
        __InformacionDataTableDia()
        __ListaDeClientes()
+       __ListaArticulosUsoInterno()
        __ListaDeVendedores()
        _Empresa()
         $('.codigo').select()
@@ -893,7 +895,7 @@ __CambiarDescuento(e){
 __CambiarCantidad(e){
    var cantidad = e.currentTarget.value;
    self.item = e.item; 
-   self.update()
+   se__CambiarCantidadlf.update()
    $( "#cambiarCantidadArticulo" ).focus()
    $( "#cambiarCantidadArticulo" ).val(cantidad)
    $('#modalCambiarCantidad').modal('show')      
@@ -1717,6 +1719,29 @@ function __ListaDeClientes(){
     return
 }
 
+/**
+*  Lista de los codigos de uso interno
+**/
+function __ListaArticulosUsoInterno(){
+    $.ajax({
+        url: 'ListarArticulosActivosUsoInternoAjax.do',
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+              self.articulos_uso_interno = result.aaData
+              self.update()
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+    return
+}
+
+
 
 
 /**
@@ -1727,6 +1752,11 @@ function __buscarcodigoPrecio(idArticulo,cantidad,precio){
         return
     }
     if(idArticulo.length ==0){
+        return
+    }
+    buscarCodigoUsoInterno(idArticulo)
+    if(self.articulo !=null){
+        actualizarArticuloPrecio(precio,cantidad)
         return
     }
     $.ajax({
@@ -1760,12 +1790,8 @@ function __buscarcodigoPrecio(idArticulo,cantidad,precio){
                         self.articulo  = modeloTabla
                         self.update()
                         if(self.articulo !=null){
-                            self.articulo.precioUnitario = precio > 0 ?precio:self.articulo.precioUnitario
-                            self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
-                            self.descripcionArticulo = modeloTabla.descripcion
-                            self.update()
-                            __agregarArticulo(cantidad)
-
+                            actualizarArticuloPrecio(precio,cantidad)
+    
                         }
                     });
                 }
@@ -1779,6 +1805,14 @@ function __buscarcodigoPrecio(idArticulo,cantidad,precio){
    return 
 }
 
+function actualizarArticuloPrecio(precio,cantidad){
+    self.articulo.precioUnitario = precio > 0 ?precio:self.articulo.precioUnitario
+    self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
+    self.descripcionArticulo = self.articulo.descripcion
+    self.update()
+    __agregarArticulo(cantidad)
+}
+
 /**
 * Buscar el codigo del codigo  en la base de datos
 **/
@@ -1788,6 +1822,14 @@ function __buscarcodigo(idArticulo,cantidad,precio){
     }
       if(idArticulo.length ==0){
         return
+    }
+    buscarCodigoUsoInterno(idArticulo)
+    if(self.articulo !=null){
+        $('#codigo').val(self.articulo.codigo)
+        $('#precioVenta').val(self.articulo.precioPublico)
+        $('#precioVenta').select()
+        $("#precioVenta").focus()
+        return        
     }
     $.ajax({
         type: 'GET',
@@ -1841,6 +1883,21 @@ function __buscarcodigo(idArticulo,cantidad,precio){
         }
     });
    return 
+}
+/**
+*  Busca el codigo de uso interno
+* */
+
+function buscarCodigoUsoInterno(codigo){
+    self.articulo = null;
+
+    for (var count = 0; count < self.articulos_uso_interno.length; count++) {
+        if (self.articulos_uso_interno[count].codigo == codigo ){
+            self.articulo          = self.articulos_uso_interno[count];
+            self.update();
+        }
+    }    
+
 }
 /**
 *  Agregar un articulo si existe se suma la cantidad y no existe se agrega en el detalle

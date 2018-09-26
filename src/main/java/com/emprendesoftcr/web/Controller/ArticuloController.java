@@ -136,6 +136,25 @@ public class ArticuloController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
+	
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarArticulosActivosUsoInternoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarArticulosActivosTipoUsoInternoAjax(HttpServletRequest request, HttpServletResponse response) {
+
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Articulo");
+		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+		dataTableFilter = new JqGridFilter("tipoCodigo", "'" + Constantes.TIPO_CODIGO_ARTICULO_USO_INTERNO + "'", "=");
+		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+			String nombreUsuario = request.getUserPrincipal().getName();	
+			 dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			delimitadores.addFiltro(dataTableFilter);
+		}
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+	}
 
 	/**
 	 * Listar Ajax de los articulos de una empresa

@@ -1,4 +1,5 @@
 <venta-restaurante>
+
    <div class="row">
         <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
         <div class="box-tools ">
@@ -92,7 +93,7 @@
                                             <span onclick ={__CambiarCantidad} class="label label-success cantidad">{cantidad.toFixed(3)}</span>
                                         </td>
                                         <td >
-                                            <span   class="label label-success precio-prod" >{precioUnitario.toFixed(2)}</span>
+                                            <span    class="label label-success precio-prod" >{precioUnitario.toFixed(2)}</span>
                                         </td>
                                         <td >
                                             <span onclick ={__CambiarDescuento} class="label label-success precio-prod" >{porcentajeDesc.toFixed(2)}</span>
@@ -207,31 +208,25 @@
                     </div>    
                 </div>
             </div>  
-            <div class="col-md-7 col-sm-12 col-lg-7 col-xs-12" style="padding: 0px 10px">
+            <div class="col-md-7 col-sm-7 col-lg-7 col-xs-12" style="padding: 0px 10px">
                 <div class="block ">
-                    <div class="head" >
-                        <div class="panel newPanel newContNavegacion" style="padding-left: 0px;padding-right: 0px; padding-top:2px;">
+                    <div class="head" style="text-align: center;">
+                        <div class="row-form panel newPanel newContNavegacion" style="padding-left: 0px;padding-right: 0px; padding-top:6px;">
                             <form>
                                 <ul id="tipo-busqueda">
                                     <li id="buscalo"  onclick = {__ListaDecodigos} class="">
                                         <h3><i class="glyphicon glyphicon-search" aria-hidden="true"></i>
-                                            <img  src="{urlImagenBuscador}" width="30px" height="15px" >&nbsp;&nbsp; {$.i18n.prop("btn.consultar")}  
+                                            <img  src="{urlImagenBuscador}" width="45px" height="15px" >&nbsp;&nbsp; {$.i18n.prop("btn.consultar")}  
                                         </h3>
                                     </li>
                                     <li onclick = {__PantallaCodigoBarra} id="codificalo" class=""> <h3>
                                         <i class="glyphicon glyphicon-barcode" aria-hidden="true"></i>
-                                        <img  src="{urlImagenLector}" width="30px" height="15px">
+                                        <img  src="{urlImagenLector}" width="40px" height="15px">
                                         &nbsp;&nbsp; {$.i18n.prop("titulo.lector")} </h3> 
                                     </li>
-                                    <li onclick = {__PantallaCodigoBarra} id="codificalo" class=""> <h3>
-                                        <i class="glyphicon glyphicon-barcode" aria-hidden="true"></i>
-                                        <img  src="{urlImagenLector}" width="30px" height="15px">
-                                        &nbsp;&nbsp; Mesas </h3> 
-                                    </li>
-
                                     <li onclick = {__PantallaCategorias} id="navegador" class=""> <h3>
                                         <i class="glyphicon glyphicon-refresh" aria-hidden="true"></i>
-                                        <img  src="{urlImagenNavegador}" width="30px" height="15px">
+                                        <img  src="{urlImagenNavegador}" width="40px" height="15px">
                                         &nbsp;{$.i18n.prop("titulo.categoria")}</h3>  
                                     </li>
                                 </ul>
@@ -1220,10 +1215,7 @@ function agregarInputsCombos_Facturas_Dias(){
 **/
 function __InformacionDataTableDia(){
     self.formato_tabla_dias = [ 
-                               {'data' :'fechaEmision'   ,"name":"fechaEmision"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true ,
-                                  "render":function(fechaEmision,type, row){
-									    return __displayDate_detail(fechaEmision);
-	 							    }
+                               {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true 
                                },
                              
                                {'data' :'numeroConsecutivo'                    ,"name":"numeroConsecutivo"                     ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
@@ -2909,4 +2901,5 @@ function _incluirBilletes(modena,descripcion,valor,imagen){
     self.update()
 }
 </script>
+
 </venta-restaurante>
