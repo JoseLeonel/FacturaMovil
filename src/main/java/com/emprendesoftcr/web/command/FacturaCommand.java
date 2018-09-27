@@ -5,6 +5,9 @@ import java.util.Date;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Vendedor;
+import com.emprendesoftcr.web.jsonDeserializer.ClienteDeserializer;
+import com.emprendesoftcr.web.jsonDeserializer.VendedorDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * Factura realizada del Front End FacturaCommand.
@@ -32,6 +35,7 @@ public class FacturaCommand {
 	private String		nombreFactura;
 
 	private String		direccion;
+	
 	private String		correoAlternativo;
 
 	private String		referenciaTipoDoc;
@@ -98,12 +102,17 @@ public class FacturaCommand {
 
 	private Date			updated_at;
 
+	@JsonDeserialize(using=ClienteDeserializer.class)
 	private Cliente		cliente;
 
+	@JsonDeserialize(using=VendedorDeserializer.class)
 	private Vendedor	vendedor;
+
 	private String		detalleFactura;
 
 	private Empresa		empresa;
+
+	private String		usuario;
 
 	public FacturaCommand() {
 		super();
@@ -485,6 +494,15 @@ public class FacturaCommand {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	
+	public String getUsuario() {
+		return usuario;
+	}
+	
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
 	}
 
 }
