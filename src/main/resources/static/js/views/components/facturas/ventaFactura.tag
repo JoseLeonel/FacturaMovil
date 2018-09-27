@@ -1905,6 +1905,7 @@ function __displayDate_detail(fecha) {
     var dateTime = new Date(fecha);
     return moment(dateTime).format('YYYY-MM-DD ');
 }
+
 /**
 *  Crear Factura nueva
 **/
@@ -1927,6 +1928,7 @@ function crearFactura(estado){
     self.factura.estado = estado
     self.update();
     var formulario = $("#formularioFactura").serialize();
+
     $.ajax({
         type : "POST",
         dataType : "json",

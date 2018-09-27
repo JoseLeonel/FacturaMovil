@@ -29,6 +29,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -518,6 +519,29 @@ public class FacturasController {
 	@ResponseBody
 	public RespuestaServiceValidator crearFactura(HttpServletRequest request, ModelMap model, @ModelAttribute FacturaCommand facturaCommand, BindingResult result, SessionStatus status) {
 		try {
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			return this.crearFactura(facturaCommand, result, usuario);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+
+	@RequestMapping(value = "/service/CrearFacturaServiceAjax", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	@SuppressWarnings("rawtypes")
+	public RespuestaServiceValidator crearFactura(HttpServletRequest request, @RequestBody FacturaCommand facturaCommand,  BindingResult result) throws ParseException {		
+		try {
+			
+			Usuario usuario = usuarioBo.buscar(facturaCommand.getUsuario());
+			return this.crearFactura(facturaCommand, result, usuario);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+
+	private RespuestaServiceValidator<?> crearFactura(FacturaCommand facturaCommand, BindingResult result, Usuario usuario) {
+		try {
+			
 			facturaCommand.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
 			facturaCommand.setTotalEfectivo(facturaCommand.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalEfectivo());
 			facturaCommand.setTotalTarjeta(facturaCommand.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalTarjeta());
@@ -534,7 +558,6 @@ public class FacturasController {
 			facturaCommand.setTotalVenta(facturaCommand.getTotalVenta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalVenta());
 			facturaCommand.setTotalVentaNeta(facturaCommand.getTotalVentaNeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalVentaNeta());
 			UsuarioCaja usuarioCajaBd = null;
-			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				usuarioCajaBd = usuarioCajaBo.findByUsuarioAndEstado(usuario, Constantes.ESTADO_ACTIVO);
 				if (usuarioCajaBd == null) {
@@ -552,7 +575,6 @@ public class FacturasController {
 					}
 
 				}
-
 			}
 			TipoCambio tipoCambio = null;
 			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
@@ -587,7 +609,6 @@ public class FacturasController {
 				facturaCommand.setVendedor(vendedor);
 
 			}
-
 			facturaCommand.setEmpresa(usuario.getEmpresa());
 			facturaFormValidator.validate(facturaCommand, result);
 			if (result.hasErrors()) {
@@ -602,7 +623,8 @@ public class FacturasController {
 				facturaBo.eliminarDetalleFacturaPorSP(facturaBD);
 				for (Detalle detalle : facturaBD.getDetalles() ) {
 					 detalleBo.eliminar(detalle);
-				}
+				}				
+
 			}
 			Factura factura = facturaBo.crearFactura(facturaCommand, usuario, usuarioCajaBd, tipoCambio);
 			if (factura == null) {
@@ -616,19 +638,7 @@ public class FacturasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-
-	@RequestMapping(value = "/service/CrearFacturaServiceAjax", method = RequestMethod.GET, headers = "Accept=application/json")
-	@ResponseBody
-	@SuppressWarnings("rawtypes")
-	public RespuestaServiceValidator crearFactura(HttpServletRequest request, @ModelAttribute FacturaCommand facturaCommand,  BindingResult result) throws ParseException {		
-		return this.agregarFactura(request, facturaCommand, result);
-	}
-
-	@SuppressWarnings("rawtypes")
-	private RespuestaServiceValidator agregarFactura(HttpServletRequest request, FacturaCommand facturaCommand, BindingResult result) {
-		return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", "5500000000002252");
-	}
-	
+		
 	/**
 	 * Recibir factura de otro emisor
 	 * @param request

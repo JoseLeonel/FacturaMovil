@@ -288,6 +288,7 @@ public class Constantes {
 	public static final String					FACTURA_TIPO_DOC_FACTURA_ELECTRONICA								= "01";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO								= "02";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO								= "03";
+	public static final String					FACTURA_TIPO_DOC_COMPRAS														= " ";
 
 	public static final String					RECEPCION_FACTURA_TIPO_DOC_ACEPTADO									= "05";
 	public static final String					RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_PARCIAL					= "06";

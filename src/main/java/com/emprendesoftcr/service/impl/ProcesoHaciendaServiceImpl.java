@@ -199,7 +199,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	//@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 		try {
@@ -474,7 +474,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
 				ArrayList<String> listaCorreos = new ArrayList<String>();
 				// Se determina si es una recepcion de factura
-				if (hacienda.getTipoDoc().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO) || hacienda.getTipoDoc().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_PARCIAL) || hacienda.getTipoDoc().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_RECHAZADO)) {
+				if (hacienda.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_COMPRAS)) {
 					RecepcionFactura recepcionFactura = recepcionFacturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
 					if (recepcionFactura != null) {
 						listaCorreos.add(recepcionFactura.getEmpresa().getCorreoElectronico());
@@ -572,13 +572,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			modelEmail.put("clave", clave);
 			modelEmail.put("cedulaEmisor", recepcionFactura.getCedulaEmisor());
 			String tipoMensajeTitulo = "";
-			if (hacienda.getTipoDoc().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO)) {
+			if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO)) {
 				modelEmail.put("tipoMensaje", "aceptación");
 				tipoMensajeTitulo = "Aceptación";
-			} else if (hacienda.getTipoDoc().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_PARCIAL)) {
+			} else if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_PARCIAL)) {
 				modelEmail.put("tipoMensaje", "aceptación parcial");
 				tipoMensajeTitulo = "Aceptación Parcial";
-			} else if (hacienda.getTipoDoc().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_RECHAZADO)) {
+			} else if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_RECHAZADO)) {
 				modelEmail.put("tipoMensaje", "rechazo");
 				tipoMensajeTitulo = "Rechazo";
 			}
@@ -745,7 +745,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				hacienda.setReintentos(Constantes.ZEROS);
 				hacienda.setReintentosAceptacion(Constantes.ZEROS);
 
-				String tipoDoc = "";
+				String tipoDoc = Constantes.FACTURA_TIPO_DOC_COMPRAS;
 				hacienda.setTipoDoc(tipoDoc);
 				hacienda.setEmpresa(recepcionFactura.getEmpresa());
 				hacienda.setNombreReceptor(recepcionFactura.getEmpresa().getNombreComercial());
