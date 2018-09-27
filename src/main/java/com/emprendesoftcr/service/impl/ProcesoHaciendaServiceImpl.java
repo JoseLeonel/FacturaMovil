@@ -746,6 +746,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				hacienda.setReintentosAceptacion(Constantes.ZEROS);
 
 				String tipoDoc = "";
+				if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_ACEPTADO)) {
+					tipoDoc = Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO;
+				}else  if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_ACEPTADO_PARCIAL)) {
+					tipoDoc = Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_PARCIAL;
+				}else if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_RECHAZADO)) {
+					tipoDoc = Constantes.RECEPCION_FACTURA_TIPO_DOC_RECHAZADO;
+				}
 				hacienda.setTipoDoc(tipoDoc);
 				hacienda.setEmpresa(recepcionFactura.getEmpresa());
 				hacienda.setNombreReceptor(recepcionFactura.getEmpresa().getNombreComercial());
