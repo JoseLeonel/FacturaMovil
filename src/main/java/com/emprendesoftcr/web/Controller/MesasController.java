@@ -29,12 +29,14 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Mesa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.MesaCommand;
+import com.emprendesoftcr.web.command.ParametrosPaginacionMesa;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.MesaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
+
 /**
- * Control de mesas
- * MesasController.
+ * Control de mesas MesasController.
  * @author jose.
  * @since 4 sep. 2018
  */
@@ -62,12 +64,16 @@ public class MesasController {
 	private EmpresaPropertyEditor												empresaPropertyEditor;
 
 	@Autowired
+	private MesaPropertyEditor													mesaPropertyEditor;
+
+	@Autowired
 	private StringPropertyEditor												stringPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 
 		binder.registerCustomEditor(Empresa.class, empresaPropertyEditor);
+		binder.registerCustomEditor(Empresa.class, mesaPropertyEditor);
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
 
@@ -98,6 +104,28 @@ public class MesasController {
 			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+	}
+
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarPaginacionMesasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarMesasAjax(HttpServletRequest request, ModelMap model, @ModelAttribute ParametrosPaginacionMesa parametrosPaginacionMesa) {
+
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Mesa");
+		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+			String nombreUsuario = request.getUserPrincipal().getName();
+			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			delimitadores.addFiltro(dataTableFilter);
+		}
+		JqGridFilter categoriaFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
+		delimitadores.addFiltro(categoriaFilter);
+
+		delimitadores.setLength(parametrosPaginacionMesa.getCantidadPorPagina());
+
+		delimitadores.setStart(parametrosPaginacionMesa.getPaginaActual());
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
@@ -137,14 +165,13 @@ public class MesasController {
 				result.rejectValue("descripcion", "error.mesa.descripcion.existe");
 			}
 
-
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			mesa.setEmpresa(usuario.getEmpresa());
 			mesa.setCreated_at(new Date());
 			mesa.setUpdated_at(new Date());
-			
+
 			mesaBo.agregar(mesa);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mesa.agregar.correctamente", mesa);
 
@@ -189,7 +216,6 @@ public class MesasController {
 		}
 	}
 
-	
 	@RequestMapping(value = "/MostrarMesaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Mesa mesa, BindingResult result, SessionStatus status) throws Exception {

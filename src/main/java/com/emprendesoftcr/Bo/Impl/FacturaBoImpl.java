@@ -264,11 +264,7 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
 			factura.setEstado(facturaCommand.getEstado());
 
-			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO) || facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
-				factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
-			} else {
-				factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
-			}
+		
 
 			if (factura.getId() == Constantes.ZEROS_LONG) {
 				factura.setCreated_at(new Date());
@@ -282,7 +278,7 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setNumeroConsecutivo(empresaDao.generarConsecutivoFactura(facturaCommand.getEmpresa(), usuario, factura));
 				factura.setClave(empresaDao.generaClaveFacturaTributacion(factura.getEmpresa(), factura.getNumeroConsecutivo(), FacturaElectronicaUtils.COMPROBANTE_ELECTRONICO_NORMAL));
 			}
-
+      factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_EN_PROCESOS);
 			if (factura.getId() == null) {
 				factura.setCreated_at(new Date());
 				agregar(factura);
@@ -433,6 +429,18 @@ public class FacturaBoImpl implements FacturaBo {
 					cuentaCobrarDao.crearCuentaXCobrar(factura);
 				}
 			}
+			
+			//Verifica si esta facturado para cambiar el estado firma y enviar a crear el xml en el proceso automatico
+			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO) || facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+				factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
+			} else {
+				 if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)){
+					 factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);	 
+				 }
+			}
+			modificar(factura);
+			
+			
 
 			// Anulacion de la factura anterior
 			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
@@ -506,10 +514,11 @@ public class FacturaBoImpl implements FacturaBo {
 			if (facturaCommand.getTotalBanco() == null || facturaCommand.getTotalTarjeta() == null || facturaCommand.getTotalEfectivo() == null) {
 				return resultado;
 			}
-			if (facturaCommand.getTotalBanco() == 0 || facturaCommand.getTotalTarjeta() == 0) {
-				resultado = facturaCommand.getTotalEfectivo() - facturaCommand.getTotalCambioPagar();
-			} else {
-				resultado = facturaCommand.getTotalVentaNeta();
+			//Si hay montos en banco y tarjeta debe ser igual en efectivo
+			if (facturaCommand.getTotalBanco() > 0 || facturaCommand.getTotalTarjeta() > 0) {
+				resultado =facturaCommand.getTotalEfectivo();
+			}else {
+				resultado = facturaCommand.getTotalComprobante();
 			}
 		} catch (Exception e) {
 			log.info("** Error  aplicar getTotalEfectivo : " + e.getMessage() + " fecha " + new Date());

@@ -1319,12 +1319,22 @@ __agregarArticulosFactura(e){
                        self.cliente  = modeloTabla.cliente
                        self.vendedor = modeloTabla.vendedor
                        self.factura.referenciaNumero = numero
+                        self.factura.totalTarjeta = 0 
+                        self.factura.totalBanco = 0 
+                        self.factura.totalEfectivo = 0
                        
                        self.update()
                        $('.referenciaNumero').val(numero)
                     });
+                    if(self.factura.estado ==5){
+                         sweetAlert("", "Ya se encuentra anulada", "error");
+                         return
+                    }
                     if(self.factura.id == null){
                          sweetAlert("", $.i18n.prop("error.factura.no.existe"), "error");
+                    }else{
+                         self.factura.id= null
+                       self.update()
                     }
                 }
                 cargarDetallesFacturaEnEspera()

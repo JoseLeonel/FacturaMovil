@@ -159,6 +159,7 @@ self.on('mount',function(){
      __InicializarTabla('.tableListar')
     agregarInputsCombos() 
     listaClientesActivos()
+    
      window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
