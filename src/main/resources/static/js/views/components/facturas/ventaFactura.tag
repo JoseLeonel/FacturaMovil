@@ -1,32 +1,86 @@
 <venta-factura>
+
+
+
+
+<!--Modal Cambiar Cantidad-->
+<div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+       <div class="modal-content">
+            <div class="modal-header with-border " >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.cantidad")}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
+                        <div class="form-group has-success">
+                            <label class="knob-label" >{$.i18n.prop("inventario.cantidad")}</label>
+                            <input  type="number" class="form-control cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus">
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick ="{__recalculacionDelDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Fin Cambiar Cantidad-->
+
+<!--Modal Cambiar Descripcion-->
+
+<div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+       <div class="modal-content">
+            <div class="modal-header with-border " >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descripcion")}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
+                        <div class="form-group has-success">
+                            <label class="knob-label" >{$.i18n.prop("inventario.cantidad")}</label>
+                            <input  type="text" class="form-control cambiarDescripcionArticulo" id="cambiarDescripcionArticulo" name = "cambiarDescripcionArticulo" autofocus="autofocus">
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick ="{__cambiarDescripcionDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Fin Cambiar descripcion-->
+<div id="pagina1">
    <div class="row">
         <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-        <div class="box-tools ">
-            <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
-            <a class="pull-left" href="#"    onclick = {__ImprimirTiquete}  title="{$.i18n.prop("imprimir.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f7")}</span></a>
-            <a class="pull-left" href="#"    onclick = {__MostrarFormularioDePago}  title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
-            <a class="pull-left" href="#"    onclick= { __CrearFacturaTemporal}  title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
-            <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
-            <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
-            
-        </div>
+            <div class="box-tools ">
+                <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
+                <a class="pull-left" href="#"    onclick = {__ImprimirTiquete}  title="{$.i18n.prop("imprimir.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f7")}</span></a>
+                <a class="pull-left" href="#"    onclick = {__MostrarFormularioDePago}  title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
+                <a class="pull-left" href="#"    onclick= { __CrearFacturaTemporal}  title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
+                <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
+                <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
+            </div>
         </div>      
     </div>              
-<div>
-    <form id="FormPaginacion">
-        <input type="hidden" name="id" id="id" value="{parametrosPaginacion.cantidadPorPagina}">
-
-        <input type="hidden" name="cantidadPorPagina" id="cantidadPorPagina" value="{parametrosPaginacion.cantidadPorPagina}">
-        <input type="hidden" name="paginaActual" id="paginaActual" value="{parametrosPaginacion.paginaActual}">
-        <input type="hidden" name="total" id="total" value="{parametrosPaginacion.total}">
-        <input type="hidden" name="categoria" id="categoria" value="{categoria.id}">
-    </form>
-</div>
+    <div>
+        <form id="FormPaginacion">
+            <input type="hidden" name="id" id="id" value="{parametrosPaginacion.cantidadPorPagina}">
+            <input type="hidden" name="cantidadPorPagina" id="cantidadPorPagina" value="{parametrosPaginacion.cantidadPorPagina}">
+            <input type="hidden" name="paginaActual" id="paginaActual" value="{parametrosPaginacion.paginaActual}">
+            <input type="hidden" name="total" id="total" value="{parametrosPaginacion.total}">
+            <input type="hidden" name="categoria" id="categoria" value="{categoria.id}">
+        </form>
+    </div>
+<div>    
 <!--Modal mostrar  -->
 <div id="modalVendedor" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-
             <div class="modal-header with-border table-header" >
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("vendedor.lista")}   </h4>
             </div>
@@ -61,17 +115,17 @@
 <!--fin del modal-->
 <!--Inicio de la Venta-->
 <div show={mostarParaCrearNuevaVentas}>
-    <div class="content">
-           <div class="row-fluid no-space">
-            <div class="col-md-5 col-sm-5 col-lg-5 col-xs-12 pull-right" style="padding: 0px 10px">
-                <div class="block panel newPanel newContPrecio">                    
+    <div class="container-fluid">
+        <div class="row no-space">
+            <div class="col-md-5 col-sm-5 col-lg-5 col-xs-12 pull-right" style="padding: 0px 12px">
+                <div class="block panel ">                    
                     <div id="listadoProdcutos">{$.i18n.prop("titulo.listado.venta")}   {factura.id>0?factura.id:'' } {factura.nombreFactura}</div>
                     <hr style="margin: 2px 0px 0px 0px; border-color: #e4e4e4; margin-top: 0px">
                     <div class="data-fluid">
                         <div id="listaProductos" style="height:200px; overflow-x: hidden; width:100%">
-                            <table id="tablaListaProductos" cellpadding="0" cellspacing="0" width="100%" class="dtable lcnp">
+                            <table id="tablaListaProductos"  cellpadding="0" cellspacing="0" width="100%" class="table lcnp table-dark">
                                 <thead>
-                                    <tr style=" display: none">
+                                    <tr >
                                         <td width="50%"></td>
                                         <td width="10%"></td>
                                         <td width="10%"></td>
@@ -79,17 +133,19 @@
                                         <td width="10%"></td>
                                         <td width="19%"></td>
                                         <td width="1%"></td>
-                                        <td width="10%"></td>
+                                        <td width="15%"></td>
                                     </tr>
                                 </thead>
-                                <tbody height="70px" id="productos-detail">
+                                <tbody height="70%" id="productos-detail">
                                     <tr style="" each={detail}>
                                         <td>
-                                            <span onclick ={__CambiarDescripcion} class="title-detalle text-info">
+                                           <diV onclick ={__CambiarDescripcion}>
+                                            <span   class="title-detalle text-info clickable clearfix">
                                             {descripcion}</span>
+                                           <div> 
                                         </td>
                                         <td >
-                                            <span onclick ={__CambiarCantidad} class="label label-success cantidad">{cantidad.toFixed(3)}</span>
+                                            <span onclick ={__CambiarCantidad} class="label label-success cantidad clickable">{cantidad.toFixed(3)}</span>
                                         </td>
                                         <td >
                                             <span    class="label label-success precio-prod" >{precioUnitario.toFixed(2)}</span>
@@ -104,7 +160,7 @@
                                             <span class="precio-calc">{montoTotalLinea.toFixed(2)}</span>
                                         </td>
                                         <td>
-                                            <button  onclick={__removeProductFromDetail} class="btn_eliminar_detalle btn-danger btn-xs btn-block">X</button>
+                                            <button  onclick={__removeProductFromDetail} class="btn_eliminar_detalle btn-danger btn-xs btn-block clickable">X</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -112,100 +168,92 @@
                         </div>
                         <hr style="margin: 0px; border-color: #e4e4e4;">
                         <div id="bordeBevelTop">
-                            <table id="pagarTableInfo" width="100%">
-                                <tbody>
-                                    <tr style="height:30px;">
-                                        <td width="30%" id="bordeBevelLeft"> 
-                                            <span id="pagarInfo"> {$.i18n.prop("factura.resumen.subTotal")} </span>
-                                            <span id="cantidad-total">{subTotalGeneral  } </span> 
-                                        </td>
-                                        <td width="35%" id="bordeBevelLeft"> 
-                                            <span id="pagarInfo">{$.i18n.prop("factura.resumen.descuento")}  </span>
-                                            <span id="sigPeso">   </span>
-                                            <span id="iva-total">{totalDescuentos}</span> 
-                                        </td>
-                                        <td width="35%" id="bordeBevelRight"> 
-                                            <span id="pagarInfo">{$.i18n.prop("factura.resumen.impuesto")}  </span>
-                                            <span id="sigPeso">      </span>
-                                            <span id="subtotal">{totalImpuesto}</span> 
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <hr style="margin: 0px; border-color: #e4e4e4; margin-top: 0px">                    
-                        <div  onclick = {__MostrarFormularioDePago} id="btnGrandePagar" class="head green well" style="color: #fff; font-size: 55px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
-                            <table id="pagarTable" width="100%">
-                                <tbody>
-                                    <tr>
-                                        <td width="30%" id="">
-                                            <div id="pagarTitulo">{$.i18n.prop("factura.total")}:</div>
-                                        </td>
-                                        <td width="70%" id="">
-                                            <div id="">
-                                                <span id="total_show_peso" class="textShadow">  </span>
-                                                <span class="label label-info textShadow" id="total-show">{totalComprobante}</span>
-                                            </div>
-                                        </td>
-                                    </tr>                     
-                                </tbody>
-                            </table>
-                        </div>
-                        <hr style="margin: 0px; border-color: #e4e4e4;">
+                        <table id="pagarTableInfo" width="100%">
+                            <tbody>
+                                <tr style="height:30px;">
+                                    <td width="30%" id="bordeBevelLeft"> 
+                                        <span id="pagarInfo"> {$.i18n.prop("factura.resumen.subTotal")} </span>
+                                        <span id="cantidad-total">{subTotalGeneral  } </span> 
+                                    </td>
+                                    <td width="35%" id="bordeBevelLeft"> 
+                                        <span id="pagarInfo">{$.i18n.prop("factura.resumen.descuento")}  </span>
+                                        <span id="sigPeso">   </span>
+                                        <span id="iva-total">{totalDescuentos}</span> 
+                                    </td>
+                                    <td width="35%" id="bordeBevelRight"> 
+                                        <span id="pagarInfo">{$.i18n.prop("factura.resumen.impuesto")}  </span>
+                                        <span id="sigPeso">      </span>
+                                        <span id="subtotal">{totalImpuesto}</span> 
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div  class="row  ">
-                        <div class="col-md-12 "  style="padding:10px 15px 18px 15px; ">
-                            <!--Cliente o Nuevo Cliente-->
-                            <div class="input-group">
-                                <span onclick = {__CambiarNombreTiquete} title="Cambiar Nombre Tiquete" class="input-group-addon btnClientes" id="add-new-client"> 
-                                    <small class="fa fa-plus" style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
-                                    <span class="fa fa-user" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"></span> 
-                                </span>
-                                <input onclick={_EscogerClientes} type="text"  placeholder="Cliente" value="{cliente.nombreCompleto}"  name="datos_cliente" id="datos_cliente" autocomplete="off" >
-                            </div>
-                            <!--Fin Cliente o Nuevo Cliente-->
-                            <!--Vendedor o Nuevo Vendedor-->
-                            <div class="input-group">
-                                <span title="Vendedor" class="input-group-addon " > 
-                                    <span class="fa fa-user" aria-hidden="true" style="margin:3px 4px 0px 2px"></span> 
-                                </span>
-                                <input type="text" onclick={_EscogerVendedores} placeholder="Vendedor" value="{vendedor.nombreCompleto}"  name="v_vendedor" id="v_vendedor" autocomplete="off" >
-                            </div>
-                            <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label-titulos-articulo">Tikete a :{factura.nombreFactura}</span></a>
-                        </div>
-                    </div> 
+                    <hr style="margin: 0px; border-color: #e4e4e4; margin-top: 0px">                    
+                    <div  onclick = {__MostrarFormularioDePago} id="btnGrandePagar" class="head green well" style="color: #fff; font-size: 55px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
+                        <table id="pagarTable" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td width="30%" id="">
+                                        <div id="pagarTitulo">{$.i18n.prop("factura.total")}:</div>
+                                    </td>
+                                    <td width="70%" id="">
+                                        <div id="">
+                                            <span id="total_show_peso" class="textShadow">  </span>
+                                            <span class="label label-info textShadow" id="total-show">{totalComprobante}</span>
+                                       </div>
+                                    </td>
+                                </tr>                     
+                            </tbody>
+                        </table>
+                    </div>
                     <hr style="margin: 0px; border-color: #e4e4e4;">
-                    <div  class="row  ">
-                        <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 " >   
-                            <section class="contenedor-opciones">
-                                <a href="#" class="opciones-menu" onclick = {__CrearFacturaTemporal} >
-                                    <i class="fa fa-clock-o">{$.i18n.prop("venta.en.espera")}</i>
-                                </a>
-                                <a  href="#" class="opciones-limpiar" onclick = {__ImprimirTiquete} >
-                                    <i class="fa fa-print">Tiquete</i>
-                                </a> 
-                                 <a  href="#" class="opciones-limpiar" onclick = {__Limpiar} >
-                                    <i class="fa fa-trash">{$.i18n.prop("btn.limpiar")}</i>
-                                </a> 
-                                                            
-                            </section>
-                        </div>    
-                    </div> 
-
-                    <div  class="row">
-                        <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12" >
-                            <section class="lista-facturas-espera">
-                                <div id="botones"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
-                                  
-                                     <span class="label-titulos-espera"> {nombreFactura ==null?"T#"+id:""}  {nombreFactura}</span>
-                                </div>         
-                                 
-                            </section>
-                           
-                        </div>
-                        
-                    </div>    
                 </div>
+                <div  class="row  ">
+                    <div class="col-md-12 col-sx-12 col-lg-12 col-sm-12 "  style="padding:10px 15px 18px 15px; ">
+                        <div class="input-group">
+                            <span onclick = {__CambiarNombreTiquete} title="Cambiar Nombre Tiquete" class="input-group-addon btnClientes" id="add-new-client"> 
+                                <small class="fa fa-plus" style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                <span class="fa fa-user" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"></span> 
+                            </span>
+                            <input onclick={_EscogerClientes} type="text"  placeholder="Cliente" value="{cliente.nombreCompleto}"  name="datos_cliente" id="datos_cliente" autocomplete="off" >
+                        </div>
+                        <!--Vendedor o Nuevo Vendedor-->
+                        <div class="input-group">
+                            <span title="Vendedor" class="input-group-addon " > 
+                                <span class="fa fa-user" aria-hidden="true" style="margin:3px 4px 0px 2px"></span> 
+                            </span>
+                            <input type="text" onclick={_EscogerVendedores} placeholder="Vendedor" value="{vendedor.nombreCompleto}"  name="v_vendedor" id="v_vendedor" autocomplete="off" >
+                        </div>
+                        <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label-titulos-articulo">Tikete a :{factura.nombreFactura}</span></a>
+                    </div>
+                </div> 
+                <hr style="margin: 0px; border-color: #e4e4e4;">
+                <div  class="row  ">
+                    <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 " >   
+                        <section class="contenedor-opciones">
+                            <a href="#" class="opciones-menu" onclick = {__CrearFacturaTemporal} >
+                                <i class="fa fa-clock-o">{$.i18n.prop("venta.en.espera")}</i>
+                            </a>
+                            <a  href="#" class="opciones-limpiar" onclick = {__ImprimirTiquete} >
+                                <i class="fa fa-print">Tiquete</i>
+                            </a> 
+                            <a  href="#" class="opciones-limpiar" onclick = {__Limpiar} >
+                                <i class="fa fa-trash">{$.i18n.prop("btn.limpiar")}</i>
+                            </a> 
+                        </section>
+                    </div>    
+                </div> 
+                <div  class="row">
+                    <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12" >
+                        <section class="lista-facturas-espera">
+                            <div id="botones"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
+                                <span class="label-titulos-espera"> {nombreFactura ==null?"T#"+id:""}  {nombreFactura}</span>
+                            </div>         
+                        </section>
+                    </div>
+                </div>    
+            </div>
             </div>  
             <div class="col-md-7 col-sm-7 col-lg-7 col-xs-12" style="padding: 0px 10px">
                 <div class="block ">
@@ -232,11 +280,10 @@
                             </form>
                         </div>
                     </div>
-                </div>    
-            </div>
-        </div>
-        <!--Ventana de los productos-->
-                <div   class="col-sx-12 col-sm-7 col-md-7 col-lg-7 " >
+                    
+                </div>   
+                <!--Ventana de los productos-->
+                <div   class="col-sx-12 col-sm-12 col-md-12 col-lg-12 " >
                     <!--Seccion de categorias-->
                     <section show= {mostrarCategorias} class="lista-articulos" >
                         <div show= {mostrarCategorias} id="item-categorias"class="product-item"  each ={categorias.data}  onclick={__ArticulosXCategorias}>
@@ -266,6 +313,10 @@
                     </section>
                     <!--Fin Seccion de codigo de barra-->
                 </div> 
+                 
+            </div>
+        </div>
+        
     </div>       
 </div>
 <!--Fin Ventana de los productos-->
@@ -373,58 +424,8 @@
 </div>
 <!--fin Modal agregar el nombre de el tiquete temporal-->
 <!--Modal Cambiar Cantidad-->
-<div class="modal fade" id="modalCambiarCantidad" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.cantidad")}</h4>
-            </div>
-            <div class="modal-body">
-                <form id = "formulario" name ="formulario "   class="advanced-search-form">
-                    <div class="row">   
-                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                            <label class="knob-label" >{$.i18n.prop("inventario.cantidad")}</label>
-                            <input  type="number" class="form-control cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <div class="row">
-                    <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                        <button type="button" onclick ="{__recalculacionDelDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-     </div>
-</div>
-<!--Fin Cambiar Cantidad-->
-<!--Modal Cambiar Descripcion-->
-<div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descripcion")}</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
-                        <div class="form-group has-success">
-                            <label >Descripcion:</label>
-                            <input  type="text" class="form-control cambiarDescripcionArticulo" id="cambiarDescripcionArticulo" name = "cambiarDescripcionArticulo" autofocus="autofocus">
-                        </div>
-                    </div>
-                </div> 
-            </div>
-            <div class="modal-footer">
-                
-                <button type="button" onclick ="{__cambiarDescripcionDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--Fin Cambiar descripcion-->
+
+
 <!--Modal Cambiar precio-->
 <div id='modalCambiarPrecio' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -711,7 +712,216 @@
 		    </div>
         </div>  
 </div>  
-<!--Fin Ventana de los billetes-->      
+<!--Fin Ventana de los billetes-->   
+<style type="text/css">
+    .clickable {
+        cursor: pointer;
+    }
+    .modal {
+position: fixed;
+top: 3%;
+right: 3%;
+left: 3%;
+bottom: 3%;
+width: auto;
+margin: 0;
+}
+.modal-body {
+max-height: 350px;
+padding: 15px;
+overflow-y: auto;
+-webkit-overflow-scrolling: touch;
+}
+
+.modal-body { height: 60%; }
+
+@media (max-width: 480px) 
+{
+    .modal.fade.in {
+        top: 10px;
+  }
+}
+
+td.col-1, th.col-1 {
+  width: 8.33333%; }
+
+td.col-2, th.col-2 {
+  width: 16.66667%; }
+
+td.col-3, th.col-3 {
+  width: 25%; }
+
+td.col-4, th.col-4 {
+  width: 33.33333%; }
+
+td.col-5, th.col-5 {
+  width: 41.66667%; }
+
+td.col-6, th.col-6 {
+  width: 50%; }
+
+td.col-7, th.col-7 {
+  width: 58.33333%; }
+
+td.col-8, th.col-8 {
+  width: 66.66667%; }
+
+td.col-9, th.col-9 {
+  width: 75%; }
+
+td.col-10, th.col-10 {
+  width: 83.33333%; }
+
+td.col-11, th.col-11 {
+  width: 91.66667%; }
+
+td.col-12, th.col-12 {
+  width: 100%; }
+
+td.col-sm-1, th.col-sm-1 {
+  width: 8.33333%; }
+
+td.col-sm-2, th.col-sm-2 {
+  width: 16.66667%; }
+
+td.col-sm-3, th.col-sm-3 {
+  width: 25%; }
+
+td.col-sm-4, th.col-sm-4 {
+  width: 33.33333%; }
+
+td.col-sm-5, th.col-sm-5 {
+  width: 41.66667%; }
+
+td.col-sm-6, th.col-sm-6 {
+  width: 50%; }
+
+td.col-sm-7, th.col-sm-7 {
+  width: 58.33333%; }
+
+td.col-sm-8, th.col-sm-8 {
+  width: 66.66667%; }
+
+td.col-sm-9, th.col-sm-9 {
+  width: 75%; }
+
+td.col-sm-10, th.col-sm-10 {
+  width: 83.33333%; }
+
+td.col-sm-11, th.col-sm-11 {
+  width: 91.66667%; }
+
+td.col-sm-12, th.col-sm-12 {
+  width: 100%; }
+
+td.col-md-1, th.col-md-1 {
+  width: 8.33333%; }
+
+td.col-md-2, th.col-md-2 {
+  width: 16.66667%; }
+
+td.col-md-3, th.col-md-3 {
+  width: 25%; }
+
+td.col-md-4, th.col-md-4 {
+  width: 33.33333%; }
+
+td.col-md-5, th.col-md-5 {
+  width: 41.66667%; }
+
+td.col-md-6, th.col-md-6 {
+  width: 50%; }
+
+td.col-md-7, th.col-md-7 {
+  width: 58.33333%; }
+
+td.col-md-8, th.col-md-8 {
+  width: 66.66667%; }
+
+td.col-md-9, th.col-md-9 {
+  width: 75%; }
+
+td.col-md-10, th.col-md-10 {
+  width: 83.33333%; }
+
+td.col-md-11, th.col-md-11 {
+  width: 91.66667%; }
+
+td.col-md-12, th.col-md-12 {
+  width: 100%; }
+
+td.col-lg-1, th.col-lg-1 {
+  width: 8.33333%; }
+
+td.col-lg-2, th.col-lg-2 {
+  width: 16.66667%; }
+
+td.col-lg-3, th.col-lg-3 {
+  width: 25%; }
+
+td.col-lg-4, th.col-lg-4 {
+  width: 33.33333%; }
+
+td.col-lg-5, th.col-lg-5 {
+  width: 41.66667%; }
+
+td.col-lg-6, th.col-lg-6 {
+  width: 50%; }
+
+td.col-lg-7, th.col-lg-7 {
+  width: 58.33333%; }
+
+td.col-lg-8, th.col-lg-8 {
+  width: 66.66667%; }
+
+td.col-lg-9, th.col-lg-9 {
+  width: 75%; }
+
+td.col-lg-10, th.col-lg-10 {
+  width: 83.33333%; }
+
+td.col-lg-11, th.col-lg-11 {
+  width: 91.66667%; }
+
+td.col-lg-12, th.col-lg-12 {
+  width: 100%; }
+
+td.col-xl-1, th.col-xl-1 {
+  width: 8.33333%; }
+
+td.col-xl-2, th.col-xl-2 {
+  width: 16.66667%; }
+
+td.col-xl-3, th.col-xl-3 {
+  width: 25%; }
+
+td.col-xl-4, th.col-xl-4 {
+  width: 33.33333%; }
+
+td.col-xl-5, th.col-xl-5 {
+  width: 41.66667%; }
+
+td.col-xl-6, th.col-xl-6 {
+  width: 50%; }
+
+td.col-xl-7, th.col-xl-7 {
+  width: 58.33333%; }
+
+td.col-xl-8, th.col-xl-8 {
+  width: 66.66667%; }
+
+td.col-xl-9, th.col-xl-9 {
+  width: 75%; }
+
+td.col-xl-10, th.col-xl-10 {
+  width: 83.33333%; }
+
+td.col-xl-11, th.col-xl-11 {
+  width: 91.66667%; }
+
+td.col-xl-12, th.col-xl-12 {
+  width: 100%; }
+</style> 
 
 <script>
     var self = this;
@@ -1346,17 +1556,25 @@ __CambiarCantidad(e){
    self.update()
    $( "#cambiarCantidadArticulo" ).focus()
    $( "#cambiarCantidadArticulo" ).val(self.item.cantidad)
-   $('#modalCambiarCantidad').modal('show')      
+   $('#modalCambiarCantidad').modal()                      // initialized with defaults
+   $('#modalCambiarCantidad').modal({ keyboard: false })   // initialized with no keyboard
+   $('#modalCambiarCantidad').modal('show')                // initializes and invokes show immediately
 }
 /**
 *Cambiar descripcion
 **/
 __CambiarDescripcion(e){
+    console.log(e)
    self.item = e.item; 
    self.update()
+  
    $( "#cambiarDescripcionArticulo" ).focus()
    $( "#cambiarDescripcionArticulo" ).val(self.item.descripcion)
-   $('#modalCambiarDescripcion').modal('show')      
+   $('#modalCambiarDescripcion').modal()                      // initialized with defaults
+   $('#modalCambiarDescripcion').modal({ keyboard: false })   // initialized with no keyboard
+   $('#modalCambiarDescripcion').modal('show')                // initializes and invokes show immediately
+
+
 }
 /**
 *Cambiar precio del producto
@@ -2052,6 +2270,8 @@ function mostrarPAgo(){
         return
     }
     self.mostarParaCrearNuevaVentas = false
+      self.factura.totalEfectivo = self.factura.totalComprobante
+        self.update()
      $('#totalEfectivo').val(self.factura.totalComprobante)
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)

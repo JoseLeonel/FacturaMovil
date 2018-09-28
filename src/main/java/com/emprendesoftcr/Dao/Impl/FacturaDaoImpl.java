@@ -64,7 +64,7 @@ public class FacturaDaoImpl implements FacturaDao {
 	@Override
 	public Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Factura obj where obj.numeroConsecutivo = :consecutivo and obj.empresa = :empresa");
-		query.setParameter("consecutivo", consecutivo);
+		query.setParameter("consecutivo", consecutivo.toString());
 		query.setParameter("empresa", empresa);
 		List<Factura> results = query.getResultList();
 		if (!results.isEmpty()) {
