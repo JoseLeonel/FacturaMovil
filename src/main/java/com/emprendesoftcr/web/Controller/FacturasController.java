@@ -74,6 +74,7 @@ import com.emprendesoftcr.pdf.Proformas;
 import com.emprendesoftcr.validator.FacturaFormValidator;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
+import com.emprendesoftcr.web.command.TotalFacturaCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.FechaPropertyEditor;
@@ -304,6 +305,32 @@ public class FacturasController {
 		return "views/facturas/listaFacturas";
 	}
 
+	/**
+	 * Listado de facturas anuladas y facturadas
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/TotalFacturas", method = RequestMethod.GET)
+	public String totalFacturas(ModelMap model) {
+		return "views/facturas/totalFacturas";
+	}
+	
+	/** 
+	 * Busca el total de facturas por rango de fechas
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/TotalFacturasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public TotalFacturaCommand TotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam) {
+		Date fechaInicio = Utils.parseDate(fechaInicioParam);
+		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		return facturaBo.sumarFacturas(fechaInicio, fechaFinal, usuario.getEmpresa().getId());
+		//return new TotalFacturaCommand(250D,250D,250D,250D,250D,250D);
+	}
+	
 	/**
 	 * PDF de las proformas realizadas por empresa
 	 * @param request

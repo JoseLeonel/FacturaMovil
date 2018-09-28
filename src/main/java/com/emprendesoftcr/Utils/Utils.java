@@ -1256,6 +1256,22 @@ public final class Utils {
     BigDecimal bd = new BigDecimal(Double.toString(value));
     bd = bd.setScale(places, RoundingMode.HALF_UP);
     return bd.doubleValue();
-}
+	}
 
+	public static Date dateToDate(Date fecha, boolean fechaMax) {
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(fecha);
+		if (fechaMax) {
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+			calendar.set(Calendar.MILLISECOND, 999);
+		} else {
+			calendar.set(Calendar.HOUR_OF_DAY, 0);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
+		}
+		return calendar.getTime();
+	}
 }

@@ -707,9 +707,9 @@
 				facturaTotalVentaNeta:"0",
 				facturaTotalComprobante:"0",
 				facturaTotalImpuestos:"0",
-		}
+			}
 		
-		self.recepcionFactura ={
+			self.recepcionFactura ={
 				id:null,
 				clave:"",
 				cedulaEmisor:"",
@@ -721,8 +721,9 @@
 				totalFactura:"0",
 				cedulaReceptor:"",
 				numeroConsecutivoReceptor:"",				
-		}
-		self.update()
+			}
+			
+			self.update()
 		}
 		
 		

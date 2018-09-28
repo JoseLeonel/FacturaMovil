@@ -1,9 +1,11 @@
 package com.emprendesoftcr.Dao;
 
 import java.util.Collection;
+import java.util.Date;
 
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.web.command.TotalFacturaCommand;
 
 public interface FacturaDao {
 
@@ -21,8 +23,6 @@ public interface FacturaDao {
 	
 	Collection<Factura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma);
 	
+	TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa);
 	
-
-	
-
 }

@@ -36,6 +36,7 @@ import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.UsuarioCajaFactura;
 import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.FacturaCommand;
+import com.emprendesoftcr.web.command.TotalFacturaCommand;
 import com.google.gson.Gson;
 
 @Transactional
@@ -507,6 +508,11 @@ public class FacturaBoImpl implements FacturaBo {
 		}
 
 		return resultado;
+	}
+
+	@Override
+	public TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa) {
+		return facturaDao.sumarFacturas(fechaInicio, fechaFinal, idEmpresa);
 	}
 
 }

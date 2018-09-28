@@ -328,4 +328,21 @@ public class Constantes {
 	public static final String					FACTURA_ESTADO_PENDIENTE_STR												= "factura.estado.pendiente";
 	public static final String					FACTURA_ESTADO_FACTURADO_STR												= "factura.estado.facturado";
 
+	
+	//Nombres de procedimientos
+	public static final String					SP_TOTAL_FACTURAS																			= "SPTOTALFACTURAS";
+	public static final String					SP_TOTAL_FACTURAS_IN_FECHA_INICIO											= "FECHA_INICIO";	
+	public static final String					SP_TOTAL_FACTURAS_IN_FECHA_FIN												= "FECHA_FIN";	
+	public static final String					SP_TOTAL_FACTURAS_IN_ID_EMPRESA												= "ID_EMPRESA";	
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL														= "TOTAL";	
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO									= "TOTAL_DESCUENTOS";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS									= "TOTAL_IMPUESTOS";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS							= "TOTAL_NETAS";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS						= "TOTAL_EXENTAS";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS						= "TOTAL_GRABADAS";
+
+
 }
+
+
+
