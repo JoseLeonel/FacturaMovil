@@ -14,7 +14,7 @@ public class Constantes {
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 200;
 	// 48 horas cada 5 minutos
 	public static final Integer					MAXIMO_REINTENTOS_ACEPTACION												= 60;
-	public static final String					MAXIMO_REINTENTOS_ACEPTACION_STR												= "Tope de intentos de aceptacion,no envio respuesta";
+	public static final String					MAXIMO_REINTENTOS_ACEPTACION_STR										= "Tope de intentos de aceptacion,no envio respuesta";
 
 	public static final Integer					SEMAFORO_ESTADO_REINTENTOS													= 3;
 	public static final Integer					SEMAFORO_ESTADO_FIRMADO															= 1;
@@ -319,11 +319,12 @@ public class Constantes {
 	public static final Integer					FACTURA_ESTADO_PROFORMAS														= 3;
 	public static final Integer					FACTURA_ESTADO_FACTURADO														= 2;
 	public static final Integer					FACTURA_ESTADO_TIQUETE_USO_INTERNO									= 4;
-	public static final Integer					FACTURA_ESTADO_ANULADA            									= 5;
+	public static final Integer					FACTURA_ESTADO_ANULADA															= 5;
 
 	public static final Integer					FACTURA_ESTADO_FIRMA_PENDIENTE											= 1;
 	public static final Integer					FACTURA_ESTADO_REFIRMAR_DOCUMENTO										= 8;
 	public static final Integer					FACTURA_ESTADO_FIRMA_COMPLETO												= 2;
+	public static final Integer					FACTURA_ESTADO_FIRMA_EN_PROCESOS										= 3;
 
 	public static final String					FACTURA_ESTADO_PENDIENTE_STR												= "factura.estado.pendiente";
 	public static final String					FACTURA_ESTADO_FACTURADO_STR												= "factura.estado.facturado";

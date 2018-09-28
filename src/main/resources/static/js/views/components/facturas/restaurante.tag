@@ -21,6 +21,7 @@
         <input type="hidden" name="paginaActual" id="paginaActual" value="{parametrosPaginacion.paginaActual}">
         <input type="hidden" name="total" id="total" value="{parametrosPaginacion.total}">
         <input type="hidden" name="categoria" id="categoria" value="{categoria.id}">
+        <input type="hidden" name="mesa" id="mesa" value="{mesa.id}">
     </form>
 </div>
 <!--Modal mostrar  -->
@@ -219,10 +220,10 @@
                                             <img  src="{urlImagenBuscador}" width="45px" height="15px" >&nbsp;&nbsp; {$.i18n.prop("btn.consultar")}  
                                         </h3>
                                     </li>
-                                    <li onclick = {__PantallaCodigoBarra} id="codificalo" class=""> <h3>
+                                    <li onclick = {__PantallaMesas} id="codificalo" class=""> <h3>
                                         <i class="glyphicon glyphicon-barcode" aria-hidden="true"></i>
                                         <img  src="{urlImagenLector}" width="40px" height="15px">
-                                        &nbsp;&nbsp; {$.i18n.prop("titulo.lector")} </h3> 
+                                        &nbsp;&nbsp; Mesas </h3> 
                                     </li>
                                     <li onclick = {__PantallaCategorias} id="navegador" class=""> <h3>
                                         <i class="glyphicon glyphicon-refresh" aria-hidden="true"></i>
@@ -252,6 +253,14 @@
                             <span class="label-titulos-articulo">{descripcion}</span>
                         </div>
                     </section>
+                     <!--Seccion de Mesas-->
+                    <section show= {mostrarMesas} class="lista-articulos" >
+                        <div class="product-item"  each ={mesas.data}   onclick={__AgregarProductoDePantalla}>
+                            <img  style = "width:80px;" alt="" class="img-responsive " src="/dist/img/mesa.png">
+                            <span class="label-titulos-articulo">{descripcion}</span>
+                        </div>
+                    </section>
+
                     <div onclick = {__BotonAnterior} show= {mostrarNavegador}  class="pull-left btnNavegacion " >
                         <i class="fa fa-arrow-left"></i>{$.i18n.prop("btn.Anterior")}
                     </div>
@@ -259,12 +268,7 @@
                         <i class="fa fa-arrow-right"></i>{$.i18n.prop("btn.siguiente")}
                     </div>
                     <!--Fin Seccion de articulos-->
-                    <!--Seccion de codigo de barra-->
-                    <section show={mostrarCodigoBarra} class="codigo-barra" >
-                        <div class="barra">
-                           <input onkeypress = {__addProductToDetail} type="text" class="form-control" id="codigoBarra" autofocus="autofocus" placeholder="{$.i18n.prop('titulo.digite.codigo.barra')}">
-                       </div>    
-                    </section>
+                   
                     <!--Fin Seccion de codigo de barra-->
                 </div> 
     </div>       
@@ -718,8 +722,6 @@
     var self = this;
     // Detalle de la factura es una coleccion de articulos
     self.mostarParaCrearNuevaVentas = true
-    self.mostrarCodigoBarra    = true
-    self.mostrarCodigoBarra          = true;
     self.detail                = []
     self.mensajesBackEnd       = []
     self.error                 = false
@@ -821,6 +823,18 @@
             to:0
         }
     }
+    self.mesas    = {
+        data:[],
+        pagination:{
+            total:0,
+            current_page:0,
+            per_page:0,
+            last_page:0,
+            from:0,
+            to:0
+        }
+    }
+
     self.categoria = {
         id:null,
         descripcion:""
@@ -948,6 +962,45 @@ __BotonSiguiente(){
 }
 
 /**
+*  Lista de las Mesas
+**/
+function __ListaMesas(){
+    //Primera vez 
+    if( self.mesas.pagination.current_page == 0){
+        self.parametrosPaginacion.cantidadPorPagina = 12
+        self.parametrosPaginacion.paginaActual = 0
+        self.parametrosPaginacion.total = 0
+        self.update()
+    }
+    $('#cantidadPorPagina').val(self.parametrosPaginacion.cantidadPorPagina)
+    $('#paginadaActual').val(self.parametrosPaginacion.paginaActual )
+    var formulario = $('#FormPaginacion').serialize();
+    $.ajax({
+        url: 'ListarPaginacionMesasAjax.do',
+        datatype: "json",
+        data: formulario,
+        method:"POST",
+        success: function (result) {
+            if(result.aaData.length > 0){
+               self.mesas.data = result.aaData
+               self.mesas.pagination.total = result.recordsTotal
+               self.mesas.pagination.last_page = Math.round(result.recordsTotal/10)
+               self.mostrarNavegador            = false
+               self.mostrarCategorias           = false //muestra la pantalla de imagenes de articulos   
+               self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias  
+               self.mostrarMesas                = true 
+               self.update()
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+}
+
+
+/**
 *  Lista de los clientes
 **/
 function __ListaCategorias(){
@@ -1041,7 +1094,7 @@ __PantallaCategorias(){
 **/
 function mostrarCategorias(){
     self.categoria = {
-        id:0,
+        id:null,
         descripcion:""
     }
     self.categorias  = {
@@ -1077,13 +1130,63 @@ function mostrarCategorias(){
 /**
 *  Mostrar pantalla de codigo de barra
 **/
-__PantallaCodigoBarra(){
-    self.mostrarCodigoBarra          = true;
+__PantallaMesas(){
+    self.mostrarCodigoBarra          = false;
     self.mostrarNavegador            = false
     self.mostrarCategorias           = false //muestra la pantalla de imagenes de articulos   
     self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
+    self.categoria = {
+        id:null,
+        descripcion:""
+    }
+    self.mesa = {
+        id:null,
+        descripcion:""
+    }
+    self.categoria = {
+        id:0,
+        descripcion:""
+    }
+    self.categorias  = {
+        data:[],
+        pagination:{
+            total:0,
+            current_page:0,
+            per_page:0,
+            last_page:0,
+            from:0,
+            to:0
+        }
+    }
+    self.mesas  = {
+        data:[],
+        pagination:{
+            total:0,
+            current_page:0,
+            per_page:0,
+            last_page:0,
+            from:0,
+            to:0
+        }
+    }
+
+     self.inventariosXCategoria = {
+        data:[],
+        pagination:{
+            total:0,
+            current_page:0,
+            per_page:0,
+            last_page:0,
+            from:0,
+            to:0
+        }
+    }
+    self.mostrarNavegador            = true
+    self.mostrarCategorias           = true //muestra la pantalla de imagenes de articulos   
+    self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
     self.update()
-    $('#codigoBarra').focus()
+    __ListaMesas()
+    
 }
 /**
 *  Limpiar Formulario
@@ -1756,8 +1859,7 @@ function __Init(){
     self.mostarParaCrearNuevaFactura    = true
     self.mostrarCamposIngresoContado   = true;
     self.mostarParaCrearNuevaVentas = true
-    self.mostrarCodigoBarra    = true
-    self.mostrarCodigoBarra          = true;
+    self.mostrarMesas    = true
     self.mostrarFormularioPago         = false
     self.mostarParaCrearNuevaFactura   = true
     self.mostrarCamposIngresoContado   = true

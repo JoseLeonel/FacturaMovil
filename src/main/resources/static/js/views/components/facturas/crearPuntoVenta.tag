@@ -617,7 +617,7 @@
        cargaBilletes()
        __InformacionDataTableDia()
        __ListaDeClientes()
-       __ListaArticulosUsoInterno()
+      // __ListaArticulosUsoInterno()
        __ListaDeVendedores()
        _Empresa()
         $('.codigo').select()
@@ -680,7 +680,7 @@ function _Empresa(){
 __LimpiarFormulario(){
     $(".plazoCredito").val(null)   
     $(".fechaCredito").val(null)   
-     $(".totalEfectivo").val(null)   
+    $(".totalEfectivo").val(null)   
     $(".totalTarjeta").val(null)   
     $(".totalBanco").val(null)   
     $(".nota").val(null)   
@@ -727,7 +727,6 @@ _ListaFacturasDia(){
 *  Facturas del Dia
 **/
 function ListadoFacturasDelDia(){
-    
       $("#tableListarFacturasDia").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListarFacturasDia')  
         $.ajax({
@@ -836,11 +835,6 @@ function consultaFactura(data){
             }else{
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
-                     //  $('#modalFacturasDia').modal('hide') 
-
-
-                       //$('#modalFacturasDia').remove();
-                     
                        riot.mount('ptv-imprimir',{factura:modeloTabla});
                     });
                 }
@@ -895,7 +889,7 @@ __CambiarDescuento(e){
 __CambiarCantidad(e){
    var cantidad = e.currentTarget.value;
    self.item = e.item; 
-   se__CambiarCantidadlf.update()
+   self.update()
    $( "#cambiarCantidadArticulo" ).focus()
    $( "#cambiarCantidadArticulo" ).val(cantidad)
    $('#modalCambiarCantidad').modal('show')      
@@ -1068,6 +1062,10 @@ function aplicarFactura(estado){
                 }
                 var montoEntregado = self.factura.totalTarjeta + self.factura.totalBanco + self.factura.totalEfectivo
                 montoEntregado = redondeoDecimales(__valorNumerico(montoEntregado),2)
+                if(montoEntregado > 20000000){
+                    mensajeError("Monto entregado es muy alto")
+                    return
+                }
                 var resultado  = redondeoDecimales( __valorNumerico(self.factura.totalComprobante),2)
                 if(__valorNumerico(resultado) > __valorNumerico(montoEntregado)  ){
                     mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
@@ -1444,6 +1442,7 @@ function mostrarPAgo(){
         return
     }
     if(self.vueltoImprimir == 0){
+      
         $('#totalEfectivo').val(self.factura.totalComprobante)
         $('#totalTarjeta').val(null)
         $('#totalBanco').val(null)
@@ -1505,6 +1504,8 @@ __addProductToDetail(e){
         $('.codigo').focus()
        return  
     }
+    
+   
     __buscarcodigo(codigoActual,__valorNumerico(cantidadAct),0);
     if(self.articulo !=null){
         if(self.articulo.tipoCodigo !="04"){
@@ -1754,11 +1755,11 @@ function __buscarcodigoPrecio(idArticulo,cantidad,precio){
     if(idArticulo.length ==0){
         return
     }
-    buscarCodigoUsoInterno(idArticulo)
-    if(self.articulo !=null){
-        actualizarArticuloPrecio(precio,cantidad)
-        return
-    }
+  //  buscarCodigoUsoInterno(idArticulo)
+//    if(self.articulo !=null){
+//        actualizarArticuloPrecio(precio,cantidad)
+//        return
+ //   }
     $.ajax({
         type: 'GET',
         url: 'findArticuloByCodigojax.do',
@@ -1817,20 +1818,22 @@ function actualizarArticuloPrecio(precio,cantidad){
 * Buscar el codigo del codigo  en la base de datos
 **/
 function __buscarcodigo(idArticulo,cantidad,precio){
+    self.articulo = null
+    self.update()
     if(idArticulo ==null){
         return
     }
       if(idArticulo.length ==0){
         return
     }
-    buscarCodigoUsoInterno(idArticulo)
-    if(self.articulo !=null){
-        $('#codigo').val(self.articulo.codigo)
-        $('#precioVenta').val(self.articulo.precioPublico)
-        $('#precioVenta').select()
-        $("#precioVenta").focus()
-        return        
-    }
+ //   buscarCodigoUsoInterno(idArticulo)
+ //   if(self.articulo !=null){
+ //       $('#codigo').val(self.articulo.codigo)
+ //       $('#precioVenta').val(self.articulo.precioPublico)
+ //       $('#precioVenta').select()
+ //       $("#precioVenta").focus()
+ //      return        
+ //  }
     $.ajax({
         type: 'GET',
         url: 'findArticuloByCodigojax.do',
@@ -1864,7 +1867,7 @@ function __buscarcodigo(idArticulo,cantidad,precio){
                         self.update()
                         if(self.articulo !=null){
                             if(self.articulo.tipoCodigo =="04"){
-                                $('#codigo').val(self.articulo.codigo)
+                               // $('#codigo').val(self.articulo.codigo)
                                 $('#precioVenta').val(self.articulo.precioPublico)
                                 $('#precioVenta').select()
                                 $("#precioVenta").focus()
