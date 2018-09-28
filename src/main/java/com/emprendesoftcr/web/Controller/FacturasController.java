@@ -132,7 +132,7 @@ public class FacturasController {
 																																																				facturaElectronica.setClienteNombre(d.getCliente().getNombreCompleto());
 																																																				facturaElectronica.setClienteNombreComercial(d.getCliente().getNombreComercial());
 																																																				facturaElectronica.setClienteCorreo(d.getCliente().getCorreoElectronico());
-																																																				facturaElectronica.setClienteCedula(d.getCliente().getTipoCedula() + "-" + d.getCliente().getCedula());
+																																																				facturaElectronica.setClienteCedula(d.getCliente().getCedula());
 																																																				facturaElectronica.setClienteTelefono(d.getCliente().getTelefono() !=null?d.getCliente().getTelefono().toString():Constantes.EMPTY);
 
 																																																		//	}

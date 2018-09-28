@@ -101,7 +101,7 @@ public class HaciendasController {
 																																																				facturaElectronica.setClienteNombre(d.getCliente().getNombreCompleto());
 																																																				facturaElectronica.setClienteNombreComercial(d.getCliente().getNombreComercial());
 																																																				facturaElectronica.setClienteCorreo(d.getCliente().getCorreoElectronico());
-																																																				facturaElectronica.setClienteCedula(d.getCliente().getTipoCedula() + "-" + d.getCliente().getCedula());
+																																																				facturaElectronica.setClienteCedula(d.getCliente().getCedula());
 																																																				facturaElectronica.setClienteTelefono(String.format("%s-%s", d.getCliente().getTelefono().toString().substring(0, 4), d.getCliente().getTelefono().toString().substring(4, 8)));
 
 																																																			}
