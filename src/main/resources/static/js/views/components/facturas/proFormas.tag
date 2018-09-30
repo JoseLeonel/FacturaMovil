@@ -671,12 +671,10 @@
 
 <script>
 self = this
-
 self.detail                = []
 self.totalDescuentos       = 0
 self.totalImpuestos        = 0
 self.total                 = 0
-
 self.mostrarListado        = true
 self.mostrarDetalle        = false
 self.on('mount',function(){
@@ -684,10 +682,8 @@ self.on('mount',function(){
     __InformacionDataTable()
     __InicializarTabla('.tableListar')
     agregarInputsCombos()
-
     sumar()
     listado()
-
 })
 
 /**
@@ -728,13 +724,6 @@ __Enviar(){
      }
 
 }
-
-
-
-
-
-
-
 
 function listado(){
     __InformacionDataTable();
@@ -794,14 +783,6 @@ function sumar(){
     self.update()
 }
 
-function redondearDecimales(numero, decimales) {
-    numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}');   // Expresion regular para numeros con un cierto numero de decimales o mas
-    if (numeroRegexp.test(numero)) {         // Ya que el numero tiene el numero de decimales requeridos o mas, se realiza el redondeo
-        return Number(numero.toFixed(decimales));
-    } else {
-        return Number(numero.toFixed(decimales)) === 0 ? 0 : numero;  // En valores muy bajos, se comprueba si el numero es 0 (con el redondeo deseado), si no lo es se devuelve el numero otra vez.
-    }
-}
 
 
 
@@ -897,9 +878,6 @@ function cargarDetallesFacturaEnEspera(){
     
      
 }
-
-
-
 /**
 * cargar los estados de la compra
 **/
@@ -921,7 +899,9 @@ function __ComboEstados(){
     }
     self.update()
 }
-
+/**
+*
+**/
 function __comboCondicionPago(){
     switch(self.factura.condicionVenta) {
     case "01":
@@ -941,11 +921,7 @@ function __comboCondicionPago(){
 **/
 function __InformacionDataTable(){
     self.formato_tabla = [ 
-                               {'data' :'fechaEmision'   ,"name":"fechaEmision"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true ,
-                                  "render":function(fechaEmision,type, row){
-									    return __displayDate_detail(fechaEmision);
-	 							    }
-                               },
+                               {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true },
                              
                                {'data' :'id'                    ,"name":"id"                     ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
                                    "render":function(id,type, row){
@@ -959,19 +935,19 @@ function __InformacionDataTable(){
                                },
                                {'data' :'totalImpuesto'       ,"name":"totalImpuesto"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true ,
                                     "render":function(totalImpuesto,type, row){
-                                         var resultaldo = formatoDecimales(__valorNumerico(totalImpuesto))
+                                         var resultado = formatoDecimales(__valorNumerico(totalImpuesto))
 									    return  resultado;
 	 							    }
                                },
                                {'data' :'totalDescuentos'                ,"name":"totalDescuentos"                 ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true ,
                                     "render":function(totalDescuentos,type, row){
-                                        var resultaldo = formatoDecimales(__valorNumerico(totalDescuentos))
+                                        var resultado = formatoDecimales(__valorNumerico(totalDescuentos))
 									    return  resultado;
 	 							    }
                                },
                                {'data' :'totalComprobante'               ,"name":"totalComprobante"                ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true ,
                                     "render":function(totalComprobante,type, row){
-                                        var resultaldo = formatoDecimales(__valorNumerico(totalComprobante))
+                                        var resultado = formatoDecimales(__valorNumerico(totalComprobante))
 									    return  resultado;
 	 							    }
                                },
