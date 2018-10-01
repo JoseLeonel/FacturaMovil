@@ -12,8 +12,6 @@
                         <th class="table-header">{$.i18n.prop("proveedor.nombreCompleto")} </th>
                         <th class="table-header">{$.i18n.prop("proveedor.representante")}  </th>
                         <th class="table-header">{$.i18n.prop("proveedor.email")}          </th>
-                        <th class="table-header">{$.i18n.prop("proveedor.telefono")}       </th>
-                        <th class="table-header">{$.i18n.prop("proveedor.movil")}          </th>
                         <th class="table-header">{$.i18n.prop("listado.acciones")}        </th>
                     </thead>
                     <tfoot style="display: table-header-group;">
@@ -21,8 +19,6 @@
                             <th>{$.i18n.prop("proveedor.nombreCompleto")} </th>
                             <th>{$.i18n.prop("proveedor.representante")}  </th>
                             <th>{$.i18n.prop("proveedor.email")}          </th>
-                            <th>{$.i18n.prop("proveedor.telefono")}       </th>
-                            <th>{$.i18n.prop("proveedor.movil")}          </th>
                             <th>                                          </th>
                         </tr>
                     </tfoot>                    
@@ -119,7 +115,7 @@
                     </div>                    
                     <div class="box-footer">
                         <button onclick={_AtrasComprasFinal} type="button" class="btn-dark-gray btn-back pull-left"  >{$.i18n.prop("btn.volver")}</button>
-                        <button  onclick={__AplicarYCrearCompra}  class="btn-green btn-edit pull-right " > &nbsp {$.i18n.prop("btn.modificar")}</button>
+                        <button  onclick={__AplicarYCrearCompra}  class="btn-green btn-edit pull-right " > &nbsp Aplicar</button>
                     </div>
                 </div><!--fin del cabecera-izquierda-->
                 <section class="cabecera-derecha">
@@ -778,7 +774,7 @@ function crearCompra(estadoCompra){
         totalCompra:__valorNumerico(self.compra.totalCompra),
         formaPago:$('.formaPago').val(),
         tipoDocumento:$('.tipoDocumento').val(),
-        proveedor:self.proveedor.id,
+        proveedor:$('.proveedor').val(),
         consecutivo:$('.consecutivo').val(),
         estado:estadoCompra,
         fechaCredito:$('.formaPago').val() == 2?$('.fechaCredito').val():new Date(),
@@ -1332,8 +1328,6 @@ function __informacionData(){
     self.informacion_tabla_proveedores = [	{'data' : 'nombreCompleto'  ,"name":"nombreCompleto" ,"title" : $.i18n.prop("proveedor.nombreCompleto")         ,"autoWidth":false},
                                             {'data' : 'representante'   ,"name":"representante"  ,"title" : $.i18n.prop("proveedor.representante")  ,"autoWidth":false},
                                             {'data' : 'email'           ,"name":"email"          ,"title" : $.i18n.prop("proveedor.email")          ,"autoWidth":false},                                
-                                            {'data' : 'telefono'        ,"name":"telefono"       ,"title" : $.i18n.prop("proveedor.telefono")       ,"autoWidth":false},                                
-                                            {'data' : 'movil'           ,"name":"movil"          ,"title" : $.i18n.prop("proveedor.movil")        ,"autoWidth":false},                                
                                             {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
 									            "render":function(id,type, row){
 										            return __OpcionesProveedores(id,type,row);
@@ -1421,7 +1415,7 @@ function agregarInputsCombos_Proveedores(){
     $('.tableListaProveedor tfoot th').each( function (e) {
         var title = $('.tableListaProveedor thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 5    ){
+        if ( $(this).index() != 3    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })

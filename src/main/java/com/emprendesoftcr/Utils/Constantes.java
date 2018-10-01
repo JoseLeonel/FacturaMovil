@@ -9,6 +9,7 @@ public class Constantes {
 	// Tipo de codigos de productos
 	public static final String					TIPO_CODIGO_ARTICULO_POR_SERVICIO										= "07";
 	public static final String					TIPO_CODIGO_ARTICULO_USO_INTERNO										= "04";
+	public static final String					CODIGO_ARTICULO_IMPUESTO_SERVICIO										= "8888";
 
 	// Semaforo
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 200;
@@ -137,6 +138,11 @@ public class Constantes {
 	// Abono
 	public static final String					ABONO_ESTADO_PAGADO																	= "Pagado";
 	public static final String					ABONO_ESTADO_ANULADO																= "Anulado";
+
+	// Cuentas por Pagar
+	public static final Integer					CUENTA_POR_PAGAR_ESTADO_PENDIENTE										= 1;
+	public static final Integer					CUENTA_POR_PAGAR_ESTADO_CERRADO											= 2;
+	public static final Integer					CUENTA_POR_PAGAR_ESTADO_ANULADO											= 3;
 
 	// Tipo de cuenta por Cobrar
 	public static final String					CUENTA_POR_COBRAR_TIPO_Automatica										= "Automatica";

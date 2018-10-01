@@ -321,6 +321,7 @@ public class FacturaBoImpl implements FacturaBo {
 			Double totalImpuesto = Constantes.ZEROS_DOUBLE;
 			Double totalComprobante = Constantes.ZEROS_DOUBLE;
 			Double subTotal = Constantes.ZEROS_DOUBLE;
+		  
 
 			// Agregar Lineas de Detalle
 			JSONArray jsonArrayDetalleFactura = (JSONArray) json.get("data");

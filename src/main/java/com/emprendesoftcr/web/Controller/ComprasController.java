@@ -110,27 +110,25 @@ public class ComprasController {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			compraFormValidator.validate(compraCommand, result);
-			if (result.hasErrors()) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
-			}
+			//compraFormValidator.validate(compraCommand, result);
+			// if (result.hasErrors()) {
+			// return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			// }
 			if (!compraCommand.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
 				compraCommand.setFechaCredito(null);
 			}
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-			if (compraCommand.getConsecutivo().equals(Constantes.EMPTY)) {
-				result.rejectValue("consecutivo", "error.compra.existe.consecutivo");
-			}
-			Compra compraBD = compraBo.findByConsecutivoAndEmpresa(compraCommand.getConsecutivo(), usuarioSesion.getEmpresa());
-			if (compraBD != null) {
-				if (!compraBD.getId().equals(compraCommand.getId())) {
-					result.rejectValue("consecutivo", "error.compra.existe.consecutivo");
+			if (!compraCommand.getConsecutivo().equals(Constantes.EMPTY)) {
+				Compra compraBD = compraBo.findByConsecutivoAndEmpresa(compraCommand.getConsecutivo(), usuarioSesion.getEmpresa());
+				if (compraBD != null) {
+					if (!compraBD.getId().equals(compraCommand.getId())) {
+						result.rejectValue("consecutivo", "error.compra.existe.consecutivo");
+					}
 				}
-
 			}
-			if (result.hasErrors()) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
-			}
+			//if (result.hasErrors()) {
+			//	return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			//}
 			compraCommand.setEmpresa(usuarioSesion.getEmpresa());
 			compraCommand.setUsuarioCreacion(usuarioSesion);
 			compraBo.crearCompra(compraCommand, usuarioSesion);
@@ -173,7 +171,7 @@ public class ComprasController {
 	 */
 	@RequestMapping(value = "/ListarComprasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarComprasAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idProveedor) {
+	public RespuestaServiceDataTable listarComprasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idProveedor) {
 
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Proveedor proveedor = proveedorBo.buscar(idProveedor);

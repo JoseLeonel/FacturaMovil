@@ -44,7 +44,6 @@ public class Compra implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY")
 	@Column(name = "fecha_credito")
-
 	private Date								fechaCredito;
 
 	@Temporal(TemporalType.TIMESTAMP)

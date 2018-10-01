@@ -2,10 +2,10 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Cliente;
+import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Usuario;
@@ -80,6 +80,7 @@ public class FacturaEsperaCommand {
 	private Double		totalCambio;
 
 	private Double		totalCambioPagar;
+	private Double		impuestoServicioIS;
 
 	private String		codigoMoneda;
 
@@ -157,6 +158,59 @@ public class FacturaEsperaCommand {
 		this.referenciaCodigo = factura.getReferenciaCodigo();
 		this.referenciaRazon = factura.getReferenciaRazon();
 		this.referenciaFechaEmision = factura.getReferenciaFechaEmision();
+	}
+	
+	public FacturaEsperaCommand(Detalle detalle) {
+		super();
+		this.id = detalle.getFactura().getId();
+		this.fechaCredito = detalle.getFactura().getFechaCredito();
+		this.fechaEmisionSTR = Utils.getFechaGeneraReporte(detalle.getFactura().getFechaEmision());
+		this.numeroConsecutivo = detalle.getFactura().getNumeroConsecutivo();
+		this.fechaEmision = detalle.getFactura().getFechaEmision();
+		this.condicionVenta = detalle.getFactura().getCondicionVenta();
+		this.plazoCredito = detalle.getFactura().getPlazoCredito();
+		this.tipoDoc = detalle.getFactura().getTipoDoc();
+		this.medioBanco = detalle.getFactura().getMedioBanco();
+		this.medioEfectivo = detalle.getFactura().getMedioEfectivo();
+		this.medioTarjeta = detalle.getFactura().getMedioTarjeta();
+		this.nombreFactura = detalle.getFactura().getNombreFactura();
+		this.direccion = detalle.getFactura().getDireccion();
+		this.nota = detalle.getFactura().getNota();
+		this.comanda = detalle.getFactura().getComanda();
+		this.subTotal = detalle.getFactura().getSubTotal();
+		this.totalTransporte = detalle.getFactura().getTotalTransporte();
+		this.totalServGravados = detalle.getFactura().getTotalServGravados();
+		this.totalServExentos = detalle.getFactura().getTotalServExentos();
+		this.totalMercanciasGravadas = detalle.getFactura().getTotalMercanciasGravadas();
+		this.totalMercanciasExentas = detalle.getFactura().getTotalMercanciasExentas();
+		this.totalGravado = detalle.getFactura().getTotalGravado();
+		this.totalExento = detalle.getFactura().getTotalExento();
+		this.totalVenta = detalle.getFactura().getTotalVenta();
+		this.totalDescuentos = detalle.getFactura().getTotalDescuentos();
+		this.totalVentaNeta = detalle.getFactura().getTotalVentaNeta();
+		this.totalImpuesto = detalle.getFactura().getTotalImpuesto();
+		this.totalComprobante = detalle.getFactura().getTotalComprobante();
+		this.totalEfectivo = detalle.getFactura().getTotalEfectivo();
+		this.totalTarjeta = detalle.getFactura().getTotalTarjeta();
+		this.totalBanco = detalle.getFactura().getTotalBanco();
+		this.totalCredito = detalle.getFactura().getTotalCredito();
+		this.montoCambio = detalle.getFactura().getMontoCambio();
+		this.totalCambio = detalle.getFactura().getTotalCambio();
+		this.totalCambioPagar = detalle.getFactura().getTotalCambioPagar();
+		this.codigoMoneda = detalle.getFactura().getCodigoMoneda();
+		this.estado = detalle.getFactura().getEstado();
+		this.created_at = detalle.getFactura().getCreated_at();
+		this.updated_at = detalle.getFactura().getUpdated_at();
+		this.cliente = detalle.getFactura().getCliente();
+		this.empresa = detalle.getFactura().getEmpresa();
+		this.vendedor = detalle.getFactura().getVendedor();
+		this.usuarioCreacion = detalle.getFactura().getUsuarioCreacion();
+		this.referenciaTipoDoc = detalle.getFactura().getReferenciaTipoDoc();
+		this.referenciaNumero = detalle.getFactura().getReferenciaNumero();
+		this.referenciaCodigo = detalle.getFactura().getReferenciaCodigo();
+		this.referenciaRazon = detalle.getFactura().getReferenciaRazon();
+		this.impuestoServicioIS = !detalle.getCodigo().equals(Constantes.CODIGO_ARTICULO_IMPUESTO_SERVICIO)?Constantes.ZEROS_DOUBLE:detalle.getMontoTotalLinea();
+		
 	}
 
 	
@@ -567,6 +621,21 @@ public class FacturaEsperaCommand {
 		this.medioBanco = medioBanco;
 	}
 
+	
+	public Double getImpuestoServicioIS() {
+		return impuestoServicioIS;
+	}
+
+	
+	public void setImpuestoServicioIS(Double impuestoServicioIS) {
+		this.impuestoServicioIS = impuestoServicioIS;
+	}
+
+
+
+
+	
+	
 	
 	
 }

@@ -140,11 +140,12 @@
                                             {descripcion}</span>
                                            <div> 
                                         </td>
+                                        
                                         <td >
                                             <span onclick ={__CambiarCantidad} class="label label-success cantidad clickable">{cantidad.toFixed(3)}</span>
                                         </td>
                                         <td >
-                                            <span    class="label label-success precio-prod" >{precioUnitario.toFixed(2)}</span>
+                                            <span  onclick ={__CambiarPrecio}   class="label label-success precio-prod" >{precioUnitario.toFixed(2)}</span>
                                         </td>
                                         <td >
                                             <span onclick ={__CambiarDescuento} class="label label-success precio-prod" >{porcentajeDesc.toFixed(2)}</span>
@@ -2622,16 +2623,16 @@ __cambiarDescripcionDetalle(e){
 /**
 * Cambiar el precio del detalle de la factura
 **/
-__cambiarElPrecio(e){
+__cambiarElPrecio(){
     var precio = $(".cambiarprecioArticulo").val();
+     self.item.precioUnitario = __valorNumerico(precio);
+     self.update()
     agregarPrecioAlDetalle(precio)
 }
 /**
 * Cambiar el precio en el detalle
 **/
 function agregarPrecioAlDetalle(precio){
-    self.item.precioUnitario = precio
-    self.update()
     ActualizarLineaDEtalle()
     aplicarCambioLineaDetalle() 
     $(".cambiarprecioArticulo").val(null);
@@ -2738,6 +2739,7 @@ function getTotalDescuento(precio,cantidad,porcentajeDesc){
 * calculacion de los detalle de la factura 
 **/
 function __calculate() {
+    calcularImpuestoServicio()
     self.factura.total            = 0;
     self.factura.totalDescuentos  = 0;
     self.factura.totalImpuesto    = 0;
@@ -2790,6 +2792,32 @@ function __calculate() {
     $( "#codigoBarra" ).val(null);
     $( "#quantity" ).val(null);
     getSubTotalGeneral()
+}
+
+function calcularImpuestoServicio(){
+    var resultado = 0
+     self.detail.forEach(function(e){
+        resultado += e.montoTotal
+    });
+    //Impuesto del servicio
+    resultado = resultado * 0.10
+    resultado = Math.round(__valorNumerico(resultado))
+     for (var count = 0; count < self.detail.length; count++) {
+        if (self.detail[count].codigo == "8888" ){
+            self.item          = self.detail[count];
+            self.item.precioUnitario = resultado
+            self.item.subTotal       = resultado
+            self.item.montoTotal     = resultado
+            self.item.montoTotalLinea = resultado
+
+            self.update();
+            ActualizarLineaDEtalle()
+            self.detail[count] = self.item;
+            self.update();
+        }
+    }
+    
+
 }
 
 
