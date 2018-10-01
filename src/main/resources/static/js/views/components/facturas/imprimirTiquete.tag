@@ -248,8 +248,8 @@ self.on('mount',function(){
     buscarCondicionPago()
     self.facturaImpresa.totalComprobante = formatoDecimales(self.facturaImpresa.totalComprobante,2);
     self.detalles.forEach(function(elemen){
+    		console.log(elemen);
             elemen.montoTotalLinea = formatoDecimales(elemen.montoTotalLinea,2);
-           
         }
     )
     self.update()

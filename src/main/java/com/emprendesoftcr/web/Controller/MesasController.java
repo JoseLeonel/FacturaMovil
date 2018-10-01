@@ -73,7 +73,7 @@ public class MesasController {
 	public void initBinder(WebDataBinder binder) {
 
 		binder.registerCustomEditor(Empresa.class, empresaPropertyEditor);
-		binder.registerCustomEditor(Empresa.class, mesaPropertyEditor);
+		binder.registerCustomEditor(Mesa.class, mesaPropertyEditor);
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
 
@@ -111,7 +111,7 @@ public class MesasController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarPaginacionMesasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarMesasAjax(HttpServletRequest request, ModelMap model, @ModelAttribute ParametrosPaginacionMesa parametrosPaginacionMesa) {
+	public RespuestaServiceDataTable listarPaginacionMesasAjax(HttpServletRequest request, ModelMap model, @ModelAttribute ParametrosPaginacionMesa parametrosPaginacionMesa) {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Mesa");
@@ -120,15 +120,13 @@ public class MesasController {
 			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
-		JqGridFilter categoriaFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
-		delimitadores.addFiltro(categoriaFilter);
-
+		JqGridFilter mesaFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
+		delimitadores.addFiltro(mesaFilter);
 		delimitadores.setLength(parametrosPaginacionMesa.getCantidadPorPagina());
-
 		delimitadores.setStart(parametrosPaginacionMesa.getPaginaActual());
-
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
+
 
 	/**
 	 * Listar las mesas activas por empresa

@@ -12,17 +12,23 @@ import com.emprendesoftcr.modelo.Mesa;
  */
 public class MesaCommand {
 
-	private Long		id;
+	private Long id;
 
-	private String	descripcion;
+	private String descripcion;
 
-	private String	estado;
+	private String estado;
 
-	private Date		created_at;
+	private Date created_at;
 
-	private Date		updated_at;
+	private Date updated_at;
 
-	private Empresa	empresa;
+	private Empresa empresa;
+
+	private Boolean impuestoServicio;
+
+	private Integer prioridad;
+
+	private Integer tieneFacturas;
 
 	public MesaCommand(Mesa mesa) {
 		super();
@@ -32,7 +38,9 @@ public class MesaCommand {
 		this.created_at = mesa.getCreated_at();
 		this.updated_at = mesa.getUpdated_at();
 		this.empresa = mesa.getEmpresa();
-
+		this.prioridad = mesa.getPrioridad();
+		this.impuestoServicio = mesa.getImpuestoServicio();
+		this.tieneFacturas = mesa.getTieneFacturas();
 	}
 
 	public MesaCommand() {
@@ -41,6 +49,14 @@ public class MesaCommand {
 
 	public Long getId() {
 		return id;
+	}
+
+	public Integer getTieneFacturas() {
+		return tieneFacturas;
+	}
+
+	public void setTieneFacturas(Integer tieneFacturas) {
+		this.tieneFacturas = tieneFacturas;
 	}
 
 	public void setId(Long id) {
@@ -85,6 +101,26 @@ public class MesaCommand {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public Boolean getImpuestoServicio() {
+		return impuestoServicio;
+	}
+
+	public String getImpuestoServicioStr() {
+		return impuestoServicio ? "10% serv" : "0% serv";
+	}
+
+	public void setImpuestoServicio(Boolean impuestoServicio) {
+		this.impuestoServicio = impuestoServicio;
+	}
+
+	public Integer getPrioridad() {
+		return prioridad;
+	}
+
+	public void setPrioridad(Integer prioridad) {
+		this.prioridad = prioridad;
 	}
 
 }

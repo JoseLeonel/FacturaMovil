@@ -1756,18 +1756,20 @@ __CambiarNombreTiquete(){
 *  Crear la factura temporal o espera
 **/
 __CrearFacturaTemporal(){
-    if(self.factura.id ==null){
+    if(self.factura.id == null){
         
         if(self.detail.length != 0 ){
             $('#ModalAgregarNombreTiquete').modal('show') 
             $('.cambioNombreFactura').focus()
             return
         }
+
     }else{
         self.seIncluyoUnArticulo = 1
         self.update()
-       aplicarFactura(1)    
+        aplicarFactura(1)    
     }
+    
    // __FacturaEnEspera(self.factEspera)
     self.factEspera =null
     self.update()

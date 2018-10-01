@@ -13,6 +13,9 @@ var _Init = function () {
  * @returns
  */
 function cargaMantenimiento() {
-  riot.mount('venta-restaurante');
+
+	
+	riot.mount('venta-restaurante');
 }
+
 

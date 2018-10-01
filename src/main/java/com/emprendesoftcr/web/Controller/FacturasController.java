@@ -62,6 +62,7 @@ import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.modelo.Mesa;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
@@ -74,10 +75,13 @@ import com.emprendesoftcr.pdf.Proformas;
 import com.emprendesoftcr.validator.FacturaFormValidator;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
+import com.emprendesoftcr.web.command.ParametrosPaginacion;
+import com.emprendesoftcr.web.command.ParametrosPaginacionMesa;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.FechaPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.MesaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.VendedorPropertyEditor;
 import com.google.common.base.Function;
@@ -235,6 +239,9 @@ public class FacturasController {
 	@Autowired
 	private FechaPropertyEditor																				fechaPropertyEditor;
 
+	@Autowired
+	private MesaPropertyEditor																				mesaPropertyEditor;
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Cliente.class, clientePropertyEditor);
@@ -242,6 +249,7 @@ public class FacturasController {
 		binder.registerCustomEditor(Empresa.class, empresaPropertyEditor);
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 		binder.registerCustomEditor(Date.class, fechaPropertyEditor);
+		binder.registerCustomEditor(Mesa.class, mesaPropertyEditor);
 	}
 
 	@RequestMapping(value = "/proformas.do", method = RequestMethod.GET)
@@ -455,6 +463,39 @@ public class FacturasController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
+	
+	
+	/**
+	 * Facturas En espera de convertirse en factura oficial
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/ListarFacturasEsperaPorMesaAjax", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarFacturasEsperaPorMesaAjax(HttpServletRequest request, HttpServletResponse response, @ModelAttribute ParametrosPaginacionMesa parametrosPaginacionMesa) {
+
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Factura");
+		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO.toString() + "'", "<>");
+		delimitadores.addFiltro(dataTableFilter);
+		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO.toString() + "'", "<>");
+		delimitadores.addFiltro(dataTableFilter);
+		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_PROFORMAS + "'", "<>");
+		delimitadores.addFiltro(dataTableFilter);
+		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+		dataTableFilter = new JqGridFilter("mesa.id", "'" + parametrosPaginacionMesa.getMesa().getId() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+
+		delimitadores.setLength(parametrosPaginacionMesa.getCantidadPorPagina());
+		delimitadores.setStart(parametrosPaginacionMesa.getPaginaActual());
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+	}
+	
 
 	/**
 	 * Solo facturas de credito y debito en espera

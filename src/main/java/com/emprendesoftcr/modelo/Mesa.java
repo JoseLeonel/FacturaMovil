@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Formula;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -27,33 +28,42 @@ public class Mesa {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long		id;
+	private Long id;
 
 	@Column(name = "descripcion")
-	private String	descripcion;
+	private String descripcion;
 
 	@Column(name = "estado")
-	private String	estado;
+	private String estado;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "created_at")
-	private Date		created_at;
+	private Date created_at;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
-	private Date		updated_at;
+	private Date updated_at;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
-	private Empresa	empresa;
+	private Empresa empresa;
+
+	@Column(name = "impuestos_servicio")
+	private Boolean impuestoServicio;
+
+	@Column(name = "prioridad")
+	private Integer prioridad;
+
+	@Formula("(select count(*) from facturas fact where fact.mesa_id = id and fact.estado = 1)")
+	private Integer tieneFacturas; 
 
 	public Mesa() {
 		super();
 	}
 
-	public Mesa(Long id, String descripcion, String estado, Date created_at, Date updated_at, Empresa empresa) {
+	public Mesa(Long id, String descripcion, String estado, Date created_at, Date updated_at, Empresa empresa, Boolean impuestoServicio, Integer prioridad) {
 		super();
 		this.id = id;
 		this.descripcion = descripcion;
@@ -61,6 +71,8 @@ public class Mesa {
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.empresa = empresa;
+		this.prioridad = prioridad;
+		this.impuestoServicio = impuestoServicio;
 	}
 
 	public Long getId() {
@@ -109,6 +121,30 @@ public class Mesa {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public Boolean getImpuestoServicio() {
+		return impuestoServicio;
+	}
+
+	public void setImpuestoServicio(Boolean impuestoServicio) {
+		this.impuestoServicio = impuestoServicio;
+	}
+
+	public Integer getPrioridad() {
+		return prioridad;
+	}
+
+	public void setPrioridad(Integer prioridad) {
+		this.prioridad = prioridad;
+	}
+
+	public Integer getTieneFacturas() {
+		return tieneFacturas;
+	}
+
+	public void setTieneFacturas(Integer tieneFacturas) {
+		this.tieneFacturas = tieneFacturas;
 	}
 
 }

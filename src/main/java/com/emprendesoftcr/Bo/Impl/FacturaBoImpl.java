@@ -264,7 +264,8 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
 			factura.setEstado(facturaCommand.getEstado());
 
-		
+			factura.setMesa(facturaCommand.getMesa()); 
+
 
 			if (factura.getId() == Constantes.ZEROS_LONG) {
 				factura.setCreated_at(new Date());
@@ -410,6 +411,48 @@ public class FacturaBoImpl implements FacturaBo {
 
 				}
 			}
+			
+			//Se agrega un detalle para el costo por servicio de restaurante y se afecta el monto total de la factura
+			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) 
+						&& facturaCommand.getMesa() != null 
+						&& !facturaCommand.getMesa().getId().equals(0L) 
+						&& facturaCommand.getMesa().getImpuestoServicio()) {
+				
+				Detalle detalle = new Detalle();
+				detalle.setCantidad(1D);
+				detalle.setCodigo("07");
+				detalle.setCreated_at(new Date());
+				detalle.setDescripcion("Impuesto Servicio");
+				detalle.setGanancia(Constantes.ZEROS_DOUBLE);
+				detalle.setImpuesto(10D);
+				detalle.setMontoDescuento(Constantes.ZEROS_DOUBLE);
+				detalle.setMontoImpuesto(Constantes.ZEROS_DOUBLE);
+				detalle.setMontoTotal(Utils.roundFactura(subTotal * 0.10,5));
+				detalle.setMontoTotalLinea(Utils.roundFactura(subTotal * 0.10,5));
+				detalle.setNaturalezaDescuento(Constantes.FORMATO_NATURALEZA_DESCUENTO);
+				detalle.setNumeroLinea(factura.getDetalles().size() + 1);				
+				detalle.setObservacion("Impuesto al servicio");
+				detalle.setPorcentajeDesc(Constantes.ZEROS_DOUBLE);
+				detalle.setPrecioUnitario(Utils.roundFactura(subTotal * 0.10,5));	
+				detalle.setSubTotal(Utils.roundFactura(subTotal * 0.10,5));
+				detalle.setTipoCodigo(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO);
+				detalle.setTipoImpuesto("");
+				detalle.setUnidadMedida("Unid");				
+				detalle.setUpdated_at(new Date());
+				detalle.setFactura(factura);				
+				detalle.setUsuario(usuario);
+				detalle.setTipoCodigo("");
+				factura.addDetalle(detalle);
+				
+				
+				//Se afecta los montos de la factura
+				totalServExentos = totalServExentos + detalle.getMontoTotal();
+				totalExento = totalExento + detalle.getMontoTotal();
+				totalVenta = totalVenta +  detalle.getMontoTotal();
+				totalVentaNeta = totalVentaNeta + detalle.getMontoTotal();
+				totalComprobante = totalComprobante + detalle.getMontoTotal();
+			}
+			
 			totalVentaNeta = totalVenta + totalDescuentos;
 			// Resumen de la Factura
 			factura.setTotalMercanciasGravadas(Utils.roundFactura(totalMercanciasGravadas, 5));
@@ -423,6 +466,7 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setTotalDescuentos(Utils.roundFactura(totalDescuentos, 5));
 			factura.setTotalImpuesto(Utils.roundFactura(totalImpuesto, 5));
 			factura.setTotalComprobante(Utils.roundFactura(totalComprobante, 5));
+			factura.setTotalImpuestoServicio(Utils.roundFactura(subTotal * 0.10,5));
 			// Crear Credito del cliente
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
 				if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
@@ -439,8 +483,6 @@ public class FacturaBoImpl implements FacturaBo {
 				 }
 			}
 			modificar(factura);
-			
-			
 
 			// Anulacion de la factura anterior
 			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {

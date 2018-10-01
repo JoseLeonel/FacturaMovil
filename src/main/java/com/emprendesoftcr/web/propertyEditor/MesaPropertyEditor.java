@@ -19,12 +19,13 @@ public class MesaPropertyEditor extends PropertyEditorSupport {
 
 	@Autowired
 	MesaBo mesaBo;
-
+ 
 	@Override
 	public String getAsText() {
 		Mesa mesa = (Mesa) getValue();
 		return (mesa == null ? "" : mesa.getId().toString());
 	}
+	
 
 	@Override
 	public void setAsText(String idMesa) throws IllegalArgumentException {

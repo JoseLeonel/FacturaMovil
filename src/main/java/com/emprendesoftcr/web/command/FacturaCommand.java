@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Mesa;
 import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.web.jsonDeserializer.ClienteDeserializer;
 import com.emprendesoftcr.web.jsonDeserializer.VendedorDeserializer;
@@ -94,6 +95,8 @@ public class FacturaCommand {
 
 	private Double		totalCambioPagar;
 
+	private Double		totalImpuestoServ;
+
 	private String		codigoMoneda;
 
 	private Integer		estado;
@@ -113,6 +116,8 @@ public class FacturaCommand {
 	private Empresa		empresa;
 
 	private String		usuario;
+
+	private Mesa		mesa;
 
 	public FacturaCommand() {
 		super();
@@ -488,6 +493,16 @@ public class FacturaCommand {
 		this.totalCambioPagar = totalCambioPagar;
 	}
 
+	
+	public Double getTotalImpuestoServ() {
+		return totalImpuestoServ;
+	}
+
+	
+	public void setTotalImpuestoServ(Double totalImpuestoServ) {
+		this.totalImpuestoServ = totalImpuestoServ;
+	}
+
 	public Empresa getEmpresa() {
 		return empresa;
 	}
@@ -503,6 +518,16 @@ public class FacturaCommand {
 	
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
+	}
+
+	
+	public Mesa getMesa() {
+		return mesa;
+	}
+
+	
+	public void setMesa(Mesa mesa) {
+		this.mesa = mesa;
 	}
 
 }

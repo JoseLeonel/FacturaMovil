@@ -62,7 +62,6 @@
                             <td ><strong>{$.i18n.prop("tikect.total.venta")}</strong></td>
                             <td ><strong>{facturaImpresa.totalVenta } </strong>  </td>
                             </tr>
-
                             <tr>
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.total.descuento")}</strong></td>

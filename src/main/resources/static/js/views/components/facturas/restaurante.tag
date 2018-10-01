@@ -1,34 +1,84 @@
 <venta-restaurante>
 
+<!--Modal Cambiar Cantidad-->
+<div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+       <div class="modal-content">
+            <div class="modal-header with-border " >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.cantidad")}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
+                        <div class="form-group has-success">
+                            <label class="knob-label" >{$.i18n.prop("inventario.cantidad")}</label>
+                            <input  type="number" class="form-control cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus">
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick ="{__recalculacionDelDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Fin Cambiar Cantidad-->
+
+<!--Modal Cambiar Descripcion-->
+
+<div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+       <div class="modal-content">
+            <div class="modal-header with-border " >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descripcion")}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
+                        <div class="form-group has-success">
+                            <label class="knob-label" >{$.i18n.prop("inventario.cantidad")}</label>
+                            <input  type="text" class="form-control cambiarDescripcionArticulo" id="cambiarDescripcionArticulo" name = "cambiarDescripcionArticulo" autofocus="autofocus">
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick ="{__cambiarDescripcionDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Fin Cambiar descripcion-->
+<div id="pagina1" style="padding-bottom:15px" show={mostarParaCrearNuevaVentas}>
    <div class="row">
         <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-        <div class="box-tools ">
-            <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
-            <a class="pull-left" href="#"    onclick = {__ImprimirTiquete}  title="{$.i18n.prop("imprimir.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f7")}</span></a>
-            <a class="pull-left" href="#"    onclick = {__MostrarFormularioDePago}  title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
-            <a class="pull-left" href="#"    onclick= { __CrearFacturaTemporal}  title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
-            <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
-            <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
-            
-        </div>
+            <div class="box-tools ">
+                <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
+                <a class="pull-left" href="#"    onclick = {__ImprimirTiquete}  title="{$.i18n.prop("imprimir.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f7")}</span></a>
+                <a class="pull-left" href="#"    onclick = {__MostrarFormularioDePago}  title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
+                <a class="pull-left" href="#"    onclick= { __CrearFacturaTemporal}  title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
+                <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
+                <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
+            </div>
         </div>      
     </div>              
-<div>
-    <form id="FormPaginacion">
-        <input type="hidden" name="id" id="id" value="{parametrosPaginacion.cantidadPorPagina}">
-
-        <input type="hidden" name="cantidadPorPagina" id="cantidadPorPagina" value="{parametrosPaginacion.cantidadPorPagina}">
-        <input type="hidden" name="paginaActual" id="paginaActual" value="{parametrosPaginacion.paginaActual}">
-        <input type="hidden" name="total" id="total" value="{parametrosPaginacion.total}">
-        <input type="hidden" name="categoria" id="categoria" value="{categoria.id}">
-        <input type="hidden" name="mesa" id="mesa" value="{mesa.id}">
-    </form>
+    <div>
+        <form id="FormPaginacion">
+            <input type="hidden" name="id" id="id" value="{parametrosPaginacion.cantidadPorPagina}">
+            <input type="hidden" name="cantidadPorPagina" id="cantidadPorPagina" value="{parametrosPaginacion.cantidadPorPagina}">
+            <input type="hidden" name="paginaActual" id="paginaActual" value="{parametrosPaginacion.paginaActual}">
+            <input type="hidden" name="total" id="total" value="{parametrosPaginacion.total}">
+            <input type="hidden" name="categoria" id="categoria" value="{categoria.id}">
+            <input type="hidden" name="mesa" id="mesa" value="{mesa.id}">
+        </form>
+    </div>
 </div>
 <!--Modal mostrar  -->
 <div id="modalVendedor" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-
             <div class="modal-header with-border table-header" >
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("vendedor.lista")}   </h4>
             </div>
@@ -61,19 +111,53 @@
     </div>
 </div>
 <!--fin del modal-->
+
+<!--Inicio mostrar mesas-->
+<div show={mostrarMesas}>
+   	<div class="container-fluid">
+           <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12" style="padding: 0px 10px">
+             <!--Ventana de los productos-->
+			 <!--Seccion de mesas-->
+             <section class="lista-mesas" >
+             	<div id="item-mesas" class="product-item col-sx-12 col-sm-12 col-md-3 col-lg-3"  each ={mesas.data}  onclick={__FacturasXMesa}>
+                	<img  style = "width:120px;" alt="" class="img-responsive " src="/dist/img/mesa.png">
+                    <div>
+	                    <span class="label-titulos-articulo">{descripcion} - {impuestoServicioStr}</span>           			
+                    </div>	
+                    <div>
+		                <span class="label-titulos-articulo"><i class="fa text-red">Fact. Pendientes( {tieneFacturas} )</i></span>           			
+                    </div>	
+                </div>
+             </section>
+           </div>    
+           <div onclick = {__BotonAnterior}  class="pull-left btnNavegacion " >
+           		<i class="fa fa-arrow-left"></i>{$.i18n.prop("btn.Anterior")}
+           </div>
+           <div onclick = {__BotonSiguiente} class="pull-right btnNavegacion " >
+           		<i class="fa fa-arrow-right"></i>{$.i18n.prop("btn.siguiente")}
+           </div>
+     </div>
+</div>       
+<!--Fin Ventana de los productos-->
 <!--Inicio de la Venta-->
 <div show={mostarParaCrearNuevaVentas}>
-    <div class="content">
-           <div class="row-fluid no-space">
-            <div class="col-md-5 col-sm-5 col-lg-5 col-xs-12 pull-right" style="padding: 0px 10px">
-                <div class="block panel newPanel newContPrecio">                    
-                    <div id="listadoProdcutos">{$.i18n.prop("titulo.listado.venta")}   {factura.id>0?factura.id:'' } {factura.nombreFactura}</div>
+    <div class="container-fluid">
+        <div class="row no-space">           
+            <div class="col-md-5 col-sm-5 col-lg-5 col-xs-12 pull-right" style="padding: 0px 12px">
+                <div class="block panel ">                    
+                    <div id="listadoProdcutos">{$.i18n.prop("titulo.listado.venta")}   {factura.id>0?factura.id:'' } {factura.nombreFactura} </div>
+                    <!--Mesa seleccionada-->
+                    <div class="input-group">
+                        <span title="Vendedor" class="input-group-addon " > 
+                            <span class="fa fa-glass" aria-hidden="true" style="margin:3px 4px 0px 2px"> Mesa: {factura.mesa.id>0?factura.mesa.descripcion:''} </span> 
+                        </span>
+                    </div>
                     <hr style="margin: 2px 0px 0px 0px; border-color: #e4e4e4; margin-top: 0px">
                     <div class="data-fluid">
                         <div id="listaProductos" style="height:200px; overflow-x: hidden; width:100%">
-                            <table id="tablaListaProductos" cellpadding="0" cellspacing="0" width="100%" class="dtable lcnp">
+                            <table id="tablaListaProductos"  cellpadding="0" cellspacing="0" width="100%" class="table lcnp table-dark">
                                 <thead>
-                                    <tr style=" display: none">
+                                    <tr >
                                         <td width="50%"></td>
                                         <td width="10%"></td>
                                         <td width="10%"></td>
@@ -81,17 +165,19 @@
                                         <td width="10%"></td>
                                         <td width="19%"></td>
                                         <td width="1%"></td>
-                                        <td width="10%"></td>
+                                        <td width="15%"></td>
                                     </tr>
                                 </thead>
-                                <tbody height="70px" id="productos-detail">
+                                <tbody height="70%" id="productos-detail">
                                     <tr style="" each={detail}>
                                         <td>
-                                            <span onclick ={__CambiarDescripcion} class="title-detalle text-info">
+                                           <diV onclick ={__CambiarDescripcion}>
+                                            <span   class="title-detalle text-info clickable clearfix">
                                             {descripcion}</span>
+                                           <div> 
                                         </td>
                                         <td >
-                                            <span onclick ={__CambiarCantidad} class="label label-success cantidad">{cantidad.toFixed(3)}</span>
+                                            <span onclick ={__CambiarCantidad} class="label label-success cantidad clickable">{cantidad.toFixed(3)}</span>
                                         </td>
                                         <td >
                                             <span    class="label label-success precio-prod" >{precioUnitario.toFixed(2)}</span>
@@ -106,7 +192,7 @@
                                             <span class="precio-calc">{montoTotalLinea.toFixed(2)}</span>
                                         </td>
                                         <td>
-                                            <button  onclick={__removeProductFromDetail} class="btn_eliminar_detalle btn-danger btn-xs btn-block">X</button>
+                                            <button  onclick={__removeProductFromDetail} class="btn_eliminar_detalle btn-danger btn-xs btn-block clickable">X</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -114,100 +200,88 @@
                         </div>
                         <hr style="margin: 0px; border-color: #e4e4e4;">
                         <div id="bordeBevelTop">
-                            <table id="pagarTableInfo" width="100%">
-                                <tbody>
-                                    <tr style="height:30px;">
-                                        <td width="30%" id="bordeBevelLeft"> 
-                                            <span id="pagarInfo"> {$.i18n.prop("factura.resumen.subTotal")} </span>
-                                            <span id="cantidad-total">{subTotalGeneral  } </span> 
-                                        </td>
-                                        <td width="35%" id="bordeBevelLeft"> 
-                                            <span id="pagarInfo">{$.i18n.prop("factura.resumen.descuento")}  </span>
-                                            <span id="sigPeso">   </span>
-                                            <span id="iva-total">{totalDescuentos}</span> 
-                                        </td>
-                                        <td width="35%" id="bordeBevelRight"> 
-                                            <span id="pagarInfo">{$.i18n.prop("factura.resumen.impuesto")}  </span>
-                                            <span id="sigPeso">      </span>
-                                            <span id="subtotal">{totalImpuesto}</span> 
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <hr style="margin: 0px; border-color: #e4e4e4; margin-top: 0px">                    
-                        <div  onclick = {__MostrarFormularioDePago} id="btnGrandePagar" class="head green well" style="color: #fff; font-size: 55px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
-                            <table id="pagarTable" width="100%">
-                                <tbody>
-                                    <tr>
-                                        <td width="30%" id="">
-                                            <div id="pagarTitulo">{$.i18n.prop("factura.total")}:</div>
-                                        </td>
-                                        <td width="70%" id="">
-                                            <div id="">
-                                                <span id="total_show_peso" class="textShadow">  </span>
-                                                <span class="label label-info textShadow" id="total-show">{totalComprobante}</span>
-                                            </div>
-                                        </td>
-                                    </tr>                     
-                                </tbody>
-                            </table>
-                        </div>
-                        <hr style="margin: 0px; border-color: #e4e4e4;">
+                        <table id="pagarTableInfo" width="100%">
+                            <tbody>
+                                <tr style="height:30px;">
+                                    <td width="25%" id="bordeBevelLeft"> 
+                                        <span id="pagarInfo"> {$.i18n.prop("factura.resumen.subTotal")} </span>
+                                        <span id="cantidad-total">{subTotalGeneral  } </span> 
+                                    </td>
+                                    <td width="25%" id="bordeBevelLeft"> 
+                                        <span id="pagarInfo">{$.i18n.prop("factura.resumen.descuento")}  </span>
+                                        <span id="sigPeso">   </span>
+                                        <span id="iva-total">{totalDescuentos}</span> 
+                                    </td>
+                                    <td width="25%" id="bordeBevelRight"> 
+                                        <span id="pagarInfo">{$.i18n.prop("factura.resumen.impuesto")}  </span>
+                                        <span id="sigPeso">      </span>
+                                        <span id="subtotal">{totalImpuesto}</span> 
+                                    </td>
+                                    <td width="25%" id="bordeBevelRight"> 
+                                        <span id="pagarInfo">{$.i18n.prop("factura.resumen.impuestoServ")}  </span>
+                                        <span id="sigPeso">      </span>
+                                        <span id="subtotal">{totalImpuestoServ}</span> 
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div  class="row  ">
-                        <div class="col-md-12 "  style="padding:10px 15px 18px 15px; ">
-                            <!--Cliente o Nuevo Cliente-->
-                            <div class="input-group">
-                                <span onclick = {__CambiarNombreTiquete} title="Cambiar Nombre Tiquete" class="input-group-addon btnClientes" id="add-new-client"> 
-                                    <small class="fa fa-plus" style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
-                                    <span class="fa fa-user" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"></span> 
-                                </span>
-                                <input onclick={_EscogerClientes} type="text"  placeholder="Cliente" value="{cliente.nombreCompleto}"  name="datos_cliente" id="datos_cliente" autocomplete="off" >
-                            </div>
-                            <!--Fin Cliente o Nuevo Cliente-->
-                            <!--Vendedor o Nuevo Vendedor-->
-                            <div class="input-group">
-                                <span title="Vendedor" class="input-group-addon " > 
-                                    <span class="fa fa-user" aria-hidden="true" style="margin:3px 4px 0px 2px"></span> 
-                                </span>
-                                <input type="text" onclick={_EscogerVendedores} placeholder="Vendedor" value="{vendedor.nombreCompleto}"  name="v_vendedor" id="v_vendedor" autocomplete="off" >
-                            </div>
-                            <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label-titulos-articulo">Tikete a :{factura.nombreFactura}</span></a>
-                        </div>
-                    </div> 
+                    <hr style="margin: 0px; border-color: #e4e4e4; margin-top: 0px">                    
+                    <div  onclick = {__MostrarFormularioDePago} id="btnGrandePagar" class="head green well" style="color: #fff; font-size: 55px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
+                        <table id="pagarTable" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td width="30%" id="">
+                                        <div id="pagarTitulo">{$.i18n.prop("factura.total")}:</div>
+                                    </td>
+                                    <td width="70%" id="">
+                                        <div id="">
+                                            <span id="total_show_peso" class="textShadow">  </span>
+                                            <span class="label label-info textShadow" id="total-show">{totalComprobante}</span>
+                                       </div>
+                                    </td>
+                                </tr>                     
+                            </tbody>
+                        </table>
+                    </div>
                     <hr style="margin: 0px; border-color: #e4e4e4;">
-                    <div  class="row  ">
-                        <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 " >   
-                            <section class="contenedor-opciones">
-                                <a href="#" class="opciones-menu" onclick = {__CrearFacturaTemporal} >
-                                    <i class="fa fa-clock-o">{$.i18n.prop("venta.en.espera")}</i>
-                                </a>
-                                <a  href="#" class="opciones-limpiar" onclick = {__ImprimirTiquete} >
-                                    <i class="fa fa-print">Tiquete</i>
-                                </a> 
-                                 <a  href="#" class="opciones-limpiar" onclick = {__Limpiar} >
-                                    <i class="fa fa-trash">{$.i18n.prop("btn.limpiar")}</i>
-                                </a> 
-                                                            
-                            </section>
-                        </div>    
-                    </div> 
-
-                    <div  class="row">
-                        <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12" >
-                            <section class="lista-facturas-espera">
-                                <div id="botones"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
-                                  
-                                     <span class="label-titulos-espera"> {nombreFactura ==null?"T#"+id:""}  {nombreFactura}</span>
-                                </div>         
-                                 
-                            </section>
-                           
-                        </div>
-                        
-                    </div>    
                 </div>
+                <div  class="row ">
+                    <div class="col-md-12 col-sx-12 col-lg-12 col-sm-12 "  style="padding:10px 15px 18px 15px; ">
+                        <div class="input-group">
+                            <span onclick = {__CambiarNombreTiquete} title="Cambiar Nombre Tiquete" class="input-group-addon btnClientes" id="add-new-client"> 
+                                <small class="fa fa-plus" style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                <span class="fa fa-user" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"></span> 
+                            </span>
+                            <input onclick={_EscogerClientes} type="text"  placeholder="Cliente" value="{cliente.nombreCompleto}"  name="datos_cliente" id="datos_cliente" autocomplete="off" >
+                        </div>
+                        <!--Vendedor o Nuevo Vendedor-->
+                        <div class="input-group">
+                            <span title="Vendedor" class="input-group-addon " > 
+                                <span class="fa fa-user" aria-hidden="true" style="margin:3px 4px 0px 2px"></span> 
+                            </span>
+                            <input type="text" onclick={_EscogerVendedores} placeholder="Vendedor" value="{vendedor.nombreCompleto}"  name="v_vendedor" id="v_vendedor" autocomplete="off" >
+                        </div>
+                        <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label-titulos-articulo">Tikete a :{factura.nombreFactura}</span></a>
+                    </div>                                                                        
+                </div> 
+                <hr style="margin: 0px; border-color: #e4e4e4;">
+                <div  class="row  ">
+                    <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 " >   
+                        <section class="contenedor-opciones">
+                            <a href="#" class="opciones-menu" onclick = {__CrearFacturaTemporal} >
+                                <i class="fa fa-clock-o">{$.i18n.prop("venta.en.espera")}</i>
+                            </a>
+                            <a  href="#" class="opciones-limpiar" onclick = {__ImprimirTiquete} >
+                                <i class="fa fa-print">Tiquete</i>
+                            </a> 
+                            <a  href="#" class="opciones-limpiar" onclick = {__Limpiar} >
+                                <i class="fa fa-trash">{$.i18n.prop("btn.limpiar")}</i>
+                            </a> 
+                        </section>
+                    </div>    
+                </div>                 
+            </div>
             </div>  
             <div class="col-md-7 col-sm-7 col-lg-7 col-xs-12" style="padding: 0px 10px">
                 <div class="block ">
@@ -221,10 +295,10 @@
                                         </h3>
                                     </li>
                                     <li onclick = {__PantallaMesas} id="codificalo" class=""> <h3>
-                                        <i class="glyphicon glyphicon-barcode" aria-hidden="true"></i>
+                                        <i class="glyphicon glyphicon-glass" aria-hidden="true"></i>
                                         <img  src="{urlImagenLector}" width="40px" height="15px">
-                                        &nbsp;&nbsp; Mesas </h3> 
-                                    </li>
+                                        &nbsp;&nbsp; {$.i18n.prop("titulo.mesas")} </h3> 
+                                    </li>                                    
                                     <li onclick = {__PantallaCategorias} id="navegador" class=""> <h3>
                                         <i class="glyphicon glyphicon-refresh" aria-hidden="true"></i>
                                         <img  src="{urlImagenNavegador}" width="40px" height="15px">
@@ -234,16 +308,22 @@
                             </form>
                         </div>
                     </div>
-                </div>    
-            </div>
-        </div>
-        <!--Ventana de los productos-->
-                <div   class="col-sx-12 col-sm-7 col-md-7 col-lg-7 " >
+                    
+                </div>   
+                <!--Ventana de los productos-->
+                <div   class="col-sx-12 col-sm-12 col-md-12 col-lg-12 " >
                     <!--Seccion de categorias-->
                     <section show= {mostrarCategorias} class="lista-articulos" >
                         <div show= {mostrarCategorias} id="item-categorias"class="product-item"  each ={categorias.data}  onclick={__ArticulosXCategorias}>
                             <img  style = "width:120px;" alt="" class="img-responsive " src="/dist/img/carrito1.png">
                              <span class="label-titulos-articulo">{descripcion}</span>
+                        </div>
+                    </section>					
+					<!--Seccion facturas por mesas-->
+                    <section show= {mostrarFacturasMesas} class="lista-articulos" >
+                        <div show= {mostrarFacturasMesas} id="item-mesas-facturas" class="product-item"  each ={facturasXMesa.data}  onclick={__CargarFacturaEspera}>
+                            <img  style = "width:120px;" alt="" class="img-responsive " src="/dist/img/factura.jpeg">
+                             <span class="label-titulos-articulo">{nombreFactura}</span>
                         </div>
                     </section>
                     <!--Seccion de articulos-->
@@ -253,14 +333,7 @@
                             <span class="label-titulos-articulo">{descripcion}</span>
                         </div>
                     </section>
-                     <!--Seccion de Mesas-->
-                    <section show= {mostrarMesas} class="lista-articulos" >
-                        <div class="product-item"  each ={mesas.data}   onclick={__AgregarProductoDePantalla}>
-                            <img  style = "width:80px;" alt="" class="img-responsive " src="/dist/img/mesa.png">
-                            <span class="label-titulos-articulo">{descripcion}</span>
-                        </div>
-                    </section>
-
+                </div>    
                     <div onclick = {__BotonAnterior} show= {mostrarNavegador}  class="pull-left btnNavegacion " >
                         <i class="fa fa-arrow-left"></i>{$.i18n.prop("btn.Anterior")}
                     </div>
@@ -268,9 +341,18 @@
                         <i class="fa fa-arrow-right"></i>{$.i18n.prop("btn.siguiente")}
                     </div>
                     <!--Fin Seccion de articulos-->
-                   
+                    <!--Seccion de codigo de barra-->
+                    <section show={mostrarCodigoBarra} class="codigo-barra" >
+                        <div class="barra">
+                           <input onkeypress = {__addProductToDetail} type="text" class="form-control" id="codigoBarra" autofocus="autofocus" placeholder="{$.i18n.prop('titulo.digite.codigo.barra')}">
+                       </div>    
+                    </section>
                     <!--Fin Seccion de codigo de barra-->
                 </div> 
+                 
+            </div>
+        </div>
+        
     </div>       
 </div>
 <!--Fin Ventana de los productos-->
@@ -378,58 +460,8 @@
 </div>
 <!--fin Modal agregar el nombre de el tiquete temporal-->
 <!--Modal Cambiar Cantidad-->
-<div class="modal fade" id="modalCambiarCantidad" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.cantidad")}</h4>
-            </div>
-            <div class="modal-body">
-                <form id = "formulario" name ="formulario "   class="advanced-search-form">
-                    <div class="row">   
-                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                            <label class="knob-label" >{$.i18n.prop("inventario.cantidad")}</label>
-                            <input  type="number" class="form-control cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <div class="row">
-                    <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                        <button type="button" onclick ="{__recalculacionDelDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-     </div>
-</div>
-<!--Fin Cambiar Cantidad-->
-<!--Modal Cambiar Descripcion-->
-<div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descripcion")}</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
-                        <div class="form-group has-success">
-                            <label >Descripcion:</label>
-                            <input  type="text" class="form-control cambiarDescripcionArticulo" id="cambiarDescripcionArticulo" name = "cambiarDescripcionArticulo" autofocus="autofocus">
-                        </div>
-                    </div>
-                </div> 
-            </div>
-            <div class="modal-footer">
-                
-                <button type="button" onclick ="{__cambiarDescripcionDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--Fin Cambiar descripcion-->
+
+
 <!--Modal Cambiar precio-->
 <div id='modalCambiarPrecio' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -619,9 +651,6 @@
                                         <label>{$.i18n.prop("factura.plazoCredito")}</label> 
                                         <input type="number" id = "plazoCredito"  name "plazoCredito" class="form-control plazoCredito" value="{factura.plazoCredito}" >
                                     </div>
-                                  
-                                   
-
                                 </div>
                                 <div  class= "col-md-6 col-sx-6 col-sm-6 col-lg-6" >
                                     <div class="form-group has-success">
@@ -636,12 +665,11 @@
                                         <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
                                         <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="campo tamanoLetraTotales totalBanco" id="totalBanco" name = "totalBanco"  value="{factura.totalBanco}">
                                     </div>
-                               
-                                    
                                 </div>
                             </div>
                             <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
-                            <input type="hidden" id='estado'                  name='estado'                      value="{factura.estado}" >
+                            <input type="hidden" id='mesa'                    name='mesa'                  value="{mesa.id}" >
+                            <input type="hidden" id='estado'                  name='estado'                  value="{factura.estado}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='subTotal'                name='subTotal'                value="{factura.subTotal}" >
@@ -656,9 +684,10 @@
                             <input type="hidden" id='totalGravado'            name='totalGravado'            value="{factura.totalGravado}" >
                             <input type="hidden" id='totalExento'             name='totalExento'             value="{factura.totalExento}" >
                             <input type="hidden" id='totalVenta'              name='totalVenta'              value="{factura.totalVenta}" >
-                            <input type="hidden" id='totalDescuentos'          name='totalDescuentos'          value="{factura.totalDescuentos}" >
+                            <input type="hidden" id='totalDescuentos'          name='totalDescuentos'        value="{factura.totalDescuentos}" >
                             <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
                             <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           value="{factura.totalImpuesto}" >
+                            <input type="hidden" id='totalImpuestoServ'       name='totalImpuestoServ'       value="{factura.totalImpuestoServ}" >
                             <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
                             <input type="hidden" id='totalTarjeta'            name='totalTarjeta'            value="{factura.totalTarjeta}" >
                             <input type="hidden" id='totalBanco'              name='totalBanco'              value="{factura.totalBanco}" >
@@ -701,6 +730,7 @@
                                         <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.subTotal")}  <span id="lblSubtotal"> {subTotalGeneral} </span></p>
                                         <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos} </span></p>
                                         <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {totalImpuesto} </span></p>
+                                        <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.impuestoServicio")}   <span id="lblSubtotal"> {totalImpuestoServ} </span></p>
                                     </div>
                                     <div class="precioTotalFactura">
                                         <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}</span></p>
@@ -716,12 +746,220 @@
 		    </div>
         </div>  
 </div>  
-<!--Fin Ventana de los billetes-->      
+<!--Fin Ventana de los billetes-->   
+<style type="text/css">
+    .clickable {
+        cursor: pointer;
+    }
+    .modal {
+position: fixed;
+top: 3%;
+right: 3%;
+left: 3%;
+bottom: 3%;
+width: auto;
+margin: 0;
+}
+.modal-body {
+max-height: 350px;
+padding: 15px;
+overflow-y: auto;
+-webkit-overflow-scrolling: touch;
+}
+
+.modal-body { height: 60%; }
+
+@media (max-width: 480px) 
+{
+    .modal.fade.in {
+        top: 10px;
+  }
+}
+
+td.col-1, th.col-1 {
+  width: 8.33333%; }
+
+td.col-2, th.col-2 {
+  width: 16.66667%; }
+
+td.col-3, th.col-3 {
+  width: 25%; }
+
+td.col-4, th.col-4 {
+  width: 33.33333%; }
+
+td.col-5, th.col-5 {
+  width: 41.66667%; }
+
+td.col-6, th.col-6 {
+  width: 50%; }
+
+td.col-7, th.col-7 {
+  width: 58.33333%; }
+
+td.col-8, th.col-8 {
+  width: 66.66667%; }
+
+td.col-9, th.col-9 {
+  width: 75%; }
+
+td.col-10, th.col-10 {
+  width: 83.33333%; }
+
+td.col-11, th.col-11 {
+  width: 91.66667%; }
+
+td.col-12, th.col-12 {
+  width: 100%; }
+
+td.col-sm-1, th.col-sm-1 {
+  width: 8.33333%; }
+
+td.col-sm-2, th.col-sm-2 {
+  width: 16.66667%; }
+
+td.col-sm-3, th.col-sm-3 {
+  width: 25%; }
+
+td.col-sm-4, th.col-sm-4 {
+  width: 33.33333%; }
+
+td.col-sm-5, th.col-sm-5 {
+  width: 41.66667%; }
+
+td.col-sm-6, th.col-sm-6 {
+  width: 50%; }
+
+td.col-sm-7, th.col-sm-7 {
+  width: 58.33333%; }
+
+td.col-sm-8, th.col-sm-8 {
+  width: 66.66667%; }
+
+td.col-sm-9, th.col-sm-9 {
+  width: 75%; }
+
+td.col-sm-10, th.col-sm-10 {
+  width: 83.33333%; }
+
+td.col-sm-11, th.col-sm-11 {
+  width: 91.66667%; }
+
+td.col-sm-12, th.col-sm-12 {
+  width: 100%; }
+
+td.col-md-1, th.col-md-1 {
+  width: 8.33333%; }
+
+td.col-md-2, th.col-md-2 {
+  width: 16.66667%; }
+
+td.col-md-3, th.col-md-3 {
+  width: 25%; }
+
+td.col-md-4, th.col-md-4 {
+  width: 33.33333%; }
+
+td.col-md-5, th.col-md-5 {
+  width: 41.66667%; }
+
+td.col-md-6, th.col-md-6 {
+  width: 50%; }
+
+td.col-md-7, th.col-md-7 {
+  width: 58.33333%; }
+
+td.col-md-8, th.col-md-8 {
+  width: 66.66667%; }
+
+td.col-md-9, th.col-md-9 {
+  width: 75%; }
+
+td.col-md-10, th.col-md-10 {
+  width: 83.33333%; }
+
+td.col-md-11, th.col-md-11 {
+  width: 91.66667%; }
+
+td.col-md-12, th.col-md-12 {
+  width: 100%; }
+
+td.col-lg-1, th.col-lg-1 {
+  width: 8.33333%; }
+
+td.col-lg-2, th.col-lg-2 {
+  width: 16.66667%; }
+
+td.col-lg-3, th.col-lg-3 {
+  width: 25%; }
+
+td.col-lg-4, th.col-lg-4 {
+  width: 33.33333%; }
+
+td.col-lg-5, th.col-lg-5 {
+  width: 41.66667%; }
+
+td.col-lg-6, th.col-lg-6 {
+  width: 50%; }
+
+td.col-lg-7, th.col-lg-7 {
+  width: 58.33333%; }
+
+td.col-lg-8, th.col-lg-8 {
+  width: 66.66667%; }
+
+td.col-lg-9, th.col-lg-9 {
+  width: 75%; }
+
+td.col-lg-10, th.col-lg-10 {
+  width: 83.33333%; }
+
+td.col-lg-11, th.col-lg-11 {
+  width: 91.66667%; }
+
+td.col-lg-12, th.col-lg-12 {
+  width: 100%; }
+
+td.col-xl-1, th.col-xl-1 {
+  width: 8.33333%; }
+
+td.col-xl-2, th.col-xl-2 {
+  width: 16.66667%; }
+
+td.col-xl-3, th.col-xl-3 {
+  width: 25%; }
+
+td.col-xl-4, th.col-xl-4 {
+  width: 33.33333%; }
+
+td.col-xl-5, th.col-xl-5 {
+  width: 41.66667%; }
+
+td.col-xl-6, th.col-xl-6 {
+  width: 50%; }
+
+td.col-xl-7, th.col-xl-7 {
+  width: 58.33333%; }
+
+td.col-xl-8, th.col-xl-8 {
+  width: 66.66667%; }
+
+td.col-xl-9, th.col-xl-9 {
+  width: 75%; }
+
+td.col-xl-10, th.col-xl-10 {
+  width: 83.33333%; }
+
+td.col-xl-11, th.col-xl-11 {
+  width: 91.66667%; }
+
+td.col-xl-12, th.col-xl-12 {
+  width: 100%; }
+</style> 
 
 <script>
     var self = this;
     // Detalle de la factura es una coleccion de articulos
-    self.mostarParaCrearNuevaVentas = true
     self.detail                = []
     self.mensajesBackEnd       = []
     self.error                 = false
@@ -753,6 +991,7 @@
 	    totalDescuentos:0,
 	    totalVentaNeta:0,
 	    totalImpuesto:0,
+	    totalImpuestoServ:0,
 	    totalComprobante:0,
 	    totalEfectivo:0,
         totalTarjeta:0,
@@ -770,7 +1009,12 @@
 	    vendedor:{
             id:0,
             nombreCompleto:""
-        }
+        },
+        mesa:{
+            id:0,
+            descripcion:"",
+            impuestoServicio:false
+       }
 
     }                   
     self.item                  = null;
@@ -783,18 +1027,14 @@
         id:null,
         nombreCompleto:""
     };
-    self.facturas_espera       = {data:[]}  
     self.informacion_tabla             = []
     self.informacion_tabla_articulo    = []
     self.informacion_tabla_clientes    = []
     self.idiomaDataTable               = {}
-    self.mostrarFormularioPago         = false
-    self.mostarParaCrearNuevaFactura   = true
-    self.mostrarCamposIngresoContado   = true
-    self.mostrarReferencias            = false 
     self.subTotalGeneral               = 0
     self.totalDescuentos               = 0
     self.totalImpuesto                 = 0
+    self.totalImpuestoServ             = 0
     self.totalComprobante              = 0;
     self.totalCambioPagar              = 0;
     self.todasProvincias               = {data:[]}
@@ -804,7 +1044,7 @@
     self.cantones                      = []
     self.distritos                     = []
     self.barrios                       = []
-     self.mostrarListadoArticulos == false
+
     self.parametrosPaginacion = {
         id:null,
         paginaActual:0,
@@ -823,18 +1063,6 @@
             to:0
         }
     }
-    self.mesas    = {
-        data:[],
-        pagination:{
-            total:0,
-            current_page:0,
-            per_page:0,
-            last_page:0,
-            from:0,
-            to:0
-        }
-    }
-
     self.categoria = {
         id:null,
         descripcion:""
@@ -850,8 +1078,44 @@
             to:0
         }
     }
-    self.mostrarImpuestoServicio = false
+    
+ 	self.mesa = {
+         id:0,
+         descripcion:"",
+         impuestoServicio:false
+     }
+     self.mesas  = {
+         data:[],
+         pagination:{
+             total:0,
+             current_page:0,
+             per_page:0,
+             last_page:0,
+             from:0,
+             to:0
+         }
+     }
+     self.facturasXMesa = {
+         data:[],
+         pagination:{
+             total:0,
+             current_page:0,
+             per_page:0,
+             last_page:0,
+             from:0,
+             to:0
+         }
+     }
 
+    self.mostarParaCrearNuevaVentas    = false //true
+    self.mostrarCodigoBarra            = false //true
+    self.mostrarFormularioPago         = false
+    self.mostarParaCrearNuevaFactura   = false //true
+    self.mostrarCamposIngresoContado   = false //true
+    self.mostrarReferencias            = false 
+    self.mostrarListadoArticulos       = false
+    self.mostrarImpuestoServicio       = false
+    self.factEspera =null
     self.urlImagenNavegador   = '/dist/img/navegador.png';
     self.urlImagenLector      = '/dist/img/codigo_barra.png';
     self.urlImagenBuscador    = '/dist/img/buscador.png';
@@ -866,30 +1130,28 @@
         __InicializarTabla('.tableListaInventario')
         __InicializarTabla('.tableListaVendedor')
         agregarInputsCombos_Articulo()
-        __ListaFacturasEnEspera()
        // setInterval(function() {
             // triggering the "ready" event will resolve the promise
-        //    __ListaFacturasEnEspera()
         //}.bind(this), 10000)
           
         __comboCondicionPago()
         __ComboTipoDocumentos()
         
         __ListaDeClientes()
-       __ListaDeVendedores()
-       __Teclas()
-       __TipoCambio()
-       
-       
-     
+        __ListaDeVendedores()
+        __Teclas()
+        __TipoCambio()
+
+        __ListaMesas()
+
         cargaBilletes()
-        mostrarCategorias()
+         //mostrarCategorias()
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
      
     })
-
+    
  /**
 * agregar producto desde la pantalla de articulos
 **/
@@ -962,45 +1224,6 @@ __BotonSiguiente(){
 }
 
 /**
-*  Lista de las Mesas
-**/
-function __ListaMesas(){
-    //Primera vez 
-    if( self.mesas.pagination.current_page == 0){
-        self.parametrosPaginacion.cantidadPorPagina = 12
-        self.parametrosPaginacion.paginaActual = 0
-        self.parametrosPaginacion.total = 0
-        self.update()
-    }
-    $('#cantidadPorPagina').val(self.parametrosPaginacion.cantidadPorPagina)
-    $('#paginadaActual').val(self.parametrosPaginacion.paginaActual )
-    var formulario = $('#FormPaginacion').serialize();
-    $.ajax({
-        url: 'ListarPaginacionMesasAjax.do',
-        datatype: "json",
-        data: formulario,
-        method:"POST",
-        success: function (result) {
-            if(result.aaData.length > 0){
-               self.mesas.data = result.aaData
-               self.mesas.pagination.total = result.recordsTotal
-               self.mesas.pagination.last_page = Math.round(result.recordsTotal/10)
-               self.mostrarNavegador            = false
-               self.mostrarCategorias           = false //muestra la pantalla de imagenes de articulos   
-               self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias  
-               self.mostrarMesas                = true 
-               self.update()
-            }
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
-}
-
-
-/**
 *  Lista de los clientes
 **/
 function __ListaCategorias(){
@@ -1029,6 +1252,8 @@ function __ListaCategorias(){
                self.mostrarNavegador            = true
                self.mostrarCategorias           = true //muestra la pantalla de imagenes de articulos   
                self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
+               self.mostrarMesas	            = false //muestra la pantalla mesas
+               self.mostrarFacturasMesas        = false //muestra las facturas por mesa
                self.update()
             }
         },
@@ -1068,7 +1293,9 @@ function __ListaArticulosXCategorias(){
                self.mostrarCodigoBarra          = false;
                self.mostrarNavegador            = true
                self.mostrarCategorias           = false //muestra la pantalla de imagenes de articulos   
-               self.mostrarArticulosXCategoria  = true //muestra la pantalla de imagenes de categorias                  
+               self.mostrarArticulosXCategoria  = true //muestra la pantalla de imagenes de categorias
+               self.mostrarMesas	            = false //muestra la pantalla mesas               
+               self.mostrarFacturasMesas        = false //muestra las facturas por mesa
                self.update()
             }else{
                 sweetAlert("",$.i18n.prop("articulo.por.categoria"), "info");
@@ -1094,7 +1321,7 @@ __PantallaCategorias(){
 **/
 function mostrarCategorias(){
     self.categoria = {
-        id:null,
+        id:0,
         descripcion:""
     }
     self.categorias  = {
@@ -1123,6 +1350,8 @@ function mostrarCategorias(){
     self.mostrarCategorias           = true //muestra la pantalla de imagenes de articulos   
     self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
     self.mostrarCodigoBarra          = false
+    self.mostrarMesas	             = false //muestra la pantalla mesas
+    self.mostrarFacturasMesas        = false //muestra las facturas por mesa
     self.update()
     __ListaCategorias()
 
@@ -1130,63 +1359,15 @@ function mostrarCategorias(){
 /**
 *  Mostrar pantalla de codigo de barra
 **/
-__PantallaMesas(){
-    self.mostrarCodigoBarra          = false;
+__PantallaCodigoBarra(){
+    self.mostrarCodigoBarra          = true;
     self.mostrarNavegador            = false
     self.mostrarCategorias           = false //muestra la pantalla de imagenes de articulos   
     self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
-    self.categoria = {
-        id:null,
-        descripcion:""
-    }
-    self.mesa = {
-        id:null,
-        descripcion:""
-    }
-    self.categoria = {
-        id:0,
-        descripcion:""
-    }
-    self.categorias  = {
-        data:[],
-        pagination:{
-            total:0,
-            current_page:0,
-            per_page:0,
-            last_page:0,
-            from:0,
-            to:0
-        }
-    }
-    self.mesas  = {
-        data:[],
-        pagination:{
-            total:0,
-            current_page:0,
-            per_page:0,
-            last_page:0,
-            from:0,
-            to:0
-        }
-    }
-
-     self.inventariosXCategoria = {
-        data:[],
-        pagination:{
-            total:0,
-            current_page:0,
-            per_page:0,
-            last_page:0,
-            from:0,
-            to:0
-        }
-    }
-    self.mostrarNavegador            = true
-    self.mostrarCategorias           = true //muestra la pantalla de imagenes de articulos   
-    self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
+    self.mostrarMesas	             = false //muestra la pantalla mesas
+    self.mostrarFacturasMesas        = false //muestra las facturas por mesa
     self.update()
-    __ListaMesas()
-    
+    $('#codigoBarra').focus()
 }
 /**
 *  Limpiar Formulario
@@ -1450,7 +1631,9 @@ __CambiarCantidad(e){
    self.update()
    $( "#cambiarCantidadArticulo" ).focus()
    $( "#cambiarCantidadArticulo" ).val(self.item.cantidad)
-   $('#modalCambiarCantidad').modal('show')      
+   $('#modalCambiarCantidad').modal()                      // initialized with defaults
+   $('#modalCambiarCantidad').modal({ keyboard: false })   // initialized with no keyboard
+   $('#modalCambiarCantidad').modal('show')                // initializes and invokes show immediately
 }
 /**
 *Cambiar descripcion
@@ -1458,9 +1641,14 @@ __CambiarCantidad(e){
 __CambiarDescripcion(e){
    self.item = e.item; 
    self.update()
+  
    $( "#cambiarDescripcionArticulo" ).focus()
    $( "#cambiarDescripcionArticulo" ).val(self.item.descripcion)
-   $('#modalCambiarDescripcion').modal('show')      
+   $('#modalCambiarDescripcion').modal()                      // initialized with defaults
+   $('#modalCambiarDescripcion').modal({ keyboard: false })   // initialized with no keyboard
+   $('#modalCambiarDescripcion').modal('show')                // initializes and invokes show immediately
+
+
 }
 /**
 *Cambiar precio del producto
@@ -1697,7 +1885,6 @@ __ModificarNombreTiquete(){
                     }
                 }
                  $('#ModalCambiarNombreTiquete').modal('hide') 
-                __ListaFacturasEnEspera()
             }
         },
         error: function (xhr, status) {
@@ -1715,6 +1902,7 @@ __ModificarNombreTiquete(){
 __AgregarNombreFacturaTemporal(){
     $('#ModalAgregarNombreTiquete').modal('hide') 
     self.factura.nombreFactura = $('.cambioNombreFactura').val()==null?"":$('.cambioNombreFactura').val();
+    self.mesa.id = self.factura.mesa.id
     self.update()
     aplicarFactura(1)      
     if(self.factEspera !=null){
@@ -1794,7 +1982,6 @@ function __Init(){
     self.comboEstados          = []
     self.comboCondicionPagos        = []
     self.comboTipoDocumentos   = []
-    self.facturas_espera       = {data:[]}  
     self.descripcionArticulo = ""
     $('.cambioNombreFactura').val(null)
     self.factura                = {
@@ -1822,6 +2009,7 @@ function __Init(){
 	    totalDescuentos:0,
 	    totalVentaNeta:0,
 	    totalImpuesto:0,
+	    totalImpuestoServ:0,
 	    totalComprobante:0,
 	    totalEfectivo:0,
         totalTarjeta:0,
@@ -1840,8 +2028,14 @@ function __Init(){
 	    vendedor:{
             id:0,
             nombreCompleto:""
-        }
-    }                            
+        },
+        mesa:{
+            id:0,
+            descripcion:"",
+            impuestoServicio:false
+       }
+    }
+    self.factura.mesa = self.mesa;
     self.item                  = null;
     self.articulo              = null;
     self.clientes              = {data:[]}
@@ -1856,15 +2050,18 @@ function __Init(){
     self.informacion_tabla_clientes    = []
     self.idiomaDataTable               = {}
     self.mostrarFormularioPago         = false
-    self.mostarParaCrearNuevaFactura    = true
+    self.mostarParaCrearNuevaFactura   = true
     self.mostrarCamposIngresoContado   = true;
-    self.mostarParaCrearNuevaVentas = true
-    self.mostrarMesas    = true
+    self.mostarParaCrearNuevaVentas    = true
+    self.mostrarCodigoBarra            = true
+    self.mostrarCodigoBarra            = true;
     self.mostrarFormularioPago         = false
     self.mostarParaCrearNuevaFactura   = true
     self.mostrarCamposIngresoContado   = true
     self.mostrarReferencias            = false 
-    self.parametrosPaginacion = {
+    self.mostrarMesas	           	   = true //muestra la pantalla mesas
+    self.mostrarFacturasMesas          = false
+    	self.parametrosPaginacion = {
             id:null,
             paginaActual:0,
             cantidadPorPagina:10,
@@ -1905,6 +2102,7 @@ function __Init(){
     self.totalComprobante =0;
     self.totalDescuentos  =0;
     self.totalImpuesto    =0;
+    self.totalImpuestoServ=0;
     self.totalCambioPagar =0;
     self.update()
     $('#condicionVenta').prop("selectedIndex", 0);
@@ -1924,17 +2122,139 @@ function __Init(){
       __ComboTipoDocumentos()
       //Estados
       __ComboEstados()
-     __ListaFacturasEnEspera()
      mostrarCategorias()
      
      $('#codigoBarra').val(null)
      $('#codigoBarra').focus()
 }
+
+/**
+*  Inicializar las variables de trabajos
+**/
+function __InitDatos(){
+    self.detail                = []
+    self.mensajesBackEnd       = []
+    self.error                 = false
+    self.comboEstados          = []
+    self.comboCondicionPagos   = []
+    self.comboTipoDocumentos   = []
+    self.descripcionArticulo = ""
+    $('.cambioNombreFactura').val(null)
+    self.factura                = {
+        id:null,
+	    fechaCredito:null,
+	    fechaEmision:null,
+	    condicionVenta:"",
+	    plazoCredito:0,
+	    tipoDoc:"",
+	    medioPago:"",
+	    nombreFactura:"",
+	    direccion:"",
+	    nota:"",
+	    comanda:"",
+	    subTotal:0,
+	    totalTransporte:0,
+	    total:0,
+	    totalServGravados:0,
+	    totalServExentos:0,
+	    totalMercanciasGravadas:0,
+	    totalMercanciasExentas:0,
+	    totalGravado:0,
+	    totalExento:0,
+	    totalVenta:0,
+	    totalDescuentos:0,
+	    totalVentaNeta:0,
+	    totalImpuesto:0,
+	    totalImpuestoServ:0,
+	    totalComprobante:0,
+	    totalEfectivo:0,
+        totalTarjeta:0,
+        totalCambioPagar:0,
+	    totalBanco:0,
+	    totalCredito:0,
+	    montoCambio:0,
+	    totalCambio:0,
+        totalCambioPagar:0,
+	    codigoMoneda:"",
+	    estado:0,
+	    cliente:{
+            id:0,
+            nombreCompleto:"",
+        },
+	    vendedor:{
+            id:0,
+            nombreCompleto:""
+        },
+        mesa:{
+            id:0,
+            descripcion:"",
+            impuestoServicio:false
+       }
+    }
+    self.factura.mesa = self.mesa;
+    self.item                  = null;
+    self.articulo              = null;
+    self.clientes              = {data:[]}
+    self.detalleFactura        ={data:[]}
+    self.cliente               = {};
+    self.vendedor = {
+        id:0,
+        nombreCompleto:""
+    }
+    self.informacion_tabla             = []
+    self.informacion_tabla_articulo    = []
+    self.informacion_tabla_clientes    = []
+    self.idiomaDataTable               = {}
+    	self.parametrosPaginacion = {
+            id:null,
+            paginaActual:0,
+            cantidadPorPagina:10,
+            total:0
+        }
+        self.categorias = {
+            data:[],
+            pagination:{
+                total:0,
+                current_page:0,
+                per_page:0,
+                last_page:0,
+                from:0,
+                to:0
+            }
+        }
+        self.categoria = {
+            id:0,
+            descripcion:""
+        }
+        self.inventariosXCategoria = {
+            data:[],
+            pagination:{
+                total:0,
+                current_page:0,
+                per_page:0,
+                last_page:0,
+                from:0,
+                to:0
+            }
+        }
+    self.urlImagenNavegador   = '/dist/img/navegador.png';
+    self.urlImagenLector      = '/dist/img/codigo_barra.png';
+    self.urlImagenBuscador    = '/dist/img/buscador.png';
+    //totales
+    self.totalComprobante     = 0;
+    self.subTotalGeneral  =0;
+    self.totalComprobante =0;
+    self.totalDescuentos  =0;
+    self.totalImpuesto    =0;
+    self.totalImpuestoServ=0;    
+    self.totalCambioPagar =0;
+    self.update()    
+}
 /**
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
 **/
 function __FacturaEnEspera(factura){
-    if(factura ==null){
+    if(factura == null){
         return
     }
      __Init()
@@ -2008,6 +2328,7 @@ function __displayDate_detail(fecha) {
     var dateTime = new Date(fecha);
     return moment(dateTime).format('YYYY-MM-DD ');
 }
+
 /**
 *  Crear Factura nueva
 **/
@@ -2030,6 +2351,7 @@ function crearFactura(estado){
     self.factura.estado = estado
     self.update();
     var formulario = $("#formularioFactura").serialize();
+
     $.ajax({
         type : "POST",
         dataType : "json",
@@ -2063,41 +2385,17 @@ function evaluarFactura(data){
             if(self.facturaImprimir.estado == 2){
                 __Init()
                 //Envia a la pantalla de impresion
-                __ListaFacturasEnEspera()
                 self.facturaImprimir   = modeloTabla
                 self.update()
                 riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
                  
             }else{
-               
                 __Init()
-                __ListaFacturasEnEspera()
             }
         });
     }
 }
-/**
-*  Lista de las facturas pendientes por el usuario
-**/
-function __ListaFacturasEnEspera(){
-     self.facturas_espera       = {data:[]}  
-     self.update()
-    $.ajax({
-        url: 'ListarFacturasEsperaActivasAjax',
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            if(result.aaData.length > 0){
-               self.facturas_espera.data =  result.aaData;  
-               self.update(); 
-            }
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });    
-}
+
 /**
 *  Obtiene el valor de lo digitado en el campo de Descuento
 **/
@@ -2153,6 +2451,8 @@ function mostrarPAgo(){
         return
     }
     self.mostarParaCrearNuevaVentas = false
+      self.factura.totalEfectivo = self.factura.totalComprobante
+        self.update()
      $('#totalEfectivo').val(self.factura.totalComprobante)
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
@@ -2548,7 +2848,7 @@ function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc){
 *Actualizar linea en el detalle
 **/
 function ActualizarLineaDEtalle(){
-  var montoTotal               = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
+    var montoTotal               = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
     var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc)
     var subTotal               = montoTotal - montoDescuento
     var montoImpuesto          = _calcularImpuesto(subTotal,self.item.impuesto ==null?0:self.item.impuesto)
@@ -2632,12 +2932,14 @@ function __calculate() {
     self.factura.total            = 0;
     self.factura.totalDescuentos  = 0;
     self.factura.totalImpuesto    = 0;
-    self.factura.subTotal         = 0;
+    self.factura.totalImpuestoServ = 0; 
+    self.factura.subTotal          = 0;
     self.update()
     totalVenta     = 0
     subTotal       = 0
     totalDescuento = 0
     totalImpuesto  = 0
+    totalImpuestoServ  = 0
     totalMercanciasGravadas = 0
     totalMercanciasExentas  = 0
     totalServGravados       = 0
@@ -2670,11 +2972,21 @@ function __calculate() {
     self.factura.totalDescuentos         = Math.round(__valorNumerico(totalDescuento))
     self.factura.subTotal                = Math.round(__valorNumerico(subTotal))
     self.factura.totalImpuesto           = Math.round(__valorNumerico(totalImpuesto))
-    self.factura.totalVentaNeta          = Math.round(__valorNumerico(totalVenta-totalDescuento))
-    self.factura.totalComprobante        = Math.round(__valorNumerico(totalComprobante))
-    self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
+    
+    //Se verifica si la mesa tiene impuestos
+    if(self.factura.mesa.impuestoServicio){
+        self.factura.totalImpuestoServ       = Math.round(__valorNumerico(subTotal * 0.10))
+        self.factura.totalVentaNeta          = Math.round(__valorNumerico((totalVenta-totalDescuento) + self.factura.totalImpuestoServ))
+        self.factura.totalComprobante        = Math.round(__valorNumerico(totalComprobante + self.factura.totalImpuestoServ))
+        self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
+    }else{
+        self.factura.totalVentaNeta          = Math.round(__valorNumerico(totalVenta-totalDescuento))
+        self.factura.totalComprobante        = Math.round(__valorNumerico(totalComprobante))
+        self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
+    }
     self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
     self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
+    self.totalImpuestoServ                = formatoDecimales(self.factura.totalImpuestoServ,2);
 
   //  self.articulo              = null;
     self.update(); 
@@ -3002,6 +3314,120 @@ function _incluirBilletes(modena,descripcion,valor,imagen){
     )
     self.update()
 }
-</script>
 
+/**
+*  Evento click para mostrar las mesas 
+**/
+__PantallaMesas(){
+	__ListaMesas()
+}
+
+/**
+*  Lista las mesas
+**/
+function __ListaMesas(){
+	__InitDatos();
+	self.mesas.data = []
+   
+	//Primera vez 
+    if( self.mesas.pagination.current_page == 0){
+        self.facturasXMesa.pagination.current_page = 0    
+        self.parametrosPaginacion.cantidadPorPagina = 12
+        self.parametrosPaginacion.paginaActual = 0
+        self.parametrosPaginacion.total = 0
+        self.update()
+    }
+    $('#cantidadPorPagina').val(self.parametrosPaginacion.cantidadPorPagina)
+    $('#paginadaActual').val(self.parametrosPaginacion.paginaActual )
+    var formulario = $('#FormPaginacion').serialize();
+    $.ajax({
+        url: 'ListarPaginacionMesasAjax.do',
+        datatype: "json",
+        data: formulario,
+        method:"POST",
+        success: function (result) {
+            if(result.aaData.length > 0){
+               console.log(result.aaData)
+               self.mesas.data = result.aaData
+               self.mesas.pagination.total = result.recordsTotal
+               self.mesas.pagination.last_page = Math.round(result.recordsTotal/10)
+               self.mostrarNavegador            = false
+               self.mostrarMesas	            = true
+               self.mostrarCategorias           = false //muestra la pantalla de imagenes de articulos   
+               self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
+               self.mostrarFacturasMesas        = false //muestra las facturas por mesa
+               self.mostarParaCrearNuevaVentas  = false
+               self.update()
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+}
+
+//Se presentan las facturas pendientes por mes
+__FacturasXMesa(e){
+    var item = e.item
+    self.mesa = item
+    self.factura.mesa = item
+    self.update()
+    __ListaFacturasXMesas()
+}
+
+/**
+*  Lista las facturas de una mesa
+**/
+function __ListaFacturasXMesas(){
+
+	//Primera vez 
+    if( self.facturasXMesa.pagination.current_page == 0){
+        self.facturasXMesa.pagination.current_page = 0    
+        self.parametrosPaginacion.cantidadPorPagina = 12
+        self.parametrosPaginacion.paginaActual = 0
+        self.parametrosPaginacion.total = 0
+        self.update()
+    }
+    $('#cantidadPorPagina').val(self.parametrosPaginacion.cantidadPorPagina)
+    $('#paginadaActual').val(self.parametrosPaginacion.paginaActual )
+    $('#mesa').val(self.mesa.id )
+
+    var formulario = $('#FormPaginacion').serialize();
+	self.facturasXMesa.data = []
+    $.ajax({
+        url: 'ListarFacturasEsperaPorMesaAjax',
+        datatype: "json",
+        data: formulario,
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+               self.facturasXMesa.data = result.aaData
+               self.facturasXMesa.pagination.total = result.recordsTotal
+               self.facturasXMesa.pagination.last_page = Math.round(result.recordsTotal/10)
+               self.mostrarCategorias        = false //muestra la pantalla de imagenes de articulos   
+               self.mostrarFacturasMesas     = true //muestra las facturas por mesa
+            }else{
+               self.mostrarCategorias       = true //muestra la pantalla de imagenes de articulos   
+               self.mostrarFacturasMesas    = false //muestra las facturas por mesa
+               mostrarCategorias();
+            }
+            self.mostrarMesas	             = false //muestra la pantalla mesas               
+            self.mostrarCodigoBarra          = false;
+            self.mostrarNavegador            = true
+            self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias
+            self.mostarParaCrearNuevaVentas  = true
+            self.update()        
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+}
+function getCantidadDePaginas(total){
+    return total / 10;
+}
+
+</script>
 </venta-restaurante>
