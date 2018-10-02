@@ -1860,7 +1860,7 @@ function aplicarFactura(estado){
                 mensajeError($.i18n.prop("error.factura.monto.ingresado"))
                 return
             }
-            var montoEntregado = self.factura.totalTarjeta + self.factura.totalBanco + self.factura.totalEfectivo
+            var montoEntregado = __valorNumerico($('#totalTarjeta').val())  + __valorNumerico($('#totalBanco').val()) + $('#totalEfectivo').val()
             montoEntregado = redondeoDecimales(__valorNumerico(montoEntregado),2)
             var resultado  = redondeoDecimales( __valorNumerico(self.factura.totalComprobante),2)
             if(__valorNumerico(resultado) > __valorNumerico(montoEntregado)  ){
@@ -2130,7 +2130,7 @@ function crearFactura(estado){
     self.factura.condicionVenta = $('#condicionVenta').val()
     self.factura.fechaCredito =fechaCreditoTemporal.toString()
     self.factura.referenciaFechaEmision =fechaReferencia
-    self.factura.totalEfectivo =$('#totalEfectivo').val()
+    self.factura.totalEfectivo =__valorNumerico($('#totalEfectivo').val())
     self.factura.totalTarjeta = __valorNumerico($('#totalTarjeta').val()) 
     self.factura.totalBanco = __valorNumerico($('#totalBanco').val())
     self.factura.detalleFactura =JSONDetalles

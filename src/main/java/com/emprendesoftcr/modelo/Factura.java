@@ -23,6 +23,7 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
 
 /**
  * Factura de ventas a los clientes.
@@ -749,6 +750,15 @@ public class Factura implements Serializable {
 
 	public void setTieneIS(Integer tieneIS) {
 		this.tieneIS = tieneIS;
+	}
+	
+	public String getFechaEmisionSTR() {
+		if(this.fechaEmision !=null) {
+			return Utils.getFechaGeneraReporte(this.getFechaEmision());	
+		}
+		return Constantes.EMPTY;
+		
+		
 	}
 
 }

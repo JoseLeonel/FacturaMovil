@@ -425,6 +425,10 @@ public class FacturasController {
 
 		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
+		if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
+			dataTableFilter = new JqGridFilter("usuarioCreacion.id", "'" + usuarioSesion.getId().toString() + "'", "=");
+			delimitadores.addFiltro(dataTableFilter);
+		}
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
@@ -452,6 +456,11 @@ public class FacturasController {
 		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
+		if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
+			dataTableFilter = new JqGridFilter("usuarioCreacion.id", "'" + usuarioSesion.getId().toString() + "'", "=");
+			delimitadores.addFiltro(dataTableFilter);
+		}
+
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
@@ -474,6 +483,11 @@ public class FacturasController {
 		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
+		if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
+			dataTableFilter = new JqGridFilter("usuarioCreacion.id", "'" + usuarioSesion.getId().toString() + "'", "=");
+			delimitadores.addFiltro(dataTableFilter);
+		}
+
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
@@ -482,7 +496,7 @@ public class FacturasController {
 	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Cliente cliente = clienteBo.buscar(idCliente);
-		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cliente, usuarioSesion.getEmpresa());
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cliente, usuarioSesion.getEmpresa(), usuarioBo);
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
@@ -497,7 +511,7 @@ public class FacturasController {
 		DateFormat df = new SimpleDateFormat(Constantes.DATE_FORMAT7);
 		String reportDate = df.format(fechahoy);
 
-		DataTableDelimitador query = DelimitadorBuilder.get(request, reportDate, reportDate, cliente, usuarioSesion.getEmpresa());
+		DataTableDelimitador query = DelimitadorBuilder.get(request, reportDate, reportDate, cliente, usuarioSesion.getEmpresa(), usuarioBo);
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
@@ -526,7 +540,7 @@ public class FacturasController {
 	@RequestMapping(value = "/service/CrearFacturaServiceAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	@SuppressWarnings("rawtypes")
-	public RespuestaServiceValidator crearFactura(HttpServletRequest request, @RequestBody FacturaCommand facturaCommand, BindingResult result) throws ParseException {
+	public RespuestaServiceValidator crearFactura(@RequestBody FacturaCommand facturaCommand, BindingResult result) throws ParseException {
 		try {
 
 			Usuario usuario = usuarioBo.buscar(facturaCommand.getUsuario());
@@ -557,6 +571,7 @@ public class FacturasController {
 			UsuarioCaja usuarioCajaBd = null;
 			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				usuarioCajaBd = usuarioCajaBo.findByUsuarioAndEstado(usuario, Constantes.ESTADO_ACTIVO);
+
 				if (usuarioCajaBd == null) {
 					if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 
@@ -565,6 +580,7 @@ public class FacturasController {
 				}
 
 			}
+
 			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 					if (facturaCommand.getTotalBanco().equals(Constantes.ZEROS_DOUBLE) && facturaCommand.getTotalEfectivo().equals(Constantes.ZEROS_DOUBLE) && facturaCommand.getTotalTarjeta().equals(Constantes.ZEROS_DOUBLE)) {
@@ -700,11 +716,11 @@ public class FacturasController {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
 
-			 Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			// Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 			// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 			// criptografica desde linux
-			 certificadoBo.agregar(usuario.getEmpresa(),"","");
+			// certificadoBo.agregar(usuario.getEmpresa(),"","");
 			// usuario.getEmpresa().getClaveLlaveCriptografica().toString(),
 			// usuario.getEmpresa().getNombreLlaveCriptografica());
 			// String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);
@@ -966,7 +982,7 @@ public class FacturasController {
 
 	private static class DelimitadorBuilder {
 
-		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Cliente cliente, Empresa empresa) {
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Cliente cliente, Empresa empresa, UsuarioBo usuarioBo) {
 			// Consulta por fechas
 			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Factura");
 			Date fechaInicio = new Date();
@@ -980,6 +996,11 @@ public class FacturasController {
 			if (cliente != null) {
 				delimitador.addFiltro(new JqGridFilter("cliente.id", "'" + cliente.getId().toString() + "'", "="));
 			}
+			if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
+				Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+				delimitador.addFiltro(new JqGridFilter("usuarioCreacion.id", "'" + usuario.getId().toString() + "'", "="));
+			}
+
 			if (!inicio.equals(Constantes.EMPTY) && !fin.equals(Constantes.EMPTY)) {
 				fechaInicio = Utils.parseDate(inicio);
 				fechaFinal = Utils.parseDate(fin);

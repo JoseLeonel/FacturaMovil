@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.web.jsonDeserializer.ClienteDeserializer;
 import com.emprendesoftcr.web.jsonDeserializer.VendedorDeserializer;
@@ -35,7 +36,7 @@ public class FacturaCommand {
 	private String		nombreFactura;
 
 	private String		direccion;
-	
+
 	private String		correoAlternativo;
 
 	private String		referenciaTipoDoc;
@@ -102,10 +103,10 @@ public class FacturaCommand {
 
 	private Date			updated_at;
 
-	@JsonDeserialize(using=ClienteDeserializer.class)
+	@JsonDeserialize(using = ClienteDeserializer.class)
 	private Cliente		cliente;
 
-	@JsonDeserialize(using=VendedorDeserializer.class)
+	@JsonDeserialize(using = VendedorDeserializer.class)
 	private Vendedor	vendedor;
 
 	private String		detalleFactura;
@@ -118,6 +119,8 @@ public class FacturaCommand {
 		super();
 	}
 
+
+
 	public Long getId() {
 		return id;
 	}
@@ -126,12 +129,10 @@ public class FacturaCommand {
 		this.id = id;
 	}
 
-	
 	public String getCorreoAlternativo() {
 		return correoAlternativo;
 	}
 
-	
 	public void setCorreoAlternativo(String correoAlternativo) {
 		this.correoAlternativo = correoAlternativo;
 	}
@@ -496,11 +497,10 @@ public class FacturaCommand {
 		this.empresa = empresa;
 	}
 
-	
 	public String getUsuario() {
 		return usuario;
 	}
-	
+
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
 	}

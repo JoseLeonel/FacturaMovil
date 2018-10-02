@@ -120,6 +120,9 @@ public class CajasController {
 			delimitadores.addFiltro(dataTableFilter);
 			dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
+			delimitadores.addFiltro(dataTableFilter);
 		}
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);

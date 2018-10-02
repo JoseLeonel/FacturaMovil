@@ -221,6 +221,11 @@ public class Constantes {
 
 	// Roles de usuario
 	public static final String					ROL_ADMINISTRADOR_SISTEMA														= "Administrador_Sistema";
+	public static final String					ROL_USUARIO_VENDEDOR																= "usuario_vendedor";
+	public static final String					ROL_ADMINISTRADOR_CAJERO														= "Administrador_Cajero";
+	public static final String					ROL_ADMINISTRADOR_RESTAURANTE												= "Administrador_Restaurante";
+	public static final String					ROL_ADMINISTRADOR_EMPRESA														= "Administrador_Empresa";
+
 	// Usuario
 	public static final String					WEB_SESSION_USUARIO																	= "usuario";
 	public static final Long						ID_USUARIO_SISTEMA																	= -1L;
