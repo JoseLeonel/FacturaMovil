@@ -64,17 +64,17 @@
             </div>
         </div>      
     </div>              
-    <div>
-        <form id="FormPaginacion">
-            <input type="hidden" name="id" id="id" value="{parametrosPaginacion.cantidadPorPagina}">
-            <input type="hidden" name="cantidadPorPagina" id="cantidadPorPagina" value="{parametrosPaginacion.cantidadPorPagina}">
-            <input type="hidden" name="paginaActual" id="paginaActual" value="{parametrosPaginacion.paginaActual}">
-            <input type="hidden" name="total" id="total" value="{parametrosPaginacion.total}">
-            <input type="hidden" name="categoria" id="categoria" value="{categoria.id}">
-            <input type="hidden" name="mesa" id="mesa" value="{mesa.id}">
-        </form>
-    </div>
 </div>
+ <div>
+     <form id="FormPaginacion">
+         <input type="hidden" name="id" id="id" value="{parametrosPaginacion.cantidadPorPagina}">
+         <input type="hidden" name="cantidadPorPagina" id="cantidadPorPagina" value="{parametrosPaginacion.cantidadPorPagina}">
+         <input type="hidden" name="paginaActual" id="paginaActual" value="{parametrosPaginacion.paginaActual}">
+         <input type="hidden" name="total" id="total" value="{parametrosPaginacion.total}">
+         <input type="hidden" name="categoria" id="categoria" value="{categoria.id}">
+         <input type="hidden" name="mesa" id="mesa" value="{mesa.id}">
+     </form>
+ </div>
 <!--Modal mostrar  -->
 <div id="modalVendedor" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -130,10 +130,10 @@
                 </div>
              </section>
            </div>    
-           <div onclick = {__BotonAnterior}  class="pull-left btnNavegacion " >
+           <div onclick = {__BotonAnteriorMesas}  class="pull-left btnNavegacion " >
            		<i class="fa fa-arrow-left"></i>{$.i18n.prop("btn.Anterior")}
            </div>
-           <div onclick = {__BotonSiguiente} class="pull-right btnNavegacion " >
+           <div onclick = {__BotonSiguienteMesas} class="pull-right btnNavegacion " >
            		<i class="fa fa-arrow-right"></i>{$.i18n.prop("btn.siguiente")}
            </div>
      </div>
@@ -1182,45 +1182,60 @@ __ArticulosXCategorias(e){
 *  boton anterior de la pantalla de categorias or articulos
 **/    
 __BotonAnterior(){
-    
-    if(self.categoria.id == 0){//cuando esta usando la pantalla de categorias
-        self.categorias.pagination.current_page = self.categorias.pagination.current_page - 1
-        self.categorias.pagination.current_page = self.categorias.pagination.current_page > 1?self.categorias.pagination.current_page:1;
+	if (self.mostrarFacturasMesas){
+        self.facturasXMesa.pagination.current_page = self.facturasXMesa.pagination.current_page - 1
+        self.facturasXMesa.pagination.current_page = self.facturasXMesa.pagination.current_page > 1?self.facturasXMesa.pagination.current_page:1;
         self.parametrosPaginacion.paginaActual = self.parametrosPaginacion.paginaActual > 1?self.parametrosPaginacion.paginaActual - 12:0 
         self.update()
-        __ListaCategorias()
+        __ListaFacturasXMesas()
+    }else {
+        if(self.categoria.id == 0){//cuando esta usando la pantalla de categorias
+            self.categorias.pagination.current_page = self.categorias.pagination.current_page - 1
+            self.categorias.pagination.current_page = self.categorias.pagination.current_page > 1?self.categorias.pagination.current_page:1;
+            self.parametrosPaginacion.paginaActual = self.parametrosPaginacion.paginaActual > 1?self.parametrosPaginacion.paginaActual - 12:0 
+            self.update()
+            __ListaCategorias()
 
-    }else{// cuando esta usando la pantalla de articulos
-        self.inventariosXCategoria.pagination.current_page = self.inventariosXCategoria.pagination.current_page - 1
-        self.inventariosXCategoria.pagination.current_page = self.inventariosXCategoria.pagination.current_page > 1?self.inventariosXCategoria.pagination.current_page:1;
-         self.parametrosPaginacion.paginaActual = self.parametrosPaginacion.paginaActual > 1?self.parametrosPaginacion.paginaActual - 12:0 
-        self.update()
-        __ListaArticulosXCategorias()
-    }
-           
+        }else{// cuando esta usando la pantalla de articulos
+            self.inventariosXCategoria.pagination.current_page = self.inventariosXCategoria.pagination.current_page - 1
+            self.inventariosXCategoria.pagination.current_page = self.inventariosXCategoria.pagination.current_page > 1?self.inventariosXCategoria.pagination.current_page:1;
+             self.parametrosPaginacion.paginaActual = self.parametrosPaginacion.paginaActual > 1?self.parametrosPaginacion.paginaActual - 12:0 
+            self.update()
+            __ListaArticulosXCategorias()
+        }    	
+    }  
 }
+
+
 
 /**
 *  boton siguiente de la pantalla de categorias or articulos
 **/    
 __BotonSiguiente(){
-    if(self.categoria.id == 0){//cuando esta usando la pantalla de categorias
-        if(self.categorias.pagination.current_page <  self.categorias.pagination.last_page){
-        self.categorias.pagination.current_page = self.categorias.pagination.current_page + 1
-        self.parametrosPaginacion.paginaActual += 12
-        self.update()
-        __ListaCategorias()
+	if (self.mostrarFacturasMesas){
+        if(self.facturasXMesa.pagination.current_page <  self.facturasXMesa.pagination.last_page){
+	        self.facturasXMesa.pagination.current_page = self.facturasXMesa.pagination.current_page + 1
+	        self.parametrosPaginacion.paginaActual += 12
+	        self.update()
+	       	__ListaFacturasXMesas()
         }
-    }else{ //cuando esta usando la pantalla de articulos
-        if(self.inventariosXCategoria.pagination.current_page <  self.inventariosXCategoria.pagination.last_page){
-        self.inventariosXCategoria.pagination.current_page = self.inventariosXCategoria.pagination.current_page + 1
-         self.parametrosPaginacion.paginaActual += 12
-        self.update()
-        __ListaArticulosXCategorias()
-
-        }
+    }else {
+	    if(self.categoria.id == 0){//cuando esta usando la pantalla de categorias
+	        if(self.categorias.pagination.current_page <  self.categorias.pagination.last_page){
+	        self.categorias.pagination.current_page = self.categorias.pagination.current_page + 1
+	        self.parametrosPaginacion.paginaActual += 12
+	        self.update()
+	        __ListaCategorias()
+	        }
+	    }else{ //cuando esta usando la pantalla de articulos
+	        if(self.inventariosXCategoria.pagination.current_page <  self.inventariosXCategoria.pagination.last_page){
+	        	self.inventariosXCategoria.pagination.current_page = self.inventariosXCategoria.pagination.current_page + 1
+	        	self.parametrosPaginacion.paginaActual += 12
+	        	self.update()
+	        	__ListaArticulosXCategorias()
+	        }
+	    }
     }
-            
 }
 
 /**
@@ -2202,38 +2217,32 @@ function __InitDatos(){
     self.informacion_tabla_articulo    = []
     self.informacion_tabla_clientes    = []
     self.idiomaDataTable               = {}
-    	self.parametrosPaginacion = {
-            id:null,
-            paginaActual:0,
-            cantidadPorPagina:10,
-            total:0
+    self.categorias = {
+        data:[],
+        pagination:{
+            total:0,
+            current_page:0,
+            per_page:0,
+            last_page:0,
+            from:0,
+            to:0
         }
-        self.categorias = {
-            data:[],
-            pagination:{
-                total:0,
-                current_page:0,
-                per_page:0,
-                last_page:0,
-                from:0,
-                to:0
-            }
+    }
+    self.categoria = {
+        id:0,
+        descripcion:""
+    }
+    self.inventariosXCategoria = {
+        data:[],
+        pagination:{
+            total:0,
+            current_page:0,
+            per_page:0,
+            last_page:0,
+            from:0,
+            to:0
         }
-        self.categoria = {
-            id:0,
-            descripcion:""
-        }
-        self.inventariosXCategoria = {
-            data:[],
-            pagination:{
-                total:0,
-                current_page:0,
-                per_page:0,
-                last_page:0,
-                from:0,
-                to:0
-            }
-        }
+    }
     //totales
     self.totalComprobante     = 0;
     self.subTotalGeneral  =0;
@@ -3318,16 +3327,36 @@ __PantallaMesas(){
 	__ListaMesas()
 }
 
+__BotonAnteriorMesas(){
+	  self.mesas.pagination.current_page = self.mesas.pagination.current_page - 1
+	  self.mesas.pagination.current_page = self.mesas.pagination.current_page > 1?self.mesas.pagination.current_page:1;
+	  self.parametrosPaginacion.paginaActual = self.parametrosPaginacion.paginaActual > 1?self.parametrosPaginacion.paginaActual - 12:0 
+	  self.update()
+	  __ListaMesas()
+}
+ 
+__BotonSiguienteMesas(){
+    console.log("-------__BotonSiguienteMesas--------------------- " + self.mesas.pagination.current_page);
+    console.log("-------__BotonSiguienteMesas-------last-------------- " + self.mesas.pagination.last_page);
+	if(self.mesas.pagination.current_page <  self.mesas.pagination.last_page){
+		self.mesas.pagination.current_page = self.mesas.pagination.current_page + 1
+	    self.parametrosPaginacion.paginaActual += 12
+	    self.update()
+	    __ListaMesas() 
+	}
+}
+
 /**
 *  Lista las mesas
 **/
 function __ListaMesas(){
 	__InitDatos();
 	self.mesas.data = []
-   
+    console.log("---------------------------- " + self.mesas.pagination.current_page);
+	console.log("---------------------------- " + self.mesas.pagination.total);
 	//Primera vez 
     if( self.mesas.pagination.current_page == 0){
-        self.facturasXMesa.pagination.current_page = 0    
+        self.mesas.pagination.current_page = 0    
         self.parametrosPaginacion.cantidadPorPagina = 12
         self.parametrosPaginacion.paginaActual = 0
         self.parametrosPaginacion.total = 0
@@ -3343,6 +3372,7 @@ function __ListaMesas(){
         method:"POST",
         success: function (result) {
             if(result.aaData.length > 0){
+               console.log("---------------------------- " + result.recordsTotal);
                console.log(result.aaData)
                self.mesas.data = result.aaData
                self.mesas.pagination.total = result.recordsTotal
@@ -3421,9 +3451,5 @@ function __ListaFacturasXMesas(){
         }
     });
 }
-function getCantidadDePaginas(total){
-    return total / 10;
-}
-
 </script>
 </venta-restaurante>
