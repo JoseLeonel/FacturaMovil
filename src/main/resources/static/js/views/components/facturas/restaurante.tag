@@ -2135,9 +2135,6 @@ function __InitDatos(){
     self.detail                = []
     self.mensajesBackEnd       = []
     self.error                 = false
-    self.comboEstados          = []
-    self.comboCondicionPagos   = []
-    self.comboTipoDocumentos   = []
     self.descripcionArticulo = ""
     $('.cambioNombreFactura').val(null)
     self.factura                = {
@@ -2237,16 +2234,13 @@ function __InitDatos(){
                 to:0
             }
         }
-    self.urlImagenNavegador   = '/dist/img/navegador.png';
-    self.urlImagenLector      = '/dist/img/codigo_barra.png';
-    self.urlImagenBuscador    = '/dist/img/buscador.png';
     //totales
     self.totalComprobante     = 0;
     self.subTotalGeneral  =0;
     self.totalComprobante =0;
     self.totalDescuentos  =0;
     self.totalImpuesto    =0;
-    self.totalImpuestoServ=0;    
+    self.totalImpuestoServ =0;		  
     self.totalCambioPagar =0;
     self.update()    
 }
@@ -3164,6 +3158,7 @@ function __comboCondicionPago(){
 * cargar los tipos de Documento de la factura
 **/
 function __ComboTipoDocumentos(){
+	console.log("----------------------------- " + self.comboTipoDocumentos);
     self.comboTipoDocumentos = []
     self.update()
     self.comboTipoDocumentos.push({
@@ -3174,6 +3169,7 @@ function __ComboTipoDocumentos(){
          estado:"01",
         descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
     })
+	console.log("----------------------------- " + self.comboTipoDocumentos);
     self.update()
 }
 /**
