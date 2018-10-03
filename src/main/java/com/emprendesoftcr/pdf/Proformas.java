@@ -66,34 +66,34 @@ public class Proformas {
 	}
 
 	private void addLogo(PdfContentByte cb, String dir, Document document, String logo) throws IOException, DocumentException {
-	// Cuadro 1
-			Image img = null;
-			if(logo !=null) {
-				if(!logo.equals(Constantes.EMPTY)) {
-					img = Image.getInstance(dir + "/data/logos/" + logo);	
-				}
-					
+		// Cuadro 1
+		Image img = null;
+		if(logo !=null) {
+			if(!logo.equals(Constantes.EMPTY)) {
+				img = Image.getInstance(dir + "/data/logos/" + logo);	
 			}
-			
-			cb.setColorStroke(bColor);
-			cb.setColorFill(BaseColor.WHITE);
-			cb.setLineWidth(1f);
-			cb.roundRectangle(10, PageSize.TABLOID.rotate().getHeight() - 100, 640, 90, 5);
-			cb.fillStroke();
-			// Fondo
-			cb.setColorFill(bColor);
-			cb.roundRectangle(10, PageSize.TABLOID.rotate().getHeight() - 100, 127, 90, 5);
-			cb.fill();
-			cb.setColorFill(BaseColor.WHITE);
-			//
-
-			if(img !=null) {
-				img.setAbsolutePosition(450, PageSize.TABLOID.rotate().getHeight() - 90);
-				img.setAlignment(Image.ALIGN_RIGHT);
-				img.scaleAbsolute(160, 85);
-				cb.addImage(img);
 				
-			}
+		}
+		
+		cb.setColorStroke(bColor);
+		cb.setColorFill(BaseColor.WHITE);
+		cb.setLineWidth(1f);
+		cb.roundRectangle(10, PageSize.TABLOID.rotate().getHeight() - 100, 640, 100, 5);
+		cb.fillStroke();
+		// Fondo
+		cb.setColorFill(bColor);
+		cb.roundRectangle(10, PageSize.TABLOID.rotate().getHeight() - 100, 127, 100, 5);
+		cb.fill();
+		cb.setColorFill(BaseColor.WHITE);
+		//
+
+		if(img !=null) {
+			img.setAbsolutePosition(450, PageSize.TABLOID.rotate().getHeight() - 100);
+			img.setAlignment(Image.ALIGN_RIGHT);
+			img.scaleAbsolute(200,120);
+			cb.addImage(img);
+			
+		}
 	}
 
 	private void addEmisor(PdfContentByte cb, Font font14, Font font12, FacturaElectronica facturaElectronica, String dir) throws MalformedURLException, IOException, DocumentException {

@@ -248,7 +248,7 @@
                 </div>
                 <section class="cabecera-derecha">
 				    <!--right sidebar-->
-                     <div class="row">
+                     <div class="row ">
                             <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
                     <aside class="left-sidebar">
                             <!--Booking details-->
@@ -298,11 +298,11 @@
                     <div class="row">
                         <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                             <label  >{$.i18n.prop("articulo.codigo")}  </label>
-                            <input type="text" class="form-control" id="codigoArt" name="codigoArt"  onkeypress={__ConsultarProductosCod} >
+                            <input type="text" class="form-control codigoArt" id="codigoArt" name="codigoArt"  onkeypress={__ConsultarProductosCod} >
                         </div>
                         <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                             <label  >{$.i18n.prop("articulo.descripcion")}</label>
-                            <input type="text" class="form-control "   id="descArticulo" name="descArticulo" onkeypress={__ConsultarProductosDesc}>
+                            <input type="text" class="form-control descArticulo "   id="descArticulo" name="descArticulo" onkeypress={__ConsultarProductosDesc}>
                         </div>
                     </div> 
                 </form>    
@@ -436,7 +436,7 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                <button type="button" class="btn-dark-gray btn-back pull-left" >{$.i18n.prop("btn.volver")}</button>
             </div>
         </div>
     </div>
@@ -613,6 +613,7 @@
        __ListaDeClientes()
       // __ListaArticulosUsoInterno()
        __ListaDeVendedores()
+       __agregarArticulos()
        _Empresa()
         $('.codigo').select()
         $(".codigo").focus()
@@ -996,6 +997,10 @@ __CalculaCambioAEntregarKeyPress(e){
  __ListaDecodigos(){
      self.mostrarListadoArticulos = true
      self.update()
+     $('.descArticulo').val(null)
+     $('.codigoArt').val(null)
+    $(".tableListarArticulos").dataTable().fnClearTable();
+    $(".tableListarArticulos").DataTable().destroy();
    $('#modalInventario').modal('show')   
  }
 /**
@@ -1595,6 +1600,7 @@ function __sumarMasArticulo(codigo,precio){
 **/
 __agregarArticuloBotonAgregar(){
    __buscarcodigo($( "#codigo" ).val(),1,0);
+   return
 }
 
 
@@ -1640,7 +1646,7 @@ function __ListaDeArticulosPorDescripcion(){
                 self.update()
                 loadListar(".tableListarArticulos",idioma_espanol,self.informacion_tabla_articulo,self.articulos.data)
                 agregarInputsCombos_Articulo()
-                __agregarArticulos()
+              //  __agregarArticulos()
                 ActivarEventoFiltro(".tableListarArticulos")
              
                 
@@ -1771,17 +1777,17 @@ function __buscarcodigoPrecio(idArticulo,cantidad,precio){
                     self.articulo =null
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         //Articulo no puede agregarse si no hay en el inventario
-                        if(modeloTabla.contable == "Si"){
-                            if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
-                                mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
-                                return
-                            }
-                            if(modeloTabla.cantidad < cantidad ){
-                                mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
-                                return
-                            }
+                     //   if(modeloTabla.contable == "Si"){
+                     //       if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
+                     //           mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
+                     //           return
+                     //       }
+                     //       if(modeloTabla.cantidad < cantidad ){
+                     //           mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
+                     //           return
+                     //       }
 
-                        }
+                      //  }
                         self.articulo  = modeloTabla
                         self.update()
                         if(self.articulo !=null){
@@ -1844,16 +1850,16 @@ function __buscarcodigo(idArticulo,cantidad,precio){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         //Articulo no puede agregarse si no hay en el inventario
-                        if(modeloTabla.contable == "Si"){
-                            if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
-                                mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
-                                return
-                            }
-                            if(modeloTabla.cantidad < cantidad ){
-                                mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
-                                return
-                            }
-                        }
+                     //   if(modeloTabla.contable == "Si"){
+                     //       if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
+                     //           mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
+                     //           return
+                     //       }
+                     //       if(modeloTabla.cantidad < cantidad ){
+                     //           mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
+                     //           return
+                     //       }
+                     //   }
                         self.articulo  = modeloTabla
                         self.articulo.precioUnitario = precio > 0 ?precio:self.articulo.precioUnitario
                         self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico

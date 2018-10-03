@@ -1,6 +1,5 @@
 package com.emprendesoftcr.web.Controller;
 
-
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,8 +39,7 @@ import com.emprendesoftcr.web.propertyEditor.UsuarioPropertyEditor;
 import com.google.common.base.Function;
 
 /**
- * Abrir caja para facturar
- * UsuarioCajasController.
+ * Abrir caja para facturar UsuarioCajasController.
  * @author jose.
  * @since 11 jun. 2018
  */
@@ -75,7 +73,7 @@ public class UsuarioCajasController {
 	UsuarioCajaPropertyEditor																	usuarioCajaPropertyEditor;
 
 	@Autowired
-	UsuarioPropertyEditor																	usuarioPropertyEditor;
+	UsuarioPropertyEditor																			usuarioPropertyEditor;
 
 	@Autowired
 	private StringPropertyEditor															stringPropertyEditor;
@@ -99,6 +97,11 @@ public class UsuarioCajasController {
 	public String abrirCajas(ModelMap model) {
 		return "views/caja/abrirCajas";
 	}
+	
+	@RequestMapping(value = "/ListarCajasInactivas", method = RequestMethod.GET)
+	public String liasCajas(ModelMap model) {
+		return "views/caja/ListarCajasInactivas";
+	}
 
 	/**
 	 * Lista de las cajas creadas por usuario
@@ -112,16 +115,29 @@ public class UsuarioCajasController {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "UsuarioCaja");
-	
-				
+
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		JqGridFilter dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
-		delimitadores.addFiltro(dataTableFilter);	
-		
-		dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
-				
+			dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
+			delimitadores.addFiltro(dataTableFilter);
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_CAJAS_ABIERTAS_CERRADAS);
+	}
 	
+	@RequestMapping(value = "/ListarUsuariosCajasCerradasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarUsuariosCajasCerradasAjax(HttpServletRequest request, HttpServletResponse response) {
+
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "UsuarioCaja");
+
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		JqGridFilter dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+			dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_INACTIVO.toString() + "'", "=");
+			delimitadores.addFiltro(dataTableFilter);
+
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_CAJAS_ABIERTAS_CERRADAS);
 	}
 
@@ -158,7 +174,7 @@ public class UsuarioCajasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
+
 	/**
 	 * Cerrar la cja
 	 * @param request
@@ -176,12 +192,11 @@ public class UsuarioCajasController {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			UsuarioCaja usuarioCajaBd = usuarioCajaBo.buscar(usuarioCaja.getId());
-			
 
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-		
+
 			usuarioCajaBo.cierreCaja(usuarioCajaBd);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuarioCaja.cierre.correctamente", usuarioCajaBd);
 
@@ -212,7 +227,6 @@ public class UsuarioCajasController {
 	}
 
 	/**
-	 * 
 	 * RESPONSES.
 	 * @author jose.
 	 * @since 11 jun. 2018

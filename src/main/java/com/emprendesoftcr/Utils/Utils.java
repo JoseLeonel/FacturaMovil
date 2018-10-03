@@ -1200,7 +1200,7 @@ public final class Utils {
 	}
 	
 	public static String getFechaGeneraReporte(Date date) {
-		DateFormat fechaCompleta = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		DateFormat fechaCompleta = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss a");
 		return fechaCompleta.format(date);
 	}
 

@@ -16,6 +16,9 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
+
 /**
  * Asociacion de la factura realizada en la caja
  * UsuarioCajaFactura.
@@ -67,6 +70,22 @@ public class UsuarioCajaFactura implements Serializable {
 		this.updated_at = updated_at;
 	}
 
+	public String getUpdated_atSTR() {
+		if(this.updated_at !=null) {
+			return Utils.getFechaGeneraReporte(this.updated_at);	
+		}
+		return Constantes.EMPTY;
+		
+		
+	}
+	public String getCreated_atSTR() {
+		if(this.created_at !=null) {
+			return Utils.getFechaGeneraReporte(this.created_at);	
+		}
+		return Constantes.EMPTY;
+		
+		
+	}
 
 
 	

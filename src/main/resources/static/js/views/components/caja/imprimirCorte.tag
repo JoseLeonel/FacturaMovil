@@ -22,7 +22,6 @@
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalEfectivo")}: </strong>₡{usuarioCaja.totalEfectivo.toLocaleString('de-DE')}<br></div>                                                 
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalTarjeta")} : </strong>₡{usuarioCaja.totalTarjeta.toLocaleString('de-DE')}<br></div>                                                 
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalBanco")}    : </strong>₡{usuarioCaja.totalBanco.toLocaleString('de-DE')}<br></div>                                                 
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalCredito")} : </strong>₡{usuarioCaja.totalCredito.toLocaleString('de-DE')}<br></div>                                                 
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalAbono")} : </strong>₡{usuarioCaja.totalAbono.toLocaleString('de-DE')}<br></div>                                                 
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalNeto")}    : </strong>₡{usuarioCaja.totalNeto.toLocaleString('de-DE')}<br></div>                                                 
                         <br>

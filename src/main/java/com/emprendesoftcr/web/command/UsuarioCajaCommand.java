@@ -2,6 +2,7 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
@@ -30,6 +31,11 @@ public class UsuarioCajaCommand {
 	private Date		created_at;
 
 	private Date		updated_at;
+	
+
+	private String		created_atSTR;
+
+	private String		updated_atSTR;
 
 	private String	estado;
 
@@ -52,12 +58,33 @@ public class UsuarioCajaCommand {
 		this.updated_at = usuarioCaja.getUpdated_at();
 		this.estado = usuarioCaja.getEstado();
 		this.totalAbono = usuarioCaja.getTotalAbono();
-
+		this.created_atSTR = Utils.getFechaGeneraReporte(usuarioCaja.getCreated_at());
+    this.updated_atSTR = Utils.getFechaGeneraReporte(usuarioCaja.getUpdated_at());
 	}
 
 	
 
 	
+	
+	public String getCreated_atSTR() {
+		return created_atSTR;
+	}
+
+	
+	public void setCreated_atSTR(String created_atSTR) {
+		this.created_atSTR = created_atSTR;
+	}
+
+	
+	public String getUpdated_atSTR() {
+		return updated_atSTR;
+	}
+
+	
+	public void setUpdated_atSTR(String updated_atSTR) {
+		this.updated_atSTR = updated_atSTR;
+	}
+
 	public Long getId() {
 		return id;
 	}

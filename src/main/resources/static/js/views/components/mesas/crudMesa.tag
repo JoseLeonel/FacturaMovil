@@ -14,18 +14,18 @@
                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th class="table-header" >{$.i18n.prop("mesa.descripcion")}   </th>
-                                <th class="table-header" >{$.i18n.prop("mesa.created_at")}    </th>
-                                <th class="table-header" >{$.i18n.prop("mesa.updated_at")}    </th>
-                                <th class="table-header" >{$.i18n.prop("mesa.estado")}        </th>
-                                <th class="table-header" > {$.i18n.prop("listado.acciones")}   </th>
+                                <th class="table-header" >{$.i18n.prop("mesa.descripcion")}       </th>
+                                <th class="table-header" >{$.i18n.prop("mesa.impuestoServicio")}  </th>
+                                <th class="table-header" >{$.i18n.prop("mesa.prioridad")}         </th>
+                                <th class="table-header" >{$.i18n.prop("mesa.estado")}            </th>
+                                <th class="table-header" > {$.i18n.prop("listado.acciones")}      </th>
                             </tr>
                         </thead>
                         <tfoot style="display: table-header-group;">
                             <tr>
                                 <th>{$.i18n.prop("mesa.descripcion")}   </th>
-                                <th>{$.i18n.prop("mesa.created_at")}    </th>
-                                <th>{$.i18n.prop("mesa.updated_at")}    </th>
+                                <th>{$.i18n.prop("mesa.impuestoServicio")}  </th>
+                                <th>{$.i18n.prop("mesa.prioridad")}         </th>
                                 <th>{$.i18n.prop("mesa.estado")}        </th>
                                 <th>  </th>
                             </tr>
@@ -38,8 +38,8 @@
 
 <div  >
     <div class="row center " show ={mostrarFormulario} >
-    <div class=" col-lg-4 "></div>
-        <div class="col-md-12 col-lg-4 col-sx-12 col-sm-12">
+    <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 "></div>
+        <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
             <div class="box box-solid box-primary">
                 <div class="box-header with-border">
                     <h1 class="box-title"><i class="fa fa-edit"></i>&nbsp {mesa.id > 0 ? $.i18n.prop("mesa.modificar")   :$.i18n.prop("mesa.agregar")}     </h1>
@@ -56,6 +56,21 @@
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label  >{$.i18n.prop("mesa.descripcion")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" class="form-control descripcion" placeHolder ="{$.i18n.prop("mesa.descripcion")}" id="descripcion" name="descripcion" value="{mesa.descripcion}"  >
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                <label >{$.i18n.prop("mesa.impuestoServicio")}</label>
+                                <select  class="form-control" id="impuestoServicio" name="impuestoServicio" >
+                                    <option  each={impuestoServicios}  value="{codigo}" selected="{mesa.impuestoServicio ==codigo?true:false}" >{descripcion}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                <label  >{$.i18n.prop("mesa.prioridad")}  <span class="requeridoDato">*</span></label>
+                                <input type="number" class="form-control prioridad"  id="prioridad" name="prioridad" value="{mesa.prioridad}"  >
 
                             </div>
                         </div>
@@ -84,7 +99,7 @@
                 </div>
             </div>   
         </div>
-        <div class="col-lg-4 "></div>
+        
     </div>
 </div>
  
@@ -145,6 +160,7 @@
     self.empresas                  = {aaData:[]}
     self.mostrarListado            = true 
     self.botonModificar            = false
+    self.impuestoServicios         = []
     self.botonAgregar              = false
     self.mesa = {
         id:null,
@@ -162,6 +178,7 @@ self.on('mount',function(){
     __MantenimientoAgregar()
     __Eventos()
     __ComboEstados()
+    __ComboImpuestoServicio()
     Limpiar()
     window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
@@ -220,6 +237,22 @@ function __ComboEstados(){
      self.update();
 
 }
+
+function __ComboImpuestoServicio(){
+    self.impuestoServicios         = []
+    self.impuestoServicios.push({
+        codigo: 0,
+        descripcion:$.i18n.prop("boolean.no")
+     });
+    self.impuestoServicios.push({
+        codigo: 1,
+        descripcion: $.i18n.prop("boolean.si")
+     });
+     self.update();
+
+}
+
+
 /**
 *  Activar Eventos
 **/
@@ -454,16 +487,12 @@ function __listado(){
 function __InformacionDataTable(){
     self.informacion_tabla = [ 
                                {'data' :'descripcion'    ,"name":"descripcion"     ,"title" : $.i18n.prop("mesa.descripcion") ,"autoWidth" :true },
-                               {'data' : 'created_at'        ,"name":"created_at"  ,"title" : $.i18n.prop("mesa.created_at")  ,"autoWidth" :false,
-                                    "render":function(created_at,type, row){
-                                        return __displayDate_detail(created_at);
+                               {'data' : 'impuestoServicio'        ,"name":"impuestoServicio"  ,"title" : $.i18n.prop("mesa.impuestoServicio")  ,"autoWidth" :false,
+                                    "render":function(impuestoServicio,type, row){
+                                        return impuestoServicio ==0?$.i18n.prop("boolean.no"):$.i18n.prop("boolean.si");
                                     }
                                 },
-                                {'data' : 'updated_at'        ,"name":"updated_at" ,"title" : $.i18n.prop("mesa.updated_at")  ,"autoWidth" :false,
-                                    "render":function(updated_at,type, row){
-                                        return __displayDate_detail(updated_at);
-                                    }
-                                },
+                                {'data' : 'prioridad'    ,"name":"prioridad"       ,"title" : $.i18n.prop("mesa.prioridad")  ,"autoWidth" :false },
                                {'data' : 'estado'        ,"name":"estado"          ,"title" : $.i18n.prop("mesa.estado")      ,"autoWidth" :false},
                                {'data' : 'id'            ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
@@ -473,6 +502,9 @@ function __InformacionDataTable(){
     self.update();
    
 }
+
+
+
 /**
 *Formato de la fecha con hora
 **/

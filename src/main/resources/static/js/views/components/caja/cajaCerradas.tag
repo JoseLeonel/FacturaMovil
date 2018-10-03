@@ -1,8 +1,8 @@
-<abrir-caja>
+<cerrada-caja>
     <!-- Titulos -->
     <div  class="row titulo-encabezado"  >
         <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <h1 ><i class="fa fa-unlock"></i>&nbsp {$.i18n.prop("usuarioCaja.titulo")}  </h1>
+            <h1 ><i class="fa fa-lock"></i>&nbsp {$.i18n.prop("usuarioCaja.titulo.cajas.cerradas")}  </h1>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"></div>
     </div>
@@ -141,15 +141,11 @@
 
                         </div>
                         <div class="row">
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalCredito")}  </label>
-                                <input type="text" class="form-control "  value="₡ {usuarioCaja.totalCredito.toLocaleString('de-DE')}" readonly >
-                            </div>
-                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalAbono")}  </label>
                                 <input type="text" class="form-control "  value="₡ {usuarioCaja.totalAbono.toLocaleString('de-DE')}" readonly >
                             </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-6 col-lg-4">
+                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalNeto")}  </label>
                                 <input type="text" class="form-control "  value="₡ {usuarioCaja.totalNeto.toLocaleString('de-DE')}" readonly >
                             </div>
@@ -236,8 +232,6 @@ self.on('mount',function(){
     agregarInputsCombos()
     ActivarEventoFiltro('.tableListar')
     __listado()
-    includeActions('.dataTables_wrapper','.dataTables_length')
-    __MantenimientoAgregar()
     __Eventos()
     __listadoCajasActivas()
    
@@ -307,39 +301,15 @@ function __Eventos(){
 **/
 __regresarAlListado(){
    
-                self.mostrarListado     = true;
-                self.botonAgregar       = false;
-                self.botonModificar     = false;
-                self.mostrarFormulario  = false 
-                self.mostrarVerDetalle  = false
-                self.update()
-                __listado();
+    self.mostrarListado     = true;
+    self.botonAgregar       = false;
+    self.botonModificar     = false;
+    self.mostrarFormulario  = false 
+    self.mostrarVerDetalle  = false
+    self.update()
+    __listado();
 
    
-}
-// Mostrar formulario de mantenimiento Agregar
-function __MantenimientoAgregar(){
-      //Inicializar el Formulario
-    $('.dataTables_wrapper').on('click','.btn-agregar',function(e){
-        self.caja    = {};                // modelo o domain   
-        self.usuarioCaja = {
-            id:null,
-            totalFondoInicial:0
-        }
-        
-        //desahabilita  listado 
-        self.mostrarListado   = false;
-        self.mostrarFormulario  = true 
-        //desahabilita boton modificar
-        self.botonModificar   = false;
-        // habilita el formulario
-        self.botonAgregar     = true;
-        self.update();
-        //Inicializar el Formulario
-        $(".errorServerSideJgrid").remove();
-        $("#formulario").validate(reglasDeValidacion());
-   
-    })
 }
 
 /**
@@ -376,71 +346,6 @@ function __consultar(){
         }
     });
 }
-/**
-*   Agregar 
-**/
-__agregar(){
-   
-    if ($("#formulario").valid()) {
-        // Permite obtener todos los valores de los elementos del form del jsp
-        var formulario = $("#formulario").serialize();
-       
-          
-                $.ajax({
-                    type : "POST",
-                    dataType : "json",
-                    data : formulario,
-                    url : 'AgregarUsuarioCajaAjax.do',
-                    success : function(data) {
-                        console.log(data);
-                        if (data.status != 200) {
-                        	serverMessageJson(data);
-                            if (data.message != null && data.message.length > 0) {
-                            	swal({
-      	                           title: '',
-      	                           text: data.message,
-      	                           type: 'error',
-      	                           showCancelButton: false,
-      	                           confirmButtonText: $.i18n.prop("btn.aceptar"),
-      	                         })
-                            }
-                            
-                        } else {
-                        	serverMessageJson(data);
-                               swal({
-	                           title: '',
-	                           text: data.message,
-	                           type: 'success',
-	                           showCancelButton: false,
-	                           confirmButtonText: $.i18n.prop("btn.aceptar"),
-	                         })
-	                        $("#formulario").validate(reglasDeValidacion());
-                            $(".errorServerSideJgrid").remove();
-                            $("#descripcion").val(null);
-                            $("#terminal").val(null);
-                              __Eventos()
-                        }
-                    },
-                    error : function(xhr, status) {
-                        console.log(xhr);
-                        mensajeErrorServidor(xhr, status);
-                    }
-                });
-          
-     
-        
-    }
-}
-
-/**
-** Modificar la Empresa
-**/
-__Modificar(){
-    self.error = false;
-    self.exito = false;
-    self.update();
-    __modificarRegistro("#formulario",$.i18n.prop("caja.mensaje.alert.modificar"),'ModificarCajaAjax.do','ListarcajasAjax.do','#tableListar')
-}
 
 /**
 *  Mostrar listado datatable
@@ -448,16 +353,14 @@ __Modificar(){
 function __listado(){
     $("#tableListar").dataTable().fnClearTable(); 
     $.ajax({
-        url: "ListarUsuariosCajasAjax.do",
+        url: "ListarUsuariosCajasCerradasAjax.do",
         datatype: "json",
         method:"GET",
         success: function (result) {
              if(result.aaData.length > 0){
                 __InformacionDataTable();
                 loadListar(".tableListar",idioma_espanol,self.informacion_tabla,result.aaData)
-                includeActions('.dataTables_wrapper','.dataTables_length')
                 agregarInputsCombos();
-                __MantenimientoAgregar()
                     //Activar filtros
                 ActivarEventoFiltro(".tableListar")
                 __VerDetalle()
@@ -503,11 +406,9 @@ function __InformacionDataTable(){
                                 },
                                {'data' : 'totalNeto'     ,"name":"totalNeto"        ,"title" : $.i18n.prop("usuarioCaja.totalNeto")      ,"autoWidth" :false,
                                     "render":function(totalNeto,type, row){
-                                        return     formatoDecimales(__valorNumerico(totalNeto));
-                                        
+                                        return  formatoDecimales(__valorNumerico(totalNeto));
                                     }
                                },
-                               
                                {'data' : 'estado'        ,"name":"estado"          ,"title" : $.i18n.prop("usuarioCaja.estado")      ,"autoWidth" :false},
                                {'data' : 'id'            ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
@@ -679,7 +580,7 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 8    ){
+        if ( $(this).index() != 7    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
  
@@ -687,4 +588,4 @@ function agregarInputsCombos(){
 
 }
 </script>
-</abrir-caja>
+</cerrada-caja>

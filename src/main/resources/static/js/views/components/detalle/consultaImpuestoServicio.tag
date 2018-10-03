@@ -66,7 +66,7 @@
                         
                             <div class="row" >        
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
-                                    <h2 class="pull-right"> Total Impuesto Servicio :  {totalImpuestoServicio.toFixed(2)} </h2>
+                                    <h2 class="pull-right">Total Imp.Serv(10%) :  {totalImpuestoServicio} </h2>
                                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
@@ -577,6 +577,7 @@ function sumar(){
           
 
     })
+    self.totalImpuestoServicio = formatoDecimales(__valorNumerico(self.totalImpuestoServicio))
     self.totalImpuestos  = redondearDecimales(self.totalImpuestos,2)
     self.total           = redondearDecimales(self.total,2)
     self.totalDescuentos = redondearDecimales(self.totalDescuentos,2)

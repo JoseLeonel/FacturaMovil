@@ -205,6 +205,8 @@ public class MesasController {
 				mesaBD.setDescripcion(mesa.getDescripcion());
 				mesaBD.setUpdated_at(new Date());
 				mesaBD.setEstado(mesa.getEstado());
+				mesaBD.setPrioridad(mesa.getPrioridad());
+				mesaBD.setImpuestoServicio(mesa.getImpuestoServicio());
 				mesaBo.modificar(mesaBD);
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mesa.modificado.correctamente", mesaBD);
 			}

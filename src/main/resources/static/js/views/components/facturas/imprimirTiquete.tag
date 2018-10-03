@@ -179,17 +179,17 @@
         text-align: left;
     }
     .ticket > img
-    {
-        max-width: inherit;
-        width: inherit;
-    }
-    @page
-    {
-        margin: 0;
-    }
-    .zona-impresion
-    {
-        display: flex;
+    {cerrada-caja
+     cerrada-caja
+     cerrada-caja
+    }cerrada-caja
+    @cerrada-caja
+    {cerrada-caja
+     cerrada-caja
+    }cerrada-caja
+    .cerrada-caja
+    {cerrada-caja
+     cerrada-caja
         flex-wrap: wrap;
         width: 80%;
     }

@@ -673,7 +673,7 @@
         width:100%;
         margin :auto;
     }
-    .cabecera-izquierda {
+    .cabecera-izquierda {200
        margin-right:5%;
        width:85%;
     }
@@ -681,13 +681,13 @@
     .cabecera-derecha {
         width:25%;
     }
-    .contenedor-detalle   {
+    .contenedor-detalle  200
         display:flex;
         width:100%;
         margin :auto;
     }
 
-    .booking-details h1 {
+    .booking-details h1 {200
         font-size: 1.5em;
         color: #666;
         text-shadow: none;
