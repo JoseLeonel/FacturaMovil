@@ -4,11 +4,8 @@ import java.util.Date;
 
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
-<<<<<<< HEAD
 import com.emprendesoftcr.modelo.Mesa;
-=======
 import com.emprendesoftcr.modelo.Factura;
->>>>>>> master
 import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.web.jsonDeserializer.ClienteDeserializer;
 import com.emprendesoftcr.web.jsonDeserializer.VendedorDeserializer;

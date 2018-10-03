@@ -264,12 +264,9 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
 			factura.setEstado(facturaCommand.getEstado());
 
-<<<<<<< HEAD
 			factura.setMesa(facturaCommand.getMesa()); 
 
 
-=======
->>>>>>> master
 			if (factura.getId() == Constantes.ZEROS_LONG) {
 				factura.setCreated_at(new Date());
 			}
@@ -415,7 +412,6 @@ public class FacturaBoImpl implements FacturaBo {
 
 				}
 			}
-<<<<<<< HEAD
 			
 			//Se agrega un detalle para el costo por servicio de restaurante y se afecta el monto total de la factura
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) 
@@ -472,23 +468,6 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setTotalImpuesto(Utils.roundFactura(totalImpuesto, 5));
 			factura.setTotalComprobante(Utils.roundFactura(totalComprobante, 5));
 			factura.setTotalImpuestoServicio(Utils.roundFactura(subTotal * 0.10,5));
-=======
-			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-				totalVentaNeta = totalVenta + totalDescuentos;
-				// Resumen de la Factura
-				factura.setTotalMercanciasGravadas(Utils.roundFactura(totalMercanciasGravadas, 5));
-				factura.setTotalMercanciasExentas(Utils.roundFactura(totalMercanciasExentas, 5));
-				factura.setTotalServExentos(Utils.roundFactura(totalServExentos, 5));
-				factura.setTotalServGravados(Utils.roundFactura(totalServGravados, 5));
-				factura.setTotalGravado(Utils.roundFactura(totalGravado, 5));
-				factura.setTotalExento(Utils.roundFactura(totalExento, 5));
-				factura.setTotalVenta(Utils.roundFactura(totalVenta, 5));
-				factura.setTotalVentaNeta(Utils.roundFactura(totalVentaNeta, 5));
-				factura.setTotalDescuentos(Utils.roundFactura(totalDescuentos, 5));
-				factura.setTotalImpuesto(Utils.roundFactura(totalImpuesto, 5));
-				factura.setTotalComprobante(Utils.roundFactura(totalComprobante, 5));
-			}
->>>>>>> master
 			// Crear Credito del cliente
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
 				if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
