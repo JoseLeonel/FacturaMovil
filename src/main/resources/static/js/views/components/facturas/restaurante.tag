@@ -3167,7 +3167,6 @@ function __comboCondicionPago(){
 * cargar los tipos de Documento de la factura
 **/
 function __ComboTipoDocumentos(){
-	console.log("----------------------------- " + self.comboTipoDocumentos);
     self.comboTipoDocumentos = []
     self.update()
     self.comboTipoDocumentos.push({
@@ -3178,7 +3177,6 @@ function __ComboTipoDocumentos(){
          estado:"01",
         descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
     })
-	console.log("----------------------------- " + self.comboTipoDocumentos);
     self.update()
 }
 /**
@@ -3336,8 +3334,6 @@ __BotonAnteriorMesas(){
 }
  
 __BotonSiguienteMesas(){
-    console.log("-------__BotonSiguienteMesas--------------------- " + self.mesas.pagination.current_page);
-    console.log("-------__BotonSiguienteMesas-------last-------------- " + self.mesas.pagination.last_page);
 	if(self.mesas.pagination.current_page <  self.mesas.pagination.last_page){
 		self.mesas.pagination.current_page = self.mesas.pagination.current_page + 1
 	    self.parametrosPaginacion.paginaActual += 12
@@ -3352,8 +3348,6 @@ __BotonSiguienteMesas(){
 function __ListaMesas(){
 	__InitDatos();
 	self.mesas.data = []
-    console.log("---------------------------- " + self.mesas.pagination.current_page);
-	console.log("---------------------------- " + self.mesas.pagination.total);
 	//Primera vez 
     if( self.mesas.pagination.current_page == 0){
         self.mesas.pagination.current_page = 0    
@@ -3372,8 +3366,6 @@ function __ListaMesas(){
         method:"POST",
         success: function (result) {
             if(result.aaData.length > 0){
-               console.log("---------------------------- " + result.recordsTotal);
-               console.log(result.aaData)
                self.mesas.data = result.aaData
                self.mesas.pagination.total = result.recordsTotal
                self.mesas.pagination.last_page = Math.round(result.recordsTotal/10)
