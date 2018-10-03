@@ -420,7 +420,7 @@ public class FacturaBoImpl implements FacturaBo {
 				
 				Detalle detalle = new Detalle();
 				detalle.setCantidad(1D);
-				detalle.setCodigo("07");
+				detalle.setCodigo("8888");
 				detalle.setCreated_at(new Date());
 				detalle.setDescripcion("Impuesto Servicio");
 				detalle.setGanancia(Constantes.ZEROS_DOUBLE);
