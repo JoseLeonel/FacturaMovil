@@ -81,7 +81,7 @@
                                         <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="campo tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"  value="{factura.totalTarjeta}" >
                                     </div>
                                     <div  class="form-group has-success">
-                                        <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
+                                         <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
                                         <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="campo" id="totalBanco"  value="{factura.totalBanco}"  value="{factura.totalBanco}">
                                     </div>
 
@@ -386,19 +386,13 @@
                         <th class="table-header">{$.i18n.prop("cliente.cedula")}            </th>
                         <th class="table-header">{$.i18n.prop("cliente.nombreCompleto")}    </th>
                         <th class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
-                        <th class="table-header">{$.i18n.prop("cliente.descuento")}         </th>
-                        <th class="table-header">{$.i18n.prop("cliente.telefono")}          </th>
-                        <th class="table-header">{$.i18n.prop("cliente.celular")}           </th>
                         <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
                     </thead>
                     <tfoot style="display: table-header-group;">
                         <tr>
                             <th>{$.i18n.prop("cliente.cedula")}           </th>
                             <th>{$.i18n.prop("cliente.nombreCompleto")}   </th>
-                            <th>{$.i18n.prop("cliente.correoElectronico")}</th>.toFixed(2)
-                            <th>{$.i18n.prop("cliente.descuento")}        </th>
-                            <th>{$.i18n.prop("cliente.telefono")}         </th>
-                            <th>{$.i18n.prop("cliente.celular")}          </th>
+                            <th>{$.i18n.prop("cliente.correoElectronico")}</th>
                             <th>                                          </th>
                         </tr>
                     </tfoot>                    
@@ -462,7 +456,7 @@
                     <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
                         <div class="form-group has-success">
                             <label >Cantidad:</label>
-                            <input  type="number" class="form-control cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus">
+                            <input  type="number"  class="form-control cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus">
                         </div>
                     </div>
                 </div> 
@@ -489,7 +483,7 @@
                     <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
                         <div class="form-group has-success">
                             <label >{$.i18n.prop("factura.linea.detalle.descuento")}</label>
-                            <input  type="number" class="form-control aplicarDescuento" id="aplicarDescuento" name = "aplicarDescuento" autofocus="autofocus">
+                            <input  type="number"  class="form-control aplicarDescuento" id="aplicarDescuento" name = "aplicarDescuento" autofocus="autofocus">
                         </div>
                     </div>
                 </div> 
@@ -2359,9 +2353,6 @@ function __informacionData(){
                                         {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false},
                                         {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("cliente.nombreCompleto")    ,"autoWidth":false},
                                         {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("cliente.correoElectronico") ,"autoWidth":false},
-                                        {'data' : 'descuento'        ,"name":"descuento"         ,"title" : $.i18n.prop("cliente.descuento")         ,"autoWidth":false},                                
-                                        {'data' : 'telefono'         ,"name":"telefono"          ,"title" : $.i18n.prop("cliente.telefono")          ,"autoWidth":false},                                
-                                        {'data' : 'celular'          ,"name":"celular"           ,"title" : $.i18n.prop("cliente.celular")           ,"autoWidth":false},                                
                                         {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
 									            "render":function(id,type, row){
 										            return __Opcionesclientes(id,type,row);
@@ -2392,6 +2383,7 @@ function __seleccionarClientes() {
 	     }
         self.cliente = data
         self.update();
+        
     });
 }
 /**
@@ -2452,7 +2444,7 @@ function agregarInputsCombos_Clientes(){
     $('.tableListaCliente tfoot th').each( function (e) {
         var title = $('.tableListaCliente thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 5    ){
+        if ( $(this).index() != 3    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })

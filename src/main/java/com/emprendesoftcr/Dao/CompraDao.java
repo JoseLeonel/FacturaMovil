@@ -16,6 +16,8 @@ public interface CompraDao {
 	Compra findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa);
 	
 	void eliminarDetalleComprasPorSP(Compra compra);
+	
+
 
 	
 

@@ -15,7 +15,7 @@
                     <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
                         <div class="form-group has-success">
                             <label class="knob-label" >{$.i18n.prop("inventario.cantidad")}</label>
-                            <input  type="number" class="form-control cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus">
+                            <input  type="number"  class="campo tamanoLetraTotales cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus">
                         </div>
                     </div>
                 </div> 
@@ -42,7 +42,7 @@
                     <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
                         <div class="form-group has-success">
                             <label class="knob-label" >{$.i18n.prop("inventario.cantidad")}</label>
-                            <input  type="text" class="form-control cambiarDescripcionArticulo" id="cambiarDescripcionArticulo" name = "cambiarDescripcionArticulo" autofocus="autofocus">
+                            <input  type="text" class="campo tamanoLetraTotales cambiarDescripcionArticulo" id="cambiarDescripcionArticulo" name = "cambiarDescripcionArticulo" autofocus="autofocus">
                         </div>
                     </div>
                 </div> 
@@ -90,8 +90,6 @@
                         <th class="table-header">{$.i18n.prop("vendedor.cedula")}            </th>
                         <th class="table-header">{$.i18n.prop("vendedor.nombreCompleto")}    </th>
                         <th class="table-header">{$.i18n.prop("vendedor.correoElectronico")} </th>
-                        <th class="table-header">{$.i18n.prop("vendedor.telefono")}          </th>
-                        <th class="table-header">{$.i18n.prop("vendedor.celular")}           </th>
                         <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
                     </thead>
                     <tfoot style="display: table-header-group;">
@@ -99,8 +97,6 @@
                             <th>{$.i18n.prop("vendedor.cedula")}           </th>
                             <th>{$.i18n.prop("vendedor.nombreCompleto")}   </th>
                             <th>{$.i18n.prop("vendedor.correoElectronico")}</th>
-                            <th>{$.i18n.prop("vendedor.telefono")}         </th>
-                            <th>{$.i18n.prop("vendedor.celular")}          </th>
                             <th>                                           </th>
                         </tr>
                     </tfoot>                    
@@ -126,13 +122,13 @@
                             <table id="tablaListaProductos"  cellpadding="0" cellspacing="0" width="100%" class="table lcnp table-dark">
                                 <thead>
                                     <tr >
-                                        <td width="50%"></td>
-                                        <td width="10%"></td>
-                                        <td width="10%"></td>
-                                        <td width="10%"></td>
-                                        <td width="10%"></td>
-                                        <td width="19%"></td>
-                                        <td width="1%"></td>
+                                        <td width="50%"> Descripcion</td>
+                                        <td width="10%">Cant</td>
+                                        <td width="10%">Precio.U</td>
+                                        <td width="10%">Desc</td>
+                                        <td width="10%">IV</td>
+                                        <td width="19%">Total</td>
+                                        
                                         <td width="15%"></td>
                                     </tr>
                                 </thead>
@@ -144,11 +140,12 @@
                                             {descripcion}</span>
                                            <div> 
                                         </td>
+                                        
                                         <td >
                                             <span onclick ={__CambiarCantidad} class="label label-success cantidad clickable">{cantidad.toFixed(3)}</span>
                                         </td>
                                         <td >
-                                            <span    class="label label-success precio-prod" >{precioUnitario.toFixed(2)}</span>
+                                            <span  onclick ={__CambiarPrecio}   class="label label-success precio-prod" >{precioUnitario.toFixed(2)}</span>
                                         </td>
                                         <td >
                                             <span onclick ={__CambiarDescuento} class="label label-success precio-prod" >{porcentajeDesc.toFixed(2)}</span>
@@ -435,10 +432,10 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
+                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
                         <div class="form-group has-success">
                             <label >Precio:</label>
-                            <input  type="number" class="form-control cambiarprecioArticulo" id="cambiarprecioArticulo" name = "cambiarprecioArticulo" autofocus="autofocus">
+                            <input  type="number"  class="form-control cambiarprecioArticulo" id="cambiarprecioArticulo" name = "cambiarprecioArticulo" autofocus="autofocus">
                         </div>
                     </div>
                 </div> 
@@ -455,17 +452,17 @@
 
 <!--Modal Cambiar Descuento-->
 <div id='modalCambiarDescuento' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog modal-md">
        <div class="modal-content">
             <div class="modal-header with-border " >
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descuento")}</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
+                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
                         <div class="form-group has-success">
                             <label >{$.i18n.prop("factura.linea.detalle.descuento")}</label>
-                            <input  type="number" class="form-control aplicarDescuento" id="aplicarDescuento" name = "aplicarDescuento" autofocus="autofocus">
+                            <input  type="number" class="campo tamanoLetraTotales aplicarDescuento" id="aplicarDescuento" name = "aplicarDescuento" autofocus="autofocus">
                         </div>
                     </div>
                 </div> 
@@ -526,9 +523,6 @@
                         <th class="table-header">{$.i18n.prop("cliente.cedula")}            </th>
                         <th class="table-header">{$.i18n.prop("cliente.nombreCompleto")}    </th>
                         <th class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
-                        <th class="table-header">{$.i18n.prop("cliente.descuento")}         </th>
-                        <th class="table-header">{$.i18n.prop("cliente.telefono")}          </th>
-                        <th class="table-header">{$.i18n.prop("cliente.celular")}           </th>
                         <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
                     </thead>
                     <tfoot style="display: table-header-group;">
@@ -536,9 +530,6 @@
                             <th>{$.i18n.prop("cliente.cedula")}           </th>
                             <th>{$.i18n.prop("cliente.nombreCompleto")}   </th>
                             <th>{$.i18n.prop("cliente.correoElectronico")}</th>
-                            <th>{$.i18n.prop("cliente.descuento")}        </th>
-                            <th>{$.i18n.prop("cliente.telefono")}         </th>
-                            <th>{$.i18n.prop("cliente.celular")}          </th>
                             <th>                                          </th>
                         </tr>
                     </tfoot>                    
@@ -1871,7 +1862,7 @@ function aplicarFactura(estado){
                 mensajeError($.i18n.prop("error.factura.monto.ingresado"))
                 return
             }
-            var montoEntregado = self.factura.totalTarjeta + self.factura.totalBanco + self.factura.totalEfectivo
+            var montoEntregado = __valorNumerico($('#totalTarjeta').val())  + __valorNumerico($('#totalBanco').val()) + $('#totalEfectivo').val()
             montoEntregado = redondeoDecimales(__valorNumerico(montoEntregado),2)
             var resultado  = redondeoDecimales( __valorNumerico(self.factura.totalComprobante),2)
             if(__valorNumerico(resultado) > __valorNumerico(montoEntregado)  ){
@@ -2141,7 +2132,7 @@ function crearFactura(estado){
     self.factura.condicionVenta = $('#condicionVenta').val()
     self.factura.fechaCredito =fechaCreditoTemporal.toString()
     self.factura.referenciaFechaEmision =fechaReferencia
-    self.factura.totalEfectivo =$('#totalEfectivo').val()
+    self.factura.totalEfectivo =__valorNumerico($('#totalEfectivo').val())
     self.factura.totalTarjeta = __valorNumerico($('#totalTarjeta').val()) 
     self.factura.totalBanco = __valorNumerico($('#totalBanco').val())
     self.factura.detalleFactura =JSONDetalles
@@ -2634,16 +2625,16 @@ __cambiarDescripcionDetalle(e){
 /**
 * Cambiar el precio del detalle de la factura
 **/
-__cambiarElPrecio(e){
+__cambiarElPrecio(){
     var precio = $(".cambiarprecioArticulo").val();
+     self.item.precioUnitario = __valorNumerico(precio);
+     self.update()
     agregarPrecioAlDetalle(precio)
 }
 /**
 * Cambiar el precio en el detalle
 **/
 function agregarPrecioAlDetalle(precio){
-    self.item.precioUnitario = precio
-    self.update()
     ActualizarLineaDEtalle()
     aplicarCambioLineaDetalle() 
     $(".cambiarprecioArticulo").val(null);
@@ -2750,6 +2741,7 @@ function getTotalDescuento(precio,cantidad,porcentajeDesc){
 * calculacion de los detalle de la factura 
 **/
 function __calculate() {
+    calcularImpuestoServicio()
     self.factura.total            = 0;
     self.factura.totalDescuentos  = 0;
     self.factura.totalImpuesto    = 0;
@@ -2802,6 +2794,32 @@ function __calculate() {
     $( "#codigoBarra" ).val(null);
     $( "#quantity" ).val(null);
     getSubTotalGeneral()
+}
+
+function calcularImpuestoServicio(){
+    var resultado = 0
+     self.detail.forEach(function(e){
+        resultado += e.montoTotal
+    });
+    //Impuesto del servicio
+    resultado = resultado * 0.10
+    resultado = Math.round(__valorNumerico(resultado))
+     for (var count = 0; count < self.detail.length; count++) {
+        if (self.detail[count].codigo == "8888" ){
+            self.item          = self.detail[count];
+            self.item.precioUnitario = resultado
+            self.item.subTotal       = resultado
+            self.item.montoTotal     = resultado
+            self.item.montoTotalLinea = resultado
+
+            self.update();
+            ActualizarLineaDEtalle()
+            self.detail[count] = self.item;
+            self.update();
+        }
+    }
+    
+
 }
 
 
@@ -2874,8 +2892,6 @@ function __informacionData_vendedores(){
                                         {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("vendedor.cedula")            ,"autoWidth":false},
                                         {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("vendedor.nombreCompleto")    ,"autoWidth":false},
                                         {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("vendedor.correoElectronico") ,"autoWidth":false},
-                                        {'data' : 'telefono'         ,"name":"telefono"          ,"title" : $.i18n.prop("vendedor.telefono")          ,"autoWidth":false},                                
-                                        {'data' : 'celular'          ,"name":"celular"           ,"title" : $.i18n.prop("vendedor.celular")           ,"autoWidth":false},                                
                                         {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
 									            "render":function(id,type, row){
 										            return __OpcionesVendedores(id,type,row);
@@ -2916,9 +2932,6 @@ function __informacionData(){
                                         {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false},
                                         {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("cliente.nombreCompleto")    ,"autoWidth":false},
                                         {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("cliente.correoElectronico") ,"autoWidth":false},
-                                        {'data' : 'descuento'        ,"name":"descuento"         ,"title" : $.i18n.prop("cliente.descuento")         ,"autoWidth":false},                                
-                                        {'data' : 'telefono'         ,"name":"telefono"          ,"title" : $.i18n.prop("cliente.telefono")          ,"autoWidth":false},                                
-                                        {'data' : 'celular'          ,"name":"celular"           ,"title" : $.i18n.prop("cliente.celular")           ,"autoWidth":false},                                
                                         {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
 									            "render":function(id,type, row){
 										            return __Opcionesclientes(id,type,row);
@@ -3021,7 +3034,7 @@ function agregarInputsCombos_Clientes(){
     $('.tableListaCliente tfoot th').each( function (e) {
         var title = $('.tableListaCliente thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 5    ){
+        if ( $(this).index() != 3    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
@@ -3034,7 +3047,7 @@ function agregarInputsCombos_Vendedores(){
     $('.tableListaVendedor tfoot th').each( function (e) {
         var title = $('.tableListaVendedor thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 5    ){
+        if ( $(this).index() != 3    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
