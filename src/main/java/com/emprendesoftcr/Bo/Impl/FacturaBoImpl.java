@@ -194,14 +194,14 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setReferenciaCodigo(facturaCommand.getReferenciaCodigo());
 				factura.setReferenciaRazon(facturaCommand.getReferenciaRazon());
 				factura.setReferenciaFechaEmision(Utils.parseDate2(facturaCommand.getReferenciaFechaEmision()));
-				if(facturaCommand.getReferenciaNumero() !=null) {
-					if(facturaCommand.getReferenciaNumero() !=Constantes.EMPTY) {
-						Factura facturaAnular = findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(),usuario.getEmpresa());
-						if(facturaAnular !=null) {
+				if (facturaCommand.getReferenciaNumero() != null) {
+					if (facturaCommand.getReferenciaNumero() != Constantes.EMPTY) {
+						Factura facturaAnular = findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa());
+						if (facturaAnular != null) {
 							facturaAnular.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
 							modificar(facturaAnular);
 						}
-						
+
 					}
 				}
 			} else {
@@ -264,8 +264,6 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
 			factura.setEstado(facturaCommand.getEstado());
 
-		
-
 			if (factura.getId() == Constantes.ZEROS_LONG) {
 				factura.setCreated_at(new Date());
 			}
@@ -278,7 +276,7 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setNumeroConsecutivo(empresaDao.generarConsecutivoFactura(facturaCommand.getEmpresa(), usuario, factura));
 				factura.setClave(empresaDao.generaClaveFacturaTributacion(factura.getEmpresa(), factura.getNumeroConsecutivo(), FacturaElectronicaUtils.COMPROBANTE_ELECTRONICO_NORMAL));
 			}
-      factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_EN_PROCESOS);
+			factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_EN_PROCESOS);
 			if (factura.getId() == null) {
 				factura.setCreated_at(new Date());
 				agregar(factura);
@@ -300,7 +298,7 @@ public class FacturaBoImpl implements FacturaBo {
 				usuarioCajaFactura.setFactura(factura);
 				usuarioCajaFactura.setUsuarioCaja(usuarioCaja);
 				usuarioCajaFacturaDao.agregar(usuarioCajaFactura);
-				if (!factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
+				if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) ) {
 					usuarioCajaDao.actualizarCaja(usuarioCaja, factura.getTotalEfectivo(), factura.getTotalTarjeta(), factura.getTotalBanco(), factura.getTotalCredito(), Constantes.ZEROS_DOUBLE);
 				}
 
@@ -324,6 +322,7 @@ public class FacturaBoImpl implements FacturaBo {
 			Double totalImpuesto = Constantes.ZEROS_DOUBLE;
 			Double totalComprobante = Constantes.ZEROS_DOUBLE;
 			Double subTotal = Constantes.ZEROS_DOUBLE;
+		  
 
 			// Agregar Lineas de Detalle
 			JSONArray jsonArrayDetalleFactura = (JSONArray) json.get("data");
@@ -410,37 +409,37 @@ public class FacturaBoImpl implements FacturaBo {
 
 				}
 			}
-			totalVentaNeta = totalVenta + totalDescuentos;
-			// Resumen de la Factura
-			factura.setTotalMercanciasGravadas(Utils.roundFactura(totalMercanciasGravadas, 5));
-			factura.setTotalMercanciasExentas(Utils.roundFactura(totalMercanciasExentas, 5));
-			factura.setTotalServExentos(Utils.roundFactura(totalServExentos, 5));
-			factura.setTotalServGravados(Utils.roundFactura(totalServGravados, 5));
-			factura.setTotalGravado(Utils.roundFactura(totalGravado, 5));
-			factura.setTotalExento(Utils.roundFactura(totalExento, 5));
-			factura.setTotalVenta(Utils.roundFactura(totalVenta, 5));
-			factura.setTotalVentaNeta(Utils.roundFactura(totalVentaNeta, 5));
-			factura.setTotalDescuentos(Utils.roundFactura(totalDescuentos, 5));
-			factura.setTotalImpuesto(Utils.roundFactura(totalImpuesto, 5));
-			factura.setTotalComprobante(Utils.roundFactura(totalComprobante, 5));
+			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+				totalVentaNeta = totalVenta + totalDescuentos;
+				// Resumen de la Factura
+				factura.setTotalMercanciasGravadas(Utils.roundFactura(totalMercanciasGravadas, 5));
+				factura.setTotalMercanciasExentas(Utils.roundFactura(totalMercanciasExentas, 5));
+				factura.setTotalServExentos(Utils.roundFactura(totalServExentos, 5));
+				factura.setTotalServGravados(Utils.roundFactura(totalServGravados, 5));
+				factura.setTotalGravado(Utils.roundFactura(totalGravado, 5));
+				factura.setTotalExento(Utils.roundFactura(totalExento, 5));
+				factura.setTotalVenta(Utils.roundFactura(totalVenta, 5));
+				factura.setTotalVentaNeta(Utils.roundFactura(totalVentaNeta, 5));
+				factura.setTotalDescuentos(Utils.roundFactura(totalDescuentos, 5));
+				factura.setTotalImpuesto(Utils.roundFactura(totalImpuesto, 5));
+				factura.setTotalComprobante(Utils.roundFactura(totalComprobante, 5));
+			}
 			// Crear Credito del cliente
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
 				if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 					cuentaCobrarDao.crearCuentaXCobrar(factura);
 				}
 			}
-			
-			//Verifica si esta facturado para cambiar el estado firma y enviar a crear el xml en el proceso automatico
+
+			// Verifica si esta facturado para cambiar el estado firma y enviar a crear el xml en el proceso automatico
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO) || facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
 			} else {
-				 if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)){
-					 factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);	 
-				 }
+				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+					factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
+				}
 			}
 			modificar(factura);
-			
-			
 
 			// Anulacion de la factura anterior
 			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
@@ -514,10 +513,10 @@ public class FacturaBoImpl implements FacturaBo {
 			if (facturaCommand.getTotalBanco() == null || facturaCommand.getTotalTarjeta() == null || facturaCommand.getTotalEfectivo() == null) {
 				return resultado;
 			}
-			//Si hay montos en banco y tarjeta debe ser igual en efectivo
+			// Si hay montos en banco y tarjeta debe ser igual en efectivo
 			if (facturaCommand.getTotalBanco() > 0 || facturaCommand.getTotalTarjeta() > 0) {
-				resultado =facturaCommand.getTotalEfectivo();
-			}else {
+				resultado = facturaCommand.getTotalEfectivo();
+			} else {
 				resultado = facturaCommand.getTotalComprobante();
 			}
 		} catch (Exception e) {

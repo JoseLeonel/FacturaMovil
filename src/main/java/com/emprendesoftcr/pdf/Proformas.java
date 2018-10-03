@@ -90,7 +90,7 @@ public class Proformas {
 			if(img !=null) {
 				img.setAbsolutePosition(450, PageSize.TABLOID.rotate().getHeight() - 90);
 				img.setAlignment(Image.ALIGN_RIGHT);
-				img.scaleAbsolute(140, 70);
+				img.scaleAbsolute(160, 85);
 				cb.addImage(img);
 				
 			}

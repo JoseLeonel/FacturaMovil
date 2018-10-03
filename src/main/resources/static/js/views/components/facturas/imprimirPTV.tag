@@ -20,7 +20,7 @@
                         <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.cedula")}       </strong>{facturaImpresa.empresa.cedula}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.telefono")}     </strong>{facturaImpresa.empresa.telefono}<br></div>
                         <div class="encabezado">{facturaImpresa.empresa.otraSenas}                        <br></div>
-                        <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.fecha.emision")} </strong>{facturaImpresa.fechaEmision}</div>
+                        <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.fecha.emision")} </strong>{facturaImpresa.fechaEmisionSTR}</div>
                         <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.condicion.venta")} </strong>{facturaImpresa.condicionVenta}</div>
                         <div class="encabezado" show ="{facturaImpresa.plazoCredito > 0}"><strong>{$.i18n.prop("tikect.encabezado.plazo.credito")} </strong>{facturaImpresa.plazoCredito}</div>
                         <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>{facturaImpresa.tipoDoc}</div>
@@ -330,7 +330,7 @@ function consultaFactura(idFactura){
                     self.update()
                     self.detalles = []
                     self.detalles =self.facturaImpresa.detalles
-                    self.facturaImpresa.fechaEmision     = displayDate_detail(self.facturaImpresa.fechaEmision)
+                   
                     self.facturaImpresa.totalVenta       = formatoDecimales(self.facturaImpresa.totalVenta,2);
                     self.facturaImpresa.totalDescuentos  = formatoDecimales(self.facturaImpresa.totalDescuentos,2);
                     self.facturaImpresa.totalVentaNeta   = formatoDecimales(self.facturaImpresa.totalVentaNeta,2);
@@ -397,12 +397,6 @@ function getSubTotalGeneral(){
 
 
 
-/**
-*Formato de Fecha
-**/
-function displayDate_detail(fecha) {
-    return fecha == null?"":moment(fecha).format('DD/MM/YYYY h:mm:ss a');
-}
 
 /**
 *Imprimir facturaImpresa
@@ -518,27 +512,7 @@ function imprimirElemento(elemento){
 }
 
 
-/**
-*  retorna el valor numerico o cero sino es numerico
-**/
-function __valorNumerico(valor){
-    return isNumber(valor)?parseFloat(valor):0 ;
-}
-/**
-*  Validar si es numero
-**/
-function isNumber(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-}
 
-function redondearDecimales(numero, decimales) {
-    numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}');   // Expresion regular para numeros con un cierto numero de decimales o mas
-    if (numeroRegexp.test(numero)) {         // Ya que el numero tiene el numero de decimales requeridos o mas, se realiza el redondeo
-        return Number(numero.toFixed(decimales));
-    } else {
-        return Number(numero.toFixed(decimales)) === 0 ? 0 : numero;  // En valores muy bajos, se comprueba si el numero es 0 (con el redondeo deseado), si no lo es se devuelve el numero otra vez.
-    }
-}
 
 </script>
 </ptv-imprimir>

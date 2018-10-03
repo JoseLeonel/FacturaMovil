@@ -15,11 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.emprendesoftcr.Bo.CompraBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.CompraDao;
+import com.emprendesoftcr.Dao.CuentaPagarDao;
 import com.emprendesoftcr.Dao.KardexDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Compra;
+import com.emprendesoftcr.modelo.CuentaPagar;
 import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
@@ -47,6 +49,9 @@ public class CompraBoImpl implements CompraBo {
 
 	@Autowired
 	private KardexDao				kardexDao;
+	
+	@Autowired
+	private CuentaPagarDao				cuentaPagarDao;
 
 	
 
@@ -140,6 +145,27 @@ public class CompraBoImpl implements CompraBo {
 
 				}
 			}
+			
+			// Crear Credito del cliente
+			if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
+				if (compra.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
+					CuentaPagar cuentaPagar	 = new CuentaPagar();
+					cuentaPagar.setConsecutivo(compra.getConsecutivo());
+					cuentaPagar.setCreated_at(new Date());
+					cuentaPagar.setUpdated_at(new Date());
+					cuentaPagar.setEmpresa(compra.getEmpresa());
+					cuentaPagar.setTotal(compra.getTotalCompra());
+					cuentaPagar.setFechaCredito(compra.getFechaCredito());
+					cuentaPagar.setTotalSaldo(compra.getTotalCompra());
+					cuentaPagar.setProveedor(compra.getProveedor());
+					cuentaPagar.setTotalAbono(Constantes.ZEROS_DOUBLE);
+					cuentaPagar.setUsuarioCreacion(usuario);
+					cuentaPagar.setEstado(Constantes.CUENTA_POR_PAGAR_ESTADO_PENDIENTE);
+					cuentaPagarDao.agregar(cuentaPagar);
+					
+				}
+			}
+			
     
 			
 

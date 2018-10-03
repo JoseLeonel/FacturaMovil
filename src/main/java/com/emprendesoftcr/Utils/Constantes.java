@@ -9,6 +9,7 @@ public class Constantes {
 	// Tipo de codigos de productos
 	public static final String					TIPO_CODIGO_ARTICULO_POR_SERVICIO										= "07";
 	public static final String					TIPO_CODIGO_ARTICULO_USO_INTERNO										= "04";
+	public static final String					CODIGO_ARTICULO_IMPUESTO_SERVICIO										= "8888";
 
 	// Semaforo
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 200;
@@ -138,6 +139,11 @@ public class Constantes {
 	public static final String					ABONO_ESTADO_PAGADO																	= "Pagado";
 	public static final String					ABONO_ESTADO_ANULADO																= "Anulado";
 
+	// Cuentas por Pagar
+	public static final Integer					CUENTA_POR_PAGAR_ESTADO_PENDIENTE										= 1;
+	public static final Integer					CUENTA_POR_PAGAR_ESTADO_CERRADO											= 2;
+	public static final Integer					CUENTA_POR_PAGAR_ESTADO_ANULADO											= 3;
+
 	// Tipo de cuenta por Cobrar
 	public static final String					CUENTA_POR_COBRAR_TIPO_Automatica										= "Automatica";
 	public static final String					CUENTA_POR_COBRAR_TIPO_MANUAL												= "Manual";
@@ -215,6 +221,11 @@ public class Constantes {
 
 	// Roles de usuario
 	public static final String					ROL_ADMINISTRADOR_SISTEMA														= "Administrador_Sistema";
+	public static final String					ROL_USUARIO_VENDEDOR																= "usuario_vendedor";
+	public static final String					ROL_ADMINISTRADOR_CAJERO														= "Administrador_Cajero";
+	public static final String					ROL_ADMINISTRADOR_RESTAURANTE												= "Administrador_Restaurante";
+	public static final String					ROL_ADMINISTRADOR_EMPRESA														= "Administrador_Empresa";
+
 	// Usuario
 	public static final String					WEB_SESSION_USUARIO																	= "usuario";
 	public static final Long						ID_USUARIO_SISTEMA																	= -1L;

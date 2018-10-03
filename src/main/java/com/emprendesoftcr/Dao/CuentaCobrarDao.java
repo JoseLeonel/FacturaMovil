@@ -16,4 +16,5 @@ public interface CuentaCobrarDao {
 	CuentaCobrar buscarPorFacturaManual(Integer facturaManual);
 	
 	void crearCuentaXCobrar(Factura factura);
+
 }
