@@ -356,9 +356,12 @@ public class FacturaBoImpl implements FacturaBo {
 						detalle.setMontoDescuento(detalle.getMontoDescuento() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoDescuento(), 5));
 						detalle.setMontoImpuesto(detalle.getMontoImpuesto() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoImpuesto(), 5));
 						detalle.setPrecioUnitario(detalle.getPrecioUnitario() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getPrecioUnitario(), 5));
-						detalle.setSubTotal(detalle.getSubTotal() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getSubTotal(), 5));
 						detalle.setMontoTotalLinea(detalle.getMontoTotalLinea() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoTotalLinea(), 5));
 						detalle.setMontoTotal(detalle.getMontoTotal() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoTotal(), 5));
+						
+						//Se calcula el subtotal por problemas de decimales
+						//detalle.setSubTotal(detalle.getSubTotal() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getSubTotal(), 5));
+						detalle.setSubTotal(Utils.roundFactura(detalle.getMontoTotal() - detalle.getMontoDescuento(), 5));
 
 						// Suma de montos con impuestos
 						// Con impuesto
@@ -454,7 +457,7 @@ public class FacturaBoImpl implements FacturaBo {
 				totalComprobante = totalComprobante + detalle.getMontoTotal();
 			}
 			
-			totalVentaNeta = totalVenta + totalDescuentos;
+			totalVentaNeta = totalVenta - totalDescuentos;
 			// Resumen de la Factura
 			factura.setTotalMercanciasGravadas(Utils.roundFactura(totalMercanciasGravadas, 5));
 			factura.setTotalMercanciasExentas(Utils.roundFactura(totalMercanciasExentas, 5));

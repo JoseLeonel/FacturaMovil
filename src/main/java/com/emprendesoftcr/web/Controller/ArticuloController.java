@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Collection;
 import java.util.Iterator;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -45,8 +44,6 @@ import com.emprendesoftcr.web.propertyEditor.MarcaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
 
-
-
 /**
  * Control de los articulos de una empresa ArticuloController.
  * @author jose.
@@ -55,37 +52,37 @@ import com.google.common.base.Function;
 @Controller
 public class ArticuloController {
 
-	private static final Function<Object, ArticuloCommand>	TO_COMMAND	= new Function<Object, ArticuloCommand>() {
+	private static final Function<Object, ArticuloCommand> TO_COMMAND = new Function<Object, ArticuloCommand>() {
 
-																																				@Override
-																																				public ArticuloCommand apply(Object f) {
-																																					return new ArticuloCommand((Articulo) f);
-																																				};
-																																			};
-
-	@Autowired
-	private DataTableBo																			dataTableBo;
+		@Override
+		public ArticuloCommand apply(Object f) {
+			return new ArticuloCommand((Articulo) f);
+		};
+	};
 
 	@Autowired
-	private ArticuloBo																			articuloBo;
+	private DataTableBo dataTableBo;
 
 	@Autowired
-	private KardexBo																				kardexBo;
+	private ArticuloBo articuloBo;
 
 	@Autowired
-	private UsuarioBo																				usuarioBo;
+	private KardexBo kardexBo;
 
 	@Autowired
-	private ArticuloPropertyEditor													articuloPropertyEditor;
+	private UsuarioBo usuarioBo;
 
 	@Autowired
-	private MarcaPropertyEditor															marcaPropertyEditor;
+	private ArticuloPropertyEditor articuloPropertyEditor;
 
 	@Autowired
-	private CategoriaPropertyEditor													categoriaPropertyEditor;
+	private MarcaPropertyEditor marcaPropertyEditor;
 
 	@Autowired
-	private StringPropertyEditor														stringPropertyEditor;
+	private CategoriaPropertyEditor categoriaPropertyEditor;
+
+	@Autowired
+	private StringPropertyEditor stringPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -111,14 +108,12 @@ public class ArticuloController {
 	public String listarKardex(ModelMap model) {
 		return "views/articulos/ListarKardex";
 	}
-	
+
 	@RequestMapping(value = "/CambiarPrecio", method = RequestMethod.GET)
 	public String cambiarPrecio(ModelMap model) {
 		return "views/articulos/CambioPrecio";
 	}
-	
-	
-	
+
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticulosActivosAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
@@ -129,14 +124,14 @@ public class ArticuloController {
 		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
-			String nombreUsuario = request.getUserPrincipal().getName();	
-			 dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			String nombreUsuario = request.getUserPrincipal().getName();
+			dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
-	
+
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticulosActivosUsoInternoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -148,8 +143,8 @@ public class ArticuloController {
 		delimitadores.addFiltro(dataTableFilter);
 		dataTableFilter = new JqGridFilter("tipoCodigo", "'" + Constantes.TIPO_CODIGO_ARTICULO_USO_INTERNO + "'", "=");
 		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
-			String nombreUsuario = request.getUserPrincipal().getName();	
-			 dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			String nombreUsuario = request.getUserPrincipal().getName();
+			dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
 
@@ -177,34 +172,29 @@ public class ArticuloController {
 		Long total = dataTableBo.contar(delimitadores);
 		Collection<Object> objetos = dataTableBo.listar(delimitadores);
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-    List<Object> solicitudList = new ArrayList<Object>();
-    for (Iterator<Object> iterator = objetos.iterator(); iterator.hasNext();) {
-      Articulo object = (Articulo) iterator.next();
-      // no se carga el usuario del sistema el id -1
-      if(object.getId().longValue() > 0L){ 
-              solicitudList.add(new ArticuloCommand(object));
-      }
-}
-    
-		
+		List<Object> solicitudList = new ArrayList<Object>();
+		for (Iterator<Object> iterator = objetos.iterator(); iterator.hasNext();) {
+			Articulo object = (Articulo) iterator.next();
+			// no se carga el usuario del sistema el id -1
+			if (object.getId().longValue() > 0L) {
+				solicitudList.add(new ArticuloCommand(object));
+			}
+		}
 
-    respuestaService.setRecordsTotal(total);
-    respuestaService.setRecordsFiltered(total);
-    if (!request.getParameter("draw").equals(" ")) {
-            respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
-
-    }
-
-    respuestaService.setAaData(solicitudList);
-
-    return respuestaService;
+		respuestaService.setRecordsTotal(total);
+		respuestaService.setRecordsFiltered(total);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
 
 	}
 
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarPorDescripcionCodigoArticuloAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarDescripcionCodigoArticulosAjax(HttpServletRequest request, ModelMap model,@ModelAttribute Articulo articulo,  @ModelAttribute String descArticulo,@RequestParam String codigoArt) {
+	public RespuestaServiceDataTable listarDescripcionCodigoArticulosAjax(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, @ModelAttribute String descArticulo, @RequestParam String codigoArt) {
 
 		DataTableDelimitador delimitadores = null;
 		String valorDescripcion = request.getParameter("descArticulo");
@@ -215,20 +205,20 @@ public class ArticuloController {
 			delimitadores.addFiltro(dataTableFilter);
 
 		}
-		JqGridFilter categoriaFilter =null;
-		if(codigoArt !=null) {
-			if(!codigoArt.equals(Constantes.EMPTY)) {
+		JqGridFilter categoriaFilter = null;
+		if (codigoArt != null) {
+			if (!codigoArt.equals(Constantes.EMPTY)) {
 				categoriaFilter = new JqGridFilter("codigo", "'" + codigoArt + "'", "=");
 				delimitadores.addFiltro(categoriaFilter);
 			}
 		}
-		if(valorDescripcion !=null) {
-			if(!valorDescripcion.equals(Constantes.EMPTY)){
-				categoriaFilter = new JqGridFilter("descripcion",  valorDescripcion , " like ");
+		if (valorDescripcion != null) {
+			if (!valorDescripcion.equals(Constantes.EMPTY)) {
+				categoriaFilter = new JqGridFilter("descripcion", valorDescripcion, " like ");
 				delimitadores.addFiltro(categoriaFilter);
-				
+
 			}
-			
+
 		}
 
 		categoriaFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
@@ -237,7 +227,6 @@ public class ArticuloController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
-	
 	/**
 	 * Paginacion de la venta
 	 * @param request
@@ -300,12 +289,12 @@ public class ArticuloController {
 				result.rejectValue("codigo", "error.articulo.codigo.existe");
 			}
 
-//			if (articulo.getCosto() == null) {
-//				result.rejectValue("costo", "error.articulo.costo.mayorCero");
-//			}
-//			if (articulo.getCosto() == 0) {
-//				result.rejectValue("costo", "error.articulo.costo.mayorCero");
-//			}
+			// if (articulo.getCosto() == null) {
+			// result.rejectValue("costo", "error.articulo.costo.mayorCero");
+			// }
+			// if (articulo.getCosto() == 0) {
+			// result.rejectValue("costo", "error.articulo.costo.mayorCero");
+			// }
 			if (articulo.getPrecioPublico() == null) {
 				result.rejectValue("costo", "error.articulo.precioPublico.mayorCero");
 			}
@@ -314,7 +303,7 @@ public class ArticuloController {
 			}
 			if (articulo.getCantidad() != null) {
 				if (articulo.getCantidad() == Constantes.ZEROS_DOUBLE) {
-					 articulo.setCantidad(Constantes.ZEROS_DOUBLE);
+					articulo.setCantidad(Constantes.ZEROS_DOUBLE);
 				}
 			}
 			if (articulo.getCantidad() == null) {
@@ -323,11 +312,11 @@ public class ArticuloController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			if(articulo.getTipoImpuesto() !=null) {
-				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Sin impuesto") ?Constantes.EMPTY:articulo.getTipoImpuesto());
+			if (articulo.getTipoImpuesto() != null) {
+				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Sin impuesto") ? Constantes.EMPTY : articulo.getTipoImpuesto());
 			}
 			articulo.setCreated_at(new Date());
-			articulo.setTipoImpuesto(articulo.getTipoImpuesto() ==null?Constantes.EMPTY:articulo.getTipoImpuesto());
+			articulo.setTipoImpuesto(articulo.getTipoImpuesto() == null ? Constantes.EMPTY : articulo.getTipoImpuesto());
 			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
 			articulo.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
 			articulo.setGananciaPrecioEspecial(articulo.getGananciaPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getGananciaPrecioEspecial());
@@ -345,15 +334,15 @@ public class ArticuloController {
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articulo.setUsuario(usuarioSesion);
 			articuloBo.agregar(articulo);
-			
-			if(usuarioSesion.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
-				if(!articulo.getCantidad().equals(Constantes.ZEROS_DOUBLE)) {
+
+			if (usuarioSesion.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
+				if (!articulo.getCantidad().equals(Constantes.ZEROS_DOUBLE)) {
 					kardexBo.entrada(articulo, Constantes.ZEROS_DOUBLE, articulo.getCantidad(), Constantes.OBSERVACION_INICIAL_INVENTARIO_NUEVO, Constantes.CONSECUTIVO_INICIAL_INVENTARIO_NUEVO, Constantes.KARDEX_TIPO_ENTRADA, Constantes.MOTIVO_INICIAL_INVENTARIO_NUEVO, usuarioSesion);
-					
+
 				}
-				
+
 			}
-			
+
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.agregar.correctamente", articulo);
 
 		} catch (Exception e) {
@@ -379,11 +368,11 @@ public class ArticuloController {
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-			if(articulo.getTipoImpuesto() !=null) {
-				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Sin impuesto") ?Constantes.EMPTY:articulo.getTipoImpuesto());
+			if (articulo.getTipoImpuesto() != null) {
+				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Sin impuesto") ? Constantes.EMPTY : articulo.getTipoImpuesto());
 			}
-			if(articulo.getTipoCodigo() == null) {
-				 articulo.setTipoCodigo("04");
+			if (articulo.getTipoCodigo() == null) {
+				articulo.setTipoCodigo("04");
 			}
 			Articulo articuloBd = articuloBo.buscar(articulo.getId());
 			Articulo articuloValidar = null;
@@ -413,7 +402,7 @@ public class ArticuloController {
 			articulo.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMinimo());
 			articuloBd.setCreated_at(new Date());
 			articuloBd.setUpdated_at(new Date());
-			articuloBd.setCosto(articulo.getCosto() == null?Constantes.ZEROS_DOUBLE:articulo.getCosto());
+			articuloBd.setCosto(articulo.getCosto() == null ? Constantes.ZEROS_DOUBLE : articulo.getCosto());
 			articuloBd.setMaximo(articulo.getMaximo());
 			articuloBd.setMinimo(articulo.getMinimo());
 			articuloBd.setMarca(articulo.getMarca());
@@ -431,7 +420,7 @@ public class ArticuloController {
 			articuloBd.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
 			articuloBd.setUsuario(usuarioSesion);
 			articuloBd.setCodigo(articulo.getCodigo().trim());
-			articuloBd.setTipoImpuesto(articulo.getTipoImpuesto() ==null?Constantes.EMPTY:articulo.getTipoImpuesto());
+			articuloBd.setTipoImpuesto(articulo.getTipoImpuesto() == null ? Constantes.EMPTY : articulo.getTipoImpuesto());
 			articuloBd.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articuloBo.modificar(articuloBd);
 
@@ -463,22 +452,20 @@ public class ArticuloController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/MostrarPorCodigoAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response,  ModelMap model, @ModelAttribute Articulo articulo,@RequestParam Double precioPublico , @RequestParam String codigo,BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Articulo articulo, @RequestParam Double precioPublico, @RequestParam String codigo, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			Articulo articuloBD = articuloBo.buscarPorCodigoYEmpresa(codigo, usuario.getEmpresa());
-			
+
 			if (articuloBD == null) {
 				result.rejectValue("codigo", "error.articulo.codigo.no.existe");
 			}
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			 
-
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", articuloBD);
 		} catch (Exception e) {
@@ -488,15 +475,15 @@ public class ArticuloController {
 
 	@RequestMapping(value = "/CambiarPrecioAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator cambiarPrecio(HttpServletRequest request, HttpServletResponse response,  ModelMap model, @ModelAttribute Articulo articulo,@RequestParam Double precioPublico , @RequestParam String codigo, @RequestParam String tipoImpuesto, @RequestParam Double impuesto, @RequestParam String descripcion,@RequestParam String tipoCodigo,String unidadMedida,BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator cambiarPrecio(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Articulo articulo, @RequestParam Double precioPublico, @RequestParam String codigo, @RequestParam String tipoImpuesto, @RequestParam Double impuesto, @RequestParam String descripcion, @RequestParam String tipoCodigo, String unidadMedida, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			Articulo articuloBD = articuloBo.buscarPorCodigoYEmpresa(codigo, usuario.getEmpresa());
-			
+
 			if (articuloBD == null) {
 				result.rejectValue("codigo", "error.articulo.codigo.no.existe");
 			}
-		
+
 			Articulo articuloValidar = null;
 			if (!articuloBD.getDescripcion().equals(descripcion)) {
 				articuloValidar = articuloBo.buscarPorDescripcionYEmpresa(descripcion, usuario.getEmpresa());
@@ -507,22 +494,19 @@ public class ArticuloController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			
-			if(tipoCodigo == null) {
+
+			if (tipoCodigo == null) {
 				articuloBD.setTipoCodigo("04");
-			}else {
+			} else {
 				articuloBD.setTipoCodigo(tipoCodigo);
-			}	
+			}
 			articuloBD.setPrecioPublico(precioPublico);
 			articuloBD.setUnidadMedida(unidadMedida);
 			articuloBD.setDescripcion(descripcion);
 			articuloBD.setTipoImpuesto(tipoImpuesto);
 			articuloBD.setImpuesto(impuesto);
-			
-			articuloBo.modificar(articuloBD);
-			
-			 
 
+			articuloBo.modificar(articuloBD);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBD);
 		} catch (Exception e) {
@@ -530,39 +514,33 @@ public class ArticuloController {
 		}
 	}
 
-	
-	
-	
+	// @RequestMapping(value = "/CambiarPrecioAjax", method = RequestMethod.POST, headers = "Accept=application/json")
+	// @ResponseBody
+	// public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idFactura) {
+	// try {
+	// //Factura facturaBD = facturaBo.findById(idFactura);
+	//
+	// Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+	//
+	// // Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave criptografica desde linux
+	//// certificadoBo.agregar(usuario.getEmpresa(), usuario.getEmpresa().getClaveLlaveCriptografica().toString(), usuario.getEmpresa().getNombreLlaveCriptografica());
+	// // String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);
+	// // facturaXMLServices.getFirmarXML(xml, facturaBD.getEmpresa());
+	//
+	// // KeyStore keyStore = null;
+	// // LlaveCriptografica llaveCriptografica = new LlaveCriptografica();
+	// //
+	// // llaveCriptografica.setPassSignature(usuario.getEmpresa().getClaveLlaveCriptografica().toString());
+	// // llaveCriptografica.setPathSignature(usuario.getEmpresa().getNombreLlaveCriptografica());
+	// // XadesSigner xadesSigner = llaveCriptograficaService.getSigner(usuario.getEmpresa().getNombreLlaveCriptografica(),usuario.getEmpresa().getClaveLlaveCriptografica().toString());
+	// // keyStore = llaveCriptograficaService.getKeyStore(llaveCriptografica);
+	//
+	// return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", facturaBD);
+	// } catch (Exception e) {
+	// return RespuestaServiceValidator.ERROR(e);
+	// }
+	// }
 
-//	@RequestMapping(value = "/CambiarPrecioAjax", method = RequestMethod.POST, headers = "Accept=application/json")
-//	@ResponseBody
-//	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idFactura) {
-//		try {
-//			//Factura facturaBD = facturaBo.findById(idFactura);
-//
-//			 Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-//
-//			// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave criptografica desde linux
-////			 certificadoBo.agregar(usuario.getEmpresa(), usuario.getEmpresa().getClaveLlaveCriptografica().toString(), usuario.getEmpresa().getNombreLlaveCriptografica());
-//			// String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);
-//			// facturaXMLServices.getFirmarXML(xml, facturaBD.getEmpresa());
-//
-//			// KeyStore keyStore = null;
-//			// LlaveCriptografica llaveCriptografica = new LlaveCriptografica();
-//			//
-//			// llaveCriptografica.setPassSignature(usuario.getEmpresa().getClaveLlaveCriptografica().toString());
-//			// llaveCriptografica.setPathSignature(usuario.getEmpresa().getNombreLlaveCriptografica());
-//			// XadesSigner xadesSigner = llaveCriptograficaService.getSigner(usuario.getEmpresa().getNombreLlaveCriptografica(),usuario.getEmpresa().getClaveLlaveCriptografica().toString());
-//			// keyStore = llaveCriptograficaService.getKeyStore(llaveCriptografica);
-//
-//			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", facturaBD);
-//		} catch (Exception e) {
-//			return RespuestaServiceValidator.ERROR(e);
-//		}
-//	}
-
-	
-	
 	/**
 	 * Buscar Articulo por id del inventario
 	 * @param request

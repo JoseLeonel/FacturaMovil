@@ -3275,7 +3275,8 @@ _sumarBilletes(e){
        self.factura.totalCambioPagar  = 0
        self.claseCambioDinero     = "entregarCambioPositivo"
     }else{
-        self.factura.totalEfectivo = __valorNumerico(self.factura.totalEfectivo) + __valorNumerico(item.valor) 
+        //self.factura.totalEfectivo = __valorNumerico(self.factura.totalEfectivo) + __valorNumerico(item.valor) 
+        self.factura.totalEfectivo = __valorNumerico(item.valor) 
         self.update()
         var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
         sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 

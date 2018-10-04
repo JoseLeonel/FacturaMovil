@@ -394,7 +394,7 @@ function __ListaDeArticulosPorEmpresa(){
     $.ajax({
         url: 'ListarArticuloAjax.do',
         datatype: "json",
-        method:"GET",
+        method:"POST",
         success: function (result) {
             if(result.aaData.length > 0){
                 _informacionData_Articulo()
