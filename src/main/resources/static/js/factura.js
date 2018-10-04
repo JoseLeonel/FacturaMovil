@@ -112,15 +112,14 @@ function redondearDecimales(numero, decimales) {
 //Modal o redirect en caso de error
 function mensajeErrorServidor(xhr, status) {
 	console.log(status);
-	console.log(xhr.getResponseHeader);
+	console.log("-------------------" + xhr.getResponseHeader("UNAUTHORIZED"));
 	if(xhr.getResponseHeader("UNAUTHORIZED")=="true"){
-        window.location.href = "Login.do";
+        window.location.href = "login";
 	}else if (xhr.status == 500) {
 		window.location.href = "ErrorPage.jsp?exceptionMessage="
 			+ xhr.getResponseHeader("exception");
     }else {
-    	 mensajeAlertErrorOConfirmacion('error',$.i18n.prop("mensaje.error.general"));
-    	
+    	 mensajeAlertErrorOConfirmacion('error',$.i18n.prop("mensaje.error.general"));    	
     } 
 }
 
@@ -802,7 +801,7 @@ function initDateRangePicker(element) {
     var start = moment().subtract(7, 'days');
     var end = moment(); 
     element.daterangepicker({
-        "locale": {
+        "locale": { 
             "format": "DD/MM/YYYY",
             "separator": " - ",
             "applyLabel": "Aplicar",
@@ -839,6 +838,4 @@ function initDateRangePicker(element) {
         "endDate": end.format('DD/MM/YYYY'),
     });
 }
-
-
 

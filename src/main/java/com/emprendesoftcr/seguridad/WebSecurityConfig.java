@@ -1,5 +1,11 @@
 package com.emprendesoftcr.seguridad;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,8 +15,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
 import com.emprendesoftcr.repository.UsuarioRepository;
 import com.emprendesoftcr.service.impl.CustomUsuariosDetailsService;
@@ -21,9 +29,8 @@ import com.emprendesoftcr.service.impl.CustomUsuariosDetailsService;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	private CustomUsuariosDetailsService	usuarioDetailsService;
+	private CustomUsuariosDetailsService usuarioDetailsService;
 
-	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(usuarioDetailsService).passwordEncoder(passwordEncoder());
@@ -37,20 +44,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/administrativo/**","/templates/**", "/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/dist/**");
+		web.ignoring().antMatchers("/administrativo/**", "/templates/**", "/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/dist/**");
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
-		http.authorizeRequests().antMatchers("/administrativo/**","/templates/**","/bootstrap/**", "/dist/**", "/plugins/**", "/resources/**", "/registration").permitAll()
-														.antMatchers("/service/CrearFacturaServiceAjax").permitAll()
-														.antMatchers("/webjars/**").permitAll()
-		                        .antMatchers("/login").permitAll()
-		                        .anyRequest().authenticated().and().formLogin().loginPage("/login").failureUrl("/login?error=true")
-		                        .defaultSuccessUrl("/").usernameParameter("username").passwordParameter("password")
-		                        .and().logout().and().exceptionHandling().accessDeniedPage("/error/403");
-
+		http.authorizeRequests().antMatchers("/administrativo/**", "/templates/**", "/bootstrap/**", "/dist/**", "/plugins/**", "/resources/**", "/registration")
+		.permitAll().antMatchers("/service/CrearFacturaServiceAjax").permitAll().antMatchers("/webjars/**").permitAll().antMatchers("/login")
+		.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login").failureUrl("/login?error=true").defaultSuccessUrl("/").usernameParameter("username").passwordParameter("password")
+		.and().logout().and().exceptionHandling().accessDeniedPage("/error/403")
+		.and().exceptionHandling().authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/login"));
 		http.logout().deleteCookies("auth_code", "JSESSIONID").invalidateHttpSession(true);
 
 		http.csrf().disable();
@@ -58,4 +62,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.sessionManagement().invalidSessionUrl("/");
 	}
 
+	public class AjaxAwareAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoint     {
+	    public AjaxAwareAuthenticationEntryPoint(String loginUrl) {
+	        super(loginUrl);
+	    }
+
+	    @Override
+	    public void commence(
+	    		
+	        HttpServletRequest request,
+	        HttpServletResponse response,
+	        AuthenticationException authException)
+	        throws IOException, ServletException {
+	        String ajaxHeader = ((HttpServletRequest) request).getHeader("X-Requested-With");
+	        boolean isAjax = "XMLHttpRequest".equals(ajaxHeader);
+	        if (isAjax) {
+	    				response.setHeader("UNAUTHORIZED", "true");// Utilizado para los llamados ajax
+	    				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+	            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Ajax REquest Denied (Session Expired)");
+	        } else {
+	            super.commence(request, response, authException);
+	        }
+	    }
+	}
+	
 }
