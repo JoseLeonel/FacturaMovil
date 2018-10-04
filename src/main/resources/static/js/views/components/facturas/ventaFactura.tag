@@ -2137,7 +2137,6 @@ function crearFactura(estado){
     self.factura.totalEfectivo =__valorNumerico($('#totalEfectivo').val())
     self.factura.totalTarjeta = __valorNumerico($('#totalTarjeta').val()) 
     self.factura.totalBanco = __valorNumerico($('#totalBanco').val())
-    self.factura.plazoCredito = __valorNumerico($('#plazoCreditoL').val())
     self.factura.detalleFactura =JSONDetalles
     self.factura.estado = estado
     self.update();

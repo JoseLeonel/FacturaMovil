@@ -2,6 +2,7 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Abono;
 import com.emprendesoftcr.modelo.CuentaCobrar;
 
@@ -34,6 +35,9 @@ public class AbonoCommand {
 	private Date					created_at;
 
 	private Date					updated_at;
+	
+	private String		created_atSTR;
+	private String		updated_atSTR;
 
 	private CuentaCobrar	cuentaCobrar;
 
@@ -58,6 +62,8 @@ public class AbonoCommand {
     this.created_at = abono.getCreated_at();
     this.updated_at = abono.getUpdated_at();
     this.cuentaCobrar =abono.getCuentaCobrar();
+    this.created_atSTR = Utils.getFechaGeneraReporte(abono.getCreated_at());
+		this.updated_atSTR = Utils.getFechaGeneraReporte(abono.getUpdated_at());
 		
 	}
 
@@ -81,6 +87,28 @@ public class AbonoCommand {
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.cuentaCobrar = cuentaCobrar;
+	}
+
+	
+	
+	
+	public String getCreated_atSTR() {
+		return created_atSTR;
+	}
+
+	
+	public void setCreated_atSTR(String created_atSTR) {
+		this.created_atSTR = created_atSTR;
+	}
+
+	
+	public String getUpdated_atSTR() {
+		return updated_atSTR;
+	}
+
+	
+	public void setUpdated_atSTR(String updated_atSTR) {
+		this.updated_atSTR = updated_atSTR;
 	}
 
 	public Long getId() {

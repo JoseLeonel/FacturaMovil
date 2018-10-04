@@ -147,9 +147,9 @@ public class CompraBoImpl implements CompraBo {
 					cuentaPagar.setCreated_at(new Date());
 					cuentaPagar.setUpdated_at(new Date());
 					cuentaPagar.setEmpresa(compra.getEmpresa());
-					cuentaPagar.setTotal(compra.getTotalCompra());
+					cuentaPagar.setTotal(Utils.roundFactura(compra.getTotalCompra(),5));
 					cuentaPagar.setFechaCredito(compra.getFechaCredito());
-					cuentaPagar.setTotalSaldo(compra.getTotalCompra());
+					cuentaPagar.setTotalSaldo(Utils.roundFactura(compra.getTotalCompra(),5));
 					cuentaPagar.setProveedor(compra.getProveedor());
 					cuentaPagar.setTotalAbono(Constantes.ZEROS_DOUBLE);
 					cuentaPagar.setUsuarioCreacion(usuario);

@@ -424,7 +424,7 @@
         .contenedor-listar{
             width:100%;
         }
-        .input-table-search{.toLocaleString('de-DE')
+        .input-table-search{
             margin-left: 15px;
             margin-right: 15px;
             width:100%;
@@ -1014,19 +1014,22 @@ function __InformacionDataTable(){
                             {'data' :'consecutivo'              ,"name":"consecutivo"                 ,"title" : $.i18n.prop("cuentaPagar.consecutivo")   ,"autoWidth" :false },
                             {'data' :'total'                    ,"name":"total"                       ,"title" : $.i18n.prop("cuentaPagar.total")          ,"autoWidth" :false ,
                                 "render":function(total,type, row){
-                                      return total.toLocaleString('de-DE');
+                                       var resultado = redondeoDecimales(total,2)
+									    return  resultado;
                                  }
                             },
                             {'data' :'totalAbono'               ,"name":"totalAbono"                  ,"title" : $.i18n.prop("cuentaPagar.totalAbono")     ,"autoWidth" :false ,
                                 "render":function(totalAbono,type, row){
-                                      return totalAbono.toLocaleString('de-DE');
+                                      var resultado = redondeoDecimales(totalAbono,2)
+									    return  resultado;
                                  }
 
                             
                             },
                             {'data' : 'totalSaldo'              ,"name":"totalSaldo"                  ,"title" : $.i18n.prop("cuentaPagar.totalSaldo")        ,"autoWidth" :false,
                                 "render":function(totalSaldo,type, row){
-                                      return totalSaldo.toLocaleString('de-DE');
+                                      var resultado = redondeoDecimales(totalSaldo,2)
+									    return  resultado;
                                  }
 
                             },

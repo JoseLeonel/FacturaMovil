@@ -14,18 +14,16 @@
                     <div class="ticket" > 
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.titulo")}{abono.id}     </strong><br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.cuentaCobrar.titulo")}{abono.cuentaCobrar.id}     </strong><br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("abono.created_at")}                    </strong>{abono.created_at}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("abono.updated_at")}                    </strong>{abono.updated_at}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("abono.created_atSTR")}                    </strong>{abono.created_at}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("abono.updated_atSTR")}                    </strong>{abono.updated_at}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.cliente")}              </strong>{abono.cuentaCobrar.cliente.nombreCompleto}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.vendedor")}              </strong>{abono.cuentaCobrar.vendedor.nombreCompleto}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.fechaPago")}            </strong>{abono.fechaPago}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.recibo")}:              </strong>{abono.recibo}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.transferencia")}:       </strong>{abono.recibo}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.totalEfectivo")}: </strong>₡{abono.totalEfectivo.toLocaleString('de-DE')}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalTarjeta")}  : </strong>₡{abono.totalTarjeta.toLocaleString('de-DE')}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.totalBanco")}   : </strong>₡{abono.totalBanco.toLocaleString('de-DE')}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.total")}        : </strong>₡{abono.cuentaCobrar.total.toLocaleString('de-DE')}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.saldo")}        : </strong>₡{abono.cuentaCobrar.totalSaldo.toLocaleString('de-DE')}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.transferencia")}:       </strong>{abono.transferencia}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.totalEfectivo")}: </strong>₡{abono.totalEfectivo.toFixed(2)}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalTarjeta")}  : </strong>₡{abono.totalTarjeta.toFixed(2)}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.totalBanco")}   : </strong>₡{abono.totalBanco.toFixed(2)}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.total")}        : </strong>₡{abono.cuentaCobrar.toFixed(2)}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.saldo")}        : </strong>₡{abono.cuentaCobrar.toFixed(2)}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.nota")}         : </strong>{abono.nota}<br></div>
                         <br>
                     </div>

@@ -22,11 +22,11 @@
                         <div class="encabezado">{facturaImpresa.empresa.otraSenas}                        <br></div>
                         <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.fecha.emision")} </strong>{facturaImpresa.fechaEmisionSTR}</div>
                         <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.condicion.venta")} </strong>{facturaImpresa.condicionVenta}</div>
-                        <div class="encabezado" show ="{facturaImpresa.plazoCredito > 0}"><strong>{$.i18n.prop("tikect.encabezado.plazo.credito")}  </strong>{facturaImpresa.plazoCredito} dias</div>
+                        <div class="encabezado" show ="{facturaImpresa.plazoCredito > 0}"><strong>{$.i18n.prop("tikect.encabezado.plazo.credito")} dias </strong>{facturaImpresa.plazoCredito}</div>
                         <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>{facturaImpresa.tipoDoc}</div>
                         <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.moneda")}        </strong>{facturaImpresa.codigoMoneda}</div>
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc != '88'}"><strong>{$.i18n.prop("tikect.encabezado.numeroFactura")} </strong>{facturaImpresa.numeroConsecutivo}</div>
-                        <div class=" encabezado" show = "{facturaImpresa.tipoDoc != '88'}"><strong>{$.i18n.prop("tikect.encabezado.clave")}</strong> </div>
+                        <div class=" encabezado" show = "{facturaImpresa.tipoDoc != '88'  }"><strong>{$.i18n.prop("tikect.encabezado.clave")}</strong> </div>
                         <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88'}">{claveParteUno}</div>
                         <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88'}">{claveParteDos}</div>
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura != ""}"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.nombreFactura}</div>
@@ -335,8 +335,8 @@ function consultaFactura(idFactura){
                     self.facturaImpresa.totalExento      = redondearDecimales(self.facturaImpresa.totalExento,5);
                     self.facturaImpresa.totalComprobante = redondearDecimales(self.facturaImpresa.totalComprobante,0);
                     self.facturaImpresa.totalCambioPagar = redondearDecimales(self.facturaImpresa.totalCambioPagar,5);
-                    self.claveParteUno= self.facturaImpresa.clave.substring(0,24)
-                    self.claveParteDos= self.facturaImpresa.clave.substring(25,51)
+                    self.claveParteUno= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(0,24):""
+                    self.claveParteDos= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(25,51):""
                     //detalles
                     self.totalImpuestoServicio = 0
                     self.subTotal = 0
@@ -375,6 +375,7 @@ function consultaFactura(idFactura){
                     }else{
                         self.subTotal = __valorNumerico(self.facturaImpresa.totalVenta) 
                     }
+                 
                      $('.imprimirModal').modal('show'); 
                 }
             }

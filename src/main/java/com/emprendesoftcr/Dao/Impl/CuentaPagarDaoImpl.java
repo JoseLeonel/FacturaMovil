@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.CuentaCobrarDao;
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Factura;
@@ -114,10 +115,10 @@ public class CuentaPagarDaoImpl implements CuentaCobrarDao {
 			cuentaCobrar.setNota(factura.getNota() == null?Constantes.CUENTA_POR_COBRAR_NOTA_AUTOMATICO:factura.getNota());
 			cuentaCobrar.setRecibo(Constantes.EMPTY);
 			cuentaCobrar.setTipo(Constantes.CUENTA_POR_COBRAR_TIPO_Automatica);
-			cuentaCobrar.setTotal(factura.getTotalVentaNeta());
+			cuentaCobrar.setTotal(Utils.roundFactura(factura.getTotalComprobante(),5));
 			cuentaCobrar.setTotalAbono(Constantes.ZEROS_DOUBLE);
 			cuentaCobrar.setTotalComision(Constantes.ZEROS_DOUBLE);
-			cuentaCobrar.setTotalSaldo(factura.getTotalVentaNeta());
+			cuentaCobrar.setTotalSaldo(Utils.roundFactura(factura.getTotalComprobante(),5));
 			cuentaCobrar.setDescuento(Constantes.ZEROS_DOUBLE);
 			cuentaCobrar.setUsuario(factura.getUsuarioCreacion());
 			cuentaCobrar.setVendedor(factura.getVendedor());

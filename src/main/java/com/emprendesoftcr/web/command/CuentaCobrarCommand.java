@@ -2,6 +2,7 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Empresa;
@@ -49,6 +50,11 @@ public class CuentaCobrarCommand {
 
 	private Date			updated_at;
 
+	private String		created_atSTR;
+	private String		updated_atSTR;
+	
+	private Integer plazoCredito;
+
 	private Cliente		cliente;
 	private Vendedor	vendedor;
 
@@ -79,6 +85,9 @@ public class CuentaCobrarCommand {
 		this.cliente = cuentaCobrar.getCliente();
 		this.vendedor = cuentaCobrar.getVendedor();
 		this.empresa = cuentaCobrar.getEmpresa();
+		this.created_atSTR = Utils.getFechaGeneraReporte(cuentaCobrar.getCreated_at());
+		this.updated_atSTR = Utils.getFechaGeneraReporte(cuentaCobrar.getUpdated_at());
+		this.plazoCredito = cuentaCobrar.getPlazoCredito();
 	}
 
 	public CuentaCobrarCommand() {
@@ -93,6 +102,36 @@ public class CuentaCobrarCommand {
 	}
 
 	
+	
+	
+	public Integer getPlazoCredito() {
+		return plazoCredito;
+	}
+
+	
+	public void setPlazoCredito(Integer plazoCredito) {
+		this.plazoCredito = plazoCredito;
+	}
+
+	public String getCreated_atSTR() {
+		return created_atSTR;
+	}
+
+	
+	public void setCreated_atSTR(String created_atSTR) {
+		this.created_atSTR = created_atSTR;
+	}
+
+	
+	public String getUpdated_atSTR() {
+		return updated_atSTR;
+	}
+
+	
+	public void setUpdated_atSTR(String updated_atSTR) {
+		this.updated_atSTR = updated_atSTR;
+	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
