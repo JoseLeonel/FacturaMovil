@@ -917,34 +917,21 @@ function __InformacionDataTable(){
                             },
                             {'data' : 'total'                 ,"name":"total"                   ,"title" : $.i18n.prop("cuentaCobrar.total")        ,"autoWidth" :false,
                                 "render":function(total,type, row){
-<<<<<<< HEAD
                                     var resultado = redondeoDecimales(total,2)
 									    return  resultado;
-=======
-                                      return total;
->>>>>>> c6b8f02945c7cb11fd68c544817711af45ce76c0
                                  }
                             },
                             {'data' : 'totalAbono'            ,"name":"totalAbono"              ,"title" : $.i18n.prop("cuentaCobrar.totalAbono")   ,"autoWidth" :false,
                                 "render":function(totalAbono,type, row){
-<<<<<<< HEAD
                                     var resultado = redondeoDecimales(totalAbono,2)
     							    return  resultado;
                              }
-=======
-                                      return  totalAbono;
-                                 }
->>>>>>> c6b8f02945c7cb11fd68c544817711af45ce76c0
                             
                             },
                             {'data' : 'totalSaldo'            ,"name":"totalSaldo"              ,"title" : $.i18n.prop("cuentaCobrar.totalSaldo")   ,"autoWidth" :false,
                                 "render":function(totalSaldo,type, row){
-<<<<<<< HEAD
                                     var resultado = redondeoDecimales(totalSaldo,2)
     							    return  resultado;
-=======
-                                      return  totalSaldo;
->>>>>>> c6b8f02945c7cb11fd68c544817711af45ce76c0
                                  }
                             
                             },
