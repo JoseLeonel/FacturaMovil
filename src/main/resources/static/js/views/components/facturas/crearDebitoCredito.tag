@@ -65,7 +65,7 @@
                                     </div>    
                                     <div class="form-group " show = {!mostrarCamposIngresoContado || factura.fechaCredito}>
                                         <label>{$.i18n.prop("factura.plazoCredito")}</label> 
-                                        <input type="number" id = "plazoCredito"  name "plazoCredito" class="form-control plazoCredito" value="{factura.plazoCredito}" >
+                                        <input type="number" id = "plazoCreditoL"  name "plazoCreditoL" class="form-control plazoCreditoL" value="{factura.plazoCredito}" >
                                     </div>
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("cliente.correoElectronico")}</label> 
@@ -126,6 +126,7 @@
                                 </div>
                             </div>
                             <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
+                            <input type="hidden" id='plazoCredito'            name='plazoCredito'            value="{factura.plazoCredito}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='subTotal'                name='subTotal'                value="{factura.subTotal}" >
@@ -608,7 +609,7 @@ function _INIT(){
     $(".totalEfectivo").val(null)   
 
 
-    $(".plazoCredito").val(null)   
+    $(".plazoCreditoL").val(null)   
     $(".fechaCredito").val(null)   
     $(".nota").val(null)   
     $(".direccion").val(null)   
@@ -882,7 +883,13 @@ __CalculaCambioAEntregarKeyPress(e){
  * Listar codigos  llamado del modal para presentar los articulos
  **/   
  __ListaDecodigos(){
-      $('#modalInventario').modal('show')   
+    self.mostrarListadoArticulos = true
+    self.update()
+    $('.descArticulo').val(null)
+    $('.codigoArt').val(null)
+    $(".tableListarArticulos").dataTable().fnClearTable();
+    $(".tableListarArticulos").DataTable().destroy();
+    $('#modalInventario').modal('show')   
  }
 /**
 *  Buscar la Factura Pendiente en espera
@@ -910,7 +917,7 @@ function aplicarFactura(){
            mensajeError($.i18n.prop("factura.alert.fechaCredito"))
             return
         }
-        if($('#plazoCredito').val() < 0 || $('#plazoCredito').val() == null || $('#plazoCredito').val() == 0){
+        if($('#plazoCreditoL').val() < 0 || $('#plazoCreditoL').val() == null || $('#plazoCreditoL').val() == 0){
            mensajeError($.i18n.prop("factura.alert.plazoCredito"))
             return
         }

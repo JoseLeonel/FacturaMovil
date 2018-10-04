@@ -242,18 +242,18 @@
                                 <input  id= "cantidadDetalle" class="form-control " type="number" placeholder="Cantidad Detalle" value = "{cantidad}"  readonly/>
                             </td>
                             <td class="text-right">
-                                <input   class="form-control" type="text"  value = "₡ {costo}" readonly/>
+                                <input   class="form-control" type="text"  value = " {costo.toFixed(2)}" readonly/>
                             </td>
                             <td class="text-right">
-                                <input   class="form-control" type="text"  value = "₡ {descuento}" readonly/>
+                                <input   class="form-control" type="text"  value = " {descuento.toFixed(2)}" readonly/>
                             </td>
                                                         
                             <td class="text-right">
-                                <input  class="form-control" type="text"  value = "₡ {impuesto}" readonly/>
+                                <input  class="form-control" type="text"  value = " {impuesto.toFixed(2)}" readonly/>
                             </td>
 
                             <td class="text-right">
-                                <input  class="form-control" type="text"  value = "₡ {subTotal}" readonly/>
+                                <input  class="form-control" type="text"  value = " {montoTotalLinea}" readonly/>
                             </td>
                         </tr>
                         </tbody>
@@ -274,7 +274,7 @@
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show">₡ {compra.subTotal}</span>
+                                                    <span class="label label-info textShadow" id="total-show"> {compra.subTotal.toFixed(2)}</span>
                                                 </div>
                                             </td>
                                         </tr>                                            
@@ -285,7 +285,7 @@
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show">₡ {compra.totalDescuento}</span>
+                                                    <span class="label label-info textShadow" id="total-show"> {compra.totalDescuento.toFixed(2)}</span>
                                                 </div>
                                             </td>
                                         </tr>                                            
@@ -296,7 +296,7 @@
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show">₡ {compra.totalImpuesto}</span>
+                                                    <span class="label label-info textShadow" id="total-show"> {compra.totalImpuesto.toFixed(2)}</span>
                                                 </div>
                                             </td>
                                         </tr>         
@@ -307,7 +307,7 @@
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show">₡ {compra.totalCompra}</span>
+                                                    <span class="label label-info textShadow" id="total-show"> {compra.totalCompra.toFixed(2)}</span>
                                                 </div>
                                             </td>
                                         </tr>                     
@@ -754,7 +754,7 @@ function __MostrarCompra(){
         self.compra.fechaPago = self.compra.fechaPago !=null?__displayDate_detail(self.compra.fechaPago):null;
         self.compra.fechaCredito = self.compra.fechaCredito !=null?__displayDate_detail(self.compra.fechaCredito):null;
         self.compra.fechaCompra = self.compra.fechaCompra !=null?__displayDate_detail(self.compra.fechaCompra):null;
-        self.compra.fechaIngreso  =self.compra.fechaIngreso !=null?formatoFechaHora(self.compra.fechaIngreso):null;
+        self.compra.fechaIngreso  =self.compra.fechaIngresoSTR !=null?self.compra.fechaIngresoSTR:null;
         self.update()
         cargarDetallesCompra()
 	});
@@ -776,7 +776,7 @@ function cargarDetallesCompra(){
             costo           : parseFloat(e.costo),
             impuesto        : e.impuesto,
             descuento       : e.descuento,
-            subTotal        : parseFloat(e.subTotal)
+            montoTotalLinea        : parseFloat(e.montoTotalLinea)
         });
     })
     self.mostrarCompra         = true

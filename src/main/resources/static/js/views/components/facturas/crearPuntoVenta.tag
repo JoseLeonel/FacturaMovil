@@ -54,7 +54,7 @@
                                         <input type="text" id="nombreFactura" name="nombreFactura" class="campo"  value="{factura.nombreFactura}" >
                                     </div>
                                     
-                                    <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group ">
+                                    <div show = "{!mostrarCamposIngresoContado || factura.fechaCredito}" class="form-group ">
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 
                                         <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
                                             <input type="text" class="campo fechaCredito" name="fechaCredito" id="fechaCredito" value="{factura.fechaCredito}" >
@@ -63,9 +63,9 @@
                                             </div>
                                         </div>
                                     </div>    
-                                    <div class="form-group " show = {!mostrarCamposIngresoContado || factura.fechaCredito}>
+                                    <div class="form-group " show = "{!mostrarCamposIngresoContado || factura.fechaCredito}">
                                         <label>{$.i18n.prop("factura.plazoCredito")}</label> 
-                                        <input type="number" id = "plazoCredito"  name "plazoCredito" class="campo plazoCredito" value="{factura.plazoCredito}" >
+                                        <input type="number" id = "plazoCreditoL"  name "plazoCreditoL" class="campo plazoCreditoL" value="{factura.plazoCredito}" >
                                     </div>
                                     
                                    
@@ -89,6 +89,7 @@
                                 </div>
                             </div>
                             <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
+                            <input type="hidden" id='plazoCredito'            name='plazoCredito'            value="{factura.plazoCredito}" >
                             <input type="hidden" id='estado'                  name='estado'                  value="{factura.estado}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
@@ -995,13 +996,13 @@ __CalculaCambioAEntregarKeyPress(e){
  * Listar codigos  llamado del modal para presentar los articulos
  **/   
  __ListaDecodigos(){
-     self.mostrarListadoArticulos = true
-     self.update()
-     $('.descArticulo').val(null)
-     $('.codigoArt').val(null)
+    self.mostrarListadoArticulos = true
+    self.update()
+    $('.descArticulo').val(null)
+    $('.codigoArt').val(null)
     $(".tableListarArticulos").dataTable().fnClearTable();
     $(".tableListarArticulos").DataTable().destroy();
-   $('#modalInventario').modal('show')   
+    $('#modalInventario').modal('show')    
  }
 /**
 *  Buscar la Factura Pendiente en espera
@@ -1047,7 +1048,7 @@ function aplicarFactura(estado){
            mensajeError($.i18n.prop("factura.alert.fechaCredito"))
             return
         }
-        if($('#plazoCredito').val() < 0 || $('#plazoCredito').val() == null || $('#plazoCredito').val() == 0){
+        if($('#plazoCreditoL').val() < 0 || $('#plazoCreditoL').val() == null || $('#plazoCreditoL').val() == 0){
            mensajeError($.i18n.prop("factura.alert.plazoCredito"))
             return
         }
@@ -1183,7 +1184,7 @@ function __Init(){
     $(".totalTarjeta").val(null)   
     $(".totalEfectivo").val(null)   
     $('.precioVenta').val(null)
-    $("#plazoCredito").val(null)
+    $("#plazoCreditoL").val(null)
     $("#nota").val(null)
     $("#fechaCredito").val(null)
     $("#cambiarCantidadArticulo").val(null)
@@ -1280,8 +1281,7 @@ function crearFactura(estado){
     self.update() 
     var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
     var fechaReferencia =$('#referenciaFechaEmision').val() !=null?referenciaFechaEmision.value:new Date() 
-     var JSONDetalles = JSON.stringify( self.detalleFactura );
-    
+    var JSONDetalles = JSON.stringify( self.detalleFactura );
     self.factura.id = self.factura.id
     self.factura.condicionVenta = $('#condicionVenta').val()
     self.factura.fechaCredito =fechaCreditoTemporal.toString()
@@ -1289,13 +1289,11 @@ function crearFactura(estado){
     self.factura.totalEfectivo =__valorNumerico($('#totalEfectivo').val())
     self.factura.totalTarjeta = __valorNumerico($('#totalTarjeta').val()) 
     self.factura.totalBanco = __valorNumerico($('#totalBanco').val())
+    self.factura.plazoCredito = __valorNumerico($('#plazoCreditoL').val())
     self.factura.detalleFactura =JSONDetalles
     self.factura.estado = estado
     self.update();
-    
     var formulario = $("#formularioFactura").serialize();
-     
-                    
     $.ajax({
         type : "POST",
         dataType : "json",

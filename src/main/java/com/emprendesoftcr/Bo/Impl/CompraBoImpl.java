@@ -81,8 +81,6 @@ public class CompraBoImpl implements CompraBo {
 			}else {
 				compra.setFechaCredito(null);
 			}
-			
-			
 			compra.setNota(compraCommand.getNota());
 			compra.setTotalCompra(compraCommand.getTotalCompra());
 			compra.setTotalDescuento(compraCommand.getTotalDescuento());
@@ -97,26 +95,13 @@ public class CompraBoImpl implements CompraBo {
 				compra.setFechaIngreso(new Date());
 				compra.setUpdated_at(new Date());
 			}
-			
-			 if(compra.getId() == null) {
-				 compra.setCreated_at(new Date());
-				 compra.setUpdated_at(new Date());
-				 compra.setUsuarioCreacion(usuario);
-				 compra.setUsuarioIngresoInventario(usuario);
-	    	 agregar(compra); 
-	     }else {
-	    	 compra.setCreated_at(new Date());
-	    	 compra.setUsuarioIngresoInventario(usuario);
-	    	 modificar(compra);
-	     }   
-			
 			if(compraCommand.getId() !=null ) {
 				if(compraCommand.getId() > 0) {
 					compraDao.eliminarDetalleComprasPorSP(compra);
 				}
 			}
 
-			
+		
 			JSONObject json = null;
 			try {
 				json = (JSONObject) new JSONParser().parse(compraCommand.getDetalleCompra());
@@ -139,13 +124,21 @@ public class CompraBoImpl implements CompraBo {
           detalleCompra.setUpdated_at(new Date());
           //detalleCompraDao.agregar(detalleCompra);
 					compra.addDetalleCompra(detalleCompra);
-					compraDao.modificar(compra); 
-					
+			//		compraDao.modificar(compra); 
 					aplicarInventario(compra,  detalleCompra, articulo);
-
 				}
 			}
-			
+			if(compra.getId() == null) {
+				 compra.setCreated_at(new Date());
+				 compra.setUpdated_at(new Date());
+				 compra.setUsuarioCreacion(usuario);
+				 compra.setUsuarioIngresoInventario(usuario);
+	    	 agregar(compra); 
+	     }else {
+	    	 compra.setCreated_at(new Date());
+	    	 compra.setUsuarioIngresoInventario(usuario);
+	    	 modificar(compra);
+	     }   
 			// Crear Credito del cliente
 			if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
 				if (compra.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
@@ -165,10 +158,6 @@ public class CompraBoImpl implements CompraBo {
 					
 				}
 			}
-			
-    
-			
-
 		} catch (Exception e) {
 			log.info("** Error  crearCompra: " + e.getMessage() + " fecha " + new Date());
 
@@ -185,21 +174,26 @@ public class CompraBoImpl implements CompraBo {
 	 */
 	@Override
 	public void aplicarInventario(Compra compra,  DetalleCompra detalleCompra, Articulo articulo) throws Exception {
-		if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
-			
-			Double cantidadTotal = articulo.getCantidad() + detalleCompra.getCantidad();
+		try {
+			if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
+				
+				Double cantidadTotal = articulo.getCantidad() + detalleCompra.getCantidad();
 
-			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getProveedor().getNombreCompleto();
-			kardexDao.entrada(articulo,articulo.getCantidad(), detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
-			articulo.setCosto(articuloDao.costoPromedio(articulo.getCosto(), detalleCompra.getCosto(), articulo.getCantidad(), detalleCompra.getCantidad()));
-			articulo.setGananciaPrecioPublico(articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio()));
-			articulo.setUpdated_at(new Date());
-			articulo.setUsuario(compra.getUsuarioCreacion());
-			articulo.setCantidad(cantidadTotal);
-			articulo.setPrecioPublico(detalleCompra.getPrecio());
-			articuloDao.modificar(articulo);
+				String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getProveedor().getNombreCompleto();
+				kardexDao.entrada(articulo,articulo.getCantidad(), detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
+				articulo.setCosto(articuloDao.costoPromedio(articulo.getCosto(), detalleCompra.getCosto(), articulo.getCantidad(), detalleCompra.getCantidad()));
+				articulo.setGananciaPrecioPublico(articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio()));
+				articulo.setUpdated_at(new Date());
+				articulo.setUsuario(compra.getUsuarioCreacion());
+				articulo.setCantidad(cantidadTotal);
+				articulo.setPrecioPublico(detalleCompra.getPrecio());
+				articuloDao.modificar(articulo);
+			}
 			
-
+		} catch (Exception e) {
+			log.info("** Error  aplicarInventario: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+			
 		}
 
 	}
