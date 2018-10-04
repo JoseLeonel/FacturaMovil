@@ -25,6 +25,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
@@ -194,6 +196,13 @@ public class Compra implements Serializable {
 	public void setFechaCredito(Date fechaCredito) {
 		this.fechaCredito = fechaCredito;
 	}
+	
+	public String getFechaCreditoSTR() {
+		if(this.fechaCredito !=null) {
+			return Utils.getFechaGeneraReporte(this.fechaCredito);	
+		}
+		return Constantes.EMPTY;
+	}
 
 	public Date getFechaPago() {
 		return fechaPago;
@@ -203,12 +212,25 @@ public class Compra implements Serializable {
 		this.fechaPago = fechaPago;
 	}
 
+	public String getFechaPagoSTR() {
+		if(this.fechaPago !=null) {
+			return Utils.getFechaGeneraReporte(this.fechaPago);	
+		}
+		return Constantes.EMPTY;
+	}
+
 	public Date getFechaCompra() {
 		return fechaCompra;
 	}
 
 	public void setFechaCompra(Date fechaCompra) {
 		this.fechaCompra = fechaCompra;
+	}
+	public String getFechaCompraSTR() {
+		if(this.fechaCompra !=null) {
+			return Utils.getFechaGeneraReporte(this.fechaCompra);	
+		}
+		return Constantes.EMPTY;
 	}
 
 	public Date getFechaIngreso() {
@@ -218,7 +240,13 @@ public class Compra implements Serializable {
 	public void setFechaIngreso(Date fechaIngreso) {
 		this.fechaIngreso = fechaIngreso;
 	}
-
+	public String getFechaIngresoSTR() {
+		if(this.fechaIngreso !=null) {
+			return Utils.getFechaGeneraReporte(this.fechaIngreso);	
+		}
+		return Constantes.EMPTY;
+	}
+	
 	public Integer getTipoDocumento() {
 		return tipoDocumento;
 	}

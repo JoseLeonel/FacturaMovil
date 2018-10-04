@@ -65,9 +65,9 @@
                             <div class="row">
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div class="form-group ">
-                                        <input   type="hidden" class="form-control campo" id="proveedor" name="proveedor" value="{proveedor.id}">
+                                        <input   type="hidden" class="form-control campo proveedor" id="proveedor" name="proveedor" value="{proveedor.id}">
                                         <label>{$.i18n.prop("compra.proveedor")}</label> 
-                                        <input onclick = {_EscogerProveedores}  type="text" id="nombreProveedor" name="nombreProveedor" class="campo proveedor form-control"  value="{proveedor.nombreCompleto}">
+                                        <input onclick = {_EscogerProveedores}  type="text" id="nombreProveedor" name="nombreProveedor" class="campo nombreProveedor form-control"  value="{proveedor.nombreCompleto}">
                                     </div>
                                 </div>
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">

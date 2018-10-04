@@ -649,7 +649,7 @@
                                     </div>    
                                     <div class="form-group " show = {!mostrarCamposIngresoContado || factura.fechaCredito}>
                                         <label>{$.i18n.prop("factura.plazoCredito")}</label> 
-                                        <input type="number" id = "plazoCredito"  name "plazoCredito" class="form-control plazoCredito" value="{factura.plazoCredito}" >
+                                        <input type="number" id = "plazoCreditoL"  name "plazoCreditoL" class="form-control plazoCreditoL" value="{factura.plazoCredito}" >
                                     </div>
                                 </div>
                                 <div  class= "col-md-6 col-sx-6 col-sm-6 col-lg-6" >
@@ -668,8 +668,9 @@
                                 </div>
                             </div>
                             <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
-                            <input type="hidden" id='mesa'                    name='mesa'                  value="{mesa.id}" >
+                            <input type="hidden" id='mesa'                    name='mesa'                    value="{mesa.id}" >
                             <input type="hidden" id='estado'                  name='estado'                  value="{factura.estado}" >
+                            <input type="hidden" id='plazoCredito'            name='plazoCredito'            value="{factura.plazoCredito}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='subTotal'                name='subTotal'                value="{factura.subTotal}" >
@@ -1388,7 +1389,7 @@ __PantallaCodigoBarra(){
 *  Limpiar Formulario
 **/
 __LimpiarFormulario(){
-    $(".plazoCredito").val(null)   
+    $(".plazoCreditoL").val(null)   
     $(".fechaCredito").val(null)   
      $(".totalEfectivo").val(null)   
     $(".totalTarjeta").val(null)   
@@ -1947,7 +1948,7 @@ function aplicarFactura(estado){
            mensajeError($.i18n.prop("factura.alert.fechaCredito"))
             return
         }
-        if($('#plazoCredito').val() < 0 || $('#plazoCredito').val() == null || $('#plazoCredito').val() == 0){
+        if($('#plazoCreditoL').val() < 0 || $('#plazoCreditoL').val() == null || $('#plazoCreditoL').val() == 0){
            mensajeError($.i18n.prop("factura.alert.plazoCredito"))
             return
         }
@@ -2126,7 +2127,7 @@ function __Init(){
     $(".totalBanco").val(null)   
     $(".totalTarjeta").val(null)   
     $(".totalEfectivo").val(null)   
-    $("#plazoCredito").val(null)
+    $("#plazoCreditoL").val(null)
     $("#nota").val(null)
     $("#fechaCredito").val(null)
     $("#cambiarCantidadArticulo").val(null)
@@ -2350,6 +2351,7 @@ function crearFactura(estado){
     self.factura.totalEfectivo =$('#totalEfectivo').val()
     self.factura.totalTarjeta = __valorNumerico($('#totalTarjeta').val()) 
     self.factura.totalBanco = __valorNumerico($('#totalBanco').val())
+    self.factura.plazoCredito = __valorNumerico($('#plazoCreditoL').val())
     self.factura.detalleFactura =JSONDetalles
     self.factura.estado = estado
     self.update();

@@ -28,6 +28,13 @@ public class CompraEsperaCommand {
 
 	private Date								fechaIngreso;
 
+	private String								fechaPagoSTR;
+
+	private String								fechaCompraSTR;
+
+	private String								fechaIngresoSTR;
+	private String								fechaCreditoSTR;
+
 	private Integer							tipoDocumento;
 
 	private Integer							formaPago;
@@ -63,6 +70,10 @@ public class CompraEsperaCommand {
 		this.totalImpuesto = compra.getTotalImpuesto();
 		this.totalDescuento = compra.getTotalDescuento();
 		this.subTotal = compra.getSubTotal();
+		this.fechaCompraSTR = compra.getFechaCompraSTR();
+		this.fechaIngresoSTR = compra.getFechaIngresoSTR();
+		this.fechaCreditoSTR = compra.getFechaCreditoSTR();
+		this.fechaPagoSTR = compra.getFechaPagoSTR();
 
 	}
 
@@ -79,6 +90,70 @@ public class CompraEsperaCommand {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+
+
+	
+	public String getFechaPagoSTR() {
+		return fechaPagoSTR;
+	}
+
+
+
+
+	
+	
+	public String getFechaCreditoSTR() {
+		return fechaCreditoSTR;
+	}
+
+
+
+
+	
+	public void setFechaCreditoSTR(String fechaCreditoSTR) {
+		this.fechaCreditoSTR = fechaCreditoSTR;
+	}
+
+
+
+
+	public void setFechaPagoSTR(String fechaPagoSTR) {
+		this.fechaPagoSTR = fechaPagoSTR;
+	}
+
+
+
+
+	
+	public String getFechaCompraSTR() {
+		return fechaCompraSTR;
+	}
+
+
+
+
+	
+	public void setFechaCompraSTR(String fechaCompraSTR) {
+		this.fechaCompraSTR = fechaCompraSTR;
+	}
+
+
+
+
+	
+	public String getFechaIngresoSTR() {
+		return fechaIngresoSTR;
+	}
+
+
+
+
+	
+	public void setFechaIngresoSTR(String fechaIngresoSTR) {
+		this.fechaIngresoSTR = fechaIngresoSTR;
+	}
+
 
 
 
