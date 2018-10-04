@@ -21,11 +21,11 @@
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.fechaPago")}            </strong>{abono.fechaPago}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.recibo")}:              </strong>{abono.recibo}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.transferencia")}:       </strong>{abono.recibo}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.totalEfectivo")}: </strong>₡{abono.totalEfectivo.toLocaleString('de-DE')}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalTarjeta")}  : </strong>₡{abono.totalTarjeta.toLocaleString('de-DE')}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.totalBanco")}   : </strong>₡{abono.totalBanco.toLocaleString('de-DE')}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.total")}        : </strong>₡{abono.cuentaCobrar.total.toLocaleString('de-DE')}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.saldo")}        : </strong>₡{abono.cuentaCobrar.totalSaldo.toLocaleString('de-DE')}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.totalEfectivo")}: </strong>₡{abono.totalEfectivo}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalTarjeta")}  : </strong>₡{abono.totalTarjeta}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.totalBanco")}   : </strong>₡{abono.totalBanco}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.total")}        : </strong>₡{abono.cuentaCobrar.total}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.saldo")}        : </strong>₡{abono.cuentaCobrar.totalSaldo}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.nota")}         : </strong>{abono.nota}<br></div>
                         <br>
                     </div>

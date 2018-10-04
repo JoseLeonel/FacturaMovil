@@ -100,7 +100,7 @@
                                         </tfoot>
                                     </table>
 
-                                    <h2 class="pull-right">{$.i18n.prop("factura.linea.detalle.impuesto")}:{totalImpuestos.toLocaleString('de-DE')} {$.i18n.prop("factura.linea.detalle.descuento")}:{totalDescuentos.toLocaleString('de-DE')} {$.i18n.prop("factura.total")}:{total.toLocaleString('de-DE')}  </h2>
+                                    <h2 class="pull-right">{$.i18n.prop("factura.linea.detalle.impuesto")}:{totalImpuestos} {$.i18n.prop("factura.linea.detalle.descuento")}:{totalDescuentos} {$.i18n.prop("factura.total")}:{total}  </h2>
                                 </div>   
 
                             </div> 
@@ -274,18 +274,18 @@
                                 <input  class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad} readonly/>
                             </td>
                             <td class="text-right">
-                                <input   class="form-control" type="text"  value = "{precioUnitario.toLocaleString('de-DE')}" readonly />
+                                <input   class="form-control" type="text"  value = "{precioUnitario}" readonly />
                             </td>
                             <td class="text-right">
-                                <input   class="form-control" type="text"  value = "{descuento.toLocaleString('de-DE')}" readonly/>
+                                <input   class="form-control" type="text"  value = "{descuento}" readonly/>
                             </td>
                                                         
                             <td class="text-right">
-                                <input  class="form-control" type="text"  value = "{impuesto.toLocaleString('de-DE')}" readonly/>
+                                <input  class="form-control" type="text"  value = "{impuesto}" readonly/>
                             </td>
 
                             <td class="text-righ">
-                                <input  class="form-control" type="text"  value = "₡ {montoTotalLinea.toLocaleString('de-DE')}" readonly/>
+                                <input  class="form-control" type="text"  value = "₡ {montoTotalLinea}" readonly/>
                             </td>
                         </tr>
                         </tbody>
@@ -312,7 +312,7 @@
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show">₡ {factura.totalComprobante.toLocaleString('de-DE')}</span>
+                                                    <span class="label label-info textShadow" id="total-show">₡ {factura.totalComprobante}</span>
                                                 </div>
                                             </td>
                                         </tr>                     

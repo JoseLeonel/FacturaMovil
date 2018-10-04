@@ -94,6 +94,10 @@
             </div>   
         </div>
         <div class="col-md-2 col-lg-2 col-sm-2"></div>
+        <div class="col-md-2 col-lg-2 col-sm-2">
+	        <button onclick ={__EnviarPorCorreo} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-edit"></i></button>
+			<a class="fa fa-print" target="_blank" title="Imprimir recibo" href="DescargarDetalleTotalFacturasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}"></a>        
+        </div>
     </div>
 
 	<script>
@@ -113,7 +117,11 @@
 				totalVentasNetas:"0",
 				totalVentasExentas:"0",
 				totalVentasGravadas:"0",
-		}			
+		}
+		
+		self.fechaInicio="";
+		self.fechaFin="";
+		
 
 		//Se cargan al montar el tag
 		self.on('mount',function(){
@@ -158,20 +166,21 @@
 		**/
 		__Busqueda(){
 			limpiarFactura();
-		    self.update()
+		    self.fechaInicio = $('#fechaInicial').val();
+		    self.fechaFin = $('#fechaFin').val();
+		    self.update();
+		    
 		    if ($("#filtros").valid()) {
 		        var parametros = {
-		        	fechaInicioParam:$('.fechaInicial').val(),
-		        	fechaFinParam:$('.fechaFinal').val(),
+		        	fechaInicioParam:$('#fechaInicial').val(),
+		        	fechaFinParam:$('#fechaFinal').val(),
 		        };
-		        console.log(parametros);
 		        $.ajax({
 		            url: "TotalFacturasAjax.do",
 		            datatype: "json",
 		            data:parametros ,
 		            method:"GET",
 		            success: function (data) {
-				        console.log(data);
 			        	self.factura = data;
 			        	self.mostrarDetalle = true;
 			        	self.mostrarFiltros = false;
@@ -184,6 +193,33 @@
 		        });
 		 	}		
 		}
+		
+		/**
+		*  Busqueda de la informacion y la envia por correo
+		**/
+		__EnviarPorCorreo(){
+		    if ($("#filtros").valid()) {
+		        var parametros = {
+		        	fechaInicioParam:$('#fechaInicial').val(),
+		        	fechaFinParam:$('#fechaFinal').val(),
+		        };
+		        $.ajax({
+		            url: "EnvioDetalleTotalFacturasAjax.do",
+		            datatype: "json",
+		            data:parametros ,
+		            method:"POST",
+		            success: function (data) {
+					    self.update();
+			        },
+			        error: function (xhr, status) {
+			            console.log(xhr);
+			            mensajeErrorServidor(xhr, status);
+			        }
+		        });
+		 	}		
+		}
+		
+		
 		
 		/**
 		* limpiar los filtros

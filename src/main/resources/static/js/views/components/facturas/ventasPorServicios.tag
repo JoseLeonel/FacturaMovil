@@ -171,7 +171,7 @@
                         <div class="row" >
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label ">{$.i18n.prop("factura.resumen.total.servicios")}</label> 
-                                <input type="number" step="any"  class="form-control "  value="{factura.totalComprobante.toLocaleString('de-DE')}" readonly>
+                                <input type="number" step="any"  class="form-control "  value="{factura.totalComprobante}" readonly>
                             </div>
                         </div>    
                         <div class="row" >
@@ -195,7 +195,7 @@
                         <div class="row" >
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label ">{$.i18n.prop("factura.resumen.cambio")}</label> 
-                                <input type="number" step="any"  class="form-control "  value="{factura.totalCambioPagar.toLocaleString('de-DE')}" readonly>
+                                <input type="number" step="any"  class="form-control "  value="{factura.totalCambioPagar}" readonly>
                             </div>
                         </div>   
                             <input type="hidden" id='estado'                  name='estado'                  value="{factura.estado}" >
@@ -695,7 +695,7 @@ function __nuevoArticuloAlDetalle(cantidad){
        porcentajeDesc  : 0,
        subTotal        : subTotal,
        montoTotalLinea : montoTotalLinea,
-       montoTotal      :montoTotal
+       montoTotal      : montoTotal
     });
     var cont = 0;
     self.detail.forEach(function(elemen){

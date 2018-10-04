@@ -1907,7 +1907,7 @@ function _informacionData_Articulo(){
                                         {'data' : 'cantidad'       ,"name":"cantidad"        ,"title" : $.i18n.prop("inventario.cantidad")   ,"autoWidth":false},
                                         {'data' : 'precioPublico'  ,"name":"precioPublico"   ,"title" : $.i18n.prop("articulo.precioPublico"),"autoWidth":false,
                                           "render":function(precioPublico,type, row){
-                                               return  "₡" + precioPublico.toLocaleString('de-DE');
+                                               return  "₡" + precioPublico;
                                             }
                                         },
                                         {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
