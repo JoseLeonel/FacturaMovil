@@ -71,7 +71,7 @@
             <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
                 <div class="box box-solid box-primary">
                     <div class="box-header with-border">
-                       <h1 class="box-title" ><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle")}{cuentaCobrar.id}  {$.i18n.prop("cuentaCobrar.total")}:₡{cuentaCobrar.total.toLocaleString('de-DE')}  {$.i18n.prop("cuentaCobrar.totalSaldo")}:₡ {cuentaCobrar.totalSaldo.toLocaleString('de-DE')} </h1>
+                       <h1 class="box-title" ><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle")}{cuentaCobrar.id}  {$.i18n.prop("cuentaCobrar.total")}:₡{cuentaCobrar.total}  {$.i18n.prop("cuentaCobrar.totalSaldo")}:₡ {cuentaCobrar.totalSaldo} </h1>
                     </div>
                     <div class="box-body">
                         <div class="planel-body" >
@@ -105,7 +105,7 @@
                                             </tr>
                                         </tfoot>
                                     </table>
-                                     <h2 class="pull-right"> {$.i18n.prop("cuentaCobrar.totalAbono")}: {cuentaCobrar.totalAbono.toLocaleString('de-DE')} </h2>
+                                     <h2 class="pull-right"> {$.i18n.prop("cuentaCobrar.totalAbono")}: {cuentaCobrar.totalAbono} </h2>
                                 </div>    
                             </div>
                         </div>    
@@ -127,8 +127,8 @@
         <div class="col-md-12 col-lg-12 col-sx-12 col-sm-1">
             <div class="box box-solid box-primary">
                 <div class="box-header with-border">
-                    <h1 class="box-title" show={abono.id == null}><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.agregar")} {cuentaCobrar.id}  {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total}  {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo.toLocaleString('de-DE')} </h1>
-                    <h1 class="box-title" show={abono.id != null}><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.id")} {abono.id} {$.i18n.prop("abono.detalle.cuenta")} {cuentaCobrar.id} {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total.toLocaleString('de-DE')} {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo.toLocaleString('de-DE')}</h1>
+                    <h1 class="box-title" show={abono.id == null}><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.agregar")} {cuentaCobrar.id}  {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total}  {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo} </h1>
+                    <h1 class="box-title" show={abono.id != null}><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.id")} {abono.id} {$.i18n.prop("abono.detalle.cuenta")} {cuentaCobrar.id} {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total} {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo}</h1>
                 </div>
                 <div class="box-body">
                     <form id = "formularioAbono" name ="formularioAbono " class="advanced-search-form">
@@ -177,7 +177,7 @@
                         <div class="row">
                             <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4">
                                 <label >{$.i18n.prop("cuentaCobrar.totalSaldo")} </label>
-                                <input  type="number" step="any" class="form-control" placeHolder ="{$.i18n.prop("abono.totalSaldo")}"  value="{ cuentaCobrar.totalSaldo.toLocaleString('de-DE')}" readonly>                        
+                                <input  type="number" step="any" class="form-control" placeHolder ="{$.i18n.prop("abono.totalSaldo")}"  value="{ cuentaCobrar.totalSaldo}" readonly>                        
                             </div>
                             <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4">
                                 <label >{$.i18n.prop("abono.totalEfectivo")}</span> </label>
@@ -1186,24 +1186,37 @@ function includeActionsAbono(dataTables_wrapper,dataTables_length) {
     var new_header = "<div  class='new-header-with-actions' style='padding-top:0px; padding-bottom:0px;'>";
     new_header += "<div class='add-new btn-agregarAbono' ><i class='fa fa-plus'></i> Agregar</div>";
     new_header += "</div>";
-    parent.prepend(new_header);
+    parent.prepend(new_header); var resultado = redondeoDecimales(total,2)
+									    return  resultado;
 }
 /**
- * Funcion para Modificar del Listar
+ * Funcion para Modificar del L var resultado = redondeoDecimales(total,2)
+									    return  resultado;
  */
-function __modificarRegistro_Listar(){
-	$('#tableListar').on('click','.btnModificar',function(e){
-        $("#formulario").validate(reglasDeValidacion());
-        $(".errorServerSideJgrid").remove();
-		var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
+function __modificarRegistro_Li var resultado = redondeoDecimales(total,2)
+									    return  resultado;
+	$('#tableListar').on('click var resultado = redondeoDecimales(total,2)
+									    return  resultado;Modificar',function(e){
+        $("#formulario").valida var resultado = redondeoDecimales(total,2)
+									    return  resultado;asDeValidacion());
+        $(".errorServerSideJgri var resultado = redondeoDecimales(total,2)
+									    return  resultado;ove();
+		var table = $('#tableLi var resultado = redondeoDecimales(total,2)
+									    return  resultado;DataTable();
+		if(table.row(this).chil var resultado = redondeoDecimales(total,2)
+									    return  resultado;wn()){
+			//cuando el datatab var resultado = redondeoDecimales(total,2)
+									    return  resultado; en modo responsive
+	       var data = table.row var resultado = redondeoDecimales(total,2)
+									    return  resultado;data();
 	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
+	       var data = table.row var resultado = redondeoDecimales(total,2)
+									    return  resultado;).parents("tr")).data();
 	    }
-        __LimpiarCuentasPorCobrar() 
-        self.cuentaPagar = data
+        __LimpiarCuentasPorCobr var resultado = redondeoDecimales(total,2)
+									    return  resultado;
+        self.cuentaPagar = data var resultado = redondeoDecimales(total,2)
+									    return  resultado;
         self.update()
         __consultar()
 	});
@@ -1306,17 +1319,25 @@ function listaAbonosPorCuentaPorCobrar(){
             if(result.aaData.length > 0){
                 __InformacionTabla_lista_Abonos();
                 loadListar(".tableListaAbonos",idioma_espanol,self.informacion_tabla_abonos,result.aaData)
-                if(self.cuentaCobrar.totalSaldo == 0){
-                    $( ".btn-agregarAbono" ).remove();
+                if(self.cuentaCobrar.total var resultado = redondeoDecimales(total,2)
+									    return  resultado;aldo == 0){
+                    $( ".btn-agregarAbono" var resultado = redondeoDecimales(total,2)
+									    return  resultado;).remove();
                 }else{
-                   includeActionsAbono('.dataTables_wrapper','.dataTables_length')  
+                   includeActionsAbono('.d var resultado = redondeoDecimales(total,2)
+									    return  resultado;taTables_wrapper','.dataTables_length')  
                 }
-                agregarInputsCombosAbonos();
-                ActivarEventoFiltro(".tableListaAbonos")
+                agregarInputsCombosAbonos( var resultado = redondeoDecimales(total,2)
+									    return  resultado;;
+                ActivarEventoFiltro(".tabl var resultado = redondeoDecimales(total,2)
+									    return  resultado;ListaAbonos")
             }else{
-                includeActionsAbono('.dataTables_wrapper','.dataTables_length')  
-                agregarInputsCombosAbonos();
-                ActivarEventoFiltro(".tableListaAbonos")
+                includeActionsAbono('.data var resultado = redondeoDecimales(total,2)
+									    return  resultado;ables_wrapper','.dataTables_length')  
+                agregarInputsCombosAbonos( var resultado = redondeoDecimales(total,2)
+									    return  resultado;;
+                ActivarEventoFiltro(".tabl var resultado = redondeoDecimales(total,2)
+									    return  resultado;ListaAbonos")
 
             }
             __MantenimientoAgregarAbono()
@@ -1346,7 +1367,7 @@ function __InformacionTabla_lista_Abonos(){
                                        {'data' : 'recibo'         ,"name":"recibo"        ,"title" : $.i18n.prop("abono.recibo")},
                                        {'data' : 'total'          ,"name":"total"         ,"title" : $.i18n.prop("abono.total"),
                                             "render":function(total,type, row){
-                                                return total.toLocaleString('de-DE');
+                                                return total;
                                             }
                                        
                                        },

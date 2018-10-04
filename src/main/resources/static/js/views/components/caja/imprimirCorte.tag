@@ -18,12 +18,12 @@
                         <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.updated_at")}      </strong>{usuarioCaja.updated_at}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.usuario")}       </strong>{usuarioCaja.usuario.nombre} {usuarioCaja.usuario.primerApellido} {usuarioCaja.usuario.segundoApellido}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.caja")}          </strong>{usuarioCaja.caja.descripcion}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.fondoIncial")}  : </strong>₡{usuarioCaja.totalFondoInicial.toLocaleString('de-DE')}<br></div>                                                 
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalEfectivo")}: </strong>₡{usuarioCaja.totalEfectivo.toLocaleString('de-DE')}<br></div>                                                 
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalTarjeta")} : </strong>₡{usuarioCaja.totalTarjeta.toLocaleString('de-DE')}<br></div>                                                 
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalBanco")}    : </strong>₡{usuarioCaja.totalBanco.toLocaleString('de-DE')}<br></div>                                                 
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalAbono")} : </strong>₡{usuarioCaja.totalAbono.toLocaleString('de-DE')}<br></div>                                                 
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalNeto")}    : </strong>₡{usuarioCaja.totalNeto.toLocaleString('de-DE')}<br></div>                                                 
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.fondoIncial")}  : </strong>₡{usuarioCaja.totalFondoInicial}<br></div>                                                 
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalEfectivo")}: </strong>₡{usuarioCaja.totalEfectivo}<br></div>                                                 
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalTarjeta")} : </strong>₡{usuarioCaja.totalTarjeta}<br></div>                                                 
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalBanco")}    : </strong>₡{usuarioCaja.totalBanco}<br></div>                                                 
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalAbono")} : </strong>₡{usuarioCaja.totalAbono}<br></div>                                                 
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalNeto")}    : </strong>₡{usuarioCaja.totalNeto}<br></div>                                                 
                         <br>
                        
                     </div>

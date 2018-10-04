@@ -109,37 +109,37 @@
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label  >{$.i18n.prop("usuarioCaja.fondoIncial")}  </label>
-                                <input type="text" class="form-control "  value="₡ {usuarioCaja.totalFondoInicial.toLocaleString('de-DE')}" readonly >
+                                <input type="text" class="form-control "  value="₡ {usuarioCaja.totalFondoInicial}" readonly >
                             </div>
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label  >{$.i18n.prop("usuarioCaja.totalEfectivo")}  </label>
-                                <input type="text" class="form-control "  value="₡ {usuarioCaja.totalEfectivo.toLocaleString('de-DE')}" readonly >
+                                <input type="text" class="form-control "  value="₡ {usuarioCaja.totalEfectivo}" readonly >
                             </div>
 
                         </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label  >{$.i18n.prop("usuarioCaja.totalTarjeta")}  </label>
-                                <input type="text" class="form-control "  value="₡ {usuarioCaja.totalTarjeta.toLocaleString('de-DE')}" readonly >
+                                <input type="text" class="form-control "  value="₡ {usuarioCaja.totalTarjeta}" readonly >
                             </div>
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label  >{$.i18n.prop("usuarioCaja.totalBanco")}  </label>
-                                <input type="text" class="form-control "  value="₡ {usuarioCaja.totalBanco.toLocaleString('de-DE')}" readonly >
+                                <input type="text" class="form-control "  value="₡ {usuarioCaja.totalBanco}" readonly >
                             </div>
 
                         </div>
                         <div class="row">
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label  >{$.i18n.prop("usuarioCaja.totalCredito")}  </label>
-                                <input type="text" class="form-control "  value="₡ {usuarioCaja.totalCredito.toLocaleString('de-DE')}" readonly >
+                                <input type="text" class="form-control "  value="₡ {usuarioCaja.totalCredito}" readonly >
                             </div>
                              <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label  >{$.i18n.prop("usuarioCaja.totalAbono")}  </label>
-                                <input type="text" class="form-control "  value="₡ {usuarioCaja.totalAbono.toLocaleString('de-DE')}" readonly >
+                                <input type="text" class="form-control "  value="₡ {usuarioCaja.totalAbono}" readonly >
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-6 col-lg-4">
                                 <label  >{$.i18n.prop("usuarioCaja.totalNeto")}  </label>
-                                <input type="text" class="form-control "  value="₡ {usuarioCaja.totalNeto.toLocaleString('de-DE')}" readonly >
+                                <input type="text" class="form-control "  value="₡ {usuarioCaja.totalNeto}" readonly >
                             </div>
                            
                         </div>
@@ -435,7 +435,7 @@ function __InformacionDataTable(){
                                {'data' : 'moneda'        ,"name":"moneda"  ,"title" : $.i18n.prop("tipoCambio.moneda")  ,"autoWidth" :false },
                                {'data' : 'total'         ,"name":"total"   ,"title" : $.i18n.prop("tipoCambio.total")   ,"autoWidth" :false,
                                     "render":function(total,type, row){
-                                        return "₡" + total.toLocaleString('de-DE');
+                                        return "₡" + total;
                                     }
                                },
                                {'data' : 'estado'        ,"name":"estado"          ,"title" : $.i18n.prop("tipoCambio.estado")      ,"autoWidth" :false},

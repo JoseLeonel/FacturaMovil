@@ -71,7 +71,11 @@
             <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
                 <div class="box box-solid box-primary">
                     <div class="box-header with-border">
+<<<<<<< HEAD
                        <h1 class="box-title" ><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle")}{cuentaCobrar.id}  {$.i18n.prop("cuentaCobrar.total")}:₡{cuentaCobrar.total.toFixed(2)}  {$.i18n.prop("cuentaCobrar.totalSaldo")}:₡ {cuentaCobrar.totalSaldo.toFixed(2)} </h1>
+=======
+                       <h1 class="box-title" ><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle")}{cuentaCobrar.id}  {$.i18n.prop("cuentaCobrar.total")}:₡{cuentaCobrar.total}  {$.i18n.prop("cuentaCobrar.totalSaldo")}:₡ {cuentaCobrar.totalSaldo} </h1>
+>>>>>>> c6b8f02945c7cb11fd68c544817711af45ce76c0
                     </div>
                     <div class="box-body">
                         <div class="planel-body" >
@@ -105,7 +109,11 @@
                                             </tr>
                                         </tfoot>
                                     </table>
+<<<<<<< HEAD
                                      <h2 class="pull-right"> {$.i18n.prop("cuentaCobrar.totalAbono")}: {cuentaCobrar.totalAbono.toFixed(2)} </h2>
+=======
+                                     <h2 class="pull-right"> {$.i18n.prop("cuentaCobrar.totalAbono")}: {cuentaCobrar.totalAbono} </h2>
+>>>>>>> c6b8f02945c7cb11fd68c544817711af45ce76c0
                                 </div>    
                             </div>
                         </div>    
@@ -127,8 +135,13 @@
         <div class="col-md-12 col-lg-12 col-sx-12 col-sm-1">
             <div class="box box-solid box-primary">
                 <div class="box-header with-border">
+<<<<<<< HEAD
                     <h1 class="box-title" show={abono.id == null}><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.agregar")} {cuentaCobrar.id}  {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total}  {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo.toFixed(2)} </h1>
                     <h1 class="box-title" show={abono.id != null}><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.id")} {abono.id} {$.i18n.prop("abono.detalle.cuenta")} {cuentaCobrar.id} {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total.toFixed(2)} {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo.toFixed(2)}</h1>
+=======
+                    <h1 class="box-title" show={abono.id == null}><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.agregar")} {cuentaCobrar.id}  {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total}  {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo} </h1>
+                    <h1 class="box-title" show={abono.id != null}><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.id")} {abono.id} {$.i18n.prop("abono.detalle.cuenta")} {cuentaCobrar.id} {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total} {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo}</h1>
+>>>>>>> c6b8f02945c7cb11fd68c544817711af45ce76c0
                 </div>
                 <div class="box-body">
                     <form id = "formularioAbono" name ="formularioAbono " class="advanced-search-form">
@@ -177,7 +190,11 @@
                         <div class="row">
                             <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4">
                                 <label >{$.i18n.prop("cuentaCobrar.totalSaldo")} </label>
+<<<<<<< HEAD
                                 <input  type="number" step="any" class="form-control" placeHolder ="{$.i18n.prop("cuentaCobrar.totalSaldo")}"  value="{ cuentaCobrar.totalSaldo.toFixed(2)}" readonly>                        
+=======
+                                <input  type="number" step="any" class="form-control" placeHolder ="{$.i18n.prop("abono.totalSaldo")}"  value="{ cuentaCobrar.totalSaldo}" readonly>                        
+>>>>>>> c6b8f02945c7cb11fd68c544817711af45ce76c0
                             </div>
                             <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4">
                                 <label >{$.i18n.prop("abono.totalEfectivo")}</span> </label>
@@ -900,21 +917,34 @@ function __InformacionDataTable(){
                             },
                             {'data' : 'total'                 ,"name":"total"                   ,"title" : $.i18n.prop("cuentaCobrar.total")        ,"autoWidth" :false,
                                 "render":function(total,type, row){
+<<<<<<< HEAD
                                     var resultado = redondeoDecimales(total,2)
 									    return  resultado;
+=======
+                                      return total;
+>>>>>>> c6b8f02945c7cb11fd68c544817711af45ce76c0
                                  }
                             },
                             {'data' : 'totalAbono'            ,"name":"totalAbono"              ,"title" : $.i18n.prop("cuentaCobrar.totalAbono")   ,"autoWidth" :false,
                                 "render":function(totalAbono,type, row){
+<<<<<<< HEAD
                                     var resultado = redondeoDecimales(totalAbono,2)
     							    return  resultado;
                              }
+=======
+                                      return  totalAbono;
+                                 }
+>>>>>>> c6b8f02945c7cb11fd68c544817711af45ce76c0
                             
                             },
                             {'data' : 'totalSaldo'            ,"name":"totalSaldo"              ,"title" : $.i18n.prop("cuentaCobrar.totalSaldo")   ,"autoWidth" :false,
                                 "render":function(totalSaldo,type, row){
+<<<<<<< HEAD
                                     var resultado = redondeoDecimales(totalSaldo,2)
     							    return  resultado;
+=======
+                                      return  totalSaldo;
+>>>>>>> c6b8f02945c7cb11fd68c544817711af45ce76c0
                                  }
                             
                             },
@@ -1225,7 +1255,11 @@ function __InformacionTabla_lista_Abonos(){
                                        {'data' : 'recibo'         ,"name":"recibo"        ,"title" : $.i18n.prop("abono.recibo")},
                                        {'data' : 'total'          ,"name":"total"         ,"title" : $.i18n.prop("abono.total"),
                                             "render":function(total,type, row){
+<<<<<<< HEAD
                                                 return formatoDecimales(total,2);
+=======
+                                                return total;
+>>>>>>> c6b8f02945c7cb11fd68c544817711af45ce76c0
                                             }
                                        
                                        },
