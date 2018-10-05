@@ -110,14 +110,14 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																			// }
 																																																			// facturaElectronica.setClienteMesCobro(TO_MESCOBRO.apply(d.getMesCobro()));
 																																																			// Ubicacion
-																																																			facturaElectronica.set_logo(d.getEmpresa().getLogo());
+																																																			facturaElectronica.set_logo(d.getEmpresa().getLogo() !=null?d.getEmpresa().getLogo():Constantes.EMPTY);
 																																																			facturaElectronica.set_clienteDireccion(d.getDireccion());
 																																																			// Otros
 																																																			facturaElectronica.setTipoDocumento(FacturaElectronicaUtils.getTipoDocumento(d.getTipoDoc()));
 																																																			facturaElectronica.setClave(d.getClave());
 																																																			facturaElectronica.setConsecutivo(d.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ? d.getId().toString() : d.getNumeroConsecutivo());
 																																																			facturaElectronica.setFechaEmision(d.getFechaEmision().toString());
-																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito().toString());
+																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito() !=null?d.getPlazoCredito().toString():Constantes.EMPTY);
 																																																			facturaElectronica.setCondicionVenta(BIND_CONDICION_VENTA.apply(d.getCondicionVenta()));
 																																																			facturaElectronica.setMedioBanco(d.getMedioBanco() != null ? Constantes.FACTURA_MEDIO_PAGO_TRANSFERENCIA_STR : Constantes.EMPTY);
 																																																			facturaElectronica.setMedioEfectivo(d.getMedioEfectivo() != null ? Constantes.FACTURA_MEDIO_PAGO_EFECTIVO_STR : Constantes.EMPTY);
@@ -546,8 +546,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			modelEmail.put("telefono", factura.getEmpresa().getTelefono());
 			String from = "FISCO_No_Reply@emprendesoftcr.com";
 			if(factura.getEmpresa().getAbreviaturaEmpresa() !=null) {
-				if(factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = "Documento_Electronico_" + factura.getEmpresa().getAbreviaturaEmpresa() + "_No_Reply@emprendesoftcr.com";
+				if(!factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+					from =  factura.getEmpresa().getAbreviaturaEmpresa()+"_Doc_Electronico" + "_No_Reply@emprendesoftcr.com";
 				}
 			}
 
@@ -590,11 +590,11 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			}
 
 			modelEmail.put("tipoMensajeTitulo", tipoMensajeTitulo);
-			String from = "Aceptacion_Compras_Reply@emprendesoftcr.com";
+			String from = tipoMensajeTitulo + "_Reply@emprendesoftcr.com";
 			
 			if(hacienda.getEmpresa().getAbreviaturaEmpresa() !=null) {
-				if(hacienda.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = "Aceptacion_Compras_" + hacienda.getEmpresa().getAbreviaturaEmpresa() + "_No_Reply@emprendesoftcr.com";
+				if(!hacienda.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+					from =  hacienda.getEmpresa().getAbreviaturaEmpresa()+"_"+ tipoMensajeTitulo  + "_No_Reply@emprendesoftcr.com";
 				}
 			}
 			

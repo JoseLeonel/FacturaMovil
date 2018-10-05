@@ -407,6 +407,10 @@ function __CorreoAlternativo(){
 	    }
         self.hacienda = data
         self.update()
+        $('#ModalCorreoAlternativo').modal({
+         backdrop: 'static',
+         keyboard: false
+        })
         $('.correoAlternativo').val(null)
         $('#ModalCorreoAlternativo').modal('show')      
 	});

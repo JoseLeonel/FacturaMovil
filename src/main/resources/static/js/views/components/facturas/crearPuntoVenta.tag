@@ -2124,6 +2124,7 @@ function agregarCantidadAlaVenta(cantidad){
     ActualizarLineaDEtalle()
     aplicarCambioLineaDetalle() 
     cambiarCantidadArticulo.value = 0
+   
     $('#modalCambiarCantidad').modal('hide') 
 }
 /**

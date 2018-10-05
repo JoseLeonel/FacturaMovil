@@ -90,7 +90,7 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 	 "</Emisor>" +
 	 xmlReceptor(factura) +
 	     "<CondicionVenta>" + factura.getCondicionVenta() + "</CondicionVenta>" +
-	     "<PlazoCredito>" + FacturaElectronicaUtils.replazarConZeros(factura.getPlazoCredito().toString(),Constantes.FORMATO_PLAZO_CREDITO) + "</PlazoCredito>"  
+	     "<PlazoCredito>" + FacturaElectronicaUtils.replazarConZeros(factura.getPlazoCredito() !=null?factura.getPlazoCredito().toString():Constantes.ZEROS.toString(),Constantes.FORMATO_PLAZO_CREDITO) + "</PlazoCredito>"  
 	      + getMedioPago(factura) +
 	     "<DetalleServicio>" + xmlDetalleServicio(factura) + "</DetalleServicio>" +
 	     "<ResumenFactura>" +
@@ -227,14 +227,39 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 	 */
 	private String xmlDetalleServicio(Factura factura) throws Exception{
 	 String lineas = Constantes.EMPTY;
-	
+	String tipoCodigo = Constantes.EMPTY;
 	try {
 
     for(Detalle detalle : factura.getDetalles()) {
+    	tipoCodigo = Constantes.EMPTY; 
+    	if(detalle.getTipoCodigo() !=null) {
+    		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_USO_INTERNO)) {
+    			tipoCodigo=detalle.getTipoCodigo(); 
+    		}
+    		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
+    			tipoCodigo=detalle.getTipoCodigo(); 
+    		}
+    		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_CODIGO_VENDEDOR)) {
+    			tipoCodigo=detalle.getTipoCodigo(); 
+    		}
+    		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_CODIGO_COMPRADOR)) {
+    			tipoCodigo=detalle.getTipoCodigo(); 
+    		}
+    		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_CODIGO_ASIGNADO_POR_INDUSTRIAS)) {
+    			tipoCodigo=detalle.getTipoCodigo(); 
+    		}
+    		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_CODIGO_OTROS)) {
+    			tipoCodigo=detalle.getTipoCodigo(); 
+    		}
+    		
+    	}
+    	if(tipoCodigo.equals(Constantes.EMPTY)) {
+    		tipoCodigo = Constantes.TIPO_CODIGO_ARTICULO_CODIGO_VENDEDOR;
+    	}
     	lineas += "<LineaDetalle>" +
           "<NumeroLinea>" + new BigInteger(detalle.getNumeroLinea().toString()) + "</NumeroLinea>" +
           "<Codigo>" +
-          "<Tipo>" + Constantes.CODIGO_PRODUCTO_VENDEDOR + "</Tipo>" +
+          "<Tipo>" + tipoCodigo + "</Tipo>" +
           "<Codigo>" + detalle.getCodigo() + "</Codigo>" +
           "</Codigo>" +
           "<Cantidad>" + FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getCantidad()) + "</Cantidad>" +

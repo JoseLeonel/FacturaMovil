@@ -151,7 +151,7 @@ public class FacturasController {
 																																																			facturaElectronica.setClave(d.getClave());
 																																																			facturaElectronica.setConsecutivo(d.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ? d.getId().toString() : d.getNumeroConsecutivo());
 																																																			facturaElectronica.setFechaEmision(d.getFechaEmision().toString());
-																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito().toString());
+																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito() !=null?d.getPlazoCredito().toString():Constantes.EMPTY);
 																																																			facturaElectronica.setCondicionVenta(BIND_CONDICION_VENTA.apply(d.getCondicionVenta()));
 																																																			facturaElectronica.setMedioBanco(d.getMedioBanco() != null ? Constantes.FACTURA_MEDIO_PAGO_TRANSFERENCIA_STR : Constantes.EMPTY);
 																																																			facturaElectronica.setMedioEfectivo(d.getMedioEfectivo() != null ? Constantes.FACTURA_MEDIO_PAGO_EFECTIVO_STR : Constantes.EMPTY);
@@ -1021,8 +1021,8 @@ public class FacturasController {
 			String nombre = facturaBD.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? facturaBD.getEmpresa().getNombre() : facturaBD.getEmpresa().getNombreComercial();
 			String from = "Proforma_No_Reply@emprendesoftcr.com";
 			if(facturaBD.getEmpresa().getAbreviaturaEmpresa() !=null) {
-				if(facturaBD.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = "Proforma_" + facturaBD.getEmpresa().getAbreviaturaEmpresa() + "_No_Reply@emprendesoftcr.com";
+				if(!facturaBD.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+					from = facturaBD.getEmpresa().getAbreviaturaEmpresa()+ "_Proforma" + "_No_Reply@emprendesoftcr.com";
 				}
 			}
 
@@ -1086,8 +1086,8 @@ public class FacturasController {
 			String from = "Documentos_No_Reply@emprendesoftcr.com";
 			
 			if(factura.getEmpresa().getAbreviaturaEmpresa() !=null) {
-				if(factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = "Documento_Electronico_"+factura.getEmpresa().getAbreviaturaEmpresa() + "_No_Reply@emprendesoftcr.com";
+				if(!factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+					from = factura.getEmpresa().getAbreviaturaEmpresa()+"_Doc_Electronico" + "_No_Reply@emprendesoftcr.com";
 				}
 			}
 			
