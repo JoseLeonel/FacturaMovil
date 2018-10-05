@@ -82,12 +82,19 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 	@Override
 	public void actualizarCaja(UsuarioCaja usuarioCaja, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono) throws Exception {
 		try {
-			Double resultadoTotalBanco  = totalBanco + usuarioCaja.getTotalBanco();
-			Double resultadoTotalEfectivo = totalEfectivo + usuarioCaja.getTotalEfectivo();
-			Double resultadoTarjeta = totalTarjeta + usuarioCaja.getTotalTarjeta();
-			Double resultadoAbono = totalAbono + usuarioCaja.getTotalAbono();
-			Double resultadoNeto  = getTotalNeto(resultadoTotalEfectivo.doubleValue(),resultadoTarjeta.doubleValue(),resultadoTotalBanco.doubleValue(),resultadoAbono.doubleValue());
-			usuarioCaja.setTotalCredito(sumarTotalCredito(totalCredito.doubleValue(),usuarioCaja.getTotalCredito().doubleValue()));
+			Double resultadoTotalBanco = Constantes.ZEROS_DOUBLE;
+			resultadoTotalBanco = totalBanco + usuarioCaja.getTotalBanco();
+
+			Double resultadoTotalEfectivo = Constantes.ZEROS_DOUBLE;
+			resultadoTotalEfectivo = totalEfectivo + usuarioCaja.getTotalEfectivo();
+
+			Double resultadoAbono = Constantes.ZEROS_DOUBLE;
+			resultadoAbono = totalAbono + usuarioCaja.getTotalAbono();
+
+			Double resultadoTarjeta = Constantes.ZEROS_DOUBLE;
+			resultadoTarjeta = totalTarjeta + usuarioCaja.getTotalTarjeta();
+			Double resultadoNeto = resultadoTotalEfectivo + resultadoTarjeta + resultadoTotalBanco + resultadoAbono;
+			usuarioCaja.setTotalCredito(Constantes.ZEROS_DOUBLE);
 			usuarioCaja.setTotalBanco(resultadoTotalBanco);
 			usuarioCaja.setTotalEfectivo(resultadoTotalEfectivo);
 			usuarioCaja.setTotalTarjeta(resultadoTarjeta);
@@ -100,21 +107,6 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 			throw e;
 		}
 
-	}
-	
-	private Double getTotalNeto( Double totalEfectivo, Double totalTarjeta, Double totalBanco,  Double totalAbono) {
-		Double resultado = totalEfectivo ==null?Constantes.ZEROS_DOUBLE:totalEfectivo;
-		resultado +=totalTarjeta ==null?Constantes.ZEROS_DOUBLE:totalTarjeta;
-		resultado += totalAbono ==null?Constantes.ZEROS_DOUBLE:totalAbono;
-		resultado += totalBanco ==null?Constantes.ZEROS_DOUBLE:totalBanco;
-		return resultado;
-		
-	}
-	
-	private Double sumarTotalCredito(Double totalCredito,Double monto) {
-		Double resultado = totalCredito ==null?Constantes.ZEROS_DOUBLE:totalCredito;
-		resultado +=monto ==null?Constantes.ZEROS_DOUBLE:monto;
-		return resultado;
 	}
 
 }

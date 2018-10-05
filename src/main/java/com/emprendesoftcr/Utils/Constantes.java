@@ -9,6 +9,10 @@ public class Constantes {
 	// Tipo de codigos de productos
 	public static final String					TIPO_CODIGO_ARTICULO_POR_SERVICIO										= "07";
 	public static final String					TIPO_CODIGO_ARTICULO_USO_INTERNO										= "04";
+	public static final String					TIPO_CODIGO_ARTICULO_CODIGO_VENDEDOR								= "01";
+	public static final String					TIPO_CODIGO_ARTICULO_CODIGO_COMPRADOR								= "02";
+	public static final String					TIPO_CODIGO_ARTICULO_CODIGO_ASIGNADO_POR_INDUSTRIAS	= "03";
+	public static final String					TIPO_CODIGO_ARTICULO_CODIGO_OTROS										= "99";
 	public static final String					CODIGO_ARTICULO_IMPUESTO_SERVICIO										= "8888";
 
 	// Semaforo
@@ -340,21 +344,16 @@ public class Constantes {
 	public static final String					FACTURA_ESTADO_PENDIENTE_STR												= "factura.estado.pendiente";
 	public static final String					FACTURA_ESTADO_FACTURADO_STR												= "factura.estado.facturado";
 
-	
-	//Nombres de procedimientos
-	public static final String					SP_TOTAL_FACTURAS																			= "SPTOTALFACTURAS";
-	public static final String					SP_TOTAL_FACTURAS_IN_FECHA_INICIO											= "FECHA_INICIO";	
-	public static final String					SP_TOTAL_FACTURAS_IN_FECHA_FIN												= "FECHA_FIN";	
-	public static final String					SP_TOTAL_FACTURAS_IN_ID_EMPRESA												= "ID_EMPRESA";	
-	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL														= "TOTAL";	
-	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO									= "TOTAL_DESCUENTOS";
-	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS									= "TOTAL_IMPUESTOS";
-	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS							= "TOTAL_NETAS";
-	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS						= "TOTAL_EXENTAS";
-	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS						= "TOTAL_GRABADAS";
-
+	// Nombres de procedimientos
+	public static final String					SP_TOTAL_FACTURAS																		= "SPTOTALFACTURAS";
+	public static final String					SP_TOTAL_FACTURAS_IN_FECHA_INICIO										= "FECHA_INICIO";
+	public static final String					SP_TOTAL_FACTURAS_IN_FECHA_FIN											= "FECHA_FIN";
+	public static final String					SP_TOTAL_FACTURAS_IN_ID_EMPRESA											= "ID_EMPRESA";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL													= "TOTAL";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO								= "TOTAL_DESCUENTOS";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS								= "TOTAL_IMPUESTOS";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS						= "TOTAL_NETAS";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS					= "TOTAL_EXENTAS";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS					= "TOTAL_GRABADAS";
 
 }
-
-
-

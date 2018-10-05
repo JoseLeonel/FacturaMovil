@@ -1017,8 +1017,15 @@ public class FacturasController {
 			modelEmail.put("correo", facturaBD.getEmpresa().getCorreoElectronico());
 			modelEmail.put("telefono", facturaBD.getEmpresa().getTelefono());
 
-			String from = "Proforma_No_Reply@emprendesoftcr.com";
+			
 			String nombre = facturaBD.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? facturaBD.getEmpresa().getNombre() : facturaBD.getEmpresa().getNombreComercial();
+			String from = "Proforma_No_Reply@emprendesoftcr.com";
+			if(facturaBD.getEmpresa().getAbreviaturaEmpresa() !=null) {
+				if(facturaBD.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+					from = "Proforma_" + facturaBD.getEmpresa().getAbreviaturaEmpresa() + "_No_Reply@emprendesoftcr.com";
+				}
+			}
+
 			String subject = "Proforma N° " + facturaBD.getId().toString() + " del Emisor: " + nombre;
 
 			//
@@ -1075,8 +1082,15 @@ public class FacturasController {
 			modelEmail.put("nombreEmpresa", factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial());
 			modelEmail.put("correo", factura.getEmpresa().getCorreoElectronico());
 			modelEmail.put("telefono", factura.getEmpresa().getTelefono());
-
+       
 			String from = "Documentos_No_Reply@emprendesoftcr.com";
+			
+			if(factura.getEmpresa().getAbreviaturaEmpresa() !=null) {
+				if(factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+					from = "Documento_Electronico_"+factura.getEmpresa().getAbreviaturaEmpresa() + "_No_Reply@emprendesoftcr.com";
+				}
+			}
+			
 			String nombre = factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial();
 			String subject = "Documento Electrónico N° " + clave + " del Emisor: " + nombre;
 

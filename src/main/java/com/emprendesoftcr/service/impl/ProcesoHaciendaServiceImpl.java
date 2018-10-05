@@ -545,6 +545,12 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			modelEmail.put("correo", factura.getEmpresa().getCorreoElectronico());
 			modelEmail.put("telefono", factura.getEmpresa().getTelefono());
 			String from = "FISCO_No_Reply@emprendesoftcr.com";
+			if(factura.getEmpresa().getAbreviaturaEmpresa() !=null) {
+				if(factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+					from = "Documento_Electronico_" + factura.getEmpresa().getAbreviaturaEmpresa() + "_No_Reply@emprendesoftcr.com";
+				}
+			}
+
 			String nombre = factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial();
 			String subject = "Documento Electrónico N° " + clave + " del Emisor: " + nombre;
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailHacienda.vm", modelEmail);
@@ -584,7 +590,14 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			}
 
 			modelEmail.put("tipoMensajeTitulo", tipoMensajeTitulo);
-			String from = "FISCO_No_Reply@emprendesoftcr.com";
+			String from = "Aceptacion_Compras_Reply@emprendesoftcr.com";
+			
+			if(hacienda.getEmpresa().getAbreviaturaEmpresa() !=null) {
+				if(hacienda.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+					from = "Aceptacion_Compras_" + hacienda.getEmpresa().getAbreviaturaEmpresa() + "_No_Reply@emprendesoftcr.com";
+				}
+			}
+			
 			String subject = tipoMensajeTitulo + " Documento Electrónico N° " + clave + " del emisor con cédula: " + recepcionFactura.getCedulaEmisor();
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailHaciendaRecepcionFactura.vm", modelEmail);
 		} catch (Exception e) {

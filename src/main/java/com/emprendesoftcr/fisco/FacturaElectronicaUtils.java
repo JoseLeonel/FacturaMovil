@@ -215,7 +215,8 @@ public final class FacturaElectronicaUtils {
       dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
       return dateFormat.format(date);
   }
-
+  
+ 
   /**
    * Convierte un string de fecha a su expresion en ISO 8601
    * @param string Fecha a ser convertida

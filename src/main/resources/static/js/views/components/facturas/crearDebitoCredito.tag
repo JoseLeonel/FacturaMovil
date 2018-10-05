@@ -1914,7 +1914,8 @@ function _informacionData_Articulo(){
                                         {'data' : 'cantidad'       ,"name":"cantidad"        ,"title" : $.i18n.prop("inventario.cantidad")   ,"autoWidth":false},
                                         {'data' : 'precioPublico'  ,"name":"precioPublico"   ,"title" : $.i18n.prop("articulo.precioPublico"),"autoWidth":false,
                                           "render":function(precioPublico,type, row){
-                                               return  "₡" + precioPublico;
+                                              var resultado = formatoDecimales(__valorNumerico(precioPublico))
+                                               return  resultado;
                                             }
                                         },
                                         {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",

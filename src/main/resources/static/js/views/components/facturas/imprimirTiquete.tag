@@ -1,18 +1,19 @@
 <tiquete-imprimir>
 
-<div class="modal fade imprimirModalTiquete" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade imprimirModalTiquete" id="imprimirModalTiquete" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div  class= "wrap">
         <h1 >{$.i18n.prop("tikect.encabezado.tiquete")} {facturaImpresa.id}<h1>
         <div class="pantalla-imprimir">
             <div class="botones-imprimir">
-                <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
+                <a href="#" class="boton-imprimirTiquete"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
                 
             </div>
-            <section class="zona-impresion" id="imprimeme" name ="imprimeme">
+            <section class="zona-impresion" id="imprimirtiqueteTemporal" name ="imprimirtiqueteTemporal">
                 <div class="forma-impresion">
-                    <div class="ticket" id="ticket" name="ticket" > 
+                    <div class="tiqueteTemporal" id="tiqueteTemporal" name="tiqueteTemporal" > 
                         <h1 >{$.i18n.prop("tikect.encabezado.tiquete")} {facturaImpresa.id}<h1>
                           <div class="encabezado" show ="{facturaImpresa.nombreFactura !=null}"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.nombreFactura}</div>
   
@@ -45,7 +46,7 @@
                             <td ><strong>{facturaImpresa.totalComprobante}</strong></td>
                             </tr>
                             <tr>
-                            <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
+                            <td colspan="3"><div id="divQR1" name="divQR1"  class="divQR1"></div></td>
                             </tr>
                             
                         </tbody>
@@ -58,7 +59,9 @@
             
         </div>
     </div>    
-
+    <div class="modal-footer">
+        <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+    </div>
     </div>
   </div>
 </div>
@@ -107,7 +110,7 @@
         flex-direction: column;
         width: 20%;
     }
-    .botones-imprimir .boton-imprimir
+    .botones-imprimir .boton-imprimirTiquete
     {
         background-color: #6dca42 !important;
         border: none;
@@ -131,7 +134,7 @@
     }
 
   
-    .ticket
+    .tiqueteTemporal
     {
         color: #000;
         float: left;
@@ -148,7 +151,7 @@
         text-transform: none;
         width: 377px;
     }
-    .ticket > table
+    .tiqueteTemporal > table
     {
         border-collapse: collapse;
         border-top: 0px solid black;
@@ -158,17 +161,17 @@
         border-collapse: collapse;
         border-top: 1px solid black;
     }
-    .ticket > td.producto,th.producto
+    .tiqueteTemporal > td.producto,th.producto
     {
         max-width: 75px;
         width: 377px;
     }
-    .ticket > td.cantidad,th.cantidad
+    .tiqueteTemporal > td.cantidad,th.cantidad
     {
         width: 377px;
         word-break: break-all;
     }
-    .ticket > td.precio,th.precio
+    .tiqueteTemporal > td.precio,th.precio
     {
         width: 377px;
         word-break: break-all;
@@ -178,18 +181,8 @@
         align-content: left;
         text-align: left;
     }
-    .ticket > img
-    {cerrada-caja
-     cerrada-caja
-     cerrada-caja
-    }cerrada-caja
-    @cerrada-caja
-    {cerrada-caja
-     cerrada-caja
-    }cerrada-caja
-    .cerrada-caja
-    {cerrada-caja
-     cerrada-caja
+    .tiqueteTemporal > img
+    {
         flex-wrap: wrap;
         width: 80%;
     }
@@ -238,6 +231,7 @@ self.on('mount',function(){
         self.detalles =self.facturaImpresa.detalles
         self.facturaImpresa.fechaEmision = displayDate_detail(self.facturaImpresa.fechaEmision)
         self.update()
+        
        $('.imprimirModalTiquete').modal('show'); 
     }
     getSubTotalGeneral()
@@ -292,6 +286,8 @@ function displayDate_detail(fecha) {
 *Imprimir facturaImpresa
 **/    
 __ImprimirfacturaImpresa(){
+    
+     $('#imprimirModalTiquete').modal('toggle') 
     __imprimir()
     $("#boton-regresar").focus()
 }
@@ -374,8 +370,8 @@ function __ComboTipoDocumentos(){
 *imprimir
 **/
 function __imprimir(){
-    var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
-     var div = document.querySelector("#imprimeme");
+    var objeto=document.getElementById('imprimirtiqueteTemporal');  //obtenemos el objeto a imprimir
+     var div = document.querySelector("#imprimirtiqueteTemporal");
     imprimirElemento(div)
 
 }

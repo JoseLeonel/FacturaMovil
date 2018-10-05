@@ -1060,7 +1060,7 @@ function aplicarFactura(estado){
                     mensajeError($.i18n.prop("error.factura.monto.ingresado"))
                     return
                 }
-                var montoEntregado = self.factura.totalTarjeta + self.factura.totalBanco + self.factura.totalEfectivo
+                var montoEntregado = __valorNumerico($('#totalTarjeta').val())  + __valorNumerico($('#totalBanco').val()) + __valorNumerico($('#totalEfectivo').val())
                 montoEntregado = redondeoDecimales(__valorNumerico(montoEntregado),2)
                 if(montoEntregado > 20000000){
                     mensajeError("Monto entregado es muy alto")

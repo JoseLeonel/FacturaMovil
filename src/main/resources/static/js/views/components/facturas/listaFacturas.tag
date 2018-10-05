@@ -1133,6 +1133,10 @@ function __CorreoAlternativo(){
         self.factura = data
         self.update()
         $('.correoAlternativo').val(null)
+        $('#ModalCorreoAlternativo').modal({
+         backdrop: 'static',
+         keyboard: false
+        })
         $('#ModalCorreoAlternativo').modal('show')      
 	});
 }

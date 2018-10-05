@@ -22,6 +22,8 @@ public class CuentaPagarCommand {
 
 	private Date			fechaCredito;
 	private String		fechaCreditoSTR;
+	private String		created_atSTR;
+	private String		updated_atSTR;
 
 	private Date			created_at;
 
@@ -42,6 +44,8 @@ public class CuentaPagarCommand {
 		this.usuarioCreacion = cuentaPagar.getUsuarioCreacion();
 		this.fechaCredito = cuentaPagar.getFechaCredito();
 		this.fechaCreditoSTR = Utils.getFechaGeneraReporte(cuentaPagar.getFechaCredito());
+		this.created_atSTR = Utils.getFechaGeneraReporte(cuentaPagar.getCreated_at());
+		this.updated_atSTR = Utils.getFechaGeneraReporte(cuentaPagar.getUpdated_at());
 		this.estado = cuentaPagar.getEstado();
 		this.total = cuentaPagar.getTotal();
 		this.totalAbono = cuentaPagar.getTotalAbono();
@@ -159,5 +163,27 @@ public class CuentaPagarCommand {
 	public void setFechaCreditoSTR(String fechaCreditoSTR) {
 		this.fechaCreditoSTR = fechaCreditoSTR;
 	}
+
+	
+	public String getCreated_atSTR() {
+		return created_atSTR;
+	}
+
+	
+	public void setCreated_atSTR(String created_atSTR) {
+		this.created_atSTR = created_atSTR;
+	}
+
+	
+	public String getUpdated_atSTR() {
+		return updated_atSTR;
+	}
+
+	
+	public void setUpdated_atSTR(String updated_atSTR) {
+		this.updated_atSTR = updated_atSTR;
+	}
+	
+	
 
 }
