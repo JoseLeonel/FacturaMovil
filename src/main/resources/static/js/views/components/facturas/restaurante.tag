@@ -120,13 +120,13 @@
 			 <!--Seccion de mesas-->
              <section class="lista-mesas" >
              	<div id="item-mesas" class="product-item col-sx-12 col-sm-12 col-md-3 col-lg-3"  each ={mesas.data}  onclick={__FacturasXMesa}>
-                	<img  style = "width:120px;" alt="" class="img-responsive " src="/dist/img/mesa.png">
-                    <div>
-	                    <span class="label-titulos-articulo">{descripcion} - {impuestoServicioStr}</span>           			
-                    </div>	
-                    <div>
-		                <span class="label-titulos-articulo"><i class="fa text-white label-titulos-articulo">Fact. Pendientes( {tieneFacturas} )</i></span>           			
-                    </div>	
+                	<div class="containerImage">
+	                	<img  style = "width:120px;" alt="" class="img-responsive " src="/dist/img/mesaAzul.png">
+	                	<div class="top-right">{tieneFacturas}</div>
+                	</div>                	 
+					<div>
+		                <span class="label-titulos-articulo"><i class="fa text-white label-titulos-articulo" style="font-size: 25px !important">{descripcion} - {impuestoServicioStr}</i></span>           			
+                    </div>
                 </div>
              </section>
            </div>    

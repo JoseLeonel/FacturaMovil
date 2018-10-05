@@ -1927,3 +1927,18 @@ ul.checkout-bar a {
     transform-origin-y: 35%;
     transform-origin-z: initial;
 }
+
+ /* Container holding the image and the text */
+.containerImage {
+    position: relative;
+    text-align: center;
+    padding: 30px 0px 5px 80px;
+}
+
+.top-right {
+	position: absolute;
+	top: 0px;
+	left: 35%;
+	font-size: 70px;
+	color: red;
+}
