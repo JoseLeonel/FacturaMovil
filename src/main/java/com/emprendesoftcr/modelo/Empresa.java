@@ -26,6 +26,10 @@ public class Empresa implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
+	
+	@Column(name = "abreviatura")
+	private String abreviaturaEmpresa;
+
 
 	@Column(name = "numero_consecutivo")
 	private Integer numeroConsecutivo;
@@ -138,13 +142,13 @@ public class Empresa implements Serializable {
 	@Column(name = "vuelto_imprimir")
 	private Integer vueltoImprimir;
 
-	public Empresa(Integer id, String nombre, String nombreComercial, String tipoCedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, Integer codigoSeguridad, String usuarioEnvioComprobante, String passwordEnvioComprobante, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String tieneInventario, String enviarTiquete, String estadoProduccion, String tieneLector, String cambiarPrecio,Integer vueltoImprimir) {
+	public Empresa(Integer id, String nombre, String nombreComercial, String tipoCedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, Integer codigoSeguridad, String usuarioEnvioComprobante, String passwordEnvioComprobante, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String tieneInventario, String enviarTiquete, String estadoProduccion, String tieneLector, String cambiarPrecio,Integer vueltoImprimir,String abreviaturaEmpresa) {
 		super();
 		this.id = id;
 		this.numeroConsecutivo = numeroConsecutivo;
 		this.nombre = nombre;
 		this.nombreComercial = nombreComercial;
-
+    this.abreviaturaEmpresa = abreviaturaEmpresa;
 		this.tipoCedula = tipoCedula;
 		this.otraSenas = otraSenas;
 		this.codigoPais = codigoPais;
@@ -199,6 +203,16 @@ public class Empresa implements Serializable {
 	}
 
 	
+	
+	public String getAbreviaturaEmpresa() {
+		return abreviaturaEmpresa;
+	}
+
+	
+	public void setAbreviaturaEmpresa(String abreviaturaEmpresa) {
+		this.abreviaturaEmpresa = abreviaturaEmpresa;
+	}
+
 	public Integer getVueltoImprimir() {
 		return vueltoImprimir;
 	}

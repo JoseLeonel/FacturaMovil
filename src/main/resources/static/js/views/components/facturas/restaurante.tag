@@ -125,7 +125,7 @@
 	                    <span class="label-titulos-articulo">{descripcion} - {impuestoServicioStr}</span>           			
                     </div>	
                     <div>
-		                <span class="label-titulos-articulo"><i class="fa text-red">Fact. Pendientes( {tieneFacturas} )</i></span>           			
+		                <span class="label-titulos-articulo"><i class="fa text-white label-titulos-articulo">Fact. Pendientes( {tieneFacturas} )</i></span>           			
                     </div>	
                 </div>
              </section>
@@ -1959,7 +1959,7 @@ function aplicarFactura(estado){
                 mensajeError($.i18n.prop("error.factura.monto.ingresado"))
                 return
             }
-            var montoEntregado = self.factura.totalTarjeta + self.factura.totalBanco + self.factura.totalEfectivo
+            var montoEntregado = __valorNumerico($('#totalTarjeta').val())  + __valorNumerico($('#totalBanco').val()) + __valorNumerico($('#totalEfectivo').val())
             montoEntregado = redondeoDecimales(__valorNumerico(montoEntregado),2)
             var resultado  = redondeoDecimales( __valorNumerico(self.factura.totalComprobante),2)
             if(__valorNumerico(resultado) > __valorNumerico(montoEntregado)  ){

@@ -1864,7 +1864,7 @@ function aplicarFactura(estado){
                 mensajeError($.i18n.prop("error.factura.monto.ingresado"))
                 return
             }
-            var montoEntregado = __valorNumerico($('#totalTarjeta').val())  + __valorNumerico($('#totalBanco').val()) + $('#totalEfectivo').val()
+            var montoEntregado = __valorNumerico($('#totalTarjeta').val())  + __valorNumerico($('#totalBanco').val()) + __valorNumerico($('#totalEfectivo').val())
             montoEntregado = redondeoDecimales(__valorNumerico(montoEntregado),2)
             var resultado  = redondeoDecimales( __valorNumerico(self.factura.totalComprobante),2)
             if(__valorNumerico(resultado) > __valorNumerico(montoEntregado)  ){

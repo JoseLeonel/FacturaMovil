@@ -14,17 +14,17 @@
                     <div class="ticket" > 
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.titulo")}{abono.id}     </strong><br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.cuentaCobrar.titulo")}{abono.cuentaCobrar.id}     </strong><br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("abono.created_atSTR")}                    </strong>{abono.created_at}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("abono.updated_atSTR")}                    </strong>{abono.updated_at}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("abono.created_at")}                    </strong>{abono.created_atSTR}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("abono.updated_at")}                    </strong>{abono.updated_atSTR}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.cliente")}              </strong>{abono.cuentaCobrar.cliente.nombreCompleto}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.fechaPago")}            </strong>{abono.fechaPago}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.transferencia")}:       </strong>{abono.transferencia}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.totalEfectivo")}: </strong>₡{abono.totalEfectivo.toFixed(2)}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalTarjeta")}  : </strong>₡{abono.totalTarjeta.toFixed(2)}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.totalBanco")}   : </strong>₡{abono.totalBanco.toFixed(2)}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.total")}        : </strong>₡{abono.cuentaCobrar.toFixed(2)}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.saldo")}        : </strong>₡{abono.cuentaCobrar.toFixed(2)}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.nota")}         : </strong>{abono.nota}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.totalEfectivo")}: </strong>{abono.totalEfectivo.toFixed(2)}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalTarjeta")}  : </strong>{abono.totalTarjeta.toFixed(2)}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.totalBanco")}   : </strong>{abono.totalBanco.toFixed(2)}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.total")}        : </strong>{abono.cuentaCobrar.total.toFixed(2)}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.saldo")}        : </strong>{abono.cuentaCobrar.totalSaldo.toFixed(2)}<br></div>
+                        <div class="encabezado" show='{abono.nota != ""}'><strong> {$.i18n.prop("imprimir.abono.nota")}         : </strong>{abono.nota}<br></div>
                         <br>
                     </div>
                 </div>
@@ -199,9 +199,8 @@ function consultaAbono(){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         self.abono  =  modeloTabla
-                        self.abono.created_at = displayDate_detail(self.abono.created_at)
-                        self.abono.updated_at = displayDate_detail(self.abono.updated_at)
-                        self.abono.fechaPago  = displayDate_detail(self.abono.fechaPago)
+                     
+                        self.abono.fechaPago  = formatoFecha(self.abono.fechaPago)
                         self.update()
                         $('.imprimirModal').modal('show'); 
                     });
