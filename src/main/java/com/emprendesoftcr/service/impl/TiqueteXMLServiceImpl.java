@@ -86,7 +86,7 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 		        "</Emisor>" +
 		        xmlReceptor(factura) +
 		        "<CondicionVenta>" + factura.getCondicionVenta() + "</CondicionVenta>" +
-		        "<PlazoCredito>" + FacturaElectronicaUtils.replazarConZeros(factura.getPlazoCredito().toString(),Constantes.FORMATO_PLAZO_CREDITO) + "</PlazoCredito>"  
+		        "<PlazoCredito>" + FacturaElectronicaUtils.replazarConZeros(factura.getPlazoCredito() !=null?factura.getPlazoCredito().toString():Constantes.ZEROS.toString(),Constantes.FORMATO_PLAZO_CREDITO) + "</PlazoCredito>"  
 		         + getMedioPago(factura) +
 		        "<DetalleServicio>" + xmlDetalleServicio(factura) + "</DetalleServicio>" +
 		        "<ResumenFactura>" +
@@ -204,7 +204,7 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
     	try {
         for(Detalle detalle : factura.getDetalles()) {
         	tipoCodigo = Constantes.EMPTY; 
-        	if(detalle.getTipoCodigo() !=null) {}else {
+        	if(detalle.getTipoCodigo() !=null) {
         		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_USO_INTERNO)) {
         			tipoCodigo=detalle.getTipoCodigo(); 
         		}

@@ -120,7 +120,26 @@
                             </div>
 
                         </div>
+                     
+                        <div class="row">    
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >Consecutivo Aceptacion</label>
+                                <input type="text" class="form-control aceptadoConsecutivo" placeHolder ="{$.i18n.prop("empresa.aceptadoConsecutivo")}" id="aceptadoConsecutivo" name="aceptadoConsecutivo" value="{empresa.aceptadoConsecutivo}"  >
+                            </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >Aceptacion Parcial </label>
+                                <input type="text" class="form-control aceptadoParcialConsecutivo" placeHolder ="{$.i18n.prop("empresa.aceptadoParcialConsecutivo")}" id="aceptadoParcialConsecutivo" name="aceptadoParcialConsecutivo" value="{empresa.aceptadoParcialConsecutivo}"  >
+                            </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >Rechazo</label>
+                                <input type="text" class="form-control rechazadoConsecutivo" placeHolder ="{$.i18n.prop("empresa.rechazadoConsecutivo")}" id="rechazadoConsecutivo" name="rechazadoConsecutivo" value="{empresa.rechazadoConsecutivo}"  >
+                            </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label class="knob-label" >Vuelto Imprimir</label>
+                                <input type="text" class="form-control vueltoImprimir" placeHolder ="{$.i18n.prop("empresa.vueltoImprimir")}" id="vueltoImprimir" name="vueltoImprimir" value="{empresa.vueltoImprimir}"  >
+                            </div>
 
+                        </div>
                         <div class="row">    
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("empresa.provincia")} </label>
@@ -149,15 +168,8 @@
                             </div>
                             
                         </div>
+                            
                         <div class="row">    
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("empresa.llave.criptografica")}</label>
-                                <input type="text" class="form-control nombreLlaveCriptografica" placeHolder ="{$.i18n.prop("empresa.llave.criptografica.ejemplo")}" id="nombreLlaveCriptografica" name="nombreLlaveCriptografica" value="{empresa.nombreLlaveCriptografica}"  >
-                            </div>
-                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                <label class="knob-label" >{$.i18n.prop("empresa.clave.llave.criptografica")}</label>
-                                <input type="text" class="form-control claveLlaveCriptografica" placeHolder ="{$.i18n.prop("empresa.clave.llave.criptografica.ejemplo")}" id="claveLlaveCriptografica" name="claveLlaveCriptografica" value="{empresa.claveLlaveCriptografica}"  >
-                            </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("empresa.codigoSeguridad")}</label>
                                 <input type="text" class="form-control codigoSeguridad" placeHolder ="{$.i18n.prop("empresa.codigoSeguridad.ejemplo")}" id="codigoSeguridad" name="codigoSeguridad" value="{empresa.codigoSeguridad}"  >
@@ -168,7 +180,7 @@
                             </div>
 
                         </div>
-
+                        
                         <div class="row">    
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label" >{$.i18n.prop("empresa.usuarioEnvioComprobante")}</label>
@@ -187,7 +199,6 @@
                             <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label class="knob-label">{$.i18n.prop("empresa.tieneInventario")}</label>
                                 <select  class="form-control" id="tieneInventario" name="tieneInventario" >
-                                
                                     <option  each={estados}  value="{codigo}" selected="{empresa.tieneInventario ==codigo?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
@@ -504,7 +515,7 @@ var reglasDeValidacion = function() {
                 minlength:1,
 			},
 			nombreComercial : {
-				required : true,
+				
                 maxlength:80,
                 minlength:1,
 			},
@@ -521,18 +532,6 @@ var reglasDeValidacion = function() {
 			otraSenas : {
                 maxlength:250,
                 minlength:1,
-			},
-			codigoPais : {
-                maxlength:3,
-                minlength:3,
-                required : true,
-                numeroMayorCero:true,
-			},
-            telefono : {
-                maxlength:9,
-                minlength:1,
-                required : true,
-                telefonoFormat:true
 			},  
            correoElectronico : {
                 maxlength:250,
@@ -573,12 +572,6 @@ var reglasDeValidacion = function() {
                 required : true,
                 numeroMayorCero:true,
             },
-            nombreLlaveCriptografica:{
-                required : true,
-            },
-            claveLlaveCriptografica:{
-                required : true,
-            },
             codigoSeguridad:{
                 required : true,
                 minlength:8,
@@ -586,10 +579,6 @@ var reglasDeValidacion = function() {
 
             },
             usuarioEnvioComprobante:{
-                required : true,
-                maxlength:250,
-            },
-            logo:{
                 required : true,
                 maxlength:250,
             },
@@ -629,6 +618,10 @@ function _limpiar(){
    $("#notacConsecutivo").val(null)
    $("#notadConsecutivo").val(null)
    $("#tiqueteConsecutivo").val(null)
+    $("#numeroConsecutivo").val(null)
+   $("#aceptadoConsecutivo").val(null)
+   $("#aceptadoParcialConsecutivo").val(null)
+   $("#rechazadoConsecutivo").val(null)
    
    $("#nombreLlaveCriptografica").val(null)
    $("#claveLlaveCriptografica").val(null)

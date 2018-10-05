@@ -170,7 +170,7 @@ public class FacturaBoImpl implements FacturaBo {
 			if (facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 				if (facturaCommand.getFechaCredito() != null) {
 					factura.setFechaCredito(Utils.pasarADate(facturaCommand.getFechaCredito(), "yyyy-MM-dd"));
-					factura.setPlazoCredito(facturaCommand.getPlazoCredito());
+					factura.setPlazoCredito(facturaCommand.getPlazoCredito()==null?Constantes.CANTIDAD_DIAS_MINIMO_CREDITO:facturaCommand.getPlazoCredito());
 
 				}
 			} else {

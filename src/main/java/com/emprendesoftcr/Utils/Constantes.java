@@ -6,6 +6,8 @@ public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																			= ResourceBundle.getBundle("factura");
 
+//cantidad de dias de un credito minimo
+	public static final Integer					CANTIDAD_DIAS_MINIMO_CREDITO												= 1;
 	// Tipo de codigos de productos
 	public static final String					TIPO_CODIGO_ARTICULO_POR_SERVICIO										= "07";
 	public static final String					TIPO_CODIGO_ARTICULO_USO_INTERNO										= "04";

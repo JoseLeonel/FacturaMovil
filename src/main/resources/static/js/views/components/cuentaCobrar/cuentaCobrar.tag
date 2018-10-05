@@ -164,7 +164,7 @@
                                 </div>
                             </div>
                             <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4">
-                                <label >{$.i18n.prop("abono.recibo")} <span class="requeridoDato">*</span></label>
+                                <label >{$.i18n.prop("abono.recibo")} </label>
                                 <input type="text" class="form-control recibo" placeHolder ="{$.i18n.prop("abono.recibo")}"  id="recibo" name="recibo"  value="{abono.recibo}" readonly={abono.id > 0}>                        
                             </div>
                             <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4">
