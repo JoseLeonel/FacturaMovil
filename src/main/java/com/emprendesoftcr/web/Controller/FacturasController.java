@@ -343,12 +343,16 @@ public class FacturasController {
 	@ResponseBody
 	public void envioDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam) {
 
-		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		
-		//Se buscan las facturas
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+
+		//Se obtiene los totales
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
-		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		Collection<Factura> facturas = facturaBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFin, usuario.getEmpresa().getId());
+		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+		TotalFacturaCommand facturaCommand = facturaBo.sumarFacturas(fechaInicio, fechaFinal, usuario.getEmpresa().getId());
+
+		//Se buscan las facturas
+		Collection<Factura> facturas = facturaBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal, usuario.getEmpresa().getId());
 		
 		//Se prepara el excell 
 		ByteArrayOutputStream baos = createExcelFacturas(facturas);
@@ -362,9 +366,17 @@ public class FacturasController {
 		listaCorreos.add(usuario.getEmpresa().getCorreoElectronico());
 		
 		Map<String, Object> modelEmail = new HashMap<>();
-		modelEmail.put("clave", "");
-		modelEmail.put("cedulaEmisor", "");
-		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailHaciendaRecepcionFactura.vm", modelEmail);
+		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
+		modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
+		modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinal));
+		modelEmail.put("total", facturaCommand.getTotal());
+		modelEmail.put("totalDescuentos", facturaCommand.getTotal());
+		modelEmail.put("totalImpuestos", facturaCommand.getTotalImpuestos());
+		modelEmail.put("totalVentasNetas", facturaCommand.getTotalVentasNetas());
+		modelEmail.put("totalVentasExentas", facturaCommand.getTotalVentasExentas());
+		modelEmail.put("totalVentasGravadas", facturaCommand.getTotalVentasGravadas());
+		
+		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailResumenFactura.vm", modelEmail);
 	}
 	
 
@@ -399,8 +411,8 @@ public class FacturasController {
 	private ByteArrayOutputStream createExcelFacturas(Collection<Factura> facturas) {
 		//Se prepara el excell 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    List<String> headers = Arrays.asList("Id", "Fecha Emision", "# Documento", "Cliente", "Impuesto", "Descuento", "Total");
-    new SimpleExporter().gridExport(headers, facturas, "id, fechaEmisionSTR, numeroConsecutivo,nombreCliente,totalImpuesto,totalDescuentos,totalVenta", baos);
+    List<String> headers = Arrays.asList("Id", "Fecha Emision", "# Documento", "Cliente", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Total");
+    new SimpleExporter().gridExport(headers, facturas, "id, fechaEmisionSTR, numeroConsecutivo, nombreCliente, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos, totalVenta", baos);
     return baos;
 	}
 	

@@ -109,7 +109,7 @@
             <ul class="treeview-menu">
                 <li><a href="/ListaFacturas"><i class="fa fa-circle-o"></i>Listado de Facturas</a></li>
                 <li><a href="/ListaCompras" sec:authorize="hasAnyAuthority('Administrador_Cajero','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante')"><i  class="fa fa-circle-o"></i>Listado de compras</a></li>
-                <li><a href="/TotalFacturas"  sec:authorize="hasAnyAuthority('Administrador_Sistema12')"><i class="fa fa-circle-o"></i>Totales facturas mensuales</a></li>
+                <li><a href="/TotalFacturas"  sec:authorize="hasAnyAuthority('Administrador_Sistema')"><i class="fa fa-circle-o"></i>Totales facturas mensuales</a></li>
             </ul>
         </li>
         <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Restaurante','Administrador_temporal')">

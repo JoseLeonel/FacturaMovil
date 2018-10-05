@@ -14,7 +14,7 @@ public class MailConfig {
 
 	@Bean
 	public JavaMailSender mailSender() {
-		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+		/*JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		mailSender.setHost("smtp.gmail.com");
 		mailSender.setPort(587);
 		mailSender.setUsername("josehernandezchaverri@gmail.com");
@@ -30,7 +30,9 @@ public class MailConfig {
 		javaMailProperties.put("mail.smtp.connectiontimeout", 20000);
 		mailSender.setJavaMailProperties(javaMailProperties);
 
-/*		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+		*/
+		
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		mailSender.setHost("mail.emprendesoftcr.com");
 		mailSender.setPort(587);
 		mailSender.setUsername("gobookingcr@emprendesoftcr.com");
@@ -46,7 +48,7 @@ public class MailConfig {
 		javaMailProperties.put("mail.smtp.connectiontimeout", 10000);
 		javaMailProperties.put("mail.smtp.ssl.trust", "mail.emprendesoftcr.com");
 
-		mailSender.setJavaMailProperties(javaMailProperties);*/
+		mailSender.setJavaMailProperties(javaMailProperties);
 
 		
 		
