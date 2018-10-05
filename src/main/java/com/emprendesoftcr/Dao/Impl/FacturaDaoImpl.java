@@ -115,7 +115,20 @@ public class FacturaDaoImpl implements FacturaDao {
 		return query.getResultList();
 	}
 	
-	
+	/**
+	 * Todas las facturas que no se le a creado la firma
+	 * @see com.emprendesoftcr.Dao.FacturaDao#findByEstadoFirma(java.lang.Integer)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa){
+		Query query = entityManager.createQuery("select obj from Factura obj where obj.empresa.id = :idEmpresa and obj.estado = :estado and obj.fechaEmision >= :fechaInicio and obj.fechaEmision <= :fechaFin");
+		query.setParameter("idEmpresa", idEmpresa);
+		query.setParameter("estado", estado);
+		query.setParameter("fechaInicio", fechaInicio);
+		query.setParameter("fechaFin", fechaFin);
+		return query.getResultList();
+	}
 	
 	public TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa) {
 
