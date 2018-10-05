@@ -92,12 +92,12 @@
                 	</form>
                 </div>
             </div>   
+	        <div class="col-md-2 col-lg-2 col-sm-2">
+		        <button onclick ={__EnviarPorCorreo} type="button" class="btn btn-success btnBusquedaAvanzada" title="Detalle transacciones" name="button" ><i class="fa fa-envelope"></i></button>
+				<a class="fa fa-download" target="_blank" title="Descargar detalle transacciones" href="DescargarDetalleTotalFacturasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}"></a>        
+	        </div>
         </div>
         <div class="col-md-2 col-lg-2 col-sm-2"></div>
-        <div class="col-md-2 col-lg-2 col-sm-2">
-	        <button onclick ={__EnviarPorCorreo} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-edit"></i></button>
-			<a class="fa fa-print" target="_blank" title="Imprimir recibo" href="DescargarDetalleTotalFacturasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}"></a>        
-        </div>
     </div>
 
 	<script>
@@ -167,7 +167,7 @@
 		__Busqueda(){
 			limpiarFactura();
 		    self.fechaInicio = $('#fechaInicial').val();
-		    self.fechaFin = $('#fechaFin').val();
+		    self.fechaFin = $('#fechaFinal').val();
 		    self.update();
 		    
 		    if ($("#filtros").valid()) {

@@ -32,4 +32,6 @@ public interface FacturaBo {
 	Collection<Factura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma);
 	
 	TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa);
+	
+	Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa);
 }

@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.parser.ParseException;
+import org.jxls.template.SimpleExporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -75,7 +77,6 @@ import com.emprendesoftcr.pdf.Proformas;
 import com.emprendesoftcr.validator.FacturaFormValidator;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
-import com.emprendesoftcr.web.command.ParametrosPaginacion;
 import com.emprendesoftcr.web.command.ParametrosPaginacionMesa;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
@@ -328,15 +329,91 @@ public class FacturasController {
 	 * @param request
 	 * @param response
 	 * @return
-	 */
+	 */ 
 	@RequestMapping(value = "/TotalFacturasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public TotalFacturaCommand TotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam) {
+	public TotalFacturaCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam) {
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		return facturaBo.sumarFacturas(fechaInicio, fechaFinal, usuario.getEmpresa().getId());
-		//return new TotalFacturaCommand(250D,250D,250D,250D,250D,250D);
+	}
+
+	@RequestMapping(value = "/EnvioDetalleTotalFacturasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public void envioDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam) {
+
+		
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+
+		//Se obtiene los totales
+		Date fechaInicio = Utils.parseDate(fechaInicioParam);
+		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+		TotalFacturaCommand facturaCommand = facturaBo.sumarFacturas(fechaInicio, fechaFinal, usuario.getEmpresa().getId());
+
+		//Se buscan las facturas
+		Collection<Factura> facturas = facturaBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal, usuario.getEmpresa().getId());
+		
+		//Se prepara el excell 
+		ByteArrayOutputStream baos = createExcelFacturas(facturas);
+		Collection<Attachment> attachments =  createAttachments( attachment("FacturasMensuales", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
+		
+		//Se prepara el correo
+		String from = "FISCO_No_Reply@emprendesoftcr.com";
+		String subject = "Facturas dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
+		
+		ArrayList<String> listaCorreos = new ArrayList<>();
+		listaCorreos.add(usuario.getEmpresa().getCorreoElectronico());
+		
+		Map<String, Object> modelEmail = new HashMap<>();
+		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
+		modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
+		modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinal));
+		modelEmail.put("total", facturaCommand.getTotal());
+		modelEmail.put("totalDescuentos", facturaCommand.getTotal());
+		modelEmail.put("totalImpuestos", facturaCommand.getTotalImpuestos());
+		modelEmail.put("totalVentasNetas", facturaCommand.getTotalVentasNetas());
+		modelEmail.put("totalVentasExentas", facturaCommand.getTotalVentasExentas());
+		modelEmail.put("totalVentasGravadas", facturaCommand.getTotalVentasGravadas());
+		
+		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailResumenFactura.vm", modelEmail);
+	}
+	
+
+	// Descarga de manuales de usuario de acuerdo con su perfil
+	@RequestMapping(value = "/DescargarDetalleTotalFacturasAjax.do", method = RequestMethod.GET)
+	public void descargarDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam) throws IOException, Exception {
+
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		
+		//Se buscan las facturas
+		Date fechaInicio = Utils.parseDate(fechaInicioParam);
+		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+		Collection<Factura> facturas = facturaBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFin, usuario.getEmpresa().getId());
+		
+		String nombreArchivo = "FacturasMensuales.xls";
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+
+		//Se prepara el excell 
+		ByteArrayOutputStream baos = createExcelFacturas(facturas);
+    ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+
+		int BUFFER_SIZE = 4096;
+		byte[] buffer = new byte[BUFFER_SIZE];
+		int bytesRead = -1;
+		while ((bytesRead = inputStream.read(buffer)) != -1) {
+			response.getOutputStream().write(buffer, 0, bytesRead);
+		}
+	}
+	
+	
+	private ByteArrayOutputStream createExcelFacturas(Collection<Factura> facturas) {
+		//Se prepara el excell 
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    List<String> headers = Arrays.asList("Id", "Fecha Emision", "# Documento", "Cliente", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Total");
+    new SimpleExporter().gridExport(headers, facturas, "id, fechaEmisionSTR, numeroConsecutivo, nombreCliente, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos, totalVenta", baos);
+    return baos;
 	}
 	
 	/**
@@ -353,7 +430,6 @@ public class FacturasController {
 			Factura factura = facturaBo.findById(idFactura);
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
 			ByteArrayOutputStream namePDF = Proformas.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
-			int BUFFER_SIZE = 4096;
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
 			response.setContentType("application/octet-stream");
 			response.setContentLength((int) namePDF.toByteArray().length);
@@ -361,6 +437,7 @@ public class FacturasController {
 
 			fileName = "Proforma_" + factura.getId().toString();
 
+			int BUFFER_SIZE = 4096;
 			String headerKey = "Content-Disposition";
 			String headerValue = String.format("attachment; filename=\"%s\"", fileName + ".pdf");
 			response.setHeader(headerKey, headerValue);

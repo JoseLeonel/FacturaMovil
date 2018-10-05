@@ -344,10 +344,13 @@
 			<artifactId>jquery-ui</artifactId>
 			<version>1.12.1</version>
 		</dependency>
-
-
-
-
+				
+		<!-- Generacion de excell -->
+		<dependency>
+        	<groupId>org.jxls</groupId>
+        	<artifactId>jxls-poi</artifactId>
+        	<version>1.0.15</version>
+    	</dependency>
 
 	</dependencies>
 

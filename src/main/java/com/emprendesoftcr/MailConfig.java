@@ -27,9 +27,11 @@ public class MailConfig {
 
 		javaMailProperties.put("mail.smtp.starttls.enable", true);
 		javaMailProperties.put("mail.debug", true);
-		javaMailProperties.put("mail.smtp.connectiontimeout", 10000);
-		mailSender.setJavaMailProperties(javaMailProperties);*/
+		javaMailProperties.put("mail.smtp.connectiontimeout", 20000);
+		mailSender.setJavaMailProperties(javaMailProperties);
 
+		*/
+		
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		mailSender.setHost("mail.emprendesoftcr.com");
 		mailSender.setPort(587);

@@ -749,8 +749,13 @@ public class Factura implements Serializable {
 			return Utils.getFechaGeneraReporte(this.getFechaEmision());	
 		}
 		return Constantes.EMPTY;
-		
-		
+	}
+
+	public String getNombreCliente() {
+		if(this.cliente !=null) {
+			return this.getCliente().getNombreCompleto();
+		}
+		return Constantes.EMPTY;
 	}
 
 	public Mesa getMesa() {

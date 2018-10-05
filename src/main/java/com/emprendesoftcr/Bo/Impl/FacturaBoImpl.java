@@ -580,4 +580,11 @@ public class FacturaBoImpl implements FacturaBo {
 		return facturaDao.sumarFacturas(fechaInicio, fechaFinal, idEmpresa);
 	}
 
+	@Override
+	public Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa) {
+		return facturaDao.facturasRangoEstado(estado, fechaInicio, fechaFin, idEmpresa);		
+	}
+	
+	
+
 }
