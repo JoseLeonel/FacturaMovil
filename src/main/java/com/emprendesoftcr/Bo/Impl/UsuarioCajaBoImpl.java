@@ -74,7 +74,8 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 			Double totalEfectivo = usuarioCaja.getTotalEfectivo() == null?Constantes.ZEROS_DOUBLE:usuarioCaja.getTotalEfectivo();
 			Double totalBanco = usuarioCaja.getTotalBanco() == null?Constantes.ZEROS_DOUBLE:usuarioCaja.getTotalBanco();
 			Double totalTarjeta = usuarioCaja.getTotalTarjeta() ==null?Constantes.ZEROS_DOUBLE:usuarioCaja.getTotalTarjeta();
-			resultado = totalEfectivo+totalEfectivo+totalTarjeta+totalBanco;
+			Double totalAbono  = usuarioCaja.getTotalAbono() == null?Constantes.ZEROS_DOUBLE:usuarioCaja.getTotalAbono();
+			resultado = totalEfectivo+totalAbono+totalTarjeta+totalBanco;
 			usuarioCaja.setTotalNeto(Utils.roundFactura(resultado,5));
 			modificar(usuarioCaja);
 
