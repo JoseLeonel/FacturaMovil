@@ -558,7 +558,6 @@ function enviarCargarCombos(){
     __listadoCategoriasActivas()
     __listadoMarcasActivas()
 }
-
 /**
 * Asigna el impuesto 13 cuando es valor igual 01
 **/
@@ -571,10 +570,7 @@ __asignarImpuesto(){
       self.articulo.impuesto = 0
    }
    self.update()
-    
-
 }
-
 /**
 * Camps requeridos
 **/
@@ -659,7 +655,6 @@ var reglasDeValidacionSalida = function() {
 	});
 	return validationOptions;
 };
-
 /**  funciones de inventario ----------------------------------------------------------------------------**/
 /**
 *  Agregar entrada al inventario 
@@ -773,14 +768,10 @@ __agregarSalidaInventario(){
         
     }
 }
-
-
-
-
 /**
 *  Lista de motivos de Salidas activas 
 **/
-function _ListaMotivoSalidasActivas(){comboCondicionPagos
+function _ListaMotivoSalidasActivas(){
     $.ajax({
          url: "ListarMotivoSalidasActivasAjax.do",
         datatype: "json",
@@ -835,7 +826,7 @@ MostrarBotonAgregarEntrada(e){
 MostrarBotonAgregarSalida(e){
  let cantidad        = __valorNumerico(e.target.value)
  self.mostrarBotonAgregarSalida = cantidad > 0 ? true:false
- self.mostrarBotonAgregarSalida = cantidad > self.articulo.cantidad ? false:self.mostrarBotonAgregarSalida
+ self.mostrarBotonAgregarSalida = cantidad ==0 ? false:self.mostrarBotonAgregarSalida
  self.update()
 }
 /** Fin  funciones de inventario ----------------------------------------------------------------------------**/
@@ -1019,8 +1010,6 @@ function __listadoTipoUnidadesActivas(){
              if(result.aaData.length > 0){
                 self.tipoUnidades.aaData =  result.aaData
                 self.update();
-            
-
             }            
         },
         error: function (xhr, status) {
@@ -1143,13 +1132,6 @@ __regresarAlListado(){
     LimpiarArticulo()
   
 }
-
-
-
-
-
-
-
 /**
 *   Agregar 
 **/

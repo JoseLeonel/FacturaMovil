@@ -17,6 +17,7 @@ import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.CompraDao;
 import com.emprendesoftcr.Dao.CuentaPagarDao;
 import com.emprendesoftcr.Dao.KardexDao;
+import com.emprendesoftcr.Dao.ProveedorArticuloDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Articulo;
@@ -24,6 +25,8 @@ import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.CuentaPagar;
 import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Proveedor;
+import com.emprendesoftcr.modelo.ProveedorArticulo;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.DetalleCompraCommand;
@@ -40,18 +43,21 @@ import com.google.gson.Gson;
 public class CompraBoImpl implements CompraBo {
 
 	@Autowired
-	private CompraDao				compraDao;
+	private CompraDao							compraDao;
 
 	@Autowired
-	private ArticuloDao			articuloDao;
+	private ArticuloDao						articuloDao;
 
 	@Autowired
-	private KardexDao				kardexDao;
+	private KardexDao							kardexDao;
 
 	@Autowired
-	private CuentaPagarDao	cuentaPagarDao;
+	private ProveedorArticuloDao	proveedorArticuloDao;
 
-	private Logger					log	= LoggerFactory.getLogger(this.getClass());
+	@Autowired
+	private CuentaPagarDao				cuentaPagarDao;
+
+	private Logger								log	= LoggerFactory.getLogger(this.getClass());
 
 	public void agregar(Compra compra) {
 		compraDao.agregar(compra);
@@ -78,14 +84,10 @@ public class CompraBoImpl implements CompraBo {
 				compra.setFechaCredito(null);
 			}
 			compra.setNota(compraCommand.getNota());
-			compra.setTotalCompra(compraCommand.getTotalCompra());
-			compra.setTotalDescuento(compraCommand.getTotalDescuento());
-			compra.setTotalImpuesto(compraCommand.getTotalImpuesto());
 			compra.setUsuarioCreacion(compraCommand.getUsuarioCreacion());
 			compra.setTipoDocumento(compraCommand.getTipoDocumento());
 			compra.setProveedor(compraCommand.getProveedor());
 
-			compra.setSubTotal(compraCommand.getSubTotal());
 
 			if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
 				compra.setFechaIngreso(new Date());
@@ -109,7 +111,7 @@ public class CompraBoImpl implements CompraBo {
 			Double montoTotalLinea = Constantes.ZEROS_DOUBLE;
 			Double totalDescuento = Constantes.ZEROS_DOUBLE;
 			Double totalImpuesto = Constantes.ZEROS_DOUBLE;
-			Double subTotal  = Constantes.ZEROS_DOUBLE;
+			Double subTotal = Constantes.ZEROS_DOUBLE;
 			if (jsonArrayDetalleCompra != null) {
 				for (int i = 0; i < jsonArrayDetalleCompra.size(); i++) {
 					DetalleCompraCommand detalleCompraCommand = gson.fromJson(jsonArrayDetalleCompra.get(i).toString(), DetalleCompraCommand.class);
@@ -123,27 +125,27 @@ public class CompraBoImpl implements CompraBo {
 					compra.addDetalleCompra(detalleCompra);
 					// compraDao.modificar(compra);
 					if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
-						aplicarInventario(compra, detalleCompra, articulo);	
+						aplicarInventario(compra, detalleCompra, articulo);
+						actualizarProveedor(detalleCompra, articulo, compra.getProveedor());
 					}
-					
-					
-					if(detalleCompra.getMontoTotalLinea() !=null) {
+
+					if (detalleCompra.getMontoTotalLinea() != null) {
 						montoTotalLinea = detalleCompra.getMontoTotalLinea() + montoTotalLinea;
 					}
-					if(detalleCompra.getTotalDescuento() != null) {
+					if (detalleCompra.getTotalDescuento() != null) {
 						totalDescuento = detalleCompra.getTotalDescuento() + totalDescuento;
 					}
-					if(detalleCompra.getTotalImpuesto() !=null) {
-						totalImpuesto =  totalImpuesto + detalleCompra.getTotalImpuesto();
+					if (detalleCompra.getTotalImpuesto() != null) {
+						totalImpuesto = totalImpuesto + detalleCompra.getTotalImpuesto();
 					}
 				}
 			}
 			subTotal = montoTotalLinea - totalDescuento;
 			subTotal = montoTotalLinea - totalImpuesto;
-			compra.setTotalCompra(Utils.roundFactura(montoTotalLinea,5));
-			compra.setTotalDescuento(Utils.roundFactura(totalDescuento,5));
-			compra.setTotalImpuesto(Utils.roundFactura(totalImpuesto,5));
-			compra.setSubTotal(Utils.roundFactura(subTotal,5));
+			compra.setTotalCompra(Utils.roundFactura(montoTotalLinea, 5));
+			compra.setTotalDescuento(Utils.roundFactura(totalDescuento, 5));
+			compra.setTotalImpuesto(Utils.roundFactura(totalImpuesto, 5));
+			compra.setSubTotal(Utils.roundFactura(subTotal, 5));
 			if (compra.getId() == null) {
 				compra.setCreated_at(new Date());
 				compra.setUpdated_at(new Date());
@@ -183,6 +185,35 @@ public class CompraBoImpl implements CompraBo {
 	}
 
 	/**
+	 * Lista de un proveedor
+	 * @param detalleCompra
+	 * @param articulo
+	 */
+	private void actualizarProveedor(DetalleCompra detalleCompra, Articulo articulo, Proveedor proveedor) {
+		try {
+			ProveedorArticulo proveedorArticulo = proveedorArticuloDao.findByCodigo(articulo.getCodigo(), proveedor);
+			if (proveedorArticulo != null) {
+				proveedorArticulo.setUpdated_at(new Date());
+				proveedorArticulo.setCosto(detalleCompra.getCosto());
+				proveedorArticuloDao.modificar(proveedorArticulo);
+
+			} else {
+				proveedorArticulo = new ProveedorArticulo();
+				proveedorArticulo.setCreated_at(new Date());
+				proveedorArticulo.setUpdated_at(new Date());
+				proveedorArticulo.setArticulo(articulo);
+				proveedorArticulo.setCodigo(detalleCompra.getArticulo().getCodigo());
+				proveedorArticulo.setProveedor(proveedor);
+				proveedorArticuloDao.agregar(proveedorArticulo);
+			}
+
+		} catch (Exception e) {
+			log.info("** Error  actualizarProveedor: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+	}
+
+	/**
 	 * Aplicar el inventario si estado de la compras es ingresar al inventario
 	 * @param compra
 	 * @param inventario
@@ -191,17 +222,16 @@ public class CompraBoImpl implements CompraBo {
 	@Override
 	public void aplicarInventario(Compra compra, DetalleCompra detalleCompra, Articulo articulo) throws Exception {
 		try {
-				Double cantidadTotal = Utils.roundFactura(articulo.getCantidad() + detalleCompra.getCantidad(),5);
-				String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getProveedor().getNombreCompleto();
-				kardexDao.entrada(articulo, articulo.getCantidad(), detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
-				articulo.setCosto(articuloDao.costoPromedio(articulo.getCosto(), detalleCompra.getCosto(), articulo.getCantidad(), detalleCompra.getCantidad()));
-				articulo.setGananciaPrecioPublico(articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio()));
-				articulo.setUpdated_at(new Date());
-				articulo.setUsuario(compra.getUsuarioCreacion());
-				articulo.setCantidad(cantidadTotal);
-				articulo.setPrecioPublico(Utils.roundFactura(detalleCompra.getPrecio(),5));
-				articuloDao.modificar(articulo);
-			
+			Double cantidadTotal = Utils.roundFactura(articulo.getCantidad() + detalleCompra.getCantidad(), 5);
+			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getProveedor().getNombreCompleto();
+			kardexDao.entrada(articulo, articulo.getCantidad(), detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
+			articulo.setCosto(articuloDao.costoPromedio(articulo.getCosto(), detalleCompra.getCosto(), articulo.getCantidad(), detalleCompra.getCantidad()));
+			articulo.setGananciaPrecioPublico(articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio()));
+			articulo.setUpdated_at(new Date());
+			articulo.setUsuario(compra.getUsuarioCreacion());
+			articulo.setCantidad(cantidadTotal);
+			articulo.setPrecioPublico(Utils.roundFactura(detalleCompra.getPrecio(), 5));
+			articuloDao.modificar(articulo);
 
 		} catch (Exception e) {
 			log.info("** Error  aplicarInventario: " + e.getMessage() + " fecha " + new Date());

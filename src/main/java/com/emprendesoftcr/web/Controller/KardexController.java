@@ -154,7 +154,7 @@ public class KardexController {
 			if (articulo == null) {
 				result.rejectValue("codigo", "error.kardex.articulo.no.existe");
 			}
-			if (articulo.getCantidad().compareTo(kardex.getCantidadNueva()) == -1) {
+			if (kardex.getCantidadNueva() > articulo.getCantidad()  ) {
 				result.rejectValue("cantidadNueva", "error.kardex.articulo.cantidad.mayor.cantidaDelIventario");
 			}
 			if (result.hasErrors()) {

@@ -601,11 +601,11 @@
         __InicializarTabla('.tableListaVendedor')
         __InicializarTabla('.tableListarFacturasDia')
         agregarInputsCombos_Articulo()
-        __ListaFacturasEnEspera()
-       // setInterval(function() {
-            // triggering the "ready" event will resolve the promise
-        //    __ListaFacturasEnEspera()
-        //}.bind(this), 10000)
+        //__ListaFacturasEnEspera()
+        setInterval(function() {
+             triggering the "ready" event will resolve the promise
+            __ListaFacturasEnEspera()
+        }.bind(this), 10000)
         __comboCondicionPago()
         __ComboTipoDocumentos()
        __Teclas()
@@ -1194,7 +1194,7 @@ function __Init(){
      __comboCondicionPago()
      //Tipos de Documentos
       __ComboTipoDocumentos()
-     __ListaFacturasEnEspera()
+   //  __ListaFacturasEnEspera()
     $('.codigo').select()
     $(".codigo").focus()
 
