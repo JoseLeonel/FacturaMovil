@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Empresa;
 
@@ -143,7 +144,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 			}
 			Double porcentaje = 100d;
 
-			return resultado * porcentaje;
+			return Utils.roundFactura(resultado * porcentaje,5);
 
 		} catch (Exception e) {
 			log.info("** Error  porcentanjeDeGanancia: " + e.getMessage() + " fecha " + new Date());
@@ -168,7 +169,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 			Double totalProductos = cantidadActual + cantidadNueva;
 			resultado = (totalCostoActual + totalCostoNuevo);
 
-			return resultado / totalProductos;
+			return Utils.roundFactura(resultado / totalProductos,5);
 
 		} catch (Exception e) {
 			log.info("** Error  costoPromedio: " + e.getMessage() + " fecha " + new Date());
@@ -188,7 +189,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 
 			resultado = costo * cantidad;
 
-			return resultado;
+			return Utils.roundFactura(resultado,5);
 
 		} catch (Exception e) {
 			log.info("** Error  getTotalCosto: " + e.getMessage() + " fecha " + new Date());

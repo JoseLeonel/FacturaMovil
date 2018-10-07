@@ -100,7 +100,7 @@
                                         </tfoot>
                                     </table>
 
-                                    <h2 class="pull-right">{$.i18n.prop("factura.linea.detalle.impuesto")}:{totalImpuestos} {$.i18n.prop("factura.linea.detalle.descuento")}:{totalDescuentos} {$.i18n.prop("factura.total")}:{total}  </h2>
+                                    <h2 class="pull-right">{$.i18n.prop("factura.linea.detalle.impuesto")}:{totalImpuestos.toFixed(2)} {$.i18n.prop("factura.linea.detalle.descuento")}:{totalDescuentos.toFixed(2)} {$.i18n.prop("factura.total")}:{total.toFixed(2)}  </h2>
                                 </div>   
 
                             </div> 
@@ -271,21 +271,21 @@
                             <td>{codigo}</td>
                             <td>{descripcion}</td>
                             <td class="text-right">
-                                <input  class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad} readonly/>
+                                <input  class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad.toFixed(2)} readonly/>
                             </td>
                             <td class="text-right">
-                                <input   class="form-control" type="text"  value = "{precioUnitario}" readonly />
+                                <input   class="form-control" type="text"  value = "{precioUnitario.toFixed(2)}" readonly />
                             </td>
                             <td class="text-right">
-                                <input   class="form-control" type="text"  value = "{descuento}" readonly/>
+                                <input   class="form-control" type="text"  value = "{descuento.toFixed(2)}" readonly/>
                             </td>
                                                         
                             <td class="text-right">
-                                <input  class="form-control" type="text"  value = "{impuesto}" readonly/>
+                                <input  class="form-control" type="text"  value = "{montoImpuesto.toFixed(2)}" readonly/>
                             </td>
 
                             <td class="text-righ">
-                                <input  class="form-control" type="text"  value = "₡ {montoTotalLinea}" readonly/>
+                                <input  class="form-control" type="text"  value = "{montoTotalLinea.toFixed(2)}" readonly/>
                             </td>
                         </tr>
                         </tbody>
@@ -312,7 +312,7 @@
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show">₡ {factura.totalComprobante}</span>
+                                                    <span class="label label-info textShadow" id="total-show">₡ {factura.totalComprobante.toFixed(2)}</span>
                                                 </div>
                                             </td>
                                         </tr>                     
@@ -969,6 +969,13 @@ function __FacturaEnEspera(factura){
     });
 }
 
+/**
+*Formato de la fecha con hora
+**/
+function __displayDate_detail(fecha) {
+    var dateTime = new Date(fecha);
+    return moment(dateTime).format('DD/MM/YYYY ');
+}
 
 /**
 *  Cargar detalles Factura en espera
@@ -981,15 +988,15 @@ function cargarDetallesFacturaEnEspera(){
             numeroLinea     : e.numeroLinea,
             codigo          : e.codigo,
             descripcion     : e.descripcion,
-            cantidad        : redondearDecimales(parseFloat(e.cantidad),5),
-            precioUnitario  : redondearDecimales(parseFloat(e.precioUnitario),5),
-            impuesto        : redondearDecimales(parseFloat(e.impuesto),5),
-            montoImpuesto   : redondearDecimales(parseFloat(e.montoImpuesto),5),
-            montoDescuento  : redondearDecimales(parseFloat(e.montoDescuento),5),
-            porcentajeDesc  : redondearDecimales(parseFloat(e.porcentajeDesc),5),
-            subTotal        : redondearDecimales(parseFloat(e.subTotal),5),
-            montoTotalLinea : redondearDecimales(parseFloat(e.montoTotalLinea),5),
-            montoTotal      : redondearDecimales(parseFloat(e.montoTotal),5)
+            cantidad        : e.cantidad,
+            precioUnitario  : e.precioUnitario,
+            impuesto        : e.impuesto,
+            montoImpuesto   : e.montoImpuesto,
+            montoDescuento  : e.montoDescuento,
+            porcentajeDesc  : e.porcentajeDesc,
+            subTotal        : e.subTotal,
+            montoTotalLinea : e.montoTotalLinea,
+            montoTotal      : e.montoTotal
         });
     })
     self.update()
@@ -1052,20 +1059,17 @@ function __InformacionDataTable(){
                                },
                                {'data' :'totalImpuesto'       ,"name":"totalImpuesto"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true ,
                                     "render":function(totalImpuesto,type, row){
-                                        var resultado = formatoDecimales(__valorNumerico(totalImpuesto))
-									    return  resultado;
+									    return  totalImpuesto.toFixed(2);
 	 							    }
                                },
                                {'data' :'totalDescuentos'                ,"name":"totalDescuentos"                 ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true ,
                                     "render":function(totalDescuentos,type, row){
-                                        var resultado = formatoDecimales(__valorNumerico(totalDescuentos))
-									    return  resultado;
+									    return  totalDescuentos.toFixed(2);
 	 							    }
                                },
                                {'data' :'totalComprobante'               ,"name":"totalComprobante"                ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true ,
                                     "render":function(totalComprobante,type, row){
-                                        var resultado = formatoDecimales(__valorNumerico(totalComprobante))
-									    return  resultado;
+									    return  totalComprobante.toFixed(2);
 	 							    }
                                },
                                {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,

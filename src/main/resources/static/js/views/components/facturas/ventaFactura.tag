@@ -1537,6 +1537,7 @@ function consultaParaReimprimir(data){
 __CambiarDescuento(e){
     self.item = e.item; 
     self.update()
+     $('#modalCambiarDescuento').modal({backdrop: 'static', keyboard: false})     // initialized with no keyboard
     $('#modalCambiarDescuento').modal('show')      
     $('#aplicarDescuento').focus()
 }
@@ -1549,7 +1550,7 @@ __CambiarCantidad(e){
    $( "#cambiarCantidadArticulo" ).focus()
    $( "#cambiarCantidadArticulo" ).val(self.item.cantidad)
    $('#modalCambiarCantidad').modal()                      // initialized with defaults
-   $('#modalCambiarCantidad').modal({ keyboard: false })   // initialized with no keyboard
+   $('#modalCambiarCantidad').modal({backdrop: 'static', keyboard: false})     // initialized with no keyboard
    $('#modalCambiarCantidad').modal('show')                // initializes and invokes show immediately
 }
 /**
@@ -1563,7 +1564,7 @@ __CambiarDescripcion(e){
    $( "#cambiarDescripcionArticulo" ).focus()
    $( "#cambiarDescripcionArticulo" ).val(self.item.descripcion)
    $('#modalCambiarDescripcion').modal()                      // initialized with defaults
-   $('#modalCambiarDescripcion').modal({ keyboard: false })   // initialized with no keyboard
+   $('#modalCambiarDescripcion').modal({backdrop: 'static', keyboard: false})     // initialized with no keyboard
    $('#modalCambiarDescripcion').modal('show')                // initializes and invokes show immediately
 
 
@@ -1739,9 +1740,10 @@ __CambiarNombreTiquete(){
     if(self.factura.id ==null){
         return
     }
-    $('#ModalCambiarNombreTiquete').modal('show') 
     $('.cambioNombreTiquete').focus()
     $('.cambioNombreTiquete').val(self.factura.nombreFactura)
+   $('#ModalCambiarNombreTiquete').modal({backdrop: 'static', keyboard: false})     // initialized with no keyboard
+    $('#ModalCambiarNombreTiquete').modal('show') 
     
 }
 
@@ -2620,6 +2622,7 @@ __cambiarDescripcionDetalle(e){
     var descripcion = $(".cambiarDescripcionArticulo").val();
     self.item.descripcion = descripcion
     self.update()
+
     $(".cambiarDescripcionArticulo").val(null);
     $('#modalCambiarDescripcion').modal('hide') 
     

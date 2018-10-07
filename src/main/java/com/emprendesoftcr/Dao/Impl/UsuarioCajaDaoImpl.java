@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.UsuarioCajaDao;
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 
@@ -95,11 +96,11 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 			resultadoTarjeta = totalTarjeta + usuarioCaja.getTotalTarjeta();
 			Double resultadoNeto = resultadoTotalEfectivo + resultadoTarjeta + resultadoTotalBanco + resultadoAbono;
 			usuarioCaja.setTotalCredito(Constantes.ZEROS_DOUBLE);
-			usuarioCaja.setTotalBanco(resultadoTotalBanco);
-			usuarioCaja.setTotalEfectivo(resultadoTotalEfectivo);
-			usuarioCaja.setTotalTarjeta(resultadoTarjeta);
-			usuarioCaja.setTotalAbono(resultadoAbono);
-			usuarioCaja.setTotalNeto(resultadoNeto);
+			usuarioCaja.setTotalBanco(Utils.roundFactura(resultadoTotalBanco,5));
+			usuarioCaja.setTotalEfectivo(Utils.roundFactura(resultadoTotalEfectivo,5));
+			usuarioCaja.setTotalTarjeta(Utils.roundFactura(resultadoTarjeta,5));
+			usuarioCaja.setTotalAbono(Utils.roundFactura(resultadoAbono,5));
+			usuarioCaja.setTotalNeto(Utils.roundFactura(resultadoNeto,5));
 			modificar(usuarioCaja);
 
 		} catch (Exception e) {

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.emprendesoftcr.Bo.UsuarioCajaBo;
 import com.emprendesoftcr.Dao.UsuarioCajaDao;
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 
@@ -72,10 +73,9 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 			Double resultado = Constantes.ZEROS_DOUBLE;
 			Double totalEfectivo = usuarioCaja.getTotalEfectivo() == null?Constantes.ZEROS_DOUBLE:usuarioCaja.getTotalEfectivo();
 			Double totalBanco = usuarioCaja.getTotalBanco() == null?Constantes.ZEROS_DOUBLE:usuarioCaja.getTotalBanco();
-			Double fondoInicial = usuarioCaja.getTotalFondoInicial() ==null?Constantes.ZEROS_DOUBLE:usuarioCaja.getTotalFondoInicial();
 			Double totalTarjeta = usuarioCaja.getTotalTarjeta() ==null?Constantes.ZEROS_DOUBLE:usuarioCaja.getTotalTarjeta();
-			resultado = totalEfectivo+totalEfectivo+totalTarjeta+fondoInicial+totalBanco;
-			usuarioCaja.setTotalNeto(resultado);
+			resultado = totalEfectivo+totalEfectivo+totalTarjeta+totalBanco;
+			usuarioCaja.setTotalNeto(Utils.roundFactura(resultado,5));
 			modificar(usuarioCaja);
 
 		} catch (Exception e) {

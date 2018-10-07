@@ -20,6 +20,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.web.command.DetalleCompraCommand;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -100,14 +102,14 @@ public class DetalleCompra implements Serializable {
 		super();
 
 		this.numeroLinea = detalleCompraCommand.getLinea();
-		this.costo = detalleCompraCommand.getCosto();
+		this.costo = Utils.roundFactura(detalleCompraCommand.getCosto() !=null?detalleCompraCommand.getCosto():Constantes.ZEROS_DOUBLE,5);
 		this.cantidad = detalleCompraCommand.getCantidad();
-		this.impuesto = detalleCompraCommand.getImpuesto();
-		this.descuento = detalleCompraCommand.getDescuento();
-		this.totalDescuento = detalleCompraCommand.getTotalDescuento();
-		this.totalImpuesto = detalleCompraCommand.getTotalImpuesto();
-		this.montoTotalLinea = detalleCompraCommand.getMontoTotalLinea();
-		this.porcentajeImpuesto = detalleCompraCommand.getPorcentajeImpuesto();
+		this.impuesto = Utils.roundFactura(detalleCompraCommand.getImpuesto() !=null?detalleCompraCommand.getImpuesto():Constantes.ZEROS_DOUBLE,5);
+		this.descuento = Utils.roundFactura(detalleCompraCommand.getDescuento() !=null?detalleCompraCommand.getDescuento():Constantes.ZEROS_DOUBLE,5);
+		this.totalDescuento = Utils.roundFactura(detalleCompraCommand.getTotalDescuento() !=null?detalleCompraCommand.getTotalDescuento():Constantes.ZEROS_DOUBLE,5);
+		this.totalImpuesto = Utils.roundFactura(detalleCompraCommand.getTotalImpuesto() !=null?detalleCompraCommand.getTotalImpuesto():Constantes.ZEROS_DOUBLE,5);
+		this.montoTotalLinea = Utils.roundFactura(detalleCompraCommand.getMontoTotalLinea() !=null?detalleCompraCommand.getMontoTotalLinea():Constantes.ZEROS_DOUBLE,5);
+		this.porcentajeImpuesto = Utils.roundFactura(detalleCompraCommand.getPorcentajeImpuesto() !=null?detalleCompraCommand.getPorcentajeImpuesto():Constantes.ZEROS_DOUBLE,5);
 		
 
 		this.precio = detalleCompraCommand.getPrecio();

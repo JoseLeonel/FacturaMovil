@@ -44,22 +44,6 @@ public class CuentaCobrarBoImpl implements CuentaCobrarBo {
 		return cuentaCobrarDao.buscar(id);
 	}
 
-	/**
-	 * @param letraCambio
-	 * @return
-	 */
-	@Override
-	public CuentaCobrar buscarPorLetraCambio(String letraCambio) {
-		return cuentaCobrarDao.buscarPorLetraCambio(letraCambio);
-	}
-
-	/**
-	 * Factura Manual
-	 * @see com.factura.bo.CuentaCobrarBo#buscarByFacturaManual(java.lang.Integer)
-	 */
-	@Override
-	public CuentaCobrar buscarPorFacturaManual(Integer facturaManual) {
-		return cuentaCobrarDao.buscarPorFacturaManual(facturaManual);
-	}
+	
 
 }

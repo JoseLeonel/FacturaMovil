@@ -17,22 +17,22 @@ import com.emprendesoftcr.modelo.CuentaPagar;
  * @since 18 mar. 2018
  */
 @Repository("cuentaPagarDao")
-public class CuentaCobrarDaoImpl implements CuentaPagarDao {
+public class CuentaPagarDaoImpl implements CuentaPagarDao {
 
 	@PersistenceContext
 	EntityManager		entityManager;
 
 
-	public void agregar(CuentaPagar cuentaPagar) {
-		entityManager.persist(cuentaPagar);
+	public void agregar(CuentaPagar cuentaCobrar) {
+		entityManager.persist(cuentaCobrar);
 	}
 
-	public void modificar(CuentaPagar cuentaPagar) {
-		entityManager.merge(cuentaPagar);
+	public void modificar(CuentaPagar cuentaCobrar) {
+		entityManager.merge(cuentaCobrar);
 	}
 
-	public void eliminar(CuentaPagar cuentaPagar) {
-		entityManager.remove(cuentaPagar);
+	public void eliminar(CuentaPagar cuentaCobrar) {
+		entityManager.remove(cuentaCobrar);
 	}
 
 	/**
@@ -50,5 +50,6 @@ public class CuentaCobrarDaoImpl implements CuentaPagarDao {
 			return null;
 		}
 	}
-
+	
+	
 }

@@ -12,7 +12,5 @@ public interface CuentaCobrarBo {
 
 	CuentaCobrar buscar(Long id);
 
-	CuentaCobrar buscarPorLetraCambio(String letraCambio);
 
-	CuentaCobrar buscarPorFacturaManual(Integer facturaManual);
 }

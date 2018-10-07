@@ -172,10 +172,10 @@
                             <th><h1>{$.i18n.prop("compra.linea.detalle.linea")}                         </h1></th>
                             <th><h1>{$.i18n.prop("compra.linea.detalle.codigo")}                        </h1></th>
                             <th style="width:20%;"><h1>{$.i18n.prop("compra.linea.detalle.descripcion")}</h1></th>
-                            <th><h1>{$.i18n.prop("compra.linea.detalle.cantidad")}                      </h1></th>
-                            <th><h1>{$.i18n.prop("compra.linea.detalle.costo")}                         </h1></th>
-                            <th><h1>{$.i18n.prop("compra.linea.detalle.precio")}                        </h1></th>
-                            <th><h1>{$.i18n.prop("compra.linea.detalle.descuento")}                     </h1></th>
+                            <th style="width:8%;"><h1>{$.i18n.prop("compra.linea.detalle.cantidad")}                      </h1></th>
+                            <th style="width:8%;"><h1>{$.i18n.prop("compra.linea.detalle.costo")}                         </h1></th>
+                            <th style="width:8%;"><h1>{$.i18n.prop("compra.linea.detalle.precio")}                        </h1></th>
+                            <th style="width:8%;"><h1>{$.i18n.prop("compra.linea.detalle.descuento")}                     </h1></th>
                             <th><h1>{$.i18n.prop("compra.linea.detalle.impuesto")}                      </h1></th>
                             <th><h1>{$.i18n.prop("compra.linea.detalle.total")}                        </h1></th>
                         </tr>
@@ -201,10 +201,10 @@
                                 <input  onkeypress={__actualizarDescuento} onBlur={__actualizarDescuento} class="campo" type="number" step="any"  value = "{descuento}" />
                             </td>
                             <td class="text-right">
-                                 <input  class="campo" type="number" step="any"  value = "{totalImpuesto}"  readonly/>
+                                <h2>{totalImpuesto.toFixed(2)} </h2>
                             </td>
                             <td class="text-right">
-                                <input  class="campo" type="number" step="any"  value = "{montoTotalLinea}" readonly/>
+                                <h2>{montoTotalLinea.toFixed(2)} </h2>
                             </td>
                         </tr>
                         </tbody>
@@ -483,7 +483,7 @@
         display: block;
         width: 100%;
         height: 45px;
-        padding: 8px 18px;
+        padding: 6px 16px;
         font-size: 10px;
         line-height: 1.42857143;
         color: #555;
@@ -498,7 +498,7 @@
         transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
         background-color: #fcfcfc;
         border: 1px solid #ccc;
-        font: 20px verdana, arial, helvetica, sans-serif;
+        font: 14px verdana, arial, helvetica, sans-serif;
         margin: 2px 0;
         padding: 1px 2px;
         overflow: visible;
@@ -833,22 +833,8 @@ function __ListaComprasEnEspera(){
         }
     });    
 }
-/**
-*  Obtiene el valor de lo digitado en el campo de Impuesto
-**/
-__TotalDeImpuesto(e){
-    self.compra.totalImpuesto = __valorNumerico(e.target.value) 
-    self.update()
-    __calculate()
-}
-/**
-*  Obtiene el valor de lo digitado en el campo de Descuento
-**/
-__TotalDeDescuento(e){
-    self.compra.totalDescuento = __valorNumerico(e.target.value) 
-    self.update()
-    __calculate()
-}
+
+
 /**
 *   Retrocer a los ingresos de los codigos desde el formulario de ingresar el valor dinero a pagar
 **/
@@ -902,13 +888,6 @@ __addProductToDetail(e){
     __buscarcodigo(e.currentTarget.value,1);
 }
 /**
-* Buscar codigo
-**/
-__agregarArticuloBotonAgregar(){
-   __buscarcodigo($( "#codigo" ).val(),$( "#quantty" ).val());
-}
-
-/**
 * consultando por descripcion
 **/
 __ConsultarProductosDesc(e){
@@ -944,14 +923,13 @@ function __ListaDeArticulosPorDescripcion(cod,desc){
         data :formulario,
         success: function (result) {
             if(result.aaData.length > 0){
-            _informacionData_Articulo()
-
-                self.articulos.data           = result.aaData
-                self.update()
+               _informacionData_Articulo()
+               self.articulos.data           = result.aaData
+              self.update()
               loadListar(".tableListarArticulos",idioma_espanol,self.informacion_tabla_articulo,self.articulos.data)
-                agregarInputsCombos_Articulo()
-                __agregarArticulos()
-                ActivarEventoFiltro(".tableListarArticulos")
+              agregarInputsCombos_Articulo()
+              __agregarArticulos()
+              ActivarEventoFiltro(".tableListarArticulos")
             }
               
 
@@ -983,8 +961,6 @@ function __ListaDeProveedores(){
                 agregarInputsCombos_Proveedores()
                 ActivarEventoFiltro(".tableListaProveedor")
                 __seleccionarProveedores()
-               
-                
             }
         },
         error: function (xhr, status) {
@@ -1078,7 +1054,9 @@ function __nuevoArticuloAlDetalle(cantidad){
         return;
     }
     var iva =  __valorNumerico(self.articulo.impuesto/100)
-    var montoImpuestoV    = Math.round(__valorNumerico(self.articulo.costo * iva))
+    var montoImpuestoV    =__valorNumerico(self.articulo.costo * iva)
+    var totalImpuesto     = montoImpuestoV * cantidad 
+    var montoTotalLinea   = __valorNumerico(self.articulo.costo * cantidad) +  totalImpuesto
     self.descuento      = 0;
     self.detail.push({
        linea           : 0,
@@ -1089,11 +1067,11 @@ function __nuevoArticuloAlDetalle(cantidad){
        cantidad        : parseFloat(cantidad),
        costo           : self.articulo.costo,
        precio          : self.articulo.precioPublico,
-       totalImpuesto   : montoImpuestoV * cantidad,
+       totalImpuesto   : totalImpuesto,
        totalDescuento  :0,
        impuesto        : montoImpuestoV,
        descuento       : 0,
-       montoTotalLinea : Math.round(__valorNumerico(self.articulo.costo * cantidad))
+       montoTotalLinea : montoTotalLinea
     });
     var cont = 0;
     self.detail.forEach(function(elemen){
@@ -1147,8 +1125,8 @@ function _cambiaImpuesto(){
         costoProducto = self.item.costo
     }
     var valor = costoProducto * self.item.porcentajeImpuesto
-    self.item.impuesto      = Math.round(__valorNumerico(valor))
-    self.item.totalImpuesto = Math.round(__valorNumerico(self.item.impuesto *  self.item.cantidad))
+    self.item.impuesto      = __valorNumerico(valor)
+    self.item.totalImpuesto = __valorNumerico(self.item.impuesto *  self.item.cantidad)
     self.update()
 }
 /**
@@ -1156,9 +1134,9 @@ function _cambiaImpuesto(){
 **/
 function __actualizarItemArray(){
     //Subtotal del Detalle
-    self.item.montoTotalLinea = Math.round(__valorNumerico(self.item.costo * self.item.cantidad));
-    self.item.montoTotalLinea = Math.round(__valorNumerico(self.item.montoTotalLinea-self.item.totalDescuento))
-    self.item.montoTotalLinea = Math.round(__valorNumerico(self.item.montoTotalLinea + self.item.totalImpuesto));
+    self.item.montoTotalLinea = __valorNumerico(self.item.costo * self.item.cantidad);
+    self.item.montoTotalLinea = __valorNumerico(self.item.montoTotalLinea-self.item.totalDescuento)
+    self.item.montoTotalLinea = __valorNumerico(self.item.montoTotalLinea + self.item.totalImpuesto);
     self.update()
 }
 /**
@@ -1240,7 +1218,7 @@ __actualizarDescuento(e){
     } 
     var valor = self.item.descuento /100
     var resultado = self.item.costo * valor
-    self.item.totalDescuento =  Math.round(__valorNumerico(resultado * self.item.cantidad))
+    self.item.totalDescuento =  __valorNumerico(resultado * self.item.cantidad)
     self.update()   
     _cambiaImpuesto()
     __actualizarItemArray();
@@ -1263,20 +1241,20 @@ function __calculate() {
     var totalImpuesto  = 0
     self.detail.forEach(function(e){
         totalCompra      += e.montoTotalLinea >0?e.montoTotalLinea:0
-        montoTotalLinea  += e.montoTotalLinea >0?e.montoTotalLinea + e.descuento:0
         totalDescuento   += e.descuento >0?e.descuento:0
         totalImpuesto    += e.totalImpuesto >0?e.totalImpuesto:0
     });
-    self.compra.totalCompra    += totalCompra
-    self.compra.totalDescuento += totalDescuento
-    self.compra.totalImpuesto  += totalImpuesto
+    self.compra.totalCompra    = totalCompra
+    self.compra.totalDescuento = totalDescuento
+    self.compra.totalImpuesto  = totalImpuesto
     self.totalGeneralDescuento = formatoDecimales(totalDescuento,2)
     self.totalGeneralImpuesto  = formatoDecimales(totalImpuesto,2)
     self.totalGeneralCompra    = formatoDecimales(totalCompra,2)
     self.articulo              = null;
     self.update(); 
     $( "#codigo" ).val(null);
-    $( "#quantity" ).val(null);
+    $('.codigo').select()
+    $('.codigo').focus()
 }
 /**
 * Definicion de la tabla articulos 
@@ -1442,8 +1420,8 @@ function __Teclas(){
     }
 
   if(tecla ==27){
-      $(".codigo").focus()
-      $(".codigo").focus()
+      $('.codigo').select()
+      $('.codigo').focus()
     }
     }, false );
 }                         

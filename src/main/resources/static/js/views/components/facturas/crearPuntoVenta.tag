@@ -215,7 +215,7 @@
                             <th ><h1>{$.i18n.prop("factura.linea.detalle.precio")}                       </h1></th>
                             <th ><h1>{$.i18n.prop("factura.linea.detalle.descuento")}                    </h1></th>
                             <th ><h1>{$.i18n.prop("factura.linea.detalle.impuesto")}                     </h1></th>
-                            <th ><h1>{$.i18n.prop("factura.linea.detalle.subTotal")}                     </h1> </th>
+                            <th ><h1>{$.i18n.prop("factura.linea.detalle.subTotal")}                     </h1> </th> 
                         </tr>
                         </thead>
                         <tbody>
@@ -497,6 +497,7 @@
     </div>
 </div>
 <!--Fin Cambiar Descuento-->
+
 <script>
     var self = this;
     // Detalle de la factura es una coleccion de articulos
@@ -2224,12 +2225,12 @@ function __calculate() {
     self.factura.totalGravado            = __valorNumerico(totalGravado)
     self.factura.totalExento             = __valorNumerico(totalExento)
     //cuando se aplica descuentos
-    self.factura.totalVenta              = Math.round(__valorNumerico(totalVenta))
-    self.factura.totalDescuentos         = Math.round(__valorNumerico(totalDescuento))
-    self.factura.subTotal                = Math.round(__valorNumerico(subTotal))
-    self.factura.totalImpuesto           = Math.round(__valorNumerico(totalImpuesto))
-    self.factura.totalVentaNeta          = Math.round(__valorNumerico(totalVenta-totalDescuento))
-    self.factura.totalComprobante        = Math.round(__valorNumerico(totalComprobante))
+    self.factura.totalVenta              = __valorNumerico(totalVenta)
+    self.factura.totalDescuentos         = __valorNumerico(totalDescuento)
+    self.factura.subTotal                = __valorNumerico(subTotal)
+    self.factura.totalImpuesto           = __valorNumerico(totalImpuesto)
+    self.factura.totalVentaNeta          = __valorNumerico(totalVenta-totalDescuento)
+    self.factura.totalComprobante        = __valorNumerico(totalComprobante)
     self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
     self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
     self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);

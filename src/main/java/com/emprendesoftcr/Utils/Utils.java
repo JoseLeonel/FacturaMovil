@@ -1252,6 +1252,7 @@ public final class Utils {
 	 * @return
 	 */
 	public static double roundFactura(double value, int places) {
+	
     if (places < 0) throw new IllegalArgumentException();
  
     BigDecimal bd = new BigDecimal(Double.toString(value));

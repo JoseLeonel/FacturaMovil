@@ -1,6 +1,7 @@
 package com.emprendesoftcr.Dao;
 
 import com.emprendesoftcr.modelo.CuentaCobrar;
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 
 public interface CuentaCobrarDao {
@@ -12,9 +13,7 @@ public interface CuentaCobrarDao {
 	void eliminar(CuentaCobrar cuentaCobrar);
 
 	CuentaCobrar buscar(Long id);
-	CuentaCobrar buscarPorLetraCambio(String letraCambio);
-	CuentaCobrar buscarPorFacturaManual(Integer facturaManual);
-	
+	CuentaCobrar buscarPorConsecutivo(Empresa empresa,String consecutivo);
 	void crearCuentaXCobrar(Factura factura);
 
 }

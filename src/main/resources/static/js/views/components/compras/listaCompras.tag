@@ -253,7 +253,7 @@
                             </td>
 
                             <td class="text-right">
-                                <input  class="form-control" type="text"  value = " {montoTotalLinea}" readonly/>
+                                <input  class="form-control" type="text"  value = " {montoTotalLinea.toFixed(2)}" readonly/>
                             </td>
                         </tr>
                         </tbody>
@@ -710,8 +710,8 @@ function __InformacionDataTable(){
                                },
                                {'data' :'totalCompra'         ,"name":"totalCompra"          ,"title" : $.i18n.prop("compra.listado.total")         ,"autoWidth" :true ,
                                     "render":function(totalCompra,type, row){
-                                        var resultado = formatoDecimales(__valorNumerico(totalCompra))
-                                        return resultado;
+                                        
+                                        return totalCompra.toFixed(2);
                                     }
                                },
                                {'data' :'descripcionEstado'          ,"name":"descripcionEstado"           ,"title" : $.i18n.prop("compra.listado.estado")        ,"autoWidth" :true },

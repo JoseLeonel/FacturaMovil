@@ -299,6 +299,12 @@ public class Constantes {
 	public static final String					FACTURA_CONDICION_VENTA_CONTADO_STR									= "factura.codicion.venta.contado";
 	public static final String					FACTURA_CONDICION_VENTA_CREDITO_STR									= "factura.codicion.venta.credito";
 
+	public static final String					FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO						= "01";
+	public static final String					FACTURA_CODIGO_REFERENCIA_CORRIJE_TEXTO							= "02";
+	public static final String					FACTURA_CODIGO_REFERENCIA_CORRIJE_MONTO							= "03";
+	public static final String					FACTURA_CODIGO_REFERENCIA_OTRO_DOCUMENTO						= "04";
+	public static final String					FACTURA_CODIGO_REFERENCIA_SUSTITUYE_COMPROBANTE			= "05";
+
 	public static final String					FACTURA_TIPO_DOC_TIQUETE														= "04";
 	public static final String					FACTURA_TIPO_DOC_PROFORMAS													= "88";
 	public static final String					FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO								= "87";

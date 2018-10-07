@@ -148,14 +148,7 @@ public class CuentaCobrarController {
 			} else if (cuentaCobrar.getMontoCouta() == Constantes.ZEROS_DOUBLE) {
 				result.rejectValue("montoCuota", "error.cuentaCobrar.montoCuota.requerido");
 			}
-			CuentaCobrar cuentaCobrarBD = cuentaCobrarBo.buscarPorLetraCambio(cuentaCobrar.getLetraCambio());
-			if (cuentaCobrarBD != null) {
-				result.rejectValue("letraCambio", "error.cuentaCobrar.letraCambio.existe");
-			}
-			CuentaCobrar cuentaCobrarValidar = cuentaCobrarBo.buscarPorFacturaManual(cuentaCobrar.getFacturaManual());
-			if (cuentaCobrarValidar != null) {
-				result.rejectValue("facturaManual", "error.cuentaCobrar.facturaManual.existe");
-			}
+		
 
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
@@ -215,21 +208,7 @@ public class CuentaCobrarController {
 			} else if (cuentaCobrar.getMontoCouta() == Constantes.ZEROS_DOUBLE) {
 				result.rejectValue("montoCuota", "error.cuentaCobrar.montoCuota.requerido");
 			}
-			if (!cuentaCobrarBD.getLetraCambio().equals(cuentaCobrar.getLetraCambio())) {
-				CuentaCobrar cuentaCobrarValidar = cuentaCobrarBo.buscarPorLetraCambio(cuentaCobrar.getLetraCambio());
-				if (cuentaCobrarValidar != null) {
-					result.rejectValue("letraCambio", "error.cuentaCobrar.letraCambio.existe");
-				}
-
-			}
-			if (!cuentaCobrarBD.getFacturaManual().equals(cuentaCobrar.getFacturaManual())) {
-				CuentaCobrar cuentaCobrarValidar = cuentaCobrarBo.buscarPorFacturaManual(cuentaCobrar.getFacturaManual());
-				if (cuentaCobrarValidar != null) {
-					result.rejectValue("facturaManual", "error.cuentaCobrar.facturaManual.existe");
-				}
-
-			}
-
+			
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}

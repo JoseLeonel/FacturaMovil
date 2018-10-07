@@ -26,6 +26,7 @@ import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.modelo.Articulo;
+import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
@@ -170,7 +171,7 @@ public class FacturaBoImpl implements FacturaBo {
 			if (facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 				if (facturaCommand.getFechaCredito() != null) {
 					factura.setFechaCredito(Utils.pasarADate(facturaCommand.getFechaCredito(), "yyyy-MM-dd"));
-					factura.setPlazoCredito(facturaCommand.getPlazoCredito()==null?Constantes.CANTIDAD_DIAS_MINIMO_CREDITO:facturaCommand.getPlazoCredito());
+					factura.setPlazoCredito(facturaCommand.getPlazoCredito() == null ? Constantes.CANTIDAD_DIAS_MINIMO_CREDITO : facturaCommand.getPlazoCredito());
 
 				}
 			} else {
@@ -264,8 +265,7 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
 			factura.setEstado(facturaCommand.getEstado());
 
-			factura.setMesa(facturaCommand.getMesa()); 
-
+			factura.setMesa(facturaCommand.getMesa());
 
 			if (factura.getId() == Constantes.ZEROS_LONG) {
 				factura.setCreated_at(new Date());
@@ -301,7 +301,7 @@ public class FacturaBoImpl implements FacturaBo {
 				usuarioCajaFactura.setFactura(factura);
 				usuarioCajaFactura.setUsuarioCaja(usuarioCaja);
 				usuarioCajaFacturaDao.agregar(usuarioCajaFactura);
-				if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) ) {
+				if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
 					usuarioCajaDao.actualizarCaja(usuarioCaja, factura.getTotalEfectivo(), factura.getTotalTarjeta(), factura.getTotalBanco(), factura.getTotalCredito(), Constantes.ZEROS_DOUBLE);
 				}
 
@@ -325,7 +325,6 @@ public class FacturaBoImpl implements FacturaBo {
 			Double totalImpuesto = Constantes.ZEROS_DOUBLE;
 			Double totalComprobante = Constantes.ZEROS_DOUBLE;
 			Double subTotal = Constantes.ZEROS_DOUBLE;
-		  
 
 			// Agregar Lineas de Detalle
 			JSONArray jsonArrayDetalleFactura = (JSONArray) json.get("data");
@@ -358,9 +357,9 @@ public class FacturaBoImpl implements FacturaBo {
 						detalle.setPrecioUnitario(detalle.getPrecioUnitario() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getPrecioUnitario(), 5));
 						detalle.setMontoTotalLinea(detalle.getMontoTotalLinea() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoTotalLinea(), 5));
 						detalle.setMontoTotal(detalle.getMontoTotal() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoTotal(), 5));
-						
-						//Se calcula el subtotal por problemas de decimales
-						//detalle.setSubTotal(detalle.getSubTotal() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getSubTotal(), 5));
+
+						// Se calcula el subtotal por problemas de decimales
+						// detalle.setSubTotal(detalle.getSubTotal() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getSubTotal(), 5));
 						detalle.setSubTotal(Utils.roundFactura(detalle.getMontoTotal() - detalle.getMontoDescuento(), 5));
 
 						// Suma de montos con impuestos
@@ -415,13 +414,10 @@ public class FacturaBoImpl implements FacturaBo {
 
 				}
 			}
-			
-			//Se agrega un detalle para el costo por servicio de restaurante y se afecta el monto total de la factura
-			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) 
-						&& facturaCommand.getMesa() != null 
-						&& !facturaCommand.getMesa().getId().equals(0L) 
-						&& facturaCommand.getMesa().getImpuestoServicio()) {
-				
+
+			// Se agrega un detalle para el costo por servicio de restaurante y se afecta el monto total de la factura
+			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) && facturaCommand.getMesa() != null && !facturaCommand.getMesa().getId().equals(0L) && facturaCommand.getMesa().getImpuestoServicio()) {
+
 				Detalle detalle = new Detalle();
 				detalle.setCantidad(1D);
 				detalle.setCodigo("8888");
@@ -431,32 +427,31 @@ public class FacturaBoImpl implements FacturaBo {
 				detalle.setImpuesto(10D);
 				detalle.setMontoDescuento(Constantes.ZEROS_DOUBLE);
 				detalle.setMontoImpuesto(Constantes.ZEROS_DOUBLE);
-				detalle.setMontoTotal(Utils.roundFactura(subTotal * 0.10,5));
-				detalle.setMontoTotalLinea(Utils.roundFactura(subTotal * 0.10,5));
+				detalle.setMontoTotal(Utils.roundFactura(subTotal * 0.10, 5));
+				detalle.setMontoTotalLinea(Utils.roundFactura(subTotal * 0.10, 5));
 				detalle.setNaturalezaDescuento(Constantes.FORMATO_NATURALEZA_DESCUENTO);
-				detalle.setNumeroLinea(factura.getDetalles().size() + 1);				
+				detalle.setNumeroLinea(factura.getDetalles().size() + 1);
 				detalle.setObservacion("Impuesto al servicio");
 				detalle.setPorcentajeDesc(Constantes.ZEROS_DOUBLE);
-				detalle.setPrecioUnitario(Utils.roundFactura(subTotal * 0.10,5));	
-				detalle.setSubTotal(Utils.roundFactura(subTotal * 0.10,5));
+				detalle.setPrecioUnitario(Utils.roundFactura(subTotal * 0.10, 5));
+				detalle.setSubTotal(Utils.roundFactura(subTotal * 0.10, 5));
 				detalle.setTipoCodigo(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO);
 				detalle.setTipoImpuesto("");
-				detalle.setUnidadMedida("Unid");				
+				detalle.setUnidadMedida("Unid");
 				detalle.setUpdated_at(new Date());
-				detalle.setFactura(factura);				
+				detalle.setFactura(factura);
 				detalle.setUsuario(usuario);
 				detalle.setTipoCodigo("");
 				factura.addDetalle(detalle);
-				
-				
-				//Se afecta los montos de la factura
+
+				// Se afecta los montos de la factura
 				totalServExentos = totalServExentos + detalle.getMontoTotal();
 				totalExento = totalExento + detalle.getMontoTotal();
-				totalVenta = totalVenta +  detalle.getMontoTotal();
+				totalVenta = totalVenta + detalle.getMontoTotal();
 				totalVentaNeta = totalVentaNeta + detalle.getMontoTotal();
 				totalComprobante = totalComprobante + detalle.getMontoTotal();
 			}
-			
+
 			totalVentaNeta = totalVenta - totalDescuentos;
 			// Resumen de la Factura
 			factura.setTotalMercanciasGravadas(Utils.roundFactura(totalMercanciasGravadas, 5));
@@ -470,13 +465,7 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setTotalDescuentos(Utils.roundFactura(totalDescuentos, 5));
 			factura.setTotalImpuesto(Utils.roundFactura(totalImpuesto, 5));
 			factura.setTotalComprobante(Utils.roundFactura(totalComprobante, 5));
-			factura.setTotalImpuestoServicio(Utils.roundFactura(subTotal * 0.10,5));
-			// Crear Credito del cliente
-			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
-				if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
-					cuentaCobrarDao.crearCuentaXCobrar(factura);
-				}
-			}
+			factura.setTotalImpuestoServicio(Utils.roundFactura(subTotal * 0.10, 5));
 
 			// Verifica si esta facturado para cambiar el estado firma y enviar a crear el xml en el proceso automatico
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO) || facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
@@ -488,12 +477,38 @@ public class FacturaBoImpl implements FacturaBo {
 			}
 			modificar(factura);
 
+			// Crear Credito del cliente
+			if(factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)){
+				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
+					if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+						cuentaCobrarDao.crearCuentaXCobrar(factura);
+					}
+				}
+				
+			}
+
+			
+			
 			// Anulacion de la factura anterior
 			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
 				if (factura.getReferenciaNumero() != null) {
 					if (factura.getReferenciaNumero() != Constantes.EMPTY) {
 						Factura facturaAnterior = findByConsecutivoAndEmpresa(factura.getReferenciaNumero(), usuario.getEmpresa());
 						if (facturaAnterior != null) {
+							CuentaCobrar cuentaCobrar = cuentaCobrarDao.buscarPorConsecutivo(factura.getEmpresa(), factura.getReferenciaNumero());
+							if (cuentaCobrar != null) {
+								// Eliminar la cuenta por cobrar si el tipo de anulacio es total
+								if (factura.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
+									cuentaCobrarDao.eliminar(cuentaCobrar);
+								} else if (!factura.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
+									cuentaCobrar.setTotal(factura.getTotalComprobante());
+									cuentaCobrar.setTotalSaldo(factura.getTotalComprobante());
+									cuentaCobrar.setFactura(factura.getNumeroConsecutivo());
+									cuentaCobrarDao.modificar(cuentaCobrar);
+
+								}
+
+							}
 							facturaAnterior.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
 							modificar(facturaAnterior);
 							if (facturaAnterior.getClave() != null) {
@@ -582,9 +597,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 	@Override
 	public Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa) {
-		return facturaDao.facturasRangoEstado(estado, fechaInicio, fechaFin, idEmpresa);		
+		return facturaDao.facturasRangoEstado(estado, fechaInicio, fechaFin, idEmpresa);
 	}
-	
-	
 
 }

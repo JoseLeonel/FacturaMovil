@@ -14,8 +14,8 @@ import org.springframework.stereotype.Repository;
 import com.emprendesoftcr.Dao.CuentaCobrarDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
-import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.CuentaCobrar;
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 
 /**
@@ -24,7 +24,7 @@ import com.emprendesoftcr.modelo.Factura;
  * @since 18 mar. 2018
  */
 @Repository("cuentaCobrarDao")
-public class CuentaPagarDaoImpl implements CuentaCobrarDao {
+public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 
 	@PersistenceContext
 	EntityManager		entityManager;
@@ -112,13 +112,13 @@ public class CuentaPagarDaoImpl implements CuentaCobrarDao {
 			cuentaCobrar.setFechaPlazo(factura.getFechaCredito());
 			cuentaCobrar.setLetraCambio(Constantes.EMPTY);
 			cuentaCobrar.setMontoCouta(Constantes.ZEROS_DOUBLE);
-			cuentaCobrar.setNota(factura.getNota() == null?Constantes.CUENTA_POR_COBRAR_NOTA_AUTOMATICO:factura.getNota());
+			cuentaCobrar.setNota(factura.getNota() == null ? Constantes.CUENTA_POR_COBRAR_NOTA_AUTOMATICO : factura.getNota());
 			cuentaCobrar.setRecibo(Constantes.EMPTY);
 			cuentaCobrar.setTipo(Constantes.CUENTA_POR_COBRAR_TIPO_Automatica);
-			cuentaCobrar.setTotal(Utils.roundFactura(factura.getTotalComprobante(),5));
+			cuentaCobrar.setTotal(Utils.roundFactura(factura.getTotalComprobante(), 5));
 			cuentaCobrar.setTotalAbono(Constantes.ZEROS_DOUBLE);
 			cuentaCobrar.setTotalComision(Constantes.ZEROS_DOUBLE);
-			cuentaCobrar.setTotalSaldo(Utils.roundFactura(factura.getTotalComprobante(),5));
+			cuentaCobrar.setTotalSaldo(Utils.roundFactura(factura.getTotalComprobante(), 5));
 			cuentaCobrar.setDescuento(Constantes.ZEROS_DOUBLE);
 			cuentaCobrar.setUsuario(factura.getUsuarioCreacion());
 			cuentaCobrar.setVendedor(factura.getVendedor());
@@ -130,7 +130,19 @@ public class CuentaPagarDaoImpl implements CuentaCobrarDao {
 		}
 
 	}
-	
-	
+
+	@Override
+	public CuentaCobrar buscarPorConsecutivo(Empresa empresa, String consecutivo) {
+		Query query = entityManager.createQuery("select obj from CuentaCobrar obj where obj.factura = :consecutivo and obj.empresa = :empresa ");
+		query.setParameter("consecutivo", consecutivo);
+		query.setParameter("empresa", empresa);
+		List<CuentaCobrar> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (CuentaCobrar) results.get(0);
+		} else {
+			return null;
+		}
+
+	}
 
 }
