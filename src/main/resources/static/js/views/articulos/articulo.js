@@ -33,6 +33,8 @@ var ListarArticulos = function(){
              "bDeferRender": true ,
              "sDom": 'lrtip',
              "searching":true,
+            
+      
      "processing": false,
      "serverSide": true,
      "sort" : "position",
@@ -99,7 +101,7 @@ function EventoFiltro(){
 
 
 /**
-*Formato del listado de los cambios
+*Formato del listado de los cambios .toFixed(2)
 **/
 var informacion_tabla = [ 
                                {'data' :'categoria'               ,"name":"categoria"              ,"title" : "Categoria"        ,"autoWidth" :true,
@@ -108,10 +110,23 @@ var informacion_tabla = [
                                 }},
                                {'data' :'codigo'                  ,"name":"codigo"                 ,"title" : "Codigo"           ,"autoWidth" :true },
                                {'data' :'descripcion'             ,"name":"descripcion"            ,"title" : "Descripcion"      ,"autoWidth" :true },
-                               {'data' :'costo'                   ,"name":"costo"                  ,"title" : "Costo"            ,"autoWidth" :true },
+                               {'data' :'costo'                   ,"name":"costo"                  ,"title" : "Costo"            ,"autoWidth" :true
+                               ,
+                               "render":function(costo,type, row){
+                                     return costo ==null?0:costo.toFixed(2);
+                                },
+                            },
                                {'data' :'impuesto'                ,"name":"impuesto"               ,"title" : "Impuesto"         ,"autoWidth" :true },
-                               {'data' :'precioPublico'           ,"name":"precioPublico"          ,"title" : "Precio"           ,"autoWidth" :true },
-                               {'data' :'cantidad'                ,"name":"cantidad"               ,"title" : "Cantidad"         ,"autoWidth" :true },
+                               {'data' :'precioPublico'           ,"name":"precioPublico"          ,"title" : "Precio"           ,"autoWidth" :true ,
+                               "render":function(precioPublico,type, row){
+                                     return precioPublico ==null?0:precioPublico.toFixed(2);
+                                },
+                            },
+                               {'data' :'cantidad'                ,"name":"cantidad"               ,"title" : "Cantidad"         ,"autoWidth" :true,
+                               "render":function(cantidad,type, row){
+                                     return cantidad ==null?0:cantidad.toFixed(2);
+                                },
+                            },
                                {'data' :'contable'                ,"name":"contable"               ,"title" : "Contable"         ,"autoWidth" :false },
                                {'data' : 'estado'                 ,"name":"estado"          ,"title" : "Estado"      ,"autoWidth" :false},
                                {'data' : 'id'            ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
@@ -131,7 +146,7 @@ function __Opciones(id,type,row){
     
     menu += '<li><a href="#"  title="Modificar" class="  btnModificar" >Modificar</a></li>'
     menu += '<li><a href="#"  title="Entrada al inventario"  class="  btnEntrada" >Entrada</a></li>'
-    if(row.contable == "Si" ){
+    if(row.contable == "Si" && row.cantidad > 0 ){
        menu += '<li><a href="#"  title="Salida al inventario" class="  btnSalida" >Salida</a></li>'
     }
 
@@ -283,11 +298,11 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 10    ){
+        if ( $(this).index() != 9    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
            // Select
-    	if ($(this).index() == 9  ){
+    	if ($(this).index() == 8 ){
     	    var select = $('<select id="combo" class="form-control"><option value="">Todos</option></select>');
     	    // se cargan los valores por defecto que existen en el combo
     	   	select.append( '<option value="'+$.i18n.prop("estado.Activo")+'">'+$.i18n.prop("estado.Activo")+'</option>' );

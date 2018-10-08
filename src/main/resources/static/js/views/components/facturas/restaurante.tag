@@ -561,8 +561,8 @@
                    <thead>
                         <th class="table-header">{$.i18n.prop("cliente.cedula")}            </th>
                         <th class="table-header">{$.i18n.prop("cliente.nombreCompleto")}    </th>
+                        <th class="table-header">{$.i18n.prop("cliente.nombreComercial")}   </th>
                         <th class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
-                        <th class="table-header">{$.i18n.prop("cliente.descuento")}         </th>
                         <th class="table-header">{$.i18n.prop("cliente.telefono")}          </th>
                         <th class="table-header">{$.i18n.prop("cliente.celular")}           </th>
                         <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
@@ -571,8 +571,8 @@
                         <tr>
                             <th>{$.i18n.prop("cliente.cedula")}           </th>
                             <th>{$.i18n.prop("cliente.nombreCompleto")}   </th>
+                            <th>{$.i18n.prop("cliente.nombreComercial")}   </th>
                             <th>{$.i18n.prop("cliente.correoElectronico")}</th>
-                            <th>{$.i18n.prop("cliente.descuento")}        </th>
                             <th>{$.i18n.prop("cliente.telefono")}         </th>
                             <th>{$.i18n.prop("cliente.celular")}          </th>
                             <th>                                          </th>
@@ -731,7 +731,7 @@
                                         <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.subTotal")}  <span id="lblSubtotal"> {subTotalGeneral} </span></p>
                                         <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos} </span></p>
                                         <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {totalImpuesto} </span></p>
-                                        <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.impuestoServicio")}   <span id="lblSubtotal"> {totalImpuestoServ} </span></p>
+                                        <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.impuestoServ")} :  <span id="lblSubtotal"> {totalImpuestoServ} </span></p>
                                     </div>
                                     <div class="precioTotalFactura">
                                         <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}</span></p>
@@ -3111,8 +3111,8 @@ function __informacionData(){
     self.informacion_tabla_clientes = [	
                                         {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false},
                                         {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("cliente.nombreCompleto")    ,"autoWidth":false},
+                                        {'data' : 'nombreComercial'   ,"name":"nombreComercial"    ,"title" : $.i18n.prop("cliente.nombreComercial")    ,"autoWidth":false},
                                         {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("cliente.correoElectronico") ,"autoWidth":false},
-                                        {'data' : 'descuento'        ,"name":"descuento"         ,"title" : $.i18n.prop("cliente.descuento")         ,"autoWidth":false},                                
                                         {'data' : 'telefono'         ,"name":"telefono"          ,"title" : $.i18n.prop("cliente.telefono")          ,"autoWidth":false},                                
                                         {'data' : 'celular'          ,"name":"celular"           ,"title" : $.i18n.prop("cliente.celular")           ,"autoWidth":false},                                
                                         {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
@@ -3204,7 +3204,7 @@ function agregarInputsCombos_Articulo(){
     $('.tableListarArticulos tfoot th').each( function (e) {
         var title = $('.tableListarArticulos thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 4    ){
+        if ( $(this).index() != 5    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
@@ -3217,7 +3217,7 @@ function agregarInputsCombos_Clientes(){
     $('.tableListaCliente tfoot th').each( function (e) {
         var title = $('.tableListaCliente thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 5    ){
+        if ( $(this).index() != 6    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })

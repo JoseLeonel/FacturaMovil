@@ -1,4 +1,12 @@
 <compra-proveedores>
+<!-- Titulos -->
+    <div  class="row titulo-encabezado"  >
+        <div  class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+            <h1 ><i class="fa fa-calculator"></i>&nbsp Compras  </h1>
+        </div>
+        <div class=" col-sm-4 col-md-4 col-lg-4 text-right"></div>
+    </div>
+    <br>
 <!--Modal mostrar Proveedores de una sucursal -->
 <div id="modalProveedores" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -143,7 +151,6 @@
                 <div class="row">
                   <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">  
                     <div class="box-tools ">
-                            <a class="pull-left" href="#"   onclick = {}    title="Modulo de Compras"><span class="label label-limpiar ">Compras a proveedores </span></a>
                             <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago}       title="Aplicar la compra"> <span class="label label-limpiar">{$.i18n.prop("comprar.f8")}</span></a>
                             <a class="pull-left" href="#"   onclick = {__crearCompraEnEspera}  title="Compra en espera"> <span class="label label-limpiar">{$.i18n.prop("comprar.f9")}</span></a>
                             <a class="pull-left" href="#"   onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
@@ -172,7 +179,7 @@
                             <th><h1>{$.i18n.prop("compra.linea.detalle.linea")}                         </h1></th>
                             <th><h1>{$.i18n.prop("compra.linea.detalle.codigo")}                        </h1></th>
                             <th style="width:20%;"><h1>{$.i18n.prop("compra.linea.detalle.descripcion")}</h1></th>
-                            <th style="width:8%;"><h1>{$.i18n.prop("compra.linea.detalle.cantidad")}                      </h1></th>
+                            <th style="width:8%;"><h1>{$.i18n.prop("compra.linea.detalle.cantidad")}   </h1></th>
                             <th style="width:8%;"><h1>{$.i18n.prop("compra.linea.detalle.costo")}                         </h1></th>
                             <th style="width:8%;"><h1>{$.i18n.prop("compra.linea.detalle.precio")}                        </h1></th>
                             <th style="width:8%;"><h1>{$.i18n.prop("compra.linea.detalle.descuento")}                     </h1></th>
@@ -189,16 +196,16 @@
                             <td><h2>{codigo}</h2></td>
                             <td><h2>{descripcion}</h2></td>
                             <td class="text-right">
-                                <input onkeypress={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalle} id= "cantidadDetalle" class="campo" type="number" step="any" placeholder="Cantidad Detalle" value = {cantidad} />
+                                <input onkeypress={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalleBlur} id= "cantidadDetalle" class="campo" type="number" step="any" placeholder="Cantidad Detalle" value = {cantidad} />
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarCosto} onBlur={__actualizarCosto} class="campo" type="number" step="any"  value = "{costo}" />
+                                <input  onkeypress={__actualizarCostoKeyPress} onBlur={__actualizarCostoBlur} class="campo" type="number" step="any"  value = "{costo}" />
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarPrecio} onBlur={__actualizarPrecio} class="campo" type="number" step="any"  value = "{precio}" />
+                                <input  onkeypress={__actualizarPrecioKeyPress} onBlur={__actualizarPrecioBlur} class="campo" type="number" step="any"  value = "{precio}" />
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarDescuento} onBlur={__actualizarDescuento} class="campo" type="number" step="any"  value = "{descuento}" />
+                                <input  onkeypress={__actualizarDescuentoKeyPress} onBlur={__actualizarDescuentoBlur} class="campo" type="number" step="any"  value = "{descuento}" />
                             </td>
                             <td class="text-right">
                                 <h2>{totalImpuesto.toFixed(2)} </h2>
@@ -1092,13 +1099,25 @@ function __nuevoArticuloAlDetalle(cantidad){
 /**
 *   Actualizar el costo del codigo y recalcular la compra
 **/
-__actualizarCosto(e){
+__actualizarCostoKeyPress(e){
     if (e.keyCode != 13) {
         return;
     } 
     var costo = e.currentTarget.value;
     self.item = e.item; 
-    var input = e.input;
+    self.update()
+    __ActualizarCosto(costo)
+}
+
+__actualizarCostoBlur(e){
+    var costo = e.currentTarget.value;
+    self.item = e.item; 
+    self.update()
+    __ActualizarCosto(costo)
+}
+
+
+function __ActualizarCosto(costo){
     var index = self.detail.indexOf(self.item);
     //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
     costo =__valorNumerico(costo);
@@ -1166,7 +1185,23 @@ __removeProductFromDetail(e) {
     } 
     var cantidad = e.currentTarget.value;
     self.item = e.item; 
-    var input = e.input;
+    self.update()
+     __ActualizaCantidad(cantidad)
+ }
+
+  /**
+ * Cuando se aplica un cambio de cantidad en un detalle
+ * Se aplica una recalculacion de todo el detalle y Compra
+ **/ 
+ __recalculacionDelDetalleBlur(e){
+    var cantidad = e.currentTarget.value;
+    self.item = e.item; 
+    self.update()
+    __ActualizaCantidad(cantidad)
+    
+ }
+
+ function __ActualizaCantidad(cantidad){
     var index = self.detail.indexOf(self.item);
     
     //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
@@ -1184,13 +1219,25 @@ __removeProductFromDetail(e) {
 /**
 *   Actualizar el costo del codigo y recalcular la compra
 **/
-__actualizarPrecio(e){
+__actualizarPrecioKeyPress(e){
     if (e.keyCode != 13) {
         return;
     } 
     var precio = e.currentTarget.value;
     self.item = e.item; 
-    var input = e.input;
+    self.update()
+    __ActualizarPrecioDetalle(precio)
+}
+
+__actualizarPrecioBlur(e){
+    var precio = e.currentTarget.value;
+    self.item = e.item; 
+    self.update()
+    __ActualizarPrecioDetalle(precio)
+}
+
+function __ActualizarPrecioDetalle(precio){
+   var input = e.input;
     var index = self.detail.indexOf(self.item);
     //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
     precio =__valorNumerico(precio);
@@ -1203,16 +1250,29 @@ __actualizarPrecio(e){
 /**
 * Actualizar el descuento del codigo
 **/
-__actualizarDescuento(e){
+__actualizarDescuentoKeyPress(e){
     if (e.keyCode != 13) {
         return;
     } 
     self.item     = e.item; 
-    var index     = self.detail.indexOf(self.item);
+    self.update()
     var descuento = e.currentTarget.value;
     //Descuento se verifica si es null o espacios por defecto se deja en cero
      descuento =__valorNumerico(descuento);
-      //Descuento
+    __ActualizarDescuentoDetalle(descuento)
+}
+
+__actualizarDescuentoBlur(e){
+    self.item     = e.item; 
+    self.update()
+    var descuento = e.currentTarget.value;
+    //Descuento se verifica si es null o espacios por defecto se deja en cero
+     descuento =__valorNumerico(descuento);
+    __ActualizarDescuentoDetalle(descuento)
+}
+
+function __ActualizarDescuentoDetalle(descuento){
+  //Descuento
     if(self.item.descuento != descuento){
        self.item.descuento =  parseFloat(descuento);  
     } 
@@ -1222,6 +1282,7 @@ __actualizarDescuento(e){
     self.update()   
     _cambiaImpuesto()
     __actualizarItemArray();
+    var index     = self.detail.indexOf(self.item);
     self.detail[index] = self.item;
     self.update();
     __calculate();

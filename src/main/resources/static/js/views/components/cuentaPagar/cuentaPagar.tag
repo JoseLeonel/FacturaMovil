@@ -43,10 +43,10 @@
                             </div>
                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
-                                    <label>{$.i18n.prop("cliente.titulo")} </label>  
-                                    <select  class="form-control selectCliente" id="idCliente" name="idCliente" data-live-search="true">
+                                    <label>{$.i18n.prop("proveedor.titulo")} </label>  
+                                    <select  class="form-control selectProveedores" id="idProveedor" name="idProveedor" data-live-search="true">
                                         <option  data-tokens="{$.i18n.prop("todos.select")}"  value="0"  >{$.i18n.prop("todos.select")}</option>
-                                        <option  data-tokens="{nombreCompleto}" each={clientes.data}  value="{id}"  >{nombreCompleto}</option>
+                                        <option  data-tokens="{nombreCompleto}" each={proveedores.data}  value="{id}"  >{nombreCompleto}</option>
                                     </select>
                                 </div>  
                             </div>                      
@@ -225,30 +225,28 @@
                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.created_at")} </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.id")}         </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.cliente")}    </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.factura")}    </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.tipo")}       </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.total")}      </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.totalAbono")} </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.totalSaldo")} </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.estado")}     </th>
+                                <th class="table-header">{$.i18n.prop("cuentaPagar.created_at")} </th>
+                                <th class="table-header">{$.i18n.prop("cuentaPagar.id")}         </th>
+                                <th class="table-header">{$.i18n.prop("cuentaPagar.proveedor")}   </th>
+                                <th class="table-header">{$.i18n.prop("cuentaPagar.consecutivo")} </th>
+                                <th class="table-header">{$.i18n.prop("cuentaPagar.total")}      </th>
+                                <th class="table-header">{$.i18n.prop("cuentaPagar.totalAbono")} </th>
+                                <th class="table-header">{$.i18n.prop("cuentaPagar.totalSaldo")} </th>
+                                <th class="table-header">{$.i18n.prop("cuentaPagar.estado")}     </th>
                                 <th class="table-header">{$.i18n.prop("listado.acciones")}        </th>
                             </tr>
                         </thead>
                         <tfoot style="display: table-header-group;">
                             <tr>
-                                <th >{$.i18n.prop("cuentaCobrar.created_at")} </th> 
-                                <th>{$.i18n.prop("cuentaCobrar.id")}         </th>
-                                <th>{$.i18n.prop("cuentaCobrar.cliente")}    </th>
-                                <th>{$.i18n.prop("cuentaCobrar.factura")}    </th>
-                                <th>{$.i18n.prop("cuentaCobrar.tipo")}       </th>
-                                <th>{$.i18n.prop("cuentaCobrar.total")}      </th>
-                                <th>{$.i18n.prop("cuentaCobrar.totalAbono")} </th>
-                                <th>{$.i18n.prop("cuentaCobrar.totalSaldo")} </th>
-                                <th>{$.i18n.prop("cuentaCobrar.estado")}     </th>
-                                <th>                                         </th>
+                                <th >{$.i18n.prop("cuentaPagar.created_at")} </th>
+                                <th >{$.i18n.prop("cuentaPagar.id")}         </th>
+                                <th >{$.i18n.prop("cuentaPagar.proveedor")}   </th>
+                                <th >{$.i18n.prop("cuentaPagar.consecutivo")} </th>
+                                <th >{$.i18n.prop("cuentaPagar.total")}      </th>
+                                <th >{$.i18n.prop("cuentaPagar.totalAbono")} </th>
+                                <th >{$.i18n.prop("cuentaPagar.totalSaldo")} </th>
+                                <th >{$.i18n.prop("cuentaPagar.estado")}     </th>
+                                <th>   </th>
                             </tr>
                         </tfoot>
                     </table>
@@ -277,7 +275,7 @@
                         </div>
                         <div class="row">    
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
-                                <label  >{$.i18n.prop("cuentaCobrar.cliente")}  <span class="requeridoDato">*</span></label>
+                                <label  >{$.i18n.prop("cuentaPagar.proveedor")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" class="form-control "  value="{cuentaCobrar.cliente.nombreCompleto}" readonly>
                             </div>
                         </div>
@@ -379,7 +377,7 @@
     self.formato_tabla             = []         // Formato del LiUtils.roundFactura(tado de la Tabla 
     self.estados                   =[]
     self.vendedores                = {data:[]}
-    self.clientes                  = {data:[]}
+    self.proveedores               = {data:[]}
     self.empresas                  = {data:[]}
     self.mostrarListado            = true 
     self.botonModificar            = false
@@ -434,7 +432,7 @@
         __InicializarTabla('.tableListar')
         __InicializarTabla  ('.tableListaAbonos')
         agregarInputsCombos();
-        listaClientesActivos() 
+        listaProveedoresActivos() 
         listaVendedoresActivos()
         __Eventos()
         __MantenimientoAgregarAbono()
@@ -604,7 +602,7 @@ function listadoConsulta(){
         $("#tableListar").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListar')  
         $.ajax({
-            url: "ListarCuentaCobrarAjax.do",
+            url: "ListarCuentaPagarAjax.do",
             datatype: "json",
             data:formulario ,
             method:"GET",
@@ -837,18 +835,18 @@ function __ComboEstadosCuentaCobrarPendiente(){
 /**
 *  Obtiene la lista de los clientes activos
 **/
-function listaClientesActivos(){
-    self.clientes                  = {data:[]}
+function listaProveedoresActivos(){
+    self.provedores                = {data:[]}
     self.update()
     $.ajax({
-        url: "ListarClientesActivosAjax.do",
+        url: "ListarProveedoresAjax.do",
         datatype: "json",
         method:"GET",
         success: function (result) {
              if(result.aaData.length > 0){
-                 self.clientes.data = result.aaData
-                 self.update()
-                   $('.selectCliente').selectpicker();
+                self.proveedores.data = result.aaData
+                self.update()
+                $('.selectProveedor').selectpicker();
              } 
         },
         error: function (xhr, status) {
@@ -856,7 +854,6 @@ function listaClientesActivos(){
             console.log(xhr);
         }
     })
-    
 
 }
 /**
@@ -889,37 +886,26 @@ function listaVendedoresActivos(){
 **/
 function __InformacionDataTable(){
     self.informacion_tabla = [ 
-                            {'data' :'created_atSTR'             ,"name":"created_atSTR"              ,"title" : $.i18n.prop("cuentaCobrar.created_at")   ,"autoWidth" :true 
-                            },
-                            {'data' :'id'                     ,"name":"id"                      ,"title" : $.i18n.prop("cuentaCobrar.id")           ,"autoWidth" :true },
-                            {'data' :'cliente.nombreCompleto' ,"name":"cliente.nombreCompleto"  ,"title" : $.i18n.prop("cuentaCobrar.cliente")      ,"autoWidth" :false },
-                            {'data' :'factura'                ,"name":"factura"                 ,"title" : $.i18n.prop("cuentaCobrar.factura")      ,"autoWidth" :false },
-                            {'data' :'fechaPlazo'             ,"name":"fechaPlazo"              ,"title" : $.i18n.prop("cuentaCobrar.fechaPlazo")   ,"autoWidth" :false ,
-                                "render":function(fechaPlazo,type, row){
-									return  __displayDate_detail(fechaPlazo);
-                                 }
-                            },
-                            {'data' : 'total'                 ,"name":"total"                   ,"title" : $.i18n.prop("cuentaCobrar.total")        ,"autoWidth" :false,
+                            {'data' :'created_atSTR'             ,"name":"created_atSTR"             ,"title" : $.i18n.prop("cuentaPagar.created_at")   ,"autoWidth" :true           },
+                            {'data' :'proveedor.nombreCompleto'  ,"name":"proveedor.nombreCompleto"  ,"title" : $.i18n.prop("cuentaPagar.cliente")      ,"autoWidth" :false },
+                            {'data' :'consecutivo'               ,"name":"consecutivo"               ,"title" : $.i18n.prop("cuentaPagar.factura")      ,"autoWidth" :false },
+                            {'data' : 'total'                    ,"name":"total"                     ,"title" : $.i18n.prop("cuentaPagar.total")        ,"autoWidth" :false,
                                 "render":function(total,type, row){
-                                    var resultado = redondeoDecimales(total,2)
-									    return  resultado;
+									    return  total;
                                  }
                             },
-                            {'data' : 'totalAbono'            ,"name":"totalAbono"              ,"title" : $.i18n.prop("cuentaCobrar.totalAbono")   ,"autoWidth" :false,
-                                "render":function(totalAbono,type, row){
-                                    var resultado = redondeoDecimales(totalAbono,2)
-    							    return  resultado;
-                             }
-                            
-                            },
-                            {'data' : 'totalSaldo'            ,"name":"totalSaldo"              ,"title" : $.i18n.prop("cuentaCobrar.totalSaldo")   ,"autoWidth" :false,
+                            {'data' : 'totalSaldo'            ,"name":"totalSaldo"                   ,"title" : $.i18n.prop("cuentaPagar.totalSaldo")   ,"autoWidth" :false,
                                 "render":function(totalSaldo,type, row){
-                                    var resultado = redondeoDecimales(totalSaldo,2)
-    							    return  resultado;
+    							    return totalSaldo;
+                             }
+                            },
+                            {'data' : 'totalAbono'            ,"name":"totalAbono"                  ,"title" : $.i18n.prop("cuentaPagar.totalAbono")   ,"autoWidth" :false,
+                                "render":function(totalAbono,type, row){
+    							    return  totalAbono;
                                  }
                             
                             },
-                            {'data' : 'estado'                ,"name":"estado"                  ,"title" : $.i18n.prop("cuentaCobrar.estado")       ,"autoWidth" :false},
+                            {'data' : 'estado'                ,"name":"estado"                     ,"title" : $.i18n.prop("cuentaPagar.estado")       ,"autoWidth" :false},
                             {'data' : 'id'                    ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
                                       return __Opciones(id,type,row);

@@ -75,9 +75,7 @@ public class CuentaPagarController {
 	private EmpresaPropertyEditor															empresaPropertyEditor;
 	@Autowired
 	private CuentaPagarPropertyEditor													cuentaPagarPropertyEditor;
-	@Autowired
-	private VendedorPropertyEditor														vendedorPropertyEditor;
-	@Autowired
+	
 	private ProveedorPropertyEditor														proveedorPropertyEditor;
 	@Autowired
 	private StringPropertyEditor															stringPropertyEditor;
@@ -97,7 +95,7 @@ public class CuentaPagarController {
 	}
 
 	@SuppressWarnings("all")
-	@RequestMapping(value = "/ListarCuentaPagarAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@RequestMapping(value = "/	.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFinal, @RequestParam Long idProveedor) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());

@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Dao;
 
+import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.ProveedorArticulo;
 
@@ -13,6 +14,6 @@ public interface ProveedorArticuloDao {
 
 	ProveedorArticulo findById(Long id);
 	
-	ProveedorArticulo findByCodigo(String codigo , Proveedor proveedor);
+	ProveedorArticulo findByCodigo(Articulo articulo , Proveedor proveedor);
 
 }

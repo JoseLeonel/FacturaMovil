@@ -9,6 +9,7 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.ProveedorArticuloDao;
+import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.ProveedorArticulo;
 
@@ -49,9 +50,10 @@ public class ProveedorArticuloDaoImpl implements ProveedorArticuloDao {
 	}
 
 	@Override
-	public ProveedorArticulo findByCodigo(String codigo, Proveedor proveedor) {
-		Query query = entityManager.createQuery("select obj from ProveedorArticulo obj where obj.codigo = :codigo and obj.proveedor = :proveedor");
+	public ProveedorArticulo findByCodigo(Articulo articulo, Proveedor proveedor) {
+		Query query = entityManager.createQuery("select obj from ProveedorArticulo obj where obj.articulo = :articulo and obj.proveedor = :proveedor");
 		query.setParameter("proveedor", proveedor);
+		query.setParameter("articulo", articulo);
 		List<ProveedorArticulo> results = query.getResultList();
 		if (!results.isEmpty()) {
 			return (ProveedorArticulo) results.get(0);

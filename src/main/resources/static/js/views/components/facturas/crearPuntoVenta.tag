@@ -74,11 +74,11 @@
                                 <div  class= "col-md-6 col-sx-6 col-sm-6 col-lg-6" >
                                     <div class="form-group has-success">
                                         <label for="pago_transporteL">{$.i18n.prop("factura.resumen.efectivo")} </label> 
-                                        <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="campo tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo" >
+                                        <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="campo tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo" value="{factura.totalEfectivo}" >
                                     </div>
                                     <div  class="form-group has-success">
                                         <label for="pago_efectivoL">{$.i18n.prop("factura.resumen.tarjeta")} </label> 
-                                        <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="campo tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"   >
+                                        <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="campo tamanoLetraTotales totalTarjeta" id="totalTarjeta" name="totalTarjeta"  value="{factura.tarjeta}" >
                                     </div>
                                     <div  class="form-group has-success">
                                          <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
@@ -382,22 +382,28 @@
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("cliente.lista")}   </h4>
             </div>
             <div class="modal-body">
-                <table id="tableListaCliente" class="table responsive display table-striped table-hover nowrap tableListaCliente " cellspacing="0" width="100%">
-                   <thead>
-                        <th class="table-header">{$.i18n.prop("cliente.cedula")}            </th>
-                        <th class="table-header">{$.i18n.prop("cliente.nombreCompleto")}    </th>
-                        <th class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
-                        <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
-                    </thead>
-                    <tfoot style="display: table-header-group;">
-                        <tr>
-                            <th>{$.i18n.prop("cliente.cedula")}           </th>
-                            <th>{$.i18n.prop("cliente.nombreCompleto")}   </th>
-                            <th>{$.i18n.prop("cliente.correoElectronico")}</th>
-                            <th>                                          </th>
-                        </tr>
-                    </tfoot>                    
-                </table>
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <table id="tableListaCliente" class="table responsive display table-striped table-hover nowrap tableListaCliente " cellspacing="0" width="100%">
+                        <thead>
+                                <th class="table-header">{$.i18n.prop("cliente.cedula")}            </th>
+                                <th class="table-header">{$.i18n.prop("cliente.nombreComercial")}   </th>
+                                <th class="table-header">{$.i18n.prop("cliente.nombreCompleto")}    </th>
+                                <th class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
+                                <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
+                            </thead>
+                            <tfoot style="display: table-header-group;">
+                                <tr>
+                                    <th>{$.i18n.prop("cliente.cedula")}           </th>
+                                    <th>{$.i18n.prop("cliente.nombreComercial")}   </th>
+                                    <th>{$.i18n.prop("cliente.nombreCompleto")}   </th>
+                                    <th>{$.i18n.prop("cliente.correoElectronico")}</th>
+                                    <th>                                          </th>
+                                </tr>
+                            </tfoot>                    
+                        </table>
+                </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
@@ -601,11 +607,11 @@
         __InicializarTabla('.tableListaVendedor')
         __InicializarTabla('.tableListarFacturasDia')
         agregarInputsCombos_Articulo()
-        //__ListaFacturasEnEspera()
+        __ListaFacturasEnEspera()
         setInterval(function() {
-             triggering the "ready" event will resolve the promise
             __ListaFacturasEnEspera()
         }.bind(this), 10000)
+
         __comboCondicionPago()
         __ComboTipoDocumentos()
        __Teclas()
@@ -613,7 +619,7 @@
        cargaBilletes()
        __InformacionDataTableDia()
        __ListaDeClientes()
-      // __ListaArticulosUsoInterno()
+       __ListaArticulosUsoInterno()
        __ListaDeVendedores()
        __agregarArticulos()
        _Empresa()
@@ -647,6 +653,7 @@ function _Empresa(){
      $.ajax({
         url: "ParametrosEmpresaAjax.do",
         datatype: "json",
+        
         method:"GET",
         success: function (data) {
             if (data.status != 200) {
@@ -729,6 +736,7 @@ function ListadoFacturasDelDia(){
         $.ajax({
             url: "ListarFacturasDelDiaAjax.do",
             datatype: "json",
+           
             method:"GET",
             success: function (result) {
                 if(result.aaData.length > 0){
@@ -1194,7 +1202,7 @@ function __Init(){
      __comboCondicionPago()
      //Tipos de Documentos
       __ComboTipoDocumentos()
-   //  __ListaFacturasEnEspera()
+    __ListaFacturasEnEspera()
     $('.codigo').select()
     $(".codigo").focus()
 
@@ -1366,6 +1374,7 @@ function __ListaFacturasEnEspera(){
     $.ajax({
         url: 'ListarFacturasEsperaActivasAjax',
         datatype: "json",
+        global: false,
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
@@ -2315,6 +2324,7 @@ function __agregarArticulos() {
 function __informacionData_vendedores(){
     self.informacion_tabla_vendedores = [	
                                         {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("vendedor.cedula")            ,"autoWidth":false},
+                                        
                                         {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("vendedor.nombreCompleto")    ,"autoWidth":false},
                                         {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("vendedor.correoElectronico") ,"autoWidth":false},
                                         {'data' : 'telefono'         ,"name":"telefono"          ,"title" : $.i18n.prop("vendedor.telefono")          ,"autoWidth":false},                                
@@ -2357,6 +2367,7 @@ function __seleccionarVendedor() {
 function __informacionData(){
     self.informacion_tabla_clientes = [	
                                         {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false},
+                                        {'data' : 'nombreComercial'  ,"name":"nombreComercial"    ,"title" : $.i18n.prop("cliente.nombreComercial")    ,"autoWidth":false},
                                         {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("cliente.nombreCompleto")    ,"autoWidth":false},
                                         {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("cliente.correoElectronico") ,"autoWidth":false},
                                         {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
@@ -2450,7 +2461,7 @@ function agregarInputsCombos_Clientes(){
     $('.tableListaCliente tfoot th').each( function (e) {
         var title = $('.tableListaCliente thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 3    ){
+        if ( $(this).index() != 4    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
@@ -2538,6 +2549,7 @@ _sumarBilletes(e){
        self.factura.totalTarjeta  = 0
        self.factura.totalBanco    = 0
        self.factura.totalCambioPagar  = 0
+       self.totalCambioPagar = 0
        self.claseCambioDinero     = "entregarCambioPositivo"
 
     }else{

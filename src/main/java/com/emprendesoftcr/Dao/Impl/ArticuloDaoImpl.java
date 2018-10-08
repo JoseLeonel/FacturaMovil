@@ -125,6 +125,10 @@ public class ArticuloDaoImpl implements ArticuloDao {
 			if (precio == 0) {
 				return Constantes.ZEROS_DOUBLE;
 			}
+			if(precio < costo) {
+				return Constantes.ZEROS_DOUBLE;
+				
+			}
 			Double resultado = Constantes.ZEROS_DOUBLE;
 			Double precioSinImpuesto = Constantes.ZEROS_DOUBLE;
 			costo = costo == null ? Constantes.ZEROS_DOUBLE : costo;

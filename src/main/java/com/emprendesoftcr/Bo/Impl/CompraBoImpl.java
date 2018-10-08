@@ -69,6 +69,7 @@ public class CompraBoImpl implements CompraBo {
 	 * @param compraCommand
 	 * @throws Exception
 	 */
+	@Transactional
 	@Override
 	public void crearCompra(CompraCommand compraCommand, Usuario usuario) throws Exception {
 		try {
@@ -125,8 +126,11 @@ public class CompraBoImpl implements CompraBo {
 					compra.addDetalleCompra(detalleCompra);
 					// compraDao.modificar(compra);
 					if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
-						aplicarInventario(compra, detalleCompra, articulo);
-						actualizarProveedor(detalleCompra, articulo, compra.getProveedor());
+						if(articulo.getContable().equals(Constantes.CONTABLE_SI)) {
+							aplicarInventario(compra, detalleCompra, articulo);	
+						}
+						
+						actualizarProveedor(detalleCompra, compra.getProveedor());
 					}
 
 					if (detalleCompra.getMontoTotalLinea() != null) {
@@ -189,9 +193,9 @@ public class CompraBoImpl implements CompraBo {
 	 * @param detalleCompra
 	 * @param articulo
 	 */
-	private void actualizarProveedor(DetalleCompra detalleCompra, Articulo articulo, Proveedor proveedor) {
+	private void actualizarProveedor(DetalleCompra detalleCompra, Proveedor proveedor) {
 		try {
-			ProveedorArticulo proveedorArticulo = proveedorArticuloDao.findByCodigo(articulo.getCodigo(), proveedor);
+			ProveedorArticulo proveedorArticulo = proveedorArticuloDao.findByCodigo(detalleCompra.getArticulo(), proveedor);
 			if (proveedorArticulo != null) {
 				proveedorArticulo.setUpdated_at(new Date());
 				proveedorArticulo.setCosto(detalleCompra.getCosto());
@@ -201,8 +205,9 @@ public class CompraBoImpl implements CompraBo {
 				proveedorArticulo = new ProveedorArticulo();
 				proveedorArticulo.setCreated_at(new Date());
 				proveedorArticulo.setUpdated_at(new Date());
-				proveedorArticulo.setArticulo(articulo);
+				proveedorArticulo.setArticulo(detalleCompra.getArticulo());
 				proveedorArticulo.setCodigo(detalleCompra.getArticulo().getCodigo());
+				proveedorArticulo.setCosto(detalleCompra.getCosto());
 				proveedorArticulo.setProveedor(proveedor);
 				proveedorArticuloDao.agregar(proveedorArticulo);
 			}
@@ -222,15 +227,18 @@ public class CompraBoImpl implements CompraBo {
 	@Override
 	public void aplicarInventario(Compra compra, DetalleCompra detalleCompra, Articulo articulo) throws Exception {
 		try {
-			Double cantidadTotal = Utils.roundFactura(articulo.getCantidad() + detalleCompra.getCantidad(), 5);
+			Double cantidadTotal = articulo.getCantidad() + detalleCompra.getCantidad();
+		
 			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getProveedor().getNombreCompleto();
 			kardexDao.entrada(articulo, articulo.getCantidad(), detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
 			articulo.setCosto(articuloDao.costoPromedio(articulo.getCosto(), detalleCompra.getCosto(), articulo.getCantidad(), detalleCompra.getCantidad()));
 			articulo.setGananciaPrecioPublico(articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio()));
 			articulo.setUpdated_at(new Date());
 			articulo.setUsuario(compra.getUsuarioCreacion());
-			articulo.setCantidad(cantidadTotal);
-			articulo.setPrecioPublico(Utils.roundFactura(detalleCompra.getPrecio(), 5));
+
+			
+			articulo.setCantidad( articulo.getCantidad() + detalleCompra.getCantidad());
+			articulo.setPrecioPublico(detalleCompra.getPrecio());
 			articuloDao.modificar(articulo);
 
 		} catch (Exception e) {

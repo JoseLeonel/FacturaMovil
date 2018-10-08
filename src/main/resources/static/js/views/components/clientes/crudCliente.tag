@@ -9,12 +9,14 @@
     <!-- Listado  -->
     <div classs="contenedor-listar container" id="container"  show={mostrarListado}  >
         <div class="row">
-            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
+            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 scroller " style="width:98.50%;">
                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th class="table-header" >{$.i18n.prop("cliente.cedula")}            </th>
                                 <th class="table-header" >{$.i18n.prop("cliente.nombreCompleto")}    </th>
+                                <th class="table-header"> {$.i18n.prop("cliente.nombreComercial")}    </th>
+
                                 <th class="table-header" style= "width:6%;" >{$.i18n.prop("cliente.celular")}           </th>
                                 <th class="table-header" style= "width:6%;">{$.i18n.prop("cliente.telefono")}          </th>
                                 <th class="table-header" >{$.i18n.prop("empresa.estado")}            </th>
@@ -24,7 +26,9 @@
                         <tfoot style="display: table-header-group;">
                             <tr>
                                 <th>{$.i18n.prop("cliente.cedula")}            </th>
+                               
                                 <th>{$.i18n.prop("cliente.nombreCompleto")}    </th>
+                                 <th>{$.i18n.prop("cliente.nombreComercial")}    </th>
                                 <th>{$.i18n.prop("cliente.celular")}           </th>
                                 <th>{$.i18n.prop("cliente.telefono")}          </th>
                                 <th>{$.i18n.prop("cliente.estado")}            </th>
@@ -201,6 +205,9 @@
     th, td {
         white-space: nowrap;
     }
+     .scroller {
+            width: 200px; height: 600px; overflow-y: scroll;
+        }
 </style>
 <script>
     var self = this;
@@ -625,6 +632,7 @@ function __InformacionDataTable(){
     self.informacion_tabla = [ 
                             {'data' :'cedula'             ,"name":"cedula"               ,"title" : $.i18n.prop("cliente.cedula")             ,"autoWidth" :false },
                             {'data' :'nombreCompleto'     ,"name":"nombreCompleto"       ,"title" : $.i18n.prop("cliente.nombreCompleto")     ,"autoWidth" :false },
+                            {'data' :'nombreComercial'    ,"name":"nombreComercial"      ,"title" : $.i18n.prop("cliente.nombreComercial")     ,"autoWidth" :false },
                             {'data' : 'celular'           ,"name":"celular"              ,"title" : $.i18n.prop("cliente.celular")             ,"autoWidth" :false},
                             {'data' : 'telefono'          ,"name":"telefono"             ,"title" : $.i18n.prop("cliente.telefono")           ,"autoWidth" :false},
                             {'data' : 'estado'            ,"name":"estado"               ,"title" : $.i18n.prop("cliente.estado")            ,"autoWidth" :false},
@@ -748,11 +756,11 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 5    ){
+        if ( $(this).index() != 6    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
          // Select
-    	if ($(this).index() == 4  ){
+    	if ($(this).index() == 5  ){
     	    var select = $('<select id="combo" class="form-control"><option value="">Todos</option></select>');
     	    // se cargan los valores por defecto que existen en el combo
     	   	select.append( '<option value="'+$.i18n.prop("estado.Activo")+'">'+$.i18n.prop("estado.Activo")+'</option>' );
