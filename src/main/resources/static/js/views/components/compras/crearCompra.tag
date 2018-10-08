@@ -1062,7 +1062,7 @@ function __nuevoArticuloAlDetalle(cantidad){
     }
     var iva =  __valorNumerico(self.articulo.impuesto/100)
     var montoImpuestoV    =__valorNumerico(self.articulo.costo * iva)
-    var totalImpuesto     = montoImpuestoV * cantidad 
+    var totalImpuesto     = __valorNumerico(montoImpuestoV) * __valorNumerico(cantidad) 
     var montoTotalLinea   = __valorNumerico(self.articulo.costo * cantidad) +  totalImpuesto
     self.descuento      = 0;
     self.detail.push({
@@ -1071,15 +1071,15 @@ function __nuevoArticuloAlDetalle(cantidad){
        articulo_id     : self.articulo.id,
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
-       cantidad        : parseFloat(cantidad),
-       costo           : self.articulo.costo,
-       precio          : self.articulo.precioPublico,
-       totalImpuesto   : totalImpuesto,
+       cantidad        : __valorNumerico(cantidad),
+       costo           : __valorNumerico(self.articulo.costo),
+       precio          : __valorNumerico(self.articulo.precioPublico),
+       totalImpuesto   : __valorNumerico(totalImpuesto),
        totalDescuento  :0,
-       impuesto        : montoImpuestoV,
+       impuesto        : __valorNumerico(montoImpuestoV),
        descuento       : 0,
-       montoTotalLinea : montoTotalLinea
-    });
+       montoTotalLinea : __valorNumerico(montoTotalLinea)
+    }); 
     var cont = 0;
     self.detail.forEach(function(elemen){
             elemen.linea = cont + 1

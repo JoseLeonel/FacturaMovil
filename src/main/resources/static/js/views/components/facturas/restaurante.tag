@@ -118,7 +118,7 @@
            <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12" style="padding: 0px 10px">
              <!--Ventana de los productos-->
 			 <!--Seccion de mesas-->
-             <section class="lista-mesas" >
+             <section class="lista-mesas clickable" >
              	<div id="item-mesas" class="product-item col-sx-12 col-sm-12 col-md-3 col-lg-3"  each ={mesas.data}  onclick={__FacturasXMesa}>
                 	<div class="containerImage">
 	                	<img  style = "width:120px;" alt="" class="img-responsive " src="/dist/img/mesaAzul.png">
@@ -158,14 +158,13 @@
                             <table id="tablaListaProductos"  cellpadding="0" cellspacing="0" width="100%" class="table lcnp table-dark">
                                 <thead>
                                     <tr >
-                                        <td width="50%"></td>
-                                        <td width="10%"></td>
-                                        <td width="10%"></td>
-                                        <td width="10%"></td>
-                                        <td width="10%"></td>
-                                        <td width="19%"></td>
-                                        <td width="1%"></td>
-                                        <td width="15%"></td>
+                                        <td width="50%"> Descripcion</td>
+                                        <td width="10%">Cant</td>
+                                        <td width="10%">Precio.U</td>
+                                        <td width="10%">Desc</td>
+                                       
+                                        <td width="19%">Total</td>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody height="70%" id="productos-detail">
@@ -177,17 +176,15 @@
                                            <div> 
                                         </td>
                                         <td >
-                                            <span onclick ={__CambiarCantidad} class="label label-success cantidad clickable">{cantidad.toFixed(3)}</span>
+                                            <span onclick ={__CambiarCantidad} class="labelDetalleVenta label-success cantidad clickable">{cantidad.toFixed(3)}</span>
                                         </td>
                                         <td >
-                                            <span    class="label label-success precio-prod" >{precioUnitario.toFixed(2)}</span>
+                                            <span    class="labelDetalleVenta label-success precio-prod" >{precioUnitario.toFixed(2)}</span>
                                         </td>
                                         <td >
-                                            <span onclick ={__CambiarDescuento} class="label label-success precio-prod" >{porcentajeDesc.toFixed(2)}</span>
+                                            <span onclick ={__CambiarDescuento} class="labelDetalleVenta label-success precio-prod clickable" >{porcentajeDesc.toFixed(2)}</span>
                                         </td>
-                                        <td >
-                                            <span class="label label-success " >{impuesto.toFixed(2)}</span>
-                                        </td>
+                                       
                                         <td>
                                             <span class="precio-calc">{montoTotalLinea.toFixed(2)}</span>
                                         </td>
@@ -297,7 +294,7 @@
                                     <li onclick = {__PantallaMesas} id="codificalo" class=""> <h3>
                                         <i class="glyphicon glyphicon-glass" aria-hidden="true"></i>
                                         <img  src="{urlImagenLector}" width="40px" height="15px">
-                                        &nbsp;&nbsp; {$.i18n.prop("titulo.mesas")} </h3> 
+                                        &nbsp;&nbsp; {$.i18n.prop("mesa.titulo")} </h3> 
                                     </li>                                    
                                     <li onclick = {__PantallaCategorias} id="navegador" class=""> <h3>
                                         <i class="glyphicon glyphicon-refresh" aria-hidden="true"></i>
@@ -313,21 +310,21 @@
                 <!--Ventana de los productos-->
                 <div   class="col-sx-12 col-sm-12 col-md-12 col-lg-12 " >
                     <!--Seccion de categorias-->
-                    <section show= {mostrarCategorias} class="lista-articulos" >
+                    <section show= {mostrarCategorias} class="lista-articulos clickable" >
                         <div show= {mostrarCategorias} id="item-categorias"class="product-item"  each ={categorias.data}  onclick={__ArticulosXCategorias}>
                             <img  style = "width:120px;" alt="" class="img-responsive " src="/dist/img/carrito1.png">
                              <span class="label-titulos-articulo">{descripcion}</span>
                         </div>
                     </section>					
 					<!--Seccion facturas por mesas-->
-                    <section show= {mostrarFacturasMesas} class="lista-articulos" >
+                    <section show= {mostrarFacturasMesas} class="lista-articulos clickable" >
                         <div show= {mostrarFacturasMesas} id="item-mesas-facturas" class="product-item"  each ={facturasXMesa.data}  onclick={__CargarFacturaEspera}>
                             <img  style = "width:120px;" alt="" class="img-responsive " src="/dist/img/factura.jpeg">
                              <span class="label-titulos-articulo">{nombreFactura}</span>
                         </div>
                     </section>
                     <!--Seccion de articulos-->
-                    <section show= {mostrarArticulosXCategoria} class="lista-articulos" >
+                    <section show= {mostrarArticulosXCategoria} class="lista-articulos clickable" >
                         <div class="product-item"  each ={inventariosXCategoria.data}   onclick={__AgregarProductoDePantalla}>
                             <img  style = "width:80px;" alt="" class="img-responsive " src="/dist/img/carrito3.png">
                             <span class="label-titulos-articulo">{descripcion}</span>
@@ -2642,6 +2639,10 @@ function __buscarcodigo(idArticulo,cantidad){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         self.articulo  = modeloTabla
+                         if(modeloTabla.estado  == "Inactivo"){
+                            mensajeError($.i18n.prop("error.articulo.inactivo.inventario"))
+                            return
+                        }
                          self.descripcionArticulo = modeloTabla.descripcion
                         self.update()
                         __agregarArticulo(cantidad)

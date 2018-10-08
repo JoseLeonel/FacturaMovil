@@ -227,7 +227,7 @@ public class CompraBoImpl implements CompraBo {
 	@Override
 	public void aplicarInventario(Compra compra, DetalleCompra detalleCompra, Articulo articulo) throws Exception {
 		try {
-			Double cantidadTotal = articulo.getCantidad() + detalleCompra.getCantidad();
+			
 		
 			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getProveedor().getNombreCompleto();
 			kardexDao.entrada(articulo, articulo.getCantidad(), detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
@@ -237,7 +237,7 @@ public class CompraBoImpl implements CompraBo {
 			articulo.setUsuario(compra.getUsuarioCreacion());
 
 			
-			articulo.setCantidad( articulo.getCantidad() + detalleCompra.getCantidad());
+
 			articulo.setPrecioPublico(detalleCompra.getPrecio());
 			articuloDao.modificar(articulo);
 

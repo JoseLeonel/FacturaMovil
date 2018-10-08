@@ -13,10 +13,10 @@
     <div>
         <div class="row" show={mostrarListado}>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div onclick={__mostrarFiltros} class="text-left advanced-search-grid" style="margin-bottom : {valorMarginBottom}; padding : 2px;">
-                    <h4> <i class="fa fa-filter" style="padding-left : 5px;"></i>&nbsp{$.i18n.prop("filtro")} <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4>
+                <div onclick={__mostrarFiltros} class="text-left advanced-search-grid " style="margin-bottom : {valorMarginBottom}; padding : 2px;  cursor: pointer;">
+                    <h4> <i class="fa fa-filter " style="padding-left : 5px;"></i>&nbsp{$.i18n.prop("filtro")} <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4>
                 </div>  
-                <div  show={mostrarFiltros}  class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
+                <div  show={mostrarFiltros}  class="advanced-search-grid text-left " style="padding-top : 5px; padding-bottom : 5px;">
                     <form id="filtros" name="filtros">              
                         <div class= "row">
                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
@@ -368,6 +368,9 @@
   </div>
 </div>
 <style type="text/css">
+.clickable {
+        cursor: pointer;
+    }
     .btn-success {
         color: #e7e7e7;
         background-color: #00a65a !important;
@@ -876,9 +879,9 @@ function sumar(){
           
 
     })
-    self.totalImpuestos  = redondearDecimales(self.totalImpuestos,2)
-    self.total           = redondearDecimales(self.total,2)
-    self.totalDescuentos = redondearDecimales(self.totalDescuentos,2)
+    self.totalImpuestos  = self.totalImpuestos
+    self.total           = self.total
+    self.totalDescuentos = self.totalDescuentos
     
     self.update()
 }

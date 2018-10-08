@@ -1,4 +1,4 @@
-package com.emprendesoftcr.web.Controller;
+	package com.emprendesoftcr.web.Controller;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -411,7 +411,7 @@ public class ArticuloController {
 			articuloBd.setCategoria(articulo.getCategoria());
 			articuloBd.setUnidadMedida(articulo.getUnidadMedida());
 			articuloBd.setTipoCodigo(articulo.getTipoCodigo());
-			articuloBd.setEstado(Constantes.ESTADO_ACTIVO);
+			articuloBd.setEstado(articulo.getEstado());
 			articuloBd.setGananciaPrecioPublico(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioPublico()));
 			articuloBd.setGananciaPrecioMayorista(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioMayorista()));
 			articuloBd.setGananciaPrecioEspecial(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioEspecial()));
@@ -452,6 +452,8 @@ public class ArticuloController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
+	
+
 
 	@RequestMapping(value = "/MostrarPorCodigoAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody

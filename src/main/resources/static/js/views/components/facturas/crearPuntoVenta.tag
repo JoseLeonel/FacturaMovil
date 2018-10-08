@@ -608,9 +608,9 @@
         __InicializarTabla('.tableListarFacturasDia')
         agregarInputsCombos_Articulo()
         __ListaFacturasEnEspera()
-        setInterval(function() {
-            __ListaFacturasEnEspera()
-        }.bind(this), 10000)
+       // setInterval(function() {
+       //     __ListaFacturasEnEspera()
+       // }.bind(this), 10000)
 
         __comboCondicionPago()
         __ComboTipoDocumentos()
@@ -619,7 +619,7 @@
        cargaBilletes()
        __InformacionDataTableDia()
        __ListaDeClientes()
-       __ListaArticulosUsoInterno()
+       //__ListaArticulosUsoInterno()
        __ListaDeVendedores()
        __agregarArticulos()
        _Empresa()
@@ -1374,7 +1374,6 @@ function __ListaFacturasEnEspera(){
     $.ajax({
         url: 'ListarFacturasEsperaActivasAjax',
         datatype: "json",
-        global: false,
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
@@ -1796,6 +1795,10 @@ function __buscarcodigoPrecio(idArticulo,cantidad,precio){
                      //       }
 
                       //  }
+                       if(modeloTabla.estado  == "Inactivo"){
+                            mensajeError($.i18n.prop("error.articulo.inactivo.inventario"))
+                            return
+                        }
                         self.articulo  = modeloTabla
                         self.update()
                         if(self.articulo !=null){
@@ -1869,6 +1872,11 @@ function __buscarcodigo(idArticulo,cantidad,precio){
                      //       }
                      //   }
                         self.articulo  = modeloTabla
+                        if(modeloTabla.estado  == "Inactivo"){
+                            mensajeError($.i18n.prop("error.articulo.inactivo.inventario"))
+                            return
+                        }
+                     
                         self.articulo.precioUnitario = precio > 0 ?precio:self.articulo.precioUnitario
                         self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
                         self.descripcionArticulo = modeloTabla.descripcion

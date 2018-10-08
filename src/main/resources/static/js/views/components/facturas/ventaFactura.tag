@@ -142,19 +142,19 @@
                                         </td>
                                         
                                         <td >
-                                            <span onclick ={__CambiarCantidad} class="label label-success cantidad clickable">{cantidad.toFixed(3)}</span>
+                                            <span onclick ={__CambiarCantidad} class="labelDetalleVenta label-success cantidad clickable">{cantidad.toFixed(3)}</span>
                                         </td>
                                         <td >
-                                            <span  onclick ={__CambiarPrecio}   class="label label-success precio-prod" >{precioUnitario.toFixed(2)}</span>
+                                            <span  onclick ={__CambiarPrecio}   class="labelDetalleVenta label-success precio-prod" >{precioUnitario.toFixed(2)}</span>
                                         </td>
                                         <td >
-                                            <span onclick ={__CambiarDescuento} class="label label-success precio-prod" >{porcentajeDesc.toFixed(2)}</span>
+                                            <span onclick ={__CambiarDescuento} class="labelDetalleVenta label-success precio-prod" >{porcentajeDesc.toFixed(2)}</span>
                                         </td>
                                         <td >
-                                            <span class="label label-success " >{impuesto.toFixed(2)}</span>
+                                            <span class="labelDetalleVenta label-success " >{impuesto.toFixed(2)}</span>
                                         </td>
                                         <td>
-                                            <span class="precio-calc">{montoTotalLinea.toFixed(2)}</span>
+                                            <span class="labelDetalleVenta precio-calc">{montoTotalLinea.toFixed(2)}</span>
                                         </td>
                                         <td>
                                             <button  onclick={__removeProductFromDetail} class="btn_eliminar_detalle btn-danger btn-xs btn-block clickable">X</button>
@@ -282,14 +282,14 @@
                 <!--Ventana de los productos-->
                 <div   class="col-sx-12 col-sm-12 col-md-12 col-lg-12 " >
                     <!--Seccion de categorias-->
-                    <section show= {mostrarCategorias} class="lista-articulos" >
+                    <section show= {mostrarCategorias} class="lista-articulos clickable" >
                         <div show= {mostrarCategorias} id="item-categorias"class="product-item"  each ={categorias.data}  onclick={__ArticulosXCategorias}>
                             <img  style = "width:120px;" alt="" class="img-responsive " src="/dist/img/carrito1.png">
                              <span class="label-titulos-articulo">{descripcion}</span>
                         </div>
                     </section>
                     <!--Seccion de articulos-->
-                    <section show= {mostrarArticulosXCategoria} class="lista-articulos" >
+                    <section show= {mostrarArticulosXCategoria} class="lista-articulos clickable" >
                         <div class="product-item"  each ={inventariosXCategoria.data}   onclick={__AgregarProductoDePantalla}>
                             <img  style = "width:80px;" alt="" class="img-responsive " src="/dist/img/carrito3.png">
                             <span class="label-titulos-articulo">{descripcion}</span>
@@ -303,7 +303,7 @@
                     </div>
                     <!--Fin Seccion de articulos-->
                     <!--Seccion de codigo de barra-->
-                    <section show={mostrarCodigoBarra} class="codigo-barra" >
+                    <section show={mostrarCodigoBarra} class="codigo-barra clickable" >
                         <div class="barra">
                            <input onkeypress = {__addProductToDetail} type="text" class="form-control" id="codigoBarra" autofocus="autofocus" placeholder="{$.i18n.prop('titulo.digite.codigo.barra')}">
                        </div>    
@@ -708,6 +708,17 @@
 </div>  
 <!--Fin Ventana de los billetes-->   
 <style type="text/css">
+.labelDetalleVenta {
+    display: inline;
+    padding: .2em .6em .3em;
+    font-weight: 700;
+    line-height: 1;
+    color: black;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
     .clickable {
         cursor: pointer;
     }
@@ -2455,8 +2466,13 @@ function __buscarcodigo(idArticulo,cantidad){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         self.articulo  = modeloTabla
+                         if(modeloTabla.estado  == "Inactivo"){
+                            mensajeError($.i18n.prop("error.articulo.inactivo.inventario"))
+                            return
+                        }
                          self.descripcionArticulo = modeloTabla.descripcion
                         self.update()
+
                         __agregarArticulo(cantidad)
                     });
                 }

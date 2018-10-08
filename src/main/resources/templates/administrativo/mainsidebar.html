@@ -79,7 +79,7 @@
             </a>
             <ul class="treeview-menu">
                 <li><a href="/ListarCuentaCobrar"><i class="fa fa-circle-o"></i> CuentasxCobrar </a></li>
-                <li><a href="/ListarCuentaPagar"><i class="fa fa-circle-o"></i> CuentasxPagar </a></li>
+                <li><a href="/ListarCuentaPagar" sec:authorize="hasAnyAuthority('pendiente')"><i class="fa fa-circle-o"></i> CuentasxPagar </a></li>
                 
             </ul>
         </li>

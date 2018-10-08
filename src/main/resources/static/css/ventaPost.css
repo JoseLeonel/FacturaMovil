@@ -169,6 +169,25 @@
 	font-size: 14px;
 }
 
+.labelDetalleVenta {
+    display: inline;
+    padding: .2em .6em .3em;
+    font-weight: 700;
+    line-height: 1;
+    color: black;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
+.label-success, .badge-success, .green {
+    background: black!important;
+}
+    .clickable {
+        cursor: pointer;
+    }
+
+
 #buscalo,
 #codificalo,
 #navegador {
@@ -404,7 +423,7 @@ tr.nothing td {
 
 #tablaListaProductos .text-info {
 	color: #232323;
-	font-size: 18px;
+	font-size: 12px;
 	font-weight: 400;
 }
 
@@ -422,10 +441,7 @@ tr.nothing td {
 	padding-left: 20px;
 }
 
-#tablaListaProductos tr td:last-child {
-	padding-top: 3px;
-	padding-left: 0px;
-}
+
 
 #tablaListaProductos tr td:last-child {
 	width: 30px;
