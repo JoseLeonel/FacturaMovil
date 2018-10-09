@@ -122,7 +122,7 @@ public class FacturaDaoImpl implements FacturaDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa){
-		Query query = entityManager.createQuery("select obj from Factura obj where obj.empresa.id = :idEmpresa and obj.estado = :estado and obj.created_at >= :fechaInicio and obj.fechaEmision <= :fechaFin");
+		Query query = entityManager.createQuery("select obj from Factura obj where obj.empresa.id = :idEmpresa and obj.referenciaCodigo != '01' and obj.estado = :estado and obj.created_at >= :fechaInicio and obj.fechaEmision <= :fechaFin");
 		query.setParameter("idEmpresa", idEmpresa);
 		query.setParameter("estado", estado);
 		query.setParameter("fechaInicio", fechaInicio);
