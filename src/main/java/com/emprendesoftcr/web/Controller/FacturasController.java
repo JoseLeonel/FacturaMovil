@@ -341,11 +341,10 @@ public class FacturasController {
 
 	@RequestMapping(value = "/EnvioDetalleTotalFacturasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public void envioDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam) {
+	public void envioDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo) {
 
 		
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-
 		//Se obtiene los totales
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
@@ -363,7 +362,11 @@ public class FacturasController {
 		String subject = "Facturas dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
 		
 		ArrayList<String> listaCorreos = new ArrayList<>();
-		listaCorreos.add(usuario.getEmpresa().getCorreoElectronico());
+		if(correoAlternativo != null && correoAlternativo.length() > 0) {			
+			listaCorreos.add(correoAlternativo);
+		}else {
+			listaCorreos.add(usuario.getEmpresa().getCorreoElectronico());
+		}
 		
 		Map<String, Object> modelEmail = new HashMap<>();
 		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
