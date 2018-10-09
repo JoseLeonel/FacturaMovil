@@ -41,18 +41,20 @@
                             <td > *********  </td>
                             </tr>
                             <tr>
-                            <td></td>
-                            <td ><strong>{$.i18n.prop("tikect.total.comprobante")}</strong></td>
-                            <td ><strong>{facturaImpresa.totalComprobante}</strong></td>
+                            	<td></td>
+                            	<td ><strong>{$.i18n.prop("tikect.total.comprobante")}</strong></td>
+                            	<td ><strong>{facturaImpresa.totalComprobante}</strong></td>
                             </tr>
                             <tr>
-                            <td colspan="3"><div id="divQR1" name="divQR1"  class="divQR1"></div></td>
+	                            <td colspan="3">
+	                            	<div id="divQR1" name="divQR1"  class="divQR1">
+	                            	</div>
+		                            <br>                            
+		                            <br>
+	                            </td>
                             </tr>
-                            
                         </tbody>
                         </table> 
-                        
-                                 
                     </div>
                 </div>
             </section>
