@@ -110,7 +110,7 @@ public class MapEnums {
             put("06", "Contrato").
             put("07", "Procedimiento").
             put("08", "Comprobante emitido en contigencia").
-            put(" ", "Compras").
+            put("", "Compras").
             put("99", "Otros").build();
     public static final Map<String, String> ENUM_TIPO_DOC_EXONERACION = ImmutableMap.<String, String>builder().put("01", "Compras Autorizadas").
             put("02", "Ventas exentas a diplomáticos").

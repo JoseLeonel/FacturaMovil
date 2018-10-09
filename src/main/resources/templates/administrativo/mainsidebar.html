@@ -102,7 +102,7 @@
                 <i class="fa fa-balance-scale"></i> <span>Tipo Cambio</span>
             </a>
         </li>          
-        <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Sistema','usuario_vendedor','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Cajero')">
+        <li class="treeview" sec:authorize="hasAnyAuthority('Contador','Administrador_Sistema','usuario_vendedor','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Cajero')">
             <a href="#">
                 <i class="fa fa-shopping-cart"></i>
                 <span>Consultas</span>
@@ -111,7 +111,7 @@
             <ul class="treeview-menu">
                 <li><a href="/ListaFacturas"><i class="fa fa-circle-o"></i>Listado de Facturas</a></li>
                 <li><a href="/ListaCompras" sec:authorize="hasAnyAuthority('Administrador_Cajero','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante')"><i  class="fa fa-circle-o"></i>Listado de compras</a></li>
-                <li><a href="/TotalFacturas"  sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa')"><i class="fa fa-circle-o"></i>Totales facturas mensuales</a></li>
+                <li><a href="/TotalFacturas"  sec:authorize="hasAnyAuthority('Contador','Administrador_Sistema','Administrador_Empresa')"><i class="fa fa-circle-o"></i>Totales facturas mensuales</a></li>
             </ul>
         </li>
         <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Restaurante','Administrador_temporal')">
@@ -133,7 +133,7 @@
         </li>    
 		
 		
-         <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Servicios')">
+         <li class="treeview" sec:authorize="hasAnyAuthority('Contador','Administrador_Sistema','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Servicios')">
             <a href="#">
                 <i class="fa fa-share"></i>
                 <span>Tributacion</span>
@@ -142,6 +142,7 @@
             <ul class="treeview-menu">
                 <li><a href="/ListarHacienda"><i class="fa fa-circle-o"></i>Hacienda</a></li>
                 <li><a href="/recepcionFactura" ><i  class="fa fa-circle-o"></i>Aceptar Compras</a></li>
+                <li><a href="/recepcionFactura" ><i  class="fa fa-circle-o"></i>Consulta Compras Aceptadas</a></li>
             </ul>
         </li>           
          <li class="active treeview">
