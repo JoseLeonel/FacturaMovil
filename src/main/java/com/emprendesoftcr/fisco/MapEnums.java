@@ -29,6 +29,12 @@ public class MapEnums {
             "02", "Cedula Juridica",
             "03", "DIMEX",
             "04", "NITE");
+
+    public static final Map<String, String> ENUM_TIPOS_MENSAJES = ImmutableMap.of(
+    		"01", "ACEPTADA",
+        "02", "ACEPTADA PARCIALMENTE",
+        "03", "RECHAZADA");
+    
     public static final Map<String, String> ENUM_CONDICION_VENTA = ImmutableMap.<String, String>builder().put("01", "Contado").
             put("02", "Crédito").
             put("03", "Consignación").

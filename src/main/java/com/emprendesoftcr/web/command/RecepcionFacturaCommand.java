@@ -1,0 +1,140 @@
+package com.emprendesoftcr.web.command;
+
+import java.util.Date;
+
+import com.emprendesoftcr.fisco.MapEnums;
+import com.emprendesoftcr.modelo.RecepcionFactura;
+
+public class RecepcionFacturaCommand {
+
+	private Long		id;
+	private String	clave;
+	private String	cedulaEmisor;
+	private String	tipoCedulaEmisor;
+	private Date		fechaEmision;
+	// 1 aceptado, 2 aceptado parcialmente, 3 rechazado.
+	private String	mensaje;
+	private String	detalleMensaje;
+	private Double	totalImpuestos;
+	private Double	totalFactura;
+	private String	cedulaReceptor;
+	private String	numeroConsecutivoReceptor;
+	private Integer	estadoFirma;
+
+	public RecepcionFacturaCommand() {
+		super();
+	}
+
+	public RecepcionFacturaCommand(RecepcionFactura recepcionFactura) {
+		super();
+		this.id = recepcionFactura.getId();
+		this.clave = recepcionFactura.getClave();
+		this.cedulaEmisor = recepcionFactura.getCedulaEmisor();
+		this.tipoCedulaEmisor = recepcionFactura.getTipoCedulaEmisor();
+		this.fechaEmision = recepcionFactura.getFechaEmision();
+		this.mensaje = MapEnums.ENUM_TIPOS_MENSAJES.get(recepcionFactura.getMensaje());
+		this.detalleMensaje = recepcionFactura.getDetalleMensaje();
+		this.totalImpuestos = recepcionFactura.getTotalImpuestos()  == null ? 0 : recepcionFactura.getTotalImpuestos();;
+		this.totalFactura = recepcionFactura.getTotalFactura() == null ? 0 : recepcionFactura.getTotalFactura();
+		this.cedulaReceptor = recepcionFactura.getCedulaReceptor();
+		this.numeroConsecutivoReceptor = recepcionFactura.getNumeroConsecutivoReceptor();
+		this.estadoFirma = recepcionFactura.getEstadoFirma();
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getClave() {
+		return clave;
+	}
+
+	public void setClave(String clave) {
+		this.clave = clave;
+	}
+
+	public String getCedulaEmisor() {
+		return cedulaEmisor;
+	}
+
+	public void setCedulaEmisor(String cedulaEmisor) {
+		this.cedulaEmisor = cedulaEmisor;
+	}
+
+	public String getTipoCedulaEmisor() {
+		return tipoCedulaEmisor;
+	}
+
+	public void setTipoCedulaEmisor(String tipoCedulaEmisor) {
+		this.tipoCedulaEmisor = tipoCedulaEmisor;
+	}
+
+	public Date getFechaEmision() {
+		return fechaEmision;
+	}
+
+	public void setFechaEmision(Date fechaEmision) {
+		this.fechaEmision = fechaEmision;
+	}
+
+	public String getMensaje() {
+		return mensaje;
+	}
+
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
+
+	public String getDetalleMensaje() {
+		return detalleMensaje;
+	}
+
+	public void setDetalleMensaje(String detalleMensaje) {
+		this.detalleMensaje = detalleMensaje;
+	}
+
+	public Double getTotalImpuestos() {
+		return totalImpuestos;
+	}
+
+	public void setTotalImpuestos(Double totalImpuestos) {
+		this.totalImpuestos = totalImpuestos;
+	}
+
+	public Double getTotalFactura() {
+		return totalFactura;
+	}
+
+	public void setTotalFactura(Double totalFactura) {
+		this.totalFactura = totalFactura;
+	}
+
+	public String getCedulaReceptor() {
+		return cedulaReceptor;
+	}
+
+	public void setCedulaReceptor(String cedulaReceptor) {
+		this.cedulaReceptor = cedulaReceptor;
+	}
+
+	public String getNumeroConsecutivoReceptor() {
+		return numeroConsecutivoReceptor;
+	}
+
+	public void setNumeroConsecutivoReceptor(String numeroConsecutivoReceptor) {
+		this.numeroConsecutivoReceptor = numeroConsecutivoReceptor;
+	}
+
+	public Integer getEstadoFirma() {
+		return estadoFirma;
+	}
+
+	public void setEstadoFirma(Integer estadoFirma) {
+		this.estadoFirma = estadoFirma;
+	}
+
+}
