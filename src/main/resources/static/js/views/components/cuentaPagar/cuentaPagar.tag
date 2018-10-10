@@ -806,8 +806,6 @@ function __Eventos_Abonos(){
     $("#formularioAbono").validate(reglasDeValidacionAbono());
     $("#recibo").attr("maxlength", 25);
     $("#nota").attr("maxlength", 255);
-
-
     $('#descuento').mask('000', {
 		'translation' : {
 			0 : {
@@ -815,8 +813,6 @@ function __Eventos_Abonos(){
 			}
 		}
 	});
-    
-
 }
 /**
 *  Crear el combo de estados
@@ -887,8 +883,9 @@ function listaVendedoresActivos(){
 function __InformacionDataTable(){
     self.informacion_tabla = [ 
                             {'data' :'created_atSTR'             ,"name":"created_atSTR"             ,"title" : $.i18n.prop("cuentaPagar.created_at")   ,"autoWidth" :true           },
-                            {'data' :'proveedor.nombreCompleto'  ,"name":"proveedor.nombreCompleto"  ,"title" : $.i18n.prop("cuentaPagar.cliente")      ,"autoWidth" :false },
-                            {'data' :'consecutivo'               ,"name":"consecutivo"               ,"title" : $.i18n.prop("cuentaPagar.factura")      ,"autoWidth" :false },
+                            {'data' :'id'  ,"name":"id"  ,"title" : $.i18n.prop("cuentaPagar.id")      ,"autoWidth" :false },
+                            {'data' :'proveedor.nombreCompleto'  ,"name":"proveedor.nombreCompleto"  ,"title" : $.i18n.prop("cuentaPagar.proveedor")      ,"autoWidth" :false },
+                            {'data' :'consecutivo'               ,"name":"consecutivo"               ,"title" : $.i18n.prop("cuentaPagar.consecutivo")      ,"autoWidth" :false },
                             {'data' : 'total'                    ,"name":"total"                     ,"title" : $.i18n.prop("cuentaPagar.total")        ,"autoWidth" :false,
                                 "render":function(total,type, row){
 									    return  total;

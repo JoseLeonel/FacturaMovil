@@ -937,6 +937,7 @@ function __TipoCambio(){
 __TotalDeEfectivoAPagar(e){
     self.factura.totalEfectivo = __valorNumerico(e.target.value) 
     self.update()
+    
 }
 /**
 *  Obtiene el valor de lo digitado en el campo de Tarjeta
@@ -2513,6 +2514,7 @@ function __Teclas(){
             self.factura.totalCambioPagar =__valorNumerico(self.factura.totalComprobante)   
             self.totalCambioPagar = redondeoDecimales(self.factura.totalComprobante,2)
             self.update()
+            $(".totalEfectivo").val(self.totalCambioPagar)
         }  
           
          mostrarPAgo()     
@@ -2559,6 +2561,7 @@ _sumarBilletes(e){
        self.factura.totalCambioPagar  = 0
        self.totalCambioPagar = 0
        self.claseCambioDinero     = "entregarCambioPositivo"
+       $(".totalEfectivo").val(0)
 
     }else{
        self.factura.totalEfectivo = __valorNumerico(self.factura.totalEfectivo) + __valorNumerico(item.valor) 
@@ -2570,6 +2573,7 @@ _sumarBilletes(e){
         self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.totalComprobante)
         self.claseCambioDinero  = __valorNumerico(sumaMontosEntregadosParaCambios) > __valorNumerico(self.factura.totalComprobante)?'entregarCambioPositivo':'entregarCambioNegativo'
         self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
+        $(".totalEfectivo").val(self.totalCambioPagar)
 
     }
    

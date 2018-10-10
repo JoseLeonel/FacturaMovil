@@ -3247,6 +3247,7 @@ function __Teclas(){
         self.factura.totalCambioPagar =__valorNumerico(self.factura.totalComprobante)   
         self.totalCambioPagar = redondeoDecimales(self.factura.totalComprobante,2)
         self.update()
+        $(".totalEfectivo").val(self.totalCambioPagar)
          mostrarPAgo()     
       }else if (self.mostrarFormularioPago == true && self.mostarParaCrearNuevaVentas == false ){
             aplicarFactura(2)   
@@ -3288,6 +3289,7 @@ _sumarBilletes(e){
         self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.totalComprobante)
         self.claseCambioDinero  = __valorNumerico(sumaMontosEntregadosParaCambios) > __valorNumerico(self.factura.totalComprobante)?'entregarCambioPositivo':'entregarCambioNegativo'
         self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
+        $(".totalEfectivo").val(self.totalCambioPagar)
 
     }
     self.update()

@@ -503,7 +503,6 @@ public class FacturaBoImpl implements FacturaBo {
 								} else if (!factura.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
 									cuentaCobrar.setTotal(factura.getTotalComprobante());
 									cuentaCobrar.setTotalSaldo(factura.getTotalComprobante());
-									cuentaCobrar.setFactura(factura.getNumeroConsecutivo());
 									cuentaCobrarDao.modificar(cuentaCobrar);
 
 								}
