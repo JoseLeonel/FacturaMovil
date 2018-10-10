@@ -115,6 +115,12 @@ public class MesasController {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Mesa");
+		
+		if(delimitadores.getColumnData() == null) {
+			delimitadores.setColumnData("prioridad");
+			delimitadores.setColumnOrderDir("desc");			
+		}
+		
 		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
 			String nombreUsuario = request.getUserPrincipal().getName();
 			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);

@@ -78,6 +78,7 @@ import com.emprendesoftcr.validator.FacturaFormValidator;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacionMesa;
+import com.emprendesoftcr.web.command.RecepcionFacturaCommand;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
@@ -96,15 +97,24 @@ import com.itextpdf.text.DocumentException;
 @Controller
 public class FacturasController {
 
-	private static final Function<String, String>											BIND_CONDICION_VENTA						= (id) -> id.equals("01") ? "Contado" : id.equals("02") ? "Credito" : id.equals("03") ? "Consignacion" : id.equals("04") ? "Apartado" : id.equals("05") ? "Arrendamiento con opcion de compra" : id.equals("06") ? "Arrendamiento en funcion financiera" : "Otros";
+	private static final Function<String, String> BIND_CONDICION_VENTA = (id) -> id.equals("01") ? "Contado" : id.equals("02") ? "Credito" : id.equals("03") ? "Consignacion" : id.equals("04") ? "Apartado" : id.equals("05") ? "Arrendamiento con opcion de compra" : id.equals("06") ? "Arrendamiento en funcion financiera" : "Otros";
 
-	private static final Function<Object, FacturaEsperaCommand>				TO_COMMAND											= new Function<Object, FacturaEsperaCommand>() {
+	private static final Function<Object, FacturaEsperaCommand> TO_COMMAND = new Function<Object, FacturaEsperaCommand>() {
 
-																																																			@Override
-																																																			public FacturaEsperaCommand apply(Object f) {
-																																																				return new FacturaEsperaCommand((Factura) f);
-																																																			};
-																																																		};
+		@Override
+		public FacturaEsperaCommand apply(Object f) {
+			return new FacturaEsperaCommand((Factura) f);
+		};
+	};
+
+	private static final Function<Object, RecepcionFacturaCommand> TO_COMMAND_RECEPCION = new Function<Object, RecepcionFacturaCommand>() {
+		@Override
+		public RecepcionFacturaCommand apply(Object f) {
+			return new RecepcionFacturaCommand((RecepcionFactura) f);
+		};
+	};
+	
+
 	private static final Function<Detalle, DetalleFacturaElectronica>	TO_DETALLE											= (d) -> {
 																																																			//
 																																																			DetalleFacturaElectronica detalleFacturaElectronica = new DetalleFacturaElectronica();
@@ -151,7 +161,7 @@ public class FacturasController {
 																																																			facturaElectronica.setClave(d.getClave());
 																																																			facturaElectronica.setConsecutivo(d.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ? d.getId().toString() : d.getNumeroConsecutivo());
 																																																			facturaElectronica.setFechaEmision(d.getFechaEmision().toString());
-																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito() !=null?d.getPlazoCredito().toString():Constantes.EMPTY);
+																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito() != null ? d.getPlazoCredito().toString() : Constantes.EMPTY);
 																																																			facturaElectronica.setCondicionVenta(BIND_CONDICION_VENTA.apply(d.getCondicionVenta()));
 																																																			facturaElectronica.setMedioBanco(d.getMedioBanco() != null ? Constantes.FACTURA_MEDIO_PAGO_TRANSFERENCIA_STR : Constantes.EMPTY);
 																																																			facturaElectronica.setMedioEfectivo(d.getMedioEfectivo() != null ? Constantes.FACTURA_MEDIO_PAGO_EFECTIVO_STR : Constantes.EMPTY);
@@ -187,61 +197,61 @@ public class FacturasController {
 																																																		};
 
 	@Autowired
-	private DetalleBo																									detalleBo;
+	private DetalleBo detalleBo;
 
 	@Autowired
-	private CorreosBo																									correosBo;
+	private CorreosBo correosBo;
 
 	@Autowired
-	private DataTableBo																								dataTableBo;
+	private DataTableBo dataTableBo;
 
 	@Autowired
-	private CertificadoBo																							certificadoBo;
+	private CertificadoBo certificadoBo;
 
 	@Autowired
-	private UsuarioBo																									usuarioBo;
+	private UsuarioBo usuarioBo;
 
 	@Autowired
-	private TipoCambioBo																							tipoCambioBo;
+	private TipoCambioBo tipoCambioBo;
 
 	@Autowired
-	private UsuarioCajaBo																							usuarioCajaBo;
+	private UsuarioCajaBo usuarioCajaBo;
 
 	@Autowired
-	private VendedorBo																								vendedorBo;
+	private VendedorBo vendedorBo;
 
 	@Autowired
-	private EmpresaBo																									empresaBo;
+	private EmpresaBo empresaBo;
 
 	@Autowired
-	private RecepcionFacturaBo																				recepcionFacturaBo;
+	private RecepcionFacturaBo recepcionFacturaBo;
 
 	@Autowired
-	private ClienteBo																									clienteBo;
+	private ClienteBo clienteBo;
 
 	@Autowired
-	private FacturaBo																									facturaBo;
+	private FacturaBo facturaBo;
 
 	@Autowired
-	private EmpresaPropertyEditor																			empresaPropertyEditor;
+	private EmpresaPropertyEditor empresaPropertyEditor;
 
 	@Autowired
-	private ClientePropertyEditor																			clientePropertyEditor;
+	private ClientePropertyEditor clientePropertyEditor;
 
 	@Autowired
-	private VendedorPropertyEditor																		vendedorPropertyEditor;
+	private VendedorPropertyEditor vendedorPropertyEditor;
 
 	@Autowired
-	private FacturaFormValidator																			facturaFormValidator;
+	private FacturaFormValidator facturaFormValidator;
 
 	@Autowired
-	private StringPropertyEditor																			stringPropertyEditor;
+	private StringPropertyEditor stringPropertyEditor;
 
 	@Autowired
-	private FechaPropertyEditor																				fechaPropertyEditor;
+	private FechaPropertyEditor fechaPropertyEditor;
 
 	@Autowired
-	private MesaPropertyEditor																				mesaPropertyEditor;
+	private MesaPropertyEditor mesaPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -319,17 +329,26 @@ public class FacturasController {
 	 * @param model
 	 * @return
 	 */
+	@RequestMapping(value = "/ListaRecepcionFacturas", method = RequestMethod.GET)
+	public String listaRecepcionFacturas(ModelMap model) {
+		return "views/facturas/listaRecepcionFacturas";
+	}
+	/**
+	 * Listado de facturas anuladas y facturadas
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/TotalFacturas", method = RequestMethod.GET)
 	public String totalFacturas(ModelMap model) {
 		return "views/facturas/totalFacturas";
 	}
-	
-	/** 
+
+	/**
 	 * Busca el total de facturas por rango de fechas
 	 * @param request
 	 * @param response
 	 * @return
-	 */ 
+	 */
 	@RequestMapping(value = "/TotalFacturasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public TotalFacturaCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam) {
@@ -341,30 +360,32 @@ public class FacturasController {
 
 	@RequestMapping(value = "/EnvioDetalleTotalFacturasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public void envioDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam) {
+	public void envioDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo) {
 
-		
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-
-		//Se obtiene los totales
+		// Se obtiene los totales
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
 		TotalFacturaCommand facturaCommand = facturaBo.sumarFacturas(fechaInicio, fechaFinal, usuario.getEmpresa().getId());
 
-		//Se buscan las facturas
+		// Se buscan las facturas
 		Collection<Factura> facturas = facturaBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal, usuario.getEmpresa().getId());
-		
-		//Se prepara el excell 
+
+		// Se prepara el excell
 		ByteArrayOutputStream baos = createExcelFacturas(facturas);
-		Collection<Attachment> attachments =  createAttachments( attachment("FacturasMensuales", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
-		
-		//Se prepara el correo
+		Collection<Attachment> attachments = createAttachments(attachment("FacturasMensuales", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
+
+		// Se prepara el correo
 		String from = "FISCO_No_Reply@emprendesoftcr.com";
 		String subject = "Facturas dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
-		
+
 		ArrayList<String> listaCorreos = new ArrayList<>();
-		listaCorreos.add(usuario.getEmpresa().getCorreoElectronico());
-		
+		if (correoAlternativo != null && correoAlternativo.length() > 0) {
+			listaCorreos.add(correoAlternativo);
+		} else {
+			listaCorreos.add(usuario.getEmpresa().getCorreoElectronico());
+		}
+
 		Map<String, Object> modelEmail = new HashMap<>();
 		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
 		modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
@@ -375,29 +396,28 @@ public class FacturasController {
 		modelEmail.put("totalVentasNetas", facturaCommand.getTotalVentasNetas());
 		modelEmail.put("totalVentasExentas", facturaCommand.getTotalVentasExentas());
 		modelEmail.put("totalVentasGravadas", facturaCommand.getTotalVentasGravadas());
-		
+
 		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailResumenFactura.vm", modelEmail);
 	}
-	
 
 	// Descarga de manuales de usuario de acuerdo con su perfil
 	@RequestMapping(value = "/DescargarDetalleTotalFacturasAjax.do", method = RequestMethod.GET)
 	public void descargarDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam) throws IOException, Exception {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		
-		//Se buscan las facturas
+
+		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
 		Collection<Factura> facturas = facturaBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFin, usuario.getEmpresa().getId());
-		
+
 		String nombreArchivo = "FacturasMensuales.xls";
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 
-		//Se prepara el excell 
+		// Se prepara el excell
 		ByteArrayOutputStream baos = createExcelFacturas(facturas);
-    ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
 
 		int BUFFER_SIZE = 4096;
 		byte[] buffer = new byte[BUFFER_SIZE];
@@ -406,16 +426,15 @@ public class FacturasController {
 			response.getOutputStream().write(buffer, 0, bytesRead);
 		}
 	}
-	
-	
+
 	private ByteArrayOutputStream createExcelFacturas(Collection<Factura> facturas) {
-		//Se prepara el excell 
+		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    List<String> headers = Arrays.asList("Id", "Fecha Emision", "# Documento", "Cliente", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Total");
-    new SimpleExporter().gridExport(headers, facturas, "id, fechaEmisionSTR, numeroConsecutivo, nombreCliente, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos, totalComprobante", baos);
-    return baos;
+		List<String> headers = Arrays.asList("Id", "Fecha Emision", "# Documento", "Cliente", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Total");
+		new SimpleExporter().gridExport(headers, facturas, "id, fechaEmisionSTR, numeroConsecutivo, nombreCliente, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos, totalComprobante", baos);
+		return baos;
 	}
-	
+
 	/**
 	 * PDF de las proformas realizadas por empresa
 	 * @param request
@@ -544,8 +563,7 @@ public class FacturasController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
-	
-	
+
 	/**
 	 * Facturas En espera de convertirse en factura oficial
 	 * @param request
@@ -576,7 +594,6 @@ public class FacturasController {
 		delimitadores.setStart(parametrosPaginacionMesa.getPaginaActual());
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
-	
 
 	/**
 	 * Solo facturas de credito y debito en espera
@@ -646,6 +663,40 @@ public class FacturasController {
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
 
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/ListarRecepcionFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarRecepcionFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor) {
+		
+		//Usuario de la session
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+
+		// Consulta por fechas
+		DataTableDelimitador delimitador = new DataTableDelimitador(request, "RecepcionFactura");
+		delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "="));
+
+		if (cedulaEmisor != null && cedulaEmisor.length() > 0) {
+			delimitador.addFiltro(new JqGridFilter("cedulaEmisor", "'" + cedulaEmisor + "'", "="));
+		}
+
+		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+			Date fechaInicio = Utils.parseDate(fechaInicioParam);
+			Date fechaFinal = Utils.parseDate(fechaFinParam);
+			if (fechaFinal == null) {
+				fechaFinal = new Date(System.currentTimeMillis());
+			}
+			if (fechaFinal != null) {
+				fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
+			}
+			
+			DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
+			delimitador.addFiltro(new JqGridFilter("fechaEmision", dateFormat.format(fechaInicio), "date>="));
+			delimitador.addFiltro(new JqGridFilter("fechaEmision", dateFormat.format(fechaFinal), "dateFinal<="));
+		}
+		return UtilsForControllers.process(request, dataTableBo, delimitador, TO_COMMAND_RECEPCION);
+	}
+
 	@RequestMapping(value = "/ListarFacturasDelDiaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarFacturasDiaAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -669,7 +720,7 @@ public class FacturasController {
 	 * @param result
 	 * @param status
 	 * @return
-	 */ 
+	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/CrearFacturaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
@@ -1029,12 +1080,11 @@ public class FacturasController {
 			modelEmail.put("correo", facturaBD.getEmpresa().getCorreoElectronico());
 			modelEmail.put("telefono", facturaBD.getEmpresa().getTelefono());
 
-			
 			String nombre = facturaBD.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? facturaBD.getEmpresa().getNombre() : facturaBD.getEmpresa().getNombreComercial();
 			String from = "Proforma_No_Reply@emprendesoftcr.com";
-			if(facturaBD.getEmpresa().getAbreviaturaEmpresa() !=null) {
-				if(!facturaBD.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = facturaBD.getEmpresa().getAbreviaturaEmpresa()+ "_Proforma" + "_No_Reply@emprendesoftcr.com";
+			if (facturaBD.getEmpresa().getAbreviaturaEmpresa() != null) {
+				if (!facturaBD.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+					from = facturaBD.getEmpresa().getAbreviaturaEmpresa() + "_Proforma" + "_No_Reply@emprendesoftcr.com";
 				}
 			}
 
@@ -1094,15 +1144,15 @@ public class FacturasController {
 			modelEmail.put("nombreEmpresa", factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial());
 			modelEmail.put("correo", factura.getEmpresa().getCorreoElectronico());
 			modelEmail.put("telefono", factura.getEmpresa().getTelefono());
-       
+
 			String from = "Documentos_No_Reply@emprendesoftcr.com";
-			
-			if(factura.getEmpresa().getAbreviaturaEmpresa() !=null) {
-				if(!factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = factura.getEmpresa().getAbreviaturaEmpresa()+"_Doc_Electronico" + "_No_Reply@emprendesoftcr.com";
+
+			if (factura.getEmpresa().getAbreviaturaEmpresa() != null) {
+				if (!factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+					from = factura.getEmpresa().getAbreviaturaEmpresa() + "_Doc_Electronico" + "_No_Reply@emprendesoftcr.com";
 				}
 			}
-			
+
 			String nombre = factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial();
 			String subject = "Documento Electrónico N° " + clave + " del Emisor: " + nombre;
 

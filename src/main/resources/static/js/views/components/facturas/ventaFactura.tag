@@ -2844,8 +2844,6 @@ function calcularImpuestoServicio(){
     
 
 }
-
-
 /**
 *  Sub Total Generar de la factura
 **/
