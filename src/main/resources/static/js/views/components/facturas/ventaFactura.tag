@@ -1678,9 +1678,10 @@ __TotalDeBancoAPagar(e){
 *   Calculo del cambio entregar en el evento onblur
 **/
 __CalculaCambioAEntregarOnblur(e){
-    var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
-    sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
-    sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
+    var sumaMontosEntregadosParaCambios =0
+    sumaMontosEntregadosParaCambios  = __valorNumerico($('.totalTarjeta').val())
+    sumaMontosEntregadosParaCambios += __valorNumerico($('.totalBanco').val()) 
+    sumaMontosEntregadosParaCambios += __valorNumerico($('.totalEfectivo').val())
     //Si no ingresado montos no realiza las operaciones de calculos
     if(sumaMontosEntregadosParaCambios == 0){
         self.factura.totalCambioPagar = self.factura.totalComprobante * -1
@@ -1703,9 +1704,9 @@ __CalculaCambioAEntregarOnblur(e){
 __CalculaCambioAEntregarKeyPress(e){
     var sumaMontosEntregadosParaCambios =0
     if (e.keyCode == 13) {
-        sumaMontosEntregadosParaCambios  = __valorNumerico(self.factura.totalTarjeta)
-        sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
-        sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
+    sumaMontosEntregadosParaCambios  = __valorNumerico($('.totalTarjeta').val())
+    sumaMontosEntregadosParaCambios += __valorNumerico($('.totalBanco').val()) 
+    sumaMontosEntregadosParaCambios += __valorNumerico($('.totalEfectivo').val())
         if(sumaMontosEntregadosParaCambios == 0){
             self.factura.totalCambioPagar = self.factura.totalComprobante * -1
             self.update()
@@ -3183,7 +3184,8 @@ _sumarBilletes(e){
        self.totalCambioPagar = 0
        self.claseCambioDinero     = "entregarCambioPositivo"
     }else{
-        self.factura.totalEfectivo = __valorNumerico($('.totalEfectivo').val()) + __valorNumerico(item.valor) 
+       self.factura.totalEfectivo = __valorNumerico(item.valor) + __valorNumerico(self.factura.totalEfectivo)
+       $('.efectivo').val(self.factura.totalEfectivo)
         self.update()
         var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
         sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 

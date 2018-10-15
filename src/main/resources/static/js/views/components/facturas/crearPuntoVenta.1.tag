@@ -927,9 +927,9 @@ __TotalDeBancoAPagar(e){
 *   Calculo del cambio entregar en el evento onblur
 **/
 __CalculaCambioAEntregarOnblur(e){
-    var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
-    sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
-    sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
+    var sumaMontosEntregadosParaCambios =__valorNumerico($('.totalTarjeta').val())
+    sumaMontosEntregadosParaCambios += __valorNumerico($('.totalBanco').val()) 
+    sumaMontosEntregadosParaCambios += __valorNumerico($('.totalEfectivo').val()) 
     //Si no ingresado montos no realiza las operaciones de calculos
     if(sumaMontosEntregadosParaCambios == 0){
         self.factura.totalCambioPagar = self.factura.totalComprobante * -1
@@ -952,9 +952,9 @@ __CalculaCambioAEntregarOnblur(e){
 __CalculaCambioAEntregarKeyPress(e){
     var sumaMontosEntregadosParaCambios =0
     if (e.keyCode == 13) {
-        sumaMontosEntregadosParaCambios  = __valorNumerico(self.factura.totalTarjeta)
-        sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
-        sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalEfectivo) 
+        sumaMontosEntregadosParaCambios  = __valorNumerico($('.totalTarjeta').val())
+        sumaMontosEntregadosParaCambios += __valorNumerico($('.totalBanco').val()) 
+        sumaMontosEntregadosParaCambios += __valorNumerico($('.totalEfectivo').val()) 
         if(sumaMontosEntregadosParaCambios == 0){
             self.factura.totalCambioPagar = self.factura.totalComprobante * -1
             self.update()

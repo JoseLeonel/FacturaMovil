@@ -106,16 +106,16 @@ public class CuentaCobrarController {
 	 * @param idCedula
 	 * @return
 	 */
-//	@RequestMapping(value = "/TotalCuentasPorCobrarAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
-//	@ResponseBody
-//	public TotalCuentaPorCobrarCommand totalCuentasPorCobrarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String idCedula) {
-//		Date fechaInicio = Utils.parseDate(fechaInicioParam);
-//		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-//		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-//		Cliente cliente = clienteBo.buscarPorCedulaYEmpresa(idCedula, usuario.getEmpresa());
-//		
-//		return facturaBo.sumarFacturas(fechaInicio, fechaFinal, usuario.getEmpresa().getId(),cliente);
-//	}
+	@RequestMapping(value = "/TotalCuentasPorCobrarAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public TotalCuentaPorCobrarCommand totalCuentasPorCobrarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam,  @RequestParam Long idCliente) {
+		Date fechaInicio = Utils.parseDate(fechaInicioParam);
+		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Cliente cliente = clienteBo.buscar(idCliente);
+		
+		return cuentaCobrarBo.sumarCuentasPorCobrar(fechaInicio, fechaFinal, usuario.getEmpresa().getId(),cliente);
+	}
 	
 	
 	/**
