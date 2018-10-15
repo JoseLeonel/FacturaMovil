@@ -81,7 +81,7 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 	 * @param totalAbono
 	 */
 	@Override
-	public void actualizarCaja(UsuarioCaja usuarioCaja, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono) throws Exception {
+	public void actualizarCaja(UsuarioCaja usuarioCaja, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalServicio) throws Exception {
 		try {
 			Double resultadoTotalBanco = Constantes.ZEROS_DOUBLE;
 			resultadoTotalBanco = totalBanco + usuarioCaja.getTotalBanco();
@@ -94,13 +94,18 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 
 			Double resultadoTarjeta = Constantes.ZEROS_DOUBLE;
 			resultadoTarjeta = totalTarjeta + usuarioCaja.getTotalTarjeta();
-			Double resultadoNeto = resultadoTotalEfectivo + resultadoTarjeta + resultadoTotalBanco + resultadoAbono;
+
+			Double resultadoServicio = Constantes.ZEROS_DOUBLE;
+			resultadoServicio = totalServicio + usuarioCaja.getTotalServicio();
+			
+			Double resultadoNeto = resultadoTotalEfectivo + resultadoTarjeta + resultadoTotalBanco + resultadoAbono + resultadoServicio;
 			usuarioCaja.setTotalCredito(Constantes.ZEROS_DOUBLE);
 			usuarioCaja.setTotalBanco(Utils.roundFactura(resultadoTotalBanco,5));
 			usuarioCaja.setTotalEfectivo(Utils.roundFactura(resultadoTotalEfectivo,5));
 			usuarioCaja.setTotalTarjeta(Utils.roundFactura(resultadoTarjeta,5));
 			usuarioCaja.setTotalAbono(Utils.roundFactura(resultadoAbono,5));
 			usuarioCaja.setTotalNeto(Utils.roundFactura(resultadoNeto,5));
+			usuarioCaja.setTotalServicio(Utils.roundFactura(resultadoServicio,5));
 			modificar(usuarioCaja);
 
 		} catch (Exception e) {

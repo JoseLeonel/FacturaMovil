@@ -15,6 +15,5 @@ public interface UsuarioCajaDao {
 	
 	UsuarioCaja findByUsuarioAndEstado(Usuario usuario,String estado);
 	
-	void actualizarCaja(UsuarioCaja usuarioCaja ,Double totalEfectivo,Double totalTarjeta,Double totalBanco,Double totalCredito,Double totalAbono)throws Exception;
-
+	void actualizarCaja(UsuarioCaja usuarioCaja ,Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalServicio)throws Exception;
 }

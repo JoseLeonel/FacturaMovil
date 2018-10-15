@@ -9,49 +9,52 @@ import com.emprendesoftcr.modelo.UsuarioCaja;
 
 public class UsuarioCajaCommand {
 
-	private Long	id;
+	private Long		id;
 	private Double	totalFondoInicial;
 
-	private Double	totalEfectivo;
+	private Double totalEfectivo;
 
-	private Double	totalTarjeta;
+	private Double totalTarjeta;
 
-	private Double	totalBanco;
+	private Double totalBanco;
 
-	private Double	totalCredito;
+	private Double totalCredito;
 
-	private Double	totalNeto;
+	private Double totalNeto;
 
-	private Double	totalAbono;
-	
-	private String	totalFondoInicialSTR;
+	private Double totalAbono;
 
-	private String	totalEfectivoSTR;
+	private Double totalServicio;
 
-	private String	totalTarjetaSTR;
+	private String totalFondoInicialSTR;
 
-	private String	totalBancoSTR;
+	private String totalEfectivoSTR;
 
-	private String	totalCreditoSTR;
+	private String totalTarjetaSTR;
 
-	private String	totalNetoSTR;
+	private String totalBancoSTR;
 
-	private String	totalAbonoSTR;
+	private String totalCreditoSTR;
 
-	private Usuario	usuario;
+	private String totalNetoSTR;
 
-	private Caja		caja;
+	private String totalAbonoSTR;
 
-	private Date		created_at;
+	private String totalServicioSTR;
 
-	private Date		updated_at;
-	
+	private Usuario usuario;
 
-	private String		created_atSTR;
+	private Caja caja;
 
-	private String		updated_atSTR;
+	private Date created_at;
 
-	private String	estado;
+	private Date updated_at;
+
+	private String created_atSTR;
+
+	private String updated_atSTR;
+
+	private String estado;
 
 	public UsuarioCajaCommand() {
 		super();
@@ -72,98 +75,79 @@ public class UsuarioCajaCommand {
 		this.updated_at = usuarioCaja.getUpdated_at();
 		this.estado = usuarioCaja.getEstado();
 		this.totalAbono = usuarioCaja.getTotalAbono();
+		this.totalServicio = usuarioCaja.getTotalServicio();
 		this.created_atSTR = Utils.getFechaGeneraReporte(usuarioCaja.getCreated_at());
-    this.updated_atSTR = Utils.getFechaGeneraReporte(usuarioCaja.getUpdated_at());
-    this.totalFondoInicialSTR = usuarioCaja.getTotalFondoInicialSTR();
-  	this.totalEfectivoSTR = usuarioCaja.getTotalEfectivoSTR();
-  	this.totalTarjetaSTR = usuarioCaja.getTotalTarjetaSTR();
- 	  this.totalBancoSTR = usuarioCaja.getTotalBancoSTR();
-  	this.totalCreditoSTR = usuarioCaja.getTotalCreditoSTR();
-  	this.totalNetoSTR = usuarioCaja.getTotalNetoSTR();
-  	this.totalAbonoSTR = usuarioCaja.getTotalAbonoSTR();
-
+		this.updated_atSTR = Utils.getFechaGeneraReporte(usuarioCaja.getUpdated_at());
+		this.totalFondoInicialSTR = usuarioCaja.getTotalFondoInicialSTR();
+		this.totalEfectivoSTR = usuarioCaja.getTotalEfectivoSTR();
+		this.totalTarjetaSTR = usuarioCaja.getTotalTarjetaSTR();
+		this.totalBancoSTR = usuarioCaja.getTotalBancoSTR();
+		this.totalCreditoSTR = usuarioCaja.getTotalCreditoSTR();
+		this.totalNetoSTR = usuarioCaja.getTotalNetoSTR();
+		this.totalAbonoSTR = usuarioCaja.getTotalAbonoSTR();
+		this.totalServicioSTR = usuarioCaja.getTotalServicioSTR();
 	}
 
-	
-
-	
-	
 	public String getCreated_atSTR() {
 		return created_atSTR;
 	}
 
-	
 	public void setCreated_atSTR(String created_atSTR) {
 		this.created_atSTR = created_atSTR;
 	}
 
-	
-	
 	public String getTotalFondoInicialSTR() {
 		return totalFondoInicialSTR;
 	}
 
-	
 	public void setTotalFondoInicialSTR(String totalFondoInicialSTR) {
 		this.totalFondoInicialSTR = totalFondoInicialSTR;
 	}
 
-	
 	public String getTotalEfectivoSTR() {
 		return totalEfectivoSTR;
 	}
 
-	
 	public void setTotalEfectivoSTR(String totalEfectivoSTR) {
 		this.totalEfectivoSTR = totalEfectivoSTR;
 	}
 
-	
 	public String getTotalTarjetaSTR() {
 		return totalTarjetaSTR;
 	}
 
-	
 	public void setTotalTarjetaSTR(String totalTarjetaSTR) {
 		this.totalTarjetaSTR = totalTarjetaSTR;
 	}
 
-	
 	public String getTotalBancoSTR() {
 		return totalBancoSTR;
 	}
 
-	
 	public void setTotalBancoSTR(String totalBancoSTR) {
 		this.totalBancoSTR = totalBancoSTR;
 	}
 
-	
 	public String getTotalCreditoSTR() {
 		return totalCreditoSTR;
 	}
 
-	
 	public void setTotalCreditoSTR(String totalCreditoSTR) {
 		this.totalCreditoSTR = totalCreditoSTR;
 	}
 
-	
 	public String getTotalNetoSTR() {
 		return totalNetoSTR;
 	}
 
-	
 	public void setTotalNetoSTR(String totalNetoSTR) {
 		this.totalNetoSTR = totalNetoSTR;
 	}
 
-	
 	public String getTotalAbonoSTR() {
 		return totalAbonoSTR;
 	}
 
-	
 	public void setTotalAbonoSTR(String totalAbonoSTR) {
 		this.totalAbonoSTR = totalAbonoSTR;
 	}
@@ -172,7 +156,6 @@ public class UsuarioCajaCommand {
 		return updated_atSTR;
 	}
 
-	
 	public void setUpdated_atSTR(String updated_atSTR) {
 		this.updated_atSTR = updated_atSTR;
 	}
@@ -181,7 +164,6 @@ public class UsuarioCajaCommand {
 		return id;
 	}
 
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -226,77 +208,76 @@ public class UsuarioCajaCommand {
 		this.estado = estado;
 	}
 
-	
 	public Double getTotalFondoInicial() {
 		return totalFondoInicial;
 	}
 
-	
 	public void setTotalFondoInicial(Double totalFondoInicial) {
 		this.totalFondoInicial = totalFondoInicial;
 	}
 
-	
 	public Double getTotalEfectivo() {
 		return totalEfectivo;
 	}
 
-	
 	public void setTotalEfectivo(Double totalEfectivo) {
 		this.totalEfectivo = totalEfectivo;
 	}
 
-	
 	public Double getTotalTarjeta() {
 		return totalTarjeta;
 	}
 
-	
 	public void setTotalTarjeta(Double totalTarjeta) {
 		this.totalTarjeta = totalTarjeta;
 	}
 
-	
 	public Double getTotalBanco() {
 		return totalBanco;
 	}
 
-	
 	public void setTotalBanco(Double totalBanco) {
 		this.totalBanco = totalBanco;
 	}
 
-	
 	public Double getTotalCredito() {
 		return totalCredito;
 	}
 
-	
 	public void setTotalCredito(Double totalCredito) {
 		this.totalCredito = totalCredito;
 	}
 
-	
 	public Double getTotalNeto() {
 		return totalNeto;
 	}
 
-	
 	public void setTotalNeto(Double totalNeto) {
 		this.totalNeto = totalNeto;
 	}
 
-	
 	public Double getTotalAbono() {
 		return totalAbono;
 	}
 
-	
 	public void setTotalAbono(Double totalAbono) {
 		this.totalAbono = totalAbono;
 	}
 
-	
-	
+	public String getTotalServicioSTR() {
+		return totalServicioSTR;
+	}
+
+	public void setTotalServicioSTR(String totalServicioSTR) {
+		this.totalServicioSTR = totalServicioSTR;
+	}
+
+	public Double getTotalServicio() {
+		return totalServicio;
+	}
+
+	public void setTotalServicio(Double totalServicio) {
+		this.totalServicio = totalServicio;
+	}
 
 }

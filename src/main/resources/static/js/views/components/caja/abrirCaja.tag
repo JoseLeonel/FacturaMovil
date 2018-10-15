@@ -127,7 +127,6 @@
                                 <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalEfectivo")}  </label>
                                 <input type="text" class="form-control "  value=" {usuarioCaja.totalEfectivoSTR}" readonly >
                             </div>
-
                         </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
@@ -138,15 +137,19 @@
                                 <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalBanco")}  </label>
                                 <input type="text" class="form-control "  value=" {usuarioCaja.totalBancoSTR}" readonly >
                             </div>
-
                         </div>
                         <div class="row">
-                           
-                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalAbono")}  </label>
-                                <input type="text" class="form-control "  value=" {usuarioCaja.totalAbonoSTR}" readonly >
+                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                                <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalServicio")}  </label>
+                                <input type="text" class="form-control "  value=" {usuarioCaja.totalServicioSTR}" readonly >
                             </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-6 col-lg-4">
+                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                               <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalAbono")}  </label>
+                               <input type="text" class="form-control "  value=" {usuarioCaja.totalAbonoSTR}" readonly >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class= "col-md-4 col-sx-12 col-sm-6 col-lg-4 ">
                                 <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalNeto")}  </label>
                                 <input type="text" class="form-control "  value=" {usuarioCaja.totalNetoSTR}" readonly >
                             </div>

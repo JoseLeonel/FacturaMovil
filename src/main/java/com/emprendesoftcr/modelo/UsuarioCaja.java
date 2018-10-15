@@ -27,62 +27,59 @@ import com.emprendesoftcr.Utils.Utils;
 @Table(name = "usuarios_cajas")
 public class UsuarioCaja implements Serializable {
 
-	private static final long	serialVersionUID	= 8895530294398977996L;
+	private static final long serialVersionUID = 8895530294398977996L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long						id;
+	private Long id;
 
 	@Column(name = "total_fondo_inicial")
-	private Double						totalFondoInicial;
+	private Double totalFondoInicial;
 
 	@Column(name = "total_efectivo")
-	private Double						totalEfectivo;
+	private Double totalEfectivo;
 
 	@Column(name = "total_tarjeta")
-	private Double						totalTarjeta;
+	private Double totalTarjeta;
 
 	@Column(name = "total_banco")
-	private Double						totalBanco;
+	private Double totalBanco;
 
 	@Column(name = "total_credito")
-	private Double						totalCredito;
+	private Double totalCredito;
 
 	@Column(name = "total_abono")
-	private Double						totalAbono;
+	private Double totalAbono;
 
 	@Column(name = "total_neto")
-	private Double						totalNeto;
+	private Double totalNeto;
 
 	@Column(name = "impuesto_servicio")
-	private Double						totalServicio;
+	private Double totalServicio;
 
-	
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
-	private Usuario						usuario;
+	private Usuario usuario;
 
 	@ManyToOne
 	@JoinColumn(name = "caja_id")
-	private Caja							caja;
+	private Caja caja;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "created_at")
-	private Date							created_at;
+	private Date created_at;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
-	private Date							updated_at;
+	private Date updated_at;
 
 	@Column(name = "estado")
-	private String						estado;
+	private String estado;
 
-	
-
-	public UsuarioCaja(Long id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalNeto, Usuario usuario, Caja caja, Date created_at, Date updated_at, String estado) {
+	public UsuarioCaja(Long id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalNeto, Usuario usuario, Caja caja, Date created_at, Date updated_at, String estado, Double totalServicio) {
 		super();
 		this.id = id;
 		this.totalFondoInicial = totalFondoInicial;
@@ -97,33 +94,25 @@ public class UsuarioCaja implements Serializable {
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.estado = estado;
+		this.totalServicio = totalServicio;
 	}
-
-
 
 	public UsuarioCaja() {
 		super();
 	}
 
-	
-
-	
 	public Long getId() {
 		return id;
 	}
 
-
-
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-
-
 	public Double getTotalFondoInicial() {
 		return totalFondoInicial;
 	}
+
 	public String getTotalFondoInicialSTR() {
 		return Utils.formateadorMiles(this.totalFondoInicial);
 	}
@@ -139,7 +128,7 @@ public class UsuarioCaja implements Serializable {
 	public void setTotalEfectivo(Double totalEfectivo) {
 		this.totalEfectivo = totalEfectivo;
 	}
-	
+
 	public String getTotalEfectivoSTR() {
 		return Utils.formateadorMiles(this.totalEfectivo);
 	}
@@ -151,7 +140,7 @@ public class UsuarioCaja implements Serializable {
 	public void setTotalTarjeta(Double totalTarjeta) {
 		this.totalTarjeta = totalTarjeta;
 	}
-	
+
 	public String getTotalTarjetaSTR() {
 		return Utils.formateadorMiles(this.totalTarjeta);
 	}
@@ -167,6 +156,7 @@ public class UsuarioCaja implements Serializable {
 	public String getTotalBancoSTR() {
 		return Utils.formateadorMiles(this.totalBanco);
 	}
+
 	public Double getTotalCredito() {
 		return totalCredito;
 	}
@@ -178,7 +168,7 @@ public class UsuarioCaja implements Serializable {
 	public String getTotalCreditoSTR() {
 		return Utils.formateadorMiles(this.totalCredito);
 	}
-	
+
 	public Double getTotalAbono() {
 		return totalAbono;
 	}
@@ -190,7 +180,7 @@ public class UsuarioCaja implements Serializable {
 	public String getTotalAbonoSTR() {
 		return Utils.formateadorMiles(this.totalAbono);
 	}
-	
+
 	public Double getTotalNeto() {
 		return totalNeto;
 	}
@@ -199,11 +189,10 @@ public class UsuarioCaja implements Serializable {
 		this.totalNeto = totalNeto;
 	}
 
-	
 	public String getTotalNetoSTR() {
 		return Utils.formateadorMiles(this.totalNeto);
 	}
-	
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -242,6 +231,18 @@ public class UsuarioCaja implements Serializable {
 
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+
+	public Double getTotalServicio() {
+		return totalServicio;
+	}
+
+	public void setTotalServicio(Double totalServicio) {
+		this.totalServicio = totalServicio;
+	}
+	
+	public String getTotalServicioSTR() {
+		return Utils.formateadorMiles(this.totalServicio);
 	}
 
 }
