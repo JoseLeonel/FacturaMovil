@@ -112,7 +112,7 @@ public class EmpresaDaoImpl implements EmpresaDao {
 	 * @see com.emprendesoftcr.Dao.EmpresaDao#generarConsecutivoFactura(com.emprendesoftcr.modelo.Empresa)
 	 */
 	@Override
-	public String generarConsecutivoFactura(Empresa empresa, Usuario usuario, Factura factura) throws Exception {
+	public synchronized String generarConsecutivoFactura(Empresa empresa, Usuario usuario, Factura factura) throws Exception {
 		String resultado = Constantes.EMPTY;
 		try {
 			Integer consecutivo = Constantes.ZEROS;
@@ -160,7 +160,7 @@ public class EmpresaDaoImpl implements EmpresaDao {
 	 * Genera el consecutvio de la Factura de empresa
 	 * @see com.emprendesoftcr.Dao.EmpresaDao#generarConsecutivoFactura(com.emprendesoftcr.modelo.Empresa)
 	 */
-	public String generarConsecutivoRecepcionFactura(Empresa empresa, Usuario usuario, RecepcionFactura recepcionFactura) throws Exception {
+	public synchronized String generarConsecutivoRecepcionFactura(Empresa empresa, Usuario usuario, RecepcionFactura recepcionFactura) throws Exception {
 		String resultado = Constantes.EMPTY;
 		String tipoDoc 	 = "00";
 		try {
