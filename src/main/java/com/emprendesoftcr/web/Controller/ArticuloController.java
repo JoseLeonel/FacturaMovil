@@ -279,12 +279,12 @@ public class ArticuloController {
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 			Articulo articuloBd = null;
-			articuloBd = articuloBo.buscarPorDescripcionYEmpresa(articulo.getDescripcion(), usuarioSesion.getEmpresa());
+			articuloBd = articuloBo.buscarPorDescripcionYEmpresa(articulo.getDescripcion().trim(), usuarioSesion.getEmpresa());
 			if (articuloBd != null) {
 				result.rejectValue("descripcion", "error.articulo.descripcion.existe");
 			}
 
-			articuloBd = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo(), usuarioSesion.getEmpresa());
+			articuloBd = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo().trim(), usuarioSesion.getEmpresa());
 			if (articuloBd != null) {
 				result.rejectValue("codigo", "error.articulo.codigo.existe");
 			}

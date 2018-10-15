@@ -121,37 +121,34 @@
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("usuarioCaja.fondoIncial")}  </label>
-                                <input type="text" class="form-control "  value=" {usuarioCaja.totalFondoInicial.toFixed(2)}" readonly >
+                                <input type="text" class="form-control "  value=" {usuarioCaja.totalFondoInicialSTR}" readonly >
                             </div>
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalEfectivo")}  </label>
-                                <input type="text" class="form-control "  value=" {usuarioCaja.totalEfectivo.toFixed(2)}" readonly >
+                                <input type="text" class="form-control "  value=" {usuarioCaja.totalEfectivoSTR}" readonly >
                             </div>
 
                         </div>
                         <div class="row">
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalTarjeta")}  </label>
-                                <input type="text" class="form-control "  value=" {usuarioCaja.totalTarjeta.toFixed(2)}" readonly >
+                                <input type="text" class="form-control "  value=" {usuarioCaja.totalTarjetaSTR}" readonly >
                             </div>
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalBanco")}  </label>
-                                <input type="text" class="form-control "  value=" {usuarioCaja.totalBanco.toFixed(2)}" readonly >
+                                <input type="text" class="form-control "  value=" {usuarioCaja.totalBancoSTR}" readonly >
                             </div>
 
                         </div>
                         <div class="row">
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalCredito")}  </label>
-                                <input type="text" class="form-control "  value=" {usuarioCaja.totalCredito.toFixed(2)}" readonly >
-                            </div>
+                           
                              <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalAbono")}  </label>
-                                <input type="text" class="form-control "  value=" {usuarioCaja.totalAbono.toFixed(2)}" readonly >
+                                <input type="text" class="form-control "  value=" {usuarioCaja.totalAbonoSTR}" readonly >
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-6 col-lg-4">
                                 <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalNeto")}  </label>
-                                <input type="text" class="form-control "  value=" {usuarioCaja.totalNeto.toFixed(2)}" readonly >
+                                <input type="text" class="form-control "  value=" {usuarioCaja.totalNetoSTR}" readonly >
                             </div>
                            
                         </div>
@@ -496,17 +493,8 @@ function __InformacionDataTable(){
                                         return usuario.nombreUsuario;
                                     }
                                },
-                               {'data' : 'totalFondoInicial'        ,"name":"totalFondoInicial"  ,"title" : $.i18n.prop("usuarioCaja.fondoIncial")  ,"autoWidth" :false,
-                                    "render":function(totalFondoInicial,type, row){
-                                        return     totalFondoInicial !=null?totalFondoInicial.toFixed(2):0 ;
-                                    }
-                                },
-                               {'data' : 'totalNeto'     ,"name":"totalNeto"        ,"title" : $.i18n.prop("usuarioCaja.totalNeto")      ,"autoWidth" :false,
-                                    "render":function(totalNeto,type, row){
-                                        return     totalNeto !=null?totalNeto.toFixed(2):0;
-                                        
-                                    }
-                               },
+                               {'data' : 'totalFondoInicialSTR'        ,"name":"totalFondoInicialSTR"  ,"title" : $.i18n.prop("usuarioCaja.fondoIncial")  ,"autoWidth" :false},
+                               {'data' : 'totalNetoSTR'                ,"name":"totalNetoSTR"           ,"title" : $.i18n.prop("usuarioCaja.totalNeto")      ,"autoWidth" :false},
                                
                                {'data' : 'estado'        ,"name":"estado"          ,"title" : $.i18n.prop("usuarioCaja.estado")      ,"autoWidth" :false},
                                {'data' : 'id'            ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,

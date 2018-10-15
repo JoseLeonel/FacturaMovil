@@ -16,6 +16,8 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.emprendesoftcr.Utils.Utils;
+
 /**
  * Modelo para abrir cajas a usuarios para facturar UsuarioCaja.
  * @author jose.
@@ -122,6 +124,9 @@ public class UsuarioCaja implements Serializable {
 	public Double getTotalFondoInicial() {
 		return totalFondoInicial;
 	}
+	public String getTotalFondoInicialSTR() {
+		return Utils.formateadorMiles(this.totalFondoInicial);
+	}
 
 	public void setTotalFondoInicial(Double totalFondoInicial) {
 		this.totalFondoInicial = totalFondoInicial;
@@ -134,6 +139,10 @@ public class UsuarioCaja implements Serializable {
 	public void setTotalEfectivo(Double totalEfectivo) {
 		this.totalEfectivo = totalEfectivo;
 	}
+	
+	public String getTotalEfectivoSTR() {
+		return Utils.formateadorMiles(this.totalEfectivo);
+	}
 
 	public Double getTotalTarjeta() {
 		return totalTarjeta;
@@ -141,6 +150,10 @@ public class UsuarioCaja implements Serializable {
 
 	public void setTotalTarjeta(Double totalTarjeta) {
 		this.totalTarjeta = totalTarjeta;
+	}
+	
+	public String getTotalTarjetaSTR() {
+		return Utils.formateadorMiles(this.totalTarjeta);
 	}
 
 	public Double getTotalBanco() {
@@ -151,6 +164,9 @@ public class UsuarioCaja implements Serializable {
 		this.totalBanco = totalBanco;
 	}
 
+	public String getTotalBancoSTR() {
+		return Utils.formateadorMiles(this.totalBanco);
+	}
 	public Double getTotalCredito() {
 		return totalCredito;
 	}
@@ -159,6 +175,10 @@ public class UsuarioCaja implements Serializable {
 		this.totalCredito = totalCredito;
 	}
 
+	public String getTotalCreditoSTR() {
+		return Utils.formateadorMiles(this.totalCredito);
+	}
+	
 	public Double getTotalAbono() {
 		return totalAbono;
 	}
@@ -167,6 +187,10 @@ public class UsuarioCaja implements Serializable {
 		this.totalAbono = totalAbono;
 	}
 
+	public String getTotalAbonoSTR() {
+		return Utils.formateadorMiles(this.totalAbono);
+	}
+	
 	public Double getTotalNeto() {
 		return totalNeto;
 	}
@@ -175,6 +199,11 @@ public class UsuarioCaja implements Serializable {
 		this.totalNeto = totalNeto;
 	}
 
+	
+	public String getTotalNetoSTR() {
+		return Utils.formateadorMiles(this.totalNeto);
+	}
+	
 	public Usuario getUsuario() {
 		return usuario;
 	}

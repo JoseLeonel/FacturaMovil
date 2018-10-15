@@ -245,7 +245,7 @@
                     <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12" >
                         <section class="lista-facturas-espera">
                             <div id="botones"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
-                                <span class="label-titulos-espera"> {nombreFactura ==null?"T#"+id:""}  {nombreFactura}</span>
+                                <span class="label-titulos-espera"> {nombreFactura ==null || nombreFactura == '' ?"T#"+id:""}  {nombreFactura}</span>
                             </div>         
                         </section>
                     </div>
@@ -484,6 +484,19 @@
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("articulo.listar")} </h4>
             </div>
             <div class="modal-body">
+                <form id="formularioParametros" name ="formularioParametros" >
+                    <div class="row">
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label  >{$.i18n.prop("articulo.codigo")}  </label>
+                            <input type="text" class="form-control codigoArt" id="codigoArt" name="codigoArt"  onkeypress={__ConsultarProductosCod} >
+                        </div>
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label  >{$.i18n.prop("articulo.descripcion")}</label>
+                            <input type="text" class="form-control descArticulo "   id="descArticulo" name="descArticulo" onkeypress={__ConsultarProductosDesc}>
+                        </div>
+                    </div> 
+                </form>    
+                <br>                   
                 <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " cellspacing="0" width="100%">
                     <thead>
                         <th class="table-header">{$.i18n.prop("articulo.codigo")}        </th>
@@ -597,7 +610,7 @@
                                     </div>
                                     <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group ">
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 
-                                        <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
+                                        <div  class="form-group input-group date datepickerFechaCredito" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
                                             <input type="text" class="form-control fechaCredito" name="fechaCredito" id="fechaCredito" value="{factura.fechaCredito}" >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
@@ -1084,6 +1097,15 @@ td.col-xl-12, th.col-xl-12 {
      
         cargaBilletes()
         mostrarCategorias()
+        $(".nota").attr("maxlength", 80);
+        $('.datepickerFechaCredito').datepicker(
+            {
+              format: 'yyyy-mm-dd',
+              startDate: '-0d',
+              todayHighlight:true,
+            }
+        );
+        __agregarArticulos()      
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
@@ -1442,21 +1464,9 @@ function __InformacionDataTableDia(){
 									    return cliente ==null?"":cliente.nombreCompleto;
 	 							    }
                                },
-                               {'data' :'totalImpuesto'       ,"name":"totalImpuesto"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true ,
-                                    "render":function(totalImpuesto,type, row){
-									    return  formatoDecimales(totalImpuesto,2);
-	 							    }
-                               },
-                               {'data' :'totalDescuentos'                ,"name":"totalDescuentos"                 ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true ,
-                                    "render":function(totalDescuentos,type, row){
-									    return  formatoDecimales(totalDescuentos,2);
-	 							    }
-                               },
-                               {'data' :'totalComprobante'               ,"name":"totalComprobante"                ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true ,
-                                    "render":function(totalComprobante,type, row){
-									    return  formatoDecimales(totalComprobante,2);
-	 							    }
-                               },
+                               {'data' :'totalImpuestoSTR'       ,"name":"totalImpuestoSTR"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true },
+                               {'data' :'totalDescuentosSTR'     ,"name":"totalDescuentosSTR"      ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true},
+                               {'data' :'totalComprobanteSTR'    ,"name":"totalComprobanteSTR"     ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true },
                                {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
                                       return __Opciones(id,type,row);
@@ -1715,12 +1725,71 @@ __CalculaCambioAEntregarKeyPress(e){
 /**
  * Listar codigos  llamado del modal para presentar los articulos
  **/   
+  
  __ListaDecodigos(){
      self.mostrarListadoArticulos = true
      self.update()
-     __ListaDeArticulosPorEmpresa();
-     
+    $('.descArticulo').val(null)
+    $('.codigoArt').val(null)
+    $(".tableListarArticulos").dataTable().fnClearTable();
+    $(".tableListarArticulos").DataTable().destroy();
+    $('#modalInventario').modal('show')    
  }
+
+ /**
+* consultando por descripcion
+**/
+__ConsultarProductosDesc(e){
+ if (e.keyCode != 13) {
+        return;
+    } 
+ __ListaDeArticulosPorDescripcion($("#codigoArt").val(),e.currentTarget.value)   
+}    
+
+/**
+*Consultando por codigo
+**/
+__ConsultarProductosCod(e){
+ if (e.keyCode != 13) {
+        return;
+    } 
+ __ListaDeArticulosPorDescripcion(e.currentTarget.value,$("#descArticulo").val())   
+}   
+
+/**
+* mostrar la lista de articulos de la empresa
+**/
+function __ListaDeArticulosPorDescripcion(){
+    if($('#codigoArt').val() =='' && $('#descArticulo').val() =='' ){
+        return
+    }
+    $(".tableListarArticulos").dataTable().fnClearTable();
+    $(".tableListarArticulos").DataTable().destroy();
+    var formulario = $('#formularioParametros').serialize();
+    $.ajax({
+        url: 'ListarPorDescripcionCodigoArticuloAjax.do',
+        datatype: "json",
+        method:"GET",
+        data :formulario,
+        success: function (result) {
+            if(result.aaData.length > 0){
+                _informacionData_Articulo()
+                self.articulos.data           = result.aaData
+                self.update()
+                loadListar(".tableListarArticulos",idioma_espanol,self.informacion_tabla_articulo,self.articulos.data)
+                agregarInputsCombos_Articulo()
+              //  __agregarArticulos()
+                ActivarEventoFiltro(".tableListarArticulos")
+             
+                
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+}
 /**
 *  Buscar la Factura Pendiente en espera
 **/
@@ -1875,7 +1944,7 @@ function aplicarFactura(estado){
     }else{
         // Si no es credito y el estado no es pendiente se debe verificar si ingresaron el monto a pagar
         if(estado !=1){
-            if(self.factura.totalTarjeta == 0 && self.factura.totalBanco == 0 && self.factura.totalEfectivo == 0){
+            if(__valorNumerico($('#totalTarjeta').val()) == 0 && __valorNumerico($('#totalBanco').val()) == 0 && __valorNumerico($('#totalEfectivo').val()) == 0){
                 mensajeError($.i18n.prop("error.factura.monto.ingresado"))
                 return
             }
@@ -2041,6 +2110,14 @@ function __Init(){
     $("#plazoCreditoL").val(null)
     $("#nota").val(null)
     $("#fechaCredito").val(null)
+    $('.datepickerFechaCredito').datepicker(
+            {
+              format: 'yyyy-mm-dd',
+              startDate: '-0d',
+              todayHighlight:true,
+            }
+        );
+    $(".nota").attr("maxlength", 80);
     $("#cambiarCantidadArticulo").val(null)
     $("#aplicarDescuento").val(null)
     // Tipo de Pagos
@@ -2244,11 +2321,11 @@ _AtrasFacturaFinal(){
     self.factura.totalTarjeta =0
     self.factura.totalBanco =0
     self.totalCambioPagar =0
-   self.mostrarFormularioPago = false
-   self.mostarParaCrearNuevaVentas = true;
-   self.mostarParaCrearNuevaFactura = true
-   self.error = false
-   self.update()
+    self.mostrarFormularioPago = false
+    self.mostarParaCrearNuevaVentas = true;
+    self.mostarParaCrearNuevaFactura = true
+    self.error = false
+    self.update()
 }
 /**
 *    Muesta el campo de la fecha de credito
@@ -2262,6 +2339,17 @@ __formaPago(e){
     if(e.currentTarget.value == 2){
         self.mostrarCamposIngresoContado = false
     }
+    self.update()
+    $('.fechaCredito').val(null)
+     $('.datepickerFechaCredito').datepicker(
+            {
+              format: 'yyyy-mm-dd',
+              startDate: '-0d',
+              todayHighlight:true,
+            }
+    );  
+    $('.plazoCreditoL').val(0)      
+
 }
 /**
 *   funcion para grabar la Factura en el back end
@@ -2362,34 +2450,7 @@ function __sumarMasArticulo(codigo){
 __agregarArticuloBotonAgregar(){
    __buscarcodigo($( "#codigoBarra" ).val(),1);
 }
-/**
-* mostrar la lista de articulos de la empresa
-**/
-function __ListaDeArticulosPorEmpresa(){
-    $.ajax({
-        url: 'ListarArticulosActivosAjax.do',
-        datatype: "json",
-        method:"POST",
-        success: function (result) {
-            if(result.aaData.length > 0){
-                _informacionData_Articulo()
-                self.articulos.data           = result.aaData
-                self.update()
-                loadListar(".tableListarArticulos",idioma_espanol,self.informacion_tabla_articulo,self.articulos.data)
-                agregarInputsCombos_Articulo()
-                __agregarArticulos()
-                ActivarEventoFiltro(".tableListarArticulos")
-                if(self.mostrarListadoArticulos == true){
-                  $('#modalInventario').modal('show')    
-                }
-            }
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
-}
+
 /**
 *  Muestra la lista de clientes
 **/
@@ -2897,10 +2958,10 @@ function __agregarArticulos() {
 	     }
         self.articulo = data;
         self.update();  
-        if(self.articulo.contable == "Si"){
-          __buscarcodigo(self.articulo.codigo,1)
+        if(self.articulo.contable == "si"){
+           __buscarcodigo(self.articulo.codigo,1)
         }else{
-           __agregarArticulo(1)
+            __agregarArticulo(1)
         }
 	    
     });
@@ -3017,6 +3078,10 @@ function __ComboTipoDocumentos(){
     self.comboTipoDocumentos.push({
          estado:"01",
         descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
+    })
+    self.comboTipoDocumentos.push({
+         estado:"88",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
     })
     self.update()
 }

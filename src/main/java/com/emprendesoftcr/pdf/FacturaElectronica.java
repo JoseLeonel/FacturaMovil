@@ -6,10 +6,8 @@
 package com.emprendesoftcr.pdf;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -35,6 +33,8 @@ public class FacturaElectronica {
 	private String													_clienteDistrito;
 	private String													_clienteBarrio;
 	private String													_clienteDireccion;
+	
+	private String													_nota;
 
 	private String													_tipoDocumento;
 	private String													_clave;
@@ -485,43 +485,32 @@ public class FacturaElectronica {
 		this._logo = _logo;
 	}
 
-	public static FacturaElectronica Foo() {
-		FacturaElectronica f = new FacturaElectronica();
-		f.setEmisorNombre("EFIKASOLUTIONS SOCIEDAD ANONIMA");
-		f.setEmisorCorreo("info@efka.com");
-		;
-		f.setEmisorProvincia("Heredia");
-		f.setEmisorDistrito("Ulloa");
-		f.setEmisorCedula("3101733521");
-		f.setEmisorTelefono("84661931");
-		f.setEmisorCanton("Heredia");
-
-		f.setClienteNombre("Sysco Consultores de Sistemas S.A");
-		f.setClienteCedula("3101195395");
-
-		f.setFooterObservaciones("FOO Testing Tools");
-
-		f.setFooterFormaPago("Transf");
-		f.setFooterCondicionVenta("Contado");
-		f.setFooterMoneda("USD");
-		f.setFooterTipoCambio(567);
-		f.setFooterTotalServiciosGravados(5500);
-		f.setFooterTotalMercanciasGravadas(0);
-		f.setFooterTotalServiciosExentos(0);
-		f.setFooterTotalGravado(0);
-		f.setFooterTotalExento(0);
-		f.setFooterTotalVenta(5500);
-		f.setFooterTotalDescuento(0);
-		f.setFooterTotalImpuesto(0);
-		f.setFooterTotalVentaNeta(0);
-		f.setFooterTotalComprobante(5500);
-
-		for (int x = 1; x <= 25; x++) {
-			f.getDetalleFacturaElectronica().add(DetalleFacturaElectronica.Foo(x));
-		}
-
-		return f;
+	
+	
+	
+	public String get_nota() {
+		return _nota;
 	}
+
+
+
+
+
+
+
+
+	
+	public void set_nota(String _nota) {
+		this._nota = _nota;
+	}
+
+
+
+
+
+
+
+
 
 	public TableModel getDataArray() {
 

@@ -118,7 +118,7 @@ public class MesasController {
 		
 		if(delimitadores.getColumnData() == null) {
 			delimitadores.setColumnData("prioridad");
-			delimitadores.setColumnOrderDir("desc");			
+			delimitadores.setColumnOrderDir("asc");			
 		}
 		
 		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {

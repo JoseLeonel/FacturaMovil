@@ -183,7 +183,7 @@
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                     <div class="form-group ">
                                         <label >{$.i18n.prop("factura.nota")}</label> 
-                                        <input type="text" class="form-control" id="nota" name="nota" value="{factura.direccion}" readonly>
+                                        <input type="text" class="form-control" id="nota" name="nota" value="{factura.nota}" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -223,15 +223,15 @@
                                 <input   class="form-control" type="text"  value = "{precioUnitario}" readonly />
                             </td>
                             <td class="text-right">
-                                <input   class="form-control" type="text"  value = "{descuento}" readonly/>
+                                <input   class="form-control" type="text"  value = "{montoDescuento}" readonly/>
                             </td>
                                                         
                             <td class="text-right">
-                                <input  class="form-control" type="text"  value = "{impuesto}" readonly/>
+                                <input  class="form-control" type="text"  value = "{montoImpuesto}" readonly/>
                             </td>
 
                             <td class="text-righ">
-                                <input  class="form-control" type="text"  value = "₡ {montoTotalLinea}" readonly/>
+                                <input  class="form-control" type="text"  value = " {montoTotalLinea}" readonly/>
                             </td>
                         </tr>
                         </tbody>
@@ -258,7 +258,7 @@
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show">₡ {factura.totalComprobante}</span>
+                                                    <span class="label label-info textShadow" id="total-show">{factura.totalComprobanteSTR}</span>
                                                 </div>
                                             </td>
                                         </tr>                     
@@ -860,15 +860,15 @@ function cargarDetallesFacturaEnEspera(){
             numeroLinea     : e.numeroLinea,
             codigo          : e.codigo,
             descripcion     : e.descripcion,
-            cantidad        : redondearDecimales(parseFloat(e.cantidad),5),
-            precioUnitario  : redondearDecimales(parseFloat(e.precioUnitario),5),
-            impuesto        : redondearDecimales(parseFloat(e.impuesto),5),
-            montoImpuesto   : redondearDecimales(parseFloat(e.montoImpuesto),5),
-            montoDescuento  : redondearDecimales(parseFloat(e.montoDescuento),5),
-            porcentajeDesc  : redondearDecimales(parseFloat(e.porcentajeDesc),5),
-            subTotal        : redondearDecimales(parseFloat(e.subTotal),5),
-            montoTotalLinea : redondearDecimales(parseFloat(e.montoTotalLinea),5),
-            montoTotal      : redondearDecimales(parseFloat(e.montoTotal),5)
+            cantidad        : e.cantidadSTR,
+            precioUnitario  : e.precioUnitarioSTR,
+            impuesto        : e.impuesto,
+            montoImpuesto   : e.montoImpuestoSTR,
+            montoDescuento  : e.montoDescuentoSTR,
+            porcentajeDesc  : e.porcentajeDesc,
+            subTotal        : e.subTotal,
+            montoTotalLinea : e.montoTotalLineaSTR,
+            montoTotal      : e.montoTotalSTR
         });
     })
     
@@ -921,36 +921,21 @@ function __comboCondicionPago(){
 **/
 function __InformacionDataTable(){
     self.formato_tabla = [ 
-                               {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true },
+                               {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"             ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true },
                              
-                               {'data' :'id'                    ,"name":"id"                     ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
+                               {'data' :'id'                    ,"name":"id"                      ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
                                    "render":function(id,type, row){
 									    return __TipoDocumentos(id,row)
 	 							    }
                                },
-                               {'data' :'cliente'                    ,"name":"cliente"                     ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
+                               {'data' :'cliente'                    ,"name":"cliente"             ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
                                    "render":function(cliente,type, row){
 									    return cliente ==null?"":cliente.nombreCompleto;
 	 							    }
                                },
-                               {'data' :'totalImpuesto'       ,"name":"totalImpuesto"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true ,
-                                    "render":function(totalImpuesto,type, row){
-                                         var resultado = formatoDecimales(__valorNumerico(totalImpuesto))
-									    return  resultado;
-	 							    }
-                               },
-                               {'data' :'totalDescuentos'                ,"name":"totalDescuentos"                 ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true ,
-                                    "render":function(totalDescuentos,type, row){
-                                        var resultado = formatoDecimales(__valorNumerico(totalDescuentos))
-									    return  resultado;
-	 							    }
-                               },
-                               {'data' :'totalComprobante'               ,"name":"totalComprobante"                ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true ,
-                                    "render":function(totalComprobante,type, row){
-                                        var resultado = formatoDecimales(__valorNumerico(totalComprobante))
-									    return  resultado;
-	 							    }
-                               },
+                               {'data' :'totalImpuestoSTR'       ,"name":"totalImpuestoSTR"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true },
+                               {'data' :'totalDescuentosSTR'     ,"name":"totalDescuentosSTR"      ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true },
+                               {'data' :'totalComprobanteSTR'    ,"name":"totalComprobanteSTR"     ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true },
                                {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
                                       return __Opciones(id,type,row);

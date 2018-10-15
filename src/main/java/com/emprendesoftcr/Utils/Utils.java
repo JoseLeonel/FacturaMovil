@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,6 +44,20 @@ public final class Utils {
 		return calendar.getTime();
 	}
 
+	public static String formateadorMiles(Double valor) {
+		String resultado = Constantes.EMPTY;
+		
+		if(valor == null) {
+			valor = 0d;
+			
+		}
+		
+		DecimalFormat formateador = new DecimalFormat("###,###,##0.00");
+		resultado = formateador.format (valor);
+		
+		return resultado;
+	}
+	
 	
   /**
    * A�ade ceros a la izquierda de un valor para que este alcance n longitud

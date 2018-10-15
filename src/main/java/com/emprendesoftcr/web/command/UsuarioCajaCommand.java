@@ -23,6 +23,20 @@ public class UsuarioCajaCommand {
 	private Double	totalNeto;
 
 	private Double	totalAbono;
+	
+	private String	totalFondoInicialSTR;
+
+	private String	totalEfectivoSTR;
+
+	private String	totalTarjetaSTR;
+
+	private String	totalBancoSTR;
+
+	private String	totalCreditoSTR;
+
+	private String	totalNetoSTR;
+
+	private String	totalAbonoSTR;
 
 	private Usuario	usuario;
 
@@ -60,6 +74,14 @@ public class UsuarioCajaCommand {
 		this.totalAbono = usuarioCaja.getTotalAbono();
 		this.created_atSTR = Utils.getFechaGeneraReporte(usuarioCaja.getCreated_at());
     this.updated_atSTR = Utils.getFechaGeneraReporte(usuarioCaja.getUpdated_at());
+    this.totalFondoInicialSTR = usuarioCaja.getTotalFondoInicialSTR();
+  	this.totalEfectivoSTR = usuarioCaja.getTotalEfectivoSTR();
+  	this.totalTarjetaSTR = usuarioCaja.getTotalTarjetaSTR();
+ 	  this.totalBancoSTR = usuarioCaja.getTotalBancoSTR();
+  	this.totalCreditoSTR = usuarioCaja.getTotalCreditoSTR();
+  	this.totalNetoSTR = usuarioCaja.getTotalNetoSTR();
+  	this.totalAbonoSTR = usuarioCaja.getTotalAbonoSTR();
+
 	}
 
 	
@@ -76,6 +98,76 @@ public class UsuarioCajaCommand {
 	}
 
 	
+	
+	public String getTotalFondoInicialSTR() {
+		return totalFondoInicialSTR;
+	}
+
+	
+	public void setTotalFondoInicialSTR(String totalFondoInicialSTR) {
+		this.totalFondoInicialSTR = totalFondoInicialSTR;
+	}
+
+	
+	public String getTotalEfectivoSTR() {
+		return totalEfectivoSTR;
+	}
+
+	
+	public void setTotalEfectivoSTR(String totalEfectivoSTR) {
+		this.totalEfectivoSTR = totalEfectivoSTR;
+	}
+
+	
+	public String getTotalTarjetaSTR() {
+		return totalTarjetaSTR;
+	}
+
+	
+	public void setTotalTarjetaSTR(String totalTarjetaSTR) {
+		this.totalTarjetaSTR = totalTarjetaSTR;
+	}
+
+	
+	public String getTotalBancoSTR() {
+		return totalBancoSTR;
+	}
+
+	
+	public void setTotalBancoSTR(String totalBancoSTR) {
+		this.totalBancoSTR = totalBancoSTR;
+	}
+
+	
+	public String getTotalCreditoSTR() {
+		return totalCreditoSTR;
+	}
+
+	
+	public void setTotalCreditoSTR(String totalCreditoSTR) {
+		this.totalCreditoSTR = totalCreditoSTR;
+	}
+
+	
+	public String getTotalNetoSTR() {
+		return totalNetoSTR;
+	}
+
+	
+	public void setTotalNetoSTR(String totalNetoSTR) {
+		this.totalNetoSTR = totalNetoSTR;
+	}
+
+	
+	public String getTotalAbonoSTR() {
+		return totalAbonoSTR;
+	}
+
+	
+	public void setTotalAbonoSTR(String totalAbonoSTR) {
+		this.totalAbonoSTR = totalAbonoSTR;
+	}
+
 	public String getUpdated_atSTR() {
 		return updated_atSTR;
 	}

@@ -14,16 +14,16 @@
                 <div class="forma-impresion">
                     <div class="ticket" > 
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.titulo")}     </strong><br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.created_at")}      </strong>{usuarioCaja.created_at}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.updated_at")}      </strong>{usuarioCaja.updated_at}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.created_at")}      </strong>{usuarioCaja.created_atSTR}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.updated_at")}      </strong>{usuarioCaja.updated_atSTR}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.usuario")}       </strong>{usuarioCaja.usuario.nombre} {usuarioCaja.usuario.primerApellido} {usuarioCaja.usuario.segundoApellido}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.caja")}          </strong>{usuarioCaja.caja.descripcion}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.fondoIncial")}  : </strong>{usuarioCaja.totalFondoInicial.toFixed(2)}<br></div>                                                 
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalEfectivo")}: </strong>{usuarioCaja.totalEfectivo.toFixed(2)}<br></div>                                                 
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalTarjeta")} : </strong>{usuarioCaja.totalTarjeta.toFixed(2)}<br></div>                                                 
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalBanco")}    : </strong>{usuarioCaja.totalBanco.toFixed(2)}<br></div>                                                 
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalAbono")} : </strong>{usuarioCaja.totalAbono.toFixed(2)}<br></div>                                                 
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalNeto")}    : </strong>{usuarioCaja.totalNeto.toFixed(2)}<br></div>                                                 
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.fondoIncial")}  : </strong>{usuarioCaja.totalFondoInicialSTR}<br></div>                                                 
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalEfectivo")}: </strong>{usuarioCaja.totalEfectivoSTR}<br></div>                                                 
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalTarjeta")} : </strong>{usuarioCaja.totalTarjetaSTR}<br></div>                                                 
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalBanco")}    : </strong>{usuarioCaja.totalBancoSTR}<br></div>                                                 
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalAbono")} : </strong>{usuarioCaja.totalAbonoSTR}<br></div>                                                 
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalNeto")}    : </strong>{usuarioCaja.totalNetoSTR}<br></div>                                                 
                         <br>
                        
                     </div>

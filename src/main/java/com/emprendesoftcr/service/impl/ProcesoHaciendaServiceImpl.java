@@ -106,6 +106,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																			facturaElectronica.setClienteCorreo(d.getCliente().getCorreoElectronico());
 																																																			facturaElectronica.setClienteCedula(d.getCliente().getCedula());
 																																																			facturaElectronica.setClienteTelefono(d.getCliente().getTelefono() != null ? d.getCliente().getTelefono().toString() : Constantes.EMPTY);
+																																																			facturaElectronica.set_nota(d.getNota() ==null?Constantes.EMPTY:d.getNota());
 
 																																																			// }
 																																																			// facturaElectronica.setClienteMesCobro(TO_MESCOBRO.apply(d.getMesCobro()));

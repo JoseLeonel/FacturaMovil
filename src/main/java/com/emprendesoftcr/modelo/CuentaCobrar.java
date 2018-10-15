@@ -21,6 +21,7 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -261,6 +262,7 @@ public class CuentaCobrar implements Serializable {
 	public Double getMontoCouta() {
 		return montoCouta;
 	}
+	
 
 	public void setMontoCouta(Double montoCouta) {
 		this.montoCouta = montoCouta;
@@ -273,6 +275,10 @@ public class CuentaCobrar implements Serializable {
 	public void setTotal(Double total) {
 		this.total = total;
 	}
+	
+	public String getTotalSTR() {
+		return Utils.formateadorMiles(this.total);
+	}
 
 	public Double getTotalAbono() {
 		return totalAbono;
@@ -281,9 +287,15 @@ public class CuentaCobrar implements Serializable {
 	public void setTotalAbono(Double totalAbono) {
 		this.totalAbono = totalAbono;
 	}
+	public String getTotalAbonoSTR() {
+		return Utils.formateadorMiles(this.totalAbono);
+	}
 
 	public Double getTotalSaldo() {
 		return totalSaldo;
+	}
+	public String getTotalSaldoSTR() {
+		return Utils.formateadorMiles(this.totalSaldo);
 	}
 
 	public void setTotalSaldo(Double totalSaldo) {

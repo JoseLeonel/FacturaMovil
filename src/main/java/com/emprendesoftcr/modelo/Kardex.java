@@ -16,6 +16,8 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.emprendesoftcr.Utils.Utils;
+
 /**
  * Kardex. Registro de la trazabilidad del articulo en el inventario
  * @author jose.
@@ -139,6 +141,10 @@ public class Kardex implements Serializable {
 	public void setCantidadSolicitada(Double cantidadSolicitada) {
 		this.cantidadSolicitada = cantidadSolicitada;
 	}
+	
+	public String getCantidadSolicitadaSTR() {
+		return Utils.formateadorMiles(this.cantidadSolicitada);
+	}
 
 	public Double getCantidadActual() {
 		return cantidadActual;
@@ -146,6 +152,10 @@ public class Kardex implements Serializable {
 
 	public void setCantidadActual(Double cantidadActual) {
 		this.cantidadActual = cantidadActual;
+	}
+	
+	public String getCantidadActualSTR() {
+		return Utils.formateadorMiles(this.cantidadActual);
 	}
 
 	public Double getCostoActual() {
@@ -155,7 +165,11 @@ public class Kardex implements Serializable {
 	public void setCostoActual(Double costoActual) {
 		this.costoActual = costoActual;
 	}
+	public String getCostoActualSTR() {
+		return Utils.formateadorMiles(this.costoActual);
+	}
 
+	
 	public Double getTotalCostoActual() {
 		return totalCostoActual;
 	}
@@ -164,6 +178,10 @@ public class Kardex implements Serializable {
 		this.totalCostoActual = totalCostoActual;
 	}
 
+	public String getTotalCostoActualSTR() {
+		return Utils.formateadorMiles(this.totalCostoActual);
+	}
+	
 	public String getCodigo() {
 		return codigo;
 	}
@@ -188,6 +206,11 @@ public class Kardex implements Serializable {
 		this.cantidadNueva = cantidadNueva;
 	}
 
+	public String getCantidadNuevaSTR() {
+		return Utils.formateadorMiles(this.cantidadNueva);
+	}
+
+	
 	public Double getCostoNuevo() {
 		return costoNuevo;
 	}
@@ -196,6 +219,10 @@ public class Kardex implements Serializable {
 		this.costoNuevo = costoNuevo;
 	}
 
+	public String getCostoNuevoSTR() {
+		return Utils.formateadorMiles(this.costoNuevo);
+	}
+	
 	public Double getTotalCostoNuevo() {
 		return totalCostoNuevo;
 	}
@@ -203,7 +230,12 @@ public class Kardex implements Serializable {
 	public void setTotalCostoNuevo(Double totalCostoNuevo) {
 		this.totalCostoNuevo = totalCostoNuevo;
 	}
+	
+	public String getTotalCostoNuevoSTR() {
+		return Utils.formateadorMiles(this.totalCostoNuevo);
+	}
 
+	
 	public String getConsecutivo() {
 		return consecutivo;
 	}

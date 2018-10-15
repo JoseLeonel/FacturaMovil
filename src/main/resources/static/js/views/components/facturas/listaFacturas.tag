@@ -22,7 +22,7 @@
                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label class="knob-label" >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
-                                    <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                    <div  class="form-group input-group date datepickerFechaInicial" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
                                         <input type="text" class="form-control fechaInicial" id="fechaInicial"  name= "fechaInicial" readonly>
                                         <div class="input-group-addon">
                                             <span class="glyphicon glyphicon-th"></span>
@@ -34,7 +34,7 @@
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label class="knob-label" >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
-                                        <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                        <div  class="form-group input-group date datepickerFechaFinal" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
                                             <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
@@ -100,7 +100,6 @@
                                         </tfoot>
                                     </table>
 
-                                    <h2 class="pull-right">{$.i18n.prop("factura.linea.detalle.impuesto")}:{totalImpuestos.toFixed(2)} {$.i18n.prop("factura.linea.detalle.descuento")}:{totalDescuentos.toFixed(2)} {$.i18n.prop("factura.total")}:{total.toFixed(2)}  </h2>
                                 </div>   
 
                             </div> 
@@ -271,21 +270,21 @@
                             <td>{codigo}</td>
                             <td>{descripcion}</td>
                             <td class="text-right">
-                                <input  class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad.toFixed(2)} readonly/>
+                                <input  class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad} readonly/>
                             </td>
                             <td class="text-right">
-                                <input   class="form-control" type="text"  value = "{precioUnitario.toFixed(2)}" readonly />
+                                <input   class="form-control" type="text"  value = "{precioUnitario}" readonly />
                             </td>
                             <td class="text-right">
-                                <input   class="form-control" type="text"  value = "{descuento.toFixed(2)}" readonly/>
+                                <input   class="form-control" type="text"  value = "{montoDescuento}" readonly/>
                             </td>
                                                         
                             <td class="text-right">
-                                <input  class="form-control" type="text"  value = "{montoImpuesto.toFixed(2)}" readonly/>
+                                <input  class="form-control" type="text"  value = "{montoImpuesto}" readonly/>
                             </td>
 
                             <td class="text-righ">
-                                <input  class="form-control" type="text"  value = "{montoTotalLinea.toFixed(2)}" readonly/>
+                                <input  class="form-control" type="text"  value = "{montoTotalLinea}" readonly/>
                             </td>
                         </tr>
                         </tbody>
@@ -312,7 +311,7 @@
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show">₡ {factura.totalComprobante.toFixed(2)}</span>
+                                                    <span class="label label-info textShadow" id="total-show"> {factura.totalComprobanteSTR}</span>
                                                 </div>
                                             </td>
                                         </tr>                     
@@ -743,7 +742,19 @@ self.on('mount',function(){
     agregarInputsCombos()
 
     listaClientesActivos()
-    sumar()
+    $('.datepickerFechaFinal').datepicker(
+            {
+              format: 'yyyy-mm-dd',
+              todayHighlight:true,
+            }
+    );
+    $('.datepickerFechaInicial').datepicker(
+            {
+              format: 'yyyy-mm-dd',
+              todayHighlight:true,
+            }
+    );
+    
 
 })
 
@@ -847,7 +858,7 @@ __Busqueda(){
                     ActivarEventoFiltro(".tableListar")
                     __VerDetalle()
                     __BajarPDF()
-                    sumar()
+                    
                     __CorreoAlternativo()
                     __EnviarCorreos()
                 }else{
@@ -866,25 +877,7 @@ __Busqueda(){
 
 }
 
-function sumar(){
-          self.totalImpuestos = 0
-          self.total = 0
-          self.totalDescuentos = 0
-          self.update()
 
-    $.each(self.listaFacturas, function( index, modeloTabla ) {
-          self.totalImpuestos += modeloTabla.totalImpuesto
-          self.total += modeloTabla.totalComprobante
-          self.totalDescuentos += modeloTabla.totalDescuentos
-          
-
-    })
-    self.totalImpuestos  = self.totalImpuestos
-    self.total           = self.total
-    self.totalDescuentos = self.totalDescuentos
-    
-    self.update()
-}
 
 
 /**
@@ -991,15 +984,15 @@ function cargarDetallesFacturaEnEspera(){
             numeroLinea     : e.numeroLinea,
             codigo          : e.codigo,
             descripcion     : e.descripcion,
-            cantidad        : e.cantidad,
-            precioUnitario  : e.precioUnitario,
+            cantidad        : e.cantidadSTR,
+            precioUnitario  : e.precioUnitarioSTR,
             impuesto        : e.impuesto,
-            montoImpuesto   : e.montoImpuesto,
-            montoDescuento  : e.montoDescuento,
+            montoImpuesto   : e.montoImpuestoSTR,
+            montoDescuento  : e.montoDescuentoSTR,
             porcentajeDesc  : e.porcentajeDesc,
-            subTotal        : e.subTotal,
-            montoTotalLinea : e.montoTotalLinea,
-            montoTotal      : e.montoTotal
+            subTotal        : e.subTotalSTR,
+            montoTotalLinea : e.montoTotalLineaSTR,
+            montoTotal      : e.montoTotalSTR
         });
     })
     self.update()
@@ -1060,21 +1053,9 @@ function __InformacionDataTable(){
 									    return cliente ==null?"":cliente.nombreCompleto;
 	 							    }
                                },
-                               {'data' :'totalImpuesto'       ,"name":"totalImpuesto"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true ,
-                                    "render":function(totalImpuesto,type, row){
-									    return  totalImpuesto.toFixed(2);
-	 							    }
-                               },
-                               {'data' :'totalDescuentos'                ,"name":"totalDescuentos"                 ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true ,
-                                    "render":function(totalDescuentos,type, row){
-									    return  totalDescuentos.toFixed(2);
-	 							    }
-                               },
-                               {'data' :'totalComprobante'               ,"name":"totalComprobante"                ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true ,
-                                    "render":function(totalComprobante,type, row){
-									    return  totalComprobante.toFixed(2);
-	 							    }
-                               },
+                               {'data' :'totalImpuestoSTR'           ,"name":"totalImpuestoSTR"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true  },
+                               {'data' :'totalDescuentosSTR'         ,"name":"totalDescuentosSTR"     ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true },
+                               {'data' :'totalComprobanteSTR'        ,"name":"totalComprobanteSTR"    ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true },
                                {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
                                       return __Opciones(id,type,row);
@@ -1116,9 +1097,11 @@ function __Opciones(id,type,row){
     menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
     
     menu += '<li><a href="#"  title="Mostrar" class="  btnMostrar" >Mostrar</a></li>'
-    menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
-    menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Envio Correo</a></li>'
-    menu += '<li><a href="#"  title="Envio de correo Alternativo" class="  btnEnvioCorreoAlternativo" >Envio de correo Alternativo</a></li>'
+    if(row.empresa.noFacturaElectronica == 0){
+        menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
+        menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Envio Correo</a></li>'
+        menu += '<li><a href="#"  title="Envio de correo Alternativo" class="  btnEnvioCorreoAlternativo" >Envio de correo Alternativo</a></li>'
+    }
    menu += "</ul></div>"  
 
 

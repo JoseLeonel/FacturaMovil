@@ -19,23 +19,23 @@
                 <div  show={mostrarFiltros}  class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
                     <form id="filtros" name="filtros">              
                         <div class= "row">
-                            <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label class="knob-label" >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
-                                    <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
-                                        <input type="text" class="form-control fechaInicio" id="fechaInicio"  name= "fechaInicio" >
+                                    <div  class="form-group input-group date datepickerFechaInicial" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                        <input type="text" class="form-control fechaInicio" id="fechaInicio"  name= "fechaInicio" readonly >
                                         <div class="input-group-addon">
                                             <span class="glyphicon glyphicon-th"></span>
                                         </div>
                                     </div>	                             
                                 </div>  
                             </div>             
-                            <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label class="knob-label" >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
-                                        <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
-                                            <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" >
+                                        <div  class="form-group input-group date datepickerFechaFinal" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                            <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
                                             </div>
@@ -43,7 +43,7 @@
                                     </div>
                                 </div>  
                             </div>
-                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label>{$.i18n.prop("articulo.articulo")} </label>  
                                     <input onclick = {__ListaDecodigos}  id="codigoArticulo" name="codigoArticulo" class="form-control" type="text" value="{articulo.descripcion}" placeholder="XXXXXXXXXXX" readonly/>
@@ -56,7 +56,7 @@
             </div>
             <div class="col-xs-12 text-right">
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
-            	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
+            	<button onclick ={__limpiar} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
             </div>
         </div>
     </div>    
@@ -114,7 +114,7 @@
     </div>
     <!-- Fin del Listado -->
 
-    <!--Modal mostrar Articulos de la empresa -->
+<!--Modal mostrar Articulos de la empresa -->
 <div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -122,6 +122,19 @@
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("articulo.listar")} </h4>
             </div>
             <div class="modal-body">
+                <form id="formularioParametros" name ="formularioParametros" >
+                    <div class="row">
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label  >{$.i18n.prop("articulo.codigo")}  </label>
+                            <input type="text" class="form-control codigoArt" id="codigoArt" name="codigoArt"  onkeypress={__ConsultarProductosCod} >
+                        </div>
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label  >{$.i18n.prop("articulo.descripcion")}</label>
+                            <input type="text" class="form-control descArticulo "   id="descArticulo" name="descArticulo" onkeypress={__ConsultarProductosDesc}>
+                        </div>
+                    </div> 
+                </form>    
+                <br>                   
                 <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " cellspacing="0" width="100%">
                     <thead>
                         <th class="table-header">{$.i18n.prop("articulo.codigo")}        </th>
@@ -218,6 +231,9 @@
         _informacionData_Kardex()
         __InicializarTabla('.tableListar')
         agregarInputsCombos()
+        __limpiarFiltros()
+         
+
         window.addEventListener( "keydown", function(evento){
                 $(".errorServerSideJgrid").remove();
             }, false );
@@ -251,11 +267,7 @@ var reglasDeValidacionParametros = function() {
             articulo : {
 				required : true,
             }
-            ,
-            codigoArticulo : {
-                required : true,
-                maxlength:20
-            }  
+           
             
                         
 		},
@@ -281,12 +293,29 @@ var reglasDeValidacionParametros = function() {
 /**
 * limpiar los filtros
 **/
-__limpiarFiltros(){
+__limpiar(){
+    limpiarFiltros()
+}
+
+function limpiarFiltros(){
     $('.fechaInicio').val(null)
     $('.fechaFinal').val(null)
+    $('.datepickerFechaFinal').datepicker(
+        {
+            format: 'yyyy-mm-dd',
+            todayHighlight:true,
+        }
+    );
+    $('.datepickerFechaInicial').datepicker(
+        {
+           format: 'yyyy-mm-dd',
+           todayHighlight:true,
+        }
+    );
     $('.articulo').val(null)
     self.articulo = {}
     self.update()
+
 }
 /**
 *  Busqueda de la informacion por rango de fechas
@@ -342,33 +371,16 @@ function _informacionData_Kardex(){
 									            return created_at !=null?formatoFechaHora(created_at):null;
 	 							            }
                                         },
-                                        {'data' : 'tipo'               ,"name":"tipo"               ,"title" : $.i18n.prop("kardez.listado.tipo")  ,"autoWidth":false},
-                                        {'data' : 'cantidadSolicitada' ,"name":"cantidadSolicitada" ,"title" : $.i18n.prop("kardez.listado.cantidad.solicitada")   ,"autoWidth":false},
-                                        {'data' : 'cantidadActual'     ,"name":"cantidadActual"     ,"title" : $.i18n.prop("kardez.listado.cantidad.actual")   ,"autoWidth":false},
-                                        {'data' : 'costoActual'        ,"name":"costoActual"        ,"title" : $.i18n.prop("kardez.listado.costo.actual"),"autoWidth":false,
-                                          "render":function(costoActual,type, row){
-                                                var resultado = formatoDecimales(__valorNumerico(costoActual))
-                                               return resultado;
-                                            }
+                                        {'data' : 'tipo'               ,"name":"tipo"                   ,"title" : $.i18n.prop("kardez.listado.tipo")  ,"autoWidth":false},
+                                        {'data' : 'cantidadSolicitada' ,"name":"cantidadSolicitada"     ,"title" : $.i18n.prop("kardez.listado.cantidad.solicitada")   ,"autoWidth":false},
+                                        {'data' : 'cantidadActualSTR'  ,"name":"cantidadActualSTR"      ,"title" : $.i18n.prop("kardez.listado.cantidad.actual")   ,"autoWidth":false},
+                                        {'data' : 'costoActualSTR'     ,"name":"costoActualSTR"         ,"title" : $.i18n.prop("kardez.listado.costo.actual"),"autoWidth":false
                                         },
-                                        {'data' : 'totalCostoActual' ,"name":"totalCostoActual"     ,"title" : $.i18n.prop("kardez.listado.totalCosto.actual"),"autoWidth":false,
-                                          "render":function(totalCostoActual,type, row){
-                                              var resultado = formatoDecimales(__valorNumerico(totalCostoActual))
-                                               return  resultado;
-                                            }
+                                        {'data' : 'totalCostoActualSTR' ,"name":"totalCostoActualSTR"   ,"title" : $.i18n.prop("kardez.listado.totalCosto.actual"),"autoWidth":false},
+                                        {'data' : 'cantidadNuevaSTR'    ,"name":"cantidadNuevaSTR"      ,"title" : $.i18n.prop("kardez.listado.cantidad.nueva")   ,"autoWidth":false},
+                                        {'data' : 'costoNuevoSTR'       ,"name":"costoNuevoSTR"         ,"title" : $.i18n.prop("kardez.listado.costo.nuevo"),"autoWidth":false
                                         },
-                                        {'data' : 'cantidadNueva'      ,"name":"cantidadNueva"      ,"title" : $.i18n.prop("kardez.listado.cantidad.nueva")   ,"autoWidth":false},
-                                        {'data' : 'costoNuevo'         ,"name":"costoNuevo"         ,"title" : $.i18n.prop("kardez.listado.costo.nuevo"),"autoWidth":false,
-                                          "render":function(costoNuevo,type, row){
-                                              var resultado = formatoDecimales(__valorNumerico(costoNuevo))
-                                               return  resultado;
-                                            }
-                                        },
-                                        {'data' : 'totalCostoNuevo' ,"name":"totalCostoNuevo"       ,"title" : $.i18n.prop("kardez.listado.totalCosto.nuevo"),"autoWidth":false,
-                                          "render":function(totalCostoNuevo,type, row){
-                                              var resultado = formatoDecimales(__valorNumerico(totalCostoNuevo))
-                                               return  resultado;
-                                            }
+                                        {'data' : 'totalCostoNuevoSTR' ,"name":"totalCostoNuevoSTR"     ,"title" : $.i18n.prop("kardez.listado.totalCosto.nuevo"),"autoWidth":false
                                         },
                                         {'data' : 'motivo'      ,"name":"motivo"                   ,"title" : $.i18n.prop("kardez.listado.observacion")  ,"autoWidth":false},  
                                     ];
@@ -384,17 +396,49 @@ function _informacionData_Kardex(){
  * Listar codigos  llamado del modal para presentar los articulos
  **/   
  __ListaDecodigos(){
-     __ListaDeArticulosPorEmpresa();
+    $('.descArticulo').val(null)
+    $('.codigoArt').val(null)
+    $(".tableListarArticulos").dataTable().fnClearTable();
+    $(".tableListarArticulos").DataTable().destroy();
+    $('#modalInventario').modal('show')    
+    
  }
+
+ /**
+* consultando por descripcion
+**/
+__ConsultarProductosDesc(e){
+ if (e.keyCode != 13) {
+        return;
+    } 
+ __ListaDeArticulosPorDescripcion($("#codigoArt").val(),e.currentTarget.value)   
+}    
+
+/**
+*Consultando por codigo
+**/
+__ConsultarProductosCod(e){
+ if (e.keyCode != 13) {
+        return;
+    } 
+ __ListaDeArticulosPorDescripcion(e.currentTarget.value,$("#descArticulo").val())   
+}   
 
 /**
 * mostrar la lista de articulos de la empresa
 **/
-function __ListaDeArticulosPorEmpresa(){
+function __ListaDeArticulosPorDescripcion(){
+    if($('#codigoArt').val() =='' && $('#descArticulo').val() =='' ){
+        return
+    }
+    $(".tableListarArticulos").dataTable().fnClearTable();
+    $(".tableListarArticulos").DataTable().destroy();
+    var formulario = $('#formularioParametros').serialize();
     $.ajax({
-        url: 'ListarArticuloAjax.do',
+        url: 'ListarPorDescripcionCodigoArticuloAjax.do',
         datatype: "json",
-        method:"POST",
+        method:"GET",
+        data :formulario,
         success: function (result) {
             if(result.aaData.length > 0){
                 _informacionData_Articulo()
@@ -404,7 +448,8 @@ function __ListaDeArticulosPorEmpresa(){
                 agregarInputsCombos_Articulo()
                 __agregarArticulos()
                 ActivarEventoFiltro(".tableListarArticulos")
-                $('#modalInventario').modal('show')    
+             
+                
             }
         },
         error: function (xhr, status) {
@@ -460,6 +505,7 @@ function __agregarArticulos() {
 	       var data = table.row($(this).parents("tr")).data();
 	     }
         self.articulo = data;
+        
         self.update();  
 	    
     });

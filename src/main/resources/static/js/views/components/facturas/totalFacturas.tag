@@ -58,7 +58,7 @@
                             <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
                                 <div class="form-group">
                                     <label class="knob-label" >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
-                                    <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                    <div  class="form-group input-group date datepickerFechaInicio" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
                                         <input type="text" class="form-control fechaInicial" id="fechaInicial"  name= "fechaInicial" readonly>
                                         <div class="input-group-addon">
                                             <span class="glyphicon glyphicon-th"></span>
@@ -70,7 +70,7 @@
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label class="knob-label" >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
-                                        <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                        <div  class="form-group input-group date datepickerFechaFinal" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
                                             <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
@@ -101,27 +101,27 @@
                         <div class="row">
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.totalVentasGravadas")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control totalVentasGravadas" placeHolder ="{$.i18n.prop("factura.totalVentasGravadas")}" id="totalVentasGravadas" name="totalVentasGravadas" value="{factura.totalVentasGravadas}">
+                                <input type="text" readonly="readonly" class="form-control totalVentasGravadas" placeHolder ="{$.i18n.prop("factura.totalVentasGravadas")}" id="totalVentasGravadas" name="totalVentasGravadas" value="{factura.totalVentasGravadas.toFixed(2)}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.totalVentasExentas")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control totalVentasExentas" placeHolder ="{$.i18n.prop("factura.totalVentasExentas")}" id="totalVentasExentas" name="totalVentasExentas" value="{factura.totalVentasExentas}">
+                                <input type="text" readonly="readonly" class="form-control totalVentasExentas" placeHolder ="{$.i18n.prop("factura.totalVentasExentas")}" id="totalVentasExentas" name="totalVentasExentas" value="{factura.totalVentasExentas.toFixed(2)}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.totalVentasNetas")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control totalVentasNetas" placeHolder ="{$.i18n.prop("factura.totalVentasNetas")}" id="totalVentasNetas" name="totalVentasNetas" value="{factura.totalVentasNetas}">
+                                <input type="text" readonly="readonly" class="form-control totalVentasNetas" placeHolder ="{$.i18n.prop("factura.totalVentasNetas")}" id="totalVentasNetas" name="totalVentasNetas" value="{factura.totalVentasNetas.toFixed(2)}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.totalImpuestos")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control totalImpuestos" placeHolder ="{$.i18n.prop("factura.totalImpuestos")}" id="totalImpuestos" name="totalImpuestos" value="{factura.totalImpuestos}">
+                                <input type="text" readonly="readonly" class="form-control totalImpuestos" placeHolder ="{$.i18n.prop("factura.totalImpuestos")}" id="totalImpuestos" name="totalImpuestos" value="{factura.totalImpuestos.toFixed(2)}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.totalDescuentos")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control totalDescuentos" placeHolder ="{$.i18n.prop("factura.totalDescuentos")}" id="totalDescuentos" name="totalDescuentos" value="{factura.totalDescuentos}">
+                                <input type="text" readonly="readonly" class="form-control totalDescuentos" placeHolder ="{$.i18n.prop("factura.totalDescuentos")}" id="totalDescuentos" name="totalDescuentos" value="{factura.totalDescuentos.toFixed(2)}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.total")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control totalDescuentos" placeHolder ="{$.i18n.prop("factura.total")}" id="total" name="total" value="{factura.total}">
+                                <input type="text" readonly="readonly" class="form-control totalDescuentos" placeHolder ="{$.i18n.prop("factura.total")}" id="total" name="total" value="{factura.total.toFixed(2)}">
                             </div>
                         </div>
                 	</form>
@@ -196,6 +196,19 @@
 					totalVentasGravadas:"0",
 			}			
 			self.update();
+			$('.datepickerFechaFinal').datepicker(
+            	{
+              format: 'yyyy-mm-dd',
+              todayHighlight:true,
+            	}
+    		);
+    		$('.datepickerFechaInicio').datepicker(
+            {
+              format: 'yyyy-mm-dd',
+              todayHighlight:true,
+            }
+    		);
+
 		}
 		
 		/**
@@ -263,6 +276,18 @@
 		__limpiarFiltros(){
 		    $('#fechaInicial').val(null)
 		    $('#fechaFinal').val(null)
+			$('.datepickerFechaFinal').datepicker(
+            	{
+              format: 'yyyy-mm-dd',
+              todayHighlight:true,
+            	}
+    		);
+    		$('.datepickerFechaInicio').datepicker(
+            {
+              format: 'yyyy-mm-dd',
+              todayHighlight:true,
+            }
+    		);
 		}
 		
 		/*

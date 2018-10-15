@@ -33,6 +33,12 @@ public class CuentaCobrarCommand {
 	private Double		totalAbono;
 
 	private Double		totalSaldo;
+	
+	private String		totalSTR;
+
+	private String		totalAbonoSTR;
+
+	private String		totalSaldoSTR;
 
 	private String		descripcionArticulo;
 
@@ -88,6 +94,9 @@ public class CuentaCobrarCommand {
 		this.created_atSTR = Utils.getFechaGeneraReporte(cuentaCobrar.getCreated_at());
 		this.updated_atSTR = Utils.getFechaGeneraReporte(cuentaCobrar.getUpdated_at());
 		this.plazoCredito = cuentaCobrar.getPlazoCredito();
+		this.totalAbonoSTR = cuentaCobrar.getTotalAbonoSTR();
+		this.totalSaldoSTR = cuentaCobrar.getTotalSaldoSTR();
+		this.totalSTR = cuentaCobrar.getTotalSTR();
 	}
 
 	public CuentaCobrarCommand() {
@@ -104,6 +113,36 @@ public class CuentaCobrarCommand {
 	
 	
 	
+	
+	public String getTotalSTR() {
+		return totalSTR;
+	}
+
+	
+	public void setTotalSTR(String totalSTR) {
+		this.totalSTR = totalSTR;
+	}
+
+	
+	public String getTotalAbonoSTR() {
+		return totalAbonoSTR;
+	}
+
+	
+	public void setTotalAbonoSTR(String totalAbonoSTR) {
+		this.totalAbonoSTR = totalAbonoSTR;
+	}
+
+	
+	public String getTotalSaldoSTR() {
+		return totalSaldoSTR;
+	}
+
+	
+	public void setTotalSaldoSTR(String totalSaldoSTR) {
+		this.totalSaldoSTR = totalSaldoSTR;
+	}
+
 	public Integer getPlazoCredito() {
 		return plazoCredito;
 	}

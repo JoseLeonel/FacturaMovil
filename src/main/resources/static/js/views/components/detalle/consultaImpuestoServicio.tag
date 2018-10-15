@@ -560,33 +560,25 @@ __Busqueda(){
      }
 
 }
-
 function sumar(){
-          self.totalImpuestos = 0
-          self.total = 0
-          self.totalDescuentos = 0
-          self.totalImpuestoServicio = 0
-          self.update()
-
+    self.totalImpuestos = 0
+    self.total = 0
+    self.totalDescuentos = 0
+    self.totalImpuestoServicio = 0
+    self.update()
     $.each(self.listaFacturas, function( index, modeloTabla ) {
           self.totalImpuestos += modeloTabla.totalImpuesto
           self.totalImpuestoServicio += modeloTabla.impuestoServicioIS
           self.total += modeloTabla.totalComprobante
           self.totalDescuentos += modeloTabla.totalDescuentos
           self.update()
-          
-
     })
     self.totalImpuestoServicio = formatoDecimales(__valorNumerico(self.totalImpuestoServicio))
     self.totalImpuestos  = redondearDecimales(self.totalImpuestos,2)
     self.total           = redondearDecimales(self.total,2)
     self.totalDescuentos = redondearDecimales(self.totalDescuentos,2)
-    
     self.update()
 }
-
-
-
 /*
  * Muestra los filtros avanzados
  */
@@ -620,30 +612,16 @@ function __InformacionDataTable(){
 									    return cliente ==null?"":cliente.nombreCompleto;
 	 							    }
                                },
-                               {'data' :'totalImpuesto'       ,"name":"totalImpuesto"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true ,
-                                    "render":function(totalImpuesto,type, row){
-                                        var resultado = formatoDecimales(__valorNumerico(totalImpuesto))
-									    return  resultado;
-	 							    }
-                               },
-                               {'data' :'totalDescuentos'                ,"name":"totalDescuentos"                 ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true ,
-                                    "render":function(totalDescuentos,type, row){
-                                        var resultado = formatoDecimales(__valorNumerico(totalDescuentos))
-									    return  resultado;
-	 							    }
-                               },
-                               {'data' :'totalComprobante'               ,"name":"totalComprobante"                ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true ,
+                               {'data' :'totalImpuestoSTR'       ,"name":"totalImpuestoSTR"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true },
+                               {'data' :'totalDescuentosSTR'     ,"name":"totalDescuentosSTR"      ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true },
+                               {'data' :'totalComprobanteSTR'       ,"name":"totalComprobanteSTR"                ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true ,
                                     "render":function(totalComprobante,type, row){
                                         var resultado = formatoDecimales(__valorNumerico(totalComprobante))
 									    return  resultado;
 	 							    }
                                },
                                
-                               {'data' :'impuestoServicioIS'               ,"name":"impuestoServicioIS"                ,"title" : "Total I.S" ,"autoWidth" :true ,
-                                    "render":function(impuestoServicioIS,type, row){
-                                        var resultado = formatoDecimales(__valorNumerico(impuestoServicioIS))
-									    return  resultado;
-	 							    }
+                               {'data' :'impuestoServicioISSTR'               ,"name":"impuestoServicioISSTR"                ,"title" : "Imp.Serv" ,"autoWidth" :true 
                                },
                                {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){

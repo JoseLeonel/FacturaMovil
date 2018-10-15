@@ -101,7 +101,7 @@
                                     </div>
                                     <div  class="form-group">
                                         <label >{$.i18n.prop("informacion.FechaEmision")}</label> 
-                                        <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                        <div  class="form-group input-group date datepickerFechaEmision" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
                                             <input type="text" class="form-control referenciaFechaEmision" name="referenciaFechaEmision" id="referenciaFechaEmision"  >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
@@ -595,6 +595,14 @@
        __TipoCambio()
        __comboCondicionPagoRef()
        __Eventos()
+        $(".nota").attr("maxlength", 80);
+        $('.datepickerFechaEmision').datepicker(
+            {
+              format: 'yyyy-mm-dd',
+              startDate: '-30d',
+              todayHighlight:true,
+            }
+        );
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
@@ -611,7 +619,15 @@ function _INIT(){
 
     $(".plazoCreditoL").val(null)   
     $(".fechaCredito").val(null)   
-    $(".nota").val(null)   
+    $(".nota").val(null)  
+    $(".nota").attr("maxlength", 80);
+    $('.datepickerFechaEmision').datepicker(
+            {
+              format: 'yyyy-mm-dd',
+              startDate: '-30d',
+              todayHighlight:true,
+            }
+    ); 
     $(".direccion").val(null)   
     $(".referenciaFechaEmision").val(null)
     $('.referenciaNumero').val(null)

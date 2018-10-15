@@ -23,12 +23,13 @@
                         <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.fecha.emision")} </strong>{facturaImpresa.fechaEmisionSTR}</div>
                         <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.condicion.venta")} </strong>{facturaImpresa.condicionVenta}</div>
                         <div class="encabezado" show ="{facturaImpresa.plazoCredito > 0}"><strong>{$.i18n.prop("tikect.encabezado.plazo.credito")} dias </strong>{facturaImpresa.plazoCredito}</div>
-                        <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>{facturaImpresa.tipoDoc}</div>
+                        <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 0}"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>{facturaImpresa.tipoDoc}</div>
+                        <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 1}"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>Factura</div>
                         <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.moneda")}        </strong>{facturaImpresa.codigoMoneda}</div>
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc != '88'}"><strong>{$.i18n.prop("tikect.encabezado.numeroFactura")} </strong>{facturaImpresa.numeroConsecutivo}</div>
-                        <div class=" encabezado" show = "{facturaImpresa.tipoDoc != '88'  }"><strong>{$.i18n.prop("tikect.encabezado.clave")}</strong> </div>
-                        <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88'}">{claveParteUno}</div>
-                        <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88'}">{claveParteDos}</div>
+                        <div class=" encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0 }"><strong>{$.i18n.prop("tikect.encabezado.clave")}</strong> </div>
+                        <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0 }">{claveParteUno}</div>
+                        <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0}">{claveParteDos}</div>
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura != ""}"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.nombreFactura}</div>
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == "" }"><strong show={facturaImpresa.cliente.nombreCompleto != 'CLIENTE_FRECUENTE'}>{$.i18n.prop("tikect.encabezado.receptor")}     {facturaImpresa.cliente.nombreCompleto}</strong ></div>
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == ""}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}>{$.i18n.prop("tikect.encabezado.receptor.cedula")}  {facturaImpresa.cliente.cedula}   </strong></div>
@@ -44,7 +45,7 @@
                             <tr class = "" each={detalles} class="detalleTables">
                                 <td class="cantidad" show={codigo !='8888'}>{cantidad}</td>
                                 <td class="producto" show={codigo !='8888'}>{descripcion}</td>
-                                <td class="precio"   show={codigo !='8888'}>{montoTotal.toFixed(2)} </td>
+                                <td class="precio"   show={codigo !='8888'}>{montoTotalSTR} </td>
                             </tr>
                             </tr>
                             <tr>
@@ -58,34 +59,34 @@
                             <tr >
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.detalle.subTotal")}</strong></td>
-                            <td ><strong>{subTotalGeneral.toFixed(2) } </strong>  </td>
+                            <td ><strong>{facturaImpresa.subTotalGeneralSTR } </strong>  </td>
                             </tr>
                             <tr show={totalImpuestoServicio > 0} >
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.detalle.impuestoServicio")}</strong></td>
-                            <td ><strong>{totalImpuestoServicio.toFixed(2) } </strong>  </td>
+                            <td ><strong>{totalImpuestoServicioSTR} </strong>  </td>
                             </tr>
 
-                            <tr show={facturaImpresa.totalDescuentos>0}>
+                            <tr show={facturaImpresa.totalDescuentos >0}>
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.total.descuento")}</strong></td>
-                            <td ><strong>{facturaImpresa.totalDescuentos}</strong></td>
+                            <td ><strong>{facturaImpresa.totalDescuentosSTR}</strong></td>
                             </tr>
                             <tr>
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.total.impuesto")}</strong></td>
-                            <td ><strong>{facturaImpresa.totalImpuesto}</strong></td>
+                            <td ><strong>{facturaImpresa.totalImpuestoSTR}</strong></td>
                             </tr>
                             <tr>
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.total.final")}</strong></td>
-                            <td ><strong>{facturaImpresa.totalComprobante}</strong></td>
+                            <td ><strong>{facturaImpresa.totalComprobanteSTR}</strong></td>
                             </tr>
 
                             <tr>
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.totalCambioPagar")}</strong></td>
-                            <td ><strong>{facturaImpresa.totalCambioPagar}</strong></td>
+                            <td ><strong>{facturaImpresa.totalCambioPagarSTR}</strong></td>
                             </tr>                            
                                                  
 
@@ -97,10 +98,15 @@
                         </table> 
                         
                         <br>
-                        <p  align="left" show = "{facturaImpresa.estado !=3 && facturaImpresa.estado !=4}">{$.i18n.prop("tikect.autorizado.parte.uno")}  <br>
+                        <p  align="left" show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 0}">{$.i18n.prop("tikect.autorizado.parte.uno")}  <br>
                                          {$.i18n.prop("tikect.autorizado.parte.dos")}   
                                             <br>{$.i18n.prop("tikect.autorizado.parte.tres")}
                                             <br>{$.i18n.prop("tikect.autorizado.parte.cuatro")}</p>
+                        <p  align="left" show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 1}">{$.i18n.prop("tikect.autorizado.no.factura.elec.parte.uno")}  <br>
+                                         {$.i18n.prop("tikect.autorizado.no.factura.elec.parte.dos")}   
+                                            <br>{$.i18n.prop("tikect.autorizado.no.factura.elec.parte.tres")}
+                                            <br>{$.i18n.prop("tikect.autorizado.no.factura.elec.parte.cuatro")}</p>
+
                         <br>
                         <div class="encabezado">{$.i18n.prop("tikect.final")}</div>           
                     </div>
@@ -288,7 +294,7 @@
 var self = this;
 self.facturaImpresa   = opts.factura;  
 self.detalles = []
-self.subTotalGeneral = 0
+
 self.titulo = ""
 self.claveParteUno =""
 self.claveParteDos =""
@@ -328,13 +334,6 @@ function consultaFactura(idFactura){
                     self.detalles = []
                     self.detalles =self.facturaImpresa.detalles
                    
-                    self.facturaImpresa.totalVenta       = redondearDecimales(self.facturaImpresa.totalVenta,5);
-                    self.facturaImpresa.totalDescuentos  = formatoDecimales(self.facturaImpresa.totalDescuentos,2);
-                    self.facturaImpresa.totalVentaNeta   = formatoDecimales(self.facturaImpresa.totalVentaNeta,2);
-                    self.facturaImpresa.totalImpuesto    = formatoDecimales(self.facturaImpresa.totalImpuesto,2);
-                    self.facturaImpresa.totalExento      = redondearDecimales(self.facturaImpresa.totalExento,5);
-                    self.facturaImpresa.totalComprobante = redondearDecimales(self.facturaImpresa.totalComprobante,0);
-                    self.facturaImpresa.totalCambioPagar = redondearDecimales(self.facturaImpresa.totalCambioPagar,5);
                     self.claveParteUno= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(0,24):""
                     self.claveParteDos= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(25,51):""
                     //detalles
@@ -349,10 +348,9 @@ function consultaFactura(idFactura){
                         elemen.montoTotal = redondearDecimales(elemen.montoTotal,0);
                          self.update()
                     })
-                   
-                     self.subTotal = 0
-                    self.update()
-                    getSubTotalGeneral()
+                   self.totalImpuestoServicioSTR = ""
+                   self.totalImpuestoServicioSTR =  formatoDecimales(self.totalImpuestoServicio,2)  
+                   self.update()
                     getMoneda()
                     __ComboTipoDocumentos()
                     buscarTipoDocumento()
@@ -370,11 +368,7 @@ function consultaFactura(idFactura){
                     self.update()
                   
                     });
-                    if(__valorNumerico(self.totalImpuestoServicio) > 0){
-                      self.subTotal = __valorNumerico(self.facturaImpresa.totalVenta) - __valorNumerico(self.totalImpuestoServicio)
-                    }else{
-                        self.subTotal = __valorNumerico(self.facturaImpresa.totalVenta) 
-                    }
+                  
                  
                      $('.imprimirModal').modal('show'); 
                 }
@@ -402,11 +396,7 @@ function getMoneda() {
     self.update()
 }
 
-function getSubTotalGeneral(){
-    var resultado = __valorNumerico(self.facturaImpresa.subTotal) + __valorNumerico(self.facturaImpresa.totalDescuentos)
-    self.subTotalGeneral = redondearDecimales(resultado,5)
-    self.update()
-}
+
 
 
 

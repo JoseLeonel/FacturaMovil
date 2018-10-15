@@ -11,22 +11,32 @@ public class KardexCommand {
 	private Long		id;
 
 	private Double		cantidadSolicitada;
+	
+	private String		cantidadSolicitadaSTR;
 
 	private Double		cantidadActual;
+	
+	private String		cantidadActualSTR;
 
 	private Double		costoActual;
+	private String		costoActualSTR;
 
 	private Double		totalCostoActual;
+	private String		totalCostoActualSTR;
 
 	private String		codigo;
 
 	private String		observacion;
 
 	private Double		cantidadNueva;
+	private String		cantidadNuevaSTR;
 
 	private Double		costoNuevo;
+	private String		costoNuevoSTR;
 
 	private Double		totalCostoNuevo;
+	
+	private String		totalCostoNuevoSTR;
 
 	private String		consecutivo;
 
@@ -60,6 +70,15 @@ public class KardexCommand {
 		this.updated_at = kardex.getUpdated_at();
 		this.articulo = kardex.getArticulo();
 		this.usuario = kardex.getUsuario();
+		
+		this.cantidadActualSTR = kardex.getCantidadActualSTR();
+		this.cantidadNuevaSTR = kardex.getCantidadNuevaSTR();
+		this.cantidadSolicitadaSTR = kardex.getCantidadSolicitadaSTR();
+		this.costoActualSTR = kardex.getCostoActualSTR();
+		this.costoNuevoSTR = kardex.getCostoNuevoSTR();
+		this.totalCostoActualSTR = kardex.getCostoActualSTR();
+		this.totalCostoNuevoSTR = kardex.getTotalCostoNuevoSTR();
+		
 
 	}
 
@@ -76,6 +95,118 @@ public class KardexCommand {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+
+
+	
+	public String getCantidadSolicitadaSTR() {
+		return cantidadSolicitadaSTR;
+	}
+
+
+
+
+	
+	public void setCantidadSolicitadaSTR(String cantidadSolicitadaSTR) {
+		this.cantidadSolicitadaSTR = cantidadSolicitadaSTR;
+	}
+
+
+
+
+	
+	public String getCantidadActualSTR() {
+		return cantidadActualSTR;
+	}
+
+
+
+
+	
+	public void setCantidadActualSTR(String cantidadActualSTR) {
+		this.cantidadActualSTR = cantidadActualSTR;
+	}
+
+
+
+
+	
+	public String getCostoActualSTR() {
+		return costoActualSTR;
+	}
+
+
+
+
+	
+	public void setCostoActualSTR(String costoActualSTR) {
+		this.costoActualSTR = costoActualSTR;
+	}
+
+
+
+
+	
+	public String getTotalCostoActualSTR() {
+		return totalCostoActualSTR;
+	}
+
+
+
+
+	
+	public void setTotalCostoActualSTR(String totalCostoActualSTR) {
+		this.totalCostoActualSTR = totalCostoActualSTR;
+	}
+
+
+
+
+	
+	public String getCantidadNuevaSTR() {
+		return cantidadNuevaSTR;
+	}
+
+
+
+
+	
+	public void setCantidadNuevaSTR(String cantidadNuevaSTR) {
+		this.cantidadNuevaSTR = cantidadNuevaSTR;
+	}
+
+
+
+
+	
+	public String getCostoNuevoSTR() {
+		return costoNuevoSTR;
+	}
+
+
+
+
+	
+	public void setCostoNuevoSTR(String costoNuevoSTR) {
+		this.costoNuevoSTR = costoNuevoSTR;
+	}
+
+
+
+
+	
+	public String getTotalCostoNuevoSTR() {
+		return totalCostoNuevoSTR;
+	}
+
+
+
+
+	
+	public void setTotalCostoNuevoSTR(String totalCostoNuevoSTR) {
+		this.totalCostoNuevoSTR = totalCostoNuevoSTR;
+	}
+
 
 
 

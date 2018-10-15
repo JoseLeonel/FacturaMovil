@@ -41,7 +41,10 @@ public class CompraEsperaCommand {
 	private Double							totalImpuesto;
 	private Double							totalDescuento;
 	private Double							subTotal;
-
+	private String							totalImpuestoSTR;
+	private String							totalDescuentoSTR;
+	private String							subTotalSTR;
+	private String							totalCompraSTR;
 	private Double							totalCompra;
 
 	private String							nota;
@@ -56,7 +59,7 @@ public class CompraEsperaCommand {
 		super();
 		this.id = compra.getId();
 		this.consecutivo = compra.getConsecutivo();
-		this.fechaCredito = compra.getFechaPago();
+		this.fechaCredito = compra.getFechaCredito();
 		this.fechaPago = compra.getFechaPago();
 		this.fechaCompra = compra.getFechaCompra();
 		this.fechaIngreso = compra.getFechaIngreso();
@@ -74,6 +77,10 @@ public class CompraEsperaCommand {
 		this.fechaIngresoSTR = compra.getFechaIngresoSTR();
 		this.fechaCreditoSTR = compra.getFechaCreditoSTR();
 		this.fechaPagoSTR = compra.getFechaPagoSTR();
+		this.totalDescuentoSTR = compra.getTotalDescuentoSTR();
+		this.totalImpuestoSTR = compra.getTotalImpuestoSTR();
+		this.subTotalSTR = compra.getSubTotalSTR();
+		this.totalCompraSTR = compra.getTotalCompraSTR();
 
 	}
 
@@ -94,6 +101,70 @@ public class CompraEsperaCommand {
 
 
 	
+	
+	
+	public String getTotalCompraSTR() {
+		return totalCompraSTR;
+	}
+
+
+
+
+	
+	public void setTotalCompraSTR(String totalCompraSTR) {
+		this.totalCompraSTR = totalCompraSTR;
+	}
+
+
+
+
+	public String getTotalImpuestoSTR() {
+		return totalImpuestoSTR;
+	}
+
+
+
+
+	
+	public void setTotalImpuestoSTR(String totalImpuestoSTR) {
+		this.totalImpuestoSTR = totalImpuestoSTR;
+	}
+
+
+
+
+	
+	public String getTotalDescuentoSTR() {
+		return totalDescuentoSTR;
+	}
+
+
+
+
+	
+	public void setTotalDescuentoSTR(String totalDescuentoSTR) {
+		this.totalDescuentoSTR = totalDescuentoSTR;
+	}
+
+
+
+
+	
+	public String getSubTotalSTR() {
+		return subTotalSTR;
+	}
+
+
+
+
+	
+	public void setSubTotalSTR(String subTotalSTR) {
+		this.subTotalSTR = subTotalSTR;
+	}
+
+
+
+
 	public String getFechaPagoSTR() {
 		return fechaPagoSTR;
 	}

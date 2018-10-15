@@ -6,6 +6,9 @@ public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																			= ResourceBundle.getBundle("factura");
 
+	// Empresa aplica factura Electronica
+	public static final Integer					NO_APLICA_FACTURA_ELECTRONICA												= 1;
+	public static final Integer					SI_APLICA_FACTURA_ELECTRONICA												= 0;
 //cantidad de dias de un credito minimo
 	public static final Integer					CANTIDAD_DIAS_MINIMO_CREDITO												= 1;
 	// Tipo de codigos de productos
@@ -363,5 +366,15 @@ public class Constantes {
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS						= "TOTAL_NETAS";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS					= "TOTAL_EXENTAS";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS					= "TOTAL_GRABADAS";
+
+	// Totales de cuentas por cobrar
+	public static final String					SP_TOTAL_CUENTA_COBRAR															= "SPTOTALFACTURAS";
+	public static final String					SP_TOTAL_CUENTA_COBRAR_IN_FECHA_INICIO							= "FECHA_INICIO";
+	public static final String					SP_TOTAL_CUENTA_COBRAR_IN_FECHA_FIN									= "FECHA_FIN";
+	public static final String					SP_TOTAL_CUENTA_COBRAR_IN_ID_EMPRESA								= "ID_EMPRESA";
+	public static final String					SP_TOTAL_CUENTA_COBRAR_IN_ID_CLIENTE								= "ID_CLIENTE";
+	public static final String					SP_TOTAL_CUENTA_COBRAR_OUT_TOTAL										= "TOTAL";
+	public static final String					SP_TOTAL_CUENTA_COBRAR_OUT_SALDO										= "TOTAL_SALDO";
+	public static final String					SP_TOTAL_CUENTA_COBRAR_OUT_ABONO										= "TOTAL_ABONO";
 
 }

@@ -20,7 +20,7 @@
                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label  >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
-                                    <div  class="form-group input-group date" data-provide="datepicker"    data-date-format="yyyy-mm-dd">
+                                    <div  class="form-group input-group date datepickerFechaInicial " data-provide="datepicker"    data-date-format="yyyy-mm-dd">
                                         <input type="text" class="form-control fechaInicio" id="fechaInicio"  name= "fechaInicio" readonly>
                                         <div class="input-group-addon">
                                             <span class="glyphicon glyphicon-th"></span>
@@ -32,7 +32,7 @@
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label  >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
-                                        <div  class="form-group input-group date" data-provide="datepicker"    data-date-format="yyyy-mm-dd">
+                                        <div  class="form-group input-group date datepickerFechaFinal" data-provide="datepicker"    data-date-format="yyyy-mm-dd">
                                             <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
@@ -51,10 +51,34 @@
                                 </div>  
                             </div>                      
                         </div>
+                        <div class= "row">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label  >{$.i18n.prop("titulo.total")} </label>
+                                    <input type="text" class="form-control total" id="total"  name= "total" readonly>
+                                </div>  
+                            </div>                             
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label  >{$.i18n.prop("titulo.abono")} </label>
+                                    <input type="text" class="form-control abono" id="abono"  name= "abono" readonly>
+                                </div>  
+                            </div>                             
+
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label  >{$.i18n.prop("titulo.saldo")} </label>
+                                    <input type="text" class="form-control saldo" id="saldo"  name= "saldo" readonly>
+                                </div>  
+                            </div>                             
+
+                        </div>
+
                     </form>  
                 </div>
             </div>
             <div class="col-xs-12 text-right">
+                <a   show={mostrarFiltros} class="fa fa-download" target="_blank" title="Descargar detalle transacciones" href="DescargarDetalleTotalFacturasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}"> Descargar</a>        
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
             	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
             </div>
@@ -71,7 +95,7 @@
             <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
                 <div class="box box-solid box-primary">
                     <div class="box-header with-border">
-                       <h1 class="box-title" ><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle")}{cuentaCobrar.id}  {$.i18n.prop("cuentaCobrar.total")}:₡{cuentaCobrar.total.toFixed(2)}  {$.i18n.prop("cuentaCobrar.totalSaldo")}:₡ {cuentaCobrar.totalSaldo.toFixed(2)} </h1>
+                       <h1 class="box-title" ><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle")}{cuentaCobrar.id}  {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.totalSTR}  {$.i18n.prop("cuentaCobrar.totalSaldo")}: {cuentaCobrar.totalSaldoSTR} </h1>
                     </div>
                     <div class="box-body">
                         <div class="planel-body" >
@@ -105,7 +129,7 @@
                                             </tr>
                                         </tfoot>
                                     </table>
-                                     <h2 class="pull-right"> {$.i18n.prop("cuentaCobrar.totalAbono")}: {cuentaCobrar.totalAbono.toFixed(2)} </h2>
+                                     <h2 class="pull-right"> {$.i18n.prop("cuentaCobrar.totalAbono")}: {cuentaCobrar.totalAbonoSTR} </h2>
                                 </div>    
                             </div>
                         </div>    
@@ -156,7 +180,7 @@
                         <div class="row">
                             <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label >{$.i18n.prop("abono.fechaPago")} <span class="requeridoDato">*</span></label>
-                                 <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="dd/mm/yyyy">
+                                 <div  class="form-group input-group date " data-provide="datepicker"   data-date-format="dd/mm/yyyy">
                                     <input type="text" class="form-control fechaPago" placeHolder ="{$.i18n.prop("abono.fechaPago")}" id="fechaPago" name="fechaPago"  value="{abono.fechaPago}"  readonly={abono.id > 0}>
                                     <div class="input-group-addon">
                                         <span class="glyphicon glyphicon-th"></span>
@@ -440,6 +464,18 @@
         __MantenimientoAgregarAbono()
         __verAbono()
         __Anular()
+         $('.datepickerFechaFinal').datepicker(
+       	{
+            format: 'yyyy-mm-dd',
+            todayHighlight:true,
+       	}
+         );
+        $('.datepickerFechaInicial').datepicker(
+        {
+            format: 'yyyy-mm-dd',
+            todayHighlight:true,
+        }
+        );
 
         window.addEventListener( "keydown", function(evento){
                 $(".errorServerSideJgrid").remove();
@@ -899,28 +935,11 @@ function __InformacionDataTable(){
 									return  __displayDate_detail(fechaPlazo);
                                  }
                             },
-                            {'data' : 'total'                 ,"name":"total"                   ,"title" : $.i18n.prop("cuentaCobrar.total")        ,"autoWidth" :false,
-                                "render":function(total,type, row){
-                                    var resultado = redondeoDecimales(total,2)
-									    return  resultado;
-                                 }
-                            },
-                            {'data' : 'totalAbono'            ,"name":"totalAbono"              ,"title" : $.i18n.prop("cuentaCobrar.totalAbono")   ,"autoWidth" :false,
-                                "render":function(totalAbono,type, row){
-                                    var resultado = redondeoDecimales(totalAbono,2)
-    							    return  resultado;
-                             }
-                            
-                            },
-                            {'data' : 'totalSaldo'            ,"name":"totalSaldo"              ,"title" : $.i18n.prop("cuentaCobrar.totalSaldo")   ,"autoWidth" :false,
-                                "render":function(totalSaldo,type, row){
-                                    var resultado = redondeoDecimales(totalSaldo,2)
-    							    return  resultado;
-                                 }
-                            
-                            },
-                            {'data' : 'estado'                ,"name":"estado"                  ,"title" : $.i18n.prop("cuentaCobrar.estado")       ,"autoWidth" :false},
-                            {'data' : 'id'                    ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
+                            {'data' : 'totalSTR'                 ,"name":"totalSTR"                   ,"title" : $.i18n.prop("cuentaCobrar.total")        ,"autoWidth" :false},
+                            {'data' : 'totalAbonoSTR'            ,"name":"totalAbonoSTR"              ,"title" : $.i18n.prop("cuentaCobrar.totalAbono")   ,"autoWidth" :false },
+                            {'data' : 'totalSaldoSTR'            ,"name":"totalSaldoSTR"              ,"title" : $.i18n.prop("cuentaCobrar.totalSaldo")   ,"autoWidth" :false},
+                            {'data' : 'estado'                   ,"name":"estado"                  ,"title" : $.i18n.prop("cuentaCobrar.estado")       ,"autoWidth" :false},
+                            {'data' : 'id'                       ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
                                       return __Opciones(id,type,row);
                                  }
@@ -1224,12 +1243,7 @@ function __InformacionTabla_lista_Abonos(){
                                        },
                                        {'data' : 'transferencia'  ,"name":"transferencia" ,"title" : $.i18n.prop("abono.transferencia")},
                                        {'data' : 'recibo'         ,"name":"recibo"        ,"title" : $.i18n.prop("abono.recibo")},
-                                       {'data' : 'total'          ,"name":"total"         ,"title" : $.i18n.prop("abono.total"),
-                                            "render":function(total,type, row){
-                                                return formatoDecimales(total,2);
-                                            }
-                                       
-                                       },
+                                       {'data' : 'totalSTR'       ,"name":"totalSTR"      ,"title" : $.i18n.prop("abono.total")},
                                        {'data' : 'estado'         ,"name":"estado"        ,"title" : $.i18n.prop("abono.estado")},
                                        {'data' : 'created_atSTR'  ,"name":"created_atSTR"    ,"title" : $.i18n.prop("abono.created_at")
                                        },

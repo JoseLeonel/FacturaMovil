@@ -19,11 +19,11 @@
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.cliente")}              </strong>{abono.cuentaCobrar.cliente.nombreCompleto}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.fechaPago")}            </strong>{abono.fechaPago}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.transferencia")}:       </strong>{abono.transferencia}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.totalEfectivo")}: </strong>{abono.totalEfectivo.toFixed(2)}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalTarjeta")}  : </strong>{abono.totalTarjeta.toFixed(2)}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.totalBanco")}   : </strong>{abono.totalBanco.toFixed(2)}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.total")}        : </strong>{abono.cuentaCobrar.total.toFixed(2)}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.saldo")}        : </strong>{abono.cuentaCobrar.totalSaldo.toFixed(2)}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.totalEfectivo")}: </strong>{abono.totalEfectivoSTR}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalTarjeta")}  : </strong>{abono.totalTarjetaSTR}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.totalBanco")}   : </strong>{abono.totalBancoSTR}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.total")}        : </strong>{abono.cuentaCobrar.totalSTR}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.saldo")}        : </strong>{abono.cuentaCobrar.totalSaldoSTR}<br></div>
                         <div class="encabezado" show='{abono.nota != ""}'><strong> {$.i18n.prop("imprimir.abono.nota")}         : </strong>{abono.nota}<br></div>
                         <br>
                     </div>

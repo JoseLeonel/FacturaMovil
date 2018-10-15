@@ -22,7 +22,7 @@
                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label  >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
-                                    <div  class="form-group input-group date" data-provide="datepicker"    data-date-format="yyyy-mm-dd">
+                                    <div  class="form-group input-group date datepickerFechaInicio" data-provide="datepicker"    data-date-format="yyyy-mm-dd">
                                         <input type="text" class="form-control fechaInicio" id="fechaInicio"  name= "fechaInicio" readonly>
                                         <div class="input-group-addon">
                                             <span class="glyphicon glyphicon-th"></span>
@@ -34,7 +34,7 @@
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label  >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
-                                        <div  class="form-group input-group date" data-provide="datepicker"    data-date-format="yyyy-mm-dd">
+                                        <div  class="form-group input-group date datepickerFechaFinal" data-provide="datepicker"    data-date-format="yyyy-mm-dd">
                                             <input type="text" class="form-control fechaFin" id="fechaFin"  name= "fechaFin" readonly>
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
@@ -154,7 +154,7 @@
                             <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                 <div class="form-group ">
                                     <label>{$.i18n.prop("compra.fecha.ingreso")}</label> 
-                                    <input type="text"  class="form-control"  value="{compra.fechaIngreso}" readonly>
+                                    <input type="text"  class="form-control"  value="{compra.fechaIngresoSTR}" readonly>
                                 </div>
                             </div>
                             <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
@@ -183,30 +183,25 @@
                                     <input type="text"  class="form-control"  value="{compra.descripcionEstado}" readonly>
                                 </div>
                             </div>
-                            <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                                <div class="form-group ">
-                                    <label>{$.i18n.prop("compra.linea.detalle.subTotal")}</label> 
-                                    <input type="text"  class="form-control"  value="{compra.subTotal}" readonly>
-                                </div>
-                            </div>
+                           
                         </div>   
                         <div class="row">
                             <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                 <div class="form-group ">
-                                    <label>{$.i18n.prop("compra.linea.detalle.descuento")}</label> 
-                                    <input type="text"  class="form-control"  value="{compra.totalDescuento}" readonly>
+                                    <label>{$.i18n.prop("compra.descuento")}</label> 
+                                    <input type="text"  class="form-control"  value="{compra.totalDescuentoSTR}" readonly>
                                 </div>
                             </div>
                             <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                 <div class="form-group ">
                                     <label>{$.i18n.prop("compra.linea.detalle.impuesto")}</label> 
-                                    <input type="text"  class="form-control"  value="{compra.totalImpuesto}" readonly>
+                                    <input type="text"  class="form-control"  value="{compra.totalImpuestoSTR}" readonly>
                                 </div>
                             </div>
                             <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                 <div class="form-group ">
                                     <label>{$.i18n.prop("compra.total")}</label> 
-                                    <input type="text"  class="form-control"  value="{compra.totalCompra}" readonly>
+                                    <input type="text"  class="form-control"  value="{compra.totalCompraSTR}" readonly>
                                 </div>
                             </div>
                         </div>   
@@ -228,9 +223,9 @@
                             <th style="width:20%;">{$.i18n.prop("compra.linea.detalle.descripcion")} </th>
                             <th >{$.i18n.prop("compra.linea.detalle.cantidad")}                      </th>
                             <th >{$.i18n.prop("compra.linea.detalle.costo")}                         </th>
-                            <th >{$.i18n.prop("compra.linea.detalle.descuento")}                     </th>
+                            <th >{$.i18n.prop("compra.descuento")}                     </th>
                             <th >{$.i18n.prop("compra.linea.detalle.impuesto")}                      </th>
-                            <th >{$.i18n.prop("compra.linea.detalle.subTotal")}                      </th>
+                            <th >{$.i18n.prop("compra.linea.detalle.total")}                      </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -242,18 +237,18 @@
                                 <input  id= "cantidadDetalle" class="form-control " type="number" placeholder="Cantidad Detalle" value = "{cantidad}"  readonly/>
                             </td>
                             <td class="text-right">
-                                <input   class="form-control" type="text"  value = " {costo.toFixed(2)}" readonly/>
+                                <input   class="form-control" type="text"  value = "{costo}" readonly/>
                             </td>
                             <td class="text-right">
-                                <input   class="form-control" type="text"  value = " {descuento.toFixed(2)}" readonly/>
+                                <input   class="form-control" type="text"  value = "{totalDescuento}" readonly/>
                             </td>
                                                         
                             <td class="text-right">
-                                <input  class="form-control" type="text"  value = " {impuesto.toFixed(2)}" readonly/>
+                                <input  class="form-control" type="text"  value = "{totalImpuesto}" readonly/>
                             </td>
 
                             <td class="text-right">
-                                <input  class="form-control" type="text"  value = " {montoTotalLinea.toFixed(2)}" readonly/>
+                                <input  class="form-control" type="text"  value = "{montoTotalLinea}" readonly/>
                             </td>
                         </tr>
                         </tbody>
@@ -267,25 +262,15 @@
                             <div    onclick = {__MostrarFormularioDePago} id="btnGrandePagar" class="head green well" style="color: #fff; font-size: 12px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
                                 <table id="pagarTable" width="100%">
                                     <tbody>
+                                                                    
                                         <tr>
                                             <td width="30%" id="">
-                                                <div id="pagarTitulo">{$.i18n.prop("compra.linea.detalle.subTotal")}</div>
+                                                <div id="pagarTitulo">{$.i18n.prop("compra.descuento")}</div>
                                             </td>
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show"> {compra.subTotal.toFixed(2)}</span>
-                                                </div>
-                                            </td>
-                                        </tr>                                            
-                                        <tr>
-                                            <td width="30%" id="">
-                                                <div id="pagarTitulo">{$.i18n.prop("compra.linea.detalle.descuento")}</div>
-                                            </td>
-                                            <td width="70%" id="">
-                                            
-                                                <div id="">
-                                                    <span class="label label-info textShadow" id="total-show"> {compra.totalDescuento.toFixed(2)}</span>
+                                                    <span class="label label-info textShadow" id="total-show"> {compra.totalDescuentoSTR}</span>
                                                 </div>
                                             </td>
                                         </tr>                                            
@@ -296,7 +281,7 @@
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show"> {compra.totalImpuesto.toFixed(2)}</span>
+                                                    <span class="label label-info textShadow" id="total-show"> {compra.totalImpuestoSTR}</span>
                                                 </div>
                                             </td>
                                         </tr>         
@@ -307,7 +292,7 @@
                                             <td width="70%" id="">
                                             
                                                 <div id="">
-                                                    <span class="label label-info textShadow" id="total-show"> {compra.totalCompra.toFixed(2)}</span>
+                                                    <span class="label label-info textShadow" id="total-show"> {compra.totalCompraSTR}</span>
                                                 </div>
                                             </td>
                                         </tr>                     
@@ -316,11 +301,7 @@
                             </div>
                         </article>
                     </aside>
-                    <section   class="lista-compras-espera">
-                        <div id="botones"  each={compras_espera.data}  onclick={__CargarCompraEspera}>
-                            <a href="#" class="compras-espera"  title="{proveedor !=null?proveedor.nombreCompleto:""}">C# {id}</a>
-                        </div>    
-                     </section >
+                    
 
                 </section>
                       
@@ -523,7 +504,6 @@ self.compra                = {
         tipoDocumento:0,
         formaPago:0,
         totalDescuento:0,
-        subTotal:0,  
         total:0,
         nota:""
     }              
@@ -537,6 +517,19 @@ self.on('mount',function(){
     agregarInputsCombos()
    
     __ListaProveedores()
+    $('.datepickerFechaFinal').datepicker(
+            {
+              format: 'yyyy-mm-dd',
+              todayHighlight:true,
+            }
+    );
+    $('.datepickerFechaInicio').datepicker(
+            {
+              format: 'yyyy-mm-dd',
+              todayHighlight:true,
+            }
+    );
+    
 
 })
 
@@ -708,12 +701,7 @@ function __InformacionDataTable(){
 	 							    }
                                
                                },
-                               {'data' :'totalCompra'         ,"name":"totalCompra"          ,"title" : $.i18n.prop("compra.listado.total")         ,"autoWidth" :true ,
-                                    "render":function(totalCompra,type, row){
-                                        
-                                        return totalCompra.toFixed(2);
-                                    }
-                               },
+                               {'data' :'totalCompraSTR'         ,"name":"totalCompraSTR"          ,"title" : $.i18n.prop("compra.listado.total")         ,"autoWidth" :true },
                                {'data' :'descripcionEstado'          ,"name":"descripcionEstado"           ,"title" : $.i18n.prop("compra.listado.estado")        ,"autoWidth" :true },
                                {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
@@ -772,11 +760,13 @@ function cargarDetallesCompra(){
             articulo_id     : e.articulo.id,
             codigo          : e.articulo.codigo,
             descripcion     : e.articulo.descripcion,
-            cantidad        : parseFloat(e.cantidad),
-            costo           : parseFloat(e.costo),
+            cantidad        : e.cantidadSTR,
+            costo           : e.costoSTR,
             impuesto        : e.impuesto,
             descuento       : e.descuento,
-            montoTotalLinea        : parseFloat(e.montoTotalLinea)
+            totalImpuesto   : e.totalImpuestoSTR,
+            totalDescuento  : e.totalDescuentoSTR,
+            montoTotalLinea : e.montoTotalLineaSTR
         });
     })
     self.mostrarCompra         = true

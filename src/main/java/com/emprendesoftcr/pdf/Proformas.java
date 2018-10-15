@@ -147,6 +147,7 @@ public class Proformas {
 		addText(cb, "Medio pago", font12, rightColTitle, sevenRow, Element.ALIGN_LEFT);
 		addText(cb, "Moneda", font12, rightColTitle, eightRow, Element.ALIGN_LEFT);
 		addText(cb, "Tipo cambio ", font12, rightColTitle, nineRow, Element.ALIGN_LEFT);
+		addText(cb, "Nota ", font12, PageSize.TABLOID.rotate().getWidth() - 550, PageSize.TABLOID.rotate().getHeight() - 170, Element.ALIGN_LEFT);
 		//
 		cb.setColorFill(BaseColor.BLACK);
 		//
@@ -163,6 +164,7 @@ public class Proformas {
 		addText(cb, facturaElectronica.getMedioEfectivo() != null ? facturaElectronica.getMedioEfectivo() : Constantes.EMPTY, font12, rightColContent, sevenRow, Element.ALIGN_LEFT);
 		addText(cb, facturaElectronica.getMoneda() != null ? facturaElectronica.getMoneda() : Constantes.EMPTY, font12, rightColContent, eightRow, Element.ALIGN_LEFT);
 		addText(cb, facturaElectronica.getTipoCambio() != null ? facturaElectronica.getTipoCambio() : Constantes.EMPTY, font12, rightColContent, nineRow, Element.ALIGN_LEFT);
+		addText(cb, facturaElectronica.get_nota() != null?facturaElectronica.get_nota().length() >0?facturaElectronica.get_nota().trim():Constantes.EMPTY:Constantes.EMPTY, font12, PageSize.TABLOID.rotate().getWidth() - 446, PageSize.TABLOID.rotate().getHeight() - 170, Element.ALIGN_LEFT);
 		cb.setColorFill(BaseColor.BLACK);
 
 	}
@@ -272,11 +274,11 @@ public class Proformas {
 				addText(cb, detalleFacturaElectronica.get(i).getDescripcion(), font, col3, row1, Element.ALIGN_LEFT);
 				addText(cb, detalleFacturaElectronica.get(i).getUnidad(), font, colUnidad, row1, Element.ALIGN_RIGHT);
 				addText(cb, String.valueOf(detalleFacturaElectronica.get(i).getCantidad()), font, col4, row1, Element.ALIGN_RIGHT);
-				addText(cb, Utils.formatearNumeroListados(detalleFacturaElectronica.get(i).getPrecioU(),2), font, col5, row1, Element.ALIGN_RIGHT);
-				addText(cb, Utils.formatearNumeroListados(detalleFacturaElectronica.get(i).getSubtotal(),2), font, col8, row1, Element.ALIGN_RIGHT);
-				addText(cb, Utils.formatearNumeroListados(detalleFacturaElectronica.get(i).getTarifaIva(),2), font, col9, row1, Element.ALIGN_RIGHT);
-				addText(cb, Utils.formatearNumeroListados(detalleFacturaElectronica.get(i).getImpuesto(),2), font, col10, row1, Element.ALIGN_RIGHT);
-				addText(cb, Utils.formatearNumeroListados(detalleFacturaElectronica.get(i).getTotal(),2), font, col12, row1, Element.ALIGN_RIGHT);
+				addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getPrecioU()), font, col5, row1, Element.ALIGN_RIGHT);
+				addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getSubtotal()), font, col8, row1, Element.ALIGN_RIGHT);
+				addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getTarifaIva()), font, col9, row1, Element.ALIGN_RIGHT);
+				addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getImpuesto()), font, col10, row1, Element.ALIGN_RIGHT);
+				addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getTotal()), font, col12, row1, Element.ALIGN_RIGHT);
 				//
 				DateFormat fechaCompleta = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 				addText(cb, "Emitida  a las " + fechaCompleta.format(new Date()) + " horas ,  se le recuerda que los montos estan sujetos a cambio en el plazo establecido(8 dias)", font, col20, row20, Element.ALIGN_LEFT);
@@ -291,11 +293,11 @@ public class Proformas {
 				addText(cb, detalleFacturaElectronica.get(i).getDescripcion(), font, col3, rowDinamico, Element.ALIGN_LEFT);
 				addText(cb, detalleFacturaElectronica.get(i).getUnidad(), font, colUnidad, rowDinamico, Element.ALIGN_RIGHT);
 				addText(cb, String.valueOf(detalleFacturaElectronica.get(i).getCantidad()), font, col4, rowDinamico, Element.ALIGN_RIGHT);
-				addText(cb,Utils.formatearNumeroListados(detalleFacturaElectronica.get(i).getPrecioU(),2), font, col5, rowDinamico, Element.ALIGN_RIGHT);
-				addText(cb, Utils.formatearNumeroListados(detalleFacturaElectronica.get(i).getSubtotal(),2), font, col8, rowDinamico, Element.ALIGN_RIGHT);
-				addText(cb, Utils.formatearNumeroListados(detalleFacturaElectronica.get(i).getTarifaIva(),2), font, col9, rowDinamico, Element.ALIGN_RIGHT);
-				addText(cb, Utils.formatearNumeroListados(detalleFacturaElectronica.get(i).getImpuesto(),2), font, col10, rowDinamico, Element.ALIGN_RIGHT);
-				addText(cb, Utils.formatearNumeroListados(detalleFacturaElectronica.get(i).getTotal(),2), font, col12, rowDinamico, Element.ALIGN_RIGHT);
+				addText(cb,Utils.formateadorMiles(detalleFacturaElectronica.get(i).getPrecioU()), font, col5, rowDinamico, Element.ALIGN_RIGHT);
+				addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getSubtotal()), font, col8, rowDinamico, Element.ALIGN_RIGHT);
+				addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getTarifaIva()), font, col9, rowDinamico, Element.ALIGN_RIGHT);
+				addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getImpuesto()), font, col10, rowDinamico, Element.ALIGN_RIGHT);
+				addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getTotal()), font, col12, rowDinamico, Element.ALIGN_RIGHT);
 
 			}
 		}
@@ -354,12 +356,12 @@ public class Proformas {
 			exento = exento + (double) Math.round(detalleFacturaElectronica.get(i).getImpuesto() ==  Constantes.ZEROS_DOUBLE?detalleFacturaElectronica.get(i).getTotal() * 100000d:Constantes.ZEROS_DOUBLE) / 100000d;
 			total = total + (double) Math.round(detalleFacturaElectronica.get(i).getTotal() * 100000d) / 100000d;
 		}
-		addText(cb, Utils.formatearNumeroListados(monto,2), font, col1, row2, Element.ALIGN_RIGHT);
-		addText(cb, Utils.formatearNumeroListados(descuento,2), font, col2, row2, Element.ALIGN_RIGHT);
-		addText(cb, Utils.formatearNumeroListados(subTotal,2), font, col3, row2, Element.ALIGN_RIGHT);
-		addText(cb, Utils.formatearNumeroListados(impuesto,2), font, col4, row2, Element.ALIGN_RIGHT);
-		addText(cb, Utils.formatearNumeroListados(exento,2), font, col5, row2, Element.ALIGN_RIGHT);
-		addText(cb, Utils.formatearNumeroListados(total,2), fontB, col6, row2, Element.ALIGN_RIGHT);
+		addText(cb, Utils.formateadorMiles(monto), font, col1, row2, Element.ALIGN_RIGHT);
+		addText(cb, Utils.formateadorMiles(descuento), font, col2, row2, Element.ALIGN_RIGHT);
+		addText(cb, Utils.formateadorMiles(subTotal), font, col3, row2, Element.ALIGN_RIGHT);
+		addText(cb, Utils.formateadorMiles(impuesto), font, col4, row2, Element.ALIGN_RIGHT);
+		addText(cb, Utils.formateadorMiles(exento), font, col5, row2, Element.ALIGN_RIGHT);
+		addText(cb, Utils.formateadorMiles(total), fontB, col6, row2, Element.ALIGN_RIGHT);
 
 	}
 

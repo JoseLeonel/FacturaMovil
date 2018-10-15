@@ -53,8 +53,6 @@ public class DetalleCompra implements Serializable {
 	@Column(name = "cantidad")
 	private Double						cantidad;
 
-	@Column(name = "porcentaje_impuesto")
-	private Double						porcentajeImpuesto;
 
 	@Column(name = "total_impuesto")
 	private Double						totalImpuesto;
@@ -109,20 +107,18 @@ public class DetalleCompra implements Serializable {
 		this.totalDescuento = Utils.roundFactura(detalleCompraCommand.getTotalDescuento() !=null?detalleCompraCommand.getTotalDescuento():Constantes.ZEROS_DOUBLE,5);
 		this.totalImpuesto = Utils.roundFactura(detalleCompraCommand.getTotalImpuesto() !=null?detalleCompraCommand.getTotalImpuesto():Constantes.ZEROS_DOUBLE,5);
 		this.montoTotalLinea = Utils.roundFactura(detalleCompraCommand.getMontoTotalLinea() !=null?detalleCompraCommand.getMontoTotalLinea():Constantes.ZEROS_DOUBLE,5);
-		this.porcentajeImpuesto = Utils.roundFactura(detalleCompraCommand.getPorcentajeImpuesto() !=null?detalleCompraCommand.getPorcentajeImpuesto():Constantes.ZEROS_DOUBLE,5);
 		
 
 		this.precio = detalleCompraCommand.getPrecio();
 	}
 
-	public DetalleCompra(Long id, Integer numeroLinea, Double costo, Double precio, Double cantidad, Double porcentajeImpuesto, Double totalImpuesto, Double totalDescuento, Double impuesto, Double descuento, Double montoTotalLinea, Date created_at, Date updated_at, Compra compra, Articulo articulo) {
+	public DetalleCompra(Long id, Integer numeroLinea, Double costo, Double precio, Double cantidad, Double totalImpuesto, Double totalDescuento, Double impuesto, Double descuento, Double montoTotalLinea, Date created_at, Date updated_at, Compra compra, Articulo articulo) {
 		super();
 		this.id = id;
 		this.numeroLinea = numeroLinea;
 		this.costo = costo;
 		this.precio = precio;
 		this.cantidad = cantidad;
-		this.porcentajeImpuesto = porcentajeImpuesto;
 		this.totalImpuesto = totalImpuesto;
 		this.totalDescuento = totalDescuento;
 		this.impuesto = impuesto;
@@ -157,6 +153,10 @@ public class DetalleCompra implements Serializable {
 	public void setCosto(Double costo) {
 		this.costo = costo;
 	}
+	
+	public String getCostoSTR() {
+		return Utils.formateadorMiles(this.costo);
+	}
 
 	public Double getCantidad() {
 		return cantidad;
@@ -165,6 +165,10 @@ public class DetalleCompra implements Serializable {
 	public void setCantidad(Double cantidad) {
 		this.cantidad = cantidad;
 	}
+	
+	public String getCantidadSTR() {
+		return Utils.formateadorMiles(this.cantidad);
+	}
 
 	public Double getImpuesto() {
 		return impuesto;
@@ -172,6 +176,10 @@ public class DetalleCompra implements Serializable {
 
 	public void setImpuesto(Double impuesto) {
 		this.impuesto = impuesto;
+	}
+	
+	public String getImpuestoSTR() {
+		return Utils.formateadorMiles(this.impuesto);
 	}
 
 	public Double getDescuento() {
@@ -182,13 +190,10 @@ public class DetalleCompra implements Serializable {
 		this.descuento = descuento;
 	}
 
-	public Double getPorcentajeImpuesto() {
-		return porcentajeImpuesto;
+	public String getDescuentoSTR() {
+		return Utils.formateadorMiles(this.descuento);
 	}
 
-	public void setPorcentajeImpuesto(Double porcentajeImpuesto) {
-		this.porcentajeImpuesto = porcentajeImpuesto;
-	}
 
 	public Double getTotalImpuesto() {
 		return totalImpuesto;
@@ -198,12 +203,20 @@ public class DetalleCompra implements Serializable {
 		this.totalImpuesto = totalImpuesto;
 	}
 
+	public String getTotalImpuestoSTR() {
+		return Utils.formateadorMiles(this.totalImpuesto);
+	}
+	
 	public Double getTotalDescuento() {
 		return totalDescuento;
 	}
 
 	public void setTotalDescuento(Double totalDescuento) {
 		this.totalDescuento = totalDescuento;
+	}
+	
+	public String getTotalDescuentoSTR() {
+		return Utils.formateadorMiles(this.totalDescuento);
 	}
 
 	public Double getMontoTotalLinea() {
@@ -213,7 +226,10 @@ public class DetalleCompra implements Serializable {
 	public void setMontoTotalLinea(Double montoTotalLinea) {
 		this.montoTotalLinea = montoTotalLinea;
 	}
-
+	public String getMontoTotalLineaSTR() {
+		return Utils.formateadorMiles(this.montoTotalLinea);
+	}
+	
 	public Date getCreated_at() {
 		return created_at;
 	}

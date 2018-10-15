@@ -141,8 +141,12 @@ public class Empresa implements Serializable {
 	
 	@Column(name = "vuelto_imprimir")
 	private Integer vueltoImprimir;
+	
+	@Column(name = "nofactura_elec")
+	private Integer noFacturaElectronica;
+	
 
-	public Empresa(Integer id, String nombre, String nombreComercial, String tipoCedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, Integer codigoSeguridad, String usuarioEnvioComprobante, String passwordEnvioComprobante, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String tieneInventario, String enviarTiquete, String estadoProduccion, String tieneLector, String cambiarPrecio,Integer vueltoImprimir,String abreviaturaEmpresa) {
+	public Empresa(Integer id, String nombre, String nombreComercial, String tipoCedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, Integer codigoSeguridad, String usuarioEnvioComprobante, String passwordEnvioComprobante, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String tieneInventario, String enviarTiquete, String estadoProduccion, String tieneLector, String cambiarPrecio,Integer vueltoImprimir,String abreviaturaEmpresa, Integer noFacturaElectronica) {
 		super();
 		this.id = id;
 		this.numeroConsecutivo = numeroConsecutivo;
@@ -180,6 +184,7 @@ public class Empresa implements Serializable {
 		this.estadoProduccion = estadoProduccion;
 		this.tieneLector = tieneLector;
 		this.vueltoImprimir = vueltoImprimir;
+		this.noFacturaElectronica = noFacturaElectronica;
 	}
 
 	public Empresa() {
@@ -501,5 +506,17 @@ public class Empresa implements Serializable {
 	public void setRechazadoConsecutivo(Integer rechazadoConsecutivo) {
 		this.rechazadoConsecutivo = rechazadoConsecutivo;
 	}
+
+	
+	public Integer getNoFacturaElectronica() {
+		return noFacturaElectronica;
+	}
+
+	
+	public void setNoFacturaElectronica(Integer noFacturaElectronica) {
+		this.noFacturaElectronica = noFacturaElectronica;
+	}
+	
+	
 
 }

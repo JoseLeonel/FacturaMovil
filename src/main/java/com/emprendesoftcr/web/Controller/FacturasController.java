@@ -142,6 +142,7 @@ public class FacturasController {
 																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
 																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
 																																																			facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
+																																																			facturaElectronica.set_nota(d.getNota() ==null?Constantes.EMPTY:d.getNota());
 																																																			// Cliente
 																																																			// if (!d.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE))
 																																																			// {
@@ -376,7 +377,12 @@ public class FacturasController {
 		Collection<Attachment> attachments = createAttachments(attachment("FacturasMensuales", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
 		// Se prepara el correo
-		String from = "FISCO_No_Reply@emprendesoftcr.com";
+		String from = "FacturasEmitidas@emprendesoftcr.com";
+		if(usuario.getEmpresa().getAbreviaturaEmpresa() !=null) {
+			if(!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+				from =  usuario.getEmpresa().getAbreviaturaEmpresa()+"_FacturasEmitidas" + "_No_Reply@emprendesoftcr.com";
+			}
+		}
 		String subject = "Facturas dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
 
 		ArrayList<String> listaCorreos = new ArrayList<>();
@@ -748,7 +754,6 @@ public class FacturasController {
 
 	private RespuestaServiceValidator<?> crearFactura(FacturaCommand facturaCommand, BindingResult result, Usuario usuario) {
 		try {
-
 			facturaCommand.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
 			facturaCommand.setTotalEfectivo(facturaCommand.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalEfectivo());
 			facturaCommand.setTotalTarjeta(facturaCommand.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalTarjeta());
@@ -912,11 +917,11 @@ public class FacturasController {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
 
-			 Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			 //Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 			// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 			// criptografica desde linux
-			 certificadoBo.agregar(usuario.getEmpresa(),"","");
+			 //certificadoBo.agregar(usuario.getEmpresa(),"","");
 			// usuario.getEmpresa().getClaveLlaveCriptografica().toString(),
 			// usuario.getEmpresa().getNombreLlaveCriptografica());
 			// String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);

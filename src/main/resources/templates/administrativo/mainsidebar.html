@@ -30,7 +30,7 @@
 		            </a>
 		            <ul class="treeview-menu">
 		                <li><a href="/ListarCategorias"     sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i class="fa fa-circle-o"></i> Categorias       </a></li>
-		                <li><a href="/ListarMarcas"         sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante')"><i class="fa fa-circle-o"></i> Marcas           </a></li>
+		                <li><a href="/ListarMarcas"         sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i class="fa fa-circle-o"></i> Marcas           </a></li>
 		                <li><a href="/ListarMotivoSalidas"  sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante')"><i class="fa fa-circle-o"></i> Motivo de Salidas</a></li>
 		                <li><a href="/ListarMotivoEntradas" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante')"><i class="fa fa-circle-o"></i> Motivo de Entradas</a></li>
 		                <li><a href="/ListarArticulos"      sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i class="fa fa-circle-o"></i> Articulos        </a></li>
@@ -38,7 +38,7 @@
 		            </ul>
 		        </li>
 		        
-        <li class="active treeview" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante')">
+        <li class="active treeview" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')">
             <a href="/CambiarPrecio">
                 <i class="fa fa-pencil-square"></i> <span>Cambio Precio</span>
             </a>
@@ -84,7 +84,7 @@
             </ul>
         </li>
         
-         <li class="treeview"  sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante')">
+         <li class="treeview"  sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')">
             <a href="#">
                 <i class="fa fa-unlock"></i>
                 <span>Caja</span>
@@ -97,7 +97,7 @@
             </ul>
         </li>
         
- 		<li class="active treeview" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')">
+ 		<li class="active treeview" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Servicios','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')">
             <a href="/ListarTipoCambios">
                 <i class="fa fa-balance-scale"></i> <span>Tipo Cambio</span>
             </a>
@@ -111,7 +111,7 @@
             <ul class="treeview-menu">
                 <li><a href="/ListaFacturas" sec:authorize="hasAnyAuthority('Administrador_Sistema','usuario_vendedor','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Cajero')"><i class="fa fa-circle-o"></i>Listado de Facturas</a></li>
                 <li><a href="/ListaCompras" sec:authorize="hasAnyAuthority('Administrador_Cajero','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante')"><i  class="fa fa-circle-o"></i>Listado de compras</a></li>
-                <li><a href="/TotalFacturas"  sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Sistema','Administrador_Empresa')"><i class="fa fa-circle-o"></i>Totales facturas mensuales</a></li>
+                <li><a href="/TotalFacturas"  sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios')"><i class="fa fa-circle-o"></i>Totales facturas mensuales</a></li>
             </ul>
         </li>
         <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Restaurante','Administrador_temporal')">

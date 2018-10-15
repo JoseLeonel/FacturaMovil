@@ -299,7 +299,9 @@ public class Factura implements Serializable {
 	public void setTotalImpuestoServicio(Double totalImpuestoServicio) {
 		this.totalImpuestoServicio = totalImpuestoServicio;
 	}
-
+	public String getTotalImpuestoServicioSTR() {
+		return Utils.formateadorMiles(this.totalImpuestoServicio);
+	}
 	public Long getId() {
 		return id;
 	}
@@ -403,7 +405,15 @@ public class Factura implements Serializable {
 	public void setSubTotal(Double subTotal) {
 		this.subTotal = subTotal;
 	}
-
+	
+	public String getSubTotalGeneralSTR() {
+		Double valorSubTotal = this.subTotal !=null?this.subTotal:Constantes.ZEROS;
+		Double valorDescuento = this.totalDescuentos !=null?this.totalDescuentos:Constantes.ZEROS;
+		return Utils.formateadorMiles(valorSubTotal+valorDescuento);
+	}
+	public String getSubTotalSTR() {
+		return Utils.formateadorMiles(this.subTotal);
+	}
 	public Double getTotalTransporte() {
 		return totalTransporte;
 	}
@@ -443,7 +453,11 @@ public class Factura implements Serializable {
 	public void setTotalMercanciasExentas(Double totalMercanciasExentas) {
 		this.totalMercanciasExentas = totalMercanciasExentas;
 	}
+	public String getTotalMercanciasExentasSTR() {
+		return Utils.formateadorMiles(this.totalMercanciasExentas);
+	}
 
+	
 	public Double getTotalGravado() {
 		return totalGravado;
 	}
@@ -452,6 +466,10 @@ public class Factura implements Serializable {
 		this.totalGravado = totalGravado;
 	}
 
+	public String getTotalGravadoSTR() {
+		return Utils.formateadorMiles(this.totalGravado);
+	}
+	
 	public Double getTotalExento() {
 		return totalExento;
 	}
@@ -459,7 +477,11 @@ public class Factura implements Serializable {
 	public void setTotalExento(Double totalExento) {
 		this.totalExento = totalExento;
 	}
+	public String getTotalExentoSTR() {
+		return Utils.formateadorMiles(this.totalExento);
+	}
 
+	
 	public Double getTotalVenta() {
 		return totalVenta;
 	}
@@ -467,13 +489,18 @@ public class Factura implements Serializable {
 	public void setTotalVenta(Double totalVenta) {
 		this.totalVenta = totalVenta;
 	}
-
+	public String getTotalVentaSTR() {
+		return Utils.formateadorMiles(this.totalVenta);
+	}
 	public Double getTotalDescuentos() {
 		return totalDescuentos;
 	}
 
 	public void setTotalDescuentos(Double totalDescuentos) {
 		this.totalDescuentos = totalDescuentos;
+	}
+	public String getTotalDescuentosSTR() {
+		return Utils.formateadorMiles(this.totalDescuentos);
 	}
 
 	public Double getTotalVentaNeta() {
@@ -483,7 +510,9 @@ public class Factura implements Serializable {
 	public void setTotalVentaNeta(Double totalVentaNeta) {
 		this.totalVentaNeta = totalVentaNeta;
 	}
-
+	public String getTotalVentaNetaSTR() {
+		return Utils.formateadorMiles(this.totalVentaNeta);
+	}
 	public Double getTotalImpuesto() {
 		return totalImpuesto;
 	}
@@ -491,7 +520,10 @@ public class Factura implements Serializable {
 	public void setTotalImpuesto(Double totalImpuesto) {
 		this.totalImpuesto = totalImpuesto;
 	}
-
+	public String getTotalImpuestoSTR() {
+		return Utils.formateadorMiles(this.totalImpuesto);
+	}
+	
 	public Double getTotalComprobante() {
 		return totalComprobante;
 	}
@@ -499,13 +531,18 @@ public class Factura implements Serializable {
 	public void setTotalComprobante(Double totalComprobante) {
 		this.totalComprobante = totalComprobante;
 	}
-
+	
+	
 	public Double getTotalEfectivo() {
 		return totalEfectivo;
 	}
 
 	public void setTotalEfectivo(Double totalEfectivo) {
 		this.totalEfectivo = totalEfectivo;
+	}
+	
+	public String getTotalEfectivoSTR() {
+		return Utils.formateadorMiles(this.totalEfectivo);
 	}
 
 	public Double getTotalTarjeta() {
@@ -516,6 +553,10 @@ public class Factura implements Serializable {
 		this.totalTarjeta = totalTarjeta;
 	}
 
+	public String getTotalTarjetaSTR() {
+		return Utils.formateadorMiles(this.totalTarjeta);
+	}
+
 	public Double getTotalBanco() {
 		return totalBanco;
 	}
@@ -523,13 +564,19 @@ public class Factura implements Serializable {
 	public void setTotalBanco(Double totalBanco) {
 		this.totalBanco = totalBanco;
 	}
-
+	public String getTotalBancoSTR() {
+		return Utils.formateadorMiles(this.totalBanco);
+	}
 	public Double getTotalCredito() {
 		return totalCredito;
 	}
 
 	public void setTotalCredito(Double totalCredito) {
 		this.totalCredito = totalCredito;
+	}
+	
+	public String getTotalCreditoSTR() {
+		return Utils.formateadorMiles(this.totalCredito);
 	}
 
 	public Double getMontoCambio() {
@@ -540,6 +587,9 @@ public class Factura implements Serializable {
 		this.montoCambio = montoCambio;
 	}
 
+	public String getMontoCambioSTR() {
+		return Utils.formateadorMiles(this.montoCambio);
+	}
 	public Double getTotalCambio() {
 		return totalCambio;
 	}
@@ -548,12 +598,18 @@ public class Factura implements Serializable {
 		this.totalCambio = totalCambio;
 	}
 
+	public String getTotalCambioSTR() {
+		return Utils.formateadorMiles(this.totalCambio);
+	}
 	public Double getTotalCambioPagar() {
 		return totalCambioPagar;
 	}
 
 	public void setTotalCambioPagar(Double totalCambioPagar) {
 		this.totalCambioPagar = totalCambioPagar;
+	}
+	public String getTotalCambioPagarSTR() {
+		return Utils.formateadorMiles(this.totalCambioPagar);
 	}
 
 	public String getCodigoMoneda() {
@@ -765,5 +821,15 @@ public class Factura implements Serializable {
 	public void setMesa(Mesa mesa) {
 		this.mesa = mesa;
 	}
+	
+	public String getTotalComprobanteSTR() {
+		return Utils.formateadorMiles(this.totalComprobante);
+	}
+	
+	public String getTotalDescuentoSTR() {
+		return Utils.formateadorMiles(this.totalDescuentos);
+	}
+	
+	
 
 }

@@ -1,5 +1,7 @@
 package com.emprendesoftcr.Bo.Impl;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -7,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.CuentaCobrarBo;
 import com.emprendesoftcr.Dao.CuentaCobrarDao;
+import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.CuentaCobrar;
+import com.emprendesoftcr.web.command.TotalCuentaPorCobrarCommand;
 
 /**
  * cuentas por cobrar que se debe cobrar a los clientes CuentaCobrarBoImpl.
@@ -44,6 +48,10 @@ public class CuentaCobrarBoImpl implements CuentaCobrarBo {
 		return cuentaCobrarDao.buscar(id);
 	}
 
+	@Override
+	public TotalCuentaPorCobrarCommand sumarCuentasPorCobrar(Date fechaInicio, Date fechaFinal, Integer idEmpresa, Cliente cliente) {
+		return cuentaCobrarDao.sumarCuentasPorCobrar(fechaInicio, fechaFinal, idEmpresa,cliente);
+	}
 	
 
 }

@@ -150,7 +150,6 @@
      text-shadow: 0px 0px 1px #ffffff;
      font-style: italic;
      text-align: left;
-     padding-left: 20px;
      line-height: 30px;
 }
  .tamanoLetraTotales{
@@ -178,7 +177,7 @@
  #btnGrandePagar,#btnGrandePagar2{
      cursor: pointer;
      padding: 0px;
-     margin: 10px;
+     margin: 5px;
      border: none;
      text-align: center !important;
      background-color: #6dca42 !important;
@@ -212,16 +211,39 @@
 }
  .contenedor-factura {
      display:flex;
+     border: 1px solid #3c8dbc;
+     background: #ffffff;
      width:100%;
-     margin :auto;
+     margin:2;
+     flex-wrap: no-wrap;
+     
 }
+ .contenedor-factura .row{
+  margin-left: 0px !important;
+ }
+
  .cabecera-izquierda {
-     margin-right:5%;
-     width:85%;
-    disabled 
+ width:85%;
+ margin:2;
 }
+
  .cabecera-derecha {
-     width:25%;
+ width:25%;
+}
+/* Medium screens */
+@media all and (max-width: 800px) {
+  .navigation {
+    /* When on medium sized screens, we center it by evenly distributing empty space around items */
+    justify-content: space-around;
+  }
+}
+
+/* Small screens */
+@media all and (max-width: 500px) {
+  .navigation {
+    /* On small screens, we are no longer using row direction but column */
+    flex-direction: column;
+  }
 }
  .contenedor-detalle {
      display:flex;

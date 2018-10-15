@@ -19,6 +19,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -223,6 +224,10 @@ public class Detalle implements Serializable {
 	public void setPrecioUnitario(Double precioUnitario) {
 		this.precioUnitario = precioUnitario;
 	}
+	
+	public String getPrecioUnitarioSTR() {
+		return Utils.formateadorMiles(this.precioUnitario);
+	}
 
 	public Double getCantidad() {
 		return cantidad;
@@ -232,12 +237,18 @@ public class Detalle implements Serializable {
 		this.cantidad = cantidad;
 	}
 
+	public String getCantidadSTR() {
+		return Utils.formateadorMiles(this.cantidad);
+	}
 	public Double getMontoTotal() {
 		return montoTotal;
 	}
 
 	public void setMontoTotal(Double montoTotal) {
 		this.montoTotal = montoTotal;
+	}
+	public String getMontoTotalSTR() {
+		return Utils.formateadorMiles(this.montoTotal);
 	}
 
 	public Double getMontoDescuento() {
@@ -246,6 +257,9 @@ public class Detalle implements Serializable {
 
 	public void setMontoDescuento(Double montoDescuento) {
 		this.montoDescuento = montoDescuento;
+	}
+	public String getMontoDescuentoSTR() {
+		return Utils.formateadorMiles(this.montoDescuento);
 	}
 
 	public String getNaturalezaDescuento() {
@@ -263,7 +277,11 @@ public class Detalle implements Serializable {
 	public void setSubTotal(Double subTotal) {
 		this.subTotal = subTotal;
 	}
+	public String getSubTotalSTR() {
+		return Utils.formateadorMiles(this.subTotal);
+	}
 
+	
 	public Double getImpuesto() {
 		return impuesto;
 	}
@@ -280,12 +298,20 @@ public class Detalle implements Serializable {
 		this.montoImpuesto = montoImpuesto;
 	}
 
+	public String getMontoImpuestoSTR() {
+		return Utils.formateadorMiles(this.montoImpuesto);
+	}
+	
 	public Double getMontoTotalLinea() {
 		return montoTotalLinea;
 	}
 
 	public void setMontoTotalLinea(Double montoTotalLinea) {
 		this.montoTotalLinea = montoTotalLinea;
+	}
+	
+	public String getMontoTotalLineaSTR() {
+		return Utils.formateadorMiles(this.montoTotalLinea);
 	}
 
 	public Double getGanancia() {

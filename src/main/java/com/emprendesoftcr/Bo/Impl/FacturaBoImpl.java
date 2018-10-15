@@ -275,9 +275,11 @@ public class FacturaBoImpl implements FacturaBo {
 
 			// Generar el consecutivo de venta
 			if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-
 				factura.setNumeroConsecutivo(empresaDao.generarConsecutivoFactura(facturaCommand.getEmpresa(), usuario, factura));
-				factura.setClave(empresaDao.generaClaveFacturaTributacion(factura.getEmpresa(), factura.getNumeroConsecutivo(), FacturaElectronicaUtils.COMPROBANTE_ELECTRONICO_NORMAL));
+
+				if(factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)){
+					factura.setClave(empresaDao.generaClaveFacturaTributacion(factura.getEmpresa(), factura.getNumeroConsecutivo(), FacturaElectronicaUtils.COMPROBANTE_ELECTRONICO_NORMAL));
+				}
 			}
 			factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_EN_PROCESOS);
 			if (factura.getId() == null) {
@@ -350,7 +352,7 @@ public class FacturaBoImpl implements FacturaBo {
 					detalle.setUnidadMedida(articulo.getUnidadMedida());
 					detalle.setTipoImpuesto(articulo.getTipoImpuesto());
 					// Se aplica el redondeo hasta que se facture porque puede ser venta en espera y se necesita la presicion de los decimales
-					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)  ) {
 
 						detalle.setMontoDescuento(detalle.getMontoDescuento() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoDescuento(), 5));
 						detalle.setMontoImpuesto(detalle.getMontoImpuesto() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoImpuesto(), 5));
@@ -468,8 +470,9 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setTotalImpuestoServicio(Utils.roundFactura(subTotal * 0.10, 5));
 
 			// Verifica si esta facturado para cambiar el estado firma y enviar a crear el xml en el proceso automatico
-			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO) || facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+			if (factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO) || facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
+				
 			} else {
 				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 					factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
@@ -478,17 +481,15 @@ public class FacturaBoImpl implements FacturaBo {
 			modificar(factura);
 
 			// Crear Credito del cliente
-			if(factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)){
+			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
 				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
 					if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 						cuentaCobrarDao.crearCuentaXCobrar(factura);
 					}
 				}
-				
+
 			}
 
-			
-			
 			// Anulacion de la factura anterior
 			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
 				if (factura.getReferenciaNumero() != null) {
@@ -544,11 +545,20 @@ public class FacturaBoImpl implements FacturaBo {
 			if (factura.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
 				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
 					if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-						String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO + factura.getNumeroConsecutivo();
-						kardexDao.entrada(articulo, articulo.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
+						if (articulo.getContable() != null) {
+							if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
+								String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO + factura.getNumeroConsecutivo();
+								kardexDao.entrada(articulo, articulo.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
+							}
+						}
 					} else {
-						String leyenda = Constantes.MOTIVO_SALIDA_INVENTARIO_VENTA + factura.getNumeroConsecutivo();
-						kardexDao.salida(articulo, articulo.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
+						if (articulo.getContable() != null) {
+							if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
+								String leyenda = Constantes.MOTIVO_SALIDA_INVENTARIO_VENTA + factura.getNumeroConsecutivo();
+								kardexDao.salida(articulo, articulo.getCantidad(), detalle.getCantidad(), Constantes.EMPTY, factura.getNumeroConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, factura.getUsuarioCreacion());
+
+							}
+						}
 
 					}
 
@@ -571,8 +581,8 @@ public class FacturaBoImpl implements FacturaBo {
 	public Double getTotalEfectivo(FacturaCommand facturaCommand) throws Exception {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		try {
-			if (facturaCommand.getTotalBanco() == null || facturaCommand.getTotalTarjeta() == null || facturaCommand.getTotalEfectivo() == null) {
-				return resultado;
+			if (facturaCommand.getTotalBanco() == null && facturaCommand.getTotalTarjeta() == null & facturaCommand.getTotalEfectivo() == null) {
+				return facturaCommand.getTotalComprobante();
 			}
 			// Si hay montos en banco y tarjeta debe ser igual en efectivo
 			if (facturaCommand.getTotalBanco() > 0 || facturaCommand.getTotalTarjeta() > 0) {

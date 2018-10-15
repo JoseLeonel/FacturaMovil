@@ -112,7 +112,6 @@ public class CompraBoImpl implements CompraBo {
 			Double montoTotalLinea = Constantes.ZEROS_DOUBLE;
 			Double totalDescuento = Constantes.ZEROS_DOUBLE;
 			Double totalImpuesto = Constantes.ZEROS_DOUBLE;
-			Double subTotal = Constantes.ZEROS_DOUBLE;
 			if (jsonArrayDetalleCompra != null) {
 				for (int i = 0; i < jsonArrayDetalleCompra.size(); i++) {
 					DetalleCompraCommand detalleCompraCommand = gson.fromJson(jsonArrayDetalleCompra.get(i).toString(), DetalleCompraCommand.class);
@@ -144,12 +143,9 @@ public class CompraBoImpl implements CompraBo {
 					}
 				}
 			}
-			subTotal = montoTotalLinea - totalDescuento;
-			subTotal = montoTotalLinea - totalImpuesto;
 			compra.setTotalCompra(Utils.roundFactura(montoTotalLinea, 5));
 			compra.setTotalDescuento(Utils.roundFactura(totalDescuento, 5));
 			compra.setTotalImpuesto(Utils.roundFactura(totalImpuesto, 5));
-			compra.setSubTotal(Utils.roundFactura(subTotal, 5));
 			if (compra.getId() == null) {
 				compra.setCreated_at(new Date());
 				compra.setUpdated_at(new Date());
@@ -227,11 +223,14 @@ public class CompraBoImpl implements CompraBo {
 	@Override
 	public void aplicarInventario(Compra compra, DetalleCompra detalleCompra, Articulo articulo) throws Exception {
 		try {
+			Double totalLinea = detalleCompra.getMontoTotalLinea() != null?detalleCompra.getMontoTotalLinea():Constantes.ZEROS_DOUBLE;
+			totalLinea = totalLinea > 0 ? totalLinea / detalleCompra.getCantidad():Constantes.ZEROS_DOUBLE;
+			Double costo  = totalLinea;
 			
 		
 			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getProveedor().getNombreCompleto();
 			kardexDao.entrada(articulo, articulo.getCantidad(), detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
-			articulo.setCosto(articuloDao.costoPromedio(articulo.getCosto(), detalleCompra.getCosto(), articulo.getCantidad(), detalleCompra.getCantidad()));
+			articulo.setCosto(articuloDao.costoPromedio(articulo.getCosto(), costo, articulo.getCantidad(), detalleCompra.getCantidad()));
 			articulo.setGananciaPrecioPublico(articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio()));
 			articulo.setUpdated_at(new Date());
 			articulo.setUsuario(compra.getUsuarioCreacion());

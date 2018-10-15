@@ -1,8 +1,12 @@
 package com.emprendesoftcr.Dao;
 
+import java.util.Date;
+
+import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.web.command.TotalCuentaPorCobrarCommand;
 
 public interface CuentaCobrarDao {
 
@@ -15,5 +19,6 @@ public interface CuentaCobrarDao {
 	CuentaCobrar buscar(Long id);
 	CuentaCobrar buscarPorConsecutivo(Empresa empresa,String consecutivo);
 	void crearCuentaXCobrar(Factura factura);
+	TotalCuentaPorCobrarCommand sumarCuentasPorCobrar(Date fechaInicio, Date fechaFinal, Integer idEmpresa,Cliente cliente);
 
 }

@@ -87,7 +87,7 @@
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div  class="form-group">
                                         <label>{$.i18n.prop("compra.fecha.compra")}</label> 
-                                        <div  class="form-group input-group date " data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                        <div  class="form-group input-group date datepickerFechaCompra " data-provide="datepickerFechaCompra"   data-date-format="yyyy-mm-dd">
                                             <input type="text" class="form-control fechaCompra campo" id="fechaCompra" name = "fechaCompra" value="{compra.fechaCompra}" >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
@@ -102,7 +102,7 @@
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div show = {!mostrarCamposIngresoContado || compra.fechaCredito} class="form-group has-success">
                                         <label >{$.i18n.prop("compra.fecha.credito")}</label> 
-                                        <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
+                                        <div  class="form-group input-group date datepickerFechaCredito" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
                                             <input type="text" class="form-control fechaCredito campo" id="fechaCredito" value="{compra.fechaCredito}" >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
@@ -145,7 +145,8 @@
             </div><!--fin del cabecera-derecha-->
         </div><!--fin del cabecera-derecha-->
     </div><!--fin del contenedor-compra-->
-    <div class="box box-solid box-primary" show={mostarParaCrearNuevaCompra}>
+
+<div class="box box-solid box-primary" show={mostarParaCrearNuevaCompra}>
         <div class="box-body">
              <div class="box-header with-border">
                 <div class="row">
@@ -245,14 +246,17 @@
                         <div id="botones"  each={compras_espera.data}  onclick={__CargarCompraEspera}>
                             <a href="#" class="compras-espera"  title="{proveedor !=null?proveedor.nombreCompleto:""}">C# {id}</a>
                         </div>    
-                     </section >
+                    </section >
 
                 </section>
-                      
-            </div><!-- fin contenedor-compra-->
             
         </div><!-- fin box-body-->
 	</div><!-- fin box -->
+                      
+            </div><!-- fin contenedor-compra-->
+
+
+    
 <!--Modal mostrar Articulos de la empresa -->
 <div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -301,6 +305,44 @@
 </div>
 <!--fin del modal-->
 <style type="text/css">
+
+ #contenedor {
+  width:500px;
+  height:200px;
+  background: #fff;
+  padding:10px;
+  border:10px solid #2c3e50;
+  margin:20px;
+  display:flex;
+  display:-webkit-flex;
+  display:-ms-flexbox;
+ justify-content:space-between;
+}
+ .cabecera-izquierda {
+       margin-right:5%;
+       width:85%;
+    }
+
+    .cabecera-derecha {
+        width:25%;
+    }
+
+.elemento{
+  background: #E67E22;
+  color:#fff;
+  margin:5px;
+  flex-basis:150px; 
+  
+  height:50px;
+
+  
+}
+
+.item {
+  
+  width: 50%;
+}
+
     .boton-consultar {
         display: block;
         display: inline-block;
@@ -441,14 +483,7 @@
         width:100%;
         margin :auto;
     }
-    .cabecera-izquierda {
-       margin-right:5%;
-       width:85%;
-    }
-
-    .cabecera-derecha {
-        width:25%;
-    }
+   
     .contenedor-detalle   {
         display:flex;
         width:100%;
@@ -558,12 +593,17 @@
         __informacionData()
         __InicializarTabla('.tableListaProveedor')
         __InicializarTabla('.tableListaInventario')
+        
+        
         agregarInputsCombos_Articulo()
           __ListaComprasEnEspera()
         __comboFormaPagos()
         __ComboTipoDocumentos()
         __Teclas()
         __ListaDeProveedores()
+        __Init()
+        
+       
         
     })
 /**
@@ -656,10 +696,24 @@ __Limpiar(){
 function __Init(){
     $('.fechaCompra').val(null);
     $('.fechaCredito').val(null)
+     $('.datepickerFechaCompra').datepicker(
+            {
+              format: 'yyyy-mm-dd',
+              startDate: '-90d',
+              todayHighlight:true,
+            }
+         );
+        $('.datepickerFechaCredito').datepicker(
+            {
+              format: 'yyyy-mm-dd',
+              startDate: '-0d',
+              todayHighlight:true,
+            }
+         );
     $('.nota').val(null)
     $('.consecutivo').val(null)
     self.detail                = [];
-    self.compra                = {
+     self.compra                = {
         consecutivo:"",
         fechaCredito    : null,
         fechaCompra     : null,
@@ -671,9 +725,9 @@ function __Init(){
         formaPago:0,
         totalDescuento:0,
         subTotal:0,  
-        totalCompra:0,
+        total:0,
         nota:""
-    }                  
+    }                          
     self.item                  = null;
     self.articulo              = null;
     self.articulos                     = {data:[]}
@@ -685,6 +739,7 @@ function __Init(){
     self.totalGeneralDescuento = 0;
     self.totalGeneralImpuesto  = 0;
     self.totalGeneralCompra    = 0; 
+    self.totalSubTotalGeneral  = 0;
 
     self.update();
     // Tipo de Pagos
@@ -747,7 +802,6 @@ function cargarDetallesCompraEnEspera(){
     self.compra.detalleCompras.forEach(function(e){
         self.detail.push({
             linea           : e.numeroLinea,
-            porcentajeImpuesto :e.iva,
             articulo_id     : e.articulo.id,
             codigo          : e.articulo.codigo,
             descripcion     : e.articulo.descripcion,
@@ -776,9 +830,10 @@ function crearCompra(estadoCompra){
         id:self.compra.id,
         nota:$('.nota').val(),
         subTotal:__valorNumerico(self.compra.subTotal),
-        totalDescuento:__valorNumerico(self.totalDescuentoDetalle),
+        totalDescuento:__valorNumerico(self.compra.totalDescuento),
         totalImpuesto:__valorNumerico(self.compra.totalImpuesto),
         totalCompra:__valorNumerico(self.compra.totalCompra),
+        
         formaPago:$('.formaPago').val(),
         tipoDocumento:$('.tipoDocumento').val(),
         proveedor:$('.proveedor').val(),
@@ -1067,7 +1122,6 @@ function __nuevoArticuloAlDetalle(cantidad){
     self.descuento      = 0;
     self.detail.push({
        linea           : 0,
-       porcentajeImpuesto :iva,
        articulo_id     : self.articulo.id,
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
@@ -1076,7 +1130,7 @@ function __nuevoArticuloAlDetalle(cantidad){
        precio          : __valorNumerico(self.articulo.precioPublico),
        totalImpuesto   : __valorNumerico(totalImpuesto),
        totalDescuento  :0,
-       impuesto        : __valorNumerico(montoImpuestoV),
+       impuesto        : __valorNumerico(iva),
        descuento       : 0,
        montoTotalLinea : __valorNumerico(montoTotalLinea)
     }); 
@@ -1143,9 +1197,9 @@ function _cambiaImpuesto(){
     }else{
         costoProducto = self.item.costo
     }
-    var valor = costoProducto * self.item.porcentajeImpuesto
-    self.item.impuesto      = __valorNumerico(valor)
-    self.item.totalImpuesto = __valorNumerico(self.item.impuesto *  self.item.cantidad)
+    var valor = costoProducto * self.item.impuesto
+    var valor = valor * self.item.cantidad
+    self.item.totalImpuesto = __valorNumerico(valor)
     self.update()
 }
 /**
@@ -1237,7 +1291,6 @@ __actualizarPrecioBlur(e){
 }
 
 function __ActualizarPrecioDetalle(precio){
-   var input = e.input;
     var index = self.detail.indexOf(self.item);
     //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
     precio =__valorNumerico(precio);
@@ -1300,9 +1353,10 @@ function __calculate() {
     var montoTotalLinea= 0
     var totalDescuento = 0
     var totalImpuesto  = 0
+    var subTotal = 0
     self.detail.forEach(function(e){
         totalCompra      += e.montoTotalLinea >0?e.montoTotalLinea:0
-        totalDescuento   += e.descuento >0?e.descuento:0
+        totalDescuento   += e.totalDescuento >0?e.totalDescuento:0
         totalImpuesto    += e.totalImpuesto >0?e.totalImpuesto:0
     });
     self.compra.totalCompra    = totalCompra

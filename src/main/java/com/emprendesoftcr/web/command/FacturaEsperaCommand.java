@@ -13,14 +13,14 @@ import com.emprendesoftcr.modelo.Vendedor;
 
 public class FacturaEsperaCommand {
 
-	private Long		id;
+	private Long			id;
 
 	private Date			fechaCredito;
 
 	private String		numeroConsecutivo;
 
 	private Date			fechaEmision;
-	private String			fechaEmisionSTR;
+	private String		fechaEmisionSTR;
 
 	private String		condicionVenta;
 
@@ -28,12 +28,11 @@ public class FacturaEsperaCommand {
 
 	private String		tipoDoc;
 
-	private String						medioEfectivo;
-	
-	private String						medioTarjeta;
+	private String		medioEfectivo;
 
-	private String						medioBanco;
-	
+	private String		medioTarjeta;
+
+	private String		medioBanco;
 
 	private String		nombreFactura;
 
@@ -61,11 +60,16 @@ public class FacturaEsperaCommand {
 	private Double		totalVenta;
 
 	private Double		totalDescuentos;
+
+	private String		totalDescuentosSTR;
+
 	private Double		totalVentaNeta;
 
 	private Double		totalImpuesto;
+	private String		totalImpuestoSTR;
 
 	private Double		totalComprobante;
+	private String		totalComprobanteSTR;
 
 	private Double		totalEfectivo;
 
@@ -80,6 +84,7 @@ public class FacturaEsperaCommand {
 	private Double		totalCambio;
 
 	private Double		totalCambioPagar;
+	private String		impuestoServicioISSTR;
 	private Double		impuestoServicioIS;
 
 	private String		codigoMoneda;
@@ -158,8 +163,12 @@ public class FacturaEsperaCommand {
 		this.referenciaCodigo = factura.getReferenciaCodigo();
 		this.referenciaRazon = factura.getReferenciaRazon();
 		this.referenciaFechaEmision = factura.getReferenciaFechaEmision();
+		this.totalComprobanteSTR = factura.getTotalComprobanteSTR();
+		this.totalImpuestoSTR = factura.getTotalImpuestoSTR();
+		this.totalDescuentosSTR = factura.getTotalDescuentoSTR();
+
 	}
-	
+
 	public FacturaEsperaCommand(Detalle detalle) {
 		super();
 		this.id = detalle.getFactura().getId();
@@ -209,41 +218,69 @@ public class FacturaEsperaCommand {
 		this.referenciaNumero = detalle.getFactura().getReferenciaNumero();
 		this.referenciaCodigo = detalle.getFactura().getReferenciaCodigo();
 		this.referenciaRazon = detalle.getFactura().getReferenciaRazon();
-		this.impuestoServicioIS = !detalle.getCodigo().equals(Constantes.CODIGO_ARTICULO_IMPUESTO_SERVICIO)?Constantes.ZEROS_DOUBLE:detalle.getMontoTotalLinea();
-		
+		this.impuestoServicioISSTR = Utils.formateadorMiles(!detalle.getCodigo().equals(Constantes.CODIGO_ARTICULO_IMPUESTO_SERVICIO) ? Constantes.ZEROS_DOUBLE : detalle.getMontoTotalLinea());
+		this.impuestoServicioIS = !detalle.getCodigo().equals(Constantes.CODIGO_ARTICULO_IMPUESTO_SERVICIO) ? Constantes.ZEROS_DOUBLE : detalle.getMontoTotalLinea();
+		this.totalComprobanteSTR = detalle.getFactura().getTotalComprobanteSTR();
+		this.totalImpuestoSTR = detalle.getFactura().getTotalImpuestoSTR();
+		this.totalDescuentosSTR = detalle.getFactura().getTotalDescuentoSTR();
+
 	}
 
-	
+	public Double getImpuestoServicioIS() {
+		return impuestoServicioIS;
+	}
 
-	
+	public String getTotalDescuentosSTR() {
+		return totalDescuentosSTR;
+	}
+
+	public void setTotalDescuentosSTR(String totalDescuentosSTR) {
+		this.totalDescuentosSTR = totalDescuentosSTR;
+	}
+
+	public String getTotalImpuestoSTR() {
+		return totalImpuestoSTR;
+	}
+
+	public void setTotalImpuestoSTR(String totalImpuestoSTR) {
+		this.totalImpuestoSTR = totalImpuestoSTR;
+	}
+
+	public String getTotalComprobanteSTR() {
+		return totalComprobanteSTR;
+	}
+
+	public void setTotalComprobanteSTR(String totalComprobanteSTR) {
+		this.totalComprobanteSTR = totalComprobanteSTR;
+	}
+
 	public Long getId() {
 		return id;
 	}
 
-
-
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-
-
-	
 	public String getFechaEmisionSTR() {
 		return fechaEmisionSTR;
 	}
 
+	public String getImpuestoServicioISSTR() {
+		return impuestoServicioISSTR;
+	}
 
+	public void setImpuestoServicioISSTR(String impuestoServicioISSTR) {
+		this.impuestoServicioISSTR = impuestoServicioISSTR;
+	}
 
+	public void setImpuestoServicioIS(Double impuestoServicioIS) {
+		this.impuestoServicioIS = impuestoServicioIS;
+	}
 
-	
 	public void setFechaEmisionSTR(String fechaEmisionSTR) {
 		this.fechaEmisionSTR = fechaEmisionSTR;
 	}
-
-
-
 
 	public Date getFechaCredito() {
 		return fechaCredito;
@@ -292,8 +329,6 @@ public class FacturaEsperaCommand {
 	public void setTipoDoc(String tipoDoc) {
 		this.tipoDoc = tipoDoc;
 	}
-
-	
 
 	public String getNombreFactura() {
 		return nombreFactura;
@@ -591,51 +626,28 @@ public class FacturaEsperaCommand {
 		this.referenciaFechaEmision = referenciaFechaEmision;
 	}
 
-	
 	public String getMedioEfectivo() {
 		return medioEfectivo;
 	}
 
-	
 	public void setMedioEfectivo(String medioEfectivo) {
 		this.medioEfectivo = medioEfectivo;
 	}
 
-	
 	public String getMedioTarjeta() {
 		return medioTarjeta;
 	}
 
-	
 	public void setMedioTarjeta(String medioTarjeta) {
 		this.medioTarjeta = medioTarjeta;
 	}
 
-	
 	public String getMedioBanco() {
 		return medioBanco;
 	}
 
-	
 	public void setMedioBanco(String medioBanco) {
 		this.medioBanco = medioBanco;
 	}
 
-	
-	public Double getImpuestoServicioIS() {
-		return impuestoServicioIS;
-	}
-
-	
-	public void setImpuestoServicioIS(Double impuestoServicioIS) {
-		this.impuestoServicioIS = impuestoServicioIS;
-	}
-
-
-
-
-	
-	
-	
-	
 }

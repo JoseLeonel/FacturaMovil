@@ -56,7 +56,7 @@
                                     
                                     <div show = "{!mostrarCamposIngresoContado || factura.fechaCredito}" class="form-group ">
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 
-                                        <div  class="form-group input-group date datepickerFechaCredito" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
+                                        <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
                                             <input type="text" class="campo fechaCredito" name="fechaCredito" id="fechaCredito" value="{factura.fechaCredito}" >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
@@ -606,14 +606,6 @@
         $('.codigo').select()
         $(".codigo").focus()
         $(".nota").attr("maxlength", 80);
-        $('.datepickerFechaCredito').datepicker(
-            {
-              format: 'yyyy-mm-dd',
-              startDate: '-0d',
-              todayHighlight:true,
-            }
-        );
-
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
@@ -1168,7 +1160,6 @@ function __Init(){
 
     $('#condicionVenta').prop("selectedIndex", 0);
     $('#tipoDoc').prop("selectedIndex", 0);
-    $(".nota").attr("maxlength", 80);
     $(".totalBanco").val(null)   
     $(".totalTarjeta").val(null)   
     $(".totalEfectivo").val(null)   
@@ -1176,13 +1167,6 @@ function __Init(){
     $("#plazoCreditoL").val(null)
     $("#nota").val(null)
     $("#fechaCredito").val(null)
-    $('.datepickerFechaCredito').datepicker(
-            {
-              format: 'yyyy-mm-dd',
-              startDate: '-0d',
-              todayHighlight:true,
-            }
-    );
     $("#cambiarCantidadArticulo").val(null)
     $("#aplicarDescuento").val(null)
     // Tipo de Pagos
@@ -1406,8 +1390,8 @@ __formaPago(e){
     if(e.currentTarget.value == 2){
         self.mostrarCamposIngresoContado = false
     }
-     self.update()
-     $('.fechaCredito').val(null)
+    self.update()
+    $('.fechaCredito').val(null)
     $('.datepickerFechaCredito').datepicker(
             {
               format: 'yyyy-mm-dd',
@@ -1415,7 +1399,8 @@ __formaPago(e){
               todayHighlight:true,
             }
     );  
-    $('.plazoCreditoL').val(0)  
+    $('.plazoCreditoL').val(0)      
+
 }
 /**
 *   funcion para grabar la Factura en el back end

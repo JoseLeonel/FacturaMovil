@@ -271,12 +271,19 @@ public class Compra implements Serializable {
 		this.totalImpuesto = totalImpuesto;
 	}
 
+	public String getTotalImpuestoSTR() {
+		return Utils.formateadorMiles(this.totalImpuesto);
+	}
 	public Double getTotalDescuento() {
 		return totalDescuento;
 	}
 
 	public void setTotalDescuento(Double totalDescuento) {
 		this.totalDescuento = totalDescuento;
+	}
+
+	public String getTotalDescuentoSTR() {
+		return Utils.formateadorMiles(this.totalDescuento);
 	}
 
 	public Double getSubTotal() {
@@ -287,6 +294,11 @@ public class Compra implements Serializable {
 		this.subTotal = subTotal;
 	}
 
+	public String getSubTotalSTR() {
+		return Utils.formateadorMiles(this.subTotal);
+	}
+
+	
 	public Double getTotalCompra() {
 		return totalCompra;
 	}
@@ -294,6 +306,11 @@ public class Compra implements Serializable {
 	public void setTotalCompra(Double totalCompra) {
 		this.totalCompra = totalCompra;
 	}
+	
+	public String getTotalCompraSTR() {
+		return Utils.formateadorMiles(this.totalCompra);
+	}
+
 
 	public String getNota() {
 		return nota;

@@ -17,6 +17,7 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
 
 /**
  * Modelo para los abonos de una cuenta por cobrar Abono.
@@ -186,6 +187,9 @@ public class Abono implements Serializable {
 		this.totalEfectivo = totalEfectivo;
 	}
 
+	public String getTotalEfectivoSTR() {
+		return Utils.formateadorMiles(this.totalEfectivo);
+	}
 	
 	public Double getTotalTarjeta() {
 		return totalTarjeta;
@@ -195,7 +199,9 @@ public class Abono implements Serializable {
 	public void setTotalTarjeta(Double totalTarjeta) {
 		this.totalTarjeta = totalTarjeta;
 	}
-
+	public String getTotalTarjetaSTR() {
+		return Utils.formateadorMiles(this.totalTarjeta);
+	}
 	
 	public Double getTotalBanco() {
 		return totalBanco;
@@ -206,6 +212,9 @@ public class Abono implements Serializable {
 		this.totalBanco = totalBanco;
 	}
 
+	public String getTotalBancoSTR() {
+		return Utils.formateadorMiles(this.totalBanco);
+	}
 	
 	public Double getTotal() {
 		return total;
@@ -215,7 +224,10 @@ public class Abono implements Serializable {
 	public void setTotal(Double total) {
 		this.total = total;
 	}
-
+	public String getTotalSTR() {
+		return Utils.formateadorMiles(this.total);
+	}
+	
 	
 	public String getEstado() {
 		return estado;
