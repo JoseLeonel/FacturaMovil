@@ -78,6 +78,8 @@ public class FacturaBoImpl implements FacturaBo {
 		facturaDao.agregar(factura);
 
 	}
+	
+	private final ReentrantLock lock = new ReentrantLock();
 
 	/**
 	 * Modificar una factura
@@ -430,8 +432,9 @@ public class FacturaBoImpl implements FacturaBo {
 			}
 		}
 	}
+	
 
-	/**
+	/**	
 	 * Crear la factura o el tiquete temporal
 	 * @see com.emprendesoftcr.Bo.FacturaBo#crearFactura(com.emprendesoftcr.web.command.FacturaCommand, com.emprendesoftcr.modelo.Usuario)
 	 */
@@ -496,7 +499,6 @@ public class FacturaBoImpl implements FacturaBo {
 			// Se asociando los detalles a la factura
 			this.asociaDetallesFactura(factura, facturaCommand, usuario, detallesFacturaCommand);
 
-			ReentrantLock lock = new ReentrantLock();
 			
 	    try {
 
