@@ -88,4 +88,8 @@ public class EmpresaBoImpl implements EmpresaBo {
 		return empresaDao.generarConsecutivoRecepcionFactura(empresa, usuario, recepcionFactura);
 	}
 
+	@Override
+	public String generaClaveFacturaTributacion(Empresa empresa, String consecutivoFactura, Integer comprobanteElectronico) throws Exception{
+		return empresaDao.generaClaveFacturaTributacion(empresa, consecutivoFactura, comprobanteElectronico);
+	}
 }

@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Dao;
 
+import java.util.Collection;
 import java.util.Date;
 
 import com.emprendesoftcr.modelo.Cliente;
@@ -17,8 +18,13 @@ public interface CuentaCobrarDao {
 	void eliminar(CuentaCobrar cuentaCobrar);
 
 	CuentaCobrar buscar(Long id);
-	CuentaCobrar buscarPorConsecutivo(Empresa empresa,String consecutivo);
+
+	CuentaCobrar buscarPorConsecutivo(Empresa empresa, String consecutivo);
+
 	void crearCuentaXCobrar(Factura factura);
-	TotalCuentaPorCobrarCommand sumarCuentasPorCobrar(Date fechaInicio, Date fechaFinal, Integer idEmpresa,Cliente cliente);
+
+	TotalCuentaPorCobrarCommand sumarCuentasPorCobrar(Date fechaInicio, Date fechaFinal, Integer idEmpresa, Cliente cliente);
+	
+	Collection<Factura> cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(Date fechaInicio, Date fechaFin,Empresa empresa,Cliente cliente,String estado);
 
 }

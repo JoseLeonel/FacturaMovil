@@ -1,12 +1,19 @@
 package com.emprendesoftcr.web.Controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jxls.template.SimpleExporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -33,6 +40,7 @@ import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.web.command.CuentaCobrarCommand;
@@ -97,6 +105,44 @@ public class CuentaCobrarController {
 		return "views/cuentasxcobrar/ListarCuentasXCobrar";
 	}
 
+	
+//////Descarga de manuales de usuario de acuerdo con su perfil
+//	@RequestMapping(value = "/DescargarDetalleTotalFacturasAjax.do", method = RequestMethod.GET)
+//	public void descargarDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam ,@RequestParam Long idCliente,@RequestParam String estado) throws IOException, Exception {
+//
+//		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+//		Cliente cliente = clienteBo.buscar(idCliente);
+//
+//		// Se buscan las facturas
+//		Date fechaInicio = Utils.parseDate(fechaInicioParam);
+//		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+//		Collection<CuentaCobrar> cuentaCobras = cuentaCobrarBo.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado( fechaInicio, fechaFin, usuario.getEmpresa(),cliente,estado);
+//
+//		String nombreArchivo = "FacturasMensuales.xls";
+//		response.setContentType("application/octet-stream");
+//		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+//
+//		// Se prepara el excell
+//		ByteArrayOutputStream baos = createExcelFacturas(facturas);
+//		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+//
+//		int BUFFER_SIZE = 4096;
+//		byte[] buffer = new byte[BUFFER_SIZE];
+//		int bytesRead = -1;
+//		while ((bytesRead = inputStream.read(buffer)) != -1) {
+//			response.getOutputStream().write(buffer, 0, bytesRead);
+//		}
+//	}
+
+	private ByteArrayOutputStream createExcelFacturas(Collection<Factura> facturas) {
+		// Se prepara el excell
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		List<String> headers = Arrays.asList("Id", "Fecha Emision", "# Documento", "Cliente", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Total");
+		new SimpleExporter().gridExport(headers, facturas, "id, fechaEmisionSTR, numeroConsecutivo, nombreCliente, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos, totalComprobante", baos);
+		return baos;
+	}
+	
+	
 	/**
 	 * Total de Cuentas por cobrar
 	 * @param request
@@ -127,10 +173,10 @@ public class CuentaCobrarController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarCuentaCobrarAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam String fechaInicio, @RequestParam String fechaFinal, @RequestParam Long idCliente) {
+	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam String fechaInicio, @RequestParam String fechaFinal, @RequestParam Long idCliente,@RequestParam String estado) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Cliente cliente = clienteBo.buscar(idCliente);
-		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFinal, cliente, usuarioSesion.getEmpresa());
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFinal, cliente, usuarioSesion.getEmpresa(),estado);
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
@@ -283,7 +329,7 @@ public class CuentaCobrarController {
 
 	private static class DelimitadorBuilder {
 
-		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Cliente cliente, Empresa empresa) {
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Cliente cliente, Empresa empresa,String estado) {
 			// Consulta por fechas
 			DataTableDelimitador delimitador = new DataTableDelimitador(request, "CuentaCobrar");
 			Date fechaInicio = new Date();
@@ -293,7 +339,16 @@ public class CuentaCobrarController {
 			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
 
 			if (cliente != null) {
+				
 				delimitador.addFiltro(new JqGridFilter("cliente.id", "'" + cliente.getId().toString() + "'", "="));
+			}
+			if(estado !=null) {
+				if(!estado.equals(Constantes.EMPTY)) {
+					if(!estado.equals(Constantes.COMBO_TODOS)) {
+						delimitador.addFiltro(new JqGridFilter("estado", "'" + estado + "'", "="));	
+					}
+						
+				}
 			}
 			if (!inicio.equals(Constantes.EMPTY) && !fin.equals(Constantes.EMPTY)) {
 				fechaInicio = Utils.parseDate(inicio);

@@ -146,43 +146,47 @@ public class Empresa implements Serializable {
 	private Integer noFacturaElectronica;
 	
 
-	public Empresa(Integer id, String nombre, String nombreComercial, String tipoCedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String distrito, String barrio, String logo, String representante, String estado, String cedula, Date updated_at, Date created_at, Integer numeroConsecutivo, String casaMatriz, String canton, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, Integer codigoSeguridad, String usuarioEnvioComprobante, String passwordEnvioComprobante, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String tieneInventario, String enviarTiquete, String estadoProduccion, String tieneLector, String cambiarPrecio,Integer vueltoImprimir,String abreviaturaEmpresa, Integer noFacturaElectronica) {
+	
+	public Empresa(Integer id, String abreviaturaEmpresa, Integer numeroConsecutivo, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String cazaMatriz, Integer codigoSeguridad, String nombre, String nombreComercial, String tipoCedula, String cedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String canton, String distrito, String barrio, String logo, String tieneInventario, String tieneLector, String cambiarPrecio, String estadoProduccion, String enviarTiquete, String representante, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, String usuarioEnvioComprobante, String passwordEnvioComprobante, String estado, Date created_at, Date updated_at, Integer aceptadoConsecutivo,
+			Integer aceptadoParcialConsecutivo, Integer rechazadoConsecutivo, Integer vueltoImprimir, Integer noFacturaElectronica) {
 		super();
 		this.id = id;
+		this.abreviaturaEmpresa = abreviaturaEmpresa;
 		this.numeroConsecutivo = numeroConsecutivo;
+		this.notacConsecutivo = notacConsecutivo;
+		this.notadConsecutivo = notadConsecutivo;
+		this.tiqueteConsecutivo = tiqueteConsecutivo;
+		this.cazaMatriz = cazaMatriz;
+		this.codigoSeguridad = codigoSeguridad;
 		this.nombre = nombre;
 		this.nombreComercial = nombreComercial;
-    this.abreviaturaEmpresa = abreviaturaEmpresa;
 		this.tipoCedula = tipoCedula;
+		this.cedula = cedula;
 		this.otraSenas = otraSenas;
 		this.codigoPais = codigoPais;
 		this.telefono = telefono;
 		this.correoElectronico = correoElectronico;
 		this.provincia = provincia;
+		this.canton = canton;
 		this.distrito = distrito;
 		this.barrio = barrio;
 		this.logo = logo;
+		this.tieneInventario = tieneInventario;
+		this.tieneLector = tieneLector;
+		this.cambiarPrecio = cambiarPrecio;
+		this.estadoProduccion = estadoProduccion;
+		this.enviarTiquete = enviarTiquete;
 		this.representante = representante;
-		this.estado = Constantes.ESTADO_ACTIVO;
-		this.cedula = cedula;
-		this.created_at = new Date();
-		this.updated_at = new Date();
-		this.cazaMatriz = Constantes.CASA_MATRIZ_INICIAL_FACTURA;
-		this.canton = canton;
-		this.codigoSeguridad = codigoSeguridad;
 		this.nombreLlaveCriptografica = nombreLlaveCriptografica;
 		this.claveLlaveCriptografica = claveLlaveCriptografica;
-
-		this.passwordEnvioComprobante = passwordEnvioComprobante;
 		this.usuarioEnvioComprobante = usuarioEnvioComprobante;
-		this.notacConsecutivo = notacConsecutivo;
-		this.notadConsecutivo = notadConsecutivo;
-		this.tiqueteConsecutivo = tiqueteConsecutivo;
-		this.enviarTiquete = Constantes.ESTADO_ACTIVO;
-		this.tieneInventario = Constantes.ESTADO_ACTIVO;
-		this.cambiarPrecio = Constantes.ESTADO_INACTIVO;
-		this.estadoProduccion = estadoProduccion;
-		this.tieneLector = tieneLector;
+		this.passwordEnvioComprobante = passwordEnvioComprobante;
+		this.estado = estado;
+		this.created_at = created_at;
+		this.updated_at = updated_at;
+		this.aceptadoConsecutivo = aceptadoConsecutivo;
+		this.aceptadoParcialConsecutivo = aceptadoParcialConsecutivo;
+		this.rechazadoConsecutivo = rechazadoConsecutivo;
 		this.vueltoImprimir = vueltoImprimir;
 		this.noFacturaElectronica = noFacturaElectronica;
 	}

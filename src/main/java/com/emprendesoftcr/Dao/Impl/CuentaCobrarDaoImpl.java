@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Dao.Impl;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -149,31 +150,52 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 
 	}
 
+	/**
+	 * Totales de cuentas por cobrar
+	 * @see com.emprendesoftcr.Dao.CuentaCobrarDao#sumarCuentasPorCobrar(java.util.Date, java.util.Date, java.lang.Integer, com.emprendesoftcr.modelo.Cliente)
+	 */
 	@Override
 	public TotalCuentaPorCobrarCommand sumarCuentasPorCobrar(Date fechaInicio, Date fechaFinal, Integer idEmpresa, Cliente cliente) {
-		StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_TOTAL_FACTURAS);
+		StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_TOTAL_CUENTA_COBRAR);
 
 		// set parametros entrada
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_IN_FECHA_INICIO, Date.class, ParameterMode.IN);
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_IN_FECHA_FIN, Date.class, ParameterMode.IN);
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_IN_ID_EMPRESA, Integer.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_CUENTA_COBRAR_IN_FECHA_INICIO, Date.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_CUENTA_COBRAR_IN_FECHA_FIN, Date.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_CUENTA_COBRAR_IN_ID_EMPRESA, Integer.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_CUENTA_COBRAR_IN_ID_CLIENTE, Integer.class, ParameterMode.IN);
 
 		// set parametros salida
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL, Double.class, ParameterMode.OUT);
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO, Double.class, ParameterMode.OUT);
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS, Double.class, ParameterMode.OUT);
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS, Double.class, ParameterMode.OUT);
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS, Double.class, ParameterMode.OUT);
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_CUENTA_COBRAR_OUT_TOTAL, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_CUENTA_COBRAR_OUT_SALDO, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_CUENTA_COBRAR_OUT_ABONO, Double.class, ParameterMode.OUT);
 
 		// Valores de entrada
-		storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS_IN_FECHA_INICIO, fechaInicio);
-		storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS_IN_FECHA_FIN, fechaFinal);
-		storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS_IN_ID_EMPRESA, idEmpresa);
+		storedProcedure.setParameter(Constantes.SP_TOTAL_CUENTA_COBRAR_IN_FECHA_INICIO, fechaInicio);
+		storedProcedure.setParameter(Constantes.SP_TOTAL_CUENTA_COBRAR_IN_FECHA_FIN, fechaFinal);
+		storedProcedure.setParameter(Constantes.SP_TOTAL_CUENTA_COBRAR_IN_ID_EMPRESA, idEmpresa);
+		storedProcedure.setParameter(Constantes.SP_TOTAL_CUENTA_COBRAR_IN_ID_CLIENTE, cliente.getId());
 		storedProcedure.execute();
 
 		// Se toma la respuesta
-		return new TotalCuentaPorCobrarCommand(0d,0d,0d);
+		return new TotalCuentaPorCobrarCommand((Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_CUENTA_COBRAR_OUT_TOTAL), 
+				                                   (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_CUENTA_COBRAR_OUT_SALDO), 
+				                                   (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_CUENTA_COBRAR_OUT_ABONO));
+	}
+	
+/**
+ * Listado de cuentas por cobrar de un cliente
+ * @see com.emprendesoftcr.Dao.CuentaCobrarDao#cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(java.util.Date, java.util.Date, com.emprendesoftcr.modelo.Empresa, com.emprendesoftcr.modelo.Cliente, java.lang.Integer)
+ */
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<Factura> cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(Date fechaInicio, Date fechaFin,Empresa empresa,Cliente cliente,String estado){
+		Query query = entityManager.createQuery("select obj from CuentaCobrar obj where obj.empresa = :empresa and and obj.estado = :estado and obj.cliente = :cliente and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin");
+		query.setParameter("empresa", empresa);
+		query.setParameter("cliente", cliente);
+		query.setParameter("estado", estado);
+		query.setParameter("fechaInicio", fechaInicio);
+		query.setParameter("fechaFin", fechaFin);
+		return query.getResultList();
 	}
 
 }
