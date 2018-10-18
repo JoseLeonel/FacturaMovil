@@ -137,8 +137,13 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 		try {
 		
 			Certificado certificado  = certificadoBo.findByEmpresa(empresa);
+			if(certificado !=null) {
+				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_FACTURA);	
+			}else {
+				log.info("** Error  Empresa no se encuentra el certificado: " + empresa.getNombre());
+			}
 		
-      resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_FACTURA);
+      
 		} catch (Exception e) {
 			log.info("** Error  getFirmarXML: " + e.getMessage() + " fecha " + new Date());
 			throw e;
@@ -402,6 +407,12 @@ private String xmlIdentificacion (Factura factura) throws Exception {
   @Override
 	public  FacturaElectronica getFacturaAPDF(String xmlString) throws Exception{
 		FacturaElectronica facturaElectronica = null;
+		if(xmlString ==null) {
+			return facturaElectronica;
+		}
+		if(xmlString.equals(Constantes.EMPTY)) {
+			return facturaElectronica;
+		}
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();  
 		DocumentBuilder builder;
 		try {

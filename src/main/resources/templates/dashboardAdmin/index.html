@@ -17,9 +17,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
  <!-- This content is only shown to authenticated users.-->
 <!--</div>-->
    
-  <!--  <div sec:authorize="hasRole('Administrador_Sistema')">
-  This content is only shown to administrators.
-<!--</div>-->
+ 
 <span sec:authorize="isAuthenticated()">                | Logged user: <span sec:authentication="name"></span> 
                 Roles: <span sec:authentication="principal.authorities"></span> |
                 <a th:href="@{/logout}">Sign Out</a>

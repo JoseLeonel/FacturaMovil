@@ -51,7 +51,7 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
 			
 			        
 		} catch (Exception e) {
-			log.info("** Error  getFirmarDocumento: " + e.getMessage() + " fecha " + new Date());
+			log.info("** Error  getFirmarDocumento: " + e.getMessage() + " fecha " + new Date() + "Factura:" + certificado.getEmpresa() );
 			throw e;
 		}
 		

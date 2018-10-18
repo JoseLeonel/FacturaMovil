@@ -43,6 +43,8 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 			Certificado certificado  = certificadoBo.findByEmpresa(empresa);
 			if(certificado !=null) {
 				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_TIQUETE);	
+			}else {
+				log.info("** Error  Empresa no se encuentra el certificado: " + empresa.getNombre());
 			}
 			
 		} catch (Exception e) {

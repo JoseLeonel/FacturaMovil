@@ -49,8 +49,13 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
 	public String getFirmarXML(String xmlString, Empresa empresa) throws Exception{
 		String resultado = Constantes.EMPTY;
 		try {
-				Certificado certificado  = certificadoBo.findByEmpresa(empresa);
-			resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_NOTA_DEBITO);
+			Certificado certificado  = certificadoBo.findByEmpresa(empresa);
+			if(certificado !=null) {
+				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_NOTA_DEBITO);	
+			}else {
+				log.info("** Error  Empresa no se encuentra el certificado: " + empresa.getNombre());
+			}
+			
 		} catch (Exception e) {
 			log.info("** Error  getFirmarXML: " + e.getMessage() + " fecha " + new Date());
 			throw e;

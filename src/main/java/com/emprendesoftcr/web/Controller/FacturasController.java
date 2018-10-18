@@ -13,10 +13,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.locks.ReentrantLock;
 
 import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
@@ -732,11 +730,14 @@ public class FacturasController {
 	@RequestMapping(value = "/CrearFacturaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator crearFactura(HttpServletRequest request, ModelMap model, @ModelAttribute FacturaCommand facturaCommand, BindingResult result, SessionStatus status) {
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			return this.crearFactura(facturaCommand, result, usuario);
 		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
+			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
+			respuestaServiceValidator.setMessage(e.getMessage());
+			return respuestaServiceValidator;
 		}
 	}
 
@@ -750,12 +751,14 @@ public class FacturasController {
 			Usuario usuario = usuarioBo.buscar(facturaCommand.getUsuario());
 			return this.crearFactura(facturaCommand, result, usuario);
 		} catch (Exception e) {
+	
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
 	
 	
 	private  RespuestaServiceValidator<?> crearFactura(FacturaCommand facturaCommand, BindingResult result, Usuario usuario) {
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 				facturaCommand.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
 			facturaCommand.setTotalEfectivo(facturaCommand.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalEfectivo());
@@ -851,7 +854,9 @@ public class FacturasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", facturaCreada);
 
 		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
+			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
+			respuestaServiceValidator.setMessage(e.getMessage());
+			return respuestaServiceValidator;
 		}
 		
 	}
@@ -920,11 +925,11 @@ public class FacturasController {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
 
-			 Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			// Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 			// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 			// criptografica desde linux
-			 certificadoBo.agregar(usuario.getEmpresa(),"","");
+			// certificadoBo.agregar(usuario.getEmpresa(),"","");
 			// usuario.getEmpresa().getClaveLlaveCriptografica().toString(),
 			// usuario.getEmpresa().getNombreLlaveCriptografica());
 			// String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);

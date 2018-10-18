@@ -12,7 +12,6 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Propagation;
@@ -22,7 +21,6 @@ import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.CuentaCobrarDao;
-import com.emprendesoftcr.Dao.EmpresaDao;
 import com.emprendesoftcr.Dao.FacturaDao;
 import com.emprendesoftcr.Dao.HaciendaDao;
 import com.emprendesoftcr.Dao.KardexDao;
@@ -446,21 +444,22 @@ public class FacturaBoImpl implements FacturaBo {
 	 * @see com.emprendesoftcr.Bo.FacturaBo#crearFactura(com.emprendesoftcr.web.command.FacturaCommand, com.emprendesoftcr.modelo.Usuario)
 	 */
 	private final ReentrantLock lock = new ReentrantLock();
-  @Async
+ 
 	@Override
 	@Transactional
 	public synchronized Factura crearFactura(FacturaCommand facturaCommand, Usuario usuario, UsuarioCaja usuarioCaja, TipoCambio tipoCambio) throws Exception {
-
+     
 		Factura factura = null;
 		lock.lock();
-		System.out.println(lock);
-    System.out.println(System.identityHashCode(lock));
+		
+//		System.out.println(lock);
+//    System.out.println(System.identityHashCode(lock));
 
 		try {
 			long id = Thread.currentThread().getId();
       System.out.println(String.format("--start transaccion--> Thread=%d %s", id, "Fecha:" + new Date()));
 	
-
+      Empresa empresa = empresaBo.buscar(facturaCommand.getEmpresa().getId());
 			// Se actualizan los datos de la factura command
 			facturaCommand.setTotal(facturaCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotal());
 			facturaCommand.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
@@ -495,7 +494,7 @@ public class FacturaBoImpl implements FacturaBo {
 			// Se anula las facturas
 			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				if (facturaCommand.getReferenciaNumero() != null && facturaCommand.getReferenciaNumero() != Constantes.EMPTY) {
-					Factura facturaAnular = findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa());
+					Factura facturaAnular = findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), empresa);
 					if (facturaAnular != null) {
 						facturaAnular.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
 						modificar(facturaAnular);
@@ -518,11 +517,11 @@ public class FacturaBoImpl implements FacturaBo {
 
 				// Generar el consecutivo de venta
 				if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-					Empresa empresa = empresaBo.buscar(facturaCommand.getEmpresa().getId());
+					
 					factura.setNumeroConsecutivo(empresaBo.generarConsecutivoFactura(empresa, usuario, factura));
 					if (empresa.getNoFacturaElectronica() != null && empresa.getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
 						factura.setClave(empresaBo.generaClaveFacturaTributacion(empresa, factura.getNumeroConsecutivo(), FacturaElectronicaUtils.COMPROBANTE_ELECTRONICO_NORMAL));
-						empresa = empresaBo.buscar(facturaCommand.getEmpresa().getId());
+						
 						factura.setEmpresa(empresa);
 					}
 				}
@@ -585,7 +584,7 @@ public class FacturaBoImpl implements FacturaBo {
 			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
 				if (factura.getReferenciaNumero() != null) {
 					if (factura.getReferenciaNumero() != Constantes.EMPTY) {
-						Factura facturaAnterior = findByConsecutivoAndEmpresa(factura.getReferenciaNumero(), usuario.getEmpresa());
+						Factura facturaAnterior = findByConsecutivoAndEmpresa(factura.getReferenciaNumero(), empresa);
 						if (facturaAnterior != null) {
 							CuentaCobrar cuentaCobrar = cuentaCobrarDao.buscarPorConsecutivo(factura.getEmpresa(), factura.getReferenciaNumero());
 							if (cuentaCobrar != null) {
@@ -602,7 +601,7 @@ public class FacturaBoImpl implements FacturaBo {
 							facturaAnterior.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
 							modificar(facturaAnterior);
 							if (facturaAnterior.getClave() != null) {
-								Hacienda hacienda = haciendaDao.findByEmpresaAndClave(usuario.getEmpresa(), facturaAnterior.getClave());
+								Hacienda hacienda = haciendaDao.findByEmpresaAndClave(empresa, facturaAnterior.getClave());
 								if (hacienda != null) {
 									hacienda.setEstado(Constantes.HACIENDA_ESTADO_ANULADA);
 									haciendaDao.modificar(hacienda);

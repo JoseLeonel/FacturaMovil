@@ -106,19 +106,19 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																			facturaElectronica.setClienteCorreo(d.getCliente().getCorreoElectronico());
 																																																			facturaElectronica.setClienteCedula(d.getCliente().getCedula());
 																																																			facturaElectronica.setClienteTelefono(d.getCliente().getTelefono() != null ? d.getCliente().getTelefono().toString() : Constantes.EMPTY);
-																																																			facturaElectronica.set_nota(d.getNota() ==null?Constantes.EMPTY:d.getNota());
+																																																			facturaElectronica.set_nota(d.getNota() == null ? Constantes.EMPTY : d.getNota());
 
 																																																			// }
 																																																			// facturaElectronica.setClienteMesCobro(TO_MESCOBRO.apply(d.getMesCobro()));
 																																																			// Ubicacion
-																																																			facturaElectronica.set_logo(d.getEmpresa().getLogo() !=null?d.getEmpresa().getLogo():Constantes.EMPTY);
+																																																			facturaElectronica.set_logo(d.getEmpresa().getLogo() != null ? d.getEmpresa().getLogo() : Constantes.EMPTY);
 																																																			facturaElectronica.set_clienteDireccion(d.getDireccion());
 																																																			// Otros
 																																																			facturaElectronica.setTipoDocumento(FacturaElectronicaUtils.getTipoDocumento(d.getTipoDoc()));
 																																																			facturaElectronica.setClave(d.getClave());
 																																																			facturaElectronica.setConsecutivo(d.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ? d.getId().toString() : d.getNumeroConsecutivo());
 																																																			facturaElectronica.setFechaEmision(d.getFechaEmision().toString());
-																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito() !=null?d.getPlazoCredito().toString():Constantes.EMPTY);
+																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito() != null ? d.getPlazoCredito().toString() : Constantes.EMPTY);
 																																																			facturaElectronica.setCondicionVenta(BIND_CONDICION_VENTA.apply(d.getCondicionVenta()));
 																																																			facturaElectronica.setMedioBanco(d.getMedioBanco() != null ? Constantes.FACTURA_MEDIO_PAGO_TRANSFERENCIA_STR : Constantes.EMPTY);
 																																																			facturaElectronica.setMedioEfectivo(d.getMedioEfectivo() != null ? Constantes.FACTURA_MEDIO_PAGO_EFECTIVO_STR : Constantes.EMPTY);
@@ -546,9 +546,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			modelEmail.put("correo", factura.getEmpresa().getCorreoElectronico());
 			modelEmail.put("telefono", factura.getEmpresa().getTelefono());
 			String from = "FISCO_No_Reply@emprendesoftcr.com";
-			if(factura.getEmpresa().getAbreviaturaEmpresa() !=null) {
-				if(!factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from =  factura.getEmpresa().getAbreviaturaEmpresa()+"_Doc_Electronico" + "_No_Reply@emprendesoftcr.com";
+			if (factura.getEmpresa().getAbreviaturaEmpresa() != null) {
+				if (!factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+					from = factura.getEmpresa().getAbreviaturaEmpresa() + "_Doc_Electronico" + "_No_Reply@emprendesoftcr.com";
 				}
 			}
 
@@ -556,7 +556,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			String subject = "Documento Electrónico N° " + clave + " del Emisor: " + nombre;
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailHacienda.vm", modelEmail);
 		} catch (Exception e) {
-			log.info("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre()+ " Consecutivo" + hacienda.getConsecutivo());
+			log.info("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre() + " Consecutivo" + hacienda.getConsecutivo());
 			throw e;
 		}
 	}
@@ -592,13 +592,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 			modelEmail.put("tipoMensajeTitulo", tipoMensajeTitulo);
 			String from = tipoMensajeTitulo + "_Reply@emprendesoftcr.com";
-			
-			if(hacienda.getEmpresa().getAbreviaturaEmpresa() !=null) {
-				if(!hacienda.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from =  hacienda.getEmpresa().getAbreviaturaEmpresa()+"_"+ tipoMensajeTitulo  + "_No_Reply@emprendesoftcr.com";
+
+			if (hacienda.getEmpresa().getAbreviaturaEmpresa() != null) {
+				if (!hacienda.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+					from = hacienda.getEmpresa().getAbreviaturaEmpresa() + "_" + tipoMensajeTitulo + "_No_Reply@emprendesoftcr.com";
 				}
 			}
-			
+
 			String subject = tipoMensajeTitulo + " Documento Electrónico N° " + clave + " del emisor con cédula: " + recepcionFactura.getCedulaEmisor();
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailHaciendaRecepcionFactura.vm", modelEmail);
 		} catch (Exception e) {
@@ -648,10 +648,12 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	public synchronized void procesoFirmado() throws Exception {
 		try {
 			log.info("Inicio el proceso de firmado  {}", new Date());
+
 			// Semaforo semaforo = semaforoBo.findByEstado(Constantes.SEMAFORO_ESTADO_FIRMADO);
 			// if (semaforo != null) {
 			Collection<Factura> lista = facturaBo.findByEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE, Constantes.FACTURA_ESTADO_REFIRMAR_DOCUMENTO);
 			for (Factura factura : lista) {
+				log.info("Factura:  {}", factura.getNumeroConsecutivo() + " Empresa:" + factura.getEmpresa().getNombre());
 				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 					String comprobanteXML = Constantes.EMPTY;
 					if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
@@ -676,48 +678,53 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						// firmar el documento
 						comprobanteXML = notaDebitoXMLService.getFirmarXML(comprobanteXML, factura.getEmpresa());
 					}
-					Hacienda hacienda = new Hacienda();
-					hacienda.setCedulaEmisor(factura.getEmpresa().getCedula());
-					hacienda.setTipoEmisor(factura.getEmpresa().getTipoCedula());
-					// no se graba el cliente si es frecuente
-					if (factura.getCliente() != null) {
-						if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
-							hacienda.setCedulaReceptor(factura.getCliente().getCedula());
-							hacienda.setTipoReceptor(factura.getCliente().getTipoCedula());
+					if (comprobanteXML != null) {
+						if(!comprobanteXML.equals(Constantes.EMPTY)) {
+							Hacienda hacienda = new Hacienda();
+							hacienda.setCedulaEmisor(factura.getEmpresa().getCedula());
+							hacienda.setTipoEmisor(factura.getEmpresa().getTipoCedula());
+							// no se graba el cliente si es frecuente
+							if (factura.getCliente() != null) {
+								if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+									hacienda.setCedulaReceptor(factura.getCliente().getCedula());
+									hacienda.setTipoReceptor(factura.getCliente().getTipoCedula());
+								}
+
+							}
+							hacienda.setEmpresa(factura.getEmpresa());
+							hacienda.setClave(factura.getClave());
+							hacienda.setFechaEmisor(factura.getFechaEmision());
+							Blob b = FacturaElectronicaUtils.convertirStringToblod(comprobanteXML);
+							hacienda.setComprobanteXML(b);
+							hacienda.setCreated_at(new Date());
+							hacienda.setUpdated_at(new Date());
+							hacienda.setStatus(Constantes.ZEROS);
+							hacienda.setEstado(Constantes.HACIENDA_ESTADO_FIRMARDO_XML);
+							hacienda.setConsecutivo(factura.getNumeroConsecutivo());
+							hacienda.setReintentos(Constantes.ZEROS);
+							hacienda.setReintentosAceptacion(Constantes.ZEROS);
+							hacienda.setTipoDoc(factura.getTipoDoc());
+							hacienda.setNombreReceptor(factura.getCliente().getNombreCompleto());
+							hacienda.setCorreoReceptor(factura.getCliente().getCorreoElectronico());
+							hacienda.setTotalReceptor(factura.getTotalComprobante());
+							hacienda.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
+							haciendaBo.agregar(hacienda);
+							factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
+							factura = factura.getId() == null || factura.getId() == Constantes.ZEROS_LONG ? null : facturaBo.findById(factura.getId());
+							if (factura != null) {
+								facturaBo.modificar(factura);
+							}
+
+							
 						}
-
 					}
-					hacienda.setEmpresa(factura.getEmpresa());
-					hacienda.setClave(factura.getClave());
-					hacienda.setFechaEmisor(factura.getFechaEmision());
-					Blob b = FacturaElectronicaUtils.convertirStringToblod(comprobanteXML);
-					hacienda.setComprobanteXML(b);
-					hacienda.setCreated_at(new Date());
-					hacienda.setUpdated_at(new Date());
-					hacienda.setStatus(Constantes.ZEROS);
-					hacienda.setEstado(Constantes.HACIENDA_ESTADO_FIRMARDO_XML);
-					hacienda.setConsecutivo(factura.getNumeroConsecutivo());
-					hacienda.setReintentos(Constantes.ZEROS);
-					hacienda.setReintentosAceptacion(Constantes.ZEROS);
-					hacienda.setTipoDoc(factura.getTipoDoc());
-					hacienda.setNombreReceptor(factura.getCliente().getNombreCompleto());
-					hacienda.setCorreoReceptor(factura.getCliente().getCorreoElectronico());
-					hacienda.setTotalReceptor(factura.getTotalComprobante());
-					hacienda.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
-					haciendaBo.agregar(hacienda);
-					factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
-					factura = factura.getId() == null || factura.getId() == Constantes.ZEROS_LONG ? null : facturaBo.findById(factura.getId());
-					if (factura != null) {
-						facturaBo.modificar(factura);
-					}
-
 				}
 
 			}
 			log.info("Fin el proceso de firmado  {}", new Date());
 
 		} catch (Exception e) {
-			log.info("** Error  proceso de firmado: " + e.getMessage() + " fecha " + new Date());
+			log.info("** Error  proceso de firmado: " + e.getMessage() + " fecha " + new Date() + "Factura : ");
 			throw e;
 		}
 
