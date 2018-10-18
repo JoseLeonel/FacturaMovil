@@ -84,28 +84,33 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 	public void actualizarCaja(UsuarioCaja usuarioCaja, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalServicio) throws Exception {
 		try {
 			Double resultadoTotalBanco = Constantes.ZEROS_DOUBLE;
-			resultadoTotalBanco = totalBanco + usuarioCaja.getTotalBanco();
+			resultadoTotalBanco = usuarioCaja.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getTotalBanco();
+			resultadoTotalBanco += totalBanco;
 
 			Double resultadoTotalEfectivo = Constantes.ZEROS_DOUBLE;
-			resultadoTotalEfectivo = totalEfectivo + usuarioCaja.getTotalEfectivo();
+			resultadoTotalEfectivo = usuarioCaja.getTotalEfectivo() != null ? usuarioCaja.getTotalEfectivo() : Constantes.ZEROS_DOUBLE;
+			resultadoTotalEfectivo += totalEfectivo + usuarioCaja.getTotalEfectivo();
 
 			Double resultadoAbono = Constantes.ZEROS_DOUBLE;
-			resultadoAbono = totalAbono + usuarioCaja.getTotalAbono();
+			resultadoAbono = usuarioCaja.getTotalAbono() != null ? usuarioCaja.getTotalAbono() : Constantes.ZEROS_DOUBLE;
+			resultadoAbono += totalAbono;
 
 			Double resultadoTarjeta = Constantes.ZEROS_DOUBLE;
-			resultadoTarjeta = totalTarjeta + usuarioCaja.getTotalTarjeta();
+			resultadoTarjeta = usuarioCaja.getTotalTarjeta() != null ? usuarioCaja.getTotalTarjeta() : Constantes.ZEROS_DOUBLE;
+			resultadoTarjeta += totalTarjeta;
 
 			Double resultadoServicio = Constantes.ZEROS_DOUBLE;
-			resultadoServicio = totalServicio + usuarioCaja.getTotalServicio();
-			
+			resultadoServicio = usuarioCaja.getTotalServicio() != null ? usuarioCaja.getTotalServicio() : Constantes.ZEROS_DOUBLE;
+			resultadoServicio += totalServicio;
+
 			Double resultadoNeto = resultadoTotalEfectivo + resultadoTarjeta + resultadoTotalBanco + resultadoAbono + resultadoServicio;
 			usuarioCaja.setTotalCredito(Constantes.ZEROS_DOUBLE);
-			usuarioCaja.setTotalBanco(Utils.roundFactura(resultadoTotalBanco,5));
-			usuarioCaja.setTotalEfectivo(Utils.roundFactura(resultadoTotalEfectivo,5));
-			usuarioCaja.setTotalTarjeta(Utils.roundFactura(resultadoTarjeta,5));
-			usuarioCaja.setTotalAbono(Utils.roundFactura(resultadoAbono,5));
-			usuarioCaja.setTotalNeto(Utils.roundFactura(resultadoNeto,5));
-			usuarioCaja.setTotalServicio(Utils.roundFactura(resultadoServicio,5));
+			usuarioCaja.setTotalBanco(Utils.roundFactura(resultadoTotalBanco, 5));
+			usuarioCaja.setTotalEfectivo(Utils.roundFactura(resultadoTotalEfectivo, 5));
+			usuarioCaja.setTotalTarjeta(Utils.roundFactura(resultadoTarjeta, 5));
+			usuarioCaja.setTotalAbono(Utils.roundFactura(resultadoAbono, 5));
+			usuarioCaja.setTotalNeto(Utils.roundFactura(resultadoNeto, 5));
+			usuarioCaja.setTotalServicio(Utils.roundFactura(resultadoServicio, 5));
 			modificar(usuarioCaja);
 
 		} catch (Exception e) {

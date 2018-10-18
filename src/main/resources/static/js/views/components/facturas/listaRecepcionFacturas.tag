@@ -2,7 +2,7 @@
    <!-- Titulos -->
     <div  class="row " show="mostrarListado" >
         <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <h1><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("facturas.facturas")} </h1>
+            <h1><i class="fa fa-calculator"></i>&nbsp Compras Aceptas en Hacienda </h1>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
         </div>

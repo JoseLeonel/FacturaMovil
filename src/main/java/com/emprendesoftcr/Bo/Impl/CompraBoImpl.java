@@ -177,7 +177,7 @@ public class CompraBoImpl implements CompraBo {
 				}
 			}
 		} catch (Exception e) {
-			log.info("** Error  crearCompra: " + e.getMessage() + " fecha " + new Date());
+			log.info("** Error  crearCompra: " + e.getMessage() + " fecha " + new Date() + "  Compra:"+ compraCommand.getConsecutivo() );
 
 			throw e;
 		}

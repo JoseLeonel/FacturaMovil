@@ -74,7 +74,7 @@
                                 <div  class= "col-md-6 col-sx-6 col-sm-6 col-lg-6" >
                                     <div class="form-group has-success">
                                         <label for="pago_transporteL">{$.i18n.prop("factura.resumen.efectivo")} </label> 
-                                        <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="campo tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo" value="{factura.totalEfectivo}" >
+                                        <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="campo tamanoLetraTotales totalEfectivo " id="totalEfectivo" name="totalEfectivo" value="{factura.totalEfectivo.toFixed(2)}" >
                                     </div>
                                     <div  class="form-group has-success">
                                         <label for="pago_efectivoL">{$.i18n.prop("factura.resumen.tarjeta")} </label> 
@@ -588,9 +588,9 @@
         __InicializarTabla('.tableListarFacturasDia')
         agregarInputsCombos_Articulo()
         __ListaFacturasEnEspera()
-       // setInterval(function() {
-       //     __ListaFacturasEnEspera()
-       // }.bind(this), 10000)
+    //   setInterval(function() {
+    //        __ListaFacturasEnEspera()
+    //    }.bind(this), 20000)
 
         __comboCondicionPago()
         __ComboTipoDocumentos()
@@ -1301,7 +1301,7 @@ function crearFactura(estado){
             if (data.status != 200) {
                	serverMessageJsonClase(data);
                 if (data.message != null && data.message.length > 0) {
-                    mensajeError(data.message)
+                     mensajeAlertErrorOConfirmacion('error',data.message);    	
                 }
             } else {
                	serverMessageJsonClase(data);

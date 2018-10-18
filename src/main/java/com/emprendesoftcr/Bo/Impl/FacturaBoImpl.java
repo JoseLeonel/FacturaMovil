@@ -14,12 +14,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.CuentaCobrarDao;
-import com.emprendesoftcr.Dao.EmpresaDao;
 import com.emprendesoftcr.Dao.FacturaDao;
 import com.emprendesoftcr.Dao.HaciendaDao;
 import com.emprendesoftcr.Dao.KardexDao;
@@ -49,42 +50,45 @@ import com.google.gson.Gson;
 public class FacturaBoImpl implements FacturaBo {
 
 	@Autowired
-	FacturaDao facturaDao;
+	FacturaDao						facturaDao;
+
+
+	
+	@Autowired
+	private EmpresaBo empresaBo;
 
 	@Autowired
-	private EmpresaDao empresaDao;
+	ArticuloDao						articuloDao;
 
 	@Autowired
-	private ArticuloDao articuloDao;
+	HaciendaDao						haciendaDao;
 
 	@Autowired
-	private HaciendaDao haciendaDao;
+	KardexDao							kardexDao;
 
 	@Autowired
-	private KardexDao kardexDao;
+	CuentaCobrarDao				cuentaCobrarDao;
 
 	@Autowired
-	private CuentaCobrarDao cuentaCobrarDao;
+	UsuarioCajaFacturaDao	usuarioCajaFacturaDao;
 
 	@Autowired
-	private UsuarioCajaFacturaDao usuarioCajaFacturaDao;
+	UsuarioCajaDao				usuarioCajaDao;
 
-	@Autowired
-	private UsuarioCajaDao usuarioCajaDao;
+	private Logger				log	= LoggerFactory.getLogger(this.getClass());
 
-	private Logger log = LoggerFactory.getLogger(this.getClass());
-
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void agregar(Factura factura) {
 		facturaDao.agregar(factura);
 
 	}
-	
-	private final ReentrantLock lock = new ReentrantLock();
 
 	/**
 	 * Modificar una factura
 	 * @see com.emprendesoftcr.Bo.FacturaBo#modificar(com.emprendesoftcr.modelo.Factura)
 	 */
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	@Override
 	public void modificar(Factura factura) {
 		facturaDao.modificar(factura);
@@ -95,6 +99,7 @@ public class FacturaBoImpl implements FacturaBo {
 	 * @see com.emprendesoftcr.Bo.FacturaBo#eliminar(com.emprendesoftcr.modelo.Factura)
 	 */
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void eliminar(Factura factura) {
 		facturaDao.eliminar(factura);
 	}
@@ -126,6 +131,7 @@ public class FacturaBoImpl implements FacturaBo {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void eliminarDetalleFacturaPorSP(Factura factura) throws Exception {
 		try {
 			facturaDao.eliminarDetalleFacturaPorSP(factura);
@@ -142,7 +148,7 @@ public class FacturaBoImpl implements FacturaBo {
 	}
 
 	private Factura formaFactura(FacturaCommand facturaCommand, Usuario usuario) throws Exception {
-		
+
 		// Se forma objeto factura
 		Factura factura = null;
 		try {
@@ -239,7 +245,7 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setCreated_at(new Date());
 			}
 			factura.setFechaEmision(new Date());
-			
+
 		} catch (Exception e) {
 			throw e;
 		}
@@ -432,20 +438,28 @@ public class FacturaBoImpl implements FacturaBo {
 			}
 		}
 	}
-	
 
-	/**	
+	/**
 	 * Crear la factura o el tiquete temporal
 	 * @see com.emprendesoftcr.Bo.FacturaBo#crearFactura(com.emprendesoftcr.web.command.FacturaCommand, com.emprendesoftcr.modelo.Usuario)
 	 */
+	private final ReentrantLock lock = new ReentrantLock();
+ 
 	@Override
 	@Transactional
-	public Factura crearFactura(FacturaCommand facturaCommand, Usuario usuario, UsuarioCaja usuarioCaja, TipoCambio tipoCambio) throws Exception {
-
+	public synchronized Factura crearFactura(FacturaCommand facturaCommand, Usuario usuario, UsuarioCaja usuarioCaja, TipoCambio tipoCambio) throws Exception {
+     
 		Factura factura = null;
+		lock.lock();
+		
+//		System.out.println(lock);
+//    System.out.println(System.identityHashCode(lock));
 
 		try {
-			
+			long id = Thread.currentThread().getId();
+      System.out.println(String.format("--start transaccion--> Thread=%d %s", id, "Fecha:" + new Date()));
+	
+      Empresa empresa = empresaBo.buscar(facturaCommand.getEmpresa().getId());
 			// Se actualizan los datos de la factura command
 			facturaCommand.setTotal(facturaCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotal());
 			facturaCommand.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
@@ -480,7 +494,7 @@ public class FacturaBoImpl implements FacturaBo {
 			// Se anula las facturas
 			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				if (facturaCommand.getReferenciaNumero() != null && facturaCommand.getReferenciaNumero() != Constantes.EMPTY) {
-					Factura facturaAnular = findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa());
+					Factura facturaAnular = findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), empresa);
 					if (facturaAnular != null) {
 						facturaAnular.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
 						modificar(facturaAnular);
@@ -499,16 +513,16 @@ public class FacturaBoImpl implements FacturaBo {
 			// Se asociando los detalles a la factura
 			this.asociaDetallesFactura(factura, facturaCommand, usuario, detallesFacturaCommand);
 
-			
-	    try {
+			try {
 
-	    	lock.lock();
-				
-	    	// Generar el consecutivo de venta
+				// Generar el consecutivo de venta
 				if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-					factura.setNumeroConsecutivo(empresaDao.generarConsecutivoFactura(facturaCommand.getEmpresa(), usuario, factura));
-					if (factura.getEmpresa().getNoFacturaElectronica() != null && factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
-						factura.setClave(empresaDao.generaClaveFacturaTributacion(factura.getEmpresa(), factura.getNumeroConsecutivo(), FacturaElectronicaUtils.COMPROBANTE_ELECTRONICO_NORMAL));
+					
+					factura.setNumeroConsecutivo(empresaBo.generarConsecutivoFactura(empresa, usuario, factura));
+					if (empresa.getNoFacturaElectronica() != null && empresa.getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
+						factura.setClave(empresaBo.generaClaveFacturaTributacion(empresa, factura.getNumeroConsecutivo(), FacturaElectronicaUtils.COMPROBANTE_ELECTRONICO_NORMAL));
+						
+						factura.setEmpresa(empresa);
 					}
 				}
 				// Verifica si esta facturado para cambiar el estado firma y enviar a crear el xml en el proceso automatico
@@ -517,7 +531,7 @@ public class FacturaBoImpl implements FacturaBo {
 				} else {
 					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 						factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
-					}else {
+					} else {
 						factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_EN_PROCESOS);
 					}
 				}
@@ -532,10 +546,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 				// Se asocia a la factura la caja
 				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
-					if (factura.getTotalEfectivo().equals(Constantes.ZEROS_DOUBLE) 
-							&& factura.getTotalBanco().equals(Constantes.ZEROS_DOUBLE) 
-							&& factura.getTotalTarjeta().equals(Constantes.ZEROS_DOUBLE) 
-							&& factura.getTotalCredito().equals(Constantes.ZEROS_DOUBLE)) {
+					if (factura.getTotalEfectivo().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalBanco().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalTarjeta().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalCredito().equals(Constantes.ZEROS_DOUBLE)) {
 						if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 							factura.setTotalEfectivo(facturaCommand.getTotalEfectivo());
 							factura.setTotalCambioPagar(Constantes.ZEROS_DOUBLE);
@@ -547,18 +558,15 @@ public class FacturaBoImpl implements FacturaBo {
 					usuarioCajaFactura.setFactura(factura);
 					usuarioCajaFactura.setUsuarioCaja(usuarioCaja);
 					usuarioCajaFacturaDao.agregar(usuarioCajaFactura);
-					if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) 
-							&& !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS) 
-							&& !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) 
-							&& !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+					if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
 						usuarioCajaDao.actualizarCaja(usuarioCaja, factura.getTotalEfectivo(), factura.getTotalTarjeta(), factura.getTotalBanco(), factura.getTotalCredito(), Constantes.ZEROS_DOUBLE, factura.getTotalImpuestoServicio());
 					}
 					modificar(factura);
 				}
-				
-				//Actualiza articulo y inventario
+
+				// Actualiza articulo y inventario
 				this.actualizaArticulosInventario(detallesFacturaCommand, factura, usuario);
-				
+
 				// Crear Credito del cliente
 				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
 					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
@@ -567,18 +575,16 @@ public class FacturaBoImpl implements FacturaBo {
 						}
 					}
 				}
-	    }catch (Exception e) {
-	    	throw e;
-	    }finally {
-	       lock.unlock();
-	    }
-			
+
+			} catch (Exception e) {
+				throw e;
+			}
 
 			// Anulacion de la factura anterior
 			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
 				if (factura.getReferenciaNumero() != null) {
 					if (factura.getReferenciaNumero() != Constantes.EMPTY) {
-						Factura facturaAnterior = findByConsecutivoAndEmpresa(factura.getReferenciaNumero(), usuario.getEmpresa());
+						Factura facturaAnterior = findByConsecutivoAndEmpresa(factura.getReferenciaNumero(), empresa);
 						if (facturaAnterior != null) {
 							CuentaCobrar cuentaCobrar = cuentaCobrarDao.buscarPorConsecutivo(factura.getEmpresa(), factura.getReferenciaNumero());
 							if (cuentaCobrar != null) {
@@ -595,7 +601,7 @@ public class FacturaBoImpl implements FacturaBo {
 							facturaAnterior.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
 							modificar(facturaAnterior);
 							if (facturaAnterior.getClave() != null) {
-								Hacienda hacienda = haciendaDao.findByEmpresaAndClave(usuario.getEmpresa(), facturaAnterior.getClave());
+								Hacienda hacienda = haciendaDao.findByEmpresaAndClave(empresa, facturaAnterior.getClave());
 								if (hacienda != null) {
 									hacienda.setEstado(Constantes.HACIENDA_ESTADO_ANULADA);
 									haciendaDao.modificar(hacienda);
@@ -605,16 +611,18 @@ public class FacturaBoImpl implements FacturaBo {
 					}
 				}
 			}
+			System.out.println(String.format("--Finaliza transaccion--> Thread=%d %s", id, "Fecha:" + new Date())); 
 			
 		} catch (Exception e) {
 			log.info("** Error  crear la factura: " + e.getMessage() + " fecha " + new Date());
 			throw e;
+		}finally {
+			lock.unlock();
 		}
+		
 		return factura;
 	}
-	
-	
-	
+
 	/**
 	 * Aplicar el inventario si estado de la venta es facturada Toda nota credito se devuelve al inventario los productos
 	 */

@@ -13,6 +13,7 @@ import javax.persistence.StoredProcedureQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Dao.FacturaDao;
 import com.emprendesoftcr.Utils.Constantes;
@@ -21,6 +22,7 @@ import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 
 @Repository("facturaDao")
+@Transactional
 public class FacturaDaoImpl implements FacturaDao {
 
 	@PersistenceContext
@@ -122,7 +124,7 @@ public class FacturaDaoImpl implements FacturaDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa){
-		Query query = entityManager.createQuery("select obj from Factura obj where obj.empresa.id = :idEmpresa and obj.referenciaCodigo != '01' and obj.estado = :estado and obj.created_at >= :fechaInicio and obj.fechaEmision <= :fechaFin");
+		Query query = entityManager.createQuery("select obj from Factura obj where obj.empresa.id = :idEmpresa and obj.referenciaCodigo != '01' and obj.estado = :estado and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin");
 		query.setParameter("idEmpresa", idEmpresa);
 		query.setParameter("estado", estado);
 		query.setParameter("fechaInicio", fechaInicio);

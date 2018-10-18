@@ -6,6 +6,7 @@ public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																			= ResourceBundle.getBundle("factura");
 
+	public static final String					COMBO_TODOS																					= "0";
 	// Empresa aplica factura Electronica
 	public static final Integer					NO_APLICA_FACTURA_ELECTRONICA												= 1;
 	public static final Integer					SI_APLICA_FACTURA_ELECTRONICA												= 0;

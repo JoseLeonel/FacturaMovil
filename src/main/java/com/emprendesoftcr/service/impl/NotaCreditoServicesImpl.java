@@ -49,7 +49,12 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
 		String resultado = Constantes.EMPTY;
 		try {
 			Certificado certificado  = certificadoBo.findByEmpresa(empresa);
-			 resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_NOTA_CREDITO);
+			if(certificado !=null) {
+				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_NOTA_CREDITO); 
+			}else {
+				log.info("** Error  Empresa no se encuentra el certificado: " + empresa.getNombre());
+			}
+			 
 		
      
 		} catch (Exception e) {

@@ -51,6 +51,12 @@ public class EmpresaDaoImpl implements EmpresaDao {
 	public Empresa buscar(Integer id) {
 		Query query = entityManager.createQuery("select obj from Empresa obj where obj.id = :id");
 		query.setParameter("id", id);
+		return (Empresa) query.getSingleResult();
+	}
+
+	public Empresa buscar2(Integer id) {
+		Query query = entityManager.createQuery("select obj from Empresa obj where obj.id = :id");
+		query.setParameter("id", id);
 		List<Empresa> results = query.getResultList();
 		if (!results.isEmpty()) {
 			return (Empresa) results.get(0);
@@ -58,7 +64,7 @@ public class EmpresaDaoImpl implements EmpresaDao {
 			return null;
 		}
 	}
-
+	
 	/**
 	 * Buscar por nombre
 	 * @param nombre
