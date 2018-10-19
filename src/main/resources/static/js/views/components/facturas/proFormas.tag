@@ -24,6 +24,7 @@
                                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
+                                                <th class = "table-header" >{$.i18n.prop("factura.id")}            </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}            </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.documento")}                </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.cliente")}                  </th>
@@ -35,6 +36,7 @@
                                         </thead>
                                         <tfoot style="display: table-header-group;">
                                             <tr>
+                                                <th>{$.i18n.prop("factura.id")}            </th>
                                                 <th>{$.i18n.prop("factura.fecha.emision")}            </th>
                                                 <th>{$.i18n.prop("factura.documento")}                </th>
                                                 <th>{$.i18n.prop("factura.cliente")}                  </th>
@@ -750,6 +752,7 @@ function listado(){
                     __CambiarEstado()
                     sumar()
                     __EnviarCorreos()
+                    __imprimirPTV()
                 }else{
                     __InformacionDataTable();
                      agregarInputsCombos();
@@ -921,6 +924,7 @@ function __comboCondicionPago(){
 **/
 function __InformacionDataTable(){
     self.formato_tabla = [ 
+                               {'data' :'id'   ,"name":"id"             ,"title" : $.i18n.prop("factura.id")     ,"autoWidth" :true },
                                {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"             ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true },
                              
                                {'data' :'id'                    ,"name":"id"                      ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
@@ -979,6 +983,7 @@ function __Opciones(id,type,row){
     menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
     
     menu += '<li><a href="#"  title="Mostrar" class="  btnMostrar" >Mostrar</a></li>'
+    menu += '<li><a href="#"  title="Mostrar" class="  btnImprimir" >Imprimir</a></li>'
     menu += '<li><a href="#"  title="Cambia el Estado Proforma a Venta en espera" class="  btnPendiente" >Cambiar a venta en espera</a></li>'
     menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Envio Correo</a></li>'
     menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
@@ -986,6 +991,24 @@ function __Opciones(id,type,row){
     menu += "</ul></div>"  
 
      return menu;          
+}
+
+/**
+*  imprimir impresora punto de venta
+**/
+function __imprimirPTV(){
+	$('.tableListar').on('click','.btnImprimir',function(e){
+		var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+        self.factura = data
+        self.update()
+        riot.mount('proforma-imprimir',{factura:self.factura});    
+	});
 }
 
 

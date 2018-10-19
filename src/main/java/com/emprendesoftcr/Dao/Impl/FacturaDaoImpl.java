@@ -21,8 +21,8 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 
-@Repository("facturaDao")
 @Transactional
+@Repository("facturaDao")
 public class FacturaDaoImpl implements FacturaDao {
 
 	@PersistenceContext
@@ -46,6 +46,7 @@ public class FacturaDaoImpl implements FacturaDao {
 	 * @param id
 	 * @return
 	 */
+	@Transactional(readOnly = true)
 	@Override
 	public Factura findById(Long id) {
 		Query query = entityManager.createQuery("select obj from Factura obj where obj.id = :id");
@@ -63,6 +64,7 @@ public class FacturaDaoImpl implements FacturaDao {
 	 * Busca por consecutivo y empresa
 	 * @see com.emprendesoftcr.Dao.CompraDao#findByConsecutivoAndEmpresa(java.lang.String, com.emprendesoftcr.modelo.Empresa)
 	 */
+	@Transactional(readOnly = true)
 	@Override
 	public Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Factura obj where obj.numeroConsecutivo = :consecutivo and obj.empresa = :empresa");
@@ -107,12 +109,13 @@ public class FacturaDaoImpl implements FacturaDao {
 	 * Todas las facturas que no se le a creado la firma
 	 * @see com.emprendesoftcr.Dao.FacturaDao#findByEstadoFirma(java.lang.Integer)
 	 */
+	@Transactional(readOnly = true)
 	@Override
 	public Collection<Factura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma){
 		Query query = entityManager.createQuery("select obj from Factura obj where  obj.estadoFirma = :estadoFirma or  obj.estadoFirma = :reEstadoFirma");
 		query.setParameter("estadoFirma", estadoFirma);
 		query.setParameter("reEstadoFirma", reEstadoFirma);
-		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
+	//	query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
 		
 		return query.getResultList();
 	}
@@ -121,6 +124,7 @@ public class FacturaDaoImpl implements FacturaDao {
 	 * Todas las facturas que no se le a creado la firma
 	 * @see com.emprendesoftcr.Dao.FacturaDao#findByEstadoFirma(java.lang.Integer)
 	 */
+	@Transactional(readOnly = true)
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa){
@@ -131,7 +135,7 @@ public class FacturaDaoImpl implements FacturaDao {
 		query.setParameter("fechaFin", fechaFin);
 		return query.getResultList();
 	}
-	
+	@Transactional(readOnly = true)
 	public TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa) {
 
 		StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_TOTAL_FACTURAS);

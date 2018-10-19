@@ -96,23 +96,13 @@ import com.itextpdf.text.DocumentException;
 @Controller
 public class FacturasController {
 
-	private static final Function<String, String> BIND_CONDICION_VENTA = (id) -> id.equals("01") ? "Contado" : id.equals("02") ? "Credito" : id.equals("03") ? "Consignacion" : id.equals("04") ? "Apartado" : id.equals("05") ? "Arrendamiento con opcion de compra" : id.equals("06") ? "Arrendamiento en funcion financiera" : "Otros";
+	private static final Function<String, String>											BIND_CONDICION_VENTA						= (id) -> id.equals("01") ? "Contado" : id.equals("02") ? "Credito" : id.equals("03") ? "Consignacion" : id.equals("04") ? "Apartado" : id.equals("05") ? "Arrendamiento con opcion de compra" : id.equals("06") ? "Arrendamiento en funcion financiera" : "Otros";
 
-	private static final Function<Object, FacturaEsperaCommand> TO_COMMAND = new Function<Object, FacturaEsperaCommand>() {
+	private static final Function<Object, FacturaEsperaCommand>				TO_COMMAND=new Function<Object,FacturaEsperaCommand>(){
 
-		@Override
-		public FacturaEsperaCommand apply(Object f) {
-			return new FacturaEsperaCommand((Factura) f);
-		};
-	};
+	@Override public FacturaEsperaCommand apply(Object f){return new FacturaEsperaCommand((Factura)f);};};
 
-	private static final Function<Object, RecepcionFacturaCommand> TO_COMMAND_RECEPCION = new Function<Object, RecepcionFacturaCommand>() {
-		@Override
-		public RecepcionFacturaCommand apply(Object f) {
-			return new RecepcionFacturaCommand((RecepcionFactura) f);
-		};
-	};
-	
+	private static final Function<Object, RecepcionFacturaCommand>		TO_COMMAND_RECEPCION=new Function<Object,RecepcionFacturaCommand>(){@Override public RecepcionFacturaCommand apply(Object f){return new RecepcionFacturaCommand((RecepcionFactura)f);};};
 
 	private static final Function<Detalle, DetalleFacturaElectronica>	TO_DETALLE											= (d) -> {
 																																																			//
@@ -141,16 +131,17 @@ public class FacturasController {
 																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
 																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
 																																																			facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
-																																																			facturaElectronica.set_nota(d.getNota() ==null?Constantes.EMPTY:d.getNota());
+																																																			facturaElectronica.set_nota(d.getNota() == null ? Constantes.EMPTY : d.getNota());
 																																																			// Cliente
 																																																			// if (!d.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE))
 																																																			// {
+
 																																																			facturaElectronica.setClienteNombre(d.getCliente().getNombreCompleto());
 																																																			facturaElectronica.setClienteNombreComercial(d.getCliente().getNombreComercial());
 																																																			facturaElectronica.setClienteCorreo(d.getCliente().getCorreoElectronico());
 																																																			facturaElectronica.setClienteCedula(d.getCliente().getCedula());
 																																																			facturaElectronica.setClienteTelefono(d.getCliente().getTelefono() != null ? d.getCliente().getTelefono().toString() : Constantes.EMPTY);
-
+																																																			facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
 																																																			// }
 																																																			// facturaElectronica.setClienteMesCobro(TO_MESCOBRO.apply(d.getMesCobro()));
 																																																			// Ubicacion
@@ -197,61 +188,61 @@ public class FacturasController {
 																																																		};
 
 	@Autowired
-	private DetalleBo detalleBo;
+	private DetalleBo																									detalleBo;
 
 	@Autowired
-	private CorreosBo correosBo;
+	private CorreosBo																									correosBo;
 
 	@Autowired
-	private DataTableBo dataTableBo;
+	private DataTableBo																								dataTableBo;
 
 	@Autowired
-	private CertificadoBo certificadoBo;
+	private CertificadoBo																							certificadoBo;
 
 	@Autowired
-	private UsuarioBo usuarioBo;
+	private UsuarioBo																									usuarioBo;
 
 	@Autowired
-	private TipoCambioBo tipoCambioBo;
+	private TipoCambioBo																							tipoCambioBo;
 
 	@Autowired
-	private UsuarioCajaBo usuarioCajaBo;
+	private UsuarioCajaBo																							usuarioCajaBo;
 
 	@Autowired
-	private VendedorBo vendedorBo;
+	private VendedorBo																								vendedorBo;
 
 	@Autowired
-	private EmpresaBo empresaBo;
+	private EmpresaBo																									empresaBo;
 
 	@Autowired
-	private RecepcionFacturaBo recepcionFacturaBo;
+	private RecepcionFacturaBo																				recepcionFacturaBo;
 
 	@Autowired
-	private ClienteBo clienteBo;
+	private ClienteBo																									clienteBo;
 
 	@Autowired
-	private FacturaBo facturaBo;
+	private FacturaBo																									facturaBo;
 
 	@Autowired
-	private EmpresaPropertyEditor empresaPropertyEditor;
+	private EmpresaPropertyEditor																			empresaPropertyEditor;
 
 	@Autowired
-	private ClientePropertyEditor clientePropertyEditor;
+	private ClientePropertyEditor																			clientePropertyEditor;
 
 	@Autowired
-	private VendedorPropertyEditor vendedorPropertyEditor;
+	private VendedorPropertyEditor																		vendedorPropertyEditor;
 
 	@Autowired
-	private FacturaFormValidator facturaFormValidator;
+	private FacturaFormValidator																			facturaFormValidator;
 
 	@Autowired
-	private StringPropertyEditor stringPropertyEditor;
+	private StringPropertyEditor																			stringPropertyEditor;
 
 	@Autowired
-	private FechaPropertyEditor fechaPropertyEditor;
+	private FechaPropertyEditor																				fechaPropertyEditor;
 
 	@Autowired
-	private MesaPropertyEditor mesaPropertyEditor;
+	private MesaPropertyEditor																				mesaPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -333,6 +324,7 @@ public class FacturasController {
 	public String listaRecepcionFacturas(ModelMap model) {
 		return "views/facturas/listaRecepcionFacturas";
 	}
+
 	/**
 	 * Listado de facturas anuladas y facturadas
 	 * @param model
@@ -377,9 +369,9 @@ public class FacturasController {
 
 		// Se prepara el correo
 		String from = "FacturasEmitidas@emprendesoftcr.com";
-		if(usuario.getEmpresa().getAbreviaturaEmpresa() !=null) {
-			if(!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-				from =  usuario.getEmpresa().getAbreviaturaEmpresa()+"_FacturasEmitidas" + "_No_Reply@emprendesoftcr.com";
+		if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
+			if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+				from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_FacturasEmitidas" + "_No_Reply@emprendesoftcr.com";
 			}
 		}
 		String subject = "Facturas dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
@@ -671,10 +663,9 @@ public class FacturasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarRecepcionFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarRecepcionFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor) {
-		
-		//Usuario de la session
+	public RespuestaServiceDataTable listarRecepcionFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor) {
+
+		// Usuario de la session
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 		// Consulta por fechas
@@ -694,7 +685,7 @@ public class FacturasController {
 			if (fechaFinal != null) {
 				fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
 			}
-			
+
 			DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
 			delimitador.addFiltro(new JqGridFilter("fechaEmision", dateFormat.format(fechaInicio), "date>="));
 			delimitador.addFiltro(new JqGridFilter("fechaEmision", dateFormat.format(fechaFinal), "dateFinal<="));
@@ -745,22 +736,21 @@ public class FacturasController {
 	@ResponseBody
 	@SuppressWarnings("rawtypes")
 	public RespuestaServiceValidator crearFactura(@RequestBody FacturaCommand facturaCommand, BindingResult result) throws ParseException {
-		
+
 		try {
 
 			Usuario usuario = usuarioBo.buscar(facturaCommand.getUsuario());
 			return this.crearFactura(facturaCommand, result, usuario);
 		} catch (Exception e) {
-	
+
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
-	
-	private  RespuestaServiceValidator<?> crearFactura(FacturaCommand facturaCommand, BindingResult result, Usuario usuario) {
+
+	private RespuestaServiceValidator<?> crearFactura(FacturaCommand facturaCommand, BindingResult result, Usuario usuario) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-				facturaCommand.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
+			facturaCommand.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
 			facturaCommand.setTotalEfectivo(facturaCommand.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalEfectivo());
 			facturaCommand.setTotalTarjeta(facturaCommand.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalTarjeta());
 			facturaCommand.setTotalTransporte(facturaCommand.getTotalTransporte() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalTransporte());
@@ -851,14 +841,14 @@ public class FacturasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			Factura facturaCreada = facturaBo.findById(factura.getId());
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", facturaCreada);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", facturaCreada);
 
 		} catch (Exception e) {
 			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
 			respuestaServiceValidator.setMessage(e.getMessage());
 			return respuestaServiceValidator;
 		}
-		
+
 	}
 
 	/**
@@ -1142,39 +1132,68 @@ public class FacturasController {
 			if (!correo.equals(Constantes.EMPTY)) {
 				listaCorreos.add(correo);
 			}
+			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
 
-			listaCorreos.add(factura.getCliente().getCorreoElectronico());
-
-			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
-			ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
-
-			String clave = getConsecutivo(factura.getTipoDoc(), factura.getNumeroConsecutivo());
-			Collection<Attachment> attachments = createAttachments(PDF_Attach(clave, factura.getEmpresa().getCedula(), asPDF(namePDF)));
-
-			Map<String, Object> modelEmail = new HashMap<>();
-
-			modelEmail.put("clave", clave);
-			modelEmail.put("nombreEmpresa", factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial());
-			modelEmail.put("correo", factura.getEmpresa().getCorreoElectronico());
-			modelEmail.put("telefono", factura.getEmpresa().getTelefono());
-
-			String from = "Documentos_No_Reply@emprendesoftcr.com";
-
-			if (factura.getEmpresa().getAbreviaturaEmpresa() != null) {
-				if (!factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-					from = factura.getEmpresa().getAbreviaturaEmpresa() + "_Doc_Electronico" + "_No_Reply@emprendesoftcr.com";
+				if (factura.getCliente().getCorreoElectronico() != null) {
+					listaCorreos.add(factura.getCliente().getCorreoElectronico());
 				}
+				if (factura.getCliente().getCorreoElectronico1() != null) {
+					if (!factura.getCliente().getCorreoElectronico1().equals(Constantes.EMPTY)) {
+						listaCorreos.add(factura.getCliente().getCorreoElectronico1());
+					}
+
+				}
+				if (factura.getCliente().getCorreoElectronico2() != null) {
+					if (!factura.getCliente().getCorreoElectronico2().equals(Constantes.EMPTY)) {
+						listaCorreos.add(factura.getCliente().getCorreoElectronico2());
+					}
+
+				}
+				if (factura.getCliente().getCorreoElectronico3() != null) {
+					if (!factura.getCliente().getCorreoElectronico3().equals(Constantes.EMPTY)) {
+						listaCorreos.add(factura.getCliente().getCorreoElectronico3());
+					}
+				}
+
 			}
+      if(listaCorreos !=null) {
+      	if(!listaCorreos.isEmpty()) {
+    			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
+    			ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 
-			String nombre = factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial();
-			String subject = "Documento Electrónico N° " + clave + " del Emisor: " + nombre;
+    			String clave = getConsecutivo(factura.getTipoDoc(), factura.getNumeroConsecutivo());
+    			Collection<Attachment> attachments = createAttachments(PDF_Attach(clave, factura.getEmpresa().getCedula(), asPDF(namePDF)));
 
-			//
-			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailHacienda.vm", modelEmail);
-			//
+    			Map<String, Object> modelEmail = new HashMap<>();
 
+    			modelEmail.put("clave", clave);
+    			modelEmail.put("nombreEmpresa", factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial());
+    			modelEmail.put("correo", factura.getEmpresa().getCorreoElectronico());
+    			modelEmail.put("telefono", factura.getEmpresa().getTelefono());
+
+    			String from = "Documentos_No_Reply@emprendesoftcr.com";
+
+    			if (factura.getEmpresa().getAbreviaturaEmpresa() != null) {
+    				if (!factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+    					from = factura.getEmpresa().getAbreviaturaEmpresa() + "_Doc_Electronico" + "_No_Reply@emprendesoftcr.com";
+    				}
+    			}
+
+    			String nombre = factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial();
+    			String subject = "Documento Electrónico N° " + clave + " del Emisor: " + nombre;
+
+    			//
+    			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailHacienda.vm", modelEmail);
+    			//
+
+    			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+    			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
+    			return respuestaServiceValidator;
+      		
+      	}
+      }
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
-			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
+			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("factura.no.tiene.correos.asociado"));
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);

@@ -70,7 +70,7 @@ public class FacturaElectronica {
 	private double													_footerTotalGravado;
 	private double													_footerTotalExento;
 	private double													_footerTotalVenta;
-	private double													_footerTotalDescuento;
+	private Double													_footerTotalDescuento;
 	private double													_footerTotalImpuesto;
 	private double													_footerTotalVentaNeta;
 	private double													_footerTotalComprobante;
@@ -261,11 +261,11 @@ public class FacturaElectronica {
 		this._footerTotalVenta = _footerTotalVenta;
 	}
 
-	public double getFooterTotalDescuento() {
+	public Double getFooterTotalDescuento() {
 		return _footerTotalDescuento;
 	}
 
-	public void setFooterTotalDescuento(double _footerTotalDescuento) {
+	public void setFooterTotalDescuento(Double _footerTotalDescuento) {
 		this._footerTotalDescuento = _footerTotalDescuento;
 	}
 

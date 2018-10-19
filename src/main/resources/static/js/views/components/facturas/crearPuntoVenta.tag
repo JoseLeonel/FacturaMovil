@@ -588,9 +588,9 @@
         __InicializarTabla('.tableListarFacturasDia')
         agregarInputsCombos_Articulo()
         __ListaFacturasEnEspera()
-    //   setInterval(function() {
-    //        __ListaFacturasEnEspera()
-    //    }.bind(this), 20000)
+       setInterval(function() {
+            __ListaFacturasEnEspera()
+        }.bind(this), 45000)
 
         __comboCondicionPago()
         __ComboTipoDocumentos()
@@ -1328,7 +1328,7 @@ function evaluarFactura(data){
                 self.facturaReimprimir = modeloTabla
                 self.update()
                 if(self.vueltoImprimir == 0){
-                    var mensaje = "Cons# :"+   self.facturaImprimir.numeroConsecutivo        
+                    var mensaje = self.facturaImprimir.numeroConsecutivo !=null ?"Cons# :"+   self.facturaImprimir.numeroConsecutivo:"Tiquete# :"+   self.facturaImprimir.id        
                     swal({
                         position: 'top-end',
                         type: 'success',
@@ -1363,6 +1363,7 @@ function __ListaFacturasEnEspera(){
     $.ajax({
         url: 'ListarFacturasEsperaActivasAjax',
         datatype: "json",
+        global: false,
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
@@ -1372,7 +1373,7 @@ function __ListaFacturasEnEspera(){
         },
         error: function (xhr, status) {
             console.log(xhr);
-            mensajeErrorServidor(xhr, status);
+            window.location.href = "login";
         }
     });    
 }

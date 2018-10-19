@@ -858,7 +858,7 @@ __Busqueda(){
                     ActivarEventoFiltro(".tableListar")
                     __VerDetalle()
                     __BajarPDF()
-                    
+                    __imprimirPTV()
                     __CorreoAlternativo()
                     __EnviarCorreos()
                 }else{
@@ -1097,6 +1097,7 @@ function __Opciones(id,type,row){
     menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
     
     menu += '<li><a href="#"  title="Mostrar" class="  btnMostrar" >Mostrar</a></li>'
+    menu += '<li><a href="#"  title="Mostrar" class="  btnImprimir" >Imprimir</a></li>'
     if(row.empresa.noFacturaElectronica == 0){
         menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
         menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Envio Correo</a></li>'
@@ -1106,6 +1107,26 @@ function __Opciones(id,type,row){
 
 
      return menu;          
+}
+
+
+
+ /**
+*  imprimir impresora punto de venta
+**/
+function __imprimirPTV(){
+	$('.tableListar').on('click','.btnImprimir',function(e){
+		var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+        self.factura = data
+        self.update()
+        riot.mount('ptv-imprimir',{factura:self.factura});    
+	});
 }
 
 /**

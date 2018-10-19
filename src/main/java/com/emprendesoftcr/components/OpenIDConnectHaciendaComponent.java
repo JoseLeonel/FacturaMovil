@@ -91,6 +91,7 @@ public class OpenIDConnectHaciendaComponent {
 
 	private TokenInfo getTokenUrlHacienda(Empresa empresa) {
 		ClientPost clientPost = null;
+		
 		MultivaluedMap multivaluedMap = asMap(empresa);
     
 		String idp_uri = Constantes.EMPTY;
@@ -113,7 +114,8 @@ public class OpenIDConnectHaciendaComponent {
 		} else {
 
 		}
-		return TokenInfoJson.from(body);
+		return null;
+	//	return TokenInfoJson.from(body);
 	}
 
 	public Map send(String serviceUrl, MultivaluedMap bodyParams, MediaType contentType, Map<String, String> headers) {

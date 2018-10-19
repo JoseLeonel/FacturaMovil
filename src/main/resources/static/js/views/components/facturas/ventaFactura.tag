@@ -2265,16 +2265,32 @@ function evaluarFactura(data){
         $.each(data.listaObjetos, function( index, modeloTabla ) {
             self.facturaImprimir   = modeloTabla
             self.update()
-            if(self.facturaImprimir.estado == 2){
+           if(self.facturaImprimir.estado == 2 || self.facturaImprimir.estado == 3 || self.facturaImprimir.estado == 4){
                 __Init()
                 //Envia a la pantalla de impresion
-                __ListaFacturasEnEspera()
-                self.facturaImprimir   = modeloTabla
+                self.facturaReimprimir = modeloTabla
                 self.update()
-                riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
-                 
-            }else{
+                if(self.vueltoImprimir == 0){
+                    var mensaje = "Cons# :"+   self.facturaImprimir.numeroConsecutivo        
+                    swal({
+                        position: 'top-end',
+                        type: 'success',
+                        title: mensaje,
+                        showConfirmButton: false,
+                        timer: 1500
+                     })
+                }else{
+                    riot.mount('ptv-imprimir',{factura:self.facturaImprimir}); 
+                }
                
+            }else{
+                swal({
+                position: 'top-end',
+                type: 'success',
+                title:data.message,
+                showConfirmButton: false,
+                timer: 1000
+                })
                 __Init()
                 __ListaFacturasEnEspera()
             }

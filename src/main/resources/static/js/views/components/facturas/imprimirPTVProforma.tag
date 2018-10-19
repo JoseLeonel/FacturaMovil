@@ -1,4 +1,4 @@
-<ptv-imprimir>
+<proforma-imprimir>
 
 <div id="imprimirModal" class="modal fade imprimirModal" tabindex="-1" role="dialog" aria-labelledby="imprimirModal" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -13,8 +13,7 @@
             <section class="zona-impresion" id="imprimeme" name ="imprimeme">
                 <div class="forma-impresion">
                     <div class="ticket" id="ticket" name="ticket" > 
-                        <div class="encabezado" show = "{facturaImpresa.tipoDoc == '88'}"><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.id}                       </strong><br></div>
-                        <div class="encabezado" show = "{facturaImpresa.tipoDoc == '87'}"><strong> {$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")} {facturaImpresa.id}                       </strong><br></div>
+                        <div class="encabezado" ><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.id}                       </strong><br></div>
                         <div class="encabezado"><strong> {facturaImpresa.empresa.nombreComercial}                        </strong><br></div>
                         <div class="encabezado"><strong> {facturaImpresa.empresa.nombre}                        </strong><br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.cedula")}       </strong>{facturaImpresa.empresa.cedula}<br></div>
@@ -26,10 +25,7 @@
                         <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 0}"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>{facturaImpresa.tipoDoc}</div>
                         <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 1}"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>Factura</div>
                         <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.moneda")}        </strong>{facturaImpresa.codigoMoneda}</div>
-                        <div class="encabezado" show = "{facturaImpresa.tipoDoc != '88' &&  facturaImpresa.numeroConsecutivo != ""}"><strong>{$.i18n.prop("tikect.encabezado.numeroFactura")} </strong>{facturaImpresa.numeroConsecutivo}</div>
-                        <div class=" encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0  &&  facturaImpresa.clave != ""}"><strong>{$.i18n.prop("tikect.encabezado.clave")}</strong> </div>
-                        <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0 }">{claveParteUno}</div>
-                        <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0}">{claveParteDos}</div>
+                        
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura != ""}"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.nombreFactura}</div>
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == "" }"><strong show={facturaImpresa.cliente.nombreCompleto != 'CLIENTE_FRECUENTE'}>{$.i18n.prop("tikect.encabezado.receptor")}     {facturaImpresa.cliente.nombreCompleto}</strong ></div>
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == ""}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}>{$.i18n.prop("tikect.encabezado.receptor.cedula")}  {facturaImpresa.cliente.cedula}   </strong></div>
@@ -61,13 +57,13 @@
                             <td ><strong>{$.i18n.prop("tikect.detalle.subTotal")}</strong></td>
                             <td ><strong>{facturaImpresa.subTotalGeneralSTR } </strong>  </td>
                             </tr>
-                            <tr show={totalImpuestoServicio > 0} >
+                            <tr show="{totalImpuestoServicio > 0}" >
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.detalle.impuestoServicio")}</strong></td>
                             <td ><strong>{totalImpuestoServicioSTR} </strong>  </td>
                             </tr>
 
-                            <tr show={facturaImpresa.totalDescuentos >0}>
+                            <tr show="{facturaImpresa.totalDescuentos >0}">
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.total.descuento")}</strong></td>
                             <td ><strong>{facturaImpresa.totalDescuentosSTR}</strong></td>
@@ -83,11 +79,6 @@
                             <td ><strong>{facturaImpresa.totalComprobanteSTR}</strong></td>
                             </tr>
 
-                            <tr>
-                            <td></td>
-                            <td ><strong>{$.i18n.prop("tikect.totalCambioPagar")}</strong></td>
-                            <td ><strong>{facturaImpresa.totalCambioPagarSTR}</strong></td>
-                            </tr>                            
                                                  
 
                             <tr>
@@ -108,7 +99,7 @@
                                             <br>{$.i18n.prop("tikect.autorizado.no.factura.elec.parte.cuatro")}</p>
 
                         <br>
-                        <div class="encabezado">{$.i18n.prop("tikect.final")}</div>           
+                        <div class="encabezado"></div>           
                     </div>
                 </div>
             </section>
@@ -518,4 +509,4 @@ function imprimirElemento(elemento){
 
 
 </script>
-</ptv-imprimir>
+</proforma-imprimir>
