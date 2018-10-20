@@ -177,22 +177,47 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 		storedProcedure.execute();
 
 		// Se toma la respuesta
-		return new TotalCuentaPorCobrarCommand((Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_CUENTA_COBRAR_OUT_TOTAL), 
-				                                   (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_CUENTA_COBRAR_OUT_SALDO), 
-				                                   (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_CUENTA_COBRAR_OUT_ABONO));
+		return new TotalCuentaPorCobrarCommand((Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_CUENTA_COBRAR_OUT_TOTAL), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_CUENTA_COBRAR_OUT_SALDO), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_CUENTA_COBRAR_OUT_ABONO));
 	}
-	
-/**
- * Listado de cuentas por cobrar de un cliente
- * @see com.emprendesoftcr.Dao.CuentaCobrarDao#cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(java.util.Date, java.util.Date, com.emprendesoftcr.modelo.Empresa, com.emprendesoftcr.modelo.Cliente, java.lang.Integer)
- */
+
+	/**
+	 * Listado de cuentas por cobrar de un cliente
+	 * @see com.emprendesoftcr.Dao.CuentaCobrarDao#cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(java.util.Date, java.util.Date, com.emprendesoftcr.modelo.Empresa, com.emprendesoftcr.modelo.Cliente, java.lang.Integer)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<Factura> cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(Date fechaInicio, Date fechaFin,Empresa empresa,Cliente cliente,String estado){
-		Query query = entityManager.createQuery("select obj from CuentaCobrar obj where obj.empresa = :empresa and and obj.estado = :estado and obj.cliente = :cliente and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin");
+	public Collection<CuentaCobrar> cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(Date fechaInicio, Date fechaFin, Empresa empresa, Cliente cliente, String estado) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select obj from CuentaCobrar obj");
+		hql.append(" where obj.empresa = :empresa ");
+		if (estado != null) {
+			if (!estado.equals(Constantes.COMBO_TODOS)) {
+				hql.append(" and obj.estado = :estado ");
+
+			}
+		}
+		if (cliente != null) {
+			if (!cliente.equals(Constantes.COMBO_TODOS)) {
+				hql.append("and obj.cliente = :cliente ");
+
+			}
+		}
+		hql.append("and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin ");
+		Query query = entityManager.createQuery(hql.toString());
+		if (estado != null) {
+			if (!estado.equals(Constantes.COMBO_TODOS)) {
+				query.setParameter("estado", estado);
+
+			}
+		}
+		if (cliente != null) {
+			if (!cliente.equals(Constantes.COMBO_TODOS)) {
+				query.setParameter("cliente", cliente);
+
+			}
+		}
+
 		query.setParameter("empresa", empresa);
-		query.setParameter("cliente", cliente);
-		query.setParameter("estado", estado);
 		query.setParameter("fechaInicio", fechaInicio);
 		query.setParameter("fechaFin", fechaFin);
 		return query.getResultList();

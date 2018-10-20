@@ -85,23 +85,23 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 		try {
 			Double resultadoTotalBanco = Constantes.ZEROS_DOUBLE;
 			resultadoTotalBanco = usuarioCaja.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getTotalBanco();
-			resultadoTotalBanco += totalBanco;
+			resultadoTotalBanco = totalBanco + resultadoTotalBanco;
 
 			Double resultadoTotalEfectivo = Constantes.ZEROS_DOUBLE;
 			resultadoTotalEfectivo = usuarioCaja.getTotalEfectivo() != null ? usuarioCaja.getTotalEfectivo() : Constantes.ZEROS_DOUBLE;
-			resultadoTotalEfectivo += totalEfectivo + usuarioCaja.getTotalEfectivo();
+			resultadoTotalEfectivo = totalEfectivo + usuarioCaja.getTotalEfectivo();
 
 			Double resultadoAbono = Constantes.ZEROS_DOUBLE;
 			resultadoAbono = usuarioCaja.getTotalAbono() != null ? usuarioCaja.getTotalAbono() : Constantes.ZEROS_DOUBLE;
-			resultadoAbono += totalAbono;
+			resultadoAbono = totalAbono + resultadoAbono ;
 
 			Double resultadoTarjeta = Constantes.ZEROS_DOUBLE;
 			resultadoTarjeta = usuarioCaja.getTotalTarjeta() != null ? usuarioCaja.getTotalTarjeta() : Constantes.ZEROS_DOUBLE;
-			resultadoTarjeta += totalTarjeta;
+			resultadoTarjeta = totalTarjeta + resultadoTarjeta;
 
 			Double resultadoServicio = Constantes.ZEROS_DOUBLE;
 			resultadoServicio = usuarioCaja.getTotalServicio() != null ? usuarioCaja.getTotalServicio() : Constantes.ZEROS_DOUBLE;
-			resultadoServicio += totalServicio;
+			resultadoServicio = totalServicio + resultadoServicio ;
 
 			Double resultadoNeto = resultadoTotalEfectivo + resultadoTarjeta + resultadoTotalBanco + resultadoAbono + resultadoServicio;
 			usuarioCaja.setTotalCredito(Constantes.ZEROS_DOUBLE);

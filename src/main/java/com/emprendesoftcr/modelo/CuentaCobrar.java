@@ -341,6 +341,13 @@ public class CuentaCobrar implements Serializable {
 	public void setFechaPlazo(Date fechaPlazo) {
 		this.fechaPlazo = fechaPlazo;
 	}
+	
+	public String getFechaPlazoSTR() {
+		if(this.fechaPlazo !=null) {
+			return Utils.getFechaGeneraReporte(this.fechaPlazo);	
+		}
+		return Constantes.EMPTY;
+	}
 
 	public Date getFechaEntrega() {
 		return fechaEntrega;
@@ -352,6 +359,12 @@ public class CuentaCobrar implements Serializable {
 
 	public Date getCreated_at() {
 		return created_at;
+	}
+	public String getCreated_atSTR() {
+		if(this.created_at !=null) {
+			return Utils.getFechaGeneraReporte(this.created_at);	
+		}
+		return Constantes.EMPTY;
 	}
 
 	public void setCreated_at(Date created_at) {
@@ -374,6 +387,9 @@ public class CuentaCobrar implements Serializable {
 		this.cliente = cliente;
 	}
 
+	public String getNombreClienteSTR() {
+		return cliente.getNombreCompleto() ==null?Constantes.EMPTY:cliente.getNombreCompleto();
+	}
 	public Usuario getUsuario() {
 		return usuario;
 	}

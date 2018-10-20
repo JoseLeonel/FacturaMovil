@@ -8,6 +8,44 @@
     </div>
   <br>
     <br><br>
+
+ <!-- Modal correo alternativo-->
+	<div class="modal fade" id="ModalCorreoAlternativo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	          
+	                <h1 class="box-title"><i class="btn-correo"></i>&nbsp {$.i18n.prop("hacienda.titulo.correo.alternativo")}     </h1>
+	          
+	      </div>
+	      <div class="modal-body">
+	        <form id = "formulario" name ="formulario "   class="advanced-search-form">
+	            <div class="row">   
+	                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+	                    <label class="knob-label" >{$.i18n.prop("hacienda.correo")}</label>
+	                    <input type="email" class="form-control correoAlternativo" placeHolder ="{$.i18n.prop("hacienda.correo.ejemplo")}" id="correoAlternativo" name="correoAlternativo" value=""  >
+	                </div>
+	            </div>
+	        </form>
+	      </div>
+	      <div class="modal-footer">
+	        <div class="row">
+	            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+	                <button onclick ={__regresarAlListadoAlternativo}  type="button" class="btn-dark-gray btn-back  pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+	                    {$.i18n.prop("btn.volver")}
+	                </button>
+	            </div>
+	            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+	                <button  onclick={__EnviarCorreoAlternativo}   class="btn-green btn-correo pull-right" >  {$.i18n.prop("btn.enviar.correo")}</button>
+	            </div>
+	         </div>		       
+	      </div>
+	    </div>
+	  </div>
+	</div>
+    
+
+
     <!-- Inicio Filtros-->
         <div class="row" show={mostrarListado}>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -44,7 +82,7 @@
                             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                                 <div class="form-group">
                                     <label>{$.i18n.prop("cliente.titulo")} </label>  
-                                    <select  class="form-control selectCliente" id="idCliente" name="idCliente" data-live-search="true">
+                                    <select  class="form-control selectCliente idCliente" id="idCliente" name="idCliente" data-live-search="true">
                                         <option  data-tokens="{$.i18n.prop("todos.select")}"  value="0"  >{$.i18n.prop("todos.select")}</option>
                                         <option  data-tokens="{nombreCompleto}" each={clientes.data}  value="{id}"  >{nombreCompleto}</option>
                                     </select>
@@ -53,7 +91,7 @@
                             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                                 <div class="form-group">
                                     <label>{$.i18n.prop("combo.estado")} </label>  
-                                    <select  class="form-control selectEstado" id="estado" name="estado" >
+                                    <select  class="form-control selectEstado estado" id="estado" name="estado" >
                                         <option  data-tokens="{$.i18n.prop("todos.select")}"  value="0"  >{$.i18n.prop("todos.select")}</option>
                                         <option   each={estados}  value="{codigo}"  >{descripcion}</option>
                                     </select>
@@ -67,7 +105,7 @@
                 </div>
             </div>
             <div class="col-xs-12 text-right">
-                <a   show={mostrarFiltros} class="fa fa-download" target="_blank" title="Descargar detalle transacciones" href="DescargarDetalleTotalFacturasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}"> Descargar</a>        
+                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar detalle transacciones" href="DescargarDetalleTotalCuentasXCobrarAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&idClienteParam={cliente}&estadoParam={estado}"> Descargar</a>        
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
             	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
             </div>
@@ -348,6 +386,9 @@
         <div class="col-md-2 col-lg-2 col-sm-2"></div>
     </div>
 
+
+
+
 <imprimir-abono></imprimir-abono>
 
 <style type ="text/css">
@@ -411,6 +452,7 @@
     self.vendedores                = {data:[]}
     self.clientes                  = {data:[]}
     self.empresas                  = {data:[]}
+    self.hay_datos                 = false           
     self.mostrarListado            = true 
     self.botonModificar            = false
     self.botonAgregar              = false
@@ -460,10 +502,15 @@
            id:null
        }
     }
+    self.fechaInicio =null
+    self.fechaFin =null
+    self.cliente =null
+    self.estado = null
     self.on('mount',function(){
         $("#filtros").validate(reglasDeValidacionParametros());
         $("#formulario").validate(reglasDeValidacion());
         $("#formularioAbono").validate(reglasDeValidacionAbono());
+        $("#formulario").validate(reglasDeValidacionCorreo());	
         __InicializarTabla('.tableListar')
         __InicializarTabla  ('.tableListaAbonos')
         agregarInputsCombos();
@@ -610,6 +657,87 @@ var reglasDeValidacionParametros = function() {
 	return validationOptions;
 };
 
+
+		
+		__CorreoAlternativo(){
+			$('#correoAlternativo').val(null);
+		    $('#ModalCorreoAlternativo').modal({
+			    backdrop: 'static',
+		        keyboard: false
+		    });
+		    $('#ModalCorreoAlternativo').modal('show');      
+		}
+
+		/**
+		* Enviar el correo
+		**/
+		__EnviarCorreoAlternativo(){
+		     if ($("#formulario").valid()) {
+		    	 __EnviarPorCorreo()
+		     }
+		}
+		
+		__EnviarCorreoEmpresa(){
+		   	 __EnviarPorCorreo()
+		}
+		
+		/**
+		*  Regresar al listado
+		**/
+		__regresarAlListadoAlternativo(){
+		    $('#ModalCorreoAlternativo').modal('hide')
+		}
+		
+		/**
+		* Camps requeridos
+		**/
+		var reglasDeValidacionCorreo = function() {
+			var validationOptions = $.extend({}, formValidationDefaults, {
+				rules : {
+					correoAlternativo : {
+						required : true,
+		                email:true,
+		                maxlength:240,
+		                minlength:1,
+					}                                   
+		                        
+				},
+				ignore : []
+
+			});
+			return validationOptions;
+		};
+		
+
+	/**
+		*  Busqueda de la informacion y la envia por correo
+		**/
+		function __EnviarPorCorreo(){
+		    if ($("#filtros").valid()) {
+		        var parametros = {
+		        	correoAlternativo:$('#correoAlternativo').val(),		
+		        	fechaInicioParam:$('#fechaInicial').val(),
+		        	fechaFinParam:$('#fechaFinal').val(),
+                    idClienteParam:$('#idCliente').val(),
+                    estadoParam = $('.estado').val()
+		        };
+		        $.ajax({
+		            url: "EnvioDetalleCuentasXCobrarCorreoAjax.do",
+		            datatype: "json",
+		            data:parametros ,
+		            method:"POST",
+		            success: function (data) {
+					    
+			        },
+			        error: function (xhr, status) {
+			            console.log(xhr);
+			            mensajeErrorServidor(xhr, status);
+			        }
+		        });
+		 	}		
+		}
+
+
 /*
  * Muestra los filtros avanzados
  */
@@ -630,7 +758,13 @@ var reglasDeValidacionParametros = function() {
 __limpiarFiltros(){
     $('#fechaInicio').val(null)
     $('#fechaFinal').val(null)
-  
+    self.fechaInicio =null
+    self.fechaFin =null
+    self.idCliente =null
+    self.estado = null
+    self.hay_datos                 = false  
+    self.update()
+
 
 }
 
@@ -647,7 +781,11 @@ __Busqueda(){
 }
 
 function listadoConsulta(){
-       
+    self.fechaInicio =$('.fechaInicio').val()
+    self.fechaFin =$('.fechaFinal').val()
+    self.cliente =$('#idCliente').val()
+    self.estado = $('.estado').val()
+    self.update()
         var formulario = $("#filtros").serialize();
         $("#tableListar").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListar')  
@@ -666,9 +804,14 @@ function listadoConsulta(){
                     __mostrarListadoAbonos()
                     __MantenimientoAgregarAbono()
                     TotalesGenerales(result.aaData)
+                    self.hay_datos  = true
+                    self.update()
                 }else{
                     __InformacionDataTable();
                      agregarInputsCombos();
+                    self.hay_datos  = false
+                    self.update()
+
 
                 }           
             },

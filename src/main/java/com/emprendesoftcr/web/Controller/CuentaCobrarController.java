@@ -40,7 +40,6 @@ import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Empresa;
-import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.web.command.CuentaCobrarCommand;
@@ -106,39 +105,72 @@ public class CuentaCobrarController {
 	}
 
 	
-//////Descarga de manuales de usuario de acuerdo con su perfil
-//	@RequestMapping(value = "/DescargarDetalleTotalFacturasAjax.do", method = RequestMethod.GET)
-//	public void descargarDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam ,@RequestParam Long idCliente,@RequestParam String estado) throws IOException, Exception {
-//
-//		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-//		Cliente cliente = clienteBo.buscar(idCliente);
-//
-//		// Se buscan las facturas
-//		Date fechaInicio = Utils.parseDate(fechaInicioParam);
-//		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-//		Collection<CuentaCobrar> cuentaCobras = cuentaCobrarBo.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado( fechaInicio, fechaFin, usuario.getEmpresa(),cliente,estado);
-//
-//		String nombreArchivo = "FacturasMensuales.xls";
-//		response.setContentType("application/octet-stream");
-//		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
-//
-//		// Se prepara el excell
-//		ByteArrayOutputStream baos = createExcelFacturas(facturas);
-//		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
-//
-//		int BUFFER_SIZE = 4096;
-//		byte[] buffer = new byte[BUFFER_SIZE];
-//		int bytesRead = -1;
-//		while ((bytesRead = inputStream.read(buffer)) != -1) {
-//			response.getOutputStream().write(buffer, 0, bytesRead);
-//		}
-//	}
+////Descarga de manuales de usuario de acuerdo con su perfil
+	@RequestMapping(value = "/DescargarDetalleTotalCuentasXCobrarAjax.do", method = RequestMethod.GET)
+	public void descargarDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam ,@RequestParam Long idClienteParam,@RequestParam String estadoParam) throws IOException, Exception {
 
-	private ByteArrayOutputStream createExcelFacturas(Collection<Factura> facturas) {
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Cliente cliente = clienteBo.buscar(idClienteParam);
+
+		// Se buscan las facturas
+		Date fechaInicio = Utils.parseDate(fechaInicioParam);
+		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+		Collection<CuentaCobrar> cuentaCobras = cuentaCobrarBo.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado( fechaInicio, fechaFin, usuario.getEmpresa(),cliente,estadoParam);
+
+		String nombreArchivo = "cuentaxCobrar.xls";
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+
+		// Se prepara el excell
+		ByteArrayOutputStream baos = createExcelCuentaCobrar(cuentaCobras);
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+
+		int BUFFER_SIZE = 4096;
+		byte[] buffer = new byte[BUFFER_SIZE];
+		int bytesRead = -1;
+		while ((bytesRead = inputStream.read(buffer)) != -1) {
+			response.getOutputStream().write(buffer, 0, bytesRead);
+		}
+	}
+	
+	
+	
+//Enviar Correo de las cuentas por cobrar
+@RequestMapping(value = "/EnvioDetalleCuentasXCobrarCorreoAjax.do", method = RequestMethod.GET)
+public void enviarCorreoCuentasXCobrarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam ,@RequestParam Long idClienteParam,@RequestParam String estadoParam) throws IOException, Exception {
+
+	Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+	Cliente cliente = clienteBo.buscar(idClienteParam);
+
+	// Se buscan las facturas
+	Date fechaInicio = Utils.parseDate(fechaInicioParam);
+	Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+	Collection<CuentaCobrar> cuentaCobras = cuentaCobrarBo.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado( fechaInicio, fechaFin, usuario.getEmpresa(),cliente,estadoParam);
+
+	String nombreArchivo = "cuentaxCobrar.xls";
+	response.setContentType("application/octet-stream");
+	response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+
+	// Se prepara el excell
+	ByteArrayOutputStream baos = createExcelCuentaCobrar(cuentaCobras);
+	ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+
+	int BUFFER_SIZE = 4096;
+	byte[] buffer = new byte[BUFFER_SIZE];
+	int bytesRead = -1;
+	while ((bytesRead = inputStream.read(buffer)) != -1) {
+		response.getOutputStream().write(buffer, 0, bytesRead);
+	}
+}
+
+	
+	
+
+	private ByteArrayOutputStream createExcelCuentaCobrar(Collection<CuentaCobrar> cuentaCobrar) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Id", "Fecha Emision", "# Documento", "Cliente", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Total");
-		new SimpleExporter().gridExport(headers, facturas, "id, fechaEmisionSTR, numeroConsecutivo, nombreCliente, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos, totalComprobante", baos);
+		List<String> headers = Arrays.asList("", "Fecha Emision", "# Documento", "Cliente", "Total", "Saldo", "Abono");
+		new SimpleExporter().gridExport(headers, cuentaCobrar, "#Cuenta, created_atSTR, factura, nombreClienteSTR, total,totalSaldo,totalAbono", baos);
 		return baos;
 	}
 	

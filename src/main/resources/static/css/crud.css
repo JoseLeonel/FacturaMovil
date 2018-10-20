@@ -595,6 +595,13 @@ input.cmn-toggle-yes-no:checked + label:after {
         content: "\f00e ";
     
     }
+    .btn-bajar:before{
+    	font-family: FontAwesome;
+        content: "\f019 ";
+    
+    }
+    
+    
     .btn-siguiente:before{
     	font-family: FontAwesome;
         content: "\f054 ";

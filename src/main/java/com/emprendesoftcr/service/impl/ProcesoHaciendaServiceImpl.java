@@ -234,7 +234,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			log.info("** Error2  taskHaciendaEnvio: " + e.getMessage() + " fecha " + new Date());
 			 throw e;
 		}
-		soporteProblemaConHacienda(FacturasConProblemas);
+		//soporteProblemaConHacienda(FacturasConProblemas);
 	}
 
 	/**

@@ -126,6 +126,18 @@ public class ComprasController {
 					}
 				}
 			}
+			
+			if(compraCommand.getId() !=null) {
+				if(compraCommand.getId() > 0) {
+					Compra combraVerificar = compraBo.findById(compraCommand.getId());
+					if(combraVerificar !=null) {
+						if(combraVerificar.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
+							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("compra.error.ya.se.encuentra.ingresada", result.getAllErrors());
+						}
+					}
+				}
+			}
+			
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}

@@ -765,7 +765,26 @@ public class FacturasController {
 			facturaCommand.setTotalServGravados(facturaCommand.getTotalServGravados() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalServGravados());
 			facturaCommand.setTotalVenta(facturaCommand.getTotalVenta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalVenta());
 			facturaCommand.setTotalVentaNeta(facturaCommand.getTotalVentaNeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalVentaNeta());
+			
+			
+			
+			
 			UsuarioCaja usuarioCajaBd = null;
+			// Si esta en estado facturada en base de datos se retorna un mensaje que ya fue procesada
+			if(facturaCommand != null) {
+				if(facturaCommand.getId()  !=null) {
+					if(facturaCommand.getId() > Constantes.ZEROS_LONG) {
+						Factura facturaRevision = facturaBo.findById(facturaCommand.getId());
+						if(facturaRevision !=null) {
+							if(facturaRevision.getEstado() !=null) {
+								if(facturaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+									return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.ya.esta.procesada", result.getAllErrors());
+								}
+							}
+						}
+					}
+				}
+			}
 			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				usuarioCajaBd = usuarioCajaBo.findByUsuarioAndEstado(usuario, Constantes.ESTADO_ACTIVO);
 
@@ -777,6 +796,7 @@ public class FacturasController {
 				}
 
 			}
+			
 
 			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
