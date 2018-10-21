@@ -297,11 +297,11 @@
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.created_at")} </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.id")}         </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.cliente")}    </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.factura")}    </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.tipo")}       </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.total")}      </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.totalAbono")} </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.totalSaldo")} </th>
+                                <th class="table-header">{$.i1108n.prop("cuentaCobrar.factura")}    </th>
+                                <th class="table-header">{$.i1108n.prop("cuentaCobrar.tipo")}       </th>
+                                <th class="table-header">{$.i1108n.prop("cuentaCobrar.total")}      </th>
+                                <th class="table-header">{$.i1108n.prop("cuentaCobrar.totalAbono")} </th>
+                                <th class="table-header">{$.i1108n.prop("cuentaCobrar.totalSaldo")} </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.estado")}     </th>
                                 <th class="table-header">{$.i18n.prop("listado.acciones")}        </th>
                             </tr>
@@ -733,8 +733,8 @@ var reglasDeValidacionParametros = function() {
                     idClienteParam:$('#idCliente').val(),
                     estadoParam :$('#estado').val(),
                     total : self.total,
-                    saldo : self.totalAbono,
-                    abono : self.totalSaldo
+                    saldo : self.totalSaldo,
+                    abono : self.totalAbono
 		        };
 		        $.ajax({
 		            url: "EnvioDetalleCuentasXCobrarCorreoAjax.do",
