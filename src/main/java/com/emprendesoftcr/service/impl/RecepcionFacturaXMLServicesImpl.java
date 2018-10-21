@@ -76,7 +76,10 @@ public class RecepcionFacturaXMLServicesImpl implements RecepcionFacturaXMLServi
 		try {
 		
 			Certificado certificado  = certificadoBo.findByEmpresa(empresa);		
-      resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_RECEPCION_FACTURA);
+			if(certificado !=null) {
+				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_RECEPCION_FACTURA);	
+			}
+      
 		} catch (Exception e) {
 			log.info("** Error  getFirmarXML: " + e.getMessage() + " fecha " + new Date());
 			throw e;

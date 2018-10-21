@@ -577,6 +577,7 @@
     self.totalDescuentos               = 0
     self.totalImpuesto                 = 0
     self.totalComprobante              = 0
+    self.primeraVezBilleteClick = false
     self.totalCambioPagar              = 0
     self.on('mount',function(){
         $("#formularioFactura").validate(reglasDeValidacionFactura());
@@ -1090,6 +1091,7 @@ __Limpiar(){
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
+     self.primeraVezBilleteClick = false
     self.mostrarListadoArticulos == false
     self.detail                = []
     self.mensajesBackEnd       = []
@@ -1391,6 +1393,7 @@ __TotalDeDescuento(e){
 _AtrasFacturaFinal(){
    self.mostrarFormularioPago = false
    self.mostarParaCrearNuevaFactura = true
+    self.primeraVezBilleteClick = false
    self.error = false
    self.update()
    $('.codigo').val(null)
@@ -2512,12 +2515,15 @@ function __Teclas(){
         if(self.vueltoImprimir == 0){
             self.factura.totalCambioPagar =__valorNumerico(self.factura.totalComprobante)   
             self.totalCambioPagar = redondeoDecimales(self.factura.totalComprobante,2)
+            self.primeraVezBilleteClick == false
             self.update()
             $(".totalEfectivo").val(self.totalCambioPagar)
         }  
           
          mostrarPAgo()     
       }else if (self.mostrarFormularioPago == true && self.mostarParaCrearNuevaFactura == false ){
+          self.primeraVezBilleteClick == false
+          self.update()
             aplicarFactura(2)   
         } 
     }   
@@ -2551,6 +2557,12 @@ function __Teclas(){
 * Contabilizar los billetes de acuerdo a como se vayan dando click en la pantalla
 */
 _sumarBilletes(e){
+    if(self.primeraVezBilleteClick == false){
+      
+        self.factura.totalEfectivo = 0
+        self.primeraVezBilleteClick = true
+        self.update()
+    }
     var item = e.item
     if(item.valor == 0 ){
        self.factura.totalEfectivo = 0
@@ -2561,7 +2573,7 @@ _sumarBilletes(e){
        self.claseCambioDinero     = "entregarCambioPositivo"
     }else{
        self.factura.totalEfectivo = __valorNumerico(item.valor) + __valorNumerico(self.factura.totalEfectivo)
-       $('.efectivo').val(self.factura.totalEfectivo)
+       
         self.update()
         var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
         sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 
@@ -2570,7 +2582,8 @@ _sumarBilletes(e){
         self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.totalComprobante)
         self.claseCambioDinero  = __valorNumerico(sumaMontosEntregadosParaCambios) > __valorNumerico(self.factura.totalComprobante)?'entregarCambioPositivo':'entregarCambioNegativo'
         self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
-        $(".totalEfectivo").val(self.totalCambioPagar)
+        $(".totalEfectivo").val(self.factura.totalEfectivo)
+        $('.efectivo').val(self.totalCambioPagar)
 
     }
     self.update()

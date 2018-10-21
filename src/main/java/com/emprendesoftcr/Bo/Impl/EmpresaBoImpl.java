@@ -19,7 +19,6 @@ import com.emprendesoftcr.modelo.Usuario;
  * @since 19 abr. 2018
  */
 @Transactional
-@EnableTransactionManagement
 @Service("empresaBo")
 public class EmpresaBoImpl implements EmpresaBo {
 
