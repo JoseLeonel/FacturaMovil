@@ -70,7 +70,7 @@ import com.google.common.base.Function;
 @Service("procesoHaciendaService")
 public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
-	private static final Function<String, String>											BIND_CONDICION_VENTA						= (id) -> id.equals("01") ? "Contado" : id.equals("02") ? "Credito" : id.equals("03") ? "Consignacion" : id.equals("04") ? "Apartado" : id.equals("05") ? "Arrendamiento con opcion de compra" : id.equals("06") ? "Arrendamiento en funcion financiera" : "Otros";
+	private static final Function<String, String> BIND_CONDICION_VENTA = (id) -> id.equals("01") ? "Contado" : id.equals("02") ? "Credito" : id.equals("03") ? "Consignacion" : id.equals("04") ? "Apartado" : id.equals("05") ? "Arrendamiento con opcion de compra" : id.equals("06") ? "Arrendamiento en funcion financiera" : "Otros";
 
 	private static final Function<Detalle, DetalleFacturaElectronica>	TO_DETALLE											= (d) -> {
 																																																			//
@@ -153,55 +153,55 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																			return facturaElectronica;
 																																																		};
 
-	private Logger																										log															= LoggerFactory.getLogger(this.getClass());
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	HaciendaBo																												haciendaBo;
+	HaciendaBo haciendaBo;
 
 	@Autowired
-	RespuestaHaciendaXMLService																				respuestaHaciendaXMLService;
+	RespuestaHaciendaXMLService respuestaHaciendaXMLService;
 
 	@Autowired
-	SemaforoBo																												semaforoBo;
+	SemaforoBo semaforoBo;
 
 	@Autowired
-	CorreosBo																													correosBo;
+	CorreosBo correosBo;
 
 	@Autowired
-	OpenIDConnectHaciendaComponent																		openIDConnect;
+	OpenIDConnectHaciendaComponent openIDConnect;
 
 	@Autowired
-	EnvioHaciendaComponent																						envioHaciendaComponent;
+	EnvioHaciendaComponent envioHaciendaComponent;
 
 	@Autowired
-	FacturaBo																													facturaBo;
+	FacturaBo facturaBo;
 
 	@Autowired
-	RecepcionFacturaBo																								recepcionFacturaBo;
+	RecepcionFacturaBo recepcionFacturaBo;
 
 	@Autowired
-	CertificadoBo																											certificadoBo;
+	CertificadoBo certificadoBo;
 
 	@Autowired
-	FacturaXMLServices																								facturaXMLServices;
+	FacturaXMLServices facturaXMLServices;
 
 	@Autowired
-	TiqueteXMLService																									tiqueteXMLService;
+	TiqueteXMLService tiqueteXMLService;
 
 	@Autowired
-	NotaCreditoXMLServices																						notaCreditoXMLServices;
+	NotaCreditoXMLServices notaCreditoXMLServices;
 
 	@Autowired
-	NotaDebitoXMLService																							notaDebitoXMLService;
+	NotaDebitoXMLService notaDebitoXMLService;
 
 	@Autowired
-	RecepcionFacturaXMLServices																				recepcionFacturaXMLServices;
+	RecepcionFacturaXMLServices recepcionFacturaXMLServices;
 
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
 
-//	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 		ArrayList<Hacienda> FacturasConProblemas = new ArrayList<Hacienda>();
@@ -343,7 +343,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html Proceso automatico para ejecutar aceptacion del documento
 	 */
-//	@Scheduled(cron = "0 0/5 * * * ?")
+	@Scheduled(cron = "0 0/5 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		try {
@@ -507,7 +507,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	//@Scheduled(cron = "0 0/1 * * * ?")
+	// @Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -690,7 +690,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-//	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -781,7 +781,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	//@Scheduled(cron = "0 0/1 * * * ?")
+	// @Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {
@@ -797,10 +797,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 						// Crear XMl sin firma
 						comprobanteXMLSinFirma = recepcionFacturaXMLServices.getCrearXMLSinFirma(recepcionFactura);
-						
+
 						comprobanteXMLConFirma = recepcionFacturaXMLServices.getFirmarXML(comprobanteXMLSinFirma, recepcionFactura.getEmpresa());
-						
-						if(!comprobanteXMLConFirma.equals(Constantes.EMPTY)) {
+
+						if (!comprobanteXMLConFirma.equals(Constantes.EMPTY)) {
 							// Se cargan los datos de la factura, el emisor es el que envia la factura para su aprobacion
 							Hacienda hacienda = new Hacienda();
 							hacienda.setCedulaEmisor(recepcionFactura.getCedulaEmisor());
@@ -831,9 +831,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 							if (recepcionFactura != null) {
 								recepcionFacturaBo.modificar(recepcionFactura);
 							}
-							
+
 						}
-            
+
 					} catch (Exception e) {
 						log.info("** Error1  proceso de firmado: " + e.getMessage() + " fecha " + new Date());
 					}
