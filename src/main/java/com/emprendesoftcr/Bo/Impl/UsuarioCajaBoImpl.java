@@ -95,9 +95,4 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 		usuarioCajaDao.actualizarCaja(usuarioCaja, totalEfectivo, totalTarjeta, totalBanco, totalCredito, totalAbono, totalServicio);
 	}
 
-	@Override
-	public void actualizarCaja(UsuarioCaja usuarioCaja) throws Exception {
-		usuarioCajaDao.actualizarCaja(usuarioCaja);		
-	}
-
 }

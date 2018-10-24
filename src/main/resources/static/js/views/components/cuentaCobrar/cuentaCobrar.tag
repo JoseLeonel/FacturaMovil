@@ -19,7 +19,7 @@
 	          
 	      </div>
 	      <div class="modal-body">
-	        <form id = "formularioCorreo" name ="formularioCorreo "   class="advanced-search-form">
+	        <form id = "formulario" name ="formulario "   class="advanced-search-form">
 	            <div class="row">   
 	                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
 	                    <label class="knob-label" >{$.i18n.prop("hacienda.correo")}</label>
@@ -105,7 +105,6 @@
                 </div>
             </div>
             <div class="col-xs-12 text-right">
-                <a   show={hay_datos==true} onclick ={__CorreoAlternativo} class=" btn btn-primary btn-correo"   title="Envia el estado de cuenta al cliente" href="#"> {$.i18n.prop("btn.enviar.correo")}</a>        
                 <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar detalle transacciones" href="DescargarDetalleTotalCuentasXCobrarAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&idClienteParam={cliente}&estadoParam={estado}"> Descargar</a>        
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
             	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
@@ -272,19 +271,19 @@
             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                 <div class="form-group">
                     <label  >{$.i18n.prop("titulo.total")} </label>
-                    <input type="text" class="form-control " value="{totalSTR}" readonly>
+                    <input type="text" class="form-control " value="{total}" readonly>
                 </div>  
             </div>                             
             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                 <div class="form-group">
                     <label  >{$.i18n.prop("titulo.abono")} </label>
-                    <input type="text" class="form-control" value="{totalAbonoSTR}" readonly>
+                    <input type="text" class="form-control" value="{totalAbono}" readonly>
                 </div>  
             </div>                             
             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                 <div class="form-group">
                     <label  >{$.i18n.prop("titulo.saldo")} </label>
-                    <input type="text" class="form-control" value="{totalSaldoSTR}" readonly>
+                    <input type="text" class="form-control" value="{totalSaldo}" readonly>
                 </div>  
             </div>                             
         </div>
@@ -297,11 +296,11 @@
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.created_at")} </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.id")}         </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.cliente")}    </th>
-                                <th class="table-header">{$.i1108n.prop("cuentaCobrar.factura")}    </th>
-                                <th class="table-header">{$.i1108n.prop("cuentaCobrar.tipo")}       </th>
-                                <th class="table-header">{$.i1108n.prop("cuentaCobrar.total")}      </th>
-                                <th class="table-header">{$.i1108n.prop("cuentaCobrar.totalAbono")} </th>
-                                <th class="table-header">{$.i1108n.prop("cuentaCobrar.totalSaldo")} </th>
+                                <th class="table-header">{$.i18n.prop("cuentaCobrar.factura")}    </th>
+                                <th class="table-header">{$.i18n.prop("cuentaCobrar.tipo")}       </th>
+                                <th class="table-header">{$.i18n.prop("cuentaCobrar.total")}      </th>
+                                <th class="table-header">{$.i18n.prop("cuentaCobrar.totalAbono")} </th>
+                                <th class="table-header">{$.i18n.prop("cuentaCobrar.totalSaldo")} </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.estado")}     </th>
                                 <th class="table-header">{$.i18n.prop("listado.acciones")}        </th>
                             </tr>
@@ -462,9 +461,6 @@
     self.total                     = 0
     self.totalAbono                = 0
     self.totalSaldo                = 0
-    self.totalSTR                     = 0
-    self.totalAbonoSTR                = 0
-    self.totalSaldoSTR                = 0
     self.cuentaCobrar                   ={
         id:null,
         recibo:"",
@@ -514,7 +510,7 @@
         $("#filtros").validate(reglasDeValidacionParametros());
         $("#formulario").validate(reglasDeValidacion());
         $("#formularioAbono").validate(reglasDeValidacionAbono());
-        $("#formularioCorreo").validate(reglasDeValidacionCorreo());	
+        $("#formulario").validate(reglasDeValidacionCorreo());	
         __InicializarTabla('.tableListar')
         __InicializarTabla  ('.tableListaAbonos')
         agregarInputsCombos();
@@ -676,7 +672,7 @@ var reglasDeValidacionParametros = function() {
 		* Enviar el correo
 		**/
 		__EnviarCorreoAlternativo(){
-		     if ($("#formularioCorreo").valid()) {
+		     if ($("#formulario").valid()) {
 		    	 __EnviarPorCorreo()
 		     }
 		}
@@ -714,33 +710,22 @@ var reglasDeValidacionParametros = function() {
 		
 
 	/**
-    *  Busqueda de la informacion y la envia por correo
-     * @param fechaInicioParam
-	 * @param fechaFinParam
-	 * @param idClienteParam
-	 * @param estadoParam
-	 * @param correoAlternativo
-	 * @param total
-	 * @param saldo
-	 * @param abono
+		*  Busqueda de la informacion y la envia por correo
 		**/
 		function __EnviarPorCorreo(){
-		    if ($("#formularioCorreo").valid()) {
+		    if ($("#filtros").valid()) {
 		        var parametros = {
 		        	correoAlternativo:$('#correoAlternativo').val(),		
-		        	fechaInicioParam:$('#fechaInicio').val(),
+		        	fechaInicioParam:$('#fechaInicial').val(),
 		        	fechaFinParam:$('#fechaFinal').val(),
                     idClienteParam:$('#idCliente').val(),
-                    estadoParam :$('#estado').val(),
-                    total : self.total,
-                    saldo : self.totalSaldo,
-                    abono : self.totalAbono
+                    estadoParam = $('.estado').val()
 		        };
 		        $.ajax({
 		            url: "EnvioDetalleCuentasXCobrarCorreoAjax.do",
 		            datatype: "json",
 		            data:parametros ,
-		            method:"GET",
+		            method:"POST",
 		            success: function (data) {
 					    
 			        },
@@ -848,9 +833,9 @@ function TotalesGenerales(data){
         self.totalAbono += data[i].totalAbono;
         self.totalSaldo += data[i].totalSaldo;
      }
-     self.totalSTR = formatoDecimales(self.total,2)
-     self.totalAbonoSTR = formatoDecimales(self.totalAbono,2)
-     self.totalSaldoSTR = formatoDecimales(self.totalSaldo,2)
+     self.total = formatoDecimales(self.total,2)
+     self.totalAbono = formatoDecimales(self.totalAbono,2)
+     self.totalSaldo = formatoDecimales(self.totalSaldo,2)
      
      self.update()
 }

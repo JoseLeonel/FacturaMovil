@@ -1130,7 +1130,6 @@ td.col-xl-12, th.col-xl-12 {
     self.urlImagenNavegador   = '/dist/img/navegador.png';
     self.urlImagenLector      = '/dist/img/codigo_barra.png';
     self.urlImagenBuscador    = '/dist/img/buscador.png';
-    self.primeraVezBilleteClick = false
 
     self.on('mount',function(){
         $("#formularioFactura").validate(reglasDeValidacionFactura());
@@ -2070,7 +2069,6 @@ __Limpiar(){
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
-    self.primeraVezBilleteClick = false
     self.mostrarListadoArticulos == false
     self.detail                = []
     self.mensajesBackEnd       = []
@@ -2562,7 +2560,6 @@ function mostrarPAgo(){
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
     getSubTotalGeneral()
-    self.primeraVezBilleteClick = false
     self.mostarParaCrearNuevaVentas = false
     self.factura.totalCambioPagar =0
     self.mostarParaCrearNuevaFactura = false
@@ -3349,12 +3346,6 @@ function __Teclas(){
 * Contabilizar los billetes de acuerdo a como se vayan dando click en la pantalla
 */
 _sumarBilletes(e){
-     if(self.primeraVezBilleteClick == false){
-      
-        self.factura.totalEfectivo = 0
-        self.primeraVezBilleteClick = true
-        self.update()
-    }
     var item = e.item
     if(item.valor == 0 ){
        self.factura.totalEfectivo = 0
@@ -3374,9 +3365,7 @@ _sumarBilletes(e){
         self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.totalComprobante)
         self.claseCambioDinero  = __valorNumerico(sumaMontosEntregadosParaCambios) > __valorNumerico(self.factura.totalComprobante)?'entregarCambioPositivo':'entregarCambioNegativo'
         self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
-         $(".totalEfectivo").val(self.factura.totalEfectivo)
-        $('.efectivo').val(self.totalCambioPagar)
-
+        $(".totalEfectivo").val(self.totalCambioPagar)
 
     }
     self.update()

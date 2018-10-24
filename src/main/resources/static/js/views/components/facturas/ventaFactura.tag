@@ -1063,7 +1063,6 @@ td.col-xl-12, th.col-xl-12 {
             to:0
         }
     }
-    self.primeraVezBilleteClick = false
     self.mostrarImpuestoServicio = false
 
     self.urlImagenNavegador   = '/dist/img/navegador.png';
@@ -1982,7 +1981,6 @@ __Limpiar(){
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
-    self.primeraVezBilleteClick = false
     self.mostrarListadoArticulos == false
     self.detail                = []
     self.mensajesBackEnd       = []
@@ -2336,7 +2334,6 @@ _AtrasFacturaFinal(){
     $('.totalEfectivo').val(null)
     $('.totalTarjeta').val(null)
     $('.totalBanco').val(null)
-    self.primeraVezBilleteClick = false
     self.factura.totalEfectivo =0
     self.factura.totalTarjeta =0
     self.factura.totalBanco =0
@@ -2375,7 +2372,6 @@ __formaPago(e){
 *   funcion para grabar la Factura en el back end
 **/
 __MostrarFormularioDePago(){
-    
     mostrarPAgo()
 }
 
@@ -2395,7 +2391,6 @@ function mostrarPAgo(){
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
     getSubTotalGeneral()
-    self.primeraVezBilleteClick = false
     self.mostarParaCrearNuevaVentas = false
     self.factura.totalCambioPagar =0
     self.mostarParaCrearNuevaFactura = false
@@ -3197,12 +3192,6 @@ function __Teclas(){
 */
 _sumarBilletes(e){
     var item = e.item
-     if(self.primeraVezBilleteClick == false){
-      
-        self.factura.totalEfectivo = 0
-        self.primeraVezBilleteClick = true
-        self.update()
-    }
     if(item.valor == 0 ){
        self.factura.totalEfectivo = 0
        self.factura.totalTarjeta  = 0
@@ -3221,9 +3210,7 @@ _sumarBilletes(e){
         self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.totalComprobante)
         self.claseCambioDinero  = __valorNumerico(sumaMontosEntregadosParaCambios) > __valorNumerico(self.factura.totalComprobante)?'entregarCambioPositivo':'entregarCambioNegativo'
         self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
-      
-        $(".totalEfectivo").val(self.factura.totalEfectivo)
-        $('.efectivo').val(self.totalCambioPagar)
+        $(".totalEfectivo").val(self.totalCambioPagar)
 
     }
     self.update()

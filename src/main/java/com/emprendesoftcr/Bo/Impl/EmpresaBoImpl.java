@@ -1,9 +1,8 @@
 package com.emprendesoftcr.Bo.Impl;
 
-import java.util.concurrent.locks.ReentrantLock;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.EmpresaBo;
@@ -20,15 +19,13 @@ import com.emprendesoftcr.modelo.Usuario;
  * @since 19 abr. 2018
  */
 @Transactional
+@EnableTransactionManagement
 @Service("empresaBo")
 public class EmpresaBoImpl implements EmpresaBo {
 
-	
 	@Autowired
 	private EmpresaDao empresaDao;
 
-  ReentrantLock reentrantLock = new ReentrantLock();	
-	
 	public void agregar(Empresa empresa) {
 		empresaDao.agregar(empresa);
 	}
@@ -83,23 +80,12 @@ public class EmpresaBoImpl implements EmpresaBo {
 	@Override
 	@Transactional
 	public String generarConsecutivoFactura(Empresa empresa,Usuario usuario,Factura factura)  throws Exception{
-		try {
-			reentrantLock.lock();
-			return empresaDao.generarConsecutivoFactura(empresa,usuario,factura);			
-		} finally {
-			reentrantLock.unlock();
-		}
-		
+		return empresaDao.generarConsecutivoFactura(empresa,usuario,factura);
 	}
 
 	@Override
 	public String generarConsecutivoRecepcionFactura(Empresa empresa, Usuario usuario, RecepcionFactura recepcionFactura) throws Exception {
-		try {
-			reentrantLock.lock();
-			return empresaDao.generarConsecutivoRecepcionFactura(empresa, usuario, recepcionFactura);
-		} finally {
-			reentrantLock.unlock();
-		}
+		return empresaDao.generarConsecutivoRecepcionFactura(empresa, usuario, recepcionFactura);
 	}
 
 	@Override
