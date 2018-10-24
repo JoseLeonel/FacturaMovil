@@ -37,8 +37,8 @@ import com.sun.jersey.api.client.WebResource;
  * @author jose.
  * @since 18 jul. 2018
  */
-@Transactional
 @EnableTransactionManagement
+@Transactional
 @Component
 public class EnvioHaciendaComponent {
 
@@ -62,15 +62,17 @@ public class EnvioHaciendaComponent {
 	 * Envia hacia hacienda el documento firmado y actualiza los codigos
 	 * @return
 	 */
-	public  void enviarDocumentoElectronico(final String body, final OpenIDConnectHacienda openIDConnectHacienda, Hacienda hacienda) throws Exception {
+
+
+	public void enviarDocumentoElectronico(final String body, final OpenIDConnectHacienda openIDConnectHacienda, Hacienda hacienda) throws Exception {
 		try {
 			ImmutableMap<String, String> headers = ImmutableMap.of("Accept", "application/json", "Authorization", ("Bearer " + openIDConnectHacienda.getAccess_token()), "User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 			Client client = Client.create();
 			String idp_uri_documentos = Constantes.EMPTY;
-			if(hacienda.getEmpresa().getEstadoProduccion() !=null) {
-				if(hacienda.getEmpresa().getEstadoProduccion().equals(Constantes.ESTADO_ACTIVO)) {
+			if (hacienda.getEmpresa().getEstadoProduccion() != null) {
+				if (hacienda.getEmpresa().getEstadoProduccion().equals(Constantes.ESTADO_ACTIVO)) {
 					idp_uri_documentos = Constantes.IDP_URI_DOCUMENTOS_PRODUCCION;
-				}else {
+				} else {
 					idp_uri_documentos = this.IDP_URI;
 				}
 			}
@@ -84,44 +86,45 @@ public class EnvioHaciendaComponent {
 			String strResponse = response.getEntity(String.class);
 			// Problemas de recibido en Hacienda
 			if (response.getStatus() > 299) {
-				if (response.getStatus() < 500) {//Si es mayor de 500 problemas de comunicacion
+				if (response.getStatus() < 500) {// Si es mayor de 500 problemas de comunicacion
 					List err = (List) headersResponse.get(POST_X_ERROR_CAUSE);
 					String headerError = err != null && err.size() > 0 ? (String) err.get(0) : null;
 					strResponse = headerError != null && headerError != "" ? headerError : strResponse;
-					if(!strResponse.contains("ya fue recibido anteriormente.")) {
+					if (!strResponse.contains("ya fue recibido anteriormente.")) {
 						hacienda.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR);
 						hacienda.setUpdated_at(new Date());
 						hacienda.setxErrorCause(FacturaElectronicaUtils.convertirStringToblod(headerError));
 						hacienda.setStatus(response.getStatus());
-						hacienda.setReintentos(hacienda.getReintentos() != null?hacienda.getReintentos() + 1:1);
+						hacienda.setReintentos(hacienda.getReintentos() != null ? hacienda.getReintentos() + 1 : 1);
 						haciendaBo.modificar(hacienda);
-						
-					}else {
+
+					} else {
 						hacienda.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA);
 						hacienda.setUpdated_at(new Date());
 						hacienda.setxErrorCause(FacturaElectronicaUtils.convertirStringToblod(strResponse));
 						hacienda.setReintentos(Constantes.ZEROS);
 						haciendaBo.modificar(hacienda);
 					}
-					
+
 				}
 
 			} else {// Exitoso de resibido
-				 // Error por conexion
-        
+				// Error por conexion
+
 				hacienda.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA);
 				hacienda.setUpdated_at(new Date());
 				hacienda.setxErrorCause(FacturaElectronicaUtils.convertirStringToblod(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_str));
 				hacienda.setReintentos(Constantes.ZEROS);
 				haciendaBo.modificar(hacienda);
 			}
-		
+
 		} catch (ClientHandlerException exc) {
 
 			log.info("** Error  envioHaciendaFacturas: " + exc.getMessage() + " fecha " + new Date() + " Hacienta:" + hacienda.getEmpresa().getNombre());
 			throw exc;
 		}
 	}
+
 	/**
 	 * Retorna el status de la respuesta de hacienda
 	 * @param indEstado Elemento ind-estado de la respuesta de hacienda
@@ -135,16 +138,16 @@ public class EnvioHaciendaComponent {
 	 * Envia hacia hacienda
 	 * @return
 	 */
-	public Map comprobarDocumentoElectronico(final String url, final String clave, final OpenIDConnectHacienda openIDConnectHacienda)  {
+	public Map comprobarDocumentoElectronico(final String url, final String clave, final OpenIDConnectHacienda openIDConnectHacienda) {
 		try {
 			ImmutableMap<String, String> headers = ImmutableMap.of("Accept", "application/json", "Authorization", ("Bearer " + openIDConnectHacienda.getAccess_token()), "User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
-      String url_doc = Constantes.EMPTY;   
+			String url_doc = Constantes.EMPTY;
 			Client client = Client.create();
-      if(url.equals(Constantes.EMPTY)) {
-      	url_doc = this.IDP_URI;
-      }else {
-      	url_doc =url;
-      }
+			if (url.equals(Constantes.EMPTY)) {
+				url_doc = this.IDP_URI;
+			} else {
+				url_doc = url;
+			}
 			WebResource webResource = client.resource(url_doc + "/" + clave);
 			WebResource.Builder resBuilder = webResource.type(this.contentype);
 			for (Map.Entry<String, String> entry : headers.entrySet()) {
@@ -152,15 +155,14 @@ public class EnvioHaciendaComponent {
 			}
 			ClientResponse response = resBuilder.get(ClientResponse.class);
 
-			
 			ImmutableMap headersResponse = ImmutableMap.copyOf(response.getHeaders());
 			String strResponse = response.getEntity(String.class);
-			if (response.getStatus() > 299) {//Si es mayor de 500 problemas de comunicacion
-				if (response.getStatus() < 500) {//Si es mayor de 500 problemas de comunicacion
-					
-				List err = (List) headersResponse.get(POST_X_ERROR_CAUSE);
-				String headerError = err != null && err.size() > 0 ? (String) err.get(0) : null;
-				strResponse = headerError != null && headerError != "" ? headerError : strResponse;
+			if (response.getStatus() > 299) {// Si es mayor de 500 problemas de comunicacion
+				if (response.getStatus() < 500) {// Si es mayor de 500 problemas de comunicacion
+
+					List err = (List) headersResponse.get(POST_X_ERROR_CAUSE);
+					String headerError = err != null && err.size() > 0 ? (String) err.get(0) : null;
+					strResponse = headerError != null && headerError != "" ? headerError : strResponse;
 				}
 			}
 			return ImmutableMap.of(POST_RESPONSE, strResponse, POST_STATUS_CODE, response.getStatus(), POST_HEADERS, headersResponse);
@@ -169,8 +171,5 @@ public class EnvioHaciendaComponent {
 
 		}
 	}
-	
-	
-	 
 
 }

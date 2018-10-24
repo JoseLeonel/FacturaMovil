@@ -28,14 +28,17 @@ public class FacturaDaoImpl implements FacturaDao {
 	EntityManager		entityManager;
 	private Logger	log	= LoggerFactory.getLogger(this.getClass());
 
+	@Override
 	public void agregar(Factura factura) {
 		entityManager.persist(factura);
 	}
 
+	@Override
 	public void modificar(Factura factura) {
 		entityManager.merge(factura);
 	}
 
+	@Override
 	public void eliminar(Factura factura) {
 		entityManager.remove(factura);
 	}
@@ -87,7 +90,7 @@ public class FacturaDaoImpl implements FacturaDao {
 			Query query = entityManager.createQuery("Delete from Detalle obj where obj.factura = :factura ");
 			query.setParameter("factura", factura);
 			int deletedCount = query.executeUpdate();
-			
+
 //			StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_ELIMINAR_DETALLES_FACTURA);
 //			storedProcedure.registerStoredProcedureParameter(0, Integer.class, ParameterMode.IN);
 //			storedProcedure.setParameter(0, factura.getId().intValue());
@@ -107,22 +110,22 @@ public class FacturaDaoImpl implements FacturaDao {
 	 * @see com.emprendesoftcr.Dao.FacturaDao#findByEstadoFirma(java.lang.Integer)
 	 */
 	@Override
-	public Collection<Factura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma){
+	public Collection<Factura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma) {
 		Query query = entityManager.createQuery("select obj from Factura obj where  obj.estadoFirma = :estadoFirma or  obj.estadoFirma = :reEstadoFirma");
 		query.setParameter("estadoFirma", estadoFirma);
 		query.setParameter("reEstadoFirma", reEstadoFirma);
-	//	query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
-		
+		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
+
 		return query.getResultList();
 	}
-	
+
 	/**
 	 * Todas las facturas que no se le a creado la firma
 	 * @see com.emprendesoftcr.Dao.FacturaDao#findByEstadoFirma(java.lang.Integer)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa){
+	public Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa) {
 		Query query = entityManager.createQuery("select obj from Factura obj where obj.empresa.id = :idEmpresa and obj.referenciaCodigo != '01' and obj.estado = :estado and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin");
 		query.setParameter("idEmpresa", idEmpresa);
 		query.setParameter("estado", estado);
@@ -130,6 +133,7 @@ public class FacturaDaoImpl implements FacturaDao {
 		query.setParameter("fechaFin", fechaFin);
 		return query.getResultList();
 	}
+
 	@Transactional(readOnly = true)
 	public TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa) {
 
@@ -148,21 +152,14 @@ public class FacturaDaoImpl implements FacturaDao {
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS, Double.class, ParameterMode.OUT);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS, Double.class, ParameterMode.OUT);
 
-		
-		//Valores de entrada
+		// Valores de entrada
 		storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS_IN_FECHA_INICIO, fechaInicio);
 		storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS_IN_FECHA_FIN, fechaFinal);
 		storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS_IN_ID_EMPRESA, idEmpresa);
 		storedProcedure.execute();
-		
-		//Se toma la respuesta
-		return new TotalFacturaCommand(
-					(Double)storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL),
-					(Double)storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO),
-					(Double)storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS),
-					(Double)storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS),
-					(Double)storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS),
-					(Double)storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS));
+
+		// Se toma la respuesta
+		return new TotalFacturaCommand((Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS));
 	}
 
 }

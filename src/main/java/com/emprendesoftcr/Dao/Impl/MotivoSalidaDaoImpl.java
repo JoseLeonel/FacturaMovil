@@ -13,8 +13,7 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.MotivoSalida;
 
 /**
- * Motivo de salidas  que se registra en el kardex
- * MotivoSalidaDaoImpl.
+ * Motivo de salidas que se registra en el kardex MotivoSalidaDaoImpl.
  * @author jose.
  * @since 19 abr. 2018
  */
@@ -24,14 +23,17 @@ public class MotivoSalidaDaoImpl implements MotivoSalidaDao {
 	@PersistenceContext
 	EntityManager entityManager;
 
+	@Override
 	public void agregar(MotivoSalida motivoSalida) {
 		entityManager.persist(motivoSalida);
 	}
 
+	@Override
 	public void modificar(MotivoSalida motivoSalida) {
 		entityManager.merge(motivoSalida);
 	}
 
+	@Override
 	public void eliminar(MotivoSalida motivoSalida) {
 		entityManager.remove(motivoSalida);
 	}
@@ -53,7 +55,6 @@ public class MotivoSalidaDaoImpl implements MotivoSalidaDao {
 	}
 
 	/**
-	 * 
 	 * @see com.factura.dao.MotivoSalidaDao#buscarPorDescripcionYEmpresa(java.lang.String, com.factura.domain.Sucursal)
 	 */
 	public MotivoSalida buscarPorDescripcionYEmpresa(String descripcion, Empresa empresa) {

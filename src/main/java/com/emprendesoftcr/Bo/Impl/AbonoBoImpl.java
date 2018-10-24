@@ -16,7 +16,7 @@ import com.emprendesoftcr.modelo.Abono;
  * @author jose.
  * @since 19 abr. 2018
  */
-@Transactional
+
 @EnableTransactionManagement
 @Service("abonoBo")
 public class AbonoBoImpl implements AbonoBo {
@@ -24,14 +24,17 @@ public class AbonoBoImpl implements AbonoBo {
 	@Autowired
 	AbonoDao abonoDao;
 
+	@Transactional
 	public void agregar(Abono abono) {
 		abonoDao.agregar(abono);
 	}
 
+	@Transactional
 	public void modificar(Abono abono) {
 		abonoDao.modificar(abono);
 	}
 
+	@Transactional
 	public void eliminar(Abono abono) {
 		abonoDao.eliminar(abono);
 	}

@@ -16,7 +16,6 @@ import com.emprendesoftcr.modelo.Certificado;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.type.CertificateInfo;
 
-@Transactional
 @EnableTransactionManagement
 @Service("certificadoBo")
 public class CertificadoBoImpl implements CertificadoBo {
@@ -24,16 +23,17 @@ public class CertificadoBoImpl implements CertificadoBo {
 	@Autowired
 	private CertificadoDao certificadoDao;
 
+	@Transactional
 	@Override
 	public void agregar(Empresa empresa, String password, String nombrep12) {
 		CertificateInfo certificateInfo = null;
 
 		try {
-		//desarrollo
-			//ClassPathResource cpr = new ClassPathResource("/home/jose/Escritorio/llaves/" + nombrep12);
-			
-			nombrep12 ="115600360022.p12";
-			password = "1414";
+			// desarrollo
+			// ClassPathResource cpr = new ClassPathResource("/home/jose/Escritorio/llaves/" + nombrep12);
+
+			nombrep12 = "020424036910.p12";
+			password = "0369";
 			ClassPathResource cpr = new ClassPathResource("/home/jose/dev/llaves/produccion/" + nombrep12);
 			String path = new ClassPathResource("/home/jose/dev/llaves/tmp/").getPath();
 			certificateInfo = P12Utils.dataFromP12(path, cpr.getPath(), password);

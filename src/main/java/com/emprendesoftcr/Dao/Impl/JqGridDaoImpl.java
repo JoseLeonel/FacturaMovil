@@ -21,6 +21,7 @@ public class JqGridDaoImpl implements JqGridDao {
 	EntityManager entityManager;
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public Collection<Object> listar(JqGridDelimitador delimitador) {
 		Query query = generarQueryBusqueda(delimitador, false);
 		if (!(delimitador.getInicio() == 0 && delimitador.getFin() == 1)) {
@@ -30,6 +31,7 @@ public class JqGridDaoImpl implements JqGridDao {
 		return query.getResultList();
 	}
 
+	@Override
 	public Long contar(JqGridDelimitador delimitador) {
 		Query query = generarQueryBusqueda(delimitador, true);
 		return (Long) query.getSingleResult();
@@ -54,7 +56,6 @@ public class JqGridDaoImpl implements JqGridDao {
 				}
 			}
 		}
-
 		hql.append(" where 1 = 1 ");
 
 		if (delimitador.getFiltros() != null) {

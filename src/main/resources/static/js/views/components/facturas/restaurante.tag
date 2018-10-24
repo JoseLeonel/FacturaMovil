@@ -2558,7 +2558,7 @@ function mostrarPAgo(){
     self.mostarParaCrearNuevaVentas = false
       self.factura.totalEfectivo = self.factura.totalComprobante
         self.update()
-     $('#totalEfectivo').val(self.factura.totalComprobante)
+     $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(3))
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
     getSubTotalGeneral()

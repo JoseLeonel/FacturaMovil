@@ -13,7 +13,6 @@ import com.emprendesoftcr.Dao.CuentaCobrarDao;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Empresa;
-import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.web.command.TotalCuentaPorCobrarCommand;
 
 /**
@@ -21,7 +20,7 @@ import com.emprendesoftcr.web.command.TotalCuentaPorCobrarCommand;
  * @author jose.
  * @since 25 mar. 2018
  */
-@Transactional
+
 @EnableTransactionManagement
 @Service("cuentaCobrarBo")
 public class CuentaCobrarBoImpl implements CuentaCobrarBo {
@@ -29,15 +28,17 @@ public class CuentaCobrarBoImpl implements CuentaCobrarBo {
 	@Autowired
 	private CuentaCobrarDao cuentaCobrarDao;
 
-
+	@Transactional
 	public void agregar(CuentaCobrar cuentaCobrar) {
 		cuentaCobrarDao.agregar(cuentaCobrar);
 	}
 
+	@Transactional
 	public void modificar(CuentaCobrar cuentaCobrar) {
 		cuentaCobrarDao.modificar(cuentaCobrar);
 	}
 
+	@Transactional
 	public void eliminar(CuentaCobrar cuentaCobrar) {
 		cuentaCobrarDao.eliminar(cuentaCobrar);
 	}
@@ -53,18 +54,17 @@ public class CuentaCobrarBoImpl implements CuentaCobrarBo {
 
 	@Override
 	public TotalCuentaPorCobrarCommand sumarCuentasPorCobrar(Date fechaInicio, Date fechaFinal, Integer idEmpresa, Cliente cliente) {
-		return cuentaCobrarDao.sumarCuentasPorCobrar(fechaInicio, fechaFinal, idEmpresa,cliente);
+		return cuentaCobrarDao.sumarCuentasPorCobrar(fechaInicio, fechaFinal, idEmpresa, cliente);
 	}
-	
+
 	/**
 	 * Genera lista de cuentas por cobrar de clientes
 	 * @see com.emprendesoftcr.Bo.CuentaCobrarBo#cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(java.util.Date, java.util.Date, com.emprendesoftcr.modelo.Empresa, com.emprendesoftcr.modelo.Cliente, java.lang.Integer)
 	 */
 	@Override
-	public Collection<CuentaCobrar> cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(Date fechaInicio, Date fechaFin,Empresa empresa,Cliente cliente,String estado){
+	public Collection<CuentaCobrar> cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(Date fechaInicio, Date fechaFin, Empresa empresa, Cliente cliente, String estado) {
 		return cuentaCobrarDao.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(fechaInicio, fechaFin, empresa, cliente, estado);
-		
+
 	}
-	
 
 }

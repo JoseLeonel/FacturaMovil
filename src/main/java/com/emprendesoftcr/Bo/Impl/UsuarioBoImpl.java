@@ -1,7 +1,6 @@
 package com.emprendesoftcr.Bo.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,24 +16,27 @@ import com.emprendesoftcr.modelo.Usuario;
  * @author Leonel Hernandez Chaverri.
  * @since 16 ene. 2018
  */
-@Lazy
-@Transactional
 @EnableTransactionManagement
 @Service("usuarioBo")
 public class UsuarioBoImpl implements UsuarioBo {
 
-	@Lazy
 	@Autowired
 	UsuarioDao usuarioDao;
 
+	@Override
+	@Transactional
 	public void agregar(Usuario usuario) {
 		usuarioDao.agregar(usuario);
 	}
 
+	@Override
+	@Transactional
 	public void modificar(Usuario usuario) {
 		usuarioDao.modificar(usuario);
 	}
 
+	@Override
+	@Transactional
 	public void eliminar(Usuario usuario) {
 		usuarioDao.eliminar(usuario);
 	}
@@ -65,6 +67,7 @@ public class UsuarioBoImpl implements UsuarioBo {
 	public Usuario buscarPorNombreYPrimerApellidoYSegundoApellido(String nombre, String primerApellido, String segundoApellido) {
 		return usuarioDao.buscarPorNombreYPrimerApellidoYSegundoApellido(nombre, primerApellido, segundoApellido);
 	}
+
 	/**
 	 * Buscar por id
 	 * @see com.factura.bo.UsuarioBo#buscar(java.lang.Integer)
@@ -73,22 +76,20 @@ public class UsuarioBoImpl implements UsuarioBo {
 	public Usuario buscar(Integer id) {
 		return usuarioDao.buscar(id);
 	}
-	
+
 	/**
 	 * Obtener la empresa asociada de un usuario que no es superadministrador
 	 */
 	@Override
 	public JqGridFilter filtroPorEmpresa(String nombreUsuario) {
-		   Usuario usuarioSesion = buscar(nombreUsuario); 
-		  return  new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
+		Usuario usuarioSesion = buscar(nombreUsuario);
+		return new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
 
-		
 	}
-	
+
 	@Override
-	public Usuario buscar(String nombreUsuario,Empresa empresa) {
+	public Usuario buscar(String nombreUsuario, Empresa empresa) {
 		return usuarioDao.buscar(nombreUsuario, empresa);
 	}
-	
 
 }

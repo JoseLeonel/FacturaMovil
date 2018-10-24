@@ -23,14 +23,17 @@ public class MotivoEntradaDaoImpl implements MotivoEntradaDao {
 	@PersistenceContext
 	EntityManager entityManager;
 
+	@Override
 	public void agregar(MotivoEntrada motivoEntrada) {
 		entityManager.persist(motivoEntrada);
 	}
 
+	@Override
 	public void modificar(MotivoEntrada motivoEntrada) {
 		entityManager.merge(motivoEntrada);
 	}
 
+	@Override
 	public void eliminar(MotivoEntrada motivoEntrada) {
 		entityManager.remove(motivoEntrada);
 	}

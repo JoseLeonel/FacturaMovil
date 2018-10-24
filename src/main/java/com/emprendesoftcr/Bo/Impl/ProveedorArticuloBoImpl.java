@@ -1,7 +1,6 @@
 package com.emprendesoftcr.Bo.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,28 +11,28 @@ import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.ProveedorArticulo;
 
-@Lazy
-@Transactional
 @EnableTransactionManagement
 @Service("proveedorArticuloBo")
 public class ProveedorArticuloBoImpl implements ProveedorArticuloBo {
 
-	@Lazy
 	@Autowired
 	ProveedorArticuloDao proveedorArticuloDao;
 
+	@Transactional
 	@Override
 	public void agregar(ProveedorArticulo proveedorArticulo) {
 		proveedorArticuloDao.agregar(proveedorArticulo);
 
 	}
 
+	@Transactional
 	@Override
 	public void modificar(ProveedorArticulo proveedorArticulo) {
 		proveedorArticuloDao.modificar(proveedorArticulo);
 	}
 
 	@Override
+	@Transactional
 	public void eliminar(ProveedorArticulo proveedorArticulo) {
 		proveedorArticuloDao.eliminar(proveedorArticulo);
 	}
@@ -43,6 +42,7 @@ public class ProveedorArticuloBoImpl implements ProveedorArticuloBo {
 
 		return proveedorArticuloDao.findById(id);
 	}
+
 	public ProveedorArticulo findByCodigo(Articulo articulo, Proveedor proveedor) {
 		return proveedorArticuloDao.findByCodigo(articulo, proveedor);
 	}

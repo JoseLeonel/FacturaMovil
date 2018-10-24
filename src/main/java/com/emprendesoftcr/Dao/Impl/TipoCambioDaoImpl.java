@@ -23,14 +23,17 @@ public class TipoCambioDaoImpl implements TipoCambioDao {
 	@PersistenceContext
 	EntityManager entityManager;
 
+	@Override
 	public void agregar(TipoCambio tipoCambio) {
 		entityManager.persist(tipoCambio);
 	}
 
+	@Override
 	public void modificar(TipoCambio tipoCambio) {
 		entityManager.merge(tipoCambio);
 	}
 
+	@Override
 	public void eliminar(TipoCambio tipoCambio) {
 		entityManager.remove(tipoCambio);
 	}
@@ -50,8 +53,9 @@ public class TipoCambioDaoImpl implements TipoCambioDao {
 			return null;
 		}
 	}
+
 	@Override
-	public TipoCambio findByEstadoAndEmpresa(String estado,Empresa empresa) {
+	public TipoCambio findByEstadoAndEmpresa(String estado, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from TipoCambio obj where obj.estado = :estado and obj.empresa = :empresa");
 		query.setParameter("estado", estado);
 		query.setParameter("empresa", empresa);

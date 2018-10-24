@@ -35,14 +35,17 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 	EntityManager		entityManager;
 	private Logger	log	= LoggerFactory.getLogger(this.getClass());
 
+	@Override
 	public void agregar(CuentaCobrar cuentaCobrar) {
 		entityManager.persist(cuentaCobrar);
 	}
 
+	@Override
 	public void modificar(CuentaCobrar cuentaCobrar) {
 		entityManager.merge(cuentaCobrar);
 	}
 
+	@Override
 	public void eliminar(CuentaCobrar cuentaCobrar) {
 		entityManager.remove(cuentaCobrar);
 	}
@@ -52,6 +55,7 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 	 * @see com.factura.dao.CuentaCobrarDao#buscar(java.lang.Integer)
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public CuentaCobrar buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from CuentaCobrar obj where obj.id = :id");
 		query.setParameter("id", id);

@@ -11,8 +11,7 @@ import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Empresa;
 
 /**
- * categorias se va dividir los articulos de una empresa
- * CategoriaBoImpl.
+ * categorias se va dividir los articulos de una empresa CategoriaBoImpl.
  * @author jose.
  * @since 17 mar. 2018
  */
@@ -24,22 +23,28 @@ public class CategoriaBoImpl implements CategoriaBo {
 	@Autowired
 	private CategoriaDao categoriaDao;
 
+	@Transactional
+	@Override
 	public void agregar(Categoria categoria) {
 		categoriaDao.agregar(categoria);
 	}
 
+	@Override
+	@Transactional
 	public void modificar(Categoria categoria) {
 		categoriaDao.modificar(categoria);
 	}
 
+	@Override
+	@Transactional
 	public void eliminar(Categoria categoria) {
 		categoriaDao.eliminar(categoria);
 	}
 
-/**
- * Buscar por descripcion
- * @see com.factura.bo.CategoriaBo#buscarPorDescripcionYEmpresa(java.lang.String, com.factura.domain.Empresa)
- */
+	/**
+	 * Buscar por descripcion
+	 * @see com.factura.bo.CategoriaBo#buscarPorDescripcionYEmpresa(java.lang.String, com.factura.domain.Empresa)
+	 */
 	@Override
 	public Categoria buscarPorDescripcionYEmpresa(String descripcion, Empresa empresa) {
 		return categoriaDao.buscarPorDescripcionYEmpresa(descripcion, empresa);

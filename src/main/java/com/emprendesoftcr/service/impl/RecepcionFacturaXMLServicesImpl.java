@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -28,7 +27,6 @@ import com.emprendesoftcr.service.FirmaElectronicaService;
 import com.emprendesoftcr.service.RecepcionFacturaXMLServices;
 
 @Service("recepcionFacturaXMLServices")
-@Transactional
 @EnableTransactionManagement
 public class RecepcionFacturaXMLServicesImpl implements RecepcionFacturaXMLServices {
 	private Logger	log= LoggerFactory.getLogger(this.getClass());
@@ -44,10 +42,11 @@ public class RecepcionFacturaXMLServicesImpl implements RecepcionFacturaXMLServi
 	public String getCrearXMLSinFirma(RecepcionFactura recepcionFactura) throws Exception{
 		
 		String xml = Constantes.EMPTY;
-		String date = FacturaElectronicaUtils.toISO8601String(recepcionFactura.getFechaEmision());
-		String impuestos  = (recepcionFactura.getTotalImpuestos() != null && recepcionFactura.getTotalImpuestos() > Constantes.ZEROS_DOUBLE) ?  "<MontoTotalImpuesto>" + recepcionFactura.getTotalImpuestos().toString() + "</MontoTotalImpuesto>" : "";
-		
+			
 		try {
+			String date = FacturaElectronicaUtils.toISO8601String(recepcionFactura.getFechaEmision());
+			String impuestos  = (recepcionFactura.getTotalImpuestos() != null && recepcionFactura.getTotalImpuestos() > Constantes.ZEROS_DOUBLE) ?  "<MontoTotalImpuesto>" + recepcionFactura.getTotalImpuestos().toString() + "</MontoTotalImpuesto>" : "";
+
 			xml = "<MensajeReceptor xmlns=\"" + Constantes.DOCXMLS_RECEPCION_FACTURA + "\" " +
 	          "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
 	          "<Clave>" + recepcionFactura.getClave() + "</Clave>" +

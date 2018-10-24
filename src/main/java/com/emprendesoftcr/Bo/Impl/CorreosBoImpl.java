@@ -29,7 +29,7 @@ public class CorreosBoImpl implements CorreosBo {
 	private VelocityEngine	velocityEngine;
 
 	@Override
-	public void enviarConAttach(final Collection<Attachment> attachments,  ArrayList<String> correoList, final String from, final String subjet, final String email, final Map<String, Object> model) {
+	public void enviarConAttach(final Collection<Attachment> attachments, ArrayList<String> correoList, final String from, final String subjet, final String email, final Map<String, Object> model) {
 		MimeMessagePreparator preparator = new MimeMessagePreparator() {
 
 			public void prepare(MimeMessage mimeMessage) throws Exception {
@@ -39,17 +39,14 @@ public class CorreosBoImpl implements CorreosBo {
 					String correo = (String) iterator.next();
 					message.addTo(correo);
 				}
-				
-				
+
 				message.setFrom(from);
 				message.setSubject(subjet);
-      
- 				for (Iterator<Attachment> iterator = attachments.iterator(); iterator.hasNext();) {
+
+				for (Iterator<Attachment> iterator = attachments.iterator(); iterator.hasNext();) {
 					Attachment attachment = iterator.next();
 					message.addAttachment(attachment.getNombre(), attachment.getAttachment());
 				}
-      	 
-       
 
 				String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, email, "UTF-8", model);
 				message.setText(text, true);
@@ -57,16 +54,16 @@ public class CorreosBoImpl implements CorreosBo {
 		};
 		this.mailSender.send(preparator);
 	}
-	
+
 	@Override
-	public void sendSimpleMessage( String to, String subject, String text) {
-        SimpleMailMessage message = new SimpleMailMessage(); 
-        message.setTo(to); 
-        message.setSubject(subject); 
-        message.setText(text);
-        message.setFrom("SoporteEmpredesoftCR@emprendesoftcr.com");
-        this.mailSender.send(message);
-     
-    }
+	public void sendSimpleMessage(String to, String subject, String text) {
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(to);
+		message.setSubject(subject);
+		message.setText(text);
+		message.setFrom("SoporteEmpredesoftCR@emprendesoftcr.com");
+		this.mailSender.send(message);
+
+	}
 
 }

@@ -19,14 +19,17 @@ public class DetalleCompraDaoImpl implements DetalleCompraDao {
 	@PersistenceContext
 	EntityManager entityManager;
 
+	@Override
 	public void agregar(DetalleCompra detalleCompra) {
 		entityManager.persist(detalleCompra);
 	}
 	
+	@Override
 	public void modificar(DetalleCompra detalleCompra) {
 		entityManager.merge(detalleCompra);
 	}
 
+	@Override
 	public void eliminar(DetalleCompra detalleCompra) {
 		entityManager.remove(detalleCompra);
 	}

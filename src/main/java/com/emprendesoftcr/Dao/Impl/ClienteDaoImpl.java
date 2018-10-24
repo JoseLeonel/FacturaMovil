@@ -23,14 +23,17 @@ public class ClienteDaoImpl implements ClienteDao {
 	@PersistenceContext
 	EntityManager entityManager;
 
+	@Override
 	public void agregar(Cliente cliente) {
 		entityManager.persist(cliente);
 	}
 
+	@Override
 	public void modificar(Cliente cliente) {
 		entityManager.merge(cliente);
 	}
 
+	@Override
 	public void eliminar(Cliente cliente) {
 		entityManager.remove(cliente);
 	}
@@ -40,6 +43,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	 * @see com.factura.dao.ClienteDao#buscar(java.lang.Integer)
 	 */
 
+	@Override
 	public Cliente buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from Cliente obj where obj.id = :id");
 		query.setParameter("id", id);
@@ -54,6 +58,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	/**
 	 * @see com.factura.dao.ClienteDao#buscarPorNombreCompletoYEmpresa(java.lang.String, com.factura.domain.Empresa)
 	 */
+	@Override
 	public Cliente buscarPorNombreCompletoYEmpresa(String nombreCompleto, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Cliente obj where obj.nombreCompleto = :nombreCompleto and obj.empresa = :empresa");
 		query.setParameter("nombreCompleto", nombreCompleto);
@@ -71,6 +76,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	 * @param empresa
 	 * @return
 	 */
+	@Override
 	public Cliente buscarPorCedulaYEmpresa(String cedula, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Cliente obj where obj.cedula = :cedula and obj.empresa = :empresa");
 		query.setParameter("cedula", cedula);

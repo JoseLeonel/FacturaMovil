@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.EmpresaBo;
@@ -43,7 +43,7 @@ import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 import com.google.gson.Gson;
 
-@Transactional
+@EnableTransactionManagement
 @Service("facturaBo")
 public class FacturaBoImpl implements FacturaBo {
 
@@ -73,8 +73,8 @@ public class FacturaBoImpl implements FacturaBo {
 
 	private Logger				log	= LoggerFactory.getLogger(this.getClass());
 
+	@Transactional
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void agregar(Factura factura) {
 		facturaDao.agregar(factura);
 
@@ -84,7 +84,8 @@ public class FacturaBoImpl implements FacturaBo {
 	 * Modificar una factura
 	 * @see com.emprendesoftcr.Bo.FacturaBo#modificar(com.emprendesoftcr.modelo.Factura)
 	 */
-	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+
+	@Transactional
 	@Override
 	public void modificar(Factura factura) {
 		facturaDao.modificar(factura);
@@ -94,8 +95,8 @@ public class FacturaBoImpl implements FacturaBo {
 	 * Eliminar una factura
 	 * @see com.emprendesoftcr.Bo.FacturaBo#eliminar(com.emprendesoftcr.modelo.Factura)
 	 */
+	@Transactional
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void eliminar(Factura factura) {
 		facturaDao.eliminar(factura);
 	}
@@ -104,6 +105,7 @@ public class FacturaBoImpl implements FacturaBo {
 	 * Buscar por id
 	 * @see com.emprendesoftcr.Bo.FacturaBo#findById(java.lang.Integer)
 	 */
+
 	@Override
 	public Factura findById(Long id) {
 		return facturaDao.findById(id);
@@ -127,7 +129,7 @@ public class FacturaBoImpl implements FacturaBo {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	@Transactional
 	public void eliminarDetalleFacturaPorSP(Factura factura) throws Exception {
 		try {
 			facturaDao.eliminarDetalleFacturaPorSP(factura);
@@ -143,6 +145,7 @@ public class FacturaBoImpl implements FacturaBo {
 		return facturaDao.findByEstadoFirma(estadoFirma, reEstadoFirma);
 	}
 
+	@Transactional
 	private Factura formaFactura(FacturaCommand facturaCommand, Usuario usuario) throws Exception {
 
 		// Se forma objeto factura
@@ -546,7 +549,7 @@ public class FacturaBoImpl implements FacturaBo {
 				if (!factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
 
-						//montos en ceros de pagar
+						// montos en ceros de pagar
 						if (factura.getTotalEfectivo().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalBanco().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalTarjeta().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalCredito().equals(Constantes.ZEROS_DOUBLE)) {
 							if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 								factura.setTotalEfectivo(factura.getTotalComprobante());
@@ -554,19 +557,19 @@ public class FacturaBoImpl implements FacturaBo {
 								factura.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
 								factura.setTotalBanco(Constantes.ZEROS_DOUBLE);
 								factura.setTotalCredito(Constantes.ZEROS_DOUBLE);
-							
+
 							}
 						}
 
-						//credito
-							if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
-								factura.setTotalEfectivo(Constantes.ZEROS_DOUBLE);
-								factura.setTotalCambioPagar(Constantes.ZEROS_DOUBLE);
-								factura.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
-								factura.setTotalBanco(Constantes.ZEROS_DOUBLE);
-								factura.setTotalCredito(factura.getTotalComprobante());
-							
-							}
+						// credito
+						if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+							factura.setTotalEfectivo(Constantes.ZEROS_DOUBLE);
+							factura.setTotalCambioPagar(Constantes.ZEROS_DOUBLE);
+							factura.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
+							factura.setTotalBanco(Constantes.ZEROS_DOUBLE);
+							factura.setTotalCredito(factura.getTotalComprobante());
+
+						}
 
 						// Paga solo en efectivo
 						if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && factura.getTotalBanco().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalEfectivo() > Constantes.ZEROS_DOUBLE && factura.getTotalTarjeta().equals(Constantes.ZEROS_DOUBLE)) {
@@ -574,7 +577,7 @@ public class FacturaBoImpl implements FacturaBo {
 							factura.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
 							factura.setTotalBanco(Constantes.ZEROS_DOUBLE);
 							factura.setTotalCredito(Constantes.ZEROS_DOUBLE);
-							
+
 						}
 
 						// Paga solo en banco
@@ -607,7 +610,7 @@ public class FacturaBoImpl implements FacturaBo {
 							factura.setTotalBanco(resultado);
 							factura.setTotalEfectivo(Constantes.ZEROS_DOUBLE);
 						}
-					// Paga tarjeta  banco  y efectivo
+						// Paga tarjeta banco y efectivo
 						if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && factura.getTotalBanco() > Constantes.ZEROS_DOUBLE && factura.getTotalEfectivo() > Constantes.ZEROS_DOUBLE && factura.getTotalTarjeta() > Constantes.ZEROS_DOUBLE) {
 							Double resultado = factura.getTotalComprobante() - factura.getTotalTarjeta();
 							resultado = resultado - factura.getTotalBanco();
@@ -623,7 +626,7 @@ public class FacturaBoImpl implements FacturaBo {
 						if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
 							usuarioCajaDao.actualizarCaja(usuarioCaja, factura.getTotalEfectivo(), factura.getTotalTarjeta(), factura.getTotalBanco(), factura.getTotalCredito(), Constantes.ZEROS_DOUBLE, factura.getTotalImpuestoServicio());
 						}
-						
+
 					}
 
 				}

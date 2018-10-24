@@ -1,10 +1,10 @@
 	package com.emprendesoftcr.web.Controller;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +33,6 @@ import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
-import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Marca;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.ArticuloCommand;

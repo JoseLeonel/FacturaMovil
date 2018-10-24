@@ -3,15 +3,15 @@ package com.emprendesoftcr.web.command;
 import java.util.Date;
 
 import com.emprendesoftcr.Utils.Utils;
-import com.emprendesoftcr.modelo.Abono;
-import com.emprendesoftcr.modelo.CuentaCobrar;
+import com.emprendesoftcr.modelo.AbonoPagar;
+import com.emprendesoftcr.modelo.CuentaPagar;
 
 /**
  * ClienteCommand.
  * @author jose.
  * @since 17 mar. 2018
  */
-public class AbonoCommand {
+public class AbonoPagarCommand {
 
 	private Long					id;
 
@@ -46,36 +46,57 @@ public class AbonoCommand {
 	private String				created_atSTR;
 	private String				updated_atSTR;
 
-	private CuentaCobrar	cuentaCobrar;
+	private CuentaPagar	cuentaPagar;
 
-	public AbonoCommand() {
+	public AbonoPagarCommand() {
 		super();
 	}
 
-	public AbonoCommand(Abono abono) {
+	public AbonoPagarCommand(AbonoPagar abonoPagar) {
 		super();
-		this.id = abono.getId();
-		this.nota = abono.getNota();
-		this.recibo = abono.getRecibo();
-		this.transferencia = abono.getTransferencia();
-		this.fechaPago = abono.getFechaPago().toString();
-		this.totalEfectivo = abono.getTotalEfectivo();
-		this.totalTarjeta = abono.getTotalTarjeta();
-		this.totalBanco = abono.getTotalBanco();
-		this.total = abono.getTotal();
-		this.estado = abono.getEstado();
-		this.created_at = abono.getCreated_at();
-		this.updated_at = abono.getUpdated_at();
-		this.cuentaCobrar = abono.getCuentaCobrar();
-		this.created_atSTR = Utils.getFechaGeneraReporte(abono.getCreated_at());
-		this.updated_atSTR = Utils.getFechaGeneraReporte(abono.getUpdated_at());
-		this.totalBancoSTR = abono.getTotalBancoSTR();
-		this.totalEfectivoSTR = abono.getTotalEfectivoSTR();
-		this.totalTarjetaSTR = abono.getTotalTarjetaSTR();
-		this.totalSTR = abono.getTotalSTR();
+		this.id = abonoPagar.getId();
+		this.nota = abonoPagar.getNota();
+		this.recibo = abonoPagar.getRecibo();
+		this.transferencia = abonoPagar.getTransferencia();
+		this.fechaPago = abonoPagar.getFechaPago().toString();
+		this.totalEfectivo = abonoPagar.getTotalEfectivo();
+		this.totalTarjeta = abonoPagar.getTotalTarjeta();
+		this.totalBanco = abonoPagar.getTotalBanco();
+		this.total = abonoPagar.getTotal();
+		this.estado = abonoPagar.getEstado();
+		this.created_at = abonoPagar.getCreated_at();
+		this.updated_at = abonoPagar.getUpdated_at();
+		this.cuentaPagar = abonoPagar.getCuentaPagar();
+		this.created_atSTR = Utils.getFechaGeneraReporte(abonoPagar.getCreated_at());
+		this.updated_atSTR = Utils.getFechaGeneraReporte(abonoPagar.getUpdated_at());
+		this.totalBancoSTR = abonoPagar.getTotalBancoSTR();
+		this.totalEfectivoSTR = abonoPagar.getTotalEfectivoSTR();
+		this.totalTarjetaSTR = abonoPagar.getTotalTarjetaSTR();
+		this.totalSTR = abonoPagar.getTotalSTR();
 
 	}
 
+	
+
+	
+	
+	public Long getId() {
+		return id;
+	}
+
+	
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public CuentaPagar getCuentaPagar() {
+		return cuentaPagar;
+	}
+
+	
+	public void setCuentaPagar(CuentaPagar cuentaPagar) {
+		this.cuentaPagar = cuentaPagar;
+	}
 
 	public String getCreated_atSTR() {
 		return created_atSTR;
@@ -93,14 +114,7 @@ public class AbonoCommand {
 		this.updated_atSTR = updated_atSTR;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
+	
 	public String getNota() {
 		return nota;
 	}
@@ -192,13 +206,7 @@ public class AbonoCommand {
 		this.updated_at = updated_at;
 	}
 
-	public CuentaCobrar getCuentaCobrar() {
-		return cuentaCobrar;
-	}
 
-	public void setCuentaCobrar(CuentaCobrar cuentaCobrar) {
-		this.cuentaCobrar = cuentaCobrar;
-	}
 
 	public String getTotalEfectivoSTR() {
 		return totalEfectivoSTR;

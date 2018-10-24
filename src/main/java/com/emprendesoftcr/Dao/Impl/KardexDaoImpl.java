@@ -32,13 +32,14 @@ public class KardexDaoImpl implements KardexDao {
 	@Autowired
 	private ArticuloDao	articuloDao;
 
+	@Override
 	public void agregar(Kardex kardex) {
 		entityManager.persist(kardex);
 	}
 
 	/**
 	 * Registrar una salida
-	 * @throws Exception 
+	 * @throws Exception
 	 * @see com.emprendesoftcr.Dao.KardexDao#salida(com.emprendesoftcr.modelo.Inventario, java.lang.Double, java.lang.String, java.lang.String, java.lang.String, java.lang.String, com.emprendesoftcr.modelo.Usuario)
 	 */
 	@Override
@@ -77,7 +78,7 @@ public class KardexDaoImpl implements KardexDao {
 
 	/**
 	 * Registrar una entrada
-	 * @throws Exception 
+	 * @throws Exception
 	 * @see com.emprendesoftcr.Dao.KardexDao#entrada(com.emprendesoftcr.modelo.Inventario, java.lang.Double, java.lang.String, java.lang.String, java.lang.String, java.lang.String, com.emprendesoftcr.modelo.Usuario)
 	 */
 	@Override

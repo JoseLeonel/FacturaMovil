@@ -10,7 +10,6 @@ import com.emprendesoftcr.Dao.CajaDao;
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.Empresa;
 
-@Transactional
 @EnableTransactionManagement
 @Service("cajaBo")
 public class CajaBoImpl implements CajaBo {
@@ -18,14 +17,17 @@ public class CajaBoImpl implements CajaBo {
 	@Autowired
 	private CajaDao cajaDao;
 
+	@Transactional
 	public void agregar(Caja caja) {
 		cajaDao.agregar(caja);
 	}
 
+	@Transactional
 	public void modificar(Caja caja) {
 		cajaDao.modificar(caja);
 	}
 
+	@Transactional
 	public void eliminar(Caja caja) {
 		cajaDao.eliminar(caja);
 	}

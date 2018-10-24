@@ -57,6 +57,7 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 	 * 
 	 * @see com.emprendesoftcr.service.FacturaXMLServices#getCrearXML(com.emprendesoftcr.modelo.Factura)
 	 */
+	
 	@Override
 	public String getCrearXMLSinFirma(Factura factura) throws Exception{
 		String xml = Constantes.EMPTY;
@@ -64,6 +65,7 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 		factura.setFechaEmision(fecha);
 		facturaBo.modificar(factura);
 		try {
+	
 			String date = FacturaElectronicaUtils.toISO8601String(factura.getFechaEmision());
 			 xml = "<FacturaElectronica xmlns=\"" + Constantes.DOCXMLS_FACTURA + "\" " +
 	         "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +

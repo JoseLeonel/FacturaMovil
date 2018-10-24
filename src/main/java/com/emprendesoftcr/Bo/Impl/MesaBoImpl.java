@@ -10,7 +10,6 @@ import com.emprendesoftcr.Dao.MesaDao;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Mesa;
 
-@Transactional
 @EnableTransactionManagement
 @Service("mesaBo")
 public class MesaBoImpl implements MesaBo {
@@ -18,17 +17,20 @@ public class MesaBoImpl implements MesaBo {
 	@Autowired
 	MesaDao mesaDao;
 
+	@Transactional
 	@Override
 	public void agregar(Mesa mesa) {
 		mesaDao.agregar(mesa);
 	}
 
+	@Transactional
 	@Override
 	public void modificar(Mesa mesa) {
 		mesaDao.modificar(mesa);
 
 	}
 
+	@Transactional
 	@Override
 	public void eliminar(Mesa mesa) {
 		mesaDao.eliminar(mesa);

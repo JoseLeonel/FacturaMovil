@@ -19,7 +19,7 @@ import com.emprendesoftcr.modelo.Empresa;
  * @author jose.
  * @since 17 mar. 2018
  */
-@Transactional
+
 @EnableTransactionManagement
 @Service("articuloBo")
 public class ArticuloBoImpl implements ArticuloBo {
@@ -29,15 +29,18 @@ public class ArticuloBoImpl implements ArticuloBo {
 	@Autowired
 	ArticuloDao articuloDao;
 
+	@Transactional
 	public void agregar(Articulo articulo) {
 		
 		articuloDao.agregar(articulo);
 	}
 
+	@Transactional
 	public void modificar(Articulo articulo) {
 		articuloDao.modificar(articulo);
 	}
 
+	@Transactional
 	public void eliminar(Articulo articulo) {
 		articuloDao.eliminar(articulo);
 	}

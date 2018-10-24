@@ -577,7 +577,7 @@ function loadListar(table,idioma,formatoTabla,data){
 	$(table).DataTable().destroy();
         $(table).DataTable({
         destroy: true,
-        "language": idioma,
+        "language": idioma_espanol,
         "sDom": 'lrtip',
         "order": [0, 'desc'],
         "bPaginate": true,

@@ -19,7 +19,6 @@ import com.emprendesoftcr.modelo.Usuario;
  * @author jose.
  * @since 17 mar. 2018
  */
-@Transactional
 @EnableTransactionManagement
 @Service("clienteBo")
 public class ClienteBoImpl implements ClienteBo {
@@ -31,10 +30,14 @@ public class ClienteBoImpl implements ClienteBo {
 		clienteDao.agregar(cliente);
 	}
 
+	@Transactional
+	@Override
 	public void modificar(Cliente cliente) {
 		clienteDao.modificar(cliente);
 	}
 
+	@Override
+	@Transactional
 	public void eliminar(Cliente cliente) {
 		clienteDao.eliminar(cliente);
 	}
@@ -63,12 +66,14 @@ public class ClienteBoImpl implements ClienteBo {
 	public Cliente buscar(Long id) {
 		return clienteDao.buscar(id);
 	}
+
 	/**
 	 * Crear el cliente frecuente
 	 * @see com.emprendesoftcr.Bo.ClienteBo#crearClienteFrecuente(com.emprendesoftcr.modelo.Empresa, com.emprendesoftcr.modelo.Usuario)
 	 */
+	@Transactional
 	@Override
-	public Cliente crearClienteFrecuente(Empresa empresa,Usuario usuario) {
+	public Cliente crearClienteFrecuente(Empresa empresa, Usuario usuario) {
 		Cliente cliente = new Cliente();
 		cliente.setCedula(Constantes.CEDULA_CLIENTE_FRECUENTE);
 		cliente.setTipoCedula(Constantes.TIPO_CEDULA_FISICA);

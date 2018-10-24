@@ -204,7 +204,7 @@
                         <div class="row">
                             <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label >{$.i18n.prop("abono.fechaPago")} <span class="requeridoDato">*</span></label>
-                                 <div  class="form-group input-group date " data-provide="datepicker"   data-date-format="dd/mm/yyyy">
+                                 <div  class="form-group input-group fechaPagoDataPicker date" data-provide="datepicker"   data-date-format="dd-mm-yyyy">
                                     <input type="text" class="form-control fechaPago" placeHolder ="{$.i18n.prop("abono.fechaPago")}" id="fechaPago" name="fechaPago"  value="{abono.fechaPago}"  readonly={abono.id > 0}>
                                     <div class="input-group-addon">
                                         <span class="glyphicon glyphicon-th"></span>
@@ -538,6 +538,13 @@
         }
         );
 
+         $('.fechaPagoDataPicker').datepicker(
+        {
+            format: 'yyyy-mm-dd',
+            todayHighlight:true,
+        }
+        );
+
         window.addEventListener( "keydown", function(evento){
                 $(".errorServerSideJgrid").remove();
             }, false );
@@ -800,6 +807,12 @@ function listadoConsulta(){
     self.fechaFin =$('.fechaFinal').val()
     self.cliente =$('#idCliente').val()
     self.estado = $('.estado').val()
+    self.total                     = 0
+    self.totalAbono                = 0
+    self.totalSaldo                = 0
+    self.totalSTR                     = 0
+    self.totalAbonoSTR                = 0
+    self.totalSaldoSTR                = 0    
     self.update()
         var formulario = $("#filtros").serialize();
         $("#tableListar").dataTable().fnClearTable(); 
@@ -815,8 +828,8 @@ function listadoConsulta(){
                     loadListar(".tableListar",idioma_espanol,self.informacion_tabla,result.aaData)
                     agregarInputsCombos();
                     ActivarEventoFiltro(".tableListar")
-                    __modificarRegistro_Listar()
-                    __mostrarListadoAbonos()
+                    __mostrarCuentaPorCobrar()
+                    __mostrarAbonos()
                     __MantenimientoAgregarAbono()
                     TotalesGenerales(result.aaData)
                     self.hay_datos  = true
@@ -842,6 +855,13 @@ function listadoConsulta(){
 *  Suma de totales de cuenta por cobrar 
 **/
 function TotalesGenerales(data){
+     self.total                     = 0
+    self.totalAbono                = 0
+    self.totalSaldo                = 0
+    self.totalSTR                     = 0
+    self.totalAbonoSTR                = 0
+    self.totalSaldoSTR                = 0
+    self.update()
     
     for(var i in data) { 
         self.total      += data[i].total;
@@ -910,11 +930,11 @@ __regresarAlListadoAbono(){
 **/
 function __regresar(){
    
-    self.mostrarListado       = true
+    self.mostrarListado       = false
     self.botonAgregar         = false
     self.botonModificar       = false   
     self.mostrarFormulario    = false 
-    self.mostrarListadoAbonos = false
+    self.mostrarListadoAbonos = true
     self.mostrarCrearAbono    = false
     self.update()
     listadoConsulta();
@@ -1189,15 +1209,15 @@ function __LimpiarAbonos(){
 * Opciones listado de los clientes
 */
 function __Opciones(){
-  var modificar  = '<a href="#"  title="Modificar" class="btn btn-primary  btn-buscar btnModificar" role="button"> </a>';
-  var abono   = '<a href="#"  title="Ver/Crear abonos" class="btn btn-success btnlistdoAbono"  role="button"><i class="fa fa-bank"></i></a>';
+  var modificar  = '<a href="#"  title="Ver Cuenta por Cobrar" class="btn btn-primary  btn-buscar btnVer" role="button"> </a>';
+  var abono   = '<a href="#"  title="Ver/Crear abonos" class="btn btn-success btnVerAbono"  role="button"><i class="fa fa-bank"></i></a>';
   return  modificar +" " + abono;
 }
 /**
 *  Mostrar listado de abonos
 **/
-function __mostrarListadoAbonos(){
-    $('.tableListar').on('click','.btnlistdoAbono',function(e){
+function __mostrarAbonos(){
+    $('.tableListar').on('click','.btnVerAbono',function(e){
         var table = $('.tableListar').DataTable();
 		if(table.row(this).child.isShown()){
 			//cuando el datatable esta en modo responsive
@@ -1239,8 +1259,8 @@ function includeActionsAbono(dataTables_wrapper,dataTables_length) {
 /**
  * Funcion para Modificar del Listar
  */
-function __modificarRegistro_Listar(){
-	$('#tableListar').on('click','.btnModificar',function(e){
+function __mostrarCuentaPorCobrar(){
+	$('#tableListar').on('click','.btnVer',function(e){
         $("#formulario").validate(reglasDeValidacion());
         $(".errorServerSideJgrid").remove();
 		var table = $('#tableListar').DataTable();
@@ -1470,6 +1490,7 @@ function consultaAbono(){
                         self.mostrarCrearAbono         = true
                         __LimpiarAbonos()
                         self.abono  =  modeloTabla
+                        self.abono.fechaPago = __displayDate_detail(self.abono.fechaPago)
                         self.update()
                     });
                 }
@@ -1481,6 +1502,14 @@ function consultaAbono(){
             console.log(xhr);
         }
     });
+}
+
+/**
+*Formato de la fecha con hora
+**/
+function __displayDate_detail(fecha) {
+    var dateTime = new Date(fecha);
+    return moment(dateTime).format('DD/MM/YYYY ');
 }
 /**
  * mostrar la abono

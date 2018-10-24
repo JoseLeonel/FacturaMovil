@@ -10,7 +10,6 @@ import com.emprendesoftcr.Dao.SemaforoDao;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Semaforo;
 
-@Transactional
 @EnableTransactionManagement
 @Service("semaforoBo")
 public class SemaforoBoImpl implements SemaforoBo {
@@ -30,6 +29,7 @@ public class SemaforoBoImpl implements SemaforoBo {
 	}
 	
 	@Override
+	@Transactional
 	public void modificar(Semaforo semaforo) {
 		semaforoDao.modificar(semaforo);
 	}

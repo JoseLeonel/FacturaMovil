@@ -18,21 +18,25 @@ import com.emprendesoftcr.modelo.Usuario;
  * @author jose.
  * @since 19 abr. 2018
  */
-@Transactional
+
+@EnableTransactionManagement
 @Service("empresaBo")
 public class EmpresaBoImpl implements EmpresaBo {
 
 	@Autowired
 	private EmpresaDao empresaDao;
 
+	@Transactional
 	public void agregar(Empresa empresa) {
 		empresaDao.agregar(empresa);
 	}
 
+	@Transactional
 	public void modificar(Empresa empresa) {
 		empresaDao.modificar(empresa);
 	}
 
+	@Transactional
 	public void eliminar(Empresa empresa) {
 		empresaDao.eliminar(empresa);
 	}
@@ -83,11 +87,13 @@ public class EmpresaBoImpl implements EmpresaBo {
 	}
 
 	@Override
+	@Transactional
 	public String generarConsecutivoRecepcionFactura(Empresa empresa, Usuario usuario, RecepcionFactura recepcionFactura) throws Exception {
 		return empresaDao.generarConsecutivoRecepcionFactura(empresa, usuario, recepcionFactura);
 	}
 
 	@Override
+	@Transactional
 	public String generaClaveFacturaTributacion(Empresa empresa, String consecutivoFactura, Integer comprobanteElectronico) throws Exception{
 		return empresaDao.generaClaveFacturaTributacion(empresa, consecutivoFactura, comprobanteElectronico);
 	}

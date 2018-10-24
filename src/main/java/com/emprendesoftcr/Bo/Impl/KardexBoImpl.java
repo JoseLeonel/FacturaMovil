@@ -20,35 +20,37 @@ import com.emprendesoftcr.modelo.Usuario;
  * @author jose.
  * @since 12 abr. 2018
  */
-@Transactional
 @EnableTransactionManagement
 @Service("kardexBo")
 public class KardexBoImpl implements KardexBo {
-	private Logger				log	= LoggerFactory.getLogger(this.getClass());
+
+	private Logger		log	= LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private KardexDao		kardexDao;
+	private KardexDao	kardexDao;
 
-
+	@Override
+	@Transactional
 	public void agregar(Kardex kardex) {
 		kardexDao.agregar(kardex);
 	}
 
 	/**
 	 * Ingresar Cantidad al inventario
-	 * @throws Exception 
+	 * @throws Exception
 	 * @see com.emprendesoftcr.Bo.KardexBo#entrada(com.emprendesoftcr.modelo.Inventario, java.lang.Double, java.lang.Double, java.lang.String, java.lang.String, java.lang.String, java.lang.String, com.emprendesoftcr.modelo.Usuario)
 	 */
+	@Override
+	@Transactional
 	public void entrada(Articulo articulo, Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) throws Exception {
 		try {
-			kardexDao.entrada(articulo, cantidadActual, cantidadNueva, observacion, consecutivo, tipo, motivo, usuarioSesion);	
+			kardexDao.entrada(articulo, cantidadActual, cantidadNueva, observacion, consecutivo, tipo, motivo, usuarioSesion);
 		} catch (Exception e) {
 			log.info("** Error  entrada kardex: " + e.getMessage() + " fecha " + new Date());
 			throw e;
-		
+
 		}
 
-		
 	}
 
 	/**
@@ -59,16 +61,17 @@ public class KardexBoImpl implements KardexBo {
 	 * @param consecutivo
 	 * @param tipo
 	 * @param motivo
-	 * @throws Exception 
+	 * @throws Exception
 	 */
+	@Override
+	@Transactional
 	public void salida(Articulo articulo, Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) throws Exception {
 		try {
-			kardexDao.salida(articulo, cantidadActual, cantidadNueva, observacion, consecutivo, tipo, motivo, usuarioSesion);	
+			kardexDao.salida(articulo, cantidadActual, cantidadNueva, observacion, consecutivo, tipo, motivo, usuarioSesion);
 		} catch (Exception e) {
 			log.info("** Error  salida kardex: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
-		
 
 	}
 

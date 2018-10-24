@@ -939,7 +939,7 @@ public class FacturasController {
 
 			// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 			// criptografica desde linux
-			// certificadoBo.agregar(usuario.getEmpresa(),"","");
+		//	 certificadoBo.agregar(usuario.getEmpresa(),"","");
 			// usuario.getEmpresa().getClaveLlaveCriptografica().toString(),
 			// usuario.getEmpresa().getNombreLlaveCriptografica());
 			// String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);
@@ -1094,7 +1094,7 @@ public class FacturasController {
 			}
 			ByteArrayOutputStream namePDF = Proformas.main(facturaBD.getNumeroConsecutivo(), facturaBD.getTipoDoc(), facturaElectronica);
 
-			Collection<Attachment> attachments = createAttachments(PDF_Attach(facturaBD.getId().toString(), facturaBD.getEmpresa().getCedula(), asPDF(namePDF)));
+			Collection<Attachment> attachments = createAttachments(PDF_Attach(facturaBD.getId().toString(), facturaBD.getEmpresa().getCedula(), asPDF(namePDF),facturaBD.getTipoDoc()));
 
 			Map<String, Object> modelEmail = new HashMap<>();
 
@@ -1182,7 +1182,7 @@ public class FacturasController {
     			ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 
     			String clave = getConsecutivo(factura.getTipoDoc(), factura.getNumeroConsecutivo());
-    			Collection<Attachment> attachments = createAttachments(PDF_Attach(clave, factura.getEmpresa().getCedula(), asPDF(namePDF)));
+    			Collection<Attachment> attachments = createAttachments(PDF_Attach(clave, factura.getEmpresa().getCedula(), asPDF(namePDF),factura.getTipoDoc()));
 
     			Map<String, Object> modelEmail = new HashMap<>();
 
@@ -1221,8 +1221,22 @@ public class FacturasController {
 		return respuestaServiceValidator;
 	}
 
-	private Attachment PDF_Attach(String name, String cedula, ByteArrayDataSource data) {
-		return attachment("Factura_PDF_" + cedula + "_" + name, ".pdf", data);
+	private Attachment PDF_Attach(String name, String cedula, ByteArrayDataSource data,String tipoDoc) {
+		String resultado = Constantes.EMPTY;
+		resultado = "Factura_PDF_";
+		if(tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
+			resultado = "Factura_PDF_";
+		}else if(tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			resultado = "NOTA_CREDITO_PDF_";
+		}else if(tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+			resultado = "NOTA_DEBITO_PDF_";
+		}else if(tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+			resultado = "PROFORMA_PDF_";
+		}else if(tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
+			resultado = "TIQUETE_PDF_";
+		}
+	
+		return attachment(resultado + cedula + "_" + name, ".pdf", data);
 	}
 
 	private Attachment attachment(String name, String ext, ByteArrayDataSource data) {

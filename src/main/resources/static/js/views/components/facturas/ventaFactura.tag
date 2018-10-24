@@ -2391,7 +2391,7 @@ function mostrarPAgo(){
     self.mostarParaCrearNuevaVentas = false
       self.factura.totalEfectivo = self.factura.totalComprobante
         self.update()
-     $('#totalEfectivo').val(self.factura.totalComprobante)
+    $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(3))
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
     getSubTotalGeneral()
@@ -3188,10 +3188,18 @@ function __Teclas(){
     }
     //Limpiar
     if(tecla ==121){
-      __Init()
+      refrescarPagina()
     }
     }, false );
 }
+
+function refrescarPagina(){
+    location.reload(true);
+     $('.codigo').select()
+      $(".codigo").focus()
+ 
+}
+
 /**
 * Contabilizar los billetes de acuerdo a como se vayan dando click en la pantalla
 */

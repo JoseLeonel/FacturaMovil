@@ -5,10 +5,8 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Utils.Constantes;
@@ -19,7 +17,6 @@ import com.emprendesoftcr.service.FirmaElectronicaService;
 import com.emprendesoftcr.service.RespuestaHaciendaXMLService;
 
 @Service("respuestaHaciendaXMLService")
-@Transactional
 @EnableTransactionManagement
 public class RespuestaHaciendaXMLServiceImpl implements RespuestaHaciendaXMLService {
 	private Logger	log= LoggerFactory.getLogger(this.getClass());
@@ -35,8 +32,10 @@ public class RespuestaHaciendaXMLServiceImpl implements RespuestaHaciendaXMLServ
 		try {
 		
 			Certificado certificado  = certificadoBo.findByEmpresa(empresa);
-		
-      resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_RESPUESTA_HACIENDA);
+      if(certificado !=null) {
+      	resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_RESPUESTA_HACIENDA);	
+      } 		
+      
 		} catch (Exception e) {
 			log.info("** Error  findbyAcceso: " + e.getMessage() + " fecha " + new Date());
 			throw e;

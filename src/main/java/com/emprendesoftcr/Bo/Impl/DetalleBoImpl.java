@@ -18,11 +18,11 @@ import com.emprendesoftcr.modelo.Factura;
 @EnableTransactionManagement
 @Service("detalleBo")
 public class DetalleBoImpl implements DetalleBo {
-	
+
 	@Autowired
-	private DetalleDao						detalleDao;
-	
-	private Logger				log	= LoggerFactory.getLogger(this.getClass());
+	private DetalleDao	detalleDao;
+
+	private Logger			log	= LoggerFactory.getLogger(this.getClass());
 
 	@Override
 	public void agregar(Detalle detalle) {
@@ -50,7 +50,7 @@ public class DetalleBoImpl implements DetalleBo {
 
 			throw e;
 		}
-		
+
 	}
 
 }

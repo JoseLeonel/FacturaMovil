@@ -1,7 +1,6 @@
 package com.emprendesoftcr.Bo.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +15,6 @@ import com.emprendesoftcr.modelo.MotivoEntrada;
  * @author jose.
  * @since 19 abr. 2018
  */
-@Transactional
 @EnableTransactionManagement
 @Service
 public class MotivoEntradaBoImpl implements MotivoEntradaBo {
@@ -24,14 +22,20 @@ public class MotivoEntradaBoImpl implements MotivoEntradaBo {
 	@Autowired
 	MotivoEntradaDao motivoEntradaDao;
 
+	@Override
+	@Transactional
 	public void agregar(MotivoEntrada motivoEntrada) {
 		motivoEntradaDao.agregar(motivoEntrada);
 	}
 
+	@Override
+	@Transactional
 	public void modificar(MotivoEntrada motivoEntrada) {
 		motivoEntradaDao.modificar(motivoEntrada);
 	}
 
+	@Override
+	@Transactional
 	public void eliminar(MotivoEntrada motivoEntrada) {
 		motivoEntradaDao.eliminar(motivoEntrada);
 	}

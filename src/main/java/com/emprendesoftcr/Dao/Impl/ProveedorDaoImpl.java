@@ -13,8 +13,7 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 
 /**
- * Proveedores que se le aplican compras para alimentar el almacen
- * ProveedorDaoImpl.
+ * Proveedores que se le aplican compras para alimentar el almacen ProveedorDaoImpl.
  * @author jose.
  * @since 19 abr. 2018
  */
@@ -24,19 +23,23 @@ public class ProveedorDaoImpl implements ProveedorDao {
 	@PersistenceContext
 	EntityManager entityManager;
 
+	@Override
 	public void agregar(Proveedor proveedor) {
 		entityManager.persist(proveedor);
 	}
 
+	@Override
 	public void modificar(Proveedor proveedor) {
 		entityManager.merge(proveedor);
 	}
 
+	@Override
 	public void eliminar(Proveedor proveedor) {
 		entityManager.remove(proveedor);
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public Proveedor buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from Proveedor obj where obj.id = :id");
 		query.setParameter("id", id);
@@ -47,11 +50,13 @@ public class ProveedorDaoImpl implements ProveedorDao {
 			return null;
 		}
 	}
-/**
- * Buscar por nombre completo y empresa
- * @see com.factura.dao.ProveedorDao#buscarPorNombreCompletoYEmpresa(java.lang.String, com.factura.domain.Empresa)
- */
+
+	/**
+	 * Buscar por nombre completo y empresa
+	 * @see com.factura.dao.ProveedorDao#buscarPorNombreCompletoYEmpresa(java.lang.String, com.factura.domain.Empresa)
+	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public Proveedor buscarPorNombreCompletoYEmpresa(String nombreCompleto, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Proveedor obj where obj.nombreCompleto = :nombreCompleto and obj.empresa = :empresa");
 		query.setParameter("nombreCompleto", nombreCompleto);
@@ -65,11 +70,12 @@ public class ProveedorDaoImpl implements ProveedorDao {
 	}
 
 	/**
-	 * Buscar por cedula  y empresa
+	 * Buscar por cedula y empresa
 	 * @param cedula
 	 * @param empresa
 	 * @return
 	 */
+	@Override
 	public Proveedor buscarPorCedulaYEmpresa(String cedula, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Proveedor obj where obj.cedula = :cedula and obj.empresa = :empresa");
 		query.setParameter("cedula", cedula);

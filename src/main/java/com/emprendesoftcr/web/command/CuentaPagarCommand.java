@@ -35,7 +35,7 @@ public class CuentaPagarCommand {
 
 	private Usuario		usuarioCreacion;
 
-	private Integer		estado;
+	private String		estado;
 
 	public CuentaPagarCommand(CuentaPagar cuentaPagar) {
 		super();
@@ -148,11 +148,15 @@ public class CuentaPagarCommand {
 		this.usuarioCreacion = usuarioCreacion;
 	}
 
-	public Integer getEstado() {
+	
+
+	
+	public String getEstado() {
 		return estado;
 	}
 
-	public void setEstado(Integer estado) {
+	
+	public void setEstado(String estado) {
 		this.estado = estado;
 	}
 

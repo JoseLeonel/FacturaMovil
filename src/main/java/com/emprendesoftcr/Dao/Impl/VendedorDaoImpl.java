@@ -23,14 +23,17 @@ public class VendedorDaoImpl implements VendedorDao {
 	@PersistenceContext
 	EntityManager entityManager;
 
+	@Override
 	public void agregar(Vendedor vendedor) {
 		entityManager.persist(vendedor);
 	}
 
+	@Override
 	public void modificar(Vendedor vendedor) {
 		entityManager.merge(vendedor);
 	}
 
+	@Override
 	public void eliminar(Vendedor vendedor) {
 		entityManager.remove(vendedor);
 	}
@@ -40,6 +43,7 @@ public class VendedorDaoImpl implements VendedorDao {
 	 * @see com.factura.dao.VendedorDao#buscar(java.lang.Integer)
 	 */
 	@SuppressWarnings("unchecked")
+  @Override
 	public Vendedor buscar(Long id) {
 		Query query = entityManager.createQuery("select obj from Vendedor obj where obj.id = :id");
 		query.setParameter("id", id);
@@ -56,6 +60,7 @@ public class VendedorDaoImpl implements VendedorDao {
 	 * @see com.factura.dao.VendedorDao#buscarPorNombreCompletoYSucursal(java.lang.String, com.factura.domain.Sucursal)
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public Vendedor buscarPorNombreCompletoYEmpresa(String nombreCompleto, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Vendedor obj where obj.nombreCompleto = :nombreCompleto and obj.empresa = :empresa");
 		query.setParameter("nombreCompleto", nombreCompleto);
@@ -75,6 +80,7 @@ public class VendedorDaoImpl implements VendedorDao {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public Vendedor buscarPorCedulaYEmpresa(String cedula, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Vendedor obj where obj.cedula = :cedula and obj.empresa = :empresa");
 		query.setParameter("cedula", cedula);

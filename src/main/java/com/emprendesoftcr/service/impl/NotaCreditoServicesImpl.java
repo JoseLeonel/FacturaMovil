@@ -3,13 +3,13 @@ package com.emprendesoftcr.service.impl;
 import java.math.BigInteger;
 import java.util.Date;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.FacturaBo;
@@ -65,14 +65,16 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
 	}
 	
 
-	@Override
+
+  @Override
 	public String getCrearXMLSinFirma(Factura factura) throws Exception {
-		
 		String xml = Constantes.EMPTY;
 		Date fecha = new Date();
 		factura.setFechaEmision(fecha);
 		facturaBo.modificar(factura);
 		try {
+		
+			
 			String date = FacturaElectronicaUtils.toISO8601String(factura.getFechaEmision());
 			String datereferenciaEmision = FacturaElectronicaUtils.toISO8601String(factura.getReferenciaFechaEmision());
 		  
