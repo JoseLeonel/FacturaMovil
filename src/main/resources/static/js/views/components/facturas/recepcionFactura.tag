@@ -847,7 +847,6 @@
 			$(".errorServerSideJgrid").remove();
 			
 		    var formulario = $("#formularioAceptarForm").serialize();
-		    console.log(formulario);
 		    $.ajax({
 		        type : "POST",
 		        dataType : "json",

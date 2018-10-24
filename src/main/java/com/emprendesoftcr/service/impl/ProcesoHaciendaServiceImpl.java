@@ -232,7 +232,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			log.info("Finaliza Proceso de Envio de documentos  {}", new Date());
 		} catch (Exception e) {
 			log.info("** Error2  taskHaciendaEnvio: " + e.getMessage() + " fecha " + new Date());
-			throw e;
+			 throw e;
 		}
 		if (facturasConProblemas != null) {
 			if (!facturasConProblemas.isEmpty()) {
@@ -834,7 +834,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 		} catch (Exception e) {
 			log.info("** Error2  proceso de firmado: " + e.getMessage() + " fecha " + new Date());
-
+			throw e;
 		}
 	}
 
@@ -904,9 +904,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						recepcionFacturaBo.modificar(recepcionFactura);
 						log.info("** Error1 proceso de firmado: " + e.getMessage() + " fecha " + new Date());
 					}
-
-				}
+				
 			}
+		}
 
 			log.info("Fin el proceso de firmado  {}", new Date());
 
