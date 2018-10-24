@@ -26,6 +26,9 @@ public class ClienteBoImpl implements ClienteBo {
 	@Autowired
 	private ClienteDao clienteDao;
 
+
+	@Transactional
+	@Override
 	public void agregar(Cliente cliente) {
 		clienteDao.agregar(cliente);
 	}

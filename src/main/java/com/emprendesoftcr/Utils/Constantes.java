@@ -30,6 +30,7 @@ public class Constantes {
 	// Semaforo
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 300;
 	// 48 horas cada 5 minutos
+	
 	public static final Integer					MAXIMO_REINTENTOS_ACEPTACION												= 60;
 	public static final String					MAXIMO_REINTENTOS_ACEPTACION_STR										= "Tope de intentos de aceptacion,no envio respuesta";
 
@@ -98,7 +99,7 @@ public class Constantes {
 	public static final Integer					HACIENDA_ESTADO_FIRMARDO_XML												= 2;
 	public static final Integer					HACIENDA_ESTADO_ENVIADO_HACIENDA										= 3;
 	public static final Integer					HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR							= 4;
-	public static final Integer					HACIENDA_ESTADO_ENVIADO_HACIENDA_TOPE_REINTENTOS		= 5;
+	public static final Integer					HACIENDA_ESTADO_ENVIADO_HACIENDA_TOPE_REINTENTOS		= 99;
 	public static final Integer					HACIENDA_ESTADO_ACEPTADO_HACIENDA										= 6;
 	public static final Integer					HACIENDA_ESTADO_ACEPTADO_RECHAZADO									= 7;
 	public static final Integer					HACIENDA_ESTADO_ACEPTADO_PARCIAL										= 8;

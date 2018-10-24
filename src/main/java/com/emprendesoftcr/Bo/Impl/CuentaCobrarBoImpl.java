@@ -29,16 +29,19 @@ public class CuentaCobrarBoImpl implements CuentaCobrarBo {
 	private CuentaCobrarDao cuentaCobrarDao;
 
 	@Transactional
+	@Override
 	public void agregar(CuentaCobrar cuentaCobrar) {
 		cuentaCobrarDao.agregar(cuentaCobrar);
 	}
 
 	@Transactional
+	@Override
 	public void modificar(CuentaCobrar cuentaCobrar) {
 		cuentaCobrarDao.modificar(cuentaCobrar);
 	}
 
 	@Transactional
+	@Override
 	public void eliminar(CuentaCobrar cuentaCobrar) {
 		cuentaCobrarDao.eliminar(cuentaCobrar);
 	}

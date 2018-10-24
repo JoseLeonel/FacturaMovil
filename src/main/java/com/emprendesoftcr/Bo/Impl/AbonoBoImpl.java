@@ -25,16 +25,19 @@ public class AbonoBoImpl implements AbonoBo {
 	AbonoDao abonoDao;
 
 	@Transactional
+	@Override
 	public void agregar(Abono abono) {
 		abonoDao.agregar(abono);
 	}
 
 	@Transactional
+	@Override
 	public void modificar(Abono abono) {
 		abonoDao.modificar(abono);
 	}
 
 	@Transactional
+	@Override
 	public void eliminar(Abono abono) {
 		abonoDao.eliminar(abono);
 	}

@@ -218,10 +218,18 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 							envioHacienda(haciendaBD);
 						} catch (Exception e) {
 							// Se modifica el registros
-							hacienda.setNotificacion(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA);
-							hacienda.setEstado(Constantes.HACIENDA_ESTADO_PROBLEMA_ENVIO_NO_TRASABLE);
+							if (hacienda.getReintentos() == null) {
+								hacienda.setReintentos(Constantes.ZEROS);
+							}
+							if (hacienda.getReintentos() > Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_TOPE_REINTENTOS) {
+								hacienda.setNotificacion(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA);
+								hacienda.setEstado(Constantes.HACIENDA_ESTADO_PROBLEMA_ENVIO_NO_TRASABLE);
+								facturasConProblemas.add(hacienda);
+							} else {
+								hacienda.setReintentos(hacienda.getReintentos() + 1);
+							}
 							haciendaBo.modificar(hacienda);
-							facturasConProblemas.add(hacienda);
+							
 							log.info("** Error1  taskHaciendaEnvio: " + e.getMessage() + " fecha :" + new Date() + "Empresa:" + hacienda.getEmpresa().getNombre() + " Consecutivo :" + hacienda.getConsecutivo());
 						}
 
@@ -232,7 +240,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			log.info("Finaliza Proceso de Envio de documentos  {}", new Date());
 		} catch (Exception e) {
 			log.info("** Error2  taskHaciendaEnvio: " + e.getMessage() + " fecha " + new Date());
-			 throw e;
+			throw e;
 		}
 		if (facturasConProblemas != null) {
 			if (!facturasConProblemas.isEmpty()) {
@@ -348,7 +356,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html Proceso automatico para ejecutar aceptacion del documento
 	 */
-	@Scheduled(cron = "0 0/3 * * * ?")
+//	@Scheduled(cron = "0 0/3 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		try {
@@ -512,7 +520,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	// @Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -743,7 +751,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	// @Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -753,7 +761,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			for (Factura factura : lista) {
 				try {
 					log.info("Factura:  {}", factura.getNumeroConsecutivo() + " Empresa:" + factura.getEmpresa().getNombre());
-					
+
 					if (factura != null) {
 						if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 							String comprobanteXML = Constantes.EMPTY;
@@ -782,7 +790,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 							if (comprobanteXML != null) {
 								if (!comprobanteXML.equals(Constantes.EMPTY)) {
 									Hacienda haciendaVerificar = haciendaBo.findByEmpresaAndClave(factura.getEmpresa(), factura.getClave());
-									if(haciendaVerificar ==null) {
+									if (haciendaVerificar == null) {
 										Hacienda hacienda = new Hacienda();
 										hacienda.setCedulaEmisor(factura.getEmpresa().getCedula());
 										hacienda.setTipoEmisor(factura.getEmpresa().getTipoCedula());
@@ -812,7 +820,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 										hacienda.setTotalReceptor(factura.getTotalComprobante());
 										hacienda.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
 										haciendaBo.agregar(hacienda);
-										
+
 									}
 
 									if (factura != null) {
@@ -842,7 +850,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+//	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {
@@ -857,12 +865,11 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						// Crear XMl sin firma
 						comprobanteXMLSinFirma = recepcionFacturaXMLServices.getCrearXMLSinFirma(recepcionFactura);
 
-						if(comprobanteXMLSinFirma !=null) {
-							if(!comprobanteXMLSinFirma.equals(Constantes.EMPTY) ) {
-								comprobanteXMLConFirma = recepcionFacturaXMLServices.getFirmarXML(comprobanteXMLSinFirma, recepcionFactura.getEmpresa());		
+						if (comprobanteXMLSinFirma != null) {
+							if (!comprobanteXMLSinFirma.equals(Constantes.EMPTY)) {
+								comprobanteXMLConFirma = recepcionFacturaXMLServices.getFirmarXML(comprobanteXMLSinFirma, recepcionFactura.getEmpresa());
 							}
 						}
-						
 
 						if (!comprobanteXMLConFirma.equals(Constantes.EMPTY)) {
 							// Se cargan los datos de la factura, el emisor es el que envia la factura para su aprobacion
@@ -890,7 +897,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 							hacienda.setTotalReceptor(recepcionFactura.getTotalFactura());
 							hacienda.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
 							haciendaBo.agregar(hacienda);
-							
+
 							recepcionFactura = recepcionFactura.getId() == null || recepcionFactura.getId() == Constantes.ZEROS_LONG ? null : recepcionFacturaBo.findById(recepcionFactura.getId());
 							recepcionFactura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
 							if (recepcionFactura != null) {
@@ -904,9 +911,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						recepcionFacturaBo.modificar(recepcionFactura);
 						log.info("** Error1 proceso de firmado: " + e.getMessage() + " fecha " + new Date());
 					}
-				
+
+				}
 			}
-		}
 
 			log.info("Fin el proceso de firmado  {}", new Date());
 

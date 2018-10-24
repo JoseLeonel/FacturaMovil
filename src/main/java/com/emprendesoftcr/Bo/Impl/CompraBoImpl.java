@@ -60,6 +60,7 @@ public class CompraBoImpl implements CompraBo {
 	private Logger								log	= LoggerFactory.getLogger(this.getClass());
 
 	@Transactional
+	@Override
 	public void agregar(Compra compra) {
 		compraDao.agregar(compra);
 

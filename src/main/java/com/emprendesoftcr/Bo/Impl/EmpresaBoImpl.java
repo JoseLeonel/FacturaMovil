@@ -26,16 +26,19 @@ public class EmpresaBoImpl implements EmpresaBo {
 	private EmpresaDao empresaDao;
 
 	@Transactional
+	@Override
 	public void agregar(Empresa empresa) {
 		empresaDao.agregar(empresa);
 	}
 
 	@Transactional
+	@Override
 	public void modificar(Empresa empresa) {
 		empresaDao.modificar(empresa);
 	}
 
 	@Transactional
+	@Override
 	public void eliminar(Empresa empresa) {
 		empresaDao.eliminar(empresa);
 	}

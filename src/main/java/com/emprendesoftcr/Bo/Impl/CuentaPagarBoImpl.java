@@ -18,21 +18,24 @@ import com.emprendesoftcr.modelo.CuentaPagar;
 @EnableTransactionManagement
 @Service("cuentaPagarBo")
 public class CuentaPagarBoImpl implements CuentaPagarBo {
-
+	
 	@Autowired
 	private CuentaPagarDao cuentaPagarDao;
 
 	@Transactional
+	@Override
 	public void agregar(CuentaPagar cuentaPagar) {
 		cuentaPagarDao.agregar(cuentaPagar);
 	}
 
 	@Transactional
+	@Override
 	public void modificar(CuentaPagar cuentaPagar) {
 		cuentaPagarDao.modificar(cuentaPagar);
 	}
 
 	@Transactional
+	@Override
 	public void eliminar(CuentaPagar cuentaPagar) {
 		cuentaPagarDao.eliminar(cuentaPagar);
 	}

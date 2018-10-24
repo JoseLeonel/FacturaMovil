@@ -95,7 +95,7 @@ public class EnvioHaciendaComponent {
 						hacienda.setUpdated_at(new Date());
 						hacienda.setxErrorCause(FacturaElectronicaUtils.convertirStringToblod(headerError));
 						hacienda.setStatus(response.getStatus());
-						hacienda.setReintentos(hacienda.getReintentos() != null ? hacienda.getReintentos() + 1 : 1);
+				//		hacienda.setReintentos(hacienda.getReintentos() != null ? hacienda.getReintentos() + 1 : 1);
 						haciendaBo.modificar(hacienda);
 
 					} else {

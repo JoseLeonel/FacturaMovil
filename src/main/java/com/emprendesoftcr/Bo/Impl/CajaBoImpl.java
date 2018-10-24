@@ -18,16 +18,19 @@ public class CajaBoImpl implements CajaBo {
 	private CajaDao cajaDao;
 
 	@Transactional
+	@Override
 	public void agregar(Caja caja) {
 		cajaDao.agregar(caja);
 	}
 
 	@Transactional
+	@Override
 	public void modificar(Caja caja) {
 		cajaDao.modificar(caja);
 	}
 
 	@Transactional
+	@Override
 	public void eliminar(Caja caja) {
 		cajaDao.eliminar(caja);
 	}
