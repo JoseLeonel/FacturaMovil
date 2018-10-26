@@ -1063,6 +1063,7 @@ td.col-xl-12, th.col-xl-12 {
             to:0
         }
     }
+    self.primeraVezBilleteClick = false
     self.mostrarImpuestoServicio = false
 
     self.urlImagenNavegador   = '/dist/img/navegador.png';

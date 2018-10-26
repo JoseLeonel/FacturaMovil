@@ -1130,6 +1130,7 @@ td.col-xl-12, th.col-xl-12 {
     self.urlImagenNavegador   = '/dist/img/navegador.png';
     self.urlImagenLector      = '/dist/img/codigo_barra.png';
     self.urlImagenBuscador    = '/dist/img/buscador.png';
+    self.primeraVezBilleteClick = false
 
     self.on('mount',function(){
         $("#formularioFactura").validate(reglasDeValidacionFactura());

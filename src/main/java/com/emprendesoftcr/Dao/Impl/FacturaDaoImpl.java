@@ -139,7 +139,6 @@ public class FacturaDaoImpl implements FacturaDao {
 		return query.getResultList();
 	}
 
-	@Transactional(readOnly = true)
 	public TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa) {
 
 		StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_TOTAL_FACTURAS);

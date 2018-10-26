@@ -572,8 +572,14 @@ function __displayDate_detail(fecha) {
 **/
 function __InformacionDataTable(){
     self.formato_tabla = [ 
-			{'data' :'fechaEmision'   ,"name":"fechaEmision"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true },
-            {'data' : 'cedulaEmisor'  ,"name":"cedulaEmisor"    ,"title" : $.i18n.prop("emisor.cedula")     , "autoWidth" : true},
+			//{'data' :'fechaEmision'   	,"name":"fechaEmision"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true },
+			{"data" : "fechaEmision"	,"name":"fechaEmision"    ,"title" : $.i18n.prop("factura.fecha.emision")      ,"autoWidth":true, 
+				"render" : function(fechaEmision){
+					return formatearFechaDT(fechaEmision); 
+				}
+			},
+			
+			{'data' : 'cedulaEmisor'  ,"name":"cedulaEmisor"    ,"title" : $.i18n.prop("emisor.cedula")     , "autoWidth" : true},
 	        {'data' : 'clave'  ,"name":"clave"    ,"title" : $.i18n.prop("factura.clave")     , "autoWidth" : true},
     	    {'data' : 'mensaje'  ,"name":"mensaje"    ,"title" : $.i18n.prop("receptor.mensaje")     , "autoWidth" : true},
             {'data' :'totalImpuestos'       ,"name":"totalImpuestos"        ,"title" : $.i18n.prop("factura.totalImpuestos")     ,"autoWidth" :true,
@@ -598,6 +604,15 @@ function __InformacionDataTable(){
           }
    ];
    self.update();
+}
+
+//Formato de fecha
+function formatearFechaDT(fecha){	
+	if(fecha == null){
+		return " ";	
+	}else{
+		return moment(fecha).format('DD/MM/YYYY');		
+	}	
 }
 
 function __TipoDocumentos(numeroConsecutivo,row){
