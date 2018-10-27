@@ -105,6 +105,7 @@
                 </div>
             </div>
             <div class="col-xs-12 text-right">
+                <a   show={hay_datos==true} onclick= {__CorreoAlternativo} class=" btn btn-success btn-correo"   title="Enviar Correo" href="#"> Enviar Correo</a>        
                 <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar detalle transacciones" href="DescargarDetalleTotalCuentasXCobrarAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&idClienteParam={cliente}&estadoParam={estado}"> Descargar</a>        
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
             	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
@@ -271,19 +272,19 @@
             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                 <div class="form-group">
                     <label  >{$.i18n.prop("titulo.total")} </label>
-                    <input type="text" class="form-control " value="{total}" readonly>
+                    <input type="text" class="form-control totalGeneral " value="{total}" readonly>
                 </div>  
             </div>                             
             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                 <div class="form-group">
                     <label  >{$.i18n.prop("titulo.abono")} </label>
-                    <input type="text" class="form-control" value="{totalAbono}" readonly>
+                    <input type="text" class="form-control totalAbonoGeneral" value="{totalAbono}" readonly>
                 </div>  
             </div>                             
             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                 <div class="form-group">
                     <label  >{$.i18n.prop("titulo.saldo")} </label>
-                    <input type="text" class="form-control" value="{totalSaldo}" readonly>
+                    <input type="text" class="form-control totalSaldoGeneral " value="{totalSaldo}" readonly>
                 </div>  
             </div>                             
         </div>
@@ -723,17 +724,43 @@ var reglasDeValidacionParametros = function() {
 		    if ($("#filtros").valid()) {
 		        var parametros = {
 		        	correoAlternativo:$('#correoAlternativo').val(),		
-		        	fechaInicioParam:$('#fechaInicial').val(),
+		        	fechaInicioParam:$('#fechaInicio').val(),
 		        	fechaFinParam:$('#fechaFinal').val(),
                     idClienteParam:$('#idCliente').val(),
-                    estadoParam : $('.estado').val()
+                    estadoParam : $('.estado').val(),
+                    total:$('.totalGeneral').val(),
+                    abono:$('.totalAbonoGeneral').val(),
+                    saldo:$('.totalSaldoGeneral').val()
 		        };
 		        $.ajax({
 		            url: "EnvioDetalleCuentasXCobrarCorreoAjax.do",
 		            datatype: "json",
 		            data:parametros ,
-		            method:"POST",
+		            method:"GET",
 		            success: function (data) {
+                        if (data.status != 200) {
+                        	serverMessageJson(data);
+                            if (data.message != null && data.message.length > 0) {
+                            	swal({
+      	                           title: '',
+      	                           text: data.message,
+      	                           type: 'error',
+      	                           showCancelButton: false,
+      	                           confirmButtonText: 'Aceptar',
+      	                                	  
+      	                         })
+                            }
+                            
+                        } else {
+
+                         swal({
+	                           title: '',
+	                           text: "Enviado el correo Exitosamente",
+	                           type: 'success',
+	                           showCancelButton: false,
+	                           confirmButtonText: 'Aceptar',
+	                         })
+                        }
 					    
 			        },
 			        error: function (xhr, status) {

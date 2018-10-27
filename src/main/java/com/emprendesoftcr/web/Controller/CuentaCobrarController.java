@@ -5,11 +5,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.ClienteBo;
+import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.CuentaCobrarBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
@@ -37,6 +42,7 @@ import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Empresa;
@@ -68,6 +74,9 @@ public class CuentaCobrarController {
 																																					};
 	@Autowired
 	private UsuarioBo																						usuarioBo;
+	
+	@Autowired
+	private CorreosBo																									correosBo;
 
 	@Autowired
 	private DataTableBo																					dataTableBo;
@@ -137,7 +146,7 @@ public class CuentaCobrarController {
 	
 //Enviar Correo de las cuentas por cobrar
 @RequestMapping(value = "/EnvioDetalleCuentasXCobrarCorreoAjax.do", method = RequestMethod.GET)
-public void enviarCorreoCuentasXCobrarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam ,@RequestParam Long idClienteParam,@RequestParam String estadoParam) throws IOException, Exception {
+public void enviarCorreoCuentasXCobrarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam ,@RequestParam Long idClienteParam,@RequestParam String estadoParam ,@RequestParam String correoAlternativo,@RequestParam String total,@RequestParam String saldo,@RequestParam String abono ) throws IOException, Exception {
 
 	Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 	Cliente cliente = clienteBo.buscar(idClienteParam);
@@ -146,25 +155,42 @@ public void enviarCorreoCuentasXCobrarAjax(HttpServletRequest request, HttpServl
 	Date fechaInicio = Utils.parseDate(fechaInicioParam);
 	Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
 	Collection<CuentaCobrar> cuentaCobras = cuentaCobrarBo.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado( fechaInicio, fechaFin, usuario.getEmpresa(),cliente,estadoParam);
+//Se prepara el excell
+		ByteArrayOutputStream baos = createExcelCuentaCobrar(cuentaCobras);
+	
+	Collection<Attachment> attachments = createAttachments(attachment("FacturaPendientes", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
 
-	String nombreArchivo = "cuentaxCobrar.xls";
-	response.setContentType("application/octet-stream");
-	response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+		// Se prepara el correo
+		String from = "FacturasEmitidas@emprendesoftcr.com";
+		if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
+			if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+				from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_FacturasPendientes" + "_No_Reply@emprendesoftcr.com";
+			}
+		}
+		String subject = "Facturas Pendientes de cancelar dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
 
-	// Se prepara el excell
-	ByteArrayOutputStream baos = createExcelCuentaCobrar(cuentaCobras);
-	ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+		ArrayList<String> listaCorreos = new ArrayList<>();
+	
+			listaCorreos.add(correoAlternativo);
+	
+		Map<String, Object> modelEmail = new HashMap<>();
+		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
+		modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
+		modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFin));
+		modelEmail.put("total", total);
+		modelEmail.put("abono", abono);
+		modelEmail.put("saldo", saldo);
 
-	int BUFFER_SIZE = 4096;
-	byte[] buffer = new byte[BUFFER_SIZE];
-	int bytesRead = -1;
-	while ((bytesRead = inputStream.read(buffer)) != -1) {
-		response.getOutputStream().write(buffer, 0, bytesRead);
-	}
+		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/cuentasxcobrar.vm", modelEmail);
 }
 
-	
-	
+private Collection<Attachment> createAttachments(Attachment... attachments) {
+	return Arrays.asList(attachments);
+}
+private Attachment attachment(String name, String ext, ByteArrayDataSource data) {
+	return new Attachment(name + ext, data);
+}
+
 
 	private ByteArrayOutputStream createExcelCuentaCobrar(Collection<CuentaCobrar> cuentaCobrar) {
 		// Se prepara el excell

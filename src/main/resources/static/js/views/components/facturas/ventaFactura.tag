@@ -1070,6 +1070,7 @@ td.col-xl-12, th.col-xl-12 {
     self.urlImagenLector      = '/dist/img/codigo_barra.png';
     self.urlImagenBuscador    = '/dist/img/buscador.png';
 
+
     self.on('mount',function(){
         $("#formularioFactura").validate(reglasDeValidacionFactura());
         $("#formularioAgregarNombreTiquete").validate(reglasAgregarNombre());
@@ -1982,6 +1983,7 @@ __Limpiar(){
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
+    self.primeraVezBilleteClick = false
     self.mostrarListadoArticulos == false
     self.detail                = []
     self.mensajesBackEnd       = []
@@ -3167,10 +3169,13 @@ function __Teclas(){
       if(self.mostrarFormularioPago == false && self.mostarParaCrearNuevaVentas == true){
         self.factura.totalCambioPagar =__valorNumerico(self.factura.totalComprobante)   
         self.totalCambioPagar = redondeoDecimales(self.factura.totalComprobante,2)
+        self.primeraVezBilleteClick == false
         self.update()
         $(".totalEfectivo").val(self.totalCambioPagar)
          mostrarPAgo()     
       }else if (self.mostrarFormularioPago == true && self.mostarParaCrearNuevaVentas == false ){
+           self.primeraVezBilleteClick == false
+          self.update()
             aplicarFactura(2)   
         }  
     }  
@@ -3200,6 +3205,12 @@ function refrescarPagina(){
 * Contabilizar los billetes de acuerdo a como se vayan dando click en la pantalla
 */
 _sumarBilletes(e){
+     if(self.primeraVezBilleteClick == false){
+      
+        self.factura.totalEfectivo = 0
+        self.primeraVezBilleteClick = true
+        self.update()
+    }
     var item = e.item
     if(item.valor == 0 ){
        self.factura.totalEfectivo = 0
