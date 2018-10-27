@@ -15,7 +15,7 @@ import com.emprendesoftcr.modelo.Empresa;
  * @author jose.
  * @since 17 mar. 2018
  */
-@Transactional
+
 @EnableTransactionManagement
 @Service("categoriaBo")
 public class CategoriaBoImpl implements CategoriaBo {

@@ -14,7 +14,7 @@ import com.emprendesoftcr.Dao.DetalleDao;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Factura;
 
-@Transactional
+
 @EnableTransactionManagement
 @Service("detalleBo")
 public class DetalleBoImpl implements DetalleBo {
@@ -24,23 +24,27 @@ public class DetalleBoImpl implements DetalleBo {
 
 	private Logger			log	= LoggerFactory.getLogger(this.getClass());
 
+	@Transactional
 	@Override
 	public void agregar(Detalle detalle) {
 		detalleDao.agregar(detalle);
 
 	}
 
+	@Transactional
 	@Override
 	public void modificar(Detalle detalle) {
 		detalleDao.modificar(detalle);
 	}
 
+	@Transactional
 	@Override
 	public void eliminar(Detalle detalle) {
 		detalleDao.eliminar(detalle);
 
 	}
 
+	@Transactional
 	@Override
 	public Integer eliminarDetalleFactura(Factura factura) throws Exception {
 		try {

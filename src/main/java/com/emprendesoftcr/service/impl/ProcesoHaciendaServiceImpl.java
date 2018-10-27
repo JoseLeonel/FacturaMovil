@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.mail.util.ByteArrayDataSource;
-import javax.transaction.Transactional;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -202,7 +201,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
 
-	//@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 		ArrayList<Hacienda> facturasConProblemas = new ArrayList<Hacienda>();
@@ -226,7 +225,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								hacienda.setEstado(Constantes.HACIENDA_ESTADO_PROBLEMA_ENVIO_NO_TRASABLE);
 								facturasConProblemas.add(hacienda);
 							} else {
-								hacienda.setReintentos(hacienda.getReintentos() + 1);
+								hacienda.setReintentos(hacienda.getReintentos() ==null?1:hacienda.getReintentos() + 1);
 							}
 							haciendaBo.modificar(hacienda);
 							
@@ -244,7 +243,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 		if (facturasConProblemas != null) {
 			if (!facturasConProblemas.isEmpty()) {
-				soporteProblemaConHacienda(facturasConProblemas);
+		//		soporteProblemaConHacienda(facturasConProblemas);
 			}
 		}
 
@@ -356,7 +355,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html Proceso automatico para ejecutar aceptacion del documento
 	 */
-//	//@Scheduled(cron = "0 0/3 * * * ?")
+  @Scheduled(cron = "0 0/3 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		try {
@@ -520,7 +519,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	// //@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -537,7 +536,14 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						if (recepcionFactura != null) {
 							listaCorreos.add(recepcionFactura.getEmpresa().getCorreoElectronico());
 						}
-						enviarCorreosRecepcion(recepcionFactura, haciendaBD, listaCorreos);
+						if (listaCorreos != null) {
+							if (!listaCorreos.isEmpty()) {
+								enviarCorreosRecepcion(recepcionFactura, haciendaBD, listaCorreos);
+								haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
+								haciendaBo.modificar(haciendaBD);
+
+							}
+						}
 					} else {
 						Factura factura = facturaBo.findByConsecutivoAndEmpresa(haciendaBD.getConsecutivo(), haciendaBD.getEmpresa());
 						if (factura != null) {
@@ -751,7 +757,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	// //@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -850,7 +856,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-//	//@Scheduled(cron = "0 0/1 * * * ?")
+  @Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {

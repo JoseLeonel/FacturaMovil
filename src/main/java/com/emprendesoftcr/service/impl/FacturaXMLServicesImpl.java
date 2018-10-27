@@ -57,7 +57,7 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 	 * 
 	 * @see com.emprendesoftcr.service.FacturaXMLServices#getCrearXML(com.emprendesoftcr.modelo.Factura)
 	 */
-	
+	@Transactional
 	@Override
 	public String getCrearXMLSinFirma(Factura factura) throws Exception{
 		String xml = Constantes.EMPTY;

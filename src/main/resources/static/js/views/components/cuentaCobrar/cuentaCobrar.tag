@@ -726,7 +726,7 @@ var reglasDeValidacionParametros = function() {
 		        	fechaInicioParam:$('#fechaInicial').val(),
 		        	fechaFinParam:$('#fechaFinal').val(),
                     idClienteParam:$('#idCliente').val(),
-                    estadoParam = $('.estado').val()
+                    estadoParam : $('.estado').val()
 		        };
 		        $.ajax({
 		            url: "EnvioDetalleCuentasXCobrarCorreoAjax.do",
@@ -769,7 +769,7 @@ __limpiarFiltros(){
     self.fechaFin =null
     self.idCliente =null
     self.estado = null
-    self.hay_datos                 = false  
+    self.hay_datos   = false  
     self.update()
 
 

@@ -169,8 +169,8 @@ public void enviarCorreoCuentasXCobrarAjax(HttpServletRequest request, HttpServl
 	private ByteArrayOutputStream createExcelCuentaCobrar(Collection<CuentaCobrar> cuentaCobrar) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("", "Fecha Emision", "# Documento", "Cliente", "Total", "Saldo", "Abono");
-		new SimpleExporter().gridExport(headers, cuentaCobrar, "#Cuenta, created_atSTR, factura, nombreClienteSTR, total,totalSaldo,totalAbono", baos);
+		List<String> headers = Arrays.asList("#cuenta", "Fecha Emision", "# Documento", "Cliente", "Total", "Saldo", "Abono");
+		new SimpleExporter().gridExport(headers, cuentaCobrar, "id, created_atSTR, factura, nombreClienteSTR, total,totalSaldo,totalAbono", baos);
 		return baos;
 	}
 	

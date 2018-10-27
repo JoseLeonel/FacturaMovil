@@ -81,7 +81,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	 */
 	@Override
 	public Articulo buscarPorCodigoYEmpresa(String codigo, Empresa empresa) {
-		Query query = entityManager.createQuery("select obj from Articulo obj where obj.codigo = :codigo and obj.empresa = :empresa");
+		Query query = entityManager.createQuery("select distinct obj from Articulo obj where obj.codigo = :codigo and obj.empresa = :empresa");
 		query.setParameter("codigo", codigo);
 		query.setParameter("empresa", empresa);
 

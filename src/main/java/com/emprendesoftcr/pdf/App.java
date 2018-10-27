@@ -33,7 +33,7 @@ public class App {
 
 	private Logger	log			= LoggerFactory.getLogger(this.getClass());
 
-	// BaseColor bColor = new BaseColor(109, 202, 66);
+	
 	BaseColor				bColor	= new BaseColor(220, 220, 220);
 
 	public static ByteArrayOutputStream main(String consecutivo, String tipoDoc, FacturaElectronica facturaElectronica) throws IOException, DocumentException, WriterException {

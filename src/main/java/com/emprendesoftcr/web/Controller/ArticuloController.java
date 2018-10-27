@@ -375,13 +375,13 @@ public class ArticuloController {
 			}
 			Articulo articuloBd = articuloBo.buscar(articulo.getId());
 			Articulo articuloValidar = null;
-			if (!articuloBd.getDescripcion().equals(articulo.getDescripcion())) {
-				articuloValidar = articuloBo.buscarPorDescripcionYEmpresa(articulo.getDescripcion(), articulo.getEmpresa());
+			if (!articuloBd.getDescripcion().equals(articulo.getDescripcion().trim())) {
+				articuloValidar = articuloBo.buscarPorDescripcionYEmpresa(articulo.getDescripcion().trim(), articulo.getEmpresa());
 				if (articuloValidar != null) {
 					result.rejectValue("descripcion", "error.articulo.descripcion.existe");
 				}
 			}
-			if (!articuloBd.getCodigo().equals(articulo.getCodigo())) {
+			if (!articuloBd.getCodigo().equals(articulo.getCodigo().trim())) {
 				articuloValidar = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo().trim(), articulo.getEmpresa());
 				if (articuloValidar != null) {
 					result.rejectValue("codigo", "error.articulo.codigo.existe");
@@ -397,8 +397,8 @@ public class ArticuloController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			articulo.setMaximo(articulo.getMaximo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMaximo());
-			articulo.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMinimo());
+			articuloBd.setMaximo(articulo.getMaximo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMaximo());
+			articuloBd.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMinimo());
 			articuloBd.setCreated_at(new Date());
 			articuloBd.setUpdated_at(new Date());
 			articuloBd.setCosto(articulo.getCosto() == null ? Constantes.ZEROS_DOUBLE : articulo.getCosto());
@@ -506,7 +506,7 @@ public class ArticuloController {
 			articuloBD.setDescripcion(descripcion);
 			articuloBD.setTipoImpuesto(tipoImpuesto);
 			articuloBD.setImpuesto(impuesto);
-
+      articuloBD.setUpdated_at(new Date());
 			articuloBo.modificar(articuloBD);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBD);
