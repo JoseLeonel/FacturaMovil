@@ -13,7 +13,6 @@ import javax.persistence.StoredProcedureQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Dao.FacturaDao;
 import com.emprendesoftcr.Utils.Constantes;
@@ -21,7 +20,7 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 
-@Transactional
+
 @Repository("facturaDao")
 public class FacturaDaoImpl implements FacturaDao {
 

@@ -243,7 +243,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 		if (facturasConProblemas != null) {
 			if (!facturasConProblemas.isEmpty()) {
-		//		soporteProblemaConHacienda(facturasConProblemas);
+				soporteProblemaConHacienda(facturasConProblemas);
 			}
 		}
 
