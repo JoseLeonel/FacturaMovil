@@ -37,7 +37,7 @@ import com.google.gson.Gson;
  * @author jose.
  * @since 27 may. 2018
  */
-@Transactional
+
 @EnableTransactionManagement
 @Service("compraBo")
 public class CompraBoImpl implements CompraBo {
@@ -59,6 +59,8 @@ public class CompraBoImpl implements CompraBo {
 
 	private Logger								log	= LoggerFactory.getLogger(this.getClass());
 
+	@Transactional
+	@Override
 	public void agregar(Compra compra) {
 		compraDao.agregar(compra);
 
@@ -88,7 +90,6 @@ public class CompraBoImpl implements CompraBo {
 			compra.setUsuarioCreacion(compraCommand.getUsuarioCreacion());
 			compra.setTipoDocumento(compraCommand.getTipoDocumento());
 			compra.setProveedor(compraCommand.getProveedor());
-
 
 			if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
 				compra.setFechaIngreso(new Date());
@@ -125,10 +126,10 @@ public class CompraBoImpl implements CompraBo {
 					compra.addDetalleCompra(detalleCompra);
 					// compraDao.modificar(compra);
 					if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
-						if(articulo.getContable().equals(Constantes.CONTABLE_SI)) {
-							aplicarInventario(compra, detalleCompra, articulo);	
+						if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
+							aplicarInventario(compra, detalleCompra, articulo);
 						}
-						
+
 						actualizarProveedor(detalleCompra, compra.getProveedor());
 					}
 
@@ -177,7 +178,7 @@ public class CompraBoImpl implements CompraBo {
 				}
 			}
 		} catch (Exception e) {
-			log.info("** Error  crearCompra: " + e.getMessage() + " fecha " + new Date() + "  Compra:"+ compraCommand.getConsecutivo() );
+			log.info("** Error  crearCompra: " + e.getMessage() + " fecha " + new Date() + "  Compra:" + compraCommand.getConsecutivo());
 
 			throw e;
 		}
@@ -221,21 +222,19 @@ public class CompraBoImpl implements CompraBo {
 	 * @throws Exception
 	 */
 	@Override
+	@Transactional
 	public void aplicarInventario(Compra compra, DetalleCompra detalleCompra, Articulo articulo) throws Exception {
 		try {
-			Double totalLinea = detalleCompra.getMontoTotalLinea() != null?detalleCompra.getMontoTotalLinea():Constantes.ZEROS_DOUBLE;
-			totalLinea = totalLinea > 0 ? totalLinea / detalleCompra.getCantidad():Constantes.ZEROS_DOUBLE;
-			Double costo  = totalLinea;
-			
-		
+			Double totalLinea = detalleCompra.getMontoTotalLinea() != null ? detalleCompra.getMontoTotalLinea() : Constantes.ZEROS_DOUBLE;
+			totalLinea = totalLinea > 0 ? totalLinea / detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
+			Double costo = totalLinea;
+
 			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getProveedor().getNombreCompleto();
 			kardexDao.entrada(articulo, articulo.getCantidad(), detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
 			articulo.setCosto(articuloDao.costoPromedio(articulo.getCosto(), costo, articulo.getCantidad(), detalleCompra.getCantidad()));
 			articulo.setGananciaPrecioPublico(articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio()));
 			articulo.setUpdated_at(new Date());
 			articulo.setUsuario(compra.getUsuarioCreacion());
-
-			
 
 			articulo.setPrecioPublico(detalleCompra.getPrecio());
 			articuloDao.modificar(articulo);
@@ -253,6 +252,7 @@ public class CompraBoImpl implements CompraBo {
 	 * @see com.emprendesoftcr.Bo.CompraBo#modificar(com.emprendesoftcr.modelo.Compra)
 	 */
 	@Override
+	@Transactional
 	public void modificar(Compra compra) {
 		compraDao.modificar(compra);
 	}
@@ -262,6 +262,7 @@ public class CompraBoImpl implements CompraBo {
 	 * @see com.emprendesoftcr.Bo.CompraBo#eliminar(com.emprendesoftcr.modelo.Compra)
 	 */
 	@Override
+	@Transactional
 	public void eliminar(Compra compra) {
 		compraDao.eliminar(compra);
 	}

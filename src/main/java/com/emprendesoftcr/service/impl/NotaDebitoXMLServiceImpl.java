@@ -6,7 +6,6 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,6 +62,7 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
 		return resultado;
 	}
 
+	
 	@Override
 	public String getCrearXMLSinFirma(Factura factura) throws Exception{
 		String xml = Constantes.EMPTY;
@@ -70,6 +70,7 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
 		factura.setFechaEmision(fecha);
 		facturaBo.modificar(factura);
 		try {
+		
 			String datereferenciaEmision = FacturaElectronicaUtils.toISO8601String(factura.getReferenciaFechaEmision());
 			String date = FacturaElectronicaUtils.toISO8601String(factura.getFechaEmision());
 	    xml = "<NotaDebitoElectronica xmlns=\"" + Constantes.DOCXMLS_NOTA_DEBITO + "\" " +

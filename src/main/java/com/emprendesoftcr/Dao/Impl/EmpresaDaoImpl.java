@@ -4,10 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.StoredProcedureQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +18,6 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.Usuario;
-import com.emprendesoftcr.web.command.TotalFacturaCommand;
 
 /**
  * Empresa es todas las que facturan EmpresaDaoImpl.
@@ -35,14 +32,17 @@ public class EmpresaDaoImpl implements EmpresaDao {
 
 	private Logger	log	= LoggerFactory.getLogger(this.getClass());
 
+	@Override
 	public void agregar(Empresa empresa) {
 		entityManager.persist(empresa);
 	}
 
+	@Override
 	public void modificar(Empresa empresa) {
 		entityManager.merge(empresa);
 	}
 
+	@Override
 	public void eliminar(Empresa empresa) {
 		entityManager.remove(empresa);
 	}
@@ -51,6 +51,7 @@ public class EmpresaDaoImpl implements EmpresaDao {
 	 * Buscar por ID
 	 * @see com.factura.dao.EmpresaDao#buscar(java.lang.Integer)
 	 */
+	@Override
 	public Empresa buscar(Integer id) {
 		Query query = entityManager.createQuery("select obj from Empresa obj where obj.id = :id");
 		query.setParameter("id", id);
@@ -67,12 +68,13 @@ public class EmpresaDaoImpl implements EmpresaDao {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Buscar por nombre
 	 * @param nombre
 	 * @return
 	 */
+	@Override
 	public Empresa buscarPorNombre(String nombre) {
 		Query query = entityManager.createQuery("select obj from Empresa obj where obj.nombre = :nombre");
 		query.setParameter("nombre", nombre);
@@ -89,6 +91,7 @@ public class EmpresaDaoImpl implements EmpresaDao {
 	 * @param nombreComercial
 	 * @return
 	 */
+	@Override
 	public Empresa buscarPorNombreComercial(String nombreComercial) {
 		Query query = entityManager.createQuery("select obj from Empresa obj where obj.nombreComercial = :nombreComercial");
 		query.setParameter("nombreComercial", nombreComercial);
@@ -105,6 +108,7 @@ public class EmpresaDaoImpl implements EmpresaDao {
 	 * @param cedula
 	 * @return
 	 */
+	@Override
 	public Empresa buscarPorCedula(String cedula) {
 		Query query = entityManager.createQuery("select obj from Empresa obj where obj.cedula = :cedula");
 		query.setParameter("cedula", cedula);
@@ -120,29 +124,29 @@ public class EmpresaDaoImpl implements EmpresaDao {
 	 * Genera el consecutvio de la Factura de empresa
 	 * @see com.emprendesoftcr.Dao.EmpresaDao#generarConsecutivoFactura(com.emprendesoftcr.modelo.Empresa)
 	 */
-	/*@Override
+	@Override
 	public String generarConsecutivoFactura(Empresa empresa, Usuario usuario, Factura factura) throws Exception {
 		String resultado = Constantes.EMPTY;
 		try {
 			Integer consecutivo = Constantes.ZEROS;
 			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
-					consecutivo = empresa.getTiqueteConsecutivo();
-					empresa.setTiqueteConsecutivo(empresa.getTiqueteConsecutivo() + 1);
-				
+				consecutivo = empresa.getTiqueteConsecutivo();
+				empresa.setTiqueteConsecutivo(empresa.getTiqueteConsecutivo() + 1);
+
 			}
 			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
 
-					consecutivo = empresa.getNumeroConsecutivo();
-					empresa.setNumeroConsecutivo(empresa.getNumeroConsecutivo() + 1);
+				consecutivo = empresa.getNumeroConsecutivo();
+				empresa.setNumeroConsecutivo(empresa.getNumeroConsecutivo() + 1);
 
 			}
 			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-					consecutivo = empresa.getNotacConsecutivo();
-					empresa.setNotacConsecutivo(empresa.getNotacConsecutivo() + 1);
+				consecutivo = empresa.getNotacConsecutivo();
+				empresa.setNotacConsecutivo(empresa.getNotacConsecutivo() + 1);
 			}
 			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
-					consecutivo = empresa.getNotadConsecutivo();
-					empresa.setNotadConsecutivo(empresa.getNotadConsecutivo() + 1);
+				consecutivo = empresa.getNotadConsecutivo();
+				empresa.setNotadConsecutivo(empresa.getNotadConsecutivo() + 1);
 			}
 
 			modificar(empresa);
@@ -162,69 +166,42 @@ public class EmpresaDaoImpl implements EmpresaDao {
 		}
 
 		return resultado;
-	}*/
-	
+	}
+
 	/**
 	 * Genera el consecutvio de la Factura de empresa
 	 * @see com.emprendesoftcr.Dao.EmpresaDao#generarConsecutivoFactura(com.emprendesoftcr.modelo.Empresa)
 	 */
 	@Override
-	public String generarConsecutivoFactura(Empresa empresa, Usuario usuario, Factura factura) throws Exception {
-		StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_GENERAR_CONSECUTIVO);
-
-		// set parametros entrada
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_GENERAR_CONSECUTIVO_IN_ID_EMPRESA, Integer.class, ParameterMode.IN);
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_GENERAR_CONSECUTIVO_IN_ID_USUARIO, Integer.class, ParameterMode.IN);
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_GENERAR_CONSECUTIVO_IN_TIPO_DOCUMENTO, String.class, ParameterMode.IN);
-
-		// set parametros salida
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_GENERAR_CONSECUTIVO_OUT_CONSECUTIVO, String.class, ParameterMode.OUT);
-		//Valores de entrada
-		storedProcedure.setParameter(Constantes.SP_GENERAR_CONSECUTIVO_IN_ID_EMPRESA, empresa.getId());
-		storedProcedure.setParameter(Constantes.SP_GENERAR_CONSECUTIVO_IN_ID_USUARIO, usuario.getId());
-		storedProcedure.setParameter(Constantes.SP_GENERAR_CONSECUTIVO_IN_TIPO_DOCUMENTO, factura.getTipoDoc() );
-		storedProcedure.execute();
-		
-		//Se toma la respuesta
-		return (String) storedProcedure.getOutputParameterValue(Constantes.SP_GENERAR_CONSECUTIVO_OUT_CONSECUTIVO);
-	}
-	
-	
-	
-	
-	/**
-	 * Genera el consecutvio de la Factura de empresa
-	 * @see com.emprendesoftcr.Dao.EmpresaDao#generarConsecutivoFactura(com.emprendesoftcr.modelo.Empresa)
-	 */
-	/*public String generarConsecutivoRecepcionFactura(Empresa empresa, Usuario usuario, RecepcionFactura recepcionFactura) throws Exception {
+	public String generarConsecutivoRecepcionFactura(Empresa empresa, Usuario usuario, RecepcionFactura recepcionFactura) throws Exception {
 		String resultado = Constantes.EMPTY;
-		String tipoDoc 	 = "00";
+		String tipoDoc = "00";
 		try {
 			Integer consecutivo = Constantes.ZEROS;
 			if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_ACEPTADO)) {
-					consecutivo = empresa.getAceptadoConsecutivo();
-					consecutivo = consecutivo == null ? 1 : consecutivo;
-					empresa.setAceptadoConsecutivo(consecutivo + 1);
-					tipoDoc = Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO;
+				consecutivo = empresa.getAceptadoConsecutivo();
+				consecutivo = consecutivo == null ? 1 : consecutivo;
+				empresa.setAceptadoConsecutivo(consecutivo + 1);
+				tipoDoc = Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO;
 			}
 			if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_ACEPTADO_PARCIAL)) {
-					consecutivo = empresa.getAceptadoParcialConsecutivo();
-					consecutivo = consecutivo == null ? 1 : consecutivo;
-					empresa.setAceptadoParcialConsecutivo(consecutivo + 1);
-					tipoDoc = Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_PARCIAL;
+				consecutivo = empresa.getAceptadoParcialConsecutivo();
+				consecutivo = consecutivo == null ? 1 : consecutivo;
+				empresa.setAceptadoParcialConsecutivo(consecutivo + 1);
+				tipoDoc = Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_PARCIAL;
 			}
 			if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_RECHAZADO)) {
-					consecutivo = empresa.getRechazadoConsecutivo();
-					consecutivo = consecutivo == null ? 1 : consecutivo;
-					empresa.setRechazadoConsecutivo(consecutivo + 1);
-					tipoDoc = Constantes.RECEPCION_FACTURA_TIPO_DOC_RECHAZADO;
+				consecutivo = empresa.getRechazadoConsecutivo();
+				consecutivo = consecutivo == null ? 1 : consecutivo;
+				empresa.setRechazadoConsecutivo(consecutivo + 1);
+				tipoDoc = Constantes.RECEPCION_FACTURA_TIPO_DOC_RECHAZADO;
 			}
-			modificar(empresa); 
-		
+			modificar(empresa);
+
 			// Casa matriz
 			String casaMatriz = Constantes.EMPTY;
 			casaMatriz = empresa.getCazaMatriz() == null ? Constantes.CASA_MATRIZ_INICIAL_FACTURA : empresa.getCazaMatriz();
-			
+
 			// Terminal donde esta vendiendo el usaurio
 			String terminalUsuario = Constantes.EMPTY;
 			terminalUsuario = usuario.getTerminalFactura() == null ? Constantes.TERMINAL_INICIAL_FACTURA : FacturaElectronicaUtils.replazarConZeros(usuario.getTerminalFactura(), "00000");
@@ -235,41 +212,14 @@ public class EmpresaDaoImpl implements EmpresaDao {
 			throw e;
 		}
 		return resultado;
-	}*/
-
-	
-	/**
-	 * Genera el consecutvio de la Factura de empresa
-	 * @see com.emprendesoftcr.Dao.EmpresaDao#generarConsecutivoFactura(com.emprendesoftcr.modelo.Empresa)
-	 */
-	@Override
-	public String generarConsecutivoRecepcionFactura(Empresa empresa, Usuario usuario, RecepcionFactura recepcionFactura) throws Exception {
-		StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_GENERAR_CONSECUTIVO_RECEPCION);
-
-		// set parametros entrada
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_GENERAR_CONSECUTIVO_RECEPCION_IN_ID_EMPRESA, Integer.class, ParameterMode.IN);
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_GENERAR_CONSECUTIVO_RECEPCION_IN_ID_USUARIO, Integer.class, ParameterMode.IN);
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_GENERAR_CONSECUTIVO_RECEPCION_IN_TIPO_DOCUMENTO, String.class, ParameterMode.IN);
-
-		// set parametros salida
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_GENERAR_CONSECUTIVO_RECEPCION_OUT_CONSECUTIVO, String.class, ParameterMode.OUT);
-		//Valores de entrada
-		storedProcedure.setParameter(Constantes.SP_GENERAR_CONSECUTIVO_RECEPCION_IN_ID_EMPRESA, empresa.getId());
-		storedProcedure.setParameter(Constantes.SP_GENERAR_CONSECUTIVO_RECEPCION_IN_ID_USUARIO, usuario.getId());
-		storedProcedure.setParameter(Constantes.SP_GENERAR_CONSECUTIVO_RECEPCION_IN_TIPO_DOCUMENTO, recepcionFactura.getMensaje());
-		storedProcedure.execute();
-		
-		//Se toma la respuesta
-		return (String) storedProcedure.getOutputParameterValue(Constantes.SP_GENERAR_CONSECUTIVO_RECEPCION_OUT_CONSECUTIVO);
 	}
-	
-	
+
 	/**
 	 * Clave de la factura para tributacion
 	 * @see com.emprendesoftcr.Dao.EmpresaDao#generaClaveFacturaTributacion(com.emprendesoftcr.modelo.Empresa, java.lang.String, java.lang.Integer)
 	 */
 	@Override
-	public  String generaClaveFacturaTributacion(Empresa empresa, String consecutivoFactura, Integer comprobanteElectronico) throws Exception {
+	public String generaClaveFacturaTributacion(Empresa empresa, String consecutivoFactura, Integer comprobanteElectronico) throws Exception {
 
 		String resultado = Constantes.EMPTY;
 		try {

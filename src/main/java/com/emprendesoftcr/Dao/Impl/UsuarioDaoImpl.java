@@ -23,14 +23,17 @@ public class UsuarioDaoImpl implements UsuarioDao {
 	@PersistenceContext
 	EntityManager entityManager;
 
+	@Override
 	public void agregar(Usuario usuario) {
 		entityManager.persist(usuario);
 	}
 
+	@Override
 	public void modificar(Usuario usuario) {
 		entityManager.merge(usuario);
 	}
 
+	@Override
 	public void eliminar(Usuario usuario) {
 		entityManager.remove(usuario);
 	}

@@ -71,14 +71,15 @@ public class CuentaPagar implements Serializable {
 	private Usuario						usuarioCreacion;
 	
 	@Column(name = "estado")
-	private Integer						estado;
+	private String						estado;
 
 
 	public CuentaPagar() {
 		super();
 	}
 
-	public CuentaPagar(Long id, String consecutivo, Double total, Double totalAbono, Double totalSaldo, Date fechaCredito, Date created_at, Date updated_at, Proveedor proveedor, Empresa empresa, Usuario usuarioCreacion) {
+	
+	public CuentaPagar(Long id, String consecutivo, Double total, Double totalAbono, Double totalSaldo, Date fechaCredito, Date created_at, Date updated_at, Proveedor proveedor, Empresa empresa, Usuario usuarioCreacion, String estado) {
 		super();
 		this.id = id;
 		this.consecutivo = consecutivo;
@@ -91,7 +92,9 @@ public class CuentaPagar implements Serializable {
 		this.proveedor = proveedor;
 		this.empresa = empresa;
 		this.usuarioCreacion = usuarioCreacion;
+		this.estado = estado;
 	}
+
 
 	public Long getId() {
 		return id;
@@ -104,14 +107,19 @@ public class CuentaPagar implements Serializable {
 	
 
 	
-	public Integer getEstado() {
+	
+
+	
+	public String getEstado() {
 		return estado;
 	}
 
+
 	
-	public void setEstado(Integer estado) {
+	public void setEstado(String estado) {
 		this.estado = estado;
 	}
+
 
 	public String getConsecutivo() {
 		return consecutivo;

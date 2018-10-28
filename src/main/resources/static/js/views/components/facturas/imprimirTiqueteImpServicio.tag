@@ -1,16 +1,16 @@
 <tiquete-imprimir>
 
-<div class="modal fade imprimirModalTiquete" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade imprimirModalTiquete" tabindex="-1" role="dialog" aria-labelledby="imprimirModalTiquete" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div  class= "wrap">
         <h1 >{$.i18n.prop("tikect.encabezado.comprobante")} {facturaImpresa.id}<h1>
         <div class="pantalla-imprimir">
             <div class="botones-imprimir">
-                <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
+                <a href="#" class="boton-imprimir"  onclick = {__ImprimirTiq} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
                 
             </div>
-            <section class="zona-impresion" id="imprimeme" name ="imprimeme">
+            <section class="zona-impresion" id="imprimemeTempo" name ="imprimemeTempo">
                 <div class="forma-impresion">
                     <div class="ticket" id="ticket" name="ticket" > 
                         <h1 >{$.i18n.prop("tikect.encabezado.comprobante")} {facturaImpresa.id}<h1>
@@ -284,7 +284,7 @@ function displayDate_detail(fecha) {
 /**
 *Imprimir facturaImpresa
 **/    
-__ImprimirfacturaImpresa(){
+__ImprimirTiq(){
     __imprimir()
     $("#boton-regresar").focus()
 }
@@ -367,8 +367,8 @@ function __ComboTipoDocumentos(){
 *imprimir
 **/
 function __imprimir(){
-    var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
-     var div = document.querySelector("#imprimeme");
+    var objeto=document.getElementById('imprimemeTempo');  //obtenemos el objeto a imprimir
+     var div = document.querySelector("#imprimemeTempo");
     imprimirElemento(div)
 
 }

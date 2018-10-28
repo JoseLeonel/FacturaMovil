@@ -9,6 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
@@ -28,8 +31,10 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class App {
 
-	// BaseColor bColor = new BaseColor(109, 202, 66);
-	BaseColor bColor = new BaseColor(220, 220, 220);
+	private Logger	log			= LoggerFactory.getLogger(this.getClass());
+
+	
+	BaseColor				bColor	= new BaseColor(220, 220, 220);
 
 	public static ByteArrayOutputStream main(String consecutivo, String tipoDoc, FacturaElectronica facturaElectronica) throws IOException, DocumentException, WriterException {
 		String dir = System.getProperty("user.dir");
@@ -46,7 +51,7 @@ public class App {
 		BaseFont sansBold = BaseFont.createFont(fontSansBold, BaseFont.WINANSI, BaseFont.EMBEDDED);
 		Font font10 = new Font(sansRegular, 10);
 		Font font10B = new Font(sansBold, 10);
-		
+
 		// Logo
 		app.addLogo(cb, dir, document, facturaElectronica.get_logo());
 		// Emisor
@@ -62,12 +67,16 @@ public class App {
 		app.addRectanguleProducts(cb, font10B);
 		app.addProductsTittle(cb, font10B);
 		app.addProducts(cb, font10, document, facturaElectronica, dir);
-		if(facturaElectronica.getFooterTotalDescuento() >0) {
-			app.addTotals(cb, font10, font10B, facturaElectronica);	
+		if(facturaElectronica.getFooterTotalDescuento() !=null) {
+			if (facturaElectronica.getFooterTotalDescuento() > 0) {
+				app.addTotals(cb, font10, font10B, facturaElectronica);
+			} else {
+				app.addTotalsSinDescuentos(cb, font10, font10B, facturaElectronica);
+			}
+			
 		}else {
 			app.addTotalsSinDescuentos(cb, font10, font10B, facturaElectronica);
 		}
-		
 
 		document.close();
 
@@ -75,15 +84,21 @@ public class App {
 	}
 
 	private void addLogo(PdfContentByte cb, String dir, Document document, String logo) throws IOException, DocumentException {
-		// Cuadro 1
 		Image img = null;
-		if(logo !=null) {
-			if(!logo.equals(Constantes.EMPTY)) {
-				img = Image.getInstance(dir + "/data/logos/" + logo);	
+
+		// Cuadro 1
+		try {
+			if (logo != null) {
+				if (!logo.equals(Constantes.EMPTY)) {
+					img = Image.getInstance(dir + "/data/logos/" + logo);
+				}
+
 			}
-				
+
+		} catch (Exception e) {
+			log.info("** Error2  app  obtener el logo: " + e.getMessage() + " fecha " + new Date());
 		}
-		
+
 		cb.setColorStroke(bColor);
 		cb.setColorFill(BaseColor.WHITE);
 		cb.setLineWidth(1f);
@@ -96,12 +111,12 @@ public class App {
 		cb.setColorFill(BaseColor.WHITE);
 		//
 
-		if(img !=null) {
+		if (img != null) {
 			img.setAbsolutePosition(450, PageSize.TABLOID.rotate().getHeight() - 100);
 			img.setAlignment(Image.ALIGN_RIGHT);
-			img.scaleAbsolute(200,120);
+			img.scaleAbsolute(200, 120);
 			cb.addImage(img);
-			
+
 		}
 	}
 
@@ -121,7 +136,7 @@ public class App {
 		float sevenRow = PageSize.TABLOID.rotate().getHeight() - 120;
 		float eightRow = PageSize.TABLOID.rotate().getHeight() - 135;
 		float nineRow = PageSize.TABLOID.rotate().getHeight() - 150;
-	
+
 		// Cuadro 2
 		cb.setColorStroke(bColor);
 		cb.setColorFill(BaseColor.WHITE);
@@ -175,7 +190,7 @@ public class App {
 		addText(cb, facturaElectronica.getMedioEfectivo() != null ? facturaElectronica.getMedioEfectivo() : Constantes.EMPTY, font12, rightColContent, sevenRow, Element.ALIGN_LEFT);
 		addText(cb, facturaElectronica.getMoneda() != null ? facturaElectronica.getMoneda() : Constantes.EMPTY, font12, rightColContent, eightRow, Element.ALIGN_LEFT);
 		addText(cb, facturaElectronica.getTipoCambio() != null ? facturaElectronica.getTipoCambio() : Constantes.EMPTY, font12, rightColContent, nineRow, Element.ALIGN_LEFT);
-		addText(cb, facturaElectronica.get_nota() != null?facturaElectronica.get_nota().length() >0?facturaElectronica.get_nota().trim():Constantes.EMPTY:Constantes.EMPTY, font12, PageSize.TABLOID.rotate().getWidth() - 446, PageSize.TABLOID.rotate().getHeight() - 170, Element.ALIGN_LEFT);
+		addText(cb, facturaElectronica.get_nota() != null ? facturaElectronica.get_nota().length() > 0 ? facturaElectronica.get_nota().trim() : Constantes.EMPTY : Constantes.EMPTY, font12, PageSize.TABLOID.rotate().getWidth() - 446, PageSize.TABLOID.rotate().getHeight() - 170, Element.ALIGN_LEFT);
 		cb.setColorFill(BaseColor.BLACK);
 		addText(cb, "Referencia:", font14, 20, PageSize.TABLOID.rotate().getHeight() - 145, Element.ALIGN_LEFT);
 		addText(cb, facturaElectronica.getReferenciaCodigo(), font12, 102, PageSize.TABLOID.rotate().getHeight() - 145, Element.ALIGN_LEFT);
@@ -230,7 +245,7 @@ public class App {
 		float col4 = 610;
 		float col5 = 720;
 		float col6 = 800;
-		//float col7 = 810;
+		// float col7 = 810;
 		float col8 = 885;
 		float col9 = 945;
 		float col10 = 1000;
@@ -270,7 +285,7 @@ public class App {
 		float col4 = 646;
 		float col5 = 770;
 		float col6 = 860;
-	//	float col7 = 862;
+		// float col7 = 862;
 		float col8 = 940;
 		float col9 = 980;
 		float col10 = 1060;
@@ -310,7 +325,7 @@ public class App {
 				addText(cb, String.valueOf(detalleFacturaElectronica.get(i).getCantidad()), font, col4, row1, Element.ALIGN_RIGHT);
 				addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getPrecioU()), font, col5, row1, Element.ALIGN_RIGHT);
 				addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getMonto()), font, col6, row1, Element.ALIGN_RIGHT);
-			//	addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getDescuento()), font, col7, row1, Element.ALIGN_RIGHT);
+				// addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getDescuento()), font, col7, row1, Element.ALIGN_RIGHT);
 				addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getSubtotal()), font, col8, row1, Element.ALIGN_RIGHT);
 				addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getTarifaIva()), font, col9, row1, Element.ALIGN_RIGHT);
 				addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getImpuesto()), font, col10, row1, Element.ALIGN_RIGHT);
@@ -332,7 +347,7 @@ public class App {
 				addText(cb, String.valueOf(detalleFacturaElectronica.get(i).getCantidad()), font, col4, rowDinamico, Element.ALIGN_RIGHT);
 				addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getPrecioU()), font, col5, rowDinamico, Element.ALIGN_RIGHT);
 				addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getMonto()), font, col6, rowDinamico, Element.ALIGN_RIGHT);
-			//	addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getDescuento()), font, col7, rowDinamico, Element.ALIGN_RIGHT);
+				// addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getDescuento()), font, col7, rowDinamico, Element.ALIGN_RIGHT);
 				addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getSubtotal()), font, col8, rowDinamico, Element.ALIGN_RIGHT);
 				addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getTarifaIva()), font, col9, rowDinamico, Element.ALIGN_RIGHT);
 				addText(cb, Utils.formateadorMiles(detalleFacturaElectronica.get(i).getImpuesto()), font, col10, rowDinamico, Element.ALIGN_RIGHT);
@@ -393,7 +408,7 @@ public class App {
 			descuento = descuento + (double) Math.round(detalleFacturaElectronica.get(i).getDescuento() * 100000d) / 100000d;
 			subTotal = subTotal + (double) Math.round(detalleFacturaElectronica.get(i).getSubtotal() * 100000d) / 100000d;
 			impuesto = impuesto + (double) Math.round(detalleFacturaElectronica.get(i).getImpuesto() * 100000d) / 100000d;
-			exento = exento + (double) Math.round(detalleFacturaElectronica.get(i).getImpuesto() ==  Constantes.ZEROS_DOUBLE?detalleFacturaElectronica.get(i).getTotal() * 100000d:Constantes.ZEROS_DOUBLE) / 100000d;
+			exento = exento + (double) Math.round(detalleFacturaElectronica.get(i).getImpuesto() == Constantes.ZEROS_DOUBLE ? detalleFacturaElectronica.get(i).getTotal() * 100000d : Constantes.ZEROS_DOUBLE) / 100000d;
 			total = total + (double) Math.round(detalleFacturaElectronica.get(i).getTotal() * 100000d) / 100000d;
 		}
 		addText(cb, Utils.formateadorMiles(monto), font, col1, row2, Element.ALIGN_RIGHT);
@@ -404,7 +419,7 @@ public class App {
 		addText(cb, Utils.formateadorMiles(total), fontB, col6, row2, Element.ALIGN_RIGHT);
 
 	}
-	
+
 	private void addTotalsSinDescuentos(PdfContentByte cb, Font font, Font fontB, FacturaElectronica facturaElectronica) {
 		float col1 = 635;
 		float col2 = 738;
@@ -451,7 +466,7 @@ public class App {
 			monto = monto + (double) Math.round(detalleFacturaElectronica.get(i).getMonto() * 100000d) / 100000d;
 			subTotal = subTotal + (double) Math.round(detalleFacturaElectronica.get(i).getSubtotal() * 100000d) / 100000d;
 			impuesto = impuesto + (double) Math.round(detalleFacturaElectronica.get(i).getImpuesto() * 100000d) / 100000d;
-			exento = exento + (double) Math.round(detalleFacturaElectronica.get(i).getImpuesto() ==  Constantes.ZEROS_DOUBLE?detalleFacturaElectronica.get(i).getTotal() * 100000d:Constantes.ZEROS_DOUBLE) / 100000d;
+			exento = exento + (double) Math.round(detalleFacturaElectronica.get(i).getImpuesto() == Constantes.ZEROS_DOUBLE ? detalleFacturaElectronica.get(i).getTotal() * 100000d : Constantes.ZEROS_DOUBLE) / 100000d;
 			total = total + (double) Math.round(detalleFacturaElectronica.get(i).getTotal() * 100000d) / 100000d;
 		}
 		addText(cb, Utils.formateadorMiles(monto), font, col1, row2, Element.ALIGN_RIGHT);
@@ -522,9 +537,9 @@ public class App {
 		addLine(cb, BaseColor.GRAY, 680, PageSize.TABLOID.rotate().getHeight() - 230, 680, PageSize.TABLOID.rotate().getHeight() - 710);
 		addLine(cb, BaseColor.GRAY, 780, PageSize.TABLOID.rotate().getHeight() - 230, 780, PageSize.TABLOID.rotate().getHeight() - 710);
 		addLine(cb, BaseColor.GRAY, 865, PageSize.TABLOID.rotate().getHeight() - 230, 865, PageSize.TABLOID.rotate().getHeight() - 710);
-		//descuento
-	//	addLine(cb, BaseColor.GRAY, 865, PageSize.TABLOID.rotate().getHeight() - 230, 865, PageSize.TABLOID.rotate().getHeight() - 710);
-	//impuesto
+		// descuento
+		// addLine(cb, BaseColor.GRAY, 865, PageSize.TABLOID.rotate().getHeight() - 230, 865, PageSize.TABLOID.rotate().getHeight() - 710);
+		// impuesto
 		addLine(cb, BaseColor.GRAY, 945, PageSize.TABLOID.rotate().getHeight() - 230, 945, PageSize.TABLOID.rotate().getHeight() - 710);
 		addLine(cb, BaseColor.GRAY, 1000, PageSize.TABLOID.rotate().getHeight() - 230, 1000, PageSize.TABLOID.rotate().getHeight() - 710);
 		addLine(cb, BaseColor.GRAY, 1060, PageSize.TABLOID.rotate().getHeight() - 230, 1060, PageSize.TABLOID.rotate().getHeight() - 710);

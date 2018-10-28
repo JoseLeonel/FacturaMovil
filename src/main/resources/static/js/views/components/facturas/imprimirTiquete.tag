@@ -8,7 +8,7 @@
         <h1 >{$.i18n.prop("tikect.encabezado.tiquete")} {facturaImpresa.id}<h1>
         <div class="pantalla-imprimir">
             <div class="botones-imprimir">
-                <a href="#" class="boton-imprimirTiquete"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
+                <a href="#" class="boton-imprimirTiquete"  onclick = {__ImprimirTiquete} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
                 
             </div>
             <section class="zona-impresion" id="imprimirtiqueteTemporal" name ="imprimirtiqueteTemporal">
@@ -287,10 +287,10 @@ function displayDate_detail(fecha) {
 /**
 *Imprimir facturaImpresa
 **/    
-__ImprimirfacturaImpresa(){
+__ImprimirTiquete(){
     
      $('#imprimirModalTiquete').modal('toggle') 
-    __imprimir()
+    __imprimirTique()
     $("#boton-regresar").focus()
 }
 
@@ -371,15 +371,15 @@ function __ComboTipoDocumentos(){
 /**
 *imprimir
 **/
-function __imprimir(){
+function __imprimirTique(){
     var objeto=document.getElementById('imprimirtiqueteTemporal');  //obtenemos el objeto a imprimir
      var div = document.querySelector("#imprimirtiqueteTemporal");
-    imprimirElemento(div)
+    imprimirTiqueteT(div)
 
 }
 
 
-function imprimirElemento(elemento){
+function imprimirTiqueteT(elemento){
   var ventana = window.open('', 'PRINT', 'height=400,width=600');
   ventana.document.write('<html><head><title>' + "" + '</title>');
   ventana.document.write('</head><body >');

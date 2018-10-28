@@ -145,11 +145,12 @@ function __Opciones(id,type,row){
     menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
     
     menu += '<li><a href="#"  title="Modificar" class="  btnModificar" >Modificar</a></li>'
-    menu += '<li><a href="#"  title="Entrada al inventario"  class="  btnEntrada" >Entrada</a></li>'
     if(row.contable == "Si" && row.cantidad > 0 ){
        menu += '<li><a href="#"  title="Salida al inventario" class="  btnSalida" >Salida</a></li>'
     }
-
+    if(row.contable == "No"  ){
+        menu += '<li><a href="#"  title="Entrada al inventario"  class="  btnEntrada" >Entrada</a></li>'
+    }
      menu += "</ul></div>"  
      return menu;          
 }

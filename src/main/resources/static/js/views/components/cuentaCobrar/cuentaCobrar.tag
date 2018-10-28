@@ -19,7 +19,7 @@
 	          
 	      </div>
 	      <div class="modal-body">
-	        <form id = "formularioCorreo" name ="formularioCorreo "   class="advanced-search-form">
+	        <form id = "formulario" name ="formulario "   class="advanced-search-form">
 	            <div class="row">   
 	                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
 	                    <label class="knob-label" >{$.i18n.prop("hacienda.correo")}</label>
@@ -105,7 +105,7 @@
                 </div>
             </div>
             <div class="col-xs-12 text-right">
-                <a   show={hay_datos==true} onclick ={__CorreoAlternativo} class=" btn btn-primary btn-correo"   title="Envia el estado de cuenta al cliente" href="#"> {$.i18n.prop("btn.enviar.correo")}</a>        
+                <a   show={hay_datos==true} onclick= {__CorreoAlternativo} class=" btn btn-success btn-correo"   title="Enviar Correo" href="#"> Enviar Correo</a>        
                 <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar detalle transacciones" href="DescargarDetalleTotalCuentasXCobrarAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&idClienteParam={cliente}&estadoParam={estado}"> Descargar</a>        
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
             	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
@@ -204,7 +204,7 @@
                         <div class="row">
                             <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label >{$.i18n.prop("abono.fechaPago")} <span class="requeridoDato">*</span></label>
-                                 <div  class="form-group input-group date " data-provide="datepicker"   data-date-format="dd/mm/yyyy">
+                                 <div  class="form-group input-group fechaPagoDataPicker date" data-provide="datepicker"   data-date-format="dd-mm-yyyy">
                                     <input type="text" class="form-control fechaPago" placeHolder ="{$.i18n.prop("abono.fechaPago")}" id="fechaPago" name="fechaPago"  value="{abono.fechaPago}"  readonly={abono.id > 0}>
                                     <div class="input-group-addon">
                                         <span class="glyphicon glyphicon-th"></span>
@@ -272,19 +272,19 @@
             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                 <div class="form-group">
                     <label  >{$.i18n.prop("titulo.total")} </label>
-                    <input type="text" class="form-control " value="{totalSTR}" readonly>
+                    <input type="text" class="form-control totalGeneral " value="{total}" readonly>
                 </div>  
             </div>                             
             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                 <div class="form-group">
                     <label  >{$.i18n.prop("titulo.abono")} </label>
-                    <input type="text" class="form-control" value="{totalAbonoSTR}" readonly>
+                    <input type="text" class="form-control totalAbonoGeneral" value="{totalAbono}" readonly>
                 </div>  
             </div>                             
             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                 <div class="form-group">
                     <label  >{$.i18n.prop("titulo.saldo")} </label>
-                    <input type="text" class="form-control" value="{totalSaldoSTR}" readonly>
+                    <input type="text" class="form-control totalSaldoGeneral " value="{totalSaldo}" readonly>
                 </div>  
             </div>                             
         </div>
@@ -297,11 +297,11 @@
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.created_at")} </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.id")}         </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.cliente")}    </th>
-                                <th class="table-header">{$.i1108n.prop("cuentaCobrar.factura")}    </th>
-                                <th class="table-header">{$.i1108n.prop("cuentaCobrar.tipo")}       </th>
-                                <th class="table-header">{$.i1108n.prop("cuentaCobrar.total")}      </th>
-                                <th class="table-header">{$.i1108n.prop("cuentaCobrar.totalAbono")} </th>
-                                <th class="table-header">{$.i1108n.prop("cuentaCobrar.totalSaldo")} </th>
+                                <th class="table-header">{$.i18n.prop("cuentaCobrar.factura")}    </th>
+                                <th class="table-header">{$.i18n.prop("cuentaCobrar.tipo")}       </th>
+                                <th class="table-header">{$.i18n.prop("cuentaCobrar.total")}      </th>
+                                <th class="table-header">{$.i18n.prop("cuentaCobrar.totalAbono")} </th>
+                                <th class="table-header">{$.i18n.prop("cuentaCobrar.totalSaldo")} </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.estado")}     </th>
                                 <th class="table-header">{$.i18n.prop("listado.acciones")}        </th>
                             </tr>
@@ -462,9 +462,6 @@
     self.total                     = 0
     self.totalAbono                = 0
     self.totalSaldo                = 0
-    self.totalSTR                     = 0
-    self.totalAbonoSTR                = 0
-    self.totalSaldoSTR                = 0
     self.cuentaCobrar                   ={
         id:null,
         recibo:"",
@@ -514,7 +511,7 @@
         $("#filtros").validate(reglasDeValidacionParametros());
         $("#formulario").validate(reglasDeValidacion());
         $("#formularioAbono").validate(reglasDeValidacionAbono());
-        $("#formularioCorreo").validate(reglasDeValidacionCorreo());	
+        $("#formulario").validate(reglasDeValidacionCorreo());	
         __InicializarTabla('.tableListar')
         __InicializarTabla  ('.tableListaAbonos')
         agregarInputsCombos();
@@ -532,6 +529,13 @@
        	}
          );
         $('.datepickerFechaInicial').datepicker(
+        {
+            format: 'yyyy-mm-dd',
+            todayHighlight:true,
+        }
+        );
+
+         $('.fechaPagoDataPicker').datepicker(
         {
             format: 'yyyy-mm-dd',
             todayHighlight:true,
@@ -676,7 +680,7 @@ var reglasDeValidacionParametros = function() {
 		* Enviar el correo
 		**/
 		__EnviarCorreoAlternativo(){
-		     if ($("#formularioCorreo").valid()) {
+		     if ($("#formulario").valid()) {
 		    	 __EnviarPorCorreo()
 		     }
 		}
@@ -714,27 +718,19 @@ var reglasDeValidacionParametros = function() {
 		
 
 	/**
-    *  Busqueda de la informacion y la envia por correo
-     * @param fechaInicioParam
-	 * @param fechaFinParam
-	 * @param idClienteParam
-	 * @param estadoParam
-	 * @param correoAlternativo
-	 * @param total
-	 * @param saldo
-	 * @param abono
+		*  Busqueda de la informacion y la envia por correo
 		**/
 		function __EnviarPorCorreo(){
-		    if ($("#formularioCorreo").valid()) {
+		    if ($("#filtros").valid()) {
 		        var parametros = {
 		        	correoAlternativo:$('#correoAlternativo').val(),		
 		        	fechaInicioParam:$('#fechaInicio').val(),
 		        	fechaFinParam:$('#fechaFinal').val(),
                     idClienteParam:$('#idCliente').val(),
-                    estadoParam :$('#estado').val(),
-                    total : self.total,
-                    saldo : self.totalSaldo,
-                    abono : self.totalAbono
+                    estadoParam : $('.estado').val(),
+                    total:$('.totalGeneral').val(),
+                    abono:$('.totalAbonoGeneral').val(),
+                    saldo:$('.totalSaldoGeneral').val()
 		        };
 		        $.ajax({
 		            url: "EnvioDetalleCuentasXCobrarCorreoAjax.do",
@@ -742,6 +738,29 @@ var reglasDeValidacionParametros = function() {
 		            data:parametros ,
 		            method:"GET",
 		            success: function (data) {
+                        if (data.status != 200) {
+                        	serverMessageJson(data);
+                            if (data.message != null && data.message.length > 0) {
+                            	swal({
+      	                           title: '',
+      	                           text: data.message,
+      	                           type: 'error',
+      	                           showCancelButton: false,
+      	                           confirmButtonText: 'Aceptar',
+      	                                	  
+      	                         })
+                            }
+                            
+                        } else {
+
+                         swal({
+	                           title: '',
+	                           text: "Enviado el correo Exitosamente",
+	                           type: 'success',
+	                           showCancelButton: false,
+	                           confirmButtonText: 'Aceptar',
+	                         })
+                        }
 					    
 			        },
 			        error: function (xhr, status) {
@@ -777,7 +796,7 @@ __limpiarFiltros(){
     self.fechaFin =null
     self.idCliente =null
     self.estado = null
-    self.hay_datos                 = false  
+    self.hay_datos   = false  
     self.update()
 
 
@@ -800,6 +819,12 @@ function listadoConsulta(){
     self.fechaFin =$('.fechaFinal').val()
     self.cliente =$('#idCliente').val()
     self.estado = $('.estado').val()
+    self.total                     = 0
+    self.totalAbono                = 0
+    self.totalSaldo                = 0
+    self.totalSTR                     = 0
+    self.totalAbonoSTR                = 0
+    self.totalSaldoSTR                = 0    
     self.update()
         var formulario = $("#filtros").serialize();
         $("#tableListar").dataTable().fnClearTable(); 
@@ -815,8 +840,8 @@ function listadoConsulta(){
                     loadListar(".tableListar",idioma_espanol,self.informacion_tabla,result.aaData)
                     agregarInputsCombos();
                     ActivarEventoFiltro(".tableListar")
-                    __modificarRegistro_Listar()
-                    __mostrarListadoAbonos()
+                    __mostrarCuentaPorCobrar()
+                    __mostrarAbonos()
                     __MantenimientoAgregarAbono()
                     TotalesGenerales(result.aaData)
                     self.hay_datos  = true
@@ -842,15 +867,22 @@ function listadoConsulta(){
 *  Suma de totales de cuenta por cobrar 
 **/
 function TotalesGenerales(data){
+     self.total                     = 0
+    self.totalAbono                = 0
+    self.totalSaldo                = 0
+    self.totalSTR                     = 0
+    self.totalAbonoSTR                = 0
+    self.totalSaldoSTR                = 0
+    self.update()
     
     for(var i in data) { 
         self.total      += data[i].total;
         self.totalAbono += data[i].totalAbono;
         self.totalSaldo += data[i].totalSaldo;
      }
-     self.totalSTR = formatoDecimales(self.total,2)
-     self.totalAbonoSTR = formatoDecimales(self.totalAbono,2)
-     self.totalSaldoSTR = formatoDecimales(self.totalSaldo,2)
+     self.total = formatoDecimales(self.total,2)
+     self.totalAbono = formatoDecimales(self.totalAbono,2)
+     self.totalSaldo = formatoDecimales(self.totalSaldo,2)
      
      self.update()
 }
@@ -910,11 +942,11 @@ __regresarAlListadoAbono(){
 **/
 function __regresar(){
    
-    self.mostrarListado       = true
+    self.mostrarListado       = false
     self.botonAgregar         = false
     self.botonModificar       = false   
     self.mostrarFormulario    = false 
-    self.mostrarListadoAbonos = false
+    self.mostrarListadoAbonos = true
     self.mostrarCrearAbono    = false
     self.update()
     listadoConsulta();
@@ -1189,15 +1221,15 @@ function __LimpiarAbonos(){
 * Opciones listado de los clientes
 */
 function __Opciones(){
-  var modificar  = '<a href="#"  title="Modificar" class="btn btn-primary  btn-buscar btnModificar" role="button"> </a>';
-  var abono   = '<a href="#"  title="Ver/Crear abonos" class="btn btn-success btnlistdoAbono"  role="button"><i class="fa fa-bank"></i></a>';
+  var modificar  = '<a href="#"  title="Ver Cuenta por Cobrar" class="btn btn-primary  btn-buscar btnVer" role="button"> </a>';
+  var abono   = '<a href="#"  title="Ver/Crear abonos" class="btn btn-success btnVerAbono"  role="button"><i class="fa fa-bank"></i></a>';
   return  modificar +" " + abono;
 }
 /**
 *  Mostrar listado de abonos
 **/
-function __mostrarListadoAbonos(){
-    $('.tableListar').on('click','.btnlistdoAbono',function(e){
+function __mostrarAbonos(){
+    $('.tableListar').on('click','.btnVerAbono',function(e){
         var table = $('.tableListar').DataTable();
 		if(table.row(this).child.isShown()){
 			//cuando el datatable esta en modo responsive
@@ -1239,8 +1271,8 @@ function includeActionsAbono(dataTables_wrapper,dataTables_length) {
 /**
  * Funcion para Modificar del Listar
  */
-function __modificarRegistro_Listar(){
-	$('#tableListar').on('click','.btnModificar',function(e){
+function __mostrarCuentaPorCobrar(){
+	$('#tableListar').on('click','.btnVer',function(e){
         $("#formulario").validate(reglasDeValidacion());
         $(".errorServerSideJgrid").remove();
 		var table = $('#tableListar').DataTable();
@@ -1470,6 +1502,7 @@ function consultaAbono(){
                         self.mostrarCrearAbono         = true
                         __LimpiarAbonos()
                         self.abono  =  modeloTabla
+                        self.abono.fechaPago = __displayDate_detail(self.abono.fechaPago)
                         self.update()
                     });
                 }
@@ -1481,6 +1514,14 @@ function consultaAbono(){
             console.log(xhr);
         }
     });
+}
+
+/**
+*Formato de la fecha con hora
+**/
+function __displayDate_detail(fecha) {
+    var dateTime = new Date(fecha);
+    return moment(dateTime).format('DD/MM/YYYY ');
 }
 /**
  * mostrar la abono

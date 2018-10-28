@@ -1,7 +1,6 @@
 package com.emprendesoftcr.Bo.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,23 +17,27 @@ import com.emprendesoftcr.modelo.TipoCambio;
  * @since 19 abr. 2018
  */
 
-@Transactional
 @EnableTransactionManagement
 @Service("tipoCambioBo")
 public class TipoCambioBoImpl implements TipoCambioBo {
 
-	@Lazy
 	@Autowired
 	TipoCambioDao tipoCambioDao;
 
+	@Override
+	@Transactional
 	public void agregar(TipoCambio tipoCambio) {
 		tipoCambioDao.agregar(tipoCambio);
 	}
 
+	@Transactional
+	@Override
 	public void modificar(TipoCambio tipoCambio) {
 		tipoCambioDao.modificar(tipoCambio);
 	}
 
+	@Override
+	@Transactional
 	public void eliminar(TipoCambio tipoCambio) {
 		tipoCambioDao.eliminar(tipoCambio);
 	}
@@ -49,24 +52,24 @@ public class TipoCambioBoImpl implements TipoCambioBo {
 	}
 
 	@Override
-	public TipoCambio findByEstadoAndEmpresa(String estado,Empresa empresa){
-		return tipoCambioDao.findByEstadoAndEmpresa(estado,empresa);
+	public TipoCambio findByEstadoAndEmpresa(String estado, Empresa empresa) {
+		return tipoCambioDao.findByEstadoAndEmpresa(estado, empresa);
 	}
-	
+
 	/**
 	 * Conversion de la moneda
 	 * @see com.emprendesoftcr.Bo.TipoCambioBo#conversionMoneda(java.lang.Double, com.emprendesoftcr.modelo.Empresa)
 	 */
 	@Override
-	public Double conversionMoneda(Double total,TipoCambio tipoCambio) {
+	public Double conversionMoneda(Double total, TipoCambio tipoCambio) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
-	
-		if(tipoCambio != null) {
+
+		if (tipoCambio != null) {
 			resultado = total / tipoCambio.getTotal();
 		}
-		
-		 return resultado;
-		
+
+		return resultado;
+
 	}
-	
+
 }

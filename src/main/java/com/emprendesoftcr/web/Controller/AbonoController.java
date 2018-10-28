@@ -26,10 +26,10 @@ import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Bo.UsuarioCajaBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
-import com.emprendesoftcr.Utils.DataTableFilter;
 import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Abono;
 import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Usuario;
@@ -119,7 +119,7 @@ public class AbonoController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/AgregarAbonoAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @RequestParam("idCuentaCobrar") Long idCuentaCobrar, @ModelAttribute Abono abono, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @RequestParam("idCuentaCobrar") Long idCuentaCobrar, @ModelAttribute AbonoCommand abonoCommand, BindingResult result, SessionStatus status) throws Exception {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 
@@ -139,23 +139,27 @@ public class AbonoController {
 				return respuestaServiceValidator;
 			}
 
+			
 			// abono a crear no puede ser mayor al saldo de la cuenta por cobrar
-			if (abono.getTotal() > cuentaCobrar.getTotalSaldo()) {
+			if (abonoCommand.getTotal() > cuentaCobrar.getTotalSaldo()) {
 				result.rejectValue("total", "error.abono.total.mayor.totalSaldo");
 			}
-			if (abono.getTotal() == Constantes.ZEROS_DOUBLE) {
+			if (abonoCommand.getTotal() == Constantes.ZEROS_DOUBLE) {
 				result.rejectValue("total", "error.abono.total.cero");
 			}
-			if (abono.getTotal() == Constantes.ZEROS_DOUBLE) {
+			if (abonoCommand.getTotal() == Constantes.ZEROS_DOUBLE) {
 				result.rejectValue("total", "error.abono.total.cero");
 			}
 
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			abono.setTotalBanco(abono.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : abono.getTotalBanco());
-			abono.setTotalEfectivo(abono.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : abono.getTotalEfectivo());
-			abono.setTotalTarjeta(abono.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : abono.getTotalTarjeta());
+			Abono abono = new Abono();
+			abono.setFechaPago(Utils.pasarADate(abonoCommand.getFechaPago(), "yyyy-MM-dd"));
+			abono.setTotalBanco(abonoCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : abonoCommand.getTotalBanco());
+			abono.setTotalEfectivo(abonoCommand.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : abonoCommand.getTotalEfectivo());
+			abono.setTotalTarjeta(abonoCommand.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : abonoCommand.getTotalTarjeta());
+			abono.setTotal(abonoCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : abonoCommand.getTotal());
 
 			abono.setCreated_at(new Date());
 			abono.setUpdated_at(new Date());
@@ -231,7 +235,7 @@ public class AbonoController {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("all")
-	@RequestMapping(value = "/MostrarAbonoAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/MostrarAbonoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Abono abono, BindingResult result, SessionStatus status) throws Exception {
 		try {

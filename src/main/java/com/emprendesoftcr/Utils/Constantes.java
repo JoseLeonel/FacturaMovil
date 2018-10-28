@@ -8,6 +8,10 @@ public class Constantes {
 
 	public static final String					PLANTILLA_CORREO_CUENTAS_POR_COBRAR									= "email/cuentasxcobrar.vm";
 	
+	public static final Integer					HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO								= 98;
+	
+	public static final Integer					FACTURA_ESTADO_PROBLEMA_AL_FIRMAR  									= 98;
+
 	public static final String					COMBO_TODOS																					= "0";
 	// Empresa aplica factura Electronica
 	public static final Integer					NO_APLICA_FACTURA_ELECTRONICA												= 1;
@@ -24,8 +28,9 @@ public class Constantes {
 	public static final String					CODIGO_ARTICULO_IMPUESTO_SERVICIO										= "8888";
 
 	// Semaforo
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 200;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 300;
 	// 48 horas cada 5 minutos
+	
 	public static final Integer					MAXIMO_REINTENTOS_ACEPTACION												= 60;
 	public static final String					MAXIMO_REINTENTOS_ACEPTACION_STR										= "Tope de intentos de aceptacion,no envio respuesta";
 
@@ -94,7 +99,7 @@ public class Constantes {
 	public static final Integer					HACIENDA_ESTADO_FIRMARDO_XML												= 2;
 	public static final Integer					HACIENDA_ESTADO_ENVIADO_HACIENDA										= 3;
 	public static final Integer					HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR							= 4;
-	public static final Integer					HACIENDA_ESTADO_ENVIADO_HACIENDA_TOPE_REINTENTOS		= 5;
+	public static final Integer					HACIENDA_ESTADO_ENVIADO_HACIENDA_TOPE_REINTENTOS		= 99;
 	public static final Integer					HACIENDA_ESTADO_ACEPTADO_HACIENDA										= 6;
 	public static final Integer					HACIENDA_ESTADO_ACEPTADO_RECHAZADO									= 7;
 	public static final Integer					HACIENDA_ESTADO_ACEPTADO_PARCIAL										= 8;
@@ -154,9 +159,14 @@ public class Constantes {
 	public static final String					ABONO_ESTADO_ANULADO																= "Anulado";
 
 	// Cuentas por Pagar
-	public static final Integer					CUENTA_POR_PAGAR_ESTADO_PENDIENTE										= 1;
-	public static final Integer					CUENTA_POR_PAGAR_ESTADO_CERRADO											= 2;
-	public static final Integer					CUENTA_POR_PAGAR_ESTADO_ANULADO											= 3;
+	public static final String					CUENTA_POR_PAGAR_ESTADO_PENDIENTE										= "Pendiente";
+	public static final String					CUENTA_POR_PAGAR_DESCRIPCION_AUTOMATICO							= "Realizada por ventas";
+	public static final String					CUENTA_POR_PAGAR_NOTA_AUTOMATICO										= "Realizada por ventas";
+	public static final String					CUENTA_POR_PAGAR_ESTADO_CERRADO											= "Cerrada";
+	public static final String					CUENTA_POR_PAGAR_ESTADO_ANULADA											= "Anulada";
+	// Abono Pagar
+	public static final String					ABONO_PAGAR_ESTADO_PAGADO														= "Pagado";
+	public static final String					ABONO_PAGAR_ESTADO_ANULADO													= "Anulado";
 
 	// Tipo de cuenta por Cobrar
 	public static final String					CUENTA_POR_COBRAR_TIPO_Automatica										= "Automatica";
@@ -383,21 +393,4 @@ public class Constantes {
 	public static final String					SP_TOTAL_CUENTA_COBRAR_OUT_SALDO										= "TOTAL_SALDO";
 	public static final String					SP_TOTAL_CUENTA_COBRAR_OUT_ABONO										= "TOTAL_ABONO";
 
-	// Procedimientos para generar el consecutivo de una factura
-	public static final String	SP_GENERAR_CONSECUTIVO										= "SPGENERARCONSECUTIVOFACTURA";
-	public static final String	SP_GENERAR_CONSECUTIVO_IN_ID_EMPRESA			= "ID_EMRPESA";
-	public static final String	SP_GENERAR_CONSECUTIVO_IN_ID_USUARIO			= "ID_USUARIO";
-	public static final String	SP_GENERAR_CONSECUTIVO_IN_TIPO_DOCUMENTO	= "TIPO_DOCUMENTO";
-	public static final String	SP_GENERAR_CONSECUTIVO_OUT_CONSECUTIVO		= "CONSECUTIVO";
-
-	// Procedimiento para generar el consecutivo para una recepcion de factura 
-	public static final String	SP_GENERAR_CONSECUTIVO_RECEPCION										= "SPGENERARCONSECUTIVORECEPCIONFACTURA";
-	public static final String	SP_GENERAR_CONSECUTIVO_RECEPCION_IN_ID_EMPRESA			= "ID_EMRPESA";
-	public static final String	SP_GENERAR_CONSECUTIVO_RECEPCION_IN_ID_USUARIO			= "ID_USUARIO";
-	public static final String	SP_GENERAR_CONSECUTIVO_RECEPCION_IN_TIPO_DOCUMENTO	= "TIPO_DOCUMENTO";
-	public static final String	SP_GENERAR_CONSECUTIVO_RECEPCION_OUT_CONSECUTIVO		= "CONSECUTIVO";
-	
-	// Procecimiento para actualizar la caja
-	public static final String	SP_ACTUALIZA_CAJA																		= "SPACTUALIZACAJAUSUARIO";
-	public static final String	SP_ACTUALIZA_CAJA_ID_CAJA_USUARIO										= "ID_CAJA_USUARIO";
 }

@@ -4,10 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.StoredProcedureQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +14,6 @@ import org.springframework.stereotype.Repository;
 import com.emprendesoftcr.Dao.UsuarioCajaDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
-import com.emprendesoftcr.modelo.Empresa;
-import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 
@@ -29,14 +25,17 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 
 	private Logger	log	= LoggerFactory.getLogger(this.getClass());
 
+	@Override
 	public void agregar(UsuarioCaja marca) {
 		entityManager.persist(marca);
 	}
 
+	@Override
 	public void modificar(UsuarioCaja marca) {
 		entityManager.merge(marca);
 	}
 
+	@Override
 	public void eliminar(UsuarioCaja marca) {
 		entityManager.remove(marca);
 	}
@@ -121,18 +120,7 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 			log.info("** Error  aplicar getTotalEfectivo : " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
+
 	}
 
-	
-	@Override
-	public void actualizarCaja(UsuarioCaja usuarioCaja) throws Exception {
-		StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_ACTUALIZA_CAJA);
-
-		// set parametros entrada
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_ACTUALIZA_CAJA_ID_CAJA_USUARIO, Long.class, ParameterMode.IN);
-
-		//Valores de entrada
-		storedProcedure.setParameter(Constantes.SP_ACTUALIZA_CAJA_ID_CAJA_USUARIO, usuarioCaja.getId());
-		storedProcedure.execute();		
-	}
 }

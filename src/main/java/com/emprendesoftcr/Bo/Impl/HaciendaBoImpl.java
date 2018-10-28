@@ -12,9 +12,8 @@ import com.emprendesoftcr.Dao.HaciendaDao;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Hacienda;
 
-@Transactional
-@EnableTransactionManagement
 @Service("haciendaBo")
+@EnableTransactionManagement
 public class HaciendaBoImpl implements HaciendaBo {
 
 
@@ -23,19 +22,20 @@ public class HaciendaBoImpl implements HaciendaBo {
 
 
 
+	@Transactional
 	@Override
 	public void agregar(Hacienda hacienda) {
 		haciendaDao.agregar(hacienda);
 
 	}
 
+	@Transactional
 	@Override
 	public void modificar(Hacienda hacienda) {
 		haciendaDao.modificar(hacienda);
 
 	}
 
-	@Transactional(readOnly = true)
 	@Override
 	public Hacienda findById(Long id) {
 
@@ -47,20 +47,19 @@ public class HaciendaBoImpl implements HaciendaBo {
 		return haciendaDao.findByEmpresaAndClave(empresa, clave);
 	}
 	
-	@Transactional(readOnly = true)
+
 	@Override
 	public Collection<Hacienda> findByEmpresaAndEstado(Empresa empresa, Integer estado) {
 
 		return haciendaDao.findByEmpresaAndEstado(empresa, estado);
 	}
-	@Transactional(readOnly = true)
 	@Override
 	public Collection<Hacienda> findByEstado( Integer estado,Integer estadoError) {
 
 		return haciendaDao.findByEstado(estado,estadoError);
 	}
-	@Transactional(readOnly = true)
 	@Override
+	
 	public Collection<Hacienda> findByEstadoAndNotificacion(Integer estado, Integer notificacion){
 		return haciendaDao.findByEstadoAndNotificacion(estado,notificacion);
 	}

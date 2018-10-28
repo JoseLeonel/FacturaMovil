@@ -2,8 +2,6 @@ package com.emprendesoftcr.Bo.Impl;
 
 import java.util.Collection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -14,21 +12,22 @@ import com.emprendesoftcr.Dao.RecepcionFacturaDao;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 
-@Transactional
+
 @EnableTransactionManagement
 @Service("recepcionFacturaBo")
 public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 
 	@Autowired
 	RecepcionFacturaDao						recepcionFacturaDao;
-	private Logger								log	= LoggerFactory.getLogger(this.getClass());
 
 	@Override
+	@Transactional
 	public void agregar(RecepcionFactura recepcionFactura) {
 		recepcionFacturaDao.agregar(recepcionFactura);		
 	}
 
 	@Override
+	@Transactional
 	public void modificar(RecepcionFactura recepcionFactura) {
 		recepcionFacturaDao.modificar(recepcionFactura);		
 	}

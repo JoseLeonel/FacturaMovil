@@ -1,10 +1,10 @@
 	package com.emprendesoftcr.web.Controller;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +33,6 @@ import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
-import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Marca;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.ArticuloCommand;
@@ -376,13 +375,13 @@ public class ArticuloController {
 			}
 			Articulo articuloBd = articuloBo.buscar(articulo.getId());
 			Articulo articuloValidar = null;
-			if (!articuloBd.getDescripcion().equals(articulo.getDescripcion())) {
-				articuloValidar = articuloBo.buscarPorDescripcionYEmpresa(articulo.getDescripcion(), articulo.getEmpresa());
+			if (!articuloBd.getDescripcion().equals(articulo.getDescripcion().trim())) {
+				articuloValidar = articuloBo.buscarPorDescripcionYEmpresa(articulo.getDescripcion().trim(), articulo.getEmpresa());
 				if (articuloValidar != null) {
 					result.rejectValue("descripcion", "error.articulo.descripcion.existe");
 				}
 			}
-			if (!articuloBd.getCodigo().equals(articulo.getCodigo())) {
+			if (!articuloBd.getCodigo().equals(articulo.getCodigo().trim())) {
 				articuloValidar = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo().trim(), articulo.getEmpresa());
 				if (articuloValidar != null) {
 					result.rejectValue("codigo", "error.articulo.codigo.existe");
@@ -398,8 +397,8 @@ public class ArticuloController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			articulo.setMaximo(articulo.getMaximo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMaximo());
-			articulo.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMinimo());
+			articuloBd.setMaximo(articulo.getMaximo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMaximo());
+			articuloBd.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMinimo());
 			articuloBd.setCreated_at(new Date());
 			articuloBd.setUpdated_at(new Date());
 			articuloBd.setCosto(articulo.getCosto() == null ? Constantes.ZEROS_DOUBLE : articulo.getCosto());
@@ -507,7 +506,7 @@ public class ArticuloController {
 			articuloBD.setDescripcion(descripcion);
 			articuloBD.setTipoImpuesto(tipoImpuesto);
 			articuloBD.setImpuesto(impuesto);
-
+      articuloBD.setUpdated_at(new Date());
 			articuloBo.modificar(articuloBD);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBD);

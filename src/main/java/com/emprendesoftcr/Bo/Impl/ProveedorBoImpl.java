@@ -15,7 +15,6 @@ import com.emprendesoftcr.modelo.Proveedor;
  * @author jose.
  * @since 17 mar. 2018
  */
-@Transactional
 @EnableTransactionManagement
 @Service("proveedorBo")
 public class ProveedorBoImpl implements ProveedorBo {
@@ -23,14 +22,20 @@ public class ProveedorBoImpl implements ProveedorBo {
 	@Autowired
 	private ProveedorDao proveedorDao;
 
+	@Override
+	@Transactional
 	public void agregar(Proveedor proveedor) {
 		proveedorDao.agregar(proveedor);
 	}
 
+	@Override
+	@Transactional
 	public void modificar(Proveedor proveedor) {
 		proveedorDao.modificar(proveedor);
 	}
 
+	@Override
+	@Transactional
 	public void eliminar(Proveedor proveedor) {
 		proveedorDao.eliminar(proveedor);
 	}

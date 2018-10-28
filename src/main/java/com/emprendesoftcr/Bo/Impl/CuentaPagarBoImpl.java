@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.CuentaPagarBo;
 import com.emprendesoftcr.Dao.CuentaPagarDao;
-import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.CuentaPagar;
 
 /**
@@ -15,23 +14,28 @@ import com.emprendesoftcr.modelo.CuentaPagar;
  * @author jose.
  * @since 25 mar. 2018
  */
-@Transactional
+
 @EnableTransactionManagement
 @Service("cuentaPagarBo")
 public class CuentaPagarBoImpl implements CuentaPagarBo {
-
+	
 	@Autowired
 	private CuentaPagarDao cuentaPagarDao;
 
-
+	@Transactional
+	@Override
 	public void agregar(CuentaPagar cuentaPagar) {
 		cuentaPagarDao.agregar(cuentaPagar);
 	}
 
+	@Transactional
+	@Override
 	public void modificar(CuentaPagar cuentaPagar) {
 		cuentaPagarDao.modificar(cuentaPagar);
 	}
 
+	@Transactional
+	@Override
 	public void eliminar(CuentaPagar cuentaPagar) {
 		cuentaPagarDao.eliminar(cuentaPagar);
 	}
@@ -44,7 +48,5 @@ public class CuentaPagarBoImpl implements CuentaPagarBo {
 	public CuentaPagar buscar(Long id) {
 		return cuentaPagarDao.buscar(id);
 	}
-
-	
 
 }

@@ -4,9 +4,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,12 +14,10 @@ import java.util.List;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.rowset.serial.SerialException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -369,11 +365,10 @@ public class HaciendasController {
 	 * @param model
 	 * @param idHacienda
 	 * @return
-	 * @throws SQLException
-	 * @throws SerialException
+	 * @throws Exception
 	 */
 	@RequestMapping(value = "/bajarXMLComprobanteAjax", method = RequestMethod.GET, headers = "Accept=application/json")
-	public void bajarXMLComprobante(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idHacienda) throws IOException, SerialException, SQLException {
+	public void bajarXMLComprobante(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idHacienda) throws Exception {
 		try {
 			Hacienda haciendaBD = haciendaBo.findById(idHacienda);
 			String fileName = haciendaBD.getTipoDoc() + "-" + haciendaBD.getConsecutivo();
@@ -411,12 +406,10 @@ public class HaciendasController {
 	 * @param response
 	 * @param model
 	 * @param idHacienda
-	 * @throws IOException
-	 * @throws SerialException
-	 * @throws SQLException
+	 * @throws Exception
 	 */
 	@RequestMapping(value = "/bajarXMLRespuestaAjax", method = RequestMethod.GET, headers = "Accept=application/json")
-	public void bajarXMLRespuesta(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idHacienda) throws IOException, SerialException, SQLException {
+	public void bajarXMLRespuesta(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idHacienda) throws Exception {
 		try {
 			Hacienda haciendaBD = haciendaBo.findById(idHacienda);
 			String fileName = haciendaBD.getTipoDoc() + "-" + haciendaBD.getConsecutivo();
@@ -476,8 +469,9 @@ public class HaciendasController {
 		} catch (DocumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw e;
 		} catch (com.google.zxing.WriterException ex) {
-
+			throw ex;
 		}
 
 	}

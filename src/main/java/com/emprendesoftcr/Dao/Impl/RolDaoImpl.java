@@ -27,6 +27,7 @@ public class RolDaoImpl implements RolDao {
 	 * @see com.factura.dao.RolDao#buscarByUserName(java.lang.String)
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public Rol buscarPorUserName(String username) {
 		Query query = entityManager.createQuery("select obj from Rol obj where obj.username = :username");
 		query.setParameter("username", username);

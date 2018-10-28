@@ -23,6 +23,7 @@ public class MarcaDaoImpl implements MarcaDao {
 	@PersistenceContext
 	EntityManager entityManager;
 
+	@Override
 	public void agregar(Marca marca) {
 		entityManager.persist(marca);
 	}

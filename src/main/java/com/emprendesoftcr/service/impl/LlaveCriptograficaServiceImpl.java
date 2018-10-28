@@ -16,7 +16,7 @@ import java.util.Enumeration;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.emprendesoftcr.fisco.DirectPasswordProvider;
 import com.emprendesoftcr.fisco.FirstCertificateSelector;
@@ -40,9 +40,10 @@ import xades4j.verification.UnexpectedJCAException;
  * @since 8 jul. 2018
  */
 @Service("llaveCriptograficaService")
-@Transactional
+@EnableTransactionManagement
 public class LlaveCriptograficaServiceImpl implements LlaveCriptograficaService {
 
+  @Override
 	public XadesSigner getSigner(String keyPath, String password) throws CertificateException, IOException {
 		XadesSigner xadesSigner = null;
 		try {

@@ -203,7 +203,7 @@
                             <thead>
                             <tr>
                                 <th style="width:5%;">                                                        </th>
-                                <th><h1>{$.i18n.prop("factura.linea.detalle.linea")}                         </h1></th>
+                                <th style="width:5%;"><h1>{$.i18n.prop("factura.linea.detalle.linea")}                         </h1></th>
                                 <th><h1>{$.i18n.prop("factura.linea.detalle.codigo")}                        </h1></th>
                                 <th style="width:20%;"><h1>{$.i18n.prop("factura.linea.detalle.descripcion")}</h1></th>
                                 <th style="width:8%;"><h1>{$.i18n.prop("factura.linea.detalle.cantidad")}    </h1> </th>
@@ -218,7 +218,7 @@
                                 <td>
                                     <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
                                 </td>
-                                <td><h2>{numeroLinea}</h2></td>
+                                <td style="width:5%;"><h2>{numeroLinea}</h2></td>
                                 <td><h2>{codigo}</h2></td>
                                 <td><h2>{descripcion}</h2></td>
                                 <td class="text-right" style="width:8%;">
@@ -1168,8 +1168,6 @@ function __Init(){
     self.totalComprobante              = 0
     self.totalCambioPagar              = 0
     self.update();
-   
-
     $('#condicionVenta').prop("selectedIndex", 0);
     $('#tipoDoc').prop("selectedIndex", 0);
     $(".nota").attr("maxlength", 80);
@@ -1452,7 +1450,7 @@ function mostrarPAgo(){
     }
     if(self.vueltoImprimir == 0){
       
-        $('#totalEfectivo').val(self.factura.totalComprobante)
+        $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(3))
         $('#totalTarjeta').val(null)
         $('#totalBanco').val(null)
 
@@ -2539,10 +2537,7 @@ function __Teclas(){
 
     //Limpiar
     if(tecla ==121){
-      __Init()
-     // $('.codigo').select()
-     // $(".codigo").focus()
-      //return
+      refrescarPagina()
     }
 
    if(tecla ==27){
@@ -2550,6 +2545,13 @@ function __Teclas(){
       $(".codigo").focus()
     }
     }, false );
+}
+
+function refrescarPagina(){
+    location.reload(true);
+     $('.codigo').select()
+      $(".codigo").focus()
+ 
 }
 
 
@@ -2573,7 +2575,7 @@ _sumarBilletes(e){
        self.claseCambioDinero     = "entregarCambioPositivo"
     }else{
        self.factura.totalEfectivo = __valorNumerico(item.valor) + __valorNumerico(self.factura.totalEfectivo)
-       
+       $('.efectivo').val(self.factura.totalEfectivo)
         self.update()
         var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
         sumaMontosEntregadosParaCambios += __valorNumerico(self.factura.totalBanco) 

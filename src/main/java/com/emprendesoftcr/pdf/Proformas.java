@@ -9,6 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
@@ -30,6 +33,9 @@ public class Proformas {
 
 	// BaseColor bColor = new BaseColor(109, 202, 66);
 	BaseColor bColor = new BaseColor(220, 220, 220);
+	
+	private Logger																										log															= LoggerFactory.getLogger(this.getClass());
+	
 
 	public static ByteArrayOutputStream main(String consecutivo, String tipoDoc, FacturaElectronica facturaElectronica) throws IOException, DocumentException, WriterException {
 		String dir = System.getProperty("user.dir");
@@ -58,8 +64,13 @@ public class Proformas {
 		app.addRectanguleProducts(cb, font10B);
 		app.addProductsTittle(cb, font10B);
 		app.addProducts(cb, font10, document, facturaElectronica, dir);
-		if(facturaElectronica.getFooterTotalDescuento() >0) {
-			app.addTotals(cb, font10, font10B, facturaElectronica);	
+		if(facturaElectronica.getFooterTotalDescuento() !=null) {
+			if(facturaElectronica.getFooterTotalDescuento() >0) {
+				app.addTotals(cb, font10, font10B, facturaElectronica);	
+			}else {
+				app.addTotalsSinDescuentos(cb, font10, font10B, facturaElectronica);
+			}
+			
 		}else {
 			app.addTotalsSinDescuentos(cb, font10, font10B, facturaElectronica);
 		}
@@ -72,12 +83,18 @@ public class Proformas {
 	private void addLogo(PdfContentByte cb, String dir, Document document, String logo) throws IOException, DocumentException {
 		// Cuadro 1
 		Image img = null;
-		if(logo !=null) {
-			if(!logo.equals(Constantes.EMPTY)) {
-				img = Image.getInstance(dir + "/data/logos/" + logo);	
+	// Cuadro 1
+			try {
+				if (logo != null) {
+					if (!logo.equals(Constantes.EMPTY)) {
+						img = Image.getInstance(dir + "/data/logos/" + logo);
+					}
+
+				}
+
+			} catch (Exception e) {
+				log.info("** Error2  app  obtener el logo: " + e.getMessage() + " fecha " + new Date());
 			}
-				
-		}
 		
 		cb.setColorStroke(bColor);
 		cb.setColorFill(BaseColor.WHITE);

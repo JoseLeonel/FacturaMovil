@@ -4,17 +4,14 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.StoredProcedureQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.CompraDao;
-import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.Empresa;
 
@@ -25,14 +22,17 @@ public class CompraDaoImpl implements CompraDao {
 	EntityManager		entityManager;
 	private Logger	log	= LoggerFactory.getLogger(this.getClass());
 
+	@Override
 	public void agregar(Compra compra) {
 		entityManager.persist(compra);
 	}
 
+	@Override
 	public void modificar(Compra compra) {
 		entityManager.merge(compra);
 	}
 
+	@Override
 	public void eliminar(Compra compra) {
 		entityManager.remove(compra);
 	}

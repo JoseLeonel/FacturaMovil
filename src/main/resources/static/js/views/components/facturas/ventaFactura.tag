@@ -1070,6 +1070,7 @@ td.col-xl-12, th.col-xl-12 {
     self.urlImagenLector      = '/dist/img/codigo_barra.png';
     self.urlImagenBuscador    = '/dist/img/buscador.png';
 
+
     self.on('mount',function(){
         $("#formularioFactura").validate(reglasDeValidacionFactura());
         $("#formularioAgregarNombreTiquete").validate(reglasAgregarNombre());
@@ -2336,7 +2337,6 @@ _AtrasFacturaFinal(){
     $('.totalEfectivo').val(null)
     $('.totalTarjeta').val(null)
     $('.totalBanco').val(null)
-    self.primeraVezBilleteClick = false
     self.factura.totalEfectivo =0
     self.factura.totalTarjeta =0
     self.factura.totalBanco =0
@@ -2375,7 +2375,6 @@ __formaPago(e){
 *   funcion para grabar la Factura en el back end
 **/
 __MostrarFormularioDePago(){
-    
     mostrarPAgo()
 }
 
@@ -2391,11 +2390,10 @@ function mostrarPAgo(){
     self.mostarParaCrearNuevaVentas = false
       self.factura.totalEfectivo = self.factura.totalComprobante
         self.update()
-     $('#totalEfectivo').val(self.factura.totalComprobante)
+    $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(3))
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
     getSubTotalGeneral()
-    self.primeraVezBilleteClick = false
     self.mostarParaCrearNuevaVentas = false
     self.factura.totalCambioPagar =0
     self.mostarParaCrearNuevaFactura = false
@@ -3171,10 +3169,13 @@ function __Teclas(){
       if(self.mostrarFormularioPago == false && self.mostarParaCrearNuevaVentas == true){
         self.factura.totalCambioPagar =__valorNumerico(self.factura.totalComprobante)   
         self.totalCambioPagar = redondeoDecimales(self.factura.totalComprobante,2)
+        self.primeraVezBilleteClick == false
         self.update()
         $(".totalEfectivo").val(self.totalCambioPagar)
          mostrarPAgo()     
       }else if (self.mostrarFormularioPago == true && self.mostarParaCrearNuevaVentas == false ){
+           self.primeraVezBilleteClick == false
+          self.update()
             aplicarFactura(2)   
         }  
     }  
@@ -3188,21 +3189,29 @@ function __Teclas(){
     }
     //Limpiar
     if(tecla ==121){
-      __Init()
+      refrescarPagina()
     }
     }, false );
 }
+
+function refrescarPagina(){
+    location.reload(true);
+     $('.codigo').select()
+      $(".codigo").focus()
+ 
+}
+
 /**
 * Contabilizar los billetes de acuerdo a como se vayan dando click en la pantalla
 */
 _sumarBilletes(e){
-    var item = e.item
      if(self.primeraVezBilleteClick == false){
       
         self.factura.totalEfectivo = 0
         self.primeraVezBilleteClick = true
         self.update()
     }
+    var item = e.item
     if(item.valor == 0 ){
        self.factura.totalEfectivo = 0
        self.factura.totalTarjeta  = 0
@@ -3221,9 +3230,7 @@ _sumarBilletes(e){
         self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.totalComprobante)
         self.claseCambioDinero  = __valorNumerico(sumaMontosEntregadosParaCambios) > __valorNumerico(self.factura.totalComprobante)?'entregarCambioPositivo':'entregarCambioNegativo'
         self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
-      
-        $(".totalEfectivo").val(self.factura.totalEfectivo)
-        $('.efectivo').val(self.totalCambioPagar)
+        $(".totalEfectivo").val(self.totalCambioPagar)
 
     }
     self.update()

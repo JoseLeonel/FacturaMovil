@@ -11,12 +11,10 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Marca;
 
 /**
- * Marcas asociadas al articulo
- * MarcaBoImpl.
+ * Marcas asociadas al articulo MarcaBoImpl.
  * @author jose.
  * @since 17 mar. 2018
  */
-@Transactional
 @EnableTransactionManagement
 @Service("marcaBo")
 public class MarcaBoImpl implements MarcaBo {
@@ -24,22 +22,28 @@ public class MarcaBoImpl implements MarcaBo {
 	@Autowired
 	MarcaDao marcaDao;
 
+	@Override
+	@Transactional
 	public void agregar(Marca marca) {
 		marcaDao.agregar(marca);
 	}
 
+	@Override
+	@Transactional
 	public void modificar(Marca marca) {
 		marcaDao.modificar(marca);
 	}
 
+	@Override
+	@Transactional
 	public void eliminar(Marca marca) {
 		marcaDao.eliminar(marca);
 	}
 
-/**
- * Busca la Marca por descripcion y empresa
- * @see com.factura.bo.MarcaBo#buscarPorDescripcionYEmpresa(java.lang.String, com.factura.domain.Empresa)
- */
+	/**
+	 * Busca la Marca por descripcion y empresa
+	 * @see com.factura.bo.MarcaBo#buscarPorDescripcionYEmpresa(java.lang.String, com.factura.domain.Empresa)
+	 */
 	@Override
 	public Marca buscarPorDescripcionYEmpresa(String descripcion, Empresa empresa) {
 		return marcaDao.buscarPorDescripcionYEmpresa(descripcion, empresa);

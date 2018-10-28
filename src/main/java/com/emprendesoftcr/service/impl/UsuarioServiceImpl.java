@@ -13,15 +13,13 @@ import com.emprendesoftcr.repository.UsuarioRepository;
 import com.emprendesoftcr.service.UsuarioService;
 
 @Service("usuarioService")
-@Transactional
 @EnableTransactionManagement
 public class UsuarioServiceImpl implements UsuarioService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-	
-	
 
+	@Transactional
 	@Override
 	public void saveUsuario(Usuario usuario) {
 		usuarioRepository.save(usuario);
@@ -29,13 +27,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public Optional<Usuario>  findByNombreUsuario(String nombreUsuario) {
+	public Optional<Usuario> findByNombreUsuario(String nombreUsuario) {
 		return usuarioRepository.findByNombreUsuario(nombreUsuario);
 	}
 
 	@Override
 	public List<Usuario> findAllUsuarios() {
-		
+
 		return (List<Usuario>) usuarioRepository.findAll();
 	}
 

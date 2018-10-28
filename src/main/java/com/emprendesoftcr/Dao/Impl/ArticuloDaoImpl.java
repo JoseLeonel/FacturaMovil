@@ -10,7 +10,6 @@ import javax.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Utils.Constantes;
@@ -24,7 +23,6 @@ import com.emprendesoftcr.modelo.Empresa;
  * @since 7 abr. 2018
  */
 @Repository("articuloDao")
-@Transactional
 public class ArticuloDaoImpl implements ArticuloDao {
 
 	@PersistenceContext
@@ -83,7 +81,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	 */
 	@Override
 	public Articulo buscarPorCodigoYEmpresa(String codigo, Empresa empresa) {
-		Query query = entityManager.createQuery("select obj from Articulo obj where obj.codigo = :codigo and obj.empresa = :empresa");
+		Query query = entityManager.createQuery("select distinct obj from Articulo obj where obj.codigo = :codigo and obj.empresa = :empresa");
 		query.setParameter("codigo", codigo);
 		query.setParameter("empresa", empresa);
 

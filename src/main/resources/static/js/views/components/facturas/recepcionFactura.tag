@@ -602,12 +602,11 @@
                     self.archivo.receptorNombreComercial = receptor.find("NombreComercial").text();
                       
                     //Se cargan los datos de la factura
-                    var facturaElectronica = $(xmlDoc).find("FacturaElectronica");
-                    self.archivo.facturaConsecutivo = facturaElectronica.find("NumeroConsecutivo").first().text();
-                    self.archivo.facturaClave = facturaElectronica.find("Clave").first().text();
-                    self.archivo.facturaFechaEmision = (facturaElectronica.find("FechaEmision")).first().text();
-                    self.archivo.facturaCondicionVenta = facturaElectronica.find("CondicionVenta").first().text();
-                    self.archivo.facturaMedioPago = facturaElectronica.find("MedioPago").first().text();
+                    self.archivo.facturaConsecutivo = $(xmlDoc).find("NumeroConsecutivo").first().text();
+                    self.archivo.facturaClave = $(xmlDoc).find("Clave").first().text();
+                    self.archivo.facturaFechaEmision = ($(xmlDoc).find("FechaEmision")).first().text();
+                    self.archivo.facturaCondicionVenta = $(xmlDoc).find("CondicionVenta").first().text();
+                    self.archivo.facturaMedioPago = $(xmlDoc).find("MedioPago").first().text();
                     
                     //Se carga el detalle de la factura
 					$("#detalleFactura").find("tr:gt(0)").remove();
@@ -646,14 +645,14 @@
                     
                     
                 	//Se cargan los datos principales
-                    self.recepcionFactura.clave = facturaElectronica.find("Clave").first().text();
+                    self.recepcionFactura.clave = $(xmlDoc).find("Clave").first().text();
                 	self.recepcionFactura.cedulaEmisor=emisor.find("Identificacion").find("Numero").text();
                 	self.recepcionFactura.emisorTipoCedula = emisor.find("Identificacion").find("Tipo").text();
-                    self.recepcionFactura.fechaEmision = facturaElectronica.find("FechaEmision").first().text();
-                    self.recepcionFactura.totalImpuestos = facturaElectronica.find("TotalImpuesto").text();
+                    self.recepcionFactura.fechaEmision = $(xmlDoc).find("FechaEmision").first().text();
+                    self.recepcionFactura.totalImpuestos = $(xmlDoc).find("TotalImpuesto").text();
                     self.recepcionFactura.totalFactura = resumenFactura.find("TotalComprobante").text();
                     self.recepcionFactura.cedulaReceptor = receptor.find("Identificacion").find("Numero").text();
-	                self.recepcionFactura.totalImpuestos = facturaElectronica.find("TotalImpuesto").first().text();
+	                self.recepcionFactura.totalImpuestos = $(xmlDoc).find("TotalImpuesto").first().text();
                 }
                 
                 reader.readAsText($("#fileUpload")[0].files[0]);
@@ -848,7 +847,6 @@
 			$(".errorServerSideJgrid").remove();
 			
 		    var formulario = $("#formularioAceptarForm").serialize();
-		    console.log(formulario);
 		    $.ajax({
 		        type : "POST",
 		        dataType : "json",

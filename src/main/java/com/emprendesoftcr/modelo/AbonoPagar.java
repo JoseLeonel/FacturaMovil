@@ -17,6 +17,7 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
 
 /**
  * Modelo para los abonos de una cuenta por cobrar Abono.
@@ -73,7 +74,7 @@ public class AbonoPagar implements Serializable {
 	private Date							updated_at;
 
 	@ManyToOne
-	@JoinColumn(name = "cuentas_cobrar_id")
+	@JoinColumn(name = "cuentas_pagar_id")
 	private CuentaPagar				cuentaPagar;
 
 	@ManyToOne
@@ -110,14 +111,9 @@ public class AbonoPagar implements Serializable {
 		this.usuario = usuario;
 	}
 
-	public CuentaPagar getCuentaPagar() {
-		return cuentaPagar;
-	}
 
-	public void setCuentaPagar(CuentaPagar cuentaPagar) {
-		this.cuentaPagar = cuentaPagar;
-	}
 
+	
 	public Long getId() {
 		return id;
 	}
@@ -166,12 +162,20 @@ public class AbonoPagar implements Serializable {
 		this.totalEfectivo = totalEfectivo;
 	}
 
+	public String getTotalEfectivoSTR() {
+		return Utils.formateadorMiles(this.totalEfectivo);
+	}
+
 	public Double getTotalTarjeta() {
 		return totalTarjeta;
 	}
 
 	public void setTotalTarjeta(Double totalTarjeta) {
 		this.totalTarjeta = totalTarjeta;
+	}
+
+	public String getTotalTarjetaSTR() {
+		return Utils.formateadorMiles(this.totalTarjeta);
 	}
 
 	public Double getTotalBanco() {
@@ -182,12 +186,20 @@ public class AbonoPagar implements Serializable {
 		this.totalBanco = totalBanco;
 	}
 
+	public String getTotalBancoSTR() {
+		return Utils.formateadorMiles(this.totalBanco);
+	}
+
 	public Double getTotal() {
 		return total;
 	}
 
 	public void setTotal(Double total) {
 		this.total = total;
+	}
+
+	public String getTotalSTR() {
+		return Utils.formateadorMiles(this.total);
 	}
 
 	public String getEstado() {
@@ -214,7 +226,13 @@ public class AbonoPagar implements Serializable {
 		this.updated_at = updated_at;
 	}
 
-	
+	public CuentaPagar getCuentaPagar() {
+		return cuentaPagar;
+	}
+
+	public void setCuentaPagar(CuentaPagar cuentaPagar) {
+		this.cuentaPagar = cuentaPagar;
+	}
 
 	public Usuario getUsuario() {
 		return usuario;

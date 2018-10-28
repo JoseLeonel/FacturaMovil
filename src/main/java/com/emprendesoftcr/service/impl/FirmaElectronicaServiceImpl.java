@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.error.SignException;
@@ -19,7 +18,6 @@ import com.google.common.collect.ImmutableList;
 
 
 @Service("firmaElectronicaService")
-@Transactional
 @EnableTransactionManagement
 public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
 	
@@ -33,20 +31,6 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
 			firmadoFactura = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + firmadoFactura;
 			 
 			resultado = firmadoFactura;
-//      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//
-//      DocumentBuilder builder;
-//      builder = factory.newDocumentBuilder();
-//          Document document = builder.parse( new InputSource(
-//                  new StringReader( firmadoFactura ) ) );
-//
-//          TransformerFactory tranFactory = TransformerFactory.newInstance();
-//          Transformer aTransformer = tranFactory.newTransformer();
-//          Source src = new DOMSource( document );
-//          Result dest = new StreamResult( new File( "prueba.xml" ) );
-//          aTransformer.transform( src, dest );
-//     
-//			
      
 			
 			        

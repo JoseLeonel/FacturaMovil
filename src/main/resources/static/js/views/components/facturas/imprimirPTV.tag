@@ -108,7 +108,10 @@
                                             <br>{$.i18n.prop("tikect.autorizado.no.factura.elec.parte.cuatro")}</p>
 
                         <br>
-                        <div class="encabezado">{$.i18n.prop("tikect.final")}</div>           
+                        <div class="encabezado">{$.i18n.prop("tikect.final")}</div>
+                        <div class="encabezado">{$.i18n.prop("emprendesoft.factura")}</div>
+                        <div class="encabezado">{$.i18n.prop("emprendesoft.mensaje")}</div> 
+                        <div class="encabezado">{$.i18n.prop("emprendesoft.correo")}</div>           
                     </div>
                 </div>
             </section>

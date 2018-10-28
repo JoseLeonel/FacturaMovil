@@ -10,6 +10,7 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.HaciendaDao;
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Hacienda;
 
@@ -70,7 +71,7 @@ public class HaciendaDaoImpl implements HaciendaDao {
 		Query query = entityManager.createQuery("select obj from Hacienda obj where obj.estado = :estado or obj.estado = :estadoError ");
 		query.setParameter("estado", estado);
 		query.setParameter("estadoError", estadoError);
-	//	query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
+		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
 		
 		return query.getResultList();
 	}
@@ -79,7 +80,7 @@ public class HaciendaDaoImpl implements HaciendaDao {
 		Query query = entityManager.createQuery("select obj from Hacienda obj where obj.estado = :estado and obj.notificacion = :notificacion ");
 		query.setParameter("estado", estado);
 		query.setParameter("notificacion", notificacion);
-	//	query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
+		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
 		
 		return query.getResultList();
 	}

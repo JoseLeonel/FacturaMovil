@@ -17,14 +17,17 @@ public class UsuarioCajaFacturaDaoImpl implements UsuarioCajaFacturaDao {
 	@PersistenceContext
 	EntityManager entityManager;
 
+	@Override
 	public void agregar(UsuarioCajaFactura usuarioCajaFactura) {
 		entityManager.persist(usuarioCajaFactura);
 	}
 
+	@Override
 	public void modificar(UsuarioCajaFactura usuarioCajaFactura) {
 		entityManager.merge(usuarioCajaFactura);
 	}
 
+	@Override
 	public void eliminar(UsuarioCajaFactura usuarioCajaFactura) {
 		entityManager.remove(usuarioCajaFactura);
 	}

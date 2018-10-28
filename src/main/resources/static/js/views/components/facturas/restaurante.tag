@@ -2070,7 +2070,7 @@ __Limpiar(){
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
-    self.primeraVezBilleteClick = false
+     self.primeraVezBilleteClick = false
     self.mostrarListadoArticulos == false
     self.detail                = []
     self.mensajesBackEnd       = []
@@ -2506,6 +2506,7 @@ _AtrasFacturaFinal(){
     $('.totalEfectivo').val(null)
     $('.totalTarjeta').val(null)
     $('.totalBanco').val(null)
+    self.primeraVezBilleteClick = false
     self.factura.totalEfectivo =0
     self.factura.totalTarjeta =0
     self.factura.totalBanco =0
@@ -2556,13 +2557,12 @@ function mostrarPAgo(){
         return
     }
     self.mostarParaCrearNuevaVentas = false
-      self.factura.totalEfectivo = self.factura.totalComprobante
-        self.update()
-     $('#totalEfectivo').val(self.factura.totalComprobante)
+    self.factura.totalEfectivo = self.factura.totalComprobante
+    self.update()
+    $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(3))
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
     getSubTotalGeneral()
-    self.primeraVezBilleteClick = false
     self.mostarParaCrearNuevaVentas = false
     self.factura.totalCambioPagar =0
     self.mostarParaCrearNuevaFactura = false
@@ -3324,10 +3324,14 @@ function __Teclas(){
       if(self.mostrarFormularioPago == false && self.mostarParaCrearNuevaVentas == true){
         self.factura.totalCambioPagar =__valorNumerico(self.factura.totalComprobante)   
         self.totalCambioPagar = redondeoDecimales(self.factura.totalComprobante,2)
+         self.primeraVezBilleteClick == false
         self.update()
         $(".totalEfectivo").val(self.totalCambioPagar)
+
          mostrarPAgo()     
       }else if (self.mostrarFormularioPago == true && self.mostarParaCrearNuevaVentas == false ){
+           self.primeraVezBilleteClick == false
+           self.update()
             aplicarFactura(2)   
         }  
     }  
@@ -3349,13 +3353,13 @@ function __Teclas(){
 * Contabilizar los billetes de acuerdo a como se vayan dando click en la pantalla
 */
 _sumarBilletes(e){
-     if(self.primeraVezBilleteClick == false){
+    var item = e.item
+    if(self.primeraVezBilleteClick == false){
       
         self.factura.totalEfectivo = 0
         self.primeraVezBilleteClick = true
         self.update()
     }
-    var item = e.item
     if(item.valor == 0 ){
        self.factura.totalEfectivo = 0
        self.factura.totalTarjeta  = 0
@@ -3364,7 +3368,7 @@ _sumarBilletes(e){
        self.totalCambioPagar = 0
        self.claseCambioDinero     = "entregarCambioPositivo"
     }else{
-       self.factura.totalEfectivo = __valorNumerico(item.valor) + __valorNumerico(self.factura.totalEfectivo)
+         self.factura.totalEfectivo = __valorNumerico(item.valor) + __valorNumerico(self.factura.totalEfectivo)
        $('.efectivo').val(self.factura.totalEfectivo)
         self.update()
         var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
@@ -3374,9 +3378,8 @@ _sumarBilletes(e){
         self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.totalComprobante)
         self.claseCambioDinero  = __valorNumerico(sumaMontosEntregadosParaCambios) > __valorNumerico(self.factura.totalComprobante)?'entregarCambioPositivo':'entregarCambioNegativo'
         self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
-         $(".totalEfectivo").val(self.factura.totalEfectivo)
+        $(".totalEfectivo").val(self.factura.totalEfectivo)
         $('.efectivo').val(self.totalCambioPagar)
-
 
     }
     self.update()

@@ -23,7 +23,6 @@ import com.emprendesoftcr.service.FirmaElectronicaService;
 import com.emprendesoftcr.service.TiqueteXMLService;
 
 @Service("tiqueteXMLService")
-@Transactional
 @EnableTransactionManagement
 public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 	private Logger	log= LoggerFactory.getLogger(this.getClass());
@@ -31,10 +30,10 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 	private CertificadoBo							certificadoBo;
 	
 	@Autowired
-	private FacturaBo							facturaBo;
+	 FacturaBo							facturaBo;
 	
 	@Autowired
-	private FirmaElectronicaService firmaElectronicaService;
+	 FirmaElectronicaService firmaElectronicaService;
 
 	@Override
 	public String getFirmarXML(String xmlString, Empresa empresa) throws Exception {
@@ -53,16 +52,17 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 		}
 		return resultado;
 	}
+	
 	@Transactional
 	@Override
 	public String getCrearXMLSinFirma(Factura factura) throws Exception{
 		String resultado = Constantes.EMPTY;
-		
+		Date fecha = new Date();
+		factura.setFechaEmision(fecha);
+		facturaBo.modificar(factura);
+
 		try {
-			Date fecha = new Date();
-			factura.setFechaEmision(fecha);
-			facturaBo.modificar(factura);
-			 String date = FacturaElectronicaUtils.toISO8601String(fecha);
+					 String date = FacturaElectronicaUtils.toISO8601String(fecha);
 		   resultado = "<TiqueteElectronico xmlns=\"" + Constantes.DOCXMLS_TIQUETE + "\" " +
 		                "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
 		        "<Clave>" + factura.getClave() + "</Clave>" +

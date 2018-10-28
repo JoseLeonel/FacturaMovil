@@ -21,7 +21,7 @@ public class AbonoCommand {
 
 	private String				transferencia;
 
-	private Date					fechaPago;
+	private String					fechaPago;
 
 	private Double				totalEfectivo;
 
@@ -58,7 +58,7 @@ public class AbonoCommand {
 		this.nota = abono.getNota();
 		this.recibo = abono.getRecibo();
 		this.transferencia = abono.getTransferencia();
-		this.fechaPago = abono.getFechaPago();
+		this.fechaPago = abono.getFechaPago().toString();
 		this.totalEfectivo = abono.getTotalEfectivo();
 		this.totalTarjeta = abono.getTotalTarjeta();
 		this.totalBanco = abono.getTotalBanco();
@@ -76,22 +76,6 @@ public class AbonoCommand {
 
 	}
 
-	public AbonoCommand(Long id, String nota, String recibo, String transferencia, Date fechaPago, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double total, String estado, Date created_at, Date updated_at, CuentaCobrar cuentaCobrar) {
-		super();
-		this.id = id;
-		this.nota = nota;
-		this.recibo = recibo;
-		this.transferencia = transferencia;
-		this.fechaPago = fechaPago;
-		this.totalEfectivo = totalEfectivo;
-		this.totalTarjeta = totalTarjeta;
-		this.totalBanco = totalBanco;
-		this.total = total;
-		this.estado = estado;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
-		this.cuentaCobrar = cuentaCobrar;
-	}
 
 	public String getCreated_atSTR() {
 		return created_atSTR;
@@ -141,11 +125,14 @@ public class AbonoCommand {
 		this.transferencia = transferencia;
 	}
 
-	public Date getFechaPago() {
+	
+	
+	public String getFechaPago() {
 		return fechaPago;
 	}
 
-	public void setFechaPago(Date fechaPago) {
+	
+	public void setFechaPago(String fechaPago) {
 		this.fechaPago = fechaPago;
 	}
 
