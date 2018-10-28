@@ -8,10 +8,6 @@ public class Constantes {
 
 	public static final String					PLANTILLA_CORREO_CUENTAS_POR_COBRAR									= "email/cuentasxcobrar.vm";
 	
-	public static final Integer					HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO								= 98;
-	
-	public static final Integer					FACTURA_ESTADO_PROBLEMA_AL_FIRMAR  									= 98;
-
 	public static final String					COMBO_TODOS																					= "0";
 	// Empresa aplica factura Electronica
 	public static final Integer					NO_APLICA_FACTURA_ELECTRONICA												= 1;

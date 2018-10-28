@@ -76,7 +76,6 @@ public class Articulo implements Serializable {
 	@Column(name = "precio_especial")
 	private Double						precioEspecial;
 	
-
 	@Column(name = "ganancia_precio_especial")
 	private Double						gananciaPrecioEspecial;
 	
@@ -123,21 +122,16 @@ public class Articulo implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
 	private Empresa						empresa;
-
-	
 	
 	@JsonIgnore
 	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
 	@JoinColumn(name = "articulo_id", referencedColumnName = "id")
 	@OrderBy("id DESC")
 	private Set<Kardex>				kardexs;
-
 	
-
-
-
-
-	
+	//1 = Articulo cocina
+	@Column(name = "comanda")
+	private Integer						comanda = 0; 
 
 	public Articulo(Long id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, Double cantidad, Double minimo, Double maximo, String estado, String tipoImpuesto, String tipoCodigo, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa,  Set<Kardex> kardexs) {
 		super();
