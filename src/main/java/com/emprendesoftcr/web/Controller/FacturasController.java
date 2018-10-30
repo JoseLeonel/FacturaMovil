@@ -79,6 +79,7 @@ import com.emprendesoftcr.web.command.FacturaEsperaCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacionMesa;
 import com.emprendesoftcr.web.command.RecepcionFacturaCommand;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
+import com.emprendesoftcr.web.command.TurismoCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.FechaPropertyEditor;
@@ -735,11 +736,13 @@ public class FacturasController {
 	@RequestMapping(value = "/service/CrearFacturaServiceAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	@SuppressWarnings("rawtypes")
-	public RespuestaServiceValidator crearFactura(@RequestBody FacturaCommand facturaCommand, BindingResult result) throws ParseException {
+	public RespuestaServiceValidator crearFactura(@RequestBody TurismoCommand turismoCommand, BindingResult result) throws ParseException {
 
 		try {
 
-			Usuario usuario = usuarioBo.buscar(facturaCommand.getUsuario());
+       Usuario usuario = null;
+       FacturaCommand facturaCommand =null;
+       
 			return this.crearFactura(facturaCommand, result, usuario);
 		} catch (Exception e) {
 
@@ -939,7 +942,7 @@ public class FacturasController {
 
 			// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 			// criptografica desde linux
-			// certificadoBo.agregar(usuario.getEmpresa(),"","");
+			 //certificadoBo.agregar(usuario.getEmpresa(),"","");
 			// usuario.getEmpresa().getClaveLlaveCriptografica().toString(),
 			// usuario.getEmpresa().getNombreLlaveCriptografica());
 			// String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);

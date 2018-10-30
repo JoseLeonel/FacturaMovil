@@ -216,6 +216,27 @@
 <!-- Fin Formulario -->   
     <!-- Listado  -->
     <div classs="contenedor-listar container" id="container"  show={mostrarListado}  >
+       <div class= "row">
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                <div class="form-group">
+                    <label  >{$.i18n.prop("titulo.total")} </label>
+                    <input type="text" class="form-control totalGeneral " value="{total}" readonly>
+                </div>  
+            </div>                             
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                <div class="form-group">
+                    <label  >{$.i18n.prop("titulo.abono")} </label>
+                    <input type="text" class="form-control totalAbonoGeneral" value="{totalAbono}" readonly>
+                </div>  
+            </div>                             
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                <div class="form-group">
+                    <label  >{$.i18n.prop("titulo.saldo")} </label>
+                    <input type="text" class="form-control totalSaldoGeneral " value="{totalSaldo}" readonly>
+                </div>  
+            </div>                             
+        </div>
+
         <div class="row">
             <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
@@ -851,28 +872,15 @@ function listaProveedoresActivos(){
 **/
 function __InformacionDataTable(){
     self.informacion_tabla = [ 
-                            {'data' :'created_atSTR'             ,"name":"created_atSTR"             ,"title" : $.i18n.prop("cuentaPagar.created_at")   ,"autoWidth" :true           },
-                            {'data' :'id'  ,"name":"id"  ,"title" : $.i18n.prop("cuentaPagar.id")      ,"autoWidth" :false },
-                            {'data' :'proveedor.nombreCompleto'  ,"name":"proveedor.nombreCompleto"  ,"title" : $.i18n.prop("cuentaPagar.proveedor")   ,"autoWidth" :false },
-                            {'data' :'consecutivo'               ,"name":"consecutivo"               ,"title" : $.i18n.prop("cuentaPagar.consecutivo")      ,"autoWidth" :false },
-                            {'data' : 'total'                    ,"name":"total"                     ,"title" : $.i18n.prop("cuentaPagar.total")        ,"autoWidth" :false,
-                                "render":function(total,type, row){
-									    return  total;
-                                 }
-                            },
-                            {'data' : 'totalSaldo'            ,"name":"totalSaldo"                   ,"title" : $.i18n.prop("cuentaPagar.totalSaldo")   ,"autoWidth" :false,
-                                "render":function(totalSaldo,type, row){
-    							    return totalSaldo;
-                             }
-                            },
-                            {'data' : 'totalAbono'            ,"name":"totalAbono"                  ,"title" : $.i18n.prop("cuentaPagar.totalAbono")   ,"autoWidth" :false,
-                                "render":function(totalAbono,type, row){
-    							    return  totalAbono;
-                                 }
-                            
-                            },
-                            {'data' : 'estado'                ,"name":"estado"                     ,"title" : $.i18n.prop("cuentaPagar.estado")       ,"autoWidth" :false},
-                            {'data' : 'id'                    ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
+                            {'data' :'created_atSTR'             ,"name":"created_atSTR"                   ,"title" : $.i18n.prop("cuentaPagar.created_at")   ,"autoWidth" :true           },
+                            {'data' :'id'                        ,"name":"id"                              ,"title" : $.i18n.prop("cuentaPagar.id")      ,"autoWidth" :false },
+                            {'data' :'proveedor.nombreCompleto'  ,"name":"proveedor.nombreCompleto"        ,"title" : $.i18n.prop("cuentaPagar.proveedor")   ,"autoWidth" :false },
+                            {'data' :'consecutivo'               ,"name":"consecutivo"                     ,"title" : $.i18n.prop("cuentaPagar.consecutivo")      ,"autoWidth" :false },
+                            {'data' : 'totalSTR'                 ,"name":"totalSTR"                        ,"title" : $.i18n.prop("cuentaPagar.total")        ,"autoWidth" :false},
+                            {'data' : 'totalSaldoSTR'            ,"name":"totalSaldoSTR"                   ,"title" : $.i18n.prop("cuentaPagar.totalSaldo")   ,"autoWidth" :false},
+                            {'data' : 'totalAbonoSTR'            ,"name":"totalAbonoSTR"                   ,"title" : $.i18n.prop("cuentaPagar.totalAbono")   ,"autoWidth" :false},
+                            {'data' : 'estado'                   ,"name":"estado"                     ,"title" : $.i18n.prop("cuentaPagar.estado")       ,"autoWidth" :false},
+                            {'data' : 'id'                       ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
                                       return __Opciones(id,type,row);
                                  }
@@ -1162,12 +1170,7 @@ function __InformacionTabla_lista_AbonoPagar(){
                                        },
                                        {'data' : 'transferencia'  ,"name":"transferencia" ,"title" : $.i18n.prop("abonoPagar.transferencia")},
                                        {'data' : 'recibo'         ,"name":"recibo"        ,"title" : $.i18n.prop("abonoPagar.recibo")},
-                                       {'data' : 'total'          ,"name":"total"         ,"title" : $.i18n.prop("abonoPagar.total"),
-                                            "render":function(total,type, row){
-                                                return formatoDecimales(total,2);
-                                            }
-                                       
-                                       },
+                                       {'data' : 'totalSTR'       ,"name":"totalSTR"         ,"title" : $.i18n.prop("abonoPagar.total")},
                                        {'data' : 'estado'         ,"name":"estado"        ,"title" : $.i18n.prop("abonoPagar.estado")},
                                        {'data' : 'created_atSTR'  ,"name":"created_atSTR"    ,"title" : $.i18n.prop("abonoPagar.created_at")
                                        },

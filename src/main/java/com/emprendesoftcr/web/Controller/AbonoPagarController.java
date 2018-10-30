@@ -51,33 +51,33 @@ public class AbonoPagarController {
 
 	private static final Function<Object, AbonoPagarCommand>	TO_COMMAND	= new Function<Object, AbonoPagarCommand>() {
 
-																																		@Override
-																																		public AbonoPagarCommand apply(Object f) {
-																																			return new AbonoPagarCommand((AbonoPagar) f);
-																																		};
-																																	};
+																																					@Override
+																																					public AbonoPagarCommand apply(Object f) {
+																																						return new AbonoPagarCommand((AbonoPagar) f);
+																																					};
+																																				};
 
 	@Autowired
-	private DataTableBo																	dataTableBo;
+	private DataTableBo																				dataTableBo;
 
 	@Autowired
-	private CuentaPagarBo															cuentaPagarBo;
+	private CuentaPagarBo																			cuentaPagarBo;
 
 	@Autowired
-	private UsuarioBo																		usuarioBo;
+	private UsuarioBo																					usuarioBo;
 
 	@Autowired
-	private UsuarioCajaBo																usuarioCajaBo;
+	private UsuarioCajaBo																			usuarioCajaBo;
 
 	@Autowired
 	private AbonoPagarBo																			abonoPagarBo;
 
 	@Autowired
-	private CuentaPagarPropertyEditor									cuentaPagarPropertyEditor;
+	private CuentaPagarPropertyEditor													cuentaPagarPropertyEditor;
 	@Autowired
-	private AbonoPropertyEditor													abonoPropertyEditor;
+	private AbonoPropertyEditor																abonoPropertyEditor;
 	@Autowired
-	private StringPropertyEditor												stringPropertyEditor;
+	private StringPropertyEditor															stringPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -117,11 +117,15 @@ public class AbonoPagarController {
 			}
 
 			CuentaPagar cuentaPagar = cuentaPagarBo.buscar(idCuentaPagar);
+
 			if (cuentaPagar == null) {
 				respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
 				respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("error.abono.cuentaPagar.no.existe"));
 				return respuestaServiceValidator;
 			}
+			cuentaPagar.setTotal(cuentaPagar.getTotal() == null ? Constantes.ZEROS_DOUBLE : cuentaPagar.getTotal());
+			cuentaPagar.setTotalSaldo(cuentaPagar.getTotalSaldo() == null ? Constantes.ZEROS_DOUBLE : cuentaPagar.getTotalSaldo());
+			cuentaPagar.setTotalAbono(cuentaPagar.getTotalAbono() == null ? Constantes.ZEROS_DOUBLE : cuentaPagar.getTotalAbono());
 
 			// abono a crear no puede ser mayor al saldo de la cuenta por cobrar
 			if (abonoPagarCommand.getTotal() > cuentaPagar.getTotalSaldo()) {
@@ -130,7 +134,6 @@ public class AbonoPagarController {
 			if (abonoPagarCommand.getTotal() == Constantes.ZEROS_DOUBLE) {
 				result.rejectValue("total", "error.abonoPagar.total.cero");
 			}
-			
 
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
@@ -141,6 +144,7 @@ public class AbonoPagarController {
 			abonoPagar.setTotalEfectivo(abonoPagarCommand.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : abonoPagarCommand.getTotalEfectivo());
 			abonoPagar.setTotalTarjeta(abonoPagarCommand.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : abonoPagarCommand.getTotalTarjeta());
 			abonoPagar.setTotalTarjeta(abonoPagarCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : abonoPagarCommand.getTotal());
+			abonoPagar.setTotal(abonoPagarCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : abonoPagarCommand.getTotal());
 
 			abonoPagar.setCreated_at(new Date());
 			abonoPagar.setUpdated_at(new Date());
@@ -148,14 +152,14 @@ public class AbonoPagarController {
 
 			abonoPagar.setEstado(Constantes.ABONO_ESTADO_PAGADO);
 			abonoPagar.setCuentaPagar(cuentaPagar);
-			abonoPagarBo.modificar(abonoPagar);
+			abonoPagarBo.agregar(abonoPagar);
+			cuentaPagar.setUpdated_at(new Date());
 			cuentaPagar.setTotalAbono(abonoPagar.getTotal() + cuentaPagar.getTotalAbono());
 			cuentaPagar.setTotalSaldo(cuentaPagar.getTotalSaldo() - abonoPagar.getTotal());
 			if (cuentaPagar.getTotalSaldo().equals(Constantes.ZEROS_DOUBLE)) {
 				cuentaPagar.setEstado(Constantes.CUENTA_POR_COBRAR_ESTADO_CERRADO);
 			}
 			cuentaPagarBo.modificar(cuentaPagar);
-
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("abonoPagar.agregar.correctamente", abonoPagar);
 

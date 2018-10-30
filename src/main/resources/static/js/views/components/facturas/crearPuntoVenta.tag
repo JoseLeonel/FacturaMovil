@@ -2548,7 +2548,7 @@ function __Teclas(){
 }
 
 function refrescarPagina(){
-    location.reload(true);
+     __Init()
      $('.codigo').select()
       $(".codigo").focus()
  

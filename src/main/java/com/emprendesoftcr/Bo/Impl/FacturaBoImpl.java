@@ -116,7 +116,7 @@ public class FacturaBoImpl implements FacturaBo {
 	 * @see com.emprendesoftcr.Bo.FacturaBo#findByConsecutivoAndEmpresa(java.lang.String, com.emprendesoftcr.modelo.Empresa)
 	 */
 	@Override
-	public Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) throws Exception {
+		public Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) throws Exception {
 		Factura factura = null;
 		try {
 			factura = facturaDao.findByConsecutivoAndEmpresa(consecutivo, empresa);
