@@ -3,8 +3,6 @@ package com.emprendesoftcr.web.command;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.persistence.Column;
-
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
@@ -15,54 +13,32 @@ import com.emprendesoftcr.modelo.Usuario;
 public class ArticuloCommand {
 
 	private Long				id;
-
 	private String			codigo;
-
 	private String			descripcion;
-
 	private String			serie;
-
 	private String			unidadMedida;
-
 	private String			contable;
-
 	private Double			costo;
-
 	private Double			impuesto;
-
 	private Double			precioPublico;
-
 	private Double			gananciaPrecioPublico;
-
 	private Double			precioMayorista;
-
 	private Double			gananciaPrecioMayorista;
-
 	private Double			precioEspecial;
-
 	private Double			gananciaPrecioEspecial;
-
 	private String			estado;
-
 	private Double			minimo;
-
 	private Double			maximo;
-
 	private String			tipoImpuesto;
 	private String			tipoCodigo;
-
 	private Date				created_at;
-
 	private Date				updated_at;
-
 	private Marca				marca;
-
 	private Usuario			usuario;
-
 	private Categoria		categoria;
-
 	private Empresa			empresa;
 	private BigDecimal	cantidad;
+	private Integer			comanda;
 
 	public ArticuloCommand(Articulo articulo) {
 		super();
@@ -93,6 +69,15 @@ public class ArticuloCommand {
 		this.tipoCodigo = articulo.getTipoCodigo();
 		this.minimo = articulo.getMinimo();
 		this.maximo = articulo.getMaximo();
+		this.comanda = articulo.getComanda();
+	}
+
+	public Integer getComanda() {
+		return comanda;
+	}
+
+	public void setComanda(Integer comanda) {
+		this.comanda = comanda;
 	}
 
 	public ArticuloCommand() {
@@ -291,22 +276,18 @@ public class ArticuloCommand {
 		this.tipoCodigo = tipoCodigo;
 	}
 
-	
 	public Double getMinimo() {
 		return minimo;
 	}
 
-	
 	public void setMinimo(Double minimo) {
 		this.minimo = minimo;
 	}
 
-	
 	public Double getMaximo() {
 		return maximo;
 	}
 
-	
 	public void setMaximo(Double maximo) {
 		this.maximo = maximo;
 	}

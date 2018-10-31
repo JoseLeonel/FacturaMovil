@@ -16,7 +16,7 @@ import javax.persistence.Table;
  * @author Jairo Cisners
  */
 @Entity
-@Table(name = "comandaEmpresa")
+@Table(name = "comanda_empresa")
 public class ComandaEmpresa implements Serializable {
 
 	private static final long serialVersionUID = 3236006908675739266L;

@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Formula;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.Utils.Constantes;
@@ -224,6 +225,9 @@ public class Factura implements Serializable {
 	@OrderBy("factura_id DESC")
 	private Set<Detalle> detalles;
 
+	@Formula("(select count(*) from comanda_mesa comanda where comanda.factura_id = id and comanda.empresa_id = empresa_id and comanda.estado = 1)")
+	private Integer comandasPendientes;
+
 	public Factura() {
 		super();
 		this.estado = Constantes.FACTURA_ESTADO_PENDIENTE;
@@ -299,9 +303,11 @@ public class Factura implements Serializable {
 	public void setTotalImpuestoServicio(Double totalImpuestoServicio) {
 		this.totalImpuestoServicio = totalImpuestoServicio;
 	}
+
 	public String getTotalImpuestoServicioSTR() {
 		return Utils.formateadorMiles(this.totalImpuestoServicio);
 	}
+
 	public Long getId() {
 		return id;
 	}
@@ -405,15 +411,17 @@ public class Factura implements Serializable {
 	public void setSubTotal(Double subTotal) {
 		this.subTotal = subTotal;
 	}
-	
+
 	public String getSubTotalGeneralSTR() {
-		Double valorSubTotal = this.subTotal !=null?this.subTotal:Constantes.ZEROS;
-		Double valorDescuento = this.totalDescuentos !=null?this.totalDescuentos:Constantes.ZEROS;
-		return Utils.formateadorMiles(valorSubTotal+valorDescuento);
+		Double valorSubTotal = this.subTotal != null ? this.subTotal : Constantes.ZEROS;
+		Double valorDescuento = this.totalDescuentos != null ? this.totalDescuentos : Constantes.ZEROS;
+		return Utils.formateadorMiles(valorSubTotal + valorDescuento);
 	}
+
 	public String getSubTotalSTR() {
 		return Utils.formateadorMiles(this.subTotal);
 	}
+
 	public Double getTotalTransporte() {
 		return totalTransporte;
 	}
@@ -453,11 +461,11 @@ public class Factura implements Serializable {
 	public void setTotalMercanciasExentas(Double totalMercanciasExentas) {
 		this.totalMercanciasExentas = totalMercanciasExentas;
 	}
+
 	public String getTotalMercanciasExentasSTR() {
 		return Utils.formateadorMiles(this.totalMercanciasExentas);
 	}
 
-	
 	public Double getTotalGravado() {
 		return totalGravado;
 	}
@@ -469,7 +477,7 @@ public class Factura implements Serializable {
 	public String getTotalGravadoSTR() {
 		return Utils.formateadorMiles(this.totalGravado);
 	}
-	
+
 	public Double getTotalExento() {
 		return totalExento;
 	}
@@ -477,11 +485,11 @@ public class Factura implements Serializable {
 	public void setTotalExento(Double totalExento) {
 		this.totalExento = totalExento;
 	}
+
 	public String getTotalExentoSTR() {
 		return Utils.formateadorMiles(this.totalExento);
 	}
 
-	
 	public Double getTotalVenta() {
 		return totalVenta;
 	}
@@ -489,9 +497,11 @@ public class Factura implements Serializable {
 	public void setTotalVenta(Double totalVenta) {
 		this.totalVenta = totalVenta;
 	}
+
 	public String getTotalVentaSTR() {
 		return Utils.formateadorMiles(this.totalVenta);
 	}
+
 	public Double getTotalDescuentos() {
 		return totalDescuentos;
 	}
@@ -499,6 +509,7 @@ public class Factura implements Serializable {
 	public void setTotalDescuentos(Double totalDescuentos) {
 		this.totalDescuentos = totalDescuentos;
 	}
+
 	public String getTotalDescuentosSTR() {
 		return Utils.formateadorMiles(this.totalDescuentos);
 	}
@@ -510,9 +521,11 @@ public class Factura implements Serializable {
 	public void setTotalVentaNeta(Double totalVentaNeta) {
 		this.totalVentaNeta = totalVentaNeta;
 	}
+
 	public String getTotalVentaNetaSTR() {
 		return Utils.formateadorMiles(this.totalVentaNeta);
 	}
+
 	public Double getTotalImpuesto() {
 		return totalImpuesto;
 	}
@@ -520,10 +533,11 @@ public class Factura implements Serializable {
 	public void setTotalImpuesto(Double totalImpuesto) {
 		this.totalImpuesto = totalImpuesto;
 	}
+
 	public String getTotalImpuestoSTR() {
 		return Utils.formateadorMiles(this.totalImpuesto);
 	}
-	
+
 	public Double getTotalComprobante() {
 		return totalComprobante;
 	}
@@ -531,8 +545,7 @@ public class Factura implements Serializable {
 	public void setTotalComprobante(Double totalComprobante) {
 		this.totalComprobante = totalComprobante;
 	}
-	
-	
+
 	public Double getTotalEfectivo() {
 		return totalEfectivo;
 	}
@@ -540,7 +553,7 @@ public class Factura implements Serializable {
 	public void setTotalEfectivo(Double totalEfectivo) {
 		this.totalEfectivo = totalEfectivo;
 	}
-	
+
 	public String getTotalEfectivoSTR() {
 		return Utils.formateadorMiles(this.totalEfectivo);
 	}
@@ -564,9 +577,11 @@ public class Factura implements Serializable {
 	public void setTotalBanco(Double totalBanco) {
 		this.totalBanco = totalBanco;
 	}
+
 	public String getTotalBancoSTR() {
 		return Utils.formateadorMiles(this.totalBanco);
 	}
+
 	public Double getTotalCredito() {
 		return totalCredito;
 	}
@@ -574,7 +589,7 @@ public class Factura implements Serializable {
 	public void setTotalCredito(Double totalCredito) {
 		this.totalCredito = totalCredito;
 	}
-	
+
 	public String getTotalCreditoSTR() {
 		return Utils.formateadorMiles(this.totalCredito);
 	}
@@ -590,6 +605,7 @@ public class Factura implements Serializable {
 	public String getMontoCambioSTR() {
 		return Utils.formateadorMiles(this.montoCambio);
 	}
+
 	public Double getTotalCambio() {
 		return totalCambio;
 	}
@@ -601,6 +617,7 @@ public class Factura implements Serializable {
 	public String getTotalCambioSTR() {
 		return Utils.formateadorMiles(this.totalCambio);
 	}
+
 	public Double getTotalCambioPagar() {
 		return totalCambioPagar;
 	}
@@ -608,6 +625,7 @@ public class Factura implements Serializable {
 	public void setTotalCambioPagar(Double totalCambioPagar) {
 		this.totalCambioPagar = totalCambioPagar;
 	}
+
 	public String getTotalCambioPagarSTR() {
 		return Utils.formateadorMiles(this.totalCambioPagar);
 	}
@@ -799,16 +817,16 @@ public class Factura implements Serializable {
 	public void setTieneIS(Integer tieneIS) {
 		this.tieneIS = tieneIS;
 	}
-	
+
 	public String getFechaEmisionSTR() {
-		if(this.fechaEmision !=null) {
-			return Utils.getFechaGeneraReporte(this.getFechaEmision());	
+		if (this.fechaEmision != null) {
+			return Utils.getFechaGeneraReporte(this.getFechaEmision());
 		}
 		return Constantes.EMPTY;
 	}
 
 	public String getNombreCliente() {
-		if(this.cliente !=null) {
+		if (this.cliente != null) {
 			return this.getCliente().getNombreCompleto();
 		}
 		return Constantes.EMPTY;
@@ -821,15 +839,21 @@ public class Factura implements Serializable {
 	public void setMesa(Mesa mesa) {
 		this.mesa = mesa;
 	}
-	
+
 	public String getTotalComprobanteSTR() {
 		return Utils.formateadorMiles(this.totalComprobante);
 	}
-	
+
 	public String getTotalDescuentoSTR() {
 		return Utils.formateadorMiles(this.totalDescuentos);
 	}
-	
-	
+
+	public Integer getComandasPendientes() {
+		return comandasPendientes;
+	}
+
+	public void setComandasPendientes(Integer comandasPendientes) {
+		this.comandasPendientes = comandasPendientes;
+	}
 
 }

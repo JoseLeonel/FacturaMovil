@@ -31,6 +31,5 @@ public class FacturaElectronicaApplication extends SpringBootServletInitializer 
 		return application.sources(FacturaElectronicaApplication.class);
 	}
 	
-	 
 
 }

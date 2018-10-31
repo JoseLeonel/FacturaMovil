@@ -16,7 +16,7 @@ import javax.persistence.Table;
  * @author Jairo Cisneros
  */
 @Entity
-@Table(name = "comandaMesa")
+@Table(name = "comanda_mesa")
 public class ComandaMesa implements Serializable {
 
 	private static final long serialVersionUID = 3236006908675739266L;
@@ -30,14 +30,17 @@ public class ComandaMesa implements Serializable {
 	@JoinColumn(name = "mesa_id")
 	private Mesa mesa;
 
+	@Column(name = "factura_id")
+	private Long idFactura;
+
+	@Column(name = "empresa_id")
+	private Integer idEmpresa;
+
 	@Column(name = "codigo")
 	private String codigo;
 
 	@Column(name = "descripcion")
 	private String descripcion;
-
-	@Column(name = "unidad_medida")
-	private String unidadMedida;
 
 	@Column(name = "comentario")
 	private String comentario;
@@ -82,12 +85,20 @@ public class ComandaMesa implements Serializable {
 		this.descripcion = descripcion;
 	}
 
-	public String getUnidadMedida() {
-		return unidadMedida;
+	public Long getIdFactura() {
+		return idFactura;
 	}
 
-	public void setUnidadMedida(String unidadMedida) {
-		this.unidadMedida = unidadMedida;
+	public void setIdFactura(Long idFactura) {
+		this.idFactura = idFactura;
+	}
+
+	public Integer getIdEmpresa() {
+		return idEmpresa;
+	}
+
+	public void setIdEmpresa(Integer idEmpresa) {
+		this.idEmpresa = idEmpresa;
 	}
 
 	public String getComentario() {

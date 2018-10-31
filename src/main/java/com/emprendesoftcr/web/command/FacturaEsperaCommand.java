@@ -112,6 +112,8 @@ public class FacturaEsperaCommand {
 	private String		referenciaRazon;
 
 	private Date			referenciaFechaEmision;
+	
+	private Integer 	comandasPendientes;
 
 	public FacturaEsperaCommand(Factura factura) {
 		super();
@@ -166,7 +168,7 @@ public class FacturaEsperaCommand {
 		this.totalComprobanteSTR = factura.getTotalComprobanteSTR();
 		this.totalImpuestoSTR = factura.getTotalImpuestoSTR();
 		this.totalDescuentosSTR = factura.getTotalDescuentoSTR();
-
+		this.comandasPendientes = factura.getComandasPendientes();
 	}
 
 	public FacturaEsperaCommand(Detalle detalle) {
@@ -648,6 +650,16 @@ public class FacturaEsperaCommand {
 
 	public void setMedioBanco(String medioBanco) {
 		this.medioBanco = medioBanco;
+	}
+
+	
+	public Integer getComandasPendientes() {
+		return comandasPendientes;
+	}
+
+	
+	public void setComandasPendientes(Integer comandasPendientes) {
+		this.comandasPendientes = comandasPendientes;
 	}
 
 }

@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
+import com.emprendesoftcr.Dao.ComandaDao;
 import com.emprendesoftcr.Dao.CuentaCobrarDao;
 import com.emprendesoftcr.Dao.FacturaDao;
 import com.emprendesoftcr.Dao.HaciendaDao;
@@ -29,6 +30,7 @@ import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.modelo.Articulo;
+import com.emprendesoftcr.modelo.ComandaMesa;
 import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
@@ -70,6 +72,9 @@ public class FacturaBoImpl implements FacturaBo {
 
 	@Autowired
 	UsuarioCajaDao				usuarioCajaDao;
+
+	@Autowired
+	ComandaDao comandaDao ;
 
 	private Logger				log	= LoggerFactory.getLogger(this.getClass());
 
@@ -274,6 +279,30 @@ public class FacturaBoImpl implements FacturaBo {
 		return detallesFacturaCommand;
 	}
 
+	
+	private void agregaDetalleComanda(Factura factura, FacturaCommand facturaCommand, Usuario usuario) throws Exception {
+		 
+		// Se obtienen los articulos que se incluyeron en la comanda
+			JSONArray jsonArrayKeyArticulos = null;
+			Gson gson = new Gson();
+			try {
+				jsonArrayKeyArticulos = (JSONArray) new JSONParser().parse(facturaCommand.getDetalleComanda());
+				for (int i = 0; i < jsonArrayKeyArticulos.size(); i++) {
+					JSONArray jsonArrayDetalle = (JSONArray)((JSONObject) jsonArrayKeyArticulos.get(i)).get("data");						
+					for (int j = 0; j < jsonArrayDetalle.size(); j++) {
+						ComandaMesa comandaMesa = gson.fromJson(jsonArrayDetalle.get(j).toString(), ComandaMesa.class);
+						comandaMesa.setIdFactura(factura.getId());
+						comandaMesa.setMesa(factura.getMesa());
+						comandaMesa.setIdEmpresa(factura.getEmpresa().getId());
+						comandaDao.agregar(comandaMesa);
+					}
+				}				
+			} catch (org.json.simple.parser.ParseException e) {
+				throw e;
+			}
+	}
+
+	
 	private void asociaDetallesFactura(Factura factura, FacturaCommand facturaCommand, Usuario usuario, ArrayList<DetalleFacturaCommand> detallesFacturaCommand) throws Exception {
 
 		// Detalles, se forma el detalle de la factura, se contabiliza los totales para evitar problemas con el tema de los decimales en el front
@@ -631,6 +660,11 @@ public class FacturaBoImpl implements FacturaBo {
 
 				}
 
+				//Agrega las ordenes de la comanda a la mesa
+				if(facturaCommand.getDetalleComanda() != null && facturaCommand.getDetalleComanda().length() > 0) {
+					this.agregaDetalleComanda(factura, facturaCommand, usuario);
+				}				
+				
 				// Actualiza articulo y inventario
 				this.actualizaArticulosInventario(detallesFacturaCommand, factura, usuario);
 
