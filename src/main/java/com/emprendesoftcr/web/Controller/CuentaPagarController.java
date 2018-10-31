@@ -97,17 +97,17 @@ public class CuentaPagarController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarCuentaPagarAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFinal, @RequestParam Long idProveedor) {
+	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFinal, @RequestParam Long idProveedor,@RequestParam String estado) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Proveedor proveedor = proveedorBo.buscar(idProveedor);
-		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFinal, proveedor, usuarioSesion.getEmpresa());
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFinal, proveedor, usuarioSesion.getEmpresa(),estado);
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
 
 	private static class DelimitadorBuilder {
 
-		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Proveedor proveedor, Empresa empresa) {
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Proveedor proveedor, Empresa empresa,String estado) {
 			// Consulta por fechas
 			DataTableDelimitador delimitador = new DataTableDelimitador(request, "CuentaPagar");
 			Date fechaInicio = new Date();
@@ -117,6 +117,14 @@ public class CuentaPagarController {
 
 			if (proveedor != null) {
 				delimitador.addFiltro(new JqGridFilter("proveedor.id", "'" + proveedor.getId().toString() + "'", "="));
+			}
+			if(estado !=null) {
+				if(!estado.equals(Constantes.EMPTY)) {
+					if(!estado.equals(Constantes.COMBO_TODOS)) {
+						delimitador.addFiltro(new JqGridFilter("estado", "'" + estado + "'", "="));	
+					}
+						
+				}
 			}
 			if (!inicio.equals(Constantes.EMPTY) && !fin.equals(Constantes.EMPTY)) {
 				fechaInicio = Utils.parseDate(inicio);

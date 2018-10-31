@@ -123,9 +123,9 @@ public class AbonoPagarController {
 				respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("error.abono.cuentaPagar.no.existe"));
 				return respuestaServiceValidator;
 			}
-			cuentaPagar.setTotal(cuentaPagar.getTotal() == null ? Constantes.ZEROS_DOUBLE : cuentaPagar.getTotal());
-			cuentaPagar.setTotalSaldo(cuentaPagar.getTotalSaldo() == null ? Constantes.ZEROS_DOUBLE : cuentaPagar.getTotalSaldo());
-			cuentaPagar.setTotalAbono(cuentaPagar.getTotalAbono() == null ? Constantes.ZEROS_DOUBLE : cuentaPagar.getTotalAbono());
+			cuentaPagar.setTotal(cuentaPagar.getTotal() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(cuentaPagar.getTotal(),5));
+			cuentaPagar.setTotalSaldo(cuentaPagar.getTotalSaldo() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(cuentaPagar.getTotalSaldo(),5));
+			cuentaPagar.setTotalAbono(cuentaPagar.getTotalAbono() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(cuentaPagar.getTotalAbono(),5));
 
 			// abono a crear no puede ser mayor al saldo de la cuenta por cobrar
 			if (abonoPagarCommand.getTotal() > cuentaPagar.getTotalSaldo()) {
@@ -140,11 +140,10 @@ public class AbonoPagarController {
 			}
 			AbonoPagar abonoPagar = new AbonoPagar();
 			abonoPagar.setFechaPago(Utils.pasarADate(abonoPagarCommand.getFechaPago(), "yyyy-MM-dd"));
-			abonoPagar.setTotalBanco(abonoPagarCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : abonoPagarCommand.getTotalBanco());
-			abonoPagar.setTotalEfectivo(abonoPagarCommand.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : abonoPagarCommand.getTotalEfectivo());
-			abonoPagar.setTotalTarjeta(abonoPagarCommand.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : abonoPagarCommand.getTotalTarjeta());
-			abonoPagar.setTotalTarjeta(abonoPagarCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : abonoPagarCommand.getTotal());
-			abonoPagar.setTotal(abonoPagarCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : abonoPagarCommand.getTotal());
+			abonoPagar.setTotalBanco(abonoPagarCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(abonoPagarCommand.getTotalBanco(),5));
+			abonoPagar.setTotalEfectivo(abonoPagarCommand.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(abonoPagarCommand.getTotalEfectivo(),5));
+			abonoPagar.setTotalTarjeta(abonoPagarCommand.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(abonoPagarCommand.getTotalTarjeta(),5));
+			abonoPagar.setTotal(abonoPagarCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(abonoPagarCommand.getTotal(),5));
 
 			abonoPagar.setCreated_at(new Date());
 			abonoPagar.setUpdated_at(new Date());
@@ -154,8 +153,8 @@ public class AbonoPagarController {
 			abonoPagar.setCuentaPagar(cuentaPagar);
 			abonoPagarBo.agregar(abonoPagar);
 			cuentaPagar.setUpdated_at(new Date());
-			cuentaPagar.setTotalAbono(abonoPagar.getTotal() + cuentaPagar.getTotalAbono());
-			cuentaPagar.setTotalSaldo(cuentaPagar.getTotalSaldo() - abonoPagar.getTotal());
+			cuentaPagar.setTotalAbono(Utils.roundFactura(abonoPagar.getTotal() + cuentaPagar.getTotalAbono(),5));
+			cuentaPagar.setTotalSaldo(Utils.roundFactura(cuentaPagar.getTotalSaldo() - abonoPagar.getTotal(),5));
 			if (cuentaPagar.getTotalSaldo().equals(Constantes.ZEROS_DOUBLE)) {
 				cuentaPagar.setEstado(Constantes.CUENTA_POR_COBRAR_ESTADO_CERRADO);
 			}
