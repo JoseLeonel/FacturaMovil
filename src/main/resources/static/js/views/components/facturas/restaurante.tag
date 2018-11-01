@@ -2126,15 +2126,9 @@ __AgregarNombreFacturaTemporal(){
     self.mesa.id = self.factura.mesa.id
     self.update()
     aplicarFactura(1)      
-<<<<<<< HEAD
     /* if(self.factEspera !=null){
       __FacturaEnEspera(self.factEspera) 
     } */
-=======
-    //if(self.factEspera !=null){
-    //  __FacturaEnEspera(self.factEspera) 
-    //}
->>>>>>> master
     self.factEspera =null
     self.update()
     
