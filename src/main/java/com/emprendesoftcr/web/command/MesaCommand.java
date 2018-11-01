@@ -2,6 +2,8 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
+import org.hibernate.annotations.Formula;
+
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Mesa;
 
@@ -30,6 +32,8 @@ public class MesaCommand {
 
 	private Integer tieneFacturas;
 
+	private Integer comandasPendientes;
+
 	public MesaCommand(Mesa mesa) {
 		super();
 		this.id = mesa.getId();
@@ -41,6 +45,7 @@ public class MesaCommand {
 		this.prioridad = mesa.getPrioridad();
 		this.impuestoServicio = mesa.getImpuestoServicio();
 		this.tieneFacturas = mesa.getTieneFacturas();
+		this.comandasPendientes = mesa.getComandasPendientes();
 	}
 
 	public MesaCommand() {
@@ -121,6 +126,14 @@ public class MesaCommand {
 
 	public void setPrioridad(Integer prioridad) {
 		this.prioridad = prioridad;
+	}
+
+	public Integer getComandasPendientes() {
+		return comandasPendientes;
+	}
+
+	public void setComandasPendientes(Integer comandasPendientes) {
+		this.comandasPendientes = comandasPendientes;
 	}
 
 }

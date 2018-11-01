@@ -323,7 +323,7 @@
                         <div show={mostrarOrdenesCocinaPendientes}>
 	                        <a class="pull-left" href="#">
 	                        	<img onclick={_MostrarComandasPendientes} style="width:40px;" alt="" class="blink" src="/dist/img/cocina.jpg">
-	                        	<span onclick = {_MostrarComandasPendientes} class="label-titulos-articulo">Ordenes por enviar a la cocina :{factura.comandasPendientes}</span>
+	                        	<span onclick = {_MostrarComandasPendientes} class="label-titulos-articulo">Ordenes por enviar a la cocina :{mesa.comandasPendientes}</span>
 	                        </a>
 	                    </div>                                                                        
                         <a class="pull-right" href="#"> <span onclick = {__CambiarNombreTiquete} class="label-titulos-articulo">Tikete a :{factura.nombreFactura}</span></a>
@@ -1084,7 +1084,6 @@ td.col-xl-12, th.col-xl-12 {
 	    totalCambio:0,
 	    codigoMoneda:"",
 	    estado:1,
-	    comandasPendientes:0,
 	    cliente:{
             id:0,
             nombreCompleto:""
@@ -1167,7 +1166,8 @@ td.col-xl-12, th.col-xl-12 {
  	self.mesa = {
          id:0,
          descripcion:"",
-         impuestoServicio:false
+         impuestoServicio:false,
+ 	     comandasPendientes:0,
      }
      self.mesas  = {
          data:[],
@@ -2032,7 +2032,6 @@ __CargarFacturaEspera(e){
     }
     
    __FacturaEnEspera(e.item)
-   __ListaComandasPendientes(e.item);
 }
 
 /**
@@ -2127,12 +2126,20 @@ __AgregarNombreFacturaTemporal(){
     self.mesa.id = self.factura.mesa.id
     self.update()
     aplicarFactura(1)      
-    if(self.factEspera !=null){
+    /* if(self.factEspera !=null){
       __FacturaEnEspera(self.factEspera) 
-    }
+    } */
     self.factEspera =null
     self.update()
     
+     self.mostrarCategorias        = false //muestra la pantalla de imagenes de articulos   
+     self.mostrarFacturasMesas     = true //muestra las facturas por mesa
+     self.mostrarMesas	             = false //muestra la pantalla mesas               
+     self.mostrarCodigoBarra          = false;
+     self.mostrarNavegador            = true
+     self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias
+     self.mostarParaCrearNuevaVentas  = true
+     self.update()        
 
 }
 /**
@@ -2407,7 +2414,6 @@ function __InitDatos(){
         totalCambioPagar:0,
 	    codigoMoneda:"",
 	    estado:0,
-	    comandasPendientes:0,
 	    cliente:{
             id:0,
             nombreCompleto:"",
@@ -2504,10 +2510,7 @@ function __FacturaEnEspera(factura){
                        self.factura.totalCambioPagar = 0
                        self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
                        self.cliente  = modeloTabla.cliente
-                       self.vendedor = modeloTabla.vendedor
-                       if(self.factura.comandasPendientes > 0){
-                    	   self.mostrarOrdenesCocinaPendientes = true;
-                       }
+                       self.vendedor = modeloTabla.vendedor                       
                        self.update()
                     });
                 }
@@ -2622,6 +2625,7 @@ function evaluarFactura(data){
                  
             }else{
                 __Init()
+                __ListaComandasPendientes();
             }
         });
     }
@@ -3636,6 +3640,11 @@ __FacturasXMesa(e){
     var item = e.item
     self.mesa = item
     self.factura.mesa = item
+    if(self.mesa.comandasPendientes > 0){
+    	self.mostrarOrdenesCocinaPendientes = true;
+    }else{
+    	self.mostrarOrdenesCocinaPendientes = false;            	
+    }
     self.update()
     __ListaFacturasXMesas()
 }
@@ -3706,7 +3715,6 @@ function __ListaComandasPendientesModal(){
         url: 'ListarComandasPendientesAjax.do',
         datatype: "json",
         data: {
-	        idFactura:self.factura.id,
 	        idMesa: self.mesa.id,  
 	        estado:1,//Pendientes
         },
@@ -3760,20 +3768,21 @@ _MostrarComandasPendientes(){
 /**
 *  Lista las comandas pendientes
 **/
-function __ListaComandasPendientes(factura){
+function __ListaComandasPendientes(){
 	self.registradosComanda = [];
     $.ajax({
         url: 'ListarComandasPendientesAjax.do',
         datatype: "json",
         data: {
-	        idFactura:factura.id,
 	        idMesa: self.mesa.id,        	
 	        estado:-2, //Enviados
         },
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
+            	self.mesa.comandasPendientes = 0;
 	           	result.aaData.forEach(function(elemen){
+	           		self.mesa.comandasPendientes = self.mesa.comandasPendientes + 1;
             		var obj = self.registradosComanda.find(o => o.key === elemen.codigo);
             		if(typeof obj == "undefined"){
             			//Si no  existe se agrupan
@@ -3801,6 +3810,12 @@ function __ListaComandasPendientes(factura){
             	    self.update()        
         	    })
             }
+            if(self.mesa.comandasPendientes > 0){
+            	self.mostrarOrdenesCocinaPendientes = true;
+            }else{
+            	self.mostrarOrdenesCocinaPendientes = false;            	
+            }
+    	    self.update()        
         },
         error: function (xhr, status) {
             console.log(xhr);
@@ -3947,7 +3962,6 @@ __EnviarCocina(){
 	});
 	
 	var informacion = {
-		id: self.factura.id,
 		mesa: self.mesa.descripcion,        	
 		mesero: "",        	
 	    nombreImpresora:"PDF1",
@@ -3991,9 +4005,51 @@ __EnviarCocina(){
             mensajeErrorServidor(xhr, status);
         }
     });		
-
-  
 } 
+
+/**
+*  Consultar  especifico
+* 1  Mostrar  2  Modificar
+**/
+function __consultar(){
+    var formulario = $('#formulario').serialize();
+    $.ajax({
+        url: "MostrarMesaAjax.do",
+        datatype: "json",
+        data: formulario,
+        method:"GET",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                    //desahabilita  listado 
+                        Limpiar()
+                        self.mostrarListado   = false;
+                        self.mostrarFormulario  = true 
+                        //desahabilita boton modificar
+                        self.botonModificar   = true;
+                        // habilita el formulario
+                        self.botonAgregar     = false;                        
+                        self.mesa  =  modeloTabla
+                        self.update()
+                        $("#descripcion").val(self.mesa.descripcion);
+                        __Eventos()
+                        __ComboEstados()
+                    });
+                }
+            }
+            
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
+        }
+    });
+}
 
 
 </script>

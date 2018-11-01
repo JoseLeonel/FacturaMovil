@@ -62,15 +62,12 @@ public class ComandaController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarComandasPendientesAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idFactura, @RequestParam Long idMesa, @RequestParam Integer estado) {
+	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idMesa, @RequestParam Integer estado) {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "ComandaMesa");
 
-		JqGridFilter dataTableFilter = new JqGridFilter("idFactura", "'" + idFactura + "'", "=");
-		delimitadores.addFiltro(dataTableFilter);
-
-		dataTableFilter = new JqGridFilter("mesa.id", "'" + idMesa + "'", "=");
+		JqGridFilter dataTableFilter = new JqGridFilter("mesa.id", "'" + idMesa + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());

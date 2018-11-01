@@ -225,9 +225,6 @@ public class Factura implements Serializable {
 	@OrderBy("factura_id DESC")
 	private Set<Detalle> detalles;
 
-	@Formula("(select count(*) from comanda_mesa comanda where comanda.factura_id = id and comanda.empresa_id = empresa_id and comanda.estado = 1)")
-	private Integer comandasPendientes;
-
 	public Factura() {
 		super();
 		this.estado = Constantes.FACTURA_ESTADO_PENDIENTE;
@@ -846,14 +843,6 @@ public class Factura implements Serializable {
 
 	public String getTotalDescuentoSTR() {
 		return Utils.formateadorMiles(this.totalDescuentos);
-	}
-
-	public Integer getComandasPendientes() {
-		return comandasPendientes;
-	}
-
-	public void setComandasPendientes(Integer comandasPendientes) {
-		this.comandasPendientes = comandasPendientes;
 	}
 
 }
