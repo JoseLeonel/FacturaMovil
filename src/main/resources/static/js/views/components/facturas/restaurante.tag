@@ -67,7 +67,7 @@
                 </div> 
             </div>
             <div class="modal-footer">
-                <button type="button" onclick ="{__comentarioComanda}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+                <button type="button" onclick ="{__comentarioComanda}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aceptar")}</button>
             </div>
         </div>
     </div>
@@ -1257,8 +1257,6 @@ __AgregarProductoDePantalla(e){
    self.articulo = item;
    self.update()
    if(self.articulo.comanda == 1){
-	    console.log("__AgregarProductoDePantalla");
-	    console.log(item);
 	    $( "#comentarioArticulo" ).focus()
 	    $( "#comentarioArticulo" ).val("")
 	    $('#modalComentarioComanda').modal()                      // initialized with defaults
@@ -1750,13 +1748,48 @@ __CambiarDescuento(e){
 *Cambiar Cantidad del Articulo
 **/
 __CambiarCantidad(e){
-   self.item = e.item; 
-   self.update()
-   $( "#cambiarCantidadArticulo" ).focus()
-   $( "#cambiarCantidadArticulo" ).val(self.item.cantidad)
-   $('#modalCambiarCantidad').modal()                      // initialized with defaults
-   $('#modalCambiarCantidad').modal({ keyboard: false })   // initialized with no keyboard
-   $('#modalCambiarCantidad').modal('show')                // initializes and invokes show immediately
+	
+	self.item = e.item; 
+	self.update()
+	
+	$.ajax({
+        type: 'GET',
+        url: 'findArticuloByCodigojax.do',
+        method:"GET",
+        data:{codigoArticulo: self.item.codigo},
+        success: function(data){
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                	swal('',data.message,'error');
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                	$.each(data.listaObjetos, function( index, modeloTabla ) {
+                        self.articulo  = modeloTabla
+                         if(modeloTabla.estado  == "Inactivo"){
+                            mensajeError($.i18n.prop("error.articulo.inactivo.inventario"))
+                            return
+                        }
+                        self.update()
+                    	if(self.articulo.comanda == 1){
+                	        sweetAlert("",$.i18n.prop("comanda.mensaje.cambiar.cantidad.articulo"), "info");
+                    	    self.update()
+                    	}else{
+                   		   $( "#cambiarCantidadArticulo" ).focus()
+                   		   $( "#cambiarCantidadArticulo" ).val(self.item.cantidad)
+                   		   $('#modalCambiarCantidad').modal()                      // initialized with defaults
+                   		   $('#modalCambiarCantidad').modal({ keyboard: false })   // initialized with no keyboard
+                   		   $('#modalCambiarCantidad').modal('show')                // initializes and invokes show immediately
+                    	}
+                    });
+                }
+            }
+        },
+	    error : function(xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });	
 }
 /**
 *Cambiar descripcion
@@ -3728,7 +3761,6 @@ _MostrarComandasPendientes(){
 *  Lista las comandas pendientes
 **/
 function __ListaComandasPendientes(factura){
-    console.log("__ListaComandasPendientes1");
 	self.registradosComanda = [];
     $.ajax({
         url: 'ListarComandasPendientesAjax.do',
@@ -3741,10 +3773,7 @@ function __ListaComandasPendientes(factura){
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
-                console.log(result.aaData);
-
-            	result.aaData.forEach(function(elemen){
-                    console.log(elemen);
+	           	result.aaData.forEach(function(elemen){
             		var obj = self.registradosComanda.find(o => o.key === elemen.codigo);
             		if(typeof obj == "undefined"){
             			//Si no  existe se agrupan
@@ -3778,8 +3807,6 @@ function __ListaComandasPendientes(factura){
             mensajeErrorServidor(xhr, status);
         }
     });	
-    
-    console.log(self.registradosComanda);
 }
 
 /**
@@ -3846,8 +3873,6 @@ function __actualizaArticuloComanda(cantidad){
 				}     
 		    })
 		} 	
-		console.log(cantidad);
-		console.log(cantidadRegistrada);
 		if(cantidad > cantidadRegistrada){		
 		   cantidad = cantidad - cantidadRegistrada;
 		   //Se envia agregar la cantidad de articulos nuevos
@@ -3856,9 +3881,6 @@ function __actualizaArticuloComanda(cantidad){
 	        sweetAlert("",$.i18n.prop("comanda.mensaje.elimina.articulo"), "info");
 		}
 	}
-	
-	console.log(self.pendientesComanda);
-
 } 
 
 
@@ -3923,20 +3945,19 @@ __EnviarCocina(){
 		     });			
 		});
 	});
-	console.log(detalles);
 	
 	var informacion = {
 		id: self.factura.id,
 		mesa: self.mesa.descripcion,        	
 		mesero: "",        	
-	    nombreImpresora:"PDF",
+	    nombreImpresora:"PDF1",
 	    cantidadCaracteresLinea:"40",
 	    formatoTiquete:"",
 	    detalles:detalles
 	}    
 	var JSONData = JSON.stringify(informacion);
-	console.log(JSONData);
 
+	//Envia a imprimir a la comanda
     $.ajax({
         contentType: 'application/json',
         url: 'http://localhost:8033/service/CrearOrdenCocinaAjax',
@@ -3944,13 +3965,34 @@ __EnviarCocina(){
         data : JSONData,
         method:"POST",
         success: function (result) {
-        	console.log(result);
+        	//Se actualiza la comanda
+        	  $.ajax({
+        	        url: 'ActualizarOrdenesComandaAjax',
+        	        datatype: "json",
+        	        data: {
+        	        	idFactura: self.factura.id,
+        	      		idMesa: self.mesa.id,
+        	        },
+        	        method:"POST",
+        	        success: function (result) {
+        	        	console.log(result);
+        	        },
+        	        error: function (xhr, status) {
+        	            console.log(xhr);
+        	            mensajeErrorServidor(xhr, status);
+        	        }
+        	    });
+        	 
+        	   $('#modalComandasPendientes').modal('hide')  
+        	   self.mostrarOrdenesCocinaPendientes = false;
         },
         error: function (xhr, status) {
             console.log(xhr);
             mensajeErrorServidor(xhr, status);
         }
     });		
+
+  
 } 
 
 

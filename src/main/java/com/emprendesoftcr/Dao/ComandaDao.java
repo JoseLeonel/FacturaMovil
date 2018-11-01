@@ -11,9 +11,11 @@ public interface ComandaDao {
 	void modificar(ComandaMesa comandaMesa);
 
 	void eliminar(ComandaMesa comandaMesa);
-
+	
 	ComandaMesa buscar(Long id);
 
 	Collection<ComandaMesa> buscarPorFacturaMesa(Long idFactura, Long idMesa);
+
+	void actualizarComandaMesaFacturas(Long idFactura, Long idMesa);
 
 }

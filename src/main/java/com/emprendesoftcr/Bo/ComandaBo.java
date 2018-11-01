@@ -12,6 +12,8 @@ public interface ComandaBo {
 
 	void eliminar(ComandaMesa comandaMesa);
 
+	void actualizarComandaMesaFacturas(Long idFactura, Long idMesa);
+	
 	ComandaMesa buscar(Long id);
 
 	Collection<ComandaMesa> buscarPorFacturaMesa(Long idFactura, Long idMesa);

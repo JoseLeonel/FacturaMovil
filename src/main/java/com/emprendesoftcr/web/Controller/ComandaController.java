@@ -6,17 +6,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.support.SessionStatus;
 
+import com.emprendesoftcr.Bo.ComandaBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
@@ -25,7 +22,6 @@ import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.modelo.ComandaMesa;
 import com.emprendesoftcr.modelo.Usuario;
-import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
 
@@ -34,6 +30,9 @@ public class ComandaController {
 
 	@Autowired
 	private DataTableBo dataTableBo;
+
+	@Autowired
+	private ComandaBo comandaBo;
 
 	@Autowired
 	private UsuarioBo usuarioBo;
@@ -47,6 +46,7 @@ public class ComandaController {
 	}
 
 	private static final Function<Object, ComandaMesa> TO_COMMAND_COMANDA_MESA = new Function<Object, ComandaMesa>() {
+
 		@Override
 		public ComandaMesa apply(Object f) {
 			return (ComandaMesa) f;
@@ -77,16 +77,15 @@ public class ComandaController {
 		dataTableFilter = new JqGridFilter("idEmpresa", "'" + usuario.getEmpresa().getId() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
-		if(estado > 0) {
+		if (estado > 0) {
 			// Estado pendientes de enviar
 			dataTableFilter = new JqGridFilter("estado", "'" + estado + "'", "=");
-			delimitadores.addFiltro(dataTableFilter);			
+			delimitadores.addFiltro(dataTableFilter);
 		}
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, ComandaController.TO_COMMAND_COMANDA_MESA);
 	}
 
-	
 	/**
 	 * Crear la Factura
 	 * @param request
@@ -96,18 +95,18 @@ public class ComandaController {
 	 * @param status
 	 * @return
 	 */
-	/*@SuppressWarnings("rawtypes")
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ActualizarOrdenesComandaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator actualizarOrdenesComandaAjax(HttpServletRequest request, ModelMap model, @ModelAttribute FacturaCommand facturaCommand, BindingResult result, SessionStatus status) {
+	public RespuestaServiceValidator actualizarOrdenesComandaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idFactura, @RequestParam Long idMesa) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-			return this.crearFactura(facturaCommand, result, usuario);
+			comandaBo.actualizarComandaMesaFacturas(idFactura, idMesa);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("actualizar.ordenes.comanda.correctamente");
 		} catch (Exception e) {
 			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
 			respuestaServiceValidator.setMessage(e.getMessage());
 			return respuestaServiceValidator;
 		}
-	}*/
+	}
 }

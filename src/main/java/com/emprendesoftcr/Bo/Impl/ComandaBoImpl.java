@@ -36,6 +36,12 @@ public class ComandaBoImpl implements ComandaBo {
 		comandaDao.eliminar(comandaMesa);
 	}
 
+	@Transactional
+	@Override
+	public void actualizarComandaMesaFacturas(Long idFactura, Long idMesa) {
+		comandaDao.actualizarComandaMesaFacturas(idFactura, idMesa);
+	}
+
 	/**
 	 * Busca por Id
 	 * @see com.factura.bo.CuentaCobrarBo#buscar(java.lang.Integer)
