@@ -121,7 +121,7 @@ public class FacturaBoImpl implements FacturaBo {
 	 * @see com.emprendesoftcr.Bo.FacturaBo#findByConsecutivoAndEmpresa(java.lang.String, com.emprendesoftcr.modelo.Empresa)
 	 */
 	@Override
-	public Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) throws Exception {
+		public Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) throws Exception {
 		Factura factura = null;
 		try {
 			factura = facturaDao.findByConsecutivoAndEmpresa(consecutivo, empresa);
@@ -489,6 +489,9 @@ public class FacturaBoImpl implements FacturaBo {
 
 			Empresa empresa = empresaBo.buscar(facturaCommand.getEmpresa().getId());
 			// Se actualizan los datos de la factura command
+			if(empresa.getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
+				facturaCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA);
+			}
 			facturaCommand.setTotal(facturaCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotal());
 			facturaCommand.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
 			facturaCommand.setTotalCambio(facturaCommand.getTotalCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambio());

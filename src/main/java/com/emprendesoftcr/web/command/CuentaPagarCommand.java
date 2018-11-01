@@ -20,6 +20,12 @@ public class CuentaPagarCommand {
 
 	private Double		totalSaldo;
 
+	private String		totalSTR;
+
+	private String		totalAbonoSTR;
+
+	private String		totalSaldoSTR;
+
 	private Date			fechaCredito;
 	private String		fechaCreditoSTR;
 	private String		created_atSTR;
@@ -54,6 +60,9 @@ public class CuentaPagarCommand {
 		this.created_at = cuentaPagar.getCreated_at();
 		this.updated_at = cuentaPagar.getUpdated_at();
 		this.empresa = cuentaPagar.getEmpresa();
+		this.totalAbonoSTR = cuentaPagar.getTotalAbonoSTR();
+		this.totalSaldoSTR = cuentaPagar.getTotalSaldoSTR();
+		this.totalSTR = cuentaPagar.getTotalSTR();
 	}
 
 	public CuentaPagarCommand() {
@@ -66,6 +75,30 @@ public class CuentaPagarCommand {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getTotalSTR() {
+		return totalSTR;
+	}
+
+	public void setTotalSTR(String totalSTR) {
+		this.totalSTR = totalSTR;
+	}
+
+	public String getTotalAbonoSTR() {
+		return totalAbonoSTR;
+	}
+
+	public void setTotalAbonoSTR(String totalAbonoSTR) {
+		this.totalAbonoSTR = totalAbonoSTR;
+	}
+
+	public String getTotalSaldoSTR() {
+		return totalSaldoSTR;
+	}
+
+	public void setTotalSaldoSTR(String totalSaldoSTR) {
+		this.totalSaldoSTR = totalSaldoSTR;
 	}
 
 	public Date getCreated_at() {
@@ -148,14 +181,10 @@ public class CuentaPagarCommand {
 		this.usuarioCreacion = usuarioCreacion;
 	}
 
-	
-
-	
 	public String getEstado() {
 		return estado;
 	}
 
-	
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
@@ -168,26 +197,20 @@ public class CuentaPagarCommand {
 		this.fechaCreditoSTR = fechaCreditoSTR;
 	}
 
-	
 	public String getCreated_atSTR() {
 		return created_atSTR;
 	}
 
-	
 	public void setCreated_atSTR(String created_atSTR) {
 		this.created_atSTR = created_atSTR;
 	}
 
-	
 	public String getUpdated_atSTR() {
 		return updated_atSTR;
 	}
 
-	
 	public void setUpdated_atSTR(String updated_atSTR) {
 		this.updated_atSTR = updated_atSTR;
 	}
-	
-	
 
 }

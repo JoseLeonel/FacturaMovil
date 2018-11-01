@@ -18,6 +18,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.emprendesoftcr.Utils.Utils;
+
 @Entity
 @Table(name = "cuentas_pagar")
 public class CuentaPagar implements Serializable {
@@ -151,6 +153,17 @@ public class CuentaPagar implements Serializable {
 
 	public void setTotalSaldo(Double totalSaldo) {
 		this.totalSaldo = totalSaldo;
+	}
+	public String getTotalSTR() {
+		return Utils.formateadorMiles(this.total);
+	}
+	public String getTotalAbonoSTR() {
+		return Utils.formateadorMiles(this.totalAbono);
+	}
+
+
+	public String getTotalSaldoSTR() {
+		return Utils.formateadorMiles(this.totalSaldo);
 	}
 
 	public Date getFechaCredito() {

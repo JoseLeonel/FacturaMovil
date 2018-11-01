@@ -168,6 +168,7 @@ public class AbonoController {
 			abono.setEstado(Constantes.ABONO_ESTADO_PAGADO);
 			abono.setCuentaCobrar(cuentaCobrar);
 			abonoBo.modificar(abono);
+			cuentaCobrar.setUpdated_at(new Date());
 			cuentaCobrar.setTotalAbono(abono.getTotal() + cuentaCobrar.getTotalAbono());
 			cuentaCobrar.setTotalSaldo(cuentaCobrar.getTotalSaldo() - abono.getTotal());
 			if (cuentaCobrar.getTotalSaldo().equals(Constantes.ZEROS_DOUBLE)) {

@@ -2126,9 +2126,15 @@ __AgregarNombreFacturaTemporal(){
     self.mesa.id = self.factura.mesa.id
     self.update()
     aplicarFactura(1)      
+<<<<<<< HEAD
     /* if(self.factEspera !=null){
       __FacturaEnEspera(self.factEspera) 
     } */
+=======
+    //if(self.factEspera !=null){
+    //  __FacturaEnEspera(self.factEspera) 
+    //}
+>>>>>>> master
     self.factEspera =null
     self.update()
     
@@ -3503,13 +3509,13 @@ function __Teclas(){
 * Contabilizar los billetes de acuerdo a como se vayan dando click en la pantalla
 */
 _sumarBilletes(e){
-    var item = e.item
-    if(self.primeraVezBilleteClick == false){
+     if(self.primeraVezBilleteClick == false){
       
         self.factura.totalEfectivo = 0
         self.primeraVezBilleteClick = true
         self.update()
     }
+    var item = e.item
     if(item.valor == 0 ){
        self.factura.totalEfectivo = 0
        self.factura.totalTarjeta  = 0
@@ -3518,7 +3524,7 @@ _sumarBilletes(e){
        self.totalCambioPagar = 0
        self.claseCambioDinero     = "entregarCambioPositivo"
     }else{
-         self.factura.totalEfectivo = __valorNumerico(item.valor) + __valorNumerico(self.factura.totalEfectivo)
+       self.factura.totalEfectivo += __valorNumerico(item.valor) 
        $('.efectivo').val(self.factura.totalEfectivo)
         self.update()
         var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
@@ -3528,9 +3534,7 @@ _sumarBilletes(e){
         self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.totalComprobante)
         self.claseCambioDinero  = __valorNumerico(sumaMontosEntregadosParaCambios) > __valorNumerico(self.factura.totalComprobante)?'entregarCambioPositivo':'entregarCambioNegativo'
         self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
-        $(".totalEfectivo").val(self.factura.totalEfectivo)
-        $('.efectivo').val(self.totalCambioPagar)
-
+        $(".totalEfectivo").val(self.factura.totalEfectivo) 
     }
     self.update()
 }
