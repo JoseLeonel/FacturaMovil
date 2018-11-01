@@ -2000,9 +2000,9 @@ __AgregarNombreFacturaTemporal(){
     self.mesa.id = self.factura.mesa.id
     self.update()
     aplicarFactura(1)      
-    if(self.factEspera !=null){
-      __FacturaEnEspera(self.factEspera) 
-    }
+    //if(self.factEspera !=null){
+    //  __FacturaEnEspera(self.factEspera) 
+    //}
     self.factEspera =null
     self.update()
     
@@ -2070,7 +2070,7 @@ __Limpiar(){
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
-     self.primeraVezBilleteClick = false
+    self.primeraVezBilleteClick = false
     self.mostrarListadoArticulos == false
     self.detail                = []
     self.mensajesBackEnd       = []
