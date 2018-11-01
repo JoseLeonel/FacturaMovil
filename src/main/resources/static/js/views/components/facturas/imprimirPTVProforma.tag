@@ -407,7 +407,7 @@ __ImprimirfacturaImpresa(){
  * **/
 function buscarCondicionPago(){
     for (var count = 0; count < self.comboCondicionPagos.length; count++) {
-        if (self.comboCondicionPagos[count].estado == self.facturaImpresa.condicionVenta ){// Si existe actualiza la cantidad
+        if (self.comboCondicionPagos[count].condicionVenta == self.facturaImpresa.condicionVenta ){// Si existe actualiza la cantidad
             self.facturaImpresa.condicionVenta =self.comboCondicionPagos[count].descripcion
             self.update()
             break;
@@ -439,7 +439,7 @@ function __comboCondicionPago(){
  * **/
 function buscarTipoDocumento(){
     for (var count = 0; count < self.comboTipoDocumentos.length; count++) {
-        if (self.comboTipoDocumentos[count].estado == self.facturaImpresa.tipoDoc ){// Si existe actualiza la cantidad
+        if (self.comboTipoDocumentos[count].tipoDoc == self.facturaImpresa.tipoDoc ){// Si existe actualiza la cantidad
             self.facturaImpresa.tipoDoc =self.comboTipoDocumentos[count].descripcion
             self.update()
             break;

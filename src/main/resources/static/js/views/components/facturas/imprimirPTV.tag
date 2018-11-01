@@ -24,7 +24,9 @@
                         <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.condicion.venta")} </strong>{facturaImpresa.condicionVenta}</div>
                         <div class="encabezado" show ="{facturaImpresa.plazoCredito > 0}"><strong>{$.i18n.prop("tikect.encabezado.plazo.credito")} dias </strong>{facturaImpresa.plazoCredito}</div>
                         <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 0}"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>{facturaImpresa.tipoDoc}</div>
-                        <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 1}"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>Factura</div>
+                        <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc == '02' }"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>Nota Debito</div>
+                        <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc == '03' }"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>Nota Credito</div>
+                        <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc == '01' }"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>Factura</div>
                         <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.moneda")}        </strong>{facturaImpresa.codigoMoneda}</div>
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc != '88' &&  facturaImpresa.numeroConsecutivo != ""}"><strong>{$.i18n.prop("tikect.encabezado.numeroFactura")} </strong>{facturaImpresa.numeroConsecutivo}</div>
                         <div class=" encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0  &&  facturaImpresa.clave != ""}"><strong>{$.i18n.prop("tikect.encabezado.clave")}</strong> </div>
@@ -451,7 +453,7 @@ function __comboCondicionPago(){
  * **/
 function buscarTipoDocumento(){
     for (var count = 0; count < self.comboTipoDocumentos.length; count++) {
-        if (self.comboTipoDocumentos[count].estado == self.facturaImpresa.tipoDoc ){// Si existe actualiza la cantidad
+        if (self.comboTipoDocumentos[count].tipoDoc == self.facturaImpresa.tipoDoc ){
             self.facturaImpresa.tipoDoc =self.comboTipoDocumentos[count].descripcion
             self.update()
             break;

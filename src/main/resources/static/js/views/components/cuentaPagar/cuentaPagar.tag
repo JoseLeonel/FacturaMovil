@@ -17,7 +17,7 @@
                 <div  show={mostrarFiltros}  class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
                     <form id="filtros" name="filtros">              
                         <div class= "row">
-                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                                 <div class="form-group">
                                     <label  >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
                                     <div  class="form-group input-group date" data-provide="datepicker"    data-date-format="yyyy-mm-dd">
@@ -28,7 +28,7 @@
                                     </div>	                             
                                 </div>  
                             </div>             
-                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label  >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
@@ -41,7 +41,7 @@
                                     </div>
                                 </div>  
                             </div>
-                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                                 <div class="form-group">
                                     <label>{$.i18n.prop("proveedor.titulo")} </label>  
                                     <select  class="form-control selectProveedores" id="idProveedor" name="idProveedor" data-live-search="true">
@@ -49,7 +49,16 @@
                                         <option  data-tokens="{nombreCompleto}" each={proveedores.data}  value="{id}"  >{nombreCompleto}</option>
                                     </select>
                                 </div>  
-                            </div>                      
+                            </div>    
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                <div class="form-group">
+                                    <label>{$.i18n.prop("combo.estado")} </label>  
+                                    <select  class="form-control selectEstado estado" id="estado" name="estado" >
+                                        <option  data-tokens="{$.i18n.prop("todos.select")}"  value="0"  >{$.i18n.prop("todos.select")}</option>
+                                        <option   each={estados}  value="{codigo}"  >{descripcion}</option>
+                                    </select>
+                                </div>  
+                            </div>                   
                         </div>
                     </form>  
                 </div>
@@ -468,6 +477,7 @@
             todayHighlight:true,
         }
         );
+        __ComboEstadosCuentaCobrar()
         window.addEventListener( "keydown", function(evento){
                 $(".errorServerSideJgrid").remove();
             }, false );
@@ -591,6 +601,25 @@ var reglasDeValidacionParametros = function() {
 	return validationOptions;
 };
 
+/**
+*  Crear el combo de estados
+**/
+function __ComboEstadosCuentaCobrar(){
+    self.estados =[]
+    self.update()
+    self.estados.push({
+        codigo: "Pendiente",
+        descripcion:$.i18n.prop("cuentaCobrar.estado.pendiente")
+     });
+    self.estados.push({
+        codigo: "Cerrada",
+        descripcion:$.i18n.prop("cuentaCobrar.estado.cerrada")
+     });
+    
+    self.update();
+}
+
+
 /*
  * Muestra los filtros avanzados
  */
@@ -642,6 +671,7 @@ function listadoConsulta(){
                     ActivarEventoFiltro(".tableListar")
                     __mostrarListadoAbonoPagar()
                     __mostrarCuentaPorPagar()
+                    TotalesGenerales(result.aaData)
                     
                 }else{
                     __InformacionDataTable();
@@ -655,6 +685,30 @@ function listadoConsulta(){
             }
         });
 
+}
+
+/**
+*  Suma de totales de cuenta por cobrar 
+**/
+function TotalesGenerales(data){
+     self.total                     = 0
+    self.totalAbono                = 0
+    self.totalSaldo                = 0
+    self.totalSTR                     = 0
+    self.totalAbonoSTR                = 0
+    self.totalSaldoSTR                = 0
+    self.update()
+    
+    for(var i in data) { 
+        self.total      += data[i].total;
+        self.totalAbono += data[i].totalAbono;
+        self.totalSaldo += data[i].totalSaldo;
+     }
+     self.total = formatoDecimales(self.total,2)
+     self.totalAbono = formatoDecimales(self.totalAbono,2)
+     self.totalSaldo = formatoDecimales(self.totalSaldo,2)
+     
+     self.update()
 }
 
 /**

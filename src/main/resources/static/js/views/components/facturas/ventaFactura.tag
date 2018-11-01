@@ -64,9 +64,11 @@
                 <a class="pull-left" href="#"    onclick= { __CrearFacturaTemporal}  title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
                 <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
                 <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
+                   
             </div>
         </div>      
-    </div>              
+    </div>    
+           
     <div>
         <form id="FormPaginacion">
             <input type="hidden" name="id" id="id" value="{parametrosPaginacion.cantidadPorPagina}">
@@ -110,10 +112,10 @@
 </div>
 <!--fin del modal-->
 <!--Inicio de la Venta-->
-<div show={mostarParaCrearNuevaVentas}>
+<div show={mostarParaCrearNuevaVentas} class="contenedor-venta">
     <div class="container-fluid">
         <div class="row no-space">
-            <div class="col-md-5 col-sm-5 col-lg-5 col-xs-12 pull-right" style="padding: 0px 12px">
+            <div class="col-md-5 col-sm-5 col-lg-5 col-xs-12 pull-right" style="padding: 2px 12px">
                 <div class="block panel ">                    
                     <div id="listadoProdcutos">{$.i18n.prop("titulo.listado.venta")}   {factura.id>0?factura.id:'' } {factura.nombreFactura}</div>
                     <hr style="margin: 2px 0px 0px 0px; border-color: #e4e4e4; margin-top: 0px">
@@ -2344,6 +2346,7 @@ _AtrasFacturaFinal(){
     self.mostrarFormularioPago = false
     self.mostarParaCrearNuevaVentas = true;
     self.mostarParaCrearNuevaFactura = true
+    self.primeraVezBilleteClick = false
     self.error = false
     self.update()
 }
@@ -3189,7 +3192,7 @@ function __Teclas(){
     }
     //Limpiar
     if(tecla ==121){
-      refrescarPagina()
+       __Init()
     }
     }, false );
 }
@@ -3220,7 +3223,7 @@ _sumarBilletes(e){
        self.totalCambioPagar = 0
        self.claseCambioDinero     = "entregarCambioPositivo"
     }else{
-       self.factura.totalEfectivo = __valorNumerico(item.valor) + __valorNumerico(self.factura.totalEfectivo)
+       self.factura.totalEfectivo += __valorNumerico(item.valor) 
        $('.efectivo').val(self.factura.totalEfectivo)
         self.update()
         var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
@@ -3230,8 +3233,7 @@ _sumarBilletes(e){
         self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.totalComprobante)
         self.claseCambioDinero  = __valorNumerico(sumaMontosEntregadosParaCambios) > __valorNumerico(self.factura.totalComprobante)?'entregarCambioPositivo':'entregarCambioNegativo'
         self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
-        $(".totalEfectivo").val(self.totalCambioPagar)
-
+        $(".totalEfectivo").val(self.factura.totalEfectivo) 
     }
     self.update()
 }
@@ -3241,7 +3243,7 @@ _sumarBilletes(e){
 function cargaBilletes(){
     self.billetes = []
     self.update()
-    _incluirBilletes("₡","50,000",50000,'/dist/img/billete50000.jpg')
+      _incluirBilletes("₡","50,000",50000,'/dist/img/billete50000.jpg')
     _incluirBilletes("₡","20,000",20000,'/dist/img/billete20000.jpg')
     _incluirBilletes("₡","10,000",10000,'/dist/img/billete10000.jpg')
     _incluirBilletes("₡","5,000",5000,'/dist/img/billete5000.jpg')

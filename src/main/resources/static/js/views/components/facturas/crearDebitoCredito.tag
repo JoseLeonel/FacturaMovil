@@ -2113,14 +2113,14 @@ function __ComboTipoDocumentos(){
     self.comboTipoDocumentos = []
     self.comboTipoDocumentosRef = []
     self.update()
+    self.comboTipoDocumentos.push({
+         estado:"03",
+        descripcion:$.i18n.prop("factura.tipo.documento.nota.credito")
+    })
     
     self.comboTipoDocumentos.push({
          estado:"02",
         descripcion:$.i18n.prop("factura.tipo.documento.nota.debito")
-    })
-    self.comboTipoDocumentos.push({
-         estado:"03",
-        descripcion:$.i18n.prop("factura.tipo.documento.nota.credito")
     })
     self.update()
    self.comboTipoDocumentosRef.push({
