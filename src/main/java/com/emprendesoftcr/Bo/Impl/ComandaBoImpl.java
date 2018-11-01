@@ -38,8 +38,8 @@ public class ComandaBoImpl implements ComandaBo {
 
 	@Transactional
 	@Override
-	public void actualizarComandaMesaFacturas(Long idFactura, Long idMesa) {
-		comandaDao.actualizarComandaMesaFacturas(idFactura, idMesa);
+	public void actualizarComandaMesaFacturas(Long idMesa) {
+		comandaDao.actualizarComandaMesaFacturas(idMesa);
 	}
 
 	/**

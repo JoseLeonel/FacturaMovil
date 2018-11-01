@@ -16,6 +16,6 @@ public interface ComandaDao {
 
 	Collection<ComandaMesa> buscarPorFacturaMesa(Long idFactura, Long idMesa);
 
-	void actualizarComandaMesaFacturas(Long idFactura, Long idMesa);
+	void actualizarComandaMesaFacturas(Long idMesa);
 
 }

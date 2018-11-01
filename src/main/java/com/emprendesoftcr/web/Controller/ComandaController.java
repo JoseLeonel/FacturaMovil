@@ -95,10 +95,10 @@ public class ComandaController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ActualizarOrdenesComandaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator actualizarOrdenesComandaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idFactura, @RequestParam Long idMesa) {
+	public RespuestaServiceValidator actualizarOrdenesComandaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idMesa) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			comandaBo.actualizarComandaMesaFacturas(idFactura, idMesa);
+			comandaBo.actualizarComandaMesaFacturas(idMesa);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("actualizar.ordenes.comanda.correctamente");
 		} catch (Exception e) {
 			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());

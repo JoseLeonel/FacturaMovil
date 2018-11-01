@@ -52,10 +52,9 @@ public class ComandaDaoImpl implements ComandaDao {
 	}
 
 	@Override
-	public void actualizarComandaMesaFacturas(Long idFactura, Long idMesa) {
-		Query query = entityManager.createNativeQuery("update comanda_mesa set estado = 0 where mesa_id = :idMesa and factura_id = :idFactura");
+	public void actualizarComandaMesaFacturas(Long idMesa) {
+		Query query = entityManager.createNativeQuery("update comanda_mesa set estado = 0 where mesa_id = :idMesa");
 		query.setParameter("idMesa", idMesa);
-		query.setParameter("idFactura", idFactura);	
 		query.executeUpdate();		
 	}
 	

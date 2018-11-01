@@ -3768,6 +3768,8 @@ _MostrarComandasPendientes(){
 **/
 function __ListaComandasPendientes(){
 	self.registradosComanda = [];
+	self.mesa.comandasPendientes = 0;
+    self.update()        	
     $.ajax({
         url: 'ListarComandasPendientesAjax.do',
         datatype: "json",
@@ -3778,10 +3780,11 @@ function __ListaComandasPendientes(){
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
-            	self.mesa.comandasPendientes = 0;
 	           	result.aaData.forEach(function(elemen){
-	           		self.mesa.comandasPendientes = self.mesa.comandasPendientes + 1;
-            		var obj = self.registradosComanda.find(o => o.key === elemen.codigo);
+	           		if(elemen.estado == 1){
+		           	  self.mesa.comandasPendientes = self.mesa.comandasPendientes + 1;
+	           		}
+	           		var obj = self.registradosComanda.find(o => o.key === elemen.codigo);
             		if(typeof obj == "undefined"){
             			//Si no  existe se agrupan
             			var datos = [];
@@ -3982,7 +3985,6 @@ __EnviarCocina(){
         	        url: 'ActualizarOrdenesComandaAjax',
         	        datatype: "json",
         	        data: {
-        	        	idFactura: self.factura.id,
         	      		idMesa: self.mesa.id,
         	        },
         	        method:"POST",
@@ -3997,6 +3999,7 @@ __EnviarCocina(){
         	 
         	   $('#modalComandasPendientes').modal('hide')  
         	   self.mostrarOrdenesCocinaPendientes = false;
+	       	   self.update()
         },
         error: function (xhr, status) {
             console.log(xhr);
@@ -4004,51 +4007,6 @@ __EnviarCocina(){
         }
     });		
 } 
-
-/**
-*  Consultar  especifico
-* 1  Mostrar  2  Modificar
-**/
-function __consultar(){
-    var formulario = $('#formulario').serialize();
-    $.ajax({
-        url: "MostrarMesaAjax.do",
-        datatype: "json",
-        data: formulario,
-        method:"GET",
-        success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                    //desahabilita  listado 
-                        Limpiar()
-                        self.mostrarListado   = false;
-                        self.mostrarFormulario  = true 
-                        //desahabilita boton modificar
-                        self.botonModificar   = true;
-                        // habilita el formulario
-                        self.botonAgregar     = false;                        
-                        self.mesa  =  modeloTabla
-                        self.update()
-                        $("#descripcion").val(self.mesa.descripcion);
-                        __Eventos()
-                        __ComboEstados()
-                    });
-                }
-            }
-            
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
-        }
-    });
-}
-
 
 </script>
 </venta-restaurante>

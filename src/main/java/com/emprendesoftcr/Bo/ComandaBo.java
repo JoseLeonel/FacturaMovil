@@ -12,7 +12,7 @@ public interface ComandaBo {
 
 	void eliminar(ComandaMesa comandaMesa);
 
-	void actualizarComandaMesaFacturas(Long idFactura, Long idMesa);
+	void actualizarComandaMesaFacturas(Long idMesa);
 	
 	ComandaMesa buscar(Long id);
 
