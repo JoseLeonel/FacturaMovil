@@ -1744,7 +1744,7 @@ __ImprimirTiquete(){
 function imprimirTiquete(){
     var factura = self.factura
     self.update()
-    riot.mount('tiquete-imprimir',{parametro:factura});
+    riot.mount('tiquete-imprimir',{factura:factura});
     var a = 1
 }
 /**

@@ -235,7 +235,7 @@ self.on('mount',function(){
         self.detalles = self.facturaImpresa.detalles
         self.facturaImpresa.fechaEmision = displayDate_detailPrint(self.facturaImpresa.fechaEmision)
         self.update()
-         getSubTotalGeneral()
+      
   
         $('.imprimirModalTiquete').modal('show'); 
     }
