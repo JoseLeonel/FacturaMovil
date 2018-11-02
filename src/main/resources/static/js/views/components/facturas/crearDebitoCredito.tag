@@ -1394,7 +1394,6 @@ __addProductToDetail(e){
        }else{
            cantidadAct = cantidadAct + codigo.charAt(i)
        }
-        console.log("pos=", i, "valor=", codigo.charAt(i));
     }
 // esto es para cuando un cliente quiere sumar varios productos
     if(existeMas == true){
@@ -1420,7 +1419,6 @@ function __sumarMasArticulo(codigo){
           cantidadAct = cantidadAct + codigo.charAt(i)
             
        }
-        console.log("pos=", i, "valor=", codigo.charAt(i));
     }
    for (var count = 0; count < self.detail.length; count++) {
         if (self.detail[count].codigo == self.articulo.codigo ){

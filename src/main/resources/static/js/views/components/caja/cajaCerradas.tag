@@ -270,7 +270,6 @@ function __listadoCajasActivas(){
         datatype: "json",
         method:"GET",
         success: function (result) {
-            console.log(result)
             if(result.aaData.length > 0){
                 self.cajas.aaData =  result.aaData
                 self.update();
@@ -528,7 +527,6 @@ function cerrarCajaAjax(){
                     data : formulario,
                     url : 'CerrarUsuarioCajaAjax.do',
                     success : function(data) {
-                        console.log(data);
                         if (data.status != 200) {
                         	serverMessageJson(data);
                             if (data.message != null && data.message.length > 0) {

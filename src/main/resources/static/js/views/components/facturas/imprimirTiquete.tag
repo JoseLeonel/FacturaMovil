@@ -43,7 +43,7 @@
                             <tr>
                             	<td></td>
                             	<td ><strong>{$.i18n.prop("tikect.total.comprobante")}</strong></td>
-                            	<td ><strong>{facturaImpresa.totalComprobante}</strong></td>
+                            	<td ><strong>{facturaImpresa.totalComprobanteSTR}</strong></td>
                             </tr>
                             <tr>
 	                            <td colspan="3">
@@ -242,9 +242,8 @@ self.on('mount',function(){
     buscarTipoDocumento()
     __comboCondicionPago()
     buscarCondicionPago()
-    self.facturaImpresa.totalComprobante = formatoDecimales(self.facturaImpresa.totalComprobante,2);
+    self.facturaImpresa.totalComprobanteSTR = formatoDecimales(self.facturaImpresa.totalComprobante,2);
     self.detalles.forEach(function(elemen){
-    		console.log(elemen);
             elemen.montoTotalLinea = formatoDecimales(elemen.montoTotalLinea,2);
         }
     )

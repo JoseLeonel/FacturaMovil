@@ -327,7 +327,6 @@ __agregar(){
                     data : formulario,
                     url : 'AgregarMotivoEntradaAjax.do',
                     success : function(data) {
-                        console.log(data);
                         if (data.status != 200) {
                         	serverMessageJson(data);
                             if (data.message != null && data.message.length > 0) {
