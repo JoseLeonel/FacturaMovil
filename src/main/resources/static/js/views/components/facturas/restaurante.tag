@@ -1743,7 +1743,9 @@ __ImprimirTiquete(){
 **/
 function imprimirTiquete(){
     var factura = self.factura
-    riot.mount('tiquete-imprimir',{factura:factura});
+    self.update()
+    riot.mount('tiquete-imprimir',{parametro:factura});
+    var a = 1
 }
 /**
 *  Obtiene el valor de lo digitado en el campo de efectivo
@@ -2429,6 +2431,10 @@ function crearFactura(estado){
     
     self.detalleFactura.data =self.detail
     self.update() 
+    if(estado ==1){
+       self.factura.tipoDoc = "04";
+    }
+    
     var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
     var fechaReferencia =$('#referenciaFechaEmision').val() !=null?referenciaFechaEmision.value:new Date() 
     var JSONDetalles = JSON.stringify( self.detalleFactura );
@@ -3057,7 +3063,7 @@ function __calculate() {
     self.factura.totalImpuesto           = Math.round(__valorNumerico(totalImpuesto))
     
     //Se verifica si la mesa tiene impuestos
-    if(self.factura.mesa.impuestoServicio){
+    if(self.factura.mesa.impuestoServicio  == true){
         self.factura.totalImpuestoServ       = Math.round(__valorNumerico(subTotal * 0.10))
         self.factura.totalVentaNeta          = Math.round(__valorNumerico((totalVenta-totalDescuento) + self.factura.totalImpuestoServ))
         self.factura.totalComprobante        = Math.round(__valorNumerico(totalComprobante + self.factura.totalImpuestoServ))

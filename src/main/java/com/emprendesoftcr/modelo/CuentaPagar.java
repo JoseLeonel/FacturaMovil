@@ -18,6 +18,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 
 @Entity
@@ -181,6 +182,13 @@ public class CuentaPagar implements Serializable {
 	public void setCreated_at(Date created_at) {
 		this.created_at = created_at;
 	}
+	public String getCreated_atSTR() {
+		if(this.created_at !=null) {
+			return Utils.getFechaGeneraReporte(this.created_at);	
+		}
+		return Constantes.EMPTY;
+	}
+
 
 	public Date getUpdated_at() {
 		return updated_at;
@@ -193,7 +201,11 @@ public class CuentaPagar implements Serializable {
 	public Proveedor getProveedor() {
 		return proveedor;
 	}
+	public String getProveedorSTR() {
+		return proveedor.getNombreCompleto();
+	}
 
+	
 	public void setProveedor(Proveedor proveedor) {
 		this.proveedor = proveedor;
 	}

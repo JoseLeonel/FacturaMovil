@@ -47,11 +47,11 @@
                                     </div>                                    
                                    <div class="form-group ">
                                         <label>{$.i18n.prop("factura.correoAlternativo")}</label> 
-                                        <input type="email" id="correoAlternativo" name="correoAlternativo" class="campo"  value="" >
+                                        <input type="email" id="correoAlternativo" name="correoAlternativo" class="campo correoAlternativo"  value="" >
                                     </div>
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("factura.nombreFactura")}</label> 
-                                        <input type="text" id="nombreFactura" name="nombreFactura" class="campo"  value="{factura.nombreFactura}" >
+                                        <input type="text" id="nombreFactura" name="nombreFactura" class="campo nombreFactura "  value="{factura.nombreFactura}" >
                                     </div>
                                     
                                     <div show = "{!mostrarCamposIngresoContado || factura.fechaCredito}" class="form-group ">
@@ -1174,6 +1174,9 @@ function __Init(){
     $(".nota").attr("maxlength", 80);
     $(".totalBanco").val(null)   
     $(".totalTarjeta").val(null)   
+    $(".nombreFactura").val(null)
+    $(".correoAlternativo").val(null)
+
     $(".totalEfectivo").val(null)   
     $('.precioVenta').val(null)
     $("#plazoCreditoL").val(null)

@@ -1,12 +1,19 @@
 package com.emprendesoftcr.web.Controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jxls.template.SimpleExporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -35,13 +42,11 @@ import com.emprendesoftcr.modelo.CuentaPagar;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.Usuario;
-import com.emprendesoftcr.web.command.CuentaCobrarCommand;
 import com.emprendesoftcr.web.command.CuentaPagarCommand;
 import com.emprendesoftcr.web.propertyEditor.CuentaPagarPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.ProveedorPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
-import com.emprendesoftcr.web.propertyEditor.VendedorPropertyEditor;
 import com.google.common.base.Function;
 
 /**
@@ -147,6 +152,42 @@ public class CuentaPagarController {
 			return delimitador;
 		}
 	}
+	
+////Descarga de manuales de usuario de acuerdo con su perfil
+@RequestMapping(value = "/DescargarDetalleTotalCuentasXPagarAjax.do", method = RequestMethod.GET)
+public void descargarDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam ,@RequestParam Long idProveedorParam,@RequestParam String estadoParam) throws IOException, Exception {
+
+	Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+	Proveedor proveedor = proveedorBo.buscar(idProveedorParam);
+
+	// Se buscan las facturas
+	Date fechaInicio = Utils.parseDate(fechaInicioParam);
+	Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+	Collection<CuentaPagar> cuentaCobras = cuentaPagarBo.cuentasPorPagarbyFechasAndEmpresaAndClienteAndEstado( fechaInicio, fechaFin, usuario.getEmpresa(),proveedor,estadoParam);
+
+	String nombreArchivo = "cuentaxPagar.xls";
+	response.setContentType("application/octet-stream");
+	response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+
+	// Se prepara el excell
+	ByteArrayOutputStream baos = createExcelCuentaPagar(cuentaCobras);
+	ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+
+	int BUFFER_SIZE = 4096;
+	byte[] buffer = new byte[BUFFER_SIZE];
+	int bytesRead = -1;
+	while ((bytesRead = inputStream.read(buffer)) != -1) {
+		response.getOutputStream().write(buffer, 0, bytesRead);
+	}
+}
+
+private ByteArrayOutputStream createExcelCuentaPagar(Collection<CuentaPagar> cuentaPagar) {
+	// Se prepara el excell
+	ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	List<String> headers = Arrays.asList("#cuenta", "Fecha Emision", "# Documento", "Proveedor", "Total", "Saldo", "Abono");
+	new SimpleExporter().gridExport(headers, cuentaPagar, "id, created_atSTR, factura, proveedorSTR, total,totalSaldo,totalAbono", baos);
+	return baos;
+}
 	
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/MostrarCuentaPagarAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")

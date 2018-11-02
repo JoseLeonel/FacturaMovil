@@ -1,5 +1,7 @@
 package com.emprendesoftcr.Dao.Impl;
 
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -9,7 +11,11 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.CuentaPagarDao;
+import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.CuentaPagar;
+import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Proveedor;
 
 /**
  * Clientes por sucursal de empresa ClienteDaoImpl.
@@ -49,6 +55,48 @@ public class CuentaPagarDaoImpl implements CuentaPagarDao {
 		} else {
 			return null;
 		}
+	}
+	
+	/**
+	 * Listado de cuentas por cobrar de un cliente
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<CuentaPagar> cuentasPorPagarbyFechasAndEmpresaAndClienteAndEstado(Date fechaInicio, Date fechaFin, Empresa empresa, Proveedor proveedor, String estado) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select obj from CuentaCobrar obj");
+		hql.append(" where obj.empresa = :empresa ");
+		if (estado != null) {
+			if (!estado.equals(Constantes.COMBO_TODOS)) {
+				hql.append(" and obj.estado = :estado ");
+
+			}
+		}
+		if (proveedor != null) {
+			if (!proveedor.equals(Constantes.COMBO_TODOS)) {
+				hql.append("and obj.proveedor = :proveedor ");
+
+			}
+		}
+		hql.append("and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin ");
+		Query query = entityManager.createQuery(hql.toString());
+		if (estado != null) {
+			if (!estado.equals(Constantes.COMBO_TODOS)) {
+				query.setParameter("estado", estado);
+
+			}
+		}
+		if (proveedor != null) {
+			if (!proveedor.equals(Constantes.COMBO_TODOS)) {
+				query.setParameter("proveedor", proveedor);
+
+			}
+		}
+
+		query.setParameter("empresa", empresa);
+		query.setParameter("fechaInicio", fechaInicio);
+		query.setParameter("fechaFin", fechaFin);
+		return query.getResultList();
 	}
 	
 	

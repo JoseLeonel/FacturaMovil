@@ -40,9 +40,17 @@
 	                            </tr>
 	                            <tr>
 	                            	<td class="text-right" colspan="2"><strong>{$.i18n.prop("tikect.total")}</strong></td>
-	                            	<td colspan="1"><strong>{facturaImpresa.totalComprobante}</strong></td>
-	                            </tr>
+	                            	<td colspan="1"><strong>{totalComprobanteImp}</strong></td>
+	  
+                                </tr>
 	                            <tr>
+		                            <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
+	                            </tr>                        
+	                            <tr>
+		                            <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
+	                            </tr>                        
+	  
+                                <tr>
 		                            <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
 	                            </tr>                        
 	                        </tbody>
@@ -220,33 +228,28 @@
 <script>
 
 var self = this;
-self.facturaImpresa   = opts.factura;  
+self.facturaImpresa   = opts.parametro;  
 self.detalles = []
-self.subTotalGeneral = 0
-
+self.subTotalGeneralImp = 0
+self.totalComprobanteImp = 0
 self.on('mount',function(){
     
     if(self.facturaImpresa.id > 0){
         self.detalles = []
         self.detalles =self.facturaImpresa.detalles
-        self.facturaImpresa.fechaEmision = displayDate_detail(self.facturaImpresa.fechaEmision)
+        self.totalComprobanteImp = formatoDecimales(self.facturaImpresa.totalComprobante,2);
+        self.detalles.forEach(function(elemen){
+                console.log(elemen);
+                elemen.montoTotalLinea = formatoDecimales(elemen.montoTotalLinea,2);
+            }
+        )
         self.update()
-       $('.imprimirModalTiquete').modal('show'); 
+         getSubTotalGeneral()
+  
+        $('.imprimirModalTiquete').modal('show'); 
     }
-    getSubTotalGeneral()
-    getMoneda()
-    __ComboTipoDocumentos()
-    buscarTipoDocumento()
-    __comboCondicionPago()
-    buscarCondicionPago()
-    self.facturaImpresa.totalComprobante = formatoDecimales(self.facturaImpresa.totalComprobante,2);
-    self.detalles.forEach(function(elemen){
-    		console.log(elemen);
-            elemen.montoTotalLinea = formatoDecimales(elemen.montoTotalLinea,2);
-        }
-    )
-    self.update()
-
+   
+  
 
    
    
@@ -254,32 +257,13 @@ self.on('mount',function(){
 })
 
 
-function getMoneda() {
-	var resultado = "CRC-Colones Costa Rica";
-	if(self.facturaImpresa.codigoMoneda == "CRC") {
-		resultado = "CRC-Colones Costa Rica";
-	}else if(self.facturaImpresa.codigoMoneda == "USD") {
-		resultado = "USD-Dolares";
-	}
-	
-    self.facturaImpresa.codigoMoneda = resultado
-    self.update()
-}
 
 function getSubTotalGeneral(){
     var resultado = __valorNumerico(self.facturaImpresa.subTotal) + __valorNumerico(self.facturaImpresa.totalDescuentos)
-    self.subTotalGeneral = redondearDecimales(resultado,5)
+    self.subTotalGeneralImp = redondearDecimales(resultado,5)
     self.update()
 }
 
-
-
-/**
-*Formato de Fecha
-**/
-function displayDate_detail(fecha) {
-    return fecha == null?"":moment(fecha).format('DD/MM/YYYY h:mm:ss a');
-}
 
 /**
 *Imprimir facturaImpresa
@@ -289,79 +273,6 @@ __ImprimirTiq(){
     $("#boton-regresar").focus()
 }
 
-/**
- * Buscar la condicion de Pago
- * **/
-function buscarCondicionPago(){
-    for (var count = 0; count < self.comboCondicionPagos.length; count++) {
-        if (self.comboCondicionPagos[count].condicionVenta == self.facturaImpresa.condicionVenta ){// Si existe actualiza la cantidad
-            self.facturaImpresa.condicionVenta =self.comboCondicionPagos[count].descripcion
-            self.update()
-            break;
-        }
-    }
-
-}
-
-/**
-* cargar los estados de la factura
-**/
-function __comboCondicionPago(){
-    self.comboCondicionPagos = []
-    self.update()
-    self.comboCondicionPagos.push({
-        estado:"01",
-        descripcion:$.i18n.prop("factura.codicion.venta.contado")
-    })
-    self.comboCondicionPagos.push({
-        estado:"02",
-        descripcion:$.i18n.prop("factura.codicion.venta.credito")
-    })
-    self.update()
-}
-
-
-/**
- * Buscar el tipo de documento
- * **/
-function buscarTipoDocumento(){
-    for (var count = 0; count < self.comboTipoDocumentos.length; count++) {
-        if (self.comboTipoDocumentos[count].tipoDoc == self.facturaImpresa.tipoDoc ){// Si existe actualiza la cantidad
-            self.facturaImpresa.tipoDoc =self.comboTipoDocumentos[count].descripcion
-            self.update()
-            break;
-        }
-    }
-}
-
-/**
-* cargar los tipos de Documento de la factura
-**/
-function __ComboTipoDocumentos(){
-    self.comboTipoDocumentos = []
-    self.update()
-    self.comboTipoDocumentos.push({
-        estado:"04",
-        descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
-    })
-    self.comboTipoDocumentos.push({
-         estado:"01",
-        descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
-    })
-    self.comboTipoDocumentos.push({
-         estado:"02",
-        descripcion:$.i18n.prop("factura.tipo.documento.nota.debito")
-    })
-    self.comboTipoDocumentos.push({
-         estado:"03",
-        descripcion:$.i18n.prop("factura.tipo.documento.nota.credito")
-    })
-     self.comboTipoDocumentos.push({
-         estado:"88",
-        descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
-    })
-    self.update()
-}
 
 /**
 *imprimir
