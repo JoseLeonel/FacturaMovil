@@ -678,7 +678,6 @@ __agregarEntradaInventario(){
                     data : formulario,
                     url : 'AgregarEntradaKardex.do',
                     success : function(data) {
-                        console.log(data);
                         if (data.status != 200) {
                         	serverMessageJson(data);
                             if (data.message != null && data.message.length > 0) {
@@ -734,7 +733,6 @@ __agregarSalidaInventario(){
                     data : formulario,
                     url : 'AgregarSalidaKardex.do',
                     success : function(data) {
-                        console.log(data);
                         if (data.status != 200) {
                         	serverMessageJson(data);
                             if (data.message != null && data.message.length > 0) {
@@ -1183,7 +1181,6 @@ __agregar(){
                     data : formulario,
                     url : 'AgregarArticuloAjax.do',
                     success : function(data) {
-                        console.log(data);
                         if (data.status != 200) {
                         	serverMessageJson(data);
                             if (data.message != null && data.message.length > 0) {

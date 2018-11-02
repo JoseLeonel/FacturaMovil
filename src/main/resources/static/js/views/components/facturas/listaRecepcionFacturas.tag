@@ -539,7 +539,6 @@ __Busqueda(){
             },
             error: function (xhr, status) {
                 mensajeErrorServidor(xhr, status);
-                console.log(xhr);
             }
         });
      }

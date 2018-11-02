@@ -392,7 +392,6 @@ __agregar(){
                     data : formulario,
                     url : 'AgregarUsuarioCajaAjax.do',
                     success : function(data) {
-                        console.log(data);
                         if (data.status != 200) {
                         	serverMessageJson(data);
                             if (data.message != null && data.message.length > 0) {
@@ -626,7 +625,6 @@ function cerrarCajaAjax(){
                     data : formulario,
                     url : 'CerrarUsuarioCajaAjax.do',
                     success : function(data) {
-                        console.log(data);
                         if (data.status != 200) {
                         	serverMessageJson(data);
                             if (data.message != null && data.message.length > 0) {

@@ -664,7 +664,6 @@ __agregar(){
                     data : formulario,
                     url : 'AgregarArticuloAjax.do',
                     success : function(data) {
-                        console.log(data);
                         if (data.status != 200) {
                         	serverMessageJson(data);
                             if (data.message != null && data.message.length > 0) {
@@ -757,7 +756,6 @@ __Modificar(){
                 }
             },
             error : function(xhr, status) {
-                 console.log(status);
                  mensajeErrorServidor(xhr, status);
             }
         });
