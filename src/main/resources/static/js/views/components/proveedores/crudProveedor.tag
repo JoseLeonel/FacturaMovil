@@ -339,7 +339,6 @@ function __listadoEmpresasActivas(){
         datatype: "json",
         method:"GET",
         success: function (result) {
-            console.log(result)
             if(result.aaData.length > 0){
                 self.empresas.aaData =  result.aaData
                 self.update();

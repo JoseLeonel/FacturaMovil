@@ -329,7 +329,6 @@ __agregar(){
                     data : formulario,
                     url : 'AgregarTipoCambioAjax.do',
                     success : function(data) {
-                        console.log(data);
                         if (data.status != 200) {
                         	serverMessageJson(data);
                             if (data.message != null && data.message.length > 0) {
@@ -510,7 +509,6 @@ function cerrarTipoCambioAjax(){
                     data : formulario,
                     url : 'DesactivarTipoCambioAjax.do',
                     success : function(data) {
-                        console.log(data);
                         if (data.status != 200) {
                         	serverMessageJson(data);
                             if (data.message != null && data.message.length > 0) {

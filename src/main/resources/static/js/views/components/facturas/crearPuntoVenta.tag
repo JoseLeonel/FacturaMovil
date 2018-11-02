@@ -1592,7 +1592,6 @@ function __sumarMasArticulo(codigo,precio){
           cantidadAct = cantidadAct + codigo.charAt(i)
             
         }
-      // console.log("pos=", i, "valor=", codigo.charAt(i));
     }
    for (var count = 0; count < self.detail.length; count++) {
         if (self.detail[count].codigo == self.articulo.codigo ){

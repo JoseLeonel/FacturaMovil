@@ -839,7 +839,6 @@ function __agregarRegistro(transaccion,formulario,mensajeAlerAgregar,urlAgregar,
                     url : urlAgregar,
                     success : function(data) {
 
-                        console.log(data.listaObjetos);
                         if (data.status != 200) {
                         	serverMessageJson(data);
                             if (data.message != null && data.message.length > 0) {

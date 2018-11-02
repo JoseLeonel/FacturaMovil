@@ -1584,7 +1584,6 @@ __CambiarCantidad(e){
 *Cambiar descripcion
 **/
 __CambiarDescripcion(e){
-    console.log(e)
    self.item = e.item; 
    self.update()
   

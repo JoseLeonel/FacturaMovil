@@ -7,7 +7,7 @@
         <h1 >{$.i18n.prop("tikect.encabezado.comprobante")} {facturaImpresa.id}<h1>
         <div class="pantalla-imprimir">
             <div class="botones-imprimir">
-                <a href="#" class="boton-imprimir"  onclick = {__ImprimirTiq} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
+                <a href="#" class="boton-imprimir"  onclick = {__ImprimirTiqPrint} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
                 
             </div>
             <section class="zona-impresion" id="imprimemeTempo" name ="imprimemeTempo">
@@ -40,12 +40,8 @@
 	                            </tr>
 	                            <tr>
 	                            	<td class="text-right" colspan="2"><strong>{$.i18n.prop("tikect.total")}</strong></td>
-	                            	<td colspan="1"><strong>{totalComprobanteImp}</strong></td>
-	  
-                                </tr>
-	                            <tr>
-		                            <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
-	                            </tr>                        
+	                            	<td colspan="1"><strong>{facturaImpresa.totalComprobanteSTR}</strong></td>
+	                            </tr>
 	                            <tr>
 		                            <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
 	                            </tr>                        
@@ -228,7 +224,7 @@
 <script>
 
 var self = this;
-self.facturaImpresa   = opts.parametro;  
+self.facturaImpresa = opts.factura;  
 self.detalles = []
 self.subTotalGeneralImp = 0
 self.totalComprobanteImp = 0
@@ -236,56 +232,148 @@ self.on('mount',function(){
     
     if(self.facturaImpresa.id > 0){
         self.detalles = []
-        self.detalles =self.facturaImpresa.detalles
-        self.totalComprobanteImp = formatoDecimales(self.facturaImpresa.totalComprobante,2);
-        self.detalles.forEach(function(elemen){
-                console.log(elemen);
-                elemen.montoTotalLinea = formatoDecimales(elemen.montoTotalLinea,2);
-            }
-        )
+        self.detalles = self.facturaImpresa.detalles
+        self.facturaImpresa.fechaEmision = displayDate_detailPrint(self.facturaImpresa.fechaEmision)
         self.update()
          getSubTotalGeneral()
   
         $('.imprimirModalTiquete').modal('show'); 
     }
-   
-  
-
-   
-   
-
+    getSubTotalGeneralPrint()
+    getMonedaPrint()
+    __ComboTipoDocumentosPrint()
+    buscarTipoDocumentoPrint()
+    __comboCondicionPagoPrint()
+    buscarCondicionPagoPrint()
+    self.facturaImpresa.totalComprobanteSTR = formatoDecimales(self.facturaImpresa.totalComprobante,2);
+    self.detalles.forEach(function(elemen){
+        elemen.montoTotalLinea = formatoDecimales(elemen.montoTotalLinea,2);
+    })
+    self.update()
 })
 
 
+function getMonedaPrint() {
+	var resultado = "CRC-Colones Costa Rica";
+	if(self.facturaImpresa.codigoMoneda == "CRC") {
+		resultado = "CRC-Colones Costa Rica";
+	}else if(self.facturaImpresa.codigoMoneda == "USD") {
+		resultado = "USD-Dolares";
+	}
+	
+    self.facturaImpresa.codigoMoneda = resultado
+    self.update()
+}
 
-function getSubTotalGeneral(){
+function getSubTotalGeneralPrint(){
     var resultado = __valorNumerico(self.facturaImpresa.subTotal) + __valorNumerico(self.facturaImpresa.totalDescuentos)
     self.subTotalGeneralImp = redondearDecimales(resultado,5)
     self.update()
 }
 
 
+
+/**
+*Formato de Fecha
+**/
+function displayDate_detailPrint(fecha) {
+    return fecha == null?"":moment(fecha).format('DD/MM/YYYY h:mm:ss a');
+}
+
 /**
 *Imprimir facturaImpresa
 **/    
-__ImprimirTiq(){
-    __imprimir()
+__ImprimirTiqPrint(){
+    __imprimirPrint()
     $("#boton-regresar").focus()
 }
 
+/**
+ * Buscar la condicion de Pago
+ * **/
+function buscarCondicionPagoPrint(){
+    for (var count = 0; count < self.comboCondicionPagos.length; count++) {
+        if (self.comboCondicionPagos[count].condicionVenta == self.facturaImpresa.condicionVenta ){// Si existe actualiza la cantidad
+            self.facturaImpresa.condicionVenta =self.comboCondicionPagos[count].descripcion
+            self.update()
+            break;
+        }
+    }
+
+}
+
+/**
+* cargar los estados de la factura
+**/
+function __comboCondicionPagoPrint(){
+    self.comboCondicionPagos = []
+    self.update()
+    self.comboCondicionPagos.push({
+        estado:"01",
+        descripcion:$.i18n.prop("factura.codicion.venta.contado")
+    })
+    self.comboCondicionPagos.push({
+        estado:"02",
+        descripcion:$.i18n.prop("factura.codicion.venta.credito")
+    })
+    self.update()
+}
+
+
+/**
+ * Buscar el tipo de documento
+ * **/
+function buscarTipoDocumentoPrint(){
+    for (var count = 0; count < self.comboTipoDocumentos.length; count++) {
+        if (self.comboTipoDocumentos[count].tipoDoc == self.facturaImpresa.tipoDoc ){// Si existe actualiza la cantidad
+            self.facturaImpresa.tipoDoc =self.comboTipoDocumentos[count].descripcion
+            self.update()
+            break;
+        }
+    }
+}
+
+/**
+* cargar los tipos de Documento de la factura
+**/
+function __ComboTipoDocumentosPrint(){
+    self.comboTipoDocumentos = []
+    self.update()
+    self.comboTipoDocumentos.push({
+        estado:"04",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
+    })
+    self.comboTipoDocumentos.push({
+         estado:"01",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
+    })
+    self.comboTipoDocumentos.push({
+         estado:"02",
+        descripcion:$.i18n.prop("factura.tipo.documento.nota.debito")
+    })
+    self.comboTipoDocumentos.push({
+         estado:"03",
+        descripcion:$.i18n.prop("factura.tipo.documento.nota.credito")
+    })
+     self.comboTipoDocumentos.push({
+         estado:"88",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
+    })
+    self.update()
+}
 
 /**
 *imprimir
 **/
-function __imprimir(){
+function __imprimirPrint(){
     var objeto=document.getElementById('imprimemeTempo');  //obtenemos el objeto a imprimir
      var div = document.querySelector("#imprimemeTempo");
-    imprimirElemento(div)
+    imprimirElementoPrint(div)
 
 }
 
 
-function imprimirElemento(elemento){
+function imprimirElementoPrint(elemento){
   var ventana = window.open('', 'PRINT', 'height=400,width=600');
   ventana.document.write('<html><head><title>' + "" + '</title>');
   ventana.document.write('</head><body >');
