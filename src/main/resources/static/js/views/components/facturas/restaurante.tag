@@ -2559,10 +2559,12 @@ function mostrarPAgo(){
     self.mostarParaCrearNuevaVentas = false
     self.factura.totalEfectivo = self.factura.totalComprobante
     self.update()
-    $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(3))
+    $('#totalEfectivo').val(self.factura.totalComprobante)
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
     getSubTotalGeneral()
+    self.primeraVezBilleteClick = false    
+    self.primeraVezBilleteClick = false
     self.mostarParaCrearNuevaVentas = false
     self.factura.totalCambioPagar =0
     self.mostarParaCrearNuevaFactura = false
@@ -3368,7 +3370,7 @@ _sumarBilletes(e){
        self.totalCambioPagar = 0
        self.claseCambioDinero     = "entregarCambioPositivo"
     }else{
-       self.factura.totalEfectivo += __valorNumerico(item.valor) 
+       self.factura.totalEfectivo = __valorNumerico(item.valor) + __valorNumerico(self.factura.totalEfectivo)
        $('.efectivo').val(self.factura.totalEfectivo)
         self.update()
         var sumaMontosEntregadosParaCambios =__valorNumerico(self.factura.totalTarjeta)
@@ -3378,7 +3380,10 @@ _sumarBilletes(e){
         self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.totalComprobante)
         self.claseCambioDinero  = __valorNumerico(sumaMontosEntregadosParaCambios) > __valorNumerico(self.factura.totalComprobante)?'entregarCambioPositivo':'entregarCambioNegativo'
         self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
-        $(".totalEfectivo").val(self.factura.totalEfectivo) 
+         $(".totalEfectivo").val(self.factura.totalEfectivo)
+        $('.efectivo').val(self.totalCambioPagar)
+
+
     }
     self.update()
 }
