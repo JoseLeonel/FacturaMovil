@@ -604,11 +604,11 @@
                                     </div>
                                      <div class="form-group ">
                                         <label>{$.i18n.prop("factura.nombreFactura")}</label> 
-                                        <input type="text" id="nombreFactura" name="nombreFactura" class="form-control"  value="{factura.nombreFactura}" >
+                                        <input type="text" id="nombreFactura" name="nombreFactura" class="form-control nombreFactura"  value="{factura.nombreFactura}" >
                                     </div>
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("factura.correoAlternativo")}</label> 
-                                        <input type="email" id="correoAlternativo" name="correoAlternativo" class="form-control"  value="" >
+                                        <input type="email" id="correoAlternativo" name="correoAlternativo" class="form-control correoAlternativo"  value="{factura.correoAlternativo}" >
                                     </div>
                                     <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group ">
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 
@@ -2113,6 +2113,9 @@ function __Init(){
     $(".totalTarjeta").val(null)   
     $(".totalEfectivo").val(null)   
     $("#plazoCreditoL").val(null)
+    $(".nombreFactura").val(null)
+    $(".correoAlternativo").val(null)
+    
     $("#nota").val(null)
     $("#fechaCredito").val(null)
     $('.datepickerFechaCredito').datepicker(

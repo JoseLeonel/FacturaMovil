@@ -45,6 +45,10 @@
 	                            <tr>
 		                            <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
 	                            </tr>                        
+	  
+                                <tr>
+		                            <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
+	                            </tr>                        
 	                        </tbody>
                         </table> 
                     </div>
@@ -222,8 +226,8 @@
 var self = this;
 self.facturaImpresa = opts.factura;  
 self.detalles = []
-self.subTotalGeneral = 0
-
+self.subTotalGeneralImp = 0
+self.totalComprobanteImp = 0
 self.on('mount',function(){
     
     if(self.facturaImpresa.id > 0){
@@ -231,7 +235,9 @@ self.on('mount',function(){
         self.detalles = self.facturaImpresa.detalles
         self.facturaImpresa.fechaEmision = displayDate_detailPrint(self.facturaImpresa.fechaEmision)
         self.update()
-       $('.imprimirModalTiquete').modal('show'); 
+      
+  
+        $('.imprimirModalTiquete').modal('show'); 
     }
     getSubTotalGeneralPrint()
     getMonedaPrint()
@@ -261,7 +267,7 @@ function getMonedaPrint() {
 
 function getSubTotalGeneralPrint(){
     var resultado = __valorNumerico(self.facturaImpresa.subTotal) + __valorNumerico(self.facturaImpresa.totalDescuentos)
-    self.subTotalGeneral = redondearDecimales(resultado,5)
+    self.subTotalGeneralImp = redondearDecimales(resultado,5)
     self.update()
 }
 

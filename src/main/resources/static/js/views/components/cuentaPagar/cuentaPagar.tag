@@ -64,6 +64,8 @@
                 </div>
             </div>
             <div class="col-xs-12 text-right">
+                <a   show={hay_datos==true} onclick= {__CorreoAlternativo} class=" btn btn-success btn-correo"   title="Enviar Correo" href="#"> Enviar Correo</a>        
+                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar detalle transacciones" href="DescargarDetalleTotalCuentasXPagarAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&idProveedorParam={idProveedor}&estadoParam={estado}"> Descargar</a>        
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
             	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
             </div>
@@ -402,6 +404,7 @@
     self.mostrarListado            = true 
     self.botonModificar            = false
     self.botonAgregar              = false
+    self.hay_datos                 = false         
     
     self.mostrarListadoAbonoPagar      = false
     self.mostrarCrearAbonoPagar         = false
@@ -445,7 +448,9 @@
 	   cuentaPagar:{
            id:null
        }
+
     }
+    self.idProveedor = 0
     self.on('mount',function(){
         $("#filtros").validate(reglasDeValidacionParametros());
         $("#formulario").validate(reglasDeValidacion());
@@ -656,6 +661,10 @@ __Busqueda(){
 
 function listadoConsulta(){
          var formulario = $("#filtros").serialize();
+        self.fechaInicio =$('.fechaInicio').val()
+        self.fechaFin =$('.fechaFinal').val()
+      
+        self.estado = $('.estado').val()
         $("#tableListar").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListar')  
         $.ajax({
@@ -665,6 +674,13 @@ function listadoConsulta(){
             method:"GET",
             success: function (result) {
                 if(result.aaData.length > 0){
+                    self.hay_datos                 = true       
+                    self.fechaInicio =$('.fechaInicio').val()
+                    self.fechaFin =$('.fechaFinal').val()
+                    self.estado = $('.estado').val()
+                    self.idProveedor = $('.selectProveedores').val()
+                    self.
+                    self.update()
                     __InformacionDataTable();
                     loadListar(".tableListar",idioma_espanol,self.informacion_tabla,result.aaData)
                     agregarInputsCombos();
@@ -672,6 +688,7 @@ function listadoConsulta(){
                     __mostrarListadoAbonoPagar()
                     __mostrarCuentaPorPagar()
                     TotalesGenerales(result.aaData)
+
                     
                 }else{
                     __InformacionDataTable();

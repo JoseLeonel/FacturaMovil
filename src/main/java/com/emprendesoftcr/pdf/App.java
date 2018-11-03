@@ -33,7 +33,6 @@ public class App {
 
 	private Logger	log			= LoggerFactory.getLogger(this.getClass());
 
-	
 	BaseColor				bColor	= new BaseColor(220, 220, 220);
 
 	public static ByteArrayOutputStream main(String consecutivo, String tipoDoc, FacturaElectronica facturaElectronica) throws IOException, DocumentException, WriterException {
@@ -60,7 +59,9 @@ public class App {
 		// Cliente
 		if (facturaElectronica.getClienteCedula() != null) {
 			if (!facturaElectronica.getClienteCedula().equals(Constantes.EMPTY)) {
+				if(!facturaElectronica.getClienteCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
 				app.addClient(cb, font10B, font10, facturaElectronica);
+				}
 			}
 		}
 

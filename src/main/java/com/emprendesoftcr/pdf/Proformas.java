@@ -59,8 +59,16 @@ public class Proformas {
 		app.addEmisor(cb, font10B, font10, facturaElectronica, dir);
 
 		// Cliente
-		app.addClient(cb, font10B, font10, facturaElectronica);
-	
+		if (facturaElectronica.getClienteCedula() != null) {
+			if (!facturaElectronica.getClienteCedula().equals(Constantes.EMPTY)) {
+				if(!facturaElectronica.getClienteCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+				app.addClient(cb, font10B, font10, facturaElectronica);
+				}
+			}
+		}
+
+		
+			
 		app.addRectanguleProducts(cb, font10B);
 		app.addProductsTittle(cb, font10B);
 		app.addProducts(cb, font10, document, facturaElectronica, dir);
@@ -284,6 +292,7 @@ public class Proformas {
 				Font font10 = new Font(sansRegular, 10);
 				Font font10B = new Font(sansBold, 10);
 				this.addEmisor(cb, font10B, font10, facturaElectronica, dir);
+				
 				this.addClient(cb, font10B, font10, facturaElectronica);
 				this.addRectanguleProducts(cb, font10B);
 				this.addProductsTittle(cb, font10B);
