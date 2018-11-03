@@ -59,9 +59,6 @@ public class Mesa {
 	@Formula("(select count(*) from facturas fact where fact.mesa_id = id and fact.estado = 1)")
 	private Integer tieneFacturas;
 
-	@Formula("(select count(*) from comanda_mesa comanda where comanda.mesa_id = id and comanda.empresa_id = empresa_id and comanda.estado = 1)")
-	private Integer comandasPendientes;
-
 	public Mesa() {
 		super();
 	}
@@ -148,14 +145,6 @@ public class Mesa {
 
 	public void setTieneFacturas(Integer tieneFacturas) {
 		this.tieneFacturas = tieneFacturas;
-	}
-
-	public Integer getComandasPendientes() {
-		return comandasPendientes;
-	}
-
-	public void setComandasPendientes(Integer comandasPendientes) {
-		this.comandasPendientes = comandasPendientes;
 	}
 
 }

@@ -18,7 +18,7 @@
                 </div> 
             </div>
             <div class="modal-footer">
-                <button type="button" onclick ="{__recalculacionDelDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+                <button type="button" onclick ="{__recalculacionDelDetalle}" class="btn-green btn_big btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
             </div>
         </div>
     </div>
@@ -44,30 +44,7 @@
                 </div> 
             </div>
             <div class="modal-footer">
-                <button type="button" onclick ="{__cambiarDescripcionDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--Modal Comentario Comanda-->
-<div id='modalComentarioComanda' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("articulo.comentario")}</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
-                        <div class="form-group has-success">
-                            <label class="knob-label" >{$.i18n.prop("articulo.comentario")}</label>
-                            <input  type="text" class="form-control comentarioArticulo" id="comentarioArticulo" name = "comentarioArticulo" autofocus="autofocus">
-                        </div>
-                    </div>
-                </div> 
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick ="{__comentarioComanda}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aceptar")}</button>
+                <button type="button" onclick ="{__cambiarDescripcionDetalle}" class="btn-green  btn_big  btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
             </div>
         </div>
     </div>
@@ -81,7 +58,7 @@
                 <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
                 <a class="pull-left" href="#"    onclick = {__ImprimirTiquete}  title="{$.i18n.prop("imprimir.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f7")}</span></a>
                 <a class="pull-left" href="#"    onclick = {__MostrarFormularioDePago}  title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
-                <a class="pull-left" href="#"    onclick= {__CrearFacturaTemporal}  title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
+                <a class="pull-left" href="#"    onclick = {__CrearFacturaTemporal}  title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
                 <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
                 <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
             </div>
@@ -128,7 +105,7 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                <button type="button" class="btn-dark-gray  btn_big  btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
             </div>
         </div>
     </div>
@@ -151,16 +128,16 @@
                     </thead>
                     <tfoot style="display: table-header-group;">
                         <tr>
-                            <th>{$.i18n.prop("articulo.codigo")}           </th>
-                            <th>{$.i18n.prop("articulo.descripcion")}   </th>
+                            <th>{$.i18n.prop("articulo.codigo")}</th>
+                            <th>{$.i18n.prop("articulo.descripcion")}</th>
                             <th>{$.i18n.prop("articulo.comentario")}</th>
                         </tr>
                     </tfoot>                    
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-                <button  onclick={__EnviarCocina} class="btn-green btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
+                <button type="button" class="btn-dark-gray btn-back  btn_big  pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                <button onclick={__ComentariosComanda} type="button" class="btn-green  btn_big  btn-edit pull-right"     data-dismiss="modal">{$.i18n.prop("btn.aceptar")}</button>                
             </div>
         </div>
     </div>
@@ -194,41 +171,61 @@
      </div>
 </div>       
 <!--Fin Ventana de los productos-->
+
 <!--Inicio de la Venta-->
 <div show={mostarParaCrearNuevaVentas}>
     <div class="container-fluid">
         <div class="row no-space">           
             <div class="col-md-5 col-sm-5 col-lg-5 col-xs-12 pull-right" style="padding: 0px 12px">
                 <div class="block panel ">                    
+                    <div  onclick = {__MostrarFormularioDePago} id="btnGrandePagar" class="head green well" style="color: #fff; font-size: 55px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
+                        <table id="pagarTable" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td width="30%" id="">
+                                        <div id="pagarTitulo">{$.i18n.prop("factura.total")}:</div>
+                                    </td>
+                                    <td width="70%" id="">
+                                        <div id="">
+                                            <span id="total_show_peso" class="textShadow">  </span>
+                                            <span class="label label-info textShadow" id="total-show">{totalComprobante}</span>
+                                       </div>
+                                    </td>
+                                </tr>                     
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr style="margin: 0px; border-color: #e4e4e4;">
+                    
                     <div id="listadoProdcutos">{$.i18n.prop("titulo.listado.venta")}   {factura.id>0?factura.id:'' } {factura.nombreFactura} </div>
                     <!--Mesa seleccionada-->
                     <div class="input-group">
                         <span title="Vendedor" class="input-group-addon " > 
-                            <span class="fa fa-glass" aria-hidden="true" style="margin:3px 4px 0px 2px"> Mesa: {factura.mesa.id>0?factura.mesa.descripcion:''} </span> 
+                            <span onclick={__FacturasXMesaTiqueteEncabezado} class="fa fa-glass" aria-hidden="true" style="margin:3px 4px 0px 2px"> Mesa: {factura.mesa.id>0?factura.mesa.descripcion:''} </span> 
                         </span>
                     </div>
                     <hr style="margin: 2px 0px 0px 0px; border-color: #e4e4e4; margin-top: 0px">
                     <div class="data-fluid">
-                        <div id="listaProductos" style="height:200px; overflow-x: hidden; width:100%">
+                        <div id="listaProductos" style="height:300px; overflow-x: hidden; width:100%">
                             <table id="tablaListaProductos"  cellpadding="0" cellspacing="0" width="100%" class="table lcnp table-dark">
                                 <thead>
                                     <tr >
                                         <td width="50%">Descripcion</td>
                                         <td width="10%">Cant</td>
                                         <td width="10%">Precio.U</td>
-                                        <td width="10%">Desc</td>
-                                       
-                                        <td width="19%">Total</td>
-                                        
+                                        <td width="10%">Desc</td>                                       
+                                        <td width="19%">Total</td>                                        
                                     </tr>
                                 </thead>
                                 <tbody height="70%" id="productos-detail">
-                                    <tr style="" each={detail}>
+                                    <tr each={detail}>
                                         <td>
-                                           <diV onclick ={__CambiarDescripcion}>
-                                            <span   class="title-detalle text-info clickable clearfix">
-                                            {descripcion}</span>
-                                           <div> 
+                                          <div class="block_container_comanda" onclick ={__CambiarDescripcion}>
+                                          	<span class="title-detalle text-info clickable clearfix">{descripcion}</span>
+                                          </div> 
+                                          <div class="block_container_comanda" show={__MostrarIconoComandasPendientes(codigo)} onclick={__MostrarComandasPendientes}>
+	                       					<img style="width:30px;" alt="" src="/dist/img/cocina.png">
+	                                      </div>
                                         </td>
                                         <td >
                                             <span onclick ={__CambiarCantidad} class="labelDetalleVenta label-success cantidad clickable">{cantidad.toFixed(3)}</span>
@@ -279,31 +276,9 @@
                         </table>
                     </div>
                     <hr style="margin: 0px; border-color: #e4e4e4; margin-top: 0px">                    
-                    <div  onclick = {__MostrarFormularioDePago} id="btnGrandePagar" class="head green well" style="color: #fff; font-size: 55px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
-                        <table id="pagarTable" width="100%">
-                            <tbody>
-                                <tr>
-                                    <td width="30%" id="">
-                                        <div id="pagarTitulo">{$.i18n.prop("factura.total")}:</div>
-                                    </td>
-                                    <td width="70%" id="">
-                                        <div id="">
-                                            <span id="total_show_peso" class="textShadow">  </span>
-                                            <span class="label label-info textShadow" id="total-show">{totalComprobante}</span>
-                                       </div>
-                                    </td>
-                                </tr>                     
-                            </tbody>
-                        </table>
-                    </div>
-                    <hr style="margin: 0px; border-color: #e4e4e4;">
                 </div>
                 <div  class="row ">
-                    <div class="col-md-12 col-sx-12 col-lg-12 col-sm-12 "  style="padding:10px 15px 18px 15px; ">
-                            <!-- <span onclick = {__CambiarNombreTiquete} title="Cambiar Nombre Tiquete" class="input-group-addon btnClientes" id="add-new-client"> 
-                                <small class="fa fa-plus" style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
-                                <span class="fa fa-user" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"></span> 
-                            </span> -->
+                    <!-- <div class="col-md-12 col-sx-12 col-lg-12 col-sm-12 "  style="padding:10px 15px 18px 15px; ">
                         <div class="input-group">
                             <span onclick = {_EscogerClientes} title="Cambiar Nombre Tiquete" class="input-group-addon btnClientes" id="add-new-client"> 
                                 <small class="fa fa-plus" style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
@@ -311,22 +286,16 @@
                             </span>
                             <input onclick={_EscogerClientes} type="text"  placeholder="Cliente" value="{cliente.nombreCompleto}"  name="datos_cliente" id="datos_cliente" autocomplete="off" >
                         </div>
-                        <!--Vendedor o Nuevo Vendedor-->
+                        Vendedor o Nuevo Vendedor
                         <div class="input-group">
                             <span  onclick={_EscogerVendedores} title="Vendedor" class="input-group-addon " > 
                                 <span class="fa fa-user" aria-hidden="true" style="margin:3px 4px 0px 2px"></span> 
                             </span>
                             <input type="text" onclick={_EscogerVendedores} placeholder="Vendedor" value="{vendedor.nombreCompleto}"  name="v_vendedor" id="v_vendedor" autocomplete="off" >
                         </div>
-                    </div>                                                                        
+                    </div> -->                                                                        
                     <div class="col-md-12 col-sx-12 col-lg-12 col-sm-12 "  style="padding:10px 15px 18px 15px; ">
-                        <div show={mostrarOrdenesCocinaPendientes}>
-	                        <a class="pull-left" href="#">
-	                        	<img onclick={_MostrarComandasPendientes} style="width:40px;" alt="" class="blink" src="/dist/img/cocina.jpg">
-	                        	<span onclick = {_MostrarComandasPendientes} class="label-titulos-articulo">Ordenes por enviar a la cocina :{mesa.comandasPendientes}</span>
-	                        </a>
-	                    </div>                                                                        
-                        <a class="pull-right" href="#"> <span onclick = {__CambiarNombreTiquete} class="label-titulos-articulo">Tikete a :{factura.nombreFactura}</span></a>
+                        <a class="pull-left" href="#"> <span onclick = {__CambiarNombreTiquete} class="label-titulos-articulo">Tikete a :{factura.nombreFactura}</span></a>
                     </div>                                                                        
                 </div> 
                 <hr style="margin: 0px; border-color: #e4e4e4;">
@@ -455,7 +424,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                <button type="button" class="btn-dark-gray  btn_big  btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
             </div>
         </div>
     </div>
@@ -484,8 +453,8 @@
             <div class="modal-footer">
                 <div class="row">
                     <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                        <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-                        <button  onclick={__ModificarNombreTiquete}   class="btn-green btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
+                        <button type="button" class="btn-dark-gray  btn_big  btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                        <button  onclick={__ModificarNombreTiquete}   class="btn-green  btn_big  btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
                     </div>
                 </div>
             </div>
@@ -514,8 +483,8 @@
             <div class="modal-footer">
                 <div class="row">
                     <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                        <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-                        <button  onclick={__AgregarNombreFacturaTemporal}   class="btn-green btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
+                        <button type="button" class="btn-dark-gray btn-back  btn_big  pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                        <button  onclick={__AgregarNombreFacturaTemporal}   class="btn-green  btn_big  btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
                     </div>
                 </div>
             </div>
@@ -544,7 +513,7 @@
                 </div> 
             </div>
             <div class="modal-footer">
-                <button type="button" onclick ="{__cambiarElPrecio}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+                <button type="button" onclick ="{__cambiarElPrecio}" class="btn-green  btn_big  btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
             </div>
         </div>
     </div>
@@ -572,7 +541,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" onclick ="{__actualizarDescuento}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+                <button type="button" onclick ="{__actualizarDescuento}" class="btn-green  btn_big btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
             </div>
         </div>
     </div>
@@ -620,7 +589,7 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                <button type="button" class="btn-dark-gray  btn_big  btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
             </div>
         </div>
     </div>
@@ -658,7 +627,7 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                <button type="button" class="btn-dark-gray btn-back  btn_big  pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
             </div>
         </div>
     </div>
@@ -771,7 +740,6 @@
                             <input type="hidden" id='totalBanco'              name='totalBanco'              value="{factura.totalBanco}" >
                             <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
                             <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
-                            <input type="hidden" id='detalleComanda'          name='detalleComanda'          value="{factura.detalleComanda}" >
                         </form>   
                     </div>
                     <div class="box-footer">
@@ -1041,8 +1009,6 @@ td.col-xl-12, th.col-xl-12 {
     // Detalle de la factura es una coleccion de articulos
     self.detail                = []
     self.pendientesComanda     = []
-    self.registradosComanda    = []
-    self.registradosPendientes = []
     self.mensajesBackEnd       = []
     self.error                 = false
     self.comboEstados          = []
@@ -1167,7 +1133,6 @@ td.col-xl-12, th.col-xl-12 {
          id:0,
          descripcion:"",
          impuestoServicio:false,
- 	     comandasPendientes:0,
      }
      self.mesas  = {
          data:[],
@@ -1256,25 +1221,9 @@ __AgregarProductoDePantalla(e){
    var item = e.item
    self.articulo = item;
    self.update()
-   if(self.articulo.comanda == 1){
-	    $( "#comentarioArticulo" ).focus()
-	    $( "#comentarioArticulo" ).val("")
-	    $('#modalComentarioComanda').modal()                      // initialized with defaults
-	    $('#modalComentarioComanda').modal({ keyboard: false })   // initialized with no keyboard
-	    $('#modalComentarioComanda').modal('show')                // initializes and invokes show immediately
-   }else{
-	    __buscarcodigo(self.articulo.codigo,1);
-	    $('#codigoBarra').val(null)
-   } 	
+   __buscarcodigo(self.articulo.codigo,1);
+    $('#codigoBarra').val(null)
 }   
-
-__comentarioComanda(e){
-	self.comentarioComanda = $(".comentarioArticulo").val();
-  	self.update()
-	__buscarcodigo(self.articulo.codigo,1);
-  	$(".comentarioArticulo").val("");
-  	$('#modalComentarioComanda').modal('hide') 
-}
     
 /**
 *  Mostrar si escoge una categorias
@@ -1748,48 +1697,18 @@ __CambiarDescuento(e){
 *Cambiar Cantidad del Articulo
 **/
 __CambiarCantidad(e){
-	
 	self.item = e.item; 
 	self.update()
-	
-	$.ajax({
-        type: 'GET',
-        url: 'findArticuloByCodigojax.do',
-        method:"GET",
-        data:{codigoArticulo: self.item.codigo},
-        success: function(data){
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                	swal('',data.message,'error');
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                	$.each(data.listaObjetos, function( index, modeloTabla ) {
-                        self.articulo  = modeloTabla
-                         if(modeloTabla.estado  == "Inactivo"){
-                            mensajeError($.i18n.prop("error.articulo.inactivo.inventario"))
-                            return
-                        }
-                        self.update()
-                    	if(self.articulo.comanda == 1){
-                	        sweetAlert("",$.i18n.prop("comanda.mensaje.cambiar.cantidad.articulo"), "info");
-                    	    self.update()
-                    	}else{
-                   		   $( "#cambiarCantidadArticulo" ).focus()
-                   		   $( "#cambiarCantidadArticulo" ).val(self.item.cantidad)
-                   		   $('#modalCambiarCantidad').modal()                      // initialized with defaults
-                   		   $('#modalCambiarCantidad').modal({ keyboard: false })   // initialized with no keyboard
-                   		   $('#modalCambiarCantidad').modal('show')                // initializes and invokes show immediately
-                    	}
-                    });
-                }
-            }
-        },
-	    error : function(xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });	
+	var obj = self.pendientesComanda.find(o => o.key === self.item.codigo);
+	if(typeof obj !== "undefined"){
+        sweetAlert("",$.i18n.prop("comanda.mensaje.elimina.articulo"), "warning");		
+	}else{
+	    $( "#cambiarCantidadArticulo" ).focus()
+	    $( "#cambiarCantidadArticulo" ).val(self.item.cantidad)
+	    $('#modalCambiarCantidad').modal()                      // initialized with defaults
+	    $('#modalCambiarCantidad').modal({ keyboard: false })   // initialized with no keyboard
+	    $('#modalCambiarCantidad').modal('show')                // initializes and invokes show immediately
+	}
 }
 /**
 *Cambiar descripcion
@@ -2010,8 +1929,6 @@ function __ListaDeArticulosPorDescripcion(){
 **/
 __CargarFacturaEspera(e){
     self.pendientesComanda     = []
-    self.registradosComanda    = []
-    self.registradosPendientes = []
     self.update()
 	
     self.factEspera = e.item
@@ -2052,7 +1969,6 @@ __CambiarNombreTiquete(){
 **/
 __CrearFacturaTemporal(){
     if(self.factura.id ==null){
-        
         if(self.detail.length != 0 ){
             $('#ModalAgregarNombreTiquete').modal('show') 
             $('.cambioNombreFactura').focus()
@@ -2061,11 +1977,14 @@ __CrearFacturaTemporal(){
     }else{
         self.seIncluyoUnArticulo = 1
         self.update()
-       aplicarFactura(1)    
+        aplicarFactura(1)    
     }
-   // __FacturaEnEspera(self.factEspera)
-    self.factEspera =null
+    // __FacturaEnEspera(self.factEspera)
+    self.factEspera = null
     self.update()
+    
+    //Se envian los datos a la comanda
+    __EnviarCocina();
 }
 
 /**
@@ -2265,13 +2184,11 @@ function __Init(){
             impuestoServicio:false
        }
     }
-    self.factura.detalleComanda = null; 
     self.factura.mesa = self.mesa;
     self.item                  = null;
     self.articulo              = null;
     self.clientes              = {data:[]}
     self.detalleFactura        ={data:[]}
-    self.detalleComanda        ={data:[]}
     self.cliente               = {};
     self.vendedor = {
         id:0,
@@ -2428,13 +2345,11 @@ function __InitDatos(){
             impuestoServicio:false
        }
     }
-    self.factura.detalleComanda = null;
     self.factura.mesa = self.mesa;
     self.item                  = null;
     self.articulo              = null;
     self.clientes              = {data:[]}
     self.detalleFactura        ={data:[]}
-    self.detalleComanda        ={data:[]}
     self.cliente               = {};
     self.vendedor = {
         id:0,
@@ -2564,8 +2479,6 @@ function __displayDate_detail(fecha) {
 *  Crear Factura nueva
 **/
 function crearFactura(estado){
-    self.factura.detalleComanda = JSON.stringify(self.pendientesComanda)
-
     self.detalleFactura.data = self.detail    
     self.update() 
     var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
@@ -2625,7 +2538,6 @@ function evaluarFactura(data){
                  
             }else{
                 __Init()
-                __ListaComandasPendientes();
             }
         });
     }
@@ -2876,7 +2788,6 @@ function __buscarcodigo(idArticulo,cantidad){
     });
 }
 
-
 /**
 *  Agregar un articulo si existe se suma la cantidad y no existe se agrega en el detalle
 **/
@@ -2893,7 +2804,10 @@ function __agregarArticulo(cantidad){
     var encontrado = false;
     if(self.detail[0] == null){ // first element
         __nuevoArticuloAlDetalle(cantidad);
-        __nuevoArticuloComanda(cantidad);
+    	//Se almacena en los casos de articulos de comanda
+    	if(self.articulo.comanda == 1){	
+            __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion);
+    	}		
         self.seIncluyoUnArticulo = 0
         self.update()
         encontrado = true;
@@ -2903,8 +2817,9 @@ function __agregarArticulo(cantidad){
                self.item          = self.detail[count];
                self.item.cantidad = self.item.cantidad + parseFloat(cantidad)
                self.update();
-               ActualizarLineaDEtalle(cantidad)
- 		       __actualizaArticuloComanda(self.item.cantidad);
+	  	      	if(self.articulo.comanda == 1){	
+	  	            __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion);
+	  	    	}		
                self.detail[count] = self.item;
                encontrado = true;
                self.seIncluyoUnArticulo = 0
@@ -2919,7 +2834,9 @@ function __agregarArticulo(cantidad){
        self.update()
 
       __nuevoArticuloAlDetalle(cantidad);
-      __nuevoArticuloComanda(cantidad);
+	  	if(self.articulo.comanda == 1){	
+	        __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion);
+		}		
     }
     __calculate(); 
 }
@@ -3031,7 +2948,8 @@ function _calcularImpuesto(precio,iva){
     if(cantidad == 0){
        cantidad = 1;
     }
-    __ValidarCantidadArticulo(self.item.codigo,cantidad)
+    //__actualizaArticuloComanda(cantidad, self.item.codigo, self.item.descripcion, self.item.cantidad);
+    __ValidarCantidadArticulo(self.item.codigo,cantidad)		
   }
 /**
 * Cambiar el precio del detalle de la factura
@@ -3083,7 +3001,7 @@ function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc){
 *Actualizar linea en el detalle
 **/
 function ActualizarLineaDEtalle(){
-    var montoTotal               = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
+    var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
     var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc)
     var subTotal               = montoTotal - montoDescuento
     var montoImpuesto          = _calcularImpuesto(subTotal,self.item.impuesto ==null?0:self.item.impuesto)
@@ -3637,21 +3555,19 @@ function __ListaMesas(){
 //Se presentan las facturas para cada mesa
 __FacturasXMesa(e){
     self.pendientesComanda     = []
-    self.registradosComanda    = []
-    self.registradosPendientes = []
-	
     var item = e.item
     self.mesa = item
-    self.factura.mesa = item
-    if(self.mesa.comandasPendientes > 0){
-    	self.mostrarOrdenesCocinaPendientes = true;
-    }else{
-    	self.mostrarOrdenesCocinaPendientes = false;            	
-    }
+    self.factura.mesa = item    
     self.update()
     __ListaFacturasXMesas()
 }
 
+//Se presentan las facturas para cada mesa
+__FacturasXMesaTiqueteEncabezado(){
+    self.pendientesComanda     = []
+    self.update()
+    __ListaFacturasXMesas()
+}
 /**
 *  Lista las facturas de una mesa
 **/
@@ -3702,262 +3618,177 @@ function __ListaFacturasXMesas(){
     });
 }
 
+//------------------------------------------------------------------------------------
+//--------------Nuevos Metodos ---------------------------------
+//------------------------------------------------------------------------------------
+__MostrarIconoComandasPendientes(codigoArticulo){
+	var obj = self.pendientesComanda.find(o => o.key === codigoArticulo);
+	if(typeof obj !== "undefined"){
+		return true;	
+	}else{
+		return false;	
+	}
+}
+
 /**
 *  Lista las comandas pendientes y las muestra en pantalla
 **/
-function __ListaComandasPendientesModal(){
-	
-    self.informacion_tabla_comandasPendientes = [	
-        {'data' : 'codigo'           ,"name":"codigo"            ,"title" : $.i18n.prop("articulo.codigo")            ,"autoWidth":false},
-        {'data' : 'descripcion'      ,"name":"descripcion"       ,"title" : $.i18n.prop("articulo.descripcion")       ,"autoWidth":false},
-        {'data' : 'comentario'       ,"name":"comentario"        ,"title" : $.i18n.prop("articulo.comentario")        ,"autoWidth":false},
-	];                              
-	
-	self.registradosPendientes = [];
-    $.ajax({
-        url: 'ListarComandasPendientesAjax.do',
-        datatype: "json",
-        data: {
-	        idMesa: self.mesa.id,  
-	        estado:1,//Pendientes
-        },
-        method:"GET",
-        success: function (result) {
-            if(result.aaData.length > 0){
-                loadListar(".tableListaComandaPendientes",idioma_espanol,self.informacion_tabla_comandasPendientes,result.aaData)
-                ActivarEventoFiltro(".tableListaComandaPendientes")
-                
-                result.aaData.forEach(function(elemen){
-            		var obj = self.registradosPendientes.find(o => o.key === elemen.codigo);
-            		if(typeof obj == "undefined"){
-            			//Si no  existe se agrupan
-            			var datos = [];
-            		    datos.push({	        
-            		        codigo          : elemen.codigo,
-            		        descripcion     : elemen.descripcion,
-            		        comentario      : elemen.comentario,
-            		        estado          : 1
-            		     });
-            			
-            		     self.registradosPendientes.push({	        
-            				 key : elemen.codigo,
-            				 data : datos
-            		     });	
-            		}else{
-						//Se agrega a los datos
-            			obj.data.push({	        
-            		        codigo          : elemen.codigo,
-            		        descripcion     : elemen.descripcion,
-            		        comentario      : elemen.comentario,
-            		        estado          : 1
-            		    });
-            		}
-            	    self.update()        
-        	    })
-            }
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
-}
+__MostrarComandasPendientes(e){	
+    //Se busca la comanda pendiente por codigo de articulo
+    var obj = self.pendientesComanda.find(o => o.key === e.item.codigo);
+	if(typeof obj !== "undefined"){
+	    var detalles = [];
+	    $('#modalComandasPendientes').modal('show')  
 
-_MostrarComandasPendientes(){
-    __ListaComandasPendientesModal();
-    $('#modalComandasPendientes').modal('show')  
-}
-
-/**
-*  Lista las comandas pendientes
-**/
-function __ListaComandasPendientes(){
-	self.registradosComanda = [];
-	self.mesa.comandasPendientes = 0;
-    self.update()        	
-    $.ajax({
-        url: 'ListarComandasPendientesAjax.do',
-        datatype: "json",
-        data: {
-	        idMesa: self.mesa.id,        	
-	        estado:-2, //Enviados
-        },
-        method:"GET",
-        success: function (result) {
-            if(result.aaData.length > 0){
-	           	result.aaData.forEach(function(elemen){
-	           		if(elemen.estado == 1){
-		           	  self.mesa.comandasPendientes = self.mesa.comandasPendientes + 1;
-	           		}
-	           		var obj = self.registradosComanda.find(o => o.key === elemen.codigo);
-            		if(typeof obj == "undefined"){
-            			//Si no  existe se agrupan
-            			var datos = [];
-            		    datos.push({	        
-            		        codigo          : elemen.codigo,
-            		        descripcion     : elemen.descripcion,
-            		        comentario      : elemen.comentario,
-            		        estado          : elemen.estado
-            		     });
-            			
-            		     self.registradosComanda.push({	        
-            				 key : elemen.codigo,
-            				 data : datos
-            		     });	
-            		}else{
-						//Se agrega a los datos
-            			obj.data.push({	        
-            		        codigo          : elemen.codigo,
-            		        descripcion     : elemen.descripcion,
-            		        comentario      : elemen.comentario,
-            		        estado          : elemen.estado
-            		    });
-            		}
-            	    self.update()        
-        	    })
-            }
-            if(self.mesa.comandasPendientes > 0){
-            	self.mostrarOrdenesCocinaPendientes = true;
-            }else{
-            	self.mostrarOrdenesCocinaPendientes = false;            	
-            }
-    	    self.update()        
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });	
-}
-
-/**
-*   agregar el articulo a la lista de pendientes en la comanda en session
-**/
-function __nuevoArticuloComanda(cantidad){
-	if(self.articulo.comanda == 1){
-		//Se almacenan los productos por separados en la comanda
-		for (var i = 0; i < cantidad; i++) {
-
-			var obj = self.pendientesComanda.find(o => o.key === self.articulo.codigo);
-			if(typeof obj !== "undefined"){
-				obj.data.push({	        
-			        codigo          : self.articulo.codigo,
-			        descripcion     : self.articulo.descripcion,
-			        comentario      : self.comentarioComanda,
-			        estado          : 1
-			    });	
-			}else{
-				var datos = [];
-				datos.push({	        
-			        codigo          : self.articulo.codigo,
-			        descripcion     : self.articulo.descripcion,
-			        comentario      : self.comentarioComanda,
-			        estado          : 1
-			    });		
-				self.pendientesComanda.push({	        
-					key : self.articulo.codigo,
-					data : datos
-			    });	
-			}
-		} 	
-	    self.update()
+	    //Se recorren las comandas pendientes y se presentan para modificar el comentario
+		obj.data.forEach(function(elemen){
+			detalles.push({	        
+				codigo          : elemen.codigo,
+			    descripcion     : elemen.descripcion,
+			    comentario      : elemen.comentario,
+			});			
+		});
+	    
+	    //Valores del data table
+	    self.informacion_tabla_comandasPendientes = [	
+	        {'data' : 'codigo'           ,"name":"codigo"            ,"title" : $.i18n.prop("articulo.codigo")            ,"autoWidth":false},
+	        {'data' : 'descripcion'      ,"name":"descripcion"       ,"title" : $.i18n.prop("articulo.descripcion")       ,"autoWidth":false},
+	        {'data' : 'comentario'       ,"name":"comentario"        ,"title" : $.i18n.prop("articulo.comentario"),        "autoWidth":false,
+                "render": function(data, type, row, meta){
+                	return '<input  id="' + row.codigo + '" data-index="' + meta.row + '" value="' + data + '" type="text" class="form-control dataTableComentario"/>'
+                }
+            },
+	    ]; 	 	
+	 	loadListar(".tableListaComandaPendientes",idioma_espanol, self.informacion_tabla_comandasPendientes, detalles)
+        ActivarEventoFiltro(".tableListaComandaPendientes")
 	}
- }
+}
 
-/**
-*   Se actualizan los productos pendientes en la comanda en session
-*   Se elimina todos los articulos por codigo y se vuelven a ingresar
-*   Se restan los articulos que ya existen en la comanda de base de datos que ya fueron enviados
-**/
-function __actualizaArticuloComanda(cantidad){
-	if(self.articulo.comanda == 1){
-
-		//Se obtiene la cantidad de los pendientes en session
-		var cantidadRegistrada = 0;
-		var obj = self.pendientesComanda.find(o => o.key === self.articulo.codigo);
+__ComentariosComanda(e){
+	
+	//Se obtienen todos los inputs y se actualizan los valores de la consola
+	$(".dataTableComentario").each(function() {
+		var valor = this.value;
+		var idx = this.getAttribute("data-index");
+		var idArticulo = this.getAttribute("id");
+		var obj = self.pendientesComanda.find(o => o.key === idArticulo);
 		if(typeof obj !== "undefined"){
-			obj.data.forEach(function(elemen){
-				//Se busca por codigo
-				if (self.articulo.codigo == elemen.codigo){
-					cantidadRegistrada = cantidadRegistrada + 1;
-				}     
-		    })
-		} 
-		
-		//Se obtiene la cantidad ya registrada
-		var obj = self.registradosComanda.find(o => o.key === self.articulo.codigo);
-		if(typeof obj !== "undefined"){
-			obj.data.forEach(function(elemen){
-				//Se busca por codigo
-				if (self.articulo.codigo == elemen.codigo){
-					cantidadRegistrada = cantidadRegistrada + 1;
-				}     
-		    })
-		} 	
-		if(cantidad > cantidadRegistrada){		
-		   cantidad = cantidad - cantidadRegistrada;
-		   //Se envia agregar la cantidad de articulos nuevos
-		   __nuevoArticuloComanda(cantidad);	   
-		}else if (cantidad < cantidadRegistrada){
-	        sweetAlert("",$.i18n.prop("comanda.mensaje.elimina.articulo"), "info");
+			obj.data[idx].comentario = valor;
 		}
-	}
-} 
-
+	 } 
+	);
+  	$('#modalComandasPendientes').modal('hide') 
+}
 
 /**
-*   Se borra el articulo de la comanda en session
+*   Agregar el articulo a la lista de pendientes en la comanda en session
+**/
+function __nuevoArticuloComanda(cantidad, codigo, descripcion){	
+	
+	//Se almacenan los productos por separados en la comanda
+	for (var i = 0; i < cantidad; i++) {
+		//Se busca si existe en el mapa, se actualiza la lista o se hace el put inicial
+		var obj = self.pendientesComanda.find(o => o.key === codigo);
+		if(typeof obj !== "undefined"){
+			obj.data.push({	        
+		        codigo          : codigo,
+		        descripcion     : descripcion,
+		        comentario      : "",
+		    });	
+		}else{
+			var datos = [];
+			datos.push({	        
+		        codigo          : codigo,
+		        descripcion     : descripcion,
+		        comentario      : "",
+		    });		
+			self.pendientesComanda.push({	        
+				key : codigo,
+				data : datos
+		    });	
+		}
+	} 	
+    self.update()
+ }
+ 
+/**
+*   Elimina el articulo de la comanda en session, se elimina el detalle
 **/
 function eliminaArticuloComanda(codigoArticulo){
-	/**
-	* Buscar el codigo del codigo  en la base de datos
-	**/
-    $.ajax({
-        type: 'GET',
-        url: 'findArticuloByCodigojax.do',
-        method:"GET",
-        data:{codigoArticulo: codigoArticulo},
-        success: function(data){
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    swal('',data.message,'error');
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                	$.each(data.listaObjetos, function( index, modeloTabla ) {
-                        self.articulo  = modeloTabla
-                         if(modeloTabla.estado  == "Inactivo"){
-                            mensajeError($.i18n.prop("error.articulo.inactivo.inventario"))
-                            return
-                        }
-                        self.update()
-                    	if(self.articulo.comanda == 1){
-                    		
-                    		//Se elimina de los pendientes en session para no almacenarlo
-                    		self.pendientesComanda.splice(self.pendientesComanda.findIndex(o => o.key === self.articulo.codigo), 1);
-                    		
-                    		//Si ya existe en la comanda de base de datos para la mesa
-                    		var obj = self.registradosComanda.find(o => o.key === self.articulo.codigo);
-                	        sweetAlert("",$.i18n.prop("comanda.mensaje.elimina.articulo"), "info");
-                    	    self.update()
-                    	}
-                    });
-                }
-            }
-        },
-	    error : function(xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });	    
+	//Se elimina de los pendientes en session para no almacenarlo
+	self.pendientesComanda.splice(self.pendientesComanda.findIndex(o => o.key === codigoArticulo), 1); 
 } 
+
+/**
+*   Se actualizan los productos pendientes en la comanda en session, acutaliza los detalles
+**/
+/* function __actualizaArticuloComanda(cantidad, codigo, descripcion, cantidadAnterior){
+	
+
+	//Se obtiene la cantidad de los pendientes en session
+	var obj = self.pendientesComanda.find(o => o.key === codigo);
+	if(typeof obj !== "undefined"){
+
+		var cantidadComanda = 0;
+		var cantidadTemp = 0;
+		obj.data.forEach(function(elemen){
+			//Se busca por codigo
+			if (codigo == elemen.codigo){
+				cantidadComanda = cantidadComanda + 1;
+			}     
+	    })
+
+	    //Caso 1: Si la cantidad anterior y la nueva son iguales se deja todo igual
+	    if(cantidad == cantidadAnterior){
+	    
+	    }else{
+	    	//Si la cantidad anterior es superior a la cantidad nueva
+	    	if(cantidadAnterior > cantidad){
+	    		//Se determina si la cantidad anterior menos la comand sigue
+	    	}
+	    	//Caso 2: La cantidad anterior menos lo que esta en la comanda, es mayor a la cantidad que se quiere poner
+		    cantidadTemp = cantidadAnterior - cantidadComanda;
+			if(cantidadTemp > cantidad){
+				//Se elimnan los articulos de la comanda
+				eliminaArticuloComanda(codigo)
+			}else{
+				
+			}
+	    }
+	    
+	    //Caso 1: La cantidad anterior menos lo que esta en la comanda es mayor a la cantidad
+	    cantidadTemp = cantidadAnterior - cantidadComanda;
+		if(cantidadTemp > cantidad){
+			//Se elimnan los articulos de la comanda
+			eliminaArticuloComanda(codigo)
+		}else{
+			
+		    //Caso 2: La cantidad anterior menos la comanda, es menor a la cantidad
+		    cantidadTemp = cantidadAnterior - cantidadComanda;
+		    if(cantidadTemp < cantidad){
+				//Se agrega a la comanda la diferencia	
+				cantidadTemp = cantidad - cantidadAnterior;
+		 	    
+				//Se envia agregar la cantidad de articulos nuevos
+				__nuevoArticuloComanda(cantidadTemp, codigo, descripcion);			
+		    }else{
+		    	//Caso 3: Los valores son iguales no se hace nada
+		    }
+
+		}	    
+	}
+} 
+ */
+
 
 /**
 *   Envia a la comanda de la cocina, se imprimen mediante el local host
 **/
-__EnviarCocina(){
+function __EnviarCocina(){
+	
+	//Se forman los detalles a enviar a la comanda
 	var detalles = [];
-	self.registradosPendientes.forEach(function(elemenKey){
+	self.pendientesComanda.forEach(function(elemenKey){
 		elemenKey.data.forEach(function(elemen){
 			detalles.push({	        
 		        codigo          : elemen.codigo,
@@ -3966,52 +3797,38 @@ __EnviarCocina(){
 		     });			
 		});
 	});
-	
-	var informacion = {
-		mesa: self.mesa.descripcion,        	
-		mesero: "",        	
-	    nombreImpresora:"PDF",
-	    cantidadCaracteresLinea:"40",
-	    formatoTiquete:"",
-	    detalles:detalles
-	}    
-	var JSONData = JSON.stringify(informacion);
+	console.log(detalles);
+	if(detalles.length > 0){
+		//Se forman los datos genales para la comanda
+		var informacion = {
+			mesa: self.mesa.descripcion,        	
+			mesero: "",        	
+		    nombreImpresora:"PDF",
+		    cantidadCaracteresLinea:"40",
+		    formatoTiquete:"",
+		    detalles:detalles
+		}    
 
-	//Envia a imprimir a la comanda
-    $.ajax({
-        contentType: 'application/json',
-        url: 'http://localhost:8033/service/CrearOrdenCocinaAjax',
-        datatype: "json",
-        data : JSONData,
-        method:"POST",
-        success: function (result) {
-        	//Se actualiza la comanda
-        	  $.ajax({
-        	        url: 'ActualizarOrdenesComandaAjax',
-        	        datatype: "json",
-        	        data: {
-        	      		idMesa: self.mesa.id,
-        	        },
-        	        method:"POST",
-        	        success: function (result) {
-        	        	console.log(result);
-        	        },
-        	        error: function (xhr, status) {
-        	            console.log(xhr);
-        	            mensajeErrorServidor(xhr, status);
-        	        }
-        	    });
-        	 
-        	   $('#modalComandasPendientes').modal('hide')  
-        	   self.mostrarOrdenesCocinaPendientes = false;
-	       	   self.update()
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });		
+		var JSONData = JSON.stringify(informacion);		
+		//Envia a imprimir a la comanda
+	    $.ajax({
+	        contentType: 'application/json',
+	        url: 'http://localhost:8033/service/CrearOrdenCocinaAjax',
+	        datatype: "json",
+	        data : JSONData,
+	        method:"POST",
+	        success: function (result) {
+	      	   $('#modalComandasPendientes').modal('hide')  
+	      	   self.pendientesComanda = []
+	      	   self.update()
+	        },
+	        error: function (xhr, status) {
+	            console.log(xhr);
+	            mensajeErrorServidor(xhr, status);
+	        }
+	    });		
+	}
 } 
-
 </script>
+
 </venta-restaurante>

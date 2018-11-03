@@ -120,8 +120,6 @@ public class FacturaCommand {
 
 	private Mesa mesa;
 
-	private String detalleComanda;
-
 	public FacturaCommand() {
 		super();
 	}
@@ -525,13 +523,4 @@ public class FacturaCommand {
 	public void setMesa(Mesa mesa) {
 		this.mesa = mesa;
 	}
-
-	public String getDetalleComanda() {
-		return detalleComanda;
-	}
-
-	public void setDetalleComanda(String detalleComanda) {
-		this.detalleComanda = detalleComanda;
-	}
-
 }

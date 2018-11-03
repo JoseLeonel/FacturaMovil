@@ -1,21 +1,13 @@
 package com.emprendesoftcr.Bo;
 
-import java.util.Collection;
+import com.emprendesoftcr.modelo.ComandaEmpresa;
 
-import com.emprendesoftcr.modelo.ComandaMesa;
+public interface ComandaEmpresaBo {
 
-public interface ComandaBo {
+	void agregar(ComandaEmpresa comandaMesa);
 
-	void agregar(ComandaMesa comandaMesa);
-
-	void modificar(ComandaMesa comandaMesa);
-
-	void eliminar(ComandaMesa comandaMesa);
-
-	void actualizarComandaMesaFacturas(Long idMesa);
+	void modificar(ComandaEmpresa comandaMesa);
 	
-	ComandaMesa buscar(Long id);
-
-	Collection<ComandaMesa> buscarPorFacturaMesa(Long idFactura, Long idMesa);
+	ComandaEmpresa buscar(Long id);
 
 }

@@ -1,21 +1,13 @@
 package com.emprendesoftcr.Dao;
 
-import java.util.Collection;
+import com.emprendesoftcr.modelo.ComandaEmpresa;
 
-import com.emprendesoftcr.modelo.ComandaMesa;
+public interface ComandaEmpresaDao {
 
-public interface ComandaDao {
+	void agregar(ComandaEmpresa comandaMesa);
 
-	void agregar(ComandaMesa comandaMesa);
-
-	void modificar(ComandaMesa comandaMesa);
-
-	void eliminar(ComandaMesa comandaMesa);
+	void modificar(ComandaEmpresa comandaMesa);
 	
-	ComandaMesa buscar(Long id);
-
-	Collection<ComandaMesa> buscarPorFacturaMesa(Long idFactura, Long idMesa);
-
-	void actualizarComandaMesaFacturas(Long idMesa);
+	ComandaEmpresa buscar(Long id);
 
 }

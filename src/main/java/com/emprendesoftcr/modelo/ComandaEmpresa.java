@@ -38,15 +38,16 @@ public class ComandaEmpresa implements Serializable {
 
 	@Column(name = "formatoTickete")
 	private String	formatoTickete					=    
-	  	"==========  COCINA  ==========\n"+
+					"==========  COCINA  ==========\n"+
 	  	  	"MESA: ${mesa}\n"+
-	  	  	"MESERO: ${mesero}\n"+		
 	  	  	"FECHA: ${fecha}\n"+		
 	  	    "=============================\n"+
 	  	    "#foreach($detalle in $detalles)"+
 	  	    	"$detalle"+
 	  	    "#end"+
 	  	    "=============================\n"+
+	  	    "\n"+
+	  	    "\n"+
 	  	    "\n"+
 	  	    "\n";
 	  	  
