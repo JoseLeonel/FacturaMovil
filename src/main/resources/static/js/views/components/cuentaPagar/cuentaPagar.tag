@@ -679,7 +679,6 @@ function listadoConsulta(){
                     self.fechaFin =$('.fechaFinal').val()
                     self.estado = $('.estado').val()
                     self.idProveedor = $('.selectProveedores').val()
-                    self.
                     self.update()
                     __InformacionDataTable();
                     loadListar(".tableListar",idioma_espanol,self.informacion_tabla,result.aaData)

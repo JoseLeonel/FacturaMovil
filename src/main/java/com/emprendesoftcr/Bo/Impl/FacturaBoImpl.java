@@ -43,6 +43,12 @@ import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 import com.google.gson.Gson;
 
+/**
+ * Reglas de la factura
+ * FacturaBoImpl.
+ * @author jose.
+ * @since 3 nov. 2018
+ */
 @EnableTransactionManagement
 @Service("facturaBo")
 public class FacturaBoImpl implements FacturaBo {

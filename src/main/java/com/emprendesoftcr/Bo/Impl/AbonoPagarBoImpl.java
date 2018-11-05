@@ -12,10 +12,11 @@ import com.emprendesoftcr.Dao.AbonoPagarDao;
 import com.emprendesoftcr.modelo.AbonoPagar;
 
 /**
- * Abonos aplicados en las cuentas por cobrar a los clientes AbonoBoImpl.
+ * Abonos pagados a proveedores AbonoPagarBoImpl.
  * @author jose.
- * @since 19 abr. 2018
+ * @since 3 nov. 2018
  */
+
 @EnableTransactionManagement
 @Service("abonoPagarBo")
 public class AbonoPagarBoImpl implements AbonoPagarBo {
@@ -25,20 +26,20 @@ public class AbonoPagarBoImpl implements AbonoPagarBo {
 
 	@Transactional
 	@Override
-	public void agregar(AbonoPagar abono) {
-		abonoPagarDao.agregar(abono);
+	public void agregar(AbonoPagar abonoPagar) {
+		abonoPagarDao.agregar(abonoPagar);
 	}
 
 	@Transactional
-  @Override
-	public void modificar(AbonoPagar abono) {
-		abonoPagarDao.modificar(abono);
+	@Override
+	public void modificar(AbonoPagar abonoPagar) {
+		abonoPagarDao.modificar(abonoPagar);
 	}
 
 	@Override
 	@Transactional
-	public void eliminar(AbonoPagar abono) {
-		abonoPagarDao.eliminar(abono);
+	public void eliminar(AbonoPagar abonoPagar) {
+		abonoPagarDao.eliminar(abonoPagar);
 	}
 
 	@Transactional
@@ -47,7 +48,6 @@ public class AbonoPagarBoImpl implements AbonoPagarBo {
 		return abonoPagarDao.buscar(id);
 	}
 
-	
 	@Override
 	public Collection<AbonoPagar> buscarPorCuentaPagar() {
 		return abonoPagarDao.buscarPorCuentaPagar();

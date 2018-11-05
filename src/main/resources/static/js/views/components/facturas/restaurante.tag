@@ -3366,15 +3366,17 @@ _sumarBilletes(e){
         self.factura.totalEfectivo = 0
         self.primeraVezBilleteClick = true
         self.update()
+
     }
     var item = e.item
     if(item.valor == 0 ){
-       self.factura.totalEfectivo = 0
+      self.factura.totalEfectivo = 0
        self.factura.totalTarjeta  = 0
        self.factura.totalBanco    = 0
        self.factura.totalCambioPagar  = 0
        self.totalCambioPagar = 0
        self.claseCambioDinero     = "entregarCambioPositivo"
+       $(".totalEfectivo").val(null) 
     }else{
        self.factura.totalEfectivo = __valorNumerico(item.valor) + __valorNumerico(self.factura.totalEfectivo)
        $('.efectivo').val(self.factura.totalEfectivo)
@@ -3399,14 +3401,14 @@ _sumarBilletes(e){
 function cargaBilletes(){
     self.billetes = []
     self.update()
-    _incluirBilletes("₡","50,000",50000,'/dist/img/billete50000.jpg')
-    _incluirBilletes("₡","20,000",20000,'/dist/img/billete20000.jpg')
-    _incluirBilletes("₡","10,000",10000,'/dist/img/billete10000.jpg')
-    _incluirBilletes("₡","5,000",5000,'/dist/img/billete5000.jpg')
+   _incluirBilletes("₡","1000",1000,'/dist/img/billete1000.jpg')
     _incluirBilletes("₡","2,000",2000,'/dist/img/billete2000.jpg')
-    _incluirBilletes("₡","1000",1000,'/dist/img/billete1000.jpg')
+    _incluirBilletes("₡","5,000",5000,'/dist/img/billete5000.jpg')
     _incluirBilletes("","Limpiar",0,'/dist/img/limpiar.png')
-
+    _incluirBilletes("₡","10,000",10000,'/dist/img/billete10000.jpg')
+    _incluirBilletes("₡","20,000",20000,'/dist/img/billete20000.jpg')
+     _incluirBilletes("₡","50,000",50000,'/dist/img/billete50000.jpg')
+    
 }
 /**
 *    Incluir a los billetes

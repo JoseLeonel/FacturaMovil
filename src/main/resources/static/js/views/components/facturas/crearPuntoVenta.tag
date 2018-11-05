@@ -355,7 +355,7 @@
     </div>
 </div>
 <!--Modal mostrar  -->
-<div id="modalClientes" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div id="modalClientes" class="modal fade modalClientes " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header with-border table-header" >
@@ -1484,9 +1484,9 @@ function mostrarPAgo(){
 */
 __addProductToDetail(e){
     $('.precioVenta').val(null)
-    if(self.empresa.tieneLector !="Activo"){
-        return
-    }
+  //  if(self.empresa.tieneLector !="Activo"){
+  //      return
+   // }
     if (e.keyCode != 13) {
         return;
     } 
@@ -1520,7 +1520,7 @@ __addProductToDetail(e){
    
     __buscarcodigo(codigoActual,__valorNumerico(cantidadAct),0);
     if(self.articulo !=null){
-        if(self.articulo.tipoCodigo !="04"){
+        if(self.articulo.tipoCodigo !="04" || self.empresa.tieneLector !="Activo"){
             $('.precioVenta').val(null)
             $('.codigo').val(null)
             $('.codigo').select()
@@ -1580,7 +1580,7 @@ function __sumarMasArticulo(codigo,precio){
 
         return;
     }
-    if(self.articulo.tipoCodigo =="04"){
+    if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
         return
     }
     var valorPrecio =  parseFloat(precio)
@@ -1887,11 +1887,11 @@ function __buscarcodigo(idArticulo,cantidad,precio){
                         self.descripcionArticulo = modeloTabla.descripcion
                         self.update()
                         if(self.articulo !=null){
-                            if(self.articulo.tipoCodigo =="04"){
+                            if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
                                // $('#codigo').val(self.articulo.codigo)
-                                $('#precioVenta').val(self.articulo.precioPublico)
-                                $('#precioVenta').select()
-                                $("#precioVenta").focus()
+                                $('.precioVenta').val(self.articulo.precioPublico)
+                                $('.precioVenta').select()
+                                $(".precioVenta").focus()
                                 return
                             }
                         }
@@ -1938,7 +1938,7 @@ function __agregarArticulo(cantidad){
     }
     var encontrado = false;
     //uso interno
-    if(self.articulo.tipoCodigo =="04"){
+    if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
         __nuevoArticuloAlDetalle(cantidad);
         encontrado = true;
     }
@@ -2322,12 +2322,23 @@ function __agregarArticulos() {
 	       var data = table.row($(this).parents("tr")).data();
 	     }
         self.articulo = data;
-        self.update();  
+        self.update(); 
+        if(self.articulo !=null){
+            if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
+                $('#codigo').val(self.articulo.codigo)
+                $('.precioVenta').val(self.articulo.precioPublico)
+                $('.precioVenta').select()
+                $(".precioVenta").focus()
+                 $('#modalInventario').modal('hide') 
+                return
+            }
+        } 
         if(self.articulo.contable == "si"){
            __buscarcodigo(self.articulo.codigo,1,0)
         }else{
             __agregarArticulo(1)
         }
+        $('#modalInventario').modal('hide') 
 	    
     });
 }
@@ -2413,6 +2424,7 @@ function __seleccionarClientes() {
 	     }
         self.cliente = data
         self.update();
+         $('#modalClientes').modal('hide') 
         
     });
 }
@@ -2599,14 +2611,13 @@ function cargaBilletes(){
     self.billetes = []
     self.update()
     
-    _incluirBilletes("₡","10,000",10000,'/dist/img/billete10000.jpg')
-    _incluirBilletes("₡","20,000",20000,'/dist/img/billete20000.jpg')
-
-    _incluirBilletes("₡","50,000",50000,'/dist/img/billete50000.jpg')
     _incluirBilletes("₡","1000",1000,'/dist/img/billete1000.jpg')
     _incluirBilletes("₡","2,000",2000,'/dist/img/billete2000.jpg')
     _incluirBilletes("₡","5,000",5000,'/dist/img/billete5000.jpg')
     _incluirBilletes("","Limpiar",0,'/dist/img/limpiar.png')
+    _incluirBilletes("₡","10,000",10000,'/dist/img/billete10000.jpg')
+    _incluirBilletes("₡","20,000",20000,'/dist/img/billete20000.jpg')
+     _incluirBilletes("₡","50,000",50000,'/dist/img/billete50000.jpg')
 }
 /**
 *    Incluir a los billetes

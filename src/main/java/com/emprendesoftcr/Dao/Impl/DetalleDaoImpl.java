@@ -14,6 +14,12 @@ import com.emprendesoftcr.Dao.DetalleDao;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Factura;
 
+/**
+ * Detalles de ventas
+ * DetalleDaoImpl.
+ * @author jose.
+ * @since 3 nov. 2018
+ */
 @Repository("detalleDao")
 public class DetalleDaoImpl implements DetalleDao {
 

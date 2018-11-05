@@ -15,15 +15,14 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 
 /**
- * cuentas por cobrar que se debe cobrar a los clientes CuentaCobrarBoImpl.
+ * cuentas por pagar de los proveedores.
  * @author jose.
  * @since 25 mar. 2018
  */
-
 @EnableTransactionManagement
 @Service("cuentaPagarBo")
 public class CuentaPagarBoImpl implements CuentaPagarBo {
-	
+
 	@Autowired
 	private CuentaPagarDao cuentaPagarDao;
 
@@ -53,10 +52,10 @@ public class CuentaPagarBoImpl implements CuentaPagarBo {
 	public CuentaPagar buscar(Long id) {
 		return cuentaPagarDao.buscar(id);
 	}
-	
+
 	@Override
-	public Collection<CuentaPagar> cuentasPorPagarbyFechasAndEmpresaAndClienteAndEstado(Date fechaInicio, Date fechaFin, Empresa empresa, Proveedor proveedor, String estado){
-		
+	public Collection<CuentaPagar> cuentasPorPagarbyFechasAndEmpresaAndClienteAndEstado(Date fechaInicio, Date fechaFin, Empresa empresa, Proveedor proveedor, String estado) {
+
 		return cuentaPagarDao.cuentasPorPagarbyFechasAndEmpresaAndClienteAndEstado(fechaInicio, fechaFin, empresa, proveedor, estado);
 	}
 

@@ -20,7 +20,11 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 
-
+/**
+ * Facturas de ventas FacturaDaoImpl.
+ * @author jose.
+ * @since 3 nov. 2018
+ */
 @Repository("facturaDao")
 public class FacturaDaoImpl implements FacturaDao {
 

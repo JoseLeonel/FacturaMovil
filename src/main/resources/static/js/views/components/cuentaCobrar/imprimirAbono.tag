@@ -188,8 +188,8 @@ function consultaAbono(){
     $.ajax({
         url: "MostrarAbonoAjax.do",
         datatype: "json",
-        data: {abono:self.abono,id:self.abono.id},
-        method:"POST",
+        data: {abono:self.abono},
+        method:"GET",
         success: function (data) {
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {

@@ -82,8 +82,8 @@
                             </tr>
                             <tr>
                             <td></td>
-                            <td ><strong>{$.i18n.prop("tikect.total.final")}</strong></td>
-                            <td ><strong>{facturaImpresa.totalComprobanteSTR}</strong></td>
+                            <td ><h3><strong>{$.i18n.prop("tikect.total.final")}</strong></h3></td>
+                            <td ><h3><strong>{facturaImpresa.totalComprobanteSTR}</strong></h3></td>
                             </tr>
 
                             <tr>

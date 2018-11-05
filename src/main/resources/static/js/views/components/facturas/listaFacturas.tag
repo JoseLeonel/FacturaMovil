@@ -1050,7 +1050,7 @@ function __InformacionDataTable(){
                                },
                                {'data' :'cliente'                    ,"name":"cliente"                     ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
                                    "render":function(cliente,type, row){
-									    return cliente ==null?"":cliente.nombreCompleto;
+									    return cliente ==null?"":cliente.cedula != "999999999999"?cliente.nombreCompleto:row.nombreFactura;
 	 							    }
                                },
                                {'data' :'totalImpuestoSTR'           ,"name":"totalImpuestoSTR"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true  },

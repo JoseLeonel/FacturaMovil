@@ -14,6 +14,11 @@ import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Hacienda;
 
+/**
+ * Hacienda de los xml que se envian a tributacion.
+ * @author jose.
+ * @since 3 nov. 2018
+ */
 @Repository("haciendaDao")
 public class HaciendaDaoImpl implements HaciendaDao {
 
@@ -43,9 +48,9 @@ public class HaciendaDaoImpl implements HaciendaDao {
 			return null;
 		}
 	}
-	
+
 	@Override
-	public Hacienda findByEmpresaAndClave(Empresa empresa,String clave) {
+	public Hacienda findByEmpresaAndClave(Empresa empresa, String clave) {
 		Query query = entityManager.createQuery("select obj from Hacienda obj where obj.empresa = :empresa and obj.clave = :clave ");
 		query.setParameter("empresa", empresa);
 		query.setParameter("clave", clave);
@@ -57,7 +62,6 @@ public class HaciendaDaoImpl implements HaciendaDao {
 		}
 	}
 
-	
 	@Override
 	public Collection<Hacienda> findByEmpresaAndEstado(Empresa empresa, Integer estado) {
 		Query query = entityManager.createQuery("select obj from Hacienda obj where obj.estado = :estado and obj.empresa = :empresa");
@@ -65,23 +69,24 @@ public class HaciendaDaoImpl implements HaciendaDao {
 		query.setParameter("empresa", empresa);
 		return query.getResultList();
 	}
-	
+
 	@Override
-	public Collection<Hacienda> findByEstado(Integer estado,Integer estadoError) {
+	public Collection<Hacienda> findByEstado(Integer estado, Integer estadoError) {
 		Query query = entityManager.createQuery("select obj from Hacienda obj where obj.estado = :estado or obj.estado = :estadoError ");
 		query.setParameter("estado", estado);
 		query.setParameter("estadoError", estadoError);
 		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
-		
+
 		return query.getResultList();
 	}
+
 	@Override
-	public Collection<Hacienda> findByEstadoAndNotificacion(Integer estado, Integer notificacion){
+	public Collection<Hacienda> findByEstadoAndNotificacion(Integer estado, Integer notificacion) {
 		Query query = entityManager.createQuery("select obj from Hacienda obj where obj.estado = :estado and obj.notificacion = :notificacion ");
 		query.setParameter("estado", estado);
 		query.setParameter("notificacion", notificacion);
-		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
-		
+		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS);
+
 		return query.getResultList();
 	}
 

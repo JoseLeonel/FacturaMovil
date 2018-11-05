@@ -16,6 +16,13 @@ import com.emprendesoftcr.modelo.Certificado;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.type.CertificateInfo;
 
+/**
+ * 
+ * CertificadoBoImpl.
+ * Donse se cuarda todo lo referente hacienda
+ * @author jose.
+ * @since 3 nov. 2018
+ */
 @EnableTransactionManagement
 @Service("certificadoBo")
 public class CertificadoBoImpl implements CertificadoBo {
@@ -32,8 +39,8 @@ public class CertificadoBoImpl implements CertificadoBo {
 			// desarrollo
 			// ClassPathResource cpr = new ClassPathResource("/home/jose/Escritorio/llaves/" + nombrep12);
 
-			nombrep12 = "030230066333.p12";
-			password = "2708";
+			nombrep12 = "310273310101.p12";
+			password = "3101";
 			ClassPathResource cpr = new ClassPathResource("/home/jose/dev/llaves/produccion/" + nombrep12);
 			String path = new ClassPathResource("/home/jose/dev/llaves/tmp/").getPath();
 			certificateInfo = P12Utils.dataFromP12(path, cpr.getPath(), password);

@@ -24,9 +24,10 @@ import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.web.command.TotalCuentaPorCobrarCommand;
 
 /**
- * Clientes por sucursal de empresa ClienteDaoImpl.
+ * Cuentas por cobrar de clientes
+ * CuentaCobrarDaoImpl.
  * @author jose.
- * @since 18 mar. 2018
+ * @since 3 nov. 2018
  */
 @Repository("cuentaCobrarDao")
 public class CuentaCobrarDaoImpl implements CuentaCobrarDao {

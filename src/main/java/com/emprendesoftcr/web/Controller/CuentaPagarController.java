@@ -155,7 +155,7 @@ public class CuentaPagarController {
 	
 ////Descarga de manuales de usuario de acuerdo con su perfil
 @RequestMapping(value = "/DescargarDetalleTotalCuentasXPagarAjax.do", method = RequestMethod.GET)
-public void descargarDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam ,@RequestParam Long idProveedorParam,@RequestParam String estadoParam) throws IOException, Exception {
+public void descargarDetalleTotalFacturasPagarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam ,@RequestParam Long idProveedorParam,@RequestParam String estadoParam) throws IOException, Exception {
 
 	Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 	Proveedor proveedor = proveedorBo.buscar(idProveedorParam);
@@ -163,14 +163,14 @@ public void descargarDetalleTotalFacturasAjax(HttpServletRequest request, HttpSe
 	// Se buscan las facturas
 	Date fechaInicio = Utils.parseDate(fechaInicioParam);
 	Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-	Collection<CuentaPagar> cuentaCobras = cuentaPagarBo.cuentasPorPagarbyFechasAndEmpresaAndClienteAndEstado( fechaInicio, fechaFin, usuario.getEmpresa(),proveedor,estadoParam);
+	Collection<CuentaPagar> cuentaPagars = cuentaPagarBo.cuentasPorPagarbyFechasAndEmpresaAndClienteAndEstado( fechaInicio, fechaFin, usuario.getEmpresa(),proveedor,estadoParam);
 
 	String nombreArchivo = "cuentaxPagar.xls";
 	response.setContentType("application/octet-stream");
 	response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 
 	// Se prepara el excell
-	ByteArrayOutputStream baos = createExcelCuentaPagar(cuentaCobras);
+	ByteArrayOutputStream baos = createExcelCuentaPagar(cuentaPagars);
 	ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
 
 	int BUFFER_SIZE = 4096;
@@ -185,7 +185,7 @@ private ByteArrayOutputStream createExcelCuentaPagar(Collection<CuentaPagar> cue
 	// Se prepara el excell
 	ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	List<String> headers = Arrays.asList("#cuenta", "Fecha Emision", "# Documento", "Proveedor", "Total", "Saldo", "Abono");
-	new SimpleExporter().gridExport(headers, cuentaPagar, "id, created_atSTR, factura, proveedorSTR, total,totalSaldo,totalAbono", baos);
+	new SimpleExporter().gridExport(headers, cuentaPagar, "id, created_atSTR, consecutivo, proveedorSTR, total,totalSaldo,totalAbono", baos);
 	return baos;
 }
 	
