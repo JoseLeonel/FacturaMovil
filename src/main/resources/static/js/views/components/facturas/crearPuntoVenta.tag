@@ -173,6 +173,7 @@
                 <div class="cabecera-izquierda">
                   <div class="pfs-funcionales ">
                     <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
+                    <a class="pull-left" href="#"    onclick = {__ListaDecodigos} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f4")}</span></a>
                     <a class="pull-left" href="#"    onclick = {_ReimprimirFactura} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f6")}</span></a>
                     <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago}   title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
                     <a class="pull-left" href="#"   onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
@@ -191,11 +192,6 @@
                                 <input onkeypress={__addPrecioDetail}  id="precioVenta" name ="precioVenta" class="campo precioVenta" type="number" step="any"  placeholder="Precio Ejemplo:600" />
                             </div>
 
-                            <div class="col-sx-12 col-sm-2 col-md-2 col-lg-2">
-                                <button    onclick = {__ListaDecodigos} class="btn btn-primary boton-consultar " id="btn-facturar" >
-                                   <i class="glyphicon glyphicon-plus"></i>{$.i18n.prop("btn.consultar")} 
-                                </button>
-                            </div>
                     </div>
                     <br>
                     <div class="detalles-factura">
@@ -764,9 +760,9 @@ function __InformacionDataTableDia(){
 									    return __TipoDocumentos(numeroConsecutivo,row)
 	 							    }
                                },
-                               {'data' :'cliente'                    ,"name":"cliente"                     ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
+                                {'data' :'cliente'                    ,"name":"cliente"                     ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
                                    "render":function(cliente,type, row){
-									    return cliente ==null?"":cliente.nombreCompleto;
+									    return cliente ==null?"":cliente.cedula != "999999999999"?cliente.nombreCompleto:row.nombreFactura;
 	 							    }
                                },
                                {'data' :'totalImpuestoSTR'               ,"name":"totalImpuestoSTR"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true },
@@ -988,6 +984,10 @@ __CalculaCambioAEntregarKeyPress(e){
  * Listar codigos  llamado del modal para presentar los articulos
  **/   
  __ListaDecodigos(){
+     ListarCodigosArticulos()
+ }
+
+ function ListarCodigosArticulos(){
     self.mostrarListadoArticulos = true
     self.update()
     $('.descArticulo').val(null)
@@ -995,6 +995,7 @@ __CalculaCambioAEntregarKeyPress(e){
     $(".tableListarArticulos").dataTable().fnClearTable();
     $(".tableListarArticulos").DataTable().destroy();
     $('#modalInventario').modal('show')    
+
  }
 /**
 *  Buscar la Factura Pendiente en espera
@@ -2541,7 +2542,11 @@ function __Teclas(){
             aplicarFactura(2)   
         } 
     }   
-    
+    //F4
+    if(tecla ==115){
+     ListarCodigosArticulos()
+    }
+
     //Factura en espera
     if(tecla ==120){
       aplicarFactura(1)   
