@@ -18,12 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Bo.FacturaBo;
+import com.emprendesoftcr.Bo.UsuarioCajaBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.CuentaCobrarDao;
 import com.emprendesoftcr.Dao.FacturaDao;
 import com.emprendesoftcr.Dao.HaciendaDao;
 import com.emprendesoftcr.Dao.KardexDao;
-import com.emprendesoftcr.Dao.UsuarioCajaDao;
 import com.emprendesoftcr.Dao.UsuarioCajaFacturaDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
@@ -75,7 +75,7 @@ public class FacturaBoImpl implements FacturaBo {
 	UsuarioCajaFacturaDao	usuarioCajaFacturaDao;
 
 	@Autowired
-	UsuarioCajaDao				usuarioCajaDao;
+	UsuarioCajaBo				usuarioCajaBo;
 
 	private Logger				log	= LoggerFactory.getLogger(this.getClass());
 
@@ -633,12 +633,13 @@ public class FacturaBoImpl implements FacturaBo {
 						usuarioCajaFactura.setFactura(factura);
 						usuarioCajaFactura.setUsuarioCaja(usuarioCaja);
 						usuarioCajaFacturaDao.agregar(usuarioCajaFactura);
-						if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
-							usuarioCajaDao.actualizarCaja(usuarioCaja, factura.getTotalEfectivo(), factura.getTotalTarjeta(), factura.getTotalBanco(), factura.getTotalCredito(), Constantes.ZEROS_DOUBLE, factura.getTotalImpuestoServicio());
-						}
-
+						
+						//Se mueve al controller por que el procedimiento no toma los cambios
+						/*if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+							//usuarioCajaDao.actualizarCaja(usuarioCaja, factura.getTotalEfectivo(), factura.getTotalTarjeta(), factura.getTotalBanco(), factura.getTotalCredito(), Constantes.ZEROS_DOUBLE, factura.getTotalImpuestoServicio());
+							usuarioCajaBo.actualizarCaja(usuarioCaja);
+						}*/
 					}
-
 				}
 
 				// Actualiza articulo y inventario
