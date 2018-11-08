@@ -98,5 +98,10 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 	public void actualizarCaja(UsuarioCaja usuarioCaja, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalServicio) throws Exception {
 		usuarioCajaDao.actualizarCaja(usuarioCaja, totalEfectivo, totalTarjeta, totalBanco, totalCredito, totalAbono, totalServicio);
 	}
-
+	
+	@Transactional
+	@Override
+	public void actualizarCaja(UsuarioCaja usuarioCaja) throws Exception {
+		usuarioCajaDao.actualizarCaja(usuarioCaja);		
+	}
 }

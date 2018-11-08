@@ -198,7 +198,12 @@ public class UsuarioCajasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 
+			//Se acutalizan los registros
+			usuarioCajaBo.actualizarCaja(usuarioCajaBd);
+			
+			//Se cierra la caja
 			usuarioCajaBo.cierreCaja(usuarioCajaBd);
+
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuarioCaja.cierre.correctamente", usuarioCajaBd);
 
 		} catch (Exception e) {

@@ -152,8 +152,7 @@
                             <div class= "col-md-4 col-sx-12 col-sm-6 col-lg-4 ">
                                 <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalNeto")}  </label>
                                 <input type="text" class="form-control "  value=" {usuarioCaja.totalNetoSTR}" readonly >
-                            </div>
-                           
+                            </div>                           
                         </div>
                     </form>    
                 </div>

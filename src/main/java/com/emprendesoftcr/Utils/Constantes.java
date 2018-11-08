@@ -393,4 +393,21 @@ public class Constantes {
 	public static final String					SP_TOTAL_CUENTA_COBRAR_OUT_SALDO										= "TOTAL_SALDO";
 	public static final String					SP_TOTAL_CUENTA_COBRAR_OUT_ABONO										= "TOTAL_ABONO";
 
+	// Procedimientos para generar el consecutivo de una factura
+	public static final String	SP_GENERAR_CONSECUTIVO										= "SPGENERARCONSECUTIVOFACTURA";
+	public static final String	SP_GENERAR_CONSECUTIVO_IN_ID_EMPRESA			= "ID_EMRPESA";
+	public static final String	SP_GENERAR_CONSECUTIVO_IN_ID_USUARIO			= "ID_USUARIO";
+	public static final String	SP_GENERAR_CONSECUTIVO_IN_TIPO_DOCUMENTO	= "TIPO_DOCUMENTO";
+	public static final String	SP_GENERAR_CONSECUTIVO_OUT_CONSECUTIVO		= "CONSECUTIVO";
+
+	// Procedimiento para generar el consecutivo para una recepcion de factura 
+	public static final String	SP_GENERAR_CONSECUTIVO_RECEPCION										= "SPGENERARCONSECUTIVORECEPCIONFACTURA";
+	public static final String	SP_GENERAR_CONSECUTIVO_RECEPCION_IN_ID_EMPRESA			= "ID_EMRPESA";
+	public static final String	SP_GENERAR_CONSECUTIVO_RECEPCION_IN_ID_USUARIO			= "ID_USUARIO";
+	public static final String	SP_GENERAR_CONSECUTIVO_RECEPCION_IN_TIPO_DOCUMENTO	= "TIPO_DOCUMENTO";
+	public static final String	SP_GENERAR_CONSECUTIVO_RECEPCION_OUT_CONSECUTIVO		= "CONSECUTIVO";
+	
+	// Procecimiento para actualizar la caja
+	public static final String	SP_ACTUALIZA_CAJA																		= "SPACTUALIZACAJAUSUARIO";
+	public static final String	SP_ACTUALIZA_CAJA_ID_CAJA_USUARIO										= "ID_CAJA_USUARIO";
 }

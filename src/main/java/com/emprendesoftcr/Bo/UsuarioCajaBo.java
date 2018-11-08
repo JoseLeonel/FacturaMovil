@@ -18,4 +18,6 @@ public interface UsuarioCajaBo {
 	
 	void actualizarCaja(UsuarioCaja usuarioCaja,Double totalEfectivo,Double totalTarjeta,Double totalBanco,Double totalCredito,Double totalAbono,Double totalServicio)throws Exception;
 
+	void actualizarCaja(UsuarioCaja usuarioCaja)throws Exception;
+
 }

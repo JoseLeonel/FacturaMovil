@@ -4,8 +4,10 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.StoredProcedureQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,6 +123,18 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 			throw e;
 		}
 
+	}
+	
+	@Override
+	public void actualizarCaja(UsuarioCaja usuarioCaja) throws Exception {
+		StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_ACTUALIZA_CAJA);
+
+		// set parametros entrada
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_ACTUALIZA_CAJA_ID_CAJA_USUARIO, Long.class, ParameterMode.IN);
+
+		//Valores de entrada
+		storedProcedure.setParameter(Constantes.SP_ACTUALIZA_CAJA_ID_CAJA_USUARIO, usuarioCaja.getId());
+		storedProcedure.execute();		
 	}
 
 }
