@@ -768,10 +768,6 @@ public class FacturasController {
 			facturaCommand.setTotalServGravados(facturaCommand.getTotalServGravados() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalServGravados());
 			facturaCommand.setTotalVenta(facturaCommand.getTotalVenta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalVenta());
 			facturaCommand.setTotalVentaNeta(facturaCommand.getTotalVentaNeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalVentaNeta());
-			
-			
-			
-			
 			UsuarioCaja usuarioCajaBd = null;
 			// Si esta en estado facturada en base de datos se retorna un mensaje que ya fue procesada
 			if(facturaCommand != null) {
@@ -799,8 +795,6 @@ public class FacturasController {
 				}
 
 			}
-			
-
 			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 					if (facturaCommand.getTotalBanco().equals(Constantes.ZEROS_DOUBLE) && facturaCommand.getTotalEfectivo().equals(Constantes.ZEROS_DOUBLE) && facturaCommand.getTotalTarjeta().equals(Constantes.ZEROS_DOUBLE)) {
@@ -823,7 +817,6 @@ public class FacturasController {
 				}
 
 			}
-
 			if (facturaCommand.getCliente() == null) {
 				Cliente cliente = clienteBo.buscarPorNombreCompletoYEmpresa(Constantes.NOMBRE_CLIENTE_FRECUENTE, usuario.getEmpresa());
 				if (cliente == null) {
@@ -873,7 +866,6 @@ public class FacturasController {
 		}
 
 	}
-
 	/**
 	 * Recibir factura de otro emisor
 	 * @param request
@@ -892,8 +884,6 @@ public class FacturasController {
 
 			String nombreUsuario = request.getUserPrincipal().getName();
 			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
-			// recepcionFactura.setFechaEmision(new Date());
-
 			// Se validan los datos
 			if (recepcionFactura.getMensaje() != null && (!recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_ACEPTADO) && !recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_ACEPTADO_PARCIAL) && !recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_RECHAZADO))) {
 				result.rejectValue("mensaje", "error.recepcionFactura.mensaje.requerido");
@@ -908,7 +898,6 @@ public class FacturasController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-
 			// Se prepara el objeto para almacenarlo
 			recepcionFactura.setNumeroConsecutivoReceptor(empresaBo.generarConsecutivoRecepcionFactura(usuarioSesion.getEmpresa(), usuarioSesion, recepcionFactura));
 			recepcionFactura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
@@ -921,7 +910,6 @@ public class FacturasController {
 		}
 
 	}
-
 	/**
 	 * Mostrar una Factura
 	 * @param request
@@ -938,11 +926,11 @@ public class FacturasController {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
 
-			// Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			 Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 			// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 			// criptografica desde linux
-		//	 certificadoBo.agregar(usuario.getEmpresa(),"","");
+			 certificadoBo.agregar(usuario.getEmpresa(),"","");
 			// usuario.getEmpresa().getClaveLlaveCriptografica().toString(),
 			// usuario.getEmpresa().getNombreLlaveCriptografica());
 			// String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);

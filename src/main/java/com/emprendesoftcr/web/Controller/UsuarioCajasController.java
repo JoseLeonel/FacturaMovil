@@ -97,7 +97,7 @@ public class UsuarioCajasController {
 	public String abrirCajas(ModelMap model) {
 		return "views/caja/abrirCajas";
 	}
-	
+
 	@RequestMapping(value = "/ListarCajasInactivas", method = RequestMethod.GET)
 	public String liasCajas(ModelMap model) {
 		return "views/caja/ListarCajasInactivas";
@@ -115,28 +115,32 @@ public class UsuarioCajasController {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "UsuarioCaja");
-
+		JqGridFilter dataTableFilter = null;
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		JqGridFilter dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
+		dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
-			dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
-			delimitadores.addFiltro(dataTableFilter);
+
+		dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_CAJAS_ABIERTAS_CERRADAS);
 	}
-	
+
 	@RequestMapping(value = "/ListarUsuariosCajasCerradasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarUsuariosCajasCerradasAjax(HttpServletRequest request, HttpServletResponse response) {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "UsuarioCaja");
-
+		JqGridFilter dataTableFilter = null;
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		JqGridFilter dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
-		delimitadores.addFiltro(dataTableFilter);
-			dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_INACTIVO.toString() + "'", "=");
+		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_EMPRESA) && !request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+			dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
+
+		}
+		dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_INACTIVO.toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_CAJAS_ABIERTAS_CERRADAS);
 	}

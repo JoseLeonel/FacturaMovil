@@ -519,7 +519,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/3 * * * ?")
+	@Scheduled(cron = "0 0/4 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {

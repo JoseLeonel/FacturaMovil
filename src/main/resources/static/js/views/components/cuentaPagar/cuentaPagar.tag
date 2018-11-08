@@ -6,6 +6,41 @@
         </div>
         <div class=" col-sm-4 col-md-4 col-lg-4 text-right"></div>
     </div>
+    <!-- Modal correo alternativo-->
+	<div class="modal fade" id="ModalCorreoAlternativo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	          
+	                <h1 class="box-title"><i class="btn-correo"></i>&nbsp {$.i18n.prop("hacienda.titulo.correo.alternativo")}     </h1>
+	          
+	      </div>
+	      <div class="modal-body">
+	        <form id = "formulario" name ="formulario "   class="advanced-search-form">
+	            <div class="row">   
+	                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+	                    <label class="knob-label" >{$.i18n.prop("hacienda.correo")}</label>
+	                    <input type="email" class="form-control correoAlternativo" placeHolder ="{$.i18n.prop("hacienda.correo.ejemplo")}" id="correoAlternativo" name="correoAlternativo" value=""  >
+	                </div>
+	            </div>
+	        </form>
+	      </div>
+	      <div class="modal-footer">
+	        <div class="row">
+	            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+	                <button onclick ={__regresarAlListadoAlternativo}  type="button" class="btn-dark-gray btn-back  pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+	                    {$.i18n.prop("btn.volver")}
+	                </button>
+	            </div>
+	            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+	                <button  onclick={__EnviarCorreoAlternativo}   class="btn-green btn-correo pull-right" >  {$.i18n.prop("btn.enviar.correo")}</button>
+	            </div>
+	         </div>		       
+	      </div>
+	    </div>
+	  </div>
+	</div>
+    
   <br>
     <br><br>
     <!-- Inicio Filtros-->
@@ -283,60 +318,7 @@
     </div>
 <!-- Fin del Listado -->
 
-<div class="row center " show ={mostrarFormulario} >
-    <div class="col-md-2 col-lg-2 col-sm-2"></div>
-        <div class="col-md-8 col-lg-8 col-sx-12 col-sm-8">
-            <div class="box box-solid box-primary">
-                <div class="box-header with-border">
-                    <h1 class="box-title"><i class="fa fa-edit"></i>&nbsp Consulta de la cuenta por pagar     </h1>
-                </div>
-                <div class="box-body">
-                    <form id = "formulario" name ="formulario "   class="advanced-search-form">
-                        <input type="hidden" name="id" id="id" value="{cuentaPagar.id}">
-                        <input type="hidden" name="cliente" id="cliente" value="{cuentaPagar.cliente.id}">
-                        <input type="hidden" name="vendedor" id="vendedor" value="{cuentaPagar.vendedor.id}">
-                        <input type="hidden" id="letraCambio" name="letraCambio" value="{cuentaPagar.letraCambio}"  >
-                        <div class="row">
-                            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 left">
-                                <label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>
-                            </div>
-                        </div>
-                        <div class="row">    
-                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
-                                <label  >{$.i18n.prop("cuentaPagar.proveedor")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control "  value="{cuentaPagar.cliente.nombreCompleto}" readonly>
-                            </div>
-                        </div>
-                        <div class="row">    
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                    <label  >{$.i18n.prop("cuentaPagar.fechaEntrega")} <span class="requeridoDato">*</span></label>
-                                    <input type="text" class="form-control fechaEntrega" placeHolder ="{$.i18n.prop('cuentaPagar.fechaEntrega')}"  id="fechaEntrega"  name= "fechaEntrega" value="{cuentaPagar.fechaEntrega}"  readonly>
-                            </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label  >{$.i18n.prop("cuentaPagar.fechaPlazo")} <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control" placeHolder ="{$.i18n.prop('cuentaPagar.fechaPlazo')}" id="fechaPlazo" name="fechaPlazo"  value="{cuentaPagar.fechaPlazo}" readonly>
-                            </div>                            
 
-                        </div>
-
-
-                    </form>    
-                </div>
-                <div class="box-footer">
-                    <div class="row">
-                       <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                            <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-                                {$.i18n.prop("btn.volver")}
-                            </button>
-                       </div>
-                    </div>   
-                
-                  
-                </div>
-            </div>   
-        </div>
-        <div class="col-md-2 col-lg-2 col-sm-2"></div>
-    </div>
 
 <imprimir-abonoPagar></imprimir-abonoPagar>
 
@@ -392,7 +374,6 @@
         }
 
 </style>
-
 <script>
     var self = this
     self.idiomaDataTable           = []         // idioma de la datatable nuevo
@@ -405,7 +386,6 @@
     self.botonModificar            = false
     self.botonAgregar              = false
     self.hay_datos                 = false         
-    
     self.mostrarListadoAbonoPagar      = false
     self.mostrarCrearAbonoPagar         = false
     self.cuentaPagar                   ={
@@ -413,7 +393,6 @@
         recibo:"",
         letraCambio:"",
         factura:"",
-        facturaManual:"",
         totalComision:0,
         descuento:0,
         cantidadPagos:0,
@@ -421,16 +400,12 @@
         total:0,
         totalAbono:0,
         totalSaldo:0,
-        descripcionArticulo:"",
         nota:"",
         tipo:"",
         estado:"",
         fechaPlazo:null,
         fechaEntrega:null,
-        cliente:{
-            id:null
-        },
-         vendedor:{
+        proveedor:{
             id:null
         }
     }
@@ -451,18 +426,14 @@
 
     }
     self.idProveedor = 0
-    self.on('mount',function(){
+self.on('mount',function(){
         $("#filtros").validate(reglasDeValidacionParametros());
-        $("#formulario").validate(reglasDeValidacion());
         $("#formularioAbonoPagar").validate(reglasDeValidacionabonoPagar());
         __InicializarTabla('.tableListar')
         __InicializarTabla  ('.tableListaAbonoPagar')
         agregarInputsCombos();
         listaProveedoresActivos() 
-        __Eventos()
         __MantenimientoAgregarAbonoPagar()
-        __verAbonoPagar()
-        __Anular()
         $('.datepickerFechaFinal').datepicker(
        	{
             format: 'yyyy-mm-dd',
@@ -487,64 +458,6 @@
                 $(".errorServerSideJgrid").remove();
             }, false );
     })
-/**
-* Camps requeridos
-**/
-var reglasDeValidacion = function() {
-	var validationOptions = $.extend({}, formValidationDefaults, {
-		rules : {
-			recibo : {
-                maxlength:25,
-                minlength:1,
-			},
-            letraCambio : {
-                maxlength:25,
-                minlength:1,
-			},
-            facturaManual : {
-                numeroMayorCero:true,
-                maxlength:11,
-                minlength:1,
-			},
-            total: {
-                numeroMayorCero:true,
-                required : true,
-			},
-            totalComision : {
-                numeroMayorCero:true,
-			},
-            descuento : {
-                maxlength:8,
-			},
-            cantidadPagos : {
-                numeroMayorCero:true,
-                required : true,
-			},
-            montoCouta : {
-                required : true,
-                numeroMayorCero:true,
-			},
-            descripcionArticulo : {
-                required : true,
-                maxlength:255,
-                minlength:1,
-			},
-            nota : {
-                maxlength:255,
-                minlength:1,
-			},
-            fechaEntrega : {
-                required : true,
-			},
-            fechaPlazo : {
-                required : true,
-			},
-		},
-		ignore : []
-
-	});
-	return validationOptions;
-};
 /**
 *  Reglas de validacion para el abonoPagar
 **/
@@ -585,7 +498,6 @@ var reglasDeValidacionabonoPagar = function() {
 	});
 	return validationOptions;
 }
-
 /**
 * Camps requeridos
 **/
@@ -605,7 +517,6 @@ var reglasDeValidacionParametros = function() {
 	});
 	return validationOptions;
 };
-
 /**
 *  Crear el combo de estados
 **/
@@ -623,8 +534,80 @@ function __ComboEstadosCuentaCobrar(){
     
     self.update();
 }
-
-
+/**
+*correoalternativo
+**/
+__CorreoAlternativo(){
+	$('#correoAlternativo').val(null);
+    $('#ModalCorreoAlternativo').modal({
+	    backdrop: 'static',
+        keyboard: false
+    });
+    $('#ModalCorreoAlternativo').modal('show');      
+}
+/**
+* Enviar el correo
+**/
+__EnviarCorreoAlternativo(){
+    if ($("#formulario").valid()) {
+    	 __EnviarPorCorreo()
+     }
+}
+/**
+*  Regresar al listado
+**/
+__regresarAlListadoAlternativo(){
+    $('#ModalCorreoAlternativo').modal('hide')
+}
+/**
+*  Busqueda de la informacion y la envia por correo
+**/
+function __EnviarPorCorreo(){
+    if ($("#filtros").valid()) {
+        var parametros = {
+           	correoAlternativo:$('#correoAlternativo').val(),		
+           	fechaInicioParam:$('#fechaInicio').val(),
+       	    fechaFinParam:$('#fechaFinal').val(),
+            idProveedorParam:$('#idProveedor').val(),
+            estadoParam : $('.estado').val(),
+            total:$('.totalGeneral').val(),
+            abono:$('.totalAbonoGeneral').val(),
+            saldo:$('.totalSaldoGeneral').val()
+		};
+		$.ajax({
+		    url: "EnvioDetalleCuentasXPagarCorreoAjax.do",
+		        datatype: "json",
+		        data:parametros ,
+		        method:"GET",
+		    success: function (data) {
+                if (data.status != 200) {
+                   	serverMessageJson(data);
+                    if (data.message != null && data.message.length > 0) {
+                       	swal({
+      	                    title: '',
+      	                    text: data.message,
+      	                    type: 'error',
+      	                    showCancelButton: false,
+      	                    confirmButtonText: 'Aceptar',
+      	                })
+                        }
+                } else {
+                   swal({
+	                    title: '',
+	                    text: "Enviado el correo Exitosamente",
+	                    type: 'success',
+	                    showCancelButton: false,
+	                    confirmButtonText: 'Aceptar',
+	                })
+                }
+	        },
+	        error: function (xhr, status) {
+	            console.log(xhr);
+	            mensajeErrorServidor(xhr, status);
+	        }
+        });
+ 	}		
+}
 /*
  * Muestra los filtros avanzados
  */
@@ -638,7 +621,6 @@ function __ComboEstadosCuentaCobrar(){
     }
     self.update();
 }
-
 /**
 * limpiar los filtros
 **/
@@ -646,19 +628,18 @@ __limpiarFiltros(){
     $('#fechaInicio').val(null)
     $('#fechaFinal').val(null)
 }
-
 /**
 *  Busqueda de la informacion por rango de fechas
 **/
 __Busqueda(){
-	$("#filtros").validate(reglasDeValidacion());
+	$("#filtros").validate(reglasDeValidacionParametros());
      if ($("#filtros").valid()) {
          listadoConsulta()
-
      }
-
 }
-
+/**
+* Consulta de las cuentas por pagar
+**/
 function listadoConsulta(){
          var formulario = $("#filtros").serialize();
         self.fechaInicio =$('.fechaInicio').val()
@@ -684,9 +665,8 @@ function listadoConsulta(){
                     loadListar(".tableListar",idioma_espanol,self.informacion_tabla,result.aaData)
                     agregarInputsCombos();
                     ActivarEventoFiltro(".tableListar")
-                    __mostrarListadoAbonoPagar()
-                    __mostrarCuentaPorPagar()
                     TotalesGenerales(result.aaData)
+                    __mostrarAbonos()
 
                     
                 }else{
@@ -702,7 +682,6 @@ function listadoConsulta(){
         });
 
 }
-
 /**
 *  Suma de totales de cuenta por cobrar 
 **/
@@ -723,10 +702,8 @@ function TotalesGenerales(data){
      self.total = formatoDecimales(self.total,2)
      self.totalAbono = formatoDecimales(self.totalAbono,2)
      self.totalSaldo = formatoDecimales(self.totalSaldo,2)
-     
      self.update()
 }
-
 /**
 *  Suma del monto de tarjeta
 **/
@@ -735,7 +712,6 @@ __TotalTarjeta(e){
     self.abonoPagar.total = self.abonoPagar.totalBanco + self.abonoPagar.totalEfectivo + self.abonoPagar.totalTarjeta
     self.update()
 }
-
 /**
 * Suma del monto de Efectivo
 **/
@@ -744,7 +720,6 @@ __TotalEfectivo(e){
     self.abonoPagar.total = self.abonoPagar.totalBanco  + self.abonoPagar.totalEfectivo + self.abonoPagar.totalTarjeta
     self.update()
 }
-
 /**
 * Suma del monto de cheque
 **/
@@ -753,12 +728,10 @@ __TotalBanco(e){
     self.abonoPagar.total = self.abonoPagar.totalBanco  + self.abonoPagar.totalEfectivo + self.abonoPagar.totalTarjeta
     self.update()
 }
-
 /**
 *  Regresar al listado
 **/
 __regresarAlListado(){
-   
     self.mostrarListado       = true
     self.botonAgregar         = false
     self.botonModificar       = false   
@@ -767,8 +740,6 @@ __regresarAlListado(){
     self.mostrarCrearAbonoPagar    = false
     self.update()
     listadoConsulta();
-
-   
 }
 /**
 * Regresar al listado de los abonoPagars 
@@ -780,7 +751,6 @@ __regresarAlListadoAbono(){
 * Regresar al listado de abonoPagars
 **/
 function __regresar(){
-   
     self.mostrarListado       = false
     self.botonAgregar         = false
     self.botonModificar       = false   
@@ -788,10 +758,8 @@ function __regresar(){
     self.mostrarListadoAbonoPagar = true
     self.mostrarCrearAbonoPagar    = false
     self.update()
-    listadoConsulta();
-
+        listadoConsulta();
 }
-
 /**
 * Calculo del monto de la cuota con base al total a pagar
 **/
@@ -803,8 +771,6 @@ __MontoCuota(e){
     self.cuentaPagar.montoCouta =self.cuentaPagar.total / __valorNumerico($('.cantidadPagos').val())
     self.update()
 }
-
-
 /**
 *   Agregar 
 **/
@@ -858,12 +824,8 @@ function __agregarRegistro(transaccion,formulario,mensajeAlerAgregar,urlAgregar,
 	                           showCancelButton: false,
 	                           confirmButtonText: 'Aceptar',
 	                         })
-                             if(transaccion == 1){
-                                __LimpiarCuentasPorPagar() 
-                             }else{
-                                 __LimpiarAbonoPagar()
-                                  listaAbonoPorCuentaPorPagar()
-                             }
+                            __LimpiarAbonoPagar()
+                            listaAbonoPorCuentaPorPagar()
                         }
                     },
                     error : function(xhr, status) {
@@ -874,13 +836,6 @@ function __agregarRegistro(transaccion,formulario,mensajeAlerAgregar,urlAgregar,
             }
         });
     }
-   
-}
-/**
-*  Activar Eventos de cuentas por pagar
-**/
-function __Eventos(){
-   $("#formulario").validate(reglasDeValidacion());
 }
 /**
 * Eventos de los abonoPagars
@@ -908,11 +863,9 @@ function __ComboEstadoscuentaPagarPendiente(){
         descripcion:$.i18n.prop("cuentaPagar.estado.pendiente")
      });
      self.update();
-
 }
-
 /**
-*  Obtiene la lista de los clientes activos
+*  Obtiene la lista de los proveedores activos
 **/
 function listaProveedoresActivos(){
     self.provedores                = {data:[]}
@@ -933,9 +886,7 @@ function listaProveedoresActivos(){
             console.log(xhr);
         }
     })
-
 }
-
 /**
 *Formato del listado de los cambios
 **/
@@ -955,60 +906,13 @@ function __InformacionDataTable(){
                                  }
 	      		            }];
     self.update();
-   
 }
-
 /**
 *Formato de la fecha con hora
 **/
 function __displayDate_detail(fecha) {
     var dateTime = new Date(fecha);
     return moment(dateTime).format('DD/MM/YYYY ');
-}
-
-/**
-*Limpiar cuentas por pagar
-**/
-function __LimpiarCuentasPorPagar(){
-    self.cuentaPagar  ={
-        id:null,
-        recibo:"",
-        letraCambio:"",
-        factura:"",
-        facturaManual:"",
-        totalComision:0,
-        descuento:0,
-        cantidadPagos:0,
-        montoCouta:0,
-        total:0,
-        totalAbono:0,
-        totalSaldo:0,
-        descripcionArticulo:"",
-        nota:"",
-        tipo:"",
-        estado:"",
-        fechaPlazo:null,
-        fechaEntrega:null,
-        cliente:{
-            id:null
-        },
-        vendedor:{
-            id:null
-        }
-    }
-    self.update()  
-    $("#fechaEntrega").val(null)
-    $("#fechaPlazo").val(null)
-    $("#recibo").val(null)
-    $("#letraCambio").val(null)
-    $("#facturaManual").val(null)
-    $("#totalComision").val(null)
-    $("#descuento").val(null)
-    $("#cantidadPagos").val(null)
-    $("#montoCouta").val(null)
-    $("#total_cuentaPagar").val(null)
-    $("#descripcionArticulo").val(null)
-    $("#nota").val(null)  
 }
 /**
 * Limpiar abonoPagars
@@ -1043,36 +947,14 @@ function __LimpiarAbonoPagar(){
 * Opciones listado de los clientes
 */
 function __Opciones(){
-  var modificar  = '<a href="#"  title="Mostrar la cuenta por pagar" class="btn btn-primary  btn-buscar btnVer" role="button"> </a>';
-  var abonoPagar   = '<a href="#"  title="Ver/Crear abono" class="btn btn-success btnlistdoAbonoPagar"  role="button"><i class="fa fa-bank"></i></a>';
-  return  modificar +" " + abonoPagar;
-}
-
-/**
- * Funcion para Modificar del Listar
- */
-function __mostrarCuentaPorPagar(){
-	$('#tableListar').on('click','.btnVer',function(e){
-        $("#formulario").validate(reglasDeValidacion());
-        $(".errorServerSideJgrid").remove();
-		var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-        __LimpiarCuentasPorPagar() 
-        self.cuentaPagar = data
-        self.update()
-        __consultar()
-	});
+  var abonoPagar   = '<a href="#"  title="Ver/Crear abono" class="btn btn-success btnVerAbono"  role="button"><i class="fa fa-bank"></i></a>';
+  return abonoPagar;
 }
 /**
-*  Mostrar listado de abonoPagars
+*  Mostrar listado de abonos
 **/
-function __mostrarListadoAbonoPagar(){
-    $('.tableListar').on('click','.btnlistdoAbonoPagar',function(e){
+function __mostrarAbonos(){
+    $('.tableListar').on('click','.btnVerAbono',function(e){
         var table = $('.tableListar').DataTable();
 		if(table.row(this).child.isShown()){
 			//cuando el datatable esta en modo responsive
@@ -1080,10 +962,9 @@ function __mostrarListadoAbonoPagar(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        $(".tableListaAbonoPagar").dataTable().fnClearTable()
+        $(".tableListaAbonos").dataTable().fnClearTable()
         includeActionsAbonoPagar('.dataTables_wrapper','.dataTables_length')
-        __LimpiarCuentasPorPagar() 
-        self.cuentaPagar = data    
+        self.cuentaPagar               = data    
         self.error                     = false
         self.errors                    = [];
         self.modificar                 = false
@@ -1091,13 +972,11 @@ function __mostrarListadoAbonoPagar(){
         self.mostrarFormulario         = false
         self.mostrarListado            = false 
         self.mostrarListadoAbonoPagar  = true
-        
-        self.mostrarCrearAbonoPagar         = false
+        self.mostrarCrearAbonoPagar    = false
         self.update()
         listaAbonoPorCuentaPorPagar()
     })
 }
-
 /**
 *  incluir el boto agregar en el modulo de abonoPagars
 **/
@@ -1112,47 +991,7 @@ function includeActionsAbonoPagar(dataTables_wrapper,dataTables_length) {
     new_header += "</div>";
     parent.prepend(new_header);
 }
-/**
-* Consultar una cuenta por pagar
-**/
-function __consultar(){
-    var formulario = $('#formulario').serialize();
-    $.ajax({
-        url: "MostrarcuentaPagarAjax.do",
-        datatype: "json",
-        data: formulario,
-        method:"GET",
-        success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                        $(".errorServerSideJgrid").remove();
-                        $("#formulario").validate(reglasDeValidacion());
-                        self.mostrarListado   = false;
-                        self.mostrarFormulario  = true 
-                        self.botonModificar   = true;
-                        self.botonAgregar = false;
-                        self.cuentaPagar  =  modeloTabla
-                        self.cuentaPagar.fechaPlazo = __displayDate_detail(self.cuentaPagar.fechaPlazo)
-                        self.cuentaPagar.fechaEntrega = __displayDate_detail(self.cuentaPagar.fechaEntrega)
-                        self.update()
-                         listaClientesActivos() 
-                        __ComboEstadoscuentaPagarModificar()
-                    });
-                }
-            }
-            
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
-        }
-    });
-}
+
 /**
 *Formato de la fecha con hora
 **/
@@ -1180,7 +1019,6 @@ function __ComboEstadoscuentaPagarModificar(){
      });
     self.update();
 }
-
 /**
 *Funciones de los abonoPagars de la cuenta por pagar
 **/
@@ -1188,17 +1026,17 @@ function listaAbonoPorCuentaPorPagar(){
     if(self.cuentaPagar.totalSaldo == 0){
         $( ".btn-agregarAbonoPagar" ).remove();
     }
-    $('.tableListaAbonoPagar').DataTable().destroy();
-     $('.tableListaAbonoPagar').dataTable().fnClearTable();
     var parametros = {idCuentaPagar:self.cuentaPagar.id}
-
     $.ajax({
         url: "ListarAbonosPorCuentaPagarAjax.do",
         datatype: "json",
         method:"GET",
         data:parametros,
         success: function (result) {
+            $('.tableListaAbonoPagar').DataTable().destroy();
+            $('.tableListaAbonoPagar').dataTable().fnClearTable();
             if(result.aaData.length > 0){
+
                 __InformacionTabla_lista_AbonoPagar();
                 loadListar(".tableListaAbonoPagar",idioma_espanol,self.informacion_tabla_AbonoPagar,result.aaData)
                 if(self.cuentaPagar.totalSaldo == 0){
@@ -1208,16 +1046,18 @@ function listaAbonoPorCuentaPorPagar(){
                 }
                 agregarInputsCombosAbonoPagar();
                 ActivarEventoFiltro(".tableListaAbonoPagar")
+                 
+            __verAbonoPagar()
+            __Anular()
+            __imprimirAbonoPagar()
             }else{
                 includeActionsAbonoPagar('.dataTables_wrapper','.dataTables_length')  
                 agregarInputsCombosAbonoPagar();
                 ActivarEventoFiltro(".tableListaAbonoPagar")
 
             }
-            __MantenimientoAgregarAbonoPagar()
-            __verAbonoPagar()
-            __Anular()
-            __imprimirAbonoPagar()
+              __MantenimientoAgregarAbonoPagar()
+         
         },
         error: function (xhr, status) {
             mensajeErrorServidor(xhr, status);
@@ -1225,7 +1065,6 @@ function listaAbonoPorCuentaPorPagar(){
         }
     })
 }
-
 /**
 *  Informacion de la lista de los abonoPagars
 **/
@@ -1260,11 +1099,8 @@ function __OpcionesAbonoPagar(id,type,row){
   var anular  = '<a href="#"  title="Anular abonoPagar" class="btn btn-danger anularAbonoPagar"  role="button"><i class="fa fa-trash"></i></a>';
   var imprimir  = '<a href="#"  title="Imprimir" class="btn btn-primary  btn-imprimir btnImprimir" role="button"> </a>';
   anular = row.estado =="Anulado"?"":anular
-  self.cuentaPagar = row.cuentaPagar
-  self.update()
   return  verAbonoPagar + " " + anular + " "+ imprimir;
 }
-
 /**
  * mostrar la abonoPagar
  */
@@ -1280,13 +1116,11 @@ function __imprimirAbonoPagar(){
         riot.mount('imprimir-abonoPagar',{abonoPagar:data});
 	});
 }
-
 /**
  * mostrar la abonoPagar
  */
 function __verAbonoPagar(){
 	$('#tableListaAbonoPagar').on('click','.verAbonoPagar',function(e){
-        $("#formularioAbonoPagar").validate(reglasDeValidacion());
         $(".errorServerSideJgrid").remove();
 		var table = $('#tableListaAbonoPagar').DataTable();
 		if(table.row(this).child.isShown()){
@@ -1300,7 +1134,6 @@ function __verAbonoPagar(){
         consultaAbono()
 	});
 }
-
 /**
 * Consultar los abonoPagars
 **/
@@ -1321,8 +1154,7 @@ function consultaAbono(){
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         //Inicializar el Formulario
                         $(".errorServerSideJgrid").remove();
-                        $("#formularioAbonoPagar").validate(reglasDeValidacionabonoPagar());
-                        self.mostrarListado            = false
+                          self.mostrarListado            = false
                         self.botonModificar            = false
                         self.botonAgregar              = false
                         self.mostrarListadoAbonoPagar      = false
@@ -1346,7 +1178,6 @@ function consultaAbono(){
  */
 function __Anular(){
 	$('#tableListaAbonoPagar').on('click','.anularAbonoPagar',function(e){
-        $("#formularioAbonoPagar").validate(reglasDeValidacion());
         $(".errorServerSideJgrid").remove();
 		var table = $('#tableListaAbonoPagar').DataTable();
 		if(table.row(this).child.isShown()){
@@ -1358,7 +1189,7 @@ function __Anular(){
         self.abonoPagar = data
         self.update()
         __agregarRegistro(2,"#formularioAbonoPagar",$.i18n.prop("abonoPagar.mensaje.alert.anulada"),'anularAbonoPagarAjax.do','ListarAbonosPorCuentaPagarAjax.do','#tableListaAbonoPagar')
-        
+       
 	});
 }
 /**
@@ -1368,7 +1199,6 @@ function __MantenimientoAgregarAbonoPagar(){
       //Inicializar el Formulario
     $('.dataTables_wrapper').on('click','.btn-agregarAbonoPagar',function(e){
         __LimpiarAbonoPagar()
-        
         self.mostrarListado       = false
         self.botonAgregar         = true
         self.botonModificar       = false   
@@ -1378,23 +1208,19 @@ function __MantenimientoAgregarAbonoPagar(){
         self.update()
         $(".errorServerSideJgrid").remove();
         $("#formularioAbonoPagar").validate(reglasDeValidacionabonoPagar());
-
     })
 }
 /**
 *  Agregar los inpust  y select de las tablas
 **/
 function agregarInputsCombos(){
-     // Agregar los input de busqueda 
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
         if ( $(this).index() != 9    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
- 
     })
-
 }
 /**
 *  Agregar los inpust  y select de las tablas
@@ -1407,10 +1233,7 @@ function agregarInputsCombosAbonoPagar(){
         if ( $(this).index() != 8    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
- 
     })
-
 }
-
 </script>    
 </cuenta-pagar>
