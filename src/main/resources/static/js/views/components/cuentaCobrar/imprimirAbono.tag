@@ -23,7 +23,11 @@
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalTarjeta")}  : </strong>{abono.totalTarjetaSTR}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.totalBanco")}   : </strong>{abono.totalBancoSTR}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.total")}        : </strong>{abono.cuentaCobrar.totalSTR}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.saldo")}        : </strong>{abono.cuentaCobrar.totalSaldoSTR}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.saldo")} Actual: </strong>{abono.cuentaCobrar.totalSaldoSTR}<br></div>
+                        <div class="encabezado"><strong><br></div>
+                        <div class="encabezado"><strong><br></div>
+                        <div class="encabezado"><strong><br></div>
+                        <div class="encabezado"><strong>Firma: ____________________________<br></div>
                         <div class="encabezado" show='{abono.nota != ""}'><strong> {$.i18n.prop("imprimir.abono.nota")}         : </strong>{abono.nota}<br></div>
                         <br>
                     </div>
@@ -185,10 +189,14 @@ self.on('mount',function(){
 * Consultar los Abonos
 **/
 function consultaAbono(){
+    var parametros = {
+        id:self.abono.id
+
+    }
     $.ajax({
         url: "MostrarAbonoAjax.do",
         datatype: "json",
-        data: {abono:self.abono},
+        data: parametros,
         method:"GET",
         success: function (data) {
             if (data.status != 200) {

@@ -7,15 +7,17 @@ public class Constantes {
 	public static final ResourceBundle	RESOURCE_BUNDLE																			= ResourceBundle.getBundle("factura");
 
 	public static final String					PLANTILLA_CORREO_CUENTAS_POR_COBRAR									= "email/cuentasxcobrar.vm";
-	
+
 	public static final Integer					HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO								= 98;
-	
-	public static final Integer					FACTURA_ESTADO_PROBLEMA_AL_FIRMAR  									= 98;
+
+	public static final Integer					FACTURA_ESTADO_PROBLEMA_AL_FIRMAR										= 98;
 
 	public static final String					COMBO_TODOS																					= "0";
 	// Empresa aplica factura Electronica
 	public static final Integer					NO_APLICA_FACTURA_ELECTRONICA												= 1;
 	public static final Integer					SI_APLICA_FACTURA_ELECTRONICA												= 0;
+	public static final Integer					SI_ENVIAR_CORREO_CLIENTE_FRECUENTE											= 1;
+	public static final Integer					NO_ENVIAR_CORREO_CLIENTE_FRECUENTE											= 0;
 //cantidad de dias de un credito minimo
 	public static final Integer					CANTIDAD_DIAS_MINIMO_CREDITO												= 1;
 	// Tipo de codigos de productos
@@ -30,9 +32,9 @@ public class Constantes {
 	// Semaforo
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 100;
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS								= 20;
-	
+
 	// 48 horas cada 5 minutos
-	
+
 	public static final Integer					MAXIMO_REINTENTOS_ACEPTACION												= 60;
 	public static final String					MAXIMO_REINTENTOS_ACEPTACION_STR										= "Tope de intentos de aceptacion,no envio respuesta";
 
@@ -116,6 +118,7 @@ public class Constantes {
 	// Hacienda
 	public static final Integer					HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE								= 1;
 	public static final Integer					HACIENDA_NOTIFICAR_CLIENTE_ENVIADO									= 2;
+	public static final Integer					HACIENDA_NOTIFICAR_CLIENTE_FRECUENTE_NO_ENVIADO			= 3;
 
 	public static final String					ESTADO_HACIENDA_ACEPTADO														= "1";
 	public static final String					ESTADO_HACIENDA_ACEPTADO_PARCIAL										= "2";
@@ -394,20 +397,20 @@ public class Constantes {
 	public static final String					SP_TOTAL_CUENTA_COBRAR_OUT_ABONO										= "TOTAL_ABONO";
 
 	// Procedimientos para generar el consecutivo de una factura
-	public static final String	SP_GENERAR_CONSECUTIVO										= "SPGENERARCONSECUTIVOFACTURA";
-	public static final String	SP_GENERAR_CONSECUTIVO_IN_ID_EMPRESA			= "ID_EMRPESA";
-	public static final String	SP_GENERAR_CONSECUTIVO_IN_ID_USUARIO			= "ID_USUARIO";
-	public static final String	SP_GENERAR_CONSECUTIVO_IN_TIPO_DOCUMENTO	= "TIPO_DOCUMENTO";
-	public static final String	SP_GENERAR_CONSECUTIVO_OUT_CONSECUTIVO		= "CONSECUTIVO";
+	public static final String					SP_GENERAR_CONSECUTIVO															= "SPGENERARCONSECUTIVOFACTURA";
+	public static final String					SP_GENERAR_CONSECUTIVO_IN_ID_EMPRESA								= "ID_EMRPESA";
+	public static final String					SP_GENERAR_CONSECUTIVO_IN_ID_USUARIO								= "ID_USUARIO";
+	public static final String					SP_GENERAR_CONSECUTIVO_IN_TIPO_DOCUMENTO						= "TIPO_DOCUMENTO";
+	public static final String					SP_GENERAR_CONSECUTIVO_OUT_CONSECUTIVO							= "CONSECUTIVO";
 
-	// Procedimiento para generar el consecutivo para una recepcion de factura 
-	public static final String	SP_GENERAR_CONSECUTIVO_RECEPCION										= "SPGENERARCONSECUTIVORECEPCIONFACTURA";
-	public static final String	SP_GENERAR_CONSECUTIVO_RECEPCION_IN_ID_EMPRESA			= "ID_EMRPESA";
-	public static final String	SP_GENERAR_CONSECUTIVO_RECEPCION_IN_ID_USUARIO			= "ID_USUARIO";
-	public static final String	SP_GENERAR_CONSECUTIVO_RECEPCION_IN_TIPO_DOCUMENTO	= "TIPO_DOCUMENTO";
-	public static final String	SP_GENERAR_CONSECUTIVO_RECEPCION_OUT_CONSECUTIVO		= "CONSECUTIVO";
-	
+	// Procedimiento para generar el consecutivo para una recepcion de factura
+	public static final String					SP_GENERAR_CONSECUTIVO_RECEPCION										= "SPGENERARCONSECUTIVORECEPCIONFACTURA";
+	public static final String					SP_GENERAR_CONSECUTIVO_RECEPCION_IN_ID_EMPRESA			= "ID_EMRPESA";
+	public static final String					SP_GENERAR_CONSECUTIVO_RECEPCION_IN_ID_USUARIO			= "ID_USUARIO";
+	public static final String					SP_GENERAR_CONSECUTIVO_RECEPCION_IN_TIPO_DOCUMENTO	= "TIPO_DOCUMENTO";
+	public static final String					SP_GENERAR_CONSECUTIVO_RECEPCION_OUT_CONSECUTIVO		= "CONSECUTIVO";
+
 	// Procecimiento para actualizar la caja
-	public static final String	SP_ACTUALIZA_CAJA																		= "SPACTUALIZACAJAUSUARIO";
-	public static final String	SP_ACTUALIZA_CAJA_ID_CAJA_USUARIO										= "ID_CAJA_USUARIO";
+	public static final String					SP_ACTUALIZA_CAJA																		= "SPACTUALIZACAJAUSUARIO";
+	public static final String					SP_ACTUALIZA_CAJA_ID_CAJA_USUARIO										= "ID_CAJA_USUARIO";
 }

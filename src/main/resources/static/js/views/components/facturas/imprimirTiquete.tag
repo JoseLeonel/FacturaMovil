@@ -41,9 +41,19 @@
                             <td > *********  </td>
                             </tr>
                             <tr>
-                            	<td></td>
+                            	<td><div class="encabezado"><strong><br></div>
+                                    <div class="encabezado"><strong><br></div>
+                                    <div class="encabezado"><strong><br></div>
+                                </td>
                             	<td ><strong>{$.i18n.prop("tikect.total.comprobante")}</strong></td>
                             	<td ><strong>{facturaImpresa.totalComprobanteSTR}</strong></td>
+                            </tr>
+                             <tr>
+                            	<td><div class="encabezado"><strong><br></div>
+                                    <div class="encabezado"><strong><br></div>
+                                    <div class="encabezado"><strong><br></div>
+                                </td>
+                            	
                             </tr>
                             <tr>
 	                            <td colspan="3">
@@ -330,7 +340,7 @@ function __comboCondicionPago(){
  * **/
 function buscarTipoDocumento(){
     for (var count = 0; count < self.comboTipoDocumentos.length; count++) {
-        if (self.comboTipoDocumentos[count].tipoDoc == self.facturaImpresa.tipoDoc ){// Si existe actualiza la cantidad
+        if (self.comboTipoDocumentos[count].estado == self.facturaImpresa.tipoDoc ){// Si existe actualiza la cantidad
             self.facturaImpresa.tipoDoc =self.comboTipoDocumentos[count].descripcion
             self.update()
             break;

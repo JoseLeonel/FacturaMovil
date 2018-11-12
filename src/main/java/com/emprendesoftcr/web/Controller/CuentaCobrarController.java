@@ -112,7 +112,13 @@ public class CuentaCobrarController {
 	public String listar(ModelMap model) {
 		return "views/cuentasxcobrar/ListarCuentasXCobrar";
 	}
+	@RequestMapping(value = "/ListarCuentasXCobrarConsulta", method = RequestMethod.GET)
+	public String listarConsulta(ModelMap model) {
+		return "views/cuentasxcobrar/ListarCuentasXCobrarConsulta";
+	}
 
+	
+	
 	
 ////Descarga de manuales de usuario de acuerdo con su perfil
 	@RequestMapping(value = "/DescargarDetalleTotalCuentasXCobrarAjax.do", method = RequestMethod.GET)

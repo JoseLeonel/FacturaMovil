@@ -25,7 +25,12 @@
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalTarjeta")}  : </strong>₡{abono.totalTarjeta.toFixed(2)}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.totalBanco")}   : </strong>₡{abono.totalBanco.toFixed(2)}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.total")}        : </strong>₡{abono.cuentaCobrar.toFixed(2)}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.saldo")}        : </strong>₡{abono.cuentaCobrar.toFixed(2)}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.saldo")} Actual : </strong>₡{abono.cuentaCobrar.toFixed(2)}<br></div>
+                        <div class="encabezado"><strong><br></div>
+                        <div class="encabezado"><strong><br></div>
+                        <div class="encabezado"><strong><br></div>
+                        <div class="encabezado"><strong>Firma: ____________________________<br></div>
+
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.nota")}         : </strong>{abono.nota}<br></div>
                         <br>
                     </div>

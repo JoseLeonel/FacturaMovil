@@ -1,12 +1,19 @@
 package com.emprendesoftcr.web.Controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jxls.template.SimpleExporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,6 +30,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.emprendesoftcr.Bo.CompraBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.ProveedorBo;
+import com.emprendesoftcr.Bo.RecepcionFacturaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
@@ -32,7 +40,9 @@ import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Proveedor;
+import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.validator.CompraFormValidator;
 import com.emprendesoftcr.web.command.CompraCommand;
@@ -60,6 +70,9 @@ public class ComprasController {
 
 	@Autowired
 	private DataTableBo																					dataTableBo;
+	
+	@Autowired
+	private RecepcionFacturaBo recepcionFacturaBo;
 
 	@Autowired
 	private UsuarioBo																						usuarioBo;
@@ -151,7 +164,91 @@ public class ComprasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
+	
+	// Descarga de manuales de usuario de acuerdo con su perfil
+	@RequestMapping(value = "/DescargarComprasAceptadasAjax.do", method = RequestMethod.GET)
+	public void descargarComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor) throws IOException {
 
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+
+		// Se buscan las facturas
+		Date fechaInicio = Utils.parseDate(fechaInicioParam);
+		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+		Collection<RecepcionFactura> recepcionFacturas = recepcionFacturaBo.findByFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFin, usuario.getEmpresa(), cedulaEmisor);
+
+		String nombreArchivo = "comprasAceptadas.xls";
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+
+		// Se prepara el excell
+		ByteArrayOutputStream baos = createExcelRecepcionCompras(recepcionFacturas);
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+
+		int BUFFER_SIZE = 4096;
+		byte[] buffer = new byte[BUFFER_SIZE];
+		int bytesRead = -1;
+		while ((bytesRead = inputStream.read(buffer)) != -1) {
+			response.getOutputStream().write(buffer, 0, bytesRead);
+		}
+	}
+
+	private ByteArrayOutputStream createExcelRecepcionCompras(Collection<RecepcionFactura> recepcionFacturas) {
+		// Se prepara el excell
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		List<String> headers = Arrays.asList("Id", "Fecha Emision", "Clave","# Documento Receptor", "Cedula Emisor", "Total Impuestos", "Total");
+		new SimpleExporter().gridExport(headers, recepcionFacturas, "id, fechaEmisionSTR,clave, numeroConsecutivoReceptor, cedulaEmisor, totalImpuestosSTR,totalFacturaSTR ", baos);
+		return baos;
+	}
+
+	
+  /**
+   * Descargar Compras
+   * @param request
+   * @param response
+   * @param fechaInicioParam
+   * @param fechaFinParam
+   * @param idProveedor
+   * @throws IOException
+   */
+	@RequestMapping(value = "/DescargarComprasIngresadasAlmacenAjax.do", method = RequestMethod.GET)
+	public void descargarComprasIngresadasAlmacenAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Long idProveedor) throws IOException {
+
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+    Proveedor proveedor = null;
+		if(idProveedor !=null) {
+			proveedor = proveedorBo.buscar(idProveedor);
+			
+		}
+		// Se buscan las facturas
+		Date fechaInicio = Utils.parseDate(fechaInicioParam);
+		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+		Collection<Compra> compras = compraBo.findByFechaInicioAndFechaFinalAndProveedor(fechaInicio, fechaFin, usuario.getEmpresa(), proveedor) ;
+
+		String nombreArchivo = "comprasIngresadasAlmacen.xls";
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+
+		// Se prepara el excell
+		ByteArrayOutputStream baos = createExcelComprasIngresadasAlmacen(compras);
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+
+		int BUFFER_SIZE = 4096;
+		byte[] buffer = new byte[BUFFER_SIZE];
+		int bytesRead = -1;
+		while ((bytesRead = inputStream.read(buffer)) != -1) {
+			response.getOutputStream().write(buffer, 0, bytesRead);
+		}
+	}
+
+	private ByteArrayOutputStream createExcelComprasIngresadasAlmacen(Collection<Compra> compras) {
+		// Se prepara el excell
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		List<String> headers = Arrays.asList("Id", "Fecha Ingreso", "# Documento Receptor", "Proveedor", "Total Impuestos", "Total","usuario");
+		new SimpleExporter().gridExport(headers, compras, "id, fechaIngresoSTR,consecutivo, proveedor.nombreCompleto, totalImpuestoSTR,totalCompraSTR,usuarioIngresoInventario.nombreUsuario ", baos);
+		return baos;
+	}
+
+	
 	/**
 	 * Lista las compras pendientes de ingresar al inventario
 	 * @param request

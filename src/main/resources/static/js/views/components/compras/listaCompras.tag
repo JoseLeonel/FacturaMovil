@@ -57,6 +57,7 @@
                 </div>
             </div>
             <div class="col-xs-12 text-right">
+                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar detalle transacciones" href="DescargarComprasIngresadasAlmacenAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&idProveedor={idProveedor}"> Descargar</a>        
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
             	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
             </div>
@@ -68,11 +69,26 @@
     <br>
   <!-- Listado  -->
     <div classs="contenedor-listar "  show={mostrarListado} >
-        <div class="row">
-            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
-                <div class="box">
-                    <div class="box-body">
-                        <div class="planel-body" >
+                            <div class="row">
+                                <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
+                                    <div class="box">
+                                        <div class="box-body">
+                                            <div class="planel-body" >
+                                                <div class= "row">
+                                                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                                        <div class="form-group">
+                                                            <label  >Impuestos </label>
+                                                            <input type="text" class="form-control totalImpuestos" value="{totalImpuestos}" readonly>
+                                                        </div>  
+                                                    </div>                             
+                                                    <div class="col-xs-12 col-sm-4 col-md-3 col-lg-4">
+                                                        <div class="form-group">
+                                                            <label  >{$.i18n.prop("compra.listado.total")} </label>
+                                                            <input type="text" class="form-control totalCompra " value="{total}" readonly>
+                                                        </div>  
+                                                    </div>                             
+                                            </div>
+
                             <div class="row" >        
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
                                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
@@ -84,9 +100,10 @@
                                                 <th class = "table-header" >{$.i18n.prop("compra.listado.fecha.compra")}   </th>
                                                 <th class = "table-header" >{$.i18n.prop("compra.listado.fecha.ingreso")}  </th>
                                                 <th class = "table-header" >{$.i18n.prop("compra.listado.fecha.credito")}  </th>
-                                                <th class = "table-header" >{$.i18n.prop("compra.listado.fecha.pago")}     </th>
+                                                
                                                 <th class = "table-header" >{$.i18n.prop("compra.listado.total")}          </th>
                                                 <th class = "table-header" >{$.i18n.prop("compra.listado.estado")}         </th>
+                                                <th class = "table-header" >Usuario     </th>
                                                 <th class = "table-header" >{$.i18n.prop("listado.acciones")}              </th>
                                             </tr>
                                         </thead>
@@ -98,9 +115,10 @@
                                                 <th>{$.i18n.prop("compra.listado.fecha.compra")}    </th>
                                                 <th>{$.i18n.prop("compra.listado.fecha.ingreso")}    </th>
                                                 <th>{$.i18n.prop("compra.listado.fecha.credito")}    </th>
-                                                <th>{$.i18n.prop("compra.listado.fecha.pago")}       </th>
+                                                
                                                 <th>{$.i18n.prop("compra.listado.total")}            </th>
                                                 <th>{$.i18n.prop("compra.listado.estado")}           </th>
+                                                <th>Usuario       </th>
                                                 <th>                                                 </th>
                                             </tr>
                                         </tfoot>
@@ -425,7 +443,7 @@
     *{
        margin:0;
        padding:0;
-       box-sizing:border-box;
+       box-sizing:border-box;idProveedor
     }
     body{
         background:white;
@@ -492,6 +510,7 @@
 self = this
 self.formato_tabla         = []
 self.detail                = []
+self.hay_datos             = false   
 self.proveedores           = {data:[]}    
 self.compra                = {
         consecutivo:"",
@@ -510,6 +529,9 @@ self.compra                = {
 self.detalleCompra         ={data:[]}    
 self.mostrarCompra         = false
 self.mostrarListado        = true
+self.fechaInicio =null
+self.fechaFin =null
+self.idProveedor =0
 self.on('mount',function(){
     $("#filtros").validate(reglasDeValidacion());
     __InformacionDataTable()
@@ -569,8 +591,16 @@ __limpiarFiltros(){
 *  Busqueda de la informacion por rango de fechas
 **/
 __Busqueda(){
+    self.fechaInicio =$('.fechaInicio').val()
+    self.fechaFin    =$('.fechaFin').val()
+    self.idProveedor =$('#idProveedor').val()
+    self.hay_datos  = false
+    self.total          = 0
+    self.totalImpuestos = 0
+    self.update()
 
      if ($("#filtros").valid()) {
+
        var formulario = $("#filtros").serialize();
         $("#tableListar").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListar')  
@@ -586,6 +616,10 @@ __Busqueda(){
                     agregarInputsCombos();
                     ActivarEventoFiltro(".tableListar")
                     __MostrarCompra()
+                    self.hay_datos  = true
+                    self.update()
+                    TotalesGenerales(result.aaData)
+
                 }else{
                     __InformacionDataTable();
                      agregarInputsCombos();
@@ -600,6 +634,21 @@ __Busqueda(){
 
      }
 
+}
+/**
+*  Suma de totales de compras
+**/
+function TotalesGenerales(data){
+    self.total          = 0
+    self.totalImpuestos = 0
+    self.update()
+    for(var i in data) { 
+        self.total      += data[i].totalCompra;
+        self.totalImpuestos += data[i].totalImpuesto;
+     }
+     self.total = formatoDecimales(self.total,2)
+     self.totalImpuestos = formatoDecimales(self.totalImpuestos,2)
+     self.update()
 }
 
 
@@ -695,14 +744,10 @@ function __InformacionDataTable(){
 	 							    }
                                
                                },
-                               {'data' :'fechaPago'                  ,"name":"fechaPago"                   ,"title" : $.i18n.prop("compra.listado.fecha.pago")    ,"autoWidth" :true ,
-                                    "render":function(fechaPago,type, row){
-									    return fechaPago !=null?__displayDate_detail(fechaPago):null;
-	 							    }
                                
-                               },
-                               {'data' :'totalCompraSTR'         ,"name":"totalCompraSTR"          ,"title" : $.i18n.prop("compra.listado.total")         ,"autoWidth" :true },
+                               {'data' :'totalCompraSTR'             ,"name":"totalCompraSTR"              ,"title" : $.i18n.prop("compra.listado.total")         ,"autoWidth" :true },
                                {'data' :'descripcionEstado'          ,"name":"descripcionEstado"           ,"title" : $.i18n.prop("compra.listado.estado")        ,"autoWidth" :true },
+                               {'data' :'usuarioIngresoInventario.nombreUsuario'   ,"name":"usuarioIngresoInventario.nombreUsuario"    ,"title" : "Usuario"    ,"autoWidth" :true },
                                {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
                                       return __Opciones(id,type,row);

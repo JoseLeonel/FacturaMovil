@@ -41,8 +41,7 @@
 	  </div>
 	</div>
     
-  <br>
-    <br><br>
+ 
     <!-- Inicio Filtros-->
         <div class="row" show={mostrarListado}>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -106,8 +105,6 @@
             </div>
         </div>
   
-<!-- Fin Filtros-->
-<br>
 
 
 
@@ -376,6 +373,7 @@
 </style>
 <script>
     var self = this
+    self.parametros   = opts.idTransaccion;  
     self.idiomaDataTable           = []         // idioma de la datatable nuevo
     self.formato_tabla             = []         // Formato del LiUtils.roundFactura(tado de la Tabla 
     self.estados                   =[]
@@ -432,8 +430,12 @@ self.on('mount',function(){
         __InicializarTabla('.tableListar')
         __InicializarTabla  ('.tableListaAbonoPagar')
         agregarInputsCombos();
+        
         listaProveedoresActivos() 
-        __MantenimientoAgregarAbonoPagar()
+        if(self.parametros ==1){
+           __MantenimientoAgregarAbonoPagar()
+        }
+        
         $('.datepickerFechaFinal').datepicker(
        	{
             format: 'yyyy-mm-dd',
@@ -474,17 +476,13 @@ var reglasDeValidacionabonoPagar = function() {
 			},
             totalEfectivo: {
                 number:true,
-             
 			},            
             totalTarjeta: {
                 number:true,
-               
 			},            
             totalBanco: {
                 number:true,
-               
 			},            
-
             nota : {
                 maxlength:255,
                 minlength:1,
@@ -641,7 +639,7 @@ __Busqueda(){
 * Consulta de las cuentas por pagar
 **/
 function listadoConsulta(){
-         var formulario = $("#filtros").serialize();
+        var formulario = $("#filtros").serialize();
         self.fechaInicio =$('.fechaInicio').val()
         self.fechaFin =$('.fechaFinal').val()
       
@@ -963,7 +961,9 @@ function __mostrarAbonos(){
 	       var data = table.row($(this).parents("tr")).data();
 	    }
         $(".tableListaAbonos").dataTable().fnClearTable()
-        includeActionsAbonoPagar('.dataTables_wrapper','.dataTables_length')
+        if(self.parametros ==1){
+            includeActionsAbonoPagar('.dataTables_wrapper','.dataTables_length')
+        }
         self.cuentaPagar               = data    
         self.error                     = false
         self.errors                    = [];
@@ -1042,21 +1042,28 @@ function listaAbonoPorCuentaPorPagar(){
                 if(self.cuentaPagar.totalSaldo == 0){
                     $( ".btn-agregarAbonoPagar" ).remove();
                 }else{
+                    if(self.parametros ==1){
+                       includeActionsAbonoPagar('.dataTables_wrapper','.dataTables_length')  
+                    }
+                }
+                if(self.parametros ==1){
+                   agregarInputsCombosAbonoPagar();
+                }
+                ActivarEventoFiltro(".tableListaAbonoPagar")
+            }else{
+                if(self.parametros ==1){
                    includeActionsAbonoPagar('.dataTables_wrapper','.dataTables_length')  
                 }
                 agregarInputsCombosAbonoPagar();
                 ActivarEventoFiltro(".tableListaAbonoPagar")
-                 
-            __verAbonoPagar()
-            __Anular()
-            __imprimirAbonoPagar()
-            }else{
-                includeActionsAbonoPagar('.dataTables_wrapper','.dataTables_length')  
-                agregarInputsCombosAbonoPagar();
-                ActivarEventoFiltro(".tableListaAbonoPagar")
 
             }
+            if(self.parametros ==1){
+              __Anular()
               __MantenimientoAgregarAbonoPagar()
+            }
+            __verAbonoPagar()
+              
          
         },
         error: function (xhr, status) {
@@ -1096,26 +1103,14 @@ function __InformacionTabla_lista_AbonoPagar(){
 */
 function __OpcionesAbonoPagar(id,type,row){
   var verAbonoPagar  = '<a href="#"  title="Ver abonos" class="btn btn-success verAbonoPagar"  role="button"><i class="fa fa-search-plus"></i></a>';
-  var anular  = '<a href="#"  title="Anular abonoPagar" class="btn btn-danger anularAbonoPagar"  role="button"><i class="fa fa-trash"></i></a>';
-  var imprimir  = '<a href="#"  title="Imprimir" class="btn btn-primary  btn-imprimir btnImprimir" role="button"> </a>';
+  var anular  = '<a href="#"  title="Anular abono" class="btn btn-danger anularAbono"  role="button"><i class="fa fa-trash"></i></a>';
   anular = row.estado =="Anulado"?"":anular
-  return  verAbonoPagar + " " + anular + " "+ imprimir;
+  if(self.parametros !=1){
+      anular = ""
+  }
+  return  verAbonoPagar + " " + anular + " ";
 }
-/**
- * mostrar la abonoPagar
- */
-function __imprimirAbonoPagar(){
-	$('.tableListaAbonoPagar').on('click','.btnImprimir',function(e){
-		var table = $('#tableListaAbonoPagar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-        riot.mount('imprimir-abonoPagar',{abonoPagar:data});
-	});
-}
+
 /**
  * mostrar la abonoPagar
  */
@@ -1177,7 +1172,8 @@ function consultaAbono(){
  * mostrar la abonoPagar
  */
 function __Anular(){
-	$('#tableListaAbonoPagar').on('click','.anularAbonoPagar',function(e){
+    
+	$('#tableListaAbonoPagar').on('click','.anularAbono',function(e){
         $(".errorServerSideJgrid").remove();
 		var table = $('#tableListaAbonoPagar').DataTable();
 		if(table.row(this).child.isShown()){
@@ -1188,9 +1184,67 @@ function __Anular(){
 	    }
         self.abonoPagar = data
         self.update()
-        __agregarRegistro(2,"#formularioAbonoPagar",$.i18n.prop("abonoPagar.mensaje.alert.anulada"),'anularAbonoPagarAjax.do','ListarAbonosPorCuentaPagarAjax.do','#tableListaAbonoPagar')
+        swal({
+           title: '',
+           text: $.i18n.prop("abonoPagar.mensaje.alert.anulada"),
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#00539B',
+            cancelButtonColor: '#d33',
+            confirmButtonText:$.i18n.prop("confirmacion.si"),
+            cancelButtonText: $.i18n.prop("confirmacion.no"),
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+        }).then(function (isConfirm) {
+            if(isConfirm){
+             __AnularAbonoPagar()
+             }
+            });
+        
+    
        
 	});
+}
+
+/**
+*   anular el abono a pagar 
+**/
+function __AnularAbonoPagar(){
+    var formulario = $("#formularioAbonoPagar").serialize();
+    $.ajax({
+        type : "GET",
+        dataType : "json",
+        data : formulario,
+        url : 'anularAbonoPagarAjax.do',
+        success : function(data) {
+            if (data.status != 200) {
+               	serverMessageJson(data);
+                if (data.message != null && data.message.length > 0) {
+                   	swal({
+                        title: '',
+                        text: data.message,
+                        type: 'error',
+                        showCancelButton: false,
+                        confirmButtonText: 'Aceptar',
+                    })
+            }
+        } else {
+           	serverMessageJson(data);
+            swal({
+                title: '',
+                text: data.message,
+                type: 'success',
+                showCancelButton: false,
+                confirmButtonText: 'Aceptar',
+            })
+            listaAbonoPorCuentaPorPagar()
+        }
+     },
+        error : function(xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
 }
 /**
 * Mostrar formulario de mantenimiento Agregar

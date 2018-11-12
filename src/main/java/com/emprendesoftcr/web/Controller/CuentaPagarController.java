@@ -109,6 +109,11 @@ public class CuentaPagarController {
 		return "views/cuentasxpagar/ListarCuentasXPagar";
 	}
 	
+	@RequestMapping(value = "/ListarCuentaPagarConsulta", method = RequestMethod.GET)
+	public String listarConsulta(ModelMap model) {
+		return "views/cuentasxpagar/ListarCuentasXPagarConsulta";
+	}
+	
 	
 
 	@SuppressWarnings("all")

@@ -16,6 +16,9 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
+
 /**
  * Recepcion de la factura, aceptacion de facturas de un emisor.
  * @author Jairo Cisneros.
@@ -135,6 +138,9 @@ public class RecepcionFactura implements Serializable {
 	public Double getTotalImpuestos() {
 		return totalImpuestos;
 	}
+	public String getTotalImpuestosSTR() {
+		return Utils.formateadorMiles(this.totalImpuestos);
+	}
 
 	public void setTotalImpuestos(Double totalImpuestos) {
 		this.totalImpuestos = totalImpuestos;
@@ -142,6 +148,10 @@ public class RecepcionFactura implements Serializable {
 
 	public Double getTotalFactura() {
 		return totalFactura;
+	}
+
+	public String getTotalFacturaSTR() {
+		return Utils.formateadorMiles(this.totalFactura);
 	}
 
 	public void setTotalFactura(Double totalFactura) {
@@ -179,5 +189,10 @@ public class RecepcionFactura implements Serializable {
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
 	}
-
+	public String getFechaEmisionSTR() {
+		if(this.fechaEmision !=null) {
+			return Utils.getFechaGeneraReporte(this.getFechaEmision());	
+		}
+		return Constantes.EMPTY;
+	}
 }

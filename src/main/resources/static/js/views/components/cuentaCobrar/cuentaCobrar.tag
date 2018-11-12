@@ -6,17 +6,14 @@
         </div>
         <div class=" col-sm-4 col-md-4 col-lg-4 text-right"></div>
     </div>
-  <br>
-    <br><br>
+    
 
  <!-- Modal correo alternativo-->
 	<div class="modal fade" id="ModalCorreoAlternativo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
-	          
-	                <h1 class="box-title"><i class="btn-correo"></i>&nbsp {$.i18n.prop("hacienda.titulo.correo.alternativo")}     </h1>
-	          
+               <h1 class="box-title"><i class="btn-correo"></i>&nbsp {$.i18n.prop("hacienda.titulo.correo.alternativo")}     </h1>
 	      </div>
 	      <div class="modal-body">
 	        <form id = "formulario" name ="formulario "   class="advanced-search-form">
@@ -113,7 +110,7 @@
         </div>
   
 <!-- Fin Filtros-->
-<br>
+
 
 
 <!-- Listado de abonos  -->
@@ -198,8 +195,6 @@
                                 <label >{$.i18n.prop("cuentaCobrar.cliente")} </label>
                                 <input type="text" class="form-control" value="{cuentaCobrar.cliente.nombreCompleto}" readonly={cuentaCobrar.id > 0} >                        
                             </div>
-                           
-                           
                         </div>
                         <div class="row">
                             <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
@@ -258,7 +253,7 @@
                 <div class="box-footer">
                     <button onclick ={__regresarAlListadoAbono}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
                         {$.i18n.prop("btn.volver")}</buuton>
-                    </button> <button show={botonAgregar} onclick={__agregarAbono}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
+                    </button> <button show={botonAgregar ==true && parametros.idTransaccion ==1} onclick={__agregarAbono}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
                   
                 </div>
             </div>   
@@ -334,7 +329,7 @@
                     <h1 class="box-title"><i class="fa fa-edit"></i>&nbsp Consulta de la cuenta por cobrar     </h1>
                 </div>
                 <div class="box-body">
-                    <form id = "formulario" name ="formulario "   class="advanced-search-form">
+                    <form id = "formularioCuentasCobrar" name ="formularioCuentasCobrar "   class="advanced-search-form">
                         <input type="hidden" name="id" id="id" value="{cuentaCobrar.id}">
                         <input type="hidden" name="cliente" id="cliente" value="{cuentaCobrar.cliente.id}">
                         <input type="hidden" name="vendedor" id="vendedor" value="{cuentaCobrar.vendedor.id}">
@@ -420,24 +415,24 @@
         }
         .contenedor-listar{
             width:100%;
-        }
-        .input-table-search{
-            margin-left: 15px;
-            margin-right: 15px;
-            width:100%;
-        }
-        .botonConsulta{
-            margin-top:28px;
-        }
+        }parametros
+        .parametros
+         parametros
+         parametros
+         parametros
+        }parametros
+        .parametros
+         parametros
+        }parametros
         
-        table td{ 
-            text-align: center;
-            font-size: 12px;
-            
-                }
-        table th {
-                text-align: center;
-                font-size: 12px;
+        tparametros
+         parametros
+         parametros
+         parametros
+         parametros
+        tparametros
+         parametros
+         parametros
         }
         th, td {
             white-space: nowrap;
@@ -447,6 +442,7 @@
 
 <script>
     var self = this
+    self.parametros   = opts.idTransaccion;  
     self.idiomaDataTable           = []         // idioma de la datatable nuevo
     self.formato_tabla             = []         // Formato del LiUtils.roundFactura(tado de la Tabla 
     self.estados                   =[]
@@ -509,7 +505,7 @@
     self.estado = null
     self.on('mount',function(){
         $("#filtros").validate(reglasDeValidacionParametros());
-        $("#formulario").validate(reglasDeValidacion());
+        $("#formularioCuentasCobrar").validate(reglasDeValidacion());
         $("#formularioAbono").validate(reglasDeValidacionAbono());
         $("#formulario").validate(reglasDeValidacionCorreo());	
         __InicializarTabla('.tableListar')
@@ -518,7 +514,10 @@
         listaClientesActivos() 
         
         __Eventos()
-        __MantenimientoAgregarAbono()
+        if(self.parametros ==1){
+           __MantenimientoAgregarAbono()
+        }
+        
         __verAbono()
         __Anular()
         __ComboEstadosCuentaCobrar()
@@ -664,114 +663,103 @@ var reglasDeValidacionParametros = function() {
 	});
 	return validationOptions;
 };
-
-
-		
-		__CorreoAlternativo(){
-			$('#correoAlternativo').val(null);
-		    $('#ModalCorreoAlternativo').modal({
-			    backdrop: 'static',
-		        keyboard: false
-		    });
-		    $('#ModalCorreoAlternativo').modal('show');      
-		}
-
-		/**
-		* Enviar el correo
-		**/
-		__EnviarCorreoAlternativo(){
-		     if ($("#formulario").valid()) {
-		    	 __EnviarPorCorreo()
-		     }
-		}
-		
-		__EnviarCorreoEmpresa(){
-		   	 __EnviarPorCorreo()
-		}
-		
-		/**
-		*  Regresar al listado
-		**/
-		__regresarAlListadoAlternativo(){
-		    $('#ModalCorreoAlternativo').modal('hide')
-		}
-		
-		/**
-		* Camps requeridos
-		**/
-		var reglasDeValidacionCorreo = function() {
-			var validationOptions = $.extend({}, formValidationDefaults, {
-				rules : {
-					correoAlternativo : {
-						required : true,
-		                email:true,
-		                maxlength:240,
-		                minlength:1,
-					}                                   
-		                        
-				},
-				ignore : []
-
-			});
-			return validationOptions;
-		};
-		
-
-	/**
-		*  Busqueda de la informacion y la envia por correo
-		**/
-		function __EnviarPorCorreo(){
-		    if ($("#filtros").valid()) {
-		        var parametros = {
-		        	correoAlternativo:$('#correoAlternativo').val(),		
-		        	fechaInicioParam:$('#fechaInicio').val(),
-		        	fechaFinParam:$('#fechaFinal').val(),
-                    idClienteParam:$('#idCliente').val(),
-                    estadoParam : $('.estado').val(),
-                    total:$('.totalGeneral').val(),
-                    abono:$('.totalAbonoGeneral').val(),
-                    saldo:$('.totalSaldoGeneral').val()
-		        };
-		        $.ajax({
-		            url: "EnvioDetalleCuentasXCobrarCorreoAjax.do",
-		            datatype: "json",
-		            data:parametros ,
-		            method:"GET",
-		            success: function (data) {
-                        if (data.status != 200) {
-                        	serverMessageJson(data);
-                            if (data.message != null && data.message.length > 0) {
-                            	swal({
-      	                           title: '',
-      	                           text: data.message,
-      	                           type: 'error',
-      	                           showCancelButton: false,
-      	                           confirmButtonText: 'Aceptar',
-      	                                	  
-      	                         })
-                            }
-                            
-                        } else {
-
-                         swal({
-	                           title: '',
-	                           text: "Enviado el correo Exitosamente",
-	                           type: 'success',
-	                           showCancelButton: false,
-	                           confirmButtonText: 'Aceptar',
-	                         })
-                        }
-					    
-			        },
-			        error: function (xhr, status) {
-			            console.log(xhr);
-			            mensajeErrorServidor(xhr, status);
-			        }
-		        });
-		 	}		
-		}
-
-
+/**
+*  Correo alternativo
+**/
+__CorreoAlternativo(){
+	$('#correoAlternativo').val(null);
+	$('#ModalCorreoAlternativo').modal({
+	    backdrop: 'static',
+	    keyboard: false
+	});
+	$('#ModalCorreoAlternativo').modal('show');      
+	}
+/**
+* Enviar el correo
+**/
+__EnviarCorreoAlternativo(){
+    if ($("#formulario").valid()) {
+     	 __EnviarPorCorreo()
+     }
+}
+/**
+* correo de la empresa
+**/		
+__EnviarCorreoEmpresa(){
+  	 __EnviarPorCorreo()
+}
+/**
+*  Regresar al listado
+**/
+__regresarAlListadoAlternativo(){
+    $('#ModalCorreoAlternativo').modal('hide')
+}
+/**
+* Camps requeridos
+**/
+var reglasDeValidacionCorreo = function() {
+  	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			correoAlternativo : {
+			required : true,
+            email:true,
+            maxlength:240,
+            minlength:1,
+		}                                   
+	},
+	ignore : []
+	});
+	return validationOptions;
+};
+/**
+*  Busqueda de la informacion y la envia por correo
+**/
+function __EnviarPorCorreo(){
+    if ($("#filtros").valid()) {
+        var parametros = {
+       	correoAlternativo:$('#correoAlternativo').val(),		
+       	fechaInicioParam:$('#fechaInicio').val(),
+       	fechaFinParam:$('#fechaFinal').val(),
+        idClienteParam:$('#idCliente').val(),
+        estadoParam : $('.estado').val(),
+        total:$('.totalGeneral').val(),
+        abono:$('.totalAbonoGeneral').val(),
+        saldo:$('.totalSaldoGeneral').val()
+    };
+    $.ajax({
+        url: "EnvioDetalleCuentasXCobrarCorreoAjax.do",
+        datatype: "json",
+        data:parametros ,
+        method:"GET",
+        success: function (data) {
+            if (data.status != 200) {
+               	serverMessageJson(data);
+                if (data.message != null && data.message.length > 0) {
+                   	swal({
+                        title: '',
+                        text: data.message,
+                        type: 'error',
+                        showCancelButton: false,
+                        confirmButtonText: 'Aceptar',
+                    })
+                }
+        } else {
+            swal({
+                title: '',
+                text: "Enviado el correo Exitosamente",
+                type: 'success',
+                showCancelButton: false,
+                confirmButtonText: 'Aceptar',
+            })
+        }
+    },
+    error: function (xhr, status) {
+        console.log(xhr);
+        mensajeErrorServidor(xhr, status);
+    }
+});
+}		
+}
 /*
  * Muestra los filtros avanzados
  */
@@ -785,7 +773,6 @@ var reglasDeValidacionParametros = function() {
     }
     self.update();
 }
-
 /**
 * limpiar los filtros
 **/
@@ -798,10 +785,7 @@ __limpiarFiltros(){
     self.estado = null
     self.hay_datos   = false  
     self.update()
-
-
 }
-
 /**
 *  Busqueda de la informacion por rango de fechas
 **/
@@ -809,11 +793,11 @@ __Busqueda(){
 	$("#filtros").validate(reglasDeValidacion());
      if ($("#filtros").valid()) {
          listadoConsulta()
-
      }
-
 }
-
+/**
+* Lista de consulta
+**/
 function listadoConsulta(){
     self.fechaInicio =$('.fechaInicio').val()
     self.fechaFin =$('.fechaFinal').val()
@@ -842,7 +826,10 @@ function listadoConsulta(){
                     ActivarEventoFiltro(".tableListar")
                     __mostrarCuentaPorCobrar()
                     __mostrarAbonos()
-                    __MantenimientoAgregarAbono()
+                    if(self.pararametros ==1){
+                       __MantenimientoAgregarAbono()
+                    }
+
                     TotalesGenerales(result.aaData)
                     self.hay_datos  = true
                     self.update()
@@ -851,8 +838,6 @@ function listadoConsulta(){
                      agregarInputsCombos();
                     self.hay_datos  = false
                     self.update()
-
-
                 }           
             },
             error: function (xhr, status) {
@@ -860,21 +845,18 @@ function listadoConsulta(){
                 console.log(xhr);
             }
         });
-
 }
-
 /**
 *  Suma de totales de cuenta por cobrar 
 **/
 function TotalesGenerales(data){
-     self.total                     = 0
-    self.totalAbono                = 0
-    self.totalSaldo                = 0
-    self.totalSTR                     = 0
-    self.totalAbonoSTR                = 0
-    self.totalSaldoSTR                = 0
+     self.total             = 0
+    self.totalAbono         = 0
+    self.totalSaldo         = 0
+    self.totalSTR           = 0
+    self.totalAbonoSTR      = 0
+    self.totalSaldoSTR      = 0
     self.update()
-    
     for(var i in data) { 
         self.total      += data[i].total;
         self.totalAbono += data[i].totalAbono;
@@ -883,11 +865,8 @@ function TotalesGenerales(data){
      self.total = formatoDecimales(self.total,2)
      self.totalAbono = formatoDecimales(self.totalAbono,2)
      self.totalSaldo = formatoDecimales(self.totalSaldo,2)
-     
      self.update()
 }
-
-
 /**
 *  Suma del monto de tarjeta
 **/
@@ -896,7 +875,6 @@ __TotalTarjeta(e){
     self.abono.total = self.abono.totalBanco + self.abono.totalEfectivo + self.abono.totalTarjeta
     self.update()
 }
-
 /**
 * Suma del monto de Efectivo
 **/
@@ -905,7 +883,6 @@ __TotalEfectivo(e){
     self.abono.total = self.abono.totalBanco  + self.abono.totalEfectivo + self.abono.totalTarjeta
     self.update()
 }
-
 /**
 * Suma del monto de cheque
 **/
@@ -914,12 +891,10 @@ __TotalBanco(e){
     self.abono.total = self.abono.totalBanco  + self.abono.totalEfectivo + self.abono.totalTarjeta
     self.update()
 }
-
 /**
 *  Regresar al listado
 **/
 __regresarAlListado(){
-   
     self.mostrarListado       = true
     self.botonAgregar         = false
     self.botonModificar       = false   
@@ -928,8 +903,6 @@ __regresarAlListado(){
     self.mostrarCrearAbono    = false
     self.update()
     listadoConsulta();
-
-   
 }
 /**
 * Regresar al listado de los abonos 
@@ -941,7 +914,6 @@ __regresarAlListadoAbono(){
 * Regresar al listado de abonos
 **/
 function __regresar(){
-   
     self.mostrarListado       = false
     self.botonAgregar         = false
     self.botonModificar       = false   
@@ -950,9 +922,7 @@ function __regresar(){
     self.mostrarCrearAbono    = false
     self.update()
     listadoConsulta();
-
 }
-
 /**
 * Calculo del monto de la cuota con base al total a pagar
 **/
@@ -965,21 +935,6 @@ __MontoCuota(e){
     self.update()
 }
 
-/**
-*   Agregar 
-**/
-__agregar(){
-    __agregarRegistro(1,"#formulario",$.i18n.prop("cuentaCobrar.mensaje.alert.agregar"),'AgregarCuentaCobrarManualAjax.do','ListarCuentaCobrarAjax.do','#tableListar')
-}
-/**
-** Modificar la Empresa
-**/
-__Modificar(){
-    self.error = false;
-    self.exito = false;
-    self.update();
-    __modificarRegistro("#formulario",$.i18n.prop("cuentaCobrar.mensaje.alert.modificar"),'ModificarCuentaCobrarjax.do','ListarCuentaCobrarAjax.do','#tableListar')
-}
 /**
 *   Agregar 
 **/
@@ -1055,7 +1010,7 @@ function __agregarRegistro(transaccion,formulario,mensajeAlerAgregar,urlAgregar,
 *  Activar Eventos de cuentas por cobrar
 **/
 function __Eventos(){
-   $("#formulario").validate(reglasDeValidacion());
+   $("#formularioCuentasCobrar").validate(reglasDeValidacion());
 }
 /**
 * Eventos de los abonos
@@ -1064,8 +1019,6 @@ function __Eventos_Abonos(){
     $("#formularioAbono").validate(reglasDeValidacionAbono());
     $("#recibo").attr("maxlength", 25);
     $("#nota").attr("maxlength", 255);
-
-
     $('#descuento').mask('000', {
 		'translation' : {
 			0 : {
@@ -1073,10 +1026,7 @@ function __Eventos_Abonos(){
 			}
 		}
 	});
-    
-
 }
-
 /**
 *  Obtiene la lista de los clientes activos
 **/
@@ -1099,10 +1049,7 @@ function listaClientesActivos(){
             console.log(xhr);
         }
     })
-    
-
 }
-
 /**
 *Formato del listado de los cambios
 **/
@@ -1130,7 +1077,6 @@ function __InformacionDataTable(){
     self.update();
    
 }
-
 /**
 *Formato de la fecha con hora
 **/
@@ -1138,7 +1084,6 @@ function __displayDate_detail(fecha) {
     var dateTime = new Date(fecha);
     return moment(dateTime).format('DD/MM/YYYY ');
 }
-
 /**
 *Limpiar cuentas por cobrar
 **/
@@ -1172,7 +1117,6 @@ function __LimpiarCuentasPorCobrar(){
     self.total                     = 0
     self.totalAbono                = 0
     self.totalSaldo                = 0
-
     self.update()  
     $("#fechaEntrega").val(null)
     $("#fechaPlazo").val(null)
@@ -1237,7 +1181,10 @@ function __mostrarAbonos(){
 	       var data = table.row($(this).parents("tr")).data();
 	    }
         $(".tableListaAbonos").dataTable().fnClearTable()
-        includeActionsAbono('.dataTables_wrapper','.dataTables_length')
+        if(self.parametros==1){
+           includeActionsAbono('.dataTables_wrapper','.dataTables_length') 
+        }
+        
         __LimpiarCuentasPorCobrar() 
         self.cuentaCobrar = data    
         self.error                     = false
@@ -1291,7 +1238,7 @@ function __mostrarCuentaPorCobrar(){
 * Consultar una cuenta por cobrar
 **/
 function __consultar(){
-    var formulario = $('#formulario').serialize();
+    var formulario = $('#formularioCuentasCobrar').serialize();
     $.ajax({
         url: "MostrarCuentaCobrarAjax.do",
         datatype: "json",
@@ -1349,10 +1296,8 @@ function __ComboEstadosCuentaCobrar(){
         codigo: "Cerrada",
         descripcion:$.i18n.prop("cuentaCobrar.estado.cerrada")
      });
-    
     self.update();
 }
-
 /**
 *Funciones de los abonos de la cuenta por cobrar
 **/
@@ -1376,19 +1321,28 @@ function listaAbonosPorCuentaPorCobrar(){
                 if(self.cuentaCobrar.totalSaldo == 0){
                     $( ".btn-agregarAbono" ).remove();
                 }else{
-                   includeActionsAbono('.dataTables_wrapper','.dataTables_length')  
+                    if(self.parametros ==1){
+                       includeActionsAbono('.dataTables_wrapper','.dataTables_length')  
+                    }
                 }
                 agregarInputsCombosAbonos();
                 ActivarEventoFiltro(".tableListaAbonos")
             }else{
-                includeActionsAbono('.dataTables_wrapper','.dataTables_length')  
+                if(self.parametros ==1){
+                     includeActionsAbono('.dataTables_wrapper','.dataTables_length')  
+                }
                 agregarInputsCombosAbonos();
                 ActivarEventoFiltro(".tableListaAbonos")
 
             }
-            __MantenimientoAgregarAbono()
+            if(self.parametros ==1){
+               __MantenimientoAgregarAbono()
+               __Anular()
+               
+            }
+            
             __verAbono()
-            __Anular()
+            
             __imprimirAbono()
         },
         error: function (xhr, status) {
@@ -1397,7 +1351,6 @@ function listaAbonosPorCuentaPorCobrar(){
         }
     })
 }
-
 /**
 *  Informacion de la lista de los abonos
 **/
@@ -1434,9 +1387,12 @@ function __OpcionesAbonos(id,type,row){
   anular = row.estado =="Anulado"?"":anular
   self.cuentaCobrar = row.cuentaCobrar
   self.update()
+  if(self.parametros !=1){
+    anular =""
+
+  }
   return  verAbono + " " + anular + " "+ imprimir;
 }
-
 /**
  * mostrar la abono
  */
@@ -1452,7 +1408,6 @@ function __imprimirAbono(){
         riot.mount('imprimir-abono',{abono:data});
 	});
 }
-
 /**
  * mostrar la abono
  */
@@ -1472,7 +1427,6 @@ function __verAbono(){
         consultaAbono()
 	});
 }
-
 /**
 * Consultar los Abonos
 **/
@@ -1506,7 +1460,6 @@ function consultaAbono(){
                     });
                 }
             }
-            
         },
         error: function (xhr, status) {
             mensajeErrorServidor(xhr, status);
@@ -1514,7 +1467,6 @@ function consultaAbono(){
         }
     });
 }
-
 /**
 *Formato de la fecha con hora
 **/
@@ -1538,7 +1490,7 @@ function __Anular(){
 	    }
         self.abono = data
         self.update()
-        __agregarRegistro(2,"#formularioAbono",$.i18n.prop("abono.mensaje.alert.anulada"),'anularAbonoAjax.do','ListarAbonosPorCuentaCobrarAjax.do','#tableListaAbonos')
+        __agregarRegistro(2,"#formularioAbono",$.i18n.prop("abono.mensaje.alert.anulada"),'anularAbonoPagarAjax.do','ListarAbonosPorCuentaPagarAjax.do','#tableListaAbonos')
         
 	});
 }
@@ -1549,7 +1501,6 @@ function __MantenimientoAgregarAbono(){
       //Inicializar el Formulario
     $('.dataTables_wrapper').on('click','.btn-agregarAbono',function(e){
         __LimpiarAbonos()
-        
         self.mostrarListado       = false
         self.botonAgregar         = true
         self.botonModificar       = false   
@@ -1559,7 +1510,6 @@ function __MantenimientoAgregarAbono(){
         self.update()
         $(".errorServerSideJgrid").remove();
         $("#formularioAbono").validate(reglasDeValidacionAbono());
-
     })
 }
 /**
@@ -1573,9 +1523,7 @@ function agregarInputsCombos(){
         if ( $(this).index() != 9    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
- 
     })
-
 }
 /**
 *  Agregar los inpust  y select de las tablas
@@ -1590,8 +1538,6 @@ function agregarInputsCombosAbonos(){
 	    }
  
     })
-
 }
-
 </script>    
 </cuenta-cobrar>

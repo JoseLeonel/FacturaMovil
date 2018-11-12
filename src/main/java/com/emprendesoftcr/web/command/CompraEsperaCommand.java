@@ -8,6 +8,7 @@ import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Proveedor;
+import com.emprendesoftcr.modelo.Usuario;
 
 /**
  * Espera de las solicitudes que no han ingresado al inventario CompraEsperaCommand.
@@ -16,7 +17,7 @@ import com.emprendesoftcr.modelo.Proveedor;
  */
 public class CompraEsperaCommand {
 
-	private Long							id;
+	private Long								id;
 
 	private String							consecutivo;
 
@@ -28,12 +29,12 @@ public class CompraEsperaCommand {
 
 	private Date								fechaIngreso;
 
-	private String								fechaPagoSTR;
+	private String							fechaPagoSTR;
 
-	private String								fechaCompraSTR;
+	private String							fechaCompraSTR;
 
-	private String								fechaIngresoSTR;
-	private String								fechaCreditoSTR;
+	private String							fechaIngresoSTR;
+	private String							fechaCreditoSTR;
 
 	private Integer							tipoDocumento;
 
@@ -52,6 +53,7 @@ public class CompraEsperaCommand {
 
 	private Integer							estado;
 	private Proveedor						proveedor;
+	private Usuario							usuarioIngresoInventario;
 
 	private Set<DetalleCompra>	detalleCompras;
 
@@ -81,152 +83,89 @@ public class CompraEsperaCommand {
 		this.totalImpuestoSTR = compra.getTotalImpuestoSTR();
 		this.subTotalSTR = compra.getSubTotalSTR();
 		this.totalCompraSTR = compra.getTotalCompraSTR();
+		this.usuarioIngresoInventario = compra.getUsuarioIngresoInventario();
 
 	}
 
-	
-
-	
 	public Long getId() {
 		return id;
 	}
 
-
-
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
 
+	public Usuario getUsuarioIngresoInventario() {
+		return usuarioIngresoInventario;
+	}
 
+	public void setUsuarioIngresoInventario(Usuario usuarioIngresoInventario) {
+		this.usuarioIngresoInventario = usuarioIngresoInventario;
+	}
 
-	
-	
-	
 	public String getTotalCompraSTR() {
 		return totalCompraSTR;
 	}
 
-
-
-
-	
 	public void setTotalCompraSTR(String totalCompraSTR) {
 		this.totalCompraSTR = totalCompraSTR;
 	}
-
-
-
 
 	public String getTotalImpuestoSTR() {
 		return totalImpuestoSTR;
 	}
 
-
-
-
-	
 	public void setTotalImpuestoSTR(String totalImpuestoSTR) {
 		this.totalImpuestoSTR = totalImpuestoSTR;
 	}
 
-
-
-
-	
 	public String getTotalDescuentoSTR() {
 		return totalDescuentoSTR;
 	}
 
-
-
-
-	
 	public void setTotalDescuentoSTR(String totalDescuentoSTR) {
 		this.totalDescuentoSTR = totalDescuentoSTR;
 	}
 
-
-
-
-	
 	public String getSubTotalSTR() {
 		return subTotalSTR;
 	}
 
-
-
-
-	
 	public void setSubTotalSTR(String subTotalSTR) {
 		this.subTotalSTR = subTotalSTR;
 	}
-
-
-
 
 	public String getFechaPagoSTR() {
 		return fechaPagoSTR;
 	}
 
-
-
-
-	
-	
 	public String getFechaCreditoSTR() {
 		return fechaCreditoSTR;
 	}
 
-
-
-
-	
 	public void setFechaCreditoSTR(String fechaCreditoSTR) {
 		this.fechaCreditoSTR = fechaCreditoSTR;
 	}
-
-
-
 
 	public void setFechaPagoSTR(String fechaPagoSTR) {
 		this.fechaPagoSTR = fechaPagoSTR;
 	}
 
-
-
-
-	
 	public String getFechaCompraSTR() {
 		return fechaCompraSTR;
 	}
 
-
-
-
-	
 	public void setFechaCompraSTR(String fechaCompraSTR) {
 		this.fechaCompraSTR = fechaCompraSTR;
 	}
 
-
-
-
-	
 	public String getFechaIngresoSTR() {
 		return fechaIngresoSTR;
 	}
 
-
-
-
-	
 	public void setFechaIngresoSTR(String fechaIngresoSTR) {
 		this.fechaIngresoSTR = fechaIngresoSTR;
 	}
-
-
-
 
 	public String getConsecutivo() {
 		return consecutivo;

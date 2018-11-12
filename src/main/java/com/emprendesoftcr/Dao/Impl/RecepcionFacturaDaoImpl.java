@@ -1,6 +1,7 @@
 package com.emprendesoftcr.Dao.Impl;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.RecepcionFacturaDao;
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.modelo.Cliente;
+import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 
@@ -79,5 +82,30 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);		
 		return query.getResultList();
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select obj from RecepcionFactura obj");
+		hql.append(" where obj.empresa = :empresa ");
+		if (cedula != null) {
+			if (!cedula.equals(Constantes.EMPTY)) {
+				hql.append("and obj.cedulaReceptor = :cedula ");
+			}
+		}
+		hql.append("and obj.fechaEmision >= :fechaInicio and obj.fechaEmision <= :fechaFin ");
+		Query query = entityManager.createQuery(hql.toString());
+		if (cedula != null) {
+			if (!cedula.equals(Constantes.EMPTY)) {
+				query.setParameter("cedula", cedula);
+			}
+		}
+		query.setParameter("empresa", empresa);
+		query.setParameter("fechaInicio", fechaInicio);
+		query.setParameter("fechaFin", fechaFin);
+		return query.getResultList();
+	}
+
 
 }

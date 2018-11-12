@@ -67,9 +67,6 @@
                                         <label>{$.i18n.prop("factura.plazoCredito")}</label> 
                                         <input type="number" id = "plazoCreditoL"  name "plazoCreditoL" class="campo plazoCreditoL" value="{factura.plazoCredito}" >
                                     </div>
-                                    
-                                   
-
                                 </div>
                                 <div  class= "col-md-6 col-sx-6 col-sm-6 col-lg-6" >
                                     <div class="form-group has-success">
@@ -84,8 +81,6 @@
                                          <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
                                         <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="campo" id="totalBanco"  value="{factura.totalBanco}"  >
                                     </div>
-
-                                    
                                 </div>
                             </div>
                             <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
@@ -168,17 +163,14 @@
 
  
  <div  class="contenedor-factura " show={mostarParaCrearNuevaFactura}>
-  
-           
                 <div class="cabecera-izquierda">
                   <div class="pfs-funcionales ">
                     <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
+                    <a class="pull-left" href="#"   onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
                     <a class="pull-left" href="#"    onclick = {__ListaDecodigos} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f4")}</span></a>
                     <a class="pull-left" href="#"    onclick = {_ReimprimirFactura} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f6")}</span></a>
                     <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago}   title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
                     <a class="pull-left" href="#"   onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
-                    <a class="pull-left" href="#"   onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
-                    
                     
                   </div>
                   <br>
@@ -186,12 +178,11 @@
                   <br>
                     <div class="row">
                             <div class="col-sx-12 col-sm-6 col-md-6 col-lg-6 has-success">
-                                <input onkeypress={__addProductToDetail}  id="codigo" name ="codigo" class="campo codigo" type="text" placeholder="XXXXXXXXXXX" />
+                                <input id="codigo" name ="codigo" class="campo codigo" type="text" placeholder="XXXXXXXXXXXXXXXXXX" />
                             </div>
                             <div class="col-sx-12 col-sm-4 col-md-4 col-lg-4 has-success">
                                 <input onkeypress={__addPrecioDetail}  id="precioVenta" name ="precioVenta" class="campo precioVenta" type="number" step="any"  placeholder="Precio Ejemplo:600" />
                             </div>
-
                     </div>
                     <br>
                     <div class="detalles-factura">
@@ -226,11 +217,9 @@
                                 <td class="text-right">
                                     <input  onclick={__CambiarDescuento} class="campo" type="text"  value = "{porcentajeDesc.toFixed(2)}" readonly/>
                                 </td>
-                                                            
                                 <td class="text-right">
                                     <input  class="campo" type="text"  value = "{impuesto.toFixed(2)}" readonly/>
                                 </td>
-
                                 <td class="text-right">
                                     <input  class="campo" type="text"  value = "{montoTotalLinea.toFixed(2)}" readonly />
                                 </td>
@@ -244,11 +233,9 @@
                     <br>
                     <br>
                     <aside class="left-sidebar">
-                            <!--Booking details-->
-
                         <article class="booking-details clearfix">
-                            <div    onclick = {__MostrarFormularioDePago} id="btnGrandePagar" class="head green well" style="color: #fff; font-size: 25px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
-                                                <div id="pagarTitulo">{$.i18n.prop("factura.total")}:  {totalComprobante}</div>
+                            <div onclick = {__MostrarFormularioDePago} id="btnGrandePagar" class="head green well" style="color: #fff; font-size: 25px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
+                                <div id="pagarTitulo">{$.i18n.prop("factura.total")}:  {totalComprobante}</div>
                             </div>
                         </article>
                     </aside>
@@ -257,12 +244,8 @@
                             <a href="#" class="factura-espera"  title="{cliente !=null?cliente.nombreCompleto:""}">C# {id}</a>
                         </div>    
                      </section >
-
                 </section>
-                      
         </div><!-- fin contenedor-factura-->
-            
-  
 <!--Modal mostrar Articulos de la empresa -->
 <div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -279,7 +262,7 @@
                         </div>
                         <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                             <label  >{$.i18n.prop("articulo.descripcion")}</label>
-                            <input type="text" class="form-control descArticulo "   id="descArticulo" name="descArticulo" onkeypress={__ConsultarProductosDesc}>
+                            <input type="text" class="form-control descArticulo "   id="descArticulo" name="descArticulo" onkeypress={__ConsultarProductosDesc} autofocus="autofocus">
                         </div>
                     </div> 
                 </form>    
@@ -342,7 +325,6 @@
                             </tr>
                         </tfoot>
                     </table>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
@@ -611,7 +593,31 @@
               todayHighlight:true,
             }
         );
-
+        var xTriggered = 0;
+        $( "#codigo" ).keyup(function( event ) {
+            xTriggered++;
+            var msg = "Handler for .keyup() called " + xTriggered + " time(s).";
+            console.log( msg +  "html" );
+            console.log( event );
+        }).keydown(function( event ) {
+            if ( event.which == 13 ) {
+                lecturaCodigo($('.codigo').val())
+            }
+        });
+        var timer;
+        $("#codigo").on('keyup',function() {
+            timer && clearTimeout(timer);
+            timer = setTimeout(postData, 100);
+        });
+            $.fn.delayPasteKeyUp = function(fn, ms)
+        {
+            var timer = 0;
+            $(this).on("propertychange input", function()
+            {
+                clearTimeout(timer);
+                timer = setTimeout(fn, ms);
+            });
+        };
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
@@ -708,7 +714,6 @@ var reglasDeValidacionFactura = function() {
 	});
 	return validationOptions;
 };
-
 /**
 * listado por Dia
 **/
@@ -746,7 +751,6 @@ function ListadoFacturasDelDia(){
             }
         });
 }
-
 /**
 * formato del listado de facturas del dia
 **/
@@ -802,7 +806,6 @@ function __reimprimir(){
 * Consultar la factura
 **/
 function consultaFactura(data){
-
      $.ajax({
         url: "MostrarFacturaAjax",
         datatype: "json",
@@ -906,7 +909,6 @@ function __TipoCambio(){
     });
 
 }
-
 /**
 *  Obtiene el valor de lo digitado en el campo de efectivo
 **/
@@ -979,21 +981,24 @@ __CalculaCambioAEntregarKeyPress(e){
         self.update()
     }
 }
-
 /**
  * Listar codigos  llamado del modal para presentar los articulos
  **/   
  __ListaDecodigos(){
      ListarCodigosArticulos()
  }
-
+/**
+Lista de articulos
+**/
  function ListarCodigosArticulos(){
     self.mostrarListadoArticulos = true
     self.update()
-    $('.descArticulo').val(null)
+   $('.descArticulo').val(null)
     $('.codigoArt').val(null)
     $(".tableListarArticulos").dataTable().fnClearTable();
     $(".tableListarArticulos").DataTable().destroy();
+    $('#descArticulo').select()
+    $('#descArticulo').focus()
     $('#modalInventario').modal('show')    
 
  }
@@ -1009,19 +1014,19 @@ __CargarFacturaEspera(e){
 __AplicarYcrearFactura(){
  aplicarFactura(2)
 }
-
+/**
+* Aplicando factura temporal
+**/
 __AplicarYcrearFacturaTemporal(){
  aplicarFactura(1)
 }
-
-
 /**
 * Aplicar la factura
 **/
 function aplicarFactura(estado){
     if(self.detail.length == 0 ){
          $('.precioVenta').val(null)
-        $('.codigo').val(null)
+        $('.codigo').val("")
         $('.codigo').focus()
          swal({
                 position: 'top-end',
@@ -1031,7 +1036,7 @@ function aplicarFactura(estado){
                 timer: 1500
                 })
         $('.precioVenta').val(null)
-        $('.codigo').val(null)
+        $('.codigo').val("")
         $('.codigo').focus()
         
         return
@@ -1400,7 +1405,7 @@ _AtrasFacturaFinal(){
     self.primeraVezBilleteClick = false
    self.error = false
    self.update()
-   $('.codigo').val(null)
+   $('.codigo').val("")
    $('.codigo').select()
    $('.codigo').focus()
 }
@@ -1440,7 +1445,7 @@ function mostrarPAgo(){
      //No hay detalles registrados en la Factura
     if(self.detail.length == 0 ){
         $('.precioVenta').val(null)
-        $('.codigo').val(null)
+        $('.codigo').val("")
         $('.codigo').focus()
         swal({
             position: 'top-end',
@@ -1450,7 +1455,7 @@ function mostrarPAgo(){
             timer: 1500
         })
         $('.precioVenta').val(null)
-        $('.codigo').val(null)
+        $('.codigo').val("")
         $('.codigo').focus()
         return
     }
@@ -1488,10 +1493,15 @@ __addProductToDetail(e){
   //  if(self.empresa.tieneLector !="Activo"){
   //      return
    // }
-    if (e.keyCode != 13) {
+    if (e.keyCode == 13) {
+        lecturaCodigo($('.codigo').val())
         return;
     } 
-    var codigo = e.currentTarget.value
+    
+}
+
+function lecturaCodigo(leerCodigo){
+    var codigo = leerCodigo
     var codigoActual = ""
     var cantidadAct =""
     var existe = false
@@ -1512,7 +1522,7 @@ __addProductToDetail(e){
     if(existeMas == true){
        __sumarMasArticulo(codigo,0)
        $('.precioVenta').val(null)
-        $('.codigo').val(null)
+        $('.codigo').val("")
         
         $('.codigo').focus()
        return  
@@ -1523,12 +1533,13 @@ __addProductToDetail(e){
     if(self.articulo !=null){
         if(self.articulo.tipoCodigo !="04" || self.empresa.tieneLector !="Activo"){
             $('.precioVenta').val(null)
-            $('.codigo').val(null)
+            $('.codigo').val("")
             $('.codigo').select()
             $('.codigo').focus()
 
         }
     }
+
 
 }
 /**
@@ -1568,7 +1579,7 @@ __addPrecioDetail(e){
     }
     __buscarcodigoPrecio(codigoActual,__valorNumerico(valor),__valorNumerico(precio));
     $('.precioVenta').val(null)
-    $('.codigo').val(null)
+    $('.codigo').val("")
     
     $('.codigo').focus()
   
@@ -2534,19 +2545,20 @@ function __Teclas(){
             self.update()
             $(".totalEfectivo").val(self.totalCambioPagar)
         }  
-          
          mostrarPAgo()     
       }else if (self.mostrarFormularioPago == true && self.mostarParaCrearNuevaFactura == false ){
           self.primeraVezBilleteClick == false
           self.update()
             aplicarFactura(2)   
         } 
-    }   
+    } 
+    //alert(tecla)  
     //F4
     if(tecla ==115){
      ListarCodigosArticulos()
+      $('.descArticulo').select()
+      $('.descArticulo').focus()
     }
-
     //Factura en espera
     if(tecla ==120){
       aplicarFactura(1)   
@@ -2555,12 +2567,13 @@ function __Teclas(){
     if(tecla ==117){
      reimprimirFacturaEnMomento()
     }
-
-    //Limpiar
-    if(tecla ==121){
+    //Limpiar F2
+    if(tecla ==113){
       refrescarPagina()
+      $('.codigo').val("")
+      $('.codigo').select()
+      $(".codigo").focus()
     }
-
    if(tecla ==27){
       $('.codigo').select()
       $(".codigo").focus()

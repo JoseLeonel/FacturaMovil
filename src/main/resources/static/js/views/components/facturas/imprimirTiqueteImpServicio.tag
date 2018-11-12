@@ -325,7 +325,7 @@ function __comboCondicionPagoPrint(){
  * **/
 function buscarTipoDocumentoPrint(){
     for (var count = 0; count < self.comboTipoDocumentos.length; count++) {
-        if (self.comboTipoDocumentos[count].tipoDoc == self.facturaImpresa.tipoDoc ){// Si existe actualiza la cantidad
+        if (self.comboTipoDocumentos[count].estado == self.facturaImpresa.tipoDoc ){// Si existe actualiza la cantidad
             self.facturaImpresa.tipoDoc =self.comboTipoDocumentos[count].descripcion
             self.update()
             break;

@@ -15,7 +15,7 @@ var _Init = function () {
 function cargaMantenimiento() {
 
 	
-	riot.mount('cuenta-pagar');
+	riot.mount('cuenta-pagar',{idTransaccion:1});
 }
 
 

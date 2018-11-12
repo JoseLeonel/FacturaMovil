@@ -54,6 +54,7 @@
                 </div>
             </div>
             <div class="col-xs-12 text-right">
+                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar detalle transacciones" href="DescargarComprasAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}"> Descargar</a>        
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
             	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
             </div>
@@ -473,6 +474,10 @@ self = this
 
 self.mostrarListado        = true
 self.mostrarDetalle        = false
+self.hay_datos             = false
+self.fechaInicio =null
+self.fechaFin =null
+self.cedula =""
 self.on('mount',function(){
     $("#filtros").validate(reglasDeValidacion());
     __InformacionDataTable()
@@ -510,8 +515,14 @@ var reglasDeValidacion = function() {
 *  Busqueda de la informacion por rango de fechas
 **/
 __Busqueda(){
+    self.hay_datos   = false
+    self.fechaInicio =$('.fechaInicial').val()
+    self.fechaFin    =$('.fechaFinal').val()
+    self.cedula      =$('#cedulaEmisor').val()
+
     self.listaFacturas = []
     self.update()
+    
     var inicial  =$('.fechaInicial').val()
      if ($("#filtros").valid()) {
         var parametros = {
@@ -519,6 +530,7 @@ __Busqueda(){
         	fechaFinParam:$('.fechaFinal').val(),
         	cedulaEmisor:$('#cedulaEmisor').val(),
         };
+
         $("#tableListar").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListar')  
         $.ajax({
@@ -531,10 +543,13 @@ __Busqueda(){
                     __InformacionDataTable();
                     loadListar(".tableListar",idioma_espanol,self.formato_tabla,result.aaData)
                     self.listaFacturas = result.aaData
+                    self.hay_datos             = true
                     self.update()
+                    agregarInputsCombos()
                     ActivarEventoFiltro(".tableListar")
                 }else{
                     __InformacionDataTable();
+                    agregarInputsCombos()
                 }           
             },
             error: function (xhr, status) {
@@ -544,10 +559,22 @@ __Busqueda(){
      }
 }
 
+
+function agregarInputsCombos(){
+     // Agregar los input de busqueda 
+    $('.tableListar tfoot th').each( function (e) {
+        var title = $('.tableListar thead th').eq($(this).index()).text();      
+        //No se toma en cuenta la columna de las acctiones(botones)
+        if ( $(this).index() != 7    ){
+	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	    }
+    })
+} 
+
 /*
  * Muestra los filtros avanzados
  */
- __mostrarFiltros(){
+ __mostrarFiltros(){ 
     if(self.mostrarFiltros){
         self.mostrarFiltros = false;
         self.valorMarginBottom  = '10px'

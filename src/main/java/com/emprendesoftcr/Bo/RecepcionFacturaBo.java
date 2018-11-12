@@ -1,6 +1,7 @@
 package com.emprendesoftcr.Bo;
 
 import java.util.Collection;
+import java.util.Date;
 
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.RecepcionFactura;
@@ -18,4 +19,5 @@ public interface RecepcionFacturaBo {
 	Collection<RecepcionFactura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma);
 	
 	Collection<RecepcionFactura> findByClave(String cedulaEmisor, String clave);
+	Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula);
 }

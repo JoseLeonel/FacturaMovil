@@ -1,7 +1,11 @@
 package com.emprendesoftcr.Dao;
 
+import java.util.Collection;
+import java.util.Date;
+
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Proveedor;
 
 public interface CompraDao {
 
@@ -16,6 +20,8 @@ public interface CompraDao {
 	Compra findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa);
 	
 	void eliminarDetalleComprasPorSP(Compra compra);
+	
+	Collection<Compra> findByFechaInicioAndFechaFinalAndProveedor(Date fechaInicio, Date fechaFin, Empresa empresa,  Proveedor proveedor);
 	
 
 

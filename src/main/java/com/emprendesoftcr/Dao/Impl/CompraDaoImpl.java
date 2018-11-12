@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Dao.Impl;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -12,8 +13,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.CompraDao;
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Proveedor;
 
 @Repository("compraDao")
 public class CompraDaoImpl implements CompraDao {
@@ -96,5 +99,26 @@ public class CompraDaoImpl implements CompraDao {
 		}
 
 	}
+	
+	@Override
+	public Collection<Compra> findByFechaInicioAndFechaFinalAndProveedor(Date fechaInicio, Date fechaFin, Empresa empresa,  Proveedor proveedor){
+		StringBuilder hql = new StringBuilder();
+		hql.append("select obj from Compra obj");
+		hql.append(" where obj.empresa = :empresa ");
+		if (proveedor != null) {
+				hql.append("and obj.proveedor = :proveedor ");
+		}
+		hql.append("and obj.fechaIngreso >= :fechaInicio and obj.fechaIngreso <= :fechaFin ");
+		Query query = entityManager.createQuery(hql.toString());
+		if (proveedor != null) {
+				query.setParameter("proveedor", proveedor);
+		}
+		query.setParameter("empresa", empresa);
+		query.setParameter("fechaInicio", fechaInicio);
+		query.setParameter("fechaFin", fechaFin);
+		return query.getResultList();
+	}
+	
+	
 
 }

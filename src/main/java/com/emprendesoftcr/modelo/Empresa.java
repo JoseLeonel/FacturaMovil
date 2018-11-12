@@ -145,10 +145,19 @@ public class Empresa implements Serializable {
 	@Column(name = "nofactura_elec")
 	private Integer noFacturaElectronica;
 	
+	@Column(name = "correo_frecuente")
+	private Integer correoFrecuente;
+	
 
 	
+	
+	
+	
+	
+	
+
 	public Empresa(Integer id, String abreviaturaEmpresa, Integer numeroConsecutivo, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String cazaMatriz, Integer codigoSeguridad, String nombre, String nombreComercial, String tipoCedula, String cedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String canton, String distrito, String barrio, String logo, String tieneInventario, String tieneLector, String cambiarPrecio, String estadoProduccion, String enviarTiquete, String representante, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, String usuarioEnvioComprobante, String passwordEnvioComprobante, String estado, Date created_at, Date updated_at, Integer aceptadoConsecutivo,
-			Integer aceptadoParcialConsecutivo, Integer rechazadoConsecutivo, Integer vueltoImprimir, Integer noFacturaElectronica) {
+			Integer aceptadoParcialConsecutivo, Integer rechazadoConsecutivo, Integer vueltoImprimir, Integer noFacturaElectronica, Integer correoFrecuente) {
 		super();
 		this.id = id;
 		this.abreviaturaEmpresa = abreviaturaEmpresa;
@@ -189,6 +198,7 @@ public class Empresa implements Serializable {
 		this.rechazadoConsecutivo = rechazadoConsecutivo;
 		this.vueltoImprimir = vueltoImprimir;
 		this.noFacturaElectronica = noFacturaElectronica;
+		this.correoFrecuente = correoFrecuente;
 	}
 
 	public Empresa() {
@@ -211,7 +221,15 @@ public class Empresa implements Serializable {
 		this.id = id;
 	}
 
+
+	public Integer getCorreoFrecuente() {
+		return correoFrecuente;
+	}
+
 	
+	public void setCorreoFrecuente(Integer correoFrecuente) {
+		this.correoFrecuente = correoFrecuente;
+	}
 	
 	public String getAbreviaturaEmpresa() {
 		return abreviaturaEmpresa;

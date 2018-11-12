@@ -13,8 +13,8 @@ public interface DetalleDao {
 	
 	
 	Integer eliminarDetalleFactura(Factura factura)throws Exception;
-
 	
+		
 
 
 }
