@@ -21,6 +21,7 @@ import com.emprendesoftcr.Utils.Utils;
 
 /**
  * Recepcion de la factura, aceptacion de facturas de un emisor.
+ * 
  * @author Jairo Cisneros.
  * @since 15 de setiembre del 2018
  */
@@ -70,6 +71,12 @@ public class RecepcionFactura implements Serializable {
 
 	@Column(name = "estado_firma")
 	private Integer estadoFirma;
+
+	@Column(name = "tipo_cambio")
+	private Double tipoCambio;
+
+	@Column(name = "codigo_moneda")
+	private String codigoMoneda;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
@@ -138,6 +145,7 @@ public class RecepcionFactura implements Serializable {
 	public Double getTotalImpuestos() {
 		return totalImpuestos;
 	}
+
 	public String getTotalImpuestosSTR() {
 		return Utils.formateadorMiles(this.totalImpuestos);
 	}
@@ -189,10 +197,28 @@ public class RecepcionFactura implements Serializable {
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
 	}
+
 	public String getFechaEmisionSTR() {
-		if(this.fechaEmision !=null) {
-			return Utils.getFechaGeneraReporte(this.getFechaEmision());	
+		if (this.fechaEmision != null) {
+			return Utils.getFechaGeneraReporte(this.getFechaEmision());
 		}
 		return Constantes.EMPTY;
 	}
+
+	public Double getTipoCambio() {
+		return tipoCambio;
+	}
+
+	public void setTipoCambio(Double tipoCambio) {
+		this.tipoCambio = tipoCambio;
+	}
+
+	public String getCodigoMoneda() {
+		return codigoMoneda;
+	}
+
+	public void setCodigoMoneda(String codigoMoneda) {
+		this.codigoMoneda = codigoMoneda;
+	}
+
 }
