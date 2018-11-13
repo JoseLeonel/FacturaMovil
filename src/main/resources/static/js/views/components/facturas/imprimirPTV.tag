@@ -86,12 +86,17 @@
                             <td ><h3><strong>{$.i18n.prop("tikect.total.final")}</strong></h3></td>
                             <td ><h3><strong>{facturaImpresa.totalComprobanteSTR}</strong></h3></td>
                             </tr>
-
                             <tr>
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.totalCambioPagar")}</strong></td>
                             <td ><strong>{facturaImpresa.totalCambioPagarSTR}</strong></td>
                             </tr>                            
+                            <tr show={facturaImpresa.tipoCambio > 1}>>
+                                <td></td>
+                                <td class="precio" ><strong>{$.i18n.prop("tipoCambio.cambioDolar")}</strong></td>
+                                <td class="precio" ><strong>{facturaImpresa.tipoCambioSTR}</strong></td>
+                                <br>
+                            </tr>
                                                  
 
                             <tr>
@@ -314,7 +319,7 @@ self.on('mount',function(){
 
 
        consultaFactura(self.facturaImpresa.id)
-        qr()
+        //qr()
     }
    
    
