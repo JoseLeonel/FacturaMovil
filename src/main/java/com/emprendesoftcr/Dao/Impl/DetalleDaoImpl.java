@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Dao.Impl;
 
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.EntityManager;
@@ -11,9 +12,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.DetalleDao;
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Factura;
 
+/**
+ * Detalles de ventas
+ * DetalleDaoImpl.
+ * @author jose.
+ * @since 3 nov. 2018
+ */
 @Repository("detalleDao")
 public class DetalleDaoImpl implements DetalleDao {
 
@@ -53,5 +61,8 @@ public class DetalleDaoImpl implements DetalleDao {
 			throw e;
 		}
 	}
+	
+	
+	
 
 }

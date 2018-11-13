@@ -1,6 +1,7 @@
 package com.emprendesoftcr.Bo.Impl;
 
 import java.util.Collection;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,11 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 	@Override
 	public Collection<RecepcionFactura> findByClave(String cedulaEmisor, String clave) {
 		return recepcionFacturaDao.findByClave(cedulaEmisor, clave);
+	}
+	
+	@Override
+	public Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula){
+		return recepcionFacturaDao.findByFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFin, empresa, cedula);
 	}
 
 }

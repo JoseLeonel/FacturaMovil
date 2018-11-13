@@ -8,10 +8,10 @@
         <div class="pantalla-imprimir">
             <div class="botones-imprimir">
                 <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
-                
+               
             </div>
-            <section class="zona-impresion" id="imprimeme" name ="imprimeme">
-                <div class="forma-impresion">
+            <section class="zona-impresion" >
+                <div class="forma-impresion" id="imprimeme" name ="imprimeme">
                     <div class="ticket" id="ticket" name="ticket" > 
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc == '88'}"><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.id}                       </strong><br></div>
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc == '87'}"><strong> {$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")} {facturaImpresa.id}                       </strong><br></div>
@@ -41,14 +41,15 @@
                                 <tr class = "forma-table">
                                     <th class="cantidad">{$.i18n.prop("tikect.detalle.cantidad")}  </th>
                                     <th class="producto">{$.i18n.prop("tikect.detalle.descripcion")}</th>
-                                    <th class="precio"> {$.i18n.prop("tikect.total.linea")}</th>
+                                    <th class="precio"> {$.i18n.prop("tikect.total.linea")} </th>
+
                                 </tr>
                             </thead>
                         <tbody>
                             <tr class = "" each={detalles} class="detalleTables">
                                 <td class="cantidad" show={codigo !='8888'}>{cantidad}</td>
                                 <td class="producto" show={codigo !='8888'}>{descripcion}</td>
-                                <td class="precio"   show={codigo !='8888'}>{montoTotalSTR} </td>
+                                <td class="precio"   show={codigo !='8888'}>{montoTotalSTR} {montoImpuesto>0?"G":"E"}</td>
                             </tr>
                             </tr>
                             <tr>
@@ -82,15 +83,20 @@
                             </tr>
                             <tr>
                             <td></td>
-                            <td ><strong>{$.i18n.prop("tikect.total.final")}</strong></td>
-                            <td ><strong>{facturaImpresa.totalComprobanteSTR}</strong></td>
+                            <td ><h3><strong>{$.i18n.prop("tikect.total.final")}</strong></h3></td>
+                            <td ><h3><strong>{facturaImpresa.totalComprobanteSTR}</strong></h3></td>
                             </tr>
-
                             <tr>
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.totalCambioPagar")}</strong></td>
                             <td ><strong>{facturaImpresa.totalCambioPagarSTR}</strong></td>
                             </tr>                            
+                            <tr show={facturaImpresa.tipoCambio > 1}>>
+                                <td></td>
+                                <td class="precio" ><strong>{$.i18n.prop("tipoCambio.cambioDolar")}</strong></td>
+                                <td class="precio" ><strong>{facturaImpresa.tipoCambioSTR}</strong></td>
+                                <br>
+                            </tr>
                                                  
 
                             <tr>
@@ -99,7 +105,7 @@
                             
                         </tbody>
                         </table> 
-                        
+                        <p  align="left" show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 0}">E=Excento G=Gravado  <br>
                         <br>
                         <p  align="left" show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 0}">{$.i18n.prop("tikect.autorizado.parte.uno")}  <br>
                                          {$.i18n.prop("tikect.autorizado.parte.dos")}   
@@ -290,8 +296,8 @@
 }
 @media only print
 {
-    body * { display: none !important; }
-    body:after { content: "Don't waste paper!"; }
+  body * { display: none !important; }
+ body:after { content: "Don't waste paper!"; }
 }
 
 </style>    
@@ -313,12 +319,68 @@ self.on('mount',function(){
 
 
        consultaFactura(self.facturaImpresa.id)
+        //qr()
     }
    
    
    
 
 })
+
+function qr(){
+     var options = {
+        // render method: 'canvas', 'image' or 'div'
+        render: 'canvas',
+
+        // version range somewhere in 1 .. 40
+        minVersion: 1,
+        maxVersion: 40,
+
+        // error correction level: 'L', 'M', 'Q' or 'H'
+        ecLevel: 'L',
+
+        // offset in pixel if drawn onto existing canvas
+        left: 0,
+        top: 0,
+
+        // size in pixel
+        size: 200,
+
+        // code color or image element
+        fill: '#000',
+
+        // background color or image element, null for transparent background
+        background: null,
+
+        // content
+        text: 'no text',
+
+        // corner radius relative to module width: 0.0 .. 0.5
+        radius: 0,
+
+        // quiet zone in modules
+        quiet: 0,
+
+        // modes
+        // 0: normal
+        // 1: label strip
+        // 2: label box
+        // 3: image strip
+        // 4: image box
+        mode: 0,
+
+        mSize: 0.1,
+        mPosX: 0.5,
+        mPosY: 0.5,
+
+        label: 'no label',
+        fontname: 'sans',
+        fontcolor: '#000',
+
+        image: null
+    }
+    $('#divQR').qrcode(options);
+}
 
 function consultaFactura(idFactura){
 
@@ -454,7 +516,7 @@ function __comboCondicionPago(){
  * **/
 function buscarTipoDocumento(){
     for (var count = 0; count < self.comboTipoDocumentos.length; count++) {
-        if (self.comboTipoDocumentos[count].tipoDoc == self.facturaImpresa.tipoDoc ){
+        if (self.comboTipoDocumentos[count].estado == self.facturaImpresa.tipoDoc ){
             self.facturaImpresa.tipoDoc =self.comboTipoDocumentos[count].descripcion
             self.update()
             break;
@@ -503,6 +565,7 @@ function __imprimir(){
     var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
      var div = document.querySelector("#imprimeme");
     imprimirElemento(div)
+    
 
 }
 
@@ -512,6 +575,7 @@ function imprimirElemento(elemento){
   ventana.document.write('<html><head><title>' + "" + '</title>');
   ventana.document.write('</head><body >');
   ventana.document.write(elemento.innerHTML);
+ 
   ventana.document.write('</body></html>');
   ventana.document.close();
   ventana.focus();
@@ -519,7 +583,6 @@ function imprimirElemento(elemento){
   ventana.close();
   return true;
 }
-
 
 
 

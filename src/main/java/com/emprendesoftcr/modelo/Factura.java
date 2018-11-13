@@ -418,7 +418,6 @@ public class Factura implements Serializable {
 	public String getSubTotalSTR() {
 		return Utils.formateadorMiles(this.subTotal);
 	}
-
 	public Double getTotalTransporte() {
 		return totalTransporte;
 	}

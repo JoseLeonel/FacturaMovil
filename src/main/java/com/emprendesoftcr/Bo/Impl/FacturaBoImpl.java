@@ -18,12 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Bo.FacturaBo;
+import com.emprendesoftcr.Bo.UsuarioCajaBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.CuentaCobrarDao;
 import com.emprendesoftcr.Dao.FacturaDao;
 import com.emprendesoftcr.Dao.HaciendaDao;
 import com.emprendesoftcr.Dao.KardexDao;
-import com.emprendesoftcr.Dao.UsuarioCajaDao;
 import com.emprendesoftcr.Dao.UsuarioCajaFacturaDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
@@ -43,6 +43,11 @@ import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 import com.google.gson.Gson;
 
+/**
+ * Reglas de la factura FacturaBoImpl.
+ * @author jose.
+ * @since 3 nov. 2018
+ */
 @EnableTransactionManagement
 @Service("facturaBo")
 public class FacturaBoImpl implements FacturaBo {
@@ -69,7 +74,7 @@ public class FacturaBoImpl implements FacturaBo {
 	UsuarioCajaFacturaDao	usuarioCajaFacturaDao;
 
 	@Autowired
-	UsuarioCajaDao				usuarioCajaDao;
+	UsuarioCajaBo					usuarioCajaBo;
 
 
 	private Logger				log	= LoggerFactory.getLogger(this.getClass());
@@ -117,7 +122,7 @@ public class FacturaBoImpl implements FacturaBo {
 	 * @see com.emprendesoftcr.Bo.FacturaBo#findByConsecutivoAndEmpresa(java.lang.String, com.emprendesoftcr.modelo.Empresa)
 	 */
 	@Override
-		public Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) throws Exception {
+	public Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) throws Exception {
 		Factura factura = null;
 		try {
 			factura = facturaDao.findByConsecutivoAndEmpresa(consecutivo, empresa);
@@ -237,8 +242,20 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setMontoCambio(facturaCommand.getMontoCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getMontoCambio());
 			factura.setTotalCambio(facturaCommand.getTotalCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambio());
 			factura.setTotalCambioPagar(facturaCommand.getTotalCambioPagar() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambioPagar());
-			factura.setCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
-			factura.setTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
+	    if(facturaCommand.getCodigoMoneda() !=null) {
+	    	//Costa Rica Colones 
+	    	if(facturaCommand.getCodigoMoneda().equals(Constantes.CODIGO_MONEDA_COSTA_RICA)) {
+					factura.setCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
+					factura.setTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
+	    	}else if(facturaCommand.getCodigoMoneda().equals(Constantes.CODIGO_MONEDA_DOLAR)) {//Dollar
+	    		factura.setCodigoMoneda(Constantes.CODIGO_MONEDA_DOLAR);
+	    		factura.setTipoCambio(facturaCommand.getTipoCambioMoneda());
+	    	}
+	    }else {
+				factura.setCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
+				factura.setTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
+	    	
+	    }		
 			factura.setEstado(facturaCommand.getEstado());
 			factura.setMesa(facturaCommand.getMesa());
 			if (factura.getId() == Constantes.ZEROS_LONG) {
@@ -251,6 +268,8 @@ public class FacturaBoImpl implements FacturaBo {
 		}
 		return factura;
 	}
+	
+	
 
 	private ArrayList<DetalleFacturaCommand> formaDetallesCommand(FacturaCommand facturaCommand) throws Exception {
 		// Detalles, se forma el detalle de la factura, se contabiliza los totales para evitar problemas con el tema de los decimales en el front
@@ -299,23 +318,18 @@ public class FacturaBoImpl implements FacturaBo {
 		Integer numeroLinea = 1;
 		for (Iterator<DetalleFacturaCommand> iterator = detallesFacturaCommand.iterator(); iterator.hasNext();) {
 			DetalleFacturaCommand detalleFacturaCommand = (DetalleFacturaCommand) iterator.next();
-
 			Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(detalleFacturaCommand.getCodigo(), usuario.getEmpresa());
 			Detalle detalle = new Detalle(detalleFacturaCommand);
 			detalle.setUsuario(usuario);
-			if (articulo.getTipoImpuesto() == null) {
-				detalle.setTipoImpuesto(Constantes.EMPTY);
-			}
-
+			detalle.setTipoImpuesto(articulo == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoImpuesto());
 			detalle.setNaturalezaDescuento(Constantes.FORMATO_NATURALEZA_DESCUENTO);
 			detalle.setNumeroLinea(numeroLinea);
 			detalle.setCreated_at(new Date());
 			detalle.setUpdated_at(new Date());
-			detalle.setTipoCodigo(articulo.getTipoCodigo());
-			detalle.setCodigo(articulo.getCodigo());
-			detalle.setUnidadMedida(articulo.getUnidadMedida());
-			detalle.setTipoImpuesto(articulo.getTipoImpuesto());
-
+			detalle.setTipoCodigo(articulo == null ? detalleFacturaCommand.getTipoCodigo() : articulo.getTipoCodigo());
+			detalle.setCodigo(articulo == null ? detalleFacturaCommand.getCodigo() : articulo.getCodigo());
+			detalle.setUnidadMedida(articulo == null ? detalleFacturaCommand.getUnidadMedida() : articulo.getUnidadMedida());
+			detalle.setTipoImpuesto(articulo == null ? detalleFacturaCommand.getTipoImpuesto() : articulo.getTipoImpuesto());
 			// Se aplica el redondeo hasta que se facture porque puede ser venta en espera y se necesita la presicion de los decimales
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
 
@@ -449,20 +463,15 @@ public class FacturaBoImpl implements FacturaBo {
 	@Override
 	@Transactional
 	public synchronized Factura crearFactura(FacturaCommand facturaCommand, Usuario usuario, UsuarioCaja usuarioCaja, TipoCambio tipoCambio) throws Exception {
-
 		Factura factura = null;
 		lock.lock();
-
-//		System.out.println(lock);
-//    System.out.println(System.identityHashCode(lock));
-
 		try {
 			long id = Thread.currentThread().getId();
 			System.out.println(String.format("--start transaccion--> Thread=%d %s", id, "Fecha:" + new Date()));
 
 			Empresa empresa = empresaBo.buscar(facturaCommand.getEmpresa().getId());
 			// Se actualizan los datos de la factura command
-			if(empresa.getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
+			if (empresa.getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
 				facturaCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA);
 			}
 			facturaCommand.setTotal(facturaCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotal());
@@ -484,18 +493,14 @@ public class FacturaBoImpl implements FacturaBo {
 			facturaCommand.setPlazoCredito(facturaCommand.getPlazoCredito() == null ? Constantes.ZEROS : facturaCommand.getPlazoCredito());
 			facturaCommand.setCodigoMoneda(facturaCommand.getCodigoMoneda() != null ? facturaCommand.getCodigoMoneda() : Constantes.CODIGO_MONEDA_COSTA_RICA);
 			facturaCommand.setTotalTarjeta(facturaCommand.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalTarjeta());
-			
-			
 			// Proformas
 			if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				facturaCommand.setEstado(Constantes.FACTURA_ESTADO_PROFORMAS);
 			}
-
 			// Tiquete de uso interno
 			if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO)) {
 				facturaCommand.setEstado(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO);
 			}
-
 			// Se anula las facturas
 			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				if (facturaCommand.getReferenciaNumero() != null && facturaCommand.getReferenciaNumero() != Constantes.EMPTY) {
@@ -506,20 +511,14 @@ public class FacturaBoImpl implements FacturaBo {
 					}
 				}
 			}
-
 			// Se forman los detalles command de las factura
 			ArrayList<DetalleFacturaCommand> detallesFacturaCommand = this.formaDetallesCommand(facturaCommand);
-
 			// --------------------------------------------- Se trabaja con el objeto a registrar en bd -----------------------------------------------------
-
 			// Se forma el objeto factura
 			factura = this.formaFactura(facturaCommand, usuario);
-
 			// Se asociando los detalles a la factura
 			this.asociaDetallesFactura(factura, facturaCommand, usuario, detallesFacturaCommand);
-
 			try {
-
 				// Generar el consecutivo de venta
 				if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 
@@ -540,7 +539,6 @@ public class FacturaBoImpl implements FacturaBo {
 						factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_EN_PROCESOS);
 					}
 				}
-
 				// Se almacena la factura, se deja en estado en proceso para que no lo tome los procesos de hacienda
 				if (factura.getId() == null) {
 					factura.setCreated_at(new Date());
@@ -548,13 +546,9 @@ public class FacturaBoImpl implements FacturaBo {
 				} else {
 					modificar(factura);
 				}
-
 				// Efectivo Banco Tarjeta
-
-				// Estado a facturar
 				if (!factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
-
 						// montos en ceros de pagar
 						if (factura.getTotalEfectivo().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalBanco().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalTarjeta().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalCredito().equals(Constantes.ZEROS_DOUBLE)) {
 							if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
@@ -563,10 +557,8 @@ public class FacturaBoImpl implements FacturaBo {
 								factura.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
 								factura.setTotalBanco(Constantes.ZEROS_DOUBLE);
 								factura.setTotalCredito(Constantes.ZEROS_DOUBLE);
-
 							}
 						}
-
 						// credito
 						if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 							factura.setTotalEfectivo(Constantes.ZEROS_DOUBLE);
@@ -574,18 +566,14 @@ public class FacturaBoImpl implements FacturaBo {
 							factura.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
 							factura.setTotalBanco(Constantes.ZEROS_DOUBLE);
 							factura.setTotalCredito(factura.getTotalComprobante());
-
 						}
-
 						// Paga solo en efectivo
 						if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && factura.getTotalBanco().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalEfectivo() > Constantes.ZEROS_DOUBLE && factura.getTotalTarjeta().equals(Constantes.ZEROS_DOUBLE)) {
 							factura.setTotalEfectivo(factura.getTotalComprobante());
 							factura.setTotalTarjeta(Constantes.ZEROS_DOUBLE);
 							factura.setTotalBanco(Constantes.ZEROS_DOUBLE);
 							factura.setTotalCredito(Constantes.ZEROS_DOUBLE);
-
 						}
-
 						// Paga solo en banco
 						if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && factura.getTotalBanco() > Constantes.ZEROS_DOUBLE && factura.getTotalEfectivo().equals(Constantes.ZEROS_DOUBLE) && factura.getTotalTarjeta().equals(Constantes.ZEROS_DOUBLE)) {
 							factura.setTotalBanco(factura.getTotalComprobante());
@@ -629,12 +617,12 @@ public class FacturaBoImpl implements FacturaBo {
 						usuarioCajaFactura.setFactura(factura);
 						usuarioCajaFactura.setUsuarioCaja(usuarioCaja);
 						usuarioCajaFacturaDao.agregar(usuarioCajaFactura);
-						if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
-							usuarioCajaDao.actualizarCaja(usuarioCaja, factura.getTotalEfectivo(), factura.getTotalTarjeta(), factura.getTotalBanco(), factura.getTotalCredito(), Constantes.ZEROS_DOUBLE, factura.getTotalImpuestoServicio());
-						}
 
+						// Se mueve al controller por que el procedimiento no toma los cambios
+						/*
+						 * if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) { //usuarioCajaDao.actualizarCaja(usuarioCaja, factura.getTotalEfectivo(), factura.getTotalTarjeta(), factura.getTotalBanco(), factura.getTotalCredito(), Constantes.ZEROS_DOUBLE, factura.getTotalImpuestoServicio()); usuarioCajaBo.actualizarCaja(usuarioCaja); }
+						 */
 					}
-
 				}
 
 				

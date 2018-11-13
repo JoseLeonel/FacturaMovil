@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Bo.Impl;
 
+import java.util.Collection;
 import java.util.Date;
 
 import org.json.simple.JSONArray;
@@ -246,6 +247,10 @@ public class CompraBoImpl implements CompraBo {
 		}
 
 	}
+	
+	public Collection<Compra> findByFechaInicioAndFechaFinalAndProveedor(Date fechaInicio, Date fechaFin, Empresa empresa,  Proveedor proveedor){
+		return compraDao.findByFechaInicioAndFechaFinalAndProveedor(fechaInicio, fechaFin, empresa, proveedor);
+	}
 
 	/**
 	 * Modificar una compra
@@ -289,6 +294,8 @@ public class CompraBoImpl implements CompraBo {
 	 * Elimina los detalles de una compra
 	 * @see com.emprendesoftcr.Bo.CompraBo#eliminarDetalleComprasPorSP(com.emprendesoftcr.modelo.Compra)
 	 */
+	@Override
+	@Transactional
 	public void eliminarDetalleComprasPorSP(Compra compra) throws Exception {
 		compraDao.eliminarDetalleComprasPorSP(compra);
 	}

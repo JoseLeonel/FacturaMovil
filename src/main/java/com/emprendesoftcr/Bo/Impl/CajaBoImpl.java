@@ -10,6 +10,12 @@ import com.emprendesoftcr.Dao.CajaDao;
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.Empresa;
 
+/**
+ * Caja es las diferentes cajas de una empresa lo importante es la terminal 00001 son 5 digitos
+ * CajaBoImpl.
+ * @author jose.
+ * @since 3 nov. 2018
+ */
 @EnableTransactionManagement
 @Service("cajaBo")
 public class CajaBoImpl implements CajaBo {

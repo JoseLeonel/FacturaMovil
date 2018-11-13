@@ -25,6 +25,7 @@
                                         <thead>
                                             <tr>
                                                 <th class = "table-header" >{$.i18n.prop("factura.id")}            </th>
+                                                <th class = "table-header" >{$.i18n.prop("usuario.nombreUsuario")}            </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}            </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.documento")}                </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.cliente")}                  </th>
@@ -37,6 +38,7 @@
                                         <tfoot style="display: table-header-group;">
                                             <tr>
                                                 <th>{$.i18n.prop("factura.id")}            </th>
+                                                <th >{$.i18n.prop("usuario.nombreUsuario")}            </th>
                                                 <th>{$.i18n.prop("factura.fecha.emision")}            </th>
                                                 <th>{$.i18n.prop("factura.documento")}                </th>
                                                 <th>{$.i18n.prop("factura.cliente")}                  </th>
@@ -924,7 +926,9 @@ function __comboCondicionPago(){
 **/
 function __InformacionDataTable(){
     self.formato_tabla = [ 
+                              
                                {'data' :'id'   ,"name":"id"             ,"title" : $.i18n.prop("factura.id")     ,"autoWidth" :true },
+                               {'data' :'usuarioCreacion.nombreUsuario'   ,"name":"usuarioCreacion.nombreUsuario"    ,"title" : $.i18n.prop("usuario.nombreUsuario")     ,"autoWidth" :true },
                                {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"             ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true },
                              
                                {'data' :'id'                    ,"name":"id"                      ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
@@ -1174,7 +1178,7 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 9    ){
+        if ( $(this).index() != 8    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })

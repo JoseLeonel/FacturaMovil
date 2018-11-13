@@ -4,20 +4,18 @@ $(document).ready(function() {
 } );/*fin document*/
 
 var _Init = function () {
-	cargaMantenimientoCajas()
+	cargaMantenimiento()
 }
-
 
 
 /**
  * LLamar al componente Riot 
  * @returns
  */
-function cargaMantenimientoCajas() {
+function cargaMantenimiento() {
+	//1 = Actualizacion 2 =Consulta
 
-	
-	riot.mount('cerrada-caja');
+	riot.mount('cuenta-cobrar',{idTransaccion:2});
 }
-
 
 

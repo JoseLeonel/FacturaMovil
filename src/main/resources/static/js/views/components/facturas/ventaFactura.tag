@@ -59,10 +59,11 @@
         <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
             <div class="box-tools ">
                 <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
+                <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
                 <a class="pull-left" href="#"    onclick = {__ImprimirTiquete}  title="{$.i18n.prop("imprimir.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f7")}</span></a>
                 <a class="pull-left" href="#"    onclick = {__MostrarFormularioDePago}  title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
                 <a class="pull-left" href="#"    onclick= { __CrearFacturaTemporal}  title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
-                <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
+                
                 <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
                    
             </div>
@@ -116,11 +117,29 @@
     <div class="container-fluid">
         <div class="row no-space">
             <div class="col-md-5 col-sm-5 col-lg-5 col-xs-12 pull-right" style="padding: 2px 12px">
-                <div class="block panel ">                    
+                <div class="block panel ">     
+                <div  onclick = {__MostrarFormularioDePago} id="btnGrandePagar" class="head green well" style="color: #fff; font-size: 55px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
+                        <table id="pagarTable" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td width="30%" id="">
+                                        <div id="pagarTitulo">{$.i18n.prop("factura.total")}:</div>
+                                    </td>
+                                    <td width="70%" id="">
+                                        <div id="">
+                                            <span id="total_show_peso" class="textShadow">  </span>
+                                            <span class="label label-info textShadow" id="total-show">{totalComprobante}</span>
+                                       </div>
+                                    </td>
+                                </tr>                     
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr style="margin: 0px; border-color: #e4e4e4;">               
                     <div id="listadoProdcutos">{$.i18n.prop("titulo.listado.venta")}   {factura.id>0?factura.id:'' } {factura.nombreFactura}</div>
                     <hr style="margin: 2px 0px 0px 0px; border-color: #e4e4e4; margin-top: 0px">
                     <div class="data-fluid">
-                        <div id="listaProductos" style="height:200px; overflow-x: hidden; width:100%">
+                        <div id="listaProductos" style="height:340px; overflow-x: hidden; width:100%">
                             <table id="tablaListaProductos"  cellpadding="0" cellspacing="0" width="100%" class="table lcnp table-dark">
                                 <thead>
                                     <tr >
@@ -189,24 +208,7 @@
                         </table>
                     </div>
                     <hr style="margin: 0px; border-color: #e4e4e4; margin-top: 0px">                    
-                    <div  onclick = {__MostrarFormularioDePago} id="btnGrandePagar" class="head green well" style="color: #fff; font-size: 55px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
-                        <table id="pagarTable" width="100%">
-                            <tbody>
-                                <tr>
-                                    <td width="30%" id="">
-                                        <div id="pagarTitulo">{$.i18n.prop("factura.total")}:</div>
-                                    </td>
-                                    <td width="70%" id="">
-                                        <div id="">
-                                            <span id="total_show_peso" class="textShadow">  </span>
-                                            <span class="label label-info textShadow" id="total-show">{totalComprobante}</span>
-                                       </div>
-                                    </td>
-                                </tr>                     
-                            </tbody>
-                        </table>
-                    </div>
-                    <hr style="margin: 0px; border-color: #e4e4e4;">
+                    
                 </div>
                 <div  class="row  ">
                     <div class="col-md-12 col-sx-12 col-lg-12 col-sm-12 "  style="padding:10px 15px 18px 15px; ">
@@ -3068,8 +3070,8 @@ function __seleccionarClientes() {
 	       var data = table.row($(this).parents("tr")).data();
 	     }
         self.cliente = data
-        self.cliente = data
         self.update();
+         $('#modalClientes').modal('hide') 
     });
 }
 /**
@@ -3193,7 +3195,7 @@ function __Teclas(){
       imprimirTiquete()   
     }
     //Limpiar
-    if(tecla ==121){
+    if(tecla ==113){
        __Init()
     }
     }, false );
@@ -3215,6 +3217,7 @@ _sumarBilletes(e){
         self.factura.totalEfectivo = 0
         self.primeraVezBilleteClick = true
         self.update()
+        
     }
     var item = e.item
     if(item.valor == 0 ){
@@ -3245,14 +3248,14 @@ _sumarBilletes(e){
 function cargaBilletes(){
     self.billetes = []
     self.update()
-      _incluirBilletes("₡","50,000",50000,'/dist/img/billete50000.jpg')
-    _incluirBilletes("₡","20,000",20000,'/dist/img/billete20000.jpg')
-    _incluirBilletes("₡","10,000",10000,'/dist/img/billete10000.jpg')
-    _incluirBilletes("₡","5,000",5000,'/dist/img/billete5000.jpg')
+     _incluirBilletes("₡","1000",1000,'/dist/img/billete1000.jpg')
     _incluirBilletes("₡","2,000",2000,'/dist/img/billete2000.jpg')
-    _incluirBilletes("₡","1000",1000,'/dist/img/billete1000.jpg')
+    _incluirBilletes("₡","5,000",5000,'/dist/img/billete5000.jpg')
     _incluirBilletes("","Limpiar",0,'/dist/img/limpiar.png')
-
+    _incluirBilletes("₡","10,000",10000,'/dist/img/billete10000.jpg')
+    _incluirBilletes("₡","20,000",20000,'/dist/img/billete20000.jpg')
+     _incluirBilletes("₡","50,000",50000,'/dist/img/billete50000.jpg')
+    
 }
 /**
 *    Incluir a los billetes

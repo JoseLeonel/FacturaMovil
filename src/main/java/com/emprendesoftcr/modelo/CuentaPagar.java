@@ -72,16 +72,14 @@ public class CuentaPagar implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "usuario_id", nullable = false)
 	private Usuario						usuarioCreacion;
-	
+
 	@Column(name = "estado")
 	private String						estado;
-
 
 	public CuentaPagar() {
 		super();
 	}
 
-	
 	public CuentaPagar(Long id, String consecutivo, Double total, Double totalAbono, Double totalSaldo, Date fechaCredito, Date created_at, Date updated_at, Proveedor proveedor, Empresa empresa, Usuario usuarioCreacion, String estado) {
 		super();
 		this.id = id;
@@ -98,7 +96,6 @@ public class CuentaPagar implements Serializable {
 		this.estado = estado;
 	}
 
-
 	public Long getId() {
 		return id;
 	}
@@ -106,23 +103,14 @@ public class CuentaPagar implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	
 
-	
-	
-
-	
 	public String getEstado() {
 		return estado;
 	}
 
-
-	
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
-
 
 	public String getConsecutivo() {
 		return consecutivo;
@@ -155,13 +143,14 @@ public class CuentaPagar implements Serializable {
 	public void setTotalSaldo(Double totalSaldo) {
 		this.totalSaldo = totalSaldo;
 	}
+
 	public String getTotalSTR() {
 		return Utils.formateadorMiles(this.total);
 	}
+
 	public String getTotalAbonoSTR() {
 		return Utils.formateadorMiles(this.totalAbono);
 	}
-
 
 	public String getTotalSaldoSTR() {
 		return Utils.formateadorMiles(this.totalSaldo);
@@ -182,13 +171,13 @@ public class CuentaPagar implements Serializable {
 	public void setCreated_at(Date created_at) {
 		this.created_at = created_at;
 	}
+
 	public String getCreated_atSTR() {
-		if(this.created_at !=null) {
-			return Utils.getFechaGeneraReporte(this.created_at);	
+		if (this.created_at != null) {
+			return Utils.getFechaGeneraReporte(this.created_at);
 		}
 		return Constantes.EMPTY;
 	}
-
 
 	public Date getUpdated_at() {
 		return updated_at;
@@ -201,11 +190,11 @@ public class CuentaPagar implements Serializable {
 	public Proveedor getProveedor() {
 		return proveedor;
 	}
+
 	public String getProveedorSTR() {
 		return proveedor.getNombreCompleto();
 	}
 
-	
 	public void setProveedor(Proveedor proveedor) {
 		this.proveedor = proveedor;
 	}

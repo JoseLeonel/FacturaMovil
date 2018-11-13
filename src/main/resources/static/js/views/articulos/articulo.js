@@ -148,7 +148,7 @@ function __Opciones(id,type,row){
     if(row.contable == "Si" && row.cantidad > 0 ){
        menu += '<li><a href="#"  title="Salida al inventario" class="  btnSalida" >Salida</a></li>'
     }
-    if(row.contable == "No"  ){
+    if(row.contable == "Si"  ){
         menu += '<li><a href="#"  title="Entrada al inventario"  class="  btnEntrada" >Entrada</a></li>'
     }
      menu += "</ul></div>"  

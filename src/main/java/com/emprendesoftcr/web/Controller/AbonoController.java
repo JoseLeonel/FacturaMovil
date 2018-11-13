@@ -129,7 +129,7 @@ public class AbonoController {
 			UsuarioCaja usuarioCaja = usuarioCajaBo.findByUsuarioAndEstado(usuarioSesion, Constantes.ESTADO_ACTIVO);
 			if (usuarioCaja == null) {
 
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.factura.no.hay.cajas.abierta", result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.cajas.abierta", result.getAllErrors());
 			}
 
 			CuentaCobrar cuentaCobrar = cuentaCobrarBo.buscar(idCuentaCobrar);
@@ -138,10 +138,8 @@ public class AbonoController {
 				respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("error.abono.cuentaCobrar.no.existe"));
 				return respuestaServiceValidator;
 			}
-
-			
-			// abono a crear no puede ser mayor al saldo de la cuenta por cobrar
-			if (abonoCommand.getTotal() > cuentaCobrar.getTotalSaldo()) {
+				// abono a crear no puede ser mayor al saldo de la cuenta por cobrar
+			if (Utils.roundFactura(abonoCommand.getTotal(), 2) > Utils.roundFactura(cuentaCobrar.getTotalSaldo(), 2)) {
 				result.rejectValue("total", "error.abono.total.mayor.totalSaldo");
 			}
 			if (abonoCommand.getTotal() == Constantes.ZEROS_DOUBLE) {

@@ -201,7 +201,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
 
-	@Scheduled(cron = "0 0/1 * * * ?")
+	//@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 		ArrayList<Hacienda> facturasConProblemas = new ArrayList<Hacienda>();
@@ -225,10 +225,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								hacienda.setEstado(Constantes.HACIENDA_ESTADO_PROBLEMA_ENVIO_NO_TRASABLE);
 								facturasConProblemas.add(hacienda);
 							} else {
-								hacienda.setReintentos(hacienda.getReintentos() ==null?1:hacienda.getReintentos() + 1);
+								hacienda.setReintentos(hacienda.getReintentos() == null ? 1 : hacienda.getReintentos() + 1);
 							}
 							haciendaBo.modificar(hacienda);
-							
+
 							log.info("** Error1  taskHaciendaEnvio: " + e.getMessage() + " fecha :" + new Date() + "Empresa:" + hacienda.getEmpresa().getNombre() + " Consecutivo :" + hacienda.getConsecutivo());
 						}
 
@@ -355,7 +355,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html Proceso automatico para ejecutar aceptacion del documento
 	 */
-  @Scheduled(cron = "0 0/3 * * * ?")
+	//@Scheduled(cron = "0 0/4 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		try {
@@ -516,18 +516,20 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	}
 
 	/**
-	 * Enviar correos a los clientes que Tributacion acepto documento
+	 * Solo se van enviar correos a la empresa cuando es un cliente o correo alternativo los tiquetes de clientes frecuentes no lo vamos enviar para ver el comportamiento de rendimiento Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	//@Scheduled(cron = "0 0/3 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
 			log.info("Inicio Envios de correos  {}", new Date());
+			Boolean noEnviarCorreoClienteFrecuente = false;
 			// Listado de los documentos Pendientes de aceptar por hacienda
 			Collection<Hacienda> listaHacienda = haciendaBo.findByEstadoAndNotificacion(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA, Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
 			for (Hacienda hacienda : listaHacienda) {
 				try {
+					noEnviarCorreoClienteFrecuente = false;
 					Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
 					ArrayList<String> listaCorreos = new ArrayList<String>();
 					// Se determina si es una recepcion de factura
@@ -535,6 +537,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						RecepcionFactura recepcionFactura = recepcionFacturaBo.findByConsecutivoAndEmpresa(haciendaBD.getConsecutivo(), haciendaBD.getEmpresa());
 						if (recepcionFactura != null) {
 							listaCorreos.add(recepcionFactura.getEmpresa().getCorreoElectronico());
+
 						}
 						if (listaCorreos != null) {
 							if (!listaCorreos.isEmpty()) {
@@ -552,20 +555,16 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 									listaCorreos.add(factura.getCorreoAlternativo());
 								}
 							}
-
 							if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
-
 								if (factura.getCliente().getCorreoElectronico() != null) {
 									if (!factura.getCliente().getCorreoElectronico().equals(Constantes.EMPTY)) {
 										listaCorreos.add(factura.getCliente().getCorreoElectronico());
 									}
-
 								}
 								if (factura.getCliente().getCorreoElectronico1() != null) {
 									if (!factura.getCliente().getCorreoElectronico1().equals(Constantes.EMPTY)) {
 										listaCorreos.add(factura.getCliente().getCorreoElectronico1());
 									}
-
 								}
 								if (factura.getCliente().getCorreoElectronico2() != null) {
 									if (!factura.getCliente().getCorreoElectronico2().equals(Constantes.EMPTY)) {
@@ -578,15 +577,23 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 										listaCorreos.add(factura.getCliente().getCorreoElectronico3());
 									}
 								}
+								listaCorreos.add(factura.getEmpresa().getCorreoElectronico());
+							} else {// Cuando un cliente quiere que le llegue un correo alternativo
+								haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_FRECUENTE_NO_ENVIADO);
+								haciendaBo.modificar(haciendaBD);
+								noEnviarCorreoClienteFrecuente = true;
+
 							}
-							listaCorreos.add(factura.getEmpresa().getCorreoElectronico());
 
 						}
 						if (listaCorreos != null) {
 							if (!listaCorreos.isEmpty()) {
 								enviarCorreos(factura, haciendaBD, listaCorreos);
-								haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
-								haciendaBo.modificar(haciendaBD);
+								if (noEnviarCorreoClienteFrecuente == false) {
+									haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
+									haciendaBo.modificar(haciendaBD);
+
+								}
 
 							}
 						}
@@ -757,7 +764,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	//@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -855,8 +862,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
+<<<<<<< HEAD
 	 */	
     @Scheduled(cron = "0 0/10 * * * ?")
+=======
+	 */
+	//@Scheduled(cron = "0 0/10 * * * ?")
+>>>>>>> master
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {

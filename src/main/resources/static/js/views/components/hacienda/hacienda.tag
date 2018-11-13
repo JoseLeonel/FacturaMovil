@@ -14,7 +14,7 @@
     <div>
         <div class="row" show={mostrarListado}>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div onclick={__mostrarFiltros} class="text-left advanced-search-grid" style="margin-bottom : {valorMarginBottom}; padding : 2px;">
+                <div onclick={__mostrarFiltros} class="text-left advanced-search-grid" style="margin-bottom : {valorMarginBottom}; padding : 2px;  cursor: pointer;">
                     <h4> <i class="fa fa-filter" style="padding-left : 5px;"></i>&nbsp{$.i18n.prop("filtro")} <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4>
                 </div>  
                 <div  show={mostrarFiltros}  class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
@@ -146,7 +146,11 @@
   </div>
 </div>
 
-
+<style type="text/css">
+.clickable {
+        cursor: pointer;
+    }
+</style>
 <script>
     self = this
     self.detail                = []

@@ -4,8 +4,10 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.StoredProcedureQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,34 +88,34 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 	@Override
 	public void actualizarCaja(UsuarioCaja usuarioCaja, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalServicio) throws Exception {
 		try {
-			Double resultadoTotalBanco = Constantes.ZEROS_DOUBLE;
-			resultadoTotalBanco = usuarioCaja.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getTotalBanco();
-			resultadoTotalBanco = totalBanco + resultadoTotalBanco;
+			// Double resultadoTotalBanco = Constantes.ZEROS_DOUBLE;
+			// resultadoTotalBanco = usuarioCaja.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getTotalBanco();
+			// resultadoTotalBanco = totalBanco + resultadoTotalBanco;
 
-			Double resultadoTotalEfectivo = Constantes.ZEROS_DOUBLE;
-			resultadoTotalEfectivo = usuarioCaja.getTotalEfectivo() != null ? usuarioCaja.getTotalEfectivo() : Constantes.ZEROS_DOUBLE;
-			resultadoTotalEfectivo = totalEfectivo + usuarioCaja.getTotalEfectivo();
+			// Double resultadoTotalEfectivo = Constantes.ZEROS_DOUBLE;
+			// resultadoTotalEfectivo = usuarioCaja.getTotalEfectivo() != null ? usuarioCaja.getTotalEfectivo() : Constantes.ZEROS_DOUBLE;
+			// resultadoTotalEfectivo = totalEfectivo + usuarioCaja.getTotalEfectivo();
 
 			Double resultadoAbono = Constantes.ZEROS_DOUBLE;
 			resultadoAbono = usuarioCaja.getTotalAbono() != null ? usuarioCaja.getTotalAbono() : Constantes.ZEROS_DOUBLE;
-			resultadoAbono = totalAbono + resultadoAbono ;
+			resultadoAbono = totalAbono + resultadoAbono;
 
-			Double resultadoTarjeta = Constantes.ZEROS_DOUBLE;
-			resultadoTarjeta = usuarioCaja.getTotalTarjeta() != null ? usuarioCaja.getTotalTarjeta() : Constantes.ZEROS_DOUBLE;
-			resultadoTarjeta = totalTarjeta + resultadoTarjeta;
+			// Double resultadoTarjeta = Constantes.ZEROS_DOUBLE;
+			// resultadoTarjeta = usuarioCaja.getTotalTarjeta() != null ? usuarioCaja.getTotalTarjeta() : Constantes.ZEROS_DOUBLE;
+			// resultadoTarjeta = totalTarjeta + resultadoTarjeta;
 
-			Double resultadoServicio = Constantes.ZEROS_DOUBLE;
-			resultadoServicio = usuarioCaja.getTotalServicio() != null ? usuarioCaja.getTotalServicio() : Constantes.ZEROS_DOUBLE;
-			resultadoServicio = totalServicio + resultadoServicio ;
+			// Double resultadoServicio = Constantes.ZEROS_DOUBLE;
+			// resultadoServicio = usuarioCaja.getTotalServicio() != null ? usuarioCaja.getTotalServicio() : Constantes.ZEROS_DOUBLE;
+			// resultadoServicio = totalServicio + resultadoServicio ;
 
-			Double resultadoNeto = resultadoTotalEfectivo + resultadoTarjeta + resultadoTotalBanco + resultadoAbono + resultadoServicio;
+			// Double resultadoNeto = resultadoTotalEfectivo + resultadoTarjeta + resultadoTotalBanco + resultadoAbono + resultadoServicio;
 			usuarioCaja.setTotalCredito(Constantes.ZEROS_DOUBLE);
-			usuarioCaja.setTotalBanco(Utils.roundFactura(resultadoTotalBanco, 5));
-			usuarioCaja.setTotalEfectivo(Utils.roundFactura(resultadoTotalEfectivo, 5));
-			usuarioCaja.setTotalTarjeta(Utils.roundFactura(resultadoTarjeta, 5));
+			// usuarioCaja.setTotalBanco(Utils.roundFactura(resultadoTotalBanco, 5));
+			// usuarioCaja.setTotalEfectivo(Utils.roundFactura(resultadoTotalEfectivo, 5));
+			// usuarioCaja.setTotalTarjeta(Utils.roundFactura(resultadoTarjeta, 5));
 			usuarioCaja.setTotalAbono(Utils.roundFactura(resultadoAbono, 5));
-			usuarioCaja.setTotalNeto(Utils.roundFactura(resultadoNeto, 5));
-			usuarioCaja.setTotalServicio(Utils.roundFactura(resultadoServicio, 5));
+			// usuarioCaja.setTotalNeto(Utils.roundFactura(resultadoNeto, 5));
+			// usuarioCaja.setTotalServicio(Utils.roundFactura(resultadoServicio, 5));
 			modificar(usuarioCaja);
 
 		} catch (Exception e) {
@@ -121,6 +123,18 @@ public class UsuarioCajaDaoImpl implements UsuarioCajaDao {
 			throw e;
 		}
 
+	}
+
+	@Override
+	public void actualizarCaja(UsuarioCaja usuarioCaja) throws Exception {
+		StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_ACTUALIZA_CAJA);
+
+		// set parametros entrada
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_ACTUALIZA_CAJA_ID_CAJA_USUARIO, Long.class, ParameterMode.IN);
+
+		// Valores de entrada
+		storedProcedure.setParameter(Constantes.SP_ACTUALIZA_CAJA_ID_CAJA_USUARIO, usuarioCaja.getId());
+		storedProcedure.execute();
 	}
 
 }

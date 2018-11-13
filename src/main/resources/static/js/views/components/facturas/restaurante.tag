@@ -55,11 +55,18 @@
    <div class="row">
         <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
             <div class="box-tools ">
+                
                 <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
+                <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
                 <a class="pull-left" href="#"    onclick = {__ImprimirTiquete}  title="{$.i18n.prop("imprimir.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f7")}</span></a>
                 <a class="pull-left" href="#"    onclick = {__MostrarFormularioDePago}  title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
+<<<<<<< HEAD
                 <a class="pull-left" href="#"    onclick = {__CrearFacturaTemporal}  title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
                 <a class="pull-left" href="#"    onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
+=======
+                <a class="pull-left" href="#"    onclick= {__CrearFacturaTemporal}  title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
+                
+>>>>>>> master
                 <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
             </div>
         </div>      
@@ -3420,9 +3427,10 @@ function __Teclas(){
       imprimirTiquete()   
     }
     //Limpiar
-    if(tecla ==121){
+    if(tecla ==113){
       __Init()
     }
+     
     }, false );
 }
 /**
@@ -3434,15 +3442,17 @@ _sumarBilletes(e){
         self.factura.totalEfectivo = 0
         self.primeraVezBilleteClick = true
         self.update()
+
     }
     var item = e.item
     if(item.valor == 0 ){
-       self.factura.totalEfectivo = 0
+      self.factura.totalEfectivo = 0
        self.factura.totalTarjeta  = 0
        self.factura.totalBanco    = 0
        self.factura.totalCambioPagar  = 0
        self.totalCambioPagar = 0
        self.claseCambioDinero     = "entregarCambioPositivo"
+       $(".totalEfectivo").val(null) 
     }else{
        self.factura.totalEfectivo = __valorNumerico(item.valor) + __valorNumerico(self.factura.totalEfectivo)
        $('.efectivo').val(self.factura.totalEfectivo)
@@ -3467,14 +3477,14 @@ _sumarBilletes(e){
 function cargaBilletes(){
     self.billetes = []
     self.update()
-    _incluirBilletes("₡","50,000",50000,'/dist/img/billete50000.jpg')
-    _incluirBilletes("₡","20,000",20000,'/dist/img/billete20000.jpg')
-    _incluirBilletes("₡","10,000",10000,'/dist/img/billete10000.jpg')
-    _incluirBilletes("₡","5,000",5000,'/dist/img/billete5000.jpg')
+   _incluirBilletes("₡","1000",1000,'/dist/img/billete1000.jpg')
     _incluirBilletes("₡","2,000",2000,'/dist/img/billete2000.jpg')
-    _incluirBilletes("₡","1000",1000,'/dist/img/billete1000.jpg')
+    _incluirBilletes("₡","5,000",5000,'/dist/img/billete5000.jpg')
     _incluirBilletes("","Limpiar",0,'/dist/img/limpiar.png')
-
+    _incluirBilletes("₡","10,000",10000,'/dist/img/billete10000.jpg')
+    _incluirBilletes("₡","20,000",20000,'/dist/img/billete20000.jpg')
+     _incluirBilletes("₡","50,000",50000,'/dist/img/billete50000.jpg')
+    
 }
 /**
 *    Incluir a los billetes

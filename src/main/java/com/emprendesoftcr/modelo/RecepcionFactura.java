@@ -16,8 +16,12 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
+
 /**
  * Recepcion de la factura, aceptacion de facturas de un emisor.
+ * 
  * @author Jairo Cisneros.
  * @since 15 de setiembre del 2018
  */
@@ -67,6 +71,12 @@ public class RecepcionFactura implements Serializable {
 
 	@Column(name = "estado_firma")
 	private Integer estadoFirma;
+
+	@Column(name = "tipo_cambio")
+	private Double tipoCambio;
+
+	@Column(name = "codigo_moneda")
+	private String codigoMoneda;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
@@ -136,12 +146,20 @@ public class RecepcionFactura implements Serializable {
 		return totalImpuestos;
 	}
 
+	public String getTotalImpuestosSTR() {
+		return Utils.formateadorMiles(this.totalImpuestos);
+	}
+
 	public void setTotalImpuestos(Double totalImpuestos) {
 		this.totalImpuestos = totalImpuestos;
 	}
 
 	public Double getTotalFactura() {
 		return totalFactura;
+	}
+
+	public String getTotalFacturaSTR() {
+		return Utils.formateadorMiles(this.totalFactura);
 	}
 
 	public void setTotalFactura(Double totalFactura) {
@@ -178,6 +196,29 @@ public class RecepcionFactura implements Serializable {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public String getFechaEmisionSTR() {
+		if (this.fechaEmision != null) {
+			return Utils.getFechaGeneraReporte(this.getFechaEmision());
+		}
+		return Constantes.EMPTY;
+	}
+
+	public Double getTipoCambio() {
+		return tipoCambio;
+	}
+
+	public void setTipoCambio(Double tipoCambio) {
+		this.tipoCambio = tipoCambio;
+	}
+
+	public String getCodigoMoneda() {
+		return codigoMoneda;
+	}
+
+	public void setCodigoMoneda(String codigoMoneda) {
+		this.codigoMoneda = codigoMoneda;
 	}
 
 }

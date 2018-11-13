@@ -7,8 +7,7 @@
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
         </div>
     </div>
-    <br>
-    <br><br>
+   <br>
     <!-- Inicio Filtros-->
     <div>
         <div class="row" show={mostrarListado}>
@@ -51,8 +50,21 @@
                                         <option  data-tokens="{nombreCompleto}" each={clientes.data}  value="{id}"  >{nombreCompleto}</option>
                                     </select>
                                 </div>  
-                            </div>                      
+                            </div>
+                                              
                         </div>
+                        <div class="row">
+                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>{$.i18n.prop("factura.tipo.documento")} </label>  
+                                    <select  class="form-control tipoDocumento" id="tipoDocumento" name="tipoDocumento" >
+                                        <option  value="0"  >{$.i18n.prop("todos.select")}</option>
+                                        <option each={comboTipoDocumentos} value="{estado}"  >{descripcion}</option>
+                                    </select>
+                                </div>  
+                            </div>
+                        </div>    
+                      
                     </form>  
                 </div>
             </div>
@@ -78,22 +90,26 @@
                                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
+                                                <th class = "table-header" >{$.i18n.prop("usuario.nombreUsuario")}            </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}            </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.documento")}                </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.cliente")}                  </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
+                                                <th class = "table-header" >{$.i18n.prop("tikect.moneda")}                    </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.total")}                    </th>
                                                 <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
                                             </tr>
                                         </thead>
                                         <tfoot style="display: table-header-group;">
                                             <tr>
+                                                <th>{$.i18n.prop("usuario.nombreUsuario")}            </th>
                                                 <th>{$.i18n.prop("factura.fecha.emision")}            </th>
                                                 <th>{$.i18n.prop("factura.documento")}                </th>
                                                 <th>{$.i18n.prop("factura.cliente")}                  </th>
                                                 <th>{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
                                                 <th>{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
+                                                <th>{$.i18n.prop("tikect.moneda")}                    </th>
                                                 <th>{$.i18n.prop("factura.total")}                    </th>
                                                 <th>                                                  </th>
                                             </tr>
@@ -545,11 +561,6 @@
     .tituloTotal{
         font-size:30px;
     }
-</style>
- 
-
-
-<style type ="text/css">
     .wrap{
         max-width:100%;
         width:100%;
@@ -675,7 +686,7 @@
         width:100%;
         margin :auto;
     }
-    .cabecera-izquierda {200
+    .cabecera-izquierda {
        margin-right:5%;
        width:85%;
     }
@@ -683,14 +694,14 @@
     .cabecera-derecha {
         width:25%;
     }
-    .contenedor-detalle  200
+    .contenedor-detalle  {
         display:flex;
         width:100%;
         margin :auto;
     }
 
-    .booking-details h1 {200
-        font-size: 1.5em;
+    .booking-details h1 {
+                font-size: 1.5em;
         color: #666;
         text-shadow: none;
     }
@@ -720,17 +731,13 @@
         margin-bottom: 5px;
         font-weight: 600;
     }
-    
 </style>
-
 <script>
 self = this
-
 self.detail                = []
 self.totalDescuentos       = 0
 self.totalImpuestos        = 0
 self.total                 = 0
-
 self.mostrarListado        = true
 self.mostrarDetalle        = false
 self.clientes                  = {data:[]}
@@ -740,33 +747,53 @@ self.on('mount',function(){
     __InformacionDataTable()
     __InicializarTabla('.tableListar')
     agregarInputsCombos()
-
     listaClientesActivos()
+    __ComboTipoDocumentos()
     $('.datepickerFechaFinal').datepicker(
-            {
-              format: 'yyyy-mm-dd',
-              todayHighlight:true,
-            }
+        {
+            format: 'yyyy-mm-dd',
+            todayHighlight:true,
+        }
     );
     $('.datepickerFechaInicial').datepicker(
-            {
-              format: 'yyyy-mm-dd',
-              todayHighlight:true,
-            }
+        {
+           format: 'yyyy-mm-dd',
+           todayHighlight:true,
+        }
     );
-    
-
 })
 
-
+/**
+* cargar los tipos de Documento de la factura
+**/
+function __ComboTipoDocumentos(){
+    self.comboTipoDocumentos = []
+    self.update()
+    self.comboTipoDocumentos.push({
+        estado:"04",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
+    })
+    self.comboTipoDocumentos.push({
+         estado:"01",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
+    })
+    
+     self.comboTipoDocumentos.push({
+         estado:"02",
+        descripcion:$.i18n.prop("referencia.tipo.documento.nota.debito")
+    })
+    self.comboTipoDocumentos.push({
+         estado:"03",
+        descripcion:$.i18n.prop("referencia.tipo.documento.nota.credito")
+    })
+    self.update()
+}
 /**
 *  Regresar al listado
 **/
 __regresarAlListadoAlternativo(){
     $('#ModalCorreoAlternativo').modal('hide')
-    
 }
-
 /**
 * Camps requeridos
 **/
@@ -786,20 +813,15 @@ var reglasDeValidacionCorreo = function() {
 	});
 	return validationOptions;
 };
-
 /**
 * Enviar el correo
 **/
 __Enviar(){
-
      if ($("#formulario").valid()) {
          enviarCorreoAlternativo()
      }
 
 }
-
-
-
 /**
 * Camps requeridos
 **/
@@ -819,15 +841,14 @@ var reglasDeValidacion = function() {
 	});
 	return validationOptions;
 };
-
 /**
 * limpiar los filtros
 **/
 __limpiarFiltros(){
     $('#fechaInicial').val(null)
     $('#fechaFinal').val(null)
+    
 }
-
 /**
 *  Busqueda de la informacion por rango de fechas
 **/
@@ -840,6 +861,7 @@ __Busqueda(){
             fechaInicio:inicial,
             fechaFin:$('.fechaFinal').val(),
             idCliente:$('#cliente').val(),
+          
         };
         $("#tableListar").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListar')  
@@ -876,10 +898,6 @@ __Busqueda(){
      }
 
 }
-
-
-
-
 /**
 *  Obtiene la lista de los clientes activos
 **/
@@ -916,8 +934,6 @@ function listaClientesActivos(){
     }
     self.update();
 }
-
-
 /**
 *  Regresar al listado
 **/
@@ -933,8 +949,6 @@ __regresarAlListado(){
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
 **/
 function __FacturaEnEspera(factura){
-
- 
     $.ajax({
         url: "MostrarFacturaAjax",
         datatype: "json",
@@ -964,7 +978,6 @@ function __FacturaEnEspera(factura){
         }
     });
 }
-
 /**
 *Formato de la fecha con hora
 **/
@@ -972,7 +985,6 @@ function __displayDate_detail(fecha) {
     var dateTime = new Date(fecha);
     return moment(dateTime).format('DD/MM/YYYY ');
 }
-
 /**
 *  Cargar detalles Factura en espera
 **/
@@ -999,15 +1011,11 @@ function cargarDetallesFacturaEnEspera(){
     __comboCondicionPago()
     __ComboEstados()
     
-     
 }
-
-
 /**
 * cargar los estados de la compra
 **/
 function __ComboEstados(){
-    
  switch(self.factura.estado) {
     case 1:
           self.factura.estado=  $.i18n.prop("factura.estado.pendiente")
@@ -1021,7 +1029,9 @@ function __ComboEstados(){
     }
     self.update()
 }
-
+/**
+* Codicion de Pago
+**/
 function __comboCondicionPago(){
     switch(self.factura.condicionVenta) {
     case "01":
@@ -1041,21 +1051,24 @@ function __comboCondicionPago(){
 **/
 function __InformacionDataTable(){
     self.formato_tabla = [ 
-                               {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true },
+                               {'data' :'usuarioCreacion.nombreUsuario'   ,"name":"usuarioCreacion.nombreUsuario"    ,"title" : $.i18n.prop("usuario.nombreUsuario")     ,"autoWidth" :true },
+                               {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"                  ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true },
                              
                                {'data' :'numeroConsecutivo'                    ,"name":"numeroConsecutivo"                     ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
                                    "render":function(numeroConsecutivo,type, row){
 									    return __TipoDocumentos(numeroConsecutivo,row)
 	 							    }
                                },
-                               {'data' :'cliente'                    ,"name":"cliente"                     ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
+                               {'data' :'cliente'                    ,"name":"cliente"                 ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
                                    "render":function(cliente,type, row){
-									    return cliente ==null?"":cliente.nombreCompleto;
+									    return cliente ==null?"":cliente.cedula != "999999999999"?cliente.nombreCompleto:row.nombreFactura;
 	 							    }
                                },
-                               {'data' :'totalImpuestoSTR'           ,"name":"totalImpuestoSTR"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true  },
+                               {'data' :'totalImpuestoSTR'           ,"name":"totalImpuestoSTR"       ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true  },
                                {'data' :'totalDescuentosSTR'         ,"name":"totalDescuentosSTR"     ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true },
+                               {'data' :'codigoMoneda'               ,"name":"codigoMoneda"           ,"title" : $.i18n.prop("tikect.encabezado.moneda") ,"autoWidth" :true },
                                {'data' :'totalComprobanteSTR'        ,"name":"totalComprobanteSTR"    ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true },
+
                                {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
                                       return __Opciones(id,type,row);
@@ -1064,9 +1077,10 @@ function __InformacionDataTable(){
     self.update();
    
 }
-
+/**
+Tipo de documento
+**/
 function __TipoDocumentos(numeroConsecutivo,row){
-
     switch(row.tipoDoc) {
     case "04":
           return  "Tiq:"+numeroConsecutivo
@@ -1083,10 +1097,8 @@ function __TipoDocumentos(numeroConsecutivo,row){
 
     default:
         return  numeroConsecutivo
+    }
 }
-}
-
-    
 /**
 * Opciones listado de los clientes
 */
@@ -1095,24 +1107,17 @@ function __Opciones(id,type,row){
     menu += '       <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' 
     menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>' 
     menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
-    
     menu += '<li><a href="#"  title="Mostrar" class="  btnMostrar" >Mostrar</a></li>'
     menu += '<li><a href="#"  title="Mostrar" class="  btnImprimir" >Imprimir</a></li>'
     menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
     if(row.empresa.noFacturaElectronica == 0){
-        
         menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Envio Correo</a></li>'
         menu += '<li><a href="#"  title="Envio de correo Alternativo" class="  btnEnvioCorreoAlternativo" >Envio de correo Alternativo</a></li>'
     }
-   menu += "</ul></div>"  
-
-
-     return menu;          
+    menu += "</ul></div>"  
+    return menu;          
 }
-
-
-
- /**
+/**
 *  imprimir impresora punto de venta
 **/
 function __imprimirPTV(){
@@ -1129,7 +1134,6 @@ function __imprimirPTV(){
         riot.mount('ptv-imprimir',{factura:self.factura});    
 	});
 }
-
 /**
 *  Enviar a correo alternativo
 **/
@@ -1152,7 +1156,6 @@ function __CorreoAlternativo(){
         $('#ModalCorreoAlternativo').modal('show')      
 	});
 }
-
 /**
  * Envio del correo al emisor y receptor
  */
@@ -1171,7 +1174,6 @@ function __EnviarCorreos(){
         
 	});
 }
-
 /**
 * Enviar correo
 **/
@@ -1189,7 +1191,6 @@ function enviarCorreoAlternativo(){
             }else{
                 sweetAlert("", data.message, "info");
             }
-            
         },
         error: function (xhr, status) {
             mensajeErrorServidor(xhr, status);
@@ -1197,8 +1198,6 @@ function enviarCorreoAlternativo(){
         }
     });
 }
-
-
 /**
  * mostrar la abono
  */
@@ -1218,7 +1217,6 @@ function __VerDetalle(){
         __FacturaEnEspera(self.factura)
 	});
 }
-
 /**
  * mostrar la abono
  */
@@ -1234,21 +1232,15 @@ function __BajarPDF(){
         location.href = "generaFacturaPDF?idFactura=" + data.id
 	});
 }
-
-
-
-
 function agregarInputsCombos(){
      // Agregar los input de busqueda 
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 9    ){
+        if ( $(this).index() != 8    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
-} 
-
-
+}
 </script>
 </lista-facturas>

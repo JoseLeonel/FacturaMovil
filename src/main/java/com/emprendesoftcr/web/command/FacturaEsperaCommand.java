@@ -110,6 +110,8 @@ public class FacturaEsperaCommand {
 	private String		referenciaCodigo;
 
 	private String		referenciaRazon;
+	
+	
 
 	private Date			referenciaFechaEmision;
 	

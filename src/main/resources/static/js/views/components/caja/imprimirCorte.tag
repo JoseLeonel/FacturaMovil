@@ -1,6 +1,6 @@
 <imprimir-caja>
 
-<div class="modal fade imprimirModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade imprimirModalCorte" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div  class= "wrap">
@@ -10,7 +10,7 @@
                 <a href="#" class="boton-imprimir"  onclick = {__ImprimirFactura} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir(F8)</a>
                 <a href="#" class="boton-imprimir" id="boton-regresar" onclick = {__RegresarVentaImprimir}><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Regresar(Esc)</a>
             </div>
-            <section class="zona-impresion" id="imprimeme">
+            <section class="zona-impresion" id="imprimemeCorte">
                 <div class="forma-impresion">
                     <div class="ticket" > 
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.titulo")}     </strong><br></div>
@@ -182,7 +182,7 @@ self.on('mount',function(){
         self.usuarioCaja.created_at = displayDate_detail(self.usuarioCaja.created_at)
         self.usuarioCaja.updated_at = displayDate_detail(self.usuarioCaja.updated_at)
         self.update()
-       $('.imprimirModal').modal('show'); 
+       $('.imprimirModalCorte').modal('show'); 
     }
     __Teclas()
    
@@ -197,7 +197,7 @@ function __Teclas(){
         var tecla = evento.keyCode; 
     if(tecla ==119){
         //Pantalla de imprimir F8 imprimir
-        var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
+        var objeto=document.getElementById('imprimemeCorte');  //obtenemos el objeto a imprimir
         var ventana=window.open('','_blank');  //abrimos una ventana vacía nueva
         ventana.document.write(objeto.innerHTML);  //imprimimos el HTML del objeto en la nueva ventana
         ventana.document.close();  //cerramos el documento
@@ -220,7 +220,7 @@ function displayDate_detail(fecha) {
 *Imprimir factura
 **/    
 __ImprimirFactura(){
-    var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
+    var objeto=document.getElementById('imprimemeCorte');  //obtenemos el objeto a imprimir
           var ventana=window.open('','_blank');  //abrimos una ventana vacía nueva
           ventana.document.write(objeto.innerHTML);  //imprimimos el HTML del objeto en la nueva ventana
           ventana.document.close();  //cerramos el documento

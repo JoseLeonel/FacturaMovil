@@ -12,33 +12,32 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.CuentaPagarDao;
 import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.CuentaPagar;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 
 /**
- * Clientes por sucursal de empresa ClienteDaoImpl.
+ * 
+ * CuentaPagarDaoImpl. Creditos de proveedores
  * @author jose.
- * @since 18 mar. 2018
+ * @since 3 nov. 2018
  */
 @Repository("cuentaPagarDao")
 public class CuentaPagarDaoImpl implements CuentaPagarDao {
 
 	@PersistenceContext
-	EntityManager		entityManager;
+	EntityManager entityManager;
 
-
-	public void agregar(CuentaPagar cuentaCobrar) {
-		entityManager.persist(cuentaCobrar);
+	public void agregar(CuentaPagar cuentaPagar) {
+		entityManager.persist(cuentaPagar);
 	}
 
-	public void modificar(CuentaPagar cuentaCobrar) {
-		entityManager.merge(cuentaCobrar);
+	public void modificar(CuentaPagar cuentaPagar) {
+		entityManager.merge(cuentaPagar);
 	}
 
-	public void eliminar(CuentaPagar cuentaCobrar) {
-		entityManager.remove(cuentaCobrar);
+	public void eliminar(CuentaPagar cuentaPagar) {
+		entityManager.remove(cuentaPagar);
 	}
 
 	/**
@@ -56,20 +55,19 @@ public class CuentaPagarDaoImpl implements CuentaPagarDao {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * Listado de cuentas por cobrar de un cliente
+	 * Listado de cuentas por pagar de proveedor
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<CuentaPagar> cuentasPorPagarbyFechasAndEmpresaAndClienteAndEstado(Date fechaInicio, Date fechaFin, Empresa empresa, Proveedor proveedor, String estado) {
 		StringBuilder hql = new StringBuilder();
-		hql.append("select obj from CuentaCobrar obj");
+		hql.append("select obj from CuentaPagar obj");
 		hql.append(" where obj.empresa = :empresa ");
 		if (estado != null) {
 			if (!estado.equals(Constantes.COMBO_TODOS)) {
 				hql.append(" and obj.estado = :estado ");
-
 			}
 		}
 		if (proveedor != null) {
@@ -92,12 +90,10 @@ public class CuentaPagarDaoImpl implements CuentaPagarDao {
 
 			}
 		}
-
 		query.setParameter("empresa", empresa);
 		query.setParameter("fechaInicio", fechaInicio);
 		query.setParameter("fechaFin", fechaFin);
 		return query.getResultList();
 	}
-	
-	
+
 }

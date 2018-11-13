@@ -9,9 +9,10 @@ import com.emprendesoftcr.Dao.DetalleCompraDao;
 import com.emprendesoftcr.modelo.DetalleCompra;
 
 /**
- * AbonoDaoImpl.
+ * Detalles compras de proveedores
+ * DetalleCompraDaoImpl.
  * @author jose.
- * @since 26 mar. 2018
+ * @since 3 nov. 2018
  */
 @Repository("detalleCompraDao")
 public class DetalleCompraDaoImpl implements DetalleCompraDao {
