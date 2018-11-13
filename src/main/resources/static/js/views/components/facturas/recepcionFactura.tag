@@ -57,6 +57,14 @@
                                 <input type="text" readonly="readonly" class="form-control recepcionTotalVentaNeta" placeHolder ="{$.i18n.prop("factura.totalComprobante")}" id="totalFactura" name="totalFactura" value="{recepcionFactura.totalFactura}">
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label> {$.i18n.prop("factura.tipoCambio")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control recepcionTipoCambio" placeHolder ="{$.i18n.prop("factura.tipoCambio")}" id="tipoCambio" name="tipoCambio" value="{recepcionFactura.tipoCambio}">
+                            </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label> {$.i18n.prop("factura.codigoMoneda")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control recepcionCodigoMonedad" placeHolder ="{$.i18n.prop("factura.codigoMoneda")}" id="codigoMoneda" name="codigoMoneda" value="{recepcionFactura.codigoMoneda}">
+                            </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label> {$.i18n.prop("receptor.cedula")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" readonly="readonly" class="form-control recepcionReceptorCedula" placeHolder ="{$.i18n.prop("receptor.cedula")}" id="cedulaReceptor" name="cedulaReceptor" value="{recepcionFactura.cedulaReceptor}">
                             </div>                                                        
@@ -352,7 +360,10 @@
 				totalImpuestos:"0",
 				totalFactura:"0",
 				cedulaReceptor:"",
-				numeroConsecutivoReceptor:"",				
+				numeroConsecutivoReceptor:"",
+				tipoCambio:"1",
+				codigoMoneda:"CRC"
+
 		}
 		
 		//Se cargan al montar el tag
@@ -439,7 +450,9 @@
 					totalImpuestos:"0",
 					totalFactura:"0",
 					cedulaReceptor:"",
-					numeroConsecutivoReceptor:"",				
+					numeroConsecutivoReceptor:"",
+					tipoCambio:"1",
+					codigoMoneda:"CRC"
 			}
 			
 		}
@@ -653,6 +666,8 @@
                     self.recepcionFactura.totalFactura = resumenFactura.find("TotalComprobante").text();
                     self.recepcionFactura.cedulaReceptor = receptor.find("Identificacion").find("Numero").text();
 	                self.recepcionFactura.totalImpuestos = $(xmlDoc).find("TotalImpuesto").first().text();
+	                self.recepcionFactura.tipoCambio = $(xmlDoc).find("TipoCambio").first().text();
+	                self.recepcionFactura.codigoMoneda = $(xmlDoc).find("CodigoMoneda").first().text();
                 }
                 
                 reader.readAsText($("#fileUpload")[0].files[0]);
@@ -720,7 +735,10 @@
 				totalImpuestos:"0",
 				totalFactura:"0",
 				cedulaReceptor:"",
-				numeroConsecutivoReceptor:"",				
+				numeroConsecutivoReceptor:"",
+				tipoCambio:"1",
+				codigoMoneda:"CRC"
+
 			}
 			
 			self.update()
