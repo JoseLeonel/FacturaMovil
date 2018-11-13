@@ -241,8 +241,20 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setMontoCambio(facturaCommand.getMontoCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getMontoCambio());
 			factura.setTotalCambio(facturaCommand.getTotalCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambio());
 			factura.setTotalCambioPagar(facturaCommand.getTotalCambioPagar() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambioPagar());
-			factura.setCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
-			factura.setTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
+	    if(facturaCommand.getCodigoMoneda() !=null) {
+	    	//Costa Rica Colones 
+	    	if(facturaCommand.getCodigoMoneda().equals(Constantes.CODIGO_MONEDA_COSTA_RICA)) {
+					factura.setCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
+					factura.setTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
+	    	}else if(facturaCommand.getCodigoMoneda().equals(Constantes.CODIGO_MONEDA_DOLAR)) {//Dollar
+	    		factura.setCodigoMoneda(Constantes.CODIGO_MONEDA_DOLAR);
+	    		factura.setTipoCambio(facturaCommand.getTipoCambioMoneda());
+	    	}
+	    }else {
+				factura.setCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
+				factura.setTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
+	    	
+	    }		
 			factura.setEstado(facturaCommand.getEstado());
 			factura.setMesa(facturaCommand.getMesa());
 			if (factura.getId() == Constantes.ZEROS_LONG) {
@@ -255,6 +267,8 @@ public class FacturaBoImpl implements FacturaBo {
 		}
 		return factura;
 	}
+	
+	
 
 	private ArrayList<DetalleFacturaCommand> formaDetallesCommand(FacturaCommand facturaCommand) throws Exception {
 		// Detalles, se forma el detalle de la factura, se contabiliza los totales para evitar problemas con el tema de los decimales en el front

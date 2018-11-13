@@ -810,6 +810,7 @@ public class FacturasController {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.tipo.cambio.dolar.activo", result.getAllErrors());
 
 				}
+				facturaCommand.setTipoCambioMoneda(tipoCambio.getTotal());
 			}
 			if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
 				if (facturaCommand.getCliente() == null) {
