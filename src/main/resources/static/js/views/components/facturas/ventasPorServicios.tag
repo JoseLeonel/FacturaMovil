@@ -1073,10 +1073,10 @@ function __comboMonedas(){
         estado:"CRC",
         descripcion:$.i18n.prop("factura.moneda.cr")
     })
-  //  self.monedas.push({
-  //      estado:"USD",
-  //      descripcion:$.i18n.prop("factura.moneda.dollar")
-  //  })    
+    self.monedas.push({
+        estado:"USD",
+        descripcion:$.i18n.prop("factura.moneda.dollar")
+    })    
     self.update()
 }
 /**

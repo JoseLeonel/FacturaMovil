@@ -314,7 +314,7 @@ self.on('mount',function(){
 
 
        consultaFactura(self.facturaImpresa.id)
-       
+        qr()
     }
    
    
