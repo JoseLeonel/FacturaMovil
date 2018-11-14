@@ -147,6 +147,7 @@ public class CuentaCobrar implements Serializable {
 
 	}
 
+	
 	public CuentaCobrar(Long id, String recibo, String letraCambio, String factura, Integer facturaManual, Double totalComision, Double descuento, Double cantidadPagos, Double montoCouta, Double total, Double totalAbono, Integer plazoCredito, Double totalSaldo, String descripcionArticulo, String nota, String tipo, String codigoMoneda, Double tipoCambio, String estado, Date fechaPlazo, Date fechaEntrega, Date created_at, Date updated_at, Cliente cliente, Usuario usuario, Empresa empresa, Vendedor vendedor, Set<Abono> abonos) {
 		super();
 		this.id = id;
@@ -178,6 +179,7 @@ public class CuentaCobrar implements Serializable {
 		this.vendedor = vendedor;
 		this.abonos = abonos;
 	}
+
 
 	public Long getId() {
 		return id;
