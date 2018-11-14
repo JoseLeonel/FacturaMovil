@@ -633,7 +633,7 @@ __consultarTotalesArticulo(){
                 
             } else {
             	var informacion = {
-            		nombreImpresora:"PDF",
+            		nombreImpresora:"factura",
             		cantidadCaracteresLinea:"40",
             		formatoTiquete:"",
             		detalles:data.listaObjetos

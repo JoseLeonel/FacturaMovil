@@ -376,13 +376,13 @@ public class ArticuloController {
 			Articulo articuloBd = articuloBo.buscar(articulo.getId());
 			Articulo articuloValidar = null;
 			if (!articuloBd.getDescripcion().equals(articulo.getDescripcion().trim())) {
-				articuloValidar = articuloBo.buscarPorDescripcionYEmpresa(articulo.getDescripcion().trim(), articulo.getEmpresa());
+				articuloValidar = articuloBo.buscarPorDescripcionYEmpresa(articulo.getDescripcion().trim(), usuarioSesion.getEmpresa());
 				if (articuloValidar != null) {
 					result.rejectValue("descripcion", "error.articulo.descripcion.existe");
 				}
 			}
 			if (!articuloBd.getCodigo().equals(articulo.getCodigo().trim())) {
-				articuloValidar = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo().trim(), articulo.getEmpresa());
+				articuloValidar = articuloBo.buscarPorCodigoYEmpresa(articulo.getCodigo().trim(), usuarioSesion.getEmpresa());
 				if (articuloValidar != null) {
 					result.rejectValue("codigo", "error.articulo.codigo.existe");
 				}

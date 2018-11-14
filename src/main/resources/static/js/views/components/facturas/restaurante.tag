@@ -1986,8 +1986,7 @@ __CrearFacturaTemporal(){
     self.factEspera = null
     self.update()
     
-    //Se envian los datos a la comanda
-    __EnviarCocina();
+    
 }
 
 /**
@@ -2482,6 +2481,10 @@ function __displayDate_detail(fecha) {
 *  Crear Factura nueva
 **/
 function crearFactura(estado){
+    self.enviarCocina = false
+    if(estado == 1){
+        self.enviarCocina = true
+    }
     self.detalleFactura.data = self.detail    
     self.update() 
     if(estado ==1){
@@ -2544,7 +2547,13 @@ function evaluarFactura(data){
                 riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
                  
             }else{
-                __Init()
+                if(self.enviarCocina == true){
+                //Se envian los datos a la comanda
+                __EnviarCocina();
+               
+                }
+                 __Init()
+
             }
         });
     }
@@ -3717,8 +3726,9 @@ function __nuevoArticuloComanda(cantidad, codigo, descripcion){
 				data : datos
 		    });	
 		}
+        self.update()
 	} 	
-    self.update()
+    
  }
  
 /**
@@ -3727,6 +3737,7 @@ function __nuevoArticuloComanda(cantidad, codigo, descripcion){
 function eliminaArticuloComanda(codigoArticulo){
 	//Se elimina de los pendientes en session para no almacenarlo
 	self.pendientesComanda.splice(self.pendientesComanda.findIndex(o => o.key === codigoArticulo), 1); 
+    self.update()
 } 
 
 /**
@@ -3813,7 +3824,7 @@ function __EnviarCocina(){
 		var informacion = {
 			mesa: self.mesa.descripcion,        	
 			mesero: "",        	
-		    nombreImpresora:"COCINA",
+		    nombreImpresora:"cocina",
 		    cantidadCaracteresLinea:"40",
 		    formatoTiquete:"",
 		    detalles:detalles
