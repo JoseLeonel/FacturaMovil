@@ -861,6 +861,7 @@ __Busqueda(){
             fechaInicio:inicial,
             fechaFin:$('.fechaFinal').val(),
             idCliente:$('#cliente').val(),
+            tipoDocumento:$('#tipoDocumento').val(),
           
         };
         $("#tableListar").dataTable().fnClearTable(); 

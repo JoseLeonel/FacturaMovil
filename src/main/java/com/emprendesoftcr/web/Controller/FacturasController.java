@@ -99,11 +99,21 @@ public class FacturasController {
 
 	private static final Function<String, String>											BIND_CONDICION_VENTA						= (id) -> id.equals("01") ? "Contado" : id.equals("02") ? "Credito" : id.equals("03") ? "Consignacion" : id.equals("04") ? "Apartado" : id.equals("05") ? "Arrendamiento con opcion de compra" : id.equals("06") ? "Arrendamiento en funcion financiera" : "Otros";
 
-	private static final Function<Object, FacturaEsperaCommand>				TO_COMMAND=new Function<Object,FacturaEsperaCommand>(){
+	private static final Function<Object, FacturaEsperaCommand>				TO_COMMAND											= new Function<Object, FacturaEsperaCommand>() {
 
-	@Override public FacturaEsperaCommand apply(Object f){return new FacturaEsperaCommand((Factura)f);};};
+																																																			@Override
+																																																			public FacturaEsperaCommand apply(Object f) {
+																																																				return new FacturaEsperaCommand((Factura) f);
+																																																			};
+																																																		};
 
-	private static final Function<Object, RecepcionFacturaCommand>		TO_COMMAND_RECEPCION=new Function<Object,RecepcionFacturaCommand>(){@Override public RecepcionFacturaCommand apply(Object f){return new RecepcionFacturaCommand((RecepcionFactura)f);};};
+	private static final Function<Object, RecepcionFacturaCommand>		TO_COMMAND_RECEPCION						= new Function<Object, RecepcionFacturaCommand>() {
+
+																																																			@Override
+																																																			public RecepcionFacturaCommand apply(Object f) {
+																																																				return new RecepcionFacturaCommand((RecepcionFactura) f);
+																																																			};
+																																																		};
 
 	private static final Function<Detalle, DetalleFacturaElectronica>	TO_DETALLE											= (d) -> {
 																																																			//
@@ -389,11 +399,11 @@ public class FacturasController {
 		modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
 		modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinal));
 		modelEmail.put("total", facturaCommand.getTotal());
-		modelEmail.put("totalDescuentos", facturaCommand.getTotalDescuentos());
-		modelEmail.put("totalImpuestos", facturaCommand.getTotalImpuestos());
-		modelEmail.put("totalVentasNetas", facturaCommand.getTotalVentasNetas());
-		modelEmail.put("totalVentasExentas", facturaCommand.getTotalVentasExentas());
-		modelEmail.put("totalVentasGravadas", facturaCommand.getTotalVentasGravadas());
+		modelEmail.put("totalDescuentos", facturaCommand.getTotalDescuentos() == null ? Constantes.ZEROS : facturaCommand.getTotalDescuentos());
+		modelEmail.put("totalImpuestos", facturaCommand.getTotalImpuestos() == null ? Constantes.ZEROS : facturaCommand.getTotalImpuestos());
+		modelEmail.put("totalVentasNetas", facturaCommand.getTotalVentasNetas() == null ? Constantes.ZEROS : facturaCommand.getTotalVentasNetas());
+		modelEmail.put("totalVentasExentas", facturaCommand.getTotalVentasExentas() == null ? Constantes.ZEROS : facturaCommand.getTotalVentasExentas());
+		modelEmail.put("totalVentasGravadas", facturaCommand.getTotalVentasGravadas() == null ? Constantes.ZEROS : facturaCommand.getTotalVentasGravadas());
 
 		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailResumenFactura.vm", modelEmail);
 	}
@@ -653,10 +663,10 @@ public class FacturasController {
 
 	@RequestMapping(value = "/ListarFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente ) {
+	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente,@RequestParam String tipoDocumento) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Cliente cliente = clienteBo.buscar(idCliente);
-		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cliente, usuarioSesion.getEmpresa(), usuarioBo);
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cliente, usuarioSesion.getEmpresa(), usuarioBo,tipoDocumento);
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
@@ -703,8 +713,8 @@ public class FacturasController {
 		Date fechahoy = new Date();
 		DateFormat df = new SimpleDateFormat(Constantes.DATE_FORMAT7);
 		String reportDate = df.format(fechahoy);
-
-		DataTableDelimitador query = DelimitadorBuilder.get(request, reportDate, reportDate, cliente, usuarioSesion.getEmpresa(), usuarioBo);
+    String tipoDocumento = Constantes.COMBO_TODOS;
+		DataTableDelimitador query = DelimitadorBuilder.get(request, reportDate, reportDate, cliente, usuarioSesion.getEmpresa(), usuarioBo,tipoDocumento);
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
@@ -740,9 +750,9 @@ public class FacturasController {
 
 		try {
 
-       Usuario usuario = null;
-       FacturaCommand facturaCommand =null;
-       
+			Usuario usuario = null;
+			FacturaCommand facturaCommand = null;
+
 			return this.crearFactura(facturaCommand, result, usuario);
 		} catch (Exception e) {
 
@@ -770,13 +780,13 @@ public class FacturasController {
 			facturaCommand.setTotalVentaNeta(facturaCommand.getTotalVentaNeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalVentaNeta());
 			UsuarioCaja usuarioCajaBd = null;
 			// Si esta en estado facturada en base de datos se retorna un mensaje que ya fue procesada
-			if(facturaCommand != null) {
-				if(facturaCommand.getId()  !=null) {
-					if(facturaCommand.getId() > Constantes.ZEROS_LONG) {
+			if (facturaCommand != null) {
+				if (facturaCommand.getId() != null) {
+					if (facturaCommand.getId() > Constantes.ZEROS_LONG) {
 						Factura facturaRevision = facturaBo.findById(facturaCommand.getId());
-						if(facturaRevision !=null) {
-							if(facturaRevision.getEstado() !=null) {
-								if(facturaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+						if (facturaRevision != null) {
+							if (facturaRevision.getEstado() != null) {
+								if (facturaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 									return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.ya.esta.procesada", result.getAllErrors());
 								}
 							}
@@ -859,10 +869,10 @@ public class FacturasController {
 			}
 			Factura facturaCreada = facturaBo.findById(factura.getId());
 			if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PENDIENTE) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
-				//usuarioCajaDao.actualizarCaja(usuarioCaja, factura.getTotalEfectivo(), factura.getTotalTarjeta(), factura.getTotalBanco(), factura.getTotalCredito(), Constantes.ZEROS_DOUBLE, factura.getTotalImpuestoServicio());
+				// usuarioCajaDao.actualizarCaja(usuarioCaja, factura.getTotalEfectivo(), factura.getTotalTarjeta(), factura.getTotalBanco(), factura.getTotalCredito(), Constantes.ZEROS_DOUBLE, factura.getTotalImpuestoServicio());
 				usuarioCajaBo.actualizarCaja(usuarioCajaBd);
 			}
-			
+
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", facturaCreada);
 
 		} catch (Exception e) {
@@ -872,6 +882,7 @@ public class FacturasController {
 		}
 
 	}
+
 	/**
 	 * Recibir factura de otro emisor
 	 * @param request
@@ -916,6 +927,7 @@ public class FacturasController {
 		}
 
 	}
+
 	/**
 	 * Mostrar una Factura
 	 * @param request
@@ -1091,7 +1103,7 @@ public class FacturasController {
 			}
 			ByteArrayOutputStream namePDF = Proformas.main(facturaBD.getNumeroConsecutivo(), facturaBD.getTipoDoc(), facturaElectronica);
 
-			Collection<Attachment> attachments = createAttachments(PDF_Attach(facturaBD.getId().toString(), facturaBD.getEmpresa().getCedula(), asPDF(namePDF),facturaBD.getTipoDoc()));
+			Collection<Attachment> attachments = createAttachments(PDF_Attach(facturaBD.getId().toString(), facturaBD.getEmpresa().getCedula(), asPDF(namePDF), facturaBD.getTipoDoc()));
 
 			Map<String, Object> modelEmail = new HashMap<>();
 
@@ -1173,42 +1185,42 @@ public class FacturasController {
 				}
 
 			}
-      if(listaCorreos !=null) {
-      	if(!listaCorreos.isEmpty()) {
-    			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
-    			ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
+			if (listaCorreos != null) {
+				if (!listaCorreos.isEmpty()) {
+					FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
+					ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 
-    			String clave = getConsecutivo(factura.getTipoDoc(), factura.getNumeroConsecutivo());
-    			Collection<Attachment> attachments = createAttachments(PDF_Attach(clave, factura.getEmpresa().getCedula(), asPDF(namePDF),factura.getTipoDoc()));
+					String clave = getConsecutivo(factura.getTipoDoc(), factura.getNumeroConsecutivo());
+					Collection<Attachment> attachments = createAttachments(PDF_Attach(clave, factura.getEmpresa().getCedula(), asPDF(namePDF), factura.getTipoDoc()));
 
-    			Map<String, Object> modelEmail = new HashMap<>();
+					Map<String, Object> modelEmail = new HashMap<>();
 
-    			modelEmail.put("clave", clave);
-    			modelEmail.put("nombreEmpresa", factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial());
-    			modelEmail.put("correo", factura.getEmpresa().getCorreoElectronico());
-    			modelEmail.put("telefono", factura.getEmpresa().getTelefono());
+					modelEmail.put("clave", clave);
+					modelEmail.put("nombreEmpresa", factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial());
+					modelEmail.put("correo", factura.getEmpresa().getCorreoElectronico());
+					modelEmail.put("telefono", factura.getEmpresa().getTelefono());
 
-    			String from = "Documentos_No_Reply@emprendesoftcr.com";
+					String from = "Documentos_No_Reply@emprendesoftcr.com";
 
-    			if (factura.getEmpresa().getAbreviaturaEmpresa() != null) {
-    				if (!factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-    					from = factura.getEmpresa().getAbreviaturaEmpresa() + "_Doc_Electronico" + "_No_Reply@emprendesoftcr.com";
-    				}
-    			}
+					if (factura.getEmpresa().getAbreviaturaEmpresa() != null) {
+						if (!factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+							from = factura.getEmpresa().getAbreviaturaEmpresa() + "_Doc_Electronico" + "_No_Reply@emprendesoftcr.com";
+						}
+					}
 
-    			String nombre = factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial();
-    			String subject = "Documento Electrónico N° " + clave + " del Emisor: " + nombre;
+					String nombre = factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial();
+					String subject = "Documento Electrónico N° " + clave + " del Emisor: " + nombre;
 
-    			//
-    			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailHacienda.vm", modelEmail);
-    			//
+					//
+					correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailHacienda.vm", modelEmail);
+					//
 
-    			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
-    			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
-    			return respuestaServiceValidator;
-      		
-      	}
-      }
+					respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+					respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
+					return respuestaServiceValidator;
+
+				}
+			}
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("factura.no.tiene.correos.asociado"));
 
@@ -1218,21 +1230,21 @@ public class FacturasController {
 		return respuestaServiceValidator;
 	}
 
-	private Attachment PDF_Attach(String name, String cedula, ByteArrayDataSource data,String tipoDoc) {
+	private Attachment PDF_Attach(String name, String cedula, ByteArrayDataSource data, String tipoDoc) {
 		String resultado = Constantes.EMPTY;
 		resultado = "Factura_PDF_";
-		if(tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
+		if (tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
 			resultado = "Factura_PDF_";
-		}else if(tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+		} else if (tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
 			resultado = "NOTA_CREDITO_PDF_";
-		}else if(tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+		} else if (tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
 			resultado = "NOTA_DEBITO_PDF_";
-		}else if(tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+		} else if (tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 			resultado = "PROFORMA_PDF_";
-		}else if(tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
+		} else if (tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
 			resultado = "TIQUETE_PDF_";
 		}
-	
+
 		return attachment(resultado + cedula + "_" + name, ".pdf", data);
 	}
 
@@ -1254,7 +1266,7 @@ public class FacturasController {
 
 	private static class DelimitadorBuilder {
 
-		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Cliente cliente, Empresa empresa, UsuarioBo usuarioBo) {
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Cliente cliente, Empresa empresa, UsuarioBo usuarioBo,String tipoDocumento) {
 			// Consulta por fechas
 			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Factura");
 			Date fechaInicio = new Date();
@@ -1271,6 +1283,13 @@ public class FacturasController {
 			if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
 				Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 				delimitador.addFiltro(new JqGridFilter("usuarioCreacion.id", "'" + usuario.getId().toString() + "'", "="));
+			}
+			if(tipoDocumento !=null) {
+				if(!tipoDocumento.equals(Constantes.EMPTY)) {
+					if(!tipoDocumento.equals(Constantes.COMBO_TODOS)) {
+						delimitador.addFiltro(new JqGridFilter("tipoDoc", "'" + tipoDocumento.toString() + "'", "="));
+					}
+				}
 			}
 
 			if (!inicio.equals(Constantes.EMPTY) && !fin.equals(Constantes.EMPTY)) {

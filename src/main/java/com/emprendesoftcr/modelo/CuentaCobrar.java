@@ -38,7 +38,7 @@ public class CuentaCobrar implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long						id;
+	private Long							id;
 
 	@Column(name = "recibo")
 	private String						recibo;
@@ -69,7 +69,7 @@ public class CuentaCobrar implements Serializable {
 
 	@Column(name = "total_abono")
 	private Double						totalAbono;
-	
+
 	@Column(name = "plazo_credito")
 	private Integer						plazoCredito;
 
@@ -85,6 +85,12 @@ public class CuentaCobrar implements Serializable {
 	@Column(name = "tipo")
 	private String						tipo;
 
+	@Column(name="cambio_moneda", columnDefinition="varchar(3) default 'CRC'")
+	private String						codigoMoneda;
+
+	@Column(name="tipo_cambio", columnDefinition="Double default '1'")
+	private Double						tipoCambio;
+	
 	@Column(name = "estado")
 	private String						estado;
 
@@ -141,9 +147,7 @@ public class CuentaCobrar implements Serializable {
 
 	}
 
-
-
-	public CuentaCobrar(Long id, String recibo, String letraCambio, String factura, Integer facturaManual, Double totalComision, Double descuento, Double cantidadPagos, Double montoCouta, Double total, Double totalAbono, Double totalSaldo, String descripcionArticulo, String nota, String tipo, String estado, Date fechaPlazo, Date fechaEntrega, Date created_at, Date updated_at, Cliente cliente, Usuario usuario, Empresa empresa, Vendedor vendedor, Set<Abono> abonos,Integer plazoCredito) {
+	public CuentaCobrar(Long id, String recibo, String letraCambio, String factura, Integer facturaManual, Double totalComision, Double descuento, Double cantidadPagos, Double montoCouta, Double total, Double totalAbono, Integer plazoCredito, Double totalSaldo, String descripcionArticulo, String nota, String tipo, String codigoMoneda, Double tipoCambio, String estado, Date fechaPlazo, Date fechaEntrega, Date created_at, Date updated_at, Cliente cliente, Usuario usuario, Empresa empresa, Vendedor vendedor, Set<Abono> abonos) {
 		super();
 		this.id = id;
 		this.recibo = recibo;
@@ -156,10 +160,13 @@ public class CuentaCobrar implements Serializable {
 		this.montoCouta = montoCouta;
 		this.total = total;
 		this.totalAbono = totalAbono;
+		this.plazoCredito = plazoCredito;
 		this.totalSaldo = totalSaldo;
 		this.descripcionArticulo = descripcionArticulo;
 		this.nota = nota;
 		this.tipo = tipo;
+		this.codigoMoneda = codigoMoneda;
+		this.tipoCambio = tipoCambio;
 		this.estado = estado;
 		this.fechaPlazo = fechaPlazo;
 		this.fechaEntrega = fechaEntrega;
@@ -170,38 +177,23 @@ public class CuentaCobrar implements Serializable {
 		this.empresa = empresa;
 		this.vendedor = vendedor;
 		this.abonos = abonos;
-		this.plazoCredito = plazoCredito;
 	}
 
-
-
-	
 	public Long getId() {
 		return id;
 	}
 
-
-
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-
-
-	
 	public Integer getPlazoCredito() {
 		return plazoCredito;
 	}
 
-
-
-	
 	public void setPlazoCredito(Integer plazoCredito) {
 		this.plazoCredito = plazoCredito;
 	}
-
-
 
 	public String getRecibo() {
 		return recibo;
@@ -262,7 +254,6 @@ public class CuentaCobrar implements Serializable {
 	public Double getMontoCouta() {
 		return montoCouta;
 	}
-	
 
 	public void setMontoCouta(Double montoCouta) {
 		this.montoCouta = montoCouta;
@@ -275,7 +266,7 @@ public class CuentaCobrar implements Serializable {
 	public void setTotal(Double total) {
 		this.total = total;
 	}
-	
+
 	public String getTotalSTR() {
 		return Utils.formateadorMiles(this.total);
 	}
@@ -287,6 +278,7 @@ public class CuentaCobrar implements Serializable {
 	public void setTotalAbono(Double totalAbono) {
 		this.totalAbono = totalAbono;
 	}
+
 	public String getTotalAbonoSTR() {
 		return Utils.formateadorMiles(this.totalAbono);
 	}
@@ -294,6 +286,7 @@ public class CuentaCobrar implements Serializable {
 	public Double getTotalSaldo() {
 		return totalSaldo;
 	}
+
 	public String getTotalSaldoSTR() {
 		return Utils.formateadorMiles(this.totalSaldo);
 	}
@@ -341,10 +334,10 @@ public class CuentaCobrar implements Serializable {
 	public void setFechaPlazo(Date fechaPlazo) {
 		this.fechaPlazo = fechaPlazo;
 	}
-	
+
 	public String getFechaPlazoSTR() {
-		if(this.fechaPlazo !=null) {
-			return Utils.getFechaGeneraReporte(this.fechaPlazo);	
+		if (this.fechaPlazo != null) {
+			return Utils.getFechaGeneraReporte(this.fechaPlazo);
 		}
 		return Constantes.EMPTY;
 	}
@@ -360,9 +353,10 @@ public class CuentaCobrar implements Serializable {
 	public Date getCreated_at() {
 		return created_at;
 	}
+
 	public String getCreated_atSTR() {
-		if(this.created_at !=null) {
-			return Utils.getFechaGeneraReporte(this.created_at);	
+		if (this.created_at != null) {
+			return Utils.getFechaGeneraReporte(this.created_at);
 		}
 		return Constantes.EMPTY;
 	}
@@ -388,8 +382,9 @@ public class CuentaCobrar implements Serializable {
 	}
 
 	public String getNombreClienteSTR() {
-		return cliente.getNombreCompleto() ==null?Constantes.EMPTY:cliente.getNombreCompleto();
+		return cliente.getNombreCompleto() == null ? Constantes.EMPTY : cliente.getNombreCompleto();
 	}
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -420,6 +415,22 @@ public class CuentaCobrar implements Serializable {
 
 	public void setAbonos(Set<Abono> abonos) {
 		this.abonos = abonos;
+	}
+
+	public String getCodigoMoneda() {
+		return codigoMoneda;
+	}
+
+	public void setCodigoMoneda(String codigoMoneda) {
+		this.codigoMoneda = codigoMoneda;
+	}
+
+	public Double getTipoCambio() {
+		return tipoCambio;
+	}
+
+	public void setTipoCambio(Double tipoCambio) {
+		this.tipoCambio = tipoCambio;
 	}
 
 }

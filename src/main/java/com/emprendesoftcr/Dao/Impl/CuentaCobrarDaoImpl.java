@@ -132,6 +132,9 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 			cuentaCobrar.setDescuento(Constantes.ZEROS_DOUBLE);
 			cuentaCobrar.setUsuario(factura.getUsuarioCreacion());
 			cuentaCobrar.setVendedor(factura.getVendedor());
+			cuentaCobrar.setTipoCambio(factura.getTipoCambio());
+			cuentaCobrar.setCodigoMoneda(factura.getCodigoMoneda());
+			cuentaCobrar.setPlazoCredito(factura.getPlazoCredito());
 			agregar(cuentaCobrar);
 
 		} catch (Exception e) {

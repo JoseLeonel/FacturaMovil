@@ -47,6 +47,7 @@ public class CuentaCobrarCommand {
 	private String		tipo;
 
 	private String		estado;
+	private String		codigoMoneda;
 
 	private Date			fechaPlazo;
 
@@ -97,6 +98,7 @@ public class CuentaCobrarCommand {
 		this.totalAbonoSTR = cuentaCobrar.getTotalAbonoSTR();
 		this.totalSaldoSTR = cuentaCobrar.getTotalSaldoSTR();
 		this.totalSTR = cuentaCobrar.getTotalSTR();
+		this.codigoMoneda =cuentaCobrar.getCodigoMoneda();
 	}
 
 	public CuentaCobrarCommand() {
@@ -350,5 +352,16 @@ public class CuentaCobrarCommand {
 	public void setTotalSaldo(Double totalSaldo) {
 		this.totalSaldo = totalSaldo;
 	}
+
+	
+	public String getCodigoMoneda() {
+		return codigoMoneda;
+	}
+
+	
+	public void setCodigoMoneda(String codigoMoneda) {
+		this.codigoMoneda = codigoMoneda;
+	}
+	
 
 }

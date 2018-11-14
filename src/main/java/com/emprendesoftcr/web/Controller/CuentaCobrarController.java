@@ -201,8 +201,8 @@ private Attachment attachment(String name, String ext, ByteArrayDataSource data)
 	private ByteArrayOutputStream createExcelCuentaCobrar(Collection<CuentaCobrar> cuentaCobrar) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("#cuenta", "Fecha Emision", "# Documento", "Cliente", "Total", "Saldo", "Abono");
-		new SimpleExporter().gridExport(headers, cuentaCobrar, "id, created_atSTR, factura, nombreClienteSTR, total,totalSaldo,totalAbono", baos);
+		List<String> headers = Arrays.asList("#cuenta", "Fecha Emision", "# Documento", "Cliente","Moneda", "Total", "Saldo", "Abono");
+		new SimpleExporter().gridExport(headers, cuentaCobrar, "id, created_atSTR, factura, nombreClienteSTR,codigoMoneda, total,totalSaldo,totalAbono", baos);
 		return baos;
 	}
 	

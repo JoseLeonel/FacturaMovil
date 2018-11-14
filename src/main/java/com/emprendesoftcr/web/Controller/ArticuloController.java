@@ -388,10 +388,10 @@ public class ArticuloController {
 				}
 			}
 			if (articulo.getPrecioPublico() == null) {
-				result.rejectValue("costo", "error.articulo.precioPublico.mayorCero");
+				result.rejectValue("precioPublico", "error.articulo.precioPublico.mayorCero");
 			}
 			if (articulo.getPrecioPublico() == 0) {
-				result.rejectValue("costo", "error.articulo.precioPublico.mayorCero");
+				result.rejectValue("precioPublico", "error.articulo.precioPublico.mayorCero");
 			}
 
 			if (result.hasErrors()) {

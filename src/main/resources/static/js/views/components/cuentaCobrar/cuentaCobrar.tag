@@ -294,6 +294,7 @@
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.cliente")}    </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.factura")}    </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.tipo")}       </th>
+                                <th class="table-header">{$.i18n.prop("cuentaCobrar.codigoMoneda")}      </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.total")}      </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.totalAbono")} </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.totalSaldo")} </th>
@@ -308,6 +309,7 @@
                                 <th>{$.i18n.prop("cuentaCobrar.cliente")}    </th>
                                 <th>{$.i18n.prop("cuentaCobrar.factura")}    </th>
                                 <th>{$.i18n.prop("cuentaCobrar.tipo")}       </th>
+                                <th>{$.i18n.prop("cuentaCobrar.codigoMoneda")} </th>
                                 <th>{$.i18n.prop("cuentaCobrar.total")}      </th>
                                 <th>{$.i18n.prop("cuentaCobrar.totalAbono")} </th>
                                 <th>{$.i18n.prop("cuentaCobrar.totalSaldo")} </th>
@@ -1065,6 +1067,7 @@ function __InformacionDataTable(){
 									return  __displayDate_detail(fechaPlazo);
                                  }
                             },
+                            {'data' : 'codigoMoneda'              ,"name":"codigoMoneda"              ,"title" : $.i18n.prop("cuentaCobrar.codigoMoneda")        ,"autoWidth" :false},
                             {'data' : 'totalSTR'                 ,"name":"totalSTR"                   ,"title" : $.i18n.prop("cuentaCobrar.total")        ,"autoWidth" :false},
                             {'data' : 'totalAbonoSTR'            ,"name":"totalAbonoSTR"              ,"title" : $.i18n.prop("cuentaCobrar.totalAbono")   ,"autoWidth" :false },
                             {'data' : 'totalSaldoSTR'            ,"name":"totalSaldoSTR"              ,"title" : $.i18n.prop("cuentaCobrar.totalSaldo")   ,"autoWidth" :false},
@@ -1520,7 +1523,7 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 9    ){
+        if ( $(this).index() != 10    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })

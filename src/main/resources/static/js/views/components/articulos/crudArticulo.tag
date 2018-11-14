@@ -734,7 +734,7 @@ __agregarSalidaInventario(){
                     url : 'AgregarSalidaKardex.do',
                     success : function(data) {
                         if (data.status != 200) {
-                        	serverMessageJson(data);
+                        	serverMessageJsonClase(data);
                             if (data.message != null && data.message.length > 0) {
                             	swal({
       	                           title: '',
