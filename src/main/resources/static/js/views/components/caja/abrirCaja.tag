@@ -164,8 +164,9 @@
                     <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left "  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
                         {$.i18n.prop("btn.volver")}
                     </button>
-
-                  
+                    <button show ={mostrarConsultaComanda} onclick ={__consultarTotalesArticulo}  type="button" class="btn-green btn-edit pull-right" id="btnTotalesArticulo" name = "btnTotalesArticulo">
+                        {$.i18n.prop("btn.totales.articulo")}
+                    </button>
                 </div>
             </div>   
         </div>
@@ -228,6 +229,7 @@
     self.botonModificar            = false
     self.botonAgregar              = false
     self.mostrarVerDetalle         = false
+    self.mostrarConsultaComanda    = false
    
     self.caja = {
         id:null,
@@ -279,7 +281,6 @@ function __listadoCajasActivas(){
         datatype: "json",
         method:"GET",
         success: function (result) {
-            console.log(result)
             if(result.aaData.length > 0){
                 self.cajas.aaData =  result.aaData
                 self.update();
@@ -315,6 +316,7 @@ __regresarAlListado(){
                 self.botonModificar     = false;
                 self.mostrarFormulario  = false 
                 self.mostrarVerDetalle  = false
+                self.mostrarConsultaComanda    = false
                 self.update()
                 __listado();
 
@@ -365,6 +367,10 @@ function __consultar(){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         self.mostrarVerDetalle = true
+                        self.mostrarConsultaComanda = false
+                        if(modeloTabla.caja.empresa.comandaEmpresa != null && modeloTabla.caja.empresa.comandaEmpresa > 0){
+                            self.mostrarConsultaComanda = true                        	
+                        }
                         self.mostrarListado   = false;
                         self.usuarioCaja  = modeloTabla
                         self.update()
@@ -601,6 +607,70 @@ function __cerrarCaja(){
         cerrarCajaAjax()
        
 	});
+}
+
+
+__consultarTotalesArticulo(){
+	$.ajax({
+        type : "GET",
+        dataType : "json",
+        data: {
+			"idUsuarioCaja":$("#id").val(),
+	    },
+        url : 'AgrupaArticulosCategoriaAjax.do',
+        success : function(data) {
+            if (data.status != 200) {
+            	serverMessageJson(data);
+                if (data.message != null && data.message.length > 0) {
+                	swal({
+                         title: '',
+                         text: data.message,
+                         type: 'error',
+                         showCancelButton: false,
+                         confirmButtonText: $.i18n.prop("btn.aceptar"),
+                       })
+                }
+                
+            } else {
+            	var informacion = {
+            		nombreImpresora:"PDF",
+            		cantidadCaracteresLinea:"40",
+            		formatoTiquete:"",
+            		detalles:data.listaObjetos
+            	}
+        		var JSONData = JSON.stringify(informacion);		
+
+            	
+            	if (data.listaObjetos != null && data.listaObjetos.length > 0) {
+            		$.ajax({
+            	        contentType: 'application/json',
+            	        url: 'http://localhost:8033/service/AgrupaArticulosCategoriaComandaAjax',
+            	        datatype: "json",
+            	        data : JSONData,
+            	        method:"POST",
+            	        success: function (result) {
+                            swal({
+                           	 	title: '',
+                            	text: data.message,
+                            	type: 'success',
+                            	showCancelButton: false,
+                            	confirmButtonText: $.i18n.prop("btn.aceptar"),
+                          	})
+            	      	   self.update()
+            	        },
+            	        error: function (xhr, status) {
+            	            console.log(xhr);
+            	            mensajeErrorServidor(xhr, status);
+            	        }
+            	    });	
+            	}
+            }
+        },
+        error : function(xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
 }
 
 /**

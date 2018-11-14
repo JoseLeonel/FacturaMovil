@@ -28,10 +28,9 @@ public class Empresa implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
-	
+
 	@Column(name = "abreviatura")
 	private String abreviaturaEmpresa;
-
 
 	@Column(name = "numero_consecutivo")
 	private Integer numeroConsecutivo;
@@ -121,11 +120,11 @@ public class Empresa implements Serializable {
 	private String passwordEnvioComprobante;
 
 	@Column(name = "estado")
-	private String	estado;
+	private String estado;
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "created_at")
-	private Date		created_at;
+	private Date created_at;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -140,23 +139,29 @@ public class Empresa implements Serializable {
 
 	@Column(name = "recha_consecutivo")
 	private Integer rechazadoConsecutivo;
-	
+
 	@Column(name = "vuelto_imprimir")
 	private Integer vueltoImprimir;
-	
+
 	@Column(name = "nofactura_elec")
 	private Integer noFacturaElectronica;
-	
+
 	@Column(name = "correo_frecuente")
 	private Integer correoFrecuente;
-	
-	@ManyToOne
-	@JoinColumn(name = "comanda_empresa_id")
-	private ComandaEmpresa comandaEmpresa;
-	
 
-	public Empresa(Integer id, String abreviaturaEmpresa, Integer numeroConsecutivo, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String cazaMatriz, Integer codigoSeguridad, String nombre, String nombreComercial, String tipoCedula, String cedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String canton, String distrito, String barrio, String logo, String tieneInventario, String tieneLector, String cambiarPrecio, String estadoProduccion, String enviarTiquete, String representante, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, String usuarioEnvioComprobante, String passwordEnvioComprobante, String estado, Date created_at, Date updated_at, Integer aceptadoConsecutivo,
-			Integer aceptadoParcialConsecutivo, Integer rechazadoConsecutivo, Integer vueltoImprimir, Integer noFacturaElectronica, Integer correoFrecuente) {
+	@Column(name = "comanda_empresa_id")
+	private Long comandaEmpresa;
+
+	public Empresa(Integer id, String abreviaturaEmpresa, Integer numeroConsecutivo, Integer notacConsecutivo,
+			Integer notadConsecutivo, Integer tiqueteConsecutivo, String cazaMatriz, Integer codigoSeguridad,
+			String nombre, String nombreComercial, String tipoCedula, String cedula, String otraSenas,
+			Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String canton,
+			String distrito, String barrio, String logo, String tieneInventario, String tieneLector,
+			String cambiarPrecio, String estadoProduccion, String enviarTiquete, String representante,
+			String nombreLlaveCriptografica, Integer claveLlaveCriptografica, String usuarioEnvioComprobante,
+			String passwordEnvioComprobante, String estado, Date created_at, Date updated_at,
+			Integer aceptadoConsecutivo, Integer aceptadoParcialConsecutivo, Integer rechazadoConsecutivo,
+			Integer vueltoImprimir, Integer noFacturaElectronica, Integer correoFrecuente) {
 		super();
 		this.id = id;
 		this.abreviaturaEmpresa = abreviaturaEmpresa;
@@ -220,21 +225,18 @@ public class Empresa implements Serializable {
 		this.id = id;
 	}
 
-
 	public Integer getCorreoFrecuente() {
 		return correoFrecuente;
 	}
 
-	
 	public void setCorreoFrecuente(Integer correoFrecuente) {
 		this.correoFrecuente = correoFrecuente;
 	}
-	
+
 	public String getAbreviaturaEmpresa() {
 		return abreviaturaEmpresa;
 	}
 
-	
 	public void setAbreviaturaEmpresa(String abreviaturaEmpresa) {
 		this.abreviaturaEmpresa = abreviaturaEmpresa;
 	}
@@ -243,7 +245,6 @@ public class Empresa implements Serializable {
 		return vueltoImprimir;
 	}
 
-	
 	public void setVueltoImprimir(Integer vueltoImprimir) {
 		this.vueltoImprimir = vueltoImprimir;
 	}
@@ -528,21 +529,19 @@ public class Empresa implements Serializable {
 		this.rechazadoConsecutivo = rechazadoConsecutivo;
 	}
 
-	
 	public Integer getNoFacturaElectronica() {
 		return noFacturaElectronica;
 	}
 
-	
 	public void setNoFacturaElectronica(Integer noFacturaElectronica) {
 		this.noFacturaElectronica = noFacturaElectronica;
 	}
 
-	public ComandaEmpresa getComandaEmpresa() {
+	public Long getComandaEmpresa() {
 		return comandaEmpresa;
 	}
 
-	public void setComandaEmpresa(ComandaEmpresa comandaEmpresa) {
+	public void setComandaEmpresa(Long comandaEmpresa) {
 		this.comandaEmpresa = comandaEmpresa;
 	}
 
