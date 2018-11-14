@@ -253,7 +253,7 @@
                 <div class="box-footer">
                     <button onclick ={__regresarAlListadoAbono}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
                         {$.i18n.prop("btn.volver")}</buuton>
-                    </button> <button show={botonAgregar ==true && parametros.idTransaccion ==1} onclick={__agregarAbono}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
+                    </button> <button show={botonAgregar ==true } onclick={__agregarAbono}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
                   
                 </div>
             </div>   
@@ -1490,7 +1490,7 @@ function __Anular(){
 	    }
         self.abono = data
         self.update()
-        __agregarRegistro(2,"#formularioAbono",$.i18n.prop("abono.mensaje.alert.anulada"),'anularAbonoPagarAjax.do','ListarAbonosPorCuentaPagarAjax.do','#tableListaAbonos')
+        __agregarRegistro(2,"#formularioAbono",$.i18n.prop("abono.mensaje.alert.anulada"),'anularAbonoAjax.do','ListarAbonosPorCuentaPagarAjax.do','#tableListaAbonos')
         
 	});
 }
