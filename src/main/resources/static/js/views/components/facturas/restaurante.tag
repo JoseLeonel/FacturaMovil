@@ -3813,7 +3813,7 @@ function __EnviarCocina(){
 		var informacion = {
 			mesa: self.mesa.descripcion,        	
 			mesero: "",        	
-		    nombreImpresora:"PDF",
+		    nombreImpresora:"COCINA",
 		    cantidadCaracteresLinea:"40",
 		    formatoTiquete:"",
 		    detalles:detalles
