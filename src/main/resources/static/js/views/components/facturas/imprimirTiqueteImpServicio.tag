@@ -42,6 +42,12 @@
 	                            	<td class="text-left" colspan="2"><h2><strong>{$.i18n.prop("tikect.total")}:</strong></h2></td>
 	                            	<td colspan="1"><h2><strong>{facturaImpresa.totalComprobanteSTR}</strong></h2></td>
 	                            </tr>
+                                <tr show={facturaImpresa.tipoCambio > 1}>>
+                                    <td></td>
+                                    <td class="precio" ><strong>{$.i18n.prop("tipoCambio.cambioDolar")}</strong></td>
+                                    <td class="precio" ><strong>{facturaImpresa.tipoCambioSTR}</strong></td>
+                                    <br>
+                                </tr>
 	                            <tr>
 		                            <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
 	                            </tr>                        

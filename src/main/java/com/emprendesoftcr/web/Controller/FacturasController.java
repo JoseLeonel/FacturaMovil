@@ -389,7 +389,7 @@ public class FacturasController {
 		modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
 		modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinal));
 		modelEmail.put("total", facturaCommand.getTotal());
-		modelEmail.put("totalDescuentos", facturaCommand.getTotal());
+		modelEmail.put("totalDescuentos", facturaCommand.getTotalDescuentos());
 		modelEmail.put("totalImpuestos", facturaCommand.getTotalImpuestos());
 		modelEmail.put("totalVentasNetas", facturaCommand.getTotalVentasNetas());
 		modelEmail.put("totalVentasExentas", facturaCommand.getTotalVentasExentas());
