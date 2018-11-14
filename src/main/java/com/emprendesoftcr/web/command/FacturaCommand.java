@@ -96,7 +96,8 @@ public class FacturaCommand {
 
 	private Double totalCambioPagar;
 
-	private Double totalImpuestoServ;
+	private Double		totalImpuestoServ;
+	private Double  tipoCambioMoneda;
 
 	private String codigoMoneda;
 
@@ -523,4 +524,19 @@ public class FacturaCommand {
 	public void setMesa(Mesa mesa) {
 		this.mesa = mesa;
 	}
+
+
+
+	
+	public Double getTipoCambioMoneda() {
+		return tipoCambioMoneda;
+	}
+
+
+
+	
+	public void setTipoCambioMoneda(Double tipoCambioMoneda) {
+		this.tipoCambioMoneda = tipoCambioMoneda;
+	}
+
 }

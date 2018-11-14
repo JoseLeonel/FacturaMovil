@@ -147,14 +147,12 @@ public class Empresa implements Serializable {
 	@Column(name = "nofactura_elec")
 	private Integer noFacturaElectronica;
 	
+	@Column(name = "correo_frecuente")
+	private Integer correoFrecuente;
+	
 	@ManyToOne
 	@JoinColumn(name = "comanda_empresa_id")
 	private ComandaEmpresa comandaEmpresa;
-	
-	
-	
-	
-	
 	
 
 	public Empresa(Integer id, String abreviaturaEmpresa, Integer numeroConsecutivo, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String cazaMatriz, Integer codigoSeguridad, String nombre, String nombreComercial, String tipoCedula, String cedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String canton, String distrito, String barrio, String logo, String tieneInventario, String tieneLector, String cambiarPrecio, String estadoProduccion, String enviarTiquete, String representante, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, String usuarioEnvioComprobante, String passwordEnvioComprobante, String estado, Date created_at, Date updated_at, Integer aceptadoConsecutivo,
@@ -539,7 +537,13 @@ public class Empresa implements Serializable {
 	public void setNoFacturaElectronica(Integer noFacturaElectronica) {
 		this.noFacturaElectronica = noFacturaElectronica;
 	}
-	
-	
+
+	public ComandaEmpresa getComandaEmpresa() {
+		return comandaEmpresa;
+	}
+
+	public void setComandaEmpresa(ComandaEmpresa comandaEmpresa) {
+		this.comandaEmpresa = comandaEmpresa;
+	}
 
 }

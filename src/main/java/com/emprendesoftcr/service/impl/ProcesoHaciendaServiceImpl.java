@@ -862,13 +862,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
-<<<<<<< HEAD
 	 */	
-    @Scheduled(cron = "0 0/10 * * * ?")
-=======
-	 */
-	//@Scheduled(cron = "0 0/10 * * * ?")
->>>>>>> master
+    //@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {

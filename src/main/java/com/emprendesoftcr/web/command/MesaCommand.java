@@ -2,8 +2,6 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
-import org.hibernate.annotations.Formula;
-
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Mesa;
 
