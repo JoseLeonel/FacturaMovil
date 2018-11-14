@@ -76,6 +76,7 @@ public class FacturaBoImpl implements FacturaBo {
 	@Autowired
 	UsuarioCajaBo					usuarioCajaBo;
 
+
 	private Logger				log	= LoggerFactory.getLogger(this.getClass());
 
 	@Transactional
@@ -292,6 +293,7 @@ public class FacturaBoImpl implements FacturaBo {
 		}
 		return detallesFacturaCommand;
 	}
+
 
 	private void asociaDetallesFactura(Factura factura, FacturaCommand facturaCommand, Usuario usuario, ArrayList<DetalleFacturaCommand> detallesFacturaCommand) throws Exception {
 
@@ -623,6 +625,7 @@ public class FacturaBoImpl implements FacturaBo {
 					}
 				}
 
+				
 				// Actualiza articulo y inventario
 				this.actualizaArticulosInventario(detallesFacturaCommand, factura, usuario);
 

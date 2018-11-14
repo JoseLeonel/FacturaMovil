@@ -18,7 +18,7 @@
                 </div> 
             </div>
             <div class="modal-footer">
-                <button type="button" onclick ="{__recalculacionDelDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+                <button type="button" onclick ="{__recalculacionDelDetalle}" class="btn-green btn_big btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
             </div>
         </div>
     </div>
@@ -27,7 +27,6 @@
 <!--Fin Cambiar Cantidad-->
 
 <!--Modal Cambiar Descripcion-->
-
 <div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
        <div class="modal-content">
@@ -45,11 +44,12 @@
                 </div> 
             </div>
             <div class="modal-footer">
-                <button type="button" onclick ="{__cambiarDescripcionDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+                <button type="button" onclick ="{__cambiarDescripcionDetalle}" class="btn-green  btn_big  btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
             </div>
         </div>
     </div>
 </div>
+
 <!--Fin Cambiar descripcion-->
 <div id="pagina1" style="padding-bottom:15px" show={mostarParaCrearNuevaVentas}>
    <div class="row">
@@ -61,7 +61,6 @@
                 <a class="pull-left" href="#"    onclick = {__ImprimirTiquete}  title="{$.i18n.prop("imprimir.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f7")}</span></a>
                 <a class="pull-left" href="#"    onclick = {__MostrarFormularioDePago}  title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
                 <a class="pull-left" href="#"    onclick= {__CrearFacturaTemporal}  title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
-                
                 <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
             </div>
         </div>      
@@ -107,7 +106,39 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                <button type="button" class="btn-dark-gray  btn_big  btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--fin del modal-->
+
+<!--Modal comandas pendientes  -->
+<div id="modalComandasPendientes" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("comanda.lista.pendientes")}   </h4>
+            </div>
+            <div class="modal-body">
+                <table id="tableListaComandaPendientes" class="table responsive display table-striped table-hover nowrap tableListaComandaPendientes " cellspacing="0" width="100%">
+                   <thead>
+                        <th class="table-header">{$.i18n.prop("articulo.codigo")}</th>
+                        <th class="table-header">{$.i18n.prop("articulo.descripcion")}</th>
+                        <th class="table-header">{$.i18n.prop("articulo.comentario")} </th>
+                    </thead>
+                    <tfoot style="display: table-header-group;">
+                        <tr>
+                            <th>{$.i18n.prop("articulo.codigo")}</th>
+                            <th>{$.i18n.prop("articulo.descripcion")}</th>
+                            <th>{$.i18n.prop("articulo.comentario")}</th>
+                        </tr>
+                    </tfoot>                    
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-dark-gray btn-back  btn_big  pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                <button onclick={__ComentariosComanda} type="button" class="btn-green  btn_big  btn-edit pull-right"     data-dismiss="modal">{$.i18n.prop("btn.aceptar")}</button>                
             </div>
         </div>
     </div>
@@ -141,41 +172,61 @@
      </div>
 </div>       
 <!--Fin Ventana de los productos-->
+
 <!--Inicio de la Venta-->
 <div show={mostarParaCrearNuevaVentas}>
     <div class="container-fluid">
         <div class="row no-space">           
             <div class="col-md-5 col-sm-5 col-lg-5 col-xs-12 pull-right" style="padding: 0px 12px">
                 <div class="block panel ">                    
+                    <div  onclick = {__MostrarFormularioDePago} id="btnGrandePagar" class="head green well" style="color: #fff; font-size: 55px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
+                        <table id="pagarTable" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td width="30%" id="">
+                                        <div id="pagarTitulo">{$.i18n.prop("factura.total")}:</div>
+                                    </td>
+                                    <td width="70%" id="">
+                                        <div id="">
+                                            <span id="total_show_peso" class="textShadow">  </span>
+                                            <span class="label label-info textShadow" id="total-show">{totalComprobante}</span>
+                                       </div>
+                                    </td>
+                                </tr>                     
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr style="margin: 0px; border-color: #e4e4e4;">
+                    
                     <div id="listadoProdcutos">{$.i18n.prop("titulo.listado.venta")}   {factura.id>0?factura.id:'' } {factura.nombreFactura} </div>
                     <!--Mesa seleccionada-->
                     <div class="input-group">
                         <span title="Vendedor" class="input-group-addon " > 
-                            <span class="fa fa-glass" aria-hidden="true" style="margin:3px 4px 0px 2px"> Mesa: {factura.mesa.id>0?factura.mesa.descripcion:''} </span> 
+                            <span onclick={__FacturasXMesaTiqueteEncabezado} class="fa fa-glass" aria-hidden="true" style="margin:3px 4px 0px 2px"> Mesa: {factura.mesa.id>0?factura.mesa.descripcion:''} </span> 
                         </span>
                     </div>
                     <hr style="margin: 2px 0px 0px 0px; border-color: #e4e4e4; margin-top: 0px">
                     <div class="data-fluid">
-                        <div id="listaProductos" style="height:200px; overflow-x: hidden; width:100%">
+                        <div id="listaProductos" style="height:300px; overflow-x: hidden; width:100%">
                             <table id="tablaListaProductos"  cellpadding="0" cellspacing="0" width="100%" class="table lcnp table-dark">
                                 <thead>
                                     <tr >
-                                        <td width="50%"> Descripcion</td>
+                                        <td width="50%">Descripcion</td>
                                         <td width="10%">Cant</td>
                                         <td width="10%">Precio.U</td>
-                                        <td width="10%">Desc</td>
-                                       
-                                        <td width="19%">Total</td>
-                                        
+                                        <td width="10%">Desc</td>                                       
+                                        <td width="19%">Total</td>                                        
                                     </tr>
                                 </thead>
                                 <tbody height="70%" id="productos-detail">
-                                    <tr style="" each={detail}>
+                                    <tr each={detail}>
                                         <td>
-                                           <diV onclick ={__CambiarDescripcion}>
-                                            <span   class="title-detalle text-info clickable clearfix">
-                                            {descripcion}</span>
-                                           <div> 
+                                          <div class="block_container_comanda" onclick ={__CambiarDescripcion}>
+                                          	<span class="title-detalle text-info clickable clearfix">{descripcion}</span>
+                                          </div> 
+                                          <div class="block_container_comanda" show={__MostrarIconoComandasPendientes(codigo)} onclick={__MostrarComandasPendientes}>
+	                       					<img style="width:30px;" alt="" src="/dist/img/cocina.png">
+	                                      </div>
                                         </td>
                                         <td >
                                             <span onclick ={__CambiarCantidad} class="labelDetalleVenta label-success cantidad clickable">{cantidad.toFixed(3)}</span>
@@ -226,42 +277,26 @@
                         </table>
                     </div>
                     <hr style="margin: 0px; border-color: #e4e4e4; margin-top: 0px">                    
-                    <div  onclick = {__MostrarFormularioDePago} id="btnGrandePagar" class="head green well" style="color: #fff; font-size: 55px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
-                        <table id="pagarTable" width="100%">
-                            <tbody>
-                                <tr>
-                                    <td width="30%" id="">
-                                        <div id="pagarTitulo">{$.i18n.prop("factura.total")}:</div>
-                                    </td>
-                                    <td width="70%" id="">
-                                        <div id="">
-                                            <span id="total_show_peso" class="textShadow">  </span>
-                                            <span class="label label-info textShadow" id="total-show">{totalComprobante}</span>
-                                       </div>
-                                    </td>
-                                </tr>                     
-                            </tbody>
-                        </table>
-                    </div>
-                    <hr style="margin: 0px; border-color: #e4e4e4;">
                 </div>
                 <div  class="row ">
-                    <div class="col-md-12 col-sx-12 col-lg-12 col-sm-12 "  style="padding:10px 15px 18px 15px; ">
+                    <!-- <div class="col-md-12 col-sx-12 col-lg-12 col-sm-12 "  style="padding:10px 15px 18px 15px; ">
                         <div class="input-group">
-                            <span onclick = {__CambiarNombreTiquete} title="Cambiar Nombre Tiquete" class="input-group-addon btnClientes" id="add-new-client"> 
+                            <span onclick = {_EscogerClientes} title="Cambiar Nombre Tiquete" class="input-group-addon btnClientes" id="add-new-client"> 
                                 <small class="fa fa-plus" style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
                                 <span class="fa fa-user" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"></span> 
                             </span>
                             <input onclick={_EscogerClientes} type="text"  placeholder="Cliente" value="{cliente.nombreCompleto}"  name="datos_cliente" id="datos_cliente" autocomplete="off" >
                         </div>
-                        <!--Vendedor o Nuevo Vendedor-->
+                        Vendedor o Nuevo Vendedor
                         <div class="input-group">
-                            <span title="Vendedor" class="input-group-addon " > 
+                            <span  onclick={_EscogerVendedores} title="Vendedor" class="input-group-addon " > 
                                 <span class="fa fa-user" aria-hidden="true" style="margin:3px 4px 0px 2px"></span> 
                             </span>
                             <input type="text" onclick={_EscogerVendedores} placeholder="Vendedor" value="{vendedor.nombreCompleto}"  name="v_vendedor" id="v_vendedor" autocomplete="off" >
                         </div>
-                        <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label-titulos-articulo">Tikete a :{factura.nombreFactura}</span></a>
+                    </div> -->                                                                        
+                    <div class="col-md-12 col-sx-12 col-lg-12 col-sm-12 "  style="padding:10px 15px 18px 15px; ">
+                        <a class="pull-left" href="#"> <span onclick = {__CambiarNombreTiquete} class="label-titulos-articulo">Tikete a :{factura.nombreFactura}</span></a>
                     </div>                                                                        
                 </div> 
                 <hr style="margin: 0px; border-color: #e4e4e4;">
@@ -390,7 +425,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                <button type="button" class="btn-dark-gray  btn_big  btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
             </div>
         </div>
     </div>
@@ -419,8 +454,8 @@
             <div class="modal-footer">
                 <div class="row">
                     <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                        <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-                        <button  onclick={__ModificarNombreTiquete}   class="btn-green btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
+                        <button type="button" class="btn-dark-gray  btn_big  btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                        <button  onclick={__ModificarNombreTiquete}   class="btn-green  btn_big  btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
                     </div>
                 </div>
             </div>
@@ -449,8 +484,8 @@
             <div class="modal-footer">
                 <div class="row">
                     <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                        <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-                        <button  onclick={__AgregarNombreFacturaTemporal}   class="btn-green btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
+                        <button type="button" class="btn-dark-gray btn-back  btn_big  pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                        <button  onclick={__AgregarNombreFacturaTemporal}   class="btn-green  btn_big  btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
                     </div>
                 </div>
             </div>
@@ -479,7 +514,7 @@
                 </div> 
             </div>
             <div class="modal-footer">
-                <button type="button" onclick ="{__cambiarElPrecio}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+                <button type="button" onclick ="{__cambiarElPrecio}" class="btn-green  btn_big  btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
             </div>
         </div>
     </div>
@@ -507,7 +542,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" onclick ="{__actualizarDescuento}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
+                <button type="button" onclick ="{__actualizarDescuento}" class="btn-green  btn_big btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
             </div>
         </div>
     </div>
@@ -555,7 +590,7 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                <button type="button" class="btn-dark-gray  btn_big  btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
             </div>
         </div>
     </div>
@@ -593,7 +628,7 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                <button type="button" class="btn-dark-gray btn-back  btn_big  pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
             </div>
         </div>
     </div>
@@ -974,10 +1009,11 @@ td.col-xl-12, th.col-xl-12 {
     var self = this;
     // Detalle de la factura es una coleccion de articulos
     self.detail                = []
+    self.pendientesComanda     = []
     self.mensajesBackEnd       = []
     self.error                 = false
     self.comboEstados          = []
-    self.comboCondicionPagos        = []
+    self.comboCondicionPagos   = []
     self.comboTipoDocumentos   = []
     self.factura                = {
         id:null,
@@ -1031,10 +1067,12 @@ td.col-xl-12, th.col-xl-12 {
 
     }                   
     self.item                  = null;
+    self.comentarioComanda     = "";
     self.articulo              = null;
     self.articulos             = {data:[]}
     self.clientes              = {data:[]}
     self.detalleFactura        = {data:[]}
+    self.detalleComanda        = {data:[]}
     self.cliente               = {}
     self.vendedor              = {
         id:null,
@@ -1095,7 +1133,7 @@ td.col-xl-12, th.col-xl-12 {
  	self.mesa = {
          id:0,
          descripcion:"",
-         impuestoServicio:false
+         impuestoServicio:false,
      }
      self.mesas  = {
          data:[],
@@ -1120,14 +1158,15 @@ td.col-xl-12, th.col-xl-12 {
          }
      }
 
-    self.mostarParaCrearNuevaVentas    = false //true
-    self.mostrarCodigoBarra            = false //true
-    self.mostrarFormularioPago         = false
-    self.mostarParaCrearNuevaFactura   = false //true
-    self.mostrarCamposIngresoContado   = true //true
-    self.mostrarReferencias            = false 
-    self.mostrarListadoArticulos       = false
-    self.mostrarImpuestoServicio       = false
+    self.mostrarOrdenesCocinaPendientes = false
+    self.mostarParaCrearNuevaVentas     = false //true
+    self.mostrarCodigoBarra             = false //true
+    self.mostrarFormularioPago          = false
+    self.mostarParaCrearNuevaFactura    = false //true
+    self.mostrarCamposIngresoContado    = true //true
+    self.mostrarReferencias             = false 
+    self.mostrarListadoArticulos        = false
+    self.mostrarImpuestoServicio        = false
     self.factEspera =null
     self.urlImagenNavegador   = '/dist/img/navegador.png';
     self.urlImagenLector      = '/dist/img/codigo_barra.png';
@@ -1180,17 +1219,13 @@ td.col-xl-12, th.col-xl-12 {
 **/
 
 __AgregarProductoDePantalla(e){
-    
-    var item =  e.item
-    self.articulo = item;
-    self.update()
-    __buscarcodigo(self.articulo.codigo,1);
+   var item = e.item
+   self.articulo = item;
+   self.update()
+   __buscarcodigo(self.articulo.codigo,1);
     $('#codigoBarra').val(null)
-    
-    
-    
 }   
-
+    
 /**
 *  Mostrar si escoge una categorias
 **/
@@ -1663,13 +1698,18 @@ __CambiarDescuento(e){
 *Cambiar Cantidad del Articulo
 **/
 __CambiarCantidad(e){
-   self.item = e.item; 
-   self.update()
-   $( "#cambiarCantidadArticulo" ).focus()
-   $( "#cambiarCantidadArticulo" ).val(self.item.cantidad)
-   $('#modalCambiarCantidad').modal()                      // initialized with defaults
-   $('#modalCambiarCantidad').modal({ keyboard: false })   // initialized with no keyboard
-   $('#modalCambiarCantidad').modal('show')                // initializes and invokes show immediately
+	self.item = e.item; 
+	self.update()
+	var obj = self.pendientesComanda.find(o => o.key === self.item.codigo);
+	if(typeof obj !== "undefined"){
+        sweetAlert("",$.i18n.prop("comanda.mensaje.elimina.articulo"), "warning");		
+	}else{
+	    $( "#cambiarCantidadArticulo" ).focus()
+	    $( "#cambiarCantidadArticulo" ).val(self.item.cantidad)
+	    $('#modalCambiarCantidad').modal()                      // initialized with defaults
+	    $('#modalCambiarCantidad').modal({ keyboard: false })   // initialized with no keyboard
+	    $('#modalCambiarCantidad').modal('show')                // initializes and invokes show immediately
+	}
 }
 /**
 *Cambiar descripcion
@@ -1891,6 +1931,9 @@ function __ListaDeArticulosPorDescripcion(){
 *  Buscar la Factura Pendiente en espera
 **/
 __CargarFacturaEspera(e){
+    self.pendientesComanda     = []
+    self.update()
+	
     self.factEspera = e.item
     self.update()
     if(self.factura.id !=null){
@@ -1898,8 +1941,7 @@ __CargarFacturaEspera(e){
         aplicarFactura(1)  
         self.seIncluyoUnArticulo =null
         self.update()
-      }  
-      
+      }        
     }else{
         if(self.detail.length != 0 ){
             $('#ModalAgregarNombreTiquete').modal('show') 
@@ -1930,7 +1972,6 @@ __CambiarNombreTiquete(){
 **/
 __CrearFacturaTemporal(){
     if(self.factura.id ==null){
-        
         if(self.detail.length != 0 ){
             $('#ModalAgregarNombreTiquete').modal('show') 
             $('.cambioNombreFactura').focus()
@@ -1939,11 +1980,14 @@ __CrearFacturaTemporal(){
     }else{
         self.seIncluyoUnArticulo = 1
         self.update()
-       aplicarFactura(1)    
+        aplicarFactura(1)    
     }
-   // __FacturaEnEspera(self.factEspera)
-    self.factEspera =null
+    // __FacturaEnEspera(self.factEspera)
+    self.factEspera = null
     self.update()
+    
+    //Se envian los datos a la comanda
+    __EnviarCocina();
 }
 
 /**
@@ -2004,12 +2048,20 @@ __AgregarNombreFacturaTemporal(){
     self.mesa.id = self.factura.mesa.id
     self.update()
     aplicarFactura(1)      
-    //if(self.factEspera !=null){
-    //  __FacturaEnEspera(self.factEspera) 
-    //}
+    /* if(self.factEspera !=null){
+      __FacturaEnEspera(self.factEspera) 
+    } */
     self.factEspera =null
     self.update()
     
+     self.mostrarCategorias        = false //muestra la pantalla de imagenes de articulos   
+     self.mostrarFacturasMesas     = true //muestra las facturas por mesa
+     self.mostrarMesas	             = false //muestra la pantalla mesas               
+     self.mostrarCodigoBarra          = false;
+     self.mostrarNavegador            = true
+     self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias
+     self.mostarParaCrearNuevaVentas  = true
+     self.update()        
 
 }
 /**
@@ -2376,7 +2428,7 @@ function __FacturaEnEspera(factura){
                        self.factura.totalCambioPagar = 0
                        self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
                        self.cliente  = modeloTabla.cliente
-                       self.vendedor = modeloTabla.vendedor
+                       self.vendedor = modeloTabla.vendedor                       
                        self.update()
                     });
                 }
@@ -2430,8 +2482,7 @@ function __displayDate_detail(fecha) {
 *  Crear Factura nueva
 **/
 function crearFactura(estado){
-    
-    self.detalleFactura.data =self.detail
+    self.detalleFactura.data = self.detail    
     self.update() 
     if(estado ==1){
        self.factura.tipoDoc = "04";
@@ -2730,7 +2781,7 @@ function __buscarcodigo(idArticulo,cantidad){
                             mensajeError($.i18n.prop("error.articulo.inactivo.inventario"))
                             return
                         }
-                         self.descripcionArticulo = modeloTabla.descripcion
+                        self.descripcionArticulo = modeloTabla.descripcion
                         self.update()
                         __agregarArticulo(cantidad)
                     });
@@ -2743,6 +2794,7 @@ function __buscarcodigo(idArticulo,cantidad){
         }
     });
 }
+
 /**
 *  Agregar un articulo si existe se suma la cantidad y no existe se agrega en el detalle
 **/
@@ -2757,8 +2809,12 @@ function __agregarArticulo(cantidad){
         cantidad = 1
     }
     var encontrado = false;
-     if(self.detail[0] == null){ // first element
+    if(self.detail[0] == null){ // first element
         __nuevoArticuloAlDetalle(cantidad);
+    	//Se almacena en los casos de articulos de comanda
+    	if(self.articulo.comanda == 1){	
+            __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion);
+    	}		
         self.seIncluyoUnArticulo = 0
         self.update()
         encontrado = true;
@@ -2768,7 +2824,9 @@ function __agregarArticulo(cantidad){
                self.item          = self.detail[count];
                self.item.cantidad = self.item.cantidad + parseFloat(cantidad)
                self.update();
-               ActualizarLineaDEtalle()
+	  	      	if(self.articulo.comanda == 1){	
+	  	            __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion);
+	  	    	}		
                self.detail[count] = self.item;
                encontrado = true;
                self.seIncluyoUnArticulo = 0
@@ -2783,6 +2841,9 @@ function __agregarArticulo(cantidad){
        self.update()
 
       __nuevoArticuloAlDetalle(cantidad);
+	  	if(self.articulo.comanda == 1){	
+	        __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion);
+		}		
     }
     __calculate(); 
 }
@@ -2802,6 +2863,9 @@ __removeProductFromDetail(e) {
     self.seIncluyoUnArticulo = 1
     self.update()
      __calculate();
+    
+    eliminaArticuloComanda(item.codigo);
+
  }
 /**
 *   agregar Articulos nuevos en el detalle de la factura
@@ -2834,7 +2898,7 @@ function __nuevoArticuloAlDetalle(cantidad){
        porcentajeDesc  : 0,
        subTotal        : subTotal,
        montoTotalLinea : montoTotalLinea,
-       montoTotal      :montoTotal
+       montoTotal      : montoTotal
     });
     var cont = 0;
     self.detail.forEach(function(elemen){
@@ -2844,6 +2908,7 @@ function __nuevoArticuloAlDetalle(cantidad){
     )
     self.update()
 }
+
 /**
 * Monto Total de la Facturra 
 **/
@@ -2884,13 +2949,14 @@ function _calcularImpuesto(precio,iva){
  * Se aplica una recalculacion de todo el detalle y Factura
  **/ 
  __recalculacionDelDetalle(e){
-      var cantidad = $(".cambiarCantidadArticulo").val();
+    var cantidad = $(".cambiarCantidadArticulo").val();
     //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
     cantidad =__valorNumerico(cantidad);
     if(cantidad == 0){
        cantidad = 1;
     }
-    __ValidarCantidadArticulo(self.item.codigo,cantidad)
+    //__actualizaArticuloComanda(cantidad, self.item.codigo, self.item.descripcion, self.item.cantidad);
+    __ValidarCantidadArticulo(self.item.codigo,cantidad)		
   }
 /**
 * Cambiar el precio del detalle de la factura
@@ -2901,8 +2967,9 @@ __cambiarDescripcionDetalle(e){
     self.update()
     $(".cambiarDescripcionArticulo").val(null);
     $('#modalCambiarDescripcion').modal('hide') 
-    
 }
+
+
 /**
 * Cambiar el precio del detalle de la factura
 **/
@@ -2941,7 +3008,7 @@ function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc){
 *Actualizar linea en el detalle
 **/
 function ActualizarLineaDEtalle(){
-    var montoTotal               = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
+    var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
     var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc)
     var subTotal               = montoTotal - montoDescuento
     var montoImpuesto          = _calcularImpuesto(subTotal,self.item.impuesto ==null?0:self.item.impuesto)
@@ -3495,15 +3562,22 @@ function __ListaMesas(){
     });
 }
 
-//Se presentan las facturas pendientes por mes
+//Se presentan las facturas para cada mesa
 __FacturasXMesa(e){
+    self.pendientesComanda     = []
     var item = e.item
     self.mesa = item
-    self.factura.mesa = item
+    self.factura.mesa = item    
     self.update()
     __ListaFacturasXMesas()
 }
 
+//Se presentan las facturas para cada mesa
+__FacturasXMesaTiqueteEncabezado(){
+    self.pendientesComanda     = []
+    self.update()
+    __ListaFacturasXMesas()
+}
 /**
 *  Lista las facturas de una mesa
 **/
@@ -3553,5 +3627,218 @@ function __ListaFacturasXMesas(){
         }
     });
 }
+
+//------------------------------------------------------------------------------------
+//--------------Nuevos Metodos ---------------------------------
+//------------------------------------------------------------------------------------
+__MostrarIconoComandasPendientes(codigoArticulo){
+	var obj = self.pendientesComanda.find(o => o.key === codigoArticulo);
+	if(typeof obj !== "undefined"){
+		return true;	
+	}else{
+		return false;	
+	}
+}
+
+/**
+*  Lista las comandas pendientes y las muestra en pantalla
+**/
+__MostrarComandasPendientes(e){	
+    //Se busca la comanda pendiente por codigo de articulo
+    var obj = self.pendientesComanda.find(o => o.key === e.item.codigo);
+	if(typeof obj !== "undefined"){
+	    var detalles = [];
+	    $('#modalComandasPendientes').modal('show')  
+
+	    //Se recorren las comandas pendientes y se presentan para modificar el comentario
+		obj.data.forEach(function(elemen){
+			detalles.push({	        
+				codigo          : elemen.codigo,
+			    descripcion     : elemen.descripcion,
+			    comentario      : elemen.comentario,
+			});			
+		});
+	    
+	    //Valores del data table
+	    self.informacion_tabla_comandasPendientes = [	
+	        {'data' : 'codigo'           ,"name":"codigo"            ,"title" : $.i18n.prop("articulo.codigo")            ,"autoWidth":false},
+	        {'data' : 'descripcion'      ,"name":"descripcion"       ,"title" : $.i18n.prop("articulo.descripcion")       ,"autoWidth":false},
+	        {'data' : 'comentario'       ,"name":"comentario"        ,"title" : $.i18n.prop("articulo.comentario"),        "autoWidth":false,
+                "render": function(data, type, row, meta){
+                	return '<input  id="' + row.codigo + '" data-index="' + meta.row + '" value="' + data + '" type="text" class="form-control dataTableComentario"/>'
+                }
+            },
+	    ]; 	 	
+	 	loadListar(".tableListaComandaPendientes",idioma_espanol, self.informacion_tabla_comandasPendientes, detalles)
+        ActivarEventoFiltro(".tableListaComandaPendientes")
+	}
+}
+
+__ComentariosComanda(e){
+	
+	//Se obtienen todos los inputs y se actualizan los valores de la consola
+	$(".dataTableComentario").each(function() {
+		var valor = this.value;
+		var idx = this.getAttribute("data-index");
+		var idArticulo = this.getAttribute("id");
+		var obj = self.pendientesComanda.find(o => o.key === idArticulo);
+		if(typeof obj !== "undefined"){
+			obj.data[idx].comentario = valor;
+		}
+	 } 
+	);
+  	$('#modalComandasPendientes').modal('hide') 
+}
+
+/**
+*   Agregar el articulo a la lista de pendientes en la comanda en session
+**/
+function __nuevoArticuloComanda(cantidad, codigo, descripcion){	
+	
+	//Se almacenan los productos por separados en la comanda
+	for (var i = 0; i < cantidad; i++) {
+		//Se busca si existe en el mapa, se actualiza la lista o se hace el put inicial
+		var obj = self.pendientesComanda.find(o => o.key === codigo);
+		if(typeof obj !== "undefined"){
+			obj.data.push({	        
+		        codigo          : codigo,
+		        descripcion     : descripcion,
+		        comentario      : "",
+		    });	
+		}else{
+			var datos = [];
+			datos.push({	        
+		        codigo          : codigo,
+		        descripcion     : descripcion,
+		        comentario      : "",
+		    });		
+			self.pendientesComanda.push({	        
+				key : codigo,
+				data : datos
+		    });	
+		}
+	} 	
+    self.update()
+ }
+ 
+/**
+*   Elimina el articulo de la comanda en session, se elimina el detalle
+**/
+function eliminaArticuloComanda(codigoArticulo){
+	//Se elimina de los pendientes en session para no almacenarlo
+	self.pendientesComanda.splice(self.pendientesComanda.findIndex(o => o.key === codigoArticulo), 1); 
+} 
+
+/**
+*   Se actualizan los productos pendientes en la comanda en session, acutaliza los detalles
+**/
+/* function __actualizaArticuloComanda(cantidad, codigo, descripcion, cantidadAnterior){
+	
+
+	//Se obtiene la cantidad de los pendientes en session
+	var obj = self.pendientesComanda.find(o => o.key === codigo);
+	if(typeof obj !== "undefined"){
+
+		var cantidadComanda = 0;
+		var cantidadTemp = 0;
+		obj.data.forEach(function(elemen){
+			//Se busca por codigo
+			if (codigo == elemen.codigo){
+				cantidadComanda = cantidadComanda + 1;
+			}     
+	    })
+
+	    //Caso 1: Si la cantidad anterior y la nueva son iguales se deja todo igual
+	    if(cantidad == cantidadAnterior){
+	    
+	    }else{
+	    	//Si la cantidad anterior es superior a la cantidad nueva
+	    	if(cantidadAnterior > cantidad){
+	    		//Se determina si la cantidad anterior menos la comand sigue
+	    	}
+	    	//Caso 2: La cantidad anterior menos lo que esta en la comanda, es mayor a la cantidad que se quiere poner
+		    cantidadTemp = cantidadAnterior - cantidadComanda;
+			if(cantidadTemp > cantidad){
+				//Se elimnan los articulos de la comanda
+				eliminaArticuloComanda(codigo)
+			}else{
+				
+			}
+	    }
+	    
+	    //Caso 1: La cantidad anterior menos lo que esta en la comanda es mayor a la cantidad
+	    cantidadTemp = cantidadAnterior - cantidadComanda;
+		if(cantidadTemp > cantidad){
+			//Se elimnan los articulos de la comanda
+			eliminaArticuloComanda(codigo)
+		}else{
+			
+		    //Caso 2: La cantidad anterior menos la comanda, es menor a la cantidad
+		    cantidadTemp = cantidadAnterior - cantidadComanda;
+		    if(cantidadTemp < cantidad){
+				//Se agrega a la comanda la diferencia	
+				cantidadTemp = cantidad - cantidadAnterior;
+		 	    
+				//Se envia agregar la cantidad de articulos nuevos
+				__nuevoArticuloComanda(cantidadTemp, codigo, descripcion);			
+		    }else{
+		    	//Caso 3: Los valores son iguales no se hace nada
+		    }
+
+		}	    
+	}
+} 
+ */
+
+
+/**
+*   Envia a la comanda de la cocina, se imprimen mediante el local host
+**/
+function __EnviarCocina(){
+	
+	//Se forman los detalles a enviar a la comanda
+	var detalles = [];
+	self.pendientesComanda.forEach(function(elemenKey){
+		elemenKey.data.forEach(function(elemen){
+			detalles.push({	        
+		        codigo          : elemen.codigo,
+		        descripcion     : elemen.descripcion,
+		        comentario      : elemen.comentario,
+		     });			
+		});
+	});
+	console.log(detalles);
+	if(detalles.length > 0){
+		//Se forman los datos genales para la comanda
+		var informacion = {
+			mesa: self.mesa.descripcion,        	
+			mesero: "",        	
+		    nombreImpresora:"PDF",
+		    cantidadCaracteresLinea:"40",
+		    formatoTiquete:"",
+		    detalles:detalles
+		}    
+
+		var JSONData = JSON.stringify(informacion);		
+		//Envia a imprimir a la comanda
+	    $.ajax({
+	        contentType: 'application/json',
+	        url: 'http://localhost:8033/service/CrearOrdenCocinaAjax',
+	        datatype: "json",
+	        data : JSONData,
+	        method:"POST",
+	        success: function (result) {
+	      	   $('#modalComandasPendientes').modal('hide')  
+	      	   self.pendientesComanda = []
+	      	   self.update()
+	        },
+	        error: function (xhr, status) {
+	            console.log(xhr);
+	            mensajeErrorServidor(xhr, status);
+	        }
+	    });		
+	}
+} 
 </script>
+
 </venta-restaurante>

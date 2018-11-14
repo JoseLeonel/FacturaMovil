@@ -57,7 +57,7 @@ public class Mesa {
 	private Integer prioridad;
 
 	@Formula("(select count(*) from facturas fact where fact.mesa_id = id and fact.estado = 1)")
-	private Integer tieneFacturas; 
+	private Integer tieneFacturas;
 
 	public Mesa() {
 		super();

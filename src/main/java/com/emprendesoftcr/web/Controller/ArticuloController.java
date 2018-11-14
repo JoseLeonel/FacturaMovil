@@ -420,6 +420,7 @@ public class ArticuloController {
 			articuloBd.setCodigo(articulo.getCodigo().trim());
 			articuloBd.setTipoImpuesto(articulo.getTipoImpuesto() == null ? Constantes.EMPTY : articulo.getTipoImpuesto());
 			articuloBd.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
+			articuloBd.setComanda(articulo.getComanda());
 			articuloBo.modificar(articuloBd);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBd);

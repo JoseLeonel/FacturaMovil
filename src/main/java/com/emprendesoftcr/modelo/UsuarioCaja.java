@@ -20,6 +20,7 @@ import com.emprendesoftcr.Utils.Utils;
 
 /**
  * Modelo para abrir cajas a usuarios para facturar UsuarioCaja.
+ * 
  * @author jose.
  * @since 10 jun. 2018
  */
@@ -58,6 +59,9 @@ public class UsuarioCaja implements Serializable {
 	@Column(name = "impuesto_servicio")
 	private Double totalServicio;
 
+	@Column(name = "total_dolares")
+	private Double totalDolares;
+
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
 	private Usuario usuario;
@@ -79,7 +83,9 @@ public class UsuarioCaja implements Serializable {
 	@Column(name = "estado")
 	private String estado;
 
-	public UsuarioCaja(Long id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalNeto, Usuario usuario, Caja caja, Date created_at, Date updated_at, String estado, Double totalServicio) {
+	public UsuarioCaja(Long id, Double totalFondoInicial, Double totalEfectivo, Double totalTarjeta, Double totalBanco,
+			Double totalCredito, Double totalAbono, Double totalNeto, Usuario usuario, Caja caja, Date created_at,
+			Date updated_at, String estado, Double totalServicio) {
 		super();
 		this.id = id;
 		this.totalFondoInicial = totalFondoInicial;
@@ -240,9 +246,20 @@ public class UsuarioCaja implements Serializable {
 	public void setTotalServicio(Double totalServicio) {
 		this.totalServicio = totalServicio;
 	}
-	
+
 	public String getTotalServicioSTR() {
 		return Utils.formateadorMiles(this.totalServicio);
 	}
 
+	public Double getTotalDolares() {
+		return totalDolares;
+	}
+
+	public void setTotalDolares(Double totalDolares) {
+		this.totalDolares = totalDolares;
+	}
+	
+	public String getTotalDolaresSTR() {
+		return Utils.formateadorMiles(this.totalDolares);
+	}
 }

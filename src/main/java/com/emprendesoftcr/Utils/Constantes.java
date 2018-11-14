@@ -7,11 +7,7 @@ public class Constantes {
 	public static final ResourceBundle	RESOURCE_BUNDLE																			= ResourceBundle.getBundle("factura");
 
 	public static final String					PLANTILLA_CORREO_CUENTAS_POR_COBRAR									= "email/cuentasxcobrar.vm";
-
-	public static final Integer					HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO								= 98;
-
-	public static final Integer					FACTURA_ESTADO_PROBLEMA_AL_FIRMAR										= 98;
-
+	
 	public static final String					COMBO_TODOS																					= "0";
 	// Empresa aplica factura Electronica
 	public static final Integer					NO_APLICA_FACTURA_ELECTRONICA												= 1;
@@ -110,6 +106,7 @@ public class Constantes {
 	public static final Integer					HACIENDA_ESTADO_ANULADA															= 9;
 	public static final Integer					HACIENDA_ESTADO_ERROR																= 10;
 	public static final Integer					HACIENDA_ESTADO_PROBLEMA_ENVIO_NO_TRASABLE					= 99;
+	public static final Integer					HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO								= 98;
 	public static final String					HACIENDA_ESTADO_ENVIADO_HACIENDA_str								= "Documento eviado a hacienda.";
 	public static final String					HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR								= "OK";
 	public static final String					HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR							= "ERROR";
@@ -370,6 +367,7 @@ public class Constantes {
 	public static final Integer					FACTURA_ESTADO_REFIRMAR_DOCUMENTO										= 8;
 	public static final Integer					FACTURA_ESTADO_FIRMA_COMPLETO												= 2;
 	public static final Integer					FACTURA_ESTADO_FIRMA_EN_PROCESOS										= 3;
+	public static final Integer					FACTURA_ESTADO_PROBLEMA_AL_FIRMAR  									= 98;
 
 	public static final String					FACTURA_ESTADO_PENDIENTE_STR												= "factura.estado.pendiente";
 	public static final String					FACTURA_ESTADO_FACTURADO_STR												= "factura.estado.facturado";

@@ -9,8 +9,8 @@ import com.emprendesoftcr.modelo.UsuarioCaja;
 
 public class UsuarioCajaCommand {
 
-	private Long		id;
-	private Double	totalFondoInicial;
+	private Long id;
+	private Double totalFondoInicial;
 
 	private Double totalEfectivo;
 
@@ -25,6 +25,8 @@ public class UsuarioCajaCommand {
 	private Double totalAbono;
 
 	private Double totalServicio;
+
+	private Double totalDolares;
 
 	private String totalFondoInicialSTR;
 
@@ -41,6 +43,8 @@ public class UsuarioCajaCommand {
 	private String totalAbonoSTR;
 
 	private String totalServicioSTR;
+
+	private String totalDolaresSTR;
 
 	private Usuario usuario;
 
@@ -69,6 +73,7 @@ public class UsuarioCajaCommand {
 		this.totalBanco = usuarioCaja.getTotalBanco();
 		this.totalCredito = usuarioCaja.getTotalCredito();
 		this.totalNeto = usuarioCaja.getTotalNeto();
+		this.totalDolares = usuarioCaja.getTotalDolares();
 		this.usuario = usuarioCaja.getUsuario();
 		this.caja = usuarioCaja.getCaja();
 		this.created_at = usuarioCaja.getCreated_at();
@@ -86,6 +91,7 @@ public class UsuarioCajaCommand {
 		this.totalNetoSTR = usuarioCaja.getTotalNetoSTR();
 		this.totalAbonoSTR = usuarioCaja.getTotalAbonoSTR();
 		this.totalServicioSTR = usuarioCaja.getTotalServicioSTR();
+		this.totalDolaresSTR = usuarioCaja.getTotalDolaresSTR();
 	}
 
 	public String getCreated_atSTR() {
@@ -278,6 +284,22 @@ public class UsuarioCajaCommand {
 
 	public void setTotalServicio(Double totalServicio) {
 		this.totalServicio = totalServicio;
+	}
+
+	public Double getTotalDolares() {
+		return totalDolares;
+	}
+
+	public void setTotalDolares(Double totalDolares) {
+		this.totalDolares = totalDolares;
+	}
+
+	public String getTotalDolaresSTR() {
+		return totalDolaresSTR;
+	}
+
+	public void setTotalDolaresSTR(String totalDolaresSTR) {
+		this.totalDolaresSTR = totalDolaresSTR;
 	}
 
 }

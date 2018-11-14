@@ -143,10 +143,15 @@
                                     <option  each={estados}  value="{codigo}" selected="{articulo.estado ==codigo?true:false}" >{descripcion}</option>
                                 </select>
                             </div>                          
-
                         </div>
-                      
-                      
+                        <div class="row">
+                             <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                <label >{$.i18n.prop("articulo.comanda")}</label>
+                                <select  class="form-control" id="comanda" name="comanda"  >
+                                    <option each={comanda}  value="{codigo}" selected="{articulo.comanda ==codigo?true:false}" >{descripcion}</option>
+                                </select>
+                            </div>                          
+                        </div>
                     </form>    
                 </div>
                 <div class="box-footer">
@@ -374,6 +379,7 @@
     self.tipoCodigos =[]
     self.contables                 = []
     self.estados                   = []
+    self.comanda                   = []
     self.botonModificar            = false
     self.botonAgregar              = false
     self.mostrarTituloArticulo     = true
@@ -402,7 +408,8 @@
         },
 		empresa:{
             id:null
-        }
+        },
+        comanda:0
     }    
    
     // variables para modulo de inventario 
@@ -415,6 +422,7 @@
 self.on('mount',function(){
     __Eventos()
     __ComboEstados()
+    __ComboComanda()
     __ComboContables()
     __listadoTipoUnidadesActivas()   
     __listadoMarcasActivas()
@@ -437,7 +445,8 @@ self.on('mount',function(){
           self.mostrarFormulario  = true 
           self.botonModificar   = true;
           self.mostrarFormularioEntrada    = false
-          self.botonAgregar     = false;                        
+          self.botonAgregar     = false;            
+          console.log(self.parametros.articulo);
           self.articulo  =  self.parametros.articulo
           self.update()
         
@@ -1018,6 +1027,22 @@ function __listadoTipoUnidadesActivas(){
 }
 /**
 *  Crear el combo de estados
+**/
+function __ComboComanda(){
+    self.comanda =[]
+    self.update()
+    self.comanda.push({
+        codigo: $.i18n.prop("combo.comanda.no.valor"),
+        descripcion: $.i18n.prop("combo.comanda.no")
+     });
+    self.comanda.push({
+        codigo: $.i18n.prop("combo.comanda.si.valor"),
+        descripcion:$.i18n.prop("combo.comanda.si")
+     });
+     self.update();
+}
+/**
+*  Crear el combo comanda
 **/
 function __ComboEstados(){
     self.estados =[]

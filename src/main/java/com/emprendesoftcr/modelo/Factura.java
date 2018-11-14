@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Formula;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.Utils.Constantes;
@@ -299,9 +300,11 @@ public class Factura implements Serializable {
 	public void setTotalImpuestoServicio(Double totalImpuestoServicio) {
 		this.totalImpuestoServicio = totalImpuestoServicio;
 	}
+
 	public String getTotalImpuestoServicioSTR() {
 		return Utils.formateadorMiles(this.totalImpuestoServicio);
 	}
+
 	public Long getId() {
 		return id;
 	}
@@ -837,7 +840,5 @@ public class Factura implements Serializable {
 	public String getTotalDescuentoSTR() {
 		return Utils.formateadorMiles(this.totalDescuentos);
 	}
-	
-	
 
 }

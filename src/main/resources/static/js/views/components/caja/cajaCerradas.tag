@@ -151,10 +151,14 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class= "col-md-4 col-sx-12 col-sm-6 col-lg-4 ">
+                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6 ">
                                 <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalNeto")}  </label>
                                 <input type="text" class="form-control "  value=" {usuarioCaja.totalNetoSTR}" readonly >
                             </div>
+                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                               <label class="knob-label" >{$.i18n.prop("usuarioCaja.totalDolares")}  </label>
+                               <input type="text" class="form-control "  value=" {usuarioCaja.totalDolaresSTR}" readonly >
+                            </div>                            
                         </div>
                     </form>    
                 </div>

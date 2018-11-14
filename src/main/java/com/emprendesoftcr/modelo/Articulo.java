@@ -33,113 +33,107 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "articulos")
 public class Articulo implements Serializable {
 
-	private static final long	serialVersionUID	= 3147925944920227346L;
+	private static final long serialVersionUID = 3147925944920227346L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long						id;
+	private Long id;
 
 	@Column(name = "codigo")
-	private String						codigo;
+	private String codigo;
 
 	@Column(name = "descripcion")
-	private String						descripcion;
+	private String descripcion;
 
 	@Column(name = "serie")
-	private String						serie;
+	private String serie;
 
 	@Column(name = "unidad_medida")
-	private String						unidadMedida;
+	private String unidadMedida;
 
 	@Column(name = "contable")
-	private String						contable;
+	private String contable;
 
 	@Column(name = "costo")
-	private Double						costo;
+	private Double costo;
 
 	@Column(name = "impuesto")
-	private Double						impuesto;
+	private Double impuesto;
 
 	@Column(name = "precio_publico")
-	private Double						precioPublico;
+	private Double precioPublico;
 
 	@Column(name = "ganancia_precio_publico")
-	private Double						gananciaPrecioPublico;
+	private Double gananciaPrecioPublico;
 
 	@Column(name = "precio_mayorista")
-	private Double						precioMayorista;
+	private Double precioMayorista;
 
 	@Column(name = "ganancia_precio_mayorista")
-	private Double						gananciaPrecioMayorista;
+	private Double gananciaPrecioMayorista;
 
 	@Column(name = "precio_especial")
-	private Double						precioEspecial;
-	
+	private Double precioEspecial;
 
 	@Column(name = "ganancia_precio_especial")
-	private Double						gananciaPrecioEspecial;
-	
+	private Double gananciaPrecioEspecial;
+
 	@Column(name = "cantidad")
-	private Double						cantidad;
+	private Double cantidad;
 
 	@Column(name = "minimo")
-	private Double						minimo;
+	private Double minimo;
 
 	@Column(name = "maximo")
-	private Double						maximo;
+	private Double maximo;
 
 	@Column(name = "estado")
-	private String						estado;
+	private String estado;
 
 	@Column(name = "tipo_impuesto")
-	private String						tipoImpuesto;
-	//Tipo de codigo del producto
+	private String tipoImpuesto;
+	// Tipo de codigo del producto
 	@Column(name = "tipo_codigo")
-	private String						tipoCodigo;
+	private String tipoCodigo;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "created_at")
-	private Date							created_at;
+	private Date created_at;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
-	private Date							updated_at;
+	private Date updated_at;
 
 	@ManyToOne
 	@JoinColumn(name = "marca_id")
-	private Marca							marca;
+	private Marca marca;
 
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
-	private Usuario						usuario;
+	private Usuario usuario;
 
 	@ManyToOne
 	@JoinColumn(name = "categoria_id")
-	private Categoria					categoria;
+	private Categoria categoria;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
-	private Empresa						empresa;
+	private Empresa empresa;
 
-	
-	
 	@JsonIgnore
 	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
 	@JoinColumn(name = "articulo_id", referencedColumnName = "id")
 	@OrderBy("id DESC")
-	private Set<Kardex>				kardexs;
+	private Set<Kardex> kardexs;
 
-	
+	// 1 = Articulo cocina
+	@Column(name = "comanda")
+	private Integer comanda = 0;
 
-
-
-
-	
-
-	public Articulo(Long id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, Double cantidad, Double minimo, Double maximo, String estado, String tipoImpuesto, String tipoCodigo, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa,  Set<Kardex> kardexs) {
+	public Articulo(Long id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, Double cantidad, Double minimo, Double maximo, String estado, String tipoImpuesto, String tipoCodigo, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa, Set<Kardex> kardexs) {
 		super();
 		this.id = id;
 		this.codigo = codigo;
@@ -167,12 +161,9 @@ public class Articulo implements Serializable {
 		this.usuario = usuario;
 		this.categoria = categoria;
 		this.empresa = empresa;
-	
+
 		this.kardexs = kardexs;
 	}
-
-
-
 
 	public Articulo() {
 		super();
@@ -189,22 +180,24 @@ public class Articulo implements Serializable {
 		this.maximo = Constantes.ZEROS_DOUBLE;
 		this.minimo = Constantes.ZEROS_DOUBLE;
 		this.cantidad = Constantes.ZEROS_DOUBLE;
-		
+
 	}
 
-	
-
-	
 	public Long getId() {
 		return id;
 	}
 
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	
+
+	public Integer getComanda() {
+		return comanda;
+	}
+
+	public void setComanda(Integer comanda) {
+		this.comanda = comanda;
+	}
 
 	public String getCodigo() {
 		return codigo;
@@ -374,15 +367,10 @@ public class Articulo implements Serializable {
 		this.empresa = empresa;
 	}
 
-	
-	
-	
-	
 	public Set<Kardex> getKardexs() {
 		return kardexs;
 	}
 
-	
 	public void setKardexs(Set<Kardex> kardexs) {
 		this.kardexs = kardexs;
 	}
@@ -397,69 +385,43 @@ public class Articulo implements Serializable {
 			if (kardexs == null) {
 				kardexs = new HashSet<Kardex>();
 			}
-			kardexAsociar.setArticulo(this);;
+			kardexAsociar.setArticulo(this);
+			;
 
 			kardexs.add(kardexAsociar);
 		}
 	}
 
-	
 	public String getTipoCodigo() {
 		return tipoCodigo;
 	}
 
-	
 	public void setTipoCodigo(String tipoCodigo) {
 		this.tipoCodigo = tipoCodigo;
 	}
 
-
-
-
-	
 	public Double getCantidad() {
 		return cantidad;
 	}
 
-
-
-
-	
 	public void setCantidad(Double cantidad) {
 		this.cantidad = cantidad;
 	}
 
-
-
-
-	
 	public Double getMinimo() {
 		return minimo;
 	}
 
-
-
-
-	
 	public void setMinimo(Double minimo) {
 		this.minimo = minimo;
 	}
 
-
-
-
-	
 	public Double getMaximo() {
 		return maximo;
 	}
 
-
-
-
-	
 	public void setMaximo(Double maximo) {
 		this.maximo = maximo;
 	}
-
 
 }

@@ -114,7 +114,7 @@ public class FacturaEsperaCommand {
 	
 
 	private Date			referenciaFechaEmision;
-
+	
 	public FacturaEsperaCommand(Factura factura) {
 		super();
 		this.id = factura.getId();
@@ -168,7 +168,6 @@ public class FacturaEsperaCommand {
 		this.totalComprobanteSTR = factura.getTotalComprobanteSTR();
 		this.totalImpuestoSTR = factura.getTotalImpuestoSTR();
 		this.totalDescuentosSTR = factura.getTotalDescuentoSTR();
-
 	}
 
 	public FacturaEsperaCommand(Detalle detalle) {
@@ -651,5 +650,4 @@ public class FacturaEsperaCommand {
 	public void setMedioBanco(String medioBanco) {
 		this.medioBanco = medioBanco;
 	}
-
 }
