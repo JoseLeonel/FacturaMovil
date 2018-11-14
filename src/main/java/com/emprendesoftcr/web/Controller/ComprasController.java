@@ -244,7 +244,7 @@ public class ComprasController {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		List<String> headers = Arrays.asList("Id", "Fecha Ingreso", "# Documento Receptor", "Proveedor", "Total Impuestos", "Total","usuario");
-		new SimpleExporter().gridExport(headers, compras, "id, fechaIngresoSTR,consecutivo, proveedor.nombreCompleto, totalImpuestoSTR,totalCompraSTR,usuarioIngresoInventario.nombreUsuario ", baos);
+		new SimpleExporter().gridExport(headers, compras, "id, fechaIngresoSTR,consecutivo, proveedorSTR, totalImpuestoSTR,totalCompraSTR,usuarioIngresoInventario.nombreUsuario ", baos);
 		return baos;
 	}
 

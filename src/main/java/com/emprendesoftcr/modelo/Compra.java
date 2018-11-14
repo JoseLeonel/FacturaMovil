@@ -348,6 +348,9 @@ public class Compra implements Serializable {
 		return proveedor;
 	}
 
+	public String getProveedorSTR() {
+		return proveedor == null?Constantes.EMPTY:this.proveedor.getNombreCompleto();
+	}
 	public void setProveedor(Proveedor proveedor) {
 		this.proveedor = proveedor;
 	}
