@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Bo.Impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -15,15 +16,16 @@ import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
+import com.emprendesoftcr.modelo.sqlNativo.UsuarioCajaCategoriaArticulo;
 
 @EnableTransactionManagement
 @Service("usuarioCajaBo")
 public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 
 	@Autowired
-	UsuarioCajaDao	usuarioCajaDao;
+	UsuarioCajaDao usuarioCajaDao;
 
-	private Logger	log	= LoggerFactory.getLogger(this.getClass());
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Transactional
 	@Override
@@ -45,6 +47,7 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 
 	/**
 	 * Buscar por id
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -55,7 +58,9 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 
 	/**
 	 * Buscar por usuario y estado
-	 * @see com.emprendesoftcr.Bo.UsuarioCajaBo#findByUsuarioAndEstado(com.emprendesoftcr.modelo.Usuario, java.lang.String)
+	 * 
+	 * @see com.emprendesoftcr.Bo.UsuarioCajaBo#findByUsuarioAndEstado(com.emprendesoftcr.modelo.Usuario,
+	 *      java.lang.String)
 	 */
 	@Override
 	public UsuarioCaja findByUsuarioAndEstado(Usuario usuario, String estado) {
@@ -65,6 +70,7 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 
 	/**
 	 * Cerrar la caja
+	 * 
 	 * @see com.emprendesoftcr.Bo.UsuarioCajaBo#cierreCaja(com.emprendesoftcr.modelo.UsuarioCaja)
 	 */
 	@Transactional
@@ -74,10 +80,14 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 			usuarioCaja.setUpdated_at(new Date());
 			usuarioCaja.setEstado(Constantes.ESTADO_INACTIVO);
 			Double resultado = Constantes.ZEROS_DOUBLE;
-			Double totalEfectivo = usuarioCaja.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getTotalEfectivo();
-			Double totalBanco = usuarioCaja.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getTotalBanco();
-			Double totalTarjeta = usuarioCaja.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getTotalTarjeta();
-			Double totalAbono = usuarioCaja.getTotalAbono() == null ? Constantes.ZEROS_DOUBLE : usuarioCaja.getTotalAbono();
+			Double totalEfectivo = usuarioCaja.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE
+					: usuarioCaja.getTotalEfectivo();
+			Double totalBanco = usuarioCaja.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE
+					: usuarioCaja.getTotalBanco();
+			Double totalTarjeta = usuarioCaja.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE
+					: usuarioCaja.getTotalTarjeta();
+			Double totalAbono = usuarioCaja.getTotalAbono() == null ? Constantes.ZEROS_DOUBLE
+					: usuarioCaja.getTotalAbono();
 			resultado = totalEfectivo + totalAbono + totalTarjeta + totalBanco;
 			usuarioCaja.setTotalNeto(Utils.roundFactura(resultado, 5));
 			modificar(usuarioCaja);
@@ -91,17 +101,27 @@ public class UsuarioCajaBoImpl implements UsuarioCajaBo {
 
 	/**
 	 * Actualiza Caja activa
-	 * @see com.emprendesoftcr.Bo.UsuarioCajaBo#actualizarCaja(java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double)
+	 * 
+	 * @see com.emprendesoftcr.Bo.UsuarioCajaBo#actualizarCaja(java.lang.Double,
+	 *      java.lang.Double, java.lang.Double, java.lang.Double, java.lang.Double)
 	 */
 	@Transactional
 	@Override
-	public void actualizarCaja(UsuarioCaja usuarioCaja, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double totalAbono, Double totalServicio) throws Exception {
-		usuarioCajaDao.actualizarCaja(usuarioCaja, totalEfectivo, totalTarjeta, totalBanco, totalCredito, totalAbono, totalServicio);
+	public void actualizarCaja(UsuarioCaja usuarioCaja, Double totalEfectivo, Double totalTarjeta, Double totalBanco,
+			Double totalCredito, Double totalAbono, Double totalServicio) throws Exception {
+		usuarioCajaDao.actualizarCaja(usuarioCaja, totalEfectivo, totalTarjeta, totalBanco, totalCredito, totalAbono,
+				totalServicio);
 	}
-	
+
 	@Transactional
 	@Override
 	public void actualizarCaja(UsuarioCaja usuarioCaja) throws Exception {
-		usuarioCajaDao.actualizarCaja(usuarioCaja);		
+		usuarioCajaDao.actualizarCaja(usuarioCaja);
 	}
+
+	@Override
+	public ArrayList<UsuarioCajaCategoriaArticulo> agrupaArticulosCategoria(Integer empresaId, Long usuarioCajaId) {
+		return usuarioCajaDao.agrupaArticulosCategoria(empresaId, usuarioCajaId);
+	}
+
 }

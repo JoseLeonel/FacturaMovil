@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -225,6 +226,7 @@ public class UsuarioCajasController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/MostrarUsuarioCajaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute UsuarioCaja usuarioCaja, BindingResult result, SessionStatus status) throws Exception {
@@ -234,6 +236,15 @@ public class UsuarioCajasController {
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
+	}
+	
+	
+	@RequestMapping(value = "/AgrupaArticulosCategoriaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	@SuppressWarnings({ "rawtypes"})
+	public RespuestaServiceValidator agrupaArticulosCategoria(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idUsuarioCaja) {
+		UsuarioCaja usuarioCaja =  usuarioCajaBo.buscar(idUsuarioCaja);
+		return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", usuarioCajaBo.agrupaArticulosCategoria(usuarioCaja.getCaja().getEmpresa().getId(), usuarioCaja.getId()));
 	}
 
 	/**

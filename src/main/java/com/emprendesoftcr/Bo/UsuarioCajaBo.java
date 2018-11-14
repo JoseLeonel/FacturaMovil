@@ -1,7 +1,10 @@
 package com.emprendesoftcr.Bo;
 
+import java.util.ArrayList;
+
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
+import com.emprendesoftcr.modelo.sqlNativo.UsuarioCajaCategoriaArticulo;
 
 public interface UsuarioCajaBo {
 
@@ -20,4 +23,5 @@ public interface UsuarioCajaBo {
 
 	void actualizarCaja(UsuarioCaja usuarioCaja)throws Exception;
 
+	ArrayList<UsuarioCajaCategoriaArticulo> agrupaArticulosCategoria(Integer empresaId, Long usuarioCajaId);
 }
