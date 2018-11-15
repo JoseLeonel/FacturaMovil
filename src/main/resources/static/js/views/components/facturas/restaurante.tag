@@ -1222,7 +1222,8 @@ __AgregarProductoDePantalla(e){
    var item = e.item
    self.articulo = item;
    self.update()
-   __buscarcodigo(self.articulo.codigo,1);
+    __agregarArticulo(1)
+   //__buscarcodigo(self.articulo.codigo,1);
     $('#codigoBarra').val(null)
 }   
     
@@ -2835,13 +2836,15 @@ function __agregarArticulo(cantidad){
                self.update();
 	  	      	if(self.articulo.comanda == 1){	
 	  	            __nuevoArticuloComanda(cantidad, self.articulo.codigo, self.articulo.descripcion);
-	  	    	}		
+	  	    	}	
+               ActualizarLineaDEtalle()   	
                self.detail[count] = self.item;
                encontrado = true;
                self.seIncluyoUnArticulo = 0
                self.update()
             }
         }
+
     
     }
     // si no existe se agrega como un codigo nuevo

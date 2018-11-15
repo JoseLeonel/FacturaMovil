@@ -568,9 +568,9 @@
         __InicializarTabla('.tableListarFacturasDia')
         agregarInputsCombos_Articulo()
         __ListaFacturasEnEspera()
-       setInterval(function() {
-            __ListaFacturasEnEspera()
-        }.bind(this), 45000)
+      // setInterval(function() {
+      //      __ListaFacturasEnEspera()
+      //  }.bind(this), 45000)
 
         __comboCondicionPago()
         __ComboTipoDocumentos()

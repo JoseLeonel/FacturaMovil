@@ -571,6 +571,37 @@ public class FacturasController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
+	 
+	 @RequestMapping(value = "/ListarFacturasEsperaActivasCajeraAjax", method = RequestMethod.GET, headers = "Accept=application/json")
+		@ResponseBody
+		public RespuestaServiceDataTable listarActivasCajeroAjax(HttpServletRequest request, HttpServletResponse response) {
+		 RespuestaServiceDataTable respuestaServiceDataTable = new RespuestaServiceDataTable(); 
+			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+			if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_CAJERO)) {
+				return respuestaServiceDataTable;
+				
+			}
+			DataTableDelimitador delimitadores = null;
+			delimitadores = new DataTableDelimitador(request, "Factura");
+			JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "=");
+			delimitadores.addFiltro(dataTableFilter);
+			dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO.toString() + "'", "<>");
+			delimitadores.addFiltro(dataTableFilter);
+			dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO.toString() + "'", "<>");
+			delimitadores.addFiltro(dataTableFilter);
+
+			dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_PROFORMAS + "'", "<>");
+			delimitadores.addFiltro(dataTableFilter);
+
+			dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
+			delimitadores.addFiltro(dataTableFilter);
+			if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
+				dataTableFilter = new JqGridFilter("usuarioCreacion.id", "'" + usuarioSesion.getId().toString() + "'", "=");
+				delimitadores.addFiltro(dataTableFilter);
+			}
+
+			return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+		}
 
 	/**
 	 * Facturas En espera de convertirse en factura oficial

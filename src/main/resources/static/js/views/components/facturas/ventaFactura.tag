@@ -1,8 +1,4 @@
 <venta-factura>
-
-
-
-
 <!--Modal Cambiar Cantidad-->
 <div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -26,11 +22,8 @@
         </div>
     </div>
 </div>
-
 <!--Fin Cambiar Cantidad-->
-
 <!--Modal Cambiar Descripcion-->
-
 <div id='modalCambiarDescripcion' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
        <div class="modal-content">
@@ -1127,7 +1120,8 @@ __AgregarProductoDePantalla(e){
     var item =  e.item
     self.articulo = item;
     self.update()
-    __buscarcodigo(self.articulo.codigo,1);
+    __agregarArticulo(1)
+    //__buscarcodigo(self.articulo.codigo,1);
     $('#codigoBarra').val(null)
     
     
@@ -1862,7 +1856,6 @@ __CrearFacturaTemporal(){
 * cCambiar el nombre de la factura
 **/
 __ModificarNombreTiquete(){
-  
     if ($("#formularioModalCambiarNombreTiquete").valid()) {
     self.factura.nombreFactura = $('.cambioNombreTiquete').val()
     self.update()
@@ -1906,8 +1899,6 @@ __ModificarNombreTiquete(){
     });
     }
 }
-
-
 /**
 *  Agregar el nombre a la factura temporal
 **/
@@ -1921,8 +1912,6 @@ __AgregarNombreFacturaTemporal(){
     }
     self.factEspera =null
     self.update()
-    
-
 }
 /**
 ** Se aplica o se crea una Factura cargada en la pantalla
@@ -1965,11 +1954,9 @@ function aplicarFactura(estado){
             if(self.factura.totalTarjeta != 0 || self.factura.totalBanco !=0){
                 if(self.factura.totalComprobante != montoEntregado  ){
                     mensajeError($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
-                return
-                    
+                   return
                 }
             }
-            
         }
     } 
     if ($("#formularioFactura").valid()) {
@@ -2117,7 +2104,6 @@ function __Init(){
     $("#plazoCreditoL").val(null)
     $(".nombreFactura").val(null)
     $(".correoAlternativo").val(null)
-    
     $("#nota").val(null)
     $("#fechaCredito").val(null)
     $('.datepickerFechaCredito').datepicker(
@@ -2220,19 +2206,16 @@ function __displayDate_detail(fecha) {
     var dateTime = new Date(fecha);
     return moment(dateTime).format('YYYY-MM-DD ');
 }
-
 /**
 *  Crear Factura nueva
 **/
 function crearFactura(estado){
-    
     self.detalleFactura.data =self.detail
     self.update() 
     var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
     var fechaReferencia =$('#referenciaFechaEmision').val() !=null?referenciaFechaEmision.value:new Date() 
     var JSONDetalles = JSON.stringify( self.detalleFactura );
     self.factura.id = self.factura.id
-   
     self.factura.condicionVenta = $('#condicionVenta').val()
     self.factura.fechaCredito =fechaCreditoTemporal.toString()
     self.factura.referenciaFechaEmision =fechaReferencia
@@ -2243,7 +2226,6 @@ function crearFactura(estado){
     self.factura.estado = estado
     self.update();
     var formulario = $("#formularioFactura").serialize();
-
     $.ajax({
         type : "POST",
         dataType : "json",
@@ -2604,13 +2586,11 @@ function __agregarArticulo(cantidad){
                self.update()
             }
         }
-    
     }
     // si no existe se agrega como un codigo nuevo
     if(encontrado == false){ // add elemen
        self.seIncluyoUnArticulo = 0
        self.update()
-
       __nuevoArticuloAlDetalle(cantidad);
     }
     __calculate(); 
@@ -2899,14 +2879,11 @@ function __calculate() {
     self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
     self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
     self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
-
-  //  self.articulo              = null;
     self.update(); 
     $( "#codigoBarra" ).val(null);
     $( "#quantity" ).val(null);
     getSubTotalGeneral()
 }
-
 function calcularImpuestoServicio(){
     var resultado = 0
      self.detail.forEach(function(e){
@@ -2922,15 +2899,12 @@ function calcularImpuestoServicio(){
             self.item.subTotal       = resultado
             self.item.montoTotal     = resultado
             self.item.montoTotalLinea = resultado
-
             self.update();
             ActualizarLineaDEtalle()
             self.detail[count] = self.item;
             self.update();
         }
     }
-    
-
 }
 /**
 *  Sub Total Generar de la factura
@@ -3007,8 +2981,7 @@ function __informacionData_vendedores(){
 	 							                }	 
 								            },
                                         ];                              
-   
-}
+ }
 /**
 * Opciones del modal de clientes
 */
@@ -3090,8 +3063,6 @@ function __comboCondicionPago(){
     })
     self.update()
 }
-
-
 /**
 * cargar los tipos de Documento de la factura
 **/

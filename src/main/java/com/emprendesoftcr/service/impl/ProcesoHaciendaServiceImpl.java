@@ -537,14 +537,12 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						RecepcionFactura recepcionFactura = recepcionFacturaBo.findByConsecutivoAndEmpresa(haciendaBD.getConsecutivo(), haciendaBD.getEmpresa());
 						if (recepcionFactura != null) {
 							listaCorreos.add(recepcionFactura.getEmpresa().getCorreoElectronico());
-
 						}
 						if (listaCorreos != null) {
 							if (!listaCorreos.isEmpty()) {
 								enviarCorreosRecepcion(recepcionFactura, haciendaBD, listaCorreos);
 								haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
 								haciendaBo.modificar(haciendaBD);
-
 							}
 						}
 					} else {
@@ -862,8 +860,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
-	 */	
-  @Scheduled(cron = "0 0/25 * * * ?")
+	 */
+	@Scheduled(cron = "0 0/25 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {

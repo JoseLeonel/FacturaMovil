@@ -193,7 +193,11 @@ public class DetalleController {
 	public String listaFacturas(ModelMap model) {
 		return "views/detalle/ListaDetallesImpuestoServicio";
 	}
-
+	
+	@RequestMapping(value = "/ListaDetallesxArticulo", method = RequestMethod.GET)
+	public String listaFacturasxCodigo(ModelMap model) {
+		return "views/detalle/ListaDetallesxCodigo";
+	}
 	
 	
 
