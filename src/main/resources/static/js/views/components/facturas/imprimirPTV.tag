@@ -4,7 +4,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div  class= "wrap">
-        <h1 >{titulo}<h1>
+        <h1 >{titulo}</h1>
         <div class="pantalla-imprimir">
             <div class="botones-imprimir">
                 <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
@@ -35,7 +35,7 @@
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura != ""}"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.nombreFactura}</div>
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == "" }"><strong show={facturaImpresa.cliente.nombreCompleto != 'CLIENTE_FRECUENTE'}>{$.i18n.prop("tikect.encabezado.receptor")}     {facturaImpresa.cliente.nombreCompleto}</strong ></div>
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == ""}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}>{$.i18n.prop("tikect.encabezado.receptor.cedula")}  {facturaImpresa.cliente.cedula}   </strong></div>
-                        <div class="encabezado" show ="{ facturaImpresa.nota != ""}">Nota:{facturaImpresa.nota}  <br/></div>
+                        <div class="encabezado" show ="{ facturaImpresa.nota != ""}"> "Nota:"   {facturaImpresa.nota}  <br/></div>
                         <table class = "forma-table">
                             <thead>
                                 <tr class = "forma-table">
@@ -91,14 +91,12 @@
                             <td ><strong>{$.i18n.prop("tikect.totalCambioPagar")}</strong></td>
                             <td ><strong>{facturaImpresa.totalCambioPagarSTR}</strong></td>
                             </tr>                            
-                            <tr show={facturaImpresa.tipoCambio > 1}>>
+                            <tr show={facturaImpresa.tipoCambio > 1}>
                                 <td></td>
                                 <td class="precio" ><strong>{$.i18n.prop("tipoCambio.cambioDolar")}</strong></td>
                                 <td class="precio" ><strong>{facturaImpresa.tipoCambioSTR}</strong></td>
                                 <br>
                             </tr>
-                                                 
-
                             <tr>
                             <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
                             </tr>
@@ -138,7 +136,10 @@
 
 
 
-<style type="text/css">
+<style type="text/css"  >
+    #divQR{
+        border:1px solid red;
+    }
     .fondoEncabezado
     {
         background: #00539B;
@@ -319,7 +320,7 @@ self.on('mount',function(){
 
 
        consultaFactura(self.facturaImpresa.id)
-        //qr()
+      //  qr()
     }
    
    
@@ -564,6 +565,7 @@ function __ComboTipoDocumentos(){
 function __imprimir(){
     var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
      var div = document.querySelector("#imprimeme");
+    
     imprimirElemento(div)
     
 
@@ -571,6 +573,8 @@ function __imprimir(){
 
 
 function imprimirElemento(elemento){
+ 
+  
   var ventana = window.open('', 'PRINT', 'height=400,width=600');
   ventana.document.write('<html><head><title>' + "" + '</title>');
   ventana.document.write('</head><body >');

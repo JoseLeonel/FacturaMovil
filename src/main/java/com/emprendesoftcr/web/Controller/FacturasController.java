@@ -571,37 +571,37 @@ public class FacturasController {
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
-	 
-	 @RequestMapping(value = "/ListarFacturasEsperaActivasCajeraAjax", method = RequestMethod.GET, headers = "Accept=application/json")
-		@ResponseBody
-		public RespuestaServiceDataTable listarActivasCajeroAjax(HttpServletRequest request, HttpServletResponse response) {
-		 RespuestaServiceDataTable respuestaServiceDataTable = new RespuestaServiceDataTable(); 
-			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-			if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_CAJERO)) {
-				return respuestaServiceDataTable;
-				
-			}
-			DataTableDelimitador delimitadores = null;
-			delimitadores = new DataTableDelimitador(request, "Factura");
-			JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "=");
-			delimitadores.addFiltro(dataTableFilter);
-			dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO.toString() + "'", "<>");
-			delimitadores.addFiltro(dataTableFilter);
-			dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO.toString() + "'", "<>");
-			delimitadores.addFiltro(dataTableFilter);
 
-			dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_PROFORMAS + "'", "<>");
-			delimitadores.addFiltro(dataTableFilter);
+	@RequestMapping(value = "/ListarFacturasEsperaActivasCajeraAjax", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarActivasCajeroAjax(HttpServletRequest request, HttpServletResponse response) {
+		RespuestaServiceDataTable respuestaServiceDataTable = new RespuestaServiceDataTable();
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_CAJERO)) {
+			return respuestaServiceDataTable;
 
-			dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
-			delimitadores.addFiltro(dataTableFilter);
-			if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
-				dataTableFilter = new JqGridFilter("usuarioCreacion.id", "'" + usuarioSesion.getId().toString() + "'", "=");
-				delimitadores.addFiltro(dataTableFilter);
-			}
-
-			return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 		}
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Factura");
+		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO.toString() + "'", "<>");
+		delimitadores.addFiltro(dataTableFilter);
+		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO.toString() + "'", "<>");
+		delimitadores.addFiltro(dataTableFilter);
+
+		dataTableFilter = new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_PROFORMAS + "'", "<>");
+		delimitadores.addFiltro(dataTableFilter);
+
+		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+		if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
+			dataTableFilter = new JqGridFilter("usuarioCreacion.id", "'" + usuarioSesion.getId().toString() + "'", "=");
+			delimitadores.addFiltro(dataTableFilter);
+		}
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+	}
 
 	/**
 	 * Facturas En espera de convertirse en factura oficial
@@ -694,10 +694,10 @@ public class FacturasController {
 
 	@RequestMapping(value = "/ListarFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente,@RequestParam String tipoDocumento) {
+	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam String tipoDocumento) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Cliente cliente = clienteBo.buscar(idCliente);
-		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cliente, usuarioSesion.getEmpresa(), usuarioBo,tipoDocumento);
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cliente, usuarioSesion.getEmpresa(), usuarioBo, tipoDocumento);
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
@@ -744,8 +744,8 @@ public class FacturasController {
 		Date fechahoy = new Date();
 		DateFormat df = new SimpleDateFormat(Constantes.DATE_FORMAT7);
 		String reportDate = df.format(fechahoy);
-    String tipoDocumento = Constantes.COMBO_TODOS;
-		DataTableDelimitador query = DelimitadorBuilder.get(request, reportDate, reportDate, cliente, usuarioSesion.getEmpresa(), usuarioBo,tipoDocumento);
+		String tipoDocumento = Constantes.COMBO_TODOS;
+		DataTableDelimitador query = DelimitadorBuilder.get(request, reportDate, reportDate, cliente, usuarioSesion.getEmpresa(), usuarioBo, tipoDocumento);
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
@@ -876,6 +876,18 @@ public class FacturasController {
 				}
 				facturaCommand.setVendedor(vendedor);
 
+			}
+			// Validar el codigo de factura que se le va aplicar una nota de credito
+			if (facturaCommand.getReferenciaNumero() != null) {
+				if (!facturaCommand.getReferenciaNumero().equals(Constantes.EMPTY)) {
+					Factura facturaReferenciaValidar = facturaBo.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa());
+					if (facturaReferenciaValidar == null) {
+						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.aplicar.nota.credito.o.debito.no.existe", result.getAllErrors());
+					}else {
+						facturaCommand.setReferenciaTipoDoc(facturaReferenciaValidar.getTipoDoc());
+						
+					}
+				}
 			}
 			facturaCommand.setEmpresa(usuario.getEmpresa());
 			facturaFormValidator.validate(facturaCommand, result);
@@ -1297,7 +1309,7 @@ public class FacturasController {
 
 	private static class DelimitadorBuilder {
 
-		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Cliente cliente, Empresa empresa, UsuarioBo usuarioBo,String tipoDocumento) {
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Cliente cliente, Empresa empresa, UsuarioBo usuarioBo, String tipoDocumento) {
 			// Consulta por fechas
 			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Factura");
 			Date fechaInicio = new Date();
@@ -1315,9 +1327,9 @@ public class FacturasController {
 				Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 				delimitador.addFiltro(new JqGridFilter("usuarioCreacion.id", "'" + usuario.getId().toString() + "'", "="));
 			}
-			if(tipoDocumento !=null) {
-				if(!tipoDocumento.equals(Constantes.EMPTY)) {
-					if(!tipoDocumento.equals(Constantes.COMBO_TODOS)) {
+			if (tipoDocumento != null) {
+				if (!tipoDocumento.equals(Constantes.EMPTY)) {
+					if (!tipoDocumento.equals(Constantes.COMBO_TODOS)) {
 						delimitador.addFiltro(new JqGridFilter("tipoDoc", "'" + tipoDocumento.toString() + "'", "="));
 					}
 				}

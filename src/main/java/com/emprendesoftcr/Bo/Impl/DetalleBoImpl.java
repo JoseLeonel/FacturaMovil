@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Bo.Impl;
 
+import java.util.Collection;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -11,8 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Dao.DetalleDao;
+import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Detalle;
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.modelo.Usuario;
 
 
 @EnableTransactionManagement
@@ -55,6 +59,12 @@ public class DetalleBoImpl implements DetalleBo {
 			throw e;
 		}
 
+	}
+	
+	@Override
+	public Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, String codigo, String tipoDocumento, Cliente cliente, Empresa empresa, Usuario usuario)
+	{
+		return detalleDao.facturasRangoEstado(estado, fechaInicio, fechaFin, codigo, tipoDocumento, cliente, empresa, usuario);
 	}
 
 }

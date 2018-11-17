@@ -52,7 +52,7 @@
                                     <div class="form-group ">
                                         <input   type="hidden" class="form-control" id="cliente" name="cliente" value="{cliente.id}">
                                         <label>{$.i18n.prop("factura.cliente")}</label> 
-                                        <input onclick = {_EscogerClientes}  type="text" id="nombreCliente" name="nombreCliente" class="form-control"  value="{cliente.nombreCompleto}" readonly>
+                                        <input  type="text" id="nombreCliente" name="nombreCliente" class="form-control"  value="{cliente.nombreCompleto}" readonly>
                                     </div>
                                     <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group ">
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 

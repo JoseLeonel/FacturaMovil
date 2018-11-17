@@ -519,7 +519,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Solo se van enviar correos a la empresa cuando es un cliente o correo alternativo los tiquetes de clientes frecuentes no lo vamos enviar para ver el comportamiento de rendimiento Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/3 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -771,7 +771,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			Collection<Factura> lista = facturaBo.findByEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE, Constantes.FACTURA_ESTADO_REFIRMAR_DOCUMENTO);
 			for (Factura factura : lista) {
 				try {
-					log.info("Factura:  {}", factura.getNumeroConsecutivo() + " Empresa:" + factura.getEmpresa().getNombre());
+					log.info("Factura id	:  {}", factura.getId() + "Factura proceso de firmado:  {}", factura.getNumeroConsecutivo() + " Empresa:" + factura.getEmpresa().getNombre());
 
 					if (factura != null) {
 						if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
@@ -811,7 +811,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 												hacienda.setCedulaReceptor(factura.getCliente().getCedula());
 												hacienda.setTipoReceptor(factura.getCliente().getTipoCedula());
 											}
-
 										}
 										hacienda.setEmpresa(factura.getEmpresa());
 										hacienda.setClave(factura.getClave());

@@ -26,9 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * Articulos relacionados a la venta Detalle.
  * @author jose.
- * @since 22 abr. 2018
- * Tomo la decision de hacer la relacion de articulo porque pensando en manejar la factura como un servicio aparte
- * en el futuro dividir el proyecto en administrativo y ventas
+ * @since 22 abr. 2018 Tomo la decision de hacer la relacion de articulo porque pensando en manejar la factura como un servicio aparte en el futuro dividir el proyecto en administrativo y ventas
  */
 
 @Entity
@@ -40,7 +38,7 @@ public class Detalle implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long						id;
+	private Long							id;
 
 	@Column(name = "numero_linea")
 	private Integer						numeroLinea;
@@ -53,7 +51,7 @@ public class Detalle implements Serializable {
 
 	@Column(name = "tipo_codigo")
 	private String						tipoCodigo;
-	
+
 	@Column(name = "tipo_impuesto")
 	private String						tipoImpuesto;
 
@@ -112,7 +110,6 @@ public class Detalle implements Serializable {
 	@JoinColumn(name = "factura_id")
 	private Factura						factura;
 
-	
 	@JsonIgnore
 	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -133,11 +130,11 @@ public class Detalle implements Serializable {
 		this.precioUnitario = detalleFacturaCommand.getPrecioUnitario();
 		this.cantidad = detalleFacturaCommand.getCantidad();
 		this.montoTotal = detalleFacturaCommand.getMontoTotal();
-		this.montoDescuento = detalleFacturaCommand.getMontoDescuento() ==null?Constantes.ZEROS_DOUBLE:detalleFacturaCommand.getMontoDescuento();
+		this.montoDescuento = detalleFacturaCommand.getMontoDescuento() == null ? Constantes.ZEROS_DOUBLE : detalleFacturaCommand.getMontoDescuento();
 		this.naturalezaDescuento = detalleFacturaCommand.getNaturalezaDescuento() == null ? Constantes.EMPTY : detalleFacturaCommand.getNaturalezaDescuento();
 		this.subTotal = detalleFacturaCommand.getSubTotal();
-		this.impuesto = detalleFacturaCommand.getImpuesto() ==null?Constantes.ZEROS_DOUBLE:detalleFacturaCommand.getImpuesto();
-		this.montoImpuesto = detalleFacturaCommand.getMontoImpuesto() ==null?Constantes.ZEROS_DOUBLE:detalleFacturaCommand.getMontoImpuesto();
+		this.impuesto = detalleFacturaCommand.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : detalleFacturaCommand.getImpuesto();
+		this.montoImpuesto = detalleFacturaCommand.getMontoImpuesto() == null ? Constantes.ZEROS_DOUBLE : detalleFacturaCommand.getMontoImpuesto();
 		this.montoTotalLinea = detalleFacturaCommand.getMontoTotalLinea();
 		this.ganancia = Constantes.ZEROS_DOUBLE;
 		this.porcentajeDesc = detalleFacturaCommand.getPorcentajeDesc() != null ? detalleFacturaCommand.getPorcentajeDesc() : Constantes.ZEROS_DOUBLE;
@@ -145,25 +142,14 @@ public class Detalle implements Serializable {
 		this.tipoCodigo = detalleFacturaCommand.getTipoCodigo();
 		this.codigo = detalleFacturaCommand.getCodigo();
 		this.unidadMedida = detalleFacturaCommand.getUnidadMedida();
-		this.tipoImpuesto = detalleFacturaCommand.getTipoImpuesto() ==null?Constantes.EMPTY:detalleFacturaCommand.getTipoImpuesto();
+		this.tipoImpuesto = detalleFacturaCommand.getTipoImpuesto() == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoImpuesto();
 
 	}
-	
-	
 
-
-
-
-
-	
-	
-	
-	
 	public Long getId() {
 		return id;
 	}
 
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -172,7 +158,6 @@ public class Detalle implements Serializable {
 		return tipoImpuesto;
 	}
 
-	
 	public void setTipoImpuesto(String tipoImpuesto) {
 		this.tipoImpuesto = tipoImpuesto;
 	}
@@ -224,7 +209,7 @@ public class Detalle implements Serializable {
 	public void setPrecioUnitario(Double precioUnitario) {
 		this.precioUnitario = precioUnitario;
 	}
-	
+
 	public String getPrecioUnitarioSTR() {
 		return Utils.formateadorMiles(this.precioUnitario);
 	}
@@ -240,6 +225,7 @@ public class Detalle implements Serializable {
 	public String getCantidadSTR() {
 		return Utils.formateadorMiles(this.cantidad);
 	}
+
 	public Double getMontoTotal() {
 		return montoTotal;
 	}
@@ -247,6 +233,7 @@ public class Detalle implements Serializable {
 	public void setMontoTotal(Double montoTotal) {
 		this.montoTotal = montoTotal;
 	}
+
 	public String getMontoTotalSTR() {
 		return Utils.formateadorMiles(this.montoTotal);
 	}
@@ -258,6 +245,7 @@ public class Detalle implements Serializable {
 	public void setMontoDescuento(Double montoDescuento) {
 		this.montoDescuento = montoDescuento;
 	}
+
 	public String getMontoDescuentoSTR() {
 		return Utils.formateadorMiles(this.montoDescuento);
 	}
@@ -277,17 +265,20 @@ public class Detalle implements Serializable {
 	public void setSubTotal(Double subTotal) {
 		this.subTotal = subTotal;
 	}
+
 	public String getSubTotalSTR() {
 		return Utils.formateadorMiles(this.subTotal);
 	}
 
-	
 	public Double getImpuesto() {
 		return impuesto;
 	}
 
 	public void setImpuesto(Double impuesto) {
 		this.impuesto = impuesto;
+	}
+	public String getImpuestoSTR() {
+		return Utils.formateadorMiles(this.impuesto);
 	}
 
 	public Double getMontoImpuesto() {
@@ -301,7 +292,7 @@ public class Detalle implements Serializable {
 	public String getMontoImpuestoSTR() {
 		return Utils.formateadorMiles(this.montoImpuesto);
 	}
-	
+
 	public Double getMontoTotalLinea() {
 		return montoTotalLinea;
 	}
@@ -309,7 +300,7 @@ public class Detalle implements Serializable {
 	public void setMontoTotalLinea(Double montoTotalLinea) {
 		this.montoTotalLinea = montoTotalLinea;
 	}
-	
+
 	public String getMontoTotalLineaSTR() {
 		return Utils.formateadorMiles(this.montoTotalLinea);
 	}
@@ -362,7 +353,6 @@ public class Detalle implements Serializable {
 		this.factura = factura;
 	}
 
-	
 	public Usuario getUsuario() {
 		return usuario;
 	}

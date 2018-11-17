@@ -7,6 +7,8 @@ public class Constantes {
 	public static final ResourceBundle	RESOURCE_BUNDLE																			= ResourceBundle.getBundle("factura");
 
 	public static final String					PLANTILLA_CORREO_CUENTAS_POR_COBRAR									= "email/cuentasxcobrar.vm";
+	public static final String					PLANTILLA_CORREO_VENTA_POR_CODIGO 									= "email/ventasXCodigo.vm";
+	
 	
 	public static final String					COMBO_TODOS																					= "0";
 	// Empresa aplica factura Electronica

@@ -1,6 +1,7 @@
 package com.emprendesoftcr.web.command;
 
-import javax.persistence.Column;
+import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.modelo.Detalle;
 
 /**
  * Linea de detalles que viene en la venta desde el front end DetalleFacturaCommand.
@@ -42,11 +43,43 @@ public class DetalleFacturaCommand {
 
 	private String	unidadMedida;
 
-	
 	private String	tipoImpuesto;
+
+	private String	fechaEmisionSTR;
+	private String	consecutivo;
+
+	private String	tipoDoc;
+	
+	private String nombreUsuario;
 
 	public DetalleFacturaCommand() {
 		super();
+	}
+
+	public DetalleFacturaCommand(Detalle detalle) {
+
+		this.id = detalle.getId();
+		this.numeroLinea = detalle.getNumeroLinea();
+		this.precioUnitario = detalle.getPrecioUnitario();
+		this.cantidad = detalle.getCantidad();
+		this.montoTotal = detalle.getMontoTotal();
+		this.montoDescuento = detalle.getMontoDescuento();
+		this.naturalezaDescuento = detalle.getNaturalezaDescuento();
+		this.subTotal = detalle.getSubTotal();
+		this.impuesto = detalle.getImpuesto();
+		this.montoImpuesto = detalle.getMontoImpuesto();
+		this.montoTotalLinea = detalle.getMontoTotalLinea();
+		this.ganancia = detalle.getGanancia();
+		this.porcentajeDesc = detalle.getPorcentajeDesc();
+		this.descripcion = detalle.getDescripcion();
+		this.tipoCodigo = detalle.getTipoCodigo();
+		this.codigo = detalle.getCodigo();
+		this.unidadMedida = detalle.getUnidadMedida();
+		this.tipoImpuesto = detalle.getTipoImpuesto();
+		this.fechaEmisionSTR = detalle.getFactura().getFechaEmisionSTR();
+		this.consecutivo = detalle.getFactura().getNumeroConsecutivo();
+		this.tipoDoc = detalle.getFactura().getTipoDoc();
+		this.nombreUsuario = detalle.getFactura().getUsuarioCreacion().getNombreUsuario();
 	}
 
 	public Long getId() {
@@ -55,6 +88,41 @@ public class DetalleFacturaCommand {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+ 
+	
+	
+	public String getNombreUsuario() {
+		return nombreUsuario;
+	}
+
+	
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
+	}
+
+	public String getTipoDoc() {
+		return tipoDoc;
+	}
+
+	public void setTipoDoc(String tipoDoc) {
+		this.tipoDoc = tipoDoc;
+	}
+
+	public String getConsecutivo() {
+		return consecutivo;
+	}
+
+	public void setConsecutivo(String consecutivo) {
+		this.consecutivo = consecutivo;
+	}
+
+	public String getFechaEmisionSTR() {
+		return fechaEmisionSTR;
+	}
+
+	public void setFechaEmisionSTR(String fechaEmisionSTR) {
+		this.fechaEmisionSTR = fechaEmisionSTR;
 	}
 
 	public String getTipoImpuesto() {
@@ -113,12 +181,20 @@ public class DetalleFacturaCommand {
 		this.precioUnitario = precioUnitario;
 	}
 
+	public String getPrecioUnitarioSTR() {
+		return Utils.formateadorMiles(this.precioUnitario);
+	}
+
 	public Double getCantidad() {
 		return cantidad;
 	}
 
 	public void setCantidad(Double cantidad) {
 		this.cantidad = cantidad;
+	}
+
+	public String getCantidadSTR() {
+		return Utils.formateadorMiles(this.cantidad);
 	}
 
 	public Double getMontoTotal() {
@@ -129,12 +205,20 @@ public class DetalleFacturaCommand {
 		this.montoTotal = montoTotal;
 	}
 
+	public String getMontoTotalSTR() {
+		return Utils.formateadorMiles(this.montoTotal);
+	}
+
 	public Double getMontoDescuento() {
 		return montoDescuento;
 	}
 
 	public void setMontoDescuento(Double montoDescuento) {
 		this.montoDescuento = montoDescuento;
+	}
+
+	public String getMontoDescuentoSTR() {
+		return Utils.formateadorMiles(this.montoDescuento);
 	}
 
 	public String getNaturalezaDescuento() {
@@ -153,12 +237,20 @@ public class DetalleFacturaCommand {
 		this.subTotal = subTotal;
 	}
 
+	public String getSubTotalSTR() {
+		return Utils.formateadorMiles(this.subTotal);
+	}
+
 	public Double getImpuesto() {
 		return impuesto;
 	}
 
 	public void setImpuesto(Double impuesto) {
 		this.impuesto = impuesto;
+	}
+
+	public String getImpuestoSTR() {
+		return Utils.formateadorMiles(this.impuesto);
 	}
 
 	public Double getMontoImpuesto() {
@@ -169,12 +261,20 @@ public class DetalleFacturaCommand {
 		this.montoImpuesto = montoImpuesto;
 	}
 
+	public String getMontoImpuestoSTR() {
+		return Utils.formateadorMiles(this.montoImpuesto);
+	}
+
 	public Double getMontoTotalLinea() {
 		return montoTotalLinea;
 	}
 
 	public void setMontoTotalLinea(Double montoTotalLinea) {
 		this.montoTotalLinea = montoTotalLinea;
+	}
+
+	public String getMontoTotalLineaSTR() {
+		return Utils.formateadorMiles(this.montoTotalLinea);
 	}
 
 	public Double getGanancia() {

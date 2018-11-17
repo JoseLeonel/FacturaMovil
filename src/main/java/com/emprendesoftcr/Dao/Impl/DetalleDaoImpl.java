@@ -13,12 +13,14 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.DetalleDao;
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Detalle;
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.modelo.Usuario;
 
 /**
- * Detalles de ventas
- * DetalleDaoImpl.
+ * Detalles de ventas DetalleDaoImpl.
  * @author jose.
  * @since 3 nov. 2018
  */
@@ -61,8 +63,44 @@ public class DetalleDaoImpl implements DetalleDao {
 			throw e;
 		}
 	}
-	
-	
-	
+
+	@Override
+	public Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, String codigo, String tipoDocumento, Cliente cliente, Empresa empresa, Usuario usuario) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select obj from Detalle obj");
+		hql.append(" where obj.factura.estado = :estado ");
+		if (cliente != null) {
+			hql.append("and obj.factura.cliente = :cliente ");
+		}
+		if (usuario != null) {
+			hql.append("and obj.factura.usuarioCreacion = :usuario ");
+		}
+		hql.append("and obj.factura.empresa = :empresa ");
+		if (tipoDocumento != null) {
+			if (!tipoDocumento.equals(Constantes.COMBO_TODOS)) {
+				hql.append("and obj.factura.tipoDoc = :tipoDocumento ");
+			}
+		}
+		hql.append("and obj.codigo = :codigo ");
+		hql.append("and obj.factura.created_at >= :fechaInicio and obj.factura.created_at <= :fechaFin ");
+		Query query = entityManager.createQuery(hql.toString());
+		query.setParameter("estado", estado);
+		if (tipoDocumento != null) {
+			if (!tipoDocumento.equals(Constantes.COMBO_TODOS)) {
+				query.setParameter("tipoDocumento", tipoDocumento);
+			}
+		}
+		if (cliente != null) {
+			query.setParameter("cliente", cliente);
+		}
+		if (usuario != null) {
+			query.setParameter("usuario", usuario);
+		}
+		query.setParameter("empresa", empresa);
+		query.setParameter("codigo", codigo);
+		query.setParameter("fechaInicio", fechaInicio);
+		query.setParameter("fechaFin", fechaFin);
+		return query.getResultList();
+	}
 
 }
