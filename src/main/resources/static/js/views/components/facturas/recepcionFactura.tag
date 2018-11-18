@@ -34,39 +34,39 @@
             <div class="box box-solid box-primary">
                 <div class="box-body">
                     <form id="formularioAceptarForm" name="formularioAceptarForm" class="advanced-search-form">
-				        <input type="hidden" name="tipoCedulaEmisor" id="tipoCedulaEmisor" value="{recepcionFactura.emisorTipoCedula}">
+				        <input type="hidden" name="emisorTipoCedula" id="emisorTipoCedula" value="{recepcionFactura.emisorTipoCedula}">
                         <div class="row">                        
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label> {$.i18n.prop("factura.clave")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control recepcionClave" placeHolder ="{$.i18n.prop("factura.clave")}" id="clave" name="clave" value="{recepcionFactura.clave}">
+                                <input type="text" readonly="readonly" class="form-control facturaClave" placeHolder ="{$.i18n.prop("factura.clave")}" id="facturaClave" name="facturaClave" value="{recepcionFactura.facturaClave}">
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label> {$.i18n.prop("emisor.cedula")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control recepcionCedulaEmisor" placeHolder ="{$.i18n.prop("emisor.cedula")}" id="cedulaEmisor" name="cedulaEmisor" value="{recepcionFactura.cedulaEmisor}">
+                                <input type="text" readonly="readonly" class="form-control emisorCedula" placeHolder ="{$.i18n.prop("emisor.cedula")}" id="emisorCedula" name="emisorCedula" value="{recepcionFactura.emisorCedula}">
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label> {$.i18n.prop("factura.fechaEmision")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control recepcionFechaEmision" placeHolder ="{$.i18n.prop("factura.fechaEmision")}" id="fechaEmision" name="fechaEmision" value="{recepcionFactura.fechaEmision}">
+                                <input type="text" readonly="readonly" class="form-control facturaFechaEmision" placeHolder ="{$.i18n.prop("factura.fechaEmision")}" id="facturaFechaEmision" name="facturaFechaEmision" value="{recepcionFactura.facturaFechaEmision}">
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label> {$.i18n.prop("factura.totalImpuestos")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control recepcionTotalImpuestos" placeHolder ="{$.i18n.prop("factura.totalImpuestos")}" id="totalImpuestos" name="totalImpuestos" value="{recepcionFactura.totalImpuestos}">
+                                <input type="text" readonly="readonly" class="form-control facturaTotalImpuestos" placeHolder ="{$.i18n.prop("factura.totalImpuestos")}" id="facturaTotalImpuestos" name="facturaTotalImpuestos" value="{recepcionFactura.facturaTotalImpuestos}">
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label> {$.i18n.prop("factura.totalComprobante")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control recepcionTotalVentaNeta" placeHolder ="{$.i18n.prop("factura.totalComprobante")}" id="totalFactura" name="totalFactura" value="{recepcionFactura.totalFactura}">
+                                <input type="text" readonly="readonly" class="form-control facturaTotalComprobante" placeHolder ="{$.i18n.prop("factura.totalComprobante")}" id="facturaTotalComprobante" name="facturaTotalComprobante" value="{recepcionFactura.facturaTotalComprobante}">
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label> {$.i18n.prop("factura.tipoCambio")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control recepcionTipoCambio" placeHolder ="{$.i18n.prop("factura.tipoCambio")}" id="tipoCambio" name="tipoCambio" value="{recepcionFactura.tipoCambio}">
+                                <input type="text" readonly="readonly" class="form-control facturaTipoCambio" placeHolder ="{$.i18n.prop("factura.tipoCambio")}" id="facturaTipoCambio" name="facturaTipoCambio" value="{recepcionFactura.facturaTipoCambio}">
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label> {$.i18n.prop("factura.codigoMoneda")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control recepcionCodigoMonedad" placeHolder ="{$.i18n.prop("factura.codigoMoneda")}" id="codigoMoneda" name="codigoMoneda" value="{recepcionFactura.codigoMoneda}">
+                                <input type="text" readonly="readonly" class="form-control facturaCodigoMoneda" placeHolder ="{$.i18n.prop("factura.codigoMoneda")}" id="facturaCodigoMoneda" name="facturaCodigoMoneda" value="{recepcionFactura.facturaCodigoMoneda}">
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label> {$.i18n.prop("receptor.cedula")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control recepcionReceptorCedula" placeHolder ="{$.i18n.prop("receptor.cedula")}" id="cedulaReceptor" name="cedulaReceptor" value="{recepcionFactura.cedulaReceptor}">
+                                <input type="text" readonly="readonly" class="form-control receptorCedula" placeHolder ="{$.i18n.prop("receptor.cedula")}" id="receptorCedula" name="receptorCedula" value="{recepcionFactura.receptorCedula}">
                             </div>                                                        
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label> {$.i18n.prop("receptor.mensaje")}  <span class="requeridoDato">*</span></label>
@@ -312,7 +312,6 @@
 				emisorNombre:"",
 				emisorCedula:"",
 				emisorTipoCedula:"",
-				emisorCorreo:"",
 				emisorCodigoProvincia:"0",
 				emisorProvincia:"",
 				emisorCanton:"",
@@ -351,20 +350,46 @@
 		
 		self.recepcionFactura ={
 				id:null,
-				clave:"",
-				cedulaEmisor:"",
-				emisorTipoCedula:"",
-				fechaEmision:"",
 				mensaje:"0",
 				detalleMensaje:"",
-				totalImpuestos:"0",
-				totalFactura:"0",
-				cedulaReceptor:"",
-				numeroConsecutivoReceptor:"",
-				tipoCambio:"1",
-				codigoMoneda:"CRC"
-
-		}
+				emisorNombre:"",
+				emisorCedula:"",
+				emisorTipoCedula:"",
+				emisorCodigoProvincia:"0",
+				emisorProvincia:"",
+				emisorCanton:"",
+				emisorCodigoCanton:"",
+				emisorDistrito:"",
+				emisorCodigoDistrito:"",
+				emisorCorreo:"",
+				emisorOtraSena:"",
+				receptorNombre:"",
+				receptorCedula:"",
+				receptorTipoCedula:"",
+				receptorCorreo:"",
+				receptorProvincia:"",
+				receptorCodigoProvincia:"",
+				receptorCanton:"",
+				receptorCodigoCanton:"",
+				receptorDistrito:"",
+				receptorCodigoDistrito:"",
+				receptorOtraSena:"",
+				receptorTelefono:"0",
+				receptorNombreComercial:"",
+				facturaConsecutivo:"",
+				facturaClave:"",
+				facturaFechaEmision:"",
+				facturaCondicionVenta:"0",
+				facturaMedioPago:"0",
+				facturaCodigoMoneda:"CRC",
+				facturaTipoCambio:"1",
+				facturaTotalServExentos:"0",
+				facturaTotalExento:"0",
+				facturaTotalVenta:"0",
+				facturaTotalVentaNeta:"0",
+				facturaTotalComprobante:"0",
+				facturaTotalImpuestos:"0",
+			}
 		
 		//Se cargan al montar el tag
 		self.on('mount',function(){
@@ -402,7 +427,6 @@
 					emisorNombre:"",
 					emisorCedula:"",
 					emisorTipoCedula:"",
-					emisorCorreo:"",
 					emisorCodigoProvincia:"0",
 					emisorProvincia:"",
 					emisorCanton:"",
@@ -440,20 +464,47 @@
 			}
 			
 			self.recepcionFactura ={
-					id:"0",
-					clave:"",
-					cedulaEmisor:"",
-					emisorTipoCedula:"",
-					fechaEmision:"",
+					id:null,
 					mensaje:"0",
 					detalleMensaje:"",
-					totalImpuestos:"0",
-					totalFactura:"0",
-					cedulaReceptor:"",
-					numeroConsecutivoReceptor:"",
-					tipoCambio:"1",
-					codigoMoneda:"CRC"
-			}
+					emisorNombre:"",
+					emisorCedula:"",
+					emisorTipoCedula:"",
+					emisorCodigoProvincia:"0",
+					emisorProvincia:"",
+					emisorCanton:"",
+					emisorCodigoCanton:"",
+					emisorDistrito:"",
+					emisorCodigoDistrito:"",
+					emisorCorreo:"",
+					emisorOtraSena:"",
+					receptorNombre:"",
+					receptorCedula:"",
+					receptorTipoCedula:"",
+					receptorCorreo:"",
+					receptorProvincia:"",
+					receptorCodigoProvincia:"",
+					receptorCanton:"",
+					receptorCodigoCanton:"",
+					receptorDistrito:"",
+					receptorCodigoDistrito:"",
+					receptorOtraSena:"",
+					receptorTelefono:"0",
+					receptorNombreComercial:"",
+					facturaConsecutivo:"",
+					facturaClave:"",
+					facturaFechaEmision:"",
+					facturaCondicionVenta:"0",
+					facturaMedioPago:"0",
+					facturaCodigoMoneda:"CRC",
+					facturaTipoCambio:"1",
+					facturaTotalServExentos:"0",
+					facturaTotalExento:"0",
+					facturaTotalVenta:"0",
+					facturaTotalVentaNeta:"0",
+					facturaTotalComprobante:"0",
+					facturaTotalImpuestos:"0",
+				}
 			
 		}
 		
@@ -581,13 +632,14 @@
 	        //} else {
 	            //alert("El archivo seleccionado no es un XML valido");
 	        //}
-            if (typeof (FileReader) != "undefined") {
+
+	        if (typeof (FileReader) != "undefined") {
                 var reader = new FileReader();
                 reader.onload = function (e) {
 
                 	//Se carga el XML
                 	var xmlDoc = $.parseXML(e.target.result);
-
+                	
                 	//Se cargan los datos para presentar el detalle de una factura
                 	
                     //Se cargan los datos del emisor
@@ -655,27 +707,52 @@
                     __buscaProvincias();
                     __buscaCantones();
                     __buscaDistritos();
-                    
-                    
-                	//Se cargan los datos principales
-                    self.recepcionFactura.clave = $(xmlDoc).find("Clave").first().text();
-                	self.recepcionFactura.cedulaEmisor=emisor.find("Identificacion").find("Numero").text();
-                	self.recepcionFactura.emisorTipoCedula = emisor.find("Identificacion").find("Tipo").text();
-                    self.recepcionFactura.fechaEmision = $(xmlDoc).find("FechaEmision").first().text();
-                    self.recepcionFactura.totalImpuestos = $(xmlDoc).find("TotalImpuesto").text();
-                    self.recepcionFactura.totalFactura = resumenFactura.find("TotalComprobante").text();
-                    self.recepcionFactura.cedulaReceptor = receptor.find("Identificacion").find("Numero").text();
-	                self.recepcionFactura.totalImpuestos = $(xmlDoc).find("TotalImpuesto").first().text();
-	                self.recepcionFactura.tipoCambio = $(xmlDoc).find("TipoCambio").first().text();
-	                self.recepcionFactura.codigoMoneda = $(xmlDoc).find("CodigoMoneda").first().text();
+                                        
+                	//Se cargan los datos del objecto a almacenar en base de datos
+                	self.recepcionFactura.emisorNombre = self.archivo.emisorNombre;
+                	self.recepcionFactura.emisorCedula =  self.archivo.emisorCedula;
+                	self.recepcionFactura.emisorTipoCedula = self.archivo.emisorTipoCedula;
+                	self.recepcionFactura.emisorCorreo = self.archivo.emisorCorreo;
+                	self.recepcionFactura.emisorCodigoProvincia = self.archivo.emisorCodigoProvincia;
+                	self.recepcionFactura.emisorProvincia = self.archivo.emisorProvincia;
+                	self.recepcionFactura.emisorCanton = self.archivo.emisorCanton;
+                	self.recepcionFactura.emisorCodigoCanton = self.archivo.emisorCodigoCanton;
+                	self.recepcionFactura.emisorDistrito = self.archivo.emisorDistrito;
+                	self.recepcionFactura.emisorCodigoDistrito = self.archivo.emisorCodigoDistrito;
+                	self.recepcionFactura.emisorOtraSena = self.archivo.emisorOtraSena;
+                	self.recepcionFactura.receptorNombre = self.archivo.receptorNombre;
+                	self.recepcionFactura.receptorCedula = self.archivo.receptorCedula;
+                	self.recepcionFactura.receptorTipoCedula = self.archivo.receptorTipoCedula;
+                	self.recepcionFactura.receptorCorreo = self.archivo.receptorCorreo;
+                	self.recepcionFactura.receptorProvincia = self.archivo.receptorProvincia;
+                	self.recepcionFactura.receptorCodigoProvincia = self.archivo.receptorCodigoProvincia;
+                	self.recepcionFactura.receptorCanton = self.archivo.receptorCanton;
+                	self.recepcionFactura.receptorCodigoCanton = self.archivo.receptorCodigoCanton;
+                	self.recepcionFactura.receptorDistrito = self.archivo.receptorDistrito;
+                	self.recepcionFactura.receptorCodigoDistrito = self.archivo.receptorCodigoDistrito;
+                	self.recepcionFactura.receptorOtraSena = self.archivo.receptorOtraSena;
+                	self.recepcionFactura.receptorTelefono = self.archivo.receptorTelefono;
+                	self.recepcionFactura.receptorNombreComercial = self.archivo.receptorNombreComercial;
+                	self.recepcionFactura.facturaConsecutivo = self.archivo.facturaConsecutivo;
+                	self.recepcionFactura.facturaClave = self.archivo.facturaClave;
+                	self.recepcionFactura.facturaFechaEmision = self.archivo.facturaFechaEmision;
+                	self.recepcionFactura.facturaCondicionVenta = self.archivo.facturaCondicionVenta;
+                	self.recepcionFactura.facturaMedioPago = self.archivo.facturaMedioPago;
+                	self.recepcionFactura.facturaCodigoMoneda = self.archivo.facturaCodigoMoneda;
+                	self.recepcionFactura.facturaTipoCambio = self.archivo.facturaTipoCambio;
+                	self.recepcionFactura.facturaTotalServExentos = self.archivo.facturaTotalServExentos;
+                	self.recepcionFactura.facturaTotalExento = self.archivo.facturaTotalExento;
+                	self.recepcionFactura.facturaTotalVenta = self.archivo.facturaTotalVenta;
+                	self.recepcionFactura.facturaTotalVentaNeta = self.archivo.facturaTotalVentaNeta;
+                	self.recepcionFactura.facturaTotalComprobante = self.archivo.facturaTotalComprobante;
+                	self.recepcionFactura.facturaTotalImpuestos = self.archivo.facturaTotalImpuestos;
                 }
                 
                 reader.readAsText($("#fileUpload")[0].files[0]);
-
                 //Se muestra la pantalla
-    		    self.mostrarFormulario     = true;
-    		    self.mostrarCargaArchivo   = true;
-    		    self.update();
+	  		    self.mostrarFormulario     = true;
+	   		    self.mostrarCargaArchivo   = true;
+	   		    self.update();					
 
             } else {
                 alert("Se presento un problema al intentar cargar el archivo, su browser no soporta HTML 5");
@@ -694,7 +771,6 @@
 				emisorCodigoCanton:"",
 				emisorDistrito:"",
 				emisorCodigoDistrito:"",
-				emisorCorreo:"",
 				emisorOtraSena:"",
 				receptorNombre:"",
 				receptorCedula:"",
@@ -726,19 +802,45 @@
 		
 			self.recepcionFactura ={
 				id:null,
-				clave:"",
-				cedulaEmisor:"",
-				emisorTipoCedula:"",
-				fechaEmision:"",
 				mensaje:"0",
 				detalleMensaje:"",
-				totalImpuestos:"0",
-				totalFactura:"0",
-				cedulaReceptor:"",
-				numeroConsecutivoReceptor:"",
-				tipoCambio:"1",
-				codigoMoneda:"CRC"
-
+				emisorNombre:"",
+				emisorCedula:"",
+				emisorTipoCedula:"",
+				emisorCorreo:"",
+				emisorCodigoProvincia:"0",
+				emisorProvincia:"",
+				emisorCanton:"",
+				emisorCodigoCanton:"",
+				emisorDistrito:"",
+				emisorCodigoDistrito:"",
+				emisorOtraSena:"",
+				receptorNombre:"",
+				receptorCedula:"",
+				receptorTipoCedula:"",
+				receptorCorreo:"",
+				receptorProvincia:"",
+				receptorCodigoProvincia:"",
+				receptorCanton:"",
+				receptorCodigoCanton:"",
+				receptorDistrito:"",
+				receptorCodigoDistrito:"",
+				receptorOtraSena:"",
+				receptorTelefono:"0",
+				receptorNombreComercial:"",
+				facturaConsecutivo:"",
+				facturaClave:"",
+				facturaFechaEmision:"",
+				facturaCondicionVenta:"0",
+				facturaMedioPago:"0",
+				facturaCodigoMoneda:"CRC",
+				facturaTipoCambio:"1",
+				facturaTotalServExentos:"0",
+				facturaTotalExento:"0",
+				facturaTotalVenta:"0",
+				facturaTotalVentaNeta:"0",
+				facturaTotalComprobante:"0",
+				facturaTotalImpuestos:"0",
 			}
 			
 			self.update()
@@ -756,6 +858,7 @@
 			        method:"GET",
 			        success: function (data) {
 			        	self.archivo.emisorProvincia = data.descripcion;
+			        	self.recepcionFactura.emisorProvincia = data.descripcion;
 					    self.update();
 			        },
 			        error: function (xhr, status) {
@@ -774,6 +877,7 @@
 			        method:"GET",
 			        success: function (data) {
 			        	self.archivo.receptorProvincia = data.descripcion;
+			        	self.recepcionFactura.receptorProvincia = data.descripcion;
 					    self.update();
 			        },
 			        error: function (xhr, status) {
@@ -793,6 +897,7 @@
 			        method:"GET",
 			        success: function (data) {
 			        	self.archivo.emisorCanton = data.descripcion;
+			        	self.recepcionFactura.emisorCanton = data.descripcion;
 					    self.update();
 			        },
 			        error: function (xhr, status) {
@@ -810,6 +915,7 @@
 			        method:"GET",
 			        success: function (data) {
 			        	self.archivo.receptorCanton = data.descripcion;
+			        	self.recepcionFactura.receptorCanton = data.descripcion;
 					    self.update();
 			        },
 			        error: function (xhr, status) {
@@ -829,6 +935,7 @@
 			        method:"GET",
 			        success: function (data) {
 			        	self.archivo.emisorDistrito = data.descripcion;
+			        	self.recepcionFactura.emisorDistrito = data.descripcion;
 					    self.update();
 			        },
 			        error: function (xhr, status) {
@@ -846,6 +953,7 @@
 			        method:"GET",
 			        success: function (data) {
 			        	self.archivo.receptorDistrito = data.descripcion;
+			        	self.recepcionFactura.receptorDistrito = data.descripcion;
 					    self.update();
 			        },
 			        error: function (xhr, status) {
@@ -863,12 +971,14 @@
 			
 			//Se limpian los errores
 			$(".errorServerSideJgrid").remove();
+			self.recepcionFactura.mensaje = $("#mensaje").val();
+			self.recepcionFactura.detalleMensaje = $("#detalleMensaje").val();
+			self.update();
 			
-		    var formulario = $("#formularioAceptarForm").serialize();
 		    $.ajax({
 		        type : "POST",
 		        dataType : "json",
-		        data : formulario,
+		        data : self.recepcionFactura,
 		        url : "AgregarRecepcionFacturaAjax.do",
 		        success : function(data) {
 		            if (data.status != 200) {

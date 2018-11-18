@@ -28,15 +28,15 @@ public class RecepcionFacturaCommand {
 	public RecepcionFacturaCommand(RecepcionFactura recepcionFactura) {
 		super();
 		this.id = recepcionFactura.getId();
-		this.clave = recepcionFactura.getClave();
-		this.cedulaEmisor = recepcionFactura.getCedulaEmisor();
-		this.tipoCedulaEmisor = recepcionFactura.getTipoCedulaEmisor();
-		this.fechaEmision = recepcionFactura.getFechaEmision();
+		this.clave = recepcionFactura.getFacturaClave();
+		this.cedulaEmisor = recepcionFactura.getEmisorCedula();
+		this.tipoCedulaEmisor = recepcionFactura.getEmisorTipoCedula();
+		this.fechaEmision = recepcionFactura.getFacturaFechaEmision();
 		this.mensaje = MapEnums.ENUM_TIPOS_MENSAJES.get(recepcionFactura.getMensaje());
 		this.detalleMensaje = recepcionFactura.getDetalleMensaje();
-		this.totalImpuestos = recepcionFactura.getTotalImpuestos()  == null ? 0 : recepcionFactura.getTotalImpuestos();;
-		this.totalFactura = recepcionFactura.getTotalFactura() == null ? 0 : recepcionFactura.getTotalFactura();
-		this.cedulaReceptor = recepcionFactura.getCedulaReceptor();
+		this.totalImpuestos = recepcionFactura.getFacturaTotalImpuestos() == null ? 0 : recepcionFactura.getFacturaTotalImpuestos();
+		this.totalFactura = recepcionFactura.getFacturaTotalComprobante() == null ? 0 : recepcionFactura.getFacturaTotalComprobante();
+		this.cedulaReceptor = recepcionFactura.getReceptorCedula();
 		this.numeroConsecutivoReceptor = recepcionFactura.getNumeroConsecutivoReceptor();
 		this.estadoFirma = recepcionFactura.getEstadoFirma();
 	}

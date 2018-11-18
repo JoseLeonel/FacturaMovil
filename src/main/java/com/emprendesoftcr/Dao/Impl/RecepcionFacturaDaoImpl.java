@@ -76,7 +76,7 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 
 	@Override
 	public Collection<RecepcionFactura> findByClave(String cedulaEmisor, String clave) {
-		Query query = entityManager.createQuery("select obj from RecepcionFactura obj where  obj.clave = :clave and obj.cedulaEmisor = :cedulaEmisor");
+		Query query = entityManager.createQuery("select obj from RecepcionFactura obj where  obj.facturaClave = :clave and obj.emisorCedula = :cedulaEmisor");
 		query.setParameter("clave", clave);
 		query.setParameter("cedulaEmisor", cedulaEmisor);
 		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);		
@@ -91,10 +91,10 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 		hql.append(" where obj.empresa = :empresa ");
 		if (cedula != null) {
 			if (!cedula.equals(Constantes.EMPTY)) {
-				hql.append("and obj.cedulaReceptor = :cedula ");
+				hql.append("and obj.receptorCedula = :cedula ");
 			}
 		}
-		hql.append("and obj.fechaEmision >= :fechaInicio and obj.fechaEmision <= :fechaFin ");
+		hql.append("and obj.facturaFechaEmision >= :fechaInicio and obj.facturaFechaEmision <= :fechaFin ");
 		Query query = entityManager.createQuery(hql.toString());
 		if (cedula != null) {
 			if (!cedula.equals(Constantes.EMPTY)) {

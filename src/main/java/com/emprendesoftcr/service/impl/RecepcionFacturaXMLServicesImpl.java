@@ -44,20 +44,20 @@ public class RecepcionFacturaXMLServicesImpl implements RecepcionFacturaXMLServi
 		String xml = Constantes.EMPTY;
 			
 		try {
-			String date = FacturaElectronicaUtils.toISO8601String(recepcionFactura.getFechaEmision());
-			String impuestos  = (recepcionFactura.getTotalImpuestos() != null && recepcionFactura.getTotalImpuestos() > Constantes.ZEROS_DOUBLE) ?  "<MontoTotalImpuesto>" + recepcionFactura.getTotalImpuestos().toString() + "</MontoTotalImpuesto>" : "";
+			String date = FacturaElectronicaUtils.toISO8601String(recepcionFactura.getFacturaFechaEmision());
+			String impuestos  = (recepcionFactura.getFacturaTotalImpuestos() != null && recepcionFactura.getFacturaTotalImpuestos() > Constantes.ZEROS_DOUBLE) ?  "<MontoTotalImpuesto>" + recepcionFactura.getFacturaTotalImpuestos().toString() + "</MontoTotalImpuesto>" : "";
 
 			xml = "<MensajeReceptor xmlns=\"" + Constantes.DOCXMLS_RECEPCION_FACTURA + "\" " +
 	          "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
-	          "<Clave>" + recepcionFactura.getClave() + "</Clave>" +
-	          "<NumeroCedulaEmisor>" + recepcionFactura.getCedulaEmisor() + "</NumeroCedulaEmisor>" +
+	          "<Clave>" + recepcionFactura.getFacturaClave() + "</Clave>" +
+	          "<NumeroCedulaEmisor>" + recepcionFactura.getEmisorCedula() + "</NumeroCedulaEmisor>" +
 	          "<FechaEmisionDoc>" + date + "</FechaEmisionDoc>" +
 	          "<Mensaje>" + recepcionFactura.getMensaje() + "</Mensaje>" +	          
 	           impuestos  +
-	          "<TotalFactura>" + recepcionFactura.getTotalFactura() + "</TotalFactura>" +
-	          "<NumeroCedulaReceptor>" + recepcionFactura.getCedulaReceptor() + "</NumeroCedulaReceptor>" +
+	          "<TotalFactura>" + recepcionFactura.getFacturaTotalComprobante() + "</TotalFactura>" +
+	          "<NumeroCedulaReceptor>" + recepcionFactura.getReceptorCedula() + "</NumeroCedulaReceptor>" +
 	          "<NumeroConsecutivoReceptor>" + recepcionFactura.getNumeroConsecutivoReceptor() + "</NumeroConsecutivoReceptor>" + 
-						"</MensajeReceptor>";		
+			  "</MensajeReceptor>";		
 		} catch (Exception e) {
 			log.info("** Error  getCrearXMLSinFirma: " + e.getMessage() + " fecha " + new Date());
 			throw e;
