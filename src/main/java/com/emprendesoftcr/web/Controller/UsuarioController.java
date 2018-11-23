@@ -74,8 +74,8 @@ public class UsuarioController {
 	 * @return
 	 */
 	@GetMapping("/CambioClave")
-	public String cambioClave(ModelMap model) {
-		return "/views/usuario/CambioClave";
+	public String cambioClavePagina(ModelMap model) {
+		return "views/usuario/CambioClave";
 	}
 /**
  * Cambiar contrasena
