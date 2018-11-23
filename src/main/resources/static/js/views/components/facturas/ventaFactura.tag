@@ -1067,7 +1067,10 @@ td.col-xl-12, th.col-xl-12 {
     self.urlImagenLector      = '/dist/img/codigo_barra.png';
     self.urlImagenBuscador    = '/dist/img/buscador.png';
 
-
+    self.tipoCambio = {
+        total:0,
+        id:null
+    }
     self.on('mount',function(){
         $("#formularioFactura").validate(reglasDeValidacionFactura());
         $("#formularioAgregarNombreTiquete").validate(reglasAgregarNombre());
@@ -1605,7 +1608,10 @@ __CambiarPrecio(e){
 * Tipo Cambio de moneda
 **/
 function __TipoCambio(){
-    self.tipoCambio = {}
+    self.tipoCambio = {
+        total:0,
+        id:null
+    }
     self.update()
     $.ajax({
         url: "MostrarTipoCambioActivoAjax.do",
@@ -2708,10 +2714,8 @@ __cambiarDescripcionDetalle(e){
     var descripcion = $(".cambiarDescripcionArticulo").val();
     self.item.descripcion = descripcion
     self.update()
-
     $(".cambiarDescripcionArticulo").val(null);
     $('#modalCambiarDescripcion').modal('hide') 
-    
 }
 /**
 * Cambiar el precio del detalle de la factura
@@ -2884,6 +2888,9 @@ function __calculate() {
     $( "#quantity" ).val(null);
     getSubTotalGeneral()
 }
+/**
+*calculo  de impuesto servicio
+**/
 function calcularImpuestoServicio(){
     var resultado = 0
      self.detail.forEach(function(e){

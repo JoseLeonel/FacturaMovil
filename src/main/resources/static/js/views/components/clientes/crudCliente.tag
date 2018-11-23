@@ -267,7 +267,7 @@ function _incializarCampos(){
     $('.cedula').val(null)
     $('.identificacionExtranjero').val(null)
     $('.telefono').val(null)
-    $('.codigoPais').val(null)
+    $('.codigoPais').val(506)
     $('.correoElectronico').val(null)
     $('.correoElectronico1').val(null)
     $('.correoElectronico2').val(null)
@@ -282,7 +282,7 @@ function _incializarCampos(){
         identificacionExtranjero:"",
         barrio:"",
         distrito:"",
-        codigoPais:"",
+        codigoPais:"506",
         cedula:"",
         provincia:"",
         celular:"",

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.FacturaDao;
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
@@ -115,7 +116,7 @@ public class FacturaDaoImpl implements FacturaDao {
 	 */
 	@Override
 	public Collection<Factura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma) {
-		Query query = entityManager.createQuery("select obj from Factura obj where  obj.estadoFirma in(:estadoFirma ,:reEstadoFirma) and estado =  :estado");
+		Query query = entityManager.createQuery("select obj from Factura obj where  obj.estadoFirma in(:estadoFirma ,:reEstadoFirma) and obj.estado =  :estado");
 		query.setParameter("estadoFirma", estadoFirma);
 		query.setParameter("reEstadoFirma", reEstadoFirma);
 		query.setParameter("estado", Constantes.FACTURA_ESTADO_FACTURADO);
@@ -124,6 +125,16 @@ public class FacturaDaoImpl implements FacturaDao {
 		return query.getResultList();
 	}
 
+	@Override
+	public Collection<Factura> findByClienteAndEmpresa(Cliente cliente ,Empresa empresa){
+		Query query = entityManager.createQuery("select obj from Factura obj where  obj.empresa = :empresa and obj.cliente =  :cliente");
+		query.setParameter("cliente", cliente);
+		query.setParameter("empresa", empresa);
+
+		return query.getResultList();
+		
+	}
+	
 	/**
 	 * Todas las facturas que no se le a creado la firma
 	 * @see com.emprendesoftcr.Dao.FacturaDao#findByEstadoFirma(java.lang.Integer)

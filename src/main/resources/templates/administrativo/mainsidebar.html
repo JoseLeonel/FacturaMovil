@@ -20,6 +20,7 @@
 			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Restaurante')"><a href="/ListarVendedores"> <i class="fa fa-circle-o"></i> Vendedores</a></li>
 			          <li sec:authorize="hasAnyAuthority('Administrador_Restaurante')"><a href="/ListarMesas"> <i class="fa fa-circle-o"></i> Mesas</a></li>
 	  		          <li sec:authorize="hasAnyAuthority('Administrador_Sistema')"><a href="/ListarCajas">      <i class="fa fa-circle-o"></i> Cajas     </a></li>
+	  		          <li ><a href="/CambioClave">   <i class="fa fa-circle-o"></i> Cambio Clave  </a></li>
 		            </ul>
 		        </li>
 		  <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')">
@@ -68,7 +69,7 @@
                 <li><a href="/creditoDebito" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i class="fa fa-circle-o"></i> Notas Credito y Debito</a></li>
                 <li><a href="/ventasPorServicio" sec:authorize="hasAnyAuthority('Administrador_Servicios')"><i class="fa fa-circle-o"></i>Por Servicios </a></li>
                 <li><a href="/postVenta" sec:authorize="hasAnyAuthority('Administrador_Empresa','Administrador_Cajero','Administrador_Sistema','Administrador_Servicios')"><i class="fa fa-circle-o"></i>Venta POS </a></li>
-                <li><a href="postRestaurante" sec:authorize="hasAnyAuthority('Administrador_Restaurante')"><i class="fa fa-circle-o"></i> Restaurante </a></li>
+                <li><a href="postRestaurante" sec:authorize="hasAnyAuthority('Administrador_Restaurante','usuario_vendedor')"><i class="fa fa-circle-o"></i> Restaurante </a></li>
             </ul>
         </li>
  		<li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Sistema','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')">

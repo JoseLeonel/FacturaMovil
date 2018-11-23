@@ -576,6 +576,10 @@
     self.totalImpuesto                 = 0
     self.totalComprobante              = 0
     self.totalCambioPagar              = 0
+    self.tipoCambio = {
+        total:0,
+        id:null
+    }
     self.on('mount',function(){
         _INIT()
         $("#formularioFactura").validate(reglasDeValidacionFactura());
@@ -793,7 +797,10 @@ __CambiarCantidad(e){
 * Tipo Cambio de moneda
 **/
 function __TipoCambio(){
-    self.tipoCambio = {}
+    self.tipoCambio = {
+        total:0,
+        id:null
+    }
     self.update()
     $.ajax({
         url: "MostrarTipoCambioActivoAjax.do",

@@ -1172,6 +1172,10 @@ td.col-xl-12, th.col-xl-12 {
     self.urlImagenLector      = '/dist/img/codigo_barra.png';
     self.urlImagenBuscador    = '/dist/img/buscador.png';
     self.primeraVezBilleteClick = false
+    self.tipoCambio = {
+        total:0,
+        id:null
+    }
 
     self.on('mount',function(){
         $("#formularioFactura").validate(reglasDeValidacionFactura());
@@ -1741,7 +1745,10 @@ __CambiarPrecio(e){
 * Tipo Cambio de moneda
 **/
 function __TipoCambio(){
-    self.tipoCambio = {}
+    self.tipoCambio = {
+        total:0,
+        id:null
+    }
     self.update()
     $.ajax({
         url: "MostrarTipoCambioActivoAjax.do",

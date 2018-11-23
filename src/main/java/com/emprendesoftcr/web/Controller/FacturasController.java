@@ -137,8 +137,8 @@ public class FacturasController {
 	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
 																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
 																																																			// Emisor
-
-																																																			facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? d.getEmpresa().getNombreComercial() : d.getEmpresa().getNombre());
+																																																			facturaElectronica.setEmisorNombreComercial( d.getEmpresa().getNombreComercial() );
+																																																			facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombre().equals(Constantes.EMPTY) ? d.getEmpresa().getNombre() : d.getEmpresa().getNombre());
 																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
 																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
 																																																			facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());

@@ -29,6 +29,7 @@ import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.modelo.Articulo;
+import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
@@ -151,6 +152,12 @@ public class FacturaBoImpl implements FacturaBo {
 		return facturaDao.findByEstadoFirma(estadoFirma, reEstadoFirma);
 	}
 
+	@Override
+	public Collection<Factura> findByClienteAndEmpresa(Cliente cliente ,Empresa empresa){
+		return facturaDao.findByClienteAndEmpresa(cliente, empresa);
+	}
+	
+	
 	@Transactional
 	private Factura formaFactura(FacturaCommand facturaCommand, Usuario usuario) throws Exception {
 

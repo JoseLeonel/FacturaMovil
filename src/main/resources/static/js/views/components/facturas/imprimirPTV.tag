@@ -137,9 +137,7 @@
 
 
 <style type="text/css"  >
-    #divQR{
-        border:1px solid red;
-    }
+  
     .fondoEncabezado
     {
         background: #00539B;
@@ -320,7 +318,7 @@ self.on('mount',function(){
 
 
        consultaFactura(self.facturaImpresa.id)
-      //  qr()
+        //qr()
     }
    
    
@@ -573,7 +571,6 @@ function __imprimir(){
 
 
 function imprimirElemento(elemento){
- 
   
   var ventana = window.open('', 'PRINT', 'height=400,width=600');
   ventana.document.write('<html><head><title>' + "" + '</title>');

@@ -7,6 +7,7 @@
     // Check if canvas is available in the browser (as Modernizr does)
     var hasCanvas = (function () {
         var elem = document.createElement('canvas');
+        elem.setAttribute("id", "leo");
         return !!(elem.getContext && elem.getContext('2d'));
     }());
 
@@ -293,7 +294,7 @@
 
     // Returns a `canvas` element representing the QR code for the given settings.
     function createCanvas(settings) {
-        var $canvas = jq('<canvas/>').attr('width', settings.size).attr('height', settings.size);
+        var $canvas = jq('<canvas/>').attr('width', settings.size).attr('height', settings.size).attr("id","leo");
         return drawOnCanvas($canvas, settings);
     }
 

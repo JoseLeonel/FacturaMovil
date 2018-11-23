@@ -135,11 +135,12 @@ public class UsuarioCajasController {
 		delimitadores = new DataTableDelimitador(request, "UsuarioCaja");
 		JqGridFilter dataTableFilter = null;
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_EMPRESA) && !request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+		if ( request.isUserInRole(Constantes.ROL_ADMINISTRADOR_CAJERO) || request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
 			dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
 
 		}
+
 		dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_INACTIVO.toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
@@ -203,10 +204,10 @@ public class UsuarioCajasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 
-			//Se acutalizan los registros
+			// Se acutalizan los registros
 			usuarioCajaBo.actualizarCaja(usuarioCajaBd);
-			
-			//Se cierra la caja
+
+			// Se cierra la caja
 			usuarioCajaBo.cierreCaja(usuarioCajaBd);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuarioCaja.cierre.correctamente", usuarioCajaBd);
@@ -237,13 +238,12 @@ public class UsuarioCajasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
-	
+
 	@RequestMapping(value = "/AgrupaArticulosCategoriaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	@SuppressWarnings({ "rawtypes"})
+	@SuppressWarnings({ "rawtypes" })
 	public RespuestaServiceValidator agrupaArticulosCategoria(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idUsuarioCaja) {
-		UsuarioCaja usuarioCaja =  usuarioCajaBo.buscar(idUsuarioCaja);
+		UsuarioCaja usuarioCaja = usuarioCajaBo.buscar(idUsuarioCaja);
 		return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", usuarioCajaBo.agrupaArticulosCategoria(usuarioCaja.getCaja().getEmpresa().getId(), usuarioCaja.getId()));
 	}
 

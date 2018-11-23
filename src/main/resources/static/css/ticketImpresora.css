@@ -1,0 +1,277 @@
+@media print {
+  .da-code{
+  position:relative;
+  font-size:8px; /* change the size of this to see how ralph will scale up or down */
+  height: 1em;
+  width: 1em;
+  margin:0 34em 34em 0;
+  float:left;
+  box-shadow:
+    /* row 1 */
+    8em    0 #000,
+    10em    0 #000,
+    11em    0 #000,
+    12em    0 #000,
+    14em    0 #000,
+    16em    0 #000,
+    /* row 2 */
+    12em  1em #000,
+    13em  1em #000,
+    14em  1em #000,
+    16em  1em #000,
+    /* row 3 */
+    8em  2em #000,
+    9em  2em #000,
+    10em  2em #000,
+    13em  2em #000,
+    14em  2em #000,
+    16em  2em #000,
+    /* row 4 */
+    9em  3em #000,
+    13em  3em #000,
+    14em  3em #000,
+    16em  3em #000,
+    /* row 5 */
+    10em  4em #000,
+    11em  4em #000,
+    12em  4em #000,
+    13em  4em #000,
+    14em  4em #000,
+    /* row 6 */
+    8em   5em #000,
+    10em   5em #000,
+    12em   5em #000,
+    13em   5em #000,
+    16em   5em #000,
+    /* row 7 */
+    8em   6em #000,
+    10em   6em #000,
+    12em   6em #000,
+    14em   6em #000,
+    16em   6em #000,
+    /* row 8 */
+    9em  7em #000,
+    14em  7em #000,
+    16em  7em #000,
+    /* row 9 */
+    0em  8em #000,
+    2em  8em #000,
+    6em  8em #000,
+    7em  8em #000,
+    10em  8em #000,
+    12em  8em #000,
+    15em  8em #000,
+    16em  8em #000,
+    19em  8em #000,
+    22em  8em #000,
+    24em  8em #000,
+    /* row 10 */
+    0em  9em #000,
+    1em  9em #000,
+    3em  9em #000,
+    5em  9em #000,
+    8em  9em #000,
+    10em  9em #000,
+    12em  9em #000,
+    13em  9em #000,
+    15em  9em #000,
+    16em  9em #000,
+    18em  9em #000,
+    19em  9em #000,
+    21em  9em #000,
+    23em  9em #000,
+    24em  9em #000,
+    /* row 11 */
+    5em  10em #000,
+    6em  10em #000,
+    7em  10em #000,
+    10em  10em #000,
+    11em  10em #000,
+    15em  10em #000,
+    16em  10em #000,
+    18em  10em #000,
+    19em  10em #000,
+    20em  10em #000,
+    21em  10em #000,
+    22em  10em #000,
+    24em  10em #000,
+    /* row 12 */
+    0em  11em #000,
+    1em  11em #000,
+    2em  11em #000,
+    3em  11em #000,
+    4em  11em #000,
+    5em  11em #000,
+    8em  11em #000,
+    9em  11em #000,
+    12em  11em #000,
+    14em  11em #000,
+    16em  11em #000,
+    18em  11em #000,
+    19em  11em #000,
+    21em  11em #000,
+    /* row 13 */
+    3em  12em #000,
+    4em  12em #000,
+    6em  12em #000,
+    8em  12em #000,
+    9em  12em #000,
+    10em  12em #000,
+    11em  12em #000,
+    15em  12em #000,
+    16em  12em #000,
+    18em  12em #000,
+    24em  12em #000,
+    /* row 14 */
+    3em  13em #000,
+    9em  13em #000,
+    10em  13em #000,
+    13em  13em #000,
+    15em  13em #000,
+    16em  13em #000,
+    17em  13em #000,
+    18em  13em #000,
+    19em  13em #000,
+    23em  13em #000,
+    24em  13em #000,
+    /* row 15 */
+    0em  14em #000,
+    1em  14em #000,
+    2em  14em #000,
+    4em  14em #000,
+    6em  14em #000,
+    8em  14em #000,
+    9em  14em #000,
+    11em  14em #000,
+    13em  14em #000,
+    15em  14em #000,
+    17em  14em #000,
+    18em  14em #000,
+    21em  14em #000,
+    22em  14em #000,
+    24em  14em #000,
+    /* row 16 */
+    3em  15em #000,
+    5em  15em #000,
+    9em  15em #000,
+    14em  15em #000,
+    15em  15em #000,
+    16em  15em #000,
+    17em  15em #000,
+    19em  15em #000,
+    /* row 17 */
+    0em  16em #000,
+    1em  16em #000,
+    6em  16em #000,
+    9em  16em #000,
+    11em  16em #000,
+    12em  16em #000,
+    14em  16em #000,
+    16em  16em #000,
+    17em  16em #000,
+    18em  16em #000,
+    19em  16em #000,
+    20em  16em #000,
+    23em  16em #000,
+    /* row 18 */
+    8em  17em #000,
+    9em  17em #000,
+    10em  17em #000,
+    12em  17em #000,
+    13em  17em #000,
+    16em  17em #000,
+    20em  17em #000,
+    22em  17em #000,
+    24em  17em #000,
+    /* row 19 */
+    8em  18em #000,    
+    9em  18em #000,    
+    12em  18em #000,    
+    16em  18em #000,    
+    18em  18em #000,    
+    20em  18em #000,    
+    21em  18em #000,    
+    24em  18em #000,    
+    /* row 20 */
+    9em  19em #000,    
+    10em  19em #000,    
+    11em  19em #000,    
+    12em  19em #000,    
+    14em  19em #000,    
+    15em  19em #000,    
+    16em  19em #000,    
+    20em  19em #000,    
+    24em  19em #000,    
+    /* row 21 */
+    13em  20em #000,    
+    14em  20em #000,    
+    15em  20em #000,    
+    16em  20em #000,    
+    17em  20em #000,    
+    18em  20em #000,    
+    19em  20em #000,    
+    20em  20em #000,    
+    21em  20em #000,    
+    24em  20em #000,    
+    /* row 22 */
+    9em  21em #000,   
+    10em  21em #000,   
+    13em  21em #000,    
+    15em  21em #000,    
+    16em  21em #000,    
+    17em  21em #000,    
+    19em  21em #000,    
+    20em  21em #000,    
+    21em  21em #000,    
+    22em  21em #000,    
+    23em  21em #000,    
+    /* row 23 */
+    8em  22em #000,        
+    10em  22em #000,        
+    11em  22em #000,        
+    15em  22em #000,        
+    16em  22em #000,        
+    20em  22em #000,        
+    23em  22em #000,        
+    24em  22em #000,        
+    /* row 24 */
+    13em  23em #000,       
+    16em  23em #000,       
+    19em  23em #000,       
+    20em  23em #000,       
+    /* row 25 */
+    8em  24em #000,           
+    10em  24em #000,           
+    11em  24em #000,           
+    12em  24em #000,           
+    13em  24em #000,           
+    16em  24em #000,           
+    17em  24em #000,           
+    21em  24em #000,           
+    
+    24em  24em #000
+    ;
+}
+
+/* position markers */
+.da-code:before{
+  content: '';
+  width: 3em;
+  height: 3em;
+  background: #000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 2em;
+  box-shadow: 0 0 0 1em white, 0 0 0 2em #000, 18em 0 0 #000, 18em 0 0 1em white, 18em 0 0 2em #000, 0 18em 0 #000, 0 18em 0 1em white, 0 18em 0 2em #000;
+}
+
+.follow-me {
+  position:absolute;
+  bottom:10px;
+  right:10px;
+  text-decoration: none;
+}
+#qr3{ font-size:3px;}
+  
+}

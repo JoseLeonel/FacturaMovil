@@ -43,8 +43,8 @@ public class EmpresaCommand {
 
 	private String	estado;
 	private String	cazaMatriz;
-	
-	private Integer vueltoImprimir;
+
+	private Integer	vueltoImprimir;
 
 	private String	nombreLlaveCriptografica;
 
@@ -52,11 +52,12 @@ public class EmpresaCommand {
 	private Integer	codigoSeguridad;
 	private String	usuarioEnvioComprobante;
 	private String	passwordEnvioComprobante;
-	private String						tieneInventario;
-	private String						tieneLector;
-	private String						cambiarPrecio;
+	private String	tieneInventario;
+	private String	tieneLector;
+	private String	cambiarPrecio;
+	private Integer	aplicaGanancia;
 
-	private String						enviarTiquete;
+	private String	enviarTiquete;
 
 	public EmpresaCommand(Empresa empresa) {
 		super();
@@ -86,7 +87,7 @@ public class EmpresaCommand {
 		this.usuarioEnvioComprobante = empresa.getUsuarioEnvioComprobante();
 		this.notacConsecutivo = empresa.getNotacConsecutivo();
 		this.notadConsecutivo = empresa.getNotadConsecutivo();
-		
+
 		this.tiqueteConsecutivo = empresa.getTiqueteConsecutivo();
 		this.enviarTiquete = empresa.getEnviarTiquete();
 		this.tieneInventario = empresa.getTieneInventario();
@@ -94,6 +95,7 @@ public class EmpresaCommand {
 		this.cambiarPrecio = empresa.getCambiarPrecio();
 		this.vueltoImprimir = empresa.getVueltoImprimir();
 		
+		this.aplicaGanancia = empresa.getAplicaGanancia();
 
 	}
 
@@ -108,13 +110,23 @@ public class EmpresaCommand {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	
+	
 
 	
+	public Integer getAplicaGanancia() {
+		return aplicaGanancia;
+	}
+
+	
+	public void setAplicaGanancia(Integer aplicaGanancia) {
+		this.aplicaGanancia = aplicaGanancia;
+	}
+
 	public String getTieneLector() {
 		return tieneLector;
 	}
 
-	
 	public void setTieneLector(String tieneLector) {
 		this.tieneLector = tieneLector;
 	}
@@ -311,55 +323,44 @@ public class EmpresaCommand {
 		this.notacConsecutivo = notacConsecutivo;
 	}
 
-	
 	public Integer getTiqueteConsecutivo() {
 		return tiqueteConsecutivo;
 	}
 
-	
 	public void setTiqueteConsecutivo(Integer tiqueteConsecutivo) {
 		this.tiqueteConsecutivo = tiqueteConsecutivo;
 	}
 
-	
 	public String getTieneInventario() {
 		return tieneInventario;
 	}
 
-	
 	public void setTieneInventario(String tieneInventario) {
 		this.tieneInventario = tieneInventario;
 	}
 
-	
 	public String getEnviarTiquete() {
 		return enviarTiquete;
 	}
 
-	
 	public void setEnviarTiquete(String enviarTiquete) {
 		this.enviarTiquete = enviarTiquete;
 	}
 
-	
 	public String getCambiarPrecio() {
 		return cambiarPrecio;
 	}
 
-	
 	public void setCambiarPrecio(String cambiarPrecio) {
 		this.cambiarPrecio = cambiarPrecio;
 	}
 
-	
 	public Integer getVueltoImprimir() {
 		return vueltoImprimir;
 	}
 
-	
 	public void setVueltoImprimir(Integer vueltoImprimir) {
 		this.vueltoImprimir = vueltoImprimir;
 	}
 
-	
 }

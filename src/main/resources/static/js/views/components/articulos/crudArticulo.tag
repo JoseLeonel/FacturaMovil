@@ -94,7 +94,7 @@
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                 <label  >{$.i18n.prop("articulo.gananciaPrecioPublico")}  </label>
-                                <input type="number" step="any" class="form-control gananciaPrecioPublico" id="gananciaPrecioPublico" name="gananciaPrecioPublico" value="{articulo.gananciaPrecioPublico}"  readonly>
+                                <input type="number" step="any" class="form-control gananciaPrecioPublico" id="gananciaPrecioPublico" name="gananciaPrecioPublico" value="{articulo.gananciaPrecioPublico}"  onkeyup ={__CalculoGananciaSinPrecioPublico}>
                             </div>
 
                         </div>
@@ -579,6 +579,11 @@ __asignarImpuesto(){
       self.articulo.impuesto = 0
    }
    self.update()
+   self.articulo.gananciaPrecioEspecial   = self.articulo.precioEspecial > 0?_porcentajeGanancia(self.articulo.costo,self.articulo.impuesto,self.articulo.precioEspecial):0
+   self.articulo.gananciaPrecioMayorista  = self.articulo.precioMayorista>0?_porcentajeGanancia(self.articulo.costo,self.articulo.impuesto,self.articulo.precioMayorista):0
+   self.articulo.gananciaPrecioPublico    = self.articulo.precioPublico >0?_porcentajeGanancia(self.articulo.costo,self.articulo.impuesto,self.articulo.precioPublico):0
+   self.update()
+
 }
 /**
 * Camps requeridos
@@ -880,6 +885,8 @@ __ActualizarPreciosImpuestos(e){
     self.articulo.gananciaPrecioPublico    = self.articulo.precioPublico > 0 ? _porcentajeGanancia(costo,impuesto,self.articulo.precioPublico):0
     self.update()
 }
+
+
 /**
 * Porcentaje de ganancia de Precio al Publico
 **/
@@ -893,6 +900,40 @@ __CalculoGananciaPublico(e){
     self.articulo.gananciaPrecioPublico  = _porcentajeGanancia(costo,impuesto,precioPublico)
     self.articulo.precioPublico = precioPublico
     self.update()
+}
+
+/**
+* Porcentaje de ganancia de Precio al Publico
+**/
+__CalculoGananciaSinPrecioPublico(e){
+    let ganancia = __valorNumerico(e.target.value)
+    if(ganancia ==0){
+        return
+    }
+    let impuesto      = __valorNumerico($('#impuesto').val())
+    let costo         = __valorNumerico($('#costo').val())
+    self.articulo.gananciaPrecioPublico  = ganancia
+    self.articulo.precioPublico = _PrecioPublicoConGanancia(costo,impuesto,ganancia)
+    self.update()
+}
+
+function _PrecioPublicoConGanancia(costo,impuesto,ganancia){
+  if(ganancia == 0){
+      return 0
+  } 
+  if(costo == 0){
+      return 0
+  } 
+  var porcentajeGanancia = ganancia/100;
+  porcentajeGanancia = 1 - porcentajeGanancia
+ 
+  var totalImpuesto = impuesto == 0 ?0:impuesto / 100
+  totalImpuesto = totalImpuesto == 0 ?0:totalImpuesto + 1
+  var resultado  = ganancia / 100
+  var precio  = costo / porcentajeGanancia
+  precio = totalImpuesto >0? precio * totalImpuesto:precio;
+
+  return precio;
 }
 /**
 * Actualizar el precio costo

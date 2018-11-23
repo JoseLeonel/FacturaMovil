@@ -143,7 +143,7 @@ public class Empresa implements Serializable {
 	@Column(name = "vuelto_imprimir")
 	private Integer vueltoImprimir;
 
-	@Column(name = "nofactura_elec")
+	@Column(name = "nofactura_elec",  columnDefinition="INT default '0'")
 	private Integer noFacturaElectronica;
 
 	@Column(name = "correo_frecuente")
@@ -151,17 +151,15 @@ public class Empresa implements Serializable {
 
 	@Column(name = "comanda_empresa_id")
 	private Long comandaEmpresa;
+	
+	@Column(name="aplic_ganancia",  columnDefinition="INT default '0'")
+	private Integer						aplicaGanancia;
 
-	public Empresa(Integer id, String abreviaturaEmpresa, Integer numeroConsecutivo, Integer notacConsecutivo,
-			Integer notadConsecutivo, Integer tiqueteConsecutivo, String cazaMatriz, Integer codigoSeguridad,
-			String nombre, String nombreComercial, String tipoCedula, String cedula, String otraSenas,
-			Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String canton,
-			String distrito, String barrio, String logo, String tieneInventario, String tieneLector,
-			String cambiarPrecio, String estadoProduccion, String enviarTiquete, String representante,
-			String nombreLlaveCriptografica, Integer claveLlaveCriptografica, String usuarioEnvioComprobante,
-			String passwordEnvioComprobante, String estado, Date created_at, Date updated_at,
-			Integer aceptadoConsecutivo, Integer aceptadoParcialConsecutivo, Integer rechazadoConsecutivo,
-			Integer vueltoImprimir, Integer noFacturaElectronica, Integer correoFrecuente) {
+
+	
+
+	public Empresa(Integer id, String abreviaturaEmpresa, Integer numeroConsecutivo, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String cazaMatriz, Integer codigoSeguridad, String nombre, String nombreComercial, String tipoCedula, String cedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String canton, String distrito, String barrio, String logo, String tieneInventario, String tieneLector, String cambiarPrecio, String estadoProduccion, String enviarTiquete, String representante, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, String usuarioEnvioComprobante, String passwordEnvioComprobante, String estado, Date created_at, Date updated_at, Integer aceptadoConsecutivo,
+			Integer aceptadoParcialConsecutivo, Integer rechazadoConsecutivo, Integer vueltoImprimir, Integer noFacturaElectronica, Integer correoFrecuente, Long comandaEmpresa, Integer aplicaGanancia) {
 		super();
 		this.id = id;
 		this.abreviaturaEmpresa = abreviaturaEmpresa;
@@ -203,6 +201,8 @@ public class Empresa implements Serializable {
 		this.vueltoImprimir = vueltoImprimir;
 		this.noFacturaElectronica = noFacturaElectronica;
 		this.correoFrecuente = correoFrecuente;
+		this.comandaEmpresa = comandaEmpresa;
+		this.aplicaGanancia = aplicaGanancia;
 	}
 
 	public Empresa() {
@@ -544,5 +544,19 @@ public class Empresa implements Serializable {
 	public void setComandaEmpresa(Long comandaEmpresa) {
 		this.comandaEmpresa = comandaEmpresa;
 	}
+
+	
+	public Integer getAplicaGanancia() {
+		return aplicaGanancia;
+	}
+
+	
+	public void setAplicaGanancia(Integer aplicaGanancia) {
+		this.aplicaGanancia = aplicaGanancia;
+	}
+
+	
+
+	
 
 }

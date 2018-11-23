@@ -368,6 +368,51 @@
     self.clientes              = {data:[]}
     self.detalleFactura        = {data:[]}
     self.cliente               = {}
+    self.factura                = {
+        id:null,
+	   fechaCredito:null,
+	   fechaEmision:null,
+	   condicionVenta:"",
+	    plazoCredito:0,
+	    tipoDoc:"",
+	    medioPago:"",
+	    nombreFactura:"",
+	    direccion:"",
+	    nota:"",
+	    comanda:"",
+	    subTotal:0,
+	    totalTransporte:0,
+	    total:0,
+	    totalServGravados:0,
+	    totalServExentos:0,
+	    totalMercanciasGravadas:0,
+	    totalMercanciasExentas:0,
+	    totalGravado:0,
+	    totalExento:0,
+	    totalVenta:0,
+	    totalDescuentos:0,
+	    totalVentaNeta:0,
+	    totalImpuesto:0,
+	    totalComprobante:0,
+	    totalEfectivo:0,
+        totalTarjeta:0,
+        totalCambioPagar:0,
+	    totalBanco:0,
+	    totalCredito:0,
+	    montoCambio:0,
+	    totalCambio:0,
+	    codigoMoneda:"",
+	    estado:1,
+	    cliente:{
+            id:0,
+            nombreCompleto:""
+        },
+	    vendedor:{
+            id:0,
+            nombreCompleto:""
+        }
+
+    }     
 self.on('mount',function(){
     limpiar()
      $("#formulario").validate(reglasDeValidacion());
@@ -516,8 +561,53 @@ function limpiar(){
     $('.condicionVenta').prop("selectedIndex", 0);
     $('.condicionVenta').prop("selectedIndex", 0);
     self.detail                = []
-    self.factura = {}
+    
     self.cliente = {}
+    self.factura                = {
+        id:null,
+	   fechaCredito:null,
+	   fechaEmision:null,
+	   condicionVenta:"",
+	    plazoCredito:0,
+	    tipoDoc:"",
+	    medioPago:"",
+	    nombreFactura:"",
+	    direccion:"",
+	    nota:"",
+	    comanda:"",
+	    subTotal:0,
+	    totalTransporte:0,
+	    total:0,
+	    totalServGravados:0,
+	    totalServExentos:0,
+	    totalMercanciasGravadas:0,
+	    totalMercanciasExentas:0,
+	    totalGravado:0,
+	    totalExento:0,
+	    totalVenta:0,
+	    totalDescuentos:0,
+	    totalVentaNeta:0,
+	    totalImpuesto:0,
+	    totalComprobante:0,
+	    totalEfectivo:0,
+        totalTarjeta:0,
+        totalCambioPagar:0,
+	    totalBanco:0,
+	    totalCredito:0,
+	    montoCambio:0,
+	    totalCambio:0,
+	    codigoMoneda:"",
+	    estado:1,
+	    cliente:{
+            id:0,
+            nombreCompleto:""
+        },
+	    vendedor:{
+            id:0,
+            nombreCompleto:""
+        }
+
+    } 
     self.update()
    
 }

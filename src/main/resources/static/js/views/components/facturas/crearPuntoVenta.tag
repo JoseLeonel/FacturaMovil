@@ -474,6 +474,11 @@
     self.codigoBarraFueraPantalla = ""
     self.totalDescuentos       = 0
     self.totalImpuesto         = 0
+    self.tipoCambio = {
+        total:0,
+        id:null
+    }
+
     self.descripcionArticulo = ""
     self.factura                = {
         id:null,
@@ -604,11 +609,11 @@
                 lecturaCodigo($('.codigo').val())
             }
         });
-        var timer;
-        $("#codigo").on('keyup',function() {
-            timer && clearTimeout(timer);
-            timer = setTimeout(postData, 100);
-        });
+       // var timer;
+       // $("#codigo").on('keyup',function() {
+       //     timer && clearTimeout(timer);
+       //     timer = setTimeout(postData, 100);
+       // });
             $.fn.delayPasteKeyUp = function(fn, ms)
         {
             var timer = 0;
@@ -882,7 +887,10 @@ __CambiarCantidad(e){
 * Tipo Cambio de moneda
 **/
 function __TipoCambio(){
-    self.tipoCambio = {}
+    self.tipoCambio = {
+        total:0,
+        id:null
+    }
     self.update()
     $.ajax({
         url: "MostrarTipoCambioActivoAjax.do",
@@ -1161,7 +1169,7 @@ function __Init(){
         id:null,
         nombreCompleto:""
     }
-    self.tipoCambio                    = {}
+    
     self.informacion_tabla             = []
     self.informacion_tabla_articulo    = []
     self.informacion_tabla_clientes    = []
@@ -2028,6 +2036,7 @@ function __nuevoArticuloAlDetalle(cantidad){
        montoImpuesto   : montoImpuesto,
        montoDescuento  : 0,
        porcentajeDesc  : 0,
+       ganancia        : self.articulo.gananciaPrecioPublico,
        subTotal        : subTotal,
        montoTotalLinea : montoTotalLinea,
        montoTotal      :montoTotal
@@ -2181,11 +2190,17 @@ __actualizarDescuento(e){
 * Actualizar el descuento
 **/
 function _actualizarDesc(e){
-//    self.item     = e.item; 
+     var descuento = $(".aplicarDescuento").val();
+     descuento = __valorNumerico(descuento)
+    if(self.empresa.aplicaGanancia ==1){
+        if(self.item.ganancia < descuento ){
+            swal('',"No se puede aplicar un descuento mayor a la ganancia",'error');
+            descuento  = self.item.ganancia
+        }
+      } 
     var index     = self.detail.indexOf(self.item);
-    var descuento = $(".aplicarDescuento").val();
-    //Descuento se verifica si es null o espacios por defecto se deja en cero
-     descuento =__valorNumerico(descuento);
+    
+   
       //Descuento
     if(self.item.porcentajeDesc != descuento){
        self.item.porcentajeDesc =  parseFloat(descuento);  
@@ -2194,7 +2209,7 @@ function _actualizarDesc(e){
     ActualizarLineaDEtalle()  
     aplicarCambioLineaDetalle()
     $('#modalCambiarDescuento').modal('hide') 
-    aplicarDescuento.value = 0
+   $(".aplicarDescuento").val(null);
 }
 /**
 * Monto a pagar en la linea el cliente
