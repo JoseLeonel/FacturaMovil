@@ -36,20 +36,6 @@ public class RecepcionFactura implements Serializable {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "clave")
-	private String clave;
-
-	@Column(name = "cedula_emisor")
-	private String cedulaEmisor;
-
-	@Column(name = "tipo_cedula_emisor")
-	private String tipoCedulaEmisor;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
-	@Column(name = "fecha_emision")
-	private Date fechaEmision;
-
 	// 1 aceptado, 2 aceptado parcialmente, 3 rechazado.
 	@Column(name = "mensaje")
 	private String mensaje;
@@ -57,26 +43,124 @@ public class RecepcionFactura implements Serializable {
 	@Column(name = "detalle_Mensaje")
 	private String detalleMensaje;
 
-	@Column(name = "total_impuestos")
-	private Double totalImpuestos;
-
-	@Column(name = "total_factura")
-	private Double totalFactura;
-
-	@Column(name = "cedula_receptor")
-	private String cedulaReceptor;
-
 	@Column(name = "numero_conse_receptor")
 	private String numeroConsecutivoReceptor;
-
+	
 	@Column(name = "estado_firma")
 	private Integer estadoFirma;
 
-	@Column(name = "tipo_cambio")
-	private Double tipoCambio;
+	@Column(name = "cedula_emisor")
+	private String emisorCedula;
+
+	@Column(name = "emisor_nombre")
+	private String emisorNombre;
+
+	@Column(name = "tipo_cedula_emisor")
+	private String emisorTipoCedula;
+
+	@Column(name = "emisor_correo")
+	private String emisorCorreo;
+
+	@Column(name = "emisor_codigo_provincia")
+	private String emisorCodigoProvincia;
+
+	@Column(name = "emisor_provincia")
+	private String emisorProvincia;
+
+	@Column(name = "emisor_canton")
+	private String emisorCanton;
+
+	@Column(name = "emisor_codigo_canton")
+	private String emisorCodigoCanton;
+
+	@Column(name = "emisor_distrito")
+	private String emisorDistrito;
+
+	@Column(name = "emisor_codigo_distrito")
+	private String emisorCodigoDistrito;
+
+	@Column(name = "emisor_otra_sena")
+	private String emisorOtraSena;
+
+	@Column(name = "receptor_nombre")
+	private String receptorNombre;
+
+	@Column(name = "cedula_receptor")
+	private String receptorCedula;
+
+	@Column(name = "receptor_tipo_cedula")
+	private String receptorTipoCedula;
+
+	@Column(name = "receptor_correo")
+	private String receptorCorreo;
+
+	@Column(name = "receptor_provincia")
+	private String receptorProvincia;
+
+	@Column(name = "receptor_codigo_provincia")
+	private String receptorCodigoProvincia;
+
+	@Column(name = "receptor_canton")
+	private String receptorCanton;
+
+	@Column(name = "receptor_codigo_canton")
+	private String receptorCodigoCanton;
+
+	@Column(name = "receptor_distrito")
+	private String receptorDistrito;
+
+	@Column(name = "receptor_codigo_distrito")
+	private String receptorCodigoDistrito;
+
+	@Column(name = "receptor_otra_sena")
+	private String receptorOtraSena;
+
+	@Column(name = "receptor_telefono")
+	private String receptorTelefono;
+
+	@Column(name = "receptor_nombre_comercial")
+	private String receptorNombreComercial;
+
+	@Column(name = "factura_consecutivo")
+	private String facturaConsecutivo;
+
+	@Column(name = "clave")
+	private String facturaClave;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
+	@Column(name = "fecha_emision")
+	private Date facturaFechaEmision;
+
+	@Column(name = "fac_condicion_venta")
+	private String facturaCondicionVenta;
+
+	@Column(name = "fac_medio_pago")
+	private String facturaMedioPago;
 
 	@Column(name = "codigo_moneda")
-	private String codigoMoneda;
+	private String facturaCodigoMoneda;
+
+	@Column(name = "tipo_cambio")
+	private Double facturaTipoCambio;
+
+	@Column(name = "fac_total_serv_exentos")
+	private Double facturaTotalServExentos;
+
+	@Column(name = "fac_total_exento")
+	private Double facturaTotalExento;
+
+	@Column(name = "fac_total_venta")
+	private Double facturaTotalVenta;
+
+	@Column(name = "fac_total_venta_neta")
+	private Double facturaTotalVentaNeta;
+
+	@Column(name = "total_factura")
+	private Double facturaTotalComprobante;
+
+	@Column(name = "total_impuestos")
+	private Double facturaTotalImpuestos;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
@@ -86,12 +170,19 @@ public class RecepcionFactura implements Serializable {
 		super();
 	}
 
-	public String getTipoCedulaEmisor() {
-		return tipoCedulaEmisor;
+	public String getFechaEmisionSTR() {
+		if (this.facturaFechaEmision != null) {
+			return Utils.getFechaGeneraReporte(this.getFacturaFechaEmision());
+		}
+		return Constantes.EMPTY;
 	}
 
-	public void setTipoCedulaEmisor(String tipoCedulaEmisor) {
-		this.tipoCedulaEmisor = tipoCedulaEmisor;
+	public String getTotalImpuestosSTR() {
+		return Utils.formateadorMiles(this.facturaTotalImpuestos);
+	}
+
+	public String getTotalFacturaSTR() {
+		return Utils.formateadorMiles(this.facturaTotalComprobante);
 	}
 
 	public Long getId() {
@@ -100,30 +191,6 @@ public class RecepcionFactura implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getClave() {
-		return clave;
-	}
-
-	public void setClave(String clave) {
-		this.clave = clave;
-	}
-
-	public String getCedulaEmisor() {
-		return cedulaEmisor;
-	}
-
-	public void setCedulaEmisor(String cedulaEmisor) {
-		this.cedulaEmisor = cedulaEmisor;
-	}
-
-	public Date getFechaEmision() {
-		return fechaEmision;
-	}
-
-	public void setFechaEmision(Date fechaEmision) {
-		this.fechaEmision = fechaEmision;
 	}
 
 	public String getMensaje() {
@@ -142,36 +209,216 @@ public class RecepcionFactura implements Serializable {
 		this.detalleMensaje = detalleMensaje;
 	}
 
-	public Double getTotalImpuestos() {
-		return totalImpuestos;
+	public Integer getEstadoFirma() {
+		return estadoFirma;
 	}
 
-	public String getTotalImpuestosSTR() {
-		return Utils.formateadorMiles(this.totalImpuestos);
+	public void setEstadoFirma(Integer estadoFirma) {
+		this.estadoFirma = estadoFirma;
 	}
 
-	public void setTotalImpuestos(Double totalImpuestos) {
-		this.totalImpuestos = totalImpuestos;
+	public String getEmisorCedula() {
+		return emisorCedula;
 	}
 
-	public Double getTotalFactura() {
-		return totalFactura;
+	public void setEmisorCedula(String emisorCedula) {
+		this.emisorCedula = emisorCedula;
 	}
 
-	public String getTotalFacturaSTR() {
-		return Utils.formateadorMiles(this.totalFactura);
+	public String getEmisorNombre() {
+		return emisorNombre;
 	}
 
-	public void setTotalFactura(Double totalFactura) {
-		this.totalFactura = totalFactura;
+	public void setEmisorNombre(String emisorNombre) {
+		this.emisorNombre = emisorNombre;
 	}
 
-	public String getCedulaReceptor() {
-		return cedulaReceptor;
+	public String getEmisorTipoCedula() {
+		return emisorTipoCedula;
 	}
 
-	public void setCedulaReceptor(String cedulaReceptor) {
-		this.cedulaReceptor = cedulaReceptor;
+	public void setEmisorTipoCedula(String emisorTipoCedula) {
+		this.emisorTipoCedula = emisorTipoCedula;
+	}
+
+	public String getEmisorCorreo() {
+		return emisorCorreo;
+	}
+
+	public void setEmisorCorreo(String emisorCorreo) {
+		this.emisorCorreo = emisorCorreo;
+	}
+
+	public String getEmisorCodigoProvincia() {
+		return emisorCodigoProvincia;
+	}
+
+	public void setEmisorCodigoProvincia(String emisorCodigoProvincia) {
+		this.emisorCodigoProvincia = emisorCodigoProvincia;
+	}
+
+	public String getEmisorProvincia() {
+		return emisorProvincia;
+	}
+
+	public void setEmisorProvincia(String emisorProvincia) {
+		this.emisorProvincia = emisorProvincia;
+	}
+
+	public String getEmisorCanton() {
+		return emisorCanton;
+	}
+
+	public void setEmisorCanton(String emisorCanton) {
+		this.emisorCanton = emisorCanton;
+	}
+
+	public String getEmisorCodigoCanton() {
+		return emisorCodigoCanton;
+	}
+
+	public void setEmisorCodigoCanton(String emisorCodigoCanton) {
+		this.emisorCodigoCanton = emisorCodigoCanton;
+	}
+
+	public String getEmisorDistrito() {
+		return emisorDistrito;
+	}
+
+	public void setEmisorDistrito(String emisorDistrito) {
+		this.emisorDistrito = emisorDistrito;
+	}
+
+	public String getEmisorCodigoDistrito() {
+		return emisorCodigoDistrito;
+	}
+
+	public void setEmisorCodigoDistrito(String emisorCodigoDistrito) {
+		this.emisorCodigoDistrito = emisorCodigoDistrito;
+	}
+
+	public String getEmisorOtraSena() {
+		return emisorOtraSena;
+	}
+
+	public void setEmisorOtraSena(String emisorOtraSena) {
+		this.emisorOtraSena = emisorOtraSena;
+	}
+
+	public String getReceptorNombre() {
+		return receptorNombre;
+	}
+
+	public void setReceptorNombre(String receptorNombre) {
+		this.receptorNombre = receptorNombre;
+	}
+
+	public String getReceptorCedula() {
+		return receptorCedula;
+	}
+
+	public void setReceptorCedula(String receptorCedula) {
+		this.receptorCedula = receptorCedula;
+	}
+
+	public String getReceptorTipoCedula() {
+		return receptorTipoCedula;
+	}
+
+	public void setReceptorTipoCedula(String receptorTipoCedula) {
+		this.receptorTipoCedula = receptorTipoCedula;
+	}
+
+	public String getReceptorCorreo() {
+		return receptorCorreo;
+	}
+
+	public void setReceptorCorreo(String receptorCorreo) {
+		this.receptorCorreo = receptorCorreo;
+	}
+
+	public String getReceptorProvincia() {
+		return receptorProvincia;
+	}
+
+	public void setReceptorProvincia(String receptorProvincia) {
+		this.receptorProvincia = receptorProvincia;
+	}
+
+	public String getReceptorCodigoProvincia() {
+		return receptorCodigoProvincia;
+	}
+
+	public void setReceptorCodigoProvincia(String receptorCodigoProvincia) {
+		this.receptorCodigoProvincia = receptorCodigoProvincia;
+	}
+
+	public String getReceptorCanton() {
+		return receptorCanton;
+	}
+
+	public void setReceptorCanton(String receptorCanton) {
+		this.receptorCanton = receptorCanton;
+	}
+
+	public String getReceptorCodigoCanton() {
+		return receptorCodigoCanton;
+	}
+
+	public void setReceptorCodigoCanton(String receptorCodigoCanton) {
+		this.receptorCodigoCanton = receptorCodigoCanton;
+	}
+
+	public String getReceptorDistrito() {
+		return receptorDistrito;
+	}
+
+	public void setReceptorDistrito(String receptorDistrito) {
+		this.receptorDistrito = receptorDistrito;
+	}
+
+	public String getReceptorCodigoDistrito() {
+		return receptorCodigoDistrito;
+	}
+
+	public void setReceptorCodigoDistrito(String receptorCodigoDistrito) {
+		this.receptorCodigoDistrito = receptorCodigoDistrito;
+	}
+
+	public String getReceptorOtraSena() {
+		return receptorOtraSena;
+	}
+
+	public void setReceptorOtraSena(String receptorOtraSena) {
+		this.receptorOtraSena = receptorOtraSena;
+	}
+
+	public String getReceptorTelefono() {
+		return receptorTelefono;
+	}
+
+	public void setReceptorTelefono(String receptorTelefono) {
+		this.receptorTelefono = receptorTelefono;
+	}
+
+	public String getReceptorNombreComercial() {
+		return receptorNombreComercial;
+	}
+
+	public void setReceptorNombreComercial(String receptorNombreComercial) {
+		this.receptorNombreComercial = receptorNombreComercial;
+	}
+
+	public String getFacturaConsecutivo() {
+		return facturaConsecutivo;
+	}
+
+	public void setFacturaConsecutivo(String facturaConsecutivo) {
+		this.facturaConsecutivo = facturaConsecutivo;
+	}
+
+	public String getFacturaClave() {
+		return facturaClave;
 	}
 
 	public String getNumeroConsecutivoReceptor() {
@@ -182,12 +429,96 @@ public class RecepcionFactura implements Serializable {
 		this.numeroConsecutivoReceptor = numeroConsecutivoReceptor;
 	}
 
-	public Integer getEstadoFirma() {
-		return estadoFirma;
+	public void setFacturaClave(String facturaClave) {
+		this.facturaClave = facturaClave;
 	}
 
-	public void setEstadoFirma(Integer estadoFirma) {
-		this.estadoFirma = estadoFirma;
+	public Date getFacturaFechaEmision() {
+		return facturaFechaEmision;
+	}
+
+	public void setFacturaFechaEmision(Date facturaFechaEmision) {
+		this.facturaFechaEmision = facturaFechaEmision;
+	}
+
+	public String getFacturaCondicionVenta() {
+		return facturaCondicionVenta;
+	}
+
+	public void setFacturaCondicionVenta(String facturaCondicionVenta) {
+		this.facturaCondicionVenta = facturaCondicionVenta;
+	}
+
+	public String getFacturaMedioPago() {
+		return facturaMedioPago;
+	}
+
+	public void setFacturaMedioPago(String facturaMedioPago) {
+		this.facturaMedioPago = facturaMedioPago;
+	}
+
+	public String getFacturaCodigoMoneda() {
+		return facturaCodigoMoneda;
+	}
+
+	public void setFacturaCodigoMoneda(String facturaCodigoMoneda) {
+		this.facturaCodigoMoneda = facturaCodigoMoneda;
+	}
+
+	public Double getFacturaTipoCambio() {
+		return facturaTipoCambio;
+	}
+
+	public void setFacturaTipoCambio(Double facturaTipoCambio) {
+		this.facturaTipoCambio = facturaTipoCambio;
+	}
+
+	public Double getFacturaTotalServExentos() {
+		return facturaTotalServExentos;
+	}
+
+	public void setFacturaTotalServExentos(Double facturaTotalServExentos) {
+		this.facturaTotalServExentos = facturaTotalServExentos;
+	}
+
+	public Double getFacturaTotalExento() {
+		return facturaTotalExento;
+	}
+
+	public void setFacturaTotalExento(Double facturaTotalExento) {
+		this.facturaTotalExento = facturaTotalExento;
+	}
+
+	public Double getFacturaTotalVenta() {
+		return facturaTotalVenta;
+	}
+
+	public void setFacturaTotalVenta(Double facturaTotalVenta) {
+		this.facturaTotalVenta = facturaTotalVenta;
+	}
+
+	public Double getFacturaTotalVentaNeta() {
+		return facturaTotalVentaNeta;
+	}
+
+	public void setFacturaTotalVentaNeta(Double facturaTotalVentaNeta) {
+		this.facturaTotalVentaNeta = facturaTotalVentaNeta;
+	}
+
+	public Double getFacturaTotalComprobante() {
+		return facturaTotalComprobante;
+	}
+
+	public void setFacturaTotalComprobante(Double facturaTotalComprobante) {
+		this.facturaTotalComprobante = facturaTotalComprobante;
+	}
+
+	public Double getFacturaTotalImpuestos() {
+		return facturaTotalImpuestos;
+	}
+
+	public void setFacturaTotalImpuestos(Double facturaTotalImpuestos) {
+		this.facturaTotalImpuestos = facturaTotalImpuestos;
 	}
 
 	public Empresa getEmpresa() {
@@ -196,29 +527,6 @@ public class RecepcionFactura implements Serializable {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
-	}
-
-	public String getFechaEmisionSTR() {
-		if (this.fechaEmision != null) {
-			return Utils.getFechaGeneraReporte(this.getFechaEmision());
-		}
-		return Constantes.EMPTY;
-	}
-
-	public Double getTipoCambio() {
-		return tipoCambio;
-	}
-
-	public void setTipoCambio(Double tipoCambio) {
-		this.tipoCambio = tipoCambio;
-	}
-
-	public String getCodigoMoneda() {
-		return codigoMoneda;
-	}
-
-	public void setCodigoMoneda(String codigoMoneda) {
-		this.codigoMoneda = codigoMoneda;
 	}
 
 }

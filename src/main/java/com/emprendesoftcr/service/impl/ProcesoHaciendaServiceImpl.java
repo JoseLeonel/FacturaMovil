@@ -681,7 +681,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 			Map<String, Object> modelEmail = new HashMap<>();
 			modelEmail.put("clave", clave);
-			modelEmail.put("cedulaEmisor", recepcionFactura.getCedulaEmisor());
+			modelEmail.put("cedulaEmisor", recepcionFactura.getEmisorCedula());
 			String tipoMensajeTitulo = "";
 			if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO)) {
 				modelEmail.put("tipoMensaje", "aceptación");
@@ -693,7 +693,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				modelEmail.put("tipoMensaje", "rechazo");
 				tipoMensajeTitulo = "Rechazo";
 			}
-
+ 
 			modelEmail.put("tipoMensajeTitulo", tipoMensajeTitulo);
 			String from = tipoMensajeTitulo + "_Reply@emprendesoftcr.com";
 
@@ -703,7 +703,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				}
 			}
 
-			String subject = tipoMensajeTitulo + " Documento Electrónico N° " + clave + " del emisor con cédula: " + recepcionFactura.getCedulaEmisor();
+			String subject = tipoMensajeTitulo + " Documento Electrónico N° " + clave + " del emisor con cédula: " + recepcionFactura.getEmisorCedula();
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailHaciendaRecepcionFactura.vm", modelEmail);
 		} catch (Exception e) {
 			log.info("** Error  enviarCorreosRecepcion: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
@@ -920,10 +920,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						if (!comprobanteXMLConFirma.equals(Constantes.EMPTY)) {
 							// Se cargan los datos de la factura, el emisor es el que envia la factura para su aprobacion
 							Hacienda hacienda = new Hacienda();
-							hacienda.setCedulaEmisor(recepcionFactura.getCedulaEmisor());
-							hacienda.setTipoEmisor(recepcionFactura.getTipoCedulaEmisor());
-							hacienda.setClave(recepcionFactura.getClave());
-							hacienda.setFechaEmisor(recepcionFactura.getFechaEmision());
+							hacienda.setCedulaEmisor(recepcionFactura.getEmisorCedula());
+							hacienda.setTipoEmisor(recepcionFactura.getEmisorTipoCedula());
+							hacienda.setClave(recepcionFactura.getFacturaClave());
+							hacienda.setFechaEmisor(recepcionFactura.getFacturaFechaEmision());
 
 							// Se cargan los datos del emisor, empresa que recibe la factura
 							hacienda.setComprobanteXML(FacturaElectronicaUtils.convertirStringToblod(comprobanteXMLConFirma));
@@ -940,7 +940,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 							hacienda.setEmpresa(recepcionFactura.getEmpresa());
 							hacienda.setNombreReceptor(recepcionFactura.getEmpresa().getNombreComercial());
 							hacienda.setCorreoReceptor(recepcionFactura.getEmpresa().getCorreoElectronico());
-							hacienda.setTotalReceptor(recepcionFactura.getTotalFactura());
+							hacienda.setTotalReceptor(recepcionFactura.getFacturaTotalComprobante());
 							hacienda.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
 							haciendaBo.agregar(hacienda);
 

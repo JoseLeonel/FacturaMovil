@@ -715,7 +715,7 @@ public class FacturasController {
 		delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "="));
 
 		if (cedulaEmisor != null && cedulaEmisor.length() > 0) {
-			delimitador.addFiltro(new JqGridFilter("cedulaEmisor", "'" + cedulaEmisor + "'", "="));
+			delimitador.addFiltro(new JqGridFilter("emisorCedula", "'" + cedulaEmisor + "'", "="));
 		}
 
 		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
@@ -729,8 +729,8 @@ public class FacturasController {
 			}
 
 			DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
-			delimitador.addFiltro(new JqGridFilter("fechaEmision", dateFormat.format(fechaInicio), "date>="));
-			delimitador.addFiltro(new JqGridFilter("fechaEmision", dateFormat.format(fechaFinal), "dateFinal<="));
+			delimitador.addFiltro(new JqGridFilter("facturaFechaEmision", dateFormat.format(fechaInicio), "date>="));
+			delimitador.addFiltro(new JqGridFilter("facturaFechaEmision", dateFormat.format(fechaFinal), "dateFinal<="));
 		}
 		return UtilsForControllers.process(request, dataTableBo, delimitador, TO_COMMAND_RECEPCION);
 	}
@@ -947,19 +947,19 @@ public class FacturasController {
 			// Se validan los datos
 			if (recepcionFactura.getMensaje() != null && (!recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_ACEPTADO) && !recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_ACEPTADO_PARCIAL) && !recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_RECHAZADO))) {
 				result.rejectValue("mensaje", "error.recepcionFactura.mensaje.requerido");
-			} else if (!usuarioSesion.getEmpresa().getCedula().trim().toUpperCase().equals(recepcionFactura.getCedulaReceptor().trim().toUpperCase())) {
-				result.rejectValue("cedulaReceptor", "error.recepcionFactura.factura.otro.receptor");
+			} else if (!usuarioSesion.getEmpresa().getCedula().trim().toUpperCase().equals(recepcionFactura.getReceptorCedula().trim().toUpperCase())) {
+				result.rejectValue("receptorCedula", "error.recepcionFactura.factura.otro.receptor");
 			} else {
-				Collection<RecepcionFactura> resultado = recepcionFacturaBo.findByClave(recepcionFactura.getCedulaEmisor(), recepcionFactura.getClave());
+				Collection<RecepcionFactura> resultado = recepcionFacturaBo.findByClave(recepcionFactura.getEmisorCedula(), recepcionFactura.getFacturaClave());
 				if (resultado != null && resultado.size() > 0) {
-					result.rejectValue("clave", "error.recepcionFactura.ya.exite");
+					result.rejectValue("facturaClave", "error.recepcionFactura.ya.exite");
 				}
 			}
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			// Se prepara el objeto para almacenarlo
-			recepcionFactura.setNumeroConsecutivoReceptor(empresaBo.generarConsecutivoRecepcionFactura(usuarioSesion.getEmpresa(), usuarioSesion, recepcionFactura));
+			recepcionFactura.    setNumeroConsecutivoReceptor(empresaBo.generarConsecutivoRecepcionFactura(usuarioSesion.getEmpresa(), usuarioSesion, recepcionFactura));
 			recepcionFactura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
 			recepcionFactura.setEmpresa(usuarioSesion.getEmpresa());
 			recepcionFacturaBo.agregar(recepcionFactura);
