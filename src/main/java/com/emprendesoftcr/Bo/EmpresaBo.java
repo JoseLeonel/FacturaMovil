@@ -1,5 +1,7 @@
 package com.emprendesoftcr.Bo;
 
+import java.util.Collection;
+
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.RecepcionFactura;
@@ -25,5 +27,7 @@ public interface EmpresaBo {
 	
 	String generarConsecutivoRecepcionFactura(Empresa empresa, Usuario usuario, RecepcionFactura recepcionFactura) throws Exception;
 	String generaClaveFacturaTributacion(Empresa empresa, String consecutivoFactura, Integer comprobanteElectronico) throws Exception;
+	
+	Collection<Empresa> findByEstado(String estado);
 
 }

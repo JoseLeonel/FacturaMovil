@@ -1,15 +1,13 @@
 package com.emprendesoftcr;
 
-import java.io.InputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.JRException;
 
 public class leo {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	public static void main(String[] args) throws JRException, IOException {
 
 		DecimalFormat formateador = new DecimalFormat("###,###.00");
 		// Este daria a la salida 1,000

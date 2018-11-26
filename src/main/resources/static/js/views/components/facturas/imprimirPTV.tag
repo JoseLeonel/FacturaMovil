@@ -11,7 +11,7 @@
                
             </div>
             <section class="zona-impresion" >
-                <div class="forma-impresion" id="imprimeme" name ="imprimeme">
+                <div class="forma-impresion myDivToPrint" id="imprimeme" name ="imprimeme">
                     <div class="ticket" id="ticket" name="ticket" > 
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc == '88'}"><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.id}                       </strong><br></div>
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc == '87'}"><strong> {$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")} {facturaImpresa.id}                       </strong><br></div>
@@ -35,7 +35,7 @@
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura != ""}"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.nombreFactura}</div>
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == "" }"><strong show={facturaImpresa.cliente.nombreCompleto != 'CLIENTE_FRECUENTE'}>{$.i18n.prop("tikect.encabezado.receptor")}     {facturaImpresa.cliente.nombreCompleto}</strong ></div>
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == ""}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}>{$.i18n.prop("tikect.encabezado.receptor.cedula")}  {facturaImpresa.cliente.cedula}   </strong></div>
-                        <div class="encabezado" show ="{ facturaImpresa.nota != ""}"> "Nota:"   {facturaImpresa.nota}  <br/></div>
+                        <div class="encabezado" show ='{ facturaImpresa.nota != "" && facturaImpresa.nota !=null}'> Nota:   {facturaImpresa.nota}  <br/></div>
                         <table class = "forma-table">
                             <thead>
                                 <tr class = "forma-table">
@@ -283,20 +283,19 @@
         align-content: left;
         text-align: left;
     }
-  @media print {
-* {
-    -webkit-print-color-adjust: exact !important; /*Chrome, Safari */
-    color-adjust: exact !important;  /*Firefox*/
-    body {
-		background: #fff;
-		color: #000;
-	}   
-  }
-}
-@media only print
-{
-  body * { display: none !important; }
- body:after { content: "Don't waste paper!"; }
+ @media print {
+    .myDivToPrint {
+        background-color: white;
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        margin: 0;
+        padding: 15px;
+        font-size: 14px;
+        line-height: 18px;
+    }
 }
 
 </style>    
@@ -571,11 +570,16 @@ function __imprimir(){
 
 
 function imprimirElemento(elemento){
+//window.print();
+//return
+    // var canvas=document.getElementById("leo");
+    
   
   var ventana = window.open('', 'PRINT', 'height=400,width=600');
   ventana.document.write('<html><head><title>' + "" + '</title>');
   ventana.document.write('</head><body >');
   ventana.document.write(elemento.innerHTML);
+  //ventana.document.write("<br><img src='"+canvas.toDataURL()+"'/>");
  
   ventana.document.write('</body></html>');
   ventana.document.close();

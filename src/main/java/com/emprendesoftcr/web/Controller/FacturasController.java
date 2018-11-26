@@ -89,6 +89,8 @@ import com.emprendesoftcr.web.propertyEditor.VendedorPropertyEditor;
 import com.google.common.base.Function;
 import com.itextpdf.text.DocumentException;
 
+import net.sf.jasperreports.engine.JRException;
+
 /**
  * Compras realizadas por la empresa y ingresan al inventario ComprasController.
  * @author jose.
@@ -316,6 +318,11 @@ public class FacturasController {
 		return "views/facturas/creditoDebito";
 	}
 
+	@RequestMapping(value = "/ListaFacturasAnulacion", method = RequestMethod.GET)
+	public String listaFacturasAnulacion(ModelMap model) {
+		return "views/facturas/listaFacturasAnulacion";
+	}
+	
 	/**
 	 * Listado de facturas anuladas y facturadas
 	 * @param model
@@ -345,6 +352,9 @@ public class FacturasController {
 	public String totalFacturas(ModelMap model) {
 		return "views/facturas/totalFacturas";
 	}
+	
+
+
 
 	/**
 	 * Busca el total de facturas por rango de fechas
@@ -450,11 +460,26 @@ public class FacturasController {
 	 * @param model
 	 * @param idFactura
 	 * @throws IOException
+	 * @throws JRException 
 	 */
 	@RequestMapping(value = "/generaProformasPDF.do", method = RequestMethod.GET, headers = "Accept=application/json")
-	public void generarProformasPDF(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura) throws IOException {
+	public void generarProformasPDF(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura) throws IOException, JRException {
 		try {
-			Factura factura = facturaBo.findById(idFactura);
+//			JasperReport jasperReport;
+//
+//
+//			jasperReport = JasperCompileManager.compileReport("reportes/ejemplo.jrxml");
+//			JRDataSource vacio = new JREmptyDataSource(1);
+//			 
+//			Map<String, Object> parameters = new HashMap<String, Object>();
+//			parameters.put("nombreEmpresa", factura.getEmpresa().getNombre().toString());
+//			
+//			JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters,vacio);
+//      
+//      JasperExportManager.exportReportToPdfFile(print, "reportes/ejemplo.pdf");
+			
+      Factura factura = facturaBo.findById(idFactura);
+			
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
 			ByteArrayOutputStream namePDF = Proformas.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
@@ -986,6 +1011,7 @@ public class FacturasController {
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idFactura) {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
+			
 
 			// Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 

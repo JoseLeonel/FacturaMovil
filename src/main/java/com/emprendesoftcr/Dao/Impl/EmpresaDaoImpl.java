@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Dao.Impl;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -232,6 +233,22 @@ public class EmpresaDaoImpl implements EmpresaDao {
 		}
 
 		return resultado;
+	}
+	
+	/**
+	 * Lista de empresas activas
+	 * @see com.emprendesoftcr.Dao.EmpresaDao#findByEstado(java.lang.String)
+	 */
+	@Override
+	public Collection<Empresa> findByEstado(String estado){
+		StringBuilder hql = new StringBuilder();
+		hql.append("select obj from Empresa obj");
+		hql.append(" where obj.estado = :estado ");
+		Query query = entityManager.createQuery(hql.toString());
+		query.setParameter("estado", estado);
+   	return query.getResultList();
+		
+		
 	}
 
 }

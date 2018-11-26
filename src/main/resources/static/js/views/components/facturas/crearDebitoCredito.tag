@@ -119,7 +119,7 @@
                                     </div>
                                     <div  class="form-group has-success">
                                         <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
-                                        <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="campo tamanoLetraTotales " id="pago_tarjeta"  value="{factura.totalTarjeta}">
+                                        <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="campo tamanoLetraTotales   totalBanco" id="totalBanco" name="totalBanco"  >
                                     </div>
 
                                     
@@ -273,7 +273,7 @@
                             </td>
 
                             <td class="text-right">
-                                <input  class="campo" type="text"  value = "₡ {montoTotalLinea.toFixed(2)}" readonly/>
+                                <input  class="campo" type="text"  value = " {montoTotalLinea.toFixed(2)}" readonly/>
                             </td>
                         </tr>
                         </tbody>
@@ -952,8 +952,7 @@ function aplicarFactura(){
                 return
             }
             var montoEntregado = self.factura.totalTarjeta + self.factura.totalBanco + self.factura.totalEfectivo
-                montoEntregado = redondeoDecimales(__valorNumerico(montoEntregado),2)
-                var resultado  = redondeoDecimales( __valorNumerico(self.factura.totalComprobante),2)
+                var resultado  = __valorNumerico(self.factura.totalComprobante)
                 if(__valorNumerico(resultado) > __valorNumerico(montoEntregado)  ){
                     mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
                     return
@@ -962,7 +961,7 @@ function aplicarFactura(){
                 var tarjeta = __valorNumerico(self.factura.totalTarjeta)
                 var banco = __valorNumerico(self.factura.totalBanco)
                 if(tarjeta != 0 || banco !=0){
-                if(self.factura.totalVentaNeta != montoEntregado  ){
+                if(self.factura.totalComprobante != montoEntregado  ){
                     mensajeError($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
                 return
                     

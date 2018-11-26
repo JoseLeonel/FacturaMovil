@@ -81,6 +81,17 @@ public class HaciendaDaoImpl implements HaciendaDao {
 	}
 
 	@Override
+	public Collection<Hacienda> findByEstadoOrEstadoErrorAndEmpresa(Empresa empresa ,Integer estado,Integer estadoError){
+		Query query = entityManager.createQuery("select obj from Hacienda obj where obj.estado in(:estado,:estadoError) and obj.empresa = :empresa ");
+		query.setParameter("estado", estado);
+		query.setParameter("estadoError", estadoError);
+		query.setParameter("empresa", empresa);
+		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
+
+		return query.getResultList();
+		
+	}
+	@Override
 	public Collection<Hacienda> findByEstadoAndNotificacion(Integer estado, Integer notificacion) {
 		Query query = entityManager.createQuery("select obj from Hacienda obj where obj.estado = :estado and obj.notificacion = :notificacion ");
 		query.setParameter("estado", estado);

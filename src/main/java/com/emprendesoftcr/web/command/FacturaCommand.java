@@ -124,6 +124,8 @@ public class FacturaCommand {
 	public FacturaCommand() {
 		super();
 	}
+	
+	
 
 	public Long getId() {
 		return id;

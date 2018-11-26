@@ -20,4 +20,5 @@ public interface HaciendaBo {
 
 	Collection<Hacienda> findByEstado(Integer estado, Integer estadoError);
 
+	Collection<Hacienda>  findByEstadoOrEstadoErrorAndEmpresa(Empresa empresa ,Integer estado,Integer estadoError);
 }
