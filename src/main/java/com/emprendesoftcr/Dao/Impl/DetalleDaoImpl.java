@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.DetalleDao;
 import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
@@ -83,7 +82,7 @@ public class DetalleDaoImpl implements DetalleDao {
 			}
 		}
 		hql.append("and obj.codigo = :codigo ");
-		hql.append("and obj.factura.created_at >= :fechaInicio and obj.factura.created_at <= :fechaFin and obj.codigoReferencia != : codigoReferencia");
+		hql.append("and obj.factura.created_at >= :fechaInicio and obj.factura.created_at <= :fechaFin and obj.factura.referenciaCodigo != :referenciaCodigo");
 		Query query = entityManager.createQuery(hql.toString());
 		query.setParameter("estado", estado);
 		if (tipoDocumento != null) {
@@ -99,7 +98,7 @@ public class DetalleDaoImpl implements DetalleDao {
 		}
 		query.setParameter("empresa", empresa);
 		query.setParameter("codigo", codigo);
-		query.setParameter("codigoReferencia", Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO);
+		query.setParameter("referenciaCodigo", Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO);
 		query.setParameter("fechaInicio", fechaInicio);
 		query.setParameter("fechaFin", fechaFin);
 		return query.getResultList();

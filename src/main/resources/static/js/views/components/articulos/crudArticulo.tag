@@ -93,7 +93,7 @@
                                 <input type="number" step="any" class="form-control impuesto" id="impuesto" name="impuesto" value="{articulo.impuesto}"  onkeyup ={__ActualizarPreciosImpuestos}>
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
-                                <label  >{$.i18n.prop("articulo.gananciaPrecioPublico")}  </label>
+                                <label  >{$.i18n.prop("articulo.gananciaPrecioPublico")} % </label>
                                 <input type="number" step="any" class="form-control gananciaPrecioPublico" id="gananciaPrecioPublico" name="gananciaPrecioPublico" value="{articulo.gananciaPrecioPublico}"  onkeyup ={__CalculoGananciaSinPrecioPublico}>
                             </div>
 
@@ -107,7 +107,7 @@
                             </div>
                             
                             <div class= "col-col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
-                                <label  >{$.i18n.prop("articulo.gananciaPrecioEspecial")}  </label>
+                                <label  >{$.i18n.prop("articulo.gananciaPrecioEspecial")} % </label>
                                 <input type="text" class="form-control gananciaPrecioEspecial" id="gananciaPrecioEspecial" name="gananciaPrecioEspecial" value="{articulo.gananciaPrecioEspecial}"  readonly>
                             </div>
                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
@@ -115,7 +115,7 @@
                                 <input type="number" step="any" class="form-control precioMayorista" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista}" onkeyup={__CalculoGananciaMayorista} >
                             </div>  
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
-                                <label  >{$.i18n.prop("articulo.gananciaPrecioMayorista")}  </label>
+                                <label  >{$.i18n.prop("articulo.gananciaPrecioMayorista")} % </label>
                                 <input type="number" step="any" class="form-control gananciaPrecioMayorista" id="gananciaPrecioMayorista" name="gananciaPrecioMayorista" value="{articulo.gananciaPrecioMayorista}"  readonly>
                             </div>
                            
@@ -925,14 +925,20 @@ function _PrecioPublicoConGanancia(costo,impuesto,ganancia){
       return 0
   } 
   var porcentajeGanancia = ganancia/100;
-  porcentajeGanancia = 1 - porcentajeGanancia
- 
+  porcentajeGanancia = porcentajeGanancia < 1 ?1 - porcentajeGanancia:porcentajeGanancia
   var totalImpuesto = impuesto == 0 ?0:impuesto / 100
   totalImpuesto = totalImpuesto == 0 ?0:totalImpuesto + 1
-  var resultado  = ganancia / 100
-  var precio  = costo / porcentajeGanancia
+  var precio  = 0
+  if(porcentajeGanancia < 1){
+    precio = costo / porcentajeGanancia
+  }else{
+      if(porcentajeGanancia == 1){
+        precio = costo * 2 
+      }else{
+        precio = costo * porcentajeGanancia
+      }
+  }
   precio = totalImpuesto >0? precio * totalImpuesto:precio;
-
   return precio;
 }
 /**
@@ -954,8 +960,8 @@ __ActualizarPreciosCosto(e){
 * obtener la ganancia del precio en decimal
 **/
 function _porcentajeGanancia(costo,impuesto,precioVenta) {
-  let porcentajeGanancia = 0;
-  let precioSinImpuesto  = 0;
+  var porcentajeGanancia = 0;
+  var precioSinImpuesto  = 0;
   if(costo == 0){
       return 0
   } 
@@ -963,12 +969,16 @@ function _porcentajeGanancia(costo,impuesto,precioVenta) {
     return 0;
   }
   if(impuesto == 0 || impuesto == null ){
-     porcentajeGanancia  = 1-(costo/precioVenta);
+    var resultado =  precioVenta / costo
+    resultado = resultado  - 1
+    porcentajeGanancia  = resultado;
   }else{
-     precioSinImpuesto = precioVenta/((impuesto/100) + 1);
-     porcentajeGanancia  = (1-(costo/precioSinImpuesto));
+    precioSinImpuesto = precioVenta/((impuesto/100) + 1);
+    var resultado =  precioSinImpuesto / costo
+    resultado = resultado  - 1
+    porcentajeGanancia  = resultado;
   }
-  return porcentajeGanancia * 100;
+  return porcentajeGanancia* 100;
 }
 /**
 *  retorna el valor numerico o cero sino es numerico

@@ -19,24 +19,12 @@
                         <form id="formularioFactura">
                             <div class="row">
                                 <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
-                                    <div class="row">
-                                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
-                                            <div class="form-group ">
-                                                <label>{$.i18n.prop("factura.condicion.pago")} </label> 
-                                                <select  onchange= {__formaPago} class="form-control condicionVenta" id="condicionVenta" name="condicionVenta">
-                                                    <option each={comboCondicionPagos} value="{estado}" selected="{factura.condicionVenta ==estado?true:false}" >{descripcion}</option>
-                                                </select>
-                                            </div>
-                                        </div>    
-                                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
                                             <div class="form-group ">
                                                 <label for="pago_tipoVentaL">{$.i18n.prop("factura.tipo.documento")} </label> 
                                                 <select onchange= {__formaReferencias} class="form-control tipoDoc" id="tipoDoc" name="tipoDoc"   >
                                                     <option each={comboTipoDocumentos} value="{estado}" selected="{factura.tipoDoc ==estado?true:false}" >{descripcion}</option>
                                                 </select>
                                             </div>
-                                        </div>
-                                    </div>
                                     <div class="form-group ">
                                         <label for="pago_tipoVentaL">{$.i18n.prop("factura.estado")} </label> 
                                         <select class="form-control estado" id="estado" name="estado"  >
@@ -48,30 +36,9 @@
                                         <label >{$.i18n.prop("factura.nota")}</label> 
                                         <input type="text" class="form-control nota" id="nota" name="nota" value="{factura.nota}">
                                     </div>
-                                    <h3> <p class="text-primary">{$.i18n.prop("factura.emisor")}</p></h3>
-                                    <div class="form-group ">
-                                        <input   type="hidden" class="form-control" id="cliente" name="cliente" value="{cliente.id}">
-                                        <label>{$.i18n.prop("factura.cliente")}</label> 
-                                        <input  type="text" id="nombreCliente" name="nombreCliente" class="form-control"  value="{cliente.nombreCompleto}" readonly>
-                                    </div>
-                                    <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group ">
-                                        <label >{$.i18n.prop("factura.fecha.credito")}</label> 
-                                        <div  class="form-group input-group date" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
-                                            <input type="text" class="form-control fechaCredito" name="fechaCredito" id="fechaCredito" value="{factura.fechaCredito}" >
-                                            <div class="input-group-addon">
-                                                <span class="glyphicon glyphicon-th"></span>
-                                            </div>
-                                        </div>
-                                    </div>    
-                                    <div class="form-group " show = {!mostrarCamposIngresoContado || factura.fechaCredito}>
-                                        <label>{$.i18n.prop("factura.plazoCredito")}</label> 
-                                        <input type="number" id = "plazoCreditoL"  name "plazoCreditoL" class="form-control plazoCreditoL" value="{factura.plazoCredito}" >
-                                    </div>
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("cliente.correoElectronico")}</label> 
-                                        <input type="text" class="form-control " value="{cliente.correoElectronico}" readonly>
-                                    </div>
                                     
+                                    
+                                                   
 
                                 </div>
                                 <div  class= "col-md-6 col-sx-6 col-sm-6 col-lg-6" >
@@ -79,16 +46,7 @@
                                         <h3><label class="text-primary">{$.i18n.prop("informacion.referencias")}</label> </h3>
                                     </div>
 
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("informacion.numero")}</label> 
-                                        <input type="text" onkeypress={__consultarConsecutivo} name = "referenciaNumero" id="referenciaNumero" class="form-control has-success referenciaNumero" value="{factura.referenciaNumero}" >
-                                    </div>
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("informacion.TipoDoc")}</label> 
-                                        <select class="form-control has-success" id="referenciaTipoDoc" name="referenciaTipoDoc"    >
-                                            <option each={comboTipoDocumentosRef} value="{estado}" selected="{factura.referenciaTipoDoc ==estado?true:false}" >{descripcion}</option>
-                                        </select>
-                                    </div>
+                                  
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("informacion.codigo")}</label> 
                                         <select class="form-control " id="referenciaCodigo" name="referenciaCodigo" >
@@ -99,15 +57,7 @@
                                         <label>{$.i18n.prop("informacion.razon")}</label> 
                                         <input type="text" class="form-control " id"referenciaRazon" name= "referenciaRazon" value="{factura.referenciaRazon}"  >
                                     </div>
-                                    <div  class="form-group">
-                                        <label >{$.i18n.prop("informacion.FechaEmision")}</label> 
-                                        <div  class="form-group input-group date datepickerFechaEmision" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
-                                            <input type="text" class="form-control referenciaFechaEmision" name="referenciaFechaEmision" id="referenciaFechaEmision"  >
-                                            <div class="input-group-addon">
-                                                <span class="glyphicon glyphicon-th"></span>
-                                            </div>
-                                        </div>
-                                    </div>    
+                                   
 
                                     <div class="form-group has-success">
                                         <label for="pago_transporteL">{$.i18n.prop("factura.resumen.efectivo")} </label> 
@@ -126,7 +76,18 @@
                                 </div>
                             </div>
                             <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
+                            <input type="hidden" id='mesa'                    name='mesa'                    value="{factura.mesa}" >
+                            <input type="hidden" id='codigoMoneda'            name='codigoMoneda'            value="{factura.codigoMoneda}" >
+                            <input type="hidden" id='tipoCambio'              name='tipoCambio'              value="{factura.tipoCambio}" >
+                            <input type="hidden" id='montoCambio'             name='montoCambio'              value="{factura.montoCambio}" >
                             <input type="hidden" id='plazoCredito'            name='plazoCredito'            value="{factura.plazoCredito}" >
+                            <input type="hidden" id='condicionVenta'          name='condicionVenta'          value="{factura.condicionVenta}" >
+                            <input type="hidden" id='fechaCredito'            name='fechaCredito'            value="{factura.fechaCredito}" >
+                            <input type="hidden" id='referenciaNumero'        name='referenciaNumero'        value="{factura.numeroConsecutivo}" >
+                            <input type="hidden" id='referenciaTipoDoc'       name='referenciaTipoDoc'       value="{factura.tipoDoc}" >
+                            <input type="hidden" id='referenciaFechaEmision'  name='referenciaFechaEmision'  value="{factura.fechaEmision}" >
+                            <input type="hidden" id="cliente"                 name="cliente"                 value="{cliente.id}">
+
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='subTotal'                name='subTotal'                value="{factura.subTotal}" >
@@ -633,10 +594,7 @@ function _INIT(){
             }
     ); 
     $(".direccion").val(null)   
-    $(".referenciaFechaEmision").val(null)
-    $('.referenciaNumero').val(null)
     $('.referenciaRazon').val(null)
-    $('.referenciaTipoDoc').prop("selectedIndex", 0);
     $('.referenciaCodigo').prop("selectedIndex", 0);
     $('.condicionVenta').prop("selectedIndex", 0);
     $('.tipoDoc').prop("selectedIndex", 0);
