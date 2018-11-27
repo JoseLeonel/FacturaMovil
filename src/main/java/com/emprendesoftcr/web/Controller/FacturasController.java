@@ -732,6 +732,27 @@ public class FacturasController {
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
+	
+	/**
+	 * Facturas sin notas de creditos de anulacion completa
+	 * @param request
+	 * @param response
+	 * @param fechaInicio
+	 * @param fechaFin
+	 * @param idCliente
+	 * @param tipoDocumento
+	 * @return
+	 */
+	@RequestMapping(value = "/listarFacturasActivasSinNotasCreditosCompletasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarFacturasActivasSinNotasCreditosCompletasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam String tipoDocumento) {
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Cliente cliente = clienteBo.buscar(idCliente);
+		DataTableDelimitador query = DelimitadorBuilder.getAnulacion(request, fechaInicio, fechaFin, cliente, usuarioSesion.getEmpresa(), usuarioBo, tipoDocumento);
+
+		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
+	}
+	
 
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarRecepcionFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -869,7 +890,7 @@ public class FacturasController {
 				}
 
 			}
-			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) && !facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 				if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 					if (facturaCommand.getTotalBanco().equals(Constantes.ZEROS_DOUBLE) && facturaCommand.getTotalEfectivo().equals(Constantes.ZEROS_DOUBLE) && facturaCommand.getTotalTarjeta().equals(Constantes.ZEROS_DOUBLE)) {
 						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.ingreso.dinero", result.getAllErrors());
@@ -1400,6 +1421,55 @@ public class FacturasController {
 			}
 			return delimitador;
 		}
+		
+		static DataTableDelimitador getAnulacion(HttpServletRequest request, String inicio, String fin, Cliente cliente, Empresa empresa, UsuarioBo usuarioBo, String tipoDocumento) {
+			// Consulta por fechas
+			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Factura");
+			Date fechaInicio = new Date();
+			Date fechaFinal = new Date();
+
+			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "<>"));
+			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PROFORMAS.toString() + "'", "<>"));
+			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_ANULADA.toString() + "'", "<>"));
+			delimitador.addFiltro(new JqGridFilter("referenciaCodigo", "'" + Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO.toString() + "'", "<>"));
+			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
+
+			if (cliente != null) {
+				delimitador.addFiltro(new JqGridFilter("cliente.id", "'" + cliente.getId().toString() + "'", "="));
+			}
+			if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
+				Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+				delimitador.addFiltro(new JqGridFilter("usuarioCreacion.id", "'" + usuario.getId().toString() + "'", "="));
+			}
+			if (tipoDocumento != null) {
+				if (!tipoDocumento.equals(Constantes.EMPTY)) {
+					if (!tipoDocumento.equals(Constantes.COMBO_TODOS)) {
+						delimitador.addFiltro(new JqGridFilter("tipoDoc", "'" + tipoDocumento.toString() + "'", "="));
+					}
+				}
+			}
+
+			if (!inicio.equals(Constantes.EMPTY) && !fin.equals(Constantes.EMPTY)) {
+				fechaInicio = Utils.parseDate(inicio);
+				fechaFinal = Utils.parseDate(fin);
+				if (fechaFinal == null) {
+					fechaFinal = new Date(System.currentTimeMillis());
+				}
+				if (fechaFinal != null && fechaFinal != null) {
+					fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
+				}
+
+				DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
+
+				inicio = dateFormat.format(fechaInicio);
+				fin = dateFormat.format(fechaFinal);
+
+				delimitador.addFiltro(new JqGridFilter("fechaEmision", inicio, "date>="));
+				delimitador.addFiltro(new JqGridFilter("fechaEmision", fin, "dateFinal<="));
+			}
+			return delimitador;
+		}
+		
 	}
 
 	static class RESPONSES {

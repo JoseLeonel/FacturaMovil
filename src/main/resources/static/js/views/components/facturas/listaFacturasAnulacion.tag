@@ -331,7 +331,6 @@ function crearFactura(){
     self.detalleFactura.data =self.detail
     self.update() 
     var JSONDetalles = JSON.stringify( self.detalleFactura );
-    self.factura.id = self.factura.id
     self.factura.referenciaCodigo = "01"
     self.factura.tipoDoc = "03"
     self.factura.referenciaFechaEmision = null
@@ -383,11 +382,32 @@ function evaluarFactura(data){
             self.facturaReimprimir = modeloTabla
             self.update()
             riot.mount('ptv-imprimir',{factura:self.facturaImprimir}); 
-            _consulta()
+            __eliminarFacturaListado()
+            
         });
     }
 }
 
+/**
+* eliminar un detalle factura
+**/
+function __eliminarFacturaListado() {
+    $("#tableListar").dataTable().fnClearTable(); 
+    __InicializarTabla('.tableListar') 
+    var index = 0
+    for (var count = 0; count < self.listaFacturas.data.length; count++) {
+        var item = self.listaFacturas.data[count]
+        if ( item.id == self.idFactura ){
+            index = count
+        }
+    }
+    self.listaFacturas.data.splice(index, 1);
+    self.update()
+    loadListar(".tableListar",idioma_espanol,self.formato_tabla,self.listaFacturas.data)
+    agregarInputsCombos();
+    ActivarEventoFiltro(".tableListar")
+    __AnularFactura()
+ }
 /**
 * cargar los tipos de Documento de la factura
 **/
@@ -469,7 +489,7 @@ __Busqueda(){
 }
 
 function _consulta(){
- self.listaFacturas = []
+ self.listaFacturas = {data:[]}
     self.update()
     var inicial  =$('.fechaInicial').val()
      if ($("#filtros").valid()) {
@@ -483,7 +503,7 @@ function _consulta(){
         $("#tableListar").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListar')  
         $.ajax({
-            url: "ListarFacturasActivasAndAnuladasAjax.do",
+            url: "listarFacturasActivasSinNotasCreditosCompletasAjax.do",
             datatype: "json",
             data:parametros ,
             method:"GET",
@@ -491,7 +511,7 @@ function _consulta(){
                 if(result.aaData.length > 0){
                     __InformacionDataTable();
                     loadListar(".tableListar",idioma_espanol,self.formato_tabla,result.aaData)
-                    self.listaFacturas = result.aaData
+                    self.listaFacturas.data = result.aaData
                     self.update()
                     agregarInputsCombos();
                     ActivarEventoFiltro(".tableListar")
@@ -511,6 +531,8 @@ function _consulta(){
 
      }
 }
+
+
 /**
 *  Obtiene la lista de los clientes activos
 **/
@@ -633,6 +655,7 @@ function __AnularFactura(){
 	    }
          __Init()
         self.factura = data
+        self.idFactura = self.factura.id
         self.update()
         __FacturaEnEspera()
 	});
