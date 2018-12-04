@@ -65,6 +65,16 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 		factura.setFechaEmision(fecha);
 		facturaBo.modificar(factura);
 		try {
+			String observacion = Constantes.EMPTY;
+			if(factura.getCliente().getObservacionVenta() !=null) {
+				if(!factura.getCliente().getObservacionVenta().equals(Constantes.EMPTY)) {
+					observacion = factura.getCliente().getObservacionVenta();
+				}else {
+					observacion = factura.getNota();
+				}
+			}else {
+				observacion = factura.getNota();
+			}
 	
 			String date = FacturaElectronicaUtils.toISO8601String(factura.getFechaEmision());
 			 xml = "<FacturaElectronica xmlns=\"" + Constantes.DOCXMLS_FACTURA + "\" " +
@@ -115,7 +125,7 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 	         "<FechaResolucion>" + Constantes.FECHA_RESOLUCION + "</FechaResolucion>" +
 	     "</Normativa>" +
 	     "<Otros>" +
-	     		"<OtroTexto codigo=\"obs\">" + factura.getNota() + "</OtroTexto>" +
+	     		"<OtroTexto codigo=\"obs\">" + observacion + "</OtroTexto>" +
 	     "</Otros>" +    
 	 "</FacturaElectronica>";
 				

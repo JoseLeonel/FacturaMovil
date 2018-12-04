@@ -62,6 +62,16 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 		facturaBo.modificar(factura);
 
 		try {
+			String observacion = Constantes.EMPTY;
+			if(factura.getCliente().getObservacionVenta() !=null) {
+				if(!factura.getCliente().getObservacionVenta().equals(Constantes.EMPTY)) {
+					observacion = factura.getCliente().getObservacionVenta();
+				}else {
+					observacion = factura.getNota();
+				}
+			}else {
+				observacion = factura.getNota();
+			}
 					 String date = FacturaElectronicaUtils.toISO8601String(fecha);
 		   resultado = "<TiqueteElectronico xmlns=\"" + Constantes.DOCXMLS_TIQUETE + "\" " +
 		                "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
@@ -111,7 +121,7 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 			        "<FechaResolucion>" + Constantes.FECHA_RESOLUCION + "</FechaResolucion>" +
 		        "</Normativa>" +
 				    "<Otros>" +
-				    		"<OtroTexto codigo=\"obs\">" + factura.getNota() + "</OtroTexto>" +
+				    		"<OtroTexto codigo=\"obs\">" + observacion + "</OtroTexto>" +
 				    "</Otros>" +    
 		        "</TiqueteElectronico>";
 			

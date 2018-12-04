@@ -46,6 +46,8 @@ public class ClienteCommand {
 
 	private Date		updated_at;
 	private String	identificacionExtranjero;
+	
+	private String observacionVenta;
 
 	private Empresa	empresa;
 
@@ -74,6 +76,7 @@ public class ClienteCommand {
 		this.correoElectronico1 = cliente.getCorreoElectronico1();
 		this.correoElectronico2 = cliente.getCorreoElectronico2();
 		this.correoElectronico3 = cliente.getCorreoElectronico3();
+		this.observacionVenta = cliente.getObservacionVenta();
 
 	}
 
@@ -303,6 +306,16 @@ public class ClienteCommand {
 	
 	public void setCorreoElectronico3(String correoElectronico3) {
 		this.correoElectronico3 = correoElectronico3;
+	}
+
+	
+	public String getObservacionVenta() {
+		return observacionVenta;
+	}
+
+	
+	public void setObservacionVenta(String observacionVenta) {
+		this.observacionVenta = observacionVenta;
 	}
 	
 	

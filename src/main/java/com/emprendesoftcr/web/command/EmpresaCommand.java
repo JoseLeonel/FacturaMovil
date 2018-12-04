@@ -58,6 +58,8 @@ public class EmpresaCommand {
 	private Integer	aplicaGanancia;
 
 	private String	enviarTiquete;
+	
+	private Integer						enterFacturar;
 
 	public EmpresaCommand(Empresa empresa) {
 		super();
@@ -96,6 +98,8 @@ public class EmpresaCommand {
 		this.vueltoImprimir = empresa.getVueltoImprimir();
 		
 		this.aplicaGanancia = empresa.getAplicaGanancia();
+		
+		this.enterFacturar = empresa.getEnterFacturar();
 
 	}
 
@@ -111,9 +115,16 @@ public class EmpresaCommand {
 		this.id = id;
 	}
 	
-	
+		
+	public Integer getEnterFacturar() {
+		return enterFacturar;
+	}
 
 	
+	public void setEnterFacturar(Integer enterFacturar) {
+		this.enterFacturar = enterFacturar;
+	}
+
 	public Integer getAplicaGanancia() {
 		return aplicaGanancia;
 	}

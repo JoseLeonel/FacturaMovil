@@ -44,6 +44,7 @@ public class Constantes {
 
 	public static final String					IDP_URI_PRODUCCION																	= "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut/protocol/openid-connect";
 	public static final String					IDP_URI_DOCUMENTOS_PRODUCCION												= "https://api.comprobanteselectronicos.go.cr/recepcion/v1/recepcion";
+	public static final String					IDP_URI_DOCUMENTOS_DESARROLLO												= "https://api.comprobanteselectronicos.go.cr/recepcion-sandbox/v1/recepcion";
 	public static final String					IDP_CLIENT_ID_PRODUCCION														= "api-prod";
 
 	// Consecutivo inicial de las empresa

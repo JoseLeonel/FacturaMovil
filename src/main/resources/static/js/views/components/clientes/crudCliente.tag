@@ -126,13 +126,16 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label >{$.i18n.prop("cliente.estado")}</label>
                                 <select  class="form-control" id="estado" name="estado" >
                                     <option  each={estados}  value="{codigo}" selected="{cliente.estado ==codigo?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
-                        </div>
+                             <div class="col-md-6 col-sx-6 col-sm-6 col-lg-6">
+                                <label >{$.i18n.prop("cliente.otros")}</label>
+                                <input type="text" class="form-control observacionVenta" placeHolder ="{$.i18n.prop("cliente.otros")}" id="observacionVenta" name="observacionVenta" value="{cliente.observacionVenta}"  >                            </div>
+                             </div>
 
                     </form>    
                 </div>
@@ -371,11 +374,15 @@ var reglasDeValidacion = function() {
                 minlength:1,
                 email:true
 			},
-            telefono : {
-                required : true,
-                maxlength:8,
-                minlength:8,
-                telefonoFormat:true
+            
+			correoElectronico3 : {
+                maxlength:250,
+                minlength:1,
+                email:true
+			},
+            observacionVenta : {
+                maxlength:80,
+                lettersOnly : true
 			},
             codigoPais : {
                 required : true,

@@ -251,6 +251,7 @@ public class ClientesController {
 			clienteBD.setOtraSena(cliente.getOtraSena());
 			clienteBD.setTipoCedula(cliente.getTipoCedula());
 			clienteBD.setNombreComercial(cliente.getNombreComercial());
+			clienteBD.setObservacionVenta(cliente.getObservacionVenta());
 			clienteBD.setUpdated_at(new Date());
 			clienteBD.setEstado(cliente.getEstado());
 			clienteBD.setTelefono(cliente.getTelefono());
@@ -258,6 +259,7 @@ public class ClientesController {
 			clienteBD.setUsuario(usuarioSesion);
 			clienteBD.setCodigoPais(cliente.getCodigoPais());
 			clienteBD.setIdentificacionExtranjero(cliente.getIdentificacionExtranjero());
+			clienteBD.setObservacionVenta(cliente.getObservacionVenta() ==null?Constantes.EMPTY:cliente.getObservacionVenta());
 
 			clienteBo.modificar(clienteBD);
 

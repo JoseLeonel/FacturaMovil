@@ -4,14 +4,14 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div  class= "wrap">
-        <h1 >{$.i18n.prop("tikect.encabezado.comprobante")} {facturaImpresa.id}<h1>
+        <h2 >{$.i18n.prop("tikect.encabezado.comprobante")} {facturaImpresa.id}<h2>
         <div class="pantalla-imprimir">
             <div class="botones-imprimir">
-                <a href="#" class="boton-imprimir"  onclick = {__ImprimirTiqPrint} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
+                <a href="#"  class="boton-imprimir" onclick = {__ImprimirTiqPrint} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
                 
             </div>
             <section class="zona-impresion" id="imprimemeTempo" name ="imprimemeTempo">
-                <div class="forma-impresion">
+                <div class="">
                     <div class="ticket" id="ticket" name="ticket" > 
                         <h1 >{$.i18n.prop("tikect.encabezado.comprobante")} {facturaImpresa.id}<h1>
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura !=null}"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.nombreFactura}</div>

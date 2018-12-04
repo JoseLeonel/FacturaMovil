@@ -417,25 +417,8 @@
         }
         .contenedor-listar{
             width:100%;
-        }parametros
-        .parametros
-         parametros
-         parametros
-         parametros
-        }parametros
-        .parametros
-         parametros
-        }parametros
-        
-        tparametros
-         parametros
-         parametros
-         parametros
-         parametros
-        tparametros
-         parametros
-         parametros
         }
+       
         th, td {
             white-space: nowrap;
         }

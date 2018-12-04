@@ -123,9 +123,9 @@
                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label>{$.i18n.prop("cliente.titulo")} </label>  
-                                    <select  class="form-control selectCliente" id="cliente" name="cliente" data-live-search="true">
+                                    <select  class="form-control selectCliente" id="clienteParam" name="clienteParam" data-live-search="true">
                                         <option  data-tokens="{$.i18n.prop("todos.select")}"   value="0"  >{$.i18n.prop("todos.select")}</option>
-                                        <option  data-tokens="{nombreCompleto}" each={clientes.data}  value="{cedula}"  >{nombreCompleto}</option>
+                                        <option  data-tokens="{nombreCompleto}" each={clientes.data}  value="{id}"  >{nombreCompleto}</option>
                                     </select>
                                 </div>  
                             </div>
@@ -351,16 +351,16 @@ function crearFactura(){
                     mensajeError(data.message)
                 }
             } else {
-                 $('#ModalAnularDocumento').modal('hide')
+                $('#ModalAnularDocumento').modal('hide')
                	serverMessageJsonClase(data);
-                 swal({
-	                    title: '',
-	                    text: "Anulacion Exitosamente",
-	                    type: 'success',
-	                    showCancelButton: false,
-	                    confirmButtonText: 'Aceptar',
-	                })   
-               evaluarFactura(data)
+                swal({
+	                title: '',
+	                text: "Anulacion Exitosamente",
+	                type: 'success',
+	                showCancelButton: false,
+	                confirmButtonText: 'Aceptar',
+	            })   
+                evaluarFactura(data)
             }
         },
         error : function(xhr, status) {
@@ -387,7 +387,6 @@ function evaluarFactura(data){
         });
     }
 }
-
 /**
 * eliminar un detalle factura
 **/
@@ -433,7 +432,6 @@ function __ComboTipoDocumentos(){
     })
     self.update()
 }
-
 /**
 * Camps requeridos
 **/
@@ -452,7 +450,6 @@ var reglasDeValidacionAnular = function() {
 	});
 	return validationOptions;
 };
-
 /**
 * Camps requeridos
 **/
@@ -465,7 +462,6 @@ var reglasDeValidacion = function() {
 			fechaFinal : {
 				required : true,
 			}                                   
-                        
 		},
 		ignore : []
 
@@ -478,16 +474,13 @@ var reglasDeValidacion = function() {
 __limpiarFiltros(){
     $('#fechaInicial').val(null)
     $('#fechaFinal').val(null)
-    
 }
 /**
 *  Busqueda de la informacion por rango de fechas
 **/
 __Busqueda(){
    _consulta()
-
 }
-
 function _consulta(){
  self.listaFacturas = {data:[]}
     self.update()
@@ -496,9 +489,8 @@ function _consulta(){
         var parametros = {
             fechaInicio:inicial,
             fechaFin:$('.fechaFinal').val(),
-            idCliente:$('#cliente').val(),
+            idCliente:$('#clienteParam').val(),
             tipoDocumento:$('#tipoDocumento').val(),
-          
         };
         $("#tableListar").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListar')  
@@ -520,7 +512,6 @@ function _consulta(){
                 }else{
                     __InformacionDataTable();
                      agregarInputsCombos();
-
                 }           
             },
             error: function (xhr, status) {
@@ -531,8 +522,6 @@ function _consulta(){
 
      }
 }
-
-
 /**
 *  Obtiene la lista de los clientes activos
 **/
@@ -580,7 +569,6 @@ __regresarAlListado(){
     __listado();
 
 }
-
 /**
 *Formato del listado 
 **/

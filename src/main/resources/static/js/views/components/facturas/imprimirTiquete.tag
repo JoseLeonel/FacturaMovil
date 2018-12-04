@@ -5,10 +5,10 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div  class= "wrap">
-        <h1 >{$.i18n.prop("tikect.encabezado.tiquete")} {facturaImpresa.id}<h1>
+        <h2 >{$.i18n.prop("tikect.encabezado.tiquete")} {facturaImpresa.id}<h2>
         <div class="pantalla-imprimir">
             <div class="botones-imprimir">
-                <a href="#" class="boton-imprimirTiquete"  onclick = {__ImprimirTiquete} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
+                <a href="#" class="boton-imprimir"  onclick = {__ImprimirTiquete} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
                 
             </div>
             <section class="zona-impresion" id="imprimirtiqueteTemporal" name ="imprimirtiqueteTemporal">

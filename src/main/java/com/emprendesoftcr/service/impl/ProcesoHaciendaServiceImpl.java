@@ -352,7 +352,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html Proceso automatico para ejecutar aceptacion del documento
 	 */
-	@Scheduled(cron = "0 0/4 * * * ?")
+	@Scheduled(cron = "0 0/3 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		try {
@@ -516,7 +516,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Solo se van enviar correos a la empresa cuando es un cliente o correo alternativo los tiquetes de clientes frecuentes no lo vamos enviar para ver el comportamiento de rendimiento Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/5 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -530,7 +530,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
 					ArrayList<String> listaCorreos = new ArrayList<String>();
 					// Se determina si es una recepcion de factura
-					if (haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_COMPRAS)) {
+					if (!haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && !haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
 						RecepcionFactura recepcionFactura = recepcionFacturaBo.findByConsecutivoAndEmpresa(haciendaBD.getConsecutivo(), haciendaBD.getEmpresa());
 						if (recepcionFactura != null) {
 							listaCorreos.add(recepcionFactura.getEmpresa().getCorreoElectronico());
@@ -618,7 +618,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	private void soporteProblemaEnvioCorreos(Empresa empresa, String consecutivo, Exception error) throws Exception {
 		try {
-			String subject = "EmpredesoftSoporte  Empresa :" + empresa.getNombre() + " Problemas de conexion";
+			String subject = "EmpredesoftSoporte  Empresa :" + empresa.getNombre() + " Problemas de conexion del correo";
 			String texto = "Empresa :" + empresa.getNombre() + " tiene  Problemas de conexion" + " Consecutivo de Factura : " + consecutivo + error.getMessage();
 			correosBo.sendSimpleMessage("josehernandezchaverri@gmail.com", subject, texto);
 			correosBo.sendSimpleMessage("vivianamartinezgranados@gmail.com", subject, texto);
@@ -674,10 +674,15 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		try {
 			String xmlFactura = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
 			String xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(hacienda.getMensajeHacienda());
+      String tipoDoc = "compra";  
+      if(hacienda !=null) {
+      	if(!hacienda.getTipoDoc().equals(Constantes.EMPTY)) {
+      		tipoDoc = hacienda.getTipoDoc();
+      	}
+      }
+			String clave = getConsecutivo(tipoDoc, hacienda.getConsecutivo());
 
-			String clave = getConsecutivo(hacienda.getTipoDoc(), hacienda.getConsecutivo());
-
-			Collection<Attachment> attachments = createAttachments(XML_Attach(clave, recepcionFactura.getEmpresa().getCedula(), asText(xmlFactura), hacienda.getTipoDoc()), XML_AttachRespuestaHacienda(clave, recepcionFactura.getEmpresa().getCedula(), asText(xmlRespuesta)));
+			Collection<Attachment> attachments = createAttachments(XML_Attach(clave, recepcionFactura.getEmpresa().getCedula(), asText(xmlFactura), tipoDoc), XML_AttachRespuestaHacienda(clave, recepcionFactura.getEmpresa().getCedula(), asText(xmlRespuesta)));
 
 			Map<String, Object> modelEmail = new HashMap<>();
 			modelEmail.put("clave", clave);
@@ -685,10 +690,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			String tipoMensajeTitulo = "";
 			if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO)) {
 				modelEmail.put("tipoMensaje", "aceptación");
-				tipoMensajeTitulo = "Aceptación";
+				tipoMensajeTitulo = "Aceptacion";
 			} else if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_PARCIAL)) {
 				modelEmail.put("tipoMensaje", "aceptación parcial");
-				tipoMensajeTitulo = "Aceptación Parcial";
+				tipoMensajeTitulo = "Aceptacion_Parcial";
 			} else if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_RECHAZADO)) {
 				modelEmail.put("tipoMensaje", "rechazo");
 				tipoMensajeTitulo = "Rechazo";

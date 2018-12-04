@@ -339,6 +339,10 @@ public class FacturaBoImpl implements FacturaBo {
 		for (Iterator<DetalleFacturaCommand> iterator = detallesFacturaCommand.iterator(); iterator.hasNext();) {
 			DetalleFacturaCommand detalleFacturaCommand = (DetalleFacturaCommand) iterator.next();
 			Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(detalleFacturaCommand.getCodigo(), usuario.getEmpresa());
+			if(articulo !=null) {
+				articulo.setUpdated_at(new Date());
+				articuloDao.modificar(articulo);
+			}
 			Detalle detalle = new Detalle(detalleFacturaCommand);
 			detalle.setUsuario(usuario);
 			detalle.setTipoImpuesto(articulo == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoImpuesto());

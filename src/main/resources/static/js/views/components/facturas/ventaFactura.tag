@@ -281,14 +281,14 @@
                     <!--Seccion de categorias-->
                     <section show= {mostrarCategorias} class="lista-articulos clickable" >
                         <div show= {mostrarCategorias} id="item-categorias"class="product-item"  each ={categorias.data}  onclick={__ArticulosXCategorias}>
-                            <img  style = "width:120px;" alt="" class="img-responsive " src="/dist/img/carrito1.png">
+                            <img  style = "width:100px;" alt="" class="img-responsive " src="/dist/img/carrito1.png">
                              <span class="label-titulos-articulo">{descripcion}</span>
                         </div>
                     </section>
                     <!--Seccion de articulos-->
                     <section show= {mostrarArticulosXCategoria} class="lista-articulos clickable" >
                         <div class="product-item"  each ={inventariosXCategoria.data}   onclick={__AgregarProductoDePantalla}>
-                            <img  style = "width:80px;" alt="" class="img-responsive " src="/dist/img/carrito3.png">
+                            <img  style = "width:75px;" alt="" class="img-responsive " src="/dist/img/carrito3.png">
                             <span class="label-titulos-articulo">{descripcion}</span>
                         </div>
                     </section>
