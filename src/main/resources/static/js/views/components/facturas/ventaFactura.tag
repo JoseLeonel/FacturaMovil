@@ -2705,6 +2705,7 @@ function _calcularImpuesto(precio,iva){
     if(cantidad == 0){
        cantidad = 1;
     }
+    cantidad = __valorNumerico(redondeoDecimales(cantidad,3))
     __ValidarCantidadArticulo(self.item.codigo,cantidad)
   }
 /**

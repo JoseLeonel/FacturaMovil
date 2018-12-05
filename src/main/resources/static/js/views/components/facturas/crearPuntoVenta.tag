@@ -961,13 +961,13 @@ __CalculaCambioAEntregarOnblur(e){
         return
     }
     self.factura.totalCambioPagar = 0
-    var totalEntregado = redondeoDecimales(sumaMontosEntregadosParaCambios,2)
-    var totalFactura   = redondeoDecimales(self.factura.totalComprobante,2)
+    var totalEntregado = __valorNumerico(redondeoDecimales(sumaMontosEntregadosParaCambios,2))
+    var totalFactura   = __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2))
     totalEntregado     = __valorNumerico(totalEntregado)
     totalFactura       = __valorNumerico(totalFactura)  
     self.factura.totalCambioPagar = totalEntregado - totalFactura
     self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)   
-    self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
+    self.totalCambioPagar = __valorNumerico(redondeoDecimales(self.factura.totalCambioPagar,2))
     self.update()
 }
 /**
@@ -985,13 +985,13 @@ __CalculaCambioAEntregarKeyPress(e){
             return
         }
         self.factura.totalCambioPagar = 0
-        var totalEntregado = redondeoDecimales(sumaMontosEntregadosParaCambios,2)
-        var totalFactura   = redondeoDecimales(self.factura.totalComprobante,2)
+        var totalEntregado = __valorNumerico(redondeoDecimales(sumaMontosEntregadosParaCambios,2))
+        var totalFactura   = __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2))
         totalEntregado     = __valorNumerico(totalEntregado)
         totalFactura       = __valorNumerico(totalFactura)  
         self.factura.totalCambioPagar = totalEntregado - totalFactura
         self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)   
-        self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
+        self.totalCambioPagar = __valorNumerico(redondeoDecimales(self.factura.totalCambioPagar,2))
         self.update()
         __EnterFacturar()
     }
@@ -2196,6 +2196,7 @@ function _calcularImpuesto(precio,iva){
     if(cantidad == 0){
        cantidad = 1;
     }
+    cantidad = __valorNumerico(redondeoDecimales(cantidad,3))
     __ValidarCantidadArticulo(self.item.codigo,cantidad)
   }
 /**

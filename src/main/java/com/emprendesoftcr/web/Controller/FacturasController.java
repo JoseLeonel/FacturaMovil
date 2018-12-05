@@ -1024,7 +1024,7 @@ public class FacturasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			// Se prepara el objeto para almacenarlo
-			recepcionFactura.    setNumeroConsecutivoReceptor(empresaBo.generarConsecutivoRecepcionFactura(usuarioSesion.getEmpresa(), usuarioSesion, recepcionFactura));
+			recepcionFactura.setNumeroConsecutivoReceptor(empresaBo.generarConsecutivoRecepcionFactura(usuarioSesion.getEmpresa(), usuarioSesion, recepcionFactura));
 			recepcionFactura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
 			recepcionFactura.setEmpresa(usuarioSesion.getEmpresa());
 			recepcionFacturaBo.agregar(recepcionFactura);
