@@ -621,12 +621,16 @@ public class FacturaBoImpl implements FacturaBo {
 							factura.setTotalEfectivo(resultado);
 						}
 						modificar(factura);
-						UsuarioCajaFactura usuarioCajaFactura = new UsuarioCajaFactura();
-						usuarioCajaFactura.setCreated_at(new Date());
-						usuarioCajaFactura.setUpdated_at(new Date());
-						usuarioCajaFactura.setFactura(factura);
-						usuarioCajaFactura.setUsuarioCaja(usuarioCaja);
-						usuarioCajaFacturaDao.agregar(usuarioCajaFactura);
+
+						//Se agrega solo si no existe en la caja de usuario, casos de reintentos
+						if(usuarioCajaFacturaDao.findByFacturaId(factura.getId()) == null) {
+							UsuarioCajaFactura usuarioCajaFactura = new UsuarioCajaFactura();
+							usuarioCajaFactura.setCreated_at(new Date());
+							usuarioCajaFactura.setUpdated_at(new Date());
+							usuarioCajaFactura.setFactura(factura);
+							usuarioCajaFactura.setUsuarioCaja(usuarioCaja);
+							usuarioCajaFacturaDao.agregar(usuarioCajaFactura);							
+						}
 
 						// Se mueve al controller por que el procedimiento no toma los cambios
 						/*

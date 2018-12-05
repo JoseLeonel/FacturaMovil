@@ -248,7 +248,7 @@ public class ArticuloController {
 		}
 		delimitadores.addFiltro(new JqGridFilter("categoria.id", "'" + parametrosPaginacion.getCategoria().getId().toString() + "'", "="));
 		delimitadores.addFiltro(new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "="));
-		delimitadores.addFiltro(new JqGridFilter("codigo", "8888", "!="));		
+		delimitadores.addFiltro(new JqGridFilter("codigo", Constantes.CODIGO_ARTICULO_IMPUESTO_SERVICIO, "!="));		
 		delimitadores.setLength(parametrosPaginacion.getCantidadPorPagina());
 		delimitadores.setStart(parametrosPaginacion.getPaginaActual());
 

@@ -48,4 +48,20 @@ public class UsuarioCajaFacturaDaoImpl implements UsuarioCajaFacturaDao {
 		}
 	}
 
+	/**
+	 * Buscar una UsuarioCajaFactura
+	 * @see com.emprendesoftcr.Dao.UsuarioCajaFacturaDao#buscar(java.lang.Long)
+	 */
+	@Override
+	public UsuarioCajaFactura findByFacturaId(Long idFactura) {
+		Query query = entityManager.createQuery("select obj from UsuarioCajaFactura obj where obj.factura.id = :id");
+		query.setParameter("id", idFactura);
+		List<UsuarioCajaFactura> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (UsuarioCajaFactura) results.get(0);
+		} else {
+			return null;
+		}
+	}
+
 }

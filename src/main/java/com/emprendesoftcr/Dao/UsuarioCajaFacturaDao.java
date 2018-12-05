@@ -12,4 +12,5 @@ public interface UsuarioCajaFacturaDao {
 
 	UsuarioCajaFactura findById(Long id);
 
+	UsuarioCajaFactura findByFacturaId(Long idFactura);
 }
