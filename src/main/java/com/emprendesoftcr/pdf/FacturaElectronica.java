@@ -15,6 +15,7 @@ public class FacturaElectronica {
 
 	private String													_logo;
 	private String													_emisorNombre;
+	private String													_emisorNombreComercial;
 	private String													_emisorCedula;
 	private String													_emisorTelefono;
 	private String													_emisorCorreo;
@@ -34,6 +35,7 @@ public class FacturaElectronica {
 	private String													_clienteBarrio;
 	private String													_clienteDireccion;
 	
+
 	private String													_nota;
 
 	private String													_tipoDocumento;
@@ -56,7 +58,7 @@ public class FacturaElectronica {
 
 	private String													referenciaCodigo;
 	private String													referenciaRazon;
-	private String														referenciaFechaEmision;
+	private String													referenciaFechaEmision;
 
 	private String													_footerObservaciones;
 	private String													_footerFormaPago;
@@ -81,33 +83,13 @@ public class FacturaElectronica {
 		this._detalleFacturaElectronica = new ArrayList<DetalleFacturaElectronica>();
 	}
 
-	
-	
-	
-	
-
-
-	
 	public String getReferenciaFechaEmision() {
 		return referenciaFechaEmision;
 	}
 
-
-
-
-
-
-
-	
 	public void setReferenciaFechaEmision(String referenciaFechaEmision) {
 		this.referenciaFechaEmision = referenciaFechaEmision;
 	}
-
-
-
-
-
-
 
 	public String getEmisorNombre() {
 		return _emisorNombre;
@@ -115,6 +97,14 @@ public class FacturaElectronica {
 
 	public void setEmisorNombre(String _emisorNombre) {
 		this._emisorNombre = _emisorNombre;
+	}
+	
+	public String getEmisorNombreComercial() {
+		return _emisorNombreComercial;
+	}
+
+	public void setEmisorNombreComercial(String _emisorNombreComercial) {
+		this._emisorNombreComercial = _emisorNombreComercial;
 	}
 
 	public String getEmisorCorreo() {
@@ -485,32 +475,13 @@ public class FacturaElectronica {
 		this._logo = _logo;
 	}
 
-	
-	
-	
 	public String get_nota() {
 		return _nota;
 	}
 
-
-
-
-
-
-
-
-	
 	public void set_nota(String _nota) {
 		this._nota = _nota;
 	}
-
-
-
-
-
-
-
-
 
 	public TableModel getDataArray() {
 

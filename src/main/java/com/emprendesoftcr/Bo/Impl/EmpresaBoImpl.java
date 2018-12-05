@@ -1,5 +1,7 @@
 package com.emprendesoftcr.Bo.Impl;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -99,4 +101,13 @@ public class EmpresaBoImpl implements EmpresaBo {
 	public String generaClaveFacturaTributacion(Empresa empresa, String consecutivoFactura, Integer comprobanteElectronico) throws Exception{
 		return empresaDao.generaClaveFacturaTributacion(empresa, consecutivoFactura, comprobanteElectronico);
 	}
+	/**
+	 * Lista de empresa por estado
+	 * @see com.emprendesoftcr.Bo.EmpresaBo#findByEstado(java.lang.String)
+	 */
+	@Override
+	public Collection<Empresa> findByEstado(String estado){
+		return empresaDao.findByEstado(estado);
+	}
+	
 }

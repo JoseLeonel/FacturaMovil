@@ -1037,6 +1037,14 @@ public final class Utils {
 		return resultado;
 	}
 
+	/*Metodo que devuelve el Numero total de minutos que hay entre las dos Fechas */
+	public static long cantidadTotalMinutos(Calendar fechaInicial ,Calendar fechaFinal){
+
+	long totalMinutos=0;
+	totalMinutos=((fechaFinal.getTimeInMillis()-fechaInicial.getTimeInMillis())/1000/60);
+	return totalMinutos;
+	}
+	
 	public static String normalizarMessageException(Exception e) {
 		String message = e.getMessage();
 		if (e instanceof NestedRuntimeException) {

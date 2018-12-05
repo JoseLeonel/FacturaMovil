@@ -29,6 +29,7 @@ import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.modelo.Articulo;
+import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
@@ -151,6 +152,12 @@ public class FacturaBoImpl implements FacturaBo {
 		return facturaDao.findByEstadoFirma(estadoFirma, reEstadoFirma);
 	}
 
+	@Override
+	public Collection<Factura> findByClienteAndEmpresa(Cliente cliente ,Empresa empresa){
+		return facturaDao.findByClienteAndEmpresa(cliente, empresa);
+	}
+	
+	
 	@Transactional
 	private Factura formaFactura(FacturaCommand facturaCommand, Usuario usuario) throws Exception {
 
@@ -180,7 +187,10 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setReferenciaNumero(facturaCommand.getReferenciaNumero());
 				factura.setReferenciaCodigo(facturaCommand.getReferenciaCodigo());
 				factura.setReferenciaRazon(facturaCommand.getReferenciaRazon());
-				factura.setReferenciaFechaEmision(Utils.parseDate2(facturaCommand.getReferenciaFechaEmision()));
+				if(facturaCommand.getReferenciaFechaEmision() !=null) {
+					factura.setReferenciaFechaEmision(Utils.parseDate2(facturaCommand.getReferenciaFechaEmision()));	
+				}
+				
 				Factura facturaReferencia = facturaDao.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(),usuario.getEmpresa());
 				// Si la factura se encuentra en el sistema se agregan los datos propios de ella
 				if(facturaReferencia !=null) {
@@ -188,7 +198,7 @@ public class FacturaBoImpl implements FacturaBo {
 					factura.setReferenciaFechaEmision(facturaReferencia.getFechaEmision());
 					factura.setCodigoMoneda(facturaReferencia.getCodigoMoneda());
 	    		factura.setTipoCambio(facturaReferencia.getTipoCambio());
-				}
+			}
 				
 				
 			} else {
@@ -329,6 +339,10 @@ public class FacturaBoImpl implements FacturaBo {
 		for (Iterator<DetalleFacturaCommand> iterator = detallesFacturaCommand.iterator(); iterator.hasNext();) {
 			DetalleFacturaCommand detalleFacturaCommand = (DetalleFacturaCommand) iterator.next();
 			Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(detalleFacturaCommand.getCodigo(), usuario.getEmpresa());
+			if(articulo !=null) {
+				articulo.setUpdated_at(new Date());
+				articuloDao.modificar(articulo);
+			}
 			Detalle detalle = new Detalle(detalleFacturaCommand);
 			detalle.setUsuario(usuario);
 			detalle.setTipoImpuesto(articulo == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoImpuesto());

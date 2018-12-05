@@ -100,6 +100,9 @@ public class Cliente implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
+	@Column(name = "obse_venta",  columnDefinition="varchar(80) default ' '")
+	private String observacionVenta;
+	
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
 	private Empresa						empresa;
@@ -112,7 +115,8 @@ public class Cliente implements Serializable {
 
 
 
-	public Cliente(Long id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, String identificacionExtranjero, String provincia, String canton, String distrito, String barrio, Integer celular, Integer codigoPais, Integer telefono, String otraSena, String correoElectronico, String correoElectronico1, String correoElectronico2, String correoElectronico3, Integer descuento, String estado, Date created_at, Date updated_at, Empresa empresa, Usuario usuario) {
+	
+	public Cliente(Long id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, String identificacionExtranjero, String provincia, String canton, String distrito, String barrio, Integer celular, Integer codigoPais, Integer telefono, String otraSena, String correoElectronico, String correoElectronico1, String correoElectronico2, String correoElectronico3, Integer descuento, String estado, Date created_at, Date updated_at, String observacionVenta, Empresa empresa, Usuario usuario) {
 		super();
 		this.id = id;
 		this.nombreCompleto = nombreCompleto;
@@ -136,6 +140,7 @@ public class Cliente implements Serializable {
 		this.estado = estado;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
+		this.observacionVenta = observacionVenta;
 		this.empresa = empresa;
 		this.usuario = usuario;
 	}
@@ -361,6 +366,16 @@ public class Cliente implements Serializable {
 	
 	public void setCorreoElectronico3(String correoElectronico3) {
 		this.correoElectronico3 = correoElectronico3;
+	}
+
+	
+	public String getObservacionVenta() {
+		return observacionVenta;
+	}
+
+	
+	public void setObservacionVenta(String observacionVenta) {
+		this.observacionVenta = observacionVenta;
 	}
 	
 	

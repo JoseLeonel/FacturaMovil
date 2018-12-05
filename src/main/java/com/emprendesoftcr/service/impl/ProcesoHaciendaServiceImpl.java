@@ -43,6 +43,7 @@ import com.emprendesoftcr.fisco.ReceptorHacienda;
 import com.emprendesoftcr.fisco.RespuestaHaciendaXML;
 import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.Detalle;
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.RecepcionFactura;
@@ -91,16 +92,12 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
 																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
 																																																			// Emisor
-																																																			// Emisor
-
-																																																			facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? d.getEmpresa().getNombreComercial() : d.getEmpresa().getNombre());
+																																																			facturaElectronica.setEmisorNombreComercial(!d.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? d.getEmpresa().getNombreComercial() : Constantes.EMPTY);
+																																																			facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombre().equals(Constantes.EMPTY) ? d.getEmpresa().getNombre() : d.getEmpresa().getNombre());
 																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
 																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
 																																																			facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
 																																																			facturaElectronica.set_nota(d.getNota() == null ? Constantes.EMPTY : d.getNota());
-																																																			// Cliente
-																																																			// if (!d.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE))
-																																																			// {
 
 																																																			facturaElectronica.setClienteNombre(d.getCliente().getNombreCompleto());
 																																																			facturaElectronica.setClienteNombreComercial(d.getCliente().getNombreComercial());
@@ -355,7 +352,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html Proceso automatico para ejecutar aceptacion del documento
 	 */
-	@Scheduled(cron = "0 0/4 * * * ?")
+	@Scheduled(cron = "0 0/3 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		try {
@@ -519,7 +516,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Solo se van enviar correos a la empresa cuando es un cliente o correo alternativo los tiquetes de clientes frecuentes no lo vamos enviar para ver el comportamiento de rendimiento Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/5 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -533,10 +530,16 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
 					ArrayList<String> listaCorreos = new ArrayList<String>();
 					// Se determina si es una recepcion de factura
-					if (haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_COMPRAS)) {
+					if (!haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && !haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
 						RecepcionFactura recepcionFactura = recepcionFacturaBo.findByConsecutivoAndEmpresa(haciendaBD.getConsecutivo(), haciendaBD.getEmpresa());
 						if (recepcionFactura != null) {
 							listaCorreos.add(recepcionFactura.getEmpresa().getCorreoElectronico());
+							if(recepcionFactura.getEmisorCorreo() !=null) {
+								if(!recepcionFactura.getEmisorCorreo().equals(Constantes.EMPTY)) {
+									listaCorreos.add(recepcionFactura.getEmisorCorreo());
+								}
+								
+							}
 						}
 						if (listaCorreos != null) {
 							if (!listaCorreos.isEmpty()) {
@@ -605,6 +608,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO);
 						haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_ENVIADO);
 						haciendaBo.modificar(haciendaBD);
+						soporteProblemaEnvioCorreos(haciendaBD.getEmpresa(), haciendaBD.getConsecutivo(), e);
 
 					}
 
@@ -614,6 +618,20 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			log.info("Fin Envios de correos  {}", new Date());
 		} catch (Exception e) {
 			log.info("** Error2  taskHaciendaEnvioDeCorreos: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+	}
+
+	private void soporteProblemaEnvioCorreos(Empresa empresa, String consecutivo, Exception error) throws Exception {
+		try {
+			String subject = "EmpredesoftSoporte  Empresa :" + empresa.getNombre() + " Problemas de conexion del correo";
+			String texto = "Empresa :" + empresa.getNombre() + " tiene  Problemas de conexion" + " Consecutivo de Factura : " + consecutivo + error.getMessage();
+			correosBo.sendSimpleMessage("josehernandezchaverri@gmail.com", subject, texto);
+			correosBo.sendSimpleMessage("vivianamartinezgranados@gmail.com", subject, texto);
+			correosBo.sendSimpleMessage("jcisneroscr@gmail.com", subject, texto);
+
+		} catch (Exception e) {
+			log.info("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
 	}
@@ -662,27 +680,47 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		try {
 			String xmlFactura = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
 			String xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(hacienda.getMensajeHacienda());
+      String tipoDoc = "compra";  
+      if(hacienda !=null) {
+      	if(!hacienda.getTipoDoc().equals(Constantes.EMPTY)) {
+      		tipoDoc = hacienda.getTipoDoc();
+      	}
+      }
+			String consecutivoGenerado = getConsecutivo(tipoDoc, recepcionFactura.getNumeroConsecutivoReceptor());
 
-			String clave = getConsecutivo(hacienda.getTipoDoc(), hacienda.getConsecutivo());
-
-			Collection<Attachment> attachments = createAttachments(XML_Attach(clave, recepcionFactura.getEmpresa().getCedula(), asText(xmlFactura), hacienda.getTipoDoc()), XML_AttachRespuestaHacienda(clave, recepcionFactura.getEmpresa().getCedula(), asText(xmlRespuesta)));
+			Collection<Attachment> attachments = createAttachments(XML_Attach(consecutivoGenerado, recepcionFactura.getEmpresa().getCedula(), asText(xmlFactura), tipoDoc), XML_AttachRespuestaHacienda(consecutivoGenerado, recepcionFactura.getEmpresa().getCedula(), asText(xmlRespuesta)));
 
 			Map<String, Object> modelEmail = new HashMap<>();
-			modelEmail.put("clave", clave);
+			modelEmail.put("clave", recepcionFactura.getFacturaClave());
 			modelEmail.put("cedulaEmisor", recepcionFactura.getEmisorCedula());
 			String tipoMensajeTitulo = "";
-			if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO)) {
-				modelEmail.put("tipoMensaje", "aceptación");
-				tipoMensajeTitulo = "Aceptación";
-			} else if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_PARCIAL)) {
+			if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO) || recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_1)) {
+				modelEmail.put("tipoMensaje", "aceptado");
+				tipoMensajeTitulo = "Aceptacion";
+			} else if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_PARCIAL) || recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_PARCIAL_1) ) {
 				modelEmail.put("tipoMensaje", "aceptación parcial");
-				tipoMensajeTitulo = "Aceptación Parcial";
-			} else if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_RECHAZADO)) {
+				tipoMensajeTitulo = "Aceptacion_Parcial";
+			} else if (recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_RECHAZADO) || recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_TIPO_DOC_RECHAZADO_1) ) {
 				modelEmail.put("tipoMensaje", "rechazo");
 				tipoMensajeTitulo = "Rechazo";
 			}
  
 			modelEmail.put("tipoMensajeTitulo", tipoMensajeTitulo);
+			String nombreProveedor = Constantes.EMPTY;
+			String nombreEmpresa = Constantes.EMPTY;
+			nombreProveedor = recepcionFactura.getEmisorNombre() !=null?recepcionFactura.getEmisorNombre():Constantes.EMPTY;
+			if(recepcionFactura.getEmpresa().getNombreComercial() !=null) {
+				if(!recepcionFactura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY)) {
+					nombreEmpresa = recepcionFactura.getEmpresa().getNombreComercial();
+				}
+			}
+			nombreEmpresa = nombreEmpresa.equals(Constantes.EMPTY)?recepcionFactura.getEmpresa().getNombre():nombreEmpresa;
+			modelEmail.put("nombreProveedor", nombreProveedor);
+			modelEmail.put("empresa",nombreEmpresa );
+			modelEmail.put("telefono",recepcionFactura.getEmpresa().getTelefono() );
+			modelEmail.put("correo",recepcionFactura.getEmpresa().getCorreoElectronico());
+			modelEmail.put("consecutivoCompra",recepcionFactura.getFacturaConsecutivo() !=null?recepcionFactura.getFacturaConsecutivo():Constantes.EMPTY);
+			modelEmail.put("consecutivoGenerado",consecutivoGenerado);
 			String from = tipoMensajeTitulo + "_Reply@emprendesoftcr.com";
 
 			if (hacienda.getEmpresa().getAbreviaturaEmpresa() != null) {
@@ -691,7 +729,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				}
 			}
 
-			String subject = tipoMensajeTitulo + " Documento Electrónico N° " + clave + " del emisor con cédula: " + recepcionFactura.getEmisorCedula();
+			String subject = nombreEmpresa + " Aceptando o Rechazando Compras documento Electrónico N° " + recepcionFactura.getNumeroConsecutivoReceptor() + " del emisor con cédula: " + recepcionFactura.getEmpresa().getCedula();
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailHaciendaRecepcionFactura.vm", modelEmail);
 		} catch (Exception e) {
 			log.info("** Error  enviarCorreosRecepcion: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
@@ -700,7 +738,14 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	}
 
 	private Collection<Attachment> createAttachments(Attachment... attachments) {
-		return Arrays.asList(attachments);
+		Collection<Attachment> resultado = null;
+		try {
+			resultado = Arrays.asList(attachments);
+		} catch (Exception e) {
+			log.info("Error al adjuntar attachments" + e);
+			throw e;
+		}
+		return resultado;
 	}
 
 	private Attachment PDF_Attach(String name, String cedula, ByteArrayDataSource data, String tipoDoc) {
@@ -730,24 +775,39 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	private Attachment XML_Attach(String name, String cedula, ByteArrayDataSource data, String tipoDoc) {
 		String resultado = Constantes.EMPTY;
-		resultado = "Factura_XML_";
-		if (tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
-			resultado = "Factura_XML_";
-		} else if (tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			resultado = "NOTA_CREDITO_XML_";
-		} else if (tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
-			resultado = "NOTA_DEBITO_XML_";
-		} else if (tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
-			resultado = "PROFORMA_XML_";
-		} else if (tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
-			resultado = "TIQUETE_XML_";
+		Attachment attachment = null;
+		try {
+			resultado = tipoDoc.equals("compra")?tipoDoc+"_XML_":"Factura_XML_";
+			if (tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
+				resultado = "Factura_XML_";
+			} else if (tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+				resultado = "NOTA_CREDITO_XML_";
+			} else if (tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+				resultado = "NOTA_DEBITO_XML_";
+			} else if (tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+				resultado = "PROFORMA_XML_";
+			} else if (tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
+				resultado = "TIQUETE_XML_";
+			}
+			attachment = attachment(resultado + cedula + "_" + name, ".xml", data);
+		} catch (Exception e) {
+			log.info("Error al adjuntar XML_Attach" + e.getCause());
+			throw e;
 		}
 
-		return attachment(resultado + cedula + "_" + name, ".xml", data);
+		return attachment;
 	}
 
 	private Attachment XML_AttachRespuestaHacienda(String name, String cedula, ByteArrayDataSource data) {
-		return attachment("Respuesta_XML_" + cedula + "_" + name, ".xml", data);
+		Attachment attachment = null;
+		try {
+			attachment = attachment("Respuesta_XML_" + cedula + "_" + name, ".xml", data);
+		} catch (Exception e) {
+			log.info("Error al adjuntar XML_AttachRespuestaHacienda" + e.getCause());
+			throw e;
+		}
+
+		return attachment;
 	}
 
 	private Attachment attachment(String name, String ext, ByteArrayDataSource data) {

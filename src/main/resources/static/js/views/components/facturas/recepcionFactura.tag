@@ -4,7 +4,7 @@
         </div>      
     </div>              
 	<div id="formularioCargaArchivo" class="row center" show={mostrarCargaArchivo}>
-    	<div class="col-md-2 col-sx-12 col-lg-2 col-sm-2"></div>
+    	
         <div class="col-md-8 col-lg-8 col-sx-12 col-sm-8">
             <div class="box box-solid box-primary">
                 <div class="box-header with-border">
@@ -18,9 +18,20 @@
                             </div>
                         </div>
                         <div class="row">
-                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label> {$.i18n.prop("archivo.factura")}  <span class="requeridoDato">*</span></label>
-					     		<input type="file" id="fileUpload" />
+					     		<input type="file" id="fileUpload" class="form-control"/>
+                            </div>
+                        </div>
+						<div class="row">
+							<div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+							    <section>
+							     	<h1>Como aceptar la compra electronica: </h1>
+									 <p>1. Le llegará un correo electronico con tres archivos.</p>
+									 <p>2. Descargue el documento cuyo nombre es “XML”.</p>
+									 <p>3. Clic Seleccionar Archivo </p>
+									 <p>4. Si todo esta bien presionar aceptar compra  </p>
+								</section> 
                             </div>
                         </div>
 					</form>

@@ -103,19 +103,19 @@ public class App {
 		cb.setColorStroke(bColor);
 		cb.setColorFill(BaseColor.WHITE);
 		cb.setLineWidth(1f);
-		cb.roundRectangle(10, PageSize.TABLOID.rotate().getHeight() - 100, 640, 100, 5);
+		cb.roundRectangle(10, PageSize.TABLOID.rotate().getHeight() - 110, 400, 100, 5);
 		cb.fillStroke();
 		// Fondo
 		cb.setColorFill(bColor);
-		cb.roundRectangle(10, PageSize.TABLOID.rotate().getHeight() - 100, 127, 100, 5);
+		cb.roundRectangle(10, PageSize.TABLOID.rotate().getHeight() - 110, 127, 100, 5);
 		cb.fill();
 		cb.setColorFill(BaseColor.WHITE);
 		//
 
 		if (img != null) {
-			img.setAbsolutePosition(450, PageSize.TABLOID.rotate().getHeight() - 100);
+			img.setAbsolutePosition(415, PageSize.TABLOID.rotate().getHeight() - 130);
 			img.setAlignment(Image.ALIGN_RIGHT);
-			img.scaleAbsolute(200, 120);
+			img.scaleAbsolute(235, 120);
 			cb.addImage(img);
 
 		}
@@ -126,8 +126,8 @@ public class App {
 
 		float leftColTitle = 20;
 		float leftColContent = 140;
-		float rightColTitle = PageSize.TABLOID.rotate().getWidth() - 550;
-		float rightColContent = PageSize.TABLOID.rotate().getWidth() - 445;
+		float rightColTitle = PageSize.TABLOID.rotate().getWidth() - 540;
+		float rightColContent = PageSize.TABLOID.rotate().getWidth() - 435;
 		float firstRow = PageSize.TABLOID.rotate().getHeight() - 30;
 		float secondRow = PageSize.TABLOID.rotate().getHeight() - 45;
 		float thirdRow = PageSize.TABLOID.rotate().getHeight() - 60;
@@ -142,7 +142,7 @@ public class App {
 		cb.setColorStroke(bColor);
 		cb.setColorFill(BaseColor.WHITE);
 		cb.setLineWidth(1f);
-		cb.roundRectangle(660, PageSize.TABLOID.rotate().getHeight() - 180, 555, 170, 5);
+		cb.roundRectangle(660, PageSize.TABLOID.rotate().getHeight() - 180, 545, 170, 5);
 		cb.fillStroke();
 		// Fondo
 		cb.setColorFill(bColor);
@@ -159,10 +159,14 @@ public class App {
 		img.scaleToFit(100, 100);
 		cb.addImage(img);
 		//
-		addText(cb, "Nombre", font12, leftColTitle, firstRow, Element.ALIGN_LEFT);
-		addText(cb, "Identificación", font12, leftColTitle, secondRow, Element.ALIGN_LEFT);
-		addText(cb, "Teléfono", font12, leftColTitle, thirdRow, Element.ALIGN_LEFT);
-		addText(cb, "Fax", font12, leftColTitle, fourthRow, Element.ALIGN_LEFT);
+		
+		addText(cb, "Nombre Comercial", font12, leftColTitle,firstRow , Element.ALIGN_LEFT);
+		addText(cb, "Nombre", font12, leftColTitle,secondRow , Element.ALIGN_LEFT);
+		
+		addText(cb, "Identificación", font12, leftColTitle, thirdRow, Element.ALIGN_LEFT);
+		
+		addText(cb, "Teléfono", font12, leftColTitle, fourthRow , Element.ALIGN_LEFT);
+		
 		addText(cb, "Correo", font12, leftColTitle, fiveRow, Element.ALIGN_LEFT);
 		addText(cb, "Tipo Documento", font12, rightColTitle, firstRow, Element.ALIGN_LEFT);
 		addText(cb, "No.Clave", font12, rightColTitle, secondRow, Element.ALIGN_LEFT);
@@ -177,10 +181,13 @@ public class App {
 		//
 		cb.setColorFill(BaseColor.BLACK);
 		//
-		addText(cb, facturaElectronica.getEmisorNombre() != null ? facturaElectronica.getEmisorNombre() : Constantes.EMPTY, font12, leftColContent, firstRow, Element.ALIGN_LEFT);
-		addText(cb, facturaElectronica.getEmisorCedula() != null ? facturaElectronica.getEmisorCedula() : Constantes.EMPTY, font12, leftColContent, secondRow, Element.ALIGN_LEFT);
-		addText(cb, facturaElectronica.getEmisorTelefono() != null ? facturaElectronica.getEmisorTelefono() : Constantes.EMPTY, font12, leftColContent, thirdRow, Element.ALIGN_LEFT);
-		addText(cb, facturaElectronica.getEmisorFax() != null ? facturaElectronica.getEmisorFax() : Constantes.EMPTY, font12, leftColContent, fourthRow, Element.ALIGN_LEFT);
+		addText(cb, facturaElectronica.getEmisorNombreComercial() != null ? facturaElectronica.getEmisorNombreComercial() : Constantes.EMPTY, font12, leftColContent, firstRow, Element.ALIGN_LEFT);
+		addText(cb, facturaElectronica.getEmisorNombre() != null ? facturaElectronica.getEmisorNombre() : Constantes.EMPTY, font12, leftColContent, secondRow, Element.ALIGN_LEFT);
+		
+		addText(cb, facturaElectronica.getEmisorCedula() != null ? facturaElectronica.getEmisorCedula() : Constantes.EMPTY, font12, leftColContent, thirdRow, Element.ALIGN_LEFT);
+		
+		addText(cb, facturaElectronica.getEmisorTelefono() != null ? facturaElectronica.getEmisorTelefono() : Constantes.EMPTY, font12, leftColContent, fourthRow, Element.ALIGN_LEFT);
+		
 		addText(cb, facturaElectronica.getEmisorCorreo() != null ? facturaElectronica.getEmisorCorreo() : Constantes.EMPTY, font12, leftColContent, fiveRow, Element.ALIGN_LEFT);
 		addText(cb, facturaElectronica.getTipoDocumento() != null ? facturaElectronica.getTipoDocumento() : Constantes.EMPTY, font12, rightColContent, firstRow, Element.ALIGN_LEFT);
 		addText(cb, facturaElectronica.getClave() != null ? facturaElectronica.getClave() : Constantes.EMPTY, font12, rightColContent, secondRow, Element.ALIGN_LEFT);

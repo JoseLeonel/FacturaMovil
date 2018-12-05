@@ -89,39 +89,39 @@ public class Proformas {
 	}
 
 	private void addLogo(PdfContentByte cb, String dir, Document document, String logo) throws IOException, DocumentException {
-		// Cuadro 1
 		Image img = null;
-	// Cuadro 1
-			try {
-				if (logo != null) {
-					if (!logo.equals(Constantes.EMPTY)) {
-						img = Image.getInstance(dir + "/data/logos/" + logo);
-					}
 
+		// Cuadro 1
+		try {
+			if (logo != null) {
+				if (!logo.equals(Constantes.EMPTY)) {
+					img = Image.getInstance(dir + "/data/logos/" + logo);
 				}
 
-			} catch (Exception e) {
-				log.info("** Error2  app  obtener el logo: " + e.getMessage() + " fecha " + new Date());
 			}
-		
+
+		} catch (Exception e) {
+			log.info("** Error2  app  obtener el logo: " + e.getMessage() + " fecha " + new Date());
+		}
+
 		cb.setColorStroke(bColor);
 		cb.setColorFill(BaseColor.WHITE);
 		cb.setLineWidth(1f);
-		cb.roundRectangle(10, PageSize.TABLOID.rotate().getHeight() - 100, 640, 100, 5);
+		cb.roundRectangle(10, PageSize.TABLOID.rotate().getHeight() - 110, 400, 100, 5);
 		cb.fillStroke();
 		// Fondo
 		cb.setColorFill(bColor);
-		cb.roundRectangle(10, PageSize.TABLOID.rotate().getHeight() - 100, 127, 100, 5);
+		cb.roundRectangle(10, PageSize.TABLOID.rotate().getHeight() - 110, 127, 100, 5);
 		cb.fill();
 		cb.setColorFill(BaseColor.WHITE);
 		//
 
-		if(img !=null) {
-			img.setAbsolutePosition(450, PageSize.TABLOID.rotate().getHeight() - 100);
+		if (img != null) {
+			img.setAbsolutePosition(415, PageSize.TABLOID.rotate().getHeight() - 130);
 			img.setAlignment(Image.ALIGN_RIGHT);
-			img.scaleAbsolute(200,120);
+			img.scaleAbsolute(235, 120);
 			cb.addImage(img);
-			
+
 		}
 	}
 
@@ -141,7 +141,7 @@ public class Proformas {
 		float sevenRow = PageSize.TABLOID.rotate().getHeight() - 120;
 		float eightRow = PageSize.TABLOID.rotate().getHeight() - 135;
 		float nineRow = PageSize.TABLOID.rotate().getHeight() - 150;
-	
+
 		// Cuadro 2
 		cb.setColorStroke(bColor);
 		cb.setColorFill(BaseColor.WHITE);
@@ -163,13 +163,18 @@ public class Proformas {
 		img.scaleToFit(100, 100);
 		cb.addImage(img);
 		//
-		addText(cb, "Nombre", font12, leftColTitle, firstRow, Element.ALIGN_LEFT);
-		addText(cb, "Identificación", font12, leftColTitle, secondRow, Element.ALIGN_LEFT);
-		addText(cb, "Teléfono", font12, leftColTitle, thirdRow, Element.ALIGN_LEFT);
-		addText(cb, "Fax", font12, leftColTitle, fourthRow, Element.ALIGN_LEFT);
+		
+		addText(cb, "Nombre Comercial", font12, leftColTitle,firstRow , Element.ALIGN_LEFT);
+		addText(cb, "Nombre", font12, leftColTitle,secondRow , Element.ALIGN_LEFT);
+		
+		addText(cb, "Identificación", font12, leftColTitle, thirdRow, Element.ALIGN_LEFT);
+		
+		addText(cb, "Teléfono", font12, leftColTitle, fourthRow , Element.ALIGN_LEFT);
+		
 		addText(cb, "Correo", font12, leftColTitle, fiveRow, Element.ALIGN_LEFT);
 		addText(cb, "Tipo Documento", font12, rightColTitle, firstRow, Element.ALIGN_LEFT);
-		addText(cb, "No.Proforma", font12, rightColTitle, thirdRow, Element.ALIGN_LEFT);
+		addText(cb, "No.Clave", font12, rightColTitle, secondRow, Element.ALIGN_LEFT);
+		addText(cb, "No.Consecutivo", font12, rightColTitle, thirdRow, Element.ALIGN_LEFT);
 		addText(cb, "Fecha emisión", font12, rightColTitle, fourthRow, Element.ALIGN_LEFT);
 		addText(cb, "Plazo crédito", font12, rightColTitle, fiveRow, Element.ALIGN_LEFT);
 		addText(cb, "Condición venta", font12, rightColTitle, sixRow, Element.ALIGN_LEFT);
@@ -180,12 +185,16 @@ public class Proformas {
 		//
 		cb.setColorFill(BaseColor.BLACK);
 		//
-		addText(cb, facturaElectronica.getEmisorNombre() != null ? facturaElectronica.getEmisorNombre() : Constantes.EMPTY, font12, leftColContent, firstRow, Element.ALIGN_LEFT);
-		addText(cb, facturaElectronica.getEmisorCedula() != null ? facturaElectronica.getEmisorCedula() : Constantes.EMPTY, font12, leftColContent, secondRow, Element.ALIGN_LEFT);
-		addText(cb, facturaElectronica.getEmisorTelefono() != null ? facturaElectronica.getEmisorTelefono() : Constantes.EMPTY, font12, leftColContent, thirdRow, Element.ALIGN_LEFT);
-		addText(cb, facturaElectronica.getEmisorFax() != null ? facturaElectronica.getEmisorFax() : Constantes.EMPTY, font12, leftColContent, fourthRow, Element.ALIGN_LEFT);
+		addText(cb, facturaElectronica.getEmisorNombreComercial() != null ? facturaElectronica.getEmisorNombreComercial() : Constantes.EMPTY, font12, leftColContent, firstRow, Element.ALIGN_LEFT);
+		addText(cb, facturaElectronica.getEmisorNombre() != null ? facturaElectronica.getEmisorNombre() : Constantes.EMPTY, font12, leftColContent, secondRow, Element.ALIGN_LEFT);
+		
+		addText(cb, facturaElectronica.getEmisorCedula() != null ? facturaElectronica.getEmisorCedula() : Constantes.EMPTY, font12, leftColContent, thirdRow, Element.ALIGN_LEFT);
+		
+		addText(cb, facturaElectronica.getEmisorTelefono() != null ? facturaElectronica.getEmisorTelefono() : Constantes.EMPTY, font12, leftColContent, fourthRow, Element.ALIGN_LEFT);
+		
 		addText(cb, facturaElectronica.getEmisorCorreo() != null ? facturaElectronica.getEmisorCorreo() : Constantes.EMPTY, font12, leftColContent, fiveRow, Element.ALIGN_LEFT);
 		addText(cb, facturaElectronica.getTipoDocumento() != null ? facturaElectronica.getTipoDocumento() : Constantes.EMPTY, font12, rightColContent, firstRow, Element.ALIGN_LEFT);
+		addText(cb, facturaElectronica.getClave() != null ? facturaElectronica.getClave() : Constantes.EMPTY, font12, rightColContent, secondRow, Element.ALIGN_LEFT);
 		addText(cb, facturaElectronica.getConsecutivo() != null ? facturaElectronica.getConsecutivo() : Constantes.EMPTY, font12, rightColContent, thirdRow, Element.ALIGN_LEFT);
 		addText(cb, facturaElectronica.getFechaEmision() != null ? facturaElectronica.getFechaEmision() : Constantes.EMPTY, font12, rightColContent, fourthRow, Element.ALIGN_LEFT);
 		addText(cb, facturaElectronica.getPlazoCredito() != null ? facturaElectronica.getPlazoCredito() : Constantes.EMPTY, font12, rightColContent, fiveRow, Element.ALIGN_LEFT);
@@ -193,7 +202,21 @@ public class Proformas {
 		addText(cb, facturaElectronica.getMedioEfectivo() != null ? facturaElectronica.getMedioEfectivo() : Constantes.EMPTY, font12, rightColContent, sevenRow, Element.ALIGN_LEFT);
 		addText(cb, facturaElectronica.getMoneda() != null ? facturaElectronica.getMoneda() : Constantes.EMPTY, font12, rightColContent, eightRow, Element.ALIGN_LEFT);
 		addText(cb, facturaElectronica.getTipoCambio() != null ? facturaElectronica.getTipoCambio() : Constantes.EMPTY, font12, rightColContent, nineRow, Element.ALIGN_LEFT);
-		addText(cb, facturaElectronica.get_nota() != null?facturaElectronica.get_nota().length() >0?facturaElectronica.get_nota().trim():Constantes.EMPTY:Constantes.EMPTY, font12, PageSize.TABLOID.rotate().getWidth() - 446, PageSize.TABLOID.rotate().getHeight() - 170, Element.ALIGN_LEFT);
+		addText(cb, facturaElectronica.get_nota() != null ? facturaElectronica.get_nota().length() > 0 ? facturaElectronica.get_nota().trim() : Constantes.EMPTY : Constantes.EMPTY, font12, PageSize.TABLOID.rotate().getWidth() - 446, PageSize.TABLOID.rotate().getHeight() - 170, Element.ALIGN_LEFT);
+		cb.setColorFill(BaseColor.BLACK);
+		addText(cb, "Referencia:", font14, 20, PageSize.TABLOID.rotate().getHeight() - 145, Element.ALIGN_LEFT);
+		addText(cb, facturaElectronica.getReferenciaCodigo(), font12, 102, PageSize.TABLOID.rotate().getHeight() - 145, Element.ALIGN_LEFT);
+		addText(cb, "Tipo documento:", font14, 20, PageSize.TABLOID.rotate().getHeight() - 160, Element.ALIGN_LEFT);
+		addText(cb, facturaElectronica.getReferenciaTipoDoc(), font12, 102, PageSize.TABLOID.rotate().getHeight() - 160, Element.ALIGN_LEFT);
+		addText(cb, "No.Consecutivo:", font14, 240, PageSize.TABLOID.rotate().getHeight() - 160, Element.ALIGN_LEFT);
+		addText(cb, facturaElectronica.getReferenciaNumero(), font12, 325, PageSize.TABLOID.rotate().getHeight() - 160, Element.ALIGN_LEFT);
+
+		addText(cb, "Fecha emisión:", font14, 460, PageSize.TABLOID.rotate().getHeight() - 160, Element.ALIGN_LEFT);
+		addText(cb, facturaElectronica.getReferenciaFechaEmision(), font12, 530, PageSize.TABLOID.rotate().getHeight() - 160, Element.ALIGN_LEFT);
+
+		addText(cb, "Razón:", font14, 20, PageSize.TABLOID.rotate().getHeight() - 180, Element.ALIGN_LEFT);
+		addText(cb, facturaElectronica.getReferenciaRazon(), font12, 55, PageSize.TABLOID.rotate().getHeight() - 180, Element.ALIGN_LEFT);
+
 		cb.setColorFill(BaseColor.BLACK);
 
 	}

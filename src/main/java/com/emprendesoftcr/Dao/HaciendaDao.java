@@ -21,5 +21,7 @@ public interface HaciendaDao {
 	Collection<Hacienda> findByEstado(Integer estado,Integer estadoError);
 	
 	Collection<Hacienda> findByEstadoAndNotificacion(Integer estado, Integer notificacion);
+	
+	Collection<Hacienda> findByEstadoOrEstadoErrorAndEmpresa(Empresa empresa ,Integer estado,Integer estadoError);
 
 }

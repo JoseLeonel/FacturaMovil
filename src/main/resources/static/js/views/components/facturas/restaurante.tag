@@ -154,7 +154,7 @@
              <section class="lista-mesas clickable" >
              	<div id="item-mesas" class="product-item col-sx-12 col-sm-12 col-md-3 col-lg-3"  each ={mesas.data}  onclick={__FacturasXMesa}>
                 	<div class="containerImage">
-	                	<img  style = "width:120px;" alt="" class="img-responsive " src="/dist/img/mesaAzul.png">
+	                	<img  style = "width:100px;" alt="" class="img-responsive " src="/dist/img/mesaAzul.png">
 	                	<div class="top-right">{tieneFacturas}</div>
                 	</div>                	 
 					<div>
@@ -349,7 +349,7 @@
                     <!--Seccion de categorias-->
                     <section show= {mostrarCategorias} class="lista-articulos clickable" >
                         <div show= {mostrarCategorias} id="item-categorias"class="product-item"  each ={categorias.data}  onclick={__ArticulosXCategorias}>
-                            <img  style = "width:120px;" alt="" class="img-responsive " src="/dist/img/carrito1.png">
+                            <img  style = "width:95px;height:95px;" alt="" class="img-responsive " src="/dist/img/carrito1.png">
                              <span class="label-titulos-articulo">{descripcion}</span>
                         </div>
                     </section>					
@@ -363,7 +363,7 @@
                     <!--Seccion de articulos-->
                     <section show= {mostrarArticulosXCategoria} class="lista-articulos clickable" >
                         <div class="product-item"  each ={inventariosXCategoria.data}   onclick={__AgregarProductoDePantalla}>
-                            <img  style = "width:80px;" alt="" class="img-responsive " src="/dist/img/carrito3.png">
+                            <img  style = "width:75px;" alt="" class="img-responsive " src="/dist/img/carrito3.png">
                             <span class="label-titulos-articulo">{descripcion}</span>
                         </div>
                     </section>
@@ -1172,6 +1172,10 @@ td.col-xl-12, th.col-xl-12 {
     self.urlImagenLector      = '/dist/img/codigo_barra.png';
     self.urlImagenBuscador    = '/dist/img/buscador.png';
     self.primeraVezBilleteClick = false
+    self.tipoCambio = {
+        total:0,
+        id:null
+    }
 
     self.on('mount',function(){
         $("#formularioFactura").validate(reglasDeValidacionFactura());
@@ -1243,21 +1247,21 @@ __ArticulosXCategorias(e){
 __BotonAnterior(){
 	if (self.mostrarFacturasMesas){
         self.facturasXMesa.pagination.current_page = self.facturasXMesa.pagination.current_page - 1
-        self.facturasXMesa.pagination.current_page = self.facturasXMesa.pagination.current_page > 1?self.facturasXMesa.pagination.current_page:1;
+        self.facturasXMesa.pagination.current_page = self.facturasXMesa.pagination.current_page > 1?self.facturasXMesa.pagination.current_page:0;
         self.parametrosPaginacion.paginaActual = self.parametrosPaginacion.paginaActual > 1?self.parametrosPaginacion.paginaActual - 12:0 
         self.update()
         __ListaFacturasXMesas()
     }else {
         if(self.categoria.id == 0){//cuando esta usando la pantalla de categorias
             self.categorias.pagination.current_page = self.categorias.pagination.current_page - 1
-            self.categorias.pagination.current_page = self.categorias.pagination.current_page > 1?self.categorias.pagination.current_page:1;
+            self.categorias.pagination.current_page = self.categorias.pagination.current_page > 1?self.categorias.pagination.current_page:0;
             self.parametrosPaginacion.paginaActual = self.parametrosPaginacion.paginaActual > 1?self.parametrosPaginacion.paginaActual - 12:0 
             self.update()
             __ListaCategorias()
 
         }else{// cuando esta usando la pantalla de articulos
             self.inventariosXCategoria.pagination.current_page = self.inventariosXCategoria.pagination.current_page - 1
-            self.inventariosXCategoria.pagination.current_page = self.inventariosXCategoria.pagination.current_page > 1?self.inventariosXCategoria.pagination.current_page:1;
+            self.inventariosXCategoria.pagination.current_page = self.inventariosXCategoria.pagination.current_page > 1?self.inventariosXCategoria.pagination.current_page:0;
              self.parametrosPaginacion.paginaActual = self.parametrosPaginacion.paginaActual > 1?self.parametrosPaginacion.paginaActual - 12:0 
             self.update()
             __ListaArticulosXCategorias()
@@ -1741,7 +1745,10 @@ __CambiarPrecio(e){
 * Tipo Cambio de moneda
 **/
 function __TipoCambio(){
-    self.tipoCambio = {}
+    self.tipoCambio = {
+        total:0,
+        id:null
+    }
     self.update()
     $.ajax({
         url: "MostrarTipoCambioActivoAjax.do",
@@ -3511,12 +3518,29 @@ function _incluirBilletes(modena,descripcion,valor,imagen){
 *  Evento click para mostrar las mesas 
 **/
 __PantallaMesas(){
+    self.mesa = {
+         id:null,
+         descripcion:"",
+         impuestoServicio:false,
+     }
+     self.mesas  = {
+         data:[],
+         pagination:{
+             total:0,
+             current_page:0,
+             per_page:0,
+             last_page:0,
+             from:0,
+             to:0
+         }
+     }
+     self.update()
 	__ListaMesas()
 }
 
 __BotonAnteriorMesas(){
 	  self.mesas.pagination.current_page = self.mesas.pagination.current_page - 1
-	  self.mesas.pagination.current_page = self.mesas.pagination.current_page > 1?self.mesas.pagination.current_page:1;
+	  self.mesas.pagination.current_page = self.mesas.pagination.current_page > 1?self.mesas.pagination.current_page:0;
 	  self.parametrosPaginacion.paginaActual = self.parametrosPaginacion.paginaActual > 1?self.parametrosPaginacion.paginaActual - 12:0 
 	  self.update()
 	  __ListaMesas()

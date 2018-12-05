@@ -324,9 +324,9 @@ public class ArticuloController {
 			articulo.setEmpresa(usuarioSesion.getEmpresa());
 			articulo.setUpdated_at(new Date());
 			articulo.setEstado(Constantes.ESTADO_ACTIVO);
-			articulo.setGananciaPrecioPublico(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioPublico()));
-			articulo.setGananciaPrecioMayorista(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioMayorista()));
-			articulo.setGananciaPrecioEspecial(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioEspecial()));
+			articulo.setGananciaPrecioPublico(articulo.getGananciaPrecioPublico() !=null?articulo.getGananciaPrecioPublico():Constantes.ZEROS_DOUBLE);
+			articulo.setGananciaPrecioMayorista(articulo.getGananciaPrecioMayorista() !=null?articulo.getGananciaPrecioMayorista():Constantes.ZEROS_DOUBLE);
+			articulo.setGananciaPrecioEspecial(articulo.getGananciaPrecioEspecial() !=null?articulo.getGananciaPrecioEspecial():Constantes.ZEROS_DOUBLE);
 			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
 			articulo.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
@@ -409,9 +409,9 @@ public class ArticuloController {
 			articuloBd.setUnidadMedida(articulo.getUnidadMedida());
 			articuloBd.setTipoCodigo(articulo.getTipoCodigo());
 			articuloBd.setEstado(articulo.getEstado());
-			articuloBd.setGananciaPrecioPublico(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioPublico()));
-			articuloBd.setGananciaPrecioMayorista(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioMayorista()));
-			articuloBd.setGananciaPrecioEspecial(articuloBo.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), articulo.getPrecioEspecial()));
+			articuloBd.setGananciaPrecioPublico(articulo.getGananciaPrecioPublico() !=null?articulo.getGananciaPrecioPublico():Constantes.ZEROS_DOUBLE);
+			articuloBd.setGananciaPrecioMayorista(articulo.getGananciaPrecioMayorista() !=null?articulo.getGananciaPrecioMayorista():Constantes.ZEROS_DOUBLE);
+			articuloBd.setGananciaPrecioEspecial(articulo.getGananciaPrecioEspecial() !=null?articulo.getGananciaPrecioEspecial():Constantes.ZEROS_DOUBLE);
 			articuloBd.setPrecioPublico(articulo.getPrecioPublico());
 			articuloBd.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
 			articuloBd.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());

@@ -70,6 +70,7 @@
                 <div class="box">
                     <div class="box-body">
                         <div class="planel-body" >
+                           
                         
                             <div class="row" >        
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
@@ -478,20 +479,23 @@ self.hay_datos             = false
 self.fechaInicio =null
 self.fechaFin =null
 self.cedula =""
+self.totalGeneral = 0
+self.totalImpuestoGeneral = 0
 self.on('mount',function(){
     $("#filtros").validate(reglasDeValidacion());
     __InformacionDataTable()
     __InicializarTabla('.tableListar')
 })
-
 /**
 * limpiar los filtros
 **/
 __limpiarFiltros(){
     $('#fechaInicial').val(null)
     $('#fechaFinal').val(null)
+    self.totalGeneral = 0
+    self.totalImpuestoGeneral = 0
+    self.update()
 }
-
 /**
 * Camps requeridos
 **/
@@ -519,7 +523,8 @@ __Busqueda(){
     self.fechaInicio =$('.fechaInicial').val()
     self.fechaFin    =$('.fechaFinal').val()
     self.cedula      =$('#cedulaEmisor').val()
-
+    self.totalGeneral = 0
+    self.totalImpuestoGeneral = 0
     self.listaFacturas = []
     self.update()
     
@@ -530,7 +535,6 @@ __Busqueda(){
         	fechaFinParam:$('.fechaFinal').val(),
         	cedulaEmisor:$('#cedulaEmisor').val(),
         };
-
         $("#tableListar").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListar')  
         $.ajax({
@@ -544,7 +548,9 @@ __Busqueda(){
                     loadListar(".tableListar",idioma_espanol,self.formato_tabla,result.aaData)
                     self.listaFacturas = result.aaData
                     self.hay_datos             = true
+
                     self.update()
+                    TotalesGenerales(result.aaData)
                     agregarInputsCombos()
                     ActivarEventoFiltro(".tableListar")
                 }else{
@@ -558,7 +564,21 @@ __Busqueda(){
         });
      }
 }
-
+/**
+*  Suma de totales de cuenta por cobrar 
+**/
+function TotalesGenerales(data){
+    self.totalGeneral = 0
+    self.totalImpuestoGeneral = 0
+    self.update()
+    for(var i in data) { 
+        self.totalGeneral         += data[i].totalFactura;
+        self.totalImpuestoGeneral += data[i].totalImpuestos;
+     }
+     self.totalGeneral = formatoDecimales(self.totalGeneral,2)
+     self.totalImpuestoGeneral = formatoDecimales(self.totalImpuestoGeneral,2)
+     self.update()
+}
 
 function agregarInputsCombos(){
      // Agregar los input de busqueda 
@@ -570,7 +590,6 @@ function agregarInputsCombos(){
 	    }
     })
 } 
-
 /*
  * Muestra los filtros avanzados
  */
@@ -584,7 +603,6 @@ function agregarInputsCombos(){
     }
     self.update();
 }
-
 /**
 *Formato de la fecha con hora
 **/
@@ -592,13 +610,11 @@ function __displayDate_detail(fecha) {
     var dateTime = new Date(fecha);
     return moment(dateTime).format('DD/MM/YYYY ');
 }
-
 /**
 *Formato del listado 
 **/
 function __InformacionDataTable(){
     self.formato_tabla = [ 
-			//{'data' :'fechaEmision'   	,"name":"fechaEmision"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true },
 			{"data" : "fechaEmision"	,"name":"fechaEmision"    ,"title" : $.i18n.prop("factura.fecha.emision")      ,"autoWidth":true, 
 				"render" : function(fechaEmision){
 					return formatearFechaDT(fechaEmision); 
@@ -631,7 +647,6 @@ function __InformacionDataTable(){
    ];
    self.update();
 }
-
 //Formato de fecha
 function formatearFechaDT(fecha){	
 	if(fecha == null){
@@ -640,9 +655,7 @@ function formatearFechaDT(fecha){
 		return moment(fecha).format('DD/MM/YYYY');		
 	}	
 }
-
 function __TipoDocumentos(numeroConsecutivo,row){
-
     switch(row.tipoDoc) {
     case "04":
           return  "Tiq:"+numeroConsecutivo

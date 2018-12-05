@@ -3,6 +3,7 @@ package com.emprendesoftcr.Bo;
 import java.util.Collection;
 import java.util.Date;
 
+import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.TipoCambio;
@@ -34,4 +35,6 @@ public interface FacturaBo {
 	TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa);
 	
 	Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa);
+	
+	Collection<Factura> findByClienteAndEmpresa(Cliente cliente ,Empresa empresa);
 }

@@ -4,14 +4,14 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div  class= "wrap">
-        <h1 >{titulo}<h1>
+        <h2 >{titulo}<h2>
         <div class="pantalla-imprimir">
             <div class="botones-imprimir">
-                <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
+                <a href="#"  class="boton-imprimir" onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
                 
             </div>
             <section class="zona-impresion" id="imprimeme" name ="imprimeme">
-                <div class="forma-impresion">
+                <div class="">
                     <div class="ticket" id="ticket" name="ticket" > 
                         <div class="encabezado" ><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.id}                       </strong><br></div>
                         <div class="encabezado"><strong> {facturaImpresa.empresa.nombreComercial}                        </strong><br></div>

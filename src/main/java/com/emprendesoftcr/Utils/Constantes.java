@@ -44,6 +44,7 @@ public class Constantes {
 
 	public static final String					IDP_URI_PRODUCCION																	= "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut/protocol/openid-connect";
 	public static final String					IDP_URI_DOCUMENTOS_PRODUCCION												= "https://api.comprobanteselectronicos.go.cr/recepcion/v1/recepcion";
+	public static final String					IDP_URI_DOCUMENTOS_DESARROLLO												= "https://api.comprobanteselectronicos.go.cr/recepcion-sandbox/v1/recepcion";
 	public static final String					IDP_CLIENT_ID_PRODUCCION														= "api-prod";
 
 	// Consecutivo inicial de las empresa
@@ -338,6 +339,11 @@ public class Constantes {
 	public static final String					RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_PARCIAL					= "06";
 	public static final String					RECEPCION_FACTURA_TIPO_DOC_RECHAZADO								= "07";
 
+	public static final String					RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_1									= "01";
+	public static final String					RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_PARCIAL_1					= "02";
+	public static final String					RECEPCION_FACTURA_TIPO_DOC_RECHAZADO_1								= "03";
+
+	
 	public static final String					FACTURA_TIPO_DOC_TIQUETE_STR												= "factura.tipo.documento.factura.tiquete";
 	public static final String					FACTURA_TIPO_DOC_PROFORMAS_STR											= "factura.tipo.documento.factura.proforma";
 	public static final String					FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO_STR						= "factura.tipo.documento.factura.tiquete.uso.interno";

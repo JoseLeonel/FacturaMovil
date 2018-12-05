@@ -31,15 +31,15 @@ public class JasperReporter {
     private String _jrxmlFilename;
     private JasperReport _report;
     private JRTableModelDataSource _dataSource;
-    private FacturaElectronica _factura; 
+   
     private InputStream _logo;
     private InputStream _qr;
     private HashMap<String,Object> _parameters;
     
     
-    public JasperReporter(String jrxmlFilename, FacturaElectronica factura){
+    public JasperReporter(String jrxmlFilename){
         this._jrxmlFilename = jrxmlFilename;
-        this._factura= factura;
+      
         _parameters = new HashMap<String, Object>();
     }
     
@@ -48,11 +48,7 @@ public class JasperReporter {
         this._report = JasperCompileManager.compileReport(_jrxmlFilename);
     }
     
-    private void setDatasource(FacturaElectronica f)
-    {        
-        _dataSource = new JRTableModelDataSource(f.getDataArray());
-        
-    }
+   
     
     
     public void setQrImage(InputStream is){
@@ -78,7 +74,7 @@ public class JasperReporter {
     public void exportToPDF(String OutputFilename) throws JRException
     {
         compile();
-        setDatasource(_factura);
+       
         
         JasperPrint print = JasperFillManager.fillReport(this._report, _parameters, this._dataSource);
         

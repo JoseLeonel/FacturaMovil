@@ -1,5 +1,6 @@
 package com.emprendesoftcr.web.Controller;
 
+import java.util.Collection;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,15 +20,16 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.DataTableBo;
+import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
-import com.emprendesoftcr.Utils.DataTableFilter;
 import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.ClienteCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
@@ -53,6 +55,9 @@ public class ClientesController {
 
 	@Autowired
 	private ClienteBo																			clienteBo;
+
+	@Autowired
+	private FacturaBo																			facturaBo;
 
 	@Autowired
 	private UsuarioBo																			usuarioBo;
@@ -106,7 +111,6 @@ public class ClientesController {
 		}
 		JqGridFilter dataTableFilter = new JqGridFilter("cedula", "'" + Constantes.CEDULA_CLIENTE_FRECUENTE + "'", "<>");
 		delimitadores.addFiltro(dataTableFilter);
-		
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
@@ -163,19 +167,17 @@ public class ClientesController {
 				result.rejectValue("cedula", "error.cliente.existe.cedula");
 			}
 
-			
-
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-	
+
 			cliente.setProvincia(Constantes.EMPTY);
 			cliente.setDistrito(Constantes.EMPTY);
 			cliente.setCanton(Constantes.EMPTY);
 			cliente.setBarrio(Constantes.EMPTY);
 			cliente.setCelular(Constantes.ZEROS);
-			
-      cliente.setEmpresa(usuarioSesion.getEmpresa());
+
+			cliente.setEmpresa(usuarioSesion.getEmpresa());
 			cliente.setCreated_at(new Date());
 			cliente.setUpdated_at(new Date());
 			cliente.setUsuario(usuarioSesion);
@@ -214,13 +216,23 @@ public class ClientesController {
 			}
 			Cliente clienteValidar = null;
 			if (!cliente.getCedula().equals(clienteBD.getCedula())) {
-				clienteValidar = clienteBo.buscarPorCedulaYEmpresa(cliente.getCedula(), usuarioSesion.getEmpresa());
-				if (clienteValidar != null) {
-					result.rejectValue("cedula", "error.cliente.existe.cedula");
+				Boolean verificarFacturas = false;
+				Collection<Factura> facturas = facturaBo.findByClienteAndEmpresa(clienteBD, usuarioSesion.getEmpresa());
+				if (facturas != null) {
+					if (!facturas.isEmpty()) {
+						result.rejectValue("cedula", "error.cliente.cedula.tiene.facturas");
+						verificarFacturas = true;
+					}
+				}
+				if (verificarFacturas == false) {
+					clienteValidar = clienteBo.buscarPorCedulaYEmpresa(cliente.getCedula(), usuarioSesion.getEmpresa());
+					if (clienteValidar != null) {
+						result.rejectValue("cedula", "error.cliente.existe.cedula");
+					}
+
 				}
 			}
 
-			
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
@@ -239,6 +251,7 @@ public class ClientesController {
 			clienteBD.setOtraSena(cliente.getOtraSena());
 			clienteBD.setTipoCedula(cliente.getTipoCedula());
 			clienteBD.setNombreComercial(cliente.getNombreComercial());
+			clienteBD.setObservacionVenta(cliente.getObservacionVenta());
 			clienteBD.setUpdated_at(new Date());
 			clienteBD.setEstado(cliente.getEstado());
 			clienteBD.setTelefono(cliente.getTelefono());
@@ -246,7 +259,8 @@ public class ClientesController {
 			clienteBD.setUsuario(usuarioSesion);
 			clienteBD.setCodigoPais(cliente.getCodigoPais());
 			clienteBD.setIdentificacionExtranjero(cliente.getIdentificacionExtranjero());
-			
+			clienteBD.setObservacionVenta(cliente.getObservacionVenta() ==null?Constantes.EMPTY:cliente.getObservacionVenta());
+
 			clienteBo.modificar(clienteBD);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("cliente.modificado.correctamente", clienteBD);

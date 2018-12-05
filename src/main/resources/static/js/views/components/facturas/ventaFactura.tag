@@ -281,14 +281,14 @@
                     <!--Seccion de categorias-->
                     <section show= {mostrarCategorias} class="lista-articulos clickable" >
                         <div show= {mostrarCategorias} id="item-categorias"class="product-item"  each ={categorias.data}  onclick={__ArticulosXCategorias}>
-                            <img  style = "width:120px;" alt="" class="img-responsive " src="/dist/img/carrito1.png">
+                            <img  style = "width:100px;" alt="" class="img-responsive " src="/dist/img/carrito1.png">
                              <span class="label-titulos-articulo">{descripcion}</span>
                         </div>
                     </section>
                     <!--Seccion de articulos-->
                     <section show= {mostrarArticulosXCategoria} class="lista-articulos clickable" >
                         <div class="product-item"  each ={inventariosXCategoria.data}   onclick={__AgregarProductoDePantalla}>
-                            <img  style = "width:80px;" alt="" class="img-responsive " src="/dist/img/carrito3.png">
+                            <img  style = "width:75px;" alt="" class="img-responsive " src="/dist/img/carrito3.png">
                             <span class="label-titulos-articulo">{descripcion}</span>
                         </div>
                     </section>
@@ -1067,7 +1067,10 @@ td.col-xl-12, th.col-xl-12 {
     self.urlImagenLector      = '/dist/img/codigo_barra.png';
     self.urlImagenBuscador    = '/dist/img/buscador.png';
 
-
+    self.tipoCambio = {
+        total:0,
+        id:null
+    }
     self.on('mount',function(){
         $("#formularioFactura").validate(reglasDeValidacionFactura());
         $("#formularioAgregarNombreTiquete").validate(reglasAgregarNombre());
@@ -1605,7 +1608,10 @@ __CambiarPrecio(e){
 * Tipo Cambio de moneda
 **/
 function __TipoCambio(){
-    self.tipoCambio = {}
+    self.tipoCambio = {
+        total:0,
+        id:null
+    }
     self.update()
     $.ajax({
         url: "MostrarTipoCambioActivoAjax.do",
@@ -2699,6 +2705,7 @@ function _calcularImpuesto(precio,iva){
     if(cantidad == 0){
        cantidad = 1;
     }
+    cantidad = __valorNumerico(redondeoDecimales(cantidad,3))
     __ValidarCantidadArticulo(self.item.codigo,cantidad)
   }
 /**
@@ -2708,10 +2715,8 @@ __cambiarDescripcionDetalle(e){
     var descripcion = $(".cambiarDescripcionArticulo").val();
     self.item.descripcion = descripcion
     self.update()
-
     $(".cambiarDescripcionArticulo").val(null);
     $('#modalCambiarDescripcion').modal('hide') 
-    
 }
 /**
 * Cambiar el precio del detalle de la factura
@@ -2884,6 +2889,9 @@ function __calculate() {
     $( "#quantity" ).val(null);
     getSubTotalGeneral()
 }
+/**
+*calculo  de impuesto servicio
+**/
 function calcularImpuestoServicio(){
     var resultado = 0
      self.detail.forEach(function(e){

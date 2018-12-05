@@ -4,14 +4,14 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div  class= "wrap">
-        <h1 >{titulo}</h1>
+        <h2 >{titulo}</h2>
         <div class="pantalla-imprimir">
             <div class="botones-imprimir">
                 <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
                
             </div>
-            <section class="zona-impresion" >
-                <div class="forma-impresion" id="imprimeme" name ="imprimeme">
+            <section class="" >
+                <div class="forma-impresion " id="imprimeme" name ="imprimeme">
                     <div class="ticket" id="ticket" name="ticket" > 
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc == '88'}"><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.id}                       </strong><br></div>
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc == '87'}"><strong> {$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")} {facturaImpresa.id}                       </strong><br></div>
@@ -35,7 +35,7 @@
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura != ""}"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.nombreFactura}</div>
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == "" }"><strong show={facturaImpresa.cliente.nombreCompleto != 'CLIENTE_FRECUENTE'}>{$.i18n.prop("tikect.encabezado.receptor")}     {facturaImpresa.cliente.nombreCompleto}</strong ></div>
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == ""}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}>{$.i18n.prop("tikect.encabezado.receptor.cedula")}  {facturaImpresa.cliente.cedula}   </strong></div>
-                        <div class="encabezado" show ="{ facturaImpresa.nota != ""}"> "Nota:"   {facturaImpresa.nota}  <br/></div>
+                        <div class="encabezado" show ='{ facturaImpresa.nota != "" && facturaImpresa.nota !=null}'> Nota:   {facturaImpresa.nota}  </div>
                         <table class = "forma-table">
                             <thead>
                                 <tr class = "forma-table">
@@ -103,8 +103,8 @@
                             
                         </tbody>
                         </table> 
-                        <p  align="left" show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 0}">E=Excento G=Gravado  <br>
-                        <br>
+                        <p  align="left" show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 0}">E=Excento G=Gravado  
+                        
                         <p  align="left" show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 0}">{$.i18n.prop("tikect.autorizado.parte.uno")}  <br>
                                          {$.i18n.prop("tikect.autorizado.parte.dos")}   
                                             <br>{$.i18n.prop("tikect.autorizado.parte.tres")}
@@ -114,7 +114,7 @@
                                             <br>{$.i18n.prop("tikect.autorizado.no.factura.elec.parte.tres")}
                                             <br>{$.i18n.prop("tikect.autorizado.no.factura.elec.parte.cuatro")}</p>
 
-                        <br>
+                       
                         <div class="encabezado">{$.i18n.prop("tikect.final")}</div>
                         <div class="encabezado">{$.i18n.prop("emprendesoft.factura")}</div>
                         <div class="encabezado">{$.i18n.prop("emprendesoft.mensaje")}</div> 
@@ -137,9 +137,7 @@
 
 
 <style type="text/css"  >
-    #divQR{
-        border:1px solid red;
-    }
+  
     .fondoEncabezado
     {
         background: #00539B;
@@ -285,6 +283,30 @@
         align-content: left;
         text-align: left;
     }
+@page
+    {
+        margin: 0;
+    }
+    .zona-impresion
+    {
+        display: flex;
+        flex-wrap: wrap;
+        width: 80%;
+    }
+    .zona-impresion .forma-impresion
+    {
+        align-items: center;
+        align-self: flex-start;
+        background-color: white !important;
+        box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.70);
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 45px;
+        margin-left: 1%;
+        transition: all .4s;
+        width: 80%;
+    }
+    
   @media print {
 * {
     -webkit-print-color-adjust: exact !important; /*Chrome, Safari */
@@ -297,10 +319,9 @@
 }
 @media only print
 {
-  body * { display: none !important; }
- body:after { content: "Don't waste paper!"; }
+    body * { display: none !important; }
+    body:after { content: "Don't waste paper!"; }
 }
-
 </style>    
 <script>
 
@@ -320,7 +341,7 @@ self.on('mount',function(){
 
 
        consultaFactura(self.facturaImpresa.id)
-      //  qr()
+        //qr()
     }
    
    
@@ -573,12 +594,16 @@ function __imprimir(){
 
 
 function imprimirElemento(elemento){
- 
+//window.print();
+//return
+    // var canvas=document.getElementById("leo");
+    
   
   var ventana = window.open('', 'PRINT', 'height=400,width=600');
   ventana.document.write('<html><head><title>' + "" + '</title>');
   ventana.document.write('</head><body >');
   ventana.document.write(elemento.innerHTML);
+  //ventana.document.write("<br><img src='"+canvas.toDataURL()+"'/>");
  
   ventana.document.write('</body></html>');
   ventana.document.close();

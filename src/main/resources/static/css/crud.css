@@ -533,6 +533,22 @@ input.cmn-toggle-yes-no:checked + label:after {
         float: right;
         cursor: pointer;
     }
+    
+    .btn-red {
+        background-color: #ea2a14;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 14px;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
     .btn-dark-gray {
         background-color: #3D3E42;
         color: #FFF;
@@ -611,8 +627,13 @@ input.cmn-toggle-yes-no:checked + label:after {
    .btn-cerrar:before{
     	font-family: FontAwesome;
         content: "\f023";
-    
-    }
+     }
+   
+   .btn-anular:before{
+    	font-family: FontAwesome;
+        content: "\f014";
+     }
+   
     .btn-imprimir:before{
     	font-family: FontAwesome;
         content: "\f02f";
