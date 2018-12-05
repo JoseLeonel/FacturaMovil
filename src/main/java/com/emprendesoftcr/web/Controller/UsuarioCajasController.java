@@ -135,14 +135,18 @@ public class UsuarioCajasController {
 		delimitadores = new DataTableDelimitador(request, "UsuarioCaja");
 		JqGridFilter dataTableFilter = null;
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		
 		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_EMPRESA) && !request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
 			dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
-
+		}
+		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {			
+			//Se incluye la empresa
+			dataTableFilter = new JqGridFilter("caja.empresa.id", "'" + usuario.getEmpresa().getId().toString() + "'", "=");
+			delimitadores.addFiltro(dataTableFilter);
 		}
 		dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_INACTIVO.toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
-
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_CAJAS_ABIERTAS_CERRADAS);
 	}
 
