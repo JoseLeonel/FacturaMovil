@@ -74,6 +74,7 @@
          <input type="hidden" name="total" id="total" value="{parametrosPaginacion.total}">
          <input type="hidden" name="categoria" id="categoria" value="{categoria.id}">
          <input type="hidden" name="mesa" id="mesa" value="{mesa.id}">
+         <input type="hidden" name="tipoVenta" id="tipoVenta" value="{parametrosPaginacion.tipoVenta}">
      </form>
  </div>
 <!--Modal mostrar  -->
@@ -1100,7 +1101,8 @@ td.col-xl-12, th.col-xl-12 {
         id:null,
         paginaActual:0,
         cantidadPorPagina:10,
-        total:0
+        total:0,
+        tipoVenta:1,
 
     }
     self.categorias                  = {
@@ -1311,6 +1313,7 @@ function __ListaCategorias(){
         self.parametrosPaginacion.cantidadPorPagina = 12
         self.parametrosPaginacion.paginaActual = 0
         self.parametrosPaginacion.total = 0
+        self.parametrosPaginacion.tipoVenta = 1
         self.update()
     }
     $('#cantidadPorPagina').val(self.parametrosPaginacion.cantidadPorPagina)
@@ -1351,6 +1354,7 @@ function __ListaArticulosXCategorias(){
         self.parametrosPaginacion.cantidadPorPagina = 12
         self.parametrosPaginacion.paginaActual = 0
         self.parametrosPaginacion.total = 0
+        self.parametrosPaginacion.tipoVenta = 1
         self.update()
     }
     $('#cantidadPorPagina').val(self.parametrosPaginacion.cantidadPorPagina)
@@ -2224,7 +2228,8 @@ function __Init(){
             id:null,
             paginaActual:0,
             cantidadPorPagina:10,
-            total:0
+            total:0,
+            tipoVenta:1
         }
         self.categorias = {
             data:[],
@@ -3567,6 +3572,8 @@ function __ListaMesas(){
         self.parametrosPaginacion.cantidadPorPagina = 12
         self.parametrosPaginacion.paginaActual = 0
         self.parametrosPaginacion.total = 0
+        self.parametrosPaginacion.tipoVenta = 1
+        
         self.update()
     }
     $('#cantidadPorPagina').val(self.parametrosPaginacion.cantidadPorPagina)
@@ -3625,6 +3632,7 @@ function __ListaFacturasXMesas(){
         self.parametrosPaginacion.cantidadPorPagina = 12
         self.parametrosPaginacion.paginaActual = 0
         self.parametrosPaginacion.total = 0
+        self.parametrosPaginacion.tipoVenta = 1
         self.update()
     }
     $('#cantidadPorPagina').val(self.parametrosPaginacion.cantidadPorPagina)

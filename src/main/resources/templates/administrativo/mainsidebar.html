@@ -82,7 +82,7 @@
             </a>
             <ul class="treeview-menu">
                 <li><a href="/ListarCuentaCobrar"><i class="fa fa-circle-o"></i> CuentasxCobrar </a></li>
-                <li><a href="/ListarCuentaPagar" sec:authorize="hasAnyAuthority('Administrador_Empresa','Administrador_Sistema')" ><i class="fa fa-circle-o"></i> CuentasxPagar </a></li>
+                <li><a href="/ListarCuentaPagar" sec:authorize="hasAnyAuthority('Administrador_Empresa','Administrador_Restaurante','Administrador_Sistema')" ><i class="fa fa-circle-o"></i> CuentasxPagar </a></li>
                 
             </ul>
         </li>
@@ -120,8 +120,8 @@
 			            </a>
 			            <ul class="treeview-menu">
 			                <li><a href="/ListaFacturas" sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Sistema','usuario_vendedor','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Cajero')"><i class="fa fa-circle-o"></i>Listado de Facturas</a></li>
-			                <li><a href="/TotalFacturas"  sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios')"><i class="fa fa-circle-o"></i>Totales Ventas mensuales</a></li>
-			                <li><a href="/ListaDetallesxArticulo"  sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios')"><i class="fa fa-circle-o"></i>Ventas por Articulo</a></li>
+			                <li><a href="/TotalFacturas"  sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Totales Ventas mensuales</a></li>
+			                <li><a href="/ListaDetallesxArticulo"  sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Ventas por Articulo</a></li>
 			            </ul>
 			        </li>
 
@@ -133,7 +133,7 @@
 			            </a>
 			            <ul class="treeview-menu">
 			                <li><a href="/ListaCompras" sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Cajero','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante')"><i  class="fa fa-circle-o"></i>Listado de compras</a></li>
-			                <li><a href="/ListaRecepcionFacturas"  sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios')"><i class="fa fa-circle-o"></i>Compras aceptadas</a></li>
+			                <li><a href="/ListaRecepcionFacturas"  sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Compras aceptadas</a></li>
 			            </ul>
 			        </li>
 			        <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Sistema','usuario_vendedor','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Cajero')">
@@ -143,8 +143,8 @@
 			                <i class="fa fa-angle-left pull-right"></i>
 			            </a>
 			            <ul class="treeview-menu">
-			                <li><a href="/ListarCuentasXCobrarConsulta"  sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios')"><i class="fa fa-circle-o"></i>CuentasXCobrar</a></li>
-			                <li><a href="/ListarCuentaPagarConsulta"  sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios')"><i class="fa fa-circle-o"></i>CuentasXPagar</a></li>
+			                <li><a href="/ListarCuentasXCobrarConsulta"  sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>CuentasXCobrar</a></li>
+			                <li><a href="/ListarCuentaPagarConsulta"  sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>CuentasXPagar</a></li>
 			            </ul>
 			        </li>
 
@@ -164,7 +164,7 @@
             </ul>
         </li>
 
-		<li class="active treeview" sec:authorize="hasAnyAuthority('Administrador_Sistema','usuario_vendedor','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios')">
+		<li class="active treeview" sec:authorize="hasAnyAuthority('Administrador_Sistema','usuario_vendedor','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')">
             <a href="/proformas.do">
                 <i class="fa fa-file-archive-o"></i> <span>Proformas</span>
             </a>

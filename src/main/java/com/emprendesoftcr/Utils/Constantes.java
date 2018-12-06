@@ -7,15 +7,17 @@ public class Constantes {
 	public static final ResourceBundle	RESOURCE_BUNDLE																			= ResourceBundle.getBundle("factura");
 
 	public static final String					PLANTILLA_CORREO_CUENTAS_POR_COBRAR									= "email/cuentasxcobrar.vm";
-	public static final String					PLANTILLA_CORREO_VENTA_POR_CODIGO 									= "email/ventasXCodigo.vm";
-	
-	
+	public static final String					PLANTILLA_CORREO_VENTA_POR_CODIGO										= "email/ventasXCodigo.vm";
+
+	// Tipo de mostrar el articulo de impuesto de servicio 10 porciento
+	public static final Integer					NO_MOSTRAR_IMPUESTO_10_PORCIENTO										= 1;
+	public static final Integer					SI_MOSTRAR_IMPUESTO_10_PORCIENTO										= 2;
 	public static final String					COMBO_TODOS																					= "0";
 	// Empresa aplica factura Electronica
 	public static final Integer					NO_APLICA_FACTURA_ELECTRONICA												= 1;
 	public static final Integer					SI_APLICA_FACTURA_ELECTRONICA												= 0;
-	public static final Integer					SI_ENVIAR_CORREO_CLIENTE_FRECUENTE											= 1;
-	public static final Integer					NO_ENVIAR_CORREO_CLIENTE_FRECUENTE											= 0;
+	public static final Integer					SI_ENVIAR_CORREO_CLIENTE_FRECUENTE									= 1;
+	public static final Integer					NO_ENVIAR_CORREO_CLIENTE_FRECUENTE									= 0;
 //cantidad de dias de un credito minimo
 	public static final Integer					CANTIDAD_DIAS_MINIMO_CREDITO												= 1;
 	// Tipo de codigos de productos
@@ -339,11 +341,10 @@ public class Constantes {
 	public static final String					RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_PARCIAL					= "06";
 	public static final String					RECEPCION_FACTURA_TIPO_DOC_RECHAZADO								= "07";
 
-	public static final String					RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_1									= "01";
-	public static final String					RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_PARCIAL_1					= "02";
-	public static final String					RECEPCION_FACTURA_TIPO_DOC_RECHAZADO_1								= "03";
+	public static final String					RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_1								= "01";
+	public static final String					RECEPCION_FACTURA_TIPO_DOC_ACEPTADO_PARCIAL_1				= "02";
+	public static final String					RECEPCION_FACTURA_TIPO_DOC_RECHAZADO_1							= "03";
 
-	
 	public static final String					FACTURA_TIPO_DOC_TIQUETE_STR												= "factura.tipo.documento.factura.tiquete";
 	public static final String					FACTURA_TIPO_DOC_PROFORMAS_STR											= "factura.tipo.documento.factura.proforma";
 	public static final String					FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO_STR						= "factura.tipo.documento.factura.tiquete.uso.interno";
@@ -375,7 +376,7 @@ public class Constantes {
 	public static final Integer					FACTURA_ESTADO_REFIRMAR_DOCUMENTO										= 8;
 	public static final Integer					FACTURA_ESTADO_FIRMA_COMPLETO												= 2;
 	public static final Integer					FACTURA_ESTADO_FIRMA_EN_PROCESOS										= 3;
-	public static final Integer					FACTURA_ESTADO_PROBLEMA_AL_FIRMAR  									= 98;
+	public static final Integer					FACTURA_ESTADO_PROBLEMA_AL_FIRMAR										= 98;
 
 	public static final String					FACTURA_ESTADO_PENDIENTE_STR												= "factura.estado.pendiente";
 	public static final String					FACTURA_ESTADO_FACTURADO_STR												= "factura.estado.facturado";

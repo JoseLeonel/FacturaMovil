@@ -5,6 +5,7 @@ import com.emprendesoftcr.modelo.Categoria;
 public class ParametrosPaginacion {
 
 	private Integer		id;
+	private Integer   tipoVenta;
 	private Integer		paginaActual;
 	private Integer		cantidadPorPagina;
 	private Integer		total;
@@ -20,6 +21,17 @@ public class ParametrosPaginacion {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	
+	
+	public Integer getTipoVenta() {
+		return tipoVenta;
+	}
+
+	
+	public void setTipoVenta(Integer tipoVenta) {
+		this.tipoVenta = tipoVenta;
 	}
 
 	public Integer getPaginaActual() {

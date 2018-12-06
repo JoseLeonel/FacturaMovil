@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -1298,5 +1300,20 @@ public final class Utils {
 			calendar.set(Calendar.MILLISECOND, 0);
 		}
 		return calendar.getTime();
+	}
+	
+	public static Boolean validarCorreo(String correo) {
+		Boolean resultado = false;
+		 // Patrón para validar el email
+    Pattern pattern = Pattern
+            .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                    + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+    Matcher mather = pattern.matcher(correo);
+		
+    if (mather.find() == true) {
+    	resultado = true;
+    }
+		
+		return resultado;
 	}
 }
