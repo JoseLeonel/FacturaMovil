@@ -16,13 +16,13 @@ public class leo {
 //		// Este otro 10,000
 //		System.out.println(formateador.format(10000));
 		
-		String numeros = "`distribuidoramaoskar@hotmail.com,dcamacho@binatekcr.com";
-    String[] numerosComoArray = numeros.split("`");
-    numerosComoArray = numeros.split("`");
-    numerosComoArray = numeros.split(",");
-    for (int i = 0; i < numerosComoArray.length; i++) {
-        System.out.println(numerosComoArray[i]);
-    }
+//		String numeros = "`distribuidoramaoskar@hotmail.com,dcamacho@binatekcr.com";
+//    String[] numerosComoArray = numeros.split("`");
+//    numerosComoArray = numeros.split("`");
+//    numerosComoArray = numeros.split(",");
+//    for (int i = 0; i < numerosComoArray.length; i++) {
+//        System.out.println(numerosComoArray[i]);
+//    }
 
 	}
 
