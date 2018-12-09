@@ -436,10 +436,12 @@ __asignarImpuesto(){
             self.update()   
         
     }else{
+        $('.impuesto').val(null)
         self.articulo.tipoImpuesto =$('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
+        
+        var resultado = self.articulo.impuesto/100
         self.articulo.impuesto = 0
-        var resultado = 13/100
-        resultado = 1 + resultado 
+        resultado = resultado == 0 ?0:1 + resultado 
         if(self.articulo.precioPublico > 0 && self.articulo.gananciaPrecioPublico == 0 ){
            self.articulo.precioPublico =  __valorNumerico(redondeoDecimales(self.articulo.precioPublico / resultado,8));               
         }
@@ -590,7 +592,7 @@ function __Eventos(){
 function __listadoCategoriasActivas(){
      self.categorias                = {aaData:[]}
      self.update()
-    $.ajax({
+    $.ajax({ 
          url: "ListarCategoriasActivasAjax.do",
         datatype: "json",
         method:"GET",
@@ -694,6 +696,19 @@ function __Impuestos(){
         codigo: '01',
         descripcion:$.i18n.prop("tipo.impuesto.ventas")
      });
+    self.impuestos.push({
+        codigo: '07',
+        descripcion:$.i18n.prop("tipo.impuesto.servicio")
+     });
+    self.impuestos.push({
+        codigo: '12',
+        descripcion:$.i18n.prop("tipo.impuesto.cemento")
+     });
+    self.impuestos.push({
+        codigo: '98',
+        descripcion:$.i18n.prop("tipo.impuesto.otros")
+     });
+   
      self.update();
 }
 /**

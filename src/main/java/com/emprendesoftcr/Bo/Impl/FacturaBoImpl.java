@@ -77,7 +77,6 @@ public class FacturaBoImpl implements FacturaBo {
 	@Autowired
 	UsuarioCajaBo					usuarioCajaBo;
 
-
 	private Logger				log	= LoggerFactory.getLogger(this.getClass());
 
 	@Transactional
@@ -153,11 +152,10 @@ public class FacturaBoImpl implements FacturaBo {
 	}
 
 	@Override
-	public Collection<Factura> findByClienteAndEmpresa(Cliente cliente ,Empresa empresa){
+	public Collection<Factura> findByClienteAndEmpresa(Cliente cliente, Empresa empresa) {
 		return facturaDao.findByClienteAndEmpresa(cliente, empresa);
 	}
-	
-	
+
 	@Transactional
 	private Factura formaFactura(FacturaCommand facturaCommand, Usuario usuario) throws Exception {
 
@@ -187,20 +185,19 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setReferenciaNumero(facturaCommand.getReferenciaNumero());
 				factura.setReferenciaCodigo(facturaCommand.getReferenciaCodigo());
 				factura.setReferenciaRazon(facturaCommand.getReferenciaRazon());
-				if(facturaCommand.getReferenciaFechaEmision() !=null) {
-					factura.setReferenciaFechaEmision(Utils.parseDate2(facturaCommand.getReferenciaFechaEmision()));	
+				if (facturaCommand.getReferenciaFechaEmision() != null) {
+					factura.setReferenciaFechaEmision(Utils.parseDate2(facturaCommand.getReferenciaFechaEmision()));
 				}
-				
-				Factura facturaReferencia = facturaDao.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(),usuario.getEmpresa());
+
+				Factura facturaReferencia = facturaDao.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa());
 				// Si la factura se encuentra en el sistema se agregan los datos propios de ella
-				if(facturaReferencia !=null) {
+				if (facturaReferencia != null) {
 					factura.setReferenciaTipoDoc(facturaReferencia.getTipoDoc());
 					factura.setReferenciaFechaEmision(facturaReferencia.getFechaEmision());
 					factura.setCodigoMoneda(facturaReferencia.getCodigoMoneda());
-	    		factura.setTipoCambio(facturaReferencia.getTipoCambio());
-			}
-				
-				
+					factura.setTipoCambio(facturaReferencia.getTipoCambio());
+				}
+
 			} else {
 				factura.setReferenciaTipoDoc(Constantes.EMPTY);
 				factura.setReferenciaNumero(Constantes.EMPTY);
@@ -262,20 +259,20 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setMontoCambio(facturaCommand.getMontoCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getMontoCambio());
 			factura.setTotalCambio(facturaCommand.getTotalCambio() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambio());
 			factura.setTotalCambioPagar(facturaCommand.getTotalCambioPagar() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalCambioPagar());
-	    if(facturaCommand.getCodigoMoneda() !=null) {
-	    	//Costa Rica Colones 
-	    	if(facturaCommand.getCodigoMoneda().equals(Constantes.CODIGO_MONEDA_COSTA_RICA)) {
+			if (facturaCommand.getCodigoMoneda() != null) {
+				// Costa Rica Colones
+				if (facturaCommand.getCodigoMoneda().equals(Constantes.CODIGO_MONEDA_COSTA_RICA)) {
 					factura.setCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
 					factura.setTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
-	    	}else if(facturaCommand.getCodigoMoneda().equals(Constantes.CODIGO_MONEDA_DOLAR)) {//Dollar
-	    		factura.setCodigoMoneda(Constantes.CODIGO_MONEDA_DOLAR);
-	    		factura.setTipoCambio(facturaCommand.getTipoCambioMoneda());
-	    	}
-	    }else {
+				} else if (facturaCommand.getCodigoMoneda().equals(Constantes.CODIGO_MONEDA_DOLAR)) {// Dollar
+					factura.setCodigoMoneda(Constantes.CODIGO_MONEDA_DOLAR);
+					factura.setTipoCambio(facturaCommand.getTipoCambioMoneda());
+				}
+			} else {
 				factura.setCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
 				factura.setTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
-	    	
-	    }		
+
+			}
 			factura.setEstado(facturaCommand.getEstado());
 			factura.setMesa(facturaCommand.getMesa());
 			if (factura.getId() == Constantes.ZEROS_LONG) {
@@ -288,8 +285,6 @@ public class FacturaBoImpl implements FacturaBo {
 		}
 		return factura;
 	}
-	
-	
 
 	private ArrayList<DetalleFacturaCommand> formaDetallesCommand(FacturaCommand facturaCommand) throws Exception {
 		// Detalles, se forma el detalle de la factura, se contabiliza los totales para evitar problemas con el tema de los decimales en el front
@@ -313,7 +308,6 @@ public class FacturaBoImpl implements FacturaBo {
 		}
 		return detallesFacturaCommand;
 	}
-
 
 	private void asociaDetallesFactura(Factura factura, FacturaCommand facturaCommand, Usuario usuario, ArrayList<DetalleFacturaCommand> detallesFacturaCommand) throws Exception {
 
@@ -339,7 +333,7 @@ public class FacturaBoImpl implements FacturaBo {
 		for (Iterator<DetalleFacturaCommand> iterator = detallesFacturaCommand.iterator(); iterator.hasNext();) {
 			DetalleFacturaCommand detalleFacturaCommand = (DetalleFacturaCommand) iterator.next();
 			Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(detalleFacturaCommand.getCodigo(), usuario.getEmpresa());
-			if(articulo !=null) {
+			if (articulo != null) {
 				articulo.setUpdated_at(new Date());
 				articuloDao.modificar(articulo);
 			}
@@ -636,14 +630,14 @@ public class FacturaBoImpl implements FacturaBo {
 						}
 						modificar(factura);
 
-						//Se agrega solo si no existe en la caja de usuario, casos de reintentos
-						if(usuarioCajaFacturaDao.findByFacturaId(factura.getId()) == null) {
+						// Se agrega solo si no existe en la caja de usuario, casos de reintentos
+						if (usuarioCajaFacturaDao.findByFacturaId(factura.getId()) == null) {
 							UsuarioCajaFactura usuarioCajaFactura = new UsuarioCajaFactura();
 							usuarioCajaFactura.setCreated_at(new Date());
 							usuarioCajaFactura.setUpdated_at(new Date());
 							usuarioCajaFactura.setFactura(factura);
 							usuarioCajaFactura.setUsuarioCaja(usuarioCaja);
-							usuarioCajaFacturaDao.agregar(usuarioCajaFactura);							
+							usuarioCajaFacturaDao.agregar(usuarioCajaFactura);
 						}
 
 						// Se mueve al controller por que el procedimiento no toma los cambios
@@ -653,7 +647,6 @@ public class FacturaBoImpl implements FacturaBo {
 					}
 				}
 
-				
 				// Actualiza articulo y inventario
 				this.actualizaArticulosInventario(detallesFacturaCommand, factura, usuario);
 

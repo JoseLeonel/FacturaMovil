@@ -256,37 +256,44 @@
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("articulo.listar")} </h4>
             </div>
             <div class="modal-body">
-                <form id="formularioParametros" name ="formularioParametros" >
-                    <div class="row">
-                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                            <label  >{$.i18n.prop("articulo.codigo")}  </label>
-                            <input type="text" class="form-control codigoArt" id="codigoArt" name="codigoArt"  onkeypress={__ConsultarProductosCod} >
-                        </div>
-                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                            <label  >{$.i18n.prop("articulo.descripcion")}</label>
-                            <input type="text" class="form-control descArticulo "   id="descArticulo" name="descArticulo" onkeypress={__ConsultarProductosDesc} autofocus="autofocus">
-                        </div>
-                    </div> 
-                </form>    
-                <br>                   
-                <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " cellspacing="0" width="100%">
-                    <thead>
-                        <th class="table-header">{$.i18n.prop("articulo.codigo")}        </th>
-                        <th class="table-header">{$.i18n.prop("articulo.descripcion")}   </th>
-                        <th class="table-header">{$.i18n.prop("inventario.cantidad")}    </th>
-                        <th class="table-header">{$.i18n.prop("articulo.precioPublico")} </th>
-                        <th class="table-header">{$.i18n.prop("listado.acciones")}       </th>
-                    </thead>
-                    <tfoot style="display: table-header-group;">
-                        <tr>
-                            <th >{$.i18n.prop("articulo.codigo")}         </th>
-                            <th >{$.i18n.prop("articulo.descripcion")}   </th>
-                            <th >{$.i18n.prop("inventario.cantidad")}    </th>
-                            <th >{$.i18n.prop("articulo.precioPublico")} </th>
-                            <th >                                        </th>
-                        </tr>
-                    </tfoot>
-                </table>
+               <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <form id="formularioParametros" name ="formularioParametros" >
+                            <div class="row">
+                                <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                                    <label  >{$.i18n.prop("articulo.codigo")}  </label>
+                                    <input type="text" class="form-control codigoArt" id="codigoArt" name="codigoArt"  onkeypress={__ConsultarProductosCod} >
+                                </div>
+                                <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                                    <label  >{$.i18n.prop("articulo.descripcion")}</label>
+                                    <input type="text" class="form-control descArticulo "   id="descArticulo" name="descArticulo" onkeypress={__ConsultarProductosDesc} autofocus="autofocus">
+                                </div>
+                            </div> 
+                        </form>    
+                        <br>      
+
+                        <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " cellspacing="0" width="100%">
+                            <thead>
+                                <th class="table-header">{$.i18n.prop("listado.acciones")}       </th>
+                                <th class="table-header">{$.i18n.prop("articulo.codigo")}        </th>
+                                <th class="table-header">{$.i18n.prop("articulo.descripcion")}   </th>
+                                <th class="table-header">{$.i18n.prop("inventario.cantidad")}    </th>
+                                <th class="table-header">{$.i18n.prop("articulo.precioPublico")} </th>
+                                
+                            </thead>
+                            <tfoot style="display: table-header-group;">
+                                <tr>
+                                    <th >                                        </th>
+                                    <th >{$.i18n.prop("articulo.codigo")}        </th>
+                                    <th >{$.i18n.prop("articulo.descripcion")}   </th>
+                                    <th >{$.i18n.prop("inventario.cantidad")}    </th>
+                                    <th >{$.i18n.prop("articulo.precioPublico")} </th>
+                                    
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>        
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
@@ -303,30 +310,36 @@
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("factura.listar.dia")} </h4>
             </div>
             <div class="modal-body">
-                <table id="tableListarFacturasDia" class="display table responsive table-hover nowrap table-condensed tableListarFacturasDia "   cellspacing="0" width="100%">
-                   <thead>
-                    <tr>
-                        <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}            </th>
-                        <th class = "table-header" >{$.i18n.prop("factura.documento")}                </th>
-                        <th class = "table-header" >{$.i18n.prop("factura.cliente")}                  </th>
-                        <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
-                        <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
-                        <th class = "table-header" >{$.i18n.prop("factura.total")}                    </th>
-                        <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
-                    </tr>
-                    </thead>
-                        <tfoot style="display: table-header-group;">
+                <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <table id="tableListarFacturasDia" class="display table responsive table-hover nowrap table-condensed tableListarFacturasDia "   cellspacing="0" width="100%">
+                        <thead>
                             <tr>
-                                <th>{$.i18n.prop("factura.fecha.emision")}            </th>
-                                <th>{$.i18n.prop("factura.documento")}                </th>
-                                <th>{$.i18n.prop("factura.cliente")}                  </th>
-                                <th>{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
-                                <th>{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
-                                <th>{$.i18n.prop("factura.total")}                    </th>
-                                <th>                                                  </th>
+                                
+                                <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}            </th>
+                                <th class = "table-header" >{$.i18n.prop("factura.documento")}                </th>
+                                <th class = "table-header" >{$.i18n.prop("factura.cliente")}                  </th>
+                                <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
+                                <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
+                                <th class = "table-header" >{$.i18n.prop("factura.total")}                    </th>
+                                <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
                             </tr>
-                        </tfoot>
-                    </table>
+                            </thead>
+                                <tfoot style="display: table-header-group;">
+                                    <tr>
+                                        
+                                        <th>{$.i18n.prop("factura.fecha.emision")}            </th>
+                                        <th>{$.i18n.prop("factura.documento")}                </th>
+                                        <th>{$.i18n.prop("factura.cliente")}                  </th>
+                                        <th>{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
+                                        <th>{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
+                                        <th>{$.i18n.prop("factura.total")}                    </th>
+                                        <th>                                                  </th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
@@ -346,19 +359,23 @@
                     <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                         <table id="tableListaCliente" class="table responsive display table-striped table-hover nowrap tableListaCliente " cellspacing="0" width="100%">
                         <thead>
+                                
                                 <th class="table-header">{$.i18n.prop("cliente.cedula")}            </th>
-                                <th class="table-header">{$.i18n.prop("cliente.nombreComercial")}   </th>
                                 <th class="table-header">{$.i18n.prop("cliente.nombreCompleto")}    </th>
                                 <th class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
+                                <th class="table-header">{$.i18n.prop("cliente.nombreComercial")}   </th>
                                 <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
+                                
                             </thead>
                             <tfoot style="display: table-header-group;">
                                 <tr>
+                                    
                                     <th>{$.i18n.prop("cliente.cedula")}           </th>
-                                    <th>{$.i18n.prop("cliente.nombreComercial")}   </th>
                                     <th>{$.i18n.prop("cliente.nombreCompleto")}   </th>
                                     <th>{$.i18n.prop("cliente.correoElectronico")}</th>
+                                    <th>{$.i18n.prop("cliente.nombreComercial")}   </th>
                                     <th>                                          </th>
+                                    
                                 </tr>
                             </tfoot>                    
                         </table>
@@ -767,6 +784,7 @@ function ListadoFacturasDelDia(){
 **/
 function __InformacionDataTableDia(){
     self.formato_tabla_dias = [ 
+
                                {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true ,
                                },
                              
@@ -787,7 +805,9 @@ function __InformacionDataTableDia(){
                                 "render":function(id,type, row){
                                       return __Opciones(id,type,row);
                                  }
-	      		            }];
+                               },
+
+	      		            ];
     self.update();
    
 }
@@ -2403,7 +2423,13 @@ function getSubTotalGeneral(){
 * Definicion de la tabla articulos 
 **/
 function _informacionData_Articulo(){
-   self.informacion_tabla_articulo = [	{'data' : 'codigo'         ,"name":"codigo"          ,"title" : $.i18n.prop("articulo.codigo")       ,"autoWidth":false},
+   self.informacion_tabla_articulo = [	
+                                        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
+                                            "render":function(id,type, row){
+                                                    return __OpcionesArticulos(id,type,row);
+                                                }	 
+                                        },
+                                       {'data' : 'codigo'         ,"name":"codigo"          ,"title" : $.i18n.prop("articulo.codigo")       ,"autoWidth":false},
                                         {'data' : 'descripcion'    ,"name":"descripcion"     ,"title" : $.i18n.prop("articulo.descripcion")  ,"autoWidth":false},
                                         {'data' : 'cantidad'       ,"name":"cantidad"        ,"title" : $.i18n.prop("inventario.cantidad")   ,"autoWidth":false},
                                         {'data' : 'precioPublico'  ,"name":"precioPublico"   ,"title" : $.i18n.prop("articulo.precioPublico"),"autoWidth":false,
@@ -2411,11 +2437,6 @@ function _informacionData_Articulo(){
                                               var resultado = formatoDecimales(__valorNumerico(precioPublico))
                                                return  resultado;
                                             }
-                                        },
-                                        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
-                                            "render":function(id,type, row){
-                                                    return __OpcionesArticulos(id,type,row);
-                                                }	 
                                         },
                               ];
     
@@ -2511,14 +2532,17 @@ function __seleccionarVendedor() {
 function __informacionData(){
     self.informacion_tabla_clientes = [	
                                         {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false},
-                                        {'data' : 'nombreComercial'  ,"name":"nombreComercial"    ,"title" : $.i18n.prop("cliente.nombreComercial")    ,"autoWidth":false},
+                                        
                                         {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("cliente.nombreCompleto")    ,"autoWidth":false},
                                         {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("cliente.correoElectronico") ,"autoWidth":false},
+                                        {'data' : 'nombreComercial'  ,"name":"nombreComercial"    ,"title" : $.i18n.prop("cliente.nombreComercial")    ,"autoWidth":false},
                                         {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
 									            "render":function(id,type, row){
 										            return __Opcionesclientes(id,type,row);
 	 							                }	 
 								            },
+
+
                                         ];                              
    
 }
@@ -2593,7 +2617,7 @@ function agregarInputsCombos_Articulo(){
     $('.tableListarArticulos tfoot th').each( function (e) {
         var title = $('.tableListarArticulos thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 4    ){
+        if ( $(this).index() != 0    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
@@ -2619,7 +2643,7 @@ function agregarInputsCombos_Facturas_Dias(){
     $('.tableListarFacturasDia tfoot th').each( function (e) {
         var title = $('.tableListarFacturasDia thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 6    ){
+        if ( $(this).index() != 0    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })

@@ -323,30 +323,34 @@
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("factura.listar.dia")} </h4>
             </div>
             <div class="modal-body">
-                <table id="tableListarFacturasDia" class="display table responsive table-hover nowrap table-condensed tableListarFacturasDia "   cellspacing="0" width="100%">
-                   <thead>
-                    <tr>
-                        <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}            </th>
-                        <th class = "table-header" >{$.i18n.prop("factura.documento")}                </th>
-                        <th class = "table-header" >{$.i18n.prop("factura.cliente")}                  </th>
-                        <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
-                        <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
-                        <th class = "table-header" >{$.i18n.prop("factura.total")}                    </th>
-                        <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
-                    </tr>
-                    </thead>
-                        <tfoot style="display: table-header-group;">
+              <div class="row">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <table id="tableListarFacturasDia" class="display table responsive table-hover nowrap table-condensed tableListarFacturasDia "   cellspacing="0" width="100%">
+                        <thead>
                             <tr>
-                                <th>{$.i18n.prop("factura.fecha.emision")}            </th>
-                                <th>{$.i18n.prop("factura.documento")}                </th>
-                                <th>{$.i18n.prop("factura.cliente")}                  </th>
-                                <th>{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
-                                <th>{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
-                                <th>{$.i18n.prop("factura.total")}                    </th>
-                                <th>                                                  </th>
+                                <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}            </th>
+                                <th class = "table-header" >{$.i18n.prop("factura.documento")}                </th>
+                                <th class = "table-header" >{$.i18n.prop("factura.cliente")}                  </th>
+                                <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
+                                <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
+                                <th class = "table-header" >{$.i18n.prop("factura.total")}                    </th>
+                                <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
                             </tr>
-                        </tfoot>
-                    </table>
+                            </thead>
+                                <tfoot style="display: table-header-group;">
+                                    <tr>
+                                        <th>{$.i18n.prop("factura.fecha.emision")}            </th>
+                                        <th>{$.i18n.prop("factura.documento")}                </th>
+                                        <th>{$.i18n.prop("factura.cliente")}                  </th>
+                                        <th>{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
+                                        <th>{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
+                                        <th>{$.i18n.prop("factura.total")}                    </th>
+                                        <th>                                                  </th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                    </div>    
+                <div>    
 
             </div>
             <div class="modal-footer">

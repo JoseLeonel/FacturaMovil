@@ -926,10 +926,12 @@ __asignarImpuesto(){
             self.update()   
         
     }else{
+         $('.impuesto').val(null)
         self.articulo.tipoImpuesto =$('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
+        
+        var resultado = self.articulo.impuesto/100
         self.articulo.impuesto = 0
-        var resultado = 13/100
-        resultado = 1 + resultado 
+        resultado = resultado == 0 ?0:1 + resultado 
         if(self.articulo.precioPublico > 0 && self.articulo.gananciaPrecioPublico == 0 ){
            self.articulo.precioPublico =  __valorNumerico(redondeoDecimales(self.articulo.precioPublico / resultado,8));               
         }

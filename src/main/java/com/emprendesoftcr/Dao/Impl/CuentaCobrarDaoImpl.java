@@ -125,10 +125,10 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 			cuentaCobrar.setNota(factura.getNota() == null ? Constantes.CUENTA_POR_COBRAR_NOTA_AUTOMATICO : factura.getNota());
 			cuentaCobrar.setRecibo(Constantes.EMPTY);
 			cuentaCobrar.setTipo(Constantes.CUENTA_POR_COBRAR_TIPO_Automatica);
-			cuentaCobrar.setTotal(Utils.roundFactura(factura.getTotalComprobante(), 5));
+			cuentaCobrar.setTotal(Utils.roundFactura(factura.getTotalComprobante(), 2));
 			cuentaCobrar.setTotalAbono(Constantes.ZEROS_DOUBLE);
 			cuentaCobrar.setTotalComision(Constantes.ZEROS_DOUBLE);
-			cuentaCobrar.setTotalSaldo(Utils.roundFactura(factura.getTotalComprobante(), 5));
+			cuentaCobrar.setTotalSaldo(Utils.roundFactura(factura.getTotalComprobante(), 2));
 			cuentaCobrar.setDescuento(Constantes.ZEROS_DOUBLE);
 			cuentaCobrar.setUsuario(factura.getUsuarioCreacion());
 			cuentaCobrar.setVendedor(factura.getVendedor());

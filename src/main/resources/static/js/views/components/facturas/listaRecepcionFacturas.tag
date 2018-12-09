@@ -77,14 +77,15 @@
                                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
                                        <thead>
                                             <tr>
-                                                <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}            </th>
-                                                <th class = "table-header" >{$.i18n.prop("emisor.cedula")}            </th>
-                                                <th class = "table-header" >{$.i18n.prop("factura.clave")}                </th>
-                                                <th class = "table-header" >{$.i18n.prop("receptor.mensaje")}                  </th>
-                                                <th class = "table-header" >{$.i18n.prop("factura.totalImpuestos")}  </th>
+                                                <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}     </th>
+                                                <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}     </th>
+                                                <th class = "table-header" >{$.i18n.prop("emisor.cedula")}             </th>
+                                                <th class = "table-header" >{$.i18n.prop("factura.clave")}             </th>
+                                                <th class = "table-header" >{$.i18n.prop("receptor.mensaje")}          </th>
+                                                <th class = "table-header" >{$.i18n.prop("factura.totalImpuestos")}    </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.totalComprobante")}  </th>
-                                                <th class = "table-header" >{$.i18n.prop("factura.documento")}                    </th>
-                                                <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
+                                                <th class = "table-header" >{$.i18n.prop("factura.documento")}         </th>
+                                                <th class = "table-header" >{$.i18n.prop("listado.acciones")}          </th>
                                             </tr>
                                         </thead>
                                         <tfoot style="display: table-header-group;">
