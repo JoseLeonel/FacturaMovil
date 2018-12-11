@@ -293,6 +293,11 @@ public class FacturasController {
 		return "views/facturas/recepcionFactura";
 	}
 
+	@RequestMapping(value = "/ventaDolares", method = RequestMethod.GET)
+	public String crearVentaDolares(ModelMap model) {
+		return "views/facturas/ventaDolares";
+	}
+	
 	/**
 	 * Ventas por Mini super
 	 * @param model
