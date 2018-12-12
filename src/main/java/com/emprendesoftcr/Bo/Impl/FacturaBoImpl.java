@@ -330,6 +330,10 @@ public class FacturaBoImpl implements FacturaBo {
 
 		// Agregar Lineas de Detalle
 		Integer numeroLinea = 1;
+		Double gananciaProducto = Constantes.ZEROS_DOUBLE;
+		Double precioUnitario = Constantes.ZEROS_DOUBLE;
+		Double costo = Constantes.ZEROS_DOUBLE;
+
 		for (Iterator<DetalleFacturaCommand> iterator = detallesFacturaCommand.iterator(); iterator.hasNext();) {
 			DetalleFacturaCommand detalleFacturaCommand = (DetalleFacturaCommand) iterator.next();
 			Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(detalleFacturaCommand.getCodigo(), usuario.getEmpresa());
@@ -337,7 +341,20 @@ public class FacturaBoImpl implements FacturaBo {
 				articulo.setUpdated_at(new Date());
 				articuloDao.modificar(articulo);
 			}
+			gananciaProducto = Constantes.ZEROS_DOUBLE;
+			precioUnitario = Constantes.ZEROS_DOUBLE;
+			costo = Constantes.ZEROS_DOUBLE;
+			if (detalleFacturaCommand.getPrecioUnitario() != null) {
+				precioUnitario = detalleFacturaCommand.getPrecioUnitario();
+			}
+			if (articulo != null) {
+				if (articulo.getCosto() != null) {
+					costo = articulo.getCosto();
+				}
+			}
+			gananciaProducto = getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad());
 			Detalle detalle = new Detalle(detalleFacturaCommand);
+			detalle.setGanancia(Utils.roundFactura(gananciaProducto, 5));
 			detalle.setUsuario(usuario);
 			detalle.setTipoImpuesto(articulo == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoImpuesto());
 			detalle.setNaturalezaDescuento(Constantes.FORMATO_NATURALEZA_DESCUENTO);
@@ -446,6 +463,13 @@ public class FacturaBoImpl implements FacturaBo {
 		factura.setTotalImpuesto(Utils.roundFactura(totalImpuesto, 5));
 		factura.setTotalComprobante(Utils.roundFactura(totalComprobante, 5));
 		factura.setTotalImpuestoServicio(Utils.roundFactura(totalImpServicios, 5));
+	}
+
+	private Double getGananciaProducto(Double precioUnitario, Double costo) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		resultado = costo != Constantes.ZEROS_DOUBLE ? precioUnitario - costo : Constantes.ZEROS_DOUBLE;
+
+		return resultado;
 	}
 
 	private void actualizaArticulosInventario(Factura factura, Usuario usuario) throws Exception {
