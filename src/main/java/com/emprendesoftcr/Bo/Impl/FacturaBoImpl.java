@@ -333,7 +333,7 @@ public class FacturaBoImpl implements FacturaBo {
 		for (Iterator<DetalleFacturaCommand> iterator = detallesFacturaCommand.iterator(); iterator.hasNext();) {
 			DetalleFacturaCommand detalleFacturaCommand = (DetalleFacturaCommand) iterator.next();
 			Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(detalleFacturaCommand.getCodigo(), usuario.getEmpresa());
-			 
+
 			if (articulo != null) {
 				articulo.setUpdated_at(new Date());
 
@@ -449,8 +449,6 @@ public class FacturaBoImpl implements FacturaBo {
 		factura.setTotalComprobante(Utils.roundFactura(totalComprobante, 5));
 		factura.setTotalImpuestoServicio(Utils.roundFactura(totalImpServicios, 5));
 	}
-
-	
 
 	private void actualizaArticulosInventario(Factura factura, Usuario usuario) throws Exception {
 		for (Iterator<Detalle> iterator = factura.getDetalles().iterator(); iterator.hasNext();) {
