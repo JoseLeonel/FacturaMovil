@@ -448,21 +448,21 @@ public class FacturaBoImpl implements FacturaBo {
 		factura.setTotalImpuestoServicio(Utils.roundFactura(totalImpServicios, 5));
 	}
 
-	private void actualizaArticulosInventario(ArrayList<DetalleFacturaCommand> detallesFacturaCommand, Factura factura, Usuario usuario) throws Exception {
+	private void actualizaArticulosInventario(Factura factura, Usuario usuario) throws Exception {
 		for (Iterator<Detalle> iterator = factura.getDetalles().iterator(); iterator.hasNext();) {
 			Detalle detalle = (Detalle) iterator.next();
 			Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(detalle.getCodigo(), usuario.getEmpresa());
 			// Si el lector esta activo modifica el precio
-			if (factura.getEmpresa().getCambiarPrecio().equals(Constantes.ESTADO_ACTIVO)) {
-				Double resultadoImpuesto = Constantes.ZEROS_DOUBLE;
-				Double precioUnitario = detalle.getPrecioUnitario();
-				if (detalle.getImpuesto() > Constantes.ZEROS_DOUBLE) {
-					resultadoImpuesto = detalle.getMontoImpuesto() / detalle.getCantidad();
-				}
-				precioUnitario = precioUnitario + resultadoImpuesto;
-				articulo.setPrecioPublico(precioUnitario);
-				articuloDao.modificar(articulo);
-			}
+//			if (factura.getEmpresa().getCambiarPrecio().equals(Constantes.ESTADO_ACTIVO)) {
+//				Double resultadoImpuesto = Constantes.ZEROS_DOUBLE;
+//				Double precioUnitario = detalle.getPrecioUnitario();
+//				if (detalle.getImpuesto() > Constantes.ZEROS_DOUBLE) {
+//					resultadoImpuesto = detalle.getMontoImpuesto() / detalle.getCantidad();
+//				}
+//				precioUnitario = precioUnitario + resultadoImpuesto;
+//				articulo.setPrecioPublico(precioUnitario);
+//				articuloDao.modificar(articulo);
+//			}
 
 			if (articulo != null) {
 				if (!factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
@@ -648,7 +648,7 @@ public class FacturaBoImpl implements FacturaBo {
 				}
 
 				// Actualiza articulo y inventario
-				this.actualizaArticulosInventario(detallesFacturaCommand, factura, usuario);
+				this.actualizaArticulosInventario(factura, usuario);
 
 				// Crear Credito del cliente
 				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
