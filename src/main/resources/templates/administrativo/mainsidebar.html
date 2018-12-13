@@ -1,5 +1,5 @@
 <!-- sidebar: style can be found in sidebar.less -->
-<section class="sidebar">
+<section class="sidebar" style="height:50%">
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu">
         <li class="active treeview">
@@ -40,7 +40,7 @@
 		            </ul>
 		        </li>
 		        
-        <li class="active treeview" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')">
+        <li class="treeview" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')">
             <a href="/CambiarPrecio">
                 <i class="fa fa-pencil-square"></i> <span>Cambio Precio</span>
             </a>
@@ -73,6 +73,8 @@
                 <li><a href="/ventasPorServicio" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Servicios')"><i class="fa fa-circle-o"></i>Por Servicios </a></li>
                 <li><a href="/postVenta" sec:authorize="hasAnyAuthority('Administrador_Empresa','Administrador_Cajero','Administrador_Sistema','Administrador_Servicios')"><i class="fa fa-circle-o"></i>Venta POS </a></li>
                 <li><a href="/postRestaurante" sec:authorize="hasAnyAuthority('Administrador_Restaurante','usuario_vendedor')"><i class="fa fa-circle-o"></i> Restaurante </a></li>
+                <li><a href="/proformas.do" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','usuario_vendedor','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i> Proformas </a></li>
+            </a>
             </ul>
         </li>
  		<li class="treeview" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')">
@@ -96,16 +98,11 @@
             </a>
             <ul class="treeview-menu">
                 <li><a href="/AbrirCajas"><i class="fa fa-circle-o"></i> Abrir/Cerrar Caja</a></li>
-                
+                <li><a href="/ListarTipoCambios"><i class="fa fa-circle-o"></i>Tipo Cambio</a></li>
                 <li><a href="/ListarCajasInactivas"><i class="fa fa-circle-o"></i> Cajas Cerradas</a></li>
+                
             </ul>
         </li>
-        
- 		<li class="active treeview" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Servicios','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')">
-            <a href="/ListarTipoCambios">
-                <i class="fa fa-balance-scale"></i> <span>Tipo Cambio</span>
-            </a>
-        </li>          
        <li class="treeview" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','usuario_vendedor','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Cajero')">
             <a href="#">
                 <i class="fa fa-shopping-cart"></i>
@@ -123,6 +120,7 @@
 			                <li><a href="/ListaFacturas" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','usuario_vendedor','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Cajero')"><i class="fa fa-circle-o"></i>Listado de Facturas</a></li>
 			                <li><a href="/TotalFacturas"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Totales Ventas mensuales</a></li>
 			                <li><a href="/ListaDetallesxArticulo"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Ventas por Articulo</a></li>
+			                <li><a href="/ListaDetallesImpuestoServicio"  sec:authorize="hasAnyAuthority('Administrador_Restaurante','Administrador_temporal')"><i class="fa fa-circle-o"></i>Listado I.S 10%</a></li>
 			            </ul>
 			        </li>
 
@@ -152,26 +150,6 @@
 
             </ul>
         </li>
-
-        <li class="treeview" sec:authorize="hasAnyAuthority('Administrador_Restaurante','Administrador_temporal')">
-            <a href="#">
-                <i class="fa fa-balance-scale"></i>
-                <span>Impues.Serv</span>
-                <i class="fa fa-angle-left pull-right"></i>
-            </a>
-            <ul class="treeview-menu">
-                <li><a href="/ListaDetallesImpuestoServicio"><i class="fa fa-circle-o"></i>Listado I.S 10%</a></li>
-                
-            </ul>
-        </li>
-
-		<li class="active treeview" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','usuario_vendedor','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')">
-            <a href="/proformas.do">
-                <i class="fa fa-file-archive-o"></i> <span>Proformas</span>
-            </a>
-        </li>    
-		
-		
          <li class="treeview" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Servicios')">
             <a href="#">
                 <i class="fa fa-share"></i>
@@ -183,7 +161,7 @@
                 <li><a href="/recepcionFactura" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Servicios')"><i  class="fa fa-circle-o"></i>Aceptar Compras</a></li>
             </ul>
         </li>           
-         <li class="active treeview">
+         <li class="treeview">
             <a href="/logout">
                 <i class="fa fa-sign-out"></i> <span>Salir</span>
             </a>
