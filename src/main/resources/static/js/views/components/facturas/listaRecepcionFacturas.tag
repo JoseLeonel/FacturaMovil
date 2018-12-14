@@ -485,7 +485,7 @@ self.totalImpuestoGeneral = 0
 self.on('mount',function(){
     $("#filtros").validate(reglasDeValidacion());
     __InformacionDataTable()
-    __InicializarTabla('.tableListar')
+     __InicializarTabla('.tableListar')
 })
 /**
 * limpiar los filtros
@@ -537,7 +537,6 @@ __Busqueda(){
         	cedulaEmisor:$('#cedulaEmisor').val(),
         };
         $("#tableListar").dataTable().fnClearTable(); 
-        __InicializarTabla('.tableListar')  
         $.ajax({
             url: "ListarRecepcionFacturasActivasAndAnuladasAjax.do",
             datatype: "json",
@@ -565,6 +564,24 @@ __Busqueda(){
         });
      }
 }
+
+/**
+*  Listar la tabla a aplicar el mantenimiento
+**/
+function __InicializarTabla(nombreTabla){
+    $(nombreTabla).DataTable({
+        destroy: true,
+        "language": idioma_espanol,
+        "sDom": 'lrtip',
+        "order": [0, 'desc'],
+        "bPaginate": true,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+        
+    });    
+}
+
 /**
 *  Suma de totales de cuenta por cobrar 
 **/
