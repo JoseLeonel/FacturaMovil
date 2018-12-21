@@ -345,7 +345,10 @@ self.on('mount',function(){
 
 
        consultaFactura(self.facturaImpresa.id)
-        //qr()
+       if(self.facturaImpresa.empresa.noFacturaElectronica == 0){
+          qr()    
+       }
+        
     }
    
    
@@ -356,7 +359,7 @@ self.on('mount',function(){
 function qr(){
      var options = {
         // render method: 'canvas', 'image' or 'div'
-        render: 'canvas',
+        render: 'div',
 
         // version range somewhere in 1 .. 40
         minVersion: 1,
@@ -370,7 +373,7 @@ function qr(){
         top: 0,
 
         // size in pixel
-        size: 200,
+        size: 100,
 
         // code color or image element
         fill: '#000',
@@ -379,7 +382,7 @@ function qr(){
         background: null,
 
         // content
-        text: 'no text',
+        text: self.facturaImpresa.clave,
 
         // corner radius relative to module width: 0.0 .. 0.5
         radius: 0,
@@ -399,7 +402,7 @@ function qr(){
         mPosX: 0.5,
         mPosY: 0.5,
 
-        label: 'no label',
+        label: self.facturaImpresa.clave,
         fontname: 'sans',
         fontcolor: '#000',
 
