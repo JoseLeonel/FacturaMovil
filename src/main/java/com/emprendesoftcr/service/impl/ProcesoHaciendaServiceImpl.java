@@ -198,10 +198,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
 
-	@Scheduled(cron = "0 0/1 * * * ?")
+	//@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
+		
 		ArrayList<Hacienda> facturasConProblemas = new ArrayList<Hacienda>();
+		OpenIDConnectHacienda openIDConnectHacienda = null;
+		Hacienda haciendaBD = null;
 		try {
 			log.info("Inicio Proceso de Envio de documentos  {}", new Date());
 			// Listado de los documentos Pendientes de enviar hacienda
@@ -210,8 +213,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				if (!listaHacienda.isEmpty()) {
 					for (Hacienda hacienda : listaHacienda) {
 						try {
-							Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
-							envioHacienda(haciendaBD);
+							haciendaBD = haciendaBo.findById(hacienda.getId());
+							openIDConnectHacienda = envioHacienda(haciendaBD, openIDConnectHacienda);
 						} catch (Exception e) {
 							// Se modifica el registros
 							if (hacienda.getReintentos() == null) {
@@ -225,7 +228,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								hacienda.setReintentos(hacienda.getReintentos() == null ? 1 : hacienda.getReintentos() + 1);
 							}
 							haciendaBo.modificar(hacienda);
-
 							log.info("** Error1  taskHaciendaEnvio: " + e.getMessage() + " fecha :" + new Date() + "Empresa:" + hacienda.getEmpresa().getNombre() + " Consecutivo :" + hacienda.getConsecutivo());
 						}
 
@@ -237,6 +239,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		} catch (Exception e) {
 			log.info("** Error2  taskHaciendaEnvio: " + e.getMessage() + " fecha " + new Date());
 			throw e;
+		}finally {
+			// Desconectar token de hacienda anterior
+			if (openIDConnectHacienda != null) {
+				if (openIDConnectHacienda.getRefresh_token().length() > 0) {
+					openIDConnect.desconectarToken(openIDConnectHacienda.getEmpresa(), openIDConnectHacienda);
+				}
+			}			
 		}
 		if (facturasConProblemas != null) {
 			if (!facturasConProblemas.isEmpty()) {
@@ -274,11 +283,23 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 */
 
 	@Override
-	public void envioHacienda(Hacienda hacienda) throws Exception {
-		try {
-			OpenIDConnectHacienda openIDConnectHacienda = null;
+	public OpenIDConnectHacienda envioHacienda(Hacienda hacienda, OpenIDConnectHacienda openIDConnectHacienda) throws Exception {
+		
+		//Se verifica si es la misma empresa de la conexion anterior o bien si es null
+		if((openIDConnectHacienda == null) || (openIDConnectHacienda != null && !hacienda.getEmpresa().getId().equals(openIDConnectHacienda.getEmpresa().getId()))) {			
+			
+			// Desconectar token de hacienda anterior
+			if (openIDConnectHacienda != null) {
+				if (openIDConnectHacienda.getRefresh_token().length() > 0) {
+					openIDConnect.desconectarToken(hacienda.getEmpresa(), openIDConnectHacienda);
+				}
+			}			
+			
 			// Obtener el token en hacienda para enviar los documentos
 			openIDConnectHacienda = openIDConnect.getToken(hacienda.getEmpresa());
+		}
+		
+		try {
 			// Se obtuvo el token de accienda
 			if (openIDConnectHacienda != null) {
 				if (openIDConnectHacienda.getAccess_token().length() > 0) {
@@ -286,20 +307,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				}
 			} else {
 				log.info("** Error no se encontro el token   " + "Empresa:" + hacienda.getEmpresa().getNombre() + " fecha " + new Date() + "Consecutivo " + hacienda.getConsecutivo());
-			}
-			// Desconectar token de hacienda
-			if (openIDConnectHacienda != null) {
-				if (openIDConnectHacienda.getRefresh_token().length() > 0) {
-					openIDConnect.desconectarToken(hacienda.getEmpresa(), openIDConnectHacienda);
-				}
-			}
-		} catch (
-
-		Exception e) {
+			}			
+		} catch (Exception e) {
 			log.info("** Error  ejecutarEnvio: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
-
+		
+		return openIDConnectHacienda;
 	}
 
 	/**
@@ -355,6 +369,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Scheduled(cron = "0 0/3 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
+		OpenIDConnectHacienda openIDConnectHacienda = null;
+		Hacienda haciendaBD = null;
 		try {
 			log.info("Inicio Comprobacion de documentos  {}", new Date());
 			// Semaforo semaforo = semaforoBo.findByEstado(Constantes.SEMAFORO_ESTADO_COMPROBAR_DOCUMENTOS);
@@ -364,17 +380,16 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				try {
 					if (hacienda.getReintentosAceptacion() != null) {
 						if (hacienda.getReintentosAceptacion() <= Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
-							Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
-							aceptarDocumento(haciendaBD);
-
+							haciendaBD = haciendaBo.findById(hacienda.getId());
+							openIDConnectHacienda = aceptarDocumento(haciendaBD, openIDConnectHacienda);
 						} else {
-							Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
+							haciendaBD = haciendaBo.findById(hacienda.getId());
 							haciendaBD.setObservacion(FacturaElectronicaUtils.convertirStringToblod(Constantes.MAXIMO_REINTENTOS_ACEPTACION_STR));
 							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
 							haciendaBo.modificar(haciendaBD);
 						}
 					} else {
-						Hacienda haciendaBD = haciendaBo.findById(hacienda.getId());
+						haciendaBD = haciendaBo.findById(hacienda.getId());
 						haciendaBD.setReintentosAceptacion(Constantes.ZEROS);
 						haciendaBo.modificar(haciendaBD);
 					}
@@ -387,6 +402,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		} catch (Exception e) {
 			log.info("** Error2  ComprobacionDocumentos: " + e.getMessage() + " fecha " + new Date());
 			throw e;
+		}finally {
+			// Desconectar token de hacienda anterior
+			if (openIDConnectHacienda != null) {
+				if (openIDConnectHacienda.getRefresh_token().length() > 0) {
+					openIDConnect.desconectarToken(openIDConnectHacienda.getEmpresa(), openIDConnectHacienda);
+				}
+			}			
 		}
 	}
 
@@ -395,12 +417,25 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * @param hacienda
 	 */
 	@Override
-	public void aceptarDocumento(Hacienda hacienda) throws Exception {
+	public OpenIDConnectHacienda aceptarDocumento(Hacienda hacienda, OpenIDConnectHacienda openIDConnectHacienda ) throws Exception {
 		try {
-			OpenIDConnectHacienda openIDConnectHacienda = null;
-			// Obtener el token en hacienda para enviar los documentos
-			openIDConnectHacienda = openIDConnect.getToken(hacienda.getEmpresa());
+			
+			//Se verifica si es la misma empresa de la conexion anterior o bien si es null
+			if((openIDConnectHacienda == null) || (openIDConnectHacienda != null && !hacienda.getEmpresa().getId().equals(openIDConnectHacienda.getEmpresa().getId()))) {			
+				
+				// Desconectar token de hacienda anterior
+				if (openIDConnectHacienda != null) {
+					if (openIDConnectHacienda.getRefresh_token().length() > 0) {
+						openIDConnect.desconectarToken(hacienda.getEmpresa(), openIDConnectHacienda);
+					}
+				}			
+				
+				// Obtener el token en hacienda para enviar los documentos
+				openIDConnectHacienda = openIDConnect.getToken(hacienda.getEmpresa());
+			}
+			
 			if (openIDConnectHacienda != null) {
+
 				// Se obtuvo el token de accienda
 				if (openIDConnectHacienda.getAccess_token().length() > 0) {
 					String idp_uri_documentos = Constantes.EMPTY;
@@ -409,8 +444,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 							idp_uri_documentos = Constantes.IDP_URI_DOCUMENTOS_PRODUCCION;
 						}
 					}
+					@SuppressWarnings("rawtypes")
 					Map response = envioHaciendaComponent.comprobarDocumentoElectronico(idp_uri_documentos, hacienda.getClave(), openIDConnectHacienda);
-
 					String body = (String) response.get(POST_RESPONSE);
 					if (body != null && body != "" && body != "{}" && !body.contains("El comprobante") && !body.contains("no ha sido recibido")) {
 
@@ -498,25 +533,20 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 					}
 				}
-				// Desconectar token de hacienda
-				if (openIDConnectHacienda != null) {
-					if (openIDConnectHacienda.getRefresh_token().length() > 0) {
-						openIDConnect.desconectarToken(hacienda.getEmpresa(), openIDConnectHacienda);
-					}
-				}
 			}
 		} catch (Exception e) {
 			log.info("** Error  aceptarDocumento: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
 			throw e;
 		}
-
+		
+		return openIDConnectHacienda;
 	}
 
 	/**
 	 * Solo se van enviar correos a la empresa cuando es un cliente o correo alternativo los tiquetes de clientes frecuentes no lo vamos enviar para ver el comportamiento de rendimiento Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/5 * * * ?")
+	//@Scheduled(cron = "0 0/5 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -537,8 +567,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 							if(recepcionFactura.getEmisorCorreo() !=null) {
 								if(!recepcionFactura.getEmisorCorreo().equals(Constantes.EMPTY)) {
 									listaCorreos.add(recepcionFactura.getEmisorCorreo());
-								}
-								
+								}								
 							}
 						}
 						if (listaCorreos != null) {

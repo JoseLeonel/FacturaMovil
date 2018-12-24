@@ -73,7 +73,7 @@ public class OpenIDConnectHaciendaComponent {
 			if (tokenInfo != null) {
 				openIDConnectHacienda.setAccess_token(tokenInfo.getAccessToken());
 				openIDConnectHacienda.setRefresh_token(tokenInfo.getRefreshToken());
-
+				openIDConnectHacienda.setEmpresa(empresa);
 			} else {
 				log.info("** Error  NO SE OCTUVO EL TOKEN: " + " fecha " + new Date() + " empresa:" + empresa.getNombre());
 			}

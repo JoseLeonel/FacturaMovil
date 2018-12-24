@@ -241,7 +241,7 @@ public class HaciendasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.error.no.existe");
 			}
 
-			procesoHaciendaService.envioHacienda(haciendaBD);
+			procesoHaciendaService.envioHacienda(haciendaBD, null);
 
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.enviado.exitoso"));
@@ -265,7 +265,7 @@ public class HaciendasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.error.no.existe");
 			}
 
-			procesoHaciendaService.aceptarDocumento(haciendaBD);
+			procesoHaciendaService.aceptarDocumento(haciendaBD, null);
 
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.aceptar.exitoso"));
