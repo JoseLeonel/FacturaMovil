@@ -1,5 +1,29 @@
 <punto-venta>
-<!--Formulario de Pago-->
+
+<!--Modal abrirCajon sin comanda-->
+<div id='modalabrirCajon' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+       <div class="modal-content">
+            <div class="modal-body">
+                <div id="imprAbriCajon" name ="imprAbriCajon">
+                    <div class="row">
+                        <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
+                            <div class="form-group has-success">
+                                <input  type="text"  class="form-control" value="abrir">
+                            </div>
+                        </div>
+                    </div> 
+                </div>    
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 <!---Datos Final cuando no es un venta de Crucero -->
 <div show={mostrarFormularioPago}>
 		<div class="row " >
@@ -1021,6 +1045,8 @@ function __EnterFacturar(){
     if(self.empresa.enterFacturar == 0){
         return
     }
+  
+
    swal({
            title: '',
            text: $.i18n.prop("factura.mensaje.alert.enter"),
@@ -1406,6 +1432,10 @@ function crearFactura(estado){
             mensajeErrorServidor(xhr, status);
         }
     });
+    if(self.empresa.abrirSinComanda == 1){
+      //Abrir cajon sin comanda
+      abrirCajonDineroSinComanda()
+    }  
 }
 /**
 *Si fue facturada o tiquete
@@ -1428,6 +1458,7 @@ function evaluarFactura(data){
                         showConfirmButton: false,
                         timer: 1500
                      })
+                   
                 }else{
                     riot.mount('ptv-imprimir',{factura:self.facturaImprimir}); 
                 }
@@ -1540,20 +1571,16 @@ function mostrarPAgo(){
         return
     }
     if(self.vueltoImprimir == 0){
-      
         $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(3))
         $('#totalTarjeta').val(null)
         $('#totalBanco').val(null)
-
     }else{
         $('#totalEfectivo').val(null)
         $('#totalTarjeta').val(null)
         $('#totalBanco').val(null)
-
     }
     getSubTotalGeneral()
     self.totalCambioPagar =0
-    
     self.factura.totalCambioPagar =0
     self.mostarParaCrearNuevaFactura = false
     self.mostrarFormularioPago = true
@@ -1613,7 +1640,6 @@ function lecturaCodigo(leerCodigo){
           existe = codigo.charAt(i) == "*"?true : false  
           if(codigo.charAt(i) !="*"){
               codigoActual = codigoActual + codigo.charAt(i)  
-
           }
        }else{
            cantidadAct = cantidadAct + codigo.charAt(i)
@@ -1623,13 +1649,10 @@ function lecturaCodigo(leerCodigo){
     if(existeMas == true){
        __sumarMasArticulo(codigo,0)
        $('.precioVenta').val(null)
-        $('.codigo').val("")
-        
-        $('.codigo').focus()
+       $('.codigo').val("")
+       $('.codigo').focus()
        return  
     }
-    
-   
     __buscarcodigo(codigoActual,__valorNumerico(cantidadAct),0);
     if(self.articulo !=null){
         if(self.articulo.tipoCodigo !="04" || self.empresa.tieneLector !="Activo"){
@@ -1637,11 +1660,8 @@ function lecturaCodigo(leerCodigo){
             $('.codigo').val("")
             $('.codigo').select()
             $('.codigo').focus()
-
         }
     }
-
-
 }
 /**
 *  cambiar el precio
@@ -1684,7 +1704,6 @@ __addPrecioDetail(e){
     __buscarcodigoPrecio(codigoActual,__valorNumerico(valor),__valorNumerico(precio));
     $('.precioVenta').val(null)
     $('.codigo').val("")
-    
     $('.codigo').focus()
   
 }
@@ -1693,7 +1712,6 @@ __addPrecioDetail(e){
 **/
 function __sumarMasArticulo(codigo,precio){
     if(self.articulo == null){
-
         return;
     }
     if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
@@ -1706,7 +1724,6 @@ function __sumarMasArticulo(codigo,precio){
        existe = codigo.charAt(i) == "+"?true : false
        if(existe == false){
           cantidadAct = cantidadAct + codigo.charAt(i)
-            
         }
     }
    for (var count = 0; count < self.detail.length; count++) {
@@ -2793,5 +2810,25 @@ function _incluirBilletes(modena,descripcion,valor,imagen){
     )
     self.update()
 }
+/**
+*Abrir el cajon de dinero sin comanda
+**/
+function abrirCajonDineroSinComanda(){
+  var div = document.querySelector("#imprAbriCajon");
+  var ventana = window.open('', 'PRINT', 'height=400,width=600');
+  ventana.document.write('<html><head><title>' + "" + '</title>');
+  ventana.document.write('</head><body >');
+  ventana.document.write(div.innerHTML);
+  ventana.document.write('</body></html>');
+  ventana.document.close();
+  ventana.focus();
+  ventana.print();
+  ventana.close();
+  return true;
+}
+
+
+
+
 </script>
 </punto-venta>

@@ -145,9 +145,9 @@ public class CompraBoImpl implements CompraBo {
 					}
 				}
 			}
-			compra.setTotalCompra(Utils.roundFactura(montoTotalLinea, 5));
-			compra.setTotalDescuento(Utils.roundFactura(totalDescuento, 5));
-			compra.setTotalImpuesto(Utils.roundFactura(totalImpuesto, 5));
+			compra.setTotalCompra(Utils.roundFactura(montoTotalLinea, 2));
+			compra.setTotalDescuento(Utils.roundFactura(totalDescuento, 2));
+			compra.setTotalImpuesto(Utils.roundFactura(totalImpuesto, 2));
 			if (compra.getId() == null) {
 				compra.setCreated_at(new Date());
 				compra.setUpdated_at(new Date());
