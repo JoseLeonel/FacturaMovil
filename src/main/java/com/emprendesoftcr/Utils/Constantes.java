@@ -30,7 +30,7 @@ public class Constantes {
 	public static final String					CODIGO_ARTICULO_IMPUESTO_SERVICIO										= "8888";
 
 	// Semaforo
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 100;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 60;
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS								= 20;
 
 	// 48 horas cada 5 minutos

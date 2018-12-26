@@ -2,7 +2,6 @@ package com.emprendesoftcr.service;
 
 import java.util.ArrayList;
 
-import com.emprendesoftcr.fisco.OpenIDConnectHacienda;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.RecepcionFactura;
@@ -19,10 +18,10 @@ public interface ProcesoHaciendaService {
 	void taskHaciendaEnvioDeCorreos() throws Exception;
 
 	// Enviar aceptar el documento hacia hacienda
-	OpenIDConnectHacienda aceptarDocumento(Hacienda hacienda, OpenIDConnectHacienda openIDConnectHacienda) throws Exception;
+	void aceptarDocumento(Hacienda hacienda) throws Exception;
 
 	// Enviar documento hacienda
-	OpenIDConnectHacienda envioHacienda(Hacienda hacienda, OpenIDConnectHacienda openIDConnectHacienda) throws Exception;
+	void envioHacienda(Hacienda hacienda) throws Exception;
 
 	void enviarCorreos(Factura factura, Hacienda hacienda, ArrayList<String> listaCorreos) throws Exception;
 

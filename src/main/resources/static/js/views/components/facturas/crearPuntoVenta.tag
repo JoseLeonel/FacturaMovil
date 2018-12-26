@@ -1,5 +1,29 @@
 <punto-venta>
-<!--Formulario de Pago-->
+
+<!--Modal abrirCajon sin comanda-->
+<div id='modalabrirCajon' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+       <div class="modal-content">
+            <div class="modal-body">
+                <div id="imprAbriCajon" name ="imprAbriCajon">
+                    <div class="row">
+                        <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
+                            <div class="form-group has-success">
+                                <input  type="text"  class="form-control" value={informacionAbrirCajon}>
+                            </div>
+                        </div>
+                    </div> 
+                </div>    
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 <!---Datos Final cuando no es un venta de Crucero -->
 <div show={mostrarFormularioPago}>
 		<div class="row " >
@@ -10,6 +34,7 @@
                         <h3 class="box-title pull-right ">{$.i18n.prop("ventas.tipo.cambio.titulo")} {tipoCambio.total} </h3>
 					</div>
 					<div class="box-body">
+                        
                         <form id="formularioFactura">
                             <div class="row">
                                 <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
@@ -79,7 +104,7 @@
                                     </div>
                                     <div  class="form-group has-success">
                                          <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
-                                        <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="campo" id="totalBanco"  value="{factura.totalBanco}"  >
+                                        <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="campo tamanoLetraTotales totalBanco" id="totalBanco"  value="{factura.totalBanco}"  >
                                     </div>
                                 </div>
                             </div>
@@ -171,6 +196,7 @@
                     <a class="pull-left" href="#"    onclick = {_ReimprimirFactura} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f6")}</span></a>
                     <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago}   title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
                     <a class="pull-left" href="#"   onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
+                    <a class="pull-left" href="#" show={mostarAbrirCajon == true}   onclick = {__AbrirCajon} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("abrir.cajon")}</span></a>
                     
                   </div>
                   <br>
@@ -586,6 +612,8 @@
     self.primeraVezBilleteClick = false
     self.totalCambioPagar              = 0
     self.semaforo_carga_articulos = false;
+    self.mostarAbrirCajon = true
+    self.informacionAbrirCajon = "."
     self.on('mount',function(){
         $("#formularioFactura").validate(reglasDeValidacionFactura());
         __informacionData()
@@ -684,6 +712,9 @@ function _Empresa(){
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                        self.empresa =   modeloTabla
                        self.vueltoImprimir = modeloTabla.vueltoImprimir
+                       if(self.empresa.abrirSinComanda == 0 && self.empresa.abrirConComanda == 0){
+                         self.mostarAbrirCajon = false
+                       }
                        self.update()
                     });
                 }
@@ -947,6 +978,7 @@ function __TipoCambio(){
 *  Obtiene el valor de lo digitado en el campo de efectivo
 **/
 __TotalDeEfectivoAPagar(e){
+ //   self.cantidadEnterFacturar = 0
     self.factura.totalEfectivo = __valorNumerico(e.target.value) 
     self.update()
     
@@ -955,6 +987,7 @@ __TotalDeEfectivoAPagar(e){
 *  Obtiene el valor de lo digitado en el campo de Tarjeta
 **/
 __TotalDeTarjetaAPagar(e){
+   // self.cantidadEnterFacturar = 0
     self.factura.totalTarjeta = __valorNumerico(e.target.value) 
     self.update()
 }
@@ -962,33 +995,18 @@ __TotalDeTarjetaAPagar(e){
 *  Obtiene el valor de lo digitado en el campo de Banco
 **/
 __TotalDeBancoAPagar(e){
+   // self.cantidadEnterFacturar = 0
     self.factura.totalBanco = __valorNumerico(e.target.value) 
     self.update()
+    
+    
 }
 /**
 *   Calculo del cambio entregar en el evento onblur
 **/
 __CalculaCambioAEntregarOnblur(e){
-    var sumaMontosEntregadosParaCambios =0
-     sumaMontosEntregadosParaCambios  = __valorNumerico($('.totalTarjeta').val())
-        sumaMontosEntregadosParaCambios += __valorNumerico($('.totalBanco').val()) 
-        sumaMontosEntregadosParaCambios += __valorNumerico($('.totalEfectivo').val())   
-
-    //Si no ingresado montos no realiza las operaciones de calculos
-    if(sumaMontosEntregadosParaCambios == 0){
-        self.factura.totalCambioPagar = self.factura.totalComprobante * -1
-        self.update()
-        return
-    }
-    self.factura.totalCambioPagar = 0
-    var totalEntregado = __valorNumerico(redondeoDecimales(sumaMontosEntregadosParaCambios,2))
-    var totalFactura   = __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2))
-    totalEntregado     = __valorNumerico(totalEntregado)
-    totalFactura       = __valorNumerico(totalFactura)  
-    self.factura.totalCambioPagar = totalEntregado - totalFactura
-    self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)   
-    self.totalCambioPagar = __valorNumerico(redondeoDecimales(self.factura.totalCambioPagar,2))
-    self.update()
+    _calculoEnterPago()
+  
 }
 /**
 *   Calculo del cambio entregar en el evento keyPress
@@ -996,11 +1014,46 @@ __CalculaCambioAEntregarOnblur(e){
 __CalculaCambioAEntregarKeyPress(e){
     var sumaMontosEntregadosParaCambios =0
     if (e.keyCode == 13) {
-        sumaMontosEntregadosParaCambios  = __valorNumerico($('.totalTarjeta').val())
+      //  __EnterFacturar()
+      
+       _calculoEnterPago()
+       if(self.totalCambioPagar == 0){
+            //alert(self.cantidadEnterFacturar)
+            if(self.cantidadEnterFacturar > 0){
+               __EnterFacturar()
+            }else{
+                self.cantidadEnterFacturar = self.cantidadEnterFacturar + 1
+                self.update()
+            }
+            
+        }else{
+            var totalFactura   = __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2))
+            if(self.totalCambioPagar > totalFactura || self.totalCambioPagar == totalFactura  ){
+                //alert(self.cantidadEnterFacturar)
+                if(self.cantidadEnterFacturar > 1){
+                __EnterFacturar()
+                }else{
+                    self.cantidadEnterFacturar = self.cantidadEnterFacturar + 1
+                    self.update()
+
+                }
+            }else{
+                self.cantidadEnterFacturar = 0
+                self.update()
+
+            }
+
+        }
+    }
+}
+
+function _calculoEnterPago(){
+        var sumaMontosEntregadosParaCambios  = __valorNumerico($('.totalTarjeta').val())
         sumaMontosEntregadosParaCambios += __valorNumerico($('.totalBanco').val()) 
         sumaMontosEntregadosParaCambios += __valorNumerico($('.totalEfectivo').val())   
         if(sumaMontosEntregadosParaCambios == 0){
-            self.factura.totalCambioPagar = self.factura.totalComprobante * -1
+            self.factura.totalCambioPagar =  __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2)) * -1
+            self.totalCambioPagar =  __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2)) * -1
             self.update()
             return
         }
@@ -1013,14 +1066,17 @@ __CalculaCambioAEntregarKeyPress(e){
         self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)   
         self.totalCambioPagar = __valorNumerico(redondeoDecimales(self.factura.totalCambioPagar,2))
         self.update()
-        __EnterFacturar()
-    }
 }
 
+/**
+
+**/
 function __EnterFacturar(){
     if(self.empresa.enterFacturar == 0){
         return
     }
+  
+
    swal({
            title: '',
            text: $.i18n.prop("factura.mensaje.alert.enter"),
@@ -1036,8 +1092,12 @@ function __EnterFacturar(){
             //Ajax__inicializarTabla();
             if(isConfirm){
                  aplicarFactura(2)
-           }
-        });   
+            }
+        } 
+        
+        );   
+        self.cantidadEnterFacturar = 0
+        self.update()
 }
 /**
  * Listar codigos  llamado del modal para presentar los articulos
@@ -1406,6 +1466,10 @@ function crearFactura(estado){
             mensajeErrorServidor(xhr, status);
         }
     });
+    if(self.empresa.abrirSinComanda == 1){
+      //Abrir cajon sin comanda
+      abrirCajonDineroSinComanda()
+    }  
 }
 /**
 *Si fue facturada o tiquete
@@ -1428,6 +1492,7 @@ function evaluarFactura(data){
                         showConfirmButton: false,
                         timer: 1500
                      })
+                   
                 }else{
                     riot.mount('ptv-imprimir',{factura:self.facturaImprimir}); 
                 }
@@ -1540,20 +1605,16 @@ function mostrarPAgo(){
         return
     }
     if(self.vueltoImprimir == 0){
-      
         $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(3))
         $('#totalTarjeta').val(null)
         $('#totalBanco').val(null)
-
     }else{
         $('#totalEfectivo').val(null)
         $('#totalTarjeta').val(null)
         $('#totalBanco').val(null)
-
     }
     getSubTotalGeneral()
     self.totalCambioPagar =0
-    
     self.factura.totalCambioPagar =0
     self.mostarParaCrearNuevaFactura = false
     self.mostrarFormularioPago = true
@@ -1563,32 +1624,7 @@ function mostrarPAgo(){
     self.factura.cambioMoneda = self.factura.totalVentaNeta / self.tipoCambio.total
     self.update()
 }
-/** 
-*
-*Agregar codigos al detalle de la Factura
-*
-*/
-__addProductToDetail(e){
-    $('.precioVenta').val(null)
-    if (e.keyCode == 13) {
-        if($('.codigo').val() == ""){
-            if(self.empresa.enterFacturar == 0){
-                return
-            }
-            if(self.cantidadEnterFacturar >= 1){
-               __EnviarFacturar()  
-            }else{
-                self.cantidadEnterFacturar = self.cantidadEnterFacturar + 1
-                self.update()
-            }
-           
-        }else{
-          lecturaCodigo($('.codigo').val())
-        }
-        return;
-    } 
-    
-}
+
 
 function lecturaCodigo(leerCodigo){
     if ($('.codigo').val() == ""){
@@ -1596,6 +1632,8 @@ function lecturaCodigo(leerCodigo){
             return
         }
         if(self.cantidadEnterFacturar >= 1){
+            self.cantidadEnterFacturar = 0
+            self.update() 
              __EnviarFacturar()  
         }else{
             self.cantidadEnterFacturar = self.cantidadEnterFacturar + 1
@@ -1613,7 +1651,6 @@ function lecturaCodigo(leerCodigo){
           existe = codigo.charAt(i) == "*"?true : false  
           if(codigo.charAt(i) !="*"){
               codigoActual = codigoActual + codigo.charAt(i)  
-
           }
        }else{
            cantidadAct = cantidadAct + codigo.charAt(i)
@@ -1623,13 +1660,10 @@ function lecturaCodigo(leerCodigo){
     if(existeMas == true){
        __sumarMasArticulo(codigo,0)
        $('.precioVenta').val(null)
-        $('.codigo').val("")
-        
-        $('.codigo').focus()
+       $('.codigo').val("")
+       $('.codigo').focus()
        return  
     }
-    
-   
     __buscarcodigo(codigoActual,__valorNumerico(cantidadAct),0);
     if(self.articulo !=null){
         if(self.articulo.tipoCodigo !="04" || self.empresa.tieneLector !="Activo"){
@@ -1637,11 +1671,8 @@ function lecturaCodigo(leerCodigo){
             $('.codigo').val("")
             $('.codigo').select()
             $('.codigo').focus()
-
         }
     }
-
-
 }
 /**
 *  cambiar el precio
@@ -1663,8 +1694,7 @@ __addPrecioDetail(e){
        if(existe == false){
           existe = codigo.charAt(i) == "*"?true : false  
           if(codigo.charAt(i) !="*"){
-              codigoActual = codigoActual + codigo.charAt(i)  
-
+            codigoActual = codigoActual + codigo.charAt(i)  
           }
        }else{
            cantidadAct = cantidadAct + codigo.charAt(i)
@@ -1677,14 +1707,12 @@ __addPrecioDetail(e){
        __sumarMasArticulo(codigo,0)
        $('.precioVenta').val(null)
         $('.codigo').val(null)
-        
         $('.codigo').focus()
        return  
     }
     __buscarcodigoPrecio(codigoActual,__valorNumerico(valor),__valorNumerico(precio));
     $('.precioVenta').val(null)
     $('.codigo').val("")
-    
     $('.codigo').focus()
   
 }
@@ -1693,7 +1721,6 @@ __addPrecioDetail(e){
 **/
 function __sumarMasArticulo(codigo,precio){
     if(self.articulo == null){
-
         return;
     }
     if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
@@ -1706,7 +1733,6 @@ function __sumarMasArticulo(codigo,precio){
        existe = codigo.charAt(i) == "+"?true : false
        if(existe == false){
           cantidadAct = cantidadAct + codigo.charAt(i)
-            
         }
     }
    for (var count = 0; count < self.detail.length; count++) {
@@ -2716,6 +2742,10 @@ function __Teclas(){
       $('.codigo').select()
       $(".codigo").focus()
     }
+     //Insert = abrir Cajon
+    if(tecla ==45){
+       __OpcionAbrirCajon()
+    }
    if(tecla ==27){
       $('.codigo').select()
       $(".codigo").focus()
@@ -2792,6 +2822,75 @@ function _incluirBilletes(modena,descripcion,valor,imagen){
         }
     )
     self.update()
+}
+
+/**
+*abrir el cajon
+**/
+__AbrirCajon(){
+    __OpcionAbrirCajon()
+}
+/**
+*  Opcion para abrir la comanda
+**/
+function __OpcionAbrirCajon(){
+    self.informacionAbrirCajon = "."
+    self.update()
+    if(self.empresa.abrirSinComanda == 1){
+        abrirCajonDineroSinComanda()  
+    }
+    if(self.empresa.abrirConComanda == 1){
+      abrirCajonDineroConComanda()
+    }
+
+}
+/**
+*Abrir el cajon de dinero sin comanda
+**/
+function abrirCajonDineroSinComanda(){
+  var div = document.querySelector("#imprAbriCajon");
+  var ventana = window.open('', 'PRINT', 'height=20,width=20');
+  ventana.document.write('<html><head><title>' + "" + '</title>');
+  ventana.document.write('</head><body >');
+  ventana.document.write(div.innerHTML);
+  ventana.document.write('</body></html>');
+  ventana.document.close();
+  ventana.focus();
+  ventana.print();
+  ventana.close();
+  return true;
+}
+/**
+* Abrir con con comanda
+**/
+function abrirCajonDineroConComanda(){
+//Se forman los detalles a enviar a la comanda
+		var informacion = {
+			mesa: "Abrir Cajon",        	
+			mesero: "abrirCajon",        	
+		    nombreImpresora:self.empresa.impresoraFactura,
+		    cantidadCaracteresLinea:"40",
+		    formatoTiquete:"",
+		    detalles:""
+		}    
+
+		var JSONData = JSON.stringify(informacion);		
+		//Envia a imprimir a la comanda
+	    $.ajax({
+	        contentType: 'application/json',
+	        url: 'http://localhost:8033/service/abrirCajonDinero',
+	        datatype: "json",
+	        data : JSONData,
+	        method:"POST",
+	        success: function (result) {
+	      	  
+	        },
+	        error: function (xhr, status) {
+	            console.log(xhr);
+	            mensajeErrorServidor(xhr, status);
+	        }
+	    });		
+	
 }
 </script>
 </punto-venta>

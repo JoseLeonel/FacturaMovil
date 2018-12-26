@@ -42,7 +42,7 @@
 	                            	<td class="text-left" colspan="2"><h2><strong>{$.i18n.prop("tikect.total")}:</strong></h2></td>
 	                            	<td colspan="1"><h2><strong>{facturaImpresa.totalComprobanteSTR}</strong></h2></td>
 	                            </tr>
-                                <tr show={facturaImpresa.tipoCambio > 1}>>
+                                <tr show={facturaImpresa.tipoCambio > 1}>
                                     <td></td>
                                     <td class="precio" ><strong>{$.i18n.prop("tipoCambio.cambioDolar")}</strong></td>
                                     <td class="precio" ><strong>{facturaImpresa.tipoCambioSTR}</strong></td>
@@ -235,15 +235,15 @@ self.detalles = []
 self.subTotalGeneralImp = 0
 self.totalComprobanteImp = 0
 self.on('mount',function(){
-    
     if(self.facturaImpresa.id > 0){
         self.detalles = []
         self.detalles = self.facturaImpresa.detalles
         self.facturaImpresa.fechaEmision = displayDate_detailPrint(self.facturaImpresa.fechaEmision)
         self.update()
-      
-  
-        $('.imprimirModalTiquete').modal('show'); 
+        if (self.facturaImpresa.empresa.imprimirDirecto == 0 ){
+           $('.imprimirModalTiquete').modal('show');  
+        }    
+         
     }
     getSubTotalGeneralPrint()
     getMonedaPrint()
@@ -256,9 +256,13 @@ self.on('mount',function(){
         elemen.montoTotalLinea = formatoDecimales(elemen.montoTotalLinea,2);
     })
     self.update()
+    if (self.facturaImpresa.empresa.imprimirDirecto == 1 ){
+        __imprimirPrint()
+    }
 })
-
-
+/**
+*
+**/
 function getMonedaPrint() {
 	var resultado = "CRC-Colones Costa Rica";
 	if(self.facturaImpresa.codigoMoneda == "CRC") {
@@ -276,16 +280,12 @@ function getSubTotalGeneralPrint(){
     self.subTotalGeneralImp = redondearDecimales(resultado,5)
     self.update()
 }
-
-
-
 /**
 *Formato de Fecha
 **/
 function displayDate_detailPrint(fecha) {
     return fecha == null?"":moment(fecha).format('DD/MM/YYYY h:mm:ss a');
 }
-
 /**
 *Imprimir facturaImpresa
 **/    
@@ -293,7 +293,6 @@ __ImprimirTiqPrint(){
     __imprimirPrint()
     $("#boton-regresar").focus()
 }
-
 /**
  * Buscar la condicion de Pago
  * **/
@@ -305,9 +304,7 @@ function buscarCondicionPagoPrint(){
             break;
         }
     }
-
 }
-
 /**
 * cargar los estados de la factura
 **/
@@ -324,8 +321,6 @@ function __comboCondicionPagoPrint(){
     })
     self.update()
 }
-
-
 /**
  * Buscar el tipo de documento
  * **/
@@ -338,7 +333,6 @@ function buscarTipoDocumentoPrint(){
         }
     }
 }
-
 /**
 * cargar los tipos de Documento de la factura
 **/
@@ -367,7 +361,6 @@ function __ComboTipoDocumentosPrint(){
     })
     self.update()
 }
-
 /**
 *imprimir
 **/

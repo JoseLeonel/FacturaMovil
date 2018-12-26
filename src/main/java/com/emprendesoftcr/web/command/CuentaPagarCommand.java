@@ -63,6 +63,7 @@ public class CuentaPagarCommand {
 		this.totalAbonoSTR = cuentaPagar.getTotalAbonoSTR();
 		this.totalSaldoSTR = cuentaPagar.getTotalSaldoSTR();
 		this.totalSTR = cuentaPagar.getTotalSTR();
+		this.consecutivo = cuentaPagar.getConsecutivo();
 	}
 
 	public CuentaPagarCommand() {

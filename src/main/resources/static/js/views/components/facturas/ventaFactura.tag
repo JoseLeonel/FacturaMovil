@@ -34,7 +34,7 @@
                 <div class="row">
                     <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
                         <div class="form-group has-success">
-                            <label class="knob-label" >{$.i18n.prop("inventario.cantidad")}</label>
+                            <label class="knob-label" >{$.i18n.prop("articulo.descripcion")}</label>
                             <input  type="text" class="campo tamanoLetraTotales cambiarDescripcionArticulo" id="cambiarDescripcionArticulo" name = "cambiarDescripcionArticulo" autofocus="autofocus">
                         </div>
                     </div>
