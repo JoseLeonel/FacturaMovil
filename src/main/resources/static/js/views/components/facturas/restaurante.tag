@@ -4600,6 +4600,9 @@ __DividirFactura(){
     aplicarFactura(1, true)      
     self.update()
 
+    $(".plazoCreditoL").val(null)   
+    $(".fechaCredito").val(null)
+    self.factura.fechaCredito = null;
     mostrarPAgo();
     self.update();
 }
