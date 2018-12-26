@@ -174,6 +174,238 @@
 </div>       
 <!--Fin Ventana de los productos-->
 
+<!--Inicio Separar Cuenta-->
+<div show={mostrarSepararCuenta}>
+    <div class="container-fluid">
+        <div class="row no-space">           
+            <div class="col-md-10 col-sm-10 col-lg-10 col-xs-12 pull-left" style="padding: 0px 12px">
+                <div class="block panel ">                    
+                    <div onclick = {__NombreDividirFactura} id="btnGrandePagar" class="head gray well" style="color: #fff; font-size: 55px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
+                        <table id="pagarTable" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td width="70%" id="">
+                                        <div id="pagarTitulo"><i class="fa fa-scissors">     {$.i18n.prop("separar.cuenta.procesar")}</i></div>
+                                    </td>
+                                </tr>                     
+                            </tbody>
+                        </table>
+                    </div>
+                </div>    
+			</div>
+		</div>	
+        <div class="row no-space">           
+            <div class="col-md-5 col-sm-5 col-lg-5 col-xs-12 pull-left" style="padding: 0px 12px">
+                <div class="block panel ">                    
+                    <div id="btnGrandePagar" onclick={__MostrarFormularioDePagoFactPrincipal} class="head well" style="color: #fff; font-size: 55px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
+                        <table id="pagarTable" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td width="30%" id="">
+                                        <div id="pagarTitulo">{$.i18n.prop("factura.total")}:</div>
+                                    </td>
+                                    <td width="70%" id="">
+                                        <div id="">
+                                            <span id="total_show_peso" class="textShadow">  </span>
+                                            <span class="label label-info textShadow" id="total-show">{totalComprobantePorSeparar}</span>
+                                       </div>
+                                    </td>
+                                </tr>                     
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr style="margin: 0px; border-color: #e4e4e4;">
+                    <div id="listadoProdcutos">{$.i18n.prop("titulo.listado.venta")}   {factura.id>0?factura.id:'' } {factura.nombreFactura} </div>
+                    <!--Mesa seleccionada-->
+                    <div class="input-group">
+                        <span title="Vendedor" class="input-group-addon " > 
+                            <span onclick={__FacturasXMesaTiqueteEncabezado} class="fa fa-glass" aria-hidden="true" style="margin:3px 4px 0px 2px"> Mesa: {factura.mesa.id>0?factura.mesa.descripcion:''} </span> 
+                        </span>
+                    </div>
+                    <hr style="margin: 2px 0px 0px 0px; border-color: #e4e4e4; margin-top: 0px">
+                    <div class="data-fluid">
+                        <div id="listaProductos" style="height:300px; overflow-x: hidden; width:100%">
+                            <table id="tablaListaProductos"  cellpadding="0" cellspacing="0" width="100%" class="table lcnp table-dark">
+                                <thead>
+                                    <tr>
+                                        <td width="50%">Descripcion</td>
+                                        <td width="10%">Cant</td>
+                                        <td width="10%">Precio.U</td>
+                                        <td width="10%">Desc</td>                                       
+                                        <td width="19%">Total</td>                                        
+                                    </tr>
+                                </thead>
+                                <tbody height="70%" id="productos-detail">
+                                    <tr each={detailPorSeparar}>
+                                        <td>
+                                           <div class="block_container_comanda">
+                                          		<span class="title-detalle text-info clickable clearfix">{descripcion}</span>
+                                          </div> 
+                                        </td>
+                                        <td>
+                                            <span class="cantidad clickable">{cantidad.toFixed(3)}</span>
+                                        </td>
+                                        <td>
+                                            <span class="precio-prod" >{precioUnitario.toFixed(2)}</span>
+                                        </td>
+                                        <td>
+                                            <span class="precio-prod clickable" >{porcentajeDesc.toFixed(2)}</span>
+                                        </td>
+                                        <td>
+                                            <span class="precio-calc">{montoTotalLinea.toFixed(2)}</span>
+                                        </td>
+                                        <td>
+                                            <button  onclick={__addCuentaSeparada} class="btn_eliminar_detalle btn-danger btn-xs btn-block clickable">+</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <hr style="margin: 0px; border-color: #e4e4e4;">
+                        <div id="bordeBevelTop">
+	                        <table id="pagarTableInfo" width="100%">
+	                            <tbody>
+	                                <tr style="height:30px;">
+	                                    <td width="25%" id="bordeBevelLeft"> 
+	                                        <span id="pagarInfo"> {$.i18n.prop("factura.resumen.subTotal")} </span>
+	                                        <span id="cantidad-total">{subTotalGeneralPorSeparar} </span> 
+	                                    </td>
+	                                    <td width="25%" id="bordeBevelLeft"> 
+	                                        <span id="pagarInfo">{$.i18n.prop("factura.resumen.descuento")}  </span>
+	                                        <span id="sigPeso">   </span>
+	                                        <span id="iva-total">{totalDescuentosPorSeparar}</span> 
+	                                    </td>
+	                                    <td width="25%" id="bordeBevelRight"> 
+	                                        <span id="pagarInfo">{$.i18n.prop("factura.resumen.impuesto")}  </span>
+	                                        <span id="sigPeso">      </span>
+	                                        <span id="subtotal">{totalImpuestoPorSeparar}</span> 
+	                                    </td>
+	                                    <td width="25%" id="bordeBevelRight"> 
+	                                        <span id="pagarInfo">{$.i18n.prop("factura.resumen.impuestoServ")}  </span>
+	                                        <span id="sigPeso">      </span>
+	                                        <span id="subtotal">{totalImpuestoServPorSeparar}</span> 
+	                                    </td>
+	                                </tr>
+	                            </tbody>
+	                        </table>
+                    	</div>
+                   		<hr style="margin: 0px; border-color: #e4e4e4; margin-top: 0px">                    
+                	</div>
+                	<hr style="margin: 0px; border-color: #e4e4e4;">
+            	</div>
+            </div>  
+
+            <div class="col-md-5 col-sm-5 col-lg-5 col-xs-12 pull-left" style="padding: 0px 12px">
+                <div class="block panel ">                    
+                    <div id="btnGrandePagarGray" class="head well" style="color: #fff; font-size: 55px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
+                        <table id="pagarTable" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td width="30%" id="">
+                                        <div id="pagarTitulo">{$.i18n.prop("factura.total")}:</div>
+                                    </td>
+                                    <td width="70%" id="">
+                                        <div id="">
+                                            <span id="total_show_peso" class="textShadow">  </span>
+                                            <span class="label label-info textShadow" id="total-show">{totalComprobanteFactSeparada}</span>
+                                       </div>
+                                    </td>
+                                </tr>                     
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr style="margin: 0px; border-color: #e4e4e4;">
+                    <div id="listadoProdcutos">{$.i18n.prop("titulo.listado.venta")}   {factura.id>0?factura.id:'' } {factura.nombreFactura} </div>
+                    <!--Mesa seleccionada-->
+                    <div class="input-group">
+                        <span title="Vendedor" class="input-group-addon " > 
+                            <span onclick={__FacturasXMesaTiqueteEncabezado} class="fa fa-glass" aria-hidden="true" style="margin:3px 4px 0px 2px"> Mesa: {factura.mesa.id>0?factura.mesa.descripcion:''} </span> 
+                        </span>
+                    </div>
+                    <hr style="margin: 2px 0px 0px 0px; border-color: #e4e4e4; margin-top: 0px">
+                    <div class="data-fluid">
+                        <div id="listaProductos" style="height:300px; overflow-x: hidden; width:100%">
+                            <table id="tablaListaProductos"  cellpadding="0" cellspacing="0" width="100%" class="table lcnp table-dark">
+                                <thead>
+                                    <tr>
+                                        <td width="50%">Descripcion</td>
+                                        <td width="10%">Cant</td>
+                                        <td width="10%">Precio.U</td>
+                                        <td width="10%">Desc</td>                                       
+                                        <td width="19%">Total</td>                                        
+                                    </tr>
+                                </thead>
+                                <tbody height="70%" id="productos-detail">
+                                    <tr each={detailFacturaSeparada}>
+                                        <td>
+                                           <div class="block_container_comanda">
+                                          		<span class="title-detalle text-info clickable clearfix">{descripcion}</span>
+                                          </div> 
+                                        </td>
+                                        <td>
+                                            <span class="cantidad clickable">{cantidad.toFixed(3)}</span>
+                                        </td>
+                                        <td>
+                                            <span class="precio-prod" >{precioUnitario.toFixed(2)}</span>
+                                        </td>
+                                        <td>
+                                            <span class="precio-prod clickable" >{porcentajeDesc.toFixed(2)}</span>
+                                        </td>
+                                        <td>
+                                            <span class="precio-calc">{montoTotalLinea.toFixed(2)}</span>
+                                        </td>
+                                        <td>
+                                            <button  onclick={__removeCuentaSeparada} class="btn_eliminar_detalle btn-danger btn-xs btn-block clickable">-</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <hr style="margin: 0px; border-color: #e4e4e4;">
+                        <div id="bordeBevelTop">
+	                        <table id="pagarTableInfo" width="100%">
+	                            <tbody>
+	                                <tr style="height:30px;">
+	                                    <td width="25%" id="bordeBevelLeft"> 
+	                                        <span id="pagarInfo"> {$.i18n.prop("factura.resumen.subTotal")} </span>
+	                                        <span id="cantidad-total">{subTotalGeneralFactSeparada} </span> 
+	                                    </td>
+	                                    <td width="25%" id="bordeBevelLeft"> 
+	                                        <span id="pagarInfo">{$.i18n.prop("factura.resumen.descuento")}  </span>
+	                                        <span id="sigPeso">   </span>
+	                                        <span id="iva-total">{totalDescuentosFactSeparada}</span> 
+	                                    </td>
+	                                    <td width="25%" id="bordeBevelRight"> 
+	                                        <span id="pagarInfo">{$.i18n.prop("factura.resumen.impuesto")}  </span>
+	                                        <span id="sigPeso">      </span>
+	                                        <span id="subtotal">{totalImpuestoFactSeparada}</span> 
+	                                    </td>
+	                                    <td width="25%" id="bordeBevelRight"> 
+	                                        <span id="pagarInfo">{$.i18n.prop("factura.resumen.impuestoServ")}  </span>
+	                                        <span id="sigPeso">      </span>
+	                                        <span id="subtotal">{totalImpuestoServFactSeparada}</span> 
+	                                    </td>
+	                                </tr>
+	                            </tbody>
+	                        </table>
+                    	</div>
+                   		<hr style="margin: 0px; border-color: #e4e4e4; margin-top: 0px">                    
+                	</div>
+                	<hr style="margin: 0px; border-color: #e4e4e4;">
+            	</div>
+            </div>  
+        </div>
+    	<div class="row">
+			<div class="col-md-10 col-sm-10 col-lg-10 col-sx-12 ">
+				<div class="box-footer">
+                     <button onclick={__AtrasSepararCuentas} class="btn-dark-gray btn-back pull-left">  {$.i18n.prop("btn.volver")}</button>
+	            </div>
+			</div>
+		</div>
+    </div>
+</div>       
+<!--Fin Separar Venta-->
+
 <!--Inicio de la Venta-->
 <div show={mostarParaCrearNuevaVentas}>
     <div class="container-fluid">
@@ -313,6 +545,9 @@
                             <a  href="#" class="opciones-limpiar" onclick = {__Limpiar} >
                                 <i class="fa fa-trash">{$.i18n.prop("btn.limpiar")}</i>
                             </a> 
+                            <a href="#" class="opciones-limpiar" onclick = {__MostrarSeperarCuentas} >
+                                <i class="fa fa-scissors">{$.i18n.prop("separar.cuenta")}</i>
+                            </a>
                         </section>
                     </div>    
                 </div>                 
@@ -386,10 +621,8 @@
                 </div> 
                  
             </div>
-        </div>
-        
-    </div>       
-</div>
+    </div>
+</div>       
 <!--Fin Ventana de los productos-->
 <!--Modal mostrar Facturas del Dias -->
 <div id='modalFacturasDia' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -494,6 +727,37 @@
      </div>
 </div>
 <!--fin Modal agregar el nombre de el tiquete temporal-->
+
+<!-- Modal Tiquete - Nombre Dividir Cuenta-->
+<div class="modal fade" id="ModalNombreTiqueteSepararCuenta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="box-title"><i class="fa fa-user-o"></i>&nbsp {$.i18n.prop("factura.digite.nombreFactura")}     </h1>
+            </div>
+            <div class="modal-body">
+                <form id = "formularioAgregarNombreTiquete" name ="formularioAgregarNombreTiquete "   class="advanced-search-form">
+                    <div class="row">   
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="knob-label" >{$.i18n.prop("factura.nombreFactura")}</label>
+                            <input type="text" class="campo tamanoLetraTotales cambioNombreSepararCuenta"  id="cambioNombreSepararCuenta" name="cambioNombreSepararCuenta" autofocus="autofocus" >
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                        <button type="button" class="btn-dark-gray btn-back  btn_big  pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                        <button  onclick={__DividirFactura}   class="btn-green  btn_big  btn-add pull-right" >  {$.i18n.prop("btn.aplicar")}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+</div>
+<!--fin Modal agregar el nombre de el tiquete temporal-->
+
 <!--Modal Cambiar Cantidad-->
 
 
@@ -1010,6 +1274,8 @@ td.col-xl-12, th.col-xl-12 {
     var self = this;
     // Detalle de la factura es una coleccion de articulos
     self.detail                = []
+    self.detailPorSeparar      = []
+    self.detailFacturaSeparada = []
     self.pendientesComanda     = []
     self.mensajesBackEnd       = []
     self.error                 = false
@@ -1018,9 +1284,9 @@ td.col-xl-12, th.col-xl-12 {
     self.comboTipoDocumentos   = []
     self.factura                = {
         id:null,
-	   fechaCredito:null,
-	   fechaEmision:null,
-	   condicionVenta:"",
+	    fechaCredito:null,
+	    fechaEmision:null,
+	    condicionVenta:"",
 	    plazoCredito:0,
 	    tipoDoc:"",
 	    medioPago:"",
@@ -1066,7 +1332,58 @@ td.col-xl-12, th.col-xl-12 {
             impuestoServicio:false
        }
 
-    }                   
+    }
+    self.facturaRespaldo                = {
+            id:null,
+    	    fechaCredito:null,
+    	    fechaEmision:null,
+    	    condicionVenta:"",
+    	    plazoCredito:0,
+    	    tipoDoc:"",
+    	    medioPago:"",
+    	    nombreFactura:"",
+    	    direccion:"",
+    	    nota:"",
+    	    comanda:"",
+    	    subTotal:0,
+    	    totalTransporte:0,
+    	    total:0,
+    	    totalServGravados:0,
+    	    totalServExentos:0,
+    	    totalMercanciasGravadas:0,
+    	    totalMercanciasExentas:0,
+    	    totalGravado:0,
+    	    totalExento:0,
+    	    totalVenta:0,
+    	    totalDescuentos:0,
+    	    totalVentaNeta:0,
+    	    totalImpuesto:0,
+    	    totalImpuestoServ:0,
+    	    totalComprobante:0,
+    	    totalEfectivo:0,
+            totalTarjeta:0,
+            totalCambioPagar:0,
+    	    totalBanco:0,
+    	    totalCredito:0,
+    	    montoCambio:0,
+    	    totalCambio:0,
+            totalCambioPagar:0,
+    	    codigoMoneda:"",
+    	    estado:0,
+    	    cliente:{
+                id:0,
+                nombreCompleto:"",
+            },
+    	    vendedor:{
+                id:0,
+                nombreCompleto:""
+            },
+            mesa:{
+                id:0,
+                descripcion:"",
+                impuestoServicio:false
+           }
+        }
     self.item                  = null;
     self.comentarioComanda     = "";
     self.articulo              = null;
@@ -1083,10 +1400,24 @@ td.col-xl-12, th.col-xl-12 {
     self.informacion_tabla_articulo    = []
     self.informacion_tabla_clientes    = []
     self.idiomaDataTable               = {}
+    
     self.subTotalGeneral               = 0
     self.totalDescuentos               = 0
     self.totalImpuesto                 = 0
     self.totalImpuestoServ             = 0
+
+    self.totalComprobantePorSeparar    = 0	
+    self.subTotalGeneralPorSeparar     = 0
+    self.totalDescuentosPorSeparar     = 0
+    self.totalImpuestoPorSeparar       = 0
+    self.totalImpuestoServPorSeparar   = 0
+
+    self.totalComprobanteFactSeparada  = 0	
+    self.subTotalGeneralFactSeparada   = 0
+    self.totalDescuentosFactSeparada   = 0
+    self.totalImpuestoFactSeparada     = 0
+    self.totalImpuestoServFactSeparada = 0
+    
     self.totalComprobante              = 0;
     self.totalCambioPagar              = 0;
     self.todasProvincias               = {data:[]}
@@ -1162,6 +1493,7 @@ td.col-xl-12, th.col-xl-12 {
 
     self.mostrarOrdenesCocinaPendientes = false
     self.mostarParaCrearNuevaVentas     = false //true
+    self.mostrarSepararCuenta		    = false //true
     self.mostrarCodigoBarra             = false //true
     self.mostrarFormularioPago          = false
     self.mostarParaCrearNuevaFactura    = false //true
@@ -1983,7 +2315,11 @@ __CambiarNombreTiquete(){
 *  Crear la factura temporal o espera
 **/
 __CrearFacturaTemporal(){
-    if(self.factura.id ==null){
+	__CrearFacturaTemporalFunc();
+}
+
+function __CrearFacturaTemporalFunc(){
+ 	if(self.factura.id == null){
         if(self.detail.length != 0 ){
             $('#ModalAgregarNombreTiquete').modal('show') 
             $('.cambioNombreFactura').focus()
@@ -1997,8 +2333,6 @@ __CrearFacturaTemporal(){
     // __FacturaEnEspera(self.factEspera)
     self.factEspera = null
     self.update()
-    
-    
 }
 
 /**
@@ -2062,29 +2396,49 @@ __AgregarNombreFacturaTemporal(){
     /* if(self.factEspera !=null){
       __FacturaEnEspera(self.factEspera) 
     } */
-    self.factEspera =null
+    self.factEspera = null
     self.update()
     
-     self.mostrarCategorias        = false //muestra la pantalla de imagenes de articulos   
-     self.mostrarFacturasMesas     = true //muestra las facturas por mesa
-     self.mostrarMesas	             = false //muestra la pantalla mesas               
-     self.mostrarCodigoBarra          = false;
-     self.mostrarNavegador            = true
-     self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias
-     self.mostarParaCrearNuevaVentas  = true
-     self.update()        
-
+    self.mostrarCategorias           = false //muestra la pantalla de imagenes de articulos   
+    self.mostrarFacturasMesas        = true //muestra las facturas por mesa
+    self.mostrarMesas	             = false //muestra la pantalla mesas               
+    self.mostrarCodigoBarra          = false;
+    self.mostrarNavegador            = true
+    self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias
+    self.mostarParaCrearNuevaVentas  = true
+    self.mostrarSepararCuenta		 = false //true
+    self.update()        
 }
+
 /**
 ** Se aplica o se crea una Factura cargada en la pantalla
 **/
 __AplicarYcrearFactura(){
- aplicarFactura(2)
+ 	if(self.detailFacturaSeparada.length > 0 ){
+ 	 	aplicarFactura(2, true)
+ 		self.mostrarFormularioPago = false;
+ 	 	self.update();
+
+ 	 	//Se carga la factura principal
+ 	 	__FacturaEnEspera(self.facturaRespaldo); 	
+ 	 	mostrarSeperarCuentasFun();
+ 		self.update(); 		
+ 	}else{
+ 	 	aplicarFactura(2) 		
+ 	}
 }
+
 /**
 * Aplicar la factura
 **/
 function aplicarFactura(estado){
+	aplicarFactura(estado, false);
+}
+
+/**
+* Aplicar la factura
+**/
+function aplicarFactura(estado, separarFactura){
     if(self.detail.length == 0 ){
         mensajeError($.i18n.prop("factura.alert.sin.detalles"))
         return
@@ -2124,7 +2478,7 @@ function aplicarFactura(estado){
         }
     } 
     if ($("#formularioFactura").valid()) {
-        crearFactura(estado)  
+        crearFactura(estado, separarFactura)  
     }
 }
 /**
@@ -2198,6 +2552,7 @@ function __Init(){
             impuestoServicio:false
        }
     }
+    
     self.factura.mesa = self.mesa;
     self.item                  = null;
     self.articulo              = null;
@@ -2216,6 +2571,7 @@ function __Init(){
     self.mostarParaCrearNuevaFactura   = true
     self.mostrarCamposIngresoContado   = true;
     self.mostarParaCrearNuevaVentas    = true
+    self.mostrarSepararCuenta		    = false //true
     self.mostrarCodigoBarra            = true
     self.mostrarCodigoBarra            = true;
     self.mostrarFormularioPago         = false
@@ -2360,6 +2716,7 @@ function __InitDatos(){
             impuestoServicio:false
        }
     }
+   
     self.factura.mesa = self.mesa;
     self.item                  = null;
     self.articulo              = null;
@@ -2422,6 +2779,7 @@ function __FacturaEnEspera(factura){
     $.ajax({
         url: "MostrarFacturaAjax",
         datatype: "json",
+        async:false,
         data: {idFactura:factura.id},
         method:"POST",
         success: function (data) {
@@ -2493,7 +2851,7 @@ function __displayDate_detail(fecha) {
 /**
 *  Crear Factura nueva
 **/
-function crearFactura(estado){
+function crearFactura(estado, separarFactura){
     self.enviarCocina = false
     if(estado == 1){
         self.enviarCocina = true
@@ -2526,6 +2884,7 @@ function crearFactura(estado){
         type : "POST",
         dataType : "json",
         data : formulario,
+        async : false,
         url : "CrearFacturaAjax",
         success : function(data) {
             if (data.status != 200) {
@@ -2535,7 +2894,7 @@ function crearFactura(estado){
                 }
             } else {
                	serverMessageJsonClase(data);
-                evaluarFactura(data)
+                evaluarFactura(data, separarFactura)
             }
         },
         error : function(xhr, status) {
@@ -2544,16 +2903,20 @@ function crearFactura(estado){
         }
     });
 }
+
+
 /**
 *Si fue facturada o tiquete
 **/
-function evaluarFactura(data){
+function evaluarFactura(data, separarFactura){
    if (data.message != null && data.message.length > 0) {
         $.each(data.listaObjetos, function( index, modeloTabla ) {
             self.facturaImprimir   = modeloTabla
             self.update()
             if(self.facturaImprimir.estado == 2){
-                __Init()
+            	if(!separarFactura){
+                    __Init()                	
+                }
                 //Envia a la pantalla de impresion
                 self.facturaImprimir   = modeloTabla
                 self.update()
@@ -2565,8 +2928,11 @@ function evaluarFactura(data){
                 __EnviarCocina();
                
                 }
-                 __Init()
-
+                if(!separarFactura){
+                    __Init()                	
+                }else{
+                	self.factura.id = self.facturaImprimir.id;
+                }
             }
         });
     }
@@ -2594,6 +2960,7 @@ _AtrasFacturaFinal(){
     self.totalCambioPagar =0
    self.mostrarFormularioPago = false
    self.mostarParaCrearNuevaVentas = true;
+   self.mostrarSepararCuenta	= false //true
    self.mostarParaCrearNuevaFactura = true
    self.error = false
    self.update()
@@ -2638,6 +3005,7 @@ function mostrarPAgo(){
         return
     }
     self.mostarParaCrearNuevaVentas = false
+    self.mostrarSepararCuenta		    = false //true
     self.factura.totalEfectivo = self.factura.totalComprobante
     self.update()
     $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(3))
@@ -3177,7 +3545,7 @@ function __calculate() {
     $( "#codigoBarra" ).val(null);
     $( "#quantity" ).val(null);
     getSubTotalGeneral()
-}
+}	
 
 
 /**
@@ -3595,6 +3963,7 @@ function __ListaMesas(){
                self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
                self.mostrarFacturasMesas        = false //muestra las facturas por mesa
                self.mostarParaCrearNuevaVentas  = false
+               self.mostrarSepararCuenta		    = false //true
                self.update()
             }
         },
@@ -3619,6 +3988,7 @@ __FacturasXMesa(e){
 __FacturasXMesaTiqueteEncabezado(){
     self.pendientesComanda     = []
     self.update()
+    __Init()
     __ListaFacturasXMesas()
 }
 /**
@@ -3663,6 +4033,7 @@ function __ListaFacturasXMesas(){
             self.mostrarNavegador            = true
             self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias
             self.mostarParaCrearNuevaVentas  = true
+            self.mostrarSepararCuenta		    = false //true
             self.update()        
         },
         error: function (xhr, status) {
@@ -3853,7 +4224,7 @@ function __EnviarCocina(){
 		     });			
 		});
 	});
-	console.log(detalles);
+	
 	if(detalles.length > 0){
 		//Se forman los datos genales para la comanda
 		var informacion = {
@@ -3885,6 +4256,493 @@ function __EnviarCocina(){
 	    });		
 	}
 } 
+ 
+__MostrarSeperarCuentas(){
+	mostrarSeperarCuentasFun();
+}
+
+function mostrarSeperarCuentasFun(){
+	self.facturaRespaldo                = {
+	    id:null,
+	    fechaCredito:null,
+	    fechaEmision:null,
+	    condicionVenta:"",
+	    plazoCredito:0,
+	    tipoDoc:"",
+	    medioPago:"",
+	    nombreFactura:"",
+	    direccion:"",
+	    nota:"",
+	    comanda:"",
+	    subTotal:0,
+	    totalTransporte:0,
+	    total:0,
+	    totalServGravados:0,
+	    totalServExentos:0,
+	    totalMercanciasGravadas:0,
+	    totalMercanciasExentas:0,
+	    totalGravado:0,
+	    totalExento:0,
+	    totalVenta:0,
+	    totalDescuentos:0,
+	    totalVentaNeta:0,
+	    totalImpuesto:0,
+	    totalImpuestoServ:0,
+	    totalComprobante:0,
+	    totalEfectivo:0,
+	    totalTarjeta:0,
+	    totalCambioPagar:0,
+	    totalBanco:0,
+	    totalCredito:0,
+	    montoCambio:0,
+	    totalCambio:0,
+	    totalCambioPagar:0,
+	    codigoMoneda:"",
+	    estado:0,
+	    cliente:{
+	        id:0,
+	        nombreCompleto:"",
+	    },
+	    vendedor:{
+	        id:0,
+	        nombreCompleto:""
+	    },
+	    mesa:{
+	        id:0,
+	        descripcion:"",
+	        impuestoServicio:false
+	   }
+	} 	
+	self.mostrarSepararCuenta		    = true;
+	self.mostarParaCrearNuevaVentas		= false;
+	self.mostarParaCrearNuevaFactura    = false;	
+    self.detailPorSeparar      = []
+    self.detailFacturaSeparada = []
+
+    self.detail.forEach(function(elemen){
+    	self.detailPorSeparar.push(elemen);
+    });
+    
+    self.totalComprobantePorSeparar    = 0	
+    self.subTotalGeneralPorSeparar     = 0
+    self.totalDescuentosPorSeparar     = 0
+    self.totalImpuestoPorSeparar       = 0
+    self.totalImpuestoServPorSeparar   = 0
+
+    self.totalComprobanteFactSeparada  = 0	
+    self.subTotalGeneralFactSeparada   = 0
+    self.totalDescuentosFactSeparada   = 0
+    self.totalImpuestoFactSeparada     = 0
+    self.totalImpuestoServFactSeparada = 0
+
+    self.totalComprobantePorSeparar = self.totalComprobante;
+    self.subTotalGeneralPorSeparar = self.subTotalGeneral;
+    self.totalDescuentosPorSeparar = self.totalDescuentos;
+    self.totalImpuestoPorSeparar = self.totalImpuesto;
+    self.totalImpuestoServPorSeparar = self.totalImpuestoServ;
+	self.update();
+}
+
+__addCuentaSeparada(e) {    
+	//Se busca el index del item 
+	var item = e.item;
+    var indexPorSeparar = self.detailPorSeparar.indexOf(item);
+    var indexSeparada = -1;
+
+    //Se recorren los detalles separados
+    self.detailFacturaSeparada.forEach(function(elemen){
+    	if(elemen.codigo == self.detailPorSeparar[indexPorSeparar].codigo){
+    		indexSeparada = self.detailFacturaSeparada.indexOf(elemen);
+    	}
+    });
+
+    //Se encontro
+    if(indexSeparada >= 0){    	
+    	//Se modifica la cantidad
+    	self.detailFacturaSeparada[indexSeparada].cantidad = self.detailFacturaSeparada[indexSeparada].cantidad + 1;
+    }else{
+    	//Se agrega el elmento
+    	self.detailFacturaSeparada.push({
+             codigo          : self.detailPorSeparar[indexPorSeparar].codigo,
+             tipoImpuesto    : self.detailPorSeparar[indexPorSeparar].tipoImpuesto,
+             descripcion     : self.detailPorSeparar[indexPorSeparar].descripcion,
+             cantidad        : parseFloat(1),
+             precioUnitario  : parseFloat(self.detailPorSeparar[indexPorSeparar].precioUnitario),
+             impuesto        : parseFloat(self.detailPorSeparar[indexPorSeparar].impuesto),
+             montoImpuesto   : parseFloat(0),
+             montoDescuento  : parseFloat(0),
+             porcentajeDesc  : parseFloat(self.detailPorSeparar[indexPorSeparar].porcentajeDesc),
+             subTotal        : parseFloat(0),
+             montoTotalLinea : parseFloat(0),
+             montoTotal      : parseFloat(0)
+        });
+    }
+
+    //Se verifica si la cantidad es mayor a 1
+    if(self.detailPorSeparar[indexPorSeparar].cantidad > 1){
+    	//Se resta
+    	self.detailPorSeparar[indexPorSeparar].cantidad = self.detailPorSeparar[indexPorSeparar].cantidad - 1;
+    }else{
+    	//Se elimina del vector
+        this.detailPorSeparar.splice(indexPorSeparar, 1);
+    }    
+    
+    actualizaDetallesFacturasPorSeparar();
+    __calculatePorSeparar();
+    self.update();
+}
+
+
+__removeCuentaSeparada(e) {    
+	//Se busca el index del item 
+	var item = e.item;
+    var indexPorSeparar = self.detailFacturaSeparada.indexOf(item);
+    var indexSeparada = -1;
+
+    //Se recorren los detalles separados
+    self.detailPorSeparar.forEach(function(elemen, index){
+    	if(elemen.codigo == self.detailFacturaSeparada[indexPorSeparar].codigo){
+    		indexSeparada = index;
+    	}
+    });
+
+    //Se encontro
+    if(indexSeparada >= 0){    	
+    	//Se modifica la cantidad
+    	self.detailPorSeparar[indexSeparada].cantidad = self.detailPorSeparar[indexSeparada].cantidad + 1;
+    }else{
+    	//Se agrega el elmento
+    	self.detailPorSeparar.push({
+             codigo          : self.detailFacturaSeparada[indexPorSeparar].codigo,
+             tipoImpuesto    : self.detailFacturaSeparada[indexPorSeparar].tipoImpuesto,
+             descripcion     : self.detailFacturaSeparada[indexPorSeparar].descripcion,
+             cantidad        : parseFloat(1),
+             precioUnitario  : parseFloat(self.detailFacturaSeparada[indexPorSeparar].precioUnitario),
+             impuesto        : parseFloat(self.detailFacturaSeparada[indexPorSeparar].impuesto),
+             montoImpuesto   : parseFloat(0),
+             montoDescuento  : parseFloat(0),
+             porcentajeDesc  : parseFloat(self.detailFacturaSeparada[indexPorSeparar].porcentajeDesc),
+             subTotal        : parseFloat(0),
+             montoTotalLinea : parseFloat(0),
+             montoTotal      : parseFloat(0)
+        });
+    }
+
+    //Se verifica si la cantidad es mayor a 1
+    if(self.detailFacturaSeparada[indexPorSeparar].cantidad > 1){
+    	//Se resta
+    	self.detailFacturaSeparada[indexPorSeparar].cantidad = self.detailFacturaSeparada[indexPorSeparar].cantidad - 1;
+    }else{
+    	//Se elimina del vector
+        this.detailFacturaSeparada.splice(indexPorSeparar, 1);
+    }    
+
+    actualizaDetallesFacturasPorSeparar();
+    __calculatePorSeparar();
+    self.update();
+}
+
+__MostrarFormularioDePagoFactPrincipal(){
+	if(self.detailFacturaSeparada.length > 0 ){
+		mensajeError($.i18n.prop("factura.alert.con.detalles.separar"))
+		return
+	}else{
+		mostrarPAgo()		
+	}
+}
+__NombreDividirFactura(){
+	if(self.detailFacturaSeparada.length == 0 ){
+	   mensajeError($.i18n.prop("factura.alert.sin.detalles.separar"))
+	   return
+	}else if(self.detailPorSeparar.length == 0 ){
+		mensajeError($.i18n.prop("factura.alert.sin.detalles.principal"))
+		return
+	}else{
+		$('#ModalNombreTiqueteSepararCuenta').modal('show') 
+	    $('.cambioNombreSepararCuenta').focus()
+        return
+	}
+}
+
+function cargaFacturaRespaldo(){
+	self.facturaRespaldo.id = self.factura.id;
+	self.facturaRespaldo.fechaCredito = self.factura.fechaCredito;
+	self.facturaRespaldo.fechaEmision = self.factura.fechaEmision;
+	self.facturaRespaldo.condicionVenta = self.factura.condicionVenta;
+	self.facturaRespaldo.plazoCredito = self.factura.plazoCredito;
+	self.facturaRespaldo.tipoDoc = self.factura.tipoDoc;
+	self.facturaRespaldo.medioPago = self.factura.medioPago;
+	self.facturaRespaldo.nombreFactura = self.factura.nombreFactura;
+	self.facturaRespaldo.direccion = self.factura.direccion;
+	self.facturaRespaldo.nota = self.factura.nota;
+	self.facturaRespaldo.comanda = self.factura.comanda;
+	self.facturaRespaldo.subTotal = self.factura.subTotal;
+	self.facturaRespaldo.totalTransporte = self.factura.totalTransporte;
+	self.facturaRespaldo.total = self.factura.total;
+	self.facturaRespaldo.totalServGravados = self.factura.totalServGravados;
+	self.facturaRespaldo.totalServExentos = self.factura.totalServExentos;
+	self.facturaRespaldo.totalMercanciasGravadas = self.factura.totalMercanciasGravadas;
+	self.facturaRespaldo.totalMercanciasExentas = self.factura.totalMercanciasExentas;
+	self.facturaRespaldo.totalGravado = self.factura.totalGravado;
+	self.facturaRespaldo.totalExento = self.factura.totalExento;
+	self.facturaRespaldo.totalVenta = self.factura.totalVenta;
+	self.facturaRespaldo.totalDescuentos = self.factura.totalDescuentos;
+    self.facturaRespaldo.totalVentaNeta = self.factura.totalVentaNeta;
+    self.facturaRespaldo.totalImpuesto = self.factura.totalImpuesto;
+    self.facturaRespaldo.totalImpuestoServ = self.factura.totalImpuestoServ;
+    self.facturaRespaldo.totalComprobante = self.factura.totalComprobante;
+    self.facturaRespaldo.totalEfectivo = self.factura.totalEfectivo;
+    self.facturaRespaldo.totalTarjeta = self.factura.totalTarjeta;
+    self.facturaRespaldo.totalCambioPagar = self.factura.totalCambioPagar;
+    self.facturaRespaldo.totalBanco = self.factura.totalBanco;
+    self.facturaRespaldo.totalCredito = self.factura.totalCredito;
+    self.facturaRespaldo.montoCambio = self.factura.montoCambio;
+    self.facturaRespaldo.totalCambio = self.factura.totalCambio;
+    self.facturaRespaldo.totalCambioPagar = self.factura.totalCambioPagar;
+    self.facturaRespaldo.codigoMoneda = self.factura.codigoMoneda;
+    self.facturaRespaldo.estado = self.factura.estado;
+    self.facturaRespaldo.cliente.id = self.factura.cliente.id;
+    self.facturaRespaldo.cliente.nombreCompleto = self.factura.cliente.nombreCompleto;
+   	self.facturaRespaldo.vendedor.id = self.factura.vendedor.id;
+   	self.facturaRespaldo.vendedor.nombreCompleto = self.factura.vendedor.nombreCompleto;
+    self.facturaRespaldo.mesa.id = self.factura.mesa.id;
+    self.facturaRespaldo.mesa.descripcion = self.factura.mesa.descripcion;
+    self.facturaRespaldo.mesa.impuestoServicio = self.factura.mesa.impuestoServicio;
+}
+
+function cargaFacturaConRespaldo(){
+	self.factura.id = self.facturaRespaldo.id;
+	self.factura.fechaCredito = self.facturaRespaldo.fechaCredito;
+	self.factura.fechaEmision = self.facturaRespaldo.fechaEmision;
+	self.factura.condicionVenta = self.facturaRespaldo.condicionVenta;
+	self.factura.plazoCredito = self.facturaRespaldo.plazoCredito;
+	self.factura.tipoDoc = self.facturaRespaldo.tipoDoc;
+	self.factura.medioPago = self.facturaRespaldo.medioPago;
+	self.factura.nombreFactura = self.facturaRespaldo.nombreFactura;
+	self.factura.direccion = self.facturaRespaldo.direccion;
+	self.factura.nota = self.facturaRespaldo.nota;
+	self.factura.comanda = self.facturaRespaldo.comanda;
+	self.factura.subTotal = self.facturaRespaldo.subTotal;
+	self.factura.totalTransporte = self.facturaRespaldo.totalTransporte;
+	self.factura.total = self.facturaRespaldo.total;
+	self.factura.totalServGravados = self.facturaRespaldo.totalServGravados;
+	self.factura.totalServExentos = self.facturaRespaldo.totalServExentos;
+	self.factura.totalMercanciasGravadas = self.facturaRespaldo.totalMercanciasGravadas;
+	self.factura.totalMercanciasExentas = self.facturaRespaldo.totalMercanciasExentas;
+	self.factura.totalGravado = self.facturaRespaldo.totalGravado;
+	self.factura.totalExento = self.facturaRespaldo.totalExento;
+	self.factura.totalVenta = self.facturaRespaldo.totalVenta;
+	self.factura.totalDescuentos = self.facturaRespaldo.totalDescuentos;
+    self.factura.totalVentaNeta = self.facturaRespaldo.totalVentaNeta;
+    self.factura.totalImpuesto = self.facturaRespaldo.totalImpuesto;
+    self.factura.totalImpuestoServ = self.facturaRespaldo.totalImpuestoServ;
+    self.factura.totalComprobante = self.facturaRespaldo.totalComprobante;
+    self.factura.totalEfectivo = self.facturaRespaldo.totalEfectivo;
+    self.factura.totalTarjeta = self.facturaRespaldo.totalTarjeta;
+    self.factura.totalCambioPagar = self.facturaRespaldo.totalCambioPagar;
+    self.factura.totalBanco = self.facturaRespaldo.totalBanco;
+    self.factura.totalCredito = self.facturaRespaldo.totalCredito;
+    self.factura.montoCambio = self.facturaRespaldo.montoCambio;
+    self.factura.totalCambio = self.facturaRespaldo.totalCambio;
+    self.factura.totalCambioPagar = self.facturaRespaldo.totalCambioPagar;
+    self.factura.codigoMoneda = self.facturaRespaldo.codigoMoneda;
+    self.factura.estado = self.facturaRespaldo.estado;
+    self.factura.cliente.id = self.facturaRespaldo.cliente.id;
+    self.factura.cliente.nombreCompleto = self.facturaRespaldo.cliente.nombreCompleto;
+   	self.factura.vendedor.id = self.facturaRespaldo.vendedor.id;
+   	self.factura.vendedor.nombreCompleto = self.facturaRespaldo.vendedor.nombreCompleto;
+    self.factura.mesa.id = self.facturaRespaldo.mesa.id;
+    self.factura.mesa.descripcion = self.facturaRespaldo.mesa.descripcion;
+    self.factura.mesa.impuestoServicio = self.facturaRespaldo.mesa.impuestoServicio;
+}
+__DividirFactura(){
+
+	//Se respalda la factura original para tomar los datos principales de ahi
+	//self.facturaRespaldo = self.factura;
+	cargaFacturaRespaldo();
+	
+	//============== Se actualiza la factura 
+	//Se actualiza el detalle de la factura.
+	self.detail = self.detailPorSeparar;
+	
+	//Se calculan el detalle de la factura nuevamente y se crea el tiquete temporal
+	__calculate();
+	__CrearFacturaTemporalFunc();
+	self.update();
+	
+	//============== Se crea una nueva factura 
+	//Se crea un nuevo tiquete
+	//self.factura = self.facturaRespaldo;
+	cargaFacturaConRespaldo();
+	//self.factura.cliente = self.facturaRespaldo.cliente; 
+	//self.factura.vendedor = self.facturaRespaldo.vendedor; 
+	self.factura.mesa = self.mesa;
+	self.factura.id = null;
+	self.factura.detalles = [];
+	self.nombreFactura = "";
+	self.detail = [];	
+    self.detailFacturaSeparada.forEach(function(elemen){
+    	self.detail.push(elemen);
+    });
+ 	self.update();
+
+ 	//Se calculan el detalle de la factura nuevamente y se crea el tiquete temporal
+	__calculate();
+ 	
+ 	//Se actualiza el nombre del nuevo tiquete
+	$('#ModalNombreTiqueteSepararCuenta').modal('hide') 
+    self.factura.nombreFactura = $('.cambioNombreSepararCuenta').val() == null ? "" :$('.cambioNombreSepararCuenta').val();
+	self.nombreFactura =  $('.cambioNombreSepararCuenta').val()==null?"":$('.cambioNombreSepararCuenta').val();
+ 	self.mesa.id = self.factura.mesa.id
+    self.update()
+    
+    //Se crea la factura
+    aplicarFactura(1, true)      
+    self.update()
+	
+    $(".plazoCreditoL").val(null)   
+    $(".fechaCredito").val(null)
+    self.factura.fechaCredito = null;
+    mostrarPAgo();
+    self.update();
+}
+
+function actualizaDetallesFacturasPorSeparar(){
+	//Se recorren los detalles por separar
+    self.detailPorSeparar.forEach(function(elemen, index){
+        self.item = elemen;
+        ActualizarLineaDEtalle()
+        self.detailPorSeparar[index] = self.item;
+    });
+	
+	//Se recorren los detalles por separar
+    self.detailFacturaSeparada.forEach(function(elemen, index){
+        self.item = elemen;
+        ActualizarLineaDEtalle()
+        self.detailFacturaSeparada[index] = self.item;
+    });
+}
+
+
+function __calculatePorSeparar() {
+
+    self.totalComprobantePorSeparar    = 0	
+    self.subTotalGeneralPorSeparar     = 0
+    self.totalDescuentosPorSeparar     = 0
+    self.totalImpuestoPorSeparar       = 0
+    self.totalImpuestoServPorSeparar   = 0
+
+    self.totalComprobanteFactSeparada  = 0	
+    self.subTotalGeneralFactSeparada   = 0
+    self.totalDescuentosFactSeparada   = 0
+    self.totalImpuestoFactSeparada     = 0
+    self.totalImpuestoServFactSeparada = 0
+
+	//Se calcula los totales factura por separar
+	totalVenta     = 0
+    subTotal       = 0
+    totalDescuento = 0
+    totalImpuesto  = 0
+    totalImpuestoServ  = 0
+    totalMercanciasGravadas = 0
+    totalMercanciasExentas  = 0
+    totalServGravados       = 0
+    totalServExentos        = 0
+    totalGravado            = 0
+    totalExento             = 0
+    totalComprobante        = 0
+    totalventaNeta          = 0
+
+    self.detailPorSeparar.forEach(function(e){
+        totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.montoTotal:0
+        totalMercanciasExentas  += e.impuesto == 0 && e.tipoImpuesto != "07"?e.montoTotal:0
+        totalServGravados       += e.montoImpuesto > 0 && e.tipoImpuesto == "07"?e.montoTotal:0
+        totalServExentos        += e.impuesto == 0 && e.tipoImpuesto == "07"?e.montoTotal:0
+        totalGravado            += e.impuesto > 0 ?e.montoTotal:0
+        totalExento             += e.impuesto == 0?e.montoTotal:0
+        totalComprobante        += e.montoTotalLinea
+        subTotal                += e.subTotal >0?e.subTotal:0
+        totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
+        totalImpuesto           += e.montoImpuesto >0?e.montoImpuesto:0
+        totalVenta              += e.montoTotal
+    });
+    
+    //cuando se aplica descuentos
+    self.totalDescuentosPorSeparar       = formatoDecimales(Math.round(__valorNumerico(totalDescuento)),2);
+    self.subTotalGeneralPorSeparar       = formatoDecimales(Math.round(__valorNumerico(subTotal)),2);
+    self.totalImpuestoPorSeparar         = formatoDecimales(Math.round(__valorNumerico(totalImpuesto)),2);
+    //Se verifica si la mesa tiene impuestos
+    if(self.factura.mesa.impuestoServicio  == true){
+        totalImpuestoServ = Math.round(__valorNumerico(subTotal * 0.10));
+        self.totalImpuestoServPorSeparar = formatoDecimales(totalImpuestoServ,2);
+        self.totalComprobantePorSeparar = formatoDecimales(Math.round(__valorNumerico(totalComprobante + totalImpuestoServ)),2);
+    }else{
+        self.totalComprobantePorSeparar = formatoDecimales(Math.round(__valorNumerico(totalComprobante)),2);
+    }
+    self.update(); 
+    
+	//Se calcula los totales factura separada
+	totalVenta     = 0
+    subTotal       = 0
+    totalDescuento = 0
+    totalImpuesto  = 0
+    totalImpuestoServ  = 0
+    totalMercanciasGravadas = 0
+    totalMercanciasExentas  = 0
+    totalServGravados       = 0
+    totalServExentos        = 0
+    totalGravado            = 0
+    totalExento             = 0
+    totalComprobante        = 0
+    totalventaNeta          = 0
+
+    self.detailFacturaSeparada.forEach(function(e){
+        totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.montoTotal:0
+        totalMercanciasExentas  += e.impuesto == 0 && e.tipoImpuesto != "07"?e.montoTotal:0
+        totalServGravados       += e.montoImpuesto > 0 && e.tipoImpuesto == "07"?e.montoTotal:0
+        totalServExentos        += e.impuesto == 0 && e.tipoImpuesto == "07"?e.montoTotal:0
+        totalGravado            += e.impuesto > 0 ?e.montoTotal:0
+        totalExento             += e.impuesto == 0?e.montoTotal:0
+        totalComprobante        += e.montoTotalLinea
+        subTotal                += e.subTotal >0?e.subTotal:0
+        totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
+        totalImpuesto           += e.montoImpuesto >0?e.montoImpuesto:0
+        totalVenta              += e.montoTotal
+    });
+    
+    //cuando se aplica descuentos
+    self.totalDescuentosFactSeparada       = formatoDecimales(Math.round(__valorNumerico(totalDescuento)),2);
+    self.subTotalGeneralFactSeparada       = formatoDecimales(Math.round(__valorNumerico(subTotal)),2);
+    self.totalImpuestoFactSeparada         = formatoDecimales(Math.round(__valorNumerico(totalImpuesto)),2);
+    //Se verifica si la mesa tiene impuestos
+    if(self.factura.mesa.impuestoServicio  == true){
+        totalImpuestoServ = Math.round(__valorNumerico(subTotal * 0.10));
+        self.totalImpuestoServFactSeparada = formatoDecimales(totalImpuestoServ,2);
+        self.totalComprobanteFactSeparada = formatoDecimales(Math.round(__valorNumerico(totalComprobante + totalImpuestoServ)),2);
+    }else{
+        self.totalComprobanteFactSeparada = formatoDecimales(Math.round(__valorNumerico(totalComprobante)),2);
+    }
+    self.update(); 
+}	
+
+__AtrasSepararCuentas(){
+	__FacturaEnEspera(self.factura); 	
+	self.update()
+    $('.totalEfectivo').val(null)
+    $('.totalTarjeta').val(null)
+    $('.totalBanco').val(null)
+    self.primeraVezBilleteClick = false
+    self.factura.totalEfectivo =0
+    self.factura.totalTarjeta =0
+    self.factura.totalBanco =0
+    self.totalCambioPagar =0
+   self.mostrarFormularioPago = false
+   self.mostarParaCrearNuevaVentas = true;
+   self.mostrarSepararCuenta	= false //true
+   self.mostarParaCrearNuevaFactura = true
+   self.error = false
+   self.update()
+}
 </script>
 
 </venta-restaurante>
