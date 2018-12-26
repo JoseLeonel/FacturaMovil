@@ -544,8 +544,8 @@
                             </a> 
                             <a  href="#" class="opciones-limpiar" onclick = {__Limpiar} >
                                 <i class="fa fa-trash">{$.i18n.prop("btn.limpiar")}</i>
-                            </a> 
-                            <a href="#" class="opciones-limpiar" onclick = {__MostrarSeperarCuentas} >
+                            </a>
+                            <a  show={separarCuenta} href="#" class="opciones-limpiar" onclick = {__MostrarSeperarCuentas} >
                                 <i class="fa fa-scissors">{$.i18n.prop("separar.cuenta")}</i>
                             </a>
                         </section>
@@ -1383,7 +1383,10 @@ td.col-xl-12, th.col-xl-12 {
                 descripcion:"",
                 impuestoServicio:false
            }
-        }
+    }
+    self.empresa              = {}
+    self.separarCuenta  	  = false;
+    _Empresa();
     self.item                  = null;
     self.comentarioComanda     = "";
     self.articulo              = null;
@@ -4742,6 +4745,40 @@ __AtrasSepararCuentas(){
    self.mostarParaCrearNuevaFactura = true
    self.error = false
    self.update()
+}
+
+/**
+* Consultar la empresa
+**/
+function _Empresa(){
+     $.ajax({
+        url: "ParametrosEmpresaAjax.do",
+        datatype: "json",
+        
+        method:"GET",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                       self.empresa = modeloTabla
+                       console.log(self.empresa);
+                       if(self.empresa.separarCuenta == 1){
+                    	   self.separarCuenta = true;
+                       }
+                       self.update()
+                    });
+                }
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
+        }
+    });
 }
 </script>
 
