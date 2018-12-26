@@ -104,7 +104,7 @@
                                     </div>
                                     <div  class="form-group has-success">
                                          <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
-                                        <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="campo" id="totalBanco"  value="{factura.totalBanco}"  >
+                                        <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="campo tamanoLetraTotales totalBanco" id="totalBanco"  value="{factura.totalBanco}"  >
                                     </div>
                                 </div>
                             </div>
@@ -1028,9 +1028,9 @@ __CalculaCambioAEntregarKeyPress(e){
             
         }else{
             var totalFactura   = __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2))
-            if(self.totalCambioPagar > 0){
+            if(self.totalCambioPagar > totalFactura || self.totalCambioPagar == totalFactura  ){
                 //alert(self.cantidadEnterFacturar)
-                if(self.cantidadEnterFacturar > 0){
+                if(self.cantidadEnterFacturar > 1){
                 __EnterFacturar()
                 }else{
                     self.cantidadEnterFacturar = self.cantidadEnterFacturar + 1
@@ -1066,8 +1066,6 @@ function _calculoEnterPago(){
         self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)   
         self.totalCambioPagar = __valorNumerico(redondeoDecimales(self.factura.totalCambioPagar,2))
         self.update()
-       
-
 }
 
 /**
@@ -1094,8 +1092,12 @@ function __EnterFacturar(){
             //Ajax__inicializarTabla();
             if(isConfirm){
                  aplicarFactura(2)
-           }
-        });   
+            }
+        } 
+        
+        );   
+        self.cantidadEnterFacturar = 0
+        self.update()
 }
 /**
  * Listar codigos  llamado del modal para presentar los articulos
@@ -2821,8 +2823,11 @@ function _incluirBilletes(modena,descripcion,valor,imagen){
     )
     self.update()
 }
+
+/**
+*abrir el cajon
+**/
 __AbrirCajon(){
-  
     __OpcionAbrirCajon()
 }
 /**
