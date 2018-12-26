@@ -230,21 +230,19 @@
 
 </style>    
 <script>
-
 var self = this;
 self.facturaImpresa   = opts.factura;  
 self.detalles = []
 self.subTotalGeneral = 0
-
 self.on('mount',function(){
-    
     if(self.facturaImpresa.id > 0){
         self.detalles = []
         self.detalles =self.facturaImpresa.detalles
         self.facturaImpresa.fechaEmision = displayDate_detail(self.facturaImpresa.fechaEmision)
         self.update()
-        
-       $('.imprimirModalTiquete').modal('show'); 
+       if (self.facturaImpresa.empresa.imprimirDirecto == 0 ){    
+          $('.imprimirModalTiquete').modal('show'); 
+       }
     }
     getSubTotalGeneral()
     getMoneda()
@@ -258,11 +256,9 @@ self.on('mount',function(){
         }
     )
     self.update()
-
-
-   
-   
-
+    if (self.facturaImpresa.empresa.imprimirDirecto == 1 ){
+        __imprimirTique()
+    }
 })
 
 
@@ -283,26 +279,20 @@ function getSubTotalGeneral(){
     self.subTotalGeneral = redondearDecimales(resultado,5)
     self.update()
 }
-
-
-
 /**
 *Formato de Fecha
 **/
 function displayDate_detail(fecha) {
     return fecha == null?"":moment(fecha).format('DD/MM/YYYY h:mm:ss a');
 }
-
 /**
 *Imprimir facturaImpresa
 **/    
 __ImprimirTiquete(){
-    
      $('#imprimirModalTiquete').modal('toggle') 
     __imprimirTique()
     $("#boton-regresar").focus()
 }
-
 /**
  * Buscar la condicion de Pago
  * **/
@@ -316,7 +306,6 @@ function buscarCondicionPago(){
     }
 
 }
-
 /**
 * cargar los estados de la factura
 **/
@@ -333,8 +322,6 @@ function __comboCondicionPago(){
     })
     self.update()
 }
-
-
 /**
  * Buscar el tipo de documento
  * **/
@@ -347,7 +334,6 @@ function buscarTipoDocumento(){
         }
     }
 }
-
 /**
 * cargar los tipos de Documento de la factura
 **/
@@ -376,7 +362,6 @@ function __ComboTipoDocumentos(){
     })
     self.update()
 }
-
 /**
 *imprimir
 **/
@@ -386,8 +371,6 @@ function __imprimirTique(){
     imprimirTiqueteT(div)
 
 }
-
-
 function imprimirTiqueteT(elemento){
   var ventana = window.open('', 'PRINT', 'height=400,width=600');
   ventana.document.write('<html><head><title>' + "" + '</title>');

@@ -332,55 +332,45 @@
 var self = this;
 self.facturaImpresa   = opts.factura;  
 self.detalles = []
-
 self.titulo = ""
 self.claveParteUno =""
 self.claveParteDos =""
 self.totalImpuestoServicio = 0
 self.subTotal = 0
-
 self.on('mount',function(){
-    
     if(self.facturaImpresa.id > 0){
-
-
        consultaFactura(self.facturaImpresa.id)
-        //qr()
+       if(self.facturaImpresa.empresa.noFacturaElectronica == 0){
+          qr()    
+       }
     }
-   
-   
-   
-
+    if (self.facturaImpresa.empresa.imprimirDirecto == 1 ){
+        __imprimir()
+    }
 })
+
+
 
 function qr(){
      var options = {
         // render method: 'canvas', 'image' or 'div'
-        render: 'canvas',
-
+        render: 'div',
         // version range somewhere in 1 .. 40
         minVersion: 1,
         maxVersion: 40,
-
         // error correction level: 'L', 'M', 'Q' or 'H'
         ecLevel: 'L',
-
         // offset in pixel if drawn onto existing canvas
         left: 0,
         top: 0,
-
         // size in pixel
-        size: 200,
-
+        size: 100,
         // code color or image element
         fill: '#000',
-
         // background color or image element, null for transparent background
         background: null,
-
         // content
-        text: 'no text',
-
+        text: self.facturaImpresa.clave,
         // corner radius relative to module width: 0.0 .. 0.5
         radius: 0,
 
@@ -399,7 +389,7 @@ function qr(){
         mPosX: 0.5,
         mPosY: 0.5,
 
-        label: 'no label',
+        label: self.facturaImpresa.clave,
         fontname: 'sans',
         fontcolor: '#000',
 
@@ -407,7 +397,9 @@ function qr(){
     }
     $('#divQR').qrcode(options);
 }
-
+/**
+*consultar Facturas
+**/
 function consultaFactura(idFactura){
 
      $.ajax({
@@ -456,15 +448,17 @@ function consultaFactura(idFactura){
                     if(self.facturaImpresa.estado ==3){
                         self.titulo = $.i18n.prop("tikect.encabezado.proforma") + self.facturaImpresa.id
                     }
-                    if(self.facturaImpresa.estado ==4){
+                    if(self.facturaImpresa.estado == 4){
                         self.titulo = $.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno") + self.facturaImpresa.id
                     }
                     self.update()
-                  
                     });
-                  
-                 
-                     $('.imprimirModal').modal('show'); 
+                    if (self.facturaImpresa.empresa.imprimirDirecto == 0 ){
+                        $('.imprimirModal').modal('show');   
+                    }else{
+                     //   __imprimir()
+                    }
+                   
                 }
             }
         },
@@ -592,9 +586,10 @@ function __imprimir(){
      var div = document.querySelector("#imprimeme");
     
     imprimirElemento(div)
+      
     
-
 }
+
 
 
 function imprimirElemento(elemento){

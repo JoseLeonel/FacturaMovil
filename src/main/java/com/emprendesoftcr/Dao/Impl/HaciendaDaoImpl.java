@@ -62,6 +62,7 @@ public class HaciendaDaoImpl implements HaciendaDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Hacienda> findByEmpresaAndEstado(Empresa empresa, Integer estado) {
 		Query query = entityManager.createQuery("select obj from Hacienda obj where obj.estado = :estado and obj.empresa = :empresa");
@@ -70,14 +71,26 @@ public class HaciendaDaoImpl implements HaciendaDao {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Hacienda> findByEstado(Integer estado, Integer estadoError) {
 		Query query = entityManager.createQuery("select obj from Hacienda obj where obj.estado = :estado or obj.estado = :estadoError order by obj.empresa.id");
 		query.setParameter("estado", estado);
 		query.setParameter("estadoError", estadoError);
 		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
+		
+		List<Hacienda> results = query.getResultList();
+		if(results != null) {
+			if (!results.isEmpty()) {
+				return  results;
+			} else {
+				return null;
+			}
+			
+		}else {
+			return null;
+		}
 
-		return query.getResultList();
 	}
 
 	@Override

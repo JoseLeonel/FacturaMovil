@@ -49,7 +49,7 @@
                                     <label>{$.i18n.prop("cliente.titulo")} </label>  
                                     <select  class="form-control selectCliente" id="cliente" name="cliente" data-live-search="true">
                                         <option  data-tokens="{$.i18n.prop("todos.select")}"   value="0"  >{$.i18n.prop("todos.select")}</option>
-                                        <option  data-tokens="{nombreCompleto}" each={clientes}  value="{id}"  >{nombreCompleto}</option>
+                                        <option  data-tokens="{nombreCompleto}" each={clientes.data}  value="{id}"  >{nombreCompleto}</option>
                                     </select>
                                 </div>  
                             </div>                      

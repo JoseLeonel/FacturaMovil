@@ -58,8 +58,14 @@ public class EmpresaCommand {
 	private Integer	aplicaGanancia;
 
 	private String	enviarTiquete;
+
+	private Integer	enterFacturar;
+
+	private Integer	imprimirDirecto;
+
+	private Integer	abrirSinComanda;
 	
-	private Integer						enterFacturar;
+	private Integer abrirConComanda;
 
 	public EmpresaCommand(Empresa empresa) {
 		super();
@@ -96,10 +102,13 @@ public class EmpresaCommand {
 		this.tieneLector = empresa.getTieneLector();
 		this.cambiarPrecio = empresa.getCambiarPrecio();
 		this.vueltoImprimir = empresa.getVueltoImprimir();
-		
+
 		this.aplicaGanancia = empresa.getAplicaGanancia();
-		
+
 		this.enterFacturar = empresa.getEnterFacturar();
+		this.imprimirDirecto = empresa.getImprimirDirecto();
+		this.abrirSinComanda = empresa.getAbrirSinComanda();
+		this.abrirConComanda = empresa.getAbrirConComanda();
 
 	}
 
@@ -114,13 +123,29 @@ public class EmpresaCommand {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
 	
-		
+	public Integer getAbrirConComanda() {
+		return abrirConComanda;
+	}
+
+	
+	public void setAbrirConComanda(Integer abrirConComanda) {
+		this.abrirConComanda = abrirConComanda;
+	}
+
+	public Integer getAbrirSinComanda() {
+		return abrirSinComanda;
+	}
+
+	public void setAbrirSinComanda(Integer abrirSinComanda) {
+		this.abrirSinComanda = abrirSinComanda;
+	}
+
 	public Integer getEnterFacturar() {
 		return enterFacturar;
 	}
 
-	
 	public void setEnterFacturar(Integer enterFacturar) {
 		this.enterFacturar = enterFacturar;
 	}
@@ -129,7 +154,6 @@ public class EmpresaCommand {
 		return aplicaGanancia;
 	}
 
-	
 	public void setAplicaGanancia(Integer aplicaGanancia) {
 		this.aplicaGanancia = aplicaGanancia;
 	}
@@ -372,6 +396,14 @@ public class EmpresaCommand {
 
 	public void setVueltoImprimir(Integer vueltoImprimir) {
 		this.vueltoImprimir = vueltoImprimir;
+	}
+
+	public Integer getImprimirDirecto() {
+		return imprimirDirecto;
+	}
+
+	public void setImprimirDirecto(Integer imprimirDirecto) {
+		this.imprimirDirecto = imprimirDirecto;
 	}
 
 }

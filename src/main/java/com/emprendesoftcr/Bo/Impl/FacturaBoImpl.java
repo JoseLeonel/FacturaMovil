@@ -677,8 +677,8 @@ public class FacturaBoImpl implements FacturaBo {
 								if (factura.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
 									cuentaCobrarDao.eliminar(cuentaCobrar);
 								} else if (!factura.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
-									cuentaCobrar.setTotal(factura.getTotalComprobante());
-									cuentaCobrar.setTotalSaldo(factura.getTotalComprobante());
+									cuentaCobrar.setTotal(Utils.roundFactura(factura.getTotalComprobante(),2));
+									cuentaCobrar.setTotalSaldo(Utils.roundFactura(factura.getTotalComprobante(),2));
 									cuentaCobrarDao.modificar(cuentaCobrar);
 
 								}
