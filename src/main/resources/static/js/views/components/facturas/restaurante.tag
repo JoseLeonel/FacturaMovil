@@ -197,7 +197,7 @@
         <div class="row no-space">           
             <div class="col-md-5 col-sm-5 col-lg-5 col-xs-12 pull-left" style="padding: 0px 12px">
                 <div class="block panel ">                    
-                    <div id="btnGrandePagarGray" class="head well" style="color: #fff; font-size: 55px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
+                    <div id="btnGrandePagar" onclick={__MostrarFormularioDePagoFactPrincipal} class="head well" style="color: #fff; font-size: 55px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
                         <table id="pagarTable" width="100%">
                             <tbody>
                                 <tr>
@@ -395,6 +395,13 @@
             	</div>
             </div>  
         </div>
+    	<div class="row">
+			<div class="col-md-10 col-sm-10 col-lg-10 col-sx-12 ">
+				<div class="box-footer">
+                     <button onclick={__AtrasSepararCuentas} class="btn-dark-gray btn-back pull-left">  {$.i18n.prop("btn.volver")}</button>
+	            </div>
+			</div>
+		</div>
     </div>
 </div>       
 <!--Fin Separar Venta-->
@@ -614,8 +621,8 @@
                 </div> 
                  
             </div>
-        </div>
-    </div>       
+    </div>
+</div>       
 <!--Fin Ventana de los productos-->
 <!--Modal mostrar Facturas del Dias -->
 <div id='modalFacturasDia' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -2392,22 +2399,33 @@ __AgregarNombreFacturaTemporal(){
     self.factEspera = null
     self.update()
     
-     self.mostrarCategorias        = false //muestra la pantalla de imagenes de articulos   
-     self.mostrarFacturasMesas     = true //muestra las facturas por mesa
-     self.mostrarMesas	             = false //muestra la pantalla mesas               
-     self.mostrarCodigoBarra          = false;
-     self.mostrarNavegador            = true
-     self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias
-     self.mostarParaCrearNuevaVentas  = true
-     self.mostrarSepararCuenta		  = false //true
-     self.update()        
-
+    self.mostrarCategorias           = false //muestra la pantalla de imagenes de articulos   
+    self.mostrarFacturasMesas        = true //muestra las facturas por mesa
+    self.mostrarMesas	             = false //muestra la pantalla mesas               
+    self.mostrarCodigoBarra          = false;
+    self.mostrarNavegador            = true
+    self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias
+    self.mostarParaCrearNuevaVentas  = true
+    self.mostrarSepararCuenta		 = false //true
+    self.update()        
 }
+
 /**
 ** Se aplica o se crea una Factura cargada en la pantalla
 **/
 __AplicarYcrearFactura(){
- aplicarFactura(2)
+ 	if(self.detailFacturaSeparada.length > 0 ){
+ 	 	aplicarFactura(2, true)
+ 		self.mostrarFormularioPago = false;
+ 	 	self.update();
+
+ 	 	//Se carga la factura principal
+ 	 	__FacturaEnEspera(self.facturaRespaldo); 	
+ 	 	mostrarSeperarCuentasFun();
+ 		self.update(); 		
+ 	}else{
+ 	 	aplicarFactura(2) 		
+ 	}
 }
 
 /**
@@ -2534,57 +2552,7 @@ function __Init(){
             impuestoServicio:false
        }
     }
-    self.facturaRespaldo                = {
-        id:null,
-	    fechaCredito:null,
-	    fechaEmision:null,
-	    condicionVenta:"",
-	    plazoCredito:0,
-	    tipoDoc:"",
-	    medioPago:"",
-	    nombreFactura:"",
-	    direccion:"",
-	    nota:"",
-	    comanda:"",
-	    subTotal:0,
-	    totalTransporte:0,
-	    total:0,
-	    totalServGravados:0,
-	    totalServExentos:0,
-	    totalMercanciasGravadas:0,
-	    totalMercanciasExentas:0,
-	    totalGravado:0,
-	    totalExento:0,
-	    totalVenta:0,
-	    totalDescuentos:0,
-	    totalVentaNeta:0,
-	    totalImpuesto:0,
-	    totalImpuestoServ:0,
-	    totalComprobante:0,
-	    totalEfectivo:0,
-        totalTarjeta:0,
-        totalCambioPagar:0,
-	    totalBanco:0,
-	    totalCredito:0,
-	    montoCambio:0,
-	    totalCambio:0,
-        totalCambioPagar:0,
-	    codigoMoneda:"",
-	    estado:0,
-	    cliente:{
-            id:0,
-            nombreCompleto:"",
-        },
-	    vendedor:{
-            id:0,
-            nombreCompleto:""
-        },
-        mesa:{
-            id:0,
-            descripcion:"",
-            impuestoServicio:false
-       }
-    }
+    
     self.factura.mesa = self.mesa;
     self.item                  = null;
     self.articulo              = null;
@@ -2748,57 +2716,7 @@ function __InitDatos(){
             impuestoServicio:false
        }
     }
-    self.facturaRespaldo                = {
-        id:null,
-	    fechaCredito:null,
-	    fechaEmision:null,
-	    condicionVenta:"",
-	    plazoCredito:0,
-	    tipoDoc:"",
-	    medioPago:"",
-	    nombreFactura:"",
-	    direccion:"",
-	    nota:"",
-	    comanda:"",
-	    subTotal:0,
-	    totalTransporte:0,
-	    total:0,
-	    totalServGravados:0,
-	    totalServExentos:0,
-	    totalMercanciasGravadas:0,
-	    totalMercanciasExentas:0,
-	    totalGravado:0,
-	    totalExento:0,
-	    totalVenta:0,
-	    totalDescuentos:0,
-	    totalVentaNeta:0,
-	    totalImpuesto:0,
-	    totalImpuestoServ:0,
-	    totalComprobante:0,
-	    totalEfectivo:0,
-        totalTarjeta:0,
-        totalCambioPagar:0,
-	    totalBanco:0,
-	    totalCredito:0,
-	    montoCambio:0,
-	    totalCambio:0,
-        totalCambioPagar:0,
-	    codigoMoneda:"",
-	    estado:0,
-	    cliente:{
-            id:0,
-            nombreCompleto:"",
-        },
-	    vendedor:{
-            id:0,
-            nombreCompleto:""
-        },
-        mesa:{
-            id:0,
-            descripcion:"",
-            impuestoServicio:false
-       }
-    }
+   
     self.factura.mesa = self.mesa;
     self.item                  = null;
     self.articulo              = null;
@@ -2861,6 +2779,7 @@ function __FacturaEnEspera(factura){
     $.ajax({
         url: "MostrarFacturaAjax",
         datatype: "json",
+        async:false,
         data: {idFactura:factura.id},
         method:"POST",
         success: function (data) {
@@ -2995,7 +2914,9 @@ function evaluarFactura(data, separarFactura){
             self.facturaImprimir   = modeloTabla
             self.update()
             if(self.facturaImprimir.estado == 2){
-                __Init()
+            	if(!separarFactura){
+                    __Init()                	
+                }
                 //Envia a la pantalla de impresion
                 self.facturaImprimir   = modeloTabla
                 self.update()
@@ -4337,6 +4258,61 @@ function __EnviarCocina(){
 } 
  
 __MostrarSeperarCuentas(){
+	mostrarSeperarCuentasFun();
+}
+
+function mostrarSeperarCuentasFun(){
+	self.facturaRespaldo                = {
+	    id:null,
+	    fechaCredito:null,
+	    fechaEmision:null,
+	    condicionVenta:"",
+	    plazoCredito:0,
+	    tipoDoc:"",
+	    medioPago:"",
+	    nombreFactura:"",
+	    direccion:"",
+	    nota:"",
+	    comanda:"",
+	    subTotal:0,
+	    totalTransporte:0,
+	    total:0,
+	    totalServGravados:0,
+	    totalServExentos:0,
+	    totalMercanciasGravadas:0,
+	    totalMercanciasExentas:0,
+	    totalGravado:0,
+	    totalExento:0,
+	    totalVenta:0,
+	    totalDescuentos:0,
+	    totalVentaNeta:0,
+	    totalImpuesto:0,
+	    totalImpuestoServ:0,
+	    totalComprobante:0,
+	    totalEfectivo:0,
+	    totalTarjeta:0,
+	    totalCambioPagar:0,
+	    totalBanco:0,
+	    totalCredito:0,
+	    montoCambio:0,
+	    totalCambio:0,
+	    totalCambioPagar:0,
+	    codigoMoneda:"",
+	    estado:0,
+	    cliente:{
+	        id:0,
+	        nombreCompleto:"",
+	    },
+	    vendedor:{
+	        id:0,
+	        nombreCompleto:""
+	    },
+	    mesa:{
+	        id:0,
+	        descripcion:"",
+	        impuestoServicio:false
+	   }
+	} 	
 	self.mostrarSepararCuenta		    = true;
 	self.mostarParaCrearNuevaVentas		= false;
 	self.mostarParaCrearNuevaFactura    = false;	
@@ -4466,10 +4442,21 @@ __removeCuentaSeparada(e) {
     self.update();
 }
 
+__MostrarFormularioDePagoFactPrincipal(){
+	if(self.detailFacturaSeparada.length > 0 ){
+		mensajeError($.i18n.prop("factura.alert.con.detalles.separar"))
+		return
+	}else{
+		mostrarPAgo()		
+	}
+}
 __NombreDividirFactura(){
 	if(self.detailFacturaSeparada.length == 0 ){
 	   mensajeError($.i18n.prop("factura.alert.sin.detalles.separar"))
 	   return
+	}else if(self.detailPorSeparar.length == 0 ){
+		mensajeError($.i18n.prop("factura.alert.sin.detalles.principal"))
+		return
 	}else{
 		$('#ModalNombreTiqueteSepararCuenta').modal('show') 
 	    $('.cambioNombreSepararCuenta').focus()
@@ -4477,10 +4464,102 @@ __NombreDividirFactura(){
 	}
 }
 
+function cargaFacturaRespaldo(){
+	self.facturaRespaldo.id = self.factura.id;
+	self.facturaRespaldo.fechaCredito = self.factura.fechaCredito;
+	self.facturaRespaldo.fechaEmision = self.factura.fechaEmision;
+	self.facturaRespaldo.condicionVenta = self.factura.condicionVenta;
+	self.facturaRespaldo.plazoCredito = self.factura.plazoCredito;
+	self.facturaRespaldo.tipoDoc = self.factura.tipoDoc;
+	self.facturaRespaldo.medioPago = self.factura.medioPago;
+	self.facturaRespaldo.nombreFactura = self.factura.nombreFactura;
+	self.facturaRespaldo.direccion = self.factura.direccion;
+	self.facturaRespaldo.nota = self.factura.nota;
+	self.facturaRespaldo.comanda = self.factura.comanda;
+	self.facturaRespaldo.subTotal = self.factura.subTotal;
+	self.facturaRespaldo.totalTransporte = self.factura.totalTransporte;
+	self.facturaRespaldo.total = self.factura.total;
+	self.facturaRespaldo.totalServGravados = self.factura.totalServGravados;
+	self.facturaRespaldo.totalServExentos = self.factura.totalServExentos;
+	self.facturaRespaldo.totalMercanciasGravadas = self.factura.totalMercanciasGravadas;
+	self.facturaRespaldo.totalMercanciasExentas = self.factura.totalMercanciasExentas;
+	self.facturaRespaldo.totalGravado = self.factura.totalGravado;
+	self.facturaRespaldo.totalExento = self.factura.totalExento;
+	self.facturaRespaldo.totalVenta = self.factura.totalVenta;
+	self.facturaRespaldo.totalDescuentos = self.factura.totalDescuentos;
+    self.facturaRespaldo.totalVentaNeta = self.factura.totalVentaNeta;
+    self.facturaRespaldo.totalImpuesto = self.factura.totalImpuesto;
+    self.facturaRespaldo.totalImpuestoServ = self.factura.totalImpuestoServ;
+    self.facturaRespaldo.totalComprobante = self.factura.totalComprobante;
+    self.facturaRespaldo.totalEfectivo = self.factura.totalEfectivo;
+    self.facturaRespaldo.totalTarjeta = self.factura.totalTarjeta;
+    self.facturaRespaldo.totalCambioPagar = self.factura.totalCambioPagar;
+    self.facturaRespaldo.totalBanco = self.factura.totalBanco;
+    self.facturaRespaldo.totalCredito = self.factura.totalCredito;
+    self.facturaRespaldo.montoCambio = self.factura.montoCambio;
+    self.facturaRespaldo.totalCambio = self.factura.totalCambio;
+    self.facturaRespaldo.totalCambioPagar = self.factura.totalCambioPagar;
+    self.facturaRespaldo.codigoMoneda = self.factura.codigoMoneda;
+    self.facturaRespaldo.estado = self.factura.estado;
+    self.facturaRespaldo.cliente.id = self.factura.cliente.id;
+    self.facturaRespaldo.cliente.nombreCompleto = self.factura.cliente.nombreCompleto;
+   	self.facturaRespaldo.vendedor.id = self.factura.vendedor.id;
+   	self.facturaRespaldo.vendedor.nombreCompleto = self.factura.vendedor.nombreCompleto;
+    self.facturaRespaldo.mesa.id = self.factura.mesa.id;
+    self.facturaRespaldo.mesa.descripcion = self.factura.mesa.descripcion;
+    self.facturaRespaldo.mesa.impuestoServicio = self.factura.mesa.impuestoServicio;
+}
+
+function cargaFacturaConRespaldo(){
+	self.factura.id = self.facturaRespaldo.id;
+	self.factura.fechaCredito = self.facturaRespaldo.fechaCredito;
+	self.factura.fechaEmision = self.facturaRespaldo.fechaEmision;
+	self.factura.condicionVenta = self.facturaRespaldo.condicionVenta;
+	self.factura.plazoCredito = self.facturaRespaldo.plazoCredito;
+	self.factura.tipoDoc = self.facturaRespaldo.tipoDoc;
+	self.factura.medioPago = self.facturaRespaldo.medioPago;
+	self.factura.nombreFactura = self.facturaRespaldo.nombreFactura;
+	self.factura.direccion = self.facturaRespaldo.direccion;
+	self.factura.nota = self.facturaRespaldo.nota;
+	self.factura.comanda = self.facturaRespaldo.comanda;
+	self.factura.subTotal = self.facturaRespaldo.subTotal;
+	self.factura.totalTransporte = self.facturaRespaldo.totalTransporte;
+	self.factura.total = self.facturaRespaldo.total;
+	self.factura.totalServGravados = self.facturaRespaldo.totalServGravados;
+	self.factura.totalServExentos = self.facturaRespaldo.totalServExentos;
+	self.factura.totalMercanciasGravadas = self.facturaRespaldo.totalMercanciasGravadas;
+	self.factura.totalMercanciasExentas = self.facturaRespaldo.totalMercanciasExentas;
+	self.factura.totalGravado = self.facturaRespaldo.totalGravado;
+	self.factura.totalExento = self.facturaRespaldo.totalExento;
+	self.factura.totalVenta = self.facturaRespaldo.totalVenta;
+	self.factura.totalDescuentos = self.facturaRespaldo.totalDescuentos;
+    self.factura.totalVentaNeta = self.facturaRespaldo.totalVentaNeta;
+    self.factura.totalImpuesto = self.facturaRespaldo.totalImpuesto;
+    self.factura.totalImpuestoServ = self.facturaRespaldo.totalImpuestoServ;
+    self.factura.totalComprobante = self.facturaRespaldo.totalComprobante;
+    self.factura.totalEfectivo = self.facturaRespaldo.totalEfectivo;
+    self.factura.totalTarjeta = self.facturaRespaldo.totalTarjeta;
+    self.factura.totalCambioPagar = self.facturaRespaldo.totalCambioPagar;
+    self.factura.totalBanco = self.facturaRespaldo.totalBanco;
+    self.factura.totalCredito = self.facturaRespaldo.totalCredito;
+    self.factura.montoCambio = self.facturaRespaldo.montoCambio;
+    self.factura.totalCambio = self.facturaRespaldo.totalCambio;
+    self.factura.totalCambioPagar = self.facturaRespaldo.totalCambioPagar;
+    self.factura.codigoMoneda = self.facturaRespaldo.codigoMoneda;
+    self.factura.estado = self.facturaRespaldo.estado;
+    self.factura.cliente.id = self.facturaRespaldo.cliente.id;
+    self.factura.cliente.nombreCompleto = self.facturaRespaldo.cliente.nombreCompleto;
+   	self.factura.vendedor.id = self.facturaRespaldo.vendedor.id;
+   	self.factura.vendedor.nombreCompleto = self.facturaRespaldo.vendedor.nombreCompleto;
+    self.factura.mesa.id = self.facturaRespaldo.mesa.id;
+    self.factura.mesa.descripcion = self.facturaRespaldo.mesa.descripcion;
+    self.factura.mesa.impuestoServicio = self.facturaRespaldo.mesa.impuestoServicio;
+}
 __DividirFactura(){
 
 	//Se respalda la factura original para tomar los datos principales de ahi
-	self.facturaRespaldo = self.factura;
+	//self.facturaRespaldo = self.factura;
+	cargaFacturaRespaldo();
 	
 	//============== Se actualiza la factura 
 	//Se actualiza el detalle de la factura.
@@ -4493,9 +4572,10 @@ __DividirFactura(){
 	
 	//============== Se crea una nueva factura 
 	//Se crea un nuevo tiquete
-	self.factura = self.facturaRespaldo;
-	self.factura.cliente = self.facturaRespaldo.cliente; 
-	self.factura.vendedor = self.facturaRespaldo.vendedor; 
+	//self.factura = self.facturaRespaldo;
+	cargaFacturaConRespaldo();
+	//self.factura.cliente = self.facturaRespaldo.cliente; 
+	//self.factura.vendedor = self.facturaRespaldo.vendedor; 
 	self.factura.mesa = self.mesa;
 	self.factura.id = null;
 	self.factura.detalles = [];
@@ -4518,12 +4598,10 @@ __DividirFactura(){
     
     //Se crea la factura
     aplicarFactura(1, true)      
-    //self.factEspera = null
     self.update()
 
     mostrarPAgo();
- 	
-    self.update()        
+    self.update();
 }
 
 function actualizaDetallesFacturasPorSeparar(){
@@ -4644,6 +4722,24 @@ function __calculatePorSeparar() {
     self.update(); 
 }	
 
+__AtrasSepararCuentas(){
+	__FacturaEnEspera(self.factura); 	
+	self.update()
+    $('.totalEfectivo').val(null)
+    $('.totalTarjeta').val(null)
+    $('.totalBanco').val(null)
+    self.primeraVezBilleteClick = false
+    self.factura.totalEfectivo =0
+    self.factura.totalTarjeta =0
+    self.factura.totalBanco =0
+    self.totalCambioPagar =0
+   self.mostrarFormularioPago = false
+   self.mostarParaCrearNuevaVentas = true;
+   self.mostrarSepararCuenta	= false //true
+   self.mostarParaCrearNuevaFactura = true
+   self.error = false
+   self.update()
+}
 </script>
 
 </venta-restaurante>
