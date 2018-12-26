@@ -8,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -158,6 +156,7 @@ public class Empresa implements Serializable {
 	@Column(name = "enter_facturar", columnDefinition = "INT default '0'")
 	private Integer						enterFacturar;
 
+	//Para no mostrar la pantalla de impresion
 	@Column(name = "imprimir_direc", columnDefinition = "INT default '0'")
 	private Integer						imprimirDirecto;
 //abrir sin comanda
@@ -166,21 +165,21 @@ public class Empresa implements Serializable {
 //abrir con comanda
 	@Column(name = "abrircon_com", columnDefinition = "INT default '0'")
 	private Integer						abrirConComanda;
-
 	
+	@Column(name = "impre_cocina")
+	private String		impresoraCocina;
 
-	public Integer getAbrirSinComanda() {
-		return abrirSinComanda;
-	}
+	@Column(name = "impre_factura")
+	private String		impresoraFactura;
 
-	public void setAbrirSinComanda(Integer abrirSinComanda) {
-		this.abrirSinComanda = abrirSinComanda;
-	}
 
 	
 	
+	
+	
+
 	public Empresa(Integer id, String abreviaturaEmpresa, Integer numeroConsecutivo, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String cazaMatriz, Integer codigoSeguridad, String nombre, String nombreComercial, String tipoCedula, String cedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String canton, String distrito, String barrio, String logo, String tieneInventario, String tieneLector, String cambiarPrecio, String estadoProduccion, String enviarTiquete, String representante, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, String usuarioEnvioComprobante, String passwordEnvioComprobante, String estado, Date created_at, Date updated_at, Integer aceptadoConsecutivo,
-			Integer aceptadoParcialConsecutivo, Integer rechazadoConsecutivo, Integer vueltoImprimir, Integer noFacturaElectronica, Integer correoFrecuente, Long comandaEmpresa, Integer aplicaGanancia, Integer enterFacturar, Integer imprimirDirecto, Integer abrirSinComanda, Integer abrirConComanda) {
+			Integer aceptadoParcialConsecutivo, Integer rechazadoConsecutivo, Integer vueltoImprimir, Integer noFacturaElectronica, Integer correoFrecuente, Long comandaEmpresa, Integer aplicaGanancia, Integer enterFacturar, Integer imprimirDirecto, Integer abrirSinComanda, Integer abrirConComanda, String impresoraCocina, String impresoraFactura) {
 		super();
 		this.id = id;
 		this.abreviaturaEmpresa = abreviaturaEmpresa;
@@ -228,6 +227,8 @@ public class Empresa implements Serializable {
 		this.imprimirDirecto = imprimirDirecto;
 		this.abrirSinComanda = abrirSinComanda;
 		this.abrirConComanda = abrirConComanda;
+		this.impresoraCocina = impresoraCocina;
+		this.impresoraFactura = impresoraFactura;
 	}
 
 	public Empresa() {
@@ -258,6 +259,36 @@ public class Empresa implements Serializable {
 	
 	public void setAbrirConComanda(Integer abrirConComanda) {
 		this.abrirConComanda = abrirConComanda;
+	}
+
+	public Integer getAbrirSinComanda() {
+		return abrirSinComanda;
+	}
+
+	public void setAbrirSinComanda(Integer abrirSinComanda) {
+		this.abrirSinComanda = abrirSinComanda;
+	}
+
+	
+	
+	
+	public String getImpresoraCocina() {
+		return impresoraCocina;
+	}
+
+	
+	public void setImpresoraCocina(String impresoraCocina) {
+		this.impresoraCocina = impresoraCocina;
+	}
+
+	
+	public String getImpresoraFactura() {
+		return impresoraFactura;
+	}
+
+	
+	public void setImpresoraFactura(String impresoraFactura) {
+		this.impresoraFactura = impresoraFactura;
 	}
 
 	public Integer getCorreoFrecuente() {

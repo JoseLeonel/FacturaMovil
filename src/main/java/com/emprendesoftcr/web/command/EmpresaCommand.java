@@ -66,6 +66,10 @@ public class EmpresaCommand {
 	private Integer	abrirSinComanda;
 	
 	private Integer abrirConComanda;
+	private String		impresoraCocina;
+
+	private String		impresoraFactura;
+
 
 	public EmpresaCommand(Empresa empresa) {
 		super();
@@ -109,6 +113,9 @@ public class EmpresaCommand {
 		this.imprimirDirecto = empresa.getImprimirDirecto();
 		this.abrirSinComanda = empresa.getAbrirSinComanda();
 		this.abrirConComanda = empresa.getAbrirConComanda();
+		this.impresoraCocina = empresa.getImpresoraCocina();
+		this.impresoraFactura = empresa.getImpresoraFactura();
+		
 
 	}
 
@@ -125,6 +132,27 @@ public class EmpresaCommand {
 	}
 
 	
+	
+	
+	public String getImpresoraCocina() {
+		return impresoraCocina;
+	}
+
+	
+	public void setImpresoraCocina(String impresoraCocina) {
+		this.impresoraCocina = impresoraCocina;
+	}
+
+	
+	public String getImpresoraFactura() {
+		return impresoraFactura;
+	}
+
+	
+	public void setImpresoraFactura(String impresoraFactura) {
+		this.impresoraFactura = impresoraFactura;
+	}
+
 	public Integer getAbrirConComanda() {
 		return abrirConComanda;
 	}
