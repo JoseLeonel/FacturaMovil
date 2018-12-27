@@ -277,7 +277,7 @@ public final class FacturaElectronicaUtils {
 		try {
 			String realPK = privateKey.replaceAll("-----END PRIVATE KEY-----", "").replaceAll("-----BEGIN PRIVATE KEY-----", "").replaceAll("\n", "");
 			byte[] b1 = Base64.getMimeDecoder().decode(realPK.getBytes(StandardCharsets.UTF_8));
-//			byte[] b1 = Base64.getDecoder().decode(realPK.getBytes(StandardCharsets.UTF_8));
+			//byte[] b1 = Base64.getDecoder().decode(realPK.getBytes(StandardCharsets.UTF_8));
 			PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(b1);
 			KeyFactory kf = KeyFactory.getInstance("RSA");
 			Signature privateSignature = Signature.getInstance("SHA256withRSA");
