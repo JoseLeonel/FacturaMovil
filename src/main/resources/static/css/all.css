@@ -493,6 +493,22 @@ input.cmn-toggle-yes-no:checked + label:after {
   transform: rotateY(0);
 }
 
+.btn-imprimir {
+        background-color: #00ACEE;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 16px;
+        font-weight: bold;
+        margin-right: 15px;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
+
 .btn-green {
         background-color: #4cae4c;
         color: #FFF;
@@ -531,6 +547,11 @@ input.cmn-toggle-yes-no:checked + label:after {
         margin-left: 2px;
         cursor: pointer;
     }
+   .btn-print:before{
+        font-family: FontAwesome;
+        content: "\f02f";
+    }
+
 
     .btn-add:before{
         font-family: FontAwesome;

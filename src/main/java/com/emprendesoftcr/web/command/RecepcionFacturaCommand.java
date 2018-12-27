@@ -20,6 +20,7 @@ public class RecepcionFacturaCommand {
 	private String	cedulaReceptor;
 	private String	numeroConsecutivoReceptor;
 	private Integer	estadoFirma;
+	private String	created_at;
 
 	public RecepcionFacturaCommand() {
 		super();
@@ -39,6 +40,7 @@ public class RecepcionFacturaCommand {
 		this.cedulaReceptor = recepcionFactura.getReceptorCedula();
 		this.numeroConsecutivoReceptor = recepcionFactura.getNumeroConsecutivoReceptor();
 		this.estadoFirma = recepcionFactura.getEstadoFirma();
+		this.created_at = recepcionFactura.getCreated_atSTR();
 	}
 
 	public Long getId() {
@@ -47,6 +49,16 @@ public class RecepcionFacturaCommand {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	
+	public String getCreated_at() {
+		return created_at;
+	}
+
+	
+	public void setCreated_at(String created_at) {
+		this.created_at = created_at;
 	}
 
 	public String getClave() {

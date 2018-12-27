@@ -289,8 +289,8 @@
                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.created_at")} </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.id")}         </th>
+                                <th width="10%" class="table-header">{$.i18n.prop("cuentaCobrar.created_at")} </th>
+                                <th width="10%" class="table-header">{$.i18n.prop("cuentaCobrar.id")}         </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.cliente")}    </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.factura")}    </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.tipo")}       </th>
@@ -298,7 +298,7 @@
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.total")}      </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.totalAbono")} </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.totalSaldo")} </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.estado")}     </th>
+                                <th width="10%" class="table-header">{$.i18n.prop("cuentaCobrar.estado")}     </th>
                                 <th class="table-header">{$.i18n.prop("listado.acciones")}        </th>
                             </tr>
                         </thead>
@@ -814,7 +814,7 @@ function listadoConsulta(){
                     if(self.pararametros ==1){
                        __MantenimientoAgregarAbono()
                     }
-
+                    __imprimirPTV()
                     TotalesGenerales(result.aaData)
                     self.hay_datos  = true
                     self.update()
@@ -1040,22 +1040,22 @@ function listaClientesActivos(){
 **/
 function __InformacionDataTable(){
     self.informacion_tabla = [ 
-                            {'data' :'created_atSTR'             ,"name":"created_atSTR"              ,"title" : $.i18n.prop("cuentaCobrar.created_at")   ,"autoWidth" :true 
+                            {'data' :'created_atSTR'             ,"name":"created_atSTR"              ,"title" : $.i18n.prop("cuentaCobrar.created_at")   ,"autoWidth" :false 
                             },
-                            {'data' :'id'                     ,"name":"id"                      ,"title" : $.i18n.prop("cuentaCobrar.id")           ,"autoWidth" :true },
+                            {'data' :'id'                     ,"name":"id"                      ,"title" : $.i18n.prop("cuentaCobrar.id")           ,"autoWidth" :false },
                             {'data' :'cliente.nombreCompleto' ,"name":"cliente.nombreCompleto"  ,"title" : $.i18n.prop("cuentaCobrar.cliente")      ,"autoWidth" :false },
                             {'data' :'factura'                ,"name":"factura"                 ,"title" : $.i18n.prop("cuentaCobrar.factura")      ,"autoWidth" :false },
-                            {'data' :'fechaPlazo'             ,"name":"fechaPlazo"              ,"title" : $.i18n.prop("cuentaCobrar.fechaPlazo")   ,"autoWidth" :false ,
+                            {'data' :'fechaPlazo'             ,"name":"fechaPlazo"              ,"title" : $.i18n.prop("cuentaCobrar.fechaPlazo")   ,"autoWidth" :true ,
                                 "render":function(fechaPlazo,type, row){
 									return  __displayDate_detail(fechaPlazo);
                                  }
                             },
-                            {'data' : 'codigoMoneda'              ,"name":"codigoMoneda"              ,"title" : $.i18n.prop("cuentaCobrar.codigoMoneda")        ,"autoWidth" :false},
-                            {'data' : 'totalSTR'                 ,"name":"totalSTR"                   ,"title" : $.i18n.prop("cuentaCobrar.total")        ,"autoWidth" :false},
-                            {'data' : 'totalAbonoSTR'            ,"name":"totalAbonoSTR"              ,"title" : $.i18n.prop("cuentaCobrar.totalAbono")   ,"autoWidth" :false },
-                            {'data' : 'totalSaldoSTR'            ,"name":"totalSaldoSTR"              ,"title" : $.i18n.prop("cuentaCobrar.totalSaldo")   ,"autoWidth" :false},
+                            {'data' : 'codigoMoneda'              ,"name":"codigoMoneda"              ,"title" : $.i18n.prop("cuentaCobrar.codigoMoneda")        ,"autoWidth" :true},
+                            {'data' : 'totalSTR'                 ,"name":"totalSTR"                   ,"title" : $.i18n.prop("cuentaCobrar.total")        ,"autoWidth" :true},
+                            {'data' : 'totalAbonoSTR'            ,"name":"totalAbonoSTR"              ,"title" : $.i18n.prop("cuentaCobrar.totalAbono")   ,"autoWidth" :true },
+                            {'data' : 'totalSaldoSTR'            ,"name":"totalSaldoSTR"              ,"title" : $.i18n.prop("cuentaCobrar.totalSaldo")   ,"autoWidth" :true},
                             {'data' : 'estado'                   ,"name":"estado"                  ,"title" : $.i18n.prop("cuentaCobrar.estado")       ,"autoWidth" :false},
-                            {'data' : 'id'                       ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
+                            {'data' : 'id'                       ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : false,
                                 "render":function(id,type, row){
                                       return __Opciones(id,type,row);
                                  }
@@ -1146,14 +1146,80 @@ function __LimpiarAbonos(){
     $("#total").val(null)
     $("#nota").val(null)
 }                      
+
+
 /**
-* Opciones listado de los clientes
+* Opciones listado de cuentas por cobrar
 */
-function __Opciones(){
-  var modificar  = '<a href="#"  title="Ver Cuenta por Cobrar" class="btn btn-primary  btn-buscar btnVer" role="button"> </a>';
-  var abono   = '<a href="#"  title="Ver/Crear abonos" class="btn btn-success btnVerAbono"  role="button"><i class="fa fa-bank"></i></a>';
-  return  modificar +" " + abono;
+function __Opciones(id,type,row){
+    var menu = '<div class="dropdown">' 
+    menu += '       <button class="btn btn-info  btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' 
+    menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>' 
+    menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
+    menu += '<li><a href="#"  title="Ver cuentas por cobrar" class="btnVer" >Mostrar</a></li>'
+    menu += '<li><a href="#"  title="Ver/Crear abonos" class="btnVerAbono" >Abonos</a></li>'
+ 
+   // menu += '<li><a href="#"  title="Imprimir" class="btnImprimirFactura" >Imprimir</a></li>'
+    menu += "</ul></div>"  
+ 
+    return menu;          
 }
+
+/**
+*  imprimir impresora punto de venta
+**/
+function __imprimirPTV(){
+	$('.tableListar').on('click','.btnImprimirFactura',function(e){
+		var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+     
+        consultaFactura(data.factura)
+        
+        
+	});
+}
+
+/**
+*Factura Consulta
+**/
+function consultaFactura(consecutivo){
+     self.factura = null
+     self.update()
+     $.ajax({
+        url: "MostrarFacturaPorConsecutivoAjax",
+        datatype: "json",
+        data: {consecutivo:consecutivo},
+        method:"POST",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                        self.factura = modeloTabla
+                        self.update()
+                        if(self.factura !=null){
+           riot.mount('ptv-imprimir',{factura:self.factura});    
+        }
+                    });
+                }
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+     
+}
+
 /**
 *  Mostrar listado de abonos
 **/
@@ -1342,43 +1408,48 @@ function listaAbonosPorCuentaPorCobrar(){
 **/
 function __InformacionTabla_lista_Abonos(){
     self.informacion_tabla_abonos  = [ 
-                                       {'data':  'id'             ,"name":"id"            ,"title" : $.i18n.prop("abono.id")},
-                                       {'data' : 'fechaPago'      ,"name":"fechaPago"     ,"title" : $.i18n.prop("abono.fechaPago"),
+                                       {'data':  'id'             ,"name":"id"            ,"title" : $.i18n.prop("abono.id"),"autoWidth" : true},
+                                       {'data' : 'fechaPago'      ,"name":"fechaPago"     ,"title" : $.i18n.prop("abono.fechaPago"),"autoWidth" : true,
 									     "render":function(fechaPago,type, row){
 										        return __displayDate_detail(fechaPago);
 	 							             }
                                        },
-                                       {'data' : 'transferencia'  ,"name":"transferencia" ,"title" : $.i18n.prop("abono.transferencia")},
-                                       {'data' : 'recibo'         ,"name":"recibo"        ,"title" : $.i18n.prop("abono.recibo")},
-                                       {'data' : 'totalSTR'       ,"name":"totalSTR"      ,"title" : $.i18n.prop("abono.total")},
-                                       {'data' : 'estado'         ,"name":"estado"        ,"title" : $.i18n.prop("abono.estado")},
-                                       {'data' : 'created_atSTR'  ,"name":"created_atSTR"    ,"title" : $.i18n.prop("abono.created_at")
+                                       {'data' : 'transferencia'  ,"name":"transferencia" ,"title" : $.i18n.prop("abono.transferencia"),"autoWidth" : true},
+                                       {'data' : 'recibo'         ,"name":"recibo"        ,"title" : $.i18n.prop("abono.recibo"),"autoWidth" : true},
+                                       {'data' : 'totalSTR'       ,"name":"totalSTR"      ,"title" : $.i18n.prop("abono.total"),"autoWidth" : true},
+                                       {'data' : 'estado'         ,"name":"estado"        ,"title" : $.i18n.prop("abono.estado"),"autoWidth" : true},
+                                       {'data' : 'created_atSTR'  ,"name":"created_atSTR"    ,"title" : $.i18n.prop("abono.created_at"),"autoWidth" : true
                                        },
-                                       {'data' : 'updated_atSTR'  ,"name":"updated_atSTR"    ,"title" : $.i18n.prop("abono.updated_at") 
-                                       },
-                                       {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"name" : "id",
+                                       {'data' : 'updated_atSTR'  ,"name":"updated_atSTR"    ,"title" : $.i18n.prop("abono.updated_at"),"autoWidth" : true},
+                                       {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"name" : "id","autoWidth" : true,
 									     "render":function(id,type, row){
 										        return __OpcionesAbonos(id,type,row);
 	 							             }
 							        }];
     self.update();
 }
-/**
-* Opciones listado de los Abonos
-*/
-function __OpcionesAbonos(id,type,row){
-  var verAbono  = '<a href="#"  title="Ver abonos" class="btn btn-success verAbono"  role="button"><i class="fa fa-search-plus"></i></a>';
-  var anular  = '<a href="#"  title="Anular abono" class="btn btn-danger anularAbono"  role="button"><i class="fa fa-trash"></i></a>';
-  var imprimir  = '<a href="#"  title="Imprimir" class="btn btn-primary  btn-imprimir btnImprimir" role="button"> </a>';
-  anular = row.estado =="Anulado"?"":anular
-  self.cuentaCobrar = row.cuentaCobrar
-  self.update()
-  if(self.parametros !=1){
-    anular =""
 
-  }
-  return  verAbono + " " + anular + " "+ imprimir;
+function __OpcionesAbonos(id,type,row){
+    var menu = '<div class="dropdown">' 
+    menu += '       <button class="btn btn-info  btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' 
+    menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>' 
+    menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
+    menu += '<li><a href="#"  title="Ver abonos" class="verAbono" >Mostrar</a></li>'
+    if(row.estado !="Anulado" ){
+       menu += '<li><a href="#"  title="Anular abono" class="anularAbono" >Anular</a></li>'
+    }
+    if(self.parametros !=1){
+       menu += '<li><a href="#"  title="Anular abono" class="anularAbono" >Anular</a></li>'
+    }
+    self.cuentaCobrar = row.cuentaCobrar
+    self.update()
+    menu += '<li><a href="#"  title="Imprimir" class="btnImprimir" >Imprimir</a></li>'
+    menu += "</ul></div>"  
+ 
+    return menu;          
 }
+
+
 /**
  * mostrar la abono
  */

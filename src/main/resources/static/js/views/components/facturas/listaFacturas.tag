@@ -1072,7 +1072,7 @@ function __InformacionDataTable(){
 
                                {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
-                                      return __Opciones(id,type,row);
+                                      return __Opciones(id,type,row); 
                                  }
 	      		            }];
     self.update();

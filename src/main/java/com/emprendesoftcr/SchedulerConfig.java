@@ -6,17 +6,17 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
 @Configuration
-public class SchedulerConfig  implements SchedulingConfigurer  {
-	
-	 private final int POOL_SIZE = 5;
+public class SchedulerConfig implements SchedulingConfigurer {
 
-   @Override
-   public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
-       ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-       threadPoolTaskScheduler.setPoolSize(POOL_SIZE);
-       threadPoolTaskScheduler.setThreadNamePrefix("Procesos-");
-       threadPoolTaskScheduler.initialize();
-       scheduledTaskRegistrar.setTaskScheduler(threadPoolTaskScheduler);
-}
+	private final int POOL_SIZE = 5;
+
+	@Override
+	public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
+		ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+		threadPoolTaskScheduler.setPoolSize(POOL_SIZE);
+		threadPoolTaskScheduler.setThreadNamePrefix("Procesos-");
+		threadPoolTaskScheduler.initialize();
+		scheduledTaskRegistrar.setTaskScheduler(threadPoolTaskScheduler);
+	}
 
 }

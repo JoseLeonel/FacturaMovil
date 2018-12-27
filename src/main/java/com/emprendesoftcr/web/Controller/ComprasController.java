@@ -195,8 +195,8 @@ public class ComprasController {
 	private ByteArrayOutputStream createExcelRecepcionCompras(Collection<RecepcionFactura> recepcionFacturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Id", "Fecha Emision", "Clave","# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "# Factura", "Total Impuestos", "Total", "Tipo Moneda", "Tipo Cambio");
-		new SimpleExporter().gridExport(headers, recepcionFacturas, "id, fechaEmisionSTR,facturaClave, numeroConsecutivoReceptor, emisorCedula, emisorNombre, facturaConsecutivo, totalImpuestosSTR,totalFacturaSTR, facturaCodigoMoneda, facturaTipoCambio", baos);
+		List<String> headers = Arrays.asList("Id","Fecha Ingreso", "Fecha Emision", "Clave","# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "# Factura", "Total Impuestos", "Total", "Tipo Moneda", "Tipo Cambio");
+		new SimpleExporter().gridExport(headers, recepcionFacturas, "id, created_atSTR,fechaEmisionSTR,facturaClave, numeroConsecutivoReceptor, emisorCedula, emisorNombre, facturaConsecutivo, totalImpuestosSTR,totalFacturaSTR, facturaCodigoMoneda, facturaTipoCambio", baos);
 		return baos;
 	}
 

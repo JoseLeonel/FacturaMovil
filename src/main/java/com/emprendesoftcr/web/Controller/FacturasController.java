@@ -1032,6 +1032,8 @@ public class FacturasController {
 			recepcionFactura.setNumeroConsecutivoReceptor(empresaBo.generarConsecutivoRecepcionFactura(usuarioSesion.getEmpresa(), usuarioSesion, recepcionFactura));
 			recepcionFactura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
 			recepcionFactura.setEmpresa(usuarioSesion.getEmpresa());
+			recepcionFactura.setCreated_at(new Date());
+			recepcionFactura.setUpdated_at(new Date());
 			recepcionFacturaBo.agregar(recepcionFactura);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("recepcionFactura.agregar.correctamente", recepcionFactura);
 
@@ -1048,8 +1050,8 @@ public class FacturasController {
 	 * @param id
 	 * @return
 	 */
-	@Autowired
-	private OpenIDConnectHaciendaComponent openIDConnectHaciendaComponent;
+//	@Autowired
+//	private OpenIDConnectHaciendaComponent openIDConnectHaciendaComponent;
 
 	@RequestMapping(value = "/MostrarFacturaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
