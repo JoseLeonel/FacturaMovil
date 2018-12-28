@@ -198,7 +198,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
 
-	@Scheduled(cron = "0 0/1 * * * ?")
+	//@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -366,7 +366,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html Proceso automatico para ejecutar aceptacion del documento
 	 */
-	@Scheduled(cron = "0 0/5 * * * ?")
+//	@Scheduled(cron = "0 0/5 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -551,7 +551,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Solo se van enviar correos a la empresa cuando es un cliente o correo alternativo los tiquetes de clientes frecuentes no lo vamos enviar para ver el comportamiento de rendimiento Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	 @Scheduled(cron = "0 0/5 * * * ?")
+	// @Scheduled(cron = "0 0/5 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -856,7 +856,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/3 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -928,8 +928,12 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 									}
 
 									if (factura != null) {
-										factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
-										facturaBo.modificar(factura);
+										Factura facturaBD = facturaBo.findById(factura.getId());
+										if(facturaBD !=null) {
+											facturaBD.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
+											facturaBo.modificar(facturaBD);
+											
+										}
 									}
 								}
 
@@ -955,7 +959,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/25 * * * ?")
+	//@Scheduled(cron = "0 0/25 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {

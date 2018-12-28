@@ -466,7 +466,7 @@
                     <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
                         <div class="form-group has-success">
                             <label >Cantidad:</label>
-                            <input  type="number"  class="form-control cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus">
+                            <input  type="number"  class="form-control cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus" min="0">
                         </div>
                     </div>
                 </div> 
@@ -493,7 +493,7 @@
                     <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
                         <div class="form-group has-success">
                             <label >{$.i18n.prop("factura.linea.detalle.descuento")}</label>
-                            <input  type="number"  class="form-control aplicarDescuento" id="aplicarDescuento" name = "aplicarDescuento" autofocus="autofocus">
+                            <input  type="number"  class="form-control aplicarDescuento" id="aplicarDescuento" name = "aplicarDescuento" autofocus="autofocus" min="0">
                         </div>
                     </div>
                 </div> 

@@ -50,6 +50,7 @@
 					</div>
                     <div class="box-body">
                         <form id="formularioCompra">
+                            <input   type="hidden" class="proveedor" id="proveedor" name="proveedor" value="{proveedor.id}">
                             <input id="id" name="id" type="hidden" value="{compra.id}">
                             <div class="row">
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
@@ -71,13 +72,6 @@
                                 </div>
                             </div>    
                             <div class="row">
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                                    <div class="form-group ">
-                                        <input   type="hidden" class="form-control campo proveedor" id="proveedor" name="proveedor" value="{proveedor.id}">
-                                        <label>{$.i18n.prop("compra.proveedor")}</label> 
-                                        <input onclick = {_EscogerProveedores}  type="text" id="nombreProveedor" name="nombreProveedor" class="campo nombreProveedor form-control"  value="{proveedor.nombreCompleto}">
-                                    </div>
-                                </div>
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("compra.consecutivo")}</label> 
@@ -165,6 +159,14 @@
             <div  class="contenedor-compra " >
                 <div class="cabecera-izquierda">
                     <div class="row">
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                            <div class="form-group ">
+                                <label>{$.i18n.prop("compra.proveedor")}</label> 
+                                <input onclick = {_EscogerProveedores}  type="text" id="nombreProveedor" name="nombreProveedor" class="campo nombreProveedor form-control"  value="{proveedor.nombreCompleto}">
+                            </div>
+                        </div>
+                    </div>            
+                    <div class="row">
                         <div class="col-sx-6 col-sm-6 col-md-6 col-lg-6">
                             <input onkeypress={__addProductToDetail}  id="codigo" class="campo" type="text" placeholder="XXXXXXXXXXX" />
                         </div>
@@ -198,16 +200,16 @@
                             <td><h2>{codigo}</h2></td>
                             <td><h2>{descripcion}</h2></td>
                             <td class="text-right">
-                                <input onkeypress={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalleBlur} id= "cantidadDetalle" class="campo" type="number" step="any" placeholder="Cantidad Detalle" value = {cantidad} />
+                                <input onkeypress={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalleBlur} id= "cantidadDetalle" class="campo" type="number" step="any" placeholder="Cantidad Detalle" value = {cantidad} min="1" pattern="^[0-9]+"/>
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarCostoKeyPress} onBlur={__actualizarCostoBlur} class="campo" type="number" step="any"  value = "{costo}" />
+                                <input  onkeypress={__actualizarCostoKeyPress} onBlur={__actualizarCostoBlur} class="campo" type="number" step="any"  value = "{costo}" min="0" pattern="^[0-9]+"/>
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarPrecioKeyPress} onBlur={__actualizarPrecioBlur} class="campo" type="number" step="any"  value = "{precio}" />
+                                <input  onkeypress={__actualizarPrecioKeyPress} onBlur={__actualizarPrecioBlur} class="campo" type="number" step="any"  value = "{precio}" min="0" pattern="^[0-9]+"/>
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarDescuentoKeyPress} onBlur={__actualizarDescuentoBlur} class="campo" type="number" step="any"  value = "{descuento}" />
+                                <input  onkeypress={__actualizarDescuentoKeyPress} onBlur={__actualizarDescuentoBlur} class="campo" type="number" step="any"  value = "{descuento}"  min="0" pattern="^[0-9]+" />
                             </td>
                             <td class="text-right">
                                 <h2>{totalImpuesto.toFixed(2)} </h2>
@@ -577,7 +579,7 @@
     self.articulos             = {data:[]}
     self.proveedores           = {data:[]}
     self.detalleCompra         ={data:[]}
-    self.proveedor             = {};
+    self.proveedor             = null;
     self.compras_espera         = {data:[]}  
     self.informacion_tabla             = []
     self.informacion_tabla_articulo    = []
@@ -594,8 +596,6 @@
         __informacionData()
         __InicializarTabla('.tableListaProveedor')
         __InicializarTabla('.tableListaInventario')
-        
-        
         agregarInputsCombos_Articulo()
           __ListaComprasEnEspera()
         __comboFormaPagos()
@@ -603,9 +603,6 @@
         __Teclas()
         __ListaDeProveedores()
         __Init()
-        
-       
-        
     })
 /**
 * Camps requeridos
@@ -733,7 +730,7 @@ function __Init(){
     self.articulo              = null;
     self.articulos                     = {data:[]}
     self.proveedores                   = {data:[]}
-    self.proveedor                     = {};
+    self.proveedor                     = null;
     self.mostrarFormularioPago = false
     self.mostarParaCrearNuevaCompra = true
     self.mostrarCamposIngresoContado = true;
@@ -755,7 +752,7 @@ function __Init(){
 function __CompraEnEspera(compra){
      __Init()
     self.detail         = []
-    self.proveedor      = {}         
+    self.proveedor      = null         
     self.update()
     $.ajax({
         url: "MostrarCompraEsperaAjax",
@@ -1036,13 +1033,17 @@ function __ListaDeProveedores(){
 * Buscar el codigo del codigo  en la base de datos
 **/
 function __buscarcodigo(idArticulo,cantidad){
+    if(self.proveedor == null){
+        swal('','Antes de ingresar articulos a la compra asociar el proveedor','error');
+        return 
+    }
     self.articulo = null;
     self.update()
     $.ajax({
          datatype: "json",
-        url: 'findArticuloByCodigojax.do',
+        url: 'findArticuloProveedorByCodigojax.do',
         method:"GET",
-        data:{codigoArticulo:idArticulo},
+        data:{codigoArticulo:idArticulo,idProveedor:self.proveedor.id},
         success: function(data){
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
@@ -1174,9 +1175,10 @@ __actualizarCostoBlur(e){
 
 function __ActualizarCosto(costo){
     var index = self.detail.indexOf(self.item);
+   
     //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
     costo =__valorNumerico(costo);
-    self.item.costo = parseFloat(costo);  
+    self.item.costo = parseFloat(costo) ;  
     _cambiaImpuesto()
     __actualizarItemArray();
     self.detail[index] = self.item;
