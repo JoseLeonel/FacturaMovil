@@ -99,12 +99,12 @@
                                         <td class="precio" ><strong>{facturaImpresa.tipoCambioSTR}</strong></td>
                                         <br>
                                     </tr>
-                                    <tr>
+                                     <tr>
                                     <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
                                     </tr>
-                                    
                                 </tbody>
                                 </table> 
+                                
                                 <p  align="left" show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 0}">E=Excento G=Gravado  
                                 
                                 <p  align="left" show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 0}">{$.i18n.prop("tikect.autorizado.parte.uno")}  <br>
@@ -330,24 +330,33 @@
 <script>
 
 var self = this;
-self.facturaImpresa   = opts.factura;  
+self.parametro   = opts.parametros;  
 self.detalles = []
 self.titulo = ""
 self.claveParteUno =""
 self.claveParteDos =""
 self.totalImpuestoServicio = 0
 self.subTotal = 0
+self.facturaActiva = 0
+self.facturaImpresa = {
+    empresa:{
+        imprimirDirecto:0
+    }
+}
+
 self.on('mount',function(){
-    if(self.facturaImpresa.id > 0){
-       consultaFactura(self.facturaImpresa.id)
-       if(self.facturaImpresa.empresa.noFacturaElectronica == 0){
-          qr()    
-       }
+    document.getElementById('divQR').innerHTML = '';
+    if(self.parametro.factura.id > 0){
+       consultaFactura(self.parametro.factura.id)
+       if(self.parametro.factura.empresa.noFacturaElectronica == 0){
+           qr()    
+        }
+                    
     }
-    if (self.facturaImpresa.empresa.imprimirDirecto == 1 ){
-        __imprimir()
-    }
+     
+    
 })
+
 
 
 
@@ -370,7 +379,7 @@ function qr(){
         // background color or image element, null for transparent background
         background: null,
         // content
-        text: self.facturaImpresa.clave,
+        text: self.parametro.factura.clave,
         // corner radius relative to module width: 0.0 .. 0.5
         radius: 0,
 
@@ -389,19 +398,24 @@ function qr(){
         mPosX: 0.5,
         mPosY: 0.5,
 
-        label: self.facturaImpresa.clave,
+        label: self.parametro.factura.clave,
         fontname: 'sans',
         fontcolor: '#000',
 
         image: null
     }
+   
+   
     $('#divQR').qrcode(options);
 }
+
+
 /**
 *consultar Facturas
 **/
 function consultaFactura(idFactura){
-
+     self.facturaImpresa =null
+     self.update()
      $.ajax({
         url: "MostrarFacturaAjax",
         datatype: "json",
@@ -416,6 +430,7 @@ function consultaFactura(idFactura){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                     self.facturaImpresa = modeloTabla
+                    console.log(self.facturaImpresa)
                     self.update()
                     self.detalles = []
                     self.detalles =self.facturaImpresa.detalles
@@ -453,12 +468,17 @@ function consultaFactura(idFactura){
                     }
                     self.update()
                     });
-                    if (self.facturaImpresa.empresa.imprimirDirecto == 0 ){
+                    if (self.facturaImpresa.empresa.imprimirDirecto == 0 || self.parametro.facturaDia ==1){
                         $('.imprimirModal').modal('show');   
                     }else{
                      //   __imprimir()
                     }
-                   
+                     if (self.parametro.factura.empresa.imprimirDirecto == 1 && self.parametro.facturaDia ==0 ){
+                      __imprimir()
+                     }
+                    
+                    
+
                 }
             }
         },
@@ -599,11 +619,11 @@ function imprimirElemento(elemento){
     
   
   var ventana = window.open('', 'PRINT', 'height=400,width=600');
-  ventana.document.write('<html><head><title>' + "" + '</title>');
-  ventana.document.write('</head><body >');
+  var html = "<!DOCTYPE HTML>";
+  html += '<html><head><title>' + "" + '</title>'
+  html += '</head><body id="imprimirLaFactura" >'
+  ventana.document.write(html);
   ventana.document.write(elemento.innerHTML);
-  //ventana.document.write("<br><img src='"+canvas.toDataURL()+"'/>");
- 
   ventana.document.write('</body></html>');
   ventana.document.close();
   ventana.focus();

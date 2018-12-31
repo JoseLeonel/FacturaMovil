@@ -99,7 +99,7 @@ public class DetalleCompra implements Serializable {
 	public DetalleCompra(DetalleCompraCommand detalleCompraCommand) {
 		super();
 
-		this.numeroLinea = detalleCompraCommand.getLinea();
+		this.numeroLinea = detalleCompraCommand.getNumeroLinea();
 		this.costo = Utils.roundFactura(detalleCompraCommand.getCosto() !=null?detalleCompraCommand.getCosto():Constantes.ZEROS_DOUBLE,5);
 		this.cantidad = detalleCompraCommand.getCantidad();
 		this.impuesto = Utils.roundFactura(detalleCompraCommand.getImpuesto() !=null?detalleCompraCommand.getImpuesto():Constantes.ZEROS_DOUBLE,5);

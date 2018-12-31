@@ -293,16 +293,9 @@ self.totalImpuestoServicio = 0
 self.subTotal = 0
 
 self.on('mount',function(){
-    
     if(self.facturaImpresa.id > 0){
-
-
        consultaFactura(self.facturaImpresa.id)
     }
-   
-   
-   
-
 })
 
 function consultaFactura(idFactura){

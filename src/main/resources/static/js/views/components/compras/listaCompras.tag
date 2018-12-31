@@ -248,7 +248,7 @@
                         </thead>
                         <tbody>
                         <tr each={detail}>
-                            <td>{linea}</td>
+                            <td>{numeroLinea}</td>
                             <td>{codigo}</td>
                             <td>{descripcion}</td>
                             <td class="text-right">
@@ -270,7 +270,10 @@
                             </td>
                         </tr>
                         </tbody>
-                    </table>          
+                    </table>   
+                     <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                        {$.i18n.prop("btn.volver")}
+                    </button>       
                 </div>
                 <section class="cabecera-derecha">
 				    <!--right sidebar-->
@@ -554,7 +557,12 @@ self.on('mount',function(){
     
 
 })
-
+ 
+ __regresarAlListado(){
+     self.mostrarCompra         = false
+     self.mostrarListado        = true
+     self.update()
+ }
 /**
 * Camps requeridos
 **/
@@ -798,10 +806,13 @@ function __MostrarCompra(){
 **/
 function cargarDetallesCompra(){
     self.detail = []
+    self.numeroLinea =  0
+    self.pesoPrioridad = 0
     self.update()
     self.compra.detalleCompras.forEach(function(e){
         self.detail.push({
-            linea           : e.numeroLinea,
+            numeroLinea     : e.numeroLinea,
+            pesoPrioridad    :e.numeroLinea,
             articulo_id     : e.articulo.id,
             codigo          : e.articulo.codigo,
             descripcion     : e.articulo.descripcion,
@@ -816,6 +827,15 @@ function cargarDetallesCompra(){
     })
     self.mostrarCompra         = true
     self.mostrarListado        = false
+    self.detail.sort(function(a,b) {
+    if ( a.pesoPrioridad > b.pesoPrioridad )
+        return -1;
+    if ( a.pesoPrioridad < b.pesoPrioridad )
+        return 1;
+    return 0;
+    } );
+    
+    
     self.update()
 }
 

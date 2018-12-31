@@ -381,7 +381,12 @@ function evaluarFactura(data){
                 //Envia a la pantalla de impresion
             self.facturaReimprimir = modeloTabla
             self.update()
-            riot.mount('ptv-imprimir',{factura:self.facturaImprimir}); 
+             var parametros = {
+                          factura:modeloTabla,
+                          facturaDia:0
+                      }
+                      console.log("consultaFactura")
+                      riot.mount('ptv-imprimir',{parametros:parametros}); 
             __eliminarFacturaListado()
             
         });

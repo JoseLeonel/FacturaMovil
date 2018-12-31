@@ -669,7 +669,7 @@ function reimprimirFacturaEnMomento(){
   if(self.facturaReimprimir ==null){
       return
   }
-  riot.mount('ptv-imprimir',{factura:self.facturaReimprimir});
+  consultaFactura(self.facturaReimprimir,0)
   $('.codigo').select()
   $(".codigo").focus() 
 }
@@ -838,13 +838,13 @@ function __reimprimir(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        consultaFactura(data)
+        consultaFactura(data,0)
 	});
 }
 /**
 * Consultar la factura
 **/
-function consultaFactura(data){
+function consultaFactura(data,tipoImpresion){
      $.ajax({
         url: "MostrarFacturaAjax",
         datatype: "json",
@@ -858,7 +858,12 @@ function consultaFactura(data){
             }else{
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
-                       riot.mount('ptv-imprimir',{factura:modeloTabla});
+                        var parametros = {
+                          factura:modeloTabla,
+                          facturaDia:tipoImpresion
+                      }
+                      console.log("consultaFactura")
+                      riot.mount('ptv-imprimir',{parametros:parametros});
                     });
                 }
             }
@@ -1438,7 +1443,12 @@ function evaluarFactura(data){
                         timer: 1500
                      })
                 }else{
-                    riot.mount('ptv-imprimir',{factura:self.facturaImprimir}); 
+                     var parametros = {
+                          factura:modeloTabla,
+                          facturaDia:0
+                      }
+                      console.log("consultaFactura")
+                      riot.mount('ptv-imprimir',{parametros:parametros});
                 }
                
             }else{

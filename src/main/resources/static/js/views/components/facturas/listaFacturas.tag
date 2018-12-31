@@ -992,9 +992,13 @@ function __displayDate_detail(fecha) {
 function cargarDetallesFacturaEnEspera(){
     self.factura.tipoDoc = __TipoDocumentos(self.factura.numeroConsecutivo,self.factura)
     self.detail                = []
+    self.numeroLinea =  0
+    self.pesoPrioridad = 0
+    self.update()
     self.factura.detalles.forEach(function(e){
         self.detail.push({
             numeroLinea     : e.numeroLinea,
+            pesoPrioridad    :e.numeroLinea,
             codigo          : e.codigo,
             descripcion     : e.descripcion,
             cantidad        : e.cantidadSTR,
@@ -1008,6 +1012,14 @@ function cargarDetallesFacturaEnEspera(){
             montoTotal      : e.montoTotalSTR
         });
     })
+    self.detail.sort(function(a,b) {
+    if ( a.pesoPrioridad > b.pesoPrioridad )
+        return -1;
+    if ( a.pesoPrioridad < b.pesoPrioridad )
+        return 1;
+    return 0;
+    } );
+
     self.update()
     __comboCondicionPago()
     __ComboEstados()
@@ -1132,7 +1144,12 @@ function __imprimirPTV(){
 	    }
         self.factura = data
         self.update()
-        riot.mount('ptv-imprimir',{factura:self.factura});    
+        var parametros = {
+                          factura:self.factura,
+                          facturaDia:1
+                      }
+                      console.log("consultaFactura")
+                      riot.mount('ptv-imprimir',{parametros:parametros});   
 	});
 }
 /**

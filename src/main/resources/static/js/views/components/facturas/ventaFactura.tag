@@ -56,7 +56,7 @@
                 <a class="pull-left" href="#"    onclick = {__ImprimirTiquete}  title="{$.i18n.prop("imprimir.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f7")}</span></a>
                 <a class="pull-left" href="#"    onclick = {__MostrarFormularioDePago}  title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
                 <a class="pull-left" href="#"    onclick= { __CrearFacturaTemporal}  title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
-                
+                <a class="pull-left" href="#" show={mostarAbrirCajon == true}   onclick = {__AbrirCajon} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("abrir.cajon")}</span></a>
                 <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
                    
             </div>
@@ -1077,6 +1077,7 @@ td.col-xl-12, th.col-xl-12 {
         total:0,
         id:null
     }
+    self.mostarAbrirCajon = true 
     self.on('mount',function(){
         $("#formularioFactura").validate(reglasDeValidacionFactura());
         $("#formularioAgregarNombreTiquete").validate(reglasAgregarNombre());
@@ -1088,6 +1089,7 @@ td.col-xl-12, th.col-xl-12 {
         __InicializarTabla('.tableListaVendedor')
         agregarInputsCombos_Articulo()
         __ListaFacturasEnEspera()
+        _Empresa()
        // setInterval(function() {
             // triggering the "ready" event will resolve the promise
         //    __ListaFacturasEnEspera()
@@ -1531,15 +1533,16 @@ function __reimprimir(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        var factura = data
-        consultaParaReimprimir(data)
+        //var factura = data
+        consultaParaReimprimir(data,1)
+       // riot.mount('ptv-imprimir',{factura:data});
 	});
 }
 
 /**
 *Consulta la Reimprimir
 **/
-function consultaParaReimprimir(data){
+function consultaParaReimprimir(data,tipoImpresion){
      $.ajax({
         url: "MostrarFacturaAjax",
         datatype: "json",
@@ -1553,8 +1556,11 @@ function consultaParaReimprimir(data){
             }else{
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
-                    //   $('#modalFacturasDia').modal('hide') 
-                       riot.mount('ptv-imprimir',{factura:modeloTabla});
+                     var parametros = {
+                          factura:modeloTabla,
+                          facturaDia:tipoImpresion
+                      }
+                       riot.mount('ptv-imprimir',{parametros:parametros});
                     });
                 }
             }
@@ -1651,7 +1657,8 @@ function __TipoCambio(){
 **/
 __Imprimir(){
     var factura = self.factura
-    riot.mount('ptv-imprimir',{factura:factura});
+    consultaParaReimprimir(factura,1)
+    //riot.mount('ptv-imprimir',{factura:factura});
 }
 /**
 * Imprimir tikete
@@ -2286,7 +2293,12 @@ function evaluarFactura(data){
                         timer: 1500
                      })
                 }else{
-                    riot.mount('ptv-imprimir',{factura:self.facturaImprimir}); 
+                    var parametros = {
+                          factura:modeloTabla,
+                          facturaDia:0
+                      }
+                      console.log("consultaFactura")
+                      riot.mount('ptv-imprimir',{parametros:parametros});
                 }
                
             }else{
@@ -3186,6 +3198,10 @@ function __Teclas(){
     if(tecla ==113){
        __Init()
     }
+      //Insert = abrir Cajon
+    if(tecla ==45){
+       __OpcionAbrirCajon()
+    }
     }, false );
 }
 
@@ -3258,6 +3274,110 @@ function _incluirBilletes(modena,descripcion,valor,imagen){
         }
     )
     self.update()
+}
+
+/**
+* Consultar la empresa
+**/
+function _Empresa(){
+     $.ajax({
+        url: "ParametrosEmpresaAjax.do",
+        datatype: "json",
+        
+        method:"GET",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                       self.empresa = modeloTabla
+                       if(self.empresa.separarCuenta == 1){
+                    	   self.separarCuenta = true;
+                       }
+                       if(self.empresa.abrirSinComanda == 0 && self.empresa.abrirConComanda == 0){
+                         self.mostarAbrirCajon = false
+                       }
+                       self.update()
+                    });
+                }
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
+        }
+    });
+}
+__AbrirCajon(){
+  __OpcionAbrirCajon()  
+}
+
+/**
+*  Opcion para abrir la comanda
+**/
+function __OpcionAbrirCajon(){
+    self.informacionAbrirCajon = "."
+    self.update()
+    if(self.empresa.abrirSinComanda == 1){
+        abrirCajonDineroSinComanda()  
+    }
+    if(self.empresa.abrirConComanda == 1){
+      abrirCajonDineroConComanda()
+    }
+
+}
+
+/**
+*Abrir el cajon de dinero sin comanda
+**/
+function abrirCajonDineroSinComanda(){
+  var div = document.querySelector("#imprAbriCajon");
+  var ventana = window.open('', 'PRINT', 'height=20,width=20');
+  ventana.document.write('<html><head><title>' + "" + '</title>');
+  ventana.document.write('</head><body >');
+  ventana.document.write(div.innerHTML);
+  ventana.document.write('</body></html>');
+  ventana.document.close();
+  ventana.focus();
+  ventana.print();
+  ventana.close();
+  return true;
+}
+
+/**
+* Abrir con con comanda
+**/
+function abrirCajonDineroConComanda(){
+//Se forman los detalles a enviar a la comanda
+		var informacion = {
+			mesa: "Abrir Cajon",        	
+			mesero: "abrirCajon",        	
+		    nombreImpresora:self.empresa.impresoraFactura,
+		    cantidadCaracteresLinea:"40",
+		    formatoTiquete:"",
+		    detalles:""
+		}    
+
+		var JSONData = JSON.stringify(informacion);		
+		//Envia a imprimir a la comanda
+	    $.ajax({
+	        contentType: 'application/json',
+	        url: 'http://localhost:8033/service/abrirCajonDinero',
+	        datatype: "json",
+	        data : JSONData,
+	        method:"POST",
+	        success: function (result) {
+	      	  
+	        },
+	        error: function (xhr, status) {
+	            console.log(xhr);
+	            mensajeErrorServidor(xhr, status);
+	        }
+	    });		
+	
 }
 </script>
 </venta-factura>

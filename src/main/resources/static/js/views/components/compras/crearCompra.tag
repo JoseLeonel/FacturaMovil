@@ -196,7 +196,7 @@
                             <td>
                                 <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
                             </td>
-                            <td><h2>{linea}</h2></td>
+                            <td><h2>{numeroLinea}</h2></td>
                             <td><h2>{codigo}</h2></td>
                             <td><h2>{descripcion}</h2></td>
                             <td class="text-right">
@@ -591,6 +591,8 @@
     self.totalGeneralDescuento = 0;
     self.totalGeneralImpuesto  = 0;
     self.totalGeneralCompra    = 0; 
+    self.numeroLinea =0
+     self.pesoPrioridad =  0
     self.on('mount',function(){
         $("#formularioCompra").validate(reglasDeValidacionCompra());
         __informacionData()
@@ -602,6 +604,12 @@
         __ComboTipoDocumentos()
         __Teclas()
         __ListaDeProveedores()
+        $('.datepickerFechaCompra').datepicker(
+        {
+            format: 'yyyy-mm-dd',
+            todayHighlight:true,
+        }
+    );
         __Init()
     })
 /**
@@ -710,6 +718,8 @@ function __Init(){
          );
     $('.nota').val(null)
     $('.consecutivo').val(null)
+    self.numeroLinea =0
+     self.pesoPrioridad =  0
     self.detail                = [];
      self.compra                = {
         consecutivo:"",
@@ -757,7 +767,7 @@ function __CompraEnEspera(compra){
     $.ajax({
         url: "MostrarCompraEsperaAjax",
         datatype: "json",
-        data: compra,
+        data: {id:compra.id},
         method:"POST",
         success: function (data) {
             if (data.status != 200) {
@@ -795,11 +805,14 @@ function __displayDate_detail(fecha) {
 *  Cargar detalles Compra Espera
 **/
 function cargarDetallesCompraEnEspera(){
-    self.detail = []
+    self.detail = [];
+    self.numeroLinea =  0
+    self.pesoPrioridad = 0
     self.update()
     self.compra.detalleCompras.forEach(function(e){
         self.detail.push({
-            linea           : e.numeroLinea,
+            numeroLinea     : e.numeroLinea,
+            pesoPrioridad    :e.numeroLinea,
             articulo_id     : e.articulo.id,
             codigo          : e.articulo.codigo,
             descripcion     : e.articulo.descripcion,
@@ -813,7 +826,19 @@ function cargarDetallesCompraEnEspera(){
             subTotal        : parseFloat(e.subTotal),
             montoTotalLinea : e.montoTotalLinea
         });
+        self.numeroLinea = self.numeroLinea + 1
+        self.cantArticulos = self.cantArticulos + 1
+        self.pesoPrioridad = self.numeroLinea
+
     })
+    self.detail.sort(function(a,b) {
+    if ( a.pesoPrioridad > b.pesoPrioridad )
+        return -1;
+    if ( a.pesoPrioridad < b.pesoPrioridad )
+        return 1;
+    return 0;
+    } );
+    
     self.update()
      __calculate(); 
 }
@@ -838,7 +863,7 @@ function crearCompra(estadoCompra){
         consecutivo:$('.consecutivo').val(),
         estado:estadoCompra,
         fechaCredito:$('.formaPago').val() == 2?$('.fechaCredito').val():new Date(),
-        fechaCompra:$('.fechaCompra').val(),
+        fechaCompra:$('.fechaCompra').val() == null ? new Date():$('.fechaCompra').val(),
         detalleCompra :JSONDetalles
      }
     $.ajax({
@@ -1069,6 +1094,7 @@ function __buscarcodigo(idArticulo,cantidad){
 *  Agregar un articulo si existe se suma la cantidad y no existe se agrega en el detalle
 **/
 function __agregarArticulo(cantidad){
+  
     if(self.articulo == null){
         return;
     }
@@ -1122,8 +1148,12 @@ function __nuevoArticuloAlDetalle(cantidad){
     var totalImpuesto     = __valorNumerico(montoImpuestoV) * __valorNumerico(cantidad) 
     var montoTotalLinea   = __valorNumerico(self.articulo.costo * cantidad) +  totalImpuesto
     self.descuento      = 0;
+    self.pesoPrioridad =  self.pesoPrioridad + 1
+    self.numeroLinea = self.numeroLinea + 1
+
     self.detail.push({
-       linea           : 0,
+       numeroLinea     : self.numeroLinea,
+       pesoPrioridad   :self.pesoPrioridad,  
        articulo_id     : self.articulo.id,
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
@@ -1136,17 +1166,10 @@ function __nuevoArticuloAlDetalle(cantidad){
        descuento       : 0,
        montoTotalLinea : __valorNumerico(montoTotalLinea)
     }); 
-    var cont = 0;
-    self.detail.forEach(function(elemen){
-            elemen.linea = cont + 1
-            cont = elemen.linea
-        }
-    )
-    self.update()
     self.detail.sort(function(a,b) {
-    if ( a.linea > b.linea )
+    if ( a.pesoPrioridad > b.pesoPrioridad )
         return -1;
-    if ( a.linea < b.linea )
+    if ( a.pesoPrioridad < b.pesoPrioridad )
         return 1;
     return 0;
     } );
@@ -1222,12 +1245,21 @@ __removeProductFromDetail(e) {
     var item = e.item;
     index = this.detail.indexOf(item);
     this.detail.splice(index, 1);
-    var cont = 0 ;
-    self.detail.forEach(function(elemen){
-            elemen.linea = cont + 1
-            cont = elemen.linea
-        }
-    )
+    var num = 0
+    for (var count = 0; count < self.detail.length; count++) {
+         num = num + 1 
+    }
+    if(num > 0){
+        var cont  = 0
+       self.detail.forEach(function(elemen){
+            elemen.numeroLinea = num 
+            num = num > 0?num -1:1
+            cont =  cont + 1
+        })  
+        self.numeroLinea =  cont
+    }
+     
+
     self.update()
      __calculate();
  }
@@ -1454,6 +1486,8 @@ function __seleccionarProveedores() {
 	     }
 	    self.proveedor = data
         self.update();
+        $('#modalProveedores').modal('hide') 
+
     });
 }
 /**
