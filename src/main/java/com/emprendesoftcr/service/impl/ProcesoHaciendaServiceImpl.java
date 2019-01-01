@@ -6,6 +6,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +22,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -61,6 +61,8 @@ import com.emprendesoftcr.service.TiqueteXMLService;
 import com.emprendesoftcr.type.RespuestaHacienda;
 import com.emprendesoftcr.type.json.RespuestaHaciendaJson;
 import com.google.common.base.Function;
+
+import xades4j.utils.Base64;
 
 /**
  * Servicio de envio de los documentos de hacienda
@@ -347,7 +349,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			// XML se convierte en base 64
 			String valor = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
 			if (valor.length() > 0) {
-				String base64 = FacturaElectronicaUtils.base64Encode(valor.trim().getBytes("UTF-8"));
+			  
+				String base64 = FacturaElectronicaUtils.base64Encode(valor.getBytes(StandardCharsets.UTF_8));
 				recepcion.setComprobanteXml(base64);
 				ObjectMapper mapperObj = new ObjectMapper();
 				String jsonStr = mapperObj.writeValueAsString(recepcion);
