@@ -124,6 +124,7 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
  private String createInfo(String xmlSinFirmar, String qualifyingProperties, String urlXMLNS) throws Exception {
 	 String resultado = Constantes.EMPTY;
 	 try {
+		 
 		 resultado =  "<ds:SignedInfo xmlns=\"" + urlXMLNS + "\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
          "<ds:CanonicalizationMethod Algorithm=\"http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments\"></ds:CanonicalizationMethod>" +
          "<ds:SignatureMethod Algorithm=\"http://www.w3.org/2001/04/xmldsig-more#rsa-sha256\"></ds:SignatureMethod>" +

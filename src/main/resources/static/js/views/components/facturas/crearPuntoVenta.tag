@@ -1130,6 +1130,10 @@ function __EnterFacturar(){
     if(self.empresa.enterFacturar == 0){
         return
     }
+    if(self.empresa.abrirSinComanda == 1 || self.empresa.abrirConComanda == 1 ){
+      //Abrir cajon sin comanda
+      __OpcionAbrirCajon()
+    }  
   
 
    swal({
@@ -1191,6 +1195,7 @@ __AplicarYcrearFactura(){
 * Aplicando factura temporal
 **/
 __AplicarYcrearFacturaTemporal(){
+ __OpcionAbrirCajon()
  aplicarFactura(1)
 }
 /**
@@ -1527,10 +1532,7 @@ function crearFactura(estado){
             mensajeErrorServidor(xhr, status);
         }
     });
-    if(self.empresa.abrirSinComanda == 1){
-      //Abrir cajon sin comanda
-      abrirCajonDineroSinComanda()
-    }  
+    
 }
 /**
 *Si fue facturada o tiquete
@@ -2777,9 +2779,9 @@ function __EnviarFacturar(){
       }else if (self.mostrarFormularioPago == true && self.mostarParaCrearNuevaFactura == false ){
           self.primeraVezBilleteClick == false
           self.update()
+           __OpcionAbrirCajon()
             aplicarFactura(2)   
         } 
-
 }
 /**
 *  teclas de la pantalla
@@ -2944,7 +2946,6 @@ function abrirCajonDineroConComanda(){
 		    formatoTiquete:"",
 		    detalles:""
 		}    
-
 		var JSONData = JSON.stringify(informacion);		
 		//Envia a imprimir a la comanda
 	    $.ajax({
