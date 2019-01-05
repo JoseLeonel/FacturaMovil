@@ -1034,22 +1034,7 @@
                         <button onclick={__AplicarYcrearFactura}  class="btn-green btn-add pull-right"> </i> {$.i18n.prop("btn.aplicar")}</button>
                     </div>
                 </div>
-                    <!--Ventana de los billetes-->
-                    <div class="container">
-                        <div class="row">
-                            <div   class="col-sx-12 col-sm-12 col-md-12 col-lg-12 " >
-                                <!--Seccion de Billetes-->
-                                <section  class="lista-articulos" >
-                                    <div class="product-item" each={billetes}   onclick={_sumarBilletes}>
-                                        <img style = "height:100px;width:250px" alt="" class="img-responsive " src="{imagen}">
-                                        <a href="#" class="label-totales">{modena} {descripcion}</a>
-                                    </div>
-                                </section>
-                            <!--Fin Seccion de Billetes-->
-                            </div> 
-                        </div>       
-                    </div>
-                    <!--Fin Ventana de los billetes-->      
+                   
             </div>
             <div class="col-md-4 col-sm-4 col-lg-4 col-sx-12 ">
 		        <div class="box">
@@ -1065,10 +1050,7 @@
                                         <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos} </span></p>
                                         <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {totalImpuesto} </span></p>
                                         <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.impuestoServ")} :  <span id="lblSubtotal"> {totalImpuestoServ} </span></p>
-                                    </div>
-                                    <div class="precioTotalFactura">
                                         <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}</span></p>
-                                        
                                     </div>
                                     <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado}>
                                         <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagar}</span></p>    
@@ -1081,6 +1063,20 @@
         </div>  
 </div>  
 <!--Fin Ventana de los billetes-->   
+ <!--Ventana de los billetes-->
+            <div class="row" show={mostrarFormularioPago}>
+                <div   class="col-sx-12 col-sm-12 col-md-12 col-lg-12 " >
+                    <!--Seccion de Billetes-->
+                    <section  class="lista-articulos" >
+                        <div class="billete-item" each={billetes}   onclick={_sumarBilletes}>
+                            <img style = "height:110px;width:180px" alt="" class="img-responsive " src="{imagen}">
+                            <a href="#">{modena} {descripcion}</a>
+                        </div>
+                    </section>
+                   <!--Fin Seccion de Billetes-->
+                </div> 
+            </div>       
+        <!--Fin Ventana de los billetes--> 
 <style type="text/css">
     .clickable {
         cursor: pointer;
@@ -2933,10 +2929,11 @@ function crearFactura(estado, separarFactura){
             mensajeErrorServidor(xhr, status);
         }
     });
-     if(self.empresa.abrirSinComanda == 1){
+    if(self.empresa.abrirSinComanda == 1){
       //Abrir cajon sin comanda
       abrirCajonDineroSinComanda()
     }  
+  
 }
 
 
@@ -3387,6 +3384,7 @@ function _calcularImpuesto(precio,iva){
     if(cantidad == 0){
        cantidad = 1;
     }
+    cantidad = __valorNumerico(redondeoDecimales(cantidad,3))
     //__actualizaArticuloComanda(cantidad, self.item.codigo, self.item.descripcion, self.item.cantidad);
     __ValidarCantidadArticulo(self.item.codigo,cantidad)		
   }
@@ -3910,10 +3908,11 @@ function cargaBilletes(){
    _incluirBilletes("₡","1000",1000,'/dist/img/billete1000.jpg')
     _incluirBilletes("₡","2,000",2000,'/dist/img/billete2000.jpg')
     _incluirBilletes("₡","5,000",5000,'/dist/img/billete5000.jpg')
-    _incluirBilletes("","Limpiar",0,'/dist/img/limpiar.png')
+    
     _incluirBilletes("₡","10,000",10000,'/dist/img/billete10000.jpg')
     _incluirBilletes("₡","20,000",20000,'/dist/img/billete20000.jpg')
      _incluirBilletes("₡","50,000",50000,'/dist/img/billete50000.jpg')
+     _incluirBilletes("","Limpiar",0,'/dist/img/limpiar.png')
     
 }
 /**

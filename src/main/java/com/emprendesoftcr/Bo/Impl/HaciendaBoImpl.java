@@ -12,6 +12,7 @@ import com.emprendesoftcr.Dao.HaciendaDao;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Hacienda;
 
+
 @Service("haciendaBo")
 @EnableTransactionManagement
 public class HaciendaBoImpl implements HaciendaBo {
@@ -42,6 +43,7 @@ public class HaciendaBoImpl implements HaciendaBo {
 		return haciendaDao.findById(id);
 	}
 
+	
 	@Override
 	public Hacienda findByEmpresaAndClave(Empresa empresa,String clave) {
 		return haciendaDao.findByEmpresaAndClave(empresa, clave);

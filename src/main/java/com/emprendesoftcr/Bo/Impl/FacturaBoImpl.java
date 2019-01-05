@@ -341,19 +341,36 @@ public class FacturaBoImpl implements FacturaBo {
 			}
 			Detalle detalle = new Detalle(detalleFacturaCommand);
 			detalle.setUsuario(usuario);
-			detalle.setTipoImpuesto(articulo == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoImpuesto());
+			if (detalleFacturaCommand.getTipoImpuesto() != null) {
+				if (detalleFacturaCommand.getTipoImpuesto().equals(Constantes.EMPTY)) {
+					if (detalle.getMontoImpuesto() != null) {
+						if (detalle.getMontoImpuesto() > 0) {
+							detalle.setTipoImpuesto(Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
+						}
+					}
+				}
+			}else {
+				if (detalle.getMontoImpuesto() != null) {
+					if (detalle.getMontoImpuesto() > 0) {
+						detalle.setTipoImpuesto(Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
+					}
+				}
+			}
+
+			//detalle.setTipoImpuesto(articulo == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoImpuesto());
 			detalle.setNaturalezaDescuento(Constantes.FORMATO_NATURALEZA_DESCUENTO);
 			detalle.setNumeroLinea(numeroLinea);
 			detalle.setCreated_at(new Date());
 			detalle.setUpdated_at(new Date());
 			detalle.setTipoCodigo(articulo == null ? detalleFacturaCommand.getTipoCodigo() : articulo.getTipoCodigo());
-			detalle.setCodigo(articulo == null ? detalleFacturaCommand.getCodigo() : articulo.getCodigo());
+		//	detalle.setCodigo(articulo == null ? detalleFacturaCommand.getCodigo() : articulo.getCodigo());
 			detalle.setUnidadMedida(articulo == null ? detalleFacturaCommand.getUnidadMedida() : articulo.getUnidadMedida());
-			detalle.setTipoImpuesto(articulo == null ? detalleFacturaCommand.getTipoImpuesto() : articulo.getTipoImpuesto());
+		//	detalle.setTipoImpuesto(articulo == null ? detalleFacturaCommand.getTipoImpuesto() : articulo.getTipoImpuesto());
 			// Se aplica el redondeo hasta que se facture porque puede ser venta en espera y se necesita la presicion de los decimales
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
 
 				detalle.setMontoDescuento(detalle.getMontoDescuento() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoDescuento(), 5));
+				detalle.setCantidad(detalle.getCantidad() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getCantidad(), 3));
 				detalle.setMontoImpuesto(detalle.getMontoImpuesto() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoImpuesto(), 5));
 				detalle.setPrecioUnitario(detalle.getPrecioUnitario() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getPrecioUnitario(), 5));
 				detalle.setMontoTotalLinea(detalle.getMontoTotalLinea() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoTotalLinea(), 5));
@@ -677,8 +694,8 @@ public class FacturaBoImpl implements FacturaBo {
 								if (factura.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
 									cuentaCobrarDao.eliminar(cuentaCobrar);
 								} else if (!factura.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
-									cuentaCobrar.setTotal(Utils.roundFactura(factura.getTotalComprobante(),2));
-									cuentaCobrar.setTotalSaldo(Utils.roundFactura(factura.getTotalComprobante(),2));
+									cuentaCobrar.setTotal(Utils.roundFactura(factura.getTotalComprobante(), 2));
+									cuentaCobrar.setTotalSaldo(Utils.roundFactura(factura.getTotalComprobante(), 2));
 									cuentaCobrarDao.modificar(cuentaCobrar);
 
 								}

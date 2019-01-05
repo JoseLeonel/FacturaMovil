@@ -15,6 +15,10 @@ public class leo {
 		 long tiempoFinal=fecha2.getTime(); 
 		 long resta=tiempoFinal - tiempoInicial;
 		 
+		 
+		 
+		 
+		 
 		 //el metodo getTime te devuelve en mili segundos para saberlo en mins debes hacer
 		 resta=resta /(1000*60);
 //		DecimalFormat formateador = new DecimalFormat("###,###.00");

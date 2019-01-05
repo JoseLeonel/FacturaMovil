@@ -57,8 +57,8 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
 	     String qualifyingProperties = generateQualifyingProperties(certificado, urlXMLNS);
 	     String _signInfo = createInfo(xmlSinFirmar, qualifyingProperties, urlXMLNS);
 	     signature += _signInfo;
-	     signature += signInfo(_signInfo, certificado.getPrivateKey());
-	     signature += x509(ImmutableList.<String>of(certificado.getCertificate())) + qualifyingProperties;
+	     signature += signInfo(_signInfo, certificado.getPrivateKey().replaceAll("\n", ""));
+	     signature += x509(ImmutableList.<String>of(certificado.getCertificate().replaceAll("\n", ""))) + qualifyingProperties;
 			
 		} catch (Exception e) {
 			log.info("** Error  sign: " + e.getMessage() + " fecha " + new Date());
@@ -92,11 +92,11 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
 	         "<xades:Cert>" +
 	         "<xades:CertDigest>" +
 	         "<ds:DigestMethod Algorithm=\"http://www.w3.org/2001/04/xmlenc#sha256\"></ds:DigestMethod>" +
-	         "<ds:DigestValue>" + certificado.getCerthash() + "</ds:DigestValue>" +
+	         "<ds:DigestValue>" + certificado.getCerthash().replaceAll("\n", "") + "</ds:DigestValue>" +
 	         "</xades:CertDigest>" +
 	         "<xades:IssuerSerial>" +
-	         "<ds:X509IssuerName>" + certificado.getX509issuerName() + "</ds:X509IssuerName>" +
-	         "<ds:X509SerialNumber>" + Long.parseLong(certificado.getX509serialNumber(), 16) + "</ds:X509SerialNumber>" +
+	         "<ds:X509IssuerName>" + certificado.getX509issuerName().replaceAll("\n", "") + "</ds:X509IssuerName>" +
+	         "<ds:X509SerialNumber>" + Long.parseLong(certificado.getX509serialNumber().replaceAll("\n", ""), 16) + "</ds:X509SerialNumber>" +
 	         "</xades:IssuerSerial>" +
 	         "</xades:Cert>" +
 	         "</xades:SigningCertificate>" +
@@ -104,8 +104,19 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
 	         "<xades:SignaturePolicyImplied></xades:SignaturePolicyImplied>" +
 	         "</xades:SignaturePolicyIdentifier>" +
 	         "</xades:SignedSignatureProperties>" +
+	         "<xades:SignedDataObjectProperties>" +
+	               "<xades:DataObjectFormat ObjectReference=\"#r-id-1\">"+
+	               		"<xades:MimeType>"+
+	                    "text/xml"+
+	                   "</xades:MimeType>"+  
+	                   "<xades:Encoding>"+ 
+	                   		"UTF-8"+
+	                   "</xades:Encoding>"+
+	               "</xades:DataObjectFormat>" +
+	         "</xades:SignedDataObjectProperties>" +
 	         "</xades:SignedProperties>" +
 	         "</xades:QualifyingProperties>" +
+	         
 	         "</ds:Object>";
 			
 		} catch (Exception e) {
@@ -178,9 +189,9 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
 	 try {
      String cerout = "";
      for (String certificate : certificates) {
-         cerout += "<ds:X509Certificate>" + certificate + "</ds:X509Certificate>";
+         cerout += "<ds:X509Certificate>" + certificate.replaceAll("\n", "") + "</ds:X509Certificate>";
      }
-     resultado = "<ds:KeyInfo><ds:X509Data>" + cerout + "</ds:X509Data></ds:KeyInfo>";
+     resultado = "<ds:KeyInfo><ds:X509Data>" + cerout.replaceAll("\n", "") + "</ds:X509Data></ds:KeyInfo>";
 		
 	} catch (Exception e) {
 		log.info("** Error  x509: " + e.getMessage() + " fecha " + new Date());
