@@ -10,19 +10,14 @@
                     <div class="imprimirArticulo" id="imprimirArticulo" name="imprimirArticulo" > 
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                    <h1 >{articulo.codigo}<h1>
-                                    <h1>{articulo.descripcion}<h1>
-                                <h1 >Precio: {articulo.precioPublico}<h1>
+                                <label class="tamanoLetra">{articulo.descripcion}</label><br>
+                                <label class="tamanoLetra" >Precio: {articulo.precioPublico}</label><br>
+                                <label class="tamanoLetra" >{articulo.codigo}</label>
 
                             </div>
                         </div> 
 
-                        <div class="row">
-                            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                    <div id="barcode"></div>
-
-                            </div>
-                        </div>                         
+                                        
 
                 </div>
             </section>
@@ -43,6 +38,10 @@
 
 
 <style type="text/css">
+.tamanoLetra{
+     font-weight: 600 !important;
+     font-size: 16px !important;
+}
     .fondoEncabezado
     {
         background: #00539B;

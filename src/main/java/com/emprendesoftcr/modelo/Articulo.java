@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -124,7 +125,7 @@ public class Articulo implements Serializable {
 	private Empresa empresa;
 
 	@JsonIgnore
-	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "articulo_id", referencedColumnName = "id")
 	@OrderBy("id DESC")
 	private Set<Kardex> kardexs;
@@ -423,5 +424,13 @@ public class Articulo implements Serializable {
 	public void setMaximo(Double maximo) {
 		this.maximo = maximo;
 	}
+
+	@Override
+	public String toString() {
+		return "Articulo [id=" + id + ", codigo=" + codigo + ", descripcion=" + descripcion + ", serie=" + serie + ", unidadMedida=" + unidadMedida + ", contable=" + contable + ", costo=" + costo + ", impuesto=" + impuesto + ", precioPublico=" + precioPublico + ", gananciaPrecioPublico=" + gananciaPrecioPublico + ", precioMayorista=" + precioMayorista + ", gananciaPrecioMayorista=" + gananciaPrecioMayorista + ", precioEspecial=" + precioEspecial + ", gananciaPrecioEspecial=" + gananciaPrecioEspecial + ", cantidad=" + cantidad + ", minimo=" + minimo + ", maximo=" + maximo + ", estado=" + estado + ", tipoImpuesto=" + tipoImpuesto + ", tipoCodigo=" + tipoCodigo + ", created_at=" + created_at + ", updated_at=" + updated_at + ", marca=" + marca + ", usuario=" + usuario + ", categoria=" + categoria
+				+ ", empresa=" + empresa + ", kardexs=" + kardexs + ", comanda=" + comanda + "]";
+	}
+	
+	
 
 }

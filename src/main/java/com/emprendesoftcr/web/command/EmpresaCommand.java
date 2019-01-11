@@ -71,6 +71,8 @@ public class EmpresaCommand {
 	private String impresoraFactura;
 
 	private Integer separarCuenta;
+	
+	private Integer pantChino;
 
 	public EmpresaCommand(Empresa empresa) {
 		super();
@@ -117,6 +119,7 @@ public class EmpresaCommand {
 		this.impresoraCocina = empresa.getImpresoraCocina();
 		this.impresoraFactura = empresa.getImpresoraFactura();
 		this.separarCuenta = empresa.getSepararCuenta();
+		this.pantChino = empresa.getPantChino();
 	}
 
 	public EmpresaCommand() {
@@ -129,6 +132,16 @@ public class EmpresaCommand {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	
+	public Integer getPantChino() {
+		return pantChino;
+	}
+
+	
+	public void setPantChino(Integer pantChino) {
+		this.pantChino = pantChino;
 	}
 
 	public String getImpresoraCocina() {

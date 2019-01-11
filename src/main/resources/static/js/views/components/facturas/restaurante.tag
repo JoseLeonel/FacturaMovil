@@ -1,5 +1,24 @@
 <venta-restaurante>
 
+<!--Modal abrirCajon sin comanda-->
+<div id='modalabrirCajon' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+       <div class="modal-content">
+            <div class="modal-body">
+                <div id="imprAbriCajon" name ="imprAbriCajon">
+                    <div class="row">
+                        <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
+                            <div class="form-group has-success">
+                                <input  type="text"  class="form-control" value={informacionAbrirCajon}>
+                            </div>
+                        </div>
+                    </div> 
+                </div>    
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--Modal Cambiar Cantidad-->
 <div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -12,7 +31,7 @@
                     <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
                         <div class="form-group has-success">
                             <label class="knob-label" >{$.i18n.prop("inventario.cantidad")}</label>
-                            <input  type="number" class="form-control cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus">
+                            <input  type="number" class="form-control cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus" min="0">
                         </div>
                     </div>
                 </div> 
@@ -61,7 +80,9 @@
                 <a class="pull-left" href="#"    onclick = {__ImprimirTiquete}  title="{$.i18n.prop("imprimir.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f7")}</span></a>
                 <a class="pull-left" href="#"    onclick = {__MostrarFormularioDePago}  title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
                 <a class="pull-left" href="#"    onclick= {__CrearFacturaTemporal}  title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
+                <a class="pull-left" href="#" show={mostarAbrirCajon == true}   onclick = {__AbrirCajon} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("abrir.cajon")}</span></a>
                 <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
+
             </div>
         </div>      
     </div>              
@@ -773,7 +794,7 @@
                     <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
                         <div class="form-group has-success">
                             <label >Precio:</label>
-                            <input  type="number" class="form-control cambiarprecioArticulo" id="cambiarprecioArticulo" name = "cambiarprecioArticulo" autofocus="autofocus">
+                            <input  type="number" class="form-control cambiarprecioArticulo" id="cambiarprecioArticulo" name = "cambiarprecioArticulo" autofocus="autofocus" min="0">
                         </div>
                     </div>
                 </div> 
@@ -800,7 +821,7 @@
                     <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
                         <div class="form-group has-success">
                             <label >{$.i18n.prop("factura.linea.detalle.descuento")}</label>
-                            <input  type="number" class="form-control aplicarDescuento" id="aplicarDescuento" name = "aplicarDescuento" autofocus="autofocus">
+                            <input  type="number" class="form-control aplicarDescuento" id="aplicarDescuento" name = "aplicarDescuento" autofocus="autofocus" min="0">
                         </div>
                     </div>
                 </div> 
@@ -1013,22 +1034,7 @@
                         <button onclick={__AplicarYcrearFactura}  class="btn-green btn-add pull-right"> </i> {$.i18n.prop("btn.aplicar")}</button>
                     </div>
                 </div>
-                    <!--Ventana de los billetes-->
-                    <div class="container">
-                        <div class="row">
-                            <div   class="col-sx-12 col-sm-12 col-md-12 col-lg-12 " >
-                                <!--Seccion de Billetes-->
-                                <section  class="lista-articulos" >
-                                    <div class="product-item" each={billetes}   onclick={_sumarBilletes}>
-                                        <img style = "height:100px;width:250px" alt="" class="img-responsive " src="{imagen}">
-                                        <a href="#" class="label-totales">{modena} {descripcion}</a>
-                                    </div>
-                                </section>
-                            <!--Fin Seccion de Billetes-->
-                            </div> 
-                        </div>       
-                    </div>
-                    <!--Fin Ventana de los billetes-->      
+                   
             </div>
             <div class="col-md-4 col-sm-4 col-lg-4 col-sx-12 ">
 		        <div class="box">
@@ -1044,10 +1050,7 @@
                                         <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos} </span></p>
                                         <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {totalImpuesto} </span></p>
                                         <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.impuestoServ")} :  <span id="lblSubtotal"> {totalImpuestoServ} </span></p>
-                                    </div>
-                                    <div class="precioTotalFactura">
                                         <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}</span></p>
-                                        
                                     </div>
                                     <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado}>
                                         <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagar}</span></p>    
@@ -1060,6 +1063,20 @@
         </div>  
 </div>  
 <!--Fin Ventana de los billetes-->   
+ <!--Ventana de los billetes-->
+            <div class="row" show={mostrarFormularioPago}>
+                <div   class="col-sx-12 col-sm-12 col-md-12 col-lg-12 " >
+                    <!--Seccion de Billetes-->
+                    <section  class="lista-articulos" >
+                        <div class="billete-item" each={billetes}   onclick={_sumarBilletes}>
+                            <img style = "height:110px;width:180px" alt="" class="img-responsive " src="{imagen}">
+                            <a href="#">{modena} {descripcion}</a>
+                        </div>
+                    </section>
+                   <!--Fin Seccion de Billetes-->
+                </div> 
+            </div>       
+        <!--Fin Ventana de los billetes--> 
 <style type="text/css">
     .clickable {
         cursor: pointer;
@@ -1513,7 +1530,7 @@ td.col-xl-12, th.col-xl-12 {
         total:0,
         id:null
     }
-
+    self.mostarAbrirCajon = true 
     self.on('mount',function(){
         $("#formularioFactura").validate(reglasDeValidacionFactura());
         $("#formularioAgregarNombreTiquete").validate(reglasAgregarNombre());
@@ -1995,15 +2012,16 @@ function __reimprimir(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        var factura = data
-        consultaParaReimprimir(data)
+       // var factura = data
+       // riot.mount('ptv-imprimir',{factura:data});
+        consultaParaReimprimir(data,1)
 	});
 }
 
 /**
 *Consulta la Reimprimir
 **/
-function consultaParaReimprimir(data){
+function consultaParaReimprimir(data,tipoImpresion){
      $.ajax({
         url: "MostrarFacturaAjax",
         datatype: "json",
@@ -2018,7 +2036,11 @@ function consultaParaReimprimir(data){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                     //   $('#modalFacturasDia').modal('hide') 
-                       riot.mount('ptv-imprimir',{factura:modeloTabla});
+                    var parametros = {
+                          factura:modeloTabla,
+                          facturaDia:tipoImpresion
+                      }
+                       riot.mount('ptv-imprimir',{parametros:parametros});
                     });
                 }
             }
@@ -2119,7 +2141,9 @@ function __TipoCambio(){
 **/
 __Imprimir(){
     var factura = self.factura
-    riot.mount('ptv-imprimir',{factura:factura});
+    consultaParaReimprimir(factura,0)
+	
+    //riot.mount('ptv-imprimir',{factura:factura});
 }
 /**
 * Imprimir tikete
@@ -2905,6 +2929,11 @@ function crearFactura(estado, separarFactura){
             mensajeErrorServidor(xhr, status);
         }
     });
+    if(self.empresa.abrirSinComanda == 1){
+      //Abrir cajon sin comanda
+      abrirCajonDineroSinComanda()
+    }  
+  
 }
 
 
@@ -2923,7 +2952,12 @@ function evaluarFactura(data, separarFactura){
                 //Envia a la pantalla de impresion
                 self.facturaImprimir   = modeloTabla
                 self.update()
-                riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
+                var parametros = {
+                          factura:modeloTabla,
+                          facturaDia:0
+                      }
+                riot.mount('ptv-imprimir',{parametros:parametros});
+                
                  
             }else{
                 if(self.enviarCocina == true){
@@ -3350,6 +3384,7 @@ function _calcularImpuesto(precio,iva){
     if(cantidad == 0){
        cantidad = 1;
     }
+    cantidad = __valorNumerico(redondeoDecimales(cantidad,3))
     //__actualizaArticuloComanda(cantidad, self.item.codigo, self.item.descripcion, self.item.cantidad);
     __ValidarCantidadArticulo(self.item.codigo,cantidad)		
   }
@@ -3819,6 +3854,10 @@ function __Teclas(){
     if(tecla ==113){
       __Init()
     }
+     //Insert = abrir Cajon
+    if(tecla ==45){
+       __OpcionAbrirCajon()
+    }
      
     }, false );
 }
@@ -3869,10 +3908,11 @@ function cargaBilletes(){
    _incluirBilletes("₡","1000",1000,'/dist/img/billete1000.jpg')
     _incluirBilletes("₡","2,000",2000,'/dist/img/billete2000.jpg')
     _incluirBilletes("₡","5,000",5000,'/dist/img/billete5000.jpg')
-    _incluirBilletes("","Limpiar",0,'/dist/img/limpiar.png')
+    
     _incluirBilletes("₡","10,000",10000,'/dist/img/billete10000.jpg')
     _incluirBilletes("₡","20,000",20000,'/dist/img/billete20000.jpg')
      _incluirBilletes("₡","50,000",50000,'/dist/img/billete50000.jpg')
+     _incluirBilletes("","Limpiar",0,'/dist/img/limpiar.png')
     
 }
 /**
@@ -4767,6 +4807,9 @@ function _Empresa(){
                        if(self.empresa.separarCuenta == 1){
                     	   self.separarCuenta = true;
                        }
+                       if(self.empresa.abrirSinComanda == 0 && self.empresa.abrirConComanda == 0){
+                         self.mostarAbrirCajon = false
+                       }
                        self.update()
                     });
                 }
@@ -4778,6 +4821,75 @@ function _Empresa(){
         }
     });
 }
+__AbrirCajon(){
+  __OpcionAbrirCajon()  
+}
+
+/**
+*  Opcion para abrir la comanda
+**/
+function __OpcionAbrirCajon(){
+    self.informacionAbrirCajon = "."
+    self.update()
+    if(self.empresa.abrirSinComanda == 1){
+        abrirCajonDineroSinComanda()  
+    }
+    if(self.empresa.abrirConComanda == 1){
+      abrirCajonDineroConComanda()
+    }
+
+}
+
+/**
+*Abrir el cajon de dinero sin comanda
+**/
+function abrirCajonDineroSinComanda(){
+  var div = document.querySelector("#imprAbriCajon");
+  var ventana = window.open('', 'PRINT', 'height=20,width=20');
+  ventana.document.write('<html><head><title>' + "" + '</title>');
+  ventana.document.write('</head><body >');
+  ventana.document.write(div.innerHTML);
+  ventana.document.write('</body></html>');
+  ventana.document.close();
+  ventana.focus();
+  ventana.print();
+  ventana.close();
+  return true;
+}
+
+/**
+* Abrir con con comanda
+**/
+function abrirCajonDineroConComanda(){
+//Se forman los detalles a enviar a la comanda
+		var informacion = {
+			mesa: "Abrir Cajon",        	
+			mesero: "abrirCajon",        	
+		    nombreImpresora:self.empresa.impresoraFactura,
+		    cantidadCaracteresLinea:"40",
+		    formatoTiquete:"",
+		    detalles:""
+		}    
+
+		var JSONData = JSON.stringify(informacion);		
+		//Envia a imprimir a la comanda
+	    $.ajax({
+	        contentType: 'application/json',
+	        url: 'http://localhost:8033/service/abrirCajonDinero',
+	        datatype: "json",
+	        data : JSONData,
+	        method:"POST",
+	        success: function (result) {
+	      	  
+	        },
+	        error: function (xhr, status) {
+	            console.log(xhr);
+	            mensajeErrorServidor(xhr, status);
+	        }
+	    });		
+	
+}
+
 </script>
 
 </venta-restaurante>

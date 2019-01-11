@@ -4,7 +4,7 @@ import com.emprendesoftcr.modelo.Articulo;
 
 public class DetalleCompraCommand {
 
-	private Integer		linea;
+	private Integer		numeroLinea;
 	private Double		porcentajeImpuesto;
 	private Long			articulo_id;
 	private String		codigo;
@@ -23,13 +23,21 @@ public class DetalleCompraCommand {
 		super();
 	}
 
-	public Integer getLinea() {
-		return linea;
+	
+
+	
+	public Integer getNumeroLinea() {
+		return numeroLinea;
 	}
 
-	public void setLinea(Integer linea) {
-		this.linea = linea;
+
+
+	
+	public void setNumeroLinea(Integer numeroLinea) {
+		this.numeroLinea = numeroLinea;
 	}
+
+
 
 	public Long getArticulo_id() {
 		return articulo_id;

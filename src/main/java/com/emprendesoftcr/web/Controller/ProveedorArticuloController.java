@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.ProveedorArticuloBo;
 import com.emprendesoftcr.Bo.ProveedorBo;
+import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.JqGridFilter;
@@ -30,6 +32,8 @@ import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.ProveedorArticulo;
+import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.web.command.ArticuloCommand;
 import com.emprendesoftcr.web.command.ProveedorArticuloCommand;
 import com.emprendesoftcr.web.propertyEditor.ArticuloPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
@@ -56,6 +60,12 @@ public class ProveedorArticuloController {
 
 	@Autowired
 	private DataTableBo																							dataTableBo;
+
+	@Autowired
+	private ArticuloBo																							articuloBo;
+
+	@Autowired
+	private UsuarioBo																								usuarioBo;
 
 	@Autowired
 	private ProveedorBo																							proveedorBo;
@@ -248,7 +258,7 @@ public class ProveedorArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/EliminarProveedorArticuloAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator eliminarAjax(HttpServletRequest request, ModelMap model, @ModelAttribute ProveedorArticulo proveedorArticulo, BindingResult result, SessionStatus status,@RequestParam Long idProveedorArticulo) {
+	public RespuestaServiceValidator eliminarAjax(HttpServletRequest request, ModelMap model, @ModelAttribute ProveedorArticulo proveedorArticulo, BindingResult result, SessionStatus status, @RequestParam Long idProveedorArticulo) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			ProveedorArticulo proveedorArticuloBd = null;
@@ -266,6 +276,32 @@ public class ProveedorArticuloController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 
+	}
+
+	@RequestMapping(value = "/findArticuloProveedorByCodigojax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator listarAjax(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, HttpServletResponse response, @RequestParam String codigoArticulo,@RequestParam Long idProveedor, BindingResult result, SessionStatus status) {
+		try {
+			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Articulo articuloBD = articuloBo.buscarPorCodigoYEmpresa(codigoArticulo, usuarioSesion.getEmpresa());
+			Proveedor proveedor = proveedorBo.buscar(idProveedor);
+			ProveedorArticulo proveedorArticuloBD =null;
+			if(proveedor !=null && articuloBD !=null) {
+				proveedorArticuloBD = proveedorArticuloBo.findByCodigo(articuloBD, proveedor);	
+			}
+			ArticuloCommand articuloCommand = articuloBD == null ? null : new ArticuloCommand(articuloBD);
+			if (articuloCommand == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.articulo.codigo.no.existe", result.getAllErrors());
+			}
+			if(proveedorArticuloBD !=null) {
+				articuloCommand.setCosto(proveedorArticuloBD.getCosto() !=null?proveedorArticuloBD.getCosto():articuloBD.getCosto());	
+			}
+			
+
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", articuloCommand);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
 	}
 
 	@SuppressWarnings("all")

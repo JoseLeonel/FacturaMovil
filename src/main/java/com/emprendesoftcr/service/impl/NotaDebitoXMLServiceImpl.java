@@ -66,10 +66,23 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
 	@Override
 	public String getCrearXMLSinFirma(Factura factura) throws Exception{
 		String xml = Constantes.EMPTY;
-		Date fecha = new Date();
-		factura.setFechaEmision(fecha);
-		facturaBo.modificar(factura);
+	
 		try {
+			Date fecha = new Date();
+			long tiempoInicial = factura.getCreated_at().getTime();
+			long tiempoFinal = fecha.getTime();
+			long resta = tiempoFinal - tiempoInicial;
+			// el metodo getTime te devuelve en mili segundos para saberlo en mins debes hacer
+			if(resta > 0) {
+				resta = resta / (1000 * 60);	
+			}
+			
+			if (resta > 80) {
+				factura.setFechaEmision(fecha);
+				facturaBo.modificar(factura);
+			}else {
+				fecha = factura.getCreated_at();
+			}
 			String observacion = Constantes.EMPTY;
 			if(factura.getCliente().getObservacionVenta() !=null) {
 				if(!factura.getCliente().getObservacionVenta().equals(Constantes.EMPTY)) {
@@ -188,6 +201,12 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
       	if(tipoCodigo.equals(Constantes.EMPTY)) {
       		tipoCodigo = Constantes.TIPO_CODIGO_ARTICULO_CODIGO_VENDEDOR;
       	}
+      	String unidadMedida =Constantes.UNIDAD_MEDIDA;
+      	if(detalle.getUnidadMedida() !=null) {
+      		if(!detalle.getUnidadMedida().equals(Constantes.EMPTY)) {
+      			unidadMedida = detalle.getUnidadMedida();
+      		}
+      	}
       	lineas += "<LineaDetalle>" +
             "<NumeroLinea>" + new BigInteger(detalle.getNumeroLinea().toString()) + "</NumeroLinea>" +
             "<Codigo>" +
@@ -195,7 +214,7 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
             "<Codigo>" + detalle.getCodigo() + "</Codigo>" +
             "</Codigo>" +
             "<Cantidad>" + FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getCantidad()) + "</Cantidad>" +
-            "<UnidadMedida>" + detalle.getUnidadMedida() + "</UnidadMedida>" +
+            "<UnidadMedida>" + unidadMedida + "</UnidadMedida>" +
     //        "<UnidadMedidaComercial>" + detalle.getUnidadMedida() + "</UnidadMedidaComercial>" +
             "<Detalle>" + detalle.getDescripcion().trim() + "</Detalle>" +
             "<PrecioUnitario>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getPrecioUnitario()) + "</PrecioUnitario>" +

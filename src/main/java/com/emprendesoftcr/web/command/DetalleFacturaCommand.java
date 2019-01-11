@@ -49,8 +49,10 @@ public class DetalleFacturaCommand {
 	private String	consecutivo;
 
 	private String	tipoDoc;
-	
-	private String nombreUsuario;
+
+	private String	nombreUsuario;
+
+	private Double	montoGanancia;
 
 	public DetalleFacturaCommand() {
 		super();
@@ -80,6 +82,7 @@ public class DetalleFacturaCommand {
 		this.consecutivo = detalle.getFactura().getNumeroConsecutivo();
 		this.tipoDoc = detalle.getFactura().getTipoDoc();
 		this.nombreUsuario = detalle.getFactura().getUsuarioCreacion().getNombreUsuario();
+		this.montoGanancia = detalle.getMontoGanancia();
 	}
 
 	public Long getId() {
@@ -89,14 +92,11 @@ public class DetalleFacturaCommand {
 	public void setId(Long id) {
 		this.id = id;
 	}
- 
-	
-	
+
 	public String getNombreUsuario() {
 		return nombreUsuario;
 	}
 
-	
 	public void setNombreUsuario(String nombreUsuario) {
 		this.nombreUsuario = nombreUsuario;
 	}
@@ -291,6 +291,14 @@ public class DetalleFacturaCommand {
 
 	public void setPorcentajeDesc(Double porcentajeDesc) {
 		this.porcentajeDesc = porcentajeDesc;
+	}
+
+	public Double getMontoGanancia() {
+		return montoGanancia;
+	}
+
+	public void setMontoGanancia(Double montoGanancia) {
+		this.montoGanancia = montoGanancia;
 	}
 
 }
