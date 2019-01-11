@@ -37,7 +37,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
@@ -56,7 +55,6 @@ import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.Utils.Utils;
-import com.emprendesoftcr.components.OpenIDConnectHaciendaComponent;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.modelo.Attachment;
@@ -133,7 +131,6 @@ public class FacturasController {
 																																																			detalleFacturaElectronica.setSubtotal(detalleFacturaElectronica.getMonto() - (d.getMontoDescuento()));
 																																																			detalleFacturaElectronica.setTarifaIva(d.getImpuesto());
 																																																			detalleFacturaElectronica.setImpuesto(d.getMontoImpuesto());
-																																																			// detalleFacturaElectronica.setExento(Constantes.EMPTY);
 																																																			detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
 																																																			//
 																																																			return detalleFacturaElectronica;
@@ -141,25 +138,18 @@ public class FacturasController {
 	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
 																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
 																																																			// Emisor
-																																																			facturaElectronica.setEmisorNombreComercial( d.getEmpresa().getNombreComercial() );
+																																																			facturaElectronica.setEmisorNombreComercial(d.getEmpresa().getNombreComercial());
 																																																			facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombre().equals(Constantes.EMPTY) ? d.getEmpresa().getNombre() : d.getEmpresa().getNombre());
 																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
 																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
 																																																			facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
 																																																			facturaElectronica.set_nota(d.getNota() == null ? Constantes.EMPTY : d.getNota());
-																																																			// Cliente
-																																																			// if (!d.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE))
-																																																			// {
-
 																																																			facturaElectronica.setClienteNombre(d.getCliente().getNombreCompleto());
 																																																			facturaElectronica.setClienteNombreComercial(d.getCliente().getNombreComercial());
 																																																			facturaElectronica.setClienteCorreo(d.getCliente().getCorreoElectronico());
 																																																			facturaElectronica.setClienteCedula(d.getCliente().getCedula());
 																																																			facturaElectronica.setClienteTelefono(d.getCliente().getTelefono() != null ? d.getCliente().getTelefono().toString() : Constantes.EMPTY);
 																																																			facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
-																																																			// }
-																																																			// facturaElectronica.setClienteMesCobro(TO_MESCOBRO.apply(d.getMesCobro()));
-																																																			// Ubicacion
 																																																			facturaElectronica.set_logo(d.getEmpresa().getLogo());
 																																																			facturaElectronica.set_clienteDireccion(d.getDireccion());
 																																																			// Otros
@@ -206,17 +196,16 @@ public class FacturasController {
 	private DetalleBo																									detalleBo;
 
 	@Autowired
-	private HaciendaBo																									haciendaBo;
+	private HaciendaBo																								haciendaBo;
 
-	
 	@Autowired
 	private CorreosBo																									correosBo;
 
 	@Autowired
 	private DataTableBo																								dataTableBo;
 
-	@Autowired
-	private CertificadoBo																							certificadoBo;
+//	@Autowired
+//	private CertificadoBo																							certificadoBo;
 
 	@Autowired
 	private UsuarioBo																									usuarioBo;
@@ -297,7 +286,7 @@ public class FacturasController {
 	public String crearVentaDolares(ModelMap model) {
 		return "views/facturas/ventaDolares";
 	}
-	
+
 	/**
 	 * Ventas por Mini super
 	 * @param model
@@ -333,7 +322,7 @@ public class FacturasController {
 	public String listaFacturasAnulacion(ModelMap model) {
 		return "views/facturas/listaFacturasAnulacion";
 	}
-	
+
 	/**
 	 * Listado de facturas anuladas y facturadas
 	 * @param model
@@ -363,9 +352,6 @@ public class FacturasController {
 	public String totalFacturas(ModelMap model) {
 		return "views/facturas/totalFacturas";
 	}
-	
-
-
 
 	/**
 	 * Busca el total de facturas por rango de fechas
@@ -471,7 +457,7 @@ public class FacturasController {
 	 * @param model
 	 * @param idFactura
 	 * @throws IOException
-	 * @throws JRException 
+	 * @throws JRException
 	 */
 	@RequestMapping(value = "/generaProformasPDF.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	public void generarProformasPDF(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura) throws IOException, JRException {
@@ -488,9 +474,9 @@ public class FacturasController {
 //			JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters,vacio);
 //      
 //      JasperExportManager.exportReportToPdfFile(print, "reportes/ejemplo.pdf");
-			
-      Factura factura = facturaBo.findById(idFactura);
-			
+
+			Factura factura = facturaBo.findById(idFactura);
+
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
 			ByteArrayOutputStream namePDF = Proformas.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
@@ -513,8 +499,7 @@ public class FacturasController {
 			inputStream.close();
 			outStream.close();
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				e.printStackTrace();
 		} catch (com.google.zxing.WriterException ex) {
 
 		}
@@ -567,8 +552,7 @@ public class FacturasController {
 			inputStream.close();
 			outStream.close();
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				e.printStackTrace();
 		} catch (com.google.zxing.WriterException ex) {
 
 		}
@@ -581,6 +565,7 @@ public class FacturasController {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarFacturasEsperaActivasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarActivasAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -608,6 +593,7 @@ public class FacturasController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarFacturasEsperaActivasCajeraAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarActivasCajeroAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -645,6 +631,7 @@ public class FacturasController {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarFacturasEsperaPorMesaAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarFacturasEsperaPorMesaAjax(HttpServletRequest request, HttpServletResponse response, @ModelAttribute ParametrosPaginacionMesa parametrosPaginacionMesa) {
@@ -676,6 +663,7 @@ public class FacturasController {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarNotasCreditoAndDebitoEsperaActivasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarNotasDebidoAndCreditoActivasAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -707,6 +695,7 @@ public class FacturasController {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarProformasActivasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarProformasActivasAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -728,6 +717,7 @@ public class FacturasController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam String tipoDocumento) {
@@ -737,7 +727,7 @@ public class FacturasController {
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
-	
+
 	/**
 	 * Facturas sin notas de creditos de anulacion completa
 	 * @param request
@@ -748,6 +738,7 @@ public class FacturasController {
 	 * @param tipoDocumento
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/listarFacturasActivasSinNotasCreditosCompletasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarFacturasActivasSinNotasCreditosCompletasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam String tipoDocumento) {
@@ -757,7 +748,6 @@ public class FacturasController {
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
-	
 
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarRecepcionFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -792,6 +782,7 @@ public class FacturasController {
 		return UtilsForControllers.process(request, dataTableBo, delimitador, TO_COMMAND_RECEPCION);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarFacturasDelDiaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarFacturasDiaAjax(HttpServletRequest request, HttpServletResponse response) {
@@ -848,7 +839,9 @@ public class FacturasController {
 		}
 	}
 
+	@SuppressWarnings({ "unlikely-arg-type", "unused" })
 	private RespuestaServiceValidator<?> crearFactura(FacturaCommand facturaCommand, BindingResult result, Usuario usuario) {
+		@SuppressWarnings("rawtypes")
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			facturaCommand.setTotalBanco(facturaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalBanco());
@@ -878,9 +871,9 @@ public class FacturasController {
 									return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.ya.esta.procesada", result.getAllErrors());
 								}
 							}
-							
+
 						}
-						
+
 					}
 				}
 			}
@@ -940,22 +933,22 @@ public class FacturasController {
 			if (facturaCommand.getReferenciaNumero() != null) {
 				if (!facturaCommand.getReferenciaNumero().equals(Constantes.EMPTY)) {
 					Factura facturaReferenciaValidar = facturaBo.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa());
-					if(facturaReferenciaValidar.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && facturaReferenciaValidar.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO) ) {
+					if (facturaReferenciaValidar.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && facturaReferenciaValidar.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
 						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.nota.credito.con.anulacion.completa", result.getAllErrors());
 					}
 					if (facturaReferenciaValidar == null) {
 						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.aplicar.nota.credito.o.debito.no.existe", result.getAllErrors());
-					}else {
+					} else {
 						facturaCommand.setReferenciaTipoDoc(facturaReferenciaValidar.getTipoDoc());
 						Hacienda hacienda = haciendaBo.findByEmpresaAndClave(usuario.getEmpresa(), facturaReferenciaValidar.getClave());
-						if(hacienda !=null) {
-							if(hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA) || hacienda.equals(Constantes.HACIENDA_ESTADO_FIRMARDO_XML)) {
+						if (hacienda != null) {
+							if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA) || hacienda.equals(Constantes.HACIENDA_ESTADO_FIRMARDO_XML)) {
 								return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.pendiente.comprobacion.hacienda", result.getAllErrors());
 							}
-						}else {
+						} else {
 							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.pendiente.comprobacion.hacienda", result.getAllErrors());
 						}
-						
+
 					}
 				}
 			}
@@ -1053,18 +1046,18 @@ public class FacturasController {
 //	@Autowired
 //	private OpenIDConnectHaciendaComponent openIDConnectHaciendaComponent;
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/MostrarFacturaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idFactura) {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
-			
 
 			// Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 			// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 			// criptografica desde linux
-		//	 certificadoBo.agregar(usuario.getEmpresa(),"","");
+			// certificadoBo.agregar(usuario.getEmpresa(),"","");
 			// usuario.getEmpresa().getClaveLlaveCriptografica().toString(),
 			// usuario.getEmpresa().getNombreLlaveCriptografica());
 			// String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);
@@ -1085,6 +1078,7 @@ public class FacturasController {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/MostrarFacturaPorConsecutivoAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator MostrarFacturaPorConsecutivo(HttpServletRequest request, HttpServletResponse response, @RequestParam String consecutivo) {
@@ -1106,6 +1100,7 @@ public class FacturasController {
 	 * @param nombreFactura
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ModificarNombreTiquteAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator ModificarNombreTiquete(HttpServletRequest request, ModelMap model, @ModelAttribute Factura factura, HttpServletResponse response, @RequestParam Long idFactura, @RequestParam String nombreFactura, BindingResult result, SessionStatus status) {
@@ -1130,6 +1125,7 @@ public class FacturasController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ConsultarConsecutivoAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator consultarConsecutivo(HttpServletRequest request, ModelMap model, @ModelAttribute Factura factura, HttpServletResponse response, @RequestParam String consecutivo, BindingResult result, SessionStatus status) {
@@ -1159,6 +1155,7 @@ public class FacturasController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/CambiarEstadoProformaAPedienteAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator cambiarEstadoProforma(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura) throws Exception {
@@ -1193,6 +1190,7 @@ public class FacturasController {
 	 * @param correo
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnviarCorreoAlternativoProformaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator enviarCorreoAlternativo(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura, @RequestParam String correo) {
@@ -1260,6 +1258,7 @@ public class FacturasController {
 	 * @param correo
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnviarCorreoAlternativoFacturaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator enviarCorreoAlternativoFactura(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura, @RequestParam String correo) {
@@ -1428,7 +1427,7 @@ public class FacturasController {
 			}
 			return delimitador;
 		}
-		
+
 		static DataTableDelimitador getAnulacion(HttpServletRequest request, String inicio, String fin, Cliente cliente, Empresa empresa, UsuarioBo usuarioBo, String tipoDocumento) {
 			// Consulta por fechas
 			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Factura");
@@ -1476,24 +1475,29 @@ public class FacturasController {
 			}
 			return delimitador;
 		}
-		
+
 	}
 
 	static class RESPONSES {
 
+		@SuppressWarnings("unused")
 		private static class OK {
 
 			private static class FACTURA {
 
+				@SuppressWarnings("rawtypes")
 				private static final RespuestaServiceValidator	AGREGADO		= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente");
+				@SuppressWarnings("rawtypes")
 				private static final RespuestaServiceValidator	MODIFICADO	= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.modificado.correctamente");
 			}
 		}
 
+		@SuppressWarnings("unused")
 		private static class ERROR {
 
 			private static class FACTURA {
 
+				@SuppressWarnings("rawtypes")
 				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.noExiste");
 			}
 		}

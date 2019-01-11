@@ -630,10 +630,6 @@
         __InicializarTabla('.tableListarFacturasDia')
         agregarInputsCombos_Articulo()
         __ListaFacturasEnEspera()
-      // setInterval(function() {
-      //      __ListaFacturasEnEspera()
-      //  }.bind(this), 45000)
-
         __comboCondicionPago()
         __ComboTipoDocumentos()
        __Teclas()
@@ -698,8 +694,6 @@ _SeleccionarBanco(){
     $('.totalBancoPantalla').select()
     $(".totalBancoPantalla").focus()
 }    
-
-
 /**
  * Reimprime la factura
  **/
@@ -886,7 +880,6 @@ function __Opciones(){
 *imprimir
 **/
 function __reimprimir(){
-    
 	$('#tableListarFacturasDia').on('click','.btnReimprimir',function(e){
 		var table = $('#tableListarFacturasDia').DataTable();
 		if(table.row(this).child.isShown()){
@@ -895,10 +888,6 @@ function __reimprimir(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        console.log("__reimprimir")
-       // riot.mount('ptv-imprimir',{factura:data});
-     ///   riot.unmount(true) 
-      
         consultaFactura(data,1)
 	});
 }
@@ -1080,8 +1069,6 @@ __CalculaCambioAEntregarKeyPress(e){
 }
 
 function __Calcular(){
-      //  __EnterFacturar()
-      
        _calculoEnterPago()
        if(self.totalCambioPagar == 0){
             //alert(self.cantidadEnterFacturar)
@@ -1091,7 +1078,6 @@ function __Calcular(){
                 self.cantidadEnterFacturar = self.cantidadEnterFacturar + 1
                 self.update()
             }
-            
         }else{
             var totalFactura   = __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2))
             if(self.totalCambioPagar > 0 || self.totalCambioPagar > totalFactura || self.totalCambioPagar == totalFactura  ){
@@ -1110,9 +1096,7 @@ function __Calcular(){
             }
 
         }
-
 }
-
 function _calculoEnterPago(){
         var sumaMontosEntregadosParaCambios  = __valorNumerico($('.totalTarjeta').val())
         sumaMontosEntregadosParaCambios += __valorNumerico($('#totalBanco').val()) 
@@ -1133,9 +1117,8 @@ function _calculoEnterPago(){
         self.totalCambioPagar = __valorNumerico(redondeoDecimales(self.factura.totalCambioPagar,2))
         self.update()
 }
-
 /**
-
+* Enter es para verificar si el cliente presiono dos veces enter y mandalo a facturar
 **/
 function __EnterFacturar(){
     if(self.empresa.enterFacturar == 0){
@@ -1145,9 +1128,7 @@ function __EnterFacturar(){
       //Abrir cajon sin comanda
       __OpcionAbrirCajon()
     }  
-  
-
-   swal({
+    swal({
            title: '',
            text: $.i18n.prop("factura.mensaje.alert.enter"),
             type: "warning",
@@ -1158,12 +1139,12 @@ function __EnterFacturar(){
             cancelButtonText: $.i18n.prop("confirmacion.no"),
             confirmButtonClass: 'btn btn-success',
             cancelButtonClass: 'btn btn-danger',
-        }).then(function (isConfirm) {
+    }).then(function (isConfirm) {
             //Ajax__inicializarTabla();
             if(isConfirm){
                  aplicarFactura(2)
             }
-        } 
+    } 
         
         );   
         self.cantidadEnterFacturar = 0
@@ -1353,7 +1334,6 @@ function __Init(){
         id:null,
         nombreCompleto:""
     }
-    
     self.informacion_tabla             = []
     self.informacion_tabla_articulo    = []
     self.informacion_tabla_clientes    = []
@@ -1368,7 +1348,6 @@ function __Init(){
     self.totalCambioPagar              = 0
     self.update();
     $(".tableListarFacturasDia").dataTable().fnClearTable(); 
-    
     __InicializarTabla('.tableListarFacturasDia')
     $('#condicionVenta').prop("selectedIndex", 0);
     $('#tipoDoc').prop("selectedIndex", 0);
@@ -1399,8 +1378,6 @@ function __Init(){
     __ListaFacturasEnEspera()
     $('.codigo').select()
     $(".codigo").focus()
-
-
 }
 /**
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
@@ -1556,7 +1533,6 @@ function evaluarFactura(data){
         $.each(data.listaObjetos, function( index, modeloTabla ) {
             self.facturaImprimir   = modeloTabla
             self.update()
-            
         });
         if(self.facturaImprimir.estado == 2 || self.facturaImprimir.estado == 3 || self.facturaImprimir.estado == 4){
                 __Init()
@@ -1711,8 +1687,9 @@ function mostrarPAgo(){
     self.factura.cambioMoneda = self.factura.totalVentaNeta / self.tipoCambio.total
     self.update()
 }
-
-
+/**
+Lectura de Codigos
+**/
 function lecturaCodigo(leerCodigo){
     if ($('.codigo').val() == ""){
         if(self.empresa.enterFacturar == 0){
@@ -1843,8 +1820,6 @@ __agregarArticuloBotonAgregar(){
    __buscarcodigo($( "#codigo" ).val(),1,0);
    return
 }
-
-
 /**
 * consultando por descripcion
 **/
@@ -1853,8 +1828,7 @@ __ConsultarProductosDesc(e){
         return;
     } 
  __ListaDeArticulosPorDescripcion($("#codigoArt").val(),e.currentTarget.value)   
-}    
-
+}
 /**
 *Consultando por codigo
 **/
@@ -1863,8 +1837,7 @@ __ConsultarProductosCod(e){
         return;
     } 
  __ListaDeArticulosPorDescripcion(e.currentTarget.value,$("#descArticulo").val())   
-}   
-
+}
 /**
 * mostrar la lista de articulos de la empresa
 **/
@@ -1887,10 +1860,7 @@ function __ListaDeArticulosPorDescripcion(){
                 self.update()
                 loadListar(".tableListarArticulos",idioma_espanol,self.informacion_tabla_articulo,self.articulos.data)
                 agregarInputsCombos_Articulo()
-              //  __agregarArticulos()
                 ActivarEventoFiltro(".tableListarArticulos")
-             
-                
             }
         },
         error: function (xhr, status) {
@@ -1960,7 +1930,6 @@ function __ListaDeClientes(){
     });
     return
 }
-
 /**
 *  Lista de los codigos de uso interno
 **/
@@ -1982,10 +1951,6 @@ function __ListaArticulosUsoInterno(){
     });
     return
 }
-
-
-
-
 /**
 * Buscar el codigo del codigo si esta input de precio aplica esto cuando es codigo de uso interno
 **/
@@ -2050,7 +2015,9 @@ function __buscarcodigoPrecio(idArticulo,cantidad,precio){
     });
    return 
 }
-
+/**
+*Actualiza el Precio del articulo
+**/
 function actualizarArticuloPrecio(precio,cantidad){
     self.articulo.precioUnitario = precio > 0 ?precio:self.articulo.precioUnitario
     self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
@@ -2059,7 +2026,6 @@ function actualizarArticuloPrecio(precio,cantidad){
     self.update()
     __agregarArticulo(cantidad)
 }
-
 /**
 * Buscar el codigo del codigo  en la base de datos
 **/
@@ -2141,7 +2107,6 @@ function __buscarcodigo(idArticulo,cantidad,precio){
 /**
 *  Busca el codigo de uso interno
 * */
-
 function buscarCodigoUsoInterno(codigo){
     self.articulo = null;
 
@@ -2151,7 +2116,6 @@ function buscarCodigoUsoInterno(codigo){
             self.update();
         }
     }    
-
 }
 /**
 *  Agregar un articulo si existe se suma la cantidad y no existe se agrega en el detalle
@@ -2172,10 +2136,8 @@ function __agregarArticulo(cantidad){
         __nuevoArticuloAlDetalle(cantidad);
         encontrado = true;
     }
-
     if( encontrado ==false){
         if(self.detail[0] == null){ // first element
-           
             __nuevoArticuloAlDetalle(cantidad);
             encontrado = true;
         }else{//Se busca el articulo si existe se incrementa la cantidad
@@ -2192,7 +2154,6 @@ function __agregarArticulo(cantidad){
                 self.update();
                 }
             }
-        
         }
         // si no existe se agrega como un codigo nuevo
         if(encontrado == false){ // add elemen
@@ -2224,8 +2185,6 @@ __removeProductFromDetail(e) {
         })  
         self.numeroLinea =  cont
     }
-     
-
     self.update()
      __calculate();
  }
@@ -2240,20 +2199,18 @@ function __nuevoArticuloAlDetalle(cantidad){
         return;
     }
     var precioUnitario  = getPrecioUnitario(self.articulo.precioPublico,self.articulo.impuesto)
-    
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
     var montoDescuento  = 0
     var naturalezaDescuento = ""
     var subTotal        = montoTotal
     var montoImpuesto   = _calcularImpuesto(subTotal,parseFloat(self.articulo.impuesto) ==null?0:parseFloat(self.articulo.impuesto))
     var montoTotalLinea = subTotal + montoImpuesto 
-    self.pesoPrioridad =  self.pesoPrioridad + 1
-    self.numeroLinea = self.numeroLinea + 1
-    self.cantArticulos = self.cantArticulos + 1
-    
+    self.pesoPrioridad  =  self.pesoPrioridad + 1
+    self.numeroLinea    = self.numeroLinea + 1
+    self.cantArticulos  = self.cantArticulos + 1
     self.detail.push({
        numeroLinea     : self.numeroLinea,
-       pesoPrioridad   :self.pesoPrioridad,  
+       pesoPrioridad   : self.pesoPrioridad,  
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?" ":self.articulo.tipoImpuesto,
        iva             : parseFloat(self.articulo.impuesto),
        codigo          : self.articulo.codigo,
@@ -2267,10 +2224,8 @@ function __nuevoArticuloAlDetalle(cantidad){
        ganancia        : self.articulo.gananciaPrecioPublico,
        subTotal        : subTotal,
        montoTotalLinea : montoTotalLinea,
-       montoTotal      :montoTotal
+       montoTotal      : montoTotal
     });
-   
-    
     self.detail.sort(function(a,b) {
     if ( a.pesoPrioridad > b.pesoPrioridad )
         return -1;
@@ -2303,7 +2258,6 @@ function getPrecioUnitario(precio ,impuesto){
        resultado  =  precio
    }
    return resultado     
-  
 }
 /**
  * calculo del impuesto iva
@@ -2425,8 +2379,6 @@ function _actualizarDesc(e){
         }
       } 
     var index     = self.detail.indexOf(self.item);
-    
-   
       //Descuento
     if(self.item.porcentajeDesc != descuento){
        self.item.porcentajeDesc =  parseFloat(descuento);  
@@ -2475,7 +2427,6 @@ function __calculate() {
     totalMercanciasExentas  = 0
     totalServGravados       = 0
     totalServExentos        = 0
-
     totalGravado            = 0
     totalExento             = 0
     totalComprobante        = 0
@@ -2509,8 +2460,6 @@ function __calculate() {
     self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
     self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
     self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
-
-   // self.articulo              = null;
     self.update(); 
     $('.precioVenta').val(null)
     $('.codigo').val(null)
@@ -2529,9 +2478,6 @@ function getSubTotalGeneral(){
 
     self.update()
 }
-
-
-
 /**
 * Definicion de la tabla articulos 
 **/
@@ -2613,7 +2559,7 @@ function __informacionData_vendedores(){
 	 							                }	 
 								            },
                                         ];                              
-   
+  
 }
 /**
 * Opciones del modal de clientes
@@ -2621,7 +2567,6 @@ function __informacionData_vendedores(){
 function __OpcionesVendedores(){
   var agregar  = '<a href="#"  title="Seleccionar Vendedor" class="btn btnVendedor btn-success form-control" title="Seleccione el vendedor" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
   return  agregar;
-
 }
 /**
 * Seleccionar el vendedor de la factura
@@ -2721,7 +2666,6 @@ function __ComboTipoDocumentos(){
     })
     self.update()
 }
-
 /**
 *  Agregar los inpust  y select de las tablas
 **/
@@ -2761,7 +2705,6 @@ function agregarInputsCombos_Facturas_Dias(){
 	    }
     })
 } 
-
 /**
 *  Agregar los inpust  y select de las tablas
 **/
@@ -2774,9 +2717,7 @@ function agregarInputsCombos_Vendedores(){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
-} 
-
-
+}
 /**
 * Mostrar el pago con F8 o en blanco
 **/
@@ -2839,21 +2780,20 @@ function __Teclas(){
     }
     }, false );
 }
-
+/**
+* refrescar una pagina
+**/
 function refrescarPagina(){
      __Init()
      $('.codigo').select()
       $(".codigo").focus()
  
 }
-
-
 /**
 * Contabilizar los billetes de acuerdo a como se vayan dando click en la pantalla
 */
 _sumarBilletes(e){
      if(self.primeraVezBilleteClick == false){
-      
         self.factura.totalEfectivo = 0
         self.primeraVezBilleteClick = true
         self.update()
@@ -2887,15 +2827,13 @@ _sumarBilletes(e){
 function cargaBilletes(){
     self.billetes = []
     self.update()
-    
     _incluirBilletes("₡","1000",1000,'/dist/img/billete1000.jpg')
     _incluirBilletes("₡","2,000",2000,'/dist/img/billete2000.jpg')
     _incluirBilletes("₡","5,000",5000,'/dist/img/billete5000.jpg')
-   
     _incluirBilletes("₡","10,000",10000,'/dist/img/billete10000.jpg')
     _incluirBilletes("₡","20,000",20000,'/dist/img/billete20000.jpg')
     _incluirBilletes("₡","50,000",50000,'/dist/img/billete50000.jpg')
-     _incluirBilletes("","Limpiar",0,'/dist/img/limpiar.png')
+    _incluirBilletes("","Limpiar",0,'/dist/img/limpiar.png')
 }
 /**
 *    Incluir a los billetes

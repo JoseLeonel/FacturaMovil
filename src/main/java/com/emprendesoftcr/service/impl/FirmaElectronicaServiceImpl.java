@@ -83,7 +83,7 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
 	     String date = FacturaElectronicaUtils.toISO8601String(new Date(timestamp.getTime() - 21600000));
 	     
 	     resultado = "<ds:Object>" +
-	         "<xades:QualifyingProperties Target=\"#id-b950d386377a\" " +
+	         "<xades:QualifyingProperties Id=\"QualifyingProperties-96ea0452-42ff-421b-8578-332e5b52f172\" Target=\"#Signature-a57f9418-05b6-49bf-a44f-11a29404c13f\" " +
 	         "xmlns:xades=\"http://uri.etsi.org/01903/v1.3.2#\">" +				
 	         "<xades:SignedProperties xmlns=\"" + urlXMLNS + "\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" xmlns:xades=\"http://uri.etsi.org/01903/v1.3.2#\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" Id=\"xades-id-b950d386377a\">" +
 	         "<xades:SignedSignatureProperties>" +
@@ -105,7 +105,7 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
 	         "</xades:SignaturePolicyIdentifier>" +
 	         "</xades:SignedSignatureProperties>" +
 	         "<xades:SignedDataObjectProperties>" +
-	               "<xades:DataObjectFormat ObjectReference=\"#r-id-1\">"+
+	               "<xades:DataObjectFormat ObjectReference=\"#Reference-754c820d-d720-443f-8ca0-c2f8c75454e9\">"+
 	               		"<xades:MimeType>"+
 	                    "text/xml"+
 	                   "</xades:MimeType>"+  
@@ -139,7 +139,7 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
 		 resultado =  "<ds:SignedInfo xmlns=\"" + urlXMLNS + "\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
          "<ds:CanonicalizationMethod Algorithm=\"http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments\"></ds:CanonicalizationMethod>" +
          "<ds:SignatureMethod Algorithm=\"http://www.w3.org/2001/04/xmldsig-more#rsa-sha256\"></ds:SignatureMethod>" +
-         "<ds:Reference Id=\"r-id-1\" URI=\"\">" +
+         "<ds:Reference Id=\"r-ddb543c7-ea0c-4b00-95b9-d4bfa2b4e411\" URI=\"\">" +
          "<ds:Transforms>" +
          "<ds:Transform Algorithm=\"http://www.w3.org/2000/09/xmldsig#enveloped-signature\"></ds:Transform>" +
          "</ds:Transforms>" +
@@ -170,7 +170,7 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
 	 String resultado = Constantes.EMPTY;
 	 try {
      String signInf = FacturaElectronicaUtils.signSHA256RSA(info, privateKey);
-     resultado =  "<ds:SignatureValue>" + signInf + "</ds:SignatureValue>";
+     resultado =  "<ds:SignatureValue Id=\"SignatureValue-a57f9418-05b6-49bf-a44f-11a29404c13f\">" + signInf + "</ds:SignatureValue>";
 		
 	} catch (Exception e) {
 		log.info("** Error  createInfo: " + e.getMessage() + " fecha " + new Date());
@@ -209,7 +209,7 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
  private String envelope(String content, String signature) throws Exception{
 	 String resultado = Constantes.EMPTY;
 	 try {
-     String sign = "<ds:Signature Id=\"id-b950d386377a\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\">" +
+     String sign = "<ds:Signature Id=\"Signature-a57f9418-05b6-49bf-a44f-11a29404c13f\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\">" +
          signature + "</ds:Signature>" + "$1";
      resultado = content.replaceAll("(<\\/(?:.(?!<))+>)$", sign);
 		

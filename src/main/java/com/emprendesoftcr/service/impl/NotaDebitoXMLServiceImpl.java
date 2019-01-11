@@ -201,6 +201,12 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
       	if(tipoCodigo.equals(Constantes.EMPTY)) {
       		tipoCodigo = Constantes.TIPO_CODIGO_ARTICULO_CODIGO_VENDEDOR;
       	}
+      	String unidadMedida =Constantes.UNIDAD_MEDIDA;
+      	if(detalle.getUnidadMedida() !=null) {
+      		if(!detalle.getUnidadMedida().equals(Constantes.EMPTY)) {
+      			unidadMedida = detalle.getUnidadMedida();
+      		}
+      	}
       	lineas += "<LineaDetalle>" +
             "<NumeroLinea>" + new BigInteger(detalle.getNumeroLinea().toString()) + "</NumeroLinea>" +
             "<Codigo>" +
@@ -208,7 +214,7 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
             "<Codigo>" + detalle.getCodigo() + "</Codigo>" +
             "</Codigo>" +
             "<Cantidad>" + FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getCantidad()) + "</Cantidad>" +
-            "<UnidadMedida>" + detalle.getUnidadMedida() + "</UnidadMedida>" +
+            "<UnidadMedida>" + unidadMedida + "</UnidadMedida>" +
     //        "<UnidadMedidaComercial>" + detalle.getUnidadMedida() + "</UnidadMedidaComercial>" +
             "<Detalle>" + detalle.getDescripcion().trim() + "</Detalle>" +
             "<PrecioUnitario>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getPrecioUnitario()) + "</PrecioUnitario>" +

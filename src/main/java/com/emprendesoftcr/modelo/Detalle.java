@@ -103,6 +103,10 @@ public class Detalle implements Serializable {
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
 	private Date							updated_at;
+	
+
+	@Column(name = "monto_gananc", columnDefinition = "Double default '0'")
+	private Double montoGanancia;
 
 	@JsonIgnore
 	@ManyToOne
@@ -359,6 +363,16 @@ public class Detalle implements Serializable {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	
+	public Double getMontoGanancia() {
+		return montoGanancia;
+	}
+
+	
+	public void setMontoGanancia(Double montoGanancia) {
+		this.montoGanancia = montoGanancia;
 	}
 
 }
