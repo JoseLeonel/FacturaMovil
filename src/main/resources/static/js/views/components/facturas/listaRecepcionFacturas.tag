@@ -77,7 +77,7 @@
                                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
                                        <thead>
                                             <tr>
-                                                <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}     </th>
+                                                <th class = "table-header" >Ingreso    </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}     </th>
                                                 <th class = "table-header" >{$.i18n.prop("emisor.cedula")}             </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.clave")}             </th>
@@ -85,11 +85,12 @@
                                                 <th class = "table-header" >{$.i18n.prop("factura.totalImpuestos")}    </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.totalComprobante")}  </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.documento")}         </th>
-                                                <th class = "table-header" >{$.i18n.prop("listado.acciones")}          </th>
+                                                
                                             </tr>
                                         </thead>
                                         <tfoot style="display: table-header-group;">
                                             <tr>
+                                                <th>Ingreso</th>
                                                 <th>{$.i18n.prop("factura.fecha.emision")}</th>
                                                 <th>{$.i18n.prop("emisor.cedula")}</th>
                                                 <th>{$.i18n.prop("factura.clave")}</th>
@@ -97,7 +98,7 @@
                                                 <th>{$.i18n.prop("factura.totalImpuestos")} </th>
                                                 <th>{$.i18n.prop("factura.totalComprobante")} </th>
                                                 <th>{$.i18n.prop("factura.documento")}</th>
-                                                <th>      </th>
+                                                
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -485,7 +486,7 @@ self.totalImpuestoGeneral = 0
 self.on('mount',function(){
     $("#filtros").validate(reglasDeValidacion());
     __InformacionDataTable()
-    __InicializarTabla('.tableListar')
+     __InicializarTabla('.tableListar')
 })
 /**
 * limpiar los filtros
@@ -537,7 +538,6 @@ __Busqueda(){
         	cedulaEmisor:$('#cedulaEmisor').val(),
         };
         $("#tableListar").dataTable().fnClearTable(); 
-        __InicializarTabla('.tableListar')  
         $.ajax({
             url: "ListarRecepcionFacturasActivasAndAnuladasAjax.do",
             datatype: "json",
@@ -565,6 +565,24 @@ __Busqueda(){
         });
      }
 }
+
+/**
+*  Listar la tabla a aplicar el mantenimiento
+**/
+function __InicializarTabla(nombreTabla){
+    $(nombreTabla).DataTable({
+        destroy: true,
+        "language": idioma_espanol,
+        "sDom": 'lrtip',
+        "order": [0, 'desc'],
+        "bPaginate": true,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+        
+    });    
+}
+
 /**
 *  Suma de totales de cuenta por cobrar 
 **/
@@ -586,9 +604,7 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 7    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
-	    }
     })
 } 
 /*
@@ -616,7 +632,8 @@ function __displayDate_detail(fecha) {
 **/
 function __InformacionDataTable(){
     self.formato_tabla = [ 
-			{"data" : "fechaEmision"	,"name":"fechaEmision"    ,"title" : $.i18n.prop("factura.fecha.emision")      ,"autoWidth":true, 
+			{'data' : 'created_at'  ,"name":"created_at"    ,"title" : "Ingreso"     , "autoWidth" : true},
+            {"data" : "fechaEmision"	,"name":"fechaEmision"    ,"title" : $.i18n.prop("factura.fecha.emision")      ,"autoWidth":true, 
 				"render" : function(fechaEmision){
 					return formatearFechaDT(fechaEmision); 
 				}
@@ -639,11 +656,6 @@ function __InformacionDataTable(){
             		 "render":function(numeroConsecutivoReceptor,type, row){
 								return __TipoDocumentos(numeroConsecutivoReceptor,row)
 	 						  }
-          },
-	      {'data' : 'id' ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
-        	  "render":function(id,type, row){
-				    return " ";
-			    }
           }
    ];
    self.update();

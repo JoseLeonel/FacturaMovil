@@ -23,14 +23,18 @@
 					     		<input type="file" id="fileUpload" class="form-control"/>
                             </div>
                         </div>
+						<br>
 						<div class="row">
 							<div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-							    <section>
+							    <section> 
+								    <a class="pull-left" href="#"    onclick = {__MostrarGuia} title="Guia para aceptar compra de un proveedor"> <span style="color:red;font-weight:bold"><u>Guia de aceptacion de compras</u></span></a><br>
+									<div show="{verAyuda ==true}">
 							     	<h1>Como aceptar la compra electronica: </h1>
 									 <p>1. Le llegará un correo electronico con tres archivos.</p>
 									 <p>2. Descargue el documento cuyo nombre es “XML”.</p>
 									 <p>3. Clic Seleccionar Archivo </p>
 									 <p>4. Si todo esta bien presionar aceptar compra  </p>
+									</div> 
 								</section> 
                             </div>
                         </div>
@@ -314,6 +318,7 @@
 	    self.mostrarCargaArchivo  = true;
 		self.mostrarFormulario    = false;	    
 	    self.mostrarDetalle       = false;
+		self.verAyuda             = false;
 		self.tipoCedulas	   	  = {data:[]} 
 		self.mediosPago	   		  = {data:[]}
 		self.condicionesVenta	  = {data:[]}
@@ -417,7 +422,15 @@
 		//Se actualiza la pagina
 		self.update();
 
-		
+		__MostrarGuia(){
+			if(self.verAyuda ==true){
+				self.verAyuda = false
+			}else{
+				self.verAyuda = true
+			}
+			self.update()
+		}
+
 		//Rereso a la pantalla para cargar otro archivo
 		__regresarAlListado(){
 			self.mostrarCargaArchivo = true;

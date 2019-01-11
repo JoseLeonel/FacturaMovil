@@ -21,6 +21,7 @@ public class Constantes {
 //cantidad de dias de un credito minimo
 	public static final Integer					CANTIDAD_DIAS_MINIMO_CREDITO												= 1;
 	// Tipo de codigos de productos
+	public static final String					TIPO_IMPUESTO_VENTA_ARTICULO												= "01";
 	public static final String					TIPO_CODIGO_ARTICULO_POR_SERVICIO										= "07";
 	public static final String					TIPO_CODIGO_ARTICULO_USO_INTERNO										= "04";
 	public static final String					TIPO_CODIGO_ARTICULO_CODIGO_VENDEDOR								= "01";
@@ -30,7 +31,7 @@ public class Constantes {
 	public static final String					CODIGO_ARTICULO_IMPUESTO_SERVICIO										= "8888";
 
 	// Semaforo
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 100;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 90;
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS								= 20;
 
 	// 48 horas cada 5 minutos
@@ -69,6 +70,7 @@ public class Constantes {
 	public static final String					CERT_HASH																						= "certHash";
 
 	// Formatos electronicos
+	public static final String					UNIDAD_MEDIDA																				= "Unid";
 	public static final String					FORMATO_PROVINCIA																		= "0";
 	public static final String					FORMATO_CANTON																			= "00";
 	public static final String					FORMATO_DISTRITO																		= "00";
@@ -387,7 +389,7 @@ public class Constantes {
 	public static final String					SP_TOTAL_FACTURAS_IN_FECHA_FIN											= "FECHA_FIN";
 	public static final String					SP_TOTAL_FACTURAS_IN_ID_EMPRESA											= "ID_EMPRESA";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL													= "TOTAL";
-	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO								= "TOTAL_DESCUENTOS";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO								= "TOTAL_DESC";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS								= "TOTAL_IMPUESTOS";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS						= "TOTAL_NETAS";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS					= "TOTAL_EXENTAS";
@@ -408,6 +410,7 @@ public class Constantes {
 	public static final String					SP_GENERAR_CONSECUTIVO_IN_ID_EMPRESA								= "ID_EMRPESA";
 	public static final String					SP_GENERAR_CONSECUTIVO_IN_ID_USUARIO								= "ID_USUARIO";
 	public static final String					SP_GENERAR_CONSECUTIVO_IN_TIPO_DOCUMENTO						= "TIPO_DOCUMENTO";
+	                                                                                           
 	public static final String					SP_GENERAR_CONSECUTIVO_OUT_CONSECUTIVO							= "CONSECUTIVO";
 
 	// Procedimiento para generar el consecutivo para una recepcion de factura

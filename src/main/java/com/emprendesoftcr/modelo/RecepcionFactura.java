@@ -21,7 +21,6 @@ import com.emprendesoftcr.Utils.Utils;
 
 /**
  * Recepcion de la factura, aceptacion de facturas de un emisor.
- * 
  * @author Jairo Cisneros.
  * @since 15 de setiembre del 2018
  */
@@ -29,147 +28,214 @@ import com.emprendesoftcr.Utils.Utils;
 @Table(name = "recepcion_factura")
 public class RecepcionFactura implements Serializable {
 
-	private static final long serialVersionUID = 544316204546771917L;
+	private static final long	serialVersionUID	= 544316204546771917L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long id;
+	private Long							id;
 
 	// 1 aceptado, 2 aceptado parcialmente, 3 rechazado.
 	@Column(name = "mensaje")
-	private String mensaje;
+	private String						mensaje;
 
 	@Column(name = "detalle_Mensaje")
-	private String detalleMensaje;
+	private String						detalleMensaje;
 
 	@Column(name = "numero_conse_receptor")
-	private String numeroConsecutivoReceptor;
-	
+	private String						numeroConsecutivoReceptor;
+
 	@Column(name = "estado_firma")
-	private Integer estadoFirma;
+	private Integer						estadoFirma;
 
 	@Column(name = "cedula_emisor")
-	private String emisorCedula;
+	private String						emisorCedula;
 
 	@Column(name = "emisor_nombre")
-	private String emisorNombre;
+	private String						emisorNombre;
 
 	@Column(name = "tipo_cedula_emisor")
-	private String emisorTipoCedula;
+	private String						emisorTipoCedula;
 
 	@Column(name = "emisor_correo")
-	private String emisorCorreo;
+	private String						emisorCorreo;
 
 	@Column(name = "emisor_codigo_provincia")
-	private String emisorCodigoProvincia;
+	private String						emisorCodigoProvincia;
 
 	@Column(name = "emisor_provincia")
-	private String emisorProvincia;
+	private String						emisorProvincia;
 
 	@Column(name = "emisor_canton")
-	private String emisorCanton;
+	private String						emisorCanton;
 
 	@Column(name = "emisor_codigo_canton")
-	private String emisorCodigoCanton;
+	private String						emisorCodigoCanton;
 
 	@Column(name = "emisor_distrito")
-	private String emisorDistrito;
+	private String						emisorDistrito;
 
 	@Column(name = "emisor_codigo_distrito")
-	private String emisorCodigoDistrito;
+	private String						emisorCodigoDistrito;
 
 	@Column(name = "emisor_otra_sena")
-	private String emisorOtraSena;
+	private String						emisorOtraSena;
 
 	@Column(name = "receptor_nombre")
-	private String receptorNombre;
+	private String						receptorNombre;
 
 	@Column(name = "cedula_receptor")
-	private String receptorCedula;
+	private String						receptorCedula;
 
 	@Column(name = "receptor_tipo_cedula")
-	private String receptorTipoCedula;
+	private String						receptorTipoCedula;
 
 	@Column(name = "receptor_correo")
-	private String receptorCorreo;
+	private String						receptorCorreo;
 
 	@Column(name = "receptor_provincia")
-	private String receptorProvincia;
+	private String						receptorProvincia;
 
 	@Column(name = "receptor_codigo_provincia")
-	private String receptorCodigoProvincia;
+	private String						receptorCodigoProvincia;
 
 	@Column(name = "receptor_canton")
-	private String receptorCanton;
+	private String						receptorCanton;
 
 	@Column(name = "receptor_codigo_canton")
-	private String receptorCodigoCanton;
+	private String						receptorCodigoCanton;
 
 	@Column(name = "receptor_distrito")
-	private String receptorDistrito;
+	private String						receptorDistrito;
 
 	@Column(name = "receptor_codigo_distrito")
-	private String receptorCodigoDistrito;
+	private String						receptorCodigoDistrito;
 
 	@Column(name = "receptor_otra_sena")
-	private String receptorOtraSena;
+	private String						receptorOtraSena;
 
 	@Column(name = "receptor_telefono")
-	private String receptorTelefono;
+	private String						receptorTelefono;
 
 	@Column(name = "receptor_nombre_comercial")
-	private String receptorNombreComercial;
+	private String						receptorNombreComercial;
 
 	@Column(name = "factura_consecutivo")
-	private String facturaConsecutivo;
+	private String						facturaConsecutivo;
 
 	@Column(name = "clave")
-	private String facturaClave;
+	private String						facturaClave;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "fecha_emision")
-	private Date facturaFechaEmision;
+	private Date							facturaFechaEmision;
 
 	@Column(name = "fac_condicion_venta")
-	private String facturaCondicionVenta;
+	private String						facturaCondicionVenta;
 
 	@Column(name = "fac_medio_pago")
-	private String facturaMedioPago;
+	private String						facturaMedioPago;
 
 	@Column(name = "codigo_moneda")
-	private String facturaCodigoMoneda;
+	private String						facturaCodigoMoneda;
 
 	@Column(name = "tipo_cambio")
-	private Double facturaTipoCambio;
+	private Double						facturaTipoCambio;
 
 	@Column(name = "fac_total_serv_exentos")
-	private Double facturaTotalServExentos;
+	private Double						facturaTotalServExentos;
 
 	@Column(name = "fac_total_exento")
-	private Double facturaTotalExento;
+	private Double						facturaTotalExento;
 
 	@Column(name = "fac_total_venta")
-	private Double facturaTotalVenta;
+	private Double						facturaTotalVenta;
 
 	@Column(name = "fac_total_venta_neta")
-	private Double facturaTotalVentaNeta;
+	private Double						facturaTotalVentaNeta;
 
 	@Column(name = "total_factura")
-	private Double facturaTotalComprobante;
+	private Double						facturaTotalComprobante;
 
 	@Column(name = "total_impuestos")
-	private Double facturaTotalImpuestos;
+	private Double						facturaTotalImpuestos;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
+	@Column(name = "created_at")
+	private Date							created_at;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
+	@Column(name = "updated_at")
+	private Date							updated_at;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
-	private Empresa empresa;
+	private Empresa						empresa;
+
+	public RecepcionFactura(Long id, String mensaje, String detalleMensaje, String numeroConsecutivoReceptor, Integer estadoFirma, String emisorCedula, String emisorNombre, String emisorTipoCedula, String emisorCorreo, String emisorCodigoProvincia, String emisorProvincia, String emisorCanton, String emisorCodigoCanton, String emisorDistrito, String emisorCodigoDistrito, String emisorOtraSena, String receptorNombre, String receptorCedula, String receptorTipoCedula, String receptorCorreo, String receptorProvincia, String receptorCodigoProvincia, String receptorCanton, String receptorCodigoCanton, String receptorDistrito, String receptorCodigoDistrito, String receptorOtraSena, String receptorTelefono, String receptorNombreComercial, String facturaConsecutivo, String facturaClave,
+			Date facturaFechaEmision, String facturaCondicionVenta, String facturaMedioPago, String facturaCodigoMoneda, Double facturaTipoCambio, Double facturaTotalServExentos, Double facturaTotalExento, Double facturaTotalVenta, Double facturaTotalVentaNeta, Double facturaTotalComprobante, Double facturaTotalImpuestos, Date created_at, Date updated_at, Empresa empresa) {
+		super();
+		this.id = id;
+		this.mensaje = mensaje;
+		this.detalleMensaje = detalleMensaje;
+		this.numeroConsecutivoReceptor = numeroConsecutivoReceptor;
+		this.estadoFirma = estadoFirma;
+		this.emisorCedula = emisorCedula;
+		this.emisorNombre = emisorNombre;
+		this.emisorTipoCedula = emisorTipoCedula;
+		this.emisorCorreo = emisorCorreo;
+		this.emisorCodigoProvincia = emisorCodigoProvincia;
+		this.emisorProvincia = emisorProvincia;
+		this.emisorCanton = emisorCanton;
+		this.emisorCodigoCanton = emisorCodigoCanton;
+		this.emisorDistrito = emisorDistrito;
+		this.emisorCodigoDistrito = emisorCodigoDistrito;
+		this.emisorOtraSena = emisorOtraSena;
+		this.receptorNombre = receptorNombre;
+		this.receptorCedula = receptorCedula;
+		this.receptorTipoCedula = receptorTipoCedula;
+		this.receptorCorreo = receptorCorreo;
+		this.receptorProvincia = receptorProvincia;
+		this.receptorCodigoProvincia = receptorCodigoProvincia;
+		this.receptorCanton = receptorCanton;
+		this.receptorCodigoCanton = receptorCodigoCanton;
+		this.receptorDistrito = receptorDistrito;
+		this.receptorCodigoDistrito = receptorCodigoDistrito;
+		this.receptorOtraSena = receptorOtraSena;
+		this.receptorTelefono = receptorTelefono;
+		this.receptorNombreComercial = receptorNombreComercial;
+		this.facturaConsecutivo = facturaConsecutivo;
+		this.facturaClave = facturaClave;
+		this.facturaFechaEmision = facturaFechaEmision;
+		this.facturaCondicionVenta = facturaCondicionVenta;
+		this.facturaMedioPago = facturaMedioPago;
+		this.facturaCodigoMoneda = facturaCodigoMoneda;
+		this.facturaTipoCambio = facturaTipoCambio;
+		this.facturaTotalServExentos = facturaTotalServExentos;
+		this.facturaTotalExento = facturaTotalExento;
+		this.facturaTotalVenta = facturaTotalVenta;
+		this.facturaTotalVentaNeta = facturaTotalVentaNeta;
+		this.facturaTotalComprobante = facturaTotalComprobante;
+		this.facturaTotalImpuestos = facturaTotalImpuestos;
+		this.created_at = created_at;
+		this.updated_at = updated_at;
+		this.empresa = empresa;
+	}
 
 	public RecepcionFactura() {
 		super();
 	}
 
+	public String getCreated_atSTR() {
+		if (this.created_at != null) {
+			return Utils.getFechaGeneraReporte(this.getCreated_at());
+		}
+		return Constantes.EMPTY;
+	}
+	
 	public String getFechaEmisionSTR() {
 		if (this.facturaFechaEmision != null) {
 			return Utils.getFechaGeneraReporte(this.getFacturaFechaEmision());
@@ -191,6 +257,22 @@ public class RecepcionFactura implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Date getCreated_at() {
+		return created_at;
+	}
+
+	public void setCreated_at(Date created_at) {
+		this.created_at = created_at;
+	}
+
+	public Date getUpdated_at() {
+		return updated_at;
+	}
+
+	public void setUpdated_at(Date updated_at) {
+		this.updated_at = updated_at;
 	}
 
 	public String getMensaje() {

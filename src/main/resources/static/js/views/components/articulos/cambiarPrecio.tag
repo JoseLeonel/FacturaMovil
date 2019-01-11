@@ -10,7 +10,8 @@
                 </div>
                 <div class="box-body">
                     <button show = {botonAgregar} title="Agregar un Nuevo Articulo"  onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp Nuevo</button>
-                     <button  onclick={__Modificar} title="modificar el Articulo" show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
+                    <button  onclick={__Modificar} title="modificar el Articulo" show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
+                    <button  onclick={__Imprimir} title="Imprimir codigo  y precio" class="btn-imprimir btn-print pull-right" > &nbsp {$.i18n.prop("btn.imprimir")}</button>
                     <form id = "formulario" name ="formulario "   class="advanced-search-form">
                         <input type="hidden" name="id" id="id" value="{articulo.id}">
                         <input type="hidden" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista}"  >
@@ -28,7 +29,7 @@
                         <div class="row">
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                 <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.codigo")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" class="campo codigo" id="codigo" name="codigo" value="{articulo.codigo}"  onkeypress={__addPrecioDetail} autofocus="autofocus">
+                                <input type="text" class="campo codigo" id="codigo" name="codigo" value="{articulo.codigo}"  onkeypress={__Consulta} autofocus="autofocus">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                 <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.descripcion")}  <span class="requeridoDato">*</span></label>
@@ -226,7 +227,7 @@ self.on('mount',function(){
 *  Consultar  especifico
 * 1  Mostrar  2  Modificar
 **/
- __addPrecioDetail(e){
+ __Consulta(e){
     if (e.keyCode != 13) {
         return;
     } 
@@ -342,7 +343,18 @@ function enviarCargarCombos(){
     __listadoCategoriasActivas()
     __listadoMarcasActivas()
 }
+/**
+*imprimir el codigo y precio
+**/
+__Imprimir(){
+   if(self.articulo == null){
+       return
+   }
+   riot.compile(function() {
+   	  var tags = riot.mount('articulo-imprimir',{articulo:self.articulo});
+	});
 
+}
 
 
 /**
@@ -402,7 +414,6 @@ __ActualizarPreciosImpuestos(e){
     self.articulo.gananciaPrecioPublico    = self.articulo.precioPublico > 0 ? _porcentajeGanancia(costo,impuesto,self.articulo.precioPublico):0
     self.update()
 }
-
 /**
 * Porcentaje de ganancia de Precio al Publico
 **/
@@ -415,7 +426,6 @@ __CalculoGananciaSinPrecioPublico(e){
     self.articulo.precioPublico = _PrecioPublicoConGanancia(costo,impuesto,ganancia)
     self.update()
 }
-
 /**
 * Asigna el impuesto 13 cuando es valor igual 01
 **/
@@ -438,7 +448,6 @@ __asignarImpuesto(){
     }else{
         $('.impuesto').val(null)
         self.articulo.tipoImpuesto =$('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
-        
         var resultado = self.articulo.impuesto/100
         self.articulo.impuesto = 0
         resultado = resultado == 0 ?0:1 + resultado 
@@ -456,18 +465,14 @@ __asignarImpuesto(){
     }
       
 }
-
-
 /**
 * Porcentaje de ganancia de Precio al Publico
 **/
-
 __CalculoGananciaPublico(e){
- var precioPublico = __valorNumerico(e.target.value)
+    var precioPublico = __valorNumerico(e.target.value)
     if(precioPublico ==0){
        return
     }
-    
     var impuesto      = __valorNumerico($('#impuesto').val())
     var costo         = __valorNumerico($('#costo').val())
     if(precioPublico == costo){
@@ -480,7 +485,9 @@ __CalculoGananciaPublico(e){
     self.articulo.precioPublico = precioPublico
     self.update()
 }
-
+/**
+*Precio con Ganancia
+**/
 function _PrecioPublicoConGanancia(costo,impuesto,ganancia){
   if(ganancia == 0){
       return 0
@@ -510,20 +517,19 @@ function _PrecioPublicoConGanancia(costo,impuesto,ganancia){
 **/
 __ActualizarPreciosCosto(e){
     let costo    = __valorNumerico(e.target.value)
-    
-    let impuesto =  __valorNumerico($('#impuesto').val())
+    let impuesto = __valorNumerico($('#impuesto').val())
     self.articulo.costo = costo 
     self.articulo.gananciaPrecioEspecial   = self.articulo.precioEspecial > 0?_porcentajeGanancia(costo,impuesto,self.articulo.precioEspecial):0
     self.articulo.gananciaPrecioMayorista  = self.articulo.precioMayorista>0?_porcentajeGanancia(costo,impuesto,self.articulo.precioMayorista):0
     self.articulo.gananciaPrecioPublico    = self.articulo.precioPublico >0?_porcentajeGanancia(costo,impuesto,self.articulo.precioPublico):0
-     
     self.update()
-
     _CalculoPrecio(costo,impuesto)
 }
-
+/**
+* calculo de Precio
+**/
 function _CalculoPrecio(costo,impuesto){
-      self.articulo.precioPublico = _PrecioPublicoConGanancia(costo,self.articulo.impuesto,self.articulo.gananciaPrecioPublico)
+    self.articulo.precioPublico = _PrecioPublicoConGanancia(costo,self.articulo.impuesto,self.articulo.gananciaPrecioPublico)
     self.update()
 
 }
@@ -860,7 +866,9 @@ __Modificar(){
     }
 }
 
-
+/**
+*  Sumar
+**/
 function sumar(){
     self.totalCosto = 0
     self.totalPrecioPublico = 0

@@ -34,7 +34,7 @@
                                 <div class=" encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0  &&  facturaImpresa.clave != ""}"><strong>{$.i18n.prop("tikect.encabezado.clave")}</strong> </div>
                                 <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0 }">{claveParteUno}</div>
                                 <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0}">{claveParteDos}</div>
-                                <div class="encabezado" show ="{facturaImpresa.nombreFactura != ""}"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.nombreFactura}</div>
+                                <div class="encabezado" show ="{facturaImpresa.nombreFactura != "" || facturaImpresa.nombreFactura ==null }"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.nombreFactura}</div>
                                 <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == "" }"><strong show={facturaImpresa.cliente.nombreCompleto != 'CLIENTE_FRECUENTE'}>{$.i18n.prop("tikect.encabezado.receptor")}     {facturaImpresa.cliente.nombreCompleto}</strong ></div>
                                 <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == ""}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}>{$.i18n.prop("tikect.encabezado.receptor.cedula")}  {facturaImpresa.cliente.cedula}   </strong></div>
                                 <div class="encabezado" show ='{ facturaImpresa.nota != "" && facturaImpresa.nota !=null}'> Nota:   {facturaImpresa.nota}  </div>
@@ -99,12 +99,12 @@
                                         <td class="precio" ><strong>{facturaImpresa.tipoCambioSTR}</strong></td>
                                         <br>
                                     </tr>
-                                    <tr>
+                                     <tr>
                                     <td colspan="3"><div id="divQR" name="divQR"  class="divQR"></div></td>
                                     </tr>
-                                    
                                 </tbody>
                                 </table> 
+                                
                                 <p  align="left" show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 0}">E=Excento G=Gravado  
                                 
                                 <p  align="left" show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 0}">{$.i18n.prop("tikect.autorizado.parte.uno")}  <br>
@@ -330,57 +330,56 @@
 <script>
 
 var self = this;
-self.facturaImpresa   = opts.factura;  
+self.parametro   = opts.parametros;  
 self.detalles = []
-
 self.titulo = ""
 self.claveParteUno =""
 self.claveParteDos =""
 self.totalImpuestoServicio = 0
 self.subTotal = 0
+self.facturaActiva = 0
+self.facturaImpresa = {
+    empresa:{
+        imprimirDirecto:0
+    }
+}
 
 self.on('mount',function(){
-    
-    if(self.facturaImpresa.id > 0){
-
-
-       consultaFactura(self.facturaImpresa.id)
-        //qr()
+    document.getElementById('divQR').innerHTML = '';
+    if(self.parametro.factura.id > 0){
+       consultaFactura(self.parametro.factura.id)
+       if(self.parametro.factura.empresa.noFacturaElectronica == 0){
+           qr()    
+        }
+                    
     }
-   
-   
-   
-
+     
+    
 })
+
+
+
 
 function qr(){
      var options = {
         // render method: 'canvas', 'image' or 'div'
-        render: 'canvas',
-
+        render: 'div',
         // version range somewhere in 1 .. 40
         minVersion: 1,
         maxVersion: 40,
-
         // error correction level: 'L', 'M', 'Q' or 'H'
         ecLevel: 'L',
-
         // offset in pixel if drawn onto existing canvas
         left: 0,
         top: 0,
-
         // size in pixel
-        size: 200,
-
+        size: 100,
         // code color or image element
         fill: '#000',
-
         // background color or image element, null for transparent background
         background: null,
-
         // content
-        text: 'no text',
-
+        text: self.parametro.factura.clave,
         // corner radius relative to module width: 0.0 .. 0.5
         radius: 0,
 
@@ -399,17 +398,24 @@ function qr(){
         mPosX: 0.5,
         mPosY: 0.5,
 
-        label: 'no label',
+        label: self.parametro.factura.clave,
         fontname: 'sans',
         fontcolor: '#000',
 
         image: null
     }
+   
+   
     $('#divQR').qrcode(options);
 }
 
-function consultaFactura(idFactura){
 
+/**
+*consultar Facturas
+**/
+function consultaFactura(idFactura){
+     self.facturaImpresa =null
+     self.update()
      $.ajax({
         url: "MostrarFacturaAjax",
         datatype: "json",
@@ -424,6 +430,7 @@ function consultaFactura(idFactura){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                     self.facturaImpresa = modeloTabla
+                    console.log(self.facturaImpresa)
                     self.update()
                     self.detalles = []
                     self.detalles =self.facturaImpresa.detalles
@@ -456,15 +463,22 @@ function consultaFactura(idFactura){
                     if(self.facturaImpresa.estado ==3){
                         self.titulo = $.i18n.prop("tikect.encabezado.proforma") + self.facturaImpresa.id
                     }
-                    if(self.facturaImpresa.estado ==4){
+                    if(self.facturaImpresa.estado == 4){
                         self.titulo = $.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno") + self.facturaImpresa.id
                     }
                     self.update()
-                  
                     });
-                  
-                 
-                     $('.imprimirModal').modal('show'); 
+                    if (self.facturaImpresa.empresa.imprimirDirecto == 0 || self.parametro.facturaDia ==1){
+                        $('.imprimirModal').modal('show');   
+                    }else{
+                     //   __imprimir()
+                    }
+                     if (self.parametro.factura.empresa.imprimirDirecto == 1 && self.parametro.facturaDia ==0 ){
+                      __imprimir()
+                     }
+                    
+                    
+
                 }
             }
         },
@@ -592,9 +606,10 @@ function __imprimir(){
      var div = document.querySelector("#imprimeme");
     
     imprimirElemento(div)
+      
     
-
 }
+
 
 
 function imprimirElemento(elemento){
@@ -604,11 +619,11 @@ function imprimirElemento(elemento){
     
   
   var ventana = window.open('', 'PRINT', 'height=400,width=600');
-  ventana.document.write('<html><head><title>' + "" + '</title>');
-  ventana.document.write('</head><body >');
+  var html = "<!DOCTYPE HTML>";
+  html += '<html><head><title>' + "" + '</title>'
+  html += '</head><body id="imprimirLaFactura" >'
+  ventana.document.write(html);
   ventana.document.write(elemento.innerHTML);
-  //ventana.document.write("<br><img src='"+canvas.toDataURL()+"'/>");
- 
   ventana.document.write('</body></html>');
   ventana.document.close();
   ventana.focus();

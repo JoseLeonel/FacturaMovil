@@ -1,26 +1,19 @@
 $(document).ready(function() {
-	
 	ListarArticulos();
 	_Init();
 } );/*fin document*/
 
 var _Init = function () {
-	
-	//cargaMantenimientoCategorias()
 	   includeActionsArticulo('.dataTables_wrapper','.dataTables_length');
 	     agregarInputsCombos();
 	    EventoFiltro();
 	    __MantenimientoAgregar();
 	    __modificarRegistro_Listar();
 	    __agregarEntradaAlInventario();
-	    __agregarSalidaAlInventario();
+       __agregarSalidaAlInventario();
+       __Imprimir_Articulo()
 }
 
-
-
-
-//datatable
-//estandar
 var ListarArticulos = function(){
      var table  =  $('#tableListar').DataTable( {
      "responsive": true,
@@ -33,8 +26,6 @@ var ListarArticulos = function(){
              "bDeferRender": true ,
              "sDom": 'lrtip',
              "searching":true,
-            
-      
      "processing": false,
      "serverSide": true,
      "sort" : "position",
@@ -50,56 +41,43 @@ var ListarArticulos = function(){
      "language" : idioma_espanol,
  } );//fin del table
   
-} // fin variable listarSolicitudUsuarioQAM
-
-// Cuando se presiona el keypress para los inputs en los filtros y select
-//estandar
-// Cuando se presiona el keypress para los inputs en los filtros y select
-//estandar
+} 
+/**
+ * Eventos del filtro
+ */
 function EventoFiltro(){
- // Busquedas por Inpus
- var table = $('#tableListar').DataTable();
- table.columns().every( function () {
-     var dataTableColumns = this
-
-     $( 'input', this.footer() ).keypress(function (event) {
+   // Busquedas por Inpus
+   var table = $('#tableListar').DataTable();
+   table.columns().every( function () {
+   var dataTableColumns = this
+   $( 'input', this.footer() ).keypress(function (event) {
         if ( event.which == 13 ) {
              if ( dataTableColumns.search() !== this.value ) {
                 dataTableColumns.search( this.value ).draw();
              }
         }
-     } );
-
-     var searchTextBoxes = $(this.header()).find('input');
+   });
+   var searchTextBoxes = $(this.header()).find('input');
      searchTextBoxes.on('keyup change',function(){
         dataTableColumns.search(this.value).draw();
-     });
-      
-     $( 'select', this.footer() ).click(function (event) {
-         if ( dataTableColumns.search() !== this.value ) {
-                dataTableColumns.search( this.value ).draw();
-         }
-      } );
-  
-    
-    
-     var searchTextBoxesSelect = $(this.header()).find('select');
+   });
+   $( 'select', this.footer() ).click(function (event) {
+      if ( dataTableColumns.search() !== this.value ) {
+         dataTableColumns.search( this.value ).draw();
+      }
+   });
+   var searchTextBoxesSelect = $(this.header()).find('select');
      searchTextBoxes.on('keyup change',function(){
         dataTableColumns.search(this.value).draw();
-     });
-
-     searchTextBoxesSelect.on('click',function(e){
+   });
+   searchTextBoxesSelect.on('click',function(e){
         e.stopPrapagation();
-     });
-     searchTextBoxes.on('click',function(e){
+   });
+   searchTextBoxes.on('click',function(e){
         e.stopPrapagation();
-      });
-
-    
+   });
  } );
 }
-
-
 /**
 *Formato del listado de los cambios .toFixed(2)
 **/
@@ -119,7 +97,7 @@ var informacion_tabla = [
                                {'data' :'impuesto'                ,"name":"impuesto"               ,"title" : "Impuesto"         ,"autoWidth" :true },
                                {'data' :'precioPublico'           ,"name":"precioPublico"          ,"title" : "Precio"           ,"autoWidth" :true ,
                                "render":function(precioPublico,type, row){
-                                     return precioPublico ==null?0:precioPublico.toFixed(2);
+                                     return precioPublico ==null?0:precioPublico >0?precioPublico.toFixed(2):0;
                                 },
                             },
                                {'data' :'cantidad'                ,"name":"cantidad"               ,"title" : "Cantidad"         ,"autoWidth" :true,
@@ -134,7 +112,6 @@ var informacion_tabla = [
                                       return __Opciones(id,type,row);
                                  }
 	      		            }];
-
 /**
 * Opciones listado de los clientes
 */
@@ -143,7 +120,7 @@ function __Opciones(id,type,row){
     menu += '       <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' 
     menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>' 
     menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
-    
+    menu += '<li><a href="#"  title="Imprimir codigo  y precio"  class="btnImprimir" >Imprimir</a></li>'
     menu += '<li><a href="#"  title="Modificar" class="  btnModificar" >Modificar</a></li>'
     if(row.contable == "Si" && row.cantidad > 0 ){
        menu += '<li><a href="#"  title="Salida al inventario" class="  btnSalida" >Salida</a></li>'
@@ -151,11 +128,10 @@ function __Opciones(id,type,row){
     if(row.contable == "Si"  ){
         menu += '<li><a href="#"  title="Entrada al inventario"  class="  btnEntrada" >Entrada</a></li>'
     }
+    
      menu += "</ul></div>"  
      return menu;          
 }
-
-
 /**
 * incluir el boton agregar en cada mantenimiento 
 **/
@@ -180,25 +156,34 @@ function __MantenimientoAgregar(){
     	var parametros = {
     			tipoEjecucion:1
     	}
-    	
     	$('.mostrarListado').hide();
 		riot.compile(function() {
 			var parametros = {
 					tipoEjecucion:1
 			};
-			
-			  // here tags are compiled and riot.mount works synchronously
-			  var tags = riot.mount('articulo-crud',{parametros:parametros})
-
-			  
+     	  // here tags are compiled and riot.mount works synchronously
+		  var tags = riot.mount('articulo-crud',{parametros:parametros})
+  
 		});
     })
 }
-
-
-
-
-
+/**
+ * Funcion para imprimir codigo descripcion y precio
+ */
+function __Imprimir_Articulo(){
+	$('.tableListar').on('click','.btnImprimir',function(e){
+      $(".errorServerSideJgrid").remove();
+		var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+		riot.compile(function() {
+   		var tags = riot.mount('articulo-imprimir',{articulo:data});
+		});
+	});
+}
 /**
  * Funcion para Modificar del Listar
  */
@@ -225,7 +210,6 @@ function __modificarRegistro_Listar(){
        
 	});
 }
-
 /**
  * Funcion agregar una entrada
  */
@@ -277,8 +261,6 @@ function __agregarSalidaAlInventario(){
 		});
 	});
 }
-
-
 /**
  * Funcion para refrescar el listado
  */
@@ -287,14 +269,12 @@ function __mostrarListado(){
 	table.ajax.reload( null, false);
 	$('.mostrarListado').show();
 }
-
 /**
  * Funcion para regresar el listado
  */
 function __mostrarRegresarAlListado(){
 	$('.mostrarListado').show();
 }
-
 /**
 *  Agregar los inpust  y select de las tablas
 **/
@@ -316,7 +296,6 @@ function agregarInputsCombos(){
     	}
     })
 }
-
 /**
 * incluir el boton agregar en cada mantenimiento 
 **/
@@ -331,5 +310,3 @@ function includeActionsArticulo(dataTables_wrapper,dataTables_length) {
     new_header += "</div>";
     parent.prepend(new_header);
 }
-
-

@@ -50,6 +50,7 @@
 					</div>
                     <div class="box-body">
                         <form id="formularioCompra">
+                            <input   type="hidden" class="proveedor" id="proveedor" name="proveedor" value="{proveedor.id}">
                             <input id="id" name="id" type="hidden" value="{compra.id}">
                             <div class="row">
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
@@ -71,13 +72,6 @@
                                 </div>
                             </div>    
                             <div class="row">
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                                    <div class="form-group ">
-                                        <input   type="hidden" class="form-control campo proveedor" id="proveedor" name="proveedor" value="{proveedor.id}">
-                                        <label>{$.i18n.prop("compra.proveedor")}</label> 
-                                        <input onclick = {_EscogerProveedores}  type="text" id="nombreProveedor" name="nombreProveedor" class="campo nombreProveedor form-control"  value="{proveedor.nombreCompleto}">
-                                    </div>
-                                </div>
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("compra.consecutivo")}</label> 
@@ -165,6 +159,14 @@
             <div  class="contenedor-compra " >
                 <div class="cabecera-izquierda">
                     <div class="row">
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                            <div class="form-group ">
+                                <label>{$.i18n.prop("compra.proveedor")}</label> 
+                                <input onclick = {_EscogerProveedores}  type="text" id="nombreProveedor" name="nombreProveedor" class="campo nombreProveedor form-control"  value="{proveedor.nombreCompleto}">
+                            </div>
+                        </div>
+                    </div>            
+                    <div class="row">
                         <div class="col-sx-6 col-sm-6 col-md-6 col-lg-6">
                             <input onkeypress={__addProductToDetail}  id="codigo" class="campo" type="text" placeholder="XXXXXXXXXXX" />
                         </div>
@@ -194,20 +196,20 @@
                             <td>
                                 <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
                             </td>
-                            <td><h2>{linea}</h2></td>
+                            <td><h2>{numeroLinea}</h2></td>
                             <td><h2>{codigo}</h2></td>
                             <td><h2>{descripcion}</h2></td>
                             <td class="text-right">
-                                <input onkeypress={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalleBlur} id= "cantidadDetalle" class="campo" type="number" step="any" placeholder="Cantidad Detalle" value = {cantidad} />
+                                <input onkeypress={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalleBlur} id= "cantidadDetalle" class="campo" type="number" step="any" placeholder="Cantidad Detalle" value = {cantidad} min="1" pattern="^[0-9]+"/>
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarCostoKeyPress} onBlur={__actualizarCostoBlur} class="campo" type="number" step="any"  value = "{costo}" />
+                                <input  onkeypress={__actualizarCostoKeyPress} onBlur={__actualizarCostoBlur} class="campo" type="number" step="any"  value = "{costo}" min="0" pattern="^[0-9]+"/>
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarPrecioKeyPress} onBlur={__actualizarPrecioBlur} class="campo" type="number" step="any"  value = "{precio}" />
+                                <input  onkeypress={__actualizarPrecioKeyPress} onBlur={__actualizarPrecioBlur} class="campo" type="number" step="any"  value = "{precio}" min="0" pattern="^[0-9]+"/>
                             </td>
                             <td class="text-right">
-                                <input  onkeypress={__actualizarDescuentoKeyPress} onBlur={__actualizarDescuentoBlur} class="campo" type="number" step="any"  value = "{descuento}" />
+                                <input  onkeypress={__actualizarDescuentoKeyPress} onBlur={__actualizarDescuentoBlur} class="campo" type="number" step="any"  value = "{descuento}"  min="0" pattern="^[0-9]+" />
                             </td>
                             <td class="text-right">
                                 <h2>{totalImpuesto.toFixed(2)} </h2>
@@ -577,7 +579,7 @@
     self.articulos             = {data:[]}
     self.proveedores           = {data:[]}
     self.detalleCompra         ={data:[]}
-    self.proveedor             = {};
+    self.proveedor             = null;
     self.compras_espera         = {data:[]}  
     self.informacion_tabla             = []
     self.informacion_tabla_articulo    = []
@@ -589,23 +591,26 @@
     self.totalGeneralDescuento = 0;
     self.totalGeneralImpuesto  = 0;
     self.totalGeneralCompra    = 0; 
+    self.numeroLinea =0
+     self.pesoPrioridad =  0
     self.on('mount',function(){
         $("#formularioCompra").validate(reglasDeValidacionCompra());
         __informacionData()
         __InicializarTabla('.tableListaProveedor')
         __InicializarTabla('.tableListaInventario')
-        
-        
         agregarInputsCombos_Articulo()
           __ListaComprasEnEspera()
         __comboFormaPagos()
         __ComboTipoDocumentos()
         __Teclas()
         __ListaDeProveedores()
+        $('.datepickerFechaCompra').datepicker(
+        {
+            format: 'yyyy-mm-dd',
+            todayHighlight:true,
+        }
+    );
         __Init()
-        
-       
-        
     })
 /**
 * Camps requeridos
@@ -713,6 +718,8 @@ function __Init(){
          );
     $('.nota').val(null)
     $('.consecutivo').val(null)
+    self.numeroLinea =0
+     self.pesoPrioridad =  0
     self.detail                = [];
      self.compra                = {
         consecutivo:"",
@@ -733,7 +740,7 @@ function __Init(){
     self.articulo              = null;
     self.articulos                     = {data:[]}
     self.proveedores                   = {data:[]}
-    self.proveedor                     = {};
+    self.proveedor                     = null;
     self.mostrarFormularioPago = false
     self.mostarParaCrearNuevaCompra = true
     self.mostrarCamposIngresoContado = true;
@@ -755,12 +762,12 @@ function __Init(){
 function __CompraEnEspera(compra){
      __Init()
     self.detail         = []
-    self.proveedor      = {}         
+    self.proveedor      = null         
     self.update()
     $.ajax({
         url: "MostrarCompraEsperaAjax",
         datatype: "json",
-        data: compra,
+        data: {id:compra.id},
         method:"POST",
         success: function (data) {
             if (data.status != 200) {
@@ -798,11 +805,14 @@ function __displayDate_detail(fecha) {
 *  Cargar detalles Compra Espera
 **/
 function cargarDetallesCompraEnEspera(){
-    self.detail = []
+    self.detail = [];
+    self.numeroLinea =  0
+    self.pesoPrioridad = 0
     self.update()
     self.compra.detalleCompras.forEach(function(e){
         self.detail.push({
-            linea           : e.numeroLinea,
+            numeroLinea     : e.numeroLinea,
+            pesoPrioridad    :e.numeroLinea,
             articulo_id     : e.articulo.id,
             codigo          : e.articulo.codigo,
             descripcion     : e.articulo.descripcion,
@@ -816,7 +826,19 @@ function cargarDetallesCompraEnEspera(){
             subTotal        : parseFloat(e.subTotal),
             montoTotalLinea : e.montoTotalLinea
         });
+        self.numeroLinea = self.numeroLinea + 1
+        self.cantArticulos = self.cantArticulos + 1
+        self.pesoPrioridad = self.numeroLinea
+
     })
+    self.detail.sort(function(a,b) {
+    if ( a.pesoPrioridad > b.pesoPrioridad )
+        return -1;
+    if ( a.pesoPrioridad < b.pesoPrioridad )
+        return 1;
+    return 0;
+    } );
+    
     self.update()
      __calculate(); 
 }
@@ -841,7 +863,7 @@ function crearCompra(estadoCompra){
         consecutivo:$('.consecutivo').val(),
         estado:estadoCompra,
         fechaCredito:$('.formaPago').val() == 2?$('.fechaCredito').val():new Date(),
-        fechaCompra:$('.fechaCompra').val(),
+        fechaCompra:$('.fechaCompra').val() == null ? new Date():$('.fechaCompra').val(),
         detalleCompra :JSONDetalles
      }
     $.ajax({
@@ -1036,13 +1058,17 @@ function __ListaDeProveedores(){
 * Buscar el codigo del codigo  en la base de datos
 **/
 function __buscarcodigo(idArticulo,cantidad){
+    if(self.proveedor == null){
+        swal('','Antes de ingresar articulos a la compra asociar el proveedor','error');
+        return 
+    }
     self.articulo = null;
     self.update()
     $.ajax({
          datatype: "json",
-        url: 'findArticuloByCodigojax.do',
+        url: 'findArticuloProveedorByCodigojax.do',
         method:"GET",
-        data:{codigoArticulo:idArticulo},
+        data:{codigoArticulo:idArticulo,idProveedor:self.proveedor.id},
         success: function(data){
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
@@ -1068,6 +1094,7 @@ function __buscarcodigo(idArticulo,cantidad){
 *  Agregar un articulo si existe se suma la cantidad y no existe se agrega en el detalle
 **/
 function __agregarArticulo(cantidad){
+  
     if(self.articulo == null){
         return;
     }
@@ -1121,8 +1148,12 @@ function __nuevoArticuloAlDetalle(cantidad){
     var totalImpuesto     = __valorNumerico(montoImpuestoV) * __valorNumerico(cantidad) 
     var montoTotalLinea   = __valorNumerico(self.articulo.costo * cantidad) +  totalImpuesto
     self.descuento      = 0;
+    self.pesoPrioridad =  self.pesoPrioridad + 1
+    self.numeroLinea = self.numeroLinea + 1
+
     self.detail.push({
-       linea           : 0,
+       numeroLinea     : self.numeroLinea,
+       pesoPrioridad   :self.pesoPrioridad,  
        articulo_id     : self.articulo.id,
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
@@ -1135,17 +1166,10 @@ function __nuevoArticuloAlDetalle(cantidad){
        descuento       : 0,
        montoTotalLinea : __valorNumerico(montoTotalLinea)
     }); 
-    var cont = 0;
-    self.detail.forEach(function(elemen){
-            elemen.linea = cont + 1
-            cont = elemen.linea
-        }
-    )
-    self.update()
     self.detail.sort(function(a,b) {
-    if ( a.linea > b.linea )
+    if ( a.pesoPrioridad > b.pesoPrioridad )
         return -1;
-    if ( a.linea < b.linea )
+    if ( a.pesoPrioridad < b.pesoPrioridad )
         return 1;
     return 0;
     } );
@@ -1174,9 +1198,10 @@ __actualizarCostoBlur(e){
 
 function __ActualizarCosto(costo){
     var index = self.detail.indexOf(self.item);
+   
     //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
     costo =__valorNumerico(costo);
-    self.item.costo = parseFloat(costo);  
+    self.item.costo = parseFloat(costo) ;  
     _cambiaImpuesto()
     __actualizarItemArray();
     self.detail[index] = self.item;
@@ -1220,12 +1245,21 @@ __removeProductFromDetail(e) {
     var item = e.item;
     index = this.detail.indexOf(item);
     this.detail.splice(index, 1);
-    var cont = 0 ;
-    self.detail.forEach(function(elemen){
-            elemen.linea = cont + 1
-            cont = elemen.linea
-        }
-    )
+    var num = 0
+    for (var count = 0; count < self.detail.length; count++) {
+         num = num + 1 
+    }
+    if(num > 0){
+        var cont  = 0
+       self.detail.forEach(function(elemen){
+            elemen.numeroLinea = num 
+            num = num > 0?num -1:1
+            cont =  cont + 1
+        })  
+        self.numeroLinea =  cont
+    }
+     
+
     self.update()
      __calculate();
  }
@@ -1452,6 +1486,8 @@ function __seleccionarProveedores() {
 	     }
 	    self.proveedor = data
         self.update();
+        $('#modalProveedores').modal('hide') 
+
     });
 }
 /**

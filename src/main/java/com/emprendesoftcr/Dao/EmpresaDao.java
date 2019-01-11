@@ -1,12 +1,9 @@
 package com.emprendesoftcr.Dao;
 
 import java.util.Collection;
-import java.util.Date;
 
 import org.springframework.stereotype.Repository;
 
-import com.emprendesoftcr.modelo.Cliente;
-import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.RecepcionFactura;

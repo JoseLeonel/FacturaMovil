@@ -9,30 +9,29 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-
-@SpringBootApplication()
+@SpringBootApplication
 @Configuration
-@EnableAutoConfiguration 
+@EnableAutoConfiguration
 @EnableScheduling
 @ComponentScan(basePackageClasses = { FacturaElectronicaApplication.class })
 public class FacturaElectronicaApplication extends SpringBootServletInitializer {
-	
 
 	public static void main(String[] args) {
-	 
+	
+
 		System.out.println("----------------- Inciando la Factura Electronica de EmprendeSoftCR 2018  ---------------------------");
 		System.out.println("----------------- Desarrollador Jairo Cisneros  ---------------------------");
 		System.out.println("----------------- Desarrollador Leonel Hernandez Chaverri  ---------------------------");
 		SpringApplication.run(FacturaElectronicaApplication.class, args);
 
 	}
-	
+
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(FacturaElectronicaApplication.class);
 	}
 	
 	
-	
+
 
 }

@@ -47,7 +47,7 @@
                                     <label>{$.i18n.prop("cliente.titulo")} </label>  
                                     <select  class="form-control selectCliente" id="cliente" name="cliente" data-live-search="true">
                                         <option  data-tokens="{$.i18n.prop("todos.select")}"   value="0"  >{$.i18n.prop("todos.select")}</option>
-                                        <option  data-tokens="{nombreCompleto}" each={clientes.data}  value="{cedula}"  >{nombreCompleto}</option>
+                                        <option  data-tokens="{nombreCompleto}" each={clientes.data}  value="{id}"  >{nombreCompleto}</option>
                                     </select>
                                 </div>  
                             </div>
@@ -992,9 +992,13 @@ function __displayDate_detail(fecha) {
 function cargarDetallesFacturaEnEspera(){
     self.factura.tipoDoc = __TipoDocumentos(self.factura.numeroConsecutivo,self.factura)
     self.detail                = []
+    self.numeroLinea =  0
+    self.pesoPrioridad = 0
+    self.update()
     self.factura.detalles.forEach(function(e){
         self.detail.push({
             numeroLinea     : e.numeroLinea,
+            pesoPrioridad    :e.numeroLinea,
             codigo          : e.codigo,
             descripcion     : e.descripcion,
             cantidad        : e.cantidadSTR,
@@ -1008,6 +1012,14 @@ function cargarDetallesFacturaEnEspera(){
             montoTotal      : e.montoTotalSTR
         });
     })
+    self.detail.sort(function(a,b) {
+    if ( a.pesoPrioridad > b.pesoPrioridad )
+        return -1;
+    if ( a.pesoPrioridad < b.pesoPrioridad )
+        return 1;
+    return 0;
+    } );
+
     self.update()
     __comboCondicionPago()
     __ComboEstados()
@@ -1072,7 +1084,7 @@ function __InformacionDataTable(){
 
                                {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
-                                      return __Opciones(id,type,row);
+                                      return __Opciones(id,type,row); 
                                  }
 	      		            }];
     self.update();
@@ -1132,7 +1144,12 @@ function __imprimirPTV(){
 	    }
         self.factura = data
         self.update()
-        riot.mount('ptv-imprimir',{factura:self.factura});    
+        var parametros = {
+                          factura:self.factura,
+                          facturaDia:1
+                      }
+                      console.log("consultaFactura")
+                      riot.mount('ptv-imprimir',{parametros:parametros});   
 	});
 }
 /**

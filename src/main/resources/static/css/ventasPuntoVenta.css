@@ -44,6 +44,55 @@
      padding: 1px 2px;
      overflow: visible;
 }
+
+.campoTotales {
+     display: block;
+     width: 100%;
+     height: 100px;
+     padding: 8px 18px;
+     font-size: 10px;
+     line-height: 1.42857143;
+     color: #0c0c0c;
+     background-color: #fff;
+     background-image: none;
+     border: 1px solid #ccc;
+     border-radius: 2px;
+     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+     box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+     -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+     -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+     background-color: #fcfcfc;
+     border: 1px solid #ccc;
+     font: 20px verdana, arial, helvetica, sans-serif;
+     margin: 2px 0;
+     padding: 1px 2px;
+     overflow: visible;
+}
+.campoTotalesConBanco {
+     display: block;
+     width: 100%;
+     height: 52px;
+     padding: 8px 18px;
+     font-size: 10px;
+     line-height: 1.42857143;
+     color: #0c0c0c;
+     background-color: #fff;
+     background-image: none;
+     border: 1px solid #ccc;
+     border-radius: 2px;
+     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+     box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+     -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+     -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+     background-color: #fcfcfc;
+     border: 1px solid #ccc;
+     font: 20px verdana, arial, helvetica, sans-serif;
+     margin: 2px 0;
+     padding: 1px 2px;
+     overflow: visible;
+}
 /* Lista de facturas en espera*/
  .cabecera-derecha .lista-factura-espera {
      width:100%;
@@ -66,7 +115,7 @@
 }
  .label-limpiar{
      font-weight: 600 !important;
-     font-size: 20px !important;
+     font-size: 19px !important;
      font-family: Roboto,sans-serif !important;
      color: #ffffff !important;
      text-shadow: 0px 0px 1px #ffffff;
@@ -142,6 +191,51 @@
      -ms-transition: background-color 100ms linear;
      transition: background-color 100ms linear;
 }
+
+.label-totalesChinos{
+     font-weight: 600 !important;
+     font-size: 50px !important;
+     font-family: Roboto,sans-serif !important;
+     color: #30ed17 !important;
+     text-shadow: 0px 0px 1px #ffffff;
+     font-style: italic;
+     text-align: left;
+     padding-left: 20px;
+     line-height: 100px;
+     border-collapse: separate;
+     text-align: center;
+     cursor: pointer;
+     padding: 10px;
+     margin: 20px;
+     border: none;
+     text-align: center !important;
+     background-color: black !important;
+     box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+     border-radius: 5px;
+     -webkit-transition: background-color 100ms linear;
+     -moz-transition: background-color 100ms linear;
+     -o-transition: background-color 100ms linear;
+     -ms-transition: background-color 100ms linear;
+     transition: background-color 100ms linear;
+}
+
+
+
+.labelTotales {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+    font-size: 60px !important;
+}
+.labelTotalesConBanco {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+    font-size: 30px !important;
+}
+
  #pagarTitulo{
      font-weight: 600 !important;
      font-size: 30px !important;
@@ -155,6 +249,14 @@
  .tamanoLetraTotales{
      font-weight: 600 !important;
      font-size: 30px !important;
+}
+.tamanoLetra{
+     font-weight: 600 !important;
+     font-size: 50px !important;
+}
+.tamanoLetraConBanco{
+     font-weight: 600 !important;
+     font-size: 40px !important;
 }
  #pagarTable,#pagarTableInfo{
      border-collapse: separate;
@@ -189,7 +291,22 @@
      -ms-transition: background-color 100ms linear;
      transition: background-color 100ms linear;
 }
- #pagarInfo,#iva-total,#subtotal,#sigPeso{
+#btnGrandePagarGray{
+        cursor: pointer;
+        padding: 0px;
+        margin: 10px;
+        border: none;
+        text-align: center !important;
+        background-color: #706c6c !important; 
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+}
+ #pagarInfo,#iva-total,#subtotal,#sigPeso,#cantidad-total {
      font-weight: 100 !important;
      font-size: 14px !important;
 }
@@ -291,9 +408,8 @@
      flex-wrap:wrap;
 }
  .lista-articulos .product-item{
-     width:22%;
      margin-left:1%;
-     margin-bottom:25px;
+     margin-bottom:9px;
      box-shadow:0px 0px 6px 0px rgba(0,0,0,0.22);
      display:flex;
      flex-direction:column;

@@ -81,7 +81,16 @@ public class CompraBoImpl implements CompraBo {
 			compra.setEmpresa(compraCommand.getEmpresa());
 			compra.setEstado(compraCommand.getEstado());
 			compra.setFormaPago(compraCommand.getFormaPago());
-			compra.setFechaCompra(Utils.pasarADate(compraCommand.getFechaCompra(), "yyyy-MM-dd"));
+			if (compra.getFechaCompra() != null) {
+				if (compra.getFechaCompra().equals(Constantes.EMPTY)) {
+					compra.setFechaCompra(new Date());
+				} else {
+					compra.setFechaCompra(Utils.pasarADate(compraCommand.getFechaCompra(), "yyyy-MM-dd"));
+				}
+			} else {
+				compra.setFechaCompra(new Date());
+			}
+
 			if (compra.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
 				compra.setFechaCredito(Utils.pasarADate(compraCommand.getFechaCredito(), "yyyy-MM-dd"));
 			} else {
@@ -145,9 +154,9 @@ public class CompraBoImpl implements CompraBo {
 					}
 				}
 			}
-			compra.setTotalCompra(Utils.roundFactura(montoTotalLinea, 5));
-			compra.setTotalDescuento(Utils.roundFactura(totalDescuento, 5));
-			compra.setTotalImpuesto(Utils.roundFactura(totalImpuesto, 5));
+			compra.setTotalCompra(Utils.roundFactura(montoTotalLinea, 2));
+			compra.setTotalDescuento(Utils.roundFactura(totalDescuento, 2));
+			compra.setTotalImpuesto(Utils.roundFactura(totalImpuesto, 2));
 			if (compra.getId() == null) {
 				compra.setCreated_at(new Date());
 				compra.setUpdated_at(new Date());
@@ -167,9 +176,9 @@ public class CompraBoImpl implements CompraBo {
 					cuentaPagar.setCreated_at(new Date());
 					cuentaPagar.setUpdated_at(new Date());
 					cuentaPagar.setEmpresa(compra.getEmpresa());
-					cuentaPagar.setTotal(compra.getTotalCompra());
+					cuentaPagar.setTotal(Utils.roundFactura(compra.getTotalCompra(), 2));
 					cuentaPagar.setFechaCredito(compra.getFechaCredito());
-					cuentaPagar.setTotalSaldo(compra.getTotalCompra());
+					cuentaPagar.setTotalSaldo(Utils.roundFactura(compra.getTotalCompra(), 2));
 					cuentaPagar.setProveedor(compra.getProveedor());
 					cuentaPagar.setTotalAbono(Constantes.ZEROS_DOUBLE);
 					cuentaPagar.setUsuarioCreacion(usuario);
@@ -247,8 +256,8 @@ public class CompraBoImpl implements CompraBo {
 		}
 
 	}
-	
-	public Collection<Compra> findByFechaInicioAndFechaFinalAndProveedor(Date fechaInicio, Date fechaFin, Empresa empresa,  Proveedor proveedor){
+
+	public Collection<Compra> findByFechaInicioAndFechaFinalAndProveedor(Date fechaInicio, Date fechaFin, Empresa empresa, Proveedor proveedor) {
 		return compraDao.findByFechaInicioAndFechaFinalAndProveedor(fechaInicio, fechaFin, empresa, proveedor);
 	}
 

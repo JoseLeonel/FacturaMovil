@@ -168,7 +168,7 @@ public class AbonoController {
 			abonoBo.modificar(abono);
 			cuentaCobrar.setUpdated_at(new Date());
 			cuentaCobrar.setTotalAbono(abono.getTotal() + cuentaCobrar.getTotalAbono());
-			cuentaCobrar.setTotalSaldo(cuentaCobrar.getTotalSaldo() - abono.getTotal());
+			cuentaCobrar.setTotalSaldo(Utils.roundFactura(cuentaCobrar.getTotalSaldo(),2) - Utils.roundFactura(abono.getTotal(),2));
 			if (cuentaCobrar.getTotalSaldo().equals(Constantes.ZEROS_DOUBLE)) {
 				cuentaCobrar.setEstado(Constantes.CUENTA_POR_COBRAR_ESTADO_CERRADO);
 			}

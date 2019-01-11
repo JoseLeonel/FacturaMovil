@@ -788,8 +788,14 @@ function __TipoCambio(){
 * Imprimir 
 **/
 __Imprimir(){
-    var factura = self.factura
-    riot.mount('ptv-imprimir',{factura:factura});
+    
+     var parametros = {
+                          factura:self.factura,
+                          facturaDia:0
+                      }
+                      console.log("consultaFactura")
+                      riot.mount('ptv-imprimir',{parametros:parametros});
+   
 }
 /**
 *  Obtiene el valor de lo digitado en el campo de efectivo
@@ -1181,7 +1187,12 @@ function evaluarFactura(data){
             if(self.facturaImprimir.estado == 2){
                 __Init()
                 //Envia a la pantalla de impresion
-                 riot.mount('ptv-imprimir',{factura:self.facturaImprimir});
+                  var parametros = {
+                          factura:modeloTabla,
+                          facturaDia:0
+                      }
+                      console.log("consultaFactura")
+                      riot.mount('ptv-imprimir',{parametros:parametros});
                  
             }else{
                 swal({

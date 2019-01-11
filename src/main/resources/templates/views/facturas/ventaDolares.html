@@ -5,13 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <!-- Meta -->
 	<meta http-equiv="Content-Type" content="text/html; UTF-8">
-    <title>Cuentas por cobrar</title>
+    <title>Ventas</title>
+ 
+    <link rel="stylesheet" type="text/css" th:href="@{/css/ventasPuntoVenta.css}"/>
     
-       <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
+     <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
 
 	<!-- jQuery UI 1.11.4 -->
 	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 	<!-- JQUERY Properties-->
+	<script th:src="@{/dist/js/jquery-qrcode-0.14.0.js}"></script>
 	<script type="text/javascript" src="js/jquery.i18n.js"></script>
 	<script type="text/javascript" th:src="@{webjars/jquery-i18n-properties/1.10.2/jquery.i18n.properties.min.js}"></script>
     <script type="text/javascript" src="/js/jquery.blockUI.js"></script>
@@ -32,26 +35,24 @@
 	<!-- include riot.js and the compiler -->
 	<script src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script>
 	
-	<!-- MANTENIMIENTO DE CUENTA POR COBRAR -->
-	<script type="text/javascript" src="/js/views/cuentaCobrar/cuentaCobrar.js"></script>
-	<script type = "riot/tag"  src="/js/views/components/cuentaCobrar/cuentaCobrar.tag" ></script>
-	<script type = "riot/tag"  src="/js/views/components/cuentaCobrar/imprimirAbono.tag" ></script>
-	<script type = "riot/tag"  src="/js/views/components/facturas/imprimirPTV.tag" ></script>
-
+	<!-- MANTENIMIENTO DE Venta Dolares -->
 	
+	<script type="text/javascript" src="/js/jQuery.print.js"></script>
+	<script type="text/javascript" src="/js/views/facturas/ventaDolares.js"></script>
+	<script type = "riot/tag"  src="/js/views/components/facturas/ventaDolares.tag" ></script>
+	<script type = "riot/tag"  src="/js/views/components/facturas/imprimirPTV.tag" ></script>
+    <script type="text/javascript" src="/js/printThis.js"></script>
+    
     
 </head>
 <body>
 <section layout:fragment="header">
 
-<ol class="breadcrumb">
-    <li><a href="/"><i class="fa fa-dashboard"></i> Inicio</a></li>
-    <li class="active">Cuentas por Cobrar</li>
-</ol>
+
 </section>
 <div layout:fragment="content">
- 	<cuenta-cobrar></cuenta-cobrar>
- 	 <ptv-imprimir></ptv-imprimir>
+    <venta-dolares></venta-dolares>
+    <ptv-imprimir></ptv-imprimir>
 </div>
 
 </body>

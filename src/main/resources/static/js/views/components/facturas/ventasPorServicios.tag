@@ -507,7 +507,7 @@ var reglasDeValidacion = function() {
 		rules : {
 			descripcionProducto : {
 				required : true,
-                maxlength:250,
+                maxlength:160,
                 minlength:1,
 			},                                   
 			precio : {
@@ -554,6 +554,7 @@ function limpiar(){
     $('.plazoCredito').val(null)
     $('.referenciaNumero').val(null)
     $('.descripcionProducto').val(null)
+       $(".descripcionProducto").attr("maxlength",160 );
     $('.precio').val(null)
     $('.referenciaTipoDoc').prop("selectedIndex", 0);
     $('.tipoDoc').prop("selectedIndex", 0);
