@@ -397,6 +397,10 @@ public class Factura implements Serializable {
 		return tipoCambio;
 	}
 
+	public Double getTotalColones() {
+		return totalComprobante * tipoCambio;
+	}
+	
 	public void setTipoCambio(Double tipoCambio) {
 		this.tipoCambio = tipoCambio;
 	}

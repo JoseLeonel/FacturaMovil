@@ -60,6 +60,14 @@
                                 <input type="text" readonly="readonly" class="form-control emisorCedula" placeHolder ="{$.i18n.prop("emisor.cedula")}" id="emisorCedula" name="emisorCedula" value="{recepcionFactura.emisorCedula}">
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label> {$.i18n.prop("emisor.correoElectronico")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control emisorCorreoElectronico" placeHolder ="{$.i18n.prop("emisor.correoElectronico")}" id="emisorCorreo" name="emisorCorreo" value="{recepcionFactura.emisorCorreo}">
+                            </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label> {$.i18n.prop("emisor.telefono")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control emisorTelefono" placeHolder ="{$.i18n.prop("emisor.telefono")}" id="emisorTelefono" name="emisorTelefono" value="{recepcionFactura.emisorTelefono}">
+                            </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label> {$.i18n.prop("factura.fechaEmision")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" readonly="readonly" class="form-control facturaFechaEmision" placeHolder ="{$.i18n.prop("factura.fechaEmision")}" id="facturaFechaEmision" name="facturaFechaEmision" value="{recepcionFactura.facturaFechaEmision}">
                             </div>
@@ -152,6 +160,10 @@
                                 <label> {$.i18n.prop("emisor.correoElectronico")} <span class="requeridoDato">*</span></label>
                                 <input type="text" readonly="readonly" class="form-control emisorCorreo" id="emisorCorreo" name="emisorCorreo" placeHolder="{$.i18n.prop("emisor.correoElectronico")}" value="{archivo.emisorCorreo}">
                             </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label> {$.i18n.prop("emisor.telefono")} <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control emisorTelefono" id="emisorTelefono" name="emisorTelefono" placeHolder="{$.i18n.prop("emisor.telefono")}" value="{archivo.emisorTelefono}">
+                            </div>                            
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("emisor.provincia")} <span class="requeridoDato">*</span></label>
                                 <input type="text" readonly="readonly" class="form-control emisorProvincia" id="emisorProvincia" name="emisorProvincia" placeHolder="{$.i18n.prop("emisor.provincia")}" value="{archivo.emisorProvincia}">
@@ -335,6 +347,7 @@
 				emisorDistrito:"",
 				emisorCodigoDistrito:"",
 				emisorCorreo:"",
+				emisorTelefono:"0",
 				emisorOtraSena:"",
 				receptorNombre:"",
 				receptorCedula:"",
@@ -378,6 +391,7 @@
 				emisorDistrito:"",
 				emisorCodigoDistrito:"",
 				emisorCorreo:"",
+				emisorTelefono:"0",
 				emisorOtraSena:"",
 				receptorNombre:"",
 				receptorCedula:"",
@@ -458,6 +472,7 @@
 					emisorDistrito:"",
 					emisorCodigoDistrito:"",
 					emisorCorreo:"",
+					emisorTelefono:"0",
 					emisorOtraSena:"",
 					receptorNombre:"",
 					receptorCedula:"",
@@ -501,6 +516,7 @@
 					emisorDistrito:"",
 					emisorCodigoDistrito:"",
 					emisorCorreo:"",
+					emisorTelefono:"0",
 					emisorOtraSena:"",
 					receptorNombre:"",
 					receptorCedula:"",
@@ -672,6 +688,7 @@
                     self.archivo.emisorCedula = emisor.find("Identificacion").find("Numero").text();
                     self.archivo.emisorTipoCedula = emisor.find("Identificacion").find("Tipo").text();
                     self.archivo.emisorCorreo = emisor.find("CorreoElectronico").text();
+                    self.archivo.emisorTelefono = emisor.find("Telefono").find("NumTelefono").text();
                     self.archivo.emisorCodigoProvincia = emisor.find("Ubicacion").find("Provincia").text();
                     self.archivo.emisorCodigoCanton = emisor.find("Ubicacion").find("Canton").text();
                     self.archivo.emisorCodigoDistrito = emisor.find("Ubicacion").find("Distrito").text();
@@ -737,6 +754,7 @@
                 	self.recepcionFactura.emisorCedula =  self.archivo.emisorCedula;
                 	self.recepcionFactura.emisorTipoCedula = self.archivo.emisorTipoCedula;
                 	self.recepcionFactura.emisorCorreo = self.archivo.emisorCorreo;
+                	self.recepcionFactura.emisorTelefono = self.archivo.emisorTelefono;
                 	self.recepcionFactura.emisorCodigoProvincia = self.archivo.emisorCodigoProvincia;
                 	self.recepcionFactura.emisorProvincia = self.archivo.emisorProvincia;
                 	self.recepcionFactura.emisorCanton = self.archivo.emisorCanton;
@@ -789,6 +807,7 @@
 				emisorCedula:"",
 				emisorTipoCedula:"",
 				emisorCorreo:"",
+				emisorTelefono:"0",
 				emisorCodigoProvincia:"0",
 				emisorProvincia:"",
 				emisorCanton:"",
@@ -832,6 +851,7 @@
 				emisorCedula:"",
 				emisorTipoCedula:"",
 				emisorCorreo:"",
+				emisorTelefono:"0",
 				emisorCodigoProvincia:"0",
 				emisorProvincia:"",
 				emisorCanton:"",
