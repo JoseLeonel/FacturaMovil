@@ -379,12 +379,6 @@ function getMoneda() {
     self.facturaImpresa.codigoMoneda = resultado
     self.update()
 }
-
-
-
-
-
-
 /**
 *Imprimir facturaImpresa
 **/    
@@ -394,7 +388,6 @@ __ImprimirfacturaImpresa(){
     $('.codigo').select()
     $(".codigo").focus() 
 }
-
 /**
  * Buscar la condicion de Pago
  * **/
@@ -406,9 +399,7 @@ function buscarCondicionPago(){
             break;
         }
     }
-
 }
-
 /**
 * cargar los estados de la factura
 **/
@@ -425,8 +416,6 @@ function __comboCondicionPago(){
     })
     self.update()
 }
-
-
 /**
  * Buscar el tipo de documento
  * **/
@@ -439,7 +428,6 @@ function buscarTipoDocumento(){
         }
     }
 }
-
 /**
 * cargar los tipos de Documento de la factura
 **/
@@ -483,8 +471,6 @@ function __imprimir(){
     imprimirElemento(div)
 
 }
-
-
 function imprimirElemento(elemento){
   var ventana = window.open('', 'PRINT', 'height=400,width=600');
   ventana.document.write('<html><head><title>' + "" + '</title>');
@@ -497,9 +483,5 @@ function imprimirElemento(elemento){
   ventana.close();
   return true;
 }
-
-
-
-
 </script>
 </proforma-imprimir>

@@ -489,9 +489,6 @@ function consultaFactura(idFactura){
     });
      
 }
-
-
-
 function getMoneda() {
 	var resultado = "CRC-Colones Costa Rica";
 	if(self.facturaImpresa.codigoMoneda == "CRC") {
@@ -503,12 +500,6 @@ function getMoneda() {
     self.facturaImpresa.codigoMoneda = resultado
     self.update()
 }
-
-
-
-
-
-
 /**
 *Imprimir facturaImpresa
 **/    
@@ -532,7 +523,6 @@ function buscarCondicionPago(){
     }
 
 }
-
 /**
 * cargar los estados de la factura
 **/
@@ -549,8 +539,6 @@ function __comboCondicionPago(){
     })
     self.update()
 }
-
-
 /**
  * Buscar el tipo de documento
  * **/
@@ -563,7 +551,6 @@ function buscarTipoDocumento(){
         }
     }
 }
-
 /**
 * cargar los tipos de Documento de la factura
 **/
@@ -597,7 +584,6 @@ function __ComboTipoDocumentos(){
    
     self.update()
 }
-
 /**
 *imprimir
 **/
@@ -609,15 +595,7 @@ function __imprimir(){
       
     
 }
-
-
-
 function imprimirElemento(elemento){
-//window.print();
-//return
-    // var canvas=document.getElementById("leo");
-    
-  
   var ventana = window.open('', 'PRINT', 'height=400,width=600');
   var html = "<!DOCTYPE HTML>";
   html += '<html><head><title>' + "" + '</title>'
@@ -631,8 +609,5 @@ function imprimirElemento(elemento){
   ventana.close();
   return true;
 }
-
-
-
 </script>
 </ptv-imprimir>

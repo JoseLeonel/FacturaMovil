@@ -47,6 +47,117 @@
 </section>
 <div layout:fragment="content">
     <resultado-hacienda></resultado-hacienda>
+    
+    <!-- Titulos -->
+    <div  class="row "  >
+        <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+            <h1 > <i class="fa fa-share" th:text="#{hacienda.titulo}"></i ></h1>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
+        </div>
+    </div>
+    
+    <!-- Inicio Filtros-->
+    <div>
+        <div class="row" >
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="text-left advanced-search-grid" style="padding : 2px;  cursor: pointer;" id="panelFiltros">
+                    <h4> <i class="fa fa-filter" style="padding-left : 5px;"></i>&nbspFiltro avanzado <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4>
+                </div>  
+                <div  id = "filtrosAvanzados" class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
+                    <form id="filtros" name="filtros">              
+                        <div class= "row">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label class="knob-label"  >Fecha Inicial <span class="requeridoDato">*</span></label>
+                                    <div  class="form-group input-group date datepickerFechaInicial" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                        <input type="text" class="form-control fechaInicial" id="fechaInicial"  name= "fechaInicial" readonly>
+                                        <div class="input-group-addon">
+                                            <span class="glyphicon glyphicon-th"></span>
+                                        </div>
+                                    </div>	                             
+                                </div>  
+                            </div>             
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label class="knob-label" >Fecha Final <span class="requeridoDato">*</span></label>
+                                        <div  class="form-group input-group date datepickerFechaFinal" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                            <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>	                             
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Cliente </label>  
+                                    <select  class="form-control selectCliente" id= "cliente" name="cliente" data-live-search="true">
+                                        <option  data-tokens="Todos"   value="0"  >Todos</option>
+                                    </select>
+                                </div>  
+                            </div>                      
+                        </div>
+                    </form>  
+                </div>
+            </div>
+            <div class="col-xs-12 text-right">
+                <button  id="bontonBusqueda" type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
+            	<button  class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
+            </div>
+        </div>
+    </div>    
+<!-- Fin Filtros-->
+  <br>
+  <!-- Listado  -->
+    <div classs="contenedor-listar "  >
+        <div class="row">
+            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
+                <div class="box">
+                    <div class="box-body">
+                        <div class="planel-body" >
+                            <div class="row" >        
+                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
+                                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th class = "table-header" >Fecha Emision</th>
+                                                <th class = "table-header" >Tipo         </th>
+                                                <th class = "table-header" >Consecutivo  </th>
+                                                <th class = "table-header" >Cliente      </th>
+                                                <th class = "table-header" >Total        </th>
+                                                <th class = "table-header" >Estado       </th>
+                                                <th class = "table-header" >Opciones     </th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot style="display: table-header-group;">
+                                            <tr>
+                                                <th>Fecha Emision </th>
+                                                <th>Tipo          </th>
+                                                <th>Consecutivo   </th>
+                                                <th>Cliente       </th>
+                                                <th>Total         </th>
+                                                <th >Estado       </th>
+                                                <th>              </th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>   
+                            </div>   
+                        </div>    
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1 col-lg-1 "> </div>
+        </div>
+    </div>
+    <!-- Fin del Listado -->
+    
+    
+    
+    
 </div>
 
 </body>

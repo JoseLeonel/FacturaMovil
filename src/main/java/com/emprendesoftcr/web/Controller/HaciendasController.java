@@ -1,5 +1,6 @@
 package com.emprendesoftcr.web.Controller;
 
+import static com.emprendesoftcr.fisco.Keys.ERROR;
 import static java.util.stream.Collectors.toList;
 
 import java.io.ByteArrayInputStream;
@@ -8,8 +9,11 @@ import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -18,8 +22,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -40,6 +46,7 @@ import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.fisco.MapEnums;
+import com.emprendesoftcr.fisco.RespuestaHaciendaXML;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
@@ -49,6 +56,9 @@ import com.emprendesoftcr.pdf.App;
 import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.service.ProcesoHaciendaService;
+import com.emprendesoftcr.service.RespuestaHaciendaXMLService;
+import com.emprendesoftcr.type.RespuestaHacienda;
+import com.emprendesoftcr.type.json.RespuestaHaciendaJson;
 import com.emprendesoftcr.web.command.HaciendaCommand;
 import com.emprendesoftcr.web.propertyEditor.FechaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
@@ -178,6 +188,11 @@ public class HaciendasController {
 	@Autowired
 	private StringPropertyEditor																			stringPropertyEditor;
 
+	@Autowired
+	private RespuestaHaciendaXMLService																respuestaHaciendaXMLService;
+
+	
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 
@@ -191,6 +206,111 @@ public class HaciendasController {
 	}
 
 	/**
+	 * CallBack de hacienda para el retorno de los xml de respuesta
+	 * @param httpEntity
+	 * @throws Exception
+	 */
+	private final ReentrantLock lock = new ReentrantLock();
+	
+	@RequestMapping(value = "/service/callback.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	@Transactional
+	public synchronized void callBack(HttpEntity<String> httpEntity) throws Exception {
+		Hacienda hacienda = null;
+		lock.lock();
+		try {
+			long id = Thread.currentThread().getId();
+			System.out.println(String.format("--start transaccion CallBACK--> Thread=%d %s", id, "Fecha:" + new Date()));
+
+			String body = httpEntity.getBody();
+			if (body != null && body != "" && body != "{}" && !body.contains("El comprobante") && !body.contains("no ha sido recibido")) {
+				RespuestaHacienda respuestaHacienda = RespuestaHaciendaJson.from(body);
+				hacienda = haciendaBo.findByClave(respuestaHacienda.clave());
+				log.info("** callBack: " +respuestaHacienda.clave() + " fecha " + new Date() );
+				if (hacienda != null) {
+					String status = getHaciendaStatus(respuestaHacienda.indEstado());
+					hacienda.setUpdated_at(new Date());
+					RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();
+					respuesta.setClave(respuestaHacienda.clave());
+					respuesta.setFecha(respuestaHacienda.fecha());
+					respuesta.setIndEstado(respuestaHacienda.indEstado());
+					respuesta.setMensaje(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().mensaje() : Constantes.EMPTY);
+					respuesta.setDetalleMensaje(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().detalleMensaje() : Constantes.EMPTY);
+					respuesta.setMontoTotalImpuesto(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().montoTotalImpuesto() : Constantes.ZEROS_DOUBLE);
+					respuesta.setNombreEmisor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().nombreEmisor() : Constantes.EMPTY);
+					respuesta.setNombreReceptor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().nombreReceptor() : Constantes.EMPTY);
+					respuesta.setNumeroCedulaEmisor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().numeroCedulaEmisor() : Constantes.EMPTY);
+					respuesta.setNumeroCedulaReceptor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().numeroCedulaReceptor() : Constantes.EMPTY);
+					respuesta.setTipoIdentificacionEmisor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().tipoIdentificacionEmisor() : Constantes.EMPTY);
+					respuesta.setTipoIdentificacionReceptor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().tipoIdentificacionReceptor() : Constantes.EMPTY);
+					respuesta.setTotalFactura(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().totalFactura() : Constantes.ZEROS_DOUBLE);
+					String xmlSinFirmarRespuesta = Constantes.EMPTY;
+					String xmlFirmadoRespuesta = Constantes.EMPTY;
+					if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECIBIDO)) {
+						xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
+						xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
+					} else {
+						if (respuestaHacienda.mensajeHacienda() != null) {
+							if (respuestaHacienda.mensajeHacienda().mensaje() != null) {
+								if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO)) {
+									xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
+									xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
+								}
+							}
+						}
+					}
+					if (xmlFirmadoRespuesta != Constantes.EMPTY) {
+						hacienda.setMensajeHacienda(FacturaElectronicaUtils.convertirStringToblod(xmlFirmadoRespuesta));
+					}
+					if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
+						hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+					} else if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
+						hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+					}
+					// Hacienda no envia mensaje
+					if (respuestaHacienda.mensajeHacienda() != null) {
+						if (respuestaHacienda.mensajeHacienda().mensaje() != null) {
+							if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO)) {
+								hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+							} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_RECHAZADO)) {
+								hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+							} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO_PARCIAL)) {
+								hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_PARCIAL);
+							}
+						}
+					} else {
+						if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
+							if (hacienda.getReintentosAceptacion() == Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
+								hacienda.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
+							} else {
+								hacienda.setReintentosAceptacion(hacienda.getReintentosAceptacion() == null ? 1 : hacienda.getReintentosAceptacion() + 1);
+								hacienda.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA);
+							}
+						}
+					}
+					hacienda.setObservacion(respuestaHacienda.mensajeHacienda() != null ? FacturaElectronicaUtils.convertirStringToblod(respuestaHacienda.mensajeHacienda().detalleMensaje()) : null);
+					haciendaBo.modificar(hacienda);
+				}
+			}
+			log.info("Finaliza callBack {}", new Date());
+		} catch (Exception e) {
+			log.info("** Error  callBack: " + e.getMessage() + " fecha " + new Date() );
+		} finally {
+			lock.unlock();
+		}
+
+	}
+
+	/**
+	 * Retorna el status de la respuesta de hacienda
+	 * @param indEstado Elemento ind-estado de la respuesta de hacienda
+	 * @return Estado de la respuesta de hacienda OK o ERROR
+	 */
+	private static String getHaciendaStatus(String indEstado) {
+		return MapEnums.ENUM_CODIGO_RESPUESTA_HACIENDA.containsKey(indEstado) ? MapEnums.ENUM_CODIGO_RESPUESTA_HACIENDA.get(indEstado) : ERROR;
+	}
+
+	/**
 	 * Listado de hacienda
 	 * @param request
 	 * @param response
@@ -201,7 +321,27 @@ public class HaciendasController {
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String cedulaReceptor) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cedulaReceptor, usuarioSesion.getEmpresa());
-		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
+
+		Long total = dataTableBo.contar(query);
+		Collection<Object> objetos = dataTableBo.listar(query);
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		List<Object> solicitudList = new ArrayList<Object>();
+		for (Iterator<Object> iterator = objetos.iterator(); iterator.hasNext();) {
+			Hacienda object = (Hacienda) iterator.next();
+			// no se carga el usuario del sistema el id -1
+			if (object.getId().longValue() > 0L) {
+				solicitudList.add(new HaciendaCommand(object));
+			}
+		}
+
+		respuestaService.setRecordsTotal(total);
+		respuestaService.setRecordsFiltered(total);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+
 	}
 
 	/**

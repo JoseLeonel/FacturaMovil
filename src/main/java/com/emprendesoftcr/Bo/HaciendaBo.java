@@ -13,6 +13,7 @@ public interface HaciendaBo {
 
 	Hacienda findById(Long id);
 	Hacienda findByEmpresaAndClave(Empresa empresa,String clave);
+	Hacienda findByClave(String clave);
 
 	Collection<Hacienda> findByEmpresaAndEstado(Empresa empresa, Integer estado);
 

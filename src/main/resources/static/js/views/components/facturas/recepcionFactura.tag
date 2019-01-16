@@ -1,8 +1,13 @@
 <recepcion-factura>
-   <div class="row">
-        <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-        </div>      
-    </div>              
+
+
+   <!-- Titulos -->
+    <div  class="row titulo-encabezado"  >
+        <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+            <h1 ><i class="fa fa-comment-o"></i>&nbsp {$.i18n.prop("nota.aceptacion.compras")}  </h1>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"></div>
+    </div>          
 	<div id="formularioCargaArchivo" class="row center" show={mostrarCargaArchivo}>
     	
         <div class="col-md-8 col-lg-8 col-sx-12 col-sm-8">

@@ -62,9 +62,6 @@ import com.emprendesoftcr.type.RespuestaHacienda;
 import com.emprendesoftcr.type.json.RespuestaHaciendaJson;
 import com.google.common.base.Function;
 
-
-
-
 /**
  * Servicio de envio de los documentos de hacienda
  **/
@@ -198,15 +195,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Autowired
 	RecepcionFacturaXMLServices																				recepcionFacturaXMLServices;
 
-	
- 
-	
-	
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-
-	@Scheduled(cron = "0 0/15 * * * ?")
+	@Scheduled(cron = "0 0/8 * * * ?")  
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -349,14 +341,29 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			}
 			// XML se convierte en base 64
 			String valor = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
-			
+
 			valor = valor.replaceAll("\n", "");
-			
+
 			if (valor.length() > 0) {
-			  
-				String base64 = FacturaElectronicaUtils.base64Encode(valor.getBytes(StandardCharsets.UTF_8));
-			
+
+				String base64 = FacturaElectronicaUtils.base64Encode(valor.getBytes("UTF-8"));
+
 				recepcion.setComprobanteXml(base64);
+		
+				//Ambiente de pruebas
+			//	recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
+
+				//San Ana
+//				recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
+
+				//Guanacaste
+				//recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+				
+				//Jaco
+//				recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+			//Alajuela
+				recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+
 				ObjectMapper mapperObj = new ObjectMapper();
 				String jsonStr = mapperObj.writeValueAsString(recepcion);
 				envioHaciendaComponent.enviarDocumentoElectronico(jsonStr, openIDConnectHacienda, hacienda);
@@ -380,7 +387,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html Proceso automatico para ejecutar aceptacion del documento
 	 */
-	@Scheduled(cron = "0 0/16 * * * ?")
+	@Scheduled(cron = "0 0/45 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -399,6 +406,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								if (hacienda.getReintentosAceptacion() <= Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
 									haciendaBD = haciendaBo.findById(hacienda.getId());
 									openIDConnectHacienda = aceptarDocumento(haciendaBD, openIDConnectHacienda);
+									
 								} else {
 									haciendaBD = haciendaBo.findById(hacienda.getId());
 									haciendaBD.setObservacion(FacturaElectronicaUtils.convertirStringToblod(Constantes.MAXIMO_REINTENTOS_ACEPTACION_STR));
@@ -871,7 +879,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/12 * * * ?")
+	@Scheduled(cron = "0 0/8 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {

@@ -117,6 +117,9 @@ public class EnvioHaciendaComponent {
 				hacienda.setReintentos(Constantes.ZEROS);
 				haciendaBo.modificar(hacienda);
 			}
+			 //Pause for 1 seconds
+      Thread.sleep(1000);
+     // log.info("** Espera de envio "  + new Date() + " consecutivo:"+ hacienda.getConsecutivo() + " hacia  Hacienta:" + hacienda.getEmpresa().getNombre());
 
 		} catch (ClientHandlerException exc) {
 

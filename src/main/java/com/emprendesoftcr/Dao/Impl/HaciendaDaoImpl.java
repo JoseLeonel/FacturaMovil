@@ -48,7 +48,19 @@ public class HaciendaDaoImpl implements HaciendaDao {
 			return null;
 		}
 	}
-
+	@Override
+	public Hacienda findByClave(String clave) {
+		Query query = entityManager.createQuery("select obj from Hacienda obj where obj.clave = :clave ");
+		query.setParameter("clave", clave);
+		List<Hacienda> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (Hacienda) results.get(0);
+		} else {
+			return null;
+		}
+	}
+	
+	
 	@Override
 	public Hacienda findByEmpresaAndClave(Empresa empresa, String clave) {
 		Query query = entityManager.createQuery("select obj from Hacienda obj where obj.empresa = :empresa and obj.clave = :clave ");

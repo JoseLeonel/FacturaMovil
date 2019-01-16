@@ -19,7 +19,7 @@ public class HaciendaCommand {
 
 	private String	tipoDoc;
 
-	private Date		fechaEmisor;
+	private String		fechaEmisor;
 
 	private String	fechaEmisorSTR;
 
@@ -47,7 +47,7 @@ public class HaciendaCommand {
 		this.id = hacienda.getId();
 		this.fechaEmisorSTR = Utils.getFechaGeneraReporte(hacienda.getFechaEmisor());
 		this.created_atSTR = Utils.getFechaGeneraReporte(hacienda.getCreated_at());
-		this.fechaEmisor = hacienda.getFechaEmisor();
+		this.fechaEmisor = Utils.getFechaGeneraHacienda(hacienda.getCreated_at());
 		this.clave = hacienda.getClave();
 		this.consecutivo = hacienda.getConsecutivo();
 		this.estado = MapEnums.ENUM_ESTADO_HACIENTA.get(hacienda.getEstado());
@@ -86,11 +86,14 @@ public class HaciendaCommand {
 		this.created_atSTR = created_atSTR;
 	}
 
-	public Date getFechaEmisor() {
+
+	
+	public String getFechaEmisor() {
 		return fechaEmisor;
 	}
 
-	public void setFechaEmisor(Date fechaEmisor) {
+	
+	public void setFechaEmisor(String fechaEmisor) {
 		this.fechaEmisor = fechaEmisor;
 	}
 

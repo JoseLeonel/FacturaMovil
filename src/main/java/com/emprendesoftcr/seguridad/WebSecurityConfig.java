@@ -49,9 +49,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable();
-		http.authorizeRequests().antMatchers("/administrativo/**", "/templates/**", "/bootstrap/**", "/dist/**", "/plugins/**", "/resources/**", "/registration")
+		 http.csrf().disable();
+		 http.authorizeRequests().antMatchers("/administrativo/**", "/templates/**", "/bootstrap/**", "/dist/**", "/plugins/**", "/resources/**", "/registration")
 		.permitAll().antMatchers("/service/CrearFacturaServiceAjax").permitAll().antMatchers("/webjars/**").permitAll().antMatchers("/login")
+		.permitAll().antMatchers("/service/callback.do").permitAll().antMatchers("/webjars/**").permitAll().antMatchers("/login")
 		.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login").failureUrl("/login?error=true").defaultSuccessUrl("/").usernameParameter("username").passwordParameter("password")
 		.and().logout().and().exceptionHandling().accessDeniedPage("/error/403")
 		.and().exceptionHandling().authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/login"));

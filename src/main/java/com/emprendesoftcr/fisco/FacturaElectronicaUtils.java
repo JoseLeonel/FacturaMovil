@@ -7,22 +7,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
-import java.security.SignatureException;
-import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.sql.Blob;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,13 +31,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
-import javax.sql.rowset.serial.SerialException;
 
 import org.json.JSONObject;
 
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DateTime;
-import com.emprendesoftcr.error.SignException;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.hash.Hashing;
@@ -155,6 +148,17 @@ public final class FacturaElectronicaUtils {
 		}
 		return resultado;
 	}
+	
+	 public static String digestSha1(String txt) {
+			String resultado = Constantes.EMPTY;
+			try {
+				resultado = BaseEncoding.base64().encode(Hashing.sha1().hashString(txt, StandardCharsets.UTF_8).asBytes());
+
+			} catch (Exception e) {
+				throw e;
+			}
+			return resultado;
+		}
 
 	/**
 	 * Transforma un texto a su expresi�n en base64
@@ -176,11 +180,14 @@ public final class FacturaElectronicaUtils {
 	 * Transforma un arreglo de bytes a su expresi�n en base64
 	 * @param btext Arreglo de bytes a ser transformado a base64
 	 * @return Arreglo de bytes transformado a base64
+	 * @throws Exception 
 	 */
-	public static String base64Encode(byte[] btext) {
+	public static String base64Encode(byte[] btext) throws Exception {
 		String resultado = Constantes.EMPTY;
 		try {
-		  resultado = BaseEncoding.base64().encode(btext);	
+		 resultado = BaseEncoding.base64().encode(btext);	
+		 
+	//	  resultado= Base64.getEncoder().withoutPadding().encodeToString(btext);
 		} catch (Exception e) {
 			throw e;
 		}

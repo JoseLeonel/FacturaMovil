@@ -834,7 +834,6 @@ var reglasDeValidacion = function() {
 			fechaFinal : {
 				required : true,
 			}                                   
-                        
 		},
 		ignore : []
 

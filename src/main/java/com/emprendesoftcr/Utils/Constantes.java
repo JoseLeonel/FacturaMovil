@@ -30,9 +30,18 @@ public class Constantes {
 	public static final String					TIPO_CODIGO_ARTICULO_CODIGO_OTROS										= "99";
 	public static final String					CODIGO_ARTICULO_IMPUESTO_SERVICIO										= "8888";
 
+	// Direcciones de callback
+	public static final String					URL_ALAJUELA_CALLBACK																= "http://www.emprendesoftcr.com:8081/service/callback.do";
+	public static final String					URL_GUANACASTE_CALLBACK															= "http://www.emprendesoftcr.com:8084/service/callback.do";
+	public static final String					URL_INVENTARIO_CALLBACK															= "http://www.emprendesoftcr.com:8080/service/callback.do";
+	public static final String					URL_JACO_CALLBACK																		= "http://www.emprendesoftcr.com:8082/service/callback.do";
+	public static final String					URL_JACODOS_CALLBACK																= "http://www.emprendesoftcr.com:8086/service/callback.do";
+	public static final String					URL_SANTA_ANA_CALLBACK															= "http://www.emprendesoftcr.com:8083/service/callback.do";
+	public static final String					URL_PRUEBAS_CALLBACK																= "http://www.emprendesoftcr.com:8085/service/callback.do";
+
 	// Semaforo
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 90;
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS								= 20;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS								= 40;
 
 	// 48 horas cada 5 minutos
 
@@ -410,7 +419,7 @@ public class Constantes {
 	public static final String					SP_GENERAR_CONSECUTIVO_IN_ID_EMPRESA								= "ID_EMRPESA";
 	public static final String					SP_GENERAR_CONSECUTIVO_IN_ID_USUARIO								= "ID_USUARIO";
 	public static final String					SP_GENERAR_CONSECUTIVO_IN_TIPO_DOCUMENTO						= "TIPO_DOCUMENTO";
-	                                                                                           
+
 	public static final String					SP_GENERAR_CONSECUTIVO_OUT_CONSECUTIVO							= "CONSECUTIVO";
 
 	// Procedimiento para generar el consecutivo para una recepcion de factura

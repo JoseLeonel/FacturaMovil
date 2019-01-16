@@ -11,17 +11,20 @@ public class Recepcion {
 	private String						fecha;
 	private EmisorHacienda		emisor;
 	private ReceptorHacienda	receptor;
+	private String callbackUrl	;
 	private String						comprobanteXml;
 
 	
 	
 
-	public Recepcion(String clave, String fecha, EmisorHacienda emisor, ReceptorHacienda receptor, String comprobanteXml) {
+	
+	public Recepcion(String clave, String fecha, EmisorHacienda emisor, ReceptorHacienda receptor, String callbackUrl, String comprobanteXml) {
 		super();
 		this.clave = clave;
 		this.fecha = fecha;
 		this.emisor = emisor;
 		this.receptor = receptor;
+		this.callbackUrl = callbackUrl;
 		this.comprobanteXml = comprobanteXml;
 	}
 
@@ -36,6 +39,7 @@ public class Recepcion {
     sb.append("\nfecha: ").append(fecha);
     sb.append("\nemisor: ").append(emisor);
     sb.append("\nreceptor: ").append(receptor);
+    sb.append("\ncallbackUrl: ").append(callbackUrl);
     sb.append("\ncomprobanteXML: ").append(comprobanteXml);
     sb.append("\n************************************");
     return sb.toString();
@@ -81,6 +85,16 @@ public class Recepcion {
 	
 	public void setComprobanteXml(String comprobanteXml) {
 		this.comprobanteXml = comprobanteXml;
+	}
+
+	
+	public String getCallbackUrl() {
+		return callbackUrl;
+	}
+
+	
+	public void setCallbackUrl(String callbackUrl) {
+		this.callbackUrl = callbackUrl;
 	}
 
 	

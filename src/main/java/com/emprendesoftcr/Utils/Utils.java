@@ -1229,6 +1229,13 @@ public final class Utils {
 		
 		return fechaCompleta.format(date);
 	}
+	
+	
+	public static String getFechaGeneraHacienda(Date date) {
+		DateFormat fechaCompleta = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a ");
+		
+		return fechaCompleta.format(date);
+	}
 
 	public static String getFechaStr(Date date) {
 		DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy");
