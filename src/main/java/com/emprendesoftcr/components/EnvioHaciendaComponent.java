@@ -63,8 +63,7 @@ public class EnvioHaciendaComponent {
 	 * @return
 	 */
 
-
-	public void enviarDocumentoElectronico(final String body, final OpenIDConnectHacienda openIDConnectHacienda, Hacienda hacienda) throws Exception {
+ public void enviarDocumentoElectronico(final String body, final OpenIDConnectHacienda openIDConnectHacienda, Hacienda hacienda) throws Exception {
 		try {
 			ImmutableMap<String, String> headers = ImmutableMap.of("Accept", "application/json", "Authorization", ("Bearer " + openIDConnectHacienda.getAccess_token()), "User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 			Client client = Client.create();
@@ -118,7 +117,7 @@ public class EnvioHaciendaComponent {
 				haciendaBo.modificar(hacienda);
 			}
 			 //Pause for 1 seconds
-      Thread.sleep(1000);
+      Thread.sleep(2000);
      // log.info("** Espera de envio "  + new Date() + " consecutivo:"+ hacienda.getConsecutivo() + " hacia  Hacienta:" + hacienda.getEmpresa().getNombre());
 
 		} catch (ClientHandlerException exc) {

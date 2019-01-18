@@ -212,6 +212,11 @@ public class HaciendasController {
 	 */
 	private final ReentrantLock lock = new ReentrantLock();
 	
+	/**
+	 * No se aplica rechazo para verificar con el de comprobacion de datos
+	 * @param httpEntity
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/service/callback.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	@Transactional
@@ -265,7 +270,7 @@ public class HaciendasController {
 					if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
 						hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
 					} else if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
-						hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+						hacienda.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
 					}
 					// Hacienda no envia mensaje
 					if (respuestaHacienda.mensajeHacienda() != null) {
@@ -273,7 +278,7 @@ public class HaciendasController {
 							if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO)) {
 								hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
 							} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_RECHAZADO)) {
-								hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+								hacienda.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
 							} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO_PARCIAL)) {
 								hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_PARCIAL);
 							}
@@ -310,12 +315,15 @@ public class HaciendasController {
 		return MapEnums.ENUM_CODIGO_RESPUESTA_HACIENDA.containsKey(indEstado) ? MapEnums.ENUM_CODIGO_RESPUESTA_HACIENDA.get(indEstado) : ERROR;
 	}
 
+ 	
+	
 	/**
 	 * Listado de hacienda
 	 * @param request
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarHaciendasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String cedulaReceptor) {
@@ -368,6 +376,7 @@ public class HaciendasController {
 	 * @param idFactura
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnviarAceptarHaciendaAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idHacienda) {
@@ -392,6 +401,7 @@ public class HaciendasController {
 		return respuestaServiceValidator;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/AceptarHaciendaAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrarAceptar(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idHacienda) {
@@ -424,6 +434,7 @@ public class HaciendasController {
 	 * @param idHacienda
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnviarCorreoClienteAndEmisorAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator enviarCorreoEmisorAndReceptor(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idHacienda) {

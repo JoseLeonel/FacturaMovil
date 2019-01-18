@@ -6,7 +6,6 @@ import static java.util.stream.Collectors.toList;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -198,7 +197,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/8 * * * ?")  
+	@Scheduled(cron = "0 0/15 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -349,20 +348,25 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				String base64 = FacturaElectronicaUtils.base64Encode(valor.getBytes("UTF-8"));
 
 				recepcion.setComprobanteXml(base64);
-		
-				//Ambiente de pruebas
-			//	recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
-				//San Ana
-//				recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
+				// Ambiente de pruebas
+				//recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
-				//Guanacaste
-				//recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
-				
-				//Jaco
-//				recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
-			//Alajuela
-				recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+				// San Ana
+				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
+
+				// Guanacaste
+				// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+				// JacoDos
+				// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+
+				// Jaco
+			//	 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+				// Inventario
+				 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+
+				// Alajuela
+				// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 				ObjectMapper mapperObj = new ObjectMapper();
 				String jsonStr = mapperObj.writeValueAsString(recepcion);
@@ -385,9 +389,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	}
 
 	/**
-	 * http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html Proceso automatico para ejecutar aceptacion del documento
+	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/45 * * * ?")
+	@Scheduled(cron = "0 0/35 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -401,23 +405,37 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				if (!listaHacienda.isEmpty()) {
 					for (Hacienda hacienda : listaHacienda) {
 						try {
-							log.info("Comprobando Documentos hacienda:" + hacienda.getConsecutivo() + " Empresa" + hacienda.getEmpresa().getNombre());
-							if (hacienda.getReintentosAceptacion() != null) {
-								if (hacienda.getReintentosAceptacion() <= Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
-									haciendaBD = haciendaBo.findById(hacienda.getId());
-									openIDConnectHacienda = aceptarDocumento(haciendaBD, openIDConnectHacienda);
-									
+
+							Date fecha = new Date();
+							long tiempoInicial = hacienda.getCreated_at().getTime();
+							long tiempoFinal = fecha.getTime();
+							long resta = tiempoFinal - tiempoInicial;
+							// el metodo getTime te devuelve en mili segundos para saberlo en mins debes hacer
+							if (resta > 0) {
+								resta = resta / (1000 * 60);
+							}
+
+							if (resta > 35 || hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ERROR)) {
+								log.info("Comprobando Documentos hacienda:" + hacienda.getConsecutivo() + " Empresa" + hacienda.getEmpresa().getNombre());
+								if (hacienda.getReintentosAceptacion() != null) {
+									if (hacienda.getReintentosAceptacion() <= Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
+										haciendaBD = haciendaBo.findById(hacienda.getId());
+										openIDConnectHacienda = aceptarDocumento(haciendaBD, openIDConnectHacienda);
+
+									} else {
+										haciendaBD = haciendaBo.findById(hacienda.getId());
+										haciendaBD.setObservacion(FacturaElectronicaUtils.convertirStringToblod(Constantes.MAXIMO_REINTENTOS_ACEPTACION_STR));
+										haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+										haciendaBo.modificar(haciendaBD);
+									}
 								} else {
 									haciendaBD = haciendaBo.findById(hacienda.getId());
-									haciendaBD.setObservacion(FacturaElectronicaUtils.convertirStringToblod(Constantes.MAXIMO_REINTENTOS_ACEPTACION_STR));
-									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+									haciendaBD.setReintentosAceptacion(Constantes.ZEROS);
 									haciendaBo.modificar(haciendaBD);
 								}
-							} else {
-								haciendaBD = haciendaBo.findById(hacienda.getId());
-								haciendaBD.setReintentosAceptacion(Constantes.ZEROS);
-								haciendaBo.modificar(haciendaBD);
+
 							}
+
 						} catch (Exception e) {
 							log.info("** Error1  ComprobacionDocumentos: " + e.getMessage() + " fecha " + new Date());
 						}
