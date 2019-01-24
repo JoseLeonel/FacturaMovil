@@ -138,6 +138,10 @@ public class Constantes {
 	public static final String					ESTADO_HACIENDA_ACEPTADO														= "1";
 	public static final String					ESTADO_HACIENDA_ACEPTADO_PARCIAL										= "2";
 	public static final String					ESTADO_HACIENDA_RECHAZADO														= "3";
+	
+	public static final String					HACIENDA_TIPODOC_COMPRAS														= " ";
+	
+	 
 
 	// Vendedor Frecuente de una empresa
 
@@ -430,6 +434,13 @@ public class Constantes {
 	public static final String					SP_GENERAR_CONSECUTIVO_RECEPCION_IN_ID_USUARIO			= "ID_USUARIO";
 	public static final String					SP_GENERAR_CONSECUTIVO_RECEPCION_IN_TIPO_DOCUMENTO	= "TIPO_DOCUMENTO";
 	public static final String					SP_GENERAR_CONSECUTIVO_RECEPCION_OUT_CONSECUTIVO		= "CONSECUTIVO";
+
+	// Procedimiento callback para actualizar la aceptacion de hacienda
+	public static final String					SP_CALLBACK_HACIENDA																= "sp_callback";
+	public static final String					SP_CALLBACK_HACIENDA_CLAVE													= "clave_e";
+	public static final String					SP_CALLBACK_HACIENDA_ESTADO													= "estado_e";
+	public static final String					SP_CALLBACK_HACIENDA_XML														= "xml_e";
+	public static final String					SP_CALLBACK_HACIENDA_MENSAJE								= "mensaje_e";
 
 	// Procecimiento para actualizar la caja
 	public static final String					SP_ACTUALIZA_CAJA																		= "SPACTUALIZACAJAUSUARIO";

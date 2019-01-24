@@ -17,11 +17,18 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class FacturaElectronicaApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
-	
+//		int dataSize = 1024 * 1024;
+//		Runtime runtime = Runtime.getRuntime();
 
 		System.out.println("----------------- Inciando la Factura Electronica de EmprendeSoftCR 2018  ---------------------------");
 		System.out.println("----------------- Desarrollador Jairo Cisneros  ---------------------------");
 		System.out.println("----------------- Desarrollador Leonel Hernandez Chaverri  ---------------------------");
+
+//		System.out.println("-Memoria maxima:" + runtime.maxMemory() / dataSize + " MB");
+//		System.out.println("-Memoria Total:" + runtime.totalMemory() / dataSize + " MB");
+//		System.out.println("-Memoria libre:" + runtime.freeMemory() / dataSize + " MB");
+//		System.out.println("-Memoria usada:" + (runtime.totalMemory() - runtime.freeMemory()) / dataSize + " MB");
+
 		SpringApplication.run(FacturaElectronicaApplication.class, args);
 
 	}
@@ -30,8 +37,5 @@ public class FacturaElectronicaApplication extends SpringBootServletInitializer 
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(FacturaElectronicaApplication.class);
 	}
-	
-	
-
 
 }
