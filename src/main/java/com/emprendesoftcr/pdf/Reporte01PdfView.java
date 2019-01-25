@@ -1,0 +1,256 @@
+
+package com.emprendesoftcr.pdf;
+
+import java.io.ByteArrayOutputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.emprendesoftcr.Utils.Utils;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPCellEvent;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+public class Reporte01PdfView {
+
+	static Font						bigFont							= FontFactory.getFont("Helvetica", "Windows-1254", 14.0F, 1, BaseColor.BLACK);
+	static Font						bigFont12						= FontFactory.getFont("Helvetica", "Windows-1254", 12.0F, 1, BaseColor.BLACK);
+	static Font						pequeFont						= FontFactory.getFont("Helvetica", "Windows-1254", 11.0F, 1, BaseColor.BLACK);
+	static Font						titulopequeFont			= FontFactory.getFont("Helvetica", "Windows-1254", 8.0F, 1, BaseColor.BLACK);
+	static Font						peque								= FontFactory.getFont("Arial", 14, BaseColor.BLACK);
+	static Font						fontmed08						= FontFactory.getFont("Arial", 8, BaseColor.BLACK);
+	static Font						fontmed11						= FontFactory.getFont("Arial", 11, BaseColor.BLACK);
+	static Font						fontmed12						= FontFactory.getFont("Arial", 11, BaseColor.BLACK);
+	static Font						fontmed12_bold			= FontFactory.getFont("Arial", 11, 1, BaseColor.BLACK);
+	static Font						font_cabezera_tabla	= FontFactory.getFont("Helvetica", "Windows-1254", 8.0F, 1, BaseColor.BLACK);
+
+	public PdfPCellEvent	roundRectangle;
+
+	public static ByteArrayOutputStream main(String consecutivo, String tipoDoc, FacturaElectronica facturaElectronica) throws Exception {
+		Reporte01PdfView reporte01PdfView = new Reporte01PdfView();
+		Document document = new Document(PageSize.A4);
+		document.setMargins(10, 10, 12, 55);
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+		PdfWriter writer = PdfWriter.getInstance(document, stream);
+		Rectangle rct = new Rectangle(36, 54, 559, 788);
+		// Definimos un nombre y un tamaño para el PageBox los nombres posibles son: “crop”, “trim”, “art” and “bleed”.
+		writer.setBoxSize("art", rct);
+		HeaderFooter event = new HeaderFooter(facturaElectronica);
+		writer.setPageEvent(event);
+		document.open();
+
+//		PdfContentByte cb = writer.getDirectContent();
+
+		reporte01PdfView.buildPdfDocument(facturaElectronica, document, writer);
+
+		document.close();
+
+		return stream;
+	}
+
+	private void buildPdfDocument(FacturaElectronica fac_electro, Document document, PdfWriter writer) throws Exception {
+
+		// document.add(new Paragraph("\n", pequeFont));
+
+		PdfPTable tabla_tercera_tabla = new PdfPTable(7);
+		tabla_tercera_tabla.setWidthPercentage(100);
+		tabla_tercera_tabla.setTotalWidth(570f);
+		tabla_tercera_tabla.setLockedWidth(true);
+		float[] header_espacio_03 = { 37, 74, 200, 31, 55, 55, 75 };
+		tabla_tercera_tabla.setWidths(header_espacio_03);
+		tabla_tercera_tabla.setSplitLate(false);
+		tabla_tercera_tabla.setSplitRows(false);
+
+		tabla_tercera_tabla.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
+		tabla_tercera_tabla.getDefaultCell().setCellEvent(new RoundRectangle());
+		// tabla_tercera_tabla.getDefaultCell().setBorder(0);
+		tabla_tercera_tabla.setSpacingAfter(0);
+		tabla_tercera_tabla.setSpacingBefore(0);
+
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Línea", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.TOP | Rectangle.BOTTOM));
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Código", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Detalle", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Unid", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Cantidad", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Precio", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Total Linea", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
+
+//tabla_tercera_tabla.setKeepRowsTogather(true);
+		tabla_tercera_tabla.setHeaderRows(1);
+		tabla_tercera_tabla.setSplitRows(false);
+		tabla_tercera_tabla.setComplete(false);
+//tabla_tercera_tabla.setSplitLate(false);
+//tabla_tercera_tabla.setKeepTogether(true);
+
+//tabla_tercera_tabla.setFooterRows(1);
+
+		int indice_ = 0;
+		for (DetalleFacturaElectronica item : fac_electro.getDetalleFacturaElectronica()) {
+			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(indice_), font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT));
+
+			tabla_tercera_tabla.addCell(obtenerCeldaNormal(item.getCodigo(), font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT));
+
+			tabla_tercera_tabla.addCell(obtenerCeldaNormal(item.getDescripcion(), font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.LEFT));
+
+			tabla_tercera_tabla.addCell(obtenerCeldaNormal(item.getUnidad(), font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.LEFT));
+
+			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getCantidad()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT));
+			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getPrecioU()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT));
+			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getTotal()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
+			indice_++;
+			/*
+			 * if(indice_ == 27){ agregaLineasBlanco02(tabla_tercera_tabla, 7); }
+			 */
+		}
+
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
+		PdfPCell ultima_linea_ = obtenerCeldaNormal("----------------------------- Última línea -----------------------------", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT);
+
+		tabla_tercera_tabla.addCell(ultima_linea_);
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
+
+		agregaLineasBlanco(tabla_tercera_tabla, indice_ + 2, true);
+
+		document.add(tabla_tercera_tabla);
+
+		PdfPTable tabla_ultima = new PdfPTable(3);
+		tabla_ultima.setWidthPercentage(100);
+		tabla_ultima.setTotalWidth(570f);
+		tabla_ultima.setLockedWidth(true);
+		float[] header_espacio_04 = { 350, 110, 110 };
+		tabla_ultima.setWidths(header_espacio_04);
+		tabla_ultima.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
+		tabla_ultima.setSpacingAfter(2);
+		tabla_ultima.setSpacingBefore(2);
+
+		PdfPTable izquierda_inferior_ultima = new PdfPTable(1);
+		izquierda_inferior_ultima.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
+		izquierda_inferior_ultima.getDefaultCell().setCellEvent(new RoundRectangle());
+
+		izquierda_inferior_ultima.addCell(obtenerCeldaNormal(" Los productos se le aplico un 10% descuento general y seran entregados en la tarde", font_cabezera_tabla, 1, true, Paragraph.ALIGN_LEFT, PdfPCell.NO_BORDER));
+
+		tabla_ultima.addCell(izquierda_inferior_ultima);
+
+		PdfPTable central_inferior_ultima = new PdfPTable(1);
+		central_inferior_ultima.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
+		central_inferior_ultima.getDefaultCell().setCellEvent(new RoundRectangle());
+
+		central_inferior_ultima.addCell(obtenerCeldaNormal("Venta neta", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
+		central_inferior_ultima.addCell(obtenerCeldaNormal("Impuestos", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
+		central_inferior_ultima.addCell(obtenerCeldaNormal("Exento", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
+		central_inferior_ultima.addCell(obtenerCeldaNormal("Total comprobante", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
+
+		tabla_ultima.addCell(central_inferior_ultima);
+
+		PdfPTable derecha_inferior_ultima = new PdfPTable(1);
+		// derecha_inferior_ultima.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
+		derecha_inferior_ultima.getDefaultCell().setCellEvent(new RoundRectangle());
+
+		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(fac_electro.getFooterTotalVenta()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(fac_electro.getFooterTotalVentaNeta()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(fac_electro.getFooterTotalImpuesto()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(fac_electro.getFooterTotalExento()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(fac_electro.getFooterTotalComprobante()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+
+		tabla_ultima.addCell(derecha_inferior_ultima);
+		document.add(tabla_ultima);
+
+	}
+
+	public void agregaLineasBlanco(PdfPTable tabla_, int longitud_lista, boolean primera_pagina) {
+		int lineas_por_pagina = 0;
+
+		if (longitud_lista > 36) {
+			// lineas_por_pagina=36-(longitud_lista%36);
+		} else {
+			lineas_por_pagina = 36 - longitud_lista;
+		}
+		for (int i = 0; i < lineas_por_pagina; i++) {
+			tabla_.addCell(obtenerCeldaNormal("\n", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
+			tabla_.addCell(obtenerCeldaNormal("\n", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
+			tabla_.addCell(obtenerCeldaNormal("\n", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
+			tabla_.addCell(obtenerCeldaNormal("\n", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
+			tabla_.addCell(obtenerCeldaNormal("\n", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
+			tabla_.addCell(obtenerCeldaNormal("\n", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
+			tabla_.addCell(obtenerCeldaNormal("\n", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
+		}
+
+		// Final de la tabla
+		tabla_.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.BOTTOM));
+		tabla_.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.BOTTOM));
+		tabla_.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.BOTTOM));
+		tabla_.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.BOTTOM));
+		tabla_.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.BOTTOM));
+		tabla_.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.BOTTOM));
+		tabla_.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.BOTTOM));
+
+	}
+
+	class RoundRectangle implements PdfPCellEvent {
+
+		/**
+		 * @see com.lowagie.text.pdf.PdfPCellEvent#cellLayout(com.lowagie.text.pdf.PdfPCell, com.lowagie.text.Rectangle, com.lowagie.text.pdf.PdfContentByte[])
+		 */
+		@Override
+		public void cellLayout(PdfPCell cell, Rectangle rect, PdfContentByte[] canvas) {
+			PdfContentByte cb = canvas[PdfPTable.LINECANVAS];
+			// cb.setColorStroke(new GrayColor(0.8f));
+			cb.roundRectangle(rect.getLeft() + 0.5f, rect.getBottom() + 0.5f, rect.getWidth() - 1, rect.getHeight() - 1, 2);
+			cb.stroke();
+		}
+	}
+
+	class RoundRectangle_tabla_sup_izq implements PdfPCellEvent {
+
+		/**
+		 * @see com.lowagie.text.pdf.PdfPCellEvent#cellLayout(com.lowagie.text.pdf.PdfPCell, com.lowagie.text.Rectangle, com.lowagie.text.pdf.PdfContentByte[])
+		 */
+		@Override
+		public void cellLayout(PdfPCell cell, Rectangle rect, PdfContentByte[] canvas) {
+			PdfContentByte cb = canvas[PdfPTable.LINECANVAS];
+			// cb.setColorStroke(new GrayColor(0.8f));
+			cb.roundRectangle(rect.getLeft() + 1.5f, rect.getBottom() + 1.5f, rect.getWidth() - 3, rect.getHeight() - 3, 5);
+			cb.stroke();
+		}
+	}
+
+	private PdfPCell obtenerCeldaNormal(String texto_, Font fuente_, int colspan_, boolean redondeado_, int tipo_alienacion, int border_) {
+		PdfPCell celda_ = new PdfPCell(new Paragraph(texto_, fuente_));
+
+		celda_.setHorizontalAlignment(tipo_alienacion);
+		celda_.setBorder(border_);
+		celda_.setColspan(colspan_);
+		if (redondeado_) {
+			celda_.setCellEvent(new RoundRectangle());
+		}
+
+		return celda_;
+
+	}
+
+	public class CellBackground implements PdfPCellEvent {
+
+		@Override
+		public void cellLayout(PdfPCell cell, Rectangle rect, PdfContentByte[] canvas) {
+			PdfContentByte cb = canvas[PdfPTable.BACKGROUNDCANVAS];
+			cb.roundRectangle(rect.getLeft() + 1.5f, rect.getBottom() + 1.5f, rect.getWidth() - 3, rect.getHeight() - 3, 4);
+			cb.setCMYKColorFill(0x00, 0x00, 0x00, 0x00);
+			cb.fill();
+		}
+	}
+}
