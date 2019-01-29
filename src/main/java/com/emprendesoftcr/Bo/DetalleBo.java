@@ -19,6 +19,6 @@ public interface DetalleBo {
 	void eliminar(Detalle detalle);
 	
 	Integer eliminarDetalleFactura(Factura factura)throws Exception;
-	Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, String codigo, String tipoDocumento, Cliente cliente, Empresa empresa, Usuario usuario);
+	Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, String codigo, String tipoDocumento, Cliente cliente, Empresa empresa, Usuario usuario,String tipoImpuesto);
 
 }

@@ -151,6 +151,16 @@
                                     </select>
                                 </div>  
                             </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>{$.i18n.prop("articulo.tipoImpuesto")} </label>  
+                                    <select  class="form-control tipoImpuesto" id="tipoImpuesto" name="tipoImpuesto" >
+                                        <option  value="0"  >{$.i18n.prop("todos.select")}</option>
+                                        <option each={impuestos} value="{codigo}"  >{descripcion}</option>
+                                    </select>
+                                </div>  
+                            </div>
+
                         </div>
                     </form>  
                 </div>
@@ -200,6 +210,7 @@
                                         <thead>
                                             <tr>
                                                 <th class = "table-header" >{$.i18n.prop("usuario.nombreUsuario")}            </th>
+                                                <th class = "table-header" >{$.i18n.prop("articulo.codigo")}                  </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}            </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.documento")}                </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.cantidad")}   </th>
@@ -213,6 +224,7 @@
                                         <tfoot style="display: table-header-group;">
                                             <tr>
                                                 <th>{$.i18n.prop("usuario.nombreUsuario")}            </th>
+                                                <th>{$.i18n.prop("articulo.codigo")}                  </th>
                                                 <th>{$.i18n.prop("factura.fecha.emision")}            </th>
                                                 <th>{$.i18n.prop("factura.documento")}                </th>
                                                 <th>{$.i18n.prop("factura.linea.detalle.cantidad")}   </th>
@@ -590,7 +602,7 @@
 <script>
 self = this
 self.detail                = []
-
+self.impuestos             =[]
 self.totalDescuentos       = 0
 self.totalImpuestos        = 0
 self.totalImpuestoServicio        = 0
@@ -624,6 +636,7 @@ self.on('mount',function(){
     agregarInputsCombos()
     listaClientesActivos()
     __ComboTipoDocumentos()
+    __Impuestos()
      $('.datepickerFechaFinal').datepicker(
        	{
             format: 'yyyy-mm-dd',
@@ -670,7 +683,8 @@ function __EnviarPorCorreo(){
             totalDescuentoGeneral:self.totalDescuentoGeneral,
             totalImpuestoGeneral:self.totalImpuestoGeneral,
             totalGeneral:self.totalGeneral,
-            descripcion:self.articulo.descripcion
+            descripcion:self.articulo.descripcion,
+            tipoImpuesto:$('.tipoImpuesto').val(),
 		};
 		$.ajax({
 		    url: "EnvioDetalleFacturasXCodigoCorreoAjax.do",
@@ -922,9 +936,6 @@ var reglasDeValidacion = function() {
 			},
 			fechaFinal : {
 				required : true,
-			},
-			codigo : {
-				required : true,
 			}
 		},ignore : []
 
@@ -964,11 +975,56 @@ __limpiarFiltros(){
 
 }
 
+/**
+* Combo para verificar si es contabilizado en el inventario o no
+**/
+function __Impuestos(){
+    self.impuestos =[]
+    self.update()
+     self.impuestos.push({
+        codigo: "",
+        descripcion:"Sin impuesto"
+     });
+
+    self.impuestos.push({
+        codigo: '01',
+        descripcion:$.i18n.prop("tipo.impuesto.ventas")
+     });
+    self.impuestos.push({
+        codigo: '07',
+        descripcion:$.i18n.prop("tipo.impuesto.servicio")
+     });
+    self.impuestos.push({
+        codigo: '12',
+        descripcion:$.i18n.prop("tipo.impuesto.cemento")
+     });
+    self.impuestos.push({
+        codigo: '98',
+        descripcion:$.i18n.prop("tipo.impuesto.otros")
+     });
+   
+     self.update();
+}
+
 
 /**
 *  Busqueda de la informacion por rango de fechas
 **/
 __Busqueda(){
+    var fechaini = new Date($('.fechaInicial').val());
+	var fechafin = new Date($('.fechaFinal').val());
+	var diasdif= fechafin.getTime()-fechaini.getTime();
+	var contdias = Math.round(diasdif/(1000*60*60*24));
+    if(contdias > 31){
+        swal({
+      	    title: '',
+      	    text: $.i18n.prop("detalle.error.consulta.articulo"),
+      	    type: 'error',
+      	    showCancelButton: false,
+      	    confirmButtonText: 'Aceptar',
+      	})
+        return
+    }
     self.listaFacturas = []
     self.hay_datos             = false
     self.hay_datos             = false
@@ -984,7 +1040,8 @@ __Busqueda(){
             fechaFin:$('.fechaFinal').val(),
             codigo:$('.codigo').val(),
             tipoDocumento:$('.tipoDocumento').val(),
-            idCliente:$('#cliente').val()
+            idCliente:$('#cliente').val(),
+            tipoImpuesto:$('.tipoImpuesto').val(),
 
         };
         $("#tableListar").dataTable().fnClearTable(); 
@@ -1056,6 +1113,7 @@ function TotalesGenerales(data){
 function __InformacionDataTable(){
     self.formato_tabla = [ 
                                {'data' :'nombreUsuario'          ,"name":"nombreUsuario"      ,"title" : $.i18n.prop("usuario.nombreUsuario")     ,"autoWidth" :true },
+                               {'data' :'codigo'                 ,"name":"codigo"             ,"title" : $.i18n.prop("articulo.codigo")           ,"autoWidth" :true },
                                {'data' :'fechaEmisionSTR'        ,"name":"fechaEmisionSTR"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true },
                                {'data' :'consecutivo'            ,"name":"consecutivo"        ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
                                    "render":function(consecutivo,type, row){
@@ -1111,7 +1169,7 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 8    ){
+        if ( $(this).index() != 9    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })

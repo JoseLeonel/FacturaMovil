@@ -62,9 +62,9 @@ public class DetalleBoImpl implements DetalleBo {
 	}
 	
 	@Override
-	public Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, String codigo, String tipoDocumento, Cliente cliente, Empresa empresa, Usuario usuario)
+	public Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, String codigo, String tipoDocumento, Cliente cliente, Empresa empresa, Usuario usuario,String tipoImpuesto)
 	{
-		return detalleDao.facturasRangoEstado(estado, fechaInicio, fechaFin, codigo, tipoDocumento, cliente, empresa, usuario);
+		return detalleDao.facturasRangoEstado(estado, fechaInicio, fechaFin, codigo, tipoDocumento, cliente, empresa, usuario,tipoImpuesto);
 	}
 
 }

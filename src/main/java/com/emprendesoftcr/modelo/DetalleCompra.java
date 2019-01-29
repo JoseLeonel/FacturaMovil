@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -82,12 +83,12 @@ public class DetalleCompra implements Serializable {
 	private Date							updated_at;
 
 	@JsonIgnore
-	@ManyToOne
+	@ManyToOne(fetch =FetchType.LAZY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "compra_id", nullable = false)
 	private Compra						compra;
 
-	@ManyToOne
+	@ManyToOne(fetch =FetchType.LAZY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "articulo_id", nullable = false)
 	private Articulo					articulo;

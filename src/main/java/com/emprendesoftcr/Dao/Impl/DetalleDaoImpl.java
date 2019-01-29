@@ -64,8 +64,9 @@ public class DetalleDaoImpl implements DetalleDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, String codigo, String tipoDocumento, Cliente cliente, Empresa empresa, Usuario usuario) {
+	public Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, String codigo, String tipoDocumento, Cliente cliente, Empresa empresa, Usuario usuario,String tipoImpuesto) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from Detalle obj");
 		hql.append(" where obj.factura.estado = :estado ");
@@ -81,7 +82,19 @@ public class DetalleDaoImpl implements DetalleDao {
 				hql.append("and obj.factura.tipoDoc = :tipoDocumento ");
 			}
 		}
-		hql.append("and obj.codigo = :codigo ");
+		if (tipoImpuesto != null) {
+			if (!tipoImpuesto.equals(Constantes.COMBO_TODOS)) {
+				hql.append("and obj.tipoImpuesto = :tipoImpuesto ");
+			}
+		}
+
+		if(codigo !=null) {
+			if(!codigo.equals(Constantes.EMPTY)) {
+				hql.append("and obj.codigo = :codigo ");	
+			}
+				
+		}
+		
 		hql.append("and obj.factura.created_at >= :fechaInicio and obj.factura.created_at <= :fechaFin and obj.factura.referenciaCodigo != :referenciaCodigo");
 		Query query = entityManager.createQuery(hql.toString());
 		query.setParameter("estado", estado);
@@ -90,6 +103,12 @@ public class DetalleDaoImpl implements DetalleDao {
 				query.setParameter("tipoDocumento", tipoDocumento);
 			}
 		}
+		if (tipoImpuesto != null) {
+			if (!tipoImpuesto.equals(Constantes.COMBO_TODOS)) {
+				query.setParameter("tipoImpuesto", tipoImpuesto);
+			}
+		}
+
 		if (cliente != null) {
 			query.setParameter("cliente", cliente);
 		}
@@ -97,7 +116,12 @@ public class DetalleDaoImpl implements DetalleDao {
 			query.setParameter("usuario", usuario);
 		}
 		query.setParameter("empresa", empresa);
-		query.setParameter("codigo", codigo);
+		if(codigo !=null) {
+			if(!codigo.equals(Constantes.EMPTY)) {
+				query.setParameter("codigo", codigo);		
+			}
+		}
+		
 		query.setParameter("referenciaCodigo", Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO);
 		query.setParameter("fechaInicio", fechaInicio);
 		query.setParameter("fechaFin", fechaFin);
