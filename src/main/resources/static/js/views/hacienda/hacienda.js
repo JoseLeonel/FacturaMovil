@@ -3,6 +3,8 @@ $(document).ready(function() {
 } );/*fin document*/
 
 var _Init = function () {
+	var advanced_search_section = $('#filtrosAvanzados');
+        advanced_search_section.slideToggle(750);
 	__Inicializar_Table('.tableListar');
 	agregarInputsCombos();
 	$('.datepickerFechaFinal').datepicker(

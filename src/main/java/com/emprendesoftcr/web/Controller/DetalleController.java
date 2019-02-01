@@ -47,6 +47,7 @@ import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
+import com.emprendesoftcr.web.command.TotalDetallesCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.FechaPropertyEditor;
@@ -130,6 +131,17 @@ public class DetalleController {
 	public String listaFacturasxCodigo(ModelMap model) {
 		return "views/detalle/ListaDetallesxCodigo";
 	}
+	
+	@RequestMapping(value = "/TotalVentasPorDetalleAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public TotalDetallesCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin) {
+		Date fechaInicial = Utils.parseDate(fechaInicio);
+		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFin), true);
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		return detalleBo.totalVentasPorDetalle(usuario.getEmpresa(),fechaInicial, fechaFinal);
+				
+				
+	}
 
 	/**
 	 * Listado de los impuestos de servicio 10%
@@ -167,7 +179,7 @@ public class DetalleController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/EnvioDetalleFacturasXCodigoCorreoAjax.do", method = RequestMethod.GET)
-	public void envioDetalleFacturasXCodigoCorreoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicialParam, @RequestParam String fechaFinalParam, @RequestParam String codigoParam, @RequestParam String tipoDocumentoParam, @RequestParam String idClienteParam, @RequestParam String correoAlternativo, @RequestParam String totalDescuentoGeneral, @RequestParam String totalImpuestoGeneral, @RequestParam String totalGeneral,  @RequestParam String descripcion,String tipoImpuesto) throws IOException, Exception {
+	public void envioDetalleFacturasXCodigoCorreoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicialParam, @RequestParam String fechaFinalParam, @RequestParam String correoAlternativo) throws IOException, Exception {
 		Boolean isVededor = false;
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
@@ -183,7 +195,7 @@ public class DetalleController {
 		if (fechaFinal != null && fechaFinal != null) {
 			fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
 		}
-		Collection<Detalle> detalles = detalleBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal, codigoParam, tipoDocumentoParam, cliente, usuario.getEmpresa(), isVededor == true ? usuario : null,tipoImpuesto);
+		Collection<Detalle> detalles = detalleBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal);
 		// Se prepara el excell
 		ByteArrayOutputStream baos = createExcelVentasXCodigo(detalles);
 		Collection<Attachment> attachments = createAttachments(attachment("ventasXCodigo", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
@@ -228,13 +240,12 @@ public class DetalleController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/DescargarDetallexCodigoAjax.do", method = RequestMethod.GET)
-	public void descargarDetallexCodigoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicialParam, @RequestParam String fechaFinalParam, @RequestParam String codigoParam, @RequestParam String tipoDocumentoParam, @RequestParam String idClienteParam,String tipoImpuesto) throws IOException {
+	public void descargarDetallexCodigoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicialParam, @RequestParam String fechaFinalParam) throws IOException {
 		Boolean isVededor = false;
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
 			isVededor = true;
 		}
-		Cliente cliente = clienteBo.buscarPorCedulaYEmpresa(idClienteParam, usuario.getEmpresa());
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicialParam);
 		Date fechaFinal = Utils.parseDate(fechaFinalParam);
@@ -246,7 +257,7 @@ public class DetalleController {
 		}
 
 	
-		Collection<Detalle> detalles = detalleBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal, codigoParam, tipoDocumentoParam, cliente, usuario.getEmpresa(), isVededor == true ? usuario : null,tipoImpuesto);
+		Collection<Detalle> detalles = detalleBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal);
 		String nombreArchivo = "VentasXProductos.xls";
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
@@ -320,6 +331,8 @@ public class DetalleController {
 					if (!tipoImpuesto.equals(Constantes.COMBO_TODOS)) {
 						delimitador.addFiltro(new JqGridFilter("tipoImpuesto", "'" + tipoImpuesto.toString() + "'", "="));
 					}
+				}else {
+					delimitador.addFiltro(new JqGridFilter("tipoImpuesto", "'" + tipoImpuesto.toString() + "'", "="));
 				}
 			}
 

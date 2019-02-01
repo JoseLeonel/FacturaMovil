@@ -260,13 +260,7 @@
                     <a class="pull-right" href="#"  title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">Articulos.No={cantArticulos} / {descripcionArticulo}</span></a>
                     <br>
                     <br>
-                    <aside class="left-sidebar">
-                        <article class="booking-details clearfix">
-                            <div onclick = {__MostrarFormularioDePago} id="btnGrandePagar" class="head green well" style="color: #fff; font-size: 25px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
-                                <div id="pagarTitulo">{$.i18n.prop("factura.total")}:  {totalComprobante}</div>
-                            </div>
-                        </article>
-                    </aside>
+                    
                 
 
                     <section   class="lista-factura-espera">
@@ -274,6 +268,13 @@
                             <a href="#" class="factura-espera"  title="{cliente !=null?cliente.nombreCompleto:""}">C# {id}</a>
                         </div>    
                      </section >
+                     <aside class="left-sidebar">
+                        <article class="clearfix">
+                            <div onclick = {__MostrarFormularioDePago}  class="precioTotalFactura" >
+                                <p class="total label-totalesChinos" style="text-align:right;">Total:  <span id="lblTotal">{totalComprobante}</span></p>
+                            </div>
+                        </article>
+                    </aside>
                 </section>
         </div><!-- fin contenedor-factura-->
 <!--Modal mostrar Articulos de la empresa -->

@@ -337,46 +337,46 @@ var reglasDeValidacion = function() {
 		rules : {
 			cedula : {
 				required : true,
-                maxlength:20,
+                maxlength:12,
                 minlength:9,
 			},
 
 			nombreCompleto : {
 				required : true,
-                maxlength:250,
+                maxlength:80,
                 minlength:1,
                 lettersOnly : true
 			},
 			otraSenas : {
-                maxlength:250,
+                maxlength:160,
                 minlength:1,
                 lettersOnly : true
 			},
 			correoElectronico : {
                 required : true,
-                maxlength:250,
+                maxlength:80,
                 minlength:1,
                 email:true
 			},
             
 			correoElectronico1 : {
-                maxlength:250,
+                maxlength:80,
                 minlength:1,
                 email:true
 			},
 			correoElectronico2 : {
-                maxlength:250,
+                maxlength:80,
                 minlength:1,
                 email:true
 			},
 			correoElectronico3 : {
-                maxlength:250,
+                maxlength:80,
                 minlength:1,
                 email:true
 			},
             
 			correoElectronico3 : {
-                maxlength:250,
+                maxlength:80,
                 minlength:1,
                 email:true
 			},

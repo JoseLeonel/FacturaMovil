@@ -431,6 +431,18 @@ public class Constantes {
 	public static final String					SP_GENERAR_CONSECUTIVO_RECEPCION_IN_TIPO_DOCUMENTO	= "TIPO_DOCUMENTO";
 	public static final String					SP_GENERAR_CONSECUTIVO_RECEPCION_OUT_CONSECUTIVO		= "CONSECUTIVO";
 
+//Procedimiento para generar totales por linea de datalles de la factura
+	public static final String					SP_VENTASXDETALLE																		= "ventasxdetalle";
+	public static final String					SP_VENTASXDETALLE_IN_ID_EMPRESA											= "e_empresa";
+	public static final String					SP_VENTASXDETALLE_IN_FECHA_INICIAL									= "fecha_inicio";
+	public static final String					SP_VENTASXDETALLE_IN_FECHA_FINAL										= "fecha_fin";
+	public static final String					SP_VENTASXDETALLE_OUT_TOTAL													= "total";
+	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_IMPUESTO								= "total_imp";
+	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_GRAVADO									= "total_grav";
+	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_DESCUENTO								= "total_desc";
+	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_EXENTOS									= "total_exc";
+	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA								= "total_gananc";
+
 	// Procecimiento para actualizar la caja
 	public static final String					SP_ACTUALIZA_CAJA																		= "SPACTUALIZACAJAUSUARIO";
 	public static final String					SP_ACTUALIZA_CAJA_ID_CAJA_USUARIO										= "ID_CAJA_USUARIO";

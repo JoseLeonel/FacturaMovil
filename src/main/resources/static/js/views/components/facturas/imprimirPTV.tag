@@ -449,6 +449,14 @@ function consultaFactura(idFactura){
                         elemen.montoTotal = redondearDecimales(elemen.montoTotal,0);
                          self.update()
                     })
+                    //Ordenar detalles
+                    self.detalles.sort(function(a,b) {
+                        if ( a.numeroLinea < b.numeroLinea )
+                            return -1;
+                        if ( a.numeroLinea > b.numeroLinea )
+                            return 1;
+                        return 0;
+                    } );
                    self.totalImpuestoServicioSTR = ""
                    self.totalImpuestoServicioSTR =  formatoDecimales(self.totalImpuestoServicio,2)  
                    self.update()

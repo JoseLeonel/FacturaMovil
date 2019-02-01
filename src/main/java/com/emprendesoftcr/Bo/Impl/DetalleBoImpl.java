@@ -12,12 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Dao.DetalleDao;
-import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
-import com.emprendesoftcr.modelo.Usuario;
-
+import com.emprendesoftcr.web.command.TotalDetallesCommand;
 
 @EnableTransactionManagement
 @Service("detalleBo")
@@ -60,11 +58,15 @@ public class DetalleBoImpl implements DetalleBo {
 		}
 
 	}
-	
+
 	@Override
-	public Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, String codigo, String tipoDocumento, Cliente cliente, Empresa empresa, Usuario usuario,String tipoImpuesto)
-	{
-		return detalleDao.facturasRangoEstado(estado, fechaInicio, fechaFin, codigo, tipoDocumento, cliente, empresa, usuario,tipoImpuesto);
+	public Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin) {
+		return detalleDao.facturasRangoEstado(estado, fechaInicio, fechaFin);
+	}
+
+	@Override
+	public TotalDetallesCommand totalVentasPorDetalle(Empresa empresa, Date fechaInicio, Date FechaFinal) {
+		return detalleDao.totalVentasPorDetalle(empresa, fechaInicio, FechaFinal);
 	}
 
 }
