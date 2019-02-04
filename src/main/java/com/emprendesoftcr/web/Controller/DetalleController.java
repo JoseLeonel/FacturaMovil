@@ -185,7 +185,7 @@ public class DetalleController {
 		if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
 			isVededor = true;
 		}
-		Cliente cliente = clienteBo.buscarPorCedulaYEmpresa(idClienteParam, usuario.getEmpresa());
+//		Cliente cliente = clienteBo.buscarPorCedulaYEmpresa(idClienteParam, usuario.getEmpresa());
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicialParam);
 		Date fechaFinal = Utils.parseDate(fechaFinalParam);
@@ -212,11 +212,11 @@ public class DetalleController {
 		Map<String, Object> modelEmail = new HashMap<>();
 		modelEmail.put("fechaInicial", fechaInicialParam);
 		modelEmail.put("fechaFinal", fechaFinalParam);
-		modelEmail.put("total", totalGeneral);
-		modelEmail.put("impuesto", totalImpuestoGeneral);
-		modelEmail.put("descuento", totalDescuentoGeneral);
-		modelEmail.put("codigo", codigoParam);
-		modelEmail.put("descripcion", descripcion);
+//		modelEmail.put("total", totalGeneral);
+//		modelEmail.put("impuesto", totalImpuestoGeneral);
+//		modelEmail.put("descuento", totalDescuentoGeneral);
+//		modelEmail.put("codigo", codigoParam);
+//		modelEmail.put("descripcion", descripcion);
 		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_VENTA_POR_CODIGO, modelEmail);
 	}
 

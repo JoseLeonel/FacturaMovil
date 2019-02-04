@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
@@ -58,7 +59,6 @@ import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.fisco.MapEnums;
-import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Detalle;
@@ -77,7 +77,6 @@ import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.pdf.Proformas;
 import com.emprendesoftcr.pdf.Reporte01PdfView;
 import com.emprendesoftcr.validator.FacturaFormValidator;
-import com.emprendesoftcr.web.command.ArticuloCommand;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacionMesa;
@@ -206,8 +205,8 @@ public class FacturasController {
 	@Autowired
 	private DataTableBo																								dataTableBo;
 
-//	@Autowired
-//	private CertificadoBo																							certificadoBo;
+	@Autowired
+	private CertificadoBo																							certificadoBo;
 
 	@Autowired
 	private UsuarioBo																									usuarioBo;
@@ -1079,11 +1078,11 @@ public class FacturasController {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
 
-			// Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			 Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 			// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 			// criptografica desde linux
-			// certificadoBo.agregar(usuario.getEmpresa(),"","");
+			 certificadoBo.agregar(usuario.getEmpresa(),"","");
 			// usuario.getEmpresa().getClaveLlaveCriptografica().toString(),
 			// usuario.getEmpresa().getNombreLlaveCriptografica());
 			// String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);
