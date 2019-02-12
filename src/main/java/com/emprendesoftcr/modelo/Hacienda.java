@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.sql.Blob;
 import java.util.Date;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -70,6 +72,7 @@ public class Hacienda implements Serializable {
 
 	@Column(name = "comprobante_xml")
 	@Lob
+	@Basic(fetch=FetchType.LAZY)
 	private Blob							comprobanteXML;
 
 	@Column(name = "consecutivo")
@@ -88,6 +91,7 @@ public class Hacienda implements Serializable {
 
 	@Column(name = "mensaje_Hacienda")
 	@Lob
+	@Basic(fetch=FetchType.LAZY)
 	private Blob							mensajeHacienda;
 
 	@Column(name = "notificacion")
@@ -95,6 +99,7 @@ public class Hacienda implements Serializable {
 
 	@Column(name = "xErrorCause")
 	@Lob
+	@Basic(fetch=FetchType.LAZY)
 	private Blob							xErrorCause;
 
 	@ManyToOne
@@ -113,6 +118,7 @@ public class Hacienda implements Serializable {
 
 	@Column(name = "observa")
 	@Lob
+	@Basic(fetch=FetchType.LAZY)
 	private Blob						observacion;
 
 

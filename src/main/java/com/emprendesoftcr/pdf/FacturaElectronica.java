@@ -16,6 +16,7 @@ public class FacturaElectronica {
 	private String													_logo;
 	private String													_emisorNombre;
 	private String													_emisorNombreComercial;
+	private String													_emisorDireccion;
 	private String													_emisorCedula;
 	private String													_emisorTelefono;
 	private String													_emisorCorreo;
@@ -113,6 +114,14 @@ public class FacturaElectronica {
 
 	public void setEmisorCorreo(String _emisorCorreo) {
 		this._emisorCorreo = _emisorCorreo;
+	}
+	
+	public String getEmisorDireccion() {
+		return _emisorDireccion;
+	}
+
+	public void setEmisorDireccion(String _emisorDireccion) {
+		this._emisorDireccion = _emisorDireccion;
 	}
 
 	public String getEmisorProvincia() {

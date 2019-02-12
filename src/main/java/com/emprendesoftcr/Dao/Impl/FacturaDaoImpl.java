@@ -149,6 +149,7 @@ public class FacturaDaoImpl implements FacturaDao {
 		query.setParameter("fechaFin", fechaFin);
 		return query.getResultList();
 	}
+	
 
 	public TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa) {
 

@@ -142,6 +142,7 @@ public class FacturasController {
 																																																			facturaElectronica.setEmisorNombreComercial(d.getEmpresa().getNombreComercial());
 																																																			facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombre().equals(Constantes.EMPTY) ? d.getEmpresa().getNombre() : d.getEmpresa().getNombre());
 																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
+																																																			facturaElectronica.setEmisorDireccion(d.getEmpresa().getOtraSenas());
 																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
 																																																			facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
 																																																			facturaElectronica.set_nota(d.getNota() == null ? Constantes.EMPTY : d.getNota());
@@ -155,7 +156,7 @@ public class FacturasController {
 																																																			facturaElectronica.set_clienteDireccion(d.getDireccion());
 																																																			// Otros
 																																																			facturaElectronica.setTipoDocumento(FacturaElectronicaUtils.getTipoDocumento(d.getTipoDoc()));
-																																																			facturaElectronica.setClave(d.getClave());
+																																																			facturaElectronica.setClave(d.getClave() ==null?Constantes.EMPTY:d.getClave());
 																																																			facturaElectronica.setConsecutivo(d.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ? d.getId().toString() : d.getNumeroConsecutivo());
 																																																			facturaElectronica.setFechaEmision(d.getFechaEmision().toString());
 																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito() != null ? d.getPlazoCredito().toString() : Constantes.EMPTY);
@@ -205,8 +206,8 @@ public class FacturasController {
 	@Autowired
 	private DataTableBo																								dataTableBo;
 
-	@Autowired
-	private CertificadoBo																							certificadoBo;
+//	@Autowired
+//	private CertificadoBo																							certificadoBo;
 
 	@Autowired
 	private UsuarioBo																									usuarioBo;
@@ -1078,11 +1079,11 @@ public class FacturasController {
 		try {
 			Factura facturaBD = facturaBo.findById(idFactura);
 
-			 Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			// Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 			// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 			// criptografica desde linux
-			 certificadoBo.agregar(usuario.getEmpresa(),"","");
+			// certificadoBo.agregar(usuario.getEmpresa(),"","");
 			// usuario.getEmpresa().getClaveLlaveCriptografica().toString(),
 			// usuario.getEmpresa().getNombreLlaveCriptografica());
 			// String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);

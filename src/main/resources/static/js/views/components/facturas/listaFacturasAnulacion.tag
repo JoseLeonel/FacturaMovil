@@ -445,7 +445,7 @@ var reglasDeValidacionAnular = function() {
 		rules : {
 			referenciaRazon : {
 				required : true,
-                maxlength:240,
+                maxlength:180,
                 minlength:1,
 			}                                   
                         

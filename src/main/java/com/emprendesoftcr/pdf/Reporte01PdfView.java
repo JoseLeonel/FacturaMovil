@@ -2,10 +2,9 @@
 package com.emprendesoftcr.pdf;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -45,28 +44,28 @@ public class Reporte01PdfView {
 		Rectangle rct = new Rectangle(36, 54, 559, 788);
 		// Definimos un nombre y un tamaño para el PageBox los nombres posibles son: “crop”, “trim”, “art” and “bleed”.
 		writer.setBoxSize("art", rct);
-		HeaderFooter event = new HeaderFooter(facturaElectronica);
+		HeaderFooter event = new HeaderFooter(facturaElectronica, tipoDoc);
 		writer.setPageEvent(event);
 		document.open();
 
 //		PdfContentByte cb = writer.getDirectContent();
 
-		reporte01PdfView.buildPdfDocument(facturaElectronica, document, writer);
+		reporte01PdfView.buildPdfDocument(facturaElectronica, document, writer,tipoDoc);
 
 		document.close();
 
 		return stream;
 	}
 
-	private void buildPdfDocument(FacturaElectronica fac_electro, Document document, PdfWriter writer) throws Exception {
+	private void buildPdfDocument(FacturaElectronica fac_electro, Document document, PdfWriter writer,String tipoDoc) throws Exception {
 
 		// document.add(new Paragraph("\n", pequeFont));
 
-		PdfPTable tabla_tercera_tabla = new PdfPTable(7);
+		PdfPTable tabla_tercera_tabla = new PdfPTable(9);
 		tabla_tercera_tabla.setWidthPercentage(100);
 		tabla_tercera_tabla.setTotalWidth(570f);
 		tabla_tercera_tabla.setLockedWidth(true);
-		float[] header_espacio_03 = { 37, 74, 200, 31, 55, 55, 75 };
+		float[] header_espacio_03 = { 23, 62, 145, 18, 28, 35,17,35, 40 };
 		tabla_tercera_tabla.setWidths(header_espacio_03);
 		tabla_tercera_tabla.setSplitLate(false);
 		tabla_tercera_tabla.setSplitRows(false);
@@ -83,12 +82,14 @@ public class Reporte01PdfView {
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Unid", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
 
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Cantidad", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
-		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Precio", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Precio Unit.", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Imp", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Total Imp", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Total Linea", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
 
 //tabla_tercera_tabla.setKeepRowsTogather(true);
 		tabla_tercera_tabla.setHeaderRows(1);
-		tabla_tercera_tabla.setSplitRows(false);
+		tabla_tercera_tabla.setSplitRows(true);
 		tabla_tercera_tabla.setComplete(false);
 //tabla_tercera_tabla.setSplitLate(false);
 //tabla_tercera_tabla.setKeepTogether(true);
@@ -97,9 +98,9 @@ public class Reporte01PdfView {
 
 		int indice_ = 0;
 		for (DetalleFacturaElectronica item : fac_electro.getDetalleFacturaElectronica()) {
-			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(indice_), font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT));
+			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getLinea()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT));
 
-			tabla_tercera_tabla.addCell(obtenerCeldaNormal(item.getCodigo(), font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT));
+			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getCodigo()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT));
 
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(item.getDescripcion(), font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.LEFT));
 
@@ -107,6 +108,8 @@ public class Reporte01PdfView {
 
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getCantidad()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT));
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getPrecioU()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT));
+			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getTarifaIva()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
+			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getImpuesto()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getTotal()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 			indice_++;
 			/*
@@ -123,7 +126,9 @@ public class Reporte01PdfView {
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
-
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
+		
 		agregaLineasBlanco(tabla_tercera_tabla, indice_ + 2, true);
 
 		document.add(tabla_tercera_tabla);
@@ -141,8 +146,14 @@ public class Reporte01PdfView {
 		PdfPTable izquierda_inferior_ultima = new PdfPTable(1);
 		izquierda_inferior_ultima.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 		izquierda_inferior_ultima.getDefaultCell().setCellEvent(new RoundRectangle());
-
-		izquierda_inferior_ultima.addCell(obtenerCeldaNormal(" Los productos se le aplico un 10% descuento general y seran entregados en la tarde", font_cabezera_tabla, 1, true, Paragraph.ALIGN_LEFT, PdfPCell.NO_BORDER));
+    String nota = Constantes.EMPTY;    
+		if(tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			nota = fac_electro.getReferenciaRazon();
+		}else {
+			fac_electro.get_nota();
+		}
+		
+		izquierda_inferior_ultima.addCell(obtenerCeldaNormal("Nota: " + nota, font_cabezera_tabla, 1, true, Paragraph.ALIGN_LEFT, PdfPCell.NO_BORDER));
 
 		tabla_ultima.addCell(izquierda_inferior_ultima);
 
@@ -150,9 +161,29 @@ public class Reporte01PdfView {
 		central_inferior_ultima.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 		central_inferior_ultima.getDefaultCell().setCellEvent(new RoundRectangle());
 
-		central_inferior_ultima.addCell(obtenerCeldaNormal("Venta neta", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
-		central_inferior_ultima.addCell(obtenerCeldaNormal("Impuestos", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
-		central_inferior_ultima.addCell(obtenerCeldaNormal("Exento", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
+		double monto = 0;
+		double descuento = 0;
+		double subTotal = 0;
+		double impuesto = 0;
+		double exento = 0;
+		double total = 0;
+		List<DetalleFacturaElectronica> detalleFacturaElectronica = fac_electro.getDetalleFacturaElectronica();
+		for (int i = 0; i < detalleFacturaElectronica.size(); i++) {
+			monto = monto + (double) Math.round(detalleFacturaElectronica.get(i).getMonto() * 100000d) / 100000d;
+			descuento = descuento + (double) Math.round(detalleFacturaElectronica.get(i).getDescuento() * 100000d) / 100000d;
+			subTotal = subTotal + (double) Math.round(detalleFacturaElectronica.get(i).getSubtotal() * 100000d) / 100000d;
+			impuesto = impuesto + (double) Math.round(detalleFacturaElectronica.get(i).getImpuesto() * 100000d) / 100000d;
+			exento = exento + (double) Math.round(detalleFacturaElectronica.get(i).getImpuesto() == Constantes.ZEROS_DOUBLE ? detalleFacturaElectronica.get(i).getTotal() * 100000d : Constantes.ZEROS_DOUBLE) / 100000d;
+			total = total + (double) Math.round(detalleFacturaElectronica.get(i).getTotal() * 100000d) / 100000d;
+		}
+
+		central_inferior_ultima.addCell(obtenerCeldaNormal("Total venta", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
+		if (descuento > Constantes.ZEROS_DOUBLE) {
+			central_inferior_ultima.addCell(obtenerCeldaNormal("Total descuentos", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
+		}
+		central_inferior_ultima.addCell(obtenerCeldaNormal("Total venta neta", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
+		central_inferior_ultima.addCell(obtenerCeldaNormal("Total Impuesto", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
+		central_inferior_ultima.addCell(obtenerCeldaNormal("Total exento", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
 		central_inferior_ultima.addCell(obtenerCeldaNormal("Total comprobante", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
 
 		tabla_ultima.addCell(central_inferior_ultima);
@@ -161,12 +192,16 @@ public class Reporte01PdfView {
 		// derecha_inferior_ultima.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 		derecha_inferior_ultima.getDefaultCell().setCellEvent(new RoundRectangle());
 
-		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(fac_electro.getFooterTotalVenta()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
-		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(fac_electro.getFooterTotalVentaNeta()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
-		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(fac_electro.getFooterTotalImpuesto()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
-		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(fac_electro.getFooterTotalExento()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
-		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(fac_electro.getFooterTotalComprobante()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(monto), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+		if (descuento > Constantes.ZEROS_DOUBLE) {
+			derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(descuento), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+		}
 
+		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(subTotal), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(impuesto), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(exento), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(total), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+		
 		tabla_ultima.addCell(derecha_inferior_ultima);
 		document.add(tabla_ultima);
 
@@ -188,9 +223,11 @@ public class Reporte01PdfView {
 			tabla_.addCell(obtenerCeldaNormal("\n", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
 			tabla_.addCell(obtenerCeldaNormal("\n", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
 			tabla_.addCell(obtenerCeldaNormal("\n", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
+			tabla_.addCell(obtenerCeldaNormal("\n", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
 		}
 
 		// Final de la tabla
+		tabla_.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.BOTTOM));
 		tabla_.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.BOTTOM));
 		tabla_.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.BOTTOM));
 		tabla_.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.BOTTOM));

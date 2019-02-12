@@ -9,6 +9,12 @@ public class Constantes {
 	public static final String					PLANTILLA_CORREO_CUENTAS_POR_COBRAR									= "email/cuentasxcobrar.vm";
 	public static final String					PLANTILLA_CORREO_VENTA_POR_CODIGO										= "email/ventasXCodigo.vm";
 
+// Version de los tipos de documentos 
+	public static final String					TIQUETE_ELECTRONICO_VERSION													= "Tiquete Electrónico ver 4.2";
+	public static final String					FACTURA_ELECTRONICO_VERSION													= "Factura Electrónica ver 4.2";
+	public static final String					NOTA_CREDITO_ELECTRONICO_VERSION										= "Nota Credito Electrónica ver 4.2";
+	public static final String					NOTA_DEBITO_ELECTRONICO_VERSION											= "Nota Debito Electrónica ver 4.2";
+	public static final String					PROFORMA_VERSION																		= "Proforma";
 	// Tipo de mostrar el articulo de impuesto de servicio 10 porciento
 	public static final Integer					NO_MOSTRAR_IMPUESTO_10_PORCIENTO										= 1;
 	public static final Integer					SI_MOSTRAR_IMPUESTO_10_PORCIENTO										= 2;

@@ -7,12 +7,10 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @Configuration
 @EnableAutoConfiguration
-@EnableScheduling
 @ComponentScan(basePackageClasses = { FacturaElectronicaApplication.class })
 public class FacturaElectronicaApplication extends SpringBootServletInitializer {
 
@@ -31,6 +29,28 @@ public class FacturaElectronicaApplication extends SpringBootServletInitializer 
 		return application.sources(FacturaElectronicaApplication.class);
 	}
 	
+//	private static DataSource datasource;
+//  
+//  public static DataSource getDataSource()
+//  {
+//          if(datasource == null)
+//          {
+//                  HikariConfig config = new HikariConfig();
+//                   
+//          config.setJdbcUrl("jdbc:mysql://localhost:3306/pruebas?useSSL=false");
+//          config.setUsername("root");
+//          config.setPassword("root");
+//
+//          config.setMaximumPoolSize(1);
+//          config.setAutoCommit(false);
+//          config.addDataSourceProperty("cachePrepStmts", "true");
+//          config.addDataSourceProperty("prepStmtCacheSize", "250");
+//          config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+//           
+//          datasource = new HikariDataSource(config);
+//          }
+//          return datasource;
+//  }
 	
 
 
