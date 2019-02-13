@@ -124,17 +124,15 @@ public class Articulo implements Serializable {
 	@JoinColumn(name = "empresa_id")
 	private Empresa empresa;
 
-	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "articulo_id", referencedColumnName = "id")
-	@OrderBy("id DESC")
-	private Set<Kardex> kardexs;
+	
 
 	// 1 = Articulo cocina
 	@Column(name = "comanda")
 	private Integer comanda = 0;
 
-	public Articulo(Long id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, Double cantidad, Double minimo, Double maximo, String estado, String tipoImpuesto, String tipoCodigo, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa, Set<Kardex> kardexs) {
+	
+
+	public Articulo(Long id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, Double cantidad, Double minimo, Double maximo, String estado, String tipoImpuesto, String tipoCodigo, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa, Integer comanda) {
 		super();
 		this.id = id;
 		this.codigo = codigo;
@@ -162,8 +160,7 @@ public class Articulo implements Serializable {
 		this.usuario = usuario;
 		this.categoria = categoria;
 		this.empresa = empresa;
-
-		this.kardexs = kardexs;
+		this.comanda = comanda;
 	}
 
 	public Articulo() {
@@ -368,30 +365,6 @@ public class Articulo implements Serializable {
 		this.empresa = empresa;
 	}
 
-	public Set<Kardex> getKardexs() {
-		return kardexs;
-	}
-
-	public void setKardexs(Set<Kardex> kardexs) {
-		this.kardexs = kardexs;
-	}
-
-	/**
-	 * Asociar Kardex a un inventario
-	 * @param inventarioAsociar
-	 */
-	public void addKardex(Kardex kardexAsociar) {
-
-		if (kardexAsociar != null) {
-			if (kardexs == null) {
-				kardexs = new HashSet<Kardex>();
-			}
-			kardexAsociar.setArticulo(this);
-			;
-
-			kardexs.add(kardexAsociar);
-		}
-	}
 
 	public String getTipoCodigo() {
 		return tipoCodigo;
@@ -428,8 +401,9 @@ public class Articulo implements Serializable {
 	@Override
 	public String toString() {
 		return "Articulo [id=" + id + ", codigo=" + codigo + ", descripcion=" + descripcion + ", serie=" + serie + ", unidadMedida=" + unidadMedida + ", contable=" + contable + ", costo=" + costo + ", impuesto=" + impuesto + ", precioPublico=" + precioPublico + ", gananciaPrecioPublico=" + gananciaPrecioPublico + ", precioMayorista=" + precioMayorista + ", gananciaPrecioMayorista=" + gananciaPrecioMayorista + ", precioEspecial=" + precioEspecial + ", gananciaPrecioEspecial=" + gananciaPrecioEspecial + ", cantidad=" + cantidad + ", minimo=" + minimo + ", maximo=" + maximo + ", estado=" + estado + ", tipoImpuesto=" + tipoImpuesto + ", tipoCodigo=" + tipoCodigo + ", created_at=" + created_at + ", updated_at=" + updated_at + ", marca=" + marca + ", usuario=" + usuario + ", categoria=" + categoria
-				+ ", empresa=" + empresa + ", kardexs=" + kardexs + ", comanda=" + comanda + "]";
+				+ ", empresa=" + empresa + ", comanda=" + comanda + "]";
 	}
+
 	
 	
 

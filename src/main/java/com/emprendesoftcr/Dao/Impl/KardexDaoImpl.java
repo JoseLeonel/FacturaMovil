@@ -65,9 +65,8 @@ public class KardexDaoImpl implements KardexDao {
 			kardex.setArticulo(articulo);
 			articulo.setCantidad(cantidadActual - cantidadNueva);
 			articuloDao.modificar(articulo);
-			Articulo articuloBD = articuloDao.buscar(articulo.getId());
-			articuloBD.addKardex(kardex);
-			articuloDao.modificar(articuloBD);
+			agregar(kardex);
+			
 
 		} catch (Exception e) {
 			log.info("** Error  salida kardex: " + e.getMessage() + " fecha " + new Date());
@@ -104,9 +103,8 @@ public class KardexDaoImpl implements KardexDao {
 			kardex.setArticulo(articulo);
 			articulo.setCantidad(cantidadActual + cantidadNueva);
 			articuloDao.modificar(articulo);
-			Articulo articuloBD = articuloDao.buscar(articulo.getId());
-			articuloBD.addKardex(kardex);
-			articuloDao.modificar(articuloBD);
+			agregar(kardex);
+			
 
 		} catch (Exception e) {
 			log.info("** Error  entrada kardex: " + e.getMessage() + " fecha " + new Date());

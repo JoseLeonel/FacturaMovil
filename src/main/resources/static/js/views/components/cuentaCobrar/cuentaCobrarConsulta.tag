@@ -52,7 +52,30 @@
                 <div  show={mostrarFiltros}  class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
                     <form id="filtros" name="filtros">              
                         <div class= "row">
-                           
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                <div class="form-group">
+                                    <label  >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
+                                    <div  class="form-group input-group date datepickerFechaInicial " data-provide="datepicker"    data-date-format="yyyy-mm-dd">
+                                        <input type="text" class="form-control fechaInicio" id="fechaInicio"  name= "fechaInicio" readonly>
+                                        <div class="input-group-addon">
+                                            <span class="glyphicon glyphicon-th"></span>
+                                        </div>
+                                    </div>	                             
+                                </div>  
+                            </div>             
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label  >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
+                                        <div  class="form-group input-group date datepickerFechaFinal" data-provide="datepicker"    data-date-format="yyyy-mm-dd">
+                                            <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>	                             
+                                    </div>
+                                </div>  
+                            </div>
                             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                                 <div class="form-group">
                                     <label>{$.i18n.prop("cliente.titulo")} </label>  
@@ -66,6 +89,7 @@
                                 <div class="form-group">
                                     <label>{$.i18n.prop("combo.estado")} </label>  
                                     <select  class="form-control selectEstado estado" id="estado" name="estado" >
+                                        <option  data-tokens="{$.i18n.prop("todos.select")}"  value="0"  >{$.i18n.prop("todos.select")}</option>
                                         <option   each={estados}  value="{codigo}"  >{descripcion}</option>
                                     </select>
                                 </div>  
@@ -760,6 +784,8 @@ __Busqueda(){
 * Lista de consulta
 **/
 function listadoConsulta(){
+    self.fechaInicio =$('.fechaInicio').val()
+    self.fechaFin =$('.fechaFinal').val()
     self.cliente =$('#idCliente').val()
     self.estado = $('.estado').val()
     self.total                     = 0
@@ -773,7 +799,7 @@ function listadoConsulta(){
         $("#tableListar").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListar')  
         $.ajax({
-            url: "ListarCuentaCobrarPorEstadoCedulaAjax.do",
+            url: "ListarCuentaCobrarAjax.do",
             datatype: "json",
             data:formulario ,
             method:"GET",

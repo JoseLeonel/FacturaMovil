@@ -2,9 +2,7 @@ package com.emprendesoftcr.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,8 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,7 +18,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Modelo de cuenta de cobrar de los clientes CuentaCobrar.
@@ -130,11 +125,6 @@ public class CuentaCobrar implements Serializable {
 	@JoinColumn(name = "vendedor_id")
 	private Vendedor					vendedor;
 
-	@JsonIgnore
-	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
-	@JoinColumn(name = "cuentas_cobrar_id", referencedColumnName = "id")
-	@OrderBy("id DESC")
-	private Set<Abono>				abonos;
 
 	public CuentaCobrar() {
 		super();
@@ -143,12 +133,15 @@ public class CuentaCobrar implements Serializable {
 
 		this.created_at = new Date();
 		this.updated_at = new Date();
-		this.abonos = null;
+		
 
 	}
 
 	
-	public CuentaCobrar(Long id, String recibo, String letraCambio, String factura, Integer facturaManual, Double totalComision, Double descuento, Double cantidadPagos, Double montoCouta, Double total, Double totalAbono, Integer plazoCredito, Double totalSaldo, String descripcionArticulo, String nota, String tipo, String codigoMoneda, Double tipoCambio, String estado, Date fechaPlazo, Date fechaEntrega, Date created_at, Date updated_at, Cliente cliente, Usuario usuario, Empresa empresa, Vendedor vendedor, Set<Abono> abonos) {
+	
+
+
+	public CuentaCobrar(Long id, String recibo, String letraCambio, String factura, Integer facturaManual, Double totalComision, Double descuento, Double cantidadPagos, Double montoCouta, Double total, Double totalAbono, Integer plazoCredito, Double totalSaldo, String descripcionArticulo, String nota, String tipo, String codigoMoneda, Double tipoCambio, String estado, Date fechaPlazo, Date fechaEntrega, Date created_at, Date updated_at, Cliente cliente, Usuario usuario, Empresa empresa, Vendedor vendedor) {
 		super();
 		this.id = id;
 		this.recibo = recibo;
@@ -177,8 +170,10 @@ public class CuentaCobrar implements Serializable {
 		this.usuario = usuario;
 		this.empresa = empresa;
 		this.vendedor = vendedor;
-		this.abonos = abonos;
 	}
+
+
+
 
 
 	public Long getId() {
@@ -411,13 +406,7 @@ public class CuentaCobrar implements Serializable {
 		this.vendedor = vendedor;
 	}
 
-	public Set<Abono> getAbonos() {
-		return abonos;
-	}
-
-	public void setAbonos(Set<Abono> abonos) {
-		this.abonos = abonos;
-	}
+	
 
 	public String getCodigoMoneda() {
 		return codigoMoneda;

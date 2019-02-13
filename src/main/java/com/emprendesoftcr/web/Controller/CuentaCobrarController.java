@@ -245,6 +245,18 @@ private Attachment attachment(String name, String ext, ByteArrayDataSource data)
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
 
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarCuentaCobrarPorEstadoCedulaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarEstadoAndCedulaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idCliente,@RequestParam String estado) {
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Cliente cliente = clienteBo.buscar(idCliente);
+		DataTableDelimitador query = DelimitadorBuilderEstado.get(request,  cliente, usuarioSesion.getEmpresa(),estado);
+
+		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
+	}
+
+	
 	/**
 	 * Agregar una Cuenta Manual cuando no se realiza por medio de una factura creada desde del sistema
 	 * @param request
@@ -432,6 +444,33 @@ private Attachment attachment(String name, String ext, ByteArrayDataSource data)
 				delimitador.addFiltro(new JqGridFilter("created_at", inicio, "date>="));
 				delimitador.addFiltro(new JqGridFilter("created_at", fin, "dateFinal<="));
 			}
+			return delimitador;
+		}
+	}
+	
+	private static class DelimitadorBuilderEstado {
+
+		static DataTableDelimitador get(HttpServletRequest request, Cliente cliente, Empresa empresa,String estado) {
+			// Consulta por fechas
+			DataTableDelimitador delimitador = new DataTableDelimitador(request, "CuentaCobrar");
+			
+
+//			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.cuen.FACTURA_ESTADO_PENDIENTE.toString() + "'", "<>"));
+			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
+
+			if (cliente != null) {
+				
+				delimitador.addFiltro(new JqGridFilter("cliente.id", "'" + cliente.getId().toString() + "'", "="));
+			}
+			if(estado !=null) {
+				if(!estado.equals(Constantes.EMPTY)) {
+					if(!estado.equals(Constantes.COMBO_TODOS)) {
+						delimitador.addFiltro(new JqGridFilter("estado", "'" + estado + "'", "="));	
+					}
+						
+				}
+			}
+		
 			return delimitador;
 		}
 	}
