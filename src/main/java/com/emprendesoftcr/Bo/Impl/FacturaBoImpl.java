@@ -18,9 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Bo.FacturaBo;
-import com.emprendesoftcr.Bo.UsuarioCajaBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.CuentaCobrarDao;
+import com.emprendesoftcr.Dao.DetalleDao;
 import com.emprendesoftcr.Dao.FacturaDao;
 import com.emprendesoftcr.Dao.HaciendaDao;
 import com.emprendesoftcr.Dao.KardexDao;
@@ -54,30 +54,31 @@ import com.google.gson.Gson;
 public class FacturaBoImpl implements FacturaBo {
 
 	@Autowired
-	FacturaDao						facturaDao;
+	private FacturaDao						facturaDao;
 
 	@Autowired
-	private EmpresaBo			empresaBo;
+	private EmpresaBo							empresaBo;
 
 	@Autowired
-	ArticuloDao						articuloDao;
+	private ArticuloDao						articuloDao;
 
 	@Autowired
-	HaciendaDao						haciendaDao;
+	private HaciendaDao						haciendaDao;
 
 	@Autowired
-	KardexDao							kardexDao;
+	private KardexDao							kardexDao;
 
 	@Autowired
-	CuentaCobrarDao				cuentaCobrarDao;
+	private CuentaCobrarDao				cuentaCobrarDao;
 
 	@Autowired
-	UsuarioCajaFacturaDao	usuarioCajaFacturaDao;
+	private UsuarioCajaFacturaDao	usuarioCajaFacturaDao;
 
+	
 	@Autowired
-	UsuarioCajaBo					usuarioCajaBo;
+	private DetalleDao							detalleDao;
 
-	private Logger				log	= LoggerFactory.getLogger(this.getClass());
+	private Logger								log	= LoggerFactory.getLogger(this.getClass());
 
 	@Transactional
 	@Override
@@ -301,8 +302,6 @@ public class FacturaBoImpl implements FacturaBo {
 		}
 		return detallesFacturaCommand;
 	}
-	
-	
 
 	private void asociaDetallesFactura(Factura factura, FacturaCommand facturaCommand, Usuario usuario, ArrayList<DetalleFacturaCommand> detallesFacturaCommand) throws Exception {
 
@@ -322,7 +321,7 @@ public class FacturaBoImpl implements FacturaBo {
 		Double totalComprobante = Constantes.ZEROS_DOUBLE;
 		Double subTotal = Constantes.ZEROS_DOUBLE;
 		Double totalImpServicios = Constantes.ZEROS_DOUBLE;
-		String unidadMedida =Constantes.EMPTY;
+		String unidadMedida = Constantes.EMPTY;
 		// Agregar Lineas de Detalle
 		Integer numeroLinea = 1;
 		Double gananciaProducto = Constantes.ZEROS_DOUBLE;
@@ -331,14 +330,14 @@ public class FacturaBoImpl implements FacturaBo {
 
 		for (Iterator<DetalleFacturaCommand> iterator = detallesFacturaCommand.iterator(); iterator.hasNext();) {
 			DetalleFacturaCommand detalleFacturaCommand = (DetalleFacturaCommand) iterator.next();
-			unidadMedida =Constantes.UNIDAD_MEDIDA;
-    	if(detalleFacturaCommand.getUnidadMedida() !=null) {
-    		if(detalleFacturaCommand.getUnidadMedida().equals(Constantes.EMPTY)) {
-    			detalleFacturaCommand.setUnidadMedida(unidadMedida);
-    		}
-    	}else {
-    			detalleFacturaCommand.setUnidadMedida(unidadMedida);
-    	}
+			unidadMedida = Constantes.UNIDAD_MEDIDA;
+			if (detalleFacturaCommand.getUnidadMedida() != null) {
+				if (detalleFacturaCommand.getUnidadMedida().equals(Constantes.EMPTY)) {
+					detalleFacturaCommand.setUnidadMedida(unidadMedida);
+				}
+			} else {
+				detalleFacturaCommand.setUnidadMedida(unidadMedida);
+			}
 			Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(detalleFacturaCommand.getCodigo(), usuario.getEmpresa());
 			if (articulo != null) {
 				articulo.setUpdated_at(new Date());
@@ -418,7 +417,9 @@ public class FacturaBoImpl implements FacturaBo {
 				totalVenta = totalVenta + detalle.getMontoTotal();
 			}
 			numeroLinea += 1;
-			factura.addDetalle(detalle);
+			detalle.setFactura(factura);
+			detalleDao.agregar(detalle);
+			//factura.addDetalle(detalle);
 		}
 		// Se agrega un detalle para el costo por servicio de restaurante y se afecta el monto total de la factura
 		if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) && facturaCommand.getMesa() != null && !facturaCommand.getMesa().getId().equals(0L) && facturaCommand.getMesa().getImpuestoServicio()) {
@@ -434,7 +435,8 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setMontoTotal(Utils.roundFactura(subTotal * 0.10, 5));
 			detalle.setMontoTotalLinea(Utils.roundFactura(subTotal * 0.10, 5));
 			detalle.setNaturalezaDescuento(Constantes.FORMATO_NATURALEZA_DESCUENTO);
-			detalle.setNumeroLinea(factura.getDetalles().size() + 1);
+			Collection<Detalle> detalles = detalleDao.findByFactura(factura);
+			detalle.setNumeroLinea(detalles.size() + 1);
 			detalle.setObservacion("Impuesto al servicio");
 			detalle.setPorcentajeDesc(Constantes.ZEROS_DOUBLE);
 			detalle.setPrecioUnitario(Utils.roundFactura(subTotal * 0.10, 5));
@@ -446,7 +448,9 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setFactura(factura);
 			detalle.setUsuario(usuario);
 			detalle.setTipoCodigo("");
-			factura.addDetalle(detalle);
+			detalle.setFactura(factura);
+			//factura.addDetalle(detalle);
+			detalleDao.agregar(detalle);
 			// Se afecta los montos de la factura
 			totalServExentos = totalServExentos + detalle.getMontoTotal();
 			totalExento = totalExento + detalle.getMontoTotal();
@@ -469,6 +473,7 @@ public class FacturaBoImpl implements FacturaBo {
 		factura.setTotalImpuesto(Utils.roundFactura(totalImpuesto, 5));
 		factura.setTotalComprobante(Utils.roundFactura(totalComprobante, 5));
 		factura.setTotalImpuestoServicio(Utils.roundFactura(totalImpServicios, 5));
+		
 	}
 
 	private Double getGananciaProducto(Double precioUnitario, Double costo) {
@@ -479,14 +484,18 @@ public class FacturaBoImpl implements FacturaBo {
 	}
 
 	private void actualizaArticulosInventario(Factura factura, Usuario usuario) throws Exception {
-		for (Iterator<Detalle> iterator = factura.getDetalles().iterator(); iterator.hasNext();) {
-			Detalle detalle = (Detalle) iterator.next();
-			Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(detalle.getCodigo(), usuario.getEmpresa());
-			if (articulo != null) {
-				if (!factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
-					aplicarInventario(factura, detalle, articulo);
+		Collection<Detalle> detalles = detalleDao.findByFactura(factura);
+		if (detalles != null) {
+			for (Detalle detalle : detalles) {
+
+				Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(detalle.getCodigo(), usuario.getEmpresa());
+				if (articulo != null) {
+					if (!factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
+						aplicarInventario(factura, detalle, articulo);
+					}
 				}
 			}
+
 		}
 	}
 
@@ -553,7 +562,7 @@ public class FacturaBoImpl implements FacturaBo {
 			// Se forma el objeto factura
 			factura = this.formaFactura(facturaCommand, usuario);
 			// Se asociando los detalles a la factura
-			this.asociaDetallesFactura(factura, facturaCommand, usuario, detallesFacturaCommand);
+			
 			try {
 				// Generar el consecutivo de venta
 				if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
@@ -575,13 +584,7 @@ public class FacturaBoImpl implements FacturaBo {
 						factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_EN_PROCESOS);
 					}
 				}
-				// Se almacena la factura, se deja en estado en proceso para que no lo tome los procesos de hacienda
-				if (factura.getId() == null) {
-					factura.setCreated_at(new Date());
-					agregar(factura);
-				} else {
-					modificar(factura);
-				}
+				
 				// Efectivo Banco Tarjeta
 				if (!factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
@@ -646,7 +649,17 @@ public class FacturaBoImpl implements FacturaBo {
 							resultado = resultado - factura.getTotalBanco();
 							factura.setTotalEfectivo(resultado);
 						}
+					// Se almacena la factura, se deja en estado en proceso para que no lo tome los procesos de hacienda
+						if (factura.getId() == null) {
+							factura.setCreated_at(new Date());
+							agregar(factura);
+						} else {
+							modificar(factura);
+						}
+						
+						this.asociaDetallesFactura(factura, facturaCommand, usuario, detallesFacturaCommand);
 						modificar(factura);
+						
 
 						// Se agrega solo si no existe en la caja de usuario, casos de reintentos
 						if (usuarioCajaFacturaDao.findByFacturaId(factura.getId()) == null) {

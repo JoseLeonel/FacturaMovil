@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.CorreosBo;
+import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Bo.HaciendaBo;
 import com.emprendesoftcr.Bo.RecepcionFacturaBo;
@@ -47,7 +48,6 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.RecepcionFactura;
-import com.emprendesoftcr.pdf.App;
 import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.pdf.Reporte01PdfView;
@@ -114,7 +114,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																			facturaElectronica.set_clienteDireccion(d.getDireccion());
 																																																			// Otros
 																																																			facturaElectronica.setTipoDocumento(FacturaElectronicaUtils.getTipoDocumento(d.getTipoDoc()));
-																																																			facturaElectronica.setClave(d.getClave() ==null?Constantes.EMPTY:d.getClave());
+																																																			facturaElectronica.setClave(d.getClave() == null ? Constantes.EMPTY : d.getClave());
 																																																			facturaElectronica.setConsecutivo(d.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ? d.getId().toString() : d.getNumeroConsecutivo());
 																																																			facturaElectronica.setFechaEmision(d.getFechaEmision().toString());
 																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito() != null ? d.getPlazoCredito().toString() : Constantes.EMPTY);
@@ -147,8 +147,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 																																																			}
 																																																			// Agrega sus detalles
-																																																			List<DetalleFacturaElectronica> detalles = d.getDetalles().stream().map(TO_DETALLE).collect(toList());
-																																																			facturaElectronica.setDetalleFacturaElectronica(detalles);
+																																																			// List<DetalleFacturaElectronica> detalles = d.getDetalles().stream().map(TO_DETALLE).collect(toList());
+																																																			// facturaElectronica.setDetalleFacturaElectronica(detalles);
 																																																			return facturaElectronica;
 																																																		};
 
@@ -174,6 +174,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	@Autowired
 	FacturaBo																													facturaBo;
+
+	@Autowired
+	DetalleBo																													detalleBo;
 
 	@Autowired
 	RecepcionFacturaBo																								recepcionFacturaBo;
@@ -352,7 +355,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				recepcion.setComprobanteXml(base64);
 
 				// Ambiente de pruebas
-				//recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 				// San Ana
 				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
@@ -363,9 +366,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 				// Jaco
-			//	 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 				// Inventario
-				 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				// Alajuela
 				// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
@@ -724,7 +727,11 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			String xmlFactura = FacturaElectronicaUtils.convertirBlodToString(hacienda.getComprobanteXML());
 			String xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(hacienda.getMensajeHacienda());
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
-		//	ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
+			Collection<Detalle> detalles = detalleBo.findByFactura(factura);
+			List<DetalleFacturaElectronica> detallesFactura = detalles.stream().map(TO_DETALLE).collect(toList());
+			facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
+
+			// ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 			ByteArrayOutputStream namePDF = Reporte01PdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 			String clave = getConsecutivo(factura.getTipoDoc(), factura.getNumeroConsecutivo());
 			Collection<Attachment> attachments = createAttachments(XML_Attach(clave, factura.getEmpresa().getCedula(), asText(xmlFactura), factura.getTipoDoc()), PDF_Attach(clave, factura.getEmpresa().getCedula(), asPDF(namePDF), factura.getTipoDoc()), XML_AttachRespuestaHacienda(clave, factura.getEmpresa().getCedula(), asText(xmlRespuesta)));
@@ -912,8 +919,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					log.info("Factura id	:  {}", factura.getId() + " Factura proceso de firmado:  " + factura.getNumeroConsecutivo().toString() + " Empresa:" + factura.getEmpresa().getNombre());
 
 					if (factura != null) {
-						if (factura.getDetalles() != null) {
-							if (!factura.getDetalles().isEmpty()) {
+						Collection<Detalle> detalles = detalleBo.findByFactura(factura);
+						if (detalles != null) {
+							if (!detalles.isEmpty()) {
 								if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 									String comprobanteXML = Constantes.EMPTY;
 									if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {

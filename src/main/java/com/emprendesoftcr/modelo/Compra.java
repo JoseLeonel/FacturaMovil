@@ -2,20 +2,14 @@ package com.emprendesoftcr.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -27,13 +21,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "compras")
 public class Compra implements Serializable {
 
-	private static final long		serialVersionUID	= -827268617562649428L;
+	private static final long	serialVersionUID	= -827268617562649428L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,86 +34,80 @@ public class Compra implements Serializable {
 	private Long							id;
 
 	@Column(name = "consecutivo")
-	private String							consecutivo;
+	private String						consecutivo;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY")
 	@Column(name = "fecha_credito")
-	private Date								fechaCredito;
+	private Date							fechaCredito;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY")
 	@Column(name = "fecha_pago")
-	private Date								fechaPago;
+	private Date							fechaPago;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY")
 	@Column(name = "fecha_compra")
-	private Date								fechaCompra;
+	private Date							fechaCompra;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "fecha_ingreso")
-	private Date								fechaIngreso;
+	private Date							fechaIngreso;
 
 	@Column(name = "tipo_documento")
-	private Integer							tipoDocumento;
+	private Integer						tipoDocumento;
 
 	@Column(name = "forma_pago")
-	private Integer							formaPago;
+	private Integer						formaPago;
 
 	@Column(name = "total_impuesto")
-	private Double							totalImpuesto;
+	private Double						totalImpuesto;
 
 	@Column(name = "total_descuento")
-	private Double							totalDescuento;
+	private Double						totalDescuento;
 
 	@Column(name = "sub_total")
-	private Double							subTotal;
+	private Double						subTotal;
 
 	@Column(name = "total_compra")
-	private Double							totalCompra;
+	private Double						totalCompra;
 
 	@Size(max = 255)
 	@Column(name = "nota")
-	private String							nota;
+	private String						nota;
 
 	@Column(name = "estado")
-	private Integer							estado;
+	private Integer						estado;
 
 	@CreatedDate
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at")
-	private Date								created_at;
+	private Date							created_at;
 
 	@LastModifiedDate
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "updated_at")
-	private Date								updated_at;
+	private Date							updated_at;
 
 	@ManyToOne
 	@JoinColumn(name = "proveedor_id")
-	private Proveedor						proveedor;
+	private Proveedor					proveedor;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
-	private Empresa							empresa;
+	private Empresa						empresa;
 
 	@ManyToOne
 	@JoinColumn(name = "usuario_id", nullable = false)
-	private Usuario							usuarioCreacion;
+	private Usuario						usuarioCreacion;
 
 	@ManyToOne
 	@JoinColumn(name = "usuario_ingreso_id", nullable = false)
-	private Usuario							usuarioIngresoInventario;
-
-	@JsonProperty("detalleCompras")
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "compra_id", referencedColumnName = "id")
-	@OrderBy("compra_id DESC")
-	private Set<DetalleCompra>	detalleCompras;
+	private Usuario						usuarioIngresoInventario;
 
 	public Compra() {
 		super();
@@ -129,12 +116,7 @@ public class Compra implements Serializable {
 
 	}
 
-	
-	
-	
-	
-	
-	public Compra(Long id, String consecutivo, Date fechaCredito, Date fechaPago, Date fechaCompra, Date fechaIngreso, Integer tipoDocumento, Integer formaPago, Double totalImpuesto, Double totalDescuento, Double subTotal, Double totalCompra, @Size(max = 255) String nota, Integer estado, Date created_at, Date updated_at, Proveedor proveedor, Empresa empresa, Usuario usuarioCreacion, Usuario usuarioIngresoInventario, Set<DetalleCompra> detalleCompras) {
+	public Compra(Long id, String consecutivo, Date fechaCredito, Date fechaPago, Date fechaCompra, Date fechaIngreso, Integer tipoDocumento, Integer formaPago, Double totalImpuesto, Double totalDescuento, Double subTotal, Double totalCompra, @Size(max = 255) String nota, Integer estado, Date created_at, Date updated_at, Proveedor proveedor, Empresa empresa, Usuario usuarioCreacion, Usuario usuarioIngresoInventario) {
 		super();
 		this.id = id;
 		this.consecutivo = consecutivo;
@@ -156,30 +138,15 @@ public class Compra implements Serializable {
 		this.empresa = empresa;
 		this.usuarioCreacion = usuarioCreacion;
 		this.usuarioIngresoInventario = usuarioIngresoInventario;
-		this.detalleCompras = detalleCompras;
 	}
-
-
-
-
-
 
 	public Long getId() {
 		return id;
 	}
 
-
-
-
-
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-
-
-
 
 	public String getConsecutivo() {
 		return consecutivo;
@@ -196,10 +163,10 @@ public class Compra implements Serializable {
 	public void setFechaCredito(Date fechaCredito) {
 		this.fechaCredito = fechaCredito;
 	}
-	
+
 	public String getFechaCreditoSTR() {
-		if(this.fechaCredito !=null) {
-			return Utils.getFechaGeneraReporte(this.fechaCredito);	
+		if (this.fechaCredito != null) {
+			return Utils.getFechaGeneraReporte(this.fechaCredito);
 		}
 		return Constantes.EMPTY;
 	}
@@ -213,8 +180,8 @@ public class Compra implements Serializable {
 	}
 
 	public String getFechaPagoSTR() {
-		if(this.fechaPago !=null) {
-			return Utils.getFechaGeneraReporte(this.fechaPago);	
+		if (this.fechaPago != null) {
+			return Utils.getFechaGeneraReporte(this.fechaPago);
 		}
 		return Constantes.EMPTY;
 	}
@@ -226,9 +193,10 @@ public class Compra implements Serializable {
 	public void setFechaCompra(Date fechaCompra) {
 		this.fechaCompra = fechaCompra;
 	}
+
 	public String getFechaCompraSTR() {
-		if(this.fechaCompra !=null) {
-			return Utils.getFechaGeneraReporte(this.fechaCompra);	
+		if (this.fechaCompra != null) {
+			return Utils.getFechaGeneraReporte(this.fechaCompra);
 		}
 		return Constantes.EMPTY;
 	}
@@ -240,13 +208,14 @@ public class Compra implements Serializable {
 	public void setFechaIngreso(Date fechaIngreso) {
 		this.fechaIngreso = fechaIngreso;
 	}
+
 	public String getFechaIngresoSTR() {
-		if(this.fechaIngreso !=null) {
-			return Utils.getFechaGeneraReporte(this.fechaIngreso);	
+		if (this.fechaIngreso != null) {
+			return Utils.getFechaGeneraReporte(this.fechaIngreso);
 		}
 		return Constantes.EMPTY;
 	}
-	
+
 	public Integer getTipoDocumento() {
 		return tipoDocumento;
 	}
@@ -274,6 +243,7 @@ public class Compra implements Serializable {
 	public String getTotalImpuestoSTR() {
 		return Utils.formateadorMiles(this.totalImpuesto);
 	}
+
 	public Double getTotalDescuento() {
 		return totalDescuento;
 	}
@@ -298,7 +268,6 @@ public class Compra implements Serializable {
 		return Utils.formateadorMiles(this.subTotal);
 	}
 
-	
 	public Double getTotalCompra() {
 		return totalCompra;
 	}
@@ -306,11 +275,10 @@ public class Compra implements Serializable {
 	public void setTotalCompra(Double totalCompra) {
 		this.totalCompra = totalCompra;
 	}
-	
+
 	public String getTotalCompraSTR() {
 		return Utils.formateadorMiles(this.totalCompra);
 	}
-
 
 	public String getNota() {
 		return nota;
@@ -349,8 +317,9 @@ public class Compra implements Serializable {
 	}
 
 	public String getProveedorSTR() {
-		return proveedor == null?Constantes.EMPTY:this.proveedor.getNombreCompleto();
+		return proveedor == null ? Constantes.EMPTY : this.proveedor.getNombreCompleto();
 	}
+
 	public void setProveedor(Proveedor proveedor) {
 		this.proveedor = proveedor;
 	}
@@ -379,23 +348,6 @@ public class Compra implements Serializable {
 		this.usuarioIngresoInventario = usuarioIngresoInventario;
 	}
 
-	public Set<DetalleCompra> getDetalleCompras() {
-		return detalleCompras;
-	}
-
-	public void setDetalleCompras(Set<DetalleCompra> detalleCompras) {
-		this.detalleCompras = detalleCompras;
-	}
-
-	public void addDetalleCompra(DetalleCompra detalleCompra) {
-
-		if (detalleCompra != null) {
-			if (detalleCompras == null) {
-				detalleCompras = new HashSet<DetalleCompra>();
-			}
-			detalleCompra.setCompra(this);
-			detalleCompras.add(detalleCompra);
-		}
-	}
+	
 
 }

@@ -4,6 +4,7 @@ package com.emprendesoftcr.service.impl;
 
 import java.io.StringReader;
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -19,6 +20,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
+import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
@@ -49,10 +51,13 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 	
 	@Autowired
 	private FirmaElectronicaService firmaElectronicaService;
+	
 	@Autowired
 	private FacturaBo							facturaBo;
 
-	
+	@Autowired
+	private DetalleBo							detalleBo;
+
 	/**
 	 * 
 	 * @see com.emprendesoftcr.service.FacturaXMLServices#getCrearXML(com.emprendesoftcr.modelo.Factura)
@@ -258,8 +263,8 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 	 String lineas = Constantes.EMPTY;
 	String tipoCodigo = Constantes.EMPTY;
 	try {
-
-    for(Detalle detalle : factura.getDetalles()) {
+    Collection<Detalle> detalles = detalleBo.findByFactura(factura);
+    for(Detalle detalle : detalles) {
     	tipoCodigo = Constantes.EMPTY; 
     	if(detalle.getTipoCodigo() !=null) {
     		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_USO_INTERNO)) {

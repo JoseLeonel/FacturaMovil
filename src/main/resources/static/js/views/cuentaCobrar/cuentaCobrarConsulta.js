@@ -13,9 +13,8 @@ var _Init = function () {
  * @returns
  */
 function cargaMantenimiento() {
-	//1 = Actualizacion 2 =Consulta
 
-	riot.mount('cuenta-cobrar',{idTransaccion:2});
+	riot.mount('consulta-cobrar');
 }
 
 

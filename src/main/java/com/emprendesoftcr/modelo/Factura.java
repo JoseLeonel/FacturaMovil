@@ -20,7 +20,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.Formula;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.Utils.Constantes;
@@ -220,11 +219,7 @@ public class Factura implements Serializable {
 	@JoinColumn(name = "mesa_id")
 	private Mesa mesa;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "factura_id", referencedColumnName = "id")
-	@OrderBy("factura_id DESC")
-	private Set<Detalle> detalles;
-
+	
 	public Factura() {
 		super();
 		this.estado = Constantes.FACTURA_ESTADO_PENDIENTE;
@@ -233,8 +228,10 @@ public class Factura implements Serializable {
 
 	}
 
+
+
 	public Factura(Long id, Date fechaCredito, String numeroConsecutivo, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon, Date referenciaFechaEmision, String medioEfectivo, String medioTarjeta, String medioBanco, String nombreFactura, String correoAlternativo, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo,
-			Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Integer tieneIS, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Set<Detalle> detalles) {
+			Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Integer tieneIS, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Mesa mesa) {
 		super();
 		this.id = id;
 		this.fechaCredito = fechaCredito;
@@ -290,8 +287,10 @@ public class Factura implements Serializable {
 		this.empresa = empresa;
 		this.vendedor = vendedor;
 		this.usuarioCreacion = usuarioCreacion;
-		this.detalles = detalles;
+		this.mesa = mesa;
 	}
+
+
 
 	public Double getTotalImpuestoServicio() {
 		return totalImpuestoServicio;
@@ -691,26 +690,7 @@ public class Factura implements Serializable {
 		this.usuarioCreacion = usuarioCreacion;
 	}
 
-	public Set<Detalle> getDetalles() {
-		return detalles;
-	}
-
-	public void setDetalles(Set<Detalle> detalles) {
-		this.detalles = detalles;
-	}
-
-	public void addDetalle(Detalle detalle) {
-
-		if (detalle != null) {
-			if (detalles == null) {
-				detalles = new HashSet<Detalle>();
-			}
-			detalle.setFactura(this);
-
-			detalles.add(detalle);
-		}
-	}
-
+	
 	public Double getCambioMoneda() {
 		return cambioMoneda;
 	}

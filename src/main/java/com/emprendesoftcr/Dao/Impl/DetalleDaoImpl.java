@@ -84,6 +84,18 @@ public class DetalleDaoImpl implements DetalleDao {
 		query.setParameter("fechaFin", fechaFin);
 		return query.getResultList();
 	}
+	@Override
+	public Collection<Detalle> findByFactura(Factura factura){
+		StringBuilder hql = new StringBuilder();
+		hql.append("select obj from Detalle obj");
+		hql.append(" where obj.factura.id = :idFactura ");
+		hql.append("and obj.factura.empresa.id = :idEmpresa ");
+		Query query = entityManager.createQuery(hql.toString());
+		query.setParameter("idFactura", factura.getId());
+		query.setParameter("idEmpresa", factura.getEmpresa().getId());
+		return query.getResultList();
+		
+	}
 	
 	@Override
 	public TotalDetallesCommand totalVentasPorDetalle(Empresa empresa , Date fechaInicio,Date FechaFinal) {

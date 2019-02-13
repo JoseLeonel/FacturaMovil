@@ -19,6 +19,7 @@ public interface DetalleBo {
 	
 	Integer eliminarDetalleFactura(Factura factura)throws Exception;
 	Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin);
+	Collection<Detalle> findByFactura(Factura factura);
 	
 	TotalDetallesCommand totalVentasPorDetalle(Empresa empresa , Date fechaInicio,Date FechaFinal);
 

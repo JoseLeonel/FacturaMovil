@@ -156,7 +156,7 @@ public class FacturasController {
 																																																			facturaElectronica.set_clienteDireccion(d.getDireccion());
 																																																			// Otros
 																																																			facturaElectronica.setTipoDocumento(FacturaElectronicaUtils.getTipoDocumento(d.getTipoDoc()));
-																																																			facturaElectronica.setClave(d.getClave() ==null?Constantes.EMPTY:d.getClave());
+																																																			facturaElectronica.setClave(d.getClave() == null ? Constantes.EMPTY : d.getClave());
 																																																			facturaElectronica.setConsecutivo(d.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ? d.getId().toString() : d.getNumeroConsecutivo());
 																																																			facturaElectronica.setFechaEmision(d.getFechaEmision().toString());
 																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito() != null ? d.getPlazoCredito().toString() : Constantes.EMPTY);
@@ -189,8 +189,8 @@ public class FacturasController {
 
 																																																			}
 																																																			// Agrega sus detalles
-																																																			List<DetalleFacturaElectronica> detalles = d.getDetalles().stream().map(TO_DETALLE).collect(toList());
-																																																			facturaElectronica.setDetalleFacturaElectronica(detalles);
+																																																			// List<DetalleFacturaElectronica> detalles = d.getDetalles().stream().map(TO_DETALLE).collect(toList());
+																																																			// facturaElectronica.setDetalleFacturaElectronica(detalles);
 																																																			return facturaElectronica;
 																																																		};
 
@@ -479,6 +479,11 @@ public class FacturasController {
 			Factura factura = facturaBo.findById(idFactura);
 
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
+			Collection<Detalle> detalles = detalleBo.findByFactura(factura);
+
+			List<DetalleFacturaElectronica> detallesFactura = detalles.stream().map(TO_DETALLE).collect(toList());
+			facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
+
 			ByteArrayOutputStream namePDF = Reporte01PdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
 			response.setContentType("application/octet-stream");
@@ -519,6 +524,11 @@ public class FacturasController {
 		try {
 			Factura factura = facturaBo.findById(idFactura);
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
+			Collection<Detalle> detalles = detalleBo.findByFactura(factura);
+
+			List<DetalleFacturaElectronica> detallesFactura = detalles.stream().map(TO_DETALLE).collect(toList());
+			facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
+
 			ByteArrayOutputStream namePDF = Reporte01PdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 //			ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 			int BUFFER_SIZE = 4096;
@@ -990,7 +1000,8 @@ public class FacturasController {
 			// Eliminar detalles si existe
 			if (facturaBD != null) {
 				facturaBo.eliminarDetalleFacturaPorSP(facturaBD);
-				for (Detalle detalle : facturaBD.getDetalles()) {
+				Collection<Detalle> detalles = detalleBo.findByFactura(facturaBD);
+				for (Detalle detalle : detalles) {
 					detalleBo.eliminar(detalle);
 				}
 
@@ -1238,6 +1249,11 @@ public class FacturasController {
 			listaCorreos.add(facturaBD.getCliente().getCorreoElectronico());
 
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(facturaBD);
+			Collection<Detalle> detalles = detalleBo.findByFactura(facturaBD);
+
+			List<DetalleFacturaElectronica> detallesFactura = detalles.stream().map(TO_DETALLE).collect(toList());
+			facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
+
 			if (facturaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 
 			}
@@ -1329,6 +1345,11 @@ public class FacturasController {
 			if (listaCorreos != null) {
 				if (!listaCorreos.isEmpty()) {
 					FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
+					Collection<Detalle> detalles = detalleBo.findByFactura(factura);
+					
+					List<DetalleFacturaElectronica> detallesFactura = detalles.stream().map(TO_DETALLE).collect(toList());
+					facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
+		
 					ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 
 					String clave = getConsecutivo(factura.getTipoDoc(), factura.getNumeroConsecutivo());

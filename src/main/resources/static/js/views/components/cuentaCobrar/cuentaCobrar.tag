@@ -79,7 +79,7 @@
             </div>
             <div class="col-xs-12 text-right">
                 <a   show={hay_datos==true} onclick= {__CorreoAlternativo} class=" btn btn-success btn-correo"   title="Enviar Correo" href="#"> Enviar Correo</a>        
-                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar detalle transacciones" href="DescargarDetalleTotalCuentasXCobrarAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&idClienteParam={cliente}&estadoParam={estado}"> Descargar</a>        
+                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar detalle transacciones" href="DescargarDetalleTotalCuentasXCobrarEstadoAjax.do?idClienteParam={cliente}&estadoParam={estado}"> Descargar</a>        
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
             	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
             </div>
@@ -465,7 +465,6 @@
     self.cliente =null
     self.estado = null
     self.on('mount',function(){
-        $("#filtros").validate(reglasDeValidacionParametros());
         $("#formularioCuentasCobrar").validate(reglasDeValidacion());
         $("#formularioAbono").validate(reglasDeValidacionAbono());
         $("#formulario").validate(reglasDeValidacionCorreo());	
@@ -605,25 +604,7 @@ var reglasDeValidacionAbono = function() {
 	return validationOptions;
 }
 
-/**
-* Camps requeridos
-**/
-var reglasDeValidacionParametros = function() {
-	var validationOptions = $.extend({}, formValidationDefaults, {
-		rules : {
-			fechaInicio : {
-				required : true,
-			},
-			fechaFinal : {
-				required : true,
-			}                                   
-                        
-		},
-		ignore : []
 
-	});
-	return validationOptions;
-};
 /**
 *  Correo alternativo
 **/
@@ -679,8 +660,6 @@ function __EnviarPorCorreo(){
     if ($("#filtros").valid()) {
         var parametros = {
        	correoAlternativo:$('#correoAlternativo').val(),		
-       	fechaInicioParam:$('#fechaInicio').val(),
-       	fechaFinParam:$('#fechaFinal').val(),
         idClienteParam:$('#idCliente').val(),
         estadoParam : $('.estado').val(),
         total:$('.totalGeneral').val(),
@@ -688,7 +667,7 @@ function __EnviarPorCorreo(){
         saldo:$('.totalSaldoGeneral').val()
     };
     $.ajax({
-        url: "EnvioDetalleCuentasXCobrarCorreoAjax.do",
+        url: "EnvioDetalleCuentasXCobrarCorreoEstadoAjax.do",
         datatype: "json",
         data:parametros ,
         method:"GET",
@@ -738,10 +717,6 @@ function __EnviarPorCorreo(){
 * limpiar los filtros
 **/
 __limpiarFiltros(){
-    $('#fechaInicio').val(null)
-    $('#fechaFinal').val(null)
-    self.fechaInicio =null
-    self.fechaFin =null
     self.idCliente =null
     self.estado = null
     self.hay_datos   = false  
@@ -1318,10 +1293,7 @@ function __ComboEstadosCuentaCobrar(){
         codigo: "Pendiente",
         descripcion:$.i18n.prop("cuentaCobrar.estado.pendiente")
      });
-    self.estados.push({
-        codigo: "Cerrada",
-        descripcion:$.i18n.prop("cuentaCobrar.estado.cerrada")
-     });
+  
     self.update();
 }
 /**
@@ -1422,8 +1394,6 @@ function __OpcionesAbonos(id,type,row){
  
     return menu;          
 }
-
-
 /**
  * mostrar la abono
  */

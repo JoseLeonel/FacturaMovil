@@ -69,5 +69,11 @@ public class CuentaCobrarBoImpl implements CuentaCobrarBo {
 		return cuentaCobrarDao.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(fechaInicio, fechaFin, empresa, cliente, estado);
 
 	}
+	
+	@Override
+	public Collection<CuentaCobrar> cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado( Empresa empresa, Cliente cliente, String estado) {
+		return cuentaCobrarDao.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(empresa, cliente, estado);
+
+	}
 
 }

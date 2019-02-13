@@ -230,5 +230,40 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 		query.setParameter("fechaFin", fechaFin);
 		return query.getResultList();
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<CuentaCobrar> cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado( Empresa empresa, Cliente cliente, String estado) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select obj from CuentaCobrar obj");
+		hql.append(" where obj.empresa = :empresa ");
+		if (estado != null) {
+			if (!estado.equals(Constantes.COMBO_TODOS)) {
+				hql.append(" and obj.estado = :estado ");
+
+			}
+		}
+		if (cliente != null) {
+			if (!cliente.equals(Constantes.COMBO_TODOS)) {
+				hql.append("and obj.cliente = :cliente ");
+
+			}
+		}
+		Query query = entityManager.createQuery(hql.toString());
+		if (estado != null) {
+			if (!estado.equals(Constantes.COMBO_TODOS)) {
+				query.setParameter("estado", estado);
+
+			}
+		}
+		if (cliente != null) {
+			if (!cliente.equals(Constantes.COMBO_TODOS)) {
+				query.setParameter("cliente", cliente);
+
+			}
+		}
+		query.setParameter("empresa", empresa);
+		return query.getResultList();
+	}
 
 }

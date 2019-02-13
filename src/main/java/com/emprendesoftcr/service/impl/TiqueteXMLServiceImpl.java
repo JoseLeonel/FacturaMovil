@@ -1,6 +1,7 @@
 package com.emprendesoftcr.service.impl;
 
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
+import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
@@ -30,10 +32,14 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 	private CertificadoBo							certificadoBo;
 	
 	@Autowired
-	 FacturaBo							facturaBo;
+	private FacturaBo							facturaBo;
 	
 	@Autowired
-	 FirmaElectronicaService firmaElectronicaService;
+	 private FirmaElectronicaService firmaElectronicaService;
+
+	@Autowired
+	private DetalleBo							detalleBo;
+
 
 	@Override
 	public String getFirmarXML(String xmlString, Empresa empresa) throws Exception {
@@ -227,57 +233,59 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
       String tipoCodigo = Constantes.EMPTY;
     	String lineas = "";
     	try {
-        for(Detalle detalle : factura.getDetalles()) {
-        	tipoCodigo = Constantes.EMPTY; 
-        	if(detalle.getTipoCodigo() !=null) {
-        		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_USO_INTERNO)) {
-        			tipoCodigo=detalle.getTipoCodigo(); 
-        		}
-        		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
-        			tipoCodigo=detalle.getTipoCodigo(); 
-        		}
-        		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_CODIGO_VENDEDOR)) {
-        			tipoCodigo=detalle.getTipoCodigo(); 
-        		}
-        		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_CODIGO_COMPRADOR)) {
-        			tipoCodigo=detalle.getTipoCodigo(); 
-        		}
-        		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_CODIGO_ASIGNADO_POR_INDUSTRIAS)) {
-        			tipoCodigo=detalle.getTipoCodigo(); 
-        		}
-        		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_CODIGO_OTROS)) {
-        			tipoCodigo=detalle.getTipoCodigo(); 
-        		}
-        		
-        	}
-        	if(tipoCodigo.equals(Constantes.EMPTY)) {
-        		tipoCodigo = Constantes.TIPO_CODIGO_ARTICULO_CODIGO_VENDEDOR;
-        	}
-        	String unidadMedida =Constantes.UNIDAD_MEDIDA;
-        	if(detalle.getUnidadMedida() !=null) {
-        		if(!detalle.getUnidadMedida().equals(Constantes.EMPTY)) {
-        			unidadMedida = detalle.getUnidadMedida();
-        		}
-        	}
-        	
-        	lineas += "<LineaDetalle>" +
-              "<NumeroLinea>" + new BigInteger(detalle.getNumeroLinea().toString()) + "</NumeroLinea>" +
-              "<Codigo>" +
-              "<Tipo>" + tipoCodigo + "</Tipo>" +
-              "<Codigo>" + detalle.getCodigo() + "</Codigo>" +
-              "</Codigo>" +
-              "<Cantidad>" + FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getCantidad()) + "</Cantidad>" +
-              "<UnidadMedida>" + unidadMedida + "</UnidadMedida>" +
-         //     "<UnidadMedidaComercial>" + detalle.getUnidadMedida() + "</UnidadMedidaComercial>" +
-              "<Detalle>" + detalle.getDescripcion().trim() + "</Detalle>" +
-              "<PrecioUnitario>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getPrecioUnitario()) + "</PrecioUnitario>" +
-              "<MontoTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotal()) + "</MontoTotal>" +
-              getDescuento(detalle.getMontoDescuento())+
-              "<SubTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getSubTotal()) + "</SubTotal>" +
-              xmlImpuestos(detalle) +
-              "<MontoTotalLinea>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotalLinea()) + "</MontoTotalLinea>" +
-              "</LineaDetalle>";
+    		Collection<Detalle> detalles = detalleBo.findByFactura(factura);
+    		    for(Detalle detalle : detalles) {
+            	tipoCodigo = Constantes.EMPTY; 
+            	if(detalle.getTipoCodigo() !=null) {
+            		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_USO_INTERNO)) {
+            			tipoCodigo=detalle.getTipoCodigo(); 
+            		}
+            		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
+            			tipoCodigo=detalle.getTipoCodigo(); 
+            		}
+            		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_CODIGO_VENDEDOR)) {
+            			tipoCodigo=detalle.getTipoCodigo(); 
+            		}
+            		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_CODIGO_COMPRADOR)) {
+            			tipoCodigo=detalle.getTipoCodigo(); 
+            		}
+            		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_CODIGO_ASIGNADO_POR_INDUSTRIAS)) {
+            			tipoCodigo=detalle.getTipoCodigo(); 
+            		}
+            		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_CODIGO_OTROS)) {
+            			tipoCodigo=detalle.getTipoCodigo(); 
+            		}
+            		
+            	}
+            	if(tipoCodigo.equals(Constantes.EMPTY)) {
+            		tipoCodigo = Constantes.TIPO_CODIGO_ARTICULO_CODIGO_VENDEDOR;
+            	}
+            	String unidadMedida =Constantes.UNIDAD_MEDIDA;
+            	if(detalle.getUnidadMedida() !=null) {
+            		if(!detalle.getUnidadMedida().equals(Constantes.EMPTY)) {
+            			unidadMedida = detalle.getUnidadMedida();
+            		}
+            	}
+            	
+            	lineas += "<LineaDetalle>" +
+                  "<NumeroLinea>" + new BigInteger(detalle.getNumeroLinea().toString()) + "</NumeroLinea>" +
+                  "<Codigo>" +
+                  "<Tipo>" + tipoCodigo + "</Tipo>" +
+                  "<Codigo>" + detalle.getCodigo() + "</Codigo>" +
+                  "</Codigo>" +
+                  "<Cantidad>" + FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getCantidad()) + "</Cantidad>" +
+                  "<UnidadMedida>" + unidadMedida + "</UnidadMedida>" +
+             //     "<UnidadMedidaComercial>" + detalle.getUnidadMedida() + "</UnidadMedidaComercial>" +
+                  "<Detalle>" + detalle.getDescripcion().trim() + "</Detalle>" +
+                  "<PrecioUnitario>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getPrecioUnitario()) + "</PrecioUnitario>" +
+                  "<MontoTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotal()) + "</MontoTotal>" +
+                  getDescuento(detalle.getMontoDescuento())+
+                  "<SubTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getSubTotal()) + "</SubTotal>" +
+                  xmlImpuestos(detalle) +
+                  "<MontoTotalLinea>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotalLinea()) + "</MontoTotalLinea>" +
+                  "</LineaDetalle>";
         }
+        
 				
 			} catch (Exception e) {
 				log.info("** Error  xmlDetalleServicio: " + e.getMessage() + " fecha " + new Date());

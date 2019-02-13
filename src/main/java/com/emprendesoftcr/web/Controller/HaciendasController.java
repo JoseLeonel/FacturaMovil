@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.emprendesoftcr.Bo.DataTableBo;
+import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Bo.HaciendaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
@@ -94,7 +95,7 @@ public class HaciendasController {
 																																																			//
 																																																			return detalleFacturaElectronica;
 																																																		};
-	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
+	private static final Function<Factura, FacturaElectronica >				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
 																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
 																																																			// Emisor
 
@@ -152,8 +153,9 @@ public class HaciendasController {
 
 																																																			}
 																																																			// Agrega sus detalles
-																																																			List<DetalleFacturaElectronica> detalles = d.getDetalles().stream().map(TO_DETALLE).collect(toList());
-																																																			facturaElectronica.setDetalleFacturaElectronica(detalles);
+																																																			
+																																																			//List<DetalleFacturaElectronica> detalles = d.getDetalles().stream().map(TO_DETALLE).collect(toList());
+																																																	//		facturaElectronica.setDetalleFacturaElectronica(detalles);
 																																																			return facturaElectronica;
 																																																		};
 
@@ -173,6 +175,10 @@ public class HaciendasController {
 	@Autowired
 	private FacturaBo																									facturaBo;
 
+	@Autowired
+	private DetalleBo																									detalleBo;
+
+	
 	@Autowired
 	private ProcesoHaciendaService																		procesoHaciendaService;
 
@@ -601,6 +607,11 @@ public class HaciendasController {
 			}
 
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
+			Collection<Detalle> detalles = detalleBo.findByFactura(factura);
+			
+			List<DetalleFacturaElectronica> detallesFactura = detalles.stream().map(TO_DETALLE).collect(toList());
+			facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
+
 			ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 			int BUFFER_SIZE = 4096;
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());

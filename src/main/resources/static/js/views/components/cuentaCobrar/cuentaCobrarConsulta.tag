@@ -1,4 +1,4 @@
-<cuenta-cobrar>
+<consulta-cobrar>
     <!-- Titulos -->
     <div  class="row titulo-encabezado"  >
         <div  class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
@@ -175,7 +175,6 @@
         <div class="col-md-12 col-lg-12 col-sx-12 col-sm-1">
             <div class="box box-solid box-primary">
                 <div class="box-header with-border">
-                    <h1 class="box-title" show={abono.id == null}><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.agregar")} {cuentaCobrar.id}  {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total}  {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo.toFixed(2)} </h1>
                     <h1 class="box-title" show={abono.id != null}><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.id")} {abono.id} {$.i18n.prop("abono.detalle.cuenta")} {cuentaCobrar.id} {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total.toFixed(2)} {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo.toFixed(2)}</h1>
                 </div>
                 <div class="box-body">
@@ -253,7 +252,6 @@
                 <div class="box-footer">
                     <button onclick ={__regresarAlListadoAbono}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
                         {$.i18n.prop("btn.volver")}</buuton>
-                    </button> <button show={botonAgregar ==true } onclick={__agregarAbono}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
                   
                 </div>
             </div>   
@@ -427,7 +425,6 @@
 
 <script>
     var self = this
-    self.parametros   = opts.idTransaccion;  
     self.idiomaDataTable           = []         // idioma de la datatable nuevo
     self.formato_tabla             = []         // Formato del LiUtils.roundFactura(tado de la Tabla 
     self.estados                   =[]
@@ -499,12 +496,9 @@
         listaClientesActivos() 
         
         __Eventos()
-        if(self.parametros ==1){
-           __MantenimientoAgregarAbono()
-        }
-        
+       
         __verAbono()
-        __Anular()
+        
         __ComboEstadosCuentaCobrar()
          $('.datepickerFechaFinal').datepicker(
        	{
@@ -811,10 +805,7 @@ function listadoConsulta(){
                     ActivarEventoFiltro(".tableListar")
                     __mostrarCuentaPorCobrar()
                     __mostrarAbonos()
-                    if(self.pararametros ==1){
-                       __MantenimientoAgregarAbono()
-                    }
-                    __imprimirPTV()
+                      __imprimirPTV()
                     TotalesGenerales(result.aaData)
                     self.hay_datos  = true
                     self.update()
@@ -920,77 +911,7 @@ __MontoCuota(e){
     self.update()
 }
 
-/**
-*   Agregar 
-**/
-__agregarAbono(){
-    __agregarRegistro(2,"#formularioAbono",$.i18n.prop("abono.mensaje.alert.agregar"),'AgregarAbonoAjax.do','ListarAbonosPorCuentaCobrarAjax.do','#tableListaAbonos')
-}
-/**
-*   Agregar 
-**/
-function __agregarRegistro(transaccion,formulario,mensajeAlerAgregar,urlAgregar,urlListar,nombretable){
-    if ($(formulario).valid()) {
-        // Permite obtener todos los valores de los elementos del form del jsp
-        var formulario = $(formulario).serialize();
-        swal({
-           title: '',
-           text: mensajeAlerAgregar,
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: '#00539B',
-            cancelButtonColor: '#d33',
-            confirmButtonText:$.i18n.prop("confirmacion.si"),
-            cancelButtonText: $.i18n.prop("confirmacion.no"),
-            confirmButtonClass: 'btn btn-success',
-            cancelButtonClass: 'btn btn-danger',
-        }).then(function (isConfirm) {
-            if(isConfirm){
-                $.ajax({
-                    type : "POST",
-                    dataType : "json",
-                    data : formulario,
-                    url : urlAgregar,
-                    success : function(data) {
 
-                        if (data.status != 200) {
-                        	serverMessageJson(data);
-                            if (data.message != null && data.message.length > 0) {
-                            	swal({
-      	                           title: '',
-      	                           text: data.message,
-      	                           type: 'error',
-      	                           showCancelButton: false,
-      	                           confirmButtonText: 'Aceptar',
-      	                         })
-                            }
-                        } else {
-                        	serverMessageJson(data);
-                             swal({
-	                           title: '',
-	                           text: data.message,
-	                           type: 'success',
-	                           showCancelButton: false,
-	                           confirmButtonText: 'Aceptar',
-	                         })
-                             if(transaccion == 1){
-                                __LimpiarCuentasPorCobrar() 
-                             }else{
-                                 __LimpiarAbonos()
-                                  listaAbonosPorCuentaPorCobrar()
-                             }
-                        }
-                    },
-                    error : function(xhr, status) {
-                        console.log(xhr);
-                        mensajeErrorServidor(xhr, status);
-                    }
-                });
-            }
-        });
-    }
-   
-}
 /**
 *  Activar Eventos de cuentas por cobrar
 **/
@@ -1233,9 +1154,7 @@ function __mostrarAbonos(){
 	       var data = table.row($(this).parents("tr")).data();
 	    }
         $(".tableListaAbonos").dataTable().fnClearTable()
-        if(self.parametros==1){
-           includeActionsAbono('.dataTables_wrapper','.dataTables_length') 
-        }
+       
         
         __LimpiarCuentasPorCobrar() 
         self.cuentaCobrar = data    
@@ -1252,20 +1171,7 @@ function __mostrarAbonos(){
     })
 }
 
-/**
-*  incluir el boto agregar en el modulo de abonos
-**/
-function includeActionsAbono(dataTables_wrapper,dataTables_length) {
-    $( ".btn-agregarAbono" ).remove();
-    $( ".btn-agregar" ).remove();
-    var parent = $(dataTables_wrapper);
-    var header_pointer = $(dataTables_length);
-    var header_length = header_pointer.html();
-    var new_header = "<div  class='new-header-with-actions' style='padding-top:0px; padding-bottom:0px;'>";
-    new_header += "<div class='add-new btn-agregarAbono' ><i class='fa fa-plus'></i> Agregar</div>";
-    new_header += "</div>";
-    parent.prepend(new_header);
-}
+
 /**
  * Funcion para Modificar del Listar
  */
@@ -1354,13 +1260,9 @@ function __ComboEstadosCuentaCobrar(){
 *Funciones de los abonos de la cuenta por cobrar
 **/
 function listaAbonosPorCuentaPorCobrar(){
-    if(self.cuentaCobrar.totalSaldo == 0){
-        $( ".btn-agregarAbono" ).remove();
-    }
     $('.tableListaAbonos').DataTable().destroy();
-     $('.tableListaAbonos').dataTable().fnClearTable();
+    $('.tableListaAbonos').dataTable().fnClearTable();
     var parametros = {idCuentaCobrar:self.cuentaCobrar.id}
-
     $.ajax({
         url: "ListarAbonosPorCuentaCobrarAjax.do",
         datatype: "json",
@@ -1370,31 +1272,13 @@ function listaAbonosPorCuentaPorCobrar(){
             if(result.aaData.length > 0){
                 __InformacionTabla_lista_Abonos();
                 loadListar(".tableListaAbonos",idioma_espanol,self.informacion_tabla_abonos,result.aaData)
-                if(self.cuentaCobrar.totalSaldo == 0){
-                    $( ".btn-agregarAbono" ).remove();
-                }else{
-                    if(self.parametros ==1){
-                       includeActionsAbono('.dataTables_wrapper','.dataTables_length')  
-                    }
-                }
                 agregarInputsCombosAbonos();
                 ActivarEventoFiltro(".tableListaAbonos")
             }else{
-                if(self.parametros ==1){
-                     includeActionsAbono('.dataTables_wrapper','.dataTables_length')  
-                }
                 agregarInputsCombosAbonos();
                 ActivarEventoFiltro(".tableListaAbonos")
-
             }
-            if(self.parametros ==1){
-               __MantenimientoAgregarAbono()
-               __Anular()
-               
-            }
-            
             __verAbono()
-            
             __imprimirAbono()
         },
         error: function (xhr, status) {
@@ -1435,12 +1319,7 @@ function __OpcionesAbonos(id,type,row){
     menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>' 
     menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
     menu += '<li><a href="#"  title="Ver abonos" class="verAbono" >Mostrar</a></li>'
-    if(row.estado !="Anulado" ){
-       menu += '<li><a href="#"  title="Anular abono" class="anularAbono" >Anular</a></li>'
-    }
-    if(self.parametros !=1){
-       menu += '<li><a href="#"  title="Anular abono" class="anularAbono" >Anular</a></li>'
-    }
+   
     self.cuentaCobrar = row.cuentaCobrar
     self.update()
     menu += '<li><a href="#"  title="Imprimir" class="btnImprimir" >Imprimir</a></li>'
@@ -1531,44 +1410,8 @@ function __displayDate_detail(fecha) {
     var dateTime = new Date(fecha);
     return moment(dateTime).format('DD/MM/YYYY ');
 }
-/**
- * mostrar la abono
- */
-function __Anular(){
-	$('#tableListaAbonos').on('click','.anularAbono',function(e){
-        $("#formularioAbono").validate(reglasDeValidacion());
-        $(".errorServerSideJgrid").remove();
-		var table = $('#tableListaAbonos').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-        self.abono = data
-        self.update()
-        __agregarRegistro(2,"#formularioAbono",$.i18n.prop("abono.mensaje.alert.anulada"),'anularAbonoAjax.do','ListarAbonosPorCuentaPagarAjax.do','#tableListaAbonos')
-        
-	});
-}
-/**
-* Mostrar formulario de mantenimiento Agregar
-**/
-function __MantenimientoAgregarAbono(){
-      //Inicializar el Formulario
-    $('.dataTables_wrapper').on('click','.btn-agregarAbono',function(e){
-        __LimpiarAbonos()
-        self.mostrarListado       = false
-        self.botonAgregar         = true
-        self.botonModificar       = false   
-        self.mostrarFormulario    = false 
-        self.mostrarListadoAbonos = false
-        self.mostrarCrearAbono    = true
-        self.update()
-        $(".errorServerSideJgrid").remove();
-        $("#formularioAbono").validate(reglasDeValidacionAbono());
-    })
-}
+
+
 /**
 *  Agregar los inpust  y select de las tablas
 **/
@@ -1597,4 +1440,4 @@ function agregarInputsCombosAbonos(){
     })
 }
 </script>    
-</cuenta-cobrar>
+</consulta-cobrar>

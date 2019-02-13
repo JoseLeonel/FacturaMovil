@@ -149,6 +149,33 @@ public class CuentaCobrarController {
 	}
 	
 	
+////Descarga de manuales de usuario de acuerdo con su perfil
+@RequestMapping(value = "/DescargarDetalleTotalCuentasXCobrarEstadoAjax.do", method = RequestMethod.GET)
+public void descargarDetalleTotalFacturasEstadoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idClienteParam,@RequestParam String estadoParam) throws IOException, Exception {
+
+	Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+	Cliente cliente = clienteBo.buscar(idClienteParam);
+
+	// Se buscan las facturas
+	Collection<CuentaCobrar> cuentaCobras = cuentaCobrarBo.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(  usuario.getEmpresa(),cliente,estadoParam);
+
+	String nombreArchivo = "cuentaxCobrar.xls";
+	response.setContentType("application/octet-stream");
+	response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+
+	// Se prepara el excell
+	ByteArrayOutputStream baos = createExcelCuentaCobrar(cuentaCobras);
+	ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+
+	int BUFFER_SIZE = 4096;
+	byte[] buffer = new byte[BUFFER_SIZE];
+	int bytesRead = -1;
+	while ((bytesRead = inputStream.read(buffer)) != -1) {
+		response.getOutputStream().write(buffer, 0, bytesRead);
+	}
+}
+
+	
 	
 //Enviar Correo de las cuentas por cobrar
 @RequestMapping(value = "/EnvioDetalleCuentasXCobrarCorreoAjax.do", method = RequestMethod.GET)
@@ -173,7 +200,7 @@ public void enviarCorreoCuentasXCobrarAjax(HttpServletRequest request, HttpServl
 				from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_FacturasPendientes" + "_No_Reply@emprendesoftcr.com";
 			}
 		}
-		String subject = "Facturas Pendientes de cancelar dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
+		String subject = "Facturas dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
 
 		ArrayList<String> listaCorreos = new ArrayList<>();
 	
@@ -188,6 +215,42 @@ public void enviarCorreoCuentasXCobrarAjax(HttpServletRequest request, HttpServl
 		modelEmail.put("saldo", saldo);
 
 		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/cuentasxcobrar.vm", modelEmail);
+}
+
+
+//Enviar Correo de las cuentas por cobrar
+@RequestMapping(value = "/EnvioDetalleCuentasXCobrarCorreoEstadoAjax.do", method = RequestMethod.GET)
+public void enviarCorreoCuentasXCobrarEstadoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idClienteParam,@RequestParam String estadoParam ,@RequestParam String correoAlternativo,@RequestParam String total,@RequestParam String saldo,@RequestParam String abono ) throws IOException, Exception {
+
+Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+Cliente cliente = clienteBo.buscar(idClienteParam);
+
+Collection<CuentaCobrar> cuentaCobras = cuentaCobrarBo.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(usuario.getEmpresa(),cliente,estadoParam);
+//Se prepara el excell
+	ByteArrayOutputStream baos = createExcelCuentaCobrar(cuentaCobras);
+
+Collection<Attachment> attachments = createAttachments(attachment("FacturaPendientes", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
+
+	// Se prepara el correo
+	String from = "FacturasEmitidas@emprendesoftcr.com";
+	if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
+		if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+			from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_FacturasPendientes" + "_No_Reply@emprendesoftcr.com";
+		}
+	}
+	String subject = "Facturas Pendientes de cancelar ";
+
+	ArrayList<String> listaCorreos = new ArrayList<>();
+
+		listaCorreos.add(correoAlternativo);
+
+	Map<String, Object> modelEmail = new HashMap<>();
+	modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
+	modelEmail.put("total", total);
+	modelEmail.put("abono", abono);
+	modelEmail.put("saldo", saldo);
+
+	correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/cuentasxcobrar.vm", modelEmail);
 }
 
 private Collection<Attachment> createAttachments(Attachment... attachments) {

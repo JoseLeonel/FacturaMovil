@@ -1,12 +1,12 @@
-package com.emprendesoftcr.Dao;
+package com.emprendesoftcr.Bo;
 
 import java.util.Collection;
 
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.DetalleCompra;
-import com.emprendesoftcr.modelo.Factura;
 
-public interface DetalleCompraDao {
+public interface DetalleCompraBo {
+	
 
 	void agregar(DetalleCompra detalleCompra);
 
@@ -16,8 +16,6 @@ public interface DetalleCompraDao {
 	
 	Collection<DetalleCompra> findByCompra(Compra compra);
 	
-
 	
-
 
 }

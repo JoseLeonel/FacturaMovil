@@ -55,7 +55,7 @@ public class CompraEsperaCommand {
 	private Proveedor						proveedor;
 	private Usuario							usuarioIngresoInventario;
 
-	private Set<DetalleCompra>	detalleCompras;
+
 
 	public CompraEsperaCommand(Compra compra) {
 		super();
@@ -71,7 +71,6 @@ public class CompraEsperaCommand {
 		this.nota = compra.getNota();
 		this.estado = compra.getEstado();
 		this.proveedor = compra.getProveedor();
-		this.detalleCompras = compra.getDetalleCompras();
 		this.totalImpuesto = compra.getTotalImpuesto();
 		this.totalDescuento = compra.getTotalDescuento();
 		this.subTotal = compra.getSubTotal();
@@ -239,13 +238,7 @@ public class CompraEsperaCommand {
 		this.estado = estado;
 	}
 
-	public Set<DetalleCompra> getDetalleCompras() {
-		return detalleCompras;
-	}
-
-	public void setDetalleCompras(Set<DetalleCompra> detalleCompras) {
-		this.detalleCompras = detalleCompras;
-	}
+	
 
 	public Proveedor getProveedor() {
 		return proveedor;

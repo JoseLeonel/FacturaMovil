@@ -1,6 +1,7 @@
 package com.emprendesoftcr.service.impl;
 
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.transaction.Transactional;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
+import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
@@ -38,6 +40,9 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
 	
 	@Autowired
 	private FacturaBo							facturaBo;
+	
+	@Autowired
+	private DetalleBo							detalleBo;
 	
 	
 	/**
@@ -180,8 +185,8 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
     String tipoCodigo = Constantes.EMPTY;
     String lineas = "";
     try {
-
-      for(Detalle detalle : factura.getDetalles()) {
+    	Collection<Detalle> detalles = detalleBo.findByFactura(factura);
+      for(Detalle detalle : detalles) {
       	tipoCodigo = Constantes.EMPTY; 
       	if(detalle.getTipoCodigo() !=null)  {
       		if(detalle.getTipoCodigo().equals(Constantes.TIPO_CODIGO_ARTICULO_USO_INTERNO)) {

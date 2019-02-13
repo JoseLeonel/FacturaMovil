@@ -17,6 +17,7 @@ import com.emprendesoftcr.Bo.CompraBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.CompraDao;
 import com.emprendesoftcr.Dao.CuentaPagarDao;
+import com.emprendesoftcr.Dao.DetalleCompraDao;
 import com.emprendesoftcr.Dao.KardexDao;
 import com.emprendesoftcr.Dao.ProveedorArticuloDao;
 import com.emprendesoftcr.Utils.Constantes;
@@ -45,6 +46,9 @@ public class CompraBoImpl implements CompraBo {
 
 	@Autowired
 	private CompraDao							compraDao;
+
+	@Autowired
+	private DetalleCompraDao							detalleCompraDao;
 
 	@Autowired
 	private ArticuloDao						articuloDao;
@@ -110,6 +114,17 @@ public class CompraBoImpl implements CompraBo {
 					compraDao.eliminarDetalleComprasPorSP(compra);
 				}
 			}
+			if (compra.getId() == null) {
+				compra.setCreated_at(new Date());
+				compra.setUpdated_at(new Date());
+				compra.setUsuarioCreacion(usuario);
+				compra.setUsuarioIngresoInventario(usuario);
+				agregar(compra);
+			} else {
+				compra.setCreated_at(new Date());
+				compra.setUsuarioIngresoInventario(usuario);
+				modificar(compra);
+			}
 
 			JSONObject json = null;
 			try {
@@ -133,7 +148,8 @@ public class CompraBoImpl implements CompraBo {
 					detalleCompra.setCreated_at(new Date());
 					detalleCompra.setUpdated_at(new Date());
 					// detalleCompraDao.agregar(detalleCompra);
-					compra.addDetalleCompra(detalleCompra);
+					detalleCompra.setCompra(compra);
+					detalleCompraDao.agregar(detalleCompra);
 					// compraDao.modificar(compra);
 					if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
 						if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
@@ -157,17 +173,8 @@ public class CompraBoImpl implements CompraBo {
 			compra.setTotalCompra(Utils.roundFactura(montoTotalLinea, 2));
 			compra.setTotalDescuento(Utils.roundFactura(totalDescuento, 2));
 			compra.setTotalImpuesto(Utils.roundFactura(totalImpuesto, 2));
-			if (compra.getId() == null) {
-				compra.setCreated_at(new Date());
-				compra.setUpdated_at(new Date());
-				compra.setUsuarioCreacion(usuario);
-				compra.setUsuarioIngresoInventario(usuario);
-				agregar(compra);
-			} else {
-				compra.setCreated_at(new Date());
-				compra.setUsuarioIngresoInventario(usuario);
-				modificar(compra);
-			}
+			compraDao.modificar(compra);
+		
 			// Crear Credito del cliente
 			if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
 				if (compra.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
