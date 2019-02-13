@@ -161,6 +161,10 @@ public class UsuarioCajasController {
 			if (usuarioCajaBd != null) {
 				result.rejectValue("totalFondoInicial", "error.usuarioCaja.totalFondoInicial.existe.activo");
 			}
+			if(usuarioCaja.getCaja() == null) {
+				result.rejectValue("caja", "error.usuarioCaja.caja.no,existe");
+				
+			}
 
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
