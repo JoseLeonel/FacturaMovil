@@ -52,6 +52,59 @@
 <div layout:fragment="content">
  	<cerrada-caja></cerrada-caja>
  	<ptv-imprimir></ptv-imprimir>
+ 	
+ 	 
+    <!-- Titulos -->
+    <div  class="row "  >
+        <div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h1 > <i class="fa fa-lock" th:text="#{usuarioCaja.titulo.cajas.cerradas}"></i ></h1>
+        </div>
+        
+    </div>
+     <!-- Listado  -->
+        <div class="row">
+            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
+                <div class="box">
+                    <div class="box-body">
+                        <div class="planel-body" >
+                            <div class="row" >        
+                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
+                                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th class = "table-header" th:text="#{usuarioCaja.caja}"></th>
+                                                <th class = "table-header" th:text="#{usuarioCaja.created_at}"></th>
+                                                <th class = "table-header" th:text="#{usuarioCaja.updated_at}"></th>
+                                                <th class = "table-header" th:text="#{usuarioCaja.usuario}"></th>
+                                                <th class = "table-header" th:text="#{usuarioCaja.fondoIncial}"></th>
+                                                <th class = "table-header" th:text="#{usuarioCaja.totalNeto}"></th>
+                                                <th class = "table-header" th:text="#{usuarioCaja.estado}"></th>
+                                                <th class = "table-header" th:text="#{listado.acciones}"></th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot style="display: table-header-group;">
+                                            <tr>
+                                                <th ></th>
+                                                <th th:text="#{usuarioCaja.created_at}"></th>
+                                                <th th:text="#{usuarioCaja.updated_at}"></th>
+                                                <th th:text="#{usuarioCaja.usuario}"></th>
+                                                <th th:text="#{usuarioCaja.fondoIncial}"></th>
+                                                <th th:text="#{usuarioCaja.totalNeto}"></th>
+                                                <th th:text="#{usuarioCaja.estado}"></th>
+                                                <th></th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>   
+                            </div>   
+                        </div>    
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1 col-lg-1 "> </div>
+        </div>
+    
+    <!-- Fin del Listado -->
 </div>
 
 </body>

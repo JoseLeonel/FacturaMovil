@@ -41,7 +41,7 @@ var ListarArticulos = function(){
      "language" : idioma_espanol,
  } );//fin del table
   
-} 
+}  
 /**
  * Eventos del filtro
  */

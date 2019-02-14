@@ -18,6 +18,8 @@ public interface CuentaPagarDao {
 	CuentaPagar buscar(Long id);
 	Collection<CuentaPagar> cuentasPorPagarbyFechasAndEmpresaAndClienteAndEstado(Date fechaInicio, Date fechaFin,Empresa empresa,Proveedor proveedor,String estado);
 	
+	Collection<CuentaPagar> cuentasPorPagarbyEmpresaAndClienteAndEstado(Empresa empresa,Proveedor proveedor,String estado);
+	
 	
 	
 

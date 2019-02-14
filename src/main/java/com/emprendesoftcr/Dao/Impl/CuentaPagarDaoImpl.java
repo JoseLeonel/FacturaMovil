@@ -96,4 +96,42 @@ public class CuentaPagarDaoImpl implements CuentaPagarDao {
 		return query.getResultList();
 	}
 
+	/**
+	 * Listado de cuentas por pagar de proveedor
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<CuentaPagar> cuentasPorPagarbyEmpresaAndClienteAndEstado( Empresa empresa, Proveedor proveedor, String estado) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select obj from CuentaPagar obj");
+		hql.append(" where obj.empresa.id = :idEmpresa ");
+		if (estado != null) {
+			if (!estado.equals(Constantes.COMBO_TODOS)) {
+				hql.append(" and obj.estado = :estado ");
+			}
+		}
+		if (proveedor != null) {
+			if (!proveedor.equals(Constantes.COMBO_TODOS)) {
+				hql.append("and obj.proveedor.id = :idProveedor ");
+
+			}
+		}
+		Query query = entityManager.createQuery(hql.toString());
+		if (estado != null) {
+			if (!estado.equals(Constantes.COMBO_TODOS)) {
+				query.setParameter("estado", estado);
+
+			}
+		}
+		if (proveedor != null) {
+			if (!proveedor.equals(Constantes.COMBO_TODOS)) {
+				query.setParameter("idProveedor", proveedor.getId());
+
+			}
+		}
+		query.setParameter("idEmpresa", empresa.getId());
+		return query.getResultList();
+	}
+
+	
 }

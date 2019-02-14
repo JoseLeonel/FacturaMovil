@@ -58,5 +58,11 @@ public class CuentaPagarBoImpl implements CuentaPagarBo {
 
 		return cuentaPagarDao.cuentasPorPagarbyFechasAndEmpresaAndClienteAndEstado(fechaInicio, fechaFin, empresa, proveedor, estado);
 	}
+	
+	@Override
+	public Collection<CuentaPagar> cuentasPorPagarbyEmpresaAndClienteAndEstado( Empresa empresa, Proveedor proveedor, String estado) {
+
+		return cuentaPagarDao.cuentasPorPagarbyEmpresaAndClienteAndEstado(empresa, proveedor, estado);
+	}
 
 }

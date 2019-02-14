@@ -43,7 +43,6 @@ import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Attachment;
-import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.CuentaPagar;
 import com.emprendesoftcr.modelo.Empresa;
@@ -126,6 +125,42 @@ public class CuentaPagarController {
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
+	
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarCuentaPagarEstadoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarEstadoAjax(HttpServletRequest request, HttpServletResponse response,  @RequestParam Long idProveedor,@RequestParam String estado) {
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Proveedor proveedor = proveedorBo.buscar(idProveedor);
+		DataTableDelimitador query = DelimitadorBuilderEstado.get(request,  proveedor, usuarioSesion.getEmpresa(),estado);
+
+		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
+	}
+	private static class DelimitadorBuilderEstado {
+
+		static DataTableDelimitador get(HttpServletRequest request,  Proveedor proveedor, Empresa empresa,String estado) {
+			// Consulta por fechas
+			DataTableDelimitador delimitador = new DataTableDelimitador(request, "CuentaPagar");
+			Date fechaInicio = new Date();
+			Date fechaFinal = new Date();
+
+			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
+
+			if (proveedor != null) {
+				delimitador.addFiltro(new JqGridFilter("proveedor.id", "'" + proveedor.getId().toString() + "'", "="));
+			}
+			if(estado !=null) {
+				if(!estado.equals(Constantes.EMPTY)) {
+					if(!estado.equals(Constantes.COMBO_TODOS)) {
+						delimitador.addFiltro(new JqGridFilter("estado", "'" + estado + "'", "="));	
+					}
+						
+				}
+			}
+			return delimitador;
+		}
+	}
+	
 
 	private static class DelimitadorBuilder {
 
@@ -191,6 +226,32 @@ public void descargarDetalleTotalFacturasPagarAjax(HttpServletRequest request, H
 	Date fechaInicio = Utils.parseDate(fechaInicioParam);
 	Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
 	Collection<CuentaPagar> cuentaPagars = cuentaPagarBo.cuentasPorPagarbyFechasAndEmpresaAndClienteAndEstado( fechaInicio, fechaFin, usuario.getEmpresa(),proveedor,estadoParam);
+
+	String nombreArchivo = "cuentaxPagar.xls";
+	response.setContentType("application/octet-stream");
+	response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+
+	// Se prepara el excell
+	ByteArrayOutputStream baos = createExcelCuentaPagar(cuentaPagars);
+	ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+
+	int BUFFER_SIZE = 4096;
+	byte[] buffer = new byte[BUFFER_SIZE];
+	int bytesRead = -1;
+	while ((bytesRead = inputStream.read(buffer)) != -1) {
+		response.getOutputStream().write(buffer, 0, bytesRead);
+	}
+}
+
+
+@RequestMapping(value = "/DescargarDetalleTotalCuentasXPagarEstadoAjax.do", method = RequestMethod.GET)
+public void descargarDetalleTotalFacturasPagarEstadoAjax(HttpServletRequest request, HttpServletResponse response ,@RequestParam Long idProveedorParam,@RequestParam String estadoParam) throws IOException, Exception {
+
+	Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+	Proveedor proveedor = proveedorBo.buscar(idProveedorParam);
+
+	// Se buscan las facturas
+	Collection<CuentaPagar> cuentaPagars = cuentaPagarBo.cuentasPorPagarbyEmpresaAndClienteAndEstado(usuario.getEmpresa(),proveedor,estadoParam);
 
 	String nombreArchivo = "cuentaxPagar.xls";
 	response.setContentType("application/octet-stream");
@@ -275,6 +336,42 @@ public void enviarCorreoCuentasXPagarAjax(HttpServletRequest request, HttpServle
 		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
 		modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
 		modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFin));
+		modelEmail.put("total", total);
+		modelEmail.put("abono", abono);
+		modelEmail.put("saldo", saldo);
+
+		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/cuentasxpagar.vm", modelEmail);
+}
+
+
+@RequestMapping(value = "/EnvioDetalleCuentasXPagarCorreoEstadoAjax.do", method = RequestMethod.GET)
+public void enviarCorreoCuentasXPagarEstadoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idProveedorParam,@RequestParam String estadoParam ,@RequestParam String correoAlternativo,@RequestParam String total,@RequestParam String saldo,@RequestParam String abono ) throws IOException, Exception {
+
+	Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+	Proveedor proveedor = proveedorBo.buscar(idProveedorParam);
+
+	// Se buscan las facturas
+	Collection<CuentaPagar> cuentaPagars = cuentaPagarBo.cuentasPorPagarbyEmpresaAndClienteAndEstado( usuario.getEmpresa(),proveedor,estadoParam);
+//Se prepara el excell
+		ByteArrayOutputStream baos = createExcelCuentaPagar(cuentaPagars);
+	
+	Collection<Attachment> attachments = createAttachments(attachment("ComprasPendientes", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
+
+		// Se prepara el correo
+		String from = "ComprasEmitidas@emprendesoftcr.com";
+		if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
+			if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+				from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_ComprasPendientes" + "_No_Reply@emprendesoftcr.com";
+			}
+		}
+		String subject = "Compras Pendientes de cancelar ";
+
+		ArrayList<String> listaCorreos = new ArrayList<>();
+	
+			listaCorreos.add(correoAlternativo);
+	
+		Map<String, Object> modelEmail = new HashMap<>();
+		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
 		modelEmail.put("total", total);
 		modelEmail.put("abono", abono);
 		modelEmail.put("saldo", saldo);

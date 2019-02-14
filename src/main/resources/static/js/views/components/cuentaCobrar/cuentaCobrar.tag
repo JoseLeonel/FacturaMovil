@@ -81,7 +81,7 @@
                 <a   show={hay_datos==true} onclick= {__CorreoAlternativo} class=" btn btn-success btn-correo"   title="Enviar Correo" href="#"> Enviar Correo</a>        
                 <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar detalle transacciones" href="DescargarDetalleTotalCuentasXCobrarEstadoAjax.do?idClienteParam={cliente}&estadoParam={estado}"> Descargar</a>        
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
-            	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
+            	
             </div>
         </div>
   
@@ -713,15 +713,7 @@ function __EnviarPorCorreo(){
     }
     self.update();
 }
-/**
-* limpiar los filtros
-**/
-__limpiarFiltros(){
-    self.idCliente =null
-    self.estado = null
-    self.hay_datos   = false  
-    self.update()
-}
+
 /**
 *  Busqueda de la informacion por rango de fechas
 **/

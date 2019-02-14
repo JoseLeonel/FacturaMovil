@@ -1,4 +1,4 @@
-<cuenta-pagar>
+<consulta-pagar>
     <!-- Titulos -->
     <div  class="row titulo-encabezado"  >
         <div  class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
@@ -51,7 +51,30 @@
                 <div  show={mostrarFiltros}  class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
                     <form id="filtros" name="filtros">              
                         <div class= "row">
-                            
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                <div class="form-group">
+                                    <label  >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
+                                    <div  class="form-group input-group date" data-provide="datepicker"    data-date-format="yyyy-mm-dd">
+                                        <input type="text" class="form-control fechaInicio" id="fechaInicio"  name= "fechaInicio" readonly>
+                                        <div class="input-group-addon">
+                                            <span class="glyphicon glyphicon-th"></span>
+                                        </div>
+                                    </div>	                             
+                                </div>  
+                            </div>             
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label  >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
+                                        <div  class="form-group input-group date" data-provide="datepicker"    data-date-format="yyyy-mm-dd">
+                                            <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>	                             
+                                    </div>
+                                </div>  
+                            </div>
                             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                                 <div class="form-group">
                                     <label>{$.i18n.prop("proveedor.titulo")} </label>  
@@ -65,6 +88,7 @@
                                 <div class="form-group">
                                     <label>{$.i18n.prop("combo.estado")} </label>  
                                     <select  class="form-control selectEstado estado" id="estado" name="estado" >
+                                        <option  data-tokens="{$.i18n.prop("todos.select")}"  value="0"  >{$.i18n.prop("todos.select")}</option>
                                         <option   each={estados}  value="{codigo}"  >{descripcion}</option>
                                     </select>
                                 </div>  
@@ -75,8 +99,9 @@
             </div>
             <div class="col-xs-12 text-right">
                 <a   show={hay_datos==true} onclick= {__CorreoAlternativo} class=" btn btn-success btn-correo"   title="Enviar Correo" href="#"> Enviar Correo</a>        
-                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar detalle transacciones" href="DescargarDetalleTotalCuentasXPagarEstadoAjax.do?idProveedorParam={idProveedor}&estadoParam={estado}"> Descargar</a>        
+                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar detalle transacciones" href="DescargarDetalleTotalCuentasXPagarAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&idProveedorParam={idProveedor}&estadoParam={estado}"> Descargar</a>        
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
+            	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
             </div>
         </div>
   
@@ -171,7 +196,7 @@
                              <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label >{$.i18n.prop("abonoPagar.fechaPago")} <span class="requeridoDato">*</span></label>
                                  <div  class="form-group input-group fechaPagoDataPicker date" data-provide="datepicker"   data-date-format="dd-mm-yyyy">
-                                    <input type="text" class="form-control fechaPago" placeHolder ="{$.i18n.prop("abono.fechaPago")}" id="fechaPago" name="fechaPago"  value="{abono.fechaPago}"  readonly={abono.id > 0}>
+                                    <input type="text" class="form-control fechaPago" placeHolder ="{$.i18n.prop("abonoPagar.fechaPago")}" id="fechaPago" name="fechaPago"  value="{abonoPagar.fechaPago}"  readonly={abonoPagar.id > 0}>
                                     <div class="input-group-addon">
                                         <span class="glyphicon glyphicon-th"></span>
                                     </div>
@@ -377,6 +402,7 @@
         tipo:"",
         estado:"",
         fechaPlazo:null,
+        
         fechaEntrega:null,
         proveedor:{
             id:null
@@ -391,6 +417,7 @@
        totalEfectivo:0,
        totalTarjeta:0,
 	   totalBanco:0,
+       fechaPago:null,
        total:0,
        estado:"",
 	   cuentaPagar:{
@@ -400,7 +427,8 @@
     }
     self.idProveedor = 0
 self.on('mount',function(){
-         $("#formularioAbonoPagar").validate(reglasDeValidacionabonoPagar());
+        $("#filtros").validate(reglasDeValidacionParametros());
+        $("#formularioAbonoPagar").validate(reglasDeValidacionabonoPagar());
         __InicializarTabla('.tableListar')
         __InicializarTabla  ('.tableListaAbonoPagar')
         agregarInputsCombos();
@@ -410,7 +438,25 @@ self.on('mount',function(){
            __MantenimientoAgregarAbonoPagar()
         }
         
-        
+        $('.datepickerFechaFinal').datepicker(
+       	{
+            format: 'yyyy-mm-dd',
+            todayHighlight:true,
+       	}
+         );
+        $('.datepickerFechaInicial').datepicker(
+        {
+            format: 'yyyy-mm-dd',
+            todayHighlight:true,
+        }
+        );
+
+         $('.fechaPagoDataPicker').datepicker(
+        {
+            format: 'yyyy-mm-dd',
+            todayHighlight:true,
+        }
+        );
         __ComboEstadosCuentaCobrar()
         window.addEventListener( "keydown", function(evento){
                 $(".errorServerSideJgrid").remove();
@@ -452,7 +498,25 @@ var reglasDeValidacionabonoPagar = function() {
 	});
 	return validationOptions;
 }
+/**
+* Camps requeridos
+**/
+var reglasDeValidacionParametros = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			fechaInicio : {
+				required : true,
+			},
+			fechaFinal : {
+				required : true,
+			}                                   
+                        
+		},
+		ignore : []
 
+	});
+	return validationOptions;
+};
 /**
 *  Crear el combo de estados
 **/
@@ -463,7 +527,10 @@ function __ComboEstadosCuentaCobrar(){
         codigo: "Pendiente",
         descripcion:$.i18n.prop("cuentaCobrar.estado.pendiente")
      });
-   
+    self.estados.push({
+        codigo: "Cerrada",
+        descripcion:$.i18n.prop("cuentaCobrar.estado.cerrada")
+     });
     
     self.update();
 }
@@ -499,6 +566,8 @@ function __EnviarPorCorreo(){
     if ($("#filtros").valid()) {
         var parametros = {
            	correoAlternativo:$('#correoAlternativo').val(),		
+           	fechaInicioParam:$('#fechaInicio').val(),
+       	    fechaFinParam:$('#fechaFinal').val(),
             idProveedorParam:$('#idProveedor').val(),
             estadoParam : $('.estado').val(),
             total:$('.totalGeneral').val(),
@@ -506,7 +575,7 @@ function __EnviarPorCorreo(){
             saldo:$('.totalSaldoGeneral').val()
 		};
 		$.ajax({
-		    url: "EnvioDetalleCuentasXPagarCorreoEstadoAjax.do",
+		    url: "EnvioDetalleCuentasXPagarCorreoAjax.do",
 		        datatype: "json",
 		        data:parametros ,
 		        method:"GET",
@@ -552,30 +621,43 @@ function __EnviarPorCorreo(){
     }
     self.update();
 }
-
+/**
+* limpiar los filtros
+**/
+__limpiarFiltros(){
+    $('#fechaInicio').val(null)
+    $('#fechaFinal').val(null)
+}
 /**
 *  Busqueda de la informacion por rango de fechas
 **/
 __Busqueda(){
+	$("#filtros").validate(reglasDeValidacionParametros());
+     if ($("#filtros").valid()) {
          listadoConsulta()
+     }
 }
 /**
 * Consulta de las cuentas por pagar
 **/
 function listadoConsulta(){
         var formulario = $("#filtros").serialize();
+        self.fechaInicio =$('.fechaInicio').val()
+        self.fechaFin =$('.fechaFinal').val()
       
         self.estado = $('.estado').val()
         $("#tableListar").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListar')  
         $.ajax({
-            url: "ListarCuentaPagarEstadoAjax.do",
+            url: "ListarCuentaPagarAjax.do",
             datatype: "json",
             data:formulario ,
             method:"GET",
             success: function (result) {
                 if(result.aaData.length > 0){
                     self.hay_datos                 = true       
+                    self.fechaInicio =$('.fechaInicio').val()
+                    self.fechaFin =$('.fechaFinal').val()
                     self.estado = $('.estado').val()
                     self.idProveedor = $('.selectProveedores').val()
                     self.update()
@@ -1210,4 +1292,4 @@ function agregarInputsCombosAbonoPagar(){
     })
 }
 </script>    
-</cuenta-pagar>
+</consulta-pagar>
