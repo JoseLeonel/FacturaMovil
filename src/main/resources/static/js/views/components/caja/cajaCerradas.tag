@@ -1,50 +1,15 @@
 <cerrada-caja>
     <!-- Titulos -->
-    <div  class="row titulo-encabezado"  >
+    <div  class="row titulo-encabezado" show={mostrarTitulo}  >
         <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
             <h1 ><i class="fa fa-lock"></i>&nbsp {$.i18n.prop("usuarioCaja.titulo.cajas.cerradas")} {mostrarListadoFacturasXCaja ==true?"--Facturas" :""} {mostrarDetalleDeFactura ==true?"-->" + factura.tipoDoc  :""} </h1>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"></div>
     </div>
     
-<!-- Listado  -->
-<div classs="contenedor-listar container" id="container"  show={mostrarListado}  >
-        <div class="row">
-            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
-                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th class="table-header" >{$.i18n.prop("usuarioCaja.caja")}          </th>
-                                <th class="table-header" >{$.i18n.prop("usuarioCaja.created_at")}    </th>
-                                <th class="table-header" >{$.i18n.prop("usuarioCaja.updated_at")}    </th>
-                                <th class="table-header" >{$.i18n.prop("usuarioCaja.usuario")}       </th>
-                                <th class="table-header" >{$.i18n.prop("usuarioCaja.fondoIncial")}   </th>
-                                <th class="table-header" >{$.i18n.prop("usuarioCaja.totalNeto")}     </th>
-                                <th class="table-header" >{$.i18n.prop("usuarioCaja.estado")}        </th>
-                                <th class="table-header" >{$.i18n.prop("listado.acciones")}          </th>
-                            </tr>
-                        </thead>
-                        <tfoot style="display: table-header-group;">
-                            <tr>
-                                <th>{$.i18n.prop("usuarioCaja.caja")}          </th>
-                                <th>{$.i18n.prop("usuarioCaja.created_at")}    </th>
-                                <th>{$.i18n.prop("usuarioCaja.updated_at")}    </th>
-                                <th>{$.i18n.prop("usuarioCaja.usuario")}       </th>
-                                <th>{$.i18n.prop("usuarioCaja.fondoIncial")}   </th>
-                                <th>{$.i18n.prop("usuarioCaja.totalNeto")}     </th>
-                                <th>{$.i18n.prop("usuarioCaja.estado")}        </th>
-                                <th>                                    </th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    
-            </div>
-        </div>   
-         
-</div>
-<!-- Fin del Listado -->
-<div >
-    <div class="row center " show ={mostrarFormulario} >
+
+
+<div class="row center " show ={mostrarFormulario} >
     <div class="col-md-2 col-sx-12 col-lg-4 col-sm-2"></div>
         <div class="col-md-12 col-lg-4 col-sx-12 col-sm-12">
             <div class="box box-solid box-primary">
@@ -94,8 +59,7 @@
         <div class=" col-lg-4 "></div>
     </div>
 </div>
-<div >
-    <div class="row center " show ={mostrarVerDetalle} >
+<div class="row center " show ={mostrarVerDetalle} >
     <div class="col-md-2 col-sx-12 col-lg-2 col-sm-2"></div>
         <div class="col-md-8 col-lg-8 col-sx-12 col-sm-8">
             <div class="box box-solid box-primary">
@@ -166,8 +130,6 @@
                     <button onclick ={__regresarAlListado}  type="button" class="btn-dark-gray btn-back pull-left "  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
                         {$.i18n.prop("btn.volver")}
                     </button>
-
-                  
                 </div>
             </div>   
         </div>
@@ -430,6 +392,7 @@
 
 <script>
     var self = this;
+     self.parametros          = opts.parametros;  
     self.idiomaDataTable           = []         // idioma de la datatable nuevo
     self.formato_tabla             = []         // Formato del Listado de la Tabla 
     self.cajas                  = {aaData:[]}
@@ -439,21 +402,53 @@
     self.mostrarVerDetalle         = false
     self.mostrarListadoFacturasXCaja = false
     self.mostrarDetalleDeFactura  = false
+    self.mostrarTitulo = false
     self.caja = {
         id:null,
         descripcion:"",
         estado:""
     }
 self.on('mount',function(){
-    __InicializarTabla('.tableListar')
+    
     __InicializarTabla('.tableListarFacturasXCaja')
     agregarInputsCombos()
-    ActivarEventoFiltro('.tableListar')
+   
     ActivarEventoFiltro('.tableListarFacturasXCaja')
-    __listado()
+   
     __Eventos()
     __listadoCajasActivas()
+    //__VerDetalleFacturaXCaja
+    if(self.parametros.tipoEjecucion == 1){
+        __facturasXCajas()
+    }
+    //__VerDetalle
+    if(self.parametros.tipoEjecucion == 2){
+        __verdetalle()
+    }
+
 })
+
+function __facturasXCajas(){
+        self.usuarioCaja  = self.parametros.data
+        self.mostrarListado            = false
+        self.botonModificar            = false
+        self.botonAgregar              = false
+        self.mostrarVerDetalle         = false
+        self.mostrarListadoFacturasXCaja = true
+        self.mostrarTitulo = true
+        self.update()
+        __listarFacturasXCajas()
+}
+
+function __verdetalle(){
+    self.mostrarVerDetalle         = true
+    self.usuarioCaja  = self.parametros.data
+     
+    self.mostrarTitulo = true
+    self.update()
+    
+        
+}
 /**
 *Regresar al listado de la caja cerrada
 **/
@@ -464,7 +459,9 @@ __regresarAlListadoCajaCerradas(){
     self.mostrarVerDetalle         = false
     self.mostrarListadoFacturasXCaja = false
     self.mostrarDetalleDeFactura  = false
+    self.mostrarTitulo = false
     self.update()
+    mostrarListadoPrincipal()
 }
 /**
 Factura especifica 
@@ -476,8 +473,25 @@ __regresarAlListadoFacturaEspecifica(){
     self.mostrarVerDetalle         = false
     self.mostrarListadoFacturasXCaja = true
     self.mostrarDetalleDeFactura  = false
-    
+    self.mostrarDetalleDeFactura  = false
+    self.mostrarTitulo = false
     self.update()
+    mostrarListadoPrincipal()
+}
+
+/**
+*  Regresar al listado
+**/
+__regresarAlListado(){
+    self.mostrarListado     = true;
+    self.botonAgregar       = false;
+    self.botonModificar     = false;
+    self.mostrarFormulario  = false 
+    self.mostrarVerDetalle  = false
+     self.mostrarTitulo = false
+    self.update()
+    mostrarListadoPrincipal()
+   
 }
 /**
 * Camps requeridos
@@ -535,18 +549,7 @@ function __Eventos(){
 		}
 	});
 }
-/**
-*  Regresar al listado
-**/
-__regresarAlListado(){
-    self.mostrarListado     = true;
-    self.botonAgregar       = false;
-    self.botonModificar     = false;
-    self.mostrarFormulario  = false 
-    self.mostrarVerDetalle  = false
-    self.update()
-    __listado();
-}
+
 /**
 *  Consultar  especifico
 * 1  Mostrar  2  Modificar
@@ -567,7 +570,6 @@ function __consultar(){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         self.mostrarVerDetalle = true
-                        self.mostrarListado   = false;
                         self.usuarioCaja  = modeloTabla
                         self.update()
                     });
@@ -579,65 +581,6 @@ function __consultar(){
             console.log(xhr);
         }
     });
-}
-/**
-*  Mostrar listado datatable
-**/
-function __listado(){
-    $("#tableListar").dataTable().fnClearTable(); 
-    $.ajax({
-        url: "ListarUsuariosCajasCerradasAjax.do",
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-             if(result.aaData.length > 0){
-                __InformacionDataTable();
-                loadListar(".tableListar",idioma_espanol,self.informacion_tabla,result.aaData)
-                agregarInputsCombos();
-                    //Activar filtros
-                ActivarEventoFiltro(".tableListar")
-                __VerDetalle()
-                __Eventos()
-                __Imprimir()
-                __VerDetalleFacturaXCaja()
-             }else{
-                 __Eventos()
-             } 
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
-        }
-    })
-}
-/**
-*Formato del listado de los cambios
-**/
-function __InformacionDataTable(){
-    self.informacion_tabla = [ 
-                               {'data' : 'caja'        ,"name":"caja"  ,"title" : $.i18n.prop("usuarioCaja.caja")  ,"autoWidth" :false,
-                                    "render":function(caja,type, row){
-                                        return caja == null?"":caja.descripcion;
-                                    }
-                                },
-                               {'data' : 'created_atSTR'        ,"name":"created_atSTR"  ,"title" : $.i18n.prop("usuarioCaja.created_at")  ,"autoWidth" :false
-                                },
-                                {'data' : 'updated_atSTR'        ,"name":"updated_atSTR" ,"title" : $.i18n.prop("usuarioCaja.updated_at")  ,"autoWidth" :false
-                                },
-                               {'data' : 'usuario'       ,"name":"usuario"         ,"title" : $.i18n.prop("usuarioCaja.usuario")     ,"autoWidth" :false,
-                                    "render":function(usuario,type, row){
-                                        return usuario.nombreUsuario;
-                                    }
-                               },
-                               {'data' : 'totalFondoInicialSTR' ,"name":"totalFondoInicialSTR"  ,"title" : $.i18n.prop("usuarioCaja.fondoIncial")  ,"autoWidth" :false},
-                               {'data' : 'totalNetoSTR'            ,"name":"totalNetoSTR"        ,"title" : $.i18n.prop("usuarioCaja.totalNeto")      ,"autoWidth" :false},
-                               {'data' : 'estado'        ,"name":"estado"          ,"title" : $.i18n.prop("usuarioCaja.estado")      ,"autoWidth" :false},
-                               {'data' : 'id'            ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
-                                "render":function(id,type, row){
-                                      return __Opciones(id,type,row);
-                                 }
-	      		            }];
-    self.update();
 }
 /**
 * Formato de montos
@@ -665,78 +608,8 @@ function __displayDate_detail(fecha) {
       var dateTime = new Date(fecha);
       return moment(dateTime).format('DD/MM/YYYY h:mm:ss');
 }
-/**
-* Opciones listado de los clientes
-*/
-function __Opciones(id,type, row){
-    let menu = '<div class="dropdown">' 
-    menu += '       <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' 
-    menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>' 
-    menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
-    menu += '<li><a href="#"  title="Mostrar" class="   btnVerDetalle" >Ver Detalle</a></li>'
-    menu += '<li><a href="#"  title="Imprimir" class="  btnImprimir" >Imprimir</a></li>'
-    menu += '<li><a href="#"  title="Facturas" class="  btnFacturas" >Facturas</a></li>'
-  //  menu += '<li><a href="#"  title="Facturas" class="  btnProductos">Productos</a></li>'
-    menu += "</ul></div>"  
-    return menu;          
-}
 /**                                  LISTADO DE FACTURAS POR CAJA                                               **/
-/**
- * Funcion para Listar Facturas asociadas a un caja
- */
-function __VerDetalleFacturaXCaja(){
-	$('#tableListar').on('click','.btnFacturas',function(e){
-    	var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-        self.usuarioCaja  = data
-        self.mostrarListado            = false
-        self.botonModificar            = false
-        self.botonAgregar              = false
-        self.mostrarVerDetalle         = false
-        self.mostrarListadoFacturasXCaja = true
-        self.update()
-        __listarFacturasXCajas()
-	});
-}
-/**
- * Funcion para Modificar del Listar
- */
-function __VerDetalle(){
-	$('#tableListar').on('click','.btnVerDetalle',function(e){
-    	var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-        self.usuarioCaja  = data
-        self.update()
-        __consultar()
-	});
-}
-/**
- * Funcion para Modificar del Listar
- */
-function __Imprimir(){
-	$('#tableListar').on('click','.btnImprimir',function(e){
-    	var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-        self.usuarioCaja  = data
-        self.update()
-        riot.mount('imprimir-caja',{usuarioCaja:self.usuarioCaja});
-	});
-}
+
 /**
 *  Busqueda de la informacion por rango de fechas
 **/

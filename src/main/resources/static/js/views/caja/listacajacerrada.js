@@ -6,7 +6,8 @@ $(document).ready(function() {
 var _Init = function () {
 	__Inicializar_Table('.tableListar');
 	agregarInputsCombos();
-	ListarCajas()
+    ListarCajas()
+    //alert(1)
 }
 /**
 *  inicializar el listado
@@ -51,7 +52,9 @@ var ListarCajas = function(){
 	"columns" : informacion_tabla,
 	"language" : idioma_espanol,
 } );//fin del table
- 
+__VerDetalleFacturaXCaja()
+__VerDetalle()
+__Imprimir()
 } 
 // traducciones del table
 var idioma_espanol = 
@@ -162,29 +165,7 @@ function EventoFiltro(){
 
 
 
-var  informacion_tabla = [ 
-	{'data' : 'caja'        ,"name":"caja"  ,"title" : $.i18n.prop("usuarioCaja.caja")  ,"autoWidth" :false,
-		 "render":function(caja,type, row){
-			 return caja == null?"":caja.descripcion;
-		 }
-	 },
-	{'data' : 'created_atSTR'  ,"name":"created_atSTR" ,"title" : $.i18n.prop("usuarioCaja.created_at")  ,"autoWidth" :false
-	 },
-	 {'data' : 'updated_atSTR' ,"name":"updated_atSTR" ,"title" : $.i18n.prop("usuarioCaja.updated_at")  ,"autoWidth" :false
-	 },
-	{'data' : 'usuario'       ,"name":"usuario"        ,"title" : $.i18n.prop("usuarioCaja.usuario")     ,"autoWidth" :false,
-		 "render":function(usuario,type, row){
-			 return usuario.nombreUsuario;
-		 }
-	},
-	{'data' : 'totalFondoInicialSTR' ,"name":"totalFondoInicialSTR" ,"title" : $.i18n.prop("usuarioCaja.fondoIncial")   ,"autoWidth" :false},
-	{'data' : 'totalNetoSTR'         ,"name":"totalNetoSTR"         ,"title" : $.i18n.prop("usuarioCaja.totalNeto")     ,"autoWidth" :false},
-	{'data' : 'estado'               ,"name":"estado"               ,"title" : $.i18n.prop("usuarioCaja.estado")        ,"autoWidth" :false},
-	{'data' : 'id'                   ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
-	 "render":function(id,type, row){
-		   return __Opciones(id,type,row);
-	  }
-   }];
+
 
 /**
 * Opciones listado de los clientes
@@ -202,4 +183,72 @@ function __Opciones(id,type, row){
     return menu;          
 }
 
+/**
+ * Funcion para Listar Facturas asociadas a un caja
+ */
+function __VerDetalleFacturaXCaja(){
+   // alert(1)
+	$('#tableListar').on('click','.btnFacturas',function(e){
+    	var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+        $("#mostrarListado").hide();
+        riot.compile(function() {
+			var parametros = {
+				tipoEjecucion:1,
+				data:data
+			};
+			 // here tags are compiled and riot.mount works synchronously
+			  var tags = riot.mount('cerrada-caja',{parametros:parametros});
+		});  
+	});
+}
+/**
+ * Funcion para Modificar del Listar
+ */
+function __VerDetalle(){
+	$('#tableListar').on('click','.btnVerDetalle',function(e){
+    	var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+        $("#mostrarListado").hide();
+        riot.compile(function() {
+			var parametros = {
+				tipoEjecucion:2,
+				data:data
+			};
+			 // here tags are compiled and riot.mount works synchronously
+			  var tags = riot.mount('cerrada-caja',{parametros:parametros});
+		});  
 
+	});
+}
+/**
+ * Funcion para Modificar del Listar
+ */
+function __Imprimir(){
+	$('#tableListar').on('click','.btnImprimir',function(e){
+    	var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+        }
+        
+        
+        riot.mount('imprimir-caja',{usuarioCaja:data});
+	});
+}
+
+function mostrarListadoPrincipal(){
+    $("#mostrarListado").show();
+}
