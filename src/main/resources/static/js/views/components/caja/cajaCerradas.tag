@@ -388,7 +388,7 @@
         </div><!-- fin box-body-->
 	</div><!-- fin box -->
 
-<imprimir-caja></imprimir-caja>
+
 
 <script>
     var self = this;

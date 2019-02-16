@@ -1,49 +1,7 @@
 <cliente-crud>
-    <!-- Titulos -->
-    <div  class="row titulo-encabezado"  >
-        <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <h1 ><i class="fa fa-cog"></i>&nbsp {$.i18n.prop("cliente.titulo")}  </h1>
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"></div>
-    </div>
-    <!-- Listado  -->
-    <div classs="contenedor-listar container" id="container"  show={mostrarListado}  >
-        <div class="row">
-            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 scroller " style="width:98.50%;">
-                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th class="table-header" >{$.i18n.prop("cliente.cedula")}            </th>
-                                <th class="table-header" >{$.i18n.prop("cliente.nombreCompleto")}    </th>
-                                <th class="table-header"> {$.i18n.prop("cliente.nombreComercial")}    </th>
-
-                                <th class="table-header" style= "width:6%;" >{$.i18n.prop("cliente.celular")}           </th>
-                                <th class="table-header" style= "width:6%;">{$.i18n.prop("cliente.telefono")}          </th>
-                                <th class="table-header" >{$.i18n.prop("empresa.estado")}            </th>
-                                <th class="table-header" > {$.i18n.prop("listado.acciones")}         </th>
-                            </tr>
-                        </thead>
-                        <tfoot style="display: table-header-group;">
-                            <tr>
-                                <th>{$.i18n.prop("cliente.cedula")}            </th>
-                               
-                                <th>{$.i18n.prop("cliente.nombreCompleto")}    </th>
-                                 <th>{$.i18n.prop("cliente.nombreComercial")}    </th>
-                                <th>{$.i18n.prop("cliente.celular")}           </th>
-                                <th>{$.i18n.prop("cliente.telefono")}          </th>
-                                <th>{$.i18n.prop("cliente.estado")}            </th>
-                                <th>      </th>
-                            </tr>
-                        </tfoot>
-                    </table>
-            </div>
-        </div>    
-    </div>
-<!-- Fin del Listado -->
 
 <div class="row center " show ={mostrarFormulario} >
-    <div class="col-md-2 col-sx-12 col-lg-2 col-sm-2"></div>
-        <div class="col-md-8 col-lg-8 col-sx-12 col-sm-8">
+        <div class="col-md-12 col-lg-18 col-sx-12 col-sm-18">
             <div class="box box-solid box-primary">
                 <div class="box-header with-border">
                     <h1 class="box-title"><i class="fa fa-edit"></i>&nbsp {cliente.id > 0 ? $.i18n.prop("titulo.modificar.cliente")   :$.i18n.prop("titulo.agregar.cliente")}     </h1>
@@ -214,15 +172,8 @@
 </style>
 <script>
     var self = this;
-    self.idiomaDataTable           = []         // idioma de la datatable nuevo
-    self.formato_tabla             = []         // Formato del Listado de la Tabla 
-    self.provincias                = []
+    self.parametros          = opts.parametros;  
     self.tipoCedulas               = {data:[]}  // definir el data del datatable
-    self.provincias                = {data:[]}  // definir el data del datatable
-    self.cantones                  = {data:[]}  // definir el data del datatable
-    self.distritos                  = {data:[]}  // definir el data del datatable
-    self.barrios                  = {data:[]}  // definir el data del datatable
-    self.mostrarListado            = true 
     self.botonModificar            = false
     self.botonAgregar              = false
     self.cliente                   ={
@@ -245,26 +196,48 @@
     }
 self.on('mount',function(){
     _incializarCampos()
-    __InicializarTabla('.tableListar')
-    __listado()
-
     __Eventos()
-    includeActions('.dataTables_wrapper','.dataTables_length')
-    __MantenimientoAgregar()
     __ComboEstados()
     __listadoTipoCedulas()
-    agregarInputsCombos();
+     //modificar cliente
+    if(self.parametros.tipoEjecucion == 1){
+       __modificarCliente()
+    }
+     //Agregar
+    if(self.parametros.tipoEjecucion == 2){
+       __Agregar()
+    }
+ 
     window.addEventListener( "keydown", function(evento){
-             $(".errorServerSideJgrid").remove();
+       $(".errorServerSideJgrid").remove();
     }, false );
 })
 
-
+/**
+**/
+function  __Agregar(){
+	//Inicializar el Formulario
+	self.mostrarFormulario  = true 
+	//desahabilita boton modificar
+	self.botonModificar     = false;
+	// habilita el formulario
+	self.botonAgregar       = true;
+	_incializarCampos()
+}
+/**
+ * Funcion para Modificar del Listar
+ */
+function __modificarCliente(){
+    _incializarCampos()
+    self.cliente = self.parametros.data
+    self.mostrarFormulario = true
+    self.update()
+    __consultar()
+}
 /**
 * Limpiar campos
 **/
 function _incializarCampos(){
-    
     $("#tipoCedula").val($("#tipoCedula option:first").val());
     $('.nombreCompleto').val(null)
     $('.cedula').val(null)
@@ -347,6 +320,10 @@ var reglasDeValidacion = function() {
                 minlength:1,
                 lettersOnly : true
 			},
+            nombreComercial : {
+		        maxlength:80,
+                 lettersOnly : true
+			},
 			otraSenas : {
                 maxlength:160,
                 minlength:1,
@@ -421,12 +398,15 @@ function __ComboEstados(){
 **/
 function __Eventos(){
     $("#formulario").validate(reglasDeValidacion());
-    $("#nombreCompleto").attr("maxlength", 250);
-    $("#nombreComercial").attr("maxlength", 250);
+    $("#nombreCompleto").attr("maxlength", 80);
+    $("#nombreComercial").attr("maxlength", 80);
     $("#cedula").attr("maxlength", 20);
     $("#identificacionExtranjero").attr("maxlength", 20);
-    $("#correoElectronico").attr("maxlength", 250);
-    $("#otraSenas").attr("maxlength", 250);
+    $("#correoElectronico").attr("maxlength", 80);
+    $("#correoElectronico1").attr("maxlength", 80);
+    $("#correoElectronico2").attr("maxlength", 80);
+    $("#correoElectronico3").attr("maxlength", 80);
+    $("#otraSenas").attr("maxlength", 80);
     $("#telefono").attr("maxlength", 8);
     $('#codigoPais').mask('000', {
 		'translation' : {
@@ -456,14 +436,12 @@ function __Eventos(){
 *  Regresar al listado
 **/
 __regresarAlListado(){
-  
-    self.mostrarListado     = true;
     self.botonAgregar       = false;
     self.botonModificar     = false;
     self.mostrarFormulario  = false 
     self.update()
     _incializarCampos()
-    __listado();
+    mostrarListadoPrincipal()
 
 }
 
@@ -600,82 +578,7 @@ __agregar(){
     }
 }
 
-/**
-*  Mostrar listado datatable
-**/
-function __listado(){
-    $("#tableListar").dataTable().fnClearTable(); 
-    $.ajax({
-        url: "ListarClientesAjax.do",
-        datatype: "json",
-        contentType: "application/json; charset=utf-8",
-        method:"GET",
-        success: function (result) {
-             if(result.aaData.length > 0){
-                __InformacionDataTable();
-                loadListar(".tableListar",idioma_espanol,self.informacion_tabla,result.aaData)
-                includeActions('.dataTables_wrapper','.dataTables_length')
-                agregarInputsCombos();
-                ActivarEventoFiltro(".tableListar")
-                __MantenimientoAgregar()
-                __Eventos()
-                __modificarRegistro_Listar()
-                __ComboEstados()
-             }else{
-                 __Eventos()
-             } 
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
-        }
-    })
-}
-/**
-*Formato del listado de los cambios
-**/
-function __InformacionDataTable(){
-    self.informacion_tabla = [ 
-                            {'data' :'cedula'             ,"name":"cedula"               ,"title" : $.i18n.prop("cliente.cedula")             ,"autoWidth" :false },
-                            {'data' :'nombreCompleto'     ,"name":"nombreCompleto"       ,"title" : $.i18n.prop("cliente.nombreCompleto")     ,"autoWidth" :false },
-                            {'data' :'nombreComercial'    ,"name":"nombreComercial"      ,"title" : $.i18n.prop("cliente.nombreComercial")     ,"autoWidth" :false },
-                            {'data' : 'celular'           ,"name":"celular"              ,"title" : $.i18n.prop("cliente.celular")             ,"autoWidth" :false},
-                            {'data' : 'telefono'          ,"name":"telefono"             ,"title" : $.i18n.prop("cliente.telefono")           ,"autoWidth" :false},
-                            {'data' : 'estado'            ,"name":"estado"               ,"title" : $.i18n.prop("cliente.estado")            ,"autoWidth" :false},
-                            {'data' : 'id'                ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
-                                "render":function(id,type, row){
-                                      return __Opciones(id,type,row);
-                                 }
-	      		            }];
-    self.update();
-   
-}
-/**
-* Opciones listado de los clientes
-*/
-function __Opciones(){
-  var modificar  = '<a href="#"  title="Modificar" class="btn btn-warning  btn-edit btnModificar" role="button"> </a>';
-  return  modificar ;
-}
-/**
- * Funcion para Modificar del Listar
- */
-function __modificarRegistro_Listar(){
-	$('#tableListar').on('click','.btnModificar',function(e){
-		var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-        _incializarCampos()
-        self.cliente = data
-        self.update()
 
-        __consultar()
-	});
-}
 /**
 *  Consultar  especifico
 * 1  Mostrar  2  Modificar
@@ -697,8 +600,6 @@ function __consultar(){
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                         //Inicializar el Formulario
                         _incializarCampos()
-                        //desahabilita  listado 
-                        self.mostrarListado   = false;
                         self.mostrarFormulario  = true 
                         //desahabilita boton modificar
                         self.botonModificar   = true;
@@ -736,46 +637,6 @@ function __consultar(){
         }
     });
 }
-/**
- * Mostrar formulario de mantenimiento Agregar
- * */
-function __MantenimientoAgregar(){
-      //Inicializar el Formulario
-    $('.dataTables_wrapper').on('click','.btn-agregar',function(e){
-        //desahabilita  listado 
-        self.mostrarListado   = false;
-        self.mostrarFormulario  = true 
-        //desahabilita boton modificar
-        self.botonModificar   = false;
-        // habilita el formulario
-        self.botonAgregar     = true;
-        _incializarCampos()
-   
-    })
-}
 
-/**
-*  Agregar los inpust  y select de las tablas
-**/
-function agregarInputsCombos(){
-     // Agregar los input de busqueda 
-    $('.tableListar tfoot th').each( function (e) {
-        var title = $('.tableListar thead th').eq($(this).index()).text();      
-        //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 6    ){
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
-	    }
-         // Select
-    	if ($(this).index() == 5  ){
-    	    var select = $('<select id="combo" class="form-control"><option value="">Todos</option></select>');
-    	    // se cargan los valores por defecto que existen en el combo
-    	   	select.append( '<option value="'+$.i18n.prop("estado.Activo")+'">'+$.i18n.prop("estado.Activo")+'</option>' );
-            select.append( '<option value="'+$.i18n.prop("estado.Inactivo")+'">'+$.i18n.prop("estado.Inactivo")+'</option>' );
-    	   	$(this).html(select);
-    	}
- 
-    })
-
-}
 </script>
 </cliente-crud>

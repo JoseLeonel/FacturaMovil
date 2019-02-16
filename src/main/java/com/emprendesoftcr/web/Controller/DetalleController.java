@@ -143,6 +143,42 @@ public class DetalleController {
 				
 	}
 
+	
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarDetlleByFacturaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idFactura) {
+
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Detalle");
+		
+		JqGridFilter dataTableFilter = new JqGridFilter("factura.id", "'" + idFactura + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_DETALLE);
+	}
+	
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarDetlleByFacturaConsecutivoAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarConsecutivoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String consecutivo) {
+
+		DataTableDelimitador delimitadores = null;
+		// Usuario de la session
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+
+		// Consulta por fechas
+	
+
+		delimitadores = new DataTableDelimitador(request, "Detalle");
+		delimitadores.addFiltro(new JqGridFilter("factura.empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "="));
+		
+		JqGridFilter dataTableFilter = new JqGridFilter("factura.numeroConsecutivo", "'" + consecutivo + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_DETALLE);
+	}
+
 	/**
 	 * Listado de los impuestos de servicio 10%
 	 * @param request

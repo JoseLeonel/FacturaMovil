@@ -55,6 +55,8 @@ var ListarCajas = function(){
 __VerDetalleFacturaXCaja()
 __VerDetalle()
 __Imprimir()
+EventoFiltro()
+agregarInputsCombos();
 } 
 // traducciones del table
 var idioma_espanol = 
@@ -233,7 +235,7 @@ function __VerDetalle(){
 }
 /**
  * Funcion para Modificar del Listar
- */
+ */ 
 function __Imprimir(){
 	$('#tableListar').on('click','.btnImprimir',function(e){
     	var table = $('#tableListar').DataTable();
@@ -243,9 +245,12 @@ function __Imprimir(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
         }
+        riot.compile(function() {
+			 // here tags are compiled and riot.mount works synchronously
+			  var tags = riot.mount('imprimir-caja',{usuarioCaja:data});
+		});  
         
         
-        riot.mount('imprimir-caja',{usuarioCaja:data});
 	});
 }
 

@@ -108,7 +108,6 @@ public class Detalle implements Serializable {
 	@Column(name = "monto_gananc", columnDefinition = "Double default '0'")
 	private Double montoGanancia;
 
-	@JsonIgnore
 	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "factura_id")

@@ -231,30 +231,65 @@ self.subTotalGeneralImp = 0
 self.totalComprobanteImp = 0
 self.on('mount',function(){
     if(self.facturaImpresa.id > 0){
-        self.detalles = []
-        self.detalles = self.facturaImpresa.detalles
-        self.facturaImpresa.fechaEmision = displayDate_detailPrint(self.facturaImpresa.fechaEmision)
-        self.update()
-        if (self.facturaImpresa.empresa.imprimirDirecto == 0 ){
-           $('.imprimirModalTiquete').modal('show');  
-        }    
+        consultar()
          
     }
-    getSubTotalGeneralPrint()
-    getMonedaPrint()
-    __ComboTipoDocumentosPrint()
-    buscarTipoDocumentoPrint()
-    __comboCondicionPagoPrint()
-    buscarCondicionPagoPrint()
-    self.facturaImpresa.totalComprobanteSTR = formatoDecimales(self.facturaImpresa.totalComprobante,2);
-    self.detalles.forEach(function(elemen){
-        elemen.montoTotalLinea = formatoDecimales(elemen.montoTotalLinea,2);
-    })
-    self.update()
-    if (self.facturaImpresa.empresa.imprimirDirecto == 1 ){
-        __imprimirPrint()
-    }
+    
 })
+
+
+function consultar(){
+     self.detalles = []
+     self.update()
+    $.ajax({
+        url: "ListarDetlleByFacturaAjax.do",
+        datatype: "json",
+        data: {idFactura:self.facturaImpresa.id},
+        method:"POST",
+        success: function (data) {
+            if(data.aaData.length > 0){
+                self.detalles =data.aaData
+                self.update()
+                self.detalles.forEach(function(elemen){
+                   elemen.montoTotalLinea = formatoDecimales(elemen.montoTotalLinea,2);
+                })
+                self.update()
+                $.each(data.aaData, function( index, modeloTabla ) {
+                    self.facturaImpresa = modeloTabla.factura 
+                    self.facturaImpresa.fechaEmision = displayDate_detail(self.facturaImpresa.fechaEmision)
+                    self.update()
+                })
+                getSubTotalGeneralPrint()
+                getMonedaPrint()
+                __ComboTipoDocumentosPrint()
+                buscarTipoDocumentoPrint()
+                __comboCondicionPagoPrint()
+                buscarCondicionPagoPrint()
+                self.facturaImpresa.totalComprobanteSTR = formatoDecimales(self.facturaImpresa.totalComprobante,2);
+                self.detalles.forEach(function(elemen){
+                    elemen.montoTotalLinea = formatoDecimales(elemen.montoTotalLinea,2);
+                })
+                self.update()
+                if (self.facturaImpresa.empresa.imprimirDirecto == 1 ){
+                    __imprimirPrint()
+                }
+                if (self.facturaImpresa.empresa.imprimirDirecto == 0 ){
+                   $('.imprimirModalTiquete').modal('show');  
+                }    
+
+            }
+     
+     
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+     
+}
+
+
 /**
 *
 **/

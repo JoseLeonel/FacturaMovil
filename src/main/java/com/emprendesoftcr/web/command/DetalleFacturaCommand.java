@@ -2,6 +2,7 @@ package com.emprendesoftcr.web.command;
 
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Detalle;
+import com.emprendesoftcr.modelo.Factura;
 
 /**
  * Linea de detalles que viene en la venta desde el front end DetalleFacturaCommand.
@@ -53,6 +54,8 @@ public class DetalleFacturaCommand {
 	private String	nombreUsuario;
 
 	private Double	montoGanancia;
+	
+	private Factura factura;
 
 	public DetalleFacturaCommand() {
 		super();
@@ -83,6 +86,7 @@ public class DetalleFacturaCommand {
 		this.tipoDoc = detalle.getFactura().getTipoDoc();
 		this.nombreUsuario = detalle.getFactura().getUsuarioCreacion().getNombreUsuario();
 		this.montoGanancia = detalle.getMontoGanancia();
+		this.factura = detalle.getFactura();
 	}
 
 	public Long getId() {
@@ -91,6 +95,18 @@ public class DetalleFacturaCommand {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	
+
+	
+	public Factura getFactura() {
+		return factura;
+	}
+
+	
+	public void setFactura(Factura factura) {
+		this.factura = factura;
 	}
 
 	public String getNombreUsuario() {

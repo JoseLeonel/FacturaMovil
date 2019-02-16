@@ -1,6 +1,10 @@
 package com.emprendesoftcr.web.Controller;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,10 +31,12 @@ import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
+import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
+import com.emprendesoftcr.web.command.ArticuloCommand;
 import com.emprendesoftcr.web.command.UsuarioCajaCommand;
 import com.emprendesoftcr.web.propertyEditor.CajaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
@@ -123,8 +129,33 @@ public class UsuarioCajasController {
 
 		dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
+		
+		delimitadores = new DataTableDelimitador(request, "UsuarioCaja");
+		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+			String nombreUsuario = request.getUserPrincipal().getName();
+			 dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			delimitadores.addFiltro(dataTableFilter);
+		}
+		Long total = dataTableBo.contar(delimitadores);
+		Collection<Object> objetos = dataTableBo.listar(delimitadores);
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		List<Object> solicitudList = new ArrayList<Object>();
+		for (Iterator<Object> iterator = objetos.iterator(); iterator.hasNext();) {
+			UsuarioCaja object = (UsuarioCaja) iterator.next();
+			// no se carga el usuario del sistema el id -1
+			if (object.getId().longValue() > 0L) {
+				solicitudList.add(new UsuarioCajaCommand(object));
+			}
+		}
 
-		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_CAJAS_ABIERTAS_CERRADAS);
+		respuestaService.setRecordsTotal(total);
+		respuestaService.setRecordsFiltered(total);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+
 	}
 
 	@RequestMapping(value = "/ListarUsuariosCajasCerradasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")

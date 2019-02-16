@@ -372,61 +372,57 @@ function qr(){
 }
 
 function consultaFactura(idFactura){
+
      $.ajax({
-        url: "MostrarFacturaAjax",
+        url: "ListarDetlleByFacturaAjax.do",
         datatype: "json",
         data: {idFactura:idFactura},
         method:"POST",
         success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
+            if(data.aaData.length > 0){
+                self.facturaImpresa = null
+                self.detalles = []
+                self.detalles =modeloTabla
+                self.update()
+                $.each(data.aaData, function( index, modeloTabla ) {
+                    if(self.facturaImpresa  == null){
+                        self.facturaImpresa = modeloTabla.factura
+                        self.claveParteUno= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(0,24):""
+                        self.claveParteDos= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(25,51):""
+                        //detalles
+                        self.totalImpuestoServicio = 0
+                        self.subTotal = 0
+                        self.update()
+                    }    
+                })
+                self.detalles.forEach(function(elemen){
+                    if(elemen.codigo == "8888"){
+                        self.totalImpuestoServicio = __valorNumerico(elemen.montoTotalLinea)
+                        self.update()
+                    }
+                    elemen.montoTotal = redondearDecimales(elemen.montoTotal,0);
+                    self.update()
+                })
+                self.totalImpuestoServicioSTR = ""
+                self.totalImpuestoServicioSTR =  formatoDecimales(self.totalImpuestoServicio,2)  
+                self.update()
+                getMoneda()
+                __ComboTipoDocumentos()
+                buscarTipoDocumento()
+                __comboCondicionPago()
+                buscarCondicionPago()
+                if(self.facturaImpresa.estado ==2){
+                    self.titulo = $.i18n.prop("tikect.encabezado.numeroFactura") + self.facturaImpresa.numeroConsecutivo
                 }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                    self.facturaImpresa = modeloTabla
-                    self.update()
-                    self.detalles = []
-                    self.detalles =self.facturaImpresa.detalles
-                    self.claveParteUno= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(0,24):""
-                    self.claveParteDos= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(25,51):""
-                    //detalles
-                    self.totalImpuestoServicio = 0
-                    self.subTotal = 0
-                    self.update()
-                    self.facturaImpresa.detalles.forEach(function(elemen){
-                        if(elemen.codigo == "8888"){
-                            self.totalImpuestoServicio = __valorNumerico(elemen.montoTotalLinea)
-                            self.update()
-                        }
-                        elemen.montoTotal = redondearDecimales(elemen.montoTotal,0);
-                         self.update()
-                    })
-                   self.totalImpuestoServicioSTR = ""
-                   self.totalImpuestoServicioSTR =  formatoDecimales(self.totalImpuestoServicio,2)  
-                   self.update()
-                    getMoneda()
-                    __ComboTipoDocumentos()
-                    buscarTipoDocumento()
-                    __comboCondicionPago()
-                    buscarCondicionPago()
-                    if(self.facturaImpresa.estado ==2){
-                        self.titulo = $.i18n.prop("tikect.encabezado.numeroFactura") + self.facturaImpresa.numeroConsecutivo
-                    }
-                    if(self.facturaImpresa.estado ==3){
-                        self.titulo = $.i18n.prop("tikect.encabezado.proforma") + self.facturaImpresa.id
-                    }
-                    if(self.facturaImpresa.estado ==4){
-                        self.titulo = $.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno") + self.facturaImpresa.id
-                    }
-                    self.update()
-                  
-                    });
-                  
-                 
-                     $('.imprimirModal').modal('show'); 
+                if(self.facturaImpresa.estado ==3){
+                    self.titulo = $.i18n.prop("tikect.encabezado.proforma") + self.facturaImpresa.id
                 }
+                if(self.facturaImpresa.estado ==4){
+                    self.titulo = $.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno") + self.facturaImpresa.id
+                }
+                self.update()
+                $('.imprimirModal').modal('show'); 
+
             }
         },
         error: function (xhr, status) {

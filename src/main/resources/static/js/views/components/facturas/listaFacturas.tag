@@ -722,27 +722,15 @@ __regresarAlListado(){
 **/
 function __FacturaEnEspera(factura){
     $.ajax({
-        url: "MostrarFacturaAjax",
+        url: "ListarDetlleByFacturaAjax.do", 
         datatype: "json",
         data: {idFactura:factura.id},
         method:"POST",
         success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                       self.factura = modeloTabla
-                       self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
-                       self.cliente  = modeloTabla.cliente
-                       self.vendedor = modeloTabla.vendedor
-                       self.update()
-                    });
-                }
-                cargarDetallesFacturaEnEspera()
+            if(data.aaData.length > 0){
+               cargarDetallesFacturaEnEspera(data.aaData)
             }
+            
         },
         error: function (xhr, status) {
             mensajeErrorServidor(xhr, status);
@@ -750,6 +738,8 @@ function __FacturaEnEspera(factura){
         }
     });
 }
+
+
 /**
 *Formato de la fecha con hora
 **/
@@ -760,37 +750,44 @@ function __displayDate_detail(fecha) {
 /**
 *  Cargar detalles Factura en espera
 **/
-function cargarDetallesFacturaEnEspera(){
-    self.factura.tipoDoc = __TipoDocumentos(self.factura.numeroConsecutivo,self.factura)
+function cargarDetallesFacturaEnEspera(data){
     self.detail                = []
     self.numeroLinea =  0
     self.pesoPrioridad = 0
+    self.factura = null
     self.update()
-    self.factura.detalles.forEach(function(e){
+     $.each(data, function( index, modeloTabla ) {
+        if(self.factura == null){
+            self.factura.tipoDoc = __TipoDocumentos(self.factura.numeroConsecutivo,self.factura)
+            self.factura = modeloTabla.factura
+            self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
+            self.cliente  = modeloTabla.factura.cliente
+            self.vendedor = modeloTabla.factura.vendedor
+            self.update()
+        }
         self.detail.push({
-            numeroLinea     : e.numeroLinea,
-            pesoPrioridad    :e.numeroLinea,
-            codigo          : e.codigo,
-            descripcion     : e.descripcion,
-            cantidad        : e.cantidadSTR,
-            precioUnitario  : e.precioUnitarioSTR,
-            impuesto        : e.impuesto,
-            montoImpuesto   : e.montoImpuestoSTR,
-            montoDescuento  : e.montoDescuentoSTR,
-            porcentajeDesc  : e.porcentajeDesc,
-            subTotal        : e.subTotalSTR,
-            montoTotalLinea : e.montoTotalLineaSTR,
-            montoTotal      : e.montoTotalSTR
+            numeroLinea     : modeloTabla.numeroLinea,
+            pesoPrioridad    :modeloTabla.numeroLinea,
+            codigo          : modeloTabla.codigo,
+            descripcion     : modeloTabla.descripcion,
+            cantidad        : modeloTabla.cantidadSTR,
+            precioUnitario  : modeloTabla.precioUnitarioSTR,
+            impuesto        : modeloTabla.impuesto,
+            montoImpuesto   : modeloTabla.montoImpuestoSTR,
+            montoDescuento  : modeloTabla.montoDescuentoSTR,
+            porcentajeDesc  : modeloTabla.porcentajeDesc,
+            subTotal        : modeloTabla.subTotalSTR,
+            montoTotalLinea : modeloTabla.montoTotalLineaSTR,
+            montoTotal      : modeloTabla.montoTotalSTR
         });
     })
-    self.detail.sort(function(a,b) {
+   self.detail.sort(function(a,b) {
     if ( a.pesoPrioridad > b.pesoPrioridad )
         return -1;
     if ( a.pesoPrioridad < b.pesoPrioridad )
         return 1;
     return 0;
     } );
-
     self.update()
     __comboCondicionPago()
     __ComboEstados()

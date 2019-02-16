@@ -11,58 +11,7 @@
   
 
     <br>
-  <!-- Listado  -->
-    <div classs="contenedor-listar "  show={mostrarListado} >
-        <div class="row">
-            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
-                <div class="box">
-                    <div class="box-body">
-                        <div class="planel-body" >
-                        
-                            <div class="row" >        
-                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
-                                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th class = "table-header" >{$.i18n.prop("factura.id")}            </th>
-                                                <th class = "table-header" >{$.i18n.prop("usuario.nombreUsuario")}            </th>
-                                                <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}            </th>
-                                                <th class = "table-header" >{$.i18n.prop("factura.documento")}                </th>
-                                                <th class = "table-header" >{$.i18n.prop("factura.cliente")}                  </th>
-                                                <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
-                                                <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
-                                                <th class = "table-header" >{$.i18n.prop("factura.total")}                    </th>
-                                                <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
-                                            </tr>
-                                        </thead>
-                                        <tfoot style="display: table-header-group;">
-                                            <tr>
-                                                <th>{$.i18n.prop("factura.id")}            </th>
-                                                <th >{$.i18n.prop("usuario.nombreUsuario")}            </th>
-                                                <th>{$.i18n.prop("factura.fecha.emision")}            </th>
-                                                <th>{$.i18n.prop("factura.documento")}                </th>
-                                                <th>{$.i18n.prop("factura.cliente")}                  </th>
-                                                <th>{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
-                                                <th>{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
-                                                <th>{$.i18n.prop("factura.total")}                    </th>
-                                                <th>                                                  </th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-
-                                    <h2 class="pull-right">{$.i18n.prop("factura.linea.detalle.impuesto")}:{totalImpuestos} {$.i18n.prop("factura.linea.detalle.descuento")}:{totalDescuentos} {$.i18n.prop("factura.total")}:{total}  </h2>
-                                </div>   
-
-                            </div> 
   
-                        </div>    
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-1 col-lg-1 "> </div>
-        </div>
-    </div>
-    <!-- Fin del Listado -->
 
 
  <div class="box box-solid box-primary" show={mostrarDetalle}>
@@ -683,12 +632,21 @@ self.mostrarListado        = true
 self.mostrarDetalle        = false
 self.on('mount',function(){
     $("#formulario").validate(reglasDeValidacionCorreo());
-    __InformacionDataTable()
-    __InicializarTabla('.tableListar')
-    agregarInputsCombos()
+ 
     sumar()
-    listado()
+ 
 })
+/**
+*  imprimir impresora punto de venta
+**/
+function __imprimir(){
+    self.factura = data
+        self.update()
+        riot.mount('proforma-imprimir',{factura:self.factura});    
+
+}
+
+
 
 /**
 *  Regresar al listado
@@ -729,44 +687,7 @@ __Enviar(){
 
 }
 
-function listado(){
-    __InformacionDataTable();
-    self.listaFacturas = []
-    self.update()
-         
-        $("#tableListar").dataTable().fnClearTable(); 
-        __InicializarTabla('.tableListar')  
-        $.ajax({
-            url: "ListarProformasActivasAjax.do",
-            datatype: "json",
-              method:"GET",
-            success: function (result) {
-                if(result.aaData.length > 0){
-                    __InformacionDataTable();
-                    loadListar(".tableListar",idioma_espanol,self.formato_tabla,result.aaData)
-                    self.listaFacturas = result.aaData
-                    self.update()
-                    agregarInputsCombos();
-                    ActivarEventoFiltro(".tableListar")
-                    __VerDetalle()
-                    __BajarPDF()
-                    __CorreoAlternativo()
-                    __CambiarEstado()
-                    sumar()
-                    __EnviarCorreos()
-                    __imprimirPTV()
-                }else{
-                    __InformacionDataTable();
-                     agregarInputsCombos();
 
-                }           
-            },
-            error: function (xhr, status) {
-                mensajeErrorServidor(xhr, status);
-                console.log(xhr);
-            }
-        });
-}
 
 function sumar(){
           self.totalImpuestos = 0
@@ -821,32 +742,18 @@ __regresarAlListado(){
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
 **/
 function __FacturaEnEspera(factura){
-
- 
     $.ajax({
-        url: "MostrarFacturaAjax",
+        url: "ListarDetlleByFacturaAjax.do",
         datatype: "json",
         data: {idFactura:factura.id},
         method:"POST",
         success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                       self.factura = modeloTabla
-                       self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
-                       self.cliente  = modeloTabla.cliente
-                       self.vendedor = modeloTabla.vendedor
-                       self.update()
-                    });
-                }
-                cargarDetallesFacturaEnEspera()
+            if(data.aaData.length > 0){
+               cargarDetallesFacturaEnEspera(data.aaData)
             }
+           
         },
-        error: function (xhr, status) {
+        error: function (xhr, status) { 
             mensajeErrorServidor(xhr, status);
             
         }
@@ -857,26 +764,34 @@ function __FacturaEnEspera(factura){
 /**
 *  Cargar detalles Factura en espera
 **/
-function cargarDetallesFacturaEnEspera(){
-    self.factura.tipoDoc = __TipoDocumentos(self.factura.id,self.factura)
+function cargarDetallesFacturaEnEspera(data){
     self.detail                = []
-    self.factura.detalles.forEach(function(e){
+    self.update()
+     $.each(data, function( index, modeloTabla ) {
+        if(self.factura == null){
+            self.factura = modeloTabla.factura
+            self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
+            self.cliente  = modeloTabla.factura.cliente
+            self.vendedor = modeloTabla.factura.vendedor
+            self.factura.tipoDoc = __TipoDocumentos(self.factura.id,self.factura)
+            self.update()
+
+        }
         self.detail.push({
-            numeroLinea     : e.numeroLinea,
-            codigo          : e.codigo,
-            descripcion     : e.descripcion,
-            cantidad        : e.cantidadSTR,
-            precioUnitario  : e.precioUnitarioSTR,
-            impuesto        : e.impuesto,
-            montoImpuesto   : e.montoImpuestoSTR,
-            montoDescuento  : e.montoDescuentoSTR,
-            porcentajeDesc  : e.porcentajeDesc,
-            subTotal        : e.subTotal,
-            montoTotalLinea : e.montoTotalLineaSTR,
-            montoTotal      : e.montoTotalSTR
+            numeroLinea     : modeloTabla.numeroLinea,
+            codigo          : modeloTabla.codigo,
+            descripcion     : modeloTabla.descripcion,
+            cantidad        : modeloTabla.cantidadSTR,
+            precioUnitario  : modeloTabla.precioUnitarioSTR,
+            impuesto        : modeloTabla.impuesto,
+            montoImpuesto   : modeloTabla.montoImpuestoSTR,
+            montoDescuento  : modeloTabla.montoDescuentoSTR,
+            porcentajeDesc  : modeloTabla.porcentajeDesc,
+            subTotal        : modeloTabla.subTotal,
+            montoTotalLinea : modeloTabla.montoTotalLineaSTR,
+            montoTotal      : modeloTabla.montoTotalSTR
         });
     })
-    
     self.update()
     __comboCondicionPago()
     __ComboEstados()
@@ -921,248 +836,10 @@ function __comboCondicionPago(){
     }
     self.update()
 } 
-/**
-*Formato del listado 
-**/
-function __InformacionDataTable(){
-    self.formato_tabla = [ 
-                              
-                               {'data' :'id'   ,"name":"id"             ,"title" : $.i18n.prop("factura.id")     ,"autoWidth" :true },
-                               {'data' :'usuarioCreacion.nombreUsuario'   ,"name":"usuarioCreacion.nombreUsuario"    ,"title" : $.i18n.prop("usuario.nombreUsuario")     ,"autoWidth" :true },
-                               {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"             ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true },
-                             
-                               {'data' :'id'                    ,"name":"id"                      ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
-                                   "render":function(id,type, row){
-									    return __TipoDocumentos(id,row)
-	 							    }
-                               },
-                               {'data' :'cliente'                    ,"name":"cliente"             ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
-                                   "render":function(cliente,type, row){
-									    return cliente ==null?"":cliente.nombreCompleto;
-	 							    }
-                               },
-                               {'data' :'totalImpuestoSTR'       ,"name":"totalImpuestoSTR"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true },
-                               {'data' :'totalDescuentosSTR'     ,"name":"totalDescuentosSTR"      ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true },
-                               {'data' :'totalComprobanteSTR'    ,"name":"totalComprobanteSTR"     ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true },
-                               {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
-                                "render":function(id,type, row){
-                                      return __Opciones(id,type,row);
-                                 }
-	      		            }];
-    self.update();
-   
-}
 
-function __TipoDocumentos(numeroConsecutivo,row){
-
-    switch(row.tipoDoc) {
-    case "04":
-          return  "Tiq:"+numeroConsecutivo
-        break;
-    case "01":
-        return  "Fact:"+numeroConsecutivo
-        break;
-    case "02":
-        return  "N.Debito:"+numeroConsecutivo
-        break;
-    case "03":
-        return  "N.Credito:"+numeroConsecutivo
-        break;
-    case "88":
-        return  "Proforma:"+numeroConsecutivo
-        break;
-    default:
-        return  numeroConsecutivo
-}
-}
 
     
-/**
-* Opciones listado de los clientes
-*/
-function __Opciones(id,type,row){
-    let menu = '<div class="dropdown">' 
-    menu += '       <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' 
-    menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>' 
-    menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
-    
-    menu += '<li><a href="#"  title="Mostrar" class="  btnMostrar" >Mostrar</a></li>'
-    menu += '<li><a href="#"  title="Mostrar" class="  btnImprimir" >Imprimir</a></li>'
-    menu += '<li><a href="#"  title="Cambia el Estado Proforma a Venta en espera" class="  btnPendiente" >Cambiar a venta en espera</a></li>'
-    menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Envio Correo</a></li>'
-    menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
-    menu += '<li><a href="#"  title="Envio de correo Alternativo" class="  btnEnvioCorreoAlternativo" >Envio de correo Alternativo</a></li>'
-    menu += "</ul></div>"  
 
-     return menu;          
-}
-
-/**
-*  imprimir impresora punto de venta
-**/
-function __imprimirPTV(){
-	$('.tableListar').on('click','.btnImprimir',function(e){
-		var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-        self.factura = data
-        self.update()
-        riot.mount('proforma-imprimir',{factura:self.factura});    
-	});
-}
-
-
-/**
-*  Cambiar Estado de Proforma a venta en espera
-**/
-function __CambiarEstado(){
-	$('.tableListar').on('click','.btnPendiente',function(e){
-		var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-        self.factura = data
-        self.update()
-        _actualizarEstado()
-	});
-}
-
-function _actualizarEstado(){
-    $.ajax({
-        url: "CambiarEstadoProformaAPedienteAjax.do",
-        datatype: "json",
-        data: {idFactura:self.factura.id},
-        method:"POST",
-        success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
-                }
-            }else{
-                sweetAlert("", data.message, "info");
-                listado()
-            }
-            
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
-        }
-    });
-}
-
-/**
-*  Enviar a correo alternativo
-**/
-function __CorreoAlternativo(){
-	$('.tableListar').on('click','.btnEnvioCorreoAlternativo',function(e){
-		var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-        self.factura = data
-        self.update()
-        $('.correoAlternativo').val(null)
-        
-        $('#ModalCorreoAlternativo').modal({
-            backdrop: 'static',
-            keyboard: false
-        })
-        $('#ModalCorreoAlternativo').modal('show')      
-	});
-}
-
-/**
- * Envio del correo al emisor y receptor
- */
-function __EnviarCorreos(){
-	$('.tableListar').on('click','.btnEnvioCorreoCliente',function(e){
-		var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-        self.factura = data
-        self.update()
-        enviarCorreoAlternativo();
-        
-	});
-}
-
-/**
-* Enviar correo
-**/
-function enviarCorreoAlternativo(){
-    $.ajax({
-        url: "EnviarCorreoAlternativoProformaAjax.do",
-        datatype: "json",
-        data: {idFactura:self.factura.id,correo:$('.correoAlternativo').val()},
-        method:"GET",
-        success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
-                }
-            }else{
-                sweetAlert("", data.message, "info");
-            }
-            
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
-        }
-    });
-}
-
-
-/**
- * mostrar la abono
- */
-function __VerDetalle(){
-	$('.tableListar').on('click','.btnMostrar',function(e){
-		var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-        self.factura = data
-        self.mostrarListado        = false
-        self.mostrarDetalle        = true
-        self.update()
-        __FacturaEnEspera(self.factura)
-	});
-}
-
-/**
- * mostrar la abono
- */
-function __BajarPDF(){
-	$('.tableListar').on('click','.btnPDF',function(e){
-		var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-        location.href = "generaProformasPDF.do?idFactura=" + data.id
-	});
-}
 
 
 /**

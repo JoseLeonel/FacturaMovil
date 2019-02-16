@@ -37,8 +37,7 @@
 	<script type="text/javascript" src="/js/views/facturas/listarProformas.js"></script>
 	<script type = "riot/tag"  src="/js/views/components/facturas/proFormas.tag" ></script>
 	<script type = "riot/tag"  src="/js/views/components/facturas/imprimirPTVProforma.tag" ></script>
-	    
-    
+	      
 </head>
 <body>
 <section layout:fragment="header">
@@ -48,6 +47,52 @@
 <div layout:fragment="content">
    <lista-proformas></lista-proformas>
    <proforma-imprimir></proforma-imprimir>
+    <div id="mostrarListado"> 
+    <!-- Titulos -->
+    <div  class="row "  >
+        <div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h1 > <i class="fa fa-calculator" th:text="#{facturas.proformas}"></i ></h1>
+        </div>
+        
+    </div>
+     <!-- Listado  -->
+    
+     
+                            <div class="row" >        
+                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
+                                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th class = "table-header" th:text="#{factura.id}"></th>
+                                                <th class = "table-header" th:text="#{usuario.nombreUsuario}"></th>
+                                                <th class = "table-header" th:text="#{factura.fecha.emision}"></th>
+                                                <th class = "table-header" th:text="#{factura.documento}"></th>
+                                                <th class = "table-header" th:text="#{factura.cliente}"></th>
+                                                <th class = "table-header" th:text="#{factura.linea.detalle.impuesto}"></th>
+                                                <th class = "table-header" th:text="#{factura.linea.detalle.descuento}"></th>
+                                                <th class = "table-header" th:text="#{factura.total}"></th>
+                                                <th class = "table-header" th:text="#{listado.acciones}"></th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot style="display: table-header-group;">
+                                            <tr>
+                                                <th th:text="#{factura.id}"></th>
+                                                <th th:text="#{usuario.nombreUsuario}"></th>
+                                                <th th:text="#{factura.fecha.emision}"></th>
+                                                <th th:text="#{factura.documento}"></th>
+                                                <th th:text="#{factura.cliente}"></th>
+                                                <th th:text="#{factura.linea.detalle.impuesto}"></th>
+                                                <th th:text="#{factura.linea.detalle.descuento}"></th>
+                                                <th th:text="#{factura.total}"></th>
+                                                <th ></th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                           </div>   
+     
+    <!-- Fin del Listado -->
+</div>
 </div>
 
 </body>

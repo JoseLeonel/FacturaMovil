@@ -21,6 +21,7 @@ public interface DetalleBo {
 	Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin);
 	Collection<Detalle> findByFactura(Factura factura);
 	
+	
 	TotalDetallesCommand totalVentasPorDetalle(Empresa empresa , Date fechaInicio,Date FechaFinal);
 
 }

@@ -47,6 +47,50 @@
 </section>
 <div layout:fragment="content">
  	<cliente-crud></cliente-crud>
+ 	 <div id="mostrarListado"> 
+    <!-- Titulos -->
+    <div  class="row "  >
+        <div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h1 > <i class="fa fa-cog" th:text="#{cliente.titulo}"></i ></h1>
+        </div>
+        
+    </div>
+     <!-- Listado  -->
+    
+     
+                            <div class="row" >        
+                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
+                                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="table-header" th:text="#{cliente.cedula}" >  </th>
+				                                <th class="table-header" th:text="#{cliente.nombreCompleto}"> </th>
+				                                <th class="table-header" th:text="#{cliente.nombreComercial}"> </th>
+				                                <th class="table-header" style= "width:6%;" th:text="#{cliente.celular}" ></th>
+				                                <th class="table-header" style= "width:6%;" th:text="#{cliente.telefono}"> </th>
+				                                <th class="table-header" th:text="#{empresa.estado}"></th>
+				                                <th class="table-header" th:text="#{listado.acciones}"></th>
+                     
+                                            </tr>
+                                        </thead>
+                                        <tfoot style="display: table-header-group;">
+                                            <tr>
+                                                <th th:text="#{cliente.cedula}" >  </th>
+				                                <th th:text="#{cliente.nombreCompleto}"> </th>
+				                                <th th:text="#{cliente.nombreComercial}"> </th>
+				                                <th style= "width:6%;" th:text="#{cliente.celular}" ></th>
+				                                <th style= "width:6%;" th:text="#{cliente.telefono}"> </th>
+				                                <th th:text="#{empresa.estado}"></th>
+				                                <th ></th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                           </div>   
+     
+    <!-- Fin del Listado -->
+ 	
+ 	
 </div>
 
 </body>

@@ -1287,26 +1287,13 @@ function __Init(){
 function __FacturaEnEspera(factura){
      __Init()
     $.ajax({
-        url: "MostrarFacturaAjax",
+        url: "ListarDetlleByFacturaAjax.do", 
         datatype: "json",
         data: {idFactura:factura.id},
         method:"POST",
         success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                       self.factura = modeloTabla
-                       self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
-                       self.cliente  = modeloTabla.cliente
-                       self.vendedor = modeloTabla.vendedor
-                       self.update()
-                    });
-                }
-                cargarDetallesFacturaEnEspera()
+            if(data.aaData.length > 0){
+               cargarDetallesFacturaEnEspera(data.aaData)
             }
         },
         error: function (xhr, status) {
@@ -1318,35 +1305,41 @@ function __FacturaEnEspera(factura){
 /**
 *  Cargar detalles Factura en espera
 **/
-function cargarDetallesFacturaEnEspera(){
+function cargarDetallesFacturaEnEspera(data){
     self.detail = [];
     self.numeroLinea =  0
     self.cantArticulos =  0
     self.pesoPrioridad = 0
-
+    self.factura = null   
     self.update()
-    self.factura.detalles.forEach(function(e){
+     $.each(data, function( index, modeloTabla ) {
+        if(self.factura ==null){
+            self.factura = modeloTabla.factura
+            self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
+            self.cliente  = modeloTabla.factura.cliente
+            self.vendedor = modeloTabla.factura.vendedor
+            self.update()
+        }
         self.detail.push({
-            numeroLinea     : e.numeroLinea,
-            pesoPrioridad    :e.numeroLinea,
-            codigo          : e.codigo,
-            tipoImpuesto    : e.tipoImpuesto,
-            descripcion     : e.descripcion,
-            cantidad        : parseFloat(e.cantidad),
-            precioUnitario  : parseFloat(e.precioUnitario),
-            impuesto        : parseFloat(e.impuesto),
-            montoImpuesto   : parseFloat(e.montoImpuesto),
-            montoDescuento  : parseFloat(e.montoDescuento),
-            porcentajeDesc  : parseFloat(e.porcentajeDesc),
-            subTotal        : parseFloat(e.subTotal),
-            montoTotalLinea : parseFloat(e.montoTotalLinea),
-            montoTotal      : parseFloat(e.montoTotal)
+            numeroLinea     : modeloTabla.numeroLinea,
+            pesoPrioridad   : modeloTabla.numeroLinea,
+            codigo          : modeloTabla.codigo,
+            tipoImpuesto    : modeloTabla.tipoImpuesto,
+            descripcion     : modeloTabla.descripcion,
+            cantidad        : parseFloat(modeloTabla.cantidad),
+            precioUnitario  : parseFloat(modeloTabla.precioUnitario),
+            impuesto        : parseFloat(modeloTabla.impuesto),
+            montoImpuesto   : parseFloat(modeloTabla.montoImpuesto),
+            montoDescuento  : parseFloat(modeloTabla.montoDescuento),
+            porcentajeDesc  : parseFloat(modeloTabla.porcentajeDesc),
+            subTotal        : parseFloat(modeloTabla.subTotal),
+            montoTotalLinea : parseFloat(modeloTabla.montoTotalLinea),
+            montoTotal      : parseFloat(modeloTabla.montoTotal)
         });
         self.update()
-        
         self.numeroLinea = self.numeroLinea + 1
         self.cantArticulos = self.cantArticulos + 1
-         self.pesoPrioridad = self.numeroLinea
+        self.pesoPrioridad = self.numeroLinea
 
     })
    
