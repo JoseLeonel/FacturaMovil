@@ -827,8 +827,7 @@ function ListadoFacturasDelDia(){
                     loadListar(".tableListarFacturasDia",idioma_espanol,self.formato_tabla_dias,result.aaData)
                     agregarInputsCombos_Facturas_Dias();
                     ActivarEventoFiltro(".tableListarFacturasDia")
-                     
-                     $('#modalFacturasDia').modal('show')    
+                    $('#modalFacturasDia').modal('show')    
                      __reimprimir()
                 }else{
                     __InformacionDataTableDia();

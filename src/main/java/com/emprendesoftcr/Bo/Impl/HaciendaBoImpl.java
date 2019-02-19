@@ -12,16 +12,12 @@ import com.emprendesoftcr.Dao.HaciendaDao;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Hacienda;
 
-
 @Service("haciendaBo")
 @EnableTransactionManagement
 public class HaciendaBoImpl implements HaciendaBo {
 
-
 	@Autowired
-	private HaciendaDao					haciendaDao;
-
-
+	private HaciendaDao haciendaDao;
 
 	@Transactional
 	@Override
@@ -37,41 +33,48 @@ public class HaciendaBoImpl implements HaciendaBo {
 
 	}
 
+	@Transactional
+	@Override
+	public void findByClaveSP(String clave, Integer estado,String xml,String mensajeHacienda) throws Exception {
+		haciendaDao.findByClaveSP(clave, estado,xml,mensajeHacienda);
+	}
+
 	@Override
 	public Hacienda findById(Long id) {
 
 		return haciendaDao.findById(id);
 	}
 
-	
 	@Override
-	public Hacienda findByEmpresaAndClave(Empresa empresa,String clave) {
+	public Hacienda findByEmpresaAndClave(Empresa empresa, String clave) {
 		return haciendaDao.findByEmpresaAndClave(empresa, clave);
 	}
-	
+
 	@Override
 	public Hacienda findByClave(String clave) {
 		return haciendaDao.findByClave(clave);
 	}
-	
 
 	@Override
 	public Collection<Hacienda> findByEmpresaAndEstado(Empresa empresa, Integer estado) {
 
 		return haciendaDao.findByEmpresaAndEstado(empresa, estado);
 	}
-	@Override
-	public Collection<Hacienda> findByEstado( Integer estado,Integer estadoError) {
 
-		return haciendaDao.findByEstado(estado,estadoError);
-	}
 	@Override
-		public Collection<Hacienda> findByEstadoAndNotificacion(Integer estado, Integer notificacion){
-		return haciendaDao.findByEstadoAndNotificacion(estado,notificacion);
+	public Collection<Hacienda> findByEstado(Integer estado, Integer estadoError) {
+
+		return haciendaDao.findByEstado(estado, estadoError);
 	}
+
 	@Override
-	public Collection<Hacienda>  findByEstadoOrEstadoErrorAndEmpresa(Empresa empresa ,Integer estado,Integer estadoError){
-		return haciendaDao.findByEstadoOrEstadoErrorAndEmpresa(empresa,estado, estadoError);
+	public Collection<Hacienda> findByEstadoAndNotificacion(Integer estado, Integer notificacion) {
+		return haciendaDao.findByEstadoAndNotificacion(estado, notificacion);
 	}
-	
+
+	@Override
+	public Collection<Hacienda> findByEstadoOrEstadoErrorAndEmpresa(Empresa empresa, Integer estado, Integer estadoError) {
+		return haciendaDao.findByEstadoOrEstadoErrorAndEmpresa(empresa, estado, estadoError);
+	}
+
 }

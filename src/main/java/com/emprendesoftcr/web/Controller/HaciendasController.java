@@ -99,8 +99,9 @@ public class HaciendasController {
 	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
 																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
 																																																			// Emisor
-																																																			facturaElectronica.setEmisorNombreComercial(d.getEmpresa().getNombreComercial());
+																																																			facturaElectronica.setEmisorNombreComercial(!d.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? d.getEmpresa().getNombreComercial() : Constantes.EMPTY);
 																																																			facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombre().equals(Constantes.EMPTY) ? d.getEmpresa().getNombre() : d.getEmpresa().getNombre());
+																																																		
 																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
 																																																			facturaElectronica.setEmisorDireccion(d.getEmpresa().getOtraSenas());
 																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
@@ -195,6 +196,9 @@ public class HaciendasController {
 	private HaciendaBo																								haciendaBo;
 
 	@Autowired
+	private EmpresaBo																									empresaBo;
+
+	@Autowired
 	private UsuarioBo																									usuarioBo;
 
 	@Autowired
@@ -234,7 +238,10 @@ public class HaciendasController {
 	@ResponseBody
 	@Transactional
 	public synchronized void callBack(HttpEntity<String> httpEntity) throws Exception {
-		Hacienda hacienda = null;
+		// Hacienda hacienda = null;
+		Integer estado = Constantes.ZEROS;
+		String mensajeHacienda = Constantes.EMPTY;
+		String xmlFirmado = Constantes.EMPTY;
 		lock.lock();
 		try {
 			long id = Thread.currentThread().getId();
@@ -247,7 +254,7 @@ public class HaciendasController {
 				log.info("** callBack: " + respuestaHacienda.clave() + " fecha " + new Date());
 				if (hacienda != null) {
 					String status = getHaciendaStatus(respuestaHacienda.indEstado());
-					hacienda.setUpdated_at(new Date());
+					// hacienda.setUpdated_at(new Date());
 					RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();
 					respuesta.setClave(respuestaHacienda.clave());
 					respuesta.setFecha(respuestaHacienda.fecha());
@@ -266,48 +273,63 @@ public class HaciendasController {
 					String xmlFirmadoRespuesta = Constantes.EMPTY;
 					if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECIBIDO)) {
 						xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
-						xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
+						xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, empresa);
 					} else {
 						if (respuestaHacienda.mensajeHacienda() != null) {
 							if (respuestaHacienda.mensajeHacienda().mensaje() != null) {
 								if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO)) {
 									xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
-									xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
+									xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, empresa);
 								}
 							}
 						}
 					}
 					if (xmlFirmadoRespuesta != Constantes.EMPTY) {
-						hacienda.setMensajeHacienda(FacturaElectronicaUtils.convertirStringToblod(xmlFirmadoRespuesta));
+						// hacienda.setMensajeHacienda(FacturaElectronicaUtils.convertirStringToblod(xmlFirmadoRespuesta));
+						xmlFirmado = xmlFirmadoRespuesta;
 					}
 					if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
-						hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+						// hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+						estado = Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA;
 					} else if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
-						hacienda.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
+						// hacienda.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
+						estado = Constantes.HACIENDA_ESTADO_ERROR;
 					}
 					// Hacienda no envia mensaje
 					if (respuestaHacienda.mensajeHacienda() != null) {
 						if (respuestaHacienda.mensajeHacienda().mensaje() != null) {
 							if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO)) {
-								hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+								// hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+								estado = Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA;
 							} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_RECHAZADO)) {
-								hacienda.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
+								// hacienda.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
+								estado = Constantes.HACIENDA_ESTADO_ERROR;
 							} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO_PARCIAL)) {
-								hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_PARCIAL);
+								// hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_PARCIAL);
+								estado = Constantes.HACIENDA_ESTADO_ACEPTADO_PARCIAL;
 							}
 						}
 					} else {
 						if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
-							if (hacienda.getReintentosAceptacion() == Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
-								hacienda.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
-							} else {
-								hacienda.setReintentosAceptacion(hacienda.getReintentosAceptacion() == null ? 1 : hacienda.getReintentosAceptacion() + 1);
-								hacienda.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA);
-							}
+//							if (hacienda.getReintentosAceptacion() == Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
+							// hacienda.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
+							estado = Constantes.HACIENDA_ESTADO_ERROR;
+							// } else {
+							// hacienda.setReintentosAceptacion(hacienda.getReintentosAceptacion() == null ? 1 : hacienda.getReintentosAceptacion() + 1);
+							// hacienda.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA);
+							// }
 						}
 					}
-					hacienda.setObservacion(respuestaHacienda.mensajeHacienda() != null ? FacturaElectronicaUtils.convertirStringToblod(respuestaHacienda.mensajeHacienda().detalleMensaje()) : null);
-					haciendaBo.modificar(hacienda);
+					// hacienda.setObservacion(respuestaHacienda.mensajeHacienda() != null ? FacturaElectronicaUtils.convertirStringToblod(respuestaHacienda.mensajeHacienda().detalleMensaje()) : null);
+					mensajeHacienda = respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().detalleMensaje() : Constantes.EMPTY;
+					if (xmlFirmado != null) {
+						if (!xmlFirmado.equals(Constantes.EMPTY)) {
+							haciendaBo.findByClaveSP(respuestaHacienda.clave(), estado, xmlFirmado, mensajeHacienda);
+						}
+
+					}
+				//	haciendaBo.findByClaveSP(respuestaHacienda.clave(), estado, xmlFirmado, mensajeHacienda);
+//					haciendaBo.modificar(hacienda);
 				}
 			}
 			log.info("Finaliza callBack {}", new Date());

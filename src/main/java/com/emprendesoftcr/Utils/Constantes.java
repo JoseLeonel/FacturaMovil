@@ -151,6 +151,10 @@ public class Constantes {
 	public static final String					ESTADO_HACIENDA_ACEPTADO														= "1";
 	public static final String					ESTADO_HACIENDA_ACEPTADO_PARCIAL										= "2";
 	public static final String					ESTADO_HACIENDA_RECHAZADO														= "3";
+	
+	public static final String					HACIENDA_TIPODOC_COMPRAS														= " ";
+	
+	 
 
 	// Vendedor Frecuente de una empresa
 

@@ -10,9 +10,9 @@
                     <div class="imprimirArticulo" id="imprimirArticulo" name="imprimirArticulo" > 
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label class="tamanoLetra">{articulo.descripcion}</label><br>
-                                <label class="tamanoLetra" >Precio: {articulo.precioPublico}</label><br>
-                                <label class="tamanoLetra" >{articulo.codigo}</label>
+                                <label class="tamanoLetraDescripcion">{articulo.descripcion}</label><br>
+                                <label class="tamanoLetraTotal" > ‎₡ {articulo.precioPublico}</label><br>
+                                <label class="tamanoLetraCodigo" >{articulo.codigo}</label>
 
                             </div>
                         </div> 
@@ -38,17 +38,28 @@
 
 
 <style type="text/css">
-.tamanoLetra{
-     font-weight: 600 !important;
-     font-size: 16px !important;
-}
+    .tamanoLetraDescripcion{
+      font-weight: 800 !important;
+      font-size: 100px !important;
+    }
+    .tamanoLetraTotal{
+      font-weight: 800 !important;
+      font-size: 100px !important;
+    }
+    .tamanoLetraCodigo{
+      font-weight: 800 !important;
+      font-size: 100px !important;
+    }
+    
+    
+    
     .fondoEncabezado
     {
         background: #00539B;
         color: #f9fafc;
     }
     .wrap
-    {
+    { 
         margin: auto;
         max-width: 1100;
         width: 90%;
