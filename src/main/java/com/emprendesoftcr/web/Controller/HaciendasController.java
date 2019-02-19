@@ -53,7 +53,6 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.Usuario;
-import com.emprendesoftcr.pdf.App;
 import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.pdf.Reporte01PdfView;
@@ -101,7 +100,7 @@ public class HaciendasController {
 																																																			// Emisor
 																																																			facturaElectronica.setEmisorNombreComercial(!d.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? d.getEmpresa().getNombreComercial() : Constantes.EMPTY);
 																																																			facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombre().equals(Constantes.EMPTY) ? d.getEmpresa().getNombre() : d.getEmpresa().getNombre());
-																																																		
+
 																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
 																																																			facturaElectronica.setEmisorDireccion(d.getEmpresa().getOtraSenas());
 																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
@@ -196,9 +195,6 @@ public class HaciendasController {
 	private HaciendaBo																								haciendaBo;
 
 	@Autowired
-	private EmpresaBo																									empresaBo;
-
-	@Autowired
 	private UsuarioBo																									usuarioBo;
 
 	@Autowired
@@ -250,7 +246,7 @@ public class HaciendasController {
 			String body = httpEntity.getBody();
 			if (body != null && body != "" && body != "{}" && !body.contains("El comprobante") && !body.contains("no ha sido recibido")) {
 				RespuestaHacienda respuestaHacienda = RespuestaHaciendaJson.from(body);
-				hacienda = haciendaBo.findByClave(respuestaHacienda.clave());
+				Hacienda hacienda = haciendaBo.findByClave(respuestaHacienda.clave());
 				log.info("** callBack: " + respuestaHacienda.clave() + " fecha " + new Date());
 				if (hacienda != null) {
 					String status = getHaciendaStatus(respuestaHacienda.indEstado());
@@ -273,13 +269,13 @@ public class HaciendasController {
 					String xmlFirmadoRespuesta = Constantes.EMPTY;
 					if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECIBIDO)) {
 						xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
-						xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, empresa);
+						xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
 					} else {
 						if (respuestaHacienda.mensajeHacienda() != null) {
 							if (respuestaHacienda.mensajeHacienda().mensaje() != null) {
 								if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO)) {
 									xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
-									xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, empresa);
+									xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
 								}
 							}
 						}
@@ -328,7 +324,7 @@ public class HaciendasController {
 						}
 
 					}
-				//	haciendaBo.findByClaveSP(respuestaHacienda.clave(), estado, xmlFirmado, mensajeHacienda);
+					// haciendaBo.findByClaveSP(respuestaHacienda.clave(), estado, xmlFirmado, mensajeHacienda);
 //					haciendaBo.modificar(hacienda);
 				}
 			}

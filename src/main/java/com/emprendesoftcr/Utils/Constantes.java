@@ -151,10 +151,8 @@ public class Constantes {
 	public static final String					ESTADO_HACIENDA_ACEPTADO														= "1";
 	public static final String					ESTADO_HACIENDA_ACEPTADO_PARCIAL										= "2";
 	public static final String					ESTADO_HACIENDA_RECHAZADO														= "3";
-	
+
 	public static final String					HACIENDA_TIPODOC_COMPRAS														= " ";
-	
-	 
 
 	// Vendedor Frecuente de una empresa
 
@@ -459,6 +457,12 @@ public class Constantes {
 	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_DESCUENTO								= "total_desc";
 	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_EXENTOS									= "total_exc";
 	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA								= "total_gananc";
+//Procedimiento callback para actualizar la aceptacion de hacienda
+	public static final String					SP_CALLBACK_HACIENDA																= "sp_callback";
+	public static final String					SP_CALLBACK_HACIENDA_CLAVE													= "clave_e";
+	public static final String					SP_CALLBACK_HACIENDA_ESTADO													= "estado_e";
+	public static final String					SP_CALLBACK_HACIENDA_XML														= "xml_e";
+	public static final String					SP_CALLBACK_HACIENDA_MENSAJE												= "mensaje_e";
 
 	// Procecimiento para actualizar la caja
 	public static final String					SP_ACTUALIZA_CAJA																		= "SPACTUALIZACAJAUSUARIO";
