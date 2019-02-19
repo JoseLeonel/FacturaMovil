@@ -98,17 +98,13 @@
                                 <label> {$.i18n.prop("factura.total")}  </label>
                                 <input type="text" readonly="readonly" class="form-control " value="{totales.total.toFixed(2)}">
                             </div>
-                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label> Total Ganancia </label>
-                                <input type="text" readonly="readonly" class="form-control"   value="{totales.totalGanancia.toFixed(2)}">
-                            </div>
-
+                            
                         </div>
                 	</form>
                 </div>
             </div>   
 	        <div class="col-md-12 col-lg-12 col-sm-12">
-				<a class="fa fa-download" target="_blank" title="Descargar detalle transacciones" href="DescargarDetallexCodigoAjax.do?fechaInicialParam={fechaInicio}&fechaFinalParam={fechaFin}"> Descargar</a>        
+				<a class="fa fa-download" onclick ={__DescargarExcel}  title="Descargar detalle transacciones" href="#"> Descargar</a>        
 	        </div>
         </div>
         <div class="col-md-2 col-lg-2 col-sm-2"></div>
@@ -250,17 +246,6 @@
 
     .cabecera-derecha {
         width:25%;
-    }AnteriorSiguiente
-    .AnteriorSiguiente
-     AnteriorSiguiente
-     AnteriorSiguiente
-     AnteriorSiguiente
-    }AnteriorSiguiente
-
-    .AnteriorSiguiente
-     AnteriorSiguiente
-     AnteriorSiguiente
-     AnteriorSiguiente
     }
     .booking-details .booking-info {
         border-top: 1px solid #DFDCD1;
@@ -499,6 +484,13 @@ self.on('mount',function(){
    
 })
 
+__DescargarExcel(){
+    if(_validarDiasAConsultar()){
+        return true
+    }
+    var url = "DescargarDetallexCodigoAjax.do?fechaInicialParam="+  $('#fechaInicial').val()+ "&fechaFinalParam=" + $('#fechaFinal').val()
+    location.href = url;
+}
 
 /**
 * Camps requeridos
@@ -559,6 +551,11 @@ __Busqueda(){
         	fechaInicio:$('#fechaInicial').val(),
         	fechaFin:$('#fechaFinal').val(),
         };
+       if(_validarDiasAConsultar()){
+           return true;
+       }
+
+        
        $.ajax({
             url: "TotalVentasPorDetalleAjax.do",
             datatype: "json",
@@ -576,6 +573,39 @@ __Busqueda(){
 	        }
         });
  	}		
+}
+/**
+* Validar rango de fechas 
+**/
+function _validarDiasAConsultar(){
+     var fechaInicio = new Date($('#fechaInicial').val()).getTime();
+        var fechaFin    = new Date($('#fechaFinal').val()).getTime();
+        var diff = fechaFin - fechaInicio;
+        var diff =diff/(1000*60*60*24)
+
+        if(diff > 31){
+            swal({
+                title: '',
+                text:  $.i18n.prop("maximo.rango.fechas"),
+                type: 'error',
+                showCancelButton: false,
+                confirmButtonText:$.i18n.prop("btn.aceptar"),
+            })
+            return true
+        }
+        if($('#fechaInicial').val() == null){
+            return true
+        }
+        if($('#fechaFinal').val() == null){
+            return true
+        }
+        if($('#fechaInicial').val() == ""){
+            return true
+        }
+        if($('#fechaFinal').val() == ""){
+            return true
+        }
+        return false 
 }
 
 /**
