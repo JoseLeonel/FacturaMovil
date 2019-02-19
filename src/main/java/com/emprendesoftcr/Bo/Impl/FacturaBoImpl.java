@@ -584,6 +584,16 @@ public class FacturaBoImpl implements FacturaBo {
 						factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_EN_PROCESOS);
 					}
 				}
+			// Se almacena la factura, se deja en estado en proceso para que no lo tome los procesos de hacienda
+				if (factura.getId() == null) {
+					factura.setCreated_at(new Date());
+					agregar(factura);
+				} else {
+					modificar(factura);
+				}
+				// Se asociando los detalles a la factura
+				this.asociaDetallesFactura(factura, facturaCommand, usuario, detallesFacturaCommand);
+
 				
 				// Efectivo Banco Tarjeta
 				if (!factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
@@ -649,16 +659,9 @@ public class FacturaBoImpl implements FacturaBo {
 							resultado = resultado - factura.getTotalBanco();
 							factura.setTotalEfectivo(resultado);
 						}
-					// Se almacena la factura, se deja en estado en proceso para que no lo tome los procesos de hacienda
-						if (factura.getId() == null) {
-							factura.setCreated_at(new Date());
-							agregar(factura);
-						} else {
-							modificar(factura);
-						}
+				
 						
-						this.asociaDetallesFactura(factura, facturaCommand, usuario, detallesFacturaCommand);
-						modificar(factura);
+							
 						
 
 						// Se agrega solo si no existe en la caja de usuario, casos de reintentos

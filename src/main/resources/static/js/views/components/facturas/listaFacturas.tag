@@ -758,6 +758,7 @@ function cargarDetallesFacturaEnEspera(data){
     self.update()
      $.each(data, function( index, modeloTabla ) {
         if(self.factura == null){
+            self.factura = modeloTabla
             self.factura.tipoDoc = __TipoDocumentos(self.factura.numeroConsecutivo,self.factura)
             self.factura = modeloTabla.factura
             self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null

@@ -9,7 +9,7 @@
                 <h2 >{titulo}</h2>
                 <div class="pantalla-imprimir">
                     <div class="botones-imprimir">
-                        <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
+                        <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;</a>
                     
                     </div>
                     <section class="" >
@@ -128,6 +128,7 @@
                 </div>
                 </div>
                 </div>
+                
     </div>    
     <div class="modal-footer">
               <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
@@ -150,8 +151,7 @@
     .wrap
     {
         margin: auto;
-        max-width: 1100;
-        width: 90%;
+       
     }
     .wrap >h1
     {
@@ -168,7 +168,7 @@
         content: '';
         height: 1px;
         margin: 20px 0;
-        width: 100%;
+       
     }
     .pantalla-imprimir
     {
@@ -179,7 +179,7 @@
     {
         display: flex;
         flex-direction: column;
-        width: 20%;
+     
     }
     .botones-imprimir .boton-imprimir
     {
@@ -219,10 +219,10 @@
         height: auto;
         line-height: normal;
         margin: 0px;
-        max-width: 377px;
+      
         padding: 0px;
         text-transform: none;
-        width: 377px;
+      
     }
     .ticket > table
     {
@@ -236,17 +236,16 @@
     }
     .ticket > td.producto,th.producto
     {
-        max-width: 75px;
-        width: 377px;
+        
     }
     .ticket > td.cantidad,th.cantidad
     {
-        width: 377px;
+      
         word-break: break-all;
     }
     .ticket > td.precio,th.precio
     {
-        width: 377px;
+        
         word-break: break-all;
     }
     .encabezado
@@ -267,7 +266,7 @@
     {
         display: flex;
         flex-wrap: wrap;
-        width: 80%;
+        
     }
     .zona-impresion .forma-impresion
     {
@@ -280,7 +279,7 @@
         margin-bottom: 45px;
         margin-left: 1%;
         transition: all .4s;
-        width: 80%;
+       
     }
     .encabezado
     {

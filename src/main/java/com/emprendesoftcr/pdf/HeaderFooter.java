@@ -8,11 +8,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.emprendesoftcr.Utils.Constantes;
+import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.ExceptionConverter;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
@@ -69,16 +71,26 @@ public class HeaderFooter extends PdfPageEventHelper {
 	@Override
 	public void onStartPage(PdfWriter writer, Document document) {
 		Image img_logo = null;
+	// Cuadro 1
+			try {
+
+				String dir = System.getProperty("user.dir");
+				if (this.facturaElectronica.get_logo() != null) {
+					if (!this.facturaElectronica.get_logo().equals(Constantes.EMPTY)) {
+						img_logo = Image.getInstance(dir + "/data/logos/" + this.facturaElectronica.get_logo());
+					}
+
+				} 
+
+			} catch (IOException ex) {
+				Logger.getLogger(HeaderFooter.class.getName()).log(Level.SEVERE, null, ex);
+			} catch (BadElementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		try {
 
-			String dir = System.getProperty("user.dir");
-			if (this.facturaElectronica.get_logo() != null) {
-				if (!this.facturaElectronica.get_logo().equals(Constantes.EMPTY)) {
-					img_logo = Image.getInstance(dir + "/data/logos/" + this.facturaElectronica.get_logo());
-				}
-
-			}
-
+		
 			if(this.facturaElectronica.getClave() !=null) {
 				if(!this.facturaElectronica.getClave().equals(Constantes.EMPTY)) {
 					String codigoQR = this.facturaElectronica.getClave();
@@ -104,25 +116,24 @@ public class HeaderFooter extends PdfPageEventHelper {
 			tabla_cabezera.setSpacingBefore(0);
 
 			PdfPTable izquierda = new PdfPTable(1);
+      if(img_logo !=null) {
+  			img_logo.setAlignment(Image.ALIGN_LEFT);
+  			//img_logo.scaleToFit(210,280);
+  			//img_logo.scalePercent(40, 40);
+  			   img_logo.scaleAbsolute(300, 175);
+  			   img_logo.setAbsolutePosition(20, PageSize.TABLOID.rotate().getHeight() - 100);
+  			img_logo.setAlignment(Image.ALIGN_RIGHT);
+      	
+      }
 
-			// String logo_ = "/opt/reportes/logo01.png";
-			// Image img_logo = Image.getInstance(logo_);
-			img_logo.setAlignment(Image.ALIGN_LEFT);
-			// img_logo.scaleAbsolute(80, 120);
-			// img_logo.scalePercent(12);
-			img_logo.scalePercent(11, 20);
-
-			// img_logo.setBorder(Image.BOX);
-			// img_logo.setBorderWidth(0);
-			// img_logo.setBorderColor(BaseColor.BLACK);
-
-			PdfPCell cell_logo = new PdfPCell(img_logo, false);
+			PdfPCell cell_logo = img_logo ==null ? new PdfPCell( ):new PdfPCell( img_logo, false);
 			cell_logo.setHorizontalAlignment(Paragraph.ALIGN_LEFT);
 			cell_logo.setColspan(1);
 			cell_logo.setBorder(Rectangle.NO_BORDER);
 			izquierda.addCell(cell_logo);
-
-			izquierda.addCell(utils_pdf.obtenerCeldaNormal("Clave: " + this.facturaElectronica.getClave(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
+			if(!this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+				izquierda.addCell(utils_pdf.obtenerCeldaNormal("Clave: " + this.facturaElectronica.getClave(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
+			}
 			tabla_cabezera.addCell(izquierda);
 
 			PdfPTable derecha = new PdfPTable(1);
@@ -198,7 +209,8 @@ public class HeaderFooter extends PdfPageEventHelper {
 			tabla_segunda_tabla.setSpacingAfter(0);
 			tabla_segunda_tabla.setSpacingBefore(0);
 
-			PdfPCell cell_recep = new PdfPCell(new Paragraph("\nNombre del Receptor:"+ this.facturaElectronica.getClienteNombre(), UtilsPdf.font_cabezera_tabla));
+			String nombreCliente = facturaElectronica.getClienteNombreComercial() != null ? facturaElectronica.getClienteNombre() : Constantes.EMPTY;
+			PdfPCell cell_recep = new PdfPCell(new Paragraph("\nNombre del Receptor:"+ nombreCliente, UtilsPdf.font_cabezera_tabla));
 			cell_recep.setHorizontalAlignment(Paragraph.ALIGN_LEFT);
 			cell_recep.setColspan(1);
 			// cell_recep.setCellEvent(new RoundRectangle_tabla_sup_izq());
@@ -206,14 +218,31 @@ public class HeaderFooter extends PdfPageEventHelper {
 
 			tabla_segunda_tabla.addCell(cell_recep);
 
-			PdfPCell cell_id_recep = new PdfPCell(new Paragraph("\nIdentificación Receptor:"+ this.facturaElectronica.getClienteCedula(), UtilsPdf.font_cabezera_tabla));
+			String cedulaCliente = Constantes.EMPTY;
+			String telefonoCliente = Constantes.EMPTY;
+			String correoCliente = Constantes.EMPTY;
+		// Cliente
+			if (facturaElectronica.getClienteCedula() != null) {
+				if (!facturaElectronica.getClienteCedula().equals(Constantes.EMPTY)) {
+					if(!facturaElectronica.getClienteCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+						cedulaCliente ="\nIdentificación Receptor:"+ this.facturaElectronica.getClienteCedula();
+						telefonoCliente = "Telefono:"+ this.facturaElectronica.getClienteTelefono();
+						correoCliente = this.facturaElectronica.getClienteCorreo();
+					}
+				}
+			}
+			
+			
+			
+			
+			PdfPCell cell_id_recep = new PdfPCell(new Paragraph(cedulaCliente, UtilsPdf.font_cabezera_tabla));
 			cell_id_recep.setHorizontalAlignment(Paragraph.ALIGN_LEFT);
 			cell_id_recep.setColspan(1);
 			cell_id_recep.setBorder(Rectangle.BOTTOM);
 
 			tabla_segunda_tabla.addCell(cell_id_recep);
 			if(this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-				PdfPCell cell_dir_recep = new PdfPCell(new Paragraph("Telefono:"+ this.facturaElectronica.getClienteTelefono() + "       Factura/Tiquete Referencia: " + this.facturaElectronica.getReferenciaNumero(), UtilsPdf.font_cabezera_tabla));
+				PdfPCell cell_dir_recep = new PdfPCell(new Paragraph( telefonoCliente + "       Factura/Tiquete Referencia: " + this.facturaElectronica.getReferenciaNumero(), UtilsPdf.font_cabezera_tabla));
 				cell_dir_recep.setHorizontalAlignment(Paragraph.ALIGN_LEFT);
 				cell_dir_recep.setColspan(1);
 				cell_dir_recep.setBorder(Rectangle.RIGHT);
@@ -221,7 +250,7 @@ public class HeaderFooter extends PdfPageEventHelper {
 				
 			}else {
 
-				PdfPCell cell_dir_recep = new PdfPCell(new Paragraph("Telefono:"+ this.facturaElectronica.getClienteTelefono(), UtilsPdf.font_cabezera_tabla));
+				PdfPCell cell_dir_recep = new PdfPCell(new Paragraph(telefonoCliente, UtilsPdf.font_cabezera_tabla));
 				cell_dir_recep.setHorizontalAlignment(Paragraph.ALIGN_LEFT);
 				cell_dir_recep.setColspan(1);
 				cell_dir_recep.setBorder(Rectangle.RIGHT);
@@ -231,7 +260,7 @@ public class HeaderFooter extends PdfPageEventHelper {
 			
 			
 
-			PdfPCell cell_cond_venta = new PdfPCell(new Paragraph(this.facturaElectronica.getClienteCorreo() + " \n\n", UtilsPdf.font_cabezera_tabla));
+			PdfPCell cell_cond_venta = new PdfPCell(new Paragraph(correoCliente + " \n\n", UtilsPdf.font_cabezera_tabla));
 			cell_cond_venta.setHorizontalAlignment(Paragraph.ALIGN_LEFT);
 			cell_cond_venta.setColspan(1);
 			cell_cond_venta.setBorder(Rectangle.NO_BORDER);
@@ -252,10 +281,8 @@ public class HeaderFooter extends PdfPageEventHelper {
 			document.add(new Paragraph("\n", UtilsPdf.pequeFont));
 
 		} catch (DocumentException de) {
-			throw new ExceptionConverter(de);
-		} catch (IOException ex) {
-			Logger.getLogger(HeaderFooter.class.getName()).log(Level.SEVERE, null, ex);
-		}
+			throw new ExceptionConverter(de);}
+		
 	}
 
 	@Override

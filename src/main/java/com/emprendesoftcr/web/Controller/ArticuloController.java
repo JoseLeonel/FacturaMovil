@@ -159,7 +159,7 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
+	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam String codigoArt) {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Articulo");
@@ -168,6 +168,14 @@ public class ArticuloController {
 			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
+		JqGridFilter categoriaFilter = null;
+		if (codigoArt != null) {
+			if (!codigoArt.equals(Constantes.EMPTY)) {
+				categoriaFilter = new JqGridFilter("codigo", "'" + codigoArt + "'", "=");
+				delimitadores.addFiltro(categoriaFilter);
+			}
+		}
+
 		Long total = dataTableBo.contar(delimitadores);
 		Collection<Object> objetos = dataTableBo.listar(delimitadores);
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();

@@ -4,12 +4,15 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div  class= "wrap">
-        <h1 >{titulo}<h1>
+       <div class="row">
+            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
+       
         <div class="pantalla-imprimir">
-            
+             
             <section class="zona-impresion" >
                 <div class="forma-impresion" id="imprimeme" name ="imprimeme">
-                    <div class="ticket" id="ticket" name="ticket" > 
+                    <div class="ticket" id="ticket" name="ticket" >
+                        <h2>{titulo}<h2>   
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc == '88'}"><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.id}                       </strong><br></div>
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc == '87'}"><strong> {$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")} {facturaImpresa.id}                       </strong><br></div>
                         <div class="encabezado"><strong> {facturaImpresa.empresa.nombreComercial}                        </strong><br></div>
@@ -57,12 +60,12 @@
                             <td >{$.i18n.prop("tikect.ultima.linea")}</td>
                             <td > *********  </td>
                             </tr>
-                            <tr >
+                            <tr>
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.detalle.subTotal")}</strong></td>
                             <td ><strong>{facturaImpresa.subTotalGeneralSTR } </strong>  </td>
                             </tr>
-                            <tr show={totalImpuestoServicio > 0} >
+                            <tr show="{totalImpuestoServicio > 0}" >
                             <td></td>
                             <td ><strong>{$.i18n.prop("tikect.detalle.impuestoServicio")}</strong></td>
                             <td ><strong>{totalImpuestoServicioSTR} </strong>  </td>
@@ -88,7 +91,7 @@
                             <td ><strong>{$.i18n.prop("tikect.totalCambioPagar")}</strong></td>
                             <td ><strong>{facturaImpresa.totalCambioPagarSTR}</strong></td>
                             </tr>                            
-                            <tr show={facturaImpresa.tipoCambio > 1}>>
+                            <tr show={facturaImpresa.tipoCambio > 1}>
                                 <td></td>
                                 <td class="precio" ><strong>{$.i18n.prop("tipoCambio.cambioDolar")}</strong></td>
                                 <td class="precio" ><strong>{facturaImpresa.tipoCambioSTR}</strong></td>
@@ -121,7 +124,8 @@
                     </div>
                 </div>
             </section>
-            
+             </div>
+                </div>
         </div>
     </div>    
     <div class="modal-footer">
@@ -144,8 +148,9 @@
     .wrap
     {
         margin: auto;
-        max-width: 1100;
-        width: 90%;
+    }
+    .container {
+       display: flex; /* or inline-flex */
     }
     .wrap >h1
     {
@@ -162,18 +167,11 @@
         content: '';
         height: 1px;
         margin: 20px 0;
-        width: 100%;
     }
     .pantalla-imprimir
     {
         display: flex;
         flex-wrap: wrap;
-    }
-    .botones-imprimir
-    {
-        display: flex;
-        flex-direction: column;
-        width: 20%;
     }
     .botones-imprimir .boton-imprimir
     {
@@ -204,7 +202,6 @@
     .ticket
     {
         color: #000;
-        float: left;
         font-family: "Times New Roman", Times, serif;
         font-size: 12px;
         font-style: normal;
@@ -213,10 +210,9 @@
         height: auto;
         line-height: normal;
         margin: 0px;
-        max-width: 377px;
+        
         padding: 0px;
         text-transform: none;
-        width: 377px;
     }
     .ticket > table
     {
@@ -230,17 +226,16 @@
     }
     .ticket > td.producto,th.producto
     {
-        max-width: 75px;
-        width: 377px;
+        
     }
     .ticket > td.cantidad,th.cantidad
     {
-        width: 377px;
+        
         word-break: break-all;
     }
     .ticket > td.precio,th.precio
     {
-        width: 377px;
+      
         word-break: break-all;
     }
     .encabezado
@@ -261,7 +256,7 @@
     {
         display: flex;
         flex-wrap: wrap;
-        width: 80%;
+       
     }
     .zona-impresion .forma-impresion
     {
@@ -269,12 +264,11 @@
         align-self: flex-start;
         background-color: white !important;
         box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.70);
-        display: flex;
         flex-direction: column;
         margin-bottom: 45px;
         margin-left: 1%;
         transition: all .4s;
-        width: 80%;
+        
     }
     .encabezado
     {
@@ -382,7 +376,7 @@ function consultaFactura(idFactura){
             if(data.aaData.length > 0){
                 self.facturaImpresa = null
                 self.detalles = []
-                self.detalles =modeloTabla
+                self.detalles =data.aaData
                 self.update()
                 $.each(data.aaData, function( index, modeloTabla ) {
                     if(self.facturaImpresa  == null){

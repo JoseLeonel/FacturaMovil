@@ -882,6 +882,8 @@ __CalculaCambioAEntregarKeyPress(e){
 *  Buscar la Factura Pendiente en espera
 **/
 __CargarFacturaEspera(e){
+    self.factura = e.item
+    self.update()
    __FacturaEnEspera(e.item)
 }
 /**
@@ -974,9 +976,12 @@ function __Init(){
     self.comboCondicionPagos        = []
     self.comboTipoDocumentos   = []
     self.facturas_espera       = {data:[]}  
+    self.item                  = null;
+    self.articulo              = null;
+    self.detalleFactura        ={data:[]}
+    self.cliente               = {};
     self.factura                = {
         id:null,
-        estado :1,
 	    fechaCredito:null,
 	    fechaEmision:null,
 	    condicionVenta:"",
@@ -1010,20 +1015,16 @@ function __Init(){
 	    totalCambio:0,
         totalCambioPagar:0,
 	    codigoMoneda:"",
-	    estado:0,
+	    estado:1,
 	    cliente:{
-            id:0,
+            id:null,
             nombreCompleto:"",
         },
 	    vendedor:{
-            id:0,
+            id:null,
             nombreCompleto:""
         }
-    }                            
-    self.item                  = null;
-    self.articulo              = null;
-    self.detalleFactura        ={data:[]}
-    self.cliente               = {};
+    }           
     self.vendedor              = {
         id:null,
         nombreCompleto:""

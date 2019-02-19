@@ -1,6 +1,7 @@
 package com.emprendesoftcr.web.command;
 
 import com.emprendesoftcr.modelo.Articulo;
+import com.emprendesoftcr.modelo.DetalleCompra;
 
 public class DetalleCompraCommand {
 
@@ -18,6 +19,9 @@ public class DetalleCompraCommand {
 	private Double		descuento;
 	private Double		montoTotalLinea;
 	private Articulo	articulo;
+
+	
+	
 
 	public DetalleCompraCommand() {
 		super();

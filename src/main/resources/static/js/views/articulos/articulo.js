@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	ListarArticulos();
+	ListarArticulos("");
 	_Init();
 } );/*fin document*/
 
@@ -12,9 +12,21 @@ var _Init = function () {
 	    __agregarEntradaAlInventario();
        __agregarSalidaAlInventario();
        __Imprimir_Articulo()
+
+    $('#codigoArt').keypress(function (e) {
+      if (e.keyCode == 13) {
+            ListarArticulos($('#codigoArt').val())
+      }
+
+    });
+    $("#filtros").validate(reglasDeValidacion());
+
+
 }
 
-var ListarArticulos = function(){
+
+
+var ListarArticulos = function(codigo){
      var table  =  $('#tableListar').DataTable( {
      "responsive": true,
       "bAutoWidth" : true,
@@ -31,7 +43,7 @@ var ListarArticulos = function(){
      "sort" : "position",
      "lengthChange": true,
      "ajax" : {
-             "url":"ListarArticuloAjax.do",
+             "url":"ListarArticuloAjax.do?codigoArt="+codigo,
              "deferRender": true,
              "type":"POST",
                      "dataType": 'json',
@@ -293,9 +305,47 @@ function agregarInputsCombos(){
     	   	select.append( '<option value="'+$.i18n.prop("estado.Activo")+'">'+$.i18n.prop("estado.Activo")+'</option>' );
             select.append( '<option value="'+$.i18n.prop("estado.Inactivo")+'">'+$.i18n.prop("estado.Inactivo")+'</option>' );
     	   	$(this).html(select);
-    	}
+       }
+       if ($(this).index() == 7 ){
+         var select = $('<select id="combo" class="form-control"><option value="">Todos</option></select>');
+         // se cargan los valores por defecto que existen en el combo
+           select.append( '<option value="'+$.i18n.prop("boolean.si")+'">'+$.i18n.prop("boolean.si")+'</option>' );
+          select.append( '<option value="'+$.i18n.prop("boolean.no")+'">'+ $.i18n.prop("boolean.no") +'</option>' );
+           $(this).html(select);
+     }
+       if ($(this).index() == 0 ){
+         var select = $('<select id="combo" class="form-control"><option value="">Todos</option></select>');
+         // se cargan los valores por defecto que existen en el combo
+         select = __listadoCategoriasActivas(select);
+         $(this).html(select);
+     }
     })
 }
+
+/**
+*  Mostrar listado datatable Categorias activas
+**/
+function __listadoCategoriasActivas(select){
+  $.ajax({
+       url: "ListarCategoriasActivasAjax.do",
+      datatype: "json",
+      method:"GET",
+      success: function (result) {
+           if(result.aaData.length > 0){
+            $.each(result.aaData, function( index, modeloTabla ) {
+               select.append( '<option value="'+modeloTabla.id+'">'+modeloTabla.descripcion+'</option>' );       
+            })
+         }
+      },
+      error: function (xhr, status) {
+          console.log(xhr);
+           mensajeErrorServidor(xhr, status);
+      }
+  })
+  return select;
+}
+
+
 /**
 * incluir el boton agregar en cada mantenimiento 
 **/

@@ -142,13 +142,22 @@ public class DetalleController {
 				
 				
 	}
+//	@Autowired
+//	private CertificadoBo																							certificadoBo;
 
+	
 	
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarDetlleByFacturaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idFactura) {
 
+		// Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+
+			// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
+			// criptografica desde linux
+		//	 certificadoBo.agregar(usuario.getEmpresa(),"","");
+	
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Detalle");
 		
@@ -167,7 +176,8 @@ public class DetalleController {
 		// Usuario de la session
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
-		// Consulta por fechas
+		
+		 
 	
 
 		delimitadores = new DataTableDelimitador(request, "Detalle");
@@ -231,7 +241,7 @@ public class DetalleController {
 		if (fechaFinal != null && fechaFinal != null) {
 			fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
 		}
-		Collection<Detalle> detalles = detalleBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal);
+		Collection<Detalle> detalles = detalleBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal,usuario.getEmpresa());
 		// Se prepara el excell
 		ByteArrayOutputStream baos = createExcelVentasXCodigo(detalles);
 		Collection<Attachment> attachments = createAttachments(attachment("ventasXCodigo", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
@@ -293,7 +303,7 @@ public class DetalleController {
 		}
 
 	
-		Collection<Detalle> detalles = detalleBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal);
+		Collection<Detalle> detalles = detalleBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal,usuario.getEmpresa());
 		String nombreArchivo = "VentasXProductos.xls";
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");

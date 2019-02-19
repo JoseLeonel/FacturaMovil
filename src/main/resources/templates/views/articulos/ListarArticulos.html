@@ -87,14 +87,25 @@
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"></div>
     </div>
+    
+    
     <!-- Listado  -->
    <div classs="container">
+        <form id = "filtros" name ="filtros" >
+        <div class="row">
+            <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
+		        <label>Digete el Codigo</label>
+		        <input type="text" class="form-control codigoArt" id="codigoArt" name="codigoArt" placeholder="XXXXXXXXXXXXXXXXXXXXXXX">
+		    </div>
+		</div>        
+		</form>
+		        
         <div class="row">
             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 scroller " style="width:98.50%;">
                  <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th class="table-header" style ="width:5%" >Categoria   </th>
+                                <th class="table-header" style ="width:5%" th:text="#{articulo.categoria}" >Categoria   </th>
                                 <th class="table-header" style ="width:5%" >Codigo   </th>
                                 <th class="table-header" >Descripcion                </th>
                                 <th class="table-header" >Costo                     </th>

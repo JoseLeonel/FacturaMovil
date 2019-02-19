@@ -124,11 +124,12 @@
                             <input type="hidden" id='totalDescuentos'         name='totalDescuentos'        value="{factura.totalDescuentos}" >
                             <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
                             <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           valmodalue="{factura.totalImpuesto}" >
-                            <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
+                               <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
+                            <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
+                                     <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
                             <input type="hidden" id='totalTarjeta'            name='totalTarjeta'            value="{factura.totalTarjeta}" >
                             <input type="hidden" id='totalBanco'              name='totalBanco'              value="{factura.totalBanco}" >
-                            <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
-                            <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
+                   
                         </form>   
                     </div>
                     <div class="box-footer">
@@ -271,7 +272,7 @@
                      <aside class="left-sidebar">
                         <article class="clearfix">
                             <div onclick = {__MostrarFormularioDePago}  class="precioTotalFactura" >
-                                <p class="total label-totalesChinos" style="text-align:right;">Total:  <span id="lblTotal">{totalComprobante}</span></p>
+                                <p class="total label-totalesComprobante" style="text-align:right;">Total:  <span id="lblTotal">{totalComprobante}</span></p>
                             </div>
                         </article>
                     </aside>
@@ -291,7 +292,7 @@
                             <div class="row">
                                 <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                     <label  >{$.i18n.prop("articulo.codigo")}  </label>
-                                    <input type="text" class="form-control codigoArt" id="codigoArt" name="codigoArt"  onkeypress={__ConsultarProductosCod} >
+                                    <input type="text" class="form-control codigoArt"  id="codigoArt" name="codigoArt"  onkeypress={__ConsultarProductosCod} >
                                 </div>
                                 <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                     <label  >{$.i18n.prop("articulo.descripcion")}</label>
@@ -632,7 +633,7 @@
         agregarInputsCombos_Articulo()
         __ListaFacturasEnEspera()
         __comboCondicionPago()
-        __ComboTipoDocumentos()
+        
        __Teclas()
        __TipoCambio()
        cargaBilletes()
@@ -642,6 +643,7 @@
        __ListaDeVendedores()
        __agregarArticulos()
        _Empresa()
+       
         $('.codigo').select()
         $(".codigo").focus()
         $(".nota").attr("maxlength", 80);
@@ -744,6 +746,7 @@ function _Empresa(){
                             self.campoTotales = "campoTotalesConBanco"
                         }
                        self.update()
+                       __ComboTipoDocumentos()
                     });
                 }
             }
@@ -1176,6 +1179,8 @@ Lista de articulos
 *  Buscar la Factura Pendiente en espera
 **/
 __CargarFacturaEspera(e){
+    self.factura =  e.item
+    self.update()
    __FacturaEnEspera(e.item)
 }
 /**
@@ -1280,51 +1285,6 @@ function __Init(){
     self.comboCondicionPagos        = []
     self.comboTipoDocumentos   = []
     self.facturas_espera       = {data:[]}  
-    self.factura                = {
-        id:null,
-	    fechaCredito:null,
-	    fechaEmision:null,
-	    condicionVenta:"",
-	    plazoCredito:0,
-	    tipoDoc:"",
-	    medioPago:"",
-	    nombreFactura:"",
-	    direccion:"",
-	    nota:"",
-	    comanda:"",
-	    subTotal:0,
-	    totalTransporte:0,
-	    total:0,
-	    totalServGravados:0,
-	    totalServExentos:0,
-	    totalMercanciasGravadas:0,
-	    totalMercanciasExentas:0,
-	    totalGravado:0,
-	    totalExento:0,
-	    totalVenta:0,
-	    totalDescuentos:0,
-	    totalVentaNeta:0,
-	    totalImpuesto:0,
-	    totalComprobante:0,
-	    totalEfectivo:0,
-        totalTarjeta:0,
-        totalCambioPagar:0,
-	    totalBanco:0,
-	    totalCredito:0,
-	    montoCambio:0,
-	    totalCambio:0,
-        totalCambioPagar:0,
-	    codigoMoneda:"",
-	    estado:1,
-	    cliente:{
-            id:null,
-            nombreCompleto:"",
-        },
-	    vendedor:{
-            id:null,
-            nombreCompleto:""
-        }
-    }                            
     self.item                  = null;
     self.articulo              = null;
     self.descripcionArticulo   = ""
@@ -1518,6 +1478,52 @@ function crearFactura(estado){
 **/
 function evaluarFactura(data){
     self.facturaImprimir =null
+     self.factura                = {
+        id:null,
+	    fechaCredito:null,
+	    fechaEmision:null,
+	    condicionVenta:"",
+	    plazoCredito:0,
+	    tipoDoc:"",
+	    medioPago:"",
+	    nombreFactura:"",
+	    direccion:"",
+	    nota:"",
+	    comanda:"",
+	    subTotal:0,
+	    totalTransporte:0,
+	    total:0,
+	    totalServGravados:0,
+	    totalServExentos:0,
+	    totalMercanciasGravadas:0,
+	    totalMercanciasExentas:0,
+	    totalGravado:0,
+	    totalExento:0,
+	    totalVenta:0,
+	    totalDescuentos:0,
+	    totalVentaNeta:0,
+	    totalImpuesto:0,
+	    totalComprobante:0,
+	    totalEfectivo:0,
+        totalTarjeta:0,
+        totalCambioPagar:0,
+	    totalBanco:0,
+	    totalCredito:0,
+	    montoCambio:0,
+	    totalCambio:0,
+        totalCambioPagar:0,
+	    codigoMoneda:"",
+	    estado:1,
+	    cliente:{
+            id:null,
+            nombreCompleto:"",
+        },
+	    vendedor:{
+            id:null,
+            nombreCompleto:""
+        }
+    }                            
+   
     self.update()
    if (data.message != null && data.message.length > 0) {
         $.each(data.listaObjetos, function( index, modeloTabla ) {
@@ -1656,7 +1662,7 @@ function mostrarPAgo(){
         return
     }
     if(self.vueltoImprimir == 0){
-        $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(3))
+        $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
         $('#totalTarjeta').val(null)
         $('#totalBanco').val(null)
         $('#totalBancoPantalla').val(null)
@@ -2174,6 +2180,8 @@ __removeProductFromDetail(e) {
             cont =  cont + 1
         })  
         self.numeroLinea =  cont
+    }else{
+      self.numeroLinea =  0  
     }
     self.update()
      __calculate();
@@ -2421,6 +2429,7 @@ function __calculate() {
     totalExento             = 0
     totalComprobante        = 0
     totalventaNeta          = 0
+    self.cantArticulos      = 0
     self.detail.forEach(function(e){
         totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.montoTotal:0
         totalMercanciasExentas  += e.impuesto == 0 && e.tipoImpuesto != "07"?e.montoTotal:0
@@ -2433,6 +2442,7 @@ function __calculate() {
         totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
         totalImpuesto           += e.montoImpuesto >0?e.montoImpuesto:0
         totalVenta              += e.montoTotal
+        self.cantArticulos      += esEntero(e.cantidad) == true? e.cantidad:1 
     });
     self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)
     self.factura.totalMercanciasExentas  = __valorNumerico(totalMercanciasExentas)
@@ -2457,6 +2467,20 @@ function __calculate() {
     $('.codigo').focus()
     getSubTotalGeneral()
 }
+
+function esEntero(numero){
+    if (isNaN(numero)){
+        return false
+    } else {
+        // es entero
+        if (numero % 1 == 0) {
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
 /**
 *  Sub Total Generar
 **/
@@ -2642,6 +2666,22 @@ function __comboCondicionPago(){
 function __ComboTipoDocumentos(){
     self.comboTipoDocumentos = []
     self.update()
+    //Prioridad de orden
+    if(self.empresa.prioridadFacturar == 1 ){
+        self.comboTipoDocumentos.push({
+            estado:"01",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
+        })
+        self.comboTipoDocumentos.push({
+            estado:"04",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
+        })
+        self.comboTipoDocumentos.push({
+            estado:"88",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
+        })
+
+    }else{
     self.comboTipoDocumentos.push({
         estado:"04",
         descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
@@ -2654,6 +2694,8 @@ function __ComboTipoDocumentos(){
          estado:"88",
         descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
     })
+
+    }
     self.update()
 }
 /**

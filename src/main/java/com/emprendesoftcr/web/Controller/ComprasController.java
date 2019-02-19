@@ -39,14 +39,15 @@ import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Compra;
+import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Empresa;
-import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.validator.CompraFormValidator;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.CompraEsperaCommand;
+import com.emprendesoftcr.web.command.DetalleCompraEsperaCommand;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.ProveedorPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
@@ -60,40 +61,48 @@ import com.google.common.base.Function;
 @Controller
 public class ComprasController {
 
-	private static final Function<Object, CompraEsperaCommand>	TO_COMMAND	= new Function<Object, CompraEsperaCommand>() {
+	private static final Function<Object, CompraEsperaCommand>		TO_COMMAND					= new Function<Object, CompraEsperaCommand>() {
 
-																																						@Override
-																																						public CompraEsperaCommand apply(Object f) {
-																																							return new CompraEsperaCommand((Compra) f);
-																																						};
-																																					};
+																																											@Override
+																																											public CompraEsperaCommand apply(Object f) {
+																																												return new CompraEsperaCommand((Compra) f);
+																																											};
+																																										};
 
-	@Autowired
-	private DataTableBo																					dataTableBo;
-	
-	@Autowired
-	private RecepcionFacturaBo recepcionFacturaBo;
+	private static final Function<Object, DetalleCompraEsperaCommand>	TO_COMMAND_DETALLE	= new Function<Object, DetalleCompraEsperaCommand>() {
 
-	@Autowired
-	private UsuarioBo																						usuarioBo;
-
-	@Autowired
-	private ProveedorBo																					proveedorBo;
+																																											@Override
+																																											public DetalleCompraEsperaCommand apply(Object f) {
+																																												return new DetalleCompraEsperaCommand((DetalleCompra) f);
+																																											};
+																																										};
 
 	@Autowired
-	private CompraBo																						compraBo;
+	private DataTableBo																						dataTableBo;
 
 	@Autowired
-	private EmpresaPropertyEditor																empresaPropertyEditor;
+	private RecepcionFacturaBo																		recepcionFacturaBo;
 
 	@Autowired
-	private ProveedorPropertyEditor															proveedorPropertyEditor;
+	private UsuarioBo																							usuarioBo;
 
 	@Autowired
-	private CompraFormValidator																	compraFormValidator;
+	private ProveedorBo																						proveedorBo;
 
 	@Autowired
-	private StringPropertyEditor																stringPropertyEditor;
+	private CompraBo																							compraBo;
+
+	@Autowired
+	private EmpresaPropertyEditor																	empresaPropertyEditor;
+
+	@Autowired
+	private ProveedorPropertyEditor																proveedorPropertyEditor;
+
+	@Autowired
+	private CompraFormValidator																		compraFormValidator;
+
+	@Autowired
+	private StringPropertyEditor																	stringPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -123,7 +132,7 @@ public class ComprasController {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			//compraFormValidator.validate(compraCommand, result);
+			// compraFormValidator.validate(compraCommand, result);
 			// if (result.hasErrors()) {
 			// return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			// }
@@ -139,18 +148,18 @@ public class ComprasController {
 					}
 				}
 			}
-			
-			if(compraCommand.getId() !=null) {
-				if(compraCommand.getId() > 0) {
+
+			if (compraCommand.getId() != null) {
+				if (compraCommand.getId() > 0) {
 					Compra combraVerificar = compraBo.findById(compraCommand.getId());
-					if(combraVerificar !=null) {
-						if(combraVerificar.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
+					if (combraVerificar != null) {
+						if (combraVerificar.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
 							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("compra.error.ya.se.encuentra.ingresada", result.getAllErrors());
 						}
 					}
 				}
 			}
-			
+
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
@@ -164,7 +173,7 @@ public class ComprasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
+
 	// Descarga de manuales de usuario de acuerdo con su perfil
 	@RequestMapping(value = "/DescargarComprasAceptadasAjax.do", method = RequestMethod.GET)
 	public void descargarComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor) throws IOException {
@@ -195,34 +204,33 @@ public class ComprasController {
 	private ByteArrayOutputStream createExcelRecepcionCompras(Collection<RecepcionFactura> recepcionFacturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Id","Fecha Ingreso", "Fecha Emision", "Clave","# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "# Factura", "Total Impuestos", "Total", "Tipo Moneda", "Tipo Cambio");
+		List<String> headers = Arrays.asList("Id", "Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "# Factura", "Total Impuestos", "Total", "Tipo Moneda", "Tipo Cambio");
 		new SimpleExporter().gridExport(headers, recepcionFacturas, "id, created_atSTR,fechaEmisionSTR,facturaClave, numeroConsecutivoReceptor, emisorCedula, emisorNombre, facturaConsecutivo, totalImpuestosSTR,totalFacturaSTR, facturaCodigoMoneda, facturaTipoCambio", baos);
 		return baos;
 	}
 
-	
-  /**
-   * Descargar Compras
-   * @param request
-   * @param response
-   * @param fechaInicioParam
-   * @param fechaFinParam
-   * @param idProveedor
-   * @throws IOException
-   */
+	/**
+	 * Descargar Compras
+	 * @param request
+	 * @param response
+	 * @param fechaInicioParam
+	 * @param fechaFinParam
+	 * @param idProveedor
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/DescargarComprasIngresadasAlmacenAjax.do", method = RequestMethod.GET)
 	public void descargarComprasIngresadasAlmacenAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Long idProveedor) throws IOException {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-    Proveedor proveedor = null;
-		if(idProveedor !=null) {
+		Proveedor proveedor = null;
+		if (idProveedor != null) {
 			proveedor = proveedorBo.buscar(idProveedor);
-			
+
 		}
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		Collection<Compra> compras = compraBo.findByFechaInicioAndFechaFinalAndProveedor(fechaInicio, fechaFin, usuario.getEmpresa(), proveedor) ;
+		Collection<Compra> compras = compraBo.findByFechaInicioAndFechaFinalAndProveedor(fechaInicio, fechaFin, usuario.getEmpresa(), proveedor);
 
 		String nombreArchivo = "comprasIngresadasAlmacen.xls";
 		response.setContentType("application/octet-stream");
@@ -243,12 +251,11 @@ public class ComprasController {
 	private ByteArrayOutputStream createExcelComprasIngresadasAlmacen(Collection<Compra> compras) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Id", "Fecha Ingreso", "# Documento Receptor", "Proveedor", "Total Impuestos", "Total","usuario");
+		List<String> headers = Arrays.asList("Id", "Fecha Ingreso", "# Documento Receptor", "Proveedor", "Total Impuestos", "Total", "usuario");
 		new SimpleExporter().gridExport(headers, compras, "id, fechaIngresoSTR,consecutivo, proveedorSTR, totalImpuestoSTR,totalCompraSTR,usuarioIngresoInventario.nombreUsuario ", baos);
 		return baos;
 	}
 
-	
 	/**
 	 * Lista las compras pendientes de ingresar al inventario
 	 * @param request
@@ -308,6 +315,20 @@ public class ComprasController {
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
+	}
+
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarDetlleByCompraAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idCompra) {
+
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "DetalleCompra");
+
+		JqGridFilter dataTableFilter = new JqGridFilter("compra.id", "'" + idCompra + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_DETALLE);
 	}
 
 	private static class DelimitadorBuilder {

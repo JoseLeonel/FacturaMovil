@@ -15,11 +15,9 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.DetalleDao;
 import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
-import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.TotalDetallesCommand;
 
 /**
@@ -69,11 +67,11 @@ public class DetalleDaoImpl implements DetalleDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin) {
+	public Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin,Empresa empresa) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from Detalle obj");
 		hql.append(" where obj.factura.estado = :estado ");
-		hql.append("and obj.factura.empresa = :empresa ");
+		hql.append("and obj.factura.empresa.id = :idEmpresa ");
 		
 		hql.append("and obj.factura.created_at >= :fechaInicio and obj.factura.created_at <= :fechaFin and obj.factura.referenciaCodigo != :referenciaCodigo");
 		Query query = entityManager.createQuery(hql.toString());
@@ -82,6 +80,7 @@ public class DetalleDaoImpl implements DetalleDao {
 		query.setParameter("referenciaCodigo", Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO);
 		query.setParameter("fechaInicio", fechaInicio);
 		query.setParameter("fechaFin", fechaFin);
+		query.setParameter("idEmpresa", empresa.getId());
 		return query.getResultList();
 	}
 	@Override

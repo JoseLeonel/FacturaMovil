@@ -109,13 +109,11 @@ public class Detalle implements Serializable {
 	private Double montoGanancia;
 
 	@ManyToOne
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "factura_id")
 	private Factura						factura;
 
 	@JsonIgnore
 	@ManyToOne
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "usuario_id")
 	private Usuario						usuario;
 

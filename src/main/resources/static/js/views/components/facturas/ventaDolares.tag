@@ -609,7 +609,7 @@
       //  }.bind(this), 45000)
 
         __comboCondicionPago()
-        __ComboTipoDocumentos()
+        
        __Teclas()
        __TipoCambio()
        cargaBilletes()
@@ -619,6 +619,7 @@
        __ListaDeVendedores()
        __agregarArticulos()
        _Empresa()
+       
         $('.codigo').select()
         $(".codigo").focus()
         $(".nota").attr("maxlength", 80);
@@ -694,6 +695,7 @@ function _Empresa(){
                        self.vueltoImprimir = modeloTabla.vueltoImprimir
                        self.update()
                     });
+                    __ComboTipoDocumentos()
                 }
             }
             
@@ -1077,6 +1079,8 @@ Lista de articulos
 *  Buscar la Factura Pendiente en espera
 **/
 __CargarFacturaEspera(e){
+    self.factura = e.item
+    self.update()
    __FacturaEnEspera(e.item)
 }
 /**
@@ -1173,14 +1177,7 @@ function __Init(){
      self.pesoPrioridad =  0
      self.numeroLinea =0
      self.cantArticulos =0
-    self.mostrarListadoArticulos == false
-    self.detail                = []
-    self.mensajesBackEnd       = []
-    self.error                 = false
-    self.comboCondicionPagos        = []
-    self.comboTipoDocumentos   = []
-    self.facturas_espera       = {data:[]}  
-    self.factura                = {
+     self.factura                = {
         id:null,
 	    fechaCredito:null,
 	    fechaEmision:null,
@@ -1224,7 +1221,15 @@ function __Init(){
             id:null,
             nombreCompleto:""
         }
-    }                            
+    }
+    self.mostrarListadoArticulos == false
+    self.detail                = []
+    self.mensajesBackEnd       = []
+    self.error                 = false
+    self.comboCondicionPagos        = []
+    self.comboTipoDocumentos   = []
+    self.facturas_espera       = {data:[]}  
+    
     self.item                  = null;
     self.articulo              = null;
     self.descripcionArticulo   = ""
@@ -2606,6 +2611,22 @@ function __comboCondicionPago(){
 function __ComboTipoDocumentos(){
     self.comboTipoDocumentos = []
     self.update()
+     //Prioridad de orden
+    if(self.empresa.prioridadFacturar == 1 ){
+        self.comboTipoDocumentos.push({
+            estado:"01",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
+        })
+        self.comboTipoDocumentos.push({
+            estado:"04",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
+        })
+        self.comboTipoDocumentos.push({
+            estado:"88",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
+        })
+
+    }else{
     self.comboTipoDocumentos.push({
         estado:"04",
         descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
@@ -2618,6 +2639,8 @@ function __ComboTipoDocumentos(){
          estado:"88",
         descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
     })
+
+    }
     self.update()
 }
 

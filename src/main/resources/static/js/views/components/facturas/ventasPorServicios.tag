@@ -250,24 +250,30 @@
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("cliente.lista")}   </h4>
             </div>
             <div class="modal-body">
-                <table id="tableListaCliente" class="table responsive display table-striped table-hover nowrap tableListaCliente " cellspacing="0" width="100%">
-                   <thead>
-                        <th class="table-header">{$.i18n.prop("cliente.cedula")}            </th>
-                        <th class="table-header">{$.i18n.prop("cliente.nombreCompleto")}    </th>
-                        <th class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
-                        <th class="table-header">{$.i18n.prop("cliente.telefono")}          </th>
-                        <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
-                    </thead>
-                    <tfoot style="display: table-header-group;">
-                        <tr>
-                            <th>{$.i18n.prop("cliente.cedula")}           </th>
-                            <th>{$.i18n.prop("cliente.nombreCompleto")}   </th>
-                            <th>{$.i18n.prop("cliente.correoElectronico")}</th>
-                            <th>{$.i18n.prop("cliente.telefono")}         </th>
-                            <th>                                          </th>
-                        </tr>
-                    </tfoot>                    
-                </table>
+                <div class="row">
+                     <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12 ">
+                        <table id="tableListaCliente" class="table responsive display table-striped table-hover nowrap tableListaCliente " cellspacing="0" width="100%">
+                        <thead>
+                                <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
+                                <th class="table-header">{$.i18n.prop("cliente.cedula")}            </th>
+                                <th class="table-header">{$.i18n.prop("cliente.nombreCompleto")}    </th>
+                                <th class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
+                                <th class="table-header">{$.i18n.prop("cliente.telefono")}          </th>
+                                
+                            </thead>
+                            <tfoot style="display: table-header-group;">
+                                <tr>
+                                    <th>                                          </th>
+                                    <th>{$.i18n.prop("cliente.cedula")}           </th>
+                                    <th>{$.i18n.prop("cliente.nombreCompleto")}   </th>
+                                    <th>{$.i18n.prop("cliente.correoElectronico")}</th>
+                                    <th>{$.i18n.prop("cliente.telefono")}         </th>
+                                    
+                                </tr>
+                            </tfoot>                    
+                        </table>
+                    </div>
+                </div>        
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
@@ -1064,15 +1070,16 @@ function __ListaDeClientes(){
 **/
 function __informacionData(){
     self.informacion_tabla_clientes = [	
-                                        {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false},
-                                        {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("cliente.nombreCompleto")    ,"autoWidth":false},
-                                        {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("cliente.correoElectronico") ,"autoWidth":false},
-                                        {'data' : 'telefono'         ,"name":"telefono"          ,"title" : $.i18n.prop("cliente.telefono")          ,"autoWidth":false},                                
                                         {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
 									            "render":function(id,type, row){
 										            return __Opcionesclientes(id,type,row);
 	 							                }	 
 								            },
+                                        {'data' : 'cedula'           ,"name":"cedula"            ,"title" : $.i18n.prop("cliente.cedula")            ,"autoWidth":false},
+                                        {'data' : 'nombreCompleto'   ,"name":"nombreCompleto"    ,"title" : $.i18n.prop("cliente.nombreCompleto")    ,"autoWidth":false},
+                                        {'data' : 'correoElectronico',"name":"correoElectronico" ,"title" : $.i18n.prop("cliente.correoElectronico") ,"autoWidth":false},
+                                        {'data' : 'telefono'         ,"name":"telefono"          ,"title" : $.i18n.prop("cliente.telefono")          ,"autoWidth":false},                                
+                                       
                                         ];                              
    
 }
@@ -1098,6 +1105,7 @@ function __seleccionarClientes() {
 	     }
         self.cliente = data
         self.update();
+         $('#modalClientes').modal('hide') 
     });
 }
 /**
@@ -1108,7 +1116,7 @@ function agregarInputsCombos_Clientes(){
     $('.tableListaCliente tfoot th').each( function (e) {
         var title = $('.tableListaCliente thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 6    ){
+        if ( $(this).index() != 0    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
@@ -1135,22 +1143,17 @@ function __comboCondicionPago(){
 function __ComboTipoDocumentos(){
     self.comboTipoDocumentos = []
     self.update()
-    self.comboTipoDocumentos.push({
-        estado:"04",
-        descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
-    })
-    self.comboTipoDocumentos.push({
-         estado:"01",
-        descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
-    })
-    self.comboTipoDocumentos.push({
-         estado:"02",
-        descripcion:$.i18n.prop("factura.tipo.documento.nota.debito")
-    })
-    self.comboTipoDocumentos.push({
-         estado:"03",
-        descripcion:$.i18n.prop("factura.tipo.documento.nota.credito")
-    })
+        self.comboTipoDocumentos.push({
+            estado:"01",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
+        })
+        self.comboTipoDocumentos.push({
+            estado:"04",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
+        })
+  
+    
+    
     
     self.update()
 }

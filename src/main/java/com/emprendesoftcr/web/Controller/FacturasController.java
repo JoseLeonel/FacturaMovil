@@ -38,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
@@ -147,10 +146,26 @@ public class FacturasController {
 																																																			facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
 																																																			facturaElectronica.set_nota(d.getNota() == null ? Constantes.EMPTY : d.getNota());
 																																																			facturaElectronica.setClienteNombre(d.getCliente().getNombreCompleto());
+																																																			if(d.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_FRECUENTE)) {
+																																																				if(d.getNombreFactura() !=null) {
+																																																					if(!d.getNombreFactura().equals(Constantes.EMPTY)) {
+																																																						facturaElectronica.setClienteNombre(d.getNombreFactura());
+																																																					}
+																																																				}
+																																																			}
 																																																			facturaElectronica.setClienteNombreComercial(d.getCliente().getNombreComercial());
 																																																			facturaElectronica.setClienteCorreo(d.getCliente().getCorreoElectronico());
+																																																			
 																																																			facturaElectronica.setClienteCedula(d.getCliente().getCedula());
-																																																			facturaElectronica.setClienteTelefono(d.getCliente().getTelefono() != null ? d.getCliente().getTelefono().toString() : Constantes.EMPTY);
+																																																			if(d.getCliente().getTelefono() != null ) {
+																																																				if(d.getCliente().getTelefono() != Constantes.ZEROS ) {
+																																																					facturaElectronica.setClienteTelefono(d.getCliente().getTelefono().toString());  		
+																																																				}else {
+																																																					facturaElectronica.setClienteTelefono(Constantes.EMPTY);
+																																																				}
+																																																			}
+																																																			
+																																																			
 																																																			facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
 																																																			facturaElectronica.set_logo(d.getEmpresa().getLogo());
 																																																			facturaElectronica.set_clienteDireccion(d.getDireccion());

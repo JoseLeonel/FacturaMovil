@@ -43,6 +43,9 @@ EventoFiltro();
 __imprimirPTV();
 __BajarPDF();
 __CambiarEstado()
+__VerDetalle()
+__EnviarCorreosCliente()
+__CorreoAlternativo()
 
 }
 /**
@@ -251,22 +254,22 @@ function __CorreoAlternativo(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        self.factura = data
-        self.update()
-        $('.correoAlternativo').val(null)
-        
-        $('#ModalCorreoAlternativo').modal({
-            backdrop: 'static',
-            keyboard: false
-        })
-        $('#ModalCorreoAlternativo').modal('show')      
+        riot.compile(function() {
+			var parametros = {
+				tipoEjecucion:3,
+				data:data
+			};
+			 // here tags are compiled and riot.mount works synchronously
+			  var tags = riot.mount('lista-proformas',{parametros:parametros});
+		});  
+          
 	});
 }
 
 /**
  * Envio del correo al emisor y receptor
  */
-function __EnviarCorreos(){
+function __EnviarCorreosCliente(){
 	$('.tableListar').on('click','.btnEnvioCorreoCliente',function(e){
 		var table = $('#tableListar').DataTable();
 		if(table.row(this).child.isShown()){
@@ -275,38 +278,20 @@ function __EnviarCorreos(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        self.factura = data
-        self.update()
-        enviarCorreoAlternativo();
+        riot.compile(function() {
+			var parametros = {
+				tipoEjecucion:2,
+				data:data
+			};
+			 // here tags are compiled and riot.mount works synchronously
+			  var tags = riot.mount('lista-proformas',{parametros:parametros});
+		});  
+        
         
 	});
 }
 
-/**
-* Enviar correo
-**/
-function enviarCorreoAlternativo(){
-    $.ajax({
-        url: "EnviarCorreoAlternativoProformaAjax.do",
-        datatype: "json",
-        data: {idFactura:self.factura.id,correo:$('.correoAlternativo').val()},
-        method:"GET",
-        success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
-                }
-            }else{
-                sweetAlert("", data.message, "info");
-            }
-            
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            console.log(xhr);
-        }
-    });
-}
+
 
 
 /**
@@ -321,11 +306,15 @@ function __VerDetalle(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        self.factura = data
-        self.mostrarListado        = false
-        self.mostrarDetalle        = true
-        self.update()
-        __FacturaEnEspera(self.factura)
+        $("#mostrarListado").hide();
+        riot.compile(function() {
+			var parametros = {
+				tipoEjecucion:1,
+				data:data
+			};
+			 // here tags are compiled and riot.mount works synchronously
+			  var tags = riot.mount('lista-proformas',{parametros:parametros});
+		});  
 	});
 }
 
@@ -385,5 +374,11 @@ function mostrarListadoPrincipal(){
 	$("#mostrarListado").show();
 	var table = $('#tableListar').DataTable();
 	table.ajax.reload();
+}
+
+function mostrarListadoPrincipalSinActualizar(){
+	$("#mostrarListado").show();
+	var table = $('#tableListar').DataTable();
+	
 }
 

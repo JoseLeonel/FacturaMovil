@@ -2303,9 +2303,8 @@ function __ListaDeArticulosPorDescripcion(){
 **/
 __CargarFacturaEspera(e){
     self.pendientesComanda     = []
-    self.update()
-	
     self.factEspera = e.item
+    self.factura = e.item
     self.update()
     if(self.factura.id !=null){
       if(self.seIncluyoUnArticulo !=null){
@@ -3751,6 +3750,18 @@ function __comboCondicionPago(){
 function __ComboTipoDocumentos(){
     self.comboTipoDocumentos = []
     self.update()
+     //Prioridad de orden
+    if(self.empresa.prioridadFacturar == 1 ){
+        self.comboTipoDocumentos.push({
+            estado:"01",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
+        })
+        self.comboTipoDocumentos.push({
+            estado:"04",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
+        })
+ 
+    }else{
     self.comboTipoDocumentos.push({
         estado:"04",
         descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
@@ -3759,6 +3770,9 @@ function __ComboTipoDocumentos(){
          estado:"01",
         descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
     })
+ 
+
+    }
     self.update()
 }
 /**
@@ -4288,7 +4302,8 @@ function __EnviarCocina(){
 	        },
 	        error: function (xhr, status) {
 	            console.log(xhr);
-	            mensajeErrorServidor(xhr, status);
+                console.log(status);
+	            //mensajeErrorServidor(xhr, status);
 	        }
 	    });		
 	}
@@ -4806,6 +4821,7 @@ function _Empresa(){
                        }
                        self.update()
                     });
+                    __ComboTipoDocumentos()
                 }
             }
         },

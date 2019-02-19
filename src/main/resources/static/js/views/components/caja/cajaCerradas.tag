@@ -392,7 +392,7 @@
 
 <script>
     var self = this;
-     self.parametros          = opts.parametros;  
+    self.parametros          = opts.parametros;  
     self.idiomaDataTable           = []         // idioma de la datatable nuevo
     self.formato_tabla             = []         // Formato del Listado de la Tabla 
     self.cajas                  = {aaData:[]}
@@ -419,7 +419,7 @@ self.on('mount',function(){
     __listadoCajasActivas()
     //__VerDetalleFacturaXCaja
     if(self.parametros.tipoEjecucion == 1){
-        __facturasXCajas()
+        __facturasXCajas() 
     }
     //__VerDetalle
     if(self.parametros.tipoEjecucion == 2){

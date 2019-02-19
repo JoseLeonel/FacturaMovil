@@ -1179,7 +1179,7 @@ function __ComboContables(){
     self.update()
     self.contables.push({
         codigo: $.i18n.prop("boolean.no"),
-        descripcion: $.i18n.prop("boolean.no")
+        descripcion: $.i18n.prop("boolean.no") 
      });
     self.contables.push({
         codigo: $.i18n.prop("boolean.si"),

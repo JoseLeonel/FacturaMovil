@@ -765,27 +765,15 @@ function __CompraEnEspera(compra){
     self.proveedor      = null         
     self.update()
     $.ajax({
-        url: "MostrarCompraEsperaAjax",
+        url: "ListarDetlleByCompraAjax.do",
         datatype: "json",
-        data: {id:compra.id},
+        data: {idCompra:compra.id},
         method:"POST",
         success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                       self.compra = modeloTabla
-                       self.compra.fechaCompra = __displayDate_detail(self.compra.fechaCompra)
-                       self.compra.fechaCredito = self.compra.fechaCredito !=null?__displayDate_detail(self.compra.fechaCredito):null
-                       self.proveedor = modeloTabla.proveedor
-                       self.update()
-                    });
-                }
-                cargarDetallesCompraEnEspera()
+             if(data.aaData.length > 0){
+               cargarDetallesCompraEnEspera(data.aaData)
             }
+            
         },
         error: function (xhr, status) {
             mensajeErrorServidor(xhr, status);
@@ -804,27 +792,35 @@ function __displayDate_detail(fecha) {
 /**
 *  Cargar detalles Compra Espera
 **/
-function cargarDetallesCompraEnEspera(){
+function cargarDetallesCompraEnEspera(data){
     self.detail = [];
     self.numeroLinea =  0
     self.pesoPrioridad = 0
+    self.compra = null
     self.update()
-    self.compra.detalleCompras.forEach(function(e){
+     $.each(data, function( index, modeloTabla ) {
+        if(self.compra == null){
+            self.compra = modeloTabla.compra
+            self.compra.fechaCompra = __displayDate_detail(self.compra.fechaCompra)
+            self.compra.fechaCredito = self.compra.fechaCredito !=null?__displayDate_detail(self.compra.fechaCredito):null
+            self.proveedor = modeloTabla.compra.proveedor
+            self.update()
+        }
         self.detail.push({
-            numeroLinea     : e.numeroLinea,
-            pesoPrioridad    :e.numeroLinea,
-            articulo_id     : e.articulo.id,
-            codigo          : e.articulo.codigo,
-            descripcion     : e.articulo.descripcion,
-            cantidad        : parseFloat(e.cantidad),
-            costo           : parseFloat(e.costo),
-            precio          : parseFloat(e.precio),
-            impuesto        : e.impuesto,
-            descuento       : e.descuento,
-            totalDescuento  : e.totalDescuento,
-            totalImpuesto   : e.totalImpuesto,
-            subTotal        : parseFloat(e.subTotal),
-            montoTotalLinea : e.montoTotalLinea
+            numeroLinea     : modeloTabla.numeroLinea,
+            pesoPrioridad    :modeloTabla.numeroLinea,
+            articulo_id     : modeloTabla.articulo.id,
+            codigo          : modeloTabla.articulo.codigo,
+            descripcion     : modeloTabla.articulo.descripcion,
+            cantidad        : parseFloat(modeloTabla.cantidad),
+            costo           : parseFloat(modeloTabla.costo),
+            precio          : parseFloat(modeloTabla.precio),
+            impuesto        : modeloTabla.impuesto,
+            descuento       : modeloTabla.descuento,
+            totalDescuento  : modeloTabla.totalDescuento,
+            totalImpuesto   : modeloTabla.totalImpuesto,
+            subTotal        : parseFloat(modeloTabla.subTotal),
+            montoTotalLinea : modeloTabla.montoTotalLinea
         });
         self.numeroLinea = self.numeroLinea + 1
         self.cantArticulos = self.cantArticulos + 1

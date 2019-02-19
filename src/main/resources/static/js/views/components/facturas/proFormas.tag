@@ -1,16 +1,5 @@
 <lista-proformas>
-   <!-- Titulos -->
-    <div  class="row " show="mostrarListado" >
-        <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <h1><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("facturas.proformas")} </h1>
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
-        </div>
-    </div>
-    <br>
   
-
-    <br>
   
 
 
@@ -624,6 +613,7 @@
 
 <script>
 self = this
+self.parametros            = opts.parametros;  
 self.detail                = []
 self.totalDescuentos       = 0
 self.totalImpuestos        = 0
@@ -633,19 +623,76 @@ self.mostrarDetalle        = false
 self.on('mount',function(){
     $("#formulario").validate(reglasDeValidacionCorreo());
  
-    sumar()
+     //__VerDetalle
+    if(self.parametros.tipoEjecucion == 1){
+        __MostrarFactura()
+    }
+    //__Enviar Correo
+    if(self.parametros.tipoEjecucion == 2){
+        __Correos()
+    }
+     //__Enviar Correo
+    if(self.parametros.tipoEjecucion == 3){
+        __CorreoAlternativoAlCliente()
+    }
  
 })
-/**
-*  imprimir impresora punto de venta
-**/
-function __imprimir(){
-    self.factura = data
-        self.update()
-        riot.mount('proforma-imprimir',{factura:self.factura});    
 
+/**
+*  Enviar a correo alternativo
+**/
+function __CorreoAlternativoAlCliente(){
+    self.factura = self.parametros.data
+    self.update()
+    $('.correoAlternativo').val(null)
+    $('#ModalCorreoAlternativo').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
+    $('#ModalCorreoAlternativo').modal('show')      
 }
 
+function __MostrarFactura(){
+    self.factura = self.parametros.data
+    self.mostrarListado        = false
+    self.mostrarDetalle        = true
+    self.update()
+    __FacturaEnEspera(self.factura)
+}
+/**
+ * Envio del correo al emisor y receptor
+ */
+function __Correos(){
+    self.factura = self.parametros.data
+    self.update()
+    enviarCorreoAlternativo();
+}
+
+/**
+* Enviar correo
+**/
+function enviarCorreoAlternativo(){
+    $.ajax({
+        url: "EnviarCorreoAlternativoProformaAjax.do",
+        datatype: "json",
+        data: {idFactura:self.factura.id,correo:$('.correoAlternativo').val()},
+        method:"GET",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                sweetAlert("", data.message, "info");
+            }
+            
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
+        }
+    });
+}
 
 
 /**
@@ -735,7 +782,7 @@ __regresarAlListado(){
     self.mostrarListado        = true
     self.mostrarDetalle        = false
     self.update()
-    __listado();
+    mostrarListadoPrincipalSinActualizar()
 
 }
 /**

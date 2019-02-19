@@ -83,12 +83,12 @@ public class DetalleCompra implements Serializable {
 	private Date							updated_at;
 
 	@JsonIgnore
-	@ManyToOne(fetch =FetchType.LAZY)
+	@ManyToOne()
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "compra_id", nullable = false)
 	private Compra						compra;
 
-	@ManyToOne(fetch =FetchType.LAZY)
+	@ManyToOne()
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "articulo_id", nullable = false)
 	private Articulo					articulo;

@@ -73,6 +73,9 @@ public class EmpresaCommand {
 	private Integer separarCuenta;
 	
 	private Integer pantChino;
+	
+	private Integer						prioridadFacturar;
+	
 
 	public EmpresaCommand(Empresa empresa) {
 		super();
@@ -120,6 +123,7 @@ public class EmpresaCommand {
 		this.impresoraFactura = empresa.getImpresoraFactura();
 		this.separarCuenta = empresa.getSepararCuenta();
 		this.pantChino = empresa.getPantChino();
+		this.prioridadFacturar = empresa.getPrioridadFacturar();
 	}
 
 	public EmpresaCommand() {
@@ -447,5 +451,16 @@ public class EmpresaCommand {
 	public void setSepararCuenta(Integer separarCuenta) {
 		this.separarCuenta = separarCuenta;
 	}
+
+	
+	public Integer getPrioridadFacturar() {
+		return prioridadFacturar;
+	}
+	
+	public void setPrioridadFacturar(Integer prioridadFacturar) {
+		this.prioridadFacturar = prioridadFacturar;
+	}
+	
+	
 
 }

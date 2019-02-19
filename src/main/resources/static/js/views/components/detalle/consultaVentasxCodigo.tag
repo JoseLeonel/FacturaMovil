@@ -1,40 +1,6 @@
 <ventas-detalles>
 
-  <!-- Modal correo alternativo-->
-	<div class="modal fade" id="ModalCorreoAlternativo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	          
-	                <h1 class="box-title"><i class="btn-correo"></i>&nbsp {$.i18n.prop("hacienda.titulo.correo.alternativo")}     </h1>
-	          
-	      </div>
-	      <div class="modal-body">
-	        <form id = "formulario" name ="formulario "   class="advanced-search-form">
-	            <div class="row">   
-	                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-	                    <label class="knob-label" >{$.i18n.prop("hacienda.correo")}</label>
-	                    <input type="email" class="form-control correoAlternativo" placeHolder ="{$.i18n.prop("hacienda.correo.ejemplo")}" id="correoAlternativo" name="correoAlternativo" value=""  >
-	                </div>
-	            </div>
-	        </form>
-	      </div>
-	      <div class="modal-footer">
-	        <div class="row">
-	            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-	                <button onclick ={__regresarAlListadoAlternativo}  type="button" class="btn-dark-gray btn-back  pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-	                    {$.i18n.prop("btn.volver")}
-	                </button>
-	            </div>
-	            <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-	                <button  onclick={__EnviarCorreoAlternativo}   class="btn-green btn-correo pull-right" >  {$.i18n.prop("btn.enviar.correo")}</button>
-	            </div>
-	         </div>		       
-	      </div>
-	    </div>
-	  </div>
-	</div>
-    
+  
 
 
 <!--fin del modal-->
@@ -143,8 +109,6 @@
             </div>   
 	        <div class="col-md-12 col-lg-12 col-sm-12">
 				<a class="fa fa-download" target="_blank" title="Descargar detalle transacciones" href="DescargarDetallexCodigoAjax.do?fechaInicialParam={fechaInicio}&fechaFinalParam={fechaFin}"> Descargar</a>        
-		        <button onclick ={__EnviarCorreoEmpresa}   type="button" class="btn btn-success btnBusquedaAvanzada" title="Enviar corre de la empresa" name="button"> Empresa  <i class="fa fa-envelope"></i></button>
-		        <button onclick ={__CorreoAlternativo} type="button" class="btn btn-success btnBusquedaAvanzada" title="Correo alternativo" name="button" >  Alternativo  <i class="fa fa-envelope"></i></button>
 	        </div>
         </div>
         <div class="col-md-2 col-lg-2 col-sm-2"></div>
@@ -535,80 +499,6 @@ self.on('mount',function(){
    
 })
 
-/**
-		*  Busqueda de la informacion y la envia por correo
-		**/
-		function __EnviarPorCorreo(){
-		    if ($("#filtros").valid()) {
-		        var parametros = {
-		        	correoAlternativo:$('#correoAlternativo').val(),		
-		        	fechaInicioParam:$('#fechaInicial').val(),
-		        	fechaFinParam:$('#fechaFinal').val(),
-		        };
-		        $.ajax({
-		            url: "EnvioDetalleFacturasXCodigoCorreoAjax.do",
-		            datatype: "json",
-		            data:parametros ,
-		            method:"POST",
-		            success: function (data) {
-					    self.update();
-			        },
-			        error: function (xhr, status) {
-			            console.log(xhr);
-			            mensajeErrorServidor(xhr, status);
-			        }
-		        });
-		 	}		
-		}
-
-__CorreoAlternativo(){
-			$('#correoAlternativo').val(null);
-		    $('#ModalCorreoAlternativo').modal({
-			    backdrop: 'static',
-		        keyboard: false
-		    });
-		    $('#ModalCorreoAlternativo').modal('show');      
-		}
-
-		/**
-		* Enviar el correo
-		**/
-		__EnviarCorreoAlternativo(){
-		     if ($("#formulario").valid()) {
-		    	 __EnviarPorCorreo()
-		     }
-		}
-		
-		__EnviarCorreoEmpresa(){
-		   	 __EnviarPorCorreo()
-		}
-		
-		/**
-		*  Regresar al listado
-		**/
-		__regresarAlListadoAlternativo(){
-		    $('#ModalCorreoAlternativo').modal('hide')
-		}
-		
-		/**
-		* Camps requeridos
-		**/
-		var reglasDeValidacionCorreo = function() {
-			var validationOptions = $.extend({}, formValidationDefaults, {
-				rules : {
-					correoAlternativo : {
-						required : true,
-		                email:true,
-		                maxlength:240,
-		                minlength:1,
-					}                                   
-		                        
-				},
-				ignore : []
-
-			});
-			return validationOptions;
-		};
 
 /**
 * Camps requeridos
