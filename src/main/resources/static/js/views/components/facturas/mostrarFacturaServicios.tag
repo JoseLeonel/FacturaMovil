@@ -11,17 +11,14 @@
              
             <section class="zona-impresion" >
                 <div class="forma-impresion" id="imprimeme" name ="imprimeme">
-                    <div class="ticket" id="ticket" name="ticket" >
-                        <h2>{titulo}<h2>   
+                    <div class="ticket" id="ticket" name="ticket" > 
+                        <div class="encabezado"><strong> {documentoElectronico} </strong><br></div>
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc == '88'}"><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.id}                       </strong><br></div>
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc == '87'}"><strong> {$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")} {facturaImpresa.id}                       </strong><br></div>
                         <div class="encabezado"><strong> {facturaImpresa.empresa.nombreComercial}                        </strong><br></div>
                         <div class="encabezado"><strong> {facturaImpresa.empresa.nombre}                        </strong><br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.cedula")}       </strong>{facturaImpresa.empresa.cedula}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.telefono")}     </strong>{facturaImpresa.empresa.telefono}<br></div>
-                        <div class="encabezado">{facturaImpresa.empresa.otraSenas}                        <br></div>
-                        <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.fecha.emision")} </strong>{facturaImpresa.fechaEmisionSTR}</div>
-                        <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.condicion.venta")} </strong>{facturaImpresa.condicionVenta}</div>
+                        <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.cedula")}  </strong>{facturaImpresa.empresa.cedula} <strong>{$.i18n.prop("tikect.encabezado.telefono")}</strong> {facturaImpresa.empresa.telefono}</strong><br></div>                        <div class="encabezado">{facturaImpresa.empresa.otraSenas}                        <br></div>
+                        <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.fecha.emision")} </strong>{facturaImpresa.fechaEmisionSTR} <strong>{$.i18n.prop("tikect.encabezado.condicion.venta")} </strong>{facturaImpresa.condicionVenta}</div>
                         <div class="encabezado" show ="{facturaImpresa.plazoCredito > 0}"><strong>{$.i18n.prop("tikect.encabezado.plazo.credito")} dias </strong>{facturaImpresa.plazoCredito}</div>
                         <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 0}"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>{facturaImpresa.tipoDoc}</div>
                         <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc == '02' }"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>Nota Debito</div>
@@ -401,6 +398,8 @@ function consultaFactura(idFactura){
                 self.totalImpuestoServicioSTR =  formatoDecimales(self.totalImpuestoServicio,2)  
                 self.update()
                 getMoneda()
+                _VersionTiquete()
+                getMedioPago()
                 __ComboTipoDocumentos()
                 buscarTipoDocumento()
                 __comboCondicionPago()
@@ -426,6 +425,36 @@ function consultaFactura(idFactura){
     });
      
 }
+
+function _VersionTiquete(){
+
+    if(self.facturaImpresa.tipoDoc == "01"){
+       self.documentoElectronico = $.i18n.prop("documento.electronico.factura");
+    }else if(self.facturaImpresa.tipoDoc == "02"){
+        self.documentoElectronico = $.i18n.prop("documento.electronico.nota.debito");
+    }else if(self.facturaImpresa.tipoDoc == "03"){
+        self.documentoElectronico = $.i18n.prop("documento.electronico.nota.credito");
+    }else if(self.facturaImpresa.tipoDoc == "04"){
+        self.documentoElectronico = $.i18n.prop("documento.electronico.tiquete");
+    }
+    self.update()
+
+}
+
+function getMedioPago() {
+
+	if(self.facturaImpresa.medioEfectivo == "01") {
+		self.facturaImpresa.medioEfectivo = $.i18n.prop("medio.pago.efectivo");
+	}
+    if(self.facturaImpresa.medioTarjeta == "02") {
+		self.facturaImpresa.medioTarjeta = $.i18n.prop("medio.pago.tarjeta");
+	}
+    if(self.facturaImpresa.medioBanco == "04") {
+	  self.facturaImpresa.medioBanco  = $.i18n.prop("medio.pago.transferencia");
+	}
+   self.update()
+}
+
 function getMoneda() {
 	var resultado = "CRC-Colones Costa Rica";
 	if(self.facturaImpresa.codigoMoneda == "CRC") {
