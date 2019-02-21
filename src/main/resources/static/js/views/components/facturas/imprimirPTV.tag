@@ -9,21 +9,23 @@
                 <h2 >{titulo}</h2>
                 <div class="pantalla-imprimir">
                     <div class="botones-imprimir">
-                        <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
+                        <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa}  ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
                     
                     </div>
                     <section class="" >
                         <div class="forma-impresion " id="imprimeme" name ="imprimeme">
                             <div class="ticket" id="ticket" name="ticket" > 
+                                <div class="encabezado"><strong> {documentoElectronico} </strong><br></div>
                                 <div class="encabezado" show = "{facturaImpresa.tipoDoc == '88'}"><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.id}                       </strong><br></div>
                                 <div class="encabezado" show = "{facturaImpresa.tipoDoc == '87'}"><strong> {$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")} {facturaImpresa.id}                       </strong><br></div>
                                 <div class="encabezado"><strong> {facturaImpresa.empresa.nombreComercial}                        </strong><br></div>
                                 <div class="encabezado"><strong> {facturaImpresa.empresa.nombre}                        </strong><br></div>
-                                <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.cedula")}       </strong>{facturaImpresa.empresa.cedula}<br></div>
-                                <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.telefono")}     </strong>{facturaImpresa.empresa.telefono}<br></div>
-                                <div class="encabezado">{facturaImpresa.empresa.otraSenas}                        <br></div>
-                                <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.fecha.emision")} </strong>{facturaImpresa.fechaEmisionSTR}</div>
+                                <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.cedula")}  </strong>{facturaImpresa.empresa.cedula} <strong>{$.i18n.prop("tikect.encabezado.telefono")}</strong> {facturaImpresa.empresa.telefono}</strong><br></div>
+                                <div class="encabezado" show = {facturaImpresa.empresa.correoElectronico != ""} >{facturaImpresa.empresa.correoElectronico}                        <br></div>
+                                <div class="encabezado">{facturaImpresa.empresa.otraSenas} <br></div>
+                                <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.fecha.emision")} </strong>{facturaImpresa.fechaEmisionSTR} </div>
                                 <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.condicion.venta")} </strong>{facturaImpresa.condicionVenta}</div>
+                                <div class="encabezado"><strong>{$.i18n.prop("factura.medioPago")} </strong>{facturaImpresa.medioEfectivo} {facturaImpresa.medioTarjeta} {facturaImpresa.medioBanco}</div>
                                 <div class="encabezado" show ="{facturaImpresa.plazoCredito > 0}"><strong>{$.i18n.prop("tikect.encabezado.plazo.credito")} dias </strong>{facturaImpresa.plazoCredito}</div>
                                 <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 0}"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>{facturaImpresa.tipoDoc}</div>
                                 <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc == '02' }"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>Nota Debito</div>
@@ -37,6 +39,9 @@
                                 <div class="encabezado" show ="{facturaImpresa.nombreFactura != "" || facturaImpresa.nombreFactura ==null }"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.nombreFactura}</div>
                                 <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == "" }"><strong show={facturaImpresa.cliente.nombreCompleto != 'CLIENTE_FRECUENTE'}>{$.i18n.prop("tikect.encabezado.receptor")}     {facturaImpresa.cliente.nombreCompleto}</strong ></div>
                                 <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == ""}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}>{$.i18n.prop("tikect.encabezado.receptor.cedula")}  {facturaImpresa.cliente.cedula}   </strong></div>
+                                <div class="encabezado" show ="{facturaImpresa.cliente.cedula != '999999999999'}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}> {facturaImpresa.cliente.correoElectronico}   </strong></div>
+                                <div class="encabezado" show ="{facturaImpresa.cliente.correoAlternativo != ''}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}> {facturaImpresa.correoAlternativo}   </strong></div>
+                                <div class="encabezado" show ="{facturaImpresa.referenciaNumero != ''}"><strong > {$.i18n.prop("informacion.numero.referencia")} {facturaImpresa.referenciaNumero}   </strong></div>
                                 <div class="encabezado" show ='{ facturaImpresa.nota != "" && facturaImpresa.nota !=null}'> Nota:   {facturaImpresa.nota}  </div>
                                 <table class = "forma-table">
                                     <thead>
@@ -395,8 +400,8 @@ function qr(){
         mode: 0,
 
         mSize: 0.1,
-        mPosX: 0.5,
-        mPosY: 0.5,
+        mPosX: 2.5,
+        mPosY: 2.5,
 
         label: self.parametro.factura.clave,
         fontname: 'sans',
@@ -453,10 +458,12 @@ function consultaFactura(idFactura){
                    self.totalImpuestoServicioSTR =  formatoDecimales(self.totalImpuestoServicio,2)  
                    self.update()
                     getMoneda()
+                    _VersionTiquete()
                     __ComboTipoDocumentos()
                     buscarTipoDocumento()
                     __comboCondicionPago()
                     buscarCondicionPago()
+                    getMedioPago()
                     if(self.facturaImpresa.estado ==2){
                         self.titulo = $.i18n.prop("tikect.encabezado.numeroFactura") + self.facturaImpresa.numeroConsecutivo
                     }
@@ -488,7 +495,38 @@ function consultaFactura(idFactura){
         }
     });
      
+
 }
+function _VersionTiquete(){
+
+    if(self.facturaImpresa.tipoDoc == "01"){
+       self.documentoElectronico = $.i18n.prop("documento.electronico.factura");
+    }else if(self.facturaImpresa.tipoDoc == "02"){
+        self.documentoElectronico = $.i18n.prop("documento.electronico.nota.debito");
+    }else if(self.facturaImpresa.tipoDoc == "03"){
+        self.documentoElectronico = $.i18n.prop("documento.electronico.nota.credito");
+    }else if(self.facturaImpresa.tipoDoc == "04"){
+        self.documentoElectronico = $.i18n.prop("documento.electronico.tiquete");
+    }
+    self.update()
+
+}
+
+function getMedioPago() {
+
+	if(self.facturaImpresa.medioEfectivo == "01") {
+		self.facturaImpresa.medioEfectivo = $.i18n.prop("medio.pago.efectivo");
+	}
+    if(self.facturaImpresa.medioTarjeta == "02") {
+		self.facturaImpresa.medioTarjeta = $.i18n.prop("medio.pago.tarjeta");
+	}
+    if(self.facturaImpresa.medioBanco == "04") {
+	  self.facturaImpresa.medioBanco  = $.i18n.prop("medio.pago.transferencia");
+	}
+   self.update()
+}
+
+
 function getMoneda() {
 	var resultado = "CRC-Colones Costa Rica";
 	if(self.facturaImpresa.codigoMoneda == "CRC") {
@@ -500,10 +538,14 @@ function getMoneda() {
     self.facturaImpresa.codigoMoneda = resultado
     self.update()
 }
+
+
 /**
 *Imprimir facturaImpresa
 **/    
 __ImprimirfacturaImpresa(){
+   
+    
     __imprimir()
     $("#boton-regresar").focus()
     $('.codigo').select()
@@ -590,6 +632,8 @@ function __ComboTipoDocumentos(){
 function __imprimir(){
     var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
      var div = document.querySelector("#imprimeme");
+
+     
     
     imprimirElemento(div)
       
