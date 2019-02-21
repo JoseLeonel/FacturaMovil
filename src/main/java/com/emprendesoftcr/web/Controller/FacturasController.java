@@ -74,7 +74,8 @@ import com.emprendesoftcr.pdf.App;
 import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.pdf.Proformas;
-import com.emprendesoftcr.pdf.Reporte01PdfView;
+import com.emprendesoftcr.pdf.ReportePdfView;
+import com.emprendesoftcr.pdf.TiquetePdfView;
 import com.emprendesoftcr.validator.FacturaFormValidator;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
@@ -499,7 +500,7 @@ public class FacturasController {
 			List<DetalleFacturaElectronica> detallesFactura = detalles.stream().map(TO_DETALLE).collect(toList());
 			facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
 
-			ByteArrayOutputStream namePDF = Reporte01PdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
+			ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
 			response.setContentType("application/octet-stream");
 			response.setContentLength((int) namePDF.toByteArray().length);
@@ -544,7 +545,10 @@ public class FacturasController {
 			List<DetalleFacturaElectronica> detallesFactura = detalles.stream().map(TO_DETALLE).collect(toList());
 			facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
 
-			ByteArrayOutputStream namePDF = Reporte01PdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
+		//	ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
+			
+			ByteArrayOutputStream namePDF = TiquetePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
+			
 //			ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 			int BUFFER_SIZE = 4096;
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());

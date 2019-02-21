@@ -10,7 +10,6 @@ import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
@@ -19,7 +18,7 @@ import com.itextpdf.text.pdf.PdfPCellEvent;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-public class ReportePdfView {
+public class TiquetePdfView {
 
 	static Font						bigFont							= FontFactory.getFont("Helvetica", "Windows-1254", 14.0F, 1, BaseColor.BLACK);
 	static Font						bigFont12						= FontFactory.getFont("Helvetica", "Windows-1254", 12.0F, 1, BaseColor.BLACK);
@@ -35,16 +34,18 @@ public class ReportePdfView {
 	public PdfPCellEvent	roundRectangle;
 
 	public static ByteArrayOutputStream main(String consecutivo, String tipoDoc, FacturaElectronica facturaElectronica) throws Exception {
-		ReportePdfView reporte01PdfView = new ReportePdfView();
-		Document document = new Document(PageSize.A4);
-		document.setMargins(10, 10, 12, 55);
+		TiquetePdfView reporte01PdfView = new TiquetePdfView();
+		Rectangle pagesize = new Rectangle(360f, 14400f);
+		Document document = new Document(pagesize, 36f, 72f, 108f, 180f);
+		document.setMargins(20, 20, 20, 20);
+		
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
 		PdfWriter writer = PdfWriter.getInstance(document, stream);
-		Rectangle rct = new Rectangle(36, 54, 559, 788);
+		
 		// Definimos un nombre y un tamaño para el PageBox los nombres posibles son: “crop”, “trim”, “art” and “bleed”.
-		writer.setBoxSize("art", rct);
-		HeaderFooter event = new HeaderFooter(facturaElectronica, tipoDoc);
+		writer.setBoxSize("art", pagesize);
+		HeaderFooterTiquete event = new HeaderFooterTiquete(facturaElectronica, tipoDoc);
 		writer.setPageEvent(event);
 		document.open();
 

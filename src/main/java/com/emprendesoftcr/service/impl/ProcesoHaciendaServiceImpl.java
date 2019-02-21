@@ -50,7 +50,7 @@ import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
-import com.emprendesoftcr.pdf.Reporte01PdfView;
+import com.emprendesoftcr.pdf.ReportePdfView;
 import com.emprendesoftcr.service.FacturaXMLServices;
 import com.emprendesoftcr.service.NotaCreditoXMLServices;
 import com.emprendesoftcr.service.NotaDebitoXMLService;
@@ -746,7 +746,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
 
 			// ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
-			ByteArrayOutputStream namePDF = Reporte01PdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
+			ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 			String clave = getConsecutivo(factura.getTipoDoc(), factura.getNumeroConsecutivo());
 			Collection<Attachment> attachments = createAttachments(XML_Attach(clave, factura.getEmpresa().getCedula(), asText(xmlFactura), factura.getTipoDoc()), PDF_Attach(clave, factura.getEmpresa().getCedula(), asPDF(namePDF), factura.getTipoDoc()), XML_AttachRespuestaHacienda(clave, factura.getEmpresa().getCedula(), asText(xmlRespuesta)));
 			Map<String, Object> modelEmail = new HashMap<>();

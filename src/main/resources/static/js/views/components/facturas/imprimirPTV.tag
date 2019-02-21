@@ -429,7 +429,6 @@ function consultaFactura(idFactura){
             if(data.aaData.length > 0){
                     self.detalles = []
                     self.detalles =data.aaData
-                    //Ordenar detalles
                     self.detalles.sort(function(a,b) {
                         if ( a.numeroLinea < b.numeroLinea )
                             return -1;
@@ -448,43 +447,26 @@ function consultaFactura(idFactura){
                    self.totalImpuestoServicioSTR = ""
                    self.totalImpuestoServicioSTR =  formatoDecimales(self.totalImpuestoServicio,2)  
                    self.update()
-                    getMoneda()
-                    _VersionTiquete()
-                    __ComboTipoDocumentos()
-                    buscarTipoDocumento()
-                    __comboCondicionPago()
-                    buscarCondicionPago()
-                    getMedioPago()
-                    if(self.facturaImpresa.estado ==2){
-                        self.titulo = $.i18n.prop("tikect.encabezado.numeroFactura") + self.facturaImpresa.numeroConsecutivo
-                    }
-                    if(self.facturaImpresa.estado ==3){
-                        self.titulo = $.i18n.prop("tikect.encabezado.proforma") + self.facturaImpresa.id
-                    }
-                    if(self.facturaImpresa.estado == 4){
-                        self.titulo = $.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno") + self.facturaImpresa.id
-                    }
-                    self.update()
                     $.each(data.aaData, function( index, modeloTabla ) {
                       if(self.facturaImpresa == null){
                             self.facturaImpresa = modeloTabla.factura
                             console.log(self.facturaImpresa)
                             self.update()
-                        
                             self.claveParteUno= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(0,24):""
                             self.claveParteDos= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(25,51):""
                             //detalles
                             self.totalImpuestoServicio = 0
                             self.subTotal = 0
-                            self.update()
                             self.totalImpuestoServicioSTR = ""
                             self.totalImpuestoServicioSTR =  formatoDecimales(self.totalImpuestoServicio,2)  
                             self.update()
                             getMoneda()
+                            _VersionTiquete()
                             __ComboTipoDocumentos()
                             buscarTipoDocumento()
                             __comboCondicionPago()
                             buscarCondicionPago()
+                            getMedioPago()
                             if(self.facturaImpresa.estado ==2){
                                 self.titulo = $.i18n.prop("tikect.encabezado.numeroFactura") + self.facturaImpresa.numeroConsecutivo
                             }
@@ -495,7 +477,6 @@ function consultaFactura(idFactura){
                                 self.titulo = $.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno") + self.facturaImpresa.id
                             }
                             self.update()
-      
                       }
                     });
                     if (self.facturaImpresa.empresa.imprimirDirecto == 0 || self.parametro.facturaDia ==1){
@@ -506,9 +487,6 @@ function consultaFactura(idFactura){
                      if (self.parametro.factura.empresa.imprimirDirecto == 1 && self.parametro.facturaDia ==0 ){
                       __imprimir()
                      }
-                     
-                    
-
             }
         },
         error: function (xhr, status) {

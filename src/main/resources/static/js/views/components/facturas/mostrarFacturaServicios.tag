@@ -374,7 +374,7 @@ function consultaFactura(idFactura){
                 self.facturaImpresa = null
                 self.detalles = []
                 self.detalles =data.aaData
-                self.update()
+                self.update() 
                 $.each(data.aaData, function( index, modeloTabla ) {
                     if(self.facturaImpresa  == null){
                         self.facturaImpresa = modeloTabla.factura

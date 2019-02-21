@@ -55,7 +55,7 @@ import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
-import com.emprendesoftcr.pdf.Reporte01PdfView;
+import com.emprendesoftcr.pdf.ReportePdfView;
 import com.emprendesoftcr.service.ProcesoHaciendaService;
 import com.emprendesoftcr.service.RespuestaHaciendaXMLService;
 import com.emprendesoftcr.type.RespuestaHacienda;
@@ -636,7 +636,7 @@ public class HaciendasController {
 			facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
 
 			// ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
-			ByteArrayOutputStream namePDF = Reporte01PdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
+			ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 			int BUFFER_SIZE = 4096;
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
 			response.setContentType("application/octet-stream");
