@@ -35,9 +35,9 @@ public class TiquetePdfView {
 
 	public static ByteArrayOutputStream main(String consecutivo, String tipoDoc, FacturaElectronica facturaElectronica) throws Exception {
 		TiquetePdfView reporte01PdfView = new TiquetePdfView();
-		Rectangle pagesize = new Rectangle(360f, 14400f);
+		Rectangle pagesize = new Rectangle(300f, 500f);
 		Document document = new Document(pagesize, 36f, 72f, 108f, 180f);
-		document.setMargins(20, 20, 20, 20);
+		document.setMargins(5, 5, 0, 20);
 		
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
@@ -51,7 +51,7 @@ public class TiquetePdfView {
 
 //		PdfContentByte cb = writer.getDirectContent();
 
-		reporte01PdfView.buildPdfDocument(facturaElectronica, document, writer,tipoDoc);
+	//	reporte01PdfView.buildPdfDocument(facturaElectronica, document, writer,tipoDoc);
 
 		document.close();
 

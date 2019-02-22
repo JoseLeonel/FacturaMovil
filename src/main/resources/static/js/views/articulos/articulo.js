@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	ListarArticulos("");
+	ListarArticulos(" ");
 	_Init();
 } );/*fin document*/
 
@@ -15,7 +15,8 @@ var _Init = function () {
 
     $('#codigoArt').keypress(function (e) {
       if (e.keyCode == 13) {
-            ListarArticulos($('#codigoArt').val())
+         var valor = $('#codigoArt').val() == null?" ":$('#codigoArt').val();
+            ListarArticulos(valor)
       }
 
     });
@@ -52,7 +53,13 @@ var ListarArticulos = function(codigo){
      "columns" : informacion_tabla,
      "language" : idioma_espanol,
  } );//fin del table
-  
+ agregarInputsCombos();
+ EventoFiltro();
+ __MantenimientoAgregar();
+ __modificarRegistro_Listar();
+ __agregarEntradaAlInventario();
+ __agregarSalidaAlInventario();
+ __Imprimir_Articulo()
 }  
 /**
  * Eventos del filtro
@@ -96,7 +103,7 @@ function EventoFiltro(){
 var informacion_tabla = [ 
                                {'data' :'categoria'               ,"name":"categoria"              ,"title" : "Categoria"        ,"autoWidth" :true,
                                "render":function(categoria,type, row){
-                                     return categoria ==null?"Sin Cantegoria":categoria.descripcion;
+                                     return categoria ==null?"Sin Cantegoria":row.categoria.descripcion;
                                 }},
                                {'data' :'codigo'                  ,"name":"codigo"                 ,"title" : "Codigo"           ,"autoWidth" :true },
                                {'data' :'descripcion'             ,"name":"descripcion"            ,"title" : "Descripcion"      ,"autoWidth" :true },
@@ -278,7 +285,8 @@ function __agregarSalidaAlInventario(){
  */
 function __mostrarListado(){
 	var table = $('#tableListar').DataTable();
-	table.ajax.reload( null, false);
+   //table.ajax.reload( null, false);
+   ListarArticulos(" ");
 	$('.mostrarListado').show();
 }
 /**
@@ -300,21 +308,21 @@ function agregarInputsCombos(){
 	    }
            // Select
     	if ($(this).index() == 8 ){
-    	    var select = $('<select id="combo" class="form-control"><option value="">Todos</option></select>');
+    	    var select = $('<select id="combo1" class="form-control"><option value="">Todos</option></select>');
     	    // se cargan los valores por defecto que existen en el combo
     	   	select.append( '<option value="'+$.i18n.prop("estado.Activo")+'">'+$.i18n.prop("estado.Activo")+'</option>' );
             select.append( '<option value="'+$.i18n.prop("estado.Inactivo")+'">'+$.i18n.prop("estado.Inactivo")+'</option>' );
     	   	$(this).html(select);
        }
        if ($(this).index() == 7 ){
-         var select = $('<select id="combo" class="form-control"><option value="">Todos</option></select>');
+         var select = $('<select id="combo2" class="form-control"><option value="">Todos</option></select>');
          // se cargan los valores por defecto que existen en el combo
            select.append( '<option value="'+$.i18n.prop("boolean.si")+'">'+$.i18n.prop("boolean.si")+'</option>' );
           select.append( '<option value="'+$.i18n.prop("boolean.no")+'">'+ $.i18n.prop("boolean.no") +'</option>' );
            $(this).html(select);
      }
        if ($(this).index() == 0 ){
-         var select = $('<select id="combo" class="form-control"><option value="">Todos</option></select>');
+         var select = $('<select id="combo3"   class="form-control"><option value="">Todos</option></select>');
          // se cargan los valores por defecto que existen en el combo
          select = __listadoCategoriasActivas(select);
          $(this).html(select);

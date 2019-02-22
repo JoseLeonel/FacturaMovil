@@ -166,6 +166,7 @@ public class ReportePdfView {
 		double subTotal = 0;
 		double impuesto = 0;
 		double exento = 0;
+		double gravado = 0;
 		double total = 0;
 		List<DetalleFacturaElectronica> detalleFacturaElectronica = fac_electro.getDetalleFacturaElectronica();
 		for (int i = 0; i < detalleFacturaElectronica.size(); i++) {
@@ -174,16 +175,19 @@ public class ReportePdfView {
 			subTotal = subTotal + (double) Math.round(detalleFacturaElectronica.get(i).getSubtotal() * 100000d) / 100000d;
 			impuesto = impuesto + (double) Math.round(detalleFacturaElectronica.get(i).getImpuesto() * 100000d) / 100000d;
 			exento = exento + (double) Math.round(detalleFacturaElectronica.get(i).getImpuesto() == Constantes.ZEROS_DOUBLE ? detalleFacturaElectronica.get(i).getTotal() * 100000d : Constantes.ZEROS_DOUBLE) / 100000d;
+			gravado = gravado + (double) Math.round(detalleFacturaElectronica.get(i).getImpuesto() > Constantes.ZEROS_DOUBLE ? detalleFacturaElectronica.get(i).getTotal() * 100000d : Constantes.ZEROS_DOUBLE) / 100000d;
 			total = total + (double) Math.round(detalleFacturaElectronica.get(i).getTotal() * 100000d) / 100000d;
 		}
 
-		central_inferior_ultima.addCell(obtenerCeldaNormal("Total venta", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
+		central_inferior_ultima.addCell(obtenerCeldaNormal("venta", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
 		if (descuento > Constantes.ZEROS_DOUBLE) {
-			central_inferior_ultima.addCell(obtenerCeldaNormal("Total descuentos", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
+			central_inferior_ultima.addCell(obtenerCeldaNormal("Descuentos", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
 		}
-		central_inferior_ultima.addCell(obtenerCeldaNormal("Total venta neta", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
-		central_inferior_ultima.addCell(obtenerCeldaNormal("Total Impuesto", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
-		central_inferior_ultima.addCell(obtenerCeldaNormal("Total exento", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
+		central_inferior_ultima.addCell(obtenerCeldaNormal("Venta Neta", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
+		central_inferior_ultima.addCell(obtenerCeldaNormal("Impuestos", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
+		
+		central_inferior_ultima.addCell(obtenerCeldaNormal("Gravadas", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
+		central_inferior_ultima.addCell(obtenerCeldaNormal("Exento", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
 		central_inferior_ultima.addCell(obtenerCeldaNormal("Total comprobante", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
 
 		tabla_ultima.addCell(central_inferior_ultima);
@@ -199,6 +203,7 @@ public class ReportePdfView {
 
 		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(subTotal), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
 		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(impuesto), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(gravado), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
 		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(exento), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
 		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(total), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
 		
