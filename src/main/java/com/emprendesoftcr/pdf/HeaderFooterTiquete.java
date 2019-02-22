@@ -72,19 +72,19 @@ public class HeaderFooterTiquete extends PdfPageEventHelper {
 	public void onStartPage(PdfWriter writer, Document document) {
 			try {
 
-		
-			if(this.facturaElectronica.getClave() !=null) {
-				if(!this.facturaElectronica.getClave().equals(Constantes.EMPTY)) {
-					String codigoQR = this.facturaElectronica.getClave();
-
-					BarcodeQRCode qrcode = new BarcodeQRCode(codigoQR, 80, 80, null);
-					Image qrcodeImage = qrcode.getImage();
-					qrcodeImage.setAbsolutePosition(495f, 765f);
-					document.add(qrcodeImage);
-					
-				}
-				
-			}
+//		
+//			if(this.facturaElectronica.getClave() !=null) {
+//				if(!this.facturaElectronica.getClave().equals(Constantes.EMPTY)) {
+//					String codigoQR = this.facturaElectronica.getClave();
+//
+//					BarcodeQRCode qrcode = new BarcodeQRCode(codigoQR, 80, 80, null);
+//					Image qrcodeImage = qrcode.getImage();
+//					qrcodeImage.setAbsolutePosition(495f, 765f);
+//					document.add(qrcodeImage);
+//					
+//				}
+//				
+//			}
 
 			UtilsPdf utils_pdf = new UtilsPdf();
 			PdfPTable tabla_cabezera = new PdfPTable(2);
@@ -97,13 +97,10 @@ public class HeaderFooterTiquete extends PdfPageEventHelper {
 			tabla_cabezera.setSpacingAfter(0);
 			tabla_cabezera.setSpacingBefore(0);
 
-			PdfPTable izquierda = new PdfPTable(1);
-  		if(!this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
-				izquierda.addCell(utils_pdf.obtenerCeldaNormal("Clave: " + this.facturaElectronica.getClave(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
-			}
-			tabla_cabezera.addCell(izquierda);
+		
+  	
 
-			PdfPTable derecha = new PdfPTable(1);
+			PdfPTable derecha = new PdfPTable(2);
 			if(this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				derecha.addCell(utils_pdf.obtenerCeldaNormal(tipoDocVersion(), UtilsPdf.bigFont16, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));	
 			}else {
@@ -166,85 +163,16 @@ public class HeaderFooterTiquete extends PdfPageEventHelper {
 
 			document.add(tabla_cabezera);
 
-			PdfPTable tabla_segunda_tabla = new PdfPTable(2);
-			tabla_segunda_tabla.setWidthPercentage(100);
-			tabla_segunda_tabla.setTotalWidth(570f);
-			tabla_segunda_tabla.setLockedWidth(true);
-			float[] header_espacio_02 = { 310, 260 };
-			tabla_segunda_tabla.setWidths(header_espacio_02);
-			tabla_segunda_tabla.getDefaultCell().setBorder(Rectangle.NO_BORDER);
-			tabla_segunda_tabla.setSpacingAfter(0);
-			tabla_segunda_tabla.setSpacingBefore(0);
-
-			String nombreCliente = facturaElectronica.getClienteNombreComercial() != null ? facturaElectronica.getClienteNombre() : Constantes.EMPTY;
-			PdfPCell cell_recep = new PdfPCell(new Paragraph("\nNombre del Receptor:"+ nombreCliente, UtilsPdf.font_cabezera_tabla));
-			cell_recep.setHorizontalAlignment(Paragraph.ALIGN_LEFT);
-			cell_recep.setColspan(1);
-			// cell_recep.setCellEvent(new RoundRectangle_tabla_sup_izq());
-			cell_recep.setBorder(Rectangle.BOTTOM | Rectangle.RIGHT);
-
-			tabla_segunda_tabla.addCell(cell_recep);
-
-			String cedulaCliente = Constantes.EMPTY;
-			String telefonoCliente = Constantes.EMPTY;
-			String correoCliente = Constantes.EMPTY;
-		// Cliente
-			if (facturaElectronica.getClienteCedula() != null) {
-				if (!facturaElectronica.getClienteCedula().equals(Constantes.EMPTY)) {
-					if(!facturaElectronica.getClienteCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
-						cedulaCliente ="\nIdentificación Receptor:"+ this.facturaElectronica.getClienteCedula();
-						telefonoCliente = "Telefono:"+ this.facturaElectronica.getClienteTelefono();
-						correoCliente = this.facturaElectronica.getClienteCorreo();
-					}
-				}
-			}
+						
 			
 			
 			
-			
-			PdfPCell cell_id_recep = new PdfPCell(new Paragraph(cedulaCliente, UtilsPdf.font_cabezera_tabla));
-			cell_id_recep.setHorizontalAlignment(Paragraph.ALIGN_LEFT);
-			cell_id_recep.setColspan(1);
-			cell_id_recep.setBorder(Rectangle.BOTTOM);
-
-			tabla_segunda_tabla.addCell(cell_id_recep);
-			if(this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-				PdfPCell cell_dir_recep = new PdfPCell(new Paragraph( telefonoCliente + "       Factura/Tiquete Referencia: " + this.facturaElectronica.getReferenciaNumero(), UtilsPdf.font_cabezera_tabla));
-				cell_dir_recep.setHorizontalAlignment(Paragraph.ALIGN_LEFT);
-				cell_dir_recep.setColspan(1);
-				cell_dir_recep.setBorder(Rectangle.RIGHT);
-				tabla_segunda_tabla.addCell(cell_dir_recep);
-				
-			}else {
-
-				PdfPCell cell_dir_recep = new PdfPCell(new Paragraph(telefonoCliente, UtilsPdf.font_cabezera_tabla));
-				cell_dir_recep.setHorizontalAlignment(Paragraph.ALIGN_LEFT);
-				cell_dir_recep.setColspan(1);
-				cell_dir_recep.setBorder(Rectangle.RIGHT);
-				tabla_segunda_tabla.addCell(cell_dir_recep);	
-			}
-
+		
 			
 			
 
-			PdfPCell cell_cond_venta = new PdfPCell(new Paragraph(correoCliente + " \n\n", UtilsPdf.font_cabezera_tabla));
-			cell_cond_venta.setHorizontalAlignment(Paragraph.ALIGN_LEFT);
-			cell_cond_venta.setColspan(1);
-			cell_cond_venta.setBorder(Rectangle.NO_BORDER);
-
-			tabla_segunda_tabla.addCell(cell_cond_venta);
-
-			PdfPCell celda_grande02 = new PdfPCell(tabla_segunda_tabla);
-			celda_grande02.setColspan(1);
-			celda_grande02.setCellEvent(utils_pdf.getRoundRectangle_tabla_sup_izq());
-			celda_grande02.setBorder(Rectangle.NO_BORDER);
-
-			PdfPTable segunda_tabla_redondeada = new PdfPTable(1);
-			segunda_tabla_redondeada.setWidthPercentage(100);
-			segunda_tabla_redondeada.getDefaultCell().setBorder(Rectangle.NO_BORDER);
-			// segunda_tabla_redondeada.getDefaultCell().setCellEvent(new RoundRectangle_tabla_sup_izq());
-			segunda_tabla_redondeada.addCell(celda_grande02);
-			document.add(segunda_tabla_redondeada);
+		
+		
 			document.add(new Paragraph("\n", UtilsPdf.pequeFont));
 
 		} catch (DocumentException de) {
