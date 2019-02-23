@@ -442,7 +442,8 @@ function __consultar(url,objeto){
 *  BajarDocumentos 
 **/
 function BajarArchivos(url,objeto){
-  location.href = url + "?idHacienda=" + objeto.id
+	location.href = url + "?idHacienda=" + objeto.id
+	
 }
 
 
