@@ -702,19 +702,25 @@ public class HaciendasController {
 
 	static class RESPONSES {
 
+		@SuppressWarnings("unused")
 		private static class OK {
 
+			@SuppressWarnings("unused")
 			private static class FACTURA {
 
+				@SuppressWarnings({ "unused", "rawtypes" })
 				private static final RespuestaServiceValidator	AGREGADO		= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente");
+				@SuppressWarnings("rawtypes")
 				private static final RespuestaServiceValidator	MODIFICADO	= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.modificado.correctamente");
 			}
 		}
 
+		@SuppressWarnings("unused")
 		private static class ERROR {
 
 			private static class FACTURA {
 
+				@SuppressWarnings("rawtypes")
 				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.noExiste");
 			}
 		}

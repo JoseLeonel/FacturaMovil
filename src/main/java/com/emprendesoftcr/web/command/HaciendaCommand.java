@@ -18,6 +18,7 @@ public class HaciendaCommand {
 	private Long		id;
 
 	private String	tipoDoc;
+	private String	tipoDocumento;
 
 	private String		fechaEmisor;
 
@@ -57,6 +58,7 @@ public class HaciendaCommand {
 		this.nombreReceptor = hacienda.getNombreReceptor();
 		this.correoReceptor = hacienda.getCorreoReceptor();
 		this.totalReceptor = hacienda.getTotalReceptor();
+		this.tipoDocumento = hacienda.getTipoDoc();
 	}
 
 	public Long getId() {
@@ -168,5 +170,17 @@ public class HaciendaCommand {
 	public void setTotalReceptor(Double totalReceptor) {
 		this.totalReceptor = totalReceptor;
 	}
+
+	
+	public String getTipoDocumento() {
+		return tipoDocumento;
+	}
+
+	
+	public void setTipoDocumento(String tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
+	}
+	
+	
 
 }
