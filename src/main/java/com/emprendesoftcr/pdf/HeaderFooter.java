@@ -97,7 +97,10 @@ public class HeaderFooter extends PdfPageEventHelper {
 
 					BarcodeQRCode qrcode = new BarcodeQRCode(codigoQR, 80, 80, null);
 					Image qrcodeImage = qrcode.getImage();
-					qrcodeImage.setAbsolutePosition(495f, 765f);
+					qrcodeImage.setAbsolutePosition(520f, 765f);
+					qrcodeImage.setAlignment(Image.ALIGN_RIGHT);
+				//	qrcodeImage.scaleAbsolute(200, 200);
+					//qrcodeImage.scaleToFit(100, 100);
 					document.add(qrcodeImage);
 					
 				}
