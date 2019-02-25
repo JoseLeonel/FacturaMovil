@@ -352,16 +352,45 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
   	try {
       if (factura.getCliente() != null) {
        	if(!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
-          resultado = "<Receptor>" +
-                  "<Nombre>" + factura.getCliente().getNombreCompleto() + "</Nombre>" +
-                  xmlIdentificacion(factura) +
-                  "<IdentificacionExtranjero>" + factura.getCliente().getIdentificacionExtranjero() + "</IdentificacionExtranjero>" +
-        //          "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
-                  ubicacionReceptor(factura)+
-         //         getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
-  //                getFax(0,factura.getCliente().getCodigoPais()) +    
-                  "<CorreoElectronico>" + factura.getCliente().getCorreoElectronico() + "</CorreoElectronico>" +
-              "</Receptor>";
+      		String cedulaExtrangera = factura.getCliente().getIdentificacionExtranjero() !=null ?factura.getCliente().getIdentificacionExtranjero():Constantes.EMPTY;
+       		
+          if(cedulaExtrangera.equals(Constantes.EMPTY)) {
+         		resultado = "<Receptor>" +
+                "<Nombre>" + factura.getCliente().getNombreCompleto() + "</Nombre>" +
+                xmlIdentificacion(factura) + 
+//                "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
+//                "<Ubicacion>" +
+//                    "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
+//                    "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
+//                    "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
+//                    "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
+//                    "<OtrasSenas>" + factura.getCliente().getOtraSena() + "</OtrasSenas>" +
+//                "</Ubicacion>" +
+//                getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
+              //  getFax(0,factura.getCliente().getCodigoPais()) +    
+                "<CorreoElectronico>" + factura.getCliente().getCorreoElectronico() + "</CorreoElectronico>" +
+            "</Receptor>";
+          	
+          } else {
+         		resultado = "<Receptor>" +
+                "<Nombre>" + factura.getCliente().getNombreCompleto() + "</Nombre>" +
+                xmlIdentificacion(factura) + 
+                "<IdentificacionExtranjero>" + factura.getCliente().getIdentificacionExtranjero() + "</IdentificacionExtranjero>" +
+//                "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
+//                "<Ubicacion>" +
+//                    "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
+//                    "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
+//                    "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
+//                    "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
+//                    "<OtrasSenas>" + factura.getCliente().getOtraSena() + "</OtrasSenas>" +
+//                "</Ubicacion>" +
+//                getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
+              //  getFax(0,factura.getCliente().getCodigoPais()) +    
+                "<CorreoElectronico>" + factura.getCliente().getCorreoElectronico() + "</CorreoElectronico>" +
+            "</Receptor>";
+          	
+          }    		
+ 
       }
       }			
 		} catch (Exception e) {
