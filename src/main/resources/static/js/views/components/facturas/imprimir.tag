@@ -6,10 +6,10 @@
                 <div class="pantalla-imprimir">
                     <div class="botones-imprimir">
                         <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
-                    
+                        <button type="button" onclick="printJS('imprimeme', 'html')">Print Form</button>
                     </div>
                     <section class="" >
-                        <div class="forma-impresion " id="imprimeme" name ="imprimeme">
+                        <div class="forma-impresion " id="imprimeme" name ="imprimeme" id="printJS-form">
                             <div class="ticket" id="ticket" name="ticket" > 
                                 <div class="encabezado" show = "{facturaImpresa.tipoDoc == '88'}"><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.id}                       </strong><br></div>
                                 <div class="encabezado" show = "{facturaImpresa.tipoDoc == '87'}"><strong> {$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")} {facturaImpresa.id}                       </strong><br></div>
@@ -238,11 +238,6 @@
         width: 377px;
         word-break: break-all;
     }
-    .encabezado
-    {
-        align-content: left;
-        text-align: left;
-    }
     .ticket > img
     {
         max-width: inherit;
@@ -275,8 +270,10 @@
     {
         align-content: left;
         text-align: left;
+        padding-top: 3px;
+        
     }
-@page
+	@page
     {
         margin: 0;
     }
@@ -315,6 +312,14 @@
     body * { display: none !important; }
     body:after { content: "Don't waste paper!"; }
 }
+
+#imprimeme {
+    height: 100%;
+    width: 400px;
+    background: beige;
+    padding-top: 10px;
+}
+
 </style>    
 <script>
 

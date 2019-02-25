@@ -10,10 +10,11 @@
                 <div class="pantalla-imprimir">
                     <div class="botones-imprimir">
                         <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;</a>
+                        <button type="button" onclick="printJS('imprimeme', 'html')">Print Form</button>
                     
                     </div>
-                    <section class="" >
-                        <div class="forma-impresion " id="imprimeme" name ="imprimeme">
+                    <section class="">
+                        <div class="forma-impresion " id="imprimeme" name ="imprimeme">                        
                             <div class="ticket" id="ticket" name="ticket" > 
                                 <div class="encabezado"><strong> {documentoElectronico} </strong><br></div>
                                 <div class="encabezado" show = "{facturaImpresa.tipoDoc == '88'}"><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.id}                       </strong><br></div>
@@ -257,6 +258,8 @@
     {
         align-content: left;
         text-align: left;
+        padding-top: 3px;
+        
     }
     .ticket > img
     {
@@ -329,6 +332,13 @@
 {
     body * { display: none !important; }
     body:after { content: "Don't waste paper!"; }
+}
+
+#imprimeme {
+    height: 100%;
+    width: 400px;
+    background: beige;
+    padding-top: 10px;
 }
 </style>    
 <script>
@@ -651,6 +661,9 @@ function imprimirElemento(elemento){
   ventana.focus();
   ventana.print();
   ventana.close();
+  
+  printJS('imprimeme', 'html');
+  
   return true;
 }
 </script>
