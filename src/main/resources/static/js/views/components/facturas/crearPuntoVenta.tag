@@ -271,9 +271,17 @@
                      </section >
                      <aside class="left-sidebar">
                         <article class="clearfix">
-                            <div onclick = {__MostrarFormularioDePago}  class="precioTotalFactura" >
+                            <div onclick = {__MostrarFormularioDePago}  class="precioTotalFactura"  show={soloParaChinos == true}>
                                 <p class="total label-totalesComprobante" style="text-align:right;">Total:  <span id="lblTotal">{totalComprobante}</span></p>
                             </div>
+                            <div class="booking-info" show={soloParaChinos == false}>
+                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.subTotal")}  <span id="lblSubtotal"> {subTotalGeneral} </span></p>
+                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos} </span></p>
+                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {totalImpuesto} </span></p>
+                                </div>
+                                <div class="precioTotalFactura" show={soloParaChinos == false} onclick = {__MostrarFormularioDePago}>
+                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}</span></p>
+                                </div>
                         </article>
                     </aside>
                 </section>

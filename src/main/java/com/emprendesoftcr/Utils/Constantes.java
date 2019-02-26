@@ -37,20 +37,20 @@ public class Constantes {
 	public static final String					CODIGO_ARTICULO_IMPUESTO_SERVICIO										= "8888";
 
 	// Direcciones de callback
-//	public static final String					URL_ALAJUELA_CALLBACK																= "http://www.emprendesoftcr.com:8081/service/callback.do";
-//	public static final String					URL_GUANACASTE_CALLBACK															= "http://www.emprendesoftcr.com:8084/service/callback.do";
-//	public static final String					URL_INVENTARIO_CALLBACK															= "http://www.emprendesoftcr.com:8080/service/callback.do";
-//	public static final String					URL_JACO_CALLBACK																		= "http://www.emprendesoftcr.com:8082/service/callback.do";
-//	public static final String					URL_JACODOS_CALLBACK																= "http://www.emprendesoftcr.com:8086/service/callback.do";
-//	public static final String					URL_SANTA_ANA_CALLBACK															= "http://www.emprendesoftcr.com:8083/service/callback.do";
-//	public static final String					URL_PRUEBAS_CALLBACK																= "http://www.emprendesoftcr.com:8085/service/callback.do";
-	public static final String					URL_ALAJUELA_CALLBACK																= "http://190.124.250.142:8081/service/callback.do";
-	public static final String					URL_GUANACASTE_CALLBACK															= "http://190.124.250.142:8084/service/callback.do";
-	public static final String					URL_INVENTARIO_CALLBACK															= "http://190.124.250.142:8080/service/callback.do";
-	public static final String					URL_JACO_CALLBACK																		= "http://190.124.250.142:8082/service/callback.do";
-	public static final String					URL_JACODOS_CALLBACK																= "http://190.124.250.142:8086/service/callback.do";
-	public static final String					URL_SANTA_ANA_CALLBACK															= "http://190.124.250.142:8083/service/callback.do";
-	public static final String					URL_PRUEBAS_CALLBACK																= "http://190.124.250.142:8085/service/callback.do";
+	public static final String					URL_ALAJUELA_CALLBACK																= "http://www.emprendesoftcr.com:8081/service/callback.do";
+	public static final String					URL_GUANACASTE_CALLBACK															= "http://www.emprendesoftcr.com:8084/service/callback.do";
+	public static final String					URL_INVENTARIO_CALLBACK															= "http://www.emprendesoftcr.com:8080/service/callback.do";
+	public static final String					URL_JACO_CALLBACK																		= "http://www.emprendesoftcr.com:8082/service/callback.do";
+	public static final String					URL_JACODOS_CALLBACK																= "http://www.emprendesoftcr.com:8086/service/callback.do";
+	public static final String					URL_SANTA_ANA_CALLBACK															= "http://www.emprendesoftcr.com:8083/service/callback.do";
+	public static final String					URL_PRUEBAS_CALLBACK																= "http://www.emprendesoftcr.com:8085/service/callback.do";
+////	public static final String					URL_ALAJUELA_CALLBACK																= "http://190.124.250.142:8081/service/callback.do";
+//	public static final String					URL_GUANACASTE_CALLBACK															= "http://190.124.250.142:8084/service/callback.do";
+//	public static final String					URL_INVENTARIO_CALLBACK															= "http://190.124.250.142:8080/service/callback.do";
+//	public static final String					URL_JACO_CALLBACK																		= "http://190.124.250.142:8082/service/callback.do";
+//	public static final String					URL_JACODOS_CALLBACK																= "http://190.124.250.142:8086/service/callback.do";
+//	public static final String					URL_SANTA_ANA_CALLBACK															= "http://190.124.250.142:8083/service/callback.do";
+//	public static final String					URL_PRUEBAS_CALLBACK																= "http://190.124.250.142:8085/service/callback.do";
 
 	// Semaforo
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 90;

@@ -75,6 +75,7 @@ public class EmpresaCommand {
 	private Integer pantChino;
 	
 	private Integer						prioridadFacturar;
+	private Integer imprimirCelular;
 	
 
 	public EmpresaCommand(Empresa empresa) {
@@ -124,6 +125,7 @@ public class EmpresaCommand {
 		this.separarCuenta = empresa.getSepararCuenta();
 		this.pantChino = empresa.getPantChino();
 		this.prioridadFacturar = empresa.getPrioridadFacturar();
+		this.imprimirCelular = empresa.getImprimirCelular();
 	}
 
 	public EmpresaCommand() {

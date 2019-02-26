@@ -317,7 +317,7 @@
     height: 100%;
     width: 400px;
     background: beige;
-    padding-top: 10px;
+    
 }
 
 </style>    

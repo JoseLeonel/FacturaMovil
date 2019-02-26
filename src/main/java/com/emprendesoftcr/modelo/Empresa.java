@@ -182,9 +182,14 @@ public class Empresa implements Serializable {
 	// en las ventas de venta nueva y post desea que les salga la opcion facturar facturas electronica no tiquetes
 	@Column(name = "prio_tiquete", columnDefinition = "INT default '0'")
 	private Integer						prioridadFacturar;
+	
+	@Column(name = "print_cel", columnDefinition = "INT default '0'")
+	private Integer						imprimirCelular;
+
+	
 
 	public Empresa(Integer id, String abreviaturaEmpresa, Integer numeroConsecutivo, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String cazaMatriz, Integer codigoSeguridad, String nombre, String nombreComercial, String tipoCedula, String cedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String canton, String distrito, String barrio, String logo, String tieneInventario, String tieneLector, String cambiarPrecio, String estadoProduccion, String enviarTiquete, String representante, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, String usuarioEnvioComprobante, String passwordEnvioComprobante, String estado, Date created_at, Date updated_at, Integer aceptadoConsecutivo,
-			Integer aceptadoParcialConsecutivo, Integer rechazadoConsecutivo, Integer vueltoImprimir, Integer noFacturaElectronica, Integer correoFrecuente, Long comandaEmpresa, Integer aplicaGanancia, Integer enterFacturar, Integer imprimirDirecto, Integer abrirSinComanda, Integer abrirConComanda, Integer pantChino, String impresoraCocina, String impresoraFactura, Integer separarCuenta, Integer prioridadFacturar) {
+			Integer aceptadoParcialConsecutivo, Integer rechazadoConsecutivo, Integer vueltoImprimir, Integer noFacturaElectronica, Integer correoFrecuente, Long comandaEmpresa, Integer aplicaGanancia, Integer enterFacturar, Integer imprimirDirecto, Integer abrirSinComanda, Integer abrirConComanda, Integer pantChino, String impresoraCocina, String impresoraFactura, Integer separarCuenta, Integer prioridadFacturar, Integer imprimirCelular) {
 		super();
 		this.id = id;
 		this.abreviaturaEmpresa = abreviaturaEmpresa;
@@ -237,6 +242,7 @@ public class Empresa implements Serializable {
 		this.impresoraFactura = impresoraFactura;
 		this.separarCuenta = separarCuenta;
 		this.prioridadFacturar = prioridadFacturar;
+		this.imprimirCelular = imprimirCelular;
 	}
 
 	public Empresa() {
@@ -659,6 +665,16 @@ public class Empresa implements Serializable {
 	
 	public void setPrioridadFacturar(Integer prioridadFacturar) {
 		this.prioridadFacturar = prioridadFacturar;
+	}
+
+	
+	public Integer getImprimirCelular() {
+		return imprimirCelular;
+	}
+
+	
+	public void setImprimirCelular(Integer imprimirCelular) {
+		this.imprimirCelular = imprimirCelular;
 	}
 	
 	

@@ -67,16 +67,16 @@ public class FacturaElectronica {
 	private String													_footerCondicionVenta;
 
 	private double													_footerTipoCambio;
-	private double													_footerTotalServiciosGravados;
-	private double													_footerTotalMercanciasGravadas;
-	private double													_footerTotalServiciosExentos;
-	private double													_footerTotalGravado;
-	private double													_footerTotalExento;
-	private double													_footerTotalVenta;
+	private Double													_footerTotalServiciosGravados;
+	private Double													_footerTotalMercanciasGravadas;
+	private Double													_footerTotalServiciosExentos;
+	private Double													_footerTotalGravado;
+	private Double													_footerTotalExento;
+	private Double													_footerTotalVenta;
 	private Double													_footerTotalDescuento;
-	private double													_footerTotalImpuesto;
-	private double													_footerTotalVentaNeta;
-	private double													_footerTotalComprobante;
+	private Double													_footerTotalImpuesto;
+	private Double													_footerTotalVentaNeta;
+	private Double													_footerTotalComprobante;
 
 	private List<DetalleFacturaElectronica>	_detalleFacturaElectronica;
 
@@ -204,59 +204,59 @@ public class FacturaElectronica {
 		this._footerMoneda = _footerMoneda;
 	}
 
-	public double getFooterTipoCambio() {
+	public Double getFooterTipoCambio() {
 		return _footerTipoCambio;
 	}
 
-	public void setFooterTipoCambio(double _footerTipoCambio) {
+	public void setFooterTipoCambio(Double _footerTipoCambio) {
 		this._footerTipoCambio = _footerTipoCambio;
 	}
 
-	public double getFooterTotalServiciosGravados() {
+	public Double getFooterTotalServiciosGravados() {
 		return _footerTotalServiciosGravados;
 	}
 
-	public void setFooterTotalServiciosGravados(double _footerTotalServiciosGravados) {
+	public void setFooterTotalServiciosGravados(Double _footerTotalServiciosGravados) {
 		this._footerTotalServiciosGravados = _footerTotalServiciosGravados;
 	}
 
-	public double getFooterTotalMercanciasGravadas() {
+	public Double getFooterTotalMercanciasGravadas() {
 		return _footerTotalMercanciasGravadas;
 	}
 
-	public void setFooterTotalMercanciasGravadas(double _footerTotalMercanciasGravadas) {
+	public void setFooterTotalMercanciasGravadas(Double _footerTotalMercanciasGravadas) {
 		this._footerTotalMercanciasGravadas = _footerTotalMercanciasGravadas;
 	}
 
-	public double getFooterTotalServiciosExentos() {
+	public Double getFooterTotalServiciosExentos() {
 		return _footerTotalServiciosExentos;
 	}
 
-	public void setFooterTotalServiciosExentos(double _footerTotalServiciosExentos) {
+	public void setFooterTotalServiciosExentos(Double _footerTotalServiciosExentos) {
 		this._footerTotalServiciosExentos = _footerTotalServiciosExentos;
 	}
 
-	public double getFooterTotalGravado() {
+	public Double getFooterTotalGravado() {
 		return _footerTotalGravado;
 	}
 
-	public void setFooterTotalGravado(double _footerTotalGravado) {
+	public void setFooterTotalGravado(Double _footerTotalGravado) {
 		this._footerTotalGravado = _footerTotalGravado;
 	}
 
-	public double getFooterTotalExento() {
+	public Double getFooterTotalExento() {
 		return _footerTotalExento;
 	}
 
-	public void setFooterTotalExento(double _footerTotalExento) {
+	public void setFooterTotalExento(Double _footerTotalExento) {
 		this._footerTotalExento = _footerTotalExento;
 	}
 
-	public double getFooterTotalVenta() {
+	public Double getFooterTotalVenta() {
 		return _footerTotalVenta;
 	}
 
-	public void setFooterTotalVenta(double _footerTotalVenta) {
+	public void setFooterTotalVenta(Double _footerTotalVenta) {
 		this._footerTotalVenta = _footerTotalVenta;
 	}
 
@@ -268,27 +268,27 @@ public class FacturaElectronica {
 		this._footerTotalDescuento = _footerTotalDescuento;
 	}
 
-	public double getFooterTotalImpuesto() {
+	public Double getFooterTotalImpuesto() {
 		return _footerTotalImpuesto;
 	}
 
-	public void setFooterTotalImpuesto(double _footerTotalImpuesto) {
+	public void setFooterTotalImpuesto(Double _footerTotalImpuesto) {
 		this._footerTotalImpuesto = _footerTotalImpuesto;
 	}
 
-	public double getFooterTotalVentaNeta() {
+	public Double getFooterTotalVentaNeta() {
 		return _footerTotalVentaNeta;
 	}
 
-	public void setFooterTotalVentaNeta(double _footerTotalVentaNeta) {
+	public void setFooterTotalVentaNeta(Double _footerTotalVentaNeta) {
 		this._footerTotalVentaNeta = _footerTotalVentaNeta;
 	}
 
-	public double getFooterTotalComprobante() {
+	public Double getFooterTotalComprobante() {
 		return _footerTotalComprobante;
 	}
 
-	public void setFooterTotalComprobante(double _footerTotalComprobante) {
+	public void setFooterTotalComprobante(Double _footerTotalComprobante) {
 		this._footerTotalComprobante = _footerTotalComprobante;
 	}
 

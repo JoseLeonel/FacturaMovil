@@ -140,6 +140,18 @@ public class FacturasController {
 																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
 																																																			// Emisor
 																																																			facturaElectronica.setEmisorNombreComercial(d.getEmpresa().getNombreComercial());
+																																																			facturaElectronica.setFooterTotalServiciosGravados(d.getTotalServGravados());
+																																																			facturaElectronica.setFooterTotalMercanciasGravadas(d.getTotalMercanciasGravadas());
+																																																			//Total Factura
+																																																			facturaElectronica.setFooterTotalServiciosExentos(d.getTotalServExentos());
+																																																			facturaElectronica.setFooterTotalGravado(d.getTotalGravado());
+																																																			facturaElectronica.setFooterTotalExento(d.getTotalExento());
+																																																			facturaElectronica.setFooterTotalVenta(d.getTotalVenta());
+																																																			facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
+																																																			facturaElectronica.setFooterTotalImpuesto(d.getTotalImpuesto());
+																																																			facturaElectronica.setFooterTotalVentaNeta(d.getTotalVentaNeta());
+																																																			facturaElectronica.setFooterTotalComprobante(d.getTotalComprobante());
+//																																																			
 																																																			facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombre().equals(Constantes.EMPTY) ? d.getEmpresa().getNombre() : d.getEmpresa().getNombre());
 																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
 																																																			facturaElectronica.setEmisorDireccion(d.getEmpresa().getOtraSenas());

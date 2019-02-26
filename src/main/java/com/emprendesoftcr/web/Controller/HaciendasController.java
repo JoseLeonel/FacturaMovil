@@ -125,6 +125,17 @@ public class HaciendasController {
 																																																					facturaElectronica.setClienteTelefono(Constantes.EMPTY);
 																																																				}
 																																																			}
+																																																			facturaElectronica.setFooterTotalServiciosGravados(d.getTotalServGravados());
+																																																			facturaElectronica.setFooterTotalMercanciasGravadas(d.getTotalMercanciasGravadas());
+																																																			//Total Factura
+																																																			facturaElectronica.setFooterTotalServiciosExentos(d.getTotalServExentos());
+																																																			facturaElectronica.setFooterTotalGravado(d.getTotalGravado());
+																																																			facturaElectronica.setFooterTotalExento(d.getTotalExento());
+																																																			facturaElectronica.setFooterTotalVenta(d.getTotalVenta());
+																																																			facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
+																																																			facturaElectronica.setFooterTotalImpuesto(d.getTotalImpuesto());
+																																																			facturaElectronica.setFooterTotalVentaNeta(d.getTotalVentaNeta());
+																																																			facturaElectronica.setFooterTotalComprobante(d.getTotalComprobante());
 
 																																																			facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
 																																																			facturaElectronica.set_logo(d.getEmpresa().getLogo());

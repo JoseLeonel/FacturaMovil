@@ -9,8 +9,12 @@
                 <h2 >{titulo}</h2>
                 <div class="pantalla-imprimir">
                     <div class="botones-imprimir">
-                        <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;</a>
-                        <button type="button" onclick="printJS('imprimeme', 'html')">Print Form</button>
+                        <a href="#" class="boton-imprimir"  onclick = {__ImprimirfacturaImpresa} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir</a>
+                                <div class="row">
+                                    <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                        <button type="button" class="btn btn-danger boton-imprimirCelular" onclick="printJS('imprimeme', 'html')" show={mostrarImprimiCelular == true}>Imprimir desde el <br>Celular</button>    
+                                    </div>
+                                </div>        
                     
                     </div>
                     <section class="">
@@ -20,10 +24,10 @@
                                 <div class="encabezado" show = "{facturaImpresa.tipoDoc == '88'}"><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.id}                       </strong><br></div>
                                 <div class="encabezado" show = "{facturaImpresa.tipoDoc == '87'}"><strong> {$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")} {facturaImpresa.id}                       </strong><br></div>
                                 <div class="encabezado"><strong> {facturaImpresa.empresa.nombreComercial}                        </strong><br></div>
-                                <div class="encabezado"><strong> {facturaImpresa.empresa.nombre}                        </strong><br></div>
-                                <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.cedula")}  </strong>{facturaImpresa.empresa.cedula} <strong>{$.i18n.prop("tikect.encabezado.telefono")}</strong> {facturaImpresa.empresa.telefono}</strong><br></div>
-                                <div class="encabezado" show = {facturaImpresa.empresa.correoElectronico != ""} >{facturaImpresa.empresa.correoElectronico}                        <br></div>
-                                <div class="encabezado">{facturaImpresa.empresa.otraSenas} <br></div>
+                                <div class="encabezado"><strong> {facturaImpresa.empresa.nombre}                        </strong></div><br>
+                                <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.cedula")}  </strong>{facturaImpresa.empresa.cedula} <strong>{$.i18n.prop("tikect.encabezado.telefono")}</strong> {facturaImpresa.empresa.telefono}</strong></div>
+                                <div class="encabezado" show = {facturaImpresa.empresa.correoElectronico != ""} >{facturaImpresa.empresa.correoElectronico} </div>
+                                <div class="encabezado" >{facturaImpresa.empresa.otraSenas} </div>
                                 <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.fecha.emision")} </strong>{facturaImpresa.fechaEmisionSTR} </div>
                                 <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.condicion.venta")} </strong>{facturaImpresa.condicionVenta}</div>
                                 <div class="encabezado"><strong>{$.i18n.prop("factura.medioPago")} </strong>{facturaImpresa.medioEfectivo} {facturaImpresa.medioTarjeta} {facturaImpresa.medioBanco}</div>
@@ -122,11 +126,16 @@
                                                     <br>{$.i18n.prop("tikect.autorizado.no.factura.elec.parte.tres")}
                                                     <br>{$.i18n.prop("tikect.autorizado.no.factura.elec.parte.cuatro")}</p>
 
-                            
+                                <br>
                                 <div class="encabezado">{$.i18n.prop("tikect.final")}</div>
                                 <div class="encabezado">{$.i18n.prop("emprendesoft.factura")}</div>
                                 <div class="encabezado">{$.i18n.prop("emprendesoft.mensaje")}</div> 
-                                <div class="encabezado">{$.i18n.prop("emprendesoft.correo")}</div>           
+                                <div class="encabezado">{$.i18n.prop("emprendesoft.correo")}</div>      
+                                <br show={mostrarImprimiCelular == true}>
+                                <br show={mostrarImprimiCelular == true}>
+                                <br show={mostrarImprimiCelular == true}>
+                                <br show={mostrarImprimiCelular == true}>     
+                                 <div class="encabezado" show={mostrarImprimiCelular == true}>Recibido Por:___________________________</div>           
                             </div>
                         </div>
                     </section>
@@ -148,6 +157,7 @@
 
 
 <style type="text/css"  >
+ 
   
     .fondoEncabezado
     {
@@ -196,6 +206,26 @@
         color: #fff;
         cursor: pointer;
         font-size: 18px;
+        margin: 15px;
+        margin-bottom: 8px;
+        moz-transition: background-color 100ms linear;
+        ms-transition: background-color 100ms linear;
+        o-transition: background-color 100ms linear;
+        padding: 10px;
+        padding-bottom: 8px !important;
+        padding-top: 8px !important;
+        text-align: center !important;
+        text-decoration: none;
+        transition: background-color 100ms linear;
+        webkit-transition: background-color 100ms linear;
+    }
+    .boton-imprimirCelular
+    {
+        border: none;
+        border-radius: 30px;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 5px 0 rgba(0, 0, 0, 0.20);
+        cursor: pointer;
+        font-size: 14px;
         margin: 15px;
         margin-bottom: 8px;
         moz-transition: background-color 100ms linear;
@@ -337,7 +367,7 @@
 #imprimeme {
     height: 100%;
     width: 400px;
-    background: beige;
+    background: white;
     padding-top: 10px;
 }
 </style>    
@@ -346,6 +376,7 @@
 var self = this;
 self.parametro   = opts.parametros;  
 self.detalles = []
+self.mostrarImprimiCelular = false;
 self.titulo = ""
 self.claveParteUno =""
 self.claveParteDos =""
@@ -362,9 +393,7 @@ self.on('mount',function(){
     document.getElementById('divQR').innerHTML = '';
     if(self.parametro.factura.id > 0){
        consultaFactura(self.parametro.factura.id)
-       if(self.parametro.factura.empresa.noFacturaElectronica == 0){
-           qr()    
-        }
+      
                     
     }
      
@@ -377,7 +406,7 @@ self.on('mount',function(){
 function qr(){
      var options = {
         // render method: 'canvas', 'image' or 'div'
-        render: 'div',
+        render: self.facturaImpresa.empresa.imprimirCelular == 1?'image':'div',
         // version range somewhere in 1 .. 40
         minVersion: 1,
         maxVersion: 40,
@@ -460,6 +489,9 @@ function consultaFactura(idFactura){
                     $.each(data.aaData, function( index, modeloTabla ) {
                       if(self.facturaImpresa == null){
                             self.facturaImpresa = modeloTabla.factura
+                            if(self.facturaImpresa.empresa.imprimirCelular == 1){
+                                self.mostrarImprimiCelular = true
+                            }
                             console.log(self.facturaImpresa)
                             self.update()
                             self.claveParteUno= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(0,24):""
@@ -489,6 +521,10 @@ function consultaFactura(idFactura){
                             self.update()
                       }
                     });
+                    if(self.parametro.factura.empresa.noFacturaElectronica == 0){
+                      qr()    
+                    }
+         
                     if (self.facturaImpresa.empresa.imprimirDirecto == 0 || self.parametro.facturaDia ==1){
                         $('.imprimirModal').modal('show');   
                     }else{
@@ -662,7 +698,7 @@ function imprimirElemento(elemento){
   ventana.print();
   ventana.close();
   
-  printJS('imprimeme', 'html');
+ // printJS('imprimeme', 'html');
   
   return true;
 }
