@@ -2185,6 +2185,7 @@ function __FacturaEnEspera(factura){
 **/
 function cargarDetallesFacturaEnEspera(data){
     self.detail = [];
+    self.factura = null
     self.update()
      $.each(data, function( index, modeloTabla ) {
         if(self.factura == null){
