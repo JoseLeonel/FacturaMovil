@@ -149,6 +149,7 @@ public class HaciendaDaoImpl implements HaciendaDao {
 	@Override
 	public void findByClaveSP(String clave, Integer estado, String xml, String mensajeHacienda) throws Exception {
 		try {
+			
 			StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_CALLBACK_HACIENDA);
 			// set parametros entrada
 			storedProcedure.registerStoredProcedureParameter(Constantes.SP_CALLBACK_HACIENDA_CLAVE, String.class, ParameterMode.IN);

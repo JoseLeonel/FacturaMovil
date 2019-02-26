@@ -396,6 +396,9 @@ self.on('mount',function(){
       
                     
     }
+    if(self.parametro.factura.empresa.noFacturaElectronica == 0){
+        qr()    
+    }
      
     
 })
@@ -406,7 +409,7 @@ self.on('mount',function(){
 function qr(){
      var options = {
         // render method: 'canvas', 'image' or 'div'
-        render: self.facturaImpresa.empresa.imprimirCelular == 1?'image':'div',
+        render: self.parametro.factura.empresa.imprimirCelular == 1?'image':'div',
         // version range somewhere in 1 .. 40
         minVersion: 1,
         maxVersion: 40,
@@ -521,9 +524,7 @@ function consultaFactura(idFactura){
                             self.update()
                       }
                     });
-                    if(self.parametro.factura.empresa.noFacturaElectronica == 0){
-                      qr()    
-                    }
+                   
          
                     if (self.facturaImpresa.empresa.imprimirDirecto == 0 || self.parametro.facturaDia ==1){
                         $('.imprimirModal').modal('show');   

@@ -327,6 +327,7 @@ public class HaciendasController {
 							// }
 						}
 					}
+					
 					// hacienda.setObservacion(respuestaHacienda.mensajeHacienda() != null ? FacturaElectronicaUtils.convertirStringToblod(respuestaHacienda.mensajeHacienda().detalleMensaje()) : null);
 					mensajeHacienda = respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().detalleMensaje() : Constantes.EMPTY;
 					if (xmlFirmado != null) {
