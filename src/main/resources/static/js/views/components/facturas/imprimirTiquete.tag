@@ -261,6 +261,7 @@ function consultar(){
                 $.each(data.aaData, function( index, modeloTabla ) {
                     self.facturaImpresa = modeloTabla.factura 
                     self.facturaImpresa.fechaEmision = displayDate_detail(self.facturaImpresa.fechaEmision)
+                    self.facturaImpresa.totalComprobante += modeloTabla.montoTotalLinea
                     self.update()
                 })
                 getSubTotalGeneral()

@@ -4,8 +4,10 @@ import static com.emprendesoftcr.fisco.Keys.ERROR;
 import static com.emprendesoftcr.fisco.Keys.POST_RESPONSE;
 import static java.util.stream.Collectors.toList;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -757,6 +759,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			List<DetalleFacturaElectronica> detallesFactura = detalles.stream().map(TO_DETALLE).collect(toList());
 			facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
 
+			
 			// ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 			ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 			String clave = getConsecutivo(factura.getTipoDoc(), factura.getNumeroConsecutivo());
@@ -924,6 +927,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	private Attachment attachment(String name, String ext, ByteArrayDataSource data) {
 		return new Attachment(name + ext, data);
 	}
+	
+
 
 	private ByteArrayDataSource asPDF(ByteArrayOutputStream stream) {
 		return new ByteArrayDataSource(stream.toByteArray(), "text/pdf");
