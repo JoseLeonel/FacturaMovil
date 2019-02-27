@@ -390,14 +390,14 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 				// Guanacaste
-				// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+				 //recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 				// JacoDos
 				// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 				// Jaco
-				// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+				 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 				// Inventario
-				 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				 //recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				// Alajuela
 				 //recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
@@ -886,6 +886,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	private ByteArrayDataSource asText(String text) throws IOException {
 		return new ByteArrayDataSource(text, "text/plain");
 	}
+	
+	
 
 	private Attachment XML_Attach(String name, String cedula, ByteArrayDataSource data, String tipoDoc) {
 		String resultado = Constantes.EMPTY;
@@ -931,7 +933,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 
 	private ByteArrayDataSource asPDF(ByteArrayOutputStream stream) {
-		return new ByteArrayDataSource(stream.toByteArray(), "text/pdf");
+		return new ByteArrayDataSource(stream.toByteArray(), "application/pdf");
 	}
 
 	/**

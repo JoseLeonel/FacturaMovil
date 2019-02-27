@@ -66,11 +66,11 @@
                                     </div>                                    
                                    <div class="form-group ">
                                         <label>{$.i18n.prop("factura.correoAlternativo")}</label> 
-                                        <input type="email" id="correoAlternativo" name="correoAlternativo" class="campo correoAlternativo"  value="" >
+                                        <input type="email" id="correoAlternativo" name="correoAlternativo" class="campo correoAlternativo"  value="{factura.correoAlternativo}" >
                                     </div>
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("factura.nombreFactura")}</label> 
-                                        <input type="text" id="nombreFactura" name="nombreFactura" class="campo nombreFactura "  value="{factura.nombreFactura}" >
+                                        <input type="text" id="nombreFactura" name="nombreFactura" class="campo nombreFactura "  value="{factura.nombreFactura}" > 
                                     </div>
                                     
                                     <div show = "{!mostrarCamposIngresoContado || factura.fechaCredito}" class="form-group ">
@@ -1415,6 +1415,9 @@ function cargarDetallesFacturaEnEspera(data){
     return 0;
     } );
     self.update()
+    $(".nombreFactura").val(self.factura.nombreFactura)
+    $(".correoAlternativo").val(self.factura.correoAlternativo)
+    
     $('#totalEfectivo').val(self.factura.totalComprobante)
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)

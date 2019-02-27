@@ -220,7 +220,7 @@
                             </span>
                             <input type="text" onclick={_EscogerVendedores} placeholder="Vendedor" value="{vendedor.nombreCompleto}"  name="v_vendedor" id="v_vendedor" autocomplete="off" >
                         </div>
-                        <a class="pull-right" href="#"   title="{$.i18n.prop("btn.limpiar")}"> <span class="label-titulos-articulo">Tikete a :{factura.nombreFactura}</span></a>
+                        <a class="pull-right" href="#"   title="{factura.nombreFactura}"> <span class="label-titulos-articulo">Tikete a :{factura.nombreFactura}</span></a>
                     </div>
                 </div> 
                 <hr style="margin: 0px; border-color: #e4e4e4;">
@@ -611,7 +611,7 @@
                                     </div>
                                      <div class="form-group ">
                                         <label>{$.i18n.prop("factura.nombreFactura")}</label> 
-                                        <input type="text" id="nombreFactura" name="nombreFactura" class="form-control nombreFactura"  value="{factura.nombreFactura}" >
+                                        <input type="text" id="nombreFactura" name="nombreFactura" class="form-control nombreFactura"  value="{factura.nombreFactura}" > 
                                     </div>
                                     <div class="form-group ">
                                         <label>{$.i18n.prop("factura.correoAlternativo")}</label> 
@@ -1819,13 +1819,12 @@ function __ListaDeArticulosPorDescripcion(){
 **/
 __CargarFacturaEspera(e){
     self.factEspera = e.item
-    self.factura = e.item
+  //  self.factura = e.item
     self.update()
     if(self.factura.id !=null){
       if(self.seIncluyoUnArticulo !=null){
         aplicarFactura(1)  
-        self.seIncluyoUnArticulo =null
-        self.update()
+       
       }  
       
     }else{
@@ -1837,7 +1836,7 @@ __CargarFacturaEspera(e){
        
     }
     
-   __FacturaEnEspera(e.item)
+__FacturaEnEspera(e.item)
 }
 
 /**
@@ -1849,7 +1848,7 @@ __CambiarNombreTiquete(){
     }
     $('.cambioNombreTiquete').focus()
     $('.cambioNombreTiquete').val(self.factura.nombreFactura)
-   $('#ModalCambiarNombreTiquete').modal({backdrop: 'static', keyboard: false})     // initialized with no keyboard
+    $('#ModalCambiarNombreTiquete').modal({backdrop: 'static', keyboard: false})     // initialized with no keyboard
     $('#ModalCambiarNombreTiquete').modal('show') 
     
 }
@@ -1858,11 +1857,18 @@ __CambiarNombreTiquete(){
 *  Crear la factura temporal o espera
 **/
 __CrearFacturaTemporal(){
+     if(self.detail.length == 0 ){
+        mensajeError($.i18n.prop("factura.alert.sin.detalles"))
+        return
+    }
     if(self.factura.id == null){
         
         if(self.detail.length != 0 ){
-            $('#ModalAgregarNombreTiquete').modal('show') 
+            $('.cambioNombreTiquete').val(self.factura.nombreFactura)
             $('.cambioNombreFactura').focus()
+            $('#ModalAgregarNombreTiquete').modal() 
+         //   $('#ModalCambiarNombreTiquete').modal({ keyboard: false })     // initialized with no keyboard
+             $('#ModalAgregarNombreTiquete').modal('show') 
             return
         }
 
@@ -2308,9 +2314,12 @@ function evaluarFactura(data){
                 showConfirmButton: false,
                 timer: 1000
                 })
+               
+            }
+             self.seIncluyoUnArticulo =null
+                self.update()
                 __Init()
                 __ListaFacturasEnEspera()
-            }
         });
     }
 }

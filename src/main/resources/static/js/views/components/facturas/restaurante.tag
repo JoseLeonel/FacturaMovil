@@ -2087,7 +2087,7 @@ __CambiarDescripcion(e){
    $( "#cambiarDescripcionArticulo" ).focus()
    $( "#cambiarDescripcionArticulo" ).val(self.item.descripcion)
    $('#modalCambiarDescripcion').modal()                      // initialized with defaults
-   $('#modalCambiarDescripcion').modal({ keyboard: false })   // initialized with no keyboard
+   $('#modalCambiarDescripcion').modal({ keyboard: false })   // initialized with no keyboard 
    $('#modalCambiarDescripcion').modal('show')                // initializes and invokes show immediately
 
 
@@ -2304,7 +2304,7 @@ function __ListaDeArticulosPorDescripcion(){
 __CargarFacturaEspera(e){
     self.pendientesComanda     = []
     self.factEspera = e.item
-    self.factura = e.item
+   // self.factura = e.item
     self.update()
     if(self.factura.id !=null){
       if(self.seIncluyoUnArticulo !=null){
