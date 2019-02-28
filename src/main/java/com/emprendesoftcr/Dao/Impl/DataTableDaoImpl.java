@@ -51,7 +51,7 @@ public class DataTableDaoImpl implements DataTableDao {
 	private Query generarQueryBusqueda(DataTableDelimitador delimitador, Boolean contar) {
 		StringBuilder hql = null;
 		if (contar) {
-			hql = new StringBuilder("select count(obj) from " + delimitador.getTabla() + " obj ");
+			hql = new StringBuilder("select count(*) from " + delimitador.getTabla() + " obj ");
 
 		} else {
 			hql = new StringBuilder("from " + delimitador.getTabla() + " obj ");
@@ -82,12 +82,15 @@ public class DataTableDaoImpl implements DataTableDao {
 				}
 			}
 		}
-		// Se define el ordenamiento
-		if (StringUtils.hasText(delimitador.getColumnOrderDir()) && StringUtils.hasText(delimitador.getColumnData())) {
-			hql.append(" order by obj.");
-			hql.append(delimitador.getColumnData());
-			hql.append(" ");
-			hql.append(delimitador.getColumnOrderDir());
+		if (contar == false) {
+			// Se define el ordenamiento
+			if (StringUtils.hasText(delimitador.getColumnOrderDir()) && StringUtils.hasText(delimitador.getColumnData())) {
+				hql.append(" order by obj.");
+				hql.append(delimitador.getColumnData());
+				hql.append(" ");
+				hql.append(delimitador.getColumnOrderDir());
+			}
+			
 		}
 
 		// else {

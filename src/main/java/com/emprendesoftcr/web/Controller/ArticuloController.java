@@ -1,5 +1,8 @@
 	package com.emprendesoftcr.web.Controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -35,6 +38,7 @@ import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Marca;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.pdf.GondolaArticuloPdfView;
 import com.emprendesoftcr.web.command.ArticuloCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacion;
 import com.emprendesoftcr.web.propertyEditor.ArticuloPropertyEditor;
@@ -42,6 +46,7 @@ import com.emprendesoftcr.web.propertyEditor.CategoriaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.MarcaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
+import com.itextpdf.text.DocumentException;
 
 /**
  * Control de los articulos de una empresa ArticuloController.
@@ -111,6 +116,39 @@ public class ArticuloController {
 	@RequestMapping(value = "/CambiarPrecio", method = RequestMethod.GET)
 	public String cambiarPrecio(ModelMap model) {
 		return "views/articulos/CambioPrecio";
+	}
+	
+	@RequestMapping(value = "/PDFGondolaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	public void bajarPDFGondola(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idArticulo) throws Exception {
+		try {
+			Articulo articuloBD = articuloBo.buscar(idArticulo);
+			String	fileName = "Articulo_" +articuloBD.getCodigo().toString() ;
+
+			// ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
+			ByteArrayOutputStream namePDF = GondolaArticuloPdfView.main(articuloBD);
+			int BUFFER_SIZE = 4096;
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
+			response.setContentType("application/octet-stream");
+			response.setContentLength((int) namePDF.toByteArray().length);
+			String headerKey = "Content-Disposition";
+			String headerValue = String.format("attachment; filename=\"%s\"", fileName + ".pdf");
+			response.setHeader(headerKey, headerValue);
+			OutputStream outStream = response.getOutputStream();
+			byte[] buffer = new byte[BUFFER_SIZE];
+			int bytesRead = -1;
+			while ((bytesRead = inputStream.read(buffer)) != -1) {
+				outStream.write(buffer, 0, bytesRead);
+			}
+			inputStream.close();
+			outStream.close();
+		} catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		} catch (com.google.zxing.WriterException ex) {
+			throw ex;
+		}
+
 	}
 
 	@SuppressWarnings("all")

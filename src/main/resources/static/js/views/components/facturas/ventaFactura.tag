@@ -1578,7 +1578,10 @@ function consultaParaReimprimir(data,tipoImpresion){
 * Aplicar el descuento
 **/
 __CambiarDescuento(e){
-    self.item = e.item; 
+    self.item = e.item;
+    if(self.item.codigo =="8888"){
+        return true
+    } 
     self.update()
      $('#modalCambiarDescuento').modal({backdrop: 'static', keyboard: false})     // initialized with no keyboard
     $('#modalCambiarDescuento').modal('show')      
@@ -1589,6 +1592,9 @@ __CambiarDescuento(e){
 **/
 __CambiarCantidad(e){
    self.item = e.item; 
+   if(self.item.codigo =="8888"){
+        return true
+    } 
    self.update()
    $( "#cambiarCantidadArticulo" ).focus()
    $( "#cambiarCantidadArticulo" ).val(self.item.cantidad)
@@ -1602,6 +1608,9 @@ __CambiarCantidad(e){
 __CambiarDescripcion(e){
    self.item = e.item; 
    self.update()
+   if(self.item.codigo =="8888"){
+        return true
+    } 
   
    $( "#cambiarDescripcionArticulo" ).focus()
    $( "#cambiarDescripcionArticulo" ).val(self.item.descripcion)
@@ -1616,6 +1625,9 @@ __CambiarDescripcion(e){
 **/
 __CambiarPrecio(e){
    self.item = e.item; 
+   if(self.item.codigo =="8888"){
+        return true
+    } 
    self.update()
    $( "#cambiarprecioArticulo" ).focus()
    $( "#cambiarprecioArticulo" ).val( e.item.precioUnitario)
@@ -2923,10 +2935,13 @@ function __calculate() {
 **/
 function calcularImpuestoServicio(){
     var resultado = 0
+    var montoDescuentoTotal = 0
      self.detail.forEach(function(e){
-        resultado += e.montoTotal
+        resultado += e.codigo != "8888" ?e.montoTotal:0;
+        montoDescuentoTotal += e.montoDescuento;
     });
     //Impuesto del servicio
+    resultado = resultado - montoDescuentoTotal; 
     resultado = resultado * 0.10
     resultado = Math.round(__valorNumerico(resultado))
      for (var count = 0; count < self.detail.length; count++) {

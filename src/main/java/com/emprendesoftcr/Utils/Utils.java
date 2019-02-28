@@ -59,6 +59,19 @@ public final class Utils {
 		
 		return resultado;
 	}
+	public static String formateadorMilesSinDecimales(Double valor) {
+		String resultado = Constantes.EMPTY;
+		
+		if(valor == null) {
+			valor = 0d;
+			
+		}
+		
+		DecimalFormat formateador = new DecimalFormat("###,###,##0");
+		resultado = formateador.format (valor);
+		
+		return resultado;
+	}
 	
 	
   /**

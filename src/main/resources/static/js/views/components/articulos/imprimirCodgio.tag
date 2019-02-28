@@ -207,17 +207,19 @@ self.on('mount',function(){
        self.articulo.precioPublico = __valorNumerico(self.articulo.precioPublico) 
        self.articulo.precioPublico = self.articulo.precioPublico > 0 ?formatoDecimales(self.articulo.precioPublico,2):0  
        self.update()
-       $("#barcode").barcode(
-          self.articulo.codigo, // Valor del codigo de barras
-          "codabar" // tipo (cadena)
-        );
-       $('.imprimirModalArticulo').modal('show'); 
+       //$("#barcode").barcode(
+       //   self.articulo.codigo, // Valor del codigo de barras
+       //   "codabar" // tipo (cadena)
+       // );
+       //$('.imprimirModalArticulo').modal('show'); 
     }
 })
 /**
 *Imprimir facturaImpresa
 **/    
 __ImprimirTiquete(){
+	location.href = "PDFGondolaAjax.do?idArticulo=" + self.articulo.id
+    return
     $('#imprimirModalArticulo').modal('toggle') 
     __imprimirTique()
     $("#boton-regresar").focus()

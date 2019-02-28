@@ -225,12 +225,16 @@
 <script>
 
 var self = this;
-self.facturaImpresa = opts.factura;  
+self.parametros = opts.parametros;  
 self.detalles = []
 self.subTotalGeneralImp = 0
 self.totalComprobanteImp = 0
+self.impServicioTotal = 0
 self.on('mount',function(){
-    if(self.facturaImpresa.id > 0){
+    if(self.parametros.facturaParametro.id > 0){
+        self.facturaImpresa = self.parametros.facturaParametro
+        self.impServicioTotal = self.parametros.impuestoServicio
+        self.update()
         consultar()
          
     }
@@ -241,25 +245,30 @@ self.on('mount',function(){
 function consultar(){
      self.detalles = []
      self.update()
+     var totalComprobante = 0
     $.ajax({
         url: "ListarDetlleByFacturaAjax.do",
         datatype: "json",
-        data: {idFactura:self.facturaImpresa.id},
+        data: {idFactura:self.parametros.facturaParametro.id},
         method:"POST",
         success: function (data) {
             if(data.aaData.length > 0){
                 self.detalles =data.aaData
                 self.update()
-                self.detalles.forEach(function(elemen){
-                   elemen.montoTotalLinea = formatoDecimales(elemen.montoTotalLinea,2);
-                })
                 self.update()
                 $.each(data.aaData, function( index, modeloTabla ) {
                     self.facturaImpresa = modeloTabla.factura 
                     self.facturaImpresa.fechaEmision = displayDate_detail(self.facturaImpresa.fechaEmision)
-                    self.facturaImpresa.totalComprobante += modeloTabla.montoTotalLinea
+                    totalComprobante = totalComprobante + __valorNumerico(modeloTabla.montoTotalLinea)    
                     self.update()
                 })
+                self.facturaImpresa.totalComprobante = totalComprobante + self.impServicioTotal
+                self.update()
+                self.detalles.forEach(function(elemen){
+                   elemen.montoTotalLinea = formatoDecimales(elemen.montoTotalLinea,2);
+                })
+                self.update()
+                
                 getSubTotalGeneralPrint()
                 getMonedaPrint()
                 __ComboTipoDocumentosPrint()

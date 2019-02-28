@@ -197,10 +197,13 @@ function __Imprimir_Articulo(){
 	       var data = table.row(this).data();
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
-	    }
-		riot.compile(function() {
-   		var tags = riot.mount('articulo-imprimir',{articulo:data});
-		});
+       }
+       location.href = "PDFGondolaAjax.do?idArticulo=" + data.id
+       return
+   
+		//riot.compile(function() {
+   	//	var tags = riot.mount('articulo-imprimir',{articulo:data});
+		//});
 	});
 }
 /**

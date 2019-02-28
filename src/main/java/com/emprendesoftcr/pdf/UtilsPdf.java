@@ -18,6 +18,8 @@ import com.itextpdf.text.pdf.PdfPTable;
  * @since 24 ene. 2019
  */
 public final class UtilsPdf {
+	public static Font	bigFont40							= FontFactory.getFont("Helvetica", "Windows-1254", 34.0F, 1, BaseColor.BLACK);
+	public static Font	bigFont24							= FontFactory.getFont("Helvetica", "Windows-1254", 30.0F, 1, BaseColor.BLACK);
 	public static Font	bigFont16							= FontFactory.getFont("Helvetica", "Windows-1254", 20.0F, 1, BaseColor.BLACK);
 	public static Font	bigFont							= FontFactory.getFont("Helvetica", "Windows-1254", 14.0F, 1, BaseColor.BLACK);
 	public static Font	bigFont12						= FontFactory.getFont("Helvetica", "Windows-1254", 12.0F, 1, BaseColor.BLACK);
@@ -28,6 +30,7 @@ public final class UtilsPdf {
 	public static Font	fontmed11						= FontFactory.getFont("Arial", 11, BaseColor.BLACK);
 	public static Font	fontmed12						= FontFactory.getFont("Arial", 11, BaseColor.BLACK);
 	public static Font	fontmed12_bold			= FontFactory.getFont("Arial", 11, 1, BaseColor.BLACK);
+	public static Font	fontmed18_bold			= FontFactory.getFont(FontFactory.TIMES_ROMAN, 34.0F, 1, BaseColor.BLACK);
 	public static Font	font_cabezera_tabla	= FontFactory.getFont("Helvetica", "Windows-1254", 8.0F, 1, BaseColor.BLACK);
 
 	public UtilsPdf() {

@@ -233,7 +233,6 @@
 var self = this;
 self.facturaImpresa   = opts.factura;  
 self.detalles = []
-self.subTotalGeneral = 0
 self.on('mount',function(){
     if(self.facturaImpresa.id > 0){
        consultar() 
@@ -245,6 +244,7 @@ self.on('mount',function(){
 function consultar(){
      self.detalles = []
      self.update()
+     var totalComprobante = 0
     $.ajax({
         url: "ListarDetlleByFacturaAjax.do",
         datatype: "json",
@@ -254,17 +254,19 @@ function consultar(){
             if(data.aaData.length > 0){
                 self.detalles =data.aaData
                 self.update()
+                
+                $.each(data.aaData, function( index, modeloTabla ) {
+                    self.facturaImpresa = modeloTabla.factura 
+                    self.facturaImpresa.fechaEmision = displayDate_detail(self.facturaImpresa.fechaEmision)
+                    totalComprobante = totalComprobante + __valorNumerico(modeloTabla.montoTotalLinea)    
+                    self.update()
+                })
+                self.facturaImpresa.totalComprobante = totalComprobante
+                self.update()
                 self.detalles.forEach(function(elemen){
                    elemen.montoTotalLinea = formatoDecimales(elemen.montoTotalLinea,2);
                 })
                 self.update()
-                $.each(data.aaData, function( index, modeloTabla ) {
-                    self.facturaImpresa = modeloTabla.factura 
-                    self.facturaImpresa.fechaEmision = displayDate_detail(self.facturaImpresa.fechaEmision)
-                    self.facturaImpresa.totalComprobante += modeloTabla.montoTotalLinea
-                    self.update()
-                })
-                getSubTotalGeneral()
                 getMoneda()
                 __ComboTipoDocumentos()
                 buscarTipoDocumento()
@@ -304,11 +306,7 @@ function getMoneda() {
     self.update()
 }
 
-function getSubTotalGeneral(){
-    var resultado = __valorNumerico(self.facturaImpresa.subTotal) + __valorNumerico(self.facturaImpresa.totalDescuentos)
-    self.subTotalGeneral = redondearDecimales(resultado,5)
-    self.update()
-}
+
 /**
 *Formato de Fecha
 **/

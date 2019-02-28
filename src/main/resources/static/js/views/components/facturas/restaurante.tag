@@ -2157,7 +2157,11 @@ __ImprimirTiquete(){
 function imprimirTiquete(){
     var factura = self.factura
     self.update()
-    riot.mount('tiquete-imprimir',{factura:factura});
+    var parametros = {
+        facturaParametro:self.factura,
+        impuestoServicio:self.ImpuestoServicio
+    }
+    riot.mount('tiquete-imprimir',{parametros:parametros});
     var a = 1
 }
 /**
@@ -3569,7 +3573,9 @@ function __calculate() {
     }
     self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
     self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
-    self.totalImpuestoServ                = formatoDecimales(self.factura.totalImpuestoServ,2);
+    self.totalImpuestoServ  = formatoDecimales(self.factura.totalImpuestoServ,2);
+    self.ImpuestoServicio  = self.factura.totalImpuestoServ;
+//    self.totalImpuestoServ                = self.factura.totalImpuestoServ;
 
   //  self.articulo              = null;
     self.update(); 
