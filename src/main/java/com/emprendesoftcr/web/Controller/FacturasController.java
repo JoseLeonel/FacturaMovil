@@ -70,12 +70,9 @@ import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.Vendedor;
-import com.emprendesoftcr.pdf.App;
 import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
-import com.emprendesoftcr.pdf.Proformas;
 import com.emprendesoftcr.pdf.ReportePdfView;
-import com.emprendesoftcr.pdf.TiquetePdfView;
 import com.emprendesoftcr.validator.FacturaFormValidator;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
@@ -91,6 +88,14 @@ import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.VendedorPropertyEditor;
 import com.google.common.base.Function;
 import com.itextpdf.text.DocumentException;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 /**
  * Compras realizadas por la empresa y ingresan al inventario ComprasController.
@@ -491,20 +496,21 @@ public class FacturasController {
 	@RequestMapping(value = "/generaProformasPDF.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	public void generarProformasPDF(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura) throws Exception {
 		try {
-//			JasperReport jasperReport;
-//
-//
-//			jasperReport = JasperCompileManager.compileReport("reportes/ejemplo.jrxml");
-//			JRDataSource vacio = new JREmptyDataSource(1);
-//			 
-//			Map<String, Object> parameters = new HashMap<String, Object>();
-//			parameters.put("nombreEmpresa", factura.getEmpresa().getNombre().toString());
-//			
-//			JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters,vacio);
-//      
-//      JasperExportManager.exportReportToPdfFile(print, "reportes/ejemplo.pdf");
-
+			//JasperReport jasperReport;
 			Factura factura = facturaBo.findById(idFactura);
+
+
+			//jasperReport = JasperCompileManager.compileReport("reportes/ejemplo.jrxml");
+			//JRDataSource vacio = new JREmptyDataSource(1);
+		 
+			//Map<String, Object> parameters = new HashMap<String, Object>();
+			//parameters.put("nombreEmpresa", factura.getEmpresa().getNombre().toString());
+			
+			//JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters,vacio);
+      
+      //JasperExportManager.exportReportToPdfFile(print, "reportes/ejemplo.pdf");
+
+			
 
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
 			Collection<Detalle> detalles = detalleBo.findByFactura(factura);

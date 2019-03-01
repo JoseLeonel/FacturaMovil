@@ -382,7 +382,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				recepcion.setComprobanteXml(base64);
 
 				// Ambiente de pruebas
-				 recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 				// San Ana
 				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
@@ -398,7 +398,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				// Alajuela
-				 //recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+				 recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 				ObjectMapper mapperObj = new ObjectMapper();
 				String jsonStr = mapperObj.writeValueAsString(recepcion);

@@ -369,7 +369,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-                <jvmArguments>-Xmx768m</jvmArguments>
+                <jvmArguments>-Xmx1024m</jvmArguments>
             </configuration>
 			</plugin>
 		</plugins>

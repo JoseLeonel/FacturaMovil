@@ -300,7 +300,7 @@ public class HaciendasController {
 						estado = Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA;
 					} else if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
 						// hacienda.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
-						estado = Constantes.HACIENDA_ESTADO_ERROR;
+						estado = Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA;
 					}
 					// Hacienda no envia mensaje
 					if (respuestaHacienda.mensajeHacienda() != null) {
@@ -310,7 +310,7 @@ public class HaciendasController {
 								estado = Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA;
 							} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_RECHAZADO)) {
 								// hacienda.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
-								estado = Constantes.HACIENDA_ESTADO_ERROR;
+								estado = Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA;
 							} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO_PARCIAL)) {
 								// hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_PARCIAL);
 								estado = Constantes.HACIENDA_ESTADO_ACEPTADO_PARCIAL;
@@ -320,7 +320,7 @@ public class HaciendasController {
 						if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
 //							if (hacienda.getReintentosAceptacion() == Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
 							// hacienda.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
-							estado = Constantes.HACIENDA_ESTADO_ERROR;
+							estado = Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA;
 							// } else {
 							// hacienda.setReintentosAceptacion(hacienda.getReintentosAceptacion() == null ? 1 : hacienda.getReintentosAceptacion() + 1);
 							// hacienda.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA);
