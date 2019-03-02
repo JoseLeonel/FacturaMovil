@@ -500,10 +500,10 @@ function consultaFactura(idFactura){
                             self.claveParteUno= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(0,24):""
                             self.claveParteDos= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(25,51):""
                             //detalles
-                            self.totalImpuestoServicio = 0
+                          //  self.totalImpuestoServicio = 0
                             self.subTotal = 0
-                            self.totalImpuestoServicioSTR = ""
-                            self.totalImpuestoServicioSTR =  formatoDecimales(self.totalImpuestoServicio,2)  
+                           // self.totalImpuestoServicioSTR = ""
+                           // self.totalImpuestoServicioSTR =  formatoDecimales(self.totalImpuestoServicio,2)  
                             self.update()
                             getMoneda()
                             _VersionTiquete()
