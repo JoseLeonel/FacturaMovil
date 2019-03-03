@@ -151,6 +151,10 @@
                                     <option each={comanda}  value="{codigo}" selected="{articulo.comanda ==codigo?true:false}" >{descripcion}</option>
                                 </select>
                             </div>                          
+                            <div class= "col-md-3 col-sx-12 col-sm-4 col-lg-3 has-success">
+                                <label  >{$.i18n.prop("articulo.prioridad")} </label>
+                                <input type="number" step="any" class="form-control prioridad" id="prioridad" name="prioridad" value="{articulo.prioridad}"  >
+                            </div>
                         </div>
                     </form>    
                 </div>
@@ -409,7 +413,8 @@
 		empresa:{
             id:null
         },
-        comanda:0
+        comanda:0,
+        prioridad:1
     }    
    
     // variables para modulo de inventario 
@@ -550,6 +555,7 @@ function LimpiarArticulo(){
    $('.gananciaPrecioMayorista').val(null)
    $('.precioEspecial').val(null)
    $('.gananciaPrecioEspecial').val(null)
+   $('.prioridad').val(1)
     $(".errorServerSideJgrid").remove();
     $("#formulario").validate(reglasDeValidacion());
     enviarCargarCombos()
@@ -1414,7 +1420,8 @@ function _inicializarArticulo(){
         },
 		empresa:{
             id:null
-        }
+        },
+        prioridad:1
     }    
     self.update()
 }

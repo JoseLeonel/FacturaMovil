@@ -39,6 +39,7 @@ public class ArticuloCommand {
 	private Empresa			empresa;
 	private BigDecimal	cantidad;
 	private Integer			comanda;
+	private Integer			prioridad;
 
 	public ArticuloCommand(Articulo articulo) {
 		super();
@@ -70,6 +71,15 @@ public class ArticuloCommand {
 		this.minimo = articulo.getMinimo();
 		this.maximo = articulo.getMaximo();
 		this.comanda = articulo.getComanda();
+		this.prioridad = articulo.getPrioridad();
+	}
+
+	public Integer getPrioridad() {
+		return prioridad;
+	}
+
+	public void setPrioridad(Integer prioridad) {
+		this.prioridad = prioridad;
 	}
 
 	public Integer getComanda() {
