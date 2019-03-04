@@ -124,13 +124,12 @@ public class Articulo implements Serializable {
 	@JoinColumn(name = "empresa_id")
 	private Empresa empresa;
 
-	
-
 	// 1 = Articulo cocina
 	@Column(name = "comanda")
 	private Integer comanda = 0;
 
-	
+	@Column(name = "prioridad", columnDefinition = "INT default '99999'")
+	private Integer prioridad;
 
 	public Articulo(Long id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, Double cantidad, Double minimo, Double maximo, String estado, String tipoImpuesto, String tipoCodigo, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa, Integer comanda) {
 		super();
@@ -365,7 +364,6 @@ public class Articulo implements Serializable {
 		this.empresa = empresa;
 	}
 
-
 	public String getTipoCodigo() {
 		return tipoCodigo;
 	}
@@ -398,13 +396,18 @@ public class Articulo implements Serializable {
 		this.maximo = maximo;
 	}
 
+	public Integer getPrioridad() {
+		return prioridad;
+	}
+
+	public void setPrioridad(Integer prioridad) {
+		this.prioridad = prioridad;
+	}
+
 	@Override
 	public String toString() {
 		return "Articulo [id=" + id + ", codigo=" + codigo + ", descripcion=" + descripcion + ", serie=" + serie + ", unidadMedida=" + unidadMedida + ", contable=" + contable + ", costo=" + costo + ", impuesto=" + impuesto + ", precioPublico=" + precioPublico + ", gananciaPrecioPublico=" + gananciaPrecioPublico + ", precioMayorista=" + precioMayorista + ", gananciaPrecioMayorista=" + gananciaPrecioMayorista + ", precioEspecial=" + precioEspecial + ", gananciaPrecioEspecial=" + gananciaPrecioEspecial + ", cantidad=" + cantidad + ", minimo=" + minimo + ", maximo=" + maximo + ", estado=" + estado + ", tipoImpuesto=" + tipoImpuesto + ", tipoCodigo=" + tipoCodigo + ", created_at=" + created_at + ", updated_at=" + updated_at + ", marca=" + marca + ", usuario=" + usuario + ", categoria=" + categoria
 				+ ", empresa=" + empresa + ", comanda=" + comanda + "]";
 	}
-
-	
-	
 
 }

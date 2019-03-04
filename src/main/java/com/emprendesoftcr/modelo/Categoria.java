@@ -27,32 +27,35 @@ import com.emprendesoftcr.Utils.Constantes;
 @Table(name = "categorias")
 public class Categoria implements Serializable {
 
-	private static final long	serialVersionUID	= 5443162013611771917L;
+	private static final long serialVersionUID = 5443162013611771917L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long						id;
+	private Long id;
 
 	@Column(name = "descripcion")
-	private String						descripcion;
+	private String descripcion;
 
 	@Column(name = "estado")
-	private String						estado;
+	private String estado;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "created_at")
-	private Date							created_at;
+	private Date created_at;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
-	private Date							updated_at;
+	private Date updated_at;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
-	private Empresa						empresa;
+	private Empresa empresa;
+
+	@Column(name = "prioridad", columnDefinition = "INT default '9999'")
+	private Integer prioridad;
 
 	public Categoria() {
 		super();
@@ -61,8 +64,6 @@ public class Categoria implements Serializable {
 		this.updated_at = new Date();
 
 	}
-
-
 
 	public Categoria(Long id, String descripcion, String estado, Date created_at, Date updated_at, Empresa empresa) {
 		super();
@@ -74,23 +75,13 @@ public class Categoria implements Serializable {
 		this.empresa = empresa;
 	}
 
-
-
-
-
-	
 	public Long getId() {
 		return id;
 	}
 
-
-
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-
 
 	public String getDescripcion() {
 		return descripcion;
@@ -130,6 +121,14 @@ public class Categoria implements Serializable {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public Integer getPrioridad() {
+		return prioridad;
+	}
+
+	public void setPrioridad(Integer prioridad) {
+		this.prioridad = prioridad;
 	}
 
 }

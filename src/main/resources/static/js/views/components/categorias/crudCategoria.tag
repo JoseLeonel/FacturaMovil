@@ -15,13 +15,15 @@
                         <thead>
                             <tr>
                                 <th class="table-header" >{$.i18n.prop("categoria.descripcion")}   </th>
+                                <th class="table-header" >{$.i18n.prop("categoria.prioridad")}        </th>
                                 <th class="table-header" >{$.i18n.prop("categoria.estado")}        </th>
-                                <th class="table-header" > {$.i18n.prop("listado.acciones")}       </th>
+                                <th class="table-header" >{$.i18n.prop("listado.acciones")}       </th>
                             </tr>
                         </thead>
                         <tfoot style="display: table-header-group;">
                             <tr>
                                 <th>{$.i18n.prop("categoria.descripcion")}   </th>
+                                <th>{$.i18n.prop("categoria.prioridad")}     </th>
                                 <th>{$.i18n.prop("categoria.estado")}        </th>
                                 <th>  </th>
                             </tr>
@@ -54,6 +56,13 @@
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label  >{$.i18n.prop("categoria.descripcion")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" class="form-control descripcion" placeHolder ="{$.i18n.prop("categoria.descripcion")}" id="descripcion" name="descripcion" value="{categoria.descripcion}"  >
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                <label  >{$.i18n.prop("categoria.prioridad")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" class="form-control descripcion" placeHolder ="{$.i18n.prop("categoria.prioridad")}" id="prioridad" name="prioridad" value="{categoria.prioridad}"  >
 
                             </div>
                         </div>
@@ -148,7 +157,8 @@
     self.categoria = {
         id:null,
         descripcion:"",
-        estado:""
+        estado:"",
+        prioridad:0
     }
 
 
@@ -178,7 +188,10 @@ var reglasDeValidacion = function() {
 				required : true,
                 maxlength:80,
                 minlength:1,
-			}                                   
+			},
+			prioridad : {
+				required : true,
+			}                                    
                         
 		},
 		ignore : []
@@ -192,12 +205,14 @@ var reglasDeValidacion = function() {
 **/
 function Limpiar(){
     $("#descripcion").val(null)
+    $("#prioridad").val(0)
     $(".errorServerSideJgrid").remove();
     $("#formulario").validate(reglasDeValidacion());
      self.categoria = {
         id:null,
         descripcion:"",
-        estado:""
+        estado:"",
+       	prioridad:0
     }
     self.update()
     __ComboEstados()
@@ -280,6 +295,7 @@ function __modificarRegistro_Listar(){
         self.categoria  = data
         self.update()
         $("#descripcion").val(self.categoria.descripcion);
+        $("#prioridad").val(self.categoria.prioridad);
         __consultar()
 	});
 }
@@ -313,6 +329,7 @@ function __consultar(){
                         self.categoria  =  modeloTabla
                         self.update()
                         $("#descripcion").val(self.categoria.descripcion);
+                        $("#prioridad").val(self.categoria.prioridad);
                         __ComboEstados()
                         __Eventos()
                     });
@@ -427,6 +444,7 @@ function __listado(){
 function __InformacionDataTable(){
     self.informacion_tabla = [ 
                                {'data' :'descripcion'    ,"name":"descripcion"     ,"title" : $.i18n.prop("categoria.descripcion") ,"autoWidth" :true },
+                               {'data' : 'prioridad'     ,"name":"prioridad"       ,"title" : $.i18n.prop("categoria.prioridad")   ,"autoWidth" :false},
                                {'data' : 'estado'        ,"name":"estado"          ,"title" : $.i18n.prop("categoria.estado")      ,"autoWidth" :false},
                                {'data' : 'id'            ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
@@ -460,7 +478,7 @@ function agregarInputsCombos(){
 	    }
 
         // Select
-    	if ($(this).index() == 1  ){
+    	if ($(this).index() == 2  ){
     	    var select = $('<select id="combo" class="form-control"><option value="">Todos</option></select>');
     	    // se cargan los valores por defecto que existen en el combo
     	   	select.append( '<option value="'+$.i18n.prop("estado.Activo")+'">'+$.i18n.prop("estado.Activo")+'</option>' );

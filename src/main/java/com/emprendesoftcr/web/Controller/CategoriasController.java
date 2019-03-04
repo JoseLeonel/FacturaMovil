@@ -126,6 +126,13 @@ public class CategoriasController {
 			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
+		
+		if(delimitadores.getColumnData() == null) {
+			//Se ordena por prioridad por defecto se crearon en 9999
+			delimitadores.setColumnData("prioridad");
+			delimitadores.setColumnOrderDir("asc");			
+		}
+
 		JqGridFilter categoriaFilter=   new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "="); 
 		delimitadores.addFiltro(categoriaFilter);
 
@@ -226,6 +233,7 @@ public class CategoriasController {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 				}
 				categoriaBD.setDescripcion(categoria.getDescripcion());
+				categoriaBD.setPrioridad(categoria.getPrioridad());
 				categoriaBD.setUpdated_at(new Date());
 				categoriaBD.setEstado(categoria.getEstado());
 				categoriaBo.modificar(categoriaBD);

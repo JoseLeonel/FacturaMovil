@@ -8,9 +8,9 @@
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"></div>
     </div>          
-	<div id="formularioCargaArchivo" class="row center" show={mostrarCargaArchivo}>
+	<div id="formularioCargaArchivo" class="row center-block" show={mostrarCargaArchivo}>
     	
-        <div class="col-md-8 col-lg-8 col-sx-12 col-sm-8">
+        <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
             <div class="box box-solid box-primary">
                 <div class="box-header with-border">
                     <h1 class="box-title"><i class="fa fa-edit"></i>&nbsp {$.i18n.prop("titulo.aceptar.factura")}</h1>
@@ -25,7 +25,7 @@
                         <div class="row">
                              <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
                                 <label> {$.i18n.prop("archivo.factura")}  <span class="requeridoDato">*</span></label>
-					     		<input type="file" id="fileUpload" class="form-control"/>
+					     		<input type="file" id="fileUpload" class="form-control fileUpload"/>
                             </div>
                         </div>
 						<br>
@@ -48,9 +48,9 @@
 			</div>
 		</div>						
 	</div>
-	<div id="formularioAceptar" class="row center" show={mostrarFormulario} >
-    	<div class="col-md-2 col-sx-12 col-lg-2 col-sm-2"></div>
-        <div class="col-md-8 col-lg-8 col-sx-12 col-sm-8">
+	<div id="formularioAceptar" class="row center-block" show={mostrarFormulario} >
+    	<div class="col-md-12 col-sx-12 col-lg-12 col-sm-12"></div>
+        <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
             <div class="box box-solid box-primary">
                 <div class="box-body">
                     <form id="formularioAceptarForm" name="formularioAceptarForm" class="advanced-search-form">
@@ -686,123 +686,133 @@
                 	var xmlDoc = $.parseXML(e.target.result);
                 	
                 	//Se cargan los datos para presentar el detalle de una factura
-                	
-                    //Se cargan los datos del emisor
-                    var emisor = $(xmlDoc).find("Emisor");
-                    self.archivo.emisorNombre = emisor.find("Nombre").text();
-                    self.archivo.emisorCedula = emisor.find("Identificacion").find("Numero").text();
-                    self.archivo.emisorTipoCedula = emisor.find("Identificacion").find("Tipo").text();
-                    self.archivo.emisorCorreo = emisor.find("CorreoElectronico").text();
-                    self.archivo.emisorTelefono = emisor.find("Telefono").find("NumTelefono").text();
-                    self.archivo.emisorCodigoProvincia = emisor.find("Ubicacion").find("Provincia").text();
-                    self.archivo.emisorCodigoCanton = emisor.find("Ubicacion").find("Canton").text();
-                    self.archivo.emisorCodigoDistrito = emisor.find("Ubicacion").find("Distrito").text();
-                    self.archivo.emisorOtraSena = emisor.find("Ubicacion").find("OtrasSenas").text();
 
-                   //Se cargan los datos del emisor
-                    var receptor = $(xmlDoc).find("Receptor");
-                    self.archivo.receptorNombre = receptor.find("Nombre").text();
-                    self.archivo.receptorCedula = receptor.find("Identificacion").find("Numero").text();
-                    self.archivo.receptorTipoCedula = receptor.find("Identificacion").find("Tipo").text();
-                    self.archivo.receptorCorreo = receptor.find("CorreoElectronico").text();
-                    self.archivo.receptorCodigoProvincia = receptor.find("Ubicacion").find("Provincia").text();
-                    self.archivo.receptorCodigoCanton = receptor.find("Ubicacion").find("Canton").text();
-                    self.archivo.receptorCodigoDistrito = receptor.find("Ubicacion").find("Distrito").text();
-                    self.archivo.receptorOtraSena = receptor.find("Ubicacion").find("OtrasSenas").text();
-                    self.archivo.receptorTelefono = receptor.find("Telefono").find("NumTelefono").text();
-                    self.archivo.receptorNombreComercial = receptor.find("NombreComercial").text();
-                      
-                    //Se cargan los datos de la factura
-                    self.archivo.facturaConsecutivo = $(xmlDoc).find("NumeroConsecutivo").first().text();
-                    self.archivo.facturaClave = $(xmlDoc).find("Clave").first().text();
-                    self.archivo.facturaFechaEmision = ($(xmlDoc).find("FechaEmision")).first().text();
-                    self.archivo.facturaCondicionVenta = $(xmlDoc).find("CondicionVenta").first().text();
-                    self.archivo.facturaMedioPago = $(xmlDoc).find("MedioPago").first().text();
-                    
-                    //Se carga el detalle de la factura
-					$("#detalleFactura").find("tr:gt(0)").remove();
-                    var detalles = $(xmlDoc).find("DetalleServicio");
-                    $(detalles).each(function () {
-                    	$(this).children().each(function () {
-		                    var row = "<tr>" + 
-			                    		  "<td>" + $(this).find("Cantidad").text() + "</td>" + 
-			                    		  "<td>" + $(this).find("UnidadMedida").text() + "</td>" + 
-			                    		  "<td>" + $(this).find("Detalle").text() + "</td>" + 
-			                    		  "<td>" + $(this).find("PrecioUnitario").text() + "</td>" + 
-			                    		  "<td>" + $(this).find("MontoTotal").text() + "</td>" + 
-			                    		  "<td>" + $(this).find("SubTotal").text() + "</td>" + 
-			                    		  "<td>" + $(this).find("MontoTotalLinea").text() + "</td>" +
-		                    		  "</tr>";
-		      	            $('#detalleFactura tr:last').after(row);
-                        });
-                    });
-                    
-                    //Se carga el resumen de la factura
-                    var resumenFactura = $(xmlDoc).find("ResumenFactura");
-                    self.archivo.facturaCodigoMoneda = resumenFactura.find("CodigoMoneda").text();
-                    self.archivo.facturaTipoCambio = resumenFactura.find("TipoCambio").text();
-                    self.archivo.facturaTotalServExentos = resumenFactura.find("TotalServExentos").text();
-                    self.archivo.facturaTotalExento = resumenFactura.find("TotalExento").text();
-                    self.archivo.facturaTotalVenta = resumenFactura.find("TotalVenta").text();
-                    self.archivo.facturaTotalVentaNeta = resumenFactura.find("TotalVentaNeta").text();
-                    self.archivo.facturaTotalComprobante = resumenFactura.find("TotalComprobante").text();
-                    self.archivo.facturaTotalImpuestos = resumenFactura.find("TotalImpuesto").text();
-                    self.update();
+                	//Se verifica que el XML no sea el del mensaje de hacienda enviado al correo
+					if($(xmlDoc).find("MensajeHacienda").length > 0){
+	    	  		    self.mostrarFormulario     = false;
+	    	   		    self.mostrarCargaArchivo   = true;
+	    	   		    self.update();					
+	    	   		 	sweetAlert("", "Favor de revisar esta cargando el XML de respuesta, cargue el correcto", "error");
+					}else{
+	                    //Se cargan los datos del emisor
+						var emisor = $(xmlDoc).find("Emisor");
+	                    self.archivo.emisorNombre = emisor.find("Nombre").text();
+	                    self.archivo.emisorCedula = emisor.find("Identificacion").find("Numero").text();
+	                    self.archivo.emisorTipoCedula = emisor.find("Identificacion").find("Tipo").text();
+	                    self.archivo.emisorCorreo = emisor.find("CorreoElectronico").text();
+	                    self.archivo.emisorTelefono = emisor.find("Telefono").find("NumTelefono").text();
+	                    self.archivo.emisorCodigoProvincia = emisor.find("Ubicacion").find("Provincia").text();
+	                    self.archivo.emisorCodigoCanton = emisor.find("Ubicacion").find("Canton").text();
+	                    self.archivo.emisorCodigoDistrito = emisor.find("Ubicacion").find("Distrito").text();
+	                    self.archivo.emisorOtraSena = emisor.find("Ubicacion").find("OtrasSenas").text();
 
-                    
-                    __buscaProvincias();
-                    __buscaCantones();
-                    __buscaDistritos();
-                                        
-                	//Se cargan los datos del objecto a almacenar en base de datos
-                	self.recepcionFactura.emisorNombre = self.archivo.emisorNombre;
-                	self.recepcionFactura.emisorCedula =  self.archivo.emisorCedula;
-                	self.recepcionFactura.emisorTipoCedula = self.archivo.emisorTipoCedula;
-                	self.recepcionFactura.emisorCorreo = self.archivo.emisorCorreo;
-                	self.recepcionFactura.emisorTelefono = self.archivo.emisorTelefono;
-                	self.recepcionFactura.emisorCodigoProvincia = self.archivo.emisorCodigoProvincia;
-                	self.recepcionFactura.emisorProvincia = self.archivo.emisorProvincia;
-                	self.recepcionFactura.emisorCanton = self.archivo.emisorCanton;
-                	self.recepcionFactura.emisorCodigoCanton = self.archivo.emisorCodigoCanton;
-                	self.recepcionFactura.emisorDistrito = self.archivo.emisorDistrito;
-                	self.recepcionFactura.emisorCodigoDistrito = self.archivo.emisorCodigoDistrito;
-                	self.recepcionFactura.emisorOtraSena = self.archivo.emisorOtraSena;
-                	self.recepcionFactura.receptorNombre = self.archivo.receptorNombre;
-                	self.recepcionFactura.receptorCedula = self.archivo.receptorCedula;
-                	self.recepcionFactura.receptorTipoCedula = self.archivo.receptorTipoCedula;
-                	self.recepcionFactura.receptorCorreo = self.archivo.receptorCorreo;
-                	self.recepcionFactura.receptorProvincia = self.archivo.receptorProvincia;
-                	self.recepcionFactura.receptorCodigoProvincia = self.archivo.receptorCodigoProvincia;
-                	self.recepcionFactura.receptorCanton = self.archivo.receptorCanton;
-                	self.recepcionFactura.receptorCodigoCanton = self.archivo.receptorCodigoCanton;
-                	self.recepcionFactura.receptorDistrito = self.archivo.receptorDistrito;
-                	self.recepcionFactura.receptorCodigoDistrito = self.archivo.receptorCodigoDistrito;
-                	self.recepcionFactura.receptorOtraSena = self.archivo.receptorOtraSena;
-                	self.recepcionFactura.receptorTelefono = self.archivo.receptorTelefono;
-                	self.recepcionFactura.receptorNombreComercial = self.archivo.receptorNombreComercial;
-                	self.recepcionFactura.facturaConsecutivo = self.archivo.facturaConsecutivo;
-                	self.recepcionFactura.facturaClave = self.archivo.facturaClave;
-                	self.recepcionFactura.facturaFechaEmision = self.archivo.facturaFechaEmision;
-                	self.recepcionFactura.facturaCondicionVenta = self.archivo.facturaCondicionVenta;
-                	self.recepcionFactura.facturaMedioPago = self.archivo.facturaMedioPago;
-                	self.recepcionFactura.facturaCodigoMoneda = self.archivo.facturaCodigoMoneda;
-                	self.recepcionFactura.facturaTipoCambio = self.archivo.facturaTipoCambio;
-                	self.recepcionFactura.facturaTotalServExentos = self.archivo.facturaTotalServExentos;
-                	self.recepcionFactura.facturaTotalExento = self.archivo.facturaTotalExento;
-                	self.recepcionFactura.facturaTotalVenta = self.archivo.facturaTotalVenta;
-                	self.recepcionFactura.facturaTotalVentaNeta = self.archivo.facturaTotalVentaNeta;
-                	self.recepcionFactura.facturaTotalComprobante = self.archivo.facturaTotalComprobante;
-                	self.recepcionFactura.facturaTotalImpuestos = self.archivo.facturaTotalImpuestos;
+	                   //Se cargan los datos del emisor
+	                    var receptor = $(xmlDoc).find("Receptor");
+	                    self.archivo.receptorNombre = receptor.find("Nombre").text();
+	                    self.archivo.receptorCedula = receptor.find("Identificacion").find("Numero").text();
+	                    self.archivo.receptorTipoCedula = receptor.find("Identificacion").find("Tipo").text();
+	                    self.archivo.receptorCorreo = receptor.find("CorreoElectronico").text();
+	                    self.archivo.receptorCodigoProvincia = receptor.find("Ubicacion").find("Provincia").text();
+	                    self.archivo.receptorCodigoCanton = receptor.find("Ubicacion").find("Canton").text();
+	                    self.archivo.receptorCodigoDistrito = receptor.find("Ubicacion").find("Distrito").text();
+	                    self.archivo.receptorOtraSena = receptor.find("Ubicacion").find("OtrasSenas").text();
+	                    self.archivo.receptorTelefono = receptor.find("Telefono").find("NumTelefono").text();
+	                    self.archivo.receptorNombreComercial = receptor.find("NombreComercial").text();
+	                      
+	                    //Se cargan los datos de la factura
+	                    self.archivo.facturaConsecutivo = $(xmlDoc).find("NumeroConsecutivo").first().text();
+	                    self.archivo.facturaClave = $(xmlDoc).find("Clave").first().text();
+	                    self.archivo.facturaFechaEmision = ($(xmlDoc).find("FechaEmision")).first().text();
+	                    self.archivo.facturaCondicionVenta = $(xmlDoc).find("CondicionVenta").first().text();
+	                    self.archivo.facturaMedioPago = $(xmlDoc).find("MedioPago").first().text();
+	                    
+	                    //Se carga el detalle de la factura
+						$("#detalleFactura").find("tr:gt(0)").remove();
+	                    var detalles = $(xmlDoc).find("DetalleServicio");
+	                    $(detalles).each(function () {
+	                    	$(this).children().each(function () {
+			                    var row = "<tr>" + 
+				                    		  "<td>" + $(this).find("Cantidad").text() + "</td>" + 
+				                    		  "<td>" + $(this).find("UnidadMedida").text() + "</td>" + 
+				                    		  "<td>" + $(this).find("Detalle").text() + "</td>" + 
+				                    		  "<td>" + $(this).find("PrecioUnitario").text() + "</td>" + 
+				                    		  "<td>" + $(this).find("MontoTotal").text() + "</td>" + 
+				                    		  "<td>" + $(this).find("SubTotal").text() + "</td>" + 
+				                    		  "<td>" + $(this).find("MontoTotalLinea").text() + "</td>" +
+			                    		  "</tr>";
+			      	            $('#detalleFactura tr:last').after(row);
+	                        });
+	                    });
+	                    
+	                    //Se carga el resumen de la factura
+	                    var resumenFactura = $(xmlDoc).find("ResumenFactura");
+	                    self.archivo.facturaCodigoMoneda = resumenFactura.find("CodigoMoneda").text();
+	                    self.archivo.facturaTipoCambio = resumenFactura.find("TipoCambio").text();
+	                    self.archivo.facturaTotalServExentos = resumenFactura.find("TotalServExentos").text();
+	                    self.archivo.facturaTotalExento = resumenFactura.find("TotalExento").text();
+	                    self.archivo.facturaTotalVenta = resumenFactura.find("TotalVenta").text();
+	                    self.archivo.facturaTotalVentaNeta = resumenFactura.find("TotalVentaNeta").text();
+	                    self.archivo.facturaTotalComprobante = resumenFactura.find("TotalComprobante").text();
+	                    self.archivo.facturaTotalImpuestos = resumenFactura.find("TotalImpuesto").text();
+	                    self.update();
+
+	                    
+	                    __buscaProvincias();
+	                    __buscaCantones();
+	                    __buscaDistritos();
+	                                        
+	                	//Se cargan los datos del objecto a almacenar en base de datos
+	                	self.recepcionFactura.emisorNombre = self.archivo.emisorNombre;
+	                	self.recepcionFactura.emisorCedula =  self.archivo.emisorCedula;
+	                	self.recepcionFactura.emisorTipoCedula = self.archivo.emisorTipoCedula;
+	                	self.recepcionFactura.emisorCorreo = self.archivo.emisorCorreo;
+	                	self.recepcionFactura.emisorTelefono = self.archivo.emisorTelefono;
+	                	self.recepcionFactura.emisorCodigoProvincia = self.archivo.emisorCodigoProvincia;
+	                	self.recepcionFactura.emisorProvincia = self.archivo.emisorProvincia;
+	                	self.recepcionFactura.emisorCanton = self.archivo.emisorCanton;
+	                	self.recepcionFactura.emisorCodigoCanton = self.archivo.emisorCodigoCanton;
+	                	self.recepcionFactura.emisorDistrito = self.archivo.emisorDistrito;
+	                	self.recepcionFactura.emisorCodigoDistrito = self.archivo.emisorCodigoDistrito;
+	                	self.recepcionFactura.emisorOtraSena = self.archivo.emisorOtraSena;
+	                	self.recepcionFactura.receptorNombre = self.archivo.receptorNombre;
+	                	self.recepcionFactura.receptorCedula = self.archivo.receptorCedula;
+	                	self.recepcionFactura.receptorTipoCedula = self.archivo.receptorTipoCedula;
+	                	self.recepcionFactura.receptorCorreo = self.archivo.receptorCorreo;
+	                	self.recepcionFactura.receptorProvincia = self.archivo.receptorProvincia;
+	                	self.recepcionFactura.receptorCodigoProvincia = self.archivo.receptorCodigoProvincia;
+	                	self.recepcionFactura.receptorCanton = self.archivo.receptorCanton;
+	                	self.recepcionFactura.receptorCodigoCanton = self.archivo.receptorCodigoCanton;
+	                	self.recepcionFactura.receptorDistrito = self.archivo.receptorDistrito;
+	                	self.recepcionFactura.receptorCodigoDistrito = self.archivo.receptorCodigoDistrito;
+	                	self.recepcionFactura.receptorOtraSena = self.archivo.receptorOtraSena;
+	                	self.recepcionFactura.receptorTelefono = self.archivo.receptorTelefono;
+	                	self.recepcionFactura.receptorNombreComercial = self.archivo.receptorNombreComercial;
+	                	self.recepcionFactura.facturaConsecutivo = self.archivo.facturaConsecutivo;
+	                	self.recepcionFactura.facturaClave = self.archivo.facturaClave;
+	                	self.recepcionFactura.facturaFechaEmision = self.archivo.facturaFechaEmision;
+	                	self.recepcionFactura.facturaCondicionVenta = self.archivo.facturaCondicionVenta;
+	                	self.recepcionFactura.facturaMedioPago = self.archivo.facturaMedioPago;
+	                	self.recepcionFactura.facturaCodigoMoneda = self.archivo.facturaCodigoMoneda;
+	                	self.recepcionFactura.facturaTipoCambio = self.archivo.facturaTipoCambio;
+	                	self.recepcionFactura.facturaTotalServExentos = self.archivo.facturaTotalServExentos;
+	                	self.recepcionFactura.facturaTotalExento = self.archivo.facturaTotalExento;
+	                	self.recepcionFactura.facturaTotalVenta = self.archivo.facturaTotalVenta;
+	                	self.recepcionFactura.facturaTotalVentaNeta = self.archivo.facturaTotalVentaNeta;
+	                	self.recepcionFactura.facturaTotalComprobante = self.archivo.facturaTotalComprobante;
+	                	self.recepcionFactura.facturaTotalImpuestos = self.archivo.facturaTotalImpuestos;
+	                	
+	    	  		    self.mostrarFormulario     = true;
+	    	   		    self.mostrarCargaArchivo   = true;
+
+					}
                 }
-                
+
                 reader.readAsText($("#fileUpload")[0].files[0]);
                 //Se muestra la pantalla
-	  		    self.mostrarFormulario     = true;
-	   		    self.mostrarCargaArchivo   = true;
 	   		    self.update();					
 
             } else {
-                alert("Se presento un problema al intentar cargar el archivo, su browser no soporta HTML 5");
+	   		 	sweetAlert("", "Se presento un problema al intentar cargar el archivo, su browser no soporta HTML 5", "error");
             }
 		}
 

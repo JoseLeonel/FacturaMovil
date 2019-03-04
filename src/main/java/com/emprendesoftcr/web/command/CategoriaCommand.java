@@ -6,24 +6,25 @@ import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Empresa;
 
 /**
- * 
  * CategoriaCommand.
  * @author lhernandez.
  * @since 7 abr. 2018
  */
 public class CategoriaCommand {
 
-	private Long	id;
+	private Long id;
 
-	private String	descripcion;
+	private String descripcion;
 
-	private String	estado;
+	private String estado;
 
-	private Date		created_at;
+	private Date created_at;
 
-	private Date		updated_at;
+	private Date updated_at;
 
-	private Empresa	empresa;
+	private Empresa empresa;
+
+	private Integer prioridad;
 
 	public CategoriaCommand(Categoria categoria) {
 		super();
@@ -33,22 +34,17 @@ public class CategoriaCommand {
 		this.created_at = categoria.getCreated_at();
 		this.updated_at = categoria.getUpdated_at();
 		this.empresa = categoria.getEmpresa();
-
+		this.prioridad = categoria.getPrioridad();
 	}
 
 	public CategoriaCommand() {
 		super();
 	}
 
-	
-
-	
-	
 	public Long getId() {
 		return id;
 	}
 
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -57,50 +53,50 @@ public class CategoriaCommand {
 		return descripcion;
 	}
 
-	
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
 
-	
 	public String getEstado() {
 		return estado;
 	}
 
-	
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
 
-	
 	public Date getCreated_at() {
 		return created_at;
 	}
 
-	
 	public void setCreated_at(Date created_at) {
 		this.created_at = created_at;
 	}
 
-	
 	public Date getUpdated_at() {
 		return updated_at;
 	}
 
-	
 	public void setUpdated_at(Date updated_at) {
 		this.updated_at = updated_at;
 	}
 
-	
 	public Empresa getEmpresa() {
 		return empresa;
 	}
 
-	
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
 	}
 
 	
+	public Integer getPrioridad() {
+		return prioridad;
+	}
+
+	
+	public void setPrioridad(Integer prioridad) {
+		this.prioridad = prioridad;
+	}
+
 }
