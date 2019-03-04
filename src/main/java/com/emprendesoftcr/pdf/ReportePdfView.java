@@ -150,7 +150,7 @@ public class ReportePdfView {
 		if(tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
 			nota = fac_electro.getReferenciaRazon();
 		}else {
-			fac_electro.get_nota();
+			nota = fac_electro.get_nota();
 		}
 		
 		izquierda_inferior_ultima.addCell(obtenerCeldaNormal("Nota: " + nota, font_cabezera_tabla, 1, true, Paragraph.ALIGN_LEFT, PdfPCell.NO_BORDER));
