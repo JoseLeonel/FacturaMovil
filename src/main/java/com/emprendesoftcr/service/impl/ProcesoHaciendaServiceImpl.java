@@ -393,12 +393,14 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				 //recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 				// Jaco
-				 //recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+			//	 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 				// Inventario
-				// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				
+				
 
 				// Alajuela
-				 recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 				ObjectMapper mapperObj = new ObjectMapper();
 				String jsonStr = mapperObj.writeValueAsString(recepcion);
@@ -457,6 +459,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 										haciendaBD = haciendaBo.findById(hacienda.getId());
 										haciendaBD.setObservacion(FacturaElectronicaUtils.convertirStringToblod(Constantes.MAXIMO_REINTENTOS_ACEPTACION_STR));
 										haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+										haciendaBD.setCallBack(Constantes.CALLBACKURL_NO);
 										haciendaBo.modificar(haciendaBD);
 									}
 								} else {
@@ -569,6 +572,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						 * Esperar el correo FE para saber que ese estado de recibido
 						 */
 						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
+							
 							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
 						}
 						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
@@ -596,6 +600,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 							}
 						}
 						haciendaBD.setObservacion(respuestaHacienda.mensajeHacienda() != null ? FacturaElectronicaUtils.convertirStringToblod(respuestaHacienda.mensajeHacienda().detalleMensaje()) : null);
+						haciendaBD.setCallBack(Constantes.CALLBACKURL_NO);
 						haciendaBo.modificar(haciendaBD);
 					} else {// sumar reintententos
 						if (body.contains("El comprobante") && body.contains("no ha sido recibido")) {
@@ -606,6 +611,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						} else {
 							hacienda.setReintentosAceptacion(hacienda.getReintentosAceptacion() == null ? 1 : hacienda.getReintentosAceptacion() + 1);
 						}
+						hacienda.setCallBack(Constantes.CALLBACKURL_NO);
 						haciendaBo.modificar(hacienda);
 
 					}

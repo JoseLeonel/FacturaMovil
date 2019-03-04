@@ -9,10 +9,12 @@ import java.util.logging.Logger;
 
 import com.emprendesoftcr.Utils.Constantes;
 import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.ExceptionConverter;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
@@ -291,27 +293,43 @@ public class HeaderFooter extends PdfPageEventHelper {
 	@Override
 	public void onEndPage(PdfWriter writer, Document document) {
 
-		Rectangle rect = writer.getBoxSize("art");
-
+		
 		// ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, new Phrase(String.format("Página %d of", writer.getPageNumber())), (rect.getLeft() + rect.getRight()) / 2, rect.getBottom() - 18, 0);
 		// ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, new Phrase(String.format("____________________________________________________________________________", writer.getRootOutline())), (rect.getLeft() + rect.getRight()) / 2, rect.getBottom() - 18, 0);
 		try {
 			/* dibujo de linea */
 			PdfContentByte cb = writer.getDirectContent();
-			cb.setLineWidth(1f);
-			cb.moveTo(11.5f, 61);
-			cb.lineTo(583, 61);
-			cb.stroke();
+//			cb.setLineWidth(1f);
+//			cb.moveTo(11.5f, 57);
+//			cb.lineTo(583, 50);
+//			cb.stroke();
+		// Ultima Linea
+			float row20 = PageSize.TABLOID.rotate().getHeight() - 695;
 			DateFormat fechaCompleta = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 			String text = "Emitida conforme lo establecido en la resolución de Facturación Electrónica, N° DGT-R-48-2016 del 7/10/16 08:00:00 , a las " + fechaCompleta.format(new Date()) + " horas";
-			BaseFont bf = BaseFont.createFont();
-			cb.setFontAndSize(bf, 8);
+			
+			if(!this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)){
+				addText(cb, text, UtilsPdf.fontmed08, 300,row20, PdfContentByte.ALIGN_CENTER);	
+			}
+			
+			//BaseFont bf = BaseFont.createFont();
+			//cb.setFontAndSize(bf, 8);
 
-			cb.showTextAlignedKerned(PdfContentByte.ALIGN_CENTER, text, 300, 41, 0);
+			//cb.showTextAlignedKerned(PdfContentByte.ALIGN_CENTER, text, 300, row20, 0);
 		} catch (Exception e) {
 			System.out.println("Error con pie de pagina");
 		}
 	}
+	
+	private void addText(PdfContentByte cb, String text, Font font, float x, float y, int align) {
+		Phrase phrase = new Phrase(text, font);
+		ColumnText.showTextAligned(cb, align, phrase, x, y, 0);
+		cb.saveState();
+		cb.stroke();
+		cb.restoreState();
+	}
+	
+
 
 	@Override
 	public void onCloseDocument(PdfWriter writer, Document document) {

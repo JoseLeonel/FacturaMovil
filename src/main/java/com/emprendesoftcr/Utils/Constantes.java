@@ -15,6 +15,10 @@ public class Constantes {
 	public static final String					NOTA_CREDITO_ELECTRONICO_VERSION										= "Nota Credito Electrónica ver 4.2";
 	public static final String					NOTA_DEBITO_ELECTRONICO_VERSION											= "Nota Debito Electrónica ver 4.2";
 	public static final String					PROFORMA_VERSION																		= "Proforma";
+	//callbackurl  1 = si 0= No
+	public static final Integer					CALLBACKURL_SI												= 1;
+	public static final Integer					CALLBACKURL_NO												= 0;
+
 	// Tipo de mostrar el articulo de impuesto de servicio 10 porciento
 	public static final Integer					NO_MOSTRAR_IMPUESTO_10_PORCIENTO										= 1;
 	public static final Integer					SI_MOSTRAR_IMPUESTO_10_PORCIENTO										= 2;

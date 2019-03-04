@@ -262,10 +262,10 @@ public class ReportePdfView {
 	public void agregaLineasBlanco(PdfPTable tabla_, int longitud_lista, boolean primera_pagina) {
 		int lineas_por_pagina = 0;
 
-		if (longitud_lista > 36) {
+		if (longitud_lista > 35) {
 			// lineas_por_pagina=36-(longitud_lista%36);
 		} else {
-			lineas_por_pagina = 36 - longitud_lista;
+			lineas_por_pagina = 35 - longitud_lista;
 		}
 		for (int i = 0; i < lineas_por_pagina; i++) {
 			tabla_.addCell(obtenerCeldaNormal("\n", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));

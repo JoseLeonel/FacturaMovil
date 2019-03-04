@@ -31,7 +31,7 @@ var ListarCajas = function(){
 	"responsive": true,
 	 "bAutoWidth" : true,
 	"destroy":true,
-	"order": [ 0, 'asc' ],
+	"order": [ 1, 'desc' ],
 			"bInfo": true,
 			"bPaginate": true,
 			"bFilter" : true,
@@ -96,7 +96,8 @@ var idioma_espanol =
                                         return caja == null?"":caja.descripcion;
                                     }
                                 },
-                               {'data' : 'created_atSTR'   ,"name":"created_at"  ,"title" : "Fecha Creacion"      ,"autoWidth" :false
+                               {'data' : 'created_atSTR'   ,"name":"created_at"  ,"title" : "Fecha Creacion"      ,"autoWidth" :false,
+                               sort: "created_at"
                                 },
                                 {'data' : 'updated_atSTR'  ,"name":"updated_at"  ,"title" : "Fecha Finalizacion"  ,"autoWidth" :false
                                 },

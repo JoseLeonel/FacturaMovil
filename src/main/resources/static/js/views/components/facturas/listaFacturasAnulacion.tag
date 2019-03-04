@@ -304,6 +304,24 @@ self.detail                = []
 })
 
 /**
+*  Listar la tabla a aplicar el mantenimiento
+**/
+function __InicializarTabla(nombreTabla){
+    $(nombreTabla).DataTable({
+        destroy: true,
+        "language": idioma_espanol,
+        "sDom": 'lrtip',
+        "order": [1, 'desc'],
+        "bPaginate": true,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+        
+    });    
+}
+
+
+/**
 *  Regresar al listado
 **/
 __regresarAlListadoAnulacion(){
@@ -580,7 +598,8 @@ __regresarAlListado(){
 function __InformacionDataTable(){
     self.formato_tabla = [ 
                                {'data' :'usuarioCreacion.nombreUsuario'   ,"name":"usuarioCreacion.nombreUsuario"    ,"title" : $.i18n.prop("usuario.nombreUsuario")     ,"autoWidth" :true },
-                               {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"                  ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true },
+                               {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"                  ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true ,
+                                sort: "fechaEmision"},
                              
                                {'data' :'numeroConsecutivo'                    ,"name":"numeroConsecutivo"                     ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
                                    "render":function(numeroConsecutivo,type, row){

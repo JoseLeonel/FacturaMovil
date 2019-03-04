@@ -244,7 +244,8 @@ public class HaciendasController {
 	@RequestMapping(value = "/service/callback.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	@Transactional
-	public synchronized void callBack(HttpEntity<String> httpEntity) throws Exception {
+	public synchronized RespuestaServiceValidator callBack(HttpEntity<String> httpEntity) throws Exception {
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		// Hacienda hacienda = null;
 		Integer estado = Constantes.ZEROS;
 		String mensajeHacienda = Constantes.EMPTY;
@@ -259,8 +260,11 @@ public class HaciendasController {
 				RespuestaHacienda respuestaHacienda = RespuestaHaciendaJson.from(body);
 				Hacienda hacienda = haciendaBo.findByClave(respuestaHacienda.clave());
 				log.info("** callBack: " + respuestaHacienda.clave() + " fecha " + new Date());
+				
 				if (hacienda != null) {
 					String status = getHaciendaStatus(respuestaHacienda.indEstado());
+					log.info("** Respuesta Estado: " + status + " fecha " + new Date());
+					//log.info("** Respuesta Estado: " + respuestaHacienda.mensajeHacienda() + " fecha " + new Date());
 					// hacienda.setUpdated_at(new Date());
 					RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();
 					respuesta.setClave(respuestaHacienda.clave());
@@ -343,9 +347,13 @@ public class HaciendasController {
 			log.info("Finaliza callBack {}", new Date());
 		} catch (Exception e) {
 			log.info("** Error  callBack: " + e.getMessage() + " fecha " + new Date());
+			return RespuestaServiceValidator.ERROR(e);
 		} finally {
 			lock.unlock();
 		}
+		respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+		respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.callback.exitoso"));
+		return respuestaServiceValidator;
 
 	}
 

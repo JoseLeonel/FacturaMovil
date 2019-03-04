@@ -478,6 +478,7 @@ function consultaFactura(idFactura){
                             return 1;
                         return 0;
                     } );
+
                     self.detalles.forEach(function(elemen){
                         if(elemen.codigo == "8888"){
                             self.totalImpuestoServicio = __valorNumerico(elemen.montoTotalLinea)
@@ -489,6 +490,7 @@ function consultaFactura(idFactura){
                    self.totalImpuestoServicioSTR = ""
                    self.totalImpuestoServicioSTR =  formatoDecimales(self.totalImpuestoServicio,2)  
                    self.update()
+
                     $.each(data.aaData, function( index, modeloTabla ) {
                       if(self.facturaImpresa == null){
                             self.facturaImpresa = modeloTabla.factura

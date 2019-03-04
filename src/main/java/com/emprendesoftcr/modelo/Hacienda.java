@@ -121,9 +121,13 @@ public class Hacienda implements Serializable {
 	@Basic(fetch=FetchType.LAZY)
 	private Blob						observacion;
 
+	// 1= callback 0=cron
+	@Column(name = "call_back", columnDefinition = "INT default '0'")
+	private Integer						callBack;
 
 
-	public Hacienda(Long id, String tipoDoc, Date fechaEmisor, String clave, String tipoEmisor, String cedulaEmisor, String tipoReceptor, String cedulaReceptor, String nombreReceptor, String correoReceptor, Double totalReceptor, Blob comprobanteXML, String consecutivo, Integer estado, Integer status, Integer reintentos, Integer reintentosAceptacion, Blob mensajeHacienda, Integer notificacion, Blob xErrorCause, Empresa empresa, Date created_at, Date updated_at, Blob observacion) {
+	
+	public Hacienda(Long id, String tipoDoc, Date fechaEmisor, String clave, String tipoEmisor, String cedulaEmisor, String tipoReceptor, String cedulaReceptor, String nombreReceptor, String correoReceptor, Double totalReceptor, Blob comprobanteXML, String consecutivo, Integer estado, Integer status, Integer reintentos, Integer reintentosAceptacion, Blob mensajeHacienda, Integer notificacion, Blob xErrorCause, Empresa empresa, Date created_at, Date updated_at, Blob observacion, Integer callBack) {
 		super();
 		this.id = id;
 		this.tipoDoc = tipoDoc;
@@ -149,6 +153,7 @@ public class Hacienda implements Serializable {
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.observacion = observacion;
+		this.callBack = callBack;
 	}
 
 	public Hacienda() {
@@ -355,5 +360,16 @@ public class Hacienda implements Serializable {
 		this.observacion = observacion;
 	}
 
+	
+	public Integer getCallBack() {
+		return callBack;
+	}
+
+	
+	public void setCallBack(Integer callBack) {
+		this.callBack = callBack;
+	}
+
+	
 	
 }

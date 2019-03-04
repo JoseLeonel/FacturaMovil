@@ -848,6 +848,24 @@ function ListadoFacturasDelDia(){
             }
         });
 }
+
+function loadListar(table,idioma,formatoTabla,data){
+	$(table).DataTable().destroy();
+        $(table).DataTable({
+        destroy: true,
+        "language": idioma_espanol,
+        "sDom": 'lrtip',
+        "order": [0, 'desc'],
+        "bPaginate": true,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+       
+        "columns": formatoTabla,
+    });  
+    $(table).dataTable().fnClearTable();
+    $(table).dataTable().fnAddData(data);        
+}
 /**
 * formato del listado de facturas del dia
 **/
