@@ -12,6 +12,8 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Dao.KardexDao;
+import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Kardex;
 import com.emprendesoftcr.modelo.Usuario;
@@ -45,7 +47,9 @@ public class KardexDaoImpl implements KardexDao {
 	@Override
 	public void salida(Articulo articulo, Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) throws Exception {
 		try {
-			Double costoNuevo = articuloDao.getTotalCosto(articulo, cantidadActual - cantidadNueva);
+			Double resultadoCantidad = Utils.roundFactura(cantidadActual,3) - Utils.roundFactura(cantidadNueva,3);
+			resultadoCantidad = resultadoCantidad < Constantes.ZEROS_DOUBLE?Constantes.ZEROS_DOUBLE:resultadoCantidad;
+			Double costoNuevo = articuloDao.getTotalCosto(articulo, resultadoCantidad);
 			Kardex kardex = new Kardex();
 			kardex.setCantidadSolicitada(cantidadNueva);
 			kardex.setCantidadActual(cantidadActual);
@@ -53,7 +57,7 @@ public class KardexDaoImpl implements KardexDao {
 			kardex.setTotalCostoActual(articuloDao.getTotalCosto(articulo, cantidadActual));
 			kardex.setCodigo(articulo.getCodigo());
 			kardex.setObservacion(observacion);
-			kardex.setCantidadNueva(cantidadActual - cantidadNueva);
+			kardex.setCantidadNueva(resultadoCantidad);
 			kardex.setCostoNuevo(articulo.getCosto());
 			kardex.setTotalCostoNuevo(costoNuevo);
 			kardex.setConsecutivo(consecutivo);
@@ -63,7 +67,7 @@ public class KardexDaoImpl implements KardexDao {
 			kardex.setUpdated_at(new Date());
 			kardex.setUsuario(usuarioSesion);
 			kardex.setArticulo(articulo);
-			articulo.setCantidad(cantidadActual - cantidadNueva);
+			articulo.setCantidad(resultadoCantidad);
 			articuloDao.modificar(articulo);
 			agregar(kardex);
 			
@@ -83,15 +87,16 @@ public class KardexDaoImpl implements KardexDao {
 	@Override
 	public void entrada(Articulo articulo, Double cantidadActual, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) throws Exception {
 		try {
+			Double resultado = Utils.roundFactura(cantidadNueva + cantidadActual,3);
 			Kardex kardex = new Kardex();
-			Double costoNuevo = articuloDao.getTotalCosto(articulo, cantidadNueva + cantidadActual);
+			Double costoNuevo = articuloDao.getTotalCosto(articulo, resultado);
 			kardex.setCantidadSolicitada(cantidadNueva);
 			kardex.setCantidadActual(cantidadActual);
 			kardex.setCostoActual(articulo.getCosto());
 			kardex.setTotalCostoActual(articuloDao.getTotalCosto(articulo, cantidadActual));
 			kardex.setCodigo(articulo.getCodigo());
 			kardex.setObservacion(observacion);
-			kardex.setCantidadNueva(cantidadNueva + cantidadActual);
+			kardex.setCantidadNueva(resultado);
 			kardex.setCostoNuevo(articulo.getCosto());
 			kardex.setTotalCostoNuevo(costoNuevo);
 			kardex.setConsecutivo(consecutivo);
@@ -101,7 +106,7 @@ public class KardexDaoImpl implements KardexDao {
 			kardex.setUpdated_at(new Date());
 			kardex.setUsuario(usuarioSesion);
 			kardex.setArticulo(articulo);
-			articulo.setCantidad(cantidadActual + cantidadNueva);
+			articulo.setCantidad(resultado);
 			articuloDao.modificar(articulo);
 			agregar(kardex);
 			

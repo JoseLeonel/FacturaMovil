@@ -292,11 +292,11 @@ public class ArticuloController {
 			delimitadores.addFiltro(dataTableFilter);
 
 		}
-		if(delimitadores.getColumnData() == null) {
-			//Se ordena por prioridad por defecto se crearon en 9999
-			delimitadores.setColumnData("prioridad");
-			delimitadores.setColumnOrderDir("asc");			
-		}
+//		if(delimitadores.getColumnData() == null) {
+//			//Se ordena por prioridad por defecto se crearon en 9999
+//			delimitadores.setColumnData("prioridad");
+//			delimitadores.setColumnOrderDir("asc");			
+//		}
 
 		delimitadores.addFiltro(new JqGridFilter("categoria.id", "'" + parametrosPaginacion.getCategoria().getId().toString() + "'", "="));
 		delimitadores.addFiltro(new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "="));

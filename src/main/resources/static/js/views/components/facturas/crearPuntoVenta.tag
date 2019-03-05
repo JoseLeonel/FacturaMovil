@@ -2822,6 +2822,7 @@ function __Teclas(){
      //Reimprimir Factura
     if(tecla ==117){
      reimprimirFacturaEnMomento()
+     
     }
     //Limpiar F2
     if(tecla ==113){

@@ -72,7 +72,7 @@
                 <li><a href="/ListaFacturasAnulacion" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Cajero','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i class="fa fa-circle-o"></i> Anular venta </a></li>
                 <li><a href="/ventasPorServicio" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Servicios')"><i class="fa fa-circle-o"></i>Por Servicios </a></li>
                 <li><a href="/postVenta" sec:authorize="hasAnyAuthority('Administrador_Empresa','Administrador_Cajero','Administrador_Sistema','Administrador_Servicios')"><i class="fa fa-circle-o"></i>Venta POS </a></li>
-                <li><a href="/postRestaurante" sec:authorize="hasAnyAuthority('Administrador_Empresa','Administrador_Restaurante','usuario_vendedor')"><i class="fa fa-circle-o"></i> Restaurante </a></li>
+                <li><a href="/postRestaurante" sec:authorize="hasAnyAuthority('Administrador_Restaurante','usuario_vendedor')"><i class="fa fa-circle-o"></i> Restaurante </a></li>
                 <li><a href="/proformas.do" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','usuario_vendedor','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i> Proformas </a></li>
             </a>
             </ul>

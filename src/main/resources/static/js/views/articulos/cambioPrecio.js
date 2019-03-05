@@ -13,9 +13,7 @@ var _Init = function () {
  * @returns
  */
 function cargaMantenimientoCategorias() {
-
-	
-	riot.mount('cambiar-precio');
+  riot.mount('cambiar-precio');
 }
 
 
