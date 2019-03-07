@@ -71,12 +71,13 @@ public class EmpresaCommand {
 	private String impresoraFactura;
 
 	private Integer separarCuenta;
-	
+
 	private Integer pantChino;
-	
-	private Integer						prioridadFacturar;
-	private Integer imprimirCelular;
-	
+
+	private Integer	prioridadFacturar;
+	private Integer	imprimirCelular;
+
+	private Integer ordenaCategoriaArticulos;
 
 	public EmpresaCommand(Empresa empresa) {
 		super();
@@ -126,6 +127,7 @@ public class EmpresaCommand {
 		this.pantChino = empresa.getPantChino();
 		this.prioridadFacturar = empresa.getPrioridadFacturar();
 		this.imprimirCelular = empresa.getImprimirCelular();
+		this.ordenaCategoriaArticulos = empresa.getOrdenaCategoriaArticulos();
 	}
 
 	public EmpresaCommand() {
@@ -140,12 +142,10 @@ public class EmpresaCommand {
 		this.id = id;
 	}
 
-	
 	public Integer getPantChino() {
 		return pantChino;
 	}
 
-	
 	public void setPantChino(Integer pantChino) {
 		this.pantChino = pantChino;
 	}
@@ -454,15 +454,28 @@ public class EmpresaCommand {
 		this.separarCuenta = separarCuenta;
 	}
 
-	
 	public Integer getPrioridadFacturar() {
 		return prioridadFacturar;
 	}
-	
+
 	public void setPrioridadFacturar(Integer prioridadFacturar) {
 		this.prioridadFacturar = prioridadFacturar;
 	}
-	
-	
+
+	public Integer getImprimirCelular() {
+		return imprimirCelular;
+	}
+
+	public void setImprimirCelular(Integer imprimirCelular) {
+		this.imprimirCelular = imprimirCelular;
+	}
+
+	public Integer getOrdenaCategoriaArticulos() {
+		return ordenaCategoriaArticulos;
+	}
+
+	public void setOrdenaCategoriaArticulos(Integer ordenaCategoriaArticulos) {
+		this.ordenaCategoriaArticulos = ordenaCategoriaArticulos;
+	}
 
 }
