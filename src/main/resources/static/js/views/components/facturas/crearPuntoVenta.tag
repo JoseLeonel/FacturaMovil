@@ -1563,7 +1563,7 @@ function evaluarFactura(data){
                 //Envia a la pantalla de impresion
                 self.facturaReimprimir = self.facturaImprimir
                 self.update()
-                if(self.vueltoImprimir == 0){
+                if(self.vueltoImprimir == 0 && self.empresa.imprimirSiempre == 0){
                     var mensaje = self.facturaImprimir.numeroConsecutivo !=null ?"Cons# :"+   self.facturaImprimir.numeroConsecutivo:"Tiquete# :"+   self.facturaImprimir.id        
                     swal({
                         type: 'success',
@@ -1573,12 +1573,11 @@ function evaluarFactura(data){
                      })
                    
                 }else{
-                    console.log("evaluarFactura")
+                  
                   var parametros = {
                           factura: self.facturaReimprimir ,
                           facturaDia:0
                       }
-                      console.log("consultaFactura")
                       riot.mount('ptv-imprimir',{parametros:parametros});
                 }
                

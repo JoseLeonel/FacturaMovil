@@ -76,6 +76,7 @@ public class EmpresaCommand {
 	
 	private Integer						prioridadFacturar;
 	private Integer imprimirCelular;
+	private Integer						imprimirSiempre;
 	
 
 	public EmpresaCommand(Empresa empresa) {
@@ -126,6 +127,7 @@ public class EmpresaCommand {
 		this.pantChino = empresa.getPantChino();
 		this.prioridadFacturar = empresa.getPrioridadFacturar();
 		this.imprimirCelular = empresa.getImprimirCelular();
+		this.imprimirSiempre =empresa.getImprimirSiempre();
 	}
 
 	public EmpresaCommand() {
@@ -461,6 +463,26 @@ public class EmpresaCommand {
 	
 	public void setPrioridadFacturar(Integer prioridadFacturar) {
 		this.prioridadFacturar = prioridadFacturar;
+	}
+
+	
+	public Integer getImprimirCelular() {
+		return imprimirCelular;
+	}
+
+	
+	public void setImprimirCelular(Integer imprimirCelular) {
+		this.imprimirCelular = imprimirCelular;
+	}
+
+	
+	public Integer getImprimirSiempre() {
+		return imprimirSiempre;
+	}
+
+	
+	public void setImprimirSiempre(Integer imprimirSiempre) {
+		this.imprimirSiempre = imprimirSiempre;
 	}
 	
 	
