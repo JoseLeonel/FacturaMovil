@@ -401,11 +401,11 @@
                 <h1 class="box-title"><i class="fa fa-user-o"></i>&nbsp {$.i18n.prop("factura.digite.nombreFactura")}     </h1>
             </div>
             <div class="modal-body">
-                <form id = "formularioAgregarNombreTiquete" name ="formularioAgregarNombreTiquete "   class="advanced-search-form">
+                <form id = "formularioAgregarNombreTiquete" name ="formularioAgregarNombreTiquete "   class="advanced-search-form"  autocomplete="off" >
                     <div class="row">   
                         <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                             <label class="knob-label" >{$.i18n.prop("factura.nombreFactura")}</label>
-                            <input type="text" class="campo tamanoLetraTotales cambioNombreFactura"  id="cambioNombreFactura" name="cambioNombreFactura" autofocus="autofocus" >
+                            <input type="text" class="campo tamanoLetraTotales cambioNombreFactura"  id="cambioNombreFactura" name="cambioNombreFactura" autofocus="autofocus"  > 
                         </div>
                     </div>
                 </form>
@@ -2511,7 +2511,7 @@ __agregarArticuloBotonAgregar(){
 *  Muestra la lista de clientes
 **/
 _EscogerClientes(){
-    $('#modalClientes').modal('show')  
+    $('#modalClientes').modal('show')   
 }
 /**
 *  Muestra la lista de vendedores
@@ -2526,6 +2526,7 @@ function __ListaDeVendedores(){
     $.ajax({
         url: 'ListarVendedoresActivosAjax.do',
         datatype: "json",
+        global: false,
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
@@ -2549,6 +2550,7 @@ function __ListaDeClientes(){
     $.ajax({
         url: 'ListarClientesActivosAjax.do',
         datatype: "json",
+        global: false,
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
@@ -3326,7 +3328,7 @@ function _Empresa(){
      $.ajax({
         url: "ParametrosEmpresaAjax.do",
         datatype: "json",
-        
+        global: false,
         method:"GET",
         success: function (data) {
             if (data.status != 200) {

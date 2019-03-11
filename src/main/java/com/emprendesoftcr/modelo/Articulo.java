@@ -130,6 +130,8 @@ public class Articulo implements Serializable {
 
 	@Column(name = "prioridad", columnDefinition = "INT default '99999'")
 	private Integer prioridad;
+	
+
 
 	public Articulo(Long id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, Double cantidad, Double minimo, Double maximo, String estado, String tipoImpuesto, String tipoCodigo, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa, Integer comanda) {
 		super();

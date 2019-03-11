@@ -20,11 +20,11 @@
                     <section class="">
                         <div class="forma-impresion " id="imprimeme" name ="imprimeme">                        
                             <div class="ticket" id="ticket" name="ticket" > 
-                                <div class="encabezado"><strong> {documentoElectronico} </strong><br></div>
+                                <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 0}"><strong> {documentoElectronico} </strong><br></div>
                                 <div class="encabezado" show = "{facturaImpresa.tipoDoc == '88'}"><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.id}                       </strong><br></div>
                                 <div class="encabezado" show = "{facturaImpresa.tipoDoc == '87'}"><strong> {$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")} {facturaImpresa.id}                       </strong><br></div>
                                 <div class="encabezado"><strong> {facturaImpresa.empresa.nombreComercial}                        </strong><br></div>
-                                <div class="encabezado"><strong> {facturaImpresa.empresa.nombre}                        </strong></div><br>
+                                <div class="encabezado"><strong> {facturaImpresa.empresa.nombre}                        </strong></div>
                                 <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.cedula")}  </strong>{facturaImpresa.empresa.cedula} <strong>{$.i18n.prop("tikect.encabezado.telefono")}</strong> {facturaImpresa.empresa.telefono}</strong></div>
                                 <div class="encabezado" show = {facturaImpresa.empresa.correoElectronico != ""} >{facturaImpresa.empresa.correoElectronico} </div>
                                 <div class="encabezado" >{facturaImpresa.empresa.otraSenas} </div>
@@ -593,8 +593,6 @@ function getMoneda() {
 *Imprimir facturaImpresa
 **/    
 __ImprimirfacturaImpresa(){
-   
-    
     __imprimir()
     $("#boton-regresar").focus()
     $('.codigo').select()
@@ -680,13 +678,8 @@ function __ComboTipoDocumentos(){
 **/
 function __imprimir(){
     var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
-     var div = document.querySelector("#imprimeme");
-
-     
-    
+    var div = document.querySelector("#imprimeme");
     imprimirElemento(div)
-      
-    
 }
 function imprimirElemento(elemento){
   var ventana = window.open('', 'PRINT', 'height=400,width=600');

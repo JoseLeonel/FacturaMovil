@@ -728,7 +728,7 @@ function _Empresa(){
      $.ajax({
         url: "ParametrosEmpresaAjax.do",
         datatype: "json",
-        
+        global: false,
         method:"GET",
         success: function (data) {
             if (data.status != 200) {
@@ -1018,6 +1018,7 @@ function __TipoCambio(){
     $.ajax({
         url: "MostrarTipoCambioActivoAjax.do",
         datatype: "json",
+        global: false,
         method:"GET",
         success: function (data) {
             if (data.status != 200) {
@@ -1912,6 +1913,7 @@ function __ListaDeVendedores(){
     $.ajax({
         url: 'ListarVendedoresActivosAjax.do',
         datatype: "json",
+        global: false,
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
@@ -1936,6 +1938,7 @@ function __ListaDeClientes(){
     $.ajax({
         url: 'ListarClientesActivosAjax.do',
         datatype: "json",
+        global: false,
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){

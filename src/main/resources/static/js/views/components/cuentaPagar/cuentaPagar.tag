@@ -790,6 +790,7 @@ function listaProveedoresActivos(){
     self.update()
     $.ajax({
         url: "ListarProveedoresAjax.do",
+        global: false,
         datatype: "json",
         method:"GET",
         success: function (result) {

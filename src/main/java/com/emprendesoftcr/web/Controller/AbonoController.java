@@ -158,7 +158,8 @@ public class AbonoController {
 			abono.setTotalEfectivo(abonoCommand.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : abonoCommand.getTotalEfectivo());
 			abono.setTotalTarjeta(abonoCommand.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : abonoCommand.getTotalTarjeta());
 			abono.setTotal(abonoCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : abonoCommand.getTotal());
-
+      abono.setRecibo(abonoCommand.getRecibo());
+      abono.setTransferencia(abonoCommand.getTransferencia());
 			abono.setCreated_at(new Date());
 			abono.setUpdated_at(new Date());
 			abono.setUsuario(usuarioSesion);

@@ -78,6 +78,7 @@ function listaClientesActivos(){
 	$.ajax({
 		 url: "ListarClientesActivosAjax.do",
 		 datatype: "json",
+		 global: false,
 		 method:"GET",
 		 success: function (result) {
 				if(result.aaData.length > 0){

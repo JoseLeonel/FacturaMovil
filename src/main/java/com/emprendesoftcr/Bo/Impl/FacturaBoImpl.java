@@ -420,6 +420,15 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setFactura(factura);
 			detalleDao.agregar(detalle);
 			//factura.addDetalle(detalle);
+			
+		// Solo aplica para venta POST 
+			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) && facturaCommand.getMesa() != null && !facturaCommand.getMesa().getId().equals(0L) && facturaCommand.getMesa().getImpuestoServicio()) {
+				Integer con = 0;
+			}else {
+				if(detalle.getCodigo().equals(Constantes.CODIGO_ARTICULO_IMPUESTO_SERVICIO)) {
+					totalImpServicios = totalImpServicios + detalle.getMontoTotal();
+				}
+			}
 		}
 		// Se agrega un detalle para el costo por servicio de restaurante y se afecta el monto total de la factura
 		if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) && facturaCommand.getMesa() != null && !facturaCommand.getMesa().getId().equals(0L) && facturaCommand.getMesa().getImpuestoServicio()) {
@@ -429,7 +438,7 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setCreated_at(new Date());
 			detalle.setDescripcion("Impuesto Servicio");
 			detalle.setGanancia(Constantes.ZEROS_DOUBLE);
-			detalle.setImpuesto(10D);
+			detalle.setImpuesto(Constantes.ZEROS_DOUBLE);
 			detalle.setMontoDescuento(Constantes.ZEROS_DOUBLE);
 			detalle.setMontoImpuesto(Constantes.ZEROS_DOUBLE);
 			detalle.setMontoTotal(Utils.roundFactura(subTotal * 0.10, 5));

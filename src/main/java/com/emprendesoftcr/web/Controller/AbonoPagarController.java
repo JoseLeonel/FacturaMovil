@@ -144,7 +144,8 @@ public class AbonoPagarController {
 			abonoPagar.setTotalEfectivo(abonoPagarCommand.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(abonoPagarCommand.getTotalEfectivo(), 5));
 			abonoPagar.setTotalTarjeta(abonoPagarCommand.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(abonoPagarCommand.getTotalTarjeta(), 5));
 			abonoPagar.setTotal(abonoPagarCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(abonoPagarCommand.getTotal(), 5));
-
+			abonoPagar.setRecibo(abonoPagarCommand.getRecibo());
+		  abonoPagar.setTransferencia(abonoPagarCommand.getTransferencia());
 			abonoPagar.setCreated_at(new Date());
 			abonoPagar.setUpdated_at(new Date());
 			abonoPagar.setUsuario(usuarioSesion);
