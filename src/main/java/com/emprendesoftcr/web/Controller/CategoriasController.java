@@ -126,14 +126,15 @@ public class CategoriasController {
 			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
 		}
-		
-		if(delimitadores.getColumnData() == null) {
+
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		if(delimitadores.getColumnData() == null && usuarioSesion.getEmpresa().getOrdenaCategoriaArticulos().equals(1)) {
 			//Se ordena por prioridad por defecto se crearon en 9999
-			delimitadores.setColumnData("prioridad");
+			delimitadores.setColumnData("prioridad, id");
 			delimitadores.setColumnOrderDir("asc");			
 		}
 
-		JqGridFilter categoriaFilter=   new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "="); 
+		JqGridFilter categoriaFilter =   new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "="); 
 		delimitadores.addFiltro(categoriaFilter);
 
 		delimitadores.setLength( parametrosPaginacion.getCantidadPorPagina());
