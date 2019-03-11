@@ -1,7 +1,5 @@
 package com.emprendesoftcr.web.command;
 
-import javax.persistence.Column;
-
 import com.emprendesoftcr.modelo.Empresa;
 
 public class EmpresaCommand {
