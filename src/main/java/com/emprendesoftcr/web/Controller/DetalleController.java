@@ -143,8 +143,8 @@ public class DetalleController {
 				
 				
 	}
-	@Autowired
-	private CertificadoBo																							certificadoBo;
+//	@Autowired
+//	private CertificadoBo																							certificadoBo;
 
 	
 	
@@ -153,11 +153,11 @@ public class DetalleController {
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idFactura) {
 
-		 Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		 //Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 			// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 			// criptografica desde linux
-			 certificadoBo.agregar(usuario.getEmpresa(),"","");
+		//	 certificadoBo.agregar(usuario.getEmpresa(),"","");
 	
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Detalle");

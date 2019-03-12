@@ -382,6 +382,8 @@ function __modificarClase(formulario,mensajeAlerModificar,urlModificar,urlListar
 }
 
 
+
+
 /**
 *   Agregar 
 **/

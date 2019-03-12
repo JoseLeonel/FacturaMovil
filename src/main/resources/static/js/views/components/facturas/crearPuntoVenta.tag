@@ -1,7 +1,38 @@
 <punto-venta>
+<!--validar rol de usuario-->
+
+<!-- The Modal -->
+  <div class="modal fade" id="modalRolUsuario">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Seguridad</h4>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+           <form id="formularioModalRolUsuario">
+                <div class="form-group ">
+                    <label>Usuario</label> 
+                    <input  type="text"  class="form-control usuarioSistema"      id="usuarioSistema" name="usuarioSistema" value="{validarRolCommand.usuarioSistema}">
+                </div>      
+                <div class="form-group ">
+                    <label>Clave</label> 
+                    <input  type="password"  class="form-control claveSistema"  name="claveSistema" id="claveSistema"  value="{validarRolCommand.claveSistema}">
+                </div>      
+            </form>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger"  onclick ="{__SeguridadVentas}" >Autorizar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--fin validar rol de usuario-->
 
 <!--Modal abrirCajon sin comanda-->
-<div id='modalabrirCajon' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div id='modalabrirCajon' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
     <div class="modal-dialog modal-sm">
        <div class="modal-content">
             <div class="modal-body">
@@ -287,7 +318,7 @@
                 </section>
         </div><!-- fin contenedor-factura-->
 <!--Modal mostrar Articulos de la empresa -->
-<div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header with-border table-header" >
@@ -525,6 +556,7 @@
     self.detail                = []
     self.mensajesBackEnd       = []
     self.error                 = false
+    self.rutaAutorizada        = ""    // 1= Cambiar cantidad 2 = Cambiar descripcion 3 =Cambiar precio
     self.comboCondicionPagos   = []
     self.comboTipoDocumentos   = []
     self.subTotalGeneral       = 0
@@ -537,6 +569,10 @@
     self.tipoCambio = {
         total:0,
         id:null
+    }
+    self.validarRolCommand = {
+        usuarioSistema : "",
+        claveSistema:""
     }
 
     self.descripcionArticulo = ""
@@ -688,9 +724,83 @@
         };
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
+             //disableF5(evento);
         }, false );
      
     })
+    function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
+/**
+* Validar seguridad de ruta autorizada
+**/ 
+__SeguridadVentas(){
+   __validarRolAdministrador('#formularioModalRolUsuario','validarRolAdministradorAjax.do');
+    
+}
+
+function __validarRolAdministrador(formulario,url){
+    var resultado = false;	
+    if ($(formulario).valid()) {
+        var formulario = $(formulario).serialize();
+        $.ajax({
+          type : "POST",
+          sync: true,
+          dataType : "json",
+          data : formulario,
+          url : url,
+          success : function(data) {
+             if (data.status != 200) {
+            	 serverMessageJsonClase(data);
+                if (data.message != null && data.message.length > 0) {
+                	 swal({
+                         type: 'error',
+                         title:"No autorizado",
+                         showConfirmButton: false,
+                         timer: 1500
+                     });
+                 }
+                return resultado;
+             } else {
+            	 var modelTabla = {};
+            	 data.listaObjetos.forEach(function(modelo) {
+            		 modeloTabla = modelo;
+            	 })
+               	if(modeloTabla.aceptacion === 1){
+                    self.validarRolCommand = {
+                        usuarioSistema : "",
+                        claveSistema:""
+                    }   
+                    self.update()
+               	    $('#modalRolUsuario').modal('hide') 
+                    $('.modal-backdrop').remove();
+                    $(self.rutaAutorizada).modal({backdrop: 'static', keyboard: true}) 
+                    $(self.rutaAutorizada).modal('show')    	
+               	}else{
+                    self.rutaAutorizada = '';
+                    self.update()
+                    swal({
+                        type: 'error',
+                        title:"No autorizado",
+                        showConfirmButton: false,
+                        timer: 1500
+                    })      
+                    return resultado;
+                }
+          
+             }
+          },
+          error : function(xhr, status) {
+             console.log(status);
+             mensajeErrorServidor(xhr, status);
+          }
+        });
+    }
+    
+}
+
+
+
+
+
 
 _SeleccionarEfectivo(){
     $('.totalEfectivo').select()
@@ -992,8 +1102,25 @@ function __TipoDocumentos(numeroConsecutivo,row){
 **/
 __CambiarDescuento(e){
     self.item = e.item; 
+    self.rutaAutorizada = '';
+    
     self.update()
-    $('#modalCambiarDescuento').modal('show')      
+    if(self.empresa.seguridadEnVentas == 1){
+        
+        self.rutaAutorizada = '#modalCambiarDescuento';
+        self.update()
+        $("#usuarioSistema").val("")
+        $("#claveSistema").val("")
+        $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalRolUsuario').modal('show')     
+
+    }else{
+         $( "#aplicarDescuento" ).focus()
+        $( "#aplicarDescuento" ).val(cantidad)
+        $('#modalCambiarDescuento').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalCambiarDescuento').modal('show')      
+    }
+    
 }
 /**
 *Cambiar Cantidad del Articulo
@@ -1001,11 +1128,22 @@ __CambiarDescuento(e){
 __CambiarCantidad(e){
    var cantidad = e.currentTarget.value;
    self.item = e.item; 
+   self.rutaAutorizada = '';
    self.update()
-   $( "#cambiarCantidadArticulo" ).focus()
-   $( "#cambiarCantidadArticulo" ).val(cantidad)
-   $('#modalCambiarCantidad').modal('show')      
-}
+   if(self.empresa.seguridadEnVentas == 1){
+        self.rutaAutorizada = '#modalCambiarCantidad';
+        self.update()
+        $("#usuarioSistema").val("")
+        $("#claveSistema").val("")
+        $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalRolUsuario').modal('show')     
+   }else{
+        $( "#cambiarCantidadArticulo" ).focus()
+        $( "#cambiarCantidadArticulo" ).val(cantidad)
+        $('#modalCambiarCantidad').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalCambiarCantidad').modal('show')      
+   }
+ }
 /**
 * Tipo Cambio de moneda
 **/

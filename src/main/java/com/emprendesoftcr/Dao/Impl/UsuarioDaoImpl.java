@@ -9,7 +9,9 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.UsuarioDao;
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Rol;
 import com.emprendesoftcr.modelo.Usuario;
 
 /**
@@ -114,6 +116,31 @@ public class UsuarioDaoImpl implements UsuarioDao {
 			return null;
 		}
 		
+	}
+	@Override
+	public Boolean isAdministrador_empresa(Usuario usuario) {
+		long count = usuario.getRoles().stream().filter(p -> p.getNombre() == Constantes.ROL_ADMINISTRADOR_EMPRESA).count();
+		return count > 1 ?true:false;
+	}
+	@Override
+	public Boolean isAdministrador_sistema(Usuario usuario) {
+		long count = usuario.getRoles().stream().filter(p -> p.getNombre() == Constantes.ROL_ADMINISTRADOR_SISTEMA).count();
+		return count > 1 ?true:false;
+	}
+	@Override
+	public Boolean isAdministrador_restaurante(Usuario usuario) {
+		long count = usuario.getRoles().stream().filter(p -> p.getNombre() == Constantes.ROL_ADMINISTRADOR_RESTAURANTE).count();
+		return count > 1 ?true:false;
+	}
+	@Override
+	public Boolean isAdministrador_cajero(Usuario usuario) {
+		long count = usuario.getRoles().stream().filter(p -> p.getNombre() == Constantes.ROL_ADMINISTRADOR_CAJERO).count();
+		return count > 1 ?true:false;
+	}
+	@Override
+	public Boolean isAdministrador_vendedor(Usuario usuario) {
+		long count = usuario.getRoles().stream().filter(p -> p.getNombre() == Constantes.ROL_USUARIO_VENDEDOR).count();
+		return count > 1 ?true:false;
 	}
 
 }
