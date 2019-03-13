@@ -89,14 +89,6 @@ import com.emprendesoftcr.web.propertyEditor.VendedorPropertyEditor;
 import com.google.common.base.Function;
 import com.itextpdf.text.DocumentException;
 
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-
 /**
  * Compras realizadas por la empresa y ingresan al inventario ComprasController.
  * @author jose.
