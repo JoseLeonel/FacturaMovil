@@ -225,7 +225,7 @@
                 <div class="cabecera-izquierda">
                   <div class="pfs-funcionales ">
                     <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
-                    <a class="pull-left" href="#"   onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
+                    <a class="pull-left" href="#"   onclick = {__LimpiarFormulario} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
                     <a class="pull-left" href="#"    onclick = {__ListaDecodigos} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f4")}</span></a>
                     <a class="pull-left" href="#"    onclick = {_ReimprimirFactura} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f6")}</span></a>
                     <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago}   title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
@@ -556,7 +556,9 @@
     self.detail                = []
     self.mensajesBackEnd       = []
     self.error                 = false
-    self.rutaAutorizada        = ""    // 1= Cambiar cantidad 2 = Cambiar descripcion 3 =Cambiar precio
+    self.rutaAutorizada        = ""    // llama al modal correspondiente
+    self.autorizarBorrado      = 0    // 0 = no autoriza 1 = si autorisa 
+
     self.comboCondicionPagos   = []
     self.comboTipoDocumentos   = []
     self.subTotalGeneral       = 0
@@ -574,7 +576,7 @@
         usuarioSistema : "",
         claveSistema:""
     }
-
+    self.itemEliminar = {}
     self.descripcionArticulo = ""
     self.factura                = {
         id:null,
@@ -772,8 +774,22 @@ function __validarRolAdministrador(formulario,url){
                     self.update()
                	    $('#modalRolUsuario').modal('hide') 
                     $('.modal-backdrop').remove();
-                    $(self.rutaAutorizada).modal({backdrop: 'static', keyboard: true}) 
-                    $(self.rutaAutorizada).modal('show')    	
+                    if(self.autorizarBorrado == 0){
+                        $(self.rutaAutorizada).modal({backdrop: 'static', keyboard: true}) 
+                        $(self.rutaAutorizada).modal('show')    	
+                    }
+                    if(self.autorizarBorrado == 1){
+                        self.autorizarBorrado = 0
+                        self.update()
+                        eliminarDetalle()
+                    }
+                    if(self.autorizarBorrado == 2){
+                        self.autorizarBorrado = 0
+                        self.update()
+                        refrescarPagina()
+                    }
+
+                    return true;
                	}else{
                     self.rutaAutorizada = '';
                     self.update()
@@ -783,7 +799,7 @@ function __validarRolAdministrador(formulario,url){
                         showConfirmButton: false,
                         timer: 1500
                     })      
-                    return resultado;
+                    return true;
                 }
           
              }
@@ -881,6 +897,23 @@ function _Empresa(){
 * LLimpiar Formulario
 **/
 __LimpiarFormulario(){
+    self.autorizarBorrado = 2
+    self.update()
+    if(self.empresa.seguridadEnVentas == 1){
+        self.rutaAutorizada = '';
+        self.update()
+        $("#usuarioSistema").val("")
+        $("#claveSistema").val("")
+        $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalRolUsuario').modal('show')     
+    }else{
+        refrescarPagina()
+    }
+}
+/**
+* limpiar pantalla
+**/
+function __LimpiarClick(){    
     $(".plazoCredito").val(null)   
     $(".fechaCredito").val(null)   
     $(".totalEfectivo").val(null)   
@@ -2332,9 +2365,28 @@ function __agregarArticulo(cantidad){
 * eliminar un detalle factura
 **/
 __removeProductFromDetail(e) {
-    var item = e.item;
-    index = this.detail.indexOf(item);
-    this.detail.splice(index, 1);
+    self.autorizarBorrado = 1
+    self.itemEliminar = e.item;
+    self.update()
+    if(self.empresa.seguridadEnVentas == 1){
+        self.rutaAutorizada = '';
+        self.update()
+        $("#usuarioSistema").val("")
+        $("#claveSistema").val("")
+        $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalRolUsuario').modal('show')     
+    }else{
+        eliminarDetalle()
+    }
+}    
+
+/**
+*    Eliminar detalle
+**/
+function  eliminarDetalle(){
+
+    index = self.detail.indexOf(self.itemEliminar);
+    self.detail.splice(index, 1);
     self.cantArticulos = self.cantArticulos > 0?self.cantArticulos - 1:0
     var num = 0
     for (var count = 0; count < self.detail.length; count++) {
