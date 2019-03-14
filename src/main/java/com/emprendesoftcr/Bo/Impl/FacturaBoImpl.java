@@ -598,6 +598,7 @@ public class FacturaBoImpl implements FacturaBo {
 					factura.setCreated_at(new Date());
 					agregar(factura);
 				} else {
+					factura.setCreated_at(new Date());
 					modificar(factura);
 				}
 				// Se asociando los detalles a la factura

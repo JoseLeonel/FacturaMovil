@@ -1391,6 +1391,9 @@ function __FacturaEnEspera(factura){
 *  Cargar detalles Factura en espera
 **/
 function cargarDetallesFacturaEnEspera(data){
+    $('.nota').val(null);
+    $('.correoAlternativo').val(null);
+    $('.nombreFactura').val(null);
     self.detail = [];
     self.numeroLinea =  0
     self.cantArticulos =  0
@@ -1398,6 +1401,9 @@ function cargarDetallesFacturaEnEspera(data){
     self.update()
     $.each(data, function( index, modeloTabla ) {
         self.factura = modeloTabla.factura
+        $('.nota').val(self.factura.nota);
+        $('.correoAlternativo').val(self.factura.correoAlternativo);
+        $('.nombreFactura').val(self.factura.nombreFactura);
         self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
         self.cliente              = modeloTabla.factura.cliente
         self.vendedor             = modeloTabla.factura.vendedor
