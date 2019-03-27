@@ -962,7 +962,6 @@ function consultaFactura(data,tipoImpresion){
 * Tipo de Documento
 **/
 function __TipoDocumentos(numeroConsecutivo,row){
-
     switch(row.tipoDoc) {
     case "04":
           return  "Tiq:"+numeroConsecutivo

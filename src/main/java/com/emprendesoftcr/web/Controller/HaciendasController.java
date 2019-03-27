@@ -695,7 +695,12 @@ public class HaciendasController {
 
 			if (cedula != null) {
 				if (!cedula.equals("0")) {
-					delimitador.addFiltro(new JqGridFilter("cedulaReceptor", "'" + cedula.toString() + "'", "="));
+					if(cedula.equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+						delimitador.addFiltro(new JqGridFilter("nombreReceptor",  Constantes.NOMBRE_CLIENTE_FRECUENTE , "like"));
+					}else {
+						delimitador.addFiltro(new JqGridFilter("cedulaReceptor",  cedula , "="));	
+					}
+					
 				}
 
 			}

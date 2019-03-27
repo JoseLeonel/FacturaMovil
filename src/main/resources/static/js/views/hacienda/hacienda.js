@@ -83,7 +83,7 @@ function listaClientesActivos(){
 		 success: function (result) {
 				if(result.aaData.length > 0){
 					$.each(result.aaData, function( index, modeloTabla ) {
-						$('.selectCliente').append('<option value="'+modeloTabla.id+'">'+modeloTabla.nombreCompleto+ '</option>');
+						$('.selectCliente').append('<option value="'+modeloTabla.cedula+'">'+modeloTabla.nombreCompleto+ '</option>');
 					});
 					$('.selectCliente').selectpicker();
 				} 
@@ -173,8 +173,19 @@ function agregarInputsCombos(){
 		//No se toma en cuenta la columna de las acctiones(botones)
 		if ( $(this).index() != 6    ){
 			 $(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
-	  }
-  })
+		}
+		// Select
+		if ($(this).index() == 1 ){
+      var select = $('<select id="combo1" class="form-control"><option value="">Todos</option></select>');
+			select.append( '<option value="'+"01"+'">'+$.i18n.prop("factura.tipo.documento.factura.electronica")+'</option>' );
+			select.append( '<option value="'+"02"+'">'+$.i18n.prop("referencia.tipo.documento.nota.debito")+'</option>' );
+  		select.append( '<option value="'+"03"+'">'+$.i18n.prop("referencia.tipo.documento.nota.credito")+'</option>' );
+      select.append( '<option value="'+"04"+'">'+$.i18n.prop("factura.tipo.documento.factura.tiquete")+'</option>' );
+     	$(this).html(select);
+    }
+	
+
+	})
 } 
 
 /**

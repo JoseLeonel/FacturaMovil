@@ -268,13 +268,12 @@
                                 <th width="10%" class="table-header">{$.i18n.prop("cuentaCobrar.created_at")} </th>
                                 <th width="10%" class="table-header">{$.i18n.prop("cuentaCobrar.id")}         </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.cliente")}    </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.factura")}    </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.tipo")}       </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.codigoMoneda")}      </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.total")}      </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.totalAbono")} </th>
-                                <th class="table-header">{$.i18n.prop("cuentaCobrar.totalSaldo")} </th>
-                                <th width="10%" class="table-header">{$.i18n.prop("cuentaCobrar.estado")}     </th>
+                                <th class="table-header"  style="width:9%">{$.i18n.prop("cuentaCobrar.factura")}    </th>
+                                <th class="table-header" style="width:2%">{$.i18n.prop("cuentaCobrar.fechaPlazo")}       </th>
+                                <th class="table-header" style="width:6%">{$.i18n.prop("cuentaCobrar.codigoMoneda")}      </th>
+                                <th class="table-header" style="width:8%">{$.i18n.prop("cuentaCobrar.total")}      </th>
+                                <th class="table-header" style="width:8%">{$.i18n.prop("cuentaCobrar.totalAbono")} </th>
+                                <th class="table-header" style="width:8%">{$.i18n.prop("cuentaCobrar.totalSaldo")} </th>
                                 <th class="table-header">{$.i18n.prop("listado.acciones")}        </th>
                             </tr>
                         </thead>
@@ -283,13 +282,12 @@
                                 <th >{$.i18n.prop("cuentaCobrar.created_at")} </th> 
                                 <th>{$.i18n.prop("cuentaCobrar.id")}         </th>
                                 <th>{$.i18n.prop("cuentaCobrar.cliente")}    </th>
-                                <th>{$.i18n.prop("cuentaCobrar.factura")}    </th>
-                                <th>{$.i18n.prop("cuentaCobrar.tipo")}       </th>
-                                <th>{$.i18n.prop("cuentaCobrar.codigoMoneda")} </th>
-                                <th>{$.i18n.prop("cuentaCobrar.total")}      </th>
-                                <th>{$.i18n.prop("cuentaCobrar.totalAbono")} </th>
-                                <th>{$.i18n.prop("cuentaCobrar.totalSaldo")} </th>
-                                <th>{$.i18n.prop("cuentaCobrar.estado")}     </th>
+                                <th  style="width:9%">{$.i18n.prop("cuentaCobrar.factura")}    </th>
+                                <th style="width:8%">{$.i18n.prop("cuentaCobrar.fechaPlazo")}       </th>
+                                <th style="width:6%">{$.i18n.prop("cuentaCobrar.codigoMoneda")} </th>
+                                <th style="width:8%">{$.i18n.prop("cuentaCobrar.total")}      </th>
+                                <th style="width:8%">{$.i18n.prop("cuentaCobrar.totalAbono")} </th>
+                                <th style="width:8%">{$.i18n.prop("cuentaCobrar.totalSaldo")} </th>
                                 <th>                                         </th>
                             </tr>
                         </tfoot>
@@ -996,7 +994,6 @@ function __InformacionDataTable(){
                             {'data' : 'totalSTR'                 ,"name":"totalSTR"                   ,"title" : $.i18n.prop("cuentaCobrar.total")        ,"autoWidth" :true},
                             {'data' : 'totalAbonoSTR'            ,"name":"totalAbonoSTR"              ,"title" : $.i18n.prop("cuentaCobrar.totalAbono")   ,"autoWidth" :true },
                             {'data' : 'totalSaldoSTR'            ,"name":"totalSaldoSTR"              ,"title" : $.i18n.prop("cuentaCobrar.totalSaldo")   ,"autoWidth" :true},
-                            {'data' : 'estado'                   ,"name":"estado"                  ,"title" : $.i18n.prop("cuentaCobrar.estado")       ,"autoWidth" :false},
                             {'data' : 'id'                       ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : false,
                                 "render":function(id,type, row){
                                       return __Opciones(id,type,row);
@@ -1514,7 +1511,7 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 10    ){
+        if ( $(this).index() != 9    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
