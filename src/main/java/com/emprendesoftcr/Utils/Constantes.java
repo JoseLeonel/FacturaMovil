@@ -15,9 +15,9 @@ public class Constantes {
 	public static final String					NOTA_CREDITO_ELECTRONICO_VERSION										= "Nota Credito Electrónica ver 4.2";
 	public static final String					NOTA_DEBITO_ELECTRONICO_VERSION											= "Nota Debito Electrónica ver 4.2";
 	public static final String					PROFORMA_VERSION																		= "Proforma";
-	//callbackurl  1 = si 0= No
-	public static final Integer					CALLBACKURL_SI												= 1;
-	public static final Integer					CALLBACKURL_NO												= 0;
+	// callbackurl 1 = si 0= No
+	public static final Integer					CALLBACKURL_SI																			= 1;
+	public static final Integer					CALLBACKURL_NO																			= 0;
 
 	// Tipo de mostrar el articulo de impuesto de servicio 10 porciento
 	public static final Integer					NO_MOSTRAR_IMPUESTO_10_PORCIENTO										= 1;
@@ -424,6 +424,12 @@ public class Constantes {
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS						= "TOTAL_NETAS";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS					= "TOTAL_EXENTAS";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS					= "TOTAL_GRABADAS";
+
+	// Totales de inventarios
+	public static final String					SP_TOTAL_INVENTARIO																	= "SPTOTALINVENTARIOS";
+	public static final String					SP_INVENTARIO_ID_EMPRESA														= "ID_EMPRESA";
+	public static final String					SP_TOTAL_COSTO_OUT																	= "TOTALCOSTO";
+	public static final String					SP_TOTAL_VENTA_OUT																	= "TOTALVENTA";
 
 	// Totales de cuentas por cobrar
 	public static final String					SP_TOTAL_CUENTA_COBRAR															= "SPTOTALFACTURAS";

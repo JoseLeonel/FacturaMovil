@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
@@ -132,42 +131,39 @@ public class DetalleController {
 	public String listaFacturasxCodigo(ModelMap model) {
 		return "views/detalle/ListaDetallesxCodigo";
 	}
-	
+
 	@RequestMapping(value = "/TotalVentasPorDetalleAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public TotalDetallesCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin) {
 		Date fechaInicial = Utils.parseDate(fechaInicio);
 		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFin), true);
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		return detalleBo.totalVentasPorDetalle(usuario.getEmpresa(),fechaInicial, fechaFinal);
-				
-				
+		return detalleBo.totalVentasPorDetalle(usuario.getEmpresa(), fechaInicial, fechaFinal);
+
 	}
 //	@Autowired
 //	private CertificadoBo																							certificadoBo;
 
-	
-	
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarDetlleByFacturaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idFactura) {
 
-		 Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
-			// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
-			// criptografica desde linux
+		// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
+		// criptografica desde linux
 //			 certificadoBo.agregar(usuario.getEmpresa(),"","");
-	
+
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Detalle");
-		
+
 		JqGridFilter dataTableFilter = new JqGridFilter("factura.id", "'" + idFactura + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_DETALLE);
 	}
-	
+
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarDetlleByFacturaConsecutivoAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
@@ -177,13 +173,9 @@ public class DetalleController {
 		// Usuario de la session
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
-		
-		 
-	
-
 		delimitadores = new DataTableDelimitador(request, "Detalle");
 		delimitadores.addFiltro(new JqGridFilter("factura.empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "="));
-		
+
 		JqGridFilter dataTableFilter = new JqGridFilter("factura.numeroConsecutivo", "'" + consecutivo + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
@@ -242,7 +234,7 @@ public class DetalleController {
 		if (fechaFinal != null && fechaFinal != null) {
 			fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
 		}
-		Collection<Detalle> detalles = detalleBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal,usuario.getEmpresa());
+		Collection<Detalle> detalles = detalleBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal, usuario.getEmpresa());
 		// Se prepara el excell
 		ByteArrayOutputStream baos = createExcelVentasXCodigo(detalles);
 		Collection<Attachment> attachments = createAttachments(attachment("ventasXCodigo", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
@@ -259,11 +251,6 @@ public class DetalleController {
 		Map<String, Object> modelEmail = new HashMap<>();
 		modelEmail.put("fechaInicial", fechaInicialParam);
 		modelEmail.put("fechaFinal", fechaFinalParam);
-//		modelEmail.put("total", totalGeneral);
-//		modelEmail.put("impuesto", totalImpuestoGeneral);
-//		modelEmail.put("descuento", totalDescuentoGeneral);
-//		modelEmail.put("codigo", codigoParam);
-//		modelEmail.put("descripcion", descripcion);
 		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_VENTA_POR_CODIGO, modelEmail);
 	}
 
@@ -303,8 +290,7 @@ public class DetalleController {
 			fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
 		}
 
-	
-		Collection<Detalle> detalles = detalleBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal,usuario.getEmpresa());
+		Collection<Detalle> detalles = detalleBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal, usuario.getEmpresa());
 		String nombreArchivo = "VentasXProductos.xls";
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
@@ -330,17 +316,17 @@ public class DetalleController {
 
 	@RequestMapping(value = "/ListaDetallesxCodigoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable ListaDetallesxCodigo(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String codigo, @RequestParam String tipoDocumento, @RequestParam String idCliente,String tipoImpuesto) {
+	public RespuestaServiceDataTable ListaDetallesxCodigo(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String codigo, @RequestParam String tipoDocumento, @RequestParam String idCliente, String tipoImpuesto) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Cliente cliente = clienteBo.buscarPorCedulaYEmpresa(idCliente, usuarioSesion.getEmpresa());
-		DataTableDelimitador query = DelimitadorBuilderXCodigo.get(request, fechaInicio, fechaFin, usuarioSesion.getEmpresa(), codigo, tipoDocumento, cliente, usuarioBo,tipoImpuesto);
+		DataTableDelimitador query = DelimitadorBuilderXCodigo.get(request, fechaInicio, fechaFin, usuarioSesion.getEmpresa(), codigo, tipoDocumento, cliente, usuarioBo, tipoImpuesto);
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND_DETALLE);
 	}
 
 	private static class DelimitadorBuilderXCodigo {
 
-		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Empresa empresa, String codigo, String tipoDocumento, Cliente cliente, UsuarioBo usuarioBo,String tipoImpuesto) {
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Empresa empresa, String codigo, String tipoDocumento, Cliente cliente, UsuarioBo usuarioBo, String tipoImpuesto) {
 			// Consulta por fechas
 			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Detalle");
 			Date fechaInicio = new Date();
@@ -351,13 +337,12 @@ public class DetalleController {
 			delimitador.addFiltro(new JqGridFilter("factura.estado", "'" + Constantes.FACTURA_ESTADO_ANULADA.toString() + "'", "<>"));
 			delimitador.addFiltro(new JqGridFilter("factura.referenciaCodigo", "'" + Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO.toString() + "'", "<>"));
 			delimitador.addFiltro(new JqGridFilter("factura.empresa.id", "'" + empresa.getId().toString() + "'", "="));
-			if(codigo !=null) {
-				if(!codigo.equals(Constantes.EMPTY)) {
-					delimitador.addFiltro(new JqGridFilter("codigo", "'" + codigo.toString() + "'", "="));	
+			if (codigo != null) {
+				if (!codigo.equals(Constantes.EMPTY)) {
+					delimitador.addFiltro(new JqGridFilter("codigo", "'" + codigo.toString() + "'", "="));
 				}
-					
+
 			}
-			
 
 			if (cliente != null) {
 				delimitador.addFiltro(new JqGridFilter("factura.cliente.id", "'" + cliente.getId().toString() + "'", "="));
@@ -378,7 +363,7 @@ public class DetalleController {
 					if (!tipoImpuesto.equals(Constantes.COMBO_TODOS)) {
 						delimitador.addFiltro(new JqGridFilter("tipoImpuesto", "'" + tipoImpuesto.toString() + "'", "="));
 					}
-				}else {
+				} else {
 					delimitador.addFiltro(new JqGridFilter("tipoImpuesto", "'" + tipoImpuesto.toString() + "'", "="));
 				}
 			}

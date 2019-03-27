@@ -1,11 +1,14 @@
 package com.emprendesoftcr.Dao.Impl;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.StoredProcedureQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +18,9 @@ import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Articulo;
+import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.web.command.TotalInventarioCommand;
 
 /**
  * Mantenimiento de Articulos de los articulos del almacen ArticuloDaoImpl.
@@ -124,9 +129,9 @@ public class ArticuloDaoImpl implements ArticuloDao {
 			if (precio == 0) {
 				return Constantes.ZEROS_DOUBLE;
 			}
-			if(precio < costo) {
+			if (precio < costo) {
 				return Constantes.ZEROS_DOUBLE;
-				
+
 			}
 			Double resultado = Constantes.ZEROS_DOUBLE;
 			Double precioSinImpuesto = Constantes.ZEROS_DOUBLE;
@@ -147,7 +152,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 			}
 			Double porcentaje = 100d;
 
-			return Utils.roundFactura(resultado * porcentaje,5);
+			return Utils.roundFactura(resultado * porcentaje, 5);
 
 		} catch (Exception e) {
 			log.info("** Error  porcentanjeDeGanancia: " + e.getMessage() + " fecha " + new Date());
@@ -172,7 +177,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 			Double totalProductos = cantidadActual + cantidadNueva;
 			resultado = (totalCostoActual + totalCostoNuevo);
 
-			return Utils.roundFactura(resultado / totalProductos,5);
+			return Utils.roundFactura(resultado / totalProductos, 5);
 
 		} catch (Exception e) {
 			log.info("** Error  costoPromedio: " + e.getMessage() + " fecha " + new Date());
@@ -192,12 +197,46 @@ public class ArticuloDaoImpl implements ArticuloDao {
 
 			resultado = costo * cantidad;
 
-			return Utils.roundFactura(resultado,5);
+			return Utils.roundFactura(resultado, 5);
 
 		} catch (Exception e) {
 			log.info("** Error  getTotalCosto: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
+	}
+
+	@Override
+	public TotalInventarioCommand sumarInventarios(Integer idEmpresa) {
+		StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_TOTAL_INVENTARIO);
+
+		// set parametros entrada
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_INVENTARIO_ID_EMPRESA, Integer.class, ParameterMode.IN);
+
+		// set parametros salida
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_COSTO_OUT, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_VENTA_OUT, Double.class, ParameterMode.OUT);
+
+		// Valores de entrada
+		storedProcedure.setParameter(Constantes.SP_INVENTARIO_ID_EMPRESA, idEmpresa);
+		storedProcedure.execute();
+
+		// Se toma la respuesta
+		return new TotalInventarioCommand((Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_COSTO_OUT), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_VENTA_OUT));
+
+	}
+
+	@Override
+	public Collection<Articulo> articulosBy(Empresa empresa) {
+		Query query = entityManager.createQuery("select obj from Articulo obj where  obj.empresa = :empresa order by obj.codigo");
+		query.setParameter("empresa", empresa);
+		return query.getResultList();
+	}
+	
+	@Override
+	public Collection<Articulo> articulosOrderCategoria(Empresa empresa) {
+		Query query = entityManager.createQuery("select obj from Articulo obj where  obj.empresa = :empresa order by obj.categoria.id,obj.descripcion");
+		query.setParameter("empresa", empresa);
+		return query.getResultList();
 	}
 
 }

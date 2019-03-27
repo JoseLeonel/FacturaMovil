@@ -298,19 +298,19 @@ public class HeaderFooter extends PdfPageEventHelper {
 		// ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, new Phrase(String.format("____________________________________________________________________________", writer.getRootOutline())), (rect.getLeft() + rect.getRight()) / 2, rect.getBottom() - 18, 0);
 		try {
 			/* dibujo de linea */
-			PdfContentByte cb = writer.getDirectContent();
+//			PdfContentByte cb = writer.getDirectContent();
 //			cb.setLineWidth(1f);
 //			cb.moveTo(11.5f, 57);
 //			cb.lineTo(583, 50);
 //			cb.stroke();
 		// Ultima Linea
-			float row20 = PageSize.TABLOID.rotate().getHeight() - 695;
-			DateFormat fechaCompleta = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-			String text = "Emitida conforme lo establecido en la resolución de Facturación Electrónica, N° DGT-R-48-2016 del 7/10/16 08:00:00 , a las " + fechaCompleta.format(new Date()) + " horas";
-			
-			if(!this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)){
-				addText(cb, text, UtilsPdf.fontmed08, 300,row20, PdfContentByte.ALIGN_CENTER);	
-			}
+//			float row20 = 680;
+//			DateFormat fechaCompleta = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+//			String text = "Emitida conforme lo establecido en la resolución de Facturación Electrónica, N° DGT-R-48-2016 del 7/10/16 08:00:00 , a las " + fechaCompleta.format(new Date()) + " horas";
+//			
+//			if(!this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)){
+//				addText(cb, text, UtilsPdf.fontmed08, 300,row20, PdfContentByte.ALIGN_CENTER);	
+//			}
 			
 			//BaseFont bf = BaseFont.createFont();
 			//cb.setFontAndSize(bf, 8);

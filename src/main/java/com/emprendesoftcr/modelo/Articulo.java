@@ -23,6 +23,7 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -332,6 +333,13 @@ public class Articulo implements Serializable {
 
 	public void setUpdated_at(Date updated_at) {
 		this.updated_at = updated_at;
+	}
+	
+	public String getUpdated_atSTR() {
+		if(this.updated_at !=null) {
+			return Utils.getFechaGeneraReporte(this.updated_at);	
+		}
+		return Constantes.EMPTY;
 	}
 
 	public Marca getMarca() {

@@ -2,8 +2,10 @@
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -12,6 +14,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jxls.template.SimpleExporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -34,13 +37,16 @@ import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
+import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Marca;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.pdf.GondolaArticuloPdfView;
 import com.emprendesoftcr.web.command.ArticuloCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacion;
+import com.emprendesoftcr.web.command.TotalInventarioCommand;
 import com.emprendesoftcr.web.propertyEditor.ArticuloPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.CategoriaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.MarcaPropertyEditor;
@@ -98,6 +104,12 @@ public class ArticuloController {
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
 
+	
+	@RequestMapping(value = "/TotalesArticulos", method = RequestMethod.GET)
+	public String totalesArticulos(ModelMap model) {
+		return "views/articulos/TotalesArticulos";
+	}
+	
 	/**
 	 * Listar JSP de los articulos
 	 * @param model
@@ -116,6 +128,79 @@ public class ArticuloController {
 	@RequestMapping(value = "/CambiarPrecio", method = RequestMethod.GET)
 	public String cambiarPrecio(ModelMap model) {
 		return "views/articulos/CambioPrecio";
+	}
+	
+	@RequestMapping(value = "/TotalInventarioAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public TotalInventarioCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response) {
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		return articuloBo.sumarInventarios(usuario.getEmpresa().getId());
+	}
+	
+	// Descarga de manuales de usuario de acuerdo con su perfil
+	@RequestMapping(value = "/DescargarInventarioAjax.do", method = RequestMethod.GET)
+	public void descargarInventarioAjax(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
+
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+
+		// Se buscan las facturas
+		Collection<Articulo> articulos = articuloBo.articulosBy(usuario.getEmpresa());
+
+		String nombreArchivo = "Inventario.xls";
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+
+		// Se prepara el excell
+		ByteArrayOutputStream baos = createExcelArticulos(articulos);
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+
+		int BUFFER_SIZE = 4096;
+		byte[] buffer = new byte[BUFFER_SIZE];
+		int bytesRead = -1;
+		while ((bytesRead = inputStream.read(buffer)) != -1) {
+			response.getOutputStream().write(buffer, 0, bytesRead);
+		}
+	}
+
+	private ByteArrayOutputStream createExcelArticulos(Collection<Articulo> articulos) {
+		// Se prepara el excell
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		List<String> headers = Arrays.asList( "Fecha Ultima Actualizacion", "#Codigo", "Descripcion", "Cantidad", "Costo","Impuesto", "Precio Publico","#Cantidad Revision Fisica");
+		new SimpleExporter().gridExport(headers, articulos,"updated_atSTR, codigo, descripcion, cantidad, costo, impuesto,precioPublico", baos);
+		return baos;
+	}
+	
+//Descarga de manuales de usuario de acuerdo con su perfil
+	@RequestMapping(value = "/DescargarInventarioExistenciasAjax.do", method = RequestMethod.GET)
+	public void descargarInventarioExistenciasAjax(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
+
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+
+		// Se buscan las facturas
+		Collection<Articulo> articulos = articuloBo.articulosOrderCategoria(usuario.getEmpresa());
+
+		String nombreArchivo = "InventarioExistencias.xls";
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+
+		// Se prepara el excell
+		ByteArrayOutputStream baos = createExcelArticulosExistencias(articulos);
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+
+		int BUFFER_SIZE = 4096;
+		byte[] buffer = new byte[BUFFER_SIZE];
+		int bytesRead = -1;
+		while ((bytesRead = inputStream.read(buffer)) != -1) {
+			response.getOutputStream().write(buffer, 0, bytesRead);
+		}
+	}
+
+	private ByteArrayOutputStream createExcelArticulosExistencias(Collection<Articulo> articulos) {
+		// Se prepara el excell
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		List<String> headers = Arrays.asList(  "Categoria","#Codigo", "Descripcion", "Cantidad Actual", "#Cantidad Revision Fisica");
+		new SimpleExporter().gridExport(headers, articulos," categoria.descripcion,codigo, descripcion, cantidad", baos);
+		return baos;
 	}
 	
 	@RequestMapping(value = "/PDFGondolaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
