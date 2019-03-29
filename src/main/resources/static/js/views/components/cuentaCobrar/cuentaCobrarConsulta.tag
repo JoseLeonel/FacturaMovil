@@ -341,24 +341,28 @@
                         </div>
                         <div class="row">    
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
-                                <label  >{$.i18n.prop("cuentaCobrar.cliente")}  <span class="requeridoDato">*</span></label>
+                                <label  >{$.i18n.prop("cuentaCobrar.cliente")}  </label>
                                 <input type="text" class="form-control "  value="{cuentaCobrar.cliente.nombreCompleto}" readonly>
                             </div>
                         </div>
                         <div class="row">    
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label  >{$.i18n.prop("cuentaCobrar.vendedor")}  <span class="requeridoDato">*</span></label>
+                                <label  >{$.i18n.prop("cuentaCobrar.vendedor")}  </label>
                                 <input type="text" class="form-control "  value="{cuentaCobrar.vendedor.nombreCompleto}" readonly>
                             </div>
                         </div>
                         <div class="row">    
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                    <label  >{$.i18n.prop("cuentaCobrar.fechaEntrega")} <span class="requeridoDato">*</span></label>
+                                    <label  >{$.i18n.prop("cuentaCobrar.fechaEntrega")} </label>
                                     <input type="text" class="form-control fechaEntrega" placeHolder ="{$.i18n.prop("cuentaCobrar.fechaEntrega")}"  id="fechaEntrega"  name= "fechaEntrega" value="{cuentaCobrar.fechaEntrega}"  readonly>
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                <label  >{$.i18n.prop("cuentaCobrar.fechaPlazo")} <span class="requeridoDato">*</span></label>
+                                <label  >{$.i18n.prop("cuentaCobrar.fechaPlazo")} </label>
                                 <input type="text" class="form-control" placeHolder ="{$.i18n.prop("cuentaCobrar.fechaPlazo")}" id="fechaPlazo" name="fechaPlazo"  value="{cuentaCobrar.fechaPlazo}" readonly>
+                            </div>   
+                              <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label  >{$.i18n.prop("cuentaCobrar.factura")} </label>
+                                <input type="text" class="form-control" placeHolder ="{$.i18n.prop("cuentaCobrar.factura")}" id="fechaPlazo" name="fechaPlazo"  value="{cuentaCobrar.factura}" readonly>
                             </div>                            
 
                         </div>

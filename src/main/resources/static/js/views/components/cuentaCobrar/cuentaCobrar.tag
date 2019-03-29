@@ -356,7 +356,11 @@
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label  >{$.i18n.prop("cuentaCobrar.fechaPlazo")} <span class="requeridoDato">*</span></label>
                                 <input type="text" class="form-control" placeHolder ="{$.i18n.prop("cuentaCobrar.fechaPlazo")}" id="fechaPlazo" name="fechaPlazo"  value="{cuentaCobrar.fechaPlazo}" readonly>
-                            </div>                            
+                            </div>   
+                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label  >{$.i18n.prop("cuentaCobrar.factura")} </label>
+                                <input type="text" class="form-control" placeHolder ="{$.i18n.prop("cuentaCobrar.factura")}" id="fechaPlazo" name="fechaPlazo"  value="{cuentaCobrar.factura}" readonly>
+                            </div>                              
 
                         </div>
 
@@ -820,7 +824,7 @@ function listadoConsulta(){
                     __InformacionDataTable();
                     self.listaCuentaXCobrar.data = result.aaData
                     self.update()
-                    loadListar(".tableListar",idioma_espanol,self.informacion_tabla,result.aaData)
+                    loadListarCuentasCobrar(".tableListar",idioma_espanol,self.informacion_tabla,result.aaData)
                     agregarInputsCombos();
                     ActivarEventoFiltro(".tableListar")
                     __mostrarCuentaPorCobrar()
@@ -844,6 +848,23 @@ function listadoConsulta(){
                 console.log(xhr);
         }
     });
+}
+function loadListarCuentasCobrar(table,idioma,formatoTabla,data){
+	$(table).DataTable().destroy();
+        $(table).DataTable({
+        destroy: true,
+        "language": idioma_espanol,
+        "sDom": 'lrtip',
+        "order": [1, 'desc'],
+        "bPaginate": true,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+       
+        "columns": formatoTabla,
+    });  
+    $(table).dataTable().fnClearTable();
+    $(table).dataTable().fnAddData(data);        
 }
 /**
 *  Suma de totales de cuenta por cobrar 

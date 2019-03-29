@@ -818,7 +818,8 @@ function __agregarRegistro(transaccion,formulario,mensajeAlerAgregar,urlAgregar,
                              if(transaccion == 3){
                                 __regresar()
                                 self.mostrarListado = true
-                                self.mostrarListadoAbonos = false
+                                self.mostrarCrearAbonoPagar = false
+                                self.mostrarListadoAbonoPagar = false
                                 self.update()
                                 __LimpiarAbonoPagar()
                              }else{

@@ -37,10 +37,8 @@ import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
-import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
-import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Marca;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.pdf.GondolaArticuloPdfView;
@@ -165,8 +163,8 @@ public class ArticuloController {
 	private ByteArrayOutputStream createExcelArticulos(Collection<Articulo> articulos) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList( "Fecha Ultima Actualizacion", "#Codigo", "Descripcion", "Cantidad", "Costo","Impuesto", "Precio Publico","#Cantidad Revision Fisica");
-		new SimpleExporter().gridExport(headers, articulos,"updated_atSTR, codigo, descripcion, cantidad, costo, impuesto,precioPublico", baos);
+		List<String> headers = Arrays.asList( "Fecha Ultima Actualizacion","Categoria", "#Codigo", "Descripcion", "Cantidad", "Costo","Impuesto", "Precio Publico","#Cantidad Revision Fisica");
+		new SimpleExporter().gridExport(headers, articulos,"updated_atSTR,categoria.descripcion, codigo, descripcion, cantidad, costo, impuesto,precioPublico", baos);
 		return baos;
 	}
 	
