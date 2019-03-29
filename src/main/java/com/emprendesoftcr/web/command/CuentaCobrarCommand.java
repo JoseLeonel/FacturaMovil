@@ -61,6 +61,8 @@ public class CuentaCobrarCommand {
 	private String		updated_atSTR;
 	
 	private Integer plazoCredito;
+	
+	private Boolean cancelar;
 
 	private Cliente		cliente;
 	private Vendedor	vendedor;
@@ -99,6 +101,7 @@ public class CuentaCobrarCommand {
 		this.totalSaldoSTR = cuentaCobrar.getTotalSaldoSTR();
 		this.totalSTR = cuentaCobrar.getTotalSTR();
 		this.codigoMoneda =cuentaCobrar.getCodigoMoneda();
+		this.cancelar = false;
 	}
 
 	public CuentaCobrarCommand() {
@@ -362,6 +365,18 @@ public class CuentaCobrarCommand {
 	public void setCodigoMoneda(String codigoMoneda) {
 		this.codigoMoneda = codigoMoneda;
 	}
+
+	
+	public Boolean getCancelar() {
+		return cancelar;
+	}
+
+	
+	public void setCancelar(Boolean cancelar) {
+		this.cancelar = cancelar;
+	}
+	
+	
 	
 
 }

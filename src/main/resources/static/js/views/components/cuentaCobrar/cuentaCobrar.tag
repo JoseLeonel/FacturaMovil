@@ -151,11 +151,15 @@
         <div class="col-md-12 col-lg-12 col-sx-12 col-sm-1">
             <div class="box box-solid box-primary">
                 <div class="box-header with-border">
-                    <h1 class="box-title" show={abono.id == null}><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.agregar")} {cuentaCobrar.id}  {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total}  {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo.toFixed(2)} </h1>
-                    <h1 class="box-title" show={abono.id != null}><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.id")} {abono.id} {$.i18n.prop("abono.detalle.cuenta")} {cuentaCobrar.id} {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total.toFixed(2)} {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo.toFixed(2)}</h1>
+                    <h1 class="box-title" show="{abono.id == null && abonoGlobal == false}" ><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.agregar")} {cuentaCobrar.id}  {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total}  {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo.toFixed(2)} </h1>
+                    <h1 class="box-title" show={abono.id != null abonoGlobal == false}><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.id")} {abono.id} {$.i18n.prop("abono.detalle.cuenta")} {cuentaCobrar.id} {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total.toFixed(2)} {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo.toFixed(2)}</h1>
+                    <h1 class="box-title" show={abonoGlobal == true}><i class="fa fa-calculator"></i>&nbsp  Total abonar:{cuentaCobrar.totalSaldo.toFixed(2)}</h1>
                 </div>
                 <div class="box-body">
                     <form id = "formularioAbono" name ="formularioAbono " class="advanced-search-form">
+                        <input type="hidden" name="listaCuentasGrupales" id="listaCuentasGrupales" value="{listaCuentasGrupales}">
+                        <input type="hidden" name="cantidadCuentasPorCobrar" id="cantidadCuentasPorCobrar" value="{cantidadCuentasPorCobrar}">
+                        
                         <input type="hidden" name="id" id="id" value="{abono.id}">
                         <input type="hidden" name="cuentaCobrar" id="cuentaCobrar" value="{abono.cuentaCobrar.id}">
                         <input type="hidden" name="idCuentaCobrar" id="idCuentaCobrar" value="{cuentaCobrar.id}">
@@ -213,7 +217,7 @@
                                 <input  type="number" step="any" class="form-control totalBanco" placeHolder ="{$.i18n.prop("abono.totalBanco")}"  id="totalBanco" name="totalBanco" onkeyup = {__TotalBanco}  value="{abono.totalBanco}" readonly={abono.id > 0}>                        
                             </div>
                             <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4">
-                                <label >{$.i18n.prop("abono.total")} <span class="requeridoDato">*</span> </label>
+                                <label >{$.i18n.prop("abono.total")}  </label>
                                 <input  type="number" step="any" class="form-control total" placeHolder ="{$.i18n.prop("abono.total")}" id="total" name="total"  value="{abono.total}"   readonly>                        
                             </div>
                         </div>
@@ -227,15 +231,22 @@
                     </form>    
                 </div>
                 <div class="box-footer">
-                    <button onclick ={__regresarAlListadoAbono}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
-                        {$.i18n.prop("btn.volver")}</buuton>
-                    </button> <button show={botonAgregar ==true } onclick={__agregarAbono}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
+                    <button show = {abonoGlobal == false} onclick ={__regresarAlListadoAbono}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                    {$.i18n.prop("btn.volver")}</buton>
+                    <button show = {abonoGlobal == true} onclick ={__RegresarListadoAbonoGlobal}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                        {$.i18n.prop("btn.volver")}</buton>
+                    </button> <button show={botonAgregar ==true  && abonoGlobal == false } onclick={__agregarAbono}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
+                    
+                    </button> <button show = {abonoGlobal == true} onclick={__agregarAbonoGrupales}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
                   
                 </div>
             </div>   
         </div>
     </div>
 </div>
+
+
+
 <!-- Fin Formulario -->   
     <!-- Listado  -->
     <div classs="contenedor-listar container" id="container"  show={mostrarListado}  >
@@ -257,6 +268,14 @@
                     <label  >{$.i18n.prop("titulo.saldo")} </label>
                     <input type="text" class="form-control totalSaldoGeneral " value="{totalSaldo}" readonly>
                 </div>  
+            </div>      
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                <div class="form-group">
+                    <label  >Total Abonar</label>
+                    <input type="text" class="form-control totalSaldoGeneral " value="{totalAplicarAbono}" readonly>
+                   
+                </div>  
+                 <button show = {totalAplicarAbono > 0 } onclick ={__CrearAbono} type="button" class="btn btn-warning " title ="Consultar" name="button" ><i class="fa fa-pencil-square-o"></i>Aplicar Abonos</button>
             </div>                             
         </div>
 
@@ -265,8 +284,9 @@
                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th width="10%" class="table-header">{$.i18n.prop("cuentaCobrar.created_at")} </th>
-                                <th width="10%" class="table-header">{$.i18n.prop("cuentaCobrar.id")}         </th>
+                                <th  style="width:1%" class="table-header"></th>
+                                <th style="width:6%" class="table-header">{$.i18n.prop("cuentaCobrar.created_at")} </th>
+                                <th style="width:6%" class="table-header">{$.i18n.prop("cuentaCobrar.id")}         </th>
                                 <th class="table-header">{$.i18n.prop("cuentaCobrar.cliente")}    </th>
                                 <th class="table-header"  style="width:9%">{$.i18n.prop("cuentaCobrar.factura")}    </th>
                                 <th class="table-header" style="width:2%">{$.i18n.prop("cuentaCobrar.fechaPlazo")}       </th>
@@ -279,8 +299,9 @@
                         </thead>
                         <tfoot style="display: table-header-group;">
                             <tr>
-                                <th >{$.i18n.prop("cuentaCobrar.created_at")} </th> 
-                                <th>{$.i18n.prop("cuentaCobrar.id")}         </th>
+                                <th style="width:1%" ></th> 
+                                <th style="width:6%">{$.i18n.prop("cuentaCobrar.created_at")} </th> 
+                                <th style="width:6%">{$.i18n.prop("cuentaCobrar.id")}         </th>
                                 <th>{$.i18n.prop("cuentaCobrar.cliente")}    </th>
                                 <th  style="width:9%">{$.i18n.prop("cuentaCobrar.factura")}    </th>
                                 <th style="width:8%">{$.i18n.prop("cuentaCobrar.fechaPlazo")}       </th>
@@ -396,6 +417,13 @@
         th, td {
             white-space: nowrap;
         }
+        table.dataTable tr th.select-checkbox.selected::after {
+    content: "✔";
+    margin-top: -11px;
+    margin-left: -4px;
+    text-align: center;
+    text-shadow: rgb(176, 190, 217) 1px 1px, rgb(176, 190, 217) -1px -1px, rgb(176, 190, 217) 1px -1px, rgb(176, 190, 217) -1px 1px;
+}
 
 </style>
 
@@ -408,12 +436,18 @@
     self.vendedores                = {data:[]}
     self.clientes                  = {data:[]}
     self.empresas                  = {data:[]}
+    self.listaCuentaXCobrar        = {data:[]}
+    self.listaCuentasGrupales      = {data:[]}
+    
     self.hay_datos                 = false           
     self.mostrarListado            = true 
     self.botonModificar            = false
+    self.totalAplicarAbono         = 0
+    self.cantidadCuentasPorCobrar  = 0
     self.botonAgregar              = false
     self.mostrarListadoAbonos      = false
     self.mostrarCrearAbono         = false
+    self.abonoGlobal               = false 
     self.total                     = 0
     self.totalAbono                = 0
     self.totalSaldo                = 0
@@ -498,11 +532,59 @@
             todayHighlight:true,
         }
         );
+        __MarcarCuentaPorCobrar()
 
         window.addEventListener( "keydown", function(evento){
                 $(".errorServerSideJgrid").remove();
             }, false );
     })
+
+__RegresarListadoAbonoGlobal(){
+    self.mostrarListado            = true 
+    self.botonModificar            = false
+    self.totalAplicarAbono         = 0
+    self.botonAgregar              = false
+    self.mostrarListadoAbonos      = false
+    self.mostrarCrearAbono         = false
+    self.abonoGlobal               = false 
+    self.update()
+}
+__CrearAbono(){
+    self.mostrarCrearAbono = true;
+    self.mostrarListado            = false
+    self.botonModificar            = false
+    self.botonAgregar              = false
+    self.mostrarListadoAbonos      = false
+    self.abonoGlobal               = true
+    self.cuentaCobrar                   ={
+        id:null,
+        recibo:"",
+        letraCambio:"",
+        factura:"",
+        facturaManual:"",
+        totalComision:0,
+        descuento:0,
+        cantidadPagos:0,
+        montoCouta:0,
+        total:0,
+        totalAbono:0,
+        totalSaldo:self.totalAplicarAbono,
+        descripcionArticulo:"",
+        nota:"",
+        tipo:"",
+        estado:"",
+        fechaPlazo:null,
+        fechaEntrega:null,
+        cliente:{
+            id:null
+        },
+         vendedor:{
+            id:null
+        }
+    }
+    self.update()
+}
+
 /**
 * Camps requeridos
 **/
@@ -716,6 +798,8 @@ function __EnviarPorCorreo(){
 *  Busqueda de la informacion por rango de fechas
 **/
 __Busqueda(){
+    self.totalAplicarAbono         = 0
+    self.update()
 	$("#filtros").validate(reglasDeValidacion());
      if ($("#filtros").valid()) {
          listadoConsulta()
@@ -745,6 +829,8 @@ function listadoConsulta(){
             success: function (result) {
                 if(result.aaData.length > 0){
                     __InformacionDataTable();
+                    self.listaCuentaXCobrar.data = result.aaData
+                    self.update()
                     loadListar(".tableListar",idioma_espanol,self.informacion_tabla,result.aaData)
                     agregarInputsCombos();
                     ActivarEventoFiltro(".tableListar")
@@ -858,7 +944,38 @@ __MontoCuota(e){
     self.cuentaCobrar.montoCouta =self.cuentaCobrar.total / __valorNumerico($('.cantidadPagos').val())
     self.update()
 }
-
+/**
+*   Agregar grupales
+**/
+__agregarAbonoGrupales(){
+    if(self.abono.total != self.totalAplicarAbono ){
+            swal({
+      	        title: '',
+      	        text: 'El total a pagar no es igual al saldo. Verificar y presione nuevamente',
+      	        type: 'error',
+      	        showCancelButton: false,
+      	        confirmButtonText: 'Aceptar',
+      	    })
+           return false
+    }
+    self.listaCuentasGrupales      = {data:[]}
+    self.cantidadCuentasPorCobrar = 0
+    self.update()
+    for (var count = 0; count < self.listaCuentaXCobrar.data.length; count++) {
+        if (self.listaCuentaXCobrar.data[count].cancelar == true ){// Si existe actualiza la cantidad
+           self.cantidadCuentasPorCobrar = self.cantidadCuentasPorCobrar + 1
+           self.listaCuentasGrupales.data.push({
+               id:self.listaCuentaXCobrar.data[count].id
+              
+           })
+            self.update()
+        }
+    }
+    var json  = JSON.stringify( self.listaCuentasGrupales)
+    $("#listaCuentasGrupales").val(json);
+    
+    __agregarRegistro(2,"#formularioAbono",$.i18n.prop("abono.mensaje.alert.agregar.abonos"),'AgregarAbonoGrupalAjax.do','ListarAbonosPorCuentaCobrarAjax.do','#tableListaAbonos')
+}
 /**
 *   Agregar 
 **/
@@ -964,9 +1081,9 @@ function listaClientesActivos(){
         method:"GET",
         success: function (result) {
              if(result.aaData.length > 0){
-                 self.clientes.data = result.aaData
-                 self.update()
-                   $('.selectCliente').selectpicker();
+                self.clientes.data = result.aaData
+                self.update()
+                $('.selectCliente').selectpicker();
              } 
         },
         error: function (xhr, status) {
@@ -979,7 +1096,12 @@ function listaClientesActivos(){
 *Formato del listado de los cambios
 **/
 function __InformacionDataTable(){
-    self.informacion_tabla = [ 
+    
+    self.informacion_tabla = [ {'data' :'id'             ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : false,
+                                 "render":function(id,type, row){
+									return  __checkbox(row);
+                                 }
+                            },
                             {'data' :'created_atSTR'             ,"name":"created_atSTR"              ,"title" : $.i18n.prop("cuentaCobrar.created_at")   ,"autoWidth" :false 
                             },
                             {'data' :'id'                     ,"name":"id"                      ,"title" : $.i18n.prop("cuentaCobrar.id")           ,"autoWidth" :false },
@@ -1001,6 +1123,78 @@ function __InformacionDataTable(){
 	      		            }];
     self.update();
    
+}
+/**
+check de cuentas por cobrar
+**/
+function __checkbox(row){
+    var idCheck = 'check-'+row.id ;
+    var checked = " ";
+    var inputcheck = '<div ><input type="checkbox" id="'+idCheck+'"  "  '+checked+'></div>'
+    return  inputcheck = $('#idCliente').val() == "0"?"":inputcheck;
+} 
+
+function __MarcarCuentaPorCobrar() {
+    $('#tableListar tbody').on('change','input[type="checkbox"]', function (e) {
+        
+        var check1 =  ($(this).attr('id'));
+        var table = $('#tableListar').DataTable();
+        if(table.row(this).child.isShown()){
+            /*cuando el datatable esta en modo responsive*/
+           var data = table.row(this).data();
+        }else{  
+           var data = table.row($(this).parents("tr")).data();
+         }
+         var chk1 =  document.getElementById(check1)
+         if (chk1.checked == false){
+             self.selecciono = false;
+             self.update();
+             __modificar(data,false,false);
+        }
+        else{
+             self.selecciono = true;
+             self.update();
+             __modificar(data,true,true);
+        }
+            
+    });
+} 
+/**
+**  Cambia el Valor de tipoAsignacion del SIM 
+**/
+function __modificar(elemento,valor,sumar){
+    for (var count = 0; count < self.listaCuentaXCobrar.data.length; count++) {
+        if (self.listaCuentaXCobrar.data[count].id == elemento.id ){// Si existe actualiza la cantidad
+            self.listaCuentaXCobrar.data[count].cancelar = valor;
+            if(sumar == true ){
+              __SumarTotalAbonar(self.listaCuentaXCobrar.data[count].totalSaldo)
+            }else{
+               __RestarTotalAbonar(self.listaCuentaXCobrar.data[count].totalSaldo)                
+            }
+            self.update()
+            break;
+        }
+    }
+}
+/**
+* Restar al total general de abonar
+**/
+function __RestarTotalAbonar(monto){
+    if( monto > self.totalAplicarAbono){
+      self.totalAplicarAbono = __valorNumerico(redondeoDecimales(monto,2)) - __valorNumerico(redondeoDecimales(self.totalAplicarAbono,2))       
+    }else{
+      self.totalAplicarAbono = __valorNumerico(redondeoDecimales(self.totalAplicarAbono,2)) - __valorNumerico(redondeoDecimales(monto,2))     
+    }
+    self.totalAplicarAbono = __valorNumerico(redondeoDecimales(self.totalAplicarAbono,2))    
+    self.update()
+}
+/**
+* Sumar al total de abonar
+**/
+function __SumarTotalAbonar(monto){
+    self.totalAplicarAbono = __valorNumerico(redondeoDecimales(monto,2)) + __valorNumerico(redondeoDecimales(self.totalAplicarAbono,2))   
+    self.totalAplicarAbono = __valorNumerico(redondeoDecimales(self.totalAplicarAbono,2))    
+    self.update()
 }
 /**
 *Formato de la fecha con hora
@@ -1511,7 +1705,7 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 9    ){
+        if ( $(this).index() != 10  &&   $(this).index() != 0  ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
