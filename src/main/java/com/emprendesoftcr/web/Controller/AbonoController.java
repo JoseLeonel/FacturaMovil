@@ -125,18 +125,14 @@ public class AbonoController {
 	@RequestMapping(value = "/AgregarAbonoAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @RequestParam("idCuentaCobrar") Long idCuentaCobrar, @ModelAttribute AbonoCommand abonoCommand, BindingResult result, SessionStatus status) throws Exception {
-
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
-
 		try {
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 			UsuarioCaja usuarioCaja = usuarioCajaBo.findByUsuarioAndEstado(usuarioSesion, Constantes.ESTADO_ACTIVO);
 			if (usuarioCaja == null) {
-
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.cajas.abierta", result.getAllErrors());
 			}
-
 			CuentaCobrar cuentaCobrar = cuentaCobrarBo.buscar(idCuentaCobrar);
 			if (cuentaCobrar == null) {
 				respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -153,7 +149,6 @@ public class AbonoController {
 			if (abonoCommand.getTotal() == Constantes.ZEROS_DOUBLE) {
 				result.rejectValue("total", "error.abono.total.cero");
 			}
-
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
@@ -168,21 +163,17 @@ public class AbonoController {
 			abono.setCreated_at(new Date());
 			abono.setUpdated_at(new Date());
 			abono.setUsuario(usuarioSesion);
-
 			abono.setEstado(Constantes.ABONO_ESTADO_PAGADO);
 			abono.setCuentaCobrar(cuentaCobrar);
-			abonoBo.modificar(abono);
+			abonoBo.agregar(abono);
 			cuentaCobrar.setUpdated_at(new Date());
 			cuentaCobrar.setTotalAbono(abono.getTotal() + cuentaCobrar.getTotalAbono());
 			cuentaCobrar.setTotalSaldo(Utils.roundFactura(cuentaCobrar.getTotalSaldo(), 2) - Utils.roundFactura(abono.getTotal(), 2));
 			if (cuentaCobrar.getTotalSaldo().equals(Constantes.ZEROS_DOUBLE)) {
 				cuentaCobrar.setEstado(Constantes.CUENTA_POR_COBRAR_ESTADO_CERRADO);
 			}
-			// cuentaCobrar.addAbono(abono);
 			cuentaCobrarBo.modificar(cuentaCobrar);
-
 			usuarioCajaBo.actualizarCaja(usuarioCaja, Constantes.ZEROS_DOUBLE, Constantes.ZEROS_DOUBLE, Constantes.ZEROS_DOUBLE, Constantes.ZEROS_DOUBLE, abono.getTotal(), Constantes.ZEROS_DOUBLE);
-
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("abono.agregar.correctamente", abono);
 
 		} catch (Exception e) {
@@ -190,24 +181,31 @@ public class AbonoController {
 		}
 	}
 
+	/**
+	 * Aplicar abonos a una lista seleccionadas de cuentas por cobrar
+	 * @param request
+	 * @param model
+	 * @param listaCuentasGrupales
+	 * @param cantidadCuentasPorCobrar
+	 * @param abonoCommand
+	 * @param result
+	 * @param status
+	 * @return
+	 * @throws Exception
+	 */
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/AgregarAbonoGrupalAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator agregarGrupal(HttpServletRequest request, ModelMap model, @RequestParam("listaCuentasGrupales") String listaCuentasGrupales, @RequestParam("cantidadCuentasPorCobrar") Long cantidadCuentasPorCobrar, @ModelAttribute AbonoCommand abonoCommand, BindingResult result, SessionStatus status) throws Exception {
-
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
-
+		Abono abonoTemp = new Abono();
 		try {
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-
 			UsuarioCaja usuarioCaja = usuarioCajaBo.findByUsuarioAndEstado(usuarioSesion, Constantes.ESTADO_ACTIVO);
 			if (usuarioCaja == null) {
-
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.cajas.abierta", result.getAllErrors());
 			}
-
 			JSONObject json = null;
-
 			try {
 				json = (JSONObject) new JSONParser().parse(listaCuentasGrupales);
 				// Agregar Lineas de Detalle
@@ -221,19 +219,13 @@ public class AbonoController {
 					totalBancoGeneral = Utils.roundFactura(totalBancoGeneral, 2);
 					totalEfectivoGeneral = Utils.roundFactura(totalEfectivoGeneral, 2);
 					totalTarjetaGeneral = Utils.roundFactura(totalTarjetaGeneral, 2);
-
 					Double totalBanco = Constantes.ZEROS_DOUBLE;
 					Double totalEfectivo = Constantes.ZEROS_DOUBLE;
-					;
 					Double totalTarjeta = Constantes.ZEROS_DOUBLE;
-					;
 					for (int i = 0; i < jsonArrayDetalleFactura.size(); i++) {
 						totalBanco = Constantes.ZEROS_DOUBLE;
 						totalEfectivo = Constantes.ZEROS_DOUBLE;
-						;
 						totalTarjeta = Constantes.ZEROS_DOUBLE;
-						;
-
 						totalAPagar = Constantes.ZEROS_DOUBLE;
 						GrupalCuentasCommand grupalCuentasCommand = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), GrupalCuentasCommand.class);
 						CuentaCobrar cuentaCobrar = cuentaCobrarBo.buscar(grupalCuentasCommand.getId());
@@ -242,53 +234,43 @@ public class AbonoController {
 							respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("error.abono.cuentaCobrar.no.existe"));
 							return respuestaServiceValidator;
 						}
-						totalAPagar = cuentaCobrar.getTotalSaldo();
+						totalAPagar =  Utils.roundFactura(cuentaCobrar.getTotalSaldo(),2);
 						if (totalEfectivoGeneral > Constantes.ZEROS_DOUBLE) {
-							if(totalEfectivoGeneral > totalAPagar) {
+							if (totalEfectivoGeneral > totalAPagar) {
 								totalEfectivo = totalAPagar;
-					//			totalAPagar = totalEfectivoGeneral - totalAPagar;
 								totalEfectivoGeneral = totalEfectivoGeneral - totalAPagar;
-
-							}else {
+							} else {
 								totalEfectivo = totalEfectivoGeneral;
-								totalAPagar = totalAPagar - totalEfectivoGeneral  ;
+								totalAPagar = totalAPagar - totalEfectivoGeneral;
 								totalEfectivoGeneral = Constantes.ZEROS_DOUBLE;
-								
 							}
 						}
 						if (totalTarjetaGeneral > Constantes.ZEROS_DOUBLE) {
-							if(totalTarjetaGeneral > totalAPagar ) {
+							if (totalTarjetaGeneral > totalAPagar) {
 								totalTarjeta = totalAPagar;
-								//totalAPagar = totalTarjetaGeneral - totalAPagar;
 								totalTarjetaGeneral = totalTarjetaGeneral - totalAPagar;
-								
-							}else {
+							} else {
 								totalTarjeta = totalTarjetaGeneral;
 								totalAPagar = totalAPagar - totalTarjetaGeneral;
 								totalTarjetaGeneral = Constantes.ZEROS_DOUBLE;
 							}
 						}
 						if (totalBancoGeneral > Constantes.ZEROS_DOUBLE) {
-							if(totalBancoGeneral > totalAPagar) {
+							if (totalBancoGeneral > totalAPagar) {
 								totalBanco = totalAPagar;
-								//totalAPagar = totalBancoGeneral - totalAPagar;
 								totalBancoGeneral = totalBancoGeneral - totalAPagar;
-								
-							}else {
+							} else {
 								totalBanco = totalBancoGeneral;
-								totalAPagar =  totalAPagar - totalBancoGeneral;
+								totalAPagar = totalAPagar - totalBancoGeneral;
 								totalBancoGeneral = Constantes.ZEROS_DOUBLE;
-								
 							}
 						}
-
 						if (abonoCommand.getTotal() == Constantes.ZEROS_DOUBLE) {
 							result.rejectValue("total", "error.abono.total.cero");
 						}
 						if (abonoCommand.getTotal() == Constantes.ZEROS_DOUBLE) {
 							result.rejectValue("total", "error.abono.total.cero");
 						}
-
 						if (result.hasErrors()) {
 							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 						}
@@ -303,19 +285,16 @@ public class AbonoController {
 						abono.setCreated_at(new Date());
 						abono.setUpdated_at(new Date());
 						abono.setUsuario(usuarioSesion);
-
 						abono.setEstado(Constantes.ABONO_ESTADO_PAGADO);
 						abono.setCuentaCobrar(cuentaCobrar);
-						abonoBo.modificar(abono);
+						abonoBo.agregar(abono);
+						abonoTemp = abono;
 						cuentaCobrar.setUpdated_at(new Date());
 						cuentaCobrar.setTotalAbono(totalBanco + totalEfectivo + totalTarjeta);
 						cuentaCobrar.setTotalSaldo(Constantes.ZEROS_DOUBLE);
 						cuentaCobrar.setEstado(Constantes.CUENTA_POR_COBRAR_ESTADO_CERRADO);
-						// cuentaCobrar.addAbono(abono);
 						cuentaCobrarBo.modificar(cuentaCobrar);
-
 						usuarioCajaBo.actualizarCaja(usuarioCaja, Constantes.ZEROS_DOUBLE, Constantes.ZEROS_DOUBLE, Constantes.ZEROS_DOUBLE, Constantes.ZEROS_DOUBLE, abono.getTotal(), Constantes.ZEROS_DOUBLE);
-
 					}
 				}
 			} catch (org.json.simple.parser.ParseException e) {
@@ -324,7 +303,7 @@ public class AbonoController {
 
 //		//	CuentaCobrar cuentaCobrar = cuentaCobrarBo.buscar(idCuentaCobrar);
 
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("abono.agregar.correctamente", null);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("abono.agregar.correctamente", abonoTemp);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
