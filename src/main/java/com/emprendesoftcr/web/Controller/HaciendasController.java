@@ -376,9 +376,9 @@ public class HaciendasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarHaciendasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String cedulaReceptor) {
+	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String cedulaReceptor,@RequestParam String tipoDocumento) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cedulaReceptor, usuarioSesion.getEmpresa());
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cedulaReceptor, usuarioSesion.getEmpresa(),tipoDocumento);
 
 		Long total = dataTableBo.contar(query);
 		Collection<Object> objetos = dataTableBo.listar(query);
@@ -415,7 +415,7 @@ public class HaciendasController {
 	@ResponseBody
 	public RespuestaServiceDataTable enviarHaciendaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String cedulaReceptor) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cedulaReceptor, usuarioSesion.getEmpresa());
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cedulaReceptor, usuarioSesion.getEmpresa(),Constantes.EMPTY);
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
 
@@ -685,7 +685,7 @@ public class HaciendasController {
 
 	private static class DelimitadorBuilder {
 
-		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, String cedula, Empresa empresa) {
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, String cedula, Empresa empresa,String tipoDocumento) {
 			// Consulta por fechas
 			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Hacienda");
 			Date fechaInicio = new Date();
@@ -699,6 +699,20 @@ public class HaciendasController {
 						delimitador.addFiltro(new JqGridFilter("nombreReceptor",  Constantes.NOMBRE_CLIENTE_FRECUENTE , "like"));
 					}else {
 						delimitador.addFiltro(new JqGridFilter("cedulaReceptor",  cedula , "="));	
+					}
+					
+				}
+
+			}
+			if (tipoDocumento != null) {
+				if (!tipoDocumento.equals(Constantes.EMPTY)) {
+					if(tipoDocumento.equals("88")) {
+						delimitador.addFiltro(new JqGridFilter("tipoDoc",  "'" + " " + "'" , "="));
+					}else {
+						if(!tipoDocumento.equals("0")) {
+							delimitador.addFiltro(new JqGridFilter("tipoDoc",  tipoDocumento , "="));	
+						}
+							
 					}
 					
 				}
