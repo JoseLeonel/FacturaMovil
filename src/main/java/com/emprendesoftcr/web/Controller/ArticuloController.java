@@ -163,8 +163,8 @@ public class ArticuloController {
 	private ByteArrayOutputStream createExcelArticulos(Collection<Articulo> articulos) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList( "Fecha Ultima Actualizacion","Categoria", "#Codigo", "Descripcion", "Cantidad", "Costo","Impuesto", "Precio Publico","#Cantidad Revision Fisica");
-		new SimpleExporter().gridExport(headers, articulos,"updated_atSTR,categoria.descripcion, codigo, descripcion, cantidad, costo, impuesto,precioPublico", baos);
+		List<String> headers = Arrays.asList( "Fecha Ultima Actualizacion","Categoria", "#Codigo", "Descripcion", "Cantidad", "Costo","Total Costo(Costo X Cantidad)","Impuesto", "Precio Publico","Total Venta Esperada(cantidadXPrecioPublico)");
+		new SimpleExporter().gridExport(headers, articulos,"updated_atSTR,categoria.descripcion, codigo, descripcion, cantidad, costo,totalCosto, impuesto,precioPublico,totalPrecioPublico", baos);
 		return baos;
 	}
 	

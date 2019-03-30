@@ -43,8 +43,8 @@
                 </div>
             </div>   
 	        <div class="col-xs-12 col-md-12 col-lg-12 col-sm-12" show={mostrarDescarga == true}>
-				<a show = {mostrarDescargas == true} class="fa fa-download btn btn-success" target="_blank" title="Descargar de todo el inventario existente" href="DescargarInventarioAjax.do"> Todo el Inventario</a> &nbsp       
-				<a show = {mostrarDescargas == true} class="fa fa-download btn btn-primary" target="_blank" title="Descargar del inventario existente con las Existencias para contabilizar contra el inventario fisico" href="DescargarInventarioExistenciasAjax.do"> Inventario con Existencias</a>        
+				<a show = {mostrarDescargas == true} class="fa fa-download btn btn-success" target="_blank" title="Descargar el inventario existente" href="DescargarInventarioAjax.do"> Todo el Inventario</a> &nbsp       
+				<a show = {mostrarDescargas == true} class="fa fa-download btn btn-primary" target="_blank" title="Descargar el inventario con las existencias para contabilizar contra el inventario fisico" href="DescargarInventarioExistenciasAjax.do"> Inventario con Existencias</a>        
 	        </div>
         </div>
         <div class="col-md-2 col-lg-2 col-sm-2"></div>

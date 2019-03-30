@@ -398,9 +398,9 @@
                         <table id="tableListaCliente" class="table responsive display table-striped table-hover nowrap tableListaCliente " cellspacing="0" width="100%">
                         <thead>
                                 
-                                <th class="table-header">{$.i18n.prop("cliente.cedula")}            </th>
+                                <th style="width:5%" class="table-header">{$.i18n.prop("cliente.cedula")}            </th>
                                 <th class="table-header">{$.i18n.prop("cliente.nombreCompleto")}    </th>
-                                <th class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
+                                <th style="width:8%"  class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
                                 <th class="table-header">{$.i18n.prop("cliente.nombreComercial")}   </th>
                                 <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
                                 
@@ -408,9 +408,9 @@
                             <tfoot style="display: table-header-group;">
                                 <tr>
                                     
-                                    <th>{$.i18n.prop("cliente.cedula")}           </th>
+                                    <th style="width:5%">{$.i18n.prop("cliente.cedula")}           </th>
                                     <th>{$.i18n.prop("cliente.nombreCompleto")}   </th>
-                                    <th>{$.i18n.prop("cliente.correoElectronico")}</th>
+                                    <th style="width:8%">{$.i18n.prop("cliente.correoElectronico")}</th>
                                     <th>{$.i18n.prop("cliente.nombreComercial")}   </th>
                                     <th>                                          </th>
                                     

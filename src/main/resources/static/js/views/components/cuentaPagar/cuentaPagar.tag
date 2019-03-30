@@ -253,7 +253,7 @@
                     <input type="text" class="form-control totalSaldoGeneral " value="{totalAplicarAbono}" readonly>
                    
                 </div>  
-                 <button  show = "{totalAplicarAbono > 0 }" onclick ={__CrearAbono} type="button" class="btn btn-warning " title ="Consultar" name="button" ><i class="fa fa-pencil-square-o"></i>Aplicar Abonos</button>
+                 <button  show = "{totalAplicarAbono > 0 }" onclick ={__CrearAbono} type="button" class="btn btn-warning " title ="Aplicar Abonos a las cuentas seleccionadas" name="button" ><i class="fa fa-pencil-square-o"></i>Aplicar Abonos</button>
             </div>                            
         </div>
         <div class="row">
@@ -466,7 +466,30 @@ __CrearAbono(){
             id:null
         }
     }
+    self.abonoPagar ={
+	   id:null,
+       nota:"",
+       recibo:"",
+       transferencia:"",
+       fechaPago:null,
+       totalEfectivo:0,
+       totalTarjeta:0,
+	   totalBanco:0,
+       total:0,
+       estado:"",
+	   cuentaPagar:{
+           id:null
+       }
+
+    }
     self.update()
+    $('.totalEfectivo').val(null)
+    $('.totalTarjeta').val(null)
+    $('.totalBanco').val(null)
+    $('.fechaPago').val(null)
+    $('.transferencia').val(null)
+    $('.recibo').val(null)
+    $('.nota').val(null)
 }
 /**
 *  Reglas de validacion para el abonoPagar

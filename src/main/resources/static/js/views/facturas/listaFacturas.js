@@ -106,7 +106,7 @@ var ListarFacturas = function(){
 	"responsive": true,
 	 "bAutoWidth" : true,
 	"destroy":true,
-	"order": [ 0, 'asc' ],
+	"order": [ 1, 'asc' ],
 			"bInfo": true,
 			"bPaginate": true,
 			"bFilter" : true,
