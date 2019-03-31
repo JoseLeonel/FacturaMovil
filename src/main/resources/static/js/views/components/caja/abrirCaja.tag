@@ -230,7 +230,6 @@
     self.botonAgregar              = false
     self.mostrarVerDetalle         = false
     self.mostrarConsultaComanda    = false
-   
     self.caja = {
         id:null,
         descripcion:"",
@@ -245,7 +244,6 @@ self.on('mount',function(){
     __MantenimientoAgregar()
     __Eventos()
     __listadoCajasActivas()
-   
 })
 /**
 * Camps requeridos
@@ -268,9 +266,7 @@ var reglasDeValidacion = function() {
 
 	});
 	return validationOptions;
-};
-
-
+}
 /**
 *  Mostrar listado datatable Cajas Activas
 **/
@@ -310,17 +306,14 @@ function __Eventos(){
 *  Regresar al listado
 **/
 __regresarAlListado(){
-   
-                self.mostrarListado     = true;
-                self.botonAgregar       = false;
-                self.botonModificar     = false;
-                self.mostrarFormulario  = false 
-                self.mostrarVerDetalle  = false
-                self.mostrarConsultaComanda    = false
-                self.update()
-                __listado();
-
-   
+    self.mostrarListado     = true;
+    self.botonAgregar       = false;
+    self.botonModificar     = false;
+    self.mostrarFormulario  = false 
+    self.mostrarVerDetalle  = false
+    self.mostrarConsultaComanda    = false
+    self.update()
+    __listado();
 }
 // Mostrar formulario de mantenimiento Agregar
 function __MantenimientoAgregar(){
@@ -331,7 +324,6 @@ function __MantenimientoAgregar(){
             id:null,
             totalFondoInicial:0
         }
-        
         //desahabilita  listado 
         self.mostrarListado   = false;
         self.mostrarFormulario  = true 
@@ -343,10 +335,8 @@ function __MantenimientoAgregar(){
         //Inicializar el Formulario
         $(".errorServerSideJgrid").remove();
         $("#formulario").validate(reglasDeValidacion());
-   
     })
 }
-
 /**
 *  Consultar  especifico
 * 1  Mostrar  2  Modificar
@@ -377,7 +367,6 @@ function __consultar(){
                     });
                 }
             }
-            
         },
         error: function (xhr, status) {
             mensajeErrorServidor(xhr, status);
@@ -389,57 +378,47 @@ function __consultar(){
 *   Agregar 
 **/
 __agregar(){
-   
     if ($("#formulario").valid()) {
-        // Permite obtener todos los valores de los elementos del form del jsp
         var formulario = $("#formulario").serialize();
-       
-          
-                $.ajax({
-                    type : "POST",
-                    dataType : "json",
-                    data : formulario,
-                    url : 'AgregarUsuarioCajaAjax.do',
-                    success : function(data) {
-                        if (data.status != 200) {
-                        	serverMessageJson(data);
-                            if (data.message != null && data.message.length > 0) {
-                            	swal({
-      	                           title: '',
-      	                           text: data.message,
-      	                           type: 'error',
-      	                           showCancelButton: false,
-      	                           confirmButtonText: $.i18n.prop("btn.aceptar"),
-      	                         })
-                            }
-                            
-                        } else {
-                        	serverMessageJson(data);
-                               swal({
-	                           title: '',
-	                           text: data.message,
-	                           type: 'success',
-	                           showCancelButton: false,
-	                           confirmButtonText: $.i18n.prop("btn.aceptar"),
-	                         })
-	                        $("#formulario").validate(reglasDeValidacion());
-                            $(".errorServerSideJgrid").remove();
-                            $("#descripcion").val(null);
-                            $("#terminal").val(null);
-                              __Eventos()
-                        }
-                    },
-                    error : function(xhr, status) {
-                        console.log(xhr);
-                        mensajeErrorServidor(xhr, status);
-                    }
-                });
-          
-     
-        
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            data : formulario,
+            url : 'AgregarUsuarioCajaAjax.do',
+        success : function(data) {
+            if (data.status != 200) {
+               	serverMessageJson(data);
+                if (data.message != null && data.message.length > 0) {
+                   	swal({
+                        title: '',
+                        text: data.message,
+                        type: 'error',
+                        showCancelButton: false,
+                        confirmButtonText: $.i18n.prop("btn.aceptar"),
+                    })
+                }
+            } else {
+               	serverMessageJson(data);
+                swal({
+	                title: '',
+	                text: data.message,
+	                type: 'success',
+	                showCancelButton: false,
+	                confirmButtonText: $.i18n.prop("btn.aceptar"),
+	            })
+	            $("#formulario").validate(reglasDeValidacion());
+                $(".errorServerSideJgrid").remove();
+                $("#descripcion").val(null);
+                $("#terminal").val(null);
+                __Eventos()
+            }
+        },
+        error : function(xhr, status) {
+            mensajeErrorServidor(xhr, status);
+        }
+    });
     }
 }
-
 /**
 ** Modificar la Empresa
 **/
@@ -449,7 +428,6 @@ __Modificar(){
     self.update();
     __modificarRegistro("#formulario",$.i18n.prop("caja.mensaje.alert.modificar"),'ModificarCajaAjax.do','ListarcajasAjax.do','#tableListar')
 }
-
 /**
 *  Mostrar listado datatable
 **/
@@ -481,10 +459,7 @@ function __listado(){
             console.log(xhr);
         }
     })
-}
-
-
- 
+} 
 /**
 *Formato del listado de los cambios
 **/
@@ -516,12 +491,13 @@ function __InformacionDataTable(){
     self.update();
    
 }
+/**
+Formato de montos
+**/
 function FormatoMontos(valor){
-    var resultado = __valorNumerico(valor)
-
-    return resultado;
+   var resultado = __valorNumerico(valor)
+   return resultado;
 }
-
 /**
 *  retorna el valor numerico o cero sino es numerico
 **/
@@ -538,8 +514,8 @@ function isNumber(n) {
 *Formato de la fecha con hora
 **/
 function __displayDate_detail(fecha) {
-      var dateTime = new Date(fecha);
-      return moment(dateTime).format('DD/MM/YYYY h:mm:ss');
+    var dateTime = new Date(fecha);
+    return moment(dateTime).format('DD/MM/YYYY h:mm:ss');
 }
                                     
 /**
@@ -552,7 +528,6 @@ function __Opciones(id,type, row){
   cerrar = row.estado =="Activo"?cerrar:""
   return  verDetalle +" "+ cerrar +" "+imprimir;
 }
-
 /**
  * Funcion para Modificar del Listar
  */
@@ -570,7 +545,6 @@ function __VerDetalle(){
         __consultar()
 	});
 }
-
 /**
  * Funcion para Modificar del Listar
  */
@@ -588,7 +562,6 @@ function __Imprimir(){
         riot.mount('imprimir-caja',{usuarioCaja:self.usuarioCaja});
 	});
 }
-
 /**
  * Funcion para Modificar del Listar
  */
@@ -602,14 +575,13 @@ function __cerrarCaja(){
 	       var data = table.row($(this).parents("tr")).data();
 	    }
         self.usuarioCaja  = data
-
         self.update()
         cerrarCajaAjax()
-       
 	});
 }
-
-
+/**
+*  Totales de Articulos
+**/
 __consultarTotalesArticulo(){
 	$.ajax({
         type : "GET",
