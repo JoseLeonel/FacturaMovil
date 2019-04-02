@@ -383,7 +383,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				recepcion.setComprobanteXml(base64);
 
 				// Ambiente de pruebas
-				 recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
+				 //recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 				// San Ana
 				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
@@ -391,7 +391,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// Guanacaste
 				// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 				// JacoDos
-				//recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+				recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 				// Jaco
 				 //recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
@@ -401,7 +401,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				
 
 				// Alajuela
-				// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+				 //recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 				ObjectMapper mapperObj = new ObjectMapper();
 				String jsonStr = mapperObj.writeValueAsString(recepcion);
@@ -426,7 +426,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/40 * * * ?")
+	@Scheduled(cron = "0 0/50 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;

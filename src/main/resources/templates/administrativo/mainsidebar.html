@@ -28,9 +28,10 @@
 		                <i class="fa fa-calculator"></i>
 		                <span>Inventarios</span>
 		                <i class="fa fa-angle-left pull-right"></i>
-		            </a>
+		            </a> 
 		            <ul class="treeview-menu">
 		                <li><a href="/ListarCategorias"     sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i class="fa fa-circle-o"></i> Categorias       </a></li>
+		                <li><a href="/ListarArticulosXCambioCategoria"     sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i class="fa fa-circle-o"></i> Cambio de Categoria </a></li>
 		                <li><a href="/ListarMarcas"         sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i class="fa fa-circle-o"></i> Marcas           </a></li>
 		                <li><a href="/ListarMotivoSalidas"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante')"><i class="fa fa-circle-o"></i> Motivo de Salidas</a></li>
 		                <li><a href="/ListarMotivoEntradas" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante')"><i class="fa fa-circle-o"></i> Motivo de Entradas</a></li>

@@ -1,18 +1,12 @@
 $(document).ready(function() {
 	ListarArticulos(" ");
-	_Init();
+   _Init();
+   
 } );/*fin document*/
 
 var _Init = function () {
-	   includeActionsArticulo('.dataTables_wrapper','.dataTables_length');
-	     agregarInputsCombos();
-	    EventoFiltro();
-	    __MantenimientoAgregar();
-	    __modificarRegistro_Listar();
-	    __agregarEntradaAlInventario();
-       __agregarSalidaAlInventario();
-       __Imprimir_Articulo()
-
+    // agregarInputsCombos();
+    EventoFiltro();
     $('#codigoArt').keypress(function (e) {
       if (e.keyCode == 13) {
          var valor = $('#codigoArt').val() == null?" ":$('#codigoArt').val();
@@ -20,12 +14,21 @@ var _Init = function () {
       }
 
     });
-    $("#filtros").validate(reglasDeValidacion());
+    $('.btncategoria').hide();
 
-
+    $('.btncategoria').click(function () {
+      enviarACambiarCategoria();
+    })
+    //$(this).html(selectCategoria);
+   
+   
 }
 
+var listaArticulosGrupales      = {data:[]}
 
+var selectCategoria = $('<select id="categoria"   class="form-control categoria"></select>');
+
+var selecciono = false;
 
 var ListarArticulos = function(codigo){
      var table  =  $('#tableListar').DataTable( {
@@ -55,12 +58,74 @@ var ListarArticulos = function(codigo){
  } );//fin del table
  agregarInputsCombos();
  EventoFiltro();
- __MantenimientoAgregar();
- __modificarRegistro_Listar();
- __agregarEntradaAlInventario();
- __agregarSalidaAlInventario();
- __Imprimir_Articulo()
+ __MarcarArticulo();
+
 }  
+
+function enviarACambiarCategoria(){
+   if(listaArticulosGrupales.data.length == 0 ){
+      swal({
+         title: '',
+          text: 'No se realizo el cambio , no hay articulos seleccinados para la nueva categoria',
+          type: 'error',
+          showCancelButton: false,
+          confirmButtonText: 'Aceptar',
+      })
+      
+   }
+   var json  = JSON.stringify( listaArticulosGrupales)
+   $("#listaArticuloGrupales").val(json);
+   var formulario = $("#filtros").serialize();
+        swal({
+           title: '',
+           text: $.i18n.prop("categoria.cambio.aplicar"),
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#00539B',
+            cancelButtonColor: '#d33',
+            confirmButtonText:$.i18n.prop("confirmacion.si"),
+            cancelButtonText: $.i18n.prop("confirmacion.no"),
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+        }).then(function (isConfirm) {
+            if(isConfirm){
+                $.ajax({
+                    type : "POST",
+                    dataType : "json",
+                    data : formulario,
+                    url : 'CambiarCategoriaArticulosGrupalAjax.do',
+                    success : function(data) {
+                        if (data.status != 200) {
+                            if (data.message != null && data.message.length > 0) {
+                            	swal({
+      	                           title: '',
+      	                           text: data.message,
+      	                           type: 'error',
+      	                           showCancelButton: false,
+      	                           confirmButtonText: 'Aceptar',
+      	                         })
+                            }
+                        } else {
+                             swal({
+	                           title: '',
+	                           text: data.message,
+	                           type: 'success',
+	                           showCancelButton: false,
+	                           confirmButtonText: 'Aceptar',
+                            })
+                           var table = $('#tableListar').DataTable();
+                           table.ajax.reload( null, false);
+                             
+                        }
+                    },
+                    error : function(xhr, status) {
+                        console.log(xhr);
+                        mensajeErrorServidor(xhr, status);
+                    }
+                });
+            }
+        });
+}
 /**
  * Eventos del filtro
  */
@@ -100,7 +165,11 @@ function EventoFiltro(){
 /**
 *Formato del listado de los cambios .toFixed(2)
 **/
-var informacion_tabla = [ 
+var informacion_tabla = [ {'data' :'id'             ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : false,
+                           "render":function(id,type, row){
+                           return  __checkbox(row);
+                           }
+                           },
                                {'data' :'categoria'               ,"name":"categoria"              ,"title" : "Categoria"        ,"autoWidth" :true,
                                "render":function(categoria,type, row){
                                      return categoria ==null?"Sin Cantegoria":row.categoria.descripcion;
@@ -126,170 +195,90 @@ var informacion_tabla = [
                             },
                                {'data' :'contable'                ,"name":"contable"               ,"title" : "Contable"         ,"autoWidth" :false },
                                {'data' : 'estado'                 ,"name":"estado"          ,"title" : "Estado"      ,"autoWidth" :false},
-                               {'data' : 'id'            ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
-                                "render":function(id,type, row){
-                                      return __Opciones(id,type,row);
-                                 }
-	      		            }];
+                           ];
 /**
-* Opciones listado de los clientes
-*/
-function __Opciones(id,type,row){
-    let menu = ' <div class="dropdown"> ' 
-    menu += '       <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' 
-    menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>' 
-    menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
-    menu += '<li><a href="#"  title="Imprimir codigo  y precio"  class="btnImprimir" >Imprimir</a></li>'
-    menu += '<li><a href="#"  title="Modificar" class="  btnModificar" >Modificar</a></li>'
-    if(row.contable == "Si" && row.cantidad > 0 ){
-       menu += '<li><a href="#"  title="Salida al inventario" class="  btnSalida" >Salida</a></li>'
-    }
-    if(row.contable == "Si"  ){
-        menu += '<li><a href="#"  title="Entrada al inventario"  class="  btnEntrada" >Entrada</a></li>'
-    }
-    
-     menu += "</ul></div>"  
-     return menu;          
-}
-/**
-* incluir el boton agregar en cada mantenimiento 
+check de cuentas por cobrar
 **/
-function includeActionsArticulo(dataTables_wrapper,dataTables_length) {
-    $( ".btn-agregar" ).remove();
-    $( ".btn-agregarInventario" ).remove();
-    var parent = $(dataTables_wrapper);
-    var header_pointer = $(dataTables_length);
-    var header_length = header_pointer.html();
-    var new_header = "<div  class='new-header-with-actions' style='padding-top:0px; padding-bottom:0px;'>";
-    new_header += "<div class='add-new btn-agregar' ><i class='fa fa-plus'></i>Agregar </div>";
-    new_header += "</div>";
-    parent.prepend(new_header);
-}
+function __checkbox(row){
+   var idCheck = 'check-'+row.id ;
+   var checked = " ";
+   var inputcheck = '<div ><input type="checkbox" id="'+idCheck+'"  "  '+checked+'></div>'
+   return  inputcheck ;
+} 
 
 /**
-* Mostrar formulario de mantenimiento Agregar
+*  Seleccionar una cuenta por cobrar para el abono general
 **/
-function __MantenimientoAgregar(){
-      //Inicializar el Formulario
-    $('.dataTables_wrapper').on('click','.btn-agregar',function(e){
-    	var parametros = {
-    			tipoEjecucion:1
-    	}
-    	$('.mostrarListado').hide();
-		riot.compile(function() {
-			var parametros = {
-					tipoEjecucion:1
-			};
-     	  // here tags are compiled and riot.mount works synchronously
-		  var tags = riot.mount('articulo-crud',{parametros:parametros})
-  
-		});
-    })
-}
-/**
- * Funcion para imprimir codigo descripcion y precio
- */
-function __Imprimir_Articulo(){
-	$('.tableListar').on('click','.btnImprimir',function(e){
-      $(".errorServerSideJgrid").remove();
-		var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
+function __MarcarArticulo() {
+   $('#tableListar tbody').on('change','input[type="checkbox"]', function (e) {
+       var check1 =  ($(this).attr('id'));
+       var table = $('#tableListar').DataTable();
+       if(table.row(this).child.isShown()){
+           /*cuando el datatable esta en modo responsive*/
+          var data = table.row(this).data();
+       }else{  
+          var data = table.row($(this).parents("tr")).data();
+        }
+        var chk1 =  document.getElementById(check1)
+        if (chk1.checked == false){
+            selecciono = false;
+            __EliminarElemento(data.id);
        }
-       location.href = "PDFGondolaAjax.do?idArticulo=" + data.id
-       return
-   
-		//riot.compile(function() {
-   	//	var tags = riot.mount('articulo-imprimir',{articulo:data});
-		//});
-	});
-}
+       else{
+            selecciono = true;
+            __incluir(data.id);
+       }
+       if(listaArticulosGrupales.data.length> 0){
+         $('.btncategoria').show()
+      }else{
+         $('.btncategoria').hide();
+      }   
+   });
+  
+} 
 /**
- * Funcion para Modificar del Listar
- */
-function __modificarRegistro_Listar(){
-	$('.tableListar').on('click','.btnModificar',function(e){
-        $(".errorServerSideJgrid").remove();
-		var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-		$('.mostrarListado').hide();
-		riot.compile(function() {
-			var parametros = {
-				tipoEjecucion:2,
-				articulo:data
-			};
-			 // here tags are compiled and riot.mount works synchronously
-			  var tags = riot.mount('articulo-crud',{parametros:parametros});
-
-			  
-		});
-       
-	});
+**  Selecionar el articulo a  cambiar a la categoria nueva
+**/
+function __incluir(elemento){
+   if(listaArticulosGrupales.data.length == 0){
+      __agregarElemento(elemento);
+      return  
+   }
+   var resultado = false ;
+   for (var count = 0; count < listaArticulosGrupales.data.length; count++) {
+       if (listaArticulosGrupales.data[count].id == elemento ){// Si existe actualiza la cantidad
+           resultado = true;
+           break;
+       }
+   }
+   if(resultado == false){
+      __agregarElemento(elemento);  
+   }
 }
-/**
- * Funcion agregar una entrada
- */
-function __agregarEntradaAlInventario(){
-	$('#tableListar').on('click','.btnEntrada',function(e){
-		var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-		$('.mostrarListado').hide();
-		riot.compile(function() {
-			var parametros = {
-				tipoEjecucion:3,
-				articulo:data
-			};
-			 // here tags are compiled and riot.mount works synchronously
-			  var tags = riot.mount('articulo-crud',{parametros:parametros});
+function __agregarElemento(elemento){
+   listaArticulosGrupales.data.push(
+      {
+        id:elemento
+      }
+   );
 
-			  
-		});
-       
-	});
 }
-/**
- * Funcion agregar una entrada
- */
-function __agregarSalidaAlInventario(){
-	$('#tableListar').on('click','.btnSalida',function(e){
-		var table = $('#tableListar').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	    }
-		$('.mostrarListado').hide();
-		riot.compile(function() {
-			var parametros = {
-				tipoEjecucion:4,
-				articulo:data
-			};
-			 // here tags are compiled and riot.mount works synchronously
-			  var tags = riot.mount('articulo-crud',{parametros:parametros});
+function __EliminarElemento(elemento){
+   var valor = {
+      id:elemento
+   }
+   var index = listaArticulosGrupales.data.indexOf(valor);
+   listaArticulosGrupales.data.splice(index, 1);
+}
 
-			  
-		});
-	});
-}
 /**
  * Funcion para refrescar el listado
  */
 function __mostrarListado(){
 	var table = $('#tableListar').DataTable();
    table.ajax.reload( null, false);
-   $('.mostrarListado').show();
+   //ListarArticulos(" ");
+	$('.mostrarListado').show();
 }
 /**
  * Funcion para regresar el listado
@@ -305,25 +294,25 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 9    ){
+        if ( $(this).index() != 9 && $(this).index() != 0    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
            // Select
-    	if ($(this).index() == 8 ){
+    	if ($(this).index() == 9 ){
     	    var select = $('<select id="combo1" class="form-control"><option value="">Todos</option></select>');
     	    // se cargan los valores por defecto que existen en el combo
     	   	select.append( '<option value="'+$.i18n.prop("estado.Activo")+'">'+$.i18n.prop("estado.Activo")+'</option>' );
             select.append( '<option value="'+$.i18n.prop("estado.Inactivo")+'">'+$.i18n.prop("estado.Inactivo")+'</option>' );
     	   	$(this).html(select);
        }
-       if ($(this).index() == 7 ){
+       if ($(this).index() == 8 ){
          var select = $('<select id="combo2" class="form-control"><option value="">Todos</option></select>');
          // se cargan los valores por defecto que existen en el combo
            select.append( '<option value="'+$.i18n.prop("boolean.si")+'">'+$.i18n.prop("boolean.si")+'</option>' );
           select.append( '<option value="'+$.i18n.prop("boolean.no")+'">'+ $.i18n.prop("boolean.no") +'</option>' );
            $(this).html(select);
      }
-       if ($(this).index() == 0 ){
+       if ($(this).index() == 1 ){
          var select = $('<select id="combo3"   class="form-control"><option value="">Todos</option></select>');
          // se cargan los valores por defecto que existen en el combo
          select = __listadoCategoriasActivas(select);
@@ -343,7 +332,9 @@ function __listadoCategoriasActivas(select){
       success: function (result) {
            if(result.aaData.length > 0){
             $.each(result.aaData, function( index, modeloTabla ) {
-               select.append( '<option value="'+modeloTabla.id+'">'+modeloTabla.descripcion+'</option>' );       
+               select.append( '<option value="'+modeloTabla.id+'">'+modeloTabla.descripcion+'</option>' );  
+               $('#categoria').append('<option value="'+modeloTabla.id+'">'+modeloTabla.descripcion+'</option>');   
+               
             })
          }
       },
@@ -351,22 +342,9 @@ function __listadoCategoriasActivas(select){
           console.log(xhr);
            mensajeErrorServidor(xhr, status);
       }
-  })
+  });
+  
   return select;
 }
 
 
-/**
-* incluir el boton agregar en cada mantenimiento 
-**/
-function includeActionsArticulo(dataTables_wrapper,dataTables_length) {
-    $( ".btn-agregar" ).remove();
-    $( ".btn-agregarInventario" ).remove();
-    var parent = $(dataTables_wrapper);
-    var header_pointer = $(dataTables_length);
-    var header_length = header_pointer.html();
-    var new_header = "<div  class='new-header-with-actions' style='padding-top:0px; padding-bottom:0px;'>";
-    new_header += "<div class='add-new btn-agregar' ><i class='fa fa-plus'></i>Agregar </div>";
-    new_header += "</div>";
-    parent.prepend(new_header);
-}

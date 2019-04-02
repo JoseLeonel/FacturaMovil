@@ -14,8 +14,12 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.jxls.template.SimpleExporter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -29,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.ArticuloBo;
+import com.emprendesoftcr.Bo.CategoriaBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.KardexBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
@@ -42,6 +47,7 @@ import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Marca;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.pdf.GondolaArticuloPdfView;
+import com.emprendesoftcr.web.command.ArticuloCambioCategoriaGrupal;
 import com.emprendesoftcr.web.command.ArticuloCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacion;
 import com.emprendesoftcr.web.command.TotalInventarioCommand;
@@ -50,6 +56,7 @@ import com.emprendesoftcr.web.propertyEditor.CategoriaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.MarcaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
+import com.google.gson.Gson;
 import com.itextpdf.text.DocumentException;
 
 /**
@@ -73,6 +80,9 @@ public class ArticuloController {
 
 	@Autowired
 	private ArticuloBo articuloBo;
+	
+	@Autowired
+	private CategoriaBo categoriaBo;
 
 	@Autowired
 	private KardexBo kardexBo;
@@ -102,6 +112,10 @@ public class ArticuloController {
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
 
+	@RequestMapping(value = "/ListarArticulosXCambioCategoria", method = RequestMethod.GET)
+	public String listarXCambioCategoria(ModelMap model) {
+		return "views/articulos/ListarArticulosCambiarCategoria";
+	}
 	
 	@RequestMapping(value = "/TotalesArticulos", method = RequestMethod.GET)
 	public String totalesArticulos(ModelMap model) {
@@ -126,6 +140,50 @@ public class ArticuloController {
 	@RequestMapping(value = "/CambiarPrecio", method = RequestMethod.GET)
 	public String cambiarPrecio(ModelMap model) {
 		return "views/articulos/CambioPrecio";
+	}
+	
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/CambiarCategoriaArticulosGrupalAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+
+	public RespuestaServiceValidator agregarGrupal(HttpServletRequest request, ModelMap model, @RequestParam("listaArticuloGrupales") String listaArticuloGrupales, @RequestParam("categoria") Long idCategoria,  @ModelAttribute ArticuloCambioCategoriaGrupal articuloCambioCategoriaGrupaltem, BindingResult result, SessionStatus status) throws Exception {
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		Articulo articuloTemp = new Articulo();
+		try {
+			JSONObject json = null;
+			try {
+				json = (JSONObject) new JSONParser().parse(listaArticuloGrupales);
+				// Agregar Lineas de Detalle
+				JSONArray jsonArrayDetalleFactura = (JSONArray) json.get("data");
+				Gson gson = new Gson();
+				if (jsonArrayDetalleFactura != null) {
+					for (int i = 0; i < jsonArrayDetalleFactura.size(); i++) {
+						ArticuloCambioCategoriaGrupal articuloCambioCategoriaGrupal = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), ArticuloCambioCategoriaGrupal.class);
+						Articulo articuloBD = articuloBo.buscar(articuloCambioCategoriaGrupal.getId());
+						if ( articuloBD == null) {
+							respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
+							respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("error.articulo.codigo.no.existe"));
+							return respuestaServiceValidator;
+						}
+						if (result.hasErrors()) {
+							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+						}
+						Categoria categoria = categoriaBo.buscar(idCategoria);
+						articuloBD.setCategoria(categoria);
+						articuloBo.modificar(articuloBD);
+						articuloTemp = articuloBD;
+					}
+				}
+			} catch (org.json.simple.parser.ParseException e) {
+				throw e;
+			}
+
+
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("categoria.cambio.correctamente", articuloTemp);
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
 	}
 	
 	@RequestMapping(value = "/TotalInventarioAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -280,7 +338,7 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam String codigoArt) {
+	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam(value = "codigoArt", required = false) String codigoArt) {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Articulo");
