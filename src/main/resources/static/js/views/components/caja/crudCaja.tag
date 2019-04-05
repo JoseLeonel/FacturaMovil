@@ -191,14 +191,11 @@ var reglasDeValidacion = function() {
 
 	});
 	return validationOptions;
-};
-
-
+}
 /**
 * Limpiar campos
 **/
 function Limpiar(){
-
     $("#terminal").val(null)
     $("#descripcion").val(null)
     $(".errorServerSideJgrid").remove();
@@ -273,16 +270,12 @@ function __MantenimientoAgregar(){
       //Inicializar el Formulario
     $('.dataTables_wrapper').on('click','.btn-agregar',function(e){
         self.caja    = {};                // modelo o domain   
-        
-        //desahabilita  listado 
         self.mostrarListado   = false;
         self.mostrarFormulario  = true 
-        //desahabilita boton modificar
         self.botonModificar   = false;
-        // habilita el formulario
         self.botonAgregar     = true;
         self.update();
-        Limpiar()
+/*******        Limpiar()
    
     })
 }

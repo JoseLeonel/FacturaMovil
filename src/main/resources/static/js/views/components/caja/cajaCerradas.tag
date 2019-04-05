@@ -427,7 +427,6 @@ self.on('mount',function(){
     }
 
 })
-
 function __facturasXCajas(){
         self.usuarioCaja  = self.parametros.data
         self.mostrarListado            = false
@@ -439,15 +438,11 @@ function __facturasXCajas(){
         self.update()
         __listarFacturasXCajas()
 }
-
 function __verdetalle(){
     self.mostrarVerDetalle         = true
     self.usuarioCaja  = self.parametros.data
-     
     self.mostrarTitulo = true
     self.update()
-    
-        
 }
 /**
 *Regresar al listado de la caja cerrada
@@ -721,8 +716,6 @@ function __BajarPDF(){
         location.href = "generaFacturaPDF?idFactura=" + data.id
 	});
 }
-
-
 /**
 Tipos de documentos
 **/
@@ -803,7 +796,6 @@ function __FacturaEnEspera(factura){
         }
     });
 }
-
 /**
 *Formato de la fecha con hora
 **/
@@ -837,16 +829,11 @@ function cargarDetallesFacturaEnEspera(){
     self.update()
     __comboCondicionPago()
     __ComboEstados()
-    
-     
 }
-
-
 /**
 * cargar los estados de la compra
 **/
 function __ComboEstados(){
-    
  switch(self.factura.estado) {
     case 1:
           self.factura.estado=  $.i18n.prop("factura.estado.pendiente")
@@ -875,9 +862,6 @@ function __comboCondicionPago(){
     }
     self.update()
 } 
- 
-
-
 /**                                  FIN LISTADO DE FACTURAS POR CAJA                                               **/
 /**
 *  Agregar los inpust  y select de las tablas

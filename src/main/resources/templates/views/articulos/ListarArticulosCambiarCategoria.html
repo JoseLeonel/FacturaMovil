@@ -14,9 +14,7 @@
 	<!-- include riot.js and the compiler -->
 	<script src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script>
 	<!-- MANTENIMIENTO DE ARTICULOS -->
-	<script type="text/javascript" src="/js/views/articulos/articulo.js"></script>
-	<script type = "riot/tag"  src="/js/views/components/articulos/crudArticulo.tag" ></script>
-	<script type = "riot/tag"  src="/js/views/components/articulos/imprimirCodgio.tag" ></script>
+	<script type="text/javascript" src="/js/views/articulos/articuloCambioCategoria.js"></script>
 	
 	
 	
@@ -83,7 +81,7 @@
 <div id="mostrarListado" class="mostrarListado" >	 
     <div  class="row titulo-encabezado "  >
         <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <h1><i class="fa fa-cog"></i>&nbsp Articulos  </h1>
+            <h1><i class="fa fa-cog"></i>&nbsp Cambio de Categoria  </h1>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"></div>
     </div>
@@ -92,12 +90,20 @@
     <!-- Listado  -->
    <div classs="container">
         <form id = "filtros" name ="filtros" >
-        <div class="row">
-            <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
-		        <label>Digete el Codigo</label>
-		        <input type="text" class="form-control codigoArt" id="codigoArt" name="codigoArt" placeholder="XXXXXXXXXXXXXXXXXXXXXXX">
-		    </div>
-		</div>        
+        
+        <input type="hidden" name="listaArticuloGrupales" id="listaArticuloGrupales" >
+		  <div class= "row">
+               	<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                     <div class="form-group">
+                         <label th:text="#{titulo.categoria.cambio}"> </label>  
+                         <select  class="form-control categoria" id="categoria" name="categoria"  >
+                             
+                         </select>
+                     </div>
+                     <button type="button" class="btn btn-warning btncategoria " title ="Aplicar el cambio de la nueva categoria" name="button" th:text="#{aplicar.categoria.nueva}" ><i class="fa fa-pencil-square-o" ></i></button>  
+                 </div>
+          </div>    
+          <br>     
 		</form>
 		        
         <div class="row">
@@ -105,6 +111,7 @@
                  <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="98.5%">
                         <thead>
                             <tr>
+                                <th style="width:3%" class="table-header"   >   </th>             
                                 <th style="width:10%" class="table-header"  th:text="#{articulo.categoria}" >Categoria   </th>
                                 <th class="table-header" style ="width:5%" >Codigo   </th>
                                 <th style="width:35%"  class="table-header" >Descripcion            </th>
@@ -114,11 +121,11 @@
                                 <th style="width:6%"  class="table-header" >Cantidad                 </th>
                                 <th class="table-header" style ="width:6%">Contable  </th>
                                 <th style="width:8%"  class="table-header" >Estado                     </th>
-                                <th class="table-header" > Acciones                   </th>
                             </tr>
                         </thead>
                         <tfoot style="display: table-header-group;">
                             <tr>
+                                <th style="width:3%" > </th>
                                 <th style="width:10%" >Categoria       </th>
                                 <th>Codigo          </th>
                                 <th style="width:35%"  >Descripcion     </th>
@@ -128,7 +135,6 @@
                                 <th style="width:6%" >Cantidad        </th>
                                 <th>Contable        </th>
                                 <th style="width:8%" >Estado          </th>
-                                <th >                                         </th>
                             </tr>
                         </tfoot>
                     </table>
@@ -137,9 +143,6 @@
         </div>    
     </div>
  </div>
- <articulo-crud></articulo-crud>
- 
- <articulo-imprimir></articulo-imprimir>   
     
 </div>
 

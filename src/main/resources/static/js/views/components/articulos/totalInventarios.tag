@@ -43,51 +43,50 @@
                 </div>
             </div>   
 	        <div class="col-xs-12 col-md-12 col-lg-12 col-sm-12" show={mostrarDescarga == true}>
-				<a class="fa fa-download" target="_blank" title="Descargar detalle transacciones" href="DescargarInventarioAjax.do"> Descargar</a> &nbsp       
-				<a class="fa fa-download" target="_blank" title="Descargar detalle transacciones" href="DescargarInventarioExistenciasAjax.do">Existencias</a>        
+				<a show = {mostrarDescargas == true} class="fa fa-download btn btn-success" target="_blank" title="Descargar el inventario existente" href="DescargarInventarioAjax.do"> Todo el Inventario</a> &nbsp       
+				<a show = {mostrarDescargas == true} class="fa fa-download btn btn-primary" target="_blank" title="Descargar el inventario con las existencias para contabilizar contra el inventario fisico" href="DescargarInventarioExistenciasAjax.do"> Inventario con Existencias</a>        
 	        </div>
         </div>
         <div class="col-md-2 col-lg-2 col-sm-2"></div>
     </div>
 
-	<script>
-	
-		self = this;
-		self.mostrarDetalle        = false
-		self.inventario ={				
-				totalCostoSTR:"0",
-				totalVentasSTR:"0",
-		}
-		self.mostrarDescarga = false
+<script>
+	self = this;
+	self.mostrarDetalle        = false
+	self.inventario ={				
+		totalCostoSTR:"0",
+		totalVentasSTR:"0",
+	}
+	self.mostrarDescarga = false
 		self.empresa = {
 			id:0
-		}
-		//Se cargan al montar el tag
-		self.on('mount',function(){
-			_Empresa();
-		})
-
-		/**
-		*  Busqueda de la informacion por rango de fechas
-		**/
-		__Busqueda(){
-		    
-		        $.ajax({
-		            url: "TotalInventarioAjax.do",
-		            datatype: "json",
-		            method:"GET",
-		            success: function (data) {
-			        	self.inventario = data;
-					    self.update();
-			        },
-			        error: function (xhr, status) {
-			            console.log(xhr);
-			            mensajeErrorServidor(xhr, status);
-			        }
-		        });
-		}
-
-
+	}
+    self.mostrarDescargas = false
+	//Se cargan al montar el tag
+	self.on('mount',function(){
+		_Empresa();
+	})
+/**
+*  Busqueda de la informacion por rango de fechas
+**/
+__Busqueda(){
+    self.mostrarDescargas = true   
+    self.update();
+   $.ajax({
+        url: "TotalInventarioAjax.do",
+        datatype: "json",
+        method:"GET",
+        success: function (data) {
+           	self.inventario = data;
+            self.mostrarDescargas = true   
+		    self.update();
+	    },
+	    error: function (xhr, status) {
+	        console.log(xhr);
+	        mensajeErrorServidor(xhr, status);
+	    }
+	});
+}
 /**
 * Consultar la empresa
 **/
@@ -107,20 +106,17 @@ function _Empresa(){
                        self.empresa =   modeloTabla
 					   if (self.empresa.descargarInventario == 1) {
                           self.mostrarDescarga = true
-						  
 					   }
                        self.update()
                     });
                 }
             }
-            
         },
         error: function (xhr, status) {
             mensajeErrorServidor(xhr, status);
             console.log(xhr);
         }
     });
-
 }
 		
 	</script>

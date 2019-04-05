@@ -265,8 +265,6 @@ public class HaciendasController {
 				if (hacienda != null) {
 					String status = getHaciendaStatus(respuestaHacienda.indEstado());
 					log.info("** Respuesta Estado: " + status + " fecha " + new Date());
-					//log.info("** Respuesta Estado: " + respuestaHacienda.mensajeHacienda() + " fecha " + new Date());
-					// hacienda.setUpdated_at(new Date());
 					RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();
 					respuesta.setClave(respuestaHacienda.clave());
 					respuesta.setFecha(respuestaHacienda.fecha());
@@ -297,43 +295,30 @@ public class HaciendasController {
 						}
 					}
 					if (xmlFirmadoRespuesta != Constantes.EMPTY) {
-						// hacienda.setMensajeHacienda(FacturaElectronicaUtils.convertirStringToblod(xmlFirmadoRespuesta));
 						xmlFirmado = xmlFirmadoRespuesta;
 					}
 					if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
-						// hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
 						estado = Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA;
 					} else if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
-						// hacienda.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
 						estado = Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA;
 					}
 					// Hacienda no envia mensaje
 					if (respuestaHacienda.mensajeHacienda() != null) {
 						if (respuestaHacienda.mensajeHacienda().mensaje() != null) {
 							if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO)) {
-								// hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
 								estado = Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA;
 							} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_RECHAZADO)) {
-								// hacienda.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
 								estado = Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA;
 							} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO_PARCIAL)) {
-								// hacienda.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_PARCIAL);
 								estado = Constantes.HACIENDA_ESTADO_ACEPTADO_PARCIAL;
 							}
 						}
 					} else {
 						if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
-//							if (hacienda.getReintentosAceptacion() == Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
-							// hacienda.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
 							estado = Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA;
-							// } else {
-							// hacienda.setReintentosAceptacion(hacienda.getReintentosAceptacion() == null ? 1 : hacienda.getReintentosAceptacion() + 1);
-							// hacienda.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA);
-							// }
 						}
 					}
 					
-					// hacienda.setObservacion(respuestaHacienda.mensajeHacienda() != null ? FacturaElectronicaUtils.convertirStringToblod(respuestaHacienda.mensajeHacienda().detalleMensaje()) : null);
 					mensajeHacienda = respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().detalleMensaje() : Constantes.EMPTY;
 					if (xmlFirmado != null) {
 						if (!xmlFirmado.equals(Constantes.EMPTY)) {
@@ -341,8 +326,6 @@ public class HaciendasController {
 						}
 
 					}
-					// haciendaBo.findByClaveSP(respuestaHacienda.clave(), estado, xmlFirmado, mensajeHacienda);
-//					haciendaBo.modificar(hacienda);
 				}
 			}
 			log.info("Finaliza callBack {}", new Date());
@@ -376,9 +359,9 @@ public class HaciendasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarHaciendasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String cedulaReceptor) {
+	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String cedulaReceptor,@RequestParam String tipoDocumento) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cedulaReceptor, usuarioSesion.getEmpresa());
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cedulaReceptor, usuarioSesion.getEmpresa(),tipoDocumento);
 
 		Long total = dataTableBo.contar(query);
 		Collection<Object> objetos = dataTableBo.listar(query);
@@ -415,7 +398,7 @@ public class HaciendasController {
 	@ResponseBody
 	public RespuestaServiceDataTable enviarHaciendaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String cedulaReceptor) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cedulaReceptor, usuarioSesion.getEmpresa());
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cedulaReceptor, usuarioSesion.getEmpresa(),Constantes.EMPTY);
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
 
@@ -685,7 +668,7 @@ public class HaciendasController {
 
 	private static class DelimitadorBuilder {
 
-		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, String cedula, Empresa empresa) {
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, String cedula, Empresa empresa,String tipoDocumento) {
 			// Consulta por fechas
 			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Hacienda");
 			Date fechaInicio = new Date();
@@ -695,7 +678,26 @@ public class HaciendasController {
 
 			if (cedula != null) {
 				if (!cedula.equals("0")) {
-					delimitador.addFiltro(new JqGridFilter("cedulaReceptor", "'" + cedula.toString() + "'", "="));
+					if(cedula.equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+						delimitador.addFiltro(new JqGridFilter("nombreReceptor",  Constantes.NOMBRE_CLIENTE_FRECUENTE , "like"));
+					}else {
+						delimitador.addFiltro(new JqGridFilter("cedulaReceptor",  cedula , "="));	
+					}
+					
+				}
+
+			}
+			if (tipoDocumento != null) {
+				if (!tipoDocumento.equals(Constantes.EMPTY)) {
+					if(tipoDocumento.equals("88")) {
+						delimitador.addFiltro(new JqGridFilter("tipoDoc",  "'" + " " + "'" , "="));
+					}else {
+						if(!tipoDocumento.equals("0")) {
+							delimitador.addFiltro(new JqGridFilter("tipoDoc",  tipoDocumento , "="));	
+						}
+							
+					}
+					
 				}
 
 			}
