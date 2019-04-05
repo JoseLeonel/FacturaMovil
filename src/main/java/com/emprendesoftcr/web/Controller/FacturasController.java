@@ -1092,6 +1092,7 @@ public class FacturasController {
 			recepcionFactura.setNumeroConsecutivoReceptor(empresaBo.generarConsecutivoRecepcionFactura(usuarioSesion.getEmpresa(), usuarioSesion, recepcionFactura));
 			recepcionFactura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
 			recepcionFactura.setEmpresa(usuarioSesion.getEmpresa());
+			recepcionFactura.setTipoDoc(Utils.obtenerTipoDocumentoConsecutivo(recepcionFactura.getFacturaConsecutivo()));			
 			recepcionFactura.setCreated_at(new Date());
 			recepcionFactura.setUpdated_at(new Date());
 			recepcionFacturaBo.agregar(recepcionFactura);
