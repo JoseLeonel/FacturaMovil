@@ -424,6 +424,14 @@ public class Constantes {
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS						= "TOTAL_NETAS";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS					= "TOTAL_EXENTAS";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS					= "TOTAL_GRABADAS";
+	// Totales de Compras Aceptadas
+	public static final String					SP_TOTAL_ACEPTADAS_IN_FECHA_INICIO									= "FECHA_INICIO";
+	public static final String					SP_TOTAL_ACEPTADAS_IN_FECHA_FIN											= "FECHA_FIN";
+	public static final String					SP_TOTAL_ACEPTADAS_IN_ID_EMPRESA										= "ID_EMPRESA";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS													= "SPTOTALACEPTADAS";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_ID_EMPRESA								= "ID_EMPRESA";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_OUT											= "TOTAL";
+	public static final String					SP_TOTAL_IMPUESTOS_COMPRAS_ACEPTADAS_OUT						= "TOTAL_IMPUESTOS";
 
 	// Totales de inventarios
 	public static final String					SP_TOTAL_INVENTARIO																	= "SPTOTALINVENTARIOS";

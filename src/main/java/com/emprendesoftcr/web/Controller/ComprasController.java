@@ -44,10 +44,10 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.Usuario;
-import com.emprendesoftcr.validator.CompraFormValidator;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.CompraEsperaCommand;
 import com.emprendesoftcr.web.command.DetalleCompraEsperaCommand;
+import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.ProveedorPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
@@ -98,9 +98,7 @@ public class ComprasController {
 	@Autowired
 	private ProveedorPropertyEditor																proveedorPropertyEditor;
 
-	@Autowired
-	private CompraFormValidator																		compraFormValidator;
-
+	
 	@Autowired
 	private StringPropertyEditor																	stringPropertyEditor;
 
@@ -116,6 +114,20 @@ public class ComprasController {
 		return "views/compras/ListarCompras";
 	}
 
+	@RequestMapping(value = "/totalesComprasAceptadas", method = RequestMethod.GET)
+	public String totalesAceptacionCompras(ModelMap model) {
+		return "views/compras/totalesComprasAceptadas";
+	}
+
+	@RequestMapping(value = "/TotalComprasAceptadasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public TotalComprasAceptadasCommand totalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin) {
+		Date inicio = Utils.parseDate(fechaInicio);
+		Date finalDate = Utils.dateToDate(Utils.parseDate(fechaFin), true);
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		return compraBo.sumarComprasAceptadas(inicio, finalDate, usuario.getEmpresa().getId());
+	}
+	
 	/**
 	 * Modulo de compras
 	 * @param model

@@ -6,6 +6,7 @@ import java.util.Date;
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
+import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
 
 public interface CompraDao {
 
@@ -23,7 +24,7 @@ public interface CompraDao {
 	
 	Collection<Compra> findByFechaInicioAndFechaFinalAndProveedor(Date fechaInicio, Date fechaFin, Empresa empresa,  Proveedor proveedor);
 	
-
+	TotalComprasAceptadasCommand sumarComprasAceptadas(Date fechaInicio, Date fechaFinal, Integer idEmpresa);
 
 	
 
