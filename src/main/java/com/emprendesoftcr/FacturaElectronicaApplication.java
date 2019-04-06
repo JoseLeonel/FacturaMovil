@@ -21,6 +21,8 @@ public class FacturaElectronicaApplication extends SpringBootServletInitializer 
 		SpringApplication.run(FacturaElectronicaApplication.class, args);
 	}
 
+	
+	
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(FacturaElectronicaApplication.class);

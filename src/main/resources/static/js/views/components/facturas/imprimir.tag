@@ -20,6 +20,7 @@
                                 <div class="encabezado">{facturaImpresa.empresa.otraSenas}                        <br></div>
                                 <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.fecha.emision")} </strong>{facturaImpresa.fechaEmisionSTR}</div>
                                 <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.condicion.venta")} </strong>{facturaImpresa.condicionVenta}</div>
+                                
                                 <div class="encabezado" show ="{facturaImpresa.plazoCredito > 0}"><strong>{$.i18n.prop("tikect.encabezado.plazo.credito")} dias </strong>{facturaImpresa.plazoCredito}</div>
                                 <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 0}"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>{facturaImpresa.tipoDoc}</div>
                                 <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc == '02' }"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>Nota Debito</div>

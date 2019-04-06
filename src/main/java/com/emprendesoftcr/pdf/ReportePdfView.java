@@ -241,7 +241,6 @@ public class ReportePdfView {
 		
 		tabla_ultima.addCell(derecha_inferior_ultima);
 		document.add(tabla_ultima);
-		float row20 = 680;
 		DateFormat fechaCompleta = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		String text = "Emitida conforme lo establecido en la resolución de Facturación Electrónica, N° DGT-R-48-2016 del 7/10/16 08:00:00 , a las " + fechaCompleta.format(new Date()) + " horas";
 		
