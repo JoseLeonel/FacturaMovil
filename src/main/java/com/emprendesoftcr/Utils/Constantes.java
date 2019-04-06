@@ -8,6 +8,8 @@ public class Constantes {
 
 	public static final String					PLANTILLA_CORREO_CUENTAS_POR_COBRAR									= "email/cuentasxcobrar.vm";
 	public static final String					PLANTILLA_CORREO_VENTA_POR_CODIGO										= "email/ventasXCodigo.vm";
+	public static final String					PLANTILLA_CORREO_COMPRAS_ACEPTADAS									= "email/emailResumenCompras.vm";
+	public static final String					PLANTILLA_CORREO_RESUMEN_VENTAS_RANGO_FECHA         = "email/emailResumenFactura.vm";
 
 // Version de los tipos de documentos 
 	public static final String					TIQUETE_ELECTRONICO_VERSION													= "Tiquete Electrónico ver 4.2";

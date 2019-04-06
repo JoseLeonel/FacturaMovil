@@ -433,14 +433,14 @@ public class FacturasController {
 		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
 		modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
 		modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinal));
-		modelEmail.put("total", facturaCommand.getTotal());
-		modelEmail.put("totalDescuentos", facturaCommand.getTotalDescuentos() == null ? Constantes.ZEROS : facturaCommand.getTotalDescuentos());
-		modelEmail.put("totalImpuestos", facturaCommand.getTotalImpuestos() == null ? Constantes.ZEROS : facturaCommand.getTotalImpuestos());
-		modelEmail.put("totalVentasNetas", facturaCommand.getTotalVentasNetas() == null ? Constantes.ZEROS : facturaCommand.getTotalVentasNetas());
-		modelEmail.put("totalVentasExentas", facturaCommand.getTotalVentasExentas() == null ? Constantes.ZEROS : facturaCommand.getTotalVentasExentas());
-		modelEmail.put("totalVentasGravadas", facturaCommand.getTotalVentasGravadas() == null ? Constantes.ZEROS : facturaCommand.getTotalVentasGravadas());
+		modelEmail.put("total", facturaCommand.getTotalSTR());
+		modelEmail.put("totalDescuentos", facturaCommand.getTotalDescuentosSTR());
+		modelEmail.put("totalImpuestos", facturaCommand.getTotalImpuestosSTR());
+		modelEmail.put("totalVentasNetas", facturaCommand.getTotalVentasNetasSTR() );
+		modelEmail.put("totalVentasExentas", facturaCommand.getTotalVentasExentasSTR());
+		modelEmail.put("totalVentasGravadas", facturaCommand.getTotalVentasGravadasSTR());
 
-		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailResumenFactura.vm", modelEmail);
+		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_RESUMEN_VENTAS_RANGO_FECHA, modelEmail);
 	}
 
 	// Descarga de manuales de usuario de acuerdo con su perfil

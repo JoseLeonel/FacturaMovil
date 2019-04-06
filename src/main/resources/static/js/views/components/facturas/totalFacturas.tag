@@ -100,27 +100,27 @@
                         <div class="row">
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.totalVentasGravadas")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control totalVentasGravadas" placeHolder ="{$.i18n.prop("factura.totalVentasGravadas")}" id="totalVentasGravadas" name="totalVentasGravadas" value="{factura.totalVentasGravadas.toFixed(2)}">
+                                <input type="text" readonly="readonly" class="form-control totalVentasGravadas" placeHolder ="{$.i18n.prop("factura.totalVentasGravadas")}" id="totalVentasGravadas" name="totalVentasGravadas" value="{factura.totalVentasGravadasSTR}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.totalVentasExentas")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control totalVentasExentas" placeHolder ="{$.i18n.prop("factura.totalVentasExentas")}" id="totalVentasExentas" name="totalVentasExentas" value="{factura.totalVentasExentas.toFixed(2)}">
+                                <input type="text" readonly="readonly" class="form-control totalVentasExentas" placeHolder ="{$.i18n.prop("factura.totalVentasExentas")}" id="totalVentasExentas" name="totalVentasExentas" value="{factura.totalVentasExentasSTR}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.totalVentasNetas")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control totalVentasNetas" placeHolder ="{$.i18n.prop("factura.totalVentasNetas")}" id="totalVentasNetas" name="totalVentasNetas" value="{factura.totalVentasNetas.toFixed(2)}">
+                                <input type="text" readonly="readonly" class="form-control totalVentasNetas" placeHolder ="{$.i18n.prop("factura.totalVentasNetas")}" id="totalVentasNetas" name="totalVentasNetas" value="{factura.totalVentasNetasSTR}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.totalImpuestos")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control totalImpuestos" placeHolder ="{$.i18n.prop("factura.totalImpuestos")}" id="totalImpuestos" name="totalImpuestos" value="{factura.totalImpuestos.toFixed(2)}">
+                                <input type="text" readonly="readonly" class="form-control totalImpuestos" placeHolder ="{$.i18n.prop("factura.totalImpuestos")}" id="totalImpuestos" name="totalImpuestos" value="{factura.totalImpuestosSTR}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.totalDescuentos")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control totalDescuentos" placeHolder ="{$.i18n.prop("factura.totalDescuentos")}" id="totalDescuentos" name="totalDescuentos" value="{factura.totalDescuentos.toFixed(2)}">
+                                <input type="text" readonly="readonly" class="form-control totalDescuentos" placeHolder ="{$.i18n.prop("factura.totalDescuentos")}" id="totalDescuentos" name="totalDescuentos" value="{factura.totalDescuentosSTR}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.total")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control totalDescuentos" placeHolder ="{$.i18n.prop("factura.total")}" id="total" name="total" value="{factura.total.toFixed(2)}">
+                                <input type="text" readonly="readonly" class="form-control totalDescuentos" placeHolder ="{$.i18n.prop("factura.total")}" id="total" name="total" value="{factura.totalSTR}">
                             </div>
                         </div>
                 	</form>
@@ -156,8 +156,6 @@
 		
 		self.fechaInicio="";
 		self.fechaFin="";
-		
-
 		//Se cargan al montar el tag
 		self.on('mount',function(){
 		    $("#filtros").validate(reglasDeValidacion());

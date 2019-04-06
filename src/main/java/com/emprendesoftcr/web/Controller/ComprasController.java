@@ -5,11 +5,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.CompraBo;
+import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.ProveedorBo;
 import com.emprendesoftcr.Bo.RecepcionFacturaBo;
@@ -38,6 +43,7 @@ import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Empresa;
@@ -88,6 +94,10 @@ public class ComprasController {
 
 	@Autowired
 	private ProveedorBo																						proveedorBo;
+	
+	@Autowired
+	private CorreosBo																									correosBo;
+
 
 	@Autowired
 	private CompraBo																							compraBo;
@@ -128,6 +138,84 @@ public class ComprasController {
 		return compraBo.sumarComprasAceptadas(inicio, finalDate, usuario.getEmpresa().getId());
 	}
 	
+	
+	@RequestMapping(value = "/CorreoTotalComprasAceptadasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public void envioTotalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo) {
+
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		// Se obtiene los totales
+		Date fechaInicio = Utils.parseDate(fechaInicioParam);
+		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+		TotalComprasAceptadasCommand totalComprasAceptadasCommand = compraBo.sumarComprasAceptadas(fechaInicio, fechaFinal, usuario.getEmpresa().getId());
+
+			Collection<RecepcionFactura> recepcionFacturas = recepcionFacturaBo.findByFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFinal, usuario.getEmpresa(), Constantes.EMPTY);
+
+		// Se prepara el excell
+		ByteArrayOutputStream baos = createExcelRecepcionCompras(recepcionFacturas);
+		Collection<Attachment> attachments = createAttachments(attachment("FacturasMensuales", ".xls", new ByteArrayDataSource(baos.toByteArray(), "text/plain")));
+
+		// Se prepara el correo
+		String from = "ComprasEmitidas@emprendesoftcr.com";
+		if (usuario.getEmpresa().getAbreviaturaEmpresa() != null) {
+			if (!usuario.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+				from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_ComprasEmitidas" + "_No_Reply@emprendesoftcr.com";
+			}
+		}
+		String subject = "Compras Aceptadas dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
+
+		ArrayList<String> listaCorreos = new ArrayList<>();
+		if (correoAlternativo != null && correoAlternativo.length() > 0) {
+			listaCorreos.add(correoAlternativo);
+		} else {
+			listaCorreos.add(usuario.getEmpresa().getCorreoElectronico());
+		}
+
+		Map<String, Object> modelEmail = new HashMap<>();
+		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
+		modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
+		modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinal));
+		modelEmail.put("total", totalComprasAceptadasCommand.getTotalSTR());
+		modelEmail.put("totalImpuestos", totalComprasAceptadasCommand.getTotalImpuestoSTR());
+
+		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_COMPRAS_ACEPTADAS, modelEmail);
+	}
+	
+
+	private Collection<Attachment> createAttachments(Attachment... attachments) {
+		return Arrays.asList(attachments);
+	}
+	
+	private Attachment attachment(String name, String ext, ByteArrayDataSource data) {
+		return new Attachment(name + ext, data);
+	}
+	
+//Descarga de manuales de usuario de acuerdo con su perfil
+	@RequestMapping(value = "/DescargarComprasAceptadasAjax.do", method = RequestMethod.GET)
+	public void descargarComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor) throws IOException {
+
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+
+		// Se buscan las facturas
+		Date fechaInicio = Utils.parseDate(fechaInicioParam);
+		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+		Collection<RecepcionFactura> recepcionFacturas = recepcionFacturaBo.findByFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFin, usuario.getEmpresa(), cedulaEmisor);
+
+		String nombreArchivo = "comprasAceptadas.xls";
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+
+		// Se prepara el excell
+		ByteArrayOutputStream baos = createExcelRecepcionCompras(recepcionFacturas);
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+
+		int BUFFER_SIZE = 4096;
+		byte[] buffer = new byte[BUFFER_SIZE];
+		int bytesRead = -1;
+		while ((bytesRead = inputStream.read(buffer)) != -1) {
+			response.getOutputStream().write(buffer, 0, bytesRead);
+		}
+	}
 	/**
 	 * Modulo de compras
 	 * @param model
@@ -186,32 +274,7 @@ public class ComprasController {
 		}
 	}
 
-	// Descarga de manuales de usuario de acuerdo con su perfil
-	@RequestMapping(value = "/DescargarComprasAceptadasAjax.do", method = RequestMethod.GET)
-	public void descargarComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor) throws IOException {
-
-		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-
-		// Se buscan las facturas
-		Date fechaInicio = Utils.parseDate(fechaInicioParam);
-		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		Collection<RecepcionFactura> recepcionFacturas = recepcionFacturaBo.findByFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFin, usuario.getEmpresa(), cedulaEmisor);
-
-		String nombreArchivo = "comprasAceptadas.xls";
-		response.setContentType("application/octet-stream");
-		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
-
-		// Se prepara el excell
-		ByteArrayOutputStream baos = createExcelRecepcionCompras(recepcionFacturas);
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
-
-		int BUFFER_SIZE = 4096;
-		byte[] buffer = new byte[BUFFER_SIZE];
-		int bytesRead = -1;
-		while ((bytesRead = inputStream.read(buffer)) != -1) {
-			response.getOutputStream().write(buffer, 0, bytesRead);
-		}
-	}
+	
 
 	private ByteArrayOutputStream createExcelRecepcionCompras(Collection<RecepcionFactura> recepcionFacturas) {
 		// Se prepara el excell
@@ -343,6 +406,9 @@ public class ComprasController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_DETALLE);
 	}
 
+
+
+
 	private static class DelimitadorBuilder {
 
 		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Proveedor proveedor, Empresa empresa) {
@@ -378,7 +444,7 @@ public class ComprasController {
 			return delimitador;
 		}
 	}
-
+	
 	static class RESPONSES {
 
 		private static class OK {
