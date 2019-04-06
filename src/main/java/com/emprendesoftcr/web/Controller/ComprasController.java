@@ -67,50 +67,48 @@ import com.google.common.base.Function;
 @Controller
 public class ComprasController {
 
-	private static final Function<Object, CompraEsperaCommand>		TO_COMMAND					= new Function<Object, CompraEsperaCommand>() {
+	private static final Function<Object, CompraEsperaCommand>				TO_COMMAND					= new Function<Object, CompraEsperaCommand>() {
 
-																																											@Override
-																																											public CompraEsperaCommand apply(Object f) {
-																																												return new CompraEsperaCommand((Compra) f);
-																																											};
-																																										};
+																																													@Override
+																																													public CompraEsperaCommand apply(Object f) {
+																																														return new CompraEsperaCommand((Compra) f);
+																																													};
+																																												};
 
 	private static final Function<Object, DetalleCompraEsperaCommand>	TO_COMMAND_DETALLE	= new Function<Object, DetalleCompraEsperaCommand>() {
 
-																																											@Override
-																																											public DetalleCompraEsperaCommand apply(Object f) {
-																																												return new DetalleCompraEsperaCommand((DetalleCompra) f);
-																																											};
-																																										};
+																																													@Override
+																																													public DetalleCompraEsperaCommand apply(Object f) {
+																																														return new DetalleCompraEsperaCommand((DetalleCompra) f);
+																																													};
+																																												};
 
 	@Autowired
-	private DataTableBo																						dataTableBo;
+	private DataTableBo																								dataTableBo;
 
 	@Autowired
-	private RecepcionFacturaBo																		recepcionFacturaBo;
+	private RecepcionFacturaBo																				recepcionFacturaBo;
 
 	@Autowired
-	private UsuarioBo																							usuarioBo;
+	private UsuarioBo																									usuarioBo;
 
 	@Autowired
-	private ProveedorBo																						proveedorBo;
-	
+	private ProveedorBo																								proveedorBo;
+
 	@Autowired
 	private CorreosBo																									correosBo;
 
+	@Autowired
+	private CompraBo																									compraBo;
 
 	@Autowired
-	private CompraBo																							compraBo;
+	private EmpresaPropertyEditor																			empresaPropertyEditor;
 
 	@Autowired
-	private EmpresaPropertyEditor																	empresaPropertyEditor;
+	private ProveedorPropertyEditor																		proveedorPropertyEditor;
 
 	@Autowired
-	private ProveedorPropertyEditor																proveedorPropertyEditor;
-
-	
-	@Autowired
-	private StringPropertyEditor																	stringPropertyEditor;
+	private StringPropertyEditor																			stringPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -137,8 +135,7 @@ public class ComprasController {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		return compraBo.sumarComprasAceptadas(inicio, finalDate, usuario.getEmpresa().getId());
 	}
-	
-	
+
 	@RequestMapping(value = "/CorreoTotalComprasAceptadasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public void envioTotalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo) {
@@ -149,7 +146,7 @@ public class ComprasController {
 		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
 		TotalComprasAceptadasCommand totalComprasAceptadasCommand = compraBo.sumarComprasAceptadas(fechaInicio, fechaFinal, usuario.getEmpresa().getId());
 
-			Collection<RecepcionFactura> recepcionFacturas = recepcionFacturaBo.findByFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFinal, usuario.getEmpresa(), Constantes.EMPTY);
+		Collection<RecepcionFactura> recepcionFacturas = recepcionFacturaBo.findByFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFinal, usuario.getEmpresa(), Constantes.EMPTY);
 
 		// Se prepara el excell
 		ByteArrayOutputStream baos = createExcelRecepcionCompras(recepcionFacturas);
@@ -175,21 +172,20 @@ public class ComprasController {
 		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
 		modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
 		modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinal));
-		modelEmail.put("total", totalComprasAceptadasCommand.getTotalSTR());
-		modelEmail.put("totalImpuestos", totalComprasAceptadasCommand.getTotalImpuestoSTR());
+		modelEmail.put("total", totalComprasAceptadasCommand.getTotal() != null ? totalComprasAceptadasCommand.getTotalSTR() : Constantes.ZEROS);
+		modelEmail.put("totalImpuesto", totalComprasAceptadasCommand.getTotalImpuesto() != null ? totalComprasAceptadasCommand.getTotalImpuestoSTR() : Constantes.ZEROS);
 
 		correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_COMPRAS_ACEPTADAS, modelEmail);
 	}
-	
 
 	private Collection<Attachment> createAttachments(Attachment... attachments) {
 		return Arrays.asList(attachments);
 	}
-	
+
 	private Attachment attachment(String name, String ext, ByteArrayDataSource data) {
 		return new Attachment(name + ext, data);
 	}
-	
+
 //Descarga de manuales de usuario de acuerdo con su perfil
 	@RequestMapping(value = "/DescargarComprasAceptadasAjax.do", method = RequestMethod.GET)
 	public void descargarComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor) throws IOException {
@@ -216,6 +212,7 @@ public class ComprasController {
 			response.getOutputStream().write(buffer, 0, bytesRead);
 		}
 	}
+
 	/**
 	 * Modulo de compras
 	 * @param model
@@ -273,8 +270,6 @@ public class ComprasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-
-	
 
 	private ByteArrayOutputStream createExcelRecepcionCompras(Collection<RecepcionFactura> recepcionFacturas) {
 		// Se prepara el excell
@@ -406,9 +401,6 @@ public class ComprasController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_DETALLE);
 	}
 
-
-
-
 	private static class DelimitadorBuilder {
 
 		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Proveedor proveedor, Empresa empresa) {
@@ -444,7 +436,7 @@ public class ComprasController {
 			return delimitador;
 		}
 	}
-	
+
 	static class RESPONSES {
 
 		private static class OK {

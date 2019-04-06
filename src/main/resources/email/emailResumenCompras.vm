@@ -259,19 +259,12 @@ a[x-apple-data-detectors=true] {
           <div style="font-size:12px;line-height:18px;color:#71777D;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><span style="color: rgb(0, 0, 0); font-size:14px; line-height:21px;">Estimado(a) Cliente,</span></div>	
           <div style="font-size:12px;line-height:18px;color:#71777D;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><span style="color: rgb(0, 0, 0); font-size:14px; line-height:21px;">La empresa: $nombreEmpresa .Se adjunta el detalle de las compras aceptadas para este periodo $fechaInicial a  $fechaFinal.  </span>
 	  </div>
-	<br>  
-	<div style="font-size:12px;line-height:18px;color:#71777D;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
-	  <div style="font-size:12px;line-height:18px;color:#71777D;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
-	   	<span style="color: rgb(0, 0, 0); font-size:14px; line height:21px;">
-			Total Impuestos: $totalImpuesto
-		</span>
-	  </div>	
-	  <div style="font-size:12px;line-height:18px;color:#71777D;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
-	   	<span style="color: rgb(0, 0, 0); font-size:14px; line height:21px;">
-			Total: $total
-		</span>
-	  </div>	
-        </div>
+	<br> 
+  <br> 
+   <div style="font-size:12px;line-height:18px;color:#71777D;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><span style="color: rgb(0, 0, 0); font-size:24px; line-height:21px;">Total en Impuestos: $totalImpuesto</span></div>	 
+   <br>
+    <div style="font-size:12px;line-height:18px;color:#71777D;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><span style="color: rgb(0, 0, 0); font-size:24px; line-height:21px;">Total en Compras: $total</span></div>	 
+
 
 <!--[if mso]></td></tr></table><![endif]-->
 
