@@ -1336,4 +1336,40 @@ public final class Utils {
 		
 		return resultado;
 	}
+	
+	public static String obtenerTipoDocumentoConsecutivo(String consecutivo) {		
+		//001 + 00004 + 01 + 0000003888 
+		return consecutivo.substring(8, 2); //Se retorna 01
+	}
+	
+	
+	public static String obtenerDescripcionTipoDocumento(String tipoDocumento) {
+		String descripcion = " ";
+		switch (tipoDocumento) {
+			case Constantes.FACTURA_TIPO_DOC_TIQUETE:
+					descripcion = Constantes.RESOURCE_BUNDLE.getString(Constantes.FACTURA_TIPO_DOC_TIQUETE_STR);
+			break;
+			case Constantes.FACTURA_TIPO_DOC_PROFORMAS:
+				descripcion = Constantes.RESOURCE_BUNDLE.getString(Constantes.FACTURA_TIPO_DOC_PROFORMAS_STR);
+			break;
+			case Constantes.FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO:
+				descripcion = Constantes.RESOURCE_BUNDLE.getString(Constantes.FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO_STR);
+			break;
+			case Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA:
+				descripcion = Constantes.RESOURCE_BUNDLE.getString(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA_STR);
+			break;
+			case Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO:
+				descripcion = Constantes.RESOURCE_BUNDLE.getString(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_STR);
+			break;
+			case Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO:
+				descripcion = Constantes.RESOURCE_BUNDLE.getString(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO_STR);
+			break;
+			case Constantes.FACTURA_TIPO_DOC_COMPRAS:
+				descripcion = Constantes.RESOURCE_BUNDLE.getString(Constantes.FACTURA_TIPO_DOC_COMPRAS_STR);
+			break;
+			default:
+				break;
+		}
+		return descripcion;		
+	}
 }
