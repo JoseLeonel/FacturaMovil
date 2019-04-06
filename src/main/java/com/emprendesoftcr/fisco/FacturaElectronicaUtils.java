@@ -36,6 +36,7 @@ import org.json.JSONObject;
 
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DateTime;
+import com.emprendesoftcr.modelo.Factura;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.hash.Hashing;
@@ -99,6 +100,37 @@ public final class FacturaElectronicaUtils {
 
 		return resultado;
 
+	}
+	
+	public static String medioPago(Factura factura) {
+		String resultado = Constantes.EMPTY;
+		if(factura.getMedioEfectivo() != null) {
+			if(!factura.getMedioEfectivo().equals(Constantes.EMPTY)) {
+				resultado = Constantes.FACTURA_MEDIO_PAGO_EFECTIVO_STR;
+			}
+		}
+		if(factura != null) {
+			if(!factura.getMedioTarjeta().equals(Constantes.EMPTY)) {
+				if(resultado.equals(Constantes.EMPTY)) {
+					resultado = Constantes.FACTURA_MEDIO_PAGO_TARJETA_STR;	
+				}else {
+					resultado = resultado + "/" +Constantes.FACTURA_MEDIO_PAGO_TARJETA_STR;
+				}
+				
+			}
+		}
+		if(factura != null) {
+			if(!factura.getMedioBanco().equals(Constantes.EMPTY)) {
+				if(resultado.equals(Constantes.EMPTY)) {
+					resultado = Constantes.FACTURA_MEDIO_PAGO_TRANSFERENCIA_STR;	
+				}else {
+					resultado = resultado + "/" +Constantes.FACTURA_MEDIO_PAGO_TRANSFERENCIA_STR;
+				}
+				
+			}
+		}
+		
+		return resultado;
 	}
 
 	/**

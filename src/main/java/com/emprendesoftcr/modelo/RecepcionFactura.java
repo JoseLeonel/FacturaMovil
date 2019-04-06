@@ -178,6 +178,9 @@ public class RecepcionFactura implements Serializable {
 	@JoinColumn(name = "empresa_id")
 	private Empresa empresa;
 
+	@Column(name = "tipo_doc")
+	private String tipoDoc;
+
 	public RecepcionFactura(Long id, String mensaje, String detalleMensaje, String numeroConsecutivoReceptor, Integer estadoFirma, String emisorCedula, String emisorNombre, String emisorTipoCedula, String emisorCorreo, String emisorTelefono, String emisorCodigoProvincia, String emisorProvincia, String emisorCanton, String emisorCodigoCanton, String emisorDistrito, String emisorCodigoDistrito, String emisorOtraSena, String receptorNombre, String receptorCedula, String receptorTipoCedula, String receptorCorreo, String receptorProvincia, String receptorCodigoProvincia, String receptorCanton, String receptorCodigoCanton, String receptorDistrito, String receptorCodigoDistrito, String receptorOtraSena, String receptorTelefono, String receptorNombreComercial, String facturaConsecutivo,
 			String facturaClave, Date facturaFechaEmision, String facturaCondicionVenta, String facturaMedioPago, String facturaCodigoMoneda, Double facturaTipoCambio, Double facturaTotalServExentos, Double facturaTotalExento, Double facturaTotalVenta, Double facturaTotalVentaNeta, Double facturaTotalComprobante, Double facturaTotalImpuestos, Date created_at, Date updated_at, Empresa empresa) {
 		super();
@@ -227,6 +230,7 @@ public class RecepcionFactura implements Serializable {
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.empresa = empresa;
+		this.tipoDoc = Utils.obtenerTipoDocumentoConsecutivo(facturaConsecutivo);
 	}
 
 	public RecepcionFactura() {
@@ -252,7 +256,11 @@ public class RecepcionFactura implements Serializable {
 	}
 
 	public String getTotalFacturaSTR() {
-		return Utils.formateadorMiles(this.facturaTotalComprobante);
+		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+			return Utils.formateadorMiles(this.facturaTotalComprobante * -1);
+		} else {
+			return Utils.formateadorMiles(this.facturaTotalComprobante);
+		}
 	}
 
 	public Long getId() {
@@ -621,6 +629,18 @@ public class RecepcionFactura implements Serializable {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public String getTipoDoc() {
+		return tipoDoc;
+	}
+
+	public void setTipoDoc(String tipoDoc) {
+		this.tipoDoc = tipoDoc;
+	}
+
+	public String getTipoDocumentoStr() {
+		return Utils.obtenerDescripcionTipoDocumento(this.tipoDoc);
 	}
 
 }

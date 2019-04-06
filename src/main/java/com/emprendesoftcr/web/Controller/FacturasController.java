@@ -140,7 +140,7 @@ public class FacturasController {
 																																																			facturaElectronica.setEmisorNombreComercial(d.getEmpresa().getNombreComercial());
 																																																			facturaElectronica.setFooterTotalServiciosGravados(d.getTotalServGravados());
 																																																			facturaElectronica.setFooterTotalMercanciasGravadas(d.getTotalMercanciasGravadas());
-																																																			//Total Factura
+																																																			// Total Factura
 																																																			facturaElectronica.setFooterTotalServiciosExentos(d.getTotalServExentos());
 																																																			facturaElectronica.setFooterTotalGravado(d.getTotalGravado());
 																																																			facturaElectronica.setFooterTotalExento(d.getTotalExento());
@@ -157,26 +157,25 @@ public class FacturasController {
 																																																			facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
 																																																			facturaElectronica.set_nota(d.getNota() == null ? Constantes.EMPTY : d.getNota());
 																																																			facturaElectronica.setClienteNombre(d.getCliente().getNombreCompleto());
-																																																			if(d.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_FRECUENTE)) {
-																																																				if(d.getNombreFactura() !=null) {
-																																																					if(!d.getNombreFactura().equals(Constantes.EMPTY)) {
+																																																			if (d.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_FRECUENTE)) {
+																																																				if (d.getNombreFactura() != null) {
+																																																					if (!d.getNombreFactura().equals(Constantes.EMPTY)) {
 																																																						facturaElectronica.setClienteNombre(d.getNombreFactura());
 																																																					}
 																																																				}
 																																																			}
 																																																			facturaElectronica.setClienteNombreComercial(d.getCliente().getNombreComercial());
 																																																			facturaElectronica.setClienteCorreo(d.getCliente().getCorreoElectronico());
-																																																			
+
 																																																			facturaElectronica.setClienteCedula(d.getCliente().getCedula());
-																																																			if(d.getCliente().getTelefono() != null ) {
-																																																				if(d.getCliente().getTelefono() != Constantes.ZEROS ) {
-																																																					facturaElectronica.setClienteTelefono(d.getCliente().getTelefono().toString());  		
-																																																				}else {
+																																																			if (d.getCliente().getTelefono() != null) {
+																																																				if (d.getCliente().getTelefono() != Constantes.ZEROS) {
+																																																					facturaElectronica.setClienteTelefono(d.getCliente().getTelefono().toString());
+																																																				} else {
 																																																					facturaElectronica.setClienteTelefono(Constantes.EMPTY);
 																																																				}
 																																																			}
-																																																			
-																																																			
+
 																																																			facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
 																																																			facturaElectronica.set_logo(d.getEmpresa().getLogo());
 																																																			facturaElectronica.set_clienteDireccion(d.getDireccion());
@@ -187,10 +186,7 @@ public class FacturasController {
 																																																			facturaElectronica.setFechaEmision(d.getFechaEmision().toString());
 																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito() != null ? d.getPlazoCredito().toString() : Constantes.EMPTY);
 																																																			facturaElectronica.setCondicionVenta(BIND_CONDICION_VENTA.apply(d.getCondicionVenta()));
-																																																			facturaElectronica.setMedioBanco(d.getMedioBanco() != null ? Constantes.FACTURA_MEDIO_PAGO_TRANSFERENCIA_STR : Constantes.EMPTY);
-																																																			facturaElectronica.setMedioEfectivo(d.getMedioEfectivo() != null ? Constantes.FACTURA_MEDIO_PAGO_EFECTIVO_STR : Constantes.EMPTY);
-																																																			facturaElectronica.setMedioTarjeta(d.getMedioTarjeta() != null ? Constantes.FACTURA_MEDIO_PAGO_TARJETA_STR : Constantes.EMPTY);
-
+																																																			facturaElectronica.setMedioEfectivo(FacturaElectronicaUtils.medioPago(d));
 																																																			facturaElectronica.setMoneda(FacturaElectronicaUtils.getMoneda(d.getCodigoMoneda()));
 																																																			facturaElectronica.setTipoCambio(d.getTipoCambio().toString());
 
@@ -214,9 +210,6 @@ public class FacturasController {
 																																																				facturaElectronica.setReferenciaFechaEmision(Constantes.EMPTY);
 
 																																																			}
-																																																			// Agrega sus detalles
-																																																			// List<DetalleFacturaElectronica> detalles = d.getDetalles().stream().map(TO_DETALLE).collect(toList());
-																																																			// facturaElectronica.setDetalleFacturaElectronica(detalles);
 																																																			return facturaElectronica;
 																																																		};
 
@@ -489,21 +482,18 @@ public class FacturasController {
 	@RequestMapping(value = "/generaProformasPDF.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	public void generarProformasPDF(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura) throws Exception {
 		try {
-			//JasperReport jasperReport;
+			// JasperReport jasperReport;
 			Factura factura = facturaBo.findById(idFactura);
 
+			// jasperReport = JasperCompileManager.compileReport("reportes/ejemplo.jrxml");
+			// JRDataSource vacio = new JREmptyDataSource(1);
 
-			//jasperReport = JasperCompileManager.compileReport("reportes/ejemplo.jrxml");
-			//JRDataSource vacio = new JREmptyDataSource(1);
-		 
-			//Map<String, Object> parameters = new HashMap<String, Object>();
-			//parameters.put("nombreEmpresa", factura.getEmpresa().getNombre().toString());
-			
-			//JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters,vacio);
-      
-      //JasperExportManager.exportReportToPdfFile(print, "reportes/ejemplo.pdf");
+			// Map<String, Object> parameters = new HashMap<String, Object>();
+			// parameters.put("nombreEmpresa", factura.getEmpresa().getNombre().toString());
 
-			
+			// JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters,vacio);
+
+			// JasperExportManager.exportReportToPdfFile(print, "reportes/ejemplo.pdf");
 
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
 			Collection<Detalle> detalles = detalleBo.findByFactura(factura);
@@ -557,10 +547,7 @@ public class FacturasController {
 			facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
 
 			ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
-			
-			//ByteArrayOutputStream namePDF = TiquetePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
-			
-//			ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
+
 			int BUFFER_SIZE = 4096;
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
 			response.setContentType("application/octet-stream");
@@ -1092,6 +1079,7 @@ public class FacturasController {
 			recepcionFactura.setNumeroConsecutivoReceptor(empresaBo.generarConsecutivoRecepcionFactura(usuarioSesion.getEmpresa(), usuarioSesion, recepcionFactura));
 			recepcionFactura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
 			recepcionFactura.setEmpresa(usuarioSesion.getEmpresa());
+			recepcionFactura.setTipoDoc(Utils.obtenerTipoDocumentoConsecutivo(recepcionFactura.getFacturaConsecutivo()));			
 			recepcionFactura.setCreated_at(new Date());
 			recepcionFactura.setUpdated_at(new Date());
 			recepcionFacturaBo.agregar(recepcionFactura);
@@ -1376,10 +1364,10 @@ public class FacturasController {
 				if (!listaCorreos.isEmpty()) {
 					FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
 					Collection<Detalle> detalles = detalleBo.findByFactura(factura);
-					
+
 					List<DetalleFacturaElectronica> detallesFactura = detalles.stream().map(TO_DETALLE).collect(toList());
 					facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
-		
+
 					ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
 
 					String clave = getConsecutivo(factura.getTipoDoc(), factura.getNumeroConsecutivo());
