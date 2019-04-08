@@ -75,6 +75,7 @@ import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.pdf.ReportePdfView;
+import com.emprendesoftcr.service.ProcesoHaciendaService;
 import com.emprendesoftcr.validator.FacturaFormValidator;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
@@ -253,6 +254,9 @@ public class FacturasController {
 
 	@Autowired
 	private RecepcionFacturaBo																				recepcionFacturaBo;
+
+	@Autowired
+	private ProcesoHaciendaService																		procesoHaciendaService;
 
 	@Autowired
 	private ClienteBo																									clienteBo;
@@ -1087,6 +1091,14 @@ public class FacturasController {
 				Collection<RecepcionFactura> resultado = recepcionFacturaBo.findByClave(recepcionFactura.getEmisorCedula(), recepcionFactura.getFacturaClave());
 				if (resultado != null && resultado.size() > 0) {
 					result.rejectValue("facturaClave", "error.recepcionFactura.ya.exite");
+				}else {
+					try {
+						if(!procesoHaciendaService.verificaRecepcionFactura(usuarioSesion.getEmpresa(), recepcionFactura.getFacturaClave())) {
+							result.rejectValue("facturaClave", "error.recepcionFactura.no.aceptada");						
+						}						
+					} catch (Exception e) {
+						result.rejectValue("facturaClave", "error.recepcionFactura.problema.comprobar");						
+					}
 				}
 			}
 			if (result.hasErrors()) {

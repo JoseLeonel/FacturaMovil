@@ -230,7 +230,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/12 * * * ?")
+	//@Scheduled(cron = "0 0/12 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -426,7 +426,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/50 * * * ?")
+	//@Scheduled(cron = "0 0/50 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -626,11 +626,76 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		return openIDConnectHacienda;
 	}
 
+	
+	/**
+	 * Verifica si un mensaje por clave fue aceptado y recibido por hacienda
+	 * @param empresa
+	 * @param clave del documento
+	 */
+	public Boolean verificaRecepcionFactura(Empresa empresa, String clave) throws Exception {
+		
+		boolean resultado = false;
+		
+		try {
+
+			OpenIDConnectHacienda openIDConnectHacienda = openIDConnect.getToken(empresa);
+			if (openIDConnectHacienda != null) {
+
+				// Se obtuvo el token de accienda
+				if (openIDConnectHacienda.getAccess_token().length() > 0) {
+					String idp_uri_documentos = Constantes.EMPTY;
+					if (empresa.getEstadoProduccion() != null) {
+						if (empresa.getEstadoProduccion().equals(Constantes.ESTADO_ACTIVO)) {
+							idp_uri_documentos = Constantes.IDP_URI_DOCUMENTOS_PRODUCCION;
+						}
+					}
+					
+					@SuppressWarnings("rawtypes")
+					Map response = envioHaciendaComponent.comprobarDocumentoElectronico(idp_uri_documentos, clave, openIDConnectHacienda);
+					String body = (String) response.get(POST_RESPONSE);
+					if (body != null && body != "" && body != "{}" && !body.contains("El comprobante") && !body.contains("no ha sido recibido")) {
+
+						RespuestaHacienda respuestaHacienda = RespuestaHaciendaJson.from(body);
+						String status = getHaciendaStatus(respuestaHacienda.indEstado());
+						RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();
+						respuesta.setClave(respuestaHacienda.clave());
+						respuesta.setFecha(respuestaHacienda.fecha());
+						respuesta.setIndEstado(respuestaHacienda.indEstado());
+						respuesta.setMensaje(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().mensaje() : Constantes.EMPTY);
+						respuesta.setDetalleMensaje(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().detalleMensaje() : Constantes.EMPTY);
+						respuesta.setMontoTotalImpuesto(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().montoTotalImpuesto() : Constantes.ZEROS_DOUBLE);
+						respuesta.setNombreEmisor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().nombreEmisor() : Constantes.EMPTY);
+						respuesta.setNombreReceptor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().nombreReceptor() : Constantes.EMPTY);
+						respuesta.setNumeroCedulaEmisor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().numeroCedulaEmisor() : Constantes.EMPTY);
+						respuesta.setNumeroCedulaReceptor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().numeroCedulaReceptor() : Constantes.EMPTY);
+						respuesta.setTipoIdentificacionEmisor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().tipoIdentificacionEmisor() : Constantes.EMPTY);
+						respuesta.setTipoIdentificacionReceptor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().tipoIdentificacionReceptor() : Constantes.EMPTY);
+						respuesta.setTotalFactura(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().totalFactura() : Constantes.ZEROS_DOUBLE);						
+						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECIBIDO)) {
+							if (respuestaHacienda.mensajeHacienda() != null) {
+								if (respuestaHacienda.mensajeHacienda().mensaje() != null) {
+									if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO)) {
+										resultado = true;
+									}
+								}
+							}
+						}
+						
+					}
+				}
+			}
+		} catch (Exception e) {
+			log.info("** Error  aceptarDocumento: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + empresa.getNombre());
+			throw e;
+		}
+		return resultado;
+	}
+	
 	/**
 	 * Solo se van enviar correos a la empresa cuando es un cliente o correo alternativo los tiquetes de clientes frecuentes no lo vamos enviar para ver el comportamiento de rendimiento Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+	//@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -945,7 +1010,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+	//@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1053,7 +1118,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/35 * * * ?")
+	//@Scheduled(cron = "0 0/35 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {
