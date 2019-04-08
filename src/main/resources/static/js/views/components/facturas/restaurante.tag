@@ -427,6 +427,68 @@
 </div>       
 <!--Fin Separar Venta-->
 
+<!--Inicio Cambiar Mesa-->
+<div show={mostrarCambiarMesa}>
+    <div class="container-fluid">
+        <div class="row no-space">           
+            <div class="col-md-10 col-sm-10 col-lg-10 col-xs-12 pull-left" style="padding: 0px 12px">
+                <div class="block panel ">                    
+                    <div id="btnGrandePagar" class="head gray well" style="color: #fff; font-size: 55px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
+                        <table id="pagarTable" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td width="70%" id="">
+                                        <div id="pagarTitulo"><i class="fa fa-exchange"> {$.i18n.prop("titulo.cambiar.mesa")}</i></div>
+                                    </td>
+                                </tr>                     
+                            </tbody>
+                        </table>
+                    </div>
+                </div>    
+			</div>
+		</div>	
+        <div class="row no-space">           
+			<div class="container-fluid">
+			       <div class="row">
+				       <div class="col-md-10 col-sm-10 col-lg-10 col-xs-10" style="padding: 0px 10px">
+			             <!--Ventana de los productos-->
+						 <!--Seccion de mesas-->
+			             <section class="lista-mesas clickable" >
+			             	<div id="item-mesas" class="product-item col-sx-12 col-sm-12 col-md-3 col-lg-3"  each ={mesasCambiar.data}  onclick={__CambiarTiqueteMesa}>
+			                	<div class="containerImage">
+				                	<img  style = "width:100px;" alt="" class="img-responsive " src="/dist/img/mesaAzul.png">
+				                	<div class="top-right">{tieneFacturas}</div>
+			                	</div>                	 
+								<div>
+					                <span class="label-titulos-articulo"><i class="fa text-white label-titulos-articulo" style="font-size: 25px !important">{descripcion} - {impuestoServicioStr}</i></span>           			
+			                    </div>
+			                </div>
+			             </section>
+			           </div>    			       
+			       </div>
+			       <div class="row">
+			       	   <div class="col-md-10 col-sm-10 col-lg-10 col-xs-10" >
+				           <div onclick = {__BotonAnteriorMesasCambiar}  class="pull-left btnNavegacion " >
+				           		<i class="fa fa-arrow-left"></i>{$.i18n.prop("btn.Anterior")}
+				           </div>
+				           <div onclick = {__BotonSiguienteMesasCambiar} class="pull-right btnNavegacion " >
+				           		<i class="fa fa-arrow-right"></i>{$.i18n.prop("btn.siguiente")}
+				           </div>			       	   
+			       	   </div>
+			       </div>
+		     </div>
+        </div>
+    	<div class="row">
+			<div class="col-md-10 col-sm-10 col-lg-10 col-sx-12 ">
+				<div class="box-footer">
+                     <button onclick={__AtrasSepararCuentas} class="btn-dark-gray btn-back pull-left">  {$.i18n.prop("btn.volver")}</button>
+	            </div>
+			</div>
+		</div>
+    </div>
+</div>       
+<!--Fin Cambiar Mesa-->
+
 <!--Inicio de la Venta-->
 <div show={mostarParaCrearNuevaVentas}>
     <div class="container-fluid">
@@ -560,13 +622,22 @@
                             <a href="#" class="opciones-menu" onclick = {__CrearFacturaTemporal} >
                                 <i class="fa fa-clock-o">{$.i18n.prop("venta.en.espera")}</i>
                             </a>
-                            <a  href="#" class="opciones-limpiar" onclick = {__ImprimirTiquete} >
+                            <a  href="#" class="opciones-menu" onclick = {__ImprimirTiquete} >
                                 <i class="fa fa-print">Tiquete</i>
                             </a> 
-                            <a  href="#" class="opciones-limpiar" onclick = {__Limpiar} >
+                            <a  href="#" class="opciones-menu" onclick = {__Limpiar} >
                                 <i class="fa fa-trash">{$.i18n.prop("btn.limpiar")}</i>
                             </a>
-                           	<a  show={separarCuenta} href="#" class="opciones-limpiar" onclick = {__MostrarSeperarCuentas} >
+                        </section>
+                    </div>    
+                </div>                 
+                <div  class="row ">
+                    <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 " >   
+                        <section class="contenedor-opciones">
+                           	<a show={factura.id > 0} href="#" class="opciones-menu" onclick = {__PantallaCambiarMesa} >
+                                <i class="fa fa-exchange">{$.i18n.prop("titulo.cambiar.mesa")}</i>
+                          	</a>
+                           	<a show={separarCuenta} href="#" class="opciones-menu" onclick = {__MostrarSeperarCuentas} >
                                 <i class="fa fa-scissors">{$.i18n.prop("separar.cuenta")}</i>
                           	</a>
                         </section>
@@ -582,19 +653,19 @@
                                 <ul id="tipo-busqueda">
                                     <li id="buscalo"  onclick = {__ListaDecodigos} class="">
                                         <h3><i class="glyphicon glyphicon-search" aria-hidden="true"></i>
-                                            <img  src="{urlImagenBuscador}" width="45px" height="15px" >&nbsp;&nbsp; {$.i18n.prop("btn.consultar")}  
+                                            <img  src="{urlImagenBuscador}" width="40px" height="15px" >&nbsp;&nbsp; {$.i18n.prop("btn.consultar")}  
                                         </h3>
                                     </li>
                                     <li onclick = {__PantallaMesas} id="codificalo" class=""> <h3>
                                         <i class="glyphicon glyphicon-glass" aria-hidden="true"></i>
-                                        <img  src="{urlImagenLector}" width="40px" height="15px">
+                                        <img  src="{urlImagenLector}" width="30px" height="15px">
                                         &nbsp;&nbsp; {$.i18n.prop("mesa.titulo")} </h3> 
                                     </li>                                    
                                     <li onclick = {__PantallaCategorias} id="navegador" class=""> <h3>
                                         <i class="glyphicon glyphicon-refresh" aria-hidden="true"></i>
-                                        <img  src="{urlImagenNavegador}" width="40px" height="15px">
+                                        <img  src="{urlImagenNavegador}" width="30px" height="15px">
                                         &nbsp;{$.i18n.prop("titulo.categoria")}</h3>  
-                                    </li>
+                                    </li>                                   
                                 </ul>
                             </form>
                         </div>
@@ -1499,6 +1570,17 @@ td.col-xl-12, th.col-xl-12 {
              to:0
          }
      }
+     self.mesasCambiar  = {
+         data:[],
+         pagination:{
+            total:0,
+            current_page:0,
+            per_page:0,
+            last_page:0,
+            from:0,
+            to:0
+        }
+     }
      self.facturasXMesa = {
          data:[],
          pagination:{
@@ -1514,6 +1596,8 @@ td.col-xl-12, th.col-xl-12 {
     self.mostrarOrdenesCocinaPendientes = false
     self.mostarParaCrearNuevaVentas     = false //true
     self.mostrarSepararCuenta		    = false //true
+    self.mostrarCambiarMesa             = false;
+
     self.mostrarCodigoBarra             = false //true
     self.mostrarFormularioPago          = false
     self.mostarParaCrearNuevaFactura    = false //true
@@ -1525,6 +1609,9 @@ td.col-xl-12, th.col-xl-12 {
     self.urlImagenNavegador   = '/dist/img/navegador.png';
     self.urlImagenLector      = '/dist/img/codigo_barra.png';
     self.urlImagenBuscador    = '/dist/img/buscador.png';
+    self.urlImagenChange      = '/dist/img/change.jpeg';
+    
+    
     self.primeraVezBilleteClick = false
     self.tipoCambio = {
         total:0,
@@ -2437,6 +2524,8 @@ __AgregarNombreFacturaTemporal(){
     self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias
     self.mostarParaCrearNuevaVentas  = true
     self.mostrarSepararCuenta		 = false //true
+    self.mostrarCambiarMesa = false;
+
     self.update()        
 }
 
@@ -2602,6 +2691,8 @@ function __Init(){
     self.mostrarCamposIngresoContado   = true;
     self.mostarParaCrearNuevaVentas    = true
     self.mostrarSepararCuenta		    = false //true
+    self.mostrarCambiarMesa = false;
+
     self.mostrarCodigoBarra            = true
     self.mostrarCodigoBarra            = true;
     self.mostrarFormularioPago         = false
@@ -2646,6 +2737,8 @@ function __Init(){
     self.urlImagenNavegador   = '/dist/img/navegador.png';
     self.urlImagenLector      = '/dist/img/codigo_barra.png';
     self.urlImagenBuscador    = '/dist/img/buscador.png';
+    self.urlImagenChange      = '/dist/img/change.jpeg';
+    
     //totales
     self.totalComprobante     = 0;
     self.subTotalGeneral  =0;
@@ -2995,6 +3088,8 @@ _AtrasFacturaFinal(){
    self.mostrarFormularioPago = false
    self.mostarParaCrearNuevaVentas = true;
    self.mostrarSepararCuenta	= false //true
+   self.mostrarCambiarMesa = false;
+
    self.mostarParaCrearNuevaFactura = true
    self.error = false
    self.update()
@@ -3040,6 +3135,8 @@ function mostrarPAgo(){
     }
     self.mostarParaCrearNuevaVentas = false
     self.mostrarSepararCuenta		    = false //true
+    self.mostrarCambiarMesa = false;
+
     self.factura.totalEfectivo = self.factura.totalComprobante
     self.update()
     $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(3))
@@ -3970,6 +4067,50 @@ __PantallaMesas(){
 	__ListaMesas()
 }
 
+/**
+*  Evento click para mostrar el cambio de tiquetes en las mesas 
+**/
+__PantallaCambiarMesa(){
+     self.mesasCambiar  = {
+         data:[],
+         pagination:{
+             total:0,
+             current_page:0,
+             per_page:0,
+             last_page:0,
+             from:0,
+             to:0
+         }
+     }
+     self.mostrarNavegador            = false
+     self.mostrarMesas	              = false
+     self.mostrarCategorias           = false //muestra la pantalla de imagenes de articulos   
+     self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
+     self.mostrarFacturasMesas        = false //muestra las facturas por mesa
+     self.mostarParaCrearNuevaVentas  = false
+     self.mostrarSepararCuenta		  = false 
+     self.mostrarCambiarMesa = true;
+     self.update()     
+	__ListaMesasCambio()
+}
+
+__BotonAnteriorMesasCambiar(){
+	  self.mesasCambiar.pagination.current_page = self.mesasCambiar.pagination.current_page - 1
+	  self.mesasCambiar.pagination.current_page = self.mesasCambiar.pagination.current_page > 1?self.mesasCambiar.pagination.current_page:0;
+	  self.parametrosPaginacion.paginaActual = self.parametrosPaginacion.paginaActual > 1?self.parametrosPaginacion.paginaActual - 12:0 
+	  self.update()
+	  __ListaMesasCambio()
+}
+
+__BotonSiguienteMesasCambiar(){
+	if(self.mesasCambiar.pagination.current_page <  self.mesasCambiar.pagination.last_page){
+		self.mesasCambiar.pagination.current_page = self.mesasCambiar.pagination.current_page + 1
+	    self.parametrosPaginacion.paginaActual += 12
+	    self.update()
+	    __ListaMesasCambio() 
+	}
+}
+
 __BotonAnteriorMesas(){
 	  self.mesas.pagination.current_page = self.mesas.pagination.current_page - 1
 	  self.mesas.pagination.current_page = self.mesas.pagination.current_page > 1?self.mesas.pagination.current_page:0;
@@ -3985,6 +4126,34 @@ __BotonSiguienteMesas(){
 	    self.update()
 	    __ListaMesas() 
 	}
+}
+
+
+__CambiarTiqueteMesa(e){
+	console.log(self.factura.id);
+	console.log(e.item);
+	//Se tiene que hacer el camvbio de mesa
+	$.ajax({
+        url: 'CambiarFacturaMesa.do',
+        datatype: "json",
+        data: {
+        	idFactura:self.factura.id,
+        	idMesa:e.item.id,        	
+        },
+        method:"POST",
+        success: function (result) {
+        	self.pendientesComanda     = []
+            var item = e.item
+            self.mesa = item
+            self.factura.mesa = item    
+            self.update()
+            __ListaFacturasXMesas()
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });	
 }
 
 /**
@@ -4023,6 +4192,8 @@ function __ListaMesas(){
                self.mostrarFacturasMesas        = false //muestra las facturas por mesa
                self.mostarParaCrearNuevaVentas  = false
                self.mostrarSepararCuenta		    = false //true
+               self.mostrarCambiarMesa = false;
+
                self.update()
             }
         },
@@ -4032,6 +4203,51 @@ function __ListaMesas(){
         }
     });
 }
+
+/**
+*  Lista las mesas para cambio de tiquete
+**/
+function __ListaMesasCambio(){
+	self.mesasCambiar.data = []
+	//Primera vez 
+    if( self.mesasCambiar.pagination.current_page == 0){
+        self.mesasCambiar.pagination.current_page = 0    
+        self.parametrosPaginacion.cantidadPorPagina = 12
+        self.parametrosPaginacion.paginaActual = 0
+        self.parametrosPaginacion.total = 0
+        self.parametrosPaginacion.tipoVenta = 1        
+        self.update()
+    }
+    $('#cantidadPorPagina').val(self.parametrosPaginacion.cantidadPorPagina)
+    $('#paginadaActual').val(self.parametrosPaginacion.paginaActual )
+    var formulario = $('#FormPaginacion').serialize();
+    $.ajax({
+        url: 'ListarPaginacionMesasAjax.do',
+        datatype: "json",
+        data: formulario,
+        method:"POST",
+        success: function (result) {
+            if(result.aaData.length > 0){
+               self.mesasCambiar.data = result.aaData
+               self.mesasCambiar.pagination.total = result.recordsTotal
+               self.mesasCambiar.pagination.last_page = Math.round(result.recordsTotal/10)
+               self.mostrarNavegador            = false
+               self.mostrarMesas	            = false
+               self.mostrarCategorias           = false //muestra la pantalla de imagenes de articulos   
+               self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias   
+               self.mostrarFacturasMesas        = false //muestra las facturas por mesa
+               self.mostarParaCrearNuevaVentas  = false
+               self.mostrarSepararCuenta		= false //true
+               self.update()
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+}
+
 
 //Se presentan las facturas para cada mesa
 __FacturasXMesa(e){
@@ -4093,6 +4309,7 @@ function __ListaFacturasXMesas(){
             self.mostrarArticulosXCategoria  = false //muestra la pantalla de imagenes de categorias
             self.mostarParaCrearNuevaVentas  = true
             self.mostrarSepararCuenta		    = false //true
+            self.mostrarCambiarMesa = false;
             self.update()        
         },
         error: function (xhr, status) {
@@ -4375,7 +4592,8 @@ function mostrarSeperarCuentasFun(){
 	} 	
 	self.mostrarSepararCuenta		    = true;
 	self.mostarParaCrearNuevaVentas		= false;
-	self.mostarParaCrearNuevaFactura    = false;	
+	self.mostarParaCrearNuevaFactura    = false;
+	self.mostrarCambiarMesa = false;	
     self.detailPorSeparar      = []
     self.detailFacturaSeparada = []
 
@@ -4798,6 +5016,7 @@ __AtrasSepararCuentas(){
    self.mostrarFormularioPago = false
    self.mostarParaCrearNuevaVentas = true;
    self.mostrarSepararCuenta	= false //true
+   self.mostrarCambiarMesa = false;
    self.mostarParaCrearNuevaFactura = true
    self.error = false
    self.update()

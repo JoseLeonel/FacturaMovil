@@ -46,6 +46,7 @@ import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Bo.HaciendaBo;
+import com.emprendesoftcr.Bo.MesaBo;
 import com.emprendesoftcr.Bo.RecepcionFacturaBo;
 import com.emprendesoftcr.Bo.TipoCambioBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
@@ -258,6 +259,9 @@ public class FacturasController {
 
 	@Autowired
 	private FacturaBo																									facturaBo;
+
+	@Autowired
+	private MesaBo																										mesaBo;
 
 	@Autowired
 	private EmpresaPropertyEditor																			empresaPropertyEditor;
@@ -1243,6 +1247,36 @@ public class FacturasController {
 			facturaBo.modificar(facturaBD);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.modificado.correctamente", facturaBD);
 
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+
+	}
+	
+	/**
+	 * Cambia la factura de mesa
+	 * @param request
+	 * @param model
+	 * @param idFactura
+	 * @param idMesa
+	 * @param result
+	 * @param status
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/CambiarFacturaMesa.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator CambiarFacturaMesa(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura, @RequestParam Long idMesa) throws Exception {
+		try {
+			Factura facturaBD = facturaBo.findById(idFactura);
+			if (facturaBD == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.no.existe");
+			}
+			facturaBD.setMesa(mesaBo.buscar(idMesa));
+			facturaBD.setUpdated_at(new Date());
+			facturaBo.modificar(facturaBD);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.modificado.correctamente", facturaBD);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
