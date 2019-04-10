@@ -669,6 +669,7 @@
     self.labelTotales = "labelTotalesConBanco"
     self.campoTotales = "campoTotalesConBanco"
     self.on('mount',function(){
+
         $("#formularioFactura").validate(reglasDeValidacionFactura());
         __informacionData()
         __informacionData_vendedores()
@@ -724,6 +725,11 @@
                 timer = setTimeout(fn, ms);
             });
         };
+        var retrievedObject = JSON.parse(localStorage.getItem('DetallesNueva'));
+        self.detail = retrievedObject
+        var facturaObject = JSON.parse(localStorage.getItem('facturaNueva'));
+        self.factura = facturaObject
+        self.update()
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
              //disableF5(evento);
@@ -1536,6 +1542,8 @@ function __Init(){
     __ListaFacturasEnEspera()
     $('.codigo').select()
     $(".codigo").focus()
+    localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
+    localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
 }
 /**
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
@@ -2403,8 +2411,12 @@ function  eliminarDetalle(){
     }else{
       self.numeroLinea =  0  
     }
+  
+   
+    self.update()
     self.update()
      __calculate();
+
  }
 /**
 *   agregar Articulos nuevos en el detalle de la factura
@@ -2415,6 +2427,9 @@ function __nuevoArticuloAlDetalle(cantidad){
     }
     if(self.articulo.descripcion == ""){
         return;
+    }
+    if(self.detail == null){
+        __storege()
     }
     var precioUnitario  = getPrecioUnitario(self.articulo.precioPublico,self.articulo.impuesto)
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
@@ -2454,6 +2469,56 @@ function __nuevoArticuloAlDetalle(cantidad){
     self.cantidadEnterFacturar = 0
     self.update()
     
+}
+
+function __storege(){
+    self.detail = []
+    self.factura                = {
+        id:null,
+	   fechaCredito:null,
+	   fechaEmision:null,
+	   condicionVenta:"",
+	    plazoCredito:0,
+	    tipoDoc:"",
+	    medioPago:"",
+	    nombreFactura:"",
+	    direccion:"",
+	    nota:"",
+	    comanda:"",
+	    subTotal:0,
+	    totalTransporte:0,
+	    total:0,
+	    totalServGravados:0,
+	    totalServExentos:0,
+	    totalMercanciasGravadas:0,
+	    totalMercanciasExentas:0,
+	    totalGravado:0,
+	    totalExento:0,
+	    totalVenta:0,
+	    totalDescuentos:0,
+	    totalVentaNeta:0,
+	    totalImpuesto:0,
+	    totalComprobante:0,
+	    totalEfectivo:0,
+        totalTarjeta:0,
+        totalCambioPagar:0,
+	    totalBanco:0,
+	    totalCredito:0,
+	    montoCambio:0,
+	    totalCambio:0,
+	    codigoMoneda:"",
+	    estado:1,
+	    cliente:{
+            id:null,
+            nombreCompleto:""
+        },
+	    vendedor:{
+            id:null,
+            nombreCompleto:""
+        }
+
+    }   
+    self.update()
 }
 /**
 * Monto de Total
@@ -2686,6 +2751,8 @@ function __calculate() {
     $('.codigo').select()
     $('.codigo').focus()
     getSubTotalGeneral()
+    localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
+    localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
 }
 
 function esEntero(numero){
