@@ -272,7 +272,7 @@
             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                 <div class="form-group">
                     <label  >Total Abonar</label>
-                    <input type="text" class="form-control totalSaldoGeneral " value="{totalAplicarAbono}" readonly>
+                    <input type="text" class="form-control   " value="{totalAplicarAbonoFormato}" readonly>
                    
                 </div>  
                  <button show = "{totalAplicarAbono > 0 }" onclick ={__CrearAbono} type="button" class="btn btn-warning " title ="Aplicar Abonos a las cuentas seleccionadas" name="button" ><i class="fa fa-pencil-square-o"></i>Aplicar Abonos</button>
@@ -439,6 +439,7 @@
     self.mostrarListado            = true 
     self.botonModificar            = false
     self.totalAplicarAbono         = 0
+    self.totalAplicarAbonoFormato  = 0
     self.cantidadCuentasPorCobrar  = 0
     self.botonAgregar              = false
     self.mostrarListadoAbonos      = false
@@ -814,8 +815,7 @@ function __EnviarPorCorreo(){
 *  Busqueda de la informacion por rango de fechas
 **/
 __Busqueda(){
-    self.totalAplicarAbono         = 0
-    self.update()
+  
 	$("#filtros").validate(reglasDeValidacion());
      if ($("#filtros").valid()) {
          listadoConsulta()
@@ -825,6 +825,15 @@ __Busqueda(){
 * Lista de consulta
 **/
 function listadoConsulta(){
+      self.totalAplicarAbono         = 0
+    self.totalAplicarAbonoFormato = 0
+    self.total = 0
+    self.totalAbono = 0
+    self.totalSaldo = 0
+    $('.totalGeneral').val(null) 
+    $('.totalSaldoGeneral').val(null)
+    $('.totalAbonoGeneral').val(null)
+    self.update()
     self.cliente =$('#idCliente').val()
     self.estado = $('.estado').val()
     self.total          = 0
@@ -959,6 +968,7 @@ __regresarAlListadoAbono(){
 function __regresar(){
     self.listaCuentasGrupales = {data:[]}
     self.totalAplicarAbono    = 0
+    self.totalAplicarAbonoFormato = 0
     self.mostrarListado       = false
     self.botonAgregar         = false
     self.botonModificar       = false   
@@ -1226,6 +1236,7 @@ function __RestarTotalAbonar(monto){
       self.totalAplicarAbono = __valorNumerico(redondeoDecimales(self.totalAplicarAbono,2)) - __valorNumerico(redondeoDecimales(monto,2))     
     }
     self.totalAplicarAbono = __valorNumerico(redondeoDecimales(self.totalAplicarAbono,2))    
+    self.totalAplicarAbonoFormato = formatoDecimales(self.totalAplicarAbono); 
     self.update()
 }
 /**
@@ -1233,7 +1244,8 @@ function __RestarTotalAbonar(monto){
 **/
 function __SumarTotalAbonar(monto){
     self.totalAplicarAbono = __valorNumerico(redondeoDecimales(monto,2)) + __valorNumerico(redondeoDecimales(self.totalAplicarAbono,2))   
-    self.totalAplicarAbono = __valorNumerico(redondeoDecimales(self.totalAplicarAbono,2))    
+    self.totalAplicarAbono = __valorNumerico(redondeoDecimales(self.totalAplicarAbono,2))   
+    self.totalAplicarAbonoFormato = formatoDecimales(self.totalAplicarAbono);  
     self.update()
 }
 /**
