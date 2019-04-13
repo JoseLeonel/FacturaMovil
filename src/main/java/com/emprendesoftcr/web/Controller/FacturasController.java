@@ -74,6 +74,7 @@ import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.pdf.ReportePdfView;
+import com.emprendesoftcr.service.ProcesoHaciendaService;
 import com.emprendesoftcr.validator.FacturaFormValidator;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
@@ -272,6 +273,9 @@ public class FacturasController {
 
 	@Autowired
 	private MesaPropertyEditor																				mesaPropertyEditor;
+
+	@Autowired
+	private ProcesoHaciendaService																		procesoHaciendaService;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -1331,78 +1335,132 @@ public class FacturasController {
 			if (factura == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.no.existe");
 			}
+			Hacienda haciendaBD = haciendaBo.findByClave(factura.getClave());
+			if (haciendaBD == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.error.no.existe");
+			}
 
 			ArrayList<String> listaCorreos = new ArrayList<String>();
-			if (!correo.equals(Constantes.EMPTY)) {
-				listaCorreos.add(correo);
-			}
-			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
-
-				if (factura.getCliente().getCorreoElectronico() != null) {
-					listaCorreos.add(factura.getCliente().getCorreoElectronico());
+			if (correo != null) {
+				if (!correo.equals(Constantes.EMPTY)) {
+					listaCorreos.add(correo);
 				}
+			}
+			if(listaCorreos !=null) {
+				if(listaCorreos.size() == 0) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.vacio.enviar");
+				}
+				
+			}
+		
+			if (haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ANULADA) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.xml.con.error");
+
+			}
+			if (!haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.no.aceptado");
+
+			}
+
+			procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
+			//
+
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+		return respuestaServiceValidator;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/EnviarCorreoClienteAsociadosFacturaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator enviarCorreoClienteAsociadosFacturaAjax(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura, @RequestParam String correo) {
+		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		try {
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
+			respuestaServiceValidator.setMessage("");
+
+			Factura factura = facturaBo.findById(idFactura);
+			if (factura == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.no.existe");
+			}
+			Hacienda haciendaBD = haciendaBo.findByClave(factura.getClave());
+			if (haciendaBD == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.error.no.existe");
+			}
+
+			ArrayList<String> listaCorreos = new ArrayList<String>();
+			if (correo != null) {
+				if (!correo.equals(Constantes.EMPTY)) {
+					listaCorreos.add(correo);
+				}
+			}
+			//Correo Oficial
+			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+				if (factura.getCliente().getCorreoElectronico() != null) {
+					if (!factura.getCliente().getCorreoElectronico().equals(Constantes.EMPTY)) {
+						listaCorreos.add(factura.getCliente().getCorreoElectronico());
+					}
+				}
+			}
+			// Correo Alternativo 1
+			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
 				if (factura.getCliente().getCorreoElectronico1() != null) {
 					if (!factura.getCliente().getCorreoElectronico1().equals(Constantes.EMPTY)) {
 						listaCorreos.add(factura.getCliente().getCorreoElectronico1());
 					}
-
 				}
+			}
+			// Correo Alternativo 2
+			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
 				if (factura.getCliente().getCorreoElectronico2() != null) {
 					if (!factura.getCliente().getCorreoElectronico2().equals(Constantes.EMPTY)) {
 						listaCorreos.add(factura.getCliente().getCorreoElectronico2());
 					}
-
 				}
+			}
+			// Correo Alternativo 3
+			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
 				if (factura.getCliente().getCorreoElectronico3() != null) {
 					if (!factura.getCliente().getCorreoElectronico3().equals(Constantes.EMPTY)) {
 						listaCorreos.add(factura.getCliente().getCorreoElectronico3());
 					}
 				}
-
 			}
-			if (listaCorreos != null) {
-				if (!listaCorreos.isEmpty()) {
-					FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
-					Collection<Detalle> detalles = detalleBo.findByFactura(factura);
-
-					List<DetalleFacturaElectronica> detallesFactura = detalles.stream().map(TO_DETALLE).collect(toList());
-					facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
-
-					ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
-
-					String clave = getConsecutivo(factura.getTipoDoc(), factura.getNumeroConsecutivo());
-					Collection<Attachment> attachments = createAttachments(PDF_Attach(clave, factura.getEmpresa().getCedula(), asPDF(namePDF), factura.getTipoDoc()));
-
-					Map<String, Object> modelEmail = new HashMap<>();
-
-					modelEmail.put("clave", clave);
-					modelEmail.put("nombreEmpresa", factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial());
-					modelEmail.put("correo", factura.getEmpresa().getCorreoElectronico());
-					modelEmail.put("telefono", factura.getEmpresa().getTelefono());
-
-					String from = "Documentos_No_Reply@emprendesoftcr.com";
-
-					if (factura.getEmpresa().getAbreviaturaEmpresa() != null) {
-						if (!factura.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
-							from = factura.getEmpresa().getAbreviaturaEmpresa() + "_Doc_Electronico" + "_No_Reply@emprendesoftcr.com";
-						}
-					}
-
-					String nombre = factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial();
-					String subject = "Documento Electrónico N° " + clave + " del Emisor: " + nombre;
-
-					//
-					correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailHacienda.vm", modelEmail);
-					//
-
-					respuestaServiceValidator.setStatus(HttpStatus.OK.value());
-					respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
-					return respuestaServiceValidator;
-
+			// Correo indicado en la factura
+			if (factura.getCorreoAlternativo() != null) {
+				if (!factura.getCorreoAlternativo().equals(Constantes.EMPTY)) {
+					listaCorreos.add(factura.getCorreoAlternativo());
 				}
 			}
+			
+			if (listaCorreos !=null) {
+				if(listaCorreos.size() == 0) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.factura.no.tiene.correo.asociado");	
+				}
+				
+
+			}
+
+			if (haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ANULADA) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.xml.con.error");
+
+			}
+			if (!haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.no.aceptado");
+
+			}
+
+			procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
+			//
+
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
-			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("factura.no.tiene.correos.asociado"));
+			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));
+			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
