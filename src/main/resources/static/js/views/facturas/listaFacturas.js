@@ -236,7 +236,7 @@ var formato_tabla = [
 							    return __TipoDocumentos(numeroConsecutivo,row)
 						    }
                         },
-                        {'data' :'cliente'                         ,"name":"cliente"                          ,"title" : "Cliente"   ,"autoWidth" :true ,
+                        {'data' :'cliente'                         ,"name":"cliente.nombreCompleto"                          ,"title" : "Cliente"   ,"autoWidth" :true ,
                             "render":function(cliente,type, row){
     						    return cliente ==null?"":cliente.cedula != "999999999999"?cliente.nombreCompleto:row.nombreFactura;
 						    }
