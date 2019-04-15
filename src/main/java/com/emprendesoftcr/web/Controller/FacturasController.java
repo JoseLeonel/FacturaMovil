@@ -486,18 +486,7 @@ public class FacturasController {
 	@RequestMapping(value = "/generaProformasPDF.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	public void generarProformasPDF(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura) throws Exception {
 		try {
-			// JasperReport jasperReport;
 			Factura factura = facturaBo.findById(idFactura);
-
-			// jasperReport = JasperCompileManager.compileReport("reportes/ejemplo.jrxml");
-			// JRDataSource vacio = new JREmptyDataSource(1);
-
-			// Map<String, Object> parameters = new HashMap<String, Object>();
-			// parameters.put("nombreEmpresa", factura.getEmpresa().getNombre().toString());
-
-			// JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters,vacio);
-
-			// JasperExportManager.exportReportToPdfFile(print, "reportes/ejemplo.pdf");
 
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
 			Collection<Detalle> detalles = detalleBo.findByFactura(factura);
@@ -1217,7 +1206,7 @@ public class FacturasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/CambiarEstadoProformaAPedienteAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator cambiarEstadoProforma(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura) throws Exception {
+	public RespuestaServiceValidator cambiarEstadoProforma(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura ,@RequestParam Integer estado) throws Exception {
 		try {
 
 			Factura facturaBD = facturaBo.findById(idFactura);
@@ -1225,11 +1214,14 @@ public class FacturasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.no.existe");
 			}
 
-			facturaBD.setEstado(Constantes.FACTURA_ESTADO_PENDIENTE);
-			facturaBD.setTipoDoc(Constantes.FACTURA_TIPO_DOC_TIQUETE);
-			facturaBD.setTotalCambioPagar(Constantes.ZEROS_DOUBLE);
-			facturaBD.setTotalEfectivo(Constantes.ZEROS_DOUBLE);
-			facturaBD.setTotalBanco(Constantes.ZEROS_DOUBLE);
+			
+			if(estado.equals(Constantes.FACTURA_ESTADO_PENDIENTE)) {
+				facturaBD.setTipoDoc(Constantes.FACTURA_TIPO_DOC_TIQUETE);
+				facturaBD.setTotalCambioPagar(Constantes.ZEROS_DOUBLE);
+				facturaBD.setTotalEfectivo(Constantes.ZEROS_DOUBLE);
+				facturaBD.setTotalBanco(Constantes.ZEROS_DOUBLE);
+			}
+			facturaBD.setEstado(estado);
 			facturaBD.setUpdated_at(new Date());
 			facturaBo.modificar(facturaBD);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.modificado.correctamente", facturaBD);

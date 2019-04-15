@@ -610,8 +610,16 @@
             todayHighlight:true,
         }
     );
-        __Init()
-    })
+    var retrievedObject = JSON.parse(localStorage.getItem('detallesComprasNueva'));
+    self.detail = retrievedObject == null?self.detail = []:retrievedObject
+    var compraObject = JSON.parse(localStorage.getItem('compraNueva'));
+    self.compra = compraObject ==null?self.compra:compraObject
+    var proveedorObject = JSON.parse(localStorage.getItem('proveedor'));
+    self.proveedor = proveedorObject == null? self.proveedor:proveedorObject
+    self.update()
+    __calculate()
+    //__Init()
+})
 /**
 * Camps requeridos
 **/
@@ -754,6 +762,9 @@ function __Init(){
      __comboFormaPagos()
      //Tipos de Documentos
       __ComboTipoDocumentos()
+    localStorage.setItem('detallesComprasNueva', JSON.stringify(self.detail));
+    localStorage.setItem('compraNueva', JSON.stringify(self.compra));
+    localStorage.setItem('proveedor', JSON.stringify(self.proveedor));
      
 }
 /**
@@ -1401,6 +1412,10 @@ function __calculate() {
     $( "#codigo" ).val(null);
     $('.codigo').select()
     $('.codigo').focus()
+    localStorage.setItem('detallesComprasNueva', JSON.stringify(self.detail));
+    localStorage.setItem('compraNueva', JSON.stringify(self.compra));
+    localStorage.setItem('proveedor', JSON.stringify(self.proveedor));
+
 }
 /**
 * Definicion de la tabla articulos 

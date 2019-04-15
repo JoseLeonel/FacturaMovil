@@ -297,7 +297,7 @@
 
                     <section   class="lista-factura-espera">
                         <div id="botones"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
-                            <a href="#" style="display:block; padding:6px 0; margin-bottom:20px;margin-left:15px;background:red;text-align:center;text-decoration:none;color:#ffffff !important;text-shadow: 0px 0px 1px #ffffff;font-style: italic;"  title="{cliente !=null?cliente.nombreCompleto:""}">C# {id}</a>
+                            <a href="#" style="display:block; padding:6px 0; margin-bottom:20px;margin-left:15px;background:{colorVentaEspera};text-align:center;text-decoration:none;color:#ffffff !important;text-shadow: 0px 0px 1px #ffffff;font-style: italic;"  title="{cliente !=null?cliente.nombreCompleto:""}">C# {id}</a>
                         </div>    
                      </section >
                      <aside class="left-sidebar">
@@ -1395,6 +1395,7 @@ Lista de articulos
 **/
 __CargarFacturaEspera(e){
     self.factura =  e.item
+    
     self.update()
    __FacturaEnEspera(e.item)
 }

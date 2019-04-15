@@ -2,6 +2,7 @@ package com.emprendesoftcr.Dao.Impl;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.DetalleDao;
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
@@ -131,6 +133,18 @@ public class DetalleDaoImpl implements DetalleDao {
 				                        (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_EXENTOS), 
 				                        (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL),
 				                        (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA));
+	}
+	@Override
+	public Detalle findByCodigoAndEmpresa(String codigo , Empresa empresa) {
+		Query query = entityManager.createQuery("select obj from Empresa obj where obj.codigo = :codigo and obj.empresa = :empresa");
+		query.setParameter("codigo", codigo);
+		query.setParameter("empresa", empresa);
+		List<Detalle> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (Detalle) results.get(0);
+		} else {
+			return null;
+		}
 	}
 
 }
