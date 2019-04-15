@@ -128,10 +128,10 @@ public class HaciendasController {
 																																																			}
 																																																			facturaElectronica.setFooterTotalServiciosGravados(d.getTotalServGravados());
 																																																			facturaElectronica.setFooterTotalMercanciasGravadas(d.getTotalMercanciasGravadas());
-																																																			//Total Factura
+																																																			// Total Factura
 																																																			facturaElectronica.setFooterTotalServiciosExentos(d.getTotalServExentos());
 																																																			facturaElectronica.setFooterTotalGravado(d.getTotalGravado());
-																																																			facturaElectronica.setFooterTotalExento(d.getTotalExento());
+																																																			facturaElectronica.setFooterTotalExento(d.getTotalMercanciasExentas());
 																																																			facturaElectronica.setFooterTotalVenta(d.getTotalVenta());
 																																																			facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
 																																																			facturaElectronica.setFooterTotalImpuesto(d.getTotalImpuesto());
@@ -149,7 +149,6 @@ public class HaciendasController {
 																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito() != null ? d.getPlazoCredito().toString() : Constantes.EMPTY);
 																																																			facturaElectronica.setCondicionVenta(BIND_CONDICION_VENTA.apply(d.getCondicionVenta()));
 																																																			facturaElectronica.setMedioEfectivo(FacturaElectronicaUtils.medioPago(d));
-
 
 																																																			facturaElectronica.setMoneda(FacturaElectronicaUtils.getMoneda(d.getCodigoMoneda()));
 																																																			facturaElectronica.setTipoCambio(d.getTipoCambio().toString());
@@ -260,7 +259,7 @@ public class HaciendasController {
 				RespuestaHacienda respuestaHacienda = RespuestaHaciendaJson.from(body);
 				Hacienda hacienda = haciendaBo.findByClave(respuestaHacienda.clave());
 				log.info("** callBack: " + respuestaHacienda.clave() + " fecha " + new Date());
-				
+
 				if (hacienda != null) {
 					String status = getHaciendaStatus(respuestaHacienda.indEstado());
 					log.info("** Respuesta Estado: " + status + " fecha " + new Date());
@@ -317,7 +316,7 @@ public class HaciendasController {
 							estado = Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA;
 						}
 					}
-					
+
 					mensajeHacienda = respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().detalleMensaje() : Constantes.EMPTY;
 					if (xmlFirmado != null) {
 						if (!xmlFirmado.equals(Constantes.EMPTY)) {
@@ -358,9 +357,9 @@ public class HaciendasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarHaciendasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String cedulaReceptor,@RequestParam String tipoDocumento) {
+	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String cedulaReceptor, @RequestParam String tipoDocumento) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cedulaReceptor, usuarioSesion.getEmpresa(),tipoDocumento);
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cedulaReceptor, usuarioSesion.getEmpresa(), tipoDocumento);
 
 		Long total = dataTableBo.contar(query);
 		Collection<Object> objetos = dataTableBo.listar(query);
@@ -397,7 +396,7 @@ public class HaciendasController {
 	@ResponseBody
 	public RespuestaServiceDataTable enviarHaciendaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String cedulaReceptor) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cedulaReceptor, usuarioSesion.getEmpresa(),Constantes.EMPTY);
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cedulaReceptor, usuarioSesion.getEmpresa(), Constantes.EMPTY);
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
 
@@ -489,6 +488,51 @@ public class HaciendasController {
 			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
 				listaCorreos.add(factura.getCliente().getCorreoElectronico());
 			}
+			// Correo Alternativo 1
+			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+				if (factura.getCliente().getCorreoElectronico1() != null) {
+					if (!factura.getCliente().getCorreoElectronico1().equals(Constantes.EMPTY)) {
+						listaCorreos.add(factura.getCliente().getCorreoElectronico1());
+					}
+				}
+			}
+			// Correo Alternativo 2
+			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+				if (factura.getCliente().getCorreoElectronico2() != null) {
+					if (!factura.getCliente().getCorreoElectronico2().equals(Constantes.EMPTY)) {
+						listaCorreos.add(factura.getCliente().getCorreoElectronico2());
+					}
+				}
+			}
+			// Correo Alternativo 3
+			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+				if (factura.getCliente().getCorreoElectronico3() != null) {
+					if (!factura.getCliente().getCorreoElectronico3().equals(Constantes.EMPTY)) {
+						listaCorreos.add(factura.getCliente().getCorreoElectronico3());
+					}
+				}
+			}
+			// Correo indicado en la factura
+			if (factura.getCorreoAlternativo() != null) {
+				if (!factura.getCorreoAlternativo().equals(Constantes.EMPTY)) {
+					listaCorreos.add(factura.getCorreoAlternativo());
+				}
+			}
+
+			if (listaCorreos != null) {
+				if (listaCorreos.size() == 0) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.factura.no.tiene.correo.asociado");
+				}
+			}
+			if (haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ANULADA) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.xml.con.error");
+
+			}
+			if (!haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.no.aceptado");
+
+			}
+
 			listaCorreos.add(factura.getEmpresa().getCorreoElectronico());
 			procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
 
@@ -530,6 +574,21 @@ public class HaciendasController {
 			}
 			ArrayList<String> listaCorreos = new ArrayList<String>();
 			listaCorreos.add(correo);
+			if (listaCorreos != null) {
+				if (listaCorreos.size() == 0) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.vacio.enviar");
+				}
+
+			}
+
+			if (haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ANULADA) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.xml.con.error");
+
+			}
+			if (!haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.no.aceptado");
+
+			}
 			procesoHaciendaService.enviarCorreos(factura, haciendaBD, listaCorreos);
 
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
@@ -667,7 +726,7 @@ public class HaciendasController {
 
 	private static class DelimitadorBuilder {
 
-		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, String cedula, Empresa empresa,String tipoDocumento) {
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, String cedula, Empresa empresa, String tipoDocumento) {
 			// Consulta por fechas
 			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Hacienda");
 			Date fechaInicio = new Date();
@@ -677,26 +736,26 @@ public class HaciendasController {
 
 			if (cedula != null) {
 				if (!cedula.equals("0")) {
-					if(cedula.equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
-						delimitador.addFiltro(new JqGridFilter("nombreReceptor",  Constantes.NOMBRE_CLIENTE_FRECUENTE , "like"));
-					}else {
-						delimitador.addFiltro(new JqGridFilter("cedulaReceptor",  cedula , "="));	
+					if (cedula.equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+						delimitador.addFiltro(new JqGridFilter("nombreReceptor", Constantes.NOMBRE_CLIENTE_FRECUENTE, "like"));
+					} else {
+						delimitador.addFiltro(new JqGridFilter("cedulaReceptor", cedula, "="));
 					}
-					
+
 				}
 
 			}
 			if (tipoDocumento != null) {
 				if (!tipoDocumento.equals(Constantes.EMPTY)) {
-					if(tipoDocumento.equals("88")) {
-						delimitador.addFiltro(new JqGridFilter("tipoDoc",  "'" + " " + "'" , "="));
-					}else {
-						if(!tipoDocumento.equals("0")) {
-							delimitador.addFiltro(new JqGridFilter("tipoDoc",  tipoDocumento , "="));	
+					if (tipoDocumento.equals("88")) {
+						delimitador.addFiltro(new JqGridFilter("tipoDoc", "'" + " " + "'", "="));
+					} else {
+						if (!tipoDocumento.equals("0")) {
+							delimitador.addFiltro(new JqGridFilter("tipoDoc", tipoDocumento, "="));
 						}
-							
+
 					}
-					
+
 				}
 
 			}
