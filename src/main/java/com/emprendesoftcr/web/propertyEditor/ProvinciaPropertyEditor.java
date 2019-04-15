@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import com.emprendesoftcr.Bo.CajaBo;
 import com.emprendesoftcr.Bo.ProvinciaBo;
 import com.emprendesoftcr.modelo.Caja;
 

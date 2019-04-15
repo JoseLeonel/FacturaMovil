@@ -1,4 +1,34 @@
 <venta-factura>
+
+<!-- The Modal -->
+  <div class="modal fade" id="modalRolUsuario">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Seguridad</h4>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+           <form id="formularioModalRolUsuario">
+                <div class="form-group ">
+                    <label>Usuario</label> 
+                    <input  type="text"  class="form-control usuarioSistema"      id="usuarioSistema" name="usuarioSistema" value="{validarRolCommand.usuarioSistema}">
+                </div>      
+                <div class="form-group ">
+                    <label>Clave</label> 
+                    <input  type="password"  class="form-control claveSistema"  name="claveSistema" id="claveSistema"  value="{validarRolCommand.claveSistema}">
+                </div>      
+            </form>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger"  onclick ="{__SeguridadVentas}" >Autorizar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--fin validar rol de usuario-->
 <!--Modal Cambiar Cantidad-->
 <div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -1118,12 +1148,102 @@ td.col-xl-12, th.col-xl-12 {
               todayHighlight:true,
             }
         );
-        __agregarArticulos()      
+        __agregarArticulos()   
+        var retrievedObject = JSON.parse(localStorage.getItem('DetallesNueva'));
+        self.detail = retrievedObject
+        var facturaObject = JSON.parse(localStorage.getItem('facturaNueva'));
+        self.factura = facturaObject
+        self.update()
+        __calculate()   
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
      
     })
+
+/**
+* Validar seguridad de ruta autorizada
+**/ 
+__SeguridadVentas(){
+   __validarRolAdministrador('#formularioModalRolUsuario','validarRolAdministradorAjax.do');
+    
+}
+
+function __validarRolAdministrador(formulario,url){
+    var resultado = false;	
+    if ($(formulario).valid()) {
+        var formulario = $(formulario).serialize();
+        $.ajax({
+          type : "POST",
+          sync: true,
+          dataType : "json",
+          data : formulario,
+          url : url,
+          success : function(data) {
+             if (data.status != 200) {
+            	 serverMessageJsonClase(data);
+                if (data.message != null && data.message.length > 0) {
+                	 swal({
+                         type: 'error',
+                         title:"No autorizado",
+                         showConfirmButton: false,
+                         timer: 1500
+                     });
+                 }
+                return resultado;
+             } else {
+            	 var modelTabla = {};
+            	 data.listaObjetos.forEach(function(modelo) {
+            		 modeloTabla = modelo;
+            	 })
+               	if(modeloTabla.aceptacion === 1){
+                    self.validarRolCommand = {
+                        usuarioSistema : "",
+                        claveSistema:""
+                    }   
+                    self.update()
+               	    $('#modalRolUsuario').modal('hide') 
+                    $('.modal-backdrop').remove();
+                    if(self.autorizarBorrado == 0){
+                        $(self.rutaAutorizada).modal({backdrop: 'static', keyboard: true}) 
+                        $(self.rutaAutorizada).modal('show')    	
+                    }
+                    if(self.autorizarBorrado == 1){
+                        self.autorizarBorrado = 0
+                        self.update()
+                        eliminarDetalle()
+                    }
+                    if(self.autorizarBorrado == 2){
+                        self.autorizarBorrado = 0
+                        self.update()
+                        refrescarPagina()
+                    }
+
+                    return true;
+               	}else{
+                    self.rutaAutorizada = '';
+                    self.update()
+                    swal({
+                        type: 'error',
+                        title:"No autorizado",
+                        showConfirmButton: false,
+                        timer: 1500
+                    })      
+                    return true;
+                }
+          
+             }
+          },
+          error : function(xhr, status) {
+             console.log(status);
+             mensajeErrorServidor(xhr, status);
+          }
+        });
+    }
+    
+}
+
+
 
  /**
 * agregar producto desde la pantalla de articulos
@@ -1340,27 +1460,28 @@ __PantallaCodigoBarra(){
 /**
 *  Limpiar Formulario
 **/
-__LimpiarFormulario(){
-    $(".plazoCredito").val(null)   
-    $(".fechaCredito").val(null)   
-     $(".totalEfectivo").val(null)   
-    $(".totalTarjeta").val(null)   
-    $(".totalBanco").val(null)   
-    $(".nota").val(null)   
-    $(".direccion").val(null)   
-    $('.condicionVenta').prop("selectedIndex", 0);
-    $('.tipoDoc').prop("selectedIndex", 0);
-    self.cliente               = {}
-    self.vendedor              = {
-        id:0,
-        nombreCompleto:""
-    };
-    self.mostrarCamposIngresoContado = true
-    self.todosBarrios                  = {data:[]}
-    self.cantones                      = []
-    self.distritos                     = []
-    self.barrios                       = []
+function __SeguridadLimpiar(){
+    self.autorizarBorrado = 2
     self.update()
+    if(self.empresa.seguridadEnVentas == 1){
+        if(self.detail.length > 0){
+            self.rutaAutorizada = '';
+            self.update()
+            $("#usuarioSistema").val("")
+            $("#claveSistema").val("")
+            $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
+            $('#modalRolUsuario').modal('show')     
+        }else{
+           refrescarPagina()
+        }
+
+    }else{
+        refrescarPagina()
+    }
+
+}
+__LimpiarFormulario(){
+    __SeguridadLimpiar()
 }
 /**
 * Camps requeridos
@@ -1578,29 +1699,51 @@ function consultaParaReimprimir(data,tipoImpresion){
 * Aplicar el descuento
 **/
 __CambiarDescuento(e){
-    self.item = e.item;
-    if(self.item.codigo =="8888"){
+    self.item = e.item; 
+    self.rutaAutorizada = '';
+    self.update()
+     if(self.item.codigo =="8888"){
         return true
     } 
-    self.update()
-     $('#modalCambiarDescuento').modal({backdrop: 'static', keyboard: false})     // initialized with no keyboard
-    $('#modalCambiarDescuento').modal('show')      
-    $('#aplicarDescuento').focus()
+    if(self.empresa.seguridadEnVentas == 1){
+        self.rutaAutorizada = '#modalCambiarDescuento';
+        self.update()
+        $("#usuarioSistema").val("")
+        $("#claveSistema").val("")
+        $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalRolUsuario').modal('show')     
+    }else{
+         $( "#aplicarDescuento" ).focus()
+        $( "#aplicarDescuento" ).val(cantidad)
+        $('#modalCambiarDescuento').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalCambiarDescuento').modal('show')      
+    }
 }
 /**
 *Cambiar Cantidad del Articulo
 **/
 __CambiarCantidad(e){
+   var cantidad = e.currentTarget.value;
    self.item = e.item; 
+   self.rutaAutorizada = '';
+   self.update()
    if(self.item.codigo =="8888"){
         return true
     } 
-   self.update()
-   $( "#cambiarCantidadArticulo" ).focus()
-   $( "#cambiarCantidadArticulo" ).val(self.item.cantidad)
-   $('#modalCambiarCantidad').modal()                      // initialized with defaults
-   $('#modalCambiarCantidad').modal({backdrop: 'static', keyboard: false})     // initialized with no keyboard
-   $('#modalCambiarCantidad').modal('show')                // initializes and invokes show immediately
+   if(self.empresa.seguridadEnVentas == 1){
+        self.rutaAutorizada = '#modalCambiarCantidad';
+        self.update()
+        $("#usuarioSistema").val("")
+        $("#claveSistema").val("")
+        $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalRolUsuario').modal('show')     
+   }else{
+        $( "#cambiarCantidadArticulo" ).focus()
+        $( "#cambiarCantidadArticulo" ).val(self.item.cantidad)
+        $('#modalCambiarCantidad').modal()                      // initialized with defaults
+        $('#modalCambiarCantidad').modal({backdrop: 'static', keyboard: false})     // initialized with no keyboard
+        $('#modalCambiarCantidad').modal('show')                // initializes and invokes show immediately   
+   }
 }
 /**
 *Cambiar descripcion
@@ -2171,6 +2314,8 @@ function __Init(){
      
      $('#codigoBarra').val(null)
      $('#codigoBarra').focus()
+    localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
+    localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
 }
 /**
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
@@ -2648,19 +2793,55 @@ function __agregarArticulo(cantidad){
 * eliminar un detalle factura
 **/
 __removeProductFromDetail(e) {
-    var item = e.item;
-    index = this.detail.indexOf(item);
-    this.detail.splice(index, 1);
-    var cont = 0 ;
-    self.detail.forEach(function(elemen){
-            elemen.numeroLinea = cont + 1
-            cont = elemen.numeroLinea
-        }
-    )
-    self.seIncluyoUnArticulo = 1
+   
+
+    self.autorizarBorrado = 1
+    self.itemEliminar = e.item;
+    self.update()
+    if(self.empresa.seguridadEnVentas == 1){
+        self.rutaAutorizada = '';
+        self.update()
+        $("#usuarioSistema").val("")
+        $("#claveSistema").val("")
+        $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalRolUsuario').modal('show')     
+    }else{
+        eliminarDetalle()
+    }
+ }
+
+ /**
+*    Eliminar detalle
+**/
+function  eliminarDetalle(){
+
+    index = self.detail.indexOf(self.itemEliminar);
+    self.detail.splice(index, 1);
+    self.cantArticulos = self.cantArticulos > 0?self.cantArticulos - 1:0
+    var num = 0
+    for (var count = 0; count < self.detail.length; count++) {
+         num = num + 1 
+    }
+    if(num > 0){
+        var cont  = 0
+       self.detail.forEach(function(elemen){
+            elemen.numeroLinea = num 
+            num = num > 0?num -1:1
+            cont =  cont + 1
+        })  
+        self.numeroLinea =  cont
+    }else{
+      self.numeroLinea =  0  
+    }
+     self.seIncluyoUnArticulo = 1
     self.update()
      __calculate();
+
+   
+
  }
+
+
 /**
 *   agregar Articulos nuevos en el detalle de la factura
 **/
@@ -2931,6 +3112,9 @@ function __calculate() {
     $( "#codigoBarra" ).val(null);
     $( "#quantity" ).val(null);
     getSubTotalGeneral()
+    localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
+    localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
+
 }
 /**
 *calculo  de impuesto servicio
@@ -3250,7 +3434,7 @@ function __Teclas(){
 }
 
 function refrescarPagina(){
-    location.reload(true);
+   __Init()
      $('.codigo').select()
       $(".codigo").focus()
  

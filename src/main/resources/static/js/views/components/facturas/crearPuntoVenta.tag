@@ -297,7 +297,7 @@
 
                     <section   class="lista-factura-espera">
                         <div id="botones"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
-                            <a href="#" class="factura-espera"  title="{cliente !=null?cliente.nombreCompleto:""}">C# {id}</a>
+                            <a href="#" style="display:block; padding:6px 0; margin-bottom:20px;margin-left:15px;background:red;text-align:center;text-decoration:none;color:#ffffff !important;text-shadow: 0px 0px 1px #ffffff;font-style: italic;"  title="{cliente !=null?cliente.nombreCompleto:""}">C# {id}</a>
                         </div>    
                      </section >
                      <aside class="left-sidebar">
@@ -549,9 +549,12 @@
     </div>
 </div>
 <!--Fin Cambiar Descuento-->
+<style type="text/css"  >
 
+</style>    
 <script>
     var self = this;
+    self.colorVentaEspera = 'red'
     // Detalle de la factura es una coleccion de articulos
     self.detail                = []
     self.mensajesBackEnd       = []
@@ -730,6 +733,7 @@
         var facturaObject = JSON.parse(localStorage.getItem('facturaNueva'));
         self.factura = facturaObject
         self.update()
+        __calculate()
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
              //disableF5(evento);
@@ -903,18 +907,27 @@ function _Empresa(){
 * LLimpiar Formulario
 **/
 __LimpiarFormulario(){
+    __SeguridadLimpiar()
+}
+function __SeguridadLimpiar(){
     self.autorizarBorrado = 2
     self.update()
     if(self.empresa.seguridadEnVentas == 1){
-        self.rutaAutorizada = '';
-        self.update()
-        $("#usuarioSistema").val("")
-        $("#claveSistema").val("")
-        $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
-        $('#modalRolUsuario').modal('show')     
+        if(self.detail.length > 0){
+            self.rutaAutorizada = '';
+            self.update()
+            $("#usuarioSistema").val("")
+            $("#claveSistema").val("")
+            $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
+            $('#modalRolUsuario').modal('show')     
+        }else{
+           refrescarPagina()
+        }
+
     }else{
         refrescarPagina()
     }
+
 }
 /**
 * limpiar pantalla
@@ -2392,7 +2405,6 @@ __removeProductFromDetail(e) {
 *    Eliminar detalle
 **/
 function  eliminarDetalle(){
-
     index = self.detail.indexOf(self.itemEliminar);
     self.detail.splice(index, 1);
     self.cantArticulos = self.cantArticulos > 0?self.cantArticulos - 1:0
@@ -2411,9 +2423,6 @@ function  eliminarDetalle(){
     }else{
       self.numeroLinea =  0  
     }
-  
-   
-    self.update()
     self.update()
      __calculate();
 
@@ -3085,7 +3094,7 @@ function __Teclas(){
     }
     //Limpiar F2
     if(tecla ==113){
-      refrescarPagina()
+      __SeguridadLimpiar()
       $('.codigo').val("")
       $('.codigo').select()
       $(".codigo").focus()
