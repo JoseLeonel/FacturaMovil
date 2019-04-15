@@ -5,8 +5,10 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.StoredProcedureQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +19,8 @@ import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
+import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
+import com.emprendesoftcr.web.command.TotalFacturaCommand;
 
 @Repository("compraDao")
 public class CompraDaoImpl implements CompraDao {
@@ -119,6 +123,30 @@ public class CompraDaoImpl implements CompraDao {
 		return query.getResultList();
 	}
 	
+	@Override
+	public TotalComprasAceptadasCommand sumarComprasAceptadas(Date fechaInicio, Date fechaFinal, Integer idEmpresa) {
+		
+
+		StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS);
+
+		// set parametros entrada
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_ACEPTADAS_IN_FECHA_INICIO, Date.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_ACEPTADAS_IN_FECHA_FIN, Date.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ID_EMPRESA, Integer.class, ParameterMode.IN);
+
+		// set parametros salida
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_OUT, Double.class, ParameterMode.OUT);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_IMPUESTOS_COMPRAS_ACEPTADAS_OUT, Double.class, ParameterMode.OUT);
+	
+		// Valores de entrada
+		storedProcedure.setParameter(Constantes.SP_TOTAL_ACEPTADAS_IN_FECHA_INICIO, fechaInicio);
+		storedProcedure.setParameter(Constantes.SP_TOTAL_ACEPTADAS_IN_FECHA_FIN, fechaFinal);
+		storedProcedure.setParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ID_EMPRESA, idEmpresa);
+		storedProcedure.execute();
+
+		// Se toma la respuesta
+		return new TotalComprasAceptadasCommand((Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_OUT), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_IMPUESTOS_COMPRAS_ACEPTADAS_OUT));
+	}
 	
 
 }

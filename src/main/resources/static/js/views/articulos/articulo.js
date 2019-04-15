@@ -288,9 +288,8 @@ function __agregarSalidaAlInventario(){
  */
 function __mostrarListado(){
 	var table = $('#tableListar').DataTable();
-   //table.ajax.reload( null, false);
-   ListarArticulos(" ");
-	$('.mostrarListado').show();
+   table.ajax.reload( null, false);
+   $('.mostrarListado').show();
 }
 /**
  * Funcion para regresar el listado

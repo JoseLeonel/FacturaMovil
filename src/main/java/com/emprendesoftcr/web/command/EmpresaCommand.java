@@ -77,6 +77,8 @@ public class EmpresaCommand {
 	private Integer	imprimirSiempre;
 	private Integer	ordenaCategoriaArticulos;
 	private Integer	seguridadEnVentas;
+		
+	private Integer descargarInventario;
 
 	public EmpresaCommand(Empresa empresa) {
 		super();
@@ -129,6 +131,7 @@ public class EmpresaCommand {
 		this.imprimirSiempre = empresa.getImprimirSiempre();
 		this.ordenaCategoriaArticulos = empresa.getOrdenaCategoriaArticulos();
 		this.seguridadEnVentas = empresa.getSeguridadEnVentas();
+		this.descargarInventario = empresa.getDescargarInventario();
 	}
 
 	public EmpresaCommand() {
@@ -496,5 +499,15 @@ public class EmpresaCommand {
 	public void setSeguridadEnVentas(Integer seguridadEnVentas) {
 		this.seguridadEnVentas = seguridadEnVentas;
 	}
+	public Integer getDescargarInventario() {
+		return descargarInventario;
+	}
+
+	
+	public void setDescargarInventario(Integer descargarInventario) {
+		this.descargarInventario = descargarInventario;
+	}
+	
+	
 
 }

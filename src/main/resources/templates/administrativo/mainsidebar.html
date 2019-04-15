@@ -28,15 +28,17 @@
 		                <i class="fa fa-calculator"></i>
 		                <span>Inventarios</span>
 		                <i class="fa fa-angle-left pull-right"></i>
-		            </a>
+		            </a> 
 		            <ul class="treeview-menu">
 		                <li><a href="/ListarCategorias"     sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i class="fa fa-circle-o"></i> Categorias       </a></li>
+		                <li><a href="/ListarArticulosXCambioCategoria"     sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i class="fa fa-circle-o"></i> Cambio de Categoria </a></li>
 		                <li><a href="/ListarMarcas"         sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i class="fa fa-circle-o"></i> Marcas           </a></li>
 		                <li><a href="/ListarMotivoSalidas"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante')"><i class="fa fa-circle-o"></i> Motivo de Salidas</a></li>
 		                <li><a href="/ListarMotivoEntradas" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante')"><i class="fa fa-circle-o"></i> Motivo de Entradas</a></li>
 		                <li><a href="/ListarArticulos"      sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i class="fa fa-circle-o"></i> Articulos        </a></li>
 		                <li><a href="/ListarProveedorArticulo.do"   sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante','Administrador_Servicios')"><i class="fa fa-circle-o"></i> ArticulosXProveedor  </a></li>
 		                <li><a href="/ListarKardex"         sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante')"><i class="fa fa-circle-o"></i> Kardex           </a></li>
+		                <li><a href="TotalesArticulos"         sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante')"><i class="fa fa-circle-o"></i> Totales inventario </a></li>
 		            </ul>
 		        </li>
 		        
@@ -120,7 +122,7 @@
 			                <li><a href="/ListaFacturas" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','usuario_vendedor','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Cajero')"><i class="fa fa-circle-o"></i>Listado de Facturas</a></li>
 			                <li><a href="/TotalFacturas"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Totales Ventas mensuales</a></li>
 			                <li><a href="/ListaDetallesxArticulo"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Ventas por Articulo</a></li>
-			                <li><a href="/ListaDetallesImpuestoServicio"  sec:authorize="hasAnyAuthority('Administrador_Restaurante','Administrador_temporal')"><i class="fa fa-circle-o"></i>Listado I.S 10%</a></li>
+			                <li><a href="ListaDetallesImpuestoServicio"  sec:authorize="hasAnyAuthority('Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Total I.S(10%)</a></li>
 			            </ul>
 			        </li>
 
@@ -133,8 +135,22 @@
 			            <ul class="treeview-menu">
 			                <li><a href="/ListaCompras" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Cajero','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante')"><i  class="fa fa-circle-o"></i>Listado de compras</a></li>
 			                <li><a href="/ListaRecepcionFacturas"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Compras aceptadas</a></li>
+			                <li><a href="totalesComprasAceptadas"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Totales Compras aceptadas</a></li>
+			                
 			            </ul>
 			        </li>
+			        <li class="treeview" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')">
+			            <a href="#">
+			                <i class="fa  fa-circle-o"></i>
+			                <span>Inventario</span>
+			                <i class="fa fa-angle-left pull-right"></i>
+			            </a>
+			            <ul class="treeview-menu">
+			                <li><a href="/TotalesArticulos" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Cajero','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante')"><i  class="fa fa-circle-o"></i>Totales de Inventario</a></li>
+			                
+			            </ul>
+			        </li>
+
 			        <li class="treeview" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','usuario_vendedor','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Administrador_Cajero')">
 			            <a href="#">
 			                <i class="fa fa-circle-o"></i>

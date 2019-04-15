@@ -2,20 +2,14 @@ package com.emprendesoftcr.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,7 +17,7 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.Utils.Constantes;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.emprendesoftcr.Utils.Utils;
 
 /**
  * Modelo para los articulos de una empresa Articulo.
@@ -332,6 +326,24 @@ public class Articulo implements Serializable {
 
 	public void setUpdated_at(Date updated_at) {
 		this.updated_at = updated_at;
+	}
+	
+	public String getUpdated_atSTR() {
+		if(this.updated_at !=null) {
+			return Utils.getFechaGeneraReporte(this.updated_at);	
+		}
+		return Constantes.EMPTY;
+	}
+	public Double getTotalCosto() {
+		Double costoTem = this.costo !=null?this.costo:Constantes.ZEROS_DOUBLE;
+		Double cantidadTem = this.cantidad != null?this.cantidad:Constantes.ZEROS_DOUBLE;
+		return costoTem * cantidadTem;
+	}
+	public Double getTotalPrecioPublico() {
+		Double precioPublicoTem = this.precioPublico !=null?this.precioPublico:Constantes.ZEROS_DOUBLE;
+		Double cantidadTem = this.cantidad != null?this.cantidad:Constantes.ZEROS_DOUBLE;
+		return precioPublicoTem * cantidadTem;
+		
 	}
 
 	public Marca getMarca() {

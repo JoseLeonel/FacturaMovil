@@ -269,9 +269,9 @@ public class FacturaBoImpl implements FacturaBo {
 			}
 			factura.setEstado(facturaCommand.getEstado());
 			factura.setMesa(facturaCommand.getMesa());
-			if (factura.getId() == Constantes.ZEROS_LONG) {
+		//	if (factura.getId() == Constantes.ZEROS_LONG) {
 				factura.setCreated_at(new Date());
-			}
+		//	}
 			factura.setFechaEmision(new Date());
 
 		} catch (Exception e) {
@@ -598,6 +598,7 @@ public class FacturaBoImpl implements FacturaBo {
 					factura.setCreated_at(new Date());
 					agregar(factura);
 				} else {
+					factura.setCreated_at(new Date());
 					modificar(factura);
 				}
 				// Se asociando los detalles a la factura

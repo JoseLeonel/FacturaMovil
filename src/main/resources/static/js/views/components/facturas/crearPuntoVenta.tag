@@ -429,9 +429,9 @@
                         <table id="tableListaCliente" class="table responsive display table-striped table-hover nowrap tableListaCliente " cellspacing="0" width="100%">
                         <thead>
                                 
-                                <th class="table-header">{$.i18n.prop("cliente.cedula")}            </th>
+                                <th style="width:5%" class="table-header">{$.i18n.prop("cliente.cedula")}            </th>
                                 <th class="table-header">{$.i18n.prop("cliente.nombreCompleto")}    </th>
-                                <th class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
+                                <th style="width:8%"  class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
                                 <th class="table-header">{$.i18n.prop("cliente.nombreComercial")}   </th>
                                 <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
                                 
@@ -439,9 +439,9 @@
                             <tfoot style="display: table-header-group;">
                                 <tr>
                                     
-                                    <th>{$.i18n.prop("cliente.cedula")}           </th>
+                                    <th style="width:5%">{$.i18n.prop("cliente.cedula")}           </th>
                                     <th>{$.i18n.prop("cliente.nombreCompleto")}   </th>
-                                    <th>{$.i18n.prop("cliente.correoElectronico")}</th>
+                                    <th style="width:8%">{$.i18n.prop("cliente.correoElectronico")}</th>
                                     <th>{$.i18n.prop("cliente.nombreComercial")}   </th>
                                     <th>                                          </th>
                                     
@@ -1124,7 +1124,6 @@ function consultaFactura(data,tipoImpresion){
 * Tipo de Documento
 **/
 function __TipoDocumentos(numeroConsecutivo,row){
-
     switch(row.tipoDoc) {
     case "04":
           return  "Tiq:"+numeroConsecutivo
@@ -1583,6 +1582,9 @@ function __FacturaEnEspera(factura){
 *  Cargar detalles Factura en espera
 **/
 function cargarDetallesFacturaEnEspera(data){
+    $('.nota').val(null);
+    $('.correoAlternativo').val(null);
+    $('.nombreFactura').val(null);
     self.detail = [];
     self.numeroLinea =  0
     self.cantArticulos =  0
@@ -1590,6 +1592,9 @@ function cargarDetallesFacturaEnEspera(data){
     self.update()
     $.each(data, function( index, modeloTabla ) {
         self.factura = modeloTabla.factura
+        $('.nota').val(self.factura.nota);
+        $('.correoAlternativo').val(self.factura.correoAlternativo);
+        $('.nombreFactura').val(self.factura.nombreFactura);
         self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
         self.cliente              = modeloTabla.factura.cliente
         self.vendedor             = modeloTabla.factura.vendedor

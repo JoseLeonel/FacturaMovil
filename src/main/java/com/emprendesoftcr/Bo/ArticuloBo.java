@@ -1,7 +1,11 @@
 package com.emprendesoftcr.Bo;
 
+import java.util.Collection;
+
 import com.emprendesoftcr.modelo.Articulo;
+import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.web.command.TotalInventarioCommand;
 
 public interface ArticuloBo {
 
@@ -22,5 +26,11 @@ public interface ArticuloBo {
 	Double sumarCantidad(Articulo articulo, Double cantidad) throws Exception;
 
 	Double restarCantidad(Articulo articulo, Double cantidad) throws Exception;
+	
+	TotalInventarioCommand sumarInventarios(Integer idEmpresa);
+	
+	Collection<Articulo> articulosBy(Empresa empresa);
+	
+	Collection<Articulo> articulosOrderCategoria(Empresa empresa);
 
 }

@@ -43,6 +43,11 @@
                                     </div>
                                 </div>  
                             </div>
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label>Total Imp.Serv(10%) </label>
+                                <input type="text" readonly="readonly" class="form-control "   value={totalImpuestoServicio}>
+                            </div>
+
                         </div>
                     </form>  
                 </div>
@@ -66,7 +71,6 @@
                         
                             <div class="row" >        
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
-                                    <h2 class="pull-right">Total Imp.Serv(10%) :  {totalImpuestoServicio} </h2>
                                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
                                         <thead>
                                             <tr>

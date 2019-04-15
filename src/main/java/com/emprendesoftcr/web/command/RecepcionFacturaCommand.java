@@ -21,6 +21,7 @@ public class RecepcionFacturaCommand {
 	private String	numeroConsecutivoReceptor;
 	private Integer	estadoFirma;
 	private String	created_at;
+	private String facturaConsecutivo;
 
 	public RecepcionFacturaCommand() {
 		super();
@@ -41,6 +42,7 @@ public class RecepcionFacturaCommand {
 		this.numeroConsecutivoReceptor = recepcionFactura.getNumeroConsecutivoReceptor();
 		this.estadoFirma = recepcionFactura.getEstadoFirma();
 		this.created_at = recepcionFactura.getCreated_atSTR();
+		this.facturaConsecutivo = recepcionFactura.getFacturaConsecutivo();
 	}
 
 	public Long getId() {
@@ -147,6 +149,16 @@ public class RecepcionFacturaCommand {
 
 	public void setEstadoFirma(Integer estadoFirma) {
 		this.estadoFirma = estadoFirma;
+	}
+
+	
+	public String getFacturaConsecutivo() {
+		return facturaConsecutivo;
+	}
+
+	
+	public void setFacturaConsecutivo(String facturaConsecutivo) {
+		this.facturaConsecutivo = facturaConsecutivo;
 	}
 
 }

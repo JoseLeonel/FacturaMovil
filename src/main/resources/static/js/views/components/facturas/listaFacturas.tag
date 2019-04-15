@@ -648,7 +648,7 @@ self.on('mount',function(){
     if(self.parametros.tipoEjecucion == 3){
        self.factura = self.parametros.factura 
        self.update()
-       enviarCorreoAlternativo();
+       enviarCorreoAsociados();
     }
     
 })
@@ -856,6 +856,30 @@ function __TipoDocumentos(numeroConsecutivo,row){
 function enviarCorreoAlternativo(){
     $.ajax({
         url: "EnviarCorreoAlternativoFacturaAjax.do",
+        datatype: "json",
+        data: {idFactura:self.factura.id,correo:$('.correoAlternativo').val()},
+        method:"GET",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                sweetAlert("", data.message, "info");
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            console.log(xhr);
+        }
+    });
+}
+/**
+* Enviar correo
+**/
+function enviarCorreoAsociados(){
+    $.ajax({
+        url: "EnviarCorreoClienteAsociadosFacturaAjax.do",
         datatype: "json",
         data: {idFactura:self.factura.id,correo:$('.correoAlternativo').val()},
         method:"GET",

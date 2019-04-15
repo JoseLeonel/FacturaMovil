@@ -1,15 +1,11 @@
 package com.emprendesoftcr.pdf;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.emprendesoftcr.Utils.Constantes;
 import com.itextpdf.text.BadElementException;
-import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -21,7 +17,6 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.BarcodeQRCode;
-import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -183,7 +178,9 @@ public class HeaderFooter extends PdfPageEventHelper {
 			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getCondicionVenta(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
 
 			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal("Medio de pago", UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
-
+ 
+	    String medioPago = Constantes.EMPTY;
+	   
 			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getMedioEfectivo(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
 
 			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal("Moneda", UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
@@ -298,19 +295,19 @@ public class HeaderFooter extends PdfPageEventHelper {
 		// ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, new Phrase(String.format("____________________________________________________________________________", writer.getRootOutline())), (rect.getLeft() + rect.getRight()) / 2, rect.getBottom() - 18, 0);
 		try {
 			/* dibujo de linea */
-			PdfContentByte cb = writer.getDirectContent();
+//			PdfContentByte cb = writer.getDirectContent();
 //			cb.setLineWidth(1f);
 //			cb.moveTo(11.5f, 57);
 //			cb.lineTo(583, 50);
 //			cb.stroke();
 		// Ultima Linea
-			float row20 = PageSize.TABLOID.rotate().getHeight() - 695;
-			DateFormat fechaCompleta = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-			String text = "Emitida conforme lo establecido en la resolución de Facturación Electrónica, N° DGT-R-48-2016 del 7/10/16 08:00:00 , a las " + fechaCompleta.format(new Date()) + " horas";
-			
-			if(!this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)){
-				addText(cb, text, UtilsPdf.fontmed08, 300,row20, PdfContentByte.ALIGN_CENTER);	
-			}
+//			float row20 = 680;
+//			DateFormat fechaCompleta = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+//			String text = "Emitida conforme lo establecido en la resolución de Facturación Electrónica, N° DGT-R-48-2016 del 7/10/16 08:00:00 , a las " + fechaCompleta.format(new Date()) + " horas";
+//			
+//			if(!this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)){
+//				addText(cb, text, UtilsPdf.fontmed08, 300,row20, PdfContentByte.ALIGN_CENTER);	
+//			}
 			
 			//BaseFont bf = BaseFont.createFont();
 			//cb.setFontAndSize(bf, 8);

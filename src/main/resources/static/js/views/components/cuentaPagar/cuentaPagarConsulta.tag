@@ -1049,9 +1049,7 @@ function listaAbonoPorCuentaPorPagar(){
                        includeActionsAbonoPagar('.dataTables_wrapper','.dataTables_length')  
                     }
                 }
-                if(self.parametros ==1){
-                   agregarInputsCombosAbonoPagar();
-                }
+                agregarInputsCombosAbonoPagar();
                 ActivarEventoFiltro(".tableListaAbonoPagar")
             }else{
                 if(self.parametros ==1){

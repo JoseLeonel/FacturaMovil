@@ -10,6 +10,7 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.CompraCommand;
+import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
 
 public interface CompraBo {
 
@@ -31,6 +32,7 @@ public interface CompraBo {
 	
 	Collection<Compra> findByFechaInicioAndFechaFinalAndProveedor(Date fechaInicio, Date fechaFin, Empresa empresa,  Proveedor proveedor);
 	
+	 TotalComprasAceptadasCommand sumarComprasAceptadas(Date fechaInicio, Date fechaFinal, Integer idEmpresa);
 
 
 }

@@ -10,6 +10,7 @@ import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -127,7 +128,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																			//Total Factura
 																																																			facturaElectronica.setFooterTotalServiciosExentos(d.getTotalServExentos());
 																																																			facturaElectronica.setFooterTotalGravado(d.getTotalGravado());
-																																																			facturaElectronica.setFooterTotalExento(d.getTotalExento());
+																																																			facturaElectronica.setFooterTotalExento(d.getTotalMercanciasExentas());
 																																																			facturaElectronica.setFooterTotalVenta(d.getTotalVenta());
 																																																			facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
 																																																			facturaElectronica.setFooterTotalImpuesto(d.getTotalImpuesto());
@@ -146,9 +147,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																			facturaElectronica.setFechaEmision(d.getFechaEmision().toString());
 																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito() != null ? d.getPlazoCredito().toString() : Constantes.EMPTY);
 																																																			facturaElectronica.setCondicionVenta(BIND_CONDICION_VENTA.apply(d.getCondicionVenta()));
-																																																			facturaElectronica.setMedioBanco(d.getMedioBanco() != null ? Constantes.FACTURA_MEDIO_PAGO_TRANSFERENCIA_STR : Constantes.EMPTY);
-																																																			facturaElectronica.setMedioEfectivo(d.getMedioEfectivo() != null ? Constantes.FACTURA_MEDIO_PAGO_EFECTIVO_STR : Constantes.EMPTY);
-																																																			facturaElectronica.setMedioTarjeta(d.getMedioTarjeta() != null ? Constantes.FACTURA_MEDIO_PAGO_TARJETA_STR : Constantes.EMPTY);
+																																																			facturaElectronica.setMedioEfectivo(FacturaElectronicaUtils.medioPago(d));
+
 
 																																																			facturaElectronica.setMoneda(FacturaElectronicaUtils.getMoneda(d.getCodigoMoneda()));
 																																																			facturaElectronica.setTipoCambio(d.getTipoCambio().toString());
@@ -382,20 +382,22 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				recepcion.setComprobanteXml(base64);
 
 				// Ambiente de pruebas
-				// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
+				 recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 				// San Ana
 				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 				// Guanacaste
 				 //recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+				
 				// JacoDos
-			//	recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+				//recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 				// Jaco
-				 //recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+				
 				// Inventario
-				 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 				
 				
 
@@ -425,7 +427,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/40 * * * ?")
+	@Scheduled(cron = "0 0/50 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -448,7 +450,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 							if (resta > 0) {
 								resta = resta / (1000 * 60);
 							}
-							if (resta > 120 || hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ERROR) || hacienda.getTipoDoc().equals(Constantes.HACIENDA_TIPODOC_COMPRAS)) {
+							if (resta > 140 || hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ERROR) || hacienda.getTipoDoc().equals(Constantes.HACIENDA_TIPODOC_COMPRAS)) {
 								log.info("Comprobando Documentos hacienda:" + hacienda.getConsecutivo() + " Empresa" + hacienda.getEmpresa().getNombre());
 								if (hacienda.getReintentosAceptacion() != null) {
 									if (hacienda.getReintentosAceptacion() <= Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
@@ -752,7 +754,6 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Envios de correos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#enviarCorreos(com.emprendesoftcr.modelo.Factura, com.emprendesoftcr.modelo.Hacienda, java.util.ArrayList)
 	 */
-
 	@Override
 	public void enviarCorreos(Factura factura, Hacienda hacienda, ArrayList<String> listaCorreos) throws Exception {
 		try {
@@ -760,7 +761,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			String xmlRespuesta = FacturaElectronicaUtils.convertirBlodToString(hacienda.getMensajeHacienda());
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
 			Collection<Detalle> detalles = detalleBo.findByFactura(factura);
-			List<DetalleFacturaElectronica> detallesFactura = detalles.stream().map(TO_DETALLE).collect(toList());
+			List<DetalleFacturaElectronica> detallesFactura = detalles.stream().sorted(Comparator.comparingInt(Detalle::getNumeroLinea)).map(TO_DETALLE).collect(toList());
 			facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
 
 			
@@ -779,6 +780,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					from = factura.getEmpresa().getAbreviaturaEmpresa() + "_Doc_Electronico" + "_No_Reply@emprendesoftcr.com";
 				}
 			}
+		
 
 			String nombre = factura.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? factura.getEmpresa().getNombre() : factura.getEmpresa().getNombreComercial();
 			String subject = "Documento Electrónico N° " + clave + " del Emisor: " + nombre;
@@ -944,7 +946,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+//	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1052,7 +1054,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/35 * * * ?")
+//	@Scheduled(cron = "0 0/35 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {

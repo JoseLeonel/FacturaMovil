@@ -32,6 +32,7 @@ import com.emprendesoftcr.modelo.ProveedorArticulo;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.DetalleCompraCommand;
+import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
 import com.google.gson.Gson;
 
 /**
@@ -314,6 +315,11 @@ public class CompraBoImpl implements CompraBo {
 	@Transactional
 	public void eliminarDetalleComprasPorSP(Compra compra) throws Exception {
 		compraDao.eliminarDetalleComprasPorSP(compra);
+	}
+	
+	@Override
+	public  TotalComprasAceptadasCommand sumarComprasAceptadas(Date fechaInicio, Date fechaFinal, Integer idEmpresa) {
+		return compraDao.sumarComprasAceptadas(fechaInicio, fechaFinal, idEmpresa);
 	}
 
 }

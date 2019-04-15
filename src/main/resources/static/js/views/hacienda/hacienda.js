@@ -7,6 +7,7 @@ var _Init = function () {
         advanced_search_section.slideToggle(750);
 	__Inicializar_Table('.tableListar');
 	agregarInputsCombos();
+	__ComboTipoDocumentosPara()
 	$('.datepickerFechaFinal').datepicker(
 		{
 		  format: 'yyyy-mm-dd',
@@ -83,7 +84,7 @@ function listaClientesActivos(){
 		 success: function (result) {
 				if(result.aaData.length > 0){
 					$.each(result.aaData, function( index, modeloTabla ) {
-						$('.selectCliente').append('<option value="'+modeloTabla.id+'">'+modeloTabla.nombreCompleto+ '</option>');
+						$('.selectCliente').append('<option value="'+modeloTabla.cedula+'">'+modeloTabla.nombreCompleto+ '</option>');
 					});
 					$('.selectCliente').selectpicker();
 				} 
@@ -96,8 +97,9 @@ function listaClientesActivos(){
 }
 var listar = function(){
 	var fechaInicio=$('.fechaInicial').val();
-    var fechaFin = $('.fechaFinal').val();
-    var cedulaReceptor = $('#cliente').val();
+  var fechaFin = $('.fechaFinal').val();
+	var cedulaReceptor = $('#cliente').val();
+	var tipoDocumento = $('.tipoDocumento').val();
 	var table  =  $('#tableListar').DataTable( {
 			"responsive": true,
 			"bAutoWidth" : true,
@@ -114,7 +116,7 @@ var listar = function(){
 			"sort" : "position",
 			"lengthChange": true,
 			"ajax" : {
-					"url":"ListarHaciendasAjax.do?fechaInicio=" + fechaInicio+"&"+"fechaFin="+fechaFin+"&"+"cedulaReceptor="+cedulaReceptor,
+					"url":"ListarHaciendasAjax.do?fechaInicio=" + fechaInicio+"&"+"fechaFin="+fechaFin+"&"+"cedulaReceptor="+cedulaReceptor+"&"+"tipoDocumento="+tipoDocumento,
 					"deferRender": true,
 					"type":"GET",
 								"dataType": 'json',
@@ -133,6 +135,20 @@ var listar = function(){
 	EventoFiltro();
 
 } 
+
+/**
+* cargar los tipos de Documento de la factura
+**/
+function __ComboTipoDocumentosPara(){
+
+	$('.tipoDocumento').append('<option value="'+"04"+'">'+$.i18n.prop("factura.tipo.documento.factura.tiquete")+ '</option>');
+	$('.tipoDocumento').append('<option value="'+"01"+'">'+$.i18n.prop("factura.tipo.documento.factura.electronica")+ '</option>');
+	$('.tipoDocumento').append('<option value="'+"02"+'">'+$.i18n.prop("referencia.tipo.documento.nota.debito")+ '</option>');
+	$('.tipoDocumento').append('<option value="'+"03"+'">'+$.i18n.prop("referencia.tipo.documento.nota.credito")+ '</option>');
+	$('.tipoDocumento').append('<option value="'+"88"+'">'+$.i18n.prop("compras.compras")+ '</option>');
+    
+}
+
 
 // traducciones del table
 var idioma_espanol = 
@@ -173,8 +189,11 @@ function agregarInputsCombos(){
 		//No se toma en cuenta la columna de las acctiones(botones)
 		if ( $(this).index() != 6    ){
 			 $(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
-	  }
-  })
+		}
+		
+	
+
+	})
 } 
 
 /**

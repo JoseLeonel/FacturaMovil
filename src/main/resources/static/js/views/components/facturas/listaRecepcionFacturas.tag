@@ -81,10 +81,11 @@
                                                 <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}     </th>
                                                 <th class = "table-header" >{$.i18n.prop("emisor.cedula")}             </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.clave")}             </th>
-                                                <th class = "table-header" >{$.i18n.prop("receptor.mensaje")}          </th>
+                                                <th class = "table-header" >Tipo Aceptacion         </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.totalImpuestos")}    </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.totalComprobante")}  </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.documento")}         </th>
+                                                <th class = "table-header" >#Compra        </th>
                                                 
                                             </tr>
                                         </thead>
@@ -94,10 +95,11 @@
                                                 <th>{$.i18n.prop("factura.fecha.emision")}</th>
                                                 <th>{$.i18n.prop("emisor.cedula")}</th>
                                                 <th>{$.i18n.prop("factura.clave")}</th>
-                                                <th>{$.i18n.prop("receptor.mensaje")}</th>
+                                                <th>Tipo Aceptacion</th>
                                                 <th>{$.i18n.prop("factura.totalImpuestos")} </th>
                                                 <th>{$.i18n.prop("factura.totalComprobante")} </th>
                                                 <th>{$.i18n.prop("factura.documento")}</th>
+                                                 <th>#Compra</th>
                                                 
                                             </tr>
                                         </tfoot>
@@ -641,7 +643,7 @@ function __InformacionDataTable(){
 			
 			{'data' : 'cedulaEmisor'  ,"name":"cedulaEmisor"    ,"title" : $.i18n.prop("emisor.cedula")     , "autoWidth" : true},
 	        {'data' : 'clave'  ,"name":"clave"    ,"title" : $.i18n.prop("factura.clave")     , "autoWidth" : true},
-    	    {'data' : 'mensaje'  ,"name":"mensaje"    ,"title" : $.i18n.prop("receptor.mensaje")     , "autoWidth" : true},
+    	    {'data' : 'mensaje'  ,"name":"mensaje"    ,"title" : "Tipo Aceptacion"     , "autoWidth" : true},
             {'data' :'totalImpuestos'       ,"name":"totalImpuestos"        ,"title" : $.i18n.prop("factura.totalImpuestos")     ,"autoWidth" :true,
                 "render":function(totalImpuestos,type, row){
 				    return  totalImpuestos.toFixed(2);
@@ -656,6 +658,14 @@ function __InformacionDataTable(){
             		 "render":function(numeroConsecutivoReceptor,type, row){
 								return __TipoDocumentos(numeroConsecutivoReceptor,row)
 	 						  }
+
+          }
+          ,
+    	  {'data' :'facturaConsecutivo'                    ,"name":"facturaConsecutivo"                     ,"title" : "#Compra"   ,"autoWidth" :true ,
+            		 "render":function(facturaConsecutivo,type, row){
+								return __TipoDocumentos(facturaConsecutivo,row)
+	 						  }
+                               
           }
    ];
    self.update();
