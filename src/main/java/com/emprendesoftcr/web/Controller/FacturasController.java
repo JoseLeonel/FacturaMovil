@@ -318,8 +318,13 @@ public class FacturasController {
 	 * @return
 	 */
 	@RequestMapping(value = "/puntoVenta", method = RequestMethod.GET)
-	public String crearCompras(ModelMap model) {
-
+	public String crearCompras(ModelMap model,HttpServletRequest request) {
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		if(usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)   ) {
+			model.addAttribute("rolAdminitrador",1);
+		}else {
+			model.addAttribute("rolAdminitrador",0);
+		}
 		return "views/facturas/puntoVenta";
 	}
 
