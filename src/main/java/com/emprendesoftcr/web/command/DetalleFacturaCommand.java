@@ -87,6 +87,7 @@ public class DetalleFacturaCommand {
 		this.nombreUsuario = detalle.getFactura().getUsuarioCreacion().getNombreUsuario();
 		this.montoGanancia = detalle.getMontoGanancia();
 		this.factura = detalle.getFactura();
+	
 	}
 
 	public Long getId() {
@@ -316,5 +317,10 @@ public class DetalleFacturaCommand {
 	public void setMontoGanancia(Double montoGanancia) {
 		this.montoGanancia = montoGanancia;
 	}
+
+	
+	
+	
+	
 
 }
