@@ -1205,19 +1205,18 @@ public class FacturasController {
 	}
 
 	/**
-	 * Cambia la proforma a pendiente para que sea procesada
 	 * @param request
+	 * @param response
 	 * @param model
 	 * @param idFactura
-	 * @param result
-	 * @param status
+	 * @param estado
 	 * @return
 	 * @throws Exception
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/CambiarEstadoProformaAPedienteAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator cambiarEstadoProforma(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura) throws Exception {
+	public RespuestaServiceValidator cambiarEstadoProforma(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura, @RequestParam Integer estado) throws Exception {
 		try {
 
 			Factura facturaBD = facturaBo.findById(idFactura);
@@ -1225,11 +1224,13 @@ public class FacturasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.no.existe");
 			}
 
-			facturaBD.setEstado(Constantes.FACTURA_ESTADO_PENDIENTE);
-			facturaBD.setTipoDoc(Constantes.FACTURA_TIPO_DOC_TIQUETE);
-			facturaBD.setTotalCambioPagar(Constantes.ZEROS_DOUBLE);
-			facturaBD.setTotalEfectivo(Constantes.ZEROS_DOUBLE);
-			facturaBD.setTotalBanco(Constantes.ZEROS_DOUBLE);
+			if (estado.equals(Constantes.FACTURA_ESTADO_PENDIENTE)) {
+				facturaBD.setTipoDoc(Constantes.FACTURA_TIPO_DOC_TIQUETE);
+				facturaBD.setTotalCambioPagar(Constantes.ZEROS_DOUBLE);
+				facturaBD.setTotalEfectivo(Constantes.ZEROS_DOUBLE);
+				facturaBD.setTotalBanco(Constantes.ZEROS_DOUBLE);
+			}
+			facturaBD.setEstado(estado);
 			facturaBD.setUpdated_at(new Date());
 			facturaBo.modificar(facturaBD);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.modificado.correctamente", facturaBD);
@@ -1346,13 +1347,13 @@ public class FacturasController {
 					listaCorreos.add(correo);
 				}
 			}
-			if(listaCorreos !=null) {
-				if(listaCorreos.size() == 0) {
+			if (listaCorreos != null) {
+				if (listaCorreos.size() == 0) {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.vacio.enviar");
 				}
-				
+
 			}
-		
+
 			if (haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ANULADA) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA_ERROR) || haciendaBD.getEstado().equals(Constantes.HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.correo.xml.con.error");
 
@@ -1374,7 +1375,7 @@ public class FacturasController {
 		}
 		return respuestaServiceValidator;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/EnviarCorreoClienteAsociadosFacturaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -1399,7 +1400,7 @@ public class FacturasController {
 					listaCorreos.add(correo);
 				}
 			}
-			//Correo Oficial
+			// Correo Oficial
 			if (!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
 				if (factura.getCliente().getCorreoElectronico() != null) {
 					if (!factura.getCliente().getCorreoElectronico().equals(Constantes.EMPTY)) {
@@ -1437,12 +1438,11 @@ public class FacturasController {
 					listaCorreos.add(factura.getCorreoAlternativo());
 				}
 			}
-			
-			if (listaCorreos !=null) {
-				if(listaCorreos.size() == 0) {
-					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.factura.no.tiene.correo.asociado");	
+
+			if (listaCorreos != null) {
+				if (listaCorreos.size() == 0) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("hacienda.factura.no.tiene.correo.asociado");
 				}
-				
 
 			}
 

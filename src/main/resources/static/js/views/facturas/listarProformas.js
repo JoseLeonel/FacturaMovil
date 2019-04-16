@@ -42,10 +42,11 @@ agregarInputsCombos();
 EventoFiltro();
 __imprimirPTV();
 __BajarPDF();
-__CambiarEstado()
-__VerDetalle()
-__EnviarCorreosCliente()
-__CorreoAlternativo()
+__CambiarEstado();
+__VerDetalle();
+__EnviarCorreosCliente();
+__CorreoAlternativo();
+__Anular();
 
 }
 /**
@@ -156,7 +157,8 @@ function __Opciones(id,type,row){
     
     menu += '<li><a href="#"  title="Mostrar" class="  btnMostrar" >Mostrar</a></li>'
     menu += '<li><a href="#"  title="Mostrar" class="  btnImprimir" >Imprimir</a></li>'
-    menu += '<li><a href="#"  title="Cambia el Estado Proforma a Venta en espera" class="  btnPendiente" >Cambiar a venta en espera</a></li>'
+	menu += '<li><a href="#"  title="Cambia el Estado Proforma a Venta en espera" class="  btnPendiente" >Cambiar a venta en espera</a></li>'
+	menu += '<li><a href="#"  title="Anular la proforma" class="  btnAnular" >Anular</a></li>'
     menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Envio Correo</a></li>'
     menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
     menu += '<li><a href="#"  title="Envio de correo Alternativo" class="  btnEnvioCorreoAlternativo" >Envio de correo Alternativo</a></li>'
@@ -213,15 +215,33 @@ function __CambiarEstado(){
 	       var data = table.row($(this).parents("tr")).data();
 	    }
        
-        _actualizarEstado(data)
+        _actualizarEstado(data,1)
 	});
 }
 
-function _actualizarEstado(data){
+/**
+*  Cambiar Estado de Proforma a venta en espera
+**/
+function __Anular(){
+	$('.tableListar').on('click','.btnAnular',function(e){
+		var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+       
+        _actualizarEstado(data,5)
+	});
+}
+
+
+function _actualizarEstado(data,estado){
     $.ajax({
         url: "CambiarEstadoProformaAPedienteAjax.do",
         datatype: "json",
-        data: {idFactura:data.id},
+        data: {idFactura:data.id,estado:estado},
         method:"POST",
         success: function (data) {
             if (data.status != 200) {
