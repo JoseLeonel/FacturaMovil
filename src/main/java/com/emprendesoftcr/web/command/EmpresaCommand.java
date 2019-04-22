@@ -4,47 +4,47 @@ import com.emprendesoftcr.modelo.Empresa;
 
 public class EmpresaCommand {
 
-	private Integer id;
+	private Integer	id;
 
-	private String nombre;
+	private String	nombre;
 
 	private String	nombreComercial;
 	private Integer	numeroConsecutivo;
 
-	private String tipoCedula;
+	private String	tipoCedula;
 
-	private String cedula;
+	private String	cedula;
 
-	private String otraSenas;
+	private String	otraSenas;
 
-	private Integer codigoPais;
+	private Integer	codigoPais;
 
-	private Integer telefono;
+	private Integer	telefono;
 
 	private Integer	notadConsecutivo;
 	private Integer	notacConsecutivo;
 
-	private Integer tiqueteConsecutivo;
+	private Integer	tiqueteConsecutivo;
 
-	private String correoElectronico;
+	private String	correoElectronico;
 
 	private String	provincia;
 	private String	canton;
 
-	private String distrito;
+	private String	distrito;
 
-	private String barrio;
+	private String	barrio;
 
-	private String logo;
+	private String	logo;
 
-	private String representante;
+	private String	representante;
 
 	private String	estado;
 	private String	cazaMatriz;
 
-	private Integer vueltoImprimir;
+	private Integer	vueltoImprimir;
 
-	private String nombreLlaveCriptografica;
+	private String	nombreLlaveCriptografica;
 
 	private Integer	claveLlaveCriptografica;
 	private Integer	codigoSeguridad;
@@ -55,28 +55,29 @@ public class EmpresaCommand {
 	private String	cambiarPrecio;
 	private Integer	aplicaGanancia;
 
-	private String enviarTiquete;
+	private String	enviarTiquete;
 
-	private Integer enterFacturar;
+	private Integer	enterFacturar;
 
-	private Integer imprimirDirecto;
+	private Integer	imprimirDirecto;
 
-	private Integer abrirSinComanda;
+	private Integer	abrirSinComanda;
 
 	private Integer	abrirConComanda;
 	private String	impresoraCocina;
 
-	private String impresoraFactura;
+	private String	impresoraFactura;
 
-	private Integer separarCuenta;
+	private Integer	separarCuenta;
 
-	private Integer pantChino;
+	private Integer	pantChino;
 
 	private Integer	prioridadFacturar;
 	private Integer	imprimirCelular;
 	private Integer	imprimirSiempre;
-	private Integer ordenaCategoriaArticulos;
-	
+	private Integer	ordenaCategoriaArticulos;
+	private Integer	seguridadEnVentas;
+		
 	private Integer descargarInventario;
 
 	public EmpresaCommand(Empresa empresa) {
@@ -127,8 +128,9 @@ public class EmpresaCommand {
 		this.pantChino = empresa.getPantChino();
 		this.prioridadFacturar = empresa.getPrioridadFacturar();
 		this.imprimirCelular = empresa.getImprimirCelular();
-		this.imprimirSiempre =empresa.getImprimirSiempre();
+		this.imprimirSiempre = empresa.getImprimirSiempre();
 		this.ordenaCategoriaArticulos = empresa.getOrdenaCategoriaArticulos();
+		this.seguridadEnVentas = empresa.getSeguridadEnVentas();
 		this.descargarInventario = empresa.getDescargarInventario();
 	}
 
@@ -468,22 +470,18 @@ public class EmpresaCommand {
 		return imprimirCelular;
 	}
 
-	
 	public void setImprimirCelular(Integer imprimirCelular) {
 		this.imprimirCelular = imprimirCelular;
 	}
 
-	
 	public Integer getImprimirSiempre() {
 		return imprimirSiempre;
 	}
 
-	
 	public void setImprimirSiempre(Integer imprimirSiempre) {
 		this.imprimirSiempre = imprimirSiempre;
 	}
-	
-	
+
 	public Integer getOrdenaCategoriaArticulos() {
 		return ordenaCategoriaArticulos;
 	}
@@ -493,6 +491,14 @@ public class EmpresaCommand {
 	}
 
 	
+	public Integer getSeguridadEnVentas() {
+		return seguridadEnVentas;
+	}
+
+	
+	public void setSeguridadEnVentas(Integer seguridadEnVentas) {
+		this.seguridadEnVentas = seguridadEnVentas;
+	}
 	public Integer getDescargarInventario() {
 		return descargarInventario;
 	}

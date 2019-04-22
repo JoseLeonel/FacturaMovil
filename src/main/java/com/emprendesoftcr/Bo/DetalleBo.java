@@ -23,5 +23,7 @@ public interface DetalleBo {
 	
 	
 	TotalDetallesCommand totalVentasPorDetalle(Empresa empresa , Date fechaInicio,Date FechaFinal);
+	
+	Detalle findByCodigoAndEmpresa(String codigo , Empresa empresa);
 
 }

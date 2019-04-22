@@ -4,18 +4,15 @@ $(document).ready(function() {
 } );/*fin document*/
 
 var _Init = function () {
+	
 	cargaMantenimiento()
 }
-
-
 /**
  * LLamar al componente Riot 
  * @returns
  */
 function cargaMantenimiento() {
-
-	
-	riot.mount('punto-venta');
+  riot.mount('punto-venta');
 }
 
 

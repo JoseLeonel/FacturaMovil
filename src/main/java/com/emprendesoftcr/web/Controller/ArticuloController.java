@@ -1,15 +1,19 @@
-	package com.emprendesoftcr.web.Controller;
+package com.emprendesoftcr.web.Controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,6 +39,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Bo.CategoriaBo;
 import com.emprendesoftcr.Bo.DataTableBo;
+import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.KardexBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
@@ -42,11 +47,12 @@ import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
+import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Marca;
 import com.emprendesoftcr.modelo.Usuario;
-import com.emprendesoftcr.pdf.GondolaArticuloPdfView;
 import com.emprendesoftcr.web.command.ArticuloCambioCategoriaGrupal;
 import com.emprendesoftcr.web.command.ArticuloCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacion;
@@ -57,7 +63,14 @@ import com.emprendesoftcr.web.propertyEditor.MarcaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
 import com.google.gson.Gson;
-import com.itextpdf.text.DocumentException;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 /**
  * Control de los articulos de una empresa ArticuloController.
@@ -67,40 +80,43 @@ import com.itextpdf.text.DocumentException;
 @Controller
 public class ArticuloController {
 
-	private static final Function<Object, ArticuloCommand> TO_COMMAND = new Function<Object, ArticuloCommand>() {
+	private static final Function<Object, ArticuloCommand>	TO_COMMAND	= new Function<Object, ArticuloCommand>() {
 
-		@Override
-		public ArticuloCommand apply(Object f) {
-			return new ArticuloCommand((Articulo) f);
-		};
-	};
-
-	@Autowired
-	private DataTableBo dataTableBo;
+																																				@Override
+																																				public ArticuloCommand apply(Object f) {
+																																					return new ArticuloCommand((Articulo) f);
+																																				};
+																																			};
 
 	@Autowired
-	private ArticuloBo articuloBo;
-	
-	@Autowired
-	private CategoriaBo categoriaBo;
+	private DataTableBo																			dataTableBo;
 
 	@Autowired
-	private KardexBo kardexBo;
+	private ArticuloBo																			articuloBo;
 
 	@Autowired
-	private UsuarioBo usuarioBo;
+	private DetalleBo																				detalleBo;
 
 	@Autowired
-	private ArticuloPropertyEditor articuloPropertyEditor;
+	private CategoriaBo																			categoriaBo;
 
 	@Autowired
-	private MarcaPropertyEditor marcaPropertyEditor;
+	private KardexBo																				kardexBo;
 
 	@Autowired
-	private CategoriaPropertyEditor categoriaPropertyEditor;
+	private UsuarioBo																				usuarioBo;
 
 	@Autowired
-	private StringPropertyEditor stringPropertyEditor;
+	private ArticuloPropertyEditor													articuloPropertyEditor;
+
+	@Autowired
+	private MarcaPropertyEditor															marcaPropertyEditor;
+
+	@Autowired
+	private CategoriaPropertyEditor													categoriaPropertyEditor;
+
+	@Autowired
+	private StringPropertyEditor														stringPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -116,12 +132,12 @@ public class ArticuloController {
 	public String listarXCambioCategoria(ModelMap model) {
 		return "views/articulos/ListarArticulosCambiarCategoria";
 	}
-	
+
 	@RequestMapping(value = "/TotalesArticulos", method = RequestMethod.GET)
 	public String totalesArticulos(ModelMap model) {
 		return "views/articulos/TotalesArticulos";
 	}
-	
+
 	/**
 	 * Listar JSP de los articulos
 	 * @param model
@@ -141,12 +157,12 @@ public class ArticuloController {
 	public String cambiarPrecio(ModelMap model) {
 		return "views/articulos/CambioPrecio";
 	}
-	
+
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/CambiarCategoriaArticulosGrupalAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 
-	public RespuestaServiceValidator agregarGrupal(HttpServletRequest request, ModelMap model, @RequestParam("listaArticuloGrupales") String listaArticuloGrupales, @RequestParam("categoria") Long idCategoria,  @ModelAttribute ArticuloCambioCategoriaGrupal articuloCambioCategoriaGrupaltem, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator agregarGrupal(HttpServletRequest request, ModelMap model, @RequestParam("listaArticuloGrupales") String listaArticuloGrupales, @RequestParam("categoria") Long idCategoria, @ModelAttribute ArticuloCambioCategoriaGrupal articuloCambioCategoriaGrupaltem, BindingResult result, SessionStatus status) throws Exception {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		Articulo articuloTemp = new Articulo();
 		try {
@@ -160,7 +176,7 @@ public class ArticuloController {
 					for (int i = 0; i < jsonArrayDetalleFactura.size(); i++) {
 						ArticuloCambioCategoriaGrupal articuloCambioCategoriaGrupal = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), ArticuloCambioCategoriaGrupal.class);
 						Articulo articuloBD = articuloBo.buscar(articuloCambioCategoriaGrupal.getId());
-						if ( articuloBD == null) {
+						if (articuloBD == null) {
 							respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());
 							respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("error.articulo.codigo.no.existe"));
 							return respuestaServiceValidator;
@@ -178,21 +194,20 @@ public class ArticuloController {
 				throw e;
 			}
 
-
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("categoria.cambio.correctamente", articuloTemp);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/TotalInventarioAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public TotalInventarioCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		return articuloBo.sumarInventarios(usuario.getEmpresa().getId());
 	}
-	
+
 	// Descarga de manuales de usuario de acuerdo con su perfil
 	@RequestMapping(value = "/DescargarInventarioAjax.do", method = RequestMethod.GET)
 	public void descargarInventarioAjax(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
@@ -221,11 +236,11 @@ public class ArticuloController {
 	private ByteArrayOutputStream createExcelArticulos(Collection<Articulo> articulos) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList( "Fecha Ultima Actualizacion","Categoria", "#Codigo", "Descripcion", "Cantidad", "Costo","Total Costo(Costo X Cantidad)","Impuesto", "Precio Publico","Total Venta Esperada(cantidadXPrecioPublico)");
-		new SimpleExporter().gridExport(headers, articulos,"updated_atSTR,categoria.descripcion, codigo, descripcion, cantidad, costo,totalCosto, impuesto,precioPublico,totalPrecioPublico", baos);
+		List<String> headers = Arrays.asList("Fecha Ultima Actualizacion", "Categoria", "#Codigo", "Descripcion", "Cantidad", "Costo", "Total Costo(Costo X Cantidad)", "Impuesto", "Precio Publico", "Total Venta Esperada(cantidadXPrecioPublico)");
+		new SimpleExporter().gridExport(headers, articulos, "updated_atSTR,categoria.descripcion, codigo, descripcion, cantidad, costo,totalCosto, impuesto,precioPublico,totalPrecioPublico", baos);
 		return baos;
 	}
-	
+
 //Descarga de manuales de usuario de acuerdo con su perfil
 	@RequestMapping(value = "/DescargarInventarioExistenciasAjax.do", method = RequestMethod.GET)
 	public void descargarInventarioExistenciasAjax(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
@@ -254,41 +269,68 @@ public class ArticuloController {
 	private ByteArrayOutputStream createExcelArticulosExistencias(Collection<Articulo> articulos) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList(  "Categoria","#Codigo", "Descripcion", "Cantidad Actual", "#Cantidad Revision Fisica");
-		new SimpleExporter().gridExport(headers, articulos," categoria.descripcion,codigo, descripcion, cantidad", baos);
+		List<String> headers = Arrays.asList("Categoria", "#Codigo", "Descripcion", "Cantidad Actual", "#Cantidad Revision Fisica");
+		new SimpleExporter().gridExport(headers, articulos, " categoria.descripcion,codigo, descripcion, cantidad", baos);
 		return baos;
 	}
-	
+
 	@RequestMapping(value = "/PDFGondolaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	public void bajarPDFGondola(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idArticulo) throws Exception {
-		try {
-			Articulo articuloBD = articuloBo.buscar(idArticulo);
-			String	fileName = "Articulo_" +articuloBD.getCodigo().toString() ;
+//		try {
+		Articulo articuloBD = articuloBo.buscar(idArticulo);
+		String fileName = "Articulo_" + articuloBD.getCodigo().toString();
 
-			// ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
-			ByteArrayOutputStream namePDF = GondolaArticuloPdfView.main(articuloBD);
-			int BUFFER_SIZE = 4096;
-			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
-			response.setContentType("application/octet-stream");
-			response.setContentLength((int) namePDF.toByteArray().length);
-			String headerKey = "Content-Disposition";
-			String headerValue = String.format("attachment; filename=\"%s\"", fileName + ".pdf");
-			response.setHeader(headerKey, headerValue);
-			OutputStream outStream = response.getOutputStream();
-			byte[] buffer = new byte[BUFFER_SIZE];
-			int bytesRead = -1;
-			while ((bytesRead = inputStream.read(buffer)) != -1) {
-				outStream.write(buffer, 0, bytesRead);
-			}
-			inputStream.close();
-			outStream.close();
-		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
-		} catch (com.google.zxing.WriterException ex) {
-			throw ex;
+		String dir = System.getProperty("user.dir");
+		String jrxmlFile = dir + "/reportes/gondola.jrxml";
+		JasperReport jasperReport;
+		InputStream input = new FileInputStream(new File(jrxmlFile));
+
+		jasperReport = JasperCompileManager.compileReport(input);
+		JRDataSource vacio = new JREmptyDataSource(1);
+
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		if (articuloBD.getDescripcion().length() > 40) {
+			parameters.put("descripcion", articuloBD.getDescripcion().substring(0, 40));
+		} else {
+			parameters.put("descripcion", articuloBD.getDescripcion().trim());
+
 		}
+
+		parameters.put("precio", Utils.formateadorMiles(articuloBD.getPrecioPublico()));
+		parameters.put("codigo", "cod:" + articuloBD.getCodigo());
+		response.setHeader("Content-Disposition", "inline; filename=\"application.pdf\"");
+		response.setContentType("application/pdf");
+
+		JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, vacio);
+		JasperExportManager.exportReportToPdfStream(print, response.getOutputStream());
+		response.getOutputStream().flush();
+		response.getOutputStream().close();
+//		  
+//
+//			// ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
+//			ByteArrayOutputStream namePDF = GondolaArticuloPdfView.main(articuloBD);
+//			int BUFFER_SIZE = 4096;
+//			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
+//			response.setContentType("application/octet-stream");
+//			response.setContentLength((int) namePDF.toByteArray().length);
+//			String headerKey = "Content-Disposition";
+//			String headerValue = String.format("attachment; filename=\"%s\"", fileName + ".pdf");
+//			response.setHeader(headerKey, headerValue);
+//			OutputStream outStream = response.getOutputStream();
+//			byte[] buffer = new byte[BUFFER_SIZE];
+//			int bytesRead = -1;
+//			while ((bytesRead = inputStream.read(buffer)) != -1) {
+//				outStream.write(buffer, 0, bytesRead);
+//			}
+//			inputStream.close();
+//			outStream.close();
+//		} catch (DocumentException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			throw e;
+//		} catch (com.google.zxing.WriterException ex) {
+//			throw ex;
+//		}
 
 	}
 
@@ -338,7 +380,7 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticuloAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam(value = "codigoArt", required = false) String codigoArt) {
+	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigoArt", required = false) String codigoArt) {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Articulo");
@@ -433,22 +475,22 @@ public class ArticuloController {
 			delimitadores.addFiltro(dataTableFilter);
 
 		}
-		
+
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		if(delimitadores.getColumnData() == null && usuarioSesion.getEmpresa().getOrdenaCategoriaArticulos().equals(1)) {
-			//Se ordena por prioridad por defecto se crearon en 9999
+		if (delimitadores.getColumnData() == null && usuarioSesion.getEmpresa().getOrdenaCategoriaArticulos().equals(1)) {
+			// Se ordena por prioridad por defecto se crearon en 9999
 			delimitadores.setColumnData("prioridad, id");
-			delimitadores.setColumnOrderDir("asc");			
+			delimitadores.setColumnOrderDir("asc");
 		}
 
 		delimitadores.addFiltro(new JqGridFilter("categoria.id", "'" + parametrosPaginacion.getCategoria().getId().toString() + "'", "="));
 		delimitadores.addFiltro(new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "="));
-		if(parametrosPaginacion.getTipoVenta() !=null) {
-			if(!parametrosPaginacion.getTipoVenta().equals(Constantes.SI_MOSTRAR_IMPUESTO_10_PORCIENTO)) {
-				delimitadores.addFiltro(new JqGridFilter("codigo", Constantes.CODIGO_ARTICULO_IMPUESTO_SERVICIO, "!="));		
+		if (parametrosPaginacion.getTipoVenta() != null) {
+			if (!parametrosPaginacion.getTipoVenta().equals(Constantes.SI_MOSTRAR_IMPUESTO_10_PORCIENTO)) {
+				delimitadores.addFiltro(new JqGridFilter("codigo", Constantes.CODIGO_ARTICULO_IMPUESTO_SERVICIO, "!="));
 			}
 		}
-				
+
 		delimitadores.setLength(parametrosPaginacion.getCantidadPorPagina());
 		delimitadores.setStart(parametrosPaginacion.getPaginaActual());
 
@@ -524,9 +566,9 @@ public class ArticuloController {
 			articulo.setEmpresa(usuarioSesion.getEmpresa());
 			articulo.setUpdated_at(new Date());
 			articulo.setEstado(Constantes.ESTADO_ACTIVO);
-			articulo.setGananciaPrecioPublico(articulo.getGananciaPrecioPublico() !=null?articulo.getGananciaPrecioPublico():Constantes.ZEROS_DOUBLE);
-			articulo.setGananciaPrecioMayorista(articulo.getGananciaPrecioMayorista() !=null?articulo.getGananciaPrecioMayorista():Constantes.ZEROS_DOUBLE);
-			articulo.setGananciaPrecioEspecial(articulo.getGananciaPrecioEspecial() !=null?articulo.getGananciaPrecioEspecial():Constantes.ZEROS_DOUBLE);
+			articulo.setGananciaPrecioPublico(articulo.getGananciaPrecioPublico() != null ? articulo.getGananciaPrecioPublico() : Constantes.ZEROS_DOUBLE);
+			articulo.setGananciaPrecioMayorista(articulo.getGananciaPrecioMayorista() != null ? articulo.getGananciaPrecioMayorista() : Constantes.ZEROS_DOUBLE);
+			articulo.setGananciaPrecioEspecial(articulo.getGananciaPrecioEspecial() != null ? articulo.getGananciaPrecioEspecial() : Constantes.ZEROS_DOUBLE);
 			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
 			articulo.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
@@ -609,9 +651,9 @@ public class ArticuloController {
 			articuloBd.setUnidadMedida(articulo.getUnidadMedida());
 			articuloBd.setTipoCodigo(articulo.getTipoCodigo());
 			articuloBd.setEstado(articulo.getEstado());
-			articuloBd.setGananciaPrecioPublico(articulo.getGananciaPrecioPublico() !=null?articulo.getGananciaPrecioPublico():Constantes.ZEROS_DOUBLE);
-			articuloBd.setGananciaPrecioMayorista(articulo.getGananciaPrecioMayorista() !=null?articulo.getGananciaPrecioMayorista():Constantes.ZEROS_DOUBLE);
-			articuloBd.setGananciaPrecioEspecial(articulo.getGananciaPrecioEspecial() !=null?articulo.getGananciaPrecioEspecial():Constantes.ZEROS_DOUBLE);
+			articuloBd.setGananciaPrecioPublico(articulo.getGananciaPrecioPublico() != null ? articulo.getGananciaPrecioPublico() : Constantes.ZEROS_DOUBLE);
+			articuloBd.setGananciaPrecioMayorista(articulo.getGananciaPrecioMayorista() != null ? articulo.getGananciaPrecioMayorista() : Constantes.ZEROS_DOUBLE);
+			articuloBd.setGananciaPrecioEspecial(articulo.getGananciaPrecioEspecial() != null ? articulo.getGananciaPrecioEspecial() : Constantes.ZEROS_DOUBLE);
 			articuloBd.setPrecioPublico(articulo.getPrecioPublico());
 			articuloBd.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
 			articuloBd.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
@@ -651,8 +693,6 @@ public class ArticuloController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
-
 
 	@RequestMapping(value = "/MostrarPorCodigoAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -706,7 +746,7 @@ public class ArticuloController {
 			articuloBD.setDescripcion(descripcion);
 			articuloBD.setTipoImpuesto(tipoImpuesto);
 			articuloBD.setImpuesto(impuesto);
-      articuloBD.setUpdated_at(new Date());
+			articuloBD.setUpdated_at(new Date());
 			articuloBo.modificar(articuloBD);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBD);
@@ -715,32 +755,32 @@ public class ArticuloController {
 		}
 	}
 
-	// @RequestMapping(value = "/CambiarPrecioAjax", method = RequestMethod.POST, headers = "Accept=application/json")
-	// @ResponseBody
-	// public RespuestaServiceValidator mostrar(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idFactura) {
-	// try {
-	// //Factura facturaBD = facturaBo.findById(idFactura);
-	//
-	// Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-	//
-	// // Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave criptografica desde linux
-	//// certificadoBo.agregar(usuario.getEmpresa(), usuario.getEmpresa().getClaveLlaveCriptografica().toString(), usuario.getEmpresa().getNombreLlaveCriptografica());
-	// // String xml = facturaXMLServices.getCrearXMLSinFirma(facturaBD);
-	// // facturaXMLServices.getFirmarXML(xml, facturaBD.getEmpresa());
-	//
-	// // KeyStore keyStore = null;
-	// // LlaveCriptografica llaveCriptografica = new LlaveCriptografica();
-	// //
-	// // llaveCriptografica.setPassSignature(usuario.getEmpresa().getClaveLlaveCriptografica().toString());
-	// // llaveCriptografica.setPathSignature(usuario.getEmpresa().getNombreLlaveCriptografica());
-	// // XadesSigner xadesSigner = llaveCriptograficaService.getSigner(usuario.getEmpresa().getNombreLlaveCriptografica(),usuario.getEmpresa().getClaveLlaveCriptografica().toString());
-	// // keyStore = llaveCriptograficaService.getKeyStore(llaveCriptografica);
-	//
-	// return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", facturaBD);
-	// } catch (Exception e) {
-	// return RespuestaServiceValidator.ERROR(e);
-	// }
-	// }
+	@RequestMapping(value = "/eliminarArticuloAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator eliminarArticulo(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Articulo articulo, @RequestParam String codigo, BindingResult result, SessionStatus status) throws Exception {
+		try {
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Articulo articuloBD = articuloBo.buscarPorCodigoYEmpresa(codigo, usuario.getEmpresa());
+
+			if (articuloBD == null) {
+				result.rejectValue("codigo", "error.articulo.codigo.no.existe");
+			}
+
+			Detalle detalle = detalleBo.findByCodigoAndEmpresa(codigo, usuario.getEmpresa());
+			if (detalle != null) {
+				result.rejectValue("descripcion", "error.articulo.con.facturas.asociadas");
+			}
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
+
+			articuloBo.eliminar(articuloBD);
+
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.eliminado.correctamente", articuloBD);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
 
 	/**
 	 * Buscar Articulo por id del inventario

@@ -350,9 +350,8 @@ __Imprimir(){
    if(self.articulo == null){
        return
    }
-   riot.compile(function() {
-   	  var tags = riot.mount('articulo-imprimir',{articulo:self.articulo});
-	});
+   location.href = "PDFGondolaAjax.do?idArticulo=" + self.articulo.id
+   
 
 }
 

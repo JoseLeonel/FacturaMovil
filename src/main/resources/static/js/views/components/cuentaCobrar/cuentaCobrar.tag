@@ -1,4 +1,6 @@
 <cuenta-cobrar>
+
+
     <!-- Titulos -->
     <div  class="row titulo-encabezado"  >
         <div  class="col-xs-12 col-sm-8 col-md-8 col-lg-8">

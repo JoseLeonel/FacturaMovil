@@ -1,7 +1,38 @@
 <punto-venta>
+<!--validar rol de usuario-->
+
+<!-- The Modal -->
+  <div class="modal fade" id="modalRolUsuario">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Seguridad</h4>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+           <form id="formularioModalRolUsuario">
+                <div class="form-group ">
+                    <label>Usuario</label> 
+                    <input  type="text"  class="form-control usuarioSistema"      id="usuarioSistema" name="usuarioSistema" value="{validarRolCommand.usuarioSistema}">
+                </div>      
+                <div class="form-group ">
+                    <label>Clave</label> 
+                    <input  type="password"  class="form-control claveSistema"  name="claveSistema" id="claveSistema"  value="{validarRolCommand.claveSistema}">
+                </div>      
+            </form>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger"  onclick ="{__SeguridadVentas}" >Autorizar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--fin validar rol de usuario-->
 
 <!--Modal abrirCajon sin comanda-->
-<div id='modalabrirCajon' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div id='modalabrirCajon' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
     <div class="modal-dialog modal-sm">
        <div class="modal-content">
             <div class="modal-body">
@@ -124,9 +155,9 @@
                             <input type="hidden" id='totalDescuentos'         name='totalDescuentos'        value="{factura.totalDescuentos}" >
                             <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
                             <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           valmodalue="{factura.totalImpuesto}" >
-                               <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
+                            <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
                             <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
-                                     <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
+                            <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
                             <input type="hidden" id='totalTarjeta'            name='totalTarjeta'            value="{factura.totalTarjeta}" >
                             <input type="hidden" id='totalBanco'              name='totalBanco'              value="{factura.totalBanco}" >
                    
@@ -194,7 +225,7 @@
                 <div class="cabecera-izquierda">
                   <div class="pfs-funcionales ">
                     <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
-                    <a class="pull-left" href="#"   onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
+                    <a class="pull-left" href="#"   onclick = {__LimpiarFormulario} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
                     <a class="pull-left" href="#"    onclick = {__ListaDecodigos} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f4")}</span></a>
                     <a class="pull-left" href="#"    onclick = {_ReimprimirFactura} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f6")}</span></a>
                     <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago}   title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
@@ -266,7 +297,7 @@
 
                     <section   class="lista-factura-espera">
                         <div id="botones"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
-                            <a href="#" class="factura-espera"  title="{cliente !=null?cliente.nombreCompleto:""}">C# {id}</a>
+                            <a href="#" style="display:block; padding:6px 0; margin-bottom:20px;margin-left:15px;background:{colorVentaEspera};text-align:center;text-decoration:none;color:#ffffff !important;text-shadow: 0px 0px 1px #ffffff;font-style: italic;"  title="{cliente !=null?cliente.nombreCompleto:""}">C# {id}</a>
                         </div>    
                      </section >
                      <aside class="left-sidebar">
@@ -287,7 +318,7 @@
                 </section>
         </div><!-- fin contenedor-factura-->
 <!--Modal mostrar Articulos de la empresa -->
-<div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header with-border table-header" >
@@ -518,13 +549,19 @@
     </div>
 </div>
 <!--Fin Cambiar Descuento-->
+<style type="text/css"  >
 
+</style>    
 <script>
     var self = this;
+    self.colorVentaEspera = 'red'
     // Detalle de la factura es una coleccion de articulos
     self.detail                = []
     self.mensajesBackEnd       = []
     self.error                 = false
+    self.rutaAutorizada        = ""    // llama al modal correspondiente
+    self.autorizarBorrado      = 0    // 0 = no autoriza 1 = si autorisa 
+
     self.comboCondicionPagos   = []
     self.comboTipoDocumentos   = []
     self.subTotalGeneral       = 0
@@ -538,7 +575,11 @@
         total:0,
         id:null
     }
-
+    self.validarRolCommand = {
+        usuarioSistema : "",
+        claveSistema:""
+    }
+    self.itemEliminar = {}
     self.descripcionArticulo = ""
     self.factura                = {
         id:null,
@@ -627,10 +668,15 @@
     self.mostarAbrirCajon = true
     self.informacionAbrirCajon = "."
     self.soloParaChinos = false
+    self.rol = {
+        rolAdministrador:0
+    }
+    
     self.tamanoLetra = "tamanoLetraConBanco"
     self.labelTotales = "labelTotalesConBanco"
     self.campoTotales = "campoTotalesConBanco"
     self.on('mount',function(){
+
         $("#formularioFactura").validate(reglasDeValidacionFactura());
         __informacionData()
         __informacionData_vendedores()
@@ -641,7 +687,7 @@
         agregarInputsCombos_Articulo()
         __ListaFacturasEnEspera()
         __comboCondicionPago()
-        
+        __RolAdministrador()
        __Teclas()
        __TipoCambio()
        cargaBilletes()
@@ -686,11 +732,140 @@
                 timer = setTimeout(fn, ms);
             });
         };
+        var retrievedObject = JSON.parse(localStorage.getItem('DetallesNueva'));
+        self.detail = retrievedObject
+        var facturaObject = JSON.parse(localStorage.getItem('facturaNueva'));
+        self.factura = facturaObject
+        self.update()
+        __calculate()
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
+             //disableF5(evento);
         }, false );
      
     })
+    function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
+
+/**
+* Verificar el Rol Admnistrador
+**/
+function __RolAdministrador(){
+    $.ajax({
+        url: "RolUsuarioAjax.do",
+        datatype: "json",
+        global: false,
+        method:"POST",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                       self.rol = modeloTabla
+                       self.update()
+                    });
+                }
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+
+}
+
+/**
+* Validar seguridad de ruta autorizada
+**/ 
+__SeguridadVentas(){
+    if(self.rol.rolAdministrador == 0){
+        return true
+    }
+   __validarRolAdministrador('#formularioModalRolUsuario','validarRolAdministradorAjax.do');
+    
+}
+
+function __validarRolAdministrador(formulario,url){
+    var resultado = false;	
+    if ($(formulario).valid()) {
+        var formulario = $(formulario).serialize();
+        $.ajax({
+          type : "POST",
+          sync: true,
+          dataType : "json",
+          data : formulario,
+          url : url,
+          success : function(data) {
+             if (data.status != 200) {
+            	 serverMessageJsonClase(data);
+                if (data.message != null && data.message.length > 0) {
+                	 swal({
+                         type: 'error',
+                         title:"No autorizado",
+                         showConfirmButton: false,
+                         timer: 1500
+                     });
+                 }
+                return resultado;
+             } else {
+            	 var modelTabla = {};
+            	 data.listaObjetos.forEach(function(modelo) {
+            		 modeloTabla = modelo;
+            	 })
+               	if(modeloTabla.aceptacion === 1){
+                    self.validarRolCommand = {
+                        usuarioSistema : "",
+                        claveSistema:""
+                    }   
+                    self.update()
+               	    $('#modalRolUsuario').modal('hide') 
+                    $('.modal-backdrop').remove();
+                    if(self.autorizarBorrado == 0){
+                        $(self.rutaAutorizada).modal({backdrop: 'static', keyboard: true}) 
+                        $(self.rutaAutorizada).modal('show')    	
+                    }
+                    if(self.autorizarBorrado == 1){
+                        self.autorizarBorrado = 0
+                        self.update()
+                        eliminarDetalle()
+                    }
+                    if(self.autorizarBorrado == 2){
+                        self.autorizarBorrado = 0
+                        self.update()
+                        refrescarPagina()
+                    }
+
+                    return true;
+               	}else{
+                    self.rutaAutorizada = '';
+                    self.update()
+                    swal({
+                        type: 'error',
+                        title:"No autorizado",
+                        showConfirmButton: false,
+                        timer: 1500
+                    })      
+                    return true;
+                }
+          
+             }
+          },
+          error : function(xhr, status) {
+             console.log(status);
+             mensajeErrorServidor(xhr, status);
+          }
+        });
+    }
+    
+}
+
+
+
+
+
 
 _SeleccionarEfectivo(){
     $('.totalEfectivo').select()
@@ -771,6 +946,32 @@ function _Empresa(){
 * LLimpiar Formulario
 **/
 __LimpiarFormulario(){
+    __SeguridadLimpiar()
+}
+function __SeguridadLimpiar(){
+    self.autorizarBorrado = 2
+    self.update()
+    if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
+        if(self.detail.length > 0){
+            self.rutaAutorizada = '';
+            self.update()
+            $("#usuarioSistema").val("")
+            $("#claveSistema").val("")
+            $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
+            $('#modalRolUsuario').modal('show')     
+        }else{
+           refrescarPagina()
+        }
+
+    }else{
+        refrescarPagina()
+    }
+
+}
+/**
+* limpiar pantalla
+**/
+function __LimpiarClick(){    
     $(".plazoCredito").val(null)   
     $(".fechaCredito").val(null)   
     $(".totalEfectivo").val(null)   
@@ -991,8 +1192,25 @@ function __TipoDocumentos(numeroConsecutivo,row){
 **/
 __CambiarDescuento(e){
     self.item = e.item; 
+    self.rutaAutorizada = '';
+    
     self.update()
-    $('#modalCambiarDescuento').modal('show')      
+    if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
+        
+        self.rutaAutorizada = '#modalCambiarDescuento';
+        self.update()
+        $("#usuarioSistema").val("")
+        $("#claveSistema").val("")
+        $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalRolUsuario').modal('show')     
+
+    }else{
+         $( "#aplicarDescuento" ).focus()
+        $( "#aplicarDescuento" ).val(cantidad)
+        $('#modalCambiarDescuento').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalCambiarDescuento').modal('show')      
+    }
+    
 }
 /**
 *Cambiar Cantidad del Articulo
@@ -1000,11 +1218,22 @@ __CambiarDescuento(e){
 __CambiarCantidad(e){
    var cantidad = e.currentTarget.value;
    self.item = e.item; 
+   self.rutaAutorizada = '';
    self.update()
-   $( "#cambiarCantidadArticulo" ).focus()
-   $( "#cambiarCantidadArticulo" ).val(cantidad)
-   $('#modalCambiarCantidad').modal('show')      
-}
+   if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
+        self.rutaAutorizada = '#modalCambiarCantidad';
+        self.update()
+        $("#usuarioSistema").val("")
+        $("#claveSistema").val("")
+        $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalRolUsuario').modal('show')     
+   }else{
+        $( "#cambiarCantidadArticulo" ).focus()
+        $( "#cambiarCantidadArticulo" ).val(cantidad)
+        $('#modalCambiarCantidad').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalCambiarCantidad').modal('show')      
+   }
+ }
 /**
 * Tipo Cambio de moneda
 **/
@@ -1205,6 +1434,7 @@ Lista de articulos
 **/
 __CargarFacturaEspera(e){
     self.factura =  e.item
+    
     self.update()
    __FacturaEnEspera(e.item)
 }
@@ -1298,6 +1528,51 @@ __Limpiar(){
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
+    self.factura                = {
+        id:null,
+	   fechaCredito:null,
+	   fechaEmision:null,
+	   condicionVenta:"",
+	    plazoCredito:0,
+	    tipoDoc:"",
+	    medioPago:"",
+	    nombreFactura:"",
+	    direccion:"",
+	    nota:"",
+	    comanda:"",
+	    subTotal:0,
+	    totalTransporte:0,
+	    total:0,
+	    totalServGravados:0,
+	    totalServExentos:0,
+	    totalMercanciasGravadas:0,
+	    totalMercanciasExentas:0,
+	    totalGravado:0,
+	    totalExento:0,
+	    totalVenta:0,
+	    totalDescuentos:0,
+	    totalVentaNeta:0,
+	    totalImpuesto:0,
+	    totalComprobante:0,
+	    totalEfectivo:0,
+        totalTarjeta:0,
+        totalCambioPagar:0,
+	    totalBanco:0,
+	    totalCredito:0,
+	    montoCambio:0,
+	    totalCambio:0,
+	    codigoMoneda:"",
+	    estado:1,
+	    cliente:{
+            id:null,
+            nombreCompleto:""
+        },
+	    vendedor:{
+            id:null,
+            nombreCompleto:""
+        }
+
+    } 
      self.primeraVezBilleteClick = false
      self.cantidadEnterFacturar = 0
      self.pesoPrioridad =  0
@@ -1364,6 +1639,8 @@ function __Init(){
     __ListaFacturasEnEspera()
     $('.codigo').select()
     $(".codigo").focus()
+    localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
+    localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
 }
 /**
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
@@ -2199,9 +2476,27 @@ function __agregarArticulo(cantidad){
 * eliminar un detalle factura
 **/
 __removeProductFromDetail(e) {
-    var item = e.item;
-    index = this.detail.indexOf(item);
-    this.detail.splice(index, 1);
+    self.autorizarBorrado = 1
+    self.itemEliminar = e.item;
+    self.update()
+    if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
+        self.rutaAutorizada = '';
+        self.update()
+        $("#usuarioSistema").val("")
+        $("#claveSistema").val("")
+        $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalRolUsuario').modal('show')     
+    }else{
+        eliminarDetalle()
+    }
+}    
+
+/**
+*    Eliminar detalle
+**/
+function  eliminarDetalle(){
+    index = self.detail.indexOf(self.itemEliminar);
+    self.detail.splice(index, 1);
     self.cantArticulos = self.cantArticulos > 0?self.cantArticulos - 1:0
     var num = 0
     for (var count = 0; count < self.detail.length; count++) {
@@ -2220,6 +2515,7 @@ __removeProductFromDetail(e) {
     }
     self.update()
      __calculate();
+
  }
 /**
 *   agregar Articulos nuevos en el detalle de la factura
@@ -2230,6 +2526,9 @@ function __nuevoArticuloAlDetalle(cantidad){
     }
     if(self.articulo.descripcion == ""){
         return;
+    }
+    if(self.detail == null){
+        __storege()
     }
     var precioUnitario  = getPrecioUnitario(self.articulo.precioPublico,self.articulo.impuesto)
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
@@ -2269,6 +2568,56 @@ function __nuevoArticuloAlDetalle(cantidad){
     self.cantidadEnterFacturar = 0
     self.update()
     
+}
+
+function __storege(){
+    self.detail = []
+    self.factura                = {
+        id:null,
+	   fechaCredito:null,
+	   fechaEmision:null,
+	   condicionVenta:"",
+	    plazoCredito:0,
+	    tipoDoc:"",
+	    medioPago:"",
+	    nombreFactura:"",
+	    direccion:"",
+	    nota:"",
+	    comanda:"",
+	    subTotal:0,
+	    totalTransporte:0,
+	    total:0,
+	    totalServGravados:0,
+	    totalServExentos:0,
+	    totalMercanciasGravadas:0,
+	    totalMercanciasExentas:0,
+	    totalGravado:0,
+	    totalExento:0,
+	    totalVenta:0,
+	    totalDescuentos:0,
+	    totalVentaNeta:0,
+	    totalImpuesto:0,
+	    totalComprobante:0,
+	    totalEfectivo:0,
+        totalTarjeta:0,
+        totalCambioPagar:0,
+	    totalBanco:0,
+	    totalCredito:0,
+	    montoCambio:0,
+	    totalCambio:0,
+	    codigoMoneda:"",
+	    estado:1,
+	    cliente:{
+            id:null,
+            nombreCompleto:""
+        },
+	    vendedor:{
+            id:null,
+            nombreCompleto:""
+        }
+
+    }   
+    self.update()
 }
 /**
 * Monto de Total
@@ -2501,6 +2850,8 @@ function __calculate() {
     $('.codigo').select()
     $('.codigo').focus()
     getSubTotalGeneral()
+    localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
+    localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
 }
 
 function esEntero(numero){
@@ -2742,7 +3093,7 @@ function agregarInputsCombos_Articulo(){
         var title = $('.tableListarArticulos thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
         if ( $(this).index() != 0    ){
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	      	$(this).html( '<input  type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
 } 
@@ -2755,7 +3106,7 @@ function agregarInputsCombos_Clientes(){
         var title = $('.tableListaCliente thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
         if ( $(this).index() != 4    ){
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	      	$(this).html( '<input  type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
 } 
@@ -2768,7 +3119,7 @@ function agregarInputsCombos_Facturas_Dias(){
         var title = $('.tableListarFacturasDia thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
         if ( $(this).index() != 6    ){
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	      	$(this).html( '<input  type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
 } 
@@ -2781,7 +3132,7 @@ function agregarInputsCombos_Vendedores(){
         var title = $('.tableListaVendedor thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
         if ( $(this).index() != 5    ){
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	      	$(this).html( '<input  type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
 }
@@ -2833,7 +3184,7 @@ function __Teclas(){
     }
     //Limpiar F2
     if(tecla ==113){
-      refrescarPagina()
+      __SeguridadLimpiar()
       $('.codigo').val("")
       $('.codigo').select()
       $(".codigo").focus()

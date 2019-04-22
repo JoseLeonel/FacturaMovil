@@ -92,4 +92,29 @@ public class UsuarioBoImpl implements UsuarioBo {
 		return usuarioDao.buscar(nombreUsuario, empresa);
 	}
 
+	@Override
+	public Boolean isAdministrador_empresa(Usuario usuario) {
+		return usuarioDao.isAdministrador_empresa(usuario);
+	}
+
+	@Override
+	public Boolean isAdministrador_sistema(Usuario usuario) {
+		return usuarioDao.isAdministrador_sistema(usuario);
+	}
+
+	@Override
+	public Boolean isAdministrador_restaurante(Usuario usuario) {
+		return usuarioDao.isAdministrador_restaurante(usuario);
+	}
+
+	@Override
+	public Boolean isAdministrador_cajero(Usuario usuario) {
+		return usuarioDao.isAdministrador_cajero(usuario);
+	}
+
+	@Override
+	public Boolean isAdministrador_vendedor(Usuario usuario) {
+		return usuarioDao.isAdministrador_vendedor(usuario);
+	}
+
 }

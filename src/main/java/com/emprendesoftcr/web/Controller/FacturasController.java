@@ -318,8 +318,13 @@ public class FacturasController {
 	 * @return
 	 */
 	@RequestMapping(value = "/puntoVenta", method = RequestMethod.GET)
-	public String crearCompras(ModelMap model) {
-
+	public String crearCompras(ModelMap model,HttpServletRequest request) {
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		if(usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)   ) {
+			model.addAttribute("rolAdminitrador",1);
+		}else {
+			model.addAttribute("rolAdminitrador",0);
+		}
 		return "views/facturas/puntoVenta";
 	}
 
@@ -486,18 +491,7 @@ public class FacturasController {
 	@RequestMapping(value = "/generaProformasPDF.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	public void generarProformasPDF(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura) throws Exception {
 		try {
-			// JasperReport jasperReport;
 			Factura factura = facturaBo.findById(idFactura);
-
-			// jasperReport = JasperCompileManager.compileReport("reportes/ejemplo.jrxml");
-			// JRDataSource vacio = new JREmptyDataSource(1);
-
-			// Map<String, Object> parameters = new HashMap<String, Object>();
-			// parameters.put("nombreEmpresa", factura.getEmpresa().getNombre().toString());
-
-			// JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters,vacio);
-
-			// JasperExportManager.exportReportToPdfFile(print, "reportes/ejemplo.pdf");
 
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
 			Collection<Detalle> detalles = detalleBo.findByFactura(factura);

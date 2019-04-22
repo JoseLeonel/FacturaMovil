@@ -73,4 +73,8 @@ public class DetalleBoImpl implements DetalleBo {
 		return detalleDao.totalVentasPorDetalle(empresa, fechaInicio, FechaFinal);
 	}
 
+	@Override
+	public Detalle findByCodigoAndEmpresa(String codigo , Empresa empresa) {
+		return detalleDao.findByCodigoAndEmpresa(codigo, empresa);
+	}
 }
