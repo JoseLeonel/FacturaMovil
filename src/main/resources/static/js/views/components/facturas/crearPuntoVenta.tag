@@ -191,10 +191,10 @@
                                 </div>
 
                                 <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado && soloParaChinos == false }>
-                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagar}</span></p>    
+                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span></p>    
                                 </div>
                                 <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado && soloParaChinos == true }>
-                                    <p class="total label-totalesChinos" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagar}</span></p>    
+                                    <p class="total label-totalesChinos" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span></p>    
                                 </div>
 
                             </article>
@@ -1274,6 +1274,7 @@ function __TipoCambio(){
 **/
 __TotalDeEfectivoAPagar(e){
  //   self.cantidadEnterFacturar = 0
+ self.totalCambioPagarSTR = 0
     self.factura.totalEfectivo = __valorNumerico(e.target.value) 
     if(self.factura.totalEfectivo ==0 ){
         self.cantidadEnterFacturar = 0
@@ -1362,6 +1363,7 @@ function _calculoEnterPago(){
         if(sumaMontosEntregadosParaCambios == 0){
             self.factura.totalCambioPagar =  __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2)) * -1
             self.totalCambioPagar =  __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2)) * -1
+            self.totalCambioPagarSTR = formatoDecimales(self.totalCambioPagar,2)    
             self.update()
             return
         }
@@ -1373,6 +1375,7 @@ function _calculoEnterPago(){
         self.factura.totalCambioPagar = totalEntregado - totalFactura
         self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)   
         self.totalCambioPagar = __valorNumerico(redondeoDecimales(self.factura.totalCambioPagar,2))
+        self.totalCambioPagarSTR = formatoDecimales(self.totalCambioPagar,2)
         self.update()
 }
 /**
@@ -1607,6 +1610,7 @@ function __Init(){
     self.totalImpuesto                 = 0
     self.totalComprobante              = 0
     self.totalCambioPagar              = 0
+    self.totalCambioPagarSTR           = 0
     self.update();
     $(".tableListarFacturasDia").dataTable().fnClearTable(); 
     __InicializarTabla('.tableListarFacturasDia')
@@ -3225,6 +3229,7 @@ _sumarBilletes(e){
        self.factura.totalCambioPagar  = 0
        self.totalCambioPagar = 0
        self.claseCambioDinero     = "entregarCambioPositivo"
+       self.totalCambioPagarSTR =0
     }else{
        self.factura.totalEfectivo += __valorNumerico(item.valor) 
        $('.efectivo').val(self.factura.totalEfectivo)
@@ -3236,6 +3241,7 @@ _sumarBilletes(e){
         self.factura.totalCambioPagar = sumaMontosEntregadosParaCambios - __valorNumerico(self.factura.totalComprobante)
         self.claseCambioDinero  = __valorNumerico(sumaMontosEntregadosParaCambios) > __valorNumerico(self.factura.totalComprobante)?'entregarCambioPositivo':'entregarCambioNegativo'
         self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
+        self.totalCambioPagarSTR =formatoDecimales(self.totalCambioPagar,2)
         $(".totalEfectivo").val(self.factura.totalEfectivo) 
     }
     self.update()

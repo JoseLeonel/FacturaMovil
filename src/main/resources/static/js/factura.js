@@ -61,6 +61,7 @@ $(document)
 	}
 
 function formatoDecimales(amount, decimals){
+	     positivoNegativo = amount > 0?"":"-"
 		 amount += ''; // por si pasan un numero en vez de un string
 		    amount = parseFloat(amount.replace(/[^0-9\.]/g, '')); // elimino cualquier cosa que no sea numero o punto
 
@@ -79,7 +80,7 @@ function formatoDecimales(amount, decimals){
 		    while (regexp.test(amount_parts[0]))
 		        amount_parts[0] = amount_parts[0].replace(regexp, '$1' + ',' + '$2');
 
-		return amount_parts.join('.');
+		return positivoNegativo + amount_parts.join('.');
 	}
 
 
