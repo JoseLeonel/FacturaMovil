@@ -119,28 +119,29 @@ public class UsuarioDaoImpl implements UsuarioDao {
 	}
 	@Override
 	public Boolean isAdministrador_empresa(Usuario usuario) {
-		long count = usuario.getRoles().stream().filter(p -> p.getNombre() == Constantes.ROL_ADMINISTRADOR_EMPRESA).count();
-		return count > 1 ?true:false;
+		long count = usuario.getRoles().stream().filter(p -> Constantes.ROL_ADMINISTRADOR_EMPRESA.equals(p.getNombre())).count();
+	
+		return count >= 1 ?true:false;
 	}
 	@Override
 	public Boolean isAdministrador_sistema(Usuario usuario) {
-		long count = usuario.getRoles().stream().filter(p -> p.getNombre() == Constantes.ROL_ADMINISTRADOR_SISTEMA).count();
-		return count > 1 ?true:false;
+		long count = usuario.getRoles().stream().filter(p -> Constantes.ROL_ADMINISTRADOR_SISTEMA.equals(p.getNombre())).count();
+		return count >= 1 ?true:false;
 	}
 	@Override
 	public Boolean isAdministrador_restaurante(Usuario usuario) {
-		long count = usuario.getRoles().stream().filter(p -> p.getNombre() == Constantes.ROL_ADMINISTRADOR_RESTAURANTE).count();
-		return count > 1 ?true:false;
+		long count = usuario.getRoles().stream().filter(p -> Constantes.ROL_ADMINISTRADOR_RESTAURANTE.equals(p.getNombre())).count();
+		return count >= 1 ?true:false;
 	}
 	@Override
 	public Boolean isAdministrador_cajero(Usuario usuario) {
-		long count = usuario.getRoles().stream().filter(p -> p.getNombre() == Constantes.ROL_ADMINISTRADOR_CAJERO).count();
-		return count > 1 ?true:false;
+		long count = usuario.getRoles().stream().filter(p -> Constantes.ROL_ADMINISTRADOR_CAJERO.equals(p.getNombre())).count();
+		return count >= 1 ?true:false;
 	}
 	@Override
 	public Boolean isAdministrador_vendedor(Usuario usuario) {
-		long count = usuario.getRoles().stream().filter(p -> p.getNombre() == Constantes.ROL_USUARIO_VENDEDOR).count();
-		return count > 1 ?true:false;
+		long count = usuario.getRoles().stream().filter(p -> Constantes.ROL_USUARIO_VENDEDOR.equals(p.getNombre())).count();
+		return count >= 1 ?true:false;
 	}
 
 }

@@ -155,9 +155,9 @@
                             <input type="hidden" id='totalDescuentos'         name='totalDescuentos'        value="{factura.totalDescuentos}" >
                             <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
                             <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           valmodalue="{factura.totalImpuesto}" >
-                               <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
+                            <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
                             <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
-                                     <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
+                            <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
                             <input type="hidden" id='totalTarjeta'            name='totalTarjeta'            value="{factura.totalTarjeta}" >
                             <input type="hidden" id='totalBanco'              name='totalBanco'              value="{factura.totalBanco}" >
                    
@@ -668,6 +668,10 @@
     self.mostarAbrirCajon = true
     self.informacionAbrirCajon = "."
     self.soloParaChinos = false
+    self.rol = {
+        rolAdministrador:0
+    }
+    
     self.tamanoLetra = "tamanoLetraConBanco"
     self.labelTotales = "labelTotalesConBanco"
     self.campoTotales = "campoTotalesConBanco"
@@ -683,7 +687,7 @@
         agregarInputsCombos_Articulo()
         __ListaFacturasEnEspera()
         __comboCondicionPago()
-        
+        __RolAdministrador()
        __Teclas()
        __TipoCambio()
        cargaBilletes()
@@ -741,10 +745,45 @@
      
     })
     function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
+
+/**
+* Verificar el Rol Admnistrador
+**/
+function __RolAdministrador(){
+    $.ajax({
+        url: "RolUsuarioAjax.do",
+        datatype: "json",
+        global: false,
+        method:"POST",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                       self.rol = modeloTabla
+                       self.update()
+                    });
+                }
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+
+}
+
 /**
 * Validar seguridad de ruta autorizada
 **/ 
 __SeguridadVentas(){
+    if(self.rol.rolAdministrador == 0){
+        return true
+    }
    __validarRolAdministrador('#formularioModalRolUsuario','validarRolAdministradorAjax.do');
     
 }
@@ -912,7 +951,7 @@ __LimpiarFormulario(){
 function __SeguridadLimpiar(){
     self.autorizarBorrado = 2
     self.update()
-    if(self.empresa.seguridadEnVentas == 1){
+    if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
         if(self.detail.length > 0){
             self.rutaAutorizada = '';
             self.update()
@@ -1156,7 +1195,7 @@ __CambiarDescuento(e){
     self.rutaAutorizada = '';
     
     self.update()
-    if(self.empresa.seguridadEnVentas == 1){
+    if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
         
         self.rutaAutorizada = '#modalCambiarDescuento';
         self.update()
@@ -1181,7 +1220,7 @@ __CambiarCantidad(e){
    self.item = e.item; 
    self.rutaAutorizada = '';
    self.update()
-   if(self.empresa.seguridadEnVentas == 1){
+   if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
         self.rutaAutorizada = '#modalCambiarCantidad';
         self.update()
         $("#usuarioSistema").val("")
@@ -1489,6 +1528,51 @@ __Limpiar(){
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
+    self.factura                = {
+        id:null,
+	   fechaCredito:null,
+	   fechaEmision:null,
+	   condicionVenta:"",
+	    plazoCredito:0,
+	    tipoDoc:"",
+	    medioPago:"",
+	    nombreFactura:"",
+	    direccion:"",
+	    nota:"",
+	    comanda:"",
+	    subTotal:0,
+	    totalTransporte:0,
+	    total:0,
+	    totalServGravados:0,
+	    totalServExentos:0,
+	    totalMercanciasGravadas:0,
+	    totalMercanciasExentas:0,
+	    totalGravado:0,
+	    totalExento:0,
+	    totalVenta:0,
+	    totalDescuentos:0,
+	    totalVentaNeta:0,
+	    totalImpuesto:0,
+	    totalComprobante:0,
+	    totalEfectivo:0,
+        totalTarjeta:0,
+        totalCambioPagar:0,
+	    totalBanco:0,
+	    totalCredito:0,
+	    montoCambio:0,
+	    totalCambio:0,
+	    codigoMoneda:"",
+	    estado:1,
+	    cliente:{
+            id:null,
+            nombreCompleto:""
+        },
+	    vendedor:{
+            id:null,
+            nombreCompleto:""
+        }
+
+    } 
      self.primeraVezBilleteClick = false
      self.cantidadEnterFacturar = 0
      self.pesoPrioridad =  0
@@ -2395,7 +2479,7 @@ __removeProductFromDetail(e) {
     self.autorizarBorrado = 1
     self.itemEliminar = e.item;
     self.update()
-    if(self.empresa.seguridadEnVentas == 1){
+    if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
         self.rutaAutorizada = '';
         self.update()
         $("#usuarioSistema").val("")
@@ -3009,7 +3093,7 @@ function agregarInputsCombos_Articulo(){
         var title = $('.tableListarArticulos thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
         if ( $(this).index() != 0    ){
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	      	$(this).html( '<input  type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
 } 
@@ -3022,7 +3106,7 @@ function agregarInputsCombos_Clientes(){
         var title = $('.tableListaCliente thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
         if ( $(this).index() != 4    ){
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	      	$(this).html( '<input  type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
 } 
@@ -3035,7 +3119,7 @@ function agregarInputsCombos_Facturas_Dias(){
         var title = $('.tableListarFacturasDia thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
         if ( $(this).index() != 6    ){
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	      	$(this).html( '<input  type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
 } 
@@ -3048,7 +3132,7 @@ function agregarInputsCombos_Vendedores(){
         var title = $('.tableListaVendedor thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
         if ( $(this).index() != 5    ){
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	      	$(this).html( '<input  type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
 }

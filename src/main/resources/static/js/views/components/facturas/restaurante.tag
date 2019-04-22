@@ -1561,6 +1561,9 @@ td.col-xl-12, th.col-xl-12 {
         total:0,
         id:null
     }
+    self.rol = {
+        rolAdministrador:0
+    }
     self.mostarAbrirCajon = true 
     self.on('mount',function(){
         $("#formularioFactura").validate(reglasDeValidacionFactura());
@@ -1585,7 +1588,7 @@ td.col-xl-12, th.col-xl-12 {
         __TipoCambio()
 
         __ListaMesas()
-
+        __RolAdministrador()   
         cargaBilletes()
         $(".nota").attr("maxlength", 80);
         $('.datepickerFechaCredito').datepicker(
@@ -1610,9 +1613,42 @@ td.col-xl-12, th.col-xl-12 {
     })
 
 /**
+* Verificar el Rol Admnistrador
+**/
+function __RolAdministrador(){
+    $.ajax({
+        url: "RolUsuarioAjax.do",
+        datatype: "json",
+        global: false,
+        method:"POST",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                       self.rol = modeloTabla
+                       self.update()
+                    });
+                }
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+
+}
+/**
 * Validar seguridad de ruta autorizada
 **/ 
 __SeguridadVentas(){
+    if(self.rol.rolAdministrador == 1){
+        return true
+    }
    __validarRolAdministrador('#formularioModalRolUsuario','validarRolAdministradorAjax.do');
     
 }
@@ -2144,7 +2180,7 @@ __CambiarDescuento(e){
     self.item = e.item; 
     self.rutaAutorizada = '';
     self.update()
-    if(self.empresa.seguridadEnVentas == 1){
+    if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
         self.rutaAutorizada = '#modalCambiarDescuento';
         self.update()
         $("#usuarioSistema").val("")
@@ -2172,7 +2208,7 @@ __CambiarCantidad(e){
    self.item = e.item; 
    self.rutaAutorizada = '';
    self.update()
-   if(self.empresa.seguridadEnVentas == 1){
+   if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
         self.rutaAutorizada = '#modalCambiarCantidad';
         self.update()
         $("#usuarioSistema").val("")
@@ -2629,7 +2665,7 @@ __Limpiar(){
 function __SeguridadLimpiar(){
      self.autorizarBorrado = 2
     self.update()
-    if(self.empresa.seguridadEnVentas == 1){
+    if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
         if(self.detail.length > 0){
             self.rutaAutorizada = '';
             self.update()
@@ -3412,7 +3448,7 @@ __removeProductFromDetail(e) {
     self.autorizarBorrado = 1
     self.itemEliminar = e.item;
     self.update()
-    if(self.empresa.seguridadEnVentas == 1){
+    if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
         self.rutaAutorizada = '';
         self.update()
         $("#usuarioSistema").val("")

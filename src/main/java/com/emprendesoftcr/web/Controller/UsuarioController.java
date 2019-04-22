@@ -25,6 +25,7 @@ import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.web.command.RolAdministradorCommand;
 import com.emprendesoftcr.web.command.UsuarioCommand;
 import com.emprendesoftcr.web.command.ValidarRolCommand;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
@@ -158,6 +159,33 @@ public class UsuarioController {
 			}
 			validarRolCommand.setAceptacion(1);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuario.validar",validarRolCommand);
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+	
+	@RequestMapping(value = "/RolUsuarioAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator rolUsuario(HttpServletRequest request,  ModelMap model,RolAdministradorCommand rolAdministradorCommand, BindingResult result, SessionStatus status) throws Exception {
+		try {
+			
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			if(usuario == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
+		
+				
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
+			if(usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)   ) {
+				rolAdministradorCommand.setRolAdministrador(1);
+			}else {
+				rolAdministradorCommand.setRolAdministrador(0);
+			}
+			
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuario.validar",rolAdministradorCommand);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
@@ -300,7 +328,8 @@ public class UsuarioController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-
+	
+	
 	private static class RESPONSES {
 
 		private static class OK {
