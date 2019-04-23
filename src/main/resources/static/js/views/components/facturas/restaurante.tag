@@ -1084,7 +1084,7 @@
                                         <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}</span></p>
                                     </div>
                                     <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado}>
-                                        <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagar}</span></p>    
+                                        <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span></p>    
                                     </div>
                             </article>
                         </aside>
@@ -1471,6 +1471,7 @@ td.col-xl-12, th.col-xl-12 {
     
     self.totalComprobante              = 0;
     self.totalCambioPagar              = 0;
+    self.totalCambioPagarSTR           = 0;
     self.todasProvincias               = {data:[]}
     self.todosCantones                 = {data:[]}
     self.todosDistritos                = {data:[]}
@@ -2313,27 +2314,49 @@ function imprimirTiquete(){
 *  Obtiene el valor de lo digitado en el campo de efectivo
 **/
 __TotalDeEfectivoAPagar(e){
-    self.factura.totalEfectivo = __valorNumerico(e.target.value) 
+    self.totalCambioPagar    = 0
+    //self.factura.totalEfectivo = __valorNumerico(e.target.value) 
     self.update()
+    _calculoEnterPago()  
 }
 /**
 *  Obtiene el valor de lo digitado en el campo de Tarjeta
 **/
 __TotalDeTarjetaAPagar(e){
-    self.factura.totalTarjeta = __valorNumerico(e.target.value) 
+    self.totalCambioPagar    = 0
+    //self.factura.totalTarjeta = __valorNumerico(e.target.value) 
     self.update()
+    _calculoEnterPago()  
 }
 /**
 *  Obtiene el valor de lo digitado en el campo de Banco
 **/
 __TotalDeBancoAPagar(e){
-    self.factura.totalBanco = __valorNumerico(e.target.value) 
+    self.totalCambioPagar    = 0
+  //  self.factura.totalBanco = __valorNumerico(e.target.value) 
     self.update()
+    _calculoEnterPago()  
 }
 /**
 *   Calculo del cambio entregar en el evento onblur
 **/
 __CalculaCambioAEntregarOnblur(e){
+    self.totalCambioPagar    = 0
+    self.update()
+   _calculoEnterPago()  
+}
+/**
+*   Calculo del cambio entregar en el evento keyPress
+**/
+__CalculaCambioAEntregarKeyPress(e){
+     self.totalCambioPagar    = 0
+     self.update()
+  //  if (e.keyCode == 13) {
+       _calculoEnterPago()  
+  //  }
+}
+
+function _calculoEnterPago(){
     var sumaMontosEntregadosParaCambios =0
     sumaMontosEntregadosParaCambios  = __valorNumerico($('.totalTarjeta').val())
     sumaMontosEntregadosParaCambios += __valorNumerico($('.totalBanco').val()) 
@@ -2341,6 +2364,7 @@ __CalculaCambioAEntregarOnblur(e){
     //Si no ingresado montos no realiza las operaciones de calculos
     if(sumaMontosEntregadosParaCambios == 0){
         self.factura.totalCambioPagar = self.factura.totalComprobante * -1
+        self.totalCambioPagarSTR =formatoDecimales(self.factura.totalCambioPagar,2)
         self.update()
         return
     }
@@ -2352,32 +2376,8 @@ __CalculaCambioAEntregarOnblur(e){
     self.factura.totalCambioPagar = totalEntregado - totalFactura
     self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)   
     self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
+    self.totalCambioPagarSTR =formatoDecimales(self.totalCambioPagar,2)
     self.update()
-}
-/**
-*   Calculo del cambio entregar en el evento keyPress
-**/
-__CalculaCambioAEntregarKeyPress(e){
-    var sumaMontosEntregadosParaCambios =0
-    if (e.keyCode == 13) {
-    sumaMontosEntregadosParaCambios  = __valorNumerico($('.totalTarjeta').val())
-    sumaMontosEntregadosParaCambios += __valorNumerico($('.totalBanco').val()) 
-    sumaMontosEntregadosParaCambios += __valorNumerico($('.totalEfectivo').val())
-        if(sumaMontosEntregadosParaCambios == 0){
-            self.factura.totalCambioPagar = self.factura.totalComprobante * -1
-            self.update()
-            return
-        }
-        self.factura.totalCambioPagar = 0
-        var totalEntregado = redondeoDecimales(sumaMontosEntregadosParaCambios,2)
-        var totalFactura   = redondeoDecimales(self.factura.totalComprobante,2)
-        totalEntregado     = __valorNumerico(totalEntregado)
-        totalFactura       = __valorNumerico(totalFactura)  
-        self.factura.totalCambioPagar = totalEntregado - totalFactura
-        self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)   
-        self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
-        self.update()
-    }
 }
 
 
@@ -2453,7 +2453,7 @@ function __ListaDeArticulosPorDescripcion(){
 __CargarFacturaEspera(e){
     self.pendientesComanda     = []
     self.factEspera = e.item
-   // self.factura = e.item
+    self.factura = e.item
     self.update()
     if(self.factura.id !=null){
       if(self.seIncluyoUnArticulo !=null){
@@ -4236,7 +4236,7 @@ __FacturasXMesa(e){
     self.pendientesComanda     = []
     var item = e.item
     self.mesa = item
-    self.factura.mesa = item    
+   // self.factura.mesa = item    
     self.update()
     __ListaFacturasXMesas()
 }

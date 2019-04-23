@@ -682,6 +682,7 @@ function __imprimir(){
     imprimirElemento(div)
 }
 function imprimirElemento(elemento){
+  var originalContents = document.body.innerHTML;
   var ventana = window.open('', 'PRINT', 'height=400,width=600');
   var html = "<!DOCTYPE HTML>";
   html += '<html><head><title>' + "" + '</title>'
@@ -693,6 +694,7 @@ function imprimirElemento(elemento){
   ventana.focus();
   ventana.print();
   ventana.close();
+  //document.body.innerHTML = originalContents;
   
  // printJS('imprimeme', 'html');
   

@@ -1910,24 +1910,23 @@ function _calculoEnterPago(){
     sumaMontosEntregadosParaCambios  = __valorNumerico($('.totalTarjeta').val())
     sumaMontosEntregadosParaCambios += __valorNumerico($('.totalBanco').val()) 
     sumaMontosEntregadosParaCambios += __valorNumerico($('.totalEfectivo').val())
-        if(sumaMontosEntregadosParaCambios == 0){
-            self.factura.totalCambioPagar = self.factura.totalComprobante * -1
-            self.totalCambioPagarSTR =formatoDecimales(self.factura.totalCambioPagar,2)
-            self.update()
-            return
-        }
-        self.factura.totalCambioPagar = 0
-        var totalEntregado = __valorNumerico(redondeoDecimales(sumaMontosEntregadosParaCambios,2))
-        var totalFactura   = __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2))
-        totalEntregado     = __valorNumerico(totalEntregado)
-        totalFactura       = __valorNumerico(totalFactura)  
-        self.claseCambioDinero = totalEntregado > totalFactura?"entregarCambioPositivo":"entregarCambioNegativo"
-        self.factura.totalCambioPagar = totalEntregado - totalFactura
-        self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)   
-        self.totalCambioPagar = __valorNumerico(redondeoDecimales(self.factura.totalCambioPagar,2))
-        self.totalCambioPagarSTR =formatoDecimales(self.totalCambioPagar,2)
+    if(sumaMontosEntregadosParaCambios == 0){
+        self.factura.totalCambioPagar = self.factura.totalComprobante * -1
+        self.totalCambioPagarSTR =formatoDecimales(self.factura.totalCambioPagar,2)
         self.update()
-
+        return
+    }
+    self.factura.totalCambioPagar = 0
+    var totalEntregado = __valorNumerico(redondeoDecimales(sumaMontosEntregadosParaCambios,2))
+    var totalFactura   = __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2))
+    totalEntregado     = __valorNumerico(totalEntregado)
+    totalFactura       = __valorNumerico(totalFactura)  
+    self.claseCambioDinero = totalEntregado > totalFactura?"entregarCambioPositivo":"entregarCambioNegativo"
+    self.factura.totalCambioPagar = totalEntregado - totalFactura
+    self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)   
+    self.totalCambioPagar =    __valorNumerico(redondeoDecimales(self.factura.totalCambioPagar,2))
+    self.totalCambioPagarSTR = formatoDecimales(self.totalCambioPagar,2)
+    self.update()
 }
 /**
  * Listar codigos  llamado del modal para presentar los articulos

@@ -3181,11 +3181,16 @@ function __Teclas(){
     if(tecla ==120){
       aplicarFactura(1)   
     }
-     //Reimprimir Factura
-    if(tecla ==117){
+     //Reimprimir Factura f6
+    //if(tecla ==117){
+    // reimprimirFacturaEnMomento()
+    //}
+     //Reimprimir Factura CTRL
+    if(tecla ==17){
      reimprimirFacturaEnMomento()
      
     }
+
     //Limpiar F2
     if(tecla ==113){
       __SeguridadLimpiar()
