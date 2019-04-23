@@ -1,12 +1,10 @@
 package com.emprendesoftcr.web.command;
 
 import java.util.Date;
-import java.util.Set;
 
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Compra;
-import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.Usuario;
 

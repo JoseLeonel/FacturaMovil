@@ -1,7 +1,6 @@
 package com.emprendesoftcr.web.command;
 
 import com.emprendesoftcr.modelo.Articulo;
-import com.emprendesoftcr.modelo.DetalleCompra;
 
 public class DetalleCompraCommand {
 

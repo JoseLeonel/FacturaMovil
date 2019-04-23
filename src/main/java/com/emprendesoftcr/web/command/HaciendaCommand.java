@@ -2,8 +2,6 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.modelo.Hacienda;
