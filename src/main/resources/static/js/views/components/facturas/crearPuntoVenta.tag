@@ -733,11 +733,14 @@
             });
         };
         var retrievedObject = JSON.parse(localStorage.getItem('DetallesNueva'));
-        self.detail = retrievedObject
-        var facturaObject = JSON.parse(localStorage.getItem('facturaNueva'));
-        self.factura = facturaObject
-        self.update()
-        __calculate()
+        if(retrievedObject != null){
+            self.detail = retrievedObject
+            var facturaObject = JSON.parse(localStorage.getItem('facturaNueva'));
+            self.factura = facturaObject
+            self.update()
+            __calculate()
+
+        }
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
              //disableF5(evento);

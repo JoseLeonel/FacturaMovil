@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Empresa;
@@ -19,13 +20,19 @@ public class ArticuloCommand {
 	private String			unidadMedida;
 	private String			contable;
 	private Double			costo;
+	private String			costoSTR;
 	private Double			impuesto;
 	private Double			precioPublico;
 	private Double			gananciaPrecioPublico;
+	private String      precioPublicoSTR;
 	private Double			precioMayorista;
 	private Double			gananciaPrecioMayorista;
 	private Double			precioEspecial;
 	private Double			gananciaPrecioEspecial;
+	private String			totalCosto;
+	private String			totalVenta;
+	private String			totalImpuesto;
+	private String			totalGanancia;
 	private String			estado;
 	private Double			minimo;
 	private Double			maximo;
@@ -38,6 +45,7 @@ public class ArticuloCommand {
 	private Categoria		categoria;
 	private Empresa			empresa;
 	private BigDecimal	cantidad;
+	private String	cantidadSTR;
 	private Integer			comanda;
 	private Integer			prioridad;
 
@@ -59,6 +67,7 @@ public class ArticuloCommand {
 		this.precioEspecial = articulo.getPrecioEspecial();
 		this.gananciaPrecioEspecial = articulo.getGananciaPrecioEspecial();
 		this.costo = articulo.getCosto();
+		this.costoSTR = Utils.formateadorMiles(articulo.getCosto());
 		this.impuesto = articulo.getImpuesto();
 		this.serie = articulo.getSerie();
 		this.unidadMedida = articulo.getUnidadMedida();
@@ -72,6 +81,11 @@ public class ArticuloCommand {
 		this.maximo = articulo.getMaximo();
 		this.comanda = articulo.getComanda();
 		this.prioridad = articulo.getPrioridad();
+		this.totalCosto = Utils.formateadorMiles(articulo.getTotalCosto());
+		this.totalVenta = Utils.formateadorMiles(articulo.getTotalPrecioPublico());
+		this.cantidadSTR = Utils.formateadorMiles(articulo.getCantidad());
+		this.totalGanancia = Utils.formateadorMiles(articulo.getGananciaTotalPublico());
+		this.precioPublicoSTR = Utils.formateadorMiles(articulo.getPrecioPublico());
 	}
 
 	public Integer getPrioridad() {
@@ -301,5 +315,76 @@ public class ArticuloCommand {
 	public void setMaximo(Double maximo) {
 		this.maximo = maximo;
 	}
+
+	
+	public String getTotalCosto() {
+		return totalCosto;
+	}
+
+	
+	public void setTotalCosto(String totalCosto) {
+		this.totalCosto = totalCosto;
+	}
+
+	
+	public String getTotalVenta() {
+		return totalVenta;
+	}
+
+	
+	public void setTotalVenta(String totalVenta) {
+		this.totalVenta = totalVenta;
+	}
+
+	
+	public String getTotalImpuesto() {
+		return totalImpuesto;
+	}
+
+	
+	public void setTotalImpuesto(String totalImpuesto) {
+		this.totalImpuesto = totalImpuesto;
+	}
+
+	
+	public String getTotalGanancia() {
+		return totalGanancia;
+	}
+
+	
+	public void setTotalGanancia(String totalGanancia) {
+		this.totalGanancia = totalGanancia;
+	}
+
+	
+	public String getCostoSTR() {
+		return costoSTR;
+	}
+
+	
+	public void setCostoSTR(String costoSTR) {
+		this.costoSTR = costoSTR;
+	}
+
+	
+	public String getCantidadSTR() {
+		return cantidadSTR;
+	}
+
+	
+	public void setCantidadSTR(String cantidadSTR) {
+		this.cantidadSTR = cantidadSTR;
+	}
+
+	
+	public String getPrecioPublicoSTR() {
+		return precioPublicoSTR;
+	}
+
+	
+	public void setPrecioPublicoSTR(String precioPublicoSTR) {
+		this.precioPublicoSTR = precioPublicoSTR;
+	}
+	
 
 }

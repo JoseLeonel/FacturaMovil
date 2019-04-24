@@ -128,6 +128,7 @@ public class ArticuloController {
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
 
+
 	@RequestMapping(value = "/ListarArticulosXCambioCategoria", method = RequestMethod.GET)
 	public String listarXCambioCategoria(ModelMap model) {
 		return "views/articulos/ListarArticulosCambiarCategoria";
@@ -393,6 +394,48 @@ public class ArticuloController {
 		if (codigoArt != null) {
 			if (!codigoArt.equals(Constantes.EMPTY)) {
 				categoriaFilter = new JqGridFilter("codigo", "'" + codigoArt + "'", "=");
+				delimitadores.addFiltro(categoriaFilter);
+			}
+		}
+
+		Long total = dataTableBo.contar(delimitadores);
+		Collection<Object> objetos = dataTableBo.listar(delimitadores);
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		List<Object> solicitudList = new ArrayList<Object>();
+		for (Iterator<Object> iterator = objetos.iterator(); iterator.hasNext();) {
+			Articulo object = (Articulo) iterator.next();
+			// no se carga el usuario del sistema el id -1
+			if (object.getId().longValue() > 0L) {
+				solicitudList.add(new ArticuloCommand(object));
+			}
+		}
+
+		respuestaService.setRecordsTotal(total);
+		respuestaService.setRecordsFiltered(total);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+
+	}
+	
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarArticuloXCategoriaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarCategoriaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigoCategoria", required = false) Long codigoCategoria) {
+
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Articulo");
+		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+			String nombreUsuario = request.getUserPrincipal().getName();
+			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
+			delimitadores.addFiltro(dataTableFilter);
+		}
+		JqGridFilter categoriaFilter = null;
+		if (codigoCategoria != null) {
+			if (!codigoCategoria.equals(Constantes.ZEROS_LONG)) {
+				categoriaFilter = new JqGridFilter("categoria.id", "'" + codigoCategoria + "'", "=");
 				delimitadores.addFiltro(categoriaFilter);
 			}
 		}
