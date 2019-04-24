@@ -11,7 +11,8 @@ var _Init = function () {
     });
     selectCategoria = __listadoCategoriasActivas(selectCategoria);
     $(".categoria").html(selectCategoria);
-   
+    __ComboEstados();
+    __ComboMinimoMaximo();
    
 }
 
@@ -53,6 +54,25 @@ var ListarArticulos = function(){
 
 }  
 
+/**
+* cargar combo de estados
+**/
+function __ComboEstados(){
+   $('.estado').append('<option value="'+$.i18n.prop("todos.select")+'">'+$.i18n.prop("todos.select")+ '</option>');
+   $('.estado').append('<option value="'+$.i18n.prop("estado.Activo")+'">'+$.i18n.prop("estado.Activo")+ '</option>');
+	$('.estado').append('<option value="'+$.i18n.prop("estado.Inactivo")+'">'+$.i18n.prop("estado.Inactivo")+ '</option>');
+    
+}
+
+/**
+* cargar combo de estados
+**/
+function __ComboMinimoMaximo(){
+   $('.minimoMaximo').append('<option value="'+$.i18n.prop("todos.select")+'">'+$.i18n.prop("todos.select")+ '</option>');
+   $('.minimoMaximo').append('<option value="'+1+'">'+$.i18n.prop("inventario.minimo")+ '</option>');
+	$('.minimoMaximo').append('<option value="'+2+'">'+$.i18n.prop("inventario.maximo")+ '</option>');
+    
+}
 
 /**
  * Eventos del filtro
@@ -94,15 +114,17 @@ function EventoFiltro(){
 *Formato del listado de los cambios .toFixed(2)
 **/
 var informacion_tabla = [ 
-                           {'data' :'codigo'       ,"name":"codigo"      ,"title" : "Codigo"         ,"autoWidth" :true },
-                           {'data' :'descripcion'  ,"name":"descripcion" ,"title" : "Descripcion"    ,"autoWidth" :true },
-                           {'data' :'cantidadSTR'  ,"name":"cantidadSTR" ,"title" : "Cantidad"       ,"autoWidth" :true},
-                           {'data' :'costoSTR'     ,"name":"costoSTR"    ,"title" : "Costo"          ,"autoWidth" :true },
-                           {'data' :'precioPublicoSTR'     ,"name":"precioPublicoSTR"    ,"title" : "Precio Venta"          ,"autoWidth" :true },
-                           {'data' :'totalCosto'   ,"name":"totalCosto"  ,"title" : "Total Costo"    ,"autoWidth" :true },
-                           {'data' :'impuesto'     ,"name":"impuesto"    ,"title" : "Total Impuesto" ,"autoWidth" :true },
-                           {'data' :'totalVenta'   ,"name":"totalVenta"  ,"title" : "Total Venta"    ,"autoWidth" :true},
-                           {'data' :'totalGanancia'   ,"name":"totalGanancia"  ,"title" : "Total Ganancia"    ,"autoWidth" :true},
+                           {'data' :'codigo'           ,"name":"codigo"           ,"title" : "Codigo"            ,"autoWidth" :true , "bSortable": false },
+                           {'data' :'descripcion'      ,"name":"descripcion"      ,"title" : "Descripcion"       ,"autoWidth" :true , "bSortable": false },
+                           {'data' :'cantidadSTR'      ,"name":"cantidad"         ,"title" : "Cantidad"          ,"autoWidth" :true, "bSortable": false },
+                           {'data' :'minimo'           ,"name":"minimo"           ,"title" : "Minimo"            ,"autoWidth" :true, "bSortable": false },
+                           {'data' :'maximo'           ,"name":"maximo"           ,"title" : "Maximo"            ,"autoWidth" :true, "bSortable": false },
+                           {'data' :'costoSTR'         ,"name":"costo"            ,"title" : "Costo"             ,"autoWidth" :true, "bSortable": false },
+                           {'data' :'precioPublicoSTR' ,"name":"precioPublico"    ,"title" : "Precio Publico"    ,"autoWidth" :true , "bSortable": false },
+                           {'data' :'totalCosto'       ,"name":"totalCosto"       ,"title" : "Total Costo"       ,"autoWidth" :true , "bSortable": false },
+                           {'data' :'totalImpuesto'    ,"name":"totalImpuesto"    ,"title" : "Impuesto Esperada" ,"autoWidth" :true , "bSortable": false },
+                           {'data' :'totalVenta'       ,"name":"totalVenta"       ,"title" : "Venta Esperada"    ,"autoWidth" :true, "bSortable": false },
+                           {'data' :'totalGanancia'    ,"name":"totalGanancia"    ,"title" : "Ganancia Esperada" ,"autoWidth" :true, "bSortable": false },
                         ];
 
 
@@ -114,7 +136,11 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+        if ( $(this).index() != 2  && $(this).index() != 3  && $(this).index() != 4  && $(this).index() != 5 && $(this).index() != 6 && $(this).index() != 7 
+            && $(this).index() != 8 && $(this).index() != 9 && $(this).index() != 10  ){
+         $(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+        }
+      	
     
     })
 }

@@ -86,6 +86,7 @@ public class ArticuloCommand {
 		this.cantidadSTR = Utils.formateadorMiles(articulo.getCantidad());
 		this.totalGanancia = Utils.formateadorMiles(articulo.getGananciaTotalPublico());
 		this.precioPublicoSTR = Utils.formateadorMiles(articulo.getPrecioPublico());
+		this.totalImpuesto = Utils.formateadorMiles(articulo.getTotalImpuesto());
 	}
 
 	public Integer getPrioridad() {

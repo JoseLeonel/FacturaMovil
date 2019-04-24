@@ -347,14 +347,16 @@ public class Articulo implements Serializable {
 	}
 	
 	public Double getGananciaTotalPublico() {
+		
 		Double costoTem = this.costo !=null?this.costo:Constantes.ZEROS_DOUBLE;
 		Double cantidadTem = this.cantidad != null?this.cantidad:Constantes.ZEROS_DOUBLE;
 		Double precioPublicoTem = this.precioPublico !=null?this.precioPublico:Constantes.ZEROS_DOUBLE;
 		Double totalCosto = costoTem * cantidadTem;
 		
 		Double totalVenta = totalCosto == 0?Constantes.ZEROS_DOUBLE:precioPublicoTem * cantidadTem;
-		Double valorImpuesto = this.impuesto == null?Constantes.ZEROS_DOUBLE:this.impuesto+1;
-		Double totalImpuesto = this.impuesto !=null?totalVenta * valorImpuesto:Constantes.ZEROS_DOUBLE;
+		Double valorImpuesto = this.impuesto == null?Constantes.ZEROS_DOUBLE:(this.impuesto/100)+1;
+		Double valor = this.impuesto !=null?totalVenta / valorImpuesto:Constantes.ZEROS_DOUBLE;
+		Double totalImpuesto = totalVenta > 0?totalVenta -  valor:Constantes.ZEROS_DOUBLE;
 		totalVenta = totalVenta - totalImpuesto;
     return totalVenta - 	totalCosto;	
 	}
@@ -367,9 +369,10 @@ public class Articulo implements Serializable {
 		
 		Double totalVenta = totalCosto == 0?Constantes.ZEROS_DOUBLE:precioPublicoTem * cantidadTem;
 		Double valorImpuesto = this.impuesto == null?Constantes.ZEROS_DOUBLE:this.impuesto+1;
-		Double totalImpuesto = this.impuesto !=null?totalVenta * valorImpuesto:Constantes.ZEROS_DOUBLE;
-		totalVenta = totalVenta - totalImpuesto;
-    return totalVenta - 	totalCosto;	
+		Double valor = this.impuesto !=null?totalVenta / valorImpuesto:Constantes.ZEROS_DOUBLE;
+		Double totalImpuesto  = totalVenta > 0?totalVenta -  valor:Constantes.ZEROS_DOUBLE;
+		
+    return totalImpuesto;	
 	}
 
 	public Marca getMarca() {
