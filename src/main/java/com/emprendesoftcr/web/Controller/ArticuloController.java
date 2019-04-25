@@ -478,6 +478,59 @@ public class ArticuloController {
 		return respuestaService;
 
 	}
+	
+/**
+ * Descarga del excel de Totales por categorias 
+ * @param request
+ * @param response
+ * @param categoria
+ * @param estado
+ * @param minimoMaximo
+ * @throws IOException
+ * @throws Exception
+ */
+	@RequestMapping(value = "/DescargarArticuloXCategoriaAjax.do", method = RequestMethod.GET)
+	public void descargarArticuloXCategoriaAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam(value = "idCategoria", required = false) Long idCategoria,@RequestParam(value = "estado", required = false) String estado,@RequestParam(value = "minimoMaximo", required = false) String minimoMaximo)  throws IOException, Exception {
+
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Categoria categoria = categoriaBo.buscar(idCategoria);
+
+		// Se buscan las facturas
+		Collection<Articulo> articulos = articuloBo.findByCategoriaAndEmpresaAndEstadoAndMinimoMaximo(usuario.getEmpresa(), categoria, estado,  minimoMaximo);;
+    String cate = categoria.getDescripcion().trim();
+    cate = cate.replace(" ","" );
+		String nombreArchivo = "Totales_" + cate+ ".xls";
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+
+		
+		// Se prepara el excell
+		ByteArrayOutputStream baos = createExcelArticuloXCategoriaAjax(articulos);
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+
+		int BUFFER_SIZE = 4096;
+		byte[] buffer = new byte[BUFFER_SIZE];
+		int bytesRead = -1;
+		while ((bytesRead = inputStream.read(buffer)) != -1) {
+			response.getOutputStream().write(buffer, 0, bytesRead);
+		}
+	}
+
+	private ByteArrayOutputStream createExcelArticuloXCategoriaAjax(Collection<Articulo> articulos) {
+		List<Object> list = new ArrayList<Object>();
+		for (Iterator<Articulo> iterator = articulos.iterator(); iterator.hasNext();) {
+			Articulo object =  iterator.next();
+			// no se carga el usuario del sistema el id -1
+			if (object.getId().longValue() > 0L) {
+				list.add(new ArticuloCommand(object));
+			}
+		}
+		// Se prepara el excell
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		List<String> headers = Arrays.asList("Categoria", "#Codigo", "Descripcion", "Cantidad", "Minimo","Maximo","Costo","Precio Publico","Total Costo","Impuesto Esperado","Venta Esperada","Ganancia Esperada");
+		new SimpleExporter().gridExport(headers, list, " categoria.descripcion,codigo, descripcion, cantidad,minimo,maximo,costoSTR,precioPublicoSTR,totalCostoSTR,totalImpuestoSTR,totalVentaSTR,totalGananciaSTR", baos);
+		return baos;
+	}
 
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarPorDescripcionCodigoArticuloAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")

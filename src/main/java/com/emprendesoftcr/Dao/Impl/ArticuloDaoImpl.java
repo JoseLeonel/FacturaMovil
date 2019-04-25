@@ -16,8 +16,10 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Articulo;
+import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.web.command.TotalInventarioCommand;
@@ -238,5 +240,31 @@ public class ArticuloDaoImpl implements ArticuloDao {
 		query.setParameter("empresa", empresa);
 		return query.getResultList();
 	}
+
+	@Override
+	public Collection<Articulo> findByCategoriaAndEmpresaAndEstadoAndMinimoMaximo(Empresa empresa,Categoria categoria, String estado, String minimoMaximo){
+		String sql = Constantes.EMPTY;
+		sql = "select obj from Articulo obj where obj.categoria = :categoria and obj.empresa = :empresa ";
+		if(minimoMaximo.equals(Constantes.ARTICULO_MINIMO)) {
+			sql = sql + " and obj.cantidad <= obj.minimo ";
+		}else if(minimoMaximo.equals(Constantes.ARTICULO_MAXIMO)) {
+			sql = sql + "and obj.cantidad <= obj.minimo ";
+		}
+		if(!estado.equals(Constantes.COMBO_TODOS)) {
+			sql = sql  + "and  obj.categoria = :categoria ";
+		}
+		sql = sql + " order by obj.categoria.id,obj.descripcion";
+
+		Query query = entityManager.createQuery(sql);
+		if(!estado.equals(Constantes.COMBO_TODOS)) {
+			query.setParameter("estado", estado);
+		}
+
+		query.setParameter("categoria", categoria);
+		query.setParameter("empresa", empresa);
+		return query.getResultList();
+		
+	}
+	
 
 }
