@@ -423,7 +423,7 @@ public class ArticuloController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticuloXCategoriaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarCategoriaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "codigoCategoria", required = false) Long codigoCategoria,@RequestParam(value = "estado", required = false) String estado,@RequestParam(value = "minimoMaximo", required = false) Integer minimoMaximo) {
+	public RespuestaServiceDataTable listarCategoriaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "categoria", required = false) Long categoria,@RequestParam(value = "estado", required = false) String estado,@RequestParam(value = "minimoMaximo", required = false) String minimoMaximo) {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Articulo");
@@ -433,9 +433,9 @@ public class ArticuloController {
 			delimitadores.addFiltro(dataTableFilter);
 		}
 		JqGridFilter categoriaFilter = null;
-		if (codigoCategoria != null) {
-			if (!codigoCategoria.equals(Constantes.ZEROS_LONG)) {
-				categoriaFilter = new JqGridFilter("categoria.id", "'" + codigoCategoria + "'", "=");
+		if (categoria != null) {
+			if (!categoria.equals(Constantes.ZEROS_LONG)) {
+				categoriaFilter = new JqGridFilter("categoria.id", "'" + categoria + "'", "=");
 				delimitadores.addFiltro(categoriaFilter);
 			}
 		}
@@ -445,12 +445,12 @@ public class ArticuloController {
 			
 		}
 		if(!minimoMaximo.equals(Constantes.COMBO_TODOS)) {
-			if(minimoMaximo == Constantes.ARTICULO_MINIMO) {
+			if(minimoMaximo.equals(Constantes.ARTICULO_MINIMO)) {
 				categoriaFilter = new JqGridFilter("obj.cantidad <= obj.minimo ");
 				delimitadores.addFiltro(categoriaFilter);
 				
 			}
-			if(minimoMaximo == Constantes.ARTICULO_MAXIMO) {
+			if(minimoMaximo.equals(Constantes.ARTICULO_MAXIMO)) {
 				categoriaFilter = new JqGridFilter("obj.cantidad >= obj.minimo ");
 				delimitadores.addFiltro(categoriaFilter);
 			}

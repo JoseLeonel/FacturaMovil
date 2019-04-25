@@ -29,10 +29,15 @@ public class ArticuloCommand {
 	private Double			gananciaPrecioMayorista;
 	private Double			precioEspecial;
 	private Double			gananciaPrecioEspecial;
-	private String			totalCosto;
-	private String			totalVenta;
-	private String			totalImpuesto;
-	private String			totalGanancia;
+	private String			totalCostoSTR;
+	private String			totalVentaSTR;
+	private String			totalImpuestoSTR;
+	private String			totalGananciaSTR;
+	private Double			totalCosto;
+	private Double			totalVenta;
+	private Double			totalImpuesto;
+	private Double			totalGanancia;
+
 	private String			estado;
 	private Double			minimo;
 	private Double			maximo;
@@ -81,12 +86,19 @@ public class ArticuloCommand {
 		this.maximo = articulo.getMaximo();
 		this.comanda = articulo.getComanda();
 		this.prioridad = articulo.getPrioridad();
-		this.totalCosto = Utils.formateadorMiles(articulo.getTotalCosto());
-		this.totalVenta = Utils.formateadorMiles(articulo.getTotalPrecioPublico());
+		this.totalCostoSTR = Utils.formateadorMiles(articulo.getTotalCosto());
+		this.totalVentaSTR = Utils.formateadorMiles(articulo.getTotalPrecioPublico());
 		this.cantidadSTR = Utils.formateadorMiles(articulo.getCantidad());
-		this.totalGanancia = Utils.formateadorMiles(articulo.getGananciaTotalPublico());
+		this.totalGananciaSTR = Utils.formateadorMiles(articulo.getGananciaTotalPublico());
 		this.precioPublicoSTR = Utils.formateadorMiles(articulo.getPrecioPublico());
-		this.totalImpuesto = Utils.formateadorMiles(articulo.getTotalImpuesto());
+		this.totalImpuestoSTR = Utils.formateadorMiles(articulo.getTotalImpuesto());
+		
+		this.totalCosto = articulo.getTotalCosto();
+		this.totalVenta = articulo.getTotalPrecioPublico();
+		this.totalGanancia = articulo.getGananciaTotalPublico();
+		this.precioPublico = articulo.getPrecioPublico();
+		this.totalImpuesto = articulo.getTotalImpuesto();
+
 	}
 
 	public Integer getPrioridad() {
@@ -318,45 +330,7 @@ public class ArticuloCommand {
 	}
 
 	
-	public String getTotalCosto() {
-		return totalCosto;
-	}
-
 	
-	public void setTotalCosto(String totalCosto) {
-		this.totalCosto = totalCosto;
-	}
-
-	
-	public String getTotalVenta() {
-		return totalVenta;
-	}
-
-	
-	public void setTotalVenta(String totalVenta) {
-		this.totalVenta = totalVenta;
-	}
-
-	
-	public String getTotalImpuesto() {
-		return totalImpuesto;
-	}
-
-	
-	public void setTotalImpuesto(String totalImpuesto) {
-		this.totalImpuesto = totalImpuesto;
-	}
-
-	
-	public String getTotalGanancia() {
-		return totalGanancia;
-	}
-
-	
-	public void setTotalGanancia(String totalGanancia) {
-		this.totalGanancia = totalGanancia;
-	}
-
 	
 	public String getCostoSTR() {
 		return costoSTR;
@@ -385,6 +359,86 @@ public class ArticuloCommand {
 	
 	public void setPrecioPublicoSTR(String precioPublicoSTR) {
 		this.precioPublicoSTR = precioPublicoSTR;
+	}
+
+	
+	public String getTotalCostoSTR() {
+		return totalCostoSTR;
+	}
+
+	
+	public void setTotalCostoSTR(String totalCostoSTR) {
+		this.totalCostoSTR = totalCostoSTR;
+	}
+
+	
+	public String getTotalVentaSTR() {
+		return totalVentaSTR;
+	}
+
+	
+	public void setTotalVentaSTR(String totalVentaSTR) {
+		this.totalVentaSTR = totalVentaSTR;
+	}
+
+	
+	public String getTotalImpuestoSTR() {
+		return totalImpuestoSTR;
+	}
+
+	
+	public void setTotalImpuestoSTR(String totalImpuestoSTR) {
+		this.totalImpuestoSTR = totalImpuestoSTR;
+	}
+
+	
+	public String getTotalGananciaSTR() {
+		return totalGananciaSTR;
+	}
+
+	
+	public void setTotalGananciaSTR(String totalGananciaSTR) {
+		this.totalGananciaSTR = totalGananciaSTR;
+	}
+
+	
+	public Double getTotalCosto() {
+		return totalCosto;
+	}
+
+	
+	public void setTotalCosto(Double totalCosto) {
+		this.totalCosto = totalCosto;
+	}
+
+	
+	public Double getTotalVenta() {
+		return totalVenta;
+	}
+
+	
+	public void setTotalVenta(Double totalVenta) {
+		this.totalVenta = totalVenta;
+	}
+
+	
+	public Double getTotalImpuesto() {
+		return totalImpuesto;
+	}
+
+	
+	public void setTotalImpuesto(Double totalImpuesto) {
+		this.totalImpuesto = totalImpuesto;
+	}
+
+	
+	public Double getTotalGanancia() {
+		return totalGanancia;
+	}
+
+	
+	public void setTotalGanancia(Double totalGanancia) {
+		this.totalGanancia = totalGanancia;
 	}
 	
 

@@ -7,8 +7,8 @@ public class Constantes {
 	public static final ResourceBundle	RESOURCE_BUNDLE																			= ResourceBundle.getBundle("factura");
 
 	//Inventario
-	public static final Integer					ARTICULO_MINIMO																			= 1;
-	public static final Integer					ARTICULO_MAXIMO																			= 2;
+	public static final String					ARTICULO_MINIMO																			= "1";
+	public static final String					ARTICULO_MAXIMO																			= "2";
 	public static final String					PLANTILLA_CORREO_CUENTAS_POR_COBRAR									= "email/cuentasxcobrar.vm";
 	public static final String					PLANTILLA_CORREO_VENTA_POR_CODIGO										= "email/ventasXCodigo.vm";
 	public static final String					PLANTILLA_CORREO_COMPRAS_ACEPTADAS									= "email/emailResumenCompras.vm";

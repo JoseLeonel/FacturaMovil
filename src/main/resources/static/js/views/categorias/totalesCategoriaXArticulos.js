@@ -1,7 +1,8 @@
 $(document).ready(function() {
 
    _Init();
-   __TotalesGenerales();
+   __InicializarTabla('.tableListar');
+   
    
 } );/*fin document*/
 
@@ -16,7 +17,7 @@ var _Init = function () {
       advanced_search_section.slideToggle(750);
    });
    $('#bontonBusqueda').click(function () {
-     ListarArticulos()
+      __ListaArticulos()
    });
   
 }
@@ -27,50 +28,61 @@ var selectCategoria = $('<select id="categoria"   class="form-control categoria"
 
 var selecciono = false;
 
-var ListarArticulos = function(){
-   var valor = $('#categoria').val() == null?" ":$('#categoria').val();
-   var estado = $('#estado').val() == null?" ":$('#estado').val();
-   var minimoMaximo = $('#minimoMaximo').val() == null?" ":$('#minimoMaximo').val();
-   var table  =  $('#tableListar').DataTable( {
-     "responsive": true,
-      "bAutoWidth" : true,
-     "destroy":true,
-     "order": [ 0, 'asc' ],
-             "bInfo": true,
-             "bPaginate": true,
-             "bFilter" : true,
-             "bDeferRender": true ,
-             "sDom": 'lrtip',
-             "searching":true,
-     "processing": false,
-     "serverSide": true,
-     "sort" : "position",
-     "lengthChange": true,
-     "ajax" : {
-             "url":"ListarArticuloXCategoriaAjax.do?codigoCategoria="+valor+"&"+"estado="+estado+"&"+"minimoMaximo="+minimoMaximo,
-             "deferRender": true,
-             "type":"POST",
-                     "dataType": 'json',
-               },
-     "columns" : informacion_tabla,
-     "language" : idioma_espanol,
- } );//fin del table
- agregarInputsCombos();
- EventoFiltro();
- 
-}  
+ var dataResultado  = {aaData:[]};
+/**
+*  Lista de los artculos
+**/
+function __ListaArticulos(){
+   $(".totalCosto").val(null);
+   $(".totalImpuestaEsperada").val(null);
+   $(".totalGananciaEsperada").val(null);
+   $(".totalVentaEsperada").val(null);
+   $(".tableListar").dataTable().fnClearTable(); 
+   __InicializarTabla('.tableListar')  
+   var formulario = $("#filtros").serialize();
+   $.ajax({
+       url: 'ListarArticuloXCategoriaAjax.do',
+       datatype: "json",
+       data : formulario,
+       global: false,
+       method:"POST",
+       success: function (result) {
+           if(result.aaData.length > 0){
+               dataResultado.aaData =result.aaData;
+               loadListar(".tableListar",idioma_espanol,informacion_tabla,result.aaData);
+               agregarInputsCombos();
+               EventoFiltro();
+               __TotalesGenerales();
+           }
+       },
+       error: function (xhr, status) {
+           console.log(xhr);
+           mensajeErrorServidor(xhr, status);
+       }
+   });
+   return
+}
 /**
  * Funcion para obtener el data y realizar la suma de los totales
  */
 function __TotalesGenerales(){
-   var table = $('#tableListar').DataTable();
-    
-   var data = table
-       .rows()
-       .data();
-    
-   console.log( 'The table has ' + data.length + ' records' );
-   console.log( 'Data', data );  
+   var totalImpuesto = 0;
+   var totalVenta = 0;
+   var totalGanancia = 0;
+   var totalCosto = 0;
+   $.each(dataResultado.aaData, function( index, modeloTabla ) {
+
+      totalImpuesto = __valorNumerico(modeloTabla.totalImpuesto) + totalImpuesto;
+      totalVenta = __valorNumerico(modeloTabla.totalVenta) + totalVenta;
+      totalGanancia = __valorNumerico(modeloTabla.totalGanancia) + totalGanancia;
+      totalCosto =  __valorNumerico(modeloTabla.totalCosto) + totalCosto;
+   });
+
+   $(".totalCosto").val(formatoDecimales(totalCosto,2));
+   $(".totalImpuestaEsperada").val(formatoDecimales(totalImpuesto,2));
+   $(".totalGananciaEsperada").val(formatoDecimales(totalGanancia,2));
+   $(".totalVentaEsperada").val(formatoDecimales(totalVenta,2));
+
 }
 /**
 * cargar combo de estados
@@ -135,26 +147,16 @@ var informacion_tabla = [
                            {'data' :'maximo'           ,"name":"maximo"           ,"title" : "Maximo"            ,"autoWidth" :true, "bSortable": false },
                            {'data' :'costoSTR'         ,"name":"costo"            ,"title" : "Costo"             ,"autoWidth" :true, "bSortable": false },
                            {'data' :'precioPublicoSTR' ,"name":"precioPublico"    ,"title" : "Precio Publico"    ,"autoWidth" :true , "bSortable": false },
-                           {'data' :'totalCosto'       ,"name":"totalCosto"       ,"title" : "Total Costo"       ,"autoWidth" :true , "bSortable": false },
-                           {'data' :'totalImpuesto'    ,"name":"totalImpuesto"    ,"title" : "Impuesto Esperada" ,"autoWidth" :true , "bSortable": false },
-                           {'data' :'totalVenta'       ,"name":"totalVenta"       ,"title" : "Venta Esperada"    ,"autoWidth" :true, "bSortable": false },
-                           {'data' :'totalGanancia'    ,"name":"totalGanancia"    ,"title" : "Ganancia Esperada" ,"autoWidth" :true, "bSortable": false },
+                           {'data' :'totalCostoSTR'    ,"name":"totalCostoSTR"    ,"title" : "Total Costo"       ,"autoWidth" :true , "bSortable": false },
+                           {'data' :'totalImpuestoSTR' ,"name":"totalImpuestoSTR" ,"title" : "Impuesto Esperado" ,"autoWidth" :true , "bSortable": false },
+                           {'data' :'totalVentaSTR'    ,"name":"totalVentaSTR"    ,"title" : "Venta Esperada"    ,"autoWidth" :true, "bSortable": false },
+                           {'data' :'totalGananciaSTR' ,"name":"totalGananciaSTR" ,"title" : "Ganancia Esperada" ,"autoWidth" :true, "bSortable": false },
                         ];
-
-
 /**
 *  Agregar los inpust  y select de las tablas
 **/
 function agregarInputsCombos(){
-     // Agregar los input de busqueda 
-    $('.tableListar tfoot th').each( function (e) {
-        var title = $('.tableListar thead th').eq($(this).index()).text();      
-        //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 2  && $(this).index() != 3  && $(this).index() != 4  && $(this).index() != 5 && $(this).index() != 6 && $(this).index() != 7 
-            && $(this).index() != 8 && $(this).index() != 9 && $(this).index() != 10  ){
-         $(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
-        }
-    })
+   
 }
 /**
 *  Mostrar listado datatable Categorias activas
@@ -170,7 +172,6 @@ function __listadoCategoriasActivas(select){
                select.append( '<option value="'+modeloTabla.id+'">'+modeloTabla.descripcion+'</option>' );  
                $('#categoria').append('<option value="'+modeloTabla.id+'">'+modeloTabla.descripcion+'</option>');   
             })
-            ListarArticulos();
          }
       },
       error: function (xhr, status) {
