@@ -77,8 +77,13 @@ public class DataTableDaoImpl implements DataTableDao {
 				// Se buscar por el campo y valor indicado
 				if (StringUtils.hasText(filter.getCampo()) && StringUtils.hasText(filter.getValor())) {
 					String toAppend = " and UPPER(obj." + filter.getCampo() + ") " + valorConOperador(filter.getOperadorBusqueda(), filter.getValor());
-
 					hql.append(toAppend);
+				}else {
+					if(filter.getCampo() !=null && filter.getValor() == null && filter.getOperadorBusqueda() == null) {
+						String toAppend = " and " + filter.getCampo()  ;
+						hql.append(toAppend);
+						
+					}
 				}
 			}
 		}

@@ -1,19 +1,24 @@
 $(document).ready(function() {
 
    _Init();
+   __TotalesGenerales();
    
 } );/*fin document*/
 
 var _Init = function () {
-    EventoFiltro();
-    $('#categoria').change(function (e) {
-      ListarArticulos();
-    });
-    selectCategoria = __listadoCategoriasActivas(selectCategoria);
-    $(".categoria").html(selectCategoria);
-    __ComboEstados();
-    __ComboMinimoMaximo();
-   
+   EventoFiltro();
+   selectCategoria = __listadoCategoriasActivas(selectCategoria);
+   $(".categoria").html(selectCategoria);
+   __ComboEstados();
+   __ComboMinimoMaximo();
+   $('#panelFiltros').click(function () {
+      var advanced_search_section = $('#filtrosAvanzados');
+      advanced_search_section.slideToggle(750);
+   });
+   $('#bontonBusqueda').click(function () {
+     ListarArticulos()
+   });
+  
 }
 
 var listaArticulosGrupales      = {data:[]}
@@ -24,7 +29,9 @@ var selecciono = false;
 
 var ListarArticulos = function(){
    var valor = $('#categoria').val() == null?" ":$('#categoria').val();
-     var table  =  $('#tableListar').DataTable( {
+   var estado = $('#estado').val() == null?" ":$('#estado').val();
+   var minimoMaximo = $('#minimoMaximo').val() == null?" ":$('#minimoMaximo').val();
+   var table  =  $('#tableListar').DataTable( {
      "responsive": true,
       "bAutoWidth" : true,
      "destroy":true,
@@ -40,40 +47,47 @@ var ListarArticulos = function(){
      "sort" : "position",
      "lengthChange": true,
      "ajax" : {
-             "url":"ListarArticuloXCategoriaAjax.do?codigoCategoria="+valor,
+             "url":"ListarArticuloXCategoriaAjax.do?codigoCategoria="+valor+"&"+"estado="+estado+"&"+"minimoMaximo="+minimoMaximo,
              "deferRender": true,
              "type":"POST",
                      "dataType": 'json',
-                     
                },
      "columns" : informacion_tabla,
      "language" : idioma_espanol,
  } );//fin del table
  agregarInputsCombos();
  EventoFiltro();
-
+ 
 }  
-
+/**
+ * Funcion para obtener el data y realizar la suma de los totales
+ */
+function __TotalesGenerales(){
+   var table = $('#tableListar').DataTable();
+    
+   var data = table
+       .rows()
+       .data();
+    
+   console.log( 'The table has ' + data.length + ' records' );
+   console.log( 'Data', data );  
+}
 /**
 * cargar combo de estados
 **/
 function __ComboEstados(){
-   $('.estado').append('<option value="'+$.i18n.prop("todos.select")+'">'+$.i18n.prop("todos.select")+ '</option>');
+   $('.estado').append('<option value="'+0+'">'+$.i18n.prop("todos.select")+ '</option>');
    $('.estado').append('<option value="'+$.i18n.prop("estado.Activo")+'">'+$.i18n.prop("estado.Activo")+ '</option>');
 	$('.estado').append('<option value="'+$.i18n.prop("estado.Inactivo")+'">'+$.i18n.prop("estado.Inactivo")+ '</option>');
-    
 }
-
 /**
 * cargar combo de estados
 **/
 function __ComboMinimoMaximo(){
-   $('.minimoMaximo').append('<option value="'+$.i18n.prop("todos.select")+'">'+$.i18n.prop("todos.select")+ '</option>');
-   $('.minimoMaximo').append('<option value="'+1+'">'+$.i18n.prop("inventario.minimo")+ '</option>');
-	$('.minimoMaximo').append('<option value="'+2+'">'+$.i18n.prop("inventario.maximo")+ '</option>');
-    
+   $('.minimoMaximo').append('<option value="'+0+'">'+$.i18n.prop("todos.select")+ '</option>');
+   $('.minimoMaximo').append('<option value="'+1+'">'+$.i18n.prop("inventario.menor.igual.minimo")+ '</option>');
+	$('.minimoMaximo').append('<option value="'+2+'">'+$.i18n.prop("inventario.mayor.igual.minimo")+ '</option>');
 }
-
 /**
  * Eventos del filtro
  */
@@ -140,11 +154,8 @@ function agregarInputsCombos(){
             && $(this).index() != 8 && $(this).index() != 9 && $(this).index() != 10  ){
          $(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
         }
-      	
-    
     })
 }
-
 /**
 *  Mostrar listado datatable Categorias activas
 **/
@@ -158,7 +169,6 @@ function __listadoCategoriasActivas(select){
             $.each(result.aaData, function( index, modeloTabla ) {
                select.append( '<option value="'+modeloTabla.id+'">'+modeloTabla.descripcion+'</option>' );  
                $('#categoria').append('<option value="'+modeloTabla.id+'">'+modeloTabla.descripcion+'</option>');   
-               
             })
             ListarArticulos();
          }
@@ -168,8 +178,5 @@ function __listadoCategoriasActivas(select){
            mensajeErrorServidor(xhr, status);
       }
   });
-  
   return select;
 }
-
-

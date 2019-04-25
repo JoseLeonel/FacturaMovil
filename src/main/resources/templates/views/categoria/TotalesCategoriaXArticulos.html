@@ -70,6 +70,15 @@
         .scroller {
             width: 200px; height: 600px; overflow-y: scroll;
         }
+        .containerTotales{
+           display: flex; /* or inline-flex */
+          justify-content:space-between;  
+          flex-wrap:wrap;
+        }
+        .elementoTotales{
+          
+         
+        }
     </style>
 </head>
 <body>
@@ -86,43 +95,72 @@
     </div>
     
     
-    <!-- Listado  -->
-   <div classs="container">
-        <form id = "filtros" name ="filtros" >
+  
+	<div class="row" >
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="text-left advanced-search-grid" style="padding : 2px;  cursor: pointer;" id="panelFiltros">
+                    <h4> <i class="fa fa-filter" style="padding-left : 5px;"></i>&nbspFiltro avanzado <i id="advanced-search-collapse-icon" class="fa fa-expand pull-right" style="padding-right : 5px;"></i></h4>
+                </div>  
+                <div  id = "filtrosAvanzados" class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
+                    <form id="filtros" name="filtros">              
+                        <div class= "row">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <div class="form-group">
+				                         <label > Categorias </label>  
+				                         <select  class="form-control categoria" id="categoria" name="categoria"  >
+				                             
+				                         </select>
+                     				</div>                        
+                                </div>  
+                            </div>             
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+			                         <label > Estado </label>  
+			                         <select  class="form-control estado" id="estado" name="estado"  >
+			                             
+			                         </select>
+                    			 </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                 <div class="form-group">
+			                         <label > Minimo/Maximo </label>  
+			                         <select  class="form-control minimoMaximo" id="minimoMaximo" name="minimoMaximo"  >
+			                             
+			                         </select>
+                     			</div>
+                            </div>    
+                             
+                        </div>
+                         
+                    </form>  
+                </div>
+            </div>
+            <div class="col-xs-12 text-right">
+                <button  id="bontonBusqueda" type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
+            </div>
+        </div>
+        <div class="containerTotales">
+        	<div class="elementoTotales">
+        	    <label> Total Costo</label>
+                <input type="text" readonly="readonly" class="form-control totalCosto"  id="totalVenta" name="totalCosto" >
+        	
+        	</div>
+        	<div class="elementoTotales">
+        	    <label> Total Impuesto Esperado</label>
+                <input type="text" readonly="readonly" class="form-control totalImpuestaEsperada"  id="totalImpuestaEsperada" name="totalImpuestaEsperada" >
+        	</div>
+        	<div class="elementoTotales">
+        	    <label> Total Venta Esperada</label>
+                <input type="text" readonly="readonly" class="form-control totalVentaEsperada"  id="totalVentaEsperada" name="totalVentaEsperada" >
+        	</div>
+        	<div class="elementoTotales">
+        	    <label> Total Ganancia Esperada</label>
+                <input type="text" readonly="readonly" class="form-control totalGananciaEsperada" id="totalGananciaEsperada" name="totalGananciaEsperada" >
+        	</div>
         
-        <input type="hidden" name="listaArticuloGrupales" id="listaArticuloGrupales" >
-		  <div class= "row">
-               	<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                     <div class="form-group">
-                         <label > Categorias </label>  
-                         <select  class="form-control categoria" id="categoria" name="categoria"  >
-                             
-                         </select>
-                     </div>
-                       
-                 </div>
-                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                     <div class="form-group">
-                         <label > Estado </label>  
-                         <select  class="form-control estado" id="estado" name="estado"  >
-                             
-                         </select>
-                     </div>
-                       
-                 </div>
-                  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                     <div class="form-group">
-                         <label > Minimo/Maximo </label>  
-                         <select  class="form-control minimoMaximo" id="minimoMaximo" name="minimoMaximo"  >
-                             
-                         </select>
-                     </div>
-                       
-                 </div>
-          </div>    
-          <br>     
-		</form>
-		
+        </div>
+        <br>
 		        
         <div class="row">
             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 scroller " style="width:98.50%;">
