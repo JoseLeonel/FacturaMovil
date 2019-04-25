@@ -249,7 +249,12 @@ public class HaciendasController {
 		Integer estado = Constantes.ZEROS;
 		String mensajeHacienda = Constantes.EMPTY;
 		String xmlFirmado = Constantes.EMPTY;
+		String status = Constantes.EMPTY;
+		String xmlSinFirmarRespuesta = Constantes.EMPTY;
+		String xmlFirmadoRespuesta = Constantes.EMPTY;
+		
 		lock.lock();
+		RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();
 		try {
 			long id = Thread.currentThread().getId();
 			System.out.println(String.format("--start transaccion CallBACK--> Thread=%d %s", id, "Fecha:" + new Date()));
@@ -261,9 +266,8 @@ public class HaciendasController {
 				log.info("** callBack: " + respuestaHacienda.clave() + " fecha " + new Date());
 
 				if (hacienda != null) {
-					String status = getHaciendaStatus(respuestaHacienda.indEstado());
-					log.info("** Respuesta Estado: " + status + " fecha " + new Date());
-					RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();
+					status = getHaciendaStatus(respuestaHacienda.indEstado());
+					log.info("** Respuesta Estado-->: " + status);
 					respuesta.setClave(respuestaHacienda.clave());
 					respuesta.setFecha(respuestaHacienda.fecha());
 					respuesta.setIndEstado(respuestaHacienda.indEstado());
@@ -277,8 +281,8 @@ public class HaciendasController {
 					respuesta.setTipoIdentificacionEmisor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().tipoIdentificacionEmisor() : Constantes.EMPTY);
 					respuesta.setTipoIdentificacionReceptor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().tipoIdentificacionReceptor() : Constantes.EMPTY);
 					respuesta.setTotalFactura(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().totalFactura() : Constantes.ZEROS_DOUBLE);
-					String xmlSinFirmarRespuesta = Constantes.EMPTY;
-					String xmlFirmadoRespuesta = Constantes.EMPTY;
+					log.info("Status -->:", status);
+					log.info("Respuesta -->:", respuesta.toString());
 					if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECIBIDO)) {
 						xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
 						xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
@@ -292,8 +296,11 @@ public class HaciendasController {
 							}
 						}
 					}
-					if (xmlFirmadoRespuesta != Constantes.EMPTY) {
-						xmlFirmado = xmlFirmadoRespuesta;
+					if (xmlFirmadoRespuesta != null) {
+						if (!xmlFirmadoRespuesta.equals(Constantes.EMPTY)) {
+							xmlFirmado = xmlFirmadoRespuesta;
+						}
+
 					}
 					if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
 						estado = Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA;
@@ -318,14 +325,20 @@ public class HaciendasController {
 					}
 
 					mensajeHacienda = respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().detalleMensaje() : Constantes.EMPTY;
+					log.info("Respuesta:", respuesta);
+					log.info("xmlFirmado:", xmlFirmado);
 					if (xmlFirmado != null) {
 						if (!xmlFirmado.equals(Constantes.EMPTY)) {
+							log.info("llamado procedimiento callback:", estado);
 							haciendaBo.findByClaveSP(respuestaHacienda.clave(), estado, xmlFirmado, mensajeHacienda);
+						} else {
+							log.info("No llamado procedimiento callback:", estado);
 						}
 
 					}
 				}
 			}
+			log.info("Estado para actualizar Factura:", estado);
 			log.info("Finaliza callBack {}", new Date());
 		} catch (Exception e) {
 			log.info("** Error  callBack: " + e.getMessage() + " fecha " + new Date());

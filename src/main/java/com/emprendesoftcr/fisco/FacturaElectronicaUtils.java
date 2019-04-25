@@ -289,7 +289,8 @@ public final class FacturaElectronicaUtils {
 	 */
 	public static String toISO8601String(Date date) {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+	//	dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+		
 		return dateFormat.format(date);
 	}
 

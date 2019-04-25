@@ -391,13 +391,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				 //recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 				
 				// JacoDos
-				//recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+			//	recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 				// Jaco
 				// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 				
 				// Inventario
-				// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				 //recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 				
 				
 
@@ -443,7 +443,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						try {
 
 							Date fecha = new Date();
-							long tiempoInicial = hacienda.getCreated_at().getTime();
+							long tiempoInicial = hacienda.getFechaEmisor().getTime();
 							long tiempoFinal = fecha.getTime();
 							long resta = tiempoFinal - tiempoInicial;
 							// el metodo getTime te devuelve en mili segundos para saberlo en mins debes hacer
@@ -955,12 +955,14 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			Collection<Factura> lista = facturaBo.findByEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE, Constantes.FACTURA_ESTADO_REFIRMAR_DOCUMENTO);
 			for (Factura factura : lista) {
 				try {
-					log.info("Factura id	:  {}", factura.getId() + " Factura proceso de firmado:  " + factura.getNumeroConsecutivo().toString() + " Empresa:" + factura.getEmpresa().getNombre());
+					
 
 					if (factura != null) {
 						Collection<Detalle> detalles = detalleBo.findByFactura(factura);
 						if (detalles != null) {
-							if (!detalles.isEmpty()) {
+//							if (!detalles.isEmpty() && factura.getEmpresa().getId().equals(Constantes.EMPRESA_VIVIANA_MARTINEZ_8085)) {
+								if (!detalles.isEmpty() ) {
+								log.info("Factura id	:  {}", factura.getId() + " Factura proceso de firmado:  " + factura.getNumeroConsecutivo().toString() + " Empresa:" + factura.getEmpresa().getNombre());
 								if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 									String comprobanteXML = Constantes.EMPTY;
 									if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
