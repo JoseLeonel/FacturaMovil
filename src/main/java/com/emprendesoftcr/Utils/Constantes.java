@@ -23,6 +23,7 @@ public class Constantes {
 	// callbackurl 1 = si 0= No
 	public static final Integer					CALLBACKURL_SI																			= 1;
 	public static final Integer					CALLBACKURL_NO																			= 0;
+	public static final Integer					EMPRESA_VIVIANA_MARTINEZ_8085												= 12;
 
 	// Tipo de mostrar el articulo de impuesto de servicio 10 porciento
 	public static final Integer					NO_MOSTRAR_IMPUESTO_10_PORCIENTO										= 1;
@@ -62,7 +63,7 @@ public class Constantes {
 //	public static final String					URL_PRUEBAS_CALLBACK																= "http://190.124.250.142:8085/service/callback.do";
 
 	// Semaforo
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 120;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 350;
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS								= 40;
 
 	// 48 horas cada 5 minutos

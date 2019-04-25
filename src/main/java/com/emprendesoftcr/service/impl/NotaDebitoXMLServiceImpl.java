@@ -101,7 +101,7 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
 			}
 		
 			String datereferenciaEmision = FacturaElectronicaUtils.toISO8601String(factura.getReferenciaFechaEmision());
-			String date = FacturaElectronicaUtils.toISO8601String(factura.getFechaEmision());
+			 String date = FacturaElectronicaUtils.toISO8601String(factura.getFechaEmision());
 	    xml = "<NotaDebitoElectronica xmlns=\"" + Constantes.DOCXMLS_NOTA_DEBITO + "\" " +
 	                "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
 	        "<Clave>" + factura.getClave() + "</Clave>" +

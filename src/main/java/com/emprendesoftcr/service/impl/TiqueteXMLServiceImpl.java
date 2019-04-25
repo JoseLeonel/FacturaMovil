@@ -91,7 +91,7 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 			}else {
 				observacion = factura.getNota();
 			}
-					 String date = FacturaElectronicaUtils.toISO8601String(fecha);
+					 String date = FacturaElectronicaUtils.toISO8601String(factura.getFechaEmision());
 		   resultado = "<TiqueteElectronico xmlns=\"" + Constantes.DOCXMLS_TIQUETE + "\" " +
 		                "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
 		        "<Clave>" + factura.getClave() + "</Clave>" +
