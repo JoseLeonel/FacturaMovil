@@ -19,7 +19,8 @@
                                 <div class="form-group">
         	                         <label > Categorias </label>  
                                     <select  class="form-control selectCategoria categoria" id="categoria" name="categoria" data-live-search="true">
-                                        <option  data-tokens="{nombreCompleto}" each={categorias.data}  value="{id}"  >{descripcion}</option>
+                                        <option  data-tokens="{$.i18n.prop("todos.select")}"  value="0"  >{$.i18n.prop("todos.select")}</option>
+                                        <option  data-tokens="{descripcion}" each={categorias.data}  value="{id}"  >{descripcion}</option>
                                     </select>
                   				</div>                        
                             </div>             

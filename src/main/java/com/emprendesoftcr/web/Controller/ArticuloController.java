@@ -128,7 +128,6 @@ public class ArticuloController {
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
 
-
 	@RequestMapping(value = "/ListarArticulosXCambioCategoria", method = RequestMethod.GET)
 	public String listarXCambioCategoria(ModelMap model) {
 		return "views/articulos/ListarArticulosCambiarCategoria";
@@ -419,11 +418,11 @@ public class ArticuloController {
 		return respuestaService;
 
 	}
-	
+
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarArticuloXCategoriaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarCategoriaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "categoria", required = false) Long categoria,@RequestParam(value = "estado", required = false) String estado,@RequestParam(value = "minimoMaximo", required = false) String minimoMaximo) {
+	public RespuestaServiceDataTable listarCategoriaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "categoria", required = false) String categoria, @RequestParam(value = "estado", required = false) String estado, @RequestParam(value = "minimoMaximo", required = false) String minimoMaximo) {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Articulo");
@@ -433,24 +432,26 @@ public class ArticuloController {
 			delimitadores.addFiltro(dataTableFilter);
 		}
 		JqGridFilter categoriaFilter = null;
-		if (categoria != null) {
-			if (!categoria.equals(Constantes.ZEROS_LONG)) {
-				categoriaFilter = new JqGridFilter("categoria.id", "'" + categoria + "'", "=");
-				delimitadores.addFiltro(categoriaFilter);
+		if (!categoria.equals(Constantes.COMBO_TODOS)) {
+			if (categoria != null) {
+				if (!categoria.equals(Constantes.EMPTY)) {
+					categoriaFilter = new JqGridFilter("categoria.id", "'" + categoria + "'", "=");
+					delimitadores.addFiltro(categoriaFilter);
+				}
 			}
 		}
-		if(!estado.equals(Constantes.COMBO_TODOS)) {
+		if (!estado.equals(Constantes.COMBO_TODOS)) {
 			categoriaFilter = new JqGridFilter("estado", "'" + estado + "'", "=");
 			delimitadores.addFiltro(categoriaFilter);
-			
+
 		}
-		if(!minimoMaximo.equals(Constantes.COMBO_TODOS)) {
-			if(minimoMaximo.equals(Constantes.ARTICULO_MINIMO)) {
+		if (!minimoMaximo.equals(Constantes.COMBO_TODOS)) {
+			if (minimoMaximo.equals(Constantes.ARTICULO_MINIMO)) {
 				categoriaFilter = new JqGridFilter("obj.cantidad <= obj.minimo ");
 				delimitadores.addFiltro(categoriaFilter);
-				
+
 			}
-			if(minimoMaximo.equals(Constantes.ARTICULO_MAXIMO)) {
+			if (minimoMaximo.equals(Constantes.ARTICULO_MAXIMO)) {
 				categoriaFilter = new JqGridFilter("obj.cantidad >= obj.minimo ");
 				delimitadores.addFiltro(categoriaFilter);
 			}
@@ -478,32 +479,44 @@ public class ArticuloController {
 		return respuestaService;
 
 	}
-	
-/**
- * Descarga del excel de Totales por categorias 
- * @param request
- * @param response
- * @param categoria
- * @param estado
- * @param minimoMaximo
- * @throws IOException
- * @throws Exception
- */
+
+	/**
+	 * Descarga del excel de Totales por categorias
+	 * @param request
+	 * @param response
+	 * @param categoria
+	 * @param estado
+	 * @param minimoMaximo
+	 * @throws IOException
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/DescargarArticuloXCategoriaAjax.do", method = RequestMethod.GET)
-	public void descargarArticuloXCategoriaAjax(HttpServletRequest request, HttpServletResponse response,@RequestParam(value = "idCategoria", required = false) Long idCategoria,@RequestParam(value = "estado", required = false) String estado,@RequestParam(value = "minimoMaximo", required = false) String minimoMaximo)  throws IOException, Exception {
+	public void descargarArticuloXCategoriaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "idCategoria", required = false) String idCategoria, @RequestParam(value = "estado", required = false) String estado, @RequestParam(value = "minimoMaximo", required = false) String minimoMaximo) throws IOException, Exception {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		Categoria categoria = categoriaBo.buscar(idCategoria);
+		Long codigoCategoria = Constantes.ZEROS_LONG;
+		if(idCategoria !=null) {
+			if (!idCategoria.equals(Constantes.COMBO_TODOS)) {
+				codigoCategoria = Long.parseLong(idCategoria);			
+			}
+			
+		}
+		Categoria categoria = categoriaBo.buscar(codigoCategoria);
 
 		// Se buscan las facturas
-		Collection<Articulo> articulos = articuloBo.findByCategoriaAndEmpresaAndEstadoAndMinimoMaximo(usuario.getEmpresa(), categoria, estado,  minimoMaximo);;
-    String cate = categoria.getDescripcion().trim();
-    cate = cate.replace(" ","" );
-		String nombreArchivo = "Totales_" + cate+ ".xls";
+		String cate = Constantes.EMPTY;
+		Collection<Articulo> articulos = articuloBo.findByCategoriaAndEmpresaAndEstadoAndMinimoMaximo(usuario.getEmpresa(), categoria, estado, minimoMaximo);
+		if(categoria !=null) {
+			cate = categoria.getDescripcion().trim();		
+		}else {
+			cate = "Inventario";
+		}
+	
+		cate = cate.replace(" ", "");
+		String nombreArchivo = "Totales_" + cate + ".xls";
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 
-		
 		// Se prepara el excell
 		ByteArrayOutputStream baos = createExcelArticuloXCategoriaAjax(articulos);
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
@@ -519,7 +532,7 @@ public class ArticuloController {
 	private ByteArrayOutputStream createExcelArticuloXCategoriaAjax(Collection<Articulo> articulos) {
 		List<Object> list = new ArrayList<Object>();
 		for (Iterator<Articulo> iterator = articulos.iterator(); iterator.hasNext();) {
-			Articulo object =  iterator.next();
+			Articulo object = iterator.next();
 			// no se carga el usuario del sistema el id -1
 			if (object.getId().longValue() > 0L) {
 				list.add(new ArticuloCommand(object));
@@ -527,7 +540,7 @@ public class ArticuloController {
 		}
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Categoria", "#Codigo", "Descripcion", "Cantidad", "Minimo","Maximo","Costo","Precio Publico","Total Costo","Impuesto Esperado","Venta Esperada","Ganancia Esperada");
+		List<String> headers = Arrays.asList("Categoria", "#Codigo", "Descripcion", "Cantidad", "Minimo", "Maximo", "Costo", "Precio Publico", "Total Costo", "Impuesto Esperado", "Venta Esperada", "Ganancia Esperada");
 		new SimpleExporter().gridExport(headers, list, " categoria.descripcion,codigo, descripcion, cantidad,minimo,maximo,costoSTR,precioPublicoSTR,totalCostoSTR,totalImpuestoSTR,totalVentaSTR,totalGananciaSTR", baos);
 		return baos;
 	}

@@ -244,14 +244,18 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	@Override
 	public Collection<Articulo> findByCategoriaAndEmpresaAndEstadoAndMinimoMaximo(Empresa empresa,Categoria categoria, String estado, String minimoMaximo){
 		String sql = Constantes.EMPTY;
-		sql = "select obj from Articulo obj where obj.categoria = :categoria and obj.empresa = :empresa ";
+		sql = "select obj from Articulo obj where obj.empresa = :empresa ";
+		if(categoria !=null) {
+			sql = sql  + "and obj.categoria = :categoria ";
+			
+		}
 		if(minimoMaximo.equals(Constantes.ARTICULO_MINIMO)) {
 			sql = sql + " and obj.cantidad <= obj.minimo ";
 		}else if(minimoMaximo.equals(Constantes.ARTICULO_MAXIMO)) {
 			sql = sql + "and obj.cantidad <= obj.minimo ";
 		}
 		if(!estado.equals(Constantes.COMBO_TODOS)) {
-			sql = sql  + "and  obj.categoria = :categoria ";
+			sql = sql  + "and  obj.estado = :estado ";
 		}
 		sql = sql + " order by obj.categoria.id,obj.descripcion";
 
@@ -259,8 +263,10 @@ public class ArticuloDaoImpl implements ArticuloDao {
 		if(!estado.equals(Constantes.COMBO_TODOS)) {
 			query.setParameter("estado", estado);
 		}
-
-		query.setParameter("categoria", categoria);
+    if(categoria !=null) {
+    	query.setParameter("categoria", categoria);	
+    }
+		
 		query.setParameter("empresa", empresa);
 		return query.getResultList();
 		
