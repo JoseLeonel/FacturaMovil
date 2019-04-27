@@ -268,6 +268,7 @@ public class HaciendasController {
 				if (hacienda != null) {
 					status = getHaciendaStatus(respuestaHacienda.indEstado());
 					log.info("** Respuesta Estado-->: " + status);
+					log.info("Respuesta12: -->:", body.toString());
 					respuesta.setClave(respuestaHacienda.clave());
 					respuesta.setFecha(respuestaHacienda.fecha());
 					respuesta.setIndEstado(respuestaHacienda.indEstado());
@@ -282,7 +283,7 @@ public class HaciendasController {
 					respuesta.setTipoIdentificacionReceptor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().tipoIdentificacionReceptor() : Constantes.EMPTY);
 					respuesta.setTotalFactura(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().totalFactura() : Constantes.ZEROS_DOUBLE);
 					log.info("Status -->:", status);
-					log.info("Respuesta -->:", respuesta.toString());
+					log.info("Respuesta -->:", body.toString());
 					if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECIBIDO)) {
 						xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
 						xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
