@@ -27,12 +27,36 @@
                     
                 </div>
                 <div class="elementoDescripcionArticulo">
-                    <h1>Descripcion de los articulos y cantidad</h1>
+                    <div class="elementoDescripcionArticulosCantidad">
+                        <span class="formatoLetraDescripcion">Articulos.No=12 / Productos productos 1</span></a>
+                    </div>
                 </div>
             </div>
             <div class="contendorPrincipalFactura">
                  <div class="elementoIzquierdo">
-                       <h1>Entrada de los datos</h1>
+                    <div class="elementoEntradaDatos">
+                        <div class="elementoCodigo">
+                             <input id="codigo" name ="codigo" class="campo codigo" type="text" placeholder="XXXXXXXXXXXXXXXXXX" />
+                        </div>
+                        <div class="elementoCodigo">
+                            <input onkeypress={__addPrecioDetail}  id="precioVenta" name ="precioVenta" class="campo precioVenta" type="number" step="any"  placeholder="Precio Ejemplo:600" />
+                        </div>
+                    </div>
+                    <div class="elementoDetalleFactura">
+                       <div class="table-container" >
+                            <div class="flex-table " >
+                                <div class="flex-row " ><h1 class="header-table">Linea</h1></div>
+                                <div class="flex-row" ><h1 class="header-table">Codigo</h1></div>
+                                <div class="flex-row" ><h1 class="header-table">Descripcion</h1></div>
+                                <div class="flex-row" ><h1 class="header-table">Cantidad</h1></div>
+                                <div class="flex-row" ><h1 class="header-table">Precio</h1></div>
+                                <div class="flex-row" ><h1 class="header-table">Desc</h1></div>
+                                <div class="flex-row" ><h1 class="header-table">Impuesto</h1></div>
+                                <div class="flex-row" ><h1 class="header-table">SubTotal</h1></div>
+                            </div>
+                        </div>    
+                    </div>
+                       
                 </div>
                 <div class="elementoDerecho">
                      <h1>Barra de boton </h1>
@@ -42,34 +66,89 @@
        
 
 <style type="text/css"  >
+$table-header: #1976D2;
+$table-header-border: #1565C0;
+$table-border: #d9d9d9;
+.header-table{
+    color: #222D32;
+    font-size: 30px;
+    font-weight: bold;
+    font-size: 2em;
+    margin: .67em 0;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.table-container{
+    display: flex;
+   
+}
+.flex-table{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+   
+}
+.flex-row{
+  background:red;
+  width:10%;
+  flex-shrink: 2;
+
+  
+
+}
+.flex-row-linea{
+  background:orange;
+  width:20%  
+}
+.flex-row-codigo{
+  background:purple;
+  width:30%  
+
+}
+.flex-row-desc{
+    color:white;
+  background:blue;
+  width:20%  
+
+}
+    .elementoTitulosDetalles{
+        background:red;
+    }
     .formatoLetraBoton{
         margin-top: 15px;
         text-shadow: 0px 0px 1px #ffffff;
-        color: #ffffff !important;
+        color: white !important;
         font-size: 19px !important;
+        font-family: Roboto,sans-serif !important;
+        font-weight: 600 !important;
+    }
+     .formatoLetraDescripcion{
+        margin-top: 15px;
+        text-shadow: 0px 0px 1px #ffffff;
+            color: #30ed17 !important;
+        font-size: 14px !important;
         font-family: Roboto,sans-serif !important;
         font-weight: 600 !important;
     }
      .containerPrincpal{
         display: flex;
         flex-direction: column;
+            border: 1px solid #3c8dbc;
         width:100%;
      }
     .elementoBotonesDescripArticuloPrincipal{
-         background-color:  rgb(201, 76, 76);
+         background-color: white;
          
          display: flex;
-         height:85px;
+         
     }
     .elementoBoton{
-        padding-top: 2px;
         margin-left: 1px;
         padding-top: 3px;
-        background-color: purple;
+        background-color: black !important;
         width:14%;
-        height:55%;
         cursor: pointer;
-        text-align: center;
+          padding-left: 3px;
         border-radius: 7px 7px 7px 7px;
         -moz-border-radius: 7px 7px 7px 7px;
         -webkit-border-radius: 7px 7px 7px 7px;
@@ -77,9 +156,20 @@
             
         
     }
+    .elementoDescripcionArticulosCantidad{
+          width:100%;
+        cursor: pointer;
+        background-color: black !important;
+          padding-left: 3px;
+        border-radius: 7px 7px 7px 7px;
+        -moz-border-radius: 7px 7px 7px 7px;
+        -webkit-border-radius: 7px 7px 7px 7px;
+        border: 0px solid #000000;
+    }
     .elementoBotonesPrincipal{
-         background-color:  red;
-         width:70%;
+         background-color:  white;
+         width:80%;
+       
         display: flex;
         flex-direction: row;
         align-items: stretch;
@@ -89,7 +179,7 @@
         
     }
    .elementoDescripcionArticulo{
-         background-color:  yellow;
+         
          width:30%;
          
 
@@ -97,7 +187,35 @@
     .contendorPrincipalFactura{
           display: flex;
           height:auto;
-          background-color: purple;
+          background-color: white;
+          width:100%;
+
+    }
+    .elementoEntradaDatos{
+          background-color: red;
+           display: flex;
+        flex-direction: row;
+        justify-content: center; 
+}
+    
+    .elementoCodigo{
+        background-color: white;
+            padding-top: 8px;
+        width:100%;
+        padding-left: 2px;
+    padding-right: 6px;
+        padding-bottom: 5px;
+
+
+
+    }
+    .elementoPrecio{
+        background-color: blue;
+        width:100%;
+
+    }
+    .elementoDetalleFactura{
+          background-color: yellow;
           width:100%;
 
     }
@@ -105,6 +223,8 @@
         height:auto;
         background-color: blue;
         width:75%;
+        display: flex;
+        flex-direction: column;
 
     }
     .elementoDerecho{
@@ -114,7 +234,7 @@
 
     }
     .elementoBotonTotal{
-        background-color: orange;
+        background-color: white;
         height:100%;
         width:100%;
 
