@@ -42,7 +42,8 @@ public class Factura implements Serializable {
 
 	@Column(name = "numero_consecutivo")
 	private String numeroConsecutivo;
-
+	
+	
 	@Column(name = "clave")
 	private String clave;
 
