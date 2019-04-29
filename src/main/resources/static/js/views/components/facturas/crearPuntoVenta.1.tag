@@ -1,555 +1,262 @@
 <punto-venta>
-<!--validar rol de usuario-->
-
-<!-- The Modal -->
-  <div class="modal fade" id="modalRolUsuario">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">Seguridad</h4>
-        </div>
-        <!-- Modal body -->
-        <div class="modal-body">
-           <form id="formularioModalRolUsuario">
-                <div class="form-group ">
-                    <label>Usuario</label> 
-                    <input  type="text"  class="form-control usuarioSistema"      id="usuarioSistema" name="usuarioSistema" value="{validarRolCommand.usuarioSistema}">
-                </div>      
-                <div class="form-group ">
-                    <label>Clave</label> 
-                    <input  type="password"  class="form-control claveSistema"  name="claveSistema" id="claveSistema"  value="{validarRolCommand.claveSistema}">
-                </div>      
-            </form>
-        </div>
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger"  onclick ="{__SeguridadVentas}" >Autorizar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-<!--fin validar rol de usuario-->
-
-<!--Modal abrirCajon sin comanda-->
-<div id='modalabrirCajon' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
-    <div class="modal-dialog modal-sm">
-       <div class="modal-content">
-            <div class="modal-body">
-                <div id="imprAbriCajon" name ="imprAbriCajon">
-                    <div class="row">
-                        <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
-                            <div class="form-group has-success">
-                                <input  type="text"  class="form-control" value={informacionAbrirCajon}>
-                            </div>
-                        </div>
-                    </div> 
-                </div>    
-            </div>
-        </div>
-    </div>
-</div>
-<!---Datos Final cuando no es un venta de Crucero -->
-<div show={mostrarFormularioPago}>
-		<div class="row " >
-			<div class="col-md-8 col-sm-8 col-lg-8 col-sx-12 ">
-				<div class="box">
-					<div class="box-header with-border fondoEncabezado">
-						<h3 class="box-title">{$.i18n.prop("ventas.titulo")} </h3>
-                        <h3 class="box-title pull-right ">{$.i18n.prop("ventas.tipo.cambio.titulo")} {tipoCambio.total} </h3>
-					</div>
-					<div class="box-body">
-                        
-                        <form id="formularioFactura">
-                            <div class="row">
-                                <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
-                                    <div class="row">
-                                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
-                                            <div class="form-group ">
-                                                <label>{$.i18n.prop("factura.condicion.pago")} </label> 
-                                                <select  onchange= {__formaPago} class="form-control condicionVenta" id="condicionVenta" name="condicionVenta">
-                                                    <option each={comboCondicionPagos} value="{estado}" selected="{factura.condicionVenta ==estado?true:false}" >{descripcion}</option>
-                                                </select>
-                                            </div>
-                                        </div>    
-                                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
-                                            <div class="form-group ">
-                                                <label for="pago_tipoVentaL">{$.i18n.prop("factura.tipo.documento")} </label> 
-                                                <select class="form-control tipoDoc" id="tipoDoc" name="tipoDoc"   >
-                                                    <option each={comboTipoDocumentos} value="{estado}" selected="{factura.tipoDoc ==estado?true:false}" >{descripcion}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group ">
-                                        <label >{$.i18n.prop("factura.nota")}</label> 
-                                        <input type="text" class="campo nota" id="nota" name="nota" value="{factura.nota}">
-                                    </div>
-                                    <h3> <p class="text-primary">{$.i18n.prop("factura.emisor")}</p></h3>
-                                    <div class="form-group ">
-                                        <input   type="hidden" class="form-control" id="cliente" name="cliente" value="{cliente.id}">
-                                        <label>{$.i18n.prop("factura.cliente")}</label> 
-                                        <input onclick = {_EscogerClientes}  type="text" id="nombreCliente" name="nombreCliente" class="campo"  value="{cliente.nombreCompleto}" readonly>
-                                    </div>
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("cliente.correoElectronico")}</label> 
-                                        <input  type="text"  class="form-control"  value="{cliente.correoElectronico}" readonly>
-                                    </div>                                    
-                                   <div class="form-group ">
-                                        <label>{$.i18n.prop("factura.correoAlternativo")}</label> 
-                                        <input type="email" id="correoAlternativo" name="correoAlternativo" class="campo correoAlternativo"  value="{factura.correoAlternativo}" >
-                                    </div>
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("factura.nombreFactura")}</label> 
-                                        <input type="text" id="nombreFactura" name="nombreFactura" class="campo nombreFactura "  value="{factura.nombreFactura}" > 
-                                    </div>
-                                    
-                                    <div show = "{!mostrarCamposIngresoContado || factura.fechaCredito}" class="form-group ">
-                                        <label >{$.i18n.prop("factura.fecha.credito")}</label> 
-                                        <div  class="form-group input-group date datepickerFechaCredito" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
-                                            <input type="text" class="campo fechaCredito" name="fechaCredito" id="fechaCredito" value="{factura.fechaCredito}" >
-                                            <div class="input-group-addon">
-                                                <span class="glyphicon glyphicon-th"></span>
-                                            </div>
-                                        </div>
-                                    </div>    
-                                    <div class="form-group " show = "{!mostrarCamposIngresoContado || factura.fechaCredito}">
-                                        <label>{$.i18n.prop("factura.plazoCredito")}</label> 
-                                        <input type="number" id = "plazoCreditoL"  name "plazoCreditoL" class="campo plazoCreditoL" value="{factura.plazoCredito}" >
-                                    </div>
-                                </div>
-                                <div  class= "col-md-6 col-sx-6 col-sm-6 col-lg-6" >
-                                    <div class="form-group ">
-                                        <label class="{labelTotales}">{$.i18n.prop("factura.resumen.efectivo")} </label> 
-                                        <input onclick={_SeleccionarEfectivo}   onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra} totalEfectivo " id="totalEfectivo" name="totalEfectivo" value="{factura.totalEfectivo}" >
-                                    </div>
-                                    <div  class="form-group ">
-                                        <label class="{labelTotales}">{$.i18n.prop("factura.resumen.tarjeta")} </label> 
-                                        <input onclick={_SeleccionarTarjeta} onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra} totalTarjeta" id="totalTarjeta" name="totalTarjeta"  value="{factura.totalTarjeta}" >
-                                    </div> 
-                                    <div  class="form-group " show={empresa.pantChino == 0}>
-                                        <label class="{labelTotales} ">{$.i18n.prop("factura.resumen.banco")} </label> 
-                                        <input onclick={_SeleccionarBanco} onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number"  onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra}  totalBancoPantalla"  id="totalBancoPantalla" name="totalBancoPantalla"  value="{factura.totalBanco}" >
-                                    </div> 
-                                   
-                                </div>
-                            </div>
-                             
-                            <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
-                            <input type="hidden" id='plazoCredito'            name='plazoCredito'            value="{factura.plazoCredito}" >
-                            <input type="hidden" id='estado'                  name='estado'                  value="{factura.estado}" >
-                            <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
-                            <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
-                            <input type="hidden" id='subTotal'                name='subTotal'                value="{factura.subTotal}" >
-                            <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
-                            <input type="hidden" id='totalComprobante'        name='totalComprobante'        value="{factura.totalComprobante}" >
-                            <input type="hidden" id='totalServGravados'       name='totalServGravados'       value="{factura.totalServGravados}" >
-                            <input type="hidden" id='totalServExentos'        name='totalServExentos'        value="{factura.totalServExentos}" >
-                            <input type="hidden" id='totalMercanciasGravadas' name='totalMercanciasGravadas' value="{factura.totalMercanciasGravadas}" >
-                            <input type="hidden" id='totalMercanciasExentas'  name='totalMercanciasExentas'  value="{factura.totalMercanciasExentas}" >
-                            <input type="hidden" id='totalServGravados'       name='totalServGravados'       value="{factura.totalServGravados}" >
-                            <input type="hidden" id='totalServExentos'        name='totalServExentos'        value="{factura.totalServExentos}" >
-                            <input type="hidden" id='totalGravado'            name='totalGravado'            value="{factura.totalGravado}" >
-                            <input type="hidden" id='totalExento'             name='totalExento'             value="{factura.totalExento}" >
-                            <input type="hidden" id='totalVenta'              name='totalVenta'              value="{factura.totalVenta}" >
-                            <input type="hidden" id='totalDescuentos'         name='totalDescuentos'        value="{factura.totalDescuentos}" >
-                            <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
-                            <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           valmodalue="{factura.totalImpuesto}" >
-                            <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
-                            <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
-                            <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
-                            <input type="hidden" id='totalTarjeta'            name='totalTarjeta'            value="{factura.totalTarjeta}" >
-                            <input type="hidden" id='totalBanco'              name='totalBanco'              value="{factura.totalBanco}" >
-                   
-                        </form>   
+      <div class="containerPrincpal">
+            <div class="elementoBotonesDescripArticuloPrincipal">
+                <div class="elementoBotonesPrincipal">
+                    <div class="elementoBoton">
+                        <span class ="formatoLetraBoton">Facturas Día</span>
                     </div>
-                    <div class="box-footer">
-                        <button onclick={_AtrasFacturaFinal} class="btn-dark-gray btn-back pull-left">  {$.i18n.prop("btn.volver")}</button>
-                        <button onclick={__AplicarYcrearFactura}  class="btn-green btn-add pull-right"> </i> {$.i18n.prop("btn.aplicar")}</button>
+                    <div class="elementoBoton">
+                        <span class ="formatoLetraBoton">F2=Limpiar</span>
+                    </div>
+                    <div class="elementoBoton">
+                        <span class ="formatoLetraBoton">F4=Articulos</span>
+                    </div>
+                    <div class="elementoBoton">
+                        <span class ="formatoLetraBoton">F6=ReImprimir</span>
+                    </div>
+                    <div class="elementoBoton">
+                        <span class ="formatoLetraBoton">F8=Facturar</span>
+                    </div>
+                    <div class="elementoBoton">
+                        <span class ="formatoLetraBoton">F9=En Espera</span>
+                    </div>
+                    <div class="elementoBoton">
+                        <span class ="formatoLetraBoton">Insert=Cajon</span>
+                    </div>
+
+                    
+                </div>
+                <div class="elementoDescripcionArticulo">
+                    <div class="elementoDescripcionArticulosCantidad">
+                        <span class="formatoLetraDescripcion">Articulos.No=12 / Productos productos 1</span></a>
                     </div>
                 </div>
-                  
             </div>
-            <div class="col-md-4 col-sm-4 col-lg-4 col-sx-12 ">
-		        <div class="box">
-				    <div class="box-header with-border"><h1 class="box-title">Detalles Facturacion</h1></div>
-				    <div class="box-body">
-                        <aside class="right-sidebar">
-                            <!--Booking details-->
-                            <article class="booking-details clearfix">
-                                <h1><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h1>
-                                <div class="booking-info" show={soloParaChinos == false}>
-                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.subTotal")}  <span id="lblSubtotal"> {subTotalGeneral} </span></p>
-                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos} </span></p>
-                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {totalImpuesto} </span></p>
-                                </div>
-                                <div class="precioTotalFactura" show={soloParaChinos == false}>
-                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}</span></p>
-                                </div>
-                                <div class="precioTotalFactura" show={soloParaChinos == true}>
-                                    <p class="total label-totalesChinos" style="text-align:right;">Total:  <span id="lblTotal">{totalComprobante}</span></p>
-                                </div>
-
-                                <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado && soloParaChinos == false }>
-                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span></p>    
-                                </div>
-                                <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado && soloParaChinos == true }>
-                                    <p class="total label-totalesChinos" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span></p>    
-                                </div>
-
-                            </article>
-                        </aside>
-                    </div><!-- fin box-body-->
-				</div><!-- fin box -->
-		    </div>
-        </div>  
-         
-</div>  
-<!--Fin Ventana de los billetes-->      
-    <!--Ventana de los billetes-->
-            <div class="row" show={mostrarFormularioPago}>
-                <div   class="col-sx-12 col-sm-12 col-md-12 col-lg-12 " >
-                    <!--Seccion de Billetes-->
-                    <section  class="lista-articulos" >
-                        <div class="product-item" each={billetes}   onclick={_sumarBilletes}>
-                            <img style = "height:110px;width:180px" alt="" class="img-responsive " src="{imagen}">
-                            <a href="#">{modena} {descripcion}</a>
+            <div class="contendorPrincipalFactura">
+                 <div class="elementoIzquierdo">
+                    <div class="elementoEntradaDatos">
+                        <div class="elementoCodigo">
+                             <input id="codigo" name ="codigo" class="campo codigo" type="text" placeholder="XXXXXXXXXXXXXXXXXX" />
                         </div>
-                    </section>
-                   <!--Fin Seccion de Billetes-->
-                </div> 
-            </div>       
-        <!--Fin Ventana de los billetes--> 
- 
- <div  class="contenedor-factura " show={mostarParaCrearNuevaFactura}>
-                <div class="cabecera-izquierda">
-                  <div class="pfs-funcionales ">
-                    <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
-                    <a class="pull-left" href="#"   onclick = {__LimpiarFormulario} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
-                    <a class="pull-left" href="#"    onclick = {__ListaDecodigos} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f4")}</span></a>
-                    <a class="pull-left" href="#"    onclick = {_ReimprimirFactura} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f6")}</span></a>
-                    <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago}   title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
-                    <a class="pull-left" href="#"   onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
-                    <a class="pull-left" href="#" show={mostarAbrirCajon == true}   onclick = {__AbrirCajon} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("abrir.cajon")}</span></a>
-                    
-                  </div>
-                  <br>
-                  <br>
-                  <br>
-                    <div class="row">
-                            <div class="col-sx-12 col-sm-6 col-md-6 col-lg-6 has-success">
-                                <input id="codigo" name ="codigo" class="campo codigo" type="text" placeholder="XXXXXXXXXXXXXXXXXX" />
-                            </div>
-                            <div class="col-sx-12 col-sm-4 col-md-4 col-lg-4 has-success">
-                                <input onkeypress={__addPrecioDetail}  id="precioVenta" name ="precioVenta" class="campo precioVenta" type="number" step="any"  placeholder="Precio Ejemplo:600" />
-                            </div>
+                        <div class="elementoCodigo">
+                            <input onkeypress={__addPrecioDetail}  id="precioVenta" name ="precioVenta" class="campo precioVenta" type="number" step="any"  placeholder="Precio Ejemplo:600" />
+                        </div>
                     </div>
-                    <br>
-                    <div class="detalles-factura">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th style="width:5%;">                                                        </th>
-                                <th style="width:5%;"><h1>{$.i18n.prop("factura.linea.detalle.linea")}                         </h1></th>
-                                <th><h1>{$.i18n.prop("factura.linea.detalle.codigo")}                        </h1></th>
-                                <th style="width:20%;"><h1>{$.i18n.prop("factura.linea.detalle.descripcion")}</h1></th>
-                                <th style="width:8%;"><h1>{$.i18n.prop("factura.linea.detalle.cantidad")}    </h1> </th>
-                                <th ><h1>{$.i18n.prop("factura.linea.detalle.precio")}                       </h1></th>
-                                <th ><h1>{$.i18n.prop("factura.linea.detalle.descuento")}                    </h1></th>
-                                <th ><h1>{$.i18n.prop("factura.linea.detalle.impuesto")}                     </h1></th>
-                                <th ><h1>{$.i18n.prop("factura.linea.detalle.subTotal")}                     </h1> </th> 
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr each={detail}>
-                                <td>
-                                    <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
-                                </td>
-                                <td style="width:5%;"><h2>{numeroLinea}</h2></td>
-                                <td><h2>{codigo}</h2></td>
-                                <td><h2>{descripcion}</h2></td>
-                                <td class="text-right" style="width:8%;">
-                                    <input onclick={__CambiarCantidad} id= "cantidadDetalle" class="campo " type="number" placeholder="Cantidad Detalle" value = {cantidad.toFixed(3)} readonly />
-                                </td>
-                                <td class="text-right">
-                                    <input   class="campo" type="text"  value = "{precioUnitario.toFixed(2)}" readonly />
-                                </td>
-                                <td class="text-right">
-                                    <input  onclick={__CambiarDescuento} class="campo" type="text"  value = "{porcentajeDesc.toFixed(2)}" readonly/>
-                                </td>
-                                <td class="text-right">
-                                    <input  class="campo" type="text"  value = "{impuesto.toFixed(2)}" readonly/>
-                                </td>
-                                <td class="text-right">
-                                    <input  class="campo" type="text"  value = "{montoTotalLinea.toFixed(2)}" readonly />
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>          
-                    </div>
-                </div>
-                <section class="cabecera-derecha">
-                    <a class="pull-right" href="#"  title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">Articulos.No={cantArticulos} / {descripcionArticulo}</span></a>
-                    <br>
-                    <br>
-                    
-                
-
-                    <section   class="lista-factura-espera">
-                        <div id="botones"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
-                            <a href="#" style="display:block; padding:6px 0; margin-bottom:20px;margin-left:15px;background:{colorVentaEspera};text-align:center;text-decoration:none;color:#ffffff !important;text-shadow: 0px 0px 1px #ffffff;font-style: italic;"  title="{cliente !=null?cliente.nombreCompleto:""}">C# {id}</a>
+                    <div class="elementoDetalleFactura">
+                       <div class="table-container" >
+                            <div class="flex-table " >
+                                <div class="flex-row " ><h1 class="header-table">Linea</h1></div>
+                                <div class="flex-row" ><h1 class="header-table">Codigo</h1></div>
+                                <div class="flex-row" ><h1 class="header-table">Descripcion</h1></div>
+                                <div class="flex-row" ><h1 class="header-table">Cantidad</h1></div>
+                                <div class="flex-row" ><h1 class="header-table">Precio</h1></div>
+                                <div class="flex-row" ><h1 class="header-table">Desc</h1></div>
+                                <div class="flex-row" ><h1 class="header-table">Impuesto</h1></div>
+                                <div class="flex-row" ><h1 class="header-table">SubTotal</h1></div>
+                            </div>
                         </div>    
-                     </section >
-                     <aside class="left-sidebar">
-                        <article class="clearfix">
-                            <div onclick = {__MostrarFormularioDePago}  class="precioTotalFactura"  show={soloParaChinos == true}>
-                                <p class="total label-totalesComprobante" style="text-align:right;">Total:  <span id="lblTotal">{totalComprobante}</span></p>
-                            </div>
-                            <div class="booking-info" show={soloParaChinos == false}>
-                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.subTotal")}  <span id="lblSubtotal"> {subTotalGeneral} </span></p>
-                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos} </span></p>
-                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {totalImpuesto} </span></p>
-                                </div>
-                                <div class="precioTotalFactura" show={soloParaChinos == false} onclick = {__MostrarFormularioDePago}>
-                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}</span></p>
-                                </div>
-                        </article>
-                    </aside>
-                </section>
-        </div><!-- fin contenedor-factura-->
-<!--Modal mostrar Articulos de la empresa -->
-<div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header with-border table-header" >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("articulo.listar")} </h4>
-            </div>
-            <div class="modal-body">
-               <div class="row">
-                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                        <form id="formularioParametros" name ="formularioParametros" >
-                            <div class="row">
-                                <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                    <label  >{$.i18n.prop("articulo.codigo")}  </label>
-                                    <input type="text" class="form-control codigoArt"  id="codigoArt" name="codigoArt"  onkeypress={__ConsultarProductosCod} >
-                                </div>
-                                <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                    <label  >{$.i18n.prop("articulo.descripcion")}</label>
-                                    <input type="text" class="form-control descArticulo "   id="descArticulo" name="descArticulo" onkeypress={__ConsultarProductosDesc} autofocus="autofocus">
-                                </div>
-                            </div> 
-                        </form>    
-                        <br>      
-
-                        <table id="tableListarArticulos" class="display table responsive table-hover nowrap table-condensed tableListarArticulos " cellspacing="0" width="100%">
-                            <thead>
-                                <th class="table-header">{$.i18n.prop("listado.acciones")}       </th>
-                                <th class="table-header">{$.i18n.prop("articulo.codigo")}        </th>
-                                <th class="table-header">{$.i18n.prop("articulo.descripcion")}   </th>
-                                <th class="table-header">{$.i18n.prop("inventario.cantidad")}    </th>
-                                <th class="table-header">{$.i18n.prop("articulo.precioPublico")} </th>
-                                
-                            </thead>
-                            <tfoot style="display: table-header-group;">
-                                <tr>
-                                    <th >                                        </th>
-                                    <th >{$.i18n.prop("articulo.codigo")}        </th>
-                                    <th >{$.i18n.prop("articulo.descripcion")}   </th>
-                                    <th >{$.i18n.prop("inventario.cantidad")}    </th>
-                                    <th >{$.i18n.prop("articulo.precioPublico")} </th>
-                                    
-                                </tr>
-                            </tfoot>
-                        </table>
                     </div>
-                </div>        
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--fin del modal-->
-<!--Modal mostrar Facturas del Dias -->
-<div id='modalFacturasDia' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header with-border table-header" >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("factura.listar.dia")} </h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                        <table id="tableListarFacturasDia" class="display table responsive table-hover nowrap table-condensed tableListarFacturasDia "   cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                
-                                <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}            </th>
-                                <th class = "table-header" >{$.i18n.prop("factura.documento")}                </th>
-                                <th class = "table-header" >{$.i18n.prop("factura.cliente")}                  </th>
-                                <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
-                                <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
-                                <th class = "table-header" >{$.i18n.prop("factura.total")}                    </th>
-                                <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
-                            </tr>
-                            </thead>
-                                <tfoot style="display: table-header-group;">
-                                    <tr>
-                                        
-                                        <th>{$.i18n.prop("factura.fecha.emision")}            </th>
-                                        <th>{$.i18n.prop("factura.documento")}                </th>
-                                        <th>{$.i18n.prop("factura.cliente")}                  </th>
-                                        <th>{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
-                                        <th>{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
-                                        <th>{$.i18n.prop("factura.total")}                    </th>
-                                        <th>                                                  </th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--Modal mostrar  -->
-<div id="modalClientes" class="modal fade modalClientes " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header with-border table-header" >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("cliente.lista")}   </h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                        <table id="tableListaCliente" class="table responsive display table-striped table-hover nowrap tableListaCliente " cellspacing="0" width="100%">
-                        <thead>
-                                
-                                <th style="width:5%" class="table-header">{$.i18n.prop("cliente.cedula")}            </th>
-                                <th class="table-header">{$.i18n.prop("cliente.nombreCompleto")}    </th>
-                                <th style="width:8%"  class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
-                                <th class="table-header">{$.i18n.prop("cliente.nombreComercial")}   </th>
-                                <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
-                                
-                            </thead>
-                            <tfoot style="display: table-header-group;">
-                                <tr>
-                                    
-                                    <th style="width:5%">{$.i18n.prop("cliente.cedula")}           </th>
-                                    <th>{$.i18n.prop("cliente.nombreCompleto")}   </th>
-                                    <th style="width:8%">{$.i18n.prop("cliente.correoElectronico")}</th>
-                                    <th>{$.i18n.prop("cliente.nombreComercial")}   </th>
-                                    <th>                                          </th>
-                                    
-                                </tr>
-                            </tfoot>                    
-                        </table>
+                       
                 </div>
+                <div class="elementoDerecho">
+                     <h1>Barra de boton </h1>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--fin del modal-->
- 
-<!--Modal mostrar  -->
-<div id="modalVendedor" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header with-border table-header" >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("vendedor.lista")}   </h4>
-            </div>
-            <div class="modal-body">
-                <table id="tableListaVendedor" class="table responsive display table-striped table-hover nowrap tableListaVendedor " cellspacing="0" width="100%">
-                   <thead>
-                        <th class="table-header">{$.i18n.prop("vendedor.cedula")}            </th>
-                        <th class="table-header">{$.i18n.prop("vendedor.nombreCompleto")}    </th>
-                        <th class="table-header">{$.i18n.prop("vendedor.correoElectronico")} </th>
-                        <th class="table-header">{$.i18n.prop("vendedor.telefono")}          </th>
-                        <th class="table-header">{$.i18n.prop("vendedor.celular")}           </th>
-                        <th class="table-header">{$.i18n.prop("listado.acciones")}          </th>
-                    </thead>
-                    <tfoot style="display: table-header-group;">
-                        <tr>
-                            <th>{$.i18n.prop("vendedor.cedula")}           </th>
-                            <th>{$.i18n.prop("vendedor.nombreCompleto")}   </th>
-                            <th>{$.i18n.prop("vendedor.correoElectronico")}</th>
-                            <th>{$.i18n.prop("vendedor.telefono")}         </th>
-                            <th>{$.i18n.prop("vendedor.celular")}          </th>
-                            <th>                                           </th>
-                        </tr>
-                    </tfoot>                    
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left" >{$.i18n.prop("btn.volver")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--fin del modal-->
- 
+      </div>
+       
 
-<!--Modal Cambiar Cantidad-->
-<div id='modalCambiarCantidad' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.cantidad")}</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
-                        <div class="form-group has-success">
-                            <label >Cantidad:</label>
-                            <input  type="number"  class="form-control cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus" min="0">
-                        </div>
-                    </div>
-                </div> 
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick ="{__recalculacionDelDetalle}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--Fin Cambiar Cantidad-->
-
-
-<!--Modal Cambiar Descuento-->
-<div id='modalCambiarDescuento' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-       <div class="modal-content">
-            <div class="modal-header with-border " >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descuento")}</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
-                        <div class="form-group has-success">
-                            <label >{$.i18n.prop("factura.linea.detalle.descuento")}</label>
-                            <input  type="number"  class="form-control aplicarDescuento" id="aplicarDescuento" name = "aplicarDescuento" autofocus="autofocus" min="0">
-                        </div>
-                    </div>
-                </div> 
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick ="{__actualizarDescuento}" class="btn-green btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--Fin Cambiar Descuento-->
 <style type="text/css"  >
+$table-header: #1976D2;
+$table-header-border: #1565C0;
+$table-border: #d9d9d9;
+.header-table{
+    color: #222D32;
+    font-size: 30px;
+    font-weight: bold;
+    font-size: 2em;
+    margin: .67em 0;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.table-container{
+    display: flex;
+   
+}
+.flex-table{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+   
+}
+.flex-row{
+  background:red;
+  width:10%;
+  flex-shrink: 2;
+
+  
+
+}
+.flex-row-linea{
+  background:orange;
+  width:20%  
+}
+.flex-row-codigo{
+  background:purple;
+  width:30%  
+
+}
+.flex-row-desc{
+    color:white;
+  background:blue;
+  width:20%  
+
+}
+    .elementoTitulosDetalles{
+        background:red;
+    }
+    .formatoLetraBoton{
+        margin-top: 15px;
+        text-shadow: 0px 0px 1px #ffffff;
+        color: white !important;
+        font-size: 19px !important;
+        font-family: Roboto,sans-serif !important;
+        font-weight: 600 !important;
+    }
+     .formatoLetraDescripcion{
+        margin-top: 15px;
+        text-shadow: 0px 0px 1px #ffffff;
+            color: #30ed17 !important;
+        font-size: 14px !important;
+        font-family: Roboto,sans-serif !important;
+        font-weight: 600 !important;
+    }
+     .containerPrincpal{
+        display: flex;
+        flex-direction: column;
+            border: 1px solid #3c8dbc;
+        width:100%;
+     }
+    .elementoBotonesDescripArticuloPrincipal{
+         background-color: white;
+         
+         display: flex;
+         
+    }
+    .elementoBoton{
+        margin-left: 1px;
+        padding-top: 3px;
+        background-color: black !important;
+        width:14%;
+        cursor: pointer;
+          padding-left: 3px;
+        border-radius: 7px 7px 7px 7px;
+        -moz-border-radius: 7px 7px 7px 7px;
+        -webkit-border-radius: 7px 7px 7px 7px;
+        border: 0px solid #000000;
+            
+        
+    }
+    .elementoDescripcionArticulosCantidad{
+          width:100%;
+        cursor: pointer;
+        background-color: black !important;
+          padding-left: 3px;
+        border-radius: 7px 7px 7px 7px;
+        -moz-border-radius: 7px 7px 7px 7px;
+        -webkit-border-radius: 7px 7px 7px 7px;
+        border: 0px solid #000000;
+    }
+    .elementoBotonesPrincipal{
+         background-color:  white;
+         width:80%;
+       
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        flex-wrap: wrap 
+       
+      
+        
+    }
+   .elementoDescripcionArticulo{
+         
+         width:30%;
+         
+
+    }
+    .contendorPrincipalFactura{
+          display: flex;
+          height:auto;
+          background-color: white;
+          width:100%;
+
+    }
+    .elementoEntradaDatos{
+          background-color: red;
+           display: flex;
+        flex-direction: row;
+        justify-content: center; 
+}
+    
+    .elementoCodigo{
+        background-color: white;
+            padding-top: 8px;
+        width:100%;
+        padding-left: 2px;
+    padding-right: 6px;
+        padding-bottom: 5px;
+
+
+
+    }
+    .elementoPrecio{
+        background-color: blue;
+        width:100%;
+
+    }
+    .elementoDetalleFactura{
+          background-color: yellow;
+          width:100%;
+
+    }
+    .elementoIzquierdo{
+        height:auto;
+        background-color: blue;
+        width:75%;
+        display: flex;
+        flex-direction: column;
+
+    }
+    .elementoDerecho{
+        height:auto;
+        background-color: green;
+        width:25%;
+
+    }
+    .elementoBotonTotal{
+        background-color: white;
+        height:100%;
+        width:100%;
+
+    }
+    .elementoVentaEspera{
+        background-color: gray;
+        height:100%;
+        width:100%;
+
+    }
+    .elementoEntradaDatos{
+        background-color: purple;
+        height:100%;
+        width:100%;
+
+    }
+    .elementoDetalesFactura{
+        background-color:#BA1670;
+        height:100%;
+        width:100%;
+
+    }
 
 </style>    
 <script>

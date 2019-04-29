@@ -37,6 +37,7 @@ import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.ProveedorBo;
 import com.emprendesoftcr.Bo.RecepcionFacturaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
+import com.emprendesoftcr.Dao.KardexDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.JqGridFilter;
@@ -100,6 +101,8 @@ public class ComprasController {
 
 	@Autowired
 	private CompraBo																									compraBo;
+	
+
 
 	@Autowired
 	private EmpresaPropertyEditor																			empresaPropertyEditor;
@@ -391,6 +394,26 @@ public class ComprasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
+	
+	
+		@RequestMapping(value = "/AnularCompraAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+		@ResponseBody
+		public RespuestaServiceValidator anularCompra(HttpServletRequest request, HttpServletResponse response, BindingResult result,@RequestParam Long idCompra) {
+			try {
+				Compra compra = compraBo.findById(idCompra);
+				if(compra == null) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+				}
+				compra.setUpdated_at(new Date());
+				compra.setEstado(Constantes.COMPRA_ESTADO_ANULADA);
+				compraBo.modificar(compra);
+				
+				
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.anulado.correctamente", compra);
+			} catch (Exception e) {
+				return RespuestaServiceValidator.ERROR(e);
+			}
+		}
 
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarDetlleByCompraAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")

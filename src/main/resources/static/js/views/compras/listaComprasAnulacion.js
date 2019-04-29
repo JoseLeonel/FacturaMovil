@@ -7,6 +7,7 @@ var _Init = function () {
 	//cargaMantenimiento()
 	__Inicializar_Table('.tableListar');
 	agregarInputsCombos();
+	EventoFiltro();
 	$('.datepickerFechaFinal').datepicker(
 		{
 		  format: 'yyyy-mm-dd',
@@ -94,7 +95,7 @@ var ListarFacturas = function(){
 	"sort" : "position",
 	"lengthChange": true,
 	"ajax" : {
-			"url":"ListarComprasAjax?fechaInicial=" + fechaInicial+"&"+"fechaFinal="+fechaFinal+"&"+"idProveedor="+idProveedor,
+			"url":"ListarComprasAjax?fechaInicio=" + fechaInicial+"&"+"fechaFin="+fechaFinal+"&"+"idProveedor="+idProveedor,
 			"deferRender": true,
 			"type":"GET",
 					"dataType": 'json',
@@ -105,6 +106,7 @@ var ListarFacturas = function(){
 } );//fin del table
 agregarInputsCombos();
 EventoFiltro();
+__AnularCompra();
 
 }
 
@@ -134,33 +136,30 @@ function __ListaProveedores(){
 *Formato del listado 
 **/
 var formato_tabla = [ 
-	{'data' :'proveedor'   ,"name":"proveedor"    ,"title" : $.i18n.prop("compra.listado.proveedor")     ,"autoWidth" :true ,
+	{'data' :'proveedor'   ,"name":"proveedor"    ,"title" : "Proveedor"     ,"autoWidth" :true ,
 	"render":function(proveedor,type, row){
-			return row.proveedor !=null?row.proveedor.nombreCompleto:"Sin Asociar";
+			return row.proveedor !=null?row.proveedor.nombreCompleto > 50 ?row.proveedor.nombreCompleto.substring(0,50):row.proveedor.nombreCompleto:"Sin Asociar";
 		}
    },
-   {'data' :'consecutivo'                ,"name":"consecutivo"                 ,"title" : $.i18n.prop("compra.listado.consecutivo")   ,"autoWidth" :true },
-   {'data' :'descripcionFormaPago'       ,"name":"descripcionFormaPago"        ,"title" : $.i18n.prop("compra.listado.formaPago")     ,"autoWidth" :true },
-   {'data' :'fechaCompra'                ,"name":"fechaCompra"                 ,"title" : $.i18n.prop("compra.listado.fecha.compra")  ,"autoWidth" :true ,
+   {'data' :'consecutivo'                ,"name":"consecutivo"                 ,"title" : "Consecutivo"   ,"autoWidth" :true },
+   {'data' :'fechaCompra'                ,"name":"fechaCompra"                 ,"title" : "Fecha Compra"  ,"autoWidth" :true ,
 		"render":function(fechaCompra,type, row){
 			return __displayDate_detail(fechaCompra);
 		 }
    },
-   {'data' :'fechaIngreso'               ,"name":"fechaIngreso"                ,"title" : $.i18n.prop("compra.listado.fecha.ingreso") ,"autoWidth" :true ,
+   {'data' :'fechaIngreso'               ,"name":"fechaIngreso"                ,"title" : "Fecha Ingreso" ,"autoWidth" :true ,
 		"render":function(fechaIngreso,type, row){
 			return fechaIngreso !=null?formatoFechaHora(fechaIngreso):null;
 		 }
    
    },
-   {'data' :'fechaCredito'               ,"name":"fechaCredito"                ,"title" : $.i18n.prop("compra.listado.fecha.credito") ,"autoWidth" :true ,
+   {'data' :'fechaCredito'               ,"name":"fechaCredito"                ,"title" : "Fecha Credito" ,"autoWidth" :true ,
 		"render":function(fechaCredito,type, row){
 			return fechaCredito !=null? __displayDate_detail(fechaCredito):null;
 		 }
    
    },
-   
-   {'data' :'totalCompraSTR'             ,"name":"totalCompraSTR"              ,"title" : $.i18n.prop("compra.listado.total")         ,"autoWidth" :true },
-   {'data' :'descripcionEstado'          ,"name":"descripcionEstado"           ,"title" : $.i18n.prop("compra.listado.estado")        ,"autoWidth" :true },
+   {'data' :'totalCompra'             ,"name":"totalCompraSTR"              ,"title" : "Total"         ,"autoWidth" :true },
    {'data' :'usuarioIngresoInventario.nombreUsuario'   ,"name":"usuarioIngresoInventario.nombreUsuario"    ,"title" : "Usuario"    ,"autoWidth" :true },
    {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
 	"render":function(id,type, row){
@@ -168,7 +167,100 @@ var formato_tabla = [
 	 }
   }];
 
+  /**
+* Opciones listado de los clientes
+*/
+function __Opciones(id,type,row){
+    var anular  = '<a href="#"  title="Anular Compra" class="btn btn-danger  btn-anular btnAnularCompra" role="button"> </a>';
+  return  anular ;        
+}
 
+/**
+ * anular Compra
+ */
+function __AnularCompra(){
+	$('.tableListar').on('click','.btnAnularCompra',function(e){
+		var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+		}
+		swal({
+			title: '',
+			text: "Deseas anular la compra?",
+			 type: "warning",
+			 showCancelButton: true,
+			 confirmButtonColor: '#00539B',
+			 cancelButtonColor: '#d33',
+			 confirmButtonText:$.i18n.prop("confirmacion.si"),
+			 cancelButtonText: $.i18n.prop("confirmacion.no"),
+			 confirmButtonClass: 'btn btn-success',
+			 cancelButtonClass: 'btn btn-danger',
+		 }).then(function (isConfirm) {
+			 //Ajax__inicializarTabla();
+			 if(isConfirm){
+				__AplicarAnularCompra(data);
+			 }
+		 });
+   
+ 	});
+}
+
+function __AplicarAnularCompra(data){
+	console.log(data);
+	var formulario= {
+		idCompra:data.id
+	}
+	$.ajax({
+		type : "POST",
+		dataType : "json",
+		data : formulario,
+		url : "AnularCompraAjax.do",
+		success : function(data) {
+			if (data.status != 200) {
+				serverMessageJson(data);
+				if (data.message != null && data.message.length > 0) {
+				   // swal('',data.message,'error');
+					swal({
+						title: '',
+						text: data.message,
+						type: 'error',
+						showCancelButton: false,
+						confirmButtonText: 'Aceptar',
+								   
+					  })
+				}
+			} else {
+				
+				swal({
+					  title: '',
+					  text: data.message,
+					  type: 'success',
+					  showCancelButton: false,
+					  confirmButtonText: 'Aceptar',
+					  
+					})
+				
+				
+			}
+	},
+		error : function(xhr, status) {
+		console.log(status);
+		mensajeErrorServidor(xhr, status);
+	}
+});
+
+}
+
+/**
+*Formato de la fecha con hora
+**/
+function __displayDate_detail(fecha) {
+    var dateTime = new Date(fecha);
+    return moment(dateTime).format('DD/MM/YYYY ');
+}
 
 function agregarInputsCombos(){
 	// Agregar los input de busqueda 

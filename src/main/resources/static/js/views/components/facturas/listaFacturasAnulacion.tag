@@ -14,7 +14,7 @@
             <div class="row">   
                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                     <label class="knob-label" >{$.i18n.prop("informacion.razon")}</label>
-                    <input type="text" class="form-control " id"referenciaRazon" name= "referenciaRazon" >
+                    <input type="text" class="form-control " id="referenciaRazon" name= "referenciaRazon" >
                 </div>
             </div>
             <input type="hidden" id='tipoDoc'                 name='tipoDoc'                 value="{factura.tipoDoc}" >
