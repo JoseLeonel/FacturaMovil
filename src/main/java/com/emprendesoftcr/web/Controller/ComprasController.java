@@ -121,6 +121,11 @@ public class ComprasController {
 	public String listar(ModelMap model) {
 		return "views/compras/ListarCompras";
 	}
+	
+	@RequestMapping(value = "/ListaComprasAnular", method = RequestMethod.GET)
+	public String listarComprasAnular(ModelMap model) {
+		return "views/compras/ListarComprasAnulacion";
+	}
 
 	@RequestMapping(value = "/totalesComprasAceptadas", method = RequestMethod.GET)
 	public String totalesAceptacionCompras(ModelMap model) {

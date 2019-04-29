@@ -266,8 +266,8 @@ public class HaciendasController {
 				log.info("** callBack: " + respuestaHacienda.clave() + " fecha " + new Date());
 
 				if (hacienda != null) {
-					status = getHaciendaStatus(respuestaHacienda.indEstado());
-					log.info("** Respuesta Estado-->: " + status);
+				String resputaStatusHacienda = getHaciendaStatus(respuestaHacienda.indEstado());
+					
 					respuesta.setClave(respuestaHacienda.clave());
 					respuesta.setFecha(respuestaHacienda.fecha());
 					respuesta.setIndEstado(respuestaHacienda.indEstado());
@@ -281,9 +281,9 @@ public class HaciendasController {
 					respuesta.setTipoIdentificacionEmisor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().tipoIdentificacionEmisor() : Constantes.EMPTY);
 					respuesta.setTipoIdentificacionReceptor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().tipoIdentificacionReceptor() : Constantes.EMPTY);
 					respuesta.setTotalFactura(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().totalFactura() : Constantes.ZEROS_DOUBLE);
-					log.info("Status -->:", status);
-					log.info("Respuesta -->:", respuesta.toString());
-					if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECIBIDO)) {
+						log.info("** Respuesta Estado-->: " + resputaStatusHacienda);
+					
+					if (!resputaStatusHacienda.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECIBIDO)) {
 						xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
 						xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
 					} else {
@@ -302,9 +302,9 @@ public class HaciendasController {
 						}
 
 					}
-					if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
+					if (resputaStatusHacienda.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
 						estado = Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA;
-					} else if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
+					} else if (resputaStatusHacienda.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
 						estado = Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA;
 					}
 					// Hacienda no envia mensaje
@@ -319,7 +319,7 @@ public class HaciendasController {
 							}
 						}
 					} else {
-						if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
+						if (!resputaStatusHacienda.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
 							estado = Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA;
 						}
 					}
@@ -341,6 +341,7 @@ public class HaciendasController {
 			log.info("Estado para actualizar Factura:", estado);
 			log.info("Finaliza callBack {}", new Date());
 		} catch (Exception e) {
+
 			log.info("** Error  callBack: " + e.getMessage() + " fecha " + new Date());
 			return RespuestaServiceValidator.ERROR(e);
 		} finally {
