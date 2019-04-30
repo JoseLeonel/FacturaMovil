@@ -381,7 +381,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 				// San Ana
-				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
+				 recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 				// Guanacaste
 				// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
@@ -393,7 +393,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 				// Inventario
-				 //recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 				
 				
 
@@ -522,7 +522,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					String body = (String) response.get(POST_RESPONSE);
 					if (body != null && body != "" && body != "{}" && !body.contains("El comprobante") && !body.contains("no ha sido recibido")) {
 						RespuestaHacienda respuestaHacienda = RespuestaHaciendaJson.from(body);
-						String status = getHaciendaStatus(respuestaHacienda.indEstado());
+
+						String statusAceptar = getHaciendaStatus(respuestaHacienda.indEstado());
 						hacienda.setUpdated_at(new Date());
 						RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();
 						// hacienda.setxErrorCause(FacturaElectronicaUtils.convertirStringToblod(respuesta.getDetalleMensaje()==null?Constantes.EMPTY:respuesta.getDetalleMensaje()));
@@ -541,7 +542,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						respuesta.setTotalFactura(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().totalFactura() : Constantes.ZEROS_DOUBLE);
 						String xmlSinFirmarRespuesta = Constantes.EMPTY;
 						String xmlFirmadoRespuesta = Constantes.EMPTY;
-						if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECIBIDO)) {
+						if (!statusAceptar.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECIBIDO)) {
 							xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
 							xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
 						} else {
@@ -561,10 +562,11 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						/**
 						 * Esperar el correo FE para saber que ese estado de recibido
 						 */
-						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
+						if (statusAceptar.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
+							
 							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
 						}
-						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
+						if (statusAceptar.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
 							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
 						}
 						// Hacienda no envia mensaje
@@ -579,7 +581,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								}
 							}
 						} else {
-							if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
+							if (!statusAceptar.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
 								if (haciendaBD.getReintentosAceptacion() == Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
 									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
 								} else {
