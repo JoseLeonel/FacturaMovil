@@ -294,6 +294,19 @@ public final class FacturaElectronicaUtils {
 		return dateFormat.format(date);
 	}
 
+	
+	/**
+	 * Convierte una fecha a su expresi�n en ISO 8601
+	 * @param date Fecha a ser convertida
+	 * @return Fecha en su expresi�n ISO 8601
+	 */
+	public static String toISO8601StringFirma(Date date) {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+		
+		return dateFormat.format(date);
+	}
+
 	/**
 	 * Convierte un string de fecha a su expresion en ISO 8601
 	 * @param string Fecha a ser convertida

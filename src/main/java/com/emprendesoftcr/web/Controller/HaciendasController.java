@@ -333,7 +333,7 @@ public class HaciendasController {
 					
 					if (xmlFirmado != null) {
 						if (!xmlFirmado.equals(Constantes.EMPTY)) {
-							log.info("llamado procedimiento callback:", estadoHacienda);
+							log.info("llamado procedimiento callback:{}", estadoHacienda.toString());
 							haciendaBo.findByClaveSP(respuestaHacienda.clave(), estadoHacienda, xmlFirmado, mensajeHacienda);
 						} else {
 							log.info("No llamado procedimiento callback:", estadoHacienda);
