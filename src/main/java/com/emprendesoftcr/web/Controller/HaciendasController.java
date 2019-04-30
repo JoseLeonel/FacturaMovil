@@ -263,10 +263,13 @@ public class HaciendasController {
 				RespuestaHacienda respuestaHacienda = RespuestaHaciendaJson.from(body);
 				Hacienda hacienda = haciendaBo.findByClave(respuestaHacienda.clave());
 				log.info("** callBack: " + respuestaHacienda.clave() + " fecha " + new Date());
+				
+				log.info("** Estado hacienda: " + estadoHacienda.toString()) ;
 
 				if (hacienda != null) {
 					String resputaStatusHacienda = getHaciendaStatus(respuestaHacienda.indEstado());
-
+					log.info("** Status dentro: " + resputaStatusHacienda) ;
+					log.info("** Estado hacienda dentro: " + estadoHacienda.toString()) ;
 					respuesta.setClave(respuestaHacienda.clave());
 					respuesta.setFecha(respuestaHacienda.fecha());
 					respuesta.setIndEstado(respuestaHacienda.indEstado());
@@ -281,10 +284,12 @@ public class HaciendasController {
 					respuesta.setTipoIdentificacionReceptor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().tipoIdentificacionReceptor() : Constantes.EMPTY);
 					respuesta.setTotalFactura(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().totalFactura() : Constantes.ZEROS_DOUBLE);
 					log.info("** Respuesta Estado-->: " + resputaStatusHacienda);
+					log.info("** Status dentro 1: " + resputaStatusHacienda) ;
 
 					if (!resputaStatusHacienda.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECIBIDO)) {
 						xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
 						xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
+						log.info("** Status firmado 1: " + resputaStatusHacienda) ;
 					} else {
 						if (respuestaHacienda.mensajeHacienda() != null) {
 							if (respuestaHacienda.mensajeHacienda().mensaje() != null) {
@@ -324,8 +329,8 @@ public class HaciendasController {
 					}
 
 					mensajeHacienda = respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().detalleMensaje() : Constantes.EMPTY;
-					log.info("Respuesta:", respuesta);
-					log.info("xmlFirmado:", xmlFirmado);
+					log.info("** Respuesta Estado-1->: " + resputaStatusHacienda);
+					
 					if (xmlFirmado != null) {
 						if (!xmlFirmado.equals(Constantes.EMPTY)) {
 							log.info("llamado procedimiento callback:", estadoHacienda);
