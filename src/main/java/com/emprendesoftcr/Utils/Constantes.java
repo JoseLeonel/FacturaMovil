@@ -187,6 +187,7 @@ public class Constantes {
 	public static final String					MOTIVO_INGRESO_INVENTARIO_COMPRA										= "Ingreso del proveedor:";
 	public static final String					MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO							= "Ingreso por nota de credito:";
 	public static final String					MOTIVO_SALIDA_INVENTARIO_VENTA											= "Salida por venta:";
+	public static final String					MOTIVO_SALIDA_INVENTARIO_COMPRA_ANULACION						= "Salida por compra anulada:";
 	// Contabiliza el inventario
 	public static final String					CONTABLE_SI																					= "Si";
 	public static final String					CONTABLE_NO																					= "No";

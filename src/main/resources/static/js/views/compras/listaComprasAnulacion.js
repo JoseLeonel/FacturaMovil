@@ -95,7 +95,7 @@ var ListarFacturas = function(){
 	"sort" : "position",
 	"lengthChange": true,
 	"ajax" : {
-			"url":"ListarComprasAjax?fechaInicio=" + fechaInicial+"&"+"fechaFin="+fechaFinal+"&"+"idProveedor="+idProveedor,
+			"url":"ListarComprasNoAnuladasAjax.do?fechaInicio=" + fechaInicial+"&"+"fechaFin="+fechaFinal+"&"+"idProveedor="+idProveedor,
 			"deferRender": true,
 			"type":"GET",
 					"dataType": 'json',
@@ -242,7 +242,8 @@ function __AplicarAnularCompra(data){
 					  confirmButtonText: 'Aceptar',
 					  
 					})
-				
+					var table = $('#tableListar').DataTable();
+					table.ajax.reload( null, false);
 				
 			}
 	},

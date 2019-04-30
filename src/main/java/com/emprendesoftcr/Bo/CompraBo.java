@@ -32,7 +32,9 @@ public interface CompraBo {
 	
 	Collection<Compra> findByFechaInicioAndFechaFinalAndProveedor(Date fechaInicio, Date fechaFin, Empresa empresa,  Proveedor proveedor);
 	
-	 TotalComprasAceptadasCommand sumarComprasAceptadas(Date fechaInicio, Date fechaFinal, Integer idEmpresa);
+	TotalComprasAceptadasCommand sumarComprasAceptadas(Date fechaInicio, Date fechaFinal, Integer idEmpresa);
+	
+	void anularCompra(Compra compra) throws Exception;
 
 
 }

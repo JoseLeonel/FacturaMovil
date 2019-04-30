@@ -44,6 +44,7 @@ import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.Compra;
 import com.emprendesoftcr.modelo.DetalleCompra;
@@ -101,8 +102,6 @@ public class ComprasController {
 
 	@Autowired
 	private CompraBo																									compraBo;
-	
-
 
 	@Autowired
 	private EmpresaPropertyEditor																			empresaPropertyEditor;
@@ -124,7 +123,7 @@ public class ComprasController {
 	public String listar(ModelMap model) {
 		return "views/compras/ListarCompras";
 	}
-	
+
 	@RequestMapping(value = "/ListaComprasAnular", method = RequestMethod.GET)
 	public String listarComprasAnular(ModelMap model) {
 		return "views/compras/ListarComprasAnulacion";
@@ -237,10 +236,6 @@ public class ComprasController {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			// compraFormValidator.validate(compraCommand, result);
-			// if (result.hasErrors()) {
-			// return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
-			// }
 			if (!compraCommand.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
 				compraCommand.setFechaCredito(null);
 			}
@@ -365,11 +360,22 @@ public class ComprasController {
 	 */
 	@RequestMapping(value = "/ListarComprasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarComprasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idProveedor) {
+	public RespuestaServiceDataTable listarComprasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idProveedor,@RequestParam String estado) {
 
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Proveedor proveedor = proveedorBo.buscar(idProveedor);
-		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, proveedor, usuarioSesion.getEmpresa());
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, proveedor, usuarioSesion.getEmpresa(),estado);
+
+		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
+	}
+	
+	@RequestMapping(value = "/ListarComprasNoAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarComprasNoAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idProveedor) {
+
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Proveedor proveedor = proveedorBo.buscar(idProveedor);
+		DataTableDelimitador query = DelimitadorBuilderAnuladas.get(request, fechaInicio, fechaFin, proveedor, usuarioSesion.getEmpresa());
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
@@ -394,26 +400,28 @@ public class ComprasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
-	
-		@RequestMapping(value = "/AnularCompraAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
-		@ResponseBody
-		public RespuestaServiceValidator anularCompra(HttpServletRequest request, HttpServletResponse response, BindingResult result,@RequestParam Long idCompra) {
-			try {
-				Compra compra = compraBo.findById(idCompra);
-				if(compra == null) {
-					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
-				}
-				compra.setUpdated_at(new Date());
-				compra.setEstado(Constantes.COMPRA_ESTADO_ANULADA);
-				compraBo.modificar(compra);
-				
-				
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.anulado.correctamente", compra);
-			} catch (Exception e) {
-				return RespuestaServiceValidator.ERROR(e);
+/**
+ * Anular un Compra
+ * @param request
+ * @param response
+ * @param result
+ * @param idCompra
+ * @return
+ */
+	@RequestMapping(value = "/AnularCompraAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator anularCompra(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Articulo articulo, @RequestParam Long idCompra,BindingResult result ,SessionStatus status) {
+		try {
+			Compra compra = compraBo.findById(idCompra);
+			if (compra == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+			compraBo.anularCompra(compra);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.anulado.correctamente", compra);
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
 		}
+	}
 
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarDetlleByCompraAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -431,13 +439,18 @@ public class ComprasController {
 
 	private static class DelimitadorBuilder {
 
-		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Proveedor proveedor, Empresa empresa) {
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Proveedor proveedor, Empresa empresa, String estado) {
 			// Consulta por fechas
 			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Compra");
 			Date fechaInicio = new Date();
 			Date fechaFinal = new Date();
 
 			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.COMPRA_ESTADO_PENDIENTE.toString() + "'", "<>"));
+			
+			if(!estado.equals(Constantes.COMBO_TODOS)) {
+				delimitador.addFiltro(new JqGridFilter("estado", "'" + estado + "'", "="));
+			}
+			
 			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
 
 			if (proveedor != null) {
@@ -464,6 +477,43 @@ public class ComprasController {
 			return delimitador;
 		}
 	}
+	private static class DelimitadorBuilderAnuladas {
+
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Proveedor proveedor, Empresa empresa) {
+			// Consulta por fechas
+			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Compra");
+			Date fechaInicio = new Date();
+			Date fechaFinal = new Date();
+
+			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.COMPRA_ESTADO_PENDIENTE.toString() + "'", "<>"));
+			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.COMPRA_ESTADO_ANULADA.toString() + "'", "<>"));
+			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
+
+			if (proveedor != null) {
+				delimitador.addFiltro(new JqGridFilter("proveedor.id", "'" + proveedor.getId().toString() + "'", "="));
+			}
+			if (!inicio.equals(Constantes.EMPTY) && !fin.equals(Constantes.EMPTY)) {
+				fechaInicio = Utils.parseDate(inicio);
+				fechaFinal = Utils.parseDate(fin);
+				if (fechaFinal == null) {
+					fechaFinal = new Date(System.currentTimeMillis());
+				}
+				if (fechaFinal != null && fechaFinal != null) {
+					fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
+				}
+
+				DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
+
+				inicio = dateFormat.format(fechaInicio);
+				fin = dateFormat.format(fechaFinal);
+
+				delimitador.addFiltro(new JqGridFilter("created_at", inicio, "date>="));
+				delimitador.addFiltro(new JqGridFilter("created_at", fin, "dateFinal<="));
+			}
+			return delimitador;
+		}
+	}
+
 
 	static class RESPONSES {
 
