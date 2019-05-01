@@ -27,6 +27,8 @@ public interface EmpresaDao {
 	Empresa buscarPorCedula(String cedula);
 
 	String generarConsecutivoFactura(Empresa empresa, Usuario usuario, Factura factura) throws Exception;
+	
+	String generarConsecutivoProforma(Empresa empresa, Usuario usuario) throws Exception;
 
 	String generarConsecutivoRecepcionFactura(Empresa empresa, Usuario usuario, RecepcionFactura recepcionFactura) throws Exception;
 

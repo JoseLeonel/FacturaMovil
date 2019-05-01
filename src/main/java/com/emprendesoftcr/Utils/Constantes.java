@@ -411,6 +411,7 @@ public class Constantes {
 	public static final Integer					FACTURA_ESTADO_FACTURADO														= 2;
 	public static final Integer					FACTURA_ESTADO_TIQUETE_USO_INTERNO									= 4;
 	public static final Integer					FACTURA_ESTADO_ANULADA															= 5;
+	public static final Integer					FACTURA_ESTADO_ANULADA_PROFORMA											= 11;
 
 	public static final Integer					FACTURA_ESTADO_FIRMA_PENDIENTE											= 1;
 	public static final Integer					FACTURA_ESTADO_REFIRMAR_DOCUMENTO										= 8;

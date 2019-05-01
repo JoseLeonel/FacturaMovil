@@ -593,6 +593,15 @@ public class FacturaBoImpl implements FacturaBo {
 						factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_EN_PROCESOS);
 					}
 				}
+				if(factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
+					if(factura.getConsecutivoProforma() !=null) {
+						if(factura.getConsecutivoProforma().equals(Constantes.EMPTY)) {
+							factura.setConsecutivoProforma(empresaBo.generarConsecutivoProforma(factura.getEmpresa(),usuario));
+						}
+					}else {
+						factura.setConsecutivoProforma(empresaBo.generarConsecutivoProforma(factura.getEmpresa(),usuario));
+					}
+				}
 			// Se almacena la factura, se deja en estado en proceso para que no lo tome los procesos de hacienda
 				if (factura.getId() == null) {
 					factura.setCreated_at(new Date());

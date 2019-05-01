@@ -48,6 +48,7 @@ public class DetalleFacturaCommand {
 
 	private String	fechaEmisionSTR;
 	private String	consecutivo;
+	private String	consecutivoProforma;
 
 	private String	tipoDoc;
 
@@ -87,6 +88,7 @@ public class DetalleFacturaCommand {
 		this.nombreUsuario = detalle.getFactura().getUsuarioCreacion().getNombreUsuario();
 		this.montoGanancia = detalle.getMontoGanancia();
 		this.factura = detalle.getFactura();
+		this.consecutivoProforma = detalle.getFactura().getConsecutivoProforma();
 	
 	}
 
@@ -316,6 +318,16 @@ public class DetalleFacturaCommand {
 
 	public void setMontoGanancia(Double montoGanancia) {
 		this.montoGanancia = montoGanancia;
+	}
+
+	
+	public String getConsecutivoProforma() {
+		return consecutivoProforma;
+	}
+
+	
+	public void setConsecutivoProforma(String consecutivoProforma) {
+		this.consecutivoProforma = consecutivoProforma;
 	}
 
 	

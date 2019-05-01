@@ -201,8 +201,13 @@ public class Empresa implements Serializable {
 	@Column(name = "descarg_inven", columnDefinition = "INT default '0'")
 	private Integer						descargarInventario;
 
+	@Column(name = "conse_proforma", columnDefinition = "INT default '1'")
+	private Integer							consecutivoProforma;
+
+	
+
 	public Empresa(Integer id, String abreviaturaEmpresa, Integer numeroConsecutivo, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String cazaMatriz, Integer codigoSeguridad, String nombre, String nombreComercial, String tipoCedula, String cedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String canton, String distrito, String barrio, String logo, String tieneInventario, String tieneLector, String cambiarPrecio, String estadoProduccion, String enviarTiquete, String representante, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, String usuarioEnvioComprobante, String passwordEnvioComprobante, String estado, Date created_at, Date updated_at, Integer aceptadoConsecutivo,
-			Integer aceptadoParcialConsecutivo, Integer rechazadoConsecutivo, Integer vueltoImprimir, Integer noFacturaElectronica, Integer correoFrecuente, Long comandaEmpresa, Integer aplicaGanancia, Integer enterFacturar, Integer imprimirDirecto, Integer abrirSinComanda, Integer abrirConComanda, Integer pantChino, String impresoraCocina, String impresoraFactura, Integer separarCuenta, Integer prioridadFacturar, Integer imprimirCelular, Integer imprimirSiempre, Integer ordenaCategoriaArticulos, Integer seguridadEnVentas, Integer descargarInventario) {
+			Integer aceptadoParcialConsecutivo, Integer rechazadoConsecutivo, Integer vueltoImprimir, Integer noFacturaElectronica, Integer correoFrecuente, Long comandaEmpresa, Integer aplicaGanancia, Integer enterFacturar, Integer imprimirDirecto, Integer abrirSinComanda, Integer abrirConComanda, Integer pantChino, String impresoraCocina, String impresoraFactura, Integer separarCuenta, Integer prioridadFacturar, Integer imprimirCelular, Integer imprimirSiempre, Integer ordenaCategoriaArticulos, Integer seguridadEnVentas, Integer descargarInventario, Integer consecutivoProforma) {
 		super();
 		this.id = id;
 		this.abreviaturaEmpresa = abreviaturaEmpresa;
@@ -260,6 +265,7 @@ public class Empresa implements Serializable {
 		this.ordenaCategoriaArticulos = ordenaCategoriaArticulos;
 		this.seguridadEnVentas = seguridadEnVentas;
 		this.descargarInventario = descargarInventario;
+		this.consecutivoProforma = consecutivoProforma;
 	}
 
 	public Empresa() {
@@ -721,5 +727,16 @@ public class Empresa implements Serializable {
 	public void setDescargarInventario(Integer descargarInventario) {
 		this.descargarInventario = descargarInventario;
 	}
+
+	
+	public Integer getConsecutivoProforma() {
+		return consecutivoProforma;
+	}
+
+	
+	public void setConsecutivoProforma(Integer consecutivoProforma) {
+		this.consecutivoProforma = consecutivoProforma;
+	}
+
 
 }

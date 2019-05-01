@@ -110,4 +110,8 @@ public class EmpresaBoImpl implements EmpresaBo {
 		return empresaDao.findByEstado(estado);
 	}
 	
+	@Override
+	public String generarConsecutivoProforma(Empresa empresa, Usuario usuario) throws Exception{
+		return empresaDao.generarConsecutivoProforma(empresa, usuario);
+	}
 }

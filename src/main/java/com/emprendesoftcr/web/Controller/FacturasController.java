@@ -725,19 +725,35 @@ public class FacturasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarProformasActivasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarProformasActivasAjax(HttpServletRequest request, HttpServletResponse response) {
+	public RespuestaServiceDataTable listarProformasActivasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "estado", required = false) Integer estado) {
 
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Factura");
-		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PROFORMAS + "'", "=");
+		JqGridFilter dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
-		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
-		delimitadores.addFiltro(dataTableFilter);
+		if(estado !=null) {
+			if(estado.equals(Constantes.FACTURA_ESTADO_PROFORMAS) ) {
+				dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PROFORMAS + "'", "=");
+				delimitadores.addFiltro(dataTableFilter);
+			}
+			if(estado.equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+				dataTableFilter = new JqGridFilter("consecutivoProforma", "'" + Constantes.EMPTY + "'", "<>");
+				delimitadores.addFiltro(dataTableFilter);
+				dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_FACTURADO + "'", "=");
+				delimitadores.addFiltro(dataTableFilter);
+			}
+			if(estado.equals(Constantes.FACTURA_ESTADO_ANULADA_PROFORMA)) {
+				dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_ANULADA_PROFORMA + "'", "=");
+				delimitadores.addFiltro(dataTableFilter);
+			}
+			
+		}
 
+	
 		if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
-			dataTableFilter = new JqGridFilter("usuarioCreacion.id", "'" + usuarioSesion.getId().toString() + "'", "=");
+			 dataTableFilter = new JqGridFilter("usuarioCreacion.id", "'" + usuarioSesion.getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
 		}
 
