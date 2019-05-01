@@ -489,16 +489,7 @@ public class FacturasController {
 			// JasperReport jasperReport;
 			Factura factura = facturaBo.findById(idFactura);
 
-			// jasperReport = JasperCompileManager.compileReport("reportes/ejemplo.jrxml");
-			// JRDataSource vacio = new JREmptyDataSource(1);
-
-			// Map<String, Object> parameters = new HashMap<String, Object>();
-			// parameters.put("nombreEmpresa", factura.getEmpresa().getNombre().toString());
-
-			// JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters,vacio);
-
-			// JasperExportManager.exportReportToPdfFile(print, "reportes/ejemplo.pdf");
-
+		
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
 			Collection<Detalle> detalles = detalleBo.findByFactura(factura);
 

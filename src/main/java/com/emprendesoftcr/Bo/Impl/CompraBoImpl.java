@@ -246,11 +246,12 @@ public class CompraBoImpl implements CompraBo {
 			Double totalLinea = detalleCompra.getMontoTotalLinea() != null ? detalleCompra.getMontoTotalLinea() : Constantes.ZEROS_DOUBLE;
 			totalLinea = totalLinea > 0 ? totalLinea / detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
 			Double costo = totalLinea;
-
+			Double costoPromedio =articuloDao.costoPromedio(articulo.getCosto(), costo, articulo.getCantidad(), detalleCompra.getCantidad()); 
+			Double porcentajeGanancia =articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio());
 			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getProveedor().getNombreCompleto();
 			kardexDao.entrada(articulo, articulo.getCantidad(), detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
-			articulo.setCosto(articuloDao.costoPromedio(articulo.getCosto(), costo, articulo.getCantidad(), detalleCompra.getCantidad()));
-			articulo.setGananciaPrecioPublico(articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio()));
+			articulo.setCosto(costoPromedio);
+			articulo.setGananciaPrecioPublico(porcentajeGanancia);
 			articulo.setUpdated_at(new Date());
 			articulo.setUsuario(compra.getUsuarioCreacion());
 
@@ -264,6 +265,8 @@ public class CompraBoImpl implements CompraBo {
 		}
 
 	}
+
+
 
 	public Collection<Compra> findByFechaInicioAndFechaFinalAndProveedor(Date fechaInicio, Date fechaFin, Empresa empresa, Proveedor proveedor) {
 		return compraDao.findByFechaInicioAndFechaFinalAndProveedor(fechaInicio, fechaFin, empresa, proveedor);
