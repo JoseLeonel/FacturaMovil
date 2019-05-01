@@ -342,7 +342,7 @@ public class HaciendasController {
 					}
 				}
 			}
-			log.info("Estado para actualizar Factura:", estadoHacienda);
+			log.info("Estado para actualizar Factura:{estadoHacienda}", estadoHacienda.toString());
 			log.info("Finaliza callBack {}", new Date());
 		} catch (Exception e) {
 

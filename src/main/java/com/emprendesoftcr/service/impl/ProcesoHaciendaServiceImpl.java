@@ -385,19 +385,19 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				 //recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 				// San Ana
-				 recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 				// Guanacaste
-				 //recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 				
 				// JacoDos
-			//	recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+				//recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 				// Jaco
 				 //recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 				
 				// Inventario
-				// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 				
 				
 
