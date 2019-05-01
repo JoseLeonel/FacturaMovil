@@ -33,7 +33,7 @@ public class RespuestaHaciendaXMLServiceImpl implements RespuestaHaciendaXMLServ
 		
 			Certificado certificado  = certificadoBo.findByEmpresa(empresa);
       if(certificado !=null) {
-      	resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_RESPUESTA_HACIENDA);	
+      	resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_RESPUESTA_HACIENDA,null);	
       } 		
       
 		} catch (Exception e) {

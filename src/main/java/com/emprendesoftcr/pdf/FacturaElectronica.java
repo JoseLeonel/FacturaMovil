@@ -42,6 +42,7 @@ public class FacturaElectronica {
 	private String													_tipoDocumento;
 	private String													_clave;
 	private String													_consecutivo;
+	private String													consecutivoProforma;
 	private String													_fechaEmision;
 	private String													_plazoCredito;
 	private String													_condicionVenta;
@@ -402,6 +403,16 @@ public class FacturaElectronica {
 
 	public void setConsecutivo(String _consecutivo) {
 		this._consecutivo = _consecutivo;
+	}
+
+	
+	public String getConsecutivoProforma() {
+		return consecutivoProforma;
+	}
+
+	
+	public void setConsecutivoProforma(String consecutivoProforma) {
+		this.consecutivoProforma = consecutivoProforma;
 	}
 
 	public String getFechaEmision() {

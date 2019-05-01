@@ -50,12 +50,12 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
    * @see com.emprendesoftcr.service.FacturaXMLServices#getFirmarXML(java.lang.String, com.emprendesoftcr.modelo.Factura)
    */
 @Override
-	public String getFirmarXML(String xmlString,Empresa empresa)  throws Exception{
+	public String getFirmarXML(String xmlString,Empresa empresa,Date fecha)  throws Exception{
 		String resultado = Constantes.EMPTY;
 		try {
 			Certificado certificado  = certificadoBo.findByEmpresa(empresa);
 			if(certificado !=null) {
-				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_NOTA_CREDITO); 
+				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_NOTA_CREDITO,fecha); 
 			}else {
 				log.info("** Error  Empresa no se encuentra el certificado: " + empresa.getNombre());
 			}

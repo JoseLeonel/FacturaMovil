@@ -179,14 +179,13 @@ function __Opciones(id,type,row){
 		menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
 		menu += '<li><a href="#"  title="Envio de correo Alternativo" class="  btnEnvioCorreoAlternativo" >Envio de correo Alternativo</a></li>'
 		menu += '<li><a href="#"  title="Anular la proforma" class="  btnAnular" >Anular</a></li>'
-		menu += '<li><a href="#"  title="Mostrar" class="  btnImprimir" >Imprimir</a></li>'
+		menu += '<li><a href="#"  title="Imprimir Proforma" class="btnImprimir" >Imprimir</a></li>'
 
 	}
 	if(row.estado ==2){
 
-		menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
-		menu += '<li><a href="#"  title="Mostrar" class="  btnImprimir" >Imprimir</a></li>'
-
+		menu += '<li><a href="#"  title="Bajar PDF" class="btnPDF" >Bajar PDF</a></li>'
+		
 	}
     
     

@@ -336,13 +336,13 @@ public class HaciendasController {
 							log.info("llamado procedimiento callback:{}", estadoHacienda.toString());
 							haciendaBo.findByClaveSP(respuestaHacienda.clave(), estadoHacienda, xmlFirmado, mensajeHacienda);
 						} else {
-							log.info("No llamado procedimiento callback:", estadoHacienda);
+							log.info("No llamado procedimiento callback: {}", estadoHacienda);
 						}
 
 					}
 				}
 			}
-			log.info("Estado para actualizar Factura:", estadoHacienda);
+			log.info("Estado para actualizar Factura: {}", estadoHacienda);
 			log.info("Finaliza callBack {}", new Date());
 		} catch (Exception e) {
 

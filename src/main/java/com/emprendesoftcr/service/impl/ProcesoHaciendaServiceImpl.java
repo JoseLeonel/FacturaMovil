@@ -93,6 +93,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																		};
 	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
 																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
+																																																			facturaElectronica.setConsecutivoProforma(d.getConsecutivoProforma());
 																																																			// Emisor
 																																																			facturaElectronica.setEmisorNombreComercial(!d.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? d.getEmpresa().getNombreComercial() : Constantes.EMPTY);
 																																																			facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombre().equals(Constantes.EMPTY) ? d.getEmpresa().getNombre() : d.getEmpresa().getNombre());
@@ -225,7 +226,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/12 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -929,7 +930,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -952,23 +953,23 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 										// Crear XMl sin firma
 										comprobanteXML = facturaXMLServices.getCrearXMLSinFirma(factura);
 										// firmar el documento
-										comprobanteXML = facturaXMLServices.getFirmarXML(comprobanteXML.replaceAll("\n", ""), factura.getEmpresa());
+										comprobanteXML = facturaXMLServices.getFirmarXML(comprobanteXML.replaceAll("\n", ""), factura.getEmpresa(),factura.getFechaEmision());
 									} else if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
 										// Crear XMl sin firma
 										comprobanteXML = tiqueteXMLService.getCrearXMLSinFirma(factura);
 										// firmar el documento
-										comprobanteXML = tiqueteXMLService.getFirmarXML(comprobanteXML.replaceAll("\n", ""), factura.getEmpresa());
+										comprobanteXML = tiqueteXMLService.getFirmarXML(comprobanteXML.replaceAll("\n", ""), factura.getEmpresa(),factura.getFechaEmision());
 									} else if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
 										// Crear XMl sin firma
 										comprobanteXML = notaCreditoXMLServices.getCrearXMLSinFirma(factura);
 										// firmar el documento
-										comprobanteXML = notaCreditoXMLServices.getFirmarXML(comprobanteXML.replaceAll("\n", ""), factura.getEmpresa());
+										comprobanteXML = notaCreditoXMLServices.getFirmarXML(comprobanteXML.replaceAll("\n", ""), factura.getEmpresa(),factura.getFechaEmision());
 
 									} else if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
 										// Crear XMl sin firma
 										comprobanteXML = notaDebitoXMLService.getCrearXMLSinFirma(factura);
 										// firmar el documentofactura
-										comprobanteXML = notaDebitoXMLService.getFirmarXML(comprobanteXML, factura.getEmpresa());
+										comprobanteXML = notaDebitoXMLService.getFirmarXML(comprobanteXML, factura.getEmpresa(),factura.getFechaEmision());
 									}
 									if (comprobanteXML != null) {
 										if (!comprobanteXML.equals(Constantes.EMPTY)) {
@@ -1056,7 +1057,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 						if (comprobanteXMLSinFirma != null) {
 							if (!comprobanteXMLSinFirma.equals(Constantes.EMPTY)) {
-								comprobanteXMLConFirma = recepcionFacturaXMLServices.getFirmarXML(comprobanteXMLSinFirma, recepcionFactura.getEmpresa());
+								comprobanteXMLConFirma = recepcionFacturaXMLServices.getFirmarXML(comprobanteXMLSinFirma, recepcionFactura.getEmpresa(),recepcionFactura.getFacturaFechaEmision());
 							}
 						}
 

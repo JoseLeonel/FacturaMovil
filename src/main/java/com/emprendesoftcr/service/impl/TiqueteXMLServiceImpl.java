@@ -42,12 +42,12 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 
 
 	@Override
-	public String getFirmarXML(String xmlString, Empresa empresa) throws Exception {
+	public String getFirmarXML(String xmlString, Empresa empresa,Date fecha) throws Exception {
 		String resultado = Constantes.EMPTY;
 		try			{
 			Certificado certificado  = certificadoBo.findByEmpresa(empresa);
 			if(certificado !=null) {
-				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_TIQUETE);	
+				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_TIQUETE,fecha);	
 			}else {
 				log.info("** Error  Empresa no se encuentra el certificado: " + empresa.getNombre());
 			}
@@ -79,7 +79,7 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 				factura.setFechaEmision(fecha);
 				facturaBo.modificar(factura);
 			}else {
-				fecha = factura.getCreated_at();
+				fecha = factura.getFechaEmision();
 			}
 			String observacion = Constantes.EMPTY;
 		if(factura.getCliente().getObservacionVenta() !=null) {

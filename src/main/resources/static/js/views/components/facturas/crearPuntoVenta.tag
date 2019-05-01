@@ -297,7 +297,8 @@
 
                     <section   class="lista-factura-espera">
                         <div id="botones"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
-                            <a href="#" style="display:block; padding:6px 0; margin-bottom:20px;margin-left:15px;background:{colorVentaEspera};text-align:center;text-decoration:none;color:#ffffff !important;text-shadow: 0px 0px 1px #ffffff;font-style: italic;"  title="{cliente !=null?cliente.nombreCompleto:""}">C# {id}</a>
+                            <a show ="{consecutivoProforma.length>0?true:false}" href="#" style="display:block; padding:6px 0; margin-bottom:20px;margin-left:15px;background:green;text-align:center;text-decoration:none;color:#ffffff !important;text-shadow: 0px 0px 1px #ffffff;font-style: italic;"  title="{cliente !=null?cliente.nombreCompleto:""}">P: {consecutivoProforma}</a>
+                            <a show ="{consecutivoProforma.length == 0?true:false}"  href="#" style="display:block; padding:6px 0; margin-bottom:20px;margin-left:15px;background:red;text-align:center;text-decoration:none;color:#ffffff !important;text-shadow: 0px 0px 1px #ffffff;font-style: italic;"  title="{cliente !=null?cliente.nombreCompleto:"Venta en espera"}">V: {id}</a>
                         </div>    
                      </section >
                      <aside class="left-sidebar">
@@ -326,7 +327,7 @@
             </div>
             <div class="modal-body">
                <div class="row">
-                    <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                    <div class= "col-md-12 col-sx-12 col-sm-12 ol-lg-12">
                         <form id="formularioParametros" name ="formularioParametros" >
                             <div class="row">
                                 <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
@@ -554,7 +555,7 @@
 </style>    
 <script>
     var self = this;
-    self.colorVentaEspera = 'red'
+    self.colorVentaEspera = 'green'
     // Detalle de la factura es una coleccion de articulos
     self.detail                = []
     self.mensajesBackEnd       = []

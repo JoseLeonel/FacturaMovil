@@ -1,5 +1,6 @@
 package com.emprendesoftcr.web.command;
 
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Factura;
@@ -88,7 +89,7 @@ public class DetalleFacturaCommand {
 		this.nombreUsuario = detalle.getFactura().getUsuarioCreacion().getNombreUsuario();
 		this.montoGanancia = detalle.getMontoGanancia();
 		this.factura = detalle.getFactura();
-		this.consecutivoProforma = detalle.getFactura().getConsecutivoProforma();
+		this.consecutivoProforma = detalle.getFactura().getConsecutivoProforma() !=null?detalle.getFactura().getConsecutivoProforma():Constantes.EMPTY;
 	
 	}
 

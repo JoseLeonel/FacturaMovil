@@ -70,12 +70,12 @@ public class RecepcionFacturaXMLServicesImpl implements RecepcionFacturaXMLServi
    * @see com.emprendesoftcr.service.FacturaXMLServices#getFirmarXML(java.lang.String, com.emprendesoftcr.modelo.Factura)
    */
 	@Override
-	public String getFirmarXML(String xmlString, Empresa empresa) throws Exception{
+	public String getFirmarXML(String xmlString, Empresa empresa,Date fecha) throws Exception{
 		String resultado = Constantes.EMPTY;
 		try {
 		
 			Certificado certificado  = certificadoBo.findByEmpresa(empresa);		
-      resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_RECEPCION_FACTURA);
+      resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_RECEPCION_FACTURA,fecha);
 		} catch (Exception e) {
 			log.info("** Error  getFirmarXML: " + e.getMessage() + " fecha " + new Date());
 			throw e;
