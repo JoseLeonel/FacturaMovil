@@ -260,7 +260,7 @@ public class EmpresaDaoImpl implements EmpresaDao {
 		try {
 			Integer consecutivo = Constantes.ZEROS;
 			consecutivo = empresa.getConsecutivoProforma();
-			empresa.setTiqueteConsecutivo(empresa.getConsecutivoProforma() + 1);
+			empresa.setConsecutivoProforma(empresa.getConsecutivoProforma() + 1);
 			modificar(empresa);
 			// Casa matriz
 			String casaMatriz = Constantes.EMPTY;

@@ -13,7 +13,6 @@
             <section class="zona-impresion" id="imprimeme" name ="imprimeme">
                 <div class="">
                     <div class="ticket" id="ticket" name="ticket" > 
-                        <div class="encabezado" show = "{facturaImpresa.tipoDoc != '88' &&  facturaImpresa.numeroConsecutivo.length > 0""}"><strong>{$.i18n.prop("tikect.encabezado.numeroFactura")} </strong>{facturaImpresa.numeroConsecutivo}</div>
                         <div class="encabezado" ><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.consecutivoProforma}                       </strong><br></div>
                         <div class="encabezado"><strong> {facturaImpresa.empresa.nombreComercial}                        </strong><br></div>
                         <div class="encabezado"><strong> {facturaImpresa.empresa.nombre}                        </strong><br></div>
