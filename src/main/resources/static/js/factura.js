@@ -778,6 +778,10 @@ function formatoFecha(fecha) {
     return fecha == null?"":moment(fecha).format('DD/MM/YYYY');
 }
 
+function formatoFechaF(fecha) {
+    return fecha == null?"":moment(fecha).format('YYYY-MM-DD');
+}
+
 function formatoFechaHora(fecha) {
     return fecha == null?"":moment(fecha).format('DD/MM/YYYY HH:mm:ss');
 }

@@ -107,7 +107,7 @@
                                     <div show = "{!mostrarCamposIngresoContado || factura.fechaCredito}" class="form-group ">
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 
                                         <div  class="form-group input-group date datepickerFechaCredito" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
-                                            <input type="text" class="campo fechaCredito" name="fechaCredito" id="fechaCredito" value="{factura.fechaCredito}" >
+                                            <input  onclick={__ActualizarPlazoCredito} type="text" class="campo fechaCredito selectFechaCredito" name="fechaCredito" id="fechaCredito" value="{factura.fechaCredito}" >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
                                             </div>
@@ -719,6 +719,9 @@
                 lecturaCodigo($('.codigo').val())
            }
         });
+        
+       
+
        // var timer;
        // $("#codigo").on('keyup',function() {
        //     timer && clearTimeout(timer);
@@ -744,11 +747,49 @@
         }
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
+             actualizaElPlazoDiasCredito();
              //disableF5(evento);
         }, false );
+
+      
+    window.addEventListener( "mouseover", function(evento){
+        actualizaElPlazoDiasCredito();
+      
+    }, false );
+    window.addEventListener( "mouseout", function(evento){
+        actualizaElPlazoDiasCredito();
+      
+    }, false );
+    window.addEventListener( "mousedown", function(evento){
+        actualizaElPlazoDiasCredito();
+      
+    }, false );
+    window.addEventListener( "click", function(evento){  
+        actualizaElPlazoDiasCredito();
+      
+    }, false );
      
     })
     function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
+
+
+__ActualizarPlazoCredito(){
+    actualizaElPlazoDiasCredito();
+}
+
+function actualizaElPlazoDiasCredito(){
+    var valor = $('.selectFechaCredito').val()
+    if(valor ==null || valor ==""){
+        return true
+    }
+    var fechaReal = new Date();
+    var formatoFecha = formatoFechaF(fechaReal);
+    var fecha1 = moment(formatoFecha);
+    var fecha2 = moment($('.selectFechaCredito').val());
+    self.factura.plazoCredito = fecha2.diff(fecha1, 'days');
+    self.update();
+
+}
 
 /**
 * Verificar el Rol Admnistrador
