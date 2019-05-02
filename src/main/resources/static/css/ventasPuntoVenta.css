@@ -97,7 +97,44 @@
  .cabecera-derecha .lista-factura-espera {
      display:flex;
      flex-wrap:wrap;
+     flex-direction: row ;
 }
+.elementoVentaEspera{
+   justify-content:  space-between ;
+   justify-content: space-between;
+    padding-bottom: 2px;
+    padding-top: 2px;
+    padding-right: 7px;
+    background:white;
+}
+.elementoUltimoProductoIngresado{
+	font-weight: 600 !important;
+    font-size: 25px !important;
+    font-family: Roboto,sans-serif !important;
+    color: #30ed17 !important;
+    text-shadow: 0px 0px 1px #ffffff;
+    font-style: italic;
+    text-align: left;
+    padding-left: 20px;
+    line-height: 30px;
+    border-collapse: separate;
+    text-align: center;
+    cursor: pointer;
+    padding: 5px;
+    margin: 5px;
+    border: none;
+    text-align: center !important;
+    background-color: black !important;
+    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+    border-radius: 5px;
+    -webkit-transition: background-color 100ms linear;
+    -moz-transition: background-color 100ms linear;
+    -o-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+}
+
+
  .cabecera-derecha .lista-factura-espera .factura-espera{
      display:block;
      padding:6px 0;

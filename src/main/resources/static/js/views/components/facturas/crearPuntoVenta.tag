@@ -245,6 +245,12 @@
                             </div>
                     </div>
                     <br>
+                    <div class="lista-factura-espera">
+                            <div class="elementoVentaEspera">
+                             <span class="label elementoUltimoProductoIngresado">Ultimo Producto: {descripcionArticulo}</span>
+                        </div>
+                    </div>
+                    <br>
                     <div class="detalles-factura">
                         <table class="table table-striped">
                             <thead>
@@ -289,16 +295,15 @@
                     </div>
                 </div>
                 <section class="cabecera-derecha">
-                    <a class="pull-right" href="#"  title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">Articulos.No={cantArticulos} / {descripcionArticulo}</span></a>
+                    <a class="pull-right" href="#"  title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">Producto.No={cantArticulos}</span></a>
                     <br>
                     <br>
-                    
                 
 
                     <section   class="lista-factura-espera">
-                        <div id="botones"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
-                            <a show ="{consecutivoProforma.length>0?true:false}" href="#" style="display:block; padding:6px 0; margin-bottom:20px;margin-left:15px;background:green;text-align:center;text-decoration:none;color:#ffffff !important;text-shadow: 0px 0px 1px #ffffff;font-style: italic;"  title="{cliente !=null?cliente.nombreCompleto:""}">P: {consecutivoProforma}</a>
-                            <a show ="{consecutivoProforma.length == 0?true:false}"  href="#" style="display:block; padding:6px 0; margin-bottom:20px;margin-left:15px;background:red;text-align:center;text-decoration:none;color:#ffffff !important;text-shadow: 0px 0px 1px #ffffff;font-style: italic;"  title="{cliente !=null?cliente.nombreCompleto:"Venta en espera"}">V: {id}</a>
+                        <div class="elementoVentaEspera"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
+                            <a show ="{consecutivoProforma.length>0?true:false}" href="#" style="display:block; background:green;text-align:center;text-decoration:none;color:#ffffff !important;text-shadow: 0px 0px 1px #ffffff;font-style: italic;"  title="{cliente !=null?cliente.nombreCompleto:""}">P: {consecutivoProforma}</a>
+                            <a show ="{consecutivoProforma.length == 0?true:false}"  href="#" style="display:block; background:red;text-align:center;text-decoration:none;color:#ffffff !important;text-shadow: 0px 0px 1px #ffffff;font-style: italic;"  title="{cliente !=null?cliente.nombreCompleto:"Venta en espera"}">V: {id}</a>
                         </div>    
                      </section >
                      <aside class="left-sidebar">
