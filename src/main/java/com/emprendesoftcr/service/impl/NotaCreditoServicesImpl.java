@@ -102,8 +102,8 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
 				observacion = factura.getNota();
 			}
 			
-			 String date = FacturaElectronicaUtils.toISO8601String(factura.getFechaEmision());
-			String datereferenciaEmision = FacturaElectronicaUtils.toISO8601String(factura.getReferenciaFechaEmision());
+			  String date = FacturaElectronicaUtils.rfc3339(factura.getFechaEmision());
+			String datereferenciaEmision = FacturaElectronicaUtils.rfc3339(factura.getReferenciaFechaEmision());
 		  
 	     xml = "<NotaCreditoElectronica xmlns=\"" + Constantes.DOCXMLS_NOTA_CREDITO + "\" " +
 	                "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +

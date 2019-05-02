@@ -379,21 +379,22 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				recepcion.setComprobanteXml(base64);
 
 				// Ambiente de pruebas
-				recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 				// San Ana
 				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 				// Guanacaste
-				// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+				 recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+				
 				// JacoDos
 				//recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 				// Jaco
 				// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
-
+				
 				// Inventario
-				 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 				
 				
 
@@ -439,7 +440,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						try {
 
 							Date fecha = new Date();
-							long tiempoInicial = hacienda.getFechaEmisor().getTime();
+							long tiempoInicial = hacienda.getCreated_at().getTime();
 							long tiempoFinal = fecha.getTime();
 							long resta = tiempoFinal - tiempoInicial;
 							// el metodo getTime te devuelve en mili segundos para saberlo en mins debes hacer
@@ -523,7 +524,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					if (body != null && body != "" && body != "{}" && !body.contains("El comprobante") && !body.contains("no ha sido recibido")) {
 						RespuestaHacienda respuestaHacienda = RespuestaHaciendaJson.from(body);
 
-						String statusAceptar = getHaciendaStatus(respuestaHacienda.indEstado());
+						String status = getHaciendaStatus(respuestaHacienda.indEstado());
 						hacienda.setUpdated_at(new Date());
 						RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();
 						// hacienda.setxErrorCause(FacturaElectronicaUtils.convertirStringToblod(respuesta.getDetalleMensaje()==null?Constantes.EMPTY:respuesta.getDetalleMensaje()));
@@ -542,7 +543,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						respuesta.setTotalFactura(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().totalFactura() : Constantes.ZEROS_DOUBLE);
 						String xmlSinFirmarRespuesta = Constantes.EMPTY;
 						String xmlFirmadoRespuesta = Constantes.EMPTY;
-						if (!statusAceptar.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECIBIDO)) {
+						if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECIBIDO)) {
 							xmlSinFirmarRespuesta = respuestaHaciendaXMLService.getCrearXMLSinFirma(respuesta);
 							xmlFirmadoRespuesta = respuestaHaciendaXMLService.getFirmarXML(xmlSinFirmarRespuesta, hacienda.getEmpresa());
 						} else {
@@ -562,11 +563,11 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						/**
 						 * Esperar el correo FE para saber que ese estado de recibido
 						 */
-						if (statusAceptar.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
+						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
 							
 							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
 						}
-						if (statusAceptar.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
+						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
 							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
 						}
 						// Hacienda no envia mensaje
@@ -581,7 +582,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								}
 							}
 						} else {
-							if (!statusAceptar.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
+							if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
 								if (haciendaBD.getReintentosAceptacion() == Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
 									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
 								} else {
@@ -938,14 +939,12 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			Collection<Factura> lista = facturaBo.findByEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE, Constantes.FACTURA_ESTADO_REFIRMAR_DOCUMENTO);
 			for (Factura factura : lista) {
 				try {
-					
+					log.info("Factura id	:  {}", factura.getId() + " Factura proceso de firmado:  " + factura.getNumeroConsecutivo().toString() + " Empresa:" + factura.getEmpresa().getNombre());
 
 					if (factura != null) {
 						Collection<Detalle> detalles = detalleBo.findByFactura(factura);
 						if (detalles != null) {
-//							if (!detalles.isEmpty() && factura.getEmpresa().getId().equals(Constantes.EMPRESA_VIVIANA_MARTINEZ_8085)) {
-								if (!detalles.isEmpty() ) {
-								log.info("Factura id	:  {}", factura.getId() + " Factura proceso de firmado:  " + factura.getNumeroConsecutivo().toString() + " Empresa:" + factura.getEmpresa().getNombre());
+							if (!detalles.isEmpty()) {
 								if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 									String comprobanteXML = Constantes.EMPTY;
 									if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {

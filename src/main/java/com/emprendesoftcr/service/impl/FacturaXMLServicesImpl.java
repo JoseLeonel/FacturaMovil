@@ -93,7 +93,7 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 				observacion = factura.getNota();
 			}
 	
-			String date = FacturaElectronicaUtils.toISO8601String(factura.getFechaEmision());
+			String date = FacturaElectronicaUtils.rfc3339(factura.getFechaEmision());
 			 xml = "<FacturaElectronica xmlns=\"" + Constantes.DOCXMLS_FACTURA + "\" " +
 	         "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
 	 "<Clave>" + factura.getClave() + "</Clave>" +
