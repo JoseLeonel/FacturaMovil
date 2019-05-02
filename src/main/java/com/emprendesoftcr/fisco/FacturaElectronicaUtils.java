@@ -289,7 +289,7 @@ public final class FacturaElectronicaUtils {
 	 */
 	public static String toISO8601String(Date date) {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-	//	dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 		
 		return dateFormat.format(date);
 	}
@@ -307,6 +307,13 @@ public final class FacturaElectronicaUtils {
 		return dateFormat.format(date);
 	}
 
+	public static String rfc3339(Date fechaEmision) {
+		SimpleDateFormat rfc3339 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+		
+		return rfc3339.format(fechaEmision).replaceAll("(\\d\\d)(\\d\\d)$", "$1:$2");
+		
+	}
+	
 	/**
 	 * Convierte un string de fecha a su expresion en ISO 8601
 	 * @param string Fecha a ser convertida

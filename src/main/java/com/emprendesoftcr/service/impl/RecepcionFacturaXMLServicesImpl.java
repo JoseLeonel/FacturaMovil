@@ -42,7 +42,7 @@ public class RecepcionFacturaXMLServicesImpl implements RecepcionFacturaXMLServi
 	public String getCrearXMLSinFirma(RecepcionFactura recepcionFactura) throws Exception{
 		
 		String xml = Constantes.EMPTY;
-			
+		
 		try {
 			String date = FacturaElectronicaUtils.toISO8601String(recepcionFactura.getFacturaFechaEmision());
 			String impuestos  = (recepcionFactura.getFacturaTotalImpuestos() != null && recepcionFactura.getFacturaTotalImpuestos() > Constantes.ZEROS_DOUBLE) ?  "<MontoTotalImpuesto>" + recepcionFactura.getFacturaTotalImpuestos().toString() + "</MontoTotalImpuesto>" : "";

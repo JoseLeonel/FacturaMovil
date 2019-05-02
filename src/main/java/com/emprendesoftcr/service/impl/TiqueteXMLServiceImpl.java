@@ -1,6 +1,8 @@
 package com.emprendesoftcr.service.impl;
 
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 
@@ -81,6 +83,10 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 			}else {
 				fecha = factura.getCreated_at();
 			}
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(new Date());
+			cal.set(Calendar.HOUR, cal.get(Calendar.HOUR)+ 2);
+			
 			String observacion = Constantes.EMPTY;
 		if(factura.getCliente().getObservacionVenta() !=null) {
 				if(!factura.getCliente().getObservacionVenta().equals(Constantes.EMPTY)) {
@@ -91,7 +97,10 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 			}else {
 				observacion = factura.getNota();
 			}
-					 String date = FacturaElectronicaUtils.toISO8601String(factura.getFechaEmision());
+		
+	
+		
+					 String date = FacturaElectronicaUtils.rfc3339(factura.getFechaEmision());
 		   resultado = "<TiqueteElectronico xmlns=\"" + Constantes.DOCXMLS_TIQUETE + "\" " +
 		                "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
 		        "<Clave>" + factura.getClave() + "</Clave>" +
