@@ -20,7 +20,9 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
+import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.modelo.Empresa;
@@ -79,16 +81,17 @@ public class UsuarioController {
 	public String cambioClavePagina(ModelMap model) {
 		return "views/usuario/CambioClave";
 	}
-/**
- * Cambiar contrasena
- * @param request
- * @param model
- * @param usuario
- * @param result
- * @param status
- * @return
- * @throws Exception
- */
+
+	/**
+	 * Cambiar contrasena
+	 * @param request
+	 * @param model
+	 * @param usuario
+	 * @param result
+	 * @param status
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/CambioAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator cambioclave(HttpServletRequest request, ModelMap model, @ModelAttribute Usuario usuario, BindingResult result, SessionStatus status) throws Exception {
@@ -110,7 +113,7 @@ public class UsuarioController {
 			usuarioSesion.setPassword(encodedPassword);
 			usuarioSesion.setPasswordConfirm(encodedPassword);
 			usuarioBo.modificar(usuarioSesion);
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuario.modificado.correctamente",usuarioSesion);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuario.modificado.correctamente", usuarioSesion);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
@@ -219,6 +222,21 @@ public class UsuarioController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
+	@RequestMapping(value = "/ListarUsuariosByEmpresaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarByEmpresaAjax(HttpServletRequest request, HttpServletResponse response) {
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Usuario");
+		delimitadores.addFiltro(new JqGridFilter("empresa.id", "'" + usuario.getEmpresa().getId().toString() + "'", "="));
+		if (request.isUserInRole(Constantes.ROL_ADMINISTRADOR_CAJERO) || request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
+			delimitadores.addFiltro(new JqGridFilter("nombreUsuario", "'" + usuario.getNombreUsuario() + "'", "="));
+		}
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+	}
+
 	/**
 	 * Agregar usuario
 	 * @param request
@@ -243,7 +261,7 @@ public class UsuarioController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 
 			}
-			
+
 			PasswordEncoder encoder = new BCryptPasswordEncoder();
 			String encodedPassword = encoder.encode(usuario.getPassword());
 			usuario.setPassword(encodedPassword);

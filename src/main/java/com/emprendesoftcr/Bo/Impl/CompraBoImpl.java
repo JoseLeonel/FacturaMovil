@@ -266,6 +266,8 @@ public class CompraBoImpl implements CompraBo {
 
 	}
 
+
+
 	public Collection<Compra> findByFechaInicioAndFechaFinalAndProveedor(Date fechaInicio, Date fechaFin, Empresa empresa, Proveedor proveedor) {
 		return compraDao.findByFechaInicioAndFechaFinalAndProveedor(fechaInicio, fechaFin, empresa, proveedor);
 	}

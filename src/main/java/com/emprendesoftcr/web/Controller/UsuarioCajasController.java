@@ -1,10 +1,8 @@
 package com.emprendesoftcr.web.Controller;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +28,7 @@ import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Caja;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Usuario;
@@ -133,20 +132,40 @@ public class UsuarioCajasController {
 
 	@RequestMapping(value = "/ListarUsuariosCajasCerradasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarUsuariosCajasCerradasAjax(HttpServletRequest request, HttpServletResponse response) {
+	public RespuestaServiceDataTable listarUsuariosCajasCerradasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String inicio, @RequestParam String fin, @RequestParam Integer idUsuario) {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "UsuarioCaja");
 		JqGridFilter dataTableFilter = null;
-		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		if ( request.isUserInRole(Constantes.ROL_ADMINISTRADOR_CAJERO) || request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
-			dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
-			delimitadores.addFiltro(dataTableFilter);
-		}
-		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {			
-			//Se incluye la empresa
+		Usuario usuario = usuarioBo.buscar(idUsuario);
+		dataTableFilter = new JqGridFilter("usuario.id", "'" + usuario.getId().toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+			// Se incluye la empresa
 			dataTableFilter = new JqGridFilter("caja.empresa.id", "'" + usuario.getEmpresa().getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
+		}
+		
+
+		Date fechaInicio = new Date();
+		Date fechaFinal = new Date();
+		if (!inicio.equals(Constantes.EMPTY) && !fin.equals(Constantes.EMPTY)) {
+			fechaInicio = Utils.parseDate(inicio);
+			fechaFinal = Utils.parseDate(fin);
+			if (fechaFinal == null) {
+				fechaFinal = new Date(System.currentTimeMillis());
+			}
+			if (fechaFinal != null && fechaFinal != null) {
+				fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
+			}
+
+			DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
+
+			inicio = dateFormat.format(fechaInicio);
+			fin = dateFormat.format(fechaFinal);
+
+			delimitadores.addFiltro(new JqGridFilter("created_at", inicio, "date>="));
+			delimitadores.addFiltro(new JqGridFilter("created_at", fin, "dateFinal<="));
 		}
 
 		dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_INACTIVO.toString() + "'", "=");
@@ -165,9 +184,9 @@ public class UsuarioCajasController {
 			if (usuarioCajaBd != null) {
 				result.rejectValue("totalFondoInicial", "error.usuarioCaja.totalFondoInicial.existe.activo");
 			}
-			if(usuarioCaja.getCaja() == null) {
+			if (usuarioCaja.getCaja() == null) {
 				result.rejectValue("caja", "error.usuarioCaja.caja.no,existe");
-				
+
 			}
 
 			if (result.hasErrors()) {

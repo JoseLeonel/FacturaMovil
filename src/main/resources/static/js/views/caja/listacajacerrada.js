@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    var advanced_search_section = $('#filtrosAvanzados');
+    advanced_search_section.slideToggle(750);
 	_Init();
 	
 } );/*fin document*/
@@ -6,9 +8,54 @@ $(document).ready(function() {
 var _Init = function () {
 	__Inicializar_Table('.tableListar');
 	agregarInputsCombos();
-    ListarCajas()
-    //alert(1)
+    EventoFiltro();
+    $('.datepickerFechaFinal').datepicker(
+		{
+		  format: 'yyyy-mm-dd',
+		  todayHighlight:true,
+		}
+	);
+	$('.datepickerFechaInicial').datepicker(
+ 	{
+	 format: 'yyyy-mm-dd',
+	 todayHighlight:true,
+ 	}
+    );
+    listaUsuariosActivos();
+    $('.btnLimpiarFiltros').click(function () {
+        $("#fechaInicial").val(null);
+        $("#fechaFinal").val(null);
+    });
+    $('#bontonBusqueda').click(function () {
+		if ($("#filtros").valid()) {
+		    ListarCajas()
+		}
+    });
+  
+    $("#filtros").validate(reglasDeValidacion());
+    $('#panelFiltros').click(function () {
+        var advanced_search_section = $('#filtrosAvanzados');
+        advanced_search_section.slideToggle(750);
+    });
 }
+
+/**
+* Reglas aplicadas
+**/
+var reglasDeValidacion = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			fechaInicial : {
+				required : true,
+			},
+			fechaFinal : {
+				required : true,
+			}                                   
+		},
+		ignore : []
+	});
+	return validationOptions;
+};
 /**
 *  inicializar el listado
 **/
@@ -27,6 +74,9 @@ function __Inicializar_Table(nombreTabla){
 }
 
 var ListarCajas = function(){
+    var fechaInicio=$('.fechaInicial').val();
+    var fechaFin = $('.fechaFinal').val();
+	var idUsuario = $('#usuario').val();
 	var table  =  $('#tableListar').DataTable( {
 	"responsive": true,
 	 "bAutoWidth" : true,
@@ -43,7 +93,7 @@ var ListarCajas = function(){
 	"sort" : "position",
 	"lengthChange": true,
 	"ajax" : {
-			"url":"ListarUsuariosCajasCerradasAjax.do",
+			"url":"ListarUsuariosCajasCerradasAjax.do?inicio=" + fechaInicio+"&"+"fin="+fechaFin+"&"+"idUsuario="+idUsuario,
 			"deferRender": true,
 			"type":"GET",
 					"dataType": 'json',
@@ -58,6 +108,29 @@ __Imprimir()
 EventoFiltro()
 agregarInputsCombos();
 } 
+
+/**
+*  Obtiene la lista de los usuarios por empresa
+**/
+function listaUsuariosActivos(){
+	$.ajax({
+		 url: "ListarUsuariosByEmpresaAjax.do",
+		 datatype: "json",
+		 method:"GET",
+		 success: function (result) {
+				if(result.aaData.length > 0){
+					$.each(result.aaData, function( index, modeloTabla ) {
+						$('.selectUsuario').append('<option value="'+modeloTabla.id+'">'+modeloTabla.nombreUsuario+ '</option>');
+					});
+					$('.selectUsuario').selectpicker();
+				} 
+		 },
+		 error: function (xhr, status) {
+			  mensajeErrorServidor(xhr, status);
+			  console.log(xhr);
+		 }
+	})
+}
 // traducciones del table
 var idioma_espanol = 
 {
@@ -101,14 +174,13 @@ var idioma_espanol =
                                 },
                                 {'data' : 'updated_atSTR'  ,"name":"updated_at"  ,"title" : "Fecha Finalizacion"  ,"autoWidth" :false
                                 },
-                               {'data' : 'usuario'         ,"name":"usuario"        ,"title" : "Usuario"             ,"autoWidth" :false,
+                               {'data' : 'usuario'         ,"name":"usuario.nombreUsuario"        ,"title" : "Usuario"             ,"autoWidth" :false,
                                     "render":function(usuario,type, row){
                                         return usuario.nombreUsuario;
                                     }
                                },
                                {'data' : 'totalFondoInicialSTR' ,"name":"totalFondoInicial"  ,"title" : "Fondo Inicial"  ,"autoWidth" :false},
                                {'data' : 'totalNetoSTR'         ,"name":"totalNeto"          ,"title" : "Total"          ,"autoWidth" :false},
-                               {'data' : 'estado'               ,"name":"estado"             ,"title" : "Estado"         ,"autoWidth" :false},
                                {'data' : 'id'                   ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
                                       return __Opciones(id,type,row);
@@ -122,7 +194,7 @@ function agregarInputsCombos(){
   $('.tableListar tfoot th').each( function (e) {
 		var title = $('.tableListar thead th').eq($(this).index()).text();      
 		//No se toma en cuenta la columna de las acctiones(botones)
-		if ( $(this).index() != 7    ){
+		if ( $(this).index() != 6 && $(this).index() != 1  && $(this).index() != 2   ){
 			 $(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	  }
   })
