@@ -104,7 +104,7 @@
                                         <input type="text" id="nombreFactura" name="nombreFactura" class="campo nombreFactura "  value="{factura.nombreFactura}" > 
                                     </div>
                                     
-                                    <div show = "{!mostrarCamposIngresoContado || factura.fechaCredito}" class="form-group ">
+                                    <div show = "{mostrarCamposIngresoContado ==false }" class="form-group ">
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 
                                         <div  class="form-group input-group date datepickerFechaCredito" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
                                             <input  onclick={__ActualizarPlazoCredito} type="text" class="campo fechaCredito selectFechaCredito" name="fechaCredito" id="fechaCredito" value="{factura.fechaCredito}" >
@@ -113,7 +113,7 @@
                                             </div>
                                         </div>
                                     </div>    
-                                    <div class="form-group " show = "{!mostrarCamposIngresoContado || factura.fechaCredito}">
+                                    <div class="form-group " show = "{mostrarCamposIngresoContado == false}">
                                         <label>{$.i18n.prop("factura.plazoCredito")}</label> 
                                         <input type="number" id = "plazoCreditoL"  name "plazoCreditoL" class="campo plazoCreditoL" value="{factura.plazoCredito}" >
                                     </div>
