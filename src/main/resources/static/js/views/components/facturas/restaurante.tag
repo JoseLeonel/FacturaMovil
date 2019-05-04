@@ -758,7 +758,7 @@
                 <h1 class="box-title"><i class="fa fa-user-o"></i>&nbsp {$.i18n.prop("factura.digite.nombreFactura")}     </h1>
             </div>
             <div class="modal-body">
-                <form id = "formularioAgregarNombreTiquete" name ="formularioAgregarNombreTiquete "   class="advanced-search-form">
+                <form id = "formularioAgregarNombreTiquete1" name ="formularioAgregarNombreTiquete1"   class="advanced-search-form">
                     <div class="row">   
                         <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                             <label class="knob-label" >{$.i18n.prop("factura.nombreFactura")}</label>
@@ -1565,10 +1565,15 @@ td.col-xl-12, th.col-xl-12 {
     self.rol = {
         rolAdministrador:0
     }
+     self.validarRolCommand = {
+                        usuarioSistema : "",
+                        claveSistema:""
+                    }   
     self.mostarAbrirCajon = true 
     self.on('mount',function(){
         $("#formularioFactura").validate(reglasDeValidacionFactura());
         $("#formularioAgregarNombreTiquete").validate(reglasAgregarNombre());
+        $("#formularioAgregarNombreTiquete1").validate(reglasAgregarNombre());
         $("#formularioModalCambiarNombreTiquete").validate(reglasCambiarNombre());
         __informacionData()
         __informacionData_vendedores()
@@ -2056,11 +2061,13 @@ function ListadoFacturasDelDia(){
 **/
 function agregarInputsCombos_Facturas_Dias(){
      // Agregar los input de busqueda 
+     var cont = 50
     $('.tableListarFacturasDia tfoot th').each( function (e) {
         var title = $('.tableListarFacturasDia thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
+        cont = cont +1
         if ( $(this).index() != 5    ){
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	      	$(this).html( '<input id = "filtroCampos'+cont+'" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
 } 
@@ -4004,11 +4011,12 @@ function __ComboEstados(){
 **/
 function agregarInputsCombos_Articulo(){
      // Agregar los input de busqueda 
+     var cont = 1
     $('.tableListarArticulos tfoot th').each( function (e) {
+        cont = cont +1 ;
         var title = $('.tableListarArticulos thead th').eq($(this).index()).text();      
-        //No se toma en cuenta la columna de las acctiones(botones)
         if ( $(this).index() != 5    ){
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	      	$(this).html( '<input id = "filtroCampos'+cont+'" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
 } 
@@ -4017,11 +4025,13 @@ function agregarInputsCombos_Articulo(){
 **/
 function agregarInputsCombos_Clientes(){
      // Agregar los input de busqueda 
+    var cont = 15
     $('.tableListaCliente tfoot th').each( function (e) {
         var title = $('.tableListaCliente thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
+        cont = cont +1 ;
         if ( $(this).index() != 6    ){
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	      	$(this).html( '<input id = "filtroCampos'+cont+'" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
 } 
@@ -4030,11 +4040,13 @@ function agregarInputsCombos_Clientes(){
 **/
 function agregarInputsCombos_Vendedores(){
      // Agregar los input de busqueda 
+     var cont= 30;
     $('.tableListaVendedor tfoot th').each( function (e) {
         var title = $('.tableListaVendedor thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
+        cont=cont+1
         if ( $(this).index() != 5    ){
-	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
+	      	$(this).html( '<input id = "filtroCampos'+cont+'" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
 } 

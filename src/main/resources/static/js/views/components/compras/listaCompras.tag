@@ -826,8 +826,32 @@ function __MostrarCompra(){
         self.compra.fechaCompra = self.compra.fechaCompra !=null?__displayDate_detail(self.compra.fechaCompra):null;
         self.compra.fechaIngreso  =self.compra.fechaIngresoSTR !=null?self.compra.fechaIngresoSTR:null;
         self.update()
-        cargarDetallesCompra()
+        __ListaDetallesCompras(data.id)
+        //cargarDetallesCompra()
 	});
+}
+
+/**
+*  Lista de los Proveedores
+**/
+function __ListaDetallesCompras(id){
+    $.ajax({
+        url: 'ListarDetlleByCompraAjax.do',
+        datatype: "json",
+          data:{idCompra:id} ,
+        method:"POST",
+        success: function (result) {
+            if(result.aaData.length > 0){
+               self.compra.detalleCompras = result.aaData
+               self.update()
+               cargarDetallesCompra()
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
 }
 
 /**

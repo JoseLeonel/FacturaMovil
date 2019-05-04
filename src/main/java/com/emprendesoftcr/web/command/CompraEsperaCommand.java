@@ -295,7 +295,7 @@ public class CompraEsperaCommand {
 	}
 
 	public String getFormatoCompraTotal() {
-		return Utils.formatearNumeroListados(this.totalCompra, 2);
+		return Utils.formatearNumeroListados(this.totalCompra == null?0:this.totalCompra, 2);
 	}
 
 	public Double getTotalImpuesto() {
