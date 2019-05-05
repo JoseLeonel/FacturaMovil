@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
@@ -141,8 +142,8 @@ public class DetalleController {
 		return detalleBo.totalVentasPorDetalle(usuario.getEmpresa(), fechaInicial, fechaFinal);
 
 	}
-//	@Autowired
-//	private CertificadoBo																							certificadoBo;
+	@Autowired
+	private CertificadoBo																							certificadoBo;
 
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarDetlleByFacturaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -153,7 +154,7 @@ public class DetalleController {
 
 		// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
 		// criptografica desde linux
-//			 certificadoBo.agregar(usuario.getEmpresa(),"","");
+			 certificadoBo.agregar(usuario.getEmpresa(),"","");
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Detalle");
