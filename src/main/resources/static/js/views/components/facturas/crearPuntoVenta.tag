@@ -138,13 +138,9 @@
                             <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
                             <input type="hidden" id='plazoCredito'            name='plazoCredito'            value="{factura.plazoCredito}" >
                             <input type="hidden" id='estado'                  name='estado'                  value="{factura.estado}" >
-                            <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
-                            <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='subTotal'                name='subTotal'                value="{factura.subTotal}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='totalComprobante'        name='totalComprobante'        value="{factura.totalComprobante}" >
-                            <input type="hidden" id='totalServGravados'       name='totalServGravados'       value="{factura.totalServGravados}" >
-                            <input type="hidden" id='totalServExentos'        name='totalServExentos'        value="{factura.totalServExentos}" >
                             <input type="hidden" id='totalMercanciasGravadas' name='totalMercanciasGravadas' value="{factura.totalMercanciasGravadas}" >
                             <input type="hidden" id='totalMercanciasExentas'  name='totalMercanciasExentas'  value="{factura.totalMercanciasExentas}" >
                             <input type="hidden" id='totalServGravados'       name='totalServGravados'       value="{factura.totalServGravados}" >
@@ -157,8 +153,6 @@
                             <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           valmodalue="{factura.totalImpuesto}" >
                             <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
                             <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
-                            <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
-                            <input type="hidden" id='totalTarjeta'            name='totalTarjeta'            value="{factura.totalTarjeta}" >
                             <input type="hidden" id='totalBanco'              name='totalBanco'              value="{factura.totalBanco}" >
                    
                         </form>   
@@ -1752,7 +1746,10 @@ function cargarDetallesFacturaEnEspera(data){
             porcentajeDesc  : parseFloat(modeloTabla.porcentajeDesc),
             subTotal        : parseFloat(modeloTabla.subTotal),
             montoTotalLinea : parseFloat(modeloTabla.montoTotalLinea),
-            montoTotal      : parseFloat(modeloTabla.montoTotal)
+            montoTotal      : parseFloat(modeloTabla.montoTotal),
+            costo           : parseFloat(modeloTabla.costo),
+            porcentajeGanancia :parseFloat(modeloTabla.porcentajeGanancia),
+
         });
         self.update()
         self.numeroLinea   = self.numeroLinea + 1
@@ -2610,7 +2607,9 @@ function __nuevoArticuloAlDetalle(cantidad){
        ganancia        : self.articulo.gananciaPrecioPublico,
        subTotal        : subTotal,
        montoTotalLinea : montoTotalLinea,
-       montoTotal      : montoTotal
+       montoTotal      : montoTotal,
+       costo           : self.articulo.costo ==null?0:self.articulo.costo,
+       porcentajeGanancia :   self.articulo.gananciaPrecioPublico ==null?0:self.articulo.gananciaPrecioPublico,
     });
     self.detail.sort(function(a,b) {
     if ( a.pesoPrioridad > b.pesoPrioridad )

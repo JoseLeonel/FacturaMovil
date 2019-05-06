@@ -88,6 +88,12 @@ public class Detalle implements Serializable {
 
 	@Column(name = "porcentaje_desc")
 	private Double						porcentajeDesc;
+	
+	@Column(name = "porcentaje_ganan", columnDefinition = "INT default '0'")
+	private Double						porcentajeGanancia;
+
+	@Column(name = "costo", columnDefinition = "INT default '0'")
+	private Double						costo;
 
 	@Column(name = "observacion")
 	private String						observacion;
@@ -369,5 +375,27 @@ public class Detalle implements Serializable {
 	public void setMontoGanancia(Double montoGanancia) {
 		this.montoGanancia = montoGanancia;
 	}
+
+	
+	public Double getPorcentajeGanancia() {
+		return porcentajeGanancia;
+	}
+
+	
+	public void setPorcentajeGanancia(Double porcentajeGanancia) {
+		this.porcentajeGanancia = porcentajeGanancia;
+	}
+
+	
+	public Double getCosto() {
+		return costo;
+	}
+
+	
+	public void setCosto(Double costo) {
+		this.costo = costo;
+	}
+	
+	
 
 }

@@ -1,5 +1,7 @@
 package com.emprendesoftcr.web.command;
 
+import javax.persistence.Column;
+
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Detalle;
@@ -58,6 +60,9 @@ public class DetalleFacturaCommand {
 	private Double	montoGanancia;
 	
 	private Factura factura;
+	private Double						porcentajeGanancia;
+
+	private Double						costo;
 
 	public DetalleFacturaCommand() {
 		super();
@@ -90,6 +95,8 @@ public class DetalleFacturaCommand {
 		this.montoGanancia = detalle.getMontoGanancia();
 		this.factura = detalle.getFactura();
 		this.consecutivoProforma = detalle.getFactura().getConsecutivoProforma() !=null?detalle.getFactura().getConsecutivoProforma():Constantes.EMPTY;
+		this.costo = detalle.getCosto();
+		this.porcentajeGanancia = detalle.getPorcentajeGanancia();
 	
 	}
 
@@ -332,7 +339,24 @@ public class DetalleFacturaCommand {
 	}
 
 	
+	public Double getPorcentajeGanancia() {
+		return porcentajeGanancia;
+	}
+
 	
+	public void setPorcentajeGanancia(Double porcentajeGanancia) {
+		this.porcentajeGanancia = porcentajeGanancia;
+	}
+
+	
+	public Double getCosto() {
+		return costo;
+	}
+
+	
+	public void setCosto(Double costo) {
+		this.costo = costo;
+	}
 	
 	
 
