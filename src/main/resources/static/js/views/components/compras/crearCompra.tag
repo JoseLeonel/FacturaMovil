@@ -667,16 +667,7 @@ __crearCompraEnEspera(){
 ** Se aplica o se crea una compra cargada en la pantalla
 **/
 __AplicarYCrearCompra(){
-     if(self.detail.length == 0 ){
-        mensajeError($.i18n.prop("compra.alert.sin.detalles"))
-        return
-    }
-    if(formaPago.value == 2  ){
-        if(fechaCredito.value == null || fechaCredito.value.length == 0){
-           mensajeError($.i18n.prop("compra.alert.fechaCredito"))
-            return
-        }
-    }
+   
     if ($("#formularioCompra").valid()) {
         swal({
            title: '',
@@ -853,6 +844,16 @@ function cargarDetallesCompraEnEspera(data){
 *  Crear Compra nueva
 **/
 function crearCompra(estadoCompra){
+    if(self.detail.length == 0 ){
+        mensajeError($.i18n.prop("compra.alert.sin.detalles"))
+        return
+    }
+    if(formaPago.value == 2  ){
+        if(fechaCredito.value == null || fechaCredito.value.length == 0){
+           mensajeError($.i18n.prop("compra.alert.fechaCredito"))
+            return
+        }
+    }
     self.detalleCompra.data =self.detail
     self.update()
       var JSONDetalles = JSON.stringify( self.detalleCompra );
