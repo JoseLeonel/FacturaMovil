@@ -2757,9 +2757,10 @@ function __Init(){
             impuestoServicio:false
        }
     }
+    self.factura.mesa = self.mesa;
     localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
     localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
-    self.factura.mesa = self.mesa;
+   
     self.item                  = null;
     self.articulo              = null;
     self.clientes              = {data:[]}

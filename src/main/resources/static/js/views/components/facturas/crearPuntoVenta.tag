@@ -1249,8 +1249,8 @@ __CambiarDescuento(e){
         $('#modalRolUsuario').modal('show')     
 
     }else{
-         $( "#aplicarDescuento" ).focus()
-        $( "#aplicarDescuento" ).val(cantidad)
+        $( "#aplicarDescuento" ).focus()
+        $( "#aplicarDescuento" ).val(null)
         $('#modalCambiarDescuento').modal({backdrop: 'static', keyboard: true}) 
         $('#modalCambiarDescuento').modal('show')      
     }
@@ -2592,24 +2592,24 @@ function __nuevoArticuloAlDetalle(cantidad){
     self.numeroLinea    = self.numeroLinea + 1
     self.cantArticulos  = self.cantArticulos + 1
     self.detail.push({
-       numeroLinea     : self.numeroLinea,
+       numeroLinea     : parseFloat(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,  
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?" ":self.articulo.tipoImpuesto,
        iva             : parseFloat(self.articulo.impuesto),
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
        cantidad        : parseFloat(cantidad),
-       precioUnitario  : precioUnitario,
+       precioUnitario  : parseFloat(precioUnitario),
        impuesto        : parseFloat(self.articulo.impuesto),
-       montoImpuesto   : montoImpuesto,
+       montoImpuesto   : parseFloat(montoImpuesto),
        montoDescuento  : 0,
        porcentajeDesc  : 0,
-       ganancia        : self.articulo.gananciaPrecioPublico,
-       subTotal        : subTotal,
-       montoTotalLinea : montoTotalLinea,
-       montoTotal      : montoTotal,
-       costo           : self.articulo.costo ==null?0:self.articulo.costo,
-       porcentajeGanancia :   self.articulo.gananciaPrecioPublico ==null?0:self.articulo.gananciaPrecioPublico,
+       ganancia        : parseFloat(self.articulo.gananciaPrecioPublico),
+       subTotal        : parseFloat(subTotal),
+       montoTotalLinea : parseFloat(montoTotalLinea),
+       montoTotal      : parseFloat(montoTotal),
+       costo           : self.articulo.costo ==null?0:parseFloat(self.articulo.costo),
+       porcentajeGanancia :   self.articulo.gananciaPrecioPublico ==null?0:parseFloat(self.articulo.gananciaPrecioPublico),
     });
     self.detail.sort(function(a,b) {
     if ( a.pesoPrioridad > b.pesoPrioridad )
@@ -2750,21 +2750,24 @@ function __ValidarCantidadArticulo(idArticulo,cantidad){
     });
 }
 /**
-* Monto de descuento
+* Monto de descuento sobre la ganancia
 **/
-function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc){
-    var porcentaje = porcentajeDesc / 100;
-    var total =  precioUnitario * cantidad
-    var resultado = total * porcentaje
+function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
+
+    var porcentaje = porcentajeDesc - porcentajeGanancia;
+    porcentaje = porcentaje/ 100;
+
+    var totalDescuento =  precioUnitario * cantidad
+    var resultado = porcentaje >0?totalDescuento * porcentaje:totalDescuento;
     return resultado
 }
 /**
 * Actualiza la linea del detalle de la factura
 **/
 function ActualizarLineaDEtalle(){
-  var montoTotal               = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
-    var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc)
-    var subTotal               = montoTotal - montoDescuento
+    var montoTotal               = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
+    var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc,self.item.porcentajeGanancia)
+    var subTotal               = montoTotal > montoDescuento?montoTotal - montoDescuento: montoDescuento-montoTotal
     var montoImpuesto          = _calcularImpuesto(subTotal,self.item.impuesto ==null?0:self.item.impuesto)
     var montoTotalLinea        = subTotal + montoImpuesto    
     self.item.montoTotal       = montoTotal
@@ -2808,9 +2811,9 @@ function _actualizarDesc(e){
      var descuento = $(".aplicarDescuento").val();
      descuento = __valorNumerico(descuento)
     if(self.empresa.aplicaGanancia ==1){
-        if(self.item.ganancia < descuento ){
+        if(self.item.porcentajeGanancia < descuento ){
             swal('',"No se puede aplicar un descuento mayor a la ganancia",'error');
-            descuento  = self.item.ganancia
+            descuento  = self.item.porcentajeGanancia
         }
       } 
     var index     = self.detail.indexOf(self.item);
