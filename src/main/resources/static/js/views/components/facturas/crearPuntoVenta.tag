@@ -2753,15 +2753,14 @@ function __ValidarCantidadArticulo(idArticulo,cantidad){
 * Monto de descuento sobre la ganancia
 **/
 function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
-
-  //  var porcentaje = porcentajeDesc - porcentajeGanancia;
-  
-  var porcentaje =  porcentajeGanancia;
+    var porcentaje =  porcentajeGanancia;
+    if(porcentajeDesc != porcentajeGanancia){
+       porcentaje =  porcentajeDesc;
+    }
     porcentaje = porcentaje/ 100;
     if(porcentajeDesc ==100){
         porcentaje = 0
     }
-
     var totalDescuento =  precioUnitario * cantidad
     var resultado = porcentaje >0?totalDescuento * porcentaje:totalDescuento;
     return resultado

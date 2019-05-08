@@ -3642,6 +3642,20 @@ function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc){
     var resultado = total * porcentaje
     return resultado
 }
+function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
+
+  //  var porcentaje = porcentajeDesc - porcentajeGanancia;
+  
+  var porcentaje =  porcentajeGanancia;
+    porcentaje = porcentaje/ 100;
+    if(porcentajeDesc ==100){
+        porcentaje = 0
+    }
+
+    var totalDescuento =  precioUnitario * cantidad
+    var resultado = total * porcentaje
+    return resultado
+}
 /**
 *Actualizar linea en el detalle
 **/
