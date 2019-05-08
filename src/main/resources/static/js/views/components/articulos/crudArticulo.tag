@@ -961,7 +961,7 @@ function _PrecioPublicoConGanancia(costo,impuesto,ganancia){
   } 
   var porcentajeGanancia = ganancia > 0?ganancia/100:0;
   if(ganancia > 0){
-    porcentajeGanancia = porcentajeGanancia < 1 ?1 - porcentajeGanancia:porcentajeGanancia
+    porcentajeGanancia = 1 - porcentajeGanancia
   }
   
   var totalImpuesto = impuesto == 0 ?0:impuesto / 100
@@ -1028,8 +1028,8 @@ function _porcentajeGanancia(costo,impuesto,precioVenta) {
       if(costo == precioVenta){
           resultado = 0
       }else{
-        resultado =  precioVenta / costo
-        resultado = resultado  - 1
+        resultado =  costo / precioVenta 
+        resultado = 1- resultado  
       }
     porcentajeGanancia  = resultado;
   }else{ 
@@ -1040,8 +1040,8 @@ function _porcentajeGanancia(costo,impuesto,precioVenta) {
         if(precioSinImpuesto ==  costo){
             resultado = 0
         }else{
-        resultado =  precioSinImpuesto / costo
-        resultado = resultado  - 1
+        resultado =   costo / precioSinImpuesto 
+        resultado = 1-resultado  
         }
         porcentajeGanancia  = resultado;
 

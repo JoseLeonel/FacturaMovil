@@ -2754,8 +2754,13 @@ function __ValidarCantidadArticulo(idArticulo,cantidad){
 **/
 function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
 
-    var porcentaje = porcentajeDesc - porcentajeGanancia;
+  //  var porcentaje = porcentajeDesc - porcentajeGanancia;
+  
+  var porcentaje =  porcentajeGanancia;
     porcentaje = porcentaje/ 100;
+    if(porcentajeDesc ==100){
+        porcentaje = 0
+    }
 
     var totalDescuento =  precioUnitario * cantidad
     var resultado = porcentaje >0?totalDescuento * porcentaje:totalDescuento;
@@ -2815,7 +2820,7 @@ function _actualizarDesc(e){
             swal('',"No se puede aplicar un descuento mayor a la ganancia",'error');
             descuento  = self.item.porcentajeGanancia
         }
-      } 
+    } 
     var index     = self.detail.indexOf(self.item);
       //Descuento
     if(self.item.porcentajeDesc != descuento){
@@ -2845,6 +2850,12 @@ function getSubTotal(precio,cantidad){
 **/
 function getTotalDescuento(precio,cantidad,porcentajeDesc){
     var porcentaje = __valorNumerico(porcentajeDesc)/100
+    var valor =  0
+    if(porcentajeDesc == 100){
+       valor = 0
+    }else{
+       var valor =  __valorNumerico(precio) * porcentaje   
+    }
     var valor =  __valorNumerico(precio) * porcentaje
     return valor * cantidad
 }

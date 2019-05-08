@@ -472,6 +472,7 @@ __CalculoGananciaPublico(e){
     if(precioPublico ==0){
        return
     }
+    
     var impuesto      = __valorNumerico($('#impuesto').val())
     var costo         = __valorNumerico($('#costo').val())
     if(precioPublico == costo){
@@ -488,28 +489,33 @@ __CalculoGananciaPublico(e){
 *Precio con Ganancia
 **/
 function _PrecioPublicoConGanancia(costo,impuesto,ganancia){
-  if(ganancia == 0){
+ if(costo == 0){
       return 0
   } 
-  if(costo == 0){
-      return 0
-  } 
-  var porcentajeGanancia = ganancia/100;
-  porcentajeGanancia = porcentajeGanancia < 1 ?1 - porcentajeGanancia:porcentajeGanancia
+  var porcentajeGanancia = ganancia > 0?ganancia/100:0;
+  if(ganancia > 0){
+    porcentajeGanancia = 1 - porcentajeGanancia
+  }
+  
   var totalImpuesto = impuesto == 0 ?0:impuesto / 100
   totalImpuesto = totalImpuesto == 0 ?0:totalImpuesto + 1
   var precio  = 0
-  if(porcentajeGanancia < 1){
-    precio = costo / porcentajeGanancia
-  }else{
-      if(porcentajeGanancia == 1){
-        precio = costo * 2 
-      }else{
-        precio = costo * porcentajeGanancia
-      }
+  if(ganancia > 0){
+    if(porcentajeGanancia < 1){
+        precio = costo / porcentajeGanancia
+    }else{
+        if(porcentajeGanancia == 1){
+            precio = costo * 2 
+        }else{
+            precio = costo * porcentajeGanancia
+        }
+    }
+  }
+  if(ganancia == 0 ){
+      precio = costo
   }
   precio = totalImpuesto >0? precio * totalImpuesto:precio;
-  return __valorNumerico(redondeoDecimales(precio,5));
+  return __valorNumerico(redondeoDecimales(precio,0));
 }
 /**
 * Actualizar el precio costo
@@ -554,8 +560,8 @@ function _porcentajeGanancia(costo,impuesto,precioVenta) {
       if(costo == precioVenta){
           resultado = 0
       }else{
-        resultado =  precioVenta / costo
-        resultado = resultado  - 1
+        resultado =  costo / precioVenta 
+        resultado = 1- resultado  
       }
     porcentajeGanancia  = resultado;
   }else{ 
@@ -566,8 +572,8 @@ function _porcentajeGanancia(costo,impuesto,precioVenta) {
         if(precioSinImpuesto ==  costo){
             resultado = 0
         }else{
-        resultado =  precioSinImpuesto / costo
-        resultado = resultado  - 1
+        resultado =   costo / precioSinImpuesto 
+        resultado = 1-resultado  
         }
         porcentajeGanancia  = resultado;
 

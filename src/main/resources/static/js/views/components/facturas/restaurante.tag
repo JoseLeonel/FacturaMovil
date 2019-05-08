@@ -2465,20 +2465,20 @@ __CargarFacturaEspera(e){
     self.factEspera = e.item
     self.factura = e.item
     self.update()
-    if(self.factura.id !=null){
-      if(self.seIncluyoUnArticulo !=null){
-        aplicarFactura(1)  
-        self.seIncluyoUnArticulo =null
-        self.update()
-      }        
-    }else{
-        if(self.detail.length != 0 ){
-            $('#ModalAgregarNombreTiquete').modal('show') 
-            $('.cambioNombreFactura').focus()
-            return
-         }
+    //if(self.factura.id !=null){
+    //  if(self.seIncluyoUnArticulo !=null){
+    //    aplicarFactura(1)  
+    //    self.seIncluyoUnArticulo =null
+    //    self.update()
+    //  }        
+   // }else{
+    //    if(self.detail.length != 0 ){
+    //        $('#ModalAgregarNombreTiquete').modal('show') 
+    //        $('.cambioNombreFactura').focus()
+    //        return
+    //     }
        
-    }
+   // }
     
    __FacturaEnEspera(e.item)
 }
@@ -2504,6 +2504,8 @@ __CrearFacturaTemporal(){
 }
 
 function __CrearFacturaTemporalFunc(){
+    self.seIncluyoUnArticulo = null
+    self.update()
  	if(self.factura.id == null){
         if(self.detail.length != 0 ){
             $('#ModalAgregarNombreTiquete').modal('show') 
@@ -4252,7 +4254,7 @@ __FacturasXMesa(e){
     self.pendientesComanda     = []
     var item = e.item
     self.mesa = item
-   // self.factura.mesa = item    
+    self.factura.mesa = item    
     self.update()
     __ListaFacturasXMesas()
 }
