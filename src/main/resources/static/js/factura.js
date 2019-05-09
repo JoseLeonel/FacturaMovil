@@ -53,6 +53,201 @@ $(document)
 			        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
 			    }
 			}
+
+	
+/** Funciones en ventas nueva , venta post , restaurante comunes **/
+	/**
+	* Monto de Total
+	**/
+	function getMontoTotal(precioUnitario,cantidad){
+	    var resultado = parseFloat(precioUnitario) * parseFloat(cantidad)
+	    return resultado
+	}
+	/**
+	* Obtiene el precio unitario sin descuento sin impuesto
+	**/
+	function getPrecioUnitario(precio ,impuesto){
+	   var porcentajeImpuesto = 0
+	   var resultado  = 0
+	   if(impuesto > 0){
+	      porcentajeImpuesto = impuesto / 100
+	      porcentajeImpuesto =  porcentajeImpuesto + 1
+	      resultado  =  precio  / porcentajeImpuesto
+	   }else{
+	       resultado  =  precio
+	   }
+	   return resultado     
+	}
+	/**
+	 * calculo del impuesto iva
+	 * */
+	function _calcularImpuesto(precio,iva){
+	    if(iva == 0){
+	        return 0;
+	    }
+	    var impuesto = iva > 0 ?parseFloat(iva)/100:0
+	    impuesto = impuesto > 0 ?impuesto+1:0
+	    var total = precio * impuesto
+	    var total = total - precio 
+	    return total
+	}
+	/**
+	* Monto de descuento sobre la ganancia
+	**/
+	function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
+	    if(porcentajeDesc == 0){
+	        return 0
+	    }
+	     if(porcentajeDesc > 100){
+	        porcentajeDesc = 100
+	    }
+	    self.item.porcentajeDesc = porcentajeDesc
+	    self.update()
+	    var porcentaje =  porcentajeGanancia;
+	    if(porcentajeDesc != porcentajeGanancia){
+	       porcentaje =  porcentajeDesc;
+	    }
+	    porcentaje = porcentaje/ 100;
+	    if(porcentajeDesc ==100){
+	        porcentaje = 0
+	    }
+	    var totalDescuento =  precioUnitario * cantidad
+	    var resultado = porcentaje >0?totalDescuento * porcentaje:totalDescuento;
+	    return resultado
+	}
+	/**
+	* Monto a pagar en la linea el cliente
+	**/
+	function getMontoTotalLinea(subTotal,totalImpuesto){
+	  return subTotal == 0?0:subTotal + totalImpuesto
+	}
+	/**
+	*  Obtener el subtotal sin el impuesto
+	**/
+	function getSubTotal(precio,cantidad){
+	    var valor = __valorNumerico(precio) * __valorNumerico(cantidad)
+	    return valor
+	}
+	/**
+	* calcular el descuento
+	**/
+	function getTotalDescuento(precio,cantidad,porcentajeDesc){
+	    var porcentaje = __valorNumerico(porcentajeDesc)/100
+	    var valor =  0
+	    if(porcentajeDesc == 100){
+	       valor = 0
+	    }else{
+	       var valor =  __valorNumerico(precio) * porcentaje   
+	    }
+	    var valor =  __valorNumerico(precio) * porcentaje
+	    return valor * cantidad
+	}
+
+/** Fin **/
+	
+	
+	
+	/**
+	 * autor : Leonel Hernandez Chaverri
+	*Funcion para mostrar la ganancia en la pantalla
+	*Venta nueva
+	*Venta Post 
+	*Venta Restaurante
+	**/
+	function __ObtenerGananciaProductoNuevoIngresado(montoDescuento,precioUnitario,costo,cantidad){
+	    if(redondeoDecimales(costo,2) == 0){
+	        return 0;
+	    }
+	    if(redondeoDecimales(montoDescuento,2) == redondeoDecimales(precioUnitario,2)){
+	        return 0;
+	    }
+	    var totalGanancia = precioUnitario - costo
+	    return  parseFloat(redondeoDecimales(totalGanancia,2) -  redondeoDecimales(montoDescuento,2)) * cantidad;
+	   
+	 
+	}
+	
+	
+	
+	
+	/**
+	* autor : Leonel Hernandez Chaverri
+	* Fecha : 23-06-17
+	* obtener la ganancia del precio en decimal
+	**/
+	function _porcentajeGanancia(costo,impuesto,precioVenta) {
+		  var porcentajeGanancia = 0;
+		  var precioSinImpuesto  = 0;
+		  if(costo == 0){
+		      return 0
+		  } 
+		  if(precioVenta == 0){
+		    return 0;
+		  }
+		  if(costo == precioVenta){
+		      return 0
+		  }
+		  var resultado = 0
+		  if(impuesto == 0 || impuesto == null ){
+		      if(costo == precioVenta){
+		          resultado = 0
+		      }else{
+		        resultado =  costo / precioVenta 
+		        resultado = 1- resultado  
+		      }
+		    porcentajeGanancia  = resultado;
+		  }else{ 
+		    if(costo == precioVenta){
+		       porcentajeGanancia  = 0; 
+		    }else{
+		        precioSinImpuesto = __valorNumerico(redondeoDecimales(precioVenta/((impuesto/100) + 1),5));
+		        if(precioSinImpuesto ==  costo){
+		            resultado = 0
+		        }else{
+		        resultado =   costo / precioSinImpuesto 
+		        resultado = 1-resultado  
+		        }
+		        porcentajeGanancia  = resultado;
+
+		    } 
+		  }
+		  return __valorNumerico(porcentajeGanancia * 100);
+		}	
+	/**
+	* autor : Leonel Hernandez Chaverri
+	* Fecha : 23-06-17
+	* obtener Precio Publico con ganancia
+	**/
+	function _PrecioPublicoConGanancia(costo,impuesto,ganancia){
+		 
+		  if(costo == 0){
+		      return 0
+		  } 
+		  var porcentajeGanancia = ganancia > 0?ganancia/100:0;
+		  if(ganancia > 0){
+		    porcentajeGanancia = 1 - porcentajeGanancia
+		  }
+		  
+		  var totalImpuesto = impuesto == 0 ?0:impuesto / 100
+		  totalImpuesto = totalImpuesto == 0 ?0:totalImpuesto + 1
+		  var precio  = 0
+		  if(ganancia > 0){
+		    if(porcentajeGanancia < 1){
+		        precio = costo / porcentajeGanancia
+		    }else{
+		        if(porcentajeGanancia == 1){
+		            precio = costo * 2 
+		        }else{
+		            precio = costo * porcentajeGanancia
+		        }
+		    }
+		  }
+		  if(ganancia == 0 ){
+		      precio = costo
+		  }
+		  precio = totalImpuesto >0? precio * totalImpuesto:precio;
+		  return __valorNumerico(redondeoDecimales(precio,0));
+		}
 	
 	function redondeoDecimales(numero,decimales)
 	{

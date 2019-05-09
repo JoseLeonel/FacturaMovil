@@ -314,7 +314,7 @@
                                     <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}</span></p>
                                 </div>
                                 <div>
-                                    <h1>IG: {totalGananciaByProducto}</h1>
+                                    <h3>IG: {totalGananciaByProducto}</h3>
                                 </div>
                         </article>
                     </aside>
@@ -2595,6 +2595,7 @@ function __nuevoArticuloAlDetalle(cantidad){
     self.pesoPrioridad  =  self.pesoPrioridad + 1
     self.numeroLinea    = self.numeroLinea + 1
     self.cantArticulos  = self.cantArticulos + 1
+    var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,self.articulo.costo ==null?0:parseFloat(self.articulo.costo),cantidad)
     self.detail.push({
        numeroLinea     : parseFloat(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,  
@@ -2608,17 +2609,14 @@ function __nuevoArticuloAlDetalle(cantidad){
        montoImpuesto   : parseFloat(montoImpuesto),
        montoDescuento  : 0,
        porcentajeDesc  : 0,
-       ganancia        : parseFloat(self.articulo.gananciaPrecioPublico),
+       ganancia        : parseFloat(ganancia),
        subTotal        : parseFloat(subTotal),
        montoTotalLinea : parseFloat(montoTotalLinea),
        montoTotal      : parseFloat(montoTotal),
        costo           : self.articulo.costo ==null?0:parseFloat(self.articulo.costo),
        porcentajeGanancia :   self.articulo.gananciaPrecioPublico ==null?0:parseFloat(self.articulo.gananciaPrecioPublico),
     });
-    self.totalGananciaByProducto = parseFloat(self.articulo.gananciaPrecioPublico)/100
-     self.totalGananciaByProducto = self.totalGananciaByProducto * parseFloat(montoTotalLinea)
-     self.totalGananciaByProducto = Math.round(__valorNumerico(self.totalGananciaByProducto))
-     self.totalGananciaByProducto = formatoDecimales(__valorNumerico(self.totalGananciaByProducto),2)
+    
     self.detail.sort(function(a,b) {
     if ( a.pesoPrioridad > b.pesoPrioridad )
         return -1;
@@ -2627,9 +2625,14 @@ function __nuevoArticuloAlDetalle(cantidad){
     return 0;
     } );
     self.cantidadEnterFacturar = 0
+    self.totalGananciaByProducto = formatoDecimales(parseFloat(ganancia),2)
     self.update()
     
+    
 }
+
+
+
 
 function __storege(){
     self.detail = []
@@ -2680,41 +2683,7 @@ function __storege(){
     }   
     self.update()
 }
-/**
-* Monto de Total
-**/
-function getMontoTotal(precioUnitario,cantidad){
-    var resultado = parseFloat(precioUnitario) * parseFloat(cantidad)
-    return resultado
-}
-/**
-* Obtiene el precio unitario sin descuento sin impuesto
-**/
-function getPrecioUnitario(precio ,impuesto){
-   var porcentajeImpuesto = 0
-   var resultado  = 0
-   if(impuesto > 0){
-      porcentajeImpuesto = impuesto / 100
-      porcentajeImpuesto =  porcentajeImpuesto + 1
-      resultado  =  precio  / porcentajeImpuesto
-   }else{
-       resultado  =  precio
-   }
-   return resultado     
-}
-/**
- * calculo del impuesto iva
- * */
-function _calcularImpuesto(precio,iva){
-    if(iva == 0){
-        return 0;
-    }
-    var impuesto = iva > 0 ?parseFloat(iva)/100:0
-    impuesto = impuesto > 0 ?impuesto+1:0
-    var total = precio * impuesto
-    var total = total - precio 
-    return total
-}
+
  /**
  * Cuando se aplica un cambio de cantidad en un detalle
  * Se aplica una recalculacion de todo el detalle y Factura
@@ -2757,35 +2726,12 @@ function __ValidarCantidadArticulo(idArticulo,cantidad){
         }
     });
 }
-/**
-* Monto de descuento sobre la ganancia
-**/
-function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
-    if(porcentajeDesc == 0){
-        return 0
-    }
-     if(porcentajeDesc > 100){
-        porcentajeDesc = 100
-    }
-    self.item.porcentajeDesc = porcentajeDesc
-    self.update()
-    var porcentaje =  porcentajeGanancia;
-    if(porcentajeDesc != porcentajeGanancia){
-       porcentaje =  porcentajeDesc;
-    }
-    porcentaje = porcentaje/ 100;
-    if(porcentajeDesc ==100){
-        porcentaje = 0
-    }
-    var totalDescuento =  precioUnitario * cantidad
-    var resultado = porcentaje >0?totalDescuento * porcentaje:totalDescuento;
-    return resultado
-}
+
 /**
 * Actualiza la linea del detalle de la factura
 **/
 function ActualizarLineaDEtalle(){
-    var montoTotal               = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
+    var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
     var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc,self.item.porcentajeGanancia)
     var subTotal               = montoTotal > montoDescuento?montoTotal - montoDescuento: montoDescuento-montoTotal
     var montoImpuesto          = _calcularImpuesto(subTotal,self.item.impuesto ==null?0:self.item.impuesto)
@@ -2795,6 +2741,8 @@ function ActualizarLineaDEtalle(){
     self.item.subTotal         = subTotal
     self.item.montoImpuesto    = montoImpuesto
     self.item.montoTotalLinea  = montoTotalLinea
+    self.item.ganancia         = __ObtenerGananciaProductoNuevoIngresado(montoDescuento,self.item.precioUnitario,self.item.costo ==null?0:parseFloat(self.item.costo),self.item.cantidad)
+    self.totalGananciaByProducto = formatoDecimales(parseFloat(self.item.ganancia),2)
     self.update()
 }
 /**
@@ -2802,7 +2750,11 @@ function ActualizarLineaDEtalle(){
 **/
 function agregarCantidadAlaVenta(cantidad){
     self.item.cantidad = cantidad
+    var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,self.item.precioUnitario,self.item.costo ==null?0:parseFloat(self.item.costo),cantidad)
+    self.item.ganancia = ganancia
+    self.totalGananciaByProducto = formatoDecimales(parseFloat(ganancia),2)
     self.update()
+
     ActualizarLineaDEtalle()
     aplicarCambioLineaDetalle() 
     cambiarCantidadArticulo.value = 0
@@ -2847,33 +2799,7 @@ function _actualizarDesc(e){
     $('#modalCambiarDescuento').modal('hide') 
    $(".aplicarDescuento").val(null);
 }
-/**
-* Monto a pagar en la linea el cliente
-**/
-function getMontoTotalLinea(subTotal,totalImpuesto){
-  return subTotal == 0?0:subTotal + totalImpuesto
-}
-/**
-*  Obtener el subtotal sin el impuesto
-**/
-function getSubTotal(precio,cantidad){
-    var valor = __valorNumerico(precio) * __valorNumerico(cantidad)
-    return valor
-}
-/**
-* calcular el descuento
-**/
-function getTotalDescuento(precio,cantidad,porcentajeDesc){
-    var porcentaje = __valorNumerico(porcentajeDesc)/100
-    var valor =  0
-    if(porcentajeDesc == 100){
-       valor = 0
-    }else{
-       var valor =  __valorNumerico(precio) * porcentaje   
-    }
-    var valor =  __valorNumerico(precio) * porcentaje
-    return valor * cantidad
-}
+
 /**
 * calculacion de los detalle de la factura 
 **/

@@ -485,38 +485,7 @@ __CalculoGananciaPublico(e){
     self.articulo.precioPublico = precioPublico
     self.update()
 }
-/**
-*Precio con Ganancia
-**/
-function _PrecioPublicoConGanancia(costo,impuesto,ganancia){
- if(costo == 0){
-      return 0
-  } 
-  var porcentajeGanancia = ganancia > 0?ganancia/100:0;
-  if(ganancia > 0){
-    porcentajeGanancia = 1 - porcentajeGanancia
-  }
-  
-  var totalImpuesto = impuesto == 0 ?0:impuesto / 100
-  totalImpuesto = totalImpuesto == 0 ?0:totalImpuesto + 1
-  var precio  = 0
-  if(ganancia > 0){
-    if(porcentajeGanancia < 1){
-        precio = costo / porcentajeGanancia
-    }else{
-        if(porcentajeGanancia == 1){
-            precio = costo * 2 
-        }else{
-            precio = costo * porcentajeGanancia
-        }
-    }
-  }
-  if(ganancia == 0 ){
-      precio = costo
-  }
-  precio = totalImpuesto >0? precio * totalImpuesto:precio;
-  return __valorNumerico(redondeoDecimales(precio,0));
-}
+
 /**
 * Actualizar el precio costo
 **/
@@ -537,49 +506,6 @@ function _CalculoPrecio(costo,impuesto){
     self.articulo.precioPublico = _PrecioPublicoConGanancia(costo,self.articulo.impuesto,self.articulo.gananciaPrecioPublico)
     self.update()
 
-}
-/**
-* autor : Leonel Hernandez Chaverri
-* Fecha : 23-06-17
-* obtener la ganancia del precio en decimal
-**/
-function _porcentajeGanancia(costo,impuesto,precioVenta) {
-  var porcentajeGanancia = 0;
-  var precioSinImpuesto  = 0;
-  if(costo == 0){
-      return 0
-  } 
-  if(precioVenta == 0){
-    return 0;
-  }
-  if(costo == precioVenta){
-      return 0
-  }
-  var resultado = 0
-  if(impuesto == 0 || impuesto == null ){
-      if(costo == precioVenta){
-          resultado = 0
-      }else{
-        resultado =  costo / precioVenta 
-        resultado = 1- resultado  
-      }
-    porcentajeGanancia  = resultado;
-  }else{ 
-    if(costo == precioVenta){
-       porcentajeGanancia  = 0; 
-    }else{
-        precioSinImpuesto = __valorNumerico(redondeoDecimales(precioVenta/((impuesto/100) + 1),5));
-        if(precioSinImpuesto ==  costo){
-            resultado = 0
-        }else{
-        resultado =   costo / precioSinImpuesto 
-        resultado = 1-resultado  
-        }
-        porcentajeGanancia  = resultado;
-
-    } 
-  }
-  return __valorNumerico(porcentajeGanancia * 100);
 }
 /**
 *  Actimpuestor validaciones del formulario

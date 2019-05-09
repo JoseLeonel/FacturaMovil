@@ -352,10 +352,12 @@ public class FacturaBoImpl implements FacturaBo {
 			if (articulo != null) {
 				if (articulo.getCosto() != null) {
 					costo = articulo.getCosto();
+					
 				}
 			}
 			gananciaProducto = getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad());
 			Detalle detalle = new Detalle(detalleFacturaCommand);
+			detalle.setCosto(costo);
 			detalle.setGanancia(Utils.roundFactura(gananciaProducto, 5));
 			detalle.setUsuario(usuario);
 			if (detalleFacturaCommand.getTipoImpuesto() != null) {
