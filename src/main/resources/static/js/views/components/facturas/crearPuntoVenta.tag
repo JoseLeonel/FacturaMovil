@@ -313,6 +313,9 @@
                                 <div class="precioTotalFactura" show={soloParaChinos == false} onclick = {__MostrarFormularioDePago}>
                                     <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}</span></p>
                                 </div>
+                                <div>
+                                    <h1>IG: {totalGananciaByProducto}</h1>
+                                </div>
                         </article>
                     </aside>
                 </section>
@@ -668,6 +671,7 @@
     self.mostarAbrirCajon = true
     self.informacionAbrirCajon = "."
     self.soloParaChinos = false
+    self.totalGananciaByProducto = 0
     self.rol = {
         rolAdministrador:0
     }
@@ -2611,6 +2615,10 @@ function __nuevoArticuloAlDetalle(cantidad){
        costo           : self.articulo.costo ==null?0:parseFloat(self.articulo.costo),
        porcentajeGanancia :   self.articulo.gananciaPrecioPublico ==null?0:parseFloat(self.articulo.gananciaPrecioPublico),
     });
+    self.totalGananciaByProducto = parseFloat(self.articulo.gananciaPrecioPublico)/100
+     self.totalGananciaByProducto = self.totalGananciaByProducto * parseFloat(montoTotalLinea)
+     self.totalGananciaByProducto = Math.round(__valorNumerico(self.totalGananciaByProducto))
+     self.totalGananciaByProducto = formatoDecimales(__valorNumerico(self.totalGananciaByProducto),2)
     self.detail.sort(function(a,b) {
     if ( a.pesoPrioridad > b.pesoPrioridad )
         return -1;
@@ -2753,6 +2761,14 @@ function __ValidarCantidadArticulo(idArticulo,cantidad){
 * Monto de descuento sobre la ganancia
 **/
 function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
+    if(porcentajeDesc == 0){
+        return 0
+    }
+     if(porcentajeDesc > 100){
+        porcentajeDesc = 100
+    }
+    self.item.porcentajeDesc = porcentajeDesc
+    self.update()
     var porcentaje =  porcentajeGanancia;
     if(porcentajeDesc != porcentajeGanancia){
        porcentaje =  porcentajeDesc;

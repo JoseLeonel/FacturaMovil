@@ -177,7 +177,7 @@
                         <div class="row" >
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label ">{$.i18n.prop("factura.resumen.efectivo")}</label> 
-                                <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress} step="any"   class="form-control totalEfectivo" id="totalEfectivo"  name="totalEfectivo"  value="0" >
+                                <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress} step="any"   class="form-control totalEfectivo" id="totalEfectivo"  name="totalEfectivo"  value="{factura.totalComprobante}" >
                             </div>
                         </div>    
                         <div class="row" >
@@ -217,9 +217,6 @@
                             <input type="hidden" id='totalDescuentos'          name='totalDescuentos'          value="{factura.totalDescuentos}" >
                             <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
                             <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           value="{factura.totalImpuesto}" >
-                            <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
-                            <input type="hidden" id='totalTarjeta'            name='totalTarjeta'            value="{factura.totalTarjeta}" >
-                            <input type="hidden" id='totalBanco'              name='totalBanco'              value="{factura.totalBanco}" >
                             <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
                             <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
                     </form>    
@@ -913,6 +910,7 @@ function __regresarProductosF(){
     self.articulo ={}
     self.update()
     limpiar()
+   
 }
 /**
 * Regresar al paso 2
@@ -966,6 +964,7 @@ function validar(){
         self.update()
         __agregarArticulo(1)
      }  
+     $('.totalEfectivo').val(self.factura.totalComprobante)
 
 }
 
@@ -975,6 +974,7 @@ function validar(){
 _SegundoPaso(){
     self.formularioSegundoPaso = false
     self.update()
+     $('.totalEfectivo').val(self.factura.totalComprobante)
 }
 /**
 *  Muestra la lista de clientes

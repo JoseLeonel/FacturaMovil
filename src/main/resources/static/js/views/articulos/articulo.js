@@ -4,7 +4,7 @@ $(document).ready(function() {
 } );/*fin document*/
 
 var _Init = function () {
-	   includeActionsArticulo('.dataTables_wrapper','.dataTables_length');
+	   
 	     agregarInputsCombos();
 	    EventoFiltro();
 	    __MantenimientoAgregar();
@@ -53,6 +53,7 @@ var ListarArticulos = function(codigo){
      "columns" : informacion_tabla,
      "language" : idioma_espanol,
  } );//fin del table
+ includeActionsArticulo('.dataTables_wrapper','.dataTables_length');
  agregarInputsCombos();
  EventoFiltro();
  __MantenimientoAgregar();

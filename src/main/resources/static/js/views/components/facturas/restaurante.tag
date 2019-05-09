@@ -2201,7 +2201,7 @@ __CambiarDescuento(e){
 
     }else{
          $( "#aplicarDescuento" ).focus()
-        $( "#aplicarDescuento" ).val(cantidad)
+        $( "#aplicarDescuento" ).val(null)
         $('#modalCambiarDescuento').modal({backdrop: 'static', keyboard: true}) 
         $('#modalCambiarDescuento').modal('show')      
     }
@@ -3035,8 +3035,11 @@ function cargarDetallesFacturaEnEspera(data){
                 porcentajeDesc  : parseFloat(modeloTabla.porcentajeDesc),
                 subTotal        : parseFloat(modeloTabla.subTotal),
                 montoTotalLinea : parseFloat(modeloTabla.montoTotalLinea),
-                montoTotal      : parseFloat(modeloTabla.montoTotal)
+                montoTotal      : parseFloat(modeloTabla.montoTotal),
+                costo           : parseFloat(modeloTabla.costo),
+                porcentajeGanancia :parseFloat(modeloTabla.porcentajeGanancia),
         });
+
         self.update()
     })
     self.totalCambioPagar = 0
@@ -3535,7 +3538,9 @@ function __nuevoArticuloAlDetalle(cantidad){
        porcentajeDesc  : 0,
        subTotal        : subTotal,
        montoTotalLinea : montoTotalLinea,
-       montoTotal      : montoTotal
+       montoTotal      : montoTotal,
+       costo           : self.articulo.costo ==null?0:parseFloat(self.articulo.costo),
+       porcentajeGanancia :   self.articulo.gananciaPrecioPublico ==null?0:parseFloat(self.articulo.gananciaPrecioPublico),
     });
     var cont = 0;
     self.detail.forEach(function(elemen){
@@ -3636,32 +3641,34 @@ function __ValidarCantidadArticulo(idArticulo,cantidad){
 /**
 *Monto en el descuento
 **/
-function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc){
-    var porcentaje = porcentajeDesc / 100;
-    var total =  precioUnitario * cantidad
-    var resultado = total * porcentaje
-    return resultado
-}
 function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
-
-  //  var porcentaje = porcentajeDesc - porcentajeGanancia;
-  
+    if(porcentajeDesc == 0){
+        return 0
+    }
+     if(porcentajeDesc > 100){
+        porcentajeDesc = 100
+    }
+    self.item.porcentajeDesc = porcentajeDesc
+    self.update()
   var porcentaje =  porcentajeGanancia;
+    if(porcentajeDesc != porcentajeGanancia){
+       porcentaje =  porcentajeDesc;
+    }
     porcentaje = porcentaje/ 100;
     if(porcentajeDesc ==100){
         porcentaje = 0
     }
-
     var totalDescuento =  precioUnitario * cantidad
-    var resultado = total * porcentaje
+    var resultado = porcentaje >0?totalDescuento * porcentaje:totalDescuento;
     return resultado
 }
+
 /**
 *Actualizar linea en el detalle
 **/
 function ActualizarLineaDEtalle(){
     var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
-    var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc)
+    var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc,self.item.porcentajeGanancia)
     var subTotal               = montoTotal - montoDescuento
     var montoImpuesto          = _calcularImpuesto(subTotal,self.item.impuesto ==null?0:self.item.impuesto)
     var montoTotalLinea        = subTotal + montoImpuesto    
@@ -3773,6 +3780,7 @@ function __calculate() {
         totalImpuesto           += e.montoImpuesto >0?e.montoImpuesto:0
         totalVenta              += e.montoTotal
     });
+   
     self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)
     self.factura.totalMercanciasExentas  = __valorNumerico(totalMercanciasExentas)
     self.factura.totalServGravados       = __valorNumerico(totalServGravados)
@@ -4664,7 +4672,9 @@ __addCuentaSeparada(e) {
              porcentajeDesc  : parseFloat(self.detailPorSeparar[indexPorSeparar].porcentajeDesc),
              subTotal        : parseFloat(0),
              montoTotalLinea : parseFloat(0),
-             montoTotal      : parseFloat(0)
+             montoTotal      : parseFloat(0),
+             costo           : parseFloat(self.detailPorSeparar[indexPorSeparar].costo),
+            porcentajeGanancia : parseFloat(self.detailPorSeparar[indexPorSeparar].gananciaPrecioPublico),
         });
     }
 
@@ -4714,7 +4724,9 @@ __removeCuentaSeparada(e) {
              porcentajeDesc  : parseFloat(self.detailFacturaSeparada[indexPorSeparar].porcentajeDesc),
              subTotal        : parseFloat(0),
              montoTotalLinea : parseFloat(0),
-             montoTotal      : parseFloat(0)
+             montoTotal      : parseFloat(0),
+             costo           : parseFloat(self.detailPorSeparar[indexPorSeparar].costo),
+             porcentajeGanancia : parseFloat(self.detailPorSeparar[indexPorSeparar].gananciaPrecioPublico),
         });
     }
 

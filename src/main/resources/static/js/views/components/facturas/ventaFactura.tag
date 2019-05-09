@@ -1745,7 +1745,7 @@ __CambiarDescuento(e){
         $('#modalRolUsuario').modal('show')     
     }else{
          $( "#aplicarDescuento" ).focus()
-        $( "#aplicarDescuento" ).val(cantidad)
+        $( "#aplicarDescuento" ).val(null)
         $('#modalCambiarDescuento').modal({backdrop: 'static', keyboard: true}) 
         $('#modalCambiarDescuento').modal('show')      
     }
@@ -2405,7 +2405,9 @@ function cargarDetallesFacturaEnEspera(data){
             porcentajeDesc  : parseFloat(modeloTabla.porcentajeDesc),
             subTotal        : parseFloat(modeloTabla.subTotal),
             montoTotalLinea : parseFloat(modeloTabla.montoTotalLinea),
-            montoTotal      : parseFloat(modeloTabla.montoTotal)
+            montoTotal      : parseFloat(modeloTabla.montoTotal),
+            costo           : parseFloat(modeloTabla.costo),
+            porcentajeGanancia :parseFloat(modeloTabla.porcentajeGanancia),
         });
         self.update()
     })
@@ -2903,7 +2905,10 @@ function __nuevoArticuloAlDetalle(cantidad){
        porcentajeDesc  : 0,
        subTotal        : subTotal,
        montoTotalLinea : montoTotalLinea,
-       montoTotal      :montoTotal
+       montoTotal      :montoTotal,
+        costo           : self.articulo.costo ==null?0:parseFloat(self.articulo.costo),
+       porcentajeGanancia :   self.articulo.gananciaPrecioPublico ==null?0:parseFloat(self.articulo.gananciaPrecioPublico),
+
     });
     var cont = 0;
     self.detail.forEach(function(elemen){
@@ -3000,10 +3005,26 @@ function __ValidarCantidadArticulo(idArticulo,cantidad){
 /**
 *Monto en el descuento
 **/
-function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc){
-    var porcentaje = porcentajeDesc / 100;
-    var total =  precioUnitario * cantidad
-    var resultado = total * porcentaje
+function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
+    if(porcentajeDesc == 0){
+        return 0
+    }
+    if(porcentajeDesc > 100){
+        porcentajeDesc = 100
+    }
+    self.item.porcentajeDesc = porcentajeDesc
+    self.update()
+
+    var porcentaje =  porcentajeGanancia;
+    if(porcentajeDesc != porcentajeGanancia){
+       porcentaje =  porcentajeDesc;
+    }
+    porcentaje = porcentaje/ 100;
+    if(porcentajeDesc ==100){
+        porcentaje = 0
+    }
+    var totalDescuento =  precioUnitario * cantidad
+    var resultado = porcentaje >0?totalDescuento * porcentaje:totalDescuento;
     return resultado
 }
 /**
@@ -3011,7 +3032,7 @@ function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc){
 **/
 function ActualizarLineaDEtalle(){
   var montoTotal               = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
-    var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc)
+    var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc,self.item.porcentajeGanancia)
     var subTotal               = montoTotal - montoDescuento
     var montoImpuesto          = _calcularImpuesto(subTotal,self.item.impuesto ==null?0:self.item.impuesto)
     var montoTotalLinea        = subTotal + montoImpuesto    
@@ -3054,6 +3075,9 @@ __actualizarDescuento(e){
 function _actualizarDesc(e){
     var index     = self.detail.indexOf(self.item);
     var descuento = $(".aplicarDescuento").val();
+    if(descuento > 100){
+        descuento =100
+    }
     //Descuento se verifica si es null o espacios por defecto se deja en cero
      descuento =__valorNumerico(descuento);
       //Descuento
