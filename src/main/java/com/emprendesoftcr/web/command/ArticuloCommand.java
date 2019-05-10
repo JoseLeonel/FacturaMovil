@@ -3,6 +3,12 @@ package com.emprendesoftcr.web.command;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Articulo;
@@ -24,7 +30,7 @@ public class ArticuloCommand {
 	private Double			impuesto;
 	private Double			precioPublico;
 	private Double			gananciaPrecioPublico;
-	private String      precioPublicoSTR;
+	private String			precioPublicoSTR;
 	private Double			precioMayorista;
 	private Double			gananciaPrecioMayorista;
 	private Double			precioEspecial;
@@ -45,14 +51,26 @@ public class ArticuloCommand {
 	private String			tipoCodigo;
 	private Date				created_at;
 	private Date				updated_at;
+	private String				created_atSTR;
+	private String				updated_atSTR;
+
 	private Marca				marca;
 	private Usuario			usuario;
 	private Categoria		categoria;
 	private Empresa			empresa;
 	private BigDecimal	cantidad;
-	private String	cantidadSTR;
+	private String			cantidadSTR;
 	private Integer			comanda;
 	private Integer			prioridad;
+	private Double			pesoTransporte;
+
+	private String			consecutivoCompra;
+
+	private String			fechaUltimaCompra;
+
+	private String			tipoImpuesto1;
+
+	private Double			impuesto1;
 
 	public ArticuloCommand(Articulo articulo) {
 		super();
@@ -92,12 +110,18 @@ public class ArticuloCommand {
 		this.totalGananciaSTR = Utils.formateadorMiles(articulo.getGananciaTotalPublico());
 		this.precioPublicoSTR = Utils.formateadorMiles(articulo.getPrecioPublico());
 		this.totalImpuestoSTR = Utils.formateadorMiles(articulo.getTotalImpuesto());
-		
 		this.totalCosto = articulo.getTotalCosto();
 		this.totalVenta = articulo.getTotalPrecioPublico();
 		this.totalGanancia = articulo.getGananciaTotalPublico();
 		this.precioPublico = articulo.getPrecioPublico();
 		this.totalImpuesto = articulo.getTotalImpuesto();
+		this.impuesto1 = articulo.getImpuesto1();
+		this.fechaUltimaCompra = articulo.getFechaUltimaCompraSTR();
+		this.consecutivoCompra = articulo.getConsecutivoCompra();
+		this.pesoTransporte = articulo.getPesoTransporte();
+		this.tipoImpuesto1 = articulo.getTipoImpuesto1();
+		this.created_atSTR = articulo.getCreated_atSTR();
+		this.updated_atSTR = articulo.getUpdated_atSTR();
 
 	}
 
@@ -107,6 +131,14 @@ public class ArticuloCommand {
 
 	public void setPrioridad(Integer prioridad) {
 		this.prioridad = prioridad;
+	}
+
+	public String getFechaUltimaCompra() {
+		return fechaUltimaCompra;
+	}
+
+	public void setFechaUltimaCompra(String fechaUltimaCompra) {
+		this.fechaUltimaCompra = fechaUltimaCompra;
 	}
 
 	public Integer getComanda() {
@@ -329,117 +361,144 @@ public class ArticuloCommand {
 		this.maximo = maximo;
 	}
 
-	
-	
-	
 	public String getCostoSTR() {
 		return costoSTR;
 	}
 
-	
 	public void setCostoSTR(String costoSTR) {
 		this.costoSTR = costoSTR;
 	}
 
-	
 	public String getCantidadSTR() {
 		return cantidadSTR;
 	}
 
-	
 	public void setCantidadSTR(String cantidadSTR) {
 		this.cantidadSTR = cantidadSTR;
 	}
 
-	
 	public String getPrecioPublicoSTR() {
 		return precioPublicoSTR;
 	}
 
-	
 	public void setPrecioPublicoSTR(String precioPublicoSTR) {
 		this.precioPublicoSTR = precioPublicoSTR;
 	}
 
-	
 	public String getTotalCostoSTR() {
 		return totalCostoSTR;
 	}
 
-	
 	public void setTotalCostoSTR(String totalCostoSTR) {
 		this.totalCostoSTR = totalCostoSTR;
 	}
 
-	
 	public String getTotalVentaSTR() {
 		return totalVentaSTR;
 	}
 
-	
 	public void setTotalVentaSTR(String totalVentaSTR) {
 		this.totalVentaSTR = totalVentaSTR;
 	}
 
-	
 	public String getTotalImpuestoSTR() {
 		return totalImpuestoSTR;
 	}
 
-	
 	public void setTotalImpuestoSTR(String totalImpuestoSTR) {
 		this.totalImpuestoSTR = totalImpuestoSTR;
 	}
 
-	
 	public String getTotalGananciaSTR() {
 		return totalGananciaSTR;
 	}
 
-	
 	public void setTotalGananciaSTR(String totalGananciaSTR) {
 		this.totalGananciaSTR = totalGananciaSTR;
 	}
 
-	
 	public Double getTotalCosto() {
 		return totalCosto;
 	}
 
-	
 	public void setTotalCosto(Double totalCosto) {
 		this.totalCosto = totalCosto;
 	}
 
-	
 	public Double getTotalVenta() {
 		return totalVenta;
 	}
 
-	
 	public void setTotalVenta(Double totalVenta) {
 		this.totalVenta = totalVenta;
 	}
 
-	
 	public Double getTotalImpuesto() {
 		return totalImpuesto;
 	}
 
-	
 	public void setTotalImpuesto(Double totalImpuesto) {
 		this.totalImpuesto = totalImpuesto;
 	}
 
-	
 	public Double getTotalGanancia() {
 		return totalGanancia;
 	}
 
-	
 	public void setTotalGanancia(Double totalGanancia) {
 		this.totalGanancia = totalGanancia;
 	}
+
+	public Double getPesoTransporte() {
+		return pesoTransporte;
+	}
+
+	public void setPesoTransporte(Double pesoTransporte) {
+		this.pesoTransporte = pesoTransporte;
+	}
+
+	public String getConsecutivoCompra() {
+		return consecutivoCompra;
+	}
+
+	public void setConsecutivoCompra(String consecutivoCompra) {
+		this.consecutivoCompra = consecutivoCompra;
+	}
+
+	public String getTipoImpuesto1() {
+		return tipoImpuesto1;
+	}
+
+	public void setTipoImpuesto1(String tipoImpuesto1) {
+		this.tipoImpuesto1 = tipoImpuesto1;
+	}
+
+	public Double getImpuesto1() {
+		return impuesto1;
+	}
+
+	public void setImpuesto1(Double impuesto1) {
+		this.impuesto1 = impuesto1;
+	}
+
 	
+	public String getCreated_atSTR() {
+		return created_atSTR;
+	}
+
+	
+	public void setCreated_atSTR(String created_atSTR) {
+		this.created_atSTR = created_atSTR;
+	}
+
+	
+	public String getUpdated_atSTR() {
+		return updated_atSTR;
+	}
+
+	
+	public void setUpdated_atSTR(String updated_atSTR) {
+		this.updated_atSTR = updated_atSTR;
+	}
 
 }

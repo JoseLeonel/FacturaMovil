@@ -91,30 +91,7 @@ $(document)
 	    var total = total - precio 
 	    return total
 	}
-	/**
-	* Monto de descuento sobre la ganancia
-	**/
-	function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGanancia){
-	    if(porcentajeDesc == 0){
-	        return 0
-	    }
-	     if(porcentajeDesc > 100){
-	        porcentajeDesc = 100
-	    }
-	    self.item.porcentajeDesc = porcentajeDesc
-	    self.update()
-	    var porcentaje =  porcentajeGanancia;
-	    if(porcentajeDesc != porcentajeGanancia){
-	       porcentaje =  porcentajeDesc;
-	    }
-	    porcentaje = porcentaje/ 100;
-	    if(porcentajeDesc ==100){
-	        porcentaje = 0
-	    }
-	    var totalDescuento =  precioUnitario * cantidad
-	    var resultado = porcentaje >0?totalDescuento * porcentaje:totalDescuento;
-	    return resultado
-	}
+	
 	/**
 	* Monto a pagar en la linea el cliente
 	**/
@@ -158,11 +135,14 @@ $(document)
 	    if(redondeoDecimales(costo,2) == 0){
 	        return 0;
 	    }
-	    if(redondeoDecimales(montoDescuento,2) == redondeoDecimales(precioUnitario,2)){
+	    var precioUnitarioTemp = precioUnitario * cantidad;
+	    var costoTemp = costo * cantidad;
+	    var totalGanancia = precioUnitarioTemp - costoTemp;
+	    if(redondeoDecimales(montoDescuento,2) == redondeoDecimales(totalGanancia,2)){
 	        return 0;
 	    }
-	    var totalGanancia = precioUnitario - costo
-	    return  parseFloat(redondeoDecimales(totalGanancia,2) -  redondeoDecimales(montoDescuento,2)) * cantidad;
+//	    totalGanancia = totalGanancia * cantidad;
+	    return  parseFloat(redondeoDecimales(totalGanancia,2) -  redondeoDecimales(montoDescuento,2));
 	   
 	 
 	}
@@ -175,7 +155,7 @@ $(document)
 	* Fecha : 23-06-17
 	* obtener la ganancia del precio en decimal
 	**/
-	function _porcentajeGanancia(costo,impuesto,precioVenta) {
+	function _porcentajeGanancia(costo,impuesto,impuesto1,precioVenta) {
 		  var porcentajeGanancia = 0;
 		  var precioSinImpuesto  = 0;
 		  if(costo == 0){
@@ -200,7 +180,8 @@ $(document)
 		    if(costo == precioVenta){
 		       porcentajeGanancia  = 0; 
 		    }else{
-		        precioSinImpuesto = __valorNumerico(redondeoDecimales(precioVenta/((impuesto/100) + 1),5));
+		    	var resultadoImpuesto = impuesto + impuesto1;
+		        precioSinImpuesto = __valorNumerico(redondeoDecimales(precioVenta/((resultadoImpuesto/100) + 1),5));
 		        if(precioSinImpuesto ==  costo){
 		            resultado = 0
 		        }else{
@@ -218,17 +199,21 @@ $(document)
 	* Fecha : 23-06-17
 	* obtener Precio Publico con ganancia
 	**/
-	function _PrecioPublicoConGanancia(costo,impuesto,ganancia){
+	function _PrecioPublicoConGanancia(costo,impuesto,impuesto1,ganancia){
 		 
 		  if(costo == 0){
-		      return 0
+		      return 0;
 		  } 
+		  if(ganancia ==0){
+			  return 0;
+		  }
 		  var porcentajeGanancia = ganancia > 0?ganancia/100:0;
 		  if(ganancia > 0){
 		    porcentajeGanancia = 1 - porcentajeGanancia
 		  }
 		  
-		  var totalImpuesto = impuesto == 0 ?0:impuesto / 100
+		  var totalImpuesto = __valorNumerico(impuesto)+__valorNumerico(impuesto1);
+		  totalImpuesto = totalImpuesto/100;
 		  totalImpuesto = totalImpuesto == 0 ?0:totalImpuesto + 1
 		  var precio  = 0
 		  if(ganancia > 0){

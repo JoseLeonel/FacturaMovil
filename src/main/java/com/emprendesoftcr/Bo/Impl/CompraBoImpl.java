@@ -2,7 +2,6 @@ package com.emprendesoftcr.Bo.Impl;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -152,6 +151,10 @@ public class CompraBoImpl implements CompraBo {
 					// detalleCompraDao.agregar(detalleCompra);
 					detalleCompra.setCompra(compra);
 					detalleCompraDao.agregar(detalleCompra);
+					articulo.setConsecutivoCompra(compra.getConsecutivo());
+					articulo.setFechaUltimaCompra(compra.getFechaCompra());
+					articulo.setUpdated_at(new Date());
+					articuloDao.modificar(articulo);
 					// compraDao.modificar(compra);
 					if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
 						if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {

@@ -355,7 +355,7 @@ public class FacturaBoImpl implements FacturaBo {
 					
 				}
 			}
-			gananciaProducto = getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad());
+			gananciaProducto = getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad(),Utils.roundFactura(detalleFacturaCommand.getMontoDescuento(), 5));
 			Detalle detalle = new Detalle(detalleFacturaCommand);
 			detalle.setCosto(costo);
 			detalle.setGanancia(Utils.roundFactura(gananciaProducto, 5));
@@ -487,11 +487,12 @@ public class FacturaBoImpl implements FacturaBo {
 		
 	}
 
-	private Double getGananciaProducto(Double precioUnitario, Double costo) {
+	private Double getGananciaProducto(Double precioUnitario, Double costo, Double montoDescuento) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
+		Double descuento = montoDescuento !=null?montoDescuento:Constantes.ZEROS_DOUBLE;
 		resultado = costo != Constantes.ZEROS_DOUBLE ? precioUnitario - costo : Constantes.ZEROS_DOUBLE;
 
-		return resultado;
+		return Utils.roundFactura(resultado -descuento,5);
 	}
 
 	private void actualizaArticulosInventario(Factura factura, Usuario usuario) throws Exception {

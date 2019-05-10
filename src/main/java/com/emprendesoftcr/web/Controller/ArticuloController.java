@@ -699,6 +699,9 @@ public class ArticuloController {
 			articulo.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articulo.setUsuario(usuarioSesion);
+			articulo.setTipoImpuesto1(articulo.getTipoImpuesto1() ==null?Constantes.EMPTY:articulo.getTipoImpuesto1());
+			articulo.setImpuesto1(articulo.getImpuesto1() ==null?Constantes.ZEROS_DOUBLE:articulo.getImpuesto1());
+			articulo.setPesoTransporte(articulo.getPesoTransporte() ==null?Constantes.ZEROS_DOUBLE:articulo.getPesoTransporte());
 			articuloBo.agregar(articulo);
 
 			if (usuarioSesion.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
@@ -789,6 +792,10 @@ public class ArticuloController {
 			articuloBd.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articuloBd.setComanda(articulo.getComanda());
 			articuloBd.setPrioridad(articulo.getPrioridad());
+			articuloBd.setTipoImpuesto1(articulo.getTipoImpuesto1() ==null?Constantes.EMPTY:articulo.getTipoImpuesto1());
+			articuloBd.setImpuesto1(articulo.getImpuesto1() ==null?Constantes.ZEROS_DOUBLE:articulo.getImpuesto1());
+			articuloBd.setPesoTransporte(articulo.getPesoTransporte() ==null?Constantes.ZEROS_DOUBLE:articulo.getPesoTransporte());
+
 			articuloBo.modificar(articuloBd);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBd);

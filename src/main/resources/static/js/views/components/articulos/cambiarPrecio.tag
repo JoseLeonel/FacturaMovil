@@ -629,13 +629,21 @@ function __Impuestos(){
         codigo: "",
         descripcion:"Sin impuesto"
      });
-    self.impuestos.push({
+     self.impuestos.push({
         codigo: '01',
         descripcion:$.i18n.prop("tipo.impuesto.ventas")
+     });
+      self.impuestos.push({
+        codigo: '02',
+        descripcion:$.i18n.prop("tipo.impuesto.consumo")
      });
     self.impuestos.push({
         codigo: '07',
         descripcion:$.i18n.prop("tipo.impuesto.servicio")
+     });
+     self.impuestos.push({
+        codigo: '06',
+        descripcion:$.i18n.prop("tipo.impuesto.tabaco")
      });
     self.impuestos.push({
         codigo: '12',
