@@ -63,6 +63,11 @@ public class DetalleFacturaCommand {
 	private Double						porcentajeGanancia;
 
 	private Double						costo;
+	private String						tipoImpuesto1;
+	private Double						impuesto1;
+
+	private Double						montoImpuesto1;
+
 
 	public DetalleFacturaCommand() {
 		super();
@@ -97,6 +102,9 @@ public class DetalleFacturaCommand {
 		this.consecutivoProforma = detalle.getFactura().getConsecutivoProforma() !=null?detalle.getFactura().getConsecutivoProforma():Constantes.EMPTY;
 		this.costo = detalle.getCosto();
 		this.porcentajeGanancia = detalle.getPorcentajeGanancia();
+		this.tipoImpuesto1 = detalle.getTipoImpuesto1();
+		this.impuesto1 = detalle.getImpuesto();
+		this.montoImpuesto1 = detalle.getMontoImpuesto1();
 	
 	}
 
@@ -356,6 +364,36 @@ public class DetalleFacturaCommand {
 	
 	public void setCosto(Double costo) {
 		this.costo = costo;
+	}
+
+	
+	public String getTipoImpuesto1() {
+		return tipoImpuesto1;
+	}
+
+	
+	public void setTipoImpuesto1(String tipoImpuesto1) {
+		this.tipoImpuesto1 = tipoImpuesto1;
+	}
+
+	
+	public Double getImpuesto1() {
+		return impuesto1;
+	}
+
+	
+	public void setImpuesto1(Double impuesto1) {
+		this.impuesto1 = impuesto1;
+	}
+
+	
+	public Double getMontoImpuesto1() {
+		return montoImpuesto1;
+	}
+
+	
+	public void setMontoImpuesto1(Double montoImpuesto1) {
+		this.montoImpuesto1 = montoImpuesto1;
 	}
 	
 	

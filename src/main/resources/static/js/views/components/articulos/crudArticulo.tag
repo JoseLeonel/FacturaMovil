@@ -1115,6 +1115,7 @@ function __listadoMarcasActivas(){
     $.ajax({
          url: "ListarMarcasActivasAjax.do",
         datatype: "json",
+        global: false,
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
@@ -1135,6 +1136,7 @@ function __listadoTipoUnidadesActivas(){
     $.ajax({
          url: "ListarTipoUnidadesAjax.do",
         datatype: "json",
+        global: false,
         method:"GET",
         success: function (result) {
              if(result.aaData.length > 0){
@@ -1295,8 +1297,23 @@ __agregar(){
                 if($('#impuesto').val()>0){
                     mensajeError($.i18n.prop("error.articulo.no.tipo.impuesto"))
                     return 
+                }
             }
-        }
+            tipo = $('#tipoImpuesto1').val() == "Sin impuesto"?"":$('#tipoImpuesto1').val()
+            if (tipo !=""){
+                if($('#impuesto1').val()==0){
+                    mensajeError($.i18n.prop("error.articulo.indicar.tipo.impuesto"))
+                    return 
+                }
+            }else{
+                if($('#impuesto1').val()>0){
+                    mensajeError($.i18n.prop("error.articulo.no.tipo.impuesto"))
+                    return 
+                }
+            }
+
+            
+        
         if(self.articulo.costo > self.articulo.precioPublico){
             mensajeError("No se puede agregar el precio Publico es menor al costo")
             return 
@@ -1357,26 +1374,54 @@ __agregar(){
 ** Modificar la Empresa
 **/
 __Modificar(){
-    var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
-    if (tipo !=""){
-        if($('#impuesto').val()==0){
-            mensajeError($.i18n.prop("error.articulo.indicar.tipo.impuesto"))
-            return 
+    var AplicoImpuesto1 = false
+    var AplicoImpuesto2 = false
+    if ($("#formulario").valid()) {
+        var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
+        if (tipo !=""){
+            if($('#impuesto').val()==0){
+                mensajeError($.i18n.prop("error.articulo.indicar.tipo.impuesto"))
+                return 
+            }else{
+                AplicoImpuesto1 = true
+            }
+        }else{
+            if($('#impuesto').val()>0){
+                mensajeError($.i18n.prop("error.articulo.no.tipo.impuesto"))
+                return 
+            }
         }
-    }else{
-        if($('#impuesto').val()>0){
-            mensajeError($.i18n.prop("error.articulo.no.tipo.impuesto"))
-            return 
+        tipo = $('#tipoImpuesto1').val() == "Sin impuesto"?"":$('#tipoImpuesto1').val()
+        if (tipo !=""){
+            if($('#impuesto1').val()==0){
+                mensajeError($.i18n.prop("error.articulo.indicar.tipo.impuesto1"))
+                return 
+            }else{
+                AplicoImpuesto2 = true
+            }
+        }else{
+            if($('#impuesto1').val()>0){
+                mensajeError($.i18n.prop("error.articulo.no.tipo.impuesto1"))
+                return 
+            }
         }
+        if(AplicoImpuesto2 == true && AplicoImpuesto1 == false){
+            mensajeError($.i18n.prop("error.articulo.no.impuesto1"))
+            return 
+
+        }
+        
+
+        if(self.articulo.costo > self.articulo.precioPublico){
+                mensajeError("No se puede modificar el Articulo el precio Publico es menor al costo")
+                return 
+        }
+        self.error = false;
+        self.exito = false;
+        self.update();
+        __modificarRegistro("#formulario",$.i18n.prop("articulo.mensaje.alert.modificar"),'ModificarArticuloAjax.do','ListarArticuloAjax.do','#tableListar')
+
     }
-    if(self.articulo.costo > self.articulo.precioPublico){
-            mensajeError("No se puede modificar el Articulo el precio Publico es menor al costo")
-            return 
-        }
-    self.error = false;
-    self.exito = false;
-    self.update();
-    __modificarRegistro("#formulario",$.i18n.prop("articulo.mensaje.alert.modificar"),'ModificarArticuloAjax.do','ListarArticuloAjax.do','#tableListar')
 }
 function sumar(){
     self.totalCosto = 0

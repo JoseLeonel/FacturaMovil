@@ -1572,7 +1572,6 @@ function aplicarFactura(estado){
 * Limpiar Pantalla
 **/
 __Limpiar(){
-     
     __Init()
 }
 /**
@@ -1624,11 +1623,11 @@ function __Init(){
         }
 
     } 
-     self.primeraVezBilleteClick = false
-     self.cantidadEnterFacturar = 0
-     self.pesoPrioridad =  0
-     self.numeroLinea =0
-     self.cantArticulos =0
+    self.primeraVezBilleteClick = false
+    self.cantidadEnterFacturar = 0
+    self.pesoPrioridad =  0
+    self.numeroLinea =0
+    self.cantArticulos =0
     self.mostrarListadoArticulos == false
     self.detail                = []
     self.mensajesBackEnd       = []
@@ -1741,11 +1740,13 @@ function cargarDetallesFacturaEnEspera(data){
             pesoPrioridad    :modeloTabla.numeroLinea,
             codigo          : modeloTabla.codigo,
             tipoImpuesto    : modeloTabla.tipoImpuesto,
+            tipoImpuesto1   : modeloTabla.tipoImpuesto1,
             descripcion     : modeloTabla.descripcion,
             cantidad        : parseFloat(modeloTabla.cantidad),
             precioUnitario  : parseFloat(modeloTabla.precioUnitario),
             impuesto        : parseFloat(modeloTabla.impuesto),
             montoImpuesto   : parseFloat(modeloTabla.montoImpuesto),
+            montoImpuesto1  : parseFloat(modeloTabla.montoImpuesto1),
             montoDescuento  : parseFloat(modeloTabla.montoDescuento),
             porcentajeDesc  : parseFloat(modeloTabla.porcentajeDesc),
             subTotal        : parseFloat(modeloTabla.subTotal),
@@ -1753,14 +1754,12 @@ function cargarDetallesFacturaEnEspera(data){
             montoTotal      : parseFloat(modeloTabla.montoTotal),
             costo           : parseFloat(modeloTabla.costo),
             porcentajeGanancia :parseFloat(modeloTabla.porcentajeGanancia),
-
         });
         self.update()
         self.numeroLinea   = self.numeroLinea + 1
         self.cantArticulos = self.cantArticulos + 1
         self.pesoPrioridad = self.numeroLinea
     })
-   
     self.factura.totalCambioPagar = self.factura.totalComprobante;
     self.totalCambioPagar         = self.factura.totalComprobante
     self.detail.sort(function(a,b) {
@@ -1773,7 +1772,6 @@ function cargarDetallesFacturaEnEspera(data){
     self.update()
     $(".nombreFactura").val(self.factura.nombreFactura)
     $(".correoAlternativo").val(self.factura.correoAlternativo)
-    
     $('#totalEfectivo').val(self.factura.totalComprobante)
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
@@ -1814,7 +1812,6 @@ function crearFactura(estado){
     $.ajax({
         type : "POST",
         dataType : "json",
-        
         data : formulario,
         url : "CrearFacturaAjax",
         success : function(data) {
@@ -1829,7 +1826,6 @@ function crearFactura(estado){
                 serverMessageJsonClase(data);
                 dataTemporal = data
                 evaluarFactura(data)
-
             }
         },
         error : function(xhr, status) {
@@ -1911,14 +1907,12 @@ function evaluarFactura(data){
                      })
                    
                 }else{
-                  
                   var parametros = {
                           factura: self.facturaReimprimir ,
                           facturaDia:0
                       }
                       riot.mount('ptv-imprimir',{parametros:parametros});
                 }
-               
         }else{
                 swal({
                 type: 'success',
@@ -2585,13 +2579,15 @@ function __nuevoArticuloAlDetalle(cantidad){
     if(self.detail == null){
         __storege()
     }
-    var precioUnitario  = getPrecioUnitario(self.articulo.precioPublico,self.articulo.impuesto)
+    var resultaMontoImpuesto = parseFloat(self.articulo.impuesto) + parseFloat(self.articulo.impuesto1)
+    var precioUnitario  = getPrecioUnitario(self.articulo.precioPublico,resultaMontoImpuesto)
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
     var montoDescuento  = 0
     var naturalezaDescuento = ""
     var subTotal        = montoTotal
     var montoImpuesto   = _calcularImpuesto(subTotal,parseFloat(self.articulo.impuesto) ==null?0:parseFloat(self.articulo.impuesto))
-    var montoTotalLinea = subTotal + montoImpuesto 
+    var montoImpuesto1  = _calcularImpuesto(subTotal,parseFloat(self.articulo.impuesto1) ==null?0:parseFloat(self.articulo.impuesto1))
+    var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1  
     self.pesoPrioridad  =  self.pesoPrioridad + 1
     self.numeroLinea    = self.numeroLinea + 1
     self.cantArticulos  = self.cantArticulos + 1
@@ -2600,13 +2596,17 @@ function __nuevoArticuloAlDetalle(cantidad){
        numeroLinea     : parseFloat(self.numeroLinea),
        pesoPrioridad   : self.pesoPrioridad,  
        tipoImpuesto    : self.articulo.tipoImpuesto ==null?" ":self.articulo.tipoImpuesto,
+       tipoImpuesto1   : self.articulo.tipoImpuesto1 ==null?" ":self.articulo.tipoImpuesto1,
        iva             : parseFloat(self.articulo.impuesto),
+       iva1            : parseFloat(self.articulo.impuesto1),
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
        cantidad        : parseFloat(cantidad),
        precioUnitario  : parseFloat(precioUnitario),
        impuesto        : parseFloat(self.articulo.impuesto),
+       impuesto1        : parseFloat(self.articulo.impuesto1),
        montoImpuesto   : parseFloat(montoImpuesto),
+       montoImpuesto1  : parseFloat(montoImpuesto1),
        montoDescuento  : 0,
        porcentajeDesc  : 0,
        ganancia        : parseFloat(ganancia),
@@ -2760,11 +2760,13 @@ function ActualizarLineaDEtalle(){
     var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc,self.item.porcentajeGanancia)
     var subTotal               = montoTotal > montoDescuento?montoTotal - montoDescuento: montoDescuento-montoTotal
     var montoImpuesto          = _calcularImpuesto(subTotal,self.item.impuesto ==null?0:self.item.impuesto)
+    var montoImpuesto1         = _calcularImpuesto(subTotal,self.item.impuesto1 ==null?0:self.item.impuesto1)
     var montoTotalLinea        = subTotal + montoImpuesto    
     self.item.montoTotal       = montoTotal
     self.item.montoDescuento   = montoDescuento
     self.item.subTotal         = subTotal
     self.item.montoImpuesto    = montoImpuesto
+    self.item.montoImpuesto1   = montoImpuesto1
     self.item.montoTotalLinea  = montoTotalLinea
     self.item.ganancia         = __ObtenerGananciaProductoNuevoIngresado(montoDescuento,self.item.precioUnitario,self.item.costo ==null?0:parseFloat(self.item.costo),self.item.cantidad)
     self.totalGananciaByProducto = formatoDecimales(parseFloat(self.item.ganancia),2)
@@ -2805,8 +2807,8 @@ __actualizarDescuento(e){
 * Actualizar el descuento
 **/
 function _actualizarDesc(e){
-     var descuento = $(".aplicarDescuento").val();
-     descuento = __valorNumerico(descuento)
+    var descuento = $(".aplicarDescuento").val();
+    descuento = __valorNumerico(descuento)
     if(self.empresa.aplicaGanancia ==1){
         if(self.item.porcentajeGanancia < descuento ){
             swal('',"No se puede aplicar un descuento mayor a la ganancia",'error');
@@ -2838,6 +2840,7 @@ function __calculate() {
     subTotal       = 0
     totalDescuento = 0
     totalImpuesto  = 0
+    totalImpuesto1  = 0
     totalMercanciasGravadas = 0
     totalMercanciasExentas  = 0
     totalServGravados       = 0
@@ -2849,15 +2852,21 @@ function __calculate() {
     self.cantArticulos      = 0
     self.detail.forEach(function(e){
         totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.montoTotal:0
+        totalMercanciasGravadas += e.montoImpuesto1 > 0 && e.tipoImpuesto1 != "07"?e.montoTotal:0
         totalMercanciasExentas  += e.impuesto == 0 && e.tipoImpuesto != "07"?e.montoTotal:0
+        totalMercanciasExentas  += e.impuesto1 == 0 && e.tipoImpuesto1 != "07"?e.montoTotal:0
         totalServGravados       += e.montoImpuesto > 0 && e.tipoImpuesto == "07"?e.montoTotal:0
+        totalServGravados       += e.montoImpuesto1 > 0 && e.tipoImpuesto1 == "07"?e.montoTotal:0
         totalServExentos        += e.impuesto == 0 && e.tipoImpuesto == "07"?e.montoTotal:0
+        totalServExentos        += e.impuesto1 == 0 && e.tipoImpuesto1 == "07"?e.montoTotal:0
         totalGravado            += e.impuesto > 0 ?e.montoTotal:0
-        totalExento             += e.impuesto == 0?e.montoTotal:0
+        totalGravado            += e.impuesto1 > 0 ?e.montoTotal:0
+        totalExento             += e.impuesto == 0 && e.impuesto1 == 0?e.montoTotal:0
         totalComprobante        += e.montoTotalLinea
         subTotal                += e.subTotal >0?e.subTotal:0
         totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
-        totalImpuesto           += e.montoImpuesto >0?e.montoImpuesto:0
+        totalImpuesto           += __valorNumerico(e.montoImpuesto)
+        totalImpuesto1          += __valorNumerico(e.montoImpuesto1)
         totalVenta              += e.montoTotal
         self.cantArticulos      += esEntero(e.cantidad) == true? e.cantidad:1 
     });
@@ -2887,6 +2896,8 @@ function __calculate() {
     localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
 }
 
+
+
 function esEntero(numero){
     if (isNaN(numero)){
         return false
@@ -2907,7 +2918,8 @@ function getSubTotalGeneral(){
     var resultado = __valorNumerico(self.factura.subTotal) + __valorNumerico(self.factura.totalDescuentos)
     self.subTotalGeneral = formatoDecimales(resultado,2)
     self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2)
-    self.totalImpuesto   = formatoDecimales(self.factura.totalImpuesto,2)
+    var resultadoTotalImpuesto = __valorNumerico(self.factura.totalImpuesto) + __valorNumerico(self.factura.totalImpuesto1)
+    self.totalImpuesto   = formatoDecimales(resultadoTotalImpuesto,2)
 
     self.update()
 }

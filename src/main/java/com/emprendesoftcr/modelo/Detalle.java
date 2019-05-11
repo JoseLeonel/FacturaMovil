@@ -88,15 +88,23 @@ public class Detalle implements Serializable {
 
 	@Column(name = "porcentaje_desc")
 	private Double						porcentajeDesc;
-	
-	@Column(name = "porcentaje_ganan", columnDefinition = "INT default '0'")
+
+	@Column(name = "porcentaje_ganan", columnDefinition = "Decimal(10,5) default '0.00'")
 	private Double						porcentajeGanancia;
 
-	@Column(name = "costo", columnDefinition = "INT default '0'")
+	@Column(name = "costo", columnDefinition = "Decimal(10,5) default '0.00'")
 	private Double						costo;
 
 	@Column(name = "observacion")
 	private String						observacion;
+
+	@Column(name = "tipo_impuesto1")
+	private String						tipoImpuesto1;
+	@Column(name = "impuesto1")
+	private Double						impuesto1;
+
+	@Column(name = "monto_impuesto1")
+	private Double						montoImpuesto1;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -107,10 +115,9 @@ public class Detalle implements Serializable {
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
 	private Date							updated_at;
-	
 
 	@Column(name = "monto_gananc", columnDefinition = "Double default '0'")
-	private Double montoGanancia;
+	private Double						montoGanancia;
 
 	@ManyToOne
 	@JoinColumn(name = "factura_id")
@@ -282,6 +289,7 @@ public class Detalle implements Serializable {
 	public void setImpuesto(Double impuesto) {
 		this.impuesto = impuesto;
 	}
+
 	public String getImpuestoSTR() {
 		return Utils.formateadorMiles(this.impuesto);
 	}
@@ -366,36 +374,58 @@ public class Detalle implements Serializable {
 		this.usuario = usuario;
 	}
 
-	
 	public Double getMontoGanancia() {
 		return montoGanancia;
 	}
 
-	
 	public void setMontoGanancia(Double montoGanancia) {
 		this.montoGanancia = montoGanancia;
 	}
 
-	
 	public Double getPorcentajeGanancia() {
 		return porcentajeGanancia;
 	}
 
-	
 	public void setPorcentajeGanancia(Double porcentajeGanancia) {
 		this.porcentajeGanancia = porcentajeGanancia;
 	}
 
-	
 	public Double getCosto() {
 		return costo;
 	}
 
-	
 	public void setCosto(Double costo) {
 		this.costo = costo;
 	}
+
 	
+	public String getTipoImpuesto1() {
+		return tipoImpuesto1;
+	}
+
 	
+	public void setTipoImpuesto1(String tipoImpuesto1) {
+		this.tipoImpuesto1 = tipoImpuesto1;
+	}
+
+	
+	public Double getImpuesto1() {
+		return impuesto1;
+	}
+
+	
+	public void setImpuesto1(Double impuesto1) {
+		this.impuesto1 = impuesto1;
+	}
+
+	
+	public Double getMontoImpuesto1() {
+		return montoImpuesto1;
+	}
+
+	
+	public void setMontoImpuesto1(Double montoImpuesto1) {
+		this.montoImpuesto1 = montoImpuesto1;
+	}
 
 }

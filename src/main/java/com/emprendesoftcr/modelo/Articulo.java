@@ -523,6 +523,7 @@ public class Articulo implements Serializable {
 		return Constantes.EMPTY;
 	}
 	
+	
 	public void setFechaUltimaCompra(Date fechaUltimaCompra) {
 		this.fechaUltimaCompra = fechaUltimaCompra;
 	}
