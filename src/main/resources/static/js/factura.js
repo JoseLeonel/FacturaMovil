@@ -197,6 +197,22 @@ $(document)
 		  }
 		  return __valorNumerico(porcentajeGanancia * 100);
 		}	
+	
+
+	function esEntero(numero){
+	    if (isNaN(numero)){
+	        return false
+	    } else {
+	        // es entero
+	        if (numero % 1 == 0) {
+	            return true
+	            
+	        } else {
+	            return false
+	        }
+	    }
+	}
+
 	/**
 	* autor : Leonel Hernandez Chaverri
 	* Fecha : 23-06-17

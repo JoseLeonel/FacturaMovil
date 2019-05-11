@@ -12,7 +12,10 @@ var _Init = function () {
  * @returns
  */
 function cargaMantenimiento() {
-  riot.mount('punto-venta');
-}
+	var parametros = {
+		codigoMoneda :'CRC'
+	}
+	riot.mount('punto-venta',{parametros:parametros});
 
+}
 

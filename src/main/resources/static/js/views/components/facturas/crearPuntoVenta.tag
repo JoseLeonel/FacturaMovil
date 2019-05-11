@@ -1,4 +1,11 @@
 <punto-venta>
+ <!-- Titulos -->
+    <div  class="row titulo-encabezado" show={parametros.codigoMoneda =="USD"?true:false} >
+        <div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h1 ><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("facturar.dolares.titulo")}  </h1>
+        </div>
+        <div class=" col-sm-4 col-md-4 col-lg-4 text-right"></div>
+    </div>
 <!--validar rol de usuario-->
 
 <!-- The Modal -->
@@ -132,6 +139,7 @@
                                     </div> 
                                 </div>
                             </div>
+                            <input type="hidden" id='codigoMoneda'            name='codigoMoneda'            value="{factura.codigoMoneda}" >
                             <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
                             <input type="hidden" id='plazoCredito'            name='plazoCredito'            value="{factura.plazoCredito}" >
                             <input type="hidden" id='estado'                  name='estado'                  value="{factura.estado}" >
@@ -558,6 +566,7 @@
 <script>
     var self = this;
     self.colorVentaEspera = 'green'
+    self.parametros   = opts.parametros; 
     // Detalle de la factura es una coleccion de articulos
     self.detail                = []
     self.mensajesBackEnd       = []
@@ -1806,8 +1815,10 @@ function crearFactura(estado){
     self.factura.plazoCredito = __valorNumerico($('#plazoCreditoL').val())
     self.factura.detalleFactura =JSONDetalles
     self.factura.estado = estado
+    self.factura.codigoMoneda = self.parametros.codigoMoneda
     self.update();
     var dataTemporal = null
+
     var formulario = $("#formularioFactura").serialize();
     $.ajax({
         type : "POST",
@@ -2579,15 +2590,16 @@ function __nuevoArticuloAlDetalle(cantidad){
     if(self.detail == null){
         __storege()
     }
-    var resultaMontoImpuesto = parseFloat(self.articulo.impuesto) + parseFloat(self.articulo.impuesto1)
-    var precioUnitario  = getPrecioUnitario(self.articulo.precioPublico,resultaMontoImpuesto)
+    var resultaMontoImpuesto = parseFloat(self.articulo.impuesto)
+    var precioUnitario  = resultaMontoImpuesto > 0 ?getPrecioUnitario(self.articulo.precioPublico,resultaMontoImpuesto):0
+    resultaMontoImpuesto = parseFloat(self.articulo.impuesto1) 
+    precioUnitario      = resultaMontoImpuesto > 0 ?getPrecioUnitario(precioUnitario,resultaMontoImpuesto):0
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
     var montoDescuento  = 0
     var naturalezaDescuento = ""
     var subTotal        = montoTotal
     var montoImpuesto1  = _calcularImpuesto(subTotal,parseFloat(self.articulo.impuesto1) ==null?0:parseFloat(self.articulo.impuesto1))
     var montoImpuesto   = _calcularImpuesto(subTotal+montoImpuesto1,parseFloat(self.articulo.impuesto) ==null?0:parseFloat(self.articulo.impuesto))
-    
     var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1  
     self.pesoPrioridad  =  self.pesoPrioridad + 1
     self.numeroLinea    = self.numeroLinea + 1
@@ -2617,7 +2629,6 @@ function __nuevoArticuloAlDetalle(cantidad){
        costo           : self.articulo.costo ==null?0:parseFloat(self.articulo.costo),
        porcentajeGanancia :   self.articulo.gananciaPrecioPublico ==null?0:parseFloat(self.articulo.gananciaPrecioPublico),
     });
-    
     self.detail.sort(function(a,b) {
     if ( a.pesoPrioridad > b.pesoPrioridad )
         return -1;
@@ -2628,8 +2639,6 @@ function __nuevoArticuloAlDetalle(cantidad){
     self.cantidadEnterFacturar = 0
     self.totalGananciaByProducto = formatoDecimales(parseFloat(ganancia),2)
     self.update()
-    
-    
 }
 
 
@@ -2760,8 +2769,10 @@ function ActualizarLineaDEtalle(){
     var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
     var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc,self.item.porcentajeGanancia)
     var subTotal               = montoTotal > montoDescuento?montoTotal - montoDescuento: montoDescuento-montoTotal
-    var montoImpuesto          = _calcularImpuesto(subTotal,self.item.impuesto ==null?0:self.item.impuesto)
-    var montoImpuesto1         = _calcularImpuesto(subTotal,self.item.impuesto1 ==null?0:self.item.impuesto1)
+    montoImpuesto1             = _calcularImpuesto(subTotal,self.item.impuesto1 ==null?0:self.item.impuesto1)
+    var resultadoMontoImpuesto1 = montoImpuesto1 + subTotal;
+    var montoImpuesto          = _calcularImpuesto(resultadoMontoImpuesto1,self.item.impuesto ==null?0:self.item.impuesto)
+    
     var montoTotalLinea        = subTotal + montoImpuesto + montoImpuesto1    
     self.item.montoTotal       = montoTotal
     self.item.montoDescuento   = montoDescuento
@@ -2782,11 +2793,9 @@ function agregarCantidadAlaVenta(cantidad){
     self.item.ganancia = ganancia
     self.totalGananciaByProducto = formatoDecimales(parseFloat(ganancia),2)
     self.update()
-
     ActualizarLineaDEtalle()
     aplicarCambioLineaDetalle() 
     cambiarCantidadArticulo.value = 0
-   
     $('#modalCambiarCantidad').modal('hide') 
 }
 /**
@@ -2898,19 +2907,6 @@ function __calculate() {
 }
 
 
-
-function esEntero(numero){
-    if (isNaN(numero)){
-        return false
-    } else {
-        // es entero
-        if (numero % 1 == 0) {
-            return true
-        } else {
-            return false
-        }
-    }
-}
 
 /**
 *  Sub Total Generar
