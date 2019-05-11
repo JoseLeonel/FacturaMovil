@@ -59,7 +59,6 @@
                         <h3 class="box-title pull-right ">{$.i18n.prop("ventas.tipo.cambio.titulo")} {tipoCambio.total} </h3>
 					</div>
 					<div class="box-body">
-                        
                         <form id="formularioFactura">
                             <div class="row">
                                 <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
@@ -131,10 +130,8 @@
                                         <label class="{labelTotales} ">{$.i18n.prop("factura.resumen.banco")} </label> 
                                         <input onclick={_SeleccionarBanco} onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number"  onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra}  totalBancoPantalla"  id="totalBancoPantalla" name="totalBancoPantalla"  value="{factura.totalBanco}" >
                                     </div> 
-                                   
                                 </div>
                             </div>
-                             
                             <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
                             <input type="hidden" id='plazoCredito'            name='plazoCredito'            value="{factura.plazoCredito}" >
                             <input type="hidden" id='estado'                  name='estado'                  value="{factura.estado}" >
@@ -148,13 +145,11 @@
                             <input type="hidden" id='totalGravado'            name='totalGravado'            value="{factura.totalGravado}" >
                             <input type="hidden" id='totalExento'             name='totalExento'             value="{factura.totalExento}" >
                             <input type="hidden" id='totalVenta'              name='totalVenta'              value="{factura.totalVenta}" >
-                            <input type="hidden" id='totalDescuentos'         name='totalDescuentos'        value="{factura.totalDescuentos}" >
+                            <input type="hidden" id='totalDescuentos'         name='totalDescuentos'         value="{factura.totalDescuentos}" >
                             <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
-                            <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           valmodalue="{factura.totalImpuesto}" >
+                            <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           value="{factura.totalImpuesto}" >
                             <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
                             <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
-                            <input type="hidden" id='totalBanco'              name='totalBanco'              value="{factura.totalBanco}" >
-                   
                         </form>   
                     </div>
                     <div class="box-footer">
@@ -255,8 +250,9 @@
                                 <th style="width:20%;"><h1>{$.i18n.prop("factura.linea.detalle.descripcion")}</h1></th>
                                 <th style="width:8%;"><h1>{$.i18n.prop("factura.linea.detalle.cantidad")}    </h1> </th>
                                 <th ><h1>{$.i18n.prop("factura.linea.detalle.precio")}                       </h1></th>
-                                <th ><h1>{$.i18n.prop("factura.linea.detalle.descuento")}                    </h1></th>
-                                <th ><h1>{$.i18n.prop("factura.linea.detalle.impuesto")}                     </h1></th>
+                                <th style="width:4%"><h1>{$.i18n.prop("factura.linea.detalle.descuento")}                    </h1></th>
+                                <th style="width:4%"><h1>{$.i18n.prop("factura.linea.detalle.impuesto")}     </h1></th>
+                                <th style="width:4%"><h1>{$.i18n.prop("factura.linea.detalle.impuesto1")}    </h1></th>
                                 <th ><h1>{$.i18n.prop("factura.linea.detalle.subTotal")}                     </h1> </th> 
                             </tr>
                             </thead>
@@ -274,12 +270,16 @@
                                 <td class="text-right">
                                     <input   class="campo" type="text"  value = "{precioUnitario.toFixed(2)}" readonly />
                                 </td>
-                                <td class="text-right">
+                                <td class="text-right" style="width:4%">
                                     <input  onclick={__CambiarDescuento} class="campo" type="text"  value = "{porcentajeDesc.toFixed(2)}" readonly/>
                                 </td>
-                                <td class="text-right">
+                                <td class="text-right" style="width:4%">
                                     <input  class="campo" type="text"  value = "{impuesto.toFixed(2)}" readonly/>
                                 </td>
+                                <td class="text-right" style="width:4%">
+                                    <input  class="campo" type="text"  value = "{impuesto1.toFixed(2)}" readonly/>
+                                </td>
+
                                 <td class="text-right">
                                     <input  class="campo" type="text"  value = "{montoTotalLinea.toFixed(2)}" readonly />
                                 </td>
@@ -2585,8 +2585,9 @@ function __nuevoArticuloAlDetalle(cantidad){
     var montoDescuento  = 0
     var naturalezaDescuento = ""
     var subTotal        = montoTotal
-    var montoImpuesto   = _calcularImpuesto(subTotal,parseFloat(self.articulo.impuesto) ==null?0:parseFloat(self.articulo.impuesto))
     var montoImpuesto1  = _calcularImpuesto(subTotal,parseFloat(self.articulo.impuesto1) ==null?0:parseFloat(self.articulo.impuesto1))
+    var montoImpuesto   = _calcularImpuesto(subTotal+montoImpuesto1,parseFloat(self.articulo.impuesto) ==null?0:parseFloat(self.articulo.impuesto))
+    
     var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1  
     self.pesoPrioridad  =  self.pesoPrioridad + 1
     self.numeroLinea    = self.numeroLinea + 1
@@ -2761,7 +2762,7 @@ function ActualizarLineaDEtalle(){
     var subTotal               = montoTotal > montoDescuento?montoTotal - montoDescuento: montoDescuento-montoTotal
     var montoImpuesto          = _calcularImpuesto(subTotal,self.item.impuesto ==null?0:self.item.impuesto)
     var montoImpuesto1         = _calcularImpuesto(subTotal,self.item.impuesto1 ==null?0:self.item.impuesto1)
-    var montoTotalLinea        = subTotal + montoImpuesto    
+    var montoTotalLinea        = subTotal + montoImpuesto + montoImpuesto1    
     self.item.montoTotal       = montoTotal
     self.item.montoDescuento   = montoDescuento
     self.item.subTotal         = subTotal

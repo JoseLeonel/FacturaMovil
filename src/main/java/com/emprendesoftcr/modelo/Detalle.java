@@ -116,7 +116,7 @@ public class Detalle implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
-	@Column(name = "monto_gananc", columnDefinition = "Double default '0'")
+	@Column(name = "monto_gananc", columnDefinition = "Decimal(10,5) default '0.00'")
 	private Double						montoGanancia;
 
 	@ManyToOne

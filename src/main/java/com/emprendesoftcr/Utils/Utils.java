@@ -35,6 +35,7 @@ import org.springframework.web.context.ContextLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.google.common.base.Strings;
 
 public final class Utils {
@@ -1372,4 +1373,5 @@ public final class Utils {
 		}
 		return descripcion;		
 	}
+	
 }

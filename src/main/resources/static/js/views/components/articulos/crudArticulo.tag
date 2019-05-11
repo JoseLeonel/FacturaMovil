@@ -52,7 +52,7 @@
                             <div class="col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                 <label >{$.i18n.prop("articulo.tipoImpuesto1")}</label>
                                 <select onchange= {__asignarImpuesto1} class="form-control selectTipoImpuesto1" id="tipoImpuesto1" name="tipoImpuesto1"  >
-                                    <option  each={impuestos}  value="{codigo}" selected="{articulo.tipoImpuesto1 ==codigo?true:false}"  >{descripcion}</option>
+                                    <option  each={impuestos1}  value="{codigo}" selected="{articulo.tipoImpuesto1 ==codigo?true:false}"  >{descripcion}</option>
                                 </select>
                             </div>
                         </div>    
@@ -378,6 +378,7 @@
     self.motivoEntradas              = {data:[]}
     self.motivoSalidas              = {data:[]}
     self.impuestos =[]
+    self.impuestos1 =[]
     self.tipoCodigos =[]
     self.contables                 = []
     self.estados                   = []
@@ -430,6 +431,7 @@ self.on('mount',function(){
     __listadoTipoUnidadesActivas()   
     __listadoMarcasActivas()
     __Impuestos() 
+    __Impuestos1()
     __tipoCodigo()
     LimpiarArticulo()
    //Agregar
@@ -1208,7 +1210,7 @@ function __Impuestos(){
         codigo: "",
         descripcion:"Sin impuesto"
      });
-
+     
     self.impuestos.push({
         codigo: '01',
         descripcion:$.i18n.prop("tipo.impuesto.ventas")
@@ -1236,6 +1238,38 @@ function __Impuestos(){
    
      self.update();
 }
+function __Impuestos1(){
+    self.impuestos1 =[]
+    self.update()
+     self.impuestos1.push({
+        codigo: "",
+        descripcion:"Sin impuesto"
+     });
+     
+    self.impuestos1.push({
+        codigo: '02',
+        descripcion:$.i18n.prop("tipo.impuesto.consumo")
+     });
+    self.impuestos1.push({
+        codigo: '07',
+        descripcion:$.i18n.prop("tipo.impuesto.servicio")
+     });
+     self.impuestos1.push({
+        codigo: '06',
+        descripcion:$.i18n.prop("tipo.impuesto.tabaco")
+     });
+    self.impuestos1.push({
+        codigo: '12',
+        descripcion:$.i18n.prop("tipo.impuesto.cemento")
+     });
+    self.impuestos1.push({
+        codigo: '98',
+        descripcion:$.i18n.prop("tipo.impuesto.otros")
+     });
+   
+     self.update();
+}
+
 /**
 * Tipo codigo del producto/servicio del articulo
 **/

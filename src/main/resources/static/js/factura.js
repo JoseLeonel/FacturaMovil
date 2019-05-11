@@ -180,8 +180,11 @@ $(document)
 		    if(costo == precioVenta){
 		       porcentajeGanancia  = 0; 
 		    }else{
-		    	var resultadoImpuesto = impuesto + impuesto1;
+		    	var resultadoImpuesto = impuesto;
 		        precioSinImpuesto = __valorNumerico(redondeoDecimales(precioVenta/((resultadoImpuesto/100) + 1),5));
+		    	resultadoImpuesto = impuesto1;
+		        precioSinImpuesto = __valorNumerico(redondeoDecimales(precioSinImpuesto/((resultadoImpuesto/100) + 1),5));
+
 		        if(precioSinImpuesto ==  costo){
 		            resultado = 0
 		        }else{
@@ -212,6 +215,10 @@ $(document)
 		    porcentajeGanancia = 1 - porcentajeGanancia
 		  }
 		  
+		  var totalImpuesto1 = __valorNumerico(impuesto1);
+		  totalImpuesto1 = totalImpuesto1/100;
+		  totalImpuesto1 = totalImpuesto1 == 0 ?0:totalImpuesto1 + 1
+		  // aplicando el 13
 		  var totalImpuesto = __valorNumerico(impuesto)+__valorNumerico(impuesto1);
 		  totalImpuesto = totalImpuesto/100;
 		  totalImpuesto = totalImpuesto == 0 ?0:totalImpuesto + 1
@@ -230,6 +237,7 @@ $(document)
 		  if(ganancia == 0 ){
 		      precio = costo
 		  }
+		  precio = totalImpuesto1 >0? precio * totalImpuesto1:precio;
 		  precio = totalImpuesto >0? precio * totalImpuesto:precio;
 		  return __valorNumerico(redondeoDecimales(precio,0));
 		}
