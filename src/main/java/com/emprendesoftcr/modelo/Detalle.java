@@ -305,6 +305,9 @@ public class Detalle implements Serializable {
 	public String getMontoImpuestoSTR() {
 		return Utils.formateadorMiles(this.montoImpuesto);
 	}
+	public String getMontoImpuesto1STR() {
+		return Utils.formateadorMiles(this.montoImpuesto1);
+	}
 
 	public Double getMontoTotalLinea() {
 		return montoTotalLinea;

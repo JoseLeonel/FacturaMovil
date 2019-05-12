@@ -80,6 +80,7 @@ function listaClientesActivos(){
 	$.ajax({
 		 url: "ListarClientesActivosAjax.do",
 		 datatype: "json",
+		 global: false,
 		 method:"GET",
 		 success: function (result) {
 				if(result.aaData.length > 0){
@@ -134,8 +135,6 @@ __VerDetalle()
 __EnviarCorreos()
 EventoFiltro()
 }
-
-
 // traducciones del table
 var idioma_espanol = 
 {
@@ -345,8 +344,6 @@ function __CorreoAlternativo(){
         cargaMantenimiento(1,data);  
 	});
 }
-
-
 /**
  * mostrar la abono
  */

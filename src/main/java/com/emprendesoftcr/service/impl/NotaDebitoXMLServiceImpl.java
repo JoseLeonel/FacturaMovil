@@ -227,7 +227,8 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
             "<MontoTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotal()) + "</MontoTotal>" +
             getDescuento(detalle.getMontoDescuento())+
             "<SubTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getSubTotal()) + "</SubTotal>" +
-            xmlImpuestos(detalle) +
+            xmlImpuestos(detalle.getFactura().getId(),detalle.getTipoImpuesto1(),detalle.getMontoImpuesto1(),detalle.getImpuesto1()) +
+            xmlImpuestos(detalle.getFactura().getId(),detalle.getTipoImpuesto(),detalle.getMontoImpuesto(),detalle.getImpuesto()) +
             "<MontoTotalLinea>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotalLinea()) + "</MontoTotalLinea>" +
             "</LineaDetalle>";
       }
@@ -256,25 +257,28 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
 	}
   
   
-  private String xmlImpuestos(Detalle detalle) throws Exception {
+  private String xmlImpuestos(Long idFactura,String tipoImpuesto,Double montoImpuesto,Double impuesto) throws Exception {
   	String resultado = Constantes.EMPTY;
   	try {
-  		if(detalle.getMontoImpuesto()>Constantes.ZEROS_DOUBLE) {
-        resultado = "<Impuesto>" +
-            "<Codigo>" + Utils.zeroPad(detalle.getTipoImpuesto(), 2) + "</Codigo>" +
-            "<Tarifa>" + FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getImpuesto() ) + "</Tarifa>" +
-            "<Monto>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoImpuesto()) + "</Monto>";
-        resultado += "</Impuesto>";
-    	}			
-		} catch (Exception e) {
-			log.info("** Error  xmlImpuestos: " + e.getMessage() + " fecha " + new Date());
-			throw e;
-		}
-  	
-
-    
+  		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
+  			return resultado;
+  		}
+  		if(montoImpuesto != null && tipoImpuesto !=null) {
+    		if(montoImpuesto > Constantes.ZEROS_DOUBLE) {
+          resultado = "<Impuesto>" +
+              "<Codigo>" + Utils.zeroPad(tipoImpuesto, 2) + "</Codigo>" +
+              "<Tarifa>" + FacturaElectronicaUtils.getConvertirBigDecimal(impuesto ) + "</Tarifa>" +
+              "<Monto>" +  FacturaElectronicaUtils.getConvertirBigDecimal(montoImpuesto) + "</Monto>";
+          resultado += "</Impuesto>";
+      	}
+  		}
+  		
+  	} catch (Exception e) {
+  		log.info("** Error  xmlImpuestos Factura :" + idFactura  + e.getMessage() + " fecha " + new Date());
+  		throw e;
+  	}
     return resultado;
-}
+  }
 	
 	/**
 	 * 

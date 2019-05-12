@@ -299,6 +299,10 @@ public class DetalleFacturaCommand {
 	public String getMontoImpuestoSTR() {
 		return Utils.formateadorMiles(this.montoImpuesto);
 	}
+	
+	public String getMontoImpuesto1STR() {
+		return Utils.formateadorMiles(this.montoImpuesto1);
+	}
 
 	public Double getMontoTotalLinea() {
 		return montoTotalLinea;
