@@ -140,6 +140,7 @@
                                 </div>
                             </div>
                             <input type="hidden" id='codigoMoneda'            name='codigoMoneda'            value="{factura.codigoMoneda}" >
+                            <input type="hidden" id='pesoTransporteTotal'     name='pesoTransporteTotal'      value="{totalPesoByFactura}" >
                             <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
                             <input type="hidden" id='plazoCredito'            name='plazoCredito'            value="{factura.plazoCredito}" >
                             <input type="hidden" id='estado'                  name='estado'                  value="{factura.estado}" >
@@ -323,6 +324,7 @@
                                 </div>
                                 <div>
                                     <h3>IG: {totalGananciaByProducto}</h3>
+                                     <h3>PG: {totalPesoByFacturaSTR}</h3>
                                 </div>
                         </article>
                     </aside>
@@ -681,6 +683,8 @@
     self.informacionAbrirCajon = "."
     self.soloParaChinos = false
     self.totalGananciaByProducto = 0
+    self.totalPesoByFactura = 0
+
     self.rol = {
         rolAdministrador:0
     }
@@ -1023,7 +1027,10 @@ function __SeguridadLimpiar(){
 /**
 * limpiar pantalla
 **/
-function __LimpiarClick(){    
+function __LimpiarClick(){  
+    self.totalPesoByFacturaSTR = ''
+    self.totalPesoByFactura  =0
+    self.totalGananciaByProducto =0
     $(".plazoCredito").val(null)   
     $(".fechaCredito").val(null)   
     $(".totalEfectivo").val(null)   
@@ -1599,6 +1606,9 @@ function __Init(){
         }
 
     } 
+    self.totalPesoByFacturaSTR = ''
+    self.totalPesoByFactura  =0
+    self.totalGananciaByProducto =0
     self.primeraVezBilleteClick = false
     self.cantidadEnterFacturar = 0
     self.pesoPrioridad =  0
@@ -1730,6 +1740,8 @@ function cargarDetallesFacturaEnEspera(data){
             montoTotal      : parseFloat(modeloTabla.montoTotal),
             costo           : parseFloat(modeloTabla.costo),
             porcentajeGanancia :parseFloat(modeloTabla.porcentajeGanancia),
+            pesoTransporte :  parseFloat(self.articulo.pesoTransporte),
+            pesoTransporteTotal :parseFloat(self.articulo.pesoTransporteTotal)
         });
         self.update()
         self.numeroLinea   = self.numeroLinea + 1
@@ -2588,7 +2600,10 @@ function __nuevoArticuloAlDetalle(cantidad){
        montoTotal      : parseFloat(montoTotal),
        costo           : self.articulo.costo ==null?0:parseFloat(self.articulo.costo),
        porcentajeGanancia :   self.articulo.gananciaPrecioPublico ==null?0:parseFloat(self.articulo.gananciaPrecioPublico),
+       pesoTransporte :  parseFloat(self.articulo.pesoTransporte),
+       pesoTransporteTotal :parseFloat(self.articulo.pesoTransporte)
     });
+    
     self.detail.sort(function(a,b) {
     if ( a.pesoPrioridad > b.pesoPrioridad )
         return -1;
@@ -2598,6 +2613,7 @@ function __nuevoArticuloAlDetalle(cantidad){
     } );
     self.cantidadEnterFacturar = 0
     self.totalGananciaByProducto = formatoDecimales(parseFloat(ganancia),2)
+    
     self.update()
 }
 
@@ -2726,7 +2742,9 @@ function ActualizarLineaDEtalle(){
     montoImpuesto1             = _calcularImpuesto(subTotal,self.item.impuesto1 ==null?0:self.item.impuesto1)
     var resultadoMontoImpuesto1 = montoImpuesto1 + subTotal;
     var montoImpuesto          = _calcularImpuesto(resultadoMontoImpuesto1,self.item.impuesto ==null?0:self.item.impuesto)
-    var montoTotalLinea        = subTotal + montoImpuesto + montoImpuesto1    
+    var montoTotalLinea        = subTotal + montoImpuesto + montoImpuesto1   
+    self.item.pesoTransporteTotal = parseFloat(self.item.cantidad) *  parseFloat(self.item.pesoTransporte)
+   
     self.item.montoTotal       = montoTotal
     self.item.montoDescuento   = montoDescuento
     self.item.subTotal         = subTotal
@@ -2812,6 +2830,7 @@ function __calculate() {
     totalComprobante        = 0
     totalventaNeta          = 0
     self.cantArticulos      = 0
+    var totalPesoByFactura = 0
     self.detail.forEach(function(e){
         totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.montoTotal:0
         totalMercanciasGravadas += e.montoImpuesto1 > 0 && e.tipoImpuesto1 != "07"?e.montoTotal:0
@@ -2831,7 +2850,10 @@ function __calculate() {
         totalImpuesto1          += __valorNumerico(e.montoImpuesto1)
         totalVenta              += e.montoTotal
         self.cantArticulos      += esEntero(e.cantidad) == true? e.cantidad:1 
+        totalPesoByFactura      += parseFloat(e.pesoTransporte) * parseFloat(e.cantidad)
     });
+    self.totalPesoByFactura = parseFloat(totalPesoByFactura)
+    self.totalPesoByFacturaSTR           = formatoDecimales(totalPesoByFactura,2);
     self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)
     self.factura.totalMercanciasExentas  = __valorNumerico(totalMercanciasExentas)
     self.factura.totalServGravados       = __valorNumerico(totalServGravados)

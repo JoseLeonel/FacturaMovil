@@ -67,6 +67,10 @@ public class DetalleFacturaCommand {
 	private Double						impuesto1;
 
 	private Double						montoImpuesto1;
+	private Double						pesoTransporte;
+	
+	private Double						pesoTransporteTotal;
+
 
 
 	public DetalleFacturaCommand() {
@@ -105,6 +109,8 @@ public class DetalleFacturaCommand {
 		this.tipoImpuesto1 = detalle.getTipoImpuesto1();
 		this.impuesto1 = detalle.getImpuesto();
 		this.montoImpuesto1 = detalle.getMontoImpuesto1();
+		this.pesoTransporte = detalle.getPesoTransporte();
+		this.pesoTransporteTotal = detalle.getPesoTransporteTotal();
 	
 	}
 
@@ -398,6 +404,26 @@ public class DetalleFacturaCommand {
 	
 	public void setMontoImpuesto1(Double montoImpuesto1) {
 		this.montoImpuesto1 = montoImpuesto1;
+	}
+
+	
+	public Double getPesoTransporte() {
+		return pesoTransporte;
+	}
+
+	
+	public void setPesoTransporte(Double pesoTransporte) {
+		this.pesoTransporte = pesoTransporte;
+	}
+
+	
+	public Double getPesoTransporteTotal() {
+		return pesoTransporteTotal;
+	}
+
+	
+	public void setPesoTransporteTotal(Double pesoTransporteTotal) {
+		this.pesoTransporteTotal = pesoTransporteTotal;
 	}
 	
 	

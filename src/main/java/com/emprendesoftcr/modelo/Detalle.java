@@ -118,6 +118,12 @@ public class Detalle implements Serializable {
 
 	@Column(name = "monto_gananc", columnDefinition = "Decimal(10,5) default '0.00'")
 	private Double						montoGanancia;
+	
+	@Column(name = "peso_transporte", columnDefinition = "Decimal(10,5) default '0.00'")
+	private Double						pesoTransporte;
+	
+	@Column(name = "peso_transTotal", columnDefinition = "Decimal(10,5) default '0.00'")
+	private Double						pesoTransporteTotal;
 
 	@ManyToOne
 	@JoinColumn(name = "factura_id")
@@ -146,7 +152,9 @@ public class Detalle implements Serializable {
 		this.naturalezaDescuento = detalleFacturaCommand.getNaturalezaDescuento() == null ? Constantes.EMPTY : detalleFacturaCommand.getNaturalezaDescuento();
 		this.subTotal = detalleFacturaCommand.getSubTotal();
 		this.impuesto = detalleFacturaCommand.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : detalleFacturaCommand.getImpuesto();
+		this.impuesto1 = detalleFacturaCommand.getImpuesto1() == null ? Constantes.ZEROS_DOUBLE : detalleFacturaCommand.getImpuesto1();
 		this.montoImpuesto = detalleFacturaCommand.getMontoImpuesto() == null ? Constantes.ZEROS_DOUBLE : detalleFacturaCommand.getMontoImpuesto();
+		this.montoImpuesto1 = detalleFacturaCommand.getMontoImpuesto1() == null ? Constantes.ZEROS_DOUBLE : detalleFacturaCommand.getMontoImpuesto1();
 		this.montoTotalLinea = detalleFacturaCommand.getMontoTotalLinea();
 		this.ganancia = Constantes.ZEROS_DOUBLE;
 		this.porcentajeDesc = detalleFacturaCommand.getPorcentajeDesc() != null ? detalleFacturaCommand.getPorcentajeDesc() : Constantes.ZEROS_DOUBLE;
@@ -155,7 +163,11 @@ public class Detalle implements Serializable {
 		this.codigo = detalleFacturaCommand.getCodigo();
 		this.unidadMedida = detalleFacturaCommand.getUnidadMedida();
 		this.tipoImpuesto = detalleFacturaCommand.getTipoImpuesto() == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoImpuesto();
-
+		this.tipoImpuesto1 = detalleFacturaCommand.getTipoImpuesto1() == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoImpuesto1();
+		this.montoGanancia = detalleFacturaCommand.getMontoGanancia();
+		this.pesoTransporte = detalleFacturaCommand.getPesoTransporte();
+		this.pesoTransporteTotal = detalleFacturaCommand.getPesoTransporteTotal();
+	
 	}
 
 	public Long getId() {
@@ -429,6 +441,26 @@ public class Detalle implements Serializable {
 	
 	public void setMontoImpuesto1(Double montoImpuesto1) {
 		this.montoImpuesto1 = montoImpuesto1;
+	}
+
+	
+	public Double getPesoTransporte() {
+		return pesoTransporte;
+	}
+
+	
+	public void setPesoTransporte(Double pesoTransporte) {
+		this.pesoTransporte = pesoTransporte;
+	}
+
+	
+	public Double getPesoTransporteTotal() {
+		return pesoTransporteTotal;
+	}
+
+	
+	public void setPesoTransporteTotal(Double pesoTransporteTotal) {
+		this.pesoTransporteTotal = pesoTransporteTotal;
 	}
 
 }

@@ -228,6 +228,7 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setMedioTarjeta(Constantes.FACTURA_MEDIO_PAGO_TARJETA);
 			}
 			factura.setTipoDoc(facturaCommand.getTipoDoc());
+			factura.setPesoTransporteTotal(facturaCommand.getPesoTransporteTotal() !=null?facturaCommand.getPesoTransporteTotal():Constantes.ZEROS_DOUBLE);
 			factura.setNombreFactura(facturaCommand.getNombreFactura());
 			factura.setDireccion(facturaCommand.getDireccion());
 			factura.setNota(facturaCommand.getNota());
@@ -356,6 +357,8 @@ public class FacturaBoImpl implements FacturaBo {
 			}
 			gananciaProducto = getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad(), Utils.roundFactura(detalleFacturaCommand.getMontoDescuento(), 5));
 			Detalle detalle = new Detalle(detalleFacturaCommand);
+			detalle.setPesoTransporte(detalleFacturaCommand.getPesoTransporte() !=null?detalleFacturaCommand.getPesoTransporte():Constantes.ZEROS_DOUBLE);
+			detalle.setPesoTransporteTotal(detalleFacturaCommand.getPesoTransporteTotal() !=null?detalleFacturaCommand.getPesoTransporteTotal():Constantes.ZEROS_DOUBLE);
 			detalle.setCosto(costo);
 			detalle.setGanancia(Utils.roundFactura(gananciaProducto, 5));
 			detalle.setUsuario(usuario);

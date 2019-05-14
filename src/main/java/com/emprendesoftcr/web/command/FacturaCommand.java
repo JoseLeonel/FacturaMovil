@@ -97,6 +97,7 @@ public class FacturaCommand {
 
 	private Double		totalImpuestoServ;
 	private Double  tipoCambioMoneda;
+	private Double pesoTransporteTotal;
 
 	private String codigoMoneda;
 
@@ -539,5 +540,21 @@ public class FacturaCommand {
 	public void setTipoCambioMoneda(Double tipoCambioMoneda) {
 		this.tipoCambioMoneda = tipoCambioMoneda;
 	}
+
+
+
+	
+	public Double getPesoTransporteTotal() {
+		return pesoTransporteTotal;
+	}
+
+
+
+	
+	public void setPesoTransporteTotal(Double pesoTransporteTotal) {
+		this.pesoTransporteTotal = pesoTransporteTotal;
+	}
+	
+	
 
 }

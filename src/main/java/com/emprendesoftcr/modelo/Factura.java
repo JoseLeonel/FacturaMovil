@@ -185,6 +185,9 @@ public class Factura implements Serializable {
 
 	@Column(name = "tiene_is")
 	private Integer						tieneIS;
+	
+	@Column(name = "peso_transTotal", columnDefinition = "Decimal(10,5) default '0.00'")
+	private Double						pesoTransporteTotal;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -224,8 +227,11 @@ public class Factura implements Serializable {
 
 	}
 
+	
+
+	
 	public Factura(Long id, Date fechaCredito, String numeroConsecutivo, String consecutivoProforma, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon, Date referenciaFechaEmision, String medioEfectivo, String medioTarjeta, String medioBanco, String nombreFactura, String correoAlternativo, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto,
-			Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Integer tieneIS, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Mesa mesa) {
+			Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Integer tieneIS, Double pesoTransporteTotal, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Mesa mesa) {
 		super();
 		this.id = id;
 		this.fechaCredito = fechaCredito;
@@ -276,6 +282,7 @@ public class Factura implements Serializable {
 		this.estado = estado;
 		this.estadoFirma = estadoFirma;
 		this.tieneIS = tieneIS;
+		this.pesoTransporteTotal = pesoTransporteTotal;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.cliente = cliente;
@@ -284,6 +291,22 @@ public class Factura implements Serializable {
 		this.usuarioCreacion = usuarioCreacion;
 		this.mesa = mesa;
 	}
+
+
+
+
+	public Double getPesoTransporteTotal() {
+		return pesoTransporteTotal;
+	}
+
+
+
+	
+	public void setPesoTransporteTotal(Double pesoTransporteTotal) {
+		this.pesoTransporteTotal = pesoTransporteTotal;
+	}
+
+
 
 	public Double getTotalImpuestoServicio() {
 		return totalImpuestoServicio;
