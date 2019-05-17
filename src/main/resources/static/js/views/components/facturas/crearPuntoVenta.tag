@@ -221,34 +221,43 @@
  
  <div  class="contenedor-factura " show={mostarParaCrearNuevaFactura}>
                 <div class="cabecera-izquierda">
-                  <div class="pfs-funcionales ">
-                    <a class="pull-left" href="#"    onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f5")}</span></a>
-                    <a class="pull-left" href="#"   onclick = {__LimpiarFormulario} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
-                    <a class="pull-left" href="#"    onclick = {__ListaDecodigos} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f4")}</span></a>
-                    <a class="pull-left" href="#"    onclick = {_ReimprimirFactura} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f6")}</span></a>
-                    <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago}   title="{$.i18n.prop("crear.ventas")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f8")}</span></a>
-                    <a class="pull-left" href="#"   onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f9")}</span></a>
-                    <a class="pull-left" href="#" show={mostarAbrirCajon == true}   onclick = {__AbrirCajon} title="{$.i18n.prop("btn.tiquete")}"> <span class="label label-limpiar">{$.i18n.prop("abrir.cajon")}</span></a>
-                    
-                  </div>
-                  <br>
-                  <br>
-                  <br>
-                    <div class="row">
-                            <div class="col-sx-12 col-sm-6 col-md-6 col-lg-6 has-success">
+                    <div class="botonesFuncionalContainer">
+                         <div class="botonesFuncional ">
+                           <div   class= "labelBotones" onclick = {_ListaFacturasDia} title="{$.i18n.prop("btn.tiquete")}"> {$.i18n.prop("factura.f5")}</div>
+                        </div> 
+                        <div class="botonesFuncional ">
+                           <div  class= "labelBotones" onclick = {__LimpiarFormulario} title="{$.i18n.prop("btn.limpiar")}"> {$.i18n.prop("factura.f10")}</div>
+                        </div>
+                        <div class="botonesFuncional ">
+                           <div  class= "labelBotones"  onclick = {__ListaDecodigos} title="{$.i18n.prop("btn.tiquete")}"> {$.i18n.prop("factura.f4")}</div>
+                        </div>
+                        <div class="botonesFuncional ">
+                           <div class= "labelBotones"     onclick = {_ReimprimirFactura} title="{$.i18n.prop("btn.tiquete")}"> {$.i18n.prop("factura.f6")}</div>
+                        </div>
+                        <div class="botonesFuncional ">
+                           <div  class= "labelBotones"   onclick = {__MostrarFormularioDePago}   title="{$.i18n.prop("crear.ventas")}"> {$.i18n.prop("factura.f8")}</div>
+                        </div>
+                        <div class="botonesFuncional ">
+                           <div  class= "labelBotones"    onclick = {__AplicarYcrearFacturaTemporal} title="{$.i18n.prop("btn.tiquete")}"> {$.i18n.prop("factura.f9")}</div>
+                        </div>
+                        <div class="botonesFuncional " show={mostarAbrirCajon == true} >
+                           <div  class= "labelBotones"    onclick = {__AbrirCajon} title="{$.i18n.prop("btn.tiquete")}"> {$.i18n.prop("abrir.cajon")}</div>
+                        </div>
+                   </div>
+                    <div class="codigoBarraPrecioContainer">
+                            <div class="inputCodigoPrecio">
                                 <input id="codigo" name ="codigo" class="campo codigo" type="text" placeholder="XXXXXXXXXXXXXXXXXX" />
                             </div>
-                            <div class="col-sx-12 col-sm-4 col-md-4 col-lg-4 has-success">
+                            <div class="inputCodigoPrecio">
                                 <input onkeypress={__addPrecioDetail}  id="precioVenta" name ="precioVenta" class="campo precioVenta" type="number" step="any"  placeholder="Precio Ejemplo:600" />
                             </div>
                     </div>
-                    <br>
-                    <div class="lista-factura-espera">
-                            <div class="elementoVentaEspera">
-                             <span class="label elementoUltimoProductoIngresado">Ultimo Producto: {descripcionArticulo}</span>
+                    <div class="tituloProductoIngresadoContainer">
+                        <div class="tituloDescripcionProductoIngresado">
+                             Ultimo Producto: {descripcionArticulo}
                         </div>
                     </div>
-                    <br>
+                    
                     <div class="detalles-factura">
                         <table class="table table-striped">
                             <thead>
@@ -298,10 +307,10 @@
                     </div>
                 </div>
                 <section class="cabecera-derecha">
-                    <a class="pull-right" href="#"  title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">Producto.No={cantArticulos}</span></a>
-                    <br>
-                    <br>
-                
+                    <div class="tituloCantidadArticulos">
+                        <div class="label-articulos"> Producto.No={cantArticulos}</div>
+                    </div>
+                    
 
                     <section   class="lista-factura-espera">
                         <div class="elementoVentaEspera"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
@@ -311,21 +320,32 @@
                      </section >
                      <aside class="left-sidebar">
                         <article class="clearfix">
-                            <div onclick = {__MostrarFormularioDePago}  class="precioTotalFactura"  show={soloParaChinos == true}>
-                                <p class="total label-totalesComprobante" style="text-align:right;">Total:  <span id="lblTotal">{totalComprobante}</span></p>
+                            <div onclick = {__MostrarFormularioDePago}  class="precioTotalFacturaContainer"  show={soloParaChinos == true}>
+                                <p class="label-totalesComprobante" >Total:  <span >{totalComprobante}</span></p>
                             </div>
                             <div class="booking-info" show={soloParaChinos == false}>
                                     <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.subTotal")}  <span id="lblSubtotal"> {subTotalGeneral} </span></p>
                                     <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos} </span></p>
                                     <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {totalImpuesto} </span></p>
-                                </div>
-                                <div class="precioTotalFactura" show={soloParaChinos == false} onclick = {__MostrarFormularioDePago}>
+                            </div>
+                            <div class="precioTotalFactura" show={soloParaChinos == false} onclick = {__MostrarFormularioDePago}>
                                     <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}</span></p>
+                            </div>
+                            <div class="gananciaContainer">
+                                <div class="formatoTituloGanancia">IG: {totalGananciaByProducto}</div>
+                                <div class="formatoTituloGanancia">PG: {totalPesoByFacturaSTR}</div>
+                            </div>
+                            <div class="seleccionOtroPrecioVenta">
+                                <div class="opcionPrecioPublico">
+                                    <label>Lista Precios </label>  
+                                    <select  class="form-control selectListaPrecios" >
+                                        <option    value="1"  >Precio Publico</option>
+                                        <option    value="2"  >Precio Mayoista</option>
+                                        <option    value="3"  >Precio Especial</option>
+                                    </select>
                                 </div>
-                                <div>
-                                    <h3>IG: {totalGananciaByProducto}</h3>
-                                     <h3>PG: {totalPesoByFacturaSTR}</h3>
-                                </div>
+                            </div>
+
                         </article>
                     </aside>
                 </section>
@@ -563,6 +583,147 @@
 </div>
 <!--Fin Cambiar Descuento-->
 <style type="text/css"  >
+.                            
+
+.precioTotalFacturaContainer{
+    display:flex;
+    flex:1;
+}
+
+.codigoBarraPrecioContainer{
+    display:flex;
+    flex:1;
+}
+.codigoBarraPrecioContainer .inputCodigoPrecio{
+    flex:1;
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-bottom: 1%;
+}
+
+.labelBotones {
+    font-weight: 600 !important;
+    font-size: 19px !important;
+    font-family: Roboto,sans-serif !important;
+    color: #ffffff !important;
+    text-shadow: 0px 0px 1px #ffffff;
+    font-style: italic;
+    text-align: left;
+    line-height: 30px;
+    border-collapse: separate;
+    text-align: center;
+    cursor: pointer;
+    text-align: center !important;
+    background-color: black !important;
+    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+    border-radius: 5px;
+    -webkit-transition: background-color 100ms linear;
+    -moz-transition: background-color 100ms linear;
+    -o-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+}
+.botonesFuncionalContainer{
+    display:flex;
+    flex:1;
+
+}
+.contenedor-factura .cabecera-izquierda .botonesFuncionalContainer{
+  display:flex;
+}
+
+.contenedor-factura .cabecera-izquierda .botonesFuncionalContainer .botonesFuncional{
+  flex:1;
+  padding-right: 1%;
+  padding-bottom: 2%;
+}
+
+.contenedor-factura {
+     display:flex;
+     flex:1;
+     border: 1px solid #3c8dbc;
+     background: #ffffff;
+     width:100%;
+     margin:2;
+     flex-wrap: no-wrap;
+     
+}
+
+
+.gananciaContainer{
+    display:flex;
+    flex:1;
+}
+.gananciaContainer .formatoTituloGanancia{
+    flex:1;
+    color: black;
+    font-size: 15px;
+    font-weight: bolder;
+}
+.tituloCantidadArticulos{
+    display:flex;
+}
+.cabecera-derecha .tituloCantidadArticulos .label-articulos{
+    font-weight: 600 !important;
+    font-size: 36px !important;
+    font-family: Roboto,sans-serif !important;
+    color: #30ed17 !important;
+    text-shadow: 0px 0px 1px #ffffff;
+    font-style: italic;
+    text-align: left;
+    padding-left: 20px;
+    line-height: 30px;
+    border-collapse: separate;
+    text-align: center;
+    flex:1;
+    padding: 5px;
+    margin: 5px;
+    border: none;
+    text-align: center !important;
+    background-color: black !important;
+    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+    border-radius: 5px;
+    -webkit-transition: background-color 100ms linear;
+    -moz-transition: background-color 100ms linear;
+    -o-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+
+}
+
+.tituloProductoIngresadoContainer{
+    display:flex;
+    flex:1;
+}
+.tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado{
+    flex:1;
+      font-weight: 600 !important;
+    font-size: 36px !important;
+    font-family: Roboto,sans-serif !important;
+    color: #30ed17 !important;
+    text-shadow: 0px 0px 1px #ffffff;
+    font-style: italic;
+    text-align: left;
+    padding-left: 20px;
+    line-height: 30px;
+    border-collapse: separate;
+    text-align: center;
+    flex:1;
+    padding: 5px;
+    margin: 5px;
+    border: none;
+    text-align: center !important;
+    background-color: black !important;
+    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+    border-radius: 5px;
+    -webkit-transition: background-color 100ms linear;
+    -moz-transition: background-color 100ms linear;
+    -o-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+}
+
+
 
 </style>    
 <script>
@@ -2364,7 +2525,7 @@ function __buscarcodigoPrecio(idArticulo,cantidad,precio){
 *Actualiza el Precio del articulo
 **/
 function actualizarArticuloPrecio(precio,cantidad){
-    self.articulo.precioUnitario = precio > 0 ?precio:self.articulo.precioUnitario
+    self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
     self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
     self.descripcionArticulo = self.articulo.descripcion
     self.cantidadEnterFacturar = 0
@@ -2422,14 +2583,13 @@ function __buscarcodigo(idArticulo,cantidad,precio){
                             mensajeError($.i18n.prop("error.articulo.inactivo.inventario"))
                             return
                         }
-                        self.articulo.precioUnitario = precio > 0 ?precio:self.articulo.precioUnitario
-                        self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
+                        self.articulo.precioPublico = getListaPrecio(self.articulo)
                         self.descripcionArticulo = modeloTabla.descripcion
                         self.update()
                         if(self.articulo !=null){
                             if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
                                // $('#codigo').val(self.articulo.codigo)
-                                $('.precioVenta').val(self.articulo.precioPublico)
+                                $('.precioVenta').val(getListaPrecio(self.articulo))
                                 $('.precioVenta').select()
                                 $(".precioVenta").focus()
                                 return
@@ -2562,8 +2722,10 @@ function __nuevoArticuloAlDetalle(cantidad){
     if(self.detail == null){
         __storege()
     }
+    //Determinar el precio a incluir
+    
     var resultaMontoImpuesto = parseFloat(self.articulo.impuesto)
-    var precioUnitario  = resultaMontoImpuesto > 0 ?getPrecioUnitario(self.articulo.precioPublico,resultaMontoImpuesto):0
+    var precioUnitario  = resultaMontoImpuesto > 0 ?getPrecioUnitario(getListaPrecio(self.articulo),resultaMontoImpuesto):0
     resultaMontoImpuesto = parseFloat(self.articulo.impuesto1) 
     precioUnitario      = resultaMontoImpuesto > 0 ?getPrecioUnitario(precioUnitario,resultaMontoImpuesto):0
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
@@ -2599,7 +2761,7 @@ function __nuevoArticuloAlDetalle(cantidad){
        montoTotalLinea : parseFloat(montoTotalLinea),
        montoTotal      : parseFloat(montoTotal),
        costo           : self.articulo.costo ==null?0:parseFloat(self.articulo.costo),
-       porcentajeGanancia :   self.articulo.gananciaPrecioPublico ==null?0:parseFloat(self.articulo.gananciaPrecioPublico),
+       porcentajeGanancia :   getListaPrecioGanancia(self.articulo) ==null?0:parseFloat(getListaPrecioGanancia(self.articulo)),
        pesoTransporte :  parseFloat(self.articulo.pesoTransporte),
        pesoTransporteTotal :parseFloat(self.articulo.pesoTransporte)
     });
@@ -2616,6 +2778,41 @@ function __nuevoArticuloAlDetalle(cantidad){
     
     self.update()
 }
+
+function getListaPrecio(articulo){
+    //Precio Publico
+    if($('.selectListaPrecios').val()==1){
+        resultado=  parseFloat(articulo.precioPublico )
+    }
+    //Precio Mayorista
+    if($('.selectListaPrecios').val()==2){
+        resultado=  parseFloat(articulo.precioMayorista )
+    }
+    //Precio Especial
+    if($('.selectListaPrecios').val()==3){
+        resultado=  parseFloat(articulo.precioEspecial) 
+    }
+    return resultado > 0 ?resultado:parseFloat(articulo.precioPublico )
+
+}
+
+function getListaPrecioGanancia(articulo){
+    //Precio Publico
+    if($('.selectListaPrecios').val()==1){
+        resultado=  parseFloat(articulo.gananciaPrecioPublico )
+    }
+    //Precio Mayorista
+    if($('.selectListaPrecios').val()==2){
+        resultado=  parseFloat(articulo.gananciaPrecioMayorista )
+    }
+    //Precio Especial
+    if($('.selectListaPrecios').val()==3){
+        resultado=  parseFloat(articulo.gananciaPrecioEspecial) 
+    }
+    return resultado > 0 ?resultado:parseFloat(articulo.gananciaPrecioEspecial )
+
+}
+
 
 function __storege(){
     self.detail = []
@@ -2938,7 +3135,7 @@ function __agregarArticulos() {
         if(self.articulo !=null){
             if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
                 $('#codigo').val(self.articulo.codigo)
-                $('.precioVenta').val(self.articulo.precioPublico)
+                $('.precioVenta').val(getListaPrecio(self.articulo))
                 $('.precioVenta').select()
                 $(".precioVenta").focus()
                  $('#modalInventario').modal('hide') 

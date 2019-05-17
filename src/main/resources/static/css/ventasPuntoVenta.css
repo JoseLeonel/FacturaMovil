@@ -388,15 +388,7 @@
      width:100%;
      margin:auto;
 }
- .contenedor-factura {
-     display:flex;
-     border: 1px solid #3c8dbc;
-     background: #ffffff;
-     width:100%;
-     margin:2;
-     flex-wrap: no-wrap;
-     
-}
+ 
  .contenedor-factura .row{
   margin-left: 0px !important;
  }
