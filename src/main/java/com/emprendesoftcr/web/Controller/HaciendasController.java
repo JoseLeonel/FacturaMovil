@@ -90,7 +90,10 @@ public class HaciendasController {
 																																																			detalleFacturaElectronica.setDescuento(d.getMontoDescuento());
 																																																			detalleFacturaElectronica.setSubtotal(detalleFacturaElectronica.getMonto() - (d.getMontoDescuento()));
 																																																			detalleFacturaElectronica.setTarifaIva(d.getImpuesto());
-																																																			detalleFacturaElectronica.setImpuesto(d.getMontoImpuesto());
+																																																			detalleFacturaElectronica.set_impuesto1(d.getImpuesto1());
+																																																			Double resultado = d.getMontoImpuesto() !=null?d.getMontoImpuesto():Constantes.ZEROS_DOUBLE;
+																																																			resultado +=d.getMontoImpuesto1() !=null?d.getMontoImpuesto1():Constantes.ZEROS_DOUBLE;
+																																																			detalleFacturaElectronica.setImpuesto(resultado);
 																																																			// detalleFacturaElectronica.setExento(Constantes.EMPTY);
 																																																			detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
 																																																			//

@@ -44,7 +44,7 @@ var ListarFacturas = function(){
 			"sDom": 'lrtip',
 			"searching":true,
 	"processing": false,
-	"serverSide": true,
+	"serverSide": false,
 	"sort" : "position",
 	"lengthChange": true,
 	"ajax" : {
@@ -76,7 +76,7 @@ function __Inicializar_Table(nombreTabla){
         destroy: true,
         "language": idioma_espanol,
         "sDom": 'lrtip',
-        "order": [0, 'desc'],
+        "order": [3, 'desc'],
         "bPaginate": true,
         'responsive': true,
         "bAutoWidth": true,
@@ -123,11 +123,18 @@ var formato_tabla = [
 	{'data' :'usuarioCreacion.nombreUsuario'   ,"name":"usuarioCreacion.nombreUsuario" ,"title" : "Usuario"    ,"autoWidth" :true },
 	{'data' :'fechaEmisionSTR'                 ,"name":"fechaEmisionSTR" ,"title" : "Fecha Emision"    ,"autoWidth" :true },
   
-	{'data' :'cliente'                    ,"name":"cliente"             ,"title" : "Cliente"   ,"autoWidth" :true ,
-		"render":function(cliente,type, row){
-			 return cliente ==null?"":cliente.nombreCompleto;
-		  }
+	{'data' :'cliente' ,'data.display' :'cliente.nombreCompleto'                         ,"name":"cliente.nombreCompleto"                          ,"title" : "Cliente"   ,"autoWidth" :true ,
+	"render":function(cliente,type, row){
+		return cliente ==null?"":cliente.nombreCompleto.length > 50?cliente.nombreCompleto.substring(0,50):cliente.nombreCompleto;
+	}
 	},
+
+	{'data' :'nombreFactura'  ,"name":"nombreFactura"                          ,"title" : "A nombre"   ,"autoWidth" :true ,
+		"render":function(nombreFactura,type, row){
+			return nombreFactura ==null?"":nombreFactura.length > 50 ? nombreFactura.substring(0,50):nombreFactura;
+		}
+	},
+
 	{'data' :'totalImpuestoSTR'       ,"name":"totalImpuestoSTR"        ,"title" : "Impuesto"  ,"autoWidth" :true },
 	{'data' :'totalDescuentosSTR'     ,"name":"totalDescuentosSTR"      ,"title" : "Descuento"  ,"autoWidth" :true },
 	{'data' :'totalComprobanteSTR'    ,"name":"totalComprobanteSTR"     ,"title" : "Total" ,"autoWidth" :true },
@@ -410,7 +417,7 @@ function EventoFiltro(){
   $('.tableListar tfoot th').each( function (e) {
 		var title = $('.tableListar thead th').eq($(this).index()).text();      
 		//No se toma en cuenta la columna de las acctiones(botones)
-		if ( $(this).index() != 7    ){
+		if ( $(this).index() != 8    ){
 			 $(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	  }
   })

@@ -130,7 +130,11 @@ public class FacturasController {
 																																																			detalleFacturaElectronica.setDescuento(d.getMontoDescuento());
 																																																			detalleFacturaElectronica.setSubtotal(detalleFacturaElectronica.getMonto() - (d.getMontoDescuento()));
 																																																			detalleFacturaElectronica.setTarifaIva(d.getImpuesto());
-																																																			detalleFacturaElectronica.setImpuesto(d.getMontoImpuesto());
+																																																			detalleFacturaElectronica.set_impuesto1(d.getImpuesto1());
+																																																			Double resultado = d.getMontoImpuesto() != null ? d.getMontoImpuesto() : Constantes.ZEROS_DOUBLE;
+																																																			resultado += d.getMontoImpuesto1() != null ? d.getMontoImpuesto1() : Constantes.ZEROS_DOUBLE;
+																																																			detalleFacturaElectronica.setImpuesto(resultado);
+																																																			// detalleFacturaElectronica.setExento(Constantes.EMPTY);
 																																																			detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
 																																																			//
 																																																			return detalleFacturaElectronica;
@@ -319,12 +323,12 @@ public class FacturasController {
 	 * @return
 	 */
 	@RequestMapping(value = "/puntoVenta", method = RequestMethod.GET)
-	public String crearCompras(ModelMap model,HttpServletRequest request) {
+	public String crearCompras(ModelMap model, HttpServletRequest request) {
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		if(usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)   ) {
-			model.addAttribute("rolAdminitrador",1);
-		}else {
-			model.addAttribute("rolAdminitrador",0);
+		if (usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)) {
+			model.addAttribute("rolAdminitrador", 1);
+		} else {
+			model.addAttribute("rolAdminitrador", 0);
 		}
 		return "views/facturas/puntoVenta";
 	}
@@ -476,8 +480,8 @@ public class FacturasController {
 	private ByteArrayOutputStream createExcelFacturas(Collection<Factura> facturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList( "Fecha Emision", "# Documento","#Proforma", "Cliente", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones");
-		new SimpleExporter().gridExport(headers, facturas,"fechaEmisionSTR, numeroConsecutivo,consecutivoProforma, nombreCliente, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos, totalComprobante,codigoMoneda, tipoCambio, totalColones", baos);
+		List<String> headers = Arrays.asList("Fecha Emision", "# Documento", "#Proforma", "Cliente", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones");
+		new SimpleExporter().gridExport(headers, facturas, "fechaEmisionSTR, numeroConsecutivo,consecutivoProforma, nombreCliente, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos, totalComprobante,codigoMoneda, tipoCambio, totalColones", baos);
 		return baos;
 	}
 
@@ -734,27 +738,26 @@ public class FacturasController {
 		JqGridFilter dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
-		if(estado !=null) {
-			if(estado.equals(Constantes.FACTURA_ESTADO_PROFORMAS) ) {
+		if (estado != null) {
+			if (estado.equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
 				dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PROFORMAS + "'", "=");
 				delimitadores.addFiltro(dataTableFilter);
 			}
-			if(estado.equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+			if (estado.equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 				dataTableFilter = new JqGridFilter("consecutivoProforma", "'" + Constantes.EMPTY + "'", "<>");
 				delimitadores.addFiltro(dataTableFilter);
 				dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_FACTURADO + "'", "=");
 				delimitadores.addFiltro(dataTableFilter);
 			}
-			if(estado.equals(Constantes.FACTURA_ESTADO_ANULADA_PROFORMA)) {
+			if (estado.equals(Constantes.FACTURA_ESTADO_ANULADA_PROFORMA)) {
 				dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_ANULADA_PROFORMA + "'", "=");
 				delimitadores.addFiltro(dataTableFilter);
 			}
-			
+
 		}
 
-	
 		if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
-			 dataTableFilter = new JqGridFilter("usuarioCreacion.id", "'" + usuarioSesion.getId().toString() + "'", "=");
+			dataTableFilter = new JqGridFilter("usuarioCreacion.id", "'" + usuarioSesion.getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
 		}
 
@@ -1044,7 +1047,7 @@ public class FacturasController {
 			}
 			Factura facturaCreada = facturaBo.findById(factura.getId());
 //			if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PENDIENTE) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
-			if (!factura.getEstado().equals(Constantes.FACTURA_ESTADO_PENDIENTE) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS) ) {
+			if (!factura.getEstado().equals(Constantes.FACTURA_ESTADO_PENDIENTE) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
 				usuarioCajaBo.actualizarCaja(usuarioCajaBd);
 			}
 

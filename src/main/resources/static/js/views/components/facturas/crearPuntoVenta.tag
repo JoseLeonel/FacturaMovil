@@ -219,7 +219,7 @@
             </div>       
         <!--Fin Ventana de los billetes--> 
  
- <div  class="contenedor-factura " show={mostarParaCrearNuevaFactura}>
+ <div  class="contenedorFactura" show={mostarParaCrearNuevaFactura}>
                 <div class="cabecera-izquierda">
                     <div class="botonesFuncionalContainer">
                          <div class="botonesFuncional ">
@@ -254,7 +254,9 @@
                     </div>
                     <div class="tituloProductoIngresadoContainer">
                         <div class="tituloDescripcionProductoIngresado">
-                             Ultimo Producto: {descripcionArticulo}
+                            <div class="ultimo_1">Ultimo: </div>
+                            <div class="ultimo_2"> {descripcionArticulo.substring(1, 60)} </div>
+                             
                         </div>
                     </div>
                     
@@ -277,7 +279,7 @@
                             <tbody>
                             <tr each={detail}>
                                 <td>
-                                    <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
+                                   <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
                                 </td>
                                 <td style="width:5%;"><h2>{numeroLinea}</h2></td>
                                 <td><h2>{codigo}</h2></td>
@@ -297,7 +299,6 @@
                                 <td class="text-right" style="width:4%">
                                     <input  class="campo" type="text"  value = "{impuesto1.toFixed(2)}" readonly/>
                                 </td>
-
                                 <td class="text-right">
                                     <input  class="campo" type="text"  value = "{montoTotalLinea.toFixed(2)}" readonly />
                                 </td>
@@ -308,10 +309,8 @@
                 </div>
                 <section class="cabecera-derecha">
                     <div class="tituloCantidadArticulos">
-                        <div class="label-articulos"> Producto.No={cantArticulos}</div>
+                        <div class="cantidadArticulosTitulo"> Producto.No={cantArticulos}</div>
                     </div>
-                    
-
                     <section   class="lista-factura-espera">
                         <div class="elementoVentaEspera"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
                             <a show ="{consecutivoProforma.length>0?true:false}" href="#" style="display:block; background:green;text-align:center;text-decoration:none;color:#ffffff !important;text-shadow: 0px 0px 1px #ffffff;font-style: italic;"  title="{cliente !=null?cliente.nombreCompleto:""}">P: {consecutivoProforma}</a>
@@ -349,7 +348,7 @@
                         </article>
                     </aside>
                 </section>
-        </div><!-- fin contenedor-factura-->
+</div><!-- fin contenedor-factura-->
 <!--Modal mostrar Articulos de la empresa -->
 <div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
     <div class="modal-dialog modal-lg">
@@ -583,7 +582,15 @@
 </div>
 <!--Fin Cambiar Descuento-->
 <style type="text/css"  >
-.                            
+                           
+.contenedorFactura{
+    display: flex;
+    flex: 1;
+    border: 1px solid #3c8dbc;
+    background: #ffffff;
+ 
+
+}
 
 .precioTotalFacturaContainer{
     display:flex;
@@ -628,26 +635,17 @@
     flex:1;
 
 }
-.contenedor-factura .cabecera-izquierda .botonesFuncionalContainer{
+.contenedorFactura .cabecera-izquierda .botonesFuncionalContainer{
   display:flex;
 }
 
-.contenedor-factura .cabecera-izquierda .botonesFuncionalContainer .botonesFuncional{
+.contenedorFactura .cabecera-izquierda .botonesFuncionalContainer .botonesFuncional{
   flex:1;
   padding-right: 1%;
   padding-bottom: 2%;
 }
 
-.contenedor-factura {
-     display:flex;
-     flex:1;
-     border: 1px solid #3c8dbc;
-     background: #ffffff;
-     width:100%;
-     margin:2;
-     flex-wrap: no-wrap;
-     
-}
+
 
 
 .gananciaContainer{
@@ -663,22 +661,22 @@
 .tituloCantidadArticulos{
     display:flex;
 }
-.cabecera-derecha .tituloCantidadArticulos .label-articulos{
-    font-weight: 600 !important;
-    font-size: 36px !important;
+.contenedorFactura .cabecera-derecha .tituloCantidadArticulos .cantidadArticulosTitulo{
+  font-weight: 600 !important;
+    font-size: 30px !important;
     font-family: Roboto,sans-serif !important;
     color: #30ed17 !important;
     text-shadow: 0px 0px 1px #ffffff;
     font-style: italic;
     text-align: left;
-    padding-left: 20px;
+    /* padding-left: 20px; */
     line-height: 30px;
     border-collapse: separate;
     text-align: center;
-    flex:1;
-    padding: 5px;
-    margin: 5px;
-    border: none;
+    cursor: pointer;
+    /* padding: 5px; */
+    /* margin: 5px; */
+    /* border: none; */
     text-align: center !important;
     background-color: black !important;
     box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
@@ -696,31 +694,66 @@
     flex:1;
 }
 .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado{
-    flex:1;
-      font-weight: 600 !important;
+    flex: 1;
+    display: flex;
+    padding-left: 2%;
+    padding-right: 2%;
+ 
+}
+
+
+
+
+.tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
+    flex: 0.15;
+    font-weight: 600 !important;
+    font-size: 36px !important;
+    font-family: Roboto,sans-serif !important;
+    color: yellow !important;
+    text-shadow: 0px 0px 1px #ffffff;
+    font-style: italic;
+    text-align: left;
+    /* padding-left: 20px; */
+    /* line-height: 100%; */
+    /* border-collapse: separate; */
+    text-align: center;
+     /* margin: 5px; */
+    border: none;
+    text-align: center !important;
+    background-color: black !important;
+    /* box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20); */
+    /* border-radius: 5px; */
+    /* -webkit-transition: background-color 100ms linear; */
+    -moz-transition: background-color 100ms linear;
+    -o-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    /* transition: background-color 100ms linear; */
+}
+
+.tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_2{
+    flex: 1;
+    font-weight: 600 !important;
     font-size: 36px !important;
     font-family: Roboto,sans-serif !important;
     color: #30ed17 !important;
     text-shadow: 0px 0px 1px #ffffff;
     font-style: italic;
     text-align: left;
-    padding-left: 20px;
-    line-height: 30px;
-    border-collapse: separate;
+    /* padding-left: 20px; */
+    /* line-height: 100%; */
+    /* border-collapse: separate; */
     text-align: center;
-    flex:1;
-    padding: 5px;
-    margin: 5px;
+     /* margin: 5px; */
     border: none;
     text-align: center !important;
     background-color: black !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 5px;
-    -webkit-transition: background-color 100ms linear;
+    /* box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20); */
+    /* border-radius: 5px; */
+    /* -webkit-transition: background-color 100ms linear; */
     -moz-transition: background-color 100ms linear;
     -o-transition: background-color 100ms linear;
     -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
+    /* transition: background-color 100ms linear; */
 }
 
 
@@ -746,6 +779,7 @@
     self.pesoPrioridad =  0
     self.numeroLinea =0
     self.cantArticulos =0
+    self.precioUltimo = ""
     self.tipoCambio = {
         total:0,
         id:null
@@ -1210,6 +1244,7 @@ function __LimpiarClick(){
     };
     self.mostrarCamposIngresoContado = true
     self.descripcionArticulo = ""
+    self.precioUltimo = ""
     self.cantidadEnterFacturar = 0
     self.update()
 }
@@ -1722,6 +1757,7 @@ __Limpiar(){
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
+    self.precioUltimo = ""
     self.factura                = {
         id:null,
 	   fechaCredito:null,
@@ -1785,6 +1821,7 @@ function __Init(){
     self.item                  = null;
     self.articulo              = null;
     self.descripcionArticulo   = ""
+    self.precioUltimo = ""
     self.clientes              = {data:[]}
     self.detalleFactura        ={data:[]}
     self.cliente               = {};
@@ -1809,7 +1846,9 @@ function __Init(){
     $(".tableListarFacturasDia").dataTable().fnClearTable(); 
     __InicializarTabla('.tableListarFacturasDia')
     $('#condicionVenta').prop("selectedIndex", 0);
+     $('#condicionVenta').prop("selectedIndex", 0);
     $('#tipoDoc').prop("selectedIndex", 0);
+    $('.selectListaPrecios').prop("selectedIndex", 0);
     $(".nota").attr("maxlength", 80);
     $("#totalBanco").val(null)   
     $(".totalTarjeta").val(null)   
@@ -1901,8 +1940,8 @@ function cargarDetallesFacturaEnEspera(data){
             montoTotal      : parseFloat(modeloTabla.montoTotal),
             costo           : parseFloat(modeloTabla.costo),
             porcentajeGanancia :parseFloat(modeloTabla.porcentajeGanancia),
-            pesoTransporte :  parseFloat(self.articulo.pesoTransporte),
-            pesoTransporteTotal :parseFloat(self.articulo.pesoTransporteTotal)
+            pesoTransporte :  parseFloat(modeloTabla.pesoTransporte),
+            pesoTransporteTotal :parseFloat(modeloTabla.pesoTransporteTotal)
         });
         self.update()
         self.numeroLinea   = self.numeroLinea + 1
@@ -2528,6 +2567,7 @@ function actualizarArticuloPrecio(precio,cantidad){
     self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
     self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
     self.descripcionArticulo = self.articulo.descripcion
+   
     self.cantidadEnterFacturar = 0
     self.update()
     __agregarArticulo(cantidad)
@@ -2634,10 +2674,15 @@ function __agregarArticulo(cantidad){
     }
     var encontrado = false;
     //uso interno
+    //Determinar el precio a incluir
+   // var resultadoPrecio = getListaPrecio(self.articulo)
+   // self.precioUltimo =formatoDecimales(resultadoPrecio * cantidad,0)    
+   // self.update()
     if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
         __nuevoArticuloAlDetalle(cantidad);
         encontrado = true;
     }
+  
     if( encontrado ==false){
         if(self.detail[0] == null){ // first element
             __nuevoArticuloAlDetalle(cantidad);
@@ -2723,11 +2768,12 @@ function __nuevoArticuloAlDetalle(cantidad){
         __storege()
     }
     //Determinar el precio a incluir
-    
+    var resultadoPrecio = getListaPrecio(self.articulo)
+      
     var resultaMontoImpuesto = parseFloat(self.articulo.impuesto)
-    var precioUnitario  = resultaMontoImpuesto > 0 ?getPrecioUnitario(getListaPrecio(self.articulo),resultaMontoImpuesto):0
+    var precioUnitario  = getPrecioUnitario(resultadoPrecio,resultaMontoImpuesto)
     resultaMontoImpuesto = parseFloat(self.articulo.impuesto1) 
-    precioUnitario      = resultaMontoImpuesto > 0 ?getPrecioUnitario(precioUnitario,resultaMontoImpuesto):0
+    precioUnitario      = getPrecioUnitario(precioUnitario,resultaMontoImpuesto)
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
     var montoDescuento  = 0
     var naturalezaDescuento = ""
@@ -2933,7 +2979,9 @@ function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGana
 * Actualiza la linea del detalle de la factura
 **/
 function ActualizarLineaDEtalle(){
-    var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
+    
+    
+     var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
     var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc,self.item.porcentajeGanancia)
     var subTotal               = montoTotal > montoDescuento?montoTotal - montoDescuento: montoDescuento-montoTotal
     montoImpuesto1             = _calcularImpuesto(subTotal,self.item.impuesto1 ==null?0:self.item.impuesto1)

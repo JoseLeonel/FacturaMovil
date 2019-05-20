@@ -85,6 +85,7 @@ public class TiquetePdfView {
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Cantidad", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Precio Unit.", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Imp", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Imp", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Total Imp", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Total Linea", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
 
@@ -109,6 +110,7 @@ public class TiquetePdfView {
 
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getCantidad()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT));
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getPrecioU()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT));
+			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getTarifaIva()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getTarifaIva()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getImpuesto()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getTotal()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
