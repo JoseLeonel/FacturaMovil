@@ -349,8 +349,8 @@ function __TotalesGenerales(){
    });
    self.totalCosto            = formatoDecimales(totalCosto,2)
    self.totalImpuestaEsperada = formatoDecimales(totalImpuesto,2)
-   self.totalVentaEsperada    = formatoDecimales(totalGanancia,2)
-   self.totalGananciaEsperada = formatoDecimales(totalVenta,2)
+   self.totalVentaEsperada    = formatoDecimales(totalVenta,2)
+   self.totalGananciaEsperada = formatoDecimales(totalGanancia,2)
    self.update()
 }
 /**

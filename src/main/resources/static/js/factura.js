@@ -184,6 +184,9 @@ $(document)
 		        precioSinImpuesto = __valorNumerico(redondeoDecimales(precioVenta/((resultadoImpuesto/100) + 1),5));
 		    	resultadoImpuesto = impuesto1;
 		        precioSinImpuesto = __valorNumerico(redondeoDecimales(precioSinImpuesto/((resultadoImpuesto/100) + 1),5));
+		        if(precioSinImpuesto < costo){
+		        	return 0
+		        }
 
 		        if(precioSinImpuesto ==  costo){
 		            resultado = 0
@@ -223,9 +226,7 @@ $(document)
 		  if(costo == 0){
 		      return 0;
 		  } 
-		  if(ganancia ==0){
-			  return 0;
-		  }
+		  
 		  var porcentajeGanancia = ganancia > 0?ganancia/100:0;
 		  if(ganancia > 0){
 		    porcentajeGanancia = 1 - porcentajeGanancia
@@ -250,11 +251,9 @@ $(document)
 		        }
 		    }
 		  }
-		  if(ganancia == 0 ){
-		      precio = costo
-		  }
-		  precio = totalImpuesto1 >0? precio * totalImpuesto1:precio;
-		  precio = totalImpuesto >0? precio * totalImpuesto:precio;
+		  
+		  precio = totalImpuesto1 >0? costo * totalImpuesto1:precio;
+		  precio = totalImpuesto >0? costo * totalImpuesto:precio;
 		  return __valorNumerico(redondeoDecimales(precio,0));
 		}
 	

@@ -281,7 +281,7 @@ public class ArticuloController {
 		String fileName = "Articulo_" + articuloBD.getCodigo().toString();
 
 		String dir = System.getProperty("user.dir");
-		String jrxmlFile = dir + "/data/reportes/gondola.jrxml";
+		String jrxmlFile = dir + "/reportes/gondola.jrxml";
 		JasperReport jasperReport;
 		InputStream input = new FileInputStream(new File(jrxmlFile));
 
