@@ -8,6 +8,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+
 @SpringBootApplication
 @Configuration
 @EnableAutoConfiguration
@@ -25,5 +26,4 @@ public class FacturaElectronicaApplication extends SpringBootServletInitializer 
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(FacturaElectronicaApplication.class);
 	}
-
 }

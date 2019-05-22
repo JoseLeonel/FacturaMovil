@@ -187,7 +187,7 @@ public class FacturaEsperaCommand {
 		this.medioBanco = detalle.getFactura().getMedioBanco();
 		this.medioEfectivo = detalle.getFactura().getMedioEfectivo();
 		this.medioTarjeta = detalle.getFactura().getMedioTarjeta();
-		this.nombreFactura = detalle.getFactura().getNombreFactura();
+		
 		this.direccion = detalle.getFactura().getDireccion();
 		this.nota = detalle.getFactura().getNota();
 		this.comanda = detalle.getFactura().getComanda();

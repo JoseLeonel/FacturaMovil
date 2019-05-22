@@ -26,7 +26,7 @@
                                 <div class="encabezado"><strong> {facturaImpresa.empresa.nombre}                        </strong></div>
                                 <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.cedula")}  </strong>{facturaImpresa.empresa.cedula} <strong>{$.i18n.prop("tikect.encabezado.telefono")}</strong> {facturaImpresa.empresa.telefono}</strong></div>
                                 <div class="encabezado" show = {facturaImpresa.empresa.correoElectronico != ""} >{facturaImpresa.empresa.correoElectronico} </div>
-                                <div class="encabezado" >{facturaImpresa.empresa.otraSenas} </div>
+                                <div class="encabezado" >{facturaImpresa.empresa.otraSenas} <br></div>
                                 <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.fecha.emision")} </strong>{facturaImpresa.fechaEmisionSTR} </div>
                                 <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.condicion.venta")} </strong>{facturaImpresa.condicionVenta}</div>
                                 <div class="encabezado"><strong>{$.i18n.prop("factura.medioPago")} </strong>{facturaImpresa.medioEfectivo} {facturaImpresa.medioTarjeta} {facturaImpresa.medioBanco}</div>
