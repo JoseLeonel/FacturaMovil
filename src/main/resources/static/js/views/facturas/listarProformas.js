@@ -36,7 +36,7 @@ var ListarFacturas = function(){
 	"responsive": true,
 	 "bAutoWidth" : true,
 	"destroy":true,
-	"order": [ 3, 'desc' ],
+	"order": [ 4, 'desc' ],
 			"bInfo": true,
 			"bPaginate": true,
 			"bFilter" : true,
@@ -120,6 +120,7 @@ var idioma_espanol =
 var formato_tabla = [ 
                               
 	{'data' :'consecutivoProforma'                              ,"name":"consecutivoProforma"             ,"title" : "#Proforma"     ,"autoWidth" :true },
+	{'data' :'id'                              ,"name":"id"             ,"title" : "#Id"     ,"autoWidth" :true },
 	{'data' :'usuarioCreacion.nombreUsuario'   ,"name":"usuarioCreacion.nombreUsuario" ,"title" : "Usuario"    ,"autoWidth" :true },
 	{'data' :'fechaEmisionSTR'                 ,"name":"fechaEmisionSTR" ,"title" : "Fecha Emision"    ,"autoWidth" :true },
   
@@ -417,7 +418,7 @@ function EventoFiltro(){
   $('.tableListar tfoot th').each( function (e) {
 		var title = $('.tableListar thead th').eq($(this).index()).text();      
 		//No se toma en cuenta la columna de las acctiones(botones)
-		if ( $(this).index() != 8    ){
+		if ( $(this).index() != 9    ){
 			 $(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	  }
   })

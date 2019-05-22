@@ -150,6 +150,7 @@
                             <th >{$.i18n.prop("factura.linea.detalle.precio")}                       </th>
                             <th >{$.i18n.prop("factura.linea.detalle.descuento")}                    </th>
                             <th >{$.i18n.prop("factura.linea.detalle.impuesto")}                     </th>
+                            <th >{$.i18n.prop("factura.linea.detalle.impuesto1")}                     </th>
                             <th >{$.i18n.prop("factura.linea.detalle.subTotal")}                     </th>
                         </tr>
                         </thead>
@@ -170,6 +171,9 @@
                                                         
                             <td class="text-right">
                                 <input  class="form-control" type="text"  value = "{montoImpuesto}" readonly/>
+                            </td>
+                            <td class="text-right">
+                                <input  class="form-control" type="text"  value = "{montoImpuesto1}" readonly/>
                             </td>
 
                             <td class="text-righ">
@@ -744,6 +748,7 @@ function sumar(){
 
     $.each(self.listaFacturas, function( index, modeloTabla ) {
           self.totalImpuestos += modeloTabla.totalImpuesto
+          self.totalImpuestos += modeloTabla.totalImpuesto1
           self.total += modeloTabla.totalComprobante
           self.totalDescuentos += modeloTabla.totalDescuentos
           
@@ -831,7 +836,9 @@ function cargarDetallesFacturaEnEspera(data){
             cantidad        : modeloTabla.cantidadSTR,
             precioUnitario  : modeloTabla.precioUnitarioSTR,
             impuesto        : modeloTabla.impuesto,
+            impuesto        : modeloTabla.impuesto1,
             montoImpuesto   : modeloTabla.montoImpuestoSTR,
+            montoImpuesto1   : modeloTabla.montoImpuesto1STR,
             montoDescuento  : modeloTabla.montoDescuentoSTR,
             porcentajeDesc  : modeloTabla.porcentajeDesc,
             subTotal        : modeloTabla.subTotal,

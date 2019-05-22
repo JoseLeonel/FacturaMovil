@@ -167,11 +167,12 @@
                             <table id="tablaListaProductos"  cellpadding="0" cellspacing="0" width="100%" class="table lcnp table-dark">
                                 <thead>
                                     <tr >
-                                        <td width="50%"> Descripcion</td>
+                                        <td width="60%"> Descripcion</td>
                                         <td width="10%">Cant</td>
                                         <td width="10%">Precio.U</td>
-                                        <td width="10%">Desc</td>
-                                        <td width="10%">IV</td>
+                                        <td width="4%">Desc</td>
+                                        <td width="4%">IMP1</td>
+                                        <td width="4%">IMP2</td>
                                         <td width="19%">Total</td>
                                         
                                         <td width="15%"></td>
@@ -195,8 +196,11 @@
                                         <td >
                                             <span onclick ={__CambiarDescuento} class="labelDetalleVenta label-success precio-prod" >{porcentajeDesc.toFixed(2)}</span>
                                         </td>
-                                        <td >
+                                        <td width="4%">
                                             <span class="labelDetalleVenta label-success " >{impuesto.toFixed(2)}</span>
+                                        </td>
+                                        <td width="4%">
+                                            <span class="labelDetalleVenta label-success " >{impuesto1.toFixed(2)}</span>
                                         </td>
                                         <td>
                                             <span class="labelDetalleVenta precio-calc">{montoTotalLinea.toFixed(2)}</span>
@@ -582,7 +586,6 @@
                             <th>{$.i18n.prop("cliente.nombreCompleto")}   </th>
                             <th>{$.i18n.prop("cliente.nombreComercial")}   </th>
                             <th style="width:8%">{$.i18n.prop("cliente.correoElectronico")}</th>
-                           
                         </tr>
                     </tfoot>                    
                 </table>
@@ -660,9 +663,6 @@
                                         <label>{$.i18n.prop("factura.plazoCredito")}</label> 
                                         <input type="number" id = "plazoCreditoL"  name "plazoCreditoL" class="form-control plazoCreditoL" value="{factura.plazoCredito}" >
                                     </div>
-                                  
-                                   
-
                                 </div>
                                 <div  class= "col-md-6 col-sx-6 col-sm-6 col-lg-6" >
                                     <div class="form-group has-success">
@@ -677,8 +677,6 @@
                                         <label for="pago_tarjetaL">{$.i18n.prop("factura.resumen.banco")} </label> 
                                         <input onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur} onkeypress = {__CalculaCambioAEntregarKeyPress} type="number" step="any" class="campo tamanoLetraTotales totalBanco" id="totalBanco" name = "totalBanco"  value="{factura.totalBanco}">
                                     </div>
-                               
-                                    
                                 </div>
                             </div>
                             <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
@@ -701,9 +699,6 @@
                             <input type="hidden" id='totalDescuentos'          name='totalDescuentos'          value="{factura.totalDescuentos}" >
                             <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
                             <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           value="{factura.totalImpuesto}" >
-                            <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
-                            <input type="hidden" id='totalTarjeta'            name='totalTarjeta'            value="{factura.totalTarjeta}" >
-                            <input type="hidden" id='totalBanco'              name='totalBanco'              value="{factura.totalBanco}" >
                             <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
                             <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
                         </form>   
@@ -2518,7 +2513,6 @@ function evaluarFactura(data){
                       console.log("consultaFactura")
                       riot.mount('ptv-imprimir',{parametros:parametros});
                 }
-               
             }else{
                 swal({
                 position: 'top-end',
@@ -2527,12 +2521,11 @@ function evaluarFactura(data){
                 showConfirmButton: false,
                 timer: 1000
                 })
-               
             }
-             self.seIncluyoUnArticulo =null
-                self.update()
-                __Init()
-                __ListaFacturasEnEspera()
+            self.seIncluyoUnArticulo =null
+            self.update()
+            __Init()
+            __ListaFacturasEnEspera()
         });
     }
 }
@@ -2606,7 +2599,6 @@ __formaPago(e){
             }
     );  
     $('.plazoCreditoL').val(0)      
-
 }
 /**
 *   funcion para grabar la Factura en el back end
@@ -2614,7 +2606,6 @@ __formaPago(e){
 __MostrarFormularioDePago(){
     mostrarPAgo()
 }
-
 /**
 * Mostrar el pago
 **/
@@ -3232,7 +3223,7 @@ function __calculate() {
     self.factura.totalVenta              = __valorNumerico(totalVenta)
     self.factura.totalDescuentos         = __valorNumerico(totalDescuento)
     self.factura.subTotal                = __valorNumerico(subTotal)
-    self.factura.totalImpuesto           = __valorNumerico(totalImpuesto) + __valorNumerico(totalImpuesto1)
+    self.factura.totalImpuesto           = __valorNumerico(totalImpuesto)
     self.factura.totalVentaNeta          = __valorNumerico(totalVenta-totalDescuento)
     self.factura.totalComprobante        = __valorNumerico(totalComprobante)
     self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);

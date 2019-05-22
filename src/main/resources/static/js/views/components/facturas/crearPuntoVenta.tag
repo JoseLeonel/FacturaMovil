@@ -218,7 +218,12 @@
                 </div> 
             </div>       
         <!--Fin Ventana de los billetes--> 
- 
+ <div class="ventaEsperaSeleccionada" show={factura.id !=null}>
+       <div class="tituloVentaEspera"> 
+           Venta en Espera: {factura.consecutivoProforma != null && factura.consecutivoProforma.length > 0  ?factura.consecutivoProforma :factura.id} 
+            {factura.cliente.nombreCompleto === 'CLIENTE_FRECUENTE'? factura.nombreFactura.length > 0?"-Nombre:" +factura.nombreFactura:'Sin Cliente Asociado' :"-Nombre:"+factura.cliente.nombreCompleto} 
+        </div>
+</div>
  <div  class="contenedorFactura" show={mostarParaCrearNuevaFactura}>
                 <div class="cabecera-izquierda">
                     <div class="botonesFuncionalContainer">
@@ -252,7 +257,7 @@
                                 <input onkeypress={__addPrecioDetail}  id="precioVenta" name ="precioVenta" class="campo precioVenta" type="number" step="any"  placeholder="Precio Ejemplo:600" />
                             </div>
                     </div>
-                    <div class="tituloProductoIngresadoContainer">
+                    <div class="tituloProductoIngresadoContainer" show={descripcionArticulo.length>0?descripcionArticulo:""}>
                         <div class="tituloDescripcionProductoIngresado">
                             <div class="ultimo_1">Ultimo: </div>
                             <div class="ultimo_2"> {descripcionArticulo.substring(1, 60)} </div>
@@ -265,15 +270,15 @@
                             <thead>
                             <tr>
                                 <th style="width:5%;">                                                        </th>
-                                <th style="width:5%;"><h1>{$.i18n.prop("factura.linea.detalle.linea")}                         </h1></th>
-                                <th><h1>{$.i18n.prop("factura.linea.detalle.codigo")}                        </h1></th>
-                                <th style="width:20%;"><h1>{$.i18n.prop("factura.linea.detalle.descripcion")}</h1></th>
-                                <th style="width:8%;"><h1>{$.i18n.prop("factura.linea.detalle.cantidad")}    </h1> </th>
-                                <th ><h1>{$.i18n.prop("factura.linea.detalle.precio")}                       </h1></th>
-                                <th style="width:4%"><h1>{$.i18n.prop("factura.linea.detalle.descuento")}                    </h1></th>
-                                <th style="width:4%"><h1>{$.i18n.prop("factura.linea.detalle.impuesto")}     </h1></th>
-                                <th style="width:4%"><h1>{$.i18n.prop("factura.linea.detalle.impuesto1")}    </h1></th>
-                                <th ><h1>{$.i18n.prop("factura.linea.detalle.subTotal")}                     </h1> </th> 
+                                <th style="width:5%;"><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.linea")}                         </div></th>
+                                <th><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.codigo")}                        </div></th>
+                                <th style="width:20%;"><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.descripcion")}</div></th>
+                                <th style="width:8%;"><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.cantidad")}    </div> </th>
+                                <th ><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.precio")}                       </div></th>
+                                <th style="width:4%"><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.descuento")}                    </div></th>
+                                <th style="width:4%"><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.impuesto")}     </div></th>
+                                <th style="width:4%"><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.impuesto1")}    </div></th>
+                                <th ><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.subTotal")}                     </div> </th> 
                             </tr>
                             </thead>
                             <tbody>
@@ -294,10 +299,10 @@
                                     <input  onclick={__CambiarDescuento} class="campo" type="text"  value = "{porcentajeDesc.toFixed(2)}" readonly/>
                                 </td>
                                 <td class="text-right" style="width:4%">
-                                    <input  class="campo" type="text"  value = "{impuesto.toFixed(2)}" readonly/>
+                                    <input  class="campo" type="text"  value = "{impuesto}" readonly/>
                                 </td>
                                 <td class="text-right" style="width:4%">
-                                    <input  class="campo" type="text"  value = "{impuesto1.toFixed(2)}" readonly/>
+                                    <input  class="campo" type="text"  value = "{impuesto1}" readonly/>
                                 </td>
                                 <td class="text-right">
                                     <input  class="campo" type="text"  value = "{montoTotalLinea.toFixed(2)}" readonly />
@@ -308,13 +313,13 @@
                     </div>
                 </div>
                 <section class="cabecera-derecha">
-                    <div class="tituloCantidadArticulos">
+                    <div class="tituloCantidadArticulos" show={cantArticulos>0}>
                         <div class="cantidadArticulosTitulo"> Producto.No={cantArticulos}</div>
                     </div>
                     <section   class="lista-factura-espera">
                         <div class="elementoVentaEspera"  each={facturas_espera.data}  onclick={__CargarFacturaEspera}>
-                            <a show ="{consecutivoProforma.length>0?true:false}" href="#" style="display:block; background:green;text-align:center;text-decoration:none;color:#ffffff !important;text-shadow: 0px 0px 1px #ffffff;font-style: italic;"  title="{cliente !=null?cliente.nombreCompleto:""}">P: {consecutivoProforma}</a>
-                            <a show ="{consecutivoProforma.length == 0?true:false}"  href="#" style="display:block; background:red;text-align:center;text-decoration:none;color:#ffffff !important;text-shadow: 0px 0px 1px #ffffff;font-style: italic;"  title="{cliente !=null?cliente.nombreCompleto:"Venta en espera"}">V: {id}</a>
+                            <a show ="{consecutivoProforma.length>0?true:false}" href="#"  title="{cliente !=null?cliente.nombreCompleto:""}" class="fondoVentaEspera">P: {consecutivoProforma}</a>
+                            <a show ="{consecutivoProforma.length == 0?true:false}"  href="#" class="fondoVentaEspera"  title="{cliente !=null?cliente.nombreCompleto:"Venta en espera"}">V: {id}</a>
                         </div>    
                      </section >
                      <aside class="left-sidebar">
@@ -336,7 +341,7 @@
                             </div>
                             <div class="seleccionOtroPrecioVenta">
                                 <div class="opcionPrecioPublico">
-                                    <label>Lista Precios </label>  
+                                    <label class="titleListaPrecio">Lista Precios </label>  
                                     <select  class="form-control selectListaPrecios" >
                                         <option    value="1"  >Precio Publico</option>
                                         <option    value="2"  >Precio Mayoista</option>
@@ -582,7 +587,70 @@
 </div>
 <!--Fin Cambiar Descuento-->
 <style type="text/css"  >
-                           
+.label-totalesComprobante {
+    display: flex;
+    flex: 1;
+    font-weight: 600 !important;
+    font-size: 35px !important;
+    font-family: Roboto,sans-serif !important;
+    color: #30ed17 !important;
+    text-shadow: 0px 0px 1px #ffffff;
+    font-style: italic;
+    text-align: left;
+    padding-left: 13px;
+    line-height: 79px;
+    border-collapse: separate;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    text-align: center !important;
+    background-color: black !important;
+    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+    border-radius: 5px;
+    -webkit-transition: background-color 100ms linear;
+    -moz-transition: background-color 100ms linear;
+    -o-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+}
+.titleListaPrecio{
+    color:blue;
+    text-decoration:underline;
+}
+.tituloDetalle{
+    text-align: center;
+    text-decoration: none;
+    font-style: italic;
+    color: black;
+    font-weight: 600;
+    font-size: 20px;
+}
+.btn-block {
+    display: block;
+    width: 100%;
+    margin-top: 49%!important;
+    }    
+
+.fondoVentaEspera{
+    background: black;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: rgb(255, 255, 255) 0px 0px 1px;
+    font-style: italic;
+    color: #e2f312 !important;
+    font-weight: 600;
+    font-size: 14px;
+    
+}
+.ventaEsperaSeleccionada{
+    display: flex;
+    padding-bottom: 0.2%;
+}  
+.ventaEsperaSeleccionada .tituloVentaEspera{
+    color: yellow;
+    background: black;
+    font-weight: 700;
+}                           
 .contenedorFactura{
     display: flex;
     flex: 1;
@@ -1139,11 +1207,18 @@ _ReimprimirFactura(){
 
 }
 function reimprimirFacturaEnMomento(){
+
+  if(self.facturaReimprimir ==null){
+    var retrievedObject = JSON.parse(localStorage.getItem('facturaReimprimir'));
+    if(retrievedObject != null){
+       self.facturaReimprimir = retrievedObject
+       self.update()
+    }    
+  }
   if(self.facturaReimprimir ==null){
       return
   }
   consultaFactura(self.facturaReimprimir,0)
-//  riot.mount('ptv-imprimir',{factura:self.facturaReimprimir});
   $('.codigo').select()
   $(".codigo").focus() 
 }
@@ -1931,6 +2006,7 @@ function cargarDetallesFacturaEnEspera(data){
             cantidad        : parseFloat(modeloTabla.cantidad),
             precioUnitario  : parseFloat(modeloTabla.precioUnitario),
             impuesto        : parseFloat(modeloTabla.impuesto),
+            impuesto1       : parseFloat(modeloTabla.impuesto1),
             montoImpuesto   : parseFloat(modeloTabla.montoImpuesto),
             montoImpuesto1  : parseFloat(modeloTabla.montoImpuesto1),
             montoDescuento  : parseFloat(modeloTabla.montoDescuento),
@@ -2087,6 +2163,7 @@ function evaluarFactura(data){
                 //Envia a la pantalla de impresion
                 self.facturaReimprimir = self.facturaImprimir
                 self.update()
+                localStorage.setItem('facturaReimprimir', JSON.stringify(self.facturaReimprimir));
                 if(self.vueltoImprimir == 0 && self.empresa.imprimirSiempre == 0){
                     var mensaje = self.facturaImprimir.numeroConsecutivo !=null ?"Cons# :"+   self.facturaImprimir.numeroConsecutivo:"Tiquete# :"+   self.facturaImprimir.id        
                     swal({
@@ -2979,9 +3056,7 @@ function getMontoDescuento(precioUnitario,cantidad,porcentajeDesc,porcentajeGana
 * Actualiza la linea del detalle de la factura
 **/
 function ActualizarLineaDEtalle(){
-    
-    
-     var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
+    var montoTotal             = getMontoTotal(self.item.precioUnitario,self.item.cantidad)
     var montoDescuento         = getMontoDescuento(self.item.precioUnitario,self.item.cantidad,self.item.porcentajeDesc,self.item.porcentajeGanancia)
     var subTotal               = montoTotal > montoDescuento?montoTotal - montoDescuento: montoDescuento-montoTotal
     montoImpuesto1             = _calcularImpuesto(subTotal,self.item.impuesto1 ==null?0:self.item.impuesto1)
@@ -3109,7 +3184,7 @@ function __calculate() {
     self.factura.totalVenta              = __valorNumerico(totalVenta)
     self.factura.totalDescuentos         = __valorNumerico(totalDescuento)
     self.factura.subTotal                = __valorNumerico(subTotal)
-    self.factura.totalImpuesto           = __valorNumerico(totalImpuesto)
+    self.factura.totalImpuesto           = __valorNumerico(totalImpuesto) + __valorNumerico(totalImpuesto1)
     self.factura.totalVentaNeta          = __valorNumerico(totalVenta-totalDescuento)
     self.factura.totalComprobante        = __valorNumerico(totalComprobante)
     self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);

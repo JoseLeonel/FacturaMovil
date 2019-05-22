@@ -107,7 +107,7 @@ public class DetalleFacturaCommand {
 		this.costo = detalle.getCosto();
 		this.porcentajeGanancia = detalle.getPorcentajeGanancia();
 		this.tipoImpuesto1 = detalle.getTipoImpuesto1();
-		this.impuesto1 = detalle.getImpuesto();
+		this.impuesto1 = detalle.getImpuesto1();
 		this.montoImpuesto1 = detalle.getMontoImpuesto1();
 		this.pesoTransporte = detalle.getPesoTransporte();
 		this.pesoTransporteTotal = detalle.getPesoTransporteTotal();

@@ -3716,7 +3716,7 @@ function __calculate() {
     self.factura.totalVenta              = Math.round(__valorNumerico(totalVenta))
     self.factura.totalDescuentos         = Math.round(__valorNumerico(totalDescuento))
     self.factura.subTotal                = Math.round(__valorNumerico(subTotal))
-    self.factura.totalImpuesto           = Math.round(__valorNumerico(totalImpuesto))
+    self.factura.totalImpuesto           = Math.round(__valorNumerico(totalImpuesto)) + Math.round(__valorNumerico(totalImpuesto1))
     
     //Se verifica si la mesa tiene impuestos
     if(self.factura.mesa.impuestoServicio  == true){

@@ -136,11 +136,7 @@ function __ListaProveedores(){
 *Formato del listado 
 **/
 var formato_tabla = [ 
-	{'data' :'proveedor'   ,"name":"proveedor"    ,"title" : "Proveedor"     ,"autoWidth" :true ,
-	"render":function(proveedor,type, row){
-			return row.proveedor !=null?row.proveedor.nombreCompleto > 50 ?row.proveedor.nombreCompleto.substring(0,50):row.proveedor.nombreCompleto:"Sin Asociar";
-		}
-   },
+	{'data' :'proveedor.nombreCompleto'   ,"name":"proveedor.nombreCompleto"    ,"title" : "Proveedor"     ,"autoWidth" :true },
    {'data' :'consecutivo'                ,"name":"consecutivo"                 ,"title" : "Consecutivo"   ,"autoWidth" :true },
    {'data' :'fechaCompra'                ,"name":"fechaCompra"                 ,"title" : "Fecha Compra"  ,"autoWidth" :true ,
 		"render":function(fechaCompra,type, row){
@@ -268,7 +264,7 @@ function agregarInputsCombos(){
   $('.tableListar tfoot th').each( function (e) {
 		var title = $('.tableListar thead th').eq($(this).index()).text();      
 		//No se toma en cuenta la columna de las acctiones(botones)
-		if ( $(this).index() != 9    ){
+		if ( $(this).index() != 7){
 			 $(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	  }
   })
