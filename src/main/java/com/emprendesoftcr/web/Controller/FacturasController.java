@@ -123,18 +123,17 @@ public class FacturasController {
 																																																			detalleFacturaElectronica.setLinea(Integer.parseInt(d.getNumeroLinea().toString()));
 																																																			detalleFacturaElectronica.setCodigo(d.getCodigo());
 																																																			detalleFacturaElectronica.setUnidad(d.getUnidadMedida());
-																																																			detalleFacturaElectronica.setCantidad(d.getCantidad());
+																																																			detalleFacturaElectronica.setCantidad(d.getCantidad() !=null?d.getCantidad():Constantes.ZEROS_DOUBLE);
 																																																			detalleFacturaElectronica.setDescripcion(d.getDescripcion());
-																																																			detalleFacturaElectronica.setPrecioU(d.getPrecioUnitario());
-																																																			detalleFacturaElectronica.setMonto(d.getMontoTotal());
-																																																			detalleFacturaElectronica.setDescuento(d.getMontoDescuento());
+																																																			detalleFacturaElectronica.setPrecioU(d.getPrecioUnitario() !=null?d.getPrecioUnitario():Constantes.ZEROS_DOUBLE);
+																																																			detalleFacturaElectronica.setMonto(d.getMontoTotal() !=null?d.getMontoTotal():Constantes.ZEROS_DOUBLE);
+																																																			detalleFacturaElectronica.setDescuento(d.getMontoDescuento() !=null?d.getMontoDescuento():Constantes.ZEROS_DOUBLE);
 																																																			detalleFacturaElectronica.setSubtotal(detalleFacturaElectronica.getMonto() - (d.getMontoDescuento()));
-																																																			detalleFacturaElectronica.setTarifaIva(d.getImpuesto());
-																																																			detalleFacturaElectronica.set_impuesto1(d.getImpuesto1());
+																																																			detalleFacturaElectronica.setTarifaIva(d.getImpuesto() !=null?d.getImpuesto():Constantes.ZEROS_DOUBLE);
+																																																			detalleFacturaElectronica.set_impuesto1(d.getImpuesto1() !=null?d.getImpuesto1():Constantes.ZEROS_DOUBLE);
 																																																			Double resultado = d.getMontoImpuesto() != null ? d.getMontoImpuesto() : Constantes.ZEROS_DOUBLE;
 																																																			resultado += d.getMontoImpuesto1() != null ? d.getMontoImpuesto1() : Constantes.ZEROS_DOUBLE;
 																																																			detalleFacturaElectronica.setImpuesto(resultado);
-																																																			// detalleFacturaElectronica.setExento(Constantes.EMPTY);
 																																																			detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
 																																																			//
 																																																			return detalleFacturaElectronica;

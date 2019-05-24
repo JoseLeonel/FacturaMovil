@@ -847,6 +847,7 @@
     self.pesoPrioridad =  0
     self.numeroLinea =0
     self.cantArticulos =0
+    self.bloqueoFactura = 0;
     self.precioUltimo = ""
     self.tipoCambio = {
         total:0,
@@ -1832,6 +1833,7 @@ __Limpiar(){
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
+    self.bloqueoFactura = 0;
     self.precioUltimo = ""
     self.factura                = {
         id:null,
@@ -2055,6 +2057,7 @@ function __displayDate_detail(fecha) {
 *  Crear Factura nueva
 **/
 function crearFactura(estado){
+    
     self.detalleFactura.data =self.detail
     self.update() 
     var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
@@ -2156,6 +2159,7 @@ function evaluarFactura(data){
    if (data.message != null && data.message.length > 0) {
         $.each(data.listaObjetos, function( index, modeloTabla ) {
             self.facturaImprimir   = modeloTabla
+            self.bloqueoFactura = 1;
             self.update()
         });
         if(self.facturaImprimir.estado == 2 || self.facturaImprimir.estado == 3 || self.facturaImprimir.estado == 4){
@@ -2938,6 +2942,7 @@ function getListaPrecioGanancia(articulo){
 
 
 function __storege(){
+    self.bloqueoFactura = 0;
     self.detail = []
     self.factura                = {
         id:null,
@@ -3498,7 +3503,7 @@ function __Teclas(){
         __EnviarFacturar()
         
     } 
-    //alert(tecla)  
+   // alert(tecla)  
     //F4
     if(tecla ==115){
      ListarCodigosArticulos()
@@ -3513,8 +3518,8 @@ function __Teclas(){
     //if(tecla ==117){
     // reimprimirFacturaEnMomento()
     //}
-     //Reimprimir Factura CTRL
-    if(tecla ==17){
+     //Reimprimir Factura End
+    if(tecla ==35){
      reimprimirFacturaEnMomento()
      
     }
