@@ -562,6 +562,7 @@ public class FacturaBoImpl implements FacturaBo {
 					if (facturaAnular != null) {
 						facturaAnular.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
 						modificar(facturaAnular);
+						facturaCommand.setCliente(facturaAnular.getCliente());
 					}
 				}
 			}
