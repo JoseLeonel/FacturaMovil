@@ -744,7 +744,7 @@ function __nuevoArticuloAlDetalle(cantidad){
     }
     var precioT = parseFloat($('#precio').val())
     var resultaMontoImpuesto = parseFloat(self.articulo.impuesto)
-    var precioUnitario  = resultaMontoImpuesto > 0 ?getPrecioUnitario(precioT,resultaMontoImpuesto):precioUnitario
+    var precioUnitario  = resultaMontoImpuesto > 0 ?getPrecioUnitario(precioT,resultaMontoImpuesto):precioT
     resultaMontoImpuesto = parseFloat(self.articulo.impuesto1) 
     precioUnitario      = resultaMontoImpuesto > 0 ?getPrecioUnitario(precioUnitario,resultaMontoImpuesto):precioUnitario
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)

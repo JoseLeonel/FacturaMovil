@@ -68,12 +68,12 @@
                             <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                 <label class="tamanoLetraTotales">{$.i18n.prop("articulo.tipoImpuesto1")}</label>
                                 <select onchange= {__asignarImpuesto1} class="campo selectTipoImpuesto1" id="tipoImpuesto1" name="tipoImpuesto1"  >
-                                    <option  each={impuestos}  value="{codigo}" selected="{articulo.tipoImpuesto1 ==codigo?true:false}"  >{descripcion}</option>
+                                    <option  each={impuestos1}  value="{codigo}" selected="{articulo.tipoImpuesto1 ==codigo?true:false}"  >{descripcion}</option>
                                 </select>
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                 <label  class="tamanoLetraTotales">{$.i18n.prop("articulo.impuesto1")}  </label>
-                                <input type="number" step="any" class=" impuesto1 campo" id="impuesto1" name="impuesto1" value="{articulo.impuesto1}"  onkeyup ={__ActualizarPreciosImpuestos1}>
+                                <input type="number" step="any" class=" impuesto1 campo" id="impuesto1" name="impuesto1" value="{articulo.impuesto1}"  onkeyup ={__CalculoImpuesto1}>
                             </div>
 
                         </div>    
@@ -217,6 +217,7 @@
     self.marcas                    = {aaData:[]}
     self.tipoUnidades              = {aaData:[]}
     self.impuestos =[]
+    self.impuestos1 =[]
     self.tipoCodigos =[]
     self.contables                 = []
     self.estados                   = []
@@ -257,6 +258,7 @@ self.on('mount',function(){
     __listadoTipoUnidadesActivas()   
     __listadoMarcasActivas()
     __Impuestos() 
+    __Impuestos1() 
     __tipoCodigo()
     LimpiarArticulo()
     window.addEventListener( "keydown", function(evento){
@@ -446,13 +448,33 @@ __ActualizarPreciosImpuestos(e){
 * Porcentaje de ganancia de Precio al Publico
 **/
 __CalculoGananciaSinPrecioPublico(e){
-    var ganancia = __valorNumerico(e.target.value)
-    var impuesto   = __valorNumerico($('#impuesto').val())
-    var impuesto1  = __valorNumerico($('#impuesto1').val())
+   __ActualizarPrecios()
+
+}
+
+function __ActualizarPrecios(){
+    var ganancia = __valorNumerico($('#gananciaPrecioPublico').val())
+    var impuesto   = __valorNumerico($('#impuesto').val())/100
+    impuesto = impuesto > 0 ? 1+impuesto:0
+    var impuesto1  = __valorNumerico($('#impuesto1').val())/100
+    impuesto1 = impuesto1 > 0?1+impuesto1:0
     var costo      = __valorNumerico($('#costo').val())
     self.articulo.gananciaPrecioPublico  = ganancia
     self.update()
-    _CalculoPrecio()
+    //calcular el precio publico
+    var resultado = ganancia / 100
+    resultado = 1-resultado
+    //resultado costo + ganancia
+    var total = costo  / resultado
+    if(impuesto1 > 0){
+      total = total * impuesto1
+    } 
+    if(impuesto>0){
+        total = total * impuesto
+    }
+    self.articulo.precioPublico = total
+    self.update()
+    $('.precioPublico').val(self.articulo.precioPublico)
 
 }
 /**
@@ -469,7 +491,7 @@ __asignarImpuesto(){
         self.articulo.tipoImpuesto =$('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
         self.update()
     } 
-    _CalculoPrecio()      
+    __ActualizarPrecios()      
 }
 /**
 * Asignar el Impuesto
@@ -479,10 +501,13 @@ __asignarImpuesto1(){
     self.articulo.impuesto1 = 0
     self.articulo.tipoImpuesto1 =$('#tipoImpuesto1').val() == "Sin impuesto"?"":$('#tipoImpuesto1').val()
     self.update()
+    __ActualizarPrecios()
 
-_CalculoPrecio()
 }
 
+__CalculoImpuesto1(e){
+__ActualizarPrecios()
+}
 /**
 * Porcentaje de ganancia de Precio al Publico
 **/
@@ -491,11 +516,54 @@ _CalculoPrecio()
 }
 
 /**
-* Actualizar el precio costo
+* Actualizar costo
 **/
 __ActualizarPreciosCosto(e){
-
-    _CalculoPrecio()
+    var impuesto  =  __valorNumerico($('#impuesto').val())/100
+    var impuesto1 =  __valorNumerico($('#impuesto1').val())/100
+    var costo     =  __valorNumerico($('#costo').val())
+    var gananciaPublica = __valorNumerico($('#gananciaPrecioPublico').val())/100
+    var precioPublico =  __valorNumerico($('#precioPublico').val())
+     //  Costo , ganancia digitada , impuestos digitados  Altera el precio
+    if(gananciaPublica > 0){
+       var resultadoPorcentajeGanancia = 1-gananciaPublica
+       var resultadoImpuesto = 0
+       precioPublico =  costo /resultadoPorcentajeGanancia
+       if(impuesto1 > 0){
+         resultadoImpuesto =  impuesto1 + 1 
+         precioPublico = precioPublico * resultadoImpuesto  
+       }
+       if(impuesto > 0){
+        resultadoImpuesto =  impuesto + 1 
+        precioPublico = precioPublico * resultadoImpuesto  
+       }
+       self.articulo.precioPublico = precioPublico
+       self.articulo.costo = costo
+       self.update()     
+    }else{
+        var total = 0
+        var totalGanancia = 0
+        //Ganancia es cero
+        if(precioPublico > 0){
+           var resultado = impuesto + impuesto1 ;
+           resultado = resultado / 100
+           resultado = resultado > 0?resultado + 1:0
+           // se le quita impuestos
+            if(resultado > 0){
+               total = precioPublico / resultado
+            }else{
+              total = precioPublico  
+            }
+            if(total > costo){
+                totalGanancia = costo / total 
+                totalGanancia = 1- totalGanancia
+                self.articulo.gananciaPrecioPublico    =  totalGanancia
+            }else{
+                self.articulo.gananciaPrecioPublico    = 0  
+            }
+ 
+        }
+    }
 }
 /**
 * calculo de Precio
@@ -505,14 +573,10 @@ function _CalculoPrecio(){
     var impuesto1 =  __valorNumerico($('#impuesto1').val())
     var costo     =  __valorNumerico($('#costo').val())
     var precioPublico    =  __valorNumerico($('#precioPublico').val())
-    self.articulo.gananciaPrecioPublico    = self.articulo.precioPublico >0?_porcentajeGanancia(costo,impuesto,impuesto1,precioPublico):0
+    self.articulo.gananciaPrecioPublico    = precioPublico >0?_porcentajeGanancia(costo,impuesto,impuesto1,precioPublico):0
+    self.articulo.precioPublico = _PrecioPublicoConGanancia(costo,impuesto,impuesto1,self.articulo.gananciaPrecioPublico)
     self.update()
-    if(precioPublico == 0){
-       self.articulo.precioPublico = _PrecioPublicoConGanancia(costo,impuesto,impuesto1,self.articulo.gananciaPrecioPublico)
-    }
-    
-    
-    self.update()
+ 
 }
 /**
 *  Actimpuestor validaciones del formulario
@@ -667,6 +731,41 @@ function __Impuestos(){
    
      self.update();
 }
+/**
+* Combo para verificar si es contabilizado en el inventario o no
+**/
+function __Impuestos1(){
+    self.impuestos1 =[]
+    self.update()
+     self.impuestos1.push({
+        codigo: "",
+        descripcion:"Sin impuesto"
+     });
+
+    self.impuestos1.push({
+        codigo: '02',
+        descripcion:$.i18n.prop("tipo.impuesto.consumo")
+     });
+    self.impuestos1.push({
+        codigo: '07',
+        descripcion:$.i18n.prop("tipo.impuesto.servicio")
+     });
+     self.impuestos1.push({
+        codigo: '06',
+        descripcion:$.i18n.prop("tipo.impuesto.tabaco")
+     });
+    self.impuestos1.push({
+        codigo: '12',
+        descripcion:$.i18n.prop("tipo.impuesto.cemento")
+     });
+    self.impuestos1.push({
+        codigo: '98',
+        descripcion:$.i18n.prop("tipo.impuesto.otros")
+     });
+   
+     self.update();
+}
+
 /**
 * Tipo codigo del producto/servicio del articulo
 **/
