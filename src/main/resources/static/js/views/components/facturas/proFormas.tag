@@ -120,12 +120,29 @@
                                         </div>
                                     </div>    
                                 </div>
-                            </div>                             
+                            </div> 
+                            <div class="row">
+                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                    <div class="form-group ">
+                                        <label>{$.i18n.prop("factura.nombreFactura")}</label> 
+                                        <input type="text"  class="form-control"  value="{factura.nombreFactura}" readonly> 
+                                    </div>
+                                </div>
+                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                    <div class="form-group ">
+                                        <label>{$.i18n.prop("factura.correoAlternativo")}</label> 
+                                        <input type="email"  class="form-control"  value="{factura.correoAlternativo}" readonly>
+                                    </div>
+                                </div>
+            
+                            </div>
+                    
+                                                  
                             <div class="row">
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                     <div class="form-group ">
                                         <label >{$.i18n.prop("factura.nota")}</label> 
-                                        <input type="text" class="form-control" id="nota" name="nota" value="{factura.nota}" readonly>
+                                        <input type="text" class="form-control"  value="{factura.nota}" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -133,7 +150,7 @@
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                     <div class="form-group ">
                                         <label >{$.i18n.prop("factura.direccion")}</label> 
-                                        <input type="text" class="form-control direccion" id="direccion" name="direccion" value="{factura.direccion}" readonly>
+                                        <input type="text" class="form-control "  value="{factura.direccion}" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -160,7 +177,7 @@
                             <td>{codigo}</td>
                             <td>{descripcion}</td>
                             <td class="text-right">
-                                <input  class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad} readonly/>
+                                <input  class="form-control " type="number" placeholder="Cantidad Detalle" value = {cantidad.toFixed(3)} readonly/>
                             </td>
                             <td class="text-right">
                                 <input   class="form-control" type="text"  value = "{precioUnitario}" readonly />
@@ -822,18 +839,23 @@ function cargarDetallesFacturaEnEspera(data){
      $.each(data, function( index, modeloTabla ) {
         if(self.factura == null){
             self.factura = modeloTabla.factura
+            self.cliente = self.factura
+            self.vendedor = self.factura.vendedor
             self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
             self.cliente  = modeloTabla.factura.cliente
             self.vendedor = modeloTabla.factura.vendedor
             self.factura.tipoDoc = __TipoDocumentos(self.factura.id,self.factura)
             self.update()
 
+        }else{
+            self.cliente = self.factura.cliente
+            self.vendedor = self.factura.vendedor
         }
         self.detail.push({
             numeroLinea     : modeloTabla.numeroLinea,
             codigo          : modeloTabla.codigo,
             descripcion     : modeloTabla.descripcion,
-            cantidad        : modeloTabla.cantidadSTR,
+            cantidad        : modeloTabla.cantidad,
             precioUnitario  : modeloTabla.precioUnitarioSTR,
             impuesto        : modeloTabla.impuesto,
             impuesto        : modeloTabla.impuesto1,
