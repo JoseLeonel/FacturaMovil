@@ -44,12 +44,12 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 
 
 	@Override
-	public String getFirmarXML(String xmlString, Empresa empresa) throws Exception {
+	public String getFirmarXML(String xmlString, Empresa empresa,Date fecha) throws Exception {
 		String resultado = Constantes.EMPTY;
 		try			{
 			Certificado certificado  = certificadoBo.findByEmpresa(empresa);
 			if(certificado !=null) {
-				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_TIQUETE);	
+				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_TIQUETE,fecha);	
 			}else {
 				log.info("** Error  Empresa no se encuentra el certificado: " + empresa.getNombre());
 			}
@@ -81,7 +81,7 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 				factura.setFechaEmision(fecha);
 				facturaBo.modificar(factura);
 			}else {
-				fecha = factura.getCreated_at();
+				fecha = factura.getFechaEmision();
 			}
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(new Date());
@@ -290,12 +290,13 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
                   "<MontoTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotal()) + "</MontoTotal>" +
                   getDescuento(detalle.getMontoDescuento())+
                   "<SubTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getSubTotal()) + "</SubTotal>" +
-                  xmlImpuestos(detalle) +
+                  xmlImpuestos(detalle.getFactura().getId(),detalle.getTipoImpuesto1(),detalle.getMontoImpuesto1(),detalle.getImpuesto1()) +
+                  xmlImpuestos(detalle.getFactura().getId(),detalle.getTipoImpuesto(),detalle.getMontoImpuesto(),detalle.getImpuesto()) +
                   "<MontoTotalLinea>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotalLinea()) + "</MontoTotalLinea>" +
                   "</LineaDetalle>";
         }
         
-				
+    		    
 			} catch (Exception e) {
 				log.info("** Error  xmlDetalleServicio: " + e.getMessage() + " fecha " + new Date());
 				throw e;
@@ -327,22 +328,25 @@ private String getDescuento(Double descuento) throws Exception {
    * @param detalle
    * @return
    */
-private String xmlImpuestos(Detalle detalle) throws Exception {
+private String xmlImpuestos(Long idFactura,String tipoImpuesto,Double montoImpuesto,Double impuesto) throws Exception {
   	String resultado = Constantes.EMPTY;
   	
   	try {
-  		if(detalle.getMontoImpuesto() != null && detalle.getTipoImpuesto() !=null) {
-	  		if(detalle.getMontoImpuesto()>Constantes.ZEROS_DOUBLE) {
+  		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
+  			return resultado;
+  		}
+  		if(montoImpuesto != null && tipoImpuesto !=null) {
+	  		if(montoImpuesto > Constantes.ZEROS_DOUBLE) {
 	        resultado = "<Impuesto>" +
-	            "<Codigo>" + Utils.zeroPad(detalle.getTipoImpuesto(), 2) + "</Codigo>" +
-	            "<Tarifa>" + FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getImpuesto() ) + "</Tarifa>" +
-	            "<Monto>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoImpuesto()) + "</Monto>";
+	            "<Codigo>" + Utils.zeroPad(tipoImpuesto, 2) + "</Codigo>" +
+	            "<Tarifa>" + FacturaElectronicaUtils.getConvertirBigDecimal(impuesto ) + "</Tarifa>" +
+	            "<Monto>" +  FacturaElectronicaUtils.getConvertirBigDecimal(montoImpuesto) + "</Monto>";
 	        resultado += "</Impuesto>";
 	    	}
   		}
 			
 		} catch (Exception e) {
-			log.info("** Error  xmlImpuestos Factura :" + detalle.getFactura().getId()  + e.getMessage() + " fecha " + new Date());
+			log.info("** Error  xmlImpuestos Factura :" + idFactura  + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
     return resultado;

@@ -18,6 +18,8 @@ public class FacturaEsperaCommand {
 	private Date			fechaCredito;
 
 	private String		numeroConsecutivo;
+	
+	
 
 	private Date			fechaEmision;
 	private String		fechaEmisionSTR;
@@ -110,6 +112,7 @@ public class FacturaEsperaCommand {
 	private String		referenciaCodigo;
 
 	private String		referenciaRazon;
+	private String consecutivoProforma;
 	
 	
 
@@ -168,6 +171,7 @@ public class FacturaEsperaCommand {
 		this.totalComprobanteSTR = factura.getTotalComprobanteSTR();
 		this.totalImpuestoSTR = factura.getTotalImpuestoSTR();
 		this.totalDescuentosSTR = factura.getTotalDescuentoSTR();
+		this.consecutivoProforma = factura.getConsecutivoProforma() !=null?factura.getConsecutivoProforma():Constantes.EMPTY;
 	}
 
 	public FacturaEsperaCommand(Detalle detalle) {
@@ -650,4 +654,16 @@ public class FacturaEsperaCommand {
 	public void setMedioBanco(String medioBanco) {
 		this.medioBanco = medioBanco;
 	}
+
+	
+	public String getConsecutivoProforma() {
+		return consecutivoProforma;
+	}
+
+	
+	public void setConsecutivoProforma(String consecutivoProforma) {
+		this.consecutivoProforma = consecutivoProforma;
+	}
+	
+	
 }

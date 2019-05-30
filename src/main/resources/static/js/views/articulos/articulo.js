@@ -4,7 +4,7 @@ $(document).ready(function() {
 } );/*fin document*/
 
 var _Init = function () {
-	   includeActionsArticulo('.dataTables_wrapper','.dataTables_length');
+	   
 	     agregarInputsCombos();
 	    EventoFiltro();
 	    __MantenimientoAgregar();
@@ -53,6 +53,7 @@ var ListarArticulos = function(codigo){
      "columns" : informacion_tabla,
      "language" : idioma_espanol,
  } );//fin del table
+ includeActionsArticulo('.dataTables_wrapper','.dataTables_length');
  agregarInputsCombos();
  EventoFiltro();
  __MantenimientoAgregar();
@@ -105,7 +106,8 @@ var informacion_tabla = [
                                "render":function(categoria,type, row){
                                      return categoria ==null?"Sin Cantegoria":row.categoria.descripcion;
                                 }},
-                               {'data' :'codigo'                  ,"name":"codigo"                 ,"title" : "Codigo"           ,"autoWidth" :true },
+                               
+                                {'data' :'codigo'                  ,"name":"codigo"                 ,"title" : "Codigo"           ,"autoWidth" :true },
                                {'data' :'descripcion'             ,"name":"descripcion"            ,"title" : "Descripcion"      ,"autoWidth" :true },
                                {'data' :'costo'                   ,"name":"costo"                  ,"title" : "Costo"            ,"autoWidth" :true
                                ,

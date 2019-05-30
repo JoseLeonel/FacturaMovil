@@ -98,14 +98,7 @@ public class AbonoPagarCommand {
 		this.cuentaPagar = cuentaPagar;
 	}
 
-	public String getCreated_atSTR() {
-		return Utils.getFechaGeneraReporte(this.created_at);
-	}
-
-	public String getUpdated_atSTR() {
-		return Utils.getFechaGeneraReporte(this.updated_at);
-	}
-
+	
 
 	
 	public String getNota() {
@@ -199,29 +192,68 @@ public class AbonoPagarCommand {
 		this.updated_at = updated_at;
 	}
 
-
-
+	
 	public String getTotalEfectivoSTR() {
-		return Utils.formateadorMiles(this.totalEfectivo);
-		
+		return totalEfectivoSTR;
 	}
 
+	
+	public void setTotalEfectivoSTR(String totalEfectivoSTR) {
+		this.totalEfectivoSTR = totalEfectivoSTR;
+	}
 
+	
 	public String getTotalTarjetaSTR() {
-		return Utils.formateadorMiles(this.totalTarjeta);
+		return totalTarjetaSTR;
 	}
 
+	
+	public void setTotalTarjetaSTR(String totalTarjetaSTR) {
+		this.totalTarjetaSTR = totalTarjetaSTR;
+	}
 
+	
 	public String getTotalBancoSTR() {
-		return Utils.formateadorMiles(this.totalBanco);
-
+		return totalBancoSTR;
 	}
 
+	
+	public void setTotalBancoSTR(String totalBancoSTR) {
+		this.totalBancoSTR = totalBancoSTR;
+	}
 
+	
 	public String getTotalSTR() {
-		return Utils.formateadorMiles(this.total);
-
+		return totalSTR;
 	}
 
+	
+	public void setTotalSTR(String totalSTR) {
+		this.totalSTR = totalSTR;
+	}
+
+	
+	public String getCreated_atSTR() {
+		return created_atSTR;
+	}
+
+	
+	public void setCreated_atSTR(String created_atSTR) {
+		this.created_atSTR = created_atSTR;
+	}
+
+	
+	public String getUpdated_atSTR() {
+		return updated_atSTR;
+	}
+
+	
+	public void setUpdated_atSTR(String updated_atSTR) {
+		this.updated_atSTR = updated_atSTR;
+	}
+
+
+
+	
 
 }

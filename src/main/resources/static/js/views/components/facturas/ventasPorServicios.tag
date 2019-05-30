@@ -4,15 +4,11 @@
             <div  class="thumbnail" style="background: #6dca42;">
                  <div class="caption">
                      <h3 class="title formItem">{descripcion}</h3>
-                    
                 </div>    
-                
             </div>
         </div> 
     </div>    
-
 <!-- Primer Paso -->
-
 <div show={formularioDetalle}>
     <div class="row center "  >
         <div class=" col-sx-12 col-lg-2 "></div>
@@ -34,7 +30,6 @@
                                 <select  onchange= {__formaReferencias} class="form-control has-success tipoDoc" id="tipoDoc" name="tipoDoc" >
                                     <option each={comboTipoDocumentos}  value="{estado}" selected="{factura.referenciaCodigo ==estado?true:false}" >{descripcion}</option>
                                 </select>
-                    
                             </div>
                         </div>
                         <div class="row">
@@ -86,21 +81,17 @@
                 </div>
                 <div class="box-body">
                     <form id = "formularioPaso2" name ="formularioPaso2"   class="advanced-search-form">
-                     
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 left">
                                 <label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>
                             </div>
                         </div>
-
-                       
                         <div class="row">
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label " >{$.i18n.prop("factura.condicion.pago")}</label>
                                 <select onchange= {__formaPago} class="form-control has-success" id="condicionVenta" name="condicionVenta" >
                                     <option each={comboCondicionPagos}  value="{estado}" selected="{factura.condicionVenta ==estado?true:false}" >{descripcion}</option>
                                 </select>
-                            
                             </div>
                         </div>
                         <div class="row" show = {mostrarCamposIngresoCredito}>
@@ -177,7 +168,7 @@
                         <div class="row" >
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label ">{$.i18n.prop("factura.resumen.efectivo")}</label> 
-                                <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress} step="any"   class="form-control totalEfectivo" id="totalEfectivo"  name="totalEfectivo"  value="0" >
+                                <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress} step="any"   class="form-control totalEfectivo" id="totalEfectivo"  name="totalEfectivo"  value="{factura.totalComprobante}" >
                             </div>
                         </div>    
                         <div class="row" >
@@ -217,9 +208,7 @@
                             <input type="hidden" id='totalDescuentos'          name='totalDescuentos'          value="{factura.totalDescuentos}" >
                             <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
                             <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           value="{factura.totalImpuesto}" >
-                            <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
-                            <input type="hidden" id='totalTarjeta'            name='totalTarjeta'            value="{factura.totalTarjeta}" >
-                            <input type="hidden" id='totalBanco'              name='totalBanco'              value="{factura.totalBanco}" >
+                            
                             <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
                             <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
                     </form>    
@@ -259,7 +248,6 @@
                                 <th class="table-header">{$.i18n.prop("cliente.nombreCompleto")}    </th>
                                 <th class="table-header">{$.i18n.prop("cliente.correoElectronico")} </th>
                                 <th class="table-header">{$.i18n.prop("cliente.telefono")}          </th>
-                                
                             </thead>
                             <tfoot style="display: table-header-group;">
                                 <tr>
@@ -429,8 +417,6 @@ self.on('mount',function(){
     __ListaDeClientes()
     __comboCondicionPago()
     __combocodigosReferencia()
-    
-   
     window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
@@ -520,7 +506,6 @@ var reglasDeValidacion = function() {
 				required : true,
                 minlength:1,
                  numeroMayorCero:true,
-               
 			}                                   
                         
 		},
@@ -528,16 +513,16 @@ var reglasDeValidacion = function() {
 
 	});
 	return validationOptions;
-};
+}
 /**
 * Datos de referencia cuando se aplica una nota de credito
 **/
 __formaReferencias(e){
-if($('#tipoDoc').val() !="01" && $('#tipoDoc').val() !="04"){
-       self.mostrarReferencias            = true
+    if($('#tipoDoc').val() !="01" && $('#tipoDoc').val() !="04"){
+       self.mostrarReferencias  = true
        self.update()  
     }else{
-        self.mostrarReferencias            = false
+        self.mostrarReferencias = false
         self.update()
         $(".referenciaFechaEmision").val(null)
         $('.referenciaNumero').val(null)
@@ -560,7 +545,7 @@ function limpiar(){
     $('.plazoCredito').val(null)
     $('.referenciaNumero').val(null)
     $('.descripcionProducto').val(null)
-       $(".descripcionProducto").attr("maxlength",160 );
+    $(".descripcionProducto").attr("maxlength",160 );
     $('.precio').val(null)
     $('.referenciaTipoDoc').prop("selectedIndex", 0);
     $('.tipoDoc').prop("selectedIndex", 0);
@@ -568,7 +553,6 @@ function limpiar(){
     $('.condicionVenta').prop("selectedIndex", 0);
     $('.condicionVenta').prop("selectedIndex", 0);
     self.detail                = []
-    
     self.cliente = {}
     self.factura                = {
         id:null,
@@ -613,19 +597,15 @@ function limpiar(){
             id:0,
             nombreCompleto:""
         }
-
     } 
     self.update()
-   
 }
-
 /**
 ** Se aplica o se crea una Factura cargada en la pantalla
 **/
 __AplicarYcrearFactura(){
  aplicarFactura()
 }
-
 /**
 * Aplicar la factura
 **/
@@ -644,8 +624,7 @@ function aplicarFactura(){
             return
         }
     }
-     
-if ($("#formularioPaso2").valid()) {
+    if ($("#formularioPaso2").valid()) {
         swal({
            title: '',
            text: $.i18n.prop("factura.alert.crear"),
@@ -666,7 +645,6 @@ if ($("#formularioPaso2").valid()) {
         });
     }
 }
-
 /**
 *  Crear Factura nueva
 **/
@@ -675,8 +653,7 @@ function crearFactura(){
     self.update() 
     var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
     var fechaReferencia =$('#referenciaFechaEmision').val() !=null?referenciaFechaEmision.value:new Date() 
-     var JSONDetalles = JSON.stringify( self.detalleFactura );
-    
+    var JSONDetalles = JSON.stringify( self.detalleFactura );
     self.factura.id = self.factura.id
     self.factura.cliente = self.cliente
     self.factura.estado = 2
@@ -733,7 +710,6 @@ function evaluarFactura(data){
                 limpiar()
                 //Envia a la pantalla de impresion
                  riot.mount('fact-servImprimir',{factura:self.facturaImprimir});
-                 
             }else{
                 swal({
 	                title: '',
@@ -743,12 +719,9 @@ function evaluarFactura(data){
 	                confirmButtonText: $.i18n.prop("btn.aceptar"),
                 })
                 limpiar()
-                
             }
         });
     }
-
-
 }
 /**
 *  Agregar un articulo si existe se suma la cantidad y no existe se agrega en el detalle
@@ -756,7 +729,7 @@ function evaluarFactura(data){
 function __agregarArticulo(cantidad){
     self.detail = []
     self.update()
-     __nuevoArticuloAlDetalle(cantidad);
+    __nuevoArticuloAlDetalle(cantidad);
     __calculate(); 
 }
 /**
@@ -770,36 +743,42 @@ function __nuevoArticuloAlDetalle(cantidad){
         return;
     }
     var precioT = parseFloat($('#precio').val())
-    var precioUnitario  = getPrecioUnitario(precioT,self.articulo.impuesto)
-    
+    var resultaMontoImpuesto = parseFloat(self.articulo.impuesto)
+    var precioUnitario  = resultaMontoImpuesto > 0 ?getPrecioUnitario(precioT,resultaMontoImpuesto):precioT
+    resultaMontoImpuesto = parseFloat(self.articulo.impuesto1) 
+    precioUnitario      = resultaMontoImpuesto > 0 ?getPrecioUnitario(precioUnitario,resultaMontoImpuesto):precioUnitario
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
     var montoDescuento  = 0
     var naturalezaDescuento = ""
     var subTotal        = montoTotal
-    var montoImpuesto   = _calcularImpuesto(subTotal,parseFloat(self.articulo.impuesto) ==null?0:parseFloat(self.articulo.impuesto))
-    var montoTotalLinea = subTotal + montoImpuesto 
+    var montoImpuesto1  = _calcularImpuesto(subTotal,parseFloat(self.articulo.impuesto1) ==null?0:parseFloat(self.articulo.impuesto1))
+    var montoImpuesto   = _calcularImpuesto(subTotal+montoImpuesto1,parseFloat(self.articulo.impuesto) ==null?0:parseFloat(self.articulo.impuesto))
+    var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1  
+    var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,self.articulo.costo ==null?0:parseFloat(self.articulo.costo),cantidad)
     self.detail.push({
-       numeroLinea     : 1,
-       tipoImpuesto    : self.articulo.tipoImpuesto,
-       iva             : parseFloat(self.articulo.impuesto),
-       codigo          : self.articulo.codigo,
        descripcion     : $('.descripcionProducto').val(),
+       numeroLinea     : 1,
+       pesoPrioridad   : 1,  
+       tipoImpuesto    : self.articulo.tipoImpuesto ==null?" ":self.articulo.tipoImpuesto,
+       tipoImpuesto1   : self.articulo.tipoImpuesto1 ==null?" ":self.articulo.tipoImpuesto1,
+       iva             : parseFloat(self.articulo.impuesto),
+       iva1            : parseFloat(self.articulo.impuesto1),
+       codigo          : self.articulo.codigo,
        cantidad        : parseFloat(cantidad),
-       precioUnitario  : precioUnitario,
+       precioUnitario  : parseFloat(precioUnitario),
        impuesto        : parseFloat(self.articulo.impuesto),
-       montoImpuesto   : montoImpuesto,
+       impuesto1        : parseFloat(self.articulo.impuesto1),
+       montoImpuesto   : parseFloat(montoImpuesto),
+       montoImpuesto1  : parseFloat(montoImpuesto1),
        montoDescuento  : 0,
        porcentajeDesc  : 0,
-       subTotal        : subTotal,
-       montoTotalLinea : montoTotalLinea,
-       montoTotal      : montoTotal
+       ganancia        : parseFloat(ganancia),
+       subTotal        : parseFloat(subTotal),
+       montoTotalLinea : parseFloat(montoTotalLinea),
+       montoTotal      : parseFloat(montoTotal),
+       costo           : self.articulo.costo ==null?0:parseFloat(self.articulo.costo),
+       porcentajeGanancia :   self.articulo.gananciaPrecioPublico ==null?0:parseFloat(self.articulo.gananciaPrecioPublico),
     });
-    var cont = 0;
-    self.detail.forEach(function(elemen){
-          elemen.numeroLinea = cont + 1
-          cont = elemen.numeroLinea
-        }
-    )
     self.update()
 }
 /**
@@ -841,34 +820,42 @@ function _calcularImpuesto(precio,iva){
 * calculacion de los detalle de la factura 
 **/
 function __calculate() {
-    self.factura.total           = 0;
+    self.factura.total            = 0;
     self.factura.totalDescuentos  = 0;
-    self.factura.totalImpuesto   = 0;
-    self.factura.subTotal        = 0;
+    self.factura.totalImpuesto    = 0;
+    self.factura.subTotal         = 0;
     self.update()
     totalVenta     = 0
     subTotal       = 0
     totalDescuento = 0
     totalImpuesto  = 0
+    totalImpuesto1  = 0
     totalMercanciasGravadas = 0
     totalMercanciasExentas  = 0
     totalServGravados       = 0
-    totalServGravados       = 0
+    totalServExentos        = 0
     totalGravado            = 0
     totalExento             = 0
     totalComprobante        = 0
     totalventaNeta          = 0
+    self.cantArticulos      = 0
     self.detail.forEach(function(e){
-        totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.subTotal:0
-        totalMercanciasExentas  += e.impuesto == 0 && e.tipoImpuesto != "07"?e.subTotal:0
-        totalServGravados       += e.montoImpuesto > 0 && e.tipoImpuesto == "07"?e.subTotal:0
-        totalServExentos        += e.impuesto == 0 && e.tipoImpuesto == "07"?e.subTotal:0
-        totalGravado            += e.impuesto > 0 ?e.subTotal:0
-        totalExento             += e.impuesto == 0?e.subTotal:0
+        totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.montoTotal:0
+        totalMercanciasGravadas += e.montoImpuesto1 > 0 && e.tipoImpuesto1 != "07"?e.montoTotal:0
+        totalMercanciasExentas  += e.impuesto == 0 && e.tipoImpuesto != "07"?e.montoTotal:0
+        totalMercanciasExentas  += e.impuesto1 == 0 && e.tipoImpuesto1 != "07"?e.montoTotal:0
+        totalServGravados       += e.montoImpuesto > 0 && e.tipoImpuesto == "07"?e.montoTotal:0
+        totalServGravados       += e.montoImpuesto1 > 0 && e.tipoImpuesto1 == "07"?e.montoTotal:0
+        totalServExentos        += e.impuesto == 0 && e.tipoImpuesto == "07"?e.montoTotal:0
+        totalServExentos        += e.impuesto1 == 0 && e.tipoImpuesto1 == "07"?e.montoTotal:0
+        totalGravado            += e.impuesto > 0 ?e.montoTotal:0
+        totalGravado            += e.impuesto1 > 0 ?e.montoTotal:0
+        totalExento             += e.impuesto == 0 && e.impuesto1 == 0?e.montoTotal:0
         totalComprobante        += e.montoTotalLinea
         subTotal                += e.subTotal >0?e.subTotal:0
         totalDescuento          += e.montoDescuento >0?e.montoDescuento:0
-        totalImpuesto           += e.montoImpuesto >0?e.montoImpuesto:0
+        totalImpuesto           += __valorNumerico(e.montoImpuesto)
+        totalImpuesto1          += __valorNumerico(e.montoImpuesto1)
         totalVenta              += e.montoTotal
     });
     self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)
@@ -877,13 +864,18 @@ function __calculate() {
     self.factura.totalServExentos        = __valorNumerico(totalServExentos)
     self.factura.totalGravado            = __valorNumerico(totalGravado)
     self.factura.totalExento             = __valorNumerico(totalExento)
-    self.factura.totalVenta              = totalVenta
+    //cuando se aplica descuentos
+    self.factura.totalVenta              = __valorNumerico(totalVenta)
     self.factura.totalDescuentos         = __valorNumerico(totalDescuento)
     self.factura.subTotal                = __valorNumerico(subTotal)
     self.factura.totalImpuesto           = __valorNumerico(totalImpuesto)
-    self.factura.totalVentaNeta          = __valorNumerico(subTotal)
+    self.factura.totalVentaNeta          = __valorNumerico(totalVenta-totalDescuento)
     self.factura.totalComprobante        = __valorNumerico(totalComprobante)
+    self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
+    self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
+    self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
     self.update(); 
+
 }
 /**
 *    Muesta el campo de la fecha de credito
@@ -891,15 +883,12 @@ function __calculate() {
 __formaPago(e){
     //Contado /sin cobro
     if(e.currentTarget.value == "01" || e.currentTarget.value == "04" ){
-        
-
         self.mostrarCamposIngresoCredito = false
     }else{
         self.mostrarCamposIngresoCredito = true 
     }
 }    
 __regresarProductos(){
-
   __regresarProductosF()
 }
 /**
@@ -946,7 +935,6 @@ function validar(){
          mensajeError($.i18n.prop("factura.error.precio.igual.cero"))
         return
     }
-
     if($('.precio').val() <= 0){
          mensajeError($.i18n.prop("factura.error.precio.igual.cero"))
         return
@@ -955,7 +943,6 @@ function validar(){
          mensajeError($.i18n.prop("factura.error.descripcion.igual.blanco"))
         return
     }
-
     if($('.descripcionProducto').val() == ""){
          mensajeError($.i18n.prop("factura.error.descripcion.igual.blanco"))
         return
@@ -966,15 +953,15 @@ function validar(){
         self.update()
         __agregarArticulo(1)
      }  
-
+     $('.totalEfectivo').val(self.factura.totalComprobante)
 }
-
 /**
 * Segundo paso
 **/
 _SegundoPaso(){
     self.formularioSegundoPaso = false
     self.update()
+     $('.totalEfectivo').val(self.factura.totalComprobante)
 }
 /**
 *  Muestra la lista de clientes
@@ -1081,7 +1068,6 @@ function __informacionData(){
                                         {'data' : 'telefono'         ,"name":"telefono"          ,"title" : $.i18n.prop("cliente.telefono")          ,"autoWidth":false},                                
                                        
                                         ];                              
-   
 }
 /**
 * Opciones del modal de clientes
@@ -1143,18 +1129,14 @@ function __comboCondicionPago(){
 function __ComboTipoDocumentos(){
     self.comboTipoDocumentos = []
     self.update()
-        self.comboTipoDocumentos.push({
-            estado:"01",
-            descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
-        })
-        self.comboTipoDocumentos.push({
-            estado:"04",
-            descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
-        })
-  
-    
-    
-    
+    self.comboTipoDocumentos.push({
+        estado:"01",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
+    })
+    self.comboTipoDocumentos.push({
+        estado:"04",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
+    })
     self.update()
 }
 /**

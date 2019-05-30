@@ -293,7 +293,6 @@ public final class FacturaElectronicaUtils {
 		
 		return dateFormat.format(date);
 	}
-
 	
 	/**
 	 * Convierte una fecha a su expresi�n en ISO 8601

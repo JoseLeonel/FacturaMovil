@@ -14,8 +14,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.Utils.Constantes;
@@ -91,8 +89,22 @@ public class Detalle implements Serializable {
 	@Column(name = "porcentaje_desc")
 	private Double						porcentajeDesc;
 
+	@Column(name = "porcentaje_ganan", columnDefinition = "Decimal(10,5) default '0.00'")
+	private Double						porcentajeGanancia;
+
+	@Column(name = "costo", columnDefinition = "Decimal(10,5) default '0.00'")
+	private Double						costo;
+
 	@Column(name = "observacion")
 	private String						observacion;
+
+	@Column(name = "tipo_impuesto1")
+	private String						tipoImpuesto1;
+	@Column(name = "impuesto1")
+	private Double						impuesto1;
+
+	@Column(name = "monto_impuesto1")
+	private Double						montoImpuesto1;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -103,10 +115,15 @@ public class Detalle implements Serializable {
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
 	private Date							updated_at;
-	
 
-	@Column(name = "monto_gananc", columnDefinition = "Double default '0'")
-	private Double montoGanancia;
+	@Column(name = "monto_gananc", columnDefinition = "Decimal(10,5) default '0.00'")
+	private Double						montoGanancia;
+	
+	@Column(name = "peso_transporte", columnDefinition = "Decimal(10,5) default '0.00'")
+	private Double						pesoTransporte;
+	
+	@Column(name = "peso_transTotal", columnDefinition = "Decimal(10,5) default '0.00'")
+	private Double						pesoTransporteTotal;
 
 	@ManyToOne
 	@JoinColumn(name = "factura_id")
@@ -135,7 +152,9 @@ public class Detalle implements Serializable {
 		this.naturalezaDescuento = detalleFacturaCommand.getNaturalezaDescuento() == null ? Constantes.EMPTY : detalleFacturaCommand.getNaturalezaDescuento();
 		this.subTotal = detalleFacturaCommand.getSubTotal();
 		this.impuesto = detalleFacturaCommand.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : detalleFacturaCommand.getImpuesto();
+		this.impuesto1 = detalleFacturaCommand.getImpuesto1() == null ? Constantes.ZEROS_DOUBLE : detalleFacturaCommand.getImpuesto1();
 		this.montoImpuesto = detalleFacturaCommand.getMontoImpuesto() == null ? Constantes.ZEROS_DOUBLE : detalleFacturaCommand.getMontoImpuesto();
+		this.montoImpuesto1 = detalleFacturaCommand.getMontoImpuesto1() == null ? Constantes.ZEROS_DOUBLE : detalleFacturaCommand.getMontoImpuesto1();
 		this.montoTotalLinea = detalleFacturaCommand.getMontoTotalLinea();
 		this.ganancia = Constantes.ZEROS_DOUBLE;
 		this.porcentajeDesc = detalleFacturaCommand.getPorcentajeDesc() != null ? detalleFacturaCommand.getPorcentajeDesc() : Constantes.ZEROS_DOUBLE;
@@ -144,7 +163,11 @@ public class Detalle implements Serializable {
 		this.codigo = detalleFacturaCommand.getCodigo();
 		this.unidadMedida = detalleFacturaCommand.getUnidadMedida();
 		this.tipoImpuesto = detalleFacturaCommand.getTipoImpuesto() == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoImpuesto();
-
+		this.tipoImpuesto1 = detalleFacturaCommand.getTipoImpuesto1() == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoImpuesto1();
+		this.montoGanancia = detalleFacturaCommand.getMontoGanancia();
+		this.pesoTransporte = detalleFacturaCommand.getPesoTransporte();
+		this.pesoTransporteTotal = detalleFacturaCommand.getPesoTransporteTotal();
+	
 	}
 
 	public Long getId() {
@@ -278,6 +301,7 @@ public class Detalle implements Serializable {
 	public void setImpuesto(Double impuesto) {
 		this.impuesto = impuesto;
 	}
+
 	public String getImpuestoSTR() {
 		return Utils.formateadorMiles(this.impuesto);
 	}
@@ -292,6 +316,9 @@ public class Detalle implements Serializable {
 
 	public String getMontoImpuestoSTR() {
 		return Utils.formateadorMiles(this.montoImpuesto);
+	}
+	public String getMontoImpuesto1STR() {
+		return Utils.formateadorMiles(this.montoImpuesto1);
 	}
 
 	public Double getMontoTotalLinea() {
@@ -362,14 +389,78 @@ public class Detalle implements Serializable {
 		this.usuario = usuario;
 	}
 
-	
 	public Double getMontoGanancia() {
 		return montoGanancia;
 	}
 
-	
 	public void setMontoGanancia(Double montoGanancia) {
 		this.montoGanancia = montoGanancia;
+	}
+
+	public Double getPorcentajeGanancia() {
+		return porcentajeGanancia;
+	}
+
+	public void setPorcentajeGanancia(Double porcentajeGanancia) {
+		this.porcentajeGanancia = porcentajeGanancia;
+	}
+
+	public Double getCosto() {
+		return costo;
+	}
+
+	public void setCosto(Double costo) {
+		this.costo = costo;
+	}
+
+	
+	public String getTipoImpuesto1() {
+		return tipoImpuesto1;
+	}
+
+	
+	public void setTipoImpuesto1(String tipoImpuesto1) {
+		this.tipoImpuesto1 = tipoImpuesto1;
+	}
+
+	
+	public Double getImpuesto1() {
+		return impuesto1;
+	}
+
+	
+	public void setImpuesto1(Double impuesto1) {
+		this.impuesto1 = impuesto1;
+	}
+
+	
+	public Double getMontoImpuesto1() {
+		return montoImpuesto1;
+	}
+
+	
+	public void setMontoImpuesto1(Double montoImpuesto1) {
+		this.montoImpuesto1 = montoImpuesto1;
+	}
+
+	
+	public Double getPesoTransporte() {
+		return pesoTransporte;
+	}
+
+	
+	public void setPesoTransporte(Double pesoTransporte) {
+		this.pesoTransporte = pesoTransporte;
+	}
+
+	
+	public Double getPesoTransporteTotal() {
+		return pesoTransporteTotal;
+	}
+
+	
+	public void setPesoTransporteTotal(Double pesoTransporteTotal) {
+		this.pesoTransporteTotal = pesoTransporteTotal;
 	}
 
 }

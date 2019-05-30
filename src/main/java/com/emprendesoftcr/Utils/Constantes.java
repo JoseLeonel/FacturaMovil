@@ -6,6 +6,9 @@ public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																			= ResourceBundle.getBundle("factura");
 
+	//Inventario
+	public static final String					ARTICULO_MINIMO																			= "1";
+	public static final String					ARTICULO_MAXIMO																			= "2";
 	public static final String					PLANTILLA_CORREO_CUENTAS_POR_COBRAR									= "email/cuentasxcobrar.vm";
 	public static final String					PLANTILLA_CORREO_VENTA_POR_CODIGO										= "email/ventasXCodigo.vm";
 	public static final String					PLANTILLA_CORREO_COMPRAS_ACEPTADAS									= "email/emailResumenCompras.vm";
@@ -61,7 +64,7 @@ public class Constantes {
 
 	// Semaforo
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 250;
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS								= 40;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS								= 50;
 
 	// 48 horas cada 5 minutos
 
@@ -184,6 +187,7 @@ public class Constantes {
 	public static final String					MOTIVO_INGRESO_INVENTARIO_COMPRA										= "Ingreso del proveedor:";
 	public static final String					MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO							= "Ingreso por nota de credito:";
 	public static final String					MOTIVO_SALIDA_INVENTARIO_VENTA											= "Salida por venta:";
+	public static final String					MOTIVO_SALIDA_INVENTARIO_COMPRA_ANULACION						= "Salida por compra anulada:";
 	// Contabiliza el inventario
 	public static final String					CONTABLE_SI																					= "Si";
 	public static final String					CONTABLE_NO																					= "No";
@@ -407,6 +411,7 @@ public class Constantes {
 	public static final Integer					FACTURA_ESTADO_FACTURADO														= 2;
 	public static final Integer					FACTURA_ESTADO_TIQUETE_USO_INTERNO									= 4;
 	public static final Integer					FACTURA_ESTADO_ANULADA															= 5;
+	public static final Integer					FACTURA_ESTADO_ANULADA_PROFORMA											= 11;
 
 	public static final Integer					FACTURA_ESTADO_FIRMA_PENDIENTE											= 1;
 	public static final Integer					FACTURA_ESTADO_REFIRMAR_DOCUMENTO										= 8;

@@ -65,4 +65,8 @@ public class CuentaPagarBoImpl implements CuentaPagarBo {
 		return cuentaPagarDao.cuentasPorPagarbyEmpresaAndClienteAndEstado(empresa, proveedor, estado);
 	}
 
+	@Override
+	public CuentaPagar findByConsecutivoAndEmpresa(String consecutivo,Empresa empresa) {
+		return cuentaPagarDao.findByConsecutivoAndEmpresa(consecutivo, empresa);
+	}
 }

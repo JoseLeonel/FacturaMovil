@@ -142,20 +142,20 @@ public class DetalleController {
 		return detalleBo.totalVentasPorDetalle(usuario.getEmpresa(), fechaInicial, fechaFinal);
 
 	}
-//	@Autowired
-//	private CertificadoBo																							certificadoBo;
+	//@Autowired
+	//private CertificadoBo																							certificadoBo;
 
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarDetlleByFacturaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Long idFactura) {
 
-		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+		 //Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
-		// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
-		// criptografica desde linux
-//			 certificadoBo.agregar(usuario.getEmpresa(),"","");
-
+			// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
+			// criptografica desde linux
+		//	 certificadoBo.agregar(usuario.getEmpresa(),"","");
+	
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Detalle");
 
@@ -310,8 +310,8 @@ public class DetalleController {
 	private ByteArrayOutputStream createExcelVentasXCodigo(Collection<Detalle> detalles) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Usuario", "Fecha Emision", "Codigo", "Descripcion", "Clave", "# Documento", "Cedula", "Cliente", "Cantidad", "Precio Unitario", "Monto Total", "Descuento", "%Impuesto", "Impuestos", "Total", "Tipo Moneda", "Tipo Cambio");
-		new SimpleExporter().gridExport(headers, detalles, "factura.usuarioCreacion.nombreUsuario, factura.fechaEmisionSTR,codigo,descripcion,factura.clave, factura.numeroConsecutivo,factura.cliente.cedula, factura.nombreCliente, cantidadSTR, precioUnitarioSTR, montoTotalSTR, montoDescuentoSTR,impuestoSTR, montoImpuestoSTR, montoTotalLinea,factura.codigoMoneda, factura.tipoCambio", baos);
+		List<String> headers = Arrays.asList("Usuario", "Fecha Emision", "Codigo", "Descripcion", "Clave", "# Documento","#Proforma", "Cedula", "Cliente", "Cantidad", "Precio Unitario", "Monto Total", "Descuento", "%Impuesto 1", "Impuestos 1", "%Impuesto 2", "Impuestos 2", "Total", "Tipo Moneda", "Tipo Cambio");
+		new SimpleExporter().gridExport(headers, detalles, "factura.usuarioCreacion.nombreUsuario, factura.fechaEmisionSTR,codigo,descripcion,factura.clave, factura.numeroConsecutivo,factura.consecutivoProforma,factura.cliente.cedula, factura.nombreCliente, cantidadSTR, precioUnitarioSTR, montoTotalSTR, montoDescuentoSTR,impuestoSTR, montoImpuestoSTR,impuesto1, montoImpuesto1STR, montoTotalLinea,factura.codigoMoneda, factura.tipoCambio", baos);
 		return baos;
 	}
 

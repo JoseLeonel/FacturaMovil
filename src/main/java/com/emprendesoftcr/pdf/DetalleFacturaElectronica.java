@@ -15,6 +15,7 @@ public class DetalleFacturaElectronica {
 	private double	_descuento;
 	private double	_subtotal;
 	private double	_tarifaIva;
+	private double	_impuesto1;
 	private double	_impuesto;
 	private double	_exento;
 	private double	_total;
@@ -121,6 +122,17 @@ public class DetalleFacturaElectronica {
 
 	public void setTotal(double _total) {
 		this._total = _total;
+	}
+	
+
+	
+	public double get_impuesto1() {
+		return _impuesto1;
+	}
+
+	
+	public void set_impuesto1(double _impuesto1) {
+		this._impuesto1 = _impuesto1;
 	}
 
 	public static DetalleFacturaElectronica Foo(int linea) {

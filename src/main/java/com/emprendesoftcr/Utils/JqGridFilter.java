@@ -36,6 +36,9 @@ public class JqGridFilter {
 		this.operadorBusqueda = operadorBusqueda;
 		this.valor = valor;
 	}
+	public JqGridFilter(String condicion) {
+		this.campo = condicion;
+	}
 
 	public Long calculaCantidadPaginas(Long total) {
 		return Math.round(Math.ceil(new Double(total) / new Double(cantidadFilas)));

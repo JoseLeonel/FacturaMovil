@@ -81,6 +81,11 @@ public class CategoriasController {
 		binder.registerCustomEditor(Empresa.class, empresaPropertyEditor);
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
+	@RequestMapping(value = "/TotalesCategoriaXArticulo.do", method = RequestMethod.GET)
+	public String totalesCategoriaXArticulo(ModelMap model) {
+		return "views/categoria/TotalesCategoriaXArticulos";
+	}
+
 
 	/**
 	 * Listar de las categorias

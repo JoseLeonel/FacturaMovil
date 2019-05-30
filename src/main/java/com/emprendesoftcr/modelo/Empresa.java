@@ -20,188 +20,194 @@ import com.emprendesoftcr.Utils.Constantes;
 @Table(name = "empresas")
 public class Empresa implements Serializable {
 
-	private static final long serialVersionUID = 2782215506581188984L;
+	private static final long	serialVersionUID	= 2782215506581188984L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer id;
+	private Integer						id;
 
 	@Column(name = "abreviatura")
-	private String abreviaturaEmpresa;
+	private String						abreviaturaEmpresa;
 
 	@Column(name = "numero_consecutivo")
-	private Integer numeroConsecutivo;
+	private Integer						numeroConsecutivo;
 
 	@Column(name = "notac_consecutivo")
-	private Integer notacConsecutivo;
+	private Integer						notacConsecutivo;
 
 	@Column(name = "notad_consecutivo")
-	private Integer notadConsecutivo;
+	private Integer						notadConsecutivo;
 
 	@Column(name = "tiq_consecutivo")
-	private Integer tiqueteConsecutivo;
+	private Integer						tiqueteConsecutivo;
 
 	@Column(name = "caza_matriz")
-	private String cazaMatriz;
+	private String						cazaMatriz;
 
 	@Column(name = "codigo_seguridad")
-	private Integer codigoSeguridad;
+	private Integer						codigoSeguridad;
 
 	@Column(name = "nombre")
-	private String nombre;
+	private String						nombre;
 
 	@Column(name = "nombre_comercial")
-	private String nombreComercial;
+	private String						nombreComercial;
 
 	@Column(name = "tipo_cedula")
-	private String tipoCedula;
+	private String						tipoCedula;
 
 	@Column(name = "cedula")
-	private String cedula;
+	private String						cedula;
 
 	@Column(name = "otra_senas")
-	private String otraSenas;
+	private String						otraSenas;
 
 	@Column(name = "codigo_pais")
-	private Integer codigoPais;
+	private Integer						codigoPais;
 
 	@Column(name = "telefono")
-	private Integer telefono;
+	private Integer						telefono;
 
 	@Column(name = "correo_electronico")
-	private String correoElectronico;
+	private String						correoElectronico;
 
 	@Column(name = "provincia")
-	private String provincia;
+	private String						provincia;
 
 	@Column(name = "canton")
-	private String canton;
+	private String						canton;
 
 	@Column(name = "distrito")
-	private String distrito;
+	private String						distrito;
 
 	@Column(name = "barrio")
-	private String barrio;
+	private String						barrio;
 
 	@Column(name = "logo")
-	private String logo;
+	private String						logo;
 
 	@Column(name = "tiene_inventario")
-	private String tieneInventario;
+	private String						tieneInventario;
 
 	@Column(name = "tiene_lector")
-	private String tieneLector;
+	private String						tieneLector;
 
 	@Column(name = "cambiar_precio")
-	private String cambiarPrecio;
+	private String						cambiarPrecio;
 
 	@Column(name = "estado_produccion")
-	private String estadoProduccion;
+	private String						estadoProduccion;
 
 	@Column(name = "enviar_tiquete")
-	private String enviarTiquete;
+	private String						enviarTiquete;
 
 	@Column(name = "representante")
-	private String representante;
+	private String						representante;
 
 	@Column(name = "nombre_llaveCriptografica")
-	private String nombreLlaveCriptografica;
+	private String						nombreLlaveCriptografica;
 
 	@Column(name = "clave_llaveCriptografica")
-	private Integer claveLlaveCriptografica;
+	private Integer						claveLlaveCriptografica;
 
 	@Column(name = "usuario_envio_comprobante")
-	private String usuarioEnvioComprobante;
+	private String						usuarioEnvioComprobante;
 
 	@Column(name = "password_envio_comprobante")
-	private String passwordEnvioComprobante;
+	private String						passwordEnvioComprobante;
 
 	@Column(name = "estado")
-	private String	estado;
+	private String						estado;
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "created_at")
-	private Date		created_at;
+	private Date							created_at;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
-	private Date updated_at;
+	private Date							updated_at;
 
 	@Column(name = "acept_consecutivo")
-	private Integer aceptadoConsecutivo;
+	private Integer						aceptadoConsecutivo;
 
 	@Column(name = "acept_parcial_consecutivo")
-	private Integer aceptadoParcialConsecutivo;
+	private Integer						aceptadoParcialConsecutivo;
 
 	@Column(name = "recha_consecutivo")
-	private Integer rechazadoConsecutivo;
+	private Integer						rechazadoConsecutivo;
 
 	@Column(name = "vuelto_imprimir")
-	private Integer vueltoImprimir;
+	private Integer						vueltoImprimir;
 
 	@Column(name = "nofactura_elec", columnDefinition = "INT default '0'")
-	private Integer noFacturaElectronica;
+	private Integer						noFacturaElectronica;
 
 	@Column(name = "correo_frecuente")
-	private Integer correoFrecuente;
+	private Integer						correoFrecuente;
 
 	@Column(name = "comanda_empresa_id")
-	private Long comandaEmpresa;
+	private Long							comandaEmpresa;
 
 	@Column(name = "aplic_ganancia", columnDefinition = "INT default '0'")
-	private Integer aplicaGanancia;
+	private Integer						aplicaGanancia;
 
 	@Column(name = "enter_facturar", columnDefinition = "INT default '0'")
-	private Integer enterFacturar;
+	private Integer						enterFacturar;
 
 	// Para no mostrar la pantalla de impresion
 	@Column(name = "imprimir_direc", columnDefinition = "INT default '0'")
-	private Integer imprimirDirecto;
+	private Integer						imprimirDirecto;
 	// abrir sin comanda
 	@Column(name = "abrirsin_com", columnDefinition = "INT default '0'")
-	private Integer abrirSinComanda;
+	private Integer						abrirSinComanda;
 	// abrir con comanda
 	@Column(name = "abrircon_com", columnDefinition = "INT default '0'")
-	private Integer abrirConComanda;
+	private Integer						abrirConComanda;
 
 	@Column(name = "pant_chino", columnDefinition = "INT default '0'")
-	private Integer pantChino;
+	private Integer						pantChino;
 
 	@Column(name = "impre_cocina")
-	private String impresoraCocina;
+	private String						impresoraCocina;
 
 	@Column(name = "impre_factura")
-	private String impresoraFactura;
+	private String						impresoraFactura;
 
 	@Column(name = "separarCuenta", columnDefinition = "INT default '0'")
-	private Integer separarCuenta;
+	private Integer						separarCuenta;
 
 	// 0= Factura tiquetes 1 = Facturas
 	// en las ventas de venta nueva y post desea que les salga la opcion facturar facturas electronica no tiquetes
 	@Column(name = "prio_tiquete", columnDefinition = "INT default '0'")
-	private Integer prioridadFacturar;
+	private Integer						prioridadFacturar;
 
 	@Column(name = "print_cel", columnDefinition = "INT default '0'")
 	private Integer						imprimirCelular;
-	
+
 	@Column(name = "print_siemp", columnDefinition = "INT default '0'")
 	private Integer						imprimirSiempre;
 
-	
-
 	// Para ordenar los articulos y categorias en POST Y RESTAURANTE
 	@Column(name = "ordena_cate_articu", columnDefinition = "INT default '0'")
-	private Integer ordenaCategoriaArticulos;
+	private Integer						ordenaCategoriaArticulos;
+
+//0 = No valida seguridad 1 = si valida seguridad
+	@Column(name = "securida_vent", columnDefinition = "INT default '0'")
+	private Integer						seguridadEnVentas;
+
 	// Descargar el inventario 1 = puede descargar 0 = no puede descargar
 	@Column(name = "descarg_inven", columnDefinition = "INT default '0'")
-	private Integer descargarInventario;
+	private Integer						descargarInventario;
+
+	@Column(name = "conse_proforma", columnDefinition = "INT default '1'")
+	private Integer							consecutivoProforma;
 
 	
-	
+
 	public Empresa(Integer id, String abreviaturaEmpresa, Integer numeroConsecutivo, Integer notacConsecutivo, Integer notadConsecutivo, Integer tiqueteConsecutivo, String cazaMatriz, Integer codigoSeguridad, String nombre, String nombreComercial, String tipoCedula, String cedula, String otraSenas, Integer codigoPais, Integer telefono, String correoElectronico, String provincia, String canton, String distrito, String barrio, String logo, String tieneInventario, String tieneLector, String cambiarPrecio, String estadoProduccion, String enviarTiquete, String representante, String nombreLlaveCriptografica, Integer claveLlaveCriptografica, String usuarioEnvioComprobante, String passwordEnvioComprobante, String estado, Date created_at, Date updated_at, Integer aceptadoConsecutivo,
-			Integer aceptadoParcialConsecutivo, Integer rechazadoConsecutivo, Integer vueltoImprimir, Integer noFacturaElectronica, Integer correoFrecuente, Long comandaEmpresa, Integer aplicaGanancia, Integer enterFacturar, Integer imprimirDirecto, Integer abrirSinComanda, Integer abrirConComanda, Integer pantChino, String impresoraCocina, String impresoraFactura, Integer separarCuenta, Integer prioridadFacturar, Integer imprimirCelular, Integer imprimirSiempre, Integer ordenaCategoriaArticulos, Integer descargarInventario) {
+			Integer aceptadoParcialConsecutivo, Integer rechazadoConsecutivo, Integer vueltoImprimir, Integer noFacturaElectronica, Integer correoFrecuente, Long comandaEmpresa, Integer aplicaGanancia, Integer enterFacturar, Integer imprimirDirecto, Integer abrirSinComanda, Integer abrirConComanda, Integer pantChino, String impresoraCocina, String impresoraFactura, Integer separarCuenta, Integer prioridadFacturar, Integer imprimirCelular, Integer imprimirSiempre, Integer ordenaCategoriaArticulos, Integer seguridadEnVentas, Integer descargarInventario, Integer consecutivoProforma) {
 		super();
 		this.id = id;
 		this.abreviaturaEmpresa = abreviaturaEmpresa;
@@ -257,7 +263,9 @@ public class Empresa implements Serializable {
 		this.imprimirCelular = imprimirCelular;
 		this.imprimirSiempre = imprimirSiempre;
 		this.ordenaCategoriaArticulos = ordenaCategoriaArticulos;
+		this.seguridadEnVentas = seguridadEnVentas;
 		this.descargarInventario = descargarInventario;
+		this.consecutivoProforma = consecutivoProforma;
 	}
 
 	public Empresa() {
@@ -283,15 +291,11 @@ public class Empresa implements Serializable {
 	public Integer getPantChino() {
 		return pantChino;
 	}
-	
 
-
-	
 	public Integer getImprimirSiempre() {
 		return imprimirSiempre;
 	}
 
-	
 	public void setImprimirSiempre(Integer imprimirSiempre) {
 		this.imprimirSiempre = imprimirSiempre;
 	}
@@ -708,17 +712,31 @@ public class Empresa implements Serializable {
 		this.ordenaCategoriaArticulos = ordenaCategoriaArticulos;
 	}
 
-	
+	public Integer getSeguridadEnVentas() {
+		return seguridadEnVentas;
+	}
+
+	public void setSeguridadEnVentas(Integer seguridadEnVentas) {
+		this.seguridadEnVentas = seguridadEnVentas;
+	}
+
 	public Integer getDescargarInventario() {
 		return descargarInventario;
 	}
 
-	
 	public void setDescargarInventario(Integer descargarInventario) {
 		this.descargarInventario = descargarInventario;
 	}
+
 	
+	public Integer getConsecutivoProforma() {
+		return consecutivoProforma;
+	}
+
 	
-	
+	public void setConsecutivoProforma(Integer consecutivoProforma) {
+		this.consecutivoProforma = consecutivoProforma;
+	}
+
 
 }

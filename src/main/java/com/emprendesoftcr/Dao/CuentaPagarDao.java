@@ -13,14 +13,14 @@ public interface CuentaPagarDao {
 
 	void modificar(CuentaPagar cuentaPagar);
 
-	void eliminar(CuentaPagar cuentaCobrar);
+	void eliminar(CuentaPagar cuentaPagar);
 
 	CuentaPagar buscar(Long id);
 	Collection<CuentaPagar> cuentasPorPagarbyFechasAndEmpresaAndClienteAndEstado(Date fechaInicio, Date fechaFin,Empresa empresa,Proveedor proveedor,String estado);
 	
 	Collection<CuentaPagar> cuentasPorPagarbyEmpresaAndClienteAndEstado(Empresa empresa,Proveedor proveedor,String estado);
 	
-	
+	CuentaPagar findByConsecutivoAndEmpresa(String consecutivo,Empresa empresa);
 	
 
 }

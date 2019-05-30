@@ -1,5 +1,6 @@
 package com.emprendesoftcr.web.command;
 
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Factura;
@@ -48,6 +49,7 @@ public class DetalleFacturaCommand {
 
 	private String	fechaEmisionSTR;
 	private String	consecutivo;
+	private String	consecutivoProforma;
 
 	private String	tipoDoc;
 
@@ -56,6 +58,18 @@ public class DetalleFacturaCommand {
 	private Double	montoGanancia;
 	
 	private Factura factura;
+	private Double						porcentajeGanancia;
+
+	private Double						costo;
+	private String						tipoImpuesto1;
+	private Double						impuesto1;
+
+	private Double						montoImpuesto1;
+	private Double						pesoTransporte;
+	
+	private Double						pesoTransporteTotal;
+
+
 
 	public DetalleFacturaCommand() {
 		super();
@@ -87,6 +101,15 @@ public class DetalleFacturaCommand {
 		this.nombreUsuario = detalle.getFactura().getUsuarioCreacion().getNombreUsuario();
 		this.montoGanancia = detalle.getMontoGanancia();
 		this.factura = detalle.getFactura();
+		this.consecutivoProforma = detalle.getFactura().getConsecutivoProforma() !=null?detalle.getFactura().getConsecutivoProforma():Constantes.EMPTY;
+		this.costo = detalle.getCosto();
+		this.porcentajeGanancia = detalle.getPorcentajeGanancia();
+		this.tipoImpuesto1 = detalle.getTipoImpuesto1();
+		this.impuesto1 = detalle.getImpuesto1();
+		this.montoImpuesto1 = detalle.getMontoImpuesto1();
+		this.pesoTransporte = detalle.getPesoTransporte();
+		this.pesoTransporteTotal = detalle.getPesoTransporteTotal();
+	
 	}
 
 	public Long getId() {
@@ -280,6 +303,10 @@ public class DetalleFacturaCommand {
 	public String getMontoImpuestoSTR() {
 		return Utils.formateadorMiles(this.montoImpuesto);
 	}
+	
+	public String getMontoImpuesto1STR() {
+		return Utils.formateadorMiles(this.montoImpuesto1);
+	}
 
 	public Double getMontoTotalLinea() {
 		return montoTotalLinea;
@@ -316,5 +343,87 @@ public class DetalleFacturaCommand {
 	public void setMontoGanancia(Double montoGanancia) {
 		this.montoGanancia = montoGanancia;
 	}
+
+	
+	public String getConsecutivoProforma() {
+		return consecutivoProforma;
+	}
+
+	
+	public void setConsecutivoProforma(String consecutivoProforma) {
+		this.consecutivoProforma = consecutivoProforma;
+	}
+
+	
+	public Double getPorcentajeGanancia() {
+		return porcentajeGanancia;
+	}
+
+	
+	public void setPorcentajeGanancia(Double porcentajeGanancia) {
+		this.porcentajeGanancia = porcentajeGanancia;
+	}
+
+	
+	public Double getCosto() {
+		return costo;
+	}
+
+	
+	public void setCosto(Double costo) {
+		this.costo = costo;
+	}
+
+	
+	public String getTipoImpuesto1() {
+		return tipoImpuesto1;
+	}
+
+	
+	public void setTipoImpuesto1(String tipoImpuesto1) {
+		this.tipoImpuesto1 = tipoImpuesto1;
+	}
+
+	
+	public Double getImpuesto1() {
+		return impuesto1;
+	}
+
+	
+	public void setImpuesto1(Double impuesto1) {
+		this.impuesto1 = impuesto1;
+	}
+
+	
+	public Double getMontoImpuesto1() {
+		return montoImpuesto1;
+	}
+
+	
+	public void setMontoImpuesto1(Double montoImpuesto1) {
+		this.montoImpuesto1 = montoImpuesto1;
+	}
+
+	
+	public Double getPesoTransporte() {
+		return pesoTransporte;
+	}
+
+	
+	public void setPesoTransporte(Double pesoTransporte) {
+		this.pesoTransporte = pesoTransporte;
+	}
+
+	
+	public Double getPesoTransporteTotal() {
+		return pesoTransporteTotal;
+	}
+
+	
+	public void setPesoTransporteTotal(Double pesoTransporteTotal) {
+		this.pesoTransporteTotal = pesoTransporteTotal;
+	}
+	
+	
 
 }

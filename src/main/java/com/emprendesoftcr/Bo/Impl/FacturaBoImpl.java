@@ -74,9 +74,8 @@ public class FacturaBoImpl implements FacturaBo {
 	@Autowired
 	private UsuarioCajaFacturaDao	usuarioCajaFacturaDao;
 
-	
 	@Autowired
-	private DetalleDao							detalleDao;
+	private DetalleDao						detalleDao;
 
 	private Logger								log	= LoggerFactory.getLogger(this.getClass());
 
@@ -229,6 +228,7 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setMedioTarjeta(Constantes.FACTURA_MEDIO_PAGO_TARJETA);
 			}
 			factura.setTipoDoc(facturaCommand.getTipoDoc());
+			factura.setPesoTransporteTotal(facturaCommand.getPesoTransporteTotal() !=null?facturaCommand.getPesoTransporteTotal():Constantes.ZEROS_DOUBLE);
 			factura.setNombreFactura(facturaCommand.getNombreFactura());
 			factura.setDireccion(facturaCommand.getDireccion());
 			factura.setNota(facturaCommand.getNota());
@@ -269,9 +269,9 @@ public class FacturaBoImpl implements FacturaBo {
 			}
 			factura.setEstado(facturaCommand.getEstado());
 			factura.setMesa(facturaCommand.getMesa());
-		//	if (factura.getId() == Constantes.ZEROS_LONG) {
-				factura.setCreated_at(new Date());
-		//	}
+			// if (factura.getId() == Constantes.ZEROS_LONG) {
+			factura.setCreated_at(new Date());
+			// }
 			factura.setFechaEmision(new Date());
 
 		} catch (Exception e) {
@@ -352,26 +352,49 @@ public class FacturaBoImpl implements FacturaBo {
 			if (articulo != null) {
 				if (articulo.getCosto() != null) {
 					costo = articulo.getCosto();
+
 				}
 			}
-			gananciaProducto = getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad());
+			gananciaProducto = getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad(), Utils.roundFactura(detalleFacturaCommand.getMontoDescuento(), 5));
 			Detalle detalle = new Detalle(detalleFacturaCommand);
+			detalle.setPesoTransporte(detalleFacturaCommand.getPesoTransporte() !=null?detalleFacturaCommand.getPesoTransporte():Constantes.ZEROS_DOUBLE);
+			detalle.setPesoTransporteTotal(detalleFacturaCommand.getPesoTransporteTotal() !=null?detalleFacturaCommand.getPesoTransporteTotal():Constantes.ZEROS_DOUBLE);
+			detalle.setCosto(costo);
 			detalle.setGanancia(Utils.roundFactura(gananciaProducto, 5));
+			detalle.setMontoGanancia(Utils.roundFactura(gananciaProducto, 5));
+			detalle.setPorcentajeGanancia(getPorcentajeGananciaProducto(detalleFacturaCommand.getPrecioUnitario(), detalleFacturaCommand.getCosto() !=null?detalleFacturaCommand.getCosto():Constantes.ZEROS));
+			detalle.setMontoGanancia(Utils.roundFactura(detalleFacturaCommand.getMontoGanancia() !=null?detalleFacturaCommand.getMontoGanancia():Constantes.ZEROS_DOUBLE, 5));
 			detalle.setUsuario(usuario);
+			detalleFacturaCommand.setTipoImpuesto(detalleFacturaCommand.getTipoImpuesto() !=null?detalleFacturaCommand.getTipoImpuesto():Constantes.EMPTY);
+			detalleFacturaCommand.setTipoImpuesto1(detalleFacturaCommand.getTipoImpuesto1() !=null?detalleFacturaCommand.getTipoImpuesto1():Constantes.EMPTY);
+			detalle.setImpuesto(detalleFacturaCommand.getImpuesto() !=null?detalleFacturaCommand.getImpuesto():Constantes.ZEROS_DOUBLE);
+			detalle.setImpuesto1(detalleFacturaCommand.getImpuesto1() !=null?detalleFacturaCommand.getImpuesto1():Constantes.ZEROS_DOUBLE);
 			if (detalleFacturaCommand.getTipoImpuesto() != null) {
-				if (detalleFacturaCommand.getTipoImpuesto().equals(Constantes.EMPTY)) {
-					if (detalle.getMontoImpuesto() != null) {
-						if (detalle.getMontoImpuesto() > 0) {
-							detalle.setTipoImpuesto(Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
+				if (!detalleFacturaCommand.getTipoImpuesto().equals(Constantes.EMPTY)) {
+					if (detalleFacturaCommand.getMontoImpuesto() != null) {
+						if (detalleFacturaCommand.getMontoImpuesto() > 0) {
+							detalle.setTipoImpuesto(!detalleFacturaCommand.getTipoImpuesto().equals(Constantes.EMPTY)?detalleFacturaCommand.getTipoImpuesto():Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
 						}
 					}
+					if (detalleFacturaCommand.getMontoImpuesto1() != null) {
+						if (detalleFacturaCommand.getMontoImpuesto1() > 0) {
+							detalle.setTipoImpuesto1(!detalleFacturaCommand.getTipoImpuesto1().equals(Constantes.EMPTY)?detalleFacturaCommand.getTipoImpuesto1():Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
+						}
+					}
+
 				}
 			} else {
-				if (detalle.getMontoImpuesto() != null) {
-					if (detalle.getMontoImpuesto() > 0) {
-						detalle.setTipoImpuesto(Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
+				if (detalleFacturaCommand.getMontoImpuesto() != null) {
+					if (detalleFacturaCommand.getMontoImpuesto() > 0) {
+						detalle.setTipoImpuesto(!detalleFacturaCommand.getTipoImpuesto().equals(Constantes.EMPTY)?detalleFacturaCommand.getTipoImpuesto():Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
 					}
 				}
+				if (detalleFacturaCommand.getMontoImpuesto1() != null) {
+					if (detalle.getMontoImpuesto1() > 0) {
+						detalle.setTipoImpuesto1(!detalleFacturaCommand.getTipoImpuesto1().equals(Constantes.EMPTY)?detalleFacturaCommand.getTipoImpuesto1():Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
+					}
+				}
+
 			}
 			detalle.setNaturalezaDescuento(Constantes.FORMATO_NATURALEZA_DESCUENTO);
 			detalle.setNumeroLinea(numeroLinea);
@@ -383,24 +406,30 @@ public class FacturaBoImpl implements FacturaBo {
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
 				detalle.setMontoDescuento(detalle.getMontoDescuento() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoDescuento(), 5));
 				detalle.setCantidad(detalle.getCantidad() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getCantidad(), 3));
-				detalle.setMontoImpuesto(detalle.getMontoImpuesto() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoImpuesto(), 5));
+				detalle.setMontoImpuesto(detalleFacturaCommand.getMontoImpuesto() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalleFacturaCommand.getMontoImpuesto(), 5));
+				detalle.setMontoImpuesto1(detalleFacturaCommand.getMontoImpuesto1() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalleFacturaCommand.getMontoImpuesto1(), 5));
 				detalle.setPrecioUnitario(detalle.getPrecioUnitario() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getPrecioUnitario(), 5));
 				detalle.setMontoTotalLinea(detalle.getMontoTotalLinea() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoTotalLinea(), 5));
 				detalle.setMontoTotal(detalle.getMontoTotal() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoTotal(), 5));
 				// Se calcula el subtotal por problemas de decimales
 				detalle.setSubTotal(Utils.roundFactura(detalle.getMontoTotal() - detalle.getMontoDescuento(), 5));
 				// Suma de montos con impuestos
+				
+				//  cambios de doble impuesto
+				
+				
 				// Con impuesto
-				if (detalle.getMontoImpuesto() > Constantes.ZEROS_DOUBLE) {
+				if (detalle.getMontoImpuesto() > Constantes.ZEROS_DOUBLE || detalle.getMontoImpuesto1() > Constantes.ZEROS_DOUBLE ) {
 					// Cuando es por servicios
 					if (detalle.getTipoImpuesto() == Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO) {
 						totalServGravados = detalle.getMontoTotal() != null ? totalServGravados + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
 					} else {
 						totalMercanciasGravadas = detalle.getMontoTotal() != null ? totalMercanciasGravadas + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
 						totalGravado = detalle.getMontoTotal() != null ? totalGravado + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
-						totalImpuesto = totalImpuesto + detalle.getMontoImpuesto();
+						totalImpuesto = totalImpuesto + detalle.getMontoImpuesto() + detalle.getMontoImpuesto1();
 					}
-				} else if (detalle.getMontoImpuesto().equals(Constantes.ZEROS_DOUBLE)) { // Sin Impuesto
+					
+				} else if (detalle.getMontoImpuesto().equals(Constantes.ZEROS_DOUBLE) && detalle.getMontoImpuesto1().equals(Constantes.ZEROS_DOUBLE) ) { // Sin Impuesto
 					// Cuando es por servicios
 					if (detalle.getTipoImpuesto() == Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO) {
 						totalServExentos = detalle.getMontoTotal() != null ? totalServExentos + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
@@ -419,13 +448,13 @@ public class FacturaBoImpl implements FacturaBo {
 			numeroLinea += 1;
 			detalle.setFactura(factura);
 			detalleDao.agregar(detalle);
-			//factura.addDetalle(detalle);
-			
-		// Solo aplica para venta POST 
+			// factura.addDetalle(detalle);
+
+			// Solo aplica para venta POST
 			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) && facturaCommand.getMesa() != null && !facturaCommand.getMesa().getId().equals(0L) && facturaCommand.getMesa().getImpuestoServicio()) {
 				Integer con = 0;
-			}else {
-				if(detalle.getCodigo().equals(Constantes.CODIGO_ARTICULO_IMPUESTO_SERVICIO)) {
+			} else {
+				if (detalle.getCodigo().equals(Constantes.CODIGO_ARTICULO_IMPUESTO_SERVICIO)) {
 					totalImpServicios = totalImpServicios + detalle.getMontoTotal();
 				}
 			}
@@ -438,9 +467,14 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setCreated_at(new Date());
 			detalle.setDescripcion("Impuesto Servicio");
 			detalle.setGanancia(Constantes.ZEROS_DOUBLE);
+			detalle.setPorcentajeDesc(Constantes.ZEROS_DOUBLE);
+			detalle.setPorcentajeGanancia(Constantes.ZEROS_DOUBLE);
+			detalle.setMontoGanancia(Constantes.ZEROS_DOUBLE);
 			detalle.setImpuesto(Constantes.ZEROS_DOUBLE);
+			detalle.setImpuesto1(Constantes.ZEROS_DOUBLE);
 			detalle.setMontoDescuento(Constantes.ZEROS_DOUBLE);
 			detalle.setMontoImpuesto(Constantes.ZEROS_DOUBLE);
+			detalle.setMontoImpuesto1(Constantes.ZEROS_DOUBLE);
 			detalle.setMontoTotal(Utils.roundFactura(subTotal * 0.10, 5));
 			detalle.setMontoTotalLinea(Utils.roundFactura(subTotal * 0.10, 5));
 			detalle.setNaturalezaDescuento(Constantes.FORMATO_NATURALEZA_DESCUENTO);
@@ -452,13 +486,14 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setSubTotal(Utils.roundFactura(subTotal * 0.10, 5));
 			detalle.setTipoCodigo(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO);
 			detalle.setTipoImpuesto("");
+			detalle.setTipoImpuesto1("");
 			detalle.setUnidadMedida("Unid");
 			detalle.setUpdated_at(new Date());
 			detalle.setFactura(factura);
 			detalle.setUsuario(usuario);
 			detalle.setTipoCodigo("");
 			detalle.setFactura(factura);
-			//factura.addDetalle(detalle);
+			// factura.addDetalle(detalle);
 			detalleDao.agregar(detalle);
 			// Se afecta los montos de la factura
 			totalServExentos = totalServExentos + detalle.getMontoTotal();
@@ -482,14 +517,36 @@ public class FacturaBoImpl implements FacturaBo {
 		factura.setTotalImpuesto(Utils.roundFactura(totalImpuesto, 5));
 		factura.setTotalComprobante(Utils.roundFactura(totalComprobante, 5));
 		factura.setTotalImpuestoServicio(Utils.roundFactura(totalImpServicios, 5));
-		
+
 	}
+	
+	
 
-	private Double getGananciaProducto(Double precioUnitario, Double costo) {
+	private Double getGananciaProducto(Double precioUnitario, Double costo, Double montoDescuento) {
+		// si el costo supera al precio unitario el costo es cero
+		if(costo > precioUnitario) {
+			costo = Constantes.ZEROS_DOUBLE;
+		}
 		Double resultado = Constantes.ZEROS_DOUBLE;
-		resultado = costo != Constantes.ZEROS_DOUBLE ? precioUnitario - costo : Constantes.ZEROS_DOUBLE;
+		Double descuento = montoDescuento != null ? montoDescuento : Constantes.ZEROS_DOUBLE;
+		
+		resultado = precioUnitario > costo ? precioUnitario - costo : Constantes.ZEROS_DOUBLE;
 
-		return resultado;
+		return Utils.roundFactura(resultado - descuento, 5);
+	}
+	
+
+	private Double getPorcentajeGananciaProducto(Double precioUnitario, Double costo) {
+		// si el costo supera al precio unitario el costo es cero
+		if(costo > precioUnitario) {
+			return 100d;
+		}
+		
+		Double resultado = costo/precioUnitario;
+		resultado = 1 - resultado;
+		
+		
+		return Utils.roundFactura(resultado * 100, 5);
 	}
 
 	private void actualizaArticulosInventario(Factura factura, Usuario usuario) throws Exception {
@@ -572,7 +629,7 @@ public class FacturaBoImpl implements FacturaBo {
 			// Se forma el objeto factura
 			factura = this.formaFactura(facturaCommand, usuario);
 			// Se asociando los detalles a la factura
-			
+
 			try {
 				// Generar el consecutivo de venta
 				if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
@@ -594,7 +651,16 @@ public class FacturaBoImpl implements FacturaBo {
 						factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_EN_PROCESOS);
 					}
 				}
-			// Se almacena la factura, se deja en estado en proceso para que no lo tome los procesos de hacienda
+				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
+					if (factura.getConsecutivoProforma() != null) {
+						if (factura.getConsecutivoProforma().equals(Constantes.EMPTY)) {
+							factura.setConsecutivoProforma(empresaBo.generarConsecutivoProforma(factura.getEmpresa(), usuario));
+						}
+					} else {
+						factura.setConsecutivoProforma(empresaBo.generarConsecutivoProforma(factura.getEmpresa(), usuario));
+					}
+				}
+				// Se almacena la factura, se deja en estado en proceso para que no lo tome los procesos de hacienda
 				if (factura.getId() == null) {
 					factura.setCreated_at(new Date());
 					agregar(factura);
@@ -605,7 +671,6 @@ public class FacturaBoImpl implements FacturaBo {
 				// Se asociando los detalles a la factura
 				this.asociaDetallesFactura(factura, facturaCommand, usuario, detallesFacturaCommand);
 
-				
 				// Efectivo Banco Tarjeta
 				if (!factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
@@ -670,10 +735,6 @@ public class FacturaBoImpl implements FacturaBo {
 							resultado = resultado - factura.getTotalBanco();
 							factura.setTotalEfectivo(resultado);
 						}
-				
-						
-							
-						
 
 						// Se agrega solo si no existe en la caja de usuario, casos de reintentos
 						if (usuarioCajaFacturaDao.findByFacturaId(factura.getId()) == null) {
@@ -684,14 +745,8 @@ public class FacturaBoImpl implements FacturaBo {
 							usuarioCajaFactura.setUsuarioCaja(usuarioCaja);
 							usuarioCajaFacturaDao.agregar(usuarioCajaFactura);
 						}
-
-						// Se mueve al controller por que el procedimiento no toma los cambios
-						/*
-						 * if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) { //usuarioCajaDao.actualizarCaja(usuarioCaja, factura.getTotalEfectivo(), factura.getTotalTarjeta(), factura.getTotalBanco(), factura.getTotalCredito(), Constantes.ZEROS_DOUBLE, factura.getTotalImpuestoServicio()); usuarioCajaBo.actualizarCaja(usuarioCaja); }
-						 */
 					}
 				}
-
 				// Actualiza articulo y inventario
 				this.actualizaArticulosInventario(factura, usuario);
 

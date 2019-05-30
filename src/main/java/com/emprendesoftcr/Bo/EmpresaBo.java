@@ -27,7 +27,7 @@ public interface EmpresaBo {
 	
 	String generarConsecutivoRecepcionFactura(Empresa empresa, Usuario usuario, RecepcionFactura recepcionFactura) throws Exception;
 	String generaClaveFacturaTributacion(Empresa empresa, String consecutivoFactura, Integer comprobanteElectronico) throws Exception;
-	
+	String generarConsecutivoProforma(Empresa empresa, Usuario usuario) throws Exception;
 	Collection<Empresa> findByEstado(String estado);
 
 }

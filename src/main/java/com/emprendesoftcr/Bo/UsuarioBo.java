@@ -22,5 +22,11 @@ public interface UsuarioBo {
 	Usuario buscarPorNombreYPrimerApellidoYSegundoApellido(String nombre, String primerApellido, String segundoApellido);
 	
 	JqGridFilter filtroPorEmpresa(String nombreUsuario);
+	
+	Boolean isAdministrador_empresa(Usuario usuario);
+	Boolean isAdministrador_sistema(Usuario usuario);
+	Boolean isAdministrador_restaurante(Usuario usuario);
+	Boolean isAdministrador_cajero(Usuario usuario);
+	Boolean isAdministrador_vendedor(Usuario usuario);
 
 }

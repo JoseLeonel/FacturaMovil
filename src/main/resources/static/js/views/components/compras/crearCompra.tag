@@ -610,8 +610,16 @@
             todayHighlight:true,
         }
     );
-        __Init()
-    })
+    var retrievedObject = JSON.parse(localStorage.getItem('detallesComprasNueva'));
+    self.detail = retrievedObject == null?self.detail = []:retrievedObject
+    var compraObject = JSON.parse(localStorage.getItem('compraNueva'));
+    self.compra = compraObject ==null?self.compra:compraObject
+    var proveedorObject = JSON.parse(localStorage.getItem('proveedor'));
+    self.proveedor = proveedorObject == null? self.proveedor:proveedorObject
+    self.update()
+    __calculate()
+    //__Init()
+})
 /**
 * Camps requeridos
 **/
@@ -659,16 +667,7 @@ __crearCompraEnEspera(){
 ** Se aplica o se crea una compra cargada en la pantalla
 **/
 __AplicarYCrearCompra(){
-     if(self.detail.length == 0 ){
-        mensajeError($.i18n.prop("compra.alert.sin.detalles"))
-        return
-    }
-    if(formaPago.value == 2  ){
-        if(fechaCredito.value == null || fechaCredito.value.length == 0){
-           mensajeError($.i18n.prop("compra.alert.fechaCredito"))
-            return
-        }
-    }
+   
     if ($("#formularioCompra").valid()) {
         swal({
            title: '',
@@ -754,6 +753,9 @@ function __Init(){
      __comboFormaPagos()
      //Tipos de Documentos
       __ComboTipoDocumentos()
+    localStorage.setItem('detallesComprasNueva', JSON.stringify(self.detail));
+    localStorage.setItem('compraNueva', JSON.stringify(self.compra));
+    localStorage.setItem('proveedor', JSON.stringify(self.proveedor));
      
 }
 /**
@@ -842,6 +844,16 @@ function cargarDetallesCompraEnEspera(data){
 *  Crear Compra nueva
 **/
 function crearCompra(estadoCompra){
+    if(self.detail.length == 0 ){
+        mensajeError($.i18n.prop("compra.alert.sin.detalles"))
+        return
+    }
+    if(formaPago.value == 2  ){
+        if(fechaCredito.value == null || fechaCredito.value.length == 0){
+           mensajeError($.i18n.prop("compra.alert.fechaCredito"))
+            return
+        }
+    }
     self.detalleCompra.data =self.detail
     self.update()
       var JSONDetalles = JSON.stringify( self.detalleCompra );
@@ -1401,6 +1413,10 @@ function __calculate() {
     $( "#codigo" ).val(null);
     $('.codigo').select()
     $('.codigo').focus()
+    localStorage.setItem('detallesComprasNueva', JSON.stringify(self.detail));
+    localStorage.setItem('compraNueva', JSON.stringify(self.compra));
+    localStorage.setItem('proveedor', JSON.stringify(self.proveedor));
+
 }
 /**
 * Definicion de la tabla articulos 

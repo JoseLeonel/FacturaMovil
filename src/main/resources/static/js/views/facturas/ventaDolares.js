@@ -13,9 +13,11 @@ var _Init = function () {
  * @returns
  */
 function cargaMantenimiento() {
+	var parametros = {
+		codigoMoneda :'USD'
+	}
+	riot.mount('punto-venta',{parametros:parametros});
 
-	
-	riot.mount('venta-dolares');
 }
 
 
