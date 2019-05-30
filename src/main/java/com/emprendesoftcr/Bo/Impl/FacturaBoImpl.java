@@ -361,6 +361,9 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setPesoTransporteTotal(detalleFacturaCommand.getPesoTransporteTotal() !=null?detalleFacturaCommand.getPesoTransporteTotal():Constantes.ZEROS_DOUBLE);
 			detalle.setCosto(costo);
 			detalle.setGanancia(Utils.roundFactura(gananciaProducto, 5));
+			detalle.setMontoGanancia(Utils.roundFactura(gananciaProducto, 5));
+			detalle.setPorcentajeGanancia(getPorcentajeGananciaProducto(detalleFacturaCommand.getPrecioUnitario(), detalleFacturaCommand.getCosto() !=null?detalleFacturaCommand.getCosto():Constantes.ZEROS));
+			detalle.setMontoGanancia(Utils.roundFactura(detalleFacturaCommand.getMontoGanancia() !=null?detalleFacturaCommand.getMontoGanancia():Constantes.ZEROS_DOUBLE, 5));
 			detalle.setUsuario(usuario);
 			detalleFacturaCommand.setTipoImpuesto(detalleFacturaCommand.getTipoImpuesto() !=null?detalleFacturaCommand.getTipoImpuesto():Constantes.EMPTY);
 			detalleFacturaCommand.setTipoImpuesto1(detalleFacturaCommand.getTipoImpuesto1() !=null?detalleFacturaCommand.getTipoImpuesto1():Constantes.EMPTY);
@@ -464,6 +467,9 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setCreated_at(new Date());
 			detalle.setDescripcion("Impuesto Servicio");
 			detalle.setGanancia(Constantes.ZEROS_DOUBLE);
+			detalle.setPorcentajeDesc(Constantes.ZEROS_DOUBLE);
+			detalle.setPorcentajeGanancia(Constantes.ZEROS_DOUBLE);
+			detalle.setMontoGanancia(Constantes.ZEROS_DOUBLE);
 			detalle.setImpuesto(Constantes.ZEROS_DOUBLE);
 			detalle.setImpuesto1(Constantes.ZEROS_DOUBLE);
 			detalle.setMontoDescuento(Constantes.ZEROS_DOUBLE);
@@ -517,11 +523,30 @@ public class FacturaBoImpl implements FacturaBo {
 	
 
 	private Double getGananciaProducto(Double precioUnitario, Double costo, Double montoDescuento) {
+		// si el costo supera al precio unitario el costo es cero
+		if(costo > precioUnitario) {
+			costo = Constantes.ZEROS_DOUBLE;
+		}
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		Double descuento = montoDescuento != null ? montoDescuento : Constantes.ZEROS_DOUBLE;
-		resultado = costo != Constantes.ZEROS_DOUBLE ? precioUnitario - costo : Constantes.ZEROS_DOUBLE;
+		
+		resultado = precioUnitario > costo ? precioUnitario - costo : Constantes.ZEROS_DOUBLE;
 
 		return Utils.roundFactura(resultado - descuento, 5);
+	}
+	
+
+	private Double getPorcentajeGananciaProducto(Double precioUnitario, Double costo) {
+		// si el costo supera al precio unitario el costo es cero
+		if(costo > precioUnitario) {
+			return 100d;
+		}
+		
+		Double resultado = costo/precioUnitario;
+		resultado = 1 - resultado;
+		
+		
+		return Utils.roundFactura(resultado * 100, 5);
 	}
 
 	private void actualizaArticulosInventario(Factura factura, Usuario usuario) throws Exception {

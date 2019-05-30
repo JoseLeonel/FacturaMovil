@@ -135,7 +135,7 @@
                                     </div> 
                                     <div  class="form-group " show={empresa.pantChino == 0}>
                                         <label class="{labelTotales} ">{$.i18n.prop("factura.resumen.banco")} </label> 
-                                        <input onclick={_SeleccionarBanco} onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number"  onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra}  totalBancoPantalla"  id="totalBancoPantalla" name="totalBancoPantalla"  value="{factura.totalBanco}" >
+                                        <input onclick={_SeleccionarBanco} onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number"  onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra}  totalBanco"  id="totalBanco" name="totalBanco"  value="{factura.totalBanco}" >
                                     </div> 
                                 </div>
                             </div>
@@ -1197,8 +1197,8 @@ _SeleccionarTarjeta(){
     $(".totalTarjeta").focus()
 }   
 _SeleccionarBanco(){
-    $('.totalBancoPantalla').select()
-    $(".totalBancoPantalla").focus()
+    $('.totalBanco').select()
+    $(".totalBanco").focus()
 }    
 /**
  * Reimprime la factura
@@ -1307,8 +1307,7 @@ function __LimpiarClick(){
     $(".totalEfectivo").val(null)   
     $(".totalTarjeta").val(null)   
     $(".totalBanco").val(null)   
-    $(".totalBancoPantalla").val(null)  
-    $(".nota").val(null)    
+   $(".nota").val(null)    
     $(".direccion").val(null)   
     $('.condicionVenta').prop("selectedIndex", 0);
     $('.tipoDoc').prop("selectedIndex", 0);
@@ -1931,7 +1930,6 @@ function __Init(){
     $(".totalTarjeta").val(null)   
     $(".nombreFactura").val(null)
     $(".correoAlternativo").val(null)
-    $(".totalBancoPantalla").val(null)  
     $(".totalEfectivo").val(null)   
     $('.precioVenta').val(null)
     $("#plazoCreditoL").val(null)
@@ -2018,6 +2016,8 @@ function cargarDetallesFacturaEnEspera(data){
             montoTotal      : parseFloat(modeloTabla.montoTotal),
             costo           : parseFloat(modeloTabla.costo),
             porcentajeGanancia :parseFloat(modeloTabla.porcentajeGanancia),
+            montoGanancia :parseFloat(modeloTabla.montoGanancia),
+            ganancia :parseFloat(__valorNumerico(modeloTabla.ganancia)),
             pesoTransporte :  parseFloat(modeloTabla.pesoTransporte),
             pesoTransporteTotal :parseFloat(modeloTabla.pesoTransporteTotal)
         });
@@ -2041,7 +2041,6 @@ function cargarDetallesFacturaEnEspera(data){
     $('#totalEfectivo').val(self.factura.totalComprobante)
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
-    $('#totalBancoPantalla').val(null)
     $('#totalEfectivo').focus()
     $('#totalEfectivo').select()
      __calculate(); 
@@ -2295,12 +2294,10 @@ function mostrarPAgo(){
         $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
         $('#totalTarjeta').val(null)
         $('#totalBanco').val(null)
-        $('#totalBancoPantalla').val(null)
     }else{
         $('#totalEfectivo').val(null)
         $('#totalTarjeta').val(null)
         $('#totalBanco').val(null)
-        $('#totalBancoPantalla').val(null)
     }
     getSubTotalGeneral()
     self.totalCambioPagar =0
@@ -2865,6 +2862,7 @@ function __nuevoArticuloAlDetalle(cantidad){
     self.pesoPrioridad  =  self.pesoPrioridad + 1
     self.numeroLinea    = self.numeroLinea + 1
     self.cantArticulos  = self.cantArticulos + 1
+    var costoTotal      = parseFloat(self.articulo.costo) > precioUnitario ?0:parseFloat(self.articulo.costo); 
     var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,self.articulo.costo ==null?0:parseFloat(self.articulo.costo),cantidad)
     self.detail.push({
        numeroLinea     : parseFloat(self.numeroLinea),
@@ -2884,10 +2882,11 @@ function __nuevoArticuloAlDetalle(cantidad){
        montoDescuento  : 0,
        porcentajeDesc  : 0,
        ganancia        : parseFloat(ganancia),
+       montoGanancia   : parseFloat(ganancia),
        subTotal        : parseFloat(subTotal),
        montoTotalLinea : parseFloat(montoTotalLinea),
        montoTotal      : parseFloat(montoTotal),
-       costo           : self.articulo.costo ==null?0:parseFloat(self.articulo.costo),
+       costo           : costoTotal,
        porcentajeGanancia :   getListaPrecioGanancia(self.articulo) ==null?0:parseFloat(getListaPrecioGanancia(self.articulo)),
        pesoTransporte :  parseFloat(self.articulo.pesoTransporte),
        pesoTransporteTotal :parseFloat(self.articulo.pesoTransporte)
@@ -2901,8 +2900,7 @@ function __nuevoArticuloAlDetalle(cantidad){
     return 0;
     } );
     self.cantidadEnterFacturar = 0
-    self.totalGananciaByProducto = formatoDecimales(parseFloat(ganancia),2)
-    
+  //  self.totalGananciaByProducto += parseFloat(ganancia)
     self.update()
 }
 
@@ -3077,7 +3075,8 @@ function ActualizarLineaDEtalle(){
     self.item.montoImpuesto1   = montoImpuesto1
     self.item.montoTotalLinea  = montoTotalLinea
     self.item.ganancia         = __ObtenerGananciaProductoNuevoIngresado(montoDescuento,self.item.precioUnitario,self.item.costo ==null?0:parseFloat(self.item.costo),self.item.cantidad)
-    self.totalGananciaByProducto = formatoDecimales(parseFloat(self.item.ganancia),2)
+    self.item.montoGanancia    = self.item.ganancia 
+   // self.totalGananciaByProducto = formatoDecimales(parseFloat(self.item.ganancia),2)
     self.update()
 }
 /**
@@ -3087,7 +3086,8 @@ function agregarCantidadAlaVenta(cantidad){
     self.item.cantidad = cantidad
     var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,self.item.precioUnitario,self.item.costo ==null?0:parseFloat(self.item.costo),cantidad)
     self.item.ganancia = ganancia
-    self.totalGananciaByProducto = formatoDecimales(parseFloat(ganancia),2)
+    self.item.montoGanancia    = self.item.ganancia
+   // self.totalGananciaByProducto = formatoDecimales(parseFloat(ganancia),2)
     self.update()
     ActualizarLineaDEtalle()
     aplicarCambioLineaDetalle() 
@@ -3141,19 +3141,20 @@ function __calculate() {
     self.factura.totalImpuesto    = 0;
     self.factura.subTotal         = 0;
     self.update()
-    totalVenta     = 0
-    subTotal       = 0
-    totalDescuento = 0
-    totalImpuesto  = 0
-    totalImpuesto1 = 0
-    totalMercanciasGravadas = 0
-    totalMercanciasExentas  = 0
-    totalServGravados       = 0
-    totalServExentos        = 0
-    totalGravado            = 0
-    totalExento             = 0
-    totalComprobante        = 0
-    totalventaNeta          = 0
+    var totalVenta     = 0
+    var subTotal       = 0
+    var totalDescuento = 0
+    var totalImpuesto  = 0
+    var totalImpuesto1 = 0
+    var totalMercanciasGravadas = 0
+    var totalMercanciasExentas  = 0
+    var totalServGravados       = 0
+    var totalServExentos        = 0
+    var totalGravado            = 0
+    var totalExento             = 0
+    var totalComprobante        = 0
+    var totalventaNeta          = 0
+    var totalGanancia           = 0
     self.cantArticulos      = 0
     var totalPesoByFactura = 0
     self.detail.forEach(function(e){
@@ -3174,9 +3175,11 @@ function __calculate() {
         totalImpuesto           += __valorNumerico(e.montoImpuesto)
         totalImpuesto1          += __valorNumerico(e.montoImpuesto1)
         totalVenta              += e.montoTotal
+        totalGanancia           +=__valorNumerico(e.ganancia)
         self.cantArticulos      += esEntero(e.cantidad) == true? e.cantidad:1 
         totalPesoByFactura      += parseFloat(e.pesoTransporte) * parseFloat(e.cantidad)
     });
+    self.totalGananciaByProducto = formatoDecimales(parseFloat(totalGanancia),2)
     self.totalPesoByFactura = parseFloat(totalPesoByFactura)
     self.totalPesoByFacturaSTR           = formatoDecimales(totalPesoByFactura,2);
     self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)

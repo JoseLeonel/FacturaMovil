@@ -23,6 +23,7 @@
             <input type="hidden" id='totalImpuestoServ'       name='totalImpuestoServ'       value="{factura.totalImpuestoServ}" >
             <input type="hidden" id='medioPago'               name='medioPago'               value="{factura.medioPago}" >
             <input type="hidden" id='mesa'                    name='mesa'                    value="{factura.mesa}" >
+            <input type="hidden" id='nota'                    name='nota'                    value="{factura.nota}" >
             <input type="hidden" id='nombreFactura'           name='nombreFactura'           value="{factura.nombreFactura}" >
             <input type="hidden" id='montoCambio'             name='montoCambio'             value="{factura.montoCambio}" >
             <input type="hidden" id='codigoMoneda'            name='codigoMoneda'            value="{factura.codigoMoneda}" >
@@ -228,7 +229,7 @@ self.totalImpuestos        = 0
 self.total                 = 0
 self.mostrarListado        = true
 self.mostrarDetalle        = false
-self.clientes                  = {data:[]}
+self.clientes              = {data:[]}
 self.detail                = []
     self.facturas_espera       = {data:[]}  
     self.factura                = {
@@ -354,6 +355,7 @@ function crearFactura(){
     self.factura.referenciaFechaEmision = null
     self.factura.referenciaTipoDoc = self.factura.tipoDoc
     self.factura.referenciaNumero = self.factura.numeroConsecutivo 
+    self.factura.nota = $('#referenciaRazon').val()
     self.factura.detalleFactura =JSONDetalles
     self.update();
     var formulario = $("#formulario").serialize();

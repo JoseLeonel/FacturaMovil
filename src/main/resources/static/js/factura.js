@@ -132,11 +132,14 @@ $(document)
 	*Venta Restaurante
 	**/
 	function __ObtenerGananciaProductoNuevoIngresado(montoDescuento,precioUnitario,costo,cantidad){
-	    if(redondeoDecimales(costo,2) == 0){
-	        return 0;
+	
+		var precioUnitarioTemp = precioUnitario * cantidad;
+		var costoTemp = costo * cantidad;
+		// si el costo es mayor al precio unitario se deja en cero debido a que se trata de productos de uso internos
+	    if(costoTemp > precioUnitarioTemp){
+	    	costoTemp = 0;
 	    }
-	    var precioUnitarioTemp = precioUnitario * cantidad;
-	    var costoTemp = costo * cantidad;
+	   
 	    var totalGanancia = precioUnitarioTemp - costoTemp;
 	    if(redondeoDecimales(montoDescuento,2) == redondeoDecimales(totalGanancia,2)){
 	        return 0;
