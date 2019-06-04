@@ -150,9 +150,12 @@ public class HeaderFooter extends PdfPageEventHelper {
 			PdfPTable derecha_inferior = new PdfPTable(2);
 			derecha_inferior.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 			// derecha_inferior.getDefaultCell().setCellEvent(new RoundRectangle());
-
-			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal("Consecutivo No.:", UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
-			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getConsecutivo(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
+      if(this.facturaElectronica.getConsecutivo() !=null) {
+      	if(!facturaElectronica.getConsecutivo().equals(Constantes.EMPTY)) {
+    			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal("Consecutivo No.:", UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
+    			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getConsecutivo(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
+      	}
+      }
 			if(facturaElectronica.getConsecutivoProforma() !=null) {
 				if(!facturaElectronica.getConsecutivoProforma().equals(Constantes.EMPTY)) {
 					derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal("No.Proforma:", UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));					

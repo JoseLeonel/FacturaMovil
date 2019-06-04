@@ -3418,10 +3418,16 @@ function __nuevoArticuloAlDetalle(cantidad){
     if(self.articulo.descripcion == ""){
         return;
     }
+    if(self.detail == null){
+        __storege()
+    }
+      //Determinar el precio a incluir
+    var resultadoPrecio = getListaPrecio(self.articulo)
+      
     var resultaMontoImpuesto = parseFloat(self.articulo.impuesto)
-    var precioUnitario  = resultaMontoImpuesto > 0 ?getPrecioUnitario(self.articulo.precioPublico,resultaMontoImpuesto):0
+    var precioUnitario  = getPrecioUnitario(resultadoPrecio,resultaMontoImpuesto)
     resultaMontoImpuesto = parseFloat(self.articulo.impuesto1) 
-    precioUnitario      = resultaMontoImpuesto > 0 ?getPrecioUnitario(precioUnitario,resultaMontoImpuesto):0
+    precioUnitario      = getPrecioUnitario(precioUnitario,resultaMontoImpuesto)
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
     var montoDescuento  = 0
     var naturalezaDescuento = ""
@@ -3432,6 +3438,7 @@ function __nuevoArticuloAlDetalle(cantidad){
     self.pesoPrioridad  =  self.pesoPrioridad + 1
     self.numeroLinea    = self.numeroLinea + 1
     self.cantArticulos  = self.cantArticulos + 1
+    var costoTotal      = parseFloat(self.articulo.costo) > precioUnitario ?0:parseFloat(self.articulo.costo); 
     var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,self.articulo.costo ==null?0:parseFloat(self.articulo.costo),cantidad)
     self.detail.push({
        numeroLinea     : parseFloat(self.numeroLinea),
@@ -3451,11 +3458,14 @@ function __nuevoArticuloAlDetalle(cantidad){
        montoDescuento  : 0,
        porcentajeDesc  : 0,
        ganancia        : parseFloat(ganancia),
+       montoGanancia   : parseFloat(ganancia),
        subTotal        : parseFloat(subTotal),
        montoTotalLinea : parseFloat(montoTotalLinea),
        montoTotal      : parseFloat(montoTotal),
-       costo           : self.articulo.costo ==null?0:parseFloat(self.articulo.costo),
-       porcentajeGanancia :   self.articulo.gananciaPrecioPublico ==null?0:parseFloat(self.articulo.gananciaPrecioPublico),
+       costo           : costoTotal,
+       porcentajeGanancia :   getListaPrecioGanancia(self.articulo) ==null?0:parseFloat(getListaPrecioGanancia(self.articulo)),
+       pesoTransporte :  parseFloat(self.articulo.pesoTransporte),
+       pesoTransporteTotal :parseFloat(self.articulo.pesoTransporte)
     });
     self.detail.sort(function(a,b) {
     if ( a.pesoPrioridad > b.pesoPrioridad )
@@ -3464,9 +3474,73 @@ function __nuevoArticuloAlDetalle(cantidad){
         return 1;
     return 0;
     } );
+    self.cantidadEnterFacturar = 0
+    self.totalGananciaByProducto = formatoDecimales(parseFloat(ganancia),2)
     self.update()
 }
 
+function getListaPrecio(articulo){
+    //Precio Publico
+    var resultado=  parseFloat(articulo.precioPublico )
+    return resultado > 0 ?resultado:parseFloat(articulo.precioPublico )
+
+}
+
+function getListaPrecioGanancia(articulo){
+    //Precio Publico
+     var resultado=  parseFloat(articulo.gananciaPrecioPublico )
+    return resultado > 0 ?resultado:parseFloat(articulo.gananciaPrecioEspecial )
+
+}
+function __storege(){
+    self.detail = []
+    self.factura                = {
+        id:null,
+	   fechaCredito:null,
+	   fechaEmision:null,
+	   condicionVenta:"",
+	    plazoCredito:0,
+	    tipoDoc:"",
+	    medioPago:"",
+	    nombreFactura:"",
+	    direccion:"",
+	    nota:"",
+	    comanda:"",
+	    subTotal:0,
+	    totalTransporte:0,
+	    total:0,
+	    totalServGravados:0,
+	    totalServExentos:0,
+	    totalMercanciasGravadas:0,
+	    totalMercanciasExentas:0,
+	    totalGravado:0,
+	    totalExento:0,
+	    totalVenta:0,
+	    totalDescuentos:0,
+	    totalVentaNeta:0,
+	    totalImpuesto:0,
+	    totalComprobante:0,
+	    totalEfectivo:0,
+        totalTarjeta:0,
+        totalCambioPagar:0,
+	    totalBanco:0,
+	    totalCredito:0,
+	    montoCambio:0,
+	    totalCambio:0,
+	    codigoMoneda:"",
+	    estado:1,
+	    cliente:{
+            id:null,
+            nombreCompleto:""
+        },
+	    vendedor:{
+            id:null,
+            nombreCompleto:""
+        }
+
+    }   
+    self.update()
+}
 /**
 * Monto Total de la Facturra 
 **/

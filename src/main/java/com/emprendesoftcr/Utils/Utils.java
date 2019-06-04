@@ -1239,26 +1239,27 @@ public final class Utils {
 	}
 	
 	public static String getFechaGeneraReporte(Date date) {
+		
 		DateFormat fechaCompleta = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss a ");
 		
-		return fechaCompleta.format(date);
+		return date !=null?fechaCompleta.format(date):Constantes.EMPTY;
 	}
 	
 	
 	public static String getFechaGeneraHacienda(Date date) {
 		DateFormat fechaCompleta = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a ");
 		
-		return fechaCompleta.format(date);
+		return date !=null?fechaCompleta.format(date):Constantes.EMPTY;
 	}
 
 	public static String getFechaStr(Date date) {
 		DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy");
-		return fecha.format(date);
+		return date !=null?fecha.format(date):Constantes.EMPTY;
 	}
 
 	public static String getHoraStr(Date date) {
 		DateFormat hora = new SimpleDateFormat("HH:mm:ss");
-		return hora.format(date);
+		return date !=null?hora.format(date):Constantes.EMPTY;
 	}
 	
 	public static String getFechaHoraStr(Date date) {

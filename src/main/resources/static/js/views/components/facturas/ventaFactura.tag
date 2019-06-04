@@ -685,15 +685,11 @@
                             <input type="hidden" id='plazoCredito'            name='plazoCredito'            value="{factura.plazoCredito}" >
                             <input type="hidden" id='estado'                  name='estado'                  value="{factura.estado}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
-                            <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='subTotal'                name='subTotal'                value="{factura.subTotal}" >
-                            <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='totalComprobante'        name='totalComprobante'        value="{factura.totalComprobante}" >
                             <input type="hidden" id='totalServGravados'       name='totalServGravados'       value="{factura.totalServGravados}" >
-                            <input type="hidden" id='totalServExentos'        name='totalServExentos'        value="{factura.totalServExentos}" >
                             <input type="hidden" id='totalMercanciasGravadas' name='totalMercanciasGravadas' value="{factura.totalMercanciasGravadas}" >
                             <input type="hidden" id='totalMercanciasExentas'  name='totalMercanciasExentas'  value="{factura.totalMercanciasExentas}" >
-                            <input type="hidden" id='totalServGravados'       name='totalServGravados'       value="{factura.totalServGravados}" >
                             <input type="hidden" id='totalServExentos'        name='totalServExentos'        value="{factura.totalServExentos}" >
                             <input type="hidden" id='totalGravado'            name='totalGravado'            value="{factura.totalGravado}" >
                             <input type="hidden" id='totalExento'             name='totalExento'             value="{factura.totalExento}" >
@@ -701,9 +697,6 @@
                             <input type="hidden" id='totalDescuentos'          name='totalDescuentos'          value="{factura.totalDescuentos}" >
                             <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
                             <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           value="{factura.totalImpuesto}" >
-                            <input type="hidden" id='totalEfectivo'           name='totalEfectivo'           value="{factura.totalEfectivo}" >
-                            <input type="hidden" id='totalTarjeta'            name='totalTarjeta'            value="{factura.totalTarjeta}" >
-                            <input type="hidden" id='totalBanco'              name='totalBanco'              value="{factura.totalBanco}" >
                             <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
                             <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
                         </form>   
@@ -988,6 +981,10 @@ td.col-xl-12, th.col-xl-12 {
     self.comboEstados          = []
     self.comboCondicionPagos        = []
     self.comboTipoDocumentos   = []
+     self.validarRolCommand = {
+                        usuarioSistema : "",
+                        claveSistema:""
+                    }   
     self.factura                = {
         id:null,
 	   fechaCredito:null,
@@ -1024,11 +1021,11 @@ td.col-xl-12, th.col-xl-12 {
 	    codigoMoneda:"",
 	    estado:1,
 	    cliente:{
-            id:0,
+            id:null,
             nombreCompleto:""
         },
 	    vendedor:{
-            id:0,
+            id:null,
             nombreCompleto:""
         }
 
@@ -2434,7 +2431,6 @@ function cargarDetallesFacturaEnEspera(data){
     $('#totalEfectivo').val(self.factura.totalComprobante)
     $('#totalTarjeta').val(null)
     $('#totalBanco').val(null)
-    $('#totalBancoPantalla').val(null)
     $('#totalEfectivo').focus()
     $('#totalEfectivo').select()
      __calculate(); 
@@ -2911,10 +2907,13 @@ function __nuevoArticuloAlDetalle(cantidad){
     if(self.detail == null){
         __storege()
     }
+      //Determinar el precio a incluir
+    var resultadoPrecio = getListaPrecio(self.articulo)
+      
     var resultaMontoImpuesto = parseFloat(self.articulo.impuesto)
-    var precioUnitario  = resultaMontoImpuesto > 0 ?getPrecioUnitario(self.articulo.precioPublico,resultaMontoImpuesto):0
+    var precioUnitario  = getPrecioUnitario(resultadoPrecio,resultaMontoImpuesto)
     resultaMontoImpuesto = parseFloat(self.articulo.impuesto1) 
-    precioUnitario      = resultaMontoImpuesto > 0 ?getPrecioUnitario(precioUnitario,resultaMontoImpuesto):0
+    precioUnitario      = getPrecioUnitario(precioUnitario,resultaMontoImpuesto)
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
     var montoDescuento  = 0
     var naturalezaDescuento = ""
@@ -2925,6 +2924,7 @@ function __nuevoArticuloAlDetalle(cantidad){
     self.pesoPrioridad  =  self.pesoPrioridad + 1
     self.numeroLinea    = self.numeroLinea + 1
     self.cantArticulos  = self.cantArticulos + 1
+    var costoTotal      = parseFloat(self.articulo.costo) > precioUnitario ?0:parseFloat(self.articulo.costo); 
     var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,self.articulo.costo ==null?0:parseFloat(self.articulo.costo),cantidad)
     self.detail.push({
        numeroLinea     : parseFloat(self.numeroLinea),
@@ -2944,11 +2944,14 @@ function __nuevoArticuloAlDetalle(cantidad){
        montoDescuento  : 0,
        porcentajeDesc  : 0,
        ganancia        : parseFloat(ganancia),
+       montoGanancia   : parseFloat(ganancia),
        subTotal        : parseFloat(subTotal),
        montoTotalLinea : parseFloat(montoTotalLinea),
        montoTotal      : parseFloat(montoTotal),
-       costo           : self.articulo.costo ==null?0:parseFloat(self.articulo.costo),
-       porcentajeGanancia :   self.articulo.gananciaPrecioPublico ==null?0:parseFloat(self.articulo.gananciaPrecioPublico),
+       costo           : costoTotal,
+       porcentajeGanancia :   getListaPrecioGanancia(self.articulo) ==null?0:parseFloat(getListaPrecioGanancia(self.articulo)),
+       pesoTransporte :  parseFloat(self.articulo.pesoTransporte),
+       pesoTransporteTotal :parseFloat(self.articulo.pesoTransporte)
     });
     self.detail.sort(function(a,b) {
     if ( a.pesoPrioridad > b.pesoPrioridad )
@@ -2962,6 +2965,19 @@ function __nuevoArticuloAlDetalle(cantidad){
     self.update()
 }
 
+function getListaPrecio(articulo){
+    //Precio Publico
+    var resultado=  parseFloat(articulo.precioPublico )
+    return resultado > 0 ?resultado:parseFloat(articulo.precioPublico )
+
+}
+
+function getListaPrecioGanancia(articulo){
+    //Precio Publico
+     var resultado=  parseFloat(articulo.gananciaPrecioPublico )
+    return resultado > 0 ?resultado:parseFloat(articulo.gananciaPrecioEspecial )
+
+}
 
 
 

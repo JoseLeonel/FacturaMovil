@@ -260,11 +260,9 @@
                     <div class="tituloProductoIngresadoContainer" show={descripcionArticulo.length>0?descripcionArticulo:""}>
                         <div class="tituloDescripcionProductoIngresado">
                             <div class="ultimo_1">Ultimo: </div>
-                            <div class="ultimo_2"> {descripcionArticulo.substring(1, 60)} </div>
-                             
+                            <div class="ultimo_2"> {descripcionArticulo.length > 50?descripcionArticulo.substring(0, 50):descripcionArticulo} </div>
                         </div>
                     </div>
-                    
                     <div class="detalles-factura">
                         <table class="table table-striped">
                             <thead>
@@ -698,6 +696,24 @@
     -ms-transition: background-color 100ms linear;
     transition: background-color 100ms linear;
 }
+@media screen and (max-width: 1024px) {
+  .labelBotones {
+    font-size: 14px !important;
+  }
+  .label-totalesComprobante{
+      font-size: 18px !important;
+  }
+  .cantidadArticulosTitulo{
+      font-size: 10px !important;
+  }
+  .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
+      font-size: 14px !important;
+  }
+  .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_2{
+      font-size: 14px !important;
+  }
+}
+
 .botonesFuncionalContainer{
     display:flex;
     flex:1;
@@ -733,7 +749,7 @@
   font-weight: 600 !important;
     font-size: 30px !important;
     font-family: Roboto,sans-serif !important;
-    color: #30ed17 !important;
+    color: #edea17 !important;
     text-shadow: 0px 0px 1px #ffffff;
     font-style: italic;
     text-align: left;
@@ -790,7 +806,7 @@
     text-align: center !important;
     background-color: black !important;
     /* box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20); */
-    /* border-radius: 5px; */
+    /* border-radius: 5.tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{px; */
     /* -webkit-transition: background-color 100ms linear; */
     -moz-transition: background-color 100ms linear;
     -o-transition: background-color 100ms linear;
@@ -912,7 +928,7 @@
     self.detalleFactura        = {data:[]}
     self.cliente               = {}
     self.vendedor              = {
-        id:0,
+        id:null,
         nombreCompleto:""
     };
     self.facturas_espera       = {data:[]}
@@ -948,11 +964,9 @@
     self.soloParaChinos = false
     self.totalGananciaByProducto = 0
     self.totalPesoByFactura = 0
-
     self.rol = {
         rolAdministrador:0
     }
-    
     self.tamanoLetra = "tamanoLetraConBanco"
     self.labelTotales = "labelTotalesConBanco"
     self.campoTotales = "campoTotalesConBanco"
@@ -1314,7 +1328,7 @@ function __LimpiarClick(){
      $(".nota").attr("maxlength", 80);
     self.cliente               = {}
     self.vendedor              = {
-        id:0,
+        id:null,
         nombreCompleto:""
     };
     self.mostrarCamposIngresoContado = true
@@ -1836,9 +1850,9 @@ function __Init(){
     self.precioUltimo = ""
     self.factura                = {
         id:null,
-	   fechaCredito:null,
-	   fechaEmision:null,
-	   condicionVenta:"",
+	    fechaCredito:null,
+	    fechaEmision:null,
+	    condicionVenta:"",
 	    plazoCredito:0,
 	    tipoDoc:"",
 	    medioPago:"",
@@ -1867,11 +1881,12 @@ function __Init(){
 	    totalCredito:0,
 	    montoCambio:0,
 	    totalCambio:0,
+        totalCambioPagar:0,
 	    codigoMoneda:"",
 	    estado:1,
 	    cliente:{
             id:null,
-            nombreCompleto:""
+            nombreCompleto:"",
         },
 	    vendedor:{
             id:null,
