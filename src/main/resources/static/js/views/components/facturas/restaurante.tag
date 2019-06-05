@@ -1309,6 +1309,7 @@ td.col-xl-11, th.col-xl-11 {
 
 td.col-xl-12, th.col-xl-12 {
   width: 100%; }
+  
 </style> 
 
 <script>

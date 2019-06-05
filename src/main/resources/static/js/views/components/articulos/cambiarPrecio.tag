@@ -11,7 +11,7 @@
                 <div class="box-body">
                     <button show = {botonAgregar} title="Agregar un Nuevo Articulo"  onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp Nuevo</button>
                     <button  onclick={__Modificar} title="modificar el Articulo" show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
-                    <button  onclick={__Imprimir} title="Imprimir codigo  y precio" class="btn-imprimir btn-print pull-right" > &nbsp {$.i18n.prop("btn.imprimir")}</button>
+                    <button  onclick={__Imprimir} title="Imprimir codigo  y precio" class="btn-imprimirCambioPrecio btn-print pull-right" > &nbsp {$.i18n.prop("btn.imprimir")}</button>
                     <form id = "formulario" name ="formulario "   class="advanced-search-form">
                         <input type="hidden" name="id" id="id" value="{articulo.id}">
                         <input type="hidden" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista}"  >
@@ -392,7 +392,7 @@ function enviarCargarCombos(){
 *imprimir el codigo y precio
 **/
 __Imprimir(){
-   if(self.articulo == null){
+   if(self.articulo.id == null){
        return
    }
    location.href = "PDFGondolaAjax.do?idArticulo=" + self.articulo.id

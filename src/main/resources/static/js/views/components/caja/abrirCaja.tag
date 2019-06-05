@@ -14,25 +14,25 @@
                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th class="table-header" >{$.i18n.prop("usuarioCaja.caja")}          </th>
-                                <th class="table-header" >{$.i18n.prop("usuarioCaja.created_at")}    </th>
-                                <th class="table-header" >{$.i18n.prop("usuarioCaja.updated_at")}    </th>
-                                <th class="table-header" >{$.i18n.prop("usuarioCaja.usuario")}       </th>
-                                <th class="table-header" >{$.i18n.prop("usuarioCaja.fondoIncial")}   </th>
-                                <th class="table-header" >{$.i18n.prop("usuarioCaja.totalNeto")}     </th>
-                                <th class="table-header" >{$.i18n.prop("usuarioCaja.estado")}        </th>
+                                <th class="table-header" style="width:2%" >{$.i18n.prop("usuarioCaja.caja")}          </th>
+                                <th class="table-header" style="width:10%">{$.i18n.prop("usuarioCaja.created_at")}    </th>
+                                <th class="table-header" style="width:10%">{$.i18n.prop("usuarioCaja.updated_at")}    </th>
+                                <th class="table-header" style="width:10%">{$.i18n.prop("usuarioCaja.usuario")}       </th>
+                                <th class="table-header"  style="width:10%">{$.i18n.prop("usuarioCaja.fondoIncial")}   </th>
+                                <th class="table-header" style="width:10%" >{$.i18n.prop("usuarioCaja.totalNeto")}     </th>
+                                <th class="table-header"  style="width:10%" >{$.i18n.prop("usuarioCaja.estado")}        </th>
                                 <th class="table-header" >{$.i18n.prop("listado.acciones")}          </th>
                             </tr>
                         </thead>
                         <tfoot style="display: table-header-group;">
                             <tr>
-                                <th>{$.i18n.prop("usuarioCaja.caja")}          </th>
-                                <th>{$.i18n.prop("usuarioCaja.created_at")}    </th>
-                                <th>{$.i18n.prop("usuarioCaja.updated_at")}    </th>
-                                <th>{$.i18n.prop("usuarioCaja.usuario")}       </th>
-                                <th>{$.i18n.prop("usuarioCaja.fondoIncial")}   </th>
-                                <th>{$.i18n.prop("usuarioCaja.totalNeto")}     </th>
-                                <th>{$.i18n.prop("usuarioCaja.estado")}        </th>
+                                <th style="width:10%">{$.i18n.prop("usuarioCaja.caja")}          </th>
+                                <th style="width:10%">{$.i18n.prop("usuarioCaja.created_at")}    </th>
+                                <th style="width:10%">{$.i18n.prop("usuarioCaja.updated_at")}    </th>
+                                <th style="width:10%">{$.i18n.prop("usuarioCaja.usuario")}       </th>
+                                <th style="width:10%">{$.i18n.prop("usuarioCaja.fondoIncial")}   </th>
+                                <th style="width:10%">{$.i18n.prop("usuarioCaja.totalNeto")}     </th>
+                                <th  style="width:10%">{$.i18n.prop("usuarioCaja.estado")}        </th>
                                 <th>                                    </th>
                             </tr>
                         </tfoot>
@@ -524,7 +524,7 @@ function __displayDate_detail(fecha) {
 function __Opciones(id,type, row){
   var verDetalle  = '<a href="#"  title="Ver Detalle" class="btn btn-success  btn-buscar btnVerDetalle" role="button"> </a>';
   var cerrar  = '<a href="#"  title="Cerrar Caja" class="btn btn-danger  btn-cerrar btnCerrarCaja" role="button"> </a>';
-  var imprimir  = '<a href="#"  title="Imprimir" class="btn btn-primary  btn-imprimir btnImprimir" role="button"> </a>';
+  var imprimir  = '<a href="#"  title="Imprimir" class="btn btn-imprimir  btnImprimir" role="button"> </a>';
   cerrar = row.estado =="Activo"?cerrar:""
   return  verDetalle +" "+ cerrar +" "+imprimir;
 }
@@ -713,7 +713,7 @@ function agregarInputsCombos(){
     $('.tableListar tfoot th').each( function (e) {
         var title = $('.tableListar thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 8    ){
+        if ( $(this).index() != 7    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
  

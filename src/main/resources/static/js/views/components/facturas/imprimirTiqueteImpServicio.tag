@@ -27,7 +27,7 @@
 	                        <tbody>
 	                            <tr class = "" each={detalles} class="detalleTables">
 	                                <td class="cantidad">{cantidad}</td>
-	                                <td class="producto">{descripcion}</td>
+	                                <td class="producto" >{descripcion.length>40?descripcion.substring(0, 40):descripcion}</td>
 	                                <td class="precio">{montoTotalLinea}</td>
 	                            </tr>
 	                            <tr>
