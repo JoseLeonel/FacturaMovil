@@ -186,6 +186,7 @@ public class ArticuloController {
 						}
 						Categoria categoria = categoriaBo.buscar(idCategoria);
 						articuloBD.setCategoria(categoria);
+						articuloBD.setUpdated_at(new Date());
 						articuloBo.modificar(articuloBD);
 						articuloTemp = articuloBD;
 					}
@@ -278,8 +279,7 @@ public class ArticuloController {
 	public void bajarPDFGondola(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idArticulo) throws Exception {
 //		try {
 		Articulo articuloBD = articuloBo.buscar(idArticulo);
-		String fileName = "Articulo_" + articuloBD.getCodigo().toString();
-
+	
 		String dir = System.getProperty("user.dir");
 		String jrxmlFile = dir + "/reportes/gondola.jrxml";
 		JasperReport jasperReport;
@@ -305,32 +305,6 @@ public class ArticuloController {
 		JasperExportManager.exportReportToPdfStream(print, response.getOutputStream());
 		response.getOutputStream().flush();
 		response.getOutputStream().close();
-//		  
-//
-//			// ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
-//			ByteArrayOutputStream namePDF = GondolaArticuloPdfView.main(articuloBD);
-//			int BUFFER_SIZE = 4096;
-//			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
-//			response.setContentType("application/octet-stream");
-//			response.setContentLength((int) namePDF.toByteArray().length);
-//			String headerKey = "Content-Disposition";
-//			String headerValue = String.format("attachment; filename=\"%s\"", fileName + ".pdf");
-//			response.setHeader(headerKey, headerValue);
-//			OutputStream outStream = response.getOutputStream();
-//			byte[] buffer = new byte[BUFFER_SIZE];
-//			int bytesRead = -1;
-//			while ((bytesRead = inputStream.read(buffer)) != -1) {
-//				outStream.write(buffer, 0, bytesRead);
-//			}
-//			inputStream.close();
-//			outStream.close();
-//		} catch (DocumentException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			throw e;
-//		} catch (com.google.zxing.WriterException ex) {
-//			throw ex;
-//		}
 
 	}
 
@@ -654,13 +628,6 @@ public class ArticuloController {
 			if (articuloBd != null) {
 				result.rejectValue("codigo", "error.articulo.codigo.existe");
 			}
-
-			// if (articulo.getCosto() == null) {
-			// result.rejectValue("costo", "error.articulo.costo.mayorCero");
-			// }
-			// if (articulo.getCosto() == 0) {
-			// result.rejectValue("costo", "error.articulo.costo.mayorCero");
-			// }
 			if (articulo.getPrecioPublico() == null) {
 				result.rejectValue("costo", "error.articulo.precioPublico.mayorCero");
 			}
@@ -688,7 +655,8 @@ public class ArticuloController {
 			articulo.setGananciaPrecioEspecial(articulo.getGananciaPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getGananciaPrecioEspecial());
 			articulo.setGananciaPrecioMayorista(articulo.getGananciaPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getGananciaPrecioMayorista());
 			articulo.setCantidad(articulo.getCantidad() == null ? Constantes.ZEROS_DOUBLE : articulo.getCantidad());
-
+			articulo.setCosto(articulo.getCosto() == null?Constantes.ZEROS_DOUBLE:articulo.getCosto());
+			
 			articulo.setEmpresa(usuarioSesion.getEmpresa());
 			articulo.setUpdated_at(new Date());
 			articulo.setEstado(Constantes.ESTADO_ACTIVO);

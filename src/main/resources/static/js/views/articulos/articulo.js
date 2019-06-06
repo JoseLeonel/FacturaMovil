@@ -20,8 +20,7 @@ var _Init = function () {
       }
 
     });
-    $("#filtros").validate(reglasDeValidacion());
-
+    
 
 }
 

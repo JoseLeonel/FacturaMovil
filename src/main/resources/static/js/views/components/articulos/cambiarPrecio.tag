@@ -39,8 +39,8 @@
                             </div>
                              <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                 <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.categoria")}  <span class="requeridoDato">*</span></label>
-                                 <select  class="campo selectCategoria"   name="categoria" >
-                                    <option  each={categorias.aaData}  value="{id}" selected="{articulo.categoria.id ==id?true:false}" >{descripcion}</option>
+                                 <select  class="campo selectCategoria"   name="categoria"  data-live-search="true">
+                                    <option  each={categorias.aaData}  data-tokens ={descripcion} value="{id}" selected="{articulo.categoria.id ==id?true:false}" >{descripcion}</option>
                                 </select>
                             </div>
                             <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
@@ -89,8 +89,8 @@
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                 <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.marca")}  <span class="requeridoDato">*</span></label>
-                                 <select  class="campo selectMarca"  name="marca">
-                                    <option  each={marcas.aaData}  value="{id}" selected="{articulo.marca.id ==id?true:false}"  >{descripcion}</option>
+                                 <select  class="campo selectMarca"  name="marca" data-live-search="true">
+                                    <option  each={marcas.aaData}  value="{id}" data-tokens ={descripcion} selected="{articulo.marca.id ==id?true:false}"  >{descripcion}</option>
                                 </select>
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
@@ -307,7 +307,7 @@ self.on('mount',function(){
                         $('.codigo').val(modeloTabla.codigo)
                         $('.descripcion').val(modeloTabla.descripcion)
                         $('.precioPublico').val(modeloTabla.precioPublico)
-                        $(".precioPublico").focus() 
+                        
                     });
                    
                 }
@@ -609,6 +609,14 @@ function __listadoCategoriasActivas(){
              if(result.aaData.length > 0){
                 self.categorias.aaData =  result.aaData
                 self.update();
+                 $('.selectCategoria').selectpicker(
+                    {
+                         style: 'btn-info',
+                        size:10,
+                        liveSearch: true
+                    }
+                );
+                $('.selectCategoria').selectpicker('refresh');
             }            
         },
         error: function (xhr, status) {
@@ -632,6 +640,14 @@ function __listadoMarcasActivas(){
             if(result.aaData.length > 0){
                 self.marcas.aaData =  result.aaData
                 self.update();
+                 $('.selectMarca').selectpicker(
+                    {
+                         style: 'btn-info',
+                        size:10,
+                        liveSearch: true
+                    }
+                );
+                $('.selectMarca').selectpicker('refresh');
             }            
         },
         error: function (xhr, status) {

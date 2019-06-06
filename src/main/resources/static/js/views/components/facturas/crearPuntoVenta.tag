@@ -2011,6 +2011,7 @@ function cargarDetallesFacturaEnEspera(data){
         self.cliente              = modeloTabla.factura.cliente
         self.vendedor             = modeloTabla.factura.vendedor
         self.update()
+        self.descripcionArticulo = modeloTabla.descripcion
         self.detail.push({
             numeroLinea     : modeloTabla.numeroLinea,
             pesoPrioridad    :modeloTabla.numeroLinea,
