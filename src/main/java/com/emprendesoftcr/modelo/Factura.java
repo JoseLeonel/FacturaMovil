@@ -185,9 +185,24 @@ public class Factura implements Serializable {
 
 	@Column(name = "tiene_is")
 	private Integer						tieneIS;
-	
+
 	@Column(name = "peso_transTotal", columnDefinition = "Decimal(10,5) default '0.00'")
 	private Double						pesoTransporteTotal;
+
+	@Column(name = "total_serv_exo", columnDefinition = "Decimal(10,5) default '0.00'")
+	private Double						totalServExonerado;
+
+	@Column(name = "total_merc_exo", columnDefinition = "Decimal(10,5) default '0.00'")
+	private Double						totalMercExonerada;
+
+	@Column(name = "total_exo", columnDefinition = "Decimal(10,5) default '0.00'")
+	private Double						totalExonerado;
+
+	@Column(name = "total_iva_dev", columnDefinition = "Decimal(10,5) default '0.00'")
+	private Double						totalIVADevuelto;
+
+	@Column(name = "total_otros_cargos", columnDefinition = "Decimal(10,5) default '0.00'")
+	private Double						totalOtrosCargos;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -229,9 +244,8 @@ public class Factura implements Serializable {
 
 	
 
-	
 	public Factura(Long id, Date fechaCredito, String numeroConsecutivo, String consecutivoProforma, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon, Date referenciaFechaEmision, String medioEfectivo, String medioTarjeta, String medioBanco, String nombreFactura, String correoAlternativo, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto,
-			Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Integer tieneIS, Double pesoTransporteTotal, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Mesa mesa) {
+			Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Integer tieneIS, Double pesoTransporteTotal, Double totalServExonerado, Double totalMercExonerada, Double totalExonerado, Double totalIVADevuelto, Double totalOtrosCargos, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Mesa mesa) {
 		super();
 		this.id = id;
 		this.fechaCredito = fechaCredito;
@@ -283,6 +297,11 @@ public class Factura implements Serializable {
 		this.estadoFirma = estadoFirma;
 		this.tieneIS = tieneIS;
 		this.pesoTransporteTotal = pesoTransporteTotal;
+		this.totalServExonerado = totalServExonerado;
+		this.totalMercExonerada = totalMercExonerada;
+		this.totalExonerado = totalExonerado;
+		this.totalIVADevuelto = totalIVADevuelto;
+		this.totalOtrosCargos = totalOtrosCargos;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.cliente = cliente;
@@ -294,19 +313,13 @@ public class Factura implements Serializable {
 
 
 
-
 	public Double getPesoTransporteTotal() {
 		return pesoTransporteTotal;
 	}
 
-
-
-	
 	public void setPesoTransporteTotal(Double pesoTransporteTotal) {
 		this.pesoTransporteTotal = pesoTransporteTotal;
 	}
-
-
 
 	public Double getTotalImpuestoServicio() {
 		return totalImpuestoServicio;
@@ -854,6 +867,76 @@ public class Factura implements Serializable {
 
 	public void setConsecutivoProforma(String consecutivoProforma) {
 		this.consecutivoProforma = consecutivoProforma;
+	}
+
+
+
+	
+	public Double getTotalServExonerado() {
+		return totalServExonerado;
+	}
+
+
+
+	
+	public void setTotalServExonerado(Double totalServExonerado) {
+		this.totalServExonerado = totalServExonerado;
+	}
+
+
+
+	
+	public Double getTotalMercExonerada() {
+		return totalMercExonerada;
+	}
+
+
+
+	
+	public void setTotalMercExonerada(Double totalMercExonerada) {
+		this.totalMercExonerada = totalMercExonerada;
+	}
+
+
+
+	
+	public Double getTotalExonerado() {
+		return totalExonerado;
+	}
+
+
+
+	
+	public void setTotalExonerado(Double totalExonerado) {
+		this.totalExonerado = totalExonerado;
+	}
+
+
+
+	
+	public Double getTotalIVADevuelto() {
+		return totalIVADevuelto;
+	}
+
+
+
+	
+	public void setTotalIVADevuelto(Double totalIVADevuelto) {
+		this.totalIVADevuelto = totalIVADevuelto;
+	}
+
+
+
+	
+	public Double getTotalOtrosCargos() {
+		return totalOtrosCargos;
+	}
+
+
+
+	
+	public void setTotalOtrosCargos(Double totalOtrosCargos) {
+		this.totalOtrosCargos = totalOtrosCargos;
 	}
 
 }

@@ -104,6 +104,8 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 		   resultado = "<TiqueteElectronico xmlns=\"" + Constantes.DOCXMLS_TIQUETE + "\" " +
 		                "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
 		        "<Clave>" + factura.getClave() + "</Clave>" +
+		        "<CodigoActividad>" + factura.getEmpresa().getCodigoActividad() + "</CodigoActividad>" + 
+		          
 		        "<NumeroConsecutivo>" + factura.getNumeroConsecutivo() + "</NumeroConsecutivo>" +
 		        "<FechaEmision>" + date + "</FechaEmision>" +
 		        "<Emisor>" +
@@ -130,24 +132,28 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 		         + getMedioPago(factura) +
 		        "<DetalleServicio>" + xmlDetalleServicio(factura) + "</DetalleServicio>" +
 		        "<ResumenFactura>" +
-		            "<CodigoMoneda>" + factura.getCodigoMoneda() + "</CodigoMoneda>" +
-		            "<TipoCambio>" + FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTipoCambio()) + "</TipoCambio>" +
+		            getCodigoMoneda(factura.getCodigoMoneda(),factura.getTipoCambio())+
 		            "<TotalServGravados>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalServGravados()) + "</TotalServGravados>" +
 		            "<TotalServExentos>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalServExentos()) + "</TotalServExentos>" +
+		            "<TotalServExonerado>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalServExonerado()) + "</TotalServExonerado>" +
 		            "<TotalMercanciasGravadas>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalMercanciasGravadas()) + "</TotalMercanciasGravadas>" +
 		            "<TotalMercanciasExentas>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalMercanciasExentas()) + "</TotalMercanciasExentas>" +
+		            "<TotalMercExonerada>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalMercExonerada()) + "</TotalMercExonerada>" +
 		            "<TotalGravado>" +      FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalGravado()) + "</TotalGravado>" +
 		            "<TotalExento>" +       FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalExento()) + "</TotalExento>" +
+		            "<TotalExonerado>" +    FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalExonerado()) + "</TotalExonerado>" +
 		            "<TotalVenta>" +        FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalVenta()) + "</TotalVenta>" +
 		            "<TotalDescuentos>" +   FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalDescuentos()) + "</TotalDescuentos>" +
 		            "<TotalVentaNeta>" +    FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalVentaNeta()) + "</TotalVentaNeta>" +
 		            "<TotalImpuesto>" +     FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalImpuesto()) + "</TotalImpuesto>" +
+		            "<TotalIVADevuelto>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalIVADevuelto()) + "</TotalIVADevuelto>" +
+		            "<TotalOtrosCargos>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalOtrosCargos()) + "</TotalOtrosCargos>" +
 		            "<TotalComprobante>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalComprobante()) + "</TotalComprobante>" +
 		        "</ResumenFactura>" +
-			      "<Normativa>" +
-			        "<NumeroResolucion>" + Constantes.NUMERO_RESOLUCION + "</NumeroResolucion>" +
-			        "<FechaResolucion>" + Constantes.FECHA_RESOLUCION + "</FechaResolucion>" +
-		        "</Normativa>" +
+//			      "<Normativa>" +
+//			        "<NumeroResolucion>" + Constantes.NUMERO_RESOLUCION + "</NumeroResolucion>" +
+//			        "<FechaResolucion>" + Constantes.FECHA_RESOLUCION + "</FechaResolucion>" +
+//		        "</Normativa>" +
 				    "<Otros>" +
 				    		"<OtroTexto codigo=\"obs\">" + observacion + "</OtroTexto>" +
 				    "</Otros>" +    
@@ -161,6 +167,22 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 		
 	}
 	
+	private String getCodigoMoneda(String codigoMoneda,Double tipoCambio) throws Exception {
+		String resultado = Constantes.EMPTY;
+		try {
+	    if(tipoCambio > Constantes.ZEROS_DOUBLE) {
+	  		 resultado = "<CodigoTipoMoneda>" +
+	          "<CodigoMoneda>" + codigoMoneda + "</CodigoMoneda>" +
+	 	        "<TipoCambio>" + FacturaElectronicaUtils.getConvertirBigDecimal(tipoCambio) +"</TipoCambio>";
+	 	     resultado += "</CodigoTipoMoneda>";
+	     }
+			
+		} catch (Exception e) {
+			log.info("** Error  getTelefono: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+		return resultado;
+	}
 
 	
 	/**
@@ -278,10 +300,10 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
             	
             	lineas += "<LineaDetalle>" +
                   "<NumeroLinea>" + new BigInteger(detalle.getNumeroLinea().toString()) + "</NumeroLinea>" +
-                  "<Codigo>" +
-                  "<Tipo>" + tipoCodigo + "</Tipo>" +
-                  "<Codigo>" + detalle.getCodigo() + "</Codigo>" +
-                  "</Codigo>" +
+                  "<CodigoComercial>" +
+                      "<Tipo>" + tipoCodigo + "</Tipo>" +
+                      "<Codigo>" + detalle.getCodigo() + "</Codigo>" +
+                  "</CodigoComercial>" +
                   "<Cantidad>" + FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getCantidad()) + "</Cantidad>" +
                   "<UnidadMedida>" + unidadMedida + "</UnidadMedida>" +
              //     "<UnidadMedidaComercial>" + detalle.getUnidadMedida() + "</UnidadMedidaComercial>" +
@@ -290,8 +312,10 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
                   "<MontoTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotal()) + "</MontoTotal>" +
                   getDescuento(detalle.getMontoDescuento())+
                   "<SubTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getSubTotal()) + "</SubTotal>" +
-                  xmlImpuestos(detalle.getFactura().getId(),detalle.getTipoImpuesto1(),detalle.getMontoImpuesto1(),detalle.getImpuesto1()) +
-                  xmlImpuestos(detalle.getFactura().getId(),detalle.getTipoImpuesto(),detalle.getMontoImpuesto(),detalle.getImpuesto()) +
+//                  "<BaseImponible>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getBaseImponible()) + "</BaseImponible>" +
+                  xmlImpuestos(detalle.getFactura().getId(),detalle.getCodigoTarifa(),detalle.getTipoImpuesto1(),detalle.getMontoImpuesto1(),detalle.getImpuesto1()) +
+                  xmlImpuestos(detalle.getFactura().getId(),detalle.getCodigoTarifa(),detalle.getTipoImpuesto(),detalle.getMontoImpuesto(),detalle.getImpuesto()) +
+                  xmlImpuestosNeto(detalle.getFactura().getId() ,detalle.getMontoImpuesto() ==null?Constantes.ZEROS_DOUBLE:detalle.getMontoImpuesto(),detalle.getMontoImpuesto1() ==null?Constantes.ZEROS_DOUBLE:detalle.getMontoImpuesto(),detalle.getImpuestoNeto()) +
                   "<MontoTotalLinea>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotalLinea()) + "</MontoTotalLinea>" +
                   "</LineaDetalle>";
         }
@@ -303,7 +327,27 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 			}
       return lineas;
 }
-/**
+private String xmlImpuestosNeto(Long idFactura ,Double montoImpuesto,Double montompuesto1,Double montoImpuestoNeto) throws Exception {
+  	String resultado = Constantes.EMPTY;
+  	if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE) && montompuesto1.equals(Constantes.ZEROS_DOUBLE)) {
+  		return resultado;
+  	}
+  	
+  	try {
+  		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
+  			return resultado;
+  		}
+	        resultado = "<ImpuestoNeto>" + FacturaElectronicaUtils.getConvertirBigDecimal(montoImpuestoNeto )+ "</ImpuestoNeto>";
+			
+		} catch (Exception e) {
+			log.info("** Error  xmlImpuestos Factura :" + idFactura  + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+    return resultado;
+}
+
+  
+ /**
  *   
  * @param descuento
  * @return
@@ -314,8 +358,10 @@ private String getDescuento(Double descuento) throws Exception {
 			return resultado;
 		}
 		try {
-			 resultado ="<MontoDescuento>" + FacturaElectronicaUtils.getConvertirBigDecimal(descuento) + "</MontoDescuento>" +
-		        "<NaturalezaDescuento>" + Constantes.FORMATO_NATURALEZA_DESCUENTO + "</NaturalezaDescuento>";
+			 resultado = "<Descuento>" +
+					  "<MontoDescuento>" + FacturaElectronicaUtils.getConvertirBigDecimal(descuento) + "</MontoDescuento>" +
+		        "<NaturalezaDescuento>" + Constantes.FORMATO_NATURALEZA_DESCUENTO + "</NaturalezaDescuento>" + 
+		        "</Descuento>" ;
 			
 		} catch (Exception e) {
 			log.info("** Error  getDescuento: " + e.getMessage() + " fecha " + new Date());
@@ -328,7 +374,7 @@ private String getDescuento(Double descuento) throws Exception {
    * @param detalle
    * @return
    */
-private String xmlImpuestos(Long idFactura,String tipoImpuesto,Double montoImpuesto,Double impuesto) throws Exception {
+private String xmlImpuestos(Long idFactura,String codigoTarifa,String tipoImpuesto,Double montoImpuesto,Double impuesto) throws Exception {
   	String resultado = Constantes.EMPTY;
   	
   	try {
@@ -339,6 +385,7 @@ private String xmlImpuestos(Long idFactura,String tipoImpuesto,Double montoImpue
 	  		if(montoImpuesto > Constantes.ZEROS_DOUBLE) {
 	        resultado = "<Impuesto>" +
 	            "<Codigo>" + Utils.zeroPad(tipoImpuesto, 2) + "</Codigo>" +
+	            "<CodigoTarifa>" + Utils.zeroPad(codigoTarifa, 2) + "</CodigoTarifa>" +
 	            "<Tarifa>" + FacturaElectronicaUtils.getConvertirBigDecimal(impuesto ) + "</Tarifa>" +
 	            "<Monto>" +  FacturaElectronicaUtils.getConvertirBigDecimal(montoImpuesto) + "</Monto>";
 	        resultado += "</Impuesto>";

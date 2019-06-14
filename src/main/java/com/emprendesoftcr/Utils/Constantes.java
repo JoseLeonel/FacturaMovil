@@ -89,13 +89,13 @@ public class Constantes {
 	public static final String					CASA_MATRIZ_INICIAL_FACTURA													= "001";
 	public static final String					TERMINAL_INICIAL_FACTURA														= "00001";
 
-	public static final String					DOCXMLS_FACTURA																			= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/facturaElectronica";
-	public static final String					DOCXMLS_NOTA_DEBITO																	= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaDebitoElectronica";
-	public static final String					DOCXMLS_NOTA_CREDITO																= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaCreditoElectronica";
-	public static final String					DOCXMLS_RESPUESTA_HACIENDA													= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/mensajeHacienda";
-	public static final String					DOCXMLS_RECEPCION_FACTURA														= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/mensajeReceptor";
+	public static final String					DOCXMLS_FACTURA																			= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/facturaElectronica";
+	public static final String					DOCXMLS_NOTA_DEBITO																	= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/notaDebitoElectronica";
+	public static final String					DOCXMLS_NOTA_CREDITO																= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/notaCreditoElectronica";
+	public static final String					DOCXMLS_RESPUESTA_HACIENDA													= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/mensajeHacienda";
+	public static final String					DOCXMLS_RECEPCION_FACTURA														= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/mensajeReceptor";
 
-	public static final String					DOCXMLS_TIQUETE																			= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/tiqueteElectronico";
+	public static final String					DOCXMLS_TIQUETE																			= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/tiqueteElectronico";
 
 	public static final String					PRIVATE_KEY																					= "privateKey";
 	public static final String					CERTIFICATE																					= "certificate";

@@ -107,6 +107,7 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
 	     xml = "<NotaCreditoElectronica xmlns=\"" + Constantes.DOCXMLS_NOTA_CREDITO + "\" " +
 	                "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
 	        "<Clave>" + factura.getClave() + "</Clave>" +
+	        "<CodigoActividad>" + factura.getEmpresa().getCodigoActividad() + "</CodigoActividad>" +
 	        "<NumeroConsecutivo>" + factura.getNumeroConsecutivo() + "</NumeroConsecutivo>" +
 	        "<FechaEmision>" + date + "</FechaEmision>" +
 	        "<Emisor>" +
