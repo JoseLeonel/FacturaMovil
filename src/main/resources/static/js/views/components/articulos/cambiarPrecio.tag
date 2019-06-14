@@ -31,7 +31,7 @@
                         <div class="row">
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                 <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.codigo")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" class="campo codigo" id="codigo" name="codigo" value="{articulo.codigo}"  onkeypress={__Consulta} autofocus="autofocus">
+                                <input type="text" class="campoNumerico codigo" id="codigo" name="codigo" value="{articulo.codigo}"  onkeypress={__Consulta} autofocus="autofocus">
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                 <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.descripcion")}  <span class="requeridoDato">*</span></label>
@@ -56,7 +56,7 @@
                         <div class="row">
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                 <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.impuesto")}  </label>
-                                <input type="number" step="any" class="campo impuesto" id="impuesto" name="impuesto" value="{articulo.impuesto}"  onkeyup ={__ActualizarPreciosImpuestos}>
+                                <input type="number" step="any" class="campoNumerico impuesto" id="impuesto" name="impuesto" value="{articulo.impuesto}"  onkeyup ={__ActualizarPreciosImpuestos}>
                             </div>
             
                             <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
@@ -73,7 +73,7 @@
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                 <label  class="tamanoLetraTotales">{$.i18n.prop("articulo.impuesto1")}  </label>
-                                <input type="number" step="any" class=" impuesto1 campo" id="impuesto1" name="impuesto1" value="{articulo.impuesto1}"  onkeyup ={__CalculoImpuesto1}>
+                                <input type="number" step="any" class=" impuesto1 campoNumerico" id="impuesto1" name="impuesto1" value="{articulo.impuesto1}"  onkeyup ={__CalculoImpuesto1}>
                             </div>
 
                         </div>    
@@ -102,23 +102,23 @@
 
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                 <label class="tamanoLetraTotales"  >{$.i18n.prop("articulo.costo")} </label>
-                                <input type="number" step="any" class="campo costo" id="costo" name="costo" value="{articulo.costo}"  onkeyup ={__ActualizarPreciosCosto}>
+                                <input type="number" step="any" class="campoNumerico costo" id="costo" name="costo" value="{articulo.costo}"  onkeyup ={__ActualizarPreciosCosto}>
                             </div>
 
                         </div>    
                         <div class="row">
                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                  <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.gananciaPrecioPublico")}%  </label>
-                                <input type="number" step="any" class="campo gananciaPrecioPublico" id="gananciaPrecioPublico" name="gananciaPrecioPublico"  value="{articulo.gananciaPrecioPublico}"  onkeyup ={__CalculoGananciaSinPrecioPublico}>
+                                <input type="number" step="any" class="campoNumerico gananciaPrecioPublico" id="gananciaPrecioPublico" name="gananciaPrecioPublico"  value="{articulo.gananciaPrecioPublico}"  onkeyup ={__CalculoGananciaSinPrecioPublico}>
                             </div>
          
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                 <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.precioPublico")}  <span class="requeridoDato">*</span></label>
-                                <input type="number" step="any" class="campo precioPublico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoGananciaPublico} value="{articulo.precioPublico}"  >
+                                <input type="number" step="any" class="campoNumerico precioPublico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoGananciaPublico} value="{articulo.precioPublico}"  >
                             </div>
                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                 <label  class="tamanoLetraTotales">{$.i18n.prop("articulo.pesoTransporte")} </label>
-                                <input type="number" step="any" class="campo pesoTransporte" id="pesoTransporte" name="pesoTransporte" value="{articulo.pesoTransporte}"  >
+                                <input type="number" step="any" class="campoNumerico pesoTransporte" id="pesoTransporte" name="pesoTransporte" value="{articulo.pesoTransporte}"  >
                             </div>
          
                         </div>
@@ -208,6 +208,34 @@
         th, td {
             white-space: nowrap;
         }
+        .campoNumerico {
+            display: block;
+            width: 100%;
+            height: 45px;
+            padding: 8px 18px;
+            font-size: 10px;
+            line-height: 1.42857143;
+            color:red;
+            
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            background-color: #fcfcfc;
+            border: 1px solid #ccc;
+            font: 20px verdana, arial, helvetica, sans-serif;
+            margin: 2px 0;
+            padding: 1px 2px;
+            overflow: visible;
+            font-size: 40px;
+            color: #ec351f;
+    font-weight: bold;
+}
     </style>
 <script>
     var self = this;
@@ -307,6 +335,7 @@ self.on('mount',function(){
                         $('.codigo').val(modeloTabla.codigo)
                         $('.descripcion').val(modeloTabla.descripcion)
                         $('.precioPublico').val(modeloTabla.precioPublico)
+                         $('.precioPublico').focus().select()
                         
                     });
                    
@@ -512,7 +541,13 @@ __ActualizarPrecios()
 * Porcentaje de ganancia de Precio al Publico
 **/
 __CalculoGananciaPublico(e){
-_CalculoPrecio()
+    var impuesto  =  __valorNumerico($('#impuesto').val())
+    var impuesto1 =  __valorNumerico($('#impuesto1').val())
+    var costo     =  __valorNumerico($('#costo').val())
+    var precioPublico    =  __valorNumerico($('#precioPublico').val())
+    self.articulo.gananciaPrecioPublico    = precioPublico >0?_porcentajeGanancia(costo,impuesto,impuesto1,precioPublico):0
+    self.articulo.precioPublico = precioPublico
+    self.update()
 }
 
 /**
@@ -603,7 +638,6 @@ function __listadoCategoriasActivas(){
     $.ajax({ 
          url: "ListarCategoriasActivasAjax.do",
         datatype: "json",
-        global: false,
         method:"GET",
         success: function (result) {
              if(result.aaData.length > 0){
@@ -634,7 +668,6 @@ function __listadoMarcasActivas(){
     $.ajax({
          url: "ListarMarcasActivasAjax.do",
         datatype: "json",
-        global: false,
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){

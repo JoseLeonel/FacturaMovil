@@ -1,6 +1,5 @@
 $(document).ready(function() {
 	_Init();
-	
 } );/*fin document*/
 
 var _Init = function () {
@@ -14,7 +13,6 @@ var _Init = function () {
  */
 function cargaMantenimientoCategorias() {
 
-	
 	riot.mount('venta-servicios');
 }
 

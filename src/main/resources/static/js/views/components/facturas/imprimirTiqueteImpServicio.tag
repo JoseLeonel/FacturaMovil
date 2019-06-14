@@ -26,9 +26,9 @@
                             </thead>
 	                        <tbody>
 	                            <tr class = "" each={detalles} class="detalleTables">
-	                                <td class="cantidad">{cantidad}</td>
+	                                <td class="cantidad">{cantidadSTR}</td>
 	                                <td class="producto" >{descripcion.length>40?descripcion.substring(0, 40):descripcion}</td>
-	                                <td class="precio">{montoTotalLinea}</td>
+	                                <td class="precio">{montoTotalLineaSTR}</td>
 	                            </tr>
 	                            <tr>
 		                            <td colspan="3"></td>

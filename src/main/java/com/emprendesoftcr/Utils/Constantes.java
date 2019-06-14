@@ -6,13 +6,13 @@ public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																			= ResourceBundle.getBundle("factura");
 
-	//Inventario
+	// Inventario
 	public static final String					ARTICULO_MINIMO																			= "1";
 	public static final String					ARTICULO_MAXIMO																			= "2";
 	public static final String					PLANTILLA_CORREO_CUENTAS_POR_COBRAR									= "email/cuentasxcobrar.vm";
 	public static final String					PLANTILLA_CORREO_VENTA_POR_CODIGO										= "email/ventasXCodigo.vm";
 	public static final String					PLANTILLA_CORREO_COMPRAS_ACEPTADAS									= "email/emailResumenCompras.vm";
-	public static final String					PLANTILLA_CORREO_RESUMEN_VENTAS_RANGO_FECHA         = "email/emailResumenFactura.vm";
+	public static final String					PLANTILLA_CORREO_RESUMEN_VENTAS_RANGO_FECHA					= "email/emailResumenFactura.vm";
 
 // Version de los tipos de documentos 
 	public static final String					TIQUETE_ELECTRONICO_VERSION													= "Tiquete Electrónico ver 4.2";
@@ -475,9 +475,12 @@ public class Constantes {
 
 //Procedimiento para generar totales por linea de datalles de la factura
 	public static final String					SP_VENTASXDETALLE																		= "ventasxdetalle";
+	public static final String					SP_VENTASXDETALLE_TIPO_IMPUESTO											= "ventasxdetaTodos";
+	public static final String					SP_VENTASXDETALLE_EXCEPTO														= "ventasxdetalleExc";
 	public static final String					SP_VENTASXDETALLE_IN_ID_EMPRESA											= "e_empresa";
 	public static final String					SP_VENTASXDETALLE_IN_FECHA_INICIAL									= "fecha_inicio";
 	public static final String					SP_VENTASXDETALLE_IN_FECHA_FINAL										= "fecha_fin";
+	public static final String					SP_VENTASXDETALLE_IN_TIPO_IMPUESTO									= "e_tipoImpuesto";
 	public static final String					SP_VENTASXDETALLE_OUT_TOTAL													= "total";
 	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_IMPUESTO								= "total_imp";
 	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_GRAVADO									= "total_grav";

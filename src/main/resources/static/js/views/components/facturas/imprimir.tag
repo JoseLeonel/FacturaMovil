@@ -46,7 +46,7 @@
                                     </thead>
                                 <tbody>
                                     <tr class = "" each={detalles} class="detalleTables">
-                                        <td class="cantidad" show={codigo !='8888'}>{cantidad}</td>
+                                        <td class="cantidad" show={codigo !='8888'}>{cantidadSTR}</td>
                                         <td class="producto" show={codigo !='8888'}>{descripcion}</td>
                                         <td class="precio"   show={codigo !='8888'}>{montoTotalSTR} {montoImpuesto>0?"G":"E"}</td>
                                     </tr>

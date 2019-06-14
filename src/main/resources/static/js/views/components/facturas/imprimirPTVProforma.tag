@@ -39,7 +39,7 @@
                             </thead>
                         <tbody>
                             <tr class = "" each={detalles} class="detalleTables">
-                                <td class="cantidad" show={codigo !='8888'}>{cantidad}</td>
+                                <td class="cantidad" show={codigo !='8888'}>{cantidadSTR}</td>
                                 <td class="producto" show={codigo !='8888'}>{descripcion.length>40?descripcion.substring(0, 40):descripcion}</td>
                                 <td class="precio"   show={codigo !='8888'}>{montoTotalSTR} </td>
                             </tr>

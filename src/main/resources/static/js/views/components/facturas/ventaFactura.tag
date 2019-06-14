@@ -2158,14 +2158,16 @@ function aplicarFactura(estado){
             }
             var montoEntregado = __valorNumerico($('#totalTarjeta').val())  + __valorNumerico($('#totalBanco').val()) + __valorNumerico($('#totalEfectivo').val())
             montoEntregado = redondeoDecimales(__valorNumerico(montoEntregado),2)
+            montoEntregado = __valorNumerico(montoEntregado)
             var resultado  = redondeoDecimales( __valorNumerico(self.factura.totalComprobante),2)
-            if(__valorNumerico(resultado) > __valorNumerico(montoEntregado)  ){
+            resultado = __valorNumerico(resultado);
+            if(resultado > montoEntregado){
                 mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
                 return
             }
             //Si el cliente esta pagando con tajeta, banco debe ser igual a la venta
             if(self.factura.totalTarjeta != 0 || self.factura.totalBanco !=0){
-                if(self.factura.totalComprobante != montoEntregado  ){
+                if(resultado != montoEntregado  ){
                     mensajeError($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
                    return
                 }

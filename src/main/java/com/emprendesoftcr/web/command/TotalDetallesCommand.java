@@ -1,5 +1,7 @@
 package com.emprendesoftcr.web.command;
 
+import com.emprendesoftcr.Utils.Utils;
+
 /**
  * TotalDetallesCommand. Para totalizar las ventas por detalle
  * @author jose.
@@ -43,6 +45,9 @@ public class TotalDetallesCommand {
 	public Double getTotal() {
 		return total;
 	}
+	public String getTotalSTR() {
+		return Utils.formateadorMiles(this.total);
+	}
 
 	public void setTotal(Double total) {
 		this.total = total;
@@ -50,6 +55,10 @@ public class TotalDetallesCommand {
 
 	public Double getTotalDescuento() {
 		return totalDescuento;
+	}
+	
+	public String getTotalDescuentoSTR() {
+		return Utils.formateadorMiles(this.totalDescuento);
 	}
 
 	public void setTotalDescuento(Double totalDescuento) {
@@ -59,6 +68,11 @@ public class TotalDetallesCommand {
 	public Double getTotalImpuesto() {
 		return totalImpuesto;
 	}
+	public String getTotalImpuestoSTR() {
+		return Utils.formateadorMiles(this.totalImpuesto);
+	}
+	
+	
 
 	public void setTotalImpuesto(Double totalImpuesto) {
 		this.totalImpuesto = totalImpuesto;
@@ -67,6 +81,10 @@ public class TotalDetallesCommand {
 	public Double getTotalGanancia() {
 		return totalGanancia;
 	}
+	public String getTotalGananciaSTR() {
+		return Utils.formateadorMiles(this.totalGanancia);
+	}
+	
 
 	public void setTotalGanancia(Double totalGanancia) {
 		this.totalGanancia = totalGanancia;
@@ -74,6 +92,9 @@ public class TotalDetallesCommand {
 
 	public Double getTotalExento() {
 		return totalExento;
+	}
+	public String getTotalExentoSTR() {
+		return  Utils.formateadorMiles(this.totalExento);
 	}
 
 	public void setTotalExento(Double totalExento) {
@@ -86,7 +107,9 @@ public class TotalDetallesCommand {
 	public Double getTotalGravado() {
 		return totalGravado;
 	}
-
+	public String getTotalGravadoSTR() {
+		return Utils.formateadorMiles(this.totalGravado);
+	}
 
 
 	

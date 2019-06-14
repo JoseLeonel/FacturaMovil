@@ -323,7 +323,7 @@
                      <aside class="left-sidebar">
                         <article class="clearfix">
                             <div onclick = {__MostrarFormularioDePago}  class="precioTotalFacturaContainer"  show={soloParaChinos == true}>
-                                <p class="label-totalesComprobante" >Total:  <span >{totalComprobante}</span></p>
+                                <div class="label-totalesComprobanteChino" >Total:  {totalComprobante}</div>
                             </div>
                             <div class="booking-info" show={soloParaChinos == false}>
                                     <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.subTotal")}  <span id="lblSubtotal"> {subTotalGeneral} </span></p>
@@ -585,26 +585,22 @@
 </div>
 <!--Fin Cambiar Descuento-->
 <style type="text/css"  >
-.label-totalesComprobante {
+.label-totalesComprobanteChino {
     display: flex;
     flex: 1;
     font-weight: 600 !important;
-    font-size: 35px !important;
+    font-size: 37px !important;
     font-family: Roboto,sans-serif !important;
     color: #30ed17 !important;
     text-shadow: 0px 0px 1px #ffffff;
     font-style: italic;
-    text-align: left;
-    padding-left: 13px;
-    line-height: 79px;
     border-collapse: separate;
-    text-align: center;
     cursor: pointer;
-    border: none;
+    margin: 2%!important;
     text-align: center !important;
     background-color: black !important;
     box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 5px;
+    border-radius: 25px !important;
     -webkit-transition: background-color 100ms linear;
     -moz-transition: background-color 100ms linear;
     -o-transition: background-color 100ms linear;

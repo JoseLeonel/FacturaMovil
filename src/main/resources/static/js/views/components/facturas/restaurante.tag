@@ -4404,6 +4404,7 @@ __ComentariosComanda(e){
 **/
 function __nuevoArticuloComanda(cantidad, codigo, descripcion){	
 	
+    
 	//Se almacenan los productos por separados en la comanda
 	for (var i = 0; i < cantidad; i++) {
 		//Se busca si existe en el mapa, se actualiza la lista o se hace el put inicial
@@ -4595,15 +4596,15 @@ function mostrarSeperarCuentasFun(){
 	    codigoMoneda:"",
 	    estado:0,
 	    cliente:{
-	        id:0,
+	        id:null,
 	        nombreCompleto:"",
 	    },
 	    vendedor:{
-	        id:0,
+	        id:null,
 	        nombreCompleto:""
 	    },
 	    mesa:{
-	        id:0,
+	        id:null,
 	        descripcion:"",
 	        impuestoServicio:false
 	   }
