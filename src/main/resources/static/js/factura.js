@@ -162,7 +162,7 @@ $(document)
 		  var porcentajeGanancia = 0;
 		  var precioSinImpuesto  = 0;
 		  if(costo == 0){
-		      return 0
+		      return 100
 		  } 
 		  if(precioVenta == 0){
 		    return 0;
