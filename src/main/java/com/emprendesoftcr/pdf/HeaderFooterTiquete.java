@@ -64,28 +64,7 @@ public class HeaderFooterTiquete extends PdfPageEventHelper {
 	public void onStartPage(PdfWriter writer, Document document) {
 			try {
 
-//		
-//			if(this.facturaElectronica.getClave() !=null) {
-//				if(!this.facturaElectronica.getClave().equals(Constantes.EMPTY)) {
-//					String codigoQR = this.facturaElectronica.getClave();
-//
-//					BarcodeQRCode qrcode = new BarcodeQRCode(codigoQR, 80, 80, null);
-//					Image qrcodeImage = qrcode.getImage();
-//					qrcodeImage.setAbsolutePosition(495f, 765f);
-//					document.add(qrcodeImage);
-//					
-//				}
-//				
-//			}
 
-			
-//			if(this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
-//				derecha.addCell(utils_pdf.obtenerCeldaNormal(tipoDocVersion(), UtilsPdf.bigFont16, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));	
-//			}else {
-//				derecha.addCell(utils_pdf.obtenerCeldaNormal(tipoDocVersion(), UtilsPdf.bigFont12, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
-//			} 
-				UtilsPdf utils_pdf = new UtilsPdf();
-				PdfPTable tabla = new PdfPTable(1);
 
 			document.add(new Paragraph(tipoDocVersion(), UtilsPdf.font_cabezera_tabla));
 			document.add(new Paragraph(this.facturaElectronica.getEmisorNombreComercial(), UtilsPdf.font_cabezera_tabla));
@@ -98,28 +77,7 @@ public class HeaderFooterTiquete extends PdfPageEventHelper {
 			document.add(new Paragraph("Plazo crédito:"+this.facturaElectronica.getPlazoCredito() , UtilsPdf.font_cabezera_tabla));
 			document.add(new Paragraph("Condición venta:"+this.facturaElectronica.getCondicionVenta() , UtilsPdf.font_cabezera_tabla));
 			    
-//
-//			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getCondicionVenta(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
-//
-//			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal("Medio de pago", UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
-//
-//			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getMedioEfectivo(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
-//
-//			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal("Moneda", UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
-//
-//			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getMoneda(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
-//
-//			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal("Tipo cambio", UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
-//
-//			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getTipoCambio(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
-//
-//			PdfPCell celda_derecha_redondeada = new PdfPCell(derecha_inferior);
-//			celda_derecha_redondeada.setBorder(Rectangle.NO_BORDER);
-//			celda_derecha_redondeada.setCellEvent(utils_pdf.getRoundRectangle());
-//
-//			derecha.addCell(celda_derecha_redondeada);
-//
-	//		tabla_cabezera.addCell(derecha);
+
 
 	
 						
