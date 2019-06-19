@@ -288,6 +288,10 @@ public class Articulo implements Serializable {
 	public void setGananciaPrecioPublico(Double gananciaPrecioPublico) {
 		this.gananciaPrecioPublico = gananciaPrecioPublico;
 	}
+	
+	public String getPrecioPublicoSTR() {
+		return Utils.formateadorMiles(this.precioPublico);
+	}
 
 	public Double getPrecioMayorista() {
 		return precioMayorista;

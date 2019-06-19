@@ -179,43 +179,43 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th style="width:5%;">                                                      </h1></th>
-                            <th><h1>{$.i18n.prop("compra.linea.detalle.linea")}                         </h1></th>
-                            <th><h1>{$.i18n.prop("compra.linea.detalle.codigo")}                        </h1></th>
-                            <th style="width:20%;"><h1>{$.i18n.prop("compra.linea.detalle.descripcion")}</h1></th>
-                            <th style="width:8%;"><h1>{$.i18n.prop("compra.linea.detalle.cantidad")}   </h1></th>
-                            <th style="width:8%;"><h1>{$.i18n.prop("compra.linea.detalle.costo")}                         </h1></th>
-                            <th style="width:8%;"><h1>{$.i18n.prop("compra.linea.detalle.precio")}                        </h1></th>
-                            <th style="width:8%;"><h1>{$.i18n.prop("compra.linea.detalle.descuento")}                     </h1></th>
-                            <th><h1>{$.i18n.prop("compra.linea.detalle.impuesto")}                      </h1></th>
-                            <th><h1>{$.i18n.prop("compra.linea.detalle.total")}                        </h1></th>
+                            <th style="width:5%;">                                                      </div></th>
+                            <th style="width:2%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.linea")}                         </div></th>
+                            <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.codigo")}                        </div></th>
+                            <th style="width:18%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descripcion")}</div></th>
+                            <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.cantidad")}   </div></th>
+                            <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.costo")}                         </div></th>
+                            <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.precio")}                        </div></th>
+                            <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descuento")}                     </div></th>
+                            <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.impuesto")}                      </div></th>
+                            <th  style="width:8%;"> <div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.total")}                        </div></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr each={detail}>
-                            <td>
+                            <td style="width:5%;">
                                 <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
                             </td>
-                            <td><h2>{numeroLinea}</h2></td>
-                            <td><h2>{codigo}</h2></td>
-                            <td><h2>{descripcion}</h2></td>
-                            <td class="text-right">
-                                <input onkeypress={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalleBlur} id= "cantidadDetalle" class="campo" type="number" step="any" placeholder="Cantidad Detalle" value = {cantidad} min="1" pattern="^[0-9]+"/>
+                            <td style="width:2%;"><h2>{numeroLinea}</h2></td>
+                            <td style="width:8%;"><h2>{codigo}</h2></td>
+                            <td style="width:18%;"><h2>{descripcion}</h2></td>
+                            <td class="text-right" style="width:17%;">
+                                <input onkeyup={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalleBlur} id= "cantidadDetalle" class="campodetalle" type="number" step="any" placeholder="Cantidad Detalle" value = {cantidad} min="1" pattern="^[0-9]+"/>
                             </td>
-                            <td class="text-right">
-                                <input  onkeypress={__actualizarCostoKeyPress} onBlur={__actualizarCostoBlur} class="campo" type="number" step="any"  value = "{costo}" min="0" pattern="^[0-9]+"/>
+                            <td class="text-right" style="width:17%;">
+                                <input  onkeyup={__actualizarCostoKeyPress} onBlur={__actualizarCostoBlur} class="campodetalle" type="number" step="any"  value = "{costo}" min="0" pattern="^[0-9]+"/>
                             </td>
-                            <td class="text-right">
-                                <input  onkeypress={__actualizarPrecioKeyPress} onBlur={__actualizarPrecioBlur} class="campo" type="number" step="any"  value = "{precio}" min="0" pattern="^[0-9]+"/>
+                            <td class="text-right" style="width:17%;">
+                                <input  onkeyup={__actualizarPrecioKeyPress} onBlur={__actualizarPrecioBlur} class="campodetalle" type="number" step="any"  value = "{precio}" min="0" pattern="^[0-9]+"/>
                             </td>
-                            <td class="text-right">
-                                <input  onkeypress={__actualizarDescuentoKeyPress} onBlur={__actualizarDescuentoBlur} class="campo" type="number" step="any"  value = "{descuento}"  min="0" pattern="^[0-9]+" />
+                            <td class="text-right" style="width:8%;">
+                                <input  onkeyup={__actualizarDescuentoKeyPress} onBlur={__actualizarDescuentoBlur} class="campodetalleDescuento" type="number" step="any"  value = "{descuento}"  min="0" pattern="^[0-9]+" />
                             </td>
-                            <td class="text-right">
-                                <h2>{totalImpuesto.toFixed(2)} </h2>
+                            <td class="text-right" style="width:14%;">
+                                <h2 class="totalLabel">{totalImpuesto.toFixed(2)} </h2>
                             </td>
-                            <td class="text-right">
-                                <h2>{montoTotalLinea.toFixed(2)} </h2>
+                            <td class="text-right" style="width:14%;">
+                                <h2 class="totalLabel">{montoTotalLinea.toFixed(2)} </h2>
                             </td>
                         </tr>
                         </tbody>
@@ -225,23 +225,9 @@
 				    <!--right sidebar-->
                     <aside class="left-sidebar">
                             <!--Booking details-->
-                        <article class="booking-details clearfix">
-                            <div    onclick = {__MostrarFormularioDePago} id="btnGrandePagar" class="head green well" style="color: #fff; font-size: 25px;  padding-top:8px !important; padding-bottom:8px !important; margin-bottom: 8px;">
-                                <table id="pagarTable" width="100%">
-                                    <tbody>
-                                        <tr>
-                                            <td width="30%" id="">
-                                                <div id="pagarTitulo">{$.i18n.prop("compra.total")}:</div>
-                                            </td>
-                                            <td width="70%" id="">
-                                            
-                                                <div id="">
-                                                    <span class="label label-info textShadow" id="total-show">{totalGeneralCompra}</span>
-                                                </div>
-                                            </td>
-                                        </tr>                     
-                                    </tbody>
-                                </table>
+                        <article class=" clearfix">
+                            <div onclick = {__MostrarFormularioDePago}  class="precioTotalFacturaContainer"  >
+                                <div class="label-totalesComprobanteChino" >Total:  {totalGeneralCompra}</div>
                             </div>
                         </article>
                     </aside>
@@ -307,13 +293,59 @@
     </div>
 </div>
 <!--fin del modal-->
-<style type="text/css">
 
+<style type="text/css">
+.label-totalesComprobanteChino {
+    display: flex;
+    flex: 1;
+    font-weight: 600 !important;
+    font-size: 37px !important;
+    font-family: Roboto,sans-serif !important;
+    color: #30ed17 !important;
+    text-shadow: 0px 0px 1px #ffffff;
+    font-style: italic;
+    border-collapse: separate;
+    cursor: pointer;
+    margin: 2%!important;
+    text-align: center !important;
+    background-color: black !important;
+    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+    border-radius: 25px !important;
+    -webkit-transition: background-color 100ms linear;
+    -moz-transition: background-color 100ms linear;
+    -o-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+}
+.precioTotalFacturaContainer{
+    display:flex;
+    flex:1;
+}
+.tituloFormat{
+    color: black;
+    font-size: 18px;
+    font-weight: bold;   
+        padding-top: 5%; 
+}
+.contenedor-compra {
+    display:flex;
+    flex-wrap: nowrap;
+}
+.cabecera-derecha{
+    flex:0.25;
+}
+.totalLabel {
+    color: blue;
+    font-size: 18px;
+    font-weight: bold;
+}
+}
  #contenedor {
   width:500px;
   height:200px;
   background: #fff;
-  padding:10px;
+  padding:10px;￼    color: blue;
+￼    font-size: 18px;
   border:10px solid #2c3e50;
   margin:20px;
   display:flex;
@@ -322,8 +354,7 @@
  justify-content:space-between;
 }
  .cabecera-izquierda {
-       margin-right:5%;
-       width:85%;
+       flex:1;
     }
 
     .cabecera-derecha {
@@ -481,11 +512,7 @@
         width:100%;
         margin:auto;
     }
-    .contenedor-compra {
-        display:flex;
-        width:100%;
-        margin :auto;
-    }
+  
    
     .contenedor-detalle   {
         display:flex;
@@ -529,7 +556,7 @@
         width: 100%;
         height: 45px;
         padding: 6px 16px;
-        font-size: 10px;
+        font-size: 12px;
         line-height: 1.42857143;
         color: #555;
         background-color: #fff;
@@ -548,6 +575,52 @@
         padding: 1px 2px;
         overflow: visible;
     }
+    .campodetalle {
+    width: 100%;
+    height: 40px;
+    padding: 6px 16px;
+    font-size: 16px;
+    line-height: 1.42857143;
+    color: #1825ef;
+    font-weight: bold;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    background-color: #fcfcfc;
+    border: 1px solid #ccc;
+    margin: 2px 0;
+    padding: 1px 2px;
+    overflow: visible;
+}
+.campodetalleDescuento {
+    width: 100%;
+    height: 40px;
+    padding: 6px 16px;
+    font-size: 16px;
+    line-height: 1.42857143;
+    color: #1825ef;
+    font-weight: bold;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    background-color: #fcfcfc;
+    border: 1px solid #ccc;
+    margin: 2px 0;
+    padding: 1px 2px;
+    overflow: visible;
+}
 </style>
 
 <script>
@@ -829,7 +902,7 @@ function cargarDetallesCompraEnEspera(data){
         self.pesoPrioridad = self.numeroLinea
 
     })
-    self.detail.sort(function(a,b) {
+   self.detail.sort(function(a,b) {
     if ( a.pesoPrioridad > b.pesoPrioridad )
         return -1;
     if ( a.pesoPrioridad < b.pesoPrioridad )
@@ -864,7 +937,6 @@ function crearCompra(estadoCompra){
         totalDescuento:__valorNumerico(self.compra.totalDescuento),
         totalImpuesto:__valorNumerico(self.compra.totalImpuesto),
         totalCompra:__valorNumerico(self.compra.totalCompra),
-        
         formaPago:$('.formaPago').val(),
         tipoDocumento:$('.tipoDocumento').val(),
         proveedor:$('.proveedor').val(),
@@ -1187,9 +1259,7 @@ function __nuevoArticuloAlDetalle(cantidad){
 *   Actualizar el costo del codigo y recalcular la compra
 **/
 __actualizarCostoKeyPress(e){
-    if (e.keyCode != 13) {
-        return;
-    } 
+   
     var costo = e.currentTarget.value;
     self.item = e.item; 
     self.update()
@@ -1277,9 +1347,9 @@ __removeProductFromDetail(e) {
  * Se aplica una recalculacion de todo el detalle y Compra
  **/ 
  __recalculacionDelDetalle(e){
-    if (e.keyCode != 13) {
-        return;
-    } 
+   // if (e.keyCode != 13) {
+   //     return;
+   // } 
     var cantidad = e.currentTarget.value;
     self.item = e.item; 
     self.update()
@@ -1303,9 +1373,9 @@ __removeProductFromDetail(e) {
     
     //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
     cantidad =__valorNumerico(cantidad);
-    if(cantidad == 0){
-       cantidad = 1;
-    }
+   // if(cantidad == 0){
+   //    cantidad = 1;
+   // }
     self.item.cantidad = parseFloat(cantidad);  
     _cambiaImpuesto()
     __actualizarItemArray();
@@ -1317,9 +1387,7 @@ __removeProductFromDetail(e) {
 *   Actualizar el costo del codigo y recalcular la compra
 **/
 __actualizarPrecioKeyPress(e){
-    if (e.keyCode != 13) {
-        return;
-    } 
+    
     var precio = e.currentTarget.value;
     self.item = e.item; 
     self.update()
@@ -1341,15 +1409,13 @@ function __ActualizarPrecioDetalle(precio){
     __actualizarItemArray();
     self.detail[index] = self.item;
     self.update();
-    __calculate();
+    //__calculate();
 }
 /**
 * Actualizar el descuento del codigo
 **/
 __actualizarDescuentoKeyPress(e){
-    if (e.keyCode != 13) {
-        return;
-    } 
+   
     self.item     = e.item; 
     self.update()
     var descuento = e.currentTarget.value;

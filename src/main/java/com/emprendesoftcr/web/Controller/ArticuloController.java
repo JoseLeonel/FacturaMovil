@@ -2,18 +2,14 @@ package com.emprendesoftcr.web.Controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,12 +43,12 @@ import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
-import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Marca;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.pdf.GondolaArticuloPdfView;
 import com.emprendesoftcr.web.command.ArticuloCambioCategoriaGrupal;
 import com.emprendesoftcr.web.command.ArticuloCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacion;
@@ -63,14 +59,7 @@ import com.emprendesoftcr.web.propertyEditor.MarcaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
 import com.google.gson.Gson;
-
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
+import com.itextpdf.text.DocumentException;
 
 /**
  * Control de los articulos de una empresa ArticuloController.
@@ -277,34 +266,39 @@ public class ArticuloController {
 
 	@RequestMapping(value = "/PDFGondolaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	public void bajarPDFGondola(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idArticulo) throws Exception {
-//		try {
-		Articulo articuloBD = articuloBo.buscar(idArticulo);
-	
-		String dir = System.getProperty("user.dir");
-		String jrxmlFile = dir + "/reportes/gondola.jrxml";
-		JasperReport jasperReport;
-		InputStream input = new FileInputStream(new File(jrxmlFile));
 
-		jasperReport = JasperCompileManager.compileReport(input);
-		JRDataSource vacio = new JREmptyDataSource(1);
+		try {
+			Articulo articuloBD = articuloBo.buscar(idArticulo);
 
-		Map<String, Object> parameters = new HashMap<String, Object>();
-		if (articuloBD.getDescripcion().length() > 40) {
-			parameters.put("descripcion", articuloBD.getDescripcion().substring(0, 40));
-		} else {
-			parameters.put("descripcion", articuloBD.getDescripcion().trim());
+
+
+			ByteArrayOutputStream namePDF = GondolaArticuloPdfView.main(articuloBD);
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
+			response.setContentType("application/octet-stream");
+			response.setContentLength((int) namePDF.toByteArray().length);
+			String fileName = Constantes.EMPTY;
+
+			Date fecha = new Date();
+			fileName = "articulo_" + articuloBD.getCodigo().trim()+fecha.toString();
+
+			int BUFFER_SIZE = 4096;
+			String headerKey = "Content-Disposition";
+			String headerValue = String.format("attachment; filename=\"%s\"", fileName + ".pdf");
+			response.setHeader(headerKey, headerValue);
+			OutputStream outStream = response.getOutputStream();
+			byte[] buffer = new byte[BUFFER_SIZE];
+			int bytesRead = -1;
+			while ((bytesRead = inputStream.read(buffer)) != -1) {
+				outStream.write(buffer, 0, bytesRead);
+			}
+			inputStream.close();
+			outStream.close();
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		} catch (com.google.zxing.WriterException ex) {
 
 		}
 
-		parameters.put("precio", Utils.formateadorMiles(articuloBD.getPrecioPublico()));
-		parameters.put("codigo", "cod:" + articuloBD.getCodigo());
-		response.setHeader("Content-Disposition", "inline; filename=\"application.pdf\"");
-		response.setContentType("application/pdf");
-
-		JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, vacio);
-		JasperExportManager.exportReportToPdfStream(print, response.getOutputStream());
-		response.getOutputStream().flush();
-		response.getOutputStream().close();
 
 	}
 

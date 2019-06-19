@@ -38,7 +38,7 @@ public class ReportePdfView {
 
 	public static ByteArrayOutputStream main(String consecutivo, String tipoDoc, FacturaElectronica facturaElectronica) throws Exception {
 		ReportePdfView reporte01PdfView = new ReportePdfView();
-		Document document = new Document(PageSize.A4);
+		Document document = new Document(PageSize.A7);
 		document.setMargins(10, 10, 12, 55);
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
