@@ -51,8 +51,8 @@ public class ArticuloCommand {
 	private String			tipoCodigo;
 	private Date				created_at;
 	private Date				updated_at;
-	private String				created_atSTR;
-	private String				updated_atSTR;
+	private String			created_atSTR;
+	private String			updated_atSTR;
 
 	private Marca				marca;
 	private Usuario			usuario;
@@ -71,6 +71,9 @@ public class ArticuloCommand {
 	private String			tipoImpuesto1;
 
 	private Double			impuesto1;
+
+	private String			codigoTarifa;
+	private String			codigoTarifa1;
 
 	public ArticuloCommand(Articulo articulo) {
 		super();
@@ -122,6 +125,8 @@ public class ArticuloCommand {
 		this.tipoImpuesto1 = articulo.getTipoImpuesto1();
 		this.created_atSTR = articulo.getCreated_atSTR();
 		this.updated_atSTR = articulo.getUpdated_atSTR();
+		this.codigoTarifa = articulo.getCodigoTarifa();
+		this.codigoTarifa1 = articulo.getCodigoTarifa1();
 
 	}
 
@@ -131,6 +136,22 @@ public class ArticuloCommand {
 
 	public void setPrioridad(Integer prioridad) {
 		this.prioridad = prioridad;
+	}
+
+	public String getCodigoTarifa() {
+		return codigoTarifa;
+	}
+
+	public void setCodigoTarifa(String codigoTarifa) {
+		this.codigoTarifa = codigoTarifa;
+	}
+
+	public String getCodigoTarifa1() {
+		return codigoTarifa1;
+	}
+
+	public void setCodigoTarifa1(String codigoTarifa1) {
+		this.codigoTarifa1 = codigoTarifa1;
 	}
 
 	public String getFechaUltimaCompra() {
@@ -481,22 +502,18 @@ public class ArticuloCommand {
 		this.impuesto1 = impuesto1;
 	}
 
-	
 	public String getCreated_atSTR() {
 		return created_atSTR;
 	}
 
-	
 	public void setCreated_atSTR(String created_atSTR) {
 		this.created_atSTR = created_atSTR;
 	}
 
-	
 	public String getUpdated_atSTR() {
 		return updated_atSTR;
 	}
 
-	
 	public void setUpdated_atSTR(String updated_atSTR) {
 		this.updated_atSTR = updated_atSTR;
 	}

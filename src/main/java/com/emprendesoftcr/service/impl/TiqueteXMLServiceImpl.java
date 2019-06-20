@@ -312,7 +312,7 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
                   "<MontoTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotal()) + "</MontoTotal>" +
                   getDescuento(detalle.getMontoDescuento())+
                   "<SubTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getSubTotal()) + "</SubTotal>" +
-//                  "<BaseImponible>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getBaseImponible()) + "</BaseImponible>" +
+                  xmlBaseImponible(detalle.getFactura().getId(),detalle.getBaseImponible())+  
                   xmlImpuestos(detalle.getFactura().getId(),detalle.getCodigoTarifa(),detalle.getTipoImpuesto1(),detalle.getMontoImpuesto1(),detalle.getImpuesto1()) +
                   xmlImpuestos(detalle.getFactura().getId(),detalle.getCodigoTarifa(),detalle.getTipoImpuesto(),detalle.getMontoImpuesto(),detalle.getImpuesto()) +
                   xmlImpuestosNeto(detalle.getFactura().getId() ,detalle.getMontoImpuesto() ==null?Constantes.ZEROS_DOUBLE:detalle.getMontoImpuesto(),detalle.getMontoImpuesto1() ==null?Constantes.ZEROS_DOUBLE:detalle.getMontoImpuesto(),detalle.getImpuestoNeto()) +
@@ -327,6 +327,27 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 			}
       return lineas;
 }
+  private String xmlBaseImponible(Long idFactura,Double baseImponible) throws Exception {
+  	String resultado = Constantes.EMPTY;
+  	
+  	
+  	try {
+  		if(baseImponible ==  Constantes.ZEROS_DOUBLE) {
+    		return resultado;
+    	}
+    	if(baseImponible == null) {
+    		return resultado;
+    	}
+    	
+	        resultado = "<BaseImponible>" +  FacturaElectronicaUtils.getConvertirBigDecimal(baseImponible) + "</BaseImponible>" ;
+			
+		} catch (Exception e) {
+			log.info("** Error  xmlImpuestos Factura :" + idFactura  + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+    return resultado;
+}
+  
 private String xmlImpuestosNeto(Long idFactura ,Double montoImpuesto,Double montompuesto1,Double montoImpuestoNeto) throws Exception {
   	String resultado = Constantes.EMPTY;
   	if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE) && montompuesto1.equals(Constantes.ZEROS_DOUBLE)) {

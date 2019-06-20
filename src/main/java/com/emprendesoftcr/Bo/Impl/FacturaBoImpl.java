@@ -410,7 +410,7 @@ public class FacturaBoImpl implements FacturaBo {
 				}
 
 			}
-			detalle.setBaseImponible(Constantes.ZEROS_DOUBLE);
+		//	detalle.setBaseImponible(impuestoNeto > Constantes.ZEROS_DOUBLE?detalle.getPrecioUnitario():Constantes.ZEROS);
       detalle.setImpuestoNeto(impuestoNeto);
 			detalle.setNaturalezaDescuento(Constantes.FORMATO_NATURALEZA_DESCUENTO);
 			detalle.setNumeroLinea(numeroLinea);
