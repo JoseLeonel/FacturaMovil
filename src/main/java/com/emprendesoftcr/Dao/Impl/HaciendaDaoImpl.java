@@ -169,5 +169,4 @@ public class HaciendaDaoImpl implements HaciendaDao {
 		}
 
 	}
-
 }
