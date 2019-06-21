@@ -429,7 +429,19 @@ public class FacturaBoImpl implements FacturaBo {
 				detalle.setMontoTotal(detalle.getMontoTotal() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoTotal(), 5));
 				// Se calcula el subtotal por problemas de decimales
 				detalle.setSubTotal(Utils.roundFactura(detalle.getMontoTotal() - detalle.getMontoDescuento(), 5));
-				detalle.setBaseImponible(detalle.getSubTotal());
+				Boolean baseImponible = Boolean.FALSE;
+				if(detalle.getTipoImpuesto() !=null) {
+					if(detalle.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
+						baseImponible = Boolean.TRUE;
+					}
+				}
+				if(detalle.getTipoImpuesto1() !=null) {
+					if(detalle.getTipoImpuesto1().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
+						baseImponible = Boolean.TRUE;
+					}
+				}
+
+				detalle.setBaseImponible(baseImponible?detalle.getSubTotal():Constantes.ZEROS_DOUBLE);
 				
 				// Suma de montos con impuestos
 

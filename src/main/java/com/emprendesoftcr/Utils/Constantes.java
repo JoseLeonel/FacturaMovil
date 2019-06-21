@@ -15,10 +15,10 @@ public class Constantes {
 	public static final String					PLANTILLA_CORREO_RESUMEN_VENTAS_RANGO_FECHA					= "email/emailResumenFactura.vm";
 
 // Version de los tipos de documentos 
-	public static final String					TIQUETE_ELECTRONICO_VERSION													= "Tiquete Electrónico ver 4.2";
-	public static final String					FACTURA_ELECTRONICO_VERSION													= "Factura Electrónica ver 4.2";
-	public static final String					NOTA_CREDITO_ELECTRONICO_VERSION										= "Nota Credito Electrónica ver 4.2";
-	public static final String					NOTA_DEBITO_ELECTRONICO_VERSION											= "Nota Debito Electrónica ver 4.2";
+	public static final String					TIQUETE_ELECTRONICO_VERSION													= "Tiquete Electrónico ver 4.3";
+	public static final String					FACTURA_ELECTRONICO_VERSION													= "Factura Electrónica ver 4.3";
+	public static final String					NOTA_CREDITO_ELECTRONICO_VERSION										= "Nota Credito Electrónica ver 4.3";
+	public static final String					NOTA_DEBITO_ELECTRONICO_VERSION											= "Nota Debito Electrónica ver 4.3";
 	public static final String					PROFORMA_VERSION																		= "Proforma";
 	// callbackurl 1 = si 0= No
 	public static final Integer					CALLBACKURL_SI																			= 1;
@@ -38,6 +38,7 @@ public class Constantes {
 	public static final Integer					CANTIDAD_DIAS_MINIMO_CREDITO												= 1;
 	// Tipo de codigos de productos
 	public static final String					TIPO_IMPUESTO_VENTA_ARTICULO												= "01";
+	public static final String					TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL						= "07";
 	public static final String					TIPO_CODIGO_ARTICULO_POR_SERVICIO										= "07";
 	public static final String					TIPO_CODIGO_ARTICULO_USO_INTERNO										= "04";
 	public static final String					TIPO_CODIGO_ARTICULO_CODIGO_VENDEDOR								= "01";

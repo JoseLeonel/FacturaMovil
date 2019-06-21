@@ -332,7 +332,7 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
   	
   	
   	try {
-  		if(baseImponible ==  Constantes.ZEROS_DOUBLE) {
+  		if(baseImponible.equals(Constantes.ZEROS_DOUBLE)) {
     		return resultado;
     	}
     	if(baseImponible == null) {
@@ -376,6 +376,9 @@ private String xmlImpuestosNeto(Long idFactura ,Double montoImpuesto,Double mont
 private String getDescuento(Double descuento) throws Exception {
 		String resultado = Constantes.EMPTY;
 		if(descuento == null) {
+			return resultado;
+		}
+		if(descuento.equals(Constantes.ZEROS_DOUBLE)) {
 			return resultado;
 		}
 		try {
