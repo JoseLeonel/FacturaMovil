@@ -309,7 +309,7 @@ public class ArticuloController {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Articulo");
-		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
+		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_INACTIVO + "'", "<>");
 		delimitadores.addFiltro(dataTableFilter);
 		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
 			String nombreUsuario = request.getUserPrincipal().getName();
@@ -543,7 +543,7 @@ public class ArticuloController {
 
 		}
 
-		categoriaFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
+		categoriaFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO + "'", "=");
 		delimitadores.addFiltro(categoriaFilter);
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
