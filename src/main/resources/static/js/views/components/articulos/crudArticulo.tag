@@ -48,8 +48,8 @@
                             </div>
                               <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
                                 <label class="tamanoLetra">{$.i18n.prop("articulo.codigoTarifa")}</label>
-                                <select  class="form-control selectCodigoTarifa" id="codigoTarifa" name="codigoTarifa"  >
-                                    <option  each={tipoCodigos}  value="{codigo}" selected="{articulo.codigoTarifa ==codigo?true:false}"  >{descripcion}</option>
+                                <select  onchange= {__AsignarTarifa} class="form-control selectCodigoTarifa1" id="codigoTarifa" name="codigoTarifa"  >
+                                    <option  each={tarifas1.aaData}  value="{codigoTarifa}" selected="{articulo.codigoTarifa ==codigoTarifa?true:false}"  >{descripcion}</option>
                                 </select>
                             </div>
                             <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
@@ -67,8 +67,8 @@
                         <div class="row">
                             <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
                                 <label class="tamanoLetra">{$.i18n.prop("articulo.codigoTarifa2")}</label>
-                                <select  class="form-control selectCodigoTarifa1" id="codigoTarifa1" name="codigoTarifa1"  >
-                                    <option  each={tipoCodigos}  value="{codigo}" selected="{articulo.codigoTarifa1 ==codigo?true:false}"  >{descripcion}</option>
+                                <select  class="form-control selectCodigoTarifa2" id="codigoTarifa1" name="codigoTarifa1"  >
+                                    <option  each={tarifas2.aaData}  value="{codigoTarifa}" selected="{articulo.codigoTarifa1 ==codigoTarifa?true:false}"  >{descripcion}</option>
                                 </select>
                             </div>
                             <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
@@ -332,87 +332,85 @@
 <!-- Fin Formulario -->   
 
 <style type ="text/css">
-.campoNumerico {
-            display: block;
-            width: 100%;
-            height: 45px;
-            padding: 8px 18px;
-            font-size: 10px;
-            line-height: 1.42857143;
-            color:red;
-            
-            background-color: #fff;
-            background-image: none;
-            border: 1px solid #ccc;
-            border-radius: 2px;
-            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-            -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
-            -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-            background-color: #fcfcfc;
-            border: 1px solid #ccc;
-            font: 20px verdana, arial, helvetica, sans-serif;
-            margin: 2px 0;
-            padding: 1px 2px;
-            overflow: visible;
-            font-size: 35px;
-            color: ##e84935;
-    font-weight: bold;
-}
+        .campoNumerico {
+        display: block;
+        width: 100%;
+        height: 45px;
+        padding: 8px 18px;
+        font-size: 10px;
+        line-height: 1.42857143;
+        color:red;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        background-color: #fcfcfc;
+        border: 1px solid #ccc;
+        font: 20px verdana, arial, helvetica, sans-serif;
+        margin: 2px 0;
+        padding: 1px 2px;
+        overflow: visible;
+        font-size: 35px;
+        color: ##e84935;
+        font-weight: bold;
+    }
     .fondoEncabezado {
         background: #00539B;
         color: #f9fafc;
     }
-  .requeridoDato {
-            color: red;
-            text-align: left;
-            font-weight: 500;
-            font-size: 13px;
-        }
-    .fondoFacturacion {
-    background: rgb(247, 244, 244);
-    color: #f9fafc;
-    border-style: solid;
-    border-width: 5px;
+    .requeridoDato {
+        color: red;
+        text-align: left;
+        font-weight: 500;
+        font-size: 13px;
     }
-        .wrap{
-            max-width:1100px;
-            width:100%;
-        }
-        body {
-            overflow: hidden;
-            background:white;
-            font-size: 12px !important;
-        }
-        .contenedor-listar{
-            width:100%;
-        }
-        .input-table-search{
-            margin-left: 15px;
-            margin-right: 15px;
-            width:100%;
-        }
-        .botonConsulta{
-            margin-top:28px;
-        }
-        
-        table td{ 
-            text-align: left;
-            font-size: 12px;
-            
-                }
-        table th {
-                text-align: center;
-                font-size: 12px;
-        }
-        th, td {
-            white-space: nowrap;
-        }
-         .tamanoLetra {
-    font-size: 16px;
-}
-    </style>
+    .fondoFacturacion {
+        background: rgb(247, 244, 244);
+        color: #f9fafc;
+        border-style: solid;
+        border-width: 5px;
+    }
+    .wrap{
+        max-width:1100px;
+        width:100%;
+    }
+    body {
+        overflow: hidden;
+        background:white;
+        font-size: 12px !important;
+    }
+    .contenedor-listar{
+        width:100%;
+    }
+    .input-table-search{
+        margin-left: 15px;
+        margin-right: 15px;
+        width:100%;
+    }
+    .botonConsulta{
+        margin-top:28px;
+    }
+    table td{
+        text-align: left;
+        font-size: 12px;
+    }
+    table th {
+        text-align: center;
+        font-size: 12px;
+    }
+    th, td {
+        white-space: nowrap;
+    }
+    .tamanoLetra {
+        font-size: 16px;
+    }
+
+</style>
 <script>
     var self = this;
     self.parametros   = opts.parametros;  
@@ -462,6 +460,9 @@
         prioridad:1
     }    
    
+   self.tarifas1    = {aaData:[]}
+   self.tarifas2    = {aaData:[]}
+   
     // variables para modulo de inventario 
     self.mostrarFormularioEntrada    = false
     self.mostrarFormularioSalida     = false
@@ -480,64 +481,105 @@ self.on('mount',function(){
     __Impuestos1()
     __tipoCodigo()
     LimpiarArticulo()
-   //Agregar
-      if(self.parametros.tipoEjecucion ==1){
-          self.mostrarTituloArticulo     = true  
-          self.mostrarFormulario = true
-          self.botonAgregar = true
-          self.update()
-      }   
-       //modificar
-      if(self.parametros.tipoEjecucion ==2){
-          self.mostrarTituloArticulo     = true  
-          self.mostrarFormulario = true
-          self.botonModificar = true
-          self.mostrarFormulario  = true 
-          self.botonModificar   = true;
-          self.mostrarFormularioEntrada    = false
-          self.botonAgregar     = false;            
-          self.articulo  =  self.parametros.articulo
-          self.update()
-          $("#formulario").validate(reglasDeValidacion());     
-          $('.precioPublico').focus().select()      
-      }  
-      //Entrada
-      if(self.parametros.tipoEjecucion ==3){
-        $("#formularioEntrada").validate(reglasDeValidacionEntrada());
-        $(".errorServerSideJgrid").remove();
-        $(".observacion_entrada").val(null)
-        $(".cantidadNueva_entrada").val(null)
-        self.articulo  = self.parametros.articulo
-        self.mostrarFormularioEntrada = true
-        self.mostrarListado            = false 
-        self.botonModificar            = false
-        self.botonAgregar              = false
-        self.mostrarFormularioEntrada    = true
-        self.mostrarFormularioSalida     = false
-        self.update()
-        _ListaMotivoEntradasActivas()
-      }
-      //Salida
-      if(self.parametros.tipoEjecucion ==4){
-        $("#formularioSalida").validate(reglasDeValidacionSalida());
-        $(".errorServerSideJgrid").remove();
-        $(".observacion_salida").val(null)
-        $(".cantidadNueva_salida").val(null)
-        self.articulo  = self.parametros.articulo
-        self.mostrarListado            = false 
-        self.botonModificar            = false
-        self.botonAgregar              = false
-        self.mostrarTituloArticulo     = false
-        // variables para modulo de inventario 
-        self.mostrarFormularioEntrada    = false
-        self.mostrarFormularioSalida     = true
-        self.update()
-        _ListaMotivoSalidasActivas()
-      }
+    __Consulta()
     window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
 })
+function getMontoTarifa(tipoImpuesto,codigoTarifa,array) {
+  return array.filter(
+    function(data) {
+      return data.tipoImpuesto == tipoImpuesto && data.codigoTarifa == codigoTarifa?data.monto:0
+    }
+  );
+}
+function getMontoImpuesto(tipoImpuesto,codigoTarifa,array){
+    if(tipoImpuesto.length ==0){
+        return 0
+    }
+    if(tipoImpuesto ==null){
+        return 0
+    }
+    var valor = getMontoTarifa(tipoImpuesto,codigoTarifa,array);
+    valor = valor !=null?valor[0]:null
+    return valor == null?0:valor.monto
+}
+
+/**
+*  Consultar  especifico
+* 1  Mostrar  2  Modificar
+**/
+ function __Consulta(){
+   
+                    LimpiarArticulo()
+                    self.articulo = self.parametros.articulo
+                    self.articulo.gananciaPrecioPublico = self.articulo.gananciaPrecioPublico !=null?self.articulo.gananciaPrecioPublico.toFixed(2):self.articulo.gananciaPrecioPublico
+                    self.articulo.gananciaPrecioMayorista = self.articulo.gananciaPrecioMayorista !=null?self.articulo.gananciaPrecioMayorista.toFixed(2):self.articulo.gananciaPrecioMayorista
+                    self.articulo.gananciaPrecioEspecial = self.articulo.gananciaPrecioEspecial !=null?self.articulo.gananciaPrecioEspecial.toFixed(2):self.articulo.gananciaPrecioEspecial
+                    self.articulo.precioPublico = self.articulo.precioPublico !=null?self.articulo.precioPublico.toFixed(2):self.articulo.precioPublico
+                    self.articulo.precioEspecial = self.articulo.precioEspecial !=null?self.articulo.precioEspecial.toFixed(2):self.articulo.precioEspecial
+                    self.articulo.precioMayorista = self.articulo.precioMayorista !=null?self.articulo.precioMayorista.toFixed(2):self.articulo.precioMayorista
+                    
+                    self.update()
+                    //Agregar
+                    if(self.parametros.tipoEjecucion ==1){
+                        self.mostrarTituloArticulo     = true  
+                        self.mostrarFormulario = true
+                        self.botonAgregar = true
+                        self.update()
+                    }   
+                    //modificar
+                    if(self.parametros.tipoEjecucion ==2){
+                        self.mostrarTituloArticulo     = true  
+                        self.mostrarFormulario = true
+                        self.botonModificar = true
+                        self.mostrarFormulario  = true 
+                        self.botonModificar   = true;
+                        self.mostrarFormularioEntrada    = false
+                        self.botonAgregar     = false;            
+                        self.update()
+                        __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto1,2)
+                        __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
+                        $("#formulario").validate(reglasDeValidacion());     
+                        $('.precioPublico').focus().select()      
+                    }  
+                    //Entrada
+                    if(self.parametros.tipoEjecucion ==3){
+                        $("#formularioEntrada").validate(reglasDeValidacionEntrada());
+                        $(".errorServerSideJgrid").remove();
+                        $(".observacion_entrada").val(null)
+                        $(".cantidadNueva_entrada").val(null)
+                        self.articulo  = self.parametros.articulo
+                        self.mostrarFormularioEntrada = true
+                        self.mostrarListado            = false 
+                        self.botonModificar            = false
+                        self.botonAgregar              = false
+                        self.mostrarFormularioEntrada    = true
+                        self.mostrarFormularioSalida     = false
+                        self.update()
+                        _ListaMotivoEntradasActivas()
+                    }
+                    //Salida
+                    if(self.parametros.tipoEjecucion ==4){
+                        $("#formularioSalida").validate(reglasDeValidacionSalida());
+                        $(".errorServerSideJgrid").remove();
+                        $(".observacion_salida").val(null)
+                        $(".cantidadNueva_salida").val(null)
+                        self.articulo  = self.parametros.articulo
+                        self.mostrarListado            = false 
+                        self.botonModificar            = false
+                        self.botonAgregar              = false
+                        self.mostrarTituloArticulo     = false
+                        // variables para modulo de inventario 
+                        self.mostrarFormularioEntrada    = false
+                        self.mostrarFormularioSalida     = true
+                        self.update()
+                        _ListaMotivoSalidasActivas()
+                    }
+                        
+  
+}
+
 /**
 * Limpiar Articulo
 **/
@@ -611,6 +653,7 @@ __cargarCombos(){
 function enviarCargarCombos(){
     __listadoCategoriasActivas()
     __listadoMarcasActivas()
+   
 }
 /**
 * Camps requeridos
@@ -848,7 +891,6 @@ function _ListaMotivoEntradasActivas(){
             if(result.aaData.length > 0){
                 self.motivoEntradas.data =  result.aaData
                 self.update();
-              
             }            
         },
         error: function (xhr, status) {
@@ -898,7 +940,6 @@ __CalculoGananciaEspecial(e){
     var precioEspecial = __valorNumerico($('#precioEspecial').val())
     self.articulo.gananciaPrecioEspecial = precioEspecial >0?_porcentajeGanancia(costo,impuesto,impuesto1,precioEspecial):0
     self.articulo.precioEspecial = precioEspecial
-   
     self.update()
 }
 /**
@@ -911,7 +952,6 @@ __ActualizarPreciosImpuestos(e){
 * Actualizar ganancias al digitar el impuesto
 **/
 __ActualizarPreciosImpuestos1(e){
-   
    _CalculoPrecio()
 }
 
@@ -926,7 +966,6 @@ __CalculoGananciaPublico(e){
     self.articulo.gananciaPrecioPublico    = precioPublico >0?_porcentajeGanancia(costo,impuesto,impuesto1,precioPublico):0
     self.articulo.precioPublico = precioPublico
     self.update()
-
 }
 
 __CalculoGananciaSinPrecioEspecial(e){
@@ -1014,23 +1053,36 @@ function __ActualizarPreciosGananciaPrecioPublico(){
 
 }
 
+__AsignarTarifa(){
+    self.articulo.impuesto = getMontoImpuesto(self.articulo.tipoImpuesto,$('#codigoTarifa').val(),self.tarifas1.aaData)
+    self.update()
+    actualizarPreciosImpuestosMayorista()
+    actualizarPreciosImpuestosPublico()
+    actualizarPreciosImpuestosEspecial()
+}
 /**
 * Asigna el impuesto 13 cuando es valor igual 01
 **/
 __asignarImpuesto(){
     if($('.selectTipoImpuesto').val()=="01"){
         self.articulo.tipoImpuesto ="01"
-        self.articulo.impuesto = 13
+         self.articulo.impuesto = 0
         self.update()
     }else{
         $('.impuesto').val(null)
-        self.articulo.impuesto = 0
+        self.articulo.impuesto = 0  
         self.articulo.tipoImpuesto =$('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
+    //    self.articulo.impuesto = getMontoImpuesto(self.articulo.codigoTarifa,self.articulo.tipoImpuesto,self.tarifas1.aaData)
         self.update()
     } 
+     __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
     actualizarPreciosImpuestosMayorista()
     actualizarPreciosImpuestosPublico()
     actualizarPreciosImpuestosEspecial()
+    self.tarifas1  = {aaData:[]}
+    
+    self.update()
+   
 }
 
 /**
@@ -1040,12 +1092,52 @@ __asignarImpuesto1(){
       $('.impuesto1').val(null)
     self.articulo.impuesto1 = 0
     self.articulo.tipoImpuesto1 =$('#tipoImpuesto1').val() == "Sin impuesto"?"":$('#tipoImpuesto1').val()
+    self.tarifas2  = {aaData:[]}
     self.update()
     actualizarPreciosImpuestosMayorista()
     actualizarPreciosImpuestosPublico()
     actualizarPreciosImpuestosEspecial()
-
+    __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto1,2)
 }
+/**
+*  Mostrar listado datatable Categorias Actimpuestos
+**/
+function __listadoTarifasByTipoImpuesto(tipoImpuesto,indicador){
+    var selector = ""
+    $.ajax({
+         url: "ListarTarifasByTipoImpuestoAjax.do",
+        datatype: "json",
+         data: {tipoImpuesto:tipoImpuesto},
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                // Tipo de impuesto 1
+                if(indicador ==1 ){
+                    self.tarifas1 =  result
+                     self.update()
+                    self.articulo.impuesto = getMontoImpuesto(self.articulo.tipoImpuesto,$('#codigoTarifa').val(),self.tarifas1.aaData)
+                    self.update()
+  
+                }
+                // Tipo de impuesto 2
+                if(indicador ==2 ){
+                    self.tarifas2 =  result
+                    self.update();
+                }
+
+              
+
+    
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+}
+/**
+**/
 function actualizarPreciosImpuestosPublico(){
     var ganancia = __valorNumerico($('#gananciaPrecioPublico').val())
     var impuesto   = __valorNumerico($('#impuesto').val())/100
@@ -1301,6 +1393,7 @@ function __listadoMarcasActivas(){
         }
     })
 }
+
 /**
 *  Mostrar listado datatable unidades de medidas activas
 **/

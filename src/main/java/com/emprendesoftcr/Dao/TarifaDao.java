@@ -1,6 +1,9 @@
 package com.emprendesoftcr.Dao;
 
+import java.util.Collection;
+
 import com.emprendesoftcr.modelo.Tarifa;
+import com.emprendesoftcr.web.command.TarifaCommand;
 
 public interface TarifaDao {
 
@@ -12,6 +15,6 @@ public interface TarifaDao {
 
 	Tarifa buscar(Long id);
 
+	Collection<TarifaCommand> findByTipoImpuesto(String tipoImpuesto);
 
-	
 }

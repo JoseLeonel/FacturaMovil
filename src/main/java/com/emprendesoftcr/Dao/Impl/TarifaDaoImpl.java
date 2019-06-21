@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Dao.Impl;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -9,7 +10,9 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.TarifaDao;
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Tarifa;
+import com.emprendesoftcr.web.command.TarifaCommand;
 
 /**
  * Mantenimiento de Marcas de los articulos del almacen MarcaDaoImpl.
@@ -52,6 +55,17 @@ public class TarifaDaoImpl implements TarifaDao {
 			return null;
 		}
 	}
+	@Override
+	public Collection<TarifaCommand> findByTipoImpuesto(String tipoImpuesto){
+		StringBuilder hql = new StringBuilder();
+		hql.append("select obj from Tarifa obj");
+		hql.append(" where obj.tipoImpuesto = :tipoImpuesto ");
 
+		Query query = entityManager.createQuery(hql.toString());
+
+		query.setParameter("tipoImpuesto", tipoImpuesto);
+		return query.getResultList();
+
+	}
 	
 }

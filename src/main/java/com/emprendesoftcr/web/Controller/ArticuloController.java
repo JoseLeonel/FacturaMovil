@@ -664,6 +664,8 @@ public class ArticuloController {
 			articulo.setTipoImpuesto1(articulo.getTipoImpuesto1() ==null?Constantes.EMPTY:articulo.getTipoImpuesto1());
 			articulo.setImpuesto1(articulo.getImpuesto1() ==null?Constantes.ZEROS_DOUBLE:articulo.getImpuesto1());
 			articulo.setPesoTransporte(articulo.getPesoTransporte() ==null?Constantes.ZEROS_DOUBLE:articulo.getPesoTransporte());
+			articulo.setCodigoTarifa(articulo.getCodigoTarifa() ==null?Constantes.EMPTY:articulo.getCodigoTarifa());
+			articulo.setCodigoTarifa1(articulo.getCodigoTarifa1() ==null?Constantes.EMPTY:articulo.getCodigoTarifa1());
 			articuloBo.agregar(articulo);
 
 			if (usuarioSesion.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
@@ -757,6 +759,8 @@ public class ArticuloController {
 			articuloBd.setTipoImpuesto1(articulo.getTipoImpuesto1() ==null?Constantes.EMPTY:articulo.getTipoImpuesto1());
 			articuloBd.setImpuesto1(articulo.getImpuesto1() ==null?Constantes.ZEROS_DOUBLE:articulo.getImpuesto1());
 			articuloBd.setPesoTransporte(articulo.getPesoTransporte() ==null?Constantes.ZEROS_DOUBLE:articulo.getPesoTransporte());
+			articuloBd.setCodigoTarifa(articulo.getCodigoTarifa() ==null?Constantes.EMPTY:articulo.getCodigoTarifa());
+			articuloBd.setCodigoTarifa1(articulo.getCodigoTarifa1() ==null?Constantes.EMPTY:articulo.getCodigoTarifa1());
 
 			articuloBo.modificar(articuloBd);
 

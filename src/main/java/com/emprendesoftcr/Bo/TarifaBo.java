@@ -1,6 +1,9 @@
 package com.emprendesoftcr.Bo;
 
+import java.util.Collection;
+
 import com.emprendesoftcr.modelo.Tarifa;
+import com.emprendesoftcr.web.command.TarifaCommand;
 
 public interface TarifaBo {
 
@@ -12,6 +15,6 @@ public interface TarifaBo {
 
 	Tarifa buscar(Long id);
 
-	
+	Collection<TarifaCommand> findByTipoImpuesto(String tipoImpuesto);
 
 }

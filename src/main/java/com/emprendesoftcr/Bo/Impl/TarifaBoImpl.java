@@ -1,5 +1,7 @@
 package com.emprendesoftcr.Bo.Impl;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -8,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.emprendesoftcr.Bo.TarifaBo;
 import com.emprendesoftcr.Dao.TarifaDao;
 import com.emprendesoftcr.modelo.Tarifa;
+import com.emprendesoftcr.web.command.TarifaCommand;
 
 /**
  * Marcas asociadas al articulo MarcaBoImpl.
@@ -42,6 +45,10 @@ public class TarifaBoImpl implements TarifaBo {
 	@Override
 	public Tarifa buscar(Long id) {
 		return tarifaDao.buscar(id);
+	}
+	
+	public Collection<TarifaCommand> findByTipoImpuesto(String tipoImpuesto){
+		return tarifaDao.findByTipoImpuesto(tipoImpuesto);
 	}
 
 }

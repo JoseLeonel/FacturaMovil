@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -19,6 +20,7 @@ import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.TarifaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
+import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.modelo.Marca;
@@ -104,7 +106,7 @@ public class TarifaController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			
+			tarifa.setId(null);
 	
 			tarifaBo.agregar(tarifa);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("tarifa.agregar.correctamente", tarifa);
@@ -134,7 +136,7 @@ public class TarifaController {
 			
 			
 			if (tarifaBD == null) {
-				return RESPONSES.ERROR.MARCA.NO_EXISTE;
+				return RESPONSES.ERROR.TARIFA.NO_EXISTE;
 			} else {
 				
 
@@ -153,6 +155,20 @@ public class TarifaController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
+	@SuppressWarnings("all")
+	@RequestMapping(value = "/ListarTarifasByTipoImpuestoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarByTipoImpuestoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String tipoImpuesto) {
+
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "Tarifa");
+
+		JqGridFilter dataTableFilter = new JqGridFilter("tipoImpuesto", "'" + tipoImpuesto + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+	}
+
 	
 	@SuppressWarnings("all")
 	private static class RESPONSES {
@@ -161,16 +177,16 @@ public class TarifaController {
 
 			private static class MARCA {
 
-				private static final RespuestaServiceValidator	AGREGADO		= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("marca.agregar.correctamente");
-				private static final RespuestaServiceValidator	MODIFICADO	= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("marca.modificado.correctamente");
+				private static final RespuestaServiceValidator	AGREGADO		= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("tarifa.agregar.correctamente");
+				private static final RespuestaServiceValidator	MODIFICADO	= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("tarifa.modificado.correctamente");
 			}
 		}
 
 		private static class ERROR {
 
-			private static class MARCA {
+			private static class TARIFA {
 
-				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.marca.noExiste");
+				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.tarifa.noExiste");
 			}
 		}
 	}
