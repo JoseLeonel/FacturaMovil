@@ -133,7 +133,7 @@ public class ClientesController {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Cliente");
-		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO.toString() + "'", "=");
+		JqGridFilter dataTableFilter = new JqGridFilter("estado", "'" + Constantes.ESTADO_INACTIVO + "'", "<>");
 		delimitadores.addFiltro(dataTableFilter);
 		dataTableFilter = new JqGridFilter("cedula", "'" + Constantes.CEDULA_CLIENTE_FRECUENTE + "'", "<>");
 		delimitadores.addFiltro(dataTableFilter);
@@ -152,7 +152,10 @@ public class ClientesController {
 			Cliente object = (Cliente) iterator.next();
 			// no se carga el usuario del sistema el id -1
 			if (object.getId().longValue() > 0L) {
-				solicitudList.add(new ClienteCommand(object));
+				if(object.getEstado().equals(Constantes.ESTADO_ACTIVO)) {
+					solicitudList.add(new ClienteCommand(object));	
+				}
+				
 			}
 		}
 
