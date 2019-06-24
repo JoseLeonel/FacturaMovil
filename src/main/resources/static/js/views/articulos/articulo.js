@@ -111,18 +111,18 @@ var informacion_tabla = [
                                {'data' :'costo'                   ,"name":"costo"                  ,"title" : "Costo"            ,"autoWidth" :true
                                ,
                                "render":function(costo,type, row){
-                                     return costo ==null?0:costo.toFixed(2);
+                                     return costo ==null?0:costo;
                                 },
                             },
                                {'data' :'impuesto'                ,"name":"impuesto"               ,"title" : "Impuesto"         ,"autoWidth" :true },
                                {'data' :'precioPublico'           ,"name":"precioPublico"          ,"title" : "Precio"           ,"autoWidth" :true ,
                                "render":function(precioPublico,type, row){
-                                     return precioPublico ==null?0:precioPublico >0?precioPublico.toFixed(2):0;
+                                     return precioPublico ==null?0:precioPublico >0?precioPublico:0;
                                 },
                             },
                                {'data' :'cantidad'                ,"name":"cantidad"               ,"title" : "Cantidad"         ,"autoWidth" :true,
                                "render":function(cantidad,type, row){
-                                     return cantidad ==null?0:cantidad.toFixed(2);
+                                     return cantidad ==null?0:cantidad;
                                 },
                             },
                                {'data' :'contable'                ,"name":"contable"               ,"title" : "Contable"         ,"autoWidth" :false },
@@ -176,7 +176,7 @@ function __MantenimientoAgregar(){
     	var parametros = {
     			tipoEjecucion:1
     	}
-    	$('.mostrarListado').hide();
+    	$('#mostrarListado').hide();
 		riot.compile(function() {
 			var parametros = {
 					tipoEjecucion:1
@@ -219,7 +219,7 @@ function __modificarRegistro_Listar(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-		$('.mostrarListado').hide();
+		$('#mostrarListado').hide();
 		riot.compile(function() {
 			var parametros = {
 				tipoEjecucion:2,
@@ -290,7 +290,7 @@ function __agregarSalidaAlInventario(){
 function __mostrarListado(){
 	var table = $('#tableListar').DataTable();
    table.ajax.reload( null, false);
-   $('.mostrarListado').show();
+   $('#mostrarListado').show();
 }
 /**
  * Funcion para regresar el listado

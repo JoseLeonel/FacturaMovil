@@ -18,16 +18,16 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.TarifaBo;
-import com.emprendesoftcr.Bo.UsuarioBo;
+import com.emprendesoftcr.Bo.TarifaIVAIBo;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
-import com.emprendesoftcr.modelo.Marca;
 import com.emprendesoftcr.modelo.Tarifa;
-import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.modelo.TarifaIVAI;
 import com.emprendesoftcr.web.command.TarifaCommand;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
+import com.emprendesoftcr.web.propertyEditor.TarifaIVAIPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.TarifaPropertyEditor;
 import com.google.common.base.Function;
 
@@ -54,18 +54,22 @@ public class TarifaController {
 	private TarifaBo																			tarifaBo;
 
 	@Autowired
-	private UsuarioBo																			usuarioBo;
+	private TarifaIVAIBo																			tarifaIVAIBo;
+
 
 	@Autowired
 	private TarifaPropertyEditor													tarifaPropertyEditor;
+
+	@Autowired
+	private TarifaIVAIPropertyEditor											tarifaIVAIPropertyEditor;
 
 	@Autowired
 	private StringPropertyEditor													stringPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
-
-		binder.registerCustomEditor(Marca.class, tarifaPropertyEditor);
+		binder.registerCustomEditor(TarifaIVAI.class, tarifaIVAIPropertyEditor);
+		binder.registerCustomEditor(Tarifa.class, tarifaPropertyEditor);
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
 
@@ -101,13 +105,13 @@ public class TarifaController {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
-			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			tarifa.setId(null);
-	
+      tarifa.setMonto(tarifa.getTarifaIVAI().getMonto());
+      
 			tarifaBo.agregar(tarifa);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("tarifa.agregar.correctamente", tarifa);
 
@@ -115,6 +119,7 @@ public class TarifaController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
+
 	@RequestMapping(value = "/MostrarTarifaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute Tarifa tarifa, BindingResult result, SessionStatus status) throws Exception {
@@ -125,6 +130,7 @@ public class TarifaController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
+
 	@RequestMapping(value = "/ModificarTarifaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Tarifa tarifa, BindingResult result, SessionStatus status) throws Exception {
@@ -133,20 +139,17 @@ public class TarifaController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("tarifa.no.modificado", result.getAllErrors());
 			}
 			Tarifa tarifaBD = tarifaBo.buscar(tarifa.getId());
-			
-			
+
 			if (tarifaBD == null) {
 				return RESPONSES.ERROR.TARIFA.NO_EXISTE;
 			} else {
-				
 
 				if (result.hasErrors()) {
 					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 				}
-				tarifaBD.setDescripcion(tarifa.getDescripcion());
-			  tarifaBD.setCodigoTarifa(tarifa.getCodigoTarifa());
-			  tarifaBD.setTipoImpuesto(tarifa.getTipoImpuesto());
-			  tarifaBD.setMonto(tarifa.getMonto());
+				tarifaBD.setTarifaIVAI(tarifa.getTarifaIVAI());
+				tarifaBD.setTipoImpuesto(tarifa.getTipoImpuesto());
+				tarifaBD.setMonto(tarifa.getTarifaIVAI().getMonto());
 				tarifaBo.modificar(tarifaBD);
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("tarifa.modificado.correctamente", tarifaBD);
 			}
@@ -155,6 +158,7 @@ public class TarifaController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
+
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarTarifasByTipoImpuestoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -169,7 +173,6 @@ public class TarifaController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
-	
 	@SuppressWarnings("all")
 	private static class RESPONSES {
 

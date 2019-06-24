@@ -22,6 +22,9 @@ import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.jxls.template.SimpleExporter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,9 +79,11 @@ import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.pdf.ReportePdfView;
 import com.emprendesoftcr.service.ProcesoHaciendaService;
 import com.emprendesoftcr.validator.FacturaFormValidator;
+import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacionMesa;
+import com.emprendesoftcr.web.command.ProformasSQLNativeCommand;
 import com.emprendesoftcr.web.command.RecepcionFacturaCommand;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 import com.emprendesoftcr.web.command.TurismoCommand;
@@ -89,6 +94,7 @@ import com.emprendesoftcr.web.propertyEditor.MesaPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.VendedorPropertyEditor;
 import com.google.common.base.Function;
+import com.google.gson.Gson;
 import com.itextpdf.text.DocumentException;
 
 /**
@@ -759,9 +765,55 @@ public class FacturasController {
 			dataTableFilter = new JqGridFilter("usuarioCreacion.id", "'" + usuarioSesion.getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
 		}
-
+		List<Object[]> objetos = (List<Object[]>) facturaBo.proformasByState(Constantes.FACTURA_ESTADO_PROFORMAS, usuarioSesion.getEmpresa().getId());
+	  for (int i = 0; i < objetos.size(); i++) {
+	  	ProformasSQLNativeCommand proformasSQLNativeCommand = new ProformasSQLNativeCommand();
+	//  	proformasSQLNativeCommand.setId( objetos.get(i)[0]);
+	  	proformasSQLNativeCommand.setConsecutivoProforma((String) objetos.get(i)[1]);
+	  	
+	  	
+		}
+		
+//		List<Object> solicitudList = new ArrayList<Object>();
+//		for (Iterator<Object> iterator = objetos.iterator(); iterator.hasNext();) {
+//			ProformasSQLNativeCommand object = (ProformasSQLNativeCommand) iterator.next();
+//			// no se carga el usuario del sistema el id -1
+//			if (object.getId().longValue() > 0L) {
+//				solicitudList.add(new ProformasSQLNativeCommand(object));
+//			}
+//		}
+//		Collection<ProformasSQLNativeCommand> solicitudList = new ArrayList<ProformasSQLNativeCommand>();
+////		solicitudList = formaDetallesCommand(objetos);
+//		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+//		Long total = (long) objetos.size();
+//		respuestaService.setRecordsTotal(total);
+//		respuestaService.setRecordsFiltered(total);
+//		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+//			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+//		}
+//		respuestaService.setAaData(objetos);
+//		return respuestaService;
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
+	
+	private ArrayList<ProformasSQLNativeCommand> formaDetallesCommand(Collection<ProformasSQLNativeCommand> objetos) throws Exception {
+		// Detalles, se forma el detalle de la factura, se contabiliza los totales para evitar problemas con el tema de los decimales en el front
+		JSONObject json = null;
+		ArrayList<ProformasSQLNativeCommand> detallesFacturaCommand = new ArrayList<>();
+		// Agregar Lineas de Detalle
+		JSONArray jsonArrayDetalleFactura = (JSONArray) json.get(objetos);
+		Gson gson = new Gson();
+		if (jsonArrayDetalleFactura != null) {
+			Integer numeroLinea = 1;
+			for (int i = 0; i < jsonArrayDetalleFactura.size(); i++) {
+				ProformasSQLNativeCommand detalleFacturaCommand = gson.fromJson(jsonArrayDetalleFactura.get(i).toString(), ProformasSQLNativeCommand.class);
+				detallesFacturaCommand.add(detalleFacturaCommand);
+				numeroLinea += 1;
+			}
+		}
+		return detallesFacturaCommand;
+	}
+
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListarFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")

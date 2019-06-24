@@ -51,17 +51,14 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label  >{$.i18n.prop("tarifa.descripcion")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control descripcion" placeHolder ="{$.i18n.prop("tarifa.descripcion")}" id="descripcion" name="descripcion" value="{tarifa.descripcion}"  >
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label  >{$.i18n.prop("tarifa.codigoTarifa")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control codigoTarifa" placeHolder ="{$.i18n.prop("tarifa.codigoTarifa")}" id="codigoTarifa" name="codigoTarifa" value="{tarifa.codigoTarifa}"  >
+                                <select  class="form-control selectTarifaIVAI"  name="tarifaIVAI" >
+                                    <option each={tarifasIVAI.data}  value="{id}"  >{descripcion}</option>
+                                </select>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label >{$.i18n.prop("tarifa.tipoImpuesto")}</label>
@@ -70,12 +67,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label  >{$.i18n.prop("tarifa.monto")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" class="form-control monto" placeHolder ="{$.i18n.prop("tarifa.monto")}" id="monto" name="monto" value="{tarifa.monto}"  >
-                            </div>
-                        </div>
+                        
                     </form>    
                 </div>
                 <div class="box-footer">
@@ -145,6 +137,7 @@
     var self = this;
     self.idiomaDataTable           = []         // idioma de la datatable nuevo
     self.formato_tabla             = []         // Formato del Listado de la Tabla 
+    self.tarifasIVAI               = {aaData:[]}
     self.empresas                  = {aaData:[]}
     self.mostrarListado            = true 
     self.botonModificar            = false
@@ -166,10 +159,34 @@ self.on('mount',function(){
     __Eventos()
     __Impuestos()
     Limpiar()
+    
     window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
 })
+/**
+*  Lista de motivos de Salidas activas 
+**/
+function _ListTarifasActivas(){
+    $.ajax({
+         url: "ListarTarifasIVAIAjax.do",
+        datatype: "json",
+        global: false,
+        method:"GET",
+        contentType: "application/json; charset=utf-8",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                self.tarifasIVAI.data =  result.aaData
+                self.update();
+               
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+}
 /**
 * Impuesto
 **/
@@ -239,6 +256,7 @@ function Limpiar(){
         estado:""
     }
     self.update()
+    _ListTarifasActivas()
 }
 /**
 *  Activar Eventos
@@ -448,8 +466,8 @@ function __listado(){
 **/
 function __InformacionDataTable(){
     self.informacion_tabla = [ 
-                               {'data' :'descripcion'    ,"name":"descripcion"     ,"title" : $.i18n.prop("tarifa.descripcion") ,"autoWidth" :true },
-                               {'data' :'codigoTarifa'   ,"name":"codigoTarifa"    ,"title" : $.i18n.prop("tarifa.codigoTarifa") ,"autoWidth" :true },
+                               {'data' :'tarifaIVAI.descripcion'    ,"name":"tarifaIVAI.descripcion"     ,"title" : $.i18n.prop("tarifa.descripcion") ,"autoWidth" :true },
+                               {'data' :'tarifaIVAI.codigoTarifa'   ,"name":"tarifaIVAI.codigoTarifa"    ,"title" : $.i18n.prop("tarifa.codigoTarifa") ,"autoWidth" :true },
                                {'data' :'tipoImpuesto'   ,"name":"tipoImpuesto"    ,"title" : $.i18n.prop("tarifa.tipoImpuesto") ,"autoWidth" :true },
                                {'data' :'monto'          ,"name":"monto"           ,"title" : $.i18n.prop("tarifa.monto")        ,"autoWidth" :true },
                                {'data' : 'id'            ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,

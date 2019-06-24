@@ -19,6 +19,7 @@ import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
+import com.emprendesoftcr.web.command.ProformasSQLNativeCommand;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 
 /**
@@ -178,6 +179,19 @@ public class FacturaDaoImpl implements FacturaDao {
 
 		// Se toma la respuesta
 		return new TotalFacturaCommand((Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS));
+	}
+	
+	/**
+	 * Reporte de listado de proformas
+	 * @see com.emprendesoftcr.Dao.FacturaDao#proformasByDateAndState(java.lang.Integer, java.util.Date, java.util.Date, java.lang.Integer)
+	 */
+	@Override
+	public List<Object[]> proformasByState(Integer estado,  Integer idEmpresa){
+     String sqlNative = "SELECT facturas.id,facturas.consecutivo_proforma,facturas.fecha_emision,usuarios.nombre_usuario,clientes.nombre_completo,facturas.nombre_factura,facturas.total_impuesto,facturas.total_descuentos ,facturas.total_comprobante ";
+     sqlNative += "FROM facturas inner join clientes on clientes.id = facturas.cliente_id inner join usuarios on usuarios.id = facturas.usuario_id ";
+     sqlNative += " where  facturas.empresa_id = '" + idEmpresa + "' ";
+     sqlNative += " and facturas.estado = '" + estado + "' ";
+     return entityManager.createNativeQuery(sqlNative).getResultList();
 	}
 
 }

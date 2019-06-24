@@ -145,28 +145,7 @@ var formato_tabla = [
 	  }
    }];
 
-   function __TipoDocumentos(numeroConsecutivo,row){
-
-    switch(row.tipoDoc) {
-    case "04":
-          return  "Tiq:"+numeroConsecutivo
-        break;
-    case "01":
-        return  "Fact:"+numeroConsecutivo
-        break;
-    case "02":
-        return  "N.Debito:"+numeroConsecutivo
-        break;
-    case "03":
-        return  "N.Credito:"+numeroConsecutivo
-        break;
-    case "88":
-        return  "Proforma:"+numeroConsecutivo
-        break;
-    default:
-        return  numeroConsecutivo
-}
-}
+   
 
 
    /**

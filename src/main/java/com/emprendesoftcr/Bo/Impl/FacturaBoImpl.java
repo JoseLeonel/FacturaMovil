@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.json.simple.JSONArray;
@@ -903,4 +904,8 @@ public class FacturaBoImpl implements FacturaBo {
 		return facturaDao.facturasRangoEstado(estado, fechaInicio, fechaFin, idEmpresa);
 	}
 
+	
+	public List<Object[]> proformasByState(Integer estado, Integer idEmpresa){
+		 return facturaDao.proformasByState(estado,  idEmpresa);
+	}
 }

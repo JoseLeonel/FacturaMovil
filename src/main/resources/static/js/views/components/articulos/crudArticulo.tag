@@ -49,7 +49,7 @@
                               <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
                                 <label class="tamanoLetra">{$.i18n.prop("articulo.codigoTarifa")}</label>
                                 <select  onchange= {__AsignarTarifa} class="form-control selectCodigoTarifa1" id="codigoTarifa" name="codigoTarifa"  >
-                                    <option  each={tarifas1.aaData}  value="{codigoTarifa}" selected="{articulo.codigoTarifa ==codigoTarifa?true:false}"  >{descripcion}</option>
+                                    <option  each={tarifas1.aaData}  value="{codigoTarifa}" selected="{articulo.codigoTarifa ==codigoTarifa?true:false}"  >{tarifaIVAI.descripcion}</option>
                                 </select>
                             </div>
                             <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
@@ -67,8 +67,8 @@
                         <div class="row">
                             <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
                                 <label class="tamanoLetra">{$.i18n.prop("articulo.codigoTarifa2")}</label>
-                                <select  class="form-control selectCodigoTarifa2" id="codigoTarifa1" name="codigoTarifa1"  >
-                                    <option  each={tarifas2.aaData}  value="{codigoTarifa}" selected="{articulo.codigoTarifa1 ==codigoTarifa?true:false}"  >{descripcion}</option>
+                                <select onchange= {__AsignarTarifa1} class="form-control selectCodigoTarifa2" id="codigoTarifa1" name="codigoTarifa1"  >
+                                    <option  each={tarifas2.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa1 ==codigoTarifa?true:false}" >{tarifaIVAI.descripcion}</option>
                                 </select>
                             </div>
                             <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
@@ -107,15 +107,15 @@
 
                         </div>
                         <div class="row">
+                            <div class= "col-col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
+                                <label class="tamanoLetra" >{$.i18n.prop("articulo.gananciaPrecioEspecial")} % </label>
+                                <input type="number" step="any" class="form-control gananciaPrecioEspecial campoNumerico" id="gananciaPrecioEspecial" name="gananciaPrecioEspecial" value="{articulo.gananciaPrecioEspecial}"  onkeyup ={__CalculoGananciaSinPrecioEspecial}>
+                            </div>
 
                             <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                 <label  class="tamanoLetra">{$.i18n.prop("articulo.precioEspecial")}  </label>
                                 <input type="number" step="any" class="form-control precioEspecial campoNumerico" id="precioEspecial" name="precioEspecial" value="{articulo.precioEspecial}"  onkeyup={__CalculoGananciaEspecial}>
                             </div>                        
-                            <div class= "col-col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
-                                <label class="tamanoLetra" >{$.i18n.prop("articulo.gananciaPrecioEspecial")} % </label>
-                                <input type="number" step="any" class="form-control gananciaPrecioEspecial campoNumerico" id="gananciaPrecioEspecial" name="gananciaPrecioEspecial" value="{articulo.gananciaPrecioEspecial}"  onkeyup ={__CalculoGananciaSinPrecioEspecial}>
-                            </div>
                             <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                 <label class="tamanoLetra" >{$.i18n.prop("inventario.minimo")} </label>
                                 <input type="number" step="any" class="form-control minimo" id="minimo" name="minimo" value="{articulo.minimo}"  >
@@ -157,11 +157,11 @@
                         </div>
 
                         <div class="row">
-                            <div class= "col-md-3 col-sx-3 col-sm-4 col-lg-3 has-success">
+                            <div class= "col-md-2 col-sx-12 col-sm-2 col-lg-2 has-success">
                                 <label class="tamanoLetra" >{$.i18n.prop("articulo.prioridad")} </label>
                                 <input type="number" step="any" class="form-control prioridad" id="prioridad" name="prioridad" value="{articulo.prioridad}"  >
                             </div>
-                            <div class= "col-md-3 col-sx-3 col-sm-4 col-lg-3 has-success">
+                            <div class= "col-md-2 col-sx-2 col-sm-2 col-lg-2 has-success">
                                 <label class="tamanoLetra" >{$.i18n.prop("articulo.pesoTransporte")} </label>
                                 <input type="number" step="any" class="form-control pesoTransporte" id="pesoTransporte" name="pesoTransporte" value="{articulo.pesoTransporte}"  >
                             </div>
@@ -173,15 +173,15 @@
                                 <label class="tamanoLetra"  >{$.i18n.prop("articulo.fechaUltimaCompra")} </label>
                                 <input type="text" step="any" class="form-control "  value="{articulo.fechaUltimaCompra}"  readonly>
                             </div>
-
-                        </div>
-                        <div class="row">
-                             <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                            <div class="col-md-2 col-sx-12 col-sm-2 col-lg-2 has-success">
                                 <label class="tamanoLetra">{$.i18n.prop("articulo.estado")}</label>
                                 <select  class="form-control" id="estado" name="estado"  >
                                     <option  each={estados}  value="{codigo}" selected="{articulo.estado ==codigo?true:false}" >{descripcion}</option>
                                 </select>
-                            </div>                          
+                            </div>     
+                        </div>
+                        <div class="row">
+                                                  
                         </div>
                     </form>    
                 </div>
@@ -513,12 +513,12 @@ function getMontoImpuesto(tipoImpuesto,codigoTarifa,array){
    
                     LimpiarArticulo()
                     self.articulo = self.parametros.articulo
-                    self.articulo.gananciaPrecioPublico = self.articulo.gananciaPrecioPublico !=null?self.articulo.gananciaPrecioPublico.toFixed(2):self.articulo.gananciaPrecioPublico
-                    self.articulo.gananciaPrecioMayorista = self.articulo.gananciaPrecioMayorista !=null?self.articulo.gananciaPrecioMayorista.toFixed(2):self.articulo.gananciaPrecioMayorista
-                    self.articulo.gananciaPrecioEspecial = self.articulo.gananciaPrecioEspecial !=null?self.articulo.gananciaPrecioEspecial.toFixed(2):self.articulo.gananciaPrecioEspecial
-                    self.articulo.precioPublico = self.articulo.precioPublico !=null?self.articulo.precioPublico.toFixed(2):self.articulo.precioPublico
-                    self.articulo.precioEspecial = self.articulo.precioEspecial !=null?self.articulo.precioEspecial.toFixed(2):self.articulo.precioEspecial
-                    self.articulo.precioMayorista = self.articulo.precioMayorista !=null?self.articulo.precioMayorista.toFixed(2):self.articulo.precioMayorista
+                    self.articulo.gananciaPrecioPublico = self.articulo.gananciaPrecioPublico !=null?self.articulo.gananciaPrecioPublico:self.articulo.gananciaPrecioPublico
+                    self.articulo.gananciaPrecioMayorista = self.articulo.gananciaPrecioMayorista !=null?self.articulo.gananciaPrecioMayorista:self.articulo.gananciaPrecioMayorista
+                    self.articulo.gananciaPrecioEspecial = self.articulo.gananciaPrecioEspecial !=null?self.articulo.gananciaPrecioEspecial:self.articulo.gananciaPrecioEspecial
+                    self.articulo.precioPublico = self.articulo.precioPublico !=null?self.articulo.precioPublico:self.articulo.precioPublico
+                    self.articulo.precioEspecial = self.articulo.precioEspecial !=null?self.articulo.precioEspecial:self.articulo.precioEspecial
+                    self.articulo.precioMayorista = self.articulo.precioMayorista !=null?self.articulo.precioMayorista:self.articulo.precioMayorista
                     
                     self.update()
                     //Agregar
@@ -1060,6 +1060,13 @@ __AsignarTarifa(){
     actualizarPreciosImpuestosPublico()
     actualizarPreciosImpuestosEspecial()
 }
+__AsignarTarifa1(){
+    self.articulo.impuesto1 = getMontoImpuesto(self.articulo.tipoImpuesto1,$('#codigoTarifa1').val(),self.tarifas2.aaData)
+    self.update()
+    actualizarPreciosImpuestosMayorista()
+    actualizarPreciosImpuestosPublico()
+    actualizarPreciosImpuestosEspecial()
+}
 /**
 * Asigna el impuesto 13 cuando es valor igual 01
 **/
@@ -1577,7 +1584,7 @@ __regresarAlListado(){
     self.update()
     //articulo.js se encuentra rutina
     __mostrarListado()
-    LimpiarArticulo()
+   // LimpiarArticulo()
 }
 /**
 *   Agregar 
@@ -1589,29 +1596,7 @@ __agregar(){
 
         if ($("#formulario").valid()) {
              var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
-            if (tipo !=""){
-                if($('#impuesto').val()==0){
-                    mensajeError($.i18n.prop("error.articulo.indicar.tipo.impuesto"))
-                    return 
-                }
-            }else{
-                if($('#impuesto').val()>0){
-                    mensajeError($.i18n.prop("error.articulo.no.tipo.impuesto"))
-                    return 
-                }
-            }
-            tipo = $('#tipoImpuesto1').val() == "Sin impuesto"?"":$('#tipoImpuesto1').val()
-            if (tipo !=""){
-                if($('#impuesto1').val()==0){
-                    mensajeError($.i18n.prop("error.articulo.indicar.tipo.impuesto"))
-                    return 
-                }
-            }else{
-                if($('#impuesto1').val()>0){
-                    mensajeError($.i18n.prop("error.articulo.no.tipo.impuesto"))
-                    return 
-                }
-            }
+            
 
             
         
@@ -1683,38 +1668,6 @@ __Modificar(){
     var AplicoImpuesto2 = false
     if ($("#formulario").valid()) {
         var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
-        if (tipo !=""){
-            if($('#impuesto').val()==0){
-                mensajeError($.i18n.prop("error.articulo.indicar.tipo.impuesto"))
-                return 
-            }else{
-                AplicoImpuesto1 = true
-            }
-        }else{
-            if($('#impuesto').val()>0){
-                mensajeError($.i18n.prop("error.articulo.no.tipo.impuesto"))
-                return 
-            }
-        }
-        tipo = $('#tipoImpuesto1').val() == "Sin impuesto"?"":$('#tipoImpuesto1').val()
-        if (tipo !=""){
-            if($('#impuesto1').val()==0){
-                mensajeError($.i18n.prop("error.articulo.indicar.tipo.impuesto1"))
-                return 
-            }else{
-                AplicoImpuesto2 = true
-            }
-        }else{
-            if($('#impuesto1').val()>0){
-                mensajeError($.i18n.prop("error.articulo.no.tipo.impuesto1"))
-                return 
-            }
-        }
-        if(AplicoImpuesto2 == true && AplicoImpuesto1 == false){
-            mensajeError($.i18n.prop("error.articulo.no.impuesto1"))
-            return 
-
-        }
         
 
         if(self.articulo.costo > self.articulo.precioPublico){
