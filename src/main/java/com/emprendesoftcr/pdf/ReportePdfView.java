@@ -38,7 +38,7 @@ public class ReportePdfView {
 
 	public static ByteArrayOutputStream main(String consecutivo, String tipoDoc, FacturaElectronica facturaElectronica) throws Exception {
 		ReportePdfView reporte01PdfView = new ReportePdfView();
-		Document document = new Document(PageSize.A7);
+		Document document = new Document(PageSize.A4);
 		document.setMargins(10, 10, 12, 55);
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
@@ -250,8 +250,6 @@ public class ReportePdfView {
 		if(!tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)){
 			document.add(new Paragraph(text , UtilsPdf.font_cabezera_tabla));
 			}	
-	
-		
 
 	}
 
@@ -283,7 +281,6 @@ public class ReportePdfView {
 		tabla_.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.BOTTOM));
 		tabla_.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.BOTTOM));
 		tabla_.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.BOTTOM));
-
 	}
 
 	class RoundRectangle implements PdfPCellEvent {

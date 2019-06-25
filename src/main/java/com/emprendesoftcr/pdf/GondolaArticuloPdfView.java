@@ -45,7 +45,7 @@ public class GondolaArticuloPdfView {
 		writer.setPageEvent(event);
 		document.open();
 
-		document.add(new Paragraph("Cod:"+ articulo.getCodigo(),bigFont));
+		document.add(new Paragraph("Cod:"+articulo.getCodigo().trim(),bigFont));
 		document.close();
 
 		return stream;

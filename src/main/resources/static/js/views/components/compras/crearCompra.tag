@@ -186,8 +186,11 @@
                             <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.cantidad")}   </div></th>
                             <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.costo")}                         </div></th>
                             <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.precio")}                        </div></th>
-                            <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descuento")}                     </div></th>
+                            <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descuento")}
+                            <th style="width:8%;"><div class="tituloFormat">Desc                     </div></th>
+                            <th style="width:8%;"><div class="tituloFormat">%Imp                      </div></th>
                             <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.impuesto")}                      </div></th>
+                            <th  style="width:8%;"> <div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.subTotal")}                        </div></th>
                             <th  style="width:8%;"> <div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.total")}                        </div></th>
                         </tr>
                         </thead>
@@ -198,22 +201,32 @@
                             </td>
                             <td style="width:2%;"><h2>{numeroLinea}</h2></td>
                             <td style="width:8%;"><h2>{codigo}</h2></td>
-                            <td style="width:18%;"><h2>{descripcion}</h2></td>
+                            <td style="width:16%;"><h2>{descripcion}</h2></td>
                             <td class="text-right" style="width:17%;">
                                 <input onkeyup={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalleBlur} id= "cantidadDetalle" class="campodetalle" type="number" step="any" placeholder="Cantidad Detalle" value = {cantidad} min="1" pattern="^[0-9]+"/>
                             </td>
-                            <td class="text-right" style="width:17%;">
+                            <td class="text-right" style="width:14%;">
                                 <input  onkeyup={__actualizarCostoKeyPress} onBlur={__actualizarCostoBlur} class="campodetalle" type="number" step="any"  value = "{costo}" min="0" pattern="^[0-9]+"/>
                             </td>
-                            <td class="text-right" style="width:17%;">
+                            <td class="text-right" style="width:14%;">
                                 <input  onkeyup={__actualizarPrecioKeyPress} onBlur={__actualizarPrecioBlur} class="campodetalle" type="number" step="any"  value = "{precio}" min="0" pattern="^[0-9]+"/>
                             </td>
                             <td class="text-right" style="width:8%;">
                                 <input  onkeyup={__actualizarDescuentoKeyPress} onBlur={__actualizarDescuentoBlur} class="campodetalleDescuento" type="number" step="any"  value = "{descuento}"  min="0" pattern="^[0-9]+" />
                             </td>
                             <td class="text-right" style="width:14%;">
+                                <h2 class="totalLabel">{totalDescuento.toFixed(2)} </h2>
+                            </td>
+                            <td class="text-right" style="width:8%;">
+                                <h2 class="totalLabelImpuesto">{impuesto*100} </h2>
+                            </td>
+                            <td class="text-right" style="width:14%;">
                                 <h2 class="totalLabel">{totalImpuesto.toFixed(2)} </h2>
                             </td>
+                           <td class="text-right" style="width:14%;">
+                                <h2 class="totalLabel">{(montoTotalLinea - totalImpuesto).toFixed(2) } </h2>
+                            </td>
+ 
                             <td class="text-right" style="width:14%;">
                                 <h2 class="totalLabel">{montoTotalLinea.toFixed(2)} </h2>
                             </td>
@@ -227,7 +240,22 @@
                             <!--Booking details-->
                         <article class=" clearfix">
                             <div onclick = {__MostrarFormularioDePago}  class="precioTotalFacturaContainer"  >
-                                <div class="label-totalesComprobanteChino" >Total:  {totalGeneralCompra}</div>
+                                <div class="totalesContainer" >
+                                    <div class="tituloTotales">SubTotal  :</div> 
+                                    <div class="valorTotal"> <p>{totalGeneralSubTotal}</p></div>
+                                </div>    
+                                <div class="totalesContainer" >
+                                  <div class="tituloTotales">Descuento:</div>
+                                  <div class="valorTotal">{totalGeneralDescuento}</div>
+                                </div>  
+                                <div class="totalesContainer" >
+                                    <div class="tituloTotales">Impuestos:</div>
+                                    <div class="valorTotal">{totalGeneralImpuesto}</div>
+                                </div>    
+                                <div class="totalesContainer" >
+                                   <div class="tituloTotales">Total   :</div> 
+                                   <div class="valorTotal"><p> {totalGeneralCompra}</p></div>
+                                </div>   
                             </div>
                         </article>
                     </aside>
@@ -295,13 +323,48 @@
 <!--fin del modal-->
 
 <style type="text/css">
-.label-totalesComprobanteChino {
+.totalesContainer{
     display: flex;
     flex: 1;
+    justify-content: space-around;
+}
+.tituloTotales{
+    text-align: left;
+    margin-right: 3%;
+    color: yellow;
+    margin-top: 2%;
+    flex: 0.5;
+}
+.valorTotal{
+    margin-top: 2%;
+}
+.label-totalesComprobanteChino {
     font-weight: 600 !important;
-    font-size: 37px !important;
+    font-size: 18px !important;
     font-family: Roboto,sans-serif !important;
     color: #30ed17 !important;
+    text-shadow: 0px 0px 1px #ffffff;
+    font-style: italic;
+    border-collapse: separate;
+    cursor: pointer;
+    margin: 1%!important;
+    text-align: center !important;
+    background-color: black !important;
+    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+    border-radius: 25px !important;
+    -webkit-transition: background-color 100ms linear;
+    -moz-transition: background-color 100ms linear;
+    -o-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+}
+.precioTotalFacturaContainer{
+    display:flex;
+    flex:1;
+    flex-direction: column;
+    ont-weight: 600 !important;
+    font-size: 14px !important;
+    color:yellow !important;
     text-shadow: 0px 0px 1px #ffffff;
     font-style: italic;
     border-collapse: separate;
@@ -317,13 +380,9 @@
     -ms-transition: background-color 100ms linear;
     transition: background-color 100ms linear;
 }
-.precioTotalFacturaContainer{
-    display:flex;
-    flex:1;
-}
 .tituloFormat{
     color: black;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: bold;   
         padding-top: 5%; 
 }
@@ -335,10 +394,18 @@
     flex:0.25;
 }
 .totalLabel {
-    color: blue;
+    color: #333;
     font-size: 18px;
     font-weight: bold;
+    margin-top: 18%;
+text-align: center;
 }
+.totalLabelImpuesto {
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 31%;
+text-align: center;
 }
  #contenedor {
   width:500px;
@@ -355,6 +422,8 @@
 }
  .cabecera-izquierda {
        flex:1;
+       margin-right: 1%;
+
     }
 
     .cabecera-derecha {
@@ -483,7 +552,7 @@
         margin: 10px;
         border: none;
         text-align: center !important;
-        background-color: #6dca42 !important;
+        background-color: yellow !important;
         box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
         border-radius: 5px;
         -webkit-transition: background-color 100ms linear;
@@ -534,12 +603,12 @@
     }
     .total{
         font-weight:bold;
-        font-size:20px;
+        font-size:23px;
     }
     .precioTotalFactura{
         font-weight:bold;
-        font-size:20px;
-        color: #0C9C22;
+        font-size:23px;
+        color:black;
         border-top: 1px solid #DFDCD1;
         padding: 0 0 5px;
         padding: 15px 0 0;
@@ -577,11 +646,11 @@
     }
     .campodetalle {
     width: 100%;
-    height: 40px;
+    height: 30px;
     padding: 6px 16px;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1.42857143;
-    color: #1825ef;
+    color:#333;
     font-weight: bold;
     background-color: #fff;
     background-image: none;
@@ -600,11 +669,11 @@
 }
 .campodetalleDescuento {
     width: 100%;
-    height: 40px;
+    height: 30px;
     padding: 6px 16px;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1.42857143;
-    color: #1825ef;
+    color:#333;
     font-weight: bold;
     background-color: #fff;
     background-image: none;
@@ -1441,6 +1510,8 @@ function __ActualizarDescuentoDetalle(descuento){
     var valor = self.item.descuento /100
     var resultado = self.item.costo * valor
     self.item.totalDescuento =  __valorNumerico(resultado * self.item.cantidad)
+    self.item.totalDescuentoFormat = formatoDecimales(self.item.totalDescuento,2)
+    
     self.update()   
     _cambiaImpuesto()
     __actualizarItemArray();
@@ -1467,10 +1538,14 @@ function __calculate() {
         totalCompra      += e.montoTotalLinea >0?e.montoTotalLinea:0
         totalDescuento   += e.totalDescuento >0?e.totalDescuento:0
         totalImpuesto    += e.totalImpuesto >0?e.totalImpuesto:0
+
     });
     self.compra.totalCompra    = totalCompra
     self.compra.totalDescuento = totalDescuento
     self.compra.totalImpuesto  = totalImpuesto
+    self.compra.subTotal  = totalCompra - totalImpuesto
+    self.compra.subTotal = self.compra.subTotal + totalDescuento
+    self.totalGeneralSubTotal = formatoDecimales(self.compra.subTotal,2)
     self.totalGeneralDescuento = formatoDecimales(totalDescuento,2)
     self.totalGeneralImpuesto  = formatoDecimales(totalImpuesto,2)
     self.totalGeneralCompra    = formatoDecimales(totalCompra,2)
