@@ -1,7 +1,6 @@
 package com.emprendesoftcr.service.impl;
 
 import java.math.BigInteger;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;

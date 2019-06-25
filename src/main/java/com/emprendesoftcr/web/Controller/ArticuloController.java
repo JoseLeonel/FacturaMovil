@@ -666,6 +666,7 @@ public class ArticuloController {
 			articulo.setPesoTransporte(articulo.getPesoTransporte() ==null?Constantes.ZEROS_DOUBLE:articulo.getPesoTransporte());
 			articulo.setCodigoTarifa(articulo.getCodigoTarifa() ==null?Constantes.EMPTY:articulo.getCodigoTarifa());
 			articulo.setCodigoTarifa1(articulo.getCodigoTarifa1() ==null?Constantes.EMPTY:articulo.getCodigoTarifa1());
+			articulo.setBaseImponible(articulo.getBaseImponible() ==null?Constantes.ZEROS:articulo.getBaseImponible());
 			articuloBo.agregar(articulo);
 
 			if (usuarioSesion.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
@@ -761,7 +762,7 @@ public class ArticuloController {
 			articuloBd.setPesoTransporte(articulo.getPesoTransporte() ==null?Constantes.ZEROS_DOUBLE:articulo.getPesoTransporte());
 			articuloBd.setCodigoTarifa(articulo.getCodigoTarifa() ==null?Constantes.EMPTY:articulo.getCodigoTarifa());
 			articuloBd.setCodigoTarifa1(articulo.getCodigoTarifa1() ==null?Constantes.EMPTY:articulo.getCodigoTarifa1());
-
+			articuloBd.setBaseImponible(articulo.getBaseImponible() ==null?Constantes.ZEROS:articulo.getBaseImponible());
 			articuloBo.modificar(articuloBd);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBd);

@@ -148,9 +148,15 @@ public class Articulo implements Serializable {
 	@Column(name = "cod_tarifa1")
 	private String						codigoTarifa1;
 
+	@Column(name = "base_imponible", columnDefinition = "INT default '0'")
+	private Integer						baseImponible;
 
 
-	public Articulo(Long id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, Double cantidad, Double minimo, String estado, String tipoImpuesto, String tipoCodigo, Double maximo, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa, Integer comanda, Integer prioridad, Double pesoTransporte, String consecutivoCompra, Date fechaUltimaCompra, String tipoImpuesto1, Double impuesto1, String codigoTarifa, String codigoTarifa1) {
+	
+
+	
+
+	public Articulo(Long id, String codigo, String descripcion, String serie, String unidadMedida, String contable, Double costo, Double impuesto, Double precioPublico, Double gananciaPrecioPublico, Double precioMayorista, Double gananciaPrecioMayorista, Double precioEspecial, Double gananciaPrecioEspecial, Double cantidad, Double minimo, String estado, String tipoImpuesto, String tipoCodigo, Double maximo, Date created_at, Date updated_at, Marca marca, Usuario usuario, Categoria categoria, Empresa empresa, Integer comanda, Integer prioridad, Double pesoTransporte, String consecutivoCompra, Date fechaUltimaCompra, String tipoImpuesto1, Double impuesto1, String codigoTarifa, String codigoTarifa1, Integer baseImponible) {
 		super();
 		this.id = id;
 		this.codigo = codigo;
@@ -187,7 +193,10 @@ public class Articulo implements Serializable {
 		this.impuesto1 = impuesto1;
 		this.codigoTarifa = codigoTarifa;
 		this.codigoTarifa1 = codigoTarifa1;
+		this.baseImponible = baseImponible;
 	}
+
+
 
 	public Articulo() {
 		super();
@@ -207,6 +216,8 @@ public class Articulo implements Serializable {
 
 	}
 
+	
+	
 	public Long getId() {
 		return id;
 	}
@@ -515,11 +526,7 @@ public class Articulo implements Serializable {
 		this.prioridad = prioridad;
 	}
 
-	@Override
-	public String toString() {
-		return "Articulo [id=" + id + ", codigo=" + codigo + ", descripcion=" + descripcion + ", serie=" + serie + ", unidadMedida=" + unidadMedida + ", contable=" + contable + ", costo=" + costo + ", impuesto=" + impuesto + ", precioPublico=" + precioPublico + ", gananciaPrecioPublico=" + gananciaPrecioPublico + ", precioMayorista=" + precioMayorista + ", gananciaPrecioMayorista=" + gananciaPrecioMayorista + ", precioEspecial=" + precioEspecial + ", gananciaPrecioEspecial=" + gananciaPrecioEspecial + ", cantidad=" + cantidad + ", minimo=" + minimo + ", maximo=" + maximo + ", estado=" + estado + ", tipoImpuesto=" + tipoImpuesto + ", tipoCodigo=" + tipoCodigo + ", created_at=" + created_at + ", updated_at=" + updated_at + ", marca=" + marca + ", usuario=" + usuario + ", categoria=" + categoria
-				+ ", empresa=" + empresa + ", comanda=" + comanda + "]";
-	}
+	
 
 	public Double getPesoTransporte() {
 		return pesoTransporte;
@@ -567,5 +574,17 @@ public class Articulo implements Serializable {
 	public void setImpuesto1(Double impuesto1) {
 		this.impuesto1 = impuesto1;
 	}
+
+	
+	public Integer getBaseImponible() {
+		return baseImponible;
+	}
+
+	
+	public void setBaseImponible(Integer baseImponible) {
+		this.baseImponible = baseImponible;
+	}
+	
+	
 
 }

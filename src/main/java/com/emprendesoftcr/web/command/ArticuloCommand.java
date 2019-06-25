@@ -74,6 +74,7 @@ public class ArticuloCommand {
 
 	private String			codigoTarifa;
 	private String			codigoTarifa1;
+	private Integer						baseImponible;
 
 	public ArticuloCommand(Articulo articulo) {
 		super();
@@ -127,8 +128,25 @@ public class ArticuloCommand {
 		this.updated_atSTR = articulo.getUpdated_atSTR();
 		this.codigoTarifa = articulo.getCodigoTarifa();
 		this.codigoTarifa1 = articulo.getCodigoTarifa1();
+		this.baseImponible = articulo.getBaseImponible();
 
 	}
+	
+	
+
+	
+	public Integer getBaseImponible() {
+		return baseImponible;
+	}
+
+
+
+	
+	public void setBaseImponible(Integer baseImponible) {
+		this.baseImponible = baseImponible;
+	}
+
+
 
 	public Integer getPrioridad() {
 		return prioridad;
