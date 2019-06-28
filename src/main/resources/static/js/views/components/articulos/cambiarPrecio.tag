@@ -97,7 +97,8 @@
                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.impuesto")}  </label>
                                     <input type="number" step="any" class="campoNumerico impuesto" id="impuesto" name="impuesto" value="{articulo.impuesto}"  onkeyup ={__ActualizarPreciosImpuestos}>
                                 </div>
-                
+                            </div>    
+                            <div class="row">  
                                 <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                     <label class="tamanoLetraTotales">{$.i18n.prop("articulo.tipoImpuesto1")}</label>
                                     <select onchange= {__asignarImpuesto1} class="campo selectTipoImpuesto1" id="tipoImpuesto1" name="tipoImpuesto1"  >
