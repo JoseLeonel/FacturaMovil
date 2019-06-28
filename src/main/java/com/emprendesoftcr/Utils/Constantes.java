@@ -5,7 +5,13 @@ import java.util.ResourceBundle;
 public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																			= ResourceBundle.getBundle("factura");
+//Esquema de XML
+	public static final Integer					ESQUEMA_XML_4_2																= 1;
+	public static final Integer					ESQUEMA_XML_4_3																= 2;
 
+	//Base Imponible se activa en el articulo
+	public static final Integer					BASE_IMPONIBLE_ACTIVO																= 1;
+	public static final Integer					BASE_IMPONIBLE_INACTIVO															= 0;
 	// Inventario
 	public static final String					ARTICULO_MINIMO																			= "1";
 	public static final String					ARTICULO_MAXIMO																			= "2";
@@ -13,12 +19,20 @@ public class Constantes {
 	public static final String					PLANTILLA_CORREO_VENTA_POR_CODIGO										= "email/ventasXCodigo.vm";
 	public static final String					PLANTILLA_CORREO_COMPRAS_ACEPTADAS									= "email/emailResumenCompras.vm";
 	public static final String					PLANTILLA_CORREO_RESUMEN_VENTAS_RANGO_FECHA					= "email/emailResumenFactura.vm";
+	
+	
 
 // Version de los tipos de documentos 
-	public static final String					TIQUETE_ELECTRONICO_VERSION													= "Tiquete Electrónico ver 4.3";
-	public static final String					FACTURA_ELECTRONICO_VERSION													= "Factura Electrónica ver 4.3";
-	public static final String					NOTA_CREDITO_ELECTRONICO_VERSION										= "Nota Credito Electrónica ver 4.3";
-	public static final String					NOTA_DEBITO_ELECTRONICO_VERSION											= "Nota Debito Electrónica ver 4.3";
+	public static final String					TIQUETE_ELECTRONICO_VERSION_4_2													= "Tiquete Electrónico ver 4.2";
+	public static final String					FACTURA_ELECTRONICO_VERSION_4_2													= "Factura Electrónica ver 4.2";
+	public static final String					NOTA_CREDITO_ELECTRONICO_VERSION_4_2										= "Nota Credito Electrónica ver 4.2";
+	public static final String					NOTA_DEBITO_ELECTRONICO_VERSION_4_2											= "Nota Debito Electrónica ver 4.2";
+	
+	public static final String					TIQUETE_ELECTRONICO_VERSION_4_3													= "Tiquete Electrónico ver 4.3";
+	public static final String					FACTURA_ELECTRONICO_VERSION_4_3													= "Factura Electrónica ver 4.3";
+	public static final String					NOTA_CREDITO_ELECTRONICO_VERSION_4_3										= "Nota Credito Electrónica ver 4.3";
+	public static final String					NOTA_DEBITO_ELECTRONICO_VERSION_4_3											= "Nota Debito Electrónica ver 4.3";
+	
 	public static final String					PROFORMA_VERSION																		= "Proforma";
 	// callbackurl 1 = si 0= No
 	public static final Integer					CALLBACKURL_SI																			= 1;

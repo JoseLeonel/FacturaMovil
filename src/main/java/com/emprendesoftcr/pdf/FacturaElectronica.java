@@ -49,6 +49,7 @@ public class FacturaElectronica {
 	private String													medioEfectivo;
 
 	private String													medioTarjeta;
+	private Integer													esquemaXML;
 
 	private String													medioBanco;
 	private String													_moneda;
@@ -92,6 +93,8 @@ public class FacturaElectronica {
 	public void setReferenciaFechaEmision(String referenciaFechaEmision) {
 		this.referenciaFechaEmision = referenciaFechaEmision;
 	}
+	
+	
 
 	public String getEmisorNombre() {
 		return _emisorNombre;
@@ -469,6 +472,16 @@ public class FacturaElectronica {
 
 	public void setMoneda(String _moneda) {
 		this._moneda = _moneda;
+	}
+
+	
+	public Integer getEsquemaXML() {
+		return esquemaXML;
+	}
+
+	
+	public void setEsquemaXML(Integer esquemaXML) {
+		this.esquemaXML = esquemaXML;
 	}
 
 	public String getTipoCambio() {

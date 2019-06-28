@@ -191,9 +191,15 @@ public class FacturaBoImpl implements FacturaBo {
 					factura.setReferenciaFechaEmision(facturaReferencia.getFechaEmision());
 					factura.setCodigoMoneda(facturaReferencia.getCodigoMoneda());
 					factura.setTipoCambio(facturaReferencia.getTipoCambio());
+					if (facturaReferencia.getVersionEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2)){
+						  factura.setVersionEsquemaXML(Constantes.ESQUEMA_XML_4_2);
+					}else {
+						factura.setVersionEsquemaXML(Constantes.ESQUEMA_XML_4_3);
+					}
 				}
 
 			} else {
+				factura.setVersionEsquemaXML(Constantes.ESQUEMA_XML_4_3);
 				factura.setReferenciaTipoDoc(Constantes.EMPTY);
 				factura.setReferenciaNumero(Constantes.EMPTY);
 				factura.setReferenciaCodigo(Constantes.EMPTY);
@@ -383,13 +389,13 @@ public class FacturaBoImpl implements FacturaBo {
 
 						if (detalleFacturaCommand.getMontoImpuesto() > 0) {
 							impuestoNeto += detalleFacturaCommand.getMontoImpuesto();
-							detalle.setCodigoTarifa("08");
+							detalle.setCodigoTarifa(articulo.getCodigoTarifa() !=null?articulo.getCodigoTarifa():Constantes.EMPTY);
 							detalle.setTipoImpuesto(!detalleFacturaCommand.getTipoImpuesto().equals(Constantes.EMPTY) ? detalleFacturaCommand.getTipoImpuesto() : Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
 						}
 					}
 					if (detalleFacturaCommand.getMontoImpuesto1() != null) {
 						if (detalleFacturaCommand.getMontoImpuesto1() > 0) {
-							detalle.setCodigoTarifa("08");
+							detalle.setCodigoTarifa1(articulo.getCodigoTarifa1() !=null?articulo.getCodigoTarifa1():Constantes.EMPTY);
 							impuestoNeto += detalleFacturaCommand.getMontoImpuesto();
 							detalle.setTipoImpuesto1(!detalleFacturaCommand.getTipoImpuesto1().equals(Constantes.EMPTY) ? detalleFacturaCommand.getTipoImpuesto1() : Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
 						}
@@ -399,12 +405,14 @@ public class FacturaBoImpl implements FacturaBo {
 			} else {
 				if (detalleFacturaCommand.getMontoImpuesto() != null) {
 					if (detalleFacturaCommand.getMontoImpuesto() > 0) {
+						detalle.setCodigoTarifa(articulo.getCodigoTarifa() !=null?articulo.getCodigoTarifa():Constantes.EMPTY);
 						impuestoNeto += detalleFacturaCommand.getMontoImpuesto();
 						detalle.setTipoImpuesto(!detalleFacturaCommand.getTipoImpuesto().equals(Constantes.EMPTY) ? detalleFacturaCommand.getTipoImpuesto() : Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
 					}
 				}
 				if (detalleFacturaCommand.getMontoImpuesto1() != null) {
 					if (detalle.getMontoImpuesto1() > 0) {
+						detalle.setCodigoTarifa(articulo.getCodigoTarifa1() !=null?articulo.getCodigoTarifa1():Constantes.EMPTY);
 						impuestoNeto += detalleFacturaCommand.getMontoImpuesto();
 						detalle.setTipoImpuesto1(!detalleFacturaCommand.getTipoImpuesto1().equals(Constantes.EMPTY) ? detalleFacturaCommand.getTipoImpuesto1() : Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
 					}
@@ -430,22 +438,12 @@ public class FacturaBoImpl implements FacturaBo {
 				detalle.setMontoTotal(detalle.getMontoTotal() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoTotal(), 5));
 				// Se calcula el subtotal por problemas de decimales
 				detalle.setSubTotal(Utils.roundFactura(detalle.getMontoTotal() - detalle.getMontoDescuento(), 5));
-				Boolean baseImponible = Boolean.FALSE;
-				if(detalle.getTipoImpuesto() !=null) {
-					if(detalle.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
-						baseImponible = Boolean.TRUE;
-					}
-				}
-				if(detalle.getTipoImpuesto1() !=null) {
-					if(detalle.getTipoImpuesto1().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
-						baseImponible = Boolean.TRUE;
-					}
-				}
-
-				detalle.setBaseImponible(baseImponible?detalle.getSubTotal():Constantes.ZEROS_DOUBLE);
 				
-				// Suma de montos con impuestos
+				
+				Integer baseImponible = articulo.getBaseImponible() !=null?articulo.getBaseImponible():Constantes.ZEROS;
 
+				detalle.setBaseImponible(baseImponible.equals(Constantes.BASE_IMPONIBLE_ACTIVO)?detalle.getSubTotal():Constantes.ZEROS_DOUBLE);
+				
 				// cambios de doble impuesto
 
 				// Con impuesto

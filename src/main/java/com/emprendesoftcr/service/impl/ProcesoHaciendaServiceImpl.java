@@ -97,6 +97,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
 																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
 																																																			facturaElectronica.setConsecutivoProforma(d.getConsecutivoProforma());
+																																																			facturaElectronica.setEsquemaXML(d.getVersionEsquemaXML());
 																																																			// Emisor
 																																																			facturaElectronica.setEmisorNombreComercial(!d.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? d.getEmpresa().getNombreComercial() : Constantes.EMPTY);
 																																																			facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombre().equals(Constantes.EMPTY) ? d.getEmpresa().getNombre() : d.getEmpresa().getNombre());

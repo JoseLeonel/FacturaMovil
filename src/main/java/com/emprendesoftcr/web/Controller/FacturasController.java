@@ -147,6 +147,7 @@ public class FacturasController {
 	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
 																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
 																																																			// Emisor
+																																																			facturaElectronica.setEsquemaXML(d.getVersionEsquemaXML());
 																																																			facturaElectronica.setEmisorNombreComercial(d.getEmpresa().getNombreComercial());
 																																																			facturaElectronica.setFooterTotalServiciosGravados(d.getTotalServGravados());
 																																																			facturaElectronica.setFooterTotalMercanciasGravadas(d.getTotalMercanciasGravadas());

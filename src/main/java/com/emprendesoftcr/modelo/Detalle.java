@@ -133,6 +133,9 @@ public class Detalle implements Serializable {
 
 	@Column(name = "cod_tarifa")
 	private String						codigoTarifa;
+	
+	@Column(name = "cod_tarifa1")
+	private String						codigoTarifa1;
 
 	@ManyToOne
 	@JoinColumn(name = "factura_id")
@@ -145,7 +148,8 @@ public class Detalle implements Serializable {
 
 	
 
-	public Detalle(Long id, Integer numeroLinea, String codigo, String descripcion, String tipoCodigo, String tipoImpuesto, String unidadMedida, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, String naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double ganancia, Double porcentajeDesc, Double porcentajeGanancia, Double costo, String observacion, String tipoImpuesto1, Double impuesto1, Double montoImpuesto1, Date created_at, Date updated_at, Double montoGanancia, Double pesoTransporte, Double pesoTransporteTotal, Double impuestoNeto, Double baseImponible, String codigoTarifa, Factura factura, Usuario usuario) {
+	
+	public Detalle(Long id, Integer numeroLinea, String codigo, String descripcion, String tipoCodigo, String tipoImpuesto, String unidadMedida, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, String naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double ganancia, Double porcentajeDesc, Double porcentajeGanancia, Double costo, String observacion, String tipoImpuesto1, Double impuesto1, Double montoImpuesto1, Date created_at, Date updated_at, Double montoGanancia, Double pesoTransporte, Double pesoTransporteTotal, Double impuestoNeto, Double baseImponible, String codigoTarifa, String codigoTarifa1, Factura factura, Usuario usuario) {
 		super();
 		this.id = id;
 		this.numeroLinea = numeroLinea;
@@ -179,6 +183,7 @@ public class Detalle implements Serializable {
 		ImpuestoNeto = impuestoNeto;
 		this.baseImponible = baseImponible;
 		this.codigoTarifa = codigoTarifa;
+		this.codigoTarifa1 = codigoTarifa1;
 		this.factura = factura;
 		this.usuario = usuario;
 	}
@@ -235,6 +240,16 @@ public class Detalle implements Serializable {
 	
 	public void setCodigoTarifa(String codigoTarifa) {
 		this.codigoTarifa = codigoTarifa;
+	}
+
+	
+	public String getCodigoTarifa1() {
+		return codigoTarifa1;
+	}
+
+	
+	public void setCodigoTarifa1(String codigoTarifa1) {
+		this.codigoTarifa1 = codigoTarifa1;
 	}
 
 	public String getTipoImpuesto() {

@@ -49,13 +49,13 @@ public class HeaderFooter extends PdfPageEventHelper {
 	private String tipoDocVersion() {
 		String resultado = Constantes.EMPTY;
 		if (this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
-			return Constantes.TIQUETE_ELECTRONICO_VERSION;
+			return this.facturaElectronica.getEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2)?Constantes.TIQUETE_ELECTRONICO_VERSION_4_2:Constantes.TIQUETE_ELECTRONICO_VERSION_4_3;
 		} else if (this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
-			return Constantes.FACTURA_ELECTRONICO_VERSION;
+			return this.facturaElectronica.getEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2)?Constantes.FACTURA_ELECTRONICO_VERSION_4_2:Constantes.FACTURA_ELECTRONICO_VERSION_4_3;
 		} else if (this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return Constantes.NOTA_CREDITO_ELECTRONICO_VERSION;
+			return this.facturaElectronica.getEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2)?Constantes.NOTA_CREDITO_ELECTRONICO_VERSION_4_2:Constantes.NOTA_CREDITO_ELECTRONICO_VERSION_4_3;
 		} else if (this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
-			return Constantes.NOTA_DEBITO_ELECTRONICO_VERSION;
+			return this.facturaElectronica.getEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2)?Constantes.NOTA_DEBITO_ELECTRONICO_VERSION_4_2:Constantes.NOTA_DEBITO_ELECTRONICO_VERSION_4_3;
 		} else if (this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 			return Constantes.PROFORMA_VERSION;
 		}

@@ -214,6 +214,9 @@ public class Factura implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
+	@Column(name = "version_esquema", columnDefinition = "INT default '0'")
+	private Integer						versionEsquemaXML;
+
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente						cliente;
@@ -242,10 +245,8 @@ public class Factura implements Serializable {
 
 	}
 
-	
-
 	public Factura(Long id, Date fechaCredito, String numeroConsecutivo, String consecutivoProforma, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon, Date referenciaFechaEmision, String medioEfectivo, String medioTarjeta, String medioBanco, String nombreFactura, String correoAlternativo, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto,
-			Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Integer tieneIS, Double pesoTransporteTotal, Double totalServExonerado, Double totalMercExonerada, Double totalExonerado, Double totalIVADevuelto, Double totalOtrosCargos, Date created_at, Date updated_at, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Mesa mesa) {
+			Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Integer tieneIS, Double pesoTransporteTotal, Double totalServExonerado, Double totalMercExonerada, Double totalExonerado, Double totalIVADevuelto, Double totalOtrosCargos, Date created_at, Date updated_at, Integer versionEsquemaXML, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Mesa mesa) {
 		super();
 		this.id = id;
 		this.fechaCredito = fechaCredito;
@@ -304,6 +305,7 @@ public class Factura implements Serializable {
 		this.totalOtrosCargos = totalOtrosCargos;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
+		this.versionEsquemaXML = versionEsquemaXML;
 		this.cliente = cliente;
 		this.empresa = empresa;
 		this.vendedor = vendedor;
@@ -311,7 +313,13 @@ public class Factura implements Serializable {
 		this.mesa = mesa;
 	}
 
+	public Integer getVersionEsquemaXML() {
+		return versionEsquemaXML;
+	}
 
+	public void setVersionEsquemaXML(Integer versionEsquemaXML) {
+		this.versionEsquemaXML = versionEsquemaXML;
+	}
 
 	public Double getPesoTransporteTotal() {
 		return pesoTransporteTotal;
@@ -869,72 +877,42 @@ public class Factura implements Serializable {
 		this.consecutivoProforma = consecutivoProforma;
 	}
 
-
-
-	
 	public Double getTotalServExonerado() {
 		return totalServExonerado;
 	}
 
-
-
-	
 	public void setTotalServExonerado(Double totalServExonerado) {
 		this.totalServExonerado = totalServExonerado;
 	}
 
-
-
-	
 	public Double getTotalMercExonerada() {
 		return totalMercExonerada;
 	}
 
-
-
-	
 	public void setTotalMercExonerada(Double totalMercExonerada) {
 		this.totalMercExonerada = totalMercExonerada;
 	}
 
-
-
-	
 	public Double getTotalExonerado() {
 		return totalExonerado;
 	}
 
-
-
-	
 	public void setTotalExonerado(Double totalExonerado) {
 		this.totalExonerado = totalExonerado;
 	}
 
-
-
-	
 	public Double getTotalIVADevuelto() {
 		return totalIVADevuelto;
 	}
 
-
-
-	
 	public void setTotalIVADevuelto(Double totalIVADevuelto) {
 		this.totalIVADevuelto = totalIVADevuelto;
 	}
 
-
-
-	
 	public Double getTotalOtrosCargos() {
 		return totalOtrosCargos;
 	}
 
-
-
-	
 	public void setTotalOtrosCargos(Double totalOtrosCargos) {
 		this.totalOtrosCargos = totalOtrosCargos;
 	}
