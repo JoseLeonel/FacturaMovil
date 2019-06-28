@@ -143,6 +143,10 @@
 <div class="box box-solid box-primary" show={mostarParaCrearNuevaCompra}>
         <div class="box-body">
              <div class="box-header with-border">
+                
+
+            <div  class="contenedor-compra " >
+                <div class="cabecera-izquierda" >
                 <div class="row">
                   <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">  
                     <div class="box-tools ">
@@ -154,10 +158,7 @@
                         </div>
                     </div>
                 </div>  
-                  <br>
-
-            <div  class="contenedor-compra " >
-                <div class="cabecera-izquierda">
+                  <br>                
                     <div class="row">
                         <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                             <div class="form-group ">
@@ -171,68 +172,12 @@
                             <input onkeypress={__addProductToDetail}  id="codigo" class="campo" type="text" placeholder="XXXXXXXXXXX" />
                         </div>
                         <div class="col-sx-2 col-sm-2 col-md-2 col-lg-2">
-                            <button    onclick = {__ListaDecodigos} class="btn btn-primary boton-consultar" id="btn-facturar" >
+                            <button    onclick = {__ListaDecodigos} class="btn btn-primary boton-consultar1" id="btn-facturar" >
                                 <i class="glyphicon glyphicon-plus"></i>Buscar
                             </button>
                         </div>
                     </div>
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th style="width:5%;">                                                      </div></th>
-                            <th style="width:2%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.linea")}                         </div></th>
-                            <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.codigo")}                        </div></th>
-                            <th style="width:18%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descripcion")}</div></th>
-                            <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.cantidad")}   </div></th>
-                            <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.costo")}                         </div></th>
-                            <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.precio")}                        </div></th>
-                            <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descuento")}
-                            <th style="width:8%;"><div class="tituloFormat">Desc                     </div></th>
-                            <th style="width:8%;"><div class="tituloFormat">%Imp                      </div></th>
-                            <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.impuesto")}                      </div></th>
-                            <th  style="width:8%;"> <div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.subTotal")}                        </div></th>
-                            <th  style="width:8%;"> <div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.total")}                        </div></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr each={detail}>
-                            <td style="width:5%;">
-                                <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
-                            </td>
-                            <td style="width:2%;"><h2>{numeroLinea}</h2></td>
-                            <td style="width:8%;"><h2>{codigo}</h2></td>
-                            <td style="width:16%;"><h2>{descripcion}</h2></td>
-                            <td class="text-right" style="width:17%;">
-                                <input onkeyup={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalleBlur} id= "cantidadDetalle" class="campodetalle" type="number" step="any" placeholder="Cantidad Detalle" value = {cantidad} min="1" pattern="^[0-9]+"/>
-                            </td>
-                            <td class="text-right" style="width:14%;">
-                                <input  onkeyup={__actualizarCostoKeyPress} onBlur={__actualizarCostoBlur} class="campodetalle" type="number" step="any"  value = "{costo}" min="0" pattern="^[0-9]+"/>
-                            </td>
-                            <td class="text-right" style="width:14%;">
-                                <input  onkeyup={__actualizarPrecioKeyPress} onBlur={__actualizarPrecioBlur} class="campodetalle" type="number" step="any"  value = "{precio}" min="0" pattern="^[0-9]+"/>
-                            </td>
-                            <td class="text-right" style="width:8%;">
-                                <input  onkeyup={__actualizarDescuentoKeyPress} onBlur={__actualizarDescuentoBlur} class="campodetalleDescuento" type="number" step="any"  value = "{descuento}"  min="0" pattern="^[0-9]+" />
-                            </td>
-                            <td class="text-right" style="width:14%;">
-                                <h2 class="totalLabel">{totalDescuento.toFixed(2)} </h2>
-                            </td>
-                            <td class="text-right" style="width:8%;">
-                                <h2 class="totalLabelImpuesto">{impuesto*100} </h2>
-                            </td>
-                            <td class="text-right" style="width:14%;">
-                                <h2 class="totalLabel">{totalImpuesto.toFixed(2)} </h2>
-                            </td>
-                           <td class="text-right" style="width:14%;">
-                                <h2 class="totalLabel">{(montoTotalLinea - totalImpuesto).toFixed(2) } </h2>
-                            </td>
- 
-                            <td class="text-right" style="width:14%;">
-                                <h2 class="totalLabel">{montoTotalLinea.toFixed(2)} </h2>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>          
+                    
                 </div>
                 <section class="cabecera-derecha">
 				    <!--right sidebar-->
@@ -272,7 +217,65 @@
                       
             </div><!-- fin contenedor-compra-->
 
-
+                    <div class="encabezadoContainer" style="overflow-x: scroll;overflow-y: scroll; height:100%;">
+<table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th style="width:5%;">                                                      </div></th>
+                            <th style="width:2%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.linea")}                         </div></th>
+                            <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.codigo")}                        </div></th>
+                            <th style="width:18%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descripcion")}</div></th>
+                            <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.cantidad")}   </div></th>
+                            <th style="width:25%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.costo")}                         </div></th>
+                            <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.precio")}                        </div></th>
+                            <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descuento")}
+                            <th style="width:8%;"><div class="tituloFormat">Desc                     </div></th>
+                            <th style="width:8%;"><div class="tituloFormat">%Imp                      </div></th>
+                            <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.impuesto")}                      </div></th>
+                            <th  style="width:8%;"> <div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.subTotal")}                        </div></th>
+                            <th  style="width:8%;"> <div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.total")}                        </div></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr each={detail}>
+                            <td style="width:5%;">
+                                <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
+                            </td>
+                            <td style="width:2%;"><h2>{numeroLinea}</h2></td>
+                            <td style="width:8%;"><h2>{codigo}</h2></td>
+                            <td style="width:16%;"><h2>{descripcion}</h2></td>
+                            <td class="text-right" style="width:17%;">
+                                <input onkeyup={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalleBlur} id= "cantidadDetalle" class="campodetalle" type="number" step="any" placeholder="Cantidad Detalle" value = {cantidad} min="1" pattern="^[0-9]+"/>
+                            </td>
+                            <td class="text-right" style="width:25%;">
+                                <input  onkeyup={__actualizarCostoKeyPress} onBlur={__actualizarCostoBlur} class="campodetalle" type="number" step="any"  value = "{costo}" min="0" pattern="^[0-9]+"/>
+                            </td>
+                            <td class="text-right" style="width:14%;">
+                                <input  onkeyup={__actualizarPrecioKeyPress} onBlur={__actualizarPrecioBlur} class="campodetalle" type="number" step="any"  value = "{precio}" min="0" pattern="^[0-9]+"/>
+                            </td>
+                            <td class="text-right" style="width:8%;">
+                                <input  onkeyup={__actualizarDescuentoKeyPress} onBlur={__actualizarDescuentoBlur} class="campodetalleDescuento" type="number" step="any"  value = "{descuento}"  min="0" pattern="^[0-9]+" />
+                            </td>
+                            <td class="text-right" style="width:14%;">
+                                <h2 class="totalLabel">{totalDescuento.toFixed(2)} </h2>
+                            </td>
+                            <td class="text-right" style="width:8%;">
+                                <h2 class="totalLabelImpuesto">{impuesto*100} </h2>
+                            </td>
+                            <td class="text-right" style="width:14%;">
+                                <h2 class="totalLabel">{totalImpuesto.toFixed(2)} </h2>
+                            </td>
+                           <td class="text-right" style="width:14%;">
+                                <h2 class="totalLabel">{(montoTotalLinea - totalImpuesto).toFixed(2) } </h2>
+                            </td>
+ 
+                            <td class="text-right" style="width:14%;">
+                                <h2 class="totalLabel">{montoTotalLinea.toFixed(2)} </h2>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>     
+                    </div>     
     
 <!--Modal mostrar Articulos de la empresa -->
 <div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -323,6 +326,60 @@
 <!--fin del modal-->
 
 <style type="text/css">
+.detalle1{
+    flex: 0.5;
+   
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-bottom: 1%;
+}
+.detalleDescripcion{
+   flex: 1.5;
+    text-align: center;
+    color: black;
+    font-weight: 600;
+    font-size: 14px;
+  
+}
+.detalleDescripcion1{
+   flex: 1.5;
+    text-align: center;
+    color: black;
+    font-size: 14px;
+  
+}
+.detalleCodigo{
+    flex: 0.8;
+    text-align: center;
+}
+.detalleLinea{
+    flex: 0.1;
+    text-align: center;
+}
+.detallesProductos{
+    display:flex;
+
+    justify-content: space-around;
+
+}
+.detalleEliminar{
+    flex:0.3;
+}
+.encabezadoContainer{
+  
+}
+.containerUno{
+    display: flex;
+   justify-content: space-between;
+}
+.tituloDetalle1{
+    color: black;
+    font-size: 14px;
+    font-weight: 600;
+        flex: 1;
+    
+    text-align: center;
+}
 .totalesContainer{
     display: flex;
     flex: 1;
@@ -385,6 +442,7 @@
     font-size: 14px;
     font-weight: bold;   
         padding-top: 5%; 
+        text-align: center;
 }
 .contenedor-compra {
     display:flex;
@@ -446,26 +504,26 @@ text-align: center;
   width: 50%;
 }
 
-    .boton-consultar {
-        display: block;
-        display: inline-block;
-            margin-bottom: 0;
-        width: 100%;
-        border-radius: 3px;
-        height: 47px;
-        padding: 6px 12px;
-        font-size: 14px;
-        line-height: 1.42857143;
-        color: #fff;
-        background-color: #3c8dbc;
-        border-color: #367fa9;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    .boton-consultar1 {
+       display: block;
+    display: inline-block;
+    margin-bottom: 0;
+    
+    border-radius: 3px;
+    height: 30px;
+    /* padding: 6px 12px; */
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #fff;
+    background-color: #3c8dbc;
+    border-color: #367fa9;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .
     }
     /* Lista de facturas en espera*/
     .cabecera-derecha .lista-compras-espera{
@@ -473,24 +531,23 @@ text-align: center;
         display:flex;
         flex-wrap:wrap;
     }
-    
+    .box-body{
+        padding: 0px !important;
+    }
     .label-limpiar{
         font-weight: 600 !important;
-        font-size: 20px !important;
+        font-size: 16px !important;
         font-family: Roboto,sans-serif !important;
         color: #ffffff !important;
         text-shadow: 0px 0px 1px #ffffff;
         font-style: italic;
         text-align: left;
-        padding-left: 20px;
         line-height: 30px;
         border-collapse: separate;
         background-color: #f2f2f2;
         color: #000;
         text-align: center;
         cursor: pointer;
-        padding: 5px;
-        margin: 10px;
         border: none;
         text-align: center !important;
         background-color: black !important;
@@ -506,9 +563,7 @@ text-align: center;
     .cabecera-derecha .lista-compras-espera .compras-espera{
         display:block;
         width:90%;
-        padding:6px 0;
-        margin-bottom:20px;
-        margin-left:15px;
+        margin-bottom:4px;
         margin-right:5px;
         background:red;
         text-align:center;
@@ -621,51 +676,49 @@ text-align: center;
         font-weight: 600;
     }
     .campo {
-        display: block;
-        width: 100%;
-        height: 45px;
-        padding: 6px 16px;
-        font-size: 12px;
-        line-height: 1.42857143;
-        color: #555;
-        background-color: #fff;
-        background-image: none;
-        border: 1px solid #ccc;
-        border-radius: 2px;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        background-color: #fcfcfc;
-        border: 1px solid #ccc;
-        font: 14px verdana, arial, helvetica, sans-serif;
-        margin: 2px 0;
-        padding: 1px 2px;
-        overflow: visible;
-    }
-    .campodetalle {
+            display: block;
     width: 100%;
     height: 30px;
     padding: 6px 16px;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 1.42857143;
-    color:#333;
-    font-weight: bold;
+    color: #555;
     background-color: #fff;
     background-image: none;
     border: 1px solid #ccc;
-    border-radius: 2px;
+    /* border-radius: 2px; */
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
     -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
     -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    background-color: #fcfcfc;
     border: 1px solid #ccc;
     margin: 2px 0;
     padding: 1px 2px;
     overflow: visible;
+    }
+    .campodetalle {
+    width: 170px;
+    height: 30px;
+    /* padding: 6px 16px; */
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+    font-weight: bold;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    /* border-radius: 2px; */
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    /* box-shadow: inset 0 1px 1px rgba(0,0,0,.075); */
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    background-color: #fcfcfc;
+    /* border: 1px solid #ccc; */
+    margin: 2px 0;
+    padding: 1px 2px;
+    /* overflow: visible; */
 }
 .campodetalleDescuento {
     width: 100%;
@@ -689,6 +742,77 @@ text-align: center;
     margin: 2px 0;
     padding: 1px 2px;
     overflow: visible;
+}
+
+/*1024x768*/
+@media only screen and (max-width: 1024px) and (min-width:768px)  {
+    .campodetalle {
+    width: 145px;
+    height: 30px;
+    /* padding: 6px 16px; */
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+    font-weight: bold;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    /* border-radius: 2px; */
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    /* box-shadow: inset 0 1px 1px rgba(0,0,0,.075); */
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    background-color: #fcfcfc;
+    /* border: 1px solid #ccc; */
+    margin: 2px 0;
+    padding: 1px 2px;
+    /* overflow: visible; */
+}
+
+    .detalle1{
+        flex: 0.80 !important;
+        margin-left: 2% !important;
+        margin-right: 2% !important;
+        text-align: center;
+        margin-bottom: 1%;
+    }
+    .detalleEliminar{
+        flex:0;
+        margin-left: 0.5%;
+    }
+   .tituloDetalle1 {
+    color: black;
+    font-size: 14px;
+    font-weight: 600;
+    flex: 1.3;
+    text-align: left;
+}
+.campodetalleDescuento {
+    width: 188%;
+    height: 30px;
+    padding: 6px 16px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+    font-weight: bold;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    background-color: #fcfcfc;
+    border: 1px solid #ccc;
+    margin: 2px 0;
+    padding: 1px 2px;
+    overflow: visible;
+}
+
+
 }
 </style>
 

@@ -21,6 +21,7 @@
                         <div class="forma-impresion " id="imprimeme" name ="imprimeme">                        
                             <div class="ticket" id="ticket" name="ticket" > 
                                 <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 0}"><strong> {documentoElectronico} </strong><br></div>
+                                <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 1}"><strong> {$.i18n.prop("regimen.simplificado")} </strong><br></div>
                                 <div class="encabezado" show = "{facturaImpresa.tipoDoc == '87'}"><strong> {$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")} {facturaImpresa.id}                       </strong><br></div>
                                 <div class="encabezado"><strong> {facturaImpresa.empresa.nombreComercial}                        </strong><br></div>
                                 <div class="encabezado"><strong> {facturaImpresa.empresa.nombre}                        </strong></div>
