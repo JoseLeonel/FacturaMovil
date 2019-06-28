@@ -717,15 +717,37 @@
                             <!--Booking details-->
                             <article class="booking-details clearfix">
                                 <h1><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h1>
-                                    <div class="booking-info">
-                                        <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.subTotal")}  <span id="lblSubtotal"> {subTotalGeneral} </span></p>
-                                        <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos} </span></p>
-                                        <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {totalImpuesto} </span></p>
-                                        <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}</span></p>
+                                    <div class="containerTotales">
+                                        <div class="elementoTotales" >
+                                           <div class="tituloTotal">
+                                             {$.i18n.prop("factura.resumen.subTotal")}
+                                           </div>
+                                           <div class="valorTotal">  {subTotalGeneral} </div>
+                                        </div>
+                                        <div class="elementoTotales" >
+                                           <div class="tituloTotal">{$.i18n.prop("factura.resumen.descuento")}</div>
+                                           <div class="valorTotal">  {totalDescuentos}  </div>
+                                        </div>
+                                        <div class="elementoTotales" >
+                                           <div class="tituloTotal">{$.i18n.prop("factura.resumen.impuesto")}</div>
+                                           <div class="valorTotal">  {totalImpuesto}  </div>
+                                        </div>   
+                                        
+                                        <div class="elementoTotales" >   
+                                           <div class="tituloTotal">{$.i18n.prop("factura.resumen.impuestoServ")}</div>
+                                           <div class="valorTotal">  {totalImpuestoServ}   </div>
+                                        </div>
+                                        <div class="elementoTotales" >   
+                                           <div class="tituloTotal">{$.i18n.prop("factura.resumen.total")}</div>
+                                           <div class="valorTotal">  {totalComprobante}  </div>
+                                        </div>
+                                        <div class="elementoTotales" show={mostrarCamposIngresoContado}>   
+                                           <div class="tituloTotal">{$.i18n.prop("factura.resumen.cambio")}</div>
+                                           <div class="valorTotal">{totalCambioPagarSTR} </div>
+                                        </div>
+                                        
                                     </div>
-                                    <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado}>
-                                        <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span></p>    
-                                    </div>
+                                    
                             </article>
                         </aside>
                     </div><!-- fin box-body-->
@@ -738,9 +760,9 @@
             <div class="row" show={mostrarFormularioPago}>
                 <div   class="col-sx-12 col-sm-12 col-md-12 col-lg-12 " >
                     <!--Seccion de Billetes-->
-                    <section  class="lista-articulos" >
-                        <div class="billete-item" each={billetes}   onclick={_sumarBilletes}>
-                            <img style = "height:110px;width:180px" alt="" class="img-responsive " src="{imagen}">
+                     <section  class="lista-articulos" >
+                        <div class="billetes1" each={billetes}   onclick={_sumarBilletes}>
+                            <img  alt="" class="sizeBilletes" src="{imagen}">
                             <a href="#">{modena} {descripcion}</a>
                         </div>
                     </section>
@@ -749,6 +771,124 @@
             </div>       
         <!--Fin Ventana de los billetes-->  
 <style type="text/css">
+.billetes1{
+    margin-left: 1%;
+    /* margin-bottom: 9px; */
+    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.22);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: flex-start;
+}
+.tituloTotal{
+    font-weight: 600 !important;
+    font-size: 30px !important;
+    font-family: Roboto, sans-serif !important;
+    color:#d3ed17 !important;
+    text-shadow: 0px 0px 1px #ffffff;
+    font-style: italic;
+    text-align: left;
+    /* padding-left: 20px; */
+    /* line-height: 30px; */
+    border-collapse: separate;
+    text-align: center;
+    /* cursor: pointer; */
+    /* padding: 10px; */
+    /* margin: 20px; */
+    border: none;
+    text-align: center !important;
+
+}
+.valorTotal{
+    font-weight: 600 !important;
+    font-size: 30px !important;
+    font-family: Roboto, sans-serif !important;
+    color: #30ed17 !important;
+    text-shadow: 0px 0px 1px #ffffff;
+    font-style: italic;
+    text-align: left;
+    /* padding-left: 20px; */
+    /* line-height: 30px; */
+    border-collapse: separate;
+    text-align: center;
+    /* cursor: pointer; */
+    /* padding: 10px; */
+    /* margin: 20px; */
+    border: none;
+    text-align: center !important;
+
+}
+.containerTotales{
+    display:flex;
+    flex-direction: column;
+    background-color: black !important;
+    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+    border-radius: 5px;
+    -webkit-transition: background-color 100ms linear;
+    -moz-transition: background-color 100ms linear;
+    -o-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+}
+.elementoTotales{
+    display: flex;
+    justify-content: space-around;
+   
+}
+.sizeBilletes{
+    height:90px;
+    width:160px;
+}
+
+@media only screen and (max-width: 1024px) and (min-width:768px)  {
+.sizeBilletes{
+    height:90px;
+    width:160px;
+}
+.tituloTotal{
+    font-weight: 600 !important;
+    font-size: 20px !important;
+    font-family: Roboto, sans-serif !important;
+    color:#d3ed17 !important;
+    text-shadow: 0px 0px 1px #ffffff;
+    font-style: italic;
+    text-align: left;
+    border-collapse: separate;
+    text-align: center;
+    border: none;
+    text-align: center !important;
+
+}
+.valorTotal{
+    font-weight: 600 !important;
+    font-size: 20px !important;
+    font-family: Roboto, sans-serif !important;
+    color: #30ed17 !important;
+    text-shadow: 0px 0px 1px #ffffff;
+    font-style: italic;
+    text-align: left;
+    border-collapse: separate;
+    text-align: center;
+    border: none;
+    text-align: center !important;
+
+}
+.containerTotales{
+    display:flex;
+    flex-direction: column;
+    background-color: black !important;
+    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+    border-radius: 5px;
+    -webkit-transition: background-color 100ms linear;
+    -moz-transition: background-color 100ms linear;
+    -o-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+}
+
+
+
+}
 .labelDetalleVenta {
     display: inline;
     padding: .2em .6em .3em;
