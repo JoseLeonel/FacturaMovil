@@ -44,24 +44,18 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.codigo")}  <span class="requeridoDato">*</span></label>
                                     <input type="text" class="campoNumerico codigo" id="codigo" name="codigo" value="{articulo.codigo}"  onkeypress={__Consulta} autofocus="autofocus">
                                 </div>
-                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.descripcion")}  <span class="requeridoDato">*</span></label>
                                     <input type="text" class="campo descripcion" id="descripcion" name="descripcion" value="{articulo.descripcion}"  >
                                 </div>
-                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.categoria")}  <span class="requeridoDato">*</span></label>
                                     <select  class="campo selectCategoria"   name="categoria"  data-live-search="true">
                                         <option  each={categorias.aaData}  data-tokens ={descripcion} value="{id}" selected="{articulo.categoria.id ==id?true:false}" >{descripcion}</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
-                                    <label class="tamanoLetraTotales">{$.i18n.prop("articulo.tipoCodigo")}<span class="requeridoDato">*</span></label>
-                                    <select  class="campo selectTipoCodigo" id="tipoCodigo" name="tipoCodigo"  >
-                                        <option  each={tipoCodigos}  value="{codigo}" selected="{articulo.tipoCodigo ==codigo?true:false}"  >{descripcion}</option>
                                     </select>
                                 </div>
 
@@ -71,41 +65,53 @@
                                     <label class="tamanoLetraTotales"  >{$.i18n.prop("articulo.costo")} </label>
                                     <input type="number" step="any" class="campoNumerico costo" id="costo" name="costo" value="{articulo.costo}"  onkeyup ={__ActualizarPreciosCosto}>
                                 </div>
-
-                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
-                                    <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.precioPublico")}  <span class="requeridoDato">*</span></label>
-                                    <input type="number" step="any" class="campoNumerico precioPublico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoGananciaPublico} value="{articulo.precioPublico}"  >
-                                </div>
                                 <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.gananciaPrecioPublico")}%  </label>
                                     <input type="number" step="any" class="campoNumerico gananciaPrecioPublico" id="gananciaPrecioPublico" name="gananciaPrecioPublico"  value="{articulo.gananciaPrecioPublico}"  onkeyup ={__CalculoGananciaSinPrecioPublico}>
+                                </div>
+                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
+                                    <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.precioPublico")}  <span class="requeridoDato">*</span></label>
+                                    <input type="number" step="any" class="campoNumerico precioPublico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoGananciaPublico} value="{articulo.precioPublico}"  >
                                 </div>
 
                             </div>    
                         </div>                  
                         <div class="tab-pane "   show={impuestosIVAIPantalla == true}>  
                             <div class="row">
-                                <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
                                     <label class="tamanoLetraTotales">{$.i18n.prop("articulo.tipoImpuesto")}<span class="requeridoDato">*</span></label>
                                     <select onchange= {__asignarImpuesto} class="campo selectTipoImpuesto" id="tipoImpuesto" name="tipoImpuesto"  >
                                     
                                         <option  each={impuestos}  value="{codigo}" selected="{articulo.tipoImpuesto ==codigo?true:false}"  >{descripcion}</option>
                                     </select>
                                 </div>
+                                <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
+                                    <label class="tamanoLetraTotales">{$.i18n.prop("articulo.codigoTarifa")}</label>
+                                    <select  onchange= {__AsignarTarifa} class="campo selectCodigoTarifa1" id="codigoTarifa" name="codigoTarifa"  >
+                                        <option  each={tarifas1.aaData}  value="{codigoTarifa}" selected="{articulo.codigoTarifa ==codigoTarifa?true:false}"  >{tarifaIVAI.descripcion}</option>
+                                     </select>
+                                </div>
 
-                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                <div class= "col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.impuesto")}  </label>
                                     <input type="number" step="any" class="campoNumerico impuesto" id="impuesto" name="impuesto" value="{articulo.impuesto}"  onkeyup ={__ActualizarPreciosImpuestos}>
                                 </div>
                             </div>    
                             <div class="row">  
-                                <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
                                     <label class="tamanoLetraTotales">{$.i18n.prop("articulo.tipoImpuesto1")}</label>
                                     <select onchange= {__asignarImpuesto1} class="campo selectTipoImpuesto1" id="tipoImpuesto1" name="tipoImpuesto1"  >
                                         <option  each={impuestos1}  value="{codigo}" selected="{articulo.tipoImpuesto1 ==codigo?true:false}"  >{descripcion}</option>
                                     </select>
                                 </div>
-                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
+                                       <label class="tamanoLetraTotales">{$.i18n.prop("articulo.codigoTarifa2")}</label>
+                                        <select onchange= {__AsignarTarifa1} class="campo selectCodigoTarifa2" id="codigoTarifa1" name="codigoTarifa1"  >
+                                            <option  each={tarifas2.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa1 ==codigoTarifa?true:false}" >{tarifaIVAI.descripcion}</option>
+                                        </select>
+                                </div>
+
+                                <div class= "col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
                                     <label  class="tamanoLetraTotales">{$.i18n.prop("articulo.impuesto1")}  </label>
                                     <input type="number" step="any" class=" impuesto1 campoNumerico" id="impuesto1" name="impuesto1" value="{articulo.impuesto1}"  onkeyup ={__CalculoImpuesto1}>
                                 </div>
@@ -141,6 +147,19 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                   <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.estado")}</label>
+                                    <select  class="campo" id="estado" name="estado"  >
+                                        <option  each={estados}  value="{codigo}" selected="{articulo.estado ==codigo?true:false}" >{descripcion}</option>
+                                    </select>
+                                </div>                          
+
+                               <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                   <label class="tamanoLetraTotales">{$.i18n.prop("articulo.tipoCodigo")}<span class="requeridoDato">*</span></label>
+                                    <select  class="campo selectTipoCodigo" id="tipoCodigo" name="tipoCodigo"  >
+                                        <option  each={tipoCodigos}  value="{codigo}" selected="{articulo.tipoCodigo ==codigo?true:false}"  >{descripcion}</option>
+                                    </select>
+                                </div>
                                 <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
                                     <label  class="tamanoLetraTotales">{$.i18n.prop("articulo.consecutivoCompra")} </label>
                                     <input type="text" step="any" class="campo form-control "  value="{articulo.consecutivoCompra}"  readonly>
@@ -149,16 +168,13 @@
                                         <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.fechaUltimaCompra")} </label>
                                         <input type="text" step="any" class="campo form-control "  value="{articulo.fechaUltimaCompraSTR}"  readonly>
                                 </div>
-                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                            </div>
+                            <div class="row">
+                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.updated_at")}  </label>
                                     <input type="text" class="form-control campo"  value="{articulo.updated_atSTR}" readonly >
                                 </div>
-                                <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
-                                   <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.estado")}</label>
-                                    <select  class="campo" id="estado" name="estado"  >
-                                        <option  each={estados}  value="{codigo}" selected="{articulo.estado ==codigo?true:false}" >{descripcion}</option>
-                                    </select>
-                                </div>                          
+
                             </div>
          
                         </div>
@@ -313,6 +329,20 @@ self.on('mount',function(){
              $(".errorServerSideJgrid").remove();
         }, false );
 })
+__AsignarTarifa(){
+    self.articulo.impuesto = getMontoImpuesto(self.articulo.tipoImpuesto,$('#codigoTarifa').val(),self.tarifas1.aaData)
+    self.update()
+    actualizarPreciosImpuestosMayorista()
+    actualizarPreciosImpuestosPublico()
+    actualizarPreciosImpuestosEspecial()
+}
+__AsignarTarifa1(){
+    self.articulo.impuesto1 = getMontoImpuesto(self.articulo.tipoImpuesto1,$('#codigoTarifa1').val(),self.tarifas2.aaData)
+    self.update()
+    actualizarPreciosImpuestosMayorista()
+    actualizarPreciosImpuestosPublico()
+    actualizarPreciosImpuestosEspecial()
+}
 precioPantallaClick(){
     self.precioPantalla = true
     self.impuestosIVAIPantalla = false
@@ -333,6 +363,63 @@ otrosPantallaClick(){
     self.update()
 
 }
+function getMontoTarifa(tipoImpuesto,codigoTarifa,array) {
+  return array.filter(
+    function(data) {
+      return data.tipoImpuesto == tipoImpuesto && data.codigoTarifa == codigoTarifa?data.monto:0
+    }
+  );
+}
+function getMontoImpuesto(tipoImpuesto,codigoTarifa,array){
+    if(tipoImpuesto.length ==0){
+        return 0
+    }
+    if(tipoImpuesto ==null){
+        return 0
+    }
+    var valor = getMontoTarifa(tipoImpuesto,codigoTarifa,array);
+    valor = valor !=null?valor[0]:null
+    return valor == null?0:valor.monto
+}
+
+/**
+*  Mostrar listado datatable Categorias Actimpuestos
+**/
+function __listadoTarifasByTipoImpuesto(tipoImpuesto,indicador){
+    var selector = ""
+    $.ajax({
+         url: "ListarTarifasByTipoImpuestoAjax.do",
+        datatype: "json",
+         data: {tipoImpuesto:tipoImpuesto},
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                // Tipo de impuesto 1
+                if(indicador ==1 ){
+                    self.tarifas1 =  result
+                     self.update()
+                    self.articulo.impuesto = getMontoImpuesto(self.articulo.tipoImpuesto,$('#codigoTarifa').val(),self.tarifas1.aaData)
+                    self.update()
+  
+                }
+                // Tipo de impuesto 2
+                if(indicador ==2 ){
+                    self.tarifas2 =  result
+                    self.update();
+                }
+
+              
+
+    
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+}
+
 /**
 *  Consultar  especifico
 * 1  Mostrar  2  Modificar
@@ -384,6 +471,10 @@ otrosPantallaClick(){
                         $('.descripcion').val(modeloTabla.descripcion)
                         $('.precioPublico').val(modeloTabla.precioPublico)
                          $('.precioPublico').focus().select()
+
+                        __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto1,2)
+
+                        __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
                         
                     });
                    
