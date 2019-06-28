@@ -1069,15 +1069,35 @@
                             <!--Booking details-->
                             <article class="booking-details clearfix">
                                 <h1><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h1>
-                                    <div class="booking-info">
-                                        <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.subTotal")}  <span id="lblSubtotal"> {subTotalGeneral} </span></p>
-                                        <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos} </span></p>
-                                        <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {totalImpuesto} </span></p>
-                                        <p class="total label-totales" style="text-align:right">{$.i18n.prop("factura.resumen.impuestoServ")} :  <span id="lblSubtotal"> {totalImpuestoServ} </span></p>
-                                        <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}</span></p>
-                                    </div>
-                                    <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado}>
-                                        <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span></p>    
+                                    <div class="containerTotales">
+                                        <div class="elementoTotales" >
+                                           <div class="tituloTotal">
+                                             {$.i18n.prop("factura.resumen.subTotal")}
+                                           </div>
+                                           <div class="valorTotal">  {subTotalGeneral} </div>
+                                        </div>
+                                        <div class="elementoTotales" >
+                                           <div class="tituloTotal">{$.i18n.prop("factura.resumen.descuento")}</div>
+                                           <div class="valorTotal">  {totalDescuentos}  </div>
+                                        </div>
+                                        <div class="elementoTotales" >
+                                           <div class="tituloTotal">{$.i18n.prop("factura.resumen.impuesto")}</div>
+                                           <div class="valorTotal">  {totalImpuesto}  </div>
+                                        </div>   
+                                        
+                                        <div class="elementoTotales" >   
+                                           <div class="tituloTotal">{$.i18n.prop("factura.resumen.impuestoServ")}</div>
+                                           <div class="valorTotal">  {totalImpuestoServ}   </div>
+                                        </div>
+                                        <div class="elementoTotales" >   
+                                           <div class="tituloTotal">{$.i18n.prop("factura.resumen.total")}</div>
+                                           <div class="valorTotal">  {totalComprobante}  </div>
+                                        </div>
+                                        <div class="elementoTotales" show={mostrarCamposIngresoContado}>   
+                                           <div class="tituloTotal">{$.i18n.prop("factura.resumen.cambio")}</div>
+                                           <div class="valorTotal">{totalCambioPagarSTR} </div>
+                                        </div>
+                                        
                                     </div>
                             </article>
                         </aside>
@@ -1092,8 +1112,8 @@
                 <div   class="col-sx-12 col-sm-12 col-md-12 col-lg-12 " >
                     <!--Seccion de Billetes-->
                     <section  class="lista-articulos" >
-                        <div class="billete-item" each={billetes}   onclick={_sumarBilletes}>
-                            <img style = "height:110px;width:180px" alt="" class="img-responsive " src="{imagen}">
+                        <div class="billetes1" each={billetes}   onclick={_sumarBilletes}>
+                            <img  alt="" class="sizeBilletes" src="{imagen}">
                             <a href="#">{modena} {descripcion}</a>
                         </div>
                     </section>
@@ -1102,6 +1122,125 @@
             </div>       
         <!--Fin Ventana de los billetes--> 
 <style type="text/css">
+.billetes1{
+    margin-left: 1%;
+    /* margin-bottom: 9px; */
+    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.22);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: flex-start;
+}
+.tituloTotal{
+    font-weight: 600 !important;
+    font-size: 30px !important;
+    font-family: Roboto, sans-serif !important;
+    color:#d3ed17 !important;
+    text-shadow: 0px 0px 1px #ffffff;
+    font-style: italic;
+    text-align: left;
+    /* padding-left: 20px; */
+    /* line-height: 30px; */
+    border-collapse: separate;
+    text-align: center;
+    /* cursor: pointer; */
+    /* padding: 10px; */
+    /* margin: 20px; */
+    border: none;
+    text-align: center !important;
+
+}
+.valorTotal{
+    font-weight: 600 !important;
+    font-size: 30px !important;
+    font-family: Roboto, sans-serif !important;
+    color: #30ed17 !important;
+    text-shadow: 0px 0px 1px #ffffff;
+    font-style: italic;
+    text-align: left;
+    /* padding-left: 20px; */
+    /* line-height: 30px; */
+    border-collapse: separate;
+    text-align: center;
+    /* cursor: pointer; */
+    /* padding: 10px; */
+    /* margin: 20px; */
+    border: none;
+    text-align: center !important;
+
+}
+.containerTotales{
+    display:flex;
+    flex-direction: column;
+    background-color: black !important;
+    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+    border-radius: 5px;
+    -webkit-transition: background-color 100ms linear;
+    -moz-transition: background-color 100ms linear;
+    -o-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+}
+.elementoTotales{
+    display: flex;
+    justify-content: space-around;
+   
+}
+.sizeBilletes{
+    height:90px;
+    width:160px;
+}
+
+@media only screen and (max-width: 1024px) and (min-width:768px)  {
+.sizeBilletes{
+    height:90px;
+    width:160px;
+}
+.tituloTotal{
+    font-weight: 600 !important;
+    font-size: 20px !important;
+    font-family: Roboto, sans-serif !important;
+    color:#d3ed17 !important;
+    text-shadow: 0px 0px 1px #ffffff;
+    font-style: italic;
+    text-align: left;
+    border-collapse: separate;
+    text-align: center;
+    border: none;
+    text-align: center !important;
+
+}
+.valorTotal{
+    font-weight: 600 !important;
+    font-size: 20px !important;
+    font-family: Roboto, sans-serif !important;
+    color: #30ed17 !important;
+    text-shadow: 0px 0px 1px #ffffff;
+    font-style: italic;
+    text-align: left;
+    border-collapse: separate;
+    text-align: center;
+    border: none;
+    text-align: center !important;
+
+}
+.containerTotales{
+    display:flex;
+    flex-direction: column;
+    background-color: black !important;
+    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+    border-radius: 5px;
+    -webkit-transition: background-color 100ms linear;
+    -moz-transition: background-color 100ms linear;
+    -o-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+}
+
+
+
+}
+
     .clickable {
         cursor: pointer;
     }
@@ -1409,7 +1548,6 @@ td.col-xl-12, th.col-xl-12 {
     	    totalCredito:0,
     	    montoCambio:0,
     	    totalCambio:0,
-            totalCambioPagar:0,
     	    codigoMoneda:"",
     	    estado:0,
     	    cliente:{
@@ -2287,6 +2425,7 @@ function imprimirTiquete(){
 **/
 __TotalDeEfectivoAPagar(e){
     self.totalCambioPagar    = 0
+    self.totalCambioPagarSTR =0
     self.update()
     _calculoEnterPago()  
 }
@@ -2295,6 +2434,7 @@ __TotalDeEfectivoAPagar(e){
 **/
 __TotalDeTarjetaAPagar(e){
     self.totalCambioPagar    = 0
+    self.totalCambioPagarSTR =0
     self.update()
     _calculoEnterPago()  
 }
@@ -2303,6 +2443,7 @@ __TotalDeTarjetaAPagar(e){
 **/
 __TotalDeBancoAPagar(e){
     self.totalCambioPagar    = 0
+    self.totalCambioPagarSTR =0
     self.update()
     _calculoEnterPago()  
 }
@@ -2311,6 +2452,7 @@ __TotalDeBancoAPagar(e){
 **/
 __CalculaCambioAEntregarOnblur(e){
     self.totalCambioPagar    = 0
+    self.totalCambioPagarSTR =0
     self.update()
    _calculoEnterPago()  
 }
@@ -2319,6 +2461,7 @@ __CalculaCambioAEntregarOnblur(e){
 **/
 __CalculaCambioAEntregarKeyPress(e){
     self.totalCambioPagar    = 0
+    self.totalCambioPagarSTR =0
     self.update()
      _calculoEnterPago()  
 }
@@ -2656,8 +2799,7 @@ function __Init(){
 	    totalCredito:0,
 	    montoCambio:0,
 	    totalCambio:0,
-        totalCambioPagar:0,
-	    codigoMoneda:"",
+        codigoMoneda:"",
 	    estado:0,
 	    cliente:{
             id:0,
@@ -2746,6 +2888,7 @@ function __Init(){
     self.totalImpuesto    =0;
     self.totalImpuestoServ=0;
     self.totalCambioPagar =0;
+    self.totalCambioPagarSTR =0
     self.pesoPrioridad =  0
     self.numeroLinea =0
     self.cantArticulos =0
@@ -2822,7 +2965,6 @@ function __InitDatos(){
 	    totalCredito:0,
 	    montoCambio:0,
 	    totalCambio:0,
-        totalCambioPagar:0,
 	    codigoMoneda:"",
 	    estado:0,
 	    cliente:{
@@ -2887,6 +3029,7 @@ function __InitDatos(){
     self.totalImpuesto    =0;
     self.totalImpuestoServ =0;		  
     self.totalCambioPagar =0;
+    self.totalCambioPagarSTR =0
     self.pesoPrioridad =  0
     self.numeroLinea =0
     self.cantArticulos =0
@@ -2935,6 +3078,7 @@ function cargarDetallesFacturaEnEspera(data){
             self.factura.totalBanco       = 0
             self.factura.totalTarjeta     = 0
             self.factura.totalCambioPagar = 0
+            self.totalCambioPagarSTR =0
             self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
             self.cliente  = self.factura.cliente
             self.vendedor = self.factura.vendedor    
@@ -2962,6 +3106,7 @@ function cargarDetallesFacturaEnEspera(data){
         self.update()
     })
     self.totalCambioPagar = 0
+    self.totalCambioPagarSTR =0
     self.update()
      __calculate(); 
 }
@@ -3083,6 +3228,7 @@ _AtrasFacturaFinal(){
     self.factura.totalTarjeta =0
     self.factura.totalBanco =0
     self.totalCambioPagar =0
+    self.totalCambioPagarSTR =0
    self.mostrarFormularioPago = false
    self.mostarParaCrearNuevaVentas = true;
    self.mostrarSepararCuenta	= false //true
@@ -3141,6 +3287,7 @@ function mostrarPAgo(){
     self.primeraVezBilleteClick = false
     self.mostarParaCrearNuevaVentas = false
     self.factura.totalCambioPagar =0
+    self.totalCambioPagarSTR =0
     self.mostarParaCrearNuevaFactura = false
     self.mostrarFormularioPago = true
     self.totalCambioPagar =0
@@ -4082,6 +4229,7 @@ function __Teclas(){
       if(self.mostrarFormularioPago == false && self.mostarParaCrearNuevaVentas == true){
         self.factura.totalCambioPagar =__valorNumerico(self.factura.totalComprobante)   
         self.totalCambioPagar = redondeoDecimales(self.factura.totalComprobante,2)
+        self.totalCambioPagarSTR =formatoDecimales(self.totalCambioPagar,2)
          self.primeraVezBilleteClick == false
         self.update()
         $(".totalEfectivo").val(self.totalCambioPagar)
@@ -4130,6 +4278,7 @@ _sumarBilletes(e){
        self.factura.totalBanco    = 0
        self.factura.totalCambioPagar  = 0
        self.totalCambioPagar = 0
+       self.totalCambioPagarSTR =0
        self.claseCambioDinero     = "entregarCambioPositivo"
        $(".totalEfectivo").val(null) 
     }else{
@@ -4145,6 +4294,7 @@ _sumarBilletes(e){
         self.totalCambioPagar = redondeoDecimales(self.factura.totalCambioPagar,2)
          $(".totalEfectivo").val(self.factura.totalEfectivo)
         $('.efectivo').val(self.totalCambioPagar)
+        self.totalCambioPagarSTR =formatoDecimales(self.totalCambioPagar,2)
 
 
     }
@@ -4592,7 +4742,6 @@ function mostrarSeperarCuentasFun(){
 	    totalCredito:0,
 	    montoCambio:0,
 	    totalCambio:0,
-	    totalCambioPagar:0,
 	    codigoMoneda:"",
 	    estado:0,
 	    cliente:{
@@ -4798,7 +4947,6 @@ function cargaFacturaRespaldo(){
     self.facturaRespaldo.totalCredito = self.factura.totalCredito;
     self.facturaRespaldo.montoCambio = self.factura.montoCambio;
     self.facturaRespaldo.totalCambio = self.factura.totalCambio;
-    self.facturaRespaldo.totalCambioPagar = self.factura.totalCambioPagar;
     self.facturaRespaldo.codigoMoneda = self.factura.codigoMoneda;
     self.facturaRespaldo.estado = self.factura.estado;
     self.facturaRespaldo.cliente.id = self.factura.cliente.id;
@@ -4844,7 +4992,6 @@ function cargaFacturaConRespaldo(){
     self.factura.totalCredito = self.facturaRespaldo.totalCredito;
     self.factura.montoCambio = self.facturaRespaldo.montoCambio;
     self.factura.totalCambio = self.facturaRespaldo.totalCambio;
-    self.factura.totalCambioPagar = self.facturaRespaldo.totalCambioPagar;
     self.factura.codigoMoneda = self.facturaRespaldo.codigoMoneda;
     self.factura.estado = self.facturaRespaldo.estado;
     self.factura.cliente.id = self.facturaRespaldo.cliente.id;
@@ -5035,6 +5182,7 @@ __AtrasSepararCuentas(){
     self.factura.totalTarjeta =0
     self.factura.totalBanco =0
     self.totalCambioPagar =0
+    self.totalCambioPagarSTR =0
    self.mostrarFormularioPago = false
    self.mostarParaCrearNuevaVentas = true;
    self.mostrarSepararCuenta	= false //true
