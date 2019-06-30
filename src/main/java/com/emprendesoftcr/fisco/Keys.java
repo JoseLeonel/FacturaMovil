@@ -47,6 +47,7 @@ public class Keys{
     public static final String XML_MENSAJE = "Mensaje";
     public static final String XML_DETALLE_MENSAJE = "DetalleMensaje";
     public static final String XML_MONTO_TOTAL_IMPUESTO = "MontoTotalImpuesto";
+    public static final String XML_CODIGO_ACTIVIDAD = "CodigoActividad";
     public static final String XML_TOTAL_FACTURA = "TotalFactura";
     public static final String FECHA = "fecha";
     public static final String INDICATIVO_ESTADO = "ind-estado";

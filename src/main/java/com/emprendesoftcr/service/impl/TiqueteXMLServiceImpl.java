@@ -48,7 +48,7 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 		try			{
 			Certificado certificado  = certificadoBo.findByEmpresa(empresa);
 			if(certificado !=null) {
-				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_TIQUETE,fecha);	
+				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_TIQUETE_4_3,fecha);	
 			}else {
 				log.info("** Error  Empresa no se encuentra el certificado: " + empresa.getNombre());
 			}
@@ -100,10 +100,10 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 	
 		
 					 String date = FacturaElectronicaUtils.rfc3339(factura.getFechaEmision());
-		   resultado = "<TiqueteElectronico xmlns=\"" + Constantes.DOCXMLS_TIQUETE + "\" " +
+		   resultado = "<TiqueteElectronico xmlns=\"" + Constantes.DOCXMLS_TIQUETE_4_3 + "\" " +
 		                "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
 		        "<Clave>" + factura.getClave() + "</Clave>" +
-		        "<CodigoActividad>" + factura.getEmpresa().getCodigoActividad() + "</CodigoActividad>" + 
+		        "<CodigoActividad>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getCodigoActividad(),Constantes.FORMATO_CODIGO_ACTIVIDAD) + "</CodigoActividad>" + 
 		          
 		        "<NumeroConsecutivo>" + factura.getNumeroConsecutivo() + "</NumeroConsecutivo>" +
 		        "<FechaEmision>" + date + "</FechaEmision>" +
@@ -129,7 +129,8 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 		        "<CondicionVenta>" + factura.getCondicionVenta() + "</CondicionVenta>" +
 		        "<PlazoCredito>" + FacturaElectronicaUtils.replazarConZeros(factura.getPlazoCredito() !=null?factura.getPlazoCredito().toString():Constantes.ZEROS.toString(),Constantes.FORMATO_PLAZO_CREDITO) + "</PlazoCredito>"  
 		         + getMedioPago(factura) +
-		        "<DetalleServicio>" + xmlDetalleServicio(factura) + "</DetalleServicio>" +
+		        "<DetalleServicio>" + xmlDetalleServicio(factura) + "</DetalleServicio>" 
+		        + getOtrosCargos(factura) +
 		        "<ResumenFactura>" +
 		            getCodigoMoneda(factura.getCodigoMoneda(),factura.getTipoCambio())+
 		            "<TotalServGravados>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalServGravados()) + "</TotalServGravados>" +
@@ -164,6 +165,28 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 		}
     return resultado;
 		
+	}
+	
+	private String getOtrosCargos(Factura factura) {
+		String resultado = Constantes.EMPTY;
+		
+		try {
+			if(factura.getTotalOtrosCargos() ==null) {
+				return resultado;
+			}
+			if(factura.getTotalOtrosCargos() > Constantes.ZEROS_DOUBLE) {
+	  		 resultado = "<OtrosCargos>" +
+	                       "<TipoDocumento>" + factura.getTipoDocumentoOtroCargo().trim() + "</TipoDocumento>" +
+	                        "<Detalle>" + factura.getDetalleOtroCargo().trim() + "</Detalle>" +
+	 	                     "<MontoCargo>" + FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalOtrosCargos()) +"</MontoCargo>";
+	 	     resultado += "</OtrosCargos>";
+	     }
+			
+		} catch (Exception e) {
+			log.info("** Error  getTelefono: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+		return resultado;
 	}
 	
 	private String getCodigoMoneda(String codigoMoneda,Double tipoCambio) throws Exception {

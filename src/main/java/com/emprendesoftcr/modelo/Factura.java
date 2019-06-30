@@ -204,6 +204,11 @@ public class Factura implements Serializable {
 	@Column(name = "total_otros_cargos", columnDefinition = "Decimal(10,5) default '0.00'")
 	private Double						totalOtrosCargos;
 
+	@Column(name = "tipo_otros_doc", columnDefinition = "varchar(2)", length = 2)
+	private String						tipoDocumentoOtroCargo;
+	@Column(name = "deta_otros_doc", columnDefinition = "varchar(60)", length = 2)
+	private String						detalleOtroCargo;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "created_at")
@@ -246,7 +251,7 @@ public class Factura implements Serializable {
 	}
 
 	public Factura(Long id, Date fechaCredito, String numeroConsecutivo, String consecutivoProforma, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon, Date referenciaFechaEmision, String medioEfectivo, String medioTarjeta, String medioBanco, String nombreFactura, String correoAlternativo, String direccion, String nota, String comanda, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto,
-			Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Integer tieneIS, Double pesoTransporteTotal, Double totalServExonerado, Double totalMercExonerada, Double totalExonerado, Double totalIVADevuelto, Double totalOtrosCargos, Date created_at, Date updated_at, Integer versionEsquemaXML, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Mesa mesa) {
+			Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Integer tieneIS, Double pesoTransporteTotal, Double totalServExonerado, Double totalMercExonerada, Double totalExonerado, Double totalIVADevuelto, Double totalOtrosCargos, String tipoDocumentoOtroCargo, String detalleOtroCargo, Date created_at, Date updated_at, Integer versionEsquemaXML, Cliente cliente, Empresa empresa, Vendedor vendedor, Usuario usuarioCreacion, Mesa mesa) {
 		super();
 		this.id = id;
 		this.fechaCredito = fechaCredito;
@@ -303,6 +308,8 @@ public class Factura implements Serializable {
 		this.totalExonerado = totalExonerado;
 		this.totalIVADevuelto = totalIVADevuelto;
 		this.totalOtrosCargos = totalOtrosCargos;
+		this.tipoDocumentoOtroCargo = tipoDocumentoOtroCargo;
+		this.detalleOtroCargo = detalleOtroCargo;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.versionEsquemaXML = versionEsquemaXML;
@@ -311,6 +318,22 @@ public class Factura implements Serializable {
 		this.vendedor = vendedor;
 		this.usuarioCreacion = usuarioCreacion;
 		this.mesa = mesa;
+	}
+
+	public String getTipoDocumentoOtroCargo() {
+		return tipoDocumentoOtroCargo;
+	}
+
+	public void setTipoDocumentoOtroCargo(String tipoDocumentoOtroCargo) {
+		this.tipoDocumentoOtroCargo = tipoDocumentoOtroCargo;
+	}
+
+	public String getDetalleOtroCargo() {
+		return detalleOtroCargo;
+	}
+
+	public void setDetalleOtroCargo(String detalleOtroCargo) {
+		this.detalleOtroCargo = detalleOtroCargo;
 	}
 
 	public Integer getVersionEsquemaXML() {

@@ -13,6 +13,7 @@ import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.fisco.RespuestaHaciendaXML;
 import com.emprendesoftcr.modelo.Certificado;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.service.FirmaElectronicaService;
 import com.emprendesoftcr.service.RespuestaHaciendaXMLService;
 
@@ -27,13 +28,14 @@ public class RespuestaHaciendaXMLServiceImpl implements RespuestaHaciendaXMLServ
 	private FirmaElectronicaService firmaElectronicaService;
 	
 	@Override
-	public String getFirmarXML(String xmlString, Empresa empresa) throws Exception{
+	public String getFirmarXML(String xmlString, Empresa empresa,Factura factura) throws Exception{
 		String resultado = Constantes.EMPTY;
 		try {
 		
 			Certificado certificado  = certificadoBo.findByEmpresa(empresa);
+			String esquemaXML = factura.getVersionEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2)?Constantes.DOCXMLS_RESPUESTA_HACIENDA_4_2:Constantes.DOCXMLS_RESPUESTA_HACIENDA_4_3;
       if(certificado !=null) {
-      	resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_RESPUESTA_HACIENDA,null);	
+      	resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, esquemaXML,null);	
       } 		
       
 		} catch (Exception e) {
@@ -44,10 +46,11 @@ public class RespuestaHaciendaXMLServiceImpl implements RespuestaHaciendaXMLServ
 	}
 
 	@Override
-	public String getCrearXMLSinFirma(RespuestaHaciendaXML respuestaHacienda) throws Exception {
+	public String getCrearXMLSinFirma(RespuestaHaciendaXML respuestaHacienda,Factura factura) throws Exception {
 		String xml = Constantes.EMPTY;
 		try {
-			xml = "<MensajeHacienda xmlns=\"" + Constantes.DOCXMLS_RESPUESTA_HACIENDA + "\" " +
+			String esquemaXML = factura.getVersionEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2)?Constantes.DOCXMLS_RESPUESTA_HACIENDA_4_2:Constantes.DOCXMLS_RESPUESTA_HACIENDA_4_3;
+			xml = "<MensajeHacienda xmlns=\"" + esquemaXML + "\" " +
 	        "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
 	         "<Clave>" + respuestaHacienda.getClave()                                           + "</Clave>" +
 	        "<NombreEmisor>" + respuestaHacienda.getNombreEmisor()                              + "</NombreEmisor>" +

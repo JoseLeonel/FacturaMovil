@@ -14,6 +14,7 @@
                 </div>
                 <div class="box-body">
                     <form id = "formulario" name ="formulario "   class="advanced-search-form">
+                            <input type="hidden" name="id" id="id" value="{articulo.id}">
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-itemPrecio" onclick={precioPantallaClick}>
                                 <a class="nav-link "  data-toggle="tab" href="#itemPrecio" role="tab" aria-controls="itemPrecio"
@@ -96,7 +97,7 @@
                                     <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra">{$.i18n.prop("articulo.codigoTarifa")}</label>
                                         <select  onchange= {__AsignarTarifa} class="form-control selectCodigoTarifa1" id="codigoTarifa" name="codigoTarifa"  >
-                                            <option  each={tarifas1.aaData}  value="{codigoTarifa}" selected="{articulo.codigoTarifa ==codigoTarifa?true:false}"  >{tarifaIVAI.descripcion}</option>
+                                            <option  each={tarifas1.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa ==tarifaIVAI.codigoTarifa && articulo.tipoImpuesto ==tipoImpuesto ?true:false}"  >{tarifaIVAI.descripcion}</option>
                                         </select>
                                     </div>
                                     <div class= "col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
@@ -114,7 +115,7 @@
                                     <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra">{$.i18n.prop("articulo.codigoTarifa2")}</label>
                                         <select onchange= {__AsignarTarifa1} class="form-control selectCodigoTarifa2" id="codigoTarifa1" name="codigoTarifa1"  >
-                                            <option  each={tarifas2.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa1 ==codigoTarifa?true:false}" >{tarifaIVAI.descripcion}</option>
+                                            <option  each={tarifas2.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa1 ==tarifaIVAI.codigoTarifa?true:false}" >{tarifaIVAI.descripcion}</option>
                                         </select>
                                     </div>
                                     <div class= "col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
@@ -218,7 +219,7 @@
                             </div>
                             
                           
-                        <input type="hidden" name="id" id="id" value="{articulo.id}">
+                       
                     </form>    
                 </div>
                 <div class="box-footer">
@@ -551,7 +552,7 @@ otrosPantallaClick(){
 function getMontoTarifa(tipoImpuesto,codigoTarifa,array) {
   return array.filter(
     function(data) {
-      return data.tipoImpuesto == tipoImpuesto && data.codigoTarifa == codigoTarifa?data.monto:0
+      return data.tipoImpuesto == tipoImpuesto && data.tarifaIVAI.codigoTarifa == codigoTarifa?data.monto:0
     }
   );
 }
@@ -572,78 +573,71 @@ function getMontoImpuesto(tipoImpuesto,codigoTarifa,array){
 * 1  Mostrar  2  Modificar
 **/
  function __Consulta(){
-   
-                    LimpiarArticulo()
-                    
-                    
-                    self.update()
-                    //Agregar
-                    if(self.parametros.tipoEjecucion ==1){
-                        self.mostrarTituloArticulo     = true  
-                        self.mostrarFormulario = true
-                         self.botonModificar = false
-                        self.mostrarFormularioEntrada    = false
-                        self.botonAgregar = true
-                        
-                        self.precioPantalla = true
-                        self.impuestosIVAIPantalla = false
-                        self.otrosPantalla = false                        
-                        self.update()
-                        $("#formulario").validate(reglasDeValidacion());     
-
-                    }   
-                    //modificar
-                    if(self.parametros.tipoEjecucion ==2){
-                        self.articulo = self.parametros.articulo
-
-                        self.mostrarTituloArticulo     = true  
-                        self.mostrarFormulario = true
-                        self.botonModificar = true
-                        self.mostrarFormulario  = true 
-                        self.botonModificar   = true;
-                        self.mostrarFormularioEntrada    = false
-                        self.botonAgregar     = false;            
-                        self.update()
-                        __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto1,2)
-                        __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
-                        $("#formulario").validate(reglasDeValidacion());     
-                        $('.precioPublico').focus().select()      
-                    }  
-                    //Entrada
-                    if(self.parametros.tipoEjecucion ==3){
-                        $("#formularioEntrada").validate(reglasDeValidacionEntrada());
-                        $(".errorServerSideJgrid").remove();
-                        $(".observacion_entrada").val(null)
-                        $(".cantidadNueva_entrada").val(null)
-                        self.articulo  = self.parametros.articulo
-                        self.mostrarFormularioEntrada = true
-                        self.mostrarListado            = false 
-                        self.botonModificar            = false
-                        self.botonAgregar              = false
-                        self.mostrarFormularioEntrada    = true
-                        self.mostrarFormularioSalida     = false
-                        self.update()
-                        _ListaMotivoEntradasActivas()
-                    }
-                    //Salida
-                    if(self.parametros.tipoEjecucion ==4){
-                        $("#formularioSalida").validate(reglasDeValidacionSalida());
-                        $(".errorServerSideJgrid").remove();
-                        $(".observacion_salida").val(null)
-                        $(".cantidadNueva_salida").val(null)
-                        self.articulo  = self.parametros.articulo
-                        self.mostrarListado            = false 
-                        self.botonModificar            = false
-                        self.botonAgregar              = false
-                        self.mostrarTituloArticulo     = false
-                        // variables para modulo de inventario 
-                        self.mostrarFormularioEntrada    = false
-                        self.mostrarFormularioSalida     = true
-                        self.update()
-                        _ListaMotivoSalidasActivas()
-                    }
-                        
-  
+    //Agregar
+    if(self.parametros.tipoEjecucion ==1){
+        LimpiarArticulo()
+        self.mostrarTituloArticulo = true  
+        self.mostrarFormulario = true
+        self.botonModificar = false
+        self.mostrarFormularioEntrada = false
+        self.botonAgregar = true
+        self.precioPantalla = true
+        self.impuestosIVAIPantalla = false
+        self.otrosPantalla = false                        
+        self.update()
+        $("#formulario").validate(reglasDeValidacion());     
+    }   
+    //modificar
+    if(self.parametros.tipoEjecucion ==2){
+        self.articulo = self.parametros.articulo
+        self.mostrarTituloArticulo = true  
+        self.mostrarFormulario = true
+        self.botonModificar = true
+        self.mostrarFormulario = true 
+        self.botonModificar   = true;
+        self.mostrarFormularioEntrada = false
+        self.botonAgregar  = false;            
+        self.update()
+        __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto1,2)
+        __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
+        $("#formulario").validate(reglasDeValidacion());     
+        $('.precioPublico').focus().select()      
+    }  
+    //Entrada
+    if(self.parametros.tipoEjecucion ==3){
+        LimpiarArticulo()
+        $("#formularioEntrada").validate(reglasDeValidacionEntrada());
+        $(".errorServerSideJgrid").remove();
+        $(".observacion_entrada").val(null)
+        $(".cantidadNueva_entrada").val(null)
+        self.articulo  = self.parametros.articulo
+        self.mostrarFormularioEntrada = true
+        self.mostrarListado = false 
+        self.botonModificar = false
+        self.botonAgregar   = false
+        self.mostrarFormularioEntrada = true
+        self.mostrarFormularioSalida  = false
+        self.update()
+        _ListaMotivoEntradasActivas()
+    }
+    //Salida
+    if(self.parametros.tipoEjecucion ==4){
+        LimpiarArticulo()
+        $("#formularioSalida").validate(reglasDeValidacionSalida());
+        $(".errorServerSideJgrid").remove();
+        $(".observacion_salida").val(null)
+        $(".cantidadNueva_salida").val(null)
+        self.articulo  = self.parametros.articulo
+        self.mostrarListado = false 
+        self.botonModificar = false
+        self.botonAgregar = false
+        self.mostrarTituloArticulo = false
+        // variables para modulo de inventario 
+        self.mostrarFormularioEntrada = false
+        self.mostrarFormularioSalida  = true
+        self.update()
+        _ListaMotivoSalidasActivas()
+    }
 }
 
 /**
@@ -1176,6 +1170,15 @@ __asignarImpuesto1(){
 *  Mostrar listado datatable Categorias Actimpuestos
 **/
 function __listadoTarifasByTipoImpuesto(tipoImpuesto,indicador){
+    if (typeof tipoImpuesto == 'undefined') {
+        return
+    }
+    if (tipoImpuesto == "" ){
+        return
+    }
+    if (tipoImpuesto == " ") {
+        return
+    }
     var selector = ""
     $.ajax({
          url: "ListarTarifasByTipoImpuestoAjax.do",
@@ -1187,20 +1190,17 @@ function __listadoTarifasByTipoImpuesto(tipoImpuesto,indicador){
                 // Tipo de impuesto 1
                 if(indicador ==1 ){
                     self.tarifas1 =  result
-                     self.update()
+                    self.update()
                     self.articulo.impuesto = getMontoImpuesto(self.articulo.tipoImpuesto,$('#codigoTarifa').val(),self.tarifas1.aaData)
                     self.update()
-  
                 }
                 // Tipo de impuesto 2
                 if(indicador ==2 ){
                     self.tarifas2 =  result
+                    self.update()
+                    self.articulo.impuesto1 = getMontoImpuesto(self.articulo.tipoImpuesto1,$('#codigoTarifa1').val(),self.tarifas1.aaData)
                     self.update();
                 }
-
-              
-
-    
             }            
         },
         error: function (xhr, status) {

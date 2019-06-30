@@ -43,5 +43,8 @@ public class TarifaIVAIBoImpl implements TarifaIVAIBo {
 	public TarifaIVAI buscar(Integer id) {
 		return tarifaIVAIDao.buscar(id);
 	}
-
+	@Override
+	public TarifaIVAI findByCodigoTarifa(String codigoTarifa) {
+		return tarifaIVAIDao.findByCodigoTarifa(codigoTarifa);
+	}
 }

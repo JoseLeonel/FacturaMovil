@@ -21,10 +21,10 @@ public class TarifaIVAI implements Serializable{
 	@Column(name = "id")
 	private Integer id;
 	
-	@Column(name = "cod_tarifa")
+	@Column(name = "cod_tarifa", length=2)
 	private String						codigoTarifa;
 
-	@Column(name = "descripcion")
+	@Column(name = "descripcion", length=80)
 	private String						descripcion;
 
 	@Column(name = "monto")

@@ -550,13 +550,13 @@ function consultaFactura(idFactura){
 function _VersionTiquete(){
 
     if(self.facturaImpresa.tipoDoc == "01"){
-       self.documentoElectronico = $.i18n.prop("documento.electronico.factura");
+        self.documentoElectronico = self.facturaImpresa.versionEsquemaXML == 1 ?$.i18n.prop("documento.electronico.factura"):$.i18n.prop("documento.electronico.factura.4.3");
     }else if(self.facturaImpresa.tipoDoc == "02"){
-        self.documentoElectronico = $.i18n.prop("documento.electronico.nota.debito");
+        self.documentoElectronico = self.facturaImpresa.versionEsquemaXML == 1 ? $.i18n.prop("documento.electronico.nota.debito.4.3");
     }else if(self.facturaImpresa.tipoDoc == "03"){
-        self.documentoElectronico = $.i18n.prop("documento.electronico.nota.credito");
+        self.documentoElectronico = self.facturaImpresa.versionEsquemaXML == 1 ?$.i18n.prop("documento.electronico.nota.credito"):$.i18n.prop("documento.electronico.nota.credito.4.3");
     }else if(self.facturaImpresa.tipoDoc == "04"){
-        self.documentoElectronico = $.i18n.prop("documento.electronico.tiquete");
+        self.documentoElectronico = self.facturaImpresa.versionEsquemaXML == 1 ?$.i18n.prop("documento.electronico.tiquete"):$.i18n.prop("documento.electronico.tiquete.4.3");
     }
     self.update()
 

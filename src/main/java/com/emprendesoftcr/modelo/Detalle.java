@@ -41,16 +41,16 @@ public class Detalle implements Serializable {
 	@Column(name = "numero_linea")
 	private Integer						numeroLinea;
 
-	@Column(name = "codigo")
+	@Column(name = "codigo", length=20)
 	private String						codigo;
 
 	@Column(name = "descripcion")
 	private String						descripcion;
 
-	@Column(name = "tipo_codigo")
+	@Column(name = "tipo_codigo", length=2)
 	private String						tipoCodigo;
 
-	@Column(name = "tipo_impuesto")
+	@Column(name = "tipo_impuesto", length=2)
 	private String						tipoImpuesto;
 
 	@Column(name = "unidad_medida")
@@ -95,14 +95,14 @@ public class Detalle implements Serializable {
 	@Column(name = "costo", columnDefinition = "Decimal(10,5) default '0.00'")
 	private Double						costo;
 
-	@Column(name = "observacion")
+	@Column(name = "observacion", length=60)
 	private String						observacion;
 
 	@Column(name = "tipo_impuesto1")
 	private String						tipoImpuesto1;
 	@Column(name = "impuesto1")
 	private Double						impuesto1;
-
+	
 	@Column(name = "monto_impuesto1")
 	private Double						montoImpuesto1;
 
@@ -131,10 +131,12 @@ public class Detalle implements Serializable {
 	@Column(name = "base_imposible", columnDefinition = "Decimal(10,5) default '0.00'")
 	private Double						baseImponible;
 
-	@Column(name = "cod_tarifa")
+
+	
+	@Column(name = "cod_tarifa", length=2)
 	private String						codigoTarifa;
 	
-	@Column(name = "cod_tarifa1")
+	@Column(name = "cod_tarifa1", length=2)
 	private String						codigoTarifa1;
 
 	@ManyToOne
@@ -149,7 +151,9 @@ public class Detalle implements Serializable {
 	
 
 	
-	public Detalle(Long id, Integer numeroLinea, String codigo, String descripcion, String tipoCodigo, String tipoImpuesto, String unidadMedida, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, String naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double ganancia, Double porcentajeDesc, Double porcentajeGanancia, Double costo, String observacion, String tipoImpuesto1, Double impuesto1, Double montoImpuesto1, Date created_at, Date updated_at, Double montoGanancia, Double pesoTransporte, Double pesoTransporteTotal, Double impuestoNeto, Double baseImponible, String codigoTarifa, String codigoTarifa1, Factura factura, Usuario usuario) {
+	
+
+	public Detalle(Long id, Integer numeroLinea, String codigo, String descripcion, String tipoCodigo, String tipoImpuesto, String unidadMedida, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, String naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double ganancia, Double porcentajeDesc, Double porcentajeGanancia, Double costo, String observacion, String tipoImpuesto1, Double impuesto1, Double montoImpuesto1, Date created_at, Date updated_at, Double montoGanancia, Double pesoTransporte, Double pesoTransporteTotal, Double impuestoNeto, Double baseImponible,  String codigoTarifa, String codigoTarifa1, Factura factura, Usuario usuario) {
 		super();
 		this.id = id;
 		this.numeroLinea = numeroLinea;
@@ -182,6 +186,7 @@ public class Detalle implements Serializable {
 		this.pesoTransporteTotal = pesoTransporteTotal;
 		ImpuestoNeto = impuestoNeto;
 		this.baseImponible = baseImponible;
+		
 		this.codigoTarifa = codigoTarifa;
 		this.codigoTarifa1 = codigoTarifa1;
 		this.factura = factura;
@@ -221,7 +226,7 @@ public class Detalle implements Serializable {
 		this.montoGanancia = detalleFacturaCommand.getMontoGanancia();
 		this.pesoTransporte = detalleFacturaCommand.getPesoTransporte();
 		this.pesoTransporteTotal = detalleFacturaCommand.getPesoTransporteTotal();
-
+	
 	}
 
 	public Long getId() {
@@ -232,6 +237,8 @@ public class Detalle implements Serializable {
 		this.id = id;
 	}
 
+	
+	
 	
 	public String getCodigoTarifa() {
 		return codigoTarifa;

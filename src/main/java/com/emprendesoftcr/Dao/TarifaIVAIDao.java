@@ -12,6 +12,6 @@ public interface TarifaIVAIDao {
 
 	TarifaIVAI buscar(Integer id);
 
-	
+	TarifaIVAI findByCodigoTarifa(String codigoTarifa);
 
 }

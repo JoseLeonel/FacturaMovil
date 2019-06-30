@@ -11,6 +11,8 @@ public interface TarifaIVAIBo {
 	void eliminar(TarifaIVAI tarifaIVAI);
 
 	TarifaIVAI buscar(Integer id);
+	
+	TarifaIVAI findByCodigoTarifa(String codigoTarifa);
 
 	
 

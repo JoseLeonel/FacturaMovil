@@ -21,7 +21,7 @@ public class Tarifa implements Serializable {
 	@Column(name = "id")
 	private Long							id;
 
-	@Column(name = "tipo_imp")
+	@Column(name = "tipo_imp", length=2)
 	private String						tipoImpuesto;
 
 	@Column(name = "monto")

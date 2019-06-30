@@ -21,12 +21,12 @@ public class RespuestaHaciendaXML {
 	private String	mensaje;
 
 	private String	detalleMensaje;
-
+	private String	codigoActividad;
 	private Double	montoTotalImpuesto;
 
 	private Double	totalFactura;
 
-	public RespuestaHaciendaXML(String clave, String fecha, String indEstado, String nombreEmisor, String tipoIdentificacionEmisor, String numeroCedulaEmisor, String nombreReceptor, String tipoIdentificacionReceptor, String numeroCedulaReceptor, String mensaje, String detalleMensaje, Double montoTotalImpuesto, Double totalFactura) {
+	public RespuestaHaciendaXML(String clave, String fecha, String indEstado, String nombreEmisor, String tipoIdentificacionEmisor, String numeroCedulaEmisor, String nombreReceptor, String tipoIdentificacionReceptor, String numeroCedulaReceptor, String mensaje, String detalleMensaje, Double montoTotalImpuesto,String codigoActividad, Double totalFactura) {
 		super();
 		this.clave = clave;
 		this.fecha = fecha;
@@ -40,6 +40,7 @@ public class RespuestaHaciendaXML {
 		this.mensaje = mensaje;
 		this.detalleMensaje = detalleMensaje;
 		this.montoTotalImpuesto = montoTotalImpuesto;
+		this.codigoActividad = codigoActividad;
 		this.totalFactura = totalFactura;
 	}
 
@@ -61,6 +62,7 @@ public class RespuestaHaciendaXML {
     sb.append("\nMensaje: ").append(mensaje);
     sb.append("\nDetalleMensaje: ").append(detalleMensaje);
     sb.append("\nMontoTotalImpuesto: ").append(montoTotalImpuesto);
+    sb.append("\nCodigoActividad: ").append(codigoActividad);
     sb.append("\nTotalFactura: ").append(totalFactura);
     sb.append("\n************************************");
     return sb.toString();
@@ -186,6 +188,16 @@ public class RespuestaHaciendaXML {
 	}
 
 	
+	
+	public String getCodigoActividad() {
+		return codigoActividad;
+	}
+
+	
+	public void setCodigoActividad(String codigoActividad) {
+		this.codigoActividad = codigoActividad;
+	}
+
 	public Double getTotalFactura() {
 		return totalFactura;
 	}

@@ -83,10 +83,10 @@ public class Articulo implements Serializable {
 	@Column(name = "estado")
 	private String						estado;
 
-	@Column(name = "tipo_impuesto")
+	@Column(name = "tipo_impuesto", length=2)
 	private String						tipoImpuesto;
 	// Tipo de codigo del producto
-	@Column(name = "tipo_codigo")
+	@Column(name = "tipo_codigo", length=2)
 	private String						tipoCodigo;
 
 	@Column(name = "maximo")
@@ -136,16 +136,16 @@ public class Articulo implements Serializable {
 	@Column(name = "fecha_compra")
 	private Date							fechaUltimaCompra;
 
-	@Column(name = "tipo_impuesto1")
+	@Column(name = "tipo_impuesto1", length=2)
 	private String						tipoImpuesto1;
 
 	@Column(name = "impuesto1", columnDefinition = "Decimal(10,2) default '0.00'")
 	private Double						impuesto1;
 	
-	@Column(name = "cod_tarifa")
+	@Column(name = "cod_tarifa", length=2)
 	private String						codigoTarifa;
 	
-	@Column(name = "cod_tarifa1")
+	@Column(name = "cod_tarifa1", length=2)
 	private String						codigoTarifa1;
 
 	@Column(name = "base_imponible", columnDefinition = "INT default '0'")

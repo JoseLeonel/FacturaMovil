@@ -52,6 +52,17 @@ public class TarifaIVAIDaoImpl2 implements TarifaIVAIDao {
 			return null;
 		}
 	}
-	
+	@Override
+	public TarifaIVAI findByCodigoTarifa(String codigoTarifa) {
+		Query query = entityManager.createQuery("select obj from TarifaIVAI obj where obj.codigoTarifa = :codigoTarifa");
+		query.setParameter("codigoTarifa", codigoTarifa);
+		List<TarifaIVAI> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (TarifaIVAI) results.get(0);
+		} else {
+			return null;
+		}
+		
+	}
 	
 }

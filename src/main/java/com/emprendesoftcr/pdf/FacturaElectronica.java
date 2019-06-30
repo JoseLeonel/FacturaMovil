@@ -62,6 +62,7 @@ public class FacturaElectronica {
 	private String													referenciaCodigo;
 	private String													referenciaRazon;
 	private String													referenciaFechaEmision;
+	private Double													totalOtrosCargos;
 
 	private String													_footerObservaciones;
 	private String													_footerFormaPago;
@@ -515,88 +516,19 @@ public class FacturaElectronica {
 	public void set_nota(String _nota) {
 		this._nota = _nota;
 	}
+	
 
-	public TableModel getDataArray() {
-
-		DefaultTableModel modelo = new DefaultTableModel();
-
-		List<Object> nombreColumnas = new ArrayList<Object>();
-		nombreColumnas.add("EmisorName");
-		nombreColumnas.add("EmisorMail");
-		nombreColumnas.add("EmisorProvince");
-		nombreColumnas.add("EmisorDistrict");
-		nombreColumnas.add("EmisorCedula");
-		nombreColumnas.add("EmisorPhone");
-		nombreColumnas.add("EmisorCanton");
-		nombreColumnas.add("ClienteName");
-		nombreColumnas.add("ClienteCedula");
-		nombreColumnas.add("DetLinea");
-		nombreColumnas.add("DetCodigo");
-		nombreColumnas.add("DetDescripcion");
-		nombreColumnas.add("DetPrecioU");
-		nombreColumnas.add("DetCantidad");
-		nombreColumnas.add("DetDescuento");
-		nombreColumnas.add("DetImpuesto");
-		nombreColumnas.add("DetTotal");
-		nombreColumnas.add("Observacion");
-		nombreColumnas.add("FormaPago");
-		nombreColumnas.add("CondicionVenta");
-		nombreColumnas.add("Moneda");
-		nombreColumnas.add("TipoCambio");
-		nombreColumnas.add("TotalServGravado");
-		nombreColumnas.add("TotalMercGravada");
-		nombreColumnas.add("TotalServExentas");
-		nombreColumnas.add("TotalGravado");
-		nombreColumnas.add("TotalExento");
-		nombreColumnas.add("TotalVenta");
-		nombreColumnas.add("TotalDescuento");
-		nombreColumnas.add("TotalImpuesto");
-		nombreColumnas.add("TotalVentaNeta");
-		nombreColumnas.add("TotalComprobante");
-
-		modelo.setColumnIdentifiers(nombreColumnas.toArray());
-		modelo.setNumRows(this.getDetalleFacturaElectronica().size());
-		int row = 0;
-		for (DetalleFacturaElectronica det : this.getDetalleFacturaElectronica()) {
-			modelo.setValueAt(this.getEmisorNombre(), row, 0);
-			modelo.setValueAt(this.getEmisorCedula(), row, 1);
-			modelo.setValueAt(this.getEmisorProvincia(), row, 2);
-			modelo.setValueAt(this.getEmisorDistrito(), row, 3);
-			modelo.setValueAt(this.getEmisorCedula(), row, 4);
-			modelo.setValueAt(this.getEmisorTelefono(), row, 5);
-			modelo.setValueAt(this.getEmisorCanton(), row, 6);
-			modelo.setValueAt(this.getClienteNombre(), row, 7);
-			modelo.setValueAt(this.getClienteCedula(), row, 8);
-
-			modelo.setValueAt(det.getLinea(), row, 9);
-			modelo.setValueAt(det.getCodigo(), row, 10);
-			modelo.setValueAt(det.getDescripcion(), row, 11);
-			modelo.setValueAt(det.getPrecioU(), row, 12);
-			modelo.setValueAt(det.getCantidad(), row, 13);
-			modelo.setValueAt(det.getDescuento(), row, 14);
-			modelo.setValueAt(det.getImpuesto(), row, 15);
-			modelo.setValueAt(det.getTotal(), row, 16);
-
-			modelo.setValueAt(this.getFooterObservaciones(), row, 17);
-			modelo.setValueAt(this.getFooterFormaPago(), row, 18);
-			modelo.setValueAt(this.getFooterCondicionVenta(), row, 19);
-			modelo.setValueAt(this.getFooterMoneda(), row, 20);
-			modelo.setValueAt(this.getFooterTipoCambio(), row, 21);
-			modelo.setValueAt(this.getFooterTotalServiciosGravados(), row, 22);
-			modelo.setValueAt(this.getFooterTotalMercanciasGravadas(), row, 23);
-			modelo.setValueAt(this.getFooterTotalServiciosExentos(), row, 24);
-			modelo.setValueAt(this.getFooterTotalGravado(), row, 25);
-			modelo.setValueAt(this.getFooterTotalExento(), row, 26);
-			modelo.setValueAt(this.getFooterTotalVenta(), row, 27);
-			modelo.setValueAt(this.getFooterTotalDescuento(), row, 28);
-			modelo.setValueAt(this.getFooterTotalImpuesto(), row, 29);
-			modelo.setValueAt(this.getFooterTotalVentaNeta(), row, 30);
-			modelo.setValueAt(this.getFooterTotalComprobante(), row, 31);
-			row++;
-		}
-
-		return modelo;
+	
+	public Double getTotalOtrosCargos() {
+		return totalOtrosCargos;
 	}
+
+	
+	public void setTotalOtrosCargos(Double totalOtrosCargos) {
+		this.totalOtrosCargos = totalOtrosCargos;
+	}
+
+	
 
 	public String getReferenciaTipoDoc() {
 		return referenciaTipoDoc;

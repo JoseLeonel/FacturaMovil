@@ -88,7 +88,7 @@
                                 <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
                                     <label class="tamanoLetraTotales">{$.i18n.prop("articulo.codigoTarifa")}</label>
                                     <select  onchange= {__AsignarTarifa} class="campo selectCodigoTarifa1" id="codigoTarifa" name="codigoTarifa"  >
-                                        <option  each={tarifas1.aaData}  value="{codigoTarifa}" selected="{articulo.codigoTarifa ==codigoTarifa?true:false}"  >{tarifaIVAI.descripcion}</option>
+                                        <option  each={tarifas1.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa ==tarifaIVAI.codigoTarifa?true:false}"  >{tarifaIVAI.descripcion}</option>
                                      </select>
                                 </div>
 
@@ -107,7 +107,7 @@
                                 <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
                                        <label class="tamanoLetraTotales">{$.i18n.prop("articulo.codigoTarifa2")}</label>
                                         <select onchange= {__AsignarTarifa1} class="campo selectCodigoTarifa2" id="codigoTarifa1" name="codigoTarifa1"  >
-                                            <option  each={tarifas2.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa1 ==codigoTarifa?true:false}" >{tarifaIVAI.descripcion}</option>
+                                            <option  each={tarifas2.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa1 ==tarifaIVAI.codigoTarifa?true:false}" >{tarifaIVAI.descripcion}</option>
                                         </select>
                                 </div>
 
@@ -315,6 +315,8 @@
             id:null
         }
     }    
+    self.tarifas1    = {aaData:[]}
+   self.tarifas2    = {aaData:[]}
 self.on('mount',function(){
     __Eventos()
     __ComboEstados()
@@ -366,7 +368,7 @@ otrosPantallaClick(){
 function getMontoTarifa(tipoImpuesto,codigoTarifa,array) {
   return array.filter(
     function(data) {
-      return data.tipoImpuesto == tipoImpuesto && data.codigoTarifa == codigoTarifa?data.monto:0
+      return data.tipoImpuesto == tipoImpuesto && data.tarifaIVAI.codigoTarifa == codigoTarifa?data.monto:0
     }
   );
 }
@@ -381,11 +383,19 @@ function getMontoImpuesto(tipoImpuesto,codigoTarifa,array){
     valor = valor !=null?valor[0]:null
     return valor == null?0:valor.monto
 }
-
 /**
 *  Mostrar listado datatable Categorias Actimpuestos
 **/
 function __listadoTarifasByTipoImpuesto(tipoImpuesto,indicador){
+   if (typeof tipoImpuesto == 'undefined') {
+        return
+    }
+    if (tipoImpuesto == "" ){
+        return
+    }
+    if (tipoImpuesto == " ") {
+        return
+    }
     var selector = ""
     $.ajax({
          url: "ListarTarifasByTipoImpuestoAjax.do",
@@ -397,20 +407,17 @@ function __listadoTarifasByTipoImpuesto(tipoImpuesto,indicador){
                 // Tipo de impuesto 1
                 if(indicador ==1 ){
                     self.tarifas1 =  result
-                     self.update()
+                    self.update()
                     self.articulo.impuesto = getMontoImpuesto(self.articulo.tipoImpuesto,$('#codigoTarifa').val(),self.tarifas1.aaData)
                     self.update()
-  
                 }
                 // Tipo de impuesto 2
                 if(indicador ==2 ){
                     self.tarifas2 =  result
+                    self.update()
+                    self.articulo.impuesto1 = getMontoImpuesto(self.articulo.tipoImpuesto1,$('#codigoTarifa1').val(),self.tarifas1.aaData)
                     self.update();
                 }
-
-              
-
-    
             }            
         },
         error: function (xhr, status) {
@@ -419,7 +426,6 @@ function __listadoTarifasByTipoImpuesto(tipoImpuesto,indicador){
         }
     })
 }
-
 /**
 *  Consultar  especifico
 * 1  Mostrar  2  Modificar
@@ -466,16 +472,17 @@ function __listadoTarifasByTipoImpuesto(tipoImpuesto,indicador){
                             self.tabOtros = true
 
                         }
+                        self.tarifas1    = {aaData:[]}
+                        self.tarifas2    = {aaData:[]}
                         self.update()
                         $('.codigo').val(modeloTabla.codigo)
                         $('.descripcion').val(modeloTabla.descripcion)
                         $('.precioPublico').val(modeloTabla.precioPublico)
-                         $('.precioPublico').focus().select()
-
-                        __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto1,2)
-
+                        $('.impuesto1').val(modeloTabla.impuesto1)
+                        $('.impuesto').val(modeloTabla.impuesto)
+                        $('.precioPublico').focus().select()
                         __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
-                        
+                        __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto1,2)
                     });
                    
                 }
@@ -521,6 +528,8 @@ function LimpiarArticulo(){
             id:null
         }
     }    
+    self.tarifas1    = {aaData:[]}
+   self.tarifas2    = {aaData:[]}
     self.update() 
    $('.selectTipoImpuesto').prop("selectedIndex", 0);
    $('.selectTipoImpuesto1').prop("selectedIndex", 0);
@@ -651,14 +660,15 @@ function __ActualizarPrecios(){
 __asignarImpuesto(){
     if($('.selectTipoImpuesto').val()=="01"){
         self.articulo.tipoImpuesto ="01"
-        self.articulo.impuesto = 13
-        self.update()
+        self.articulo.impuesto = 0
     }else{
         $('.impuesto').val(null)
         self.articulo.impuesto = 0
         self.articulo.tipoImpuesto =$('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
-        self.update()
     } 
+    self.tarifas1  = {aaData:[]}
+    self.update()
+     __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
     __ActualizarPrecios()      
 }
 /**
@@ -668,7 +678,9 @@ __asignarImpuesto1(){
     $('.impuesto1').val(null)
     self.articulo.impuesto1 = 0
     self.articulo.tipoImpuesto1 =$('#tipoImpuesto1').val() == "Sin impuesto"?"":$('#tipoImpuesto1').val()
+    self.tarifas2  = {aaData:[]}
     self.update()
+     __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto1,2)
     __ActualizarPrecios()
 
 }
