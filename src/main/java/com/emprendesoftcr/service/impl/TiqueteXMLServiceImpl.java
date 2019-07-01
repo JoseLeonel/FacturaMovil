@@ -335,8 +335,8 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
                   getDescuento(detalle.getMontoDescuento())+
                   "<SubTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getSubTotal()) + "</SubTotal>" +
                   xmlBaseImponible(detalle.getFactura().getId(),detalle.getBaseImponible())+  
-                  xmlImpuestos(detalle.getFactura().getId(),detalle.getCodigoTarifa(),detalle.getTipoImpuesto1(),detalle.getMontoImpuesto1(),detalle.getImpuesto1()) +
                   xmlImpuestos(detalle.getFactura().getId(),detalle.getCodigoTarifa(),detalle.getTipoImpuesto(),detalle.getMontoImpuesto(),detalle.getImpuesto()) +
+                  xmlImpuestos(detalle.getFactura().getId(),detalle.getCodigoTarifa1(),detalle.getTipoImpuesto1(),detalle.getMontoImpuesto1(),detalle.getImpuesto1()) +
                   xmlImpuestosNeto(detalle.getFactura().getId() ,detalle.getMontoImpuesto() ==null?Constantes.ZEROS_DOUBLE:detalle.getMontoImpuesto(),detalle.getMontoImpuesto1() ==null?Constantes.ZEROS_DOUBLE:detalle.getMontoImpuesto(),detalle.getImpuestoNeto()) +
                   "<MontoTotalLinea>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotalLinea()) + "</MontoTotalLinea>" +
                   "</LineaDetalle>";
@@ -422,17 +422,26 @@ private String getDescuento(Double descuento) throws Exception {
    */
 private String xmlImpuestos(Long idFactura,String codigoTarifa,String tipoImpuesto,Double montoImpuesto,Double impuesto) throws Exception {
   	String resultado = Constantes.EMPTY;
-  	
+  	String nodoCodigoTarifa = Constantes.EMPTY;
+  	String nodoTarifa = Constantes.EMPTY;
   	try {
   		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
   			return resultado;
   		}
+  		if (codigoTarifa !=null) {
+  			if(!codigoTarifa.equals(Constantes.EMPTY)) {
+  				nodoCodigoTarifa ="<CodigoTarifa>" + Utils.zeroPad(codigoTarifa, 2) + "</CodigoTarifa>";
+  				
+  			}
+  			
+  		}
+  		nodoTarifa = "<Tarifa>" + FacturaElectronicaUtils.getConvertirBigDecimal(impuesto ) + "</Tarifa>" ;
   		if(montoImpuesto != null && tipoImpuesto !=null) {
 	  		if(montoImpuesto > Constantes.ZEROS_DOUBLE) {
 	        resultado = "<Impuesto>" +
 	            "<Codigo>" + Utils.zeroPad(tipoImpuesto, 2) + "</Codigo>" +
-	            "<CodigoTarifa>" + Utils.zeroPad(codigoTarifa, 2) + "</CodigoTarifa>" +
-	            "<Tarifa>" + FacturaElectronicaUtils.getConvertirBigDecimal(impuesto ) + "</Tarifa>" +
+	            nodoCodigoTarifa +
+	            nodoTarifa+
 	            "<Monto>" +  FacturaElectronicaUtils.getConvertirBigDecimal(montoImpuesto) + "</Monto>";
 	        resultado += "</Impuesto>";
 	    	}

@@ -486,6 +486,9 @@ public class FacturaBoImpl implements FacturaBo {
 				}
 			}
 		}
+		factura.setTotalOtrosCargos(Constantes.ZEROS_DOUBLE);
+		factura.setTipoDocumentoOtroCargo(Constantes.EMPTY);
+		factura.setDetalleOtroCargo(Constantes.EMPTY);
 		// Se agrega un detalle para el costo por servicio de restaurante y se afecta el monto total de la factura
 		if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) && facturaCommand.getMesa() != null && !facturaCommand.getMesa().getId().equals(0L) && facturaCommand.getMesa().getImpuestoServicio()) {
 			factura.setTotalOtrosCargos(Utils.roundFactura(subTotal * 0.10, 5));

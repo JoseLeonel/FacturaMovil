@@ -42,6 +42,7 @@ public class ReportePdfView {
 		document.setMargins(10, 10, 12, 55);
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
+		
 		PdfWriter writer = PdfWriter.getInstance(document, stream);
 		Rectangle rct = new Rectangle(36, 54, 559, 788);
 		// Definimos un nombre y un tamaño para el PageBox los nombres posibles son: “crop”, “trim”, “art” and “bleed”.

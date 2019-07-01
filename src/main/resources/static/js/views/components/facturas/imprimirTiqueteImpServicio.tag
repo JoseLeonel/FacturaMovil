@@ -39,8 +39,8 @@
 	                            	<td > *********  </td>
 	                            </tr>
 	                            <tr>
-	                            	<td class="text-left" colspan="2"><h2><strong>{$.i18n.prop("tikect.total")}:</strong></h2></td>
-	                            	<td colspan="1"><h2><strong>{facturaImpresa.totalComprobanteSTR}</strong></h2></td>
+	                            	<td class="text-left" colspan="2"><h3><strong>{$.i18n.prop("tikect.total")}:</strong></h3></td>
+	                            	<td colspan="1"><h3><strong>{facturaImpresa.totalComprobanteSTR}</strong></h3></td>
 	                            </tr>
                                 <tr show={facturaImpresa.tipoCambio > 1}>
                                     <td></td>

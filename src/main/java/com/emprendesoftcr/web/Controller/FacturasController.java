@@ -253,11 +253,7 @@ public class FacturasController {
 	@Autowired
 	private VendedorBo																								vendedorBo;
 
-	@Autowired
-	private EmpresaBo																									empresaBo;
-
-	@Autowired
-	private RecepcionFacturaBo																				recepcionFacturaBo;
+	
 
 	@Autowired
 	private ClienteBo																									clienteBo;
@@ -314,10 +310,7 @@ public class FacturasController {
 		return "views/facturas/postRestaurante";
 	}
 
-	@RequestMapping(value = "/recepcionFactura", method = RequestMethod.GET)
-	public String recepcionFactura(ModelMap model) {
-		return "views/facturas/recepcionFactura";
-	}
+	
 
 	@RequestMapping(value = "/ventaDolares", method = RequestMethod.GET)
 	public String crearVentaDolares(ModelMap model) {
@@ -375,15 +368,7 @@ public class FacturasController {
 		return "views/facturas/listaFacturas";
 	}
 
-	/**
-	 * Listado de facturas anuladas y facturadas
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = "/ListaRecepcionFacturas", method = RequestMethod.GET)
-	public String listaRecepcionFacturas(ModelMap model) {
-		return "views/facturas/listaRecepcionFacturas";
-	}
+	
 
 	/**
 	 * Listado de facturas anuladas y facturadas
@@ -1117,53 +1102,7 @@ public class FacturasController {
 
 	}
 
-	/**
-	 * Recibir factura de otro emisor
-	 * @param request
-	 * @param model
-	 * @param recepcionFactura
-	 * @param result
-	 * @param status
-	 * @return
-	 * @throws Exception
-	 */
-	@SuppressWarnings("all")
-	@RequestMapping(value = "/AgregarRecepcionFacturaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceValidator agregarRecepcionFactura(HttpServletRequest request, ModelMap model, @ModelAttribute RecepcionFactura recepcionFactura, BindingResult result, SessionStatus status) throws Exception {
-		try {
 
-			String nombreUsuario = request.getUserPrincipal().getName();
-			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
-			// Se validan los datos
-			if (recepcionFactura.getMensaje() != null && (!recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_ACEPTADO) && !recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_ACEPTADO_PARCIAL) && !recepcionFactura.getMensaje().equals(Constantes.RECEPCION_FACTURA_MENSAJE_RECHAZADO))) {
-				result.rejectValue("mensaje", "error.recepcionFactura.mensaje.requerido");
-			} else if (!usuarioSesion.getEmpresa().getCedula().trim().toUpperCase().equals(recepcionFactura.getReceptorCedula().trim().toUpperCase())) {
-				result.rejectValue("receptorCedula", "error.recepcionFactura.factura.otro.receptor");
-			} else {
-				Collection<RecepcionFactura> resultado = recepcionFacturaBo.findByClave(recepcionFactura.getEmisorCedula(), recepcionFactura.getFacturaClave());
-				if (resultado != null && resultado.size() > 0) {
-					result.rejectValue("facturaClave", "error.recepcionFactura.ya.exite");
-				}
-			}
-			if (result.hasErrors()) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
-			}
-			// Se prepara el objeto para almacenarlo
-			recepcionFactura.setNumeroConsecutivoReceptor(empresaBo.generarConsecutivoRecepcionFactura(usuarioSesion.getEmpresa(), usuarioSesion, recepcionFactura));
-			recepcionFactura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
-			recepcionFactura.setEmpresa(usuarioSesion.getEmpresa());
-			recepcionFactura.setTipoDoc(Utils.obtenerTipoDocumentoConsecutivo(recepcionFactura.getFacturaConsecutivo()));
-			recepcionFactura.setCreated_at(new Date());
-			recepcionFactura.setUpdated_at(new Date());
-			recepcionFacturaBo.agregar(recepcionFactura);
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("recepcionFactura.agregar.correctamente", recepcionFactura);
-
-		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
-		}
-
-	}
 
 	/**
 	 * Mostrar una Factura

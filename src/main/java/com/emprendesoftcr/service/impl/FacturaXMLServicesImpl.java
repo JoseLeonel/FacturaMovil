@@ -412,17 +412,26 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 	
 	private String xmlImpuestos(Long idFactura,String codigoTarifa,String tipoImpuesto,Double montoImpuesto,Double impuesto) throws Exception {
   	String resultado = Constantes.EMPTY;
-  	
+  	String nodoCodigoTarifa = Constantes.EMPTY;
+  	String nodoTarifa = Constantes.EMPTY;
   	try {
   		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
   			return resultado;
   		}
+  		if (codigoTarifa !=null) {
+  			if(!codigoTarifa.equals(Constantes.EMPTY)) {
+  				nodoCodigoTarifa ="<CodigoTarifa>" + Utils.zeroPad(codigoTarifa, 2) + "</CodigoTarifa>";
+  				
+  			}
+  			
+  		}
+  		nodoTarifa = "<Tarifa>" + FacturaElectronicaUtils.getConvertirBigDecimal(impuesto ) + "</Tarifa>" ;
   		if(montoImpuesto != null && tipoImpuesto !=null) {
 	  		if(montoImpuesto > Constantes.ZEROS_DOUBLE) {
 	        resultado = "<Impuesto>" +
 	            "<Codigo>" + Utils.zeroPad(tipoImpuesto, 2) + "</Codigo>" +
-	            "<CodigoTarifa>" + Utils.zeroPad(codigoTarifa, 2) + "</CodigoTarifa>" +
-	            "<Tarifa>" + FacturaElectronicaUtils.getConvertirBigDecimal(impuesto ) + "</Tarifa>" +
+	            nodoCodigoTarifa +
+	            nodoTarifa+
 	            "<Monto>" +  FacturaElectronicaUtils.getConvertirBigDecimal(montoImpuesto) + "</Monto>";
 	        resultado += "</Impuesto>";
 	    	}

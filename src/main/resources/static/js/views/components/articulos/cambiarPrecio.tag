@@ -24,15 +24,15 @@
                         <input type="hidden"  id="prioridad" name="prioridad" value="{articulo.prioridad}"  >
                         <input type="hidden"  id="pesoTransporte" name="pesoTransporte" value="{articulo.pesoTransporte}"  >
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-itemPrecio" onclick={precioPantallaClick} show={tabprecio == true}>
-                                <a class="nav-link "  data-toggle="tab" href="#itemPrecio" role="tab" aria-controls="itemPrecio"
+                                <li class="nav-itemPrecio" onclick={precioPantallaClick} >
+                                <a class="nav-link Active"  data-toggle="tab" href="#itemPrecio" role="tab" aria-controls="itemPrecio"
                                     aria-selected="false">Precios del Articulo</a>
                                 </li>
-                                <li class="nav-itemImpuestos" onclick={impuestosIVAIPantallaClick}  show={tabImpuestos == true}>
+                                <li class="nav-itemImpuestos" onclick={impuestosIVAIPantallaClick}  >
                                     <a class="nav-link" id="contact-impuesto"  href="#itemimpuesto" role="tab" aria-controls="contact-impuesto"
                                     aria-selected="false">Impuestos</a>
                                 </li>
-                                <li class="nav-item" onclick={otrosPantallaClick} show={tabOtros == true}>
+                                <li class="nav-item" onclick={otrosPantallaClick} >
                                     <a class="nav-link" id="contact-otro" data-toggle="tab" href="#otros" role="tab" aria-controls="otros"
                                     aria-selected="false">OTROS</a>
                                 </li>
@@ -67,7 +67,7 @@
                                 </div>
                                 <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.gananciaPrecioPublico")}%  </label>
-                                    <input type="number" step="any" class="campoNumerico gananciaPrecioPublico" id="gananciaPrecioPublico" name="gananciaPrecioPublico"  value="{articulo.gananciaPrecioPublico}"  onkeyup ={__CalculoGananciaSinPrecioPublico}>
+                                    <input type="number" step="any" class="campoNumerico gananciaPrecioPublico" id="gananciaPrecioPublico" name="gananciaPrecioPublico"  value="{articulo.gananciaPrecioPublico.toFixed(5)}"  onkeyup ={__CalculoGananciaSinPrecioPublico}>
                                 </div>
                                 <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.precioPublico")}  <span class="requeridoDato">*</span></label>
