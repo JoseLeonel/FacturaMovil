@@ -114,7 +114,7 @@ public class FacturaEsperaCommand {
 	private String		referenciaRazon;
 	private String consecutivoProforma;
 	
-	
+	private Integer						versionEsquemaXML;
 
 	private Date			referenciaFechaEmision;
 	
@@ -172,6 +172,7 @@ public class FacturaEsperaCommand {
 		this.totalImpuestoSTR = factura.getTotalImpuestoSTR();
 		this.totalDescuentosSTR = factura.getTotalDescuentoSTR();
 		this.consecutivoProforma = factura.getConsecutivoProforma() !=null?factura.getConsecutivoProforma():Constantes.EMPTY;
+		this.versionEsquemaXML = factura.getVersionEsquemaXML();
 	}
 
 	public FacturaEsperaCommand(Detalle detalle) {
@@ -228,6 +229,7 @@ public class FacturaEsperaCommand {
 		this.totalComprobanteSTR = detalle.getFactura().getTotalComprobanteSTR();
 		this.totalImpuestoSTR = detalle.getFactura().getTotalImpuestoSTR();
 		this.totalDescuentosSTR = detalle.getFactura().getTotalDescuentoSTR();
+		this.versionEsquemaXML = detalle.getFactura().getVersionEsquemaXML();
 
 	}
 
@@ -663,6 +665,16 @@ public class FacturaEsperaCommand {
 	
 	public void setConsecutivoProforma(String consecutivoProforma) {
 		this.consecutivoProforma = consecutivoProforma;
+	}
+
+	
+	public Integer getVersionEsquemaXML() {
+		return versionEsquemaXML;
+	}
+
+	
+	public void setVersionEsquemaXML(Integer versionEsquemaXML) {
+		this.versionEsquemaXML = versionEsquemaXML;
 	}
 	
 	

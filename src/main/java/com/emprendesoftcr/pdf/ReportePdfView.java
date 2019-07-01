@@ -42,6 +42,7 @@ public class ReportePdfView {
 		document.setMargins(10, 10, 12, 55);
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
+		
 		PdfWriter writer = PdfWriter.getInstance(document, stream);
 		Rectangle rct = new Rectangle(36, 54, 559, 788);
 		// Definimos un nombre y un tamaño para el PageBox los nombres posibles son: “crop”, “trim”, “art” and “bleed”.
@@ -175,6 +176,7 @@ public class ReportePdfView {
 		Double totalImpuesto = Constantes.ZEROS_DOUBLE;
 		Double totalVentaNeta = Constantes.ZEROS_DOUBLE;
 		Double totalComprobante = Constantes.ZEROS_DOUBLE;
+		Double totalOtrosCargos = Constantes.ZEROS_DOUBLE;
 		//Ventas Exentas
 		if(fac_electro.getFooterTotalServiciosExentos() != null) {
 			totalExentos = fac_electro.getFooterTotalServiciosExentos();
@@ -211,7 +213,9 @@ public class ReportePdfView {
 				totalComprobante = fac_electro.getFooterTotalComprobante();
 			}
 				
-	
+	  if(fac_electro.getTotalOtrosCargos() !=null) {
+	  	totalOtrosCargos = fac_electro.getTotalOtrosCargos();
+	  }
 
 
 		central_inferior_ultima.addCell(obtenerCeldaNormal("venta", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
@@ -220,7 +224,9 @@ public class ReportePdfView {
 		}
 		central_inferior_ultima.addCell(obtenerCeldaNormal("Venta Neta", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
 		central_inferior_ultima.addCell(obtenerCeldaNormal("Impuestos", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
-		
+		if (totalOtrosCargos > Constantes.ZEROS_DOUBLE) {
+			central_inferior_ultima.addCell(obtenerCeldaNormal("Imp.Serv(10%):", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));			
+		}
 		central_inferior_ultima.addCell(obtenerCeldaNormal("Gravadas", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
 		central_inferior_ultima.addCell(obtenerCeldaNormal("Exento", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
 		central_inferior_ultima.addCell(obtenerCeldaNormal("Total comprobante", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
@@ -238,6 +244,9 @@ public class ReportePdfView {
 
 		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(totalVentaNeta), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
 		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(totalImpuesto), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+		if (totalOtrosCargos > Constantes.ZEROS_DOUBLE) {
+		    derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(totalOtrosCargos), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+		}
 		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(totalGravados), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
 		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(totalExentos), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
 		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(totalComprobante), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));

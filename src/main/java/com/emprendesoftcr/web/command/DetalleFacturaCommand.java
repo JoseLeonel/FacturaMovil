@@ -68,7 +68,7 @@ public class DetalleFacturaCommand {
 	private Double						pesoTransporte;
 	
 	private Double						pesoTransporteTotal;
-
+	
 
 
 	public DetalleFacturaCommand() {
@@ -109,6 +109,7 @@ public class DetalleFacturaCommand {
 		this.montoImpuesto1 = detalle.getMontoImpuesto1();
 		this.pesoTransporte = detalle.getPesoTransporte();
 		this.pesoTransporteTotal = detalle.getPesoTransporteTotal();
+		
 	
 	}
 
@@ -122,6 +123,8 @@ public class DetalleFacturaCommand {
 	
 	
 
+	
+	
 	
 	public Factura getFactura() {
 		return factura;

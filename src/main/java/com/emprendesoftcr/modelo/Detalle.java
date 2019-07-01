@@ -41,16 +41,16 @@ public class Detalle implements Serializable {
 	@Column(name = "numero_linea")
 	private Integer						numeroLinea;
 
-	@Column(name = "codigo")
+	@Column(name = "codigo", length=20)
 	private String						codigo;
 
 	@Column(name = "descripcion")
 	private String						descripcion;
 
-	@Column(name = "tipo_codigo")
+	@Column(name = "tipo_codigo", length=2)
 	private String						tipoCodigo;
 
-	@Column(name = "tipo_impuesto")
+	@Column(name = "tipo_impuesto", length=2)
 	private String						tipoImpuesto;
 
 	@Column(name = "unidad_medida")
@@ -95,14 +95,14 @@ public class Detalle implements Serializable {
 	@Column(name = "costo", columnDefinition = "Decimal(10,5) default '0.00'")
 	private Double						costo;
 
-	@Column(name = "observacion")
+	@Column(name = "observacion", length=60)
 	private String						observacion;
 
 	@Column(name = "tipo_impuesto1")
 	private String						tipoImpuesto1;
 	@Column(name = "impuesto1")
 	private Double						impuesto1;
-
+	
 	@Column(name = "monto_impuesto1")
 	private Double						montoImpuesto1;
 
@@ -118,12 +118,26 @@ public class Detalle implements Serializable {
 
 	@Column(name = "monto_gananc", columnDefinition = "Decimal(10,5) default '0.00'")
 	private Double						montoGanancia;
-	
+
 	@Column(name = "peso_transporte", columnDefinition = "Decimal(10,5) default '0.00'")
 	private Double						pesoTransporte;
-	
+
 	@Column(name = "peso_transTotal", columnDefinition = "Decimal(10,5) default '0.00'")
 	private Double						pesoTransporteTotal;
+
+	@Column(name = "imp_neto", columnDefinition = "Decimal(10,5) default '0.00'")
+	private Double						ImpuestoNeto;
+
+	@Column(name = "base_imposible", columnDefinition = "Decimal(10,5) default '0.00'")
+	private Double						baseImponible;
+
+
+	
+	@Column(name = "cod_tarifa", length=2)
+	private String						codigoTarifa;
+	
+	@Column(name = "cod_tarifa1", length=2)
+	private String						codigoTarifa1;
 
 	@ManyToOne
 	@JoinColumn(name = "factura_id")
@@ -133,6 +147,51 @@ public class Detalle implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
 	private Usuario						usuario;
+
+	
+
+	
+	
+
+	public Detalle(Long id, Integer numeroLinea, String codigo, String descripcion, String tipoCodigo, String tipoImpuesto, String unidadMedida, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, String naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double ganancia, Double porcentajeDesc, Double porcentajeGanancia, Double costo, String observacion, String tipoImpuesto1, Double impuesto1, Double montoImpuesto1, Date created_at, Date updated_at, Double montoGanancia, Double pesoTransporte, Double pesoTransporteTotal, Double impuestoNeto, Double baseImponible,  String codigoTarifa, String codigoTarifa1, Factura factura, Usuario usuario) {
+		super();
+		this.id = id;
+		this.numeroLinea = numeroLinea;
+		this.codigo = codigo;
+		this.descripcion = descripcion;
+		this.tipoCodigo = tipoCodigo;
+		this.tipoImpuesto = tipoImpuesto;
+		this.unidadMedida = unidadMedida;
+		this.precioUnitario = precioUnitario;
+		this.cantidad = cantidad;
+		this.montoTotal = montoTotal;
+		this.montoDescuento = montoDescuento;
+		this.naturalezaDescuento = naturalezaDescuento;
+		this.subTotal = subTotal;
+		this.impuesto = impuesto;
+		this.montoImpuesto = montoImpuesto;
+		this.montoTotalLinea = montoTotalLinea;
+		this.ganancia = ganancia;
+		this.porcentajeDesc = porcentajeDesc;
+		this.porcentajeGanancia = porcentajeGanancia;
+		this.costo = costo;
+		this.observacion = observacion;
+		this.tipoImpuesto1 = tipoImpuesto1;
+		this.impuesto1 = impuesto1;
+		this.montoImpuesto1 = montoImpuesto1;
+		this.created_at = created_at;
+		this.updated_at = updated_at;
+		this.montoGanancia = montoGanancia;
+		this.pesoTransporte = pesoTransporte;
+		this.pesoTransporteTotal = pesoTransporteTotal;
+		ImpuestoNeto = impuestoNeto;
+		this.baseImponible = baseImponible;
+		
+		this.codigoTarifa = codigoTarifa;
+		this.codigoTarifa1 = codigoTarifa1;
+		this.factura = factura;
+		this.usuario = usuario;
+	}
 
 	public Detalle() {
 		super();
@@ -176,6 +235,28 @@ public class Detalle implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	
+	
+	
+	public String getCodigoTarifa() {
+		return codigoTarifa;
+	}
+
+	
+	public void setCodigoTarifa(String codigoTarifa) {
+		this.codigoTarifa = codigoTarifa;
+	}
+
+	
+	public String getCodigoTarifa1() {
+		return codigoTarifa1;
+	}
+
+	
+	public void setCodigoTarifa1(String codigoTarifa1) {
+		this.codigoTarifa1 = codigoTarifa1;
 	}
 
 	public String getTipoImpuesto() {
@@ -317,6 +398,7 @@ public class Detalle implements Serializable {
 	public String getMontoImpuestoSTR() {
 		return Utils.formateadorMiles(this.montoImpuesto);
 	}
+
 	public String getMontoImpuesto1STR() {
 		return Utils.formateadorMiles(this.montoImpuesto1);
 	}
@@ -413,54 +495,60 @@ public class Detalle implements Serializable {
 		this.costo = costo;
 	}
 
-	
 	public String getTipoImpuesto1() {
 		return tipoImpuesto1;
 	}
 
-	
 	public void setTipoImpuesto1(String tipoImpuesto1) {
 		this.tipoImpuesto1 = tipoImpuesto1;
 	}
 
-	
 	public Double getImpuesto1() {
 		return impuesto1;
 	}
 
-	
 	public void setImpuesto1(Double impuesto1) {
 		this.impuesto1 = impuesto1;
 	}
 
-	
 	public Double getMontoImpuesto1() {
 		return montoImpuesto1;
 	}
 
-	
 	public void setMontoImpuesto1(Double montoImpuesto1) {
 		this.montoImpuesto1 = montoImpuesto1;
 	}
 
-	
 	public Double getPesoTransporte() {
 		return pesoTransporte;
 	}
 
-	
 	public void setPesoTransporte(Double pesoTransporte) {
 		this.pesoTransporte = pesoTransporte;
 	}
 
-	
 	public Double getPesoTransporteTotal() {
 		return pesoTransporteTotal;
 	}
 
-	
 	public void setPesoTransporteTotal(Double pesoTransporteTotal) {
 		this.pesoTransporteTotal = pesoTransporteTotal;
+	}
+
+	public Double getImpuestoNeto() {
+		return ImpuestoNeto;
+	}
+
+	public void setImpuestoNeto(Double impuestoNeto) {
+		ImpuestoNeto = impuestoNeto;
+	}
+
+	public Double getBaseImponible() {
+		return baseImponible;
+	}
+
+	public void setBaseImponible(Double baseImponible) {
+		this.baseImponible = baseImponible;
 	}
 
 }

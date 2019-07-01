@@ -37,6 +37,7 @@ import com.emprendesoftcr.Bo.CategoriaBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.KardexBo;
+import com.emprendesoftcr.Bo.TarifaIVAIBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
@@ -47,6 +48,7 @@ import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Marca;
+import com.emprendesoftcr.modelo.TarifaIVAI;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.pdf.GondolaArticuloPdfView;
 import com.emprendesoftcr.web.command.ArticuloCambioCategoriaGrupal;
@@ -88,6 +90,9 @@ public class ArticuloController {
 
 	@Autowired
 	private CategoriaBo																			categoriaBo;
+
+	@Autowired
+	private TarifaIVAIBo																			tarifaIVAIBo;
 
 	@Autowired
 	private KardexBo																				kardexBo;
@@ -609,6 +614,9 @@ public class ArticuloController {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
+      articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null?Constantes.EMPTY:articulo.getCodigoTarifa());
+      articulo.setCodigoTarifa1(articulo.getCodigoTarifa1() == null?Constantes.EMPTY:articulo.getCodigoTarifa1());
+
 
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
@@ -642,6 +650,18 @@ public class ArticuloController {
 			if (articulo.getTipoImpuesto() != null) {
 				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Sin impuesto") ? Constantes.EMPTY : articulo.getTipoImpuesto());
 			}
+			if (articulo.getTipoImpuesto1() != null) {
+				articulo.setTipoImpuesto1(articulo.getTipoImpuesto1().equals("Sin impuesto") ? Constantes.EMPTY : articulo.getTipoImpuesto1());
+			}
+			if(!articulo.getCodigoTarifa().equals(Constantes.EMPTY)) {
+				TarifaIVAI tarifaIVAI = tarifaIVAIBo.findByCodigoTarifa(articulo.getCodigoTarifa());
+				articulo.setImpuesto(tarifaIVAI.getMonto());
+			}
+			if(!articulo.getCodigoTarifa1().equals(Constantes.EMPTY)) {
+				TarifaIVAI tarifaIVAI = tarifaIVAIBo.findByCodigoTarifa(articulo.getCodigoTarifa1());
+				articulo.setImpuesto1(tarifaIVAI.getMonto());
+			}
+
 			articulo.setCreated_at(new Date());
 			articulo.setTipoImpuesto(articulo.getTipoImpuesto() == null ? Constantes.EMPTY : articulo.getTipoImpuesto());
 			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
@@ -664,6 +684,9 @@ public class ArticuloController {
 			articulo.setTipoImpuesto1(articulo.getTipoImpuesto1() ==null?Constantes.EMPTY:articulo.getTipoImpuesto1());
 			articulo.setImpuesto1(articulo.getImpuesto1() ==null?Constantes.ZEROS_DOUBLE:articulo.getImpuesto1());
 			articulo.setPesoTransporte(articulo.getPesoTransporte() ==null?Constantes.ZEROS_DOUBLE:articulo.getPesoTransporte());
+			articulo.setCodigoTarifa(articulo.getCodigoTarifa() ==null?Constantes.EMPTY:articulo.getCodigoTarifa());
+			articulo.setCodigoTarifa1(articulo.getCodigoTarifa1() ==null?Constantes.EMPTY:articulo.getCodigoTarifa1());
+			articulo.setBaseImponible(articulo.getBaseImponible() ==null?Constantes.ZEROS:articulo.getBaseImponible());
 			articuloBo.agregar(articulo);
 
 			if (usuarioSesion.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
@@ -697,10 +720,14 @@ public class ArticuloController {
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
-
+      articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null?Constantes.EMPTY:articulo.getCodigoTarifa());
+      articulo.setCodigoTarifa1(articulo.getCodigoTarifa1() == null?Constantes.EMPTY:articulo.getCodigoTarifa1());
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			if (articulo.getTipoImpuesto() != null) {
 				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Sin impuesto") ? Constantes.EMPTY : articulo.getTipoImpuesto());
+			}
+			if (articulo.getTipoImpuesto1() != null) {
+				articulo.setTipoImpuesto1(articulo.getTipoImpuesto1().equals("Sin impuesto") ? Constantes.EMPTY : articulo.getTipoImpuesto1());
 			}
 			if (articulo.getTipoCodigo() == null) {
 				articulo.setTipoCodigo("04");
@@ -726,9 +753,24 @@ public class ArticuloController {
 				result.rejectValue("precioPublico", "error.articulo.precioPublico.mayorCero");
 			}
 
+			if(!articulo.getCodigoTarifa().equals(Constantes.EMPTY)) {
+				TarifaIVAI tarifaIVAI = tarifaIVAIBo.findByCodigoTarifa(articulo.getCodigoTarifa());
+				articulo.setImpuesto(tarifaIVAI.getMonto());
+			}
+			if(!articulo.getCodigoTarifa1().equals(Constantes.EMPTY)) {
+				TarifaIVAI tarifaIVAI = tarifaIVAIBo.findByCodigoTarifa(articulo.getCodigoTarifa1());
+				articulo.setImpuesto1(tarifaIVAI.getMonto());
+			}
+			
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+			
+			
+			
+			
+			
+			
 			articuloBd.setMaximo(articulo.getMaximo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMaximo());
 			articuloBd.setMinimo(articulo.getMinimo() == null ? Constantes.ZEROS_DOUBLE : articulo.getMinimo());
 			articuloBd.setUpdated_at(new Date());
@@ -757,7 +799,9 @@ public class ArticuloController {
 			articuloBd.setTipoImpuesto1(articulo.getTipoImpuesto1() ==null?Constantes.EMPTY:articulo.getTipoImpuesto1());
 			articuloBd.setImpuesto1(articulo.getImpuesto1() ==null?Constantes.ZEROS_DOUBLE:articulo.getImpuesto1());
 			articuloBd.setPesoTransporte(articulo.getPesoTransporte() ==null?Constantes.ZEROS_DOUBLE:articulo.getPesoTransporte());
-
+			articuloBd.setCodigoTarifa(articulo.getCodigoTarifa() ==null?Constantes.EMPTY:articulo.getCodigoTarifa());
+			articuloBd.setCodigoTarifa1(articulo.getCodigoTarifa1() ==null?Constantes.EMPTY:articulo.getCodigoTarifa1());
+			articuloBd.setBaseImponible(articulo.getBaseImponible() ==null?Constantes.ZEROS:articulo.getBaseImponible());
 			articuloBo.modificar(articuloBd);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBd);

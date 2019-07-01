@@ -47,7 +47,7 @@ public class RecepcionFacturaXMLServicesImpl implements RecepcionFacturaXMLServi
 			String date = FacturaElectronicaUtils.toISO8601String(recepcionFactura.getFacturaFechaEmision());
 			String impuestos  = (recepcionFactura.getFacturaTotalImpuestos() != null && recepcionFactura.getFacturaTotalImpuestos() > Constantes.ZEROS_DOUBLE) ?  "<MontoTotalImpuesto>" + recepcionFactura.getFacturaTotalImpuestos().toString() + "</MontoTotalImpuesto>" : "";
 
-			xml = "<MensajeReceptor xmlns=\"" + Constantes.DOCXMLS_RECEPCION_FACTURA + "\" " +
+			xml = "<MensajeReceptor xmlns=\"" + Constantes.DOCXMLS_RECEPCION_FACTURA_4_3 + "\" " +
 	          "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
 	          "<Clave>" + recepcionFactura.getFacturaClave() + "</Clave>" +
 	          "<NumeroCedulaEmisor>" + recepcionFactura.getEmisorCedula() + "</NumeroCedulaEmisor>" +
@@ -75,7 +75,7 @@ public class RecepcionFacturaXMLServicesImpl implements RecepcionFacturaXMLServi
 		try {
 		
 			Certificado certificado  = certificadoBo.findByEmpresa(empresa);		
-      resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_RECEPCION_FACTURA,fecha);
+      resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_RECEPCION_FACTURA_4_3,fecha);
 		} catch (Exception e) {
 			log.info("** Error  getFirmarXML: " + e.getMessage() + " fecha " + new Date());
 			throw e;

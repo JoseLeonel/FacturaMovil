@@ -5,7 +5,16 @@ import java.util.ResourceBundle;
 public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																			= ResourceBundle.getBundle("factura");
+//Esquema de XML
+	public static final Integer					ESQUEMA_XML_4_2																			= 1;
+	public static final Integer					ESQUEMA_XML_4_3																			= 2;
 
+	// **Impuesto de servicio
+	public static final String					TIPO_DOCUMENTO_IMPUESTO_SERVICIO_OTRO_CARGO					= "06";
+	public static final String					IMPUESTO_SERVICIO_OTRO_CARGO_RESTAURANTE   					= "Impuesto 10% por servicio Restaurante";
+	// Base Imponible se activa en el articulo
+	public static final Integer					BASE_IMPONIBLE_ACTIVO																= 1;
+	public static final Integer					BASE_IMPONIBLE_INACTIVO															= 0;
 	// Inventario
 	public static final String					ARTICULO_MINIMO																			= "1";
 	public static final String					ARTICULO_MAXIMO																			= "2";
@@ -15,10 +24,16 @@ public class Constantes {
 	public static final String					PLANTILLA_CORREO_RESUMEN_VENTAS_RANGO_FECHA					= "email/emailResumenFactura.vm";
 
 // Version de los tipos de documentos 
-	public static final String					TIQUETE_ELECTRONICO_VERSION													= "Tiquete Electrónico ver 4.2";
-	public static final String					FACTURA_ELECTRONICO_VERSION													= "Factura Electrónica ver 4.2";
-	public static final String					NOTA_CREDITO_ELECTRONICO_VERSION										= "Nota Credito Electrónica ver 4.2";
-	public static final String					NOTA_DEBITO_ELECTRONICO_VERSION											= "Nota Debito Electrónica ver 4.2";
+	public static final String					TIQUETE_ELECTRONICO_VERSION_4_2											= "Tiquete Electrónico ver 4.2";
+	public static final String					FACTURA_ELECTRONICO_VERSION_4_2											= "Factura Electrónica ver 4.2";
+	public static final String					NOTA_CREDITO_ELECTRONICO_VERSION_4_2								= "Nota Credito Electrónica ver 4.2";
+	public static final String					NOTA_DEBITO_ELECTRONICO_VERSION_4_2									= "Nota Debito Electrónica ver 4.2";
+
+	public static final String					TIQUETE_ELECTRONICO_VERSION_4_3											= "Tiquete Electrónico ver 4.3";
+	public static final String					FACTURA_ELECTRONICO_VERSION_4_3											= "Factura Electrónica ver 4.3";
+	public static final String					NOTA_CREDITO_ELECTRONICO_VERSION_4_3								= "Nota Credito Electrónica ver 4.3";
+	public static final String					NOTA_DEBITO_ELECTRONICO_VERSION_4_3									= "Nota Debito Electrónica ver 4.3";
+
 	public static final String					PROFORMA_VERSION																		= "Proforma";
 	// callbackurl 1 = si 0= No
 	public static final Integer					CALLBACKURL_SI																			= 1;
@@ -38,6 +53,7 @@ public class Constantes {
 	public static final Integer					CANTIDAD_DIAS_MINIMO_CREDITO												= 1;
 	// Tipo de codigos de productos
 	public static final String					TIPO_IMPUESTO_VENTA_ARTICULO												= "01";
+	public static final String					TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL						= "07";
 	public static final String					TIPO_CODIGO_ARTICULO_POR_SERVICIO										= "07";
 	public static final String					TIPO_CODIGO_ARTICULO_USO_INTERNO										= "04";
 	public static final String					TIPO_CODIGO_ARTICULO_CODIGO_VENDEDOR								= "01";
@@ -89,13 +105,18 @@ public class Constantes {
 	public static final String					CASA_MATRIZ_INICIAL_FACTURA													= "001";
 	public static final String					TERMINAL_INICIAL_FACTURA														= "00001";
 
-	public static final String					DOCXMLS_FACTURA																			= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/facturaElectronica";
-	public static final String					DOCXMLS_NOTA_DEBITO																	= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaDebitoElectronica";
-	public static final String					DOCXMLS_NOTA_CREDITO																= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaCreditoElectronica";
-	public static final String					DOCXMLS_RESPUESTA_HACIENDA													= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/mensajeHacienda";
-	public static final String					DOCXMLS_RECEPCION_FACTURA														= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/mensajeReceptor";
+	public static final String					DOCXMLS_FACTURA_4_3																	= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/facturaElectronica";
+	public static final String					DOCXMLS_NOTA_DEBITO_4_3															= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/notaDebitoElectronica";
+	public static final String					DOCXMLS_NOTA_CREDITO_4_3														= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/notaCreditoElectronica";
+	public static final String					DOCXMLS_RESPUESTA_HACIENDA_4_3											= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/mensajeHacienda";
+	public static final String					DOCXMLS_RECEPCION_FACTURA_4_3												= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/mensajeReceptor";
+	public static final String					DOCXMLS_TIQUETE_4_3																	= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/tiqueteElectronico";
 
-	public static final String					DOCXMLS_TIQUETE																			= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/tiqueteElectronico";
+	public static final String					DOCXMLS_FACTURA_4_2																	= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/facturaElectronica";
+	public static final String					DOCXMLS_NOTA_DEBITO_4_2															= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaDebitoElectronica";
+	public static final String					DOCXMLS_NOTA_CREDITO_4_2														= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaCreditoElectronica";
+	public static final String					DOCXMLS_RESPUESTA_HACIENDA_4_2											= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/mensajeHacienda";
+	public static final String					DOCXMLS_RECEPCION_FACTURA_4_2												= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/mensajeReceptor";
 
 	public static final String					PRIVATE_KEY																					= "privateKey";
 	public static final String					CERTIFICATE																					= "certificate";
@@ -106,6 +127,7 @@ public class Constantes {
 	// Formatos electronicos
 	public static final String					UNIDAD_MEDIDA																				= "Unid";
 	public static final String					FORMATO_PROVINCIA																		= "0";
+	public static final String					FORMATO_CODIGO_ACTIVIDAD														= "000000";
 	public static final String					FORMATO_CANTON																			= "00";
 	public static final String					FORMATO_DISTRITO																		= "00";
 	public static final String					FORMATO_BARRIO																			= "00";

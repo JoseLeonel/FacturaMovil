@@ -7,7 +7,7 @@ import com.emprendesoftcr.modelo.Factura;
 
 public interface NotaCreditoXMLServices {
 
-	String getFirmarXML(String xmlString,Empresa empresa,Date fecha) throws Exception;
+	String getFirmarXML(String xmlString,Empresa empresa,Date fecha,Factura factura) throws Exception;
 	String getCrearXMLSinFirma(Factura factura) throws Exception;;
 
 }

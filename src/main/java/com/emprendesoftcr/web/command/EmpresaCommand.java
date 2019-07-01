@@ -79,6 +79,7 @@ public class EmpresaCommand {
 	private Integer	seguridadEnVentas;
 		
 	private Integer descargarInventario;
+	private String codigoActividad;
 
 	public EmpresaCommand(Empresa empresa) {
 		super();
@@ -132,6 +133,7 @@ public class EmpresaCommand {
 		this.ordenaCategoriaArticulos = empresa.getOrdenaCategoriaArticulos();
 		this.seguridadEnVentas = empresa.getSeguridadEnVentas();
 		this.descargarInventario = empresa.getDescargarInventario();
+		this.codigoActividad = empresa.getCodigoActividad();
 	}
 
 	public EmpresaCommand() {
@@ -506,6 +508,16 @@ public class EmpresaCommand {
 	
 	public void setDescargarInventario(Integer descargarInventario) {
 		this.descargarInventario = descargarInventario;
+	}
+
+	
+	public String getCodigoActividad() {
+		return codigoActividad;
+	}
+
+	
+	public void setCodigoActividad(String codigoActividad) {
+		this.codigoActividad = codigoActividad;
 	}
 	
 	

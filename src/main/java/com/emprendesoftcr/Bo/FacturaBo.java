@@ -2,6 +2,7 @@ package com.emprendesoftcr.Bo;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
@@ -10,6 +11,7 @@ import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.web.command.FacturaCommand;
+import com.emprendesoftcr.web.command.ProformasSQLNativeCommand;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 
 public interface FacturaBo {
@@ -37,4 +39,5 @@ public interface FacturaBo {
 	Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa);
 	
 	Collection<Factura> findByClienteAndEmpresa(Cliente cliente ,Empresa empresa);
-}
+	Collection<Object[]> proformasByState(Integer estado, Integer idEmpresa);
+}	
