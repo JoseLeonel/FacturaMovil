@@ -22,7 +22,7 @@
                         <input type="hidden"  id="minimo" name="minimo" value="{articulo.minimo}"  >
                         <input type="hidden"  id="cantidad" name="cantidad" value="{articulo.cantidad}"  >
                         <input type="hidden"  id="prioridad" name="prioridad" value="{articulo.prioridad}"  >
-                        <input type="hidden"  id="pesoTransporte" name="pesoTransporte" value="{articulo.pesoTransporte}"  >
+                        
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-itemPrecio" onclick={precioPantallaClick} >
                                 <a class="nav-link Active"  data-toggle="tab" href="#itemPrecio" role="tab" aria-controls="itemPrecio"
@@ -115,7 +115,16 @@
                                     <label  class="tamanoLetraTotales">{$.i18n.prop("articulo.impuesto1")}  </label>
                                     <input type="number" step="any" class=" impuesto1 campoNumerico" id="impuesto1" name="impuesto1" value="{articulo.impuesto1}"  onkeyup ={__CalculoImpuesto1}>
                                 </div>
+                                                               
                             </div>    
+                             <div class="row">
+                                    <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
+                                        <label class="tamanoLetraTotales">Base Imponible</label>
+                                        <select  class="campoNumerico" id="baseImponible" name="baseImponible" >
+                                            <option  each={baseImponibles}  value="{codigo}" selected="{articulo.baseImponible ==codigo?true:false}" >{descripcion}</option>
+                                        </select>
+                                    </div>       
+                                </div>       
 
                         </div>
                         <div class="tab-pane " show={otrosPantalla == true} > 
@@ -284,6 +293,7 @@
     self.botonAgregar              = false
     self.mostrarTituloArticulo     = true
     self.precioPantalla            = true
+    
     self.impuestosIVAIPantalla     = false
     self.tabprecio = true
     self.tabImpuestos = false
@@ -317,6 +327,7 @@
     }    
     self.tarifas1    = {aaData:[]}
    self.tarifas2    = {aaData:[]}
+     self.baseImponibles =[]
 self.on('mount',function(){
     __Eventos()
     __ComboEstados()
@@ -327,13 +338,31 @@ self.on('mount',function(){
     __Impuestos1() 
     __tipoCodigo()
     LimpiarArticulo()
+    __ComboBaseImponibles()
     window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
 })
+/**
+*  Crear el combo base imponible
+**/
+function __ComboBaseImponibles(){
+    self.baseImponibles =[]
+    self.update()
+    self.baseImponibles.push({
+        codigo: 1,
+        descripcion:$.i18n.prop("combo.estado.Activo")
+     });
+    self.baseImponibles.push({
+        codigo: 0,
+        descripcion: $.i18n.prop("combo.estado.Inactivo")
+     });
+     self.update();
+}
 __AsignarTarifa(){
     self.articulo.impuesto = getMontoImpuesto(self.articulo.tipoImpuesto,$('#codigoTarifa').val(),self.tarifas1.aaData)
     self.update()
+    
     actualizarPreciosImpuestosMayorista()
     actualizarPreciosImpuestosPublico()
     actualizarPreciosImpuestosEspecial()
@@ -341,6 +370,7 @@ __AsignarTarifa(){
 __AsignarTarifa1(){
     self.articulo.impuesto1 = getMontoImpuesto(self.articulo.tipoImpuesto1,$('#codigoTarifa1').val(),self.tarifas2.aaData)
     self.update()
+    
     actualizarPreciosImpuestosMayorista()
     actualizarPreciosImpuestosPublico()
     actualizarPreciosImpuestosEspecial()
@@ -425,6 +455,93 @@ function __listadoTarifasByTipoImpuesto(tipoImpuesto,indicador){
              mensajeErrorServidor(xhr, status);
         }
     })
+}
+
+function actualizarPreciosImpuestosPublico(){
+    var ganancia = __valorNumerico($('#gananciaPrecioPublico').val())
+    var impuesto   = __valorNumerico($('#impuesto').val())/100
+    impuesto = impuesto > 0 ? 1+impuesto:0
+    var impuesto1  = __valorNumerico($('#impuesto1').val())/100
+    impuesto1 = impuesto1 > 0?1+impuesto1:0
+    var costo      = __valorNumerico($('#costo').val())
+    self.articulo.gananciaPrecioPublico  = ganancia
+    self.update()
+    //calcular el precio publico
+    var resultado = ganancia / 100
+    resultado = 1-resultado
+    //resultado costo + ganancia
+    var total = costo  / resultado
+    if(impuesto1 > 0){
+      total = total * impuesto1
+    } 
+    if(impuesto>0){
+        total = total * impuesto
+    }
+    self.articulo.precioPublico = total>0?total:self.articulo.precioPublico
+    self.update()
+    $('.precioPublico').val(self.articulo.precioPublico)
+
+
+}
+
+function actualizarPreciosImpuestosMayorista(){
+    var ganancia = __valorNumerico($('#gananciaPrecioMayorista').val())
+    if(ganancia == 0){
+        return
+    }
+    var impuesto   = __valorNumerico($('#impuesto').val())/100
+    impuesto = impuesto > 0 ? 1+impuesto:0
+    var impuesto1  = __valorNumerico($('#impuesto1').val())/100
+    impuesto1 = impuesto1 > 0?1+impuesto1:0
+    var costo      = __valorNumerico($('#costo').val())
+    self.articulo.gananciaPrecioMayorista  = ganancia
+    self.update()
+    //calcular el precio publico
+    var resultado = ganancia / 100
+    resultado = 1-resultado
+    //resultado costo + ganancia
+    var total = costo  / resultado
+    if(impuesto1 > 0){
+      total = total * impuesto1
+    } 
+    if(impuesto>0){
+        total = total * impuesto
+    }
+    self.articulo.precioMayorista = total>0?total:self.articulo.precioMayorista
+    self.update()
+    $('.precioMayorista').val(self.articulo.precioMayorista)
+    
+
+}
+
+function actualizarPreciosImpuestosEspecial(){
+    var ganancia = __valorNumerico($('#gananciaPrecioEspecial').val())
+    if(ganancia == 0){
+        return
+    }
+    var impuesto   = __valorNumerico($('#impuesto').val())/100
+    impuesto = impuesto > 0 ? 1+impuesto:0
+    var impuesto1  = __valorNumerico($('#impuesto1').val())/100
+    impuesto1 = impuesto1 > 0?1+impuesto1:0
+    var costo      = __valorNumerico($('#costo').val())
+    self.articulo.gananciaPrecioEspecial  = ganancia
+    self.update()
+    //calcular el precio publico
+    var resultado = ganancia / 100
+    resultado = 1-resultado
+    //resultado costo + ganancia
+    var total = costo  / resultado
+    if(impuesto1 > 0){
+      total = total * impuesto1
+    } 
+    if(impuesto>0){
+        total = total * impuesto
+    }
+    self.articulo.precioEspecial = total > 0?total:self.articulo.precioEspecial
+    self.update()
+    $('.precioEspecial').val(self.articulo.precioEspecial)
+    
+
 }
 /**
 *  Consultar  especifico
@@ -993,38 +1110,15 @@ __agregar(){
         var AplicoImpuesto2 = false
        if ($("#formulario").valid()) {
         var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
-        if (tipo !=""){
-            if($('#impuesto').val()==0){
-                mensajeError($.i18n.prop("error.articulo.indicar.tipo.impuesto"))
-                return 
-            }else{
-                AplicoImpuesto1 = true
-            }
-        }else{
-            if($('#impuesto').val()>0){
-                mensajeError($.i18n.prop("error.articulo.no.tipo.impuesto"))
-                return 
-            }
+        if(tipo == "07"){
+                var baseImponible = $('#baseImponible').val()
+                if(baseImponible == 0){
+                   mensajeError("Debe actualizar la base imponible debe ser Activo")
+                   return 
+                }
+                
         }
-        tipo = $('#tipoImpuesto1').val() == "Sin impuesto"?"":$('#tipoImpuesto1').val()
-        if (tipo !=""){
-            if($('#impuesto1').val()==0){
-                mensajeError($.i18n.prop("error.articulo.indicar.tipo.impuesto1"))
-                return 
-            }else{
-                AplicoImpuesto2 = true
-            }
-        }else{
-            if($('#impuesto1').val()>0){
-                mensajeError($.i18n.prop("error.articulo.no.tipo.impuesto1"))
-                return 
-            }
-        }
-        if(AplicoImpuesto2 == true && AplicoImpuesto1 == false){
-            mensajeError($.i18n.prop("error.articulo.no.impuesto1"))
-            return 
 
-        }
         
         if(self.articulo.costo > self.articulo.precioPublico){
             mensajeError("No se puede agregar el precio Publico es menor al costo")
@@ -1090,39 +1184,15 @@ __Modificar(){
     var AplicoImpuesto2 = false
     if ($("#formulario").valid()) {
         var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
-        if (tipo !=""){
-            if($('#impuesto').val()==0){
-                mensajeError($.i18n.prop("error.articulo.indicar.tipo.impuesto"))
-                return 
-            }else{
-                AplicoImpuesto1 = true
-            }
-        }else{
-            if($('#impuesto').val()>0){
-                mensajeError($.i18n.prop("error.articulo.no.tipo.impuesto"))
-                return 
-            }
+        if(tipo == "07"){
+                var baseImponible = $('#baseImponible').val()
+                if(baseImponible == 0){
+                   mensajeError("Debe actualizar la base imponible debe ser Activo")
+                   return 
+                }
+                
         }
-        tipo = $('#tipoImpuesto1').val() == "Sin impuesto"?"":$('#tipoImpuesto1').val()
-        if (tipo !=""){
-            if($('#impuesto1').val()==0){
-                mensajeError($.i18n.prop("error.articulo.indicar.tipo.impuesto1"))
-                return 
-            }else{
-                AplicoImpuesto2 = true
-            }
-        }else{
-            if($('#impuesto1').val()>0){
-                mensajeError($.i18n.prop("error.articulo.no.tipo.impuesto1"))
-                return 
-            }
-        }
-        if(AplicoImpuesto2 == true && AplicoImpuesto1 == false){
-            mensajeError($.i18n.prop("error.articulo.no.impuesto1"))
-            return 
 
-        }
-        
      if(self.articulo.costo > self.articulo.precioPublico){
             mensajeError("No se puede modificar el Articulo el precio Publico es menor al costo")
             return 

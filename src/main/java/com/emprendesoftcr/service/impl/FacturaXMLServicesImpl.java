@@ -449,14 +449,19 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
  * @param descuento
  * @return
  */
-private String getDescuento(Double descuento) throws Exception{
+	private String getDescuento(Double descuento) throws Exception {
 		String resultado = Constantes.EMPTY;
-		if(descuento ==null) {
+		if(descuento == null) {
+			return resultado;
+		}
+		if(descuento.equals(Constantes.ZEROS_DOUBLE)) {
 			return resultado;
 		}
 		try {
-			 resultado ="<MontoDescuento>" + FacturaElectronicaUtils.getConvertirBigDecimal(descuento) + "</MontoDescuento>" +
-		        "<NaturalezaDescuento>" + Constantes.FORMATO_NATURALEZA_DESCUENTO + "</NaturalezaDescuento>";
+			 resultado = "<Descuento>" +
+					  "<MontoDescuento>" + FacturaElectronicaUtils.getConvertirBigDecimal(descuento) + "</MontoDescuento>" +
+		        "<NaturalezaDescuento>" + Constantes.FORMATO_NATURALEZA_DESCUENTO + "</NaturalezaDescuento>" + 
+		        "</Descuento>" ;
 			
 		} catch (Exception e) {
 			log.info("** Error  getDescuento: " + e.getMessage() + " fecha " + new Date());

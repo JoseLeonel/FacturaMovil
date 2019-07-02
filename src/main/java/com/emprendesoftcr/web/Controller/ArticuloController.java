@@ -661,6 +661,14 @@ public class ArticuloController {
 				TarifaIVAI tarifaIVAI = tarifaIVAIBo.findByCodigoTarifa(articulo.getCodigoTarifa1());
 				articulo.setImpuesto1(tarifaIVAI.getMonto());
 			}
+			if(articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
+				articulo.setImpuesto(Constantes.ZEROS_DOUBLE);
+				articulo.setCodigoTarifa(Constantes.EMPTY);
+			}
+			if(articulo.getTipoImpuesto1().equals(Constantes.EMPTY)) {
+				articulo.setImpuesto1(Constantes.ZEROS_DOUBLE);
+				articulo.setCodigoTarifa1(Constantes.EMPTY);
+			}
 
 			articulo.setCreated_at(new Date());
 			articulo.setTipoImpuesto(articulo.getTipoImpuesto() == null ? Constantes.EMPTY : articulo.getTipoImpuesto());
@@ -720,6 +728,7 @@ public class ArticuloController {
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
+			articulo.setImpuesto1(articulo.getImpuesto1() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto1());
       articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null?Constantes.EMPTY:articulo.getCodigoTarifa());
       articulo.setCodigoTarifa1(articulo.getCodigoTarifa1() == null?Constantes.EMPTY:articulo.getCodigoTarifa1());
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -761,13 +770,18 @@ public class ArticuloController {
 				TarifaIVAI tarifaIVAI = tarifaIVAIBo.findByCodigoTarifa(articulo.getCodigoTarifa1());
 				articulo.setImpuesto1(tarifaIVAI.getMonto());
 			}
+			if(articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
+				articulo.setImpuesto(Constantes.ZEROS_DOUBLE);
+				articulo.setCodigoTarifa(Constantes.EMPTY);
+			}
+			if(articulo.getTipoImpuesto1().equals(Constantes.EMPTY)) {
+				articulo.setImpuesto1(Constantes.ZEROS_DOUBLE);
+				articulo.setCodigoTarifa1(Constantes.EMPTY);
+			}
 			
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			
-			
-			
 			
 			
 			
@@ -858,6 +872,10 @@ public class ArticuloController {
 	public RespuestaServiceValidator cambiarPrecio(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Articulo articulo, @RequestParam Double precioPublico, @RequestParam String codigo, @RequestParam String tipoImpuesto, @RequestParam Double impuesto, @RequestParam String descripcion, @RequestParam String tipoCodigo, String unidadMedida, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
+			articulo.setImpuesto1(articulo.getImpuesto1() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto1());
+      articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null?Constantes.EMPTY:articulo.getCodigoTarifa());
+      articulo.setCodigoTarifa1(articulo.getCodigoTarifa1() == null?Constantes.EMPTY:articulo.getCodigoTarifa1());
 			Articulo articuloBD = articuloBo.buscarPorCodigoYEmpresa(codigo, usuario.getEmpresa());
 
 			if (articuloBD == null) {
@@ -880,12 +898,37 @@ public class ArticuloController {
 			} else {
 				articuloBD.setTipoCodigo(tipoCodigo);
 			}
-			articuloBD.setPrecioPublico(precioPublico);
-			articuloBD.setUnidadMedida(unidadMedida);
-			articuloBD.setDescripcion(descripcion);
-			articuloBD.setTipoImpuesto(tipoImpuesto);
-			articuloBD.setImpuesto(impuesto);
+			if(articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
+				articulo.setImpuesto(Constantes.ZEROS_DOUBLE);
+				articulo.setCodigoTarifa(Constantes.EMPTY);
+			}
+			if(articulo.getTipoImpuesto1().equals(Constantes.EMPTY)) {
+				articulo.setImpuesto1(Constantes.ZEROS_DOUBLE);
+				articulo.setCodigoTarifa1(Constantes.EMPTY);
+			}
 			articuloBD.setUpdated_at(new Date());
+			articuloBD.setCosto(articulo.getCosto() == null ? Constantes.ZEROS_DOUBLE : articulo.getCosto());
+			articuloBD.setMarca(articulo.getMarca());
+			articuloBD.setDescripcion(articulo.getDescripcion());
+			articuloBD.setContable(articulo.getContable());
+			articuloBD.setCategoria(articulo.getCategoria());
+			articuloBD.setUnidadMedida(articulo.getUnidadMedida());
+			articuloBD.setTipoCodigo(articulo.getTipoCodigo());
+			articuloBD.setEstado(articulo.getEstado());
+			articuloBD.setGananciaPrecioPublico(articulo.getGananciaPrecioPublico() != null ? articulo.getGananciaPrecioPublico() : Constantes.ZEROS_DOUBLE);
+			articuloBD.setPrecioPublico(articulo.getPrecioPublico());
+			articuloBD.setUsuario(usuario);
+			articuloBD.setCodigo(articulo.getCodigo().trim());
+			articuloBD.setTipoImpuesto(articulo.getTipoImpuesto() == null ? Constantes.EMPTY : articulo.getTipoImpuesto());
+			articuloBD.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
+			articuloBD.setComanda(articulo.getComanda());
+			articuloBD.setPrioridad(articulo.getPrioridad());
+			articuloBD.setTipoImpuesto1(articulo.getTipoImpuesto1() ==null?Constantes.EMPTY:articulo.getTipoImpuesto1());
+			articuloBD.setImpuesto1(articulo.getImpuesto1() ==null?Constantes.ZEROS_DOUBLE:articulo.getImpuesto1());
+			articuloBD.setPesoTransporte(articulo.getPesoTransporte() ==null?Constantes.ZEROS_DOUBLE:articulo.getPesoTransporte());
+			articuloBD.setCodigoTarifa(articulo.getCodigoTarifa() ==null?Constantes.EMPTY:articulo.getCodigoTarifa());
+			articuloBD.setCodigoTarifa1(articulo.getCodigoTarifa1() ==null?Constantes.EMPTY:articulo.getCodigoTarifa1());
+			articuloBD.setBaseImponible(articulo.getBaseImponible() ==null?Constantes.ZEROS:articulo.getBaseImponible());
 			articuloBo.modificar(articuloBD);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBD);

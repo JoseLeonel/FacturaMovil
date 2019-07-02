@@ -51,6 +51,7 @@ public class Constantes {
 	public static final Integer					NO_ENVIAR_CORREO_CLIENTE_FRECUENTE									= 0;
 //cantidad de dias de un credito minimo
 	public static final Integer					CANTIDAD_DIAS_MINIMO_CREDITO												= 1;
+	
 	// Tipo de codigos de productos
 	public static final String					TIPO_IMPUESTO_VENTA_ARTICULO												= "01";
 	public static final String					TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL						= "07";
@@ -105,11 +106,11 @@ public class Constantes {
 	public static final String					CASA_MATRIZ_INICIAL_FACTURA													= "001";
 	public static final String					TERMINAL_INICIAL_FACTURA														= "00001";
 
-	public static final String					DOCXMLS_FACTURA_4_3																	= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/facturaElectronica";
-	public static final String					DOCXMLS_NOTA_DEBITO_4_3															= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/notaDebitoElectronica";
-	public static final String					DOCXMLS_NOTA_CREDITO_4_3														= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/notaCreditoElectronica";
-	public static final String					DOCXMLS_RESPUESTA_HACIENDA_4_3											= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/mensajeHacienda";
-	public static final String					DOCXMLS_RECEPCION_FACTURA_4_3												= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.3/mensajeReceptor";
+	public static final String					DOCXMLS_FACTURA_4_3																	= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronica";
+	public static final String					DOCXMLS_NOTA_DEBITO_4_3															= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/notaDebitoElectronica";
+	public static final String					DOCXMLS_NOTA_CREDITO_4_3														= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/notaCreditoElectronica";
+	public static final String					DOCXMLS_RESPUESTA_HACIENDA_4_3											= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/mensajeHacienda";
+	public static final String					DOCXMLS_RECEPCION_FACTURA_4_3												= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/mensajeReceptor";
 	public static final String					DOCXMLS_TIQUETE_4_3																	= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/tiqueteElectronico";
 
 	public static final String					DOCXMLS_FACTURA_4_2																	= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/facturaElectronica";

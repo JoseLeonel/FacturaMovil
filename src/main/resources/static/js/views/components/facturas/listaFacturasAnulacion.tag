@@ -772,12 +772,15 @@ function cargarDetallesFacturaEnEspera(data){
             
         self.detail.push({
             codigo          : modeloTabla.codigo,
-            tipoImpuesto    : modeloTabla.tipoImpuesto,
             descripcion     : modeloTabla.descripcion,
             cantidad        : parseFloat(modeloTabla.cantidad),
             precioUnitario  : parseFloat(modeloTabla.precioUnitario),
             impuesto        : parseFloat(modeloTabla.impuesto),
+            tipoImpuesto    : modeloTabla.tipoImpuesto,
+            tipoImpuesto1   : parseFloat(modeloTabla.tipoImpuesto1),
+            impuesto1        : parseFloat(modeloTabla.impuesto1),
             montoImpuesto   : parseFloat(modeloTabla.montoImpuesto),
+            montoImpuesto1  : parseFloat(modeloTabla.montoImpuesto1),
             montoDescuento  : parseFloat(modeloTabla.montoDescuento),
             porcentajeDesc  : parseFloat(modeloTabla.porcentajeDesc),
             subTotal        : parseFloat(modeloTabla.subTotal),

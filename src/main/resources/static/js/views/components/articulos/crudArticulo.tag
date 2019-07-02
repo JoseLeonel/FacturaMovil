@@ -986,7 +986,7 @@ __CalculoGananciaMayorista(e){
     var costo     =  __valorNumerico($('#costo').val())
     var precioMayorista    =  __valorNumerico($('#precioMayorista').val())
     self.articulo.gananciaPrecioMayorista    = precioMayorista >0?_porcentajeGanancia(costo,impuesto,impuesto1,precioMayorista):0
-    self.articulo.precioMayorista = precioMayorista
+    self.articulo.precioMayorista = precioMayorista >0?precioMayorista:self.articulo.precioMayorista
    
     self.update()
 }
@@ -999,7 +999,7 @@ __CalculoGananciaEspecial(e){
     var costo     =  __valorNumerico($('#costo').val())
     var precioEspecial = __valorNumerico($('#precioEspecial').val())
     self.articulo.gananciaPrecioEspecial = precioEspecial >0?_porcentajeGanancia(costo,impuesto,impuesto1,precioEspecial):0
-    self.articulo.precioEspecial = precioEspecial
+    self.articulo.precioEspecial = precioEspecial > 0?precioEspecial:self.articulo.precioEspecial
     self.update()
 }
 /**
@@ -1024,7 +1024,7 @@ __CalculoGananciaPublico(e){
     var costo     =  __valorNumerico($('#costo').val())
     var precioPublico    =  __valorNumerico($('#precioPublico').val())
     self.articulo.gananciaPrecioPublico    = precioPublico >0?_porcentajeGanancia(costo,impuesto,impuesto1,precioPublico):0
-    self.articulo.precioPublico = precioPublico
+    self.articulo.precioPublico = precioPublico > 0?precioPublico:self.articulo.precioPublico
     self.update()
 }
 
@@ -1048,7 +1048,7 @@ __CalculoGananciaSinPrecioEspecial(e){
     if(impuesto>0){
         total = total * impuesto
     }
-    self.articulo.precioEspecial = total
+    self.articulo.precioEspecial = total>0?total:self.articulo.precioEspecial
     self.update()
     $('.precioEspecial').val(self.articulo.precioEspecial)
 
@@ -1077,7 +1077,7 @@ __CalculoGananciaSinPrecioMayorista(e){
     if(impuesto>0){
         total = total * impuesto
     }
-    self.articulo.precioMayorista = total
+    self.articulo.precioMayorista = total>0?total:self.articulo.precioMayorista
     self.update()
     $('.precioMayorista').val(self.articulo.precioMayorista)
 }
@@ -1107,7 +1107,7 @@ function __ActualizarPreciosGananciaPrecioPublico(){
     if(impuesto>0){
         total = total * impuesto
     }
-    self.articulo.precioPublico = total
+    self.articulo.precioPublico = total>0?total:self.articulo.precioPublico
     self.update()
     $('.precioPublico').val(self.articulo.precioPublico)
 
@@ -1231,7 +1231,7 @@ function actualizarPreciosImpuestosPublico(){
     if(impuesto>0){
         total = total * impuesto
     }
-    self.articulo.precioPublico = total
+    self.articulo.precioPublico = total>0?total:self.articulo.precioPublico
     self.update()
     $('.precioPublico').val(self.articulo.precioPublico)
 
@@ -1261,7 +1261,7 @@ function actualizarPreciosImpuestosMayorista(){
     if(impuesto>0){
         total = total * impuesto
     }
-    self.articulo.precioMayorista = total
+    self.articulo.precioMayorista = total>0?total:self.articulo.precioMayorista
     self.update()
     $('.precioMayorista').val(self.articulo.precioMayorista)
     
@@ -1288,18 +1288,13 @@ function actualizarPreciosImpuestosEspecial(){
     if(impuesto1 > 0){
       total = total * impuesto1
     } 
-    if(impuesto>0){
+    if(impuesto > 0){
         total = total * impuesto
     }
-    self.articulo.precioEspecial = total
+    self.articulo.precioEspecial = total>0?total:self.articulo.precioEspecial
     self.update()
     $('.precioEspecial').val(self.articulo.precioEspecial)
-    
-
 }
-
-
-
 /**
 * Actualizar el precio costo
 **/
@@ -1319,10 +1314,10 @@ __ActualizarPreciosCosto(e){
          precioPublico = precioPublico * resultadoImpuesto  
        }
        if(impuesto > 0){
-        resultadoImpuesto =  impuesto + 1 
-        precioPublico = precioPublico * resultadoImpuesto  
+          resultadoImpuesto =  impuesto + 1 
+          precioPublico = precioPublico * resultadoImpuesto  
        }
-       self.articulo.precioPublico = precioPublico
+       self.articulo.precioPublico = precioPublico > 0?precioPublico:self.articulo.precioPublico
        self.articulo.costo = costo
        self.update()     
     }else{
@@ -1678,7 +1673,14 @@ __agregar(){
 
         if ($("#formulario").valid()) {
              var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
-            
+            if(tipo == "07"){
+                var baseImponible = $('#baseImponible').val()
+                if(baseImponible == 0){
+                   mensajeError("Debe actualizar la base imponible debe ser Activo")
+                   return 
+                }
+                
+            }
 
             
         
@@ -1750,7 +1752,14 @@ __Modificar(){
     var AplicoImpuesto2 = false
     if ($("#formulario").valid()) {
         var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
-        
+        if(tipo == "07"){
+            var baseImponible = $('#baseImponible').val()
+            if(baseImponible == 0){
+                mensajeError("Debe actualizar la base imponible debe ser Activo")
+               return 
+            }
+        }
+
 
         if(self.articulo.costo > self.articulo.precioPublico){
                 mensajeError("No se puede modificar el Articulo el precio Publico es menor al costo")

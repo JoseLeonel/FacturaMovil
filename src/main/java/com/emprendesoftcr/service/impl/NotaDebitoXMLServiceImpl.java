@@ -51,13 +51,12 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
 	private FirmaElectronicaService firmaElectronicaService;
 
 	@Override
-	public String getFirmarXML(String xmlString, Empresa empresa,Date fecha,Factura factura) throws Exception{
+	public String getFirmarXML(String xmlString, Empresa empresa,Date fecha) throws Exception{
 		String resultado = Constantes.EMPTY;
 		try {
 			Certificado certificado  = certificadoBo.findByEmpresa(empresa);
-			String esquemaXML = factura.getVersionEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2)?Constantes.DOCXMLS_NOTA_DEBITO_4_2:Constantes.DOCXMLS_NOTA_DEBITO_4_3;
 			if(certificado !=null) {
-				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, esquemaXML,fecha);	
+				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_NOTA_DEBITO_4_2,fecha);	
 			}else {
 				log.info("** Error  Empresa no se encuentra el certificado: " + empresa.getNombre());
 			}
@@ -100,14 +99,12 @@ public class NotaDebitoXMLServiceImpl implements NotaDebitoXMLService {
 			}else {
 				observacion = factura.getNota();
 			}
-			
+		
 			String datereferenciaEmision = FacturaElectronicaUtils.rfc3339(factura.getReferenciaFechaEmision());
 			 String date = FacturaElectronicaUtils.rfc3339(factura.getFechaEmision());
-			 String esquemaXML = factura.getVersionEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2)?Constantes.DOCXMLS_NOTA_DEBITO_4_2:Constantes.DOCXMLS_NOTA_DEBITO_4_3;
-	    xml = "<NotaDebitoElectronica xmlns=\"" + esquemaXML + "\" " +
+	    xml = "<NotaDebitoElectronica xmlns=\"" + Constantes.DOCXMLS_NOTA_DEBITO_4_2 + "\" " +
 	                "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
 	        "<Clave>" + factura.getClave() + "</Clave>" +
-	        "<CodigoActividad>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getCodigoActividad(),Constantes.FORMATO_CODIGO_ACTIVIDAD) + "</CodigoActividad>" +
 	        "<NumeroConsecutivo>" + factura.getNumeroConsecutivo() + "</NumeroConsecutivo>" +
 	        "<FechaEmision>" + date + "</FechaEmision>" +
 	        "<Emisor>" +

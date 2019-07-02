@@ -71,6 +71,42 @@ public class DetalleFacturaCommand {
 	
 
 
+	public DetalleFacturaCommand(Long id, Integer numeroLinea, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, String naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double ganancia, Double porcentajeDesc, String descripcion, String tipoCodigo, String codigo, String unidadMedida, String tipoImpuesto, String fechaEmisionSTR, String consecutivo, String consecutivoProforma, String tipoDoc, String nombreUsuario, Double montoGanancia, Factura factura, Double porcentajeGanancia, Double costo, String tipoImpuesto1, Double impuesto1, Double montoImpuesto1, Double pesoTransporte, Double pesoTransporteTotal) {
+		super();
+		this.id = id;
+		this.numeroLinea = numeroLinea;
+		this.precioUnitario = precioUnitario;
+		this.cantidad = cantidad;
+		this.montoTotal = montoTotal;
+		this.montoDescuento = montoDescuento;
+		this.naturalezaDescuento = naturalezaDescuento;
+		this.subTotal = subTotal;
+		this.impuesto = impuesto;
+		this.montoImpuesto = montoImpuesto;
+		this.montoTotalLinea = montoTotalLinea;
+		this.ganancia = ganancia;
+		this.porcentajeDesc = porcentajeDesc;
+		this.descripcion = descripcion;
+		this.tipoCodigo = tipoCodigo;
+		this.codigo = codigo;
+		this.unidadMedida = unidadMedida;
+		this.tipoImpuesto = tipoImpuesto;
+		this.fechaEmisionSTR = fechaEmisionSTR;
+		this.consecutivo = consecutivo;
+		this.consecutivoProforma = consecutivoProforma;
+		this.tipoDoc = tipoDoc;
+		this.nombreUsuario = nombreUsuario;
+		this.montoGanancia = montoGanancia;
+		this.factura = factura;
+		this.porcentajeGanancia = porcentajeGanancia;
+		this.costo = costo;
+		this.tipoImpuesto1 = tipoImpuesto1;
+		this.impuesto1 = impuesto1;
+		this.montoImpuesto1 = montoImpuesto1;
+		this.pesoTransporte = pesoTransporte;
+		this.pesoTransporteTotal = pesoTransporteTotal;
+	}
+
 	public DetalleFacturaCommand() {
 		super();
 	}
