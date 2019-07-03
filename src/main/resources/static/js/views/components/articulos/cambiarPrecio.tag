@@ -1079,7 +1079,7 @@ function __Impuestos(){
         descripcion:$.i18n.prop("tipo.impuesto.cemento")
      });
     self.impuestos.push({
-        codigo: '98',
+        codigo: '99',
         descripcion:$.i18n.prop("tipo.impuesto.otros")
      });
    
@@ -1113,7 +1113,7 @@ function __Impuestos1(){
         descripcion:$.i18n.prop("tipo.impuesto.cemento")
      });
     self.impuestos1.push({
-        codigo: '98',
+        codigo: '99',
         descripcion:$.i18n.prop("tipo.impuesto.otros")
      });
    
@@ -1214,13 +1214,13 @@ __agregar(){
 ** Modificar la Empresa
 **/
 __Modificar(){
-     if(validarPrecios()){
+    if(validarPrecios()){
          return
      }
     var AplicoImpuesto1 = false
     var AplicoImpuesto2 = false
     if ($("#formulario").valid()) {
-        var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
+                var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
         if(tipo == "07"){
                 var baseImponible = $('#baseImponible').val()
                 if(baseImponible == 0){
@@ -1234,17 +1234,19 @@ __Modificar(){
             mensajeError("No se puede modificar el Articulo el precio Publico es menor al costo")
             return 
         }
+
     self.error = false;
     self.exito = false;
     self.update();
-    var formulario = $("#formulario").serialize();
-    $.ajax({
-        type : "POST",
-        dataType : "json",
-        data : formulario,
-        url : "ModificarArticuloAjax.do",
-        success : function(data) {
-            if (data.status != 200) {
+    if ($("#formulario").valid()) {
+        var formulario = $("#formulario").serialize();
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            data : formulario,
+            url : "ModificarArticuloAjax.do",
+            success : function(data) {
+                if (data.status != 200) {
                     serverMessageJson(data);
                     if (data.message != null && data.message.length > 0) {
                         swal({
@@ -1273,7 +1275,7 @@ __Modificar(){
                  mensajeErrorServidor(xhr, status);
             }
         });
-    
+    }
     }
     
 }

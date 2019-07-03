@@ -1575,7 +1575,7 @@ function __Impuestos(){
         descripcion:$.i18n.prop("tipo.impuesto.cemento")
      });
     self.impuestos.push({
-        codigo: '98',
+        codigo: '99',
         descripcion:$.i18n.prop("tipo.impuesto.otros")
      });
    
@@ -1606,7 +1606,7 @@ function __Impuestos1(){
         descripcion:$.i18n.prop("tipo.impuesto.cemento")
      });
     self.impuestos1.push({
-        codigo: '98',
+        codigo: '99',
         descripcion:$.i18n.prop("tipo.impuesto.otros")
      });
    
