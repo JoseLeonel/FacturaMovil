@@ -116,16 +116,16 @@ public class Detalle implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
-	@Column(name = "monto_gananc", columnDefinition = "Decimal(10,5) default '0.00'")
+	@Column(name = "monto_gananc")
 	private Double						montoGanancia;
 
-	@Column(name = "peso_transporte", columnDefinition = "Decimal(10,5) default '0.00'")
+	@Column(name = "peso_transporte" )
 	private Double						pesoTransporte;
 
-	@Column(name = "peso_transTotal", columnDefinition = "Decimal(10,5) default '0.00'")
+	@Column(name = "peso_transTotal")
 	private Double						pesoTransporteTotal;
 
-	@Column(name = "imp_neto", columnDefinition = "Decimal(10,5) default '0.00'")
+	@Column(name = "imp_neto")
 	private Double						ImpuestoNeto;
 
 	@Column(name = "base_imposible", columnDefinition = "Decimal(10,5) default '0.00'")

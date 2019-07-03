@@ -729,8 +729,11 @@ public class ArticuloController {
 		try {
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articulo.setImpuesto1(articulo.getImpuesto1() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto1());
+			articulo.setTipoImpuesto(articulo.getTipoImpuesto() == null?Constantes.EMPTY:articulo.getTipoImpuesto());
+			articulo.setTipoImpuesto1(articulo.getTipoImpuesto1() == null?Constantes.EMPTY:articulo.getTipoImpuesto1());
       articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null?Constantes.EMPTY:articulo.getCodigoTarifa());
       articulo.setCodigoTarifa1(articulo.getCodigoTarifa1() == null?Constantes.EMPTY:articulo.getCodigoTarifa1());
+      articulo.setBaseImponible(articulo.getBaseImponible() == null?Constantes.BASE_IMPONIBLE_INACTIVO:articulo.getBaseImponible());
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			if (articulo.getTipoImpuesto() != null) {
 				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Sin impuesto") ? Constantes.EMPTY : articulo.getTipoImpuesto());

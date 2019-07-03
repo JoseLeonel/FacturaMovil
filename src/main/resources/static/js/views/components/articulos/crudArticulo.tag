@@ -22,7 +22,7 @@
                                 </li>
                                 <li class="nav-itemImpuestos" onclick={impuestosIVAIPantallaClick} >
                                     <a class="nav-link" id="contact-impuesto"  href="#itemimpuesto" role="tab" aria-controls="contact-impuesto"
-                                    aria-selected="false">Impuestos</a>
+                                    aria-selected="false">Impuestos IVA</a>
                                 </li>
                                 <li class="nav-item" onclick={otrosPantallaClick}>
                                     <a class="nav-link" id="contact-otro" data-toggle="tab" href="#otros" role="tab" aria-controls="otros"
@@ -48,14 +48,14 @@
                                         </div>
                                         <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                             <label  class="tamanoLetra">{$.i18n.prop("articulo.costo")} </label>
-                                            <input type="number" step="any" class="form-control costo campoNumerico" id="costo" name="costo" value="{articulo.costo}"  onkeyup ={__ActualizarPreciosCosto}>
+                                            <input type="number" step="any" class="form-control costo campoNumerico" id="costo" name="costo" value="{articulo.costo.toFixed(0)}"  onkeyup ={__ActualizarPreciosCosto}>
                                         </div>
 
                                     </div>    
                                     <div class="row">
                                         <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6 has-success">
                                             <label  class="tamanoLetra">{$.i18n.prop("articulo.precioPublico")}  <span class="requeridoDato">*</span></label>
-                                            <input type="number" step="any" class="form-control precioPublico campoNumerico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoGananciaPublico} value="{articulo.precioPublico}"  >
+                                            <input type="number" step="any" class="form-control precioPublico campoNumerico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoGananciaPublico} value="{articulo.precioPublico.toFixed(0)}"  >
                                         </div>
 
                                         <div class= "col-md-6 col-sx-4 col-sm-6 col-lg-6 has-success">
@@ -66,7 +66,7 @@
                                     <div class="row">
                                         <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6 has-success">
                                             <label  class="tamanoLetra">{$.i18n.prop("articulo.precioMayorista")}  </label>
-                                            <input type="number" step="any" class="form-control precioMayorista campoNumerico" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista}" onkeyup={__CalculoGananciaMayorista} >
+                                            <input type="number" step="any" class="form-control precioMayorista campoNumerico" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista.toFixed(0)}" onkeyup={__CalculoGananciaMayorista} >
                                         </div>  
                                         <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6 has-success">
                                             <label class="tamanoLetra" >{$.i18n.prop("articulo.gananciaPrecioMayorista")} % </label>
@@ -77,7 +77,7 @@
                                     <div class="row">
                                         <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6 has-success">
                                             <label  class="tamanoLetra">{$.i18n.prop("articulo.precioEspecial")}  </label>
-                                            <input type="number" step="any" class="form-control precioEspecial campoNumerico" id="precioEspecial" name="precioEspecial" value="{articulo.precioEspecial}"  onkeyup={__CalculoGananciaEspecial}>
+                                            <input type="number" step="any" class="form-control precioEspecial campoNumerico" id="precioEspecial" name="precioEspecial" value="{articulo.precioEspecial.toFixed(0)}"  onkeyup={__CalculoGananciaEspecial}>
                                         </div>                        
                                         <div class= "col-col-md-6 col-sx-4 col-sm-6 col-lg-6 has-success">
                                             <label class="tamanoLetra" >{$.i18n.prop("articulo.gananciaPrecioEspecial")} % </label>
@@ -477,8 +477,11 @@
 		descripcion:"",
         serie:"",
 		unidadMedida:"",
-		costo:"",
-		impuesto:0,
+		costo:null,
+		impuesto1:null,
+        impuesto:null,
+        codigoTarifa:null,
+        codigoTarifa1:null,
         minimo:0,
         maximo:0,
 		precioPublico:null,
@@ -522,7 +525,7 @@ self.on('mount',function(){
     __Impuestos() 
     __Impuestos1()
     __tipoCodigo()
-    LimpiarArticulo()
+     LimpiarArticulo()
     __Consulta()
     window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
@@ -651,8 +654,11 @@ function LimpiarArticulo(){
 		descripcion:"",
         serie:"",
 		unidadMedida:"",
-		costo:"",
-		impuesto:0,
+		costo:null,
+		impuesto:null,
+        impuesto1:null,
+        codigoTarifa:null,
+        codigoTarifa1:null,
         minimo:0,
         maximo:0,
 		precioPublico:null,
@@ -661,6 +667,7 @@ function LimpiarArticulo(){
 		gananciaPrecioMayorista:null,
 		precioEspecial:null,
 		gananciaPrecioEspecial:null,
+        tipoImpuesto:null,
 		estado:"",
 		marca:{
             id:null
@@ -676,6 +683,7 @@ function LimpiarArticulo(){
    $('.selectTipoImpuesto').prop("selectedIndex", 0);
    $('.selectTipoImpuesto1').prop("selectedIndex", 0);
    $('.selectTipoCodigo').prop("selectedIndex", 0);
+   $('.selectTipoCodigo1').prop("selectedIndex", 0);
    $('.selecTipoUnidad').prop("selectedIndex", 0);
    $('.selectMarca').prop("selectedIndex", 0);
    $('.selectCategoria').prop("selectedIndex", 0);
@@ -687,6 +695,9 @@ function LimpiarArticulo(){
    $('.descripcion').val(null)
    $('.serie').val(null)
    $('.costo').val(null)
+   $('.codigoTarifa1').val(null)
+   $('.codigoTarifa').val(null)
+   $('.tipoImpuesto').val(null)
    $('.impuesto').val(null)
    $('.impuesto1').val(null)
    $('.precioPublico').val(null)
@@ -695,11 +706,11 @@ function LimpiarArticulo(){
    $('.gananciaPrecioMayorista').val(null)
    $('.precioEspecial').val(null)
    $('.gananciaPrecioEspecial').val(null)
-   $('.prioridad').val(1)
+   $('.prioridad').val(null)
    $('.pesoTransporte').val(null)
-    $(".errorServerSideJgrid").remove();
-    $("#formulario").validate(reglasDeValidacion());
-    enviarCargarCombos()
+   $(".errorServerSideJgrid").remove();
+   $("#formulario").validate(reglasDeValidacion());
+   enviarCargarCombos()
 }
 /**
 *  Envia  a llamar a los eventos ajax de cada combo para actualizarlo de acuerdo a la empresa
@@ -911,7 +922,6 @@ __agregarSalidaInventario(){
                         mensajeErrorServidor(xhr, status);
                     }
                 });
-        
     }
 }
 /**
@@ -986,8 +996,11 @@ __CalculoGananciaMayorista(e){
     var costo     =  __valorNumerico($('#costo').val())
     var precioMayorista    =  __valorNumerico($('#precioMayorista').val())
     self.articulo.gananciaPrecioMayorista    = precioMayorista >0?_porcentajeGanancia(costo,impuesto,impuesto1,precioMayorista):0
+    self.articulo.gananciaPrecioMayorista  =__valorNumerico(self.articulo.gananciaPrecioMayorista)
+    self.articulo.gananciaPrecioMayorista = self.articulo.gananciaPrecioMayorista.toFixed(2)
     self.articulo.precioMayorista = precioMayorista >0?precioMayorista:self.articulo.precioMayorista
-   
+   self.articulo.precioMayorista = __valorNumerico(self.articulo.precioMayorista)
+   self.articulo.precioMayorista  = self.articulo.precioMayorista.toFixed(2) 
     self.update()
 }
 /**
@@ -999,6 +1012,8 @@ __CalculoGananciaEspecial(e){
     var costo     =  __valorNumerico($('#costo').val())
     var precioEspecial = __valorNumerico($('#precioEspecial').val())
     self.articulo.gananciaPrecioEspecial = precioEspecial >0?_porcentajeGanancia(costo,impuesto,impuesto1,precioEspecial):0
+    self.articulo.gananciaPrecioEspecial = __valorNumerico(self.articulo.gananciaPrecioEspecial)
+    self.articulo.gananciaPrecioEspecial = self.articulo.gananciaPrecioEspecial.toFixed(2)
     self.articulo.precioEspecial = precioEspecial > 0?precioEspecial:self.articulo.precioEspecial
     self.update()
 }
@@ -1014,7 +1029,6 @@ __ActualizarPreciosImpuestos(e){
 __ActualizarPreciosImpuestos1(e){
    _CalculoPrecio()
 }
-
 /**
 * Porcentaje de ganancia de Precio al Publico
 **/
@@ -1024,7 +1038,9 @@ __CalculoGananciaPublico(e){
     var costo     =  __valorNumerico($('#costo').val())
     var precioPublico    =  __valorNumerico($('#precioPublico').val())
     self.articulo.gananciaPrecioPublico    = precioPublico >0?_porcentajeGanancia(costo,impuesto,impuesto1,precioPublico):0
-    self.articulo.precioPublico = precioPublico > 0?precioPublico:self.articulo.precioPublico
+    self.articulo.gananciaPrecioPublico = __valorNumerico(self.articulo.gananciaPrecioPublico )
+    self.articulo.gananciaPrecioPublico = self.articulo.gananciaPrecioPublico.toFixed(2)
+    self.articulo.precioPublico = precioPublico.toFixed(2)
     self.update()
 }
 
@@ -1049,11 +1065,11 @@ __CalculoGananciaSinPrecioEspecial(e){
         total = total * impuesto
     }
     self.articulo.precioEspecial = total>0?total:self.articulo.precioEspecial
+    self.articulo.precioEspecial = __valorNumerico(self.articulo.precioEspecial)
+    self.articulo.precioEspecial = self.articulo.precioEspecial.toFixed(2)
     self.update()
     $('.precioEspecial').val(self.articulo.precioEspecial)
-
 }
-
 /**
 * Porcentaje de ganancia de Precio mayorista
 **/
@@ -1078,6 +1094,8 @@ __CalculoGananciaSinPrecioMayorista(e){
         total = total * impuesto
     }
     self.articulo.precioMayorista = total>0?total:self.articulo.precioMayorista
+    self.articulo.precioMayorista =  __valorNumerico(self.articulo.precioMayorista) 
+    self.articulo.precioMayorista = self.articulo.precioMayorista.toFixed(2)
     self.update()
     $('.precioMayorista').val(self.articulo.precioMayorista)
 }
@@ -1108,6 +1126,8 @@ function __ActualizarPreciosGananciaPrecioPublico(){
         total = total * impuesto
     }
     self.articulo.precioPublico = total>0?total:self.articulo.precioPublico
+    self.articulo.precioPublico = __valorNumerico(self.articulo.precioPublico)
+    self.articulo.precioPublico = self.articulo.precioPublico.toFixed(2)
     self.update()
     $('.precioPublico').val(self.articulo.precioPublico)
 
@@ -1147,9 +1167,7 @@ __asignarImpuesto(){
     actualizarPreciosImpuestosPublico()
     actualizarPreciosImpuestosEspecial()
     self.tarifas1  = {aaData:[]}
-    
     self.update()
-   
 }
 
 /**
@@ -1262,10 +1280,10 @@ function actualizarPreciosImpuestosMayorista(){
         total = total * impuesto
     }
     self.articulo.precioMayorista = total>0?total:self.articulo.precioMayorista
+    self.articulo.precioMayorista =__valorNumerico(self.articulo.precioMayorista)
+    self.articulo.precioMayorista =  self.articulo.precioMayorista.toFixed(2) 
     self.update()
     $('.precioMayorista').val(self.articulo.precioMayorista)
-    
-
 }
 
 function actualizarPreciosImpuestosEspecial(){
@@ -1302,13 +1320,14 @@ __ActualizarPreciosCosto(e){
     var impuesto  =  __valorNumerico($('#impuesto').val())/100
     var impuesto1 =  __valorNumerico($('#impuesto1').val())/100
     var costo     =  __valorNumerico($('#costo').val())
-    var gananciaPublica = __valorNumerico($('#gananciaPrecioPublico').val())/100
     var precioPublico =  __valorNumerico($('#precioPublico').val())
+    var gananciaPublica = _porcentajeGanancia(costo,impuesto,impuesto1,precioPublico)
+    gananciaPublica = gananciaPublica >0?gananciaPublica/100:0
+    
      //  Costo , ganancia digitada , impuestos digitados  Altera el precio
-    if(gananciaPublica > 0){
-       var resultadoPorcentajeGanancia = 1-gananciaPublica
+       var resultadoPorcentajeGanancia = gananciaPublica>0?1-gananciaPublica:0
        var resultadoImpuesto = 0
-       precioPublico =  costo /resultadoPorcentajeGanancia
+       precioPublico =  costo > 0 && resultadoPorcentajeGanancia >0? costo /resultadoPorcentajeGanancia:precioPublico
        if(impuesto1 > 0){
          resultadoImpuesto =  impuesto1 + 1 
          precioPublico = precioPublico * resultadoImpuesto  
@@ -1317,33 +1336,13 @@ __ActualizarPreciosCosto(e){
           resultadoImpuesto =  impuesto + 1 
           precioPublico = precioPublico * resultadoImpuesto  
        }
+       self.articulo.gananciaPrecioPublico    =  gananciaPublica * 100
+       self.articulo.gananciaPrecioPublico    = __valorNumerico(self.articulo.gananciaPrecioPublico)
+       self.articulo.gananciaPrecioPublico = self.articulo.gananciaPrecioPublico.toFixed()
        self.articulo.precioPublico = precioPublico > 0?precioPublico:self.articulo.precioPublico
        self.articulo.costo = costo
        self.update()     
-    }else{
-        var total = 0
-        var totalGanancia = 0
-        //Ganancia es cero
-        if(precioPublico > 0){
-           var resultado = impuesto + impuesto1 ;
-           resultado = resultado / 100
-           resultado = resultado > 0?resultado + 1:0
-           // se le quita impuestos
-            if(resultado > 0){
-               total = precioPublico / resultado
-            }else{
-              total = precioPublico  
-            }
-            if(total > costo){
-                totalGanancia = costo / total 
-                totalGanancia = 1- totalGanancia
-                self.articulo.gananciaPrecioPublico    =  totalGanancia
-            }else{
-                self.articulo.gananciaPrecioPublico    = 0  
-            }
- 
-        }
-    }
+    
 
 }
 /**
@@ -1414,13 +1413,12 @@ function __listadoCategoriasActivas(){
                 self.update();
                 $('.selectCategoria').selectpicker(
                     {
-                         style: 'btn-info',
+                        style: 'btn-info',
                         size:10,
                         liveSearch: true
                     }
                 );
                 $('.selectCategoria').selectpicker('refresh');
-
             }            
         },
         error: function (xhr, status) {
@@ -1451,8 +1449,6 @@ function __listadoMarcasActivas(){
                     }
                 );
                 $('.selectMarca').selectpicker('refresh');
-
-    
             }            
         },
         error: function (xhr, status) {
@@ -1724,6 +1720,7 @@ __agregar(){
                             $('#serie').val(null)
                             $('#costo').val(null)
                             $('#impuesto').val(null)
+                            $('#impuesto1').val(null)
                             $('#precioPublico').val(null)
                             $('#gananciaPrecioPublico').val(null)
                             $('#precioMayorista').val(null)

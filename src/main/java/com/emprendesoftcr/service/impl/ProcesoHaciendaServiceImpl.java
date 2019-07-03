@@ -404,7 +404,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 				// Inventario
-				 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				 //recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				// Alajuela
 				//recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
