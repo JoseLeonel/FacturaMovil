@@ -1,6 +1,176 @@
 <cambiar-precio>
 
-   
+                   <button show = {botonAgregar} title="Agregar un Nuevo Articulo"  onclick={__agregar}   class="btn-green btn-add pull-right" >&nbsp Nuevo</button>
+                    <button  onclick={__Modificar} title="modificar el Articulo" show={botonModificar}  class="btn-green btn-edit pull-right" > &nbsp {$.i18n.prop("btn.modificar")}</button>
+                    <button  onclick={__Imprimir} title="Imprimir codigo  y precio" class="btn-imprimirCambioPrecio btn-print pull-right" > &nbsp {$.i18n.prop("btn.imprimir")}</button>
+
+    <div class="row">
+            <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
+                <div id="divFormulario" >
+                        <!--Form-->
+                        <form class="form-horizontal formulario" name= "formulario" id="formulario">
+                            <input type="hidden" name="id" id="id" value="{articulo.id}">
+                            <input type="hidden" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista}"  >
+                            <input type="hidden" id="gananciaPrecioMayorista" name="gananciaPrecioMayorista" value="{articulo.gananciaPrecioMayorista}">
+                            <input type="hidden"  id="gananciaPrecioEspecial" name="gananciaPrecioEspecial" value="{articulo.gananciaPrecioEspecial}"  >
+                            <input type="hidden"  id="precioEspecial" name="precioEspecial" value="{articulo.precioEspecial}" >
+                            <input type="hidden"  id="maximo" name="maximo" value="{articulo.maximo}"  >
+                            <input type="hidden"  id="minimo" name="minimo" value="{articulo.minimo}"  >
+                            <input type="hidden"  id="cantidad" name="cantidad" value="{articulo.cantidad}"  >
+                            <input type="hidden"  id="prioridad" name="prioridad" value="{articulo.prioridad}"  >
+                            <input type="hidden"  id="pesoTransporte" name="pesoTransporte" value="{articulo.pesoTransporte}"  >
+                            <div class="panel-group" id="accordion">
+                                <div class="panel panel-default" id="cuentas">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" >
+                                        <div class="panel-heading" style="background: #3c8dbc; color: white;">
+                                            <h4 class="panel-title"><span class="fa fa-bank col-md-offset-5"></span> Precios y IVA impuestos</h4>
+                                        </div>
+                                    </a>
+                                    <div id="collapse1" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
+                                                    <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.codigo")}  <span class="requeridoDato">*</span></label>
+                                                    <input type="text" class="campoNumerico codigo" id="codigo" name="codigo" value="{articulo.codigo}"  onkeypress={__Consulta} autofocus="autofocus">
+                                                </div>
+                                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
+                                                    <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.descripcion")}  <span class="requeridoDato">*</span></label>
+                                                    <input type="text" class="campo descripcion" id="descripcion" name="descripcion" value="{articulo.descripcion}"  >
+                                                </div>
+                                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
+                                                    <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.categoria")}  <span class="requeridoDato">*</span></label>
+                                                    <select  class="campo selectCategoria"   name="categoria"  data-live-search="true">
+                                                        <option  each={categorias.aaData}  data-tokens ={descripcion} value="{id}" selected="{articulo.categoria.id ==id?true:false}" >{descripcion}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
+                                                    <label class="tamanoLetraTotales"  >{$.i18n.prop("articulo.costo")} </label>
+                                                    <input type="number" step="any" class="campoNumerico costo" id="costo" name="costo" value="{articulo.costo}"  onkeyup ={__ActualizarPreciosCosto}>
+                                                </div>
+                                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
+                                                    <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.gananciaPrecioPublico")}%  </label>
+                                                    <input type="number" step="any" class="campoNumerico gananciaPrecioPublico" id="gananciaPrecioPublico" name="gananciaPrecioPublico"  value="{articulo.gananciaPrecioPublico.toFixed(5)}"  onkeyup ={__CalculoGananciaSinPrecioPublico}>
+                                                </div>
+                                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
+                                                    <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.precioPublico")}  <span class="requeridoDato">*</span></label>
+                                                    <input type="number" step="any" class="campoNumerico precioPublico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoGananciaPublico} value="{articulo.precioPublico}"  >
+                                                </div>
+                                            </div>    
+                                            <div class="row">
+                                                <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
+                                                    <label class="tamanoLetraTotales">{$.i18n.prop("articulo.tipoImpuesto")}<span class="requeridoDato">*</span></label>
+                                                    <select onchange= {__asignarImpuesto} class="campo selectTipoImpuesto" id="tipoImpuesto" name="tipoImpuesto"  >
+                                                        <option  each={impuestos}  value="{codigo}" selected="{articulo.tipoImpuesto ==codigo?true:false}"  >{descripcion}</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
+                                                    <label class="tamanoLetraTotales">{$.i18n.prop("articulo.codigoTarifa")}</label>
+                                                    <select  onchange= {__AsignarTarifa} class="campo selectCodigoTarifa1" id="codigoTarifa" name="codigoTarifa"  >
+                                                        <option  each={tarifas1.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa ==tarifaIVAI.codigoTarifa?true:false}"  >{tarifaIVAI.descripcion}</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class= "col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
+                                                    <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.impuesto")}  </label>
+                                                    <input type="number" step="any" class="campoNumerico impuesto" id="impuesto" name="impuesto" value="{articulo.impuesto}"  onkeyup ={__ActualizarPreciosImpuestos}>
+                                                </div>
+                                            </div>    
+                                            <div class="row">  
+                                                <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
+                                                    <label class="tamanoLetraTotales">{$.i18n.prop("articulo.tipoImpuesto1")}</label>
+                                                    <select onchange= {__asignarImpuesto1} class="campo selectTipoImpuesto1" id="tipoImpuesto1" name="tipoImpuesto1"  >
+                                                        <option  each={impuestos1}  value="{codigo}" selected="{articulo.tipoImpuesto1 ==codigo?true:false}"  >{descripcion}</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
+                                                    <label class="tamanoLetraTotales">{$.i18n.prop("articulo.codigoTarifa2")}</label>
+                                                        <select onchange= {__AsignarTarifa1} class="campo selectCodigoTarifa2" id="codigoTarifa1" name="codigoTarifa1"  >
+                                                            <option  each={tarifas2.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa1 ==tarifaIVAI.codigoTarifa?true:false}" >{tarifaIVAI.descripcion}</option>
+                                                        </select>
+                                                </div>
+
+                                                <div class= "col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
+                                                    <label  class="tamanoLetraTotales">{$.i18n.prop("articulo.impuesto1")}  </label>
+                                                    <input type="number" step="any" class=" impuesto1 campoNumerico" id="impuesto1" name="impuesto1" value="{articulo.impuesto1}"  onkeyup ={__CalculoImpuesto1}>
+                                                </div>
+                                            </div>    
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>          
+                            <div class="panel-group" id="accordion">
+                                <div class="panel panel-default" id="cuentas">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" >
+                                        <div class="panel-heading" style="background: #3c8dbc; color: white;">
+                                            <h4 class="panel-title"><span class="fa fa-bank col-md-offset-5"></span> Otros</h4>
+                                        </div>
+                                    </a>
+                                    <div id="collapse2" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                                    <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.unidadMedida")}  <span class="requeridoDato">*</span></label>
+                                                    <select  class="campo selecTipoUnidad has-success" name="unidadMedida" >
+                                                        <option   each={tipoUnidades.aaData}  value="{codigo}"  selected="{articulo.unidadMedida ==codigo?true:false}" >{descripcion}</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                                    <label class="tamanoLetraTotales">{$.i18n.prop("articulo.contable")}</label>
+                                                    <select  class="campo" id="contable" name="contable" >
+                                                        <option  each={contables}  value="{codigo}" selected="{articulo.contable ==codigo?true:false}" >{descripcion}</option>
+                                                    </select>
+                                                </div>
+                                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                                    <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.marca")}  <span class="requeridoDato">*</span></label>
+                                                    <select  class="campo selectMarca"  name="marca" data-live-search="true">
+                                                        <option  each={marcas.aaData}  value="{id}" data-tokens ={descripcion} selected="{articulo.marca.id ==id?true:false}"  >{descripcion}</option>
+                                                    </select>
+                                                </div>
+                                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                                    <label  class="tamanoLetraTotales">{$.i18n.prop("articulo.pesoTransporte")} </label>
+                                                    <input type="number" step="any" class="campoNumerico pesoTransporte" id="pesoTransporte" name="pesoTransporte" value="{articulo.pesoTransporte}"  >
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                                <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.estado")}</label>
+                                                    <select  class="campo" id="estado" name="estado"  >
+                                                        <option  each={estados}  value="{codigo}" selected="{articulo.estado ==codigo?true:false}" >{descripcion}</option>
+                                                    </select>
+                                                </div>                          
+
+                                            <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                                <label class="tamanoLetraTotales">{$.i18n.prop("articulo.tipoCodigo")}<span class="requeridoDato">*</span></label>
+                                                    <select  class="campo selectTipoCodigo" id="tipoCodigo" name="tipoCodigo"  >
+                                                        <option  each={tipoCodigos}  value="{codigo}" selected="{articulo.tipoCodigo ==codigo?true:false}"  >{descripcion}</option>
+                                                    </select>
+                                                </div>
+                                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                                    <label  class="tamanoLetraTotales">{$.i18n.prop("articulo.consecutivoCompra")} </label>
+                                                    <input type="text" step="any" class="campo form-control "  value="{articulo.consecutivoCompra}"  readonly>
+                                                </div>
+                                                <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3 has-success">
+                                                        <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.fechaUltimaCompra")} </label>
+                                                        <input type="text" step="any" class="campo form-control "  value="{articulo.fechaUltimaCompraSTR}"  readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
+                                                    <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.updated_at")}  </label>
+                                                    <input type="text" class="form-control campo"  value="{articulo.updated_atSTR}" readonly >
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>    
+                                 </div>
+                            </div>        
+                        </form> 
+                </div>
+            </div>              
+        <div>
+    </div>
 
 
 
@@ -8,6 +178,29 @@
 
 
 <style type ="text/css">
+.btn-imprimirCambioPrecio {
+    background-color: #00ACEE;
+    color: #FFF;
+    border-radius: 5px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 15px;
+    margin-bottom: 0.5%!important;
+    border: none;
+    float: right;
+    cursor: pointer;
+}
+ html {
+            overflow: scroll!important;
+        }
+.tamanoLetraTotales {
+    font-weight: 600 !important;
+    font-size: 20px !important;
+}
 .contenedor {
   width: 95%;
   max-width: 1200px;
@@ -86,12 +279,12 @@ background-color: white;
             transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
             background-color: #fcfcfc;
             border: 1px solid #ccc;
-            font-size: 25px;
+            font-size: 28px;
             margin: 2px 0;
             padding: 1px 2px;
             overflow: visible;
-            color: #ec351f;
-    font-weight: bold;
+            color: blue;
+            font-weight: bold;
 }
 .campoNormal {
     display: flex;
@@ -179,18 +372,7 @@ self.on('mount',function(){
     __tipoCodigo()
     LimpiarArticulo()
     __ComboBaseImponibles()
-    $('#panelFiltros').click(function () {
-        var advanced_search_section = $('#filtrosAvanzados');
-        advanced_search_section.slideToggle(750);
-    });
-     $('#panelFiltrosImpuestos').click(function () {
-        var advanced_search_section = $('#filtrosAvanzadosImpuestos');
-        advanced_search_section.slideToggle(750);
-    });
-    $('#panelFiltrosOtros').click(function () {
-        var advanced_search_section = $('#filtrosAvanzadosOtros');
-        advanced_search_section.slideToggle(750);
-    });
+    $('.collapse').collapse("show")
     window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
@@ -961,6 +1143,7 @@ __agregar(){
         var AplicoImpuesto2 = false
        if ($("#formulario").valid()) {
         var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
+        var tipo1 = $('#tipoImpuesto1').val() == "Sin impuesto"?"":$('#tipoImpuesto1').val()
         if(tipo == "07"){
                 var baseImponible = $('#baseImponible').val()
                 if(baseImponible == 0){
@@ -969,7 +1152,15 @@ __agregar(){
                 }
                 
         }
+        if(tipo =="" && tipo1 == ""){
+            var valorimpuesto = $('#impuesto').val() !=null?$('#impuesto').val():0
+             valorimpuesto += $('#impuesto1').val() !=null?$('#impuesto1').val():0
+             if(valorimpuesto > 0 ){
+                mensajeError("No se puede agregar el articulo si no indica el tipo de impuesto")
+                return 
 
+             }
+        }
         
         if(self.articulo.costo > self.articulo.precioPublico){
             mensajeError("No se puede agregar el precio Publico es menor al costo")
@@ -1022,7 +1213,9 @@ __agregar(){
                         mensajeErrorServidor(xhr, status);
                     }
                 });
-    }
+    }  else{
+          sweetAlert("", "Falta ingresar datos del articulo que son obligatorios, verificar lo indicado en ROJO", "error");
+      }
 }
 /**
 ** Modificar la Empresa
@@ -1034,7 +1227,8 @@ __Modificar(){
     var AplicoImpuesto1 = false
     var AplicoImpuesto2 = false
     if ($("#formulario").valid()) {
-                var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
+        var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
+        var tipo1 = $('#tipoImpuesto1').val() == "Sin impuesto"?"":$('#tipoImpuesto1').val()
         if(tipo == "07"){
                 var baseImponible = $('#baseImponible').val()
                 if(baseImponible == 0){
@@ -1042,6 +1236,15 @@ __Modificar(){
                    return 
                 }
                 
+        }
+         if(tipo =="" && tipo1 == ""){
+            var valorimpuesto = $('#impuesto').val() !=null?$('#impuesto').val():0
+             valorimpuesto += $('#impuesto1').val() !=null?$('#impuesto1').val():0
+             if(valorimpuesto > 0 ){
+                mensajeError("No se puede agregar el articulo si no indica el tipo de impuesto")
+                return 
+
+             }
         }
 
      if(self.articulo.costo > self.articulo.precioPublico){
@@ -1090,7 +1293,9 @@ __Modificar(){
             }
         });
     }
-    }
+    }  else{
+          sweetAlert("", "Falta ingresar datos del articulo que son obligatorios, verificar lo indicado en ROJO", "error");
+      }
     
 }
 
