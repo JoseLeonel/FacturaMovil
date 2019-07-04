@@ -11,7 +11,7 @@ public class Constantes {
 
 	// **Impuesto de servicio
 	public static final String					TIPO_DOCUMENTO_IMPUESTO_SERVICIO_OTRO_CARGO					= "06";
-	public static final String					IMPUESTO_SERVICIO_OTRO_CARGO_RESTAURANTE   					= "Impuesto 10% por servicio Restaurante";
+	public static final String					IMPUESTO_SERVICIO_OTRO_CARGO_RESTAURANTE						= "Impuesto 10% por servicio Restaurante";
 	// Base Imponible se activa en el articulo
 	public static final Integer					BASE_IMPONIBLE_ACTIVO																= 1;
 	public static final Integer					BASE_IMPONIBLE_INACTIVO															= 0;
@@ -51,7 +51,7 @@ public class Constantes {
 	public static final Integer					NO_ENVIAR_CORREO_CLIENTE_FRECUENTE									= 0;
 //cantidad de dias de un credito minimo
 	public static final Integer					CANTIDAD_DIAS_MINIMO_CREDITO												= 1;
-	
+
 	// Tipo de codigos de productos
 	public static final String					TIPO_IMPUESTO_VENTA_ARTICULO												= "01";
 	public static final String					TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL						= "07";
@@ -112,6 +112,7 @@ public class Constantes {
 	public static final String					DOCXMLS_RESPUESTA_HACIENDA_4_3											= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/mensajeHacienda";
 	public static final String					DOCXMLS_RECEPCION_FACTURA_4_3												= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/mensajeReceptor";
 	public static final String					DOCXMLS_TIQUETE_4_3																	= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/tiqueteElectronico";
+	public static final String					DOCXMLS_CONTACTO_DESARROLLADOR_4_3									= "http://apis.gometa.org";
 
 	public static final String					DOCXMLS_FACTURA_4_2																	= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/facturaElectronica";
 	public static final String					DOCXMLS_NOTA_DEBITO_4_2															= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaDebitoElectronica";
@@ -325,7 +326,7 @@ public class Constantes {
 	// Errores en el Broker
 	public static final String					ERROR_POR_COMUNICACION															= "2033";
 	public static final String					MQ_NO_REASON_CODE																		= "0000";
-
+	public static final String					DATE_FORMATImpServi																	= "yyyy-MM-dd hh:mm:ss";
 	public static final String					DATE_FORMAT1																				= "dd/MM/yyyy hh:mm:ss";
 	public static final String					DATE_1900																						= "01/01/1990 00:00:00.0";
 	public static final String					DATE_FORMAT2																				= "dd/MM/yyyy";

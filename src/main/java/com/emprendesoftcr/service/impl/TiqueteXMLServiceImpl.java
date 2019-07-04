@@ -156,6 +156,7 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 //		        "</Normativa>" +
 				    "<Otros>" +
 				    		"<OtroTexto codigo=\"obs\">" + observacion + "</OtroTexto>" +
+				    		OTroContenido()+
 				    "</Otros>" +    
 		        "</TiqueteElectronico>";
 			
@@ -165,6 +166,16 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 		}
     return resultado;
 		
+	}
+	
+	private String OTroContenido() {
+		String resultado = Constantes.EMPTY;
+
+//		 resultado = "<OtroContenido " +" xmlns:ContactoDesarrollador="+Constantes.DOCXMLS_CONTACTO_DESARROLLADOR_4_3 + ">" +
+//         "<ContactoDesarrollador>Leonel Hernandez Chaverri telef:83124207-87292997 josehernandezchaverri@gmail.com</ContactoDesarrollador>" ;
+//         resultado += "</OtroContenido>";
+
+		return resultado;
 	}
 	
 	private String getOtrosCargos(Factura factura) {

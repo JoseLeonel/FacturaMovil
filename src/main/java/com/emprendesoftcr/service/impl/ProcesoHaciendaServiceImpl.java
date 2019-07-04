@@ -392,13 +392,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				 //recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 				// San Ana
-				 //recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
+				//recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 				// Guanacaste
 				// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 				// JacoDos
-				// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+				 recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 				// Jaco
 				// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
@@ -407,7 +407,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				 //recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				// Alajuela
-				//recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+			//	recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 				ObjectMapper mapperObj = new ObjectMapper();
 				String jsonStr = mapperObj.writeValueAsString(recepcion);
@@ -533,11 +533,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					Boolean errorCaidaPlataforma = Boolean.TRUE;
 					if (body.contains("502") || body.contains("503") || body.contains("501") || body.contains("500") || body.contains("504")) {
 						errorCaidaPlataforma = Boolean.FALSE;
+						log.info("** Error  aceptarDocumento: " + body + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
 					}
 					if (body.contains("token has expired")) {
 						errorCaidaPlataforma = Boolean.FALSE;
-
-					}
+						log.info("** Error  aceptarDocumento: " + body + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
+					}		
+					log.info("** Error  aceptarDocumento: " + body + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
 					if (body != null && body != "" && body != "{}" && !body.contains("El comprobante") && !body.contains("no ha sido recibido") && errorCaidaPlataforma) {
 						RespuestaHacienda respuestaHacienda = RespuestaHaciendaJson.from(body);
 

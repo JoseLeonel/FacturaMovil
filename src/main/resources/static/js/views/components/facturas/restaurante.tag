@@ -2900,6 +2900,8 @@ function __Init(){
     $(".totalTarjeta").val(null)   
     $(".totalEfectivo").val(null)   
     $("#plazoCreditoL").val(null)
+    $("#correoAlternativo").val(null)
+    $("#nombreFactura").val(null)
     $("#nota").val(null)
     $("#fechaCredito").val(null)
     $('.datepickerFechaCredito').datepicker(

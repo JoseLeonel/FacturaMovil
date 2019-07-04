@@ -18,8 +18,6 @@ public class FacturaEsperaCommand {
 	private Date			fechaCredito;
 
 	private String		numeroConsecutivo;
-	
-	
 
 	private Date			fechaEmision;
 	private String		fechaEmisionSTR;
@@ -112,12 +110,13 @@ public class FacturaEsperaCommand {
 	private String		referenciaCodigo;
 
 	private String		referenciaRazon;
-	private String consecutivoProforma;
-	
-	private Integer						versionEsquemaXML;
+	private String		consecutivoProforma;
+
+	private Integer		versionEsquemaXML;
 
 	private Date			referenciaFechaEmision;
-	
+	private Double		totalImpuestoServicio;
+
 	public FacturaEsperaCommand(Factura factura) {
 		super();
 		this.id = factura.getId();
@@ -171,8 +170,11 @@ public class FacturaEsperaCommand {
 		this.totalComprobanteSTR = factura.getTotalComprobanteSTR();
 		this.totalImpuestoSTR = factura.getTotalImpuestoSTR();
 		this.totalDescuentosSTR = factura.getTotalDescuentoSTR();
-		this.consecutivoProforma = factura.getConsecutivoProforma() !=null?factura.getConsecutivoProforma():Constantes.EMPTY;
+		this.consecutivoProforma = factura.getConsecutivoProforma() != null ? factura.getConsecutivoProforma() : Constantes.EMPTY;
 		this.versionEsquemaXML = factura.getVersionEsquemaXML();
+		this.impuestoServicioIS = factura.getTotalImpuestoServicio() != null ? factura.getTotalImpuestoServicio() : Constantes.ZEROS_DOUBLE;
+//		this.impuestoServicioIS += factura.getTotalOtrosCargos() != null ? factura.getTotalOtrosCargos() : Constantes.ZEROS_DOUBLE;
+		this.impuestoServicioISSTR = Utils.formateadorMiles(this.impuestoServicioIS);
 	}
 
 	public FacturaEsperaCommand(Detalle detalle) {
@@ -188,7 +190,7 @@ public class FacturaEsperaCommand {
 		this.medioBanco = detalle.getFactura().getMedioBanco();
 		this.medioEfectivo = detalle.getFactura().getMedioEfectivo();
 		this.medioTarjeta = detalle.getFactura().getMedioTarjeta();
-		
+
 		this.direccion = detalle.getFactura().getDireccion();
 		this.nota = detalle.getFactura().getNota();
 		this.comanda = detalle.getFactura().getComanda();
@@ -657,25 +659,20 @@ public class FacturaEsperaCommand {
 		this.medioBanco = medioBanco;
 	}
 
-	
 	public String getConsecutivoProforma() {
 		return consecutivoProforma;
 	}
 
-	
 	public void setConsecutivoProforma(String consecutivoProforma) {
 		this.consecutivoProforma = consecutivoProforma;
 	}
 
-	
 	public Integer getVersionEsquemaXML() {
 		return versionEsquemaXML;
 	}
 
-	
 	public void setVersionEsquemaXML(Integer versionEsquemaXML) {
 		this.versionEsquemaXML = versionEsquemaXML;
 	}
-	
-	
+
 }

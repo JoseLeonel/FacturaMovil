@@ -20,13 +20,28 @@
                     <form id="filtros" name="filtros">              
                         <div class= "row">
                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
                                     <label class="knob-label" >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
-                                        <input type="text" class="form-control fechaInicial date" id="fechaInicial"  name= "fechaInicial" >
-                                   
+                                    <div  class="form-group input-group date datepickerFechaInicial" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                        <input type="text" class="form-control fechaInicial " id="fechaInicial"  name= "fechaInicial" readonly>
+                                        <div class="input-group-addon">
+                                            <span class="glyphicon glyphicon-th"></span>
+                                        </div>
+                                    </div>	                             
+                                </div>  
                             </div>             
                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <div class="form-group">
                                         <label class="knob-label" >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
-                                         <input type="text" class="form-control fechaFinal date" id="fechaFinal"  name= "fechaFinal" >
+                                        <div  class="form-group input-group date datepickerFechaFinal" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                            <input type="text" class="form-control fechaFinal  " id="fechaFinal"  name= "fechaFinal" readonly>
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>	                             
+                                    </div>
+                                </div>  
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label>Total Imp.Serv(10%) </label>
@@ -468,10 +483,10 @@ self.on('mount',function(){
     __InformacionDataTable()
     __InicializarTabla('.tableListar')
     agregarInputsCombos()
-$('#example').datetimepicker();
-
     _init()
     sumar()
+   
+   
       window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
@@ -479,32 +494,7 @@ $('#example').datetimepicker();
 })
 
 
-function _init(){
 
- 
- 
-    $('#fechaInicial').datetimepicker(
-    {
-       
-        format: 'YYYY-MM-DD hh:mm A',
-        keyBinds: {
-            'delete': function () {
-                    return false;
-                    }
-                },
-        }
-    );
-        $('#fechaFinal').datetimepicker(
-    {
-        format: 'YYYY-MM-DD hh:mm A',
-        keyBinds: {
-            'delete': function () {
-                    return false;
-                    }
-                }
-        }
-    );
-}
 
 
 /**
@@ -515,9 +505,11 @@ var reglasDeValidacion = function() {
 		rules : {
 			fechaInicial : {
 				required : true,
+                validFecha:true
 			},
 			fechaFinal : {
 				required : true,
+                validFecha:true
 			}                                   
                         
 		},
