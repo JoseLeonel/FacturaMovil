@@ -35,10 +35,26 @@ import org.springframework.web.context.ContextLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.google.common.base.Strings;
 
 public final class Utils {
+	
+	public static String oTroContenido() {
+		String resultado = Constantes.EMPTY;
+
+		 resultado = "<OtroContenido>" +
+         "<ContactoDesarrollador xmlns=\"" + Constantes.DOCXMLS_CONTACTO_DESARROLLADOR_4_3 + "\">"+
+					  "<NombreContacto>Ing.Leonel Hernandez Chaverri</NombreContacto>" +
+					  "<CorreoElectronico>josehernandezchaverri@gmail.com</CorreoElectronico>" +
+					  "<TelefonoContacto>8312-4207</TelefonoContacto>" +
+					  "<NombreContacto1>Viviana Martines Granados</NombreContacto1>" +
+					  "<CorreoElectronico1>vivivanamartinezgranados@gmail.com</CorreoElectronico1>" +
+					  "<TelefonoContacto1>8729-2997</TelefonoContacto1>" +
+			  "</ContactoDesarrollador>" ;
+         resultado += "</OtroContenido>";
+
+		return resultado;
+	}
 
 	public static Date sumarDiasFecha(Date fecha, int dias) {
 		Calendar calendar = Calendar.getInstance();

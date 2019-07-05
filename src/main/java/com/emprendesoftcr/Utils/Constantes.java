@@ -112,7 +112,7 @@ public class Constantes {
 	public static final String					DOCXMLS_RESPUESTA_HACIENDA_4_3											= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/mensajeHacienda";
 	public static final String					DOCXMLS_RECEPCION_FACTURA_4_3												= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/mensajeReceptor";
 	public static final String					DOCXMLS_TIQUETE_4_3																	= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/tiqueteElectronico";
-	public static final String					DOCXMLS_CONTACTO_DESARROLLADOR_4_3									= "http://apis.gometa.org";
+	public static final String					DOCXMLS_CONTACTO_DESARROLLADOR_4_3									= "http://emprendesoftcr.com";
 
 	public static final String					DOCXMLS_FACTURA_4_2																	= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/facturaElectronica";
 	public static final String					DOCXMLS_NOTA_DEBITO_4_2															= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaDebitoElectronica";

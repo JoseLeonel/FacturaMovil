@@ -4,6 +4,7 @@ import static com.emprendesoftcr.fisco.Keys.ERROR;
 import static com.emprendesoftcr.fisco.Keys.OK;
 import static com.emprendesoftcr.fisco.Keys.PROCESANDO;
 import static com.emprendesoftcr.fisco.Keys.RECIBIDO;
+import static com.emprendesoftcr.fisco.Keys.ACEPTADO;
 
 import java.util.Map;
 
@@ -143,6 +144,6 @@ public class MapEnums {
             put("11", "Impuesto Selectivo de consumo compras autorizadas").
             put("99", "Otros").build();
     public static final Map<String, String> ENUM_CODIGO_RESPUESTA_HACIENDA = ImmutableMap.<String, String>builder().put("aceptado", OK).
-            put("rechazado", ERROR).put("procesando", PROCESANDO).put("recibido", RECIBIDO)
+            put("rechazado", ERROR).put("procesando", PROCESANDO).put("recibido", RECIBIDO).put("aceptado", ACEPTADO)
             .build();
 }

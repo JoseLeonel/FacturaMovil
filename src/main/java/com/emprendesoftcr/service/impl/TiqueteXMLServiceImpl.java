@@ -154,9 +154,8 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 //			        "<NumeroResolucion>" + Constantes.NUMERO_RESOLUCION + "</NumeroResolucion>" +
 //			        "<FechaResolucion>" + Constantes.FECHA_RESOLUCION + "</FechaResolucion>" +
 //		        "</Normativa>" +
-				    "<Otros>" +
-				    		"<OtroTexto codigo=\"obs\">" + observacion + "</OtroTexto>" +
-				    		OTroContenido()+
+				    "<Otros>" + oTroTexto(observacion) +
+				    Utils.oTroContenido()+
 				    "</Otros>" +    
 		        "</TiqueteElectronico>";
 			
@@ -167,16 +166,15 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
     return resultado;
 		
 	}
-	
-	private String OTroContenido() {
-		String resultado = Constantes.EMPTY;
-
-//		 resultado = "<OtroContenido " +" xmlns:ContactoDesarrollador="+Constantes.DOCXMLS_CONTACTO_DESARROLLADOR_4_3 + ">" +
-//         "<ContactoDesarrollador>Leonel Hernandez Chaverri telef:83124207-87292997 josehernandezchaverri@gmail.com</ContactoDesarrollador>" ;
-//         resultado += "</OtroContenido>";
-
+	private String oTroTexto(String observacion) {
+		
+		String resultado = observacion == null?Constantes.EMPTY:observacion.trim();
+		if(!observacion.equals(Constantes.EMPTY)) {
+			 resultado = 	"<OtroTexto codigo=\"obs\">" + observacion + "</OtroTexto>" ;
+		}
 		return resultado;
 	}
+	
 	
 	private String getOtrosCargos(Factura factura) {
 		String resultado = Constantes.EMPTY;

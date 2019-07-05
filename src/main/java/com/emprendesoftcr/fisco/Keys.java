@@ -29,6 +29,7 @@ public class Keys{
     public static final String CERT_HASH = "certHash";
     public static final String ERROR = "ERROR";
     public static final String OK = "OK";
+    public static final String ACEPTADO = "aceptado";
     public static final String PROCESANDO = "procesando";
     public static final String RECIBIDO = "recibido";
     public static final String DETALLE_MENSAJE = "detalleMensaje";

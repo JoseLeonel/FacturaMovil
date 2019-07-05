@@ -149,7 +149,7 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 //	     "</Normativa>" +
 	     "<Otros>" +
 	     		"<OtroTexto codigo=\"obs\">" + observacion + "</OtroTexto>" +
-	     		OTroContenido()+ 
+	     		Utils.oTroContenido()+
 	     "</Otros>" +    
 	 "</FacturaElectronica>";
 				
@@ -163,14 +163,7 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 		
 	}
 	
-	private String OTroContenido() {
-		String resultado = Constantes.EMPTY;
-//		 resultado = "<OtroContenido>" +
-//         "<ContactoDesarrollador "+"xmlns=\"" + Constantes.DOCXMLS_CONTACTO_DESARROLLADOR_4_3 + "\" " +">EmprendesoftCR ing.Leonel Hernandez Chaverri telef:83124207-87292997 josehernandezchaverri@gmail.com vivianamartinezgranados@gmail.com </ContactoDesarrollador>" ;
-//         resultado += "</OtroContenido>";
-
-		return resultado;
-	}
+	
 
 	private String getOtrosCargos(Factura factura) {
 		String resultado = Constantes.EMPTY;

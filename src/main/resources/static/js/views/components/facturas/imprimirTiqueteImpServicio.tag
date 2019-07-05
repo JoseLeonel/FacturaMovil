@@ -14,6 +14,7 @@
                 <div class="">
                     <div class="ticket" id="ticket" name="ticket" > 
                         <h1 >{$.i18n.prop("tikect.encabezado.comprobante")} {facturaImpresa.id}<h1>
+                        <div class="encabezado"><strong>{facturaImpresa.mesa.descripcion}                        </strong><br></div>
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura !=null}"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.nombreFactura}</div>
   
                         <table class="forma-table" >
