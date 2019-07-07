@@ -196,16 +196,14 @@ public class FacturaBoImpl implements FacturaBo {
 					factura.setReferenciaFechaEmision(facturaReferencia.getFechaEmision());
 					factura.setCodigoMoneda(facturaReferencia.getCodigoMoneda());
 					factura.setTipoCambio(facturaReferencia.getTipoCambio());
-					factura.setDetalleOtroCargo(facturaReferencia.getDetalleOtroCargo() == null?Constantes.EMPTY:facturaReferencia.getDetalleOtroCargo());
-					factura.setTotalOtrosCargos(facturaReferencia.getTotalOtrosCargos() ==null?Constantes.ZEROS_DOUBLE:facturaReferencia.getTotalOtrosCargos());
-					factura.setTipoDocumentoOtroCargo(facturaReferencia.getTipoDocumentoOtroCargo() ==null?Constantes.EMPTY:facturaReferencia.getTipoDocumentoOtroCargo());
-					
-					
+					factura.setDetalleOtroCargo(facturaReferencia.getDetalleOtroCargo() == null ? Constantes.EMPTY : facturaReferencia.getDetalleOtroCargo());
+					factura.setTotalOtrosCargos(facturaReferencia.getTotalOtrosCargos() == null ? Constantes.ZEROS_DOUBLE : facturaReferencia.getTotalOtrosCargos());
+					factura.setTipoDocumentoOtroCargo(facturaReferencia.getTipoDocumentoOtroCargo() == null ? Constantes.EMPTY : facturaReferencia.getTipoDocumentoOtroCargo());
+
 					if (facturaReferencia.getVersionEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2)) {
 						factura.setVersionEsquemaXML(Constantes.ESQUEMA_XML_4_2);
 					}
-						
-					
+
 				}
 
 			} else {
@@ -470,7 +468,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 				} else if (detalle.getMontoImpuesto().equals(Constantes.ZEROS_DOUBLE) && detalle.getMontoImpuesto1().equals(Constantes.ZEROS_DOUBLE)) { // Sin Impuesto
 					// Cuando es por servicios
-					if (detalle.getTipoImpuesto().equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO) ){
+					if (detalle.getTipoImpuesto().equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
 						totalServExentos = detalle.getMontoTotal() != null ? totalServExentos + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
 					} else {
 						totalMercanciasExentas = detalle.getMontoTotal() != null ? totalMercanciasExentas + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
@@ -498,7 +496,7 @@ public class FacturaBoImpl implements FacturaBo {
 				}
 			}
 		}
-		if(factura.getTotalOtrosCargos() == null){
+		if (factura.getTotalOtrosCargos() == null) {
 			factura.setTotalOtrosCargos(Constantes.ZEROS_DOUBLE);
 			factura.setTipoDocumentoOtroCargo(Constantes.EMPTY);
 			factura.setDetalleOtroCargo(Constantes.EMPTY);
@@ -509,73 +507,27 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setTipoDocumentoOtroCargo(Constantes.TIPO_DOCUMENTO_IMPUESTO_SERVICIO_OTRO_CARGO);
 			factura.setDetalleOtroCargo(Constantes.IMPUESTO_SERVICIO_OTRO_CARGO_RESTAURANTE);
 
-//			Detalle detalle = new Detalle();
-//			detalle.setCantidad(1D);
-//			detalle.setCodigo(Constantes.CODIGO_ARTICULO_IMPUESTO_SERVICIO);
-//			detalle.setCreated_at(new Date());
-//			detalle.setDescripcion("Impuesto Servicio 10% restaurante");
-//			detalle.setGanancia(Constantes.ZEROS_DOUBLE);
-//			detalle.setPorcentajeDesc(Constantes.ZEROS_DOUBLE);
-//			detalle.setPorcentajeGanancia(Constantes.ZEROS_DOUBLE);
-//			detalle.setMontoGanancia(Constantes.ZEROS_DOUBLE);
-//			detalle.setImpuesto(Constantes.ZEROS_DOUBLE);
-//			detalle.setImpuesto1(Constantes.ZEROS_DOUBLE);
-//			detalle.setMontoDescuento(Constantes.ZEROS_DOUBLE);
-//			detalle.setCosto(Constantes.ZEROS_DOUBLE);
-//			detalle.setMontoImpuesto(Constantes.ZEROS_DOUBLE);
-//			detalle.setMontoImpuesto1(Constantes.ZEROS_DOUBLE);
-//			detalle.setBaseImponible(Constantes.ZEROS_DOUBLE);
-//			detalle.setMontoTotal(Utils.roundFactura(subTotal * 0.10, 5));
-//			detalle.setMontoTotalLinea(Utils.roundFactura(subTotal * 0.10, 5));
-//			detalle.setNaturalezaDescuento(Constantes.FORMATO_NATURALEZA_DESCUENTO);
-//			Collection<Detalle> detalles = detalleDao.findByFactura(factura);
-//			detalle.setNumeroLinea(detalles.size() + 1);
-//			detalle.setObservacion("Servicio 10% saloneros restaurante");
-//			detalle.setPorcentajeDesc(Constantes.ZEROS_DOUBLE);
-//			detalle.setPrecioUnitario(Utils.roundFactura(subTotal * 0.10, 5));
-//			detalle.setSubTotal(Utils.roundFactura(subTotal * 0.10, 5));
-//			detalle.setTipoCodigo(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO);
-//			detalle.setTipoImpuesto(Constantes.EMPTY);
-//			detalle.setTipoImpuesto1(Constantes.EMPTY);
-//			detalle.setCodigoTarifa(Constantes.EMPTY);
-//			detalle.setCodigoTarifa1(Constantes.EMPTY);
-//			detalle.setUnidadMedida("Unid");
-//			detalle.setUpdated_at(new Date());
-//			detalle.setFactura(factura);
-//			detalle.setUsuario(usuario);
-//			detalle.setTipoCodigo(Constantes.EMPTY);
-//			detalle.setFactura(factura);
-//			detalle.setOtrosCargos(Utils.roundFactura(subTotal * 0.10, 5));
-//			// factura.addDetalle(detalle);
-//			detalleDao.agregar(detalle);
 			totalOtrosCargos = totalOtrosCargos + factura.getTotalOtrosCargos();
-			// Se afecta los montos de la factura
-//			totalServExentos = totalServExentos + detalle.getMontoTotal();
-//			totalExento = totalExento + detalle.getMontoTotal();
-//			totalVenta = totalVenta + detalle.getMontoTotal();
-//			totalVentaNeta = totalVentaNeta + detalle.getMontoTotal();
-//			totalComprobante = totalComprobante + detalle.getMontoTotal();
+
 			totalImpServicios = totalImpServicios + factura.getTotalOtrosCargos();
 			totalComprobante = totalComprobante + totalOtrosCargos;
 		}
 
-		
 		// Se actualoza el resumen de la factura con los detalles asociados
 		totalVentaNeta = totalVenta - totalDescuentos;
 		factura.setTotalServExonerado(totalServExonerado);
 		factura.setTotalMercExonerada(totalMercExonerada);
 		factura.setTotalExonerado(totalExonerado);
 		factura.setTotalIVADevuelto(totalIVADevuelto);
-		if(totalOtrosCargos > Constantes.ZEROS_DOUBLE) {
-			factura.setTotalOtrosCargos(totalOtrosCargos);	
-		}else {
-			if(factura.getTotalOtrosCargos() !=null) {
+		if (totalOtrosCargos > Constantes.ZEROS_DOUBLE) {
+			factura.setTotalOtrosCargos(totalOtrosCargos);
+		} else {
+			if (factura.getTotalOtrosCargos() != null) {
 				factura.setTotalOtrosCargos(factura.getTotalOtrosCargos());
 				totalImpServicios = totalImpServicios + factura.getTotalOtrosCargos();
 				totalComprobante = totalComprobante + factura.getTotalOtrosCargos();
 			}
 		}
-		
 
 		factura.setTotalMercanciasGravadas(Utils.roundFactura(totalMercanciasGravadas, 5));
 		factura.setTotalMercanciasExentas(Utils.roundFactura(totalMercanciasExentas, 5));

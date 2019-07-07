@@ -3,6 +3,7 @@ package com.emprendesoftcr.Dao.Impl;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -224,7 +225,13 @@ public class EmpresaDaoImpl implements EmpresaDao {
 
 		String resultado = Constantes.EMPTY;
 		try {
-			resultado = FacturaElectronicaUtils.claveFactura(empresa.getCedula(), consecutivoFactura, comprobanteElectronico, empresa.getCodigoSeguridad());
+			Random rnd = new Random();
+			int dig3 = rnd.nextInt(900) + 100; // siempre 3 digitos
+			int dig5 = rnd.nextInt(90000) + 10000; // siempre 5 digitos
+			Integer valor3 = dig3;
+			Integer valor5 = dig5;
+			String codigoSeguridad = valor3.toString() + valor5.toString();
+			resultado = FacturaElectronicaUtils.claveFactura(empresa.getCedula(), consecutivoFactura, comprobanteElectronico, codigoSeguridad);
 
 		} catch (Exception e) {
 			log.info("** Error  generarClaveFacturaTributaria: " + e.getMessage() + " fecha " + new Date());

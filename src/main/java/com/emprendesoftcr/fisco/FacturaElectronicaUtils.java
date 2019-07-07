@@ -75,7 +75,7 @@ public final class FacturaElectronicaUtils {
 	 * @param comprobanteElectronico
 	 * @return
 	 */
-	public static String claveFactura(String cedulaEmisor, String consecutivoFactura, Integer comprobanteElectronico, Integer codigoSeguridad) {
+	public static String claveFactura(String cedulaEmisor, String consecutivoFactura, Integer comprobanteElectronico, String codigoSeguridad) {
 		// Fecha actual desglosada:
 		String resultado = Constantes.EMPTY;
 		try {
@@ -514,7 +514,7 @@ public final class FacturaElectronicaUtils {
 
 		int width = image.getWidth();
 		int height = image.getHeight();
-		int[] pixels = new int[width * height];
+		
 
 		LuminanceSource source = new BufferedImageLuminanceSource(image);
 		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
@@ -522,6 +522,7 @@ public final class FacturaElectronicaUtils {
 		// decode the barcode
 		QRCodeReader reader = new QRCodeReader();
 		Result result = reader.decode(bitmap);
+		
 		return new String(result.getText());
 	}
 

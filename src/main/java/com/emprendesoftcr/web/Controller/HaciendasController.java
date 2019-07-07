@@ -315,6 +315,8 @@ public class HaciendasController {
 						estadoHacienda = Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA;
 					} else if (resputaStatusHacienda.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
 						estadoHacienda = Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA;
+					}else if (resputaStatusHacienda.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_ACEPTADO_HACIENDA_STR)) {
+						estadoHacienda= Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA;
 					}
 					// Hacienda no envia mensaje
 					if (respuestaHacienda.mensajeHacienda() != null) {

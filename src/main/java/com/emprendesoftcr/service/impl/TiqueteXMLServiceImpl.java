@@ -130,8 +130,7 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 		        "<PlazoCredito>" + FacturaElectronicaUtils.replazarConZeros(factura.getPlazoCredito() !=null?factura.getPlazoCredito().toString():Constantes.ZEROS.toString(),Constantes.FORMATO_PLAZO_CREDITO) + "</PlazoCredito>"  
 		         + getMedioPago(factura) +
 		        "<DetalleServicio>" + xmlDetalleServicio(factura) + "</DetalleServicio>" 
-		        + getOtrosCargos(factura) +
-		        "<ResumenFactura>" +
+		        + getOtrosCargos(factura) +"<ResumenFactura>" +
 		            getCodigoMoneda(factura.getCodigoMoneda(),factura.getTipoCambio())+
 		            "<TotalServGravados>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalServGravados()) + "</TotalServGravados>" +
 		            "<TotalServExentos>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalServExentos()) + "</TotalServExentos>" +
@@ -155,8 +154,7 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 //			        "<FechaResolucion>" + Constantes.FECHA_RESOLUCION + "</FechaResolucion>" +
 //		        "</Normativa>" +
 				    "<Otros>" + oTroTexto(observacion) +
-				    Utils.oTroContenido()+
-				    "</Otros>" +    
+				    Utils.oTroContenido()+"</Otros>" +    
 		        "</TiqueteElectronico>";
 			
 		} catch (Exception e) {

@@ -46,10 +46,8 @@ public final class Utils {
          "<ContactoDesarrollador xmlns=\"" + Constantes.DOCXMLS_CONTACTO_DESARROLLADOR_4_3 + "\">"+
 					  "<NombreContacto>Ing.Leonel Hernandez Chaverri</NombreContacto>" +
 					  "<CorreoElectronico>josehernandezchaverri@gmail.com</CorreoElectronico>" +
-					  "<TelefonoContacto>8312-4207</TelefonoContacto>" +
-					  "<NombreContacto1>Viviana Martines Granados</NombreContacto1>" +
-					  "<CorreoElectronico1>vivivanamartinezgranados@gmail.com</CorreoElectronico1>" +
-					  "<TelefonoContacto1>8729-2997</TelefonoContacto1>" +
+					  "<TelefonoContacto>83124207</TelefonoContacto>" +
+					  "<SistemasOfrecemos>Restaurante Ferreteria Mini Super y a la medida</SistemasOfrecemos>" +
 			  "</ContactoDesarrollador>" ;
          resultado += "</OtroContenido>";
 

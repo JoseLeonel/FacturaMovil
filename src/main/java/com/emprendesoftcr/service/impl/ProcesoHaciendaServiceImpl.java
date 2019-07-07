@@ -389,25 +389,25 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				recepcion.setComprobanteXml(base64);
 
 				// Ambiente de pruebas
-				 //recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 				// San Ana
-				//recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 				// Guanacaste
 				// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 				// JacoDos
-				 recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 				// Jaco
 				// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 				// Inventario
-				 //recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				// Alajuela
-			//	recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+				recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 				ObjectMapper mapperObj = new ObjectMapper();
 				String jsonStr = mapperObj.writeValueAsString(recepcion);
@@ -455,7 +455,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 							if (resta > 0) {
 								resta = resta / (1000 * 60);
 							}
-							if (resta > 80 || hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ERROR) || hacienda.getTipoDoc().equals(Constantes.HACIENDA_TIPODOC_COMPRAS)) {
+							if (resta > 180 || hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ERROR) || hacienda.getTipoDoc().equals(Constantes.HACIENDA_TIPODOC_COMPRAS)) {
 								log.info("Comprobando Documentos hacienda:" + hacienda.getConsecutivo() + " Empresa" + hacienda.getEmpresa().getNombre());
 								if (hacienda.getReintentosAceptacion() != null) {
 									if (hacienda.getReintentosAceptacion() <= Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
@@ -530,20 +530,21 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					Map response = envioHaciendaComponent.comprobarDocumentoElectronico(idp_uri_documentos, hacienda.getClave(), openIDConnectHacienda);
 					String body = (String) response.get(POST_RESPONSE);
 
-					Boolean errorCaidaPlataforma = Boolean.TRUE;
-					if (body.contains("502") || body.contains("503") || body.contains("501") || body.contains("500") || body.contains("504")) {
-						errorCaidaPlataforma = Boolean.FALSE;
-						log.info("** Error  aceptarDocumento: " + body + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
-					}
-					if (body.contains("token has expired")) {
-						errorCaidaPlataforma = Boolean.FALSE;
-						log.info("** Error  aceptarDocumento: " + body + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
-					}		
-					log.info("** Error  aceptarDocumento: " + body + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
-					if (body != null && body != "" && body != "{}" && !body.contains("El comprobante") && !body.contains("no ha sido recibido") && errorCaidaPlataforma) {
+//					Boolean errorCaidaPlataforma = Boolean.TRUE;
+//					if (body.contains("502") || body.contains("503") || body.contains("501") || body.contains("500") || body.contains("504")) {
+//						errorCaidaPlataforma = Boolean.FALSE;
+//						log.info("** Error  aceptarDocumento: " + body + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
+//					}
+//					if (body.contains("token has expired")) {
+//						errorCaidaPlataforma = Boolean.FALSE;
+//						log.info("** Error  aceptarDocumento: token has expired " + body + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
+//					}		
+//					log.info("** aceptarDocumento hacienda body: " + body + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
+					if (body != null && body != "" && body != "{}" && !body.contains("El comprobante") && !body.contains("no ha sido recibido")) {
 						RespuestaHacienda respuestaHacienda = RespuestaHaciendaJson.from(body);
 
 						String status = getHaciendaStatus(respuestaHacienda.indEstado());
+						log.info("** getHaciendaStatus: " + status + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
 						hacienda.setUpdated_at(new Date());
 						RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();
 						// hacienda.setxErrorCause(FacturaElectronicaUtils.convertirStringToblod(respuesta.getDetalleMensaje()==null?Constantes.EMPTY:respuesta.getDetalleMensaje()));
@@ -583,21 +584,52 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						/**
 						 * Esperar el correo FE para saber que ese estado de recibido
 						 */
+						log.info("*status: " + status);
+						Boolean rechazado = Boolean.TRUE;
 						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
 							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
 						}
 						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
-							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+							rechazado = Boolean.FALSE;
+							if (haciendaBD.getReintentosAceptacion() != null) {
+								if (haciendaBD.getReintentosAceptacion() > Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
+									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+									haciendaBD.setObservacion(FacturaElectronicaUtils.convertirStringToblod(Constantes.MAXIMO_REINTENTOS_ACEPTACION_STR));
+								}else {
+								
+									haciendaBD.setReintentosAceptacion(hacienda.getReintentosAceptacion() == null ? 1 : hacienda.getReintentosAceptacion() + 1);
+								}
+							}else {
+								haciendaBD.setReintentosAceptacion(Constantes.ZEROS);
+							}
 						}
+						log.info("*status1: " + status);
+						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_ACEPTADO_HACIENDA_STR)) {
+							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+						}
+						log.info("*status2: " + status);
 						// Hacienda no envia mensaje
 						if (respuestaHacienda.mensajeHacienda() != null) {
 							if (respuestaHacienda.mensajeHacienda().mensaje() != null) {
 								if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO)) {
 									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
-								} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_RECHAZADO)) {
-									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+								} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_RECHAZADO) && rechazado) {
+									if (haciendaBD.getReintentosAceptacion() != null) {
+										if (haciendaBD.getReintentosAceptacion() > Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
+											haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+											haciendaBD.setObservacion(FacturaElectronicaUtils.convertirStringToblod(Constantes.MAXIMO_REINTENTOS_ACEPTACION_STR));
+										}else {
+											
+											haciendaBD.setReintentosAceptacion(hacienda.getReintentosAceptacion() == null ? 1 : hacienda.getReintentosAceptacion() + 1);
+										}
+									}else {
+										haciendaBD.setReintentosAceptacion(Constantes.ZEROS);
+									}
+									
 								} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO_PARCIAL)) {
 									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_PARCIAL);
+								} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.HACIENDA_ESTADO_ACEPTADO_ACEPTADO_HACIENDA_STR)) {
+									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
 								}
 							}
 						} else {
