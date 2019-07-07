@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.HaciendaBo;
 import com.emprendesoftcr.Dao.HaciendaDao;
-import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.fisco.RespuestaHaciendaXML;
+
+
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Hacienda;
 

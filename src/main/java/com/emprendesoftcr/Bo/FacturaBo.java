@@ -11,7 +11,7 @@ import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.web.command.FacturaCommand;
-import com.emprendesoftcr.web.command.ProformasSQLNativeCommand;
+
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 
 public interface FacturaBo {
