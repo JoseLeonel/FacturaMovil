@@ -192,6 +192,7 @@ public class FacturaBoImpl implements FacturaBo {
 				Factura facturaReferencia = facturaDao.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa());
 				// Si la factura se encuentra en el sistema se agregan los datos propios de ella
 				if (facturaReferencia != null) {
+					factura.setReferenciaNumero(facturaReferencia.getClave());
 					factura.setReferenciaTipoDoc(facturaReferencia.getTipoDoc());
 					factura.setReferenciaFechaEmision(facturaReferencia.getFechaEmision());
 					factura.setCodigoMoneda(facturaReferencia.getCodigoMoneda());

@@ -32,6 +32,7 @@ import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONObject;
 
 import com.emprendesoftcr.Utils.Constantes;
@@ -50,6 +51,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.google.zxing.qrcode.QRCodeWriter;
+
 
 public final class FacturaElectronicaUtils {
 
@@ -200,13 +202,24 @@ public final class FacturaElectronicaUtils {
 	public static String base64Decode(String text) {
 		String resultado = Constantes.EMPTY;
 		try {
+			
+			
 			resultado = new String(BaseEncoding.base64().decode(text), StandardCharsets.UTF_8);
+			
 		} catch (Exception e) {
 			throw e;
 		}
 		return resultado;
 
 	}
+	
+	public static String procesarTexto(String j) {
+		String r = "";
+
+		r = StringEscapeUtils.escapeJava(j);
+
+		return r;
+		}
 
 	/**
 	 * Transforma un arreglo de bytes a su expresi�n en base64
@@ -214,10 +227,19 @@ public final class FacturaElectronicaUtils {
 	 * @return Arreglo de bytes transformado a base64
 	 * @throws Exception 
 	 */
-	public static String base64Encode(byte[] btext) throws Exception {
+	public static String base64Encode(String btext) throws Exception {
 		String resultado = Constantes.EMPTY;
 		try {
-		 resultado = BaseEncoding.base64().encode(btext);	
+		 //resultado = BaseEncoding.base64().encode(btext);	
+			
+			resultado = Base64.getEncoder().encodeToString(btext.getBytes("utf-8"));
+			
+			//Pruebalo ahí, vea que cambie de bytes a String tiene que hacer el cambio
+			//
+		 
+		 //trabajare aquí
+		 //sip
+	   //String base64 = Base64.encodeBase64String(btext);
 		 
 	//	  resultado= Base64.getEncoder().withoutPadding().encodeToString(btext);
 		} catch (Exception e) {

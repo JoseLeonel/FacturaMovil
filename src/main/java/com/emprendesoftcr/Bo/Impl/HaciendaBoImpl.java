@@ -1,6 +1,7 @@
 package com.emprendesoftcr.Bo.Impl;
 
 import java.util.Collection;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,6 +79,11 @@ public class HaciendaBoImpl implements HaciendaBo {
 	@Override
 	public Collection<Hacienda> findByEstadoOrEstadoErrorAndEmpresa(Empresa empresa, Integer estado, Integer estadoError) {
 		return haciendaDao.findByEstadoOrEstadoErrorAndEmpresa(empresa, estado, estadoError);
+	}
+	
+	@Override
+	public Collection<Hacienda> findByEmpresaAndEstadoAndFechas(Integer estado,Date fechaInicial, Date FechaFinal){
+		return haciendaDao.findByEmpresaAndEstadoAndFechas(estado, fechaInicial, FechaFinal);
 	}
 
 }

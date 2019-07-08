@@ -28,6 +28,7 @@ public interface HaciendaDao {
 	
 	Collection<Hacienda> findByEstadoOrEstadoErrorAndEmpresa(Empresa empresa ,Integer estado,Integer estadoError);
 	
+	Collection<Hacienda> findByEmpresaAndEstadoAndFechas(Integer estado,Date fechaInicial, Date FechaFinal);
 	
 
 }

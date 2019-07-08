@@ -28,7 +28,7 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
 		String resultado = Constantes.EMPTY;
 		try {
 			String firmadoFactura = sign(xmlSinFimar,certificado,urlXMLNS,fecha); 
-			firmadoFactura = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + firmadoFactura;
+			firmadoFactura = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" + firmadoFactura;
 			 
 			resultado = firmadoFactura;
      

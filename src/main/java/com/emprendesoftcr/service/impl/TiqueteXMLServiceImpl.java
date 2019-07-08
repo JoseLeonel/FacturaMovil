@@ -108,10 +108,10 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 		        "<NumeroConsecutivo>" + factura.getNumeroConsecutivo() + "</NumeroConsecutivo>" +
 		        "<FechaEmision>" + date + "</FechaEmision>" +
 		        "<Emisor>" +
-		        "<Nombre>" + factura.getEmpresa().getNombre() + "</Nombre>" +
+		        "<Nombre>" + FacturaElectronicaUtils.procesarTexto(factura.getEmpresa().getNombre()) + "</Nombre>" +
 		        "<Identificacion>" +
 		            "<Tipo>" + factura.getEmpresa().getTipoCedula() + "</Tipo>" +
-		            "<Numero>" + factura.getEmpresa().getCedula() + "</Numero>" +
+		            "<Numero>" + FacturaElectronicaUtils.procesarTexto(factura.getEmpresa().getCedula()) + "</Numero>" +
 		        "</Identificacion>" +
 //		        "<NombreComercial>" + factura.getEmpresa().getNombreComercial() + "</NombreComercial>" +
 		        "<Ubicacion>" +
@@ -119,14 +119,14 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 		            "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
 		            "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
 //		            "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
-		            "<OtrasSenas>" + factura.getEmpresa().getOtraSenas() + "</OtrasSenas>" +
+		            "<OtrasSenas>" + FacturaElectronicaUtils.procesarTexto(factura.getEmpresa().getOtraSenas()) + "</OtrasSenas>" +
 		        "</Ubicacion>" +
 		        getTelefono(factura.getEmpresa().getTelefono(),factura.getEmpresa().getCodigoPais())+
 //		        getFax(0,factura.getEmpresa().getCodigoPais()) +
 		        "<CorreoElectronico>" + factura.getEmpresa().getCorreoElectronico() + "</CorreoElectronico>" +
 		        "</Emisor>" +
 		        xmlReceptor(factura) +
-		        "<CondicionVenta>" + factura.getCondicionVenta() + "</CondicionVenta>" +
+		        "<CondicionVenta>" +  FacturaElectronicaUtils.procesarTexto(factura.getCondicionVenta()) + "</CondicionVenta>" +
 		        "<PlazoCredito>" + FacturaElectronicaUtils.replazarConZeros(factura.getPlazoCredito() !=null?factura.getPlazoCredito().toString():Constantes.ZEROS.toString(),Constantes.FORMATO_PLAZO_CREDITO) + "</PlazoCredito>"  
 		         + getMedioPago(factura) +
 		        "<DetalleServicio>" + xmlDetalleServicio(factura) + "</DetalleServicio>" 
@@ -149,6 +149,7 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 		            "<TotalOtrosCargos>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalOtrosCargos()) + "</TotalOtrosCargos>" +
 		            "<TotalComprobante>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalComprobante()) + "</TotalComprobante>" +
 		        "</ResumenFactura>" +
+		        informacionFerencia(factura) +
 //			      "<Normativa>" +
 //			        "<NumeroResolucion>" + Constantes.NUMERO_RESOLUCION + "</NumeroResolucion>" +
 //			        "<FechaResolucion>" + Constantes.FECHA_RESOLUCION + "</FechaResolucion>" +
@@ -164,11 +165,37 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
     return resultado;
 		
 	}
+	
+private String informacionFerencia(Factura factura) {	
+  String resultado = Constantes.EMPTY;
+  
+  if (factura.getReferenciaNumero() ==null) {
+  	return resultado;
+  }
+  if (factura.getReferenciaNumero().equals(Constantes.EMPTY)) {
+  	return resultado;
+  }
+  
+  
+	String datereferenciaEmision = FacturaElectronicaUtils.rfc3339(factura.getReferenciaFechaEmision());
+	
+	resultado =  "<InformacionReferencia>" +
+  "<TipoDoc>" + Utils.zeroPad(FacturaElectronicaUtils.procesarTexto(factura.getReferenciaTipoDoc()),2) + "</TipoDoc>" +
+  "<Numero>" + factura.getReferenciaNumero() + "</Numero>" +
+  "<FechaEmision>" + datereferenciaEmision + "</FechaEmision>" +
+  "<Codigo>" + factura.getReferenciaCodigo() + "</Codigo>" +
+  "<Razon>" + FacturaElectronicaUtils.procesarTexto(factura.getReferenciaRazon()) + "</Razon>" +
+"</InformacionReferencia>" ;
+	
+	return resultado;
+
+}
+
 	private String oTroTexto(String observacion) {
 		
 		String resultado = observacion == null?Constantes.EMPTY:observacion.trim();
 		if(!observacion.equals(Constantes.EMPTY)) {
-			 resultado = 	"<OtroTexto codigo=\"obs\">" + observacion + "</OtroTexto>" ;
+			 resultado = 	"<OtroTexto codigo=\"obs\">" + FacturaElectronicaUtils.procesarTexto(observacion) + "</OtroTexto>" ;
 		}
 		return resultado;
 	}
@@ -183,8 +210,8 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
 			}
 			if(factura.getTotalOtrosCargos() > Constantes.ZEROS_DOUBLE) {
 	  		 resultado = "<OtrosCargos>" +
-	                       "<TipoDocumento>" + factura.getTipoDocumentoOtroCargo().trim() + "</TipoDocumento>" +
-	                        "<Detalle>" + factura.getDetalleOtroCargo().trim() + "</Detalle>" +
+	                       "<TipoDocumento>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(factura.getTipoDocumentoOtroCargo().trim(),2)) + "</TipoDocumento>" +
+	                        "<Detalle>" + FacturaElectronicaUtils.procesarTexto(factura.getDetalleOtroCargo().trim()) + "</Detalle>" +
 	 	                     "<MontoCargo>" + FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalOtrosCargos()) +"</MontoCargo>";
 	 	     resultado += "</OtrosCargos>";
 	     }
@@ -330,13 +357,13 @@ public class TiqueteXMLServiceImpl implements TiqueteXMLService {
             	lineas += "<LineaDetalle>" +
                   "<NumeroLinea>" + new BigInteger(detalle.getNumeroLinea().toString()) + "</NumeroLinea>" +
                   "<CodigoComercial>" +
-                      "<Tipo>" + tipoCodigo + "</Tipo>" +
-                      "<Codigo>" + detalle.getCodigo() + "</Codigo>" +
+                      "<Tipo>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(tipoCodigo,2)) + "</Tipo>" +
+                      "<Codigo>" + FacturaElectronicaUtils.procesarTexto(detalle.getCodigo()) + "</Codigo>" +
                   "</CodigoComercial>" +
                   "<Cantidad>" + FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getCantidad()) + "</Cantidad>" +
                   "<UnidadMedida>" + unidadMedida + "</UnidadMedida>" +
              //     "<UnidadMedidaComercial>" + detalle.getUnidadMedida() + "</UnidadMedidaComercial>" +
-                  "<Detalle>" + detalle.getDescripcion().trim() + "</Detalle>" +
+                  "<Detalle>" + FacturaElectronicaUtils.procesarTexto(detalle.getDescripcion().trim()) + "</Detalle>" +
                   "<PrecioUnitario>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getPrecioUnitario()) + "</PrecioUnitario>" +
                   "<MontoTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotal()) + "</MontoTotal>" +
                   getDescuento(detalle.getMontoDescuento())+
@@ -413,7 +440,7 @@ private String getDescuento(Double descuento) throws Exception {
 		try {
 			 resultado = "<Descuento>" +
 					  "<MontoDescuento>" + FacturaElectronicaUtils.getConvertirBigDecimal(descuento) + "</MontoDescuento>" +
-		        "<NaturalezaDescuento>" + Constantes.FORMATO_NATURALEZA_DESCUENTO + "</NaturalezaDescuento>" + 
+		        "<NaturalezaDescuento>" + FacturaElectronicaUtils.procesarTexto(Constantes.FORMATO_NATURALEZA_DESCUENTO) + "</NaturalezaDescuento>" + 
 		        "</Descuento>" ;
 			
 		} catch (Exception e) {
@@ -437,7 +464,7 @@ private String xmlImpuestos(Long idFactura,String codigoTarifa,String tipoImpues
   		}
   		if (codigoTarifa !=null) {
   			if(!codigoTarifa.equals(Constantes.EMPTY)) {
-  				nodoCodigoTarifa ="<CodigoTarifa>" + Utils.zeroPad(codigoTarifa, 2) + "</CodigoTarifa>";
+  				nodoCodigoTarifa ="<CodigoTarifa>" + Utils.zeroPad( FacturaElectronicaUtils.procesarTexto(codigoTarifa), 2) + "</CodigoTarifa>";
   				
   			}
   			
@@ -446,7 +473,7 @@ private String xmlImpuestos(Long idFactura,String codigoTarifa,String tipoImpues
   		if(montoImpuesto != null && tipoImpuesto !=null) {
 	  		if(montoImpuesto > Constantes.ZEROS_DOUBLE) {
 	        resultado = "<Impuesto>" +
-	            "<Codigo>" + Utils.zeroPad(tipoImpuesto, 2) + "</Codigo>" +
+	            "<Codigo>" + Utils.zeroPad(FacturaElectronicaUtils.procesarTexto(tipoImpuesto), 2) + "</Codigo>" +
 	            nodoCodigoTarifa +
 	            nodoTarifa+
 	            "<Monto>" +  FacturaElectronicaUtils.getConvertirBigDecimal(montoImpuesto) + "</Monto>";
@@ -475,7 +502,7 @@ private String xmlImpuestos(Long idFactura,String codigoTarifa,String tipoImpues
        		
           if(cedulaExtrangera.equals(Constantes.EMPTY)) {
          		resultado = "<Receptor>" +
-                "<Nombre>" + factura.getCliente().getNombreCompleto() + "</Nombre>" +
+                "<Nombre>" +  FacturaElectronicaUtils.procesarTexto(factura.getCliente().getNombreCompleto()) + "</Nombre>" +
                 xmlIdentificacion(factura) + 
 //                "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
 //                "<Ubicacion>" +
@@ -487,12 +514,12 @@ private String xmlImpuestos(Long idFactura,String codigoTarifa,String tipoImpues
 //                "</Ubicacion>" +
 //                getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
               //  getFax(0,factura.getCliente().getCodigoPais()) +    
-                "<CorreoElectronico>" + factura.getCliente().getCorreoElectronico() + "</CorreoElectronico>" +
+                "<CorreoElectronico>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getCorreoElectronico()) + "</CorreoElectronico>" +
             "</Receptor>";
           	
           } else {
          		resultado = "<Receptor>" +
-                "<Nombre>" + factura.getCliente().getNombreCompleto() + "</Nombre>" +
+                "<Nombre>" +  FacturaElectronicaUtils.procesarTexto(factura.getCliente().getNombreCompleto()) + "</Nombre>" +
                 xmlIdentificacion(factura) + 
                 "<IdentificacionExtranjero>" + factura.getCliente().getIdentificacionExtranjero() + "</IdentificacionExtranjero>" +
 //                "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
@@ -505,7 +532,7 @@ private String xmlImpuestos(Long idFactura,String codigoTarifa,String tipoImpues
 //                "</Ubicacion>" +
 //                getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
               //  getFax(0,factura.getCliente().getCodigoPais()) +    
-                "<CorreoElectronico>" + factura.getCliente().getCorreoElectronico() + "</CorreoElectronico>" +
+                "<CorreoElectronico>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getCorreoElectronico()) + "</CorreoElectronico>" +
             "</Receptor>";
           	
           }    		

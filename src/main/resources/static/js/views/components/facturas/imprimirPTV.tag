@@ -49,7 +49,11 @@
                                 <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == ""}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}>{$.i18n.prop("tikect.encabezado.receptor.cedula")}  {facturaImpresa.cliente.cedula}   </strong></div>
                                 <div class="encabezado" show ="{facturaImpresa.cliente.cedula != '999999999999'}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}> {facturaImpresa.cliente.correoElectronico}   </strong></div>
                                 <div class="encabezado" show ="{facturaImpresa.cliente.correoAlternativo != ''}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}> {facturaImpresa.correoAlternativo}   </strong></div>
-                                <div class="encabezado" show ="{facturaImpresa.referenciaNumero != ''}"><strong > {$.i18n.prop("informacion.numero.referencia")} {facturaImpresa.referenciaNumero}   </strong></div>
+                                <div class="tamanoClaveencabezado" show ="{facturaImpresa.referenciaNumero.length > 0}"><strong > {$.i18n.prop("informacion.numero.referencia")} </strong></div>
+  
+                                <div class="tamanoClave encabezado" show = "{facturaImpresa.referenciaNumero.length > 0}">{claveParteUnoRef}</div>
+                                <div class="tamanoClave encabezado" show = "{facturaImpresa.referenciaNumero.length > 0}">{claveParteDosRef}</div>
+
                                 <div class="encabezado" show ='{ facturaImpresa.nota != "" && facturaImpresa.nota !=null}'> Nota:   {facturaImpresa.nota}  </div>
                                 <table class = "forma-table">
                                     <thead>
@@ -383,16 +387,23 @@ self.mostrarImprimiCelular = false;
 self.titulo = ""
 self.claveParteUno =""
 self.claveParteDos =""
+self.claveParteUnoRef =""
+self.claveParteDosRef =""
 self.totalImpuestoServicio = 0
 self.subTotal = 0
 self.facturaActiva = 0
 self.facturaImpresa = {
     empresa:{
         imprimirDirecto:0
-    }
+    },
+    referenciaNumero:""
+
 }
 
 self.on('mount',function(){
+    self.claveParteUnoRef =""
+    self.claveParteDosRef =""
+    self.update()
    // document.getElementById('divQR').innerHTML = '';
     if(self.parametro.factura.id > 0){
        consultaFactura(self.parametro.factura.id)
@@ -503,6 +514,9 @@ function consultaFactura(idFactura){
                             self.update()
                             self.claveParteUno= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(0,24):""
                             self.claveParteDos= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(25,51):""
+                            self.claveParteUnoRef= self.facturaImpresa.referenciaNumero !=null ?self.facturaImpresa.referenciaNumero.substring(0,24):""
+                            self.claveParteDosRef= self.facturaImpresa.referenciaNumero !=null ?self.facturaImpresa.referenciaNumero.substring(25,51):""
+
                             //detalles
                           //  self.totalImpuestoServicio = 0
                             self.subTotal = 0

@@ -108,10 +108,10 @@ public class NotaDebitoXMLIVAServiceImpl implements NotaDebitoXMLIVAService {
 	        "<NumeroConsecutivo>" + factura.getNumeroConsecutivo() + "</NumeroConsecutivo>" +
 	        "<FechaEmision>" + date + "</FechaEmision>" +
 	        "<Emisor>" +
-	            "<Nombre>" + factura.getEmpresa().getNombre() + "</Nombre>" +
+	            "<Nombre>" + FacturaElectronicaUtils.procesarTexto(factura.getEmpresa().getNombre()) + "</Nombre>" +
 	            "<Identificacion>" +
-	                "<Tipo>" + factura.getEmpresa().getTipoCedula() + "</Tipo>" +
-	                "<Numero>" + factura.getEmpresa().getCedula() + "</Numero>" +
+	                "<Tipo>" + FacturaElectronicaUtils.procesarTexto(factura.getEmpresa().getTipoCedula()) + "</Tipo>" +
+	                "<Numero>" + FacturaElectronicaUtils.procesarTexto(factura.getEmpresa().getCedula()) + "</Numero>" +
 	            "</Identificacion>" +
 	         //   "<NombreComercial>" + factura.getEmpresa().getNombreComercial() + "</NombreComercial>" +    
 	            "<Ubicacion>" +
@@ -119,14 +119,14 @@ public class NotaDebitoXMLIVAServiceImpl implements NotaDebitoXMLIVAService {
 			            "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
 			            "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
 			   //         "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
-			            "<OtrasSenas>" + factura.getEmpresa().getOtraSenas() + "</OtrasSenas>" +
+			            "<OtrasSenas>" + FacturaElectronicaUtils.procesarTexto(factura.getEmpresa().getOtraSenas()) + "</OtrasSenas>" +
 	           "</Ubicacion>" +
 	     //      getTelefono(factura.getEmpresa().getTelefono(),factura.getEmpresa().getCodigoPais())+
 	     //      getFax(0,factura.getEmpresa().getCodigoPais()) +
-	            "<CorreoElectronico>" + factura.getEmpresa().getCorreoElectronico() + "</CorreoElectronico>" +
+	            "<CorreoElectronico>" + FacturaElectronicaUtils.procesarTexto(factura.getEmpresa().getCorreoElectronico()) + "</CorreoElectronico>" +
 	        "</Emisor>" +
 	        xmlReceptor(factura) +
-	        "<CondicionVenta>" + factura.getCondicionVenta() + "</CondicionVenta>" +
+	        "<CondicionVenta>" + FacturaElectronicaUtils.procesarTexto(factura.getCondicionVenta()) + "</CondicionVenta>" +
 	        "<PlazoCredito>" + FacturaElectronicaUtils.replazarConZeros(factura.getPlazoCredito() !=null?factura.getPlazoCredito().toString():Constantes.ZEROS.toString(),Constantes.FORMATO_PLAZO_CREDITO) + "</PlazoCredito>"  
 	         + getMedioPago(factura) +
 	        "<DetalleServicio>" + xmlDetalleServicio(factura) + "</DetalleServicio>" +
@@ -146,18 +146,18 @@ public class NotaDebitoXMLIVAServiceImpl implements NotaDebitoXMLIVAService {
 	        "<TotalComprobante>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalComprobante()) + "</TotalComprobante>" +
 	           "</ResumenFactura>" +
 	            "<InformacionReferencia>" +
-	                "<TipoDoc>" + factura.getReferenciaTipoDoc() + "</TipoDoc>" +
-	                "<Numero>" + factura.getReferenciaNumero() + "</Numero>" +
+	                "<TipoDoc>" + FacturaElectronicaUtils.procesarTexto(factura.getReferenciaTipoDoc()) + "</TipoDoc>" +
+	                "<Numero>" + FacturaElectronicaUtils.procesarTexto(factura.getReferenciaNumero()) + "</Numero>" +
 	                "<FechaEmision>" + datereferenciaEmision + "</FechaEmision>" +
-	                "<Codigo>" + factura.getReferenciaCodigo() + "</Codigo>" +
-	                "<Razon>" + factura.getReferenciaRazon() + "</Razon>" +
+	                "<Codigo>" + FacturaElectronicaUtils.procesarTexto(factura.getReferenciaCodigo()) + "</Codigo>" +
+	                "<Razon>" + FacturaElectronicaUtils.procesarTexto(factura.getReferenciaRazon()) + "</Razon>" +
 	            "</InformacionReferencia>" +
 	            "<Normativa>" +
 	            "<NumeroResolucion>" + Constantes.NUMERO_RESOLUCION + "</NumeroResolucion>" +
 	            "<FechaResolucion>" + Constantes.FECHA_RESOLUCION + "</FechaResolucion>" +
 	        "</Normativa>" +
 	        "<Otros>" +
-	        		"<OtroTexto codigo=\"obs\">" + observacion + "</OtroTexto>" +
+	        		"<OtroTexto codigo=\"obs\">" + FacturaElectronicaUtils.procesarTexto(observacion) + "</OtroTexto>" +
 	        "</Otros>" +   
 	        "</NotaDebitoElectronica>";
 			
@@ -222,7 +222,7 @@ public class NotaDebitoXMLIVAServiceImpl implements NotaDebitoXMLIVAService {
             "<Cantidad>" + FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getCantidad()) + "</Cantidad>" +
             "<UnidadMedida>" + unidadMedida + "</UnidadMedida>" +
     //        "<UnidadMedidaComercial>" + detalle.getUnidadMedida() + "</UnidadMedidaComercial>" +
-            "<Detalle>" + detalle.getDescripcion().trim() + "</Detalle>" +
+            "<Detalle>" + FacturaElectronicaUtils.procesarTexto(detalle.getDescripcion().trim()) + "</Detalle>" +
             "<PrecioUnitario>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getPrecioUnitario()) + "</PrecioUnitario>" +
             "<MontoTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotal()) + "</MontoTotal>" +
             getDescuento(detalle.getMontoDescuento())+
@@ -266,7 +266,7 @@ public class NotaDebitoXMLIVAServiceImpl implements NotaDebitoXMLIVAService {
   		if(montoImpuesto != null && tipoImpuesto !=null) {
     		if(montoImpuesto > Constantes.ZEROS_DOUBLE) {
           resultado = "<Impuesto>" +
-              "<Codigo>" + Utils.zeroPad(tipoImpuesto, 2) + "</Codigo>" +
+              "<Codigo>" + Utils.zeroPad(FacturaElectronicaUtils.procesarTexto(tipoImpuesto), 2) + "</Codigo>" +
               "<Tarifa>" + FacturaElectronicaUtils.getConvertirBigDecimal(impuesto ) + "</Tarifa>" +
               "<Monto>" +  FacturaElectronicaUtils.getConvertirBigDecimal(montoImpuesto) + "</Monto>";
           resultado += "</Impuesto>";
@@ -366,7 +366,7 @@ public class NotaDebitoXMLIVAServiceImpl implements NotaDebitoXMLIVAService {
        		
           if(cedulaExtrangera.equals(Constantes.EMPTY)) {
          		resultado = "<Receptor>" +
-                "<Nombre>" + factura.getCliente().getNombreCompleto() + "</Nombre>" +
+                "<Nombre>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getNombreCompleto()) + "</Nombre>" +
                 xmlIdentificacion(factura) + 
 //                "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
 //                "<Ubicacion>" +
@@ -383,9 +383,9 @@ public class NotaDebitoXMLIVAServiceImpl implements NotaDebitoXMLIVAService {
           	
           } else {
          		resultado = "<Receptor>" +
-                "<Nombre>" + factura.getCliente().getNombreCompleto() + "</Nombre>" +
+                "<Nombre>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getNombreCompleto()) + "</Nombre>" +
                 xmlIdentificacion(factura) + 
-                "<IdentificacionExtranjero>" + factura.getCliente().getIdentificacionExtranjero() + "</IdentificacionExtranjero>" +
+                "<IdentificacionExtranjero>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getIdentificacionExtranjero()) + "</IdentificacionExtranjero>" +
 //                "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
 //                "<Ubicacion>" +
 //                    "<Provincia>" + FacturaElectronicaUtils.replazarConZeros(factura.getCliente().getProvincia(),Constantes.FORMATO_PROVINCIA) + "</Provincia>" +
@@ -396,7 +396,7 @@ public class NotaDebitoXMLIVAServiceImpl implements NotaDebitoXMLIVAService {
 //                "</Ubicacion>" +
 //                getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
               //  getFax(0,factura.getCliente().getCodigoPais()) +    
-                "<CorreoElectronico>" + factura.getCliente().getCorreoElectronico() + "</CorreoElectronico>" +
+                "<CorreoElectronico>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getCorreoElectronico()) + "</CorreoElectronico>" +
             "</Receptor>";
           	
           }    		
@@ -433,7 +433,7 @@ private String ubicacionReceptor(Factura factura) {
   	try {
       if (factura.getCliente() != null) {
         resultado = "<Identificacion>" +
-                    "<Tipo>" + factura.getCliente().getTipoCedula() + "</Tipo>" +
+                    "<Tipo>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getTipoCedula()) + "</Tipo>" +
                     "<Numero>" + factura.getCliente().getCedula() + "</Numero>" +
                 "</Identificacion>";
     } 
