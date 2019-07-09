@@ -12,20 +12,17 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.emprendesoftcr.Bo.ActividadComercialBo;
 import com.emprendesoftcr.Bo.DataTableBo;
+import com.emprendesoftcr.Bo.EmpresaActividadComercialBo;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
-import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
-import com.emprendesoftcr.modelo.ActividadComercial;
-import com.emprendesoftcr.modelo.Tarifa;
-import com.emprendesoftcr.web.command.ActividadComercialCommand;
-import com.emprendesoftcr.web.propertyEditor.ActividadComercialPropertyEditor;
+import com.emprendesoftcr.modelo.EmpresaActividadComercial;
+import com.emprendesoftcr.web.command.EmpresaActividadComercialCommand;
+import com.emprendesoftcr.web.propertyEditor.EmpresaActividadComercialPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
 import com.google.common.base.Function;
 
@@ -37,29 +34,29 @@ import com.google.common.base.Function;
 @Controller
 public class ActividadComercialController {
 
-	private static final Function<Object, ActividadComercialCommand>	TO_COMMAND	= new Function<Object, ActividadComercialCommand>() {
+	private static final Function<Object, EmpresaActividadComercialCommand>	TO_COMMAND_POR_EMPRESA	= new Function<Object, EmpresaActividadComercialCommand>() {
 
-																																									@Override
-																																									public ActividadComercialCommand apply(Object f) {
-																																										return new ActividadComercialCommand((ActividadComercial) f);
-																																									};
-																																								};
-
-	@Autowired
-	private DataTableBo																								dataTableBo;
+																																																		@Override
+																																																		public EmpresaActividadComercialCommand apply(Object f) {
+																																																			return new EmpresaActividadComercialCommand((EmpresaActividadComercial) f);
+																																																		};
+																																																	};
 
 	@Autowired
-	private ActividadComercialBo																			actividadComercialBo;
+	private DataTableBo																											dataTableBo;
 
 	@Autowired
-	private ActividadComercialPropertyEditor													actividadComercialPropertyEditor;
+	private EmpresaActividadComercialBo																			empresaActividadComercialBo;
 
 	@Autowired
-	private StringPropertyEditor																			stringPropertyEditor;
+	private EmpresaActividadComercialPropertyEditor													empresaActividadComercialPropertyEditor;
+
+	@Autowired
+	private StringPropertyEditor																						stringPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
-		binder.registerCustomEditor(ActividadComercial.class, actividadComercialPropertyEditor);
+		binder.registerCustomEditor(EmpresaActividadComercial.class, empresaActividadComercialPropertyEditor);
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 	}
 
@@ -68,75 +65,42 @@ public class ActividadComercialController {
 		return "views/actividadComercial/ListarActividadComercial";
 	}
 
-	@RequestMapping(value = "/ListarActividadComercialAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceDataTable listarAjax(HttpServletRequest request, HttpServletResponse response) {
-
-		DataTableDelimitador delimitadores = null;
-		delimitadores = new DataTableDelimitador(request, "ActividadComercial");
-
-		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+	@RequestMapping(value = "/ListarActividadComercialPorEmpresa", method = RequestMethod.GET)
+	public String listarPorEmpresa(ModelMap model) {
+		return "views/actividadComercial/ListarActividadComercialPorEmpresa";
 	}
 
-	@RequestMapping(value = "/AgregarActividadComercialAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/ListarEmpresaActividadComercialAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute ActividadComercial actividadComercial, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceDataTable<?> listarEmpresaAjax(HttpServletRequest request, HttpServletResponse response) {
 
-		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
+		DataTableDelimitador delimitadores = null;
+		delimitadores = new DataTableDelimitador(request, "EmpresaActividadComercial");
+
+		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_POR_EMPRESA);
+	}
+
+	@RequestMapping(value = "/AgregarEmpresaActividadComercialAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator<?> agregarEmpresa(HttpServletRequest request, ModelMap model, @ModelAttribute EmpresaActividadComercialCommand empresaActividadComercialCommand, BindingResult result, SessionStatus status) throws Exception {
+
 		try {
 
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-			actividadComercial.setId(null);
-
-			actividadComercialBo.agregar(actividadComercial);
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("actividadComercial.agregar.correctamente", actividadComercial);
-
-		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
-		}
-	}
-
-	@RequestMapping(value = "/MostrarActividadComercialAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceValidator mostrar(HttpServletRequest request, ModelMap model, @ModelAttribute ActividadComercial actividadComercial, BindingResult result, SessionStatus status) throws Exception {
-		try {
-			ActividadComercialCommand actividadComercialCommand = new ActividadComercialCommand(actividadComercialBo.buscar(actividadComercial.getId()));
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("mensaje.consulta.exitosa", actividadComercialCommand);
-		} catch (Exception e) {
-			return RespuestaServiceValidator.ERROR(e);
-		}
-	}
-
-	@RequestMapping(value = "/ModificarActividadComercialAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute ActividadComercial actividadComercial, BindingResult result, SessionStatus status) throws Exception {
-		try {
-			if (result.hasErrors()) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("actividadComercial.no.modificado", result.getAllErrors());
-			}
-			ActividadComercial actividadComercialBD = actividadComercialBo.buscar(actividadComercial.getId());
-
-			if (actividadComercialBD == null) {
-				return RESPONSES.ERROR.TARIFA.NO_EXISTE;
-			} else {
-
-				if (result.hasErrors()) {
-					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
-				}
-				actividadComercialBD.setCodigoActividadComercial(actividadComercial.getCodigoActividadComercial());
-				actividadComercialBD.setDescripcion(actividadComercial.getDescripcion());
-				actividadComercialBo.modificar(actividadComercialBD);
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("actividadComercial.modificado.correctamente", actividadComercialBD);
-			}
+			EmpresaActividadComercial empresaActividadComercial = new EmpresaActividadComercial();
+			empresaActividadComercial.setId(null);
+			empresaActividadComercial.setCodigo(empresaActividadComercialCommand.getCodigo());
+			empresaActividadComercial.setDescripcion(empresaActividadComercialCommand.getDescripcion());
+			empresaActividadComercial.setPrincipal(empresaActividadComercialCommand.getPrincipal());
+			empresaActividadComercialBo.agregar(empresaActividadComercial);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("actividadComercial.agregar.correctamente", empresaActividadComercial);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-
-
 
 	@SuppressWarnings("all")
 	private static class RESPONSES {

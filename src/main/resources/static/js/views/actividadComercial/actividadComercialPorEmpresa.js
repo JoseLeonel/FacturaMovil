@@ -4,7 +4,7 @@ $(document).ready(function() {
 } );/*fin document*/
 
 var _Init = function () {
-	cargaMantenimientoActividadComercial()
+	cargaMantenimientoActividadComercialPorEmpresa()
 }
 
 
@@ -12,9 +12,9 @@ var _Init = function () {
  * LLamar al componente Riot 
  * @returns
  */
-function cargaMantenimientoActividadComercial() {
+function cargaMantenimientoActividadComercialPorEmpresa() {
 
 	
-	riot.mount('actividad-comercial');
+	riot.mount('actividad-empresa');
 }
 

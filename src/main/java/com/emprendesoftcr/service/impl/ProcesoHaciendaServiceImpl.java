@@ -236,57 +236,57 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Autowired
 	RecepcionFacturaXMLServices																				recepcionFacturaXMLServices;
 
-////	@Scheduled(cron = "0 0/1 * * * ?")
-////	@Override
-//	public synchronized void procesoCambiarConsecutivo() throws Exception {
-//
-//		Date fechaInicio = Utils.parseDate("2019-07-01");
-//		Date fechaFinal = Utils.parseDate("2019-07-08");
-//		if (fechaFinal == null) {
-//			fechaFinal = new Date(System.currentTimeMillis());
-//		}
-//		if (fechaFinal != null && fechaFinal != null) {
-//			fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
-//		}
-//		Integer contador = 0;
-//
-//		Collection<Hacienda> listaHacienda = haciendaBo.findByEmpresaAndEstadoAndFechas(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO, fechaInicio, fechaFinal);
-//		for (Hacienda hacienda : listaHacienda) {
-//
-//			// cambiar estado de la factura a pendiente de firma y generar el consecutivo
-//			if (hacienda.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) || hacienda.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
-//				Factura factura = facturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
-//
-//				if (factura != null) {
-//
-//					factura.setReferenciaTipoDoc("10");
-//					factura.setReferenciaNumero(factura.getClave());
-//					factura.setReferenciaCodigo("01");
-//
-//					factura.setReferenciaRazon("Cambio de IVA ocasiono firma invalida");
-//					factura.setReferenciaFechaEmision(factura.getFechaEmision());
-//					factura.setNumeroConsecutivo(empresaBo.generarConsecutivoFactura(hacienda.getEmpresa(), factura.getUsuarioCreacion(), factura));
-//					factura.setClave(empresaBo.generaClaveFacturaTributacion(factura.getEmpresa(), factura.getNumeroConsecutivo(), FacturaElectronicaUtils.COMPROBANTE_ELECTRONICO_NORMAL));
-//					contador += 1;
-//					log.info("Total:" + contador + " clave actual: " + factura.getClave() + " clave anterior " + factura.getReferenciaNumero());
-//					
-//
-//					factura.setEstado(2);
-//					factura.setEstadoFirma(30);
-//					facturaBo.modificar(factura);
-//					hacienda.setEstado(30);
-//					haciendaBo.modificar(hacienda);
-//
-//				}
-//			}
-//		}
-//
-//	}
+	@Scheduled(cron = "0 0/1 * * * ?")
+	@Override
+	public synchronized void procesoCambiarConsecutivo() throws Exception {
+
+		Date fechaInicio = Utils.parseDate("2019-07-01");
+		Date fechaFinal = Utils.parseDate("2019-07-08");
+		if (fechaFinal == null) {
+			fechaFinal = new Date(System.currentTimeMillis());
+		}
+		if (fechaFinal != null && fechaFinal != null) {
+			fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
+		}
+		Integer contador = 0;
+
+		Collection<Hacienda> listaHacienda = haciendaBo.findByEmpresaAndEstadoAndFechas(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO, fechaInicio, fechaFinal);
+		for (Hacienda hacienda : listaHacienda) {
+
+			// cambiar estado de la factura a pendiente de firma y generar el consecutivo
+			if (hacienda.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) || hacienda.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
+				Factura factura = facturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
+
+				if (factura != null) {
+
+					factura.setReferenciaTipoDoc("10");
+					factura.setReferenciaNumero(factura.getClave());
+					factura.setReferenciaCodigo("01");
+
+					factura.setReferenciaRazon("Cambio de IVA ocasiono firma invalida");
+					factura.setReferenciaFechaEmision(factura.getFechaEmision());
+					factura.setNumeroConsecutivo(empresaBo.generarConsecutivoFactura(hacienda.getEmpresa(), factura.getUsuarioCreacion(), factura));
+					factura.setClave(empresaBo.generaClaveFacturaTributacion(factura.getEmpresa(), factura.getNumeroConsecutivo(), FacturaElectronicaUtils.COMPROBANTE_ELECTRONICO_NORMAL));
+					contador += 1;
+					log.info("Total:" + contador + " clave actual: " + factura.getClave() + " clave anterior " + factura.getReferenciaNumero());
+					
+
+					factura.setEstado(2);
+					factura.setEstadoFirma(30);
+					facturaBo.modificar(factura);
+					hacienda.setEstado(30);
+					haciendaBo.modificar(hacienda);
+
+				}
+			}
+		}
+
+	}
 
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/12 * * * ?")
+//	@Scheduled(cron = "0 0/12 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -482,7 +482,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/55 * * * ?")
+//	@Scheduled(cron = "0 0/55 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -722,7 +722,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Solo se van enviar correos a la empresa cuando es un cliente o correo alternativo los tiquetes de clientes frecuentes no lo vamos enviar para ver el comportamiento de rendimiento Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+//	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -1039,7 +1039,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/12 * * * ?")
+//	@Scheduled(cron = "0 0/12 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1153,7 +1153,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/20 * * * ?")
+//	@Scheduled(cron = "0 0/20 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {

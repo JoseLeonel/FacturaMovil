@@ -1,4 +1,4 @@
-<actividad-comercial>
+<actividad-empresa>
     <!-- Titulos -->
     <div  class="row titulo-encabezado"  >
         <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
@@ -40,21 +40,19 @@
                 </div>
                 <div class="box-body">
                     <form id = "formulario" name ="formulario "   class="advanced-search-form">
-                        <input type="hidden" name="id" id="id" value="{tarifa.id}">
+                        <input type="hidden" name="id" id="id" value="{empresaActividadComercial.id}">
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 left">
                                 <label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label  >{$.i18n.prop("actividadComercial.codigoComercial")}  <span class="requeridoDato">*</span></label>
-                                <input type="text"  class="form-control"  value="{actividadComercial.codigoActividadComercial}"  </div>
-                            </div>    
-                            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label  >{$.i18n.prop("actividadComercial.descripcion")}  <span class="requeridoDato">*</span></label>
-                                <input type="text"  class="form-control"  value="{actividadComercial.descripcion}"  </div>
-                            </div>    
+                            <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
+                                <label class="tamanoLetra" >{$.i18n.prop("titulo.listar.actividadComercial")}  <span class="requeridoDato">*</span></label>
+                                <select  class="form-control selectActividadComercial"  name="actividadComercial" data-live-search="true">
+                                    <option  each={actividadComerciales.aaData}  value="{id}" data-tokens ={descripcion} selected="{empresaActividadComercial.codigo ==codigo?true:false}"  >{descripcion}</option>
+                                </select>
+                            </div>
                         </div>
                     </form>    
                 </div>
@@ -128,10 +126,11 @@
     self.mostrarListado            = true 
     self.botonModificar            = false
     self.botonAgregar              = false
+    self.actividadComerciales    = {aaData:[]}
     self.actividadComercial = {
         id:null,
         descripcion:"",
-        codigoActividad:"",
+        codigoActividadComercial:"",
     }
 self.on('mount',function(){
     __InicializarTabla('.tableListar')
@@ -142,11 +141,41 @@ self.on('mount',function(){
     __MantenimientoAgregar()
     __Eventos()
     Limpiar()
+    __listadoActividadComercial()
     
     window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
 })
+
+
+function __listadoActividadComercial(){
+    self.marcas                    = {aaData:[]}
+    self.update()
+    $.ajax({
+         url: "ListarActividadComercialAjax.do",
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                self.actividadComerciales.aaData =  result.aaData
+                self.update();
+                $('.selectActividadComercial').selectpicker(
+                    {
+                        style: 'btn-info',
+                        size:10,
+                        liveSearch: true
+                    }
+                );
+                $('.selectActividadComercial').selectpicker('refresh');
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+}
 
 /**
 * Camps requeridos
@@ -216,6 +245,9 @@ __regresarAlListado(){
 }
 // Mostrar formulario de mantenimiento Agregar
 function __MantenimientoAgregar(){
+    $("#descripcion").val(null);
+    $("#codigoActividadComercial").val(null);
+  
       //Inicializar el Formulario
     $('.dataTables_wrapper').on('click','.btn-agregar',function(e){
         //desahabilita  listado 
@@ -247,7 +279,8 @@ function __modificarRegistro_Listar(){
         Limpiar()
         self.actividadComercial  = data
         self.update()
-        $("#descripcion").val(self.tarifa.descripcion);
+        $("#descripcion").val(self.actividadComercial.descripcion);
+        $("#codigoActividadComercial").val(self.actividadComercial.codigoActividadComercial);
         __Eventos()
         __consultar()
 	});
@@ -279,9 +312,10 @@ function __consultar(){
                         self.botonModificar   = true;
                         // habilita el formulario
                         self.botonAgregar     = false;                        
-                        self.actividadComercial  =  modeloTabla
+                        self.empresaActividadComercial  =  modeloTabla
                         self.update()
-                        $("#descripcion").val(self.tarifa.descripcion);
+                        $("#descripcion").val(self.actividadComercial.descripcion);
+                        $("#codigoActividadComercial").val(self.actividadComercial.codigoActividadComercial);
                         __Eventos()
                     });
                 }
@@ -359,7 +393,7 @@ __Modificar(){
 function __listado(){
     $("#tableListar").dataTable().fnClearTable(); 
     $.ajax({
-        url: "ListarActividadComercialAjax.do",
+        url: "ListarEmpresaActividadComercialAjax.do",
         datatype: "json",
         method:"GET",
         success: function (result) {
@@ -389,7 +423,7 @@ function __listado(){
 function __InformacionDataTable(){
     self.informacion_tabla = [ 
                                {'data' :'descripcion'    ,"name":"descripcion"     ,"title" : $.i18n.prop("actividadComercial.descripcion") ,"autoWidth" :true },
-                               {'data' :'codigoActividadComercial'   ,"name":"codigoActividadComercial"    ,"title" : $.i18n.prop("actividadComercial.codigoComercial") ,"autoWidth" :true },
+                               {'data' :'codigo'   ,"name":"codigo"    ,"title" : $.i18n.prop("actividadComercial.codigoComercial") ,"autoWidth" :true },
                                {'data' : 'id'            ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
                                       return __Opciones(id,type,row);
@@ -420,4 +454,4 @@ function agregarInputsCombos(){
     })
 }
 </script>
-</actividad-comercial>
+</actividad-empresa>
