@@ -16,8 +16,10 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Articulo;
+import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.web.command.TotalInventarioCommand;
@@ -167,17 +169,24 @@ public class ArticuloDaoImpl implements ArticuloDao {
 	@Override
 	public Double costoPromedio(Double costoActual, Double costoNuevo, Double cantidadActual, Double cantidadNueva) throws Exception {
 		try {
+			Double resultadoFinal = Constantes.ZEROS_DOUBLE;
 			Double resultado = Constantes.ZEROS_DOUBLE;
 			costoActual = costoActual == null ? Constantes.ZEROS_DOUBLE : costoActual;
 			costoNuevo = costoNuevo == null ? Constantes.ZEROS_DOUBLE : costoNuevo;
+
 			cantidadNueva = cantidadNueva == null ? Constantes.ZEROS_DOUBLE : cantidadNueva;
-
-			Double totalCostoActual = costoActual * cantidadActual;
-			Double totalCostoNuevo = costoNuevo * cantidadNueva;
 			Double totalProductos = cantidadActual + cantidadNueva;
-			resultado = (totalCostoActual + totalCostoNuevo);
 
-			return Utils.roundFactura(resultado / totalProductos, 5);
+			if (costoActual >Constantes.ZEROS_DOUBLE) {
+				Double totalCostoActual = costoActual * cantidadActual;
+				Double totalCostoNuevo = costoNuevo * cantidadNueva;
+				resultado = (totalCostoActual + totalCostoNuevo);
+				resultadoFinal = Utils.roundFactura(resultado / totalProductos, 5);
+			} else {
+				resultadoFinal =  Utils.roundFactura(costoNuevo,5);
+			}
+
+			return resultadoFinal;
 
 		} catch (Exception e) {
 			log.info("** Error  costoPromedio: " + e.getMessage() + " fecha " + new Date());
@@ -231,12 +240,43 @@ public class ArticuloDaoImpl implements ArticuloDao {
 		query.setParameter("empresa", empresa);
 		return query.getResultList();
 	}
-	
+
 	@Override
 	public Collection<Articulo> articulosOrderCategoria(Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Articulo obj where  obj.empresa = :empresa order by obj.categoria.id,obj.descripcion");
 		query.setParameter("empresa", empresa);
 		return query.getResultList();
+	}
+
+	@Override
+	public Collection<Articulo> findByCategoriaAndEmpresaAndEstadoAndMinimoMaximo(Empresa empresa, Categoria categoria, String estado, String minimoMaximo) {
+		String sql = Constantes.EMPTY;
+		sql = "select obj from Articulo obj where obj.empresa = :empresa ";
+		if (categoria != null) {
+			sql = sql + "and obj.categoria = :categoria ";
+
+		}
+		if (minimoMaximo.equals(Constantes.ARTICULO_MINIMO)) {
+			sql = sql + " and obj.cantidad <= obj.minimo ";
+		} else if (minimoMaximo.equals(Constantes.ARTICULO_MAXIMO)) {
+			sql = sql + "and obj.cantidad <= obj.minimo ";
+		}
+		if (!estado.equals(Constantes.COMBO_TODOS)) {
+			sql = sql + "and  obj.estado = :estado ";
+		}
+		sql = sql + " order by obj.categoria.id,obj.descripcion";
+
+		Query query = entityManager.createQuery(sql);
+		if (!estado.equals(Constantes.COMBO_TODOS)) {
+			query.setParameter("estado", estado);
+		}
+		if (categoria != null) {
+			query.setParameter("categoria", categoria);
+		}
+
+		query.setParameter("empresa", empresa);
+		return query.getResultList();
+
 	}
 
 }

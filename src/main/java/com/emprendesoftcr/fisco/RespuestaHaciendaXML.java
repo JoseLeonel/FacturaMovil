@@ -21,7 +21,6 @@ public class RespuestaHaciendaXML {
 	private String	mensaje;
 
 	private String	detalleMensaje;
-
 	private Double	montoTotalImpuesto;
 
 	private Double	totalFactura;
@@ -186,6 +185,9 @@ public class RespuestaHaciendaXML {
 	}
 
 	
+	
+	
+
 	public Double getTotalFactura() {
 		return totalFactura;
 	}

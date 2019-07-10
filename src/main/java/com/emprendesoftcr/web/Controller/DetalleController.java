@@ -43,6 +43,7 @@ import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.web.command.DetalleFacturaCommand;
@@ -62,6 +63,14 @@ import com.google.common.base.Function;
  */
 @Controller
 public class DetalleController {
+
+	private static final Function<Object, FacturaEsperaCommand>		TO_COMMAND_Factura	= new Function<Object, FacturaEsperaCommand>() {
+
+																																											@Override
+																																											public FacturaEsperaCommand apply(Object f) {
+																																												return new FacturaEsperaCommand((Factura) f);
+																																											};
+																																										};
 
 	private static final Function<Object, FacturaEsperaCommand>		TO_COMMAND					= new Function<Object, FacturaEsperaCommand>() {
 
@@ -134,11 +143,11 @@ public class DetalleController {
 
 	@RequestMapping(value = "/TotalVentasPorDetalleAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public TotalDetallesCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin) {
+	public TotalDetallesCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam String tipoImpuesto) {
 		Date fechaInicial = Utils.parseDate(fechaInicio);
 		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFin), true);
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		return detalleBo.totalVentasPorDetalle(usuario.getEmpresa(), fechaInicial, fechaFinal);
+		return detalleBo.totalVentasPorDetalle(usuario.getEmpresa(), fechaInicial, fechaFinal, tipoImpuesto);
 
 	}
 //	@Autowired
@@ -196,7 +205,7 @@ public class DetalleController {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, usuarioSesion.getEmpresa());
 
-		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
+		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND_Factura);
 	}
 
 	/**
@@ -274,7 +283,7 @@ public class DetalleController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/DescargarDetallexCodigoAjax.do", method = RequestMethod.GET)
-	public void descargarDetallexCodigoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicialParam, @RequestParam String fechaFinalParam) throws IOException {
+	public void descargarDetallexCodigoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicialParam, @RequestParam String fechaFinalParam, @RequestParam String tipoImpuesto) throws IOException {
 		Boolean isVededor = false;
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
@@ -290,7 +299,7 @@ public class DetalleController {
 			fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
 		}
 
-		Collection<Detalle> detalles = detalleBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal, usuario.getEmpresa());
+		Collection<Detalle> detalles = detalleBo.facturasRango(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal, usuario.getEmpresa(), tipoImpuesto);
 		String nombreArchivo = "VentasXProductos.xls";
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
@@ -309,8 +318,8 @@ public class DetalleController {
 	private ByteArrayOutputStream createExcelVentasXCodigo(Collection<Detalle> detalles) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Usuario", "Fecha Emision", "Codigo", "Descripcion", "Clave", "# Documento", "Cedula", "Cliente", "Cantidad", "Precio Unitario", "Monto Total", "Descuento", "%Impuesto", "Impuestos", "Total", "Tipo Moneda", "Tipo Cambio");
-		new SimpleExporter().gridExport(headers, detalles, "factura.usuarioCreacion.nombreUsuario, factura.fechaEmisionSTR,codigo,descripcion,factura.clave, factura.numeroConsecutivo,factura.cliente.cedula, factura.nombreCliente, cantidadSTR, precioUnitarioSTR, montoTotalSTR, montoDescuentoSTR,impuestoSTR, montoImpuestoSTR, montoTotalLinea,factura.codigoMoneda, factura.tipoCambio", baos);
+		List<String> headers = Arrays.asList("Usuario", "Fecha Emision", "Codigo", "Descripcion", "Clave", "# Documento", "#Proforma", "Cedula", "Cliente", "Cantidad", "Precio Unitario", "Monto Total", "Descuento", "%Impuesto 1", "Impuestos 1", "%Impuesto 2", "Impuestos 2", "Total", "Tipo Moneda", "Tipo Cambio");
+		new SimpleExporter().gridExport(headers, detalles, "factura.usuarioCreacion.nombreUsuario, factura.fechaEmisionSTR,codigo,descripcion,factura.clave, factura.numeroConsecutivo,factura.consecutivoProforma,factura.cliente.cedula, factura.nombreCliente, cantidadSTR, precioUnitarioSTR, montoTotalSTR, montoDescuentoSTR,impuestoSTR, montoImpuestoSTR,impuesto1, montoImpuesto1STR, montoTotalLinea,factura.codigoMoneda, factura.tipoCambio", baos);
 		return baos;
 	}
 
@@ -394,16 +403,16 @@ public class DetalleController {
 
 		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Empresa empresa) {
 			// Consulta por fechas
-			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Detalle");
+			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Factura");
 			Date fechaInicio = new Date();
 			Date fechaFinal = new Date();
 
-			delimitador.addFiltro(new JqGridFilter("factura.estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "<>"));
-			delimitador.addFiltro(new JqGridFilter("factura.estado", "'" + Constantes.FACTURA_ESTADO_PROFORMAS.toString() + "'", "<>"));
-			delimitador.addFiltro(new JqGridFilter("factura.estado", "'" + Constantes.FACTURA_ESTADO_ANULADA.toString() + "'", "<>"));
-			delimitador.addFiltro(new JqGridFilter("factura.referenciaCodigo", "'" + Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO.toString() + "'", "<>"));
-			delimitador.addFiltro(new JqGridFilter("factura.empresa.id", "'" + empresa.getId().toString() + "'", "="));
-			delimitador.addFiltro(new JqGridFilter("codigo", "'" + Constantes.CODIGO_ARTICULO_IMPUESTO_SERVICIO.toString() + "'", "="));
+			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "<>"));
+			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PROFORMAS.toString() + "'", "<>"));
+			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_ANULADA.toString() + "'", "<>"));
+			delimitador.addFiltro(new JqGridFilter("referenciaCodigo", "'" + Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO.toString() + "'", "<>"));
+			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
+			delimitador.addFiltro(new JqGridFilter("totalImpuestoServicio", "'" + Constantes.ZEROS_DOUBLE + "'", ">"));
 
 			if (!inicio.equals(Constantes.EMPTY) && !fin.equals(Constantes.EMPTY)) {
 				fechaInicio = Utils.parseDate(inicio);
@@ -420,8 +429,8 @@ public class DetalleController {
 				inicio = dateFormat.format(fechaInicio);
 				fin = dateFormat.format(fechaFinal);
 
-				delimitador.addFiltro(new JqGridFilter("factura.fechaEmision", inicio, "date>="));
-				delimitador.addFiltro(new JqGridFilter("factura.fechaEmision", fin, "dateFinal<="));
+				delimitador.addFiltro(new JqGridFilter("fechaEmision", inicio, "date>="));
+				delimitador.addFiltro(new JqGridFilter("fechaEmision", fin, "dateFinal<="));
 			}
 			return delimitador;
 		}

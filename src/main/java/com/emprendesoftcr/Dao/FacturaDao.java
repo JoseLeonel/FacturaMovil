@@ -2,8 +2,7 @@ package com.emprendesoftcr.Dao;
 
 import java.util.Collection;
 import java.util.Date;
-
-import javax.persistence.Query;
+import java.util.List;
 
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
@@ -28,8 +27,10 @@ public interface FacturaDao {
 	
 	TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa);
 	
-	Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa);
+	List<Object[]> proformasByState(Integer estado, Integer idEmpresa);
 	
+	
+	Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa);
 		
 	Collection<Factura> findByClienteAndEmpresa(Cliente cliente ,Empresa empresa);
 }

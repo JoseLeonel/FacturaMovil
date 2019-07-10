@@ -27,9 +27,9 @@
                             </thead>
                         <tbody>
                             <tr class = "" each={detalles} class="detalleTables">
-                                <td class="cantidad">{cantidad}</td>
-                                <td class="producto">{descripcion}</td>
-                                <td class="precio">{montoTotalLinea}</td>
+                                <td class="cantidad">{cantidadSTR}</td>
+                                <td class="producto" >{descripcion.length>40?descripcion.substring(0, 40):descripcion}</td>
+                                <td class="precio">{montoTotalLineaSTR}</td>
                             </tr>
                             </tr>
                             <tr>
@@ -264,7 +264,7 @@ function consultar(){
                 self.facturaImpresa.totalComprobante = totalComprobante
                 self.update()
                 self.detalles.forEach(function(elemen){
-                   elemen.montoTotalLinea = formatoDecimales(elemen.montoTotalLinea,2);
+                   elemen.montoTotalLinea = formatoDecimales(__valorNumerico(elemen.montoTotalLinea),2);
                 })
                 self.update()
                 getMoneda()
@@ -272,7 +272,7 @@ function consultar(){
                 buscarTipoDocumento()
                 __comboCondicionPago()
                 buscarCondicionPago()
-                self.facturaImpresa.totalComprobanteSTR = formatoDecimales(self.facturaImpresa.totalComprobante,2);
+                self.facturaImpresa.totalComprobanteSTR = formatoDecimales(__valorNumerico(self.facturaImpresa.totalComprobante),2);
                 if (self.facturaImpresa.empresa.imprimirDirecto == 0 ){    
                     $('.imprimirModalTiquete').modal('show'); 
                 }

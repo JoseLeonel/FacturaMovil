@@ -32,6 +32,7 @@ import com.emprendesoftcr.modelo.ProveedorArticulo;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.DetalleCompraCommand;
+import com.emprendesoftcr.web.command.TotalComprasAceptadasCommand;
 import com.google.gson.Gson;
 
 /**
@@ -48,7 +49,7 @@ public class CompraBoImpl implements CompraBo {
 	private CompraDao							compraDao;
 
 	@Autowired
-	private DetalleCompraDao							detalleCompraDao;
+	private DetalleCompraDao			detalleCompraDao;
 
 	@Autowired
 	private ArticuloDao						articuloDao;
@@ -150,6 +151,10 @@ public class CompraBoImpl implements CompraBo {
 					// detalleCompraDao.agregar(detalleCompra);
 					detalleCompra.setCompra(compra);
 					detalleCompraDao.agregar(detalleCompra);
+					articulo.setConsecutivoCompra(compra.getConsecutivo());
+					articulo.setFechaUltimaCompra(compra.getFechaCompra());
+					articulo.setUpdated_at(new Date());
+					articuloDao.modificar(articulo);
 					// compraDao.modificar(compra);
 					if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
 						if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
@@ -174,7 +179,7 @@ public class CompraBoImpl implements CompraBo {
 			compra.setTotalDescuento(Utils.roundFactura(totalDescuento, 2));
 			compra.setTotalImpuesto(Utils.roundFactura(totalImpuesto, 2));
 			compraDao.modificar(compra);
-		
+
 			// Crear Credito del cliente
 			if (compra.getEstado().equals(Constantes.COMPRA_ESTADO_INGRESADA_INVENTARIO)) {
 				if (compra.getFormaPago().equals(Constantes.COMPRA_FORMA_PAGO_CREDITO)) {
@@ -245,14 +250,14 @@ public class CompraBoImpl implements CompraBo {
 			Double totalLinea = detalleCompra.getMontoTotalLinea() != null ? detalleCompra.getMontoTotalLinea() : Constantes.ZEROS_DOUBLE;
 			totalLinea = totalLinea > 0 ? totalLinea / detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
 			Double costo = totalLinea;
-
+			Double costoPromedio =articuloDao.costoPromedio(articulo.getCosto(), costo, articulo.getCantidad(), detalleCompra.getCantidad()); 
+			Double porcentajeGanancia =articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio());
 			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getProveedor().getNombreCompleto();
 			kardexDao.entrada(articulo, articulo.getCantidad(), detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
-			articulo.setCosto(articuloDao.costoPromedio(articulo.getCosto(), costo, articulo.getCantidad(), detalleCompra.getCantidad()));
-			articulo.setGananciaPrecioPublico(articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio()));
+			articulo.setCosto(costoPromedio);
+			articulo.setGananciaPrecioPublico(porcentajeGanancia);
 			articulo.setUpdated_at(new Date());
 			articulo.setUsuario(compra.getUsuarioCreacion());
-
 			articulo.setPrecioPublico(detalleCompra.getPrecio());
 			articuloDao.modificar(articulo);
 
@@ -263,6 +268,8 @@ public class CompraBoImpl implements CompraBo {
 		}
 
 	}
+
+
 
 	public Collection<Compra> findByFechaInicioAndFechaFinalAndProveedor(Date fechaInicio, Date fechaFin, Empresa empresa, Proveedor proveedor) {
 		return compraDao.findByFechaInicioAndFechaFinalAndProveedor(fechaInicio, fechaFin, empresa, proveedor);
@@ -314,6 +321,55 @@ public class CompraBoImpl implements CompraBo {
 	@Transactional
 	public void eliminarDetalleComprasPorSP(Compra compra) throws Exception {
 		compraDao.eliminarDetalleComprasPorSP(compra);
+	}
+
+	@Override
+	public TotalComprasAceptadasCommand sumarComprasAceptadas(Date fechaInicio, Date fechaFinal, Integer idEmpresa) {
+		return compraDao.sumarComprasAceptadas(fechaInicio, fechaFinal, idEmpresa);
+	}
+
+	@Override
+	@Transactional
+	public void anularCompra(Compra compra) throws Exception {
+		try {
+			compra.setUpdated_at(new Date());
+			compra.setEstado(Constantes.COMPRA_ESTADO_ANULADA);
+			compraDao.modificar(compra);
+			CuentaPagar cuentaPagar = cuentaPagarDao.findByConsecutivoAndEmpresa(compra.getConsecutivo(),compra.getEmpresa());
+			if(cuentaPagar !=null) {
+				cuentaPagarDao.eliminar(cuentaPagar);
+			}
+			Collection<DetalleCompra> detalleCompras = detalleCompraDao.findByCompra(compra);
+			if (detalleCompras != null) {
+				for (DetalleCompra detalleCompra : detalleCompras) {
+					Articulo articulo = articuloDao.buscarPorCodigoYEmpresa(detalleCompra.getArticulo().getCodigo(), compra.getEmpresa());
+					if (articulo != null) {
+						disminuirInventario(articulo,compra,detalleCompra);
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			log.info("** Error  anular Compra: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+
+	}
+
+	private void disminuirInventario(Articulo articulo, Compra compra, DetalleCompra detalleCompra) throws Exception {
+		try {
+			if (articulo.getContable() != null) {
+				if (articulo.getContable().equals(Constantes.CONTABLE_SI)) {
+					String leyenda = Constantes.MOTIVO_SALIDA_INVENTARIO_COMPRA_ANULACION + compra.getConsecutivo();
+					kardexDao.salida(articulo, articulo.getCantidad(), detalleCompra.getCantidad(), Constantes.EMPTY, compra.getConsecutivo().toString(), Constantes.KARDEX_TIPO_SALIDA, leyenda, compra.getUsuarioIngresoInventario());
+				}
+			}
+
+		} catch (Exception e) {
+			log.info("** Error  anular Compra: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+
 	}
 
 }

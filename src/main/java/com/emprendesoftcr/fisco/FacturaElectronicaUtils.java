@@ -32,10 +32,12 @@ import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONObject;
 
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DateTime;
+import com.emprendesoftcr.modelo.Factura;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.hash.Hashing;
@@ -49,6 +51,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.google.zxing.qrcode.QRCodeWriter;
+
 
 public final class FacturaElectronicaUtils {
 
@@ -74,7 +77,7 @@ public final class FacturaElectronicaUtils {
 	 * @param comprobanteElectronico
 	 * @return
 	 */
-	public static String claveFactura(String cedulaEmisor, String consecutivoFactura, Integer comprobanteElectronico, Integer codigoSeguridad) {
+	public static String claveFactura(String cedulaEmisor, String consecutivoFactura, Integer comprobanteElectronico, String codigoSeguridad) {
 		// Fecha actual desglosada:
 		String resultado = Constantes.EMPTY;
 		try {
@@ -99,6 +102,37 @@ public final class FacturaElectronicaUtils {
 
 		return resultado;
 
+	}
+	
+	public static String medioPago(Factura factura) {
+		String resultado = Constantes.EMPTY;
+		if(factura.getMedioEfectivo() != null) {
+			if(!factura.getMedioEfectivo().equals(Constantes.EMPTY)) {
+				resultado = Constantes.FACTURA_MEDIO_PAGO_EFECTIVO_STR;
+			}
+		}
+		if(factura != null) {
+			if(!factura.getMedioTarjeta().equals(Constantes.EMPTY)) {
+				if(resultado.equals(Constantes.EMPTY)) {
+					resultado = Constantes.FACTURA_MEDIO_PAGO_TARJETA_STR;	
+				}else {
+					resultado = resultado + "/" +Constantes.FACTURA_MEDIO_PAGO_TARJETA_STR;
+				}
+				
+			}
+		}
+		if(factura != null) {
+			if(!factura.getMedioBanco().equals(Constantes.EMPTY)) {
+				if(resultado.equals(Constantes.EMPTY)) {
+					resultado = Constantes.FACTURA_MEDIO_PAGO_TRANSFERENCIA_STR;	
+				}else {
+					resultado = resultado + "/" +Constantes.FACTURA_MEDIO_PAGO_TRANSFERENCIA_STR;
+				}
+				
+			}
+		}
+		
+		return resultado;
 	}
 
 	/**
@@ -168,13 +202,24 @@ public final class FacturaElectronicaUtils {
 	public static String base64Decode(String text) {
 		String resultado = Constantes.EMPTY;
 		try {
+			
+			
 			resultado = new String(BaseEncoding.base64().decode(text), StandardCharsets.UTF_8);
+			
 		} catch (Exception e) {
 			throw e;
 		}
 		return resultado;
 
 	}
+	
+	public static String procesarTexto(String j) {
+		String r = "";
+
+		r = StringEscapeUtils.escapeJava(j);
+
+		return r;
+		}
 
 	/**
 	 * Transforma un arreglo de bytes a su expresi�n en base64
@@ -182,10 +227,19 @@ public final class FacturaElectronicaUtils {
 	 * @return Arreglo de bytes transformado a base64
 	 * @throws Exception 
 	 */
-	public static String base64Encode(byte[] btext) throws Exception {
+	public static String base64Encode(String btext) throws Exception {
 		String resultado = Constantes.EMPTY;
 		try {
-		 resultado = BaseEncoding.base64().encode(btext);	
+		 //resultado = BaseEncoding.base64().encode(btext);	
+			
+			resultado = Base64.getEncoder().encodeToString(btext.getBytes("utf-8"));
+			
+			//Pruebalo ahí, vea que cambie de bytes a String tiene que hacer el cambio
+			//
+		 
+		 //trabajare aquí
+		 //sip
+	   //String base64 = Base64.encodeBase64String(btext);
 		 
 	//	  resultado= Base64.getEncoder().withoutPadding().encodeToString(btext);
 		} catch (Exception e) {
@@ -257,10 +311,30 @@ public final class FacturaElectronicaUtils {
 	 */
 	public static String toISO8601String(Date date) {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+		
+		return dateFormat.format(date);
+	}
+	
+	/**
+	 * Convierte una fecha a su expresi�n en ISO 8601
+	 * @param date Fecha a ser convertida
+	 * @return Fecha en su expresi�n ISO 8601
+	 */
+	public static String toISO8601StringFirma(Date date) {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+		
 		return dateFormat.format(date);
 	}
 
+	public static String rfc3339(Date fechaEmision) {
+		SimpleDateFormat rfc3339 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+		
+		return rfc3339.format(fechaEmision).replaceAll("(\\d\\d)(\\d\\d)$", "$1:$2");
+		
+	}
+	
 	/**
 	 * Convierte un string de fecha a su expresion en ISO 8601
 	 * @param string Fecha a ser convertida
@@ -462,7 +536,7 @@ public final class FacturaElectronicaUtils {
 
 		int width = image.getWidth();
 		int height = image.getHeight();
-		int[] pixels = new int[width * height];
+		
 
 		LuminanceSource source = new BufferedImageLuminanceSource(image);
 		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
@@ -470,6 +544,7 @@ public final class FacturaElectronicaUtils {
 		// decode the barcode
 		QRCodeReader reader = new QRCodeReader();
 		Result result = reader.decode(bitmap);
+		
 		return new String(result.getText());
 	}
 

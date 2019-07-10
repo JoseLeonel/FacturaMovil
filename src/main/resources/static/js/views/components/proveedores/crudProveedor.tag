@@ -221,13 +221,43 @@ self.on('mount',function(){
     __ComboEstados()
     agregarInputsCombos();
     ActivarEventoFiltro(".tableListar")
-          
      window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
 
 })
 
+
+function _Init(){
+    $('#nombreCompleto').val(null);
+    $('#cedula').val(null);
+    $('#telefono').val(null);
+    $('#movil').val(null);
+    $('#representante').val(null);
+    $('#direccion').val(null);
+    self.mostrarListado            = true 
+    self.botonModificar            = false
+    self.botonAgregar              = false
+    self.proveedor                 ={
+            id:null,
+            cedula:"",
+            razonSocial:"",
+            nombreCompleto:"",
+            representante:"",
+            email:"",
+            telefono:"",
+            movil:"",
+            direccion:"",
+            estado:"",
+            created_at:"",
+            updated_at:"",
+            empresa:{
+                id:0
+            }
+    }
+    self.update()
+    __Eventos()
+}
 
 /**
 * Camps requeridos
@@ -316,8 +346,6 @@ function __Eventos(){
 	})   
     
 }
-
-
 /**
 *  Regresar al listado
 **/
@@ -327,9 +355,9 @@ __regresarAlListado(){
     self.botonModificar     = false;
     self.mostrarFormulario  = false 
     self.update()
+    _Init()
     __listado();
 }
-
 /**
 *  Mostrar listado datatable Empresas Activas
 **/
@@ -511,10 +539,8 @@ function __MantenimientoAgregar(){
         self.proveedor    = {};     
         
         self.update();
-     
-        
-         
-        //Inicializar el Formulario
+       
+            //Inicializar el Formulario
         $(".errorServerSideJgrid").remove();
         $("#formulario").validate(reglasDeValidacion());
    

@@ -80,23 +80,23 @@
                         <div class="row">
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.totalVentasGravadas")} </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{totales.totalGravado.toFixed(2)}">
+                                <input type="text" readonly="readonly" class="form-control "  value="{totales.totalGravadoSTR}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.totalVentasExentas")} </label>
-                                <input type="text" readonly="readonly" class="form-control "   value="{totales.totalExento.toFixed(2)}">
+                                <input type="text" readonly="readonly" class="form-control "   value="{totales.totalExentoSTR}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.totalImpuestos")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "   value="{totales.totalImpuesto.toFixed(2)}">
+                                <input type="text" readonly="readonly" class="form-control "   value="{totales.totalImpuestoSTR}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.totalDescuentos")}  </label>
-                                <input type="text" readonly="readonly" class="form-control "  value="{totales.totalDescuento.toFixed(2)}">
+                                <input type="text" readonly="readonly" class="form-control "  value="{totales.totalDescuentoSTR}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.total")}  </label>
-                                <input type="text" readonly="readonly" class="form-control " value="{totales.total.toFixed(2)}">
+                                <input type="text" readonly="readonly" class="form-control " value="{totales.totalSTR}">
                             </div>
                             
                         </div>
@@ -488,7 +488,7 @@ __DescargarExcel(){
     if(_validarDiasAConsultar()){
         return true
     }
-    var url = "DescargarDetallexCodigoAjax.do?fechaInicialParam="+  $('#fechaInicial').val()+ "&fechaFinalParam=" + $('#fechaFinal').val()
+    var url = "DescargarDetallexCodigoAjax.do?fechaInicialParam="+  $('#fechaInicial').val()+ "&fechaFinalParam=" + $('#fechaFinal').val()+"&tipoImpuesto=" + $('#tipoImpuesto').val()
     location.href = url;
 }
 
@@ -542,7 +542,7 @@ function limpiar(){
 *  Busqueda de la informacion por rango de fechas
 **/
 __Busqueda(){
-	limpiar();
+	
     self.fechaInicio = $('#fechaInicial').val();
     self.fechaFin = $('#fechaFinal').val();
     self.update();
@@ -550,6 +550,7 @@ __Busqueda(){
         var parametros = {
         	fechaInicio:$('#fechaInicial').val(),
         	fechaFin:$('#fechaFinal').val(),
+            tipoImpuesto:$('#tipoImpuesto').val(),
         };
        if(_validarDiasAConsultar()){
            return true;
@@ -564,7 +565,7 @@ __Busqueda(){
             success: function (data) {
 	        	self.totales = data;
 	        	self.mostrarDetalle = true;
-	        	self.mostrarFiltros = false;
+	        	
 			    self.update();
 	        },
 	        error: function (xhr, status) {
@@ -621,18 +622,28 @@ __limpiarFiltros(){
 function __Impuestos(){
     self.impuestos =[]
     self.update()
-     self.impuestos.push({
-        codigo: ' ',
+    
+    
+   self.impuestos.push({
+        codigo: " ",
         descripcion:"Sin impuesto"
      });
-
+     
     self.impuestos.push({
         codigo: '01',
         descripcion:$.i18n.prop("tipo.impuesto.ventas")
      });
+      self.impuestos.push({
+        codigo: '02',
+        descripcion:$.i18n.prop("tipo.impuesto.consumo")
+     });
     self.impuestos.push({
         codigo: '07',
         descripcion:$.i18n.prop("tipo.impuesto.servicio")
+     });
+     self.impuestos.push({
+        codigo: '06',
+        descripcion:$.i18n.prop("tipo.impuesto.tabaco")
      });
     self.impuestos.push({
         codigo: '12',

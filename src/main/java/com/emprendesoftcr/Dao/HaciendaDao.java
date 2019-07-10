@@ -1,6 +1,7 @@
 package com.emprendesoftcr.Dao;
 
 import java.util.Collection;
+import java.util.Date;
 
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Hacienda;
@@ -26,5 +27,8 @@ public interface HaciendaDao {
 	Collection<Hacienda> findByEstadoAndNotificacion(Integer estado, Integer notificacion);
 	
 	Collection<Hacienda> findByEstadoOrEstadoErrorAndEmpresa(Empresa empresa ,Integer estado,Integer estadoError);
+	
+	Collection<Hacienda> findByEmpresaAndEstadoAndFechas(Integer estado,Date fechaInicial, Date FechaFinal);
+	
 
 }

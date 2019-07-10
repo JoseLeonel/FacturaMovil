@@ -3,6 +3,7 @@ package com.emprendesoftcr.Dao.Impl;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -224,7 +225,13 @@ public class EmpresaDaoImpl implements EmpresaDao {
 
 		String resultado = Constantes.EMPTY;
 		try {
-			resultado = FacturaElectronicaUtils.claveFactura(empresa.getCedula(), consecutivoFactura, comprobanteElectronico, empresa.getCodigoSeguridad());
+			Random rnd = new Random();
+			int dig3 = rnd.nextInt(900) + 100; // siempre 3 digitos
+			int dig5 = rnd.nextInt(90000) + 10000; // siempre 5 digitos
+			Integer valor3 = dig3;
+			Integer valor5 = dig5;
+			String codigoSeguridad = valor3.toString() + valor5.toString();
+			resultado = FacturaElectronicaUtils.claveFactura(empresa.getCedula(), consecutivoFactura, comprobanteElectronico, codigoSeguridad);
 
 		} catch (Exception e) {
 			log.info("** Error  generarClaveFacturaTributaria: " + e.getMessage() + " fecha " + new Date());
@@ -234,21 +241,50 @@ public class EmpresaDaoImpl implements EmpresaDao {
 
 		return resultado;
 	}
-	
+
 	/**
 	 * Lista de empresas activas
 	 * @see com.emprendesoftcr.Dao.EmpresaDao#findByEstado(java.lang.String)
 	 */
 	@Override
-	public Collection<Empresa> findByEstado(String estado){
+	public Collection<Empresa> findByEstado(String estado) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from Empresa obj");
 		hql.append(" where obj.estado = :estado ");
 		Query query = entityManager.createQuery(hql.toString());
 		query.setParameter("estado", estado);
-   	return query.getResultList();
-		
-		
+		return query.getResultList();
+
+	}
+
+	/**
+	 * Proforma Consecutivo
+	 * @see com.emprendesoftcr.Dao.EmpresaDao#generarConsecutivoProforma(com.emprendesoftcr.modelo.Empresa, com.emprendesoftcr.modelo.Usuario, com.emprendesoftcr.modelo.Factura)
+	 */
+	@Override
+	public String generarConsecutivoProforma(Empresa empresa, Usuario usuario) throws Exception {
+		String resultado = Constantes.EMPTY;
+		try {
+			Integer consecutivo = Constantes.ZEROS;
+			consecutivo = empresa.getConsecutivoProforma();
+			empresa.setConsecutivoProforma(empresa.getConsecutivoProforma() + 1);
+			modificar(empresa);
+			// Casa matriz
+			String casaMatriz = Constantes.EMPTY;
+			casaMatriz = empresa.getCazaMatriz() == null ? Constantes.CASA_MATRIZ_INICIAL_FACTURA : empresa.getCazaMatriz();
+			// Terminal donde esta vendiendo el usaurio
+			String terminalUsuario = Constantes.EMPTY;
+			terminalUsuario = usuario.getTerminalFactura() == null ? Constantes.TERMINAL_INICIAL_FACTURA : FacturaElectronicaUtils.replazarConZeros(usuario.getTerminalFactura(), "00000");
+			String consecutivoFactura = "0000000000".substring(consecutivo.toString().length()) + consecutivo;
+			String tipoDoc = Constantes.FACTURA_TIPO_DOC_PROFORMAS;
+			resultado = casaMatriz + terminalUsuario + tipoDoc + consecutivoFactura;
+
+		} catch (Exception e) {
+			log.info("** Error  generarConsecutivoProforma: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+
+		return resultado;
 	}
 
 }

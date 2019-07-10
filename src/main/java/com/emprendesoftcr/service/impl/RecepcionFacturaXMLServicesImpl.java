@@ -42,12 +42,12 @@ public class RecepcionFacturaXMLServicesImpl implements RecepcionFacturaXMLServi
 	public String getCrearXMLSinFirma(RecepcionFactura recepcionFactura) throws Exception{
 		
 		String xml = Constantes.EMPTY;
-			
+		
 		try {
 			String date = FacturaElectronicaUtils.toISO8601String(recepcionFactura.getFacturaFechaEmision());
 			String impuestos  = (recepcionFactura.getFacturaTotalImpuestos() != null && recepcionFactura.getFacturaTotalImpuestos() > Constantes.ZEROS_DOUBLE) ?  "<MontoTotalImpuesto>" + recepcionFactura.getFacturaTotalImpuestos().toString() + "</MontoTotalImpuesto>" : "";
 
-			xml = "<MensajeReceptor xmlns=\"" + Constantes.DOCXMLS_RECEPCION_FACTURA + "\" " +
+			xml = "<MensajeReceptor xmlns=\"" + Constantes.DOCXMLS_RECEPCION_FACTURA_4_2 + "\" " +
 	          "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
 	          "<Clave>" + recepcionFactura.getFacturaClave() + "</Clave>" +
 	          "<NumeroCedulaEmisor>" + recepcionFactura.getEmisorCedula() + "</NumeroCedulaEmisor>" +
@@ -70,12 +70,12 @@ public class RecepcionFacturaXMLServicesImpl implements RecepcionFacturaXMLServi
    * @see com.emprendesoftcr.service.FacturaXMLServices#getFirmarXML(java.lang.String, com.emprendesoftcr.modelo.Factura)
    */
 	@Override
-	public String getFirmarXML(String xmlString, Empresa empresa) throws Exception{
+	public String getFirmarXML(String xmlString, Empresa empresa,Date fecha) throws Exception{
 		String resultado = Constantes.EMPTY;
 		try {
 		
 			Certificado certificado  = certificadoBo.findByEmpresa(empresa);		
-      resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_RECEPCION_FACTURA);
+      resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_RECEPCION_FACTURA_4_3,fecha);
 		} catch (Exception e) {
 			log.info("** Error  getFirmarXML: " + e.getMessage() + " fecha " + new Date());
 			throw e;

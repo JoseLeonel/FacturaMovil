@@ -6,13 +6,32 @@ $(document).ready(function() {
 var _Init = function () {
 	__Inicializar_Table('.tableListar');
 	agregarInputsCombos();
-	ListarFacturas()
+	__comboEstado();
+	ListarFacturas();
+	
+	  $('.estado').change(function () {
+		ListarFacturas();
+	  })
+	
 }
 
+var selectCategoria = $('<select id="estado"   class="form-control estado"></select>');
 
-
+/**
+* eSTADOS DE LAS PROFORMAS
+**/
+function __comboEstado(){
+	
+    $(".estado").append( '<option value="'+3+'">'+$.i18n.prop("combo.estado.pendiente")+'</option>' );  
+	$(".estado").append('<option value="'+2+'">'+$.i18n.prop("combo.estado.convertidaEnFactura")+'</option>');   
+	$(".estado").append('<option value="'+11+'">'+$.i18n.prop("combo.estado.anulado")+'</option>');   
+	
+  }
+  
 
 var ListarFacturas = function(){
+	var estado = $('.estado').val() == null?"":$('.estado').val();
+
 	var table  =  $('#tableListar').DataTable( {
 	"responsive": true,
 	 "bAutoWidth" : true,
@@ -25,11 +44,11 @@ var ListarFacturas = function(){
 			"sDom": 'lrtip',
 			"searching":true,
 	"processing": false,
-	"serverSide": true,
+	"serverSide": false,
 	"sort" : "position",
 	"lengthChange": true,
 	"ajax" : {
-			"url":"ListarProformasActivasAjax.do",
+			"url":"ListarProformasActivasAjax.do?estado="+estado,
 			"deferRender": true,
 			"type":"GET",
 					"dataType": 'json',
@@ -42,10 +61,11 @@ agregarInputsCombos();
 EventoFiltro();
 __imprimirPTV();
 __BajarPDF();
-__CambiarEstado()
-__VerDetalle()
-__EnviarCorreosCliente()
-__CorreoAlternativo()
+__CambiarEstado();
+__VerDetalle();
+__EnviarCorreosCliente();
+__CorreoAlternativo();
+__Anular();
 
 }
 /**
@@ -56,7 +76,7 @@ function __Inicializar_Table(nombreTabla){
         destroy: true,
         "language": idioma_espanol,
         "sDom": 'lrtip',
-        "order": [0, 'desc'],
+        "order": [3, 'asc'],
         "bPaginate": true,
         'responsive': true,
         "bAutoWidth": true,
@@ -64,6 +84,7 @@ function __Inicializar_Table(nombreTabla){
         
     });    
 }
+
 
 // traducciones del table
 var idioma_espanol = 
@@ -98,20 +119,23 @@ var idioma_espanol =
 }
 var formato_tabla = [ 
                               
-	{'data' :'id'                              ,"name":"id"             ,"title" : "Id"     ,"autoWidth" :true },
+	{'data' :'consecutivoProforma'                              ,"name":"consecutivoProforma"             ,"title" : "#Proforma"     ,"autoWidth" :true },
+	{'data' :'id'                              ,"name":"id"             ,"title" : "#Id"     ,"autoWidth" :true },
 	{'data' :'usuarioCreacion.nombreUsuario'   ,"name":"usuarioCreacion.nombreUsuario" ,"title" : "Usuario"    ,"autoWidth" :true },
 	{'data' :'fechaEmisionSTR'                 ,"name":"fechaEmisionSTR" ,"title" : "Fecha Emision"    ,"autoWidth" :true },
   
-	{'data' :'id'                              ,"name":"id"              ,"title" : "Documento" ,"autoWidth" :true ,
-		"render":function(id,type, row){
-			 return __TipoDocumentos(id,row)
-		  }
+	{'data' :'cliente' ,'data.display' :'cliente.nombreCompleto'                         ,"name":"cliente.nombreCompleto"                          ,"title" : "Cliente"   ,"autoWidth" :true ,
+	"render":function(cliente,type, row){
+		return cliente ==null?"":cliente.nombreCompleto.length > 50?cliente.nombreCompleto.substring(0,50):cliente.nombreCompleto;
+	}
 	},
-	{'data' :'cliente'                    ,"name":"cliente"             ,"title" : "Cliente"   ,"autoWidth" :true ,
-		"render":function(cliente,type, row){
-			 return cliente ==null?"":cliente.nombreCompleto;
-		  }
+
+	{'data' :'nombreFactura'  ,"name":"nombreFactura"                          ,"title" : "A nombre"   ,"autoWidth" :true ,
+		"render":function(nombreFactura,type, row){
+			return nombreFactura ==null?"":nombreFactura.length > 50 ? nombreFactura.substring(0,50):nombreFactura;
+		}
 	},
+
 	{'data' :'totalImpuestoSTR'       ,"name":"totalImpuestoSTR"        ,"title" : "Impuesto"  ,"autoWidth" :true },
 	{'data' :'totalDescuentosSTR'     ,"name":"totalDescuentosSTR"      ,"title" : "Descuento"  ,"autoWidth" :true },
 	{'data' :'totalComprobanteSTR'    ,"name":"totalComprobanteSTR"     ,"title" : "Total" ,"autoWidth" :true },
@@ -121,28 +145,7 @@ var formato_tabla = [
 	  }
    }];
 
-   function __TipoDocumentos(numeroConsecutivo,row){
-
-    switch(row.tipoDoc) {
-    case "04":
-          return  "Tiq:"+numeroConsecutivo
-        break;
-    case "01":
-        return  "Fact:"+numeroConsecutivo
-        break;
-    case "02":
-        return  "N.Debito:"+numeroConsecutivo
-        break;
-    case "03":
-        return  "N.Credito:"+numeroConsecutivo
-        break;
-    case "88":
-        return  "Proforma:"+numeroConsecutivo
-        break;
-    default:
-        return  numeroConsecutivo
-}
-}
+   
 
 
    /**
@@ -155,11 +158,24 @@ function __Opciones(id,type,row){
     menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
     
     menu += '<li><a href="#"  title="Mostrar" class="  btnMostrar" >Mostrar</a></li>'
-    menu += '<li><a href="#"  title="Mostrar" class="  btnImprimir" >Imprimir</a></li>'
-    menu += '<li><a href="#"  title="Cambia el Estado Proforma a Venta en espera" class="  btnPendiente" >Cambiar a venta en espera</a></li>'
-    menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Envio Correo</a></li>'
-    menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
-    menu += '<li><a href="#"  title="Envio de correo Alternativo" class="  btnEnvioCorreoAlternativo" >Envio de correo Alternativo</a></li>'
+	
+	if(row.estado !=11 && row.estado !=2){
+
+		menu += '<li><a href="#"  title="Cambia el Estado Proforma a Venta en espera" class="  btnPendiente" >Cambiar a venta en espera</a></li>'
+		menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Envio Correo</a></li>'
+		menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
+		menu += '<li><a href="#"  title="Envio de correo Alternativo" class="  btnEnvioCorreoAlternativo" >Envio de correo Alternativo</a></li>'
+		menu += '<li><a href="#"  title="Anular la proforma" class="  btnAnular" >Anular</a></li>'
+		menu += '<li><a href="#"  title="Imprimir Proforma" class="btnImprimir" >Imprimir</a></li>'
+
+	}
+	if(row.estado ==2){
+
+		menu += '<li><a href="#"  title="Bajar PDF" class="btnPDF" >Bajar PDF</a></li>'
+		
+	}
+    
+    
     menu += "</ul></div>"  
 
      return menu;          
@@ -213,15 +229,33 @@ function __CambiarEstado(){
 	       var data = table.row($(this).parents("tr")).data();
 	    }
        
-        _actualizarEstado(data)
+        _actualizarEstado(data,1)
 	});
 }
 
-function _actualizarEstado(data){
+/**
+*  Cambiar Estado de Proforma a venta en espera
+**/
+function __Anular(){
+	$('.tableListar').on('click','.btnAnular',function(e){
+		var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+       
+        _actualizarEstado(data,11)
+	});
+}
+
+
+function _actualizarEstado(data,estado){
     $.ajax({
         url: "CambiarEstadoProformaAPedienteAjax.do",
         datatype: "json",
-        data: {idFactura:data.id},
+        data: {idFactura:data.id,estado:estado},
         method:"POST",
         success: function (data) {
             if (data.status != 200) {
@@ -363,7 +397,7 @@ function EventoFiltro(){
   $('.tableListar tfoot th').each( function (e) {
 		var title = $('.tableListar thead th').eq($(this).index()).text();      
 		//No se toma en cuenta la columna de las acctiones(botones)
-		if ( $(this).index() != 8    ){
+		if ( $(this).index() != 9    ){
 			 $(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	  }
   })

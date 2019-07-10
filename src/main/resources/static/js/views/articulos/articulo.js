@@ -4,7 +4,7 @@ $(document).ready(function() {
 } );/*fin document*/
 
 var _Init = function () {
-	   includeActionsArticulo('.dataTables_wrapper','.dataTables_length');
+	   
 	     agregarInputsCombos();
 	    EventoFiltro();
 	    __MantenimientoAgregar();
@@ -20,8 +20,7 @@ var _Init = function () {
       }
 
     });
-    $("#filtros").validate(reglasDeValidacion());
-
+    
 
 }
 
@@ -53,6 +52,7 @@ var ListarArticulos = function(codigo){
      "columns" : informacion_tabla,
      "language" : idioma_espanol,
  } );//fin del table
+ includeActionsArticulo('.dataTables_wrapper','.dataTables_length');
  agregarInputsCombos();
  EventoFiltro();
  __MantenimientoAgregar();
@@ -105,23 +105,24 @@ var informacion_tabla = [
                                "render":function(categoria,type, row){
                                      return categoria ==null?"Sin Cantegoria":row.categoria.descripcion;
                                 }},
-                               {'data' :'codigo'                  ,"name":"codigo"                 ,"title" : "Codigo"           ,"autoWidth" :true },
+                               
+                                {'data' :'codigo'                  ,"name":"codigo"                 ,"title" : "Codigo"           ,"autoWidth" :true },
                                {'data' :'descripcion'             ,"name":"descripcion"            ,"title" : "Descripcion"      ,"autoWidth" :true },
                                {'data' :'costo'                   ,"name":"costo"                  ,"title" : "Costo"            ,"autoWidth" :true
                                ,
                                "render":function(costo,type, row){
-                                     return costo ==null?0:costo.toFixed(2);
+                                     return costo ==null?0:costo;
                                 },
                             },
                                {'data' :'impuesto'                ,"name":"impuesto"               ,"title" : "Impuesto"         ,"autoWidth" :true },
                                {'data' :'precioPublico'           ,"name":"precioPublico"          ,"title" : "Precio"           ,"autoWidth" :true ,
                                "render":function(precioPublico,type, row){
-                                     return precioPublico ==null?0:precioPublico >0?precioPublico.toFixed(2):0;
+                                     return precioPublico ==null?0:precioPublico >0?precioPublico:0;
                                 },
                             },
                                {'data' :'cantidad'                ,"name":"cantidad"               ,"title" : "Cantidad"         ,"autoWidth" :true,
                                "render":function(cantidad,type, row){
-                                     return cantidad ==null?0:cantidad.toFixed(2);
+                                     return cantidad ==null?0:cantidad;
                                 },
                             },
                                {'data' :'contable'                ,"name":"contable"               ,"title" : "Contable"         ,"autoWidth" :false },
@@ -175,7 +176,7 @@ function __MantenimientoAgregar(){
     	var parametros = {
     			tipoEjecucion:1
     	}
-    	$('.mostrarListado').hide();
+    	$('#mostrarListado').hide();
 		riot.compile(function() {
 			var parametros = {
 					tipoEjecucion:1
@@ -218,7 +219,7 @@ function __modificarRegistro_Listar(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-		$('.mostrarListado').hide();
+		$('#mostrarListado').hide();
 		riot.compile(function() {
 			var parametros = {
 				tipoEjecucion:2,
@@ -289,7 +290,7 @@ function __agregarSalidaAlInventario(){
 function __mostrarListado(){
 	var table = $('#tableListar').DataTable();
    table.ajax.reload( null, false);
-   $('.mostrarListado').show();
+   $('#mostrarListado').show();
 }
 /**
  * Funcion para regresar el listado

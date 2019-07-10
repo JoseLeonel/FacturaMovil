@@ -2,6 +2,7 @@ package com.emprendesoftcr.Dao.Impl;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.DetalleDao;
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
@@ -67,24 +69,50 @@ public class DetalleDaoImpl implements DetalleDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin,Empresa empresa) {
+	public Collection<Detalle> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Empresa empresa) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from Detalle obj");
 		hql.append(" where obj.factura.estado = :estado ");
 		hql.append("and obj.factura.empresa.id = :idEmpresa ");
-		
+
 		hql.append("and obj.factura.created_at >= :fechaInicio and obj.factura.created_at <= :fechaFin and obj.factura.referenciaCodigo != :referenciaCodigo");
 		Query query = entityManager.createQuery(hql.toString());
 		query.setParameter("estado", estado);
-		
+
 		query.setParameter("referenciaCodigo", Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO);
 		query.setParameter("fechaInicio", fechaInicio);
 		query.setParameter("fechaFin", fechaFin);
 		query.setParameter("idEmpresa", empresa.getId());
 		return query.getResultList();
 	}
+	
+	public Collection<Detalle> facturasRango(Integer estado, Date fechaInicio, Date fechaFin,Empresa empresa,String tipoImpuesto){
+		StringBuilder hql = new StringBuilder();
+		hql.append("select obj from Detalle obj");
+		hql.append(" where obj.factura.estado = :estado ");
+		hql.append("and obj.factura.empresa.id = :idEmpresa ");
+
+		hql.append("and obj.factura.created_at >= :fechaInicio and obj.factura.created_at <= :fechaFin and obj.factura.referenciaCodigo != :referenciaCodigo ");
+		if(!tipoImpuesto.equals(Constantes.COMBO_TODOS)) {
+			hql.append("and obj.tipoImpuesto = :tipoImpuesto");
+		}
+		
+		Query query = entityManager.createQuery(hql.toString());
+		query.setParameter("estado", Constantes.FACTURA_ESTADO_FACTURADO);
+		if(!tipoImpuesto.equals(Constantes.COMBO_TODOS)) {
+			query.setParameter("tipoImpuesto", tipoImpuesto);
+		}
+
+		query.setParameter("referenciaCodigo", Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO);
+		query.setParameter("fechaInicio", fechaInicio);
+		query.setParameter("fechaFin", fechaFin);
+		query.setParameter("idEmpresa", empresa.getId());
+		return query.getResultList();
+		
+	}
+
 	@Override
-	public Collection<Detalle> findByFactura(Factura factura){
+	public Collection<Detalle> findByFactura(Factura factura) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from Detalle obj");
 		hql.append(" where obj.factura.id = :idFactura ");
@@ -93,18 +121,30 @@ public class DetalleDaoImpl implements DetalleDao {
 		query.setParameter("idFactura", factura.getId());
 		query.setParameter("idEmpresa", factura.getEmpresa().getId());
 		return query.getResultList();
-		
+
 	}
-	
+
 	@Override
-	public TotalDetallesCommand totalVentasPorDetalle(Empresa empresa , Date fechaInicio,Date FechaFinal) {
+	public TotalDetallesCommand totalVentasPorDetalle(Empresa empresa, Date fechaInicio, Date FechaFinal, String tipoImpuesto) {
+		StoredProcedureQuery storedProcedure =null;
+		if(tipoImpuesto.equals(Constantes.COMBO_TODOS)){
+			storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_VENTASXDETALLE_TIPO_IMPUESTO);	
+		}else if(!tipoImpuesto.equals(Constantes.COMBO_TODOS)&& !tipoImpuesto.equals(Constantes.EMPTY)){
+			storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_VENTASXDETALLE);
+		}else {
+			storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_VENTASXDETALLE_EXCEPTO);
+		}
 		
-		StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_VENTASXDETALLE);
+		
 
 		// set parametros entrada
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_IN_FECHA_INICIAL, Date.class, ParameterMode.IN);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_IN_FECHA_FINAL, Date.class, ParameterMode.IN);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_IN_ID_EMPRESA, Integer.class, ParameterMode.IN);
+		if(!tipoImpuesto.equals(Constantes.COMBO_TODOS)&& !tipoImpuesto.equals(Constantes.EMPTY)) {
+			storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_IN_TIPO_IMPUESTO, String.class, ParameterMode.IN);	
+		}
+		
 
 		// set parametros salida
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GRAVADO, Double.class, ParameterMode.OUT);
@@ -112,25 +152,38 @@ public class DetalleDaoImpl implements DetalleDao {
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_IMPUESTO, Double.class, ParameterMode.OUT);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_EXENTOS, Double.class, ParameterMode.OUT);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL, Double.class, ParameterMode.OUT);
-		
-		
-		
+
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA, Double.class, ParameterMode.OUT);
-		
 
 		// Valores de entrada
 		storedProcedure.setParameter(Constantes.SP_VENTASXDETALLE_IN_FECHA_INICIAL, fechaInicio);
 		storedProcedure.setParameter(Constantes.SP_VENTASXDETALLE_IN_FECHA_FINAL, FechaFinal);
 		storedProcedure.setParameter(Constantes.SP_VENTASXDETALLE_IN_ID_EMPRESA, empresa.getId());
+		if(!tipoImpuesto.equals(Constantes.COMBO_TODOS)&& !tipoImpuesto.equals(Constantes.EMPTY)) {
+			storedProcedure.setParameter(Constantes.SP_VENTASXDETALLE_IN_TIPO_IMPUESTO, tipoImpuesto);	
+		}
+		
 		storedProcedure.execute();
 
-
 		return new TotalDetallesCommand((Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GRAVADO), 
-				                        (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_DESCUENTO), 
-				                        (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_IMPUESTO),
-				                        (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_EXENTOS), 
-				                        (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL),
-				                        (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA));
+				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_DESCUENTO), 
+				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_IMPUESTO), 
+				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_EXENTOS),
+				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL),
+				       (Double) storedProcedure.getOutputParameterValue(Constantes.SP_VENTASXDETALLE_OUT_TOTAL_GANANCIA));
+	}
+
+	@Override
+	public Detalle findByCodigoAndEmpresa(String codigo, Empresa empresa) {
+		Query query = entityManager.createQuery("select obj from Empresa obj where obj.codigo = :codigo and obj.empresa = :empresa");
+		query.setParameter("codigo", codigo);
+		query.setParameter("empresa", empresa);
+		List<Detalle> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (Detalle) results.get(0);
+		} else {
+			return null;
+		}
 	}
 
 }

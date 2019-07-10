@@ -19,14 +19,18 @@ var _Init = function () {
     $('.btncategoria').click(function () {
       enviarACambiarCategoria();
     })
-    //$(this).html(selectCategoria);
+    __listadoCategoriasActivas($("#categoria"));
+
    
    
 }
 
 var listaArticulosGrupales      = {data:[]}
 
-var selectCategoria = $('<select id="categoria"   class="form-control categoria"></select>');
+var selectCategoria1 = $('<select id="categoria"   class="form-control categoria" data-live-search="true" ></select>');
+
+
+var selectCategoria = $('<select id="categoriaInput"   class="form-control categoriaInput" ></select>');
 
 var selecciono = false;
 
@@ -315,12 +319,37 @@ function agregarInputsCombos(){
        if ($(this).index() == 1 ){
          var select = $('<select id="combo3"   class="form-control"><option value="">Todos</option></select>');
          // se cargan los valores por defecto que existen en el combo
-         select = __listadoCategoriasActivas(select);
+         select = __listadoCategorias(select);
          $(this).html(select);
      }
     })
 }
 
+/**
+*  Mostrar listado datatable Categorias activas
+**/
+function __listadoCategorias(select){
+   $.ajax({
+        url: "ListarCategoriasActivasAjax.do",
+       datatype: "json",
+       method:"GET",
+       success: function (result) {
+            if(result.aaData.length > 0){
+             $.each(result.aaData, function( index, modeloTabla ) {
+                select.append( '<option value="'+modeloTabla.id+'">'+modeloTabla.descripcion+"</optiondata-tokens>" );  
+               
+             })
+          }
+       },
+       error: function (xhr, status) {
+           console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+       }
+   });
+   
+   return select;
+ }
+ 
 /**
 *  Mostrar listado datatable Categorias activas
 **/
@@ -332,10 +361,17 @@ function __listadoCategoriasActivas(select){
       success: function (result) {
            if(result.aaData.length > 0){
             $.each(result.aaData, function( index, modeloTabla ) {
-               select.append( '<option value="'+modeloTabla.id+'">'+modeloTabla.descripcion+'</option>' );  
-               $('#categoria').append('<option value="'+modeloTabla.id+'">'+modeloTabla.descripcion+'</option>');   
+               select.append( '<option value="'+modeloTabla.id+'">'+modeloTabla.descripcion+"</option>" );  
                
             })
+            $('.categoria').selectpicker(
+               {
+                  style: 'btn-info',
+                  size:10,
+                  liveSearch: true
+               }
+           );
+           $('.categoria').selectpicker('refresh');
          }
       },
       error: function (xhr, status) {

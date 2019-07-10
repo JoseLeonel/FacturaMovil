@@ -222,6 +222,7 @@ public class EmpresasController {
 				empresaBD.setTieneInventario(empresa.getTieneInventario());
 				empresaBD.setTieneLector(empresa.getTieneLector());
 				empresaBD.setCambiarPrecio(empresa.getCambiarPrecio());
+				empresaBD.setCodigoActividad(empresa.getCodigoActividad());
 				empresaBo.modificar(empresaBD);
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("empresa.modificado.correctamente", empresaBD);
 			}

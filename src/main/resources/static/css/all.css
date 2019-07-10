@@ -493,7 +493,7 @@ input.cmn-toggle-yes-no:checked + label:after {
   transform: rotateY(0);
 }
 
-.btn-imprimir {
+.btn-imprimirCambioPrecio {
         background-color: #00ACEE;
         color: #FFF;
         border-radius: 5px;
@@ -501,7 +501,7 @@ input.cmn-toggle-yes-no:checked + label:after {
         padding-top: 10px;
         padding-left: 20px;
         padding-right: 20px;
-        font-size: 16px;
+        font-size: 14px;
         font-weight: bold;
         margin-right: 15px;
         border: none;

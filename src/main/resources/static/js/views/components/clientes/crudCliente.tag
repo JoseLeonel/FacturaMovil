@@ -331,7 +331,7 @@ var reglasDeValidacion = function() {
 			},
 			correoElectronico : {
                 required : true,
-                maxlength:80,
+                maxlength:60,
                 minlength:1,
                 email:true
 			},

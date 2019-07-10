@@ -4,18 +4,18 @@ $(document).ready(function() {
 } );/*fin document*/
 
 var _Init = function () {
+	
 	cargaMantenimiento()
 }
-
-
 /**
  * LLamar al componente Riot 
  * @returns
  */
 function cargaMantenimiento() {
+	var parametros = {
+		codigoMoneda :'CRC'
+	}
+	riot.mount('punto-venta',{parametros:parametros});
 
-	
-	riot.mount('punto-venta');
 }
-
 

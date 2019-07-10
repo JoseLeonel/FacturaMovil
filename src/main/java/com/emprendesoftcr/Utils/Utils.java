@@ -38,6 +38,21 @@ import org.w3c.dom.NodeList;
 import com.google.common.base.Strings;
 
 public final class Utils {
+	
+	public static String oTroContenido() {
+		String resultado = Constantes.EMPTY;
+
+		 resultado = "<OtroContenido>" +
+         "<ContactoDesarrollador xmlns=\"" + Constantes.DOCXMLS_CONTACTO_DESARROLLADOR_4_3 + "\">"+
+					  "<NombreContacto>Ing.Leonel Hernandez Chaverri</NombreContacto>" +
+					  "<CorreoElectronico>josehernandezchaverri@gmail.com</CorreoElectronico>" +
+					  "<TelefonoContacto>83124207</TelefonoContacto>" +
+					  "<SistemasOfrecemos>Restaurante Ferreteria Mini Super y a la medida</SistemasOfrecemos>" +
+			  "</ContactoDesarrollador>" ;
+         resultado += "</OtroContenido>";
+
+		return resultado;
+	}
 
 	public static Date sumarDiasFecha(Date fecha, int dias) {
 		Calendar calendar = Calendar.getInstance();
@@ -130,6 +145,26 @@ public final class Utils {
 		return date;
 	}
 
+	public static Date parseDateImpuestoServicio(String dateString) {
+		Date date = null;
+		SimpleDateFormat dateFormat = new  SimpleDateFormat( "yyyy-MM-dd hh:mm:ss");
+
+		try {
+			// parse() will throw an exception if the given dateString doesn't
+			// match
+			// the current format
+			date = dateFormat.parse(dateString);
+//			date = new SimpleDateFormat("ddMMyyyyhhmmss").parse(dateString);
+
+		} catch (ParseException e) {
+			// don't do anything. just let the loop continue.
+			// we may miss on 99 format attempts, but match on one format,
+			// but that's all we need.
+		}
+
+		return date;
+	}
+	
 	public static Date parseDate2(String dateString) {
 		Date date = null;
 		SimpleDateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT6);
@@ -1238,26 +1273,27 @@ public final class Utils {
 	}
 	
 	public static String getFechaGeneraReporte(Date date) {
+		
 		DateFormat fechaCompleta = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss a ");
 		
-		return fechaCompleta.format(date);
+		return date !=null?fechaCompleta.format(date):Constantes.EMPTY;
 	}
 	
 	
 	public static String getFechaGeneraHacienda(Date date) {
 		DateFormat fechaCompleta = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a ");
 		
-		return fechaCompleta.format(date);
+		return date !=null?fechaCompleta.format(date):Constantes.EMPTY;
 	}
 
 	public static String getFechaStr(Date date) {
 		DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy");
-		return fecha.format(date);
+		return date !=null?fecha.format(date):Constantes.EMPTY;
 	}
 
 	public static String getHoraStr(Date date) {
 		DateFormat hora = new SimpleDateFormat("HH:mm:ss");
-		return hora.format(date);
+		return date !=null?hora.format(date):Constantes.EMPTY;
 	}
 	
 	public static String getFechaHoraStr(Date date) {
@@ -1339,7 +1375,7 @@ public final class Utils {
 	
 	public static String obtenerTipoDocumentoConsecutivo(String consecutivo) {		
 		//001 + 00004 + 01 + 0000003888 
-		return consecutivo.substring(8, 2); //Se retorna 01
+		return consecutivo.substring(8, 10); //Se retorna 01
 	}
 	
 	
@@ -1372,4 +1408,5 @@ public final class Utils {
 		}
 		return descripcion;		
 	}
+	
 }

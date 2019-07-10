@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <!-- Meta -->
 	<meta http-equiv="Content-Type" content="text/html; UTF-8">
-    <title>Mantenimiento de Articulos</title>
+    <title>Cambio de categoria</title>
     <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
     <!-- RIOT -->
 	<script src="/riot/riot.js"></script>
@@ -96,7 +96,7 @@
                	<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                      <div class="form-group">
                          <label th:text="#{titulo.categoria.cambio}"> </label>  
-                         <select  class="form-control categoria" id="categoria" name="categoria"  >
+                         <select  class="form-control categoria" id="categoria" name="categoria" data-live-search="true" >
                              
                          </select>
                      </div>

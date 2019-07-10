@@ -24,11 +24,11 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
 	private Logger				log	= LoggerFactory.getLogger(this.getClass());
 
 	@Override
-	public String getFirmarDocumento(Certificado certificado,String xmlSinFimar ,String urlXMLNS) throws Exception {
+	public String getFirmarDocumento(Certificado certificado,String xmlSinFimar ,String urlXMLNS,Date fecha) throws Exception {
 		String resultado = Constantes.EMPTY;
 		try {
-			String firmadoFactura = sign(xmlSinFimar,certificado,urlXMLNS); 
-			firmadoFactura = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + firmadoFactura;
+			String firmadoFactura = sign(xmlSinFimar,certificado,urlXMLNS,fecha); 
+			firmadoFactura = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" + firmadoFactura;
 			 
 			resultado = firmadoFactura;
      
@@ -50,11 +50,11 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
 	 * @return
 	 * @throws SignException
 	 */
-	 private String sign( String xmlSinFirmar, Certificado certificado,String urlXMLNS) throws Exception {
+	 private String sign( String xmlSinFirmar, Certificado certificado,String urlXMLNS,Date fecha) throws Exception {
      String signature = "";
 
 		 try {
-	     String qualifyingProperties = generateQualifyingProperties(certificado, urlXMLNS);
+	     String qualifyingProperties = generateQualifyingProperties(certificado, urlXMLNS,fecha);
 	     String _signInfo = createInfo(xmlSinFirmar, qualifyingProperties, urlXMLNS);
 	     signature += _signInfo;
 	     signature += signInfo(_signInfo, certificado.getPrivateKey().replaceAll("\n", ""));
@@ -76,11 +76,12 @@ public class FirmaElectronicaServiceImpl implements FirmaElectronicaService {
 	 * @param docXmlns
 	 * @return
 	 */
-	 private String generateQualifyingProperties (Certificado certificado, String urlXMLNS) throws Exception{
+	 private String generateQualifyingProperties (Certificado certificado, String urlXMLNS,Date fecha) throws Exception{
 		 String resultado = Constantes.EMPTY;
 		 try {
 	     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-	     String date = FacturaElectronicaUtils.toISO8601String(new Date(timestamp.getTime() - 21600000));
+	     String date = FacturaElectronicaUtils.toISO8601StringFirma(new Date(timestamp.getTime() - 21600000));
+//	     String date1 = FacturaElectronicaUtils.toISO8601StringFirma(new Date(timestamp.getTime() - 22000000));
 	     
 	     resultado = "<ds:Object>" +
 	         "<xades:QualifyingProperties Id=\"QualifyingProperties-96ea0452-42ff-421b-8578-332e5b52f172\" Target=\"#Signature-a57f9418-05b6-49bf-a44f-11a29404c13f\" " +

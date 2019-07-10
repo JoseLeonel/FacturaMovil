@@ -23,7 +23,10 @@
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalTarjeta")} : </strong>{usuarioCaja.totalTarjetaSTR}<br></div>                                                 
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalBanco")}    : </strong>{usuarioCaja.totalBancoSTR}<br></div>                                                 
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalAbono")} : </strong>{usuarioCaja.totalAbonoSTR}<br></div>                                                 
+                       
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.totalNeto")}    : </strong>{usuarioCaja.totalNetoSTR}<br></div>                                                 
+                        <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.totalDolares")}    : </strong>{usuarioCaja.totalDolaresSTR}<br></div>                                                 
+                         <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.totalServicio")}    : </strong>{usuarioCaja.totalServicioSTR}<br></div>                                                 
                         <br>
                        
                     </div>

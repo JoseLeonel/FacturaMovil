@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.modelo.Articulo;
+import com.emprendesoftcr.modelo.Categoria;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.web.command.TotalInventarioCommand;
@@ -130,5 +131,9 @@ public class ArticuloBoImpl implements ArticuloBo {
 		return articuloDao.articulosOrderCategoria(empresa);
 	}
 
+	@Override
+	public Collection<Articulo> findByCategoriaAndEmpresaAndEstadoAndMinimoMaximo(Empresa empresa, Categoria categoria, String estado, String minimoMaximo){
+		return articuloDao.findByCategoriaAndEmpresaAndEstadoAndMinimoMaximo(empresa, categoria, estado,  minimoMaximo);
+	}
 	
 }

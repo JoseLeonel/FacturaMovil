@@ -51,8 +51,20 @@
                                         <option  data-tokens="{nombreCompleto}" each={proveedores.data}  value="{id}"  >{nombreCompleto}</option>
                                     </select>
                                 </div>  
-                            </div>                      
+                            </div> 
+                                                 
                         </div>
+                        <div class="row">
+                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Estado</label>  
+                                    <select  class="form-control estado" id="estado" name="estado" >
+                                        <option  value="0"  >{$.i18n.prop("todos.select")}</option>
+                                        <option each={estados} value="{codigo}"  >{descripcion}</option>
+                                    </select>
+                                </div>  
+                            </div>
+                        </div>    
                     </form>  
                 </div>
             </div>
@@ -530,6 +542,7 @@ self.compra                = {
         nota:""
     }              
 self.detalleCompra         ={data:[]}    
+self.comboEstados          = []
 self.mostrarCompra         = false
 self.mostrarListado        = true
 self.fechaInicio =null
@@ -540,7 +553,7 @@ self.on('mount',function(){
     __InformacionDataTable()
     __InicializarTabla('.tableListar')
     agregarInputsCombos()
-   
+   __ComboEstados()
     __ListaProveedores()
     $('.datepickerFechaFinal').datepicker(
             {
@@ -557,7 +570,23 @@ self.on('mount',function(){
     
 
 })
- 
+ /**
+*  Crear el combo de estados
+**/
+function __ComboEstados(){
+    self.estados =[]
+    self.update()
+    self.estados.push({
+        codigo: 3,
+        descripcion:$.i18n.prop("compra.estado.ingreso.inventario")
+     });
+    self.estados.push({
+        codigo: 4,
+        descripcion:$.i18n.prop("compra.estado.anulado")
+     });
+  
+    self.update();
+}
  __regresarAlListado(){
      self.mostrarCompra         = false
      self.mostrarListado        = true
@@ -797,8 +826,32 @@ function __MostrarCompra(){
         self.compra.fechaCompra = self.compra.fechaCompra !=null?__displayDate_detail(self.compra.fechaCompra):null;
         self.compra.fechaIngreso  =self.compra.fechaIngresoSTR !=null?self.compra.fechaIngresoSTR:null;
         self.update()
-        cargarDetallesCompra()
+        __ListaDetallesCompras(data.id)
+        //cargarDetallesCompra()
 	});
+}
+
+/**
+*  Lista de los Proveedores
+**/
+function __ListaDetallesCompras(id){
+    $.ajax({
+        url: 'ListarDetlleByCompraAjax.do',
+        datatype: "json",
+          data:{idCompra:id} ,
+        method:"POST",
+        success: function (result) {
+            if(result.aaData.length > 0){
+               self.compra.detalleCompras = result.aaData
+               self.update()
+               cargarDetallesCompra()
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
 }
 
 /**

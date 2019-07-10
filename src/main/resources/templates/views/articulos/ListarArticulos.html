@@ -87,20 +87,15 @@
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"></div>
     </div>
-    
-    
-    <!-- Listado  -->
-   <div classs="container">
-        <form id = "filtros" name ="filtros" >
-        <div class="row">
-            <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
-		        <label>Digete el Codigo</label>
-		        <input type="text" class="form-control codigoArt" id="codigoArt" name="codigoArt" placeholder="XXXXXXXXXXXXXXXXXXXXXXX">
-		    </div>
-		</div>        
-		</form>
-		        
-        <div class="row">
+    <div class="row">
+        <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
+		    <form id = "filtros" name ="filtros" >
+   		       <label>Digete el Codigo</label>
+		       <input type="text" class="form-control codigoArt" id="codigoArt" name="codigoArt" placeholder="XXXXXXXXXXXXXXXXXXXXXXX">
+		     </form>  
+	    </div>
+	 </div>        
+     <div class="row">
             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 scroller " style="width:98.50%;">
                  <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="98.5%">
                         <thead>
@@ -132,16 +127,15 @@
                             </tr>
                         </tfoot>
                     </table>
-                    
-            </div>
-        </div>    
+               </div>
+        </div> 
+        
     </div>
- </div>
- <articulo-crud></articulo-crud>
+    <articulo-imprimir></articulo-imprimir>   
+			 <articulo-crud></articulo-crud>
  
- <articulo-imprimir></articulo-imprimir>   
-    
 </div>
+
 
 </body>
 </html>

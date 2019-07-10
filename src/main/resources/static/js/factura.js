@@ -53,6 +53,212 @@ $(document)
 			        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
 			    }
 			}
+
+	
+/** Funciones en ventas nueva , venta post , restaurante comunes **/
+	/**
+	* Monto de Total
+	**/
+	function getMontoTotal(precioUnitario,cantidad){
+	    var resultado = parseFloat(precioUnitario) * parseFloat(cantidad)
+	    return resultado
+	}
+	/**
+	* Obtiene el precio unitario sin descuento sin impuesto
+	**/
+	function getPrecioUnitario(precio ,impuesto){
+	   var porcentajeImpuesto = 0
+	   var resultado  = 0
+	   if(impuesto > 0){
+	      porcentajeImpuesto = impuesto / 100
+	      porcentajeImpuesto =  porcentajeImpuesto + 1
+	      resultado  =  precio  / porcentajeImpuesto
+	   }else{
+	       resultado  =  precio
+	   }
+	   return resultado     
+	}
+	/**
+	 * calculo del impuesto iva
+	 * */
+	function _calcularImpuesto(precio,iva){
+	    if(iva == 0){
+	        return 0;
+	    }
+	    var impuesto = iva > 0 ?parseFloat(iva)/100:0
+	    impuesto = impuesto > 0 ?impuesto+1:0
+	    var total = precio * impuesto
+	    var total = total - precio 
+	    return total
+	}
+	
+	/**
+	* Monto a pagar en la linea el cliente
+	**/
+	function getMontoTotalLinea(subTotal,totalImpuesto){
+	  return subTotal == 0?0:subTotal + totalImpuesto
+	}
+	/**
+	*  Obtener el subtotal sin el impuesto
+	**/
+	function getSubTotal(precio,cantidad){
+	    var valor = __valorNumerico(precio) * __valorNumerico(cantidad)
+	    return valor
+	}
+	/**
+	* calcular el descuento
+	**/
+	function getTotalDescuento(precio,cantidad,porcentajeDesc){
+	    var porcentaje = __valorNumerico(porcentajeDesc)/100
+	    var valor =  0
+	    if(porcentajeDesc == 100){
+	       valor = 0
+	    }else{
+	       var valor =  __valorNumerico(precio) * porcentaje   
+	    }
+	    var valor =  __valorNumerico(precio) * porcentaje
+	    return valor * cantidad
+	}
+
+/** Fin **/
+	
+	
+	
+	/**
+	 * autor : Leonel Hernandez Chaverri
+	*Funcion para mostrar la ganancia en la pantalla
+	*Venta nueva
+	*Venta Post 
+	*Venta Restaurante
+	**/
+	function __ObtenerGananciaProductoNuevoIngresado(montoDescuento,precioUnitario,costo,cantidad){
+	
+		var precioUnitarioTemp = precioUnitario * cantidad;
+		var costoTemp = costo * cantidad;
+		// si el costo es mayor al precio unitario se deja en cero debido a que se trata de productos de uso internos
+	    if(costoTemp > precioUnitarioTemp){
+	    	costoTemp = 0;
+	    }
+	   
+	    var totalGanancia = precioUnitarioTemp - costoTemp;
+	    if(redondeoDecimales(montoDescuento,2) == redondeoDecimales(totalGanancia,2)){
+	        return 0;
+	    }
+//	    totalGanancia = totalGanancia * cantidad;
+	    return  parseFloat(redondeoDecimales(totalGanancia,2) -  redondeoDecimales(montoDescuento,2));
+	   
+	 
+	}
+	
+	
+	
+	
+	/**
+	* autor : Leonel Hernandez Chaverri
+	* Fecha : 23-06-17
+	* obtener la ganancia del precio en decimal
+	**/
+	function _porcentajeGanancia(costo,impuesto,impuesto1,precioVenta) {
+		  var porcentajeGanancia = 0;
+		  var precioSinImpuesto  = 0;
+		  if(costo == 0){
+		      return 100
+		  } 
+		  if(precioVenta == 0){
+		    return 0;
+		  }
+		  if(costo == precioVenta){
+		      return 0
+		  }
+		  var resultado = 0
+		  if(impuesto == 0 || impuesto == null ){
+		      if(costo == precioVenta){
+		          resultado = 0
+		      }else{
+		        resultado =  costo / precioVenta 
+		        resultado = 1- resultado  
+		      }
+		    porcentajeGanancia  = resultado;
+		  }else{ 
+		    if(costo == precioVenta){
+		       porcentajeGanancia  = 0; 
+		    }else{
+		    	var resultadoImpuesto = impuesto;
+		        precioSinImpuesto = __valorNumerico(redondeoDecimales(precioVenta/((resultadoImpuesto/100) + 1),5));
+		    	resultadoImpuesto = impuesto1;
+		        precioSinImpuesto = __valorNumerico(redondeoDecimales(precioSinImpuesto/((resultadoImpuesto/100) + 1),5));
+		        if(precioSinImpuesto < costo){
+		        	return 0
+		        }
+
+		        if(precioSinImpuesto ==  costo){
+		            resultado = 0
+		        }else{
+		        resultado =   costo / precioSinImpuesto 
+		        resultado = 1-resultado  
+		        }
+		        porcentajeGanancia  = resultado;
+
+		    } 
+		  }
+		  return __valorNumerico(porcentajeGanancia * 100);
+		}	
+	
+
+	function esEntero(numero){
+	    if (isNaN(numero)){
+	        return false
+	    } else {
+	        // es entero
+	        if (numero % 1 == 0) {
+	            return true
+	            
+	        } else {
+	            return false
+	        }
+	    }
+	}
+
+	/**
+	* autor : Leonel Hernandez Chaverri
+	* Fecha : 23-06-17
+	* obtener Precio Publico con ganancia
+	**/
+	function _PrecioPublicoConGanancia(costo,impuesto,impuesto1,ganancia){
+		 
+		  if(costo == 0){
+		      return 0;
+		  } 
+		  
+		  var porcentajeGanancia = ganancia > 0?ganancia/100:0;
+		  if(ganancia > 0){
+		    porcentajeGanancia = 1 - porcentajeGanancia
+		  }
+		  
+		  var totalImpuesto1 = __valorNumerico(impuesto1);
+		  totalImpuesto1 = totalImpuesto1/100;
+		  totalImpuesto1 = totalImpuesto1 == 0 ?0:totalImpuesto1 + 1
+		  // aplicando el 13
+		  var totalImpuesto = __valorNumerico(impuesto)+__valorNumerico(impuesto1);
+		  totalImpuesto = totalImpuesto/100;
+		  totalImpuesto = totalImpuesto == 0 ?0:totalImpuesto + 1
+		  var precio  = 0
+		  if(ganancia > 0){
+		    if(porcentajeGanancia < 1){
+		        precio = costo / porcentajeGanancia
+		    }else{
+		        if(porcentajeGanancia == 1){
+		            precio = costo * 2 
+		        }else{
+		            precio = costo * porcentajeGanancia
+		        }
+		    }
+		  }
+		  
+		  precio = totalImpuesto1 >0? costo * totalImpuesto1:precio;
+		  precio = totalImpuesto >0? costo * totalImpuesto:precio;
+		  return __valorNumerico(redondeoDecimales(precio,0));
+		}
 	
 	function redondeoDecimales(numero,decimales)
 	{
@@ -61,6 +267,7 @@ $(document)
 	}
 
 function formatoDecimales(amount, decimals){
+	     positivoNegativo = amount > 0?"":"-"
 		 amount += ''; // por si pasan un numero en vez de un string
 		    amount = parseFloat(amount.replace(/[^0-9\.]/g, '')); // elimino cualquier cosa que no sea numero o punto
 
@@ -79,7 +286,7 @@ function formatoDecimales(amount, decimals){
 		    while (regexp.test(amount_parts[0]))
 		        amount_parts[0] = amount_parts[0].replace(regexp, '$1' + ',' + '$2');
 
-		return amount_parts.join('.');
+		return positivoNegativo + amount_parts.join('.');
 	}
 
 
@@ -380,6 +587,8 @@ function __modificarClase(formulario,mensajeAlerModificar,urlModificar,urlListar
         
     }
 }
+
+
 
 
 /**
@@ -773,6 +982,10 @@ function _confirmacion(formulario, accion, mantenimiento) {
 
 function formatoFecha(fecha) {
     return fecha == null?"":moment(fecha).format('DD/MM/YYYY');
+}
+
+function formatoFechaF(fecha) {
+    return fecha == null?"":moment(fecha).format('YYYY-MM-DD');
 }
 
 function formatoFechaHora(fecha) {

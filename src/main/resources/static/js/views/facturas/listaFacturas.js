@@ -80,6 +80,7 @@ function listaClientesActivos(){
 	$.ajax({
 		 url: "ListarClientesActivosAjax.do",
 		 datatype: "json",
+		 global: false,
 		 method:"GET",
 		 success: function (result) {
 				if(result.aaData.length > 0){
@@ -134,8 +135,6 @@ __VerDetalle()
 __EnviarCorreos()
 EventoFiltro()
 }
-
-
 // traducciones del table
 var idioma_espanol = 
 {
@@ -183,7 +182,7 @@ function agregarInputsCombos(){
   $('.tableListar tfoot th').each( function (e) {
 		var title = $('.tableListar thead th').eq($(this).index()).text();      
 		//No se toma en cuenta la columna de las acctiones(botones)
-		if ( $(this).index() != 8    ){
+		if ( $(this).index() != 9    ){
 			 $(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	  }
   })
@@ -236,9 +235,15 @@ var formato_tabla = [
 							    return __TipoDocumentos(numeroConsecutivo,row)
 						    }
                         },
-                        {'data' :'cliente'                         ,"name":"cliente"                          ,"title" : "Cliente"   ,"autoWidth" :true ,
+                        {'data' :'cliente' ,'data.display' :'cliente.nombreCompleto'                         ,"name":"cliente.nombreCompleto"                          ,"title" : "Cliente"   ,"autoWidth" :true ,
                             "render":function(cliente,type, row){
-    						    return cliente ==null?"":cliente.cedula != "999999999999"?cliente.nombreCompleto:row.nombreFactura;
+    						    return cliente ==null?"":cliente.nombreCompleto.length > 50?cliente.nombreCompleto.substring(0,50):cliente.nombreCompleto;
+						    }
+						},
+						
+                        {'data' :'nombreFactura'  ,"name":"nombreFactura"                          ,"title" : "A nombre"   ,"autoWidth" :true ,
+                            "render":function(nombreFactura,type, row){
+    						    return nombreFactura ==null?"":nombreFactura.length > 50 ? nombreFactura.substring(0,50):nombreFactura;
 						    }
                         },
                         {'data' :'totalImpuestoSTR'           ,"name":"totalImpuesto"       ,"title" : "Impuesto"    ,"autoWidth" :true  },
@@ -339,8 +344,6 @@ function __CorreoAlternativo(){
         cargaMantenimiento(1,data);  
 	});
 }
-
-
 /**
  * mostrar la abono
  */

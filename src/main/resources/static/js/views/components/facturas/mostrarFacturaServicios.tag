@@ -25,6 +25,8 @@
                         <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc == '03' }"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>Nota Credito</div>
                         <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc == '01' }"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>Factura</div>
                         <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.moneda")}        </strong>{facturaImpresa.codigoMoneda}</div>
+                        <div class="encabezado"><strong>{$.i18n.prop("factura.medioPago")} </strong>{facturaImpresa.medioEfectivo} {facturaImpresa.medioTarjeta} {facturaImpresa.medioBanco}</div>
+
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc != '88' &&  facturaImpresa.numeroConsecutivo != ""}"><strong>{$.i18n.prop("tikect.encabezado.numeroFactura")} </strong>{facturaImpresa.numeroConsecutivo}</div>
                         <div class=" encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0  &&  facturaImpresa.clave != ""}"><strong>{$.i18n.prop("tikect.encabezado.clave")}</strong> </div>
                         <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0 }">{claveParteUno}</div>

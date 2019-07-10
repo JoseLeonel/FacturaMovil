@@ -93,16 +93,17 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 				observacion = factura.getNota();
 			}
 	
-			String date = FacturaElectronicaUtils.toISO8601String(factura.getFechaEmision());
-			 xml = "<FacturaElectronica xmlns=\"" + Constantes.DOCXMLS_FACTURA + "\" " +
+			String date = FacturaElectronicaUtils.rfc3339(factura.getFechaEmision());
+			 xml = "<FacturaElectronica xmlns=\"" + Constantes.DOCXMLS_FACTURA_4_3 + "\" " +
 	         "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
 	 "<Clave>" + factura.getClave() + "</Clave>" +
+	 "<CodigoActividad>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getCodigoActividad(),Constantes.FORMATO_CODIGO_ACTIVIDAD) + "</CodigoActividad>" +        
 	 "<NumeroConsecutivo>" + factura.getNumeroConsecutivo() + "</NumeroConsecutivo>" +
 	 "<FechaEmision>" + date + "</FechaEmision>" +
 	 "<Emisor>" +
-	     "<Nombre>" + factura.getEmpresa().getNombre() + "</Nombre>" +
+	     "<Nombre>" + FacturaElectronicaUtils.procesarTexto(factura.getEmpresa().getNombre()) + "</Nombre>" +
 	     "<Identificacion>" +
-	         "<Tipo>" + factura.getEmpresa().getTipoCedula() + "</Tipo>" +
+	         "<Tipo>" + Utils.zeroPad(factura.getEmpresa().getTipoCedula(),2) + "</Tipo>" +
 	         "<Numero>" + factura.getEmpresa().getCedula() + "</Numero>" +
 	     "</Identificacion>" +
 	//     "<NombreComercial>" + factura.getEmpresa().getNombreComercial() + "</NombreComercial>" +
@@ -111,38 +112,45 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 	         "<Canton>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getCanton(),Constantes.FORMATO_CANTON) + "</Canton>" +
 	         "<Distrito>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getDistrito(),Constantes.FORMATO_DISTRITO) + "</Distrito>" +
 //	         "<Barrio>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getBarrio(),Constantes.FORMATO_BARRIO) + "</Barrio>" +
-	         "<OtrasSenas>" + factura.getEmpresa().getOtraSenas() + "</OtrasSenas>" +
+	         "<OtrasSenas>" + FacturaElectronicaUtils.procesarTexto(factura.getEmpresa().getOtraSenas()) + "</OtrasSenas>" +
 	     "</Ubicacion>" +
 	//     getTelefono(factura.getEmpresa().getTelefono(),factura.getEmpresa().getCodigoPais())+
 	//     getFax(0,factura.getEmpresa().getCodigoPais()) +
-	     "<CorreoElectronico>" + factura.getEmpresa().getCorreoElectronico() + "</CorreoElectronico>" +
+	     "<CorreoElectronico>" + FacturaElectronicaUtils.procesarTexto(factura.getEmpresa().getCorreoElectronico()) + "</CorreoElectronico>" +
 	 "</Emisor>" +
 	 xmlReceptor(factura) +
 	     "<CondicionVenta>" + factura.getCondicionVenta() + "</CondicionVenta>" +
 	     "<PlazoCredito>" + FacturaElectronicaUtils.replazarConZeros(factura.getPlazoCredito() !=null?factura.getPlazoCredito().toString():Constantes.ZEROS.toString(),Constantes.FORMATO_PLAZO_CREDITO) + "</PlazoCredito>"  
 	      + getMedioPago(factura) +
-	     "<DetalleServicio>" + xmlDetalleServicio(factura) + "</DetalleServicio>" +
+	     "<DetalleServicio>" + xmlDetalleServicio(factura) + "</DetalleServicio>" 
+	     + getOtrosCargos(factura) +
 	     "<ResumenFactura>" +
-	         "<CodigoMoneda>" + factura.getCodigoMoneda() + "</CodigoMoneda>" +
-	         "<TipoCambio>" + FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTipoCambio()) + "</TipoCambio>" +
-	         "<TotalServGravados>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalServGravados()) + "</TotalServGravados>" +
-	         "<TotalServExentos>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalServExentos()) + "</TotalServExentos>" +
-	         "<TotalMercanciasGravadas>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalMercanciasGravadas()) + "</TotalMercanciasGravadas>" +
-	         "<TotalMercanciasExentas>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalMercanciasExentas()) + "</TotalMercanciasExentas>" +
-	         "<TotalGravado>" +      FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalGravado()) + "</TotalGravado>" +
-	         "<TotalExento>" +       FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalExento()) + "</TotalExento>" +
-	         "<TotalVenta>" +        FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalVenta()) + "</TotalVenta>" +
-	         "<TotalDescuentos>" +   FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalDescuentos()) + "</TotalDescuentos>" +
-	         "<TotalVentaNeta>" +    FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalVentaNeta()) + "</TotalVentaNeta>" +
-	         "<TotalImpuesto>" +     FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalImpuesto()) + "</TotalImpuesto>" +
-	         "<TotalComprobante>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalComprobante()) + "</TotalComprobante>" +
-	     "</ResumenFactura>" +
-	     "<Normativa>" +
-	         "<NumeroResolucion>" + Constantes.NUMERO_RESOLUCION + "</NumeroResolucion>" +
-	         "<FechaResolucion>" + Constantes.FECHA_RESOLUCION + "</FechaResolucion>" +
-	     "</Normativa>" +
-	     "<Otros>" +
-	     		"<OtroTexto codigo=\"obs\">" + observacion + "</OtroTexto>" +
+		       getCodigoMoneda(factura.getCodigoMoneda(),factura.getTipoCambio())+
+		       "<TotalServGravados>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalServGravados()) + "</TotalServGravados>" +
+		       "<TotalServExentos>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalServExentos()) + "</TotalServExentos>" +
+		       "<TotalServExonerado>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalServExonerado()) + "</TotalServExonerado>" +
+		       "<TotalMercanciasGravadas>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalMercanciasGravadas()) + "</TotalMercanciasGravadas>" +
+		       "<TotalMercanciasExentas>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalMercanciasExentas()) + "</TotalMercanciasExentas>" +
+		       "<TotalMercExonerada>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalMercExonerada()) + "</TotalMercExonerada>" +
+		       "<TotalGravado>" +      FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalGravado()) + "</TotalGravado>" +
+		       "<TotalExento>" +       FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalExento()) + "</TotalExento>" +
+		       "<TotalExonerado>" +    FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalExonerado()) + "</TotalExonerado>" +
+		       "<TotalVenta>" +        FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalVenta()) + "</TotalVenta>" +
+		       "<TotalDescuentos>" +   FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalDescuentos()) + "</TotalDescuentos>" +
+		       "<TotalVentaNeta>" +    FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalVentaNeta()) + "</TotalVentaNeta>" +
+		       "<TotalImpuesto>" +     FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalImpuesto()) + "</TotalImpuesto>" +
+		       "<TotalIVADevuelto>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalIVADevuelto()) + "</TotalIVADevuelto>" +
+		       "<TotalOtrosCargos>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalOtrosCargos()) + "</TotalOtrosCargos>" +
+		       "<TotalComprobante>" +  FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalComprobante()) + "</TotalComprobante>" +
+			     "</ResumenFactura>" +
+//	     "<Normativa>" +
+//	         "<NumeroResolucion>" + Constantes.NUMERO_RESOLUCION + "</NumeroResolucion>" +
+//	         "<FechaResolucion>" + Constantes.FECHA_RESOLUCION + "</FechaResolucion>" +
+//	     "</Normativa>" +
+           informacionFerencia(factura)+
+           "<Otros>" +
+	     		"<OtroTexto codigo=\"obs\">" + FacturaElectronicaUtils.procesarTexto(observacion) + "</OtroTexto>" +
+	     		Utils.oTroContenido()+
 	     "</Otros>" +    
 	 "</FacturaElectronica>";
 				
@@ -156,18 +164,82 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 		
 	}
 	
+	private String informacionFerencia(Factura factura) {	
+	  String resultado = Constantes.EMPTY;
+	  
+	  if (factura.getReferenciaNumero() ==null) {
+	  	return resultado;
+	  }
+	  if (factura.getReferenciaNumero().equals(Constantes.EMPTY)) {
+	  	return resultado;
+	  }
+	  
+	  
+		String datereferenciaEmision = FacturaElectronicaUtils.rfc3339(factura.getReferenciaFechaEmision());
+		
+		resultado =  "<InformacionReferencia>" +
+	  "<TipoDoc>" + Utils.zeroPad(FacturaElectronicaUtils.procesarTexto(factura.getReferenciaTipoDoc()),2) + "</TipoDoc>" +
+	  "<Numero>" + factura.getReferenciaNumero() + "</Numero>" +
+	  "<FechaEmision>" + datereferenciaEmision + "</FechaEmision>" +
+	  "<Codigo>" + factura.getReferenciaCodigo() + "</Codigo>" +
+	  "<Razon>" + FacturaElectronicaUtils.procesarTexto(factura.getReferenciaRazon()) + "</Razon>" +
+	"</InformacionReferencia>" ;
+		
+		return resultado;
+
+	}
+
+	private String getOtrosCargos(Factura factura) {
+		String resultado = Constantes.EMPTY;
+		
+		try {
+			if(factura.getTotalOtrosCargos() ==null) {
+				return resultado;
+			}
+			if(factura.getTotalOtrosCargos() > Constantes.ZEROS_DOUBLE) {
+	  		 resultado = "<OtrosCargos>" +
+	                       "<TipoDocumento>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(factura.getTipoDocumentoOtroCargo().trim(),2)) + "</TipoDocumento>" +
+	                        "<Detalle>" + FacturaElectronicaUtils.procesarTexto(factura.getDetalleOtroCargo().trim()) + "</Detalle>" +
+	 	                     "<MontoCargo>" + FacturaElectronicaUtils.getConvertirBigDecimal(factura.getTotalOtrosCargos()) +"</MontoCargo>";
+	 	     resultado += "</OtrosCargos>";
+	     }
+			
+		} catch (Exception e) {
+			log.info("** Error  getTelefono: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+		return resultado;
+	}
+	
+	private String getCodigoMoneda(String codigoMoneda,Double tipoCambio) throws Exception {
+		String resultado = Constantes.EMPTY;
+		try {
+	    if(tipoCambio > Constantes.ZEROS_DOUBLE) {
+	  		 resultado = "<CodigoTipoMoneda>" +
+	          "<CodigoMoneda>" + codigoMoneda + "</CodigoMoneda>" +
+	 	        "<TipoCambio>" + FacturaElectronicaUtils.getConvertirBigDecimal(tipoCambio) +"</TipoCambio>";
+	 	     resultado += "</CodigoTipoMoneda>";
+	     }
+			
+		} catch (Exception e) {
+			log.info("** Error  getTelefono: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+		return resultado;
+	}
+	
 	/**
    * Firma de la Factura electronica
    * @see com.emprendesoftcr.service.FacturaXMLServices#getFirmarXML(java.lang.String, com.emprendesoftcr.modelo.Factura)
    */
 @Override
-	public String getFirmarXML(String xmlString,Empresa empresa) throws Exception{
+	public String getFirmarXML(String xmlString,Empresa empresa,Date fecha) throws Exception{
 		String resultado = Constantes.EMPTY;
 		try {
 		
 			Certificado certificado  = certificadoBo.findByEmpresa(empresa);
 			if(certificado !=null) {
-				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_FACTURA);	
+				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_FACTURA_4_3,fecha);	
 			}else {
 				log.info("** Error  Empresa no se encuentra el certificado: " + empresa.getNombre());
 			}
@@ -298,19 +370,22 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
     	}
     	lineas += "<LineaDetalle>" +
           "<NumeroLinea>" + new BigInteger(detalle.getNumeroLinea().toString()) + "</NumeroLinea>" +
-          "<Codigo>" +
-          "<Tipo>" + tipoCodigo + "</Tipo>" +
-          "<Codigo>" + detalle.getCodigo() + "</Codigo>" +
-          "</Codigo>" +
+          "<CodigoComercial>" +
+              "<Tipo>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(tipoCodigo,2)) + "</Tipo>" +
+              "<Codigo>" + FacturaElectronicaUtils.procesarTexto(detalle.getCodigo()) + "</Codigo>" +
+          "</CodigoComercial>" +
           "<Cantidad>" + FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getCantidad()) + "</Cantidad>" +
           "<UnidadMedida>" + unidadMedida + "</UnidadMedida>" +
-   //       "<UnidadMedidaComercial>" + detalle.getUnidadMedida() + "</UnidadMedidaComercial>" +
-          "<Detalle>" + detalle.getDescripcion().trim() + "</Detalle>" +
+     //     "<UnidadMedidaComercial>" + detalle.getUnidadMedida() + "</UnidadMedidaComercial>" +
+          "<Detalle>" + FacturaElectronicaUtils.procesarTexto(detalle.getDescripcion().trim()) + "</Detalle>" +
           "<PrecioUnitario>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getPrecioUnitario()) + "</PrecioUnitario>" +
           "<MontoTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotal()) + "</MontoTotal>" +
           getDescuento(detalle.getMontoDescuento())+
           "<SubTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getSubTotal()) + "</SubTotal>" +
-          xmlImpuestos(detalle) +
+          xmlBaseImponible(detalle.getFactura().getId(),detalle.getBaseImponible())+  
+          xmlImpuestos(detalle.getFactura().getId(),detalle.getCodigoTarifa(),detalle.getTipoImpuesto1(),detalle.getMontoImpuesto1(),detalle.getImpuesto1()) +
+          xmlImpuestos(detalle.getFactura().getId(),detalle.getCodigoTarifa(),detalle.getTipoImpuesto(),detalle.getMontoImpuesto(),detalle.getImpuesto()) +
+          xmlImpuestosNeto(detalle.getFactura().getId() ,detalle.getMontoImpuesto() ==null?Constantes.ZEROS_DOUBLE:detalle.getMontoImpuesto(),detalle.getMontoImpuesto1() ==null?Constantes.ZEROS_DOUBLE:detalle.getMontoImpuesto(),detalle.getImpuestoNeto()) +
           "<MontoTotalLinea>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotalLinea()) + "</MontoTotalLinea>" +
           "</LineaDetalle>";
     }
@@ -322,19 +397,98 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
    
     return lineas;
 }
+	 private String xmlBaseImponible(Long idFactura,Double baseImponible) throws Exception {
+	  	String resultado = Constantes.EMPTY;
+	  	
+	  	
+	  	try {
+	  		if(baseImponible.equals(Constantes.ZEROS_DOUBLE)) {
+	    		return resultado;
+	    	}
+	    	if(baseImponible == null) {
+	    		return resultado;
+	    	}
+	    	
+		        resultado = "<BaseImponible>" +  FacturaElectronicaUtils.getConvertirBigDecimal(baseImponible) + "</BaseImponible>" ;
+				
+			} catch (Exception e) {
+				log.info("** Error  xmlImpuestos Factura :" + idFactura  + e.getMessage() + " fecha " + new Date());
+				throw e;
+			}
+	    return resultado;
+	}
+	  
+	private String xmlImpuestosNeto(Long idFactura ,Double montoImpuesto,Double montompuesto1,Double montoImpuestoNeto) throws Exception {
+	  	String resultado = Constantes.EMPTY;
+	  	if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE) && montompuesto1.equals(Constantes.ZEROS_DOUBLE)) {
+	  		return resultado;
+	  	}
+	  	
+	  	try {
+	  		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
+	  			return resultado;
+	  		}
+		        resultado = "<ImpuestoNeto>" + FacturaElectronicaUtils.getConvertirBigDecimal(montoImpuestoNeto )+ "</ImpuestoNeto>";
+				
+			} catch (Exception e) {
+				log.info("** Error  xmlImpuestos Factura :" + idFactura  + e.getMessage() + " fecha " + new Date());
+				throw e;
+			}
+	    return resultado;
+	}
+	
+	private String xmlImpuestos(Long idFactura,String codigoTarifa,String tipoImpuesto,Double montoImpuesto,Double impuesto) throws Exception {
+  	String resultado = Constantes.EMPTY;
+  	String nodoCodigoTarifa = Constantes.EMPTY;
+  	String nodoTarifa = Constantes.EMPTY;
+  	try {
+  		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
+  			return resultado;
+  		}
+  		if (codigoTarifa !=null) {
+  			if(!codigoTarifa.equals(Constantes.EMPTY)) {
+  				nodoCodigoTarifa ="<CodigoTarifa>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(codigoTarifa, 2)) + "</CodigoTarifa>";
+  				
+  			}
+  			
+  		}
+  		nodoTarifa = "<Tarifa>" + FacturaElectronicaUtils.getConvertirBigDecimal(impuesto ) + "</Tarifa>" ;
+  		if(montoImpuesto != null && tipoImpuesto !=null) {
+	  		if(montoImpuesto > Constantes.ZEROS_DOUBLE) {
+	        resultado = "<Impuesto>" +
+	            "<Codigo>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(tipoImpuesto, 2)) + "</Codigo>" +
+	            nodoCodigoTarifa +
+	            nodoTarifa+
+	            "<Monto>" +  FacturaElectronicaUtils.getConvertirBigDecimal(montoImpuesto) + "</Monto>";
+	        resultado += "</Impuesto>";
+	    	}
+  		}
+			
+		} catch (Exception e) {
+			log.info("** Error  xmlImpuestos Factura :" + idFactura  + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+    return resultado;
+}
+
 /**
  *   
  * @param descuento
  * @return
  */
-private String getDescuento(Double descuento) throws Exception{
+	private String getDescuento(Double descuento) throws Exception {
 		String resultado = Constantes.EMPTY;
-		if(descuento ==null) {
+		if(descuento == null) {
+			return resultado;
+		}
+		if(descuento.equals(Constantes.ZEROS_DOUBLE)) {
 			return resultado;
 		}
 		try {
-			 resultado ="<MontoDescuento>" + FacturaElectronicaUtils.getConvertirBigDecimal(descuento) + "</MontoDescuento>" +
-		        "<NaturalezaDescuento>" + Constantes.FORMATO_NATURALEZA_DESCUENTO + "</NaturalezaDescuento>";
+			 resultado = "<Descuento>" +
+					  "<MontoDescuento>" + FacturaElectronicaUtils.getConvertirBigDecimal(descuento) + "</MontoDescuento>" +
+		        "<NaturalezaDescuento>" + Constantes.FORMATO_NATURALEZA_DESCUENTO + "</NaturalezaDescuento>" + 
+		        "</Descuento>" ;
 			
 		} catch (Exception e) {
 			log.info("** Error  getDescuento: " + e.getMessage() + " fecha " + new Date());
@@ -347,27 +501,28 @@ private String getDescuento(Double descuento) throws Exception{
    * @param detalle
    * @return
    */
-private String xmlImpuestos(Detalle detalle)throws Exception {
-  	String resultado = Constantes.EMPTY;
-  	try {
-  		if(detalle.getMontoImpuesto() != null && detalle.getTipoImpuesto() !=null) {
-    	if(detalle.getMontoImpuesto()>Constantes.ZEROS_DOUBLE) {
-        resultado = "<Impuesto>" +
-            "<Codigo>" + Utils.zeroPad(detalle.getTipoImpuesto(), 2) + "</Codigo>" +
-            "<Tarifa>" + FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getImpuesto() ) + "</Tarifa>" +
-            "<Monto>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoImpuesto()) + "</Monto>";
-        resultado += "</Impuesto>";
-    		
-    	}
-  		}
-			
-		} catch (Exception e) {
-			log.info("** Error  xmlImpuestos: " + e.getMessage() + " fecha " + new Date());
-			throw e;
+private String xmlImpuestos(Long idFactura,String tipoImpuesto,Double montoImpuesto,Double impuesto) throws Exception {
+	String resultado = Constantes.EMPTY;
+	try {
+		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
+			return resultado;
 		}
-    return resultado;
+		if(montoImpuesto != null && tipoImpuesto !=null) {
+  		if(montoImpuesto > Constantes.ZEROS_DOUBLE) {
+        resultado = "<Impuesto>" +
+            "<Codigo>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(tipoImpuesto, 2)) + "</Codigo>" +
+            "<Tarifa>" + FacturaElectronicaUtils.getConvertirBigDecimal(impuesto ) + "</Tarifa>" +
+            "<Monto>" +  FacturaElectronicaUtils.getConvertirBigDecimal(montoImpuesto) + "</Monto>";
+        resultado += "</Impuesto>";
+    	}
+		}
+		
+	} catch (Exception e) {
+		log.info("** Error  xmlImpuestos Factura :" + idFactura  + e.getMessage() + " fecha " + new Date());
+		throw e;
+	}
+  return resultado;
 }
-
 	/**
 	 * 
 	 * @param factura
@@ -382,7 +537,7 @@ private String xmlImpuestos(Detalle detalle)throws Exception {
        		
           if(cedulaExtrangera.equals(Constantes.EMPTY)) {
          		resultado = "<Receptor>" +
-                "<Nombre>" + factura.getCliente().getNombreCompleto() + "</Nombre>" +
+                "<Nombre>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getNombreCompleto()) + "</Nombre>" +
                 xmlIdentificacion(factura) + 
 //                "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
 //                "<Ubicacion>" +
@@ -394,12 +549,12 @@ private String xmlImpuestos(Detalle detalle)throws Exception {
 //                "</Ubicacion>" +
 //                getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
               //  getFax(0,factura.getCliente().getCodigoPais()) +    
-                "<CorreoElectronico>" + factura.getCliente().getCorreoElectronico() + "</CorreoElectronico>" +
+                "<CorreoElectronico>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getCorreoElectronico()) + "</CorreoElectronico>" +
             "</Receptor>";
           	
           } else {
          		resultado = "<Receptor>" +
-                "<Nombre>" + factura.getCliente().getNombreCompleto() + "</Nombre>" +
+                "<Nombre>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getNombreCompleto()) + "</Nombre>" +
                 xmlIdentificacion(factura) + 
                 "<IdentificacionExtranjero>" + factura.getCliente().getIdentificacionExtranjero() + "</IdentificacionExtranjero>" +
 //                "<NombreComercial>" + factura.getCliente().getNombreComercial() + "</NombreComercial>" +
@@ -412,7 +567,7 @@ private String xmlImpuestos(Detalle detalle)throws Exception {
 //                "</Ubicacion>" +
 //                getTelefono(factura.getCliente().getTelefono(),factura.getCliente().getCodigoPais())+
               //  getFax(0,factura.getCliente().getCodigoPais()) +    
-                "<CorreoElectronico>" + factura.getCliente().getCorreoElectronico() + "</CorreoElectronico>" +
+                "<CorreoElectronico>" + FacturaElectronicaUtils.procesarTexto(factura.getCliente().getCorreoElectronico()) + "</CorreoElectronico>" +
             "</Receptor>";
           	
           }    		
@@ -450,7 +605,7 @@ private String xmlIdentificacion (Factura factura) throws Exception {
 	try {
     if (factura.getCliente() != null) {
       resultado = "<Identificacion>" +
-                  "<Tipo>" + factura.getCliente().getTipoCedula() + "</Tipo>" +
+                  "<Tipo>" + Utils.zeroPad(factura.getCliente().getTipoCedula(),2) + "</Tipo>" +
                   "<Numero>" + factura.getCliente().getCedula() + "</Numero>" +
               "</Identificacion>";
   } 

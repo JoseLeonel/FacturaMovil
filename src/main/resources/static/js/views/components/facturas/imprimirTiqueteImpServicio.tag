@@ -14,6 +14,7 @@
                 <div class="">
                     <div class="ticket" id="ticket" name="ticket" > 
                         <h1 >{$.i18n.prop("tikect.encabezado.comprobante")} {facturaImpresa.id}<h1>
+                        <div class="encabezado"><strong>{facturaImpresa.mesa.descripcion}                        </strong><br></div>
                         <div class="encabezado" show ="{facturaImpresa.nombreFactura !=null}"><strong>{$.i18n.prop("tikect.encabezado.receptor")}     </strong>{facturaImpresa.nombreFactura}</div>
   
                         <table class="forma-table" >
@@ -26,9 +27,9 @@
                             </thead>
 	                        <tbody>
 	                            <tr class = "" each={detalles} class="detalleTables">
-	                                <td class="cantidad">{cantidad}</td>
-	                                <td class="producto">{descripcion}</td>
-	                                <td class="precio">{montoTotalLinea}</td>
+	                                <td class="cantidad">{cantidadSTR}</td>
+	                                <td class="producto" >{descripcion.length>40?descripcion.substring(0, 40):descripcion}</td>
+	                                <td class="precio">{montoTotalLineaSTR}</td>
 	                            </tr>
 	                            <tr>
 		                            <td colspan="3"></td>
@@ -39,8 +40,8 @@
 	                            	<td > *********  </td>
 	                            </tr>
 	                            <tr>
-	                            	<td class="text-left" colspan="2"><h2><strong>{$.i18n.prop("tikect.total")}:</strong></h2></td>
-	                            	<td colspan="1"><h2><strong>{facturaImpresa.totalComprobanteSTR}</strong></h2></td>
+	                            	<td class="text-left" colspan="2"><h3><strong>{$.i18n.prop("tikect.total")}:</strong></h3></td>
+	                            	<td colspan="1"><h3><strong>{facturaImpresa.totalComprobanteSTR}</strong></h3></td>
 	                            </tr>
                                 <tr show={facturaImpresa.tipoCambio > 1}>
                                     <td></td>

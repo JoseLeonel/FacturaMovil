@@ -1,6 +1,7 @@
 package com.emprendesoftcr.Bo;
 
 import java.util.Collection;
+import java.util.Date;
 
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Hacienda;
@@ -23,4 +24,6 @@ public interface HaciendaBo {
 	Collection<Hacienda> findByEstado(Integer estado, Integer estadoError);
 
 	Collection<Hacienda>  findByEstadoOrEstadoErrorAndEmpresa(Empresa empresa ,Integer estado,Integer estadoError);
+	Collection<Hacienda> findByEmpresaAndEstadoAndFechas(Integer estado,Date fechaInicial, Date FechaFinal);
+	
 }

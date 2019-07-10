@@ -9,6 +9,11 @@ var formValidationDefaults = {
         ignoreTitle: true
 };
 
+
+jQuery.validator.addMethod("validFecha", function(value, element) {
+    return this.optional(element) || moment(value,"YYYY-MM-DD hh:mm:ss ").isValid();
+}, "Ingrese una fecha valida con el formato correcto YYYY-MM-DD hh:mm:ss Ejemplo:2019-07-02 08:10:15");
+
 jQuery.extend(jQuery.validator.messages, {
     required: "Campo requerido.",  
     email: "Formato de correo inv\u00E1lido",

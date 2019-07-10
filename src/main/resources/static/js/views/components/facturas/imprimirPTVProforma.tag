@@ -13,7 +13,7 @@
             <section class="zona-impresion" id="imprimeme" name ="imprimeme">
                 <div class="">
                     <div class="ticket" id="ticket" name="ticket" > 
-                        <div class="encabezado" ><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.id}                       </strong><br></div>
+                        <div class="encabezado" ><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.consecutivoProforma}                       </strong><br></div>
                         <div class="encabezado"><strong> {facturaImpresa.empresa.nombreComercial}                        </strong><br></div>
                         <div class="encabezado"><strong> {facturaImpresa.empresa.nombre}                        </strong><br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.cedula")}       </strong>{facturaImpresa.empresa.cedula}<br></div>
@@ -39,8 +39,8 @@
                             </thead>
                         <tbody>
                             <tr class = "" each={detalles} class="detalleTables">
-                                <td class="cantidad" show={codigo !='8888'}>{cantidad}</td>
-                                <td class="producto" show={codigo !='8888'}>{descripcion}</td>
+                                <td class="cantidad" show={codigo !='8888'}>{cantidadSTR}</td>
+                                <td class="producto" show={codigo !='8888'}>{descripcion.length>40?descripcion.substring(0, 40):descripcion}</td>
                                 <td class="precio"   show={codigo !='8888'}>{montoTotalSTR} </td>
                             </tr>
                             </tr>

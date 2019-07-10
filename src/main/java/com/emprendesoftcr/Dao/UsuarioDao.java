@@ -20,5 +20,11 @@ public interface UsuarioDao {
 
 	Usuario buscarPorNombreYPrimerApellidoYSegundoApellido(String nombre, String primerApellido, String segundoApellido);
 	
+	Boolean isAdministrador_empresa(Usuario usuario);
+	Boolean isAdministrador_sistema(Usuario usuario);
+	Boolean isAdministrador_restaurante(Usuario usuario);
+	Boolean isAdministrador_cajero(Usuario usuario);
+	Boolean isAdministrador_vendedor(Usuario usuario);
+	
 
 }

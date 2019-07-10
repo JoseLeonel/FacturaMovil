@@ -21,13 +21,15 @@
                         <div class="forma-impresion " id="imprimeme" name ="imprimeme">                        
                             <div class="ticket" id="ticket" name="ticket" > 
                                 <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 0}"><strong> {documentoElectronico} </strong><br></div>
-                                <div class="encabezado" show = "{facturaImpresa.tipoDoc == '88'}"><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.id}                       </strong><br></div>
+                                <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 1}"><strong> {$.i18n.prop("regimen.simplificado")} </strong><br></div>
                                 <div class="encabezado" show = "{facturaImpresa.tipoDoc == '87'}"><strong> {$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")} {facturaImpresa.id}                       </strong><br></div>
                                 <div class="encabezado"><strong> {facturaImpresa.empresa.nombreComercial}                        </strong><br></div>
                                 <div class="encabezado"><strong> {facturaImpresa.empresa.nombre}                        </strong></div>
                                 <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.cedula")}  </strong>{facturaImpresa.empresa.cedula} <strong>{$.i18n.prop("tikect.encabezado.telefono")}</strong> {facturaImpresa.empresa.telefono}</strong></div>
-                                <div class="encabezado" show = {facturaImpresa.empresa.correoElectronico != ""} >{facturaImpresa.empresa.correoElectronico} </div>
-                                <div class="encabezado" >{facturaImpresa.empresa.otraSenas} </div>
+                                <div class="encabezado" show = {facturaImpresa.empresa.correoElectronico != ""} >{facturaImpresa.empresa.correoElectronico} <br></div>
+                                <div class="encabezado" >{facturaImpresa.empresa.otraSenas.length>39?facturaImpresa.empresa.otraSenas.substring(0, 39):facturaImpresa.empresa.otraSenas} </div>
+                                <div class="encabezado" >{facturaImpresa.empresa.otraSenas.length>39?facturaImpresa.empresa.otraSenas.substring(40, facturaImpresa.empresa.otraSenas.length):''} </div>
+                                
                                 <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.fecha.emision")} </strong>{facturaImpresa.fechaEmisionSTR} </div>
                                 <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.condicion.venta")} </strong>{facturaImpresa.condicionVenta}</div>
                                 <div class="encabezado"><strong>{$.i18n.prop("factura.medioPago")} </strong>{facturaImpresa.medioEfectivo} {facturaImpresa.medioTarjeta} {facturaImpresa.medioBanco}</div>
@@ -38,6 +40,7 @@
                                 <div class="encabezado" show="{facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc == '01' }"><strong>{$.i18n.prop("tikect.encabezado.tipo.documento")}</strong>Factura</div>
                                 <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.moneda")} </strong>{facturaImpresa.codigoMoneda}</div>
                                 <div class="encabezado" show = "{facturaImpresa.tipoDoc != '88' &&  facturaImpresa.numeroConsecutivo != ""}"><strong>{$.i18n.prop("tikect.encabezado.numeroFactura")} </strong>{facturaImpresa.numeroConsecutivo}</div>
+                                <div class="encabezado" show = "{facturaImpresa.tipoDoc != '88' &&  facturaImpresa.consecutivoProforma.length > 0}"><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.consecutivoProforma}                       </strong><br></div>
                                 <div class=" encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0  &&  facturaImpresa.clave != ""}"><strong>{$.i18n.prop("tikect.encabezado.clave")}</strong> </div>
                                 <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0 }">{claveParteUno}</div>
                                 <div class="tamanoClave encabezado" show = "{facturaImpresa.tipoDoc != '88' && facturaImpresa.empresa.noFacturaElectronica == 0}">{claveParteDos}</div>
@@ -46,7 +49,11 @@
                                 <div class="encabezado" show ="{facturaImpresa.nombreFactura ==null || facturaImpresa.nombreFactura == ""}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}>{$.i18n.prop("tikect.encabezado.receptor.cedula")}  {facturaImpresa.cliente.cedula}   </strong></div>
                                 <div class="encabezado" show ="{facturaImpresa.cliente.cedula != '999999999999'}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}> {facturaImpresa.cliente.correoElectronico}   </strong></div>
                                 <div class="encabezado" show ="{facturaImpresa.cliente.correoAlternativo != ''}"><strong show={facturaImpresa.cliente.cedula != '999999999999'}> {facturaImpresa.correoAlternativo}   </strong></div>
-                                <div class="encabezado" show ="{facturaImpresa.referenciaNumero != ''}"><strong > {$.i18n.prop("informacion.numero.referencia")} {facturaImpresa.referenciaNumero}   </strong></div>
+                                <div class="tamanoClaveencabezado" show ="{facturaImpresa.referenciaNumero.length > 0}"><strong > {$.i18n.prop("informacion.numero.referencia")} </strong></div>
+  
+                                <div class="tamanoClave encabezado" show = "{facturaImpresa.referenciaNumero.length > 0}">{claveParteUnoRef}</div>
+                                <div class="tamanoClave encabezado" show = "{facturaImpresa.referenciaNumero.length > 0}">{claveParteDosRef}</div>
+
                                 <div class="encabezado" show ='{ facturaImpresa.nota != "" && facturaImpresa.nota !=null}'> Nota:   {facturaImpresa.nota}  </div>
                                 <table class = "forma-table">
                                     <thead>
@@ -59,8 +66,8 @@
                                     </thead>
                                 <tbody>
                                     <tr class = "" each={detalles} class="detalleTables">
-                                        <td class="cantidad" show={codigo !='8888'}>{cantidad}</td>
-                                        <td class="producto" show={codigo !='8888'}>{descripcion}</td>
+                                        <td class="cantidad" show={codigo !='8888'}>{cantidadSTR}</td>
+                                        <td class="producto" show={codigo !='8888'}>{descripcion.length>40?descripcion.substring(0, 50):descripcion}</td>
                                         <td class="precio"   show={codigo !='8888'}>{montoTotalSTR} {montoImpuesto>0?"G":"E"}</td>
                                     </tr>
                                     </tr>
@@ -380,17 +387,24 @@ self.mostrarImprimiCelular = false;
 self.titulo = ""
 self.claveParteUno =""
 self.claveParteDos =""
+self.claveParteUnoRef =""
+self.claveParteDosRef =""
 self.totalImpuestoServicio = 0
 self.subTotal = 0
 self.facturaActiva = 0
 self.facturaImpresa = {
     empresa:{
         imprimirDirecto:0
-    }
+    },
+    referenciaNumero:""
+
 }
 
 self.on('mount',function(){
-    document.getElementById('divQR').innerHTML = '';
+    self.claveParteUnoRef =""
+    self.claveParteDosRef =""
+    self.update()
+   // document.getElementById('divQR').innerHTML = '';
     if(self.parametro.factura.id > 0){
        consultaFactura(self.parametro.factura.id)
       
@@ -487,8 +501,7 @@ function consultaFactura(idFactura){
                         elemen.montoTotal = redondearDecimales(elemen.montoTotal,0);
                         self.update()
                     })
-                   self.totalImpuestoServicioSTR = ""
-                   self.totalImpuestoServicioSTR =  formatoDecimales(self.totalImpuestoServicio,2)  
+                   
                    self.update()
 
                     $.each(data.aaData, function( index, modeloTabla ) {
@@ -501,6 +514,9 @@ function consultaFactura(idFactura){
                             self.update()
                             self.claveParteUno= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(0,24):""
                             self.claveParteDos= self.facturaImpresa.clave !=null ?self.facturaImpresa.clave.substring(25,51):""
+                            self.claveParteUnoRef= self.facturaImpresa.referenciaNumero !=null ?self.facturaImpresa.referenciaNumero.substring(0,24):""
+                            self.claveParteDosRef= self.facturaImpresa.referenciaNumero !=null ?self.facturaImpresa.referenciaNumero.substring(25,51):""
+
                             //detalles
                           //  self.totalImpuestoServicio = 0
                             self.subTotal = 0
@@ -526,7 +542,12 @@ function consultaFactura(idFactura){
                             self.update()
                       }
                     });
-                   
+                    if(self.totalImpuestoServicio == 0 ){
+                        self.totalImpuestoServicio = self.facturaImpresa.totalOtrosCargos
+                    }
+                   self.totalImpuestoServicioSTR = ""
+                   self.totalImpuestoServicioSTR =  formatoDecimales(self.totalImpuestoServicio,2)  
+                   self.update()
          
                     if (self.facturaImpresa.empresa.imprimirDirecto == 0 || self.parametro.facturaDia ==1){
                         $('.imprimirModal').modal('show');   
@@ -546,19 +567,19 @@ function consultaFactura(idFactura){
      
 
 }
-function _VersionTiquete(){
 
+
+function _VersionTiquete(){
     if(self.facturaImpresa.tipoDoc == "01"){
-       self.documentoElectronico = $.i18n.prop("documento.electronico.factura");
+        self.documentoElectronico = self.facturaImpresa.versionEsquemaXML == 1 ?$.i18n.prop("documento.electronico.factura"):$.i18n.prop("documento.electronico.factura.version3");
     }else if(self.facturaImpresa.tipoDoc == "02"){
-        self.documentoElectronico = $.i18n.prop("documento.electronico.nota.debito");
+        self.documentoElectronico = self.facturaImpresa.versionEsquemaXML == 1 ? $.i18n.prop("documento.electronico.nota.debito"):$.i18n.prop("documento.electronico.nota.debito.version3");
     }else if(self.facturaImpresa.tipoDoc == "03"){
-        self.documentoElectronico = $.i18n.prop("documento.electronico.nota.credito");
+        self.documentoElectronico = self.facturaImpresa.versionEsquemaXML == 1 ?$.i18n.prop("documento.electronico.nota.credito"):$.i18n.prop("documento.electronico.nota.credito.version3");
     }else if(self.facturaImpresa.tipoDoc == "04"){
-        self.documentoElectronico = $.i18n.prop("documento.electronico.tiquete");
+        self.documentoElectronico = self.facturaImpresa.versionEsquemaXML == 1 ?$.i18n.prop("documento.electronico.tiquete"):$.i18n.prop("documento.electronico.tiquete.version3");
     }
     self.update()
-
 }
 
 function getMedioPago() {
@@ -682,6 +703,7 @@ function __imprimir(){
     imprimirElemento(div)
 }
 function imprimirElemento(elemento){
+  var originalContents = document.body.innerHTML;
   var ventana = window.open('', 'PRINT', 'height=400,width=600');
   var html = "<!DOCTYPE HTML>";
   html += '<html><head><title>' + "" + '</title>'
@@ -693,6 +715,7 @@ function imprimirElemento(elemento){
   ventana.focus();
   ventana.print();
   ventana.close();
+  //document.body.innerHTML = originalContents;
   
  // printJS('imprimeme', 'html');
   

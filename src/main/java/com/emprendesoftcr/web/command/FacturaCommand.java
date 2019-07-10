@@ -5,7 +5,6 @@ import java.util.Date;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Mesa;
-import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.web.jsonDeserializer.ClienteDeserializer;
 import com.emprendesoftcr.web.jsonDeserializer.VendedorDeserializer;
@@ -98,6 +97,7 @@ public class FacturaCommand {
 
 	private Double		totalImpuestoServ;
 	private Double  tipoCambioMoneda;
+	private Double pesoTransporteTotal;
 
 	private String codigoMoneda;
 
@@ -106,6 +106,7 @@ public class FacturaCommand {
 	private Date created_at;
 
 	private Date updated_at;
+	private Integer						versionEsquemaXML;
 
 	@JsonDeserialize(using = ClienteDeserializer.class)
 	private Cliente cliente;
@@ -540,5 +541,35 @@ public class FacturaCommand {
 	public void setTipoCambioMoneda(Double tipoCambioMoneda) {
 		this.tipoCambioMoneda = tipoCambioMoneda;
 	}
+
+
+
+	
+	public Double getPesoTransporteTotal() {
+		return pesoTransporteTotal;
+	}
+
+
+
+	
+	public void setPesoTransporteTotal(Double pesoTransporteTotal) {
+		this.pesoTransporteTotal = pesoTransporteTotal;
+	}
+
+
+
+	
+	public Integer getVersionEsquemaXML() {
+		return versionEsquemaXML;
+	}
+
+
+
+	
+	public void setVersionEsquemaXML(Integer versionEsquemaXML) {
+		this.versionEsquemaXML = versionEsquemaXML;
+	}
+	
+	
 
 }

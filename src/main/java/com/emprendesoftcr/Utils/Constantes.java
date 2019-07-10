@@ -5,19 +5,40 @@ import java.util.ResourceBundle;
 public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																			= ResourceBundle.getBundle("factura");
+//Esquema de XML
+	public static final Integer					ESQUEMA_XML_4_2																			= 1;
+	public static final Integer					ESQUEMA_XML_4_3																			= 2;
 
+	// **Impuesto de servicio
+	public static final String					TIPO_DOCUMENTO_IMPUESTO_SERVICIO_OTRO_CARGO					= "06";
+	public static final String					IMPUESTO_SERVICIO_OTRO_CARGO_RESTAURANTE						= "Impuesto 10% por servicio Restaurante";
+	// Base Imponible se activa en el articulo
+	public static final Integer					BASE_IMPONIBLE_ACTIVO																= 1;
+	public static final Integer					BASE_IMPONIBLE_INACTIVO															= 0;
+	// Inventario
+	public static final String					ARTICULO_MINIMO																			= "1";
+	public static final String					ARTICULO_MAXIMO																			= "2";
 	public static final String					PLANTILLA_CORREO_CUENTAS_POR_COBRAR									= "email/cuentasxcobrar.vm";
 	public static final String					PLANTILLA_CORREO_VENTA_POR_CODIGO										= "email/ventasXCodigo.vm";
+	public static final String					PLANTILLA_CORREO_COMPRAS_ACEPTADAS									= "email/emailResumenCompras.vm";
+	public static final String					PLANTILLA_CORREO_RESUMEN_VENTAS_RANGO_FECHA					= "email/emailResumenFactura.vm";
 
 // Version de los tipos de documentos 
-	public static final String					TIQUETE_ELECTRONICO_VERSION													= "Tiquete Electrónico ver 4.2";
-	public static final String					FACTURA_ELECTRONICO_VERSION													= "Factura Electrónica ver 4.2";
-	public static final String					NOTA_CREDITO_ELECTRONICO_VERSION										= "Nota Credito Electrónica ver 4.2";
-	public static final String					NOTA_DEBITO_ELECTRONICO_VERSION											= "Nota Debito Electrónica ver 4.2";
+	public static final String					TIQUETE_ELECTRONICO_VERSION_4_2											= "Tiquete Electrónico ver 4.2";
+	public static final String					FACTURA_ELECTRONICO_VERSION_4_2											= "Factura Electrónica ver 4.2";
+	public static final String					NOTA_CREDITO_ELECTRONICO_VERSION_4_2								= "Nota Credito Electrónica ver 4.2";
+	public static final String					NOTA_DEBITO_ELECTRONICO_VERSION_4_2									= "Nota Debito Electrónica ver 4.2";
+
+	public static final String					TIQUETE_ELECTRONICO_VERSION_4_3											= "Tiquete Electrónico ver 4.3";
+	public static final String					FACTURA_ELECTRONICO_VERSION_4_3											= "Factura Electrónica ver 4.3";
+	public static final String					NOTA_CREDITO_ELECTRONICO_VERSION_4_3								= "Nota Credito Electrónica ver 4.3";
+	public static final String					NOTA_DEBITO_ELECTRONICO_VERSION_4_3									= "Nota Debito Electrónica ver 4.3";
+
 	public static final String					PROFORMA_VERSION																		= "Proforma";
 	// callbackurl 1 = si 0= No
 	public static final Integer					CALLBACKURL_SI																			= 1;
 	public static final Integer					CALLBACKURL_NO																			= 0;
+	public static final Integer					EMPRESA_VIVIANA_MARTINEZ_8085												= 12;
 
 	// Tipo de mostrar el articulo de impuesto de servicio 10 porciento
 	public static final Integer					NO_MOSTRAR_IMPUESTO_10_PORCIENTO										= 1;
@@ -30,8 +51,10 @@ public class Constantes {
 	public static final Integer					NO_ENVIAR_CORREO_CLIENTE_FRECUENTE									= 0;
 //cantidad de dias de un credito minimo
 	public static final Integer					CANTIDAD_DIAS_MINIMO_CREDITO												= 1;
+
 	// Tipo de codigos de productos
 	public static final String					TIPO_IMPUESTO_VENTA_ARTICULO												= "01";
+	public static final String					TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL						= "07";
 	public static final String					TIPO_CODIGO_ARTICULO_POR_SERVICIO										= "07";
 	public static final String					TIPO_CODIGO_ARTICULO_USO_INTERNO										= "04";
 	public static final String					TIPO_CODIGO_ARTICULO_CODIGO_VENDEDOR								= "01";
@@ -57,8 +80,8 @@ public class Constantes {
 //	public static final String					URL_PRUEBAS_CALLBACK																= "http://190.124.250.142:8085/service/callback.do";
 
 	// Semaforo
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 120;
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS								= 40;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 250;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS								= 50;
 
 	// 48 horas cada 5 minutos
 
@@ -83,13 +106,19 @@ public class Constantes {
 	public static final String					CASA_MATRIZ_INICIAL_FACTURA													= "001";
 	public static final String					TERMINAL_INICIAL_FACTURA														= "00001";
 
-	public static final String					DOCXMLS_FACTURA																			= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/facturaElectronica";
-	public static final String					DOCXMLS_NOTA_DEBITO																	= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaDebitoElectronica";
-	public static final String					DOCXMLS_NOTA_CREDITO																= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaCreditoElectronica";
-	public static final String					DOCXMLS_RESPUESTA_HACIENDA													= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/mensajeHacienda";
-	public static final String					DOCXMLS_RECEPCION_FACTURA														= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/mensajeReceptor";
+	public static final String					DOCXMLS_FACTURA_4_3																	= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronica";
+	public static final String					DOCXMLS_NOTA_DEBITO_4_3															= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/notaDebitoElectronica";
+	public static final String					DOCXMLS_NOTA_CREDITO_4_3														= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/notaCreditoElectronica";
+	public static final String					DOCXMLS_RESPUESTA_HACIENDA_4_3											= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/mensajeHacienda";
+	public static final String					DOCXMLS_RECEPCION_FACTURA_4_3												= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/mensajeReceptor";
+	public static final String					DOCXMLS_TIQUETE_4_3																	= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/tiqueteElectronico";
+	public static final String					DOCXMLS_CONTACTO_DESARROLLADOR_4_3									= "http://emprendesoftcr.com";
 
-	public static final String					DOCXMLS_TIQUETE																			= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/tiqueteElectronico";
+	public static final String					DOCXMLS_FACTURA_4_2																	= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/facturaElectronica";
+	public static final String					DOCXMLS_NOTA_DEBITO_4_2															= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaDebitoElectronica";
+	public static final String					DOCXMLS_NOTA_CREDITO_4_2														= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/notaCreditoElectronica";
+	public static final String					DOCXMLS_RESPUESTA_HACIENDA_4_2											= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/mensajeHacienda";
+	public static final String					DOCXMLS_RECEPCION_FACTURA_4_2												= "https://tribunet.hacienda.go.cr/docs/esquemas/2017/v4.2/mensajeReceptor";
 
 	public static final String					PRIVATE_KEY																					= "privateKey";
 	public static final String					CERTIFICATE																					= "certificate";
@@ -100,6 +129,7 @@ public class Constantes {
 	// Formatos electronicos
 	public static final String					UNIDAD_MEDIDA																				= "Unid";
 	public static final String					FORMATO_PROVINCIA																		= "0";
+	public static final String					FORMATO_CODIGO_ACTIVIDAD														= "000000";
 	public static final String					FORMATO_CANTON																			= "00";
 	public static final String					FORMATO_DISTRITO																		= "00";
 	public static final String					FORMATO_BARRIO																			= "00";
@@ -144,6 +174,7 @@ public class Constantes {
 	public static final Integer					HACIENDA_ESTADO_PROBLEMA_ENVIO_CORREO								= 98;
 	public static final String					HACIENDA_ESTADO_ENVIADO_HACIENDA_str								= "Documento eviado a hacienda.";
 	public static final String					HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR								= "OK";
+	public static final String					HACIENDA_ESTADO_ACEPTADO_ACEPTADO_HACIENDA_STR			= "aceptado";
 	public static final String					HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR							= "ERROR";
 	public static final String					HACIENDA_ESTADO_ACEPTADO_RECIBIDO										= "recibido";
 	public static final Integer					HACIENDA_ESTADO_ACEPTACION_HACIENDA_TOPE_REINTENTOS	= 8;
@@ -181,6 +212,7 @@ public class Constantes {
 	public static final String					MOTIVO_INGRESO_INVENTARIO_COMPRA										= "Ingreso del proveedor:";
 	public static final String					MOTIVO_INGRESO_INVENTARIO_NOTA_CREDITO							= "Ingreso por nota de credito:";
 	public static final String					MOTIVO_SALIDA_INVENTARIO_VENTA											= "Salida por venta:";
+	public static final String					MOTIVO_SALIDA_INVENTARIO_COMPRA_ANULACION						= "Salida por compra anulada:";
 	// Contabiliza el inventario
 	public static final String					CONTABLE_SI																					= "Si";
 	public static final String					CONTABLE_NO																					= "No";
@@ -295,7 +327,7 @@ public class Constantes {
 	// Errores en el Broker
 	public static final String					ERROR_POR_COMUNICACION															= "2033";
 	public static final String					MQ_NO_REASON_CODE																		= "0000";
-
+	public static final String					DATE_FORMATImpServi																	= "yyyy-MM-dd hh:mm:ss";
 	public static final String					DATE_FORMAT1																				= "dd/MM/yyyy hh:mm:ss";
 	public static final String					DATE_1900																						= "01/01/1990 00:00:00.0";
 	public static final String					DATE_FORMAT2																				= "dd/MM/yyyy";
@@ -404,6 +436,7 @@ public class Constantes {
 	public static final Integer					FACTURA_ESTADO_FACTURADO														= 2;
 	public static final Integer					FACTURA_ESTADO_TIQUETE_USO_INTERNO									= 4;
 	public static final Integer					FACTURA_ESTADO_ANULADA															= 5;
+	public static final Integer					FACTURA_ESTADO_ANULADA_PROFORMA											= 11;
 
 	public static final Integer					FACTURA_ESTADO_FIRMA_PENDIENTE											= 1;
 	public static final Integer					FACTURA_ESTADO_REFIRMAR_DOCUMENTO										= 8;
@@ -425,6 +458,14 @@ public class Constantes {
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS						= "TOTAL_NETAS";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS					= "TOTAL_EXENTAS";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS					= "TOTAL_GRABADAS";
+	// Totales de Compras Aceptadas
+	public static final String					SP_TOTAL_ACEPTADAS_IN_FECHA_INICIO									= "FECHA_INICIO";
+	public static final String					SP_TOTAL_ACEPTADAS_IN_FECHA_FIN											= "FECHA_FIN";
+	public static final String					SP_TOTAL_ACEPTADAS_IN_ID_EMPRESA										= "ID_EMPRESA";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS													= "SPTOTALACEPTADAS";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_ID_EMPRESA								= "ID_EMPRESA";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_OUT											= "TOTAL";
+	public static final String					SP_TOTAL_IMPUESTOS_COMPRAS_ACEPTADAS_OUT						= "TOTAL_IMPUESTOS";
 
 	// Totales de inventarios
 	public static final String					SP_TOTAL_INVENTARIO																	= "SPTOTALINVENTARIOS";
@@ -459,9 +500,12 @@ public class Constantes {
 
 //Procedimiento para generar totales por linea de datalles de la factura
 	public static final String					SP_VENTASXDETALLE																		= "ventasxdetalle";
+	public static final String					SP_VENTASXDETALLE_TIPO_IMPUESTO											= "ventasxdetaTodos";
+	public static final String					SP_VENTASXDETALLE_EXCEPTO														= "ventasxdetalleExc";
 	public static final String					SP_VENTASXDETALLE_IN_ID_EMPRESA											= "e_empresa";
 	public static final String					SP_VENTASXDETALLE_IN_FECHA_INICIAL									= "fecha_inicio";
 	public static final String					SP_VENTASXDETALLE_IN_FECHA_FINAL										= "fecha_fin";
+	public static final String					SP_VENTASXDETALLE_IN_TIPO_IMPUESTO									= "e_tipoImpuesto";
 	public static final String					SP_VENTASXDETALLE_OUT_TOTAL													= "total";
 	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_IMPUESTO								= "total_imp";
 	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_GRAVADO									= "total_grav";

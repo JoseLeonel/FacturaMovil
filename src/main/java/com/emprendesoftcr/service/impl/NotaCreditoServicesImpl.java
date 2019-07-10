@@ -50,16 +50,15 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
    * @see com.emprendesoftcr.service.FacturaXMLServices#getFirmarXML(java.lang.String, com.emprendesoftcr.modelo.Factura)
    */
 @Override
-	public String getFirmarXML(String xmlString,Empresa empresa)  throws Exception{
+	public String getFirmarXML(String xmlString,Empresa empresa,Date fecha)  throws Exception{
 		String resultado = Constantes.EMPTY;
 		try {
 			Certificado certificado  = certificadoBo.findByEmpresa(empresa);
 			if(certificado !=null) {
-				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_NOTA_CREDITO); 
+				resultado = firmaElectronicaService.getFirmarDocumento(certificado, xmlString, Constantes.DOCXMLS_NOTA_CREDITO_4_2,fecha); 
 			}else {
 				log.info("** Error  Empresa no se encuentra el certificado: " + empresa.getNombre());
 			}
-			 
 		
      
 		} catch (Exception e) {
@@ -102,10 +101,10 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
 				observacion = factura.getNota();
 			}
 			
-			String date = FacturaElectronicaUtils.toISO8601String(factura.getFechaEmision());
-			String datereferenciaEmision = FacturaElectronicaUtils.toISO8601String(factura.getReferenciaFechaEmision());
+			  String date = FacturaElectronicaUtils.rfc3339(factura.getFechaEmision());
+			String datereferenciaEmision = FacturaElectronicaUtils.rfc3339(factura.getReferenciaFechaEmision());
 		  
-	     xml = "<NotaCreditoElectronica xmlns=\"" + Constantes.DOCXMLS_NOTA_CREDITO + "\" " +
+	     xml = "<NotaCreditoElectronica xmlns=\"" + Constantes.DOCXMLS_NOTA_CREDITO_4_2 + "\" " +
 	                "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
 	        "<Clave>" + factura.getClave() + "</Clave>" +
 	        "<NumeroConsecutivo>" + factura.getNumeroConsecutivo() + "</NumeroConsecutivo>" +
@@ -232,8 +231,9 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
             "<MontoTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotal()) + "</MontoTotal>" +
             getDescuento(detalle.getMontoDescuento())+
             "<SubTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getSubTotal()) + "</SubTotal>" +
-            xmlImpuestos(detalle) +
-            "<MontoTotalLinea>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotalLinea()) + "</MontoTotalLinea>" +
+            xmlImpuestos(detalle.getFactura().getId(),detalle.getTipoImpuesto1(),detalle.getMontoImpuesto1(),detalle.getImpuesto1()) +
+            xmlImpuestos(detalle.getFactura().getId(),detalle.getTipoImpuesto(),detalle.getMontoImpuesto(),detalle.getImpuesto()) +
+               "<MontoTotalLinea>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotalLinea()) + "</MontoTotalLinea>" +
             "</LineaDetalle>";
       }
   	} catch (Exception e) {
@@ -262,29 +262,28 @@ public class NotaCreditoServicesImpl implements NotaCreditoXMLServices {
 	}
   
   
-  private String xmlImpuestos(Detalle detalle) throws Exception {
+  private String xmlImpuestos(Long idFactura,String tipoImpuesto,Double montoImpuesto,Double impuesto) throws Exception {
   	String resultado = Constantes.EMPTY;
   	try {
-  		if(detalle.getMontoImpuesto() != null && detalle.getTipoImpuesto() !=null) {
-    	if(detalle.getMontoImpuesto()>Constantes.ZEROS_DOUBLE) {
-        resultado = "<Impuesto>" +
-            "<Codigo>" + Utils.zeroPad(detalle.getTipoImpuesto(), 2) + "</Codigo>" +
-            "<Tarifa>" + FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getImpuesto() ) + "</Tarifa>" +
-            "<Monto>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoImpuesto()) + "</Monto>";
-        resultado += "</Impuesto>";
-    		
-    	}
+  		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
+  			return resultado;
   		}
-			
-		} catch (Exception e) {
-			log.info("** Error  xmlImpuestos: " + e.getMessage() + " fecha " + new Date());
-			throw e;
-		}
-
-    
+  		if(montoImpuesto != null && tipoImpuesto !=null) {
+    		if(montoImpuesto > Constantes.ZEROS_DOUBLE) {
+          resultado = "<Impuesto>" +
+              "<Codigo>" + Utils.zeroPad(tipoImpuesto, 2) + "</Codigo>" +
+              "<Tarifa>" + FacturaElectronicaUtils.getConvertirBigDecimal(impuesto ) + "</Tarifa>" +
+              "<Monto>" +  FacturaElectronicaUtils.getConvertirBigDecimal(montoImpuesto) + "</Monto>";
+          resultado += "</Impuesto>";
+      	}
+  		}
+  		
+  	} catch (Exception e) {
+  		log.info("** Error  xmlImpuestos Factura :" + idFactura  + e.getMessage() + " fecha " + new Date());
+  		throw e;
+  	}
     return resultado;
-}
-	
+  }
 	/**
 	 * 
 	 * @param Nota Credito
