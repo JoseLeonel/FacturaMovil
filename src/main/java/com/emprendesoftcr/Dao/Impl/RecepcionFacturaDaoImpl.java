@@ -12,10 +12,9 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.RecepcionFacturaDao;
 import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.modelo.Cliente;
-import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.RecepcionFactura;
+import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 
 @Repository("recepcionFacturaDao")
 public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
@@ -26,6 +25,11 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 	@Override
 	public void agregar(RecepcionFactura recepcionFactura) {
 		entityManager.persist(recepcionFactura);
+	}
+
+	@Override
+	public void agregar(RecepcionFacturaDetalle recepcionFacturaDetalle) {
+		entityManager.persist(recepcionFacturaDetalle);
 	}
 
 	@Override

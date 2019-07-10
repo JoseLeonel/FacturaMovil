@@ -71,6 +71,7 @@ import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.Mesa;
 import com.emprendesoftcr.modelo.RecepcionFactura;
+import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
@@ -914,13 +915,38 @@ public class FacturasController {
 			recepcionFactura.setCreated_at(new Date());
 			recepcionFactura.setUpdated_at(new Date());
 			recepcionFacturaBo.agregar(recepcionFactura);
+		
+			//Se agregan los detalles
+			this.agregaDetalleFacturas(recepcionFactura, recepcionFactura.getDetalles()); 
+
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("recepcionFactura.agregar.correctamente", recepcionFactura);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
-
 	}
+	
+	private void agregaDetalleFacturas(RecepcionFactura recepcionFactura, String jsonDetalles) {
+		JSONObject json = null;
+		try {
+			json = (JSONObject) new JSONParser().parse(jsonDetalles);
+		} catch (org.json.simple.parser.ParseException e) {
+			e.printStackTrace();
+		}
+		
+		// Agregar Lineas de Detalle
+		JSONArray jsonArrayDetalle = (JSONArray) json.get("data");
+		Gson gson = new Gson();
+
+		if (jsonArrayDetalle != null) {
+			for (int i = 0; i < jsonArrayDetalle.size(); i++) {
+				RecepcionFacturaDetalle detalle = gson.fromJson(jsonArrayDetalle.get(i).toString(), RecepcionFacturaDetalle.class);
+				detalle.setRecepcionFactura(recepcionFactura);
+				recepcionFacturaBo.agregar(detalle);
+			}
+		}		
+	}
+	
 
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarRecepcionFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")

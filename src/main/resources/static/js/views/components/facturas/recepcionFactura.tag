@@ -392,7 +392,7 @@
 		self.mediosPago	   		  = {data:[]}
 		self.condicionesVenta	  = {data:[]}
 		self.tiposMensajes		  = {data:[]}
-		self.detalleServicio      = []
+		self.detalleServicio 	  = {data:[]}
 		
 		self.archivo ={				
 				emisorNombre:"",
@@ -505,6 +505,7 @@
 				facturaTotalIVADevuelto:"0",
 				facturaTotalOtrosCargos:"0",
 				facturaTotalDescuentos:"0",
+				detalles:"",
 			}
 		
 		//Se cargan al montar el tag
@@ -726,8 +727,8 @@
 	                    
 	                    //Se carga el detalle de la factura
 						$("#detalleFactura").find("tr:gt(0)").remove();
-	                    var detalles = $(xmlDoc).find("DetalleServicio");
-	                    $(detalles).each(function () {
+	                    var detallesServicioXml = $(xmlDoc).find("DetalleServicio");
+	                    $(detallesServicioXml).each(function () {
 	                    	$(this).children().each(function () {
 			                    var row = "<tr>" + 
 				                    		  "<td>" + $(this).find("Cantidad").text() + "</td>" + 
@@ -740,7 +741,7 @@
 			                    		  "</tr>";
 			      	            $('#detalleFactura tr:last').after(row);
 			      	            
-			      	          	self.detalleServicio.push({
+			      	          	self.detalleServicio.data.push({
 				      	            numeroLinea     : $(this).find("NumeroLinea").text(),
 				      	            cantidad        : $(this).find("Cantidad").text(),
 				      	            unidadMedida    : $(this).find("UnidadMedida").text(),
@@ -765,8 +766,8 @@
 				      	            impuestoExoneracionNumeroDocumento       : $(this).find("Impuesto").find("Exoneracion").find("NumeroDocumento").text(),
 				      	            impuestoExoneracionNombreInstitucion     : $(this).find("Impuesto").find("Exoneracion").find("NombreInstitucion").text(),
 				      	            impuestoExoneracionFechaEmision          : $(this).find("Impuesto").find("Exoneracion").find("FechaEmision").text(),
-				      	            impuestoExoneracionPorcentajeExoneracion : $(this).find("Impuesto").find("Exoneracion").find("PorcentajeExoneracion").text(),
-				      	            impuestoExoneracionMontoExoneracion      : $(this).find("Impuesto").find("Exoneracion").find("MontoExoneracion").text(),
+				      	            impuestoExoneracionPorcentaje            : $(this).find("Impuesto").find("Exoneracion").find("PorcentajeExoneracion").text(),
+				      	            impuestoExoneracionMonto                 : $(this).find("Impuesto").find("Exoneracion").find("MontoExoneracion").text(),
 				      	        });	       	            
 	                        });
 	                    });
@@ -805,7 +806,7 @@
 	                	self.recepcionFactura.emisorCedula =  self.archivo.emisorCedula;
 	                	self.recepcionFactura.emisorTipoCedula = self.archivo.emisorTipoCedula;
 	                	self.recepcionFactura.emisorCorreo = self.archivo.emisorCorreo;
-	                	self.recepcionFactura.emisorTelefono = self.archivo.emisorTelefono;
+	                	self.emisorTelefono = self.archivo.emisorTelefono;
 	                	self.recepcionFactura.emisorCodigoProvincia = self.archivo.emisorCodigoProvincia;
 	                	self.recepcionFactura.emisorProvincia = self.archivo.emisorProvincia;
 	                	self.recepcionFactura.emisorCanton = self.archivo.emisorCanton;
@@ -869,8 +870,7 @@
 		}
 
 		function limpiar(){
-			self.detalleServicio      = []
-
+			self.detalleServicio = {data:[]}
 			self.archivo ={				
 				emisorNombre:"",
 				emisorCedula:"",
@@ -983,6 +983,7 @@
 				facturaTotalIVADevuelto:"0",
 				facturaTotalOtrosCargos:"0",
 				facturaTotalDescuentos:"0",
+				detalles:"",
 			}
 			
 			self.update()
@@ -1115,8 +1116,9 @@
 			$(".errorServerSideJgrid").remove();
 			self.recepcionFactura.mensaje = $("#mensaje").val();
 			self.recepcionFactura.detalleMensaje = $("#detalleMensaje").val();
+			var JSONDetalles = JSON.stringify(self.detalleServicio);
+			self.recepcionFactura.detalles = JSONDetalles;
 			self.update();
-			
 		    $.ajax({
 		        type : "POST",
 		        dataType : "json",

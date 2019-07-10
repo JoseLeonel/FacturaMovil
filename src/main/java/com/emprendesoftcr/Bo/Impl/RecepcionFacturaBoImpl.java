@@ -12,6 +12,7 @@ import com.emprendesoftcr.Bo.RecepcionFacturaBo;
 import com.emprendesoftcr.Dao.RecepcionFacturaDao;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.RecepcionFactura;
+import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 
 
 @EnableTransactionManagement
@@ -25,6 +26,12 @@ public class RecepcionFacturaBoImpl implements RecepcionFacturaBo {
 	@Transactional
 	public void agregar(RecepcionFactura recepcionFactura) {
 		recepcionFacturaDao.agregar(recepcionFactura);		
+	}
+	
+	@Override
+	@Transactional
+	public void agregar(RecepcionFacturaDetalle recepcionFacturaDetalle) {
+		recepcionFacturaDao.agregar(recepcionFacturaDetalle);		
 	}
 
 	@Override
