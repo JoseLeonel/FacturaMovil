@@ -161,6 +161,14 @@
                         </div> 
                         <div class="row" >
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                <label class="titleListaPrecio">Actividades Comerciales </label>  
+                                <select onchange= {__AsignarActividad} class="form-control selectActividadComercial"  name="selectActividadComercial" id="selectActividadComercial" >
+                                    <option  each={empresaActividadComercial}  value="{codigo}"   >{codigo}-{descripcion}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row" >
+                            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label ">{$.i18n.prop("factura.resumen.total.servicios")}</label> 
                                 <input type="number" step="any"  class="form-control "  value="{factura.totalComprobante}" readonly>
                             </div>
@@ -189,6 +197,7 @@
                                 <input type="number" step="any"  class="form-control "  value="{factura.totalCambioPagar}" readonly>
                             </div>
                         </div>   
+                            <input type="hidden" id='codigoActividad'         name='codigoActividad'         value="{factura.codigoActividad}" >
                             <input type="hidden" id='estado'                  name='estado'                  value="{factura.estado}" >
                             <input type="hidden" id='cliente'                 name='cliente'                 value="{factura.cliente.id}" >
                             <input type="hidden" id='codigoMoneda'            name='codigoMoneda'            value="{factura.codigoMoneda}" >
@@ -208,7 +217,6 @@
                             <input type="hidden" id='totalDescuentos'          name='totalDescuentos'          value="{factura.totalDescuentos}" >
                             <input type="hidden" id='totalVentaNeta'          name='totalVentaNeta'          value="{factura.totalVentaNeta}" >
                             <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           value="{factura.totalImpuesto}" >
-                            
                             <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
                             <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
                     </form>    
@@ -273,6 +281,10 @@
 
 <!--fin del modal-->
 <STYLE TYPE="text/css" rel="stylesheet" type="text/css" media="all" >
+.titleListaPrecio{
+    color:blue;
+    text-decoration:underline;
+}
 
         .formItem {
             color: #ffffff !important;
@@ -352,6 +364,7 @@
     var self = this;
     self.articulos             = {data:[]}
     self.mostrarReferencias    = false
+    self.actividadesComerciales        = []
     self.formularioDetalle     = false
     self.mostrarProductos      = true
     self.formularioSegundoPaso = false
@@ -406,7 +419,11 @@
             nombreCompleto:""
         }
 
-    }     
+    } 
+      self.actividadComercial = {
+        codigo:"",
+        descripcion:""
+    }    
 self.on('mount',function(){
     limpiar()
      $("#formulario").validate(reglasDeValidacion());
@@ -416,12 +433,56 @@ self.on('mount',function(){
     __comboCondicionPago()
     __ListaDeClientes()
     __comboCondicionPago()
+    __ListaActividadesComercales()
     __combocodigosReferencia()
     window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
     
 })
+
+/**
+*  Lista de los clientes
+**/
+function __ListaActividadesComercales(){
+    $.ajax({
+        url: 'ListaEmpresaActividadComercialPorPricipalAjax.do',
+        datatype: "json",
+        global: false,
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                self.empresaActividadComercial   = result.aaData
+                self.update()
+                BuscarActividadComercial()
+
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+    return
+}
+
+__AsignarActividad(e){
+    BuscarActividadComercial()
+}
+
+function BuscarActividadComercial(){
+    var codigo =$('#selectActividadComercial').val()
+    $.each(self.empresaActividadComercial, function( index, modeloTabla ) {
+        if(modeloTabla.codigo == codigo  ){
+           self.actividadComercial.descripcion = modeloTabla.codigo +"-" + modeloTabla.descripcion
+            self.actividadComercial.codigo =  codigo
+            self.factura.codigoActividad = codigo
+            self.update()
+        }
+
+    })
+}
+
 /**
 *  Obtiene el valor de lo digitado en el campo de efectivo
 **/
@@ -552,6 +613,7 @@ function limpiar(){
     $('.codigoMoneda').prop("selectedIndex", 0);
     $('.condicionVenta').prop("selectedIndex", 0);
     $('.condicionVenta').prop("selectedIndex", 0);
+    $('.selectActividadComercial').prop("selectedIndex", 0);
     self.detail                = []
     self.cliente = {}
     self.factura                = {
@@ -649,6 +711,11 @@ function aplicarFactura(){
 *  Crear Factura nueva
 **/
 function crearFactura(){
+    BuscarActividadComercial()
+    if( self.factura.codigoActividad.length == 0 ){
+      mensajeError($.i18n.prop("error.factura.actividad.comercial.no.existe"))
+      return
+    }
     self.detalleFactura.data =self.detail
     self.update() 
     var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 

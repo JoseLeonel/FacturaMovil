@@ -16,6 +16,7 @@
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc == '88'}"><strong> {$.i18n.prop("tikect.encabezado.proforma")} {facturaImpresa.id}                       </strong><br></div>
                         <div class="encabezado" show = "{facturaImpresa.tipoDoc == '87'}"><strong> {$.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno")} {facturaImpresa.id}                       </strong><br></div>
                         <div class="encabezado"><strong> {facturaImpresa.empresa.nombreComercial}                        </strong><br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("emisor.codigoActividad")} : </strong>{facturaImpresa.codigoActividad}</div> 
                         <div class="encabezado"><strong> {facturaImpresa.empresa.nombre}                        </strong><br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("tikect.encabezado.cedula")}  </strong>{facturaImpresa.empresa.cedula} <strong>{$.i18n.prop("tikect.encabezado.telefono")}</strong> {facturaImpresa.empresa.telefono}</strong><br></div>                        <div class="encabezado">{facturaImpresa.empresa.otraSenas}                        <br></div>
                         <div class="encabezado"><strong>{$.i18n.prop("tikect.encabezado.fecha.emision")} </strong>{facturaImpresa.fechaEmisionSTR} <strong>{$.i18n.prop("tikect.encabezado.condicion.venta")} </strong>{facturaImpresa.condicionVenta}</div>
@@ -429,18 +430,16 @@ function consultaFactura(idFactura){
 }
 
 function _VersionTiquete(){
-
     if(self.facturaImpresa.tipoDoc == "01"){
-       self.documentoElectronico = $.i18n.prop("documento.electronico.factura");
+        self.documentoElectronico = self.facturaImpresa.versionEsquemaXML == 1 ?$.i18n.prop("documento.electronico.factura"):$.i18n.prop("documento.electronico.factura.version3");
     }else if(self.facturaImpresa.tipoDoc == "02"){
-        self.documentoElectronico = $.i18n.prop("documento.electronico.nota.debito");
+        self.documentoElectronico = self.facturaImpresa.versionEsquemaXML == 1 ? $.i18n.prop("documento.electronico.nota.debito"):$.i18n.prop("documento.electronico.nota.debito.version3");
     }else if(self.facturaImpresa.tipoDoc == "03"){
-        self.documentoElectronico = $.i18n.prop("documento.electronico.nota.credito");
+        self.documentoElectronico = self.facturaImpresa.versionEsquemaXML == 1 ?$.i18n.prop("documento.electronico.nota.credito"):$.i18n.prop("documento.electronico.nota.credito.version3");
     }else if(self.facturaImpresa.tipoDoc == "04"){
-        self.documentoElectronico = $.i18n.prop("documento.electronico.tiquete");
+        self.documentoElectronico = self.facturaImpresa.versionEsquemaXML == 1 ?$.i18n.prop("documento.electronico.tiquete"):$.i18n.prop("documento.electronico.tiquete.version3");
     }
     self.update()
-
 }
 
 function getMedioPago() {

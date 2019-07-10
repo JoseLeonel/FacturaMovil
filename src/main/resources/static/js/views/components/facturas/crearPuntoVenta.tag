@@ -284,6 +284,7 @@
                             <tr each={detail}>
                                 <td>
                                    <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
+                                   <button  onclick={__removeProductFromDetail} class="btn btn-primary btn-xs btn-block" title="Exonera"><i class="fa fa-book" aria-hidden="true"></i></button>
                                 </td>
                                 <td style="width:5%;"><h2>{numeroLinea}</h2></td>
                                 <td><h2>{codigo}</h2></td>
@@ -632,7 +633,6 @@
 .btn-block {
     display: block;
     width: 100%;
-    margin-top: 49%!important;
     }    
 
 .fondoVentaEspera{
@@ -973,7 +973,7 @@
     self.totalGananciaByProducto = 0
     self.totalPesoByFactura = 0
     self.rol = {
-        rolAdministrador:0
+      rolAdministrador:0
     }
     self.tamanoLetra = "tamanoLetraConBanco"
     self.labelTotales = "labelTotalesConBanco"
