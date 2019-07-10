@@ -967,6 +967,16 @@
                             <div class="row">
                                 <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
                                     <div class="row">
+                                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                            <div class="form-group ">
+                                                <label class="titleListaPrecio">Actividades Comerciales </label>  
+                                                <select onchange= {__AsignarActividad} class="form-control selectActividadComercial"  name="selectActividadComercial" id="selectActividadComercial" >
+                                                    <option  each={empresaActividadComercial}  value="{codigo}"   >{codigo}-{descripcion}</option>
+                                                </select>
+                                            </div>
+                                        </div>    
+                                    </div>
+                                    <div class="row">
                                         <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
                                             <div class="form-group ">
                                                 <label>{$.i18n.prop("factura.condicion.pago")} </label> 
@@ -994,14 +1004,21 @@
                                         <label>{$.i18n.prop("factura.cliente")}</label> 
                                         <input onclick = {_EscogerClientes}  type="text" id="nombreCliente" name="nombreCliente" class="form-control"  value="{cliente.nombreCompleto}" readonly>
                                     </div>
-                                     <div class="form-group ">
-                                        <label>{$.i18n.prop("factura.nombreFactura")}</label> 
-                                        <input type="text" id="nombreFactura" name="nombreFactura" class="form-control"  value="{factura.nombreFactura}" >
-                                    </div>
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("factura.correoAlternativo")}</label> 
-                                        <input type="email" id="correoAlternativo" name="correoAlternativo" class="form-control"  value="" >
-                                    </div>
+                                    <div class="row">
+                                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
+                                            <div class="form-group ">
+                                                <label>{$.i18n.prop("factura.nombreFactura")}</label> 
+                                                <input type="text" id="nombreFactura" name="nombreFactura" class="form-control"  value="{factura.nombreFactura}" >
+                                            </div>
+                                        </div>
+                                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
+                                            <div class="form-group ">
+                                                <label>{$.i18n.prop("factura.correoAlternativo")}</label> 
+                                                <input type="email" id="correoAlternativo" name="correoAlternativo" class="form-control"  value="" >
+                                            </div>
+                                        </div>
+
+                                    </div>        
                                     <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group ">
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 
                                         <div  class="form-group input-group date datepickerFechaCredito" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
@@ -1031,6 +1048,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <input type="hidden" id='codigoActividad' name='codigoActividad'  value="{factura.codigoActividad}" >
                             <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
                             <input type="hidden" id='mesa'                    name='mesa'                    value="{mesa.id}" >
                             <input type="hidden" id='estado'                  name='estado'                  value="{factura.estado}" >
@@ -1566,7 +1584,7 @@ td.col-xl-12, th.col-xl-12 {
     }
     self.empresa              = {}
     self.separarCuenta  	  = false;
-    _Empresa();
+    
     self.item                  = null;
     self.comentarioComanda     = "";
     self.articulo              = null;
@@ -1701,15 +1719,21 @@ td.col-xl-12, th.col-xl-12 {
                         usuarioSistema : "",
                         claveSistema:""
                     }   
+    self.actividadesComerciales        = []
     self.mostarAbrirCajon = true 
     self.pesoPrioridad  = 1
     self.numeroLinea    = 1
     self.cantArticulos  = 1
+     self.actividadComercial = {
+        codigo:"",
+        descripcion:""
+    }
     self.on('mount',function(){
         $("#formularioFactura").validate(reglasDeValidacionFactura());
         $("#formularioAgregarNombreTiquete").validate(reglasAgregarNombre());
         $("#formularioAgregarNombreTiquete1").validate(reglasAgregarNombre());
         $("#formularioModalCambiarNombreTiquete").validate(reglasCambiarNombre());
+        _Empresa()
         __informacionData()
         __informacionData_vendedores()
         __InicializarTabla('.tableListaCliente')
@@ -1742,11 +1766,54 @@ td.col-xl-12, th.col-xl-12 {
             self.update()
             __calculate()
         }
+        __ListaActividadesComercales()
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
-     
+        function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
     })
+
+__AsignarActividad(e){
+    BuscarActividadComercial()
+}
+
+function BuscarActividadComercial(){
+    var codigo =$('#selectActividadComercial').val()
+    $.each(self.empresaActividadComercial, function( index, modeloTabla ) {
+        if(modeloTabla.codigo == codigo  ){
+           self.actividadComercial.descripcion = modeloTabla.codigo +"-" + modeloTabla.descripcion
+            self.actividadComercial.codigo =  codigo
+            self.factura.codigoActividad = codigo
+            self.update()
+        }
+
+    })
+}
+
+/**
+*  Lista de los clientes
+**/
+function __ListaActividadesComercales(){
+    $.ajax({
+        url: 'ListaEmpresaActividadComercialPorPricipalAjax.do',
+        datatype: "json",
+        global: false,
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                self.empresaActividadComercial   = result.aaData
+                self.update()
+                BuscarActividadComercial()
+
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+    return
+}
 /**
 * Verificar el Rol Admnistrador
 **/
@@ -3123,6 +3190,11 @@ function __displayDate_detail(fecha) {
 *  Crear Factura nueva
 **/
 function crearFactura(estado, separarFactura){
+    BuscarActividadComercial()
+    if( self.factura.codigoActividad.length == 0 ){
+      mensajeError($.i18n.prop("error.factura.actividad.comercial.no.existe"))
+      return
+    }
     self.enviarCocina = false
     if(estado == 1){
         self.enviarCocina = true
