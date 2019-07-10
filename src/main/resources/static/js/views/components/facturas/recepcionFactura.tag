@@ -162,6 +162,10 @@
                                 <input type="text" readonly="readonly" class="form-control emisorNombre" placeHolder ="{$.i18n.prop("emisor.nombre")}" id="emisorNombre" name="emisorNombre" value="{archivo.emisorNombre}">
                             </div>
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                <label> {$.i18n.prop("emisor.nombreComercial")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control emisorNombreComercial" placeHolder ="{$.i18n.prop("emisor.nombreComercial")}" id="emisorNombreComercial" name="emisorNombreComercial" value="{archivo.emisorNombreComercial}">
+                            </div>
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label> {$.i18n.prop("emisor.correoElectronico")} <span class="requeridoDato">*</span></label>
                                 <input type="text" readonly="readonly" class="form-control emisorCorreo" id="emisorCorreo" name="emisorCorreo" placeHolder="{$.i18n.prop("emisor.correoElectronico")}" value="{archivo.emisorCorreo}">
                             </div>
@@ -293,13 +297,61 @@
                                 <input type="text" readonly="readonly" class="form-control facturaTipoCambio" placeHolder ="{$.i18n.prop("factura.tipoCambio")}" id="facturaTipoCambio" name="facturaTipoCambio" value="{archivo.facturaTipoCambio}">
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label> {$.i18n.prop("factura.codigoActividad")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control facturaCodigoActividad" placeHolder ="{$.i18n.prop("factura.codigoActividad")}" id="facturaCodigoActividad" name="facturaCodigoActividad" value="{archivo.facturaCodigoActividad}">
+                            </div>
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label> {$.i18n.prop("factura.plazoCredito")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control facturaPlazoCredito" placeHolder ="{$.i18n.prop("factura.plazoCredito")}" id="facturaPlazoCredito" name="facturaPlazoCredito" value="{archivo.facturaPlazoCredito}">
+                            </div>
+                            
+                            
+                            
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label> {$.i18n.prop("factura.facturaTotalServGravados")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control facturaTotalServGravados" placeHolder ="{$.i18n.prop("factura.facturaTotalServGravados")}" id="facturaTotalServGravados" name="facturaTotalServGravados" value="{archivo.facturaTotalServGravados}">
+                            </div>                            
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label> {$.i18n.prop("factura.totalServExentos")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" readonly="readonly" class="form-control facturaTotalServExentos" placeHolder ="{$.i18n.prop("factura.totalServExentos")}" id="facturaTotalServExentos" name="facturaTotalServExentos" value="{archivo.facturaTotalServExentos}">
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label> {$.i18n.prop("factura.facturaTotalServExonerado")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control facturaTotalServExonerado" placeHolder ="{$.i18n.prop("factura.facturaTotalServExonerado")}" id="facturaTotalServExonerado" name="facturaTotalServExonerado" value="{archivo.facturaTotalServGravados}">
+                            </div>                            
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label> {$.i18n.prop("factura.facturaTotalMercanciasGravadas")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control facturaTotalMercanciasGravadas" placeHolder ="{$.i18n.prop("factura.facturaTotalMercanciasGravadas")}" id="facturaTotalMercanciasGravadas" name="facturaTotalMercanciasGravadas" value="{archivo.facturaTotalMercanciasGravadas}">
+                            </div>                            
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label> {$.i18n.prop("factura.facturaTotalMercanciasExentas")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control facturaTotalMercanciasExentas" placeHolder ="{$.i18n.prop("factura.facturaTotalMercanciasExentas")}" id="facturaTotalMercanciasExentas" name="facturaTotalMercanciasExentas" value="{archivo.facturaTotalMercanciasExentas}">
+                            </div>                            
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label> {$.i18n.prop("factura.facturaTotalMercExonerada")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control facturaTotalMercExonerada" placeHolder ="{$.i18n.prop("factura.facturaTotalMercExonerada")}" id="facturaTotalMercExonerada" name="facturaTotalMercExonerada" value="{archivo.facturaTotalMercExonerada}">
+                            </div>                            
+
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label> {$.i18n.prop("factura.facturaTotalGravado")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control facturaTotalGravado" placeHolder ="{$.i18n.prop("factura.facturaTotalGravado")}" id="facturaTotalGravado" name="facturaTotalGravado" value="{archivo.facturaTotalGravado}">
+                            </div>                            
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label> {$.i18n.prop("factura.facturaTotalExento")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control facturaTotalExento" placeHolder ="{$.i18n.prop("factura.facturaTotalExento")}" id="facturaTotalExento" name="facturaTotalExento" value="{archivo.facturaTotalExento}">
+                            </div>                            
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label> {$.i18n.prop("factura.facturaTotalExonerado")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control facturaTotalExonerado" placeHolder ="{$.i18n.prop("factura.facturaTotalExonerado")}" id="facturaTotalExonerado" name="facturaTotalExonerado" value="{archivo.facturaTotalExonerado}">
+                            </div>                                                        
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label> {$.i18n.prop("factura.totalVenta")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" readonly="readonly" class="form-control facturaTotalVenta" placeHolder ="{$.i18n.prop("factura.totalVenta")}" id="facturaTotalVenta" name="facturaTotalVenta" value="{archivo.facturaTotalVenta}">
-                            </div>
+                            </div>                            
+                            <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                <label> {$.i18n.prop("factura.totalDescuentos")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control facturaTotalDescuentos" placeHolder ="{$.i18n.prop("factura.totalDescuentos")}" id="facturaTotalDescuentos" name="facturaTotalDescuentos" value="{archivo.facturaTotalDescuentos}">
+                            </div>                            
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label> {$.i18n.prop("factura.totalVentaNeta")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" readonly="readonly" class="form-control facturaTotalVentaNeta" placeHolder ="{$.i18n.prop("factura.totalVentaNeta")}" id="facturaTotalVentaNeta" name="facturaTotalVentaNeta" value="{archivo.facturaTotalVentaNeta}">
@@ -340,6 +392,7 @@
 		self.mediosPago	   		  = {data:[]}
 		self.condicionesVenta	  = {data:[]}
 		self.tiposMensajes		  = {data:[]}
+		self.detalleServicio      = []
 		
 		self.archivo ={				
 				emisorNombre:"",
@@ -380,6 +433,20 @@
 				facturaTotalVentaNeta:"0",
 				facturaTotalComprobante:"0",
 				facturaTotalImpuestos:"0",
+				
+				emisorNombreComercial:"",
+				facturaCodigoActividad:"0",
+				facturaPlazoCredito:"0",
+				facturaTotalServGravados:"0",
+				facturaTotalServExonerado:"0",
+				facturaTotalMercanciasGravadas:"0",
+				facturaTotalMercanciasExentas:"0",
+				facturaTotalMercExonerada:"0",
+				facturaTotalGravado:"0",
+				facturaTotalExonerado:"0",
+				facturaTotalIVADevuelto:"0",
+				facturaTotalOtrosCargos:"0",
+				facturaTotalDescuentos:"0",
 		}
 		
 		self.recepcionFactura ={
@@ -424,6 +491,20 @@
 				facturaTotalVentaNeta:"0",
 				facturaTotalComprobante:"0",
 				facturaTotalImpuestos:"0",
+				
+				emisorNombreComercial:"",
+				facturaCodigoActividad:"0",
+				facturaPlazoCredito:"0",
+				facturaTotalServGravados:"0",
+				facturaTotalServExonerado:"0",
+				facturaTotalMercanciasGravadas:"0",
+				facturaTotalMercanciasExentas:"0",
+				facturaTotalMercExonerada:"0",
+				facturaTotalGravado:"0",
+				facturaTotalExonerado:"0",
+				facturaTotalIVADevuelto:"0",
+				facturaTotalOtrosCargos:"0",
+				facturaTotalDescuentos:"0",
 			}
 		
 		//Se cargan al montar el tag
@@ -465,94 +546,7 @@
 		    self.update();			
 		}
 		
-		function __limpiarValores(){			
-			self.archivo ={				
-					emisorNombre:"",
-					emisorCedula:"",
-					emisorTipoCedula:"",
-					emisorCodigoProvincia:"0",
-					emisorProvincia:"",
-					emisorCanton:"",
-					emisorCodigoCanton:"",
-					emisorDistrito:"",
-					emisorCodigoDistrito:"",
-					emisorCorreo:"",
-					emisorTelefono:"0",
-					emisorOtraSena:"",
-					receptorNombre:"",
-					receptorCedula:"",
-					receptorTipoCedula:"",
-					receptorCorreo:"",
-					receptorProvincia:"",
-					receptorCodigoProvincia:"",
-					receptorCanton:"",
-					receptorCodigoCanton:"",
-					receptorDistrito:"",
-					receptorCodigoDistrito:"",
-					receptorOtraSena:"",
-					receptorTelefono:"0",
-					receptorNombreComercial:"",
-					facturaConsecutivo:"",
-					facturaClave:"",
-					facturaFechaEmision:"",
-					facturaCondicionVenta:"0",
-					facturaMedioPago:"0",
-					facturaCodigoMoneda:"0",
-					facturaTipoCambio:"0",
-					facturaTotalServExentos:"0",
-					facturaTotalExento:"0",
-					facturaTotalVenta:"0",
-					facturaTotalVentaNeta:"0",
-					facturaTotalComprobante:"0",
-					facturaTotalImpuestos:"0",
-			}
 			
-			self.recepcionFactura ={
-					id:null,
-					mensaje:"0",
-					detalleMensaje:"",
-					emisorNombre:"",
-					emisorCedula:"",
-					emisorTipoCedula:"",
-					emisorCodigoProvincia:"0",
-					emisorProvincia:"",
-					emisorCanton:"",
-					emisorCodigoCanton:"",
-					emisorDistrito:"",
-					emisorCodigoDistrito:"",
-					emisorCorreo:"",
-					emisorTelefono:"0",
-					emisorOtraSena:"",
-					receptorNombre:"",
-					receptorCedula:"",
-					receptorTipoCedula:"",
-					receptorCorreo:"",
-					receptorProvincia:"",
-					receptorCodigoProvincia:"",
-					receptorCanton:"",
-					receptorCodigoCanton:"",
-					receptorDistrito:"",
-					receptorCodigoDistrito:"",
-					receptorOtraSena:"",
-					receptorTelefono:"0",
-					receptorNombreComercial:"",
-					facturaConsecutivo:"",
-					facturaClave:"",
-					facturaFechaEmision:"",
-					facturaCondicionVenta:"0",
-					facturaMedioPago:"0",
-					facturaCodigoMoneda:"CRC",
-					facturaTipoCambio:"1",
-					facturaTotalServExentos:"0",
-					facturaTotalExento:"0",
-					facturaTotalVenta:"0",
-					facturaTotalVentaNeta:"0",
-					facturaTotalComprobante:"0",
-					facturaTotalImpuestos:"0",
-				}
-			
-		}
-		
 		//Se muestra los tipos de cedulas	
 		function __listadoTipoCedulas(){
 		    self.tipoCedulas               = {data:[]}  // definir el data del datatable
@@ -705,6 +699,7 @@
 	                    self.archivo.emisorCodigoCanton = emisor.find("Ubicacion").find("Canton").text();
 	                    self.archivo.emisorCodigoDistrito = emisor.find("Ubicacion").find("Distrito").text();
 	                    self.archivo.emisorOtraSena = emisor.find("Ubicacion").find("OtrasSenas").text();
+	                    self.archivo.emisorNombreComercial = emisor.find("NombreComercial").text();
 
 	                   //Se cargan los datos del emisor
 	                    var receptor = $(xmlDoc).find("Receptor");
@@ -725,6 +720,9 @@
 	                    self.archivo.facturaFechaEmision = ($(xmlDoc).find("FechaEmision")).first().text();
 	                    self.archivo.facturaCondicionVenta = $(xmlDoc).find("CondicionVenta").first().text();
 	                    self.archivo.facturaMedioPago = $(xmlDoc).find("MedioPago").first().text();
+
+	                    self.archivo.facturaCodigoActividad = $(xmlDoc).find("CodigoActividad").first().text();
+	                    self.archivo.facturaPlazoCredito = $(xmlDoc).find("PlazoCredito").first().text();
 	                    
 	                    //Se carga el detalle de la factura
 						$("#detalleFactura").find("tr:gt(0)").remove();
@@ -741,9 +739,38 @@
 				                    		  "<td>" + $(this).find("MontoTotalLinea").text() + "</td>" +
 			                    		  "</tr>";
 			      	            $('#detalleFactura tr:last').after(row);
+			      	            
+			      	          	self.detalleServicio.push({
+				      	            numeroLinea     : $(this).find("NumeroLinea").text(),
+				      	            cantidad        : $(this).find("Cantidad").text(),
+				      	            unidadMedida    : $(this).find("UnidadMedida").text(),
+				      	            detalle         : $(this).find("Detalle").text(),
+				      	            precioUnitario  : $(this).find("PrecioUnitario").text(),
+				      	            montoTotal      : $(this).find("MontoTotal").text(),
+				      	            subTotal        : $(this).find("SubTotal").text(),
+				      	            montoTotalLinea : $(this).find("MontoTotalLinea").text(),
+				      	            impuestoNeto    : $(this).find("ImpuestoNeto").text(),
+				      	            
+				      	            codigoComercialTipo   : $(this).find("CodigoComercial").find("Tipo").text(),
+				      	            codigoComercialCodigo : $(this).find("CodigoComercial").find("Codigo").text(),
+				      	            descuentoMonto        : $(this).find("Descuento").find("MontoDescuento").text(),
+				      	            descuentoNaturaleza   : $(this).find("Descuento").find("NaturalezaDescuento").text(),
+
+				      	            impuestoCodigo        : $(this).find("Impuesto").find("Codigo").text(),
+				      	            impuestoCodigoTarifa  : $(this).find("Impuesto").find("CodigoTarifa").text(),
+				      	            impuestoTarifa        : $(this).find("Impuesto").find("Tarifa").text(),
+				      	            impuestoMonto         : $(this).find("Impuesto").find("Monto").text(),
+				      	            
+				      	            impuestoExoneracionTipoDocumento         : $(this).find("Impuesto").find("Exoneracion").find("TipoDocumento").text(),
+				      	            impuestoExoneracionNumeroDocumento       : $(this).find("Impuesto").find("Exoneracion").find("NumeroDocumento").text(),
+				      	            impuestoExoneracionNombreInstitucion     : $(this).find("Impuesto").find("Exoneracion").find("NombreInstitucion").text(),
+				      	            impuestoExoneracionFechaEmision          : $(this).find("Impuesto").find("Exoneracion").find("FechaEmision").text(),
+				      	            impuestoExoneracionPorcentajeExoneracion : $(this).find("Impuesto").find("Exoneracion").find("PorcentajeExoneracion").text(),
+				      	            impuestoExoneracionMontoExoneracion      : $(this).find("Impuesto").find("Exoneracion").find("MontoExoneracion").text(),
+				      	        });	       	            
 	                        });
 	                    });
-	                    
+
 	                    //Se carga el resumen de la factura
 	                    var resumenFactura = $(xmlDoc).find("ResumenFactura");
 	                    self.archivo.facturaCodigoMoneda = resumenFactura.find("CodigoMoneda").text();
@@ -754,6 +781,18 @@
 	                    self.archivo.facturaTotalVentaNeta = resumenFactura.find("TotalVentaNeta").text();
 	                    self.archivo.facturaTotalComprobante = resumenFactura.find("TotalComprobante").text();
 	                    self.archivo.facturaTotalImpuestos = resumenFactura.find("TotalImpuesto").text();
+
+	                    self.archivo.facturaTotalServGravados = resumenFactura.find("TotalServGravados").text();
+	                    self.archivo.facturaTotalServExonerado = resumenFactura.find("TotalServExonerado").text();
+	                    self.archivo.facturaTotalMercanciasGravadas = resumenFactura.find("TotalMercanciasGravadas").text();
+	                    self.archivo.facturaTotalMercanciasExentas = resumenFactura.find("TotalMercanciasExentas").text();
+	                    self.archivo.facturaTotalMercExonerada =resumenFactura.find("TotalMercExonerada").text();
+	                    self.archivo.facturaTotalGravado = resumenFactura.find("TotalGravado").text();
+	                    self.archivo.facturaTotalExonerado = resumenFactura.find("TotalExonerado").text();
+	                    self.archivo.facturaTotalIVADevuelto = resumenFactura.find("IVADevuelto").text();
+	                    self.archivo.facturaTotalOtrosCargos = resumenFactura.find("TotalOtrosCargos").text();	                    
+	                    self.archivo.facturaTotalDescuentos = resumenFactura.find("TotalDescuentos").text();	                    
+
 	                    self.update();
 
 	                    
@@ -801,6 +840,19 @@
 	                	self.recepcionFactura.facturaTotalComprobante = self.archivo.facturaTotalComprobante;
 	                	self.recepcionFactura.facturaTotalImpuestos = self.archivo.facturaTotalImpuestos;
 	                	
+	                	self.recepcionFactura.emisorNombreComercial = self.archivo.emisorNombreComercial;
+	                	self.recepcionFactura.facturaCodigoActividad = self.archivo.facturaCodigoActividad;
+	                	self.recepcionFactura.facturaPlazoCredito = self.archivo.facturaPlazoCredito;
+	                	self.recepcionFactura.facturaTotalServGravados = self.archivo.facturaTotalServGravados;
+	                	self.recepcionFactura.facturaTotalServExonerado = self.archivo.facturaTotalServExonerado;
+	                	self.recepcionFactura.facturaTotalMercanciasGravadas = self.archivo.facturaTotalMercanciasGravadas;
+	                	self.recepcionFactura.facturaTotalMercanciasExentas = self.archivo.facturaTotalMercanciasExentas;
+	                	self.recepcionFactura.facturaTotalMercExonerada = self.archivo.facturaTotalMercExonerada;
+	                	self.recepcionFactura.facturaTotalGravado = self.archivo.facturaTotalGravado;
+	                	self.recepcionFactura.facturaTotalExonerado = self.archivo.facturaTotalExonerado;
+	                	self.recepcionFactura.facturaTotalIVADevuelto = self.archivo.facturaTotalIVADevuelto;
+	                	self.recepcionFactura.facturaTotalOtrosCargos = self.archivo.facturaTotalOtrosCargos;				
+	                	
 	    	  		    self.mostrarFormulario     = true;
 	    	   		    self.mostrarCargaArchivo   = true;
 
@@ -817,6 +869,8 @@
 		}
 
 		function limpiar(){
+			self.detalleServicio      = []
+
 			self.archivo ={				
 				emisorNombre:"",
 				emisorCedula:"",
@@ -830,6 +884,7 @@
 				emisorDistrito:"",
 				emisorCodigoDistrito:"",
 				emisorOtraSena:"",
+				emisorNombreComercial:"",
 				receptorNombre:"",
 				receptorCedula:"",
 				receptorTipoCedula:"",
@@ -856,6 +911,20 @@
 				facturaTotalVentaNeta:"0",
 				facturaTotalComprobante:"0",
 				facturaTotalImpuestos:"0",
+				
+				emisorNombreComercial:"",
+				facturaCodigoActividad:"0",
+				facturaPlazoCredito:"0",
+				facturaTotalServGravados:"0",
+				facturaTotalServExonerado:"0",
+				facturaTotalMercanciasGravadas:"0",
+				facturaTotalMercanciasExentas:"0",
+				facturaTotalMercExonerada:"0",
+				facturaTotalGravado:"0",
+				facturaTotalExonerado:"0",
+				facturaTotalIVADevuelto:"0",
+				facturaTotalOtrosCargos:"0",
+				facturaTotalDescuentos:"0",
 			}
 		
 			self.recepcionFactura ={
@@ -900,6 +969,20 @@
 				facturaTotalVentaNeta:"0",
 				facturaTotalComprobante:"0",
 				facturaTotalImpuestos:"0",
+				
+				emisorNombreComercial:"",
+				facturaCodigoActividad:"0",
+				facturaPlazoCredito:"0",
+				facturaTotalServGravados:"0",
+				facturaTotalServExonerado:"0",
+				facturaTotalMercanciasGravadas:"0",
+				facturaTotalMercanciasExentas:"0",
+				facturaTotalMercExonerada:"0",
+				facturaTotalGravado:"0",
+				facturaTotalExonerado:"0",
+				facturaTotalIVADevuelto:"0",
+				facturaTotalOtrosCargos:"0",
+				facturaTotalDescuentos:"0",
 			}
 			
 			self.update()
