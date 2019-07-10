@@ -6,6 +6,8 @@ public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																			= ResourceBundle.getBundle("factura");
 //Esquema de XML
+	public static final Integer					ACTIVIDAD_COMERCIAL_PRINCIPAL																			= 1;
+	public static final Integer					ACTIVIDAD_COMERCIAL_NO_PRINCIPAL																			= 0;
 	public static final Integer					ESQUEMA_XML_4_2																			= 1;
 	public static final Integer					ESQUEMA_XML_4_3																			= 2;
 

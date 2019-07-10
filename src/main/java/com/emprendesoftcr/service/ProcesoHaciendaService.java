@@ -35,7 +35,7 @@ public interface ProcesoHaciendaService {
 	void procesoFirmadoRecepcionFactura() throws Exception;
 	
 	
-	void procesoCambiarConsecutivo() throws Exception;
+//	void procesoCambiarConsecutivo() throws Exception;
 
 	
 }

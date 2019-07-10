@@ -161,6 +161,7 @@ public class FacturaBoImpl implements FacturaBo {
 		// Se forma objeto factura
 		Factura factura = null;
 		try {
+
 			// Se busca la factura por id o se crea un nuevo objeto
 			factura = facturaCommand.getId() == null || facturaCommand.getId() == Constantes.ZEROS_LONG ? new Factura() : facturaDao.findById(facturaCommand.getId());
 			// Se complentan los datos de la factura
@@ -231,7 +232,7 @@ public class FacturaBoImpl implements FacturaBo {
 			factura.setFechaEmision(new Date());
 			factura.setMedioEfectivo(Constantes.EMPTY);
 			factura.setNombreFactura(facturaCommand.getNombreFactura());
-
+			factura.setCodigoActividad(facturaCommand.getCodigoActividad() == null ? usuario.getEmpresa().getCodigoActividad() : facturaCommand.getCodigoActividad());
 			if (facturaCommand.getTotalEfectivo() > Constantes.ZEROS_DOUBLE) {
 				factura.setMedioEfectivo(Constantes.MEDIO_PAGO_EFECTIVO);
 			}

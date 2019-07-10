@@ -15,7 +15,12 @@ import javax.persistence.Table;
 @Table(name = "emp_act_comer")
 public class EmpresaActividadComercial implements Serializable {
 
-	private static final long	serialVersionUID	= 1L;
+
+
+	/**
+	 * Comentario para <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 6582345058604460757L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +30,7 @@ public class EmpresaActividadComercial implements Serializable {
 	@Column(name = "codigo", length = 6)
 	private String						codigo;
 
-	@Column(name = "descripcion", length = 80)
+	@Column(name = "descripcion", length = 180)
 	private String						descripcion;
 	
 	@Column(name = "princial", columnDefinition = "INT default '0'")

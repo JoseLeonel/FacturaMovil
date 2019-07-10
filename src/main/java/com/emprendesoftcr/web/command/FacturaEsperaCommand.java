@@ -117,6 +117,7 @@ public class FacturaEsperaCommand {
 	private Date			referenciaFechaEmision;
 	private Double		totalImpuestoServicio;
 
+	private String		codigoActividad;
 	public FacturaEsperaCommand(Factura factura) {
 		super();
 		this.id = factura.getId();
@@ -175,6 +176,8 @@ public class FacturaEsperaCommand {
 		this.impuestoServicioIS = factura.getTotalImpuestoServicio() != null ? factura.getTotalImpuestoServicio() : Constantes.ZEROS_DOUBLE;
 //		this.impuestoServicioIS += factura.getTotalOtrosCargos() != null ? factura.getTotalOtrosCargos() : Constantes.ZEROS_DOUBLE;
 		this.impuestoServicioISSTR = Utils.formateadorMiles(this.impuestoServicioIS);
+		this.codigoActividad = factura.getCodigoActividad();
+		
 	}
 
 	public FacturaEsperaCommand(Detalle detalle) {
@@ -232,7 +235,7 @@ public class FacturaEsperaCommand {
 		this.totalImpuestoSTR = detalle.getFactura().getTotalImpuestoSTR();
 		this.totalDescuentosSTR = detalle.getFactura().getTotalDescuentoSTR();
 		this.versionEsquemaXML = detalle.getFactura().getVersionEsquemaXML();
-
+		this.codigoActividad = detalle.getFactura().getCodigoActividad();
 	}
 
 	public Double getImpuestoServicioIS() {
@@ -675,4 +678,25 @@ public class FacturaEsperaCommand {
 		this.versionEsquemaXML = versionEsquemaXML;
 	}
 
+	
+	public Double getTotalImpuestoServicio() {
+		return totalImpuestoServicio;
+	}
+
+	
+	public void setTotalImpuestoServicio(Double totalImpuestoServicio) {
+		this.totalImpuestoServicio = totalImpuestoServicio;
+	}
+
+	
+	public String getCodigoActividad() {
+		return codigoActividad;
+	}
+
+	
+	public void setCodigoActividad(String codigoActividad) {
+		this.codigoActividad = codigoActividad;
+	}
+
+	
 }

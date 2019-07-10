@@ -107,7 +107,7 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
 	     xml = "<NotaCreditoElectronica xmlns=\"" + Constantes.DOCXMLS_NOTA_CREDITO_4_3 + "\" "  +
 	                "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
 	        "<Clave>" + factura.getClave() + "</Clave>" +
-	        "<CodigoActividad>" + FacturaElectronicaUtils.replazarConZeros(factura.getEmpresa().getCodigoActividad(),Constantes.FORMATO_CODIGO_ACTIVIDAD) + "</CodigoActividad>" +
+	        "<CodigoActividad>" + actividadComercial(factura) + "</CodigoActividad>" +
 	        "<NumeroConsecutivo>" + factura.getNumeroConsecutivo() + "</NumeroConsecutivo>" +
 	        "<FechaEmision>" + date + "</FechaEmision>" +
 	        "<Emisor>" +
@@ -181,6 +181,19 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
 		return xml;
 	}
   
+  private String actividadComercial(Factura factura) {
+		String resultado = Constantes.EMPTY;
+		if(factura.getCodigoActividad() != null) {
+			resultado = factura.getCodigoActividad();
+		}
+		if(resultado.equals(Constantes.EMPTY)) {
+			resultado = factura.getEmpresa().getCodigoActividad();
+		}
+		FacturaElectronicaUtils.replazarConZeros(resultado,Constantes.FORMATO_CODIGO_ACTIVIDAD);
+		
+		return resultado;
+	}
+	
   
   private String getOtrosCargos(Factura factura) {
 		String resultado = Constantes.EMPTY;

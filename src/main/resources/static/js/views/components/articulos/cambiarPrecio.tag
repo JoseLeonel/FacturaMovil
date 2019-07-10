@@ -513,12 +513,12 @@ function actualizarPreciosImpuestosPublico(){
     }
     self.articulo.precioPublico = total>0?total:self.articulo.precioPublico
     self.update()
-    $('.precioPublico').val(self.articulo.precioPublico)
-
-
-}
-
-function actualizarPreciosImpuestosMayorista(){
+    $('.precioPublico').val(self.articulo.precioPublico1)
+1
+1
+}1
+1
+function actualizarPreciosImpuestosMayorista(){1
     var ganancia = __valorNumerico($('#gananciaPrecioMayorista').val())
     if(ganancia == 0){
         return

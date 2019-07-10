@@ -11,6 +11,11 @@ public class EmpresaActividadComercialCommand {
 	private String	descripcion;
 
 	private Integer	principal;
+	
+
+	public EmpresaActividadComercialCommand() {
+		super();
+	}
 
 	public EmpresaActividadComercialCommand(EmpresaActividadComercial empresaActividadComercial) {
 		super();

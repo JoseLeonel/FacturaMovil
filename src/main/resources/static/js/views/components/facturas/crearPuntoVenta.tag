@@ -139,6 +139,7 @@
                                     </div> 
                                 </div>
                             </div>
+                            <input type="hidden" id='codigoActividad' name='codigoActividad'  value="{factura.codigoActividad}" >
                             <input type="hidden" id='codigoMoneda'            name='codigoMoneda'            value="{factura.codigoMoneda}" >
                             <input type="hidden" id='pesoTransporteTotal'     name='pesoTransporteTotal'      value="{totalPesoByFactura}" >
                             <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
@@ -344,6 +345,15 @@
                                         <option    value="1"  >Precio Publico</option>
                                         <option    value="2"  >Precio Mayoista</option>
                                         <option    value="3"  >Precio Especial</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="seleccionOtroPrecioVenta">
+                                <div class="opcionPrecioPublico">
+                                    <label class="titleListaPrecio">Actividades Comerciales </label>  
+                                    <select onchange= {__AsignarActividad} class="form-control selectActividadComercial"  name="selectActividadComercial" id="selectActividadComercial" >
+                                        <option  each={empresaActividadComercial}  value="{codigo}"   >{codigo}-{descripcion}</option>
                                     </select>
                                 </div>
                             </div>
@@ -876,6 +886,7 @@
 	   fechaCredito:null,
 	   fechaEmision:null,
 	   condicionVenta:"",
+       codigoActividad:"",
 	    plazoCredito:0,
 	    tipoDoc:"",
 	    medioPago:"",
@@ -946,6 +957,7 @@
     self.cantones                      = []
     self.distritos                     = []
     self.barrios                       = []
+    self.actividadesComerciales        = []
     self.mostrarListadoArticulos == false
     self.empresa              = {}
     self.subTotalGeneral               = 0
@@ -966,6 +978,11 @@
     self.tamanoLetra = "tamanoLetraConBanco"
     self.labelTotales = "labelTotalesConBanco"
     self.campoTotales = "campoTotalesConBanco"
+
+    self.actividadComercial = {
+        codigo:"",
+        descripcion:""
+    }
     self.on('mount',function(){
 
         $("#formularioFactura").validate(reglasDeValidacionFactura());
@@ -984,10 +1001,12 @@
        cargaBilletes()
        __InformacionDataTableDia()
        __ListaDeClientes()
+       __ListaActividadesComercales()
        //__ListaArticulosUsoInterno()
        __ListaDeVendedores()
        __agregarArticulos()
        _Empresa()
+       
        
         $('.codigo').select()
         $(".codigo").focus()
@@ -1066,6 +1085,24 @@
 __ActualizarPlazoCredito(){
     actualizaElPlazoDiasCredito();
 }
+
+__AsignarActividad(e){
+    BuscarActividadComercial()
+}
+
+function BuscarActividadComercial(){
+    var codigo =$('#selectActividadComercial').val()
+    $.each(self.empresaActividadComercial, function( index, modeloTabla ) {
+        if(modeloTabla.codigo == codigo  ){
+           self.actividadComercial.descripcion = modeloTabla.codigo +"-" + modeloTabla.descripcion
+            self.actividadComercial.codigo =  codigo
+            self.factura.codigoActividad = codigo
+            self.update()
+        }
+
+    })
+}
+
 
 function actualizaElPlazoDiasCredito(){
     var valor = $('.selectFechaCredito').val()
@@ -1317,11 +1354,12 @@ function __LimpiarClick(){
     $(".totalEfectivo").val(null)   
     $(".totalTarjeta").val(null)   
     $(".totalBanco").val(null)   
-   $(".nota").val(null)    
+    $(".nota").val(null)    
     $(".direccion").val(null)   
     $('.condicionVenta').prop("selectedIndex", 0);
     $('.tipoDoc').prop("selectedIndex", 0);
-     $(".nota").attr("maxlength", 80);
+    $(".nota").attr("maxlength", 80);
+    $('.selectActividadComercial').prop("selectedIndex", 0);
     self.cliente               = {}
     self.vendedor              = {
         id:null,
@@ -1846,6 +1884,7 @@ function __Init(){
     self.precioUltimo = ""
     self.factura                = {
         id:null,
+        codigoActividad:"",
 	    fechaCredito:null,
 	    fechaEmision:null,
 	    condicionVenta:"",
@@ -1955,6 +1994,7 @@ function __Init(){
     );
     $("#cambiarCantidadArticulo").val(null)
     $("#aplicarDescuento").val(null)
+    $('.selectActividadComercial').prop("selectedIndex", 0);
     // Tipo de Pagos
      __comboCondicionPago()
      //Tipos de Documentos
@@ -2069,6 +2109,11 @@ function __displayDate_detail(fecha) {
 **/
 function crearFactura(estado){
     
+    BuscarActividadComercial()
+    if( self.factura.codigoActividad.length == 0 ){
+      mensajeError($.i18n.prop("error.factura.actividad.comercial.no.existe"))
+      return
+    }
     self.detalleFactura.data =self.detail
     self.update() 
     var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
@@ -2556,6 +2601,31 @@ function __ListaDeClientes(){
                 agregarInputsCombos_Clientes()
                 ActivarEventoFiltro(".tableListaCliente")
                 __seleccionarClientes()
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+    return
+}
+
+/**
+*  Lista de los clientes
+**/
+function __ListaActividadesComercales(){
+    $.ajax({
+        url: 'ListaEmpresaActividadComercialPorPricipalAjax.do',
+        datatype: "json",
+        global: false,
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                self.empresaActividadComercial   = result.aaData
+                self.update()
+                BuscarActividadComercial()
+
             }
         },
         error: function (xhr, status) {

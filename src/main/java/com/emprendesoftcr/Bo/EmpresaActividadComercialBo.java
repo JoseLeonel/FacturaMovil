@@ -1,5 +1,8 @@
 package com.emprendesoftcr.Bo;
 
+import java.util.Collection;
+
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.EmpresaActividadComercial;
 
 public interface EmpresaActividadComercialBo {
@@ -11,5 +14,11 @@ public interface EmpresaActividadComercialBo {
 	void eliminar(EmpresaActividadComercial empresaActividadComercial);
 
 	EmpresaActividadComercial buscar(Integer id);
+
+	EmpresaActividadComercial findByCodigo(String codigo,Empresa empresa);
+
+	EmpresaActividadComercial findByPrincipal(Integer principal,Empresa empresa);
+	
+	Collection<EmpresaActividadComercial> findAll(Empresa empresa );
 
 }

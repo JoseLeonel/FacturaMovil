@@ -17,116 +17,116 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  */
 public class FacturaCommand {
 
-	private Long id;
+	private Long			id;
 
-	private String fechaCredito;
+	private String		fechaCredito;
 
-	private Integer numeroConsecutivo;
+	private Integer		numeroConsecutivo;
 
-	private Date fechaEmision;
+	private Date			fechaEmision;
 
-	private String condicionVenta;
+	private String		condicionVenta;
 
-	private Integer plazoCredito;
+	private Integer		plazoCredito;
 
-	private String tipoDoc;
+	private String		tipoDoc;
 
-	private String medioPago;
+	private String		medioPago;
 
-	private String nombreFactura;
+	private String		nombreFactura;
 
-	private String direccion;
+	private String		direccion;
 
-	private String correoAlternativo;
+	private String		correoAlternativo;
 
-	private String referenciaTipoDoc;
+	private String		referenciaTipoDoc;
 
-	private String referenciaNumero;
+	private String		referenciaNumero;
 
-	private String referenciaCodigo;
+	private String		referenciaCodigo;
 
-	private String referenciaRazon;
+	private String		referenciaRazon;
 
-	private String referenciaFechaEmision;
+	private String		referenciaFechaEmision;
 
-	private String nota;
+	private String		nota;
 
-	private String comanda;
+	private String		comanda;
 
-	private Double subTotal;
+	private Double		subTotal;
 
-	private Double totalTransporte;
+	private Double		totalTransporte;
 
-	private Double total;
+	private Double		total;
 
-	private Double totalServGravados;
+	private Double		totalServGravados;
 
-	private Double totalServExentos;
+	private Double		totalServExentos;
 
-	private Double totalMercanciasGravadas;
+	private Double		totalMercanciasGravadas;
 
-	private Double totalMercanciasExentas;
+	private Double		totalMercanciasExentas;
 
-	private Double totalGravado;
+	private Double		totalGravado;
 
-	private Double totalExento;
+	private Double		totalExento;
 
-	private Double totalVenta;
+	private Double		totalVenta;
 
-	private Double totalDescuentos;
+	private Double		totalDescuentos;
 
-	private Double totalVentaNeta;
+	private Double		totalVentaNeta;
 
-	private Double totalImpuesto;
+	private Double		totalImpuesto;
 
-	private Double totalComprobante;
+	private Double		totalComprobante;
 
-	private Double totalEfectivo;
+	private Double		totalEfectivo;
 
-	private Double totalTarjeta;
+	private Double		totalTarjeta;
 
-	private Double totalBanco;
+	private Double		totalBanco;
 
-	private Double totalCredito;
+	private Double		totalCredito;
 
-	private Double montoCambio;
+	private Double		montoCambio;
 
-	private Double totalCambio;
+	private Double		totalCambio;
 
-	private Double totalCambioPagar;
+	private Double		totalCambioPagar;
 
 	private Double		totalImpuestoServ;
-	private Double  tipoCambioMoneda;
-	private Double pesoTransporteTotal;
+	private Double		tipoCambioMoneda;
+	private Double		pesoTransporteTotal;
 
-	private String codigoMoneda;
+	private String		codigoMoneda;
 
-	private Integer estado;
+	private Integer		estado;
 
-	private Date created_at;
+	private Date			created_at;
 
-	private Date updated_at;
-	private Integer						versionEsquemaXML;
+	private Date			updated_at;
+	private Integer		versionEsquemaXML;
 
 	@JsonDeserialize(using = ClienteDeserializer.class)
-	private Cliente cliente;
+	private Cliente		cliente;
 
 	@JsonDeserialize(using = VendedorDeserializer.class)
-	private Vendedor vendedor;
+	private Vendedor	vendedor;
 
-	private String detalleFactura;
+	private String		detalleFactura;
 
-	private Empresa empresa;
+	private Empresa		empresa;
 
-	private String usuario;
+	private String		usuario;
 
-	private Mesa mesa;
+	private Mesa			mesa;
+
+	private String		codigoActividad;
 
 	public FacturaCommand() {
 		super();
 	}
-	
-	
 
 	public Long getId() {
 		return id;
@@ -134,6 +134,14 @@ public class FacturaCommand {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getCodigoActividad() {
+		return codigoActividad;
+	}
+
+	public void setCodigoActividad(String codigoActividad) {
+		this.codigoActividad = codigoActividad;
 	}
 
 	public String getCorreoAlternativo() {
@@ -528,48 +536,28 @@ public class FacturaCommand {
 		this.mesa = mesa;
 	}
 
-
-
-	
 	public Double getTipoCambioMoneda() {
 		return tipoCambioMoneda;
 	}
 
-
-
-	
 	public void setTipoCambioMoneda(Double tipoCambioMoneda) {
 		this.tipoCambioMoneda = tipoCambioMoneda;
 	}
 
-
-
-	
 	public Double getPesoTransporteTotal() {
 		return pesoTransporteTotal;
 	}
 
-
-
-	
 	public void setPesoTransporteTotal(Double pesoTransporteTotal) {
 		this.pesoTransporteTotal = pesoTransporteTotal;
 	}
 
-
-
-	
 	public Integer getVersionEsquemaXML() {
 		return versionEsquemaXML;
 	}
 
-
-
-	
 	public void setVersionEsquemaXML(Integer versionEsquemaXML) {
 		this.versionEsquemaXML = versionEsquemaXML;
 	}
-	
-	
 
 }

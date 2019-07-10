@@ -1,5 +1,7 @@
 package com.emprendesoftcr.web.Controller;
 
+import java.util.Collection;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,10 +19,13 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.EmpresaActividadComercialBo;
+import com.emprendesoftcr.Bo.UsuarioBo;
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.modelo.EmpresaActividadComercial;
+import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.EmpresaActividadComercialCommand;
 import com.emprendesoftcr.web.propertyEditor.EmpresaActividadComercialPropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.StringPropertyEditor;
@@ -44,6 +49,9 @@ public class ActividadComercialController {
 
 	@Autowired
 	private DataTableBo																											dataTableBo;
+
+	@Autowired
+	private UsuarioBo																												usuarioBo;
 
 	@Autowired
 	private EmpresaActividadComercialBo																			empresaActividadComercialBo;
@@ -76,8 +84,27 @@ public class ActividadComercialController {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "EmpresaActividadComercial");
-
+		if (delimitadores.getColumnData() == null) {
+			// Se ordena por prioridad por defecto se crearon en 9999
+			delimitadores.setColumnData("principal");
+			delimitadores.setColumnOrderDir("desc");
+		}
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_POR_EMPRESA);
+	}
+
+	@RequestMapping(value = "/ListaEmpresaActividadComercialPorPricipalAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarEmpresa(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+			RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Collection<EmpresaActividadComercial> listar = empresaActividadComercialBo.findAll(usuario.getEmpresa());
+			
+			respuestaService.setRecordsTotal(listar != null ? (long) listar.size() : Constantes.ZEROS_LONG);
+			respuestaService.setRecordsFiltered(listar != null ? (long) listar.size() : Constantes.ZEROS_LONG);
+			respuestaService.setAaData(listar);
+			return respuestaService;
+		
 	}
 
 	@RequestMapping(value = "/AgregarEmpresaActividadComercialAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -85,17 +112,71 @@ public class ActividadComercialController {
 	public RespuestaServiceValidator<?> agregarEmpresa(HttpServletRequest request, ModelMap model, @ModelAttribute EmpresaActividadComercialCommand empresaActividadComercialCommand, BindingResult result, SessionStatus status) throws Exception {
 
 		try {
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			EmpresaActividadComercial empresaActividadComercialValida = empresaActividadComercialBo.findByCodigo(empresaActividadComercialCommand.getCodigo(), usuario.getEmpresa());
+			if (empresaActividadComercialValida != null) {
+				result.rejectValue("codigo", "error.empresaActividadComercial.codigo.existe");
+			}
+			if (empresaActividadComercialCommand.getPrincipal().equals(Constantes.ACTIVIDAD_COMERCIAL_PRINCIPAL)) {
+				empresaActividadComercialValida = null;
+				empresaActividadComercialValida = empresaActividadComercialBo.findByPrincipal(empresaActividadComercialCommand.getPrincipal(), usuario.getEmpresa());
+				if (empresaActividadComercialValida != null) {
+					result.rejectValue("codigo", "error.empresaActividadComercial.principal.existe");
+				}
+
+			}
 
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+
 			EmpresaActividadComercial empresaActividadComercial = new EmpresaActividadComercial();
+			if (empresaActividadComercialCommand.getDescripcion() != null) {
+				if (empresaActividadComercialCommand.getDescripcion().length() > 180) {
+					empresaActividadComercial.setDescripcion(empresaActividadComercialCommand.getDescripcion().substring(1, 180));
+				} else {
+					empresaActividadComercial.setDescripcion(empresaActividadComercialCommand.getDescripcion());
+				}
+			}
+
 			empresaActividadComercial.setId(null);
 			empresaActividadComercial.setCodigo(empresaActividadComercialCommand.getCodigo());
-			empresaActividadComercial.setDescripcion(empresaActividadComercialCommand.getDescripcion());
+			empresaActividadComercial.setEmpresa(usuario.getEmpresa());
 			empresaActividadComercial.setPrincipal(empresaActividadComercialCommand.getPrincipal());
 			empresaActividadComercialBo.agregar(empresaActividadComercial);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("actividadComercial.agregar.correctamente", empresaActividadComercial);
+
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+	}
+
+	@RequestMapping(value = "/ModificarEmpresaActividadComercialAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator<?> modificarEmpresa(HttpServletRequest request, ModelMap model, @ModelAttribute EmpresaActividadComercialCommand empresaActividadComercialCommand, BindingResult result, SessionStatus status) throws Exception {
+
+		try {
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			EmpresaActividadComercial empresaActividadComercialBd = empresaActividadComercialBo.findByCodigo(empresaActividadComercialCommand.getCodigo(), usuario.getEmpresa());
+			if (empresaActividadComercialBd == null) {
+				result.rejectValue("codigo", "error.empresaActividadComercial.codigo.existe");
+			}
+			if (empresaActividadComercialCommand.getPrincipal().equals(Constantes.ACTIVIDAD_COMERCIAL_PRINCIPAL)) {
+
+				EmpresaActividadComercial empresaActividadComercialPrincipal = empresaActividadComercialBo.findByPrincipal(empresaActividadComercialCommand.getPrincipal(), usuario.getEmpresa());
+				if (empresaActividadComercialPrincipal != null) {
+					result.rejectValue("codigo", "error.empresaActividadComercial.principal.existe");
+				}
+
+			}
+
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
+
+			empresaActividadComercialBd.setPrincipal(empresaActividadComercialCommand.getPrincipal());
+			empresaActividadComercialBo.agregar(empresaActividadComercialBd);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("actividadComercial.modificado.correctamente", empresaActividadComercialBd);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);

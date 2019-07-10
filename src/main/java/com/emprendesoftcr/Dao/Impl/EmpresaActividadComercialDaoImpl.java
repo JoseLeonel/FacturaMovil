@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Dao.Impl;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -9,6 +10,8 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.EmpresaActividadComercialDao;
+import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.EmpresaActividadComercial;
 
 @Repository("empresaActividadComercialDao")
@@ -47,4 +50,44 @@ public class EmpresaActividadComercialDaoImpl implements EmpresaActividadComerci
 		}
 	}
 
+  @Override
+	public EmpresaActividadComercial findByCodigo(String codigo,Empresa empresa) {
+		Query query = entityManager.createQuery("select obj from EmpresaActividadComercial obj where obj.codigo = :codigo and obj.empresa = :empresa");
+		query.setParameter("codigo", codigo);
+		query.setParameter("empresa", empresa);
+		List<EmpresaActividadComercial> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (EmpresaActividadComercial) results.get(0);
+		} else {
+			return null;
+		}
+  	
+  }
+  @Override
+	public EmpresaActividadComercial findByPrincipal(Integer principal , Empresa empresa) {
+		Query query = entityManager.createQuery("select obj from EmpresaActividadComercial obj where obj.principal = :principal and obj.empresa = :empresa");
+		query.setParameter("principal", principal);
+		query.setParameter("empresa", empresa);
+		List<EmpresaActividadComercial> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (EmpresaActividadComercial) results.get(0);
+		} else {
+			return null;
+		}
+		
+	}
+  @Override
+  public Collection<EmpresaActividadComercial> findAll(Empresa empresa ){
+  	StringBuilder hql = new StringBuilder();
+		hql.append("select obj from EmpresaActividadComercial obj");
+		hql.append(" where obj.empresa = :empresa order by obj.principal desc ");
+
+
+		Query query = entityManager.createQuery(hql.toString());
+		query.setParameter("empresa", empresa);
+		return query.getResultList();
+  	
+  }
+
+	
 }
