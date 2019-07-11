@@ -147,6 +147,21 @@ public final class FacturaElectronicaUtils {
 		return bd;
 	}
 
+	public static BigDecimal getConvertirBigDecimalFortmato3Decimales(Double valor) {
+		valor = valor == null ? Constantes.ZEROS_DOUBLE : valor;
+		BigDecimal bd = new BigDecimal(Double.toString(valor));
+		bd = bd.setScale(3, RoundingMode.HALF_UP);
+		return bd;
+	}
+	
+
+	public static BigDecimal getConvertirBigDecimalFortmato2Decimales(Double valor) {
+		valor = valor == null ? Constantes.ZEROS_DOUBLE : valor;
+		BigDecimal bd = new BigDecimal(Double.toString(valor));
+		bd = bd.setScale(3, RoundingMode.HALF_UP);
+		return bd;
+	}
+	
 	/**
 	 * Formateador de numeros en string rellena los campos con el formato indicado
 	 * @param valor
