@@ -269,7 +269,7 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
                 "<Tipo>" + Utils.zeroPad(FacturaElectronicaUtils.procesarTexto(tipoCodigo),2) + "</Tipo>" +
                 "<Codigo>" + detalle.getCodigo() + "</Codigo>" +
             "</CodigoComercial>" +
-            "<Cantidad>" + FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getCantidad()) + "</Cantidad>" +
+            "<Cantidad>" + FacturaElectronicaUtils.getConvertirBigDecimalFortmato3Decimales(detalle.getCantidad()) + "</Cantidad>" +
             "<UnidadMedida>" + unidadMedida + "</UnidadMedida>" +
        //     "<UnidadMedidaComercial>" + detalle.getUnidadMedida() + "</UnidadMedidaComercial>" +
             "<Detalle>" + FacturaElectronicaUtils.procesarTexto(detalle.getDescripcion().trim()) + "</Detalle>" +
@@ -368,7 +368,7 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
   			}
   			
   		}
-  		nodoTarifa = "<Tarifa>" + FacturaElectronicaUtils.getConvertirBigDecimal(impuesto ) + "</Tarifa>" ;
+  		nodoTarifa = "<Tarifa>" + FacturaElectronicaUtils.getConvertirBigDecimalFortmato2Decimales(impuesto ) + "</Tarifa>" ;
   		if(montoImpuesto != null && tipoImpuesto !=null) {
 	  		if(montoImpuesto > Constantes.ZEROS_DOUBLE) {
 	        resultado = "<Impuesto>" +
