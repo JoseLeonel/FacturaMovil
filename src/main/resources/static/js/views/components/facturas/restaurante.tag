@@ -952,6 +952,11 @@
 </div>
 <!--fin del modal-->
 
+
+
+
+
+
 <!--Formulario de Pago-->
 <!---Datos Final cuando no es un venta de Crucero -->
 <div show={mostrarFormularioPago}>
@@ -1666,7 +1671,7 @@ td.col-xl-12, th.col-xl-12 {
     }
     
  	self.mesa = {
-         id:0,
+         id:null,
          descripcion:"",
          impuestoServicio:false,
      }
@@ -3584,6 +3589,8 @@ function __agregarArticulo(cantidad){
     }
     __calculate(); 
 }
+
+
 /**
 * eliminar un detalle factura
 **/

@@ -8,8 +8,7 @@ package com.emprendesoftcr.pdf;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
+import com.emprendesoftcr.modelo.Empresa;
 
 public class FacturaElectronica {
 
@@ -38,6 +37,7 @@ public class FacturaElectronica {
 	
 
 	private String													_nota;
+	private String													_codigoActividadComercial;
 
 	private String													_tipoDocumento;
 	private String													_clave;
@@ -80,6 +80,8 @@ public class FacturaElectronica {
 	private Double													_footerTotalImpuesto;
 	private Double													_footerTotalVentaNeta;
 	private Double													_footerTotalComprobante;
+	
+	private Empresa  empresa;
 
 	private List<DetalleFacturaElectronica>	_detalleFacturaElectronica;
 
@@ -96,6 +98,16 @@ public class FacturaElectronica {
 	}
 	
 	
+
+	
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
 
 	public String getEmisorNombre() {
 		return _emisorNombre;
@@ -562,4 +574,16 @@ public class FacturaElectronica {
 		this.referenciaRazon = referenciaRazon;
 	}
 
+	
+	public String get_codigoActividadComercial() {
+		return _codigoActividadComercial;
+	}
+
+	
+	public void set_codigoActividadComercial(String _codigoActividadComercial) {
+		this._codigoActividadComercial = _codigoActividadComercial;
+	}
+
+	
+	
 }

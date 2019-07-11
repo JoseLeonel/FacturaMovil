@@ -41,16 +41,16 @@ public class Detalle implements Serializable {
 	@Column(name = "numero_linea")
 	private Integer						numeroLinea;
 
-	@Column(name = "codigo", length=20)
+	@Column(name = "codigo", length = 20)
 	private String						codigo;
 
 	@Column(name = "descripcion")
 	private String						descripcion;
 
-	@Column(name = "tipo_codigo", length=2)
+	@Column(name = "tipo_codigo", length = 2)
 	private String						tipoCodigo;
 
-	@Column(name = "tipo_impuesto", length=2)
+	@Column(name = "tipo_impuesto", length = 2)
 	private String						tipoImpuesto;
 
 	@Column(name = "unidad_medida")
@@ -95,14 +95,14 @@ public class Detalle implements Serializable {
 	@Column(name = "costo", columnDefinition = "Decimal(10,5) default '0.00'")
 	private Double						costo;
 
-	@Column(name = "observacion", length=60)
+	@Column(name = "observacion", length = 60)
 	private String						observacion;
 
 	@Column(name = "tipo_impuesto1")
 	private String						tipoImpuesto1;
 	@Column(name = "impuesto1")
 	private Double						impuesto1;
-	
+
 	@Column(name = "monto_impuesto1")
 	private Double						montoImpuesto1;
 
@@ -119,7 +119,7 @@ public class Detalle implements Serializable {
 	@Column(name = "monto_gananc")
 	private Double						montoGanancia;
 
-	@Column(name = "peso_transporte" )
+	@Column(name = "peso_transporte")
 	private Double						pesoTransporte;
 
 	@Column(name = "peso_transTotal")
@@ -131,13 +131,31 @@ public class Detalle implements Serializable {
 	@Column(name = "base_imposible", columnDefinition = "Decimal(10,5) default '0.00'")
 	private Double						baseImponible;
 
-
-	
-	@Column(name = "cod_tarifa", length=2)
+	@Column(name = "cod_tarifa", length = 2)
 	private String						codigoTarifa;
-	
-	@Column(name = "cod_tarifa1", length=2)
+
+	@Column(name = "cod_tarifa1", length = 2)
 	private String						codigoTarifa1;
+
+	@Column(name = "tipo_doc_exo", length = 2)
+	private String						tipoDocumentoExoneracion;
+
+	@Column(name = "nume_doc_exo", length = 40)
+	private String						numeroDocumentoExoneracion;
+
+	@Column(name = "nomb_inst_exo", length = 160)
+	private String						nombreInstitucionExoneracion;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
+	@Column(name = "fecha_emision_exo")
+	private Date							fechaEmisionExoneracion;
+
+	@Column(name = "porcentaje_exo", columnDefinition = "INT default '0'")
+	private Integer						porcentajeExoneracion;
+
+	@Column(name = "monto_exo", columnDefinition = "default '0'")
+	private Double						montoExoneracion;
 
 	@ManyToOne
 	@JoinColumn(name = "factura_id")
@@ -148,12 +166,8 @@ public class Detalle implements Serializable {
 	@JoinColumn(name = "usuario_id")
 	private Usuario						usuario;
 
-	
-
-	
-	
-
-	public Detalle(Long id, Integer numeroLinea, String codigo, String descripcion, String tipoCodigo, String tipoImpuesto, String unidadMedida, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, String naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double ganancia, Double porcentajeDesc, Double porcentajeGanancia, Double costo, String observacion, String tipoImpuesto1, Double impuesto1, Double montoImpuesto1, Date created_at, Date updated_at, Double montoGanancia, Double pesoTransporte, Double pesoTransporteTotal, Double impuestoNeto, Double baseImponible,  String codigoTarifa, String codigoTarifa1, Factura factura, Usuario usuario) {
+	public Detalle(Long id, Integer numeroLinea, String codigo, String descripcion, String tipoCodigo, String tipoImpuesto, String unidadMedida, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, String naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double ganancia, Double porcentajeDesc, Double porcentajeGanancia, Double costo, String observacion, String tipoImpuesto1, Double impuesto1, Double montoImpuesto1, Date created_at, Date updated_at, Double montoGanancia, Double pesoTransporte, Double pesoTransporteTotal, Double impuestoNeto, Double baseImponible, String codigoTarifa, String codigoTarifa1, String tipoDocumentoExoneracion, String numeroDocumentoExoneracion, String nombreInstitucionExoneracion,
+			Date fechaEmisionExoneracion, Integer porcentajeExoneracion, Double montoExoneracion, Factura factura, Usuario usuario) {
 		super();
 		this.id = id;
 		this.numeroLinea = numeroLinea;
@@ -186,9 +200,14 @@ public class Detalle implements Serializable {
 		this.pesoTransporteTotal = pesoTransporteTotal;
 		ImpuestoNeto = impuestoNeto;
 		this.baseImponible = baseImponible;
-		
 		this.codigoTarifa = codigoTarifa;
 		this.codigoTarifa1 = codigoTarifa1;
+		this.tipoDocumentoExoneracion = tipoDocumentoExoneracion;
+		this.numeroDocumentoExoneracion = numeroDocumentoExoneracion;
+		this.nombreInstitucionExoneracion = nombreInstitucionExoneracion;
+		this.fechaEmisionExoneracion = fechaEmisionExoneracion;
+		this.porcentajeExoneracion = porcentajeExoneracion;
+		this.montoExoneracion = montoExoneracion;
 		this.factura = factura;
 		this.usuario = usuario;
 	}
@@ -226,7 +245,7 @@ public class Detalle implements Serializable {
 		this.montoGanancia = detalleFacturaCommand.getMontoGanancia();
 		this.pesoTransporte = detalleFacturaCommand.getPesoTransporte();
 		this.pesoTransporteTotal = detalleFacturaCommand.getPesoTransporteTotal();
-	
+
 	}
 
 	public Long getId() {
@@ -237,24 +256,18 @@ public class Detalle implements Serializable {
 		this.id = id;
 	}
 
-	
-	
-	
 	public String getCodigoTarifa() {
 		return codigoTarifa;
 	}
 
-	
 	public void setCodigoTarifa(String codigoTarifa) {
 		this.codigoTarifa = codigoTarifa;
 	}
 
-	
 	public String getCodigoTarifa1() {
 		return codigoTarifa1;
 	}
 
-	
 	public void setCodigoTarifa1(String codigoTarifa1) {
 		this.codigoTarifa1 = codigoTarifa1;
 	}
@@ -550,5 +563,55 @@ public class Detalle implements Serializable {
 	public void setBaseImponible(Double baseImponible) {
 		this.baseImponible = baseImponible;
 	}
+
+	public String getTipoDocumentoExoneracion() {
+		return tipoDocumentoExoneracion;
+	}
+
+	public void setTipoDocumentoExoneracion(String tipoDocumentoExoneracion) {
+		this.tipoDocumentoExoneracion = tipoDocumentoExoneracion;
+	}
+
+	public String getNumeroDocumentoExoneracion() {
+		return numeroDocumentoExoneracion;
+	}
+
+	public void setNumeroDocumentoExoneracion(String numeroDocumentoExoneracion) {
+		this.numeroDocumentoExoneracion = numeroDocumentoExoneracion;
+	}
+
+	public String getNombreInstitucionExoneracion() {
+		return nombreInstitucionExoneracion;
+	}
+
+	public void setNombreInstitucionExoneracion(String nombreInstitucionExoneracion) {
+		this.nombreInstitucionExoneracion = nombreInstitucionExoneracion;
+	}
+
+	public Date getFechaEmisionExoneracion() {
+		return fechaEmisionExoneracion;
+	}
+
+	public void setFechaEmisionExoneracion(Date fechaEmisionExoneracion) {
+		this.fechaEmisionExoneracion = fechaEmisionExoneracion;
+	}
+
+	public Integer getPorcentajeExoneracion() {
+		return porcentajeExoneracion;
+	}
+
+	public void setPorcentajeExoneracion(Integer porcentajeExoneracion) {
+		this.porcentajeExoneracion = porcentajeExoneracion;
+	}
+
+	public Double getMontoExoneracion() {
+		return montoExoneracion;
+	}
+
+	public void setMontoExoneracion(Double montoExoneracion) {
+		this.montoExoneracion = montoExoneracion;
+	}
+	
+	
 
 }

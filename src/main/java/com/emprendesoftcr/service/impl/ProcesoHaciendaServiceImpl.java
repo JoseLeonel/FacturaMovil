@@ -98,6 +98,12 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																		};
 	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
 																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
+																																																			if(d.getCodigoActividad() == null) {
+																																																				facturaElectronica.set_codigoActividadComercial(d.getEmpresa().getCodigoActividad());
+																																																			}else {
+																																																				facturaElectronica.set_codigoActividadComercial(d.getCodigoActividad());
+																																																			}
+																																																			
 																																																			facturaElectronica.setConsecutivoProforma(d.getConsecutivoProforma());
 																																																			facturaElectronica.setEsquemaXML(d.getVersionEsquemaXML());
 																																																			facturaElectronica.setTotalOtrosCargos(d.getTotalOtrosCargos());
@@ -257,7 +263,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 //			if (hacienda.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) || hacienda.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
 //				Factura factura = facturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
 //
-//				if (factura != null) {
+//				if (factura != null) {La firma del comprobante
 //
 //					factura.setReferenciaTipoDoc("10");
 //					factura.setReferenciaNumero(factura.getClave());

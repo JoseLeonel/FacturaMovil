@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.emprendesoftcr.Bo.EmpresaActividadComercialBo;
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.modelo.EmpresaActividadComercial;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -32,6 +36,7 @@ import com.itextpdf.text.pdf.PdfWriter;
  */
 public class HeaderFooter extends PdfPageEventHelper {
 
+	
 	private PdfTemplate					total;
 	private FacturaElectronica	facturaElectronica;
 	private String							tipoDoc;
@@ -126,14 +131,10 @@ public class HeaderFooter extends PdfPageEventHelper {
 				izquierda.addCell(utils_pdf.obtenerCeldaNormal("Clave: " + this.facturaElectronica.getClave(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
 			}
 			tabla_cabezera.addCell(izquierda);
-
+      
 			PdfPTable derecha = new PdfPTable(1);
-			if (this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
-				derecha.addCell(utils_pdf.obtenerCeldaNormal(tipoDocVersion(), UtilsPdf.bigFont16, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
-			} else {
-				derecha.addCell(utils_pdf.obtenerCeldaNormal(tipoDocVersion(), UtilsPdf.bigFont12, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
-			}
-
+			derecha.addCell(utils_pdf.obtenerCeldaNormal(tipoDocVersion(),this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)? UtilsPdf.bigFont16: UtilsPdf.bigFont12, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
+			derecha.addCell(utils_pdf.obtenerCeldaNormal("Actividad Comercial:" +this.facturaElectronica.get_codigoActividadComercial(),this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)? UtilsPdf.bigFont16: UtilsPdf.bigFont12, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
 			derecha.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getEmisorNombreComercial(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
 
 			derecha.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getEmisorNombre(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));

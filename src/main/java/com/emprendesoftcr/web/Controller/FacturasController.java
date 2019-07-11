@@ -144,6 +144,12 @@ public class FacturasController {
 																																																		};
 	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
 																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
+																																																			if(d.getCodigoActividad() == null) {
+																																																				facturaElectronica.set_codigoActividadComercial(d.getEmpresa().getCodigoActividad());
+																																																			}else {
+																																																				facturaElectronica.set_codigoActividadComercial(d.getCodigoActividad());
+																																																			}
+
 																																																			// Emisor
 																																																			facturaElectronica.setEsquemaXML(d.getVersionEsquemaXML());
 																																																			facturaElectronica.setEmisorNombreComercial(d.getEmpresa().getNombreComercial());
