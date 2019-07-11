@@ -108,6 +108,7 @@ public class FacturaBoImpl implements FacturaBo {
 		facturaDao.eliminar(factura);
 	}
 
+	
 	/**
 	 * Buscar por id
 	 * @see com.emprendesoftcr.Bo.FacturaBo#findById(java.lang.Integer)
@@ -135,6 +136,20 @@ public class FacturaBoImpl implements FacturaBo {
 		return factura;
 	}
 
+	@Override
+	public Factura findByClaveAndEmpresa(String clave, Empresa empresa) throws Exception {
+		Factura factura = null;
+		try {
+			factura = facturaDao.findByConsecutivoAndEmpresa(clave, empresa);
+		} catch (Exception e) {
+			log.info("** Error  findByClaveAndEmpresa: " + e.getMessage() + " fecha " + new Date());
+
+			throw e;
+		}
+		return factura;
+	}
+
+	
 	@Override
 	@Transactional
 	public void eliminarDetalleFacturaPorSP(Factura factura) throws Exception {
@@ -190,6 +205,7 @@ public class FacturaBoImpl implements FacturaBo {
 					factura.setReferenciaFechaEmision(Utils.parseDate2(facturaCommand.getReferenciaFechaEmision()));
 				}
 				Factura facturaReferencia = facturaDao.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa());
+				facturaReferencia = facturaReferencia == null?facturaDao.findByClaveAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa()):facturaReferencia;
 				// Si la factura se encuentra en el sistema se agregan los datos propios de ella
 				if (facturaReferencia != null) {
 					factura.setReferenciaNumero(facturaReferencia.getClave());
@@ -637,6 +653,7 @@ public class FacturaBoImpl implements FacturaBo {
 			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				if (facturaCommand.getReferenciaNumero() != null && facturaCommand.getReferenciaNumero() != Constantes.EMPTY) {
 					Factura facturaAnular = findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), empresa);
+					facturaAnular = facturaAnular == null?facturaDao.findByClaveAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa()):facturaAnular;
 					if (facturaAnular != null) {
 						facturaAnular.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
 						modificar(facturaAnular);
@@ -789,8 +806,10 @@ public class FacturaBoImpl implements FacturaBo {
 				if (factura.getReferenciaNumero() != null) {
 					if (factura.getReferenciaNumero() != Constantes.EMPTY) {
 						Factura facturaAnterior = findByConsecutivoAndEmpresa(factura.getReferenciaNumero(), empresa);
+						facturaAnterior = facturaAnterior == null?facturaDao.findByClaveAndEmpresa(factura.getReferenciaNumero(), usuario.getEmpresa()):facturaAnterior;
 						if (facturaAnterior != null) {
-							CuentaCobrar cuentaCobrar = cuentaCobrarDao.buscarPorConsecutivo(factura.getEmpresa(), factura.getReferenciaNumero());
+							CuentaCobrar cuentaCobrar = cuentaCobrarDao.buscarPorConsecutivo(factura.getEmpresa(), facturaAnterior.getNumeroConsecutivo());
+//							cuentaCobrar = cuentaCobrar == null?cuentaCobrarDao.buscarPorConsecutivo(factura.getEmpresa(), factura()):
 							if (cuentaCobrar != null) {
 								// Eliminar la cuenta por cobrar si el tipo de anulacio es total
 								if (factura.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
@@ -802,6 +821,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 								}
 							}
+							
 							facturaAnterior.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
 							modificar(facturaAnterior);
 							if (facturaAnterior.getClave() != null) {

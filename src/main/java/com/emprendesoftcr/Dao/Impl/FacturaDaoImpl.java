@@ -84,6 +84,19 @@ public class FacturaDaoImpl implements FacturaDao {
 
 	}
 
+	public Factura findByClaveAndEmpresa(String clave, Empresa empresa) throws Exception{
+		Query query = entityManager.createQuery("select obj from Factura obj where obj.clave = :clave and obj.empresa = :empresa");
+		query.setParameter("clave", clave.toString());
+		query.setParameter("empresa", empresa);
+		List<Factura> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (Factura) results.get(0);
+		} else {
+			return null;
+		}
+		
+	}
+	
 	/**
 	 * Elimina los detalles de una factura para ser reemplazos por detalles nuevos Comparas Pendientes de ingresar el inventario
 	 * @see com.emprendesoftcr.Dao.FacturaDao#eliminarDetalleFacturaPorSP(com.emprendesoftcr.modelo.Factura)
