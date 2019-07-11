@@ -81,7 +81,6 @@ import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.pdf.ReportePdfView;
 import com.emprendesoftcr.service.ProcesoHaciendaService;
 import com.emprendesoftcr.validator.FacturaFormValidator;
-import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacionMesa;
@@ -914,6 +913,8 @@ public class FacturasController {
 			recepcionFactura.setTipoDoc(Utils.obtenerTipoDocumentoConsecutivo(recepcionFactura.getFacturaConsecutivo()));
 			recepcionFactura.setCreated_at(new Date());
 			recepcionFactura.setUpdated_at(new Date());
+			recepcionFactura.setTotalImpuestoAcreditar(recepcionFactura.getFacturaTotalImpuestos());
+			recepcionFactura.setTotalDeGastoAplicable(recepcionFactura.getFacturaTotalComprobante() - recepcionFactura.getFacturaTotalImpuestos());
 			recepcionFacturaBo.agregar(recepcionFactura);
 		
 			//Se agregan los detalles

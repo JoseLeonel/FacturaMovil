@@ -28,10 +28,10 @@ public class RecepcionFacturaDetalle implements Serializable {
 	private Long id;
 
 	@Column(name = "numero_linea")
-	private Integer numeroLinea;
+	private String numeroLinea;
 
 	@Column(name = "cantidad")
-	private Double cantidad;
+	private String cantidad;
 
 	@Column(name = "unidad_medida")
 	private String unidadMedida;
@@ -40,46 +40,46 @@ public class RecepcionFacturaDetalle implements Serializable {
 	private String detalle;
 
 	@Column(name = "precio_unitario")
-	private Double precioUnitario;
+	private String precioUnitario;
 
 	@Column(name = "monto_total")
-	private Double montoTotal;
+	private String montoTotal;
 
 	@Column(name = "sub_total")
-	private Double subTotal;
+	private String subTotal;
 
 	@Column(name = "monto_total_linea")
-	private Double montoTotalLinea;
+	private String montoTotalLinea;
 
 	@Column(name = "impuesto_neto")
-	private Double impuestoNeto;
+	private String impuestoNeto;
 
 	@Column(name = "codigo_comercial_tipo")
-	private Integer codigoComercialTipo;
+	private String codigoComercialTipo;
 
 	@Column(name = "codigo_comercial_codigo")
-	private Integer codigoComercialCodigo;
+	private String codigoComercialCodigo;
 
 	@Column(name = "descuento_monto")
-	private Double descuentoMonto;
+	private String descuentoMonto;
 
 	@Column(name = "descuento_naturaleza")
 	private String descuentoNaturaleza;
 
 	@Column(name = "impuesto_codigo")
-	private Integer impuestoCodigo;
+	private String impuestoCodigo;
 
 	@Column(name = "impuesto_codigo_tarifa")
-	private Integer impuestoCodigoTarifa;
+	private String impuestoCodigoTarifa;
 
 	@Column(name = "impuesto_tarifa")
-	private Double impuestoTarifa;
+	private String impuestoTarifa;
 
 	@Column(name = "impuesto_monto")
-	private Double impuestoMonto;
+	private String impuestoMonto;
 
 	@Column(name = "imp_exo_tipo_docu")
-	private Integer impuestoExoneracionTipoDocumento;
+	private String impuestoExoneracionTipoDocumento;
 
 	@Column(name = "imp_exo_numero_docu")
 	private String impuestoExoneracionNumeroDocumento;
@@ -91,201 +91,266 @@ public class RecepcionFacturaDetalle implements Serializable {
 	private String impuestoExoneracionFechaEmision;
 
 	@Column(name = "imp_exo_porcentaje")
-	private Double impuestoExoneracionPorcentaje;
+	private String impuestoExoneracionPorcentaje;
 
 	@Column(name = "imp_exo_monto")
-	private Double impuestoExoneracionMonto;
+	private String impuestoExoneracionMonto;
+
+	@Column(name = "base_imponible")
+	private String baseImponible;
 
 	@ManyToOne
 	@JoinColumn(name = "recepcion_factura_id")
-	private RecepcionFactura	recepcionFactura;
+	private RecepcionFactura recepcionFactura;
+
 	
 	public Long getId() {
 		return id;
 	}
 
+	
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Integer getNumeroLinea() {
+	
+	public String getNumeroLinea() {
 		return numeroLinea;
 	}
 
-	public void setNumeroLinea(Integer numeroLinea) {
+	
+	public void setNumeroLinea(String numeroLinea) {
 		this.numeroLinea = numeroLinea;
 	}
 
-	public Double getCantidad() {
+	
+	public String getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(Double cantidad) {
+	
+	public void setCantidad(String cantidad) {
 		this.cantidad = cantidad;
 	}
 
+	
 	public String getUnidadMedida() {
 		return unidadMedida;
 	}
 
+	
 	public void setUnidadMedida(String unidadMedida) {
 		this.unidadMedida = unidadMedida;
 	}
 
+	
 	public String getDetalle() {
 		return detalle;
 	}
 
+	
 	public void setDetalle(String detalle) {
 		this.detalle = detalle;
 	}
 
-	public Double getPrecioUnitario() {
+	
+	public String getPrecioUnitario() {
 		return precioUnitario;
 	}
 
-	public void setPrecioUnitario(Double precioUnitario) {
+	
+	public void setPrecioUnitario(String precioUnitario) {
 		this.precioUnitario = precioUnitario;
 	}
 
-	public Double getMontoTotal() {
+	
+	public String getMontoTotal() {
 		return montoTotal;
 	}
 
-	public void setMontoTotal(Double montoTotal) {
+	
+	public void setMontoTotal(String montoTotal) {
 		this.montoTotal = montoTotal;
 	}
 
-	public Double getSubTotal() {
+	
+	public String getSubTotal() {
 		return subTotal;
 	}
 
-	public void setSubTotal(Double subTotal) {
+	
+	public void setSubTotal(String subTotal) {
 		this.subTotal = subTotal;
 	}
 
-	public Double getMontoTotalLinea() {
+	
+	public String getMontoTotalLinea() {
 		return montoTotalLinea;
 	}
 
-	public void setMontoTotalLinea(Double montoTotalLinea) {
+	
+	public void setMontoTotalLinea(String montoTotalLinea) {
 		this.montoTotalLinea = montoTotalLinea;
 	}
 
-	public Double getImpuestoNeto() {
+	
+	public String getImpuestoNeto() {
 		return impuestoNeto;
 	}
 
-	public void setImpuestoNeto(Double impuestoNeto) {
+	
+	public void setImpuestoNeto(String impuestoNeto) {
 		this.impuestoNeto = impuestoNeto;
 	}
 
-	public Integer getCodigoComercialTipo() {
+	
+	public String getCodigoComercialTipo() {
 		return codigoComercialTipo;
 	}
 
-	public void setCodigoComercialTipo(Integer codigoComercialTipo) {
+	
+	public void setCodigoComercialTipo(String codigoComercialTipo) {
 		this.codigoComercialTipo = codigoComercialTipo;
 	}
 
-	public Integer getCodigoComercialCodigo() {
+	
+	public String getCodigoComercialCodigo() {
 		return codigoComercialCodigo;
 	}
 
-	public void setCodigoComercialCodigo(Integer codigoComercialCodigo) {
+	
+	public void setCodigoComercialCodigo(String codigoComercialCodigo) {
 		this.codigoComercialCodigo = codigoComercialCodigo;
 	}
 
-	public Double getDescuentoMonto() {
+	
+	public String getDescuentoMonto() {
 		return descuentoMonto;
 	}
 
-	public void setDescuentoMonto(Double descuentoMonto) {
+	
+	public void setDescuentoMonto(String descuentoMonto) {
 		this.descuentoMonto = descuentoMonto;
 	}
 
+	
 	public String getDescuentoNaturaleza() {
 		return descuentoNaturaleza;
 	}
 
+	
 	public void setDescuentoNaturaleza(String descuentoNaturaleza) {
 		this.descuentoNaturaleza = descuentoNaturaleza;
 	}
 
-	public Integer getImpuestoCodigo() {
+	
+	public String getImpuestoCodigo() {
 		return impuestoCodigo;
 	}
 
-	public void setImpuestoCodigo(Integer impuestoCodigo) {
+	
+	public void setImpuestoCodigo(String impuestoCodigo) {
 		this.impuestoCodigo = impuestoCodigo;
 	}
 
-	public Integer getImpuestoCodigoTarifa() {
+	
+	public String getImpuestoCodigoTarifa() {
 		return impuestoCodigoTarifa;
 	}
 
-	public void setImpuestoCodigoTarifa(Integer impuestoCodigoTarifa) {
+	
+	public void setImpuestoCodigoTarifa(String impuestoCodigoTarifa) {
 		this.impuestoCodigoTarifa = impuestoCodigoTarifa;
 	}
 
-	public Double getImpuestoTarifa() {
+	
+	public String getImpuestoTarifa() {
 		return impuestoTarifa;
 	}
 
-	public void setImpuestoTarifa(Double impuestoTarifa) {
+	
+	public void setImpuestoTarifa(String impuestoTarifa) {
 		this.impuestoTarifa = impuestoTarifa;
 	}
 
-	public Double getImpuestoMonto() {
+	
+	public String getImpuestoMonto() {
 		return impuestoMonto;
 	}
 
-	public void setImpuestoMonto(Double impuestoMonto) {
+	
+	public void setImpuestoMonto(String impuestoMonto) {
 		this.impuestoMonto = impuestoMonto;
 	}
 
-	public Integer getImpuestoExoneracionTipoDocumento() {
+	
+	public String getImpuestoExoneracionTipoDocumento() {
 		return impuestoExoneracionTipoDocumento;
 	}
 
-	public void setImpuestoExoneracionTipoDocumento(Integer impuestoExoneracionTipoDocumento) {
+	
+	public void setImpuestoExoneracionTipoDocumento(String impuestoExoneracionTipoDocumento) {
 		this.impuestoExoneracionTipoDocumento = impuestoExoneracionTipoDocumento;
 	}
 
+	
 	public String getImpuestoExoneracionNumeroDocumento() {
 		return impuestoExoneracionNumeroDocumento;
 	}
 
+	
 	public void setImpuestoExoneracionNumeroDocumento(String impuestoExoneracionNumeroDocumento) {
 		this.impuestoExoneracionNumeroDocumento = impuestoExoneracionNumeroDocumento;
 	}
 
+	
 	public String getImpuestoExoneracionNombreInstitucion() {
 		return impuestoExoneracionNombreInstitucion;
 	}
 
+	
 	public void setImpuestoExoneracionNombreInstitucion(String impuestoExoneracionNombreInstitucion) {
 		this.impuestoExoneracionNombreInstitucion = impuestoExoneracionNombreInstitucion;
 	}
 
+	
 	public String getImpuestoExoneracionFechaEmision() {
 		return impuestoExoneracionFechaEmision;
 	}
 
+	
 	public void setImpuestoExoneracionFechaEmision(String impuestoExoneracionFechaEmision) {
 		this.impuestoExoneracionFechaEmision = impuestoExoneracionFechaEmision;
 	}
 
-	public Double getImpuestoExoneracionPorcentaje() {
+	
+	public String getImpuestoExoneracionPorcentaje() {
 		return impuestoExoneracionPorcentaje;
 	}
 
-	public void setImpuestoExoneracionPorcentaje(Double impuestoExoneracionPorcentaje) {
+	
+	public void setImpuestoExoneracionPorcentaje(String impuestoExoneracionPorcentaje) {
 		this.impuestoExoneracionPorcentaje = impuestoExoneracionPorcentaje;
 	}
 
-	public Double getImpuestoExoneracionMonto() {
+	
+	public String getImpuestoExoneracionMonto() {
 		return impuestoExoneracionMonto;
+	}
+
+	
+	public void setImpuestoExoneracionMonto(String impuestoExoneracionMonto) {
+		this.impuestoExoneracionMonto = impuestoExoneracionMonto;
+	}
+
+	
+	public String getBaseImponible() {
+		return baseImponible;
+	}
+
+	
+	public void setBaseImponible(String baseImponible) {
+		this.baseImponible = baseImponible;
 	}
 
 	
@@ -298,8 +363,5 @@ public class RecepcionFacturaDetalle implements Serializable {
 		this.recepcionFactura = recepcionFactura;
 	}
 
-	public void setImpuestoExoneracionMonto(Double impuestoExoneracionMonto) {
-		this.impuestoExoneracionMonto = impuestoExoneracionMonto;
-	}
 
 }

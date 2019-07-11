@@ -193,6 +193,17 @@ public class RecepcionFactura implements Serializable {
 	@Column(name = "total_descuentos")
 	private Double						facturaTotalDescuentos;
 	
+	@Column(name = "version_doc")
+	private String version_doc; 
+	
+	@Column(name = "total_impuesto_acreditar")
+	private Double	totalImpuestoAcreditar;
+
+	@Column(name = "total_gasto_aplicable")
+	private Double				totalDeGastoAplicable;
+	
+	@Column(name = "condicion_impuesto")
+	private String	condicionImpuesto;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -817,6 +828,46 @@ public class RecepcionFactura implements Serializable {
 	
 	public void setDetalles(String detalles) {
 		this.detalles = detalles;
+	}
+
+	
+	public String getVersion_doc() {
+		return version_doc;
+	}
+
+	
+	public void setVersion_doc(String version_doc) {
+		this.version_doc = version_doc;
+	}
+
+	
+	public Double getTotalImpuestoAcreditar() {
+		return totalImpuestoAcreditar;
+	}
+
+	
+	public void setTotalImpuestoAcreditar(Double totalImpuestoAcreditar) {
+		this.totalImpuestoAcreditar = totalImpuestoAcreditar;
+	}
+
+	
+	public Double getTotalDeGastoAplicable() {
+		return totalDeGastoAplicable;
+	}
+
+	
+	public void setTotalDeGastoAplicable(Double totalDeGastoAplicable) {
+		this.totalDeGastoAplicable = totalDeGastoAplicable;
+	}
+
+	
+	public String getCondicionImpuesto() {
+		return condicionImpuesto;
+	}
+
+	
+	public void setCondicionImpuesto(String condicionImpuesto) {
+		this.condicionImpuesto = condicionImpuesto;
 	}
 
 }
