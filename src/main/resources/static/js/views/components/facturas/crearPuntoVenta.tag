@@ -604,48 +604,83 @@
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Aplicar Exoneracion al Producto</h4>
             </div>
             <div class="modal-body">
-                <div class="contenedorExoneracion">
-                    <div class="form-group has-success">
-                        <label for="pago_tipoVentaL">{$.i18n.prop("factura.tipo.documento")} </label> 
-                        <select class="form-control tipoDocExonerado" id="tipoDocExonerado" name="tipoDocExonerado"   >
-                            <option each={comboTipoDocumentos} value="{estado}" selected="{factura.tipoDoc ==estado?true:false}" >{descripcion}</option>
-                        </select>
-                    </div>
-                    <div class="form-group has-success">
-                        <label for="pago_tipoVentaL">#Compra Exoneracion </label> 
-                        <input  type="text"  class="form-control numeroDocumentoExonerado" id="numeroDocumentoExonerado" name = "numeroDocumentoExonerado" autofocus="autofocus" >                    
-                    </div>
-                    <div class="form-group has-success">
-                        <label for="pago_tipoVentaL">Nombre del Cliente/Institucion Aplicar </label> 
-                        <input  type="text"  class="form-control nombreInstitucionExoneracion" id="nombreInstitucionExoneracion" name = "nombreInstitucionExoneracion" autofocus="autofocus" >                    
-                    </div>
-                    <div class="form-group has-success">
-                        <label for="pago_tipoVentaL">Fecha Exoneracion  </label> 
-                        <div  class="form-group input-group date datepickerFechaEmisionExoneracion" data-provide="datepicker"  data-date-start-date="30d" data-date-format="yyyy-mm-dd">
-                            <input type="text" class="form-control fechaEmisionExoneracion" name="fechaEmisionExoneracion" id="fechaEmisionExoneracion" value="{factura.fechaCredito}" >
-                            <div class="input-group-addon">
-                                <span class="glyphicon glyphicon-th"></span>
+                <form id="formularioExoneracion">
+                    <div class="contenedorExoneracion">
+                        <div class="row">
+                            <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
+                                <div class="form-group ">
+                                    <label for="pago_tipoVentaL">{$.i18n.prop("factura.linea.detalle.codigo")} </label> 
+                                    <input  type="text"  class="form-control " autofocus="autofocus"  value= "{itemExonerar.codigo}" readonly>                    
+                                </div>
+                            </div>
+                            <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
+                                <div class="form-group ">
+                                    <label for="pago_tipoVentaL">{$.i18n.prop("factura.linea.detalle.descripcion")} </label> 
+                                    <input  type="text"  class="form-control " autofocus="autofocus"  value ="{itemExonerar.descripcion}" readonly>                    
+                                </div>
+                            </div>
+                        </div>  
+
+                        <div class="row">
+                            <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
+                                <div class="form-group ">
+                                    <label for="pago_tipoVentaL">{$.i18n.prop("factura.tipo.documento")} </label> 
+                                    <select class="form-control tipoDocExonerado" id="tipoDocExonerado" name="tipoDocExonerado"   >
+                                        <option each={comboTipoDocumentos} value="{estado}" selected="{montoExoneracion.tipoDoc ==estado?true:false}" >{descripcion}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
+                                <div class="form-group ">
+                                    <label for="pago_tipoVentaL">#Compra Exoneracion </label> 
+                                    <input  type="text"  class="form-control numeroDocumentoExonerado" id="numeroDocumentoExonerado" name = "numeroDocumentoExonerado" autofocus="autofocus"  value ="{itemExonerar.numeroDocumentoExonerado}">                    
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="row">
+                            <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
+                                <div class="form-group ">
+                                    <label for="pago_tipoVentaL">Nombre del Cliente/Institucion Aplicar </label> 
+                                    <input  type="text"  class="form-control nombreInstitucionExoneracion" id="nombreInstitucionExoneracion" name = "nombreInstitucionExoneracion" autofocus="autofocus"  value ="{itemExonerar.nombreInstitucionExoneracion}">                    
+                                </div>
+                            </div>
+                            <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
+                                <div class="form-group ">
+                                    <label for="pago_tipoVentaL">Fecha Exoneracion  </label> 
+                                    <div  class="form-group input-group date datepickerFechaEmisionExoneracion" data-provide="datepicker"  data-date-start-date="30d" data-date-format="yyyy-mm-dd">
+                                        <input type="text" class="form-control fechaEmisionExoneracion" name="fechaEmisionExoneracion" id="fechaEmisionExoneracion" value="{itemExonerar.fechaCredito}" >
+                                        <div class="input-group-addon">
+                                            <span class="glyphicon glyphicon-th"></span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group has-success">
-                        <label for="pago_tipoVentaL">Monto Total Impuesto del Producto  </label> 
-                        <input  type="text"  class="form-control montoTotalImpuestoExonerar" id="montoTotalImpuestoExonerar" name = "montoTotalImpuestoExonerar" autofocus="autofocus" readonly>                    
-                    </div>
+                        <div class="row" >
+                            <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
+                                <div class="form-group ">
+                                    <label for="pago_tipoVentaL">Monto Total Impuesto del Producto  </label> 
+                                    <input  type="text"  class="form-control "  value = "{itemExonerar.montoTotalImpuestoExonerarSTR}" autofocus="autofocus" readonly>                    
+                                </div>
+                            </div>   
+                            <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
+                                <div class="form-group">
+                                    <label for="pago_tipoVentaL">% Porcentaje a Exonerar  </label> 
+                                    <input  type="text"  class="form-control porcentajeExoneracion" id="porcentajeExoneracion" name = "porcentajeExoneracion" autofocus="autofocus"  value="{itemExonerar.porcentajeExoneracion}">                    
+                                </div>
+                            </div>
 
-                    <div class="form-group has-success">
-                        <label for="pago_tipoVentaL">% Porcentaje a Exonerar  </label> 
-                        <input  type="text"  class="form-control porcentajeExoneracion" id="porcentajeExoneracion" name = "porcentajeExoneracion" autofocus="autofocus" >                    
-                    </div>
-                    <div class="form-group has-success">
-                        <label for="pago_tipoVentaL">Total Aplicado a Exonerar  </label> 
-                        <input  type="text"  class="form-control montoExoneracion" id="montoExoneracion" name = "montoExoneracion" autofocus="autofocus" >                    
-                    </div>
-
-                </div> 
+                        </div> 
+                        <div class="form-group ">
+                            <label for="pago_tipoVentaL">Total Aplicado a Exonerar  </label> 
+                            <input  type="text"  class="form-control montoExoneracion" id="montoExoneracion" name = "montoExoneracion" autofocus="autofocus" rvalue="{itemExonerar.montoExoneracion}" readonly>                    
+                        </div>
+                    </div>    
+                </form> 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn-dark-gray btn-back  btn_big  pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                 <button type="button" onclick ="{__actualizarExoneracion}" class="btn-green btn_big btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
             </div>
         </div>
     </div>
@@ -1116,6 +1151,7 @@
             __calculate()
 
         }
+        __Eventos()
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
              actualizaElPlazoDiasCredito();
@@ -1144,9 +1180,91 @@
     function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
 
 
+__actualizarExoneracion(e){
+    if ($("#formularioExoneracion").valid()) {
+
+    }else{
+        mensajeError("Error Falta ingresar la informacion")
+        return 
+ 
+    }
+}
+
+function __Eventos(){
+    $("#formularioExoneracion").validate(reglasDeValidacionExoneracion());
+    $("#nombreInstitucionExoneracion").attr("maxlength", 160);
+    $("#numeroDocumentoExonerado").attr("maxlength", 40);
+    $('#porcentajeExoneracion').mask('000', {
+		'translation' : {
+			0 : {
+				pattern : /[0-9]/
+			}
+		}
+	});
+}
+
+/**
+* Camps requeridos
+**/
+var reglasDeValidacionExoneracion = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+             numeroDocumentoExonerado:{
+                 maxlength:40,
+                 required : true,
+                 minlength:1,
+             },
+             nombreInstitucionExoneracion:{
+                 maxlength:160,
+             } ,        
+             fechaEmisionExoneracion:{
+                 required : true,
+             }         
+             ,        
+             montoTotalImpuestoExonerar:{
+                 required : true,
+                 numeroMayorCero:true,
+                 number:true,
+             } 
+             ,        
+             porcentajeExoneracion:{
+                 required : true,
+                 numeroMayorCero:true,
+                 number:true,
+             } 
+             ,        
+             montoExoneracion:{
+                 required : true,
+                 numeroMayorCero:true,
+                 number:true,
+             } 
+
+		},
+		ignore : []
+
+	});
+	return validationOptions;
+};
+
+
 __aplicarExoneracionAlDetalle(e) {
-   $('#modalExoneracion').modal({backdrop: 'static', keyboard: true}) 
-   $('#modalExoneracion').modal('show')    
+    self.itemExonerar = e.item;
+    self.itemExonerar.montoTotalImpuestoExonerarSTR =formatoDecimales(self.itemExonerar.montoImpuesto + self.itemExonerar.montoImpuesto1,2) 
+    self.update()
+     if (self.itemExonerar.montoImpuesto > 0 || self.itemExonerar.montoImpuesto1 > 0) {
+        $('#modalExoneracion').modal({backdrop: 'static', keyboard: true}) 
+        $('#modalExoneracion').modal('show')
+ 
+    }else{
+        mensajeError("Error Producto no tiene impuestos incluidos , revisar")
+        return 
+ 
+    }
+   
+}
+
+function agregarExoneracionAlProducto(){
+
 }
 
 
