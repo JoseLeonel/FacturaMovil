@@ -33,9 +33,7 @@ public interface ProcesoHaciendaService {
 
 	// Proceso para firmar las facturas recibidas y aceptadas en el sistema
 	void procesoFirmadoRecepcionFactura() throws Exception;
-	
-	
-//	void procesoCambiarConsecutivo() throws Exception;
 
-	
+	void procesoCambiarConsecutivo() throws Exception;
+
 }
