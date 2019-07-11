@@ -4,11 +4,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.emprendesoftcr.Bo.EmpresaActividadComercialBo;
 import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.modelo.EmpresaActividadComercial;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
