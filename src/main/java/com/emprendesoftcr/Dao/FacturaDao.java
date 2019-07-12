@@ -21,6 +21,8 @@ public interface FacturaDao {
 
 	Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa);
 	
+	Factura findByClaveAndEmpresa(String clave, Empresa empresa) throws Exception;
+	
 	void eliminarDetalleFacturaPorSP(Factura factura);
 	
 	Collection<Factura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma);

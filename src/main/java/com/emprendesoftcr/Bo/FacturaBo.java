@@ -25,6 +25,7 @@ public interface FacturaBo {
 	Factura findById(Long id);
 
 	Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) throws Exception;
+	Factura findByClaveAndEmpresa(String clave, Empresa empresa) throws Exception;
 	
 	Factura crearFactura(FacturaCommand facturaCommand,Usuario usuario,UsuarioCaja usuarioCaja,TipoCambio tipoCambio) throws Exception;
 

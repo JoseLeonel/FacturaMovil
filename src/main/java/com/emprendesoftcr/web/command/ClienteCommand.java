@@ -2,6 +2,12 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
@@ -13,7 +19,7 @@ import com.emprendesoftcr.modelo.Empresa;
  */
 public class ClienteCommand {
 
-	private Long	id;
+	private Long		id;
 
 	private String	nombreCompleto;
 
@@ -46,8 +52,16 @@ public class ClienteCommand {
 
 	private Date		updated_at;
 	private String	identificacionExtranjero;
-	
-	private String observacionVenta;
+
+	private String	observacionVenta;
+
+	private String	tipoDocumentoExoneracion;
+
+	private String	numeroDocumentoExoneracion;
+
+	private String	nombreInstitucionExoneracion;
+
+	private Date		fechaEmisionExoneracion;
 
 	private Empresa	empresa;
 
@@ -61,7 +75,7 @@ public class ClienteCommand {
 		this.distrito = cliente.getDistrito();
 		this.barrio = cliente.getBarrio();
 		this.codigoPais = cliente.getCodigoPais();
-    this.tipoCedula = cliente.getTipoCedula();
+		this.tipoCedula = cliente.getTipoCedula();
 		this.celular = cliente.getCelular();
 		this.telefono = cliente.getTelefono();
 		this.otraSena = cliente.getOtraSena();
@@ -78,26 +92,60 @@ public class ClienteCommand {
 		this.correoElectronico3 = cliente.getCorreoElectronico3();
 		this.observacionVenta = cliente.getObservacionVenta();
 
+		this.tipoDocumentoExoneracion = cliente.getTipoDocumentoExoneracion();
+
+		this.numeroDocumentoExoneracion = cliente.getNumeroDocumentoExoneracion();
+
+		this.nombreInstitucionExoneracion = cliente.getNombreInstitucionExoneracion();
+
+		this.fechaEmisionExoneracion = cliente.getFechaEmisionExoneracion();
+
 	}
 
 	public ClienteCommand() {
 		super();
 	}
 
-	
-
-	
 	public Long getId() {
 		return id;
 	}
 
-	
-	
+	public String getTipoDocumentoExoneracion() {
+		return tipoDocumentoExoneracion;
+	}
+
+	public void setTipoDocumentoExoneracion(String tipoDocumentoExoneracion) {
+		this.tipoDocumentoExoneracion = tipoDocumentoExoneracion;
+	}
+
+	public String getNumeroDocumentoExoneracion() {
+		return numeroDocumentoExoneracion;
+	}
+
+	public void setNumeroDocumentoExoneracion(String numeroDocumentoExoneracion) {
+		this.numeroDocumentoExoneracion = numeroDocumentoExoneracion;
+	}
+
+	public String getNombreInstitucionExoneracion() {
+		return nombreInstitucionExoneracion;
+	}
+
+	public void setNombreInstitucionExoneracion(String nombreInstitucionExoneracion) {
+		this.nombreInstitucionExoneracion = nombreInstitucionExoneracion;
+	}
+
+	public Date getFechaEmisionExoneracion() {
+		return fechaEmisionExoneracion;
+	}
+
+	public void setFechaEmisionExoneracion(Date fechaEmisionExoneracion) {
+		this.fechaEmisionExoneracion = fechaEmisionExoneracion;
+	}
+
 	public String getTipoCedula() {
 		return tipoCedula;
 	}
 
-	
 	public void setTipoCedula(String tipoCedula) {
 		this.tipoCedula = tipoCedula;
 	}
@@ -278,46 +326,36 @@ public class ClienteCommand {
 		this.nombreComercial = nombreComercial;
 	}
 
-	
 	public String getCorreoElectronico1() {
 		return correoElectronico1;
 	}
 
-	
 	public void setCorreoElectronico1(String correoElectronico1) {
 		this.correoElectronico1 = correoElectronico1;
 	}
 
-	
 	public String getCorreoElectronico2() {
 		return correoElectronico2;
 	}
 
-	
 	public void setCorreoElectronico2(String correoElectronico2) {
 		this.correoElectronico2 = correoElectronico2;
 	}
 
-	
 	public String getCorreoElectronico3() {
 		return correoElectronico3;
 	}
 
-	
 	public void setCorreoElectronico3(String correoElectronico3) {
 		this.correoElectronico3 = correoElectronico3;
 	}
 
-	
 	public String getObservacionVenta() {
 		return observacionVenta;
 	}
 
-	
 	public void setObservacionVenta(String observacionVenta) {
 		this.observacionVenta = observacionVenta;
 	}
-	
-	
 
 }
