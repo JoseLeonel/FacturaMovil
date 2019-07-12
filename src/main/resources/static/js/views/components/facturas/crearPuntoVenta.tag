@@ -625,8 +625,8 @@
                             <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
                                 <div class="form-group ">
                                     <label for="pago_tipoVentaL">{$.i18n.prop("factura.tipo.documento")} </label> 
-                                    <select class="form-control tipoDocExonerado" id="tipoDocExonerado" name="tipoDocExonerado"   >
-                                        <option each={comboTipoDocumentos} value="{estado}" selected="{montoExoneracion.tipoDoc ==estado?true:false}" >{descripcion}</option>
+                                    <select  class="form-control tipoDocExonerado" id="tipoDocExonerado" name="tipoDocExonerado"   >
+                                        <option each={comboTipoDocumentoExonerados} value="{estado}" selected="{montoExoneracion.tipoDoc ==estado?true:false}" >{descripcion}</option>
                                     </select>
                                 </div>
                             </div>
@@ -641,7 +641,9 @@
                             <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
                                 <div class="form-group ">
                                     <label for="pago_tipoVentaL">Nombre del Cliente/Institucion Aplicar </label> 
-                                    <input  type="text"  class="form-control nombreInstitucionExoneracion" id="nombreInstitucionExoneracion" name = "nombreInstitucionExoneracion" autofocus="autofocus"  value ="{itemExonerar.nombreInstitucionExoneracion}">                    
+                                    <select onchange= {__AsignarNombreClienteExonerar} class="form-control nombreInstitucionExoneracion" id="nombreInstitucionExoneracion" name="nombreInstitucionExoneracion"   data-live-search="true">
+                                        <option each={clientes.data} data-tokens ="{nombreCompleto}"  value="{nombreCompleto}" selected="{itemExonerar.nombreInstitucionExoneracion ==nombreCompleto?true:false}" >{nombreCompleto}</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
@@ -666,7 +668,7 @@
                             <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
                                 <div class="form-group">
                                     <label for="pago_tipoVentaL">% Porcentaje a Exonerar  </label> 
-                                    <input  type="text"  class="form-control porcentajeExoneracion" id="porcentajeExoneracion" name = "porcentajeExoneracion" autofocus="autofocus"  value="{itemExonerar.porcentajeExoneracion}">                    
+                                    <input  type="text"  onkeyup ={__ActualizarExoneracionImpuesto} class="form-control porcentajeExoneracion" id="porcentajeExoneracion" name = "porcentajeExoneracion" autofocus="autofocus"  value="{itemExonerar.porcentajeExoneracion}">                    
                                 </div>
                             </div>
 
@@ -690,258 +692,258 @@
 
 
 <style type="text/css"  >
-.contenedorExoneracion{
+    .contenedorExoneracion{
 
-}
-.label-totalesComprobanteChino {
-    display: flex;
-    flex: 1;
-    font-weight: 600 !important;
-    font-size: 37px !important;
-    font-family: Roboto,sans-serif !important;
-    color: #30ed17 !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    border-collapse: separate;
-    cursor: pointer;
-    margin: 2%!important;
-    text-align: center !important;
-    background-color: black !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 25px !important;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
-}
-.titleListaPrecio{
-    color:blue;
-    text-decoration:underline;
-}
-.tituloDetalle{
-    text-align: center;
-    text-decoration: none;
-    font-style: italic;
-    color: black;
-    font-weight: 600;
-    font-size: 20px;
-}
-.btn-block {
-    display: block;
-    width: 100%;
-    }    
+    }
+    .label-totalesComprobanteChino {
+        display: flex;
+        flex: 1;
+        font-weight: 600 !important;
+        font-size: 37px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        border-collapse: separate;
+        cursor: pointer;
+        margin: 2%!important;
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 25px !important;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
+    .titleListaPrecio{
+        color:blue;
+        text-decoration:underline;
+    }
+    .tituloDetalle{
+        text-align: center;
+        text-decoration: none;
+        font-style: italic;
+        color: black;
+        font-weight: 600;
+        font-size: 20px;
+    }
+    .btn-block {
+        display: block;
+        width: 100%;
+        }    
 
-.fondoVentaEspera{
-    background: black;
-    text-align: center;
-    text-decoration: none;
-    text-shadow: rgb(255, 255, 255) 0px 0px 1px;
-    font-style: italic;
-    color: #e2f312 !important;
-    font-weight: 600;
-    font-size: 14px;
+    .fondoVentaEspera{
+        background: black;
+        text-align: center;
+        text-decoration: none;
+        text-shadow: rgb(255, 255, 255) 0px 0px 1px;
+        font-style: italic;
+        color: #e2f312 !important;
+        font-weight: 600;
+        font-size: 14px;
+        
+    }
+    .ventaEsperaSeleccionada{
+        display: flex;
+        padding-bottom: 0.2%;
+    }  
+    .ventaEsperaSeleccionada .tituloVentaEspera{
+        color: yellow;
+        background: black;
+        font-weight: 700;
+    }                           
+    .contenedorFactura{
+        display: flex;
+        flex: 1;
+        border: 1px solid #3c8dbc;
+        background: #ffffff;
     
-}
-.ventaEsperaSeleccionada{
-    display: flex;
-    padding-bottom: 0.2%;
-}  
-.ventaEsperaSeleccionada .tituloVentaEspera{
-    color: yellow;
-    background: black;
-    font-weight: 700;
-}                           
-.contenedorFactura{
-    display: flex;
-    flex: 1;
-    border: 1px solid #3c8dbc;
-    background: #ffffff;
- 
 
-}
+    }
 
-.precioTotalFacturaContainer{
+    .precioTotalFacturaContainer{
+        display:flex;
+        flex:1;
+    }
+
+    .codigoBarraPrecioContainer{
+        display:flex;
+        flex:1;
+    }
+    .codigoBarraPrecioContainer .inputCodigoPrecio{
+        flex:1;
+        padding-left: 2%;
+        padding-right: 2%;
+        padding-bottom: 1%;
+    }
+
+    .labelBotones {
+        font-weight: 600 !important;
+        font-size: 19px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #ffffff !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        line-height: 30px;
+        border-collapse: separate;
+        text-align: center;
+        cursor: pointer;
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
+    @media screen and (max-width: 1024px) {
+    .labelBotones {
+        font-size: 14px !important;
+    }
+    .label-totalesComprobante{
+        font-size: 18px !important;
+    }
+    .cantidadArticulosTitulo{
+        font-size: 10px !important;
+    }
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
+        font-size: 14px !important;
+    }
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_2{
+        font-size: 14px !important;
+    }
+    }
+
+    .botonesFuncionalContainer{
+        display:flex;
+        flex:1;
+
+    }
+    .contenedorFactura .cabecera-izquierda .botonesFuncionalContainer{
     display:flex;
-    flex:1;
-}
+    }
 
-.codigoBarraPrecioContainer{
-    display:flex;
+    .contenedorFactura .cabecera-izquierda .botonesFuncionalContainer .botonesFuncional{
     flex:1;
-}
-.codigoBarraPrecioContainer .inputCodigoPrecio{
-    flex:1;
-    padding-left: 2%;
-    padding-right: 2%;
-    padding-bottom: 1%;
-}
+    padding-right: 1%;
+    padding-bottom: 2%;
+    }
 
-.labelBotones {
+
+
+
+    .gananciaContainer{
+        display:flex;
+        flex:1;
+    }
+    .gananciaContainer .formatoTituloGanancia{
+        flex:1;
+        color: black;
+        font-size: 15px;
+        font-weight: bolder;
+    }
+    .tituloCantidadArticulos{
+        display:flex;
+    }
+    .contenedorFactura .cabecera-derecha .tituloCantidadArticulos .cantidadArticulosTitulo{
     font-weight: 600 !important;
-    font-size: 19px !important;
-    font-family: Roboto,sans-serif !important;
-    color: #ffffff !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    text-align: left;
-    line-height: 30px;
-    border-collapse: separate;
-    text-align: center;
-    cursor: pointer;
-    text-align: center !important;
-    background-color: black !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 5px;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
-}
-@media screen and (max-width: 1024px) {
-  .labelBotones {
-    font-size: 14px !important;
-  }
-  .label-totalesComprobante{
-      font-size: 18px !important;
-  }
-  .cantidadArticulosTitulo{
-      font-size: 10px !important;
-  }
-  .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
-      font-size: 14px !important;
-  }
-  .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_2{
-      font-size: 14px !important;
-  }
-}
+        font-size: 30px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #edea17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        /* padding-left: 20px; */
+        line-height: 30px;
+        border-collapse: separate;
+        text-align: center;
+        cursor: pointer;
+        /* padding: 5px; */
+        /* margin: 5px; */
+        /* border: none; */
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
 
-.botonesFuncionalContainer{
-    display:flex;
-    flex:1;
+    }
 
-}
-.contenedorFactura .cabecera-izquierda .botonesFuncionalContainer{
-  display:flex;
-}
-
-.contenedorFactura .cabecera-izquierda .botonesFuncionalContainer .botonesFuncional{
-  flex:1;
-  padding-right: 1%;
-  padding-bottom: 2%;
-}
+    .tituloProductoIngresadoContainer{
+        display:flex;
+        flex:1;
+    }
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado{
+        flex: 1;
+        display: flex;
+        padding-left: 2%;
+        padding-right: 2%;
+    
+    }
 
 
 
 
-.gananciaContainer{
-    display:flex;
-    flex:1;
-}
-.gananciaContainer .formatoTituloGanancia{
-    flex:1;
-    color: black;
-    font-size: 15px;
-    font-weight: bolder;
-}
-.tituloCantidadArticulos{
-    display:flex;
-}
-.contenedorFactura .cabecera-derecha .tituloCantidadArticulos .cantidadArticulosTitulo{
-  font-weight: 600 !important;
-    font-size: 30px !important;
-    font-family: Roboto,sans-serif !important;
-    color: #edea17 !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    text-align: left;
-    /* padding-left: 20px; */
-    line-height: 30px;
-    border-collapse: separate;
-    text-align: center;
-    cursor: pointer;
-    /* padding: 5px; */
-    /* margin: 5px; */
-    /* border: none; */
-    text-align: center !important;
-    background-color: black !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 5px;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
+        flex: 0.15;
+        font-weight: 600 !important;
+        font-size: 36px !important;
+        font-family: Roboto,sans-serif !important;
+        color: yellow !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        /* padding-left: 20px; */
+        /* line-height: 100%; */
+        /* border-collapse: separate; */
+        text-align: center;
+        /* margin: 5px; */
+        border: none;
+        text-align: center !important;
+        background-color: black !important;
+        /* box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20); */
+        /* border-radius: 5.tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{px; */
+        /* -webkit-transition: background-color 100ms linear; */
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        /* transition: background-color 100ms linear; */
+    }
 
-}
-
-.tituloProductoIngresadoContainer{
-    display:flex;
-    flex:1;
-}
-.tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado{
-    flex: 1;
-    display: flex;
-    padding-left: 2%;
-    padding-right: 2%;
- 
-}
-
-
-
-
-.tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{
-    flex: 0.15;
-    font-weight: 600 !important;
-    font-size: 36px !important;
-    font-family: Roboto,sans-serif !important;
-    color: yellow !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    text-align: left;
-    /* padding-left: 20px; */
-    /* line-height: 100%; */
-    /* border-collapse: separate; */
-    text-align: center;
-     /* margin: 5px; */
-    border: none;
-    text-align: center !important;
-    background-color: black !important;
-    /* box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20); */
-    /* border-radius: 5.tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_1{px; */
-    /* -webkit-transition: background-color 100ms linear; */
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    /* transition: background-color 100ms linear; */
-}
-
-.tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_2{
-    flex: 1;
-    font-weight: 600 !important;
-    font-size: 36px !important;
-    font-family: Roboto,sans-serif !important;
-    color: #30ed17 !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    text-align: left;
-    /* padding-left: 20px; */
-    /* line-height: 100%; */
-    /* border-collapse: separate; */
-    text-align: center;
-     /* margin: 5px; */
-    border: none;
-    text-align: center !important;
-    background-color: black !important;
-    /* box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20); */
-    /* border-radius: 5px; */
-    /* -webkit-transition: background-color 100ms linear; */
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    /* transition: background-color 100ms linear; */
-}
+    .tituloProductoIngresadoContainer .tituloDescripcionProductoIngresado .ultimo_2{
+        flex: 1;
+        font-weight: 600 !important;
+        font-size: 36px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        text-align: left;
+        /* padding-left: 20px; */
+        /* line-height: 100%; */
+        /* border-collapse: separate; */
+        text-align: center;
+        /* margin: 5px; */
+        border: none;
+        text-align: center !important;
+        background-color: black !important;
+        /* box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20); */
+        /* border-radius: 5px; */
+        /* -webkit-transition: background-color 100ms linear; */
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        /* transition: background-color 100ms linear; */
+    }
 
 
 
@@ -959,6 +961,7 @@
 
     self.comboCondicionPagos   = []
     self.comboTipoDocumentos   = []
+    self.comboTipoDocumentoExonerados   = []
     self.subTotalGeneral       = 0
     self.codigoBarraFueraPantalla = ""
     self.totalDescuentos       = 0
@@ -1028,7 +1031,7 @@
     self.item                  = null;
     self.articulo              = null;
     self.articulos             = {data:[]}
-    self.clientes              = {data:[]}
+    
     self.detalleFactura        = {data:[]}
     self.cliente               = {}
     self.vendedor              = {
@@ -1051,6 +1054,7 @@
     self.todosCantones                 = {data:[]}
     self.todosDistritos                = {data:[]}
     self.todosBarrios                  = {data:[]}
+    self.clientes                  = {data:[]}
     self.cantones                      = []
     self.distritos                     = []
     self.barrios                       = []
@@ -1080,6 +1084,15 @@
         codigo:"",
         descripcion:""
     }
+    self.itemExonerar ={
+        montoExoneracion :0,
+        porcentajeExoneracion:0,
+        montoTotalImpuestoExonerarSTR:0,
+        fechaEmisionExoneracion:null,
+        nombreInstitucionExoneracion:"",
+        numeroDocumentoExonerado:0,
+        tipoDocExonerado:""
+    }
     self.on('mount',function(){
 
         $("#formularioFactura").validate(reglasDeValidacionFactura());
@@ -1103,7 +1116,7 @@
        __ListaDeVendedores()
        __agregarArticulos()
        _Empresa()
-       
+       __ComboTipoDocumentoExonerados()
        
         $('.codigo').select()
         $(".codigo").focus()
@@ -1180,6 +1193,23 @@
     function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
 
 
+__ActualizarExoneracionImpuesto(){
+    self.itemExonerar.porcentajeExoneracion = __valorNumerico($('.porcentajeExoneracion').val())
+    var resultado = self.itemExonerar.porcentajeExoneracion /100
+    resultado = __valorNumerico(self.itemExonerar.montoTotalImpuestoExonerar) * resultado
+    self.itemExonerar.montoExoneracion = resultado;
+    self.update()
+
+
+}
+
+
+__AsignarNombreClienteExonerar(e){
+    self.itemExonerar.nombreInstitucionExoneracion = self.itemExonerar != null? e.currentTarget.value:null
+    self.update()
+}
+
+
 __actualizarExoneracion(e){
     if ($("#formularioExoneracion").valid()) {
 
@@ -1250,6 +1280,7 @@ var reglasDeValidacionExoneracion = function() {
 __aplicarExoneracionAlDetalle(e) {
     self.itemExonerar = e.item;
     self.itemExonerar.montoTotalImpuestoExonerarSTR =formatoDecimales(self.itemExonerar.montoImpuesto + self.itemExonerar.montoImpuesto1,2) 
+    self.itemExonerar.montoTotalImpuestoExonerar =formatoDecimales(self.itemExonerar.montoImpuesto + self.itemExonerar.montoImpuesto1,2) 
     self.update()
      if (self.itemExonerar.montoImpuesto > 0 || self.itemExonerar.montoImpuesto1 > 0) {
         $('#modalExoneracion').modal({backdrop: 'static', keyboard: true}) 
@@ -2136,7 +2167,7 @@ function __Init(){
     self.articulo              = null;
     self.descripcionArticulo   = ""
     self.precioUltimo = ""
-    self.clientes              = {data:[]}
+    
     self.detalleFactura        ={data:[]}
     self.cliente               = {};
     self.vendedor              = {
@@ -2784,6 +2815,16 @@ function __ListaDeClientes(){
         method:"GET",
         success: function (result) {
             if(result.aaData.length > 0){
+                self.clientes.data =result.aaData
+                self.update()
+                 $('.nombreInstitucionExoneracion').selectpicker(
+                    {
+                        style: 'btn-info',
+                        size:10,
+                        liveSearch: true
+                    }
+                );
+                $('.nombreInstitucionExoneracion').selectpicker('refresh');
                 __informacionData()
                 loadListar(".tableListaCliente",idioma_espanol,self.informacion_tabla_clientes,result.aaData)
                 agregarInputsCombos_Clientes()
@@ -3635,6 +3676,9 @@ function __seleccionarClientes() {
 	       var data = table.row($(this).parents("tr")).data();
 	     }
         self.cliente = data
+
+        
+        
         self.update();
          $('#modalClientes').modal('hide') 
         
@@ -3656,6 +3700,49 @@ function __comboCondicionPago(){
     })
     self.update()
 }
+/**
+* cargar los tipos de Documento de la factura
+**/
+function __ComboTipoDocumentoExonerados(){
+    self.comboTipoDocumentoExonerados = []
+    self.update()
+    self.comboTipoDocumentoExonerados.push({
+        estado:"01",
+        descripcion:$.i18n.prop("tipo.documento.exonerado.compras.autorizadas")
+    })
+    self.comboTipoDocumentoExonerados.push({
+        estado:"02",
+        descripcion:$.i18n.prop("tipo.documento.exonerado.venta.exenta.diplomado")
+    })
+    self.comboTipoDocumentoExonerados.push({
+        estado:"03",
+        descripcion:$.i18n.prop("tipo.documento.exonerado.autorizado.por.ley.hacienda")
+    })
+    self.comboTipoDocumentoExonerados.push({
+        estado:"04",
+        descripcion:$.i18n.prop("tipo.documento.exonerado.execciones.direccion.general.hacienda")
+    })
+    self.comboTipoDocumentoExonerados.push({
+        estado:"05",
+        descripcion:$.i18n.prop("tipo.documento.exonerado.transitorio.v")
+    })
+    self.comboTipoDocumentoExonerados.push({
+        estado:"06",
+        descripcion:$.i18n.prop("tipo.documento.exonerado.transitorio.ix")
+    })
+    self.comboTipoDocumentoExonerados.push({
+        estado:"07",
+        descripcion:$.i18n.prop("tipo.documento.exonerado.transitorio.xvii")
+    })
+
+    self.comboTipoDocumentoExonerados.push({
+        estado:"99",
+        descripcion:$.i18n.prop("tipo.documento.exonerado.otros")
+    })
+
+    self.update()
+}
+
 /**
 * cargar los tipos de Documento de la factura
 **/
