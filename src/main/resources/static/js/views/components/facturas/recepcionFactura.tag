@@ -116,6 +116,18 @@
                                 <input type="text" readonly="readonly" class="form-control receptorCedula" placeHolder ="{$.i18n.prop("receptor.cedula")}" id="receptorCedula" name="receptorCedula" value="{recepcionFactura.receptorCedula}">
                             </div>                                                        
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                <label> {$.i18n.prop("receptor.tipoCondicionImpuesto")}  <span class="requeridoDato">*</span></label>
+                                <select class="form-control receptorMensaje" id="condicionImpuesto" name="condicionImpuesto" >
+                                    <option each={tiposCondiciones.data}  value="{valor}" selected="{recepcionFactura.condicionImpuesto==valor?true:false}">{descripcion}</option>
+                                </select>
+                            </div>                            
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                <label> {$.i18n.prop("receptor.codigo.actividad")}  <span class="requeridoDato">*</span></label>
+                                <select class="form-control receptorMensaje" id="codigoActividad" name="condicionImpuesto" >
+                                    <option each={empresaActividadComercial}  value="{codigo}" >{codigo}-{descripcion}</option>
+                                </select>
+                            </div>                            
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label> {$.i18n.prop("receptor.mensaje")}  <span class="requeridoDato">*</span></label>
                                 <select class="form-control receptorMensaje" id="mensaje" name="mensaje" >
                                     <option each={tiposMensajes.data}  value="{valor}" selected="{recepcionFactura.mensaje==valor?true:false}">{descripcion}</option>
@@ -125,7 +137,6 @@
                                 <label  >{$.i18n.prop("receptor.detalleMensaje")}</label>
                                 <textarea maxlength="250" placeHolder ="{$.i18n.prop("receptor.detalleMensaje")}" class="form-control recepcionDetalleMensaje" id="detalleMensaje" name="detalleMensaje" value="{recepcionFactura.detalleMensaje}" ></textarea> 
                             </div>
-                            
 						</div>
 					</form>
 				</div>				
@@ -412,7 +423,10 @@
 		self.mediosPago	   		  = {data:[]}
 		self.condicionesVenta	  = {data:[]}
 		self.tiposMensajes		  = {data:[]}
+		self.tiposCondiciones     = {data:[]}
 		self.detalleServicio 	  = {data:[]}
+		self.empresaActividadComercial= {}
+		
 		self.mensaje ={				
 				facturaClave:"",
 				mensaje:"",
@@ -545,8 +559,10 @@
 			
 		    __listadoTipoCedulas();
 		    __listadoMediosPago();
+		    __listadoCondicionImpuesto();
 		    __listadoCondicionesVenta();
 		    __listadoTiposMensajes();
+		    __ListaActividadesComercales();
 		    
 		});
 
@@ -623,6 +639,17 @@
 		    self.update()
 		}
 
+		//Se muestra los tipos impuestos	
+		function __listadoCondicionImpuesto(){
+		    self.tiposCondiciones = {data:[]}  // definir el data del datatable
+		    self.update()
+		    self.tiposCondiciones.data.push({
+		        valor:"01",
+		        descripcion:$.i18n.prop("tipo.condicion.impuesto.01")
+		    })
+		    self.update()
+		}
+
 		//Se muestra los tipos medio de pago	
 		function __listadoMediosPago(){
 		    self.mediosPago = {data:[]}  // definir el data del datatable
@@ -687,6 +714,31 @@
 		        descripcion:$.i18n.prop("condicion.venta.otros")
 		    })
 		    self.update()
+		}
+		
+		/**
+		*  Lista de las actividades
+		**/
+		function __ListaActividadesComercales(){
+		    $.ajax({
+		        url: 'ListaEmpresaActividadComercialPorPricipalAjax.do',
+		        datatype: "json",
+		        global: false,
+		        method:"GET",
+		        success: function (result) {
+		            if(result.aaData.length > 0){
+		                self.empresaActividadComercial   = result.aaData
+		                self.update()
+		                BuscarActividadComercial()
+
+		            }
+		        },
+		        error: function (xhr, status) {
+		            console.log(xhr);
+		            mensajeErrorServidor(xhr, status);
+		        }
+		    });
+		    return
 		}
 		
 		function __cargarXML(xml) {

@@ -169,7 +169,7 @@ public class RecepcionFactura implements Serializable {
 	private Double						facturaTotalImpuestos;
 
 	@Column(name = "codigo_actividad")
-	private Double						facturaCodigoActividad;
+	private String						facturaCodigoActividad;
 	@Column(name = "plazo_credito")
 	private Double						facturaPlazoCredito;
 	@Column(name = "total_serv_gravados")
@@ -221,6 +221,9 @@ public class RecepcionFactura implements Serializable {
 
 	@Column(name = "tipo_doc")
 	private String						tipoDoc;
+	
+	@Column(name = "cod_actividad", length=6)
+	private String							codigoActividad;
 	
 	@Transient
 	private String detalles;
@@ -699,16 +702,6 @@ public class RecepcionFactura implements Serializable {
 	}
 
 	
-	public Double getFacturaCodigoActividad() {
-		return facturaCodigoActividad;
-	}
-
-	
-	public void setFacturaCodigoActividad(Double facturaCodigoActividad) {
-		this.facturaCodigoActividad = facturaCodigoActividad;
-	}
-
-	
 	public Double getFacturaPlazoCredito() {
 		return facturaPlazoCredito;
 	}
@@ -868,6 +861,21 @@ public class RecepcionFactura implements Serializable {
 	
 	public void setCondicionImpuesto(String condicionImpuesto) {
 		this.condicionImpuesto = condicionImpuesto;
+	}
+
+	
+	public String getCodigoActividad() {
+		return codigoActividad;
+	}
+
+	
+	public void setCodigoActividad(String codigoActividad) {
+		this.codigoActividad = codigoActividad;
+	}
+
+	
+	public void setFacturaCodigoActividad(String facturaCodigoActividad) {
+		this.facturaCodigoActividad = facturaCodigoActividad;
 	}
 
 }

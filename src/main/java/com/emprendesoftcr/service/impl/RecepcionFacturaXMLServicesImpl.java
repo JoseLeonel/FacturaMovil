@@ -49,14 +49,14 @@ public class RecepcionFacturaXMLServicesImpl implements RecepcionFacturaXMLServi
 
 			xml = ""; 
 			if(recepcionFactura.getVersion_doc().equals("4.3")) {
-				xml = "<MensajeReceptor xmlns=\"" + Constantes.DOCXMLS_RECEPCION_FACTURA_4_2 + "\" " +
+				xml = "<MensajeReceptor xmlns=\"" + Constantes.DOCXMLS_RECEPCION_FACTURA_4_3 + "\" " +
 	          "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
 	          "<Clave>" + recepcionFactura.getFacturaClave() + "</Clave>" +
 	          "<NumeroCedulaEmisor>" + recepcionFactura.getEmisorCedula() + "</NumeroCedulaEmisor>" +
 	          "<FechaEmisionDoc>" + date + "</FechaEmisionDoc>" +
 	          "<Mensaje>" + recepcionFactura.getMensaje() + "</Mensaje>" +	          
 	           impuestos  +
-	          "<CodigoActividad>" + recepcionFactura.getFacturaCodigoActividad() + "</CodigoActividad>" +
+	          "<CodigoActividad>" + recepcionFactura.getCodigoActividad() + "</CodigoActividad>" +
 	          "<CondicionImpuesto>" + recepcionFactura.getCondicionImpuesto() + "</CondicionImpuesto>" + 
 	          "<MontoTotalImpuestoAcreditar>" + recepcionFactura.getTotalImpuestoAcreditar() + "</MontoTotalImpuestoAcreditar>" +
 	          "<MontoTotalDeGastoAplicable>" + recepcionFactura.getTotalDeGastoAplicable() + "</MontoTotalDeGastoAplicable>" +
