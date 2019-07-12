@@ -102,6 +102,22 @@ public class Cliente implements Serializable {
 
 	@Column(name = "obse_venta",  columnDefinition="varchar(80) default ' '")
 	private String observacionVenta;
+
+	@Column(name = "tipo_doc_exo", length = 2)
+	private String						tipoDocumentoExoneracion;
+
+	@Column(name = "nume_doc_exo", length = 40)
+	private String						numeroDocumentoExoneracion;
+
+	@Column(name = "nomb_inst_exo", length = 160)
+	private String						nombreInstitucionExoneracion;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
+	@Column(name = "fecha_emision_exo")
+	private Date							fechaEmisionExoneracion;
+
+	
 	
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
@@ -116,7 +132,8 @@ public class Cliente implements Serializable {
 
 
 	
-	public Cliente(Long id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, String identificacionExtranjero, String provincia, String canton, String distrito, String barrio, Integer celular, Integer codigoPais, Integer telefono, String otraSena, String correoElectronico, String correoElectronico1, String correoElectronico2, String correoElectronico3, Integer descuento, String estado, Date created_at, Date updated_at, String observacionVenta, Empresa empresa, Usuario usuario) {
+
+	public Cliente(Long id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, String identificacionExtranjero, String provincia, String canton, String distrito, String barrio, Integer celular, Integer codigoPais, Integer telefono, String otraSena, String correoElectronico, String correoElectronico1, String correoElectronico2, String correoElectronico3, Integer descuento, String estado, Date created_at, Date updated_at, String observacionVenta, String tipoDocumentoExoneracion, String numeroDocumentoExoneracion, String nombreInstitucionExoneracion, Date fechaEmisionExoneracion, Empresa empresa, Usuario usuario) {
 		super();
 		this.id = id;
 		this.nombreCompleto = nombreCompleto;
@@ -141,6 +158,10 @@ public class Cliente implements Serializable {
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.observacionVenta = observacionVenta;
+		this.tipoDocumentoExoneracion = tipoDocumentoExoneracion;
+		this.numeroDocumentoExoneracion = numeroDocumentoExoneracion;
+		this.nombreInstitucionExoneracion = nombreInstitucionExoneracion;
+		this.fechaEmisionExoneracion = fechaEmisionExoneracion;
 		this.empresa = empresa;
 		this.usuario = usuario;
 	}
@@ -171,6 +192,46 @@ public class Cliente implements Serializable {
 	
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	
+	public String getTipoDocumentoExoneracion() {
+		return tipoDocumentoExoneracion;
+	}
+
+	
+	public void setTipoDocumentoExoneracion(String tipoDocumentoExoneracion) {
+		this.tipoDocumentoExoneracion = tipoDocumentoExoneracion;
+	}
+
+	
+	public String getNumeroDocumentoExoneracion() {
+		return numeroDocumentoExoneracion;
+	}
+
+	
+	public void setNumeroDocumentoExoneracion(String numeroDocumentoExoneracion) {
+		this.numeroDocumentoExoneracion = numeroDocumentoExoneracion;
+	}
+
+	
+	public String getNombreInstitucionExoneracion() {
+		return nombreInstitucionExoneracion;
+	}
+
+	
+	public void setNombreInstitucionExoneracion(String nombreInstitucionExoneracion) {
+		this.nombreInstitucionExoneracion = nombreInstitucionExoneracion;
+	}
+
+	
+	public Date getFechaEmisionExoneracion() {
+		return fechaEmisionExoneracion;
+	}
+
+	
+	public void setFechaEmisionExoneracion(Date fechaEmisionExoneracion) {
+		this.fechaEmisionExoneracion = fechaEmisionExoneracion;
 	}
 
 	public String getNombreCompleto() {

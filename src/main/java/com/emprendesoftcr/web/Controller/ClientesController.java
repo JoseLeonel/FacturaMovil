@@ -205,6 +205,8 @@ public class ClientesController {
 			cliente.setCanton(Constantes.EMPTY);
 			cliente.setBarrio(Constantes.EMPTY);
 			cliente.setCelular(Constantes.ZEROS);
+			
+			
 
 			cliente.setEmpresa(usuarioSesion.getEmpresa());
 			cliente.setCreated_at(new Date());
@@ -289,7 +291,9 @@ public class ClientesController {
 			clienteBD.setCodigoPais(cliente.getCodigoPais());
 			clienteBD.setIdentificacionExtranjero(cliente.getIdentificacionExtranjero());
 			clienteBD.setObservacionVenta(cliente.getObservacionVenta() ==null?Constantes.EMPTY:cliente.getObservacionVenta());
-
+      clienteBD.setTipoDocumentoExoneracion(cliente.getTipoDocumentoExoneracion());
+      clienteBD.setFechaEmisionExoneracion(cliente.getFechaEmisionExoneracion());
+      clienteBD.setNumeroDocumentoExoneracion(cliente.getNumeroDocumentoExoneracion());
 			clienteBo.modificar(clienteBD);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("cliente.modificado.correctamente", clienteBD);

@@ -839,7 +839,7 @@ public class FacturaBoImpl implements FacturaBo {
 			System.out.println(String.format("--Finaliza transaccion--> Thread=%d %s", id, "Fecha:" + new Date()));
 
 		} catch (Exception e) {
-			log.info("** Error  crear la factura: " + e.getMessage() + " fecha " + new Date());
+			log.error("** Error  crear la factura: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		} finally {
 			lock.unlock();
@@ -873,7 +873,7 @@ public class FacturaBoImpl implements FacturaBo {
 				}
 			}
 		} catch (Exception e) {
-			log.info("** Error  aplicar en el inventario: " + e.getMessage() + " fecha " + new Date());
+			log.error("** Error  aplicar en el inventario: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
 	}
@@ -896,7 +896,7 @@ public class FacturaBoImpl implements FacturaBo {
 				resultado = facturaCommand.getTotalComprobante();
 			}
 		} catch (Exception e) {
-			log.info("** Error  aplicar getTotalEfectivo : " + e.getMessage() + " fecha " + new Date());
+			log.error("** Error  aplicar getTotalEfectivo : " + e.getMessage() + " fecha " + new Date());
 			throw e;
 
 		}

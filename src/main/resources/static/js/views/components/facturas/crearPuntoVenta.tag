@@ -2029,6 +2029,11 @@ __AplicarYcrearFacturaTemporal(){
 * Aplicar la factura
 **/
 function aplicarFactura(estado){
+    if($("#tipoDoc").val() ==null){
+        mensajeError($.i18n.prop("Se presento inconveniente ,vuelva a presiona F8"))
+        return
+
+    }
     if(self.detail.length == 0 ){
          $('.precioVenta').val(null)
         $('.codigo').val("")
