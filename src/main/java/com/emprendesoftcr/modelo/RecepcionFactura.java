@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -83,6 +84,9 @@ public class RecepcionFactura implements Serializable {
 
 	@Column(name = "emisor_otra_sena")
 	private String						emisorOtraSena;
+
+	@Column(name = "emisor_nombre_comercial")
+	private String						emisorNombreComercial;
 
 	@Column(name = "receptor_nombre")
 	private String						receptorNombre;
@@ -164,6 +168,43 @@ public class RecepcionFactura implements Serializable {
 	@Column(name = "total_impuestos")
 	private Double						facturaTotalImpuestos;
 
+	@Column(name = "codigo_actividad")
+	private Double						facturaCodigoActividad;
+	@Column(name = "plazo_credito")
+	private Double						facturaPlazoCredito;
+	@Column(name = "total_serv_gravados")
+	private Double						facturaTotalServGravados;
+	@Column(name = "total_serv_exonerado")
+	private Double						facturaTotalServExonerado;
+	@Column(name = "total_mercancias_gravadas")
+	private Double						facturaTotalMercanciasGravadas;
+	@Column(name = "total_mercancias_exentas")
+	private Double						facturaTotalMercanciasExentas;
+	@Column(name = "total_mercExonerada")
+	private Double						facturaTotalMercExonerada;
+	@Column(name = "total_gravado")
+	private Double						facturaTotalGravado;
+	@Column(name = "total_exonerado")
+	private Double						facturaTotalExonerado;
+	@Column(name = "total_iva_devuelto")
+	private Double						facturaTotalIVADevuelto;
+	@Column(name = "total_otros_cargos")
+	private Double						facturaTotalOtrosCargos;
+	@Column(name = "total_descuentos")
+	private Double						facturaTotalDescuentos;
+	
+	@Column(name = "version_doc")
+	private String version_doc; 
+	
+	@Column(name = "total_impuesto_acreditar")
+	private Double	totalImpuestoAcreditar;
+
+	@Column(name = "total_gasto_aplicable")
+	private Double				totalDeGastoAplicable;
+	
+	@Column(name = "condicion_impuesto")
+	private String	condicionImpuesto;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "created_at")
@@ -180,6 +221,9 @@ public class RecepcionFactura implements Serializable {
 
 	@Column(name = "tipo_doc")
 	private String						tipoDoc;
+	
+	@Transient
+	private String detalles;
 
 	public RecepcionFactura(Long id, String mensaje, String detalleMensaje, String numeroConsecutivoReceptor, Integer estadoFirma, String emisorCedula, String emisorNombre, String emisorTipoCedula, String emisorCorreo, String emisorTelefono, String emisorCodigoProvincia, String emisorProvincia, String emisorCanton, String emisorCodigoCanton, String emisorDistrito, String emisorCodigoDistrito, String emisorOtraSena, String receptorNombre, String receptorCedula, String receptorTipoCedula, String receptorCorreo, String receptorProvincia, String receptorCodigoProvincia, String receptorCanton, String receptorCodigoCanton, String receptorDistrito, String receptorCodigoDistrito, String receptorOtraSena, String receptorTelefono, String receptorNombreComercial, String facturaConsecutivo,
 			String facturaClave, Date facturaFechaEmision, String facturaCondicionVenta, String facturaMedioPago, String facturaCodigoMoneda, Double facturaTipoCambio, Double facturaTotalServExentos, Double facturaTotalExento, Double facturaTotalVenta, Double facturaTotalVentaNeta, Double facturaTotalComprobante, Double facturaTotalImpuestos, Date created_at, Date updated_at, Empresa empresa) {
@@ -644,8 +688,186 @@ public class RecepcionFactura implements Serializable {
 		this.tipoDoc = tipoDoc;
 	}
 
+	
+	public String getEmisorNombreComercial() {
+		return emisorNombreComercial;
+	}
+
+	
+	public void setEmisorNombreComercial(String emisorNombreComercial) {
+		this.emisorNombreComercial = emisorNombreComercial;
+	}
+
+	
+	public Double getFacturaCodigoActividad() {
+		return facturaCodigoActividad;
+	}
+
+	
+	public void setFacturaCodigoActividad(Double facturaCodigoActividad) {
+		this.facturaCodigoActividad = facturaCodigoActividad;
+	}
+
+	
+	public Double getFacturaPlazoCredito() {
+		return facturaPlazoCredito;
+	}
+
+	
+	public void setFacturaPlazoCredito(Double facturaPlazoCredito) {
+		this.facturaPlazoCredito = facturaPlazoCredito;
+	}
+
+	
+	public Double getFacturaTotalServGravados() {
+		return facturaTotalServGravados;
+	}
+
+	
+	public void setFacturaTotalServGravados(Double facturaTotalServGravados) {
+		this.facturaTotalServGravados = facturaTotalServGravados;
+	}
+
+	
+	public Double getFacturaTotalServExonerado() {
+		return facturaTotalServExonerado;
+	}
+
+	
+	public void setFacturaTotalServExonerado(Double facturaTotalServExonerado) {
+		this.facturaTotalServExonerado = facturaTotalServExonerado;
+	}
+
+	
+	public Double getFacturaTotalMercanciasGravadas() {
+		return facturaTotalMercanciasGravadas;
+	}
+
+	
+	public void setFacturaTotalMercanciasGravadas(Double facturaTotalMercanciasGravadas) {
+		this.facturaTotalMercanciasGravadas = facturaTotalMercanciasGravadas;
+	}
+
+	
+	public Double getFacturaTotalMercanciasExentas() {
+		return facturaTotalMercanciasExentas;
+	}
+
+	
+	public void setFacturaTotalMercanciasExentas(Double facturaTotalMercanciasExentas) {
+		this.facturaTotalMercanciasExentas = facturaTotalMercanciasExentas;
+	}
+
+	
+	public Double getFacturaTotalMercExonerada() {
+		return facturaTotalMercExonerada;
+	}
+
+	
+	public void setFacturaTotalMercExonerada(Double facturaTotalMercExonerada) {
+		this.facturaTotalMercExonerada = facturaTotalMercExonerada;
+	}
+
+	
+	public Double getFacturaTotalGravado() {
+		return facturaTotalGravado;
+	}
+
+	
+	public void setFacturaTotalGravado(Double facturaTotalGravado) {
+		this.facturaTotalGravado = facturaTotalGravado;
+	}
+
+	
+	public Double getFacturaTotalExonerado() {
+		return facturaTotalExonerado;
+	}
+
+	
+	public void setFacturaTotalExonerado(Double facturaTotalExonerado) {
+		this.facturaTotalExonerado = facturaTotalExonerado;
+	}
+
+	
+	public Double getFacturaTotalIVADevuelto() {
+		return facturaTotalIVADevuelto;
+	}
+
+	
+	public void setFacturaTotalIVADevuelto(Double facturaTotalIVADevuelto) {
+		this.facturaTotalIVADevuelto = facturaTotalIVADevuelto;
+	}
+
+	
+	public Double getFacturaTotalOtrosCargos() {
+		return facturaTotalOtrosCargos;
+	}
+
+	
+	public void setFacturaTotalOtrosCargos(Double facturaTotalOtrosCargos) {
+		this.facturaTotalOtrosCargos = facturaTotalOtrosCargos;
+	}
+
+	
+	public Double getFacturaTotalDescuentos() {
+		return facturaTotalDescuentos;
+	}
+
+	
+	public void setFacturaTotalDescuentos(Double facturaTotalDescuentos) {
+		this.facturaTotalDescuentos = facturaTotalDescuentos;
+	}
+
 	public String getTipoDocumentoStr() {
 		return Utils.obtenerDescripcionTipoDocumento(this.tipoDoc);
+	}
+
+	public String getDetalles() {
+		return detalles;
+	}
+	
+	public void setDetalles(String detalles) {
+		this.detalles = detalles;
+	}
+
+	
+	public String getVersion_doc() {
+		return version_doc;
+	}
+
+	
+	public void setVersion_doc(String version_doc) {
+		this.version_doc = version_doc;
+	}
+
+	
+	public Double getTotalImpuestoAcreditar() {
+		return totalImpuestoAcreditar;
+	}
+
+	
+	public void setTotalImpuestoAcreditar(Double totalImpuestoAcreditar) {
+		this.totalImpuestoAcreditar = totalImpuestoAcreditar;
+	}
+
+	
+	public Double getTotalDeGastoAplicable() {
+		return totalDeGastoAplicable;
+	}
+
+	
+	public void setTotalDeGastoAplicable(Double totalDeGastoAplicable) {
+		this.totalDeGastoAplicable = totalDeGastoAplicable;
+	}
+
+	
+	public String getCondicionImpuesto() {
+		return condicionImpuesto;
+	}
+
+	
+	public void setCondicionImpuesto(String condicionImpuesto) {
+		this.condicionImpuesto = condicionImpuesto;
 	}
 
 }

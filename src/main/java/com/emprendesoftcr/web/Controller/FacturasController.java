@@ -48,6 +48,7 @@ import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Bo.HaciendaBo;
+import com.emprendesoftcr.Bo.MesaBo;
 import com.emprendesoftcr.Bo.RecepcionFacturaBo;
 import com.emprendesoftcr.Bo.TipoCambioBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
@@ -69,6 +70,7 @@ import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.Mesa;
 import com.emprendesoftcr.modelo.RecepcionFactura;
+import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
@@ -262,6 +264,9 @@ public class FacturasController {
 
 	@Autowired
 	private FacturaBo																									facturaBo;
+
+	@Autowired
+	private MesaBo																										mesaBo;
 
 	@Autowired
 	private EmpresaPropertyEditor																			empresaPropertyEditor;
@@ -913,14 +918,41 @@ public class FacturasController {
 			recepcionFactura.setTipoDoc(Utils.obtenerTipoDocumentoConsecutivo(recepcionFactura.getFacturaConsecutivo()));
 			recepcionFactura.setCreated_at(new Date());
 			recepcionFactura.setUpdated_at(new Date());
+			recepcionFactura.setTotalImpuestoAcreditar(recepcionFactura.getFacturaTotalImpuestos());
+			recepcionFactura.setTotalDeGastoAplicable(recepcionFactura.getFacturaTotalComprobante() - recepcionFactura.getFacturaTotalImpuestos());
 			recepcionFacturaBo.agregar(recepcionFactura);
+		
+			//Se agregan los detalles
+			this.agregaDetalleFacturas(recepcionFactura, recepcionFactura.getDetalles()); 
+
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("recepcionFactura.agregar.correctamente", recepcionFactura);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
-
 	}
+	
+	private void agregaDetalleFacturas(RecepcionFactura recepcionFactura, String jsonDetalles) {
+		JSONObject json = null;
+		try {
+			json = (JSONObject) new JSONParser().parse(jsonDetalles);
+		} catch (org.json.simple.parser.ParseException e) {
+			e.printStackTrace();
+		}
+		
+		// Agregar Lineas de Detalle
+		JSONArray jsonArrayDetalle = (JSONArray) json.get("data");
+		Gson gson = new Gson();
+
+		if (jsonArrayDetalle != null) {
+			for (int i = 0; i < jsonArrayDetalle.size(); i++) {
+				RecepcionFacturaDetalle detalle = gson.fromJson(jsonArrayDetalle.get(i).toString(), RecepcionFacturaDetalle.class);
+				detalle.setRecepcionFactura(recepcionFactura);
+				recepcionFacturaBo.agregar(detalle);
+			}
+		}		
+	}
+	
 
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarRecepcionFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -1311,6 +1343,36 @@ public class FacturasController {
 			facturaBo.modificar(facturaBD);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.modificado.correctamente", facturaBD);
 
+		} catch (Exception e) {
+			return RespuestaServiceValidator.ERROR(e);
+		}
+
+	}
+	
+	/**
+	 * Cambia la factura de mesa
+	 * @param request
+	 * @param model
+	 * @param idFactura
+	 * @param idMesa
+	 * @param result
+	 * @param status
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/CambiarFacturaMesa.do", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceValidator CambiarFacturaMesa(HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestParam Long idFactura, @RequestParam Long idMesa) throws Exception {
+		try {
+			Factura facturaBD = facturaBo.findById(idFactura);
+			if (facturaBD == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.no.existe");
+			}
+			facturaBD.setMesa(mesaBo.buscar(idMesa));
+			facturaBD.setUpdated_at(new Date());
+			facturaBo.modificar(facturaBD);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.modificado.correctamente", facturaBD);
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
 		}
