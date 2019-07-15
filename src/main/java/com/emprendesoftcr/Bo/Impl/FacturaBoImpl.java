@@ -435,19 +435,19 @@ public class FacturaBoImpl implements FacturaBo {
 
 			// cambios de doble impuesto
 
-			totalServGravados = totalServGravados + getTotalServicioGravados(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getSubTotal(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1());
+			totalServGravados = totalServGravados + getTotalServicioGravados(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoTotal(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1());
 			totalServExonerado = totalServExonerado + getTotalServExonerado(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoExoneracion());
-			totalMercExonerada = totalMercExonerada + getTotalMercExonerada(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getSubTotal(), detalle.getPorcentajeExoneracion());
+			totalMercExonerada = totalMercExonerada + getTotalMercExonerada(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoTotal(), detalle.getPorcentajeExoneracion());
 
 			totalImpuesto = totalImpuesto + getTotalImpuesto(detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getTipoDocumentoExoneracion(), detalle.getImpuestoNeto());
-			totalMercanciasGravadas = totalMercanciasGravadas + getTotalMercanciasGravadas(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getSubTotal(), detalle.getPorcentajeExoneracion());
-			totalMercanciasExentas = totalMercanciasExentas + getTotalMercanciasExentas(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(),detalle.getSubTotal());
+			totalMercanciasGravadas = totalMercanciasGravadas + getTotalMercanciasGravadas(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal(), detalle.getPorcentajeExoneracion());
+			totalMercanciasExentas = totalMercanciasExentas + getTotalMercanciasExentas(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(),detalle.getMontoTotal());
 
-			totalServExentos = totalServExentos + getTotalServExentos(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getSubTotal());
+			totalServExentos = totalServExentos + getTotalServExentos(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal());
 
-			totalExento = totalExento + getTotalExentos(detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getSubTotal());
+			totalExento = totalExento + getTotalExentos(detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal());
 
-			totalExonerado = totalExonerado + getTotalExonerado(totalServExonerado, totalMercExonerada);
+			
 			totalDescuentos = totalDescuentos + detalle.getMontoDescuento();
 			montoTotalLinea = getMontoTotalLinea(detalle.getSubTotal(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getImpuestoNeto(), detalle.getTipoDocumentoExoneracion());
 			totalComprobante = totalComprobante + montoTotalLinea;
@@ -460,6 +460,7 @@ public class FacturaBoImpl implements FacturaBo {
 			detalleDao.agregar(detalle);
 
 		}
+		totalExonerado = totalExonerado + getTotalExonerado(totalServExonerado, totalMercExonerada);
 		totalGravado = totalGravado + totalMercanciasGravadas + totalServGravados;
 		totalVenta = totalVenta + totalExento + totalGravado + totalExonerado;
 		if (factura.getTotalOtrosCargos() == null)
@@ -504,14 +505,14 @@ public class FacturaBoImpl implements FacturaBo {
 		factura.setTotalServGravados(totalServGravados);
 		factura.setTotalGravado(totalGravado);
 		factura.setTotalExento(totalExento);
-		factura.setTotalVenta(totalVenta);
-		factura.setTotalVentaNeta(totalVentaNeta);
+		factura.setTotalVenta(Utils.roundFactura(totalVenta,5));
+		factura.setTotalVentaNeta(Utils.roundFactura(totalVentaNeta,5));
 		factura.setTotalDescuentos(totalDescuentos);
 		factura.setTotalImpuesto(totalImpuesto);
 		factura.setTotalImpuestoServicio(totalImpServicios);
 		totalComprobante = factura.getTotalOtrosCargos() + totalImpuesto + totalVentaNeta;
 		totalComprobante = totalComprobante - totalIVADevuelto;
-		factura.setTotalComprobante(totalComprobante);
+		factura.setTotalComprobante(Utils.roundFactura(totalComprobante,5));
 
 	}
 
@@ -814,7 +815,7 @@ public class FacturaBoImpl implements FacturaBo {
 	 */
 	private Double getSubtotal(Double montoTotal, Double montoDescuento) {
 
-		return montoTotal - montoDescuento;
+		return Utils.roundFactura( montoTotal - montoDescuento,5);
 	}
 
 	/**
