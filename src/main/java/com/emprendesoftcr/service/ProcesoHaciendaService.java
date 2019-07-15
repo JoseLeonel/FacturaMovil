@@ -3,6 +3,7 @@ package com.emprendesoftcr.service;
 import java.util.ArrayList;
 
 import com.emprendesoftcr.fisco.OpenIDConnectHacienda;
+import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.RecepcionFactura;
@@ -34,6 +35,9 @@ public interface ProcesoHaciendaService {
 	// Proceso para firmar las facturas recibidas y aceptadas en el sistema
 	void procesoFirmadoRecepcionFactura() throws Exception;
 
-	void procesoCambiarConsecutivo() throws Exception;
+	//void procesoCambiarConsecutivo() throws Exception;
 
+	Boolean verificaRecepcionFactura(Empresa empresa, String clave) throws Exception;
+
+	
 }

@@ -5,10 +5,13 @@ import java.util.Date;
 
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.RecepcionFactura;
+import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 
 public interface RecepcionFacturaBo {
 
 	void agregar(RecepcionFactura recepcionFactura);
+
+	void agregar(RecepcionFacturaDetalle recepcionFacturaDetalle);
 
 	void modificar(RecepcionFactura recepcionFactura);
 
@@ -19,5 +22,6 @@ public interface RecepcionFacturaBo {
 	Collection<RecepcionFactura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma);
 	
 	Collection<RecepcionFactura> findByClave(String cedulaEmisor, String clave);
+
 	Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula);
 }
