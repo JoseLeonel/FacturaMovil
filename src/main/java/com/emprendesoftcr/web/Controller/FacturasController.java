@@ -1050,6 +1050,13 @@ public class FacturasController {
 					}
 				}
 			}
+			if (facturaCommand.getTipoDoc() == null ){
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.tipo.doc", result.getAllErrors());
+			}
+			if (facturaCommand.getTipoDoc() == null ){
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.tipo.doc", result.getAllErrors());
+			}
+
 			if(facturaCommand.getCodigoActividad() == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.actividad.comercial.no.existe", result.getAllErrors());
 			}else if (facturaCommand.getCodigoActividad().equals(Constantes.EMPTY)) {

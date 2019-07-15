@@ -6,11 +6,16 @@ public class Constantes {
 
 	public static final ResourceBundle	RESOURCE_BUNDLE																			= ResourceBundle.getBundle("factura");
 //Esquema de XML
-	public static final Integer					ACTIVIDAD_COMERCIAL_PRINCIPAL																			= 1;
-	public static final Integer					ACTIVIDAD_COMERCIAL_NO_PRINCIPAL																			= 0;
+	public static final Integer					ACTIVIDAD_COMERCIAL_PRINCIPAL												= 1;
+	public static final Integer					ACTIVIDAD_COMERCIAL_NO_PRINCIPAL										= 0;
 	public static final Integer					ESQUEMA_XML_4_2																			= 1;
 	public static final Integer					ESQUEMA_XML_4_3																			= 2;
 
+	// unidad de medidas SP
+	public static final String					UNIDAD_MEDIDA_SERVICIO_SP														= "Sp";
+	public static final String					UNIDAD_MEDIDA_SERVICIO_OS														= "Os";
+	public static final String					UNIDAD_MEDIDA_SERVICIO_SPE													= "Spe";
+	public static final String					UNIDAD_MEDIDA_SERVICIO_ST														= "St";
 	// **Impuesto de servicio
 	public static final String					TIPO_DOCUMENTO_IMPUESTO_SERVICIO_OTRO_CARGO					= "06";
 	public static final String					IMPUESTO_SERVICIO_OTRO_CARGO_RESTAURANTE						= "Impuesto 10% por servicio Restaurante";

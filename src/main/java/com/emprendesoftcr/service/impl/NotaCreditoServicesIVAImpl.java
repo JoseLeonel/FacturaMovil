@@ -315,7 +315,7 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
   		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
   			return resultado;
   		}
-	        resultado = "<ImpuestoNeto>" + FacturaElectronicaUtils.getConvertirBigDecimal(montoImpuestoNeto )+ "</ImpuestoNeto>";
+	        resultado = "<ImpuestoNeto>" + FacturaElectronicaUtils.truncateDecimal(montoImpuestoNeto,5 )+ "</ImpuestoNeto>";
 			
 		} catch (Exception e) {
 			log.info("** Error  xmlImpuestos Factura :" + idFactura  + e.getMessage() + " fecha " + new Date());
@@ -328,15 +328,14 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
   	String resultado = Constantes.EMPTY;
   	
   	
-  	try {
-  		if(baseImponible.equals(Constantes.ZEROS_DOUBLE)) {
-    		return resultado;
-    	}
-    	if(baseImponible == null) {
-    		return resultado;
-    	}
+  		try {
+	  	 	if(baseImponible == null) {
+	    		return resultado;
+	    	}else if(baseImponible.equals(Constantes.ZEROS_DOUBLE)) {
+	    		return resultado;
+	    	}
     	
-	        resultado = "<BaseImponible>" +  FacturaElectronicaUtils.getConvertirBigDecimal(baseImponible) + "</BaseImponible>" ;
+	        resultado = "<BaseImponible>" +  FacturaElectronicaUtils.truncateDecimal(baseImponible,5) + "</BaseImponible>" ;
 			
 		} catch (Exception e) {
 			log.info("** Error  xmlImpuestos Factura :" + idFactura  + e.getMessage() + " fecha " + new Date());
@@ -354,7 +353,7 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
 		}
 		try {
 			 resultado = "<Descuento>" +
-					  "<MontoDescuento>" + FacturaElectronicaUtils.getConvertirBigDecimal(descuento) + "</MontoDescuento>" +
+					  "<MontoDescuento>" + FacturaElectronicaUtils.truncateDecimal(descuento,5) + "</MontoDescuento>" +
 		        "<NaturalezaDescuento>" + Constantes.FORMATO_NATURALEZA_DESCUENTO + "</NaturalezaDescuento>" + 
 		        "</Descuento>" ;
 			
@@ -381,14 +380,14 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
   			}
   			
   		}
-  		nodoTarifa = "<Tarifa>" + FacturaElectronicaUtils.getConvertirBigDecimalFortmato2Decimales(impuesto ) + "</Tarifa>" ;
+  		nodoTarifa = "<Tarifa>" + FacturaElectronicaUtils.truncateDecimal(impuesto,2 ) + "</Tarifa>" ;
   		if(montoImpuesto != null && tipoImpuesto !=null) {
 	  		if(montoImpuesto > Constantes.ZEROS_DOUBLE) {
 	        resultado = "<Impuesto>" +
 	            "<Codigo>" + Utils.zeroPad(FacturaElectronicaUtils.procesarTexto(tipoImpuesto), 2) + "</Codigo>" +
 	            nodoCodigoTarifa +
 	            nodoTarifa+
-	            "<Monto>" +  FacturaElectronicaUtils.getConvertirBigDecimal(montoImpuesto) + "</Monto>";
+	            "<Monto>" +  FacturaElectronicaUtils.truncateDecimal(montoImpuesto,2) + "</Monto>";
 	        resultado += "</Impuesto>";
 	    	}
   		}

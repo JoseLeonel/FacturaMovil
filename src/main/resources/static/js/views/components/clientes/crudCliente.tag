@@ -117,43 +117,35 @@
                 <div class="panel-group" id="accordion">
                     <div class="panel panel-default" id="cuentas">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" >
-                        <div class="panel-heading" style="background: #3c8dbc; color: white;">
-                            <h4 class="panel-title"><span class="fa fa-bank  col-md-offset-5"></span> Exoneracion</h4>
-                        </div>
+                            <div class="panel-heading" style="background: #3c8dbc; color: white;">
+                                <h4 class="panel-title"><span class="fa fa-bank  col-md-offset-5"></span> Exoneracion</h4>
+                            </div>
                         </a>
                         <div id="collapse2" class="panel-collapse collapse">
                             <div class="panel-body">
-                              <form class="form-horizontal formularioExoneracion" name= "formularioExoneracion" id="formularioExoneracion">
                                 <div class="row">    
                                     <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                         <label  >{$.i18n.prop("factura.tipo.documento")}</label>
-                                        <select  class="form-control tipoDocExonerado" id="tipoDocExonerado" name="tipoDocExonerado"   >
-                                            <option each={comboTipoDocumentoExonerados} value="{estado}" selected="{montoExoneracion.tipoDoc ==estado?true:false}" >{descripcion}</option>
+                                        <select  class="form-control tipoDocumentoExoneracion" id="tipoDocumentoExoneracion" name="tipoDocumentoExoneracion"   >
+                                            <option each={comboTipoDocumentoExonerados} value="{estado}" selected="{cliente.tipoDocumentoExoneracion ==estado?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>
                                     <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                    <div class="form-group ">
-                                            <label for="pago_tipoVentaL">#Compra Exoneracion </label> 
-                                            <input  type="text"  class="form-control numeroDocumentoExonerado" id="numeroDocumentoExonerado" name = "numeroDocumentoExonerado" autofocus="autofocus"  value ="{cliente.numeroDocumentoExonerado}">                    
-                                        </div>
+                                        <label >#Compra Exoneracion </label> 
+                                        <input  type="text"  class="form-control numeroDocumentoExoneracion" id="numeroDocumentoExoneracion" name = "numeroDocumentoExoneracion" autofocus="autofocus"  value ="{cliente.numeroDocumentoExoneracion}">                    
                                     </div>
                                     <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                        <div class="form-group ">
-                                            <label for="pago_tipoVentaL">Fecha Exoneracion  </label> 
-                                            <div  class="form-group input-group date datepickerFechaEmisionExoneracion" data-provide="datepicker"  data-date-start-date="30d" data-date-format="yyyy-mm-dd">
-                                                <input type="text" class="form-control fechaEmisionExoneracion" name="fechaEmisionExoneracion" id="fechaEmisionExoneracion" value="{cliente.fechaCredito}" >
-                                                <div class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-th"></span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <label >Fecha Exoneracion  </label> 
+                                        <input  type="text"  class="form-control fechaEmisionExoneracionSTR" id="fechaEmisionExoneracionSTR" name = "fechaEmisionExoneracionSTR" autofocus="autofocus"  value ="{cliente.fechaEmisionExoneracionSTR}">                    
                                     </div>
-                                    
                                 </div>
-                                </form>
-
-
-
+                                <div class="row">
+                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                        <label >% Porcentaje Exoneracion  </label> 
+                                        <input  type="number"  class="form-control porcentajeExoneracion" id="porcentajeExoneracion" name = "porcentajeExoneracion" autofocus="autofocus"  value ="{cliente.porcentajeExoneracion}">                    
+                                    </div>
+                               
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -165,6 +157,7 @@
 
 
 <style type ="text/css">
+
     .botones{
         margin-bottom: 0.5%;
     }
@@ -270,38 +263,46 @@ self.on('mount',function(){
        __Agregar()
     }
     __ComboTipoDocumentoExonerados()
-    __EventosExoneracion()
+    configuracionDatePicker()
+    
     window.addEventListener( "keydown", function(evento){
        $(".errorServerSideJgrid").remove();
     }, false );
 })
 
-function __EventosExoneracion(){
-    $("#formularioExoneracion").validate(reglasDeValidacionExoneracion());
-    $("#numeroDocumentoExonerado").attr("maxlength", 40);
+function configuracionDatePicker(){
+    $("#fechaEmisionExoneracionSTR").keydown(function(e) {
+        e.preventDefault();
+    });
+    $('#fechaEmisionExoneracionSTR').datetimepicker({
+        locale: 'es',
+        format: 'YYYY-MM-DD hh:mm:ss a',
+        keyBinds: {
+           'delete': function () {
+                return false;
+            }
+        },
+        tooltips: {
+           today: 'Hoy',
+           clear: 'Limpiar',
+           close: 'Cerrar',
+           selectMonth: 'Seleccionar Mes',
+           prevMonth: 'Mes Anterior',
+           nextMonth: 'Mes Siguiente',
+           selectYear: 'Seleccionar A\u00F1o',
+           prevYear: 'A\u00F1o Anterior',
+           nextYear: 'A\u00F1o Siguiente',
+           selectTime: 'Seleccionar',
+           incrementHour: 'Incrementar Hora',
+           decrementHour: 'Decrementar Hora',
+           incrementMinute: 'Incrementar Minutos',
+           decrementMinute: 'Decrementar Minutos',
+           togglePeriod: 'Cambiar',
+           pickHour: 'Seleccionar Hora',
+           pickMinute: 'Seleccionar Minutos'
+        }
+    });
 }
-
-/**
-* Camps requeridos
-**/
-var reglasDeValidacionExoneracion = function() {
-	var validationOptions = $.extend({}, formValidationDefaults, {
-		rules : {
-             numeroDocumentoExonerado:{
-                 maxlength:40,
-                 required : true,
-                 minlength:1,
-             },
-             fechaEmisionExoneracion:{
-                 required : true,
-             }         
-  
-		},
-		ignore : []
-
-	});
-	return validationOptions;
-};
 
 /**
 * cargar los tipos de Documento de la factura
@@ -381,10 +382,14 @@ function _incializarCampos(){
     $('.correoElectronico1').val(null)
     $('.correoElectronico2').val(null)
     $('.correoElectronico3').val(null)
+    $('.porcentajeExoneracion').val(null)
+    $('.fechaEmisionExoneracion').val(null)
+    $('.numeroDocumentoExoneracion').val(null)
     $('.otraSena').val(null)
     $('.nombreComercial').val(null)
     $(".errorServerSideJgrid").remove();
     $("#formulario").validate(reglasDeValidacion());
+    configuracionDatePicker()
     self.cliente = {
         id:null,
         nombreCompleto:"",
@@ -401,6 +406,13 @@ function _incializarCampos(){
         correoElectronico1:"",
         correoElectronico2:"",
         correoElectronico3:"",
+        montoExoneracion:0,
+        porcentajeExoneracion:0,
+        fechaEmisionExoneracion:null,
+        nombreInstitucionExoneracion:"",
+        numeroDocumentoExoneracion:"",
+        tipoDocumentoExoneracion:"",
+
         descuento:0,
         estado:"",
         sucursal:{
@@ -502,7 +514,20 @@ var reglasDeValidacion = function() {
             identificacionExtranjero : {
                 maxlength:20,
                 minlength:9,
-			}                       
+			},
+            porcentajeExoneracion:{
+             number:true,
+             porcentajes:true
+            },
+            numeroDocumentoExoneracion:{
+              maxlength:40,
+            },
+            tipoDocumentoExoneracion:{
+              maxlength:2,
+            },
+            nombreInstitucionExoneracion:{
+              maxlength:160,
+            }                          
 		},
 		ignore : []
 
@@ -563,6 +588,13 @@ function __Eventos(){
             }
 	})
 
+    $('.porcentajeExoneracion').mask('000', {
+            'translation' : {
+                0 : {
+                    pattern : /[0-9]/
+                }
+            }
+	})
 
 }
 /**
@@ -636,10 +668,44 @@ __Modificar(){
     if(validarTamanosCedulas()){
         return
     }
+    if(validaExoneracion()){
+        return
+    }
     self.error = false;
     self.exito = false;
     self.update();
    __modificarRegistro("#formulario",$.i18n.prop("cliente.mensaje.alert.modificar"),'ModificarClienteAjax.do','ListarClientesAjax.do','#tableListar')
+}
+
+function validaExoneracion(){
+   if($("#numeroDocumentoExoneracion").val() == null){
+       return false
+   }
+   var valor  = $("#numeroDocumentoExoneracion").val()
+   if(valor.length ==0){
+       return false
+   }
+   if($('#fechaEmisionExoneracionSTR').val() == null){
+       sweetAlert("", "Campo requerido La fecha de emision de la exoneracion", "error");
+       return true
+   }
+   valor  = $('#fechaEmisionExoneracionSTR').val()
+   if(valor.length ==0){
+        sweetAlert("", "Campo requerido La fecha de emision de la exoneracion", "error");
+       return true
+   }
+   valor  = __valorNumerico($('#porcentajeExoneracion').val())
+   if(valor ==0){
+        sweetAlert("", "El porcentaje debe ser mayor a cero", "error");
+       return true
+   }
+   if(valor > 100){
+        sweetAlert("", "El porcentaje debe ser menor o igual al 100%", "error");
+       return true
+   }
+
+   return false;
+
 }
 /**
 *   Agregar 
@@ -648,14 +714,14 @@ __agregar(){
     if(validarTamanosCedulas()){
         return
     }
-    resultado = __agregarRegistro("#formulario",$.i18n.prop("cliente.mensaje.alert.agregar"),'AgregarClienteAjax.do','ListarClientesAjax.do','#tableListar')
-     if ($("#formulario").valid()) {
-         var numeroDocumentoExonerado = $(".numeroDocumentoExonerado").val()
-         if(numeroDocumentoExonerado.length > 0){
-             if ($("#formularioExoneracion").valid()) {
+    if(validaExoneracion()){
+        return
+    }
 
-             }else{
-                 swal({
+     if ($("#formulario").valid()) {
+        aplicarCreacion()
+    }else{
+        swal({
       	        title: '',
       	        text: "Error Faltan datos requeridos",
       	        type: 'error',
@@ -663,9 +729,12 @@ __agregar(){
       	        confirmButtonText: 'Aceptar',
             })
             return true
-             }
-         }
+    }
+}
+
+function aplicarCreacion(){
         // Permite obtener todos los valores de los elementos del form del jsp
+        //resultado = __agregarRegistro("#formulario",$.i18n.prop("cliente.mensaje.alert.agregar"),'AgregarClienteAjax.do','ListarClientesAjax.do','#tableListar')
         var formulario = $("#formulario").serialize();
         swal({
            title: '',
@@ -721,20 +790,9 @@ __agregar(){
                     }
                 });
             }
-        });
-        
-    }else{
-        swal({
-      	        title: '',
-      	        text: "Error Faltan datos requeridos",
-      	        type: 'error',
-      	        showCancelButton: false,
-      	        confirmButtonText: 'Aceptar',
-            })
-            return true
-    }
-}
+        })        
 
+}
 
 /**
 *  Consultar  especifico
@@ -781,6 +839,8 @@ function __consultar(){
                         __Eventos()
                         
                          $('.tipoCedula').val(self.cliente.tipoCedula)
+                         $("#fechaEmisionExoneracionSTR").val(self.cliente.fechaEmisionExoneracionSTR)
+                         $("#numeroDocumentoExoneracion").val(self.cliente.numeroDocumentoExoneracion)
                         
                         
                     });

@@ -30,12 +30,11 @@ import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
-import com.emprendesoftcr.modelo.Articulo;
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Usuario;
-import com.emprendesoftcr.web.command.ArticuloCommand;
 import com.emprendesoftcr.web.command.ClienteCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
@@ -137,7 +136,7 @@ public class ClientesController {
 		delimitadores.addFiltro(dataTableFilter);
 		dataTableFilter = new JqGridFilter("cedula", "'" + Constantes.CEDULA_CLIENTE_FRECUENTE + "'", "<>");
 		delimitadores.addFiltro(dataTableFilter);
-		
+
 		delimitadores = new DataTableDelimitador(request, "Cliente");
 		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
 			String nombreUsuario = request.getUserPrincipal().getName();
@@ -152,10 +151,10 @@ public class ClientesController {
 			Cliente object = (Cliente) iterator.next();
 			// no se carga el usuario del sistema el id -1
 			if (object.getId().longValue() > 0L) {
-				if(object.getEstado().equals(Constantes.ESTADO_ACTIVO)) {
-					solicitudList.add(new ClienteCommand(object));	
+				if (object.getEstado().equals(Constantes.ESTADO_ACTIVO)) {
+					solicitudList.add(new ClienteCommand(object));
 				}
-				
+
 			}
 		}
 
@@ -167,7 +166,6 @@ public class ClientesController {
 		respuestaService.setAaData(solicitudList);
 		return respuestaService;
 
-		
 	}
 
 	/**
@@ -183,7 +181,7 @@ public class ClientesController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/AgregarClienteAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute Cliente cliente, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator agregar(HttpServletRequest request, ModelMap model, @ModelAttribute ClienteCommand clienteCommand, BindingResult result, SessionStatus status) throws Exception {
 		try {
 
 			String nombreUsuario = request.getUserPrincipal().getName();
@@ -191,7 +189,7 @@ public class ClientesController {
 
 			Cliente clienteValidar = null;
 
-			clienteValidar = clienteBo.buscarPorCedulaYEmpresa(cliente.getCedula().trim(), usuarioSesion.getEmpresa());
+			clienteValidar = clienteBo.buscarPorCedulaYEmpresa(clienteCommand.getCedula().trim(), usuarioSesion.getEmpresa());
 			if (clienteValidar != null) {
 				result.rejectValue("cedula", "error.cliente.existe.cedula");
 			}
@@ -199,14 +197,37 @@ public class ClientesController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+			Cliente cliente = new Cliente();
+			cliente.setCedula(clienteCommand.getCedula());
+			cliente.setTipoCedula(clienteCommand.getTipoCedula());
+			cliente.setDescuento(clienteCommand.getDescuento());
+			cliente.setNombreCompleto(clienteCommand.getNombreCompleto());
+			cliente.setCorreoElectronico(clienteCommand.getCorreoElectronico());
+			cliente.setCorreoElectronico3(clienteCommand.getCorreoElectronico3());
+			cliente.setCorreoElectronico1(clienteCommand.getCorreoElectronico1());
+			cliente.setCorreoElectronico2(clienteCommand.getCorreoElectronico2());
+			if (clienteCommand.getFechaEmisionExoneracionSTR() != null) {
+				if (!clienteCommand.getFechaEmisionExoneracionSTR().equals(Constantes.EMPTY)) {
+					Date fechaInicio = Utils.parseDateImpuestoServicio(clienteCommand.getFechaEmisionExoneracionSTR());
+					cliente.setFechaEmisionExoneracion(fechaInicio);
+					cliente.setNombreInstitucionExoneracion(clienteCommand.getNombreCompleto());
+					cliente.setNumeroDocumentoExoneracion(clienteCommand.getNumeroDocumentoExoneracion());
+					cliente.setTipoDocumentoExoneracion(clienteCommand.getTipoDocumentoExoneracion());
+					cliente.setPorcentajeExoneracion(clienteCommand.getPorcentajeExoneracion());
 
+				}
+			}
+      cliente.setCodigoPais(clienteCommand.getCodigoPais());
+      cliente.setIdentificacionExtranjero(clienteCommand.getIdentificacionExtranjero());
+      cliente.setEstado(clienteCommand.getEstado());
+     cliente.setOtraSena(clienteCommand.getOtraSena());
+     cliente.setObservacionVenta(clienteCommand.getObservacionVenta());
+     cliente.setNombreComercial(clienteCommand.getNombreComercial());
 			cliente.setProvincia(Constantes.EMPTY);
 			cliente.setDistrito(Constantes.EMPTY);
 			cliente.setCanton(Constantes.EMPTY);
 			cliente.setBarrio(Constantes.EMPTY);
 			cliente.setCelular(Constantes.ZEROS);
-			
-			
 
 			cliente.setEmpresa(usuarioSesion.getEmpresa());
 			cliente.setCreated_at(new Date());
@@ -233,20 +254,20 @@ public class ClientesController {
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ModificarClienteAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Cliente cliente, BindingResult result, SessionStatus status) throws Exception {
+	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute ClienteCommand clienteCommand, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			String nombreUsuario = request.getUserPrincipal().getName();
 			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("cliente.no.modificado", result.getAllErrors());
 			}
-			Cliente clienteBD = clienteBo.buscar(cliente.getId());
+			Cliente clienteBD = clienteBo.buscar(clienteCommand.getId());
 
 			if (clienteBD == null) {
 				return RESPONSES.ERROR.CLIENTE.NO_EXISTE;
 			}
 			Cliente clienteValidar = null;
-			if (!cliente.getCedula().equals(clienteBD.getCedula())) {
+			if (!clienteCommand.getCedula().equals(clienteBD.getCedula())) {
 				Boolean verificarFacturas = false;
 				Collection<Factura> facturas = facturaBo.findByClienteAndEmpresa(clienteBD, usuarioSesion.getEmpresa());
 				if (facturas != null) {
@@ -256,7 +277,7 @@ public class ClientesController {
 					}
 				}
 				if (verificarFacturas == false) {
-					clienteValidar = clienteBo.buscarPorCedulaYEmpresa(cliente.getCedula(), usuarioSesion.getEmpresa());
+					clienteValidar = clienteBo.buscarPorCedulaYEmpresa(clienteCommand.getCedula(), usuarioSesion.getEmpresa());
 					if (clienteValidar != null) {
 						result.rejectValue("cedula", "error.cliente.existe.cedula");
 					}
@@ -267,33 +288,42 @@ public class ClientesController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+			if (clienteCommand.getFechaEmisionExoneracionSTR() != null) {
+				if (!clienteCommand.getFechaEmisionExoneracionSTR().equals(Constantes.EMPTY)) {
+					Date fechaInicio = Utils.parseDateImpuestoServicio(clienteCommand.getFechaEmisionExoneracionSTR());
+					clienteBD.setFechaEmisionExoneracion(fechaInicio);
+					clienteBD.setNombreInstitucionExoneracion(clienteCommand.getNombreCompleto());
+					clienteBD.setNumeroDocumentoExoneracion(clienteCommand.getNumeroDocumentoExoneracion());
+					clienteBD.setTipoDocumentoExoneracion(clienteCommand.getTipoDocumentoExoneracion());
+					clienteBD.setPorcentajeExoneracion(clienteCommand.getPorcentajeExoneracion());
+
+				}
+			}
+
 			clienteBD.setProvincia(Constantes.EMPTY);
 			clienteBD.setDistrito(Constantes.EMPTY);
 			clienteBD.setCanton(Constantes.EMPTY);
 			clienteBD.setBarrio(Constantes.EMPTY);
-			clienteBD.setCorreoElectronico1(cliente.getCorreoElectronico1());
-			clienteBD.setCorreoElectronico2(cliente.getCorreoElectronico2());
-			clienteBD.setCorreoElectronico3(cliente.getCorreoElectronico3());
+			clienteBD.setCorreoElectronico1(clienteCommand.getCorreoElectronico1());
+			clienteBD.setCorreoElectronico2(clienteCommand.getCorreoElectronico2());
+			clienteBD.setCorreoElectronico3(clienteCommand.getCorreoElectronico3());
 
-			clienteBD.setCedula(cliente.getCedula());
-			clienteBD.setNombreCompleto(cliente.getNombreCompleto());
-			clienteBD.setCorreoElectronico(cliente.getCorreoElectronico());
-			clienteBD.setDescuento(cliente.getDescuento());
-			clienteBD.setOtraSena(cliente.getOtraSena());
-			clienteBD.setTipoCedula(cliente.getTipoCedula());
-			clienteBD.setNombreComercial(cliente.getNombreComercial());
-			clienteBD.setObservacionVenta(cliente.getObservacionVenta());
+			clienteBD.setCedula(clienteCommand.getCedula());
+			clienteBD.setNombreCompleto(clienteCommand.getNombreCompleto());
+			clienteBD.setCorreoElectronico(clienteCommand.getCorreoElectronico());
+			clienteBD.setDescuento(clienteCommand.getDescuento());
+			clienteBD.setOtraSena(clienteCommand.getOtraSena());
+			clienteBD.setTipoCedula(clienteCommand.getTipoCedula());
+			clienteBD.setNombreComercial(clienteCommand.getNombreComercial());
+			clienteBD.setObservacionVenta(clienteCommand.getObservacionVenta());
 			clienteBD.setUpdated_at(new Date());
-			clienteBD.setEstado(cliente.getEstado());
-			clienteBD.setTelefono(cliente.getTelefono());
-			clienteBD.setCelular(cliente.getCelular());
+			clienteBD.setEstado(clienteCommand.getEstado());
+			clienteBD.setTelefono(clienteCommand.getTelefono());
+			clienteBD.setCelular(clienteCommand.getCelular());
 			clienteBD.setUsuario(usuarioSesion);
-			clienteBD.setCodigoPais(cliente.getCodigoPais());
-			clienteBD.setIdentificacionExtranjero(cliente.getIdentificacionExtranjero());
-			clienteBD.setObservacionVenta(cliente.getObservacionVenta() ==null?Constantes.EMPTY:cliente.getObservacionVenta());
-      clienteBD.setTipoDocumentoExoneracion(cliente.getTipoDocumentoExoneracion());
-      clienteBD.setFechaEmisionExoneracion(cliente.getFechaEmisionExoneracion());
-      clienteBD.setNumeroDocumentoExoneracion(cliente.getNumeroDocumentoExoneracion());
+			clienteBD.setCodigoPais(clienteCommand.getCodigoPais());
+			clienteBD.setIdentificacionExtranjero(clienteCommand.getIdentificacionExtranjero());
+			clienteBD.setObservacionVenta(clienteCommand.getObservacionVenta() == null ? Constantes.EMPTY : clienteCommand.getObservacionVenta());
 			clienteBo.modificar(clienteBD);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("cliente.modificado.correctamente", clienteBD);

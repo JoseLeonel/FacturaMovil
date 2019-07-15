@@ -73,13 +73,6 @@ public class DetalleController {
 																																											};
 																																										};
 
-	private static final Function<Object, FacturaEsperaCommand>		TO_COMMAND					= new Function<Object, FacturaEsperaCommand>() {
-
-																																											@Override
-																																											public FacturaEsperaCommand apply(Object f) {
-																																												return new FacturaEsperaCommand((Detalle) f);
-																																											};
-																																										};
 	private static final Function<Object, DetalleFacturaCommand>	TO_COMMAND_DETALLE	= new Function<Object, DetalleFacturaCommand>() {
 
 																																											@Override

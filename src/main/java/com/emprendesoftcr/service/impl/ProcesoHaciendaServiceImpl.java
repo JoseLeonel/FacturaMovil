@@ -242,58 +242,62 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Autowired
 	RecepcionFacturaXMLServices																				recepcionFacturaXMLServices;
 
-	@Scheduled(cron = "0 0/1 * * * ?")
+//	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoCambiarConsecutivo() throws Exception {
 
 		Date fechaInicio = Utils.parseDate("2019-07-01");
-		Date fechaFinal = Utils.parseDate("2019-07-08");
-		if (fechaFinal == null) {
+		Date fechaFinal = Utils.parseDate("2019-07-13");
+		if (fechaFinal == null) {	
 			fechaFinal = new Date(System.currentTimeMillis());
 		}
 		if (fechaFinal != null && fechaFinal != null) {
 			fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
 		}
 		Integer contador = 0;
-
+    Boolean resultado = Boolean.FALSE;
 		Collection<Hacienda> listaHacienda = haciendaBo.findByEmpresaAndEstadoAndFechas(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO, fechaInicio, fechaFinal);
 		for (Hacienda hacienda : listaHacienda) {
        
 			
-			// cambiar estado de la factura a pendiente de firma y generar el consecutivo
-			if (hacienda.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) || hacienda.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
-				Factura factura = facturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
+				// cambiar estado de la factura a pendiente de firma y generar el consecutivo
+				if (hacienda.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) || hacienda.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
+					Factura factura = facturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
 
-				if (factura != null) {
+					if (factura != null) {
+//            if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO	)) {
+  						factura.setReferenciaTipoDoc("10");
+  						factura.setReferenciaNumero(factura.getClave());
+  						factura.setReferenciaCodigo("01");
 
-					factura.setReferenciaTipoDoc("10");
-					factura.setReferenciaNumero(factura.getClave());
-					factura.setReferenciaCodigo("01");
+  						factura.setReferenciaRazon("IVA ocasiono firma invalida"+ factura.getNumeroConsecutivo());
+  						factura.setReferenciaFechaEmision(factura.getFechaEmision());
+  						factura.setNumeroConsecutivo(empresaBo.generarConsecutivoFactura(hacienda.getEmpresa(), factura.getUsuarioCreacion(), factura));
+  						factura.setClave(empresaBo.generaClaveFacturaTributacion(factura.getEmpresa(), factura.getNumeroConsecutivo(), FacturaElectronicaUtils.COMPROBANTE_ELECTRONICO_NORMAL));
+  						contador += 1;
+  						log.info("Total:" + contador + " clave actual: " + factura.getClave() + " clave anterior " + factura.getReferenciaNumero());
+  						
 
-					factura.setReferenciaRazon("IVA ocasiono firma invalida"+ factura.getNumeroConsecutivo());
-					factura.setReferenciaFechaEmision(factura.getFechaEmision());
-					factura.setNumeroConsecutivo(empresaBo.generarConsecutivoFactura(hacienda.getEmpresa(), factura.getUsuarioCreacion(), factura));
-					factura.setClave(empresaBo.generaClaveFacturaTributacion(factura.getEmpresa(), factura.getNumeroConsecutivo(), FacturaElectronicaUtils.COMPROBANTE_ELECTRONICO_NORMAL));
-					contador += 1;
-					log.info("Total:" + contador + " clave actual: " + factura.getClave() + " clave anterior " + factura.getReferenciaNumero());
-					
+  						factura.setEstado(2);
+  						factura.setEstadoFirma(30);
+  						facturaBo.modificar(factura);
+  						hacienda.setEstado(30);
+  						haciendaBo.modificar(hacienda);
 
-					factura.setEstado(2);
-					factura.setEstadoFirma(30);
-					facturaBo.modificar(factura);
-					hacienda.setEstado(30);
-					haciendaBo.modificar(hacienda);
-
-				}
+            	
+//            } 
+					}
+				
+			}
 			}
 		}
 
-	}
+	
 
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-//	@Scheduled(cron = "0 0/12 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -333,7 +337,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			}
 			log.info("Finaliza Proceso de Envio de documentos  {}", new Date());
 		} catch (Exception e) {
-			log.info("** Error2  taskHaciendaEnvio: " + e.getMessage() + " fecha " + new Date());
+			log.error("** Error2  taskHaciendaEnvio: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		} finally {
 			// Desconectar token de hacienda anterior
@@ -367,7 +371,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 			}
 		} catch (Exception e) {
-			log.info("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date());
+			log.error("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
 	}
@@ -405,7 +409,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				log.info("** Error no se encontro el token   " + "Empresa:" + hacienda.getEmpresa().getNombre() + " fecha " + new Date() + "Consecutivo " + hacienda.getConsecutivo());
 			}
 		} catch (Exception e) {
-			log.info("** Error  ejecutarEnvio: " + e.getMessage() + " fecha " + new Date());
+			log.error("** Error  ejecutarEnvio: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
 
@@ -471,7 +475,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				envioHaciendaComponent.enviarDocumentoElectronico(jsonStr, openIDConnectHacienda, hacienda);
 			}
 		} catch (Exception e) {
-			log.info("** Error  envioHaciendaFacturas: " + e.getMessage() + " fecha " + new Date() + " Hacienta:" + hacienda.getEmpresa().getNombre());
+			log.error("** Error  envioHaciendaFacturas: " + e.getMessage() + " fecha " + new Date() + " Hacienta:" + hacienda.getEmpresa().getNombre());
 			throw e;
 		}
 
@@ -489,7 +493,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-//	@Scheduled(cron = "0 0/55 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -543,7 +547,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			log.info("Fin Comprobacion de documentos  {}", new Date());
 
 		} catch (Exception e) {
-			log.info("** Error2  ComprobacionDocumentos: " + e.getMessage() + " fecha " + new Date());
+			log.error("** Error2  ComprobacionDocumentos: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		} finally {
 			// Desconectar token de hacienda anterior
@@ -718,7 +722,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				}
 			}
 		} catch (Exception e) {
-			log.info("** Error  aceptarDocumento: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
+			log.error("** Error  aceptarDocumento: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
 			throw e;
 		}
 
@@ -829,7 +833,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			}
 			log.info("Fin Envios de correos  {}", new Date());
 		} catch (Exception e) {
-			log.info("** Error2  taskHaciendaEnvioDeCorreos: " + e.getMessage() + " fecha " + new Date());
+			log.error("** Error2  taskHaciendaEnvioDeCorreos: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
 	}
@@ -843,7 +847,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			correosBo.sendSimpleMessage("jcisneroscr@gmail.com", subject, texto);
 
 		} catch (Exception e) {
-			log.info("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date());
+			log.error("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
 	}
@@ -890,7 +894,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, plantillaEmail, modelEmail);
 		} catch (Exception e) {
-			log.info("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre() + " Consecutivo" + hacienda.getConsecutivo());
+			log.error("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre() + " Consecutivo" + hacienda.getConsecutivo());
 			throw e;
 		}
 	}
@@ -956,7 +960,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			String subject = nombreEmpresa + " Aceptando o Rechazando Compras documento Electrónico N° " + recepcionFactura.getNumeroConsecutivoReceptor() + " del emisor con cédula: " + recepcionFactura.getEmpresa().getCedula();
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailHaciendaRecepcionFactura.vm", modelEmail);
 		} catch (Exception e) {
-			log.info("** Error  enviarCorreosRecepcion: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
+			log.error("** Error  enviarCorreosRecepcion: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
 			throw e;
 		}
 	}
@@ -1027,7 +1031,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		try {
 			attachment = attachment("Respuesta_XML_" + cedula + "_" + name, ".xml", data);
 		} catch (Exception e) {
-			log.info("Error al adjuntar XML_AttachRespuestaHacienda" + e.getCause());
+			log.error("Error al adjuntar XML_AttachRespuestaHacienda" + e.getCause());
 			throw e;
 		}
 
@@ -1046,7 +1050,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-//	@Scheduled(cron = "0 0/12 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1151,7 +1155,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			log.info("** Fin  proceso de firmad" + " fecha " + new Date());
 
 		} catch (Exception e) {
-			log.info("** Error2  proceso de firmado: " + e.getMessage() + " fecha " + new Date());
+			log.error("** Error2  proceso de firmado: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
 	}
@@ -1219,7 +1223,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 					} catch (Exception e) {
 						recepcionFactura.setEstadoFirma(Constantes.FACTURA_ESTADO_PROBLEMA_AL_FIRMAR);
 						recepcionFacturaBo.modificar(recepcionFactura);
-						log.info("** Error1 proceso de firmado: " + e.getMessage() + " fecha " + new Date());
+						log.error("** Error1 proceso de firmado: " + e.getMessage() + " fecha " + new Date());
 					}
 
 				}
@@ -1228,7 +1232,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			log.info("Fin el proceso de firmado  {}", new Date());
 
 		} catch (Exception e) {
-			log.info("** Error2  proceso de firmado: " + e.getMessage() + " fecha " + new Date());
+			log.error("** Error2  proceso de firmado: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
 	}

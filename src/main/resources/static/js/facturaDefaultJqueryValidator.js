@@ -61,6 +61,14 @@ $.validator.addMethod("numeroMayorCero",
         },
         "Ingrese un n\u00FAmero mayor a cero."
 );
+
+$.validator.addMethod("porcentajes",
+        function(value, element) {
+	       
+		    return value <= 100 || /^[1-9]\d*(\.\d+)?$/ig.test(value);
+        },
+        "Porcentaje menor o igual al 100%."
+);
 				 
  
 

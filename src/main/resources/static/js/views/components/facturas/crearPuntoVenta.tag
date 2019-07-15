@@ -2030,7 +2030,7 @@ __AplicarYcrearFacturaTemporal(){
 **/
 function aplicarFactura(estado){
     if($("#tipoDoc").val() ==null){
-        mensajeError($.i18n.prop("Se presento inconveniente ,vuelva a presiona F8"))
+        mensajeError($.i18n.prop("Se presento inconveniente ,vuelva a presiona F8 Factura o F9 Proformas"))
         return
 
     }
@@ -2295,7 +2295,13 @@ function cargarDetallesFacturaEnEspera(data){
             montoGanancia :parseFloat(modeloTabla.montoGanancia),
             ganancia :parseFloat(__valorNumerico(modeloTabla.ganancia)),
             pesoTransporte :  parseFloat(modeloTabla.pesoTransporte),
-            pesoTransporteTotal :parseFloat(modeloTabla.pesoTransporteTotal)
+            pesoTransporteTotal :parseFloat(modeloTabla.pesoTransporteTotal),
+            montoExoneracion:parseFloat(modeloTabla.montoExoneracion),
+            porcentajeExoneracion:parseFloat(modeloTabla.porcentajeExoneracion),
+            fechaEmisionExoneracion:modeloTabla.fechaEmisionExoneracion,
+            nombreInstitucionExoneracion:modeloTabla.nombreInstitucionExoneracion,
+            numeroDocumentoExoneracion:modeloTabla.numeroDocumentoExoneracion,
+            tipoDocumentoExoneracion:modeloTabla.tipoDocumentoExoneracion
         });
         self.update()
         self.numeroLinea   = self.numeroLinea + 1
@@ -2656,7 +2662,7 @@ __addPrecioDetail(e){
     var codigoActual = ""
     var cantidadAct =""
     var existe = false
-     var existeMas = false
+    var existeMas = false
     for(i=0; i<codigo.length; i++){
          existeMas = codigo.charAt(i) == "+"?true : false
        if(existe == false){
@@ -3205,7 +3211,13 @@ function __nuevoArticuloAlDetalle(cantidad){
        costo           : costoTotal,
        porcentajeGanancia :   getListaPrecioGanancia(self.articulo) ==null?0:parseFloat(getListaPrecioGanancia(self.articulo)),
        pesoTransporte :  parseFloat(self.articulo.pesoTransporte),
-       pesoTransporteTotal :parseFloat(self.articulo.pesoTransporte)
+       pesoTransporteTotal :parseFloat(self.articulo.pesoTransporte),
+       montoExoneracion:0,
+       porcentajeExoneracion:0,
+       fechaEmisionExoneracion:null,
+       nombreInstitucionExoneracion:"",
+       numeroDocumentoExoneracion:"",
+       tipoDocumentoExoneracion:""
     });
     
     self.detail.sort(function(a,b) {
@@ -3682,13 +3694,43 @@ function __seleccionarClientes() {
 	     }
         self.cliente = data
 
-        
+        __aplicarExoneracionPorCliente()
         
         self.update();
          $('#modalClientes').modal('hide') 
         
     });
 }
+
+/**
+* Aplicar la exoneracion de detalles
+**/
+function __aplicarExoneracionPorCliente(){
+    var porcentaje = self.cliente.porcentajeExoneracion / 100
+    var valorTotal = 0
+    for (var count = 0; count < self.detail.length; count++) {
+        self.item          = self.detail[count];
+        self.cliente.porcentajeExoneracion = parseFloat(self.cliente.porcentajeExoneracion)
+            if(self.item.montoImpuesto > 0 || self.item.montoImpuesto1 > 0 ){
+                if(self.cliente.porcentajeExoneracion > 0){
+                    self.item.porcentajeExoneracion = parseFloat(self.cliente.porcentajeExoneracion)
+                    self.item.fechaEmisionExoneracion = self.cliente.fechaEmisionExoneracion
+                    self.item.nombreInstitucionExoneracion = self.cliente.nombreInstitucionExoneracion
+                    self.item.numeroDocumentoExoneracion = self.cliente.numeroDocumentoExoneracion
+                    self.item.tipoDocumentoExoneracion = self.cliente.tipoDocumentoExoneracion
+                    valorTotal = parseFloat(self.item.montoImpuesto * porcentaje)  
+                    self.item.montoExoneracion = valorTotal
+                    self.item.ImpuestoNeto = self.item.montoImpuesto - self.item.montoExoneracion
+                    self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
+                    self.detail[count] = self.item;
+                    self.update();
+
+                }
+            }
+    }
+    __calculate()
+}
+
 /**
 * cargar los estados de la factura
 **/

@@ -108,7 +108,6 @@ public class FacturaBoImpl implements FacturaBo {
 		facturaDao.eliminar(factura);
 	}
 
-	
 	/**
 	 * Buscar por id
 	 * @see com.emprendesoftcr.Bo.FacturaBo#findById(java.lang.Integer)
@@ -149,7 +148,6 @@ public class FacturaBoImpl implements FacturaBo {
 		return factura;
 	}
 
-	
 	@Override
 	@Transactional
 	public void eliminarDetalleFacturaPorSP(Factura factura) throws Exception {
@@ -206,7 +204,7 @@ public class FacturaBoImpl implements FacturaBo {
 					factura.setReferenciaFechaEmision(Utils.parseDate2(facturaCommand.getReferenciaFechaEmision()));
 				}
 				Factura facturaReferencia = facturaDao.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa());
-				facturaReferencia = facturaReferencia == null?facturaDao.findByClaveAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa()):facturaReferencia;
+				facturaReferencia = facturaReferencia == null ? facturaDao.findByClaveAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa()) : facturaReferencia;
 				// Si la factura se encuentra en el sistema se agregan los datos propios de ella
 				if (facturaReferencia != null) {
 					factura.setReferenciaNumero(facturaReferencia.getClave());
@@ -366,6 +364,7 @@ public class FacturaBoImpl implements FacturaBo {
 		Double precioUnitario = Constantes.ZEROS_DOUBLE;
 		Double costo = Constantes.ZEROS_DOUBLE;
 
+		Double montoTotalLinea = Constantes.ZEROS_DOUBLE;
 		for (Iterator<DetalleFacturaCommand> iterator = detallesFacturaCommand.iterator(); iterator.hasNext();) {
 			DetalleFacturaCommand detalleFacturaCommand = (DetalleFacturaCommand) iterator.next();
 			unidadMedida = Constantes.UNIDAD_MEDIDA;
@@ -393,173 +392,450 @@ public class FacturaBoImpl implements FacturaBo {
 
 				}
 			}
-			gananciaProducto = getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad(), Utils.roundFactura(detalleFacturaCommand.getMontoDescuento(), 5));
+			gananciaProducto = getGananciaProducto(precioUnitario * detalleFacturaCommand.getCantidad(), costo * detalleFacturaCommand.getCantidad(), detalleFacturaCommand.getMontoDescuento());
 			Detalle detalle = new Detalle(detalleFacturaCommand);
 			detalle.setPesoTransporte(detalleFacturaCommand.getPesoTransporte() != null ? detalleFacturaCommand.getPesoTransporte() : Constantes.ZEROS_DOUBLE);
 			detalle.setPesoTransporteTotal(detalleFacturaCommand.getPesoTransporteTotal() != null ? detalleFacturaCommand.getPesoTransporteTotal() : Constantes.ZEROS_DOUBLE);
 			detalle.setCosto(costo);
-			detalle.setGanancia(Utils.roundFactura(gananciaProducto, 5));
-			detalle.setMontoGanancia(Utils.roundFactura(gananciaProducto, 5));
+			detalle.setGanancia(gananciaProducto);
+			detalle.setMontoGanancia(gananciaProducto);
 			detalle.setPorcentajeGanancia(getPorcentajeGananciaProducto(detalleFacturaCommand.getPrecioUnitario(), detalleFacturaCommand.getCosto() != null ? detalleFacturaCommand.getCosto() : Constantes.ZEROS));
-			detalle.setMontoGanancia(Utils.roundFactura(detalleFacturaCommand.getMontoGanancia() != null ? detalleFacturaCommand.getMontoGanancia() : Constantes.ZEROS_DOUBLE, 5));
+			detalle.setMontoGanancia(detalleFacturaCommand.getMontoGanancia() != null ? detalleFacturaCommand.getMontoGanancia() : Constantes.ZEROS_DOUBLE);
 			detalle.setUsuario(usuario);
 			detalleFacturaCommand.setTipoImpuesto(detalleFacturaCommand.getTipoImpuesto() != null ? detalleFacturaCommand.getTipoImpuesto() : Constantes.EMPTY);
 			detalleFacturaCommand.setTipoImpuesto1(detalleFacturaCommand.getTipoImpuesto1() != null ? detalleFacturaCommand.getTipoImpuesto1() : Constantes.EMPTY);
 			detalle.setImpuesto(detalleFacturaCommand.getImpuesto() != null ? detalleFacturaCommand.getImpuesto() : Constantes.ZEROS_DOUBLE);
 			detalle.setImpuesto1(detalleFacturaCommand.getImpuesto1() != null ? detalleFacturaCommand.getImpuesto1() : Constantes.ZEROS_DOUBLE);
-			Double impuestoNeto = Constantes.ZEROS_DOUBLE;
-			detalle.setCodigoTarifa(Constantes.EMPTY);
-			if (detalleFacturaCommand.getTipoImpuesto() != null) {
-				if (!detalleFacturaCommand.getTipoImpuesto().equals(Constantes.EMPTY)) {
-					if (detalleFacturaCommand.getMontoImpuesto() != null) {
+			detalle.setCodigoTarifa(articulo.getCodigoTarifa() != null ? articulo.getCodigoTarifa() : Constantes.EMPTY);
+			detalle.setCodigoTarifa1(articulo.getCodigoTarifa1() != null ? articulo.getCodigoTarifa1() : Constantes.EMPTY);
+			detalle.setTipoImpuesto(!detalleFacturaCommand.getTipoImpuesto().equals(Constantes.EMPTY) ? detalleFacturaCommand.getTipoImpuesto() : Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
+			detalle.setTipoImpuesto1(!detalleFacturaCommand.getTipoImpuesto1().equals(Constantes.EMPTY) ? detalleFacturaCommand.getTipoImpuesto1() : Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
+			detalle.setFechaEmisionExoneracion(detalleFacturaCommand.getFechaEmisionExoneracion());
+			detalle.setNombreInstitucionExoneracion(detalleFacturaCommand.getNombreInstitucionExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNombreInstitucionExoneracion());
+			detalle.setNumeroDocumentoExoneracion(detalleFacturaCommand.getNumeroDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNumeroDocumentoExoneracion());
+			detalle.setTipoDocumentoExoneracion(detalleFacturaCommand.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getTipoDocumentoExoneracion());
+			detalle.setPorcentajeExoneracion(detalleFacturaCommand.getPorcentajeExoneracion() == null ? Constantes.ZEROS : detalleFacturaCommand.getPorcentajeExoneracion());
 
-						if (detalleFacturaCommand.getMontoImpuesto() > 0) {
-							impuestoNeto += detalleFacturaCommand.getMontoImpuesto();
-							detalle.setCodigoTarifa(articulo.getCodigoTarifa() != null ? articulo.getCodigoTarifa() : Constantes.EMPTY);
-							detalle.setTipoImpuesto(!detalleFacturaCommand.getTipoImpuesto().equals(Constantes.EMPTY) ? detalleFacturaCommand.getTipoImpuesto() : Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
-						}
-					}
-					if (detalleFacturaCommand.getMontoImpuesto1() != null) {
-						if (detalleFacturaCommand.getMontoImpuesto1() > 0) {
-							detalle.setCodigoTarifa1(articulo.getCodigoTarifa1() != null ? articulo.getCodigoTarifa1() : Constantes.EMPTY);
-							impuestoNeto += detalleFacturaCommand.getMontoImpuesto();
-							detalle.setTipoImpuesto1(!detalleFacturaCommand.getTipoImpuesto1().equals(Constantes.EMPTY) ? detalleFacturaCommand.getTipoImpuesto1() : Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
-						}
-					}
+			detalle.setMontoTotal(getMontoTotal(detalle.getPrecioUnitario(), detalle.getCantidad()));
+			detalle.setMontoDescuento(getDescuento(detalle.getMontoTotal(), detalle.getPorcentajeDesc()));
+			detalle.setSubTotal(getSubtotal(detalle.getMontoTotal(), detalle.getMontoDescuento()));
+			detalle.setMontoImpuesto1(getMontoImpuestoSin13(detalle.getSubTotal(), detalle.getImpuesto1()));
+			detalle.setMontoImpuesto(getMontoImpuestoCon13(detalle.getSubTotal(), detalle.getMontoImpuesto1(), detalle.getImpuesto()));
+			detalle.setMontoExoneracion(getMontoExoneracion(detalle.getTipoDocumentoExoneracion(), detalle.getPorcentajeExoneracion(), detalle.getMontoImpuesto()));
+			detalle.setImpuestoNeto(getImpuestoNetoTotal(detalle.getTipoDocumentoExoneracion(), detalle.getPorcentajeExoneracion(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoExoneracion()));
+			Integer baseImponible = articulo.getBaseImponible() != null ? articulo.getBaseImponible() : Constantes.ZEROS;
+			detalle.setBaseImponible(getBaseImponibleTotal(articulo.getTipoImpuesto(), detalle.getSubTotal(), baseImponible));
 
-				}
-			} else {
-				if (detalleFacturaCommand.getMontoImpuesto() != null) {
-					if (detalleFacturaCommand.getMontoImpuesto() > 0) {
-						detalle.setCodigoTarifa(articulo.getCodigoTarifa() != null ? articulo.getCodigoTarifa() : Constantes.EMPTY);
-						impuestoNeto += detalleFacturaCommand.getMontoImpuesto();
-						detalle.setTipoImpuesto(!detalleFacturaCommand.getTipoImpuesto().equals(Constantes.EMPTY) ? detalleFacturaCommand.getTipoImpuesto() : Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
-					}
-				}
-				if (detalleFacturaCommand.getMontoImpuesto1() != null) {
-					if (detalle.getMontoImpuesto1() > 0) {
-						detalle.setCodigoTarifa(articulo.getCodigoTarifa1() != null ? articulo.getCodigoTarifa1() : Constantes.EMPTY);
-						impuestoNeto += detalleFacturaCommand.getMontoImpuesto();
-						detalle.setTipoImpuesto1(!detalleFacturaCommand.getTipoImpuesto1().equals(Constantes.EMPTY) ? detalleFacturaCommand.getTipoImpuesto1() : Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
-					}
-				}
-
-			}
-			// detalle.setBaseImponible(impuestoNeto > Constantes.ZEROS_DOUBLE?detalle.getPrecioUnitario():Constantes.ZEROS);
-			detalle.setImpuestoNeto(impuestoNeto);
-			detalle.setNaturalezaDescuento(Constantes.FORMATO_NATURALEZA_DESCUENTO);
+			detalle.setNaturalezaDescuento(detalle.getMontoDescuento() > Constantes.ZEROS_DOUBLE ? Constantes.FORMATO_NATURALEZA_DESCUENTO : Constantes.EMPTY);
 			detalle.setNumeroLinea(numeroLinea);
 			detalle.setCreated_at(new Date());
 			detalle.setUpdated_at(new Date());
 			detalle.setTipoCodigo(articulo == null ? detalleFacturaCommand.getTipoCodigo() : articulo.getTipoCodigo());
 			detalle.setUnidadMedida(articulo == null ? detalleFacturaCommand.getUnidadMedida() : articulo.getUnidadMedida());
-			// Se aplica el redondeo hasta que se facture porque puede ser venta en espera y se necesita la presicion de los decimales
-			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
-				detalle.setMontoDescuento(detalle.getMontoDescuento() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoDescuento(), 5));
-				detalle.setCantidad(detalle.getCantidad() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getCantidad(), 3));
-				detalle.setMontoImpuesto(detalleFacturaCommand.getMontoImpuesto() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalleFacturaCommand.getMontoImpuesto(), 5));
-				detalle.setMontoImpuesto1(detalleFacturaCommand.getMontoImpuesto1() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalleFacturaCommand.getMontoImpuesto1(), 5));
-				detalle.setPrecioUnitario(detalle.getPrecioUnitario() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getPrecioUnitario(), 5));
-				detalle.setMontoTotalLinea(detalle.getMontoTotalLinea() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoTotalLinea(), 5));
-				detalle.setMontoTotal(detalle.getMontoTotal() == null ? Constantes.ZEROS_DOUBLE : Utils.roundFactura(detalle.getMontoTotal(), 5));
-				// Se calcula el subtotal por problemas de decimales
-				detalle.setSubTotal(Utils.roundFactura(detalle.getMontoTotal() - detalle.getMontoDescuento(), 5));
 
-				Integer baseImponible = articulo.getBaseImponible() != null ? articulo.getBaseImponible() : Constantes.ZEROS;
+			// cambios de doble impuesto
 
-				detalle.setBaseImponible(baseImponible.equals(Constantes.BASE_IMPONIBLE_ACTIVO) ? detalle.getSubTotal() : Constantes.ZEROS_DOUBLE);
+			totalServGravados = totalServGravados + getTotalServicioGravados(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoTotal(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1());
+			totalServExonerado = totalServExonerado + getTotalServExonerado(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoExoneracion());
+			totalMercExonerada = totalMercExonerada + getTotalMercExonerada(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoTotal(), detalle.getPorcentajeExoneracion());
 
-				// cambios de doble impuesto
+			totalImpuesto = totalImpuesto + getTotalImpuesto(detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getTipoDocumentoExoneracion(), detalle.getImpuestoNeto());
+			totalMercanciasGravadas = totalMercanciasGravadas + getTotalMercanciasGravadas(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal(), detalle.getPorcentajeExoneracion());
+			totalMercanciasExentas = totalMercanciasExentas + getTotalMercanciasExentas(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getMontoTotal());
 
-				// Con impuesto
-				if (detalle.getMontoImpuesto() > Constantes.ZEROS_DOUBLE || detalle.getMontoImpuesto1() > Constantes.ZEROS_DOUBLE) {
-					// Cuando es por servicios
-					if (detalle.getTipoImpuesto().equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
-						totalServGravados = detalle.getMontoTotal() != null ? totalServGravados + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
-						totalImpuesto = totalImpuesto + detalle.getMontoImpuesto() + detalle.getMontoImpuesto1();
-						totalGravado = detalle.getMontoTotal() != null ? totalGravado + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
-					} else {
-						totalMercanciasGravadas = detalle.getMontoTotal() != null ? totalMercanciasGravadas + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
-						totalGravado = detalle.getMontoTotal() != null ? totalGravado + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
-						totalImpuesto = totalImpuesto + detalle.getMontoImpuesto() + detalle.getMontoImpuesto1();
-					}
+			totalServExentos = totalServExentos + getTotalServExentos(detalle.getTipoImpuesto(), detalle.getUnidadMedida(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getSubTotal());
 
-				} else if (detalle.getMontoImpuesto().equals(Constantes.ZEROS_DOUBLE) && detalle.getMontoImpuesto1().equals(Constantes.ZEROS_DOUBLE)) { // Sin Impuesto
-					// Cuando es por servicios
-					if (detalle.getTipoImpuesto().equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
-						totalServExentos = detalle.getMontoTotal() != null ? totalServExentos + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
-					} else {
-						totalMercanciasExentas = detalle.getMontoTotal() != null ? totalMercanciasExentas + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
-					}
-					totalExento = detalle.getMontoTotal() != null ? totalExento + detalle.getMontoTotal() : Constantes.ZEROS_DOUBLE;
-				}
+			totalExento = totalExento + getTotalExentos(detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getSubTotal());
 
-				// Total del comprobante
-				totalComprobante = totalComprobante + detalle.getMontoTotalLinea();
-				subTotal = subTotal + detalle.getSubTotal();
-				totalDescuentos = totalDescuentos + detalle.getMontoDescuento();
-				totalVenta = totalVenta + detalle.getMontoTotal();
-			}
+			totalExonerado = totalExonerado + getTotalExonerado(totalServExonerado, totalMercExonerada);
+			totalDescuentos = totalDescuentos + detalle.getMontoDescuento();
+			montoTotalLinea = getMontoTotalLinea(detalle.getSubTotal(), detalle.getMontoImpuesto(), detalle.getMontoImpuesto1(), detalle.getImpuestoNeto(), detalle.getTipoDocumentoExoneracion());
+			totalComprobante = totalComprobante + montoTotalLinea;
+
+			detalle.setMontoTotalLinea(montoTotalLinea);
+
+			detalle.setNumeroLinea(numeroLinea);
 			numeroLinea += 1;
 			detalle.setFactura(factura);
 			detalleDao.agregar(detalle);
-			// factura.addDetalle(detalle);
 
-			// Solo aplica para venta POST
-			if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) && facturaCommand.getMesa() != null && !facturaCommand.getMesa().getId().equals(0L) && facturaCommand.getMesa().getImpuestoServicio()) {
-				Integer con = 0;
-			} else {
-				if (detalle.getCodigo().equals(Constantes.CODIGO_ARTICULO_IMPUESTO_SERVICIO)) {
-					totalImpServicios = totalImpServicios + detalle.getMontoTotal();
-				}
-			}
 		}
-		if (factura.getTotalOtrosCargos() == null) {
+		totalGravado = totalGravado + totalMercanciasGravadas + totalServGravados;
+		totalVenta = totalVenta + totalExento + totalGravado + totalExonerado;
+		if (factura.getTotalOtrosCargos() == null)
+
+		{
 			factura.setTotalOtrosCargos(Constantes.ZEROS_DOUBLE);
 			factura.setTipoDocumentoOtroCargo(Constantes.EMPTY);
 			factura.setDetalleOtroCargo(Constantes.EMPTY);
 		}
 		// Se agrega un detalle para el costo por servicio de restaurante y se afecta el monto total de la factura
 		if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) && facturaCommand.getMesa() != null && !facturaCommand.getMesa().getId().equals(0L) && facturaCommand.getMesa().getImpuestoServicio()) {
-			factura.setTotalOtrosCargos(Utils.roundFactura(subTotal * 0.10, 5));
+			factura.setTotalOtrosCargos(subTotal * 0.10);
 			factura.setTipoDocumentoOtroCargo(Constantes.TIPO_DOCUMENTO_IMPUESTO_SERVICIO_OTRO_CARGO);
 			factura.setDetalleOtroCargo(Constantes.IMPUESTO_SERVICIO_OTRO_CARGO_RESTAURANTE);
 
 			totalOtrosCargos = totalOtrosCargos + factura.getTotalOtrosCargos();
 
 			totalImpServicios = totalImpServicios + factura.getTotalOtrosCargos();
-			totalComprobante = totalComprobante + totalOtrosCargos;
+
 		}
 
 		// Se actualoza el resumen de la factura con los detalles asociados
 		totalVentaNeta = totalVenta - totalDescuentos;
-		factura.setTotalServExonerado(totalServExonerado);
-		factura.setTotalMercExonerada(totalMercExonerada);
-		factura.setTotalExonerado(totalExonerado);
-		factura.setTotalIVADevuelto(totalIVADevuelto);
+
 		if (totalOtrosCargos > Constantes.ZEROS_DOUBLE) {
 			factura.setTotalOtrosCargos(totalOtrosCargos);
 		} else {
 			if (factura.getTotalOtrosCargos() != null) {
 				factura.setTotalOtrosCargos(factura.getTotalOtrosCargos());
 				totalImpServicios = totalImpServicios + factura.getTotalOtrosCargos();
-				totalComprobante = totalComprobante + factura.getTotalOtrosCargos();
+
 			}
 		}
 
-		factura.setTotalMercanciasGravadas(Utils.roundFactura(totalMercanciasGravadas, 5));
-		factura.setTotalMercanciasExentas(Utils.roundFactura(totalMercanciasExentas, 5));
-		factura.setTotalServExentos(Utils.roundFactura(totalServExentos, 5));
-		factura.setTotalServGravados(Utils.roundFactura(totalServGravados, 5));
-		factura.setTotalGravado(Utils.roundFactura(totalGravado, 5));
-		factura.setTotalExento(Utils.roundFactura(totalExento, 5));
-		factura.setTotalVenta(Utils.roundFactura(totalVenta, 5));
-		factura.setTotalVentaNeta(Utils.roundFactura(totalVentaNeta, 5));
-		factura.setTotalDescuentos(Utils.roundFactura(totalDescuentos, 5));
-		factura.setTotalImpuesto(Utils.roundFactura(totalImpuesto, 5));
-		factura.setTotalComprobante(Utils.roundFactura(totalComprobante, 5));
-		factura.setTotalImpuestoServicio(Utils.roundFactura(totalImpServicios, 5));
+		factura.setTotalServExonerado(totalServExonerado);
+		factura.setTotalMercExonerada(totalMercExonerada);
+		factura.setTotalExonerado(totalExonerado);
+		factura.setTotalIVADevuelto(totalIVADevuelto);
+		factura.setTotalMercanciasGravadas(totalMercanciasGravadas);
+		factura.setTotalMercanciasExentas(totalMercanciasExentas);
+		factura.setTotalServExentos(totalServExentos);
+		factura.setTotalServGravados(totalServGravados);
+		factura.setTotalGravado(totalGravado);
+		factura.setTotalExento(totalExento);
+		factura.setTotalVenta(totalVenta);
+		factura.setTotalVentaNeta(totalVentaNeta);
+		factura.setTotalDescuentos(totalDescuentos);
+		factura.setTotalImpuesto(totalImpuesto);
+		factura.setTotalImpuestoServicio(totalImpServicios);
+		totalComprobante = factura.getTotalOtrosCargos() + totalImpuesto + totalVentaNeta;
+		totalComprobante = totalComprobante - totalIVADevuelto;
+		factura.setTotalComprobante(totalComprobante);
 
+	}
+
+	/**
+	 * Monto Linea
+	 * @param subTotal
+	 * @param montoImpuesto
+	 * @param montoImpuesto1
+	 * @param montoImpuestoNeto
+	 * @param tipoDocumentoExoneracion
+	 * @return
+	 */
+	private Double getMontoTotalLinea(Double subTotal, Double montoImpuesto, Double montoImpuesto1, Double montoImpuestoNeto, String tipoDocumentoExoneracion) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+
+		if (!tipoDocumentoExoneracion.equals(Constantes.EMPTY)) {
+			resultado = subTotal + montoImpuestoNeto;
+		} else {
+			resultado = subTotal + montoImpuesto + montoImpuesto1;
+		}
+
+		return resultado;
+	}
+
+	/**
+	 * Total de servicios exentos
+	 * @param tipoImpuesto
+	 * @param unidadMedida
+	 * @param montoImpuesto
+	 * @param montoImpuesto1
+	 * @param subTotal
+	 * @return
+	 */
+	private Double getTotalServExentos(String tipoImpuesto, String unidadMedida, Double montoImpuesto, Double montoImpuesto1, Double subTotal) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		Boolean esMercancia = Boolean.TRUE;
+		if (!tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
+			esMercancia = Boolean.FALSE;
+		}
+		if (!unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) && !unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) && !unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) && !unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
+			esMercancia = Boolean.FALSE;
+		}
+		if (esMercancia) {
+
+			if (montoImpuesto1.equals(Constantes.ZEROS_DOUBLE) && montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
+				resultado = subTotal;
+			}
+
+		}
+		return resultado;
+	}
+
+	/**
+	 * @param montoImpuesto
+	 * @param montoImpuesto1
+	 * @param subTotal
+	 * @return
+	 */
+	private Double getTotalExentos(Double montoImpuesto, Double montoImpuesto1, Double subTotal) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		if (montoImpuesto.equals(Constantes.ZEROS_DOUBLE) && montoImpuesto1.equals(Constantes.ZEROS_DOUBLE)) {
+			resultado = subTotal;
+		}
+		return resultado;
+	}
+
+	/**
+	 * Total Mercancias Excentas
+	 * @param montoImpuesto
+	 * @param montoImpuesto1
+	 * @param subTotal
+	 * @return
+	 */
+	private Double getTotalMercanciasExentas(String tipoImpuesto, String unidadMedida, Double montoImpuesto, Double montoImpuesto1, Double subTotal) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		Boolean esMercancia = Boolean.TRUE;
+
+		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
+			esMercancia = Boolean.FALSE;
+		}
+		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
+			esMercancia = Boolean.FALSE;
+		}
+		if (esMercancia) {
+
+			if (montoImpuesto1.equals(Constantes.ZEROS_DOUBLE) && montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
+				resultado = subTotal;
+			}
+
+		}
+		return resultado;
+	}
+
+	/**
+	 * Total Mercancia Gravada
+	 * @param tipoImpuesto
+	 * @param unidadMedida
+	 * @param montoImpuesto
+	 * @param montoImpuesto1
+	 * @param subTotal
+	 * @param porcentajeExoneracion
+	 * @return
+	 */
+	private Double getTotalMercanciasGravadas(String tipoImpuesto, String unidadMedida, Double montoImpuesto, Double montoImpuesto1, Double subTotal, Integer porcentajeExoneracion) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		Boolean esMercancia = Boolean.TRUE;
+		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
+			esMercancia = Boolean.FALSE;
+		}
+		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
+			esMercancia = Boolean.FALSE;
+		}
+		if (esMercancia) {
+			if (montoImpuesto1 > Constantes.ZEROS_DOUBLE || montoImpuesto > Constantes.ZEROS_DOUBLE) {
+				if (porcentajeExoneracion > Constantes.ZEROS) {
+					Double porcentaValor = porcentajeExoneracion / 100d;
+					porcentaValor = 1 - porcentaValor;
+					resultado = subTotal * porcentaValor;
+				} else {
+					resultado = subTotal;
+				}
+			}
+
+		}
+		return resultado;
+	}
+
+	/**
+	 * Total de impuesto
+	 * @param montoImpuesto
+	 * @param montoImpuesto1
+	 * @return
+	 */
+	private Double getTotalImpuesto(Double montoImpuesto, Double montoImpuesto1, String tipoDocumentoExoneracion, Double montoImpuestoNeto) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		if (!tipoDocumentoExoneracion.equals(Constantes.EMPTY)) {
+			resultado = montoImpuestoNeto;
+		} else {
+			resultado = montoImpuesto + montoImpuesto1;
+		}
+
+		return resultado;
+	}
+
+	/**
+	 * Total exonerado si el detalle tiene exoneracion
+	 * @param SubTotal
+	 * @param montoExonerado
+	 * @return
+	 */
+	private Double getTotalExonerado(Double totalServExonerado, Double totalMercExonerada) {
+		return totalServExonerado + totalMercExonerada;
+	}
+
+	private Double getTotalMercExonerada(String tipoImpuesto, String unidadMedida, Double montoTotal, Integer porcentajeExoneracion) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		Boolean esGravado = Boolean.TRUE;
+		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
+			esGravado = Boolean.FALSE;
+		}
+		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
+			esGravado = Boolean.FALSE;
+		}
+		if (esGravado && porcentajeExoneracion > Constantes.ZEROS) {
+			Double porcentaValor = porcentajeExoneracion / 100d;
+			resultado = montoTotal * porcentaValor;
+
+		}
+		return resultado;
+	}
+
+	/**
+	 * @param tipoImpuesto
+	 * @param unidadMedida
+	 * @param montoExonerado
+	 * @return
+	 */
+	private Double getTotalServExonerado(String tipoImpuesto, String unidadMedida, Double montoExonerado) {
+
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
+			resultado = montoExonerado;
+		}
+		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
+			resultado = montoExonerado;
+		}
+		return resultado;
+	}
+
+	/**
+	 * Total de servicios grabados = suma del subtotal si cumple que es un servicio
+	 * @param tipoImpuesto
+	 * @param unidadMedida
+	 * @param SubTotal
+	 * @param montoImpuesto
+	 * @param montoImpuesto1
+	 * @return
+	 */
+	private Double getTotalServicioGravados(String tipoImpuesto, String unidadMedida, Double SubTotal, Double montoImpuesto, Double montoImpuesto1) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		if (montoImpuesto.equals(Constantes.ZEROS_DOUBLE) && montoImpuesto1.equals(Constantes.ZEROS_DOUBLE)) {
+			return resultado;
+		}
+		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
+			resultado = SubTotal;
+		}
+		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
+			resultado = SubTotal;
+		}
+
+		return resultado;
+	}
+
+	/**
+	 * @param tipoImpuesto
+	 * @param subTotal
+	 * @return
+	 */
+	private Double getBaseImponibleTotal(String tipoImpuesto, Double subTotal, Integer activoBaseImponible) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+
+		if (tipoImpuesto.equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL) && activoBaseImponible.equals(Constantes.BASE_IMPONIBLE_ACTIVO)) {
+			return subTotal;
+
+		}
+
+		return resultado;
+
+	}
+
+	/**
+	 * @param tipoDocumentoExonerado
+	 * @param porcentajeExonerado
+	 * @param montoImpuesto
+	 * @param montoImpuesto1
+	 * @param montoExonerado
+	 * @return
+	 */
+	private Double getImpuestoNetoTotal(String tipoDocumentoExonerado, Integer porcentajeExonerado, Double montoImpuesto, Double montoImpuesto1, Double montoExonerado) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		if (!tipoDocumentoExonerado.equals(Constantes.EMPTY)) {
+			if (porcentajeExonerado < 100) {
+				resultado = montoImpuesto + montoImpuesto1;
+				resultado = resultado - montoExonerado;
+			}
+
+		} else {
+			resultado = montoImpuesto + montoImpuesto1;
+		}
+
+		return resultado;
+
+	}
+
+	/**
+	 * Monto de exonaracion = monto del impuesto * porcentaje de la exoneracion
+	 * @param tipodocumento
+	 * @param porcentajeExoneracion
+	 * @param montoImpuesto
+	 * @return
+	 */
+	private Double getMontoExoneracion(String tipoDocumentoExonerado, Integer porcentajeExoneracion, Double montoImpuesto) {
+		if (tipoDocumentoExonerado.equals(Constantes.EMPTY)) {
+			return Constantes.ZEROS_DOUBLE;
+		}
+		Double porcentaje = Double.parseDouble(porcentajeExoneracion.toString()) / 100;
+		return montoImpuesto * porcentaje;
+	}
+
+	/**
+	 * Es la suma del subtotal + primer impuesto por la tarifa sacamos el impuesto 13
+	 * @param subTotal
+	 * @param montoPrimerImpuesto
+	 * @param tarifa
+	 * @return
+	 */
+	private Double getMontoImpuestoCon13(Double subTotal, Double montoPrimerImpuesto, Double tarifa) {
+		Double valor = tarifa / 100d;
+		Double resultado = subTotal + montoPrimerImpuesto;
+		return resultado * valor;
+	}
+
+	/**
+	 * Monto impuesto sin 13 = subTotal * tarifa
+	 * @param subTotal
+	 * @param tarifa
+	 * @return
+	 */
+	private Double getMontoImpuestoSin13(Double subTotal, Double tarifa) {
+		Double valor = tarifa / 100d;
+		return subTotal * valor;
+
+	}
+
+	/**
+	 * SubTotal = Monto Total - Monto Descuento
+	 * @param montoDescuento
+	 * @param montoTotal
+	 * @return
+	 */
+	private Double getSubtotal(Double montoTotal, Double montoDescuento) {
+
+		return montoTotal - montoDescuento;
+	}
+
+	/**
+	 * Total Descuento de la linea
+	 * @param montoTotal
+	 * @param porcentajeDescuento
+	 * @return
+	 */
+	private Double getDescuento(Double montoTotal, Double porcentajeDescuento) {
+		Double valor = porcentajeDescuento / 100d;
+		return montoTotal * valor;
+	}
+
+	/**
+	 * Monto Total
+	 * @param precioUnitario
+	 * @param cantidad
+	 * @return
+	 */
+	private Double getMontoTotal(Double precioUnitario, Double cantidad) {
+		return precioUnitario * cantidad;
 	}
 
 	private Double getGananciaProducto(Double precioUnitario, Double costo, Double montoDescuento) {
@@ -572,7 +848,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 		resultado = precioUnitario > costo ? precioUnitario - costo : Constantes.ZEROS_DOUBLE;
 
-		return Utils.roundFactura(resultado - descuento, 5);
+		return Utils.roundFactura(resultado - descuento, 6);
 	}
 
 	private Double getPorcentajeGananciaProducto(Double precioUnitario, Double costo) {
@@ -584,7 +860,7 @@ public class FacturaBoImpl implements FacturaBo {
 		Double resultado = costo / precioUnitario;
 		resultado = 1 - resultado;
 
-		return Utils.roundFactura(resultado * 100, 5);
+		return Utils.roundFactura(resultado * 100, 6);
 	}
 
 	private void actualizaArticulosInventario(Factura factura, Usuario usuario) throws Exception {
@@ -654,7 +930,7 @@ public class FacturaBoImpl implements FacturaBo {
 			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				if (facturaCommand.getReferenciaNumero() != null && facturaCommand.getReferenciaNumero() != Constantes.EMPTY) {
 					Factura facturaAnular = findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), empresa);
-					facturaAnular = facturaAnular == null?facturaDao.findByClaveAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa()):facturaAnular;
+					facturaAnular = facturaAnular == null ? facturaDao.findByClaveAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa()) : facturaAnular;
 					if (facturaAnular != null) {
 						facturaAnular.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
 						modificar(facturaAnular);
@@ -807,10 +1083,9 @@ public class FacturaBoImpl implements FacturaBo {
 				if (factura.getReferenciaNumero() != null) {
 					if (factura.getReferenciaNumero() != Constantes.EMPTY) {
 						Factura facturaAnterior = findByConsecutivoAndEmpresa(factura.getReferenciaNumero(), empresa);
-						facturaAnterior = facturaAnterior == null?facturaDao.findByClaveAndEmpresa(factura.getReferenciaNumero(), usuario.getEmpresa()):facturaAnterior;
+						facturaAnterior = facturaAnterior == null ? facturaDao.findByClaveAndEmpresa(factura.getReferenciaNumero(), usuario.getEmpresa()) : facturaAnterior;
 						if (facturaAnterior != null) {
 							CuentaCobrar cuentaCobrar = cuentaCobrarDao.buscarPorConsecutivo(factura.getEmpresa(), facturaAnterior.getNumeroConsecutivo());
-//							cuentaCobrar = cuentaCobrar == null?cuentaCobrarDao.buscarPorConsecutivo(factura.getEmpresa(), factura()):
 							if (cuentaCobrar != null) {
 								// Eliminar la cuenta por cobrar si el tipo de anulacio es total
 								if (factura.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
@@ -822,7 +1097,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 								}
 							}
-							
+
 							facturaAnterior.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
 							modificar(facturaAnterior);
 							if (facturaAnterior.getClave() != null) {

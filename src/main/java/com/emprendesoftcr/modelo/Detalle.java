@@ -56,43 +56,43 @@ public class Detalle implements Serializable {
 	@Column(name = "unidad_medida")
 	private String						unidadMedida;
 
-	@Column(name = "precio_unitario")
+	@Column(name = "precio_unitario", precision = 18, scale = 5)
 	private Double						precioUnitario;
 
-	@Column(name = "cantidad")
+	@Column(name = "cantidad", precision = 18, scale = 3)
 	private Double						cantidad;
 
-	@Column(name = "monto_total")
+	@Column(name = "monto_total", precision = 18, scale = 5)
 	private Double						montoTotal;
 
-	@Column(name = "Monto_descuento")
+	@Column(name = "Monto_descuento", precision = 18, scale = 5)
 	private Double						montoDescuento;
 
 	@Column(name = "naturaleza_descuento")
 	private String						naturalezaDescuento;
 
-	@Column(name = "sub_total")
+	@Column(name = "sub_total", precision = 18, scale = 5)
 	private Double						subTotal;
 
-	@Column(name = "impuesto")
+	@Column(name = "impuesto", precision = 18, scale = 5)
 	private Double						impuesto;
 
-	@Column(name = "monto_impuesto")
+	@Column(name = "monto_impuesto", precision = 18, scale = 5)
 	private Double						montoImpuesto;
 
-	@Column(name = "monto_total_linea")
+	@Column(name = "monto_total_linea", precision = 18, scale = 5)
 	private Double						montoTotalLinea;
 
-	@Column(name = "ganancia")
+	@Column(name = "ganancia", precision = 18, scale = 5)
 	private Double						ganancia;
 
-	@Column(name = "porcentaje_desc")
+	@Column(name = "porcentaje_desc", precision = 18, scale = 5)
 	private Double						porcentajeDesc;
 
-	@Column(name = "porcentaje_ganan", columnDefinition = "Decimal(10,5) default '0.00'")
+	@Column(name = "porcentaje_ganan", columnDefinition = "default '0.00'", precision = 18, scale = 5)
 	private Double						porcentajeGanancia;
 
-	@Column(name = "costo", columnDefinition = "Decimal(10,5) default '0.00'")
+	@Column(name = "costo", columnDefinition = " default '0.00'", precision = 18, scale = 5)
 	private Double						costo;
 
 	@Column(name = "observacion", length = 60)
@@ -100,10 +100,10 @@ public class Detalle implements Serializable {
 
 	@Column(name = "tipo_impuesto1")
 	private String						tipoImpuesto1;
-	@Column(name = "impuesto1")
+	@Column(name = "impuesto1", precision = 18, scale = 5)
 	private Double						impuesto1;
 
-	@Column(name = "monto_impuesto1")
+	@Column(name = "monto_impuesto1", precision = 18, scale = 5)
 	private Double						montoImpuesto1;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -116,19 +116,19 @@ public class Detalle implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
-	@Column(name = "monto_gananc")
+	@Column(name = "monto_gananc", precision = 18, scale = 5)
 	private Double						montoGanancia;
 
-	@Column(name = "peso_transporte")
+	@Column(name = "peso_transporte", precision = 18, scale = 5)
 	private Double						pesoTransporte;
 
-	@Column(name = "peso_transTotal")
+	@Column(name = "peso_transTotal", precision = 18, scale = 5)
 	private Double						pesoTransporteTotal;
 
-	@Column(name = "imp_neto")
+	@Column(name = "imp_neto", precision = 18, scale = 5)
 	private Double						ImpuestoNeto;
 
-	@Column(name = "base_imposible", columnDefinition = "Decimal(10,5) default '0.00'")
+	@Column(name = "base_imposible", columnDefinition = "default '0.00'", precision = 18, scale = 5)
 	private Double						baseImponible;
 
 	@Column(name = "cod_tarifa", length = 2)
@@ -154,7 +154,7 @@ public class Detalle implements Serializable {
 	@Column(name = "porcentaje_exo", columnDefinition = "INT default '0'")
 	private Integer						porcentajeExoneracion;
 
-	@Column(name = "monto_exo", columnDefinition = "default '0'")
+	@Column(name = "mont_exone", precision = 18, scale = 5)
 	private Double						montoExoneracion;
 
 	@ManyToOne
@@ -611,7 +611,5 @@ public class Detalle implements Serializable {
 	public void setMontoExoneracion(Double montoExoneracion) {
 		this.montoExoneracion = montoExoneracion;
 	}
-	
-	
 
 }

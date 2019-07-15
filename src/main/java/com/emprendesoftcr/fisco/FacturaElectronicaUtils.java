@@ -70,6 +70,9 @@ public final class FacturaElectronicaUtils {
 
 	public static final String	FORMATO_CODIGO_SEGURIDAD							= "00000000";
 
+	
+	
+	
 	/**
 	 * Clave de la Factura para tributacion directa Codigo del Pais :Los primeros tres dígitos corresponden al código del país (506). Del cuarto al quinto dígito, corresponde al día en que se genere el comprobante electrónico. Del sexto al séptimo dígito, corresponde al mes en que se genere el comprobante electrónico. Del octavo al noveno dígito, corresponde al año en que se genere el comprobante electrónico. Del décimo al vigésimo primero dígito, corresponde al número de cédula del emisor. Del vigésimo segundo al cuadragésimo primero dígito, corresponde a la numeración consecutiva del comprobante electrónico. El cuadragésimo segundo le corresponde a la situación del comprobante electrónico para el cual se debe de utilizar la siguiente codificación: 1= Normal 2=Contigencia 3= Sin Internet
 	 * @param cedulaEmisor
@@ -135,6 +138,16 @@ public final class FacturaElectronicaUtils {
 		return resultado;
 	}
 
+	
+	public static BigDecimal truncateDecimal(Double x,int numberofDecimals)
+	{
+	    if ( x > 0) {
+	        return new BigDecimal(String.valueOf(x)).setScale(numberofDecimals, BigDecimal.ROUND_FLOOR);
+	    } else {
+	        return new BigDecimal(String.valueOf(x)).setScale(numberofDecimals, BigDecimal.ROUND_CEILING);
+	    }
+	}
+	
 	/**
 	 * Convertir a 5 decimales para la factura
 	 * @param valor
@@ -159,6 +172,13 @@ public final class FacturaElectronicaUtils {
 		valor = valor == null ? Constantes.ZEROS_DOUBLE : valor;
 		BigDecimal bd = new BigDecimal(Double.toString(valor));
 		bd = bd.setScale(3, RoundingMode.HALF_UP);
+		return bd;
+	}
+	
+	public static BigDecimal getConvertirBigDecimalFortmatoDecimales(Integer valor) {
+		valor = valor == null ? Constantes.ZEROS : valor;
+		BigDecimal bd = new BigDecimal(Integer.toString(valor));
+		bd = bd.setScale(0, RoundingMode.HALF_UP);
 		return bd;
 	}
 	

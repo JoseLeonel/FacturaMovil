@@ -32,7 +32,7 @@ public class Cliente implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long						id;
+	private Long							id;
 
 	@Column(name = "nombre_completo")
 	private String						nombreCompleto;
@@ -65,10 +65,10 @@ public class Cliente implements Serializable {
 	private Integer						celular;
 
 	@Column(name = "codigo_pais")
-	private Integer				codigoPais;
+	private Integer						codigoPais;
 
 	@Column(name = "telefono")
-	private Integer				telefono;
+	private Integer						telefono;
 
 	@Column(name = "otraSena")
 	private String						otraSena;
@@ -83,9 +83,8 @@ public class Cliente implements Serializable {
 	@Column(name = "correo_electronico3")
 	private String						correoElectronico3;
 
-	
 	@Column(name = "descuento")
-	private Integer				descuento;
+	private Integer						descuento;
 
 	@Column(name = "estado")
 	private String						estado;
@@ -100,8 +99,8 @@ public class Cliente implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
-	@Column(name = "obse_venta",  columnDefinition="varchar(80) default ' '")
-	private String observacionVenta;
+	@Column(name = "obse_venta", columnDefinition = "varchar(80) default ' '")
+	private String						observacionVenta;
 
 	@Column(name = "tipo_doc_exo", length = 2)
 	private String						tipoDocumentoExoneracion;
@@ -112,13 +111,14 @@ public class Cliente implements Serializable {
 	@Column(name = "nomb_inst_exo", length = 160)
 	private String						nombreInstitucionExoneracion;
 
+	@Column(name = "porcentaje_exo", columnDefinition = "INT default '0'")
+	private Integer						porcentajeExoneracion;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "fecha_emision_exo")
 	private Date							fechaEmisionExoneracion;
 
-	
-	
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
 	private Empresa						empresa;
@@ -127,13 +127,7 @@ public class Cliente implements Serializable {
 	@JoinColumn(name = "usuario_id")
 	private Usuario						usuario;
 
-	
-
-
-
-	
-
-	public Cliente(Long id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, String identificacionExtranjero, String provincia, String canton, String distrito, String barrio, Integer celular, Integer codigoPais, Integer telefono, String otraSena, String correoElectronico, String correoElectronico1, String correoElectronico2, String correoElectronico3, Integer descuento, String estado, Date created_at, Date updated_at, String observacionVenta, String tipoDocumentoExoneracion, String numeroDocumentoExoneracion, String nombreInstitucionExoneracion, Date fechaEmisionExoneracion, Empresa empresa, Usuario usuario) {
+	public Cliente(Long id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, String identificacionExtranjero, String provincia, String canton, String distrito, String barrio, Integer celular, Integer codigoPais, Integer telefono, String otraSena, String correoElectronico, String correoElectronico1, String correoElectronico2, String correoElectronico3, Integer descuento, String estado, Date created_at, Date updated_at, String observacionVenta, String tipoDocumentoExoneracion, String numeroDocumentoExoneracion, String nombreInstitucionExoneracion, Integer porcentajeExoneracion, Date fechaEmisionExoneracion, Empresa empresa, Usuario usuario) {
 		super();
 		this.id = id;
 		this.nombreCompleto = nombreCompleto;
@@ -161,6 +155,7 @@ public class Cliente implements Serializable {
 		this.tipoDocumentoExoneracion = tipoDocumentoExoneracion;
 		this.numeroDocumentoExoneracion = numeroDocumentoExoneracion;
 		this.nombreInstitucionExoneracion = nombreInstitucionExoneracion;
+		this.porcentajeExoneracion = porcentajeExoneracion;
 		this.fechaEmisionExoneracion = fechaEmisionExoneracion;
 		this.empresa = empresa;
 		this.usuario = usuario;
@@ -182,54 +177,42 @@ public class Cliente implements Serializable {
 		this.usuario = usuario;
 	}
 
-	
-
-	
 	public Long getId() {
 		return id;
 	}
 
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	
 	public String getTipoDocumentoExoneracion() {
 		return tipoDocumentoExoneracion;
 	}
 
-	
 	public void setTipoDocumentoExoneracion(String tipoDocumentoExoneracion) {
 		this.tipoDocumentoExoneracion = tipoDocumentoExoneracion;
 	}
 
-	
 	public String getNumeroDocumentoExoneracion() {
 		return numeroDocumentoExoneracion;
 	}
 
-	
 	public void setNumeroDocumentoExoneracion(String numeroDocumentoExoneracion) {
 		this.numeroDocumentoExoneracion = numeroDocumentoExoneracion;
 	}
 
-	
 	public String getNombreInstitucionExoneracion() {
 		return nombreInstitucionExoneracion;
 	}
 
-	
 	public void setNombreInstitucionExoneracion(String nombreInstitucionExoneracion) {
 		this.nombreInstitucionExoneracion = nombreInstitucionExoneracion;
 	}
 
-	
 	public Date getFechaEmisionExoneracion() {
 		return fechaEmisionExoneracion;
 	}
 
-	
 	public void setFechaEmisionExoneracion(Date fechaEmisionExoneracion) {
 		this.fechaEmisionExoneracion = fechaEmisionExoneracion;
 	}
@@ -258,8 +241,6 @@ public class Cliente implements Serializable {
 		this.provincia = provincia;
 	}
 
-	
-
 	public String getOtraSena() {
 		return otraSena;
 	}
@@ -275,8 +256,6 @@ public class Cliente implements Serializable {
 	public void setCorreoElectronico(String correoElectronico) {
 		this.correoElectronico = correoElectronico;
 	}
-
-	
 
 	public String getEstado() {
 		return estado;
@@ -358,87 +337,80 @@ public class Cliente implements Serializable {
 		this.barrio = barrio;
 	}
 
-	
 	public Integer getCodigoPais() {
 		return codigoPais;
 	}
 
-	
 	public void setCodigoPais(Integer codigoPais) {
 		this.codigoPais = codigoPais;
 	}
 
-	
 	public Integer getTelefono() {
 		return telefono;
 	}
 
-	
 	public void setTelefono(Integer telefono) {
 		this.telefono = telefono;
 	}
 
-	
 	public Integer getDescuento() {
 		return descuento;
 	}
 
-	
 	public void setDescuento(Integer descuento) {
 		this.descuento = descuento;
 	}
 
-
-	
 	public void setCelular(Integer celular) {
 		this.celular = celular;
 	}
 
-	
 	public Integer getCelular() {
 		return celular;
 	}
 
-	
 	public String getCorreoElectronico1() {
 		return correoElectronico1;
 	}
 
-	
 	public void setCorreoElectronico1(String correoElectronico1) {
 		this.correoElectronico1 = correoElectronico1;
 	}
 
-	
 	public String getCorreoElectronico2() {
 		return correoElectronico2;
 	}
 
-	
 	public void setCorreoElectronico2(String correoElectronico2) {
 		this.correoElectronico2 = correoElectronico2;
 	}
 
-	
 	public String getCorreoElectronico3() {
 		return correoElectronico3;
 	}
 
-	
 	public void setCorreoElectronico3(String correoElectronico3) {
 		this.correoElectronico3 = correoElectronico3;
 	}
 
-	
 	public String getObservacionVenta() {
 		return observacionVenta;
 	}
 
-	
 	public void setObservacionVenta(String observacionVenta) {
 		this.observacionVenta = observacionVenta;
 	}
-	
-	
 
+	
+	public Integer getPorcentajeExoneracion() {
+		return porcentajeExoneracion;
+	}
+
+	
+	public void setPorcentajeExoneracion(Integer porcentajeExoneracion) {
+		this.porcentajeExoneracion = porcentajeExoneracion;
+	}
+
+	
+	
 }

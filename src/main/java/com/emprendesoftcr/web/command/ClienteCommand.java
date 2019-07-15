@@ -9,6 +9,7 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 
@@ -62,6 +63,8 @@ public class ClienteCommand {
 	private String	nombreInstitucionExoneracion;
 
 	private Date		fechaEmisionExoneracion;
+	private String	fechaEmisionExoneracionSTR;
+	private Integer	porcentajeExoneracion;
 
 	private Empresa	empresa;
 
@@ -91,15 +94,12 @@ public class ClienteCommand {
 		this.correoElectronico2 = cliente.getCorreoElectronico2();
 		this.correoElectronico3 = cliente.getCorreoElectronico3();
 		this.observacionVenta = cliente.getObservacionVenta();
-
+    this.porcentajeExoneracion = cliente.getPorcentajeExoneracion();
 		this.tipoDocumentoExoneracion = cliente.getTipoDocumentoExoneracion();
-
 		this.numeroDocumentoExoneracion = cliente.getNumeroDocumentoExoneracion();
-
 		this.nombreInstitucionExoneracion = cliente.getNombreInstitucionExoneracion();
-
 		this.fechaEmisionExoneracion = cliente.getFechaEmisionExoneracion();
-
+		this.fechaEmisionExoneracionSTR = Utils.getFechaGeneraReporte(cliente.getFechaEmisionExoneracion());
 	}
 
 	public ClienteCommand() {
@@ -108,6 +108,14 @@ public class ClienteCommand {
 
 	public Long getId() {
 		return id;
+	}
+
+	public Integer getPorcentajeExoneracion() {
+		return porcentajeExoneracion;
+	}
+
+	public void setPorcentajeExoneracion(Integer porcentajeExoneracion) {
+		this.porcentajeExoneracion = porcentajeExoneracion;
 	}
 
 	public String getTipoDocumentoExoneracion() {
@@ -356,6 +364,14 @@ public class ClienteCommand {
 
 	public void setObservacionVenta(String observacionVenta) {
 		this.observacionVenta = observacionVenta;
+	}
+
+	public String getFechaEmisionExoneracionSTR() {
+		return fechaEmisionExoneracionSTR;
+	}
+
+	public void setFechaEmisionExoneracionSTR(String fechaEmisionExoneracionSTR) {
+		this.fechaEmisionExoneracionSTR = fechaEmisionExoneracionSTR;
 	}
 
 }

@@ -104,74 +104,74 @@ public class Factura implements Serializable {
 	@Column(name = "comanda")
 	private String						comanda;
 
-	@Column(name = "tipo_cambio")
+	@Column(name = "tipo_cambio", precision = 18, scale = 5)
 	private Double						tipoCambio;
 
-	@Column(name = "subTotal")
+	@Column(name = "subTotal", precision = 18, scale = 5)
 	private Double						subTotal;
 
-	@Column(name = "total_transporte")
+	@Column(name = "total_transporte", precision = 18, scale = 5)
 	private Double						totalTransporte;
 
-	@Column(name = "total_serv_gravados")
+	@Column(name = "total_serv_gravados", precision = 18, scale = 5)
 	private Double						totalServGravados;
 
-	@Column(name = "total_serv_exentos")
+	@Column(name = "total_serv_exentos", precision = 18, scale = 5)
 	private Double						totalServExentos;
 
-	@Column(name = "total_mercancias_gravadas")
+	@Column(name = "total_mercancias_gravadas", precision = 18, scale = 5)
 	private Double						totalMercanciasGravadas;
 
-	@Column(name = "total_mercancias_exentas")
+	@Column(name = "total_mercancias_exentas", precision = 18, scale = 5)
 	private Double						totalMercanciasExentas;
 
-	@Column(name = "total_gravado")
+	@Column(name = "total_gravado", precision = 18, scale = 5)
 	private Double						totalGravado;
 
-	@Column(name = "total_exento")
+	@Column(name = "total_exento", precision = 18, scale = 5)
 	private Double						totalExento;
 
-	@Column(name = "total_venta")
+	@Column(name = "total_venta", precision = 18, scale = 5)
 	private Double						totalVenta;
 
-	@Column(name = "total_descuentos")
+	@Column(name = "total_descuentos", precision = 18, scale = 5)
 	private Double						totalDescuentos;
 
-	@Column(name = "total_venta_neta")
+	@Column(name = "total_venta_neta", precision = 18, scale = 5)
 	private Double						totalVentaNeta;
 
-	@Column(name = "total_impuesto")
+	@Column(name = "total_impuesto", precision = 18, scale = 5)
 	private Double						totalImpuesto;
 
-	@Column(name = "total_comprobante")
+	@Column(name = "total_comprobante", precision = 18, scale = 5)
 	private Double						totalComprobante;
 
-	@Column(name = "total_efectivo")
+	@Column(name = "total_efectivo", precision = 18, scale = 5)
 	private Double						totalEfectivo;
 
-	@Column(name = "total_tarjeta")
+	@Column(name = "total_tarjeta", precision = 18, scale = 5)
 	private Double						totalTarjeta;
 
-	@Column(name = "total_banco")
+	@Column(name = "total_banco", precision = 18, scale = 5)
 	private Double						totalBanco;
 
-	@Column(name = "total_credito")
+	@Column(name = "total_credito", precision = 18, scale = 5)
 	private Double						totalCredito;
 
-	@Column(name = "monto_cambio")
+	@Column(name = "monto_cambio", precision = 18, scale = 5)
 	private Double						montoCambio;
 
-	@Column(name = "total_cambio")
+	@Column(name = "total_cambio", precision = 18, scale = 5)
 	private Double						totalCambio;
 
 	// Impuesto del servicio cuando aplica
-	@Column(name = "total_servicio")
+	@Column(name = "total_servicio", precision = 18, scale = 5)
 	private Double						totalImpuestoServicio;
 
-	@Column(name = "total_cambioPagar")
+	@Column(name = "total_cambioPagar", precision = 18, scale = 5)
 	private Double						totalCambioPagar;
 
-	@Column(name = "cambio_moneda")
+	@Column(name = "cambio_moneda", precision = 18, scale = 5)
 	private Double						cambioMoneda;
 
 	@Column(name = "codigo_moneda")
