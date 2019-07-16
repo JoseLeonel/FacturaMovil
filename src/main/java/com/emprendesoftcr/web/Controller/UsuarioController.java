@@ -152,14 +152,16 @@ public class UsuarioController {
 //				else
 //
 //				System.out.println("The password does not match.");
-			if (result.hasErrors()) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
-			}
 			if(usuarioBo.isAdministrador_sistema(usuario) || usuarioBo.isAdministrador_empresa(usuario) || usuarioBo.isAdministrador_restaurante(usuario)   ) {
 				validarRolCommand.setAceptacion(1);
 			}else {
-				validarRolCommand.setAceptacion(0);
+				result.rejectValue("claveSistema", "validar.usuario.rol.invalido");
 			}
+			
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
+			
 			validarRolCommand.setAceptacion(1);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("usuario.validar",validarRolCommand);
 
