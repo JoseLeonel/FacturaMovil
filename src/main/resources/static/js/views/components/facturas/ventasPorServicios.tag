@@ -168,33 +168,44 @@
                             </div>
                         </div>
                         <div class="row" >
-                            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <div class="col-md-6 col-sx-6 col-sm-6 col-lg-6">
+                                <label class="knob-label ">{$.i18n.prop("factura.resumen.impuesto")}</label> 
+                                <input type="number" step="any"  class="form-control "  value="{totalImpuesto}" readonly>
+                            </div>
+                            <div class="col-md-6 col-sx-6 col-sm-6 col-lg-6" >
+                                <label class="knob-label ">{$.i18n.prop("factura.resumen.exoneracion")}</label> 
+                                <input type="number" step="any"  class="form-control "  value="{montoExoneracion}" readonly>
+                            </div>
+
+                        </div>    
+                        
+
+                        <div class="row" >
+                            <div class="col-md-6 col-sx-6 col-sm-6 col-lg-6">
                                 <label class="knob-label ">{$.i18n.prop("factura.resumen.total.servicios")}</label> 
-                                <input type="number" step="any"  class="form-control "  value="{factura.totalComprobante}" readonly>
+                                <input type="number" step="any"  class="form-control "  value="{factura.totalComprobante.toFixed(2)}" readonly>
                             </div>
-                        </div>    
-                        <div class="row" >
-                            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <div class="col-md-6 col-sx-6 col-sm-6 col-lg-6">
                                 <label class="knob-label ">{$.i18n.prop("factura.resumen.efectivo")}</label> 
-                                <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress} step="any"   class="form-control totalEfectivo" id="totalEfectivo"  name="totalEfectivo"  value="{factura.totalComprobante}" >
+                                <input onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress} step="any"   class="form-control totalEfectivo" id="totalEfectivo"  name="totalEfectivo"  value="{factura.totalComprobante.toFixed(2)}" >
                             </div>
+
                         </div>    
                         <div class="row" >
-                            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <div class="col-md-6 col-sx-6 col-sm-6 col-lg-6">
                                 <label class="knob-label ">{$.i18n.prop("factura.resumen.tarjeta")}</label> 
                                 <input onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any" class="form-control totalTarjeta " id="totalTarjeta"  name="totalTarjeta"  value="0" >
                             </div>
-                        </div>    
-                        <div class="row" >
-                            <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <div class="col-md-6 col-sx-6 col-sm-6 col-lg-6">
                                 <label class="knob-label ">{$.i18n.prop("factura.resumen.banco")}</label> 
                                 <input onkeyup={ __TotalDeBancoAPagar} onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control totalBanco" id="totalBanco"  name="totalBanco"  value="0" >
                             </div>
+
                         </div>    
                         <div class="row" >
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label class="knob-label ">{$.i18n.prop("factura.resumen.cambio")}</label> 
-                                <input type="number" step="any"  class="form-control "  value="{factura.totalCambioPagar}" readonly>
+                                <input type="number" step="any"  class="form-control "  value="{totalCambioPagar}" readonly>
                             </div>
                         </div>   
                             <input type="hidden" id='codigoActividad'         name='codigoActividad'         value="{factura.codigoActividad}" >
@@ -429,7 +440,7 @@ self.on('mount',function(){
      $("#formulario").validate(reglasDeValidacion());
     __ListaDeArticulosPorEmpresa()
     __comboMonedas()
-    __ComboTipoDocumentos()
+    __ComboTipoDocumentos(1)
     __comboCondicionPago()
     __ListaDeClientes()
     __comboCondicionPago()
@@ -892,19 +903,20 @@ function __calculate() {
     self.factura.totalImpuesto    = 0;
     self.factura.subTotal         = 0;
     self.update()
-    totalVenta     = 0
-    subTotal       = 0
-    totalDescuento = 0
-    totalImpuesto  = 0
-    totalImpuesto1  = 0
-    totalMercanciasGravadas = 0
-    totalMercanciasExentas  = 0
-    totalServGravados       = 0
-    totalServExentos        = 0
-    totalGravado            = 0
-    totalExento             = 0
-    totalComprobante        = 0
-    totalventaNeta          = 0
+    var totalVenta     = 0
+    var subTotal       = 0
+    var totalDescuento = 0
+    var totalImpuesto  = 0
+    var montoExoneracion = 0
+    var totalImpuesto1  = 0
+    var totalMercanciasGravadas = 0
+    var totalMercanciasExentas  = 0
+    var totalServGravados       = 0
+    var totalServExentos        = 0
+    var totalGravado            = 0
+    var totalExento             = 0
+    var totalComprobante        = 0
+    var totalventaNeta          = 0
     self.cantArticulos      = 0
     self.detail.forEach(function(e){
         totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.montoTotal:0
@@ -924,6 +936,7 @@ function __calculate() {
         totalImpuesto           += __valorNumerico(e.montoImpuesto)
         totalImpuesto1          += __valorNumerico(e.montoImpuesto1)
         totalVenta              += e.montoTotal
+        montoExoneracion        += parseFloat(e.montoExoneracion) 
     });
     self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)
     self.factura.totalMercanciasExentas  = __valorNumerico(totalMercanciasExentas)
@@ -941,6 +954,7 @@ function __calculate() {
     self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
     self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
     self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
+    self.montoExoneracion                = formatoDecimales(montoExoneracion,2);
     self.update(); 
 
 }
@@ -1020,7 +1034,7 @@ function validar(){
         self.update()
         __agregarArticulo(1)
      }  
-     $('.totalEfectivo').val(self.factura.totalComprobante)
+     $('.totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
 }
 /**
 * Segundo paso
@@ -1028,7 +1042,7 @@ function validar(){
 _SegundoPaso(){
     self.formularioSegundoPaso = false
     self.update()
-     $('.totalEfectivo').val(self.factura.totalComprobante)
+     $('.totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
 }
 /**
 *  Muestra la lista de clientes
@@ -1156,11 +1170,75 @@ function __seleccionarClientes() {
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	     }
-        self.cliente = data
-        self.update();
+          self.cliente = data
+         self.update();
+        __aplicarExoneracionPorCliente()
+        
+       
+         if(verificarSiClienteFrecuente()){
+             __ComboTipoDocumentos(1)
+         }else{
+             __ComboTipoDocumentos(2)
+         }
          $('#modalClientes').modal('hide') 
     });
 }
+
+/**
+*Verifica si es cleinte frecuente por la cedula y el nombre  sino es se actualiza el tipo de documento combo
+* para que salga factura o proforma
+**/
+function verificarSiClienteFrecuente(){
+    if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE")){
+        return true
+    }
+    if(self.cliente.cedula.indexOf("999999999999")){
+        return true
+    }
+    return false;
+}
+
+/**
+* Aplicar la exoneracion de detalles
+**/
+function __aplicarExoneracionPorCliente(){
+    var porcentaje = self.cliente.porcentajeExoneracion / 100
+    var valorTotal = 0
+    for (var count = 0; count < self.detail.length; count++) {
+        self.item          = self.detail[count];
+        self.cliente.porcentajeExoneracion = parseFloat(self.cliente.porcentajeExoneracion)
+            if(self.item.montoImpuesto > 0 || self.item.montoImpuesto1 > 0 ){
+                if(self.cliente.porcentajeExoneracion > 0){
+                    self.item.porcentajeExoneracion = parseFloat(self.cliente.porcentajeExoneracion)
+                    self.item.fechaEmisionExoneracion = self.cliente.fechaEmisionExoneracion
+                    self.item.nombreInstitucionExoneracion = self.cliente.nombreInstitucionExoneracion
+                    self.item.numeroDocumentoExoneracion = self.cliente.numeroDocumentoExoneracion
+                    self.item.tipoDocumentoExoneracion = self.cliente.tipoDocumentoExoneracion
+                    valorTotal = parseFloat(self.item.montoImpuesto * porcentaje)  
+                    self.item.montoExoneracion = valorTotal
+                    self.item.ImpuestoNeto = self.item.montoImpuesto - self.item.montoExoneracion
+                    self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
+                    self.detail[count] = self.item;
+                    self.update();
+                }else{
+                    //Cliente no tiene exoneracion
+                    self.item.porcentajeExoneracion = 0
+                    self.item.fechaEmisionExoneracion = null
+                    self.item.nombreInstitucionExoneracion = ""
+                    self.item.numeroDocumentoExoneracion = ""
+                    self.item.tipoDocumentoExoneracion = ""
+                    self.item.ImpuestoNeto = self.item.montoImpuesto 
+                    self.item.montoExoneracion = 0
+                    self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
+                    self.detail[count] = self.item;
+                    self.update();
+
+                }
+            }
+    }
+    __calculate()
+}
+
 /**
 *  Agregar los inpust  y select de las tablas
 **/
@@ -1193,17 +1271,27 @@ function __comboCondicionPago(){
 /**
 * cargar los codigos de tipo de documentos
 **/
-function __ComboTipoDocumentos(){
+function __ComboTipoDocumentos(valor){
     self.comboTipoDocumentos = []
     self.update()
-    self.comboTipoDocumentos.push({
-        estado:"01",
-        descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
-    })
-    self.comboTipoDocumentos.push({
-        estado:"04",
-        descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
-    })
+     // Tipo documento unicamente proforma y factura 
+    if(valor == 1){
+        self.comboTipoDocumentos.push({
+            estado:"01",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
+        })
+      
+       self.update()
+       return true 
+    }
+     if(valor == 2){
+         self.comboTipoDocumentos.push({
+            estado:"04",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
+        })
+       self.update()
+       return true 
+    }
     self.update()
 }
 /**

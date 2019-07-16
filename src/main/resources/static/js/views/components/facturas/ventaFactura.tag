@@ -750,9 +750,9 @@
                                            <div class="valorTotal">  {totalImpuesto}  </div>
                                         </div>   
                                         
-                                        <div class="elementoTotales" >   
-                                           <div class="tituloTotal">{$.i18n.prop("factura.resumen.impuestoServ")}</div>
-                                           <div class="valorTotal">  {totalImpuestoServ}   </div>
+                                        <div class="elementoTotales"  >   
+                                           <div class="tituloTotal">{$.i18n.prop("factura.resumen.exoneracion")}</div>
+                                           <div class="valorTotal">  {montoExoneracion}   </div>
                                         </div>
                                         <div class="elementoTotales" >   
                                            <div class="tituloTotal">{$.i18n.prop("factura.resumen.total")}</div>
@@ -2515,6 +2515,7 @@ function __Init(){
     self.totalDescuentos  =0;
     self.totalImpuesto    =0;
     self.totalCambioPagar =0;
+    self.montoExoneracion     = 0
     self.update()
     $('#condicionVenta').prop("selectedIndex", 0);
     $('#tipoDoc').prop("selectedIndex", 0);
@@ -2540,7 +2541,7 @@ function __Init(){
     // Tipo de Pagos
      __comboCondicionPago()
      //Tipos de Documentos
-      __ComboTipoDocumentos()
+      __ComboTipoDocumentos(0)
       //Estados
       __ComboEstados()
      __ListaFacturasEnEspera()
@@ -2617,6 +2618,12 @@ function cargarDetallesFacturaEnEspera(data){
             montoTotal      : parseFloat(modeloTabla.montoTotal),
             costo           : parseFloat(modeloTabla.costo),
             porcentajeGanancia :parseFloat(modeloTabla.porcentajeGanancia),
+             montoExoneracion:parseFloat(modeloTabla.montoExoneracion),
+            porcentajeExoneracion:parseFloat(modeloTabla.porcentajeExoneracion),
+            fechaEmisionExoneracion:modeloTabla.fechaEmisionExoneracion,
+            nombreInstitucionExoneracion:modeloTabla.nombreInstitucionExoneracion,
+            numeroDocumentoExoneracion:modeloTabla.numeroDocumentoExoneracion,
+            tipoDocumentoExoneracion:modeloTabla.tipoDocumentoExoneracion
         });
         self.update()
         self.numeroLinea   = self.numeroLinea + 1
@@ -2640,7 +2647,13 @@ function cargarDetallesFacturaEnEspera(data){
     $('#totalBanco').val(null)
     $('#totalEfectivo').focus()
     $('#totalEfectivo').select()
-     __calculate(); 
+    // __calculate(); 
+    if(verificarSiClienteFrecuente()){
+             __ComboTipoDocumentos(1)
+    }else{
+         __ComboTipoDocumentos(2)
+    }
+    __aplicarExoneracionPorCliente()
 }
 /** 
 *Formato de la fecha con hora
@@ -3163,7 +3176,13 @@ function __nuevoArticuloAlDetalle(cantidad){
        costo           : costoTotal,
        porcentajeGanancia :   getListaPrecioGanancia(self.articulo) ==null?0:parseFloat(getListaPrecioGanancia(self.articulo)),
        pesoTransporte :  parseFloat(self.articulo.pesoTransporte),
-       pesoTransporteTotal :parseFloat(self.articulo.pesoTransporte)
+       pesoTransporteTotal :parseFloat(self.articulo.pesoTransporte),
+         montoExoneracion:0,
+       porcentajeExoneracion:0,
+       fechaEmisionExoneracion:null,
+       nombreInstitucionExoneracion:"",
+       numeroDocumentoExoneracion:"",
+       tipoDocumentoExoneracion:""
     });
     self.detail.sort(function(a,b) {
     if ( a.pesoPrioridad > b.pesoPrioridad )
@@ -3430,6 +3449,7 @@ function __calculate() {
     totalComprobante        = 0
     totalventaNeta          = 0
     self.cantArticulos      = 0
+    var montoExoneracion = 0
     self.detail.forEach(function(e){
         totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.montoTotal:0
         totalMercanciasGravadas += e.montoImpuesto1 > 0 && e.tipoImpuesto1 != "07"?e.montoTotal:0
@@ -3449,6 +3469,7 @@ function __calculate() {
         totalImpuesto1          += __valorNumerico(e.montoImpuesto1)
         totalVenta              += e.montoTotal
         self.cantArticulos      += esEntero(e.cantidad) == true? e.cantidad:1 
+         montoExoneracion        += parseFloat(e.montoExoneracion) 
     });
     self.factura.totalMercanciasGravadas = __valorNumerico(totalMercanciasGravadas)
     self.factura.totalMercanciasExentas  = __valorNumerico(totalMercanciasExentas)
@@ -3466,6 +3487,7 @@ function __calculate() {
     self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
     self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
     self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
+     self.montoExoneracion                = formatoDecimales(montoExoneracion,2);
     self.update(); 
     $('.precioVenta').val(null)
     $('.codigo').val(null)
@@ -3642,9 +3664,73 @@ function __seleccionarClientes() {
 	     }
         self.cliente = data
         self.update();
+        __aplicarExoneracionPorCliente()
+        
+        
          $('#modalClientes').modal('hide') 
+         if(verificarSiClienteFrecuente()){
+             __ComboTipoDocumentos(1)
+         }else{
+             __ComboTipoDocumentos(2)
+         }
+        
     });
 }
+/**
+*Verifica si es cleinte frecuente por la cedula y el nombre  sino es se actualiza el tipo de documento combo
+* para que salga factura o proforma
+**/
+function verificarSiClienteFrecuente(){
+    if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE")){
+        return true
+    }
+    if(self.cliente.cedula.indexOf("999999999999")){
+        return true
+    }
+    return false;
+}
+
+/**
+* Aplicar la exoneracion de detalles
+**/
+function __aplicarExoneracionPorCliente(){
+    var porcentaje = self.cliente.porcentajeExoneracion / 100
+    var valorTotal = 0
+    for (var count = 0; count < self.detail.length; count++) {
+        self.item          = self.detail[count];
+        self.cliente.porcentajeExoneracion = parseFloat(self.cliente.porcentajeExoneracion)
+            if(self.item.montoImpuesto > 0 || self.item.montoImpuesto1 > 0 ){
+                if(self.cliente.porcentajeExoneracion > 0){
+                    self.item.porcentajeExoneracion = parseFloat(self.cliente.porcentajeExoneracion)
+                    self.item.fechaEmisionExoneracion = self.cliente.fechaEmisionExoneracion
+                    self.item.nombreInstitucionExoneracion = self.cliente.nombreInstitucionExoneracion
+                    self.item.numeroDocumentoExoneracion = self.cliente.numeroDocumentoExoneracion
+                    self.item.tipoDocumentoExoneracion = self.cliente.tipoDocumentoExoneracion
+                    valorTotal = parseFloat(self.item.montoImpuesto * porcentaje)  
+                    self.item.montoExoneracion = valorTotal
+                    self.item.ImpuestoNeto = self.item.montoImpuesto - self.item.montoExoneracion
+                    self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
+                    self.detail[count] = self.item;
+                    self.update();
+                }else{
+                    //Cliente no tiene exoneracion
+                    self.item.porcentajeExoneracion = 0
+                    self.item.fechaEmisionExoneracion = null
+                    self.item.nombreInstitucionExoneracion = ""
+                    self.item.numeroDocumentoExoneracion = ""
+                    self.item.tipoDocumentoExoneracion = ""
+                    self.item.ImpuestoNeto = self.item.montoImpuesto 
+                    self.item.montoExoneracion = 0
+                    self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
+                    self.detail[count] = self.item;
+                    self.update();
+
+                }
+            }
+    }
+    __calculate()
+}
+
 /**
 * cargar los estados de la factura
 **/
@@ -3664,9 +3750,31 @@ function __comboCondicionPago(){
 /**
 * cargar los tipos de Documento de la factura
 **/
-function __ComboTipoDocumentos(){
+function __ComboTipoDocumentos(valor){
     self.comboTipoDocumentos = []
     self.update()
+    // Tipo documento unicamente proforma y factura 
+    if(valor == 1){
+        self.comboTipoDocumentos.push({
+            estado:"01",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
+        })
+        self.comboTipoDocumentos.push({
+            estado:"88",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
+        })
+       self.update()
+       return true 
+    }
+     if(valor == 2){
+         self.comboTipoDocumentos.push({
+            estado:"04",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
+        })
+       self.update()
+       return true 
+    }
+
     //Prioridad de orden
     if(self.empresa.prioridadFacturar == 1 ){
         self.comboTipoDocumentos.push({
@@ -3892,7 +4000,7 @@ function _Empresa(){
                        }
                        self.update()
                     });
-                    __ComboTipoDocumentos()
+                    __ComboTipoDocumentos(0)
                 }
             }
         },

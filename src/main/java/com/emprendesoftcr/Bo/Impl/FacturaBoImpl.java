@@ -494,24 +494,24 @@ public class FacturaBoImpl implements FacturaBo {
 
 			}
 		}
-
-		factura.setTotalServExonerado(totalServExonerado);
-		factura.setTotalMercExonerada(totalMercExonerada);
-		factura.setTotalExonerado(totalExonerado);
-		factura.setTotalIVADevuelto(totalIVADevuelto);
-		factura.setTotalMercanciasGravadas(totalMercanciasGravadas);
-		factura.setTotalMercanciasExentas(totalMercanciasExentas);
-		factura.setTotalServExentos(totalServExentos);
-		factura.setTotalServGravados(totalServGravados);
-		factura.setTotalGravado(totalGravado);
-		factura.setTotalExento(totalExento);
-		factura.setTotalVenta(Utils.roundFactura(totalVenta,5));
-		factura.setTotalVentaNeta(Utils.roundFactura(totalVentaNeta,5));
-		factura.setTotalDescuentos(totalDescuentos);
-		factura.setTotalImpuesto(totalImpuesto);
-		factura.setTotalImpuestoServicio(totalImpServicios);
 		totalComprobante = factura.getTotalOtrosCargos() + totalImpuesto + totalVentaNeta;
 		totalComprobante = totalComprobante - totalIVADevuelto;
+
+		factura.setTotalServExonerado(Utils.roundFactura(totalServExonerado,5));
+		factura.setTotalMercExonerada(Utils.roundFactura(totalMercExonerada,5));
+		factura.setTotalExonerado(Utils.roundFactura(totalExonerado,5));
+		factura.setTotalIVADevuelto(Utils.roundFactura(totalIVADevuelto,5));
+		factura.setTotalMercanciasGravadas(Utils.roundFactura(totalMercanciasGravadas,5));
+		factura.setTotalMercanciasExentas(Utils.roundFactura(totalMercanciasExentas,5));
+		factura.setTotalServExentos(Utils.roundFactura(totalServExentos,5));
+		factura.setTotalServGravados(Utils.roundFactura(totalServGravados,5));
+		factura.setTotalGravado(Utils.roundFactura(totalGravado,5));
+		factura.setTotalExento(Utils.roundFactura(totalExento,5));
+		factura.setTotalVenta(Utils.roundFactura(totalVenta,5));
+		factura.setTotalVentaNeta(Utils.roundFactura(totalVentaNeta,5));
+		factura.setTotalDescuentos(Utils.roundFactura(totalDescuentos,5));
+		factura.setTotalImpuesto(Utils.roundFactura(totalImpuesto,5));
+		factura.setTotalImpuestoServicio(totalImpServicios);
 		factura.setTotalComprobante(Utils.roundFactura(totalComprobante,5));
 
 	}
@@ -534,7 +534,7 @@ public class FacturaBoImpl implements FacturaBo {
 			resultado = subTotal + montoImpuesto + montoImpuesto1;
 		}
 
-		return resultado;
+		return Utils.roundFactura(resultado,5);
 	}
 
 	/**
@@ -739,7 +739,7 @@ public class FacturaBoImpl implements FacturaBo {
 
 		}
 
-		return resultado;
+		return Utils.roundFactura(resultado,5);
 
 	}
 
@@ -763,7 +763,7 @@ public class FacturaBoImpl implements FacturaBo {
 			resultado = montoImpuesto + montoImpuesto1;
 		}
 
-		return resultado;
+		return Utils.roundFactura(resultado,5);
 
 	}
 
@@ -779,7 +779,7 @@ public class FacturaBoImpl implements FacturaBo {
 			return Constantes.ZEROS_DOUBLE;
 		}
 		Double porcentaje = Double.parseDouble(porcentajeExoneracion.toString()) / 100;
-		return montoImpuesto * porcentaje;
+		return Utils.roundFactura(montoImpuesto * porcentaje,5);
 	}
 
 	/**
@@ -792,7 +792,7 @@ public class FacturaBoImpl implements FacturaBo {
 	private Double getMontoImpuestoCon13(Double subTotal, Double montoPrimerImpuesto, Double tarifa) {
 		Double valor = tarifa / 100d;
 		Double resultado = subTotal + montoPrimerImpuesto;
-		return resultado * valor;
+		return Utils.roundFactura(resultado * valor,5);
 	}
 
 	/**
@@ -803,7 +803,7 @@ public class FacturaBoImpl implements FacturaBo {
 	 */
 	private Double getMontoImpuestoSin13(Double subTotal, Double tarifa) {
 		Double valor = tarifa / 100d;
-		return subTotal * valor;
+		return Utils.roundFactura(subTotal * valor,5);
 
 	}
 
@@ -826,7 +826,7 @@ public class FacturaBoImpl implements FacturaBo {
 	 */
 	private Double getDescuento(Double montoTotal, Double porcentajeDescuento) {
 		Double valor = porcentajeDescuento / 100d;
-		return montoTotal * valor;
+		return Utils.roundFactura(montoTotal * valor,5);
 	}
 
 	/**
@@ -836,7 +836,7 @@ public class FacturaBoImpl implements FacturaBo {
 	 * @return
 	 */
 	private Double getMontoTotal(Double precioUnitario, Double cantidad) {
-		return precioUnitario * cantidad;
+		return Utils.roundFactura(precioUnitario * cantidad,5);
 	}
 
 	private Double getGananciaProducto(Double precioUnitario, Double costo, Double montoDescuento) {

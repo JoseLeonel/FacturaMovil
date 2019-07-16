@@ -114,7 +114,7 @@ var informacion_tabla = [
                                      return costo ==null?0:costo;
                                 },
                             },
-                               {'data' :'impuesto'                ,"name":"impuesto"               ,"title" : "Impuesto"         ,"autoWidth" :true },
+                               {'data' :'impuesto'                ,"name":"impuesto"               ,"title" : "IVA"         ,"autoWidth" :true },
                                {'data' :'precioPublico'           ,"name":"precioPublico"          ,"title" : "Precio"           ,"autoWidth" :true ,
                                "render":function(precioPublico,type, row){
                                      return precioPublico ==null?0:precioPublico >0?precioPublico:0;

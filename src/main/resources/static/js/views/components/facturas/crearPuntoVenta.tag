@@ -177,21 +177,19 @@
                             <!--Booking details-->
                             <article class="booking-details clearfix">
                                 <h1><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h1>
-                                <div class="booking-info" show={soloParaChinos == false}>
-                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.subTotal")}  <span id="lblSubtotal"> {subTotalGeneral} </span></p>
-                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos} </span></p>
-                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {totalImpuesto} </span></p>
+                                <div class="TotalesContainer"  onclick = {__MostrarFormularioDePago}>
+                                    <div  show={soloParaChinos == false} class="elementoTotales">{$.i18n.prop("factura.resumen.subTotal")}   <span id="lblSubtotal"> {subTotalGeneral}   </span> </div> 
+                                    <div  show={soloParaChinos == false && totalDescuentos > 0} class="elementoTotales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos}   </span> </div> 
+                                    <div  show={soloParaChinos == false} class="elementoTotales">{$.i18n.prop("factura.resumen.impuesto")}    <span id="lblSubtotal"> {totalImpuesto}    </span> </div> 
+                                    <div  show="{soloParaChinos == false && montoExoneracion > 0}" class="elementoTotales">{$.i18n.prop("factura.resumen.exoneracion")} <span id="lblSubtotal"> {montoExoneracion} </span> </div> 
+                                    <div  show={soloParaChinos == false} class="elementoTotales">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}         </span> </div> 
+                                    <div  show={soloParaChinos == false} class="elementoTotales">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span> </div> 
                                 </div>
-                                <div class="precioTotalFactura" show={soloParaChinos == false}>
-                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}</span></p>
-                                </div>
+      
                                 <div class="precioTotalFactura" show={soloParaChinos == true}>
                                     <p class="total label-totalesChinos" style="text-align:right;">Total:  <span id="lblTotal">{totalComprobante}</span></p>
                                 </div>
 
-                                <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado && soloParaChinos == false }>
-                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span></p>    
-                                </div>
                                 <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado && soloParaChinos == true }>
                                     <p class="total label-totalesChinos" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span></p>    
                                 </div>
@@ -219,7 +217,7 @@
                 </div> 
             </div>       
         <!--Fin Ventana de los billetes--> 
- <div class="ventaEsperaSeleccionada" show={factura.id !=null}>
+ <div class="ventaEsperaSeleccionada" show={factura.id !=null && mostrarFormularioPago == false}>
        <div class="tituloVentaEspera"> 
            Venta en Espera: {factura.consecutivoProforma != null && factura.consecutivoProforma.length > 0  ?factura.consecutivoProforma :factura.id} 
             {factura.cliente.nombreCompleto === 'CLIENTE_FRECUENTE'? factura.nombreFactura.length > 0?"-Nombre:" +factura.nombreFactura:'Sin Cliente Asociado' :"-Nombre:"+factura.cliente.nombreCompleto} 
@@ -284,7 +282,7 @@
                             <tr each={detail}>
                                 <td>
                                    <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
-                                   <button  onclick={__aplicarExoneracionAlDetalle} class="btn btn-primary btn-xs btn-block" title="Exonera"><i class="fa fa-book" aria-hidden="true"></i></button>
+                                   
                                 </td>
                                 <td style="width:5%;"><h2>{numeroLinea}</h2></td>
                                 <td><h2>{codigo}</h2></td>
@@ -327,13 +325,14 @@
                             <div onclick = {__MostrarFormularioDePago}  class="precioTotalFacturaContainer"  show={soloParaChinos == true}>
                                 <div class="label-totalesComprobanteChino" >Total:  {totalComprobante}</div>
                             </div>
-                            <div class="booking-info" show={soloParaChinos == false}>
-                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.subTotal")}  <span id="lblSubtotal"> {subTotalGeneral} </span></p>
-                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos} </span></p>
-                                    <p style="text-align:right" class="total label-totales">{$.i18n.prop("factura.resumen.impuesto")}   <span id="lblSubtotal"> {totalImpuesto} </span></p>
-                            </div>
-                            <div class="precioTotalFactura" show={soloParaChinos == false} onclick = {__MostrarFormularioDePago}>
-                                    <p class="total label-totales" style="text-align:right;">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}</span></p>
+                            <div class="TotalesContainer"  onclick = {__MostrarFormularioDePago}>
+                                 <div  show={soloParaChinos == false} class="elementoTotales">{$.i18n.prop("factura.resumen.subTotal")}   <span id="lblSubtotal"> {subTotalGeneral}   </span> </div> 
+                                 <div  show={soloParaChinos == false && totalDescuentos > 0} class="elementoTotales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos}   </span> </div> 
+                                 <div  show={soloParaChinos == false} class="elementoTotales">{$.i18n.prop("factura.resumen.impuesto")}    <span id="lblSubtotal"> {totalImpuesto}    </span> </div> 
+                                 <div  show={soloParaChinos == false && montoExoneracion > 0} class="elementoTotales">{$.i18n.prop("factura.resumen.exoneracion")} <span id="lblSubtotal"> {montoExoneracion} </span> </div> 
+                                 <div  show={soloParaChinos == false} class="elementoTotales">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}         </span> </div> 
+                                 
+                                 
                             </div>
                             <div class="gananciaContainer">
                                 <div class="formatoTituloGanancia">IG: {totalGananciaByProducto}</div>
@@ -344,7 +343,7 @@
                                     <label class="titleListaPrecio">Lista Precios </label>  
                                     <select  class="form-control selectListaPrecios" >
                                         <option    value="1"  >Precio Publico</option>
-                                        <option    value="2"  >Precio Mayoista</option>
+                                        <option    value="2"  >Precio Mayorista</option>
                                         <option    value="3"  >Precio Especial</option>
                                     </select>
                                 </div>
@@ -596,102 +595,47 @@
 </div>
 <!--Fin Cambiar Descuento-->
 
-<!--Modal mostrar Clientes de una sucursal -->
-<div id="modalExoneracion" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header with-border table-header" >
-                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Aplicar Exoneracion al Producto</h4>
-            </div>
-            <div class="modal-body">
-                <form id="formularioExoneracion">
-                    <div class="contenedorExoneracion">
-                        <div class="row">
-                            <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
-                                <div class="form-group ">
-                                    <label for="pago_tipoVentaL">{$.i18n.prop("factura.linea.detalle.codigo")} </label> 
-                                    <input  type="text"  class="form-control " autofocus="autofocus"  value= "{itemExonerar.codigo}" readonly>                    
-                                </div>
-                            </div>
-                            <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
-                                <div class="form-group ">
-                                    <label for="pago_tipoVentaL">{$.i18n.prop("factura.linea.detalle.descripcion")} </label> 
-                                    <input  type="text"  class="form-control " autofocus="autofocus"  value ="{itemExonerar.descripcion}" readonly>                    
-                                </div>
-                            </div>
-                        </div>  
 
-                        <div class="row">
-                            <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
-                                <div class="form-group ">
-                                    <label for="pago_tipoVentaL">{$.i18n.prop("factura.tipo.documento")} </label> 
-                                    <select  class="form-control tipoDocExonerado" id="tipoDocExonerado" name="tipoDocExonerado"   >
-                                        <option each={comboTipoDocumentoExonerados} value="{estado}" selected="{montoExoneracion.tipoDoc ==estado?true:false}" >{descripcion}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
-                                <div class="form-group ">
-                                    <label for="pago_tipoVentaL">#Compra Exoneracion </label> 
-                                    <input  type="text"  class="form-control numeroDocumentoExonerado" id="numeroDocumentoExonerado" name = "numeroDocumentoExonerado" autofocus="autofocus"  value ="{itemExonerar.numeroDocumentoExonerado}">                    
-                                </div>
-                            </div>
-                        </div>  
-                        <div class="row">
-                            <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
-                                <div class="form-group ">
-                                    <label for="pago_tipoVentaL">Nombre del Cliente/Institucion Aplicar </label> 
-                                    <select onchange= {__AsignarNombreClienteExonerar} class="form-control nombreInstitucionExoneracion" id="nombreInstitucionExoneracion" name="nombreInstitucionExoneracion"   data-live-search="true">
-                                        <option each={clientes.data} data-tokens ="{nombreCompleto}"  value="{nombreCompleto}" selected="{itemExonerar.nombreInstitucionExoneracion ==nombreCompleto?true:false}" >{nombreCompleto}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
-                                <div class="form-group ">
-                                    <label for="pago_tipoVentaL">Fecha Exoneracion  </label> 
-                                    <div  class="form-group input-group date datepickerFechaEmisionExoneracion" data-provide="datepicker"  data-date-start-date="30d" data-date-format="yyyy-mm-dd">
-                                        <input type="text" class="form-control fechaEmisionExoneracion" name="fechaEmisionExoneracion" id="fechaEmisionExoneracion" value="{itemExonerar.fechaCredito}" >
-                                        <div class="input-group-addon">
-                                            <span class="glyphicon glyphicon-th"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row" >
-                            <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
-                                <div class="form-group ">
-                                    <label for="pago_tipoVentaL">Monto Total Impuesto del Producto  </label> 
-                                    <input  type="text"  class="form-control "  value = "{itemExonerar.montoTotalImpuestoExonerarSTR}" autofocus="autofocus" readonly>                    
-                                </div>
-                            </div>   
-                            <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
-                                <div class="form-group">
-                                    <label for="pago_tipoVentaL">% Porcentaje a Exonerar  </label> 
-                                    <input  type="text"  onkeyup ={__ActualizarExoneracionImpuesto} class="form-control porcentajeExoneracion" id="porcentajeExoneracion" name = "porcentajeExoneracion" autofocus="autofocus"  value="{itemExonerar.porcentajeExoneracion}">                    
-                                </div>
-                            </div>
-
-                        </div> 
-                        <div class="form-group ">
-                            <label for="pago_tipoVentaL">Total Aplicado a Exonerar  </label> 
-                            <input  type="text"  class="form-control montoExoneracion" id="montoExoneracion" name = "montoExoneracion" autofocus="autofocus" rvalue="{itemExonerar.montoExoneracion}" readonly>                    
-                        </div>
-                    </div>    
-                </form> 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back  btn_big  pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
-                 <button type="button" onclick ="{__actualizarExoneracion}" class="btn-green btn_big btn-edit pull-right">{$.i18n.prop("btn.aplicar")}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--fin del modal-->
 
 
 
 <style type="text/css"  >
+    .elementoTotalesChino{
+        font-weight: 600 !important;
+        font-size: 32px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        margin-left: 4%;
+        margin-bottom: 2%;
+        margin-top: 2%;
+        margin-right: 2%;
+    }
+    .elementoTotales{
+        font-weight: 600 !important;
+        font-size: 25px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        margin-left: 4%;
+        margin-bottom: 2%;
+        margin-top: 2%;
+        margin-right: 2%;
+    }
+    .TotalesContainer{
+        display:flex;
+        flex-direction: column;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 5px;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
     .contenedorExoneracion{
 
     }
@@ -732,6 +676,7 @@
     .btn-block {
         display: block;
         width: 100%;
+        margin-top: 30%;
         }    
 
     .fondoVentaEspera{
@@ -966,6 +911,7 @@
     self.codigoBarraFueraPantalla = ""
     self.totalDescuentos       = 0
     self.totalImpuesto         = 0
+    self.montoExoneracion     = 0
     self.pesoPrioridad =  0
     self.numeroLinea =0
     self.cantArticulos =0
@@ -1064,6 +1010,7 @@
     self.subTotalGeneral               = 0
     self.totalDescuentos               = 0
     self.totalImpuesto                 = 0
+    self.montoExoneracion              = 0
     self.totalComprobante              = 0
     self.primeraVezBilleteClick = false
     self.totalCambioPagar              = 0
@@ -1084,15 +1031,7 @@
         codigo:"",
         descripcion:""
     }
-    self.itemExonerar ={
-        montoExoneracion :0,
-        porcentajeExoneracion:0,
-        montoTotalImpuestoExonerarSTR:0,
-        fechaEmisionExoneracion:null,
-        nombreInstitucionExoneracion:"",
-        numeroDocumentoExonerado:0,
-        tipoDocExonerado:""
-    }
+    
     self.on('mount',function(){
 
         $("#formularioFactura").validate(reglasDeValidacionFactura());
@@ -1160,11 +1099,13 @@
             self.detail = retrievedObject
             var facturaObject = JSON.parse(localStorage.getItem('facturaNueva'));
             self.factura = facturaObject
+            var clienteObject = JSON.parse(localStorage.getItem('cliente'));
+            self.clienteObject = facturaObject
             self.update()
             __calculate()
 
         }
-        __Eventos()
+        
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
              actualizaElPlazoDiasCredito();
@@ -1192,111 +1133,6 @@
     })
     function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
 
-
-__ActualizarExoneracionImpuesto(){
-    self.itemExonerar.porcentajeExoneracion = __valorNumerico($('.porcentajeExoneracion').val())
-    var resultado = self.itemExonerar.porcentajeExoneracion /100
-    resultado = __valorNumerico(self.itemExonerar.montoTotalImpuestoExonerar) * resultado
-    self.itemExonerar.montoExoneracion = resultado;
-    self.update()
-
-
-}
-
-
-__AsignarNombreClienteExonerar(e){
-    self.itemExonerar.nombreInstitucionExoneracion = self.itemExonerar != null? e.currentTarget.value:null
-    self.update()
-}
-
-
-__actualizarExoneracion(e){
-    if ($("#formularioExoneracion").valid()) {
-
-    }else{
-        mensajeError("Error Falta ingresar la informacion")
-        return 
- 
-    }
-}
-
-function __Eventos(){
-    $("#formularioExoneracion").validate(reglasDeValidacionExoneracion());
-    $("#nombreInstitucionExoneracion").attr("maxlength", 160);
-    $("#numeroDocumentoExonerado").attr("maxlength", 40);
-    $('#porcentajeExoneracion').mask('000', {
-		'translation' : {
-			0 : {
-				pattern : /[0-9]/
-			}
-		}
-	});
-}
-
-/**
-* Camps requeridos
-**/
-var reglasDeValidacionExoneracion = function() {
-	var validationOptions = $.extend({}, formValidationDefaults, {
-		rules : {
-             numeroDocumentoExonerado:{
-                 maxlength:40,
-                 required : true,
-                 minlength:1,
-             },
-             nombreInstitucionExoneracion:{
-                 maxlength:160,
-             } ,        
-             fechaEmisionExoneracion:{
-                 required : true,
-             }         
-             ,        
-             montoTotalImpuestoExonerar:{
-                 required : true,
-                 numeroMayorCero:true,
-                 number:true,
-             } 
-             ,        
-             porcentajeExoneracion:{
-                 required : true,
-                 numeroMayorCero:true,
-                 number:true,
-             } 
-             ,        
-             montoExoneracion:{
-                 required : true,
-                 numeroMayorCero:true,
-                 number:true,
-             } 
-
-		},
-		ignore : []
-
-	});
-	return validationOptions;
-};
-
-
-__aplicarExoneracionAlDetalle(e) {
-    self.itemExonerar = e.item;
-    self.itemExonerar.montoTotalImpuestoExonerarSTR =formatoDecimales(self.itemExonerar.montoImpuesto + self.itemExonerar.montoImpuesto1,2) 
-    self.itemExonerar.montoTotalImpuestoExonerar =formatoDecimales(self.itemExonerar.montoImpuesto + self.itemExonerar.montoImpuesto1,2) 
-    self.update()
-     if (self.itemExonerar.montoImpuesto > 0 || self.itemExonerar.montoImpuesto1 > 0) {
-        $('#modalExoneracion').modal({backdrop: 'static', keyboard: true}) 
-        $('#modalExoneracion').modal('show')
- 
-    }else{
-        mensajeError("Error Producto no tiene impuestos incluidos , revisar")
-        return 
- 
-    }
-   
-}
-
-function agregarExoneracionAlProducto(){
-
-}
 
 
 
@@ -1479,6 +1315,8 @@ function reimprimirFacturaEnMomento(){
     var retrievedObject = JSON.parse(localStorage.getItem('facturaReimprimir'));
     if(retrievedObject != null){
        self.facturaReimprimir = retrievedObject
+        var clienteObject = JSON.parse(localStorage.getItem('cliente'));
+        self.clienteObject = facturaObject
        self.update()
     }    
   }
@@ -1522,7 +1360,7 @@ function _Empresa(){
                             self.campoTotales = "campoTotalesConBanco"
                         }
                        self.update()
-                       __ComboTipoDocumentos()
+                       __ComboTipoDocumentos(0)
                     });
                 }
             }
@@ -1561,35 +1399,7 @@ function __SeguridadLimpiar(){
     }
 
 }
-/**
-* limpiar pantalla
-**/
-function __LimpiarClick(){  
-    self.totalPesoByFacturaSTR = ''
-    self.totalPesoByFactura  =0
-    self.totalGananciaByProducto =0
-    $(".plazoCredito").val(null)   
-    $(".fechaCredito").val(null)   
-    $(".totalEfectivo").val(null)   
-    $(".totalTarjeta").val(null)   
-    $(".totalBanco").val(null)   
-    $(".nota").val(null)    
-    $(".direccion").val(null)   
-    $('.condicionVenta').prop("selectedIndex", 0);
-    $('.tipoDoc').prop("selectedIndex", 0);
-    $(".nota").attr("maxlength", 80);
-    $('.selectActividadComercial').prop("selectedIndex", 0);
-    self.cliente               = {}
-    self.vendedor              = {
-        id:null,
-        nombreCompleto:""
-    };
-    self.mostrarCamposIngresoContado = true
-    self.descripcionArticulo = ""
-    self.precioUltimo = ""
-    self.cantidadEnterFacturar = 0
-    self.update()
-}
+
 /**
 * Camps requeridos
 **/
@@ -2189,9 +1999,11 @@ function __Init(){
     self.subTotalGeneral               = 0
     self.totalDescuentos               = 0
     self.totalImpuesto                 = 0
+    self.montoExoneracion              = 0
     self.totalComprobante              = 0
     self.totalCambioPagar              = 0
     self.totalCambioPagarSTR           = 0
+    
     self.update();
     $(".tableListarFacturasDia").dataTable().fnClearTable(); 
     __InicializarTabla('.tableListarFacturasDia')
@@ -2222,12 +2034,13 @@ function __Init(){
     // Tipo de Pagos
      __comboCondicionPago()
      //Tipos de Documentos
-      __ComboTipoDocumentos()
+      __ComboTipoDocumentos(0)
     __ListaFacturasEnEspera()
     $('.codigo').select()
     $(".codigo").focus()
     localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
     localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
+    localStorage.setItem('cliente', JSON.stringify(self.cliente));
 }
 /**
 *  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
@@ -2325,7 +2138,13 @@ function cargarDetallesFacturaEnEspera(data){
     $('#totalBanco').val(null)
     $('#totalEfectivo').focus()
     $('#totalEfectivo').select()
-     __calculate(); 
+    // __calculate(); 
+    if(verificarSiClienteFrecuente()){
+             __ComboTipoDocumentos(1)
+    }else{
+         __ComboTipoDocumentos(2)
+    }
+    __aplicarExoneracionPorCliente()
 }
 /** 
 *Formato de la fecha con hora
@@ -3485,6 +3304,7 @@ function __calculate() {
     var totalGanancia           = 0
     self.cantArticulos      = 0
     var totalPesoByFactura = 0
+    var montoExoneracion = 0
     self.detail.forEach(function(e){
         totalMercanciasGravadas += e.montoImpuesto > 0 && e.tipoImpuesto != "07"?e.montoTotal:0
         totalMercanciasGravadas += e.montoImpuesto1 > 0 && e.tipoImpuesto1 != "07"?e.montoTotal:0
@@ -3506,6 +3326,7 @@ function __calculate() {
         totalGanancia           +=__valorNumerico(e.ganancia)
         self.cantArticulos      += esEntero(e.cantidad) == true? e.cantidad:1 
         totalPesoByFactura      += parseFloat(e.pesoTransporte) * parseFloat(e.cantidad)
+        montoExoneracion        += parseFloat(e.montoExoneracion) 
     });
     self.totalGananciaByProducto = formatoDecimales(parseFloat(totalGanancia),2)
     self.totalPesoByFactura = parseFloat(totalPesoByFactura)
@@ -3526,6 +3347,7 @@ function __calculate() {
     self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
     self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
     self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
+    self.montoExoneracion                = formatoDecimales(montoExoneracion,2);
     self.update(); 
     $('.precioVenta').val(null)
     $('.codigo').val(null)
@@ -3534,6 +3356,15 @@ function __calculate() {
     getSubTotalGeneral()
     localStorage.setItem('DetallesNueva', JSON.stringify(self.detail));
     localStorage.setItem('facturaNueva', JSON.stringify(self.factura));
+    localStorage.setItem('cliente', JSON.stringify(self.factura.cliente));
+    $(".nombreFactura").val(self.factura.nombreFactura)
+    $(".correoAlternativo").val(self.factura.correoAlternativo)
+    $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
+    $('#totalTarjeta').val(null)
+    $('#totalBanco').val(null)
+    $('#totalEfectivo').focus()
+    $('#totalEfectivo').select()
+    $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
 }
 /**
 *  Sub Total Generar
@@ -3544,6 +3375,7 @@ function getSubTotalGeneral(){
     self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2)
     var resultadoTotalImpuesto = __valorNumerico(self.factura.totalImpuesto) + __valorNumerico(self.factura.totalImpuesto1)
     self.totalImpuesto   = formatoDecimales(resultadoTotalImpuesto,2)
+      
     self.update()
 }
 /**
@@ -3693,13 +3525,32 @@ function __seleccionarClientes() {
 	       var data = table.row($(this).parents("tr")).data();
 	     }
         self.cliente = data
-
+        self.update();
         __aplicarExoneracionPorCliente()
         
-        self.update();
+        
          $('#modalClientes').modal('hide') 
+         if(verificarSiClienteFrecuente()){
+             __ComboTipoDocumentos(1)
+         }else{
+             __ComboTipoDocumentos(2)
+         }
         
     });
+}
+
+/**
+*Verifica si es cleinte frecuente por la cedula y el nombre  sino es se actualiza el tipo de documento combo
+* para que salga factura o proforma
+**/
+function verificarSiClienteFrecuente(){
+    if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE")){
+        return true
+    }
+    if(self.cliente.cedula.indexOf("999999999999")){
+        return true
+    }
+    return false;
 }
 
 /**
@@ -3721,6 +3572,18 @@ function __aplicarExoneracionPorCliente(){
                     valorTotal = parseFloat(self.item.montoImpuesto * porcentaje)  
                     self.item.montoExoneracion = valorTotal
                     self.item.ImpuestoNeto = self.item.montoImpuesto - self.item.montoExoneracion
+                    self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
+                    self.detail[count] = self.item;
+                    self.update();
+                }else{
+                    //Cliente no tiene exoneracion
+                    self.item.porcentajeExoneracion = 0
+                    self.item.fechaEmisionExoneracion = null
+                    self.item.nombreInstitucionExoneracion = ""
+                    self.item.numeroDocumentoExoneracion = ""
+                    self.item.tipoDocumentoExoneracion = ""
+                    self.item.ImpuestoNeto = self.item.montoImpuesto 
+                    self.item.montoExoneracion = 0
                     self.item.montoTotalLinea = self.item.subTotal +  self.item.ImpuestoNeto
                     self.detail[count] = self.item;
                     self.update();
@@ -3793,9 +3656,31 @@ function __ComboTipoDocumentoExonerados(){
 /**
 * cargar los tipos de Documento de la factura
 **/
-function __ComboTipoDocumentos(){
+function __ComboTipoDocumentos(valor){
     self.comboTipoDocumentos = []
     self.update()
+    // Tipo documento unicamente proforma y factura 
+    if(valor == 1){
+        self.comboTipoDocumentos.push({
+            estado:"01",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
+        })
+        self.comboTipoDocumentos.push({
+            estado:"88",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
+        })
+       self.update()
+       return true 
+    }
+     if(valor == 2){
+         self.comboTipoDocumentos.push({
+            estado:"04",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
+        })
+       self.update()
+       return true 
+    }
+
     //Prioridad de orden
     if(self.empresa.prioridadFacturar == 1 ){
         self.comboTipoDocumentos.push({
