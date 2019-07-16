@@ -100,12 +100,17 @@
                                     <tr>
                                     <td></td>
                                     <td ><strong>{$.i18n.prop("tikect.total.impuesto")}</strong></td>
-                                    <td ><strong>{facturaImpresa.totalImpuestoSTR}</strong></td>
+                                    <td ><strong>{montoImpuestoSTR}</strong></td>
+                                    </tr>
+                                    <tr show={montoExoneracion > 0}>
+                                    <td></td>
+                                    <td ><strong>{$.i18n.prop("factura.resumen.exoneracion")}</strong></td>
+                                    <td ><strong>{montoExoneracionSTR}</strong></td>
                                     </tr>
                                     <tr>
                                     <td></td>
-                                    <td ><h3><strong>{$.i18n.prop("tikect.total.final")}</strong></h3></td>
-                                    <td ><h3><strong>{facturaImpresa.totalComprobanteSTR}</strong></h3></td>
+                                    <td ><div class="formatoTotal"><strong>{$.i18n.prop("tikect.total.final")}</strong></div></td>
+                                    <td ><div class="formatoTotal"><strong>{facturaImpresa.totalComprobanteSTR}</strong></div></td>
                                     </tr>
                                     <tr>
                                     <td></td>
@@ -166,8 +171,9 @@
 
 
 <style type="text/css"  >
- 
-  
+    .formatoTotal{
+        
+    } 
     .fondoEncabezado
     {
         background: #00539B;
@@ -257,7 +263,7 @@
         color: #000;
         float: left;
         font-family: "Times New Roman", Times, serif;
-        font-size: 12px;
+        font-size: 13px;
         font-style: normal;
         font-variant: normal;
         font-weight: normal;
@@ -385,6 +391,11 @@
 var self = this;
 self.parametro   = opts.parametros;  
 self.detalles = []
+self.montoExoneracion = 0
+self.montoImpuesto = 0
+self.montoExoneracionSTR = ""
+self.montoImpuestoSTR = ""
+
 self.mostrarImprimiCelular = false;
 self.titulo = ""
 self.claveParteUno =""
@@ -503,10 +514,16 @@ function consultaFactura(idFactura){
                         elemen.montoTotal = redondearDecimales(elemen.montoTotal,0);
                         self.update()
                     })
-                   
-                   self.update()
 
+                   self.montoExoneracion = 0
+                   self.montoImpuesto = 0
+                   self.montoExoneracionSTR = ""
+                   self.montoImpuestoSTR = ""
+
+                   self.update()
                     $.each(data.aaData, function( index, modeloTabla ) {
+                        self.montoExoneracion = self.montoExoneracion + parseFloat(modeloTabla.montoExoneracion)
+                        self.montoImpuesto = self.montoImpuesto + parseFloat(modeloTabla.montoImpuesto + modeloTabla.montoImpuesto1)
                       if(self.facturaImpresa == null){
                             self.facturaImpresa = modeloTabla.factura
                             if(self.facturaImpresa.empresa.imprimirCelular == 1){
@@ -544,6 +561,9 @@ function consultaFactura(idFactura){
                             self.update()
                       }
                     });
+                   self.montoExoneracionSTR = formatoDecimales(self.montoExoneracion,0);
+                   self.montoImpuestoSTR = formatoDecimales(self.montoImpuesto,0);
+
                     if(self.totalImpuestoServicio == 0 ){
                         self.totalImpuestoServicio = self.facturaImpresa.totalOtrosCargos
                     }

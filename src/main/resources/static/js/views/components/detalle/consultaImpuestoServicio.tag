@@ -485,8 +485,6 @@ self.on('mount',function(){
     agregarInputsCombos()
     _init()
     sumar()
-   
-   
       window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );

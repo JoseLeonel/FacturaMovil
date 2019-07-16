@@ -93,52 +93,27 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																			resultado += d.getMontoImpuesto1() != null ? d.getMontoImpuesto1() : Constantes.ZEROS_DOUBLE;
 																																																			detalleFacturaElectronica.setImpuesto(resultado);
 																																																			detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
+																																																			detalleFacturaElectronica.setMontoExoneracion(d.getMontoExoneracion());
+																																																			detalleFacturaElectronica.setTipoDocumentoExoneracion(d.getTipoDocumentoExoneracion());
+																																																			detalleFacturaElectronica.setFechaEmisionExoneracion(Utils.getFechaGeneraReporte(d.getFechaEmisionExoneracion()));
+																																																			detalleFacturaElectronica.setNumeroDocumentoExoneracion(d.getNumeroDocumentoExoneracion());
 																																																			//
 																																																			return detalleFacturaElectronica;
 																																																		};
 	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
 																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
-																																																			if(d.getCodigoActividad() == null) {
+																																																			if (d.getCodigoActividad() == null) {
 																																																				facturaElectronica.set_codigoActividadComercial(d.getEmpresa().getCodigoActividad());
-																																																			}else {
+																																																			} else {
 																																																				facturaElectronica.set_codigoActividadComercial(d.getCodigoActividad());
 																																																			}
-																																																			
-																																																			facturaElectronica.setConsecutivoProforma(d.getConsecutivoProforma());
-																																																			facturaElectronica.setEsquemaXML(d.getVersionEsquemaXML());
-																																																			facturaElectronica.setTotalOtrosCargos(d.getTotalOtrosCargos());
+
 																																																			// Emisor
-																																																			facturaElectronica.setEmisorNombreComercial(!d.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? d.getEmpresa().getNombreComercial() : Constantes.EMPTY);
-																																																			facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombre().equals(Constantes.EMPTY) ? d.getEmpresa().getNombre() : d.getEmpresa().getNombre());
-																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
-																																																			facturaElectronica.setEmisorDireccion(d.getEmpresa().getOtraSenas());
-																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
-																																																			facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
-																																																			facturaElectronica.set_nota(d.getNota() == null ? Constantes.EMPTY : d.getNota());
-
-																																																			facturaElectronica.setClienteNombre(d.getCliente().getNombreCompleto());
-																																																			facturaElectronica.setClienteNombreComercial(d.getCliente().getNombreComercial());
-
-																																																			facturaElectronica.setClienteCorreo(d.getCliente().getCorreoElectronico());
-																																																			facturaElectronica.setClienteCedula(d.getCliente().getCedula());
-																																																			if (d.getCliente().getTelefono() != null) {
-																																																				if (d.getCliente().getTelefono() != Constantes.ZEROS) {
-																																																					facturaElectronica.setClienteTelefono(d.getCliente().getTelefono().toString());
-																																																				} else {
-																																																					facturaElectronica.setClienteTelefono(Constantes.EMPTY);
-																																																				}
-																																																			}
-
-																																																			if (d.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_FRECUENTE)) {
-																																																				if (d.getNombreFactura() != null) {
-																																																					if (!d.getNombreFactura().equals(Constantes.EMPTY)) {
-																																																						facturaElectronica.setClienteNombre(d.getNombreFactura());
-																																																					}
-																																																				}
-																																																			}
-																																																			facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
+																																																			facturaElectronica.setEsquemaXML(d.getVersionEsquemaXML());
+																																																			facturaElectronica.setEmisorNombreComercial(d.getEmpresa().getNombreComercial());
 																																																			facturaElectronica.setFooterTotalServiciosGravados(d.getTotalServGravados());
 																																																			facturaElectronica.setFooterTotalMercanciasGravadas(d.getTotalMercanciasGravadas());
+																																																			facturaElectronica.setTotalOtrosCargos(d.getTotalOtrosCargos());
 																																																			// Total Factura
 																																																			facturaElectronica.setFooterTotalServiciosExentos(d.getTotalServExentos());
 																																																			facturaElectronica.setFooterTotalGravado(d.getTotalGravado());
@@ -148,22 +123,45 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																			facturaElectronica.setFooterTotalImpuesto(d.getTotalImpuesto());
 																																																			facturaElectronica.setFooterTotalVentaNeta(d.getTotalVentaNeta());
 																																																			facturaElectronica.setFooterTotalComprobante(d.getTotalComprobante());
-//																																													
-																																																			// }
-																																																			// facturaElectronica.setClienteMesCobro(TO_MESCOBRO.apply(d.getMesCobro()));
-																																																			// Ubicacion
+//		
+																																																			facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombre().equals(Constantes.EMPTY) ? d.getEmpresa().getNombre() : d.getEmpresa().getNombre());
+																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
+																																																			facturaElectronica.setEmisorDireccion(d.getEmpresa().getOtraSenas());
+																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
+																																																			facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
+																																																			facturaElectronica.set_nota(d.getNota() == null ? Constantes.EMPTY : d.getNota());
+																																																			facturaElectronica.setClienteNombre(d.getCliente().getNombreCompleto());
+																																																			if (d.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_FRECUENTE)) {
+																																																				if (d.getNombreFactura() != null) {
+																																																					if (!d.getNombreFactura().equals(Constantes.EMPTY)) {
+																																																						facturaElectronica.setClienteNombre(d.getNombreFactura());
+																																																					}
+																																																				}
+																																																			}
+																																																			facturaElectronica.setClienteNombreComercial(d.getCliente().getNombreComercial());
+																																																			facturaElectronica.setClienteCorreo(d.getCliente().getCorreoElectronico());
+
+																																																			facturaElectronica.setClienteCedula(d.getCliente().getCedula());
+																																																			if (d.getCliente().getTelefono() != null) {
+																																																				if (d.getCliente().getTelefono() != Constantes.ZEROS) {
+																																																					facturaElectronica.setClienteTelefono(d.getCliente().getTelefono().toString());
+																																																				} else {
+																																																					facturaElectronica.setClienteTelefono(Constantes.EMPTY);
+																																																				}
+																																																			}
+
+																																																			facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
 																																																			facturaElectronica.set_logo(d.getEmpresa().getLogo());
 																																																			facturaElectronica.set_clienteDireccion(d.getDireccion());
 																																																			// Otros
 																																																			facturaElectronica.setTipoDocumento(FacturaElectronicaUtils.getTipoDocumento(d.getTipoDoc()));
 																																																			facturaElectronica.setClave(d.getClave() == null ? Constantes.EMPTY : d.getClave());
-																																																			facturaElectronica.setConsecutivo(d.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ? d.getId().toString() : d.getNumeroConsecutivo());
-																																																			facturaElectronica.setConsecutivoProforma(d.getConsecutivoProforma() != null ? d.getConsecutivoProforma() : Constantes.EMPTY);
+																																																			facturaElectronica.setConsecutivo(d.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ? Constantes.EMPTY : d.getNumeroConsecutivo());
+																																																			facturaElectronica.setConsecutivoProforma(d.getConsecutivoProforma());
 																																																			facturaElectronica.setFechaEmision(Utils.getFechaGeneraReporte(d.getFechaEmision()));
 																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito() != null ? d.getPlazoCredito().toString() : Constantes.EMPTY);
 																																																			facturaElectronica.setCondicionVenta(BIND_CONDICION_VENTA.apply(d.getCondicionVenta()));
 																																																			facturaElectronica.setMedioEfectivo(FacturaElectronicaUtils.medioPago(d));
-
 																																																			facturaElectronica.setMoneda(FacturaElectronicaUtils.getMoneda(d.getCodigoMoneda()));
 																																																			facturaElectronica.setTipoCambio(d.getTipoCambio().toString());
 
@@ -448,7 +446,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 				// San Ana
-			//	 recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 				// Guanacaste
 				// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
@@ -724,16 +722,15 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		return openIDConnectHacienda;
 	}
 
-	
 	/**
 	 * Verifica si un mensaje por clave fue aceptado y recibido por hacienda
 	 * @param empresa
 	 * @param clave del documento
 	 */
 	public Boolean verificaRecepcionFactura(Empresa empresa, String clave) throws Exception {
-		
+
 		boolean resultado = false;
-		
+
 		try {
 
 			OpenIDConnectHacienda openIDConnectHacienda = openIDConnect.getToken(empresa);
@@ -747,7 +744,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 							idp_uri_documentos = Constantes.IDP_URI_DOCUMENTOS_PRODUCCION;
 						}
 					}
-					
+
 					@SuppressWarnings("rawtypes")
 					Map response = envioHaciendaComponent.comprobarDocumentoElectronico(idp_uri_documentos, clave, openIDConnectHacienda);
 					String body = (String) response.get(POST_RESPONSE);
@@ -768,7 +765,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						respuesta.setNumeroCedulaReceptor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().numeroCedulaReceptor() : Constantes.EMPTY);
 						respuesta.setTipoIdentificacionEmisor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().tipoIdentificacionEmisor() : Constantes.EMPTY);
 						respuesta.setTipoIdentificacionReceptor(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().tipoIdentificacionReceptor() : Constantes.EMPTY);
-						respuesta.setTotalFactura(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().totalFactura() : Constantes.ZEROS_DOUBLE);						
+						respuesta.setTotalFactura(respuestaHacienda.mensajeHacienda() != null ? respuestaHacienda.mensajeHacienda().totalFactura() : Constantes.ZEROS_DOUBLE);
 						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECIBIDO)) {
 							if (respuestaHacienda.mensajeHacienda() != null) {
 								if (respuestaHacienda.mensajeHacienda().mensaje() != null) {
@@ -778,7 +775,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								}
 							}
 						}
-						
+
 					}
 				}
 			}
@@ -788,12 +785,12 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 		return resultado;
 	}
-	
+
 	/**
 	 * Solo se van enviar correos a la empresa cuando es un cliente o correo alternativo los tiquetes de clientes frecuentes no lo vamos enviar para ver el comportamiento de rendimiento Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	////@Scheduled(cron = "0 0/10 * * * ?")
+	//// @Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -1224,7 +1221,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	//@Scheduled(cron = "0 0/20 * * * ?")
+	// @Scheduled(cron = "0 0/20 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {

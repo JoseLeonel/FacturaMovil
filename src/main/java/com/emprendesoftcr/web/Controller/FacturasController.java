@@ -142,6 +142,10 @@ public class FacturasController {
 																																																			resultado += d.getMontoImpuesto1() != null ? d.getMontoImpuesto1() : Constantes.ZEROS_DOUBLE;
 																																																			detalleFacturaElectronica.setImpuesto(resultado);
 																																																			detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
+																																																			detalleFacturaElectronica.setMontoExoneracion(d.getMontoExoneracion());
+																																																			detalleFacturaElectronica.setTipoDocumentoExoneracion(d.getTipoDocumentoExoneracion());
+																																																			detalleFacturaElectronica.setFechaEmisionExoneracion(Utils.getFechaGeneraReporte(d.getFechaEmisionExoneracion()));
+																																																			detalleFacturaElectronica.setNumeroDocumentoExoneracion(d.getNumeroDocumentoExoneracion());
 																																																			//
 																																																			return detalleFacturaElectronica;
 																																																		};

@@ -54,7 +54,7 @@ $(document)
 			    }
 			}
 
-	
+
 /** Funciones en ventas nueva , venta post , restaurante comunes **/
 	/**
 	* Monto de Total

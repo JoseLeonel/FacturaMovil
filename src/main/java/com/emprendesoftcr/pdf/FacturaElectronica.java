@@ -80,6 +80,9 @@ public class FacturaElectronica {
 	private Double													_footerTotalImpuesto;
 	private Double													_footerTotalVentaNeta;
 	private Double													_footerTotalComprobante;
+	private Double                           montoExoneracion;
+	private String                           numeroDocumentoExoneracion;
+	private String                           fechaExoneracion;
 	
 	private Empresa  empresa;
 
@@ -582,6 +585,36 @@ public class FacturaElectronica {
 	
 	public void set_codigoActividadComercial(String _codigoActividadComercial) {
 		this._codigoActividadComercial = _codigoActividadComercial;
+	}
+
+	
+	public Double getMontoExoneracion() {
+		return montoExoneracion;
+	}
+
+	
+	public void setMontoExoneracion(Double montoExoneracion) {
+		this.montoExoneracion = montoExoneracion;
+	}
+
+	
+	public String getNumeroDocumentoExoneracion() {
+		return numeroDocumentoExoneracion;
+	}
+
+	
+	public void setNumeroDocumentoExoneracion(String numeroDocumentoExoneracion) {
+		this.numeroDocumentoExoneracion = numeroDocumentoExoneracion;
+	}
+
+	
+	public String getFechaExoneracion() {
+		return fechaExoneracion;
+	}
+
+	
+	public void setFechaExoneracion(String fechaExoneracion) {
+		this.fechaExoneracion = fechaExoneracion;
 	}
 
 	

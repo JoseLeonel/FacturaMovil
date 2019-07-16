@@ -95,6 +95,10 @@ public class HaciendasController {
 																																																			resultado += d.getMontoImpuesto1() != null ? d.getMontoImpuesto1() : Constantes.ZEROS_DOUBLE;
 																																																			detalleFacturaElectronica.setImpuesto(resultado);
 																																																			detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
+																																																			detalleFacturaElectronica.setMontoExoneracion(d.getMontoExoneracion());
+																																																			detalleFacturaElectronica.setTipoDocumentoExoneracion(d.getTipoDocumentoExoneracion());
+																																																			detalleFacturaElectronica.setFechaEmisionExoneracion(Utils.getFechaGeneraReporte(d.getFechaEmisionExoneracion()));
+																																																			detalleFacturaElectronica.setNumeroDocumentoExoneracion(d.getNumeroDocumentoExoneracion());
 																																																			//
 																																																			return detalleFacturaElectronica;
 																																																		};
@@ -105,12 +109,24 @@ public class HaciendasController {
 																																																			} else {
 																																																				facturaElectronica.set_codigoActividadComercial(d.getCodigoActividad());
 																																																			}
-																																																			facturaElectronica.setEmpresa(d.getEmpresa());
-																																																			facturaElectronica.setEsquemaXML(d.getVersionEsquemaXML());
-																																																			// Emisor
-																																																			facturaElectronica.setEmisorNombreComercial(!d.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? d.getEmpresa().getNombreComercial() : Constantes.EMPTY);
-																																																			facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombre().equals(Constantes.EMPTY) ? d.getEmpresa().getNombre() : d.getEmpresa().getNombre());
 
+																																																			// Emisor
+																																																			facturaElectronica.setEsquemaXML(d.getVersionEsquemaXML());
+																																																			facturaElectronica.setEmisorNombreComercial(d.getEmpresa().getNombreComercial());
+																																																			facturaElectronica.setFooterTotalServiciosGravados(d.getTotalServGravados());
+																																																			facturaElectronica.setFooterTotalMercanciasGravadas(d.getTotalMercanciasGravadas());
+																																																			facturaElectronica.setTotalOtrosCargos(d.getTotalOtrosCargos());
+																																																			// Total Factura
+																																																			facturaElectronica.setFooterTotalServiciosExentos(d.getTotalServExentos());
+																																																			facturaElectronica.setFooterTotalGravado(d.getTotalGravado());
+																																																			facturaElectronica.setFooterTotalExento(d.getTotalMercanciasExentas());
+																																																			facturaElectronica.setFooterTotalVenta(d.getTotalVenta());
+																																																			facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
+																																																			facturaElectronica.setFooterTotalImpuesto(d.getTotalImpuesto());
+																																																			facturaElectronica.setFooterTotalVentaNeta(d.getTotalVentaNeta());
+																																																			facturaElectronica.setFooterTotalComprobante(d.getTotalComprobante());
+//		
+																																																			facturaElectronica.setEmisorNombre(!d.getEmpresa().getNombre().equals(Constantes.EMPTY) ? d.getEmpresa().getNombre() : d.getEmpresa().getNombre());
 																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
 																																																			facturaElectronica.setEmisorDireccion(d.getEmpresa().getOtraSenas());
 																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
@@ -124,7 +140,6 @@ public class HaciendasController {
 																																																					}
 																																																				}
 																																																			}
-																																																			facturaElectronica.setTotalOtrosCargos(d.getTotalOtrosCargos());
 																																																			facturaElectronica.setClienteNombreComercial(d.getCliente().getNombreComercial());
 																																																			facturaElectronica.setClienteCorreo(d.getCliente().getCorreoElectronico());
 
@@ -136,17 +151,6 @@ public class HaciendasController {
 																																																					facturaElectronica.setClienteTelefono(Constantes.EMPTY);
 																																																				}
 																																																			}
-																																																			facturaElectronica.setFooterTotalServiciosGravados(d.getTotalServGravados());
-																																																			facturaElectronica.setFooterTotalMercanciasGravadas(d.getTotalMercanciasGravadas());
-																																																			// Total Factura
-																																																			facturaElectronica.setFooterTotalServiciosExentos(d.getTotalServExentos());
-																																																			facturaElectronica.setFooterTotalGravado(d.getTotalGravado());
-																																																			facturaElectronica.setFooterTotalExento(d.getTotalMercanciasExentas());
-																																																			facturaElectronica.setFooterTotalVenta(d.getTotalVenta());
-																																																			facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
-																																																			facturaElectronica.setFooterTotalImpuesto(d.getTotalImpuesto());
-																																																			facturaElectronica.setFooterTotalVentaNeta(d.getTotalVentaNeta());
-																																																			facturaElectronica.setFooterTotalComprobante(d.getTotalComprobante());
 
 																																																			facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
 																																																			facturaElectronica.set_logo(d.getEmpresa().getLogo());
@@ -155,12 +159,11 @@ public class HaciendasController {
 																																																			facturaElectronica.setTipoDocumento(FacturaElectronicaUtils.getTipoDocumento(d.getTipoDoc()));
 																																																			facturaElectronica.setClave(d.getClave() == null ? Constantes.EMPTY : d.getClave());
 																																																			facturaElectronica.setConsecutivo(d.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ? Constantes.EMPTY : d.getNumeroConsecutivo());
-																																																			facturaElectronica.setConsecutivoProforma(d.getConsecutivoProforma() != null ? d.getConsecutivoProforma() : Constantes.EMPTY);
+																																																			facturaElectronica.setConsecutivoProforma(d.getConsecutivoProforma());
 																																																			facturaElectronica.setFechaEmision(Utils.getFechaGeneraReporte(d.getFechaEmision()));
 																																																			facturaElectronica.setPlazoCredito(d.getPlazoCredito() != null ? d.getPlazoCredito().toString() : Constantes.EMPTY);
 																																																			facturaElectronica.setCondicionVenta(BIND_CONDICION_VENTA.apply(d.getCondicionVenta()));
 																																																			facturaElectronica.setMedioEfectivo(FacturaElectronicaUtils.medioPago(d));
-
 																																																			facturaElectronica.setMoneda(FacturaElectronicaUtils.getMoneda(d.getCodigoMoneda()));
 																																																			facturaElectronica.setTipoCambio(d.getTipoCambio().toString());
 
@@ -184,12 +187,8 @@ public class HaciendasController {
 																																																				facturaElectronica.setReferenciaFechaEmision(Constantes.EMPTY);
 
 																																																			}
-																																																			// Agrega sus detalles
-																																																			// List<DetalleFacturaElectronica> detalles = d.getDetalles().stream().map(TO_DETALLE).collect(toList());
-																																																			// facturaElectronica.setDetalleFacturaElectronica(detalles);
 																																																			return facturaElectronica;
 																																																		};
-
 	private static final Function<Object, HaciendaCommand>						TO_COMMAND											= new Function<Object, HaciendaCommand>() {
 
 																																																			@Override

@@ -1,5 +1,13 @@
 package com.emprendesoftcr.pdf;
 
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 /**
  * @author Wesker
  */
@@ -19,6 +27,17 @@ public class DetalleFacturaElectronica {
 	private double	_impuesto;
 	private double	_exento;
 	private double	_total;
+	private String	tipoDocumentoExoneracion;
+
+	private String	numeroDocumentoExoneracion;
+
+	private String	nombreInstitucionExoneracion;
+
+	private String		fechaEmisionExoneracion;
+
+	private Integer	porcentajeExoneracion;
+
+	private Double	montoExoneracion;
 
 	public String getUnidad() {
 		return _unidad;
@@ -123,16 +142,75 @@ public class DetalleFacturaElectronica {
 	public void setTotal(double _total) {
 		this._total = _total;
 	}
-	
 
-	
 	public double get_impuesto1() {
 		return _impuesto1;
 	}
 
-	
 	public void set_impuesto1(double _impuesto1) {
 		this._impuesto1 = _impuesto1;
+	}
+
+	
+	
+	
+	public String getTipoDocumentoExoneracion() {
+		return tipoDocumentoExoneracion;
+	}
+
+	
+	public void setTipoDocumentoExoneracion(String tipoDocumentoExoneracion) {
+		this.tipoDocumentoExoneracion = tipoDocumentoExoneracion;
+	}
+
+	
+	public String getNumeroDocumentoExoneracion() {
+		return numeroDocumentoExoneracion;
+	}
+
+	
+	public void setNumeroDocumentoExoneracion(String numeroDocumentoExoneracion) {
+		this.numeroDocumentoExoneracion = numeroDocumentoExoneracion;
+	}
+
+	
+	public String getNombreInstitucionExoneracion() {
+		return nombreInstitucionExoneracion;
+	}
+
+	
+	public void setNombreInstitucionExoneracion(String nombreInstitucionExoneracion) {
+		this.nombreInstitucionExoneracion = nombreInstitucionExoneracion;
+	}
+
+	
+	public String getFechaEmisionExoneracion() {
+		return fechaEmisionExoneracion;
+	}
+
+	
+	public void setFechaEmisionExoneracion(String fechaEmisionExoneracion) {
+		this.fechaEmisionExoneracion = fechaEmisionExoneracion;
+	}
+
+	
+	public Integer getPorcentajeExoneracion() {
+		return porcentajeExoneracion;
+	}
+
+	
+	public void setPorcentajeExoneracion(Integer porcentajeExoneracion) {
+		this.porcentajeExoneracion = porcentajeExoneracion;
+	}
+
+	
+	public Double getMontoExoneracion() {
+		return montoExoneracion;
+	}
+
+	
+	public void setMontoExoneracion(Double montoExoneracion) {
+		this.montoExoneracion = montoExoneracion;
 	}
 
 	public static DetalleFacturaElectronica Foo(int linea) {

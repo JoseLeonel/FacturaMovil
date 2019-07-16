@@ -32,7 +32,6 @@ import com.itextpdf.text.pdf.PdfWriter;
  */
 public class HeaderFooter extends PdfPageEventHelper {
 
-	
 	private PdfTemplate					total;
 	private FacturaElectronica	facturaElectronica;
 	private String							tipoDoc;
@@ -50,13 +49,13 @@ public class HeaderFooter extends PdfPageEventHelper {
 	private String tipoDocVersion() {
 		String resultado = Constantes.EMPTY;
 		if (this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
-			return this.facturaElectronica.getEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2)?Constantes.TIQUETE_ELECTRONICO_VERSION_4_2:Constantes.TIQUETE_ELECTRONICO_VERSION_4_3;
+			return this.facturaElectronica.getEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2) ? Constantes.TIQUETE_ELECTRONICO_VERSION_4_2 : Constantes.TIQUETE_ELECTRONICO_VERSION_4_3;
 		} else if (this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
-			return this.facturaElectronica.getEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2)?Constantes.FACTURA_ELECTRONICO_VERSION_4_2:Constantes.FACTURA_ELECTRONICO_VERSION_4_3;
+			return this.facturaElectronica.getEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2) ? Constantes.FACTURA_ELECTRONICO_VERSION_4_2 : Constantes.FACTURA_ELECTRONICO_VERSION_4_3;
 		} else if (this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.facturaElectronica.getEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2)?Constantes.NOTA_CREDITO_ELECTRONICO_VERSION_4_2:Constantes.NOTA_CREDITO_ELECTRONICO_VERSION_4_3;
+			return this.facturaElectronica.getEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2) ? Constantes.NOTA_CREDITO_ELECTRONICO_VERSION_4_2 : Constantes.NOTA_CREDITO_ELECTRONICO_VERSION_4_3;
 		} else if (this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
-			return this.facturaElectronica.getEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2)?Constantes.NOTA_DEBITO_ELECTRONICO_VERSION_4_2:Constantes.NOTA_DEBITO_ELECTRONICO_VERSION_4_3;
+			return this.facturaElectronica.getEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2) ? Constantes.NOTA_DEBITO_ELECTRONICO_VERSION_4_2 : Constantes.NOTA_DEBITO_ELECTRONICO_VERSION_4_3;
 		} else if (this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 			return Constantes.PROFORMA_VERSION;
 		}
@@ -127,10 +126,10 @@ public class HeaderFooter extends PdfPageEventHelper {
 				izquierda.addCell(utils_pdf.obtenerCeldaNormal("Clave: " + this.facturaElectronica.getClave(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
 			}
 			tabla_cabezera.addCell(izquierda);
-      
+
 			PdfPTable derecha = new PdfPTable(1);
-			derecha.addCell(utils_pdf.obtenerCeldaNormal(tipoDocVersion(),this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)? UtilsPdf.bigFont16: UtilsPdf.bigFont12, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
-			derecha.addCell(utils_pdf.obtenerCeldaNormal("Actividad Comercial:" +this.facturaElectronica.get_codigoActividadComercial(),this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)? UtilsPdf.bigFont16: UtilsPdf.bigFont12, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
+			derecha.addCell(utils_pdf.obtenerCeldaNormal(tipoDocVersion(), this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ? UtilsPdf.bigFont16 : UtilsPdf.bigFont12, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
+			derecha.addCell(utils_pdf.obtenerCeldaNormal("Actividad Comercial:" + this.facturaElectronica.get_codigoActividadComercial(), this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) ? UtilsPdf.bigFont16 : UtilsPdf.bigFont12, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
 			derecha.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getEmisorNombreComercial(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
 
 			derecha.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getEmisorNombre(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.NO_BORDER));
@@ -147,22 +146,19 @@ public class HeaderFooter extends PdfPageEventHelper {
 			PdfPTable derecha_inferior = new PdfPTable(2);
 			derecha_inferior.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 			// derecha_inferior.getDefaultCell().setCellEvent(new RoundRectangle());
-      if(this.facturaElectronica.getConsecutivo() !=null) {
-      	if(!this.facturaElectronica.getConsecutivo().equals(Constantes.EMPTY)) {
-      		derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal("Consecutivo No.:", UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
-    			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getConsecutivo(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
-    	    		
-      	}
-      }
-			if(facturaElectronica.getConsecutivoProforma() !=null) {
-				if(!facturaElectronica.getConsecutivoProforma().equals(Constantes.EMPTY)) {
-					derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal("No.Proforma:", UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));					
+			if (this.facturaElectronica.getConsecutivo() != null) {
+				if (!this.facturaElectronica.getConsecutivo().equals(Constantes.EMPTY)) {
+					derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal("Consecutivo No.:", UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
+					derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getConsecutivo(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
+
+				}
+			}
+			if (facturaElectronica.getConsecutivoProforma() != null) {
+				if (!facturaElectronica.getConsecutivoProforma().equals(Constantes.EMPTY)) {
+					derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal("No.Proforma:", UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
 					derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getConsecutivoProforma(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
 				}
 			}
-			
-
-			
 
 			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal("Fecha de emisión:", UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
 
@@ -177,8 +173,6 @@ public class HeaderFooter extends PdfPageEventHelper {
 			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getCondicionVenta(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
 
 			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal("Medio de pago", UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
-
-			String medioPago = Constantes.EMPTY;
 
 			derecha_inferior.addCell(utils_pdf.obtenerCeldaNormal(this.facturaElectronica.getMedioEfectivo(), UtilsPdf.font_cabezera_tabla, 1, false, Paragraph.ALIGN_LEFT, Rectangle.BOTTOM));
 
@@ -227,7 +221,7 @@ public class HeaderFooter extends PdfPageEventHelper {
 				if (!facturaElectronica.getClienteCedula().equals(Constantes.EMPTY)) {
 					if (!facturaElectronica.getClienteCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
 						cedulaCliente = "\nIdentificación Receptor:" + this.facturaElectronica.getClienteCedula();
-						telefonoCliente = "Telefono:" + this.facturaElectronica.getClienteTelefono();
+						telefonoCliente = "Telefono:" + this.facturaElectronica.getClienteTelefono() == null ? Constantes.EMPTY : this.facturaElectronica.getClienteTelefono();
 						correoCliente = this.facturaElectronica.getClienteCorreo();
 					}
 				}
@@ -239,6 +233,35 @@ public class HeaderFooter extends PdfPageEventHelper {
 			cell_id_recep.setBorder(Rectangle.BOTTOM);
 
 			tabla_segunda_tabla.addCell(cell_id_recep);
+
+//			Exoneracion inicio
+			String fechaExoneracion = Constantes.EMPTY;
+			String numeroDocumentoExoneracion = Constantes.EMPTY;
+			Boolean tieneExoneracion = Boolean.FALSE;
+
+			for (DetalleFacturaElectronica item : this.facturaElectronica.getDetalleFacturaElectronica()) {
+				if (item.getMontoExoneracion() != null) {
+					if (item.getMontoExoneracion() > Constantes.ZEROS_DOUBLE) {
+						fechaExoneracion = item.getFechaEmisionExoneracion();
+						numeroDocumentoExoneracion = item.getNumeroDocumentoExoneracion();
+						tieneExoneracion = Boolean.TRUE;
+					}
+				}
+			}
+
+			if (tieneExoneracion) {
+				PdfPCell cell_recep1 = new PdfPCell(new Paragraph("Fecha Exoneracion:" + fechaExoneracion, UtilsPdf.font_cabezera_tabla));
+				cell_recep1.setHorizontalAlignment(Paragraph.ALIGN_LEFT);
+				cell_recep1.setColspan(1);
+				cell_recep1.setBorder(Rectangle.BOTTOM | Rectangle.RIGHT);
+				tabla_segunda_tabla.addCell(cell_recep1);
+				PdfPCell cell_id_recep1 = new PdfPCell(new Paragraph("Numero de Exoneracion:" + numeroDocumentoExoneracion, UtilsPdf.font_cabezera_tabla));
+				cell_id_recep1.setHorizontalAlignment(Paragraph.ALIGN_LEFT);
+				cell_id_recep1.setColspan(1);
+				cell_id_recep1.setBorder(Rectangle.BOTTOM);
+				tabla_segunda_tabla.addCell(cell_id_recep1);
+			}
+//			Final exoneracion  
 			if (this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || this.tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
 				PdfPCell cell_dir_recep = new PdfPCell(new Paragraph(telefonoCliente + "       Factura/Tiquete Referencia: " + this.facturaElectronica.getReferenciaNumero(), UtilsPdf.font_cabezera_tabla));
 				cell_dir_recep.setHorizontalAlignment(Paragraph.ALIGN_LEFT);
@@ -273,6 +296,7 @@ public class HeaderFooter extends PdfPageEventHelper {
 			// segunda_tabla_redondeada.getDefaultCell().setCellEvent(new RoundRectangle_tabla_sup_izq());
 			segunda_tabla_redondeada.addCell(celda_grande02);
 			document.add(segunda_tabla_redondeada);
+
 			document.add(new Paragraph("\n", UtilsPdf.pequeFont));
 
 		} catch (DocumentException de) {
