@@ -87,7 +87,7 @@ public class Constantes {
 //	public static final String					URL_PRUEBAS_CALLBACK																= "http://190.124.250.142:8085/service/callback.do";
 
 	// Semaforo
-	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 250;
+	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 600;
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR_CORREOS								= 50;
 
 	// 48 horas cada 5 minutos

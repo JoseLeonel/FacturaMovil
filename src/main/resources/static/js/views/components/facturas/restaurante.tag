@@ -2023,6 +2023,14 @@ function __validarRolAdministrador(formulario,url){
     }
     
 }    
+
+/**
+* refrescar una pagina
+**/
+function refrescarPagina(){
+     __Init()
+   
+}
  /**
 * agregar producto desde la pantalla de articulos
 **/
