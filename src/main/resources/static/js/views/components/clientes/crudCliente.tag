@@ -118,7 +118,7 @@
                     <div class="panel panel-default" >
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" >
                             <div class="panel-heading" style="background: #3c8dbc; color: white;">
-                                <h4 class="panel-title"><span class="fa fa-bank  col-md-offset-5"></span> Exento de IVA</h4>
+                                <h4 class="panel-title"><span class="fa fa-bank  col-md-offset-5"></span> Exento de IVA,Extensiones articulo 8 de la ley 9635</h4>
                             </div>
                         </a>
                         <div id="collapse3" class="panel-collapse collapse">
@@ -144,7 +144,7 @@
                     <div class="panel panel-default" >
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" >
                             <div class="panel-heading" style="background: #3c8dbc; color: white;">
-                                <h4 class="panel-title"><span class="fa fa-bank  col-md-offset-5"></span> Exoneracion</h4>
+                                <h4 class="panel-title"><span class="fa fa-bank  col-md-offset-5"></span> Exoneracion con afiliacion a Exonet</h4>
                             </div>
                         </a>
                         <div id="collapse2" class="panel-collapse collapse">

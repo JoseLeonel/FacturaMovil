@@ -294,7 +294,30 @@ function formatoDecimales(amount, decimals){
 *  retorna el valor numerico o cero sino es numerico
 **/
 function __valorNumerico(valor){
+	if (typeof valor == 'undefined') {
+	    return 0;
+	}
+
     return isNumber(valor)?parseFloat(valor):0 ;
+}
+
+function __valorFloat(valor){
+	if (typeof valor == 'undefined') {
+	    return 0.0;
+	}
+    return isNumber(valor)?parseFloat(valor):0.0 ;
+}
+function __valorEnterot(valor){
+    return isNumber(valor)?parseInt(valor):0 ;
+}
+
+function __valorString(valor){
+	if(isNumber(valor) == false){
+		if (typeof valor == 'undefined') {
+		    return "";
+		}
+	}
+    return valor ;
 }
 /**
 *  Validar si es numero

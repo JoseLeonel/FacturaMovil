@@ -59,7 +59,7 @@ public class Detalle implements Serializable {
 	@Column(name = "precio_unitario", precision = 18, scale = 5)
 	private Double						precioUnitario;
 
-	@Column(name = "cantidad", precision = 18, scale = 3)
+	@Column(name = "cantidad", precision = 16, scale = 3)
 	private Double						cantidad;
 
 	@Column(name = "monto_total", precision = 18, scale = 5)
