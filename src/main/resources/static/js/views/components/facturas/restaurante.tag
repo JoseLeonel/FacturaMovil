@@ -2472,22 +2472,10 @@ function consultaParaReimprimir(data,tipoImpresion){
 **/
 __CambiarDescuento(e){
     self.item = e.item; 
-    self.rutaAutorizada = '';
-    self.update()
-    if(self.empresa.seguridadEnVentas == 1 && self.rol.rolAdministrador == 0){
-        self.rutaAutorizada = '#modalCambiarDescuento';
-        self.update()
-        $("#usuarioSistema").val("")
-        $("#claveSistema").val("")
-        $('#modalRolUsuario').modal({backdrop: 'static', keyboard: true}) 
-        $('#modalRolUsuario').modal('show')     
-
-    }else{
-         $( "#aplicarDescuento" ).focus()
-        $( "#aplicarDescuento" ).val(null)
-        $('#modalCambiarDescuento').modal({backdrop: 'static', keyboard: true}) 
-        $('#modalCambiarDescuento').modal('show')      
-    }
+    $( "#aplicarDescuento" ).focus()
+    $( "#aplicarDescuento" ).val(null)
+    $('#modalCambiarDescuento').modal({backdrop: 'static', keyboard: true}) 
+    $('#modalCambiarDescuento').modal('show')      
 }
 /**
 *Cambiar Cantidad del Articulo
