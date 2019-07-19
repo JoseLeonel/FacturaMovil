@@ -1,9 +1,7 @@
 <recepcion-factura>
  	<!-- Titulos -->
     <div  class="row titulo-encabezado"  >
-        <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <h1 ><i class="fa fa-comment-o"></i>&nbsp {$.i18n.prop("nota.aceptacion.compras")}  </h1>
-        </div>
+        
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"></div>
     </div>
     <div id="formularioMensajeArchivo" class="row center-block" show={mostrarCargaArchivoMensaje}>    	
@@ -42,7 +40,7 @@
 								    <a class="pull-left" href="#"    onclick = {__MostrarGuia} title="Guia para aceptar compra de un proveedor"> <span style="color:red;font-weight:bold"><u>Guia de aceptacion de compras</u></span></a><br>
 									<div show="{verAyuda ==true}">
 							     	<h1>Como aceptar la compra electronica: </h1>
-									 <p>1. Le llegará un correo electronico con tres archivos.</p>
+									 <p>1. Le llegarï¿½ un correo electronico con tres archivos.</p>
 									 <p>2. Descargue el documento cuyo nombre es "XML".</p>
 									 <p>3. Clic Seleccionar Archivo </p>
 									 <p>4. Si todo esta bien presionar aceptar compra </p>

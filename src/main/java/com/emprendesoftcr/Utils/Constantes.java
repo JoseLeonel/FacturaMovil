@@ -70,6 +70,9 @@ public class Constantes {
 	public static final String					TIPO_CODIGO_ARTICULO_CODIGO_OTROS										= "99";
 	public static final String					CODIGO_ARTICULO_IMPUESTO_SERVICIO										= "8888";
 
+	public static final String					TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO						= "02";
+	public static final Double					TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO_VALOR			= 10d;
+
 	// Direcciones de callback
 	public static final String					URL_ALAJUELA_CALLBACK																= "http://www.emprendesoftcr.com:8081/service/callback.do";
 	public static final String					URL_GUANACASTE_CALLBACK															= "http://www.emprendesoftcr.com:8084/service/callback.do";
@@ -85,6 +88,14 @@ public class Constantes {
 //	public static final String					URL_JACODOS_CALLBACK																= "http://190.124.250.142:8086/service/callback.do";
 //	public static final String					URL_SANTA_ANA_CALLBACK															= "http://190.124.250.142:8083/service/callback.do";
 //	public static final String					URL_PRUEBAS_CALLBACK																= "http://190.124.250.142:8085/service/callback.do";
+
+//Cliente libre de impuesto
+	public static final String					DOCUMENTO_LIBRE_IVA																	= "AA9999999BBB";
+	public static final Integer					PORCENTAJE_LIBRE_IVA																= 100;
+	public static final String					TIPO_LIBRE_IVA																			= "LL";
+
+	public static final Integer					LIBRE_IMPUESTOS_ACTIVO															= 1;
+	public static final Integer					LIBRE_IMPUESTOS_INACTIVO														= 0;
 
 	// Semaforo
 	public static final Integer					BLOQUES_DOCUMENTOS_A_PROCESAR												= 600;
@@ -335,6 +346,7 @@ public class Constantes {
 	public static final String					ERROR_POR_COMUNICACION															= "2033";
 	public static final String					MQ_NO_REASON_CODE																		= "0000";
 	public static final String					DATE_FORMATImpServi																	= "yyyy-MM-dd hh:mm:ss";
+	public static final String					DATE_FORMATImpServi1																= "yyyy-MM-dd hh:mm a";
 	public static final String					DATE_FORMAT1																				= "dd/MM/yyyy hh:mm:ss";
 	public static final String					DATE_1900																						= "01/01/1990 00:00:00.0";
 	public static final String					DATE_FORMAT2																				= "dd/MM/yyyy";

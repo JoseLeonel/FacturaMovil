@@ -472,6 +472,7 @@
 self = this
 
 self.detail                = []
+self.listaFacturas = []
 self.totalDescuentos       = 0
 self.totalImpuestos        = 0
 self.totalImpuestoServicio        = 0
@@ -484,7 +485,9 @@ self.on('mount',function(){
     __InicializarTabla('.tableListar')
     agregarInputsCombos()
     _init()
-    sumar()
+    
+   
+   
       window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );

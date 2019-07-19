@@ -157,6 +157,9 @@ public class Detalle implements Serializable {
 	@Column(name = "mont_exone", precision = 18, scale = 5)
 	private Double						montoExoneracion;
 
+	@Column(name = "mont_exone1", precision = 18, scale = 5)
+	private Double						montoExoneracion1;
+
 	@ManyToOne
 	@JoinColumn(name = "factura_id")
 	private Factura						factura;
@@ -167,7 +170,7 @@ public class Detalle implements Serializable {
 	private Usuario						usuario;
 
 	public Detalle(Long id, Integer numeroLinea, String codigo, String descripcion, String tipoCodigo, String tipoImpuesto, String unidadMedida, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, String naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double ganancia, Double porcentajeDesc, Double porcentajeGanancia, Double costo, String observacion, String tipoImpuesto1, Double impuesto1, Double montoImpuesto1, Date created_at, Date updated_at, Double montoGanancia, Double pesoTransporte, Double pesoTransporteTotal, Double impuestoNeto, Double baseImponible, String codigoTarifa, String codigoTarifa1, String tipoDocumentoExoneracion, String numeroDocumentoExoneracion, String nombreInstitucionExoneracion,
-			Date fechaEmisionExoneracion, Integer porcentajeExoneracion, Double montoExoneracion, Factura factura, Usuario usuario) {
+			Date fechaEmisionExoneracion, Integer porcentajeExoneracion, Double montoExoneracion, Double montoExoneracion1, Factura factura, Usuario usuario) {
 		super();
 		this.id = id;
 		this.numeroLinea = numeroLinea;
@@ -208,6 +211,7 @@ public class Detalle implements Serializable {
 		this.fechaEmisionExoneracion = fechaEmisionExoneracion;
 		this.porcentajeExoneracion = porcentajeExoneracion;
 		this.montoExoneracion = montoExoneracion;
+		this.montoExoneracion1 = montoExoneracion1;
 		this.factura = factura;
 		this.usuario = usuario;
 	}
@@ -245,6 +249,13 @@ public class Detalle implements Serializable {
 		this.montoGanancia = detalleFacturaCommand.getMontoGanancia();
 		this.pesoTransporte = detalleFacturaCommand.getPesoTransporte();
 		this.pesoTransporteTotal = detalleFacturaCommand.getPesoTransporteTotal();
+		this.tipoDocumentoExoneracion = detalleFacturaCommand.getTipoDocumentoExoneracion();
+		this.numeroDocumentoExoneracion = detalleFacturaCommand.getNumeroDocumentoExoneracion();
+		this.nombreInstitucionExoneracion = detalleFacturaCommand.getNombreInstitucionExoneracion();
+		this.fechaEmisionExoneracion = detalleFacturaCommand.getFechaEmisionExoneracion();
+		this.porcentajeExoneracion = detalleFacturaCommand.getPorcentajeExoneracion();
+		this.montoExoneracion = detalleFacturaCommand.getMontoExoneracion();
+		this.montoExoneracion1 = detalleFacturaCommand.getMontoExoneracion1();
 
 	}
 
@@ -610,6 +621,14 @@ public class Detalle implements Serializable {
 
 	public void setMontoExoneracion(Double montoExoneracion) {
 		this.montoExoneracion = montoExoneracion;
+	}
+
+	public Double getMontoExoneracion1() {
+		return montoExoneracion1;
+	}
+
+	public void setMontoExoneracion1(Double montoExoneracion1) {
+		this.montoExoneracion1 = montoExoneracion1;
 	}
 
 }

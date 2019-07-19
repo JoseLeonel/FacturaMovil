@@ -193,6 +193,31 @@ public class ClientesController {
 			if (clienteValidar != null) {
 				result.rejectValue("cedula", "error.cliente.existe.cedula");
 			}
+			
+			if (clienteCommand.getFechaEmisionExoneracionSTR() != null) {
+				if (!clienteCommand.getFechaEmisionExoneracionSTR().equals(Constantes.EMPTY)) {
+					 if(clienteCommand.getNumeroDocumentoExoneracion() != null) {
+						 if(clienteCommand.getNumeroDocumentoExoneracion().equals(Constantes.EMPTY)) {
+							 result.rejectValue("numeroDocumentoExoneracion", "error.cliente.empty.numeroDocumentoExoneracion");
+						 }
+					 }
+					 if(clienteCommand.getPorcentajeExoneracion() !=null) {
+						 if(clienteCommand.getPorcentajeExoneracion().equals(Constantes.ZEROS_DOUBLE)) {
+							 result.rejectValue("porcentajeExoneracion", "error.cliente.zeros.porcentajeExoneracion");
+						 }
+					 }
+
+				}
+			}
+			if (clienteCommand.getFechaEmisionExoneracionSTR() != null) {
+				if(!clienteCommand.getFechaEmisionExoneracionSTR().equals(Constantes.EMPTY)) {
+					if(clienteCommand.getLibreImpuesto() !=null) {
+						if(clienteCommand.getLibreImpuesto().equals(Constantes.LIBRE_IMPUESTOS_ACTIVO)) {
+							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.ya.tiene.exoneracion", result.getAllErrors());
+						}
+					}
+				}
+			}
 
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
@@ -228,11 +253,13 @@ public class ClientesController {
 			cliente.setCanton(Constantes.EMPTY);
 			cliente.setBarrio(Constantes.EMPTY);
 			cliente.setCelular(Constantes.ZEROS);
+			
 
 			cliente.setEmpresa(usuarioSesion.getEmpresa());
 			cliente.setCreated_at(new Date());
 			cliente.setUpdated_at(new Date());
 			cliente.setUsuario(usuarioSesion);
+			cliente.setLibreImpuesto(clienteCommand.getLibreImpuesto());
 			clienteBo.agregar(cliente);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("cliente.agregar.correctamente", cliente);
 
@@ -284,7 +311,30 @@ public class ClientesController {
 
 				}
 			}
+			if (clienteCommand.getFechaEmisionExoneracionSTR() != null) {
+				if (!clienteCommand.getFechaEmisionExoneracionSTR().equals(Constantes.EMPTY)) {
+					 if(clienteCommand.getNumeroDocumentoExoneracion() != null) {
+						 if(clienteCommand.getNumeroDocumentoExoneracion().equals(Constantes.EMPTY)) {
+							 result.rejectValue("numeroDocumentoExoneracion", "error.cliente.empty.numeroDocumentoExoneracion");
+						 }
+					 }
+					 if(clienteCommand.getPorcentajeExoneracion() !=null) {
+						 if(clienteCommand.getPorcentajeExoneracion().equals(Constantes.ZEROS_DOUBLE)) {
+							 result.rejectValue("porcentajeExoneracion", "error.cliente.zeros.porcentajeExoneracion");
+						 }
+					 }
 
+				}
+			}
+			if (clienteCommand.getFechaEmisionExoneracionSTR() != null) {
+				if(!clienteCommand.getFechaEmisionExoneracionSTR().equals(Constantes.EMPTY)) {
+					if(clienteCommand.getLibreImpuesto() !=null) {
+						if(clienteCommand.getLibreImpuesto().equals(Constantes.LIBRE_IMPUESTOS_ACTIVO)) {
+							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.ya.tiene.exoneracion", result.getAllErrors());
+						}
+					}
+				}
+			}
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
@@ -324,6 +374,7 @@ public class ClientesController {
 			clienteBD.setCodigoPais(clienteCommand.getCodigoPais());
 			clienteBD.setIdentificacionExtranjero(clienteCommand.getIdentificacionExtranjero());
 			clienteBD.setObservacionVenta(clienteCommand.getObservacionVenta() == null ? Constantes.EMPTY : clienteCommand.getObservacionVenta());
+			clienteBD.setLibreImpuesto(clienteCommand.getLibreImpuesto());
 			clienteBo.modificar(clienteBD);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("cliente.modificado.correctamente", clienteBD);

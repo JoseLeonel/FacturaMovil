@@ -643,9 +643,7 @@ public class ArticuloController {
 			if (articulo.getCantidad() == null) {
 				articulo.setCantidad(Constantes.ZEROS_DOUBLE);
 			}
-			if (result.hasErrors()) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
-			}
+			
 			if (articulo.getTipoImpuesto() != null) {
 				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Sin impuesto") ? Constantes.EMPTY : articulo.getTipoImpuesto());
 			}
@@ -668,7 +666,35 @@ public class ArticuloController {
 				articulo.setImpuesto1(Constantes.ZEROS_DOUBLE);
 				articulo.setCodigoTarifa1(Constantes.EMPTY);
 			}
-
+			if(!articulo.getTipoImpuesto1().equals(Constantes.EMPTY)) {
+				if(!articulo.getTipoImpuesto1().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)){
+					if(articulo.getImpuesto1().equals(Constantes.ZEROS_DOUBLE)) {
+						result.rejectValue("impuesto1", "error.articulo.tipoImpuesto1.cero");	
+					}
+				}
+				if(articulo.getTipoImpuesto1().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO)){
+					if(!articulo.getImpuesto1().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO_VALOR)) {
+						result.rejectValue("tipoImpuesto1", "error.articulo.tipoImpuesto1.selectivoConsumo");	
+					}
+					
+				}
+			}
+			if(!articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
+				if(!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)){
+					if(articulo.getImpuesto().equals(Constantes.ZEROS_DOUBLE)) {
+						result.rejectValue("impuesto1", "error.articulo.tipoImpuesto1.cero");	
+					}
+				}
+				if(articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO)){
+					if(!articulo.getImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO_VALOR)) {
+						result.rejectValue("tipoImpuesto1", "error.articulo.tipoImpuesto1.selectivoConsumo");	
+					}
+					
+				}
+			}
+			if (result.hasErrors()) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
+			}
 			articulo.setCreated_at(new Date());
 			articulo.setTipoImpuesto(articulo.getTipoImpuesto() == null ? Constantes.EMPTY : articulo.getTipoImpuesto());
 			articulo.setPrecioEspecial(articulo.getPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioEspecial());
@@ -780,6 +806,33 @@ public class ArticuloController {
 				articulo.setImpuesto1(Constantes.ZEROS_DOUBLE);
 				articulo.setCodigoTarifa1(Constantes.EMPTY);
 			}
+			if(!articulo.getTipoImpuesto1().equals(Constantes.EMPTY)) {
+				if(!articulo.getTipoImpuesto1().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)){
+					if(articulo.getImpuesto1().equals(Constantes.ZEROS_DOUBLE)) {
+						result.rejectValue("impuesto1", "error.articulo.tipoImpuesto1.cero");	
+					}
+				}
+				if(articulo.getTipoImpuesto1().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO)){
+					if(!articulo.getImpuesto1().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO_VALOR)) {
+						result.rejectValue("tipoImpuesto1", "error.articulo.tipoImpuesto1.selectivoConsumo");	
+					}
+					
+				}
+			}
+			if(!articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
+				if(!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)){
+					if(articulo.getImpuesto().equals(Constantes.ZEROS_DOUBLE)) {
+						result.rejectValue("impuesto1", "error.articulo.tipoImpuesto1.cero");	
+					}
+				}
+				if(articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO)){
+					if(!articulo.getImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO_VALOR)) {
+						result.rejectValue("tipoImpuesto1", "error.articulo.tipoImpuesto1.selectivoConsumo");	
+					}
+					
+				}
+			}
+			
 			
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());

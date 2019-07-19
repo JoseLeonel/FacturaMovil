@@ -42,7 +42,6 @@ public class ReportePdfView {
 		document.setMargins(10, 10, 12, 55);
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
-		
 		PdfWriter writer = PdfWriter.getInstance(document, stream);
 		Rectangle rct = new Rectangle(36, 54, 559, 788);
 		// Definimos un nombre y un tamaño para el PageBox los nombres posibles son: “crop”, “trim”, “art” and “bleed”.
@@ -53,14 +52,14 @@ public class ReportePdfView {
 
 //		PdfContentByte cb = writer.getDirectContent();
 
-		reporte01PdfView.buildPdfDocument(facturaElectronica, document, writer,tipoDoc);
+		reporte01PdfView.buildPdfDocument(facturaElectronica, document, writer, tipoDoc);
 
 		document.close();
 
 		return stream;
 	}
 
-	private void buildPdfDocument(FacturaElectronica fac_electro, Document document, PdfWriter writer,String tipoDoc) throws Exception {
+	private void buildPdfDocument(FacturaElectronica fac_electro, Document document, PdfWriter writer, String tipoDoc) throws Exception {
 
 		// document.add(new Paragraph("\n", pequeFont));
 
@@ -68,7 +67,7 @@ public class ReportePdfView {
 		tabla_tercera_tabla.setWidthPercentage(100);
 		tabla_tercera_tabla.setTotalWidth(570f);
 		tabla_tercera_tabla.setLockedWidth(true);
-		float[] header_espacio_03 = { 23, 60, 135, 18, 28, 35,17,17,35, 40 };
+		float[] header_espacio_03 = { 23, 60, 135, 18, 28, 35, 17, 17, 35, 40 };
 		tabla_tercera_tabla.setWidths(header_espacio_03);
 		tabla_tercera_tabla.setSplitLate(false);
 		tabla_tercera_tabla.setSplitRows(false);
@@ -100,14 +99,16 @@ public class ReportePdfView {
 		Double totalImpuesto = Constantes.ZEROS_DOUBLE;
 		Double totalExoneracion = Constantes.ZEROS_DOUBLE;
 //tabla_tercera_tabla.setFooterRows(1);
-    fac_electro.setMontoExoneracion(Constantes.ZEROS_DOUBLE);;
+		fac_electro.setMontoExoneracion(Constantes.ZEROS_DOUBLE);
+		;
 		int indice_ = 0;
 		for (DetalleFacturaElectronica item : fac_electro.getDetalleFacturaElectronica()) {
-		//Total Impuesto
-			totalImpuesto = item.getImpuesto() > Constantes.ZEROS_DOUBLE?totalImpuesto + item.getImpuesto():Constantes.ZEROS_DOUBLE;
-			totalExoneracion = item.getMontoExoneracion() != null?totalExoneracion + item.getMontoExoneracion():Constantes.ZEROS_DOUBLE;
-			
-			
+			// Total Impuesto
+			if (!item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA)) {
+				totalImpuesto = item.getImpuesto() > Constantes.ZEROS_DOUBLE ? totalImpuesto + item.getImpuesto() : Constantes.ZEROS_DOUBLE;
+				totalExoneracion = item.getMontoExoneracion() != null ? totalExoneracion + item.getMontoExoneracion() : Constantes.ZEROS_DOUBLE;
+			}
+
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getLinea()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT));
 
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getCodigo()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT));
@@ -118,11 +119,10 @@ public class ReportePdfView {
 
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getCantidad()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT));
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getPrecioU()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT));
-			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getTarifaIva()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
-			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.get_impuesto1()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
-			
-			
-			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getImpuesto()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
+			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA)?Constantes.EMPTY:item.getTarifaIva()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
+			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA)?Constantes.EMPTY:item.get_impuesto1()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
+
+			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA)?Constantes.ZEROS_DOUBLE:item.getImpuesto()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getTotal()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 			indice_++;
 			/*
@@ -159,13 +159,13 @@ public class ReportePdfView {
 		PdfPTable izquierda_inferior_ultima = new PdfPTable(1);
 		izquierda_inferior_ultima.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 		izquierda_inferior_ultima.getDefaultCell().setCellEvent(new RoundRectangle());
-    String nota = Constantes.EMPTY;    
-		if(tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+		String nota = Constantes.EMPTY;
+		if (tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
 			nota = fac_electro.getReferenciaRazon();
-		}else {
+		} else {
 			nota = fac_electro.get_nota();
 		}
-		
+
 		izquierda_inferior_ultima.addCell(obtenerCeldaNormal("Nota: " + nota, font_cabezera_tabla, 1, true, Paragraph.ALIGN_LEFT, PdfPCell.NO_BORDER));
 
 		tabla_ultima.addCell(izquierda_inferior_ultima);
@@ -174,52 +174,51 @@ public class ReportePdfView {
 		central_inferior_ultima.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 		central_inferior_ultima.getDefaultCell().setCellEvent(new RoundRectangle());
 
-		//Total Factura
+		// Total Factura
 		Double totalExentos = Constantes.ZEROS_DOUBLE;
 		Double totalGravados = Constantes.ZEROS_DOUBLE;
 		Double totalVenta = Constantes.ZEROS_DOUBLE;
 		Double totalDescuento = Constantes.ZEROS_DOUBLE;
-	
+
 		Double totalVentaNeta = Constantes.ZEROS_DOUBLE;
 		Double totalComprobante = Constantes.ZEROS_DOUBLE;
 		Double totalOtrosCargos = Constantes.ZEROS_DOUBLE;
-		//Ventas Exentas
-		if(fac_electro.getFooterTotalServiciosExentos() != null) {
+		// Ventas Exentas
+		if (fac_electro.getFooterTotalServiciosExentos() != null) {
 			totalExentos = fac_electro.getFooterTotalServiciosExentos();
 		}
-		if(fac_electro.getFooterTotalExento() != null) {
+		if (fac_electro.getFooterTotalExento() != null) {
 			totalExentos += fac_electro.getFooterTotalExento();
 		}
-		//Ventas Gravadas
-		if(fac_electro.getFooterTotalServiciosGravados() != null) {
+		// Ventas Gravadas
+		if (fac_electro.getFooterTotalServiciosGravados() != null) {
 			totalGravados = fac_electro.getFooterTotalServiciosGravados();
 		}
-		if(fac_electro.getFooterTotalMercanciasGravadas() != null) {
+		if (fac_electro.getFooterTotalMercanciasGravadas() != null) {
 			totalGravados += fac_electro.getFooterTotalMercanciasGravadas();
 		}
-		
-		//Total Ventas
-		if(fac_electro.getFooterTotalVenta() != null) {
+
+		// Total Ventas
+		if (fac_electro.getFooterTotalVenta() != null) {
 			totalVenta = fac_electro.getFooterTotalVenta();
 		}
-  	//Total Descuento
-		if(fac_electro.getFooterTotalDescuento() != null) {
+		// Total Descuento
+		if (fac_electro.getFooterTotalDescuento() != null) {
 			totalDescuento = fac_electro.getFooterTotalDescuento();
-		}    		
-  	
-   	// Total Ventas Netas
-			if(fac_electro.getFooterTotalVentaNeta() != null) {
-				totalVentaNeta = fac_electro.getFooterTotalVentaNeta();
-			}
-		// Total Comprobante
-			if(fac_electro.getFooterTotalComprobante() != null) {
-				totalComprobante = fac_electro.getFooterTotalComprobante();
-			}
-				
-	  if(fac_electro.getTotalOtrosCargos() !=null) {
-	  	totalOtrosCargos = fac_electro.getTotalOtrosCargos();
-	  }
+		}
 
+		// Total Ventas Netas
+		if (fac_electro.getFooterTotalVentaNeta() != null) {
+			totalVentaNeta = fac_electro.getFooterTotalVentaNeta();
+		}
+		// Total Comprobante
+		if (fac_electro.getFooterTotalComprobante() != null) {
+			totalComprobante = fac_electro.getFooterTotalComprobante();
+		}
+
+		if (fac_electro.getTotalOtrosCargos() != null) {
+			totalOtrosCargos = fac_electro.getTotalOtrosCargos();
+		}
 
 		central_inferior_ultima.addCell(obtenerCeldaNormal("venta", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
 		if (totalDescuento > Constantes.ZEROS_DOUBLE) {
@@ -227,14 +226,19 @@ public class ReportePdfView {
 		}
 		central_inferior_ultima.addCell(obtenerCeldaNormal("Venta Neta", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
 		central_inferior_ultima.addCell(obtenerCeldaNormal("IVAI", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
-		if(fac_electro.getMontoExoneracion() !=null) {
-			if(fac_electro.getMontoExoneracion() > Constantes.ZEROS_DOUBLE) {
-				 central_inferior_ultima.addCell(obtenerCeldaNormal("Exoneracion(-):", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));		
+		Boolean tieneExoneracion = Boolean.FALSE;
+		if (!fac_electro.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA)) {
+			tieneExoneracion = Boolean.TRUE;
+		}
+
+		if (fac_electro.getMontoExoneracion() != null && tieneExoneracion) {
+			if (fac_electro.getMontoExoneracion() > Constantes.ZEROS_DOUBLE) {
+				central_inferior_ultima.addCell(obtenerCeldaNormal("Exoneracion(-):", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
 			}
 		}
-		
+
 		if (totalOtrosCargos > Constantes.ZEROS_DOUBLE) {
-			central_inferior_ultima.addCell(obtenerCeldaNormal("Imp.Serv(10%):", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));			
+			central_inferior_ultima.addCell(obtenerCeldaNormal("Imp.Serv(10%):", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
 		}
 		central_inferior_ultima.addCell(obtenerCeldaNormal("Gravadas", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
 		central_inferior_ultima.addCell(obtenerCeldaNormal("Exento", font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, PdfPCell.NO_BORDER));
@@ -253,26 +257,26 @@ public class ReportePdfView {
 
 		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(totalVentaNeta), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
 		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(totalImpuesto), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
-		if(fac_electro.getMontoExoneracion() !=null) {
-			if(fac_electro.getMontoExoneracion() > Constantes.ZEROS_DOUBLE) {
+		if (fac_electro.getMontoExoneracion() != null && tieneExoneracion) {
+			if (fac_electro.getMontoExoneracion() > Constantes.ZEROS_DOUBLE) {
 				derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(fac_electro.getMontoExoneracion()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
 			}
 		}
 
 		if (totalOtrosCargos > Constantes.ZEROS_DOUBLE) {
-		    derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(totalOtrosCargos), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
+			derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(totalOtrosCargos), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
 		}
 		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(totalGravados), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
 		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(totalExentos), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
 		derecha_inferior_ultima.addCell(obtenerCeldaNormal(Utils.formateadorMiles(totalComprobante), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
-	
+
 		tabla_ultima.addCell(derecha_inferior_ultima);
 		document.add(tabla_ultima);
-			String text = "Emitida conforme lo establecido en la resolución de Facturación Electrónica, N° DGT-R-48-2016 del 7/10/16 08:00:00 , a las " + fac_electro.getFechaEmision() ;
-		
-		if(!tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)){
-			document.add(new Paragraph(text , UtilsPdf.font_cabezera_tabla));
-			}	
+		String text = "Emitida conforme lo establecido en la resolución de Facturación Electrónica, N° DGT-R-48-2016 del 7/10/16 08:00:00 , a las " + fac_electro.getFechaEmision();
+
+		if (!tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+			document.add(new Paragraph(text, UtilsPdf.font_cabezera_tabla));
+		}
 
 	}
 

@@ -16,7 +16,7 @@
 		            <ul class="treeview-menu">
 		            
 			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema')" >                       <a href="/ListarTarifas">    <i class="fa fa-circle-o"></i> Tarifas  </a></li>
-			            <li sec:authorize="hasAnyAuthority('Administrador_Sistema')" >                       <a href="ListarActividadComercialPorEmpresa">    <i class="fa fa-circle-o"></i> Act.Comerciales	  </a></li>
+			            <li sec:authorize="hasAnyAuthority('Administrador_Sistema','administrador_Cocodrillos','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')" >                       <a href="ListarActividadComercialPorEmpresa">    <i class="fa fa-circle-o"></i> Act.Comerciales	  </a></li>
 			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema')" >                       <a href="/ListarUsuario">    <i class="fa fa-circle-o"></i> Usuarios  </a></li>
 			          <li sec:authorize="hasAnyAuthority('Administrador_Sistema')">                        <a href="/ListarEmpresas">   <i class="fa fa-circle-o"></i> Empresas  </a></li>
 			          <li sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','usuario_vendedor','Administrador_Cajero','Usuario_Mesero')"><a href="/ListarClientes">   <i class="fa fa-circle-o"></i> Clientes  </a></li>

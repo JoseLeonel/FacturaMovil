@@ -82,9 +82,12 @@ public class DetalleFacturaCommand {
 	private Integer	porcentajeExoneracion;
 
 	private Double	montoExoneracion;
+	private Double	montoExoneracion1;
+
+	
 
 	public DetalleFacturaCommand(Long id, Integer numeroLinea, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, String naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double ganancia, Double porcentajeDesc, String descripcion, String tipoCodigo, String codigo, String unidadMedida, String tipoImpuesto, String fechaEmisionSTR, String consecutivo, String consecutivoProforma, String tipoDoc, String nombreUsuario, Double montoGanancia, Factura factura, Double porcentajeGanancia, Double costo, String tipoImpuesto1, Double impuesto1, Double montoImpuesto1, Double pesoTransporte, Double pesoTransporteTotal, String tipoDocumentoExoneracion, String numeroDocumentoExoneracion, String nombreInstitucionExoneracion,
-			Date fechaEmisionExoneracion, Integer porcentajeExoneracion, Double montoExoneracion) {
+			Date fechaEmisionExoneracion, Integer porcentajeExoneracion, Double montoExoneracion, Double montoExoneracion1) {
 		super();
 		this.id = id;
 		this.numeroLinea = numeroLinea;
@@ -124,6 +127,7 @@ public class DetalleFacturaCommand {
 		this.fechaEmisionExoneracion = fechaEmisionExoneracion;
 		this.porcentajeExoneracion = porcentajeExoneracion;
 		this.montoExoneracion = montoExoneracion;
+		this.montoExoneracion1 = montoExoneracion1;
 	}
 
 	public DetalleFacturaCommand() {
@@ -170,6 +174,7 @@ public class DetalleFacturaCommand {
 		this.fechaEmisionExoneracion = detalle.getFechaEmisionExoneracion();
 		this.montoExoneracion = detalle.getMontoExoneracion();
 		this.porcentajeExoneracion = detalle.getPorcentajeExoneracion();
+		this.montoExoneracion1 = detalle.getMontoExoneracion1();
 
 	}
 
@@ -179,6 +184,14 @@ public class DetalleFacturaCommand {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Double getMontoExoneracion1() {
+		return montoExoneracion1;
+	}
+
+	public void setMontoExoneracion1(Double montoExoneracion1) {
+		this.montoExoneracion1 = montoExoneracion1;
 	}
 
 	public Factura getFactura() {
@@ -465,67 +478,52 @@ public class DetalleFacturaCommand {
 		this.pesoTransporteTotal = pesoTransporteTotal;
 	}
 
-	
 	public String getTipoDocumentoExoneracion() {
 		return tipoDocumentoExoneracion;
 	}
 
-	
 	public void setTipoDocumentoExoneracion(String tipoDocumentoExoneracion) {
 		this.tipoDocumentoExoneracion = tipoDocumentoExoneracion;
 	}
 
-	
 	public String getNumeroDocumentoExoneracion() {
 		return numeroDocumentoExoneracion;
 	}
 
-	
 	public void setNumeroDocumentoExoneracion(String numeroDocumentoExoneracion) {
 		this.numeroDocumentoExoneracion = numeroDocumentoExoneracion;
 	}
 
-	
 	public String getNombreInstitucionExoneracion() {
 		return nombreInstitucionExoneracion;
 	}
 
-	
 	public void setNombreInstitucionExoneracion(String nombreInstitucionExoneracion) {
 		this.nombreInstitucionExoneracion = nombreInstitucionExoneracion;
 	}
 
-	
 	public Date getFechaEmisionExoneracion() {
 		return fechaEmisionExoneracion;
 	}
 
-	
 	public void setFechaEmisionExoneracion(Date fechaEmisionExoneracion) {
 		this.fechaEmisionExoneracion = fechaEmisionExoneracion;
 	}
 
-	
 	public Integer getPorcentajeExoneracion() {
 		return porcentajeExoneracion;
 	}
 
-	
 	public void setPorcentajeExoneracion(Integer porcentajeExoneracion) {
 		this.porcentajeExoneracion = porcentajeExoneracion;
 	}
 
-	
 	public Double getMontoExoneracion() {
 		return montoExoneracion;
 	}
 
-	
 	public void setMontoExoneracion(Double montoExoneracion) {
 		this.montoExoneracion = montoExoneracion;
 	}
 
-	
-	
-	
 }

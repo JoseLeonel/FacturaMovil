@@ -53,35 +53,35 @@
                                 <div class="row">   
                                     <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.costo")} </label>
-                                        <input type="number" step="any" class="form-control costo campoNumerico" id="costo" name="costo" value="{articulo.costo.toFixed(0)}"  onkeyup ={__ActualizarPreciosCosto}>
+                                        <input type="number" step="any" class="form-control costo campoNumerico" id="costo" name="costo" value="{articulo.costo.toFixed(0)}"  onkeydown ={__ActualizarPreciosCosto}>
                                     </div>
                                     <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.precioPublico")}  <span class="requeridoDato">*</span></label>
-                                        <input type="number" step="any" class="form-control precioPublico campoNumerico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoGananciaPublico} value="{articulo.precioPublico.toFixed(0)}"  >
+                                        <input type="number" step="any" class="form-control precioPublico campoNumerico" id="precioPublico" name="precioPublico" onkeydown ={__CalculoGananciaPublico} value="{articulo.precioPublico.toFixed(0)}"  >
                                     </div>
                                     <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.gananciaPrecioPublico")} % </label>
-                                        <input type="number" step="any" class="form-control gananciaPrecioPublico campoNumerico" id="gananciaPrecioPublico" name="gananciaPrecioPublico" value="{articulo.gananciaPrecioPublico}"  onkeyup ={__CalculoGananciaSinPrecioPublico}>
+                                        <input type="number" step="any" class="form-control gananciaPrecioPublico campoNumerico" id="gananciaPrecioPublico" name="gananciaPrecioPublico" value="{articulo.gananciaPrecioPublico}"  onkeydown ={__CalculoGananciaSinPrecioPublico}>
                                     </div>
                                     <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.precioMayorista")}  </label>
-                                        <input type="number" step="any" class="form-control precioMayorista campoNumerico" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista.toFixed(0)}" onkeyup={__CalculoGananciaMayorista} >
+                                        <input type="number" step="any" class="form-control precioMayorista campoNumerico" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista.toFixed(0)}" onkeydown={__CalculoGananciaMayorista} >
                                     </div>  
 
                                 </div>    
                                 <div class="row">
                                     <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.gananciaPrecioMayorista")} % </label>
-                                        <input type="number" step="any" class="form-control gananciaPrecioMayorista campoNumerico" id="gananciaPrecioMayorista" name="gananciaPrecioMayorista" value="{articulo.gananciaPrecioMayorista}"  onkeyup ={__CalculoGananciaSinPrecioMayorista}>
+                                        <input type="number" step="any" class="form-control gananciaPrecioMayorista campoNumerico" id="gananciaPrecioMayorista" name="gananciaPrecioMayorista" value="{articulo.gananciaPrecioMayorista}"  onkeydown ={__CalculoGananciaSinPrecioMayorista}>
                                     </div>
 
                                     <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.precioEspecial")}  </label>
-                                        <input type="number" step="any" class="form-control precioEspecial campoNumerico" id="precioEspecial" name="precioEspecial" value="{articulo.precioEspecial.toFixed(0)}"  onkeyup={__CalculoGananciaEspecial}>
+                                        <input type="number" step="any" class="form-control precioEspecial campoNumerico" id="precioEspecial" name="precioEspecial" value="{articulo.precioEspecial.toFixed(0)}"  onkeydown={__CalculoGananciaEspecial}>
                                     </div>                        
                                     <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.gananciaPrecioEspecial")} % </label>
-                                        <input type="number" step="any" class="form-control gananciaPrecioEspecial campoNumerico" id="gananciaPrecioEspecial" name="gananciaPrecioEspecial" value="{articulo.gananciaPrecioEspecial}"  onkeyup ={__CalculoGananciaSinPrecioEspecial}>
+                                        <input type="number" step="any" class="form-control gananciaPrecioEspecial campoNumerico" id="gananciaPrecioEspecial" name="gananciaPrecioEspecial" value="{articulo.gananciaPrecioEspecial}"  onkeydown ={__CalculoGananciaSinPrecioEspecial}>
                                     </div>
                                     <div class="col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                         <label class="tamanoLetra">{$.i18n.prop("articulo.tipoImpuesto")} </label>
@@ -119,7 +119,7 @@
                                 <div class="row">
                                     <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.impuesto1")}  </label>
-                                        <input type="number" step="any" class="form-control impuesto1 campoNumerico" id="impuesto1" name="impuesto1" value="{articulo.impuesto1}"  onkeyup ={__ActualizarPreciosImpuestos1}>
+                                        <input type="number" step="any" class="form-control impuesto1 campoNumerico" id="impuesto1" name="impuesto1" value="{articulo.impuesto1}"  onkeydown ={__ActualizarPreciosImpuestos1}>
                                     </div>
                                     <div class="col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                         <label class="tamanoLetra">Base Imponible</label>
@@ -1679,7 +1679,6 @@ __agregar(){
                 }
                 
             }
-
             
         
         if(self.articulo.costo > self.articulo.precioPublico){
@@ -1759,6 +1758,22 @@ __Modificar(){
                 mensajeError("Debe actualizar la base imponible debe ser Activo")
                return 
             }
+        }
+        tipo = $('#tipoImpuesto1').val() == "Sin impuesto"?"":$('#tipoImpuesto1').val()
+        if(tipo.length == 0){
+           var monto = parseFloat($(".impuesto1").val())
+           if (monto > 0){
+                mensajeError("Error el iva 2 , debe tener impuesto")
+                return 
+            } 
+        } 
+        if(tipo =='02'){
+           var monto = parseFloat($(".impuesto1").val())
+            if (monto != 10){
+               mensajeError("Error El IVA selectivo de consumo ,el porcentaje es incorrecto, consulte con su contador")
+               return 
+            }
+
         }
 
 

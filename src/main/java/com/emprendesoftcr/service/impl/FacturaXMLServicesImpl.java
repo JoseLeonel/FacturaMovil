@@ -407,7 +407,7 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
           getDescuento(detalle.getMontoDescuento())+
           "<SubTotal>" +  FacturaElectronicaUtils.truncateDecimal(detalle.getSubTotal(),5) + "</SubTotal>" +
           xmlBaseImponible(detalle.getFactura().getId(),detalle.getBaseImponible())+  
-          xmlImpuestos(detalle.getFactura().getId(),detalle.getCodigoTarifa(),detalle.getTipoImpuesto1(),detalle.getMontoImpuesto1(),detalle.getImpuesto1(),detalle) +
+          xmlImpuestos1(detalle.getFactura().getId(),detalle.getCodigoTarifa(),detalle.getTipoImpuesto1(),detalle.getMontoImpuesto1(),detalle.getImpuesto1(),detalle) +
           xmlImpuestos(detalle.getFactura().getId(),detalle.getCodigoTarifa(),detalle.getTipoImpuesto(),detalle.getMontoImpuesto(),detalle.getImpuesto(),detalle) +
           xmlImpuestosNeto(detalle.getFactura().getId() ,detalle.getMontoImpuesto() ==null?Constantes.ZEROS_DOUBLE:detalle.getMontoImpuesto(),detalle.getMontoImpuesto1() ==null?Constantes.ZEROS_DOUBLE:detalle.getMontoImpuesto(),detalle.getImpuestoNeto()) +
           "<MontoTotalLinea>" +  FacturaElectronicaUtils.truncateDecimal(detalle.getMontoTotalLinea(),5) + "</MontoTotalLinea>" +
@@ -422,21 +422,21 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
     return lineas;
 }
 	
-	private String xmlExoneracion(Detalle detalle) {
+	private String xmlExoneracion(String tipoDocumentoExoneracion,Date fechaEmisionExoneracion,String numeroDocumentoExoneracion,String nombreInstitucionExoneracion,Integer porcentajeExoneracion,Double montoExoneracion) {
   	String resultado = Constantes.EMPTY;
-  	if(detalle.getTipoDocumentoExoneracion() == null) {
+  	if(tipoDocumentoExoneracion == null) {
   		return resultado;
-  	}else if(detalle.getTipoDocumentoExoneracion().equals(Constantes.EMPTY)) {
+  	}else if(tipoDocumentoExoneracion.equals(Constantes.EMPTY)) {
   		return resultado;
   	}
-  	String date = FacturaElectronicaUtils.rfc3339( detalle.getFechaEmisionExoneracion());
+  	String date = FacturaElectronicaUtils.rfc3339( fechaEmisionExoneracion);
   	 resultado = "<Exoneracion>" +
-				  "<TipoDocumento>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(detalle.getTipoDocumentoExoneracion(),2)) + "</TipoDocumento>" +
-	        "<NumeroDocumento>" + FacturaElectronicaUtils.procesarTexto(detalle.getNumeroDocumentoExoneracion()) + "</NumeroDocumento>" +
-	        "<NombreInstitucion>" + FacturaElectronicaUtils.procesarTexto(detalle.getNombreInstitucionExoneracion()) + "</NombreInstitucion>" +
+				  "<TipoDocumento>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(tipoDocumentoExoneracion,2)) + "</TipoDocumento>" +
+	        "<NumeroDocumento>" + FacturaElectronicaUtils.procesarTexto(numeroDocumentoExoneracion) + "</NumeroDocumento>" +
+	        "<NombreInstitucion>" + FacturaElectronicaUtils.procesarTexto(nombreInstitucionExoneracion) + "</NombreInstitucion>" +
 	        "<FechaEmision>" + date+ "</FechaEmision>" +
-	        "<PorcentajeExoneracion>" + detalle.getPorcentajeExoneracion() + "</PorcentajeExoneracion>" +
-	        "<MontoExoneracion>" + FacturaElectronicaUtils.truncateDecimal(detalle.getMontoExoneracion(),5) + "</MontoExoneracion>" +
+	        "<PorcentajeExoneracion>" + porcentajeExoneracion + "</PorcentajeExoneracion>" +
+	        "<MontoExoneracion>" + FacturaElectronicaUtils.truncateDecimal(montoExoneracion,5) + "</MontoExoneracion>" +
 	        "</Exoneracion>" ;
   	return resultado;
   }
@@ -509,13 +509,49 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 	            nodoCodigoTarifa +
 	            nodoTarifa+
 	            "<Monto>" +  FacturaElectronicaUtils.truncateDecimal(montoImpuesto,5) + "</Monto>"
-	        + xmlExoneracion(detalle);
+	        +  xmlExoneracion(detalle.getTipoDocumentoExoneracion(),detalle.getFechaEmisionExoneracion(),detalle.getNumeroDocumentoExoneracion(),detalle.getNombreInstitucionExoneracion(),detalle.getPorcentajeExoneracion(),detalle.getMontoExoneracion());
 	        resultado += "</Impuesto>";
 	    	}
   		}
 			
 		} catch (Exception e) {
 			log.error("** Error  xmlImpuestos Factura :" + idFactura  + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+    return resultado;
+}
+	
+	private String xmlImpuestos1(Long idFactura,String codigoTarifa,String tipoImpuesto,Double montoImpuesto,Double impuesto,Detalle detalle) throws Exception {
+  	String resultado = Constantes.EMPTY;
+  	String nodoCodigoTarifa = Constantes.EMPTY;
+  	String nodoTarifa = Constantes.EMPTY;
+  	try {
+  		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
+  			return resultado;
+  		}
+  		if (codigoTarifa !=null) {
+  			if(!codigoTarifa.equals(Constantes.EMPTY)) {
+  				nodoCodigoTarifa ="<CodigoTarifa>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(codigoTarifa, 2)) + "</CodigoTarifa>";
+  				
+  			}
+  			
+  		}
+  		
+  		nodoTarifa = "<Tarifa>" + FacturaElectronicaUtils.truncateDecimal(impuesto,2 ) + "</Tarifa>" ;
+  		if(montoImpuesto != null && tipoImpuesto !=null) {
+	  		if(montoImpuesto > Constantes.ZEROS_DOUBLE) {
+	        resultado = "<Impuesto>" +
+	            "<Codigo>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(tipoImpuesto, 2)) + "</Codigo>" +
+	            nodoCodigoTarifa +
+	            nodoTarifa+
+	            "<Monto>" +  FacturaElectronicaUtils.truncateDecimal(montoImpuesto,5) + "</Monto>"
+	        +  xmlExoneracion(detalle.getTipoDocumentoExoneracion(),detalle.getFechaEmisionExoneracion(),detalle.getNumeroDocumentoExoneracion(),detalle.getNombreInstitucionExoneracion(),detalle.getPorcentajeExoneracion(),detalle.getMontoExoneracion1());
+	        resultado += "</Impuesto>";
+	    	}
+  		}
+			
+		} catch (Exception e) {
+			log.error("** Error  xmlImpuestos1 Factura :" + idFactura  + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
     return resultado;

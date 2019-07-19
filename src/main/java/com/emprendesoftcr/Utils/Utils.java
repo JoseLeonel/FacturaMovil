@@ -38,20 +38,58 @@ import org.w3c.dom.NodeList;
 import com.google.common.base.Strings;
 
 public final class Utils {
-	
+
 	public static String oTroContenido() {
 		String resultado = Constantes.EMPTY;
 
-		 resultado = "<OtroContenido>" +
-         "<ContactoDesarrollador xmlns=\"" + Constantes.DOCXMLS_CONTACTO_DESARROLLADOR_4_3 + "\">"+
-					  "<NombreContacto>Ing.Leonel Hernandez Chaverri</NombreContacto>" +
-					  "<CorreoElectronico>josehernandezchaverri@gmail.com</CorreoElectronico>" +
-					  "<TelefonoContacto>83124207</TelefonoContacto>" +
-					  "<SistemasOfrecemos>Restaurante Ferreteria Mini Super y a la medida</SistemasOfrecemos>" +
-			  "</ContactoDesarrollador>" ;
-         resultado += "</OtroContenido>";
+		resultado = "<OtroContenido>" + "<ContactoDesarrollador xmlns=\"" + Constantes.DOCXMLS_CONTACTO_DESARROLLADOR_4_3 + "\">" + "<NombreContacto>Ing.Leonel Hernandez Chaverri</NombreContacto>" + "<CorreoElectronico>josehernandezchaverri@gmail.com</CorreoElectronico>" + "<TelefonoContacto>83124207</TelefonoContacto>" + "<SistemasOfrecemos>Restaurante Ferreteria Mini Super y a la medida</SistemasOfrecemos>" + "</ContactoDesarrollador>";
+		resultado += "</OtroContenido>";
 
 		return resultado;
+	}
+	
+	public static Double Maximo5Decimales(Double valor) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		String[] splitter = valor.toString().split("\\.");
+		splitter[0].length(); // Before Decimal Count
+		splitter[1].length(); // After Decimal Count
+		String digitos = splitter[1];
+		if (splitter[1].length() >= 5) {
+			String decimales = digitos.substring(0, 5);
+			String valor1  = splitter[0] + "." + decimales;
+			resultado = Double.parseDouble(valor1);
+		}else {
+			String decimales = digitos.substring(0, splitter[1].length());
+			String valor1  = splitter[0] + "." + decimales;
+			resultado = Double.parseDouble(valor1);
+			
+		}
+				
+
+		return resultado;
+
+	}
+
+	/**
+	 * Si el sexto digito es mayor 5  o igual
+	 * @param valor
+	 * @return
+	 */
+	public static Boolean aplicarRedondeo(Double valor) {
+		Boolean resultado = Boolean.FALSE;
+		String[] splitter = valor.toString().split("\\.");
+		splitter[0].length(); // Before Decimal Count
+		splitter[1].length(); // After Decimal Count
+		if (splitter[1].length() > 5) {
+			String digitos = splitter[1];
+			int num = Character.getNumericValue(digitos.charAt(5));
+			if (num >= 5) {
+				resultado = Boolean.TRUE;
+			}
+		}
+
+		return resultado;
+
 	}
 
 	public static Date sumarDiasFecha(Date fecha, int dias) {
@@ -63,62 +101,61 @@ public final class Utils {
 
 	public static String formateadorMiles(Double valor) {
 		String resultado = Constantes.EMPTY;
-		
-		if(valor == null) {
+
+		if (valor == null) {
 			valor = 0d;
-			
+
 		}
-		
+
 		DecimalFormat formateador = new DecimalFormat("###,###,##0.00");
-		resultado = formateador.format (valor);
-		
+		resultado = formateador.format(valor);
+
 		return resultado;
 	}
+
 	public static String formateadorMilesSinDecimales(Double valor) {
 		String resultado = Constantes.EMPTY;
-		
-		if(valor == null) {
+
+		if (valor == null) {
 			valor = 0d;
-			
+
 		}
-		
+
 		DecimalFormat formateador = new DecimalFormat("###,###,##0");
-		resultado = formateador.format (valor);
-		
+		resultado = formateador.format(valor);
+
 		return resultado;
 	}
-	
-	
-  /**
-   * A�ade ceros a la izquierda de un valor para que este alcance n longitud
-   * @param num Valor a ser completado con ceros a la izquierda
-   * @param places Longitud que tendr� el valor una vez completado
-   * @return String con el nuevo valor
-   */
-  public static String zeroPad(int num, int places) {
-      return String.format("%0" + Integer.toString(places) + "d", num);
-  }
 
-  /**
-   * A�ade ceros a la izquierda de un valor para que este alcance n longitud
-   * @param num Valor a ser completado con ceros a la izquierda
-   * @param places Longitud que tendr� el valor una vez completado
-   * @return String con el nuevo valor
-   */
-  public static String zeroPad(long num, int places) {
-      return Strings.padStart(Long.toString(num), places, '0');
-  }
+	/**
+	 * A�ade ceros a la izquierda de un valor para que este alcance n longitud
+	 * @param num Valor a ser completado con ceros a la izquierda
+	 * @param places Longitud que tendr� el valor una vez completado
+	 * @return String con el nuevo valor
+	 */
+	public static String zeroPad(int num, int places) {
+		return String.format("%0" + Integer.toString(places) + "d", num);
+	}
 
-  /**
-   * A�ade ceros a la izquierda de un valor para que este alcance n longitud
-   * @param num Valor a ser completado con ceros a la izquierda
-   * @param places Longitud que tendr� el valor una vez completado
-   * @return String con el nuevo valor
-   */
-  public static String zeroPad(String num, int places) {
-      return Strings.padStart(num, places, '0');
-  }
+	/**
+	 * A�ade ceros a la izquierda de un valor para que este alcance n longitud
+	 * @param num Valor a ser completado con ceros a la izquierda
+	 * @param places Longitud que tendr� el valor una vez completado
+	 * @return String con el nuevo valor
+	 */
+	public static String zeroPad(long num, int places) {
+		return Strings.padStart(Long.toString(num), places, '0');
+	}
 
+	/**
+	 * A�ade ceros a la izquierda de un valor para que este alcance n longitud
+	 * @param num Valor a ser completado con ceros a la izquierda
+	 * @param places Longitud que tendr� el valor una vez completado
+	 * @return String con el nuevo valor
+	 */
+	public static String zeroPad(String num, int places) {
+		return Strings.padStart(num, places, '0');
+	}
 
 	/**
 	 * @param dateString An input String, presumably from a user or a database table.
@@ -147,7 +184,7 @@ public final class Utils {
 
 	public static Date parseDateImpuestoServicio(String dateString) {
 		Date date = null;
-		SimpleDateFormat dateFormat = new  SimpleDateFormat( "yyyy-MM-dd hh:mm:ss");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
 		try {
 			// parse() will throw an exception if the given dateString doesn't
@@ -164,7 +201,27 @@ public final class Utils {
 
 		return date;
 	}
-	
+
+	public static Date parseDateImpuestoServicio1(String dateString) {
+		Date date = null;
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
+
+		try {
+			// parse() will throw an exception if the given dateString doesn't
+			// match
+			// the current format
+			date = dateFormat.parse(dateString);
+//			date = new SimpleDateFormat("ddMMyyyyhhmmss").parse(dateString);
+
+		} catch (ParseException e) {
+			// don't do anything. just let the loop continue.
+			// we may miss on 99 format attempts, but match on one format,
+			// but that's all we need.
+		}
+
+		return date;
+	}
+
 	public static Date parseDate2(String dateString) {
 		Date date = null;
 		SimpleDateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT6);
@@ -184,7 +241,7 @@ public final class Utils {
 
 		return date;
 	}
-	
+
 	public static Boolean stringIsNullOrEmpty(String valor) {
 
 		if (valor == null) {
@@ -1087,14 +1144,14 @@ public final class Utils {
 		return resultado;
 	}
 
-	/*Metodo que devuelve el Numero total de minutos que hay entre las dos Fechas */
-	public static long cantidadTotalMinutos(Calendar fechaInicial ,Calendar fechaFinal){
+	/* Metodo que devuelve el Numero total de minutos que hay entre las dos Fechas */
+	public static long cantidadTotalMinutos(Calendar fechaInicial, Calendar fechaFinal) {
 
-	long totalMinutos=0;
-	totalMinutos=((fechaFinal.getTimeInMillis()-fechaInicial.getTimeInMillis())/1000/60);
-	return totalMinutos;
+		long totalMinutos = 0;
+		totalMinutos = ((fechaFinal.getTimeInMillis() - fechaInicial.getTimeInMillis()) / 1000 / 60);
+		return totalMinutos;
 	}
-	
+
 	public static String normalizarMessageException(Exception e) {
 		String message = e.getMessage();
 		if (e instanceof NestedRuntimeException) {
@@ -1271,36 +1328,35 @@ public final class Utils {
 		}
 		return null;
 	}
-	
+
 	public static String getFechaGeneraReporte(Date date) {
-		
+
 		DateFormat fechaCompleta = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss a ");
-		
-		return date !=null?fechaCompleta.format(date):Constantes.EMPTY;
+
+		return date != null ? fechaCompleta.format(date) : Constantes.EMPTY;
 	}
-	
-	
+
 	public static String getFechaGeneraHacienda(Date date) {
 		DateFormat fechaCompleta = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a ");
-		
-		return date !=null?fechaCompleta.format(date):Constantes.EMPTY;
+
+		return date != null ? fechaCompleta.format(date) : Constantes.EMPTY;
 	}
 
 	public static String getFechaStr(Date date) {
 		DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy");
-		return date !=null?fecha.format(date):Constantes.EMPTY;
+		return date != null ? fecha.format(date) : Constantes.EMPTY;
 	}
 
 	public static String getHoraStr(Date date) {
 		DateFormat hora = new SimpleDateFormat("HH:mm:ss");
-		return date !=null?hora.format(date):Constantes.EMPTY;
+		return date != null ? hora.format(date) : Constantes.EMPTY;
 	}
-	
+
 	public static String getFechaHoraStr(Date date) {
 		DateFormat fecha = new SimpleDateFormat("yyyy-MM-dd");
-		DateFormat hora  = new SimpleDateFormat("hh:mm:ss");
-		String fechaStr  = fecha.format(date);
-		String horaStr   = hora.format(date);
+		DateFormat hora = new SimpleDateFormat("hh:mm:ss");
+		String fechaStr = fecha.format(date);
+		String horaStr = hora.format(date);
 		return fechaStr + " " + horaStr;
 	}
 
@@ -1326,6 +1382,7 @@ public final class Utils {
 		return xmlDate;
 
 	}
+
 	/**
 	 * Redondeo de los detalles de la factura y resumen
 	 * @param value
@@ -1333,12 +1390,13 @@ public final class Utils {
 	 * @return
 	 */
 	public static double roundFactura(double value, int places) {
-	
-    if (places < 0) throw new IllegalArgumentException();
- 
-    BigDecimal bd = new BigDecimal(Double.toString(value));
-    bd = bd.setScale(places, RoundingMode.HALF_UP);
-    return bd.doubleValue();
+
+		if (places < 0)
+			throw new IllegalArgumentException();
+
+		BigDecimal bd = new BigDecimal(Double.toString(value));
+		bd = bd.setScale(places, RoundingMode.HALF_UP);
+		return bd.doubleValue();
 	}
 
 	public static Date dateToDate(Date fecha, boolean fechaMax) {
@@ -1357,56 +1415,53 @@ public final class Utils {
 		}
 		return calendar.getTime();
 	}
-	
+
 	public static Boolean validarCorreo(String correo) {
 		Boolean resultado = false;
-		 // Patrón para validar el email
-    Pattern pattern = Pattern
-            .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-                    + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
-    Matcher mather = pattern.matcher(correo);
-		
-    if (mather.find() == true) {
-    	resultado = true;
-    }
-		
+		// Patrón para validar el email
+		Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+		Matcher mather = pattern.matcher(correo);
+
+		if (mather.find() == true) {
+			resultado = true;
+		}
+
 		return resultado;
 	}
-	
-	public static String obtenerTipoDocumentoConsecutivo(String consecutivo) {		
-		//001 + 00004 + 01 + 0000003888 
-		return consecutivo.substring(8, 10); //Se retorna 01
+
+	public static String obtenerTipoDocumentoConsecutivo(String consecutivo) {
+		// 001 + 00004 + 01 + 0000003888
+		return consecutivo.substring(8, 10); // Se retorna 01
 	}
-	
-	
+
 	public static String obtenerDescripcionTipoDocumento(String tipoDocumento) {
 		String descripcion = " ";
 		switch (tipoDocumento) {
 			case Constantes.FACTURA_TIPO_DOC_TIQUETE:
-					descripcion = Constantes.RESOURCE_BUNDLE.getString(Constantes.FACTURA_TIPO_DOC_TIQUETE_STR);
-			break;
+				descripcion = Constantes.RESOURCE_BUNDLE.getString(Constantes.FACTURA_TIPO_DOC_TIQUETE_STR);
+				break;
 			case Constantes.FACTURA_TIPO_DOC_PROFORMAS:
 				descripcion = Constantes.RESOURCE_BUNDLE.getString(Constantes.FACTURA_TIPO_DOC_PROFORMAS_STR);
-			break;
+				break;
 			case Constantes.FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO:
 				descripcion = Constantes.RESOURCE_BUNDLE.getString(Constantes.FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO_STR);
-			break;
+				break;
 			case Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA:
 				descripcion = Constantes.RESOURCE_BUNDLE.getString(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA_STR);
-			break;
+				break;
 			case Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO:
 				descripcion = Constantes.RESOURCE_BUNDLE.getString(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO_STR);
-			break;
+				break;
 			case Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO:
 				descripcion = Constantes.RESOURCE_BUNDLE.getString(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO_STR);
-			break;
+				break;
 			case Constantes.FACTURA_TIPO_DOC_COMPRAS:
 				descripcion = Constantes.RESOURCE_BUNDLE.getString(Constantes.FACTURA_TIPO_DOC_COMPRAS_STR);
-			break;
+				break;
 			default:
 				break;
 		}
-		return descripcion;		
+		return descripcion;
 	}
-	
+
 }

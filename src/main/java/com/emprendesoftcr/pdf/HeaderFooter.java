@@ -243,8 +243,11 @@ public class HeaderFooter extends PdfPageEventHelper {
 				if (item.getMontoExoneracion() != null) {
 					if (item.getMontoExoneracion() > Constantes.ZEROS_DOUBLE) {
 						fechaExoneracion = item.getFechaEmisionExoneracion();
-						numeroDocumentoExoneracion = item.getNumeroDocumentoExoneracion();
+						numeroDocumentoExoneracion = item.getNumeroDocumentoExoneracion() != null?item.getNumeroDocumentoExoneracion():Constantes.EMPTY;
 						tieneExoneracion = Boolean.TRUE;
+						if(numeroDocumentoExoneracion.equals(Constantes.DOCUMENTO_LIBRE_IVA)) {
+							tieneExoneracion = Boolean.FALSE;
+						}
 					}
 				}
 			}

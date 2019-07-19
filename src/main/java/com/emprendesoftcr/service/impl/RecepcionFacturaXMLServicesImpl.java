@@ -51,32 +51,31 @@ public class RecepcionFacturaXMLServicesImpl implements RecepcionFacturaXMLServi
 			if(recepcionFactura.getVersion_doc().equals("4.3")) {
 				xml = "<MensajeReceptor xmlns=\"" + Constantes.DOCXMLS_RECEPCION_FACTURA_4_3 + "\" " +
 	          "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
-	          "<Clave>" + recepcionFactura.getFacturaClave() + "</Clave>" +
-	          "<NumeroCedulaEmisor>" + recepcionFactura.getEmisorCedula() + "</NumeroCedulaEmisor>" +
+	          "<Clave>" + FacturaElectronicaUtils.procesarTexto(recepcionFactura.getFacturaClave()) + "</Clave>" +
+	          "<NumeroCedulaEmisor>" + FacturaElectronicaUtils.procesarTexto(recepcionFactura.getEmisorCedula()) + "</NumeroCedulaEmisor>" +
 	          "<FechaEmisionDoc>" + date + "</FechaEmisionDoc>" +
-	          "<Mensaje>" + recepcionFactura.getMensaje() + "</Mensaje>" +	          
+	          "<Mensaje>" + FacturaElectronicaUtils.procesarTexto(recepcionFactura.getMensaje()) + "</Mensaje>" +	          
 	           impuestos  +
-	          "<CodigoActividad>" + recepcionFactura.getCodigoActividad() + "</CodigoActividad>" +
+	          "<CodigoActividad>" +FacturaElectronicaUtils.replazarConZeros(recepcionFactura.getCodigoActividad(),Constantes.FORMATO_CODIGO_ACTIVIDAD)  + "</CodigoActividad>" +
 	          "<CondicionImpuesto>" + recepcionFactura.getCondicionImpuesto() + "</CondicionImpuesto>" + 
-	          "<MontoTotalImpuestoAcreditar>" + recepcionFactura.getTotalImpuestoAcreditar() + "</MontoTotalImpuestoAcreditar>" +
-	          "<MontoTotalDeGastoAplicable>" + recepcionFactura.getTotalDeGastoAplicable() + "</MontoTotalDeGastoAplicable>" +
-	          "<MontoTotalDeGastoAplicable>" + recepcionFactura.getTotalDeGastoAplicable() + "</MontoTotalDeGastoAplicable>" +
-	          "<TotalFactura>" + recepcionFactura.getFacturaTotalComprobante() + "</TotalFactura>" +
-	          "<NumeroCedulaReceptor>" + recepcionFactura.getReceptorCedula() + "</NumeroCedulaReceptor>" +
-	          "<NumeroConsecutivoReceptor>" + recepcionFactura.getNumeroConsecutivoReceptor() + "</NumeroConsecutivoReceptor>" + 
+	          getMontoTotalImpuestoAcreditar(recepcionFactura)+
+	          getGastosAplicables(recepcionFactura)+
+	          "<TotalFactura>" + FacturaElectronicaUtils.truncateDecimal(recepcionFactura.getFacturaTotalComprobante(),5) + "</TotalFactura>" +
+	          "<NumeroCedulaReceptor>" + FacturaElectronicaUtils.procesarTexto(recepcionFactura.getReceptorCedula()) + "</NumeroCedulaReceptor>" +
+	          "<NumeroConsecutivoReceptor>" + FacturaElectronicaUtils.procesarTexto(recepcionFactura.getNumeroConsecutivoReceptor()) + "</NumeroConsecutivoReceptor>" + 
 			  "</MensajeReceptor>";		
 				
 			}else {
 				xml = "<MensajeReceptor xmlns=\"" + Constantes.DOCXMLS_RECEPCION_FACTURA_4_2 + "\" " +
 	          "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
-	          "<Clave>" + recepcionFactura.getFacturaClave() + "</Clave>" +
-	          "<NumeroCedulaEmisor>" + recepcionFactura.getEmisorCedula() + "</NumeroCedulaEmisor>" +
+	          "<Clave>" + FacturaElectronicaUtils.procesarTexto(recepcionFactura.getFacturaClave()) + "</Clave>" +
+	          "<NumeroCedulaEmisor>" + FacturaElectronicaUtils.procesarTexto(recepcionFactura.getEmisorCedula()) + "</NumeroCedulaEmisor>" +
 	          "<FechaEmisionDoc>" + date + "</FechaEmisionDoc>" +
-	          "<Mensaje>" + recepcionFactura.getMensaje() + "</Mensaje>" +	          
+	          "<Mensaje>" + FacturaElectronicaUtils.procesarTexto(recepcionFactura.getMensaje()) + "</Mensaje>" +	          
 	           impuestos  +
-	          "<TotalFactura>" + recepcionFactura.getFacturaTotalComprobante() + "</TotalFactura>" +
-	          "<NumeroCedulaReceptor>" + recepcionFactura.getReceptorCedula() + "</NumeroCedulaReceptor>" +
-	          "<NumeroConsecutivoReceptor>" + recepcionFactura.getNumeroConsecutivoReceptor() + "</NumeroConsecutivoReceptor>" + 
+	          "<TotalFactura>" + FacturaElectronicaUtils.truncateDecimal(recepcionFactura.getFacturaTotalComprobante(),5) + "</TotalFactura>" +
+	          "<NumeroCedulaReceptor>" + FacturaElectronicaUtils.procesarTexto(recepcionFactura.getReceptorCedula()) + "</NumeroCedulaReceptor>" +
+	          "<NumeroConsecutivoReceptor>" + FacturaElectronicaUtils.procesarTexto(recepcionFactura.getNumeroConsecutivoReceptor()) + "</NumeroConsecutivoReceptor>" + 
 			  "</MensajeReceptor>";						
 			}
 		} catch (Exception e) {
@@ -84,6 +83,37 @@ public class RecepcionFacturaXMLServicesImpl implements RecepcionFacturaXMLServi
 			throw e;
 		}
 		 return xml;		
+	}
+	
+
+	private  String getMontoTotalImpuestoAcreditar(RecepcionFactura recepcionFactura) {
+		String resultado = Constantes.EMPTY;
+		if(recepcionFactura.getTotalImpuestoAcreditar() == null) {
+			return resultado;
+		}
+		if(recepcionFactura.getTotalImpuestoAcreditar().equals(Constantes.ZEROS_DOUBLE)) {
+			return resultado;
+		}
+	
+		resultado  = "<MontoTotalImpuestoAcreditar>" + FacturaElectronicaUtils.truncateDecimal(recepcionFactura.getTotalImpuestoAcreditar(),5) 
+		            + "</MontoTotalImpuestoAcreditar>" ;
+		
+		return resultado;
+	}
+
+	
+	private  String getGastosAplicables(RecepcionFactura recepcionFactura) {
+		String resultado = Constantes.EMPTY;
+		if(recepcionFactura.getTotalDeGastoAplicable() == null) {
+			return resultado;
+		}
+		if(recepcionFactura.getTotalDeGastoAplicable().equals(Constantes.ZEROS_DOUBLE)) {
+			return resultado;
+		}
+		resultado  = "<MontoTotalDeGastoAplicable>" + FacturaElectronicaUtils.truncateDecimal(recepcionFactura.getTotalDeGastoAplicable(),5) + 
+				         "</MontoTotalDeGastoAplicable>" ;
+		
+		return resultado;
 	}
 	
 	/**

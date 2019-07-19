@@ -115,7 +115,33 @@
         <div class="row" >  
             <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="panel-group" id="accordion">
-                    <div class="panel panel-default" id="cuentas">
+                    <div class="panel panel-default" >
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" >
+                            <div class="panel-heading" style="background: #3c8dbc; color: white;">
+                                <h4 class="panel-title"><span class="fa fa-bank  col-md-offset-5"></span> Exento de IVA</h4>
+                            </div>
+                        </a>
+                        <div id="collapse3" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="row">    
+                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                        <label  >Exento de IVA</label>
+                                        <select  class="form-control libreImpuest" id="libreImpuesto" name="libreImpuesto"   >
+                                            <option each={comboLibreImpuesto} value="{estado}" selected="{cliente.libreImpuesto ==estado?true:false}" >{descripcion}</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>                            
+        <div class="row" >  
+            <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-default" >
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" >
                             <div class="panel-heading" style="background: #3c8dbc; color: white;">
                                 <h4 class="panel-title"><span class="fa fa-bank  col-md-offset-5"></span> Exoneracion</h4>
@@ -131,7 +157,7 @@
                                         </select>
                                     </div>
                                     <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                        <label >#Compra Exoneracion </label> 
+                                        <label >Numero Autorizacion Exonet </label> 
                                         <input  type="text"  class="form-control numeroDocumentoExoneracion" id="numeroDocumentoExoneracion" name = "numeroDocumentoExoneracion" autofocus="autofocus"  value ="{cliente.numeroDocumentoExoneracion}">                    
                                     </div>
                                     <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
@@ -253,6 +279,7 @@ self.on('mount',function(){
     _incializarCampos()
     __Eventos()
     __ComboEstados()
+    __ComboLibreImpuesto()
     __listadoTipoCedulas()
      //modificar cliente
     if(self.parametros.tipoEjecucion == 1){
@@ -372,6 +399,7 @@ function __modificarCliente(){
 * Limpiar campos
 **/
 function _incializarCampos(){
+    $('#libreImpuesto').prop("selectedIndex", 0);
     $("#tipoCedula").val($("#tipoCedula option:first").val());
     $('.nombreCompleto').val(null)
     $('.cedula').val(null)
@@ -535,6 +563,24 @@ var reglasDeValidacion = function() {
 	return validationOptions;
 };
 /**
+* Libre de Impuesto
+**/
+function __ComboLibreImpuesto(){
+    self.comboLibreImpuesto =[]
+    self.update()
+    self.comboLibreImpuesto.push({
+        estado: "0",
+        descripcion: $.i18n.prop("combo.estado.Inactivo")
+     });
+
+    self.comboLibreImpuesto.push({
+        estado: "1",
+        descripcion:$.i18n.prop("combo.estado.Activo")
+     });
+     self.update();
+
+}
+/**
 *  Crear el combo de estados
 **/
 function __ComboEstados(){
@@ -678,12 +724,16 @@ __Modificar(){
 }
 
 function validaExoneracion(){
-   if($("#numeroDocumentoExoneracion").val() == null){
+   if($("#numeroDocumentoExoneracion").val() == null && $('#fechaEmisionExoneracionSTR').val() == null){
+       return false
+   }
+    if($("#numeroDocumentoExoneracion").val() == "" && $('#fechaEmisionExoneracionSTR').val() == ""){
        return false
    }
    var valor  = $("#numeroDocumentoExoneracion").val()
    if(valor.length ==0){
-       return false
+       sweetAlert("", "Campo requerido Indique el numero autorizacion de Exonet", "error");
+       return true
    }
    if($('#fechaEmisionExoneracionSTR').val() == null){
        sweetAlert("", "Campo requerido La fecha de emision de la exoneracion", "error");
@@ -841,6 +891,7 @@ function __consultar(){
                          $('.tipoCedula').val(self.cliente.tipoCedula)
                          $("#fechaEmisionExoneracionSTR").val(self.cliente.fechaEmisionExoneracionSTR)
                          $("#numeroDocumentoExoneracion").val(self.cliente.numeroDocumentoExoneracion)
+                         $("#porcentajeExoneracion").val(self.cliente.porcentajeExoneracion)
                         
                         
                     });

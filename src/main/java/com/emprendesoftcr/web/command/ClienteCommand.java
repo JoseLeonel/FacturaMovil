@@ -65,6 +65,7 @@ public class ClienteCommand {
 	private Date		fechaEmisionExoneracion;
 	private String	fechaEmisionExoneracionSTR;
 	private Integer	porcentajeExoneracion;
+	private Integer						libreImpuesto;
 
 	private Empresa	empresa;
 
@@ -94,12 +95,14 @@ public class ClienteCommand {
 		this.correoElectronico2 = cliente.getCorreoElectronico2();
 		this.correoElectronico3 = cliente.getCorreoElectronico3();
 		this.observacionVenta = cliente.getObservacionVenta();
-    this.porcentajeExoneracion = cliente.getPorcentajeExoneracion();
+		this.porcentajeExoneracion = cliente.getPorcentajeExoneracion();
 		this.tipoDocumentoExoneracion = cliente.getTipoDocumentoExoneracion();
 		this.numeroDocumentoExoneracion = cliente.getNumeroDocumentoExoneracion();
 		this.nombreInstitucionExoneracion = cliente.getNombreInstitucionExoneracion();
 		this.fechaEmisionExoneracion = cliente.getFechaEmisionExoneracion();
 		this.fechaEmisionExoneracionSTR = Utils.getFechaGeneraHacienda(cliente.getFechaEmisionExoneracion());
+		this.libreImpuesto = cliente.getLibreImpuesto();
+
 	}
 
 	public ClienteCommand() {
@@ -372,6 +375,16 @@ public class ClienteCommand {
 
 	public void setFechaEmisionExoneracionSTR(String fechaEmisionExoneracionSTR) {
 		this.fechaEmisionExoneracionSTR = fechaEmisionExoneracionSTR;
+	}
+
+	
+	public Integer getLibreImpuesto() {
+		return libreImpuesto;
+	}
+
+	
+	public void setLibreImpuesto(Integer libreImpuesto) {
+		this.libreImpuesto = libreImpuesto;
 	}
 
 }
