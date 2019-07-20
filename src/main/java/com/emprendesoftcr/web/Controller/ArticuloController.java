@@ -615,6 +615,9 @@ public class ArticuloController {
 			articulo.setImpuesto1(articulo.getImpuesto1() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto1());
 			articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
 			articulo.setCodigoTarifa1(articulo.getCodigoTarifa1() == null ? Constantes.EMPTY : articulo.getCodigoTarifa1());
+			articulo.setTipoImpuesto1(Constantes.EMPTY);
+			articulo.setImpuesto1(Constantes.ZEROS_DOUBLE);
+			articulo.setCodigoTarifa1(Constantes.EMPTY);
 
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
@@ -787,11 +790,12 @@ public class ArticuloController {
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 		try {
 			articulo.setTipoImpuesto(articulo.getTipoImpuesto() == null ? Constantes.EMPTY : articulo.getTipoImpuesto());
-			articulo.setTipoImpuesto1(articulo.getTipoImpuesto1() == null ? Constantes.EMPTY : articulo.getTipoImpuesto1());
+
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
-			articulo.setImpuesto1(articulo.getImpuesto1() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto1());
 			articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
-			articulo.setCodigoTarifa1(articulo.getCodigoTarifa1() == null ? Constantes.EMPTY : articulo.getCodigoTarifa1());
+			articulo.setTipoImpuesto1(Constantes.EMPTY);
+			articulo.setImpuesto1(Constantes.ZEROS_DOUBLE);
+			articulo.setCodigoTarifa1(Constantes.EMPTY);
 			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.BASE_IMPONIBLE_INACTIVO : articulo.getBaseImponible());
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			if (articulo.getTipoImpuesto() != null) {
@@ -889,14 +893,9 @@ public class ArticuloController {
 				}
 			}
 			if (!articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
-				if (!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
-					if (articulo.getImpuesto().equals(Constantes.ZEROS_DOUBLE)) {
-						result.rejectValue("impuesto1", "error.articulo.tipoImpuesto1.cero");
-					}
-				}
 				if (articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO)) {
 					if (!articulo.getImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO_VALOR)) {
-						result.rejectValue("tipoImpuesto1", "error.articulo.tipoImpuesto1.selectivoConsumo");
+						result.rejectValue("tipoImpuesto", "error.articulo.tipoImpuesto1.selectivoConsumo");
 					}
 
 				}

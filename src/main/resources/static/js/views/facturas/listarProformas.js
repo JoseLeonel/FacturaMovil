@@ -134,7 +134,7 @@ var formato_tabla = [
 			return nombreFactura ==null?"":nombreFactura.length > 50 ? nombreFactura.substring(0,50):nombreFactura;
 		}
 	},
-	{'data' :'totalImpuestoSTR'       ,"name":"totalImpuestoSTR"        ,"title" : "Impuesto"  ,"autoWidth" :true },
+	{'data' :'totalImpuestoSTR'       ,"name":"totalImpuestoSTR"        ,"title" : "IVA"  ,"autoWidth" :true },
 	{'data' :'totalDescuentosSTR'     ,"name":"totalDescuentosSTR"      ,"title" : "Descuento"  ,"autoWidth" :true },
 	{'data' :'totalComprobanteSTR'    ,"name":"totalComprobanteSTR"     ,"title" : "Total" ,"autoWidth" :true },
 	{'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,

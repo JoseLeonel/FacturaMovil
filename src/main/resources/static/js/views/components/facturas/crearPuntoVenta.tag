@@ -274,7 +274,6 @@
                                 <th ><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.precio")}                       </div></th>
                                 <th style="width:4%"><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.descuento")}                    </div></th>
                                 <th style="width:4%"><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.impuesto")}     </div></th>
-                                <th style="width:4%"><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.impuesto1")}    </div></th>
                                 <th ><div class="tituloDetalle">{$.i18n.prop("factura.linea.detalle.subTotal")}                     </div> </th> 
                             </tr>
                             </thead>
@@ -298,9 +297,6 @@
                                 </td>
                                 <td class="text-right" style="width:4%">
                                     <input  class="campo" type="text"  value = "{impuesto}" readonly/>
-                                </td>
-                                <td class="text-right" style="width:4%">
-                                    <input  class="campo" type="text"  value = "{impuesto1}" readonly/>
                                 </td>
                                 <td class="text-right">
                                     <input  class="campo" type="text"  value = "{montoTotalLinea.toFixed(2)}" readonly />

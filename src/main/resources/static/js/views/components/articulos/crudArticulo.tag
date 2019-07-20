@@ -18,124 +18,113 @@
             <!--Form-->
             <form class="form-horizontal formulario" name= "formulario" id="formulario">
                 <input type="hidden" name="id" id="id" value="{articulo.id}">
+                <input type="hidden"  id="tipoImpuesto1" name="tipoImpuesto1" value="{articulo.tipoImpuesto1}"  >
+                <input type="hidden"  id="codigoTarifa1" name="codigoTarifa1" value="{articulo.codigoTarifa1}"  >
+                <input type="hidden"  id="impuesto1" name="impuesto1" value="{articulo.impuesto1}"  >
                 <div class="panel-group" id="accordion">
                     <div class="panel panel-default" id="cuentas">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" >
                             <div class="panel-heading" style="background: #3c8dbc; color: white;">
-                                <h4 class="panel-title"><span class="fa fa-bank col-md-offset-5"></span> Precios y IVA impuestos</h4>
+                                <h4 class="panel-title"><span class="fa fa-bank col-md-offset-5"></span> Maestro Articulo</h4>
                             </div>
                         </a>             
                         <div id="collapse1" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
+                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label  >{$.i18n.prop("articulo.categoria")}  <span class="requeridoDato">*</span></label>
-                                        <select  class="form-control selectCategoria "   name="categoria" data-live-search="true">
+                                        <select  class="form-control selectCategoria campoNumerico "   name="categoria" data-live-search="true">
                                             <option  each={categorias.aaData}  data-tokens ={descripcion} value="{id}" selected="{articulo.categoria.id ==id?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>   
-                                    <div class="col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
+                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra">{$.i18n.prop("articulo.tipoCodigo")}</label>
-                                        <select  class="form-control selectTipoCodigo" id="tipoCodigo" name="tipoCodigo"  >
+                                        <select  class="form-control selectTipoCodigo campoNumerico" id="tipoCodigo" name="tipoCodigo"  >
                                             <option  each={tipoCodigos}  value="{codigo}" selected="{articulo.tipoCodigo ==codigo?true:false}"  >{descripcion}</option>
                                         </select>
                                     </div>
 
-                                    <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
+                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.codigo")}  <span class="requeridoDato">*</span></label>
                                         <input type="text" class="form-control codigo campoNumerico" id="codigo" name="codigo" value="{articulo.codigo}"  >
                                     </div>
-                                    <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
-                                        <label  class="tamanoLetra">{$.i18n.prop("articulo.descripcion")}  <span class="requeridoDato">*</span></label>
-                                        <input type="text" class="form-control descripcion" id="descripcion" name="descripcion" value="{articulo.descripcion}"  >
-                                    </div>
+                                  
                                 </div> 
                                 <div class="row">   
-                                    <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
+                                  <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12 has-success">
+                                        <label  class="tamanoLetra">{$.i18n.prop("articulo.descripcion")}  <span class="requeridoDato">*</span></label>
+                                        <input type="text" class="form-control descripcion campoNumerico" id="descripcion" name="descripcion" value="{articulo.descripcion}"  >
+                                    </div>
+                                </div>    
+                                <div class="row">   
+                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.costo")} </label>
                                         <input type="number" step="any" class="form-control costo campoNumerico" id="costo" name="costo" value="{articulo.costo.toFixed(0)}"  onkeyup ={__ActualizarPreciosCosto}>
                                     </div>
-                                    <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
+                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.precioPublico")}  <span class="requeridoDato">*</span></label>
                                         <input type="number" step="any" class="form-control precioPublico campoNumerico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoGananciaPublico} value="{articulo.precioPublico.toFixed(0)}"  >
                                     </div>
-                                    <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
+                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.gananciaPrecioPublico")} % </label>
                                         <input type="number" step="any" class="form-control gananciaPrecioPublico campoNumerico" id="gananciaPrecioPublico" name="gananciaPrecioPublico" value="{articulo.gananciaPrecioPublico.toFixed(5)}"  onkeyup ={__CalculoGananciaSinPrecioPublico}>
                                     </div>
-                                    <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
+
+                                </div>    
+                                <div class="row">
+                                     <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.precioMayorista")}  </label>
                                         <input type="number" step="any" class="form-control precioMayorista campoNumerico" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista.toFixed(0)}" onkeyup={__CalculoGananciaMayorista} >
                                     </div>  
 
-                                </div>    
-                                <div class="row">
-                                    <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
+                                     <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.gananciaPrecioMayorista")} % </label>
                                         <input type="number" step="any" class="form-control gananciaPrecioMayorista campoNumerico" id="gananciaPrecioMayorista" name="gananciaPrecioMayorista" value="{articulo.gananciaPrecioMayorista.toFixed(5)}"  onkeyup ={__CalculoGananciaSinPrecioMayorista}>
                                     </div>
 
-                                    <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
+                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.precioEspecial")}  </label>
                                         <input type="number" step="any" class="form-control precioEspecial campoNumerico" id="precioEspecial" name="precioEspecial" value="{articulo.precioEspecial.toFixed(0)}"  onkeyup={__CalculoGananciaEspecial}>
                                     </div>                        
-                                    <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
+
+                                </div>
+                                <div class="row">
+                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.gananciaPrecioEspecial")} % </label>
                                         <input type="number" sp="any" class="form-control gananciaPrecioEspecial campoNumerico" id="gananciaPrecioEspecial" name="gananciaPrecioEspecial" value="{articulo.gananciaPrecioEspecial.toFixed(5)}"  onkeyup ={__CalculoGananciaSinPrecioEspecial}>
                                     </div>
-                                    <div class="col-md-3 col-s4 col-sm-3 col-lg-3 has-success">
+
+                                    <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+
                                         <label class="tamanoLetra">{$.i18n.prop("articulo.tipoImpuesto")} </label>
-                                        <select onchange= {__agnarImpuesto} class="form-control selectTipoImpuesto" id="tipoImpuesto" name="tipoImpuesto"  >
+                                        <select onchange= {__asignarImpuesto} class="form-control selectTipoImpuesto campoNumerico" id="tipoImpuesto" name="tipoImpuesto"  >
                                             <option  each={impuestos}  value="{codigo}" selected="{articulo.tipoImpuesto ==codigo?true:false}"  >{descripcion}</option>
                                         </select>
                                     </div>
 
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-3 col-s4 col-sm-3 col-lg-3 has-success">
+                                    <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra">{$.i18n.prop("articulo.codigoTarifa")}</label>
-                                        <select  onchange= {__AsignarTarifa} class="form-control selectCodigoTarifa1" id="codigoTarifa" name="codigoTarifa"  >
+                                        <select  onchange= {__AsignarTarifa} class="form-control selectCodigoTarifa1 campoNumerico" id="codigoTarifa" name="codigoTarifa"  >
                                             <option  each={tarifas1.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa ==tarifaIVAI.codigoTarifa && articulo.tipoImpuesto ==tipoImpuesto ?true:false}"  >{tarifaIVAI.descripcion}</option>
-                                        </select>
-                                    </div>
-                                    <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
-                                        <label class="tamanoLetra"  >{$.i18n.prop("articulo.impuesto")}  </label>
-                                        <input type="number" step="any" class="form-control impuesto campoNumerico" id="impuesto" name="impuesto" value="{articulo.impuesto}"  onkeyup ={__ActualizarPreciosImpuestos}>
-                                    </div>
-                                    <div class="col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
-                                        <label class="tamanoLetra" >{$.i18n.prop("articulo.tipoImpuesto1")}</label>
-                                        <select onchange= {__asignarImpuesto1} class="form-control selectTipoImpuesto1" id="tipoImpuesto1" name="tipoImpuesto1"  >
-                                            <option  each={impuestos1}  value="{codigo}" selected="{articulo.tipoImpuesto1 ==codigo?true:false}"  >{descripcion}</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
-                                        <label class="tamanoLetra">{$.i18n.prop("articulo.codigoTarifa2")}</label>
-                                        <select onchange= {__AsignarTarifa1} class="form-control selectCodigoTarifa2" id="codigoTarifa1" name="codigoTarifa1"  >
-                                            <option  each={tarifas2.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa1 ==tarifaIVAI.codigoTarifa?true:false}" >{tarifaIVAI.descripcion}</option>
                                         </select>
                                     </div>
 
                                 </div>    
                                 <div class="row">
-                                    <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
-                                        <label  class="tamanoLetra">{$.i18n.prop("articulo.impuesto1")}  </label>
-                                        <input type="number" step="any" class="form-control impuesto1 campoNumerico" id="impuesto1" name="impuesto1" value="{articulo.impuesto1}"  onkeyup ={__ActualizarPreciosImpuestos1}>
+                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                                        <label class="tamanoLetra"  >{$.i18n.prop("articulo.impuesto")}  </label>
+                                        <input type="number" step="any" class="form-control impuesto campoNumerico" id="impuesto" name="impuesto" value="{articulo.impuesto}"  onkeyup ={__ActualizarPreciosImpuestos}>
                                     </div>
-                                    <div class="col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
-                                        <label class="tamanoLetra">Base Imponible</label>
-                                        <select  class="form-control" id="baseImponible" name="baseImponible" >
-                                            <option  each={baseImponibles}  value="{codigo}" selected="{articulo.baseImponible ==codigo?true:false}" >{descripcion}</option>
-                                        </select>
-                                    </div>       
-                                    <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
+                                      
+                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.marca")}  <span class="requeridoDato">*</span></label>
-                                        <select  class="form-control selectMarca"  name="marca" data-live-search="true">
+                                        <select  class="form-control selectMarca campoNumerico"  name="marca" data-live-search="true">
                                             <option  each={marcas.aaData}  value="{id}" data-tokens ={descripcion} selected="{articulo.marca.id ==id?true:false}"  >{descripcion}</option>
                                         </select>
                                     </div>
-                                    <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
+                                    <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.unidadMedida")}  <span class="requeridoDato">*</span></label>
-                                        <select  class="form-control selecTipoUnidad has-success" name="unidadMedida" >
+                                        <select  class="form-control selecTipoUnidad has-success campoNumerico" name="unidadMedida" >
                                             <option   each={tipoUnidades.aaData}  value="{codigo}"  selected="{articulo.unidadMedida ==codigo?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>
@@ -158,34 +147,34 @@
                                 <div class="row">
                                     <div class="col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                         <label class="tamanoLetra">{$.i18n.prop("articulo.contable")}</label>
-                                        <select  class="form-control" id="contable" name="contable" >
+                                        <select  class="form-control campoNumerico" id="contable" name="contable" >
                                             <option  each={contables}  value="{codigo}" selected="{articulo.contable ==codigo?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>
                                     <div class="col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                         <label class="tamanoLetra">{$.i18n.prop("articulo.comanda")}</label>
-                                        <select  class="form-control" id="comanda" name="comanda"  >
+                                        <select  class="form-control campoNumerico" id="comanda" name="comanda"  >
                                             <option each={comanda}  value="{codigo}" selected="{articulo.comanda ==codigo?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>                          
                                     <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.prioridad")} </label>
-                                        <input type="number" step="any" class="form-control prioridad" id="prioridad" name="prioridad" value="{articulo.prioridad}"  >
+                                        <input type="number" step="any" class="form-control prioridad campoNumerico" id="prioridad" name="prioridad" value="{articulo.prioridad}"  >
                                     </div>
                                     <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.pesoTransporte")} </label>
-                                        <input type="number" step="any" class="form-control pesoTransporte" id="pesoTransporte" name="pesoTransporte" value="{articulo.pesoTransporte}"  >
+                                        <input type="number" step="any" class="form-control pesoTransporte campoNumerico" id="pesoTransporte" name="pesoTransporte" value="{articulo.pesoTransporte}"  >
                                     </div>
 
                                 </div>
                                 <div class="row">
                                     <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("inventario.minimo")} </label>
-                                        <input type="number" step="any" class="form-control minimo" id="minimo" name="minimo" value="{articulo.minimo}"  >
+                                        <input type="number" step="any" class="form-control minimo campoNumerico" id="minimo" name="minimo" value="{articulo.minimo}"  >
                                     </div>
                                     <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("inventario.maximo")} </label>
-                                        <input type="number" step="any" class="form-control maximo" id="maximo" name="maximo" value="{articulo.maximo}"  >
+                                        <input type="number" step="any" class="form-control maximo campoNumerico" id="maximo" name="maximo" value="{articulo.maximo}"  >
                                     </div>
                                     <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("inventario.cantidad")} </label>
@@ -193,17 +182,23 @@
                                     </div>                        
                                     <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.consecutivoCompra")} </label>
-                                        <input type="text" step="any" class="form-control "  value="{articulo.consecutivoCompra}"  readonly>
+                                        <input type="text" step="any" class="form-control campoNumerico"  value="{articulo.consecutivoCompra}"  readonly>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class= "col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
+                                    <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                                        <label class="tamanoLetra">Base Imponible</label>
+                                        <select  class="form-control campoNumerico" id="baseImponible" name="baseImponible" >
+                                            <option  each={baseImponibles}  value="{codigo}" selected="{articulo.baseImponible ==codigo?true:false}" >{descripcion}</option>
+                                        </select>
+                                    </div>    
+                                    <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra"  >{$.i18n.prop("articulo.fechaUltimaCompra")} </label>
-                                        <input type="text" step="any" class="form-control "  value="{articulo.fechaUltimaCompra}"  readonly>
+                                        <input type="text" step="any" class="form-control campoNumerico"  value="{articulo.fechaUltimaCompra}"  readonly>
                                     </div>
-                                    <div class="col-md-3 col-sx-4 col-sm-3 col-lg-3 has-success">
+                                    <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra">{$.i18n.prop("articulo.estado")}</label>
-                                        <select  class="form-control" id="estado" name="estado"  >
+                                        <select  class="form-control campoNumerico" id="estado" name="estado"  >
                                             <option  each={estados}  value="{codigo}" selected="{articulo.estado ==codigo?true:false}" >{descripcion}</option>
                                         </select>
                                     </div>     
@@ -384,7 +379,7 @@
         height: 45px;
         padding: 8px 18px;
         line-height: 1.42857143;
-        color:blue;
+        color:black;
         background-color: #fff;
         background-image: none;
         border: 1px solid #ccc;
@@ -530,7 +525,7 @@ self.on('mount',function(){
     __listadoTipoUnidadesActivas()   
     __listadoMarcasActivas()
     __Impuestos() 
-    __Impuestos1()
+ //   __Impuestos1()
     __tipoCodigo()
      LimpiarArticulo()
     __Consulta()
@@ -609,10 +604,10 @@ function getMontoImpuesto(tipoImpuesto,codigoTarifa,array){
         self.mostrarFormularioEntrada = false
         self.botonAgregar  = false;            
         self.update()
-        __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto1,2)
+       // __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto1,2)
         __listadoTarifasByTipoImpuesto(self.articulo.tipoImpuesto,1)
         $("#formulario").validate(reglasDeValidacion());     
-        $('.precioPublico').focus().select()      
+       
     }  
     //Entrada
     if(self.parametros.tipoEjecucion ==3){

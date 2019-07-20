@@ -246,7 +246,7 @@ var formato_tabla = [
     						    return nombreFactura ==null?"":nombreFactura.length > 50 ? nombreFactura.substring(0,50):nombreFactura;
 						    }
                         },
-                        {'data' :'totalImpuestoSTR'           ,"name":"totalImpuesto"       ,"title" : "Impuesto"    ,"autoWidth" :true  },
+                        {'data' :'totalImpuestoSTR'           ,"name":"totalImpuesto"       ,"title" : "IVA"    ,"autoWidth" :true  },
                         {'data' :'totalDescuentosSTR'         ,"name":"totalDescuentos"     ,"title" : "Descuento"   ,"autoWidth" :true },
                         {'data' :'codigoMoneda'               ,"name":"codigoMoneda"           ,"title" : "Moneda"      ,"autoWidth" :true },
                         {'data' :'totalComprobanteSTR'        ,"name":"totalComprobante"    ,"title" : "Total"       ,"autoWidth" :true },

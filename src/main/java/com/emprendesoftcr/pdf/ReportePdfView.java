@@ -63,11 +63,11 @@ public class ReportePdfView {
 
 		// document.add(new Paragraph("\n", pequeFont));
 
-		PdfPTable tabla_tercera_tabla = new PdfPTable(10);
+		PdfPTable tabla_tercera_tabla = new PdfPTable(9);
 		tabla_tercera_tabla.setWidthPercentage(100);
 		tabla_tercera_tabla.setTotalWidth(570f);
 		tabla_tercera_tabla.setLockedWidth(true);
-		float[] header_espacio_03 = { 23, 60, 135, 18, 28, 35, 17, 17, 35, 40 };
+		float[] header_espacio_03 = { 23, 60, 135, 18, 28, 35, 17,  35, 40 };
 		tabla_tercera_tabla.setWidths(header_espacio_03);
 		tabla_tercera_tabla.setSplitLate(false);
 		tabla_tercera_tabla.setSplitRows(false);
@@ -85,8 +85,8 @@ public class ReportePdfView {
 
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Cantidad", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT | Rectangle.TOP | Rectangle.BOTTOM));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Precio Unit.", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
-		tabla_tercera_tabla.addCell(obtenerCeldaNormal("IVA1", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
-		tabla_tercera_tabla.addCell(obtenerCeldaNormal("IVA2", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
+		tabla_tercera_tabla.addCell(obtenerCeldaNormal("IVAI", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
+//		tabla_tercera_tabla.addCell(obtenerCeldaNormal("IVA2", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Total IVA", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("Total Linea", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.TOP | Rectangle.RIGHT | Rectangle.BOTTOM));
 
@@ -120,7 +120,7 @@ public class ReportePdfView {
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getCantidad()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT));
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getPrecioU()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT));
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA)?Constantes.EMPTY:item.getTarifaIva()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
-			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA)?Constantes.EMPTY:item.get_impuesto1()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
+//			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA)?Constantes.EMPTY:item.get_impuesto1()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA)?Constantes.ZEROS_DOUBLE:item.getImpuesto()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getTotal()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
@@ -136,7 +136,7 @@ public class ReportePdfView {
 
 		tabla_tercera_tabla.addCell(ultima_linea_);
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
-		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
+//		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));
 		tabla_tercera_tabla.addCell(obtenerCeldaNormal("", font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT | Rectangle.RIGHT));

@@ -330,7 +330,7 @@
         maximo:0,
         tipoImpuesto1:'',
         codigoTarifa1:'',
-        impuesto1:0
+        impuesto1:0,
 		precioPublico:null,
 		gananciaPrecioPublico:null,
 		precioMayorista:null,
