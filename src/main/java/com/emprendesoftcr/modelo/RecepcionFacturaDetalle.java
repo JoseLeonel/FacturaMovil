@@ -25,7 +25,7 @@ public class RecepcionFacturaDetalle implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long id1;
+	private Long id;
 
 	@Column(name = "numero_linea")
 	private Integer numeroLinea;
