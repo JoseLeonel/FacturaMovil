@@ -919,6 +919,7 @@
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descuento")}</h4>
             </div>
             <div class="modal-body">
+                <form id="formularioDescuento" name="formularioDescuento">
                 <div class="row">
                     <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
                         <div class="form-group has-success">
@@ -927,6 +928,7 @@
                         </div>
                     </div>
                 </div> 
+                </form>
 
             </div>
             <div class="modal-footer">
@@ -2468,9 +2470,27 @@ function consultaParaReimprimir(data,tipoImpresion){
     });
 }
 /**
+* Camps requeridos
+**/
+var reglasDescuentoAplicar = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			aplicarDescuento : {
+				required : true,
+                numeroMayorCero:true,
+			}           
+		},
+		ignore : []
+
+	});
+	return validationOptions;
+};
+/**
 * Aplicar el descuento
 **/
 __CambiarDescuento(e){
+    $("#aplicarDescuento").attr("maxlength", 7);
+     $("#formularioDescuento").validate(reglasDescuentoAplicar());
     self.item = e.item; 
     $( "#aplicarDescuento" ).focus()
     $( "#aplicarDescuento" ).val(null)
@@ -4047,11 +4067,14 @@ function aplicarCambioLineaDetalle(){
     self.update()
     __calculate()
 }
+
 /**
 * Actualizar el descuento del codigo
 **/
 __actualizarDescuento(e){
-    _actualizarDesc(e)
+    if ($("#formularioDescuento").valid()) {
+        _actualizarDesc(e)
+    }
 }
 /**
 *Actualizar el descuento
@@ -4061,6 +4084,10 @@ function _actualizarDesc(e){
     var descuento = $(".aplicarDescuento").val();
     //Descuento se verifica si es null o espacios por defecto se deja en cero
      descuento =__valorNumerico(descuento);
+     if(descuento > 100){
+         swal('',"Error el descuento no puede ser mayor al 100%",'error');
+         return false
+    }
       //Descuento
     if(self.item.porcentajeDesc != descuento){
        self.item.porcentajeDesc =  parseFloat(descuento);  

@@ -92,7 +92,7 @@ public class ArticuloController {
 	private CategoriaBo																			categoriaBo;
 
 	@Autowired
-	private TarifaIVAIBo																			tarifaIVAIBo;
+	private TarifaIVAIBo																		tarifaIVAIBo;
 
 	@Autowired
 	private KardexBo																				kardexBo;
@@ -274,8 +274,6 @@ public class ArticuloController {
 		try {
 			Articulo articuloBD = articuloBo.buscar(idArticulo);
 
-
-
 			ByteArrayOutputStream namePDF = GondolaArticuloPdfView.main(articuloBD);
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(namePDF.toByteArray());
 			response.setContentType("application/octet-stream");
@@ -283,7 +281,7 @@ public class ArticuloController {
 			String fileName = Constantes.EMPTY;
 
 			Date fecha = new Date();
-			fileName = "articulo_" + articuloBD.getCodigo().trim()+fecha.toString();
+			fileName = "articulo_" + articuloBD.getCodigo().trim() + fecha.toString();
 
 			int BUFFER_SIZE = 4096;
 			String headerKey = "Content-Disposition";
@@ -302,7 +300,6 @@ public class ArticuloController {
 		} catch (com.google.zxing.WriterException ex) {
 
 		}
-
 
 	}
 
@@ -467,23 +464,23 @@ public class ArticuloController {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Long codigoCategoria = Constantes.ZEROS_LONG;
-		if(idCategoria !=null) {
+		if (idCategoria != null) {
 			if (!idCategoria.equals(Constantes.COMBO_TODOS)) {
-				codigoCategoria = Long.parseLong(idCategoria);			
+				codigoCategoria = Long.parseLong(idCategoria);
 			}
-			
+
 		}
 		Categoria categoria = categoriaBo.buscar(codigoCategoria);
 
 		// Se buscan las facturas
 		String cate = Constantes.EMPTY;
 		Collection<Articulo> articulos = articuloBo.findByCategoriaAndEmpresaAndEstadoAndMinimoMaximo(usuario.getEmpresa(), categoria, estado, minimoMaximo);
-		if(categoria !=null) {
-			cate = categoria.getDescripcion().trim();		
-		}else {
+		if (categoria != null) {
+			cate = categoria.getDescripcion().trim();
+		} else {
 			cate = "Inventario";
 		}
-	
+
 		cate = cate.replace(" ", "");
 		String nombreArchivo = "Totales_" + cate + ".xls";
 		response.setContentType("application/octet-stream");
@@ -612,10 +609,12 @@ public class ArticuloController {
 
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
+			articulo.setTipoImpuesto(articulo.getTipoImpuesto() == null ? Constantes.EMPTY : articulo.getTipoImpuesto());
+			articulo.setTipoImpuesto1(articulo.getTipoImpuesto1() == null ? Constantes.EMPTY : articulo.getTipoImpuesto1());
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
-      articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null?Constantes.EMPTY:articulo.getCodigoTarifa());
-      articulo.setCodigoTarifa1(articulo.getCodigoTarifa1() == null?Constantes.EMPTY:articulo.getCodigoTarifa1());
-
+			articulo.setImpuesto1(articulo.getImpuesto1() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto1());
+			articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
+			articulo.setCodigoTarifa1(articulo.getCodigoTarifa1() == null ? Constantes.EMPTY : articulo.getCodigoTarifa1());
 
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
@@ -643,53 +642,88 @@ public class ArticuloController {
 			if (articulo.getCantidad() == null) {
 				articulo.setCantidad(Constantes.ZEROS_DOUBLE);
 			}
-			
+
 			if (articulo.getTipoImpuesto() != null) {
 				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Sin impuesto") ? Constantes.EMPTY : articulo.getTipoImpuesto());
 			}
 			if (articulo.getTipoImpuesto1() != null) {
 				articulo.setTipoImpuesto1(articulo.getTipoImpuesto1().equals("Sin impuesto") ? Constantes.EMPTY : articulo.getTipoImpuesto1());
 			}
-			if(!articulo.getCodigoTarifa().equals(Constantes.EMPTY)) {
+			if (!articulo.getCodigoTarifa().equals(Constantes.EMPTY)) {
 				TarifaIVAI tarifaIVAI = tarifaIVAIBo.findByCodigoTarifa(articulo.getCodigoTarifa());
-				articulo.setImpuesto(tarifaIVAI.getMonto());
+				if (tarifaIVAI == null) {
+					result.rejectValue("codigoTarifa", "error.articulo.codigo.tarifa.no.existe");
+				} else {
+					if (!tarifaIVAI.getMonto().equals(articulo.getImpuesto())) {
+						result.rejectValue("codigoTarifa", "error.articulo.codigo.tarifa.no.tiene.porcentaje.correcto");
+					} else {
+						articulo.setImpuesto(tarifaIVAI.getMonto());
+					}
+				}
 			}
-			if(!articulo.getCodigoTarifa1().equals(Constantes.EMPTY)) {
+			if (!articulo.getCodigoTarifa1().equals(Constantes.EMPTY)) {
 				TarifaIVAI tarifaIVAI = tarifaIVAIBo.findByCodigoTarifa(articulo.getCodigoTarifa1());
-				articulo.setImpuesto1(tarifaIVAI.getMonto());
+				if (tarifaIVAI == null) {
+					result.rejectValue("codigoTarifa1", "error.articulo.codigo.tarifa.no.existe");
+				} else {
+					if (!tarifaIVAI.getMonto().equals(articulo.getImpuesto1())) {
+						result.rejectValue("impuesto1", "error.articulo.codigo.tarifa.no.tiene.porcentaje.correcto");
+					} else {
+						articulo.setImpuesto1(tarifaIVAI.getMonto());
+					}
+				}
 			}
-			if(articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
+			if (!articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
+				if (!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL) && !articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_ARTICULO)) {
+					if (articulo.getImpuesto().equals(Constantes.ZEROS_DOUBLE)) {
+						result.rejectValue("impuesto", "error.articulo.codigo.impuesto.no.tiene.porcentaje.correcto");
+
+					}
+				}
+
+			}
+			if (!articulo.getTipoImpuesto1().equals(Constantes.EMPTY)) {
+				if (!articulo.getTipoImpuesto1().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL) && !articulo.getTipoImpuesto1().equals(Constantes.TIPO_IMPUESTO_VENTA_ARTICULO)) {
+					if (articulo.getImpuesto1().equals(Constantes.ZEROS_DOUBLE)) {
+						result.rejectValue("impuesto1", "error.articulo.codigo.impuesto.no.tiene.porcentaje.correcto");
+
+					}
+				}
+
+			}
+
+			if (articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
 				articulo.setImpuesto(Constantes.ZEROS_DOUBLE);
 				articulo.setCodigoTarifa(Constantes.EMPTY);
 			}
-			if(articulo.getTipoImpuesto1().equals(Constantes.EMPTY)) {
+			if (articulo.getTipoImpuesto1().equals(Constantes.EMPTY)) {
 				articulo.setImpuesto1(Constantes.ZEROS_DOUBLE);
 				articulo.setCodigoTarifa1(Constantes.EMPTY);
 			}
-			if(!articulo.getTipoImpuesto1().equals(Constantes.EMPTY)) {
-				if(!articulo.getTipoImpuesto1().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)){
-					if(articulo.getImpuesto1().equals(Constantes.ZEROS_DOUBLE)) {
-						result.rejectValue("impuesto1", "error.articulo.tipoImpuesto1.cero");	
+			if (!articulo.getTipoImpuesto1().equals(Constantes.EMPTY)) {
+				if (!articulo.getTipoImpuesto1().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
+					if (articulo.getImpuesto1().equals(Constantes.ZEROS_DOUBLE)) {
+						result.rejectValue("impuesto1", "error.articulo.tipoImpuesto1.cero");
 					}
 				}
-				if(articulo.getTipoImpuesto1().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO)){
-					if(!articulo.getImpuesto1().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO_VALOR)) {
-						result.rejectValue("tipoImpuesto1", "error.articulo.tipoImpuesto1.selectivoConsumo");	
+				if (articulo.getTipoImpuesto1().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO)) {
+					if (!articulo.getImpuesto1().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO_VALOR)) {
+						result.rejectValue("tipoImpuesto1", "error.articulo.tipoImpuesto1.selectivoConsumo");
 					}
-					
+
 				}
 			}
-			if(!articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
-				if(!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)){
-					if(articulo.getImpuesto().equals(Constantes.ZEROS_DOUBLE)) {
-						result.rejectValue("impuesto1", "error.articulo.tipoImpuesto1.cero");	
+			if (!articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
+				if (!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
+					if (articulo.getImpuesto().equals(Constantes.ZEROS_DOUBLE)) {
+						result.rejectValue("impuesto1", "error.articulo.tipoImpuesto1.cero");
 					}
 				}
-				if(articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO)){
-					if(!articulo.getImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO_VALOR)) {
-						result.rejectValue("tipoImpuesto1", "error.articulo.tipoImpuesto1.selectivoConsumo");	
+				if (articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO)) {
+					if (!articulo.getImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO_VALOR)) {
+						result.rejectValue("tipoImpuesto1", "error.articulo.tipoImpuesto1.selectivoConsumo");
 					}
-					
+
 				}
 			}
 			if (result.hasErrors()) {
@@ -702,8 +736,8 @@ public class ArticuloController {
 			articulo.setGananciaPrecioEspecial(articulo.getGananciaPrecioEspecial() == null ? Constantes.ZEROS_DOUBLE : articulo.getGananciaPrecioEspecial());
 			articulo.setGananciaPrecioMayorista(articulo.getGananciaPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getGananciaPrecioMayorista());
 			articulo.setCantidad(articulo.getCantidad() == null ? Constantes.ZEROS_DOUBLE : articulo.getCantidad());
-			articulo.setCosto(articulo.getCosto() == null?Constantes.ZEROS_DOUBLE:articulo.getCosto());
-			
+			articulo.setCosto(articulo.getCosto() == null ? Constantes.ZEROS_DOUBLE : articulo.getCosto());
+
 			articulo.setEmpresa(usuarioSesion.getEmpresa());
 			articulo.setUpdated_at(new Date());
 			articulo.setEstado(Constantes.ESTADO_ACTIVO);
@@ -714,12 +748,12 @@ public class ArticuloController {
 			articulo.setPrecioMayorista(articulo.getPrecioMayorista() == null ? Constantes.ZEROS_DOUBLE : articulo.getPrecioMayorista());
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articulo.setUsuario(usuarioSesion);
-			articulo.setTipoImpuesto1(articulo.getTipoImpuesto1() ==null?Constantes.EMPTY:articulo.getTipoImpuesto1());
-			articulo.setImpuesto1(articulo.getImpuesto1() ==null?Constantes.ZEROS_DOUBLE:articulo.getImpuesto1());
-			articulo.setPesoTransporte(articulo.getPesoTransporte() ==null?Constantes.ZEROS_DOUBLE:articulo.getPesoTransporte());
-			articulo.setCodigoTarifa(articulo.getCodigoTarifa() ==null?Constantes.EMPTY:articulo.getCodigoTarifa());
-			articulo.setCodigoTarifa1(articulo.getCodigoTarifa1() ==null?Constantes.EMPTY:articulo.getCodigoTarifa1());
-			articulo.setBaseImponible(articulo.getBaseImponible() ==null?Constantes.ZEROS:articulo.getBaseImponible());
+			articulo.setTipoImpuesto1(articulo.getTipoImpuesto1() == null ? Constantes.EMPTY : articulo.getTipoImpuesto1());
+			articulo.setImpuesto1(articulo.getImpuesto1() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto1());
+			articulo.setPesoTransporte(articulo.getPesoTransporte() == null ? Constantes.ZEROS_DOUBLE : articulo.getPesoTransporte());
+			articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
+			articulo.setCodigoTarifa1(articulo.getCodigoTarifa1() == null ? Constantes.EMPTY : articulo.getCodigoTarifa1());
+			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
 			articuloBo.agregar(articulo);
 
 			if (usuarioSesion.getEmpresa().getTieneInventario().equals(Constantes.ESTADO_ACTIVO)) {
@@ -752,13 +786,13 @@ public class ArticuloController {
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute Articulo articulo, BindingResult result, SessionStatus status) throws Exception {
 		try {
+			articulo.setTipoImpuesto(articulo.getTipoImpuesto() == null ? Constantes.EMPTY : articulo.getTipoImpuesto());
+			articulo.setTipoImpuesto1(articulo.getTipoImpuesto1() == null ? Constantes.EMPTY : articulo.getTipoImpuesto1());
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articulo.setImpuesto1(articulo.getImpuesto1() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto1());
-			articulo.setTipoImpuesto(articulo.getTipoImpuesto() == null?Constantes.EMPTY:articulo.getTipoImpuesto());
-			articulo.setTipoImpuesto1(articulo.getTipoImpuesto1() == null?Constantes.EMPTY:articulo.getTipoImpuesto1());
-      articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null?Constantes.EMPTY:articulo.getCodigoTarifa());
-      articulo.setCodigoTarifa1(articulo.getCodigoTarifa1() == null?Constantes.EMPTY:articulo.getCodigoTarifa1());
-      articulo.setBaseImponible(articulo.getBaseImponible() == null?Constantes.BASE_IMPONIBLE_INACTIVO:articulo.getBaseImponible());
+			articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
+			articulo.setCodigoTarifa1(articulo.getCodigoTarifa1() == null ? Constantes.EMPTY : articulo.getCodigoTarifa1());
+			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.BASE_IMPONIBLE_INACTIVO : articulo.getBaseImponible());
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			if (articulo.getTipoImpuesto() != null) {
 				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Sin impuesto") ? Constantes.EMPTY : articulo.getTipoImpuesto());
@@ -790,50 +824,84 @@ public class ArticuloController {
 				result.rejectValue("precioPublico", "error.articulo.precioPublico.mayorCero");
 			}
 
-			if(!articulo.getCodigoTarifa().equals(Constantes.EMPTY)) {
+			if (!articulo.getCodigoTarifa().equals(Constantes.EMPTY)) {
 				TarifaIVAI tarifaIVAI = tarifaIVAIBo.findByCodigoTarifa(articulo.getCodigoTarifa());
-				articulo.setImpuesto(tarifaIVAI.getMonto());
+				if (tarifaIVAI == null) {
+					result.rejectValue("codigoTarifa", "error.articulo.codigo.tarifa.no.existe");
+				} else {
+					if (!tarifaIVAI.getMonto().equals(articulo.getImpuesto())) {
+						result.rejectValue("impuesto", "error.articulo.codigo.tarifa.no.tiene.porcentaje.correcto");
+					} else {
+						articulo.setImpuesto(tarifaIVAI.getMonto());
+					}
+				}
 			}
-			if(!articulo.getCodigoTarifa1().equals(Constantes.EMPTY)) {
+			if (!articulo.getCodigoTarifa1().equals(Constantes.EMPTY)) {
 				TarifaIVAI tarifaIVAI = tarifaIVAIBo.findByCodigoTarifa(articulo.getCodigoTarifa1());
-				articulo.setImpuesto1(tarifaIVAI.getMonto());
+				if (tarifaIVAI == null) {
+					result.rejectValue("codigoTarifa1", "error.articulo.codigo.tarifa.no.existe");
+				} else {
+					if (!tarifaIVAI.getMonto().equals(articulo.getImpuesto1())) {
+						result.rejectValue("impuesto1", "error.articulo.codigo.tarifa.no.tiene.porcentaje.correcto");
+					} else {
+						articulo.setImpuesto1(tarifaIVAI.getMonto());
+					}
+				}
 			}
-			if(articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
+			if (!articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
+				if (!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL) && !articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_ARTICULO)) {
+					if (articulo.getImpuesto().equals(Constantes.ZEROS_DOUBLE)) {
+						result.rejectValue("impuesto", "error.articulo.codigo.impuesto.no.tiene.porcentaje.correcto");
+
+					}
+				}
+
+			}
+			if (!articulo.getTipoImpuesto1().equals(Constantes.EMPTY)) {
+				if (!articulo.getTipoImpuesto1().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL) && !articulo.getTipoImpuesto1().equals(Constantes.TIPO_IMPUESTO_VENTA_ARTICULO)) {
+					if (articulo.getImpuesto1().equals(Constantes.ZEROS_DOUBLE)) {
+						result.rejectValue("impuesto1", "error.articulo.codigo.impuesto.no.tiene.porcentaje.correcto");
+
+					}
+				}
+
+			}
+
+			if (articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
 				articulo.setImpuesto(Constantes.ZEROS_DOUBLE);
 				articulo.setCodigoTarifa(Constantes.EMPTY);
 			}
-			if(articulo.getTipoImpuesto1().equals(Constantes.EMPTY)) {
+			if (articulo.getTipoImpuesto1().equals(Constantes.EMPTY)) {
 				articulo.setImpuesto1(Constantes.ZEROS_DOUBLE);
 				articulo.setCodigoTarifa1(Constantes.EMPTY);
 			}
-			if(!articulo.getTipoImpuesto1().equals(Constantes.EMPTY)) {
-				if(!articulo.getTipoImpuesto1().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)){
-					if(articulo.getImpuesto1().equals(Constantes.ZEROS_DOUBLE)) {
-						result.rejectValue("impuesto1", "error.articulo.tipoImpuesto1.cero");	
+			if (!articulo.getTipoImpuesto1().equals(Constantes.EMPTY)) {
+				if (!articulo.getTipoImpuesto1().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
+					if (articulo.getImpuesto1().equals(Constantes.ZEROS_DOUBLE)) {
+						result.rejectValue("impuesto1", "error.articulo.tipoImpuesto1.cero");
 					}
 				}
-				if(articulo.getTipoImpuesto1().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO)){
-					if(!articulo.getImpuesto1().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO_VALOR)) {
-						result.rejectValue("tipoImpuesto1", "error.articulo.tipoImpuesto1.selectivoConsumo");	
+				if (articulo.getTipoImpuesto1().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO)) {
+					if (!articulo.getImpuesto1().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO_VALOR)) {
+						result.rejectValue("tipoImpuesto1", "error.articulo.tipoImpuesto1.selectivoConsumo");
 					}
-					
-				}
-			}
-			if(!articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
-				if(!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)){
-					if(articulo.getImpuesto().equals(Constantes.ZEROS_DOUBLE)) {
-						result.rejectValue("impuesto1", "error.articulo.tipoImpuesto1.cero");	
-					}
-				}
-				if(articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO)){
-					if(!articulo.getImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO_VALOR)) {
-						result.rejectValue("tipoImpuesto1", "error.articulo.tipoImpuesto1.selectivoConsumo");	
-					}
-					
+
 				}
 			}
-			
-			
+			if (!articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
+				if (!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
+					if (articulo.getImpuesto().equals(Constantes.ZEROS_DOUBLE)) {
+						result.rejectValue("impuesto1", "error.articulo.tipoImpuesto1.cero");
+					}
+				}
+				if (articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO)) {
+					if (!articulo.getImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO_VALOR)) {
+						result.rejectValue("tipoImpuesto1", "error.articulo.tipoImpuesto1.selectivoConsumo");
+					}
+
+				}
+			}
+
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
@@ -862,12 +930,12 @@ public class ArticuloController {
 			articuloBd.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articuloBd.setComanda(articulo.getComanda());
 			articuloBd.setPrioridad(articulo.getPrioridad());
-			articuloBd.setTipoImpuesto1(articulo.getTipoImpuesto1() ==null?Constantes.EMPTY:articulo.getTipoImpuesto1());
-			articuloBd.setImpuesto1(articulo.getImpuesto1() ==null?Constantes.ZEROS_DOUBLE:articulo.getImpuesto1());
-			articuloBd.setPesoTransporte(articulo.getPesoTransporte() ==null?Constantes.ZEROS_DOUBLE:articulo.getPesoTransporte());
-			articuloBd.setCodigoTarifa(articulo.getCodigoTarifa() ==null?Constantes.EMPTY:articulo.getCodigoTarifa());
-			articuloBd.setCodigoTarifa1(articulo.getCodigoTarifa1() ==null?Constantes.EMPTY:articulo.getCodigoTarifa1());
-			articuloBd.setBaseImponible(articulo.getBaseImponible() ==null?Constantes.ZEROS:articulo.getBaseImponible());
+			articuloBd.setTipoImpuesto1(articulo.getTipoImpuesto1() == null ? Constantes.EMPTY : articulo.getTipoImpuesto1());
+			articuloBd.setImpuesto1(articulo.getImpuesto1() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto1());
+			articuloBd.setPesoTransporte(articulo.getPesoTransporte() == null ? Constantes.ZEROS_DOUBLE : articulo.getPesoTransporte());
+			articuloBd.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
+			articuloBd.setCodigoTarifa1(articulo.getCodigoTarifa1() == null ? Constantes.EMPTY : articulo.getCodigoTarifa1());
+			articuloBd.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
 			articuloBo.modificar(articuloBd);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBd);
@@ -926,8 +994,8 @@ public class ArticuloController {
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			articulo.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articulo.setImpuesto1(articulo.getImpuesto1() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto1());
-      articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null?Constantes.EMPTY:articulo.getCodigoTarifa());
-      articulo.setCodigoTarifa1(articulo.getCodigoTarifa1() == null?Constantes.EMPTY:articulo.getCodigoTarifa1());
+			articulo.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
+			articulo.setCodigoTarifa1(articulo.getCodigoTarifa1() == null ? Constantes.EMPTY : articulo.getCodigoTarifa1());
 			Articulo articuloBD = articuloBo.buscarPorCodigoYEmpresa(codigo, usuario.getEmpresa());
 
 			if (articuloBD == null) {
@@ -950,11 +1018,11 @@ public class ArticuloController {
 			} else {
 				articuloBD.setTipoCodigo(tipoCodigo);
 			}
-			if(articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
+			if (articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
 				articulo.setImpuesto(Constantes.ZEROS_DOUBLE);
 				articulo.setCodigoTarifa(Constantes.EMPTY);
 			}
-			if(articulo.getTipoImpuesto1().equals(Constantes.EMPTY)) {
+			if (articulo.getTipoImpuesto1().equals(Constantes.EMPTY)) {
 				articulo.setImpuesto1(Constantes.ZEROS_DOUBLE);
 				articulo.setCodigoTarifa1(Constantes.EMPTY);
 			}
@@ -975,12 +1043,12 @@ public class ArticuloController {
 			articuloBD.setImpuesto(articulo.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto());
 			articuloBD.setComanda(articulo.getComanda());
 			articuloBD.setPrioridad(articulo.getPrioridad());
-			articuloBD.setTipoImpuesto1(articulo.getTipoImpuesto1() ==null?Constantes.EMPTY:articulo.getTipoImpuesto1());
-			articuloBD.setImpuesto1(articulo.getImpuesto1() ==null?Constantes.ZEROS_DOUBLE:articulo.getImpuesto1());
-			articuloBD.setPesoTransporte(articulo.getPesoTransporte() ==null?Constantes.ZEROS_DOUBLE:articulo.getPesoTransporte());
-			articuloBD.setCodigoTarifa(articulo.getCodigoTarifa() ==null?Constantes.EMPTY:articulo.getCodigoTarifa());
-			articuloBD.setCodigoTarifa1(articulo.getCodigoTarifa1() ==null?Constantes.EMPTY:articulo.getCodigoTarifa1());
-			articuloBD.setBaseImponible(articulo.getBaseImponible() ==null?Constantes.ZEROS:articulo.getBaseImponible());
+			articuloBD.setTipoImpuesto1(articulo.getTipoImpuesto1() == null ? Constantes.EMPTY : articulo.getTipoImpuesto1());
+			articuloBD.setImpuesto1(articulo.getImpuesto1() == null ? Constantes.ZEROS_DOUBLE : articulo.getImpuesto1());
+			articuloBD.setPesoTransporte(articulo.getPesoTransporte() == null ? Constantes.ZEROS_DOUBLE : articulo.getPesoTransporte());
+			articuloBD.setCodigoTarifa(articulo.getCodigoTarifa() == null ? Constantes.EMPTY : articulo.getCodigoTarifa());
+			articuloBD.setCodigoTarifa1(articulo.getCodigoTarifa1() == null ? Constantes.EMPTY : articulo.getCodigoTarifa1());
+			articuloBD.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
 			articuloBo.modificar(articuloBD);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("articulo.modificado.correctamente", articuloBD);

@@ -31,6 +31,7 @@ public interface ArticuloDao {
 
 	Collection<Articulo> articulosBy(Empresa empresa);
 
+	
 	Collection<Articulo> articulosOrderCategoria(Empresa empresa);
 
 	Collection<Articulo> findByCategoriaAndEmpresaAndEstadoAndMinimoMaximo(Empresa empresa,Categoria categoria, String estado, String minimoMaximo);

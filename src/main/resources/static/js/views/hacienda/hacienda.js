@@ -28,7 +28,7 @@ var _Init = function () {
 
     $('#bontonBusqueda').click(function () {
 		if ($("#filtros").valid()) {
-		    listar()
+		    _consulta()
 		}
     });
     $('.btnLimpiarFiltros').click(function () {
@@ -37,6 +37,51 @@ var _Init = function () {
     });
     $("#filtros").validate(reglasDeValidacion());
 
+}
+
+var haciendas = {data:[]};
+
+function _consulta(){
+	haciendas = {data:[]}
+	var fechaInicio=$('.fechaInicial').val();
+	var fechaFin = $('.fechaFinal').val();
+	var cedulaReceptor = $('#cliente').val();
+	var tipoDocumento = $('.tipoDocumento').val();
+	var parametros = {
+		fechaInicio:fechaInicio,
+		fechaFin:fechaFin,
+		cedulaReceptor:cedulaReceptor,
+		tipoDocumento:tipoDocumento,
+	}
+	__Inicializar_Table('.tableListar')  
+	$.ajax({
+	   url: "ListarHaciendasAjax.do",
+	   datatype: "json",
+	   data:parametros ,
+	   method:"GET",
+	   success: function (result) {
+		   if(result.aaData.length > 0){
+			   loadListar(".tableListar",idioma_espanol,informacion_tabla,result.aaData)
+			   haciendas.data = result.aaData
+			   agregarInputsCombos();
+			   ActivarEventoFiltro(".tableListar")
+			   __CorreoAlternativo()
+				__BajarDocumentoXML()
+				__EnviarCorreos()
+				__EnviarAceptarHacienda()
+				__EnviarHacienda()
+				__RespuestaHacienda()
+				__BajarPDFHacienda()
+				EventoFiltro();
+		   }else{
+				agregarInputsCombos();
+		   }           
+	   },
+	   error: function (xhr, status) {
+		   mensajeErrorServidor(xhr, status);
+		   console.log(xhr);
+	   }
+	});
 }
 /**
 * Reglas aplicadas
@@ -69,7 +114,6 @@ function __Inicializar_Table(nombreTabla){
         'responsive': true,
         "bAutoWidth": true,
         "lengthChange": true,
-        
     });    
 }
 /**
@@ -95,47 +139,6 @@ function listaClientesActivos(){
 		 }
 	})
 }
-var listar = function(){
-	var fechaInicio=$('.fechaInicial').val();
-  var fechaFin = $('.fechaFinal').val();
-	var cedulaReceptor = $('#cliente').val();
-	var tipoDocumento = $('.tipoDocumento').val();
-	var table  =  $('#tableListar').DataTable( {
-			"responsive": true,
-			"bAutoWidth" : true,
-			"destroy":true,
-			"order": [ 0, 'asc' ],
-					"bInfo": true,
-					"bPaginate": true,
-					"bFilter" : true,
-					"bDeferRender": true ,
-					"sDom": 'lrtip',
-					"searching":true,
-			"processing": false,
-			"serverSide": true,
-			"sort" : "position",
-			"lengthChange": true,
-			"ajax" : {
-					"url":"ListarHaciendasAjax.do?fechaInicio=" + fechaInicio+"&"+"fechaFin="+fechaFin+"&"+"cedulaReceptor="+cedulaReceptor+"&"+"tipoDocumento="+tipoDocumento,
-					"deferRender": true,
-					"type":"GET",
-								"dataType": 'json',
-								
-						},
-			"columns" : informacion_tabla,
-			"language" : idioma_espanol,
-} );//fin del table
-	__CorreoAlternativo()
-	__BajarDocumentoXML()
-	__EnviarCorreos()
-	__EnviarAceptarHacienda()
-	__EnviarHacienda()
-	__RespuestaHacienda()
-	__BajarPDFHacienda()
-	EventoFiltro();
-
-} 
-
 /**
 * cargar los tipos de Documento de la factura
 **/
@@ -148,8 +151,6 @@ function __ComboTipoDocumentosPara(){
 	$('.tipoDocumento').append('<option value="'+"88"+'">'+$.i18n.prop("compras.compras")+ '</option>');
     
 }
-
-
 // traducciones del table
 var idioma_espanol = 
 {
@@ -190,9 +191,18 @@ function agregarInputsCombos(){
 		if ( $(this).index() != 6    ){
 			 $(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 		}
-		
-	
+		if ($(this).index() == 1 ){
+			var select = $('<select id="combo3"   class="form-control"><option value="">Todos</option></select>');
+			// se cargan los valores por defecto que existen en el combo
+			select.append( '<option value="'+$.i18n.prop("factura.tipo.documento.factura.tiquete")+'">'+$.i18n.prop("factura.tipo.documento.factura.tiquete")+'</option>' );       
+			select.append( '<option value="'+$.i18n.prop("factura.tipo.documento.factura.electronica")+'">'+$.i18n.prop("factura.tipo.documento.factura.electronica")+'</option>' );       
 
+			select.append( '<option value="'+$.i18n.prop("referencia.tipo.documento.nota.credito")+'">'+$.i18n.prop("referencia.tipo.documento.nota.credito")+'</option>' );       
+
+			select.append( '<option value="'+$.i18n.prop("referencia.tipo.documento.nota.debito")+'">'+$.i18n.prop("referencia.tipo.documento.nota.debito")+'</option>' );       
+			select.append( '<option value="'+$.i18n.prop("compras.compras") +'">'+$.i18n.prop("compras.compras")+'</option>' );       
+			$(this).html(select);
+		}
 	})
 } 
 
@@ -232,10 +242,6 @@ function EventoFiltro(){
    });
  } );
 }
-
-
-
-
 /**
  * LLamar al componente Riot 
  * @returns
@@ -302,7 +308,6 @@ function __Opciones(id,type,row){
 function formatoFechaHacienda(fecha) {
     return fecha == null?"":moment(fecha).format('DD/MM/YYYY h:mm:ss a');
 }
-
 /**
 *  Enviar a correo alternativo
 **/
@@ -315,7 +320,6 @@ function __CorreoAlternativo(){
 		}else{	
 			var data = table.row($(this).parents("tr")).data();
 		}
-		
 		riot.compile(function() {
 			var parametros = {
 				tipoEjecucion:1,
@@ -326,10 +330,6 @@ function __CorreoAlternativo(){
 		});  
   });
 }
-
-
-
-
 /**
 * Bajar PDF
 */
@@ -345,8 +345,6 @@ function __BajarPDFHacienda(){
 		 BajarArchivos("bajarPDFComprobanteAjax",data)
   });
 }
-
-
 /**
 * Respuesta de Hacienda
 */
@@ -362,8 +360,6 @@ function __RespuestaHacienda(){
 		 BajarArchivos("bajarXMLRespuestaAjax",data)
   });
 }
-
-
 /**
 * Envio Manual hacia Hacienda
 */
@@ -379,7 +375,6 @@ function __EnviarHacienda(){
 		 __consultar("EnviarAceptarHaciendaAjax",data)
   });
 }
-
 /**
 * Envio Manual para revisar la aceptacion del documento por Hacienda
 */
@@ -395,7 +390,6 @@ function __EnviarAceptarHacienda(){
 		 __consultar("AceptarHaciendaAjax",data)
   });
 }
-
 /**
 * Envio del correo al emisor y receptor
 */
@@ -411,8 +405,6 @@ function __EnviarCorreos(){
 		 __consultar("EnviarCorreoClienteAndEmisorAjax",data)
   });
 }
-
-
 /**
 * bajar el xml del documento
 */
@@ -425,18 +417,13 @@ function __BajarDocumentoXML(){
 		}else{	
 			var data = table.row($(this).parents("tr")).data();
 		}
-		 
 		 BajarArchivos("bajarXMLComprobanteAjax",data)
   });
 }
-
-
-
 /**
 *  Enviar 
 **/
 function __consultar(url,objeto){
-	
 	$.ajax({
 		 url: url,
 		 datatype: "json",
@@ -458,9 +445,6 @@ function __consultar(url,objeto){
 		 }
 	});
 }
-
-
-
 /**
 *  BajarDocumentos 
 **/
@@ -468,6 +452,3 @@ function BajarArchivos(url,objeto){
 	location.href = url + "?idHacienda=" + objeto.id
 	
 }
-
-
-

@@ -16,9 +16,15 @@
                             <input type="hidden"  id="precioEspecial" name="precioEspecial" value="{articulo.precioEspecial}" >
                             <input type="hidden"  id="maximo" name="maximo" value="{articulo.maximo}"  >
                             <input type="hidden"  id="minimo" name="minimo" value="{articulo.minimo}"  >
+                            
                             <input type="hidden"  id="cantidad" name="cantidad" value="{articulo.cantidad}"  >
                             <input type="hidden"  id="prioridad" name="prioridad" value="{articulo.prioridad}"  >
                             <input type="hidden"  id="pesoTransporte" name="pesoTransporte" value="{articulo.pesoTransporte}"  >
+
+                            <input type="hidden"  id="tipoImpuesto1" name="tipoImpuesto1" value="{articulo.tipoImpuesto1}"  >
+                            <input type="hidden"  id="codigoTarifa1" name="codigoTarifa1" value="{articulo.codigoTarifa1}"  >
+                            <input type="hidden"  id="impuesto1" name="impuesto1" value="{articulo.impuesto1}"  >
+
                             <div class="panel-group" id="accordion">
                                 <div class="panel panel-default" id="cuentas">
                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" >
@@ -47,7 +53,7 @@
                                             <div class="row">
                                                 <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                                     <label class="tamanoLetraTotales"  >{$.i18n.prop("articulo.costo")} </label>
-                                                    <input type="number" step="any" class="campoNumerico costo" id="costo" name="costo" value="{articulo.costo}"  onkeydown ={__ActualizarPreciosCosto}>
+                                                    <input type="number" step="any" class="campoNumerico costo" id="costo" name="costo" value="{articulo.costo}"  onkeyup ={__ActualizarPreciosCosto}>
                                                 </div>
                                                 <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.gananciaPrecioPublico")}%  </label>
@@ -55,7 +61,7 @@
                                                 </div>
                                                 <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.precioPublico")}  <span class="requeridoDato">*</span></label>
-                                                    <input type="number" step="any" class="campoNumerico precioPublico" id="precioPublico" name="precioPublico" onkeydown ={__CalculoGananciaPublico} value="{articulo.precioPublico}"  >
+                                                    <input type="number" step="any" class="campoNumerico precioPublico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoGananciaPublico} value="{articulo.precioPublico}"  >
                                                 </div>
                                             </div>    
                                             <div class="row">
@@ -74,26 +80,7 @@
 
                                                 <div class= "col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.impuesto")}  </label>
-                                                    <input type="number" step="any" class="campoNumerico impuesto" id="impuesto" name="impuesto" value="{articulo.impuesto}"  onkeydown ={__ActualizarPreciosImpuestos}>
-                                                </div>
-                                            </div>    
-                                            <div class="row">  
-                                                <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
-                                                    <label class="tamanoLetraTotales">{$.i18n.prop("articulo.tipoImpuesto1")}</label>
-                                                    <select onchange= {__asignarImpuesto1} class="campo selectTipoImpuesto1" id="tipoImpuesto1" name="tipoImpuesto1"  >
-                                                        <option  each={impuestos1}  value="{codigo}" selected="{articulo.tipoImpuesto1 ==codigo?true:false}"  >{descripcion}</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
-                                                    <label class="tamanoLetraTotales">{$.i18n.prop("articulo.codigoTarifa2")}</label>
-                                                        <select onchange= {__AsignarTarifa1} class="campo selectCodigoTarifa2" id="codigoTarifa1" name="codigoTarifa1"  >
-                                                            <option  each={tarifas2.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa1 ==tarifaIVAI.codigoTarifa?true:false}" >{tarifaIVAI.descripcion}</option>
-                                                        </select>
-                                                </div>
-
-                                                <div class= "col-md-4 col-sx-6 col-sm-4 col-lg-4 has-success">
-                                                    <label  class="tamanoLetraTotales">{$.i18n.prop("articulo.impuesto1")}  </label>
-                                                    <input type="number" step="any" class=" impuesto1 campoNumerico" id="impuesto1" name="impuesto1" value="{articulo.impuesto1}"  onkeyup ={__CalculoImpuesto1}>
+                                                    <input type="number" step="any" class="campoNumerico impuesto" id="impuesto" name="impuesto" value="{articulo.impuesto}"  onkeyup ={__ActualizarPreciosImpuestos}>
                                                 </div>
                                             </div>    
                                         </div>
@@ -178,51 +165,51 @@
 
 
 <style type ="text/css">
-.btn-imprimirCambioPrecio {
-    background-color: #00ACEE;
-    color: #FFF;
-    border-radius: 5px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    font-size: 14px;
-    font-weight: bold;
-    margin-right: 15px;
-    margin-bottom: 0.5%!important;
-    border: none;
-    float: right;
-    cursor: pointer;
-}
- html {
-            overflow: scroll!important;
-        }
-.tamanoLetraTotales {
-    font-weight: 600 !important;
-    font-size: 20px !important;
-}
-.contenedor {
-  width: 95%;
-  max-width: 1200px;
-  overflow-x: scroll;
-  overflow-y: scroll;
-   height:100%;
-}
-.scrollBarras {
-    background-color: #3c8dbc;
-    color: white;
-    font-size: 28px;
-    font-weight: 600;
-     margin: 2px;
-}
-.contenScroll{
-background-color: white;
-    color: #2b2727;
-    padding-left: 5px;
-    padding-right: 5px;
-    margin-bottom: 10px;
-    border-radius: 3px;
-}
+    .btn-imprimirCambioPrecio {
+        background-color: #00ACEE;
+        color: #FFF;
+        border-radius: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 14px;
+        font-weight: bold;
+        margin-right: 15px;
+        margin-bottom: 0.5%!important;
+        border: none;
+        float: right;
+        cursor: pointer;
+    }
+    html {
+                overflow: scroll!important;
+            }
+    .tamanoLetraTotales {
+        font-weight: 600 !important;
+        font-size: 20px !important;
+    }
+    .contenedor {
+    width: 95%;
+    max-width: 1200px;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    height:100%;
+    }
+    .scrollBarras {
+        background-color: #3c8dbc;
+        color: white;
+        font-size: 28px;
+        font-weight: 600;
+        margin: 2px;
+    }
+    .contenScroll{
+    background-color: white;
+        color: #2b2727;
+        padding-left: 5px;
+        padding-right: 5px;
+        margin-bottom: 10px;
+        border-radius: 3px;
+    }
     .fondoEncabezado {
         background: #00539B;
         color: #f9fafc;
@@ -285,30 +272,30 @@ background-color: white;
             overflow: visible;
             color: blue;
             font-weight: bold;
-}
-.campoNormal {
-    display: flex;
-    width: 100%;
-    height: 40px;
-    padding: 8px 18px;
-    line-height: 1.42857143;
-    color: #555;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    background-color: #fcfcfc;
-    border: 1px solid #ccc;
-    font-size: 25px;
-    margin: 2px 0;
-    padding: 1px 2px;
-    overflow: visible;
-}
+    }
+    .campoNormal {
+        display: flex;
+        width: 100%;
+        height: 40px;
+        padding: 8px 18px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        background-color: #fcfcfc;
+        border: 1px solid #ccc;
+        font-size: 25px;
+        margin: 2px 0;
+        padding: 1px 2px;
+        overflow: visible;
+    }
     </style>
 <script>
     var self = this;
@@ -341,6 +328,9 @@ background-color: white;
 		impuesto:0,
         minimo:0,
         maximo:0,
+        tipoImpuesto1:'',
+        codigoTarifa1:'',
+        impuesto1:0
 		precioPublico:null,
 		gananciaPrecioPublico:null,
 		precioMayorista:null,
@@ -359,7 +349,7 @@ background-color: white;
         }
     }    
     self.tarifas1    = {aaData:[]}
-   self.tarifas2    = {aaData:[]}
+    self.tarifas2    = {aaData:[]}
      self.baseImponibles =[]
 self.on('mount',function(){
     __Eventos()
@@ -368,7 +358,7 @@ self.on('mount',function(){
     __listadoTipoUnidadesActivas()   
     __listadoMarcasActivas()
     __Impuestos() 
-    __Impuestos1() 
+  //  __Impuestos1() 
     __tipoCodigo()
     LimpiarArticulo()
     __ComboBaseImponibles()
@@ -396,11 +386,11 @@ function __ComboBaseImponibles(){
 __AsignarTarifa(){
     self.articulo.impuesto = getMontoImpuesto(self.articulo.tipoImpuesto,$('#codigoTarifa').val(),self.tarifas1.aaData)
     self.update()
-    
     actualizarPreciosImpuestosMayorista()
     actualizarPreciosImpuestosPublico()
     actualizarPreciosImpuestosEspecial()
 }
+
 __AsignarTarifa1(){
     self.articulo.impuesto1 = getMontoImpuesto(self.articulo.tipoImpuesto1,$('#codigoTarifa1').val(),self.tarifas2.aaData)
     self.update()

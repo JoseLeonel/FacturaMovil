@@ -43,6 +43,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.emprendesoftcr.Bo.ClienteBo;
+import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleBo;
@@ -76,6 +77,10 @@ import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.Vendedor;
+import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstado;
+import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstadoAndUsuario;
+import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndFacturada;
+import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndFacturadaAndUsuario;
 import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.pdf.ReportePdfView;
@@ -84,6 +89,7 @@ import com.emprendesoftcr.validator.FacturaFormValidator;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacionMesa;
+import com.emprendesoftcr.web.command.ProformasByEmpresaAndEstadoCommand;
 import com.emprendesoftcr.web.command.ProformasSQLNativeCommand;
 import com.emprendesoftcr.web.command.RecepcionFacturaCommand;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
@@ -142,18 +148,18 @@ public class FacturasController {
 																																																			resultado += d.getMontoImpuesto1() != null ? d.getMontoImpuesto1() : Constantes.ZEROS_DOUBLE;
 																																																			detalleFacturaElectronica.setImpuesto(resultado);
 																																																			detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
-																																																			detalleFacturaElectronica.setMontoExoneracion(d.getMontoExoneracion());
-																																																			detalleFacturaElectronica.setTipoDocumentoExoneracion(d.getTipoDocumentoExoneracion());
-																																																			detalleFacturaElectronica.setFechaEmisionExoneracion(Utils.getFechaGeneraReporte(d.getFechaEmisionExoneracion()));
-																																																			detalleFacturaElectronica.setNumeroDocumentoExoneracion(d.getNumeroDocumentoExoneracion());
+																																																			detalleFacturaElectronica.setMontoExoneracion(d.getMontoExoneracion() != null ? d.getMontoExoneracion() : Constantes.ZEROS_DOUBLE);
+																																																			detalleFacturaElectronica.setTipoDocumentoExoneracion(d.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : d.getTipoDocumentoExoneracion());
+																																																			detalleFacturaElectronica.setFechaEmisionExoneracion(d.getFechaEmisionExoneracion() != null ? Utils.getFechaGeneraReporte(d.getFechaEmisionExoneracion()) : Constantes.EMPTY);
+																																																			detalleFacturaElectronica.setNumeroDocumentoExoneracion(d.getNumeroDocumentoExoneracion() != null ? d.getNumeroDocumentoExoneracion() : Constantes.EMPTY);
 																																																			//
 																																																			return detalleFacturaElectronica;
 																																																		};
 	private static final Function<Factura, FacturaElectronica>				DOCUMENTO_TO_FACTURAELECTRONICA	= (d) -> {
 																																																			FacturaElectronica facturaElectronica = new FacturaElectronica();
-																																																			if(d.getCodigoActividad() == null) {
+																																																			if (d.getCodigoActividad() == null) {
 																																																				facturaElectronica.set_codigoActividadComercial(d.getEmpresa().getCodigoActividad());
-																																																			}else {
+																																																			} else {
 																																																				facturaElectronica.set_codigoActividadComercial(d.getCodigoActividad());
 																																																			}
 
@@ -198,9 +204,9 @@ public class FacturasController {
 																																																					facturaElectronica.setClienteTelefono(Constantes.EMPTY);
 																																																				}
 																																																			}
-																																																			if (d.getCliente().getLibreImpuesto().equals(Constantes.LIBRE_IMPUESTOS_ACTIVO)){
+																																																			if (d.getCliente().getLibreImpuesto().equals(Constantes.LIBRE_IMPUESTOS_ACTIVO)) {
 																																																				facturaElectronica.setNumeroDocumentoExoneracion(Constantes.DOCUMENTO_LIBRE_IVA);
-																																																			}else {
+																																																			} else {
 																																																				facturaElectronica.setNumeroDocumentoExoneracion(Constantes.EMPTY);
 																																																			}
 
@@ -276,6 +282,9 @@ public class FacturasController {
 	private FacturaBo																									facturaBo;
 
 	@Autowired
+	private ConsultasNativeBo																					consultasNativeBo;
+
+	@Autowired
 	private MesaBo																										mesaBo;
 
 	@Autowired
@@ -317,6 +326,7 @@ public class FacturasController {
 		binder.registerCustomEditor(Date.class, fechaPropertyEditor);
 		binder.registerCustomEditor(Mesa.class, mesaPropertyEditor);
 	}
+
 	@RequestMapping(value = "/recepcionFactura", method = RequestMethod.GET)
 	public String recepcionFactura(ModelMap model) {
 		return "views/facturas/recepcionFactura";
@@ -762,57 +772,104 @@ public class FacturasController {
 		delimitadores = new DataTableDelimitador(request, "Factura");
 		JqGridFilter dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
+		estado = estado == null ? Constantes.FACTURA_ESTADO_PROFORMAS : estado;
 
-		if (estado != null) {
-			if (estado.equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
-				dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PROFORMAS + "'", "=");
-				delimitadores.addFiltro(dataTableFilter);
-			}
-			if (estado.equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-				dataTableFilter = new JqGridFilter("consecutivoProforma", "'" + Constantes.EMPTY + "'", "<>");
-				delimitadores.addFiltro(dataTableFilter);
-				dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_FACTURADO + "'", "=");
-				delimitadores.addFiltro(dataTableFilter);
-			}
-			if (estado.equals(Constantes.FACTURA_ESTADO_ANULADA_PROFORMA)) {
-				dataTableFilter = new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_ANULADA_PROFORMA + "'", "=");
-				delimitadores.addFiltro(dataTableFilter);
-			}
+		Collection<ProformasByEmpresaAndEstadoAndUsuario> objetoProforma = null;
+		Collection<ProformasByEmpresaAndEstadoAndUsuario> objetoAnulado = null;
+		Collection<ProformasByEmpresaAndFacturadaAndUsuario> objetoFacturas = null;
+		Collection<ProformasByEmpresaAndEstado> objetoProformaAdmin = null;
+		Collection<ProformasByEmpresaAndEstado> objetoAnuladoAdmin = null;
+		Collection<ProformasByEmpresaAndFacturada> objetoFacturasAdmin = null;
 
-		}
+		if (request.isUserInRole(Constantes.ROL_ADMINISTRADOR_CAJERO)|| request.isUserInRole(Constantes.ROL_ADMINISTRADOR_EMPRESA)|| request.isUserInRole(Constantes.ROL_ADMINISTRADOR_RESTAURANTE)) {
+			objetoProformaAdmin = estado.equals(Constantes.FACTURA_ESTADO_PROFORMAS) ? consultasNativeBo.findByProformasByEmpresaAndEstado(usuarioSesion.getEmpresa(), estado) : null;
+			objetoAnuladoAdmin = estado.equals(Constantes.FACTURA_ESTADO_ANULADA_PROFORMA) ? consultasNativeBo.findByProformasByEmpresaAndEstado(usuarioSesion.getEmpresa(), estado) : null;
+			objetoFacturasAdmin = objetoProforma == null && objetoAnulado == null ? consultasNativeBo.findByProformasByEmpresaFacturada(usuarioSesion.getEmpresa()) : null;
 
-		if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
-			dataTableFilter = new JqGridFilter("usuarioCreacion.id", "'" + usuarioSesion.getId().toString() + "'", "=");
-			delimitadores.addFiltro(dataTableFilter);
-		}
-		List<Object[]> objetos = (List<Object[]>) facturaBo.proformasByState(Constantes.FACTURA_ESTADO_PROFORMAS, usuarioSesion.getEmpresa().getId());
-		for (int i = 0; i < objetos.size(); i++) {
-			ProformasSQLNativeCommand proformasSQLNativeCommand = new ProformasSQLNativeCommand();
-			// proformasSQLNativeCommand.setId( objetos.get(i)[0]);
-			proformasSQLNativeCommand.setConsecutivoProforma((String) objetos.get(i)[1]);
+		} else {
+			objetoProforma = estado.equals(Constantes.FACTURA_ESTADO_PROFORMAS) ? consultasNativeBo.findByProformasByEmpresaAndEstadoAndUsuario(usuarioSesion.getEmpresa(), estado, usuarioSesion.getId()) : null;
+			objetoAnulado = estado.equals(Constantes.FACTURA_ESTADO_ANULADA_PROFORMA) ? consultasNativeBo.findByProformasByEmpresaAndEstadoAndUsuario(usuarioSesion.getEmpresa(), estado, usuarioSesion.getId()) : null;
+			objetoFacturas = objetoProforma == null && objetoAnulado == null ? consultasNativeBo.findByProformasByEmpresaFacturadaAndUsuario(usuarioSesion.getEmpresa(), usuarioSesion.getId()) : null;
 
 		}
 
-//		List<Object> solicitudList = new ArrayList<Object>();
-//		for (Iterator<Object> iterator = objetos.iterator(); iterator.hasNext();) {
-//			ProformasSQLNativeCommand object = (ProformasSQLNativeCommand) iterator.next();
-//			// no se carga el usuario del sistema el id -1
-//			if (object.getId().longValue() > 0L) {
-//				solicitudList.add(new ProformasSQLNativeCommand(object));
-//			}
-//		}
-//		Collection<ProformasSQLNativeCommand> solicitudList = new ArrayList<ProformasSQLNativeCommand>();
-////		solicitudList = formaDetallesCommand(objetos);
-//		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-//		Long total = (long) objetos.size();
-//		respuestaService.setRecordsTotal(total);
-//		respuestaService.setRecordsFiltered(total);
-//		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
-//			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
-//		}
-//		respuestaService.setAaData(objetos);
-//		return respuestaService;
-		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		List<Object> solicitudList = new ArrayList<Object>();
+		if (request.isUserInRole(Constantes.ROL_ADMINISTRADOR_CAJERO)) {
+			if (objetoProformaAdmin != null) {
+				for (ProformasByEmpresaAndEstado proformasByEmpresa : objetoProformaAdmin) {
+
+					// no se carga el usuario del sistema el id -1
+					if (proformasByEmpresa.getId().longValue() > 0L) {
+						solicitudList.add(new ProformasByEmpresaAndEstadoCommand(proformasByEmpresa));
+								}
+				}
+
+			}
+
+			if (objetoAnuladoAdmin != null) {
+				for (ProformasByEmpresaAndEstado proformasByEmpresaAndEstado : objetoAnuladoAdmin) {
+
+					// no se carga el usuario del sistema el id -1
+					if (proformasByEmpresaAndEstado.getId().longValue() > 0L) {
+						solicitudList.add(new ProformasByEmpresaAndEstadoCommand(proformasByEmpresaAndEstado));
+					}
+				}
+
+			}
+			if (objetoFacturasAdmin != null) {
+				for (ProformasByEmpresaAndFacturada proformasByEmpresaAndFacturada : objetoFacturasAdmin) {
+
+					// no se carga el usuario del sistema el id -1
+					if (proformasByEmpresaAndFacturada.getId().longValue() > 0L) {
+						solicitudList.add(new ProformasByEmpresaAndEstadoCommand(proformasByEmpresaAndFacturada));
+					}
+				}
+
+			}
+
+
+		} else {
+			if (objetoProforma != null) {
+				for (ProformasByEmpresaAndEstadoAndUsuario proformasByEmpresaAndEstado : objetoProforma) {
+
+					// no se carga el usuario del sistema el id -1
+					if (proformasByEmpresaAndEstado.getId().longValue() > 0L) {
+						solicitudList.add(new ProformasByEmpresaAndEstadoCommand(proformasByEmpresaAndEstado));
+					}
+				}
+
+			}
+
+			if (objetoAnulado != null) {
+				for (ProformasByEmpresaAndEstadoAndUsuario proformasByEmpresaAndEstado : objetoAnulado) {
+
+					// no se carga el usuario del sistema el id -1
+					if (proformasByEmpresaAndEstado.getId().longValue() > 0L) {
+						solicitudList.add(new ProformasByEmpresaAndEstadoCommand(proformasByEmpresaAndEstado));
+					}
+				}
+
+			}
+			if (objetoFacturas != null) {
+				for (ProformasByEmpresaAndFacturadaAndUsuario proformasByEmpresaAndFacturada : objetoFacturas) {
+
+					// no se carga el usuario del sistema el id -1
+					if (proformasByEmpresaAndFacturada.getId().longValue() > 0L) {
+						solicitudList.add(new ProformasByEmpresaAndEstadoCommand(proformasByEmpresaAndFacturada));
+					}
+				}
+
+			}
+
+		}
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
 	}
 
 	private ArrayList<ProformasSQLNativeCommand> formaDetallesCommand(Collection<ProformasSQLNativeCommand> objetos) throws Exception {
@@ -931,9 +988,9 @@ public class FacturasController {
 			recepcionFactura.setTotalImpuestoAcreditar(recepcionFactura.getFacturaTotalImpuestos());
 			recepcionFactura.setTotalDeGastoAplicable(recepcionFactura.getFacturaTotalComprobante() - recepcionFactura.getFacturaTotalImpuestos());
 			recepcionFacturaBo.agregar(recepcionFactura);
-		
-			//Se agregan los detalles
-			this.agregaDetalleFacturas(recepcionFactura, recepcionFactura.getDetalles()); 
+
+			// Se agregan los detalles
+			this.agregaDetalleFacturas(recepcionFactura, recepcionFactura.getDetalles());
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("recepcionFactura.agregar.correctamente", recepcionFactura);
 
@@ -941,7 +998,7 @@ public class FacturasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
+
 	private void agregaDetalleFacturas(RecepcionFactura recepcionFactura, String jsonDetalles) {
 		JSONObject json = null;
 		try {
@@ -949,7 +1006,7 @@ public class FacturasController {
 		} catch (org.json.simple.parser.ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		// Agregar Lineas de Detalle
 		JSONArray jsonArrayDetalle = (JSONArray) json.get("data");
 		Gson gson = new Gson();
@@ -960,9 +1017,8 @@ public class FacturasController {
 				detalle.setRecepcionFactura(recepcionFactura);
 				recepcionFacturaBo.agregar(detalle);
 			}
-		}		
+		}
 	}
-	
 
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarRecepcionFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -1092,16 +1148,16 @@ public class FacturasController {
 					}
 				}
 			}
-			if (facturaCommand.getTipoDoc() == null ){
+			if (facturaCommand.getTipoDoc() == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.tipo.doc", result.getAllErrors());
 			}
-			if (facturaCommand.getTipoDoc() == null ){
+			if (facturaCommand.getTipoDoc() == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.tipo.doc", result.getAllErrors());
 			}
 
-			if(facturaCommand.getCodigoActividad() == null) {
+			if (facturaCommand.getCodigoActividad() == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.actividad.comercial.no.existe", result.getAllErrors());
-			}else if (facturaCommand.getCodigoActividad().equals(Constantes.EMPTY)) {
+			} else if (facturaCommand.getCodigoActividad().equals(Constantes.EMPTY)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.actividad.comercial.no.existe", result.getAllErrors());
 			}
 			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
@@ -1365,7 +1421,7 @@ public class FacturasController {
 		}
 
 	}
-	
+
 	/**
 	 * Cambia la factura de mesa
 	 * @param request

@@ -23,6 +23,7 @@ class UtilsForControllers {
 		Long total = bo.contar(delimitadores);
 		Collection<Object> objetos = new ArrayList<Object>();
 		objetos = Collections2.transform(bo.listar(delimitadores), f);
+		
 		return new RespuestaServiceDataTable.Builder(request, objetos, total).build();
 	}
 }

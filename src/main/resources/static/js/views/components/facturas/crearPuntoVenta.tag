@@ -578,6 +578,7 @@
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descuento")}</h4>
             </div>
             <div class="modal-body">
+                <form id="formularioDescuento" name="formularioDescuento">
                 <div class="row">
                     <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
                         <div class="form-group has-success">
@@ -586,6 +587,7 @@
                         </div>
                     </div>
                 </div> 
+                </form>
 
             </div>
             <div class="modal-footer">
@@ -1601,10 +1603,30 @@ function __TipoDocumentos(numeroConsecutivo,row){
         return  numeroConsecutivo
 }
 }
+
+
+/**
+* Camps requeridos
+**/
+var reglasDescuentoAplicar = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			aplicarDescuento : {
+				required : true,
+                numeroMayorCero:true,
+			}           
+		},
+		ignore : []
+
+	});
+	return validationOptions;
+};
 /**
 * Aplicar el descuento
 **/
 __CambiarDescuento(e){
+    $("#aplicarDescuento").attr("maxlength", 7);
+     $("#formularioDescuento").validate(reglasDescuentoAplicar());
     self.item = e.item; 
     self.rutaAutorizada = '';
     self.update()
@@ -3287,7 +3309,9 @@ function aplicarCambioLineaDetalle(){
 * Actualizar el descuento del codigo
 **/
 __actualizarDescuento(e){
-    _actualizarDesc(e)
+    if ($("#formularioDescuento").valid()) {
+        _actualizarDesc(e)
+    }
 }
 /**
 * Actualizar el descuento
@@ -3295,6 +3319,10 @@ __actualizarDescuento(e){
 function _actualizarDesc(e){
     var descuento = $(".aplicarDescuento").val();
     descuento = __valorNumerico(descuento)
+    if(descuento > 100){
+         swal('',"Error el descuento no puede ser mayor al 100%",'error');
+         return false
+    }
     if(self.empresa.aplicaGanancia ==1){
         if(self.item.porcentajeGanancia < descuento ){
             swal('',"No se puede aplicar un descuento mayor a la ganancia",'error');

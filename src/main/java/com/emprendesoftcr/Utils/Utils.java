@@ -31,6 +31,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.springframework.core.NestedRuntimeException;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.Errors;
 import org.springframework.web.context.ContextLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -47,7 +49,25 @@ public final class Utils {
 
 		return resultado;
 	}
-	
+
+	public static Boolean validarCedulaDiferenteCaracter(String valor) {
+		Boolean resultado = Boolean.FALSE;
+		if (valor == null) {
+			return Boolean.FALSE;
+		}
+		if (valor.length() == 0) {
+			return Boolean.FALSE;
+		}
+		char letraIgual = valor.charAt(1);
+		for (int i = 0; i < valor.length(); i++) {
+			char c = valor.charAt(i);
+			if (letraIgual != c) {
+				resultado = Boolean.TRUE;
+			}
+		}
+		return resultado;
+	}
+
 	public static Double Maximo5Decimales(Double valor) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		String[] splitter = valor.toString().split("\\.");
@@ -56,22 +76,21 @@ public final class Utils {
 		String digitos = splitter[1];
 		if (splitter[1].length() >= 5) {
 			String decimales = digitos.substring(0, 5);
-			String valor1  = splitter[0] + "." + decimales;
+			String valor1 = splitter[0] + "." + decimales;
 			resultado = Double.parseDouble(valor1);
-		}else {
+		} else {
 			String decimales = digitos.substring(0, splitter[1].length());
-			String valor1  = splitter[0] + "." + decimales;
+			String valor1 = splitter[0] + "." + decimales;
 			resultado = Double.parseDouble(valor1);
-			
+
 		}
-				
 
 		return resultado;
 
 	}
 
 	/**
-	 * Si el sexto digito es mayor 5  o igual
+	 * Si el sexto digito es mayor 5 o igual
 	 * @param valor
 	 * @return
 	 */
@@ -644,6 +663,33 @@ public final class Utils {
 		}
 		return new String(resultChars).trim();
 	}
+
+	public static void rejectIfNotValidEmail(Errors errors, String campo) {
+		String email = (String) errors.getFieldValue(campo);
+		if (email.length() > 0) {
+			if (Constantes.LONGITUD_EMAIL < email.length()) {
+				errors.rejectValue(campo, Constantes.KEY_LONGITUD_INCORRECTA, new Object[] { Constantes.LONGITUD_EMAIL }, "");
+			} else if (!email.matches(Constantes.PATRON_EMAIL)) {
+				errors.rejectValue(campo, Constantes.KEY_EMAIL_FORMATO_INCORRECTO);
+			}
+		}
+	}
+	
+	public static void rejectIfNotValidCedulaFisica(Errors errors, String campo) {
+		String cedula = (String) errors.getFieldValue(campo);
+		if (!(cedula.matches(Constantes.PATRON_CEDULA_FISICA_NACIONALES) || cedula.matches(Constantes.PATRON_CEDULA_FISICA_OTROS))) {
+		errors.rejectValue(campo, Constantes.KEY_CEDULA_FISICA_FORMATO_INCORRECTO);
+		}
+		}
+	
+	
+	public static void rejectIfNotValidCedulaJuridica(Errors errors, String campo) {
+		String cedula = (String) errors.getFieldValue(campo);
+		if (!(cedula.matches(Constantes.PATRON_CEDULA_JURIDICA_AUTONOMA) || cedula.matches(Constantes.PATRON_CEDULA_JURIDICA_GOBIERNO) || cedula.matches(Constantes.PATRON_CEDULA_JURIDICA_PERSONERIA))) {
+		errors.rejectValue(campo, Constantes.KEY_CEDULA_JURIDICA_FORMATO_INCORRECTO);
+		}
+		}
+	
 
 	/**
 	 * Determina si un caracter representa un digito numerico en una mascara

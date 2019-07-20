@@ -490,6 +490,7 @@
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descuento")}</h4>
             </div>
             <div class="modal-body">
+                <form id="formularioDescuento" name="formularioDescuento">
                 <div class="row">
                     <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
                         <div class="form-group has-success">
@@ -498,6 +499,7 @@
                         </div>
                     </div>
                 </div> 
+                </form>
 
             </div>
             <div class="modal-footer">
@@ -1936,9 +1938,27 @@ function consultaParaReimprimir(data,tipoImpresion){
     });
 }
 /**
+* Camps requeridos
+**/
+var reglasDescuentoAplicar = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			aplicarDescuento : {
+				required : true,
+                numeroMayorCero:true,
+			}           
+		},
+		ignore : []
+
+	});
+	return validationOptions;
+};
+/**
 * Aplicar el descuento
 **/
 __CambiarDescuento(e){
+     $("#aplicarDescuento").attr("maxlength", 7);
+     $("#formularioDescuento").validate(reglasDescuentoAplicar());
     self.item = e.item; 
     self.rutaAutorizada = '';
     self.update()
@@ -3395,7 +3415,9 @@ function aplicarCambioLineaDetalle(){
 * Actualizar el descuento del codigo
 **/
 __actualizarDescuento(e){
-    _actualizarDesc(e)
+     if ($("#formularioDescuento").valid()) {
+        _actualizarDesc(e)
+     }
 }
 /**
 *Actualizar el descuento
@@ -3403,6 +3425,10 @@ __actualizarDescuento(e){
 function _actualizarDesc(e){
     var index     = self.detail.indexOf(self.item);
     var descuento = $(".aplicarDescuento").val();
+     if(descuento > 100){
+         swal('',"Error el descuento no puede ser mayor al 100%",'error');
+         return false
+    }
     if(descuento > 100){
         descuento =100
     }

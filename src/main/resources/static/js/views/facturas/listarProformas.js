@@ -7,10 +7,10 @@ var _Init = function () {
 	__Inicializar_Table('.tableListar');
 	agregarInputsCombos();
 	__comboEstado();
-	ListarFacturas();
+	_consulta();
 	
 	  $('.estado').change(function () {
-		ListarFacturas();
+		_consulta();
 	  })
 	
 }
@@ -29,44 +29,44 @@ function __comboEstado(){
   }
   
 
-var ListarFacturas = function(){
+
+
+var proformas = {data:[]};
+
+function _consulta(){
+	proformas = {data:[]}
 	var estado = $('.estado').val() == null?"":$('.estado').val();
-
-	var table  =  $('#tableListar').DataTable( {
-	"responsive": true,
-	 "bAutoWidth" : true,
-	"destroy":true,
-	"order": [ 3, 'desc' ],
-			"bInfo": true,
-			"bPaginate": true,
-			"bFilter" : true,
-			"bDeferRender": true ,
-			"sDom": 'lrtip',
-			"searching":true,
-	"processing": false,
-	"serverSide": false,
-	"sort" : "position",
-	"lengthChange": true,
-	"ajax" : {
-			"url":"ListarProformasActivasAjax.do?estado="+estado,
-			"deferRender": true,
-			"type":"GET",
-					"dataType": 'json',
-					
-			  },
-	"columns" : formato_tabla,
-	"language" : idioma_espanol,
-} );//fin del table
-agregarInputsCombos();
-EventoFiltro();
-__imprimirPTV();
-__BajarPDF();
-__CambiarEstado();
-__VerDetalle();
-__EnviarCorreosCliente();
-__CorreoAlternativo();
-__Anular();
-
+	var parametros = {
+		estado:estado,
+	}
+	__Inicializar_Table('.tableListar')  
+	$.ajax({
+	   url: "ListarProformasActivasAjax.do",
+	   datatype: "json",
+	   data:parametros ,
+	   method:"GET",
+	   success: function (result) {
+		   if(result.aaData.length > 0){
+			   loadListar(".tableListar",idioma_espanol,formato_tabla,result.aaData)
+			   proformas.data = result.aaData
+			   agregarInputsCombos();
+			   EventoFiltro();
+			   __imprimirPTV();
+			   __BajarPDF();
+			   __CambiarEstado();
+			   __VerDetalle();
+			   __EnviarCorreosCliente();
+			   __CorreoAlternativo();
+			   __Anular();
+ 		  }else{
+				agregarInputsCombos();
+		   }           
+	   },
+	   error: function (xhr, status) {
+		   mensajeErrorServidor(xhr, status);
+		   console.log(xhr);
+	   }
+	});
 }
 /**
 *  inicializar el listado
@@ -119,23 +119,21 @@ var idioma_espanol =
 }
 var formato_tabla = [ 
                               
-	{'data' :'consecutivoProforma'                              ,"name":"consecutivoProforma"             ,"title" : "#Proforma"     ,"autoWidth" :true },
-	{'data' :'id'                              ,"name":"id"             ,"title" : "#Id"     ,"autoWidth" :true },
-	{'data' :'usuarioCreacion.nombreUsuario'   ,"name":"usuarioCreacion.nombreUsuario" ,"title" : "Usuario"    ,"autoWidth" :true },
-	{'data' :'fechaEmisionSTR'                 ,"name":"fechaEmisionSTR" ,"title" : "Fecha Emision"    ,"autoWidth" :true },
+	{'data' :'consecutivoProforma',"name":"consecutivoProforma" ,"title" : "#Proforma" ,"autoWidth" :true },
+	{'data' :'consecutivo'        ,"name":"consecutivo"     ,"title" : "#Factura","autoWidth" :true },
+	{'data' :'usuarioCreacion'    ,"name":"usuarioCreacion" ,"title" : "Usuario","autoWidth" :true },
+	{'data' :'fechaEmisionSTR'    ,"name":"fechaEmisionSTR" ,"title" : "Fecha Emision"    ,"autoWidth" :true },
   
-	{'data' :'cliente' ,'data.display' :'cliente.nombreCompleto'                         ,"name":"cliente.nombreCompleto"                          ,"title" : "Cliente"   ,"autoWidth" :true ,
-	"render":function(cliente,type, row){
-		return cliente ==null?"":cliente.nombreCompleto.length > 50?cliente.nombreCompleto.substring(0,50):cliente.nombreCompleto;
-	}
+	{'data' :'cliente' ,'data.display' :'cliente',"name":"cliente" ,"title" : "Cliente"   ,"autoWidth" :true ,
+		"render":function(cliente,type, row){
+			return cliente ==null?"":cliente.length > 50?cliente.substring(0,50):cliente;
+		}
 	},
-
 	{'data' :'nombreFactura'  ,"name":"nombreFactura"                          ,"title" : "A nombre"   ,"autoWidth" :true ,
 		"render":function(nombreFactura,type, row){
 			return nombreFactura ==null?"":nombreFactura.length > 50 ? nombreFactura.substring(0,50):nombreFactura;
 		}
 	},
-
 	{'data' :'totalImpuestoSTR'       ,"name":"totalImpuestoSTR"        ,"title" : "Impuesto"  ,"autoWidth" :true },
 	{'data' :'totalDescuentosSTR'     ,"name":"totalDescuentosSTR"      ,"title" : "Descuento"  ,"autoWidth" :true },
 	{'data' :'totalComprobanteSTR'    ,"name":"totalComprobanteSTR"     ,"title" : "Total" ,"autoWidth" :true },

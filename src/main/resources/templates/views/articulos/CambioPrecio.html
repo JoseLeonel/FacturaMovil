@@ -7,7 +7,9 @@
 	<meta http-equiv="Content-Type" content="text/html; UTF-8">
 	
     <title>Mantenimiento de Articulos</title>
-    <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
+   <!-- jQuery 2.2.0 -->
+	<script th:src="@{/js/jquery-1.11.2.js}"></script>
+  
     <link rel="stylesheet" type="text/css" th:href="@{css/ventaPost.css}"/>
     <!-- RIOT -->
 	<script src="/riot/riot.js"></script>
@@ -69,16 +71,20 @@
         th, td {
             white-space: nowrap;
         }
+ .scrollerT {
+    width: 100% !important;
+    height: 800px;
+    overflow-y: scroll;
+}
     </style>
 </head>
 <body>
 
 <div layout:fragment="content">
- 	
-    <cambiar-precio></cambiar-precio>
-    
- 
- <articulo-imprimir></articulo-imprimir>   
+ 	<div class="scrollerT row col-md-12 col-sx-12 col-sm-12 col-lg-12 ">
+    	<cambiar-precio></cambiar-precio>
+		 <articulo-imprimir></articulo-imprimir>
+	</div>	    
     
 </div>
 

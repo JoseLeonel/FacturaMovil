@@ -93,10 +93,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																			resultado += d.getMontoImpuesto1() != null ? d.getMontoImpuesto1() : Constantes.ZEROS_DOUBLE;
 																																																			detalleFacturaElectronica.setImpuesto(resultado);
 																																																			detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
-																																																			detalleFacturaElectronica.setMontoExoneracion(d.getMontoExoneracion());
-																																																			detalleFacturaElectronica.setTipoDocumentoExoneracion(d.getTipoDocumentoExoneracion());
-																																																			detalleFacturaElectronica.setFechaEmisionExoneracion(Utils.getFechaGeneraReporte(d.getFechaEmisionExoneracion()));
-																																																			detalleFacturaElectronica.setNumeroDocumentoExoneracion(d.getNumeroDocumentoExoneracion());
+																																																			detalleFacturaElectronica.setMontoExoneracion(d.getMontoExoneracion() != null ? d.getMontoExoneracion() : Constantes.ZEROS_DOUBLE);
+																																																			detalleFacturaElectronica.setTipoDocumentoExoneracion(d.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : d.getTipoDocumentoExoneracion());
+																																																			detalleFacturaElectronica.setFechaEmisionExoneracion(d.getFechaEmisionExoneracion() != null ? Utils.getFechaGeneraReporte(d.getFechaEmisionExoneracion()) : Constantes.EMPTY);
+																																																			detalleFacturaElectronica.setNumeroDocumentoExoneracion(d.getNumeroDocumentoExoneracion() != null ? d.getNumeroDocumentoExoneracion() : Constantes.EMPTY);
 																																																			//
 																																																			return detalleFacturaElectronica;
 																																																		};
