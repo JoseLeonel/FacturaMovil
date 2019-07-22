@@ -62,6 +62,14 @@ $.validator.addMethod("numeroMayorCero",
         "Ingrese un n\u00FAmero mayor a cero."
 );
 
+$.validator.addMethod("numeroMayorIgualCero",
+        function(value, element) {
+	       
+		    return value  >= 0 || /^[1-9]\d*(\.\d+)?$/ig.test(value);
+        },
+        "Ingrese un n\u00FAmero mayor o igual a cero."
+);
+
 $.validator.addMethod("porcentajes",
         function(value, element) {
 	       

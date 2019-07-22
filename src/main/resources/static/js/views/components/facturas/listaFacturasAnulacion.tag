@@ -17,6 +17,7 @@
                     <input type="text" class="form-control " id="referenciaRazon" name= "referenciaRazon" >
                 </div>
             </div>
+             <input type="hidden" id='codigoActividad'        name='codigoActividad'         value="{factura.codigoActividad}" >
             <input type="hidden" id='tipoDoc'                 name='tipoDoc'                 value="{factura.tipoDoc}" >
             <input type="hidden" id='totalCredito'            name='totalCredito'            value="{factura.totalCredito}" >
             <input type="hidden" id='totalImpuesto'           name='totalImpuesto'           value="{factura.totalImpuesto}" >
@@ -132,17 +133,6 @@
                             </div>
                                               
                         </div>
-                        <div class="row">
-                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                                <div class="form-group">
-                                    <label>{$.i18n.prop("factura.tipo.documento")} </label>  
-                                    <select  class="form-control tipoDocumento" id="tipoDocumento" name="tipoDocumento" >
-                                        <option  value="0"  >{$.i18n.prop("todos.select")}</option>
-                                        <option each={comboTipoDocumentos} value="{estado}"  >{descripcion}</option>
-                                    </select>
-                                </div>  
-                            </div>
-                        </div>    
                       
                     </form>  
                 </div>
@@ -515,7 +505,6 @@ function _consulta(){
             fechaInicio:inicial,
             fechaFin:$('.fechaFinal').val(),
             idCliente:$('#clienteParam').val(),
-            tipoDocumento:$('#tipoDocumento').val(),
         };
         $("#tableListar").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListar')  
@@ -600,18 +589,16 @@ __regresarAlListado(){
 **/
 function __InformacionDataTable(){
     self.formato_tabla = [ 
-                               {'data' :'usuarioCreacion.nombreUsuario'   ,"name":"usuarioCreacion.nombreUsuario"    ,"title" : $.i18n.prop("usuario.nombreUsuario")     ,"autoWidth" :true },
-                               {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"                  ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true ,
-                                sort: "fechaEmision"},
-                             
-                               {'data' :'numeroConsecutivo'                    ,"name":"numeroConsecutivo"                     ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
+                               {'data' :'nombreUsuario'     ,"name":"nombreUsuario"    ,"title" : $.i18n.prop("usuario.nombreUsuario")     ,"autoWidth" :true },
+                               {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"  ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true },
+                               {'data' :'numeroConsecutivo' ,"name":"numeroConsecutivo" ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
                                    "render":function(numeroConsecutivo,type, row){
 									    return __TipoDocumentos(numeroConsecutivo,row)
 	 							    }
                                },
-                               {'data' :'cliente'                    ,"name":"cliente"                 ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
-                                   "render":function(cliente,type, row){
-									    return cliente ==null?"":cliente.cedula != "999999999999"?cliente.nombreCompleto:row.nombreFactura;
+                               {'data' :'nombreCompleto' ,"name":"nombreCompleto" ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
+                                   "render":function(nombreCompleto,type, row){
+									    return nombreCompleto ==null?"":row.cedula != "999999999999"?nombreCompleto:row.nombreFactura;
 	 							    }
                                },
                                {'data' :'totalImpuestoSTR'           ,"name":"totalImpuestoSTR"       ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true  },

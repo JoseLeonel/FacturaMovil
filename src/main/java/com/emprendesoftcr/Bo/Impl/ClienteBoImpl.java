@@ -88,6 +88,11 @@ public class ClienteBoImpl implements ClienteBo {
 		cliente.setEmpresa(empresa);
 		cliente.setDescuento(Constantes.ZEROS);
 		cliente.setEstado(Constantes.ESTADO_ACTIVO);
+		cliente.setTipoDocumentoExoneracion(Constantes.EMPTY);
+		cliente.setFechaEmisionExoneracion(null);
+		cliente.setPorcentajeExoneracion(Constantes.ZEROS);
+		cliente.setNombreInstitucionExoneracion(Constantes.EMPTY);
+		cliente.setLibreImpuesto(Constantes.LIBRE_IMPUESTOS_INACTIVO);
 		cliente.setOtraSena(Constantes.EMPTY);
 		cliente.setCreated_at(new Date());
 		cliente.setUpdated_at(new Date());

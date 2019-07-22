@@ -374,13 +374,14 @@ function __ComboBaseImponibles(){
     self.baseImponibles =[]
     self.update()
     self.baseImponibles.push({
-        codigo: 1,
-        descripcion:$.i18n.prop("combo.estado.Activo")
-     });
-    self.baseImponibles.push({
         codigo: 0,
         descripcion: $.i18n.prop("combo.estado.Inactivo")
      });
+    self.baseImponibles.push({
+        codigo: 1,
+        descripcion:$.i18n.prop("combo.estado.Activo")
+     });
+   
      self.update();
 }
 __AsignarTarifa(){

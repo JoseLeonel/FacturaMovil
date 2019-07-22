@@ -618,6 +618,7 @@ public class ArticuloController {
 			articulo.setTipoImpuesto1(Constantes.EMPTY);
 			articulo.setImpuesto1(Constantes.ZEROS_DOUBLE);
 			articulo.setCodigoTarifa1(Constantes.EMPTY);
+			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.ZEROS : articulo.getBaseImponible());
 
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 
@@ -728,7 +729,15 @@ public class ArticuloController {
 					}
 
 				}
+				if(!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
+					if(articulo.getBaseImponible().equals(Constantes.BASE_IMPONIBLE_ACTIVO)) {
+						result.rejectValue("tipoImpuesto", "error.articulo.tipoImpuesto1.base.imponible.incorrecta");
+					}	
+				}
+			
 			}
+		
+			
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
@@ -898,6 +907,11 @@ public class ArticuloController {
 						result.rejectValue("tipoImpuesto", "error.articulo.tipoImpuesto1.selectivoConsumo");
 					}
 
+				}
+				if(!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
+					if(articulo.getBaseImponible().equals(Constantes.BASE_IMPONIBLE_ACTIVO)) {
+						result.rejectValue("tipoImpuesto", "error.articulo.tipoImpuesto1.base.imponible.incorrecta");
+					}	
 				}
 			}
 

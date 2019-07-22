@@ -364,6 +364,7 @@ public class Constantes {
 	public static final String					MQ_NO_REASON_CODE																		= "0000";
 	public static final String					DATE_FORMATImpServi																	= "yyyy-MM-dd hh:mm:ss";
 	public static final String					DATE_FORMATImpServi1																= "yyyy-MM-dd hh:mm a";
+	public static final String					DATE_FORMATImpServi2																= "yyyy-MM-dd hh:mm ";
 	public static final String					DATE_FORMAT1																				= "dd/MM/yyyy hh:mm:ss";
 	public static final String					DATE_1900																						= "01/01/1990 00:00:00.0";
 	public static final String					DATE_FORMAT2																				= "dd/MM/yyyy";

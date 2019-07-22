@@ -35,7 +35,6 @@ import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Usuario;
-import com.emprendesoftcr.validator.ValidarClienteFormValidator;
 import com.emprendesoftcr.web.command.ClienteCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
@@ -78,9 +77,6 @@ public class ClientesController {
 
 	@Autowired
 	private StringPropertyEditor													stringPropertyEditor;
-
-	@Autowired
-	private ValidarClienteFormValidator										validarClienteFormValidator;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -191,28 +187,28 @@ public class ClientesController {
 			String nombreUsuario = request.getUserPrincipal().getName();
 			Usuario usuarioSesion = usuarioBo.buscar(nombreUsuario);
 
-			clienteCommand.setCedula(clienteCommand.getCedula() ==null?Constantes.EMPTY:clienteCommand.getCedula());
-			clienteCommand.setNombreCompleto(clienteCommand.getNombreCompleto() == null?Constantes.EMPTY:clienteCommand.getCedula());
-			clienteCommand.setCorreoElectronico(clienteCommand.getCorreoElectronico() ==null?Constantes.EMPTY:clienteCommand.getCorreoElectronico());
-			
-			if(clienteCommand.getCedula().equals(Constantes.EMPTY)) {
+			clienteCommand.setCedula(clienteCommand.getCedula() == null ? Constantes.EMPTY : clienteCommand.getCedula());
+			clienteCommand.setNombreCompleto(clienteCommand.getNombreCompleto() == null ? Constantes.EMPTY : clienteCommand.getNombreCompleto());
+			clienteCommand.setCorreoElectronico(clienteCommand.getCorreoElectronico() == null ? Constantes.EMPTY : clienteCommand.getCorreoElectronico());
+
+			if (clienteCommand.getCedula().equals(Constantes.EMPTY)) {
 				result.rejectValue("cedula", Constantes.KEY_REQUERIDO);
 			}
-			if(clienteCommand.getNombreCompleto().equals(Constantes.EMPTY)) {
+			if (clienteCommand.getNombreCompleto().equals(Constantes.EMPTY)) {
 				result.rejectValue("nombreCompleto", Constantes.KEY_REQUERIDO);
 			}
-			if(clienteCommand.getCorreoElectronico().equals(Constantes.EMPTY)) {
+			if (clienteCommand.getCorreoElectronico().equals(Constantes.EMPTY)) {
 				result.rejectValue("correoElectronico", Constantes.KEY_REQUERIDO);
 			}
-			if(clienteCommand.getTipoCedula().equals(Constantes.TIPO_CEDULA_FISICA)) {
-				
-				if(clienteCommand.getCedula().length() > 9) {
+			if (clienteCommand.getTipoCedula().equals(Constantes.TIPO_CEDULA_FISICA)) {
+
+				if (clienteCommand.getCedula().length() > 9) {
 					result.rejectValue("cedula", "error.cliente.cedula.fisica.tamano.incorrecto");
 				}
 			}
-			if(clienteCommand.getTipoCedula().equals(Constantes.TIPO_CEDULA_JURIDICA)) {
-				
-				if(clienteCommand.getCedula().length() > 10) {
+			if (clienteCommand.getTipoCedula().equals(Constantes.TIPO_CEDULA_JURIDICA)) {
+
+				if (clienteCommand.getCedula().length() > 10) {
 					result.rejectValue("cedula", "error.cliente.cedula.juridica.tamano.incorrecto");
 				}
 			}
@@ -235,6 +231,7 @@ public class ClientesController {
 							result.rejectValue("porcentajeExoneracion", "error.cliente.zeros.porcentajeExoneracion");
 						}
 					}
+					
 
 				}
 			}
@@ -315,27 +312,27 @@ public class ClientesController {
 	@ResponseBody
 	public RespuestaServiceValidator modificar(HttpServletRequest request, ModelMap model, @ModelAttribute ClienteCommand clienteCommand, BindingResult result, SessionStatus status) throws Exception {
 		try {
-			
-			clienteCommand.setCedula(clienteCommand.getCedula() ==null?Constantes.EMPTY:clienteCommand.getCedula());
-			clienteCommand.setNombreCompleto(clienteCommand.getNombreCompleto() == null?Constantes.EMPTY:clienteCommand.getCedula());
-			clienteCommand.setCorreoElectronico(clienteCommand.getCorreoElectronico() ==null?Constantes.EMPTY:clienteCommand.getCorreoElectronico());
-			
-			if(clienteCommand.getCedula().equals(Constantes.EMPTY)) {
+
+			clienteCommand.setCedula(clienteCommand.getCedula() == null ? Constantes.EMPTY : clienteCommand.getCedula());
+			clienteCommand.setNombreCompleto(clienteCommand.getNombreCompleto() == null ? Constantes.EMPTY : clienteCommand.getNombreCompleto());
+			clienteCommand.setCorreoElectronico(clienteCommand.getCorreoElectronico() == null ? Constantes.EMPTY : clienteCommand.getCorreoElectronico());
+
+			if (clienteCommand.getCedula().equals(Constantes.EMPTY)) {
 				result.rejectValue("cedula", Constantes.KEY_REQUERIDO);
 			}
-			if(clienteCommand.getNombreCompleto().equals(Constantes.EMPTY)) {
+			if (clienteCommand.getNombreCompleto().equals(Constantes.EMPTY)) {
 				result.rejectValue("nombreCompleto", Constantes.KEY_REQUERIDO);
 			}
-			if(clienteCommand.getCorreoElectronico().equals(Constantes.EMPTY)) {
+			if (clienteCommand.getCorreoElectronico().equals(Constantes.EMPTY)) {
 				result.rejectValue("correoElectronico", Constantes.KEY_REQUERIDO);
 			}
-			if(clienteCommand.getTipoCedula().equals(Constantes.TIPO_CEDULA_FISICA)) {
-				if(clienteCommand.getCedula().length() > 9) {
+			if (clienteCommand.getTipoCedula().equals(Constantes.TIPO_CEDULA_FISICA)) {
+				if (clienteCommand.getCedula().length() > 9) {
 					result.rejectValue("cedula", "error.cliente.cedula.fisica.tamano.incorrecto");
 				}
 			}
-			if(clienteCommand.getTipoCedula().equals(Constantes.TIPO_CEDULA_JURIDICA)) {
-				if(clienteCommand.getCedula().length() > 10) {
+			if (clienteCommand.getTipoCedula().equals(Constantes.TIPO_CEDULA_JURIDICA)) {
+				if (clienteCommand.getCedula().length() > 10) {
 					result.rejectValue("cedula", "error.cliente.cedula.juridica.tamano.incorrecto");
 				}
 			}

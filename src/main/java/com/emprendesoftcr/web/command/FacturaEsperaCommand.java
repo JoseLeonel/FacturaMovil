@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
@@ -116,6 +117,8 @@ public class FacturaEsperaCommand {
 
 	private Date			referenciaFechaEmision;
 	private Double		totalImpuestoServicio;
+	private String  tipoDocSTR;
+	
 
 	private String		codigoActividad;
 	public FacturaEsperaCommand(Factura factura) {
@@ -177,6 +180,7 @@ public class FacturaEsperaCommand {
 //		this.impuestoServicioIS += factura.getTotalOtrosCargos() != null ? factura.getTotalOtrosCargos() : Constantes.ZEROS_DOUBLE;
 		this.impuestoServicioISSTR = Utils.formateadorMiles(this.impuestoServicioIS);
 		this.codigoActividad = factura.getCodigoActividad();
+		this.tipoDocSTR = MapEnums.ENUM_TIPO_DOC.get(factura.getTipoDoc());
 		
 	}
 
@@ -236,6 +240,19 @@ public class FacturaEsperaCommand {
 		this.totalDescuentosSTR = detalle.getFactura().getTotalDescuentoSTR();
 		this.versionEsquemaXML = detalle.getFactura().getVersionEsquemaXML();
 		this.codigoActividad = detalle.getFactura().getCodigoActividad();
+		this.tipoDocSTR = MapEnums.ENUM_TIPO_DOC.get(detalle.getFactura().getTipoDoc());
+	}
+	
+	
+
+	
+	public String getTipoDocSTR() {
+		return tipoDocSTR;
+	}
+
+	
+	public void setTipoDocSTR(String tipoDocSTR) {
+		this.tipoDocSTR = tipoDocSTR;
 	}
 
 	public Double getImpuestoServicioIS() {

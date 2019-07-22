@@ -324,7 +324,7 @@
                             <div class="TotalesContainer"  onclick = {__MostrarFormularioDePago}>
                                  <div  show={soloParaChinos == false} class="elementoTotales">{$.i18n.prop("factura.resumen.subTotal")}   <span id="lblSubtotal"> {subTotalGeneral}   </span> </div> 
                                  <div  show={soloParaChinos == false && totalDescuentos > 0} class="elementoTotales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos}   </span> </div> 
-                                 <div  show={soloParaChinos == false && totalImpuesto1 > 0} class="elementoTotales" >{$.i18n.prop("factura.resumen.impuesto")}     <span id="lblSubtotal"> {totalImpuesto}    </span> </div> 
+                                 <div  show={soloParaChinos == false && totalImpuesto > 0} class="elementoTotales" >{$.i18n.prop("factura.resumen.impuesto")}     <span id="lblSubtotal"> {totalImpuesto}    </span> </div> 
                                  
                                  <div  show={soloParaChinos == false && montoExoneracion > 0} class="elementoTotales">{$.i18n.prop("factura.resumen.exoneracion")} <span id="lblSubtotal"> {montoExoneracion} </span> </div> 
                                  <div  show={soloParaChinos == false} class="elementoTotales">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}         </span> </div> 
@@ -1496,7 +1496,7 @@ function __InformacionDataTableDia(){
                                },
                                 {'data' :'cliente'                    ,"name":"cliente"                     ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
                                    "render":function(cliente,type, row){
-									    return cliente ==null?"":cliente.cedula != "999999999999"?cliente.nombreCompleto:row.nombreFactura;
+									    return cliente ==null?"":row.cedula != "999999999999"?cliente:row.nombreFactura;
 	 							    }
                                },
                                {'data' :'totalImpuestoSTR'               ,"name":"totalImpuestoSTR"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true },
@@ -1608,8 +1608,7 @@ var reglasDescuentoAplicar = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
 		rules : {
 			aplicarDescuento : {
-				required : true,
-                numeroMayorCero:true,
+			    numeroMayorIgualCero:true,
 			}           
 		},
 		ignore : []
@@ -2171,10 +2170,13 @@ function cargarDetallesFacturaEnEspera(data){
     $('#totalEfectivo').focus()
     $('#totalEfectivo').select()
     // __calculate(); 
-    if(verificarSiClienteFrecuente()){
-             __ComboTipoDocumentos(1)
-    }else{
-         __ComboTipoDocumentos(2)
+    if($(".tipoDoc").val() !="88"){
+        if(verificarSiClienteFrecuente()){
+                __ComboTipoDocumentos(1)
+        }else{
+            __ComboTipoDocumentos(2)
+        }
+
     }
     __aplicarExoneracionPorCliente()
 }
@@ -3590,11 +3592,13 @@ function __seleccionarClientes() {
 
         }
          $('#modalClientes').modal('hide') 
-         if(verificarSiClienteFrecuente()){
-             __ComboTipoDocumentos(1)
-         }else{
-             __ComboTipoDocumentos(2)
-         }
+        if($(".tipoDoc").val() !="88"){
+            if(verificarSiClienteFrecuente()){
+                __ComboTipoDocumentos(1)
+            }else{
+                __ComboTipoDocumentos(2)
+            }
+        }
         
     });
 }

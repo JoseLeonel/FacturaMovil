@@ -404,8 +404,7 @@ function EventoFiltro(){
 
 function mostrarListadoPrincipal(){
 	$("#mostrarListado").show();
-	var table = $('#tableListar').DataTable();
-	table.ajax.reload();
+	_consulta()
 }
 
 function mostrarListadoPrincipalSinActualizar(){

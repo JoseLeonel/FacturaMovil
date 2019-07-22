@@ -77,6 +77,8 @@ import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.Vendedor;
+import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
+import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstado;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstadoAndUsuario;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndFacturada;
@@ -86,7 +88,9 @@ import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.pdf.ReportePdfView;
 import com.emprendesoftcr.service.ProcesoHaciendaService;
 import com.emprendesoftcr.validator.FacturaFormValidator;
+import com.emprendesoftcr.web.command.FacturaAnulacionCommand;
 import com.emprendesoftcr.web.command.FacturaCommand;
+import com.emprendesoftcr.web.command.FacturaDiaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacionMesa;
 import com.emprendesoftcr.web.command.ProformasByEmpresaAndEstadoCommand;
@@ -781,7 +785,7 @@ public class FacturasController {
 		Collection<ProformasByEmpresaAndEstado> objetoAnuladoAdmin = null;
 		Collection<ProformasByEmpresaAndFacturada> objetoFacturasAdmin = null;
 
-		if (request.isUserInRole(Constantes.ROL_ADMINISTRADOR_CAJERO)|| request.isUserInRole(Constantes.ROL_ADMINISTRADOR_EMPRESA)|| request.isUserInRole(Constantes.ROL_ADMINISTRADOR_RESTAURANTE)) {
+		if (request.isUserInRole(Constantes.ROL_ADMINISTRADOR_CAJERO) || request.isUserInRole(Constantes.ROL_ADMINISTRADOR_EMPRESA) || request.isUserInRole(Constantes.ROL_ADMINISTRADOR_RESTAURANTE)) {
 			objetoProformaAdmin = estado.equals(Constantes.FACTURA_ESTADO_PROFORMAS) ? consultasNativeBo.findByProformasByEmpresaAndEstado(usuarioSesion.getEmpresa(), estado) : null;
 			objetoAnuladoAdmin = estado.equals(Constantes.FACTURA_ESTADO_ANULADA_PROFORMA) ? consultasNativeBo.findByProformasByEmpresaAndEstado(usuarioSesion.getEmpresa(), estado) : null;
 			objetoFacturasAdmin = objetoProforma == null && objetoAnulado == null ? consultasNativeBo.findByProformasByEmpresaFacturada(usuarioSesion.getEmpresa()) : null;
@@ -802,7 +806,7 @@ public class FacturasController {
 					// no se carga el usuario del sistema el id -1
 					if (proformasByEmpresa.getId().longValue() > 0L) {
 						solicitudList.add(new ProformasByEmpresaAndEstadoCommand(proformasByEmpresa));
-								}
+					}
 				}
 
 			}
@@ -827,7 +831,6 @@ public class FacturasController {
 				}
 
 			}
-
 
 		} else {
 			if (objetoProforma != null) {
@@ -935,15 +938,56 @@ public class FacturasController {
 	 * @param tipoDocumento
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/listarFacturasActivasSinNotasCreditosCompletasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarFacturasActivasSinNotasCreditosCompletasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam String tipoDocumento) {
+	public RespuestaServiceDataTable listarFacturasActivasSinNotasCreditosCompletasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Cliente cliente = clienteBo.buscar(idCliente);
-		DataTableDelimitador query = DelimitadorBuilder.getAnulacion(request, fechaInicio, fechaFin, cliente, usuarioSesion.getEmpresa(), usuarioBo, tipoDocumento);
 
-		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
+		Date fechaInicioP = Utils.parseDate(fechaInicio);
+		Date fechaFinalP = Utils.parseDate(fechaFin);
+		if (!fechaInicio.equals(Constantes.EMPTY) && !fechaFin.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+			}
+
+		}
+
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+
+
+		String inicio1 = dateFormat1.format(fechaInicioP);
+		String fin1 = dateFormat1.format(fechaFinalP);
+
+		Integer idUsuario = Constantes.ZEROS;
+		if (request.isUserInRole(Constantes.ROL_ADMINISTRADOR_CAJERO) || request.isUserInRole(Constantes.ROL_ADMINISTRADOR_EMPRESA) || request.isUserInRole(Constantes.ROL_ADMINISTRADOR_RESTAURANTE)) {
+			idUsuario = Constantes.ZEROS;
+		} else {
+			idUsuario = usuarioSesion.getId();
+		}
+
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		Collection<FacturasSinNotaCreditoNative> objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, Constantes.FACTURA_ESTADO_FACTURADO, inicio1, fin1, cliente !=null?cliente.getId():Constantes.ZEROS_LONG);
+		List<Object> solicitudList = new ArrayList<Object>();
+		if (objetos != null) {
+			for (FacturasSinNotaCreditoNative facturasDelDia : objetos) {
+				if (facturasDelDia.getId().longValue() > 0L) {
+					solicitudList.add(new FacturaAnulacionCommand(facturasDelDia));
+				}
+			}
+
+		}
+
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+
+//		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
 
 	/**
@@ -1058,15 +1102,36 @@ public class FacturasController {
 	@ResponseBody
 	public RespuestaServiceDataTable listarFacturasDiaAjax(HttpServletRequest request, HttpServletResponse response) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		Cliente cliente = null;
+		Integer idUsuario = Constantes.ZEROS;
+		if (request.isUserInRole(Constantes.ROL_ADMINISTRADOR_CAJERO) || request.isUserInRole(Constantes.ROL_ADMINISTRADOR_EMPRESA) || request.isUserInRole(Constantes.ROL_ADMINISTRADOR_RESTAURANTE)) {
+			idUsuario = Constantes.ZEROS;
+		} else {
+			idUsuario = usuarioSesion.getId();
+		}
 
 		Date fechahoy = new Date();
-		DateFormat df = new SimpleDateFormat(Constantes.DATE_FORMAT7);
+		DateFormat df = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String reportDate = df.format(fechahoy);
-		String tipoDocumento = Constantes.COMBO_TODOS;
-		DataTableDelimitador query = DelimitadorBuilder.get(request, reportDate, reportDate, cliente, usuarioSesion.getEmpresa(), usuarioBo, tipoDocumento);
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		Collection<FacturasDelDiaNative> objetos = consultasNativeBo.findByFacturasDelDia(usuarioSesion.getEmpresa(), idUsuario, Constantes.FACTURA_ESTADO_FACTURADO, reportDate);
+		List<Object> solicitudList = new ArrayList<Object>();
+		if (objetos != null) {
+			for (FacturasDelDiaNative facturasDelDia : objetos) {
+				if (facturasDelDia.getId().longValue() > 0L) {
+					solicitudList.add(new FacturaDiaCommand(facturasDelDia));
+				}
+			}
 
-		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
+		}
+
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+//		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
 
 	/**

@@ -9,8 +9,11 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.ConsultasNativeDao;
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.sqlNativo.BaseNativeQuery;
+import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
+import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNativeByEmpresaAndFechaAndCliente;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstado;
@@ -93,6 +96,48 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		Query query = entityManager.createNativeQuery(queryStr, ProformasByEmpresaAndFacturadaAndUsuario.class);
 		return (Collection<ProformasByEmpresaAndFacturada>) query.getResultList();
 	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<FacturasDelDiaNative> findByFacturasDelDia(Empresa empresa,Integer idusuario,Integer estado,String fecha){
+		String queryStr = getQueryBase(FacturasDelDiaNative.class);
+		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
+		if (idusuario > Constantes.ZEROS) {
+			queryStr = queryStr.replaceAll("facturas.usuario_id =" ," facturas.usuario_id ='"+ idusuario.toString() + "' ");	
+		}else {
+			queryStr = queryStr.replaceAll("facturas.usuario_id =" ," ");
+		}
+		
+		queryStr = queryStr.replaceAll(":ESTADO", estado.toString());
+		queryStr = queryStr.replaceAll(":FECHA", "'"+fecha+"'");	
+		
+		Query query = entityManager.createNativeQuery(queryStr, FacturasDelDiaNative.class);
+		return (Collection<FacturasDelDiaNative>) query.getResultList();
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa,Integer idusuario,Integer estado,String fechaInicial,String fechaFinal,Long idCliente){
+		String queryStr = getQueryBase(FacturasSinNotaCreditoNative.class);
+		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
+		queryStr = queryStr.replaceAll(":ESTADO", estado.toString());
+		queryStr = queryStr.replaceAll(":FECHAINICIAL","'"+ fechaInicial+"'");
+		queryStr = queryStr.replaceAll(":FECHAFINAL","'"+ fechaFinal+"'");
+		if (idusuario > Constantes.ZEROS) {
+			queryStr = queryStr.replaceAll("facturas.usuario_id =" ," facturas.usuario_id ='"+ idusuario.toString() + "' ");	
+		}else {
+			queryStr = queryStr.replaceAll("facturas.usuario_id =" ," ");
+		}
+		if (idCliente > Constantes.ZEROS_LONG) {
+			queryStr = queryStr.replaceAll("and facturas.cliente_id =" ," and facturas.cliente_id ='"+ idCliente.toString() + "' ");	
+		}else {
+			queryStr = queryStr.replaceAll("and facturas.cliente_id =" ," ");
+		}
+		
+		Query query = entityManager.createNativeQuery(queryStr, FacturasSinNotaCreditoNative.class);
+		return (Collection<FacturasSinNotaCreditoNative>) query.getResultList();
+		
+	}
+	
 	private static <T> String getQueryBase(Class<T> claseObjecto) {
 		return ((claseObjecto).getDeclaredAnnotationsByType(BaseNativeQuery.class))[0].query();
 	}

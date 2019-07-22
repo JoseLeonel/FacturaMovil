@@ -432,8 +432,8 @@ public class FacturaBoImpl implements FacturaBo {
 			detalle.setImpuesto1(detalleFacturaCommand.getImpuesto1() != null ? detalleFacturaCommand.getImpuesto1() : Constantes.ZEROS_DOUBLE);
 			detalle.setCodigoTarifa(articulo.getCodigoTarifa() != null && getLibreImpuesto(factura.getCliente()) == Boolean.FALSE ? articulo.getCodigoTarifa() : Constantes.EMPTY);
 			detalle.setCodigoTarifa1(articulo.getCodigoTarifa1() != null && getLibreImpuesto(factura.getCliente()) == Boolean.FALSE ? articulo.getCodigoTarifa1() : Constantes.EMPTY);
-			detalle.setTipoImpuesto(!detalleFacturaCommand.getTipoImpuesto().equals(Constantes.EMPTY) ? detalleFacturaCommand.getTipoImpuesto() : Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
-			detalle.setTipoImpuesto1(!detalleFacturaCommand.getTipoImpuesto1().equals(Constantes.EMPTY) ? detalleFacturaCommand.getTipoImpuesto1() : Constantes.TIPO_IMPUESTO_VENTA_ARTICULO);
+			detalle.setTipoImpuesto(!detalleFacturaCommand.getTipoImpuesto().equals(Constantes.EMPTY) ? detalleFacturaCommand.getTipoImpuesto() : Constantes.EMPTY);
+			detalle.setTipoImpuesto1(!detalleFacturaCommand.getTipoImpuesto1().equals(Constantes.EMPTY) ? detalleFacturaCommand.getTipoImpuesto1() : Constantes.EMPTY);
 			detalle.setFechaEmisionExoneracion(detalleFacturaCommand.getFechaEmisionExoneracion());
 			detalle.setNombreInstitucionExoneracion(detalleFacturaCommand.getNombreInstitucionExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNombreInstitucionExoneracion());
 			detalle.setNumeroDocumentoExoneracion(detalleFacturaCommand.getNumeroDocumentoExoneracion() == null ? Constantes.EMPTY : detalleFacturaCommand.getNumeroDocumentoExoneracion());
@@ -591,9 +591,9 @@ public class FacturaBoImpl implements FacturaBo {
 	private Double getTotalServExentos(String tipoImpuesto, String unidadMedida, Double montoImpuesto, Double montoImpuesto1, Double subTotal) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		Boolean esMercancia = Boolean.TRUE;
-		if (!tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
-			esMercancia = Boolean.FALSE;
-		}
+//		if (!tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
+//			esMercancia = Boolean.FALSE;
+//		}
 		if (!unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) && !unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) && !unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) && !unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
 			esMercancia = Boolean.FALSE;
 		}
@@ -632,9 +632,9 @@ public class FacturaBoImpl implements FacturaBo {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		Boolean esMercancia = Boolean.TRUE;
 
-		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
-			esMercancia = Boolean.FALSE;
-		}
+//		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
+//			esMercancia = Boolean.FALSE;
+//		}
 		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
 			esMercancia = Boolean.FALSE;
 		}
@@ -661,9 +661,9 @@ public class FacturaBoImpl implements FacturaBo {
 	private Double getTotalMercanciasGravadas(String tipoImpuesto, String unidadMedida, Double montoImpuesto, Double montoImpuesto1, Double subTotal, Integer porcentajeExoneracion) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		Boolean esMercancia = Boolean.TRUE;
-		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
-			esMercancia = Boolean.FALSE;
-		}
+//		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
+//			esMercancia = Boolean.FALSE;
+//		}
 		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
 			esMercancia = Boolean.FALSE;
 		}
@@ -713,9 +713,9 @@ public class FacturaBoImpl implements FacturaBo {
 	private Double getTotalMercExonerada(String tipoImpuesto, String unidadMedida, Double montoTotal, Integer porcentajeExoneracion) {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		Boolean esGravado = Boolean.TRUE;
-		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
-			esGravado = Boolean.FALSE;
-		}
+//		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
+//			esGravado = Boolean.FALSE;
+//		}
 		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
 			esGravado = Boolean.FALSE;
 		}
@@ -736,9 +736,9 @@ public class FacturaBoImpl implements FacturaBo {
 	private Double getTotalServExonerado(String tipoImpuesto, String unidadMedida, Double montoExonerado) {
 
 		Double resultado = Constantes.ZEROS_DOUBLE;
-		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
-			resultado = montoExonerado;
-		}
+//		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
+//			resultado = montoExonerado;
+//		}
 		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
 			resultado = montoExonerado;
 		}
@@ -759,9 +759,9 @@ public class FacturaBoImpl implements FacturaBo {
 		if (montoImpuesto.equals(Constantes.ZEROS_DOUBLE) && montoImpuesto1.equals(Constantes.ZEROS_DOUBLE)) {
 			return resultado;
 		}
-		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
-			resultado = SubTotal;
-		}
+//		if (tipoImpuesto.equals(Constantes.TIPO_CODIGO_ARTICULO_POR_SERVICIO)) {
+//			resultado = SubTotal;
+//		}
 		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
 			resultado = SubTotal;
 		}

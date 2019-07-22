@@ -358,7 +358,7 @@
 <style type ="text/css">
 .scrollerT {
     width: 100% !important;
-    height: 800px;
+    height: 650px;
     overflow-y: scroll;
 }
 .botones{
@@ -529,6 +529,7 @@ self.on('mount',function(){
     __tipoCodigo()
      LimpiarArticulo()
     __Consulta()
+
     $('.collapse').collapse("show")
     window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
@@ -1521,13 +1522,14 @@ function __ComboEstados(){
 function __ComboBaseImponibles(){
     self.baseImponibles =[]
     self.update()
-    self.baseImponibles.push({
-        codigo: 1,
-        descripcion:$.i18n.prop("combo.estado.Activo")
-     });
+    
     self.baseImponibles.push({
         codigo: 0,
         descripcion: $.i18n.prop("combo.estado.Inactivo")
+     });
+     self.baseImponibles.push({
+        codigo: 1,
+        descripcion:$.i18n.prop("combo.estado.Activo")
      });
      self.update();
 }

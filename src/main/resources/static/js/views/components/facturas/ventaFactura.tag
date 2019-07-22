@@ -1830,7 +1830,7 @@ function agregarInputsCombos_Facturas_Dias(){
 **/
 function __InformacionDataTableDia(){
     self.formato_tabla_dias = [ 
-                               {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true 
+                               {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true ,
                                },
                              
                                {'data' :'numeroConsecutivo'                    ,"name":"numeroConsecutivo"                     ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
@@ -1838,21 +1838,22 @@ function __InformacionDataTableDia(){
 									    return __TipoDocumentos(numeroConsecutivo,row)
 	 							    }
                                },
-                               {'data' :'cliente'                    ,"name":"cliente"                     ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
+                                {'data' :'cliente'                    ,"name":"cliente"                     ,"title" : $.i18n.prop("factura.cliente")   ,"autoWidth" :true ,
                                    "render":function(cliente,type, row){
-									    return cliente ==null?"":cliente.nombreCompleto;
+									    return cliente ==null?"":row.cedula != "999999999999"?cliente:row.nombreFactura;
 	 							    }
                                },
-                               {'data' :'totalImpuestoSTR'       ,"name":"totalImpuestoSTR"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true },
-                               {'data' :'totalDescuentosSTR'     ,"name":"totalDescuentosSTR"      ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true},
-                               {'data' :'totalComprobanteSTR'    ,"name":"totalComprobanteSTR"     ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true },
+                               {'data' :'totalImpuestoSTR'               ,"name":"totalImpuestoSTR"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true },
+                               {'data' :'totalDescuentosSTR'             ,"name":"totalDescuentosSTR"      ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true },
+                               {'data' :'totalComprobanteSTR'            ,"name":"totalComprobanteSTR"     ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true },
                                {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
                                       return __Opciones(id,type,row);
                                  }
-	      		            }];
+                               },
+	      		            ];
     self.update();
- 
+   
 }
 function __Opciones(){
 var agregar  = '<a href="#"  class="btn btnReimprimir btn-primary form-control" title="Imprimir" role="button"> <i class="glyphicon glyphicon glyphicon-print"></i></a>';
@@ -1944,8 +1945,7 @@ var reglasDescuentoAplicar = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
 		rules : {
 			aplicarDescuento : {
-				required : true,
-                numeroMayorCero:true,
+		        numeroMayorIgualCero:true,
 			}           
 		},
 		ignore : []

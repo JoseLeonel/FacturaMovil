@@ -116,6 +116,7 @@ public class MapEnums {
             put("05", "Nota de despacho").
             put("06", "Contrato").
             put("07", "Procedimiento").
+            put("88", "Proforma").
             put("08", "Comprobante emitido en contigencia").
             put(" ", "Compras").
             put("99", "Otros").build();

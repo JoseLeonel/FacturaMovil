@@ -835,16 +835,18 @@ function __FacturaEnEspera(factura){
 **/
 function cargarDetallesFacturaEnEspera(data){
     self.detail                = []
+    self.factura = null;
     self.update()
      $.each(data, function( index, modeloTabla ) {
         if(self.factura == null){
             self.factura = modeloTabla.factura
-            self.cliente = self.factura
+            self.cliente = self.factura.cliente
             self.vendedor = self.factura.vendedor
+            self.update()
             self.factura.fechaCredito = self.factura.fechaCredito !=null?__displayDate_detail(self.factura.fechaCredito):null
             self.cliente  = modeloTabla.factura.cliente
             self.vendedor = modeloTabla.factura.vendedor
-            self.factura.tipoDoc = __TipoDocumentos(self.factura.id,self.factura)
+            self.factura.tipoDoc = modeloTabla.tipoDocSTR
             self.update()
 
         }else{
@@ -874,6 +876,7 @@ function cargarDetallesFacturaEnEspera(data){
     
      
 }
+
 /**
 * cargar los estados de la compra
 **/
