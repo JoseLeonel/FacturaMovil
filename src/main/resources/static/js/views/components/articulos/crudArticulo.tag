@@ -59,39 +59,39 @@
                                 <div class="row">   
                                     <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.costo")} </label>
-                                        <input type="number" step="any" class="form-control costo campoNumerico" id="costo" name="costo" value="{articulo.costo.toFixed(0)}"  onkeyup ={__ActualizarPreciosCosto}>
+                                        <input type="number" step="any" class="form-control costo campoNumerico" id="costo" name="costo" value="{articulo.costo}"  onkeyup ={__ActualizarPreciosCosto}>
                                     </div>
                                     <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.precioPublico")}  <span class="requeridoDato">*</span></label>
-                                        <input type="number" step="any" class="form-control precioPublico campoNumerico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoGananciaPublico} value="{articulo.precioPublico.toFixed(0)}"  >
+                                        <input type="number" step="any" class="form-control precioPublico campoNumerico" id="precioPublico" name="precioPublico" onkeyup ={__CalculoGananciaPublico} value="{articulo.precioPublico}"  >
                                     </div>
                                     <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.gananciaPrecioPublico")} % </label>
-                                        <input type="number" step="any" class="form-control gananciaPrecioPublico campoNumerico" id="gananciaPrecioPublico" name="gananciaPrecioPublico" value="{articulo.gananciaPrecioPublico.toFixed(5)}"  onkeyup ={__CalculoGananciaSinPrecioPublico}>
+                                        <input type="number" step="any" class="form-control gananciaPrecioPublico campoNumerico" id="gananciaPrecioPublico" name="gananciaPrecioPublico" value="{articulo.gananciaPrecioPublico}"  onkeyup ={__CalculoGananciaSinPrecioPublico}>
                                     </div>
 
                                 </div>    
                                 <div class="row">
                                      <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.precioMayorista")}  </label>
-                                        <input type="number" step="any" class="form-control precioMayorista campoNumerico" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista.toFixed(0)}" onkeyup={__CalculoGananciaMayorista} >
+                                        <input type="number" step="any" class="form-control precioMayorista campoNumerico" id="precioMayorista" name="precioMayorista" value="{articulo.precioMayorista}" onkeyup={__CalculoGananciaMayorista} >
                                     </div>  
 
                                      <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.gananciaPrecioMayorista")} % </label>
-                                        <input type="number" step="any" class="form-control gananciaPrecioMayorista campoNumerico" id="gananciaPrecioMayorista" name="gananciaPrecioMayorista" value="{articulo.gananciaPrecioMayorista.toFixed(5)}"  onkeyup ={__CalculoGananciaSinPrecioMayorista}>
+                                        <input type="number" step="any" class="form-control gananciaPrecioMayorista campoNumerico" id="gananciaPrecioMayorista" name="gananciaPrecioMayorista" value="{articulo.gananciaPrecioMayorista}"  onkeypress ={__CalculoGananciaSinPrecioMayorista}>
                                     </div>
 
                                     <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label  class="tamanoLetra">{$.i18n.prop("articulo.precioEspecial")}  </label>
-                                        <input type="number" step="any" class="form-control precioEspecial campoNumerico" id="precioEspecial" name="precioEspecial" value="{articulo.precioEspecial.toFixed(0)}"  onkeyup={__CalculoGananciaEspecial}>
+                                        <input type="number" step="any" class="form-control precioEspecial campoNumerico" id="precioEspecial" name="precioEspecial" value="{articulo.precioEspecial}"  onkeyup={__CalculoGananciaEspecial}>
                                     </div>                        
 
                                 </div>
                                 <div class="row">
                                     <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                                         <label class="tamanoLetra" >{$.i18n.prop("articulo.gananciaPrecioEspecial")} % </label>
-                                        <input type="number" sp="any" class="form-control gananciaPrecioEspecial campoNumerico" id="gananciaPrecioEspecial" name="gananciaPrecioEspecial" value="{articulo.gananciaPrecioEspecial.toFixed(5)}"  onkeyup ={__CalculoGananciaSinPrecioEspecial}>
+                                        <input type="number" sp="any" class="form-control gananciaPrecioEspecial campoNumerico" id="gananciaPrecioEspecial" name="gananciaPrecioEspecial" value="{articulo.gananciaPrecioEspecial}"  onkeyup ={__CalculoGananciaSinPrecioEspecial}>
                                     </div>
 
                                     <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
@@ -529,6 +529,8 @@ self.on('mount',function(){
     __tipoCodigo()
      LimpiarArticulo()
     __Consulta()
+    
+   
 
     $('.collapse').collapse("show")
     window.addEventListener( "keydown", function(evento){
@@ -1001,10 +1003,10 @@ __CalculoGananciaMayorista(e){
     var precioMayorista    =  __valorNumerico($('#precioMayorista').val())
     self.articulo.gananciaPrecioMayorista    = precioMayorista >0?_porcentajeGanancia(costo,impuesto,impuesto1,precioMayorista):0
     self.articulo.gananciaPrecioMayorista  =__valorNumerico(self.articulo.gananciaPrecioMayorista)
-    self.articulo.gananciaPrecioMayorista = self.articulo.gananciaPrecioMayorista.toFixed(2)
+    self.articulo.gananciaPrecioMayorista = self.articulo.gananciaPrecioMayorista
     self.articulo.precioMayorista = precioMayorista >0?precioMayorista:self.articulo.precioMayorista
    self.articulo.precioMayorista = __valorNumerico(self.articulo.precioMayorista)
-   self.articulo.precioMayorista  = self.articulo.precioMayorista.toFixed(2) 
+   self.articulo.precioMayorista  = self.articulo.precioMayorista
     self.update()
 }
 /**
@@ -1017,7 +1019,7 @@ __CalculoGananciaEspecial(e){
     var precioEspecial = __valorNumerico($('#precioEspecial').val())
     self.articulo.gananciaPrecioEspecial = precioEspecial >0?_porcentajeGanancia(costo,impuesto,impuesto1,precioEspecial):0
     self.articulo.gananciaPrecioEspecial = __valorNumerico(self.articulo.gananciaPrecioEspecial)
-    self.articulo.gananciaPrecioEspecial = self.articulo.gananciaPrecioEspecial.toFixed(2)
+    self.articulo.gananciaPrecioEspecial = self.articulo.gananciaPrecioEspecial
     self.articulo.precioEspecial = precioEspecial > 0?precioEspecial:self.articulo.precioEspecial
     self.update()
 }
@@ -1044,7 +1046,7 @@ __CalculoGananciaPublico(e){
     self.articulo.gananciaPrecioPublico    = precioPublico >0?_porcentajeGanancia(costo,impuesto,impuesto1,precioPublico):0
     self.articulo.gananciaPrecioPublico = __valorNumerico(self.articulo.gananciaPrecioPublico )
     self.articulo.gananciaPrecioPublico = self.articulo.gananciaPrecioPublico
-    $('#gananciaPrecioPublico').val(self.articulo.gananciaPrecioPublico.toFixed(5))
+    $('#gananciaPrecioPublico').val(self.articulo.gananciaPrecioPublico)
     self.articulo.precioPublico = precioPublico
     self.update()
 }
@@ -1073,7 +1075,7 @@ __CalculoGananciaSinPrecioEspecial(e){
     self.articulo.precioEspecial = __valorNumerico(self.articulo.precioEspecial)
     self.articulo.precioEspecial = self.articulo.precioEspecial
     self.update()
-    $('.precioEspecial').val(self.articulo.precioEspecial.toFixed(2))
+    $('.precioEspecial').val(self.articulo.precioEspecial)
 }
 /**
 * Porcentaje de ganancia de Precio mayorista
@@ -1100,7 +1102,7 @@ __CalculoGananciaSinPrecioMayorista(e){
     }
     self.articulo.precioMayorista = total>0?total:self.articulo.precioMayorista
     self.articulo.precioMayorista =  __valorNumerico(self.articulo.precioMayorista) 
-    self.articulo.precioMayorista = self.articulo.precioMayorista.toFixed(2)
+    self.articulo.precioMayorista = self.articulo.precioMayorista
     self.update()
     $('.precioMayorista').val(self.articulo.precioMayorista)
 }
@@ -1132,7 +1134,7 @@ function __ActualizarPreciosGananciaPrecioPublico(){
     }
     self.articulo.precioPublico = total>0?total:self.articulo.precioPublico
     self.articulo.precioPublico = __valorNumerico(self.articulo.precioPublico)
-    self.articulo.precioPublico = self.articulo.precioPublico.toFixed(2)
+    self.articulo.precioPublico = self.articulo.precioPublico
     self.update()
     $('.precioPublico').val(self.articulo.precioPublico)
 

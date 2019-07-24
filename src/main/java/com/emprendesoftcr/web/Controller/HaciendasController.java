@@ -261,6 +261,7 @@ public class HaciendasController {
 	 * @param httpEntity
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/service/callback.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	@Transactional
@@ -411,7 +412,7 @@ public class HaciendasController {
 			fechaFinalt = Utils.sumarDiasFecha(fechaFinalt, 1);
 		}
 
-		DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMATImpServi1);
+		DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 //		delimitador.addFiltro(new JqGridFilter("facturaFechaEmision", dateFormat.format(fechaInicio), "date>="));
 //		delimitador.addFiltro(new JqGridFilter("facturaFechaEmision", dateFormat.format(fechaFinal), "dateFinal<="));
 //		

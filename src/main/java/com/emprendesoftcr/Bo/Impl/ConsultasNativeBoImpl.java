@@ -11,6 +11,7 @@ import com.emprendesoftcr.Dao.ConsultasNativeDao;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
+import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNativeByEmpresaAndFechaAndCliente;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstado;
@@ -72,6 +73,12 @@ public class ConsultasNativeBoImpl implements ConsultasNativeBo {
 	public Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa, Integer idusuario, Integer estado, String fechaInicial, String fechaFinal, Long idCliente) {
 		
 		return consultasNativeDao.findByFacturasAnulacion(empresa, idusuario, estado, fechaInicial, fechaFinal, idCliente);
+	}
+
+	@Override
+	public Collection<HaciendaComprobarNative> findByComprabarDocumentoPendienteaceptar() {
+		
+		return consultasNativeDao.findByComprabarDocumentoPendienteaceptar();
 	}
 
 	

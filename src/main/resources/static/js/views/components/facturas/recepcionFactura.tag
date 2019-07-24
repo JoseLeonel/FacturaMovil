@@ -11,21 +11,14 @@
                     <h1 class="box-title"><i class="fa fa-edit"></i>&nbsp {$.i18n.prop("titulo.aceptar.factura")}</h1>
                 </div>
                 <div class="box-body">
-                    <form id="formularioMensajeArchivo" name="formularioMensajeArchivo" class="advanced-search-form">
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 left">
                                 <label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>
                             </div>
                         </div>
-                        <div class="row">
-                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label> {$.i18n.prop("archivo.mensaje")}  <span class="requeridoDato">*</span></label>
-					     		<input type="file" id="fileUploadMensajeArchivo" class="form-control fileUpload"/>
-                            </div>
-                        </div>
-					</form>
+                    
 				</div>
-				<div class="box-body" show={mostrarCargaArchivo}>
+				<div class="box-body" >
                     <form id="formulario" name="formulario" class="advanced-search-form">
                         <div class="row">
                              <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
@@ -42,7 +35,7 @@
 							     	<h1>Como aceptar la compra electronica: </h1>
 									 <p>1. Le llegara un correo electronico con tres archivos.</p>
 									 <p>2. Descargue el documento cuyo nombre es "XML".</p>
-									 <p>3. Clic Seleccionar XML de respuesta </p>
+									 <p>3. Verificar el xml de respuesta se encuentre Aceptado por hacienda </p>
 									 <p>3. Clic Seleccionar XML de Factura </p>
 									 <p>4. Si todo esta bien presionar aceptar compra </p>
 									</div> 
@@ -292,7 +285,6 @@
 				                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
 				                        <thead id="detalleFactura">
 				                            <tr>
-				                                <th class="table-header" >Codigo</th>
 												<th class="table-header" >{$.i18n.prop("factura.cantidad")}</th>
 				                                <th class="table-header" >{$.i18n.prop("factura.unidadMedida")}</th>
 				                                <th class="table-header" >{$.i18n.prop("factura.detalle")}</th>
@@ -541,9 +533,7 @@
 				__cargarXML($(this).val());
 			});
 			
-			$('input[id=fileUploadMensajeArchivo]').change(function() {
-				__cargarXMLMensaje($(this).val());
-			});
+			
 			
 		    __listadoTipoCedulas();
 		    __listadoMediosPago();
@@ -764,23 +754,10 @@ function BuscarActividadComercial(){
                 	
                 	//Se cargan los datos para presentar el detalle de una factura
 
-                	//Se verifica que el XML no sea el del mensaje de hacienda enviado al correo
-					if($(xmlDoc).find("MensajeHacienda").length > 0){
-	    	  		    self.mostrarFormulario         = false;
-	    	  		  	self.mostrarCargaArchivoMensaje = true;
-	    	   		    self.mostrarCargaArchivo        = true;
-	    	   		    self.update();					
-	    	   		 	sweetAlert("", "Favor de revisar esta cargando el XML de respuesta, cargue el correcto", "error");
-					}else{
+                
 						console.log($(xmlDoc).find("Clave").first().text());
 						console.log(self.mensaje.facturaClave);
-						if(self.mensaje.facturaClave != $(xmlDoc).find("Clave").first().text()){
-		    	  		    self.mostrarFormulario         = false;
-		    	  		  	self.mostrarCargaArchivoMensaje = true;
-		    	   		    self.mostrarCargaArchivo        = true;
-		    	   		    self.update();					
-		    	   		 	sweetAlert("", "Favor de revisar el XML no corresponde al mensaje aceptacion, cargue el correcto", "error");							
-						}else{
+						
 							//Se cargan los datos del emisor
 							var emisor = $(xmlDoc).find("Emisor");
 		                    self.archivo.emisorNombre = emisor.find("Nombre").text();
@@ -821,9 +798,9 @@ function BuscarActividadComercial(){
 							$("#detalleFactura").find("tr:gt(0)").remove();
 		                    var detallesServicioXml = $(xmlDoc).find("DetalleServicio");
 		                    $(detallesServicioXml).each(function () {
+								var valor = __valorString($(this).find("CodigoComercial").find("Codigo").text())
 		                    	$(this).children().each(function () {
 				                    var row = "<tr>" + 
-					                    		  "<td>" + __valorFloat($(this).find("Codigo").text()) + "</td>" + 
 												  "<td>" + __valorFloat($(this).find("Cantidad").text()) + "</td>" + 
 					                    		  "<td>" + __valorString($(this).find("UnidadMedida").text()) + "</td>" + 
 					                    		  "<td>" + __valorString($(this).find("Detalle").text()) + "</td>" + 
@@ -835,7 +812,7 @@ function BuscarActividadComercial(){
 				      	            $('#detalleFactura tr:last').after(row);
 				      	            
 				      	          	self.detalleServicio.data.push({
-					      	            numeroLinea     : __valorEnterot($(this).find("NumeroLinea").text()),
+					      	            numeroLinea     : 0,
 					      	            cantidad        : __valorFloat($(this).find("Cantidad").text()),
 					      	            unidadMedida    : __valorString($(this).find("UnidadMedida").text()),
 					      	            detalle         : __valorString($(this).find("Detalle").text()),
@@ -845,8 +822,8 @@ function BuscarActividadComercial(){
 					      	            montoTotalLinea : __valorFloat($(this).find("MontoTotalLinea").text()),
 					      	            impuestoNeto    : __valorFloat($(this).find("ImpuestoNeto").text()),
 					      	            baseImponible   : __valorFloat($(this).find("BaseImponible").text()),
-					      	            codigoComercialTipo   : __valorString($(this).find("CodigoComercial").find("Tipo").text()),
-					      	            codigoComercialCodigo : __valorString($(this).find("CodigoComercial").find("Codigo").text()),
+					      	            codigoComercialTipo   : "",
+					      	            codigoComercialCodigo : "",
 					      	            descuentoMonto        : __valorFloat($(this).find("Descuento").find("MontoDescuento").text()),
 					      	            descuentoNaturaleza   : __valorString($(this).find("Descuento").find("NaturalezaDescuento").text()),
 					      	            impuestoCodigo        : __valorString($(this).find("Impuesto").find("Codigo").text()),
@@ -948,8 +925,8 @@ function BuscarActividadComercial(){
 		    	  		    self.mostrarFormulario     = true;
 		    	   		    self.mostrarCargaArchivo   = true;
 		    	   		 	self.mostrarCargaArchivoMensaje = true;														
-						}
-					}
+						
+					
                 }
 
                 reader.readAsText($("#fileUpload")[0].files[0]);

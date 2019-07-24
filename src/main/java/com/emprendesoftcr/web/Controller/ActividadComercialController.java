@@ -22,6 +22,7 @@ import com.emprendesoftcr.Bo.EmpresaActividadComercialBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
+import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
 import com.emprendesoftcr.Utils.RespuestaServiceValidator;
 import com.emprendesoftcr.modelo.EmpresaActividadComercial;
@@ -83,12 +84,15 @@ public class ActividadComercialController {
 	public RespuestaServiceDataTable<?> listarEmpresaAjax(HttpServletRequest request, HttpServletResponse response) {
 
 		DataTableDelimitador delimitadores = null;
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		delimitadores = new DataTableDelimitador(request, "EmpresaActividadComercial");
 		if (delimitadores.getColumnData() == null) {
 			// Se ordena por prioridad por defecto se crearon en 9999
 			delimitadores.setColumnData("principal");
 			delimitadores.setColumnOrderDir("desc");
 		}
+		JqGridFilter dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
+		delimitadores.addFiltro(dataTableFilter);
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_POR_EMPRESA);
 	}
 
@@ -133,7 +137,7 @@ public class ActividadComercialController {
 			EmpresaActividadComercial empresaActividadComercial = new EmpresaActividadComercial();
 			if (empresaActividadComercialCommand.getDescripcion() != null) {
 				if (empresaActividadComercialCommand.getDescripcion().length() > 180) {
-					empresaActividadComercial.setDescripcion(empresaActividadComercialCommand.getDescripcion().substring(1, 180));
+					empresaActividadComercial.setDescripcion(empresaActividadComercialCommand.getDescripcion().substring(0, 180));
 				} else {
 					empresaActividadComercial.setDescripcion(empresaActividadComercialCommand.getDescripcion());
 				}

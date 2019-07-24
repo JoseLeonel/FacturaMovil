@@ -283,6 +283,7 @@ public class ClientesController {
 			cliente.setCanton(Constantes.EMPTY);
 			cliente.setBarrio(Constantes.EMPTY);
 			cliente.setCelular(Constantes.ZEROS);
+			cliente.setTelefono(clienteCommand.getTelefono() == null?Constantes.ZEROS:clienteCommand.getTelefono());
 
 			cliente.setEmpresa(usuarioSesion.getEmpresa());
 			cliente.setCreated_at(new Date());

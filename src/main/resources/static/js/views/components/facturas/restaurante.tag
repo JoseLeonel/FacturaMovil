@@ -1097,7 +1097,7 @@
                                         </div>
 
                                     </div>        
-                                    <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group ">
+                                    <div show = {mostrarCamposIngresoContado == false} class="form-group ">
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 
                                         <div  class="form-group input-group date datepickerFechaCredito" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
                                             <input type="text" class="form-control fechaCredito" name="fechaCredito" id="fechaCredito" value="{factura.fechaCredito}" >
@@ -1106,7 +1106,7 @@
                                             </div>
                                         </div>
                                     </div>    
-                                    <div class="form-group " show = {!mostrarCamposIngresoContado || factura.fechaCredito}>
+                                    <div class="form-group " show = {mostrarCamposIngresoContado ==false}>
                                         <label>{$.i18n.prop("factura.plazoCredito")}</label> 
                                         <input type="number" id = "plazoCreditoL"  name "plazoCreditoL" class="form-control plazoCreditoL" value="{factura.plazoCredito}" >
                                     </div>
@@ -1827,45 +1827,7 @@ td.col-xl-12, th.col-xl-12 {
         descripcion:""
     }
     self.on('mount',function(){
-        $("#formularioFactura").validate(reglasDeValidacionFactura());
-        $("#formularioAgregarNombreTiquete").validate(reglasAgregarNombre());
-        $("#formularioAgregarNombreTiquete1").validate(reglasAgregarNombre());
-        $("#formularioModalCambiarNombreTiquete").validate(reglasCambiarNombre());
-        _Empresa()
-        __informacionData()
-        __informacionData_vendedores()
-        __InicializarTabla('.tableListaCliente')
-        __InicializarTabla('.tableListaInventario')
-        __InicializarTabla('.tableListaVendedor')
-        agregarInputsCombos_Articulo()
-        __comboCondicionPago()
-        __ComboTipoDocumentos(0)
-        __ListaDeClientes()
-        __ListaDeVendedores()
-        __Teclas()
-        __TipoCambio()
-        __ListaMesas()
-        __RolAdministrador()   
-        cargaBilletes()
-        $(".nota").attr("maxlength", 80);
-        $('.datepickerFechaCredito').datepicker(
-            {
-              format: 'yyyy-mm-dd',
-              startDate: '-0d',
-              todayHighlight:true,
-            }
-        );  
-        __agregarArticulos()      
-        var retrievedObject = JSON.parse(localStorage.getItem('DetallesNueva'));
-        if(retrievedObject !=null){
-            self.detail = retrievedObject
-            var facturaObject = JSON.parse(localStorage.getItem('facturaNueva'));
-            self.factura = facturaObject
-              var clienteObject = JSON.parse(localStorage.getItem('cliente'));
-            self.cliente = clienteObject
-            self.update()
-            __calculate()
-        }
+       
         __ListaActividadesComercales()
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
@@ -1909,6 +1871,45 @@ function __ListaActividadesComercales(){
                 self.empresaActividadComercial   = result.aaData
                 self.update()
                 BuscarActividadComercial()
+                 $("#formularioFactura").validate(reglasDeValidacionFactura());
+                $("#formularioAgregarNombreTiquete").validate(reglasAgregarNombre());
+                $("#formularioAgregarNombreTiquete1").validate(reglasAgregarNombre());
+                $("#formularioModalCambiarNombreTiquete").validate(reglasCambiarNombre());
+                _Empresa()
+                __informacionData()
+                __informacionData_vendedores()
+                __InicializarTabla('.tableListaCliente')
+                __InicializarTabla('.tableListaInventario')
+                __InicializarTabla('.tableListaVendedor')
+                agregarInputsCombos_Articulo()
+                __comboCondicionPago()
+                __ComboTipoDocumentos(0)
+                __ListaDeClientes()
+                __ListaDeVendedores()
+                __Teclas()
+                __TipoCambio()
+                __ListaMesas()
+                __RolAdministrador()   
+                cargaBilletes()
+                $(".nota").attr("maxlength", 80);
+                $('.datepickerFechaCredito').datepicker(
+                    {
+                    format: 'yyyy-mm-dd',
+                    startDate: '-0d',
+                    todayHighlight:true,
+                    }
+                );  
+                __agregarArticulos()      
+                var retrievedObject = JSON.parse(localStorage.getItem('DetallesNueva'));
+                if(retrievedObject !=null){
+                    self.detail = retrievedObject
+                    var facturaObject = JSON.parse(localStorage.getItem('facturaNueva'));
+                    self.factura = facturaObject
+                    var clienteObject = JSON.parse(localStorage.getItem('cliente'));
+                    self.cliente = clienteObject
+                    self.update()
+                    __calculate()
+                }
 
             }
         },
@@ -2519,9 +2520,10 @@ __CambiarCantidad(e){
         $('#modalRolUsuario').modal('show')     
    }else{
         $("#cambiarCantidadArticulo" ).focus()
-        $("#cambiarCantidadArticulo" ).val(cantidad)
+        
         $('#modalCambiarCantidad').modal({backdrop: 'static', keyboard: true}) 
         $('#modalCambiarCantidad').modal('show')      
+        $("#cambiarCantidadArticulo" ).val(self.item.cantidad)
    }
 }
 /**
@@ -3033,7 +3035,7 @@ function __Init(){
     self.mostrarCodigoBarra            = true;
     self.mostrarFormularioPago         = false
     self.mostarParaCrearNuevaFactura   = true
-    self.mostrarCamposIngresoContado   = true
+    
     self.mostrarReferencias            = false 
     self.mostrarMesas	           	   = true //muestra la pantalla mesas
     self.mostrarFacturasMesas          = false
@@ -3313,12 +3315,7 @@ function cargarDetallesFacturaEnEspera(data){
     self.totalCambioPagar = 0
     self.totalCambioPagarSTR =0
     self.update()
-      // __calculate(); 
-    if(verificarSiClienteFrecuente()){
-             __ComboTipoDocumentos(1)
-    }else{
-         __ComboTipoDocumentos(2)
-    }
+    
     __aplicarExoneracionPorCliente()
 }
 /** 
@@ -4179,15 +4176,23 @@ function __calculate() {
     self.factura.totalImpuesto           = Math.round(__valorNumerico(totalImpuesto)) + Math.round(__valorNumerico(totalImpuesto1))
     
     //Se verifica si la mesa tiene impuestos
-    if(self.factura.mesa.impuestoServicio  == true){
-        self.factura.totalImpuestoServ       = Math.round(__valorNumerico(subTotal * 0.10))
-        self.factura.totalVentaNeta          = Math.round(__valorNumerico((totalVenta-totalDescuento) + self.factura.totalImpuestoServ))
-        self.factura.totalComprobante        = Math.round(__valorNumerico(totalComprobante + self.factura.totalImpuestoServ))
-        self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
+    if (typeof self.factura.mesa.impuestoServicio !== 'undefined'){
+        if(self.factura.mesa.impuestoServicio  == true){
+            self.factura.totalImpuestoServ       = Math.round(__valorNumerico(subTotal * 0.10))
+            self.factura.totalVentaNeta          = Math.round(__valorNumerico((totalVenta-totalDescuento) + self.factura.totalImpuestoServ))
+            self.factura.totalComprobante        = Math.round(__valorNumerico(totalComprobante + self.factura.totalImpuestoServ))
+            self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
+        }else{
+            self.factura.totalVentaNeta          = Math.round(__valorNumerico(totalVenta-totalDescuento))
+            self.factura.totalComprobante        = Math.round(__valorNumerico(totalComprobante))
+            self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
+        }
+
     }else{
         self.factura.totalVentaNeta          = Math.round(__valorNumerico(totalVenta-totalDescuento))
         self.factura.totalComprobante        = Math.round(__valorNumerico(totalComprobante))
         self.totalComprobante                = formatoDecimales(self.factura.totalComprobante,2);
+
     }
     self.totalDescuentos                 = formatoDecimales(self.factura.totalDescuentos,2);
     self.totalImpuesto                   = formatoDecimales(self.factura.totalImpuesto,2);
@@ -4355,27 +4360,11 @@ function __seleccionarClientes() {
         
         
          $('#modalClientes').modal('hide') 
-         if(verificarSiClienteFrecuente()){
-             __ComboTipoDocumentos(1)
-         }else{
-             __ComboTipoDocumentos(2)
-         }
+         
         
     });
 }
-/**
-*Verifica si es cleinte frecuente por la cedula y el nombre  sino es se actualiza el tipo de documento combo
-* para que salga factura o proforma
-**/
-function verificarSiClienteFrecuente(){
-    if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE")){
-        return true
-    }
-    if(self.cliente.cedula.indexOf("999999999999")){
-        return true
-    }
-    return false;
-}
+
 
 /**
 * Aplicar la exoneracion de detalles
@@ -4451,7 +4440,28 @@ function __aplicarExoneracionPorCliente(){
        self.update();
 
     }
+    if(verificarClienteFrecuente()){
+        __ComboTipoDocumentos(0)
 
+    }else{
+        __ComboTipoDocumentosSinClienteFrecuente()
+
+    }
+
+}
+
+
+function verificarClienteFrecuente(){
+    if(self.cliente == null){
+        return false;
+    }
+    if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE") != -1){
+        return true;        
+    }
+    if(self.cliente.cedula.indexOf("999999999999") != -1){
+       return true; 
+    }
+    return false;
 }
 /**
 * cargar los estados de la factura
@@ -4475,25 +4485,7 @@ function __comboCondicionPago(){
 function __ComboTipoDocumentos(valor){
     self.comboTipoDocumentos = []
     self.update()
-    // Tipo documento unicamente proforma y factura 
-    if(valor == 1){
-        self.comboTipoDocumentos.push({
-            estado:"01",
-            descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
-        })
-       self.update()
-       return true 
-    }
-     if(valor == 2){
-         self.comboTipoDocumentos.push({
-            estado:"04",
-            descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
-        })
-       self.update()
-       return true 
-    }
-
-    //Prioridad de orden
+       //Prioridad de orden
     if(self.empresa.prioridadFacturar == 1 ){
         self.comboTipoDocumentos.push({
             estado:"01",
@@ -4515,8 +4507,23 @@ function __ComboTipoDocumentos(valor){
     })
  
     }
+      self.update()
+}
+function __ComboTipoDocumentosSinClienteFrecuente(){
+    self.comboTipoDocumentos = []
+    self.update()
+    self.comboTipoDocumentos.push({
+        estado:"01",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
+    })
+    self.comboTipoDocumentos.push({
+        estado:"04",
+        descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
+    })
+ 
     self.update()
 }
+
 /**
 * cargar los estados de la factura
 **/

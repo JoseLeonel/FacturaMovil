@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
+import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.EmpresaBo;
@@ -51,6 +52,7 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.RecepcionFactura;
+import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
 import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.pdf.ReportePdfView;
@@ -220,6 +222,8 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	@Autowired
 	DetalleBo																													detalleBo;
+	@Autowired
+	ConsultasNativeBo																									consultasNativeBo;
 
 	@Autowired
 	RecepcionFacturaBo																								recepcionFacturaBo;
@@ -292,10 +296,21 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 //
 //	}
 
+//	@Scheduled(cron = "0 0/10 * * * ?")
+//	@Override
+	public synchronized void taskAnularProformas() {
+		try {
+			log.info("Inicio Proceso de Anulacion de Proformas de empresas con criterio de dias  {}", new Date());
+		} catch (Exception e) {
+			log.error("** Error2  Proceso de anulacion de proformas: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		} 
+	}
+	
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -448,7 +463,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				recepcion.setComprobanteXml(base64);
 
 				// Ambiente de pruebas
-				recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 				// San Ana
 				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
@@ -463,10 +478,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 				// Inventario
-				// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				// Alajuela
-				// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+				 //recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 				ObjectMapper mapperObj = new ObjectMapper();
 				String jsonStr = mapperObj.writeValueAsString(recepcion);
@@ -491,7 +506,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+	@Scheduled(cron = "0 0/20 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -500,10 +515,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			log.info("Inicio Comprobacion de documentos  {}", new Date());
 			// Semaforo semaforo = semaforoBo.findByEstado(Constantes.SEMAFORO_ESTADO_COMPROBAR_DOCUMENTOS);
 			// Listado de los documentos Pendientes de aceptar por hacienda
-			Collection<Hacienda> listaHacienda = haciendaBo.findByEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA, Constantes.HACIENDA_ESTADO_ERROR);
+			Collection<HaciendaComprobarNative> listaHacienda = consultasNativeBo.findByComprabarDocumentoPendienteaceptar();
 			if (listaHacienda != null) {
 				if (!listaHacienda.isEmpty()) {
-					for (Hacienda hacienda : listaHacienda) {
+					for (HaciendaComprobarNative hacienda : listaHacienda) {
 						try {
 
 							Date fecha = new Date();
@@ -514,8 +529,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 							if (resta > 0) {
 								resta = resta / (1000 * 60);
 							}
-							if (resta > 10 || hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ERROR) || hacienda.getTipoDoc().equals(Constantes.HACIENDA_TIPODOC_COMPRAS)) {
-								log.info("Comprobando Documentos hacienda:" + hacienda.getConsecutivo() + " Empresa" + hacienda.getEmpresa().getNombre());
+							log.info("Comprobando Documentos:" + hacienda.getConsecutivo() + " Empresa :" + hacienda.getNombreEmpresa());
+							if (resta >= 20 || hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ERROR) || hacienda.getTipoDoc().equals(Constantes.HACIENDA_TIPODOC_COMPRAS)) {
+								log.info("Documento cumplio 3 horas::" + hacienda.getConsecutivo() + " Empresa :" + hacienda.getNombreEmpresa());
 								if (hacienda.getReintentosAceptacion() != null) {
 									if (hacienda.getReintentosAceptacion() <= Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
 										haciendaBD = haciendaBo.findById(hacienda.getId());
@@ -648,6 +664,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
 							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
 						}
+						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_ACEPTADO_HACIENDA_STR)) {
+							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+						}
 						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
 							rechazado = Boolean.FALSE;
 							if (haciendaBD.getReintentosAceptacion() != null) {
@@ -664,6 +683,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						}
 						log.info("*status1: " + status);
 						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_ACEPTADO_HACIENDA_STR)) {
+							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+						}
+						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
 							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
 						}
 						log.info("*status2: " + status);
@@ -1112,7 +1134,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
@@ -1226,7 +1248,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+	@Scheduled(cron = "0 0/15 * * * ?")
 	@Override
 	public synchronized void procesoFirmadoRecepcionFactura() throws Exception {
 		try {

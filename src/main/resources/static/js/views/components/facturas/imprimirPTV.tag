@@ -434,6 +434,13 @@ self.on('mount',function(){
 
 
 function qr(){
+    if(self.parametro.factura.clave == null){
+        return false
+    }
+    if(self.parametro.factura.clave.length ==0){
+        return false
+    }
+    
      var options = {
         // render method: 'canvas', 'image' or 'div'
         render: self.parametro.factura.empresa.imprimirCelular == 1?'image':'div',

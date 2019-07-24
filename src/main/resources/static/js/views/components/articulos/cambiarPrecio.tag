@@ -57,7 +57,7 @@
                                                 </div>
                                                 <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.gananciaPrecioPublico")}%  </label>
-                                                    <input type="number" step="any" class="campoNumerico gananciaPrecioPublico" id="gananciaPrecioPublico" name="gananciaPrecioPublico"  value="{articulo.gananciaPrecioPublico.toFixed(5)}"  onkeyup ={__CalculoGananciaSinPrecioPublico}>
+                                                    <input type="number" step="any" class="campoNumerico gananciaPrecioPublico" id="gananciaPrecioPublico" name="gananciaPrecioPublico"  value="{articulo.gananciaPrecioPublico}"  onkeyup ={__CalculoGananciaSinPrecioPublico}>
                                                 </div>
                                                 <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4 has-success">
                                                     <label class="tamanoLetraTotales" >{$.i18n.prop("articulo.precioPublico")}  <span class="requeridoDato">*</span></label>

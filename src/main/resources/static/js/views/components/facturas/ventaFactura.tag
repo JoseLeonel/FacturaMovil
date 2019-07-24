@@ -665,7 +665,7 @@
                                             </div>
                                         </div>
                                     </div>        
-                                    <div show = {!mostrarCamposIngresoContado || factura.fechaCredito} class="form-group ">
+                                    <div show = {mostrarCamposIngresoContado == false} class="form-group ">
                                         <label >{$.i18n.prop("factura.fecha.credito")}</label> 
                                         <div  class="form-group input-group date datepickerFechaCredito" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
                                             <input type="text" class="form-control fechaCredito" name="fechaCredito" id="fechaCredito" value="{factura.fechaCredito}" >
@@ -674,7 +674,7 @@
                                             </div>
                                         </div>
                                     </div>    
-                                    <div class="form-group " show = {!mostrarCamposIngresoContado || factura.fechaCredito}>
+                                    <div class="form-group " show = "{mostrarCamposIngresoContado == false}">
                                         <label>{$.i18n.prop("factura.plazoCredito")}</label> 
                                         <input type="number" id = "plazoCreditoL"  name "plazoCreditoL" class="form-control plazoCreditoL" value="{factura.plazoCredito}" >
                                     </div>
@@ -2675,12 +2675,7 @@ function cargarDetallesFacturaEnEspera(data){
     $('#totalBanco').val(null)
     $('#totalEfectivo').focus()
     $('#totalEfectivo').select()
-    // __calculate(); 
-    if(verificarSiClienteFrecuente()){
-             __ComboTipoDocumentos(1)
-    }else{
-         __ComboTipoDocumentos(2)
-    }
+   
     __aplicarExoneracionPorCliente()
 }
 /** 
@@ -3704,34 +3699,11 @@ function __seleccionarClientes() {
         
         
          $('#modalClientes').modal('hide') 
-         if(verificarSiClienteFrecuente()){
-             __ComboTipoDocumentos(1)
-         }else{
-             __ComboTipoDocumentos(2)
-         }
+       
         
     });
 }
-/**
-*Verifica si es cleinte frecuente por la cedula y el nombre  sino es se actualiza el tipo de documento combo
-* para que salga factura o proforma
-**/
-function verificarSiClienteFrecuente(){
-    if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE")){
-        return true
-    }
-    if(self.cliente.cedula.indexOf("999999999999")){
-        return true
-    }
-    return false;
-}
 
-/**
-* Aplicar la exoneracion de detalles
-**/
-/**
-* Aplicar la exoneracion de detalles
-**/
 /**
 * Aplicar la exoneracion de detalles
 **/
@@ -3739,8 +3711,8 @@ function __aplicarExoneracionPorCliente(){
     var aplicaExo = false
     var porcentaje = self.cliente.libreImpuesto == 1?1:self.cliente.porcentajeExoneracion / 100
     var valorTotal = 0
-    for (var count = 0; count < self.detail.length; count++) {
-        self.item          = self.detail[count];
+    for (var count = 0;count < self.detail.length; count++) {
+        self.item = self.detail[count];
         self.cliente.porcentajeExoneracion = parseFloat(self.cliente.porcentajeExoneracion)
             if(self.item.montoImpuesto > 0 || self.item.montoImpuesto1 > 0 ){
                 if(self.cliente.porcentajeExoneracion > 0 || self.cliente.libreImpuesto == 1 ){
@@ -3805,7 +3777,24 @@ function __aplicarExoneracionPorCliente(){
        self.update();
 
     }
+    if(verificarClienteFrecuente()){
+      __ComboTipoDocumentos()
+    }else{
+        __ComboTipoDocumentosSinClienteFrecuente()
+    }
 
+}
+function verificarClienteFrecuente(){
+    if(self.cliente == null){
+        return false;
+    }
+    if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE") != -1){
+        return true;        
+    }
+    if(self.cliente.cedula.indexOf("999999999999") != -1){
+       return true; 
+    }
+    return false;
 }
 
 /**
@@ -3831,27 +3820,6 @@ function __ComboTipoDocumentos(valor){
     self.comboTipoDocumentos = []
     self.update()
     // Tipo documento unicamente proforma y factura 
-    if(valor == 1){
-        self.comboTipoDocumentos.push({
-            estado:"01",
-            descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
-        })
-        self.comboTipoDocumentos.push({
-            estado:"88",
-            descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
-        })
-       self.update()
-       return true 
-    }
-     if(valor == 2){
-         self.comboTipoDocumentos.push({
-            estado:"04",
-            descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
-        })
-       self.update()
-       return true 
-    }
-
     //Prioridad de orden
     if(self.empresa.prioridadFacturar == 1 ){
         self.comboTipoDocumentos.push({
@@ -3883,6 +3851,25 @@ function __ComboTipoDocumentos(valor){
 
     }
     self.update()
+}
+
+function __ComboTipoDocumentosSinClienteFrecuente(){
+    self.comboTipoDocumentos = []
+    self.update()
+    // Tipo documento unicamente proforma y factura 
+        self.comboTipoDocumentos.push({
+            estado:"01",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
+        })
+        self.comboTipoDocumentos.push({
+            estado:"04",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
+        })
+        self.comboTipoDocumentos.push({
+            estado:"88",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
+        })
+     self.update()
 }
 /**
 * cargar los estados de la factura

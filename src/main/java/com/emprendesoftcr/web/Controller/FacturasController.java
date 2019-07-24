@@ -656,7 +656,7 @@ public class FacturasController {
 
 		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
-		if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
+		if (usuarioBo.isAdministrador_vendedor(usuarioSesion)) {
 			dataTableFilter = new JqGridFilter("usuarioCreacion.id", "'" + usuarioSesion.getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
 		}
@@ -670,7 +670,7 @@ public class FacturasController {
 	public RespuestaServiceDataTable listarActivasCajeroAjax(HttpServletRequest request, HttpServletResponse response) {
 		RespuestaServiceDataTable respuestaServiceDataTable = new RespuestaServiceDataTable();
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_CAJERO)) {
+		if (!usuarioBo.isAdministrador_cajero(usuarioSesion)) {
 			return respuestaServiceDataTable;
 
 		}
@@ -688,7 +688,7 @@ public class FacturasController {
 
 		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
-		if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
+		if (usuarioBo.isAdministrador_vendedor(usuarioSesion)) {
 			dataTableFilter = new JqGridFilter("usuarioCreacion.id", "'" + usuarioSesion.getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
 		}
@@ -752,7 +752,7 @@ public class FacturasController {
 		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
-		if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
+		if (usuarioBo.isAdministrador_vendedor(usuarioSesion)) {
 			dataTableFilter = new JqGridFilter("usuarioCreacion.id", "'" + usuarioSesion.getId().toString() + "'", "=");
 			delimitadores.addFiltro(dataTableFilter);
 		}
@@ -770,12 +770,8 @@ public class FacturasController {
 	@RequestMapping(value = "/ListarProformasActivasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarProformasActivasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "estado", required = false) Integer estado) {
-
+		Boolean administrador = Boolean.FALSE;
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		DataTableDelimitador delimitadores = null;
-		delimitadores = new DataTableDelimitador(request, "Factura");
-		JqGridFilter dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
-		delimitadores.addFiltro(dataTableFilter);
 		estado = estado == null ? Constantes.FACTURA_ESTADO_PROFORMAS : estado;
 
 		Collection<ProformasByEmpresaAndEstadoAndUsuario> objetoProforma = null;
@@ -785,11 +781,11 @@ public class FacturasController {
 		Collection<ProformasByEmpresaAndEstado> objetoAnuladoAdmin = null;
 		Collection<ProformasByEmpresaAndFacturada> objetoFacturasAdmin = null;
 
-		if (request.isUserInRole(Constantes.ROL_ADMINISTRADOR_CAJERO) || request.isUserInRole(Constantes.ROL_ADMINISTRADOR_EMPRESA) || request.isUserInRole(Constantes.ROL_ADMINISTRADOR_RESTAURANTE)) {
+		if (usuarioBo.isAdministrador_cajero(usuarioSesion) || usuarioBo.isAdministrador_empresa(usuarioSesion) || usuarioBo.isAdministrador_restaurante(usuarioSesion)) {
 			objetoProformaAdmin = estado.equals(Constantes.FACTURA_ESTADO_PROFORMAS) ? consultasNativeBo.findByProformasByEmpresaAndEstado(usuarioSesion.getEmpresa(), estado) : null;
 			objetoAnuladoAdmin = estado.equals(Constantes.FACTURA_ESTADO_ANULADA_PROFORMA) ? consultasNativeBo.findByProformasByEmpresaAndEstado(usuarioSesion.getEmpresa(), estado) : null;
-			objetoFacturasAdmin = objetoProforma == null && objetoAnulado == null ? consultasNativeBo.findByProformasByEmpresaFacturada(usuarioSesion.getEmpresa()) : null;
-
+			objetoFacturasAdmin = objetoProformaAdmin == null && objetoAnuladoAdmin == null ? consultasNativeBo.findByProformasByEmpresaFacturada(usuarioSesion.getEmpresa()) : null;
+			administrador = Boolean.TRUE;
 		} else {
 			objetoProforma = estado.equals(Constantes.FACTURA_ESTADO_PROFORMAS) ? consultasNativeBo.findByProformasByEmpresaAndEstadoAndUsuario(usuarioSesion.getEmpresa(), estado, usuarioSesion.getId()) : null;
 			objetoAnulado = estado.equals(Constantes.FACTURA_ESTADO_ANULADA_PROFORMA) ? consultasNativeBo.findByProformasByEmpresaAndEstadoAndUsuario(usuarioSesion.getEmpresa(), estado, usuarioSesion.getId()) : null;
@@ -799,7 +795,7 @@ public class FacturasController {
 
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		List<Object> solicitudList = new ArrayList<Object>();
-		if (request.isUserInRole(Constantes.ROL_ADMINISTRADOR_CAJERO)) {
+		if (administrador) {
 			if (objetoProformaAdmin != null) {
 				for (ProformasByEmpresaAndEstado proformasByEmpresa : objetoProformaAdmin) {
 
@@ -901,7 +897,7 @@ public class FacturasController {
 		Cliente cliente = clienteBo.buscar(idCliente);
 		DataTableDelimitador delimitadores = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cliente, usuarioSesion.getEmpresa(), usuarioBo, tipoDocumento);
 
-		if (!request.isUserInRole(Constantes.ROL_ADMINISTRADOR_SISTEMA)) {
+		if (!usuarioBo.isAdministrador_sistema(usuarioSesion)) {
 			String nombreUsuario = request.getUserPrincipal().getName();
 			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
 			delimitadores.addFiltro(dataTableFilter);
@@ -956,19 +952,18 @@ public class FacturasController {
 
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 
-
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
 
 		Integer idUsuario = Constantes.ZEROS;
-		if (request.isUserInRole(Constantes.ROL_ADMINISTRADOR_CAJERO) || request.isUserInRole(Constantes.ROL_ADMINISTRADOR_EMPRESA) || request.isUserInRole(Constantes.ROL_ADMINISTRADOR_RESTAURANTE)) {
+		if (usuarioBo.isAdministrador_cajero(usuarioSesion) || usuarioBo.isAdministrador_empresa(usuarioSesion) || usuarioBo.isAdministrador_restaurante(usuarioSesion)) {
 			idUsuario = Constantes.ZEROS;
 		} else {
 			idUsuario = usuarioSesion.getId();
 		}
 
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-		Collection<FacturasSinNotaCreditoNative> objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, Constantes.FACTURA_ESTADO_FACTURADO, inicio1, fin1, cliente !=null?cliente.getId():Constantes.ZEROS_LONG);
+		Collection<FacturasSinNotaCreditoNative> objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, Constantes.FACTURA_ESTADO_FACTURADO, inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG);
 		List<Object> solicitudList = new ArrayList<Object>();
 		if (objetos != null) {
 			for (FacturasSinNotaCreditoNative facturasDelDia : objetos) {
@@ -1195,6 +1190,7 @@ public class FacturasController {
 			facturaCommand.setTotalServGravados(facturaCommand.getTotalServGravados() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalServGravados());
 			facturaCommand.setTotalVenta(facturaCommand.getTotalVenta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalVenta());
 			facturaCommand.setTotalVentaNeta(facturaCommand.getTotalVentaNeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalVentaNeta());
+			facturaCommand.setTipoDoc(facturaCommand.getTipoDoc() != null ? facturaCommand.getTipoDoc() : Constantes.EMPTY);
 			UsuarioCaja usuarioCajaBd = null;
 			// Si esta en estado facturada en base de datos se retorna un mensaje que ya fue procesada
 			if (facturaCommand != null) {
@@ -1217,6 +1213,10 @@ public class FacturasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.tipo.doc", result.getAllErrors());
 			}
 			if (facturaCommand.getTipoDoc() == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.tipo.doc", result.getAllErrors());
+			}
+
+			if (facturaCommand.getTipoDoc().equals(Constantes.EMPTY)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.tipo.doc", result.getAllErrors());
 			}
 
@@ -1253,9 +1253,11 @@ public class FacturasController {
 				}
 				facturaCommand.setTipoCambioMoneda(tipoCambio.getTotal());
 			}
-			if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
-				if (facturaCommand.getCliente() == null) {
-					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.incluir.cliente", result.getAllErrors());
+			if (!usuario.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
+				if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
+					if (facturaCommand.getCliente() == null) {
+						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.incluir.cliente", result.getAllErrors());
+					}
 				}
 
 			}
@@ -1267,7 +1269,32 @@ public class FacturasController {
 				} else {
 					facturaCommand.setCliente(cliente);
 				}
+
 			}
+
+			if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !usuario.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
+				if (facturaCommand.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_FRECUENTE)) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.tipo.documento.factura", result.getAllErrors());
+				}
+				if (facturaCommand.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.tipo.documento.factura", result.getAllErrors());
+				}
+			}
+			if (facturaCommand.getCliente().getLibreImpuesto() != null) {
+				if (facturaCommand.getCliente().getLibreImpuesto().equals(Constantes.LIBRE_IMPUESTOS_ACTIVO)) {
+					if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.exoneracion.libre.impuesto", result.getAllErrors());
+					}
+				}
+			}
+			if (facturaCommand.getCliente().getTipoDocumentoExoneracion() != null) {
+				if (!facturaCommand.getCliente().getTipoDocumentoExoneracion().equals(Constantes.EMPTY)) {
+					if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.exoneracion.libre.impuesto", result.getAllErrors());
+					}
+				}
+			}
+
 			if (facturaCommand.getVendedor() == null) {
 				Vendedor vendedor = vendedorBo.buscarPorNombreCompletoYEmpresa(Constantes.NOMBRE_VENDEDOR_FRECUENTE, usuario.getEmpresa());
 				if (vendedor == null) {

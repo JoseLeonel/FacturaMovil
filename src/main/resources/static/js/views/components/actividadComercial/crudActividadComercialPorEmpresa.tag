@@ -63,7 +63,7 @@
                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6 has-success">
                                 <label class="tamanoLetra" >{$.i18n.prop("actividadComercial.actividades.asociadas")}  <span class="requeridoDato">*</span></label>
                                 <select onchange= {__AsignarActividad} class="form-control selectActividadComercial"  name="selectActividadComercial" id="selectActividadComercial" >
-                                    <option data-descripcion = "{descripcion}"  each={actividadComerciales.aaData}  value="{codigo}" selected="{empresaActividadComercial.codigo ==codigo?true:false}"  >{codigo}-{descripcion}</option>
+                                    <option data-descripcion = "{descripcion}"  each={actividadComerciales.aaData}  value="{codigo}" selected="{empresaActividadComercial.codigo ==codigo?true:false}"  >{descripcion}</option>
                                 </select>
                             </div>
                         </div>
@@ -329,7 +329,7 @@ __agregar(){
     if(self.empresaActividadComercial.codigo.length == 0){
       self.empresaActividadComercial.codigo = $('.selectActividadComercial').val()    
       self.empresaActividadComercial.descripcion = $('.selectActividadComercial').text();
-      self.empresaActividadComercial.descripcion = self.empresaActividadComercial.codigo +"-"+self.empresaActividadComercial.descripcion 
+      self.empresaActividadComercial.descripcion = self.empresaActividadComercial.descripcion 
     }
    
     self.empresaActividadComercial.principal = __valorNumerico($('.selectPrincipal').val())

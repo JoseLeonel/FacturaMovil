@@ -30,7 +30,7 @@ public class EmpresaActividadComercial implements Serializable {
 	@Column(name = "codigo", length = 6)
 	private String						codigo;
 
-	@Column(name = "descripcion", length = 180)
+	@Column(name = "descripcion", length = 200)
 	private String						descripcion;
 	
 	@Column(name = "princial", columnDefinition = "INT default '0'")

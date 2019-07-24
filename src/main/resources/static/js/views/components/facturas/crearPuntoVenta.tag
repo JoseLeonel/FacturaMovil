@@ -178,12 +178,12 @@
                             <article class="booking-details clearfix">
                                 <h1><span id="lblSCS">{$.i18n.prop("factura.resumen.venta")}</span></h1>
                                 <div class="TotalesContainer"  onclick = {__MostrarFormularioDePago}>
-                                    <div  show={soloParaChinos == false} class="elementoTotales">{$.i18n.prop("factura.resumen.subTotal")}   <span id="lblSubtotal"> {subTotalGeneral}   </span> </div> 
-                                    <div  show={soloParaChinos == false && totalDescuentos > 0} class="elementoTotales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos}   </span> </div> 
-                                    <div  show={soloParaChinos == false} class="elementoTotales">{$.i18n.prop("factura.resumen.impuesto")}    <span id="lblSubtotal"> {totalImpuesto}    </span> </div> 
+                                    <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.subTotal")}   <span id="lblSubtotal"> {subTotalGeneral}   </span> </div> 
+                                    <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos}   </span> </div> 
+                                    <div  show= "{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.impuesto")}    <span id="lblSubtotal"> {totalImpuesto}    </span> </div> 
                                     <div  show="{soloParaChinos == false && montoExoneracion > 0}" class="elementoTotales">{$.i18n.prop("factura.resumen.exoneracion")} <span id="lblSubtotal"> {montoExoneracion} </span> </div> 
-                                    <div  show={soloParaChinos == false} class="elementoTotales">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}         </span> </div> 
-                                    <div  show={soloParaChinos == false} class="elementoTotales">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span> </div> 
+                                    <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}         </span> </div> 
+                                    <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span> </div> 
                                 </div>
       
                                 <div class="precioTotalFactura" show={soloParaChinos == true}>
@@ -322,12 +322,12 @@
                                 <div class="label-totalesComprobanteChino" >Total:  {totalComprobante}</div>
                             </div>
                             <div class="TotalesContainer"  onclick = {__MostrarFormularioDePago}>
-                                 <div  show={soloParaChinos == false} class="elementoTotales">{$.i18n.prop("factura.resumen.subTotal")}   <span id="lblSubtotal"> {subTotalGeneral}   </span> </div> 
-                                 <div  show={soloParaChinos == false && totalDescuentos > 0} class="elementoTotales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos}   </span> </div> 
-                                 <div  show={soloParaChinos == false && totalImpuesto > 0} class="elementoTotales" >{$.i18n.prop("factura.resumen.impuesto")}     <span id="lblSubtotal"> {totalImpuesto}    </span> </div> 
+                                 <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.subTotal")}   <span id="lblSubtotal"> {subTotalGeneral}   </span> </div> 
+                                 <div  show="{soloParaChinos == false }" class="elementoTotales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos}   </span> </div> 
+                                 <div  show="{soloParaChinos == false }" class="elementoTotales" >{$.i18n.prop("factura.resumen.impuesto")}     <span id="lblSubtotal"> {totalImpuesto}    </span> </div> 
                                  
-                                 <div  show={soloParaChinos == false && montoExoneracion > 0} class="elementoTotales">{$.i18n.prop("factura.resumen.exoneracion")} <span id="lblSubtotal"> {montoExoneracion} </span> </div> 
-                                 <div  show={soloParaChinos == false} class="elementoTotales">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}         </span> </div> 
+                                 <div  show="{soloParaChinos == false && montoExoneracion > 0}" class="elementoTotales">{$.i18n.prop("factura.resumen.exoneracion")} <span id="lblSubtotal"> {montoExoneracion} </span> </div> 
+                                 <div  show="{soloParaChinos == false}" class="elementoTotales">{$.i18n.prop("factura.resumen.total")}   <span id="lblTotal">{totalComprobante}         </span> </div> 
                                  
                                  
                             </div>
@@ -2169,15 +2169,7 @@ function cargarDetallesFacturaEnEspera(data){
     $('#totalBanco').val(null)
     $('#totalEfectivo').focus()
     $('#totalEfectivo').select()
-    // __calculate(); 
-    if($(".tipoDoc").val() !="88"){
-        if(verificarSiClienteFrecuente()){
-                __ComboTipoDocumentos(1)
-        }else{
-            __ComboTipoDocumentos(2)
-        }
-
-    }
+    __ComboTipoDocumentos(0)
     __aplicarExoneracionPorCliente()
 }
 /** 
@@ -2197,6 +2189,17 @@ function crearFactura(estado){
       mensajeError($.i18n.prop("error.factura.actividad.comercial.no.existe"))
       return
     }
+    //if($(".tipoDoc").val() !="01" &&  $(".tipoDoc").val() !="88"){
+    //    if(verificarSiClienteFrecuente()){
+    //    mensajeError($.i18n.prop("error.factura.tipo.documento.factura"))
+    //    return
+    //    }
+    //    if(validarSiTieneExoneracion()){
+    //        mensajeError($.i18n.prop("error.factura.exoneracion.libre.impuesto"))
+    //        return
+    //    }
+   // }
+    
     self.detalleFactura.data =self.detail
     self.update() 
     var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
@@ -3591,14 +3594,8 @@ function __seleccionarClientes() {
             __aplicarExoneracionPorCliente()
 
         }
-         $('#modalClientes').modal('hide') 
-        if($(".tipoDoc").val() !="88"){
-            if(verificarSiClienteFrecuente()){
-                __ComboTipoDocumentos(1)
-            }else{
-                __ComboTipoDocumentos(2)
-            }
-        }
+        $('#modalClientes').modal('hide') 
+       // __ComboTipoDocumentos(0)
         
     });
 }
@@ -3608,13 +3605,26 @@ function __seleccionarClientes() {
 * para que salga factura o proforma
 **/
 function verificarSiClienteFrecuente(){
-    if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE")){
+    if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE") != -1){
         return true
     }
-    if(self.cliente.cedula.indexOf("999999999999")){
+    if(self.cliente.cedula.indexOf("999999999999") != -1){
         return true
     }
     return false;
+}
+
+function validarSiTieneExoneracion(){
+    for (var count = 0; count < self.detail.length; count++) {
+        self.item          = self.detail[count];
+        self.cliente.porcentajeExoneracion = parseFloat(self.cliente.porcentajeExoneracion)
+        if(self.item.montoImpuesto > 0 || self.item.montoImpuesto1 > 0 ){
+           if(self.cliente.porcentajeExoneracion > 0 || self.cliente.libreImpuesto == 1 ){
+                return true
+            }
+        }
+    }            
+    
 }
 
 /**
@@ -3759,27 +3769,6 @@ function __ComboTipoDocumentos(valor){
     self.comboTipoDocumentos = []
     self.update()
     // Tipo documento unicamente proforma y factura 
-    if(valor == 1){
-        self.comboTipoDocumentos.push({
-            estado:"01",
-            descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
-        })
-        self.comboTipoDocumentos.push({
-            estado:"88",
-            descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
-        })
-       self.update()
-       return true 
-    }
-     if(valor == 2){
-         self.comboTipoDocumentos.push({
-            estado:"04",
-            descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
-        })
-       self.update()
-       return true 
-    }
-
     //Prioridad de orden
     if(self.empresa.prioridadFacturar == 1 ){
         self.comboTipoDocumentos.push({

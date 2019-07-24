@@ -1637,8 +1637,12 @@ function __imprimirAbono(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        riot.mount('imprimir-abono',{abono:data});
+        imprimirAbono(data)
 	});
+}
+
+function imprimirAbono(data){
+   riot.mount('imprimir-abono',{abono:data});  
 }
 /**
  * mostrar la abono

@@ -180,8 +180,11 @@
 var self = this;
 self.abono   = opts.abono;  
 self.on('mount',function(){
-    if(self.abono.id > 0){
-       consultaAbono()
+    if (typeof self.abono !== 'undefined'){
+        if(self.abono.id > 0){
+        consultaAbono()
+        }
+
     }
     __Teclas()
 })

@@ -171,7 +171,7 @@ public class RecepcionFactura implements Serializable {
 	@Column(name = "codigo_actividad")
 	private String						facturaCodigoActividad;
 	@Column(name = "plazo_credito")
-	private Double						facturaPlazoCredito;
+	private String						facturaPlazoCredito;
 	@Column(name = "total_serv_gravados")
 	private Double						facturaTotalServGravados;
 	@Column(name = "total_serv_exonerado")
@@ -702,16 +702,23 @@ public class RecepcionFactura implements Serializable {
 	}
 
 	
-	public Double getFacturaPlazoCredito() {
+	
+	
+	
+	public String getFacturaPlazoCredito() {
 		return facturaPlazoCredito;
 	}
 
 	
-	public void setFacturaPlazoCredito(Double facturaPlazoCredito) {
+	public void setFacturaPlazoCredito(String facturaPlazoCredito) {
 		this.facturaPlazoCredito = facturaPlazoCredito;
 	}
 
 	
+	public String getFacturaCodigoActividad() {
+		return facturaCodigoActividad;
+	}
+
 	public Double getFacturaTotalServGravados() {
 		return facturaTotalServGravados;
 	}

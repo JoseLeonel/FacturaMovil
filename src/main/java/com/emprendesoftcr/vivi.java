@@ -1,15 +1,27 @@
 package com.emprendesoftcr;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.Utils.Utils;
 
 public class vivi {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
 		// TODO Auto-generated method stub
 		Double valor = 9.29204;
+		
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	 
+			Date fechaInicial=dateFormat.parse("2019-07-22");
+			Date fechaFinal=dateFormat.parse("2019-07-23");
+	 
+			int dias=(int) ((fechaFinal.getTime()-fechaInicial.getTime())/86400000);
+	 
+			System.out.println("Hay "+dias+" dias de diferencia");
+		
 
 //		521.6814159292036
 //		523.6460176991151
