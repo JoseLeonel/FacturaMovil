@@ -615,7 +615,7 @@ function __EnviarPorCorreo(){
  * Muestra los filtros avanzados
  */
  __mostrarFiltros(){
-    if(self.mostrarFiltros){
+    if(self.mostrarFiltros){ 
         self.mostrarFiltros = false;
         self.valorMarginBottom  = '10px'
     }else{
