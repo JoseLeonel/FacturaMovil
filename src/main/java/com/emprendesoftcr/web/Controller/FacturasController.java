@@ -1156,7 +1156,7 @@ public class FacturasController {
 	@RequestMapping(value = "/service/CrearFacturaServiceAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	@SuppressWarnings("rawtypes")
-	public RespuestaServiceValidator crearFactura(@RequestBody TurismoCommand turismoCommand, BindingResult result) throws ParseException {
+	public RespuestaServiceValidator crearFacturaTurismo(@RequestBody TurismoCommand turismoCommand, BindingResult result) throws ParseException {
 
 		try {
 

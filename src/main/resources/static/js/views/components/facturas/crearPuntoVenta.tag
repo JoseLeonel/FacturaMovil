@@ -2223,6 +2223,7 @@ function crearFactura(estado){
     $.ajax({
         type : "POST",
         dataType : "json",
+        async: false,
         data : formulario,
         url : "CrearFacturaAjax",
         success : function(data) {
