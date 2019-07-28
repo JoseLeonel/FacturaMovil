@@ -273,34 +273,40 @@
                     </div>     
     
 <!--Modal mostrar Articulos de la empresa -->
-<div id='modalInventario' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div id='modalAgregarLineaEnCompra' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header with-border table-header" >
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Agregar Linea de Detalle a la Compra Simplificada </h4>
             </div>
             <div class="modal-body">
-                <form id="formularioParametros" name ="formularioParametros" >
+                <form id="formularioLineaDetalle" name ="formularioLineaDetalle" >
                     <div class="row">
                         <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                            <label class="tamanoLetraSimplificadaDetalle"  >Cantidad  </label>
+                            <input type="number" step="any" class="form-control cantidad tamanonumeros" id="cantidad" name="cantidad" onkeyup = {__CalculaMontoLinea}>
+                        </div>
+
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                             <label class="tamanoLetraSimplificadaDetalle" >{$.i18n.prop("articulo.codigo")}  </label>
-                            <input type="text" class="form-control" id="codigoArt" name="codigoArt"  onkeypress={__ConsultarProductosCod} >
+                            <input type="text" class="form-control tamanonumeros" id="codigoArt" name="codigoArt"  onkeyup = {__CalculaMontoLinea} >
                         </div>
                         <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                             <label class="tamanoLetraSimplificadaDetalle" >{$.i18n.prop("articulo.descripcion")}</label>
-                            <input type="text" class="form-control "   id="descArticulo" name="descArticulo" onkeypress={__ConsultarProductosDesc}>
+                            <input type="text" class="form-control tamanonumeros"   id="descArticulo" name="descArticulo" onkeyup = {__CalculaMontoLinea}>
                         </div>
+                    </div> 
+                    <div class="row">
                         <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                             <label class="tamanoLetraSimplificadaDetalle">{$.i18n.prop("articulo.tipoCodigo")}</label>
                             <select  class="form-control tipoImpuesto " id="tipoCodigo" name="tipoCodigo"  >
                                 <option  each={tipoCodigos}  value="{codigo}" selected="{articulo.tipoCodigo ==codigo?true:false}"  >{descripcion}</option>
                             </select>
                         </div>
-                    </div> 
-                    <div class="row">
+
                         <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                             <label class="tamanoLetraSimplificadaDetalle">{$.i18n.prop("articulo.tipoImpuesto")} </label>
-                            <select onchange= {__asignarImpuesto} class="form-control selectTipoImpuesto " id="tipoImpuesto" name="tipoImpuesto"  >
+                            <select onchange= {__asignarImpuesto} class="form-control tipoImpuesto " id="tipoImpuesto" name="tipoImpuesto"  >
                                 <option  each={impuestos}  value="{codigo}"  >{descripcion}</option>
                             </select>
                         </div>
@@ -310,26 +316,56 @@
                                 <option  each={tarifas1.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa ==tarifaIVAI.codigoTarifa && articulo.tipoImpuesto ==tipoImpuesto ?true:false}"  >{tarifaIVAI.descripcion}</option>
                             </select>
                         </div>        
-                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
-                            <label class="tamanoLetraSimplificadaDetalle"  >{$.i18n.prop("articulo.impuesto")}  </label>
-                            <input type="number" step="any" class="form-control impuesto " id="impuesto" name="impuesto" >
-                        </div>
                     </div>
                     <div class="row">
                         <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                            <label class="tamanoLetraSimplificadaDetalle"  >Precio Unitario </label>
+                            <input type="number" step="any" class="form-control precioUnitario  tamanonumeros" id="precioUnitario" name="precioUnitario" onkeyup = {__CalculaMontoLinea} >
                         </div>
                         <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
-                            <label class="tamanoLetraSimplificadaDetalle"  >Monto </label>
-                            <input type="number" step="any" class="form-control montoArticulo " id="montoArticulo" name="montoArticulo"  >
+                            <label class="tamanoLetraSimplificadaDetalle"  >% Descuento </label>
+                            <input type="number" step="any" class="form-control porcentajeDescuento  tamanonumeros" id="porcentajeDescuento" name="porcentajeDescuento"  onkeyup = {__CalculaMontoLinea}>
                         </div>
+
                         <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                            <label class="tamanoLetraSimplificadaDetalle"  >%{$.i18n.prop("articulo.impuesto")}  </label>
+                            <input type="number" step="any" class="form-control impuesto  tamanonumeros" id="impuesto" name="impuesto" onkeyup = {__CalculaMontoLinea}>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
+                            <label class="tamanoLetraSimplificadaDetalle"  >Descuento </label>
+                            <input type="number" step="any" class="form-control montoDescuento tamanonumeros " id="montoDescuento" name="montoDescuento"  readonly>
+                        </div>
+
+                        <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
+                            <label class="tamanoLetraSimplificadaDetalle"  >IVA  </label>
+                            <input type="number" step="any" class="form-control montoImpuesto tamanonumeros " id="montoImpuesto" name="montoImpuesto" readonly>
+                        </div>
+                        <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
+                            <label class="tamanoLetraSimplificadaDetalle"  >Sub Total  </label>
+                            <input type="number" step="any" class="form-control subTotal tamanonumeros " id="subTotal" name="subTotal" readonly>
+                        </div>
+
+                        <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
+                            <label class="tamanoLetraSimplificadaDetalle"  >Total Linea </label>
+                            <input type="number" step="any" class="form-control montoTotalLinea tamanonumeros " id="montoTotalLinea" name="montoTotalLinea" readonly >
                         </div>
 
                     </div>
                 </form>    
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-dark-gray btn-back pull-left"  data-dismiss="modal">{$.i18n.prop("btn.volver")}</button>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                    <button onclick ={__regresar}  type="button" class="btn-dark-gray btn-back  pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                        {$.i18n.prop("btn.volver")}
+                    </button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                    <button  onclick={__AplicarAgregarLineaDetalle}   class=" btn-green pull-right" >  Agregar Linea</button>
+                </div>
             </div>
         </div>
     </div>
@@ -337,208 +373,210 @@
 <!--fin del modal-->
 
 <style type="text/css">
-.tamanoLetraSimplificadaDetalle {
-    font-weight: 600 !important;
-    font-size: 30px !important;
-}
-.detalle1{
-    flex: 0.5;
-   
-    margin-left: 2%;
-    margin-right: 2%;
-    margin-bottom: 1%;
-}
-.detalleDescripcion{
-   flex: 1.5;
-    text-align: center;
-    color: black;
-    font-weight: 600;
-    font-size: 14px;
-  
-}
-.detalleDescripcion1{
-   flex: 1.5;
-    text-align: center;
-    color: black;
-    font-size: 14px;
-  
-}
-.detalleCodigo{
-    flex: 0.8;
-    text-align: center;
-}
-.detalleLinea{
-    flex: 0.1;
-    text-align: center;
-}
-.detallesProductos{
-    display:flex;
-
-    justify-content: space-around;
-
-}
-.detalleEliminar{
-    flex:0.3;
-}
-.encabezadoContainer{
-  
-}
-.containerUno{
-    display: flex;
-   justify-content: space-between;
-}
-.tituloDetalle1{
-    color: black;
-    font-size: 14px;
-    font-weight: 600;
-        flex: 1;
+    .tamanonumeros{
+       font-size: 34px;
+       font-weight: 600;
+       color: black;
+    }
+    .tamanoLetraSimplificadaDetalle {
+        font-weight: 600 !important;
+        font-size: 30px !important;
+    }
+    .detalle1{
+        flex: 0.5;
     
-    text-align: center;
-}
-.totalesContainer{
-    display: flex;
-    flex: 1;
-    justify-content: space-around;
-}
-.tituloTotales{
-    text-align: left;
-    margin-right: 3%;
-    color: yellow;
-    margin-top: 2%;
-    flex: 0.5;
-}
-.valorTotal{
-    margin-top: 2%;
-}
-.label-totalesComprobanteChino {
-    font-weight: 600 !important;
-    font-size: 18px !important;
-    font-family: Roboto,sans-serif !important;
-    color: #30ed17 !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    border-collapse: separate;
-    cursor: pointer;
-    margin: 1%!important;
-    text-align: center !important;
-    background-color: black !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 25px !important;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
-}
-.precioTotalFacturaContainer{
-    display:flex;
-    flex:1;
-    flex-direction: column;
-    ont-weight: 600 !important;
-    font-size: 14px !important;
-    color:yellow !important;
-    text-shadow: 0px 0px 1px #ffffff;
-    font-style: italic;
-    border-collapse: separate;
-    cursor: pointer;
-    margin: 2%!important;
-    text-align: center !important;
-    background-color: black !important;
-    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
-    border-radius: 25px !important;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
-}
-.tituloFormat{
-    color: black;
-    font-size: 14px;
-    font-weight: bold;   
-        padding-top: 5%; 
+        margin-left: 2%;
+        margin-right: 2%;
+        margin-bottom: 1%;
+    }
+    .detalleDescripcion{
+     flex: 1.5;
         text-align: center;
-}
-.contenedor-compra {
-    display:flex;
-    flex-wrap: nowrap;
-}
-.cabecera-derecha{
-    flex:0.25;
-}
-.totalLabel {
-    color: #333;
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 18%;
-text-align: center;
-}
-.totalLabelImpuesto {
-    color: #333;
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 31%;
-text-align: center;
-}
- #contenedor {
-  width:500px;
-  height:200px;
-  background: #fff;
-  padding:10px;￼    color: blue;
-￼    font-size: 18px;
-  border:10px solid #2c3e50;
-  margin:20px;
-  display:flex;
-  display:-webkit-flex;
-  display:-ms-flexbox;
- justify-content:space-between;
-}
- .cabecera-izquierda {
-       flex:1;
-       margin-right: 1%;
+        color: black;
+        font-weight: 600;
+        font-size: 14px;
+    
+    }
+    .detalleDescripcion1{
+      flex: 1.5;
+        text-align: center;
+        color: black;
+        font-size: 14px;
+    
+    }
+    .detalleCodigo{
+        flex: 0.8;
+        text-align: center;
+    }
+    .detalleLinea{
+        flex: 0.1;
+        text-align: center;
+    }
+    .detallesProductos{
+        display:flex;
+
+        justify-content: space-around;
 
     }
-
-    .cabecera-derecha {
-        width:25%;
+    .detalleEliminar{
+        flex:0.3;
     }
+    .containerUno{
+        display: flex;
+    justify-content: space-between;
+    }
+    .tituloDetalle1{
+        color: black;
+        font-size: 14px;
+        font-weight: 600;
+            flex: 1;
+        
+        text-align: center;
+    }
+    .totalesContainer{
+        display: flex;
+        flex: 1;
+        justify-content: space-around;
+    }
+    .tituloTotales{
+        text-align: left;
+        margin-right: 3%;
+        color: yellow;
+        margin-top: 2%;
+        flex: 0.5;
+    }
+    .valorTotal{
+        margin-top: 2%;
+    }
+    .label-totalesComprobanteChino {
+        font-weight: 600 !important;
+        font-size: 18px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        border-collapse: separate;
+        cursor: pointer;
+        margin: 1%!important;
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 25px !important;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
+    .precioTotalFacturaContainer{
+        display:flex;
+        flex:1;
+        flex-direction: column;
+        ont-weight: 600 !important;
+        font-size: 14px !important;
+        color:yellow !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        border-collapse: separate;
+        cursor: pointer;
+        margin: 2%!important;
+        text-align: center !important;
+        background-color: black !important;
+        box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 8px 0 rgba(0, 0, 0, 0.20);
+        border-radius: 25px !important;
+        -webkit-transition: background-color 100ms linear;
+        -moz-transition: background-color 100ms linear;
+        -o-transition: background-color 100ms linear;
+        -ms-transition: background-color 100ms linear;
+        transition: background-color 100ms linear;
+    }
+    .tituloFormat{
+        color: black;
+        font-size: 14px;
+        font-weight: bold;   
+            padding-top: 5%; 
+            text-align: center;
+    }
+    .contenedor-compra {
+        display:flex;
+        flex-wrap: nowrap;
+    }
+    .cabecera-derecha{
+        flex:0.25;
+    }
+    .totalLabel {
+        color: #333;
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 18%;
+        text-align: center;
+    }
+    .totalLabelImpuesto {
+        color: #333;
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 31%;
+        text-align: center;
+    }
+    #contenedor {
+        width:500px;
+        height:200px;
+        background: #fff;
+        padding:10px;￼    color: blue;
+        ￼    font-size: 18px;
+        border:10px solid #2c3e50;
+        margin:20px;
+        display:flex;
+        display:-webkit-flex;
+        display:-ms-flexbox;
+        justify-content:space-between;
+    }
+    .cabecera-izquierda {
+        flex:1;
+        margin-right: 1%;
 
-.elemento{
-  background: #E67E22;
-  color:#fff;
-  margin:5px;
-  flex-basis:150px; 
-  
-  height:50px;
+        }
 
-  
-}
+        .cabecera-derecha {
+            width:25%;
+        }
 
-.item {
-  
-  width: 50%;
-}
+        .elemento{
+        background: #E67E22;
+        color:#fff;
+        margin:5px;
+        flex-basis:150px; 
+        
+        height:50px;
+
+        
+        }
+
+        .item {
+        
+        width: 50%;
+        }
 
     .boton-consultar1 {
        display: block;
-    display: inline-block;
-    margin-bottom: 0;
-    
-    border-radius: 3px;
-    height: 30px;
-    /* padding: 6px 12px; */
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #fff;
-    background-color: #3c8dbc;
-    border-color: #367fa9;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .
+        display: inline-block;
+        margin-bottom: 0;
+        
+        border-radius: 3px;
+        height: 30px;
+        /* padding: 6px 12px; */
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #fff;
+        background-color: #3c8dbc;
+        border-color: #367fa9;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .
     }
     /* Lista de facturas en espera*/
     .cabecera-derecha .lista-compras-espera{
@@ -691,141 +729,141 @@ text-align: center;
         font-weight: 600;
     }
     .campo {
-            display: block;
-    width: 100%;
-    height: 30px;
-    padding: 6px 16px;
-    font-size: 12px;
-    line-height: 1.42857143;
-    color: #555;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    /* border-radius: 2px; */
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    border: 1px solid #ccc;
-    margin: 2px 0;
-    padding: 1px 2px;
-    overflow: visible;
+        display: block;
+        width: 100%;
+        height: 30px;
+        padding: 6px 16px;
+        font-size: 12px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        /* border-radius: 2px; */
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        border: 1px solid #ccc;
+        margin: 2px 0;
+        padding: 1px 2px;
+        overflow: visible;
     }
     .campodetalle {
-    width: 170px;
-    height: 30px;
-    /* padding: 6px 16px; */
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #333;
-    font-weight: bold;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    /* border-radius: 2px; */
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    /* box-shadow: inset 0 1px 1px rgba(0,0,0,.075); */
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    background-color: #fcfcfc;
-    /* border: 1px solid #ccc; */
-    margin: 2px 0;
-    padding: 1px 2px;
-    /* overflow: visible; */
-}
-.campodetalleDescuento {
-    width: 100%;
-    height: 30px;
-    padding: 6px 16px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color:#333;
-    font-weight: bold;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    background-color: #fcfcfc;
-    border: 1px solid #ccc;
-    margin: 2px 0;
-    padding: 1px 2px;
-    overflow: visible;
-}
-
-/*1024x768*/
-@media only screen and (max-width: 1024px) and (min-width:768px)  {
-    .campodetalle {
-    width: 145px;
-    height: 30px;
-    /* padding: 6px 16px; */
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #333;
-    font-weight: bold;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    /* border-radius: 2px; */
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    /* box-shadow: inset 0 1px 1px rgba(0,0,0,.075); */
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    background-color: #fcfcfc;
-    /* border: 1px solid #ccc; */
-    margin: 2px 0;
-    padding: 1px 2px;
-    /* overflow: visible; */
-}
-
-    .detalle1{
-        flex: 0.80 !important;
-        margin-left: 2% !important;
-        margin-right: 2% !important;
-        text-align: center;
-        margin-bottom: 1%;
+        width: 170px;
+        height: 30px;
+        /* padding: 6px 16px; */
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #333;
+        font-weight: bold;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        /* border-radius: 2px; */
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        /* box-shadow: inset 0 1px 1px rgba(0,0,0,.075); */
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        background-color: #fcfcfc;
+        /* border: 1px solid #ccc; */
+        margin: 2px 0;
+        padding: 1px 2px;
+        /* overflow: visible; */
     }
-    .detalleEliminar{
-        flex:0;
-        margin-left: 0.5%;
+    .campodetalleDescuento {
+        width: 100%;
+        height: 30px;
+        padding: 6px 16px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color:#333;
+        font-weight: bold;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        background-color: #fcfcfc;
+        border: 1px solid #ccc;
+        margin: 2px 0;
+        padding: 1px 2px;
+        overflow: visible;
     }
-   .tituloDetalle1 {
-    color: black;
-    font-size: 14px;
-    font-weight: 600;
-    flex: 1.3;
-    text-align: left;
-}
-.campodetalleDescuento {
-    width: 188%;
-    height: 30px;
-    padding: 6px 16px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #333;
-    font-weight: bold;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    background-color: #fcfcfc;
-    border: 1px solid #ccc;
-    margin: 2px 0;
-    padding: 1px 2px;
-    overflow: visible;
-}
+
+    /*1024x768*/
+    @media only screen and (max-width: 1024px) and (min-width:768px)  {
+        .campodetalle {
+            width: 145px;
+            height: 30px;
+            /* padding: 6px 16px; */
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #333;
+            font-weight: bold;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            /* border-radius: 2px; */
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            /* box-shadow: inset 0 1px 1px rgba(0,0,0,.075); */
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            background-color: #fcfcfc;
+            /* border: 1px solid #ccc; */
+            margin: 2px 0;
+            padding: 1px 2px;
+            /* overflow: visible; */
+        }
+
+        .detalle1{
+            flex: 0.80 !important;
+            margin-left: 2% !important;
+            margin-right: 2% !important;
+            text-align: center;
+            margin-bottom: 1%;
+        }
+        .detalleEliminar{
+            flex:0;
+            margin-left: 0.5%;
+        }
+    .tituloDetalle1 {
+        color: black;
+        font-size: 14px;
+        font-weight: 600;
+        flex: 1.3;
+        text-align: left;
+    }
+    .campodetalleDescuento {
+        width: 188%;
+        height: 30px;
+        padding: 6px 16px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #333;
+        font-weight: bold;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        background-color: #fcfcfc;
+        border: 1px solid #ccc;
+        margin: 2px 0;
+        padding: 1px 2px;
+        overflow: visible;
+    }
 
 
 }
@@ -876,10 +914,21 @@ text-align: center;
     self.totalGeneralImpuesto  = 0;
     self.totalGeneralCompra    = 0; 
     self.numeroLinea =0
-     self.pesoPrioridad =  0
+    self.pesoPrioridad =  0
+    self.detalle ={
+         numeroLinea : 0,
+         precioUnitario:0,
+         cantidad:0,
+         montoDescuento:0,
+         montoImpuesto:0,
+         porcentajeDescuento:0,
+         impuesto:0,
+         montoTotalLinea:0
+
+     }
     self.on('mount',function(){
-        $("#formularioCompra").validate(reglasDeValidacionCompra());
-        __informacionData()
+        $("#formularioLineaDetalle").validate(reglasDeValidacionDetalleCompra());
+           __informacionData()
         __InicializarTabla('.tableListaProveedor')
         __InicializarTabla('.tableListaInventario')
         agregarInputsCombos_Articulo()
@@ -890,6 +939,7 @@ text-align: center;
         __Impuestos()
         __ListaDeProveedores()
         __tipoCodigo()
+        __Eventos()
         $('.datepickerFechaCompra').datepicker(
         {
             format: 'yyyy-mm-dd',
@@ -907,9 +957,74 @@ text-align: center;
     //__Init()
 })
 
+__CalculaMontoLinea(){
+  aplicarMontos()
+}
+
+function aplicarMontos(){
+ 
+    var porcentajeDescuento = parseFloat(__valorNumerico($(".porcentajeDescuento").val()));
+    porcentajeDescuento = porcentajeDescuento / 100
+    var cantidad = parseFloat(__valorNumerico($(".cantidad").val()));
+    var impuesto = parseFloat(__valorNumerico($(".impuesto").val()));
+    impuesto = impuesto > 0 ? impuesto / 100 : 0
+    var precioUnitario = parseFloat(__valorNumerico($(".precioUnitario").val()));
+    var subTotal = precioUnitario *  cantidad
+    var montoDescuento = subTotal *  porcentajeDescuento
+    subTotal = subTotal - montoDescuento
+    var montoImpuesto = subTotal * impuesto;
+    var montoTotalLinea = subTotal + montoImpuesto
+    $("#subTotal").val(redondeoDecimales(subTotal,2))
+    $("#montoDescuento").val(redondeoDecimales(montoDescuento,2))
+    $("#montoImpuesto").val(redondeoDecimales(montoImpuesto,2))
+    $("#montoTotalLinea").val(redondeoDecimales(montoTotalLinea,2))
+    self.detalle.montoDescuento = montoDescuento
+    self.detalle.precioUnitario = precioUnitario
+    self.detalle.impuesto = impuesto
+    self.detalle.subTotal = subTotal
+    self.detalle.cantidad = cantidad
+    self.detalle.montoDescuento = montoDescuento
+    self.detalle.montoImpuesto = montoImpuesto
+    self.detalle.montoTotalLinea = montoTotalLinea
+    self.update()
+
+
+}
+
+/**
+*  Actimpuestor validaciones del formulario
+**/
+function __Eventos(){
+    $("#formularioLineaDetalle").validate(reglasDeValidacionDetalleCompra());
+    $("#descArticulo").attr("maxlength", 160);
+    $("#codigoArt").attr("maxlength", 20);
+    $('#impuesto').mask('00', {
+		'translation' : {
+			0 : {
+				pattern : /[0-9]/
+			}
+		}
+	});
+}
+
+__AplicarAgregarLineaDetalle(){
+    $("#formularioLineaDetalle").validate(reglasDeValidacionDetalleCompra());
+    if ($("#formularioLineaDetalle").valid()) {
+        
+    }
+}
+
+/**
+*  Regresar al listado
+**/
+__regresar(){
+    $('#modalAgregarLineaEnCompra').modal('hide')
+}
+
 
 __AsignarTarifa(){
     $(".impuesto").val(getMontoImpuesto($(".tipoImpuesto").val(),$('#codigoTarifa').val(),self.tarifas1.aaData))
+    aplicarMontos()
 }
 function getMontoTarifa(tipoImpuesto,codigoTarifa,array) {
   return array.filter(
@@ -969,6 +1084,7 @@ __asignarImpuesto(){
      __listadoTarifasByTipoImpuesto($('#tipoImpuesto').val(),1)
     self.tarifas1  = {aaData:[]}
     self.update()
+    aplicarMontos()
 }
 /**
 *  Mostrar listado datatable Categorias Actimpuestos
@@ -1039,6 +1155,33 @@ function __Impuestos(){
    
      self.update();
 }
+
+var reglasDeValidacionDetalleCompra = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+            cantidad:{
+                required : true,
+                numeroMayorCero:true
+            },
+			codigoArt : {
+				required : true,
+         	},                                   
+			descArticulo : {
+				required : true,
+                maxlength:160,
+                minlength:10,
+                lettersOnly : true
+             },
+             precioUnitario:{
+                required:true,
+                numeroMayorCero:true
+             }         
+		},
+		ignore : []
+
+	});
+	return validationOptions;
+};
 /**
 * Camps requeridos
 **/
@@ -1067,7 +1210,7 @@ var reglasDeValidacionCompra = function() {
  * Listar codigos  llamado del modal para presentar los articulos
  **/   
  __ListaDecodigos(){
-  $('#modalInventario').modal('show')      
+  $('#modalAgregarLineaEnCompra').modal('show')      
  }
 /**
 *  Buscar la Compra Pendiente en espera
@@ -1387,70 +1530,8 @@ function mostrarFormaPago(){
     self.update()
 
 }
-/** 
-*
-*Agregar codigos al detalle de la Compra
-*
-*/
-__addProductToDetail(e){
-    if (e.keyCode != 13) {
-        return;
-    } 
-    __buscarcodigo(e.currentTarget.value,1);
-}
-/**
-* consultando por descripcion
-**/
-__ConsultarProductosDesc(e){
- if (e.keyCode != 13) {
-        return;
-    } 
- __ListaDeArticulosPorDescripcion($("#codigoArt").val(),e.currentTarget.value)   
-}    
 
-/**
-*Consultando por codigo
-**/
-__ConsultarProductosCod(e){
- if (e.keyCode != 13) {
-        return;
-    } 
- __ListaDeArticulosPorDescripcion(e.currentTarget.value,$("#descArticulo").val())   
-}    
-/**
-* mostrar la lista de articulos de la empresa
-**/
-function __ListaDeArticulosPorDescripcion(cod,desc){
-    if($('#codigoArt').val() =='' && $('#descArticulo').val() =='' ){
-        return
-    }
-     $(".tableListarArticulos").dataTable().fnClearTable();
-     $(".tableListarArticulos").DataTable().destroy();
-    var formulario = $('#formularioParametros').serialize();
-    $.ajax({
-        url: 'ListarPorDescripcionCodigoArticuloAjax.do',
-        datatype: "json",
-        method:"GET",
-        data :formulario,
-        success: function (result) {
-            if(result.aaData.length > 0){
-               _informacionData_Articulo()
-               self.articulos.data           = result.aaData
-              self.update()
-              loadListar(".tableListarArticulos",idioma_espanol,self.informacion_tabla_articulo,self.articulos.data)
-              agregarInputsCombos_Articulo()
-              __agregarArticulos()
-              ActivarEventoFiltro(".tableListarArticulos")
-            }
-              
 
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
-}
 /**
 *  Muestra la lista de proveedores
 **/
@@ -1480,42 +1561,7 @@ function __ListaDeProveedores(){
         }
     });
 }
-/**
-* Buscar el codigo del codigo  en la base de datos
-**/
-function __buscarcodigo(idArticulo,cantidad){
-    if(self.proveedor == null){
-        swal('','Antes de ingresar articulos a la compra asociar el proveedor','error');
-        return 
-    }
-    self.articulo = null;
-    self.update()
-    $.ajax({
-         datatype: "json",
-        url: 'findArticuloProveedorByCodigojax.do',
-        method:"GET",
-        data:{codigoArticulo:idArticulo,idProveedor:self.proveedor.id},
-        success: function(data){
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    swal('',data.message,'error');
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                        self.articulo  = modeloTabla
-                        __agregarArticulo(cantidad)
-                        self.update()
-                    });
-                }
-            }
-        },
-	    error : function(xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
-}
+
 /**
 *  Agregar un articulo si existe se suma la cantidad y no existe se agrega en el detalle
 **/
@@ -1563,10 +1609,10 @@ function __agregarArticulo(cantidad){
 *   agregar Articulos nuevos en el detalle de la Compra
 **/
 function __nuevoArticuloAlDetalle(cantidad){
-    if(self.articulo.descripcion == null){
+    if(self.detalle.descripcion == null){
         return;
     }
-    if(self.articulo.descripcion == ""){
+    if(self.detalle.descripcion == ""){
         return;
     }
     var iva =  __valorNumerico(self.articulo.impuesto/100)
@@ -1580,7 +1626,6 @@ function __nuevoArticuloAlDetalle(cantidad){
     self.detail.push({
        numeroLinea     : self.numeroLinea,
        pesoPrioridad   :self.pesoPrioridad,  
-       articulo_id     : self.articulo.id,
        codigo          : self.articulo.codigo,
        descripcion     : self.articulo.descripcion,
        cantidad        : __valorNumerico(cantidad),
