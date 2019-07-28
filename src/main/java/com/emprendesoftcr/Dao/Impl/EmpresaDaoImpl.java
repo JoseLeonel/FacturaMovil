@@ -170,6 +170,35 @@ public class EmpresaDaoImpl implements EmpresaDao {
 		return resultado;
 	}
 
+	
+	@Override
+	public String generarConsecutivoCompraSimplificada(Empresa empresa, Usuario usuario) throws Exception {
+		String resultado = Constantes.EMPTY;
+		try {
+			Integer consecutivo = Constantes.ZEROS;
+		  consecutivo = empresa.getConsecutivoCompraSimplificada();
+		  empresa.setConsecutivoCompraSimplificada(empresa.getConsecutivoCompraSimplificada()+1);
+
+			modificar(empresa);
+			// Casa matriz
+			String casaMatriz = Constantes.EMPTY;
+			casaMatriz = empresa.getCazaMatriz() == null ? Constantes.CASA_MATRIZ_INICIAL_FACTURA : empresa.getCazaMatriz();
+			// Terminal donde esta vendiendo el usaurio
+			String terminalUsuario = Constantes.EMPTY;
+			terminalUsuario = usuario.getTerminalFactura() == null ? Constantes.TERMINAL_INICIAL_FACTURA : FacturaElectronicaUtils.replazarConZeros(usuario.getTerminalFactura(), "00000");
+			String consecutivoFactura = "0000000000".substring(consecutivo.toString().length()) + consecutivo;
+
+			resultado = casaMatriz + terminalUsuario + Constantes.FACTURA_TIPO_DOC_COMPRA_SIMPLIFICADA + consecutivoFactura;
+
+		} catch (Exception e) {
+			log.info("** Error  generarConsecutivoCompraSimplificada: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+
+		return resultado;
+	}
+
+	
 	/**
 	 * Genera el consecutvio de la Factura de empresa
 	 * @see com.emprendesoftcr.Dao.EmpresaDao#generarConsecutivoFactura(com.emprendesoftcr.modelo.Empresa)

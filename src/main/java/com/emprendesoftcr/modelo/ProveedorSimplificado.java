@@ -20,65 +20,72 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "provee_simpli")
 public class ProveedorSimplificado implements Serializable {
 
-	private static final long serialVersionUID = 359421617446093903L;
+	private static final long	serialVersionUID	= 359421617446093903L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long id;
+	private Long							id;
 
 	@Column(name = "nombre_completo")
-	private String nombreCompleto;
+	private String						nombreCompleto;
 
 	@Column(name = "nombre_comercial")
-	private String nombreComercial;
+	private String						nombreComercial;
 
 	@Column(name = "tipo_cedula")
-	private String tipoCedula;
+	private String						tipoCedula;
 
 	@Column(name = "cedula")
-	private String cedula;
+	private String						cedula;
+	@Column(name = "codigo_pais")
+	private Integer						codigoPais;
+
+	@Column(name = "telefono")
+	private Integer						telefono;
 
 	@Column(name = "identificacion_Extranjero")
-	private String identificacionExtranjero;
+	private String						identificacionExtranjero;
 
 	@Column(name = "correo_electronico")
-	private String correoElectronico;
+	private String						correoElectronico;
 
 	@Column(name = "estado")
-	private String estado;
+	private Integer						estado;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "created_at")
-	private Date created_at;
+	private Date							created_at;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
-	private Date updated_at;
+	private Date							updated_at;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
-	private Empresa empresa;
+	private Empresa						empresa;
 
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
-	private Usuario usuario;
+	private Usuario						usuario;
 
 	public ProveedorSimplificado() {
 		super();
 	}
 
-	public ProveedorSimplificado(Long id, String nombreCompleto, String nombreComercial, String tipoCedula,
-			String cedula, String identificacionExtranjero, String correoElectronico, String estado, Date created_at,
-			Date updated_at, Empresa empresa, Usuario usuario) {
+	
+
+	public ProveedorSimplificado(Long id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, Integer codigoPais, Integer telefono, String identificacionExtranjero, String correoElectronico, Integer estado, Date created_at, Date updated_at, Empresa empresa, Usuario usuario) {
 		super();
 		this.id = id;
 		this.nombreCompleto = nombreCompleto;
 		this.nombreComercial = nombreComercial;
 		this.tipoCedula = tipoCedula;
 		this.cedula = cedula;
+		this.codigoPais = codigoPais;
+		this.telefono = telefono;
 		this.identificacionExtranjero = identificacionExtranjero;
 		this.correoElectronico = correoElectronico;
 		this.estado = estado;
@@ -87,6 +94,8 @@ public class ProveedorSimplificado implements Serializable {
 		this.empresa = empresa;
 		this.usuario = usuario;
 	}
+
+
 
 	public Long getId() {
 		return id;
@@ -144,11 +153,11 @@ public class ProveedorSimplificado implements Serializable {
 		this.correoElectronico = correoElectronico;
 	}
 
-	public String getEstado() {
+	public Integer getEstado() {
 		return estado;
 	}
 
-	public void setEstado(String estado) {
+	public void setEstado(Integer estado) {
 		this.estado = estado;
 	}
 
@@ -182,6 +191,34 @@ public class ProveedorSimplificado implements Serializable {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+
+
+	
+	public Integer getCodigoPais() {
+		return codigoPais;
+	}
+
+
+
+	
+	public void setCodigoPais(Integer codigoPais) {
+		this.codigoPais = codigoPais;
+	}
+
+
+
+	
+	public Integer getTelefono() {
+		return telefono;
+	}
+
+
+
+	
+	public void setTelefono(Integer telefono) {
+		this.telefono = telefono;
 	}
 
 }

@@ -1034,7 +1034,7 @@
         codigo:"",
         descripcion:""
     }
-    
+    self.transaccion = false
     self.on('mount',function(){
 
         $("#formularioFactura").validate(reglasDeValidacionFactura());
@@ -1813,6 +1813,7 @@ function __EnterFacturar(){
             cancelButtonText: $.i18n.prop("confirmacion.no"),
             confirmButtonClass: 'btn btn-success',
             cancelButtonClass: 'btn btn-danger',
+           
     }).then(function (isConfirm) {
             if(isConfirm){
                  aplicarFactura(2)
@@ -1853,13 +1854,15 @@ __CargarFacturaEspera(e){
 /**
 ** Se aplica o se crea una Factura cargada en la pantalla
 **/
-__AplicarYcrearFactura(){
+__AplicarYcrearFactura(e){
+   
  aplicarFactura(2)
 }
 /**
 * Aplicando factura temporal
 **/
-__AplicarYcrearFacturaTemporal(){
+__AplicarYcrearFacturaTemporal(e){
+    
  __OpcionAbrirCajon()
  aplicarFactura(1)
 }
@@ -1943,6 +1946,7 @@ __Limpiar(){
 **/
 function __Init(){
     self.bloqueoFactura = 0;
+    self.transaccion = false
     self.precioUltimo = ""
     self.factura                = {
         id:null,
@@ -2183,12 +2187,18 @@ function __displayDate_detail(fecha) {
 *  Crear Factura nueva
 **/
 function crearFactura(estado){
+
     
     BuscarActividadComercial()
     if( self.factura.codigoActividad.length == 0 ){
       mensajeError($.i18n.prop("error.factura.actividad.comercial.no.existe"))
       return
     }
+      if (self.transaccion == true ){
+        return false
+    }
+    self.transaccion = true 
+    self.update()
     //if($(".tipoDoc").val() !="01" &&  $(".tipoDoc").val() !="88"){
     //    if(verificarSiClienteFrecuente()){
     //    mensajeError($.i18n.prop("error.factura.tipo.documento.factura"))
@@ -2224,6 +2234,7 @@ function crearFactura(estado){
         type : "POST",
         dataType : "json",
         async: false,
+        
         data : formulario,
         url : "CrearFacturaAjax",
         success : function(data) {
@@ -2232,17 +2243,23 @@ function crearFactura(estado){
                 if (data.message != null && data.message.length > 0) {
                      mensajeAlertErrorOConfirmacion('error',data.message);    	
                 }
+                self.transaccion = false
+                self.update()
             } else {
                	self.cantidadEnterFacturar =0
                 self.update()
                 serverMessageJsonClase(data);
                 dataTemporal = data
                 evaluarFactura(data)
+                self.transaccion = false
+                self.update()
             }
         },
         error : function(xhr, status) {
             console.log(xhr);
             mensajeErrorServidor(xhr, status);
+            self.transaccion = false
+            self.update()
         }
     });
     

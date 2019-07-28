@@ -7,9 +7,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Dao.ProveedorSimplificadoDao;
-import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.ProveedorSimplificado;
 @Repository("proveedorSimplificadoDao")
@@ -18,16 +18,19 @@ public class ProveedorSimplificadoDaoImpl implements ProveedorSimplificadoDao {
 	@PersistenceContext
 	EntityManager entityManager;
 	
+	@Transactional
 	@Override
 	public void agregar(ProveedorSimplificado proveedorSimplificado) {
 		entityManager.persist(proveedorSimplificado);
 	}
 
+	@Transactional
 	@Override
 	public void modificar(ProveedorSimplificado proveedorSimplificado) {
 		entityManager.merge(proveedorSimplificado);
 	}
 
+	@Transactional
 	@Override
 	public void eliminar(ProveedorSimplificado proveedorSimplificado) {
 		entityManager.remove(proveedorSimplificado);

@@ -15,10 +15,10 @@
 	<!-- jQuery UI 1.11.4 -->
 	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 	<!-- JQUERY Properties-->
-	<script type="text/javascript" src="js/jquery.i18n.js"></script>
+	<script type="text/javascript" th:src="@{js/jquery.i18n.js}"></script>
 	<script type="text/javascript" th:src="@{webjars/jquery-i18n-properties/1.10.2/jquery.i18n.properties.min.js}"></script>
-    <script type="text/javascript" src="/js/jquery.blockUI.js"></script>
-	<script type="text/javascript" src="/js/jquery.validate.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.blockUI.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery.validate.min.js}"></script>
 	 
 	 <!-- MASK -->
 	 <script type="text/javascript" src="js/jquery.mask.js"></script>
@@ -46,10 +46,7 @@
     
 </head>
 <body>
-<section layout:fragment="header">
 
-
-</section>
 <div layout:fragment="content">
     
     <punto-venta></punto-venta>

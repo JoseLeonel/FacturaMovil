@@ -20,8 +20,8 @@ import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 
 @Entity
-@Table(name = "factura_simpli")
-public class FacturaSimplificada implements Serializable {
+@Table(name = "compra_simpli")
+public class CompraSimplificada implements Serializable {
 	
 	private static final long serialVersionUID = 826299407924905733L;
 
@@ -218,11 +218,14 @@ public class FacturaSimplificada implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "usuario_id", nullable = false)
 	private Usuario usuarioCreacion;
+	
+	@Column(name = "act_comercial", length = 6)
+	private String						codigoActividad;
 
 	
 
 	
-	public FacturaSimplificada() {
+	public CompraSimplificada() {
 		super();
 		this.estado = Constantes.FACTURA_ESTADO_PENDIENTE;
 		this.created_at = new Date();
@@ -231,21 +234,13 @@ public class FacturaSimplificada implements Serializable {
 	}
 
 	
-	public FacturaSimplificada(Long id, Date fechaCredito, String numeroConsecutivo, String consecutivoProforma,
-			String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc,
-			String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon,
-			Date referenciaFechaEmision, String medioEfectivo, String medioTarjeta, String medioBanco,
-			String nombreFactura, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados,
-			Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado,
-			Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto,
-			Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito,
-			Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar,
-			Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Double pesoTransporteTotal,
-			Double totalServExonerado, Double totalMercExonerada, Double totalExonerado, Double totalIVADevuelto,
-			Double totalOtrosCargos, String tipoDocumentoOtroCargo, String detalleOtroCargo, Date created_at,
-			Date updated_at, Integer versionEsquemaXML,
-			com.emprendesoftcr.modelo.ProveedorSimplificado proveedorSimplificado, Empresa empresa,
-			Usuario usuarioCreacion) {
+	
+
+	
+	
+
+	public CompraSimplificada(Long id, Date fechaCredito, String numeroConsecutivo, String consecutivoProforma, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon, Date referenciaFechaEmision, String medioEfectivo, String medioTarjeta, String medioBanco, String nombreFactura, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta,
+			Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Double pesoTransporteTotal, Double totalServExonerado, Double totalMercExonerada, Double totalExonerado, Double totalIVADevuelto, Double totalOtrosCargos, String tipoDocumentoOtroCargo, String detalleOtroCargo, Date created_at, Date updated_at, Integer versionEsquemaXML, com.emprendesoftcr.modelo.ProveedorSimplificado proveedorSimplificado, Empresa empresa, Usuario usuarioCreacion, String codigoActividad) {
 		super();
 		this.id = id;
 		this.fechaCredito = fechaCredito;
@@ -305,7 +300,13 @@ public class FacturaSimplificada implements Serializable {
 		ProveedorSimplificado = proveedorSimplificado;
 		this.empresa = empresa;
 		this.usuarioCreacion = usuarioCreacion;
+		this.codigoActividad = codigoActividad;
 	}
+
+
+
+
+
 
 
 	public String getTipoDocumentoOtroCargo() {
@@ -872,6 +873,28 @@ public class FacturaSimplificada implements Serializable {
 
 	public void setProveedorSimplificado(ProveedorSimplificado proveedorSimplificado) {
 		ProveedorSimplificado = proveedorSimplificado;
+	}
+
+
+
+
+
+
+
+	
+	public String getCodigoActividad() {
+		return codigoActividad;
+	}
+
+
+
+
+
+
+
+	
+	public void setCodigoActividad(String codigoActividad) {
+		this.codigoActividad = codigoActividad;
 	}
 
 	

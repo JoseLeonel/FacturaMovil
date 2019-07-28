@@ -35,5 +35,7 @@ public interface EmpresaDao {
 	String generaClaveFacturaTributacion(Empresa empresa, String consecutivoFactura, Integer comprobanteElectronico) throws Exception;
 	
 	Collection<Empresa> findByEstado(String estado);
+	
+	String generarConsecutivoCompraSimplificada(Empresa empresa, Usuario usuario) throws Exception;
 
 }

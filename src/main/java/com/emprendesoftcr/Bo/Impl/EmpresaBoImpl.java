@@ -114,4 +114,11 @@ public class EmpresaBoImpl implements EmpresaBo {
 	public String generarConsecutivoProforma(Empresa empresa, Usuario usuario) throws Exception{
 		return empresaDao.generarConsecutivoProforma(empresa, usuario);
 	}
+
+	@Override
+	@Transactional
+	public String generarConsecutivoCompraSimplificada(Empresa empresa, Usuario usuario) throws Exception {
+		
+		return empresaDao.generarConsecutivoCompraSimplificada(empresa, usuario);
+	}
 }

@@ -51,7 +51,7 @@ public class Constantes {
 	public static final Integer					NO_MOSTRAR_IMPUESTO_10_PORCIENTO										= 1;
 	public static final Integer					SI_MOSTRAR_IMPUESTO_10_PORCIENTO										= 2;
 	public static final String					COMBO_TODOS																					= "0";
-	public static final String					COMBO_TODOS_T																					= "Todos";
+	public static final String					COMBO_TODOS_T																				= "Todos";
 	// Empresa aplica factura Electronica
 	public static final Integer					NO_APLICA_FACTURA_ELECTRONICA												= 1;
 	public static final Integer					SI_APLICA_FACTURA_ELECTRONICA												= 0;
@@ -63,17 +63,15 @@ public class Constantes {
 //Valores fijos
 	public static final int							LONGITUD_EMAIL																			= 200;
 	public static final String					KEY_EMAIL_FORMATO_INCORRECTO												= "error.formato.email";
-	public static final String KEY_CEDULA_JURIDICA_FORMATO_INCORRECTO = "error.cedula.juridica.formato.incorrecto";
-	public static final String KEY_CEDULA_FISICA_FORMATO_INCORRECTO = "error.cedula.fisica.formato.incorrecto";
-	public static final String KEY_CEDULA_OTRA_FORMATO_INCORRECTO = "error.cedula.otra.formato.incorrecto";
-	
-	public static final String PATRON_CEDULAS_TODAS = "^[a-zA-Z][a-zA-Z\\-' ]*[a-zA-Z ]$";
+	public static final String					KEY_CEDULA_JURIDICA_FORMATO_INCORRECTO							= "error.cedula.juridica.formato.incorrecto";
+	public static final String					KEY_CEDULA_FISICA_FORMATO_INCORRECTO								= "error.cedula.fisica.formato.incorrecto";
+	public static final String					KEY_CEDULA_OTRA_FORMATO_INCORRECTO									= "error.cedula.otra.formato.incorrecto";
+
+	public static final String					PATRON_CEDULAS_TODAS																= "^[a-zA-Z][a-zA-Z\\-' ]*[a-zA-Z ]$";
 
 	// Patron que requiere la combinacion de: numeros y letras
-	public static final String PATRON_REGISTRO_CLAVE = "^((?=.*[\\d])(?=.*[A-Za-z])|(?=.*[^\\w\\d\\s])(?=.*[A-Za-z])).{6,}$";
-	public static final String PATRON_ICECLAVE = "^\\d{6}$";
-	
-	
+	public static final String					PATRON_REGISTRO_CLAVE																= "^((?=.*[\\d])(?=.*[A-Za-z])|(?=.*[^\\w\\d\\s])(?=.*[A-Za-z])).{6,}$";
+	public static final String					PATRON_ICECLAVE																			= "^\\d{6}$";
 
 	// Tipo de codigos de productos
 	public static final String					TIPO_IMPUESTO_VENTA_ARTICULO												= "01";
@@ -295,6 +293,10 @@ public class Constantes {
 	// Estados
 	public static final String					ESTADO_ACTIVO																				= "Activo";
 	public static final String					ESTADO_INACTIVO																			= "Inactivo";
+
+//Estados
+	public static final Integer					ESTADO_ACTIVO_PROVEEDOR_SIMPLIFICADO								= 1;
+	public static final Integer					ESTADO_INACTIVO_PROVEEDOR_SIMPLIFICADO							= 0;
 	//
 	public static final String					EMPTY																								= "";
 	public static final String					BLANK																								= " ";
@@ -332,7 +334,6 @@ public class Constantes {
 	public static final Integer					DATO_ERRONEO																				= -1;
 	public static final String					DOMIMIO_CORREO_ELECTRONICO_ICE											= "ice.co.cr";
 
-	
 	public static final String					PATRON_CEDULA_EXTRANJEROS_RESIDENCIA								= "^[cC]\\d{1,17}$";
 	public static final String					PATRON_CEDULA_EXTRANJEROS_PASAPORTE									= "^[pP]\\d{1,17}$";
 	public static final String					PATRON_CEDULA_FISICA_NACIONALES											= "^[1-7]\\d{8}$";
@@ -431,6 +432,7 @@ public class Constantes {
 	public static final String					FACTURA_CODIGO_REFERENCIA_SUSTITUYE_COMPROBANTE			= "05";
 
 	public static final String					FACTURA_TIPO_DOC_TIQUETE														= "04";
+	public static final String					FACTURA_TIPO_DOC_COMPRA_SIMPLIFICADA								= "08";
 	public static final String					FACTURA_TIPO_DOC_PROFORMAS													= "88";
 	public static final String					FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO								= "87";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_ELECTRONICA								= "01";

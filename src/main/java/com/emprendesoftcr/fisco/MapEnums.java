@@ -12,6 +12,12 @@ import com.google.common.collect.ImmutableMap;
 
 public class MapEnums {
 
+	public static final Map<Integer, String> ENUM_ESTADO_ = ImmutableMap.<Integer, String>builder()
+  		.put(1, "Activo").
+       put(0, "Desactivo")
+       .build();
+
+	
    public static final Map<Integer, String> ENUM_ESTADO_HACIENTA = ImmutableMap.<Integer, String>builder()
   		.put(1, "Pendiente Firmar xml").
        put(2, "Firmado XML").

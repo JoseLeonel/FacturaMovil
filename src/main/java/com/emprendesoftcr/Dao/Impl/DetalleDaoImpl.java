@@ -175,7 +175,7 @@ public class DetalleDaoImpl implements DetalleDao {
 
 	@Override
 	public Detalle findByCodigoAndEmpresa(String codigo, Empresa empresa) {
-		Query query = entityManager.createQuery("select obj from Empresa obj where obj.codigo = :codigo and obj.empresa = :empresa");
+		Query query = entityManager.createQuery("select obj from Detalle obj where obj.codigo = :codigo and obj.empresa = :empresa");
 		query.setParameter("codigo", codigo);
 		query.setParameter("empresa", empresa);
 		List<Detalle> results = query.getResultList();

@@ -1138,12 +1138,14 @@ public class FacturasController {
 	 * @param status
 	 * @return
 	 */
+	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/CrearFacturaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator crearFactura(HttpServletRequest request, ModelMap model, @ModelAttribute FacturaCommand facturaCommand, BindingResult result, SessionStatus status) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
+
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			return this.crearFactura(facturaCommand, result, usuario);
 		} catch (Exception e) {
