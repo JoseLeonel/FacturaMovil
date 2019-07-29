@@ -49,68 +49,65 @@
                     <div class="box-body">
                         <form id="formularioCompra">
                             <input   type="hidden" class="proveedorSimplificado" id="proveedorSimplificado" name="proveedorSimplificado" value="{proveedorSimplificado.id}">
-                            <input id="id" name="id" type="hidden" value="{compra.id}">
                             <div class="row">
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("compra.forma.pago")} </label> 
-                                        <select  onchange= {__formaPago} class="form-control formaPago campo" id="formaPago" >
-                                            <option each={comboFormaPagos} value="{estado}" selected="{compra.formaPago ==estado?true:false}" >{descripcion}</option>
-                                        </select>
-                                    </div>
- 
-                                </div>
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-46">
-                                    <div class="form-group ">
-                                        <label for="pago_tipoVentaL">{$.i18n.prop("compra.tipo.documento")} </label> 
-                                        <select class="form-control tipoDocumento campo" id="tipoDocumento" name="tipoDocumento"   >
-                                            <option each={comboTipoDocumentos} value="{estado}" selected="{compra.tipoDocumento ==estado?true:false}" >{descripcion}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>    
-                            <div class="row">
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                                    <div class="form-group ">
-                                        <label>{$.i18n.prop("compra.consecutivo")}</label> 
-                                        <input type="text" class="form-control consecutivo campo" id="consecutivo" name="consecutivo" value="{compra.consecutivo}">
-                                    </div>
-                                </div>
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                                    <div  class="form-group">
-                                        <label>{$.i18n.prop("compra.fecha.compra")}</label> 
-                                        <div  class="form-group input-group date datepickerFechaCompra " data-provide="datepickerFechaCompra"   data-date-format="yyyy-mm-dd">
-                                            <input type="text" class="form-control fechaCompra campo" id="fechaCompra" name = "fechaCompra" value="{compra.fechaCompra}" >
-                                            <div class="input-group-addon">
-                                                <span class="glyphicon glyphicon-th"></span>
+                                <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
+                                    <div class="row">
+                                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
+                                            <div class="form-group ">
+                                                <label>{$.i18n.prop("factura.condicion.pago")} </label> 
+                                                <select  onchange= {__formaPago} class="form-control condicionVenta" id="condicionVenta" name="condicionVenta">
+                                                    <option each={comboCondicionPagos} value="{estado}" selected="{factura.condicionVenta ==estado?true:false}" >{descripcion}</option>
+                                                </select>
+                                            </div>
+                                        </div>    
+                                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
+                                            <div class="form-group ">
+                                                <label for="pago_tipoVentaL">{$.i18n.prop("factura.tipo.documento")} </label> 
+                                                <select class="form-control tipoDoc" id="tipoDoc" name="tipoDoc"   >
+                                                    <option each={comboTipoDocumentos} value="{estado}" selected="{factura.tipoDoc ==estado?true:false}" >{descripcion}</option>
+                                                </select>
                                             </div>
                                         </div>
-                                    </div>    
-                                </div>
-                            </div>    
-                            <div class="row">
-                            </div>    
-                            <div class="row">
-                                <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
-                                    <div show = {!mostrarCamposIngresoContado || compra.fechaCredito} class="form-group has-success">
-                                        <label >{$.i18n.prop("compra.fecha.credito")}</label> 
+                                    </div>
+                                    <div class="form-group ">
+                                        <label >{$.i18n.prop("factura.nota")}</label> 
+                                        <input type="text" class="form-control nota" id="nota" name="nota" value="{factura.nota}">
+                                    </div>
+                                    <div show = "{mostrarCamposIngresoContado ==false }" class="form-group ">
+                                        <label >{$.i18n.prop("factura.fecha.credito")}</label> 
                                         <div  class="form-group input-group date datepickerFechaCredito" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
-                                            <input type="text" class="form-control fechaCredito campo" id="fechaCredito" value="{compra.fechaCredito}" >
+                                            <input  onclick={__ActualizarPlazoCredito} type="text" class="form-control fechaCredito selectFechaCredito" name="fechaCredito" id="fechaCredito" value="{factura.fechaCredito}" >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
                                             </div>
                                         </div>
                                     </div>    
-                                </div>
-                            </div>   
-                            <div class="row">
-                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                    <div class="form-group ">
-                                        <label >{$.i18n.prop("compra.nota")}</label> 
-                                        <input type="text" class="form-control nota campo" id="nota" name="nota" value="{compra.nota}">
+                                    <div class="form-group " show = "{mostrarCamposIngresoContado == false}">
+                                        <label>{$.i18n.prop("factura.plazoCredito")}</label> 
+                                        <input type="number" id = "plazoCreditoL"  name "plazoCreditoL" class="form-control plazoCreditoL" value="{factura.plazoCredito}" >
                                     </div>
+
                                 </div>
-                            </div>
+                                <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6">
+                                    <div class="form-group ">
+                                        <label class="{labelTotales}">{$.i18n.prop("factura.resumen.efectivo")} </label> 
+                                        <input onclick={_SeleccionarEfectivo}   onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control totalEfectivo " id="totalEfectivo" name="totalEfectivo" value="{factura.totalEfectivo}" >
+                                    </div>
+                                    <div  class="form-group ">
+                                        <label class="{labelTotales}">{$.i18n.prop("factura.resumen.tarjeta")} </label> 
+                                        <input onclick={_SeleccionarTarjeta} onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control totalTarjeta" id="totalTarjeta" name="totalTarjeta"  value="{factura.totalTarjeta}" >
+                                    </div> 
+                                    <div  class="form-group " >
+                                        <label class="{labelTotales} ">{$.i18n.prop("factura.resumen.banco")} </label> 
+                                        <input onclick={_SeleccionarBanco} onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number"  onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="form-control totalBanco"  id="totalBanco" name="totalBanco"  value="{factura.totalBanco}" >
+                                    </div> 
+
+                                </div>
+
+                            </div>    
+                            
+                                
+                            
                         </form>   
                     </div>                    
                     <div class="box-footer">
@@ -130,6 +127,9 @@
                             </div>
                             <div class="precioTotalFactura">
                                 <p class="total" style="text-align:right;">Total  : <span id="lblTotal">{totalGeneralCompra}</span></p>
+                            </div>
+                            <div class="precioTotalFactura" >
+                                    <p class="total " style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span></p>    
                             </div>
                         </article>
                     </aside>     
@@ -221,11 +221,10 @@
                             <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.codigo")}                        </div></th>
                             <th style="width:18%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descripcion")}</div></th>
                             <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.cantidad")}   </div></th>
-                            <th style="width:25%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.costo")}                         </div></th>
-                            <th style="width:17%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.precio")}                        </div></th>
+                            <th style="width:17%;"><div class="tituloFormat">Precio Unitario                        </div></th>
                             <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descuento")}
                             <th style="width:8%;"><div class="tituloFormat">Desc                     </div></th>
-                            <th style="width:8%;"><div class="tituloFormat">%Imp                      </div></th>
+                            <th style="width:8%;"><div class="tituloFormat">%IVA                      </div></th>
                             <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.impuesto")}                      </div></th>
                             <th  style="width:8%;"> <div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.subTotal")}                        </div></th>
                             <th  style="width:8%;"> <div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.total")}                        </div></th>
@@ -236,36 +235,33 @@
                             <td style="width:5%;">
                                 <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
                             </td>
-                            <td style="width:2%;"><h2>{numeroLinea}</h2></td>
-                            <td style="width:8%;"><h2>{codigo}</h2></td>
-                            <td style="width:16%;"><h2>{descripcion}</h2></td>
+                            <td style="width:2%;"><div class="formatDetalle">{numeroLinea}</div></td>
+                            <td style="width:8%;"><div class="formatDetalle">{codigo}</div></td>
+                            <td style="width:16%;"><div class="formatDetalle">{descripcion}</div></td>
                             <td class="text-right" style="width:17%;">
-                                <input onkeyup={__recalculacionDelDetalle} onBlur={__recalculacionDelDetalleBlur} id= "cantidadDetalle" class="campodetalle" type="number" step="any" placeholder="Cantidad Detalle" value = {cantidad} min="1" pattern="^[0-9]+"/>
-                            </td>
-                            <td class="text-right" style="width:25%;">
-                                <input  onkeyup={__actualizarCostoKeyPress} onBlur={__actualizarCostoBlur} class="campodetalle" type="number" step="any"  value = "{costo}" min="0" pattern="^[0-9]+"/>
+                                <div class="formatDetalle">{cantidad}</div>
                             </td>
                             <td class="text-right" style="width:14%;">
-                                <input  onkeyup={__actualizarPrecioKeyPress} onBlur={__actualizarPrecioBlur} class="campodetalle" type="number" step="any"  value = "{precio}" min="0" pattern="^[0-9]+"/>
+                                <div class="formatDetalle">{precio}</div>
                             </td>
                             <td class="text-right" style="width:8%;">
-                                <input  onkeyup={__actualizarDescuentoKeyPress} onBlur={__actualizarDescuentoBlur} class="campodetalleDescuento" type="number" step="any"  value = "{descuento}"  min="0" pattern="^[0-9]+" />
+                                <div class="formatDetalle">{descuento}</div>
                             </td>
                             <td class="text-right" style="width:14%;">
-                                <h2 class="totalLabel">{totalDescuento.toFixed(2)} </h2>
+                                <div class="formatDetalle">{totalDescuento.toFixed(2)} </div>
                             </td>
                             <td class="text-right" style="width:8%;">
-                                <h2 class="totalLabelImpuesto">{impuesto*100} </h2>
+                                <div class="formatDetalle">{impuesto*100} </div>
                             </td>
                             <td class="text-right" style="width:14%;">
-                                <h2 class="totalLabel">{totalImpuesto.toFixed(2)} </h2>
+                                <div class="formatDetalle">{totalImpuesto.toFixed(2)} </div>
                             </td>
                            <td class="text-right" style="width:14%;">
-                                <h2 class="totalLabel">{(montoTotalLinea - totalImpuesto).toFixed(2) } </h2>
+                                <div class="formatDetalle">{(montoTotalLinea - totalImpuesto).toFixed(2) } </div>
                             </td>
  
                             <td class="text-right" style="width:14%;">
-                                <h2 class="totalLabel">{montoTotalLinea.toFixed(2)} </h2>
+                                <div class="formatDetalle">{montoTotalLinea.toFixed(2)} </div>
                             </td>
                         </tr>
                         </tbody>
@@ -282,11 +278,7 @@
             <div class="modal-body">
                 <form id="formularioLineaDetalle" name ="formularioLineaDetalle" >
                     <div class="row">
-                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
-                            <label class="tamanoLetraSimplificadaDetalle"  >Cantidad  </label>
-                            <input type="number" step="any" class="form-control cantidad tamanonumeros" id="cantidad" name="cantidad" onkeyup = {__CalculaMontoLinea}>
-                        </div>
-
+                       
                         <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                             <label class="tamanoLetraSimplificadaDetalle" >{$.i18n.prop("articulo.codigo")}  </label>
                             <input type="text" class="form-control tamanonumeros" id="codigoArt" name="codigoArt"  onkeyup = {__CalculaMontoLinea} >
@@ -295,13 +287,22 @@
                             <label class="tamanoLetraSimplificadaDetalle" >{$.i18n.prop("articulo.descripcion")}</label>
                             <input type="text" class="form-control tamanonumeros"   id="descArticulo" name="descArticulo" onkeyup = {__CalculaMontoLinea}>
                         </div>
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                            <label class="tamanoLetraSimplificadaDetalle">{$.i18n.prop("articulo.tipoCodigo")}</label>
+                            <select  class="form-control tipoCodigo " id="tipoCodigo" name="tipoCodigo"  >
+                                <option  each={tipoCodigos}  value="{codigo}" selected="{articulo.tipoCodigo ==codigo?true:false}"  >{descripcion}</option>
+                            </select>
+                        </div>
+
                     </div> 
                     <div class="row">
                         <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
-                            <label class="tamanoLetraSimplificadaDetalle">{$.i18n.prop("articulo.tipoCodigo")}</label>
-                            <select  class="form-control tipoImpuesto " id="tipoCodigo" name="tipoCodigo"  >
-                                <option  each={tipoCodigos}  value="{codigo}" selected="{articulo.tipoCodigo ==codigo?true:false}"  >{descripcion}</option>
-                            </select>
+                            <label class="tamanoLetraSimplificadaDetalle"  >Cantidad  </label>
+                            <input type="number" step="any" class="form-control cantidad tamanonumeros" id="cantidad" name="cantidad" onkeyup = {__CalculaMontoLinea}>
+                        </div>
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                            <label class="tamanoLetraSimplificadaDetalle"  >Precio Unitario </label>
+                            <input type="number" step="any" class="form-control precioUnitario  tamanonumeros" id="precioUnitario" name="precioUnitario" onkeyup = {__CalculaMontoLinea} >
                         </div>
 
                         <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
@@ -310,18 +311,15 @@
                                 <option  each={impuestos}  value="{codigo}"  >{descripcion}</option>
                             </select>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                             <label class="tamanoLetraSimplificadaDetalle">{$.i18n.prop("articulo.codigoTarifa")}</label>
                             <select  onchange= {__AsignarTarifa} class="form-control selectCodigoTarifa " id="codigoTarifa" name="codigoTarifa"  >
                                 <option  each={tarifas1.aaData}  value="{tarifaIVAI.codigoTarifa}" selected="{articulo.codigoTarifa ==tarifaIVAI.codigoTarifa && articulo.tipoImpuesto ==tipoImpuesto ?true:false}"  >{tarifaIVAI.descripcion}</option>
                             </select>
                         </div>        
-                    </div>
-                    <div class="row">
-                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
-                            <label class="tamanoLetraSimplificadaDetalle"  >Precio Unitario </label>
-                            <input type="number" step="any" class="form-control precioUnitario  tamanonumeros" id="precioUnitario" name="precioUnitario" onkeyup = {__CalculaMontoLinea} >
-                        </div>
+                       
                         <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                             <label class="tamanoLetraSimplificadaDetalle"  >% Descuento </label>
                             <input type="number" step="any" class="form-control porcentajeDescuento  tamanonumeros" id="porcentajeDescuento" name="porcentajeDescuento"  onkeyup = {__CalculaMontoLinea}>
@@ -373,6 +371,11 @@
 <!--fin del modal-->
 
 <style type="text/css">
+    .formatDetalle{
+        font-size: 25px;
+        color: black;
+        text-align: center;
+    }
     .tamanonumeros{
        font-size: 34px;
        font-weight: 600;
@@ -930,10 +933,8 @@
         $("#formularioLineaDetalle").validate(reglasDeValidacionDetalleCompra());
            __informacionData()
         __InicializarTabla('.tableListaProveedor')
-        __InicializarTabla('.tableListaInventario')
         agregarInputsCombos_Articulo()
-          __ListaComprasEnEspera()
-        __comboFormaPagos()
+        __comboCondicionPago()
         __ComboTipoDocumentos()
         __Teclas()
         __Impuestos()
@@ -957,6 +958,68 @@
     //__Init()
 })
 
+
+_SeleccionarEfectivo(){
+    $('.totalEfectivo').select()
+    $(".totalEfectivo").focus()
+}    
+
+_SeleccionarTarjeta(){
+    $('.totalTarjeta').select()
+    $(".totalTarjeta").focus()
+}   
+_SeleccionarBanco(){
+    $('.totalBanco').select()
+    $(".totalBanco").focus()
+}  
+__ActualizarPlazoCredito(){
+    actualizaElPlazoDiasCredito();
+}
+
+
+function actualizaElPlazoDiasCredito(){
+    var valor = $('.selectFechaCredito').val()
+    if(valor ==null || valor ==""){
+        return true
+    }
+    var fechaReal = new Date();
+    var formatoFecha = formatoFechaF(fechaReal);
+    var fecha1 = moment(formatoFecha);
+    var fecha2 = moment($('.selectFechaCredito').val());
+    self.factura.plazoCredito = fecha2.diff(fecha1, 'days');
+    self.update();
+
+}
+
+/**
+* cargar los estados de la factura
+**/
+function __comboCondicionPago(){
+    self.comboCondicionPagos = []
+    self.update()
+    self.comboCondicionPagos.push({
+        estado:"01",
+        descripcion:$.i18n.prop("factura.codicion.venta.contado")
+    })
+    self.comboCondicionPagos.push({
+        estado:"02",
+        descripcion:$.i18n.prop("factura.codicion.venta.credito")
+    })
+    self.update()
+}
+/**
+* cargar los tipos de Documento de la factura
+**/
+function __ComboTipoDocumentos(){
+    self.comboTipoDocumentos = []
+    self.update()
+    self.comboTipoDocumentos.push({
+        estado:"08",
+        descripcion:$.i18n.prop("factura.tipo.documento.compras.simplificada")
+    })
+    self.update()
+}
+
 __CalculaMontoLinea(){
   aplicarMontos()
 }
@@ -978,6 +1041,10 @@ function aplicarMontos(){
     $("#montoDescuento").val(redondeoDecimales(montoDescuento,2))
     $("#montoImpuesto").val(redondeoDecimales(montoImpuesto,2))
     $("#montoTotalLinea").val(redondeoDecimales(montoTotalLinea,2))
+    self.detalle.porcentajeDescuento = porcentajeDescuento
+    self.detalle.descripcion = $("#descArticulo").val()
+    self.detalle.codigo = $("#codigoArt").val()
+    self.detalle.tipoCodigo = $(".tipoCodigo").val()
     self.detalle.montoDescuento = montoDescuento
     self.detalle.precioUnitario = precioUnitario
     self.detalle.impuesto = impuesto
@@ -987,6 +1054,7 @@ function aplicarMontos(){
     self.detalle.montoImpuesto = montoImpuesto
     self.detalle.montoTotalLinea = montoTotalLinea
     self.update()
+   
 
 
 }
@@ -1010,7 +1078,7 @@ function __Eventos(){
 __AplicarAgregarLineaDetalle(){
     $("#formularioLineaDetalle").validate(reglasDeValidacionDetalleCompra());
     if ($("#formularioLineaDetalle").valid()) {
-        
+         __nuevoArticuloAlDetalle()
     }
 }
 
@@ -1169,7 +1237,7 @@ var reglasDeValidacionDetalleCompra = function() {
 			descArticulo : {
 				required : true,
                 maxlength:160,
-                minlength:10,
+                minlength:5,
                 lettersOnly : true
              },
              precioUnitario:{
@@ -1212,19 +1280,9 @@ var reglasDeValidacionCompra = function() {
  __ListaDecodigos(){
   $('#modalAgregarLineaEnCompra').modal('show')      
  }
-/**
-*  Buscar la Compra Pendiente en espera
-**/
-__CargarCompraEspera(e){
-   __CompraEnEspera(e.item)
-}
 
-/**
-* Crear Compra en espera
-**/
-__crearCompraEnEspera(){
- crearCompra(1)  
-}
+
+
 /**
 ** Se aplica o se crea una compra cargada en la pantalla
 **/
@@ -1311,40 +1369,10 @@ function __Init(){
     self.totalSubTotalGeneral  = 0;
 
     self.update();
-    // Tipo de Pagos
-     __comboFormaPagos()
-     //Tipos de Documentos
-      __ComboTipoDocumentos()
-    localStorage.setItem('detallesComprasNueva', JSON.stringify(self.detail));
-    localStorage.setItem('compraNueva', JSON.stringify(self.compra));
-    localStorage.setItem('proveedor', JSON.stringify(self.proveedor));
+    
      
 }
-/**
-*  Compra en espera ,proveedor y sus  detalles desde back end
-**/
-function __CompraEnEspera(compra){
-     __Init()
-    self.detail         = []
-    self.proveedor      = null         
-    self.update()
-    $.ajax({
-        url: "ListarDetlleByCompraAjax.do",
-        datatype: "json",
-        data: {idCompra:compra.id},
-        method:"POST",
-        success: function (data) {
-             if(data.aaData.length > 0){
-               cargarDetallesCompraEnEspera(data.aaData)
-            }
-            
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            
-        }
-    });
-}
+
 /** 
 *Formato de la fecha con hora
 **/
@@ -1401,91 +1429,6 @@ function cargarDetallesCompraEnEspera(data){
     
     self.update()
      __calculate(); 
-}
-/**
-*  Crear Compra nueva
-**/
-function crearCompra(estadoCompra){
-    if(self.detail.length == 0 ){
-        mensajeError($.i18n.prop("compra.alert.sin.detalles"))
-        return
-    }
-    if(formaPago.value == 2  ){
-        if(fechaCredito.value == null || fechaCredito.value.length == 0){
-           mensajeError($.i18n.prop("compra.alert.fechaCredito"))
-            return
-        }
-    }
-    self.detalleCompra.data =self.detail
-    self.update()
-      var JSONDetalles = JSON.stringify( self.detalleCompra );
-    var informacion = {
-        id:self.compra.id,
-        nota:$('.nota').val(),
-        subTotal:__valorNumerico(self.compra.subTotal),
-        totalDescuento:__valorNumerico(self.compra.totalDescuento),
-        totalImpuesto:__valorNumerico(self.compra.totalImpuesto),
-        totalCompra:__valorNumerico(self.compra.totalCompra),
-        formaPago:$('.formaPago').val(),
-        tipoDocumento:$('.tipoDocumento').val(),
-        proveedor:$('.proveedor').val(),
-        consecutivo:$('.consecutivo').val(),
-        estado:estadoCompra,
-        fechaCredito:$('.formaPago').val() == 2?$('.fechaCredito').val():new Date(),
-        fechaCompra:$('.fechaCompra').val() == null ? new Date():$('.fechaCompra').val(),
-        detalleCompra :JSONDetalles
-     }
-    $.ajax({
-        type : "POST",
-        dataType : "json",
-        data : informacion,
-        url : "CrearCompraAjax.do",
-        success : function(data) {
-            if (data.status != 200) {
-               	serverMessageJsonClase(data);
-                if (data.message != null && data.message.length > 0) {
-                    mensajeError(data.message)
-                }
-            } else {
-               	serverMessageJsonClase(data);
-                swal({
-	                title: '',
-	                text: data.message,
-	                type: 'success',
-	                showCancelButton: false,
-	                confirmButtonText: 'Aceptar',
-                })
-                __Init()
-                __ListaComprasEnEspera()
-            }
-        },
-        error : function(xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });
-}
-/**
-*  Lista de las compras pendientes pendiente por el usuario
-**/
-function __ListaComprasEnEspera(){
-    self.compras_espera         = {data:[]}  
-    self.update()
-    $.ajax({
-        url: 'ListarComprasEsperaActivasAjax',
-        datatype: "json",
-        method:"GET",
-        success: function (result) {
-            if(result.aaData.length > 0){
-               self.compras_espera.data =  result.aaData;  
-               self.update(); 
-            }
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            mensajeErrorServidor(xhr, status);
-        }
-    });    
 }
 
 
@@ -1562,80 +1505,39 @@ function __ListaDeProveedores(){
     });
 }
 
-/**
-*  Agregar un articulo si existe se suma la cantidad y no existe se agrega en el detalle
-**/
-function __agregarArticulo(cantidad){
-  
-    if(self.articulo == null){
-        return;
-    }
-    if(cantidad == null){
-        cantidad = 1
-    }
-    if(cantidad == 0){
-        cantidad = 1
-    }
-    var encontrado = false;
-     if(self.detail[0] == null){ // first element
-        __nuevoArticuloAlDetalle(cantidad);
-        encontrado = true;
-    }else{//Se busca el articulo si existe se incrementa la cantidad
-        for (var count = 0; count < self.detail.length; count++) {
-            if (self.detail[count].articulo_id == self.articulo.id ){
-               self.item  = self.detail[count];
-               self.item.cantidad = self.item.cantidad + parseFloat(cantidad)
-               self.update();
-               __actualizarItemArray();
-               self.detail[count] = self.item;
-               encontrado = true;
-              self.update();
-            }
-        }
-    
-    }
-    // si no existe se agrega como un codigo nuevo
-    if(encontrado == false){ // add elemen
-      __nuevoArticuloAlDetalle(cantidad);
-    }
-    __calculate(); 
-    self.articulo = null;
-    self.update()
 
-    
-}
 
 /**
 *   agregar Articulos nuevos en el detalle de la Compra
 **/
-function __nuevoArticuloAlDetalle(cantidad){
+function __nuevoArticuloAlDetalle(){
     if(self.detalle.descripcion == null){
         return;
     }
     if(self.detalle.descripcion == ""){
         return;
     }
-    var iva =  __valorNumerico(self.articulo.impuesto/100)
-    var montoImpuestoV    =__valorNumerico(self.articulo.costo * iva)
-    var totalImpuesto     = __valorNumerico(montoImpuestoV) * __valorNumerico(cantidad) 
-    var montoTotalLinea   = __valorNumerico(self.articulo.costo * cantidad) +  totalImpuesto
-    self.descuento      = 0;
-    self.pesoPrioridad =  self.pesoPrioridad + 1
-    self.numeroLinea = self.numeroLinea + 1
-
+    var cont = 0
+    self.detail.forEach(function(elemen){
+        cont =  cont + 1
+    })  
+    self.numeroLinea = cont > 0?cont+1:1
+    self.pesoPrioridad =  cont > 0? cont+1:1
+    self.update()
     self.detail.push({
        numeroLinea     : self.numeroLinea,
        pesoPrioridad   :self.pesoPrioridad,  
-       codigo          : self.articulo.codigo,
-       descripcion     : self.articulo.descripcion,
-       cantidad        : __valorNumerico(cantidad),
-       costo           : __valorNumerico(self.articulo.costo),
-       precio          : __valorNumerico(self.articulo.precioPublico),
-       totalImpuesto   : __valorNumerico(totalImpuesto),
-       totalDescuento  :0,
-       impuesto        : __valorNumerico(iva),
-       descuento       : 0,
-       montoTotalLinea : __valorNumerico(montoTotalLinea)
+       codigo          : self.detalle.codigo,
+       descripcion     : self.detalle.descripcion,
+       tipoCodigo      : self.detalle.tipoCodigo,
+       cantidad        : self.detalle.cantidad,
+       costo           :0,
+       precio          : self.detalle.precioUnitario,
+       totalImpuesto   : self.detalle.montoImpuesto,
+       totalDescuento  : self.detalle.montoDescuento,
+       impuesto        : self.detalle.impuesto,
+       descuento       : self.detalle.porcentajeDescuento,
+       montoTotalLinea : self.detalle.montoTotalLinea
     }); 
     self.detail.sort(function(a,b) {
     if ( a.pesoPrioridad > b.pesoPrioridad )
@@ -1645,68 +1547,9 @@ function __nuevoArticuloAlDetalle(cantidad){
     return 0;
     } );
     self.update()
-}
-/**
-*   Actualizar el costo del codigo y recalcular la compra
-**/
-__actualizarCostoKeyPress(e){
-   
-    var costo = e.currentTarget.value;
-    self.item = e.item; 
-    self.update()
-    __ActualizarCosto(costo)
-}
-
-__actualizarCostoBlur(e){
-    var costo = e.currentTarget.value;
-    self.item = e.item; 
-    self.update()
-    __ActualizarCosto(costo)
-}
-
-
-function __ActualizarCosto(costo){
-    var index = self.detail.indexOf(self.item);
-   
-    //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
-    costo =__valorNumerico(costo);
-    self.item.costo = parseFloat(costo) ;  
-    _cambiaImpuesto()
-    __actualizarItemArray();
-    self.detail[index] = self.item;
-    self.update();
     __calculate();
 }
-/**
-* Actualiza el impuesto si cambia el costo
-**/
-function _cambiaImpuesto(){
-    if(self.item.impuesto ==0){
-        return 0
-    }
-    var costoProducto = 0
-    if(self.item.descuento > 0){
-        var valor = self.item.descuento /100
-        var resultado = self.item.costo * valor
-        costoProducto = self.item.costo - resultado
-    }else{
-        costoProducto = self.item.costo
-    }
-    var valor = costoProducto * self.item.impuesto
-    var valor = valor * self.item.cantidad
-    self.item.totalImpuesto = __valorNumerico(valor)
-    self.update()
-}
-/**
-* Actualizar item en el array
-**/
-function __actualizarItemArray(){
-    //Subtotal del Detalle
-    self.item.montoTotalLinea = __valorNumerico(self.item.costo * self.item.cantidad);
-    self.item.montoTotalLinea = __valorNumerico(self.item.montoTotalLinea-self.item.totalDescuento)
-    self.item.montoTotalLinea = __valorNumerico(self.item.montoTotalLinea + self.item.totalImpuesto);
-    self.update()
-}
+
 /**
 * eliminar un detalle Compra
 **/
@@ -1733,115 +1576,7 @@ __removeProductFromDetail(e) {
      __calculate();
  }
    
- /**
- * Cuando se aplica un cambio de cantidad en un detalle
- * Se aplica una recalculacion de todo el detalle y Compra
- **/ 
- __recalculacionDelDetalle(e){
-   // if (e.keyCode != 13) {
-   //     return;
-   // } 
-    var cantidad = e.currentTarget.value;
-    self.item = e.item; 
-    self.update()
-     __ActualizaCantidad(cantidad)
- }
-
-  /**
- * Cuando se aplica un cambio de cantidad en un detalle
- * Se aplica una recalculacion de todo el detalle y Compra
- **/ 
- __recalculacionDelDetalleBlur(e){
-    var cantidad = e.currentTarget.value;
-    self.item = e.item; 
-    self.update()
-    __ActualizaCantidad(cantidad)
-    
- }
-
- function __ActualizaCantidad(cantidad){
-    var index = self.detail.indexOf(self.item);
-    
-    //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
-    cantidad =__valorNumerico(cantidad);
-   // if(cantidad == 0){
-   //    cantidad = 1;
-   // }
-    self.item.cantidad = parseFloat(cantidad);  
-    _cambiaImpuesto()
-    __actualizarItemArray();
-    self.detail[index] = self.item;
-    self.update();
-    __calculate();
- }
-/**
-*   Actualizar el costo del codigo y recalcular la compra
-**/
-__actualizarPrecioKeyPress(e){
-    
-    var precio = e.currentTarget.value;
-    self.item = e.item; 
-    self.update()
-    __ActualizarPrecioDetalle(precio)
-}
-
-__actualizarPrecioBlur(e){
-    var precio = e.currentTarget.value;
-    self.item = e.item; 
-    self.update()
-    __ActualizarPrecioDetalle(precio)
-}
-
-function __ActualizarPrecioDetalle(precio){
-    var index = self.detail.indexOf(self.item);
-    //Cantidad del detalle se verifica si es null o espacio por defecto se deja en 1
-    precio =__valorNumerico(precio);
-    self.item.precio = parseFloat(precio);  
-    __actualizarItemArray();
-    self.detail[index] = self.item;
-    self.update();
-    //__calculate();
-}
-/**
-* Actualizar el descuento del codigo
-**/
-__actualizarDescuentoKeyPress(e){
-   
-    self.item     = e.item; 
-    self.update()
-    var descuento = e.currentTarget.value;
-    //Descuento se verifica si es null o espacios por defecto se deja en cero
-     descuento =__valorNumerico(descuento);
-    __ActualizarDescuentoDetalle(descuento)
-}
-
-__actualizarDescuentoBlur(e){
-    self.item     = e.item; 
-    self.update()
-    var descuento = e.currentTarget.value;
-    //Descuento se verifica si es null o espacios por defecto se deja en cero
-     descuento =__valorNumerico(descuento);
-    __ActualizarDescuentoDetalle(descuento)
-}
-
-function __ActualizarDescuentoDetalle(descuento){
-  //Descuento
-    if(self.item.descuento != descuento){
-       self.item.descuento =  parseFloat(descuento);  
-    } 
-    var valor = self.item.descuento /100
-    var resultado = self.item.costo * valor
-    self.item.totalDescuento =  __valorNumerico(resultado * self.item.cantidad)
-    self.item.totalDescuentoFormat = formatoDecimales(self.item.totalDescuento,2)
-    
-    self.update()   
-    _cambiaImpuesto()
-    __actualizarItemArray();
-    var index     = self.detail.indexOf(self.item);
-    self.detail[index] = self.item;
-    self.update();
-    __calculate();
-}
+ 
 /**
 * calculacion de los detalle de la compra 
 **/
@@ -1881,48 +1616,7 @@ function __calculate() {
     localStorage.setItem('proveedor', JSON.stringify(self.proveedor));
 
 }
-/**
-* Definicion de la tabla articulos 
-**/
-function _informacionData_Articulo(){
-   self.informacion_tabla_articulo = [	{'data' : 'codigo'         ,"name":"codigo"          ,"title" : $.i18n.prop("articulo.codigo")       ,"autoWidth":false},
-                                        {'data' : 'descripcion'    ,"name":"descripcion"     ,"title" : $.i18n.prop("articulo.descripcion")  ,"autoWidth":false},
-                                        {'data' : 'cantidad'       ,"name":"cantidad"        ,"title" : $.i18n.prop("inventario.cantidad")   ,"autoWidth":false},
-                                        {'data' : 'costo'          ,"name":"costo"           ,"title" : $.i18n.prop("articulo.costo")        ,"autoWidth":false},
-                                        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
-                                            "render":function(id,type, row){
-                                                    return __OpcionesArticulos(id,type,row);
-                                                }	 
-                                        },
-                              ];
-    
- self.update()        
-}
-/**
-* Opciones del modal de articulos
-*/
-function __OpcionesArticulos(){
-  var agregar  = '<a href="#"  title="Agregar" class="btn btnAgregar btn-success form-control" title="Modificar" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
-  return  agregar;
 
-}
-/**
-* Agregar codigos a la compra desde modal de articulos
-**/
-function __agregarArticulos() {
-     $('#tableListarArticulos').on('click', '.btnAgregar', function (e) {
-         var table = $('#tableListarArticulos').DataTable();
-		if(table.row(this).child.isShown()){
-			//cuando el datatable esta en modo responsive
-	       var data = table.row(this).data();
-	    }else{	
-	       var data = table.row($(this).parents("tr")).data();
-	     }
-        self.articulo = data;
-        self.update();  
-	    __buscarcodigo(self.articulo.codigo,1)
-    });
-}
 /**
 * formato de la tabla de proveedores
 **/
@@ -1964,40 +1658,7 @@ function __seleccionarProveedores() {
 
     });
 }
-/**
-* cargar los estados de la compra
-**/
-function __comboFormaPagos(){
-    self.comboFormaPagos = []
-    self.comboFormaPagos.push({
-        estado:1,
-        descripcion:$.i18n.prop("combos.formaPago.contado")
-    })
-    self.comboFormaPagos.push({
-        estado:2,
-        descripcion:$.i18n.prop("combos.formaPago.credito")
-    })
-     self.comboFormaPagos.push({
-        estado:3,
-        descripcion:$.i18n.prop("combos.formaPago.sinCobro")
-    })
-    self.update()
-}
-/**
-* cargar los tipos de Documento de la compra
-**/
-function __ComboTipoDocumentos(){
-    self.comboTipoDocumentos = []
-    self.comboTipoDocumentos.push({
-        estado:1,
-        descripcion:$.i18n.prop("combos.tipoDocumento.factura")
-    })
-    self.comboTipoDocumentos.push({
-        estado:2,
-        descripcion:$.i18n.prop("combos.tipoDocumento.boleta")
-    })
-    self.update()
-}
+
 /**
 *  Agregar los inpust  y select de las tablas
 **/

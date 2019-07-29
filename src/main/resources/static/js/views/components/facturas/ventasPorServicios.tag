@@ -829,16 +829,19 @@ function __nuevoArticuloAlDetalle(cantidad){
     }
     var precioT = parseFloat($('#precio').val())
     var resultaMontoImpuesto = parseFloat(self.articulo.impuesto)
-    var precioUnitario  = resultaMontoImpuesto > 0 ?getPrecioUnitario(precioT,resultaMontoImpuesto):precioT
-    resultaMontoImpuesto = parseFloat(self.articulo.impuesto1) 
-    precioUnitario      = resultaMontoImpuesto > 0 ?getPrecioUnitario(precioUnitario,resultaMontoImpuesto):precioUnitario
+  //  var precioUnitario  = resultaMontoImpuesto > 0 ?getPrecioUnitario(precioT,resultaMontoImpuesto):precioT
+    var precioUnitario  = precioT
+    //resultaMontoImpuesto = parseFloat(self.articulo.impuesto1) 
+    //precioUnitario      = resultaMontoImpuesto > 0 ?getPrecioUnitario(precioUnitario,resultaMontoImpuesto):precioUnitario
     var montoTotal      = getMontoTotal(precioUnitario,cantidad)
     var montoDescuento  = 0
     var naturalezaDescuento = ""
     var subTotal        = montoTotal
-    var montoImpuesto1  = _calcularImpuesto(subTotal,parseFloat(self.articulo.impuesto1) ==null?0:parseFloat(self.articulo.impuesto1))
-    var montoImpuesto   = _calcularImpuesto(subTotal+montoImpuesto1,parseFloat(self.articulo.impuesto) ==null?0:parseFloat(self.articulo.impuesto))
-    var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1  
+   // var montoImpuesto1  = _calcularImpuesto(subTotal,parseFloat(self.articulo.impuesto1) ==null?0:parseFloat(self.articulo.impuesto1))
+    //var montoImpuesto   = _calcularImpuesto(subTotal+montoImpuesto1,parseFloat(self.articulo.impuesto) ==null?0:parseFloat(self.articulo.impuesto))
+    var montoImpuesto   = _calcularImpuesto(subTotal,parseFloat(self.articulo.impuesto) ==null?0:parseFloat(self.articulo.impuesto))
+    //var montoTotalLinea = subTotal + montoImpuesto + montoImpuesto1  
+    var montoTotalLinea = subTotal + montoImpuesto   
     var ganancia        = __ObtenerGananciaProductoNuevoIngresado(0,precioUnitario,self.articulo.costo ==null?0:parseFloat(self.articulo.costo),cantidad)
     self.detail.push({
        descripcion     : $('.descripcionProducto').val(),
@@ -854,7 +857,7 @@ function __nuevoArticuloAlDetalle(cantidad){
        impuesto        : parseFloat(self.articulo.impuesto),
        impuesto1        : parseFloat(self.articulo.impuesto1),
        montoImpuesto   : parseFloat(montoImpuesto),
-       montoImpuesto1  : parseFloat(montoImpuesto1),
+       montoImpuesto1  : 0,
        montoDescuento  : 0,
        porcentajeDesc  : 0,
        ganancia        : parseFloat(ganancia),
