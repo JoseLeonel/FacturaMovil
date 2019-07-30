@@ -63,6 +63,9 @@ public class ProveedorSimplificado implements Serializable {
 	@Column(name = "updated_at")
 	private Date							updated_at;
 
+	@Column(name = "cod_actividad", length = 6)
+	private String						codigoActividad;
+
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
 	private Empresa						empresa;
@@ -75,9 +78,7 @@ public class ProveedorSimplificado implements Serializable {
 		super();
 	}
 
-	
-
-	public ProveedorSimplificado(Long id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, Integer codigoPais, Integer telefono, String identificacionExtranjero, String correoElectronico, Integer estado, Date created_at, Date updated_at, Empresa empresa, Usuario usuario) {
+	public ProveedorSimplificado(Long id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, Integer codigoPais, Integer telefono, String identificacionExtranjero, String correoElectronico, Integer estado, Date created_at, Date updated_at, String codigoActividad, Empresa empresa, Usuario usuario) {
 		super();
 		this.id = id;
 		this.nombreCompleto = nombreCompleto;
@@ -91,11 +92,10 @@ public class ProveedorSimplificado implements Serializable {
 		this.estado = estado;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
+		this.codigoActividad = codigoActividad;
 		this.empresa = empresa;
 		this.usuario = usuario;
 	}
-
-
 
 	public Long getId() {
 		return id;
@@ -193,32 +193,28 @@ public class ProveedorSimplificado implements Serializable {
 		this.usuario = usuario;
 	}
 
-
-
-	
 	public Integer getCodigoPais() {
 		return codigoPais;
 	}
 
-
-
-	
 	public void setCodigoPais(Integer codigoPais) {
 		this.codigoPais = codigoPais;
 	}
 
-
-
-	
 	public Integer getTelefono() {
 		return telefono;
 	}
 
-
-
-	
 	public void setTelefono(Integer telefono) {
 		this.telefono = telefono;
+	}
+
+	public String getCodigoActividad() {
+		return codigoActividad;
+	}
+
+	public void setCodigoActividad(String codigoActividad) {
+		this.codigoActividad = codigoActividad;
 	}
 
 }

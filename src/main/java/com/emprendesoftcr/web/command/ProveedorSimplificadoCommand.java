@@ -14,7 +14,6 @@ import com.emprendesoftcr.modelo.Usuario;
 
 public class ProveedorSimplificadoCommand {
 
-	
 	private Long		id;
 
 	private String	nombreCompleto;
@@ -30,8 +29,8 @@ public class ProveedorSimplificadoCommand {
 	private String	correoElectronico;
 
 	private Integer	estado;
-	
-	private String estadoSTR;
+
+	private String	estadoSTR;
 
 	private Date		created_at;
 
@@ -40,11 +39,12 @@ public class ProveedorSimplificadoCommand {
 	private Empresa	empresa;
 
 	private Usuario	usuario;
-	
-	private Integer						codigoPais;
 
-	private Integer						telefono;
+	private Integer	codigoPais;
 
+	private Integer	telefono;
+
+	private String	codigoActividad;
 
 	public ProveedorSimplificadoCommand(ProveedorSimplificado proveedorSimplificado) {
 		super();
@@ -63,62 +63,41 @@ public class ProveedorSimplificadoCommand {
 		this.codigoPais = proveedorSimplificado.getCodigoPais();
 		this.telefono = proveedorSimplificado.getTelefono();
 		this.estadoSTR = MapEnums.ENUM_ESTADO_.get(proveedorSimplificado.getEstado());
-		
-	}
-	
-	
+		this.codigoActividad = proveedorSimplificado.getCodigoActividad();
 
-	
+	}
+
 	public String getEstadoSTR() {
 		return estadoSTR;
 	}
 
-
-
-	
 	public void setEstadoSTR(String estadoSTR) {
 		this.estadoSTR = estadoSTR;
 	}
-
-
 
 	public ProveedorSimplificadoCommand() {
 		super();
 	}
 
-
-
 	public Long getId() {
 		return id;
 	}
 
-	
 	public Integer getCodigoPais() {
 		return codigoPais;
 	}
 
-
-
-	
 	public void setCodigoPais(Integer codigoPais) {
 		this.codigoPais = codigoPais;
 	}
 
-
-
-	
 	public Integer getTelefono() {
 		return telefono;
 	}
 
-
-
-	
 	public void setTelefono(Integer telefono) {
 		this.telefono = telefono;
 	}
-
-
 
 	public void setId(Long id) {
 		this.id = id;
@@ -210,6 +189,14 @@ public class ProveedorSimplificadoCommand {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public String getCodigoActividad() {
+		return codigoActividad;
+	}
+
+	public void setCodigoActividad(String codigoActividad) {
+		this.codigoActividad = codigoActividad;
 	}
 
 }

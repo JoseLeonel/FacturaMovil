@@ -34,46 +34,48 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                        <label  >{$.i18n.prop("proveedorSimplificado.nombreCompleto")}  <span class="requeridoDato">*</span></label>
-                                        <input type="text" class="form-control nombreCompleto" placeHolder ="{$.i18n.prop("proveedorSimplificado.nombreCompleto")}" id="nombreCompleto" name="nombreCompleto" value="{proveedorSimplificado.nombreCompleto}"  >
-
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                        <label  >{$.i18n.prop("proveedorSimplificado.cedula")} <span class="requeridoDato">*</span></label>
+                                        <input type="text" class="form-control cedula" id="cedula" name="cedula" placeHolder ="{$.i18n.prop("proveedorSimplificado.cedula")}" value="{proveedorSimplificado.cedula}" onkeypress = {__ConsultarHacienda} onBlur ={__ConsultarHaciendaBlur} >
                                     </div>
-                                    <div class= "col-md-2 col-sx-12 col-sm-2 col-lg-2">
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                        <label  >{$.i18n.prop("proveedorSimplificado.nombreCompleto")}  <span class="requeridoDato">*</span></label>
+                                        <input type="text" class="form-control nombreCompleto" placeHolder ="{$.i18n.prop("proveedorSimplificado.nombreCompleto")}" id="nombreCompleto" name="nombreCompleto" value="{proveedorSimplificado.nombreCompleto}"  readonly>
+                                    </div>
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label  >{$.i18n.prop("proveedorSimplificado.tipoCedula")}  <span class="requeridoDato">*</span></label>
                                         <select  class="form-control tipoCedula " id="tipoCedula" name="tipoCedula" >
                                             <option  each={tipoCedulas.data}  value="{valor}" selected="{proveedorSimplificado.tipoCedula ==valor?true:false}"  >{descripcion}</option>
                                         </select>
                                     </div>                            
                                     <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                        <label  >{$.i18n.prop("proveedorSimplificado.cedula")} <span class="requeridoDato">*</span></label>
-                                        <input type="text" class="form-control cedula" id="cedula" name="cedula" placeHolder ="{$.i18n.prop("proveedorSimplificado.cedula")}" value="{proveedorSimplificado.cedula}"  >
-                                    </div>
-                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                        <label  >{$.i18n.prop("proveedorSimplificado.nombreComercial")} </label>
-                                        <input type="text" class="form-control nombreComercial" placeHolder ="{$.i18n.prop("proveedorSimplificado.nombreComercial")}" id="nombreComercial" name="nombreComercial" value="{proveedorSimplificado.nombreComercial}"  >
-                                    </div>
-                                    
+                                        <label>Actividad Comercial<span class="requeridoDato">*</span></label>
+                                        <select  class="form-control codigoActividad " id="codigoActividad" name="codigoActividad" >
+                                            <option  each={clienteHacienda.actividades}  selected="{proveedorSimplificado.codigoActividad ==codigo?true:false}" value="{codigo}"  >{descripcion}</option>
+                                        </select>
+                                    </div>    
                                 </div>
                                 <div class="row">
-                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                        <label  >Regimen <span class="requeridoDato">*</span> </label>
+                                        <input type="text" class="form-control " value="{clienteHacienda.regimen.descripcion}" readonly >
+                                    </div>
+
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label  >{$.i18n.prop("proveedorSimplificado.codigoPais")} <span class="requeridoDato">*</span> </label>
                                         <input type="text" class="form-control codigoPais" placeHolder ="{$.i18n.prop("proveedorSimplificado.codigoPais.ejemplo")}" id="codigoPais" name="codigoPais" value="{proveedorSimplificado.codigoPais}"  >
                                     </div>
-                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label  >{$.i18n.prop("proveedorSimplificado.telefono")} </label>
                                         <input type="text" class="form-control telefono" placeHolder ="{$.i18n.prop("proveedorSimplificado.telefono")}" id="telefono" name="telefono" value="{proveedorSimplificado.telefono}"  >
                                     </div>
-                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label  >{$.i18n.prop("proveedorSimplificado.correoElectronico")}</label>
                                         <input type="text" class="form-control correoElectronico" placeHolder ="{$.i18n.prop("proveedorSimplificado.correoElectronico")}" id="correoElectronico" name="correoElectronico" value="{proveedorSimplificado.correoElectronico}"  >
                                     </div>
                                 </div>
-                                                    
-                             
-                             
                                 <div class="row">
-                                    <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                                    <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label >{$.i18n.prop("proveedorSimplificado.estado")}</label>
                                         <select  class="form-control" id="estado" name="estado" >
                                             <option  each={estados}  value="{codigo}" selected="{proveedorSimplificado.estado ==codigo?true:false}" >{descripcion}</option>
@@ -175,11 +177,19 @@
             id:null
         }
     }
+    self.clienteHacienda= {
+        nombre:"",
+        tipoIdentificacion:"",
+        regimen:{
+            codigo:"",
+            descripcion:""
+        },
+        actividades:[]
+    }
 self.on('mount',function(){
     _incializarCampos()
     __Eventos()
     __ComboEstados()
-    __listadoTipoCedulas()
      $('.collapse').collapse("show")
     if(self.parametros.tipoEjecucion == 1){
        __modificarCliente()
@@ -188,11 +198,48 @@ self.on('mount',function(){
     if(self.parametros.tipoEjecucion == 2){
        __Agregar()
     }
+   
   
     window.addEventListener( "keydown", function(evento){
        $(".errorServerSideJgrid").remove();
     }, false );
 })
+
+/**
+*Consulta hacienda
+**/
+__ConsultarHaciendaBlur(){
+    var cedula = $('#cedula').val()
+    getClienteHacienda(cedula)
+
+}
+
+__ConsultarHacienda(e){
+     if (e.keyCode != 13) {
+        return;
+    } 
+    var cedula = $('#cedula').val()
+    getClienteHacienda(cedula)
+}
+function getClienteHacienda(cedula){
+    $.ajax({
+    "url": "https://api.hacienda.go.cr/fe/ae?identificacion="+ cedula,
+    "method": "GET",
+    statusCode: {
+        404: function() {
+            alert( "No se puede conectar con Hacienda" )
+        },
+        404: function() {
+            alert( "Cedula invalidad" )
+        }
+    }
+    }).done(function (response) {
+        self.clienteHacienda = response
+        self.update()
+        __listadoTipoCedulas()
+         $('#nombreCompleto').val(self.clienteHacienda.nombre)
+    });
+}
 
 
 /**
@@ -248,22 +295,30 @@ function _incializarCampos(){
 function __listadoTipoCedulas(){
     self.tipoCedulas               = {data:[]}  // definir el data del datatable
     self.update()
-    self.tipoCedulas.data.push({
-        valor:"01",
-        descripcion:$.i18n.prop("tipo.cedula.fisica")
-    })
-   self.tipoCedulas.data.push({
-        valor:"02",
-        descripcion:$.i18n.prop("tipo.cedula.juridica")
-    })
-   self.tipoCedulas.data.push({
-        valor:"03",
-        descripcion:$.i18n.prop("tipo.cedula.dimex")
-    })
+    if(self.clienteHacienda.tipoIdentificacion == "01") {
+        self.tipoCedulas.data.push({
+            valor:"01",
+            descripcion:$.i18n.prop("tipo.cedula.fisica")
+        })
+    }
+    if(self.clienteHacienda.tipoIdentificacion == "02") {
+        self.tipoCedulas.data.push({
+            valor:"02",
+            descripcion:$.i18n.prop("tipo.cedula.juridica")
+        })
+    }
+    if(self.clienteHacienda.tipoIdentificacion == "03" ){
+        self.tipoCedulas.data.push({
+            valor:"03",
+            descripcion:$.i18n.prop("tipo.cedula.dimex")
+        })
+    }    
+    if(self.clienteHacienda.tipoIdentificacion == "04" ){
      self.tipoCedulas.data.push({
         valor:"04",
         descripcion:$.i18n.prop("tipo.cedula.nite")
     })
+    }
     self.update()
 }
 /**
@@ -417,17 +472,37 @@ __Modificar(){
     if(validarTamanosCedulas()){
         return
     }
+    var valor = $("#estado").val()
+    if(validarRegimenModificar(1) && valor == 1){
+        return false
+    }
     self.error = false;
     self.exito = false;
     self.update();
    __modificarRegistro("#formulario",$.i18n.prop("proveedorSimplificado.mensaje.alert.modificar"),'ModificarProveedorSimplificadoAjax.do','ListarProveedorSimplificadoActivosAjax.do','#tableListar')
 }
+
+function validarRegimenModificar(ejecucion){
+   if(self.clienteHacienda.regimen.codigo == "1" && ejecucion == 1){
+       sweetAlert("", $.i18n.prop("error.proveedorSimplificado.regimen.tradicional.modificar"), "error");
+       return true
+   }   
+   if(self.clienteHacienda.regimen.codigo == "1" && ejecucion == 2){
+       sweetAlert("", $.i18n.prop("error.proveedorSimplificado.regimen.tradicional.agregar"), "error");
+       return true
+   }   
+   return false
+
+}
 /**
 *   Agregar 
 **/
 __agregar(){
-    if(validarTamanosCedulas()){
+    if(validarTamanosCedulas(2)){
         return
+    }
+     if(validarRegimenModificar(2) ){
+        return false
     }
      if ($("#formulario").valid()) {
         aplicarCreacion()
@@ -530,6 +605,7 @@ function __consultar(){
                         self.botonAgregar = false;
                         self.proveedorSimplificado  =  modeloTabla
                         self.update()
+                        getClienteHacienda(self.proveedorSimplificado.cedula)
                         $('#nombreCompleto').val(self.proveedorSimplificado.nombreCompleto)
                         $('#cedula').val(self.proveedorSimplificado.cedula)
                         $('#telefono').val(self.proveedorSimplificado.telefono)

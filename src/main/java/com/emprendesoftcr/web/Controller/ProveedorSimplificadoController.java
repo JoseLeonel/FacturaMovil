@@ -57,11 +57,9 @@ public class ProveedorSimplificadoController {
 																																										};
 																																									};
 
-	
 	@Autowired
 	private ProveedorSimplificadoBo																			proveedorSimplificadoBo;
 
-	
 	@Autowired
 	private UsuarioBo																										usuarioBo;
 
@@ -166,6 +164,10 @@ public class ProveedorSimplificadoController {
 			proveedorSimplificadoCommand.setCedula(proveedorSimplificadoCommand.getCedula() == null ? Constantes.EMPTY : proveedorSimplificadoCommand.getCedula());
 			proveedorSimplificadoCommand.setNombreCompleto(proveedorSimplificadoCommand.getNombreCompleto() == null ? Constantes.EMPTY : proveedorSimplificadoCommand.getNombreCompleto());
 			proveedorSimplificadoCommand.setCorreoElectronico(proveedorSimplificadoCommand.getCorreoElectronico() == null ? Constantes.EMPTY : proveedorSimplificadoCommand.getCorreoElectronico());
+			proveedorSimplificadoCommand.setCodigoPais(proveedorSimplificadoCommand.getCodigoPais() == null ? Constantes.ZEROS : proveedorSimplificadoCommand.getCodigoPais());
+			proveedorSimplificadoCommand.setTelefono(proveedorSimplificadoCommand.getTelefono() == null?Constantes.ZEROS:proveedorSimplificadoCommand.getTelefono());
+			proveedorSimplificadoCommand.setNombreComercial(proveedorSimplificadoCommand.getNombreComercial() ==null?Constantes.EMPTY:proveedorSimplificadoCommand.getNombreComercial());
+			
 
 			if (proveedorSimplificadoCommand.getCedula().equals(Constantes.EMPTY)) {
 				result.rejectValue("cedula", Constantes.KEY_REQUERIDO);
@@ -210,12 +212,13 @@ public class ProveedorSimplificadoController {
 			proveedorSimplificado.setCorreoElectronico(proveedorSimplificadoCommand.getCorreoElectronico());
 			proveedorSimplificado.setIdentificacionExtranjero(proveedorSimplificadoCommand.getIdentificacionExtranjero());
 			proveedorSimplificado.setEstado(proveedorSimplificadoCommand.getEstado());
-      proveedorSimplificado.setCodigoPais(proveedorSimplificadoCommand.getCodigoPais());
-      proveedorSimplificado.setTelefono(proveedorSimplificadoCommand.getTelefono());
+			proveedorSimplificado.setCodigoPais(proveedorSimplificadoCommand.getCodigoPais());
+			proveedorSimplificado.setTelefono(proveedorSimplificadoCommand.getTelefono());
 			proveedorSimplificado.setEmpresa(usuarioSesion.getEmpresa());
 			proveedorSimplificado.setCreated_at(new Date());
 			proveedorSimplificado.setUpdated_at(new Date());
 			proveedorSimplificado.setUsuario(usuarioSesion);
+			proveedorSimplificado.setCodigoActividad(proveedorSimplificadoCommand.getCodigoActividad());
 			proveedorSimplificadoBo.agregar(proveedorSimplificado);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("proveedorSimplificado.agregar.correctamente", proveedorSimplificado);
 
@@ -224,7 +227,6 @@ public class ProveedorSimplificadoController {
 		}
 	}
 
-	
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ModificarProveedorSimplificadoAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
@@ -234,7 +236,9 @@ public class ProveedorSimplificadoController {
 			proveedorSimplificadoCommand.setCedula(proveedorSimplificadoCommand.getCedula() == null ? Constantes.EMPTY : proveedorSimplificadoCommand.getCedula());
 			proveedorSimplificadoCommand.setNombreCompleto(proveedorSimplificadoCommand.getNombreCompleto() == null ? Constantes.EMPTY : proveedorSimplificadoCommand.getNombreCompleto());
 			proveedorSimplificadoCommand.setCorreoElectronico(proveedorSimplificadoCommand.getCorreoElectronico() == null ? Constantes.EMPTY : proveedorSimplificadoCommand.getCorreoElectronico());
-
+			proveedorSimplificadoCommand.setCodigoPais(proveedorSimplificadoCommand.getCodigoPais() == null ? Constantes.ZEROS : proveedorSimplificadoCommand.getCodigoPais());
+			proveedorSimplificadoCommand.setTelefono(proveedorSimplificadoCommand.getTelefono() == null?Constantes.ZEROS:proveedorSimplificadoCommand.getTelefono());
+			proveedorSimplificadoCommand.setNombreComercial(proveedorSimplificadoCommand.getNombreComercial() ==null?Constantes.EMPTY:proveedorSimplificadoCommand.getNombreComercial());
 			if (proveedorSimplificadoCommand.getCedula().equals(Constantes.EMPTY)) {
 				result.rejectValue("cedula", Constantes.KEY_REQUERIDO);
 			}
@@ -259,7 +263,7 @@ public class ProveedorSimplificadoController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("proveedorSimplificado.no.modificado", result.getAllErrors());
 			}
-			ProveedorSimplificado proveedorSimplificadoDB =proveedorSimplificadoBo.buscar(proveedorSimplificadoCommand.getId());
+			ProveedorSimplificado proveedorSimplificadoDB = proveedorSimplificadoBo.buscar(proveedorSimplificadoCommand.getId());
 
 			if (proveedorSimplificadoDB == null) {
 				return RESPONSES.ERROR.CLIENTE.NO_EXISTE;
@@ -289,11 +293,8 @@ public class ProveedorSimplificadoController {
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
-
 			proveedorSimplificadoDB.setCodigoPais(proveedorSimplificadoCommand.getCodigoPais());
 			proveedorSimplificadoDB.setTelefono(proveedorSimplificadoCommand.getTelefono());
-
-
 			proveedorSimplificadoDB.setCedula(proveedorSimplificadoCommand.getCedula());
 			proveedorSimplificadoDB.setNombreCompleto(proveedorSimplificadoCommand.getNombreCompleto());
 			proveedorSimplificadoDB.setCorreoElectronico(proveedorSimplificadoCommand.getCorreoElectronico());
@@ -303,6 +304,7 @@ public class ProveedorSimplificadoController {
 			proveedorSimplificadoDB.setEstado(proveedorSimplificadoCommand.getEstado());
 			proveedorSimplificadoDB.setUsuario(usuarioSesion);
 			proveedorSimplificadoDB.setIdentificacionExtranjero(proveedorSimplificadoCommand.getIdentificacionExtranjero());
+			proveedorSimplificadoDB.setCodigoActividad(proveedorSimplificadoCommand.getCodigoActividad());
 			proveedorSimplificadoBo.modificar(proveedorSimplificadoDB);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("proveedorSimplificado.modificado.correctamente", proveedorSimplificadoDB);
@@ -323,8 +325,6 @@ public class ProveedorSimplificadoController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-	
-	
 
 	@SuppressWarnings("all")
 	private static class RESPONSES {
