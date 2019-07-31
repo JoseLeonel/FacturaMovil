@@ -923,6 +923,7 @@
     self.error                 = false
     self.comboEstados          = []
     self.comboFormaPagos        = []
+    self.totalComprobante  = 0
     self.comboTipoDocumentos   = []
     self.impuestos =[]
     self.tarifas1    = {aaData:[]}
@@ -1948,6 +1949,7 @@ function __calculate() {
     self.factura.totalDescuentos  = 0;
     self.factura.totalImpuesto    = 0;
     self.factura.subTotal         = 0;
+    self.factura.totalComprobante = 0
     self.update()
     var totalVenta     = 0
     var subTotal       = 0
