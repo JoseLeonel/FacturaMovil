@@ -112,6 +112,7 @@ public class ComprasSimplificadaController {
 			compraSimplificadaCommand.setTotalVenta(compraSimplificadaCommand.getTotalVenta() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalVenta());
 			compraSimplificadaCommand.setTotalVentaNeta(compraSimplificadaCommand.getTotalVentaNeta() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalVentaNeta());
 			compraSimplificadaCommand.setTipoDoc(compraSimplificadaCommand.getTipoDoc() != null ? compraSimplificadaCommand.getTipoDoc() : Constantes.EMPTY);
+			compraSimplificadaCommand.setCodigoActividad(compraSimplificadaCommand.getProveedorSimplificado() !=null?compraSimplificadaCommand.getProveedorSimplificado().getCodigoActividad():Constantes.EMPTY);
 			UsuarioCaja usuarioCajaBd = null;
 			// Si esta en estado facturada en base de datos se retorna un mensaje que ya fue procesada
 			if (compraSimplificadaCommand != null) {

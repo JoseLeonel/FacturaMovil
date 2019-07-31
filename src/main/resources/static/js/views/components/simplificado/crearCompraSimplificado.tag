@@ -1008,7 +1008,7 @@
          montoTotalLinea:0
 
      }
-   
+    self.detalleFactura        = {data:[]}   
     self.on('mount',function(){
         $("#formularioLineaDetalle").validate(reglasDeValidacionDetalleCompra());
            __informacionData()
@@ -1469,7 +1469,7 @@ __AplicarYCrearCompra(){
         }).then(function (isConfirm) {
             //Ajax__inicializarTabla();
             if(isConfirm){
-               crearCompra(2)  
+               aplicarFactura(2)  
               
             }
         });
@@ -1586,18 +1586,18 @@ function crearFactura(estado){
     self.factura.plazoCredito = __valorNumerico($('#plazoCreditoL').val())
     self.factura.detalleFactura =JSONDetalles
     self.factura.estado = estado
-    self.factura.codigoMoneda = self.parametros.codigoMoneda
+    self.factura.codigoMoneda = "CRC"
     self.update();
     var dataTemporal = null
 
-    var formulario = $("#formularioFactura").serialize();
+    var formulario = $("#formularioCompra").serialize();
     $.ajax({
         type : "POST",
         dataType : "json",
         async: false,
         
         data : formulario,
-        url : "CrearFacturaAjax",
+        url : "CrearCompraSimplificadaAjax.do",
         success : function(data) {
             if (data.status != 200) {
                	serverMessageJsonClase(data);
@@ -1782,7 +1782,7 @@ function __Init(){
     self.totalGeneralImpuesto  = 0;
     self.totalGeneralCompra    = 0; 
     self.totalSubTotalGeneral  = 0;
-
+    self.detalleFactura        = {data:[]}
     self.update();
     
      

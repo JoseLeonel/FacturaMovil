@@ -189,9 +189,8 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
 		if(resultado.equals(Constantes.EMPTY)) {
 			resultado = factura.getEmpresa().getCodigoActividad();
 		}
-		FacturaElectronicaUtils.replazarConZeros(resultado,Constantes.FORMATO_CODIGO_ACTIVIDAD);
-		
-		return resultado;
+			
+		return FacturaElectronicaUtils.replazarConZeros(resultado,Constantes.FORMATO_CODIGO_ACTIVIDAD);
 	}
 	
   

@@ -183,9 +183,9 @@ public class FacturaXMLServicesImpl implements FacturaXMLServices {
 		if(resultado.equals(Constantes.EMPTY)) {
 			resultado = factura.getEmpresa().getCodigoActividad();
 		}
-		FacturaElectronicaUtils.replazarConZeros(resultado,Constantes.FORMATO_CODIGO_ACTIVIDAD);
 		
-		return resultado;
+		
+		return FacturaElectronicaUtils.replazarConZeros(resultado,Constantes.FORMATO_CODIGO_ACTIVIDAD);
 	}
 	
 	private String informacionFerencia(Factura factura) {	
