@@ -426,6 +426,11 @@ public class FacturasController {
 	public String totalFacturas(ModelMap model) {
 		return "views/facturas/totalFacturas";
 	}
+	
+	@RequestMapping(value = "/TotalImpuestoVentasMensuales", method = RequestMethod.GET)
+	public String totalImpuestoVentasMensuales(ModelMap model) {
+		return "views/facturas/totalImpuestoVentasMensuales";
+	}
 
 	/**
 	 * Busca el total de facturas por rango de fechas
