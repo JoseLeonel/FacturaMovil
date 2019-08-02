@@ -841,7 +841,12 @@ function __InicializarTabla(nombreTabla){
         "bAutoWidth": true,
         "lengthChange": true,
         
-    });    
+    });
+	var table = $(nombreTabla).DataTable();
+ 	table
+    .clear()
+    .draw();
+
 }
 
 
