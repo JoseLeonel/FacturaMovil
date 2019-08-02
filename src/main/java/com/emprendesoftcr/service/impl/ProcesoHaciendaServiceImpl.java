@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
+import com.emprendesoftcr.Bo.CompraSimplificadaBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DetalleBo;
@@ -47,6 +48,7 @@ import com.emprendesoftcr.fisco.Recepcion;
 import com.emprendesoftcr.fisco.ReceptorHacienda;
 import com.emprendesoftcr.fisco.RespuestaHaciendaXML;
 import com.emprendesoftcr.modelo.Attachment;
+import com.emprendesoftcr.modelo.CompraSimplificada;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
@@ -56,6 +58,7 @@ import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
 import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.pdf.ReportePdfView;
+import com.emprendesoftcr.service.CompraSimplificadaXMLServices;
 import com.emprendesoftcr.service.FacturaXMLServices;
 import com.emprendesoftcr.service.NotaCreditoXMLIVAServices;
 import com.emprendesoftcr.service.NotaCreditoXMLServices;
@@ -217,11 +220,16 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	@Autowired
 	FacturaBo																													facturaBo;
+
+	@Autowired
+	CompraSimplificadaBo																							compraSimplificadaBo;
+
 	@Autowired
 	EmpresaBo																													empresaBo;
 
 	@Autowired
 	DetalleBo																													detalleBo;
+
 	@Autowired
 	ConsultasNativeBo																									consultasNativeBo;
 
@@ -233,6 +241,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	@Autowired
 	FacturaXMLServices																								facturaXMLServices;
+
+	@Autowired
+	CompraSimplificadaXMLServices																			compraSimplificadaXMLServices;
 
 	@Autowired
 	TiqueteXMLService																									tiqueteXMLService;
@@ -304,9 +315,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		} catch (Exception e) {
 			log.error("** Error2  Proceso de anulacion de proformas: " + e.getMessage() + " fecha " + new Date());
 			throw e;
-		} 
+		}
 	}
-	
+
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
@@ -472,16 +483,16 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 				// JacoDos
-				// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+				 recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 				// Jaco
 				// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 				// Inventario
-				recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				//recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				// Alajuela
-				 //recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 				ObjectMapper mapperObj = new ObjectMapper();
 				String jsonStr = mapperObj.writeValueAsString(recepcion);
@@ -530,7 +541,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								resta = resta / (1000 * 60);
 							}
 							log.info("Comprobando Documentos:" + hacienda.getConsecutivo() + " Empresa :" + hacienda.getNombreEmpresa());
-							if (resta >= 20 || hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ERROR) || hacienda.getTipoDoc().equals(Constantes.HACIENDA_TIPODOC_COMPRAS)) {
+							if (resta >= 10 || hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ERROR) || hacienda.getTipoDoc().equals(Constantes.HACIENDA_TIPODOC_COMPRAS)) {
 								log.info("Documento cumplio 3 horas::" + hacienda.getConsecutivo() + " Empresa :" + hacienda.getNombreEmpresa());
 								if (hacienda.getReintentosAceptacion() != null) {
 									if (hacienda.getReintentosAceptacion() <= Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
@@ -1138,6 +1149,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
+			//procesoFirmadoComprasSimplificadas();
 			log.info("Inicio el proceso de firmado  {}", new Date());
 
 			Collection<Factura> lista = facturaBo.findByEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE, Constantes.FACTURA_ESTADO_REFIRMAR_DOCUMENTO);
@@ -1242,6 +1254,74 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			log.error("** Error2  proceso de firmado: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
+	}
+
+	private void procesoFirmadoComprasSimplificadas() throws Exception {
+		try {
+			log.info("Inicio Proceso de firmado compra Simplificado  {}", new Date());
+			String xmlString = Constantes.EMPTY;
+			Collection<CompraSimplificada> lista = compraSimplificadaBo.findByEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE, Constantes.FACTURA_ESTADO_REFIRMAR_DOCUMENTO);
+			if (lista != null) {
+				for (CompraSimplificada compraSimplificada : lista) {
+					try {
+						log.info("Compra simplificada id	:  {}", compraSimplificada.getId() + " Compra Simplificada proceso de firmado:  " + compraSimplificada.getNumeroConsecutivo().toString() + " Empresa:" + compraSimplificada.getEmpresa().getNombre());
+						xmlString = Constantes.EMPTY;
+						xmlString = compraSimplificadaXMLServices.getCrearXMLSinFirma(compraSimplificada);
+						xmlString = compraSimplificadaXMLServices.getFirmarXML(xmlString, compraSimplificada.getEmpresa(), compraSimplificada.getFechaEmision());
+						if (xmlString != null) {
+							if (!xmlString.equals(Constantes.EMPTY)) {
+								Hacienda haciendaVerificar = haciendaBo.findByEmpresaAndClave(compraSimplificada.getEmpresa(), compraSimplificada.getClave());
+								if (haciendaVerificar == null) {
+									Hacienda hacienda = new Hacienda();
+									hacienda.setCedulaEmisor(compraSimplificada.getEmpresa().getCedula());
+									hacienda.setTipoEmisor(compraSimplificada.getEmpresa().getTipoCedula());
+									// no se graba el cliente si es frecuente
+									if (compraSimplificada.getProveedorSimplificado() != null) {
+										if (!compraSimplificada.getProveedorSimplificado().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+											hacienda.setCedulaReceptor(compraSimplificada.getProveedorSimplificado().getCedula());
+											hacienda.setTipoReceptor(compraSimplificada.getProveedorSimplificado().getTipoCedula());
+										}
+									}
+									hacienda.setEmpresa(compraSimplificada.getEmpresa());
+									hacienda.setClave(compraSimplificada.getClave());
+									hacienda.setFechaEmisor(compraSimplificada.getFechaEmision());
+									Blob b = FacturaElectronicaUtils.convertirStringToblod(xmlString);
+									hacienda.setComprobanteXML(b);
+									hacienda.setCreated_at(new Date());
+									hacienda.setUpdated_at(new Date());
+									hacienda.setStatus(Constantes.ZEROS);
+									hacienda.setEstado(Constantes.HACIENDA_ESTADO_FIRMARDO_XML);
+									hacienda.setConsecutivo(compraSimplificada.getNumeroConsecutivo());
+									hacienda.setReintentos(Constantes.ZEROS);
+									hacienda.setReintentosAceptacion(Constantes.ZEROS);
+									hacienda.setTipoDoc(compraSimplificada.getTipoDoc());
+									hacienda.setNombreReceptor(compraSimplificada.getProveedorSimplificado().getNombreCompleto());
+									hacienda.setCorreoReceptor(compraSimplificada.getProveedorSimplificado().getCorreoElectronico());
+									hacienda.setTotalReceptor(compraSimplificada.getTotalComprobante());
+									hacienda.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
+									haciendaBo.agregar(hacienda);
+									
+									
+								}
+							}
+						}
+
+					} catch (Exception e) {
+						compraSimplificada.setEstadoFirma(Constantes.FACTURA_ESTADO_PROBLEMA_AL_FIRMAR);
+						compraSimplificadaBo.modificar(compraSimplificada);
+						log.error("** Error1 proceso de firmado compra simplificada: " + e.getMessage() + " fecha " + new Date());
+					}
+
+				}
+
+			}
+
+		} catch (Exception e) {
+			log.error("** Error2  proceso de firmado compra Simplificada: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+
+		log.info("Finaliza proceso de firmado compra Simplificado  {}", new Date());
 	}
 
 	/**

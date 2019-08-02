@@ -76,7 +76,7 @@ public class ComprasSimplificadaController {
 		return "/views/simplificado/crearCompraSimplificado";
 	}
 
-	@RequestMapping(value = "/CrearCompraSimplificadaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/CrearCompraSimplificadaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceValidator crearFactura(HttpServletRequest request, ModelMap model, @ModelAttribute CompraSimplificadaCommand compraSimplificadaCommand, BindingResult result, SessionStatus status) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
@@ -96,10 +96,11 @@ public class ComprasSimplificadaController {
 		@SuppressWarnings("rawtypes")
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
+			compraSimplificadaCommand.setEstado(Constantes.FACTURA_ESTADO_FACTURADO);
+			compraSimplificadaCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_COMPRA_SIMPLIFICADA);
 			compraSimplificadaCommand.setTotalBanco(compraSimplificadaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalBanco());
 			compraSimplificadaCommand.setTotalEfectivo(compraSimplificadaCommand.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalEfectivo());
 			compraSimplificadaCommand.setTotalTarjeta(compraSimplificadaCommand.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalTarjeta());
-			compraSimplificadaCommand.setTotalTransporte(compraSimplificadaCommand.getTotalTransporte() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalTransporte());
 			compraSimplificadaCommand.setTotalDescuentos(compraSimplificadaCommand.getTotalDescuentos() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalDescuentos());
 			compraSimplificadaCommand.setTotalExento(compraSimplificadaCommand.getTotalExento() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalExento());
 			compraSimplificadaCommand.setTotalGravado(compraSimplificadaCommand.getTotalGravado() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalGravado());
@@ -113,7 +114,7 @@ public class ComprasSimplificadaController {
 			compraSimplificadaCommand.setTotalVentaNeta(compraSimplificadaCommand.getTotalVentaNeta() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalVentaNeta());
 			compraSimplificadaCommand.setTipoDoc(compraSimplificadaCommand.getTipoDoc() != null ? compraSimplificadaCommand.getTipoDoc() : Constantes.EMPTY);
 			compraSimplificadaCommand.setCodigoActividad(compraSimplificadaCommand.getProveedorSimplificado() !=null?compraSimplificadaCommand.getProveedorSimplificado().getCodigoActividad():Constantes.EMPTY);
-			UsuarioCaja usuarioCajaBd = null;
+			
 			// Si esta en estado facturada en base de datos se retorna un mensaje que ya fue procesada
 			if (compraSimplificadaCommand != null) {
 				if (compraSimplificadaCommand.getId() != null) {
@@ -122,7 +123,7 @@ public class ComprasSimplificadaController {
 						if (compraSimplificadaRevision != null) {
 							if (compraSimplificadaRevision.getEstado() != null) {
 								if (compraSimplificadaRevision.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-									return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.ya.esta.procesada", result.getAllErrors());
+									return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("compraSimplificada.error.ya.esta.procesada", result.getAllErrors());
 								}
 							}
 
@@ -132,30 +133,26 @@ public class ComprasSimplificadaController {
 				}
 			}
 			if (compraSimplificadaCommand.getTipoDoc() == null) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.tipo.doc", result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("compraSimplificada.error.tipo.doc", result.getAllErrors());
 			}
 			if (compraSimplificadaCommand.getTipoDoc() == null) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.tipo.doc", result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("compraSimplificada.error.tipo.doc", result.getAllErrors());
 			}
 
 			if (compraSimplificadaCommand.getTipoDoc().equals(Constantes.EMPTY)) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.tipo.doc", result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("compraSimplificada.error.tipo.doc", result.getAllErrors());
 			}
 
+			if(compraSimplificadaCommand.getProveedorSimplificado() == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.compraSimplificada.proveedor.no.asociado", result.getAllErrors());
+			} 
 			if (compraSimplificadaCommand.getCodigoActividad() == null) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.actividad.comercial.no.existe", result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.compraSimplificada.actividad.comercial.no.existe", result.getAllErrors());
 			} else if (compraSimplificadaCommand.getCodigoActividad().equals(Constantes.EMPTY)) {
-				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.actividad.comercial.no.existe", result.getAllErrors());
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.compraSimplificada.actividad.comercial.no.existe", result.getAllErrors());
 			}
 
-			if (!compraSimplificadaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS) && !compraSimplificadaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
-				if (compraSimplificadaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-					if (compraSimplificadaCommand.getTotalBanco().equals(Constantes.ZEROS_DOUBLE) && compraSimplificadaCommand.getTotalEfectivo().equals(Constantes.ZEROS_DOUBLE) && compraSimplificadaCommand.getTotalTarjeta().equals(Constantes.ZEROS_DOUBLE)) {
-						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.ingreso.dinero", result.getAllErrors());
-					}
-
-				}
-			}
+		
 			TipoCambio tipoCambio = null;
 			if (!compraSimplificadaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				tipoCambio = tipoCambioBo.findByEstadoAndEmpresa(Constantes.ESTADO_ACTIVO, usuario.getEmpresa());
@@ -166,30 +163,8 @@ public class ComprasSimplificadaController {
 				compraSimplificadaCommand.setTipoCambioMoneda(tipoCambio.getTotal());
 			}
 
-			if (compraSimplificadaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !usuario.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
-				if (compraSimplificadaCommand.getProveedorSimplificado().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_FRECUENTE)) {
-					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.tipo.documento.factura", result.getAllErrors());
-				}
-				if (compraSimplificadaCommand.getProveedorSimplificado().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
-					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.tipo.documento.factura", result.getAllErrors());
-				}
-			}
+			
 
-			// Validar el codigo de factura que se le va aplicar una nota de credito
-			if (compraSimplificadaCommand.getReferenciaNumero() != null) {
-				if (!compraSimplificadaCommand.getReferenciaNumero().equals(Constantes.EMPTY)) {
-					CompraSimplificada compraSimplificadaReferenciaValidar = compraSimplificadaBo.findByConsecutivoAndEmpresa(compraSimplificadaCommand.getReferenciaNumero(), usuario.getEmpresa());
-					if (compraSimplificadaReferenciaValidar.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && compraSimplificadaReferenciaValidar.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
-						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.nota.credito.con.anulacion.completa", result.getAllErrors());
-					}
-					if (compraSimplificadaReferenciaValidar == null) {
-						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.aplicar.nota.credito.o.debito.no.existe", result.getAllErrors());
-					} else {
-						compraSimplificadaCommand.setReferenciaTipoDoc(compraSimplificadaReferenciaValidar.getTipoDoc());
-
-					}
-				}
-			}
 			compraSimplificadaCommand.setEmpresa(usuario.getEmpresa());
 			compraSimplificadaFormValidator.validate(compraSimplificadaCommand, result);
 			if (result.hasErrors()) {
@@ -214,7 +189,7 @@ public class ComprasSimplificadaController {
 			}
 			CompraSimplificada facturaCreada = compraSimplificadaBo.findById(compraSimplificada.getId());
 
-			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("factura.agregar.correctamente", facturaCreada);
+			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compraSimplificada.agregar.correctamente", facturaCreada);
 
 		} catch (Exception e) {
 			respuestaServiceValidator.setStatus(HttpStatus.BAD_REQUEST.value());

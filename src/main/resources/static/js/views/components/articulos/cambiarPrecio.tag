@@ -165,6 +165,7 @@
 
 
 <style type ="text/css">
+  
     .btn-imprimirCambioPrecio {
         background-color: #00ACEE;
         color: #FFF;
@@ -505,11 +506,11 @@ function actualizarPreciosImpuestosPublico(){
     self.articulo.precioPublico = total>0?total:self.articulo.precioPublico
     self.update()
     $('.precioPublico').val(self.articulo.precioPublico1)
-1
-1
-}1
-1
-function actualizarPreciosImpuestosMayorista(){1
+
+
+}
+
+function actualizarPreciosImpuestosMayorista(){
     var ganancia = __valorNumerico($('#gananciaPrecioMayorista').val())
     if(ganancia == 0){
         return

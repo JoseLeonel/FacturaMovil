@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.ProvinciaBo;
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.JqGridFilter;
 import com.emprendesoftcr.Utils.RespuestaServiceDataTable;
@@ -40,50 +41,50 @@ import com.google.common.base.Function;
 @Controller
 public class ProvinciasController {
 
-	private static final Function<Object, ProvinciaCommand> TO_COMMAND = new Function<Object, ProvinciaCommand>() {
+	private static final Function<Object, ProvinciaCommand>	TO_COMMAND					= new Function<Object, ProvinciaCommand>() {
 
-		@Override
-		public ProvinciaCommand apply(Object f) {
-			return new ProvinciaCommand((Provincia) f);
-		};
-	};
+																																								@Override
+																																								public ProvinciaCommand apply(Object f) {
+																																									return new ProvinciaCommand((Provincia) f);
+																																								};
+																																							};
 
-	private static final Function<Object, CantonCommand> TO_COMMAND_CANTON = new Function<Object, CantonCommand>() {
+	private static final Function<Object, CantonCommand>		TO_COMMAND_CANTON		= new Function<Object, CantonCommand>() {
 
-		@Override
-		public CantonCommand apply(Object f) {
-			return new CantonCommand((Canton) f);
-		};
-	};
+																																								@Override
+																																								public CantonCommand apply(Object f) {
+																																									return new CantonCommand((Canton) f);
+																																								};
+																																							};
 
-	private static final Function<Object, DistritoCommand> TO_COMMAND_DISTRITO = new Function<Object, DistritoCommand>() {
+	private static final Function<Object, DistritoCommand>	TO_COMMAND_DISTRITO	= new Function<Object, DistritoCommand>() {
 
-		@Override
-		public DistritoCommand apply(Object f) {
-			return new DistritoCommand((Distrito) f);
-		};
+																																								@Override
+																																								public DistritoCommand apply(Object f) {
+																																									return new DistritoCommand((Distrito) f);
+																																								};
 
-	};
+																																							};
 
-	private static final Function<Object, BarriosCommand> TO_COMMAND_BARRIO = new Function<Object, BarriosCommand>() {
+	private static final Function<Object, BarriosCommand>		TO_COMMAND_BARRIO		= new Function<Object, BarriosCommand>() {
 
-		@Override
-		public BarriosCommand apply(Object f) {
-			return new BarriosCommand((Barrio) f);
-		};
-	};
-
-	@Autowired
-	private DataTableBo dataTableBo;
+																																								@Override
+																																								public BarriosCommand apply(Object f) {
+																																									return new BarriosCommand((Barrio) f);
+																																								};
+																																							};
 
 	@Autowired
-	private ProvinciaBo provinciaBo;
+	private DataTableBo																			dataTableBo;
 
 	@Autowired
-	private ProvinciaPropertyEditor provinciaPropertyEditor;
+	private ProvinciaBo																			provinciaBo;
 
 	@Autowired
-	private StringPropertyEditor stringPropertyEditor;
+	private ProvinciaPropertyEditor													provinciaPropertyEditor;
+
+	@Autowired
+	private StringPropertyEditor														stringPropertyEditor;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -107,7 +108,7 @@ public class ProvinciasController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
-	/** 
+	/**
 	 * Busca provincia
 	 * @param request
 	 * @param response
@@ -119,7 +120,7 @@ public class ProvinciasController {
 		return provinciaBo.findByCodigo(codigoProvincia);
 	}
 
-	/** 
+	/**
 	 * Busca canton
 	 * @param request
 	 * @param response
@@ -131,7 +132,7 @@ public class ProvinciasController {
 		return provinciaBo.findCantonByCodigo(codigoProvincia, codigoCanton);
 	}
 
-	/** 
+	/**
 	 * Busca distrito
 	 * @param request
 	 * @param response
@@ -139,7 +140,7 @@ public class ProvinciasController {
 	 */
 	@RequestMapping(value = "/BuscaDistritoAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public Distrito buscaDistritoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer codigoProvincia, @RequestParam Integer codigoCanton, @RequestParam Integer codigoDistrito) { 
+	public Distrito buscaDistritoAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam Integer codigoProvincia, @RequestParam Integer codigoCanton, @RequestParam Integer codigoDistrito) {
 		return provinciaBo.findDistritoByCodigo(codigoProvincia, codigoCanton, codigoDistrito);
 	}
 
@@ -157,8 +158,11 @@ public class ProvinciasController {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Canton");
+		JqGridFilter dataTableFilter = null;
+		if (provincia != null) {
+			dataTableFilter = new JqGridFilter("codigo_provincia", "'" + provincia.getCodigo() !=null?provincia.getCodigo().toString():Constantes.EMPTY + "'", "=");
+		}
 
-		JqGridFilter dataTableFilter = new JqGridFilter("codigo_provincia", "'" + provincia.getCodigo().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_CANTON);
@@ -193,12 +197,14 @@ public class ProvinciasController {
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Distrito");
+		JqGridFilter dataTableFilter = null;
+		if (canton != null) {
+			dataTableFilter = new JqGridFilter("codigoCanton", "'" + canton.getCodigo() !=null?canton.getCodigo().toString():Constantes.EMPTY + "'", "=");
+			delimitadores.addFiltro(dataTableFilter);
+			dataTableFilter = new JqGridFilter("codigoProvincia", "'" + canton.getCodigo_provincia() !=null?canton.getCodigo_provincia().toString():Constantes.EMPTY + "'", "=");
+			delimitadores.addFiltro(dataTableFilter);
 
-		JqGridFilter dataTableFilter = new JqGridFilter("codigoCanton", "'" + canton.getCodigo().toString() + "'", "=");
-		delimitadores.addFiltro(dataTableFilter);
-
-		dataTableFilter = new JqGridFilter("codigoProvincia", "'" + canton.getCodigo_provincia().toString() + "'", "=");
-		delimitadores.addFiltro(dataTableFilter);
+		}
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND_DISTRITO);
 	}

@@ -22,209 +22,160 @@ import com.emprendesoftcr.Utils.Utils;
 @Entity
 @Table(name = "compra_simpli")
 public class CompraSimplificada implements Serializable {
-	
-	private static final long serialVersionUID = 826299407924905733L;
+
+	private static final long			serialVersionUID	= 826299407924905733L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long id;
+	private Long									id;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "fecha_credito")
-	private Date fechaCredito;
+	private Date									fechaCredito;
 
-	@Column(name = "numero_consecutivo")
-	private String numeroConsecutivo;
+	@Column(name = "numero_consecutivo", length = 20)
+	private String								numeroConsecutivo;
 
-	@Column(name = "consecutivo_proforma")
-	private String consecutivoProforma;
-
-	@Column(name = "clave", length=50)
-	private String clave;
+	@Column(name = "clave", length = 50)
+	private String								clave;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "fecha_emision")
-	private Date fechaEmision;
+	private Date									fechaEmision;
 
-	@Column(name = "condicion_venta", length=2)
-	private String condicionVenta;
+	@Column(name = "condicion_venta", length = 2)
+	private String								condicionVenta;
 
 	@Column(name = "plazo_credito")
-	private Integer plazoCredito;
+	private Integer								plazoCredito;
 
-	@Column(name = "tipo_doc", length=2)
-	private String tipoDoc;
-
-	@Column(name = "ref_tipo_doc", length=2)
-	private String referenciaTipoDoc;
-
-	@Column(name = "ref_numero", length=20)
-	private String referenciaNumero;
-
-	@Column(name = "ref_codigo", length=2)
-	private String referenciaCodigo;
-
-	@Column(name = "ref_razon", length=160)
-	private String referenciaRazon;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
-	@Column(name = "ref_fecha_emision")
-	private Date referenciaFechaEmision;
-
-	@Column(name = "medio_efectivo", length=2)
-	private String medioEfectivo;
-
-	@Column(name = "medio_tarjeta", length=2)
-	private String medioTarjeta;
-
-	@Column(name = "medio_banco", length=2)
-	private String medioBanco;
-
-	@Column(name = "nombre_factura", length=180)
-	private String nombreFactura;
+	@Column(name = "tipo_doc", length = 2)
+	private String								tipoDoc;
 
 	
-		
-	
+
+
+
+	@Column(name = "medio_efectivo", length = 2)
+	private String								medioEfectivo;
+
+	@Column(name = "medio_tarjeta", length = 2)
+	private String								medioTarjeta;
+
+	@Column(name = "medio_banco", length = 2)
+	private String								medioBanco;
+
+
 	@Column(name = "tipo_cambio", precision = 18, scale = 5)
-	private Double tipoCambio;
+	private Double								tipoCambio;
 
 	@Column(name = "subTotal", precision = 18, scale = 5)
-	private Double subTotal;
+	private Double								subTotal;
 
-	@Column(name = "total_transporte", precision = 18, scale = 5)
-	private Double totalTransporte;
+
 
 	@Column(name = "total_serv_gravados", precision = 18, scale = 5)
-	private Double totalServGravados;
+	private Double								totalServGravados;
 
 	@Column(name = "total_serv_exentos", precision = 18, scale = 5)
-	private Double totalServExentos;
+	private Double								totalServExentos;
 
 	@Column(name = "total_mercancias_gravadas", precision = 18, scale = 5)
-	private Double totalMercanciasGravadas;
+	private Double								totalMercanciasGravadas;
 
 	@Column(name = "total_mercancias_exentas", precision = 18, scale = 5)
-	private Double totalMercanciasExentas;
+	private Double								totalMercanciasExentas;
 
 	@Column(name = "total_gravado", precision = 18, scale = 5)
-	private Double totalGravado;
+	private Double								totalGravado;
 
 	@Column(name = "total_exento", precision = 18, scale = 5)
-	private Double totalExento;
+	private Double								totalExento;
 
 	@Column(name = "total_venta", precision = 18, scale = 5)
-	private Double totalVenta;
+	private Double								totalVenta;
 
 	@Column(name = "total_descuentos", precision = 18, scale = 5)
-	private Double totalDescuentos;
+	private Double								totalDescuentos;
 
 	@Column(name = "total_venta_neta", precision = 18, scale = 5)
-	private Double totalVentaNeta;
+	private Double								totalVentaNeta;
 
 	@Column(name = "total_impuesto", precision = 18, scale = 5)
-	private Double totalImpuesto;
+	private Double								totalImpuesto;
 
 	@Column(name = "total_comprobante", precision = 18, scale = 5)
-	private Double totalComprobante;
+	private Double								totalComprobante;
 
 	@Column(name = "total_efectivo", precision = 18, scale = 5)
-	private Double totalEfectivo;
+	private Double								totalEfectivo;
 
 	@Column(name = "total_tarjeta", precision = 18, scale = 5)
-	private Double totalTarjeta;
+	private Double								totalTarjeta;
 
 	@Column(name = "total_banco", precision = 18, scale = 5)
-	private Double totalBanco;
+	private Double								totalBanco;
 
 	@Column(name = "total_credito", precision = 18, scale = 5)
-	private Double totalCredito;
+	private Double								totalCredito;
 
 	@Column(name = "monto_cambio", precision = 18, scale = 5)
-	private Double montoCambio;
+	private Double								montoCambio;
 
 	@Column(name = "total_cambio", precision = 18, scale = 5)
-	private Double totalCambio;
+	private Double								totalCambio;
 
 	// Impuesto del servicio cuando aplica
 	@Column(name = "total_servicio", precision = 18, scale = 5)
-	private Double totalImpuestoServicio;
+	private Double								totalImpuestoServicio;
 
 	@Column(name = "total_cambioPagar", precision = 18, scale = 5)
-	private Double totalCambioPagar;
-
-	@Column(name = "cambio_moneda", precision = 18, scale = 5)
-	private Double cambioMoneda;
-
-	@Column(name = "codigo_moneda")
-	private String codigoMoneda;
-
-	@Column(name = "estado")
-	private Integer estado;
-
-	@Column(name = "estado_firma")
-	private Integer estadoFirma;
+	private Double								totalCambioPagar;
 
 	
-	@Column(name = "peso_transTotal", columnDefinition = "Decimal(10,5) default '0.00'")
-	private Double pesoTransporteTotal;
 
-	@Column(name = "total_serv_exo", columnDefinition = "Decimal(10,5) default '0.00'")
-	private Double totalServExonerado;
+	@Column(name = "codigo_moneda", length = 3)
+	private String								codigoMoneda;
 
-	@Column(name = "total_merc_exo", columnDefinition = "Decimal(10,5) default '0.00'")
-	private Double totalMercExonerada;
+	@Column(name = "estado")
+	private Integer								estado;
 
-	@Column(name = "total_exo", columnDefinition = "Decimal(10,5) default '0.00'")
-	private Double totalExonerado;
+	@Column(name = "estado_firma")
+	private Integer								estadoFirma;
 
-	@Column(name = "total_iva_dev", columnDefinition = "Decimal(10,5) default '0.00'")
-	private Double totalIVADevuelto;
-
-	@Column(name = "total_otros_cargos", columnDefinition = "Decimal(10,5) default '0.00'")
-	private Double totalOtrosCargos;
-
-	@Column(name = "tipo_otros_doc", columnDefinition = "varchar(2)", length = 2)
-	private String tipoDocumentoOtroCargo;
-	@Column(name = "deta_otros_doc", columnDefinition = "varchar(60)", length = 2)
-	private String detalleOtroCargo;
+		
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "created_at")
-	private Date created_at;
+	private Date									created_at;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "updated_at")
-	private Date updated_at;
+	private Date									updated_at;
 
 	@Column(name = "version_esquema", columnDefinition = "INT default '0'")
-	private Integer versionEsquemaXML;
+	private Integer								versionEsquemaXML;
 
 	@ManyToOne
 	@JoinColumn(name = "proveedorsimpl_id")
-	private ProveedorSimplificado ProveedorSimplificado;
+	private ProveedorSimplificado	ProveedorSimplificado;
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
-	private Empresa empresa;
+	private Empresa								empresa;
 
-	
 	@ManyToOne
 	@JoinColumn(name = "usuario_id", nullable = false)
-	private Usuario usuarioCreacion;
-	
+	private Usuario								usuarioCreacion;
+
 	@Column(name = "act_comercial", length = 6)
-	private String						codigoActividad;
+	private String								codigoActividad;
 
-	
-
-	
 	public CompraSimplificada() {
 		super();
 		this.estado = Constantes.FACTURA_ESTADO_PENDIENTE;
@@ -233,36 +184,34 @@ public class CompraSimplificada implements Serializable {
 
 	}
 
-	
-	
+		
+
+
+
+
 
 	
-	
 
-	public CompraSimplificada(Long id, Date fechaCredito, String numeroConsecutivo, String consecutivoProforma, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon, Date referenciaFechaEmision, String medioEfectivo, String medioTarjeta, String medioBanco, String nombreFactura, Double tipoCambio, Double subTotal, Double totalTransporte, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta,
-			Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, Double cambioMoneda, String codigoMoneda, Integer estado, Integer estadoFirma, Double pesoTransporteTotal, Double totalServExonerado, Double totalMercExonerada, Double totalExonerado, Double totalIVADevuelto, Double totalOtrosCargos, String tipoDocumentoOtroCargo, String detalleOtroCargo, Date created_at, Date updated_at, Integer versionEsquemaXML, com.emprendesoftcr.modelo.ProveedorSimplificado proveedorSimplificado, Empresa empresa, Usuario usuarioCreacion, String codigoActividad) {
+
+
+
+
+	public CompraSimplificada(Long id, Date fechaCredito, String numeroConsecutivo, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String medioEfectivo, String medioTarjeta, String medioBanco, Double tipoCambio, Double subTotal, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, String codigoMoneda, Integer estado, Integer estadoFirma, Date created_at,
+			Date updated_at, Integer versionEsquemaXML, com.emprendesoftcr.modelo.ProveedorSimplificado proveedorSimplificado, Empresa empresa, Usuario usuarioCreacion, String codigoActividad) {
 		super();
 		this.id = id;
 		this.fechaCredito = fechaCredito;
 		this.numeroConsecutivo = numeroConsecutivo;
-		this.consecutivoProforma = consecutivoProforma;
 		this.clave = clave;
 		this.fechaEmision = fechaEmision;
 		this.condicionVenta = condicionVenta;
 		this.plazoCredito = plazoCredito;
 		this.tipoDoc = tipoDoc;
-		this.referenciaTipoDoc = referenciaTipoDoc;
-		this.referenciaNumero = referenciaNumero;
-		this.referenciaCodigo = referenciaCodigo;
-		this.referenciaRazon = referenciaRazon;
-		this.referenciaFechaEmision = referenciaFechaEmision;
 		this.medioEfectivo = medioEfectivo;
 		this.medioTarjeta = medioTarjeta;
 		this.medioBanco = medioBanco;
-		this.nombreFactura = nombreFactura;
 		this.tipoCambio = tipoCambio;
 		this.subTotal = subTotal;
-		this.totalTransporte = totalTransporte;
 		this.totalServGravados = totalServGravados;
 		this.totalServExentos = totalServExentos;
 		this.totalMercanciasGravadas = totalMercanciasGravadas;
@@ -282,18 +231,9 @@ public class CompraSimplificada implements Serializable {
 		this.totalCambio = totalCambio;
 		this.totalImpuestoServicio = totalImpuestoServicio;
 		this.totalCambioPagar = totalCambioPagar;
-		this.cambioMoneda = cambioMoneda;
 		this.codigoMoneda = codigoMoneda;
 		this.estado = estado;
 		this.estadoFirma = estadoFirma;
-		this.pesoTransporteTotal = pesoTransporteTotal;
-		this.totalServExonerado = totalServExonerado;
-		this.totalMercExonerada = totalMercExonerada;
-		this.totalExonerado = totalExonerado;
-		this.totalIVADevuelto = totalIVADevuelto;
-		this.totalOtrosCargos = totalOtrosCargos;
-		this.tipoDocumentoOtroCargo = tipoDocumentoOtroCargo;
-		this.detalleOtroCargo = detalleOtroCargo;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.versionEsquemaXML = versionEsquemaXML;
@@ -309,21 +249,11 @@ public class CompraSimplificada implements Serializable {
 
 
 
-	public String getTipoDocumentoOtroCargo() {
-		return tipoDocumentoOtroCargo;
-	}
 
-	public void setTipoDocumentoOtroCargo(String tipoDocumentoOtroCargo) {
-		this.tipoDocumentoOtroCargo = tipoDocumentoOtroCargo;
-	}
 
-	public String getDetalleOtroCargo() {
-		return detalleOtroCargo;
-	}
 
-	public void setDetalleOtroCargo(String detalleOtroCargo) {
-		this.detalleOtroCargo = detalleOtroCargo;
-	}
+
+
 
 	public Integer getVersionEsquemaXML() {
 		return versionEsquemaXML;
@@ -331,14 +261,6 @@ public class CompraSimplificada implements Serializable {
 
 	public void setVersionEsquemaXML(Integer versionEsquemaXML) {
 		this.versionEsquemaXML = versionEsquemaXML;
-	}
-
-	public Double getPesoTransporteTotal() {
-		return pesoTransporteTotal;
-	}
-
-	public void setPesoTransporteTotal(Double pesoTransporteTotal) {
-		this.pesoTransporteTotal = pesoTransporteTotal;
 	}
 
 	public Double getTotalImpuestoServicio() {
@@ -409,14 +331,6 @@ public class CompraSimplificada implements Serializable {
 		this.tipoDoc = tipoDoc;
 	}
 
-	public String getNombreFactura() {
-		return nombreFactura;
-	}
-
-	public void setNombreFactura(String nombreFactura) {
-		this.nombreFactura = nombreFactura;
-	}
-
 	
 
 	public Double getTipoCambio() {
@@ -451,14 +365,6 @@ public class CompraSimplificada implements Serializable {
 
 	public String getTipoCambioSTR() {
 		return Utils.formateadorMiles(this.tipoCambio);
-	}
-
-	public Double getTotalTransporte() {
-		return totalTransporte;
-	}
-
-	public void setTotalTransporte(Double totalTransporte) {
-		this.totalTransporte = totalTransporte;
 	}
 
 	public Double getTotalServGravados() {
@@ -693,7 +599,6 @@ public class CompraSimplificada implements Serializable {
 		this.updated_at = updated_at;
 	}
 
-	
 	public Empresa getEmpresa() {
 		return empresa;
 	}
@@ -701,8 +606,6 @@ public class CompraSimplificada implements Serializable {
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
 	}
-
-	
 
 	public Usuario getUsuarioCreacion() {
 		return usuarioCreacion;
@@ -712,13 +615,7 @@ public class CompraSimplificada implements Serializable {
 		this.usuarioCreacion = usuarioCreacion;
 	}
 
-	public Double getCambioMoneda() {
-		return cambioMoneda;
-	}
-
-	public void setCambioMoneda(Double cambioMoneda) {
-		this.cambioMoneda = cambioMoneda;
-	}
+	
 
 	public String getClave() {
 		return clave;
@@ -728,45 +625,7 @@ public class CompraSimplificada implements Serializable {
 		this.clave = clave;
 	}
 
-	public String getReferenciaTipoDoc() {
-		return referenciaTipoDoc;
-	}
-
-	public void setReferenciaTipoDoc(String referenciaTipoDoc) {
-		this.referenciaTipoDoc = referenciaTipoDoc;
-	}
-
-	public String getReferenciaNumero() {
-		return referenciaNumero;
-	}
-
-	public void setReferenciaNumero(String referenciaNumero) {
-		this.referenciaNumero = referenciaNumero;
-	}
-
-	public String getReferenciaCodigo() {
-		return referenciaCodigo;
-	}
-
-	public void setReferenciaCodigo(String referenciaCodigo) {
-		this.referenciaCodigo = referenciaCodigo;
-	}
-
-	public String getReferenciaRazon() {
-		return referenciaRazon;
-	}
-
-	public void setReferenciaRazon(String referenciaRazon) {
-		this.referenciaRazon = referenciaRazon;
-	}
-
-	public Date getReferenciaFechaEmision() {
-		return referenciaFechaEmision;
-	}
-
-	public void setReferenciaFechaEmision(Date referenciaFechaEmision) {
-		this.referenciaFechaEmision = referenciaFechaEmision;
-	}
+	
 
 	public String getMedioEfectivo() {
 		return medioEfectivo;
@@ -807,8 +666,6 @@ public class CompraSimplificada implements Serializable {
 		return Constantes.EMPTY;
 	}
 
-
-
 	public String getTotalComprobanteSTR() {
 		return Utils.formateadorMiles(this.totalComprobante);
 	}
@@ -817,85 +674,22 @@ public class CompraSimplificada implements Serializable {
 		return Utils.formateadorMiles(this.totalDescuentos);
 	}
 
-	public String getConsecutivoProforma() {
-		return consecutivoProforma;
-	}
-
-	public void setConsecutivoProforma(String consecutivoProforma) {
-		this.consecutivoProforma = consecutivoProforma;
-	}
-
-	public Double getTotalServExonerado() {
-		return totalServExonerado;
-	}
-
-	public void setTotalServExonerado(Double totalServExonerado) {
-		this.totalServExonerado = totalServExonerado;
-	}
-
-	public Double getTotalMercExonerada() {
-		return totalMercExonerada;
-	}
-
-	public void setTotalMercExonerada(Double totalMercExonerada) {
-		this.totalMercExonerada = totalMercExonerada;
-	}
-
-	public Double getTotalExonerado() {
-		return totalExonerado;
-	}
-
-	public void setTotalExonerado(Double totalExonerado) {
-		this.totalExonerado = totalExonerado;
-	}
-
-	public Double getTotalIVADevuelto() {
-		return totalIVADevuelto;
-	}
-
-	public void setTotalIVADevuelto(Double totalIVADevuelto) {
-		this.totalIVADevuelto = totalIVADevuelto;
-	}
-
-	public Double getTotalOtrosCargos() {
-		return totalOtrosCargos;
-	}
-
-	public void setTotalOtrosCargos(Double totalOtrosCargos) {
-		this.totalOtrosCargos = totalOtrosCargos;
-	}
-
-
+	
+	
 	public ProveedorSimplificado getProveedorSimplificado() {
 		return ProveedorSimplificado;
 	}
-
 
 	public void setProveedorSimplificado(ProveedorSimplificado proveedorSimplificado) {
 		ProveedorSimplificado = proveedorSimplificado;
 	}
 
-
-
-
-
-
-
-	
 	public String getCodigoActividad() {
 		return codigoActividad;
 	}
 
-
-
-
-
-
-
-	
 	public void setCodigoActividad(String codigoActividad) {
 		this.codigoActividad = codigoActividad;
 	}
 
-	
 }

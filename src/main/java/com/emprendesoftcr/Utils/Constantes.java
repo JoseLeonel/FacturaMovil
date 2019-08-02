@@ -117,7 +117,7 @@ public class Constantes {
 
 	// 48 horas cada 5 minutos
 
-	public static final Integer					MAXIMO_REINTENTOS_ACEPTACION												= 12;
+	public static final Integer					MAXIMO_REINTENTOS_ACEPTACION												= 20;
 	public static final String					MAXIMO_REINTENTOS_ACEPTACION_STR										= "Tope de intentos de aceptacion,no envio respuesta";
 
 	public static final Integer					SEMAFORO_ESTADO_ACTIVO															= 1;
@@ -139,6 +139,7 @@ public class Constantes {
 	public static final String					TERMINAL_INICIAL_FACTURA														= "00001";
 
 	public static final String					DOCXMLS_FACTURA_4_3																	= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronica";
+	public static final String					DOCXMLS_COMPRA_SIMPLIFICADA_4_3											= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronicaCompra";
 	public static final String					DOCXMLS_NOTA_DEBITO_4_3															= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/notaDebitoElectronica";
 	public static final String					DOCXMLS_NOTA_CREDITO_4_3														= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/notaCreditoElectronica";
 	public static final String					DOCXMLS_RESPUESTA_HACIENDA_4_3											= "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/mensajeHacienda";

@@ -1011,6 +1011,9 @@ function formatoFecha(fecha) {
 function formatoFechaF(fecha) {
     return fecha == null?"":moment(fecha).format('YYYY-MM-DD');
 }
+function formatoFechaYYYY(fecha) {
+    return fecha == null?"":moment(fecha).format('YYYY-MM-DD');
+}
 
 function formatoFechaHora(fecha) {
     return fecha == null?"":moment(fecha).format('DD/MM/YYYY HH:mm:ss');

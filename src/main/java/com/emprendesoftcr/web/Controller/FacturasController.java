@@ -1098,7 +1098,7 @@ public class FacturasController {
 	public RespuestaServiceDataTable listarFacturasDiaAjax(HttpServletRequest request, HttpServletResponse response) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Integer idUsuario = Constantes.ZEROS;
-		if (request.isUserInRole(Constantes.ROL_ADMINISTRADOR_CAJERO) || request.isUserInRole(Constantes.ROL_ADMINISTRADOR_EMPRESA) || request.isUserInRole(Constantes.ROL_ADMINISTRADOR_RESTAURANTE)) {
+		if (usuarioBo.isAdministrador_cajero(usuarioSesion) || usuarioBo.isAdministrador_empresa(usuarioSesion) || usuarioBo.isAdministrador_restaurante(usuarioSesion)) {
 			idUsuario = Constantes.ZEROS;
 		} else {
 			idUsuario = usuarioSesion.getId();
@@ -1818,13 +1818,17 @@ public class FacturasController {
 			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "<>"));
 			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PROFORMAS.toString() + "'", "<>"));
 			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_ANULADA.toString() + "'", "<>"));
+			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_ANULADA_PROFORMA.toString() + "'", "<>"));
+			
+			
 			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
 
 			if (cliente != null) {
 				delimitador.addFiltro(new JqGridFilter("cliente.id", "'" + cliente.getId().toString() + "'", "="));
 			}
-			if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
-				Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			if (usuarioBo.isAdministrador_vendedor(usuario)) {
+				
 				delimitador.addFiltro(new JqGridFilter("usuarioCreacion.id", "'" + usuario.getId().toString() + "'", "="));
 			}
 			if (tipoDocumento != null) {
@@ -1866,13 +1870,15 @@ public class FacturasController {
 			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PROFORMAS.toString() + "'", "<>"));
 			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_ANULADA.toString() + "'", "<>"));
 			delimitador.addFiltro(new JqGridFilter("referenciaCodigo", "'" + Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO.toString() + "'", "<>"));
+			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_ANULADA_PROFORMA.toString() + "'", "<>"));
 			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
 
 			if (cliente != null) {
 				delimitador.addFiltro(new JqGridFilter("cliente.id", "'" + cliente.getId().toString() + "'", "="));
 			}
-			if (request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
-				Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+			if (usuarioBo.isAdministrador_vendedor(usuario)) {
+				
 				delimitador.addFiltro(new JqGridFilter("usuarioCreacion.id", "'" + usuario.getId().toString() + "'", "="));
 			}
 			if (tipoDocumento != null) {

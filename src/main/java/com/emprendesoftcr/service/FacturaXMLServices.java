@@ -14,6 +14,6 @@ public interface FacturaXMLServices {
 
 	FacturaElectronica getFacturaAPDF(String xml) throws Exception;
 
-	;
+	
 
 }

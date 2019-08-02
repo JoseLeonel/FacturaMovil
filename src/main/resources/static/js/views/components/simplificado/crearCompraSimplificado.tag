@@ -168,7 +168,6 @@
                     <div class="box-tools ">
                             <a class="pull-left" href="#"   onclick = {__Limpiar} title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-limpiar">{$.i18n.prop("factura.f10")}</span></a>
                             <a class="pull-left" href="#"   onclick = {__MostrarFormularioDePago}       title="Aplicar la compra"> <span class="label label-limpiar">{$.i18n.prop("comprar.f8")}</span></a>
-                            <a class="pull-left" href="#"   onclick = {__crearCompraEnEspera}  title="Compra en espera"> <span class="label label-limpiar">{$.i18n.prop("comprar.f9")}</span></a>
                             
                             <a class="pull-right" href="#"  title="{$.i18n.prop("btn.limpiar")}"> <span class="label label-articulos">{descripcionArticulo}</span></a>
                         </div>
@@ -218,11 +217,6 @@
                         </article>
                     </aside>
                  
-                    <section   class="lista-compras-espera">
-                        <div id="botones"  each={compras_espera.data}  onclick={__CargarCompraEspera}>
-                            <a href="#" class="compras-espera"  title="{proveedor !=null?proveedor.nombreCompleto:""}">C# {id}</a>
-                        </div>    
-                    </section >
 
                 </section>
             
@@ -1021,18 +1015,17 @@
         __ListaDeProveedores()
         __tipoCodigo()
         __Eventos()
-        __ListaActividadesComercales()
         $('.datepickerFechaCompra').datepicker(
         {
             format: 'yyyy-mm-dd',
             todayHighlight:true,
         }
     );
-    var retrievedObject = JSON.parse(localStorage.getItem('detallesComprasNueva'));
+    var retrievedObject = JSON.parse(localStorage.getItem('detallesComprasSimplificadaNueva'));
     self.detail = retrievedObject == null?self.detail = []:retrievedObject
-    var compraObject = JSON.parse(localStorage.getItem('compraNueva'));
+    var compraObject = JSON.parse(localStorage.getItem('compraSimplificadaNueva'));
     self.compra = compraObject ==null?self.compra:compraObject
-    var proveedorObject = JSON.parse(localStorage.getItem('proveedor'));
+    var proveedorObject = JSON.parse(localStorage.getItem('proveedorSimplificada'));
     self.proveedor = proveedorObject == null? self.proveedor:proveedorObject
     self.update()
     __calculate()
@@ -1370,10 +1363,10 @@ function __Impuestos(){
         codigo: '02',
         descripcion:$.i18n.prop("tipo.impuesto.consumo")
      });
-    self.impuestos.push({
-        codigo: '07',
-        descripcion:$.i18n.prop("tipo.impuesto.servicio")
-     });
+   // self.impuestos.push({
+   //     codigo: '07',
+   //     descripcion:$.i18n.prop("tipo.impuesto.servicio")
+   //  });
      self.impuestos.push({
         codigo: '06',
         descripcion:$.i18n.prop("tipo.impuesto.tabaco")

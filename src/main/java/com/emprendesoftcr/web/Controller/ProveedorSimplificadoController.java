@@ -165,9 +165,11 @@ public class ProveedorSimplificadoController {
 			proveedorSimplificadoCommand.setNombreCompleto(proveedorSimplificadoCommand.getNombreCompleto() == null ? Constantes.EMPTY : proveedorSimplificadoCommand.getNombreCompleto());
 			proveedorSimplificadoCommand.setCorreoElectronico(proveedorSimplificadoCommand.getCorreoElectronico() == null ? Constantes.EMPTY : proveedorSimplificadoCommand.getCorreoElectronico());
 			proveedorSimplificadoCommand.setCodigoPais(proveedorSimplificadoCommand.getCodigoPais() == null ? Constantes.ZEROS : proveedorSimplificadoCommand.getCodigoPais());
-			proveedorSimplificadoCommand.setTelefono(proveedorSimplificadoCommand.getTelefono() == null?Constantes.ZEROS:proveedorSimplificadoCommand.getTelefono());
-			proveedorSimplificadoCommand.setNombreComercial(proveedorSimplificadoCommand.getNombreComercial() ==null?Constantes.EMPTY:proveedorSimplificadoCommand.getNombreComercial());
-			
+			proveedorSimplificadoCommand.setTelefono(proveedorSimplificadoCommand.getTelefono() == null ? Constantes.ZEROS : proveedorSimplificadoCommand.getTelefono());
+			proveedorSimplificadoCommand.setNombreComercial(proveedorSimplificadoCommand.getNombreComercial() == null ? Constantes.EMPTY : proveedorSimplificadoCommand.getNombreComercial());
+			proveedorSimplificadoCommand.setCodigoProvincia(proveedorSimplificadoCommand.getCodigoProvincia() != null ? proveedorSimplificadoCommand.getCodigoProvincia() : Constantes.ZEROS);
+			proveedorSimplificadoCommand.setCodigoDistrito(proveedorSimplificadoCommand.getCodigoDistrito() != null ? proveedorSimplificadoCommand.getCodigoDistrito() : Constantes.ZEROS);
+			proveedorSimplificadoCommand.setCodigoCanton(proveedorSimplificadoCommand.getCodigoCanton() != null ? proveedorSimplificadoCommand.getCodigoCanton() : Constantes.ZEROS);
 
 			if (proveedorSimplificadoCommand.getCedula().equals(Constantes.EMPTY)) {
 				result.rejectValue("cedula", Constantes.KEY_REQUERIDO);
@@ -218,6 +220,10 @@ public class ProveedorSimplificadoController {
 			proveedorSimplificado.setCreated_at(new Date());
 			proveedorSimplificado.setUpdated_at(new Date());
 			proveedorSimplificado.setUsuario(usuarioSesion);
+			proveedorSimplificado.setCodigoProvincia(proveedorSimplificadoCommand.getCodigoProvincia() != null ? proveedorSimplificadoCommand.getCodigoProvincia() : Constantes.ZEROS);
+			proveedorSimplificado.setCodigoDistrito(proveedorSimplificadoCommand.getCodigoDistrito() != null ? proveedorSimplificadoCommand.getCodigoDistrito() : Constantes.ZEROS);
+			proveedorSimplificado.setCodigoCanton(proveedorSimplificadoCommand.getCodigoCanton() != null ? proveedorSimplificadoCommand.getCodigoCanton() : Constantes.ZEROS);
+
 			proveedorSimplificado.setCodigoActividad(proveedorSimplificadoCommand.getCodigoActividad());
 			proveedorSimplificadoBo.agregar(proveedorSimplificado);
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("proveedorSimplificado.agregar.correctamente", proveedorSimplificado);
@@ -237,8 +243,12 @@ public class ProveedorSimplificadoController {
 			proveedorSimplificadoCommand.setNombreCompleto(proveedorSimplificadoCommand.getNombreCompleto() == null ? Constantes.EMPTY : proveedorSimplificadoCommand.getNombreCompleto());
 			proveedorSimplificadoCommand.setCorreoElectronico(proveedorSimplificadoCommand.getCorreoElectronico() == null ? Constantes.EMPTY : proveedorSimplificadoCommand.getCorreoElectronico());
 			proveedorSimplificadoCommand.setCodigoPais(proveedorSimplificadoCommand.getCodigoPais() == null ? Constantes.ZEROS : proveedorSimplificadoCommand.getCodigoPais());
-			proveedorSimplificadoCommand.setTelefono(proveedorSimplificadoCommand.getTelefono() == null?Constantes.ZEROS:proveedorSimplificadoCommand.getTelefono());
-			proveedorSimplificadoCommand.setNombreComercial(proveedorSimplificadoCommand.getNombreComercial() ==null?Constantes.EMPTY:proveedorSimplificadoCommand.getNombreComercial());
+			proveedorSimplificadoCommand.setTelefono(proveedorSimplificadoCommand.getTelefono() == null ? Constantes.ZEROS : proveedorSimplificadoCommand.getTelefono());
+			proveedorSimplificadoCommand.setNombreComercial(proveedorSimplificadoCommand.getNombreComercial() == null ? Constantes.EMPTY : proveedorSimplificadoCommand.getNombreComercial());
+			proveedorSimplificadoCommand.setCodigoProvincia(proveedorSimplificadoCommand.getCodigoProvincia() != null ? proveedorSimplificadoCommand.getCodigoProvincia() : Constantes.ZEROS);
+			proveedorSimplificadoCommand.setCodigoDistrito(proveedorSimplificadoCommand.getCodigoDistrito() != null ? proveedorSimplificadoCommand.getCodigoDistrito() : Constantes.ZEROS);
+			proveedorSimplificadoCommand.setCodigoCanton(proveedorSimplificadoCommand.getCodigoCanton() != null ? proveedorSimplificadoCommand.getCodigoCanton() : Constantes.ZEROS);
+
 			if (proveedorSimplificadoCommand.getCedula().equals(Constantes.EMPTY)) {
 				result.rejectValue("cedula", Constantes.KEY_REQUERIDO);
 			}
@@ -305,6 +315,10 @@ public class ProveedorSimplificadoController {
 			proveedorSimplificadoDB.setUsuario(usuarioSesion);
 			proveedorSimplificadoDB.setIdentificacionExtranjero(proveedorSimplificadoCommand.getIdentificacionExtranjero());
 			proveedorSimplificadoDB.setCodigoActividad(proveedorSimplificadoCommand.getCodigoActividad());
+			proveedorSimplificadoDB.setCodigoProvincia(proveedorSimplificadoCommand.getCodigoProvincia() != null ? proveedorSimplificadoCommand.getCodigoProvincia() : Constantes.ZEROS);
+			proveedorSimplificadoDB.setCodigoDistrito(proveedorSimplificadoCommand.getCodigoDistrito() != null ? proveedorSimplificadoCommand.getCodigoDistrito() : Constantes.ZEROS);
+			proveedorSimplificadoDB.setCodigoCanton(proveedorSimplificadoCommand.getCodigoCanton() != null ? proveedorSimplificadoCommand.getCodigoCanton() : Constantes.ZEROS);
+
 			proveedorSimplificadoBo.modificar(proveedorSimplificadoDB);
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("proveedorSimplificado.modificado.correctamente", proveedorSimplificadoDB);

@@ -35,13 +35,16 @@ public class AbonoPagar implements Serializable {
 	@Column(name = "id")
 	private Long							id;
 
-	@Column(name = "nota")
+	@Column(name = "nota", length = 60)
 	private String						nota;
 
-	@Column(name = "recibo")
+	@Column(name = "recibo", length = 30)
 	private String						recibo;
 
-	@Column(name = "transferencia")
+	@Column(name = "nomb_banco", length = 20)
+	private String						nombreBanco;
+
+	@Column(name = "transferencia", length = 30)
 	private String						transferencia;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -60,7 +63,7 @@ public class AbonoPagar implements Serializable {
 	@Column(name = "total")
 	private Double						total;
 
-	@Column(name = "estado")
+	@Column(name = "estado", length = 20)
 	private String						estado;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -93,11 +96,12 @@ public class AbonoPagar implements Serializable {
 
 	}
 
-	public AbonoPagar(Long id, String nota, String recibo, String transferencia, Date fechaPago, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double total, String estado, Date created_at, Date updated_at, CuentaPagar cuentaPagar, Usuario usuario) {
+	public AbonoPagar(Long id, String nota, String recibo, String nombreBanco, String transferencia, Date fechaPago, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double total, String estado, Date created_at, Date updated_at, CuentaPagar cuentaPagar, Usuario usuario) {
 		super();
 		this.id = id;
 		this.nota = nota;
 		this.recibo = recibo;
+		this.nombreBanco = nombreBanco;
 		this.transferencia = transferencia;
 		this.fechaPago = fechaPago;
 		this.totalEfectivo = totalEfectivo;
@@ -111,9 +115,6 @@ public class AbonoPagar implements Serializable {
 		this.usuario = usuario;
 	}
 
-
-
-	
 	public Long getId() {
 		return id;
 	}
@@ -240,6 +241,14 @@ public class AbonoPagar implements Serializable {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public String getNombreBanco() {
+		return nombreBanco;
+	}
+
+	public void setNombreBanco(String nombreBanco) {
+		this.nombreBanco = nombreBanco;
 	}
 
 }
