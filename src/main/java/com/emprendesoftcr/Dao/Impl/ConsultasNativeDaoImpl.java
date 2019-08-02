@@ -105,7 +105,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		if (idusuario > Constantes.ZEROS) {
 			queryStr = queryStr.replaceAll("facturas.usuario_id =" ," facturas.usuario_id ='"+ idusuario.toString() + "' ");	
 		}else {
-			queryStr = queryStr.replaceAll("facturas.usuario_id =" ," ");
+			queryStr = queryStr.replaceAll("and facturas.usuario_id =" ," ");
 		}
 		
 		queryStr = queryStr.replaceAll(":ESTADO", estado.toString());

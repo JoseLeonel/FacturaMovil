@@ -55,10 +55,6 @@ public class CompraSimplificada implements Serializable {
 	@Column(name = "tipo_doc", length = 2)
 	private String								tipoDoc;
 
-	
-
-
-
 	@Column(name = "medio_efectivo", length = 2)
 	private String								medioEfectivo;
 
@@ -68,14 +64,11 @@ public class CompraSimplificada implements Serializable {
 	@Column(name = "medio_banco", length = 2)
 	private String								medioBanco;
 
-
 	@Column(name = "tipo_cambio", precision = 18, scale = 5)
 	private Double								tipoCambio;
 
 	@Column(name = "subTotal", precision = 18, scale = 5)
 	private Double								subTotal;
-
-
 
 	@Column(name = "total_serv_gravados", precision = 18, scale = 5)
 	private Double								totalServGravados;
@@ -135,8 +128,6 @@ public class CompraSimplificada implements Serializable {
 	@Column(name = "total_cambioPagar", precision = 18, scale = 5)
 	private Double								totalCambioPagar;
 
-	
-
 	@Column(name = "codigo_moneda", length = 3)
 	private String								codigoMoneda;
 
@@ -145,8 +136,6 @@ public class CompraSimplificada implements Serializable {
 
 	@Column(name = "estado_firma")
 	private Integer								estadoFirma;
-
-		
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -183,18 +172,6 @@ public class CompraSimplificada implements Serializable {
 		this.updated_at = new Date();
 
 	}
-
-		
-
-
-
-
-
-	
-
-
-
-
 
 	public CompraSimplificada(Long id, Date fechaCredito, String numeroConsecutivo, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String medioEfectivo, String medioTarjeta, String medioBanco, Double tipoCambio, Double subTotal, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, String codigoMoneda, Integer estado, Integer estadoFirma, Date created_at,
 			Date updated_at, Integer versionEsquemaXML, com.emprendesoftcr.modelo.ProveedorSimplificado proveedorSimplificado, Empresa empresa, Usuario usuarioCreacion, String codigoActividad) {
@@ -242,18 +219,6 @@ public class CompraSimplificada implements Serializable {
 		this.usuarioCreacion = usuarioCreacion;
 		this.codigoActividad = codigoActividad;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
 
 	public Integer getVersionEsquemaXML() {
 		return versionEsquemaXML;
@@ -330,8 +295,6 @@ public class CompraSimplificada implements Serializable {
 	public void setTipoDoc(String tipoDoc) {
 		this.tipoDoc = tipoDoc;
 	}
-
-	
 
 	public Double getTipoCambio() {
 		return tipoCambio;
@@ -615,8 +578,6 @@ public class CompraSimplificada implements Serializable {
 		this.usuarioCreacion = usuarioCreacion;
 	}
 
-	
-
 	public String getClave() {
 		return clave;
 	}
@@ -624,8 +585,6 @@ public class CompraSimplificada implements Serializable {
 	public void setClave(String clave) {
 		this.clave = clave;
 	}
-
-	
 
 	public String getMedioEfectivo() {
 		return medioEfectivo;
@@ -674,8 +633,6 @@ public class CompraSimplificada implements Serializable {
 		return Utils.formateadorMiles(this.totalDescuentos);
 	}
 
-	
-	
 	public ProveedorSimplificado getProveedorSimplificado() {
 		return ProveedorSimplificado;
 	}

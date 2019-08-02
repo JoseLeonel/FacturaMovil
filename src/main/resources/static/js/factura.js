@@ -829,6 +829,8 @@ function loadListar(table,idioma,formatoTabla,data){
 *  Listar la tabla a aplicar el mantenimiento
 **/
 function __InicializarTabla(nombreTabla){
+	$(nombreTabla).dataTable().fnClearTable();
+	$(nombreTabla).DataTable().destroy();
     $(nombreTabla).DataTable({
         destroy: true,
         "language": idioma_espanol,

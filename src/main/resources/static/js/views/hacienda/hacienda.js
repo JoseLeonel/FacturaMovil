@@ -28,6 +28,7 @@ var _Init = function () {
 
     $('#bontonBusqueda').click(function () {
 		if ($("#filtros").valid()) {
+			__Inicializar_Table('.tableListar')  
 		    _consulta()
 		}
     });
@@ -42,6 +43,10 @@ var _Init = function () {
 var haciendas = {data:[]};
 
 function _consulta(){
+	var table = $('.tableListar').DataTable();
+ 	table
+    .clear()
+    .draw();
 	haciendas = {data:[]}
 	var fechaInicio=$('.fechaInicial').val();
 	var fechaFin = $('.fechaFinal').val();
@@ -74,7 +79,7 @@ function _consulta(){
 				__BajarPDFHacienda()
 				EventoFiltro();
 		   }else{
-				agregarInputsCombos();
+			__Inicializar_Table('.tableListar')  
 		   }           
 	   },
 	   error: function (xhr, status) {
@@ -295,7 +300,7 @@ function __Opciones(id,type,row){
 	if(row.estado == "Enviado"){
 		 menu += '<li><a href="#"  title="Aceptacion Manual a Tributacion" class="  btnAceptacionManual" >Aceptacion Manual</a></li>'
 	}
-	if(row.tipoDocumento !=" "){
+	if(row.tipoDoc.indexOf('Factura') !== -1  || row.tipoDoc.indexOf('Nota') !== -1 || row.tipoDoc.indexOf('Tiquete') !== -1 ){
 		menu += '<li><a href="#"  title="Bajar PDF" class="  btnBajarPDF" >PDF Documentos</a></li>'
 	}
 	

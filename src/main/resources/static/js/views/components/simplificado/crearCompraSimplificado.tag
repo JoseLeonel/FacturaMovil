@@ -1103,7 +1103,7 @@ function __EnterFacturar(){
    
     swal({
            title: '',
-           text: $.i18n.prop("factura.mensaje.alert.enter"),
+           text: $.i18n.prop("compraSimplificada.mensaje.alert.enter"),
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: '#00539B',
@@ -1167,10 +1167,10 @@ function __comboCondicionPago(){
         estado:"01",
         descripcion:$.i18n.prop("factura.codicion.venta.contado")
     })
-    self.comboCondicionPagos.push({
-        estado:"02",
-        descripcion:$.i18n.prop("factura.codicion.venta.credito")
-    })
+   // self.comboCondicionPagos.push({
+   //     estado:"02",
+   //     descripcion:$.i18n.prop("factura.codicion.venta.credito")
+  //  })
     self.update()
 }
 /**
@@ -1367,14 +1367,14 @@ function __Impuestos(){
    //     codigo: '07',
    //     descripcion:$.i18n.prop("tipo.impuesto.servicio")
    //  });
-     self.impuestos.push({
-        codigo: '06',
-        descripcion:$.i18n.prop("tipo.impuesto.tabaco")
-     });
-    self.impuestos.push({
-        codigo: '12',
-        descripcion:$.i18n.prop("tipo.impuesto.cemento")
-     });
+ //    self.impuestos.push({
+ //       codigo: '06',
+ //       descripcion:$.i18n.prop("tipo.impuesto.tabaco")
+ //    });
+ //   self.impuestos.push({
+ //       codigo: '12',
+ //       descripcion:$.i18n.prop("tipo.impuesto.cemento")
+ //    });
     self.impuestos.push({
         codigo: '99',
         descripcion:$.i18n.prop("tipo.impuesto.otros")
@@ -1450,7 +1450,7 @@ __AplicarYCrearCompra(){
     if ($("#formularioCompra").valid()) {
         swal({
            title: '',
-           text: $.i18n.prop("compra.alert.crear"),
+           text: $.i18n.prop("compraSimplificada.alert.crear"),
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: '#00539B',
@@ -1477,7 +1477,7 @@ __Limpiar(){
 
 function aplicarFactura(estado){
     if($("#tipoDoc").val() ==null){
-        mensajeError($.i18n.prop("Se presento inconveniente ,vuelva a presiona F8 Factura o F9 Proformas"))
+        mensajeError($.i18n.prop("Se presento inconveniente ,vuelva a presiona F8 Compra Simplificada"))
         return
 
     }
@@ -1487,7 +1487,7 @@ function aplicarFactura(estado){
         $('.codigo').focus()
          swal({
                 type: 'error',
-                title:$.i18n.prop("factura.alert.sin.detalles"),
+                title:$.i18n.prop("compraSimplificada.alert.sin.detalles"),
                 showConfirmButton: false,
                 timer: 1500
                 })
@@ -1498,11 +1498,11 @@ function aplicarFactura(estado){
     }
     if($('#condicionVenta').val() == "02"  ){
         if($('#fechaCredito').val() == null || $('#fechaCredito').val() == 0){
-           mensajeError($.i18n.prop("factura.alert.fechaCredito"))
+           mensajeError($.i18n.prop("compraSimplificada.alert.fechaCredito"))
             return
         }
         if($('#plazoCreditoL').val() < 0 || $('#plazoCreditoL').val() == null || $('#plazoCreditoL').val() == 0){
-           mensajeError($.i18n.prop("factura.alert.plazoCredito"))
+           mensajeError($.i18n.prop("compraSimplificada.alert.plazoCredito"))
             return
         }
     }else{
@@ -1510,7 +1510,7 @@ function aplicarFactura(estado){
         if($("#tipoDoc").val() !="88"){
             if(estado == 2){
                 if(__valorNumerico($('#totalTarjeta').val()) == 0 && __valorNumerico($('#totalBanco').val()) == 0 && __valorNumerico($('#totalEfectivo').val()) == 0){
-                    mensajeError($.i18n.prop("error.factura.monto.ingresado"))
+                    mensajeError($.i18n.prop("error.compraSimplificada.monto.ingresado"))
                     return
                 }
                 var montoEntregado = __valorNumerico($('#totalTarjeta').val())  + __valorNumerico($('#totalBanco').val()) + __valorNumerico($('#totalEfectivo').val())
@@ -1521,7 +1521,7 @@ function aplicarFactura(estado){
                 }
                 var resultado  = redondeoDecimales( __valorNumerico(self.factura.totalComprobante),2)
                 if(__valorNumerico(resultado) > __valorNumerico(montoEntregado)  ){
-                    mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
+                    mensajeError($.i18n.prop("error.compraSimplificada.monto.ingresado.es.menor.ala.venta"))
                     return
                 }
                 //Si el cliente esta pagando con tajeta, banco debe ser igual a la venta
@@ -1529,7 +1529,7 @@ function aplicarFactura(estado){
                 var banco = __valorNumerico(self.factura.totalBanco)
                 if(tarjeta != 0 || banco !=0){
                     if(resultado != montoEntregado  ){
-                        mensajeError($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
+                        mensajeError($.i18n.prop("error.compraSimplificada.monto.tarjeta.banco.igual.venta"))
                     return
                         
                     }
@@ -1678,67 +1678,19 @@ function evaluarFactura(data){
             self.bloqueoFactura = 1;
             self.update()
         });
-        if(self.facturaImprimir.estado == 2 || self.facturaImprimir.estado == 3 || self.facturaImprimir.estado == 4){
-                __Init()
-                //Envia a la pantalla de impresion
-                self.facturaReimprimir = self.facturaImprimir
-                self.update()
-                localStorage.setItem('facturaReimprimir', JSON.stringify(self.facturaReimprimir));
-                if(self.vueltoImprimir == 0 && self.empresa.imprimirSiempre == 0){
-                    var mensaje = self.facturaImprimir.numeroConsecutivo !=null ?"Cons# :"+   self.facturaImprimir.numeroConsecutivo:"Tiquete# :"+   self.facturaImprimir.id        
-                    swal({
-                        type: 'success',
-                        title: mensaje,
-                        showConfirmButton: false,
-                        timer: 1500
-                     })
-                   
-                }else{
-                  var parametros = {
-                          factura: self.facturaReimprimir ,
-                          facturaDia:0
-                      }
-                      riot.mount('ptv-imprimir',{parametros:parametros});
-                }
-        }else{
-                swal({
-                type: 'success',
-                title:data.message,
-                showConfirmButton: false,
-                timer: 1000
-                })
-                __Init()
-                __ListaFacturasEnEspera()
-        }
-          
+        __Init()
+        //Envia a la pantalla de impresion
+        self.facturaReimprimir = self.facturaImprimir
+        self.update()
+        var mensaje = self.facturaImprimir.numeroConsecutivo !=null ?"Cons# :"+   self.facturaImprimir.numeroConsecutivo:"Tiquete# :"+   self.facturaImprimir.id        
+        swal({
+            type: 'success',
+            title: mensaje,
+            showConfirmButton: false,
+            timer: 1500
+        })
     }
 }
-/**
-*  Lista de las facturas pendientes por el usuario
-**/
-function __ListaFacturasEnEspera(){
-     self.facturas_espera       = {data:[]}  
-     self.update()
-    $.ajax({
-        url: 'ListarFacturasEsperaActivasAjax',
-        datatype: "json",
-        global: false,
-        method:"GET",
-        success: function (result) {
-            if(result.aaData.length > 0){
-               self.facturas_espera.data =  result.aaData;  
-               self.update(); 
-            }
-        },
-        error: function (xhr, status) {
-            console.log(xhr);
-            window.location.href = "login";
-        }
-    });    
-}
-
-
-
 /**
 *  Inicializar las variables de trabajos
 **/
@@ -1777,8 +1729,6 @@ function __Init(){
     self.totalSubTotalGeneral  = 0;
     self.detalleFactura        = {data:[]}
     self.update();
-    
-     
 }
 
 /** 
@@ -1788,9 +1738,6 @@ function __displayDate_detail(fecha) {
     var dateTime = new Date(fecha);
     return moment(dateTime).format('YYYY-MM-DD ');
 }
-
-
-
 /**
 *   Retrocer a los ingresos de los codigos desde el formulario de ingresar el valor dinero a pagar
 **/
@@ -1832,8 +1779,6 @@ function mostrarFormaPago(){
     self.update()
 
 }
-
-
 /**
 *  Muestra la lista de proveedores
 **/
@@ -1863,9 +1808,6 @@ function __ListaDeProveedores(){
         }
     });
 }
-
-
-
 /**
 *   agregar Articulos nuevos en el detalle de la Compra
 **/
@@ -1909,7 +1851,6 @@ function __nuevoArticuloAlDetalle(){
     self.update()
     __calculate();
 }
-
 /**
 * eliminar un detalle Compra
 **/
@@ -1930,13 +1871,11 @@ __removeProductFromDetail(e) {
         })  
         self.numeroLinea =  cont
     }
-     
-
     self.update()
      __calculate();
  }
-   
- 
+/**
+**/ 
 function __calculate() {
     self.factura.total            = 0;
     self.factura.totalDescuentos  = 0;
@@ -1980,15 +1919,12 @@ function getSubTotalGeneral(){
     self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2)
     var resultadoTotalImpuesto = __valorNumerico(self.factura.totalImpuesto) + __valorNumerico(self.factura.totalImpuesto1)
     self.totalImpuesto   = formatoDecimales(resultadoTotalImpuesto,2)
-      
     self.update()
 }
-
 /**
 * formato de la tabla de proveedores
 **/
 function __informacionData(){
-
     self.informacion_tabla_proveedores = [	{'data' : 'nombreCompleto'  ,"name":"nombreCompleto" ,"title" : $.i18n.prop("proveedor.nombreCompleto") ,"autoWidth":false},
                                             {'data' : 'correoElectronico'           ,"name":"correoElectronico"          ,"title" : $.i18n.prop("proveedor.email")          ,"autoWidth":false},                                
                                             {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"autoWidth" : true,"name" : "id",
@@ -2005,7 +1941,6 @@ function __informacionData(){
 function __OpcionesProveedores(){
   var agregar  = '<a href="#"  title="Seleccionar Proveedor" class="btn btnAgregar btn-success form-control" title="Seleccione el Proveedor de la compra" role="button"> <i class="glyphicon glyphicon-plus"></i></a>';
   return  agregar;
-
 }
 /**
 * Agregar codigos a la compra desde modal de articulos
@@ -2025,7 +1960,6 @@ function __seleccionarProveedores() {
 
     });
 }
-
 /**
 *  Agregar los inpust  y select de las tablas
 **/
@@ -2047,12 +1981,11 @@ function agregarInputsCombos_Proveedores(){
     $('.tableListaProveedor tfoot th').each( function (e) {
         var title = $('.tableListaProveedor thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)
-        if ( $(this).index() != 3    ){
+        if ( $(this).index() != 2    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
 }     
-
 /**
 *  teclas de la pantalla
 **/      
