@@ -225,11 +225,21 @@ public class RecepcionFactura implements Serializable {
 	@Column(name = "cod_actividad", length=6)
 	private String							codigoActividad;
 	
+	//1 = Gasto de Inventario  2 = Gastos
+	@Column(name = "tipo_gasto", columnDefinition = "INT default '1'")
+	private Integer							tipoGasto;
+	
+	
 	@Transient
 	private String detalles;
 
-	public RecepcionFactura(Long id, String mensaje, String detalleMensaje, String numeroConsecutivoReceptor, Integer estadoFirma, String emisorCedula, String emisorNombre, String emisorTipoCedula, String emisorCorreo, String emisorTelefono, String emisorCodigoProvincia, String emisorProvincia, String emisorCanton, String emisorCodigoCanton, String emisorDistrito, String emisorCodigoDistrito, String emisorOtraSena, String receptorNombre, String receptorCedula, String receptorTipoCedula, String receptorCorreo, String receptorProvincia, String receptorCodigoProvincia, String receptorCanton, String receptorCodigoCanton, String receptorDistrito, String receptorCodigoDistrito, String receptorOtraSena, String receptorTelefono, String receptorNombreComercial, String facturaConsecutivo,
-			String facturaClave, Date facturaFechaEmision, String facturaCondicionVenta, String facturaMedioPago, String facturaCodigoMoneda, Double facturaTipoCambio, Double facturaTotalServExentos, Double facturaTotalExento, Double facturaTotalVenta, Double facturaTotalVentaNeta, Double facturaTotalComprobante, Double facturaTotalImpuestos, Date created_at, Date updated_at, Empresa empresa) {
+	
+
+	
+	
+	public RecepcionFactura(Long id, String mensaje, String detalleMensaje, String numeroConsecutivoReceptor, Integer estadoFirma, String emisorCedula, String emisorNombre, String emisorTipoCedula, String emisorCorreo, String emisorTelefono, String emisorCodigoProvincia, String emisorProvincia, String emisorCanton, String emisorCodigoCanton, String emisorDistrito, String emisorCodigoDistrito, String emisorOtraSena, String emisorNombreComercial, String receptorNombre, String receptorCedula, String receptorTipoCedula, String receptorCorreo, String receptorProvincia, String receptorCodigoProvincia, String receptorCanton, String receptorCodigoCanton, String receptorDistrito, String receptorCodigoDistrito, String receptorOtraSena, String receptorTelefono, String receptorNombreComercial,
+			String facturaConsecutivo, String facturaClave, Date facturaFechaEmision, String facturaCondicionVenta, String facturaMedioPago, String facturaCodigoMoneda, Double facturaTipoCambio, Double facturaTotalServExentos, Double facturaTotalExento, Double facturaTotalVenta, Double facturaTotalVentaNeta, Double facturaTotalComprobante, Double facturaTotalImpuestos, String facturaCodigoActividad, String facturaPlazoCredito, Double facturaTotalServGravados, Double facturaTotalServExonerado, Double facturaTotalMercanciasGravadas, Double facturaTotalMercanciasExentas, Double facturaTotalMercExonerada, Double facturaTotalGravado, Double facturaTotalExonerado, Double facturaTotalIVADevuelto, Double facturaTotalOtrosCargos, Double facturaTotalDescuentos, String version_doc,
+			Double totalImpuestoAcreditar, Double totalDeGastoAplicable, String condicionImpuesto, Date created_at, Date updated_at, Empresa empresa, String tipoDoc, String codigoActividad, Integer tipoGasto, String detalles) {
 		super();
 		this.id = id;
 		this.mensaje = mensaje;
@@ -248,6 +258,7 @@ public class RecepcionFactura implements Serializable {
 		this.emisorDistrito = emisorDistrito;
 		this.emisorCodigoDistrito = emisorCodigoDistrito;
 		this.emisorOtraSena = emisorOtraSena;
+		this.emisorNombreComercial = emisorNombreComercial;
 		this.receptorNombre = receptorNombre;
 		this.receptorCedula = receptorCedula;
 		this.receptorTipoCedula = receptorTipoCedula;
@@ -274,10 +285,29 @@ public class RecepcionFactura implements Serializable {
 		this.facturaTotalVentaNeta = facturaTotalVentaNeta;
 		this.facturaTotalComprobante = facturaTotalComprobante;
 		this.facturaTotalImpuestos = facturaTotalImpuestos;
+		this.facturaCodigoActividad = facturaCodigoActividad;
+		this.facturaPlazoCredito = facturaPlazoCredito;
+		this.facturaTotalServGravados = facturaTotalServGravados;
+		this.facturaTotalServExonerado = facturaTotalServExonerado;
+		this.facturaTotalMercanciasGravadas = facturaTotalMercanciasGravadas;
+		this.facturaTotalMercanciasExentas = facturaTotalMercanciasExentas;
+		this.facturaTotalMercExonerada = facturaTotalMercExonerada;
+		this.facturaTotalGravado = facturaTotalGravado;
+		this.facturaTotalExonerado = facturaTotalExonerado;
+		this.facturaTotalIVADevuelto = facturaTotalIVADevuelto;
+		this.facturaTotalOtrosCargos = facturaTotalOtrosCargos;
+		this.facturaTotalDescuentos = facturaTotalDescuentos;
+		this.version_doc = version_doc;
+		this.totalImpuestoAcreditar = totalImpuestoAcreditar;
+		this.totalDeGastoAplicable = totalDeGastoAplicable;
+		this.condicionImpuesto = condicionImpuesto;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.empresa = empresa;
 		this.tipoDoc = Utils.obtenerTipoDocumentoConsecutivo(facturaConsecutivo);
+		this.codigoActividad = codigoActividad;
+		this.tipoGasto = tipoGasto;
+		this.detalles = detalles;
 	}
 
 	public RecepcionFactura() {
@@ -321,6 +351,19 @@ public class RecepcionFactura implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	
+	
+	
+	
+	public Integer getTipoGasto() {
+		return tipoGasto;
+	}
+
+	
+	public void setTipoGasto(Integer tipoGasto) {
+		this.tipoGasto = tipoGasto;
 	}
 
 	public Date getCreated_at() {

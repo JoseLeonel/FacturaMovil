@@ -98,20 +98,26 @@
                             </div>                                                        
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label> {$.i18n.prop("receptor.tipoCondicionImpuesto")}  <span class="requeridoDato">*</span></label>
-                                <select class="form-control receptorMensaje" id="condicionImpuesto" name="condicionImpuesto" >
+                                <select class="form-control condicionImpuesto" id="condicionImpuesto" name="condicionImpuesto" >
                                     <option each={tiposCondiciones.data}  value="{valor}" selected="{recepcionFactura.condicionImpuesto==valor?true:false}">{descripcion}</option>
                                 </select>
                             </div>                            
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label> {$.i18n.prop("receptor.codigo.actividad")}  <span class="requeridoDato">*</span></label>
-                                <select class="form-control receptorMensaje" id="codigoActividad" name="condicionImpuesto" >
+                                <select class="form-control codigoActividad" id="codigoActividad" name="codigoActividad" >
                                     <option each={empresaActividadComercial}  value="{codigo}" >{codigo}-{descripcion}</option>
                                 </select>
                             </div>                            
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label> {$.i18n.prop("receptor.mensaje")}  <span class="requeridoDato">*</span></label>
-                                <select class="form-control receptorMensaje" id="mensaje" name="mensaje" >
+                                <select class="form-control mensaje" id="mensaje" name="mensaje" >
                                     <option each={tiposMensajes.data}  value="{valor}" selected="{recepcionFactura.mensaje==valor?true:false}">{descripcion}</option>
+                                </select>
+                            </div>    
+							 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                                <label> {$.i18n.prop("receptor.mensaje")}  <span class="requeridoDato">*</span></label>
+                                <select class="form-control tipoGasto" id="tipoGasto" name="tipoGasto" >
+                                    <option each={tiposGasto.data}  value="{valor}" selected="{recepcionFactura.tipoGasto==valor?true:false}">{descripcion}</option>
                                 </select>
                             </div>                            
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
@@ -403,6 +409,7 @@
 		self.mediosPago	   		  = {data:[]}
 		self.condicionesVenta	  = {data:[]}
 		self.tiposMensajes		  = {data:[]}
+		self.tiposGasto           = {data:[]}
 		self.tiposCondiciones     = {data:[]}
 		self.detalleServicio 	  = {data:[]}
 		self.empresaActividadComercial= {}
@@ -540,6 +547,7 @@
 		    __listadoCondicionImpuesto();
 		    __listadoCondicionesVenta();
 		    __listadoTiposMensajes();
+			__listadoTiposGasto();
 		    __ListaActividadesComercales();
 		    
 		});
@@ -613,6 +621,20 @@
 		    self.tiposMensajes.data.push({
 		        valor:"03",
 		        descripcion:$.i18n.prop("tipo.mensaje.aceptado.rechazado")
+		    })
+		    self.update()
+		}
+		//Se muestra los tipos medio de pago	
+		function __listadoTiposGasto(){
+		    self.tiposGasto = {data:[]}  // definir el data del datatable
+		    self.update()
+		    self.tiposGasto.data.push({
+		        valor:"01",
+		        descripcion:$.i18n.prop("tipo.gasto.inventario.mensaje")
+		    })
+		    self.tiposGasto.data.push({
+		        valor:"02",
+		        descripcion:$.i18n.prop("tipo.gasto.gasto.mensaje")
 		    })
 		    self.update()
 		}
@@ -842,8 +864,14 @@ function BuscarActividadComercial(){
 
 		                    //Se carga el resumen de la factura
 		                    var resumenFactura = $(xmlDoc).find("ResumenFactura");
-		                    self.archivo.facturaCodigoMoneda = __valorString(resumenFactura.find("CodigoMoneda").text());
-		                    self.archivo.facturaTipoCambio = __valorString(resumenFactura.find("TipoCambio").text());
+		                    self.archivo.facturaCodigoMoneda = __valorString(resumenFactura.find("CodigoTipoMoneda").find("CodigoMoneda").text());
+							self.archivo.facturaTipoCambio = __valorFloat(resumenFactura.find("CodigoTipoMoneda").find("TipoCambio").text());
+							if(self.archivo.facturaCodigoMoneda != 'CRC' && self.archivo.facturaCodigoMoneda != 'USD' ){
+		                       self.archivo.facturaCodigoMoneda = __valorString(resumenFactura.find("CodigoMoneda").text());
+							   self.archivo.facturaTipoCambio = __valorFloat(resumenFactura.find("TipoCambio").text());
+
+							}
+		                    
 		                    self.archivo.facturaTotalServExentos = __valorFloat(resumenFactura.find("TotalServExentos").text());
 		                    self.archivo.facturaTotalExento = __valorFloat(resumenFactura.find("TotalExento").text());
 		                    self.archivo.facturaTotalVenta = __valorFloat(resumenFactura.find("TotalVenta").text());
@@ -870,6 +898,9 @@ function BuscarActividadComercial(){
 		                    __buscaDistritos();
 		                                        
 		                	//Se cargan los datos del objecto a almacenar en base de datos
+							self.recepcionFactura.tipoGasto = $("#tipoGasto").val()
+							self.recepcionFactura.condicionImpuesto = $("#condicionImpuesto").val()
+							self.recepcionFactura.codigoActividad = $("#codigoActividad").val()
 		                	self.recepcionFactura.emisorNombre = self.archivo.emisorNombre;
 		                	self.recepcionFactura.emisorCedula =  self.archivo.emisorCedula;
 		                	self.recepcionFactura.emisorTipoCedula = self.archivo.emisorTipoCedula;
@@ -1232,6 +1263,10 @@ function BuscarActividadComercial(){
 			$(".errorServerSideJgrid").remove();
 			self.recepcionFactura.mensaje = $("#mensaje").val();
 			self.recepcionFactura.detalleMensaje = $("#detalleMensaje").val();
+			self.recepcionFactura.tipoGasto = $("#tipoGasto").val()
+			self.recepcionFactura.condicionImpuesto = $("#condicionImpuesto").val()
+			self.recepcionFactura.codigoActividad = $("#codigoActividad").val()
+		          
 			var JSONDetalles = JSON.stringify(self.detalleServicio);
 			self.recepcionFactura.detalles = JSONDetalles;
 			self.update();

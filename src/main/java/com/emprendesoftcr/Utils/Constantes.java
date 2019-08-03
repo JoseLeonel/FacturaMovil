@@ -216,6 +216,11 @@ public class Constantes {
 	public static final Integer					HACIENDA_NOTIFICAR_CLIENTE_ENVIADO									= 2;
 	public static final Integer					HACIENDA_NOTIFICAR_CLIENTE_FRECUENTE_NO_ENVIADO			= 3;
 
+	//Tipo de gastos
+	
+	public static final Integer					TIPO_GASTO_ACEPTACION_COMPRAS_INVENTARIO			= 1;
+	public static final Integer					TIPO_GASTO_ACEPTACION_COMPRAS_GASTOS			= 2;
+	
 	public static final String					ESTADO_HACIENDA_ACEPTADO														= "1";
 	public static final String					ESTADO_HACIENDA_ACEPTADO_PARCIAL										= "2";
 	public static final String					ESTADO_HACIENDA_RECHAZADO														= "3";

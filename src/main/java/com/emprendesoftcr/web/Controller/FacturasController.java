@@ -1026,6 +1026,25 @@ public class FacturasController {
 			recepcionFactura.setUpdated_at(new Date());
 			recepcionFactura.setTotalImpuestoAcreditar(recepcionFactura.getFacturaTotalImpuestos());
 			recepcionFactura.setTotalDeGastoAplicable(recepcionFactura.getFacturaTotalComprobante() - recepcionFactura.getFacturaTotalImpuestos());
+
+			recepcionFactura.setFacturaCodigoMoneda(recepcionFactura.getFacturaCodigoMoneda() == null ? Constantes.CODIGO_MONEDA_COSTA_RICA : recepcionFactura.getFacturaCodigoMoneda());
+			recepcionFactura.setFacturaTipoCambio(recepcionFactura.getFacturaTipoCambio() == null ? Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO : recepcionFactura.getFacturaTipoCambio());
+			recepcionFactura.setFacturaTotalDescuentos(recepcionFactura.getFacturaTotalDescuentos() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalDescuentos());
+			recepcionFactura.setFacturaTotalExento(recepcionFactura.getFacturaTotalExento() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalExento());
+			recepcionFactura.setFacturaTotalExonerado(recepcionFactura.getFacturaTotalExonerado() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalExonerado());
+			recepcionFactura.setFacturaTotalGravado(recepcionFactura.getFacturaTotalGravado() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalGravado());
+			recepcionFactura.setFacturaTotalImpuestos(recepcionFactura.getFacturaTotalImpuestos() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalImpuestos());
+			recepcionFactura.setFacturaTotalIVADevuelto(recepcionFactura.getFacturaTotalIVADevuelto() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalIVADevuelto());
+			recepcionFactura.setFacturaTotalMercanciasExentas(recepcionFactura.getFacturaTotalMercanciasExentas() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalMercanciasExentas());
+			recepcionFactura.setFacturaTotalMercanciasGravadas(recepcionFactura.getFacturaTotalMercanciasGravadas() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalMercanciasGravadas());
+			recepcionFactura.setFacturaTotalMercExonerada(recepcionFactura.getFacturaTotalMercExonerada() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalMercExonerada());
+			recepcionFactura.setFacturaTotalOtrosCargos(recepcionFactura.getFacturaTotalOtrosCargos() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalOtrosCargos());
+			recepcionFactura.setFacturaTotalServExentos(recepcionFactura.getFacturaTotalServExentos() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalServExentos());
+			recepcionFactura.setFacturaTotalServExonerado(recepcionFactura.getFacturaTotalServExonerado() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalServExonerado());
+			recepcionFactura.setFacturaTotalServGravados(recepcionFactura.getFacturaTotalServGravados() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalServGravados());
+			recepcionFactura.setTipoGasto(recepcionFactura.getTipoGasto() == null?Constantes.TIPO_GASTO_ACEPTACION_COMPRAS_INVENTARIO:recepcionFactura.getTipoGasto());
+			recepcionFactura.setVersion_doc("4.3");
+			
 			recepcionFacturaBo.agregar(recepcionFactura);
 
 			// Se agregan los detalles
@@ -1138,7 +1157,7 @@ public class FacturasController {
 	 * @param status
 	 * @return
 	 */
-	
+
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/CrearFacturaAjax", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
@@ -1819,8 +1838,7 @@ public class FacturasController {
 			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PROFORMAS.toString() + "'", "<>"));
 			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_ANULADA.toString() + "'", "<>"));
 			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_ANULADA_PROFORMA.toString() + "'", "<>"));
-			
-			
+
 			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
 
 			if (cliente != null) {
@@ -1828,7 +1846,7 @@ public class FacturasController {
 			}
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			if (usuarioBo.isAdministrador_vendedor(usuario)) {
-				
+
 				delimitador.addFiltro(new JqGridFilter("usuarioCreacion.id", "'" + usuario.getId().toString() + "'", "="));
 			}
 			if (tipoDocumento != null) {
@@ -1878,7 +1896,7 @@ public class FacturasController {
 			}
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			if (usuarioBo.isAdministrador_vendedor(usuario)) {
-				
+
 				delimitador.addFiltro(new JqGridFilter("usuarioCreacion.id", "'" + usuario.getId().toString() + "'", "="));
 			}
 			if (tipoDocumento != null) {

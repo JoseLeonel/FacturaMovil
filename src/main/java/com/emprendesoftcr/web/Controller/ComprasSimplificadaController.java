@@ -75,6 +75,13 @@ public class ComprasSimplificadaController {
 	public String crearCompras(ModelMap model) {
 		return "/views/simplificado/crearCompraSimplificado";
 	}
+	
+	
+	@RequestMapping(value = "/ListarComprasSimplificado", method = RequestMethod.GET)
+	public String listarComprasSimplificadas(ModelMap model) {
+		return "/views/simplificado/ListarComprasSimplificado";
+	}
+	
 
 	@RequestMapping(value = "/CrearCompraSimplificadaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
