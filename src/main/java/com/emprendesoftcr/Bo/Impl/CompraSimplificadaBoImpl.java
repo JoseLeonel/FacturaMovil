@@ -282,7 +282,7 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 			detalleCompraSimplificada.setMontoDescuento(getDescuento(detalleCompraSimplificada.getMontoTotal(), detalleCompraSimplificadaCommand.getPorcentajeDesc()));
 			detalleCompraSimplificada.setSubTotal(getSubtotal(detalleCompraSimplificada.getMontoTotal(), detalleCompraSimplificada.getMontoDescuento()));
 
-			detalleCompraSimplificada.setMontoImpuesto(getMontoImpuestoCon13(detalleCompraSimplificada.getSubTotal(), detalleCompraSimplificadaCommand.getMontoImpuesto(), detalleCompraSimplificadaCommand.getImpuesto()));
+			detalleCompraSimplificada.setMontoImpuesto(getMontoImpuestoCon13(detalleCompraSimplificada.getSubTotal(),  detalleCompraSimplificadaCommand.getImpuesto()));
 
 			detalleCompraSimplificada.setImpuestoNeto(getImpuestoNetoTotal(detalleCompraSimplificada.getMontoImpuesto()));
 
@@ -455,12 +455,12 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 	 * @param tarifa
 	 * @return
 	 */
-	private Double getMontoImpuestoCon13(Double subTotal, Double montoPrimerImpuesto, Double tarifa) {
+	private Double getMontoImpuestoCon13(Double subTotal, Double tarifa) {
 		Double valor = tarifa / 100d;
-		Double resultado = Constantes.ZEROS_DOUBLE;
-		resultado = subTotal + montoPrimerImpuesto;
-		resultado = resultado * valor;
-		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
+		Double resultadoImpuesto = Constantes.ZEROS_DOUBLE;
+		resultadoImpuesto = subTotal * valor;
+		
+		return Utils.aplicarRedondeo(resultadoImpuesto) ? Utils.roundFactura(resultadoImpuesto, 5) : resultadoImpuesto;
 	}
 
 	/**

@@ -309,6 +309,9 @@ function __valorFloat(valor){
     return isNumber(valor)?parseFloat(valor):0.0 ;
 }
 function __valorEnterot(valor){
+	if (typeof valor == 'undefined') {
+	    return 0;
+	}
     return isNumber(valor)?parseInt(valor):0 ;
 }
 

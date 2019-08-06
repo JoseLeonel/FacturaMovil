@@ -77,6 +77,7 @@ import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.Vendedor;
+import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstado;
@@ -766,7 +767,7 @@ public class FacturasController {
 	 * @param response
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListarProformasActivasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarProformasActivasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "estado", required = false) Integer estado) {
@@ -774,24 +775,24 @@ public class FacturasController {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		estado = estado == null ? Constantes.FACTURA_ESTADO_PROFORMAS : estado;
 
-		Collection<ProformasByEmpresaAndEstadoAndUsuario> objetoProforma = null;
-		Collection<ProformasByEmpresaAndEstadoAndUsuario> objetoAnulado = null;
-		Collection<ProformasByEmpresaAndFacturadaAndUsuario> objetoFacturas = null;
+//		Collection<ProformasByEmpresaAndEstadoAndUsuario> objetoProforma = null;
+//		Collection<ProformasByEmpresaAndEstadoAndUsuario> objetoAnulado = null;
+//		Collection<ProformasByEmpresaAndFacturadaAndUsuario> objetoFacturas = null;
 		Collection<ProformasByEmpresaAndEstado> objetoProformaAdmin = null;
 		Collection<ProformasByEmpresaAndEstado> objetoAnuladoAdmin = null;
 		Collection<ProformasByEmpresaAndFacturada> objetoFacturasAdmin = null;
 
-		if (usuarioBo.isAdministrador_cajero(usuarioSesion) || usuarioBo.isAdministrador_empresa(usuarioSesion) || usuarioBo.isAdministrador_restaurante(usuarioSesion)) {
-			objetoProformaAdmin = estado.equals(Constantes.FACTURA_ESTADO_PROFORMAS) ? consultasNativeBo.findByProformasByEmpresaAndEstado(usuarioSesion.getEmpresa(), estado) : null;
-			objetoAnuladoAdmin = estado.equals(Constantes.FACTURA_ESTADO_ANULADA_PROFORMA) ? consultasNativeBo.findByProformasByEmpresaAndEstado(usuarioSesion.getEmpresa(), estado) : null;
-			objetoFacturasAdmin = objetoProformaAdmin == null && objetoAnuladoAdmin == null ? consultasNativeBo.findByProformasByEmpresaFacturada(usuarioSesion.getEmpresa()) : null;
-			administrador = Boolean.TRUE;
-		} else {
-			objetoProforma = estado.equals(Constantes.FACTURA_ESTADO_PROFORMAS) ? consultasNativeBo.findByProformasByEmpresaAndEstadoAndUsuario(usuarioSesion.getEmpresa(), estado, usuarioSesion.getId()) : null;
-			objetoAnulado = estado.equals(Constantes.FACTURA_ESTADO_ANULADA_PROFORMA) ? consultasNativeBo.findByProformasByEmpresaAndEstadoAndUsuario(usuarioSesion.getEmpresa(), estado, usuarioSesion.getId()) : null;
-			objetoFacturas = objetoProforma == null && objetoAnulado == null ? consultasNativeBo.findByProformasByEmpresaFacturadaAndUsuario(usuarioSesion.getEmpresa(), usuarioSesion.getId()) : null;
-
-		}
+//		if (usuarioBo.isAdministrador_cajero(usuarioSesion) || usuarioBo.isAdministrador_empresa(usuarioSesion) || usuarioBo.isAdministrador_restaurante(usuarioSesion)) {
+		objetoProformaAdmin = estado.equals(Constantes.FACTURA_ESTADO_PROFORMAS) ? consultasNativeBo.findByProformasByEmpresaAndEstado(usuarioSesion.getEmpresa(), estado) : null;
+		objetoAnuladoAdmin = estado.equals(Constantes.FACTURA_ESTADO_ANULADA_PROFORMA) ? consultasNativeBo.findByProformasByEmpresaAndEstado(usuarioSesion.getEmpresa(), estado) : null;
+		objetoFacturasAdmin = objetoProformaAdmin == null && objetoAnuladoAdmin == null ? consultasNativeBo.findByProformasByEmpresaFacturada(usuarioSesion.getEmpresa()) : null;
+		administrador = Boolean.TRUE;
+//		} else {
+//			objetoProforma = estado.equals(Constantes.FACTURA_ESTADO_PROFORMAS) ? consultasNativeBo.findByProformasByEmpresaAndEstadoAndUsuario(usuarioSesion.getEmpresa(), estado, usuarioSesion.getId()) : null;
+//			objetoAnulado = estado.equals(Constantes.FACTURA_ESTADO_ANULADA_PROFORMA) ? consultasNativeBo.findByProformasByEmpresaAndEstadoAndUsuario(usuarioSesion.getEmpresa(), estado, usuarioSesion.getId()) : null;
+//			objetoFacturas = objetoProforma == null && objetoAnulado == null ? consultasNativeBo.findByProformasByEmpresaFacturadaAndUsuario(usuarioSesion.getEmpresa(), usuarioSesion.getId()) : null;
+//
+//		}
 
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
 		List<Object> solicitudList = new ArrayList<Object>();
@@ -827,41 +828,42 @@ public class FacturasController {
 				}
 
 			}
-
-		} else {
-			if (objetoProforma != null) {
-				for (ProformasByEmpresaAndEstadoAndUsuario proformasByEmpresaAndEstado : objetoProforma) {
-
-					// no se carga el usuario del sistema el id -1
-					if (proformasByEmpresaAndEstado.getId().longValue() > 0L) {
-						solicitudList.add(new ProformasByEmpresaAndEstadoCommand(proformasByEmpresaAndEstado));
-					}
-				}
-
-			}
-
-			if (objetoAnulado != null) {
-				for (ProformasByEmpresaAndEstadoAndUsuario proformasByEmpresaAndEstado : objetoAnulado) {
-
-					// no se carga el usuario del sistema el id -1
-					if (proformasByEmpresaAndEstado.getId().longValue() > 0L) {
-						solicitudList.add(new ProformasByEmpresaAndEstadoCommand(proformasByEmpresaAndEstado));
-					}
-				}
-
-			}
-			if (objetoFacturas != null) {
-				for (ProformasByEmpresaAndFacturadaAndUsuario proformasByEmpresaAndFacturada : objetoFacturas) {
-
-					// no se carga el usuario del sistema el id -1
-					if (proformasByEmpresaAndFacturada.getId().longValue() > 0L) {
-						solicitudList.add(new ProformasByEmpresaAndEstadoCommand(proformasByEmpresaAndFacturada));
-					}
-				}
-
-			}
-
 		}
+
+//		} else {
+//			if (objetoProforma != null) {
+//				for (ProformasByEmpresaAndEstadoAndUsuario proformasByEmpresaAndEstado : objetoProforma) {
+//
+//					// no se carga el usuario del sistema el id -1
+//					if (proformasByEmpresaAndEstado.getId().longValue() > 0L) {
+//						solicitudList.add(new ProformasByEmpresaAndEstadoCommand(proformasByEmpresaAndEstado));
+//					}
+//				}
+//
+//			}
+//
+//			if (objetoAnulado != null) {
+//				for (ProformasByEmpresaAndEstadoAndUsuario proformasByEmpresaAndEstado : objetoAnulado) {
+//
+//					// no se carga el usuario del sistema el id -1
+//					if (proformasByEmpresaAndEstado.getId().longValue() > 0L) {
+//						solicitudList.add(new ProformasByEmpresaAndEstadoCommand(proformasByEmpresaAndEstado));
+//					}
+//				}
+//
+//			}
+//			if (objetoFacturas != null) {
+//				for (ProformasByEmpresaAndFacturadaAndUsuario proformasByEmpresaAndFacturada : objetoFacturas) {
+//
+//					// no se carga el usuario del sistema el id -1
+//					if (proformasByEmpresaAndFacturada.getId().longValue() > 0L) {
+//						solicitudList.add(new ProformasByEmpresaAndEstadoCommand(proformasByEmpresaAndFacturada));
+//					}
+//				}
+//
+//			}
+//
+//		}
 		respuestaService.setRecordsTotal(0l);
 		respuestaService.setRecordsFiltered(0l);
 		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
@@ -1014,9 +1016,64 @@ public class FacturasController {
 					result.rejectValue("facturaClave", "error.recepcionFactura.ya.exite");
 				}
 			}
+			recepcionFactura.setFacturaCodigoMoneda(recepcionFactura.getFacturaCodigoMoneda() == null ? Constantes.EMPTY : recepcionFactura.getFacturaCodigoMoneda());
+			if (recepcionFactura.getFacturaCodigoMoneda().equals(Constantes.EMPTY)) {
+				result.rejectValue("facturaClave", "error.recepcionFactura.codido.moneda.cero");
+			}
+
+			recepcionFactura.setFacturaTipoCambio(recepcionFactura.getFacturaTipoCambio() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTipoCambio());
+
+			if (recepcionFactura.getFacturaTipoCambio().equals(Constantes.ZEROS_DOUBLE)) {
+				result.rejectValue("facturaClave", "error.recepcionFactura.tipo.cambio.esta.ceros");
+			}
+
+			List<RecepcionFacturaDetalle> detallesCompra = new ArrayList<RecepcionFacturaDetalle>();
+			JSONObject json = null;
+			try {
+				json = (JSONObject) new JSONParser().parse(recepcionFactura.getDetalles());
+			} catch (org.json.simple.parser.ParseException e) {
+				e.printStackTrace();
+			}
+
+			// Agregar Lineas de Detalle
+			JSONArray jsonArrayDetalle = (JSONArray) json.get("data");
+			Gson gson = new Gson();
+
+			if (jsonArrayDetalle != null) {
+				for (int i = 0; i < jsonArrayDetalle.size(); i++) {
+					RecepcionFacturaDetalle detalle = gson.fromJson(jsonArrayDetalle.get(i).toString(), RecepcionFacturaDetalle.class);
+					detalle.setNumeroLinea(detalle.getNumeroLinea() == null ? Constantes.ZEROS : detalle.getNumeroLinea());
+					detalle.setCantidad(detalle.getCantidad() == null ? Constantes.ZEROS_DOUBLE : detalle.getCantidad());
+					detalle.setUnidadMedida(detalle.getUnidadMedida() == null ? Constantes.EMPTY : detalle.getUnidadMedida());
+					detalle.setDetalle(detalle.getDetalle() == null ? Constantes.EMPTY : detalle.getDetalle());
+					detalle.setPrecioUnitario(detalle.getPrecioUnitario() == null ? Constantes.ZEROS_DOUBLE : detalle.getPrecioUnitario());
+					detalle.setMontoTotal(detalle.getMontoTotal() == null ? Constantes.ZEROS_DOUBLE : detalle.getMontoTotal());
+					detalle.setSubTotal(detalle.getSubTotal() == null ? Constantes.ZEROS_DOUBLE : detalle.getSubTotal());
+					detalle.setMontoTotalLinea(detalle.getMontoTotalLinea() == null ? Constantes.ZEROS_DOUBLE : detalle.getMontoTotalLinea());
+					detalle.setImpuestoNeto(detalle.getImpuestoNeto() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoNeto());
+					detalle.setCodigoComercialTipo(detalle.getCodigoComercialTipo() == null ? Constantes.EMPTY : detalle.getCodigoComercialTipo());
+					detalle.setCodigoComercialCodigo(detalle.getCodigoComercialCodigo() == null ? Constantes.EMPTY : detalle.getCodigoComercialCodigo());
+					detalle.setDescuentoMonto(detalle.getDescuentoMonto() == null ? Constantes.ZEROS_DOUBLE : detalle.getDescuentoMonto());
+					detalle.setDescuentoNaturaleza(detalle.getDescuentoNaturaleza() == null ? Constantes.EMPTY : detalle.getDescuentoNaturaleza());
+					detalle.setImpuestoCodigo(detalle.getImpuestoCodigo() == null ? Constantes.EMPTY : detalle.getImpuestoCodigo());
+					detalle.setImpuestoCodigoTarifa(detalle.getImpuestoCodigoTarifa() == null ? Constantes.EMPTY : detalle.getImpuestoCodigoTarifa());
+					detalle.setImpuestoTarifa(detalle.getImpuestoTarifa() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoTarifa());
+					detalle.setImpuestoMonto(detalle.getImpuestoMonto() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoMonto());
+					detalle.setImpuestoExoneracionTipoDocumento(detalle.getImpuestoExoneracionTipoDocumento() == null ? Constantes.EMPTY : detalle.getImpuestoExoneracionTipoDocumento());
+					detalle.setImpuestoExoneracionNumeroDocumento(detalle.getImpuestoExoneracionNumeroDocumento() == null ? Constantes.EMPTY : detalle.getImpuestoExoneracionNumeroDocumento());
+					detalle.setImpuestoExoneracionNombreInstitucion(detalle.getImpuestoExoneracionNombreInstitucion() == null ? Constantes.EMPTY : detalle.getImpuestoExoneracionNombreInstitucion());
+					detalle.setImpuestoExoneracionFechaEmision(detalle.getImpuestoExoneracionFechaEmision() == null ? Constantes.EMPTY : detalle.getImpuestoExoneracionFechaEmision());
+					detalle.setImpuestoExoneracionPorcentaje(detalle.getImpuestoExoneracionPorcentaje() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoExoneracionPorcentaje());
+					detalle.setImpuestoExoneracionMonto(detalle.getImpuestoExoneracionMonto() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoExoneracionMonto());
+					detalle.setBaseImponible(detalle.getBaseImponible() == null ? Constantes.ZEROS_DOUBLE : detalle.getBaseImponible());
+					detalle.setRecepcionFactura(null);
+					detallesCompra.add(detalle);
+				}
+			}
 			if (result.hasErrors()) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
+
 			// Se prepara el objeto para almacenarlo
 			recepcionFactura.setNumeroConsecutivoReceptor(empresaBo.generarConsecutivoRecepcionFactura(usuarioSesion.getEmpresa(), usuarioSesion, recepcionFactura));
 			recepcionFactura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
@@ -1027,8 +1084,13 @@ public class FacturasController {
 			recepcionFactura.setTotalImpuestoAcreditar(recepcionFactura.getFacturaTotalImpuestos());
 			recepcionFactura.setTotalDeGastoAplicable(recepcionFactura.getFacturaTotalComprobante() - recepcionFactura.getFacturaTotalImpuestos());
 
-			recepcionFactura.setFacturaCodigoMoneda(recepcionFactura.getFacturaCodigoMoneda() == null ? Constantes.CODIGO_MONEDA_COSTA_RICA : recepcionFactura.getFacturaCodigoMoneda());
-			recepcionFactura.setFacturaTipoCambio(recepcionFactura.getFacturaTipoCambio() == null ? Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO : recepcionFactura.getFacturaTipoCambio());
+			if (recepcionFactura.getFacturaTipoCambio().equals(Constantes.ZEROS_DOUBLE)) {
+				if (recepcionFactura.getFacturaCodigoMoneda().equals(Constantes.CODIGO_MONEDA_COSTA_RICA)) {
+					recepcionFactura.setFacturaTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
+				} else {
+					recepcionFactura.setFacturaTipoCambio(570d);
+				}
+			}
 			recepcionFactura.setFacturaTotalDescuentos(recepcionFactura.getFacturaTotalDescuentos() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalDescuentos());
 			recepcionFactura.setFacturaTotalExento(recepcionFactura.getFacturaTotalExento() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalExento());
 			recepcionFactura.setFacturaTotalExonerado(recepcionFactura.getFacturaTotalExonerado() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalExonerado());
@@ -1042,39 +1104,46 @@ public class FacturasController {
 			recepcionFactura.setFacturaTotalServExentos(recepcionFactura.getFacturaTotalServExentos() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalServExentos());
 			recepcionFactura.setFacturaTotalServExonerado(recepcionFactura.getFacturaTotalServExonerado() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalServExonerado());
 			recepcionFactura.setFacturaTotalServGravados(recepcionFactura.getFacturaTotalServGravados() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalServGravados());
-			recepcionFactura.setTipoGasto(recepcionFactura.getTipoGasto() == null?Constantes.TIPO_GASTO_ACEPTACION_COMPRAS_INVENTARIO:recepcionFactura.getTipoGasto());
-			recepcionFactura.setVersion_doc("4.3");
 			
-			recepcionFacturaBo.agregar(recepcionFactura);
+			recepcionFactura.setTipoGasto(recepcionFactura.getTipoGasto() == null ? Constantes.TIPO_GASTO_ACEPTACION_COMPRAS_INVENTARIO : recepcionFactura.getTipoGasto());
+			recepcionFactura.setVersion_doc("4.3");
 
-			// Se agregan los detalles
-			this.agregaDetalleFacturas(recepcionFactura, recepcionFactura.getDetalles());
+			recepcionFacturaBo.agregar(recepcionFactura);
+			for (RecepcionFacturaDetalle recepcionFacturaDetalle : detallesCompra) {
+				RecepcionFacturaDetalle recepcionFacturaDetalleNueva = new RecepcionFacturaDetalle();
+
+				recepcionFacturaDetalleNueva.setNumeroLinea(recepcionFacturaDetalle.getNumeroLinea());
+				recepcionFacturaDetalleNueva.setCantidad(recepcionFacturaDetalle.getCantidad());
+				recepcionFacturaDetalleNueva.setUnidadMedida(recepcionFacturaDetalle.getUnidadMedida());
+				recepcionFacturaDetalleNueva.setDetalle(recepcionFacturaDetalle.getDetalle());
+				recepcionFacturaDetalleNueva.setPrecioUnitario(recepcionFacturaDetalle.getPrecioUnitario());
+				recepcionFacturaDetalleNueva.setMontoTotal(recepcionFacturaDetalle.getMontoTotal());
+				recepcionFacturaDetalleNueva.setSubTotal(recepcionFacturaDetalle.getSubTotal());
+				recepcionFacturaDetalleNueva.setMontoTotalLinea(recepcionFacturaDetalle.getMontoTotalLinea());
+				recepcionFacturaDetalleNueva.setImpuestoNeto(recepcionFacturaDetalle.getImpuestoNeto());
+				recepcionFacturaDetalleNueva.setCodigoComercialTipo(recepcionFacturaDetalle.getCodigoComercialTipo());
+				recepcionFacturaDetalleNueva.setCodigoComercialCodigo(recepcionFacturaDetalle.getCodigoComercialCodigo());
+				recepcionFacturaDetalleNueva.setDescuentoMonto(recepcionFacturaDetalle.getDescuentoMonto());
+				recepcionFacturaDetalleNueva.setDescuentoNaturaleza(recepcionFacturaDetalle.getDescuentoNaturaleza());
+				recepcionFacturaDetalleNueva.setImpuestoCodigo(recepcionFacturaDetalle.getImpuestoCodigo());
+				recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa(recepcionFacturaDetalle.getImpuestoCodigoTarifa());
+				recepcionFacturaDetalleNueva.setImpuestoTarifa(recepcionFacturaDetalle.getImpuestoTarifa());
+				recepcionFacturaDetalleNueva.setImpuestoMonto(recepcionFacturaDetalle.getImpuestoMonto());
+				recepcionFacturaDetalleNueva.setImpuestoExoneracionTipoDocumento(recepcionFacturaDetalle.getImpuestoExoneracionTipoDocumento());
+				recepcionFacturaDetalleNueva.setImpuestoExoneracionNumeroDocumento(recepcionFacturaDetalle.getImpuestoExoneracionNumeroDocumento());
+				recepcionFacturaDetalleNueva.setImpuestoExoneracionNombreInstitucion(recepcionFacturaDetalle.getImpuestoExoneracionNombreInstitucion());
+				recepcionFacturaDetalleNueva.setImpuestoExoneracionFechaEmision(recepcionFacturaDetalle.getImpuestoExoneracionFechaEmision());
+				recepcionFacturaDetalleNueva.setImpuestoExoneracionPorcentaje(recepcionFacturaDetalle.getImpuestoExoneracionPorcentaje());
+				recepcionFacturaDetalleNueva.setImpuestoExoneracionMonto(recepcionFacturaDetalle.getImpuestoExoneracionMonto());
+				recepcionFacturaDetalleNueva.setBaseImponible(recepcionFacturaDetalle.getBaseImponible());
+				recepcionFacturaDetalleNueva.setRecepcionFactura(recepcionFactura);
+				recepcionFacturaBo.agregar(recepcionFacturaDetalleNueva);
+			}
 
 			return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("recepcionFactura.agregar.correctamente", recepcionFactura);
 
 		} catch (Exception e) {
 			return RespuestaServiceValidator.ERROR(e);
-		}
-	}
-
-	private void agregaDetalleFacturas(RecepcionFactura recepcionFactura, String jsonDetalles) {
-		JSONObject json = null;
-		try {
-			json = (JSONObject) new JSONParser().parse(jsonDetalles);
-		} catch (org.json.simple.parser.ParseException e) {
-			e.printStackTrace();
-		}
-
-		// Agregar Lineas de Detalle
-		JSONArray jsonArrayDetalle = (JSONArray) json.get("data");
-		Gson gson = new Gson();
-
-		if (jsonArrayDetalle != null) {
-			for (int i = 0; i < jsonArrayDetalle.size(); i++) {
-				RecepcionFacturaDetalle detalle = gson.fromJson(jsonArrayDetalle.get(i).toString(), RecepcionFacturaDetalle.class);
-				detalle.setRecepcionFactura(recepcionFactura);
-				recepcionFacturaBo.agregar(detalle);
-			}
 		}
 	}
 
@@ -1336,17 +1405,6 @@ public class FacturasController {
 						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.aplicar.nota.credito.o.debito.no.existe", result.getAllErrors());
 					} else {
 						facturaCommand.setReferenciaTipoDoc(facturaReferenciaValidar.getTipoDoc());
-//						if (facturaReferenciaValidar.getEmpresa().getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
-//							Hacienda hacienda = haciendaBo.findByEmpresaAndClave(usuario.getEmpresa(), facturaReferenciaValidar.getClave());
-//							if (hacienda != null) {
-//								if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA) || hacienda.equals(Constantes.HACIENDA_ESTADO_FIRMARDO_XML)) {
-//									return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.pendiente.comprobacion.hacienda", result.getAllErrors());
-//								}
-//							} else {
-//								return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.pendiente.comprobacion.hacienda", result.getAllErrors());
-//							}
-//
-//						}
 
 					}
 				}
@@ -1374,7 +1432,6 @@ public class FacturasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("mensajes.error.transaccion", result.getAllErrors());
 			}
 			Factura facturaCreada = facturaBo.findById(factura.getId());
-//			if (!factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PENDIENTE) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
 			if (!factura.getEstado().equals(Constantes.FACTURA_ESTADO_PENDIENTE) && !factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
 				usuarioCajaBo.actualizarCaja(usuarioCajaBd);
 			}
@@ -1582,17 +1639,14 @@ public class FacturasController {
 		try {
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage("");
-
 			Factura facturaBD = facturaBo.findById(idFactura);
 			if (facturaBD == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.no.existe");
 			}
-
 			ArrayList<String> listaCorreos = new ArrayList<String>();
 			if (!correo.equals(Constantes.EMPTY)) {
 				listaCorreos.add(correo);
 			}
-
 			listaCorreos.add(facturaBD.getCliente().getCorreoElectronico());
 
 			FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(facturaBD);
@@ -1625,7 +1679,6 @@ public class FacturasController {
 
 			String subject = "Proforma N° " + facturaBD.getId().toString() + " del Emisor: " + nombre;
 
-			//
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, "email/emailProforma.vm", modelEmail);
 			//
 
@@ -1814,6 +1867,7 @@ public class FacturasController {
 		return new Attachment(name + ext, data);
 	}
 
+	@SuppressWarnings("unused")
 	private String getConsecutivo(String tipoDoc, String consecutivo) {
 		return tipoDoc + "-" + consecutivo;
 	}

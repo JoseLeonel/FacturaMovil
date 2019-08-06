@@ -249,18 +249,14 @@ var informacion_tabla = [
 	{'data' :'totalDescuentoSTR'  ,"name":"totalDescuentoSTR"  ,"title" : "Descuento"  ,"autoWidth" :true },
 	{'data' :'totalImpuestoSTR'   ,"name":"totalImpuestoSTR"   ,"title" : "IVAI"       ,"autoWidth" :true },
 	{'data' :'totalComprobanteSTR',"name":"totalComprobanteSTR","title" : "Total"      ,"autoWidth" :true },
-    {'data' :'nombreUsuario'      ,"name":"nombreUsuario"      ,"title" : "Usuario"    ,"autoWidth" :true },
-    {'data' : 'id'                ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
-	"render":function(id,type, row){
-		  return __Opciones(id,type,row);
-	 }
-  }];
+    {'data' :'nombreUsuario'      ,"name":"nombreUsuario"      ,"title" : "Usuario"    ,"autoWidth" :true }
+  ];
 
   /**
 * Opciones listado de los clientes
 */
 function __Opciones(id,type,row){
-    var anular  = '<a href="#"  title="Anular Compra" class="btn btn-danger  btn-anular btnAnularCompra" role="button"> </a>';
+    var anular  ="";
   return  anular ;        
 }
 

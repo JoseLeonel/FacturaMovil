@@ -114,12 +114,7 @@
                                     <option each={tiposMensajes.data}  value="{valor}" selected="{recepcionFactura.mensaje==valor?true:false}">{descripcion}</option>
                                 </select>
                             </div>    
-							 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
-                                <label> {$.i18n.prop("receptor.mensaje")}  <span class="requeridoDato">*</span></label>
-                                <select class="form-control tipoGasto" id="tipoGasto" name="tipoGasto" >
-                                    <option each={tiposGasto.data}  value="{valor}" selected="{recepcionFactura.tipoGasto==valor?true:false}">{descripcion}</option>
-                                </select>
-                            </div>                            
+							                       
                             <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                                 <label  >{$.i18n.prop("receptor.detalleMensaje")}</label>
                                 <textarea maxlength="250" placeHolder ="{$.i18n.prop("receptor.detalleMensaje")}" class="form-control recepcionDetalleMensaje" id="detalleMensaje" name="detalleMensaje" value="{recepcionFactura.detalleMensaje}" ></textarea> 
@@ -898,7 +893,7 @@ function BuscarActividadComercial(){
 		                    __buscaDistritos();
 		                                        
 		                	//Se cargan los datos del objecto a almacenar en base de datos
-							self.recepcionFactura.tipoGasto = $("#tipoGasto").val()
+							self.recepcionFactura.tipoGasto = 1
 							self.recepcionFactura.condicionImpuesto = $("#condicionImpuesto").val()
 							self.recepcionFactura.codigoActividad = $("#codigoActividad").val()
 		                	self.recepcionFactura.emisorNombre = self.archivo.emisorNombre;
@@ -1263,7 +1258,7 @@ function BuscarActividadComercial(){
 			$(".errorServerSideJgrid").remove();
 			self.recepcionFactura.mensaje = $("#mensaje").val();
 			self.recepcionFactura.detalleMensaje = $("#detalleMensaje").val();
-			self.recepcionFactura.tipoGasto = $("#tipoGasto").val()
+			self.recepcionFactura.tipoGasto = 1
 			self.recepcionFactura.condicionImpuesto = $("#condicionImpuesto").val()
 			self.recepcionFactura.codigoActividad = $("#codigoActividad").val()
 		          

@@ -104,6 +104,9 @@ public class RecepcionFacturaDetalle implements Serializable {
 	private RecepcionFactura recepcionFactura;
 
 	
+	
+	
+	
 	public Long getId() {
 		return id;
 	}

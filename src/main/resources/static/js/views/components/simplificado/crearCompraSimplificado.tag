@@ -346,21 +346,17 @@
 
                     </div>
                     <div class="row">
-                        <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                             <label class="tamanoLetraSimplificadaDetalle"  >Descuento </label>
                             <input type="number" step="any" class="form-control montoDescuento tamanonumeros " id="montoDescuento" name="montoDescuento"  readonly>
                         </div>
 
-                        <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                             <label class="tamanoLetraSimplificadaDetalle"  >IVA  </label>
                             <input type="number" step="any" class="form-control montoImpuesto tamanonumeros " id="montoImpuesto" name="montoImpuesto" readonly>
                         </div>
-                        <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
-                            <label class="tamanoLetraSimplificadaDetalle"  >Sub Total  </label>
-                            <input type="number" step="any" class="form-control subTotal tamanonumeros " id="subTotal" name="subTotal" readonly>
-                        </div>
-
-                        <div class= "col-md-3 col-sx-3 col-sm-3 col-lg-3 has-success">
+                    
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                             <label class="tamanoLetraSimplificadaDetalle"  >Total Linea </label>
                             <input type="number" step="any" class="form-control montoTotalLinea tamanonumeros " id="montoTotalLinea" name="montoTotalLinea" readonly >
                         </div>
@@ -992,6 +988,7 @@
     self.pesoPrioridad =  0
     self.detalle ={
          numeroLinea : 0,
+         codigoTarifa:'',
          precioUnitario:0,
          cantidad:0,
          montoDescuento:0,
@@ -1192,25 +1189,26 @@ __CalculaMontoLinea(){
 
 function aplicarMontos(){
  
-    var porcentajeDescuento = parseFloat(__valorNumerico($(".porcentajeDescuento").val()));
+    var porcentajeDescuento = __valorFloat(__valorNumerico($(".porcentajeDescuento").val()));
     porcentajeDescuento = porcentajeDescuento / 100
-    var cantidad = parseFloat(__valorNumerico($(".cantidad").val()));
-    var impuesto = parseFloat(__valorNumerico($(".impuesto").val()));
+    var cantidad = __valorFloat(__valorNumerico($(".cantidad").val()));
+    var impuesto = __valorFloat(__valorNumerico($(".impuesto").val()));
     impuesto = impuesto > 0 ? impuesto / 100 : 0
-    var precioUnitario = parseFloat(__valorNumerico($(".precioUnitario").val()));
+    var precioUnitario = __valorFloat(__valorNumerico($(".precioUnitario").val()));
     var subTotal = precioUnitario *  cantidad
     var montoDescuento = subTotal *  porcentajeDescuento
     subTotal = subTotal - montoDescuento
     var montoImpuesto = subTotal * impuesto;
     var montoTotalLinea = subTotal + montoImpuesto
-    $("#subTotal").val(redondeoDecimales(subTotal,2))
-    $("#montoDescuento").val(redondeoDecimales(montoDescuento,2))
+     $("#montoDescuento").val(redondeoDecimales(montoDescuento,2))
     $("#montoImpuesto").val(redondeoDecimales(montoImpuesto,2))
     $("#montoTotalLinea").val(redondeoDecimales(montoTotalLinea,2))
     self.detalle.porcentajeDescuento = porcentajeDescuento
     self.detalle.descripcion = $("#descArticulo").val()
     self.detalle.codigo = $("#codigoArt").val()
     self.detalle.tipoCodigo = $(".tipoCodigo").val()
+    self.detalle.codigoTarifa = $(".selectCodigoTarifa").val()
+    self.detalle.tipoImpuesto = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
     self.detalle.montoDescuento = montoDescuento
     self.detalle.precioUnitario = precioUnitario
     self.detalle.impuesto = impuesto
@@ -1239,6 +1237,16 @@ function __Eventos(){
 __AplicarAgregarLineaDetalle(){
     $("#formularioLineaDetalle").validate(reglasDeValidacionDetalleCompra());
     if ($("#formularioLineaDetalle").valid()) {
+         //aplicarMontos()
+         tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
+        if(tipo !='01' &&  tipo !='07' && tipo.length > 0 ){
+           var monto = __valorFloat($(".impuesto").val())
+            if (monto == 0){
+               mensajeError("El tipo de impuesto requiere el porcentaje, por favor digitelo en la casilla IVA")
+               return 
+            }
+
+        }
          __nuevoArticuloAlDetalle()
     }
 }
@@ -1822,13 +1830,16 @@ function __nuevoArticuloAlDetalle(){
     self.detail.forEach(function(elemen){
         cont =  cont + 1
     })  
+    
     self.numeroLinea = cont > 0?cont+1:1
     self.pesoPrioridad =  cont > 0? cont+1:1
     self.update()
     self.detail.push({
        numeroLinea     : self.numeroLinea,
        pesoPrioridad   :self.pesoPrioridad,  
-       codigo          : self.detalle.codigo,
+       codigo          :self.detalle.codigo,
+       codigoTarifa    :self.detalle.codigoTarifa,
+       tipoImpuesto    : self.detalle.tipoImpuesto,
        descripcion     : self.detalle.descripcion,
        tipoCodigo      : self.detalle.tipoCodigo,
        cantidad        : self.detalle.cantidad,
@@ -1836,7 +1847,7 @@ function __nuevoArticuloAlDetalle(){
        precioUnitario  : self.detalle.precioUnitario,
        montoImpuesto   : self.detalle.montoImpuesto,
        montoDescuento  : self.detalle.montoDescuento,
-       impuesto        : self.detalle.impuesto,
+       impuesto        : self.detalle.impuesto * 100,
        porcentajeDesc  : self.detalle.porcentajeDescuento,
        subTotal        : parseFloat(self.detalle.subTotal),
        montoTotalLinea : self.detalle.montoTotalLinea
