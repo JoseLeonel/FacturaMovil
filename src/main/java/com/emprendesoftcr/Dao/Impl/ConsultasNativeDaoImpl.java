@@ -12,6 +12,7 @@ import com.emprendesoftcr.Dao.ConsultasNativeDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.sqlNativo.BaseNativeQuery;
+import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
@@ -139,6 +140,17 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		
 	}
 	
+	public Collection<ConsultaIVANative> findByEmpresaAndEstadoAndFechasAndActividadComercial(Empresa empresa, String fechaInicial , String fechaFinal, Integer estado, Integer codigoActividadComercial){
+		
+		String queryStr = getQueryBase(ConsultaIVANative.class);
+		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
+		queryStr = queryStr.replaceAll(":FECHAINICIAL","'"+ fechaInicial+"'");
+		queryStr = queryStr.replaceAll(":FECHAFINAL","'"+ fechaFinal+"'");
+		queryStr = queryStr.replaceAll(":ESTADO", estado.toString());
+		Query query = entityManager.createNativeQuery(queryStr, ConsultaIVANative.class);
+		return (Collection<ConsultaIVANative>) query.getResultList();
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<HaciendaComprobarNative> findByComprabarDocumentoPendienteaceptar(){
@@ -150,5 +162,6 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 	private static <T> String getQueryBase(Class<T> claseObjecto) {
 		return ((claseObjecto).getDeclaredAnnotationsByType(BaseNativeQuery.class))[0].query();
 	}
+
 	
 }

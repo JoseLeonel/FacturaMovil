@@ -2,87 +2,217 @@
    <!-- Titulos -->
     
 	<div class="principalContainer">
+	
 	   <div class="encabezado">
 			<div class="encabezado1">
 			</div>
 			<div class="encabezado2">
-				<p>Contribuye con ventas de tarifa plana, reducida, canasta basica (1%) y excentas y compras con tarifas
-					plenas y reducidas</p>	
+				<p class="titulo">Contribuye con ventas de tarifa plana, reducida, canasta basica (1%) y excentas y compras con tarifas
+					plenas y reducidas 89</p>	
 			</div>
 			<div class="encabezado3">
 			</div>
 	   </div>
+	   <br style="color: #0056b2;" />
+	   <hr/>
+	   <br/>
+		<form id="filtros">
+		
+		<div class="consultas">
+				<div class="consultarFecha">
+					<div class="fechaInicio">
+						<label class="knob-label" >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
+						<div  class="form-group input-group date datepickerFechaInicio" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+							<input type="text" class="form-control fechaInicial" id="fechaInicial"  name= "fechaInicial" readonly>
+							<div class="input-group-addon">
+								<span class="glyphicon glyphicon-th"></span>
+							</div>
+						</div>
+					</div>
+					<div class="espaciofechas">
+					</div>
+					<div class="fechaFinal">
+						<label class="knob-label" >{$.i18n.prop("fecha.final")}<span class="requeridoDato">*</span></label>
+						<div  class="form-group input-group date datepickerFechaFinal" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+							<input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
+							<div class="input-group-addon">
+								<span class="glyphicon glyphicon-th"></span>
+							</div>
+						</div>	
+					</div>
+				</div>
+				<div class="espaciofechas">
+				</div>	
+				<div class="consultarEstado">   
+					<label for="pago_tipoVentaL">{$.i18n.prop("factura.estado")} </label> 
+					<select class="form-control estado" id="estado" name="estado"  >
+						<option each={comboEstados} value="{estado}" selected="{factura.estado ==estado?true:false}" >{descripcion}</option>
+					</select>
+				</div>
+				<div class="espaciofechas">
+				</div>
+				<div class="actividadEconomica">   
+				<label class="titleListaPrecio">Actividades Comerciales </label>  
+					<select class="form-control selectActividadComercial"  name="selectActividadComercial" id="selectActividadComercial" >
+						<option  each={empresaActividadComercial}  value="{codigo}"   >{descripcion}</option>
+					</select>
+				</div>
+				<div class="espaciofechas">
+				</div>
+				<div class="consultarBoton">	
+					<button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
+					<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
+				</div>
+		    
+		</div>
+		</form>	
+		<br/>
+	    <br/>
 	   <div class="reportes">
-			<div class="ventas">
-
-               <table id="tablaVentas">
+			<div class="ventasUno">
+               <table id="tablaVentasUno">
+			      <caption>Impuesto al Valor Agregado</caption>
 			      <tr>
-				     <td class="celeste"></td>
-					 <td class="celeste">Monto Venta</td>
-					 <td class="celeste">Monto IVA</td>
+				     <td></td>
+					 <td><p class="formatos">Monto Venta</p></td>
+					 <td><p class="formatos">Monto IVA</p></td>
 				  </tr>
 				  <tr>
-				     <td class="azul">Ventas al 13%</td>
-					 <td class="azul">150.0000</td>
-					 <td class="azul">160.0000</td>
+				     <td><p class="formatos">Tarifa 0% (Exento)</p></td>
+					 <td>1<div id="ventasUnoImpExcento0"></div><div/></td>
+					 <td>2<div id="ventasUnoIvaExcento0"></div></td>
 				  </tr>
 				  <tr>
-				     <td class="celeste">Ventas al 4%</td>
-					 <td class="celeste">195.0000</td>
-					 <td class="celeste">200.0000</td>
+				     <td><p class="formatos">Tarifa reducida 1%</p></td>
+					 <td>3<div id="ventasUnoImpReducida1"></div></td>
+					 <td>4<div id="ventasUnoIvaReducida1"></div></td>
 				  </tr>
 				  <tr>
-				     <td class="azul">Ventas al 1%</td>
-					 <td class="azul">146.0000</td>
-					 <td class="azul">752.0000</td>
+				     <td><p class="formatos">Tarifa reducida 2% </p></td>
+					 <td>5<div id="ventasUnoImpReducida2"></div></td>
+					 <td>6<div id="ventasUnoIvaReducida2"></div></td>
 				  </tr>
 				  <tr>
-				     <td class="celeste">Ventas excentas</td>
-					 <td class="celeste">199.0000</td>
-					 <td class="celeste">234.0000</td>
+				     <td><p class="formatos">Tarifa reducida 4%</p></td>
+					 <td>7<div id="ventasUnoImpReducida4"></div></td>
+					 <td>8<div id="ventasUnoIvaReducida4"></div></td>
 				  </tr>
 				  <tr>
-				     <td class="azul">Total</td>
-					 <td class="azul">190.0000</td>
-					 <td class="azul">124.0000</td>
+				     <td><p class="formatos">Transitorio 0%</p></td>
+					 <td>11<div id="ventasUnoImpTransitorio0"></div></td>
+					 <td>12<div id="ventasUnoIvaTransitorio0"></div></td>
+				  </tr>
+				  <tr>
+				     <td><p class="formatos">Transitorio 4%</p></td>
+					 <td>15<div id="ventasUnoImpTransitorio4"></div></td>
+					 <td>16<div id="ventasUnoIvaTransitorio4"></div></td>
+				  </tr>
+				  <tr>
+				     <td><p class="formatos">Transitorio 8% </p></td>
+					 <td>19<div id="ventasUnoImpTransitorio8"></div></td>
+					 <td>20<div id="ventasUnoIvaTransitorio8"></div></td>
+				  </tr>
+				  <tr>
+				     <td><p class="formatos">Tarifa general 13%</p></td>
+					 <td>{totales.01_iva_13.montoImpuesto}<div id="ventasUnoImpGeneral13"></div></td>
+					 <td>24<div id="ventasIvaGeneral13"></div></td>
+				  </tr>
+				  <tr>
+				     <td><p class="formatos">Total</p></td>
+					 <td>25<div id="ventasUnoImpTotal"></div></td>
+					 <td>26<div id="ventasUnoIvaTotal"></div></td>
 				  </tr>
 			   </table>
 			</div>
-			<div class="separador">
+				<div class="espaciofechas">
 			</div>
-			<div class="compras">
-				<div class="comprasInfo">
-               <table id="tablaCompras">
-			      <tr>
-				     <td class="celeste"></td>
-					 <td class="celeste">Monto Venta</td>
-					 <td class="celeste">Monto IVA</td>
-				  </tr>
-				  <tr>
-				     <td class="azul">Compras al 2%</td>
-					 <td class="azul">150.0000</td>
-					 <td class="azul">160.0000</td>
-				  </tr>
-				  <tr>
-				     <td class="celeste">Compras 4%</td>
-					 <td class="celeste">195.0000</td>
-					 <td class="celeste">200.0000</td>
-				  </tr>
-				  <tr>
-				     <td class="azul">Compras al 13%</td>
-					 <td class="azul">146.0000</td>
-					 <td class="azul">752.0000</td>
-				  </tr>
-				  <tr>
-				     <td class="celeste">Total</td>
-					 <td class="celeste">199.0000</td>
-					 <td class="celeste">234.0000</td>
-				  </tr>
-
-			   </table>
-
-			   </div>
-			   <div class="comprasVacio">
+			<div class="otros">
+				<table id="tablaOtros">
+				<caption>Otros</caption>
+					<tr>
+						<td></td>
+						<td><p class="formatos">Monto Venta</p></td>
+						<td><p class="formatos">Monto IVA</p></td>
+					</tr>
+					<tr>
+						<td><p class="formatos">Selectivo de consumo</p></td>
+						<td>1<div id="otrosImpExcento0"></div></td>
+						<td>2<div id="otrosIvaExcento0"></div></td>
+					</tr>
+					<tr>
+						<td><p class="formatos">Cemento</p></td>
+						<td>3<div id="otrosImpReducida1"></div></td>
+						<td>4<div id="otrosIvaReducida1"></div></td>
+					</tr>
+					<tr>
+						<td><p class="formatos">Otros</p></td>
+						<td>3<div id="otrosImpReducida1"></div></td>
+						<td>4<div id="otrosIvaReducida1"></div></td>
+					</tr>
+					<tr>
+						<td><p class="formatos">Total</p></td>
+						<td>25<div id="otrosImpTotal"></div></td>
+						<td>26<div id="otrosIvaTotal"></div></td>
+					</tr>
+				</table>
+			</div>
+			<div class="espaciofechas">
+			</div>
+			<div class="VentasSiete">
+				<div class="ventasInfoSiete">
+					<table id="tablaVentasSiete">
+					<caption>IVA (calculo especial) </caption>
+						<tr>
+							<td></td>
+							<td><p class="formatos">Monto Venta</p></td>
+							<td><p class="formatos">Monto IVA</p></td>
+						</tr>
+						<tr>
+							<td><p class="formatos">Tarifa 0% (Exento)</p></td>
+							<td>1<div id="ventasSieteImpExcento0"></div></td>
+							<td>2<div id="ventasSieteIvaExcento0"></div></td>
+						</tr>
+						<tr>
+							<td><p class="formatos">Tarifa reducida 1%</p></td>
+							<td>3<div id="ventasSieteImpReducida1"></div></td>
+							<td>4<div id="ventasSieteIvaReducida1"></div></td>
+						</tr>
+						<tr>
+							<td><p class="formatos">Tarifa reducida 2% </p></td>
+							<td>5<div id="ventasSieteImpReducida2"></div></td>
+							<td>6<div id="ventasSieteIvaReducida2"></div></td>
+						</tr>
+						<tr>
+							<td><p class="formatos">Tarifa reducida 4%</p></td>
+							<td>7<div id="ventasSieteImpReducida4"></div></td>
+							<td>8<div id="ventasSieteIvaReducida4"></div></td>
+						</tr>
+						<tr>
+							<td><p class="formatos">Transitorio 0%</p></td>
+							<td>11<div id="ventasSieteImpTransitorio0"></div></td>
+							<td>12<div id="ventasSieteIvaTransitorio0"></div></td>
+						</tr>
+						<tr>
+							<td><p class="formatos">Transitorio 4%</p></td>
+							<td>15<div id="ventasSieteImpTransitorio4"></div></td>
+							<td>16<div id="ventasSieteIvaTransitorio4"></div></td>
+						</tr>
+						<tr>
+							<td><p class="formatos">Transitorio 8% </p></td>
+							<td>19<div id="ventasSieteImpTransitorio8"></div></td>
+							<td>20<div id="ventasSieteIvaTransitorio8"></div></td>
+						</tr>
+						<tr>
+							<td><p class="formatos">Tarifa general 13%</p></td>
+							<td>23<div id="ventasSieteImpGeneral13"></div></td>
+							<td>24<div id="ventasSieteIvaGeneral13"></div></td>
+						</tr>
+						<tr>
+							<td><p class="formatos">Total</p></td>
+							<td>25<div id="ventasSieteImpTotal"></div></td>
+							<td>26<div id="ventasSieteIvaTotal"></div></td>
+						</tr>
+					</table>
 			   </div>
 			</div>
 	   </div>
@@ -96,77 +226,76 @@
 					<div class="formulasRotuloFila1Col3"></div>
 				</div>
 				<div class="formulasRotuloFila2">
-					<div class="formulasRotuloFila2Col1">Formula<br/>de<br/>Proporcion</div>
+					<div class="formulasRotuloFila2Col1"><p class="formatos">Formula<br/>de<br/>Proporcion</p></div>
 					<div class="formulasRotuloFila2Col2"></div>
-					<div class="formulasRotuloFila2Col3">Ventas<br/>con<br/>derecho a<br/>credito</div>
+					<div class="formulasRotuloFila2Col3"><p class="formatos">Ventas con<br/>derecho a<br/>credito</P></div>
 				</div>
 				<div class="formulasRotuloFila3">
 					<div class="formulasRotuloFila3Col1"></div>
-					<div class="formulasRotuloFila3Col2"></div>
+					<div class="formulasRotuloFila3Col2"><p class="formatos">Ventas sin derecho a credito</p></div>
 					<div class="formulasRotuloFila3Col3"></div>
 				</div>
 			 </div>
 			 <div class="formulasInfo">
 				<table id="tablaInfo" border="1">
 					<tr>
-						<td rowspan="2">Ventas al 13%</td>
-						<td>15.000</td>
+						<td rowspan="2"><p class="formatos">Ventas al 13%</p></td>
+						<td>1<div id="info1"></td>
 						<td rowspan="2">15.79%</td>
 					</tr>
 					<tr>
-						<td>95.000</td>
+						<td>2<div id="info2"></td>
 					</tr>
 					<tr>
-						<td class="azul"></td>
-						<td class="azul"></td>
-						<td class="azul"></td>
+						<td></td>
+						<td></td>
+						<td></td>
 					</tr>
 					<tr>
-						<td rowspan="2">Ventas al 4%</td>
-						<td>20000</td>
+						<td rowspan="2"><p class="formatos">Ventas al 4%</p></td>
+						<td>3<div id="info3"></td>
 						<td rowspan="2">21.05%</td>
 					</tr>
 					<tr>
-						<td>900000</td>
+						<td>3<div id="info3"></td>
 					</tr>
 					<tr>
-						<td class="azul"></td>
-						<td class="azul"></td>
-						<td class="azul"></td>
+						<td></td>
+						<td></td>
+						<td></td>
 					</tr>
 					<tr>
-						<td rowspan="2">Ventaas al 1%</td>
-						<td>400000</td>
-						<td rowspan="2">42.11%</td>
+						<td rowspan="2"><p class="formatos">Ventaas al 1%</p></td>
+						<td>4<div id="info4"></td>
+						<td rowspan="2">5<div id="info5"></td>
 					</tr>
 					<tr>
-						<td>950000</td>
+						<td>5<div id="info5"></td>
 					</tr>
 					<tr>
-						<td class="azul"></td>
-						<td class="azul"></td>
-						<td class="azul"></td>
+						<td></td>
+						<td></td>
+						<td></td>
 					</tr>
 						<tr>
-						<td rowspan="2">Ventas excentas</td>
-						<td>20000</td>
+						<td rowspan="2"><p class="formatos">Ventas excentas</p></td>
+						<td>6<div id="info6"></td>
 						<td rowspan="2">21.11%</td>
 					</tr>
 					<tr>
-						<td>95000</td>
+						<td>7<div id="info7"></td>
 					</tr>
 					<tr>
-						<td class="azul"></td>
-						<td class="azul"></td>
-						<td class="azul"></td>
-					</tr>
-					<tr>
-						<td>Total</td>
 						<td></td>
-						<td>100%</td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td><p class="formatos">Total</p></td>
+						<td></td>
+						<td>8<div id="info8">%</td>
 					</tr>
 				</table>
-
 			 </div>
 			 <div class="formulasVacio">
 			 </div>
@@ -174,6 +303,25 @@
     </div>
 
 	<style type="text/css"  >
+
+		.formatos {
+			font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+			font-size: medium;
+		}
+
+		.titulo{
+	        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+			font-weight: 800;
+			font-size: medium;
+		}
+
+		label {
+			display: inline-block;
+		    max-width: 100%;
+		    margin-bottom: 5px;
+		    font-size: large;
+		}
+		
        .principalContainer{
             display: flex;
 			flex-direction: column;
@@ -185,39 +333,41 @@
 	   }
 	   .encabezado{
 		   display: flex;
-	       flex: 0.20; 
+	       flex: 0.10; 
 		   flex-direction: row;
+	   }
+	   .consultas{
+		   display: flex;
+	       flex: 0.20; 
+		   flex-direction: row; 
 	   }
 	   .reportes{
 		   display: flex;
-	       flex: 0.40; 
+	       flex: 0.35; 
 		   flex-direction: row;
+		   justify-content: space-between;
 	   }
 	   .formulas{
 		   display: flex;
-	       flex: 0.40; 
+	       flex: 0.35; 
 		   flex-direction: row;
 	   }
-	   .ventas{
+	   .ventasUno{
 		   display: flex;
-	       flex: 0.40; 
+	       flex: 0.33; 
 	   }
-       .separador{
+       .otros{
 		   display: flex;
-	       flex: 0.20; 
+	       flex: 0.34; 
 	   }
-	   .compras{
+	   .VentasSiete{
 		   display: flex;
-	       flex: 0.40; 
+	       flex: 0.33; 
 		   flex-direction: column;
 	   }
-	   .comprasInfo{
+	   .ventasInfoSiete{
            display: flex;
 	       flex: 0.80; 
-	   }
-	   .comprasVacio{
-           display: flex;
-	       flex: 0.20;
 	   }
 	   .formulasRotulo{ 
 		   display: flex;
@@ -227,7 +377,6 @@
 	   .formulasInfo{
            display: flex;
 	       flex: 0.50; 
-
 	    }
 	   .formulasVacio{ 
            display: flex;	
@@ -250,7 +399,6 @@
 				display: flex;
 				flex: 0.33; 
 		}
-
 		.formulasRotuloFila2{
 			display: flex;
 			flex: 0.40; 
@@ -268,7 +416,6 @@
 				display: flex;
 				flex: 0.33; 
 		}
-
 		.formulasRotuloFila3{
 			display: flex;
 			flex: 0.30; 
@@ -286,7 +433,6 @@
 				display: flex;
 				flex: 0.33; 
 		}
-
 		.encabezado1{
 				display: flex;
 				flex: 0.20; 
@@ -300,21 +446,18 @@
 				display: flex;
 				flex: 0.20; 
 		}
-
        .ventasFila1{
 			display: flex;
 			flex: 0.33; 
 			flex-direction: column;
            justify-items: center;
 	   }
-
        .ventasFila2{
 			display: flex;
 			flex: 0.33; 
 			flex-direction: column;
            justify-items: center;
 	   }
-
        .ventasFila3{
 			display: flex;
 			flex: 0.34; 
@@ -322,90 +465,134 @@
 			    flex: 0.40;
             justify-items: center;
 	   }
-
 	   	.comprasInfoFila1{
 			display: flex;
 			flex: 0.33; 
 			flex-direction: column;
 			justify-content: center;
 		   }
-
 		.comprasInfoFila2{
 			display: flex;
 			flex: 0.33; 
 			flex-direction: column;
 			justify-content: center;
 		}
-
 		.comprasInfoFila3{
 			display: flex;
 			flex: 0.34; 
 			flex-direction: column;
 			justify-content: center;
 		}
-
-		.azul{
-            background-color: #6495ED;
+        .consultarFecha{
+         	display: flex;
+			flex: 0.60; 
+			flex-direction: row;
+		}
+        .consultarEstado{
+           	display: flex;
+			flex: 0.10; 
+			flex-direction: column;
+		}
+        .actividadEconomica{
+           	display: flex;
+			flex: 0.15; 
+			flex-direction: column;
+		}
+		.consultarBoton{
+			display: flex;
+			flex: 0.15; 
+			flex-direction: row-reverse;
+			justify-content: space-around;
+			align-items: center;
+		}
+		.fechaInicio{
+			display: flex;
+			flex: 0.45; 
+			flex-direction: column;
+		}
+		.espaciofechas{
+	        display: flex;
+			flex: 0.10; 	
+		}
+        .fechaFinal{
+			display: flex;
+			flex: 0.45; 
+			flex-direction: column;
 		}
 
-		.celeste{
-            background-color: #00FFFF;
-		}
+
 
 /*----------------------------------------------------------------------------------------*/
 
-		#tablaVentas {
+		#tablaVentasUno {
 			font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
 			border-collapse: collapse;
 			width: 100%;
 		}
-
-		#tablaVentas td, #tablaVentas th {
+		#tablaVentasUno td, #tablaVentasUno th {
 			border: 1px solid #ddd;
 			padding: 8px;
 		}
-
-		#tablaVentas th {
+		#tablaVentasUno th {
 			padding-top: 12px;
 			padding-bottom: 12px;
 			text-align: left;
 			color: white;
 		}
+		#tablaVentasUno tr:nth-child(even){background-color: #f2f2f2;}
+        #tablaVentasUno tr:hover {background-color: #ddd;}
 
 /*----------------------------------------------------------------------------------*/
 
-		#tablaCompras {
+
+		#tablaOtros {
 			font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
 			border-collapse: collapse;
 			width: 100%;
 		}
-
-		#tablaCompras td, #tablaCompras th {
+		#tablaOtros td, #tablaOtros th {
 			border: 1px solid #ddd;
 			padding: 8px;
 		}
-
-		#tablaCompras th {
+		#tablaOtros th {
 			padding-top: 12px;
 			padding-bottom: 12px;
 			text-align: left;
 			background-color: #4CAF50;
 			color: white;
 		}
+		#tablaOtros tr:nth-child(even){background-color: #f2f2f2;}
+        #tablaOtros tr:hover {background-color: #ddd;}
 
 /*----------------------------------------------------------------------------------*/
-
+		#tablaVentasSiete {
+			font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+			border-collapse: collapse;
+			width: 100%;
+		}
+		#tablaVentasSiete td, #tablaVentasSiete th {
+			border: 1px solid #ddd;
+			padding: 8px;
+		}
+		#tablaVentasSiete th {
+			padding-top: 12px;
+			padding-bottom: 12px;
+			text-align: left;
+			background-color: #4CAF50;
+			color: white;
+		}
+		#tablaVentasSiete tr:nth-child(even){background-color: #f2f2f2;}
+        #tablaVentasSiete tr:hover {background-color: #ddd;}
+/*----------------------------------------------------------------------------------*/
 		#tablaInfo {
 			font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
 			border-collapse: collapse;
 			width: 100%;
 		}
-
 		#tablaInfo td, #tablaInfo th {
 			border: 1px solid #ddd;
 			padding: 8px;
 		}
-
 		#tablaInfo th {
 			padding-top: 12px;
 			padding-bottom: 12px;
@@ -413,26 +600,39 @@
 			background-color: #4CAF50;
 			color: white;
 		}
+		#tablaInfo tr:nth-child(even){background-color: #f2f2f2;}
+        #tablaInfo tr:hover {background-color: #ddd;}
+/*--------------------------------------------------------------------------------------*/
 
-
-
-
-
+		.formulasRotuloFila2Col2{
+			position:relative;
+			margin: 20px;
+			width:48px;
+			height: 38px;
+			background: #d1d1d1;
+			/*border:solid 1px #999;*/
+			float: left;
+			background-color: #6495ED;
+		}
 		.formulasRotuloFila2Col2:before, .formulasRotuloFila2Col2:after {
-		border-bottom: 25px solid transparent;
-		border-top: 25px solid transparent;
-		top:-1px;
+			border-bottom: 20px solid transparent;
+			border-top: 20px solid transparent;
+			top:-1px;
+			content: " ";
+			position: absolute;
+			display: block;
+			width: 0;
+			height: 0;  
 		}
 		.formulasRotuloFila2Col2:after {
-		border-left: 16px solid #C7E0E5;
-		right: -15px;
-		z-index: 2;
+			border-left: 16px solid #6495ED;
+			right: -15px;
+			z-index: 2;
 		}
-		
 		.formulasRotuloFila2Col2:before {
-		border-left: 16px solid #0cceff;
-		right: -16px;
-		z-index: 1;
+			border-left: 16px solid #999;
+			right: -16px;
+			z-index: 1;
 		}
 
 
@@ -441,6 +641,8 @@
 	<script>
 	
 		self = this;
+
+		self.comboEstados          = []
 	
 		//Se presentan los filtros
 		self.mostrarFiltros = true;
@@ -448,21 +650,21 @@
 
 		self.mostrarDetalle        = false
 
-		self.factura ={				
-				total:"0",
-				totalDescuentos:"0",
-				totalImpuestos:"0",
-				totalVentasNetas:"0",
-				totalVentasExentas:"0",
-				totalVentasGravadas:"0",
+		self.totales ={
+			01_iva_13:{
+				montoImpuesto:0,
+				montoVenta:0
+			}
 		}
 		
 		self.fechaInicio="";
 		self.fechaFin="";
 		//Se cargan al montar el tag
 		self.on('mount',function(){
+			__ComboEstados()
+			__ListaActividadesComercales()
 		    $("#filtros").validate(reglasDeValidacion());
-		    $("#formulario").validate(reglasDeValidacionCorreo());	
+		   
 		    limpiarFactura();
 		})
 
@@ -487,14 +689,7 @@
 		};
 		
 		function limpiarFactura(){
-			self.factura ={				
-					total:"0",
-					totalDescuentos:"0",
-					totalImpuestos:"0",
-					totalVentasNetas:"0",
-					totalVentasExentas:"0",
-					totalVentasGravadas:"0",
-			}			
+			
 			self.update();
 			$('.datepickerFechaFinal').datepicker(
             	{
@@ -510,31 +705,77 @@
     		);
 
 		}
+
+		
+		
+
+		function __ListaActividadesComercales(){
+			$.ajax({
+				url: 'ListaEmpresaActividadComercialPorPricipalAjax.do',
+				datatype: "json",
+				method:"GET",
+				success: function (result) {
+					if(result.aaData.length > 0){
+						self.empresaActividadComercial   = result.aaData
+						self.update()
+					
+
+					}
+				},
+				error: function (xhr, status) {
+					console.log(xhr);
+					mensajeErrorServidor(xhr, status);
+				}
+			});
+			return
+		}
+
+
+		function __ComboEstados(){
+			self.comboEstados = []
+			self.comboEstados.push({
+				estado:1,
+				descripcion:$.i18n.prop("factura.estado.pendiente")
+			})
+			self.comboEstados.push({
+				estado:2,
+				descripcion:$.i18n.prop("factura.estado.facturado")
+			})
+			
+			self.update()
+		}
 		
 		/**
 		*  Busqueda de la informacion por rango de fechas
 		**/
 		__Busqueda(){
 			limpiarFactura();
+			var 01_iva_13 = 0
 		    self.fechaInicio = $('#fechaInicial').val();
 		    self.fechaFin = $('#fechaFinal').val();
 		    self.update();
 		    
 		    if ($("#filtros").valid()) {
 		        var parametros = {
-		        	fechaInicioParam:$('#fechaInicial').val(),
-		        	fechaFinParam:$('#fechaFinal').val(),
+		        	fechaInicio:$('#fechaInicial').val(),
+		        	fechaFin:$('#fechaFinal').val(),
+					estado: 6,
+					selectActividadComercial: 7
 		        };
 		        $.ajax({
-		            url: "TotalFacturasAjax.do",
+		            url: "listarConsutaIvaAjax.do",
 		            datatype: "json",
 		            data:parametros ,
 		            method:"GET",
 		            success: function (data) {
-			        	self.factura = data;
-			        	self.mostrarDetalle = true;
-			        	self.mostrarFiltros = false;
-					    self.update();
+						$.each(data, function( index, modeloTabla ) {
+                            if(modeloTabla.impuesto == 13 && modeloTabla.tipoImpuesto =='01'){
+                                01_iva_13 = 01_iva_13 + modeloTabla.montoImpuesto
+							}
+						}
+						self.totales.01_iva_13.montoImpuesto = 01_iva_13 
+						self.update()
+			        	
 			        },
 			        error: function (xhr, status) {
 			            console.log(xhr);
@@ -544,31 +785,6 @@
 		 	}		
 		}
 		
-		/**
-		*  Busqueda de la informacion y la envia por correo
-		**/
-		function __EnviarPorCorreo(){
-		    if ($("#filtros").valid()) {
-		        var parametros = {
-		        	correoAlternativo:$('#correoAlternativo').val(),		
-		        	fechaInicioParam:$('#fechaInicial').val(),
-		        	fechaFinParam:$('#fechaFinal').val(),
-		        };
-		        $.ajax({
-		            url: "EnvioDetalleTotalFacturasAjax.do",
-		            datatype: "json",
-		            data:parametros ,
-		            method:"POST",
-		            success: function (data) {
-					    self.update();
-			        },
-			        error: function (xhr, status) {
-			            console.log(xhr);
-			            mensajeErrorServidor(xhr, status);
-			        }
-		        });
-		 	}		
-		}
 		
 		/**
 		* limpiar los filtros
@@ -590,70 +806,6 @@
     		);
 		}
 		
-		/*
-		* Muestra los filtros avanzados
-		*/
-		__mostrarFiltros(){
-		    if(self.mostrarFiltros){
-		        self.mostrarFiltros = false;
-		        self.valorMarginBottom  = '10px'
-		    }else{
-		        self.mostrarFiltros = true;
-		        self.valorMarginBottom  = '0px'
-		    }
-		    self.update();
-		}
 
-		
-		
-		__CorreoAlternativo(){
-			$('#correoAlternativo').val(null);
-		    $('#ModalCorreoAlternativo').modal({
-			    backdrop: 'static',
-		        keyboard: false
-		    });
-		    $('#ModalCorreoAlternativo').modal('show');      
-		}
-
-		/**
-		* Enviar el correo
-		**/
-		__EnviarCorreoAlternativo(){
-		     if ($("#formulario").valid()) {
-		    	 __EnviarPorCorreo()
-		     }
-		}
-		
-		__EnviarCorreoEmpresa(){
-		   	 __EnviarPorCorreo()
-		}
-		
-		/**
-		*  Regresar al listado
-		**/
-		__regresarAlListadoAlternativo(){
-		    $('#ModalCorreoAlternativo').modal('hide')
-		}
-		
-		/**
-		* Camps requeridos
-		**/
-		var reglasDeValidacionCorreo = function() {
-			var validationOptions = $.extend({}, formValidationDefaults, {
-				rules : {
-					correoAlternativo : {
-						required : true,
-		                email:true,
-		                maxlength:240,
-		                minlength:1,
-					}                                   
-		                        
-				},
-				ignore : []
-
-			});
-			return validationOptions;
-		};
-		
 	</script>
 </consulta-iva>

@@ -3,6 +3,7 @@ package com.emprendesoftcr.Bo;
 import java.util.Collection;
 
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
@@ -32,4 +33,6 @@ public interface ConsultasNativeBo {
 	Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa,Integer idusuario,Integer estado,String fechaInicial,String fechaFinal,Long idCliente);
 	
 	Collection<HaciendaComprobarNative> findByComprabarDocumentoPendienteaceptar();
+	
+	Collection<ConsultaIVANative> findByEmpresaAndEstadoAndFechasAndActividadComercial(Empresa empresa, String fechaInicial , String fechaFinal, Integer estado, Integer codigoActividadComercial);
 }
