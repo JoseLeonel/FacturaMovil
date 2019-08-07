@@ -3,11 +3,13 @@ package com.emprendesoftcr.modelo.sqlNativo;
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @BaseNativeQuery(name = "cons_vent_iva", 
-query = "select d.id,  d.tipo_impuesto, d.impuesto, i.descripcion, sum(d.imp_neto * f.tipo_cambio) as totalImpuesto, sum(d.monto_total_linea * f.tipo_cambio) as totalVentas"   
+query = "select @s\\:=@s+1 as id_consulta, d.tipo_impuesto, d.cod_tarifa, d.impuesto, i.descripcion, sum(d.imp_neto * f.tipo_cambio) as total_impuesto, sum(d.monto_total_linea * f.tipo_cambio) as total_ventas"   
 		+ " from " 
+		+ " (select @s\\:=0) as s, "
 		+ " detalles d  inner join facturas f on f.id = d.factura_id " 
 		+ " inner join hacienda_xml h on  h.consecutivo = f.numero_consecutivo " 
 		+ " inner join tarifa t on d.tipo_impuesto = t.tipo_imp " 
@@ -18,15 +20,16 @@ query = "select d.id,  d.tipo_impuesto, d.impuesto, i.descripcion, sum(d.imp_net
 		+ " f.estado        = 2 and "
 		+ " f.fecha_emision >= :FECHAINICIAL and "
 		+ " f.fecha_emision <= :FECHAFINAL and "
-		+ " d.cod_tarifa    != ''  and"
-		+ " f.estado        = 2 and "
+		+ " d.cod_tarifa    != ''  and "
+		+ " h.estado        = :ESTADO  and "
 		+ " d.cod_tarifa    = i.cod_tarifa and "
 		+ " d.tipo_impuesto = t.tipo_imp "
 		+ " group by  "
-		+ " d.id, d.tipo_impuesto, d.impuesto, i.descripcion  "
+		+ " d.tipo_impuesto, d.cod_tarifa, d.impuesto, i.descripcion  "
 		+ " order by  "
-		+ " d.tipo_impuesto")
+		+ " id_consulta, d.tipo_impuesto")
 
+@Entity
 public class ConsultaIVANative implements Serializable {
 	
 	/**
@@ -35,22 +38,25 @@ public class ConsultaIVANative implements Serializable {
 	private static final long serialVersionUID = 8189598032481010858L;
 	
 	@Id
-	@Column(name = "id")
-	private Long		id;
-
+	@Column(name = "id_consulta")
+	private Long							id;
+	
 	@Column(name = "tipo_impuesto")
 	private String tipoImpuesto;
 	
+	@Column(name = "cod_tarifa")
+	private String codTarifa;
+			
 	@Column(name = "impuesto")
 	private Double impuesto;
 	
 	@Column(name = "descripcion")
 	private String descripcion;
 	
-	@Column(name = "totalImpuesto")
+	@Column(name = "total_impuesto")
 	private Double totalImpuesto;
 	
-	@Column(name = "totalVentas")
+	@Column(name = "total_ventas")
 	private Double totalVentas;
 
 	public Long getId() {
@@ -67,6 +73,14 @@ public class ConsultaIVANative implements Serializable {
 
 	public void setTipoImpuesto(String tipoImpuesto) {
 		this.tipoImpuesto = tipoImpuesto;
+	}
+
+	public String getCodTarifa() {
+		return codTarifa;
+	}
+
+	public void setCodTarifa(String codTarifa) {
+		this.codTarifa = codTarifa;
 	}
 
 	public Double getImpuesto() {
@@ -109,6 +123,7 @@ public class ConsultaIVANative implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((codTarifa == null) ? 0 : codTarifa.hashCode());
 		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((impuesto == null) ? 0 : impuesto.hashCode());
@@ -127,6 +142,11 @@ public class ConsultaIVANative implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		ConsultaIVANative other = (ConsultaIVANative) obj;
+		if (codTarifa == null) {
+			if (other.codTarifa != null)
+				return false;
+		} else if (!codTarifa.equals(other.codTarifa))
+			return false;
 		if (descripcion == null) {
 			if (other.descripcion != null)
 				return false;
@@ -160,4 +180,7 @@ public class ConsultaIVANative implements Serializable {
 		return true;
 	}
 
+
+
+	
 }

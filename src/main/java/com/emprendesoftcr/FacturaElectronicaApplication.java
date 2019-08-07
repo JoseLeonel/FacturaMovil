@@ -22,7 +22,7 @@ public class FacturaElectronicaApplication extends SpringBootServletInitializer 
 		System.out.println("----------------- Juan 3:16 Porque de tal manera amo Dios al mundo que ha dado a su Hijo al mundo para que todo aquel que cree en EL no se pierda y tenga vida Eterna  ---------------------------");
 		SpringApplication.run(FacturaElectronicaApplication.class, args);
 	}
-	
+																																																																																																																						
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {

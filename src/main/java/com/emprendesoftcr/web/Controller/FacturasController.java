@@ -1032,9 +1032,7 @@ public class FacturasController {
 		List<Object> solicitudList = new ArrayList<Object>();
 		if (objetos != null) {
 			for (ConsultaIVANative consultaIVANative : objetos) {
-				if (consultaIVANative.getId().longValue() > 0L) {
-					solicitudList.add(new ConsultaIvaCommand(consultaIVANative));
-				}
+				solicitudList.add(new ConsultaIvaCommand(consultaIVANative));
 			}
 		}
 		respuestaService.setRecordsTotal(0l);
