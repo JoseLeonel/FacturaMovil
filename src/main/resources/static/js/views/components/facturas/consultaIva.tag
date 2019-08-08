@@ -79,48 +79,48 @@
 				  </tr>
 				  <tr>
 				     <td><p class="formatos">Tarifa 0% (Exento)</p></td>
-					 <td><div value="0">{totales.uno_iva_01.montoImpuestoUno01}</div></td>
 					 <td><div value="0">{totales.uno_iva_01.montoVentaUno01}</div></td>
+					 <td><div value="0">{totales.uno_iva_01.montoImpuestoUno01}</div></td>
 				  </tr>
 				  <tr>
 				     <td><p class="formatos">Tarifa reducida 1%</p></td>
-					 <td><div value="0">{totales.uno_iva_01.montoImpuestoUno02}</div></td>
 					 <td><div value="0">{totales.uno_iva_01.montoVentaUno02}</div></td>
+					 <td><div value="0">{totales.uno_iva_01.montoImpuestoUno02}</div></td>
 				  </tr>
 				  <tr>
 				     <td><p class="formatos">Tarifa reducida 2% </p></td>
-					 <td><div value="0">{totales.uno_iva_01.montoImpuestoUno03}</div></td>
 					 <td><div value="0">{totales.uno_iva_01.montoVentaUno03}</div></td>
+					 <td><div value="0">{totales.uno_iva_01.montoImpuestoUno03}</div></td>
 				  </tr>
 				  <tr>
 				     <td><p class="formatos">Tarifa reducida 4%</p></td>
-					 <td><div value="0">{totales.uno_iva_01.montoImpuestoUno04}</div></td>
 					 <td><div value="0">{totales.uno_iva_01.montoVentaUno04}</div></td>
+					 <td><div value="0">{totales.uno_iva_01.montoImpuestoUno04}</div></td>
 				  </tr>
 				  <tr>
 				     <td><p class="formatos">Transitorio 0%</p></td>
-					 <td><div value="0">{totales.uno_iva_01.montoImpuestoUno05}</div></td>
 					 <td><div value="0">{totales.uno_iva_01.montoVentaUno05}</div></td>
+					 <td><div value="0">{totales.uno_iva_01.montoImpuestoUno05}</div></td>
 				  </tr>
 				  <tr>
 				     <td><p class="formatos">Transitorio 4%</p></td>
-					 <td><div value="0">{totales.uno_iva_01.montoImpuestoUno06}</div></td>
 					 <td><div value="0">{totales.uno_iva_01.montoVentaUno06}</div></td>
+					 <td><div value="0">{totales.uno_iva_01.montoImpuestoUno06}</div></td>
 				  </tr>
 				  <tr>
 				     <td><p class="formatos">Transitorio 8% </p></td>
-					 <td><div value="0">{totales.uno_iva_01.montoImpuestoUno07}</div></td>
 					 <td><div value="0">{totales.uno_iva_01.montoVentaUno07}</div></td>
+					 <td><div value="0">{totales.uno_iva_01.montoImpuestoUno07}</div></td>
 				  </tr>
 				  <tr>
 				     <td><p class="formatos">Tarifa general 13%</p></td>
-					 <td><div value="0">{totales.uno_iva_01.montoImpuestoUno08}</div></td>
 					 <td><div value="0">{totales.uno_iva_01.montoVentaUno08}</div></td>
+					 <td><div value="0">{totales.uno_iva_01.montoImpuestoUno08}</div></td>
 				  </tr>
 				  <tr>
 				     <td><p class="formatos">Total</p></td>
-					 <td><div value="0">{totales.unoTotal.totalImpuestoUno}</div></td>
 					 <td><div value="0">{totales.unoTotal.totalVentasUno}</div></td>
+					 <td><div value="0">{totales.unoTotal.totalImpuestoUno}</div></td>
 				  </tr>
 			   </table>
 			 
@@ -137,23 +137,23 @@
 					</tr>
 					<tr>
 						<td><p class="formatos">Selectivo de consumo</p></td>
-						<td>1<div id="otrosImpExcento0"></div></td>
-						<td>2<div id="otrosIvaExcento0"></div></td>
+						<td><div>{totales.otros.selectivoConsumo.scVentas}</div></td>
+						<td><div>{totales.otros.selectivoConsumo.scImpuesto}</div></td>
 					</tr>
 					<tr>
 						<td><p class="formatos">Cemento</p></td>
-						<td>3<div id="otrosImpReducida1"></div></td>
-						<td>4<div id="otrosIvaReducida1"></div></td>
+						<td><div>{totales.otros.selectivoConsumo.cVentas}</div></td>
+						<td><div>{totales.otros.selectivoConsumo.cImpuesto}</div></td>
 					</tr>
 					<tr>
 						<td><p class="formatos">Otros</p></td>
-						<td>3<div id="otrosImpReducida1"></div></td>
-						<td>4<div id="otrosIvaReducida1"></div></td>
+						<td><div>{totales.otros.selectivoConsumo.oImpuesto}</div></td>
+						<td><div>{totales.otros.selectivoConsumo.oVentas}</div></td>
 					</tr>
 					<tr>
 						<td><p class="formatos">Total</p></td>
-						<td>25<div id="otrosImpTotal"></div></td>
-						<td>26<div id="otrosIvaTotal"></div></td>
+						<td><div>{totales.otros.selectivoConsumo.tImpuesto}</div></td>
+						<td><div>{totales.otros.selectivoConsumo.tVentas}</div></td>
 					</tr>
 				</table>
 			</div>
@@ -170,48 +170,48 @@
 						</tr>
 						<tr>
 							<td><p class="formatos">Tarifa 0% (Exento)</p></td>
-							<td><div value="0">{totales.siete_iva_01.montoImpuestoSiete01}</div></td>
 							<td><div value="0">{totales.siete_iva_01.montoVentaSiete01}</div></td>
+							<td><div value="0">{totales.siete_iva_01.montoImpuestoSiete01}</div></td>
 						</tr>
 						<tr>
 							<td><p class="formatos">Tarifa reducida 1%</p></td>
-							<td><div value="0">{totales.siete_iva_02.montoImpuestoSiete02}</div></td>
 							<td><div value="0">{totales.siete_iva_02.montoVentaSiete02}</div></td>
+							<td><div value="0">{totales.siete_iva_02.montoImpuestoSiete02}</div></td>
 						</tr>
 						<tr>
 							<td><p class="formatos">Tarifa reducida 2% </p></td>
-							<td><div value="0">{totales.siete_iva_03.montoImpuestoSiete03}</div></td>
 							<td><div value="0">{totales.siete_iva_03.montoVentaSiete03}</div></td>
+							<td><div value="0">{totales.siete_iva_03.montoImpuestoSiete03}</div></td>
 						</tr>
 						<tr>
 							<td><p class="formatos">Tarifa reducida 4%</p></td>
-							<td><div value="0">{totales.siete_iva_04.montoImpuestoSiete04}</div></td>
 							<td><div value="0">{totales.siete_iva_04.montoVentaSiete04}</div></td>
+							<td><div value="0">{totales.siete_iva_04.montoImpuestoSiete04}</div></td>
 						</tr>
 						<tr>
 							<td><p class="formatos">Transitorio 0%</p></td>
-							<td><div value="0">{totales.siete_iva_05.montoImpuestoSiete05}</div></td>
 							<td><div value="0">{totales.siete_iva_05.montoVentaSiete05}</div></td>
+							<td><div value="0">{totales.siete_iva_05.montoImpuestoSiete05}</div></td>
 						</tr>
 						<tr>
 							<td><p class="formatos">Transitorio 4%</p></td>
-							<td><div value="0">{totales.siete_iva_06.montoImpuestoSiete06}</div></td>
 							<td><div value="0">{totales.siete_iva_06.montoVentaSiete06}</div></td>
+							<td><div value="0">{totales.siete_iva_06.montoImpuestoSiete06}</div></td>
 						</tr>
 						<tr>
 							<td><p class="formatos">Transitorio 8% </p></td>
-							<td><div value="0">{totales.siete_iva_07.montoImpuestoSiete07}</div></td>
 							<td><div value="0">{totales.siete_iva_07.montoVentaSiete07}</div></td>
+							<td><div value="0">{totales.siete_iva_07.montoImpuestoSiete07}</div></td>
 						</tr>
 						<tr>
 							<td><p class="formatos">Tarifa general 13%</p></td>
-							<td><div value="0">{totales.siete_iva_08.montoImpuestoSiete08}</div></td>
 							<td><div value="0">{totales.siete_iva_08.montoVentaSiete08}</div></td>
+							<td><div value="0">{totales.siete_iva_08.montoImpuestoSiete08}</div></td>
 						</tr>
 						<tr>
 							<td><p class="formatos">Total</p></td>
-							<td><div value="0">{totales.sieteTotal.totalImpuestoSiete}</div></td>
 							<td><div value="0">{totales.sieteTotal.totalVentasSiete}</div></td>
+							<td><div value="0">{totales.sieteTotal.totalImpuestoSiete}</div></td>
 						</tr>
 					</table>
 			   </div>
@@ -240,25 +240,12 @@
 			 <div class="formulasInfo">
 				<table id="tablaInfo" border="1">
 					<tr>
-						<td rowspan="2"><p class="formatos">Ventas al 13%</p></td>
-						<td>1<div id="info1"></td>
-						<td rowspan="2">15.79%</td>
+						<td rowspan="2"><p class="formatos">Tarifa 0% (Exento)</p></td>
+						<td>{totales.estadistica.tarifaCeroP}<div></div></td>
+						<td rowspan="2"><div>{totales.estadistica.tarifaCeroImp}</div>%</td>
 					</tr>
 					<tr>
-						<td>2<div id="info2"></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td rowspan="2"><p class="formatos">Ventas al 4%</p></td>
-						<td>3<div id="info3"></td>
-						<td rowspan="2">21.05%</td>
-					</tr>
-					<tr>
-						<td>3<div id="info3"></td>
+						<td>{totales.estadistica.totalVentasP}<div></td>
 					</tr>
 					<tr>
 						<td></td>
@@ -266,35 +253,100 @@
 						<td></td>
 					</tr>
 					<tr>
-						<td rowspan="2"><p class="formatos">Ventaas al 1%</p></td>
-						<td>4<div id="info4"></td>
-						<td rowspan="2">5<div id="info5"></td>
+						<td rowspan="2"><p class="formatos">Tarifa reducida 1%</p></td>
+						<td>{totales.estadistica.tarifaReducidaUnoP}<div></div></td>
+						<td rowspan="2"><div>{totales.estadistica.tarifaReducidaUnoPImp}</div>%</td>
 					</tr>
 					<tr>
-						<td>5<div id="info5"></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-						<tr>
-						<td rowspan="2"><p class="formatos">Ventas excentas</p></td>
-						<td>6<div id="info6"></td>
-						<td rowspan="2">21.11%</td>
-					</tr>
-					<tr>
-						<td>7<div id="info7"></td>
+						<td>{totales.estadistica.totalVentasP}<div></div></td>
 					</tr>
 					<tr>
 						<td></td>
 						<td></td>
 						<td></td>
 					</tr>
+					<tr>
+						<td rowspan="2"><p class="formatos">Tarifa reducida 2%</p></td>
+						<td>{totales.estadistica.tarifaReducidaDosP}<div></div></td>
+						<td rowspan="2"><div>{totales.estadistica.tarifaReducidaDosPImp}</div>%</td>
+					</tr>
+					<tr>
+						<td>{totales.estadistica.totalVentasP}<div></div></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td rowspan="2"><p class="formatos">Tarifa reducida 4%</p></td>
+						<td>{totales.estadistica.tarifareducidaCuatroP}<div></div></td>
+						<td rowspan="2"><div>{totales.estadistica.tarifareducidaCuatroPImp}</div>%</td>
+					</tr>
+					<tr>
+						<td>{totales.estadistica.totalVentasP}<div></div></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td rowspan="2"><p class="formatos">Transitorio 0%</p></td>
+						<td>{totales.estadistica.transitorioCeroP}<div></div></td>
+						<td rowspan="2"><div>{totales.estadistica.transitorioCeroPImp}</div>%</td>
+					</tr>
+					<tr>
+						<td>{totales.estadistica.totalVentasP}<div></div></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td rowspan="2"><p class="formatos">Transitorio 4%</p></td>
+						<td>{totales.estadistica.transitorioCuatroP}<div></div></td>
+						<td rowspan="2"><div>{totales.estadistica.transitorioCuatroPImp}</div>%</td>
+					</tr>
+					<tr>
+						<td>{totales.estadistica.totalVentasP}<div></div></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td rowspan="2"><p class="formatos">Transitorio 8%</p></td>
+						<td>{totales.estadistica.transitorioOchoP}<div></div></td>
+						<td rowspan="2"><div>{totales.estadistica.transitorioOchoPImp}</div>%</td>
+					</tr>
+					<tr>
+						<td>{totales.estadistica.totalVentasP}<div></div></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td rowspan="2"><p class="formatos">Tarifa general 13%</p></td>
+						<td>{totales.estadistica.tarifaGeneralP}<div></div></td>
+						<td rowspan="2"><div>{totales.estadistica.tarifaGeneralPImp}</div>%</td>
+					</tr>
+					<tr>
+						<td>{totales.estadistica.totalVentasP}<div></div></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>    
 					<tr>
 						<td><p class="formatos">Total</p></td>
-						<td></td>
-						<td>8<div id="info8">%</td>
+						<td>{totales.estadistica.totalVentasImp}<div></div></td>
+						<td>{totales.estadistica.totalVentasP}<div></div>%</td>
 					</tr>
 				</table>
 			 </div>
@@ -741,9 +793,59 @@
 				   tImpuesto:0,
 				   tVentas:0
 				}	
-			}
+			},
+		    estadistica:{
+			   tarifaCeroP:0,
+			   tarifaReducidaUnoP:0,
+			   tarifaReducidaDosP:0,
+			   tarifareducidaCuatroP:0,
+			   transitorioCeroP:0,
+			   transitorioCuatroP:0,
+			   transitorioOchoP:0,
+			   tarifaGeneralP:0,
+			   totalVentasP:0
+		    }
 		}
 
+/* 
+
+
+{totales.estadistica.tarifaCeroImp}
+{totales.estadistica.tarifaReducidaUnoPImp}
+{totales.estadistica.tarifaReducidaDosPImp}
+{totales.estadistica.tarifareducidaCuatroPImp}
+{totales.estadistica.transitorioCeroPImp}
+{totales.estadistica.transitorioCuatroPImp}
+{totales.estadistica.transitorioOchoPImp}
+{totales.estadistica.tarifaGeneralPImp}
+
+{totales.estadistica.totalVentasImp}  f
+
+
+{totales.estadistica.tarifaCeroP}
+{totales.estadistica.tarifaReducidaUnoP}
+{totales.estadistica.tarifaReducidaDosP}
+{totales.estadistica.tarifareducidaCuatroP}
+{totales.estadistica.transitorioCeroP}
+{totales.estadistica.transitorioCuatroP}
+{totales.estadistica.transitorioOchoP}
+{totales.estadistica.tarifaGeneralP}
+
+{totales.estadistica.totalVentasP}
+
+
+
+
+           01
+    02
+    03
+ 04
+      05
+    06
+      07
+        08
+totalVentasP
+*/
 /*-----------------------------------------------------------------------------------------*/
 
 		self.fechaInicio="";
@@ -912,8 +1014,8 @@
 									self.totales.uno_iva_01.montoImpuestoUno08 = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
 									self.totales.uno_iva_01.montoVentaUno08    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
 								}
-								unoImpuestoTotal += formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
-			                    unoVentaTotal    += formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5)
+								unoImpuestoTotal += montoImpuestoPivot
+								unoVentaTotal    += montoVentaPivot
 							}
 
 							/*----7----*/
@@ -950,8 +1052,8 @@
 									self.totales.siete_iva_08.montoImpuestoSiete08 = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
 									self.totales.siete_iva_08.montoVentaSiete08    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
 								}
-								sieteImpuestoTotal += formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
-								sieteVentaTotal    += formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5)
+								sieteImpuestoTotal += montoImpuestoPivot
+								sieteVentaTotal    += montoVentaPivot
                             }
 							/*----no tienen----*/
 
@@ -964,7 +1066,7 @@
                                 self.totales.otros.selectivoConsumo.cVentas    = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
 								self.totales.otros.selectivoConsumo.cImpuesto  = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
 							
-							}else if(modeloTabla.tipoImpuesto =='02'){ //otros
+							}else if(modeloTabla.tipoImpuesto =='99'){ //otros
                                 self.totales.otros.selectivoConsumo.oImpuesto  = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
 								self.totales.otros.selectivoConsumo.oVentas    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 	
 							}
