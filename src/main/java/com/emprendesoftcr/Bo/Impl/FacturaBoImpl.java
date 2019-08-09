@@ -139,7 +139,7 @@ public class FacturaBoImpl implements FacturaBo {
 	public Factura findByClaveAndEmpresa(String clave, Empresa empresa) throws Exception {
 		Factura factura = null;
 		try {
-			factura = facturaDao.findByConsecutivoAndEmpresa(clave, empresa);
+			factura = facturaDao.findByClaveAndEmpresa(clave, empresa);
 		} catch (Exception e) {
 			log.info("** Error  findByClaveAndEmpresa: " + e.getMessage() + " fecha " + new Date());
 
@@ -580,7 +580,7 @@ public class FacturaBoImpl implements FacturaBo {
 		} else {
 			resultado = Utils.Maximo5Decimales(subTotal) + Utils.Maximo5Decimales(montoImpuesto) + Utils.Maximo5Decimales(montoImpuesto1);
 		}
-
+    
 		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
 	}
 

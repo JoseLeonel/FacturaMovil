@@ -69,6 +69,16 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div  class="form-group ">
+                                        <label >Fecha Emision</label> 
+                                        <div  class="form-group input-group date datepickerFechaEmision" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
+                                            <input  type="text" class="form-control fechaEmisionSTR selectFechaEmision" name="fechaEmisionSTR" id="fechaEmisionSTR"  >
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>
+                                    </div>    
+
                                     <div class="form-group ">
                                         <label >{$.i18n.prop("factura.nota")}</label> 
                                         <input type="text" class="form-control nota" id="nota" name="nota" value="{factura.nota}">

@@ -321,7 +321,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -474,25 +474,25 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				recepcion.setComprobanteXml(base64);
 
 				// Ambiente de pruebas
-			//	recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 				// San Ana
 				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 				// Guanacaste
-				 //recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+				recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 				// JacoDos
-			//	 recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 				// Jaco
 				// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 				// Inventario
-				//recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				// Alajuela
-				 recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 				ObjectMapper mapperObj = new ObjectMapper();
 				String jsonStr = mapperObj.writeValueAsString(recepcion);
@@ -591,6 +591,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Override
 	public OpenIDConnectHacienda aceptarDocumento(Hacienda hacienda, OpenIDConnectHacienda openIDConnectHacienda) throws Exception {
 		try {
+			Boolean aplicarCambioEstadoFactura = Boolean.FALSE;
 			// Se verifica si es la misma empresa de la conexion anterior o bien si es null
 			if ((openIDConnectHacienda == null) || (openIDConnectHacienda != null && !hacienda.getEmpresa().getId().equals(openIDConnectHacienda.getEmpresa().getId()))) {
 
@@ -674,15 +675,18 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						Boolean rechazado = Boolean.TRUE;
 						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
 							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+							aplicarCambioEstadoFactura = Boolean.TRUE;
 						}
 						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_ACEPTADO_HACIENDA_STR)) {
 							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+							aplicarCambioEstadoFactura = Boolean.TRUE;
 						}
 						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
 							rechazado = Boolean.FALSE;
 							if (haciendaBD.getReintentosAceptacion() != null) {
 								if (haciendaBD.getReintentosAceptacion() > Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
 									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+									aplicarCambioEstadoFactura = Boolean.TRUE;
 									haciendaBD.setObservacion(FacturaElectronicaUtils.convertirStringToblod(Constantes.MAXIMO_REINTENTOS_ACEPTACION_STR));
 								} else {
 
@@ -694,9 +698,11 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						}
 						log.info("*status1: " + status);
 						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_ACEPTADO_HACIENDA_STR)) {
+							aplicarCambioEstadoFactura = Boolean.TRUE;
 							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
 						}
 						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
+							aplicarCambioEstadoFactura = Boolean.TRUE;
 							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
 						}
 						log.info("*status2: " + status);
@@ -709,6 +715,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 									if (haciendaBD.getReintentosAceptacion() != null) {
 										if (haciendaBD.getReintentosAceptacion() > Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
 											haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+											aplicarCambioEstadoFactura = Boolean.TRUE;
 											haciendaBD.setObservacion(FacturaElectronicaUtils.convertirStringToblod(Constantes.MAXIMO_REINTENTOS_ACEPTACION_STR));
 										} else {
 
@@ -722,12 +729,14 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_PARCIAL);
 								} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.HACIENDA_ESTADO_ACEPTADO_ACEPTADO_HACIENDA_STR)) {
 									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+									aplicarCambioEstadoFactura = Boolean.TRUE;
 								}
 							}
 						} else {
 							if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
 								if (haciendaBD.getReintentosAceptacion() == Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
 									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
+									aplicarCambioEstadoFactura = Boolean.TRUE;
 								} else {
 									haciendaBD.setReintentosAceptacion(haciendaBD.getReintentosAceptacion() == null ? 1 : haciendaBD.getReintentosAceptacion() + 1);
 									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA);
@@ -737,18 +746,25 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						haciendaBD.setObservacion(respuestaHacienda.mensajeHacienda() != null ? FacturaElectronicaUtils.convertirStringToblod(respuestaHacienda.mensajeHacienda().detalleMensaje()) : null);
 						haciendaBD.setCallBack(Constantes.CALLBACKURL_NO);
 						haciendaBo.modificar(haciendaBD);
+						if(aplicarCambioEstadoFactura) {
+							cambiarEstado(hacienda);	
+						}
 					} else {// sumar reintententos
 						if (body.contains("El comprobante") && body.contains("no ha sido recibido")) {
 							hacienda.setxErrorCause(FacturaElectronicaUtils.convertirStringToblod(body));
 							hacienda.setObservacion(FacturaElectronicaUtils.convertirStringToblod(body));
 							hacienda.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
+							aplicarCambioEstadoFactura = Boolean.TRUE;
 
 						} else {
 							hacienda.setReintentosAceptacion(hacienda.getReintentosAceptacion() == null ? 1 : hacienda.getReintentosAceptacion() + 1);
 						}
 						hacienda.setCallBack(Constantes.CALLBACKURL_NO);
 						haciendaBo.modificar(hacienda);
-
+						if(aplicarCambioEstadoFactura) {
+							cambiarEstado(hacienda);	
+						}
+						
 					}
 				}
 			}
@@ -758,6 +774,41 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 
 		return openIDConnectHacienda;
+	}
+
+	private void cambiarEstado(Hacienda hacienda) throws Exception {
+		try {
+			if (hacienda != null) {
+				if (hacienda.getTipoDoc().equals(Constantes.HACIENDA_TIPODOC_COMPRAS)) {
+//          RecepcionFactura recepcionFactura = recepcionFacturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(),hacienda.getEmpresa());
+//          if (recepcionFactura != null) {
+//						if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+//							recepcionFactura.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+//						} else if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+//							recepcionFactura.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+//						}
+//						recepcionFacturaBo.modificar(recepcionFactura);
+//						}
+
+					
+				} else {
+					Factura factura = facturaBo.findByClaveAndEmpresa(hacienda.getClave(), hacienda.getEmpresa());
+					if (factura != null) {
+						if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+							factura.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+						} else if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+							factura.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+						}
+						facturaBo.modificar(factura);
+
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			log.error("** Error  cambiar el estado Factura: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
+			throw e;
+		}
 	}
 
 	/**
@@ -1145,11 +1196,11 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/12 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
-//			procesoFirmadoComprasSimplificadas();
+			procesoFirmadoComprasSimplificadas();
 			log.info("Inicio el proceso de firmado  {}", new Date());
 
 			Collection<Factura> lista = facturaBo.findByEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE, Constantes.FACTURA_ESTADO_REFIRMAR_DOCUMENTO);
@@ -1308,8 +1359,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 										}
 									}
-									
-									
+
 								}
 							}
 						}

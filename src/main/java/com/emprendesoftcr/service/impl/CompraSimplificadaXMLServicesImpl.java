@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
-import com.emprendesoftcr.Bo.CompraSimplificadaBo;
 import com.emprendesoftcr.Bo.DetalleCompraSimplificadaBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
@@ -21,7 +20,6 @@ import com.emprendesoftcr.modelo.Certificado;
 import com.emprendesoftcr.modelo.CompraSimplificada;
 import com.emprendesoftcr.modelo.DetalleCompraSimplificada;
 import com.emprendesoftcr.modelo.Empresa;
-import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.service.CompraSimplificadaXMLServices;
 import com.emprendesoftcr.service.FirmaElectronicaService;
 
@@ -43,8 +41,7 @@ public class CompraSimplificadaXMLServicesImpl implements CompraSimplificadaXMLS
 	@Autowired
 	private FirmaElectronicaService	firmaElectronicaService;
 
-	@Autowired
-	private CompraSimplificadaBo		compraSimplificadaBo;
+
 
 	@Autowired
 	private DetalleCompraSimplificadaBo								detalleCompraSimplificadaBo;
@@ -57,21 +54,21 @@ public class CompraSimplificadaXMLServicesImpl implements CompraSimplificadaXMLS
 	public String getCrearXMLSinFirma(CompraSimplificada compraSimplificada) throws Exception {
 		String xml = Constantes.EMPTY;
 		try {
-			Date fecha = new Date();
-			long tiempoInicial = compraSimplificada.getCreated_at().getTime();
-			long tiempoFinal = fecha.getTime();
-			long resta = tiempoFinal - tiempoInicial;
+//			Date fecha = new Date();
+//			long tiempoInicial = compraSimplificada.getCreated_at().getTime();
+//			long tiempoFinal = fecha.getTime();
+//			long resta = tiempoFinal - tiempoInicial;
 			// el metodo getTime te devuelve en mili segundos para saberlo en mins debes hacer
-			if (resta > 0) {
-				resta = resta / (1000 * 60);
-			}
-
-			if (resta > 80) {
-				compraSimplificada.setFechaEmision(fecha);
-				compraSimplificadaBo.modificar(compraSimplificada);
-			} else {
-				fecha = compraSimplificada.getCreated_at();
-			}
+//			if (resta > 0) {
+//				resta = resta / (1000 * 60);
+//			}
+//
+//			if (resta > 80) {
+//				compraSimplificada.setFechaEmision(fecha);
+//				compraSimplificadaBo.modificar(compraSimplificada);
+//			} else {
+//				fecha = compraSimplificada.getCreated_at();
+//			}
 			String observacion = Constantes.EMPTY;
 
 			String date = FacturaElectronicaUtils.rfc3339(compraSimplificada.getFechaEmision());

@@ -273,7 +273,7 @@ public class HaciendasController {
 		String xmlFirmado = Constantes.EMPTY;
 		String xmlSinFirmarRespuesta = Constantes.EMPTY;
 		String xmlFirmadoRespuesta = Constantes.EMPTY;
-
+		Boolean aplicarCambioEstadoFactura = Boolean.TRUE;
 		lock.lock();
 		RespuestaHaciendaXML respuesta = new RespuestaHaciendaXML();
 		try {
@@ -330,16 +330,19 @@ public class HaciendasController {
 					}
 					if (resputaStatusHacienda.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
 						estadoHacienda = Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA;
+						aplicarCambioEstadoFactura = Boolean.TRUE;
 					} else if (resputaStatusHacienda.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
 						estadoHacienda = Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA;
 					} else if (resputaStatusHacienda.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_ACEPTADO_HACIENDA_STR)) {
 						estadoHacienda = Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA;
+						aplicarCambioEstadoFactura = Boolean.TRUE;
 					}
 					// Hacienda no envia mensaje
 					if (respuestaHacienda.mensajeHacienda() != null) {
 						if (respuestaHacienda.mensajeHacienda().mensaje() != null) {
 							if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO)) {
 								estadoHacienda = Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA;
+								aplicarCambioEstadoFactura = Boolean.TRUE;
 							} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_RECHAZADO)) {
 								estadoHacienda = Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA;
 							} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.ESTADO_HACIENDA_ACEPTADO_PARCIAL)) {
@@ -364,6 +367,11 @@ public class HaciendasController {
 						}
 
 					}
+					if(aplicarCambioEstadoFactura) {
+						cambiarEstado(hacienda);	
+					}
+	
+
 				}
 			}
 			log.info("Estado para actualizar Factura: {}", estadoHacienda);
@@ -379,6 +387,42 @@ public class HaciendasController {
 		respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.callback.exitoso"));
 		return respuestaServiceValidator;
 
+	}
+	
+	
+	private void cambiarEstado(Hacienda hacienda) throws Exception {
+		try {
+			if (hacienda != null) {
+				if (hacienda.getTipoDoc().equals(Constantes.HACIENDA_TIPODOC_COMPRAS)) {
+//          RecepcionFactura recepcionFactura = recepcionFacturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(),hacienda.getEmpresa());
+//          if (recepcionFactura != null) {
+//						if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+//							recepcionFactura.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+//						} else if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+//							recepcionFactura.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+//						}
+//						recepcionFacturaBo.modificar(recepcionFactura);
+//						}
+
+					
+				} else {
+					Factura factura = facturaBo.findByClaveAndEmpresa(hacienda.getClave(), hacienda.getEmpresa());
+					if (factura != null) {
+						if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+							factura.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+						} else if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+							factura.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+						}
+						facturaBo.modificar(factura);
+
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			log.error("** Error  cambiar el estado Factura: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
+			throw e;
+		}
 	}
 
 	/**

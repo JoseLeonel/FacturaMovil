@@ -34,7 +34,23 @@
 	<script type="text/javascript" src="/js/views/facturas/listaFacturas.js"></script>
 	<script type = "riot/tag"  src="/js/views/components/facturas/listaFacturas.tag" ></script>
 	<script type = "riot/tag"  src="/js/views/components/facturas/imprimirPTV.tag" ></script>
+	<style>
+	.tituloFacturas{
+	    font-size: 24px;
+        color: black;
+	}
+	.formatoEntrada{
+		margin-bottom: 1%;
+}
+	}
+	.scrlollT{
+	overflow: scroll;
+	}
+	html {
+  scroll-behavior: smooth;
+}
 	
+	</style>
     
 </head>
 <body>
@@ -44,14 +60,14 @@
     <!-- Titulos -->
     <div  class="row "  >
         <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <h1 > <i class="fa fa-calculator" th:text="#{facturas.facturas}"></i ></h1>
+             <i class="fa fa-calculator tituloFacturas" th:text="#{facturas.facturas}"></i >
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
         </div>
     </div>
     
     <!-- Inicio Filtros-->
-<div class="mostrarListadoDeFacturas"  id="mostrarListadoDeFacturas">
+<div class="mostrarListadoDeFacturas "  id="mostrarListadoDeFacturas">
         <div class="row" >
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="text-left advanced-search-grid" style="padding : 2px;  cursor: pointer;" id="panelFiltros">
@@ -91,7 +107,7 @@
                                         <option  data-tokens="Todos"   value="0"  >Todos</option>
                                     </select>
                                 </div>  
-                            </div>    
+                            </div>  
                              
                         </div>
                         <div class= "row">
@@ -103,16 +119,36 @@
                                     </select>
                                  </div>  
                             </div>
+                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Actividad Economica </label>  
+                                    <select  class="form-control selectActividadEconocimica" id= "actividadEconomica" name="actividadEconomica" >
+                                    </select>
+                                </div>  
+                            </div>    
+                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Estado </label>  
+                                    <select  class="form-control selectEstado" id= "estado" name="estado" >
+                                    	<option  value="0"  th:text="#{todos.select}"></option>
+                                    	<option  value="2"  >Facturada</option>
+                                    	<option  value="5"  >Anulada</option>
+                                    	<option  value="6"  >Aceptada</option>
+                                    	<option  value="7"  >No Aceptada</option>
+                                    </select>
+                                </div>  
+                            </div>    
+
                         </div>    
                     </form>  
                 </div>
             </div>
-            <div class="col-xs-12 text-right">
+            <div class="col-xs-12 text-right formatoEntrada">
                 <button  id="bontonBusqueda" type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
             	<button  class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
             </div>
         </div>
-        <br>
+       
    <!-- Listado  -->
     
         <div class="row">
@@ -120,7 +156,7 @@
                 <div class="box">
                     <div class="box-body">
                         <div class="planel-body" >
-                            <div class="row" >        
+                            <div class="row scrlollT" >        
                                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
                                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="97%">
                                         <thead>

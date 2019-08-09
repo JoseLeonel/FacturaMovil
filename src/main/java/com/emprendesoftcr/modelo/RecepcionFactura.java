@@ -230,6 +230,8 @@ public class RecepcionFactura implements Serializable {
 	private Integer							tipoGasto;
 	
 	
+	
+	
 	@Transient
 	private String detalles;
 

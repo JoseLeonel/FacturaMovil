@@ -348,7 +348,7 @@
 
                             <div class="seleccionOtroPrecioVenta">
                                 <div class="opcionPrecioPublico">
-                                    <label class="titleListaPrecio">Actividades Comerciales </label>  
+                                    <label class="titleListaPrecio">Actividades Economicas </label>  
                                     <select onchange= {__AsignarActividad} class="form-control selectActividadComercial"  name="selectActividadComercial" id="selectActividadComercial" >
                                         <option  each={empresaActividadComercial}  value="{codigo}"   >{codigo}-{descripcion}</option>
                                     </select>
@@ -1112,7 +1112,7 @@
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
              actualizaElPlazoDiasCredito();
-             //disableF5(evento);
+  //           disableF5(evento);
         }, false );
 
       
@@ -1134,7 +1134,31 @@
     }, false );
      
     })
-    function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
+
+
+    
+ //   function disableF5(e) { 
+   //    // alert(e.keyCode)
+//        if ((e.which || e.keyCode) == 116) e.preventDefault(); 
+//        if ((e.which || e.keyCode) == 117) e.preventDefault(); 
+//        if(e.target.id != 'codigo' && e.target.id != 'precioVenta' && e.target.id != 'nota'
+//           && e.target.id != 'correoAlternativo' && e.target.id != 'nombreFactura' &&
+//           e.target.id != 'totalEfectivo' && e.target.id != 'totalTarjeta' &&
+//           e.target.id != 'totalBanco' && e.target.id != 'plazoCreditoL' && e.target.id != 'fechaCredito'
+//           && e.target.id != 'aplicarDescuento' && e.target.id != 'cambiarCantidadArticulo'){
+//           if ((e.which || e.keyCode) == 8) {
+//               $('.codigo').focus()
+//               e.preventDefault()
+//              
+//               }; 
+//           if ((e.which || e.keyCode) == 13) {
+//               $('.codigo').focus()
+//               e.preventDefault()
+//               
+//               }; 
+//        }
+//         
+//        }
 
 
 
@@ -3113,9 +3137,12 @@ function __nuevoArticuloAlDetalle(cantidad){
 
 function verificarTarifa(){
     if(parseFloat(self.articulo.impuesto) > 0 ||  parseFloat(self.articulo.impuesto1) > 0){
-        if (self.articulo.codigoTarifa == "" && self.articulo.codigoTarifa1 == ""){
-            return true 
-        }
+       if (self.articulo.tipoImpuesto =='01' ||  self.articulo.tipoImpuesto =='07'){
+            if (self.articulo.codigoTarifa == "" && self.articulo.codigoTarifa1 == ""){
+                return true 
+            }
+    
+       }
     }
     return false
 }

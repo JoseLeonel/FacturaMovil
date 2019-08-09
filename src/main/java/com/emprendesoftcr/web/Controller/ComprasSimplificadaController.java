@@ -106,7 +106,7 @@ public class ComprasSimplificadaController {
 	public String listarComprasSimplificadas(ModelMap model) {
 		return "/views/simplificado/ListarComprasSimplificado";
 	}
-	
+
 	@RequestMapping(value = "/ListarConsultaComprasSimplificado", method = RequestMethod.GET)
 	public String listarComprasConsultaSimplificadas(ModelMap model) {
 		return "/views/simplificado/ListarConsultaComprasSimplificado";
@@ -117,7 +117,18 @@ public class ComprasSimplificadaController {
 	public RespuestaServiceValidator crearFactura(HttpServletRequest request, ModelMap model, @ModelAttribute CompraSimplificadaCommand compraSimplificadaCommand, BindingResult result, SessionStatus status) {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
+			if (compraSimplificadaCommand.getFechaEmisionSTR() != null) {
+				if (!compraSimplificadaCommand.getFechaEmisionSTR().equals(Constantes.EMPTY)) {
+					Date fechaEmision = Utils.parseDate(compraSimplificadaCommand.getFechaEmisionSTR());
+					compraSimplificadaCommand.setFechaEmision(fechaEmision);
 
+				} else {
+					compraSimplificadaCommand.setFechaEmision(null);
+				}
+
+			} else {
+				compraSimplificadaCommand.setFechaEmision(null);
+			}
 			Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 			return this.crearFactura(compraSimplificadaCommand, result, usuario);
 		} catch (Exception e) {
@@ -167,6 +178,18 @@ public class ComprasSimplificadaController {
 					}
 				}
 			}
+			if (compraSimplificadaCommand.getFechaEmision() == null) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("compraSimplificada.error.fecha.emision", result.getAllErrors());
+			}
+			if (compraSimplificadaCommand.getFechaEmision() != null) {
+				Date fecha = new Date();
+				long tiempoInicial = compraSimplificadaCommand.getFechaEmision().getTime();
+				long tiempoFinal = fecha.getTime();
+				if (tiempoInicial > tiempoFinal) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("compraSimplificada.fecha.emision.mayor.hoy", result.getAllErrors());
+				}
+			}
+
 			if (compraSimplificadaCommand.getTipoDoc() == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("compraSimplificada.error.tipo.doc", result.getAllErrors());
 			}

@@ -12,7 +12,7 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @BaseNativeQuery(name = "proformas", query = "SELECT facturas.id,facturas.consecutivo_proforma,facturas.usuario_id,facturas.fecha_emision,facturas.cliente_id,facturas.nombre_factura,facturas.total_impuesto,facturas.total_descuentos,facturas.total_comprobante,usuarios.nombre_usuario,clientes.nombre_completo,facturas.empresa_id,facturas.estado,facturas.tipo_doc,facturas.numero_consecutivo FROM facturas" + " left join clientes on clientes.id = facturas.cliente_id " + " left JOIN usuarios on usuarios.id = facturas.usuario_id " + " left join empresas on empresas.id = facturas.empresa_id " 
-+ " where facturas.empresa_id = :ID_EMPRESA and facturas.estado = :ESTADO and facturas.tipo_doc ='88' ")
++ " where facturas.empresa_id = :ID_EMPRESA and facturas.estado = :ESTADO and facturas.tipo_doc ='88' order by facturas.fecha_emision desc")
 @Entity
 public class ProformasByEmpresaAndEstado implements Serializable {
 

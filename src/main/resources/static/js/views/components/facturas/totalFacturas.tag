@@ -54,7 +54,7 @@
                 <div  show={mostrarFiltros}  class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
                     <form id="filtros" name="filtros">              
                         <div class= "row">
-                            <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label class="knob-label" >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
                                     <div  class="form-group input-group date datepickerFechaInicio" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
@@ -65,7 +65,7 @@
                                     </div>	                             
                                 </div>  
                             </div>             
-                            <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label class="knob-label" >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
@@ -77,7 +77,19 @@
                                         </div>	                             
                                     </div>
                                 </div>  
-                            </div>                                                
+                            </div>   
+							 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Estado </label>  
+                                    <select  class="form-control selectEstado" id= "estado" name="estado" >
+                                    	<option  value="0"  th:text="#{todos.select}"></option>
+                                    	<option  value="2"  >Facturada</option>
+                                    	<option  value="5"  >Anulada</option>
+                                    	<option  value="6"  >Aceptada</option>
+                                    	<option  value="7"  >No Aceptada</option>
+                                    </select>
+                                </div>  
+                            </div>                                                 
                         </div>
                     </form>  
                 </div>

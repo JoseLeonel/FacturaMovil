@@ -527,7 +527,7 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 			compraSimplificada.setUsuarioCreacion(usuario);
 			compraSimplificada.setEmpresa(usuario.getEmpresa());
 			compraSimplificada.setProveedorSimplificado(compraSimplificadaCommand.getProveedorSimplificado());
-			compraSimplificada.setFechaEmision(new Date());
+			compraSimplificada.setFechaEmision(compraSimplificadaCommand.getFechaEmision());
 			compraSimplificada.setMedioEfectivo(Constantes.EMPTY);
 			compraSimplificada.setCodigoActividad(compraSimplificadaCommand.getCodigoActividad() == null ? usuario.getEmpresa().getCodigoActividad() : compraSimplificadaCommand.getCodigoActividad());
 			if (compraSimplificadaCommand.getTotalEfectivo() > Constantes.ZEROS_DOUBLE) {
@@ -578,7 +578,7 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 			compraSimplificada.setEstado(compraSimplificadaCommand.getEstado());
 			compraSimplificada.setCreated_at(new Date());
 			// }
-			compraSimplificada.setFechaEmision(new Date());
+			compraSimplificada.setFechaEmision(compraSimplificadaCommand.getFechaEmision());
 
 		} catch (Exception e) {
 			throw e;

@@ -17,6 +17,8 @@ public class CompraSimplificadaCommand {
 	private Integer								numeroConsecutivo;
 
 	private Date									fechaEmision;
+	
+	private String									fechaEmisionSTR;
 
 	private String								condicionVenta;
 
@@ -469,6 +471,16 @@ public class CompraSimplificadaCommand {
 
 	public void setVersionEsquemaXML(Integer versionEsquemaXML) {
 		this.versionEsquemaXML = versionEsquemaXML;
+	}
+
+	
+	public String getFechaEmisionSTR() {
+		return fechaEmisionSTR;
+	}
+
+	
+	public void setFechaEmisionSTR(String fechaEmisionSTR) {
+		this.fechaEmisionSTR = fechaEmisionSTR;
 	}
 
 }
