@@ -433,25 +433,25 @@ public class FacturasController {
 	 */
 	@RequestMapping(value = "/TotalFacturasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public TotalFacturaCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam) {
+	public TotalFacturaCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam,@RequestParam Integer estado) {
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		return facturaBo.sumarFacturas(fechaInicio, fechaFinal, usuario.getEmpresa().getId());
+		return facturaBo.sumarFacturas(fechaInicio, fechaFinal, usuario.getEmpresa().getId(),estado);
 	}
 
 	@RequestMapping(value = "/EnvioDetalleTotalFacturasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public void envioDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo) {
+	public void envioDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo,@RequestParam Integer estado) {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		// Se obtiene los totales
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		TotalFacturaCommand facturaCommand = facturaBo.sumarFacturas(fechaInicio, fechaFinal, usuario.getEmpresa().getId());
+		TotalFacturaCommand facturaCommand = facturaBo.sumarFacturas(fechaInicio, fechaFinal, usuario.getEmpresa().getId(),estado);
 
 		// Se buscan las facturas
-		Collection<Factura> facturas = facturaBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFinal, usuario.getEmpresa().getId());
+		Collection<Factura> facturas = facturaBo.facturasRangoEstado(estado, fechaInicio, fechaFinal, usuario.getEmpresa().getId());
 
 		// Se prepara el excell
 		ByteArrayOutputStream baos = createExcelFacturas(facturas);
@@ -472,9 +472,21 @@ public class FacturasController {
 		} else {
 			listaCorreos.add(usuario.getEmpresa().getCorreoElectronico());
 		}
+		String estadoDesc = Constantes.EMPTY;
+		if(estado == 2) {
+			estadoDesc = "Facturados";
+		}if(estado == 5) {
+			estadoDesc = "Anulados";
+		}if(estado == 6) {
+			estadoDesc = "Aceptados";
+		}if(estado == 7) {
+			estadoDesc = "Rechazados";
+		}
+		
 
 		Map<String, Object> modelEmail = new HashMap<>();
 		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
+		modelEmail.put("estadoDesc", estadoDesc);
 		modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
 		modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinal));
 		modelEmail.put("total", facturaCommand.getTotal() != null ? facturaCommand.getTotalSTR() : Constantes.ZEROS);
@@ -489,14 +501,14 @@ public class FacturasController {
 
 	// Descarga de manuales de usuario de acuerdo con su perfil
 	@RequestMapping(value = "/DescargarDetalleTotalFacturasAjax.do", method = RequestMethod.GET)
-	public void descargarDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam) throws IOException, Exception {
+	public void descargarDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam,Integer estado) throws IOException, Exception {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		Collection<Factura> facturas = facturaBo.facturasRangoEstado(Constantes.FACTURA_ESTADO_FACTURADO, fechaInicio, fechaFin, usuario.getEmpresa().getId());
+		Collection<Factura> facturas = facturaBo.facturasRangoEstado(estado, fechaInicio, fechaFin, usuario.getEmpresa().getId());
 
 		String nombreArchivo = "FacturasMensuales.xls";
 		response.setContentType("application/octet-stream");

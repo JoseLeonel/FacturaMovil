@@ -56,6 +56,16 @@
                                     </select>
                                 </div>  
                             </div>
+                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Estado </label>  
+                                    <select  class="form-control selectEstado estado" id= "estado" name="estado" >
+                                     	<option  value="2"  >Facturada</option>
+                                    	<option  value="5"  >Anulada</option>
+                                    	
+                                    </select>
+                                </div>  
+                            </div>            
 
                         </div>
                     </form>  
@@ -488,7 +498,7 @@ __DescargarExcel(){
     if(_validarDiasAConsultar()){
         return true
     }
-    var url = "DescargarDetallexCodigoAjax.do?fechaInicialParam="+  $('#fechaInicial').val()+ "&fechaFinalParam=" + $('#fechaFinal').val()+"&tipoImpuesto=" + $('#tipoImpuesto').val()
+    var url = "DescargarDetallexCodigoAjax.do?fechaInicialParam="+  $('#fechaInicial').val()+ "&fechaFinalParam=" + $('#fechaFinal').val()+"&tipoImpuesto=" + $('#tipoImpuesto').val()+"&estado="+$(".estado").val()
     location.href = url;
 }
 
@@ -551,6 +561,7 @@ __Busqueda(){
         	fechaInicio:$('#fechaInicial').val(),
         	fechaFin:$('#fechaFinal').val(),
             tipoImpuesto:$('#tipoImpuesto').val(),
+            estado:$('#estado').val(),
         };
        if(_validarDiasAConsultar()){
            return true;
@@ -565,6 +576,7 @@ __Busqueda(){
             success: function (data) {
 	        	self.totales = data;
 	        	self.mostrarDetalle = true;
+                self.estado = $(".estado").val()
 	        	
 			    self.update();
 	        },

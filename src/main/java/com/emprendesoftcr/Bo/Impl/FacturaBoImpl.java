@@ -1249,8 +1249,8 @@ public class FacturaBoImpl implements FacturaBo {
 	}
 
 	@Override
-	public TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa) {
-		return facturaDao.sumarFacturas(fechaInicio, fechaFinal, idEmpresa);
+	public TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa,Integer estado) {
+		return facturaDao.sumarFacturas(fechaInicio, fechaFinal, idEmpresa,estado);
 	}
 
 	@Override

@@ -27,7 +27,7 @@ public interface FacturaDao {
 	
 	Collection<Factura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma);
 	
-	TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa);
+	TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa,Integer estado);
 	
 	List<Object[]> proformasByState(Integer estado, Integer idEmpresa);
 	
