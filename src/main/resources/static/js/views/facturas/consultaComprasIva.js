@@ -14,8 +14,8 @@ var _Init = function () {
  */
 function cargaMantenimiento() {
 	var parametros = {
-		url:"listarConsutaIvaAjax.do",
-		titulo:"Ventas"
+		url:"listarConsutaComprasIvaAjax.do",
+		titulo:"Compras"
 	}
     riot.mount('consulta-iva',{parametros:parametros});   
 	
