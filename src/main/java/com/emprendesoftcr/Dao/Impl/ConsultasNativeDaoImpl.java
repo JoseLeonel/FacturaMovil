@@ -12,6 +12,7 @@ import com.emprendesoftcr.Dao.ConsultasNativeDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.sqlNativo.BaseNativeQuery;
+import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
@@ -149,6 +150,18 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		queryStr = queryStr.replaceAll(":ESTADO", estado.toString());
 		Query query = entityManager.createNativeQuery(queryStr, ConsultaIVANative.class);
 		return (Collection<ConsultaIVANative>) query.getResultList();
+	}
+	
+	
+	public Collection<ConsultaComprasIvaNative> findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(Empresa empresa, String fechaInicial , String fechaFinal, Integer estado, Integer codigoActividadComercial){
+		
+		String queryStr = getQueryBase(ConsultaComprasIvaNative.class);
+		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
+		queryStr = queryStr.replaceAll(":FECHAINICIAL","'"+ fechaInicial+"'");
+		queryStr = queryStr.replaceAll(":FECHAFINAL","'"+ fechaFinal+"'");
+		queryStr = queryStr.replaceAll(":ESTADO", estado.toString());
+		Query query = entityManager.createNativeQuery(queryStr, ConsultaComprasIvaNative.class);
+		return (Collection<ConsultaComprasIvaNative>) query.getResultList();
 	}
 	
 	@SuppressWarnings("unchecked")

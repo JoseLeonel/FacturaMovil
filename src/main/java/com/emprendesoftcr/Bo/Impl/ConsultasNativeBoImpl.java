@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Dao.ConsultasNativeDao;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
@@ -86,6 +87,12 @@ public class ConsultasNativeBoImpl implements ConsultasNativeBo {
 	public Collection<ConsultaIVANative> findByEmpresaAndEstadoAndFechasAndActividadComercial(Empresa empresa,
 			String fechaInicial, String fechaFinal, Integer estado, Integer codigoActividadComercial) {
 		return consultasNativeDao.findByEmpresaAndEstadoAndFechasAndActividadComercial(empresa, fechaInicial, fechaFinal, estado, codigoActividadComercial);
+	}
+	
+	@Override
+	public Collection<ConsultaComprasIvaNative> findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(Empresa empresa, 
+			String fechaInicial , String fechaFinal, Integer estado, Integer codigoActividadComercial){
+		return consultasNativeDao.findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(empresa, fechaInicial, fechaFinal, estado, codigoActividadComercial);
 	}
 
 	

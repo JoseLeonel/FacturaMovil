@@ -77,6 +77,7 @@ import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.Vendedor;
+import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
@@ -89,6 +90,7 @@ import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.pdf.ReportePdfView;
 import com.emprendesoftcr.service.ProcesoHaciendaService;
 import com.emprendesoftcr.validator.FacturaFormValidator;
+import com.emprendesoftcr.web.command.ConsultaComprasIvaCommand;
 import com.emprendesoftcr.web.command.ConsultaIvaCommand;
 import com.emprendesoftcr.web.command.FacturaAnulacionCommand;
 import com.emprendesoftcr.web.command.FacturaCommand;
@@ -999,6 +1001,23 @@ public class FacturasController {
 //		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
 	
+	
+	
+	
+//---- rolo
+	
+	
+	/***
+	 * 
+	 * @param request
+	 * @param response
+	 * @param fechaInicio
+	 * @param fechaFin
+	 * @param estado
+	 * @param selectActividadComercial
+	 * @return
+	 */
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/listarConsutaComprasIvaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
@@ -1021,11 +1040,11 @@ public class FacturasController {
 			idUsuario = usuarioSesion.getId();
 		}
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-		Collection<ConsultaIVANative> objetos = consultasNativeBo.findByEmpresaAndEstadoAndFechasAndActividadComercial(usuarioSesion.getEmpresa(), inicio1, fin1, estado, selectActividadComercial);
+		Collection<ConsultaComprasIvaNative> objetos = consultasNativeBo.findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(usuarioSesion.getEmpresa(), inicio1, fin1, estado, selectActividadComercial);
 		List<Object> solicitudList = new ArrayList<Object>();
 		if (objetos != null) {
-			for (ConsultaIVANative consultaIVANative : objetos) {
-				solicitudList.add(new ConsultaIvaCommand(consultaIVANative));
+			for (ConsultaComprasIvaNative consultaComprasIvaNative : objetos) {
+				solicitudList.add(new ConsultaComprasIvaCommand(consultaComprasIvaNative));
 			}
 		}
 		respuestaService.setRecordsTotal(0l);
