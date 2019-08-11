@@ -31,7 +31,27 @@ public class MapEnums {
        put(10, "Con Error")
        .build();
 
-	
+   public static final Map<String, String> ENUM_TIPOS_IMPUESTOS = ImmutableMap.<String, String>builder()
+   		.put("01", "Impuesto al Valor Agregado").
+        put("02", "Impuesto Selectivo de Consumo").
+        put("03", "Impuesto Único a los Combustibles").
+        put("07", "IVA (calculo especial)").
+        put("12", "Impuesto Específico al Cemento").
+        put("99", "Otros")
+        .build();
+
+   public static final Map<String, String> ENUM_TARIFAS_IMPUESTOS= ImmutableMap.<String, String>builder()
+    		.put("01", "Tarifa 0% (Exento)").
+         put("02", "Tarifa reducida 1%").
+         put("03", "Tarifa reducida 2%").
+         put("04", "Tarifa reducida 4%").
+         put("05", "Transitorio 0%").
+         put("06", "Transitorio 4%").
+         put("07", "Transitorio 8%").
+         put("08", "Tarifa general 13%")
+         .build();
+   
+   
     public static final Map<String, String> ENUM_TIPOS_IDENTIFICACION = ImmutableMap.of("01", "Cedula Fisica",
             "02", "Cedula Juridica",
             "03", "DIMEX",

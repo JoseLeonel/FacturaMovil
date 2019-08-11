@@ -64,7 +64,7 @@ public class ReportePdfView {
 		tabla_tercera_tabla.setWidthPercentage(100);
 		tabla_tercera_tabla.setTotalWidth(570f);
 		tabla_tercera_tabla.setLockedWidth(true);
-		float[] header_espacio_03 = { 23, 60, 135, 18, 28, 35, 17,  35, 40 };
+		float[] header_espacio_03 = { 23, 60, 135, 18, 28, 35, 17, 35, 40 };
 		tabla_tercera_tabla.setWidths(header_espacio_03);
 		tabla_tercera_tabla.setSplitLate(false);
 		tabla_tercera_tabla.setSplitRows(false);
@@ -102,8 +102,8 @@ public class ReportePdfView {
 		for (DetalleFacturaElectronica item : fac_electro.getDetalleFacturaElectronica()) {
 			// Total Impuesto
 			if (!item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA)) {
-				totalImpuesto = item.getImpuesto() > Constantes.ZEROS_DOUBLE ? totalImpuesto + item.getImpuesto() : Constantes.ZEROS_DOUBLE;
-				totalExoneracion = item.getMontoExoneracion() != null ? totalExoneracion + item.getMontoExoneracion() : Constantes.ZEROS_DOUBLE;
+				totalImpuesto = item.getImpuesto() > Constantes.ZEROS_DOUBLE ? totalImpuesto + item.getImpuesto() : totalImpuesto ;
+				totalExoneracion = item.getMontoExoneracion() != null ? totalExoneracion + item.getMontoExoneracion() : totalExoneracion ;
 			}
 
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getLinea()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT));
@@ -116,10 +116,10 @@ public class ReportePdfView {
 
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getCantidad()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT));
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getPrecioU()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT));
-			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA)?Constantes.EMPTY:item.getTarifaIva()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
+			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA) ? Constantes.EMPTY : item.getTarifaIva()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 //			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA)?Constantes.EMPTY:item.get_impuesto1()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 
-			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA)?Constantes.ZEROS_DOUBLE:item.getImpuesto()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
+			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA) ? Constantes.ZEROS_DOUBLE : item.getImpuesto()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(Utils.formateadorMiles(item.getTotal()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_RIGHT, Rectangle.LEFT | Rectangle.RIGHT));
 			indice_++;
 			/*

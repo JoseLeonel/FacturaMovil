@@ -121,4 +121,10 @@ public class EmpresaBoImpl implements EmpresaBo {
 		
 		return empresaDao.generarConsecutivoCompraSimplificada(empresa, usuario);
 	}
+
+	@Override
+	public String generarConsecutivoNotaCreditoInterno(Empresa empresa, Usuario usuario) throws Exception {
+		
+		return empresaDao.generarConsecutivoNotaCreditoInterno(empresa, usuario);
+	}
 }

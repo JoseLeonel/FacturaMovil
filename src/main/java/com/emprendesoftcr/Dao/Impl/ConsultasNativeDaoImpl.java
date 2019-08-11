@@ -100,7 +100,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 	}
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<FacturasDelDiaNative> findByFacturasDelDia(Empresa empresa,Integer idusuario,Integer estado,String fecha){
+	public Collection<FacturasDelDiaNative> findByFacturasDelDia(Empresa empresa,Integer idusuario,String estado,String fecha){
 		String queryStr = getQueryBase(FacturasDelDiaNative.class);
 		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
 		if (idusuario > Constantes.ZEROS) {
@@ -118,7 +118,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa,Integer idusuario,Integer estado,String fechaInicial,String fechaFinal,Long idCliente){
+	public Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa,Integer idusuario,String estado,String fechaInicial,String fechaFinal,Long idCliente){
 		String queryStr = getQueryBase(FacturasSinNotaCreditoNative.class);
 		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
 		queryStr = queryStr.replaceAll(":ESTADO", estado.toString());

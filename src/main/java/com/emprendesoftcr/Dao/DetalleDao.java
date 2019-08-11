@@ -23,7 +23,7 @@ public interface DetalleDao {
 	Collection<Detalle> facturasRango(Integer estado, Date fechaInicio, Date fechaFin,Empresa empresa,String tipoImpuesto);
 	
 	Collection<Detalle> findByFactura(Factura factura);
-	TotalDetallesCommand totalVentasPorDetalle(Empresa empresa , Date fechaInicio,Date FechaFinal,String tipoImpuesto);
+	TotalDetallesCommand totalVentasPorDetalle(Empresa empresa , Date fechaInicio,Date FechaFinal,String tipoImpuesto,Integer estado);
 	Detalle findByCodigoAndEmpresa(String codigo , Empresa empresa);
 	
 }

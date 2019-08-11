@@ -27,12 +27,12 @@ public interface FacturaDao {
 	
 	Collection<Factura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma);
 	
-	TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa,Integer estado);
+	TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa,Integer estado,String actividadEconomica);
 	
 	List<Object[]> proformasByState(Integer estado, Integer idEmpresa);
 	
 	
-	Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa);
+	Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa,String actividadEconomica);
 		
 	Collection<Factura> findByClienteAndEmpresa(Cliente cliente ,Empresa empresa);
 }

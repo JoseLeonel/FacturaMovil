@@ -96,9 +96,9 @@ public class DetalleDaoImpl implements DetalleDao {
 		if(!tipoImpuesto.equals(Constantes.COMBO_TODOS)) {
 			hql.append("and obj.tipoImpuesto = :tipoImpuesto");
 		}
-		
+		hql.append(" order by obj.tipoImpuesto,obj.codigoTarifa ");
 		Query query = entityManager.createQuery(hql.toString());
-		query.setParameter("estado", Constantes.FACTURA_ESTADO_FACTURADO);
+		query.setParameter("estado", estado);
 		if(!tipoImpuesto.equals(Constantes.COMBO_TODOS)) {
 			query.setParameter("tipoImpuesto", tipoImpuesto);
 		}
@@ -125,7 +125,7 @@ public class DetalleDaoImpl implements DetalleDao {
 	}
 
 	@Override
-	public TotalDetallesCommand totalVentasPorDetalle(Empresa empresa, Date fechaInicio, Date FechaFinal, String tipoImpuesto) {
+	public TotalDetallesCommand totalVentasPorDetalle(Empresa empresa, Date fechaInicio, Date FechaFinal, String tipoImpuesto,Integer estado) {
 		StoredProcedureQuery storedProcedure =null;
 		if(tipoImpuesto.equals(Constantes.COMBO_TODOS)){
 			storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_VENTASXDETALLE_TIPO_IMPUESTO);	
@@ -141,6 +141,7 @@ public class DetalleDaoImpl implements DetalleDao {
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_IN_FECHA_INICIAL, Date.class, ParameterMode.IN);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_IN_FECHA_FINAL, Date.class, ParameterMode.IN);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_IN_ID_EMPRESA, Integer.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_IN_ESTADO, Integer.class, ParameterMode.IN);
 		if(!tipoImpuesto.equals(Constantes.COMBO_TODOS)&& !tipoImpuesto.equals(Constantes.EMPTY)) {
 			storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_IN_TIPO_IMPUESTO, String.class, ParameterMode.IN);	
 		}
@@ -159,6 +160,8 @@ public class DetalleDaoImpl implements DetalleDao {
 		storedProcedure.setParameter(Constantes.SP_VENTASXDETALLE_IN_FECHA_INICIAL, fechaInicio);
 		storedProcedure.setParameter(Constantes.SP_VENTASXDETALLE_IN_FECHA_FINAL, FechaFinal);
 		storedProcedure.setParameter(Constantes.SP_VENTASXDETALLE_IN_ID_EMPRESA, empresa.getId());
+		storedProcedure.setParameter(Constantes.SP_VENTASXDETALLE_IN_ESTADO, estado);
+		
 		if(!tipoImpuesto.equals(Constantes.COMBO_TODOS)&& !tipoImpuesto.equals(Constantes.EMPTY)) {
 			storedProcedure.setParameter(Constantes.SP_VENTASXDETALLE_IN_TIPO_IMPUESTO, tipoImpuesto);	
 		}

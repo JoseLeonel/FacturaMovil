@@ -62,6 +62,9 @@
                                     <select  class="form-control selectEstado estado" id= "estado" name="estado" >
                                      	<option  value="2"  >Facturada</option>
                                     	<option  value="5"  >Anulada</option>
+                                       	<option  value="6"  >Aceptada</option>
+                                    	<option  value="7"  >No Aceptada</option>
+
                                     	
                                     </select>
                                 </div>  
@@ -638,7 +641,7 @@ function __Impuestos(){
     
    self.impuestos.push({
         codigo: " ",
-        descripcion:"Sin impuesto"
+        descripcion:"Exento"
      });
      
     self.impuestos.push({

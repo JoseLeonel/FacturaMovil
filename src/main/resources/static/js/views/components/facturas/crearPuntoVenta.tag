@@ -1618,7 +1618,9 @@ function __TipoDocumentos(numeroConsecutivo,row){
     case "87":
         return  "TiqueteInterno:"+row.id
         break;
-
+    case "86":
+        return  "NC.Interno:"+row.numeroConsecutivo
+        break;
     default:
         return  numeroConsecutivo
 }
@@ -3640,8 +3642,13 @@ function __seleccionarClientes() {
 
         }
         $('#modalClientes').modal('hide') 
-       // __ComboTipoDocumentos(0)
+       
         
+        if(!verificarSiClienteFrecuente()){
+           __ComboTipoDocumentos(1)
+        }else{
+            __ComboTipoDocumentos(0)
+        }
     });
 }
 
@@ -3811,8 +3818,28 @@ function __ComboTipoDocumentoExonerados(){
 * cargar los tipos de Documento de la factura
 **/
 function __ComboTipoDocumentos(valor){
+    if($('.tipoDoc').val() =="88"){
+        return
+    }
     self.comboTipoDocumentos = []
     self.update()
+    if(valor == 1){
+        self.comboTipoDocumentos.push({
+            estado:"01",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
+        })
+        self.comboTipoDocumentos.push({
+            estado:"04",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.tiquete")
+        })
+        self.comboTipoDocumentos.push({
+            estado:"88",
+            descripcion:$.i18n.prop("factura.tipo.documento.factura.proforma")
+        })
+        self.update()
+        return 
+    }
+
     // Tipo documento unicamente proforma y factura 
     //Prioridad de orden
     if(self.empresa.prioridadFacturar == 1 ){

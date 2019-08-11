@@ -23,7 +23,7 @@ public interface DetalleBo {
 	Collection<Detalle> findByFactura(Factura factura);
 	
 	
-	TotalDetallesCommand totalVentasPorDetalle(Empresa empresa , Date fechaInicio,Date FechaFinal,String tipoImpuesto);
+	TotalDetallesCommand totalVentasPorDetalle(Empresa empresa , Date fechaInicio,Date FechaFinal,String tipoImpuesto,Integer estado);
 	
 	Detalle findByCodigoAndEmpresa(String codigo , Empresa empresa);
 

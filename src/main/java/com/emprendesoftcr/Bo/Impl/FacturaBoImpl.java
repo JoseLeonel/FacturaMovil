@@ -208,6 +208,9 @@ public class FacturaBoImpl implements FacturaBo {
 				facturaReferencia = facturaReferencia == null ? facturaDao.findByClaveAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa()) : facturaReferencia;
 				// Si la factura se encuentra en el sistema se agregan los datos propios de ella
 				if (facturaReferencia != null) {
+					if(facturaReferencia.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO)) {
+						factura.setTipoDoc(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO);
+					}
 					factura.setReferenciaNumero(facturaReferencia.getClave());
 					factura.setReferenciaTipoDoc(facturaReferencia.getTipoDoc());
 					factura.setReferenciaFechaEmision(facturaReferencia.getFechaEmision());
@@ -301,10 +304,13 @@ public class FacturaBoImpl implements FacturaBo {
 			}
 			factura.setEstado(facturaCommand.getEstado());
 			factura.setMesa(facturaCommand.getMesa());
-			// if (factura.getId() == Constantes.ZEROS_LONG) {
 			factura.setCreated_at(new Date());
-			// }
 			factura.setFechaEmision(new Date());
+			if(factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+				factura.setEstado(Constantes.FACTURA_ESTADO_FACTURADO);
+				factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
+				factura.setClave(Constantes.EMPTY);
+			}
 
 		} catch (Exception e) {
 			throw e;
@@ -997,6 +1003,9 @@ public class FacturaBoImpl implements FacturaBo {
 					Factura facturaAnular = findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), empresa);
 					facturaAnular = facturaAnular == null ? facturaDao.findByClaveAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa()) : facturaAnular;
 					if (facturaAnular != null) {
+						if(facturaAnular.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO)) {
+							facturaCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO);
+						}
 						facturaAnular.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
 						modificar(facturaAnular);
 						facturaCommand.setCliente(facturaAnular.getCliente());
@@ -1013,8 +1022,8 @@ public class FacturaBoImpl implements FacturaBo {
 
 			try {
 				// Generar el consecutivo de venta
-				if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-
+				if (facturaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+          
 					factura.setNumeroConsecutivo(empresaBo.generarConsecutivoFactura(empresa, usuario, factura));
 					
 					if (empresa.getNoFacturaElectronica() != null && empresa.getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
@@ -1028,10 +1037,13 @@ public class FacturaBoImpl implements FacturaBo {
 				if (factura.getEmpresa().getNoFacturaElectronica() != null && factura.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO) || facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 					factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
 				} else {
-					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-						factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
-					} else {
-						factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_EN_PROCESOS);
+					if(!factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+						if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+							factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
+						} else {
+							factura.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_EN_PROCESOS);
+						}
+							
 					}
 				}
 				if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_PROFORMAS)) {
@@ -1042,6 +1054,9 @@ public class FacturaBoImpl implements FacturaBo {
 					} else {
 						factura.setConsecutivoProforma(empresaBo.generarConsecutivoProforma(factura.getEmpresa(), usuario));
 					}
+				}
+				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
+						factura.setNumeroConsecutivo(empresaBo.generarConsecutivoNotaCreditoInterno(factura.getEmpresa(), usuario));
 				}
 				// Se almacena la factura, se deja en estado en proceso para que no lo tome los
 				// procesos de hacienda
@@ -1135,7 +1150,8 @@ public class FacturaBoImpl implements FacturaBo {
 				this.actualizaArticulosInventario(factura, usuario);
 
 				// Crear Credito del cliente
-				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
+				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)
+						) {
 					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
 						if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 							cuentaCobrarDao.crearCuentaXCobrar(factura);
@@ -1148,7 +1164,9 @@ public class FacturaBoImpl implements FacturaBo {
 			}
 
 			// Anulacion de la factura anterior
-			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)
+					|| factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)
+					) {
 				if (factura.getReferenciaNumero() != null) {
 					if (factura.getReferenciaNumero() != Constantes.EMPTY) {
 						Factura facturaAnterior = findByConsecutivoAndEmpresa(factura.getReferenciaNumero(), empresa);
@@ -1169,13 +1187,13 @@ public class FacturaBoImpl implements FacturaBo {
 
 							facturaAnterior.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
 							modificar(facturaAnterior);
-							if (facturaAnterior.getClave() != null) {
-								Hacienda hacienda = haciendaDao.findByEmpresaAndClave(empresa, facturaAnterior.getClave());
-								if (hacienda != null) {
-									hacienda.setEstado(Constantes.HACIENDA_ESTADO_ANULADA);
-									haciendaDao.modificar(hacienda);
-								}
-							}
+//							if (facturaAnterior.getClave() != null) {
+//								Hacienda hacienda = haciendaDao.findByEmpresaAndClave(empresa, facturaAnterior.getClave());
+//								if (hacienda != null) {
+//									hacienda.setEstado(Constantes.HACIENDA_ESTADO_ANULADA);
+//									haciendaDao.modificar(hacienda);
+//								}
+//							}
 						}
 					}
 				}
@@ -1249,13 +1267,13 @@ public class FacturaBoImpl implements FacturaBo {
 	}
 
 	@Override
-	public TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa,Integer estado) {
-		return facturaDao.sumarFacturas(fechaInicio, fechaFinal, idEmpresa,estado);
+	public TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa,Integer estado,String actividadEconomica) {
+		return facturaDao.sumarFacturas(fechaInicio, fechaFinal, idEmpresa,estado,actividadEconomica);
 	}
 
 	@Override
-	public Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa) {
-		return facturaDao.facturasRangoEstado(estado, fechaInicio, fechaFin, idEmpresa);
+	public Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa,String actividadEconomica) {
+		return facturaDao.facturasRangoEstado(estado, fechaInicio, fechaFin, idEmpresa,actividadEconomica);
 	}
 
 	public List<Object[]> proformasByState(Integer estado, Integer idEmpresa) {

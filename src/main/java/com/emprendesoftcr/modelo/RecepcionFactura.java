@@ -192,19 +192,19 @@ public class RecepcionFactura implements Serializable {
 	private Double						facturaTotalOtrosCargos;
 	@Column(name = "total_descuentos")
 	private Double						facturaTotalDescuentos;
-	
+
 	@Column(name = "version_doc")
-	private String version_doc; 
-	
+	private String						version_doc;
+
 	@Column(name = "total_impuesto_acreditar")
-	private Double	totalImpuestoAcreditar;
+	private Double						totalImpuestoAcreditar;
 
 	@Column(name = "total_gasto_aplicable")
-	private Double				totalDeGastoAplicable;
-	
+	private Double						totalDeGastoAplicable;
+
 	@Column(name = "condicion_impuesto")
-	private String	condicionImpuesto;
-	
+	private String						condicionImpuesto;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "created_at")
@@ -221,27 +221,23 @@ public class RecepcionFactura implements Serializable {
 
 	@Column(name = "tipo_doc")
 	private String						tipoDoc;
-	
-	@Column(name = "cod_actividad", length=6)
-	private String							codigoActividad;
-	
-	//1 = Gasto de Inventario  2 = Gastos
+
+	@Column(name = "cod_actividad", length = 6)
+	private String						codigoActividad;
+
+	// 1 = Gasto de Inventario 2 = Gastos
 	@Column(name = "tipo_gasto", columnDefinition = "INT default '1'")
-	private Integer							tipoGasto;
-	
-	
-	
-	
+	private Integer						tipoGasto;
+
 	@Transient
-	private String detalles;
+	private String						detalles;
 
-	
+	@Column(name = "estado", columnDefinition = "INT default '1'")
+	private Integer						estado;
 
-	
-	
 	public RecepcionFactura(Long id, String mensaje, String detalleMensaje, String numeroConsecutivoReceptor, Integer estadoFirma, String emisorCedula, String emisorNombre, String emisorTipoCedula, String emisorCorreo, String emisorTelefono, String emisorCodigoProvincia, String emisorProvincia, String emisorCanton, String emisorCodigoCanton, String emisorDistrito, String emisorCodigoDistrito, String emisorOtraSena, String emisorNombreComercial, String receptorNombre, String receptorCedula, String receptorTipoCedula, String receptorCorreo, String receptorProvincia, String receptorCodigoProvincia, String receptorCanton, String receptorCodigoCanton, String receptorDistrito, String receptorCodigoDistrito, String receptorOtraSena, String receptorTelefono, String receptorNombreComercial,
 			String facturaConsecutivo, String facturaClave, Date facturaFechaEmision, String facturaCondicionVenta, String facturaMedioPago, String facturaCodigoMoneda, Double facturaTipoCambio, Double facturaTotalServExentos, Double facturaTotalExento, Double facturaTotalVenta, Double facturaTotalVentaNeta, Double facturaTotalComprobante, Double facturaTotalImpuestos, String facturaCodigoActividad, String facturaPlazoCredito, Double facturaTotalServGravados, Double facturaTotalServExonerado, Double facturaTotalMercanciasGravadas, Double facturaTotalMercanciasExentas, Double facturaTotalMercExonerada, Double facturaTotalGravado, Double facturaTotalExonerado, Double facturaTotalIVADevuelto, Double facturaTotalOtrosCargos, Double facturaTotalDescuentos, String version_doc,
-			Double totalImpuestoAcreditar, Double totalDeGastoAplicable, String condicionImpuesto, Date created_at, Date updated_at, Empresa empresa, String tipoDoc, String codigoActividad, Integer tipoGasto, String detalles) {
+			Double totalImpuestoAcreditar, Double totalDeGastoAplicable, String condicionImpuesto, Date created_at, Date updated_at, Empresa empresa, String tipoDoc, String codigoActividad, Integer tipoGasto, String detalles, Integer estado) {
 		super();
 		this.id = id;
 		this.mensaje = mensaje;
@@ -310,6 +306,7 @@ public class RecepcionFactura implements Serializable {
 		this.codigoActividad = codigoActividad;
 		this.tipoGasto = tipoGasto;
 		this.detalles = detalles;
+		this.estado = estado;
 	}
 
 	public RecepcionFactura() {
@@ -356,14 +353,19 @@ public class RecepcionFactura implements Serializable {
 	}
 
 	
+	public Integer getEstado() {
+		return estado;
+	}
+
 	
-	
-	
+	public void setEstado(Integer estado) {
+		this.estado = estado;
+	}
+
 	public Integer getTipoGasto() {
 		return tipoGasto;
 	}
 
-	
 	public void setTipoGasto(Integer tipoGasto) {
 		this.tipoGasto = tipoGasto;
 	}
@@ -736,30 +738,22 @@ public class RecepcionFactura implements Serializable {
 		this.tipoDoc = tipoDoc;
 	}
 
-	
 	public String getEmisorNombreComercial() {
 		return emisorNombreComercial;
 	}
 
-	
 	public void setEmisorNombreComercial(String emisorNombreComercial) {
 		this.emisorNombreComercial = emisorNombreComercial;
 	}
 
-	
-	
-	
-	
 	public String getFacturaPlazoCredito() {
 		return facturaPlazoCredito;
 	}
 
-	
 	public void setFacturaPlazoCredito(String facturaPlazoCredito) {
 		this.facturaPlazoCredito = facturaPlazoCredito;
 	}
 
-	
 	public String getFacturaCodigoActividad() {
 		return facturaCodigoActividad;
 	}
@@ -768,97 +762,78 @@ public class RecepcionFactura implements Serializable {
 		return facturaTotalServGravados;
 	}
 
-	
 	public void setFacturaTotalServGravados(Double facturaTotalServGravados) {
 		this.facturaTotalServGravados = facturaTotalServGravados;
 	}
 
-	
 	public Double getFacturaTotalServExonerado() {
 		return facturaTotalServExonerado;
 	}
 
-	
 	public void setFacturaTotalServExonerado(Double facturaTotalServExonerado) {
 		this.facturaTotalServExonerado = facturaTotalServExonerado;
 	}
 
-	
 	public Double getFacturaTotalMercanciasGravadas() {
 		return facturaTotalMercanciasGravadas;
 	}
 
-	
 	public void setFacturaTotalMercanciasGravadas(Double facturaTotalMercanciasGravadas) {
 		this.facturaTotalMercanciasGravadas = facturaTotalMercanciasGravadas;
 	}
 
-	
 	public Double getFacturaTotalMercanciasExentas() {
 		return facturaTotalMercanciasExentas;
 	}
 
-	
 	public void setFacturaTotalMercanciasExentas(Double facturaTotalMercanciasExentas) {
 		this.facturaTotalMercanciasExentas = facturaTotalMercanciasExentas;
 	}
 
-	
 	public Double getFacturaTotalMercExonerada() {
 		return facturaTotalMercExonerada;
 	}
 
-	
 	public void setFacturaTotalMercExonerada(Double facturaTotalMercExonerada) {
 		this.facturaTotalMercExonerada = facturaTotalMercExonerada;
 	}
 
-	
 	public Double getFacturaTotalGravado() {
 		return facturaTotalGravado;
 	}
 
-	
 	public void setFacturaTotalGravado(Double facturaTotalGravado) {
 		this.facturaTotalGravado = facturaTotalGravado;
 	}
 
-	
 	public Double getFacturaTotalExonerado() {
 		return facturaTotalExonerado;
 	}
 
-	
 	public void setFacturaTotalExonerado(Double facturaTotalExonerado) {
 		this.facturaTotalExonerado = facturaTotalExonerado;
 	}
 
-	
 	public Double getFacturaTotalIVADevuelto() {
 		return facturaTotalIVADevuelto;
 	}
 
-	
 	public void setFacturaTotalIVADevuelto(Double facturaTotalIVADevuelto) {
 		this.facturaTotalIVADevuelto = facturaTotalIVADevuelto;
 	}
 
-	
 	public Double getFacturaTotalOtrosCargos() {
 		return facturaTotalOtrosCargos;
 	}
 
-	
 	public void setFacturaTotalOtrosCargos(Double facturaTotalOtrosCargos) {
 		this.facturaTotalOtrosCargos = facturaTotalOtrosCargos;
 	}
 
-	
 	public Double getFacturaTotalDescuentos() {
 		return facturaTotalDescuentos;
 	}
 
-	
 	public void setFacturaTotalDescuentos(Double facturaTotalDescuentos) {
 		this.facturaTotalDescuentos = facturaTotalDescuentos;
 	}
@@ -870,62 +845,51 @@ public class RecepcionFactura implements Serializable {
 	public String getDetalles() {
 		return detalles;
 	}
-	
+
 	public void setDetalles(String detalles) {
 		this.detalles = detalles;
 	}
 
-	
 	public String getVersion_doc() {
 		return version_doc;
 	}
 
-	
 	public void setVersion_doc(String version_doc) {
 		this.version_doc = version_doc;
 	}
 
-	
 	public Double getTotalImpuestoAcreditar() {
 		return totalImpuestoAcreditar;
 	}
 
-	
 	public void setTotalImpuestoAcreditar(Double totalImpuestoAcreditar) {
 		this.totalImpuestoAcreditar = totalImpuestoAcreditar;
 	}
 
-	
 	public Double getTotalDeGastoAplicable() {
 		return totalDeGastoAplicable;
 	}
 
-	
 	public void setTotalDeGastoAplicable(Double totalDeGastoAplicable) {
 		this.totalDeGastoAplicable = totalDeGastoAplicable;
 	}
 
-	
 	public String getCondicionImpuesto() {
 		return condicionImpuesto;
 	}
 
-	
 	public void setCondicionImpuesto(String condicionImpuesto) {
 		this.condicionImpuesto = condicionImpuesto;
 	}
 
-	
 	public String getCodigoActividad() {
 		return codigoActividad;
 	}
 
-	
 	public void setCodigoActividad(String codigoActividad) {
 		this.codigoActividad = codigoActividad;
 	}
 
-	
 	public void setFacturaCodigoActividad(String facturaCodigoActividad) {
 		this.facturaCodigoActividad = facturaCodigoActividad;
 	}

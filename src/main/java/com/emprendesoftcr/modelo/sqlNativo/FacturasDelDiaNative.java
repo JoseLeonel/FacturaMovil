@@ -18,7 +18,7 @@ query = "Select clientes.cedula,clientes.nombre_completo,facturas.updated_at,fac
 		"facturas.empresa_id" + 
 		" from facturas" 
 		+ " left join clientes on clientes.id = facturas.cliente_id " 
-		+ " where facturas.empresa_id = :ID_EMPRESA and facturas.estado = :ESTADO and facturas.tipo_doc !='88'  and facturas.fecha_emision >= :FECHA and facturas.usuario_id = order by facturas.fecha_emision desc ")
+		+ " where facturas.empresa_id = :ID_EMPRESA and facturas.estado in :ESTADO and facturas.tipo_doc !='88'  and facturas.fecha_emision >= :FECHA and facturas.usuario_id = order by facturas.fecha_emision desc ")
 @Entity
 public class FacturasDelDiaNative  implements Serializable {
 

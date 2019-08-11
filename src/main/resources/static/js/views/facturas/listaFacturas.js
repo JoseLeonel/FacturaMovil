@@ -202,6 +202,7 @@ function __ComboTipoDocumentosPara(){
 	$('.tipoDocumento').append('<option value="'+"01"+'">'+$.i18n.prop("factura.tipo.documento.factura.electronica")+ '</option>');
 	$('.tipoDocumento').append('<option value="'+"02"+'">'+$.i18n.prop("referencia.tipo.documento.nota.debito")+ '</option>');
 	$('.tipoDocumento').append('<option value="'+"03"+'">'+$.i18n.prop("referencia.tipo.documento.nota.credito")+ '</option>');
+	$('.tipoDocumento').append('<option value="'+"86"+'">'+$.i18n.prop("referencia.tipo.documento.nota.credito.interno")+ '</option>');
     
 }
 
@@ -295,10 +296,14 @@ function __TipoDocumentos(numeroConsecutivo,row){
         return  "Fact:"+numeroConsecutivo
         break;
     case "02":
-        return  "N.Debito:"+numeroConsecutivo
+        return  "N.D:"+numeroConsecutivo
         break;
     case "03":
-        return  "N.Credito:"+numeroConsecutivo
+		return  "N.C:"+numeroConsecutivo
+		break;
+
+	case "03":
+        return  "NC.Interna:"+numeroConsecutivo
         break;
     default:
         return  numeroConsecutivo
