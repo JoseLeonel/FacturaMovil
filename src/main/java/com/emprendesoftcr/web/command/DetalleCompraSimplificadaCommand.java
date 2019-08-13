@@ -1,7 +1,5 @@
 package com.emprendesoftcr.web.command;
 
-import java.util.Date;
-
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.CompraSimplificada;
@@ -32,7 +30,6 @@ public class DetalleCompraSimplificadaCommand {
 
 	private Double	montoTotalLinea;
 
-	private Double	ganancia;
 
 	private Double	porcentajeDesc;
 	private String	descripcion;
@@ -47,36 +44,16 @@ public class DetalleCompraSimplificadaCommand {
 
 	private String	fechaEmisionSTR;
 	private String	consecutivo;
-	private String	consecutivoProforma;
 
 	private String	tipoDoc;
 
 	private String	nombreUsuario;
 
-	private Double	montoGanancia;
 
 	private CompraSimplificada	compraSimplificada;
-	private Double	porcentajeGanancia;
 
-	private Double	costo;
-	private Double	impuesto1;
 
-	private Double	pesoTransporte;
-
-	private Double	pesoTransporteTotal;
-
-	private String	tipoDocumentoExoneracion;
-
-	private String	numeroDocumentoExoneracion;
-
-	private String	nombreInstitucionExoneracion;
-
-	private Date		fechaEmisionExoneracion;
-
-	private Integer	porcentajeExoneracion;
-
-	private Double	montoExoneracion;
-	
+		
 	private String						codigoTarifa;
 
 	
@@ -91,38 +68,28 @@ public class DetalleCompraSimplificadaCommand {
 
 		this.id = detalleCompraSimplificada.getId();
 		this.numeroLinea = detalleCompraSimplificada.getNumeroLinea();
-		this.precioUnitario = detalleCompraSimplificada.getPrecioUnitario();
-		this.cantidad = detalleCompraSimplificada.getCantidad();
-		this.montoTotal = detalleCompraSimplificada.getMontoTotal();
-		this.montoDescuento = detalleCompraSimplificada.getMontoDescuento();
-		this.naturalezaDescuento = detalleCompraSimplificada.getNaturalezaDescuento();
-		this.subTotal = detalleCompraSimplificada.getSubTotal();
-		this.impuesto = detalleCompraSimplificada.getImpuesto();
-		this.montoImpuesto = detalleCompraSimplificada.getMontoImpuesto();
-		this.montoTotalLinea = detalleCompraSimplificada.getMontoTotalLinea();
-		this.ganancia = detalleCompraSimplificada.getGanancia();
-		this.porcentajeDesc = detalleCompraSimplificada.getPorcentajeDesc();
-		this.descripcion = detalleCompraSimplificada.getDescripcion();
-		this.tipoCodigo = detalleCompraSimplificada.getTipoCodigo();
-		this.codigo = detalleCompraSimplificada.getCodigo();
-		this.unidadMedida = detalleCompraSimplificada.getUnidadMedida();
-		this.tipoImpuesto = detalleCompraSimplificada.getTipoImpuesto();
-		this.fechaEmisionSTR = detalleCompraSimplificada.getCompraSimplificada().getFechaEmisionSTR();
-		this.consecutivo = detalleCompraSimplificada.getCompraSimplificada().getNumeroConsecutivo();
-		this.tipoDoc = detalleCompraSimplificada.getCompraSimplificada().getTipoDoc();
-		this.nombreUsuario = detalleCompraSimplificada.getCompraSimplificada().getUsuarioCreacion().getNombreUsuario();
-		this.montoGanancia = detalleCompraSimplificada.getMontoGanancia();
+		this.precioUnitario = detalleCompraSimplificada.getPrecioUnitario() == null?Constantes.ZEROS_DOUBLE:detalleCompraSimplificada.getPrecioUnitario();
+		this.cantidad = detalleCompraSimplificada.getCantidad() != null?detalleCompraSimplificada.getCantidad():Constantes.ZEROS_DOUBLE;
+		this.montoTotal = detalleCompraSimplificada.getMontoTotal() !=null?detalleCompraSimplificada.getMontoTotal():Constantes.ZEROS_DOUBLE;
+		this.montoDescuento = detalleCompraSimplificada.getMontoDescuento() !=null?detalleCompraSimplificada.getMontoDescuento():Constantes.ZEROS_DOUBLE;
+		this.naturalezaDescuento = detalleCompraSimplificada.getNaturalezaDescuento() !=null?detalleCompraSimplificada.getNaturalezaDescuento():Constantes.KEY_EMAIL_FORMATO_INCORRECTO;
+		this.subTotal = detalleCompraSimplificada.getSubTotal() !=null?detalleCompraSimplificada.getSubTotal():Constantes.ZEROS_DOUBLE;
+		this.impuesto = detalleCompraSimplificada.getImpuesto() !=null?detalleCompraSimplificada.getImpuesto():Constantes.ZEROS_DOUBLE;
+		this.montoImpuesto = detalleCompraSimplificada.getMontoImpuesto() !=null?detalleCompraSimplificada.getMontoImpuesto():Constantes.ZEROS_DOUBLE;
+		this.montoTotalLinea = detalleCompraSimplificada.getMontoTotalLinea() !=null?detalleCompraSimplificada.getMontoTotalLinea():Constantes.ZEROS_DOUBLE;
+		this.porcentajeDesc = detalleCompraSimplificada.getPorcentajeDesc() !=null?detalleCompraSimplificada.getPorcentajeDesc():Constantes.ZEROS_DOUBLE;
+		this.descripcion = detalleCompraSimplificada.getDescripcion() !=null?detalleCompraSimplificada.getDescripcion():Constantes.EMPTY;
+		this.tipoCodigo = detalleCompraSimplificada.getTipoCodigo() !=null?detalleCompraSimplificada.getTipoCodigo():Constantes.EMPTY;
+		this.codigo = detalleCompraSimplificada.getCodigo() !=null?detalleCompraSimplificada.getCodigo():Constantes.EMPTY;
+		this.unidadMedida = detalleCompraSimplificada.getUnidadMedida() !=null?detalleCompraSimplificada.getUnidadMedida():Constantes.EMPTY;
+		this.tipoImpuesto = detalleCompraSimplificada.getTipoImpuesto() !=null?detalleCompraSimplificada.getTipoImpuesto():Constantes.EMPTY;
+		this.fechaEmisionSTR = detalleCompraSimplificada.getCompraSimplificada().getFechaEmisionSTR() !=null?detalleCompraSimplificada.getCompraSimplificada().getFechaEmisionSTR():Constantes.EMPTY;
+		this.consecutivo = detalleCompraSimplificada.getCompraSimplificada().getNumeroConsecutivo() !=null?detalleCompraSimplificada.getCompraSimplificada().getNumeroConsecutivo():Constantes.EMPTY;
+		this.tipoDoc = detalleCompraSimplificada.getCompraSimplificada().getTipoDoc() !=null?detalleCompraSimplificada.getCompraSimplificada().getTipoDoc():Constantes.EMPTY;
+		this.nombreUsuario = detalleCompraSimplificada.getCompraSimplificada().getUsuarioCreacion().getNombreUsuario() !=null?detalleCompraSimplificada.getCompraSimplificada().getUsuarioCreacion().getNombreUsuario():Constantes.EMPTY;
 		this.compraSimplificada = detalleCompraSimplificada.getCompraSimplificada();
-		this.consecutivoProforma = detalleCompraSimplificada.getCompraSimplificada().getConsecutivoProforma() != null ? detalleCompraSimplificada.getCompraSimplificada().getConsecutivoProforma() : Constantes.EMPTY;
-		this.costo = detalleCompraSimplificada.getCosto();
-		this.porcentajeGanancia = detalleCompraSimplificada.getPorcentajeGanancia();
-		this.tipoDocumentoExoneracion = detalleCompraSimplificada.getTipoDocumentoExoneracion();
-		this.numeroDocumentoExoneracion = detalleCompraSimplificada.getNumeroDocumentoExoneracion();
-		this.nombreInstitucionExoneracion = detalleCompraSimplificada.getNombreInstitucionExoneracion();
-		this.fechaEmisionExoneracion = detalleCompraSimplificada.getFechaEmisionExoneracion();
-		this.montoExoneracion = detalleCompraSimplificada.getMontoExoneracion();
-		this.porcentajeExoneracion = detalleCompraSimplificada.getPorcentajeExoneracion();
-
+		this.unidadMedida = Constantes.UNIDAD_MEDIDA;
+		
 	}
 
 	public Long getId() {
@@ -318,13 +285,7 @@ public class DetalleCompraSimplificadaCommand {
 		return Utils.formateadorMiles(this.montoTotalLinea);
 	}
 
-	public Double getGanancia() {
-		return ganancia;
-	}
-
-	public void setGanancia(Double ganancia) {
-		this.ganancia = ganancia;
-	}
+	
 
 	public Double getPorcentajeDesc() {
 		return porcentajeDesc;
@@ -334,113 +295,8 @@ public class DetalleCompraSimplificadaCommand {
 		this.porcentajeDesc = porcentajeDesc;
 	}
 
-	public Double getMontoGanancia() {
-		return montoGanancia;
-	}
-
-	public void setMontoGanancia(Double montoGanancia) {
-		this.montoGanancia = montoGanancia;
-	}
-
-	public String getConsecutivoProforma() {
-		return consecutivoProforma;
-	}
-
-	public void setConsecutivoProforma(String consecutivoProforma) {
-		this.consecutivoProforma = consecutivoProforma;
-	}
-
-	public Double getPorcentajeGanancia() {
-		return porcentajeGanancia;
-	}
-
-	public void setPorcentajeGanancia(Double porcentajeGanancia) {
-		this.porcentajeGanancia = porcentajeGanancia;
-	}
-
-	public Double getCosto() {
-		return costo;
-	}
-
-	public void setCosto(Double costo) {
-		this.costo = costo;
-	}
-
 	
-	public Double getImpuesto1() {
-		return impuesto1;
-	}
-
-	public void setImpuesto1(Double impuesto1) {
-		this.impuesto1 = impuesto1;
-	}
-
-
-
-	public Double getPesoTransporte() {
-		return pesoTransporte;
-	}
-
-	public void setPesoTransporte(Double pesoTransporte) {
-		this.pesoTransporte = pesoTransporte;
-	}
-
-	public Double getPesoTransporteTotal() {
-		return pesoTransporteTotal;
-	}
-
-	public void setPesoTransporteTotal(Double pesoTransporteTotal) {
-		this.pesoTransporteTotal = pesoTransporteTotal;
-	}
-
-	public String getTipoDocumentoExoneracion() {
-		return tipoDocumentoExoneracion;
-	}
-
-	public void setTipoDocumentoExoneracion(String tipoDocumentoExoneracion) {
-		this.tipoDocumentoExoneracion = tipoDocumentoExoneracion;
-	}
-
-	public String getNumeroDocumentoExoneracion() {
-		return numeroDocumentoExoneracion;
-	}
-
-	public void setNumeroDocumentoExoneracion(String numeroDocumentoExoneracion) {
-		this.numeroDocumentoExoneracion = numeroDocumentoExoneracion;
-	}
-
-	public String getNombreInstitucionExoneracion() {
-		return nombreInstitucionExoneracion;
-	}
-
-	public void setNombreInstitucionExoneracion(String nombreInstitucionExoneracion) {
-		this.nombreInstitucionExoneracion = nombreInstitucionExoneracion;
-	}
-
-	public Date getFechaEmisionExoneracion() {
-		return fechaEmisionExoneracion;
-	}
-
-	public void setFechaEmisionExoneracion(Date fechaEmisionExoneracion) {
-		this.fechaEmisionExoneracion = fechaEmisionExoneracion;
-	}
-
-	public Integer getPorcentajeExoneracion() {
-		return porcentajeExoneracion;
-	}
-
-	public void setPorcentajeExoneracion(Integer porcentajeExoneracion) {
-		this.porcentajeExoneracion = porcentajeExoneracion;
-	}
-
-	public Double getMontoExoneracion() {
-		return montoExoneracion;
-	}
-
-	public void setMontoExoneracion(Double montoExoneracion) {
-		this.montoExoneracion = montoExoneracion;
-	}
-
+	
 	
 	public CompraSimplificada getCompraSimplificada() {
 		return compraSimplificada;

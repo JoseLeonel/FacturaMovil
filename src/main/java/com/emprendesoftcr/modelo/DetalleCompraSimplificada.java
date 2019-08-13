@@ -22,10 +22,14 @@ import com.emprendesoftcr.web.command.DetalleCompraSimplificadaCommand;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "detalle_simpli")
+@Table(name = "detall_simpl")
 public class DetalleCompraSimplificada implements Serializable {
 
-	private static final long		serialVersionUID	= 5443162013611771917L;
+
+	/**
+	 * Comentario para <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = 972950950980269271L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +42,7 @@ public class DetalleCompraSimplificada implements Serializable {
 	@Column(name = "codigo", length = 20)
 	private String							codigo;
 
-	@Column(name = "descripcion")
+	@Column(name = "descripcion", length = 180)
 	private String							descripcion;
 
 	@Column(name = "tipo_codigo", length = 2)
@@ -47,7 +51,7 @@ public class DetalleCompraSimplificada implements Serializable {
 	@Column(name = "tipo_impuesto", length = 2)
 	private String							tipoImpuesto;
 
-	@Column(name = "unidad_medida")
+	@Column(name = "unidad_medida", length = 15)
 	private String							unidadMedida;
 
 	@Column(name = "precio_unitario", precision = 18, scale = 5)
@@ -62,7 +66,7 @@ public class DetalleCompraSimplificada implements Serializable {
 	@Column(name = "Monto_descuento", precision = 18, scale = 5)
 	private Double							montoDescuento;
 
-	@Column(name = "naturaleza_descuento")
+	@Column(name = "naturaleza_descuento", length = 80)
 	private String							naturalezaDescuento;
 
 	@Column(name = "sub_total", precision = 18, scale = 5)
@@ -77,17 +81,8 @@ public class DetalleCompraSimplificada implements Serializable {
 	@Column(name = "monto_total_linea", precision = 18, scale = 5)
 	private Double							montoTotalLinea;
 
-	@Column(name = "ganancia", precision = 18, scale = 5)
-	private Double							ganancia;
-
 	@Column(name = "porcentaje_desc", precision = 18, scale = 5)
 	private Double							porcentajeDesc;
-
-	@Column(name = "porcentaje_ganan", columnDefinition = "default '0.00'", precision = 18, scale = 5)
-	private Double							porcentajeGanancia;
-
-	@Column(name = "costo", columnDefinition = " default '0.00'", precision = 18, scale = 5)
-	private Double							costo;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
@@ -99,40 +94,14 @@ public class DetalleCompraSimplificada implements Serializable {
 	@Column(name = "updated_at")
 	private Date								updated_at;
 
-	@Column(name = "monto_gananc", precision = 18, scale = 5)
-	private Double							montoGanancia;
-
 	@Column(name = "imp_neto", precision = 18, scale = 5)
 	private Double							ImpuestoNeto;
 
-	@Column(name = "base_imposible", columnDefinition = "default '0.00'", precision = 18, scale = 5)
+	@Column(name = "base_imponible",  precision = 18, scale = 5)
 	private Double							baseImponible;
 
 	@Column(name = "cod_tarifa", length = 2)
 	private String							codigoTarifa;
-
-
-
-	@Column(name = "tipo_doc_exo", length = 2)
-	private String							tipoDocumentoExoneracion;
-
-	@Column(name = "nume_doc_exo", length = 40)
-	private String							numeroDocumentoExoneracion;
-
-	@Column(name = "nomb_inst_exo", length = 160)
-	private String							nombreInstitucionExoneracion;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
-	@Column(name = "fecha_emision_exo")
-	private Date								fechaEmisionExoneracion;
-
-	@Column(name = "porcentaje_exo", columnDefinition = "INT default '0'")
-	private Integer							porcentajeExoneracion;
-
-	@Column(name = "mont_exone", precision = 18, scale = 5)
-	private Double							montoExoneracion;
-
 
 	@ManyToOne
 	@JoinColumn(name = "comp_simpl_id")
@@ -150,6 +119,42 @@ public class DetalleCompraSimplificada implements Serializable {
 
 	}
 
+	
+	
+
+
+
+	public DetalleCompraSimplificada(Long id, Integer numeroLinea, String codigo, String descripcion, String tipoCodigo, String tipoImpuesto, String unidadMedida, Double precioUnitario, Double cantidad, Double montoTotal, Double montoDescuento, String naturalezaDescuento, Double subTotal, Double impuesto, Double montoImpuesto, Double montoTotalLinea, Double porcentajeDesc, Date created_at, Date updated_at, Double impuestoNeto, Double baseImponible, String codigoTarifa, CompraSimplificada compraSimplificada, Usuario usuario) {
+		super();
+		this.id = id;
+		this.numeroLinea = numeroLinea;
+		this.codigo = codigo;
+		this.descripcion = descripcion;
+		this.tipoCodigo = tipoCodigo;
+		this.tipoImpuesto = tipoImpuesto;
+		this.unidadMedida = unidadMedida;
+		this.precioUnitario = precioUnitario;
+		this.cantidad = cantidad;
+		this.montoTotal = montoTotal;
+		this.montoDescuento = montoDescuento;
+		this.naturalezaDescuento = naturalezaDescuento;
+		this.subTotal = subTotal;
+		this.impuesto = impuesto;
+		this.montoImpuesto = montoImpuesto;
+		this.montoTotalLinea = montoTotalLinea;
+		this.porcentajeDesc = porcentajeDesc;
+		this.created_at = created_at;
+		this.updated_at = updated_at;
+		ImpuestoNeto = impuestoNeto;
+		this.baseImponible = baseImponible;
+		this.codigoTarifa = codigoTarifa;
+		this.compraSimplificada = compraSimplificada;
+		this.usuario = usuario;
+	}
+
+
+
+
 	public DetalleCompraSimplificada(DetalleCompraSimplificadaCommand detalleCompraSimplificadaCommand) {
 		super();
 		this.id = detalleCompraSimplificadaCommand.getId();
@@ -163,21 +168,13 @@ public class DetalleCompraSimplificada implements Serializable {
 		this.impuesto = detalleCompraSimplificadaCommand.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : detalleCompraSimplificadaCommand.getImpuesto();
 		this.montoImpuesto = detalleCompraSimplificadaCommand.getMontoImpuesto() == null ? Constantes.ZEROS_DOUBLE : detalleCompraSimplificadaCommand.getMontoImpuesto();
 		this.montoTotalLinea = detalleCompraSimplificadaCommand.getMontoTotalLinea();
-		this.ganancia = Constantes.ZEROS_DOUBLE;
 		this.porcentajeDesc = detalleCompraSimplificadaCommand.getPorcentajeDesc() != null ? detalleCompraSimplificadaCommand.getPorcentajeDesc() : Constantes.ZEROS_DOUBLE;
 		this.descripcion = detalleCompraSimplificadaCommand.getDescripcion();
 		this.tipoCodigo = detalleCompraSimplificadaCommand.getTipoCodigo();
 		this.codigo = detalleCompraSimplificadaCommand.getCodigo();
 		this.unidadMedida = detalleCompraSimplificadaCommand.getUnidadMedida();
 		this.tipoImpuesto = detalleCompraSimplificadaCommand.getTipoImpuesto() == null ? Constantes.EMPTY : detalleCompraSimplificadaCommand.getTipoImpuesto();
-		this.montoGanancia = detalleCompraSimplificadaCommand.getMontoGanancia();
-		this.tipoDocumentoExoneracion = detalleCompraSimplificadaCommand.getTipoDocumentoExoneracion();
-		this.numeroDocumentoExoneracion = detalleCompraSimplificadaCommand.getNumeroDocumentoExoneracion();
-		this.nombreInstitucionExoneracion = detalleCompraSimplificadaCommand.getNombreInstitucionExoneracion();
-		this.fechaEmisionExoneracion = detalleCompraSimplificadaCommand.getFechaEmisionExoneracion();
-		this.porcentajeExoneracion = detalleCompraSimplificadaCommand.getPorcentajeExoneracion();
-		this.montoExoneracion = detalleCompraSimplificadaCommand.getMontoExoneracion();
-		
+
 	}
 
 	public Long getId() {
@@ -195,8 +192,6 @@ public class DetalleCompraSimplificada implements Serializable {
 	public void setCodigoTarifa(String codigoTarifa) {
 		this.codigoTarifa = codigoTarifa;
 	}
-
-
 
 	public String getTipoImpuesto() {
 		return tipoImpuesto;
@@ -350,14 +345,6 @@ public class DetalleCompraSimplificada implements Serializable {
 		return Utils.formateadorMiles(this.montoTotalLinea);
 	}
 
-	public Double getGanancia() {
-		return ganancia;
-	}
-
-	public void setGanancia(Double ganancia) {
-		this.ganancia = ganancia;
-	}
-
 	public Double getPorcentajeDesc() {
 		return porcentajeDesc;
 	}
@@ -382,14 +369,10 @@ public class DetalleCompraSimplificada implements Serializable {
 		this.updated_at = updated_at;
 	}
 
-	
-
-	
 	public CompraSimplificada getCompraSimplificada() {
 		return compraSimplificada;
 	}
 
-	
 	public void setCompraSimplificada(CompraSimplificada compraSimplificada) {
 		this.compraSimplificada = compraSimplificada;
 	}
@@ -400,30 +383,6 @@ public class DetalleCompraSimplificada implements Serializable {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
-	}
-
-	public Double getMontoGanancia() {
-		return montoGanancia;
-	}
-
-	public void setMontoGanancia(Double montoGanancia) {
-		this.montoGanancia = montoGanancia;
-	}
-
-	public Double getPorcentajeGanancia() {
-		return porcentajeGanancia;
-	}
-
-	public void setPorcentajeGanancia(Double porcentajeGanancia) {
-		this.porcentajeGanancia = porcentajeGanancia;
-	}
-
-	public Double getCosto() {
-		return costo;
-	}
-
-	public void setCosto(Double costo) {
-		this.costo = costo;
 	}
 
 	public Double getImpuestoNeto() {
@@ -441,55 +400,5 @@ public class DetalleCompraSimplificada implements Serializable {
 	public void setBaseImponible(Double baseImponible) {
 		this.baseImponible = baseImponible;
 	}
-
-	public String getTipoDocumentoExoneracion() {
-		return tipoDocumentoExoneracion;
-	}
-
-	public void setTipoDocumentoExoneracion(String tipoDocumentoExoneracion) {
-		this.tipoDocumentoExoneracion = tipoDocumentoExoneracion;
-	}
-
-	public String getNumeroDocumentoExoneracion() {
-		return numeroDocumentoExoneracion;
-	}
-
-	public void setNumeroDocumentoExoneracion(String numeroDocumentoExoneracion) {
-		this.numeroDocumentoExoneracion = numeroDocumentoExoneracion;
-	}
-
-	public String getNombreInstitucionExoneracion() {
-		return nombreInstitucionExoneracion;
-	}
-
-	public void setNombreInstitucionExoneracion(String nombreInstitucionExoneracion) {
-		this.nombreInstitucionExoneracion = nombreInstitucionExoneracion;
-	}
-
-	public Date getFechaEmisionExoneracion() {
-		return fechaEmisionExoneracion;
-	}
-
-	public void setFechaEmisionExoneracion(Date fechaEmisionExoneracion) {
-		this.fechaEmisionExoneracion = fechaEmisionExoneracion;
-	}
-
-	public Integer getPorcentajeExoneracion() {
-		return porcentajeExoneracion;
-	}
-
-	public void setPorcentajeExoneracion(Integer porcentajeExoneracion) {
-		this.porcentajeExoneracion = porcentajeExoneracion;
-	}
-
-	public Double getMontoExoneracion() {
-		return montoExoneracion;
-	}
-
-	public void setMontoExoneracion(Double montoExoneracion) {
-		this.montoExoneracion = montoExoneracion;
-	}
-
-	
 
 }

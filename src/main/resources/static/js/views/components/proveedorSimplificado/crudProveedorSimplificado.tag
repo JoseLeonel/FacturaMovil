@@ -74,6 +74,26 @@
                                         <input type="text" class="form-control correoElectronico" placeHolder ="{$.i18n.prop("proveedorSimplificado.correoElectronico")}" id="correoElectronico" name="correoElectronico" value="{proveedorSimplificado.correoElectronico}"  >
                                     </div>
                                 </div>
+                                <div class="row">    
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                        <label class="knob-label" >{$.i18n.prop("empresa.provincia")} </label>
+                                        <select onchange= {__cargaCantones}  class="form-control" id="codigoProvincia" name="codigoProvincia" >
+                                            <option  each={provincias.data}  value="{codigo}" selected="{proveedorSimplificado.codigoProvincia ==codigo?true:false}" >{descripcion}</option>
+                                        </select>
+                                    </div>
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                        <label class="knob-label" >{$.i18n.prop("empresa.canton")} </label>
+                                        <select onchange= {__cargaDistritos}    class="form-control" id="codigoCanton" name="codigoCanton" >
+                                            <option  each={cantones.data}  value="{codigo}" selected="{proveedorSimplificado.codigoCanton ==codigo?true:false}" >{descripcion}</option>
+                                        </select>
+                                    </div>
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                        <label class="knob-label" >{$.i18n.prop("empresa.distrito")} </label>
+                                        <select   class="form-control" id="codigoDistrito" name="codigoDistrito" >
+                                            <option  each={distritos.data}  value="{codigo}" selected="{proveedorSimplificado.codigoDistrito ==codigo?true:false}" >{descripcion}</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label >{$.i18n.prop("proveedorSimplificado.estado")}</label>
@@ -161,6 +181,10 @@
     var self = this;
     self.parametros          = opts.parametros;  
     self.tipoCedulas               = {data:[]}  // definir el data del datatable
+    self.provincias                = {data:[]}  // definir el data del datatable
+    self.cantones                  = {data:[]}  // definir el data del datatable
+    self.distritos                 = {data:[]}  // definir el data del datatable
+
     self.botonModificar            = false
     self.botonAgregar              = false
     self.comboTipoDocumentoExonerados   = []
@@ -190,6 +214,7 @@ self.on('mount',function(){
     _incializarCampos()
     __Eventos()
     __ComboEstados()
+    __cargaProvincias()
      $('.collapse').collapse("show")
     if(self.parametros.tipoEjecucion == 1){
        __modificarCliente()
@@ -204,6 +229,111 @@ self.on('mount',function(){
        $(".errorServerSideJgrid").remove();
     }, false );
 })
+
+/**
+*  Provincias
+**/
+function __cargaProvincias(){
+    self.provincias                = {data:[]}  // definir el data del datatable
+    self.update()
+     $.ajax({
+         url: "ListarProvinciasAjax.do",
+        datatype: "json",
+        method:"GET",
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.provincias.data =  result.aaData
+                self.update();
+                _ConsultarCantonesByProvincias()
+            
+
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+
+}
+
+/**
+* cuando cambia la provincia cambia los cantones
+**/
+__cargaCantones(){
+    _ConsultarCantonesByProvincias()
+}
+/**
+*  Cantones
+**/
+function _ConsultarCantonesByProvincias(){
+    var provincia = {
+        id:null,
+        codigo:$('#provincia').val(),
+        descripcion:""
+    }
+    self.cantones  = {data:[]}
+    self.update()
+     $.ajax({
+         url: "ListarCantonesAjax.do",
+        datatype: "json",
+        method:"GET",
+        data : provincia,
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.cantones.data =  result.aaData
+                self.update();
+                _ConsultarDistritosByCanton()
+
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+
+}
+
+/**
+* cuando cambia los cantones cambia los distritos
+**/
+
+__cargaDistritos(){
+    _ConsultarDistritosByCanton()
+
+}
+
+/**
+*  Cantones
+**/
+function _ConsultarDistritosByCanton(){
+    var canton = {
+        id:null,
+        codigo:$('#canton').val(),
+        codigo_provincia:$('#provincia').val(),
+        descripcion:""
+    }
+    self.distritos  = {data:[]}
+    self.update()
+     $.ajax({
+         url: "ListarDistritosAjax.do",
+        datatype: "json",
+        method:"GET",
+        data : canton,
+        success: function (result) {
+             if(result.aaData.length > 0){
+                self.distritos.data =  result.aaData
+                self.update();
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+
+}
 
 /**
 *Consulta hacienda

@@ -43,6 +43,11 @@ public class ProveedorSimplificadoCommand {
 	private Integer	codigoPais;
 
 	private Integer	telefono;
+	private Integer	codigoProvincia;
+
+	private Integer	codigoCanton;
+
+	private Integer	codigoDistrito;
 
 	private String	codigoActividad;
 
@@ -64,7 +69,13 @@ public class ProveedorSimplificadoCommand {
 		this.telefono = proveedorSimplificado.getTelefono();
 		this.estadoSTR = MapEnums.ENUM_ESTADO_.get(proveedorSimplificado.getEstado());
 		this.codigoActividad = proveedorSimplificado.getCodigoActividad();
+    this.codigoProvincia = proveedorSimplificado.getCodigoProvincia();
+    this.codigoCanton = proveedorSimplificado.getCodigoCanton();
+    this.codigoDistrito = proveedorSimplificado.getCodigoDistrito();
+	}
 
+	public ProveedorSimplificadoCommand() {
+		super();
 	}
 
 	public String getEstadoSTR() {
@@ -75,8 +86,28 @@ public class ProveedorSimplificadoCommand {
 		this.estadoSTR = estadoSTR;
 	}
 
-	public ProveedorSimplificadoCommand() {
-		super();
+	public Integer getCodigoProvincia() {
+		return codigoProvincia;
+	}
+
+	public void setCodigoProvincia(Integer codigoProvincia) {
+		this.codigoProvincia = codigoProvincia;
+	}
+
+	public Integer getCodigoCanton() {
+		return codigoCanton;
+	}
+
+	public void setCodigoCanton(Integer codigoCanton) {
+		this.codigoCanton = codigoCanton;
+	}
+
+	public Integer getCodigoDistrito() {
+		return codigoDistrito;
+	}
+
+	public void setCodigoDistrito(Integer codigoDistrito) {
+		this.codigoDistrito = codigoDistrito;
 	}
 
 	public Long getId() {

@@ -1165,7 +1165,7 @@ __asignarImpuesto(){
     }else{
         $('.impuesto').val(null)
         self.articulo.impuesto = 0  
-        self.articulo.tipoImpuesto =$('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
+        self.articulo.tipoImpuesto =$('#tipoImpuesto').val() == "Exento"?"":$('#tipoImpuesto').val()
     //    self.articulo.impuesto = getMontoImpuesto(self.articulo.codigoTarifa,self.articulo.tipoImpuesto,self.tarifas1.aaData)
         self.update()
     } 
@@ -1183,7 +1183,7 @@ __asignarImpuesto(){
 __asignarImpuesto1(){
       $('.impuesto1').val(null)
     self.articulo.impuesto1 = 0
-    self.articulo.tipoImpuesto1 =$('#tipoImpuesto1').val() == "Sin impuesto"?"":$('#tipoImpuesto1').val()
+    self.articulo.tipoImpuesto1 =$('#tipoImpuesto1').val() == "Exento"?"":$('#tipoImpuesto1').val()
     self.tarifas2  = {aaData:[]}
     self.update()
     actualizarPreciosImpuestosMayorista()
@@ -1559,7 +1559,7 @@ function __Impuestos(){
     self.update()
      self.impuestos.push({
         codigo: "",
-        descripcion:"Sin impuesto"
+         descripcion:"Exento"
      });
      
     self.impuestos.push({
@@ -1594,7 +1594,7 @@ function __Impuestos1(){
     self.update()
      self.impuestos1.push({
         codigo: "",
-        descripcion:"Sin impuesto"
+        descripcion:"Exento"
      });
      
     self.impuestos1.push({
@@ -1676,7 +1676,7 @@ __agregar(){
      }
 
         if ($("#formulario").valid()) {
-             var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
+             var tipo = $('#tipoImpuesto').val() == "Exento"?"":$('#tipoImpuesto').val()
             if(tipo == "07"){
                 var baseImponible = $('#baseImponible').val()
                 if(baseImponible == 0){
@@ -1757,7 +1757,7 @@ __Modificar(){
     var AplicoImpuesto1 = false
     var AplicoImpuesto2 = false
     if ($("#formulario").valid()) {
-        var tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
+        var tipo = $('#tipoImpuesto').val() == "Exento"?"":$('#tipoImpuesto').val()
         if(tipo == "07"){
             var baseImponible = $('#baseImponible').val()
             if(baseImponible == 0){
@@ -1765,7 +1765,7 @@ __Modificar(){
                return 
             }
         }
-        tipo = $('#tipoImpuesto1').val() == "Sin impuesto"?"":$('#tipoImpuesto1').val()
+        tipo = $('#tipoImpuesto1').val() == "Exento"?"":$('#tipoImpuesto1').val()
         if(tipo.length == 0){
            var monto = parseFloat($(".impuesto1").val())
            if (monto > 0){

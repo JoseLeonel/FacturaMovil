@@ -68,6 +68,24 @@ function _consulta(){
 	   }
 	});
 }
+
+function loadListar(table,idioma,formatoTabla,data){
+	$(table).DataTable().destroy();
+        $(table).DataTable({
+        destroy: true,
+        "language": idioma_espanol,
+        "sDom": 'lrtip',
+        "order": [3, 'desc'],
+        "bPaginate": true,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+       
+        "columns": formatoTabla,
+    });  
+    $(table).dataTable().fnClearTable();
+    $(table).dataTable().fnAddData(data);        
+}
 /**
 *  inicializar el listado
 **/
@@ -76,7 +94,7 @@ function __Inicializar_Table(nombreTabla){
         destroy: true,
         "language": idioma_espanol,
         "sDom": 'lrtip',
-        "order": [0, 'asc'],
+        "order": [3, 'desc'],
         "bPaginate": true,
         'responsive': true,
         "bAutoWidth": true,

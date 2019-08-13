@@ -4176,7 +4176,13 @@ function __calculate() {
     self.factura.totalImpuesto           = Math.round(__valorNumerico(totalImpuesto)) + Math.round(__valorNumerico(totalImpuesto1))
     
     //Se verifica si la mesa tiene impuestos
-    if (typeof self.factura.mesa.impuestoServicio !== 'undefined'){
+    var tieneMesa = typeof self.factura.mesa !== 'undefined'?true:false;
+    var tieneImpuestoServiciot = false
+    if(tieneMesa){
+      tieneImpuestoServiciot = typeof self.factura.mesa.impuestoServicio !== 'undefined'?true:false;  
+    }
+    
+    if (tieneMesa && tieneImpuestoServiciot){
         if(self.factura.mesa.impuestoServicio  == true){
             self.factura.totalImpuestoServ       = Math.round(__valorNumerico(subTotal * 0.10))
             self.factura.totalVentaNeta          = Math.round(__valorNumerico((totalVenta-totalDescuento) + self.factura.totalImpuestoServ))

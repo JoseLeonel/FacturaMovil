@@ -1,7 +1,10 @@
 package com.emprendesoftcr.Bo;
 
+import java.util.Collection;
+
 import com.emprendesoftcr.modelo.CompraSimplificada;
 import com.emprendesoftcr.modelo.Empresa;
+import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.CompraSimplificadaCommand;
@@ -22,6 +25,8 @@ public interface CompraSimplificadaBo {
 	CompraSimplificada findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa);
 	
 	void eliminarDetalleComprasPorSP(CompraSimplificada compraSimplificada) throws Exception;
+	
+	Collection<CompraSimplificada> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma);
 	
 
 

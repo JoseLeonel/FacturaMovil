@@ -1,5 +1,6 @@
 package com.emprendesoftcr.Dao.Impl;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.CompraSimplificadaDao;
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.CompraSimplificada;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
@@ -109,6 +111,19 @@ public class CompraSimplificadaDaoImpl implements CompraSimplificadaDao {
 			log.error("** Error ejecutar el procedimineto almacenados de eliminar detalles de una compra : " + e.getMessage() + " fecha " + new Date());
 		}
 
+	}
+	
+	@Override
+	public Collection<CompraSimplificada> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma) {
+		//Query query = entityManager.createQuery("select obj from Factura obj where  obj.estadoFirma in(:estadoFirma ,:reEstadoFirma) and obj.estado =  :estado and obj.empresa.id =  :idEmpresa order by obj.empresa.id");
+		Query query = entityManager.createQuery("select obj from CompraSimplificada obj where  obj.estadoFirma in(:estadoFirma ,:reEstadoFirma) and obj.estado =  :estado order by obj.empresa.id");
+		query.setParameter("estadoFirma", estadoFirma);
+	//	query.setParameter("idEmpresa", Constantes.EMPRESA_VIVIANA_MARTINEZ_8085);
+		query.setParameter("reEstadoFirma", reEstadoFirma);
+		query.setParameter("estado", Constantes.FACTURA_ESTADO_FACTURADO);
+		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
+
+		return query.getResultList();
 	}
 
 }

@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.emprendesoftcr.Bo.CertificadoBo;
+import com.emprendesoftcr.Bo.CompraSimplificadaBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DetalleBo;
@@ -47,6 +48,7 @@ import com.emprendesoftcr.fisco.Recepcion;
 import com.emprendesoftcr.fisco.ReceptorHacienda;
 import com.emprendesoftcr.fisco.RespuestaHaciendaXML;
 import com.emprendesoftcr.modelo.Attachment;
+import com.emprendesoftcr.modelo.CompraSimplificada;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
@@ -56,6 +58,7 @@ import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
 import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.pdf.ReportePdfView;
+import com.emprendesoftcr.service.CompraSimplificadaXMLServices;
 import com.emprendesoftcr.service.FacturaXMLServices;
 import com.emprendesoftcr.service.NotaCreditoXMLIVAServices;
 import com.emprendesoftcr.service.NotaCreditoXMLServices;
@@ -217,11 +220,16 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	@Autowired
 	FacturaBo																													facturaBo;
+
+	@Autowired
+	CompraSimplificadaBo																							compraSimplificadaBo;
+
 	@Autowired
 	EmpresaBo																													empresaBo;
 
 	@Autowired
 	DetalleBo																													detalleBo;
+
 	@Autowired
 	ConsultasNativeBo																									consultasNativeBo;
 
@@ -233,6 +241,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	@Autowired
 	FacturaXMLServices																								facturaXMLServices;
+
+	@Autowired
+	CompraSimplificadaXMLServices																			compraSimplificadaXMLServices;
 
 	@Autowired
 	TiqueteXMLService																									tiqueteXMLService;
@@ -296,21 +307,21 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 //
 //	}
 
-//	@Scheduled(cron = "0 0/10 * * * ?")
-//	@Override
+//	@Scheduled(cron = "0 0/1 * * * ?")
+	@Override
 	public synchronized void taskAnularProformas() {
 		try {
 			log.info("Inicio Proceso de Anulacion de Proformas de empresas con criterio de dias  {}", new Date());
 		} catch (Exception e) {
 			log.error("** Error2  Proceso de anulacion de proformas: " + e.getMessage() + " fecha " + new Date());
 			throw e;
-		} 
+		}
 	}
-	
+
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -469,7 +480,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 				// Guanacaste
-				// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+				recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 				// JacoDos
 				// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
@@ -478,10 +489,10 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 				// Inventario
-				recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				// Alajuela
-				 //recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
 
 				ObjectMapper mapperObj = new ObjectMapper();
 				String jsonStr = mapperObj.writeValueAsString(recepcion);
@@ -530,7 +541,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 								resta = resta / (1000 * 60);
 							}
 							log.info("Comprobando Documentos:" + hacienda.getConsecutivo() + " Empresa :" + hacienda.getNombreEmpresa());
-							if (resta >= 20 || hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ERROR) || hacienda.getTipoDoc().equals(Constantes.HACIENDA_TIPODOC_COMPRAS)) {
+							if (resta >= 6 || hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ERROR) || hacienda.getTipoDoc().equals(Constantes.HACIENDA_TIPODOC_COMPRAS)) {
 								log.info("Documento cumplio 3 horas::" + hacienda.getConsecutivo() + " Empresa :" + hacienda.getNombreEmpresa());
 								if (hacienda.getReintentosAceptacion() != null) {
 									if (hacienda.getReintentosAceptacion() <= Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
@@ -580,6 +591,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Override
 	public OpenIDConnectHacienda aceptarDocumento(Hacienda hacienda, OpenIDConnectHacienda openIDConnectHacienda) throws Exception {
 		try {
+			Boolean aplicarCambioEstadoFactura = Boolean.FALSE;
 			// Se verifica si es la misma empresa de la conexion anterior o bien si es null
 			if ((openIDConnectHacienda == null) || (openIDConnectHacienda != null && !hacienda.getEmpresa().getId().equals(openIDConnectHacienda.getEmpresa().getId()))) {
 
@@ -663,15 +675,18 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						Boolean rechazado = Boolean.TRUE;
 						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
 							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+							aplicarCambioEstadoFactura = Boolean.TRUE;
 						}
 						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_ACEPTADO_HACIENDA_STR)) {
 							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+							aplicarCambioEstadoFactura = Boolean.TRUE;
 						}
 						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO_STR)) {
 							rechazado = Boolean.FALSE;
 							if (haciendaBD.getReintentosAceptacion() != null) {
 								if (haciendaBD.getReintentosAceptacion() > Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
 									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+									aplicarCambioEstadoFactura = Boolean.TRUE;
 									haciendaBD.setObservacion(FacturaElectronicaUtils.convertirStringToblod(Constantes.MAXIMO_REINTENTOS_ACEPTACION_STR));
 								} else {
 
@@ -683,9 +698,11 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						}
 						log.info("*status1: " + status);
 						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_ACEPTADO_HACIENDA_STR)) {
+							aplicarCambioEstadoFactura = Boolean.TRUE;
 							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
 						}
 						if (status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
+							aplicarCambioEstadoFactura = Boolean.TRUE;
 							haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
 						}
 						log.info("*status2: " + status);
@@ -698,6 +715,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 									if (haciendaBD.getReintentosAceptacion() != null) {
 										if (haciendaBD.getReintentosAceptacion() > Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
 											haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+											aplicarCambioEstadoFactura = Boolean.TRUE;
 											haciendaBD.setObservacion(FacturaElectronicaUtils.convertirStringToblod(Constantes.MAXIMO_REINTENTOS_ACEPTACION_STR));
 										} else {
 
@@ -711,12 +729,14 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_PARCIAL);
 								} else if (respuestaHacienda.mensajeHacienda().mensaje().contains(Constantes.HACIENDA_ESTADO_ACEPTADO_ACEPTADO_HACIENDA_STR)) {
 									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+									aplicarCambioEstadoFactura = Boolean.TRUE;
 								}
 							}
 						} else {
 							if (!status.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA_STR)) {
 								if (haciendaBD.getReintentosAceptacion() == Constantes.MAXIMO_REINTENTOS_ACEPTACION) {
 									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
+									aplicarCambioEstadoFactura = Boolean.TRUE;
 								} else {
 									haciendaBD.setReintentosAceptacion(haciendaBD.getReintentosAceptacion() == null ? 1 : haciendaBD.getReintentosAceptacion() + 1);
 									haciendaBD.setEstado(Constantes.HACIENDA_ESTADO_ENVIADO_HACIENDA);
@@ -726,18 +746,25 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 						haciendaBD.setObservacion(respuestaHacienda.mensajeHacienda() != null ? FacturaElectronicaUtils.convertirStringToblod(respuestaHacienda.mensajeHacienda().detalleMensaje()) : null);
 						haciendaBD.setCallBack(Constantes.CALLBACKURL_NO);
 						haciendaBo.modificar(haciendaBD);
+						if(aplicarCambioEstadoFactura) {
+							cambiarEstado(hacienda);	
+						}
 					} else {// sumar reintententos
 						if (body.contains("El comprobante") && body.contains("no ha sido recibido")) {
 							hacienda.setxErrorCause(FacturaElectronicaUtils.convertirStringToblod(body));
 							hacienda.setObservacion(FacturaElectronicaUtils.convertirStringToblod(body));
 							hacienda.setEstado(Constantes.HACIENDA_ESTADO_ERROR);
+							aplicarCambioEstadoFactura = Boolean.TRUE;
 
 						} else {
 							hacienda.setReintentosAceptacion(hacienda.getReintentosAceptacion() == null ? 1 : hacienda.getReintentosAceptacion() + 1);
 						}
 						hacienda.setCallBack(Constantes.CALLBACKURL_NO);
 						haciendaBo.modificar(hacienda);
-
+						if(aplicarCambioEstadoFactura) {
+							cambiarEstado(hacienda);	
+						}
+						
 					}
 				}
 			}
@@ -747,6 +774,41 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 		}
 
 		return openIDConnectHacienda;
+	}
+
+	private void cambiarEstado(Hacienda hacienda) throws Exception {
+		try {
+			if (hacienda != null) {
+				if (hacienda.getTipoDoc().equals(Constantes.HACIENDA_TIPODOC_COMPRAS)) {
+//          RecepcionFactura recepcionFactura = recepcionFacturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(),hacienda.getEmpresa());
+//          if (recepcionFactura != null) {
+//						if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+//							recepcionFactura.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+//						} else if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+//							recepcionFactura.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+//						}
+//						recepcionFacturaBo.modificar(recepcionFactura);
+//						}
+
+					
+				} else {
+					Factura factura = facturaBo.findByClaveAndEmpresa(hacienda.getClave(), hacienda.getEmpresa());
+					if (factura != null) {
+						if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+							factura.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+						} else if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+							factura.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+						}
+						facturaBo.modificar(factura);
+
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			log.error("** Error  cambiar el estado Factura: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
+			throw e;
+		}
 	}
 
 	/**
@@ -1134,10 +1196,11 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
+			procesoFirmadoComprasSimplificadas();
 			log.info("Inicio el proceso de firmado  {}", new Date());
 
 			Collection<Factura> lista = facturaBo.findByEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE, Constantes.FACTURA_ESTADO_REFIRMAR_DOCUMENTO);
@@ -1242,6 +1305,81 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 			log.error("** Error2  proceso de firmado: " + e.getMessage() + " fecha " + new Date());
 			throw e;
 		}
+	}
+
+	private void procesoFirmadoComprasSimplificadas() throws Exception {
+		try {
+			log.info("Inicio Proceso de firmado compra Simplificado  {}", new Date());
+			String xmlString = Constantes.EMPTY;
+			Collection<CompraSimplificada> lista = compraSimplificadaBo.findByEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE, Constantes.FACTURA_ESTADO_REFIRMAR_DOCUMENTO);
+			if (lista != null) {
+				for (CompraSimplificada compraSimplificada : lista) {
+					try {
+						log.info("Compra simplificada id	:  {}", compraSimplificada.getId() + " Compra Simplificada proceso de firmado:  " + compraSimplificada.getNumeroConsecutivo().toString() + " Empresa:" + compraSimplificada.getEmpresa().getNombre());
+						xmlString = Constantes.EMPTY;
+						xmlString = compraSimplificadaXMLServices.getCrearXMLSinFirma(compraSimplificada);
+						xmlString = compraSimplificadaXMLServices.getFirmarXML(xmlString, compraSimplificada.getEmpresa(), compraSimplificada.getFechaEmision());
+						if (xmlString != null) {
+							if (!xmlString.equals(Constantes.EMPTY)) {
+								Hacienda haciendaVerificar = haciendaBo.findByEmpresaAndClave(compraSimplificada.getEmpresa(), compraSimplificada.getClave());
+								if (haciendaVerificar == null) {
+									Hacienda hacienda = new Hacienda();
+									hacienda.setCedulaEmisor(compraSimplificada.getEmpresa().getCedula());
+									hacienda.setTipoEmisor(compraSimplificada.getEmpresa().getTipoCedula());
+									// no se graba el cliente si es frecuente
+									if (compraSimplificada.getProveedorSimplificado() != null) {
+										if (!compraSimplificada.getProveedorSimplificado().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+											hacienda.setCedulaReceptor(compraSimplificada.getProveedorSimplificado().getCedula());
+											hacienda.setTipoReceptor(compraSimplificada.getProveedorSimplificado().getTipoCedula());
+										}
+									}
+									hacienda.setEmpresa(compraSimplificada.getEmpresa());
+									hacienda.setClave(compraSimplificada.getClave());
+									hacienda.setFechaEmisor(compraSimplificada.getFechaEmision());
+									Blob b = FacturaElectronicaUtils.convertirStringToblod(xmlString);
+									hacienda.setComprobanteXML(b);
+									hacienda.setCreated_at(new Date());
+									hacienda.setUpdated_at(new Date());
+									hacienda.setStatus(Constantes.ZEROS);
+									hacienda.setEstado(Constantes.HACIENDA_ESTADO_FIRMARDO_XML);
+									hacienda.setConsecutivo(compraSimplificada.getNumeroConsecutivo());
+									hacienda.setReintentos(Constantes.ZEROS);
+									hacienda.setReintentosAceptacion(Constantes.ZEROS);
+									hacienda.setTipoDoc(compraSimplificada.getTipoDoc());
+									hacienda.setNombreReceptor(compraSimplificada.getProveedorSimplificado().getNombreCompleto());
+									hacienda.setCorreoReceptor(compraSimplificada.getProveedorSimplificado().getCorreoElectronico());
+									hacienda.setTotalReceptor(compraSimplificada.getTotalComprobante());
+									hacienda.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_PENDIENTE);
+									haciendaBo.agregar(hacienda);
+									if (compraSimplificada != null) {
+										CompraSimplificada compraSimplificadaBD = compraSimplificadaBo.findById(compraSimplificada.getId());
+										if (compraSimplificadaBD != null) {
+											compraSimplificadaBD.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_COMPLETO);
+											compraSimplificadaBo.modificar(compraSimplificadaBD);
+
+										}
+									}
+
+								}
+							}
+						}
+
+					} catch (Exception e) {
+						compraSimplificada.setEstadoFirma(Constantes.FACTURA_ESTADO_PROBLEMA_AL_FIRMAR);
+						compraSimplificadaBo.modificar(compraSimplificada);
+						log.error("** Error1 proceso de firmado compra simplificada: " + e.getMessage() + " fecha " + new Date());
+					}
+
+				}
+
+			}
+
+		} catch (Exception e) {
+			log.error("** Error2  proceso de firmado compra Simplificada: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+
+		log.info("Finaliza proceso de firmado compra Simplificado  {}", new Date());
 	}
 
 	/**

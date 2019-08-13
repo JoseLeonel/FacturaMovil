@@ -1,5 +1,7 @@
 package com.emprendesoftcr.Dao;
 
+import java.util.Collection;
+
 import com.emprendesoftcr.modelo.CompraSimplificada;
 import com.emprendesoftcr.modelo.Empresa;
 
@@ -19,6 +21,7 @@ public interface CompraSimplificadaDao {
 	
 	CompraSimplificada findByClaveAndEmpresa(String clave, Empresa empresa) throws Exception;
 	
+	Collection<CompraSimplificada> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma);
 
 	
 

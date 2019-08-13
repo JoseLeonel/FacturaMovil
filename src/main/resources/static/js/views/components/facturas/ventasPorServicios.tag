@@ -454,6 +454,65 @@ self.on('mount',function(){
     
 })
 
+
+/**
+*  Obtiene el valor de lo digitado en el campo de efectivo
+**/
+__TotalDeEfectivoAPagar(e){
+    self.totalCambioPagarSTR = 0
+    self.factura.totalEfectivo = __valorNumerico($("#totalEfectivo").val()) 
+    self.update()
+    _calculoEnterPago()
+}
+/**
+*  Obtiene el valor de lo digitado en el campo de Tarjeta
+**/
+__TotalDeTarjetaAPagar(e){
+    self.factura.totalTarjeta = __valorNumerico($("#totalTarjeta").val()) 
+    self.update()
+    _calculoEnterPago()
+}
+/**
+*  Obtiene el valor de lo digitado en el campo de Banco
+**/
+__TotalDeBancoAPagar(e){
+    self.factura.totalBanco = __valorNumerico($(".totalBanco").val()) 
+   
+    self.update()
+    _calculoEnterPago()
+}
+/**
+*   Calculo del cambio entregar en el evento onblur
+**/
+__CalculaCambioAEntregarOnblur(e){
+    _calculoEnterPago()
+}
+
+
+function _calculoEnterPago(){
+        var sumaMontosEntregadosParaCambios  = __valorNumerico($('.totalTarjeta').val())
+        sumaMontosEntregadosParaCambios += __valorNumerico($('#totalBanco').val()) 
+        sumaMontosEntregadosParaCambios += __valorNumerico($('.totalEfectivo').val())   
+        if(sumaMontosEntregadosParaCambios == 0){
+            self.factura.totalCambioPagar =  __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2)) * -1
+            self.totalCambioPagar =  __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2)) * -1
+            self.totalCambioPagarSTR = formatoDecimales(self.totalCambioPagar,2)    
+            self.update()
+            return
+        }
+        self.factura.totalCambioPagar = 0
+        var totalEntregado = __valorNumerico(redondeoDecimales(sumaMontosEntregadosParaCambios,2))
+        var totalFactura   = __valorNumerico(redondeoDecimales(self.factura.totalComprobante,2))
+        totalEntregado     = __valorNumerico(totalEntregado)
+        totalFactura       = __valorNumerico(totalFactura)  
+        self.factura.totalCambioPagar = totalEntregado - totalFactura
+        self.factura.totalCambioPagar =__valorNumerico(self.factura.totalCambioPagar)   
+        self.totalCambioPagar = __valorNumerico(redondeoDecimales(self.factura.totalCambioPagar,2))
+        self.totalCambioPagarSTR = formatoDecimales(self.totalCambioPagar,2)
+        self.update()
+}
+
+
 /**
 *  Lista de los clientes
 **/
@@ -501,27 +560,8 @@ function BuscarActividadComercial(){
     })
 }
 
-/**
-*  Obtiene el valor de lo digitado en el campo de efectivo
-**/
-__TotalDeEfectivoAPagar(e){
-    self.factura.totalEfectivo = __valorNumerico(e.target.value) 
-    self.update()
-}
-/**
-*  Obtiene el valor de lo digitado en el campo de Tarjeta
-**/
-__TotalDeTarjetaAPagar(e){
-    self.factura.totalTarjeta = __valorNumerico(e.target.value) 
-    self.update()
-}
-/**
-*  Obtiene el valor de lo digitado en el campo de Banco
-**/
-__TotalDeBancoAPagar(e){
-    self.factura.totalBanco = __valorNumerico(e.target.value) 
-    self.update()
-}
+
+
 /**
 *   Calculo del cambio entregar en el evento onblur
 **/
@@ -704,6 +744,35 @@ function aplicarFactura(){
             return
         }
     }
+
+    if($("#tipoDoc").val() !="88"){
+        if(__valorNumerico($('#totalTarjeta').val()) == 0 && __valorNumerico($('#totalBanco').val()) == 0 && __valorNumerico($('#totalEfectivo').val()) == 0){
+            mensajeError($.i18n.prop("error.factura.monto.ingresado"))
+            return
+        }
+        var montoEntregado = __valorNumerico($('#totalTarjeta').val())  + __valorNumerico($('#totalBanco').val()) + __valorNumerico($('#totalEfectivo').val())
+        montoEntregado = redondeoDecimales(__valorNumerico(montoEntregado),2)
+        if(montoEntregado > 20000000){
+           mensajeError("Monto entregado es muy alto")
+           return
+        }
+        var resultado  = redondeoDecimales( __valorNumerico(self.factura.totalComprobante),2)
+        if(__valorNumerico(resultado) > __valorNumerico(montoEntregado)  ){
+            mensajeError($.i18n.prop("error.factura.monto.ingresado.es.menor.ala.venta"))
+            return
+        }
+        //Si el cliente esta pagando con tajeta, banco debe ser igual a la venta
+        var tarjeta = __valorNumerico(self.factura.totalTarjeta)
+        var banco = __valorNumerico(self.factura.totalBanco)
+        if(tarjeta != 0 || banco !=0){
+            if(resultado != montoEntregado  ){
+                mensajeError($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
+                return
+            }
+        }
+    }
+  
+
     if ($("#formularioPaso2").valid()) {
         swal({
            title: '',

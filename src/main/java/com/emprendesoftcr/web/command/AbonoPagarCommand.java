@@ -45,6 +45,21 @@ public class AbonoPagarCommand {
 
 	private String				created_atSTR;
 	private String				updated_atSTR;
+	
+	private String				fechaPagoSTR;
+	
+	
+	public String getFechaPagoSTR() {
+		return fechaPagoSTR;
+	}
+
+	
+	public void setFechaPagoSTR(String fechaPagoSTR) {
+		this.fechaPagoSTR = fechaPagoSTR;
+	}
+
+
+	private String						nombreBanco;
 
 	private CuentaPagar	cuentaPagar;
 
@@ -58,7 +73,7 @@ public class AbonoPagarCommand {
 		this.nota = abonoPagar.getNota();
 		this.recibo = abonoPagar.getRecibo();
 		this.transferencia = abonoPagar.getTransferencia();
-		this.fechaPago = abonoPagar.getFechaPago().toString();
+		this.fechaPago = Utils.getFechaGeneraReporte(abonoPagar.getFechaPago());
 		this.totalEfectivo = abonoPagar.getTotalEfectivo();
 		this.totalTarjeta = abonoPagar.getTotalTarjeta();
 		this.totalBanco = abonoPagar.getTotalBanco();
@@ -73,6 +88,8 @@ public class AbonoPagarCommand {
 		this.totalEfectivoSTR = abonoPagar.getTotalEfectivoSTR();
 		this.totalTarjetaSTR = abonoPagar.getTotalTarjetaSTR();
 		this.totalSTR = abonoPagar.getTotalSTR();
+		this.nombreBanco = abonoPagar.getNombreBanco();
+		this.fechaPagoSTR = Utils.getFechaGeneraReporte(abonoPagar.getFechaPago());
 
 	}
 
@@ -87,6 +104,16 @@ public class AbonoPagarCommand {
 	
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	
+	public String getNombreBanco() {
+		return nombreBanco;
+	}
+
+	
+	public void setNombreBanco(String nombreBanco) {
+		this.nombreBanco = nombreBanco;
 	}
 
 	public CuentaPagar getCuentaPagar() {

@@ -3,8 +3,12 @@ package com.emprendesoftcr.Dao;
 import java.util.Collection;
 
 import com.emprendesoftcr.modelo.Empresa;
+<<<<<<< HEAD
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
+=======
+import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
+>>>>>>> 0a7653d7e17dc8d16953b0a74e3b38fb48706f2b
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
@@ -35,7 +39,11 @@ public interface  ConsultasNativeDao {
 	
 	Collection<HaciendaComprobarNative> findByComprabarDocumentoPendienteaceptar();
 	
+<<<<<<< HEAD
 	Collection<ConsultaIVANative> findByEmpresaAndEstadoAndFechasAndActividadComercial(Empresa empresa, String fechaInicial , String fechaFinal, Integer estado, Integer codigoActividadComercial);
 	
 	Collection<ConsultaComprasIvaNative> findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(Empresa empresa, String fechaInicial , String fechaFinal, Integer estado, Integer codigoActividadComercial);
+=======
+	Collection<CompraSimplificadaNative> findComprasSimplificadasByFechaAndEstadoAndEmpresa(Empresa empresa, String fechaInicial , String fechaFinal,Long idProveedor,Integer estado,Integer idUsuario);
+>>>>>>> 0a7653d7e17dc8d16953b0a74e3b38fb48706f2b
 }

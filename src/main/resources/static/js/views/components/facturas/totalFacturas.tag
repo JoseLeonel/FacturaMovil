@@ -54,7 +54,7 @@
                 <div  show={mostrarFiltros}  class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
                     <form id="filtros" name="filtros">              
                         <div class= "row">
-                            <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label class="knob-label" >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
                                     <div  class="form-group input-group date datepickerFechaInicio" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
@@ -65,7 +65,7 @@
                                     </div>	                             
                                 </div>  
                             </div>             
-                            <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label class="knob-label" >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
@@ -77,7 +77,18 @@
                                         </div>	                             
                                     </div>
                                 </div>  
-                            </div>                                                
+                            </div>   
+							 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Estado </label>  
+                                    <select  class="form-control selectEstado estado" id= "estado" name="estado" >
+                                     	<option  value="2"  >Facturada</option>
+                                    	<option  value="5"  >Anulada</option>
+                                    	<option  value="6"  >Aceptada </option>
+                                    	<option  value="7"  >No Aceptada</option>
+                                    </select>
+                                </div>  
+                            </div>                                                 
                         </div>
                     </form>  
                 </div>
@@ -127,9 +138,9 @@
                 </div>
             </div>   
 	        <div class="col-md-12 col-lg-12 col-sm-12">
-				<a class="fa fa-download" target="_blank" title="Descargar detalle transacciones" href="DescargarDetalleTotalFacturasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}"> Descargar</a>        
-		        <button onclick ={__EnviarCorreoEmpresa}   type="button" class="btn btn-success btnBusquedaAvanzada" title="Enviar corre de la empresa" name="button"> Empresa  <i class="fa fa-envelope"></i></button>
-		        <button onclick ={__CorreoAlternativo} type="button" class="btn btn-success btnBusquedaAvanzada" title="Correo alternativo" name="button" >  Alternativo  <i class="fa fa-envelope"></i></button>
+				<a show ="{mostrarBotones == true?true:false}" class="fa fa-download" target="_blank" title="Descargar detalle transacciones" href="DescargarDetalleTotalFacturasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&estado={estado}"> Descargar</a>        
+		        <button show ="{mostrarBotones == true?true:false}" onclick ={__EnviarCorreoEmpresa}   type="button" class="btn btn-success btnBusquedaAvanzada" title="Enviar corre de la empresa" name="button"> Empresa  <i class="fa fa-envelope"></i></button>
+		        <button show ="{mostrarBotones == true?true:false}" onclick ={__CorreoAlternativo} type="button" class="btn btn-success btnBusquedaAvanzada" title="Correo alternativo" name="button" >  Alternativo  <i class="fa fa-envelope"></i></button>
 	        </div>
         </div>
         <div class="col-md-2 col-lg-2 col-sm-2"></div>
@@ -153,7 +164,8 @@
 				totalVentasExentas:"0",
 				totalVentasGravadas:"0",
 		}
-		
+		self.mostrarBotones=false
+		self.estado = 0
 		self.fechaInicio="";
 		self.fechaFin="";
 		//Se cargan al montar el tag
@@ -215,12 +227,15 @@
 			limpiarFactura();
 		    self.fechaInicio = $('#fechaInicial').val();
 		    self.fechaFin = $('#fechaFinal').val();
+			self.estado = $('.estado').val()
+			self.mostrarBotones=false
 		    self.update();
 		    
 		    if ($("#filtros").valid()) {
 		        var parametros = {
 		        	fechaInicioParam:$('#fechaInicial').val(),
 		        	fechaFinParam:$('#fechaFinal').val(),
+					estado:$('.estado').val()
 		        };
 		        $.ajax({
 		            url: "TotalFacturasAjax.do",
@@ -231,6 +246,10 @@
 			        	self.factura = data;
 			        	self.mostrarDetalle = true;
 			        	self.mostrarFiltros = false;
+						if(self.factura.total >0){
+                          self.mostrarBotones=true
+						}
+						
 					    self.update();
 			        },
 			        error: function (xhr, status) {
@@ -250,6 +269,7 @@
 		        	correoAlternativo:$('#correoAlternativo').val(),		
 		        	fechaInicioParam:$('#fechaInicial').val(),
 		        	fechaFinParam:$('#fechaFinal').val(),
+					estado:$('.estado').val()
 		        };
 		        $.ajax({
 		            url: "EnvioDetalleTotalFacturasAjax.do",

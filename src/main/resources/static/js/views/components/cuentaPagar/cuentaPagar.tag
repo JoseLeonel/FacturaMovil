@@ -89,27 +89,23 @@
                                     <table id="tableListaAbonoPagar" class="display table responsive table-hover nowrap table-condensed tableListaAbonoPagar"   cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
-                                                <th class="table-header" >{$.i18n.prop("abonoPagar.id")}           </th>
                                                 <th class="table-header" >{$.i18n.prop("abonoPagar.fechaPago")}     </th>
                                                 <th class="table-header" >{$.i18n.prop("abonoPagar.transferencia")} </th>
-                                                <th class="table-header" >{$.i18n.prop("abonoPagar.recibo")}        </th>
+                                                <th class="table-header">{$.i18n.prop("abonoPagar.nota")}        </th>
+                                                <th class="table-header">{$.i18n.prop("abonoPagar.nombreBanco")}        </th>
                                                 <th class="table-header" >{$.i18n.prop("abonoPagar.total")}         </th>
                                                 <th class="table-header" >{$.i18n.prop("abonoPagar.estado")}        </th>
-                                                <th class="table-header" >{$.i18n.prop("abonoPagar.created_at")}    </th>
-                                                <th class="table-header" >{$.i18n.prop("abonoPagar.updated_at")}    </th>
                                                 <th class="table-header">{$.i18n.prop("listado.acciones")}        </th>
                                             </tr>
                                         </thead>
                                         <tfoot style="display: table-header-group;">
                                             <tr>
-                                                <th >{$.i18n.prop("abonoPagar.id")}            </th>
                                                 <th >{$.i18n.prop("abonoPagar.fechaPago")}     </th>
                                                 <th >{$.i18n.prop("abonoPagar.transferencia")} </th>
-                                                <th >{$.i18n.prop("abonoPagar.recibo")}        </th>
+                                                <th >{$.i18n.prop("abonoPagar.nota")}        </th>
+                                                <th >{$.i18n.prop("abonoPagar.nombreBanco")}        </th>
                                                 <th >{$.i18n.prop("abonoPagar.total")}         </th>
                                                 <th >{$.i18n.prop("abonoPagar.estado")}        </th>
-                                                <th >{$.i18n.prop("abonoPagar.created_at")}    </th>
-                                                <th >{$.i18n.prop("abonoPagar.updated_at")}    </th>
                                                 <th >                 </th>
                                             </tr>
                                         </tfoot>
@@ -160,25 +156,34 @@
                             </div>
                         </div>
                         <div class="row">
-                             <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                        
+                            <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3" show="{abonoPagar.id>0}">
+                                <label >{$.i18n.prop("abonoPagar.fechaPago")} </label>
+                                <input type="text" class="form-control fechaPagoMostrar" placeHolder ="{$.i18n.prop("abonoPagar.fechaPago")}"  id="fechaPagoMostrar" name="fechaPagoMostrar"   readonly={abonoPagar.id > 0}>                        
+                            </div>
+
+                             <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3" show="{abonoPagar.id == null}">
                                 <label >{$.i18n.prop("abonoPagar.fechaPago")} <span class="requeridoDato">*</span></label>
-                                 <div  class="form-group input-group fechaPagoDataPicker date" data-provide="datepicker"   data-date-format="dd-mm-yyyy">
-                                    <input type="text" class="form-control fechaPago" placeHolder ="{$.i18n.prop("abono.fechaPago")}" id="fechaPago" name="fechaPago"  value="{abono.fechaPago}"  readonly={abono.id > 0}>
+                                 <div  class="form-group input-group fechaPagoDataPicker date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                    <input type="text" class="form-control fechaPago" placeHolder ="{$.i18n.prop("abonoPagar.fechaPago")}" id="fechaPago" name="fechaPago"  value="{abonoPagar.fechaPago}"  }>
                                     <div class="input-group-addon">
                                         <span class="glyphicon glyphicon-th"></span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4">
+                            <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3">
                                 <label >{$.i18n.prop("abonoPagar.recibo")} </label>
                                 <input type="text" class="form-control recibo" placeHolder ="{$.i18n.prop("abonoPagar.recibo")}"  id="recibo" name="recibo"  value="{abonoPagar.recibo}" readonly={abonoPagar.id > 0}>                        
                             </div>
-                            <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4">
+                            <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3">
                                 <label >{$.i18n.prop("abonoPagar.transferencia")} </label>
                                 <input type="text" class="form-control transferencia" placeHolder ="{$.i18n.prop("abonoPagar.transferencia")}" id="transferencia" name="transferencia" value="{abonoPagar.transferencia}" readonly={abonoPagar.id > 0}>                        
                             </div>
-                            <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                            <div class="col-md-3 col-sx-3 col-sm-3 col-lg-3">
+                                <label >{$.i18n.prop("abonoPagar.nombreBanco")} </label>
+                                <input type="text" class="form-control nombreBanco" placeHolder ="{$.i18n.prop("abonoPagar.nombreBanco")}" id="nombreBanco" name="nombreBanco" value="{abonoPagar.nombreBanco}" readonly={abonoPagar.id > 0}>                        
                             </div>
+
                         </div>
                         <div class="row">
                             <div class="col-md-4 col-sx-6 col-sm-4 col-lg-4">
@@ -257,7 +262,7 @@
             </div>                            
         </div>
         <div class="row">
-            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
+            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 scrollerT" style="width:98.50%;">
                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar"   cellspacing="0" width="100%">
                         <thead>
                             <tr>
@@ -294,6 +299,12 @@
 <!-- Fin del Listado -->
 <imprimir-abonoPagar></imprimir-abonoPagar>
 <style type ="text/css">
+        .scrollerT {
+            width: 100% !important;
+            height: 300px;
+            overflow-y: scroll;
+            
+        }
         .fondoEncabezado {
             background: #00539B;
             color: #f9fafc;
@@ -490,6 +501,8 @@ __CrearAbono(){
     $('.fechaPago').val(null)
     $('.transferencia').val(null)
     $('.recibo').val(null)
+    $('.nombreBanco').val(null)
+    
     $('.nota').val(null)
 }
 /**
@@ -502,6 +515,12 @@ var reglasDeValidacionabonoPagar = function() {
                 maxlength:25,
                 minlength:1,
 			},
+			transferencia : {
+                maxlength:30,
+			},
+            nombreBanco:{
+                maxlength:20,
+            },
             total: {
                 numeroMayorCero:true,
                 required : true,
@@ -516,7 +535,7 @@ var reglasDeValidacionabonoPagar = function() {
                 number:true,
 			},            
             nota : {
-                maxlength:255,
+                maxlength:60,
                 minlength:1,
 			},
             fechaPago : {
@@ -876,7 +895,9 @@ function __agregarRegistro(transaccion,formulario,mensajeAlerAgregar,urlAgregar,
 function __Eventos_abonoPagars(){
     $("#formularioAbonoPagar").validate(reglasDeValidacionabonoPagar());
     $("#recibo").attr("maxlength", 25);
-    $("#nota").attr("maxlength", 255);
+    $("#transferencia").attr("maxlength", 25);
+    $("#nota").attr("maxlength", 60);
+    $("#nombreBanco").attr("maxlength", 20);
     $('#descuento').mask('000', {
 		'translation' : {
 			0 : {
@@ -1180,25 +1201,19 @@ function listaAbonoPorCuentaPorPagar(){
         }
     })
 }
+
+ 
 /**
 *  Informacion de la lista de los abonoPagars
 **/
 function __InformacionTabla_lista_AbonoPagar(){
     self.informacion_tabla_AbonoPagar  = [ 
-                                       {'data':  'id'             ,"name":"id"            ,"title" : $.i18n.prop("abonoPagar.id")},
-                                       {'data' : 'fechaPago'      ,"name":"fechaPago"     ,"title" : $.i18n.prop("abonoPagar.fechaPago"),
-									     "render":function(fechaPago,type, row){
-										        return __displayDate_detail(fechaPago);
-	 							             }
-                                       },
+                                       {'data' : 'created_atSTR'      ,"name":"created_atSTR"     ,"title" : $.i18n.prop("abonoPagar.fechaPago")},
                                        {'data' : 'transferencia'  ,"name":"transferencia" ,"title" : $.i18n.prop("abonoPagar.transferencia")},
-                                       {'data' : 'recibo'         ,"name":"recibo"        ,"title" : $.i18n.prop("abonoPagar.recibo")},
-                                       {'data' : 'totalSTR'       ,"name":"totalSTR"         ,"title" : $.i18n.prop("abonoPagar.total")},
+                                       {'data' : 'nota'           ,"name":"nota"          ,"title" : $.i18n.prop("abonoPagar.nota")},
+                                       {'data' : 'nombreBanco'    ,"name":"nombreBanco"          ,"title" : $.i18n.prop("abonoPagar.nombreBanco")},
+                                       {'data' : 'totalSTR'       ,"name":"totalSTR"      ,"title" : $.i18n.prop("abonoPagar.total")},
                                        {'data' : 'estado'         ,"name":"estado"        ,"title" : $.i18n.prop("abonoPagar.estado")},
-                                       {'data' : 'created_atSTR'  ,"name":"created_atSTR"    ,"title" : $.i18n.prop("abonoPagar.created_at")
-                                       },
-                                       {'data' : 'updated_atSTR'  ,"name":"updated_atSTR"    ,"title" : $.i18n.prop("abonoPagar.updated_at") 
-                                       },
                                        {"bSortable" : false, "bSearchable" : false, 'data' : 'id',"name" : "id",
 									     "render":function(id,type, row){
 										        return __OpcionesAbonoPagar(id,type,row);
@@ -1263,7 +1278,9 @@ function consultaAbono(){
                         self.mostrarCrearAbonoPagar    = true
                         __LimpiarAbonoPagar()
                         self.abonoPagar  =  modeloTabla
+
                         self.update()
+                        $(".fechaPagoMostrar").val(self.abonoPagar.fechaPago.substr(0,10))
                     });
                 }
             }
@@ -1363,6 +1380,8 @@ function __MantenimientoAgregarAbonoPagar(){
         self.update()
         $(".errorServerSideJgrid").remove();
         $("#formularioAbonoPagar").validate(reglasDeValidacionabonoPagar());
+        __Eventos_abonoPagars()
+        
     })
 }
 /**

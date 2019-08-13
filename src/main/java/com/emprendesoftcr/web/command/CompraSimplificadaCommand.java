@@ -17,6 +17,8 @@ public class CompraSimplificadaCommand {
 	private Integer								numeroConsecutivo;
 
 	private Date									fechaEmision;
+	
+	private String									fechaEmisionSTR;
 
 	private String								condicionVenta;
 
@@ -32,15 +34,6 @@ public class CompraSimplificadaCommand {
 
 	private String								correoAlternativo;
 
-	private String								referenciaTipoDoc;
-
-	private String								referenciaNumero;
-
-	private String								referenciaCodigo;
-
-	private String								referenciaRazon;
-
-	private String								referenciaFechaEmision;
 
 	private String								nota;
 
@@ -48,7 +41,6 @@ public class CompraSimplificadaCommand {
 
 	private Double								subTotal;
 
-	private Double								totalTransporte;
 
 	private Double								total;
 
@@ -90,7 +82,6 @@ public class CompraSimplificadaCommand {
 
 	private Double								totalImpuestoServ;
 	private Double								tipoCambioMoneda;
-	private Double								pesoTransporteTotal;
 
 	private String								codigoMoneda;
 
@@ -158,46 +149,7 @@ public class CompraSimplificadaCommand {
 		this.detalleFactura = detalleFactura;
 	}
 
-	public String getReferenciaTipoDoc() {
-		return referenciaTipoDoc;
-	}
-
-	public void setReferenciaTipoDoc(String referenciaTipoDoc) {
-		this.referenciaTipoDoc = referenciaTipoDoc;
-	}
-
-	public String getReferenciaNumero() {
-		return referenciaNumero;
-	}
-
-	public void setReferenciaNumero(String referenciaNumero) {
-		this.referenciaNumero = referenciaNumero;
-	}
-
-	public String getReferenciaCodigo() {
-		return referenciaCodigo;
-	}
-
-	public void setReferenciaCodigo(String referenciaCodigo) {
-		this.referenciaCodigo = referenciaCodigo;
-	}
-
-	public String getReferenciaRazon() {
-		return referenciaRazon;
-	}
-
-	public void setReferenciaRazon(String referenciaRazon) {
-		this.referenciaRazon = referenciaRazon;
-	}
-
-	public String getReferenciaFechaEmision() {
-		return referenciaFechaEmision;
-	}
-
-	public void setReferenciaFechaEmision(String referenciaFechaEmision) {
-		this.referenciaFechaEmision = referenciaFechaEmision;
-	}
-
+	
 	public String getFechaCredito() {
 		return fechaCredito;
 	}
@@ -294,13 +246,7 @@ public class CompraSimplificadaCommand {
 		this.subTotal = subTotal;
 	}
 
-	public Double getTotalTransporte() {
-		return totalTransporte;
-	}
-
-	public void setTotalTransporte(Double totalTransporte) {
-		this.totalTransporte = totalTransporte;
-	}
+	
 
 	public Double getTotal() {
 		return total;
@@ -518,13 +464,6 @@ public class CompraSimplificadaCommand {
 		this.tipoCambioMoneda = tipoCambioMoneda;
 	}
 
-	public Double getPesoTransporteTotal() {
-		return pesoTransporteTotal;
-	}
-
-	public void setPesoTransporteTotal(Double pesoTransporteTotal) {
-		this.pesoTransporteTotal = pesoTransporteTotal;
-	}
 
 	public Integer getVersionEsquemaXML() {
 		return versionEsquemaXML;
@@ -532,6 +471,16 @@ public class CompraSimplificadaCommand {
 
 	public void setVersionEsquemaXML(Integer versionEsquemaXML) {
 		this.versionEsquemaXML = versionEsquemaXML;
+	}
+
+	
+	public String getFechaEmisionSTR() {
+		return fechaEmisionSTR;
+	}
+
+	
+	public void setFechaEmisionSTR(String fechaEmisionSTR) {
+		this.fechaEmisionSTR = fechaEmisionSTR;
 	}
 
 }

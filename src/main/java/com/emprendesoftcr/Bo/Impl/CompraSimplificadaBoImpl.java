@@ -1,6 +1,7 @@
 package com.emprendesoftcr.Bo.Impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.concurrent.locks.ReentrantLock;
@@ -32,34 +33,26 @@ import com.emprendesoftcr.web.command.DetalleCompraSimplificadaCommand;
 import com.google.gson.Gson;
 
 /**
- * Reglas de negocio para las compras hacia el inventario CompraBoImpl.
+ * Proveedores compras Simplificadas CompraSimplificadaBoImpl.
  * @author jose.
- * @since 27 may. 2018
+ * @since 31 jul. 2019
  */
-
 @EnableTransactionManagement
 @Service("compraSimplificadaBo")
 public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 
 	@Autowired
-	private CompraSimplificadaDao							compraSimplificadaDao;
+	private CompraSimplificadaDao					compraSimplificadaDao;
 
 	@Autowired
-	private DetalleCompraSimplificadaDao			detalleCompraSimplificadaDao;
+	private DetalleCompraSimplificadaDao	detalleCompraSimplificadaDao;
 
-
-//	@Autowired
-//	private KardexDao							kardexDao;
-
-
-	
-	
 	@Autowired
-	private EmpresaBo							empresaBo;
-	
-	private Logger								log	= LoggerFactory.getLogger(this.getClass());
-	
-	private final ReentrantLock lock = new ReentrantLock();
+	private EmpresaBo											empresaBo;
+
+	private Logger												log		= LoggerFactory.getLogger(this.getClass());
+
+	private final ReentrantLock						lock	= new ReentrantLock();
 
 	@Transactional
 	@Override
@@ -67,8 +60,7 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 		compraSimplificadaDao.agregar(compraSimplificada);
 
 	}
-	
-	
+
 	@Override
 	@Transactional
 	public synchronized CompraSimplificada crearCompraSimplificada(CompraSimplificadaCommand compraSimplificadaCommand, Usuario usuario, TipoCambio tipoCambio) throws Exception {
@@ -79,10 +71,6 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 			System.out.println(String.format("--start transaccion--> Thread=%d %s", id, "Fecha:" + new Date()));
 
 			Empresa empresa = empresaBo.buscar(compraSimplificadaCommand.getEmpresa().getId());
-			// Se actualizan los datos de la factura command
-			if (empresa.getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA) && !compraSimplificadaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-				compraSimplificadaCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA);
-			}
 			compraSimplificadaCommand.setTotal(compraSimplificadaCommand.getTotal() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotal());
 			compraSimplificadaCommand.setTotalBanco(compraSimplificadaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalBanco());
 			compraSimplificadaCommand.setTotalCambio(compraSimplificadaCommand.getTotalCambio() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalCambio());
@@ -102,26 +90,6 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 			compraSimplificadaCommand.setPlazoCredito(compraSimplificadaCommand.getPlazoCredito() == null ? Constantes.ZEROS : compraSimplificadaCommand.getPlazoCredito());
 			compraSimplificadaCommand.setCodigoMoneda(compraSimplificadaCommand.getCodigoMoneda() != null ? compraSimplificadaCommand.getCodigoMoneda() : Constantes.CODIGO_MONEDA_COSTA_RICA);
 			compraSimplificadaCommand.setTotalTarjeta(compraSimplificadaCommand.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalTarjeta());
-			// Proformas
-			if (compraSimplificadaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
-				compraSimplificadaCommand.setEstado(Constantes.FACTURA_ESTADO_PROFORMAS);
-			}
-			// Tiquete de uso interno
-			if (compraSimplificadaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO)) {
-				compraSimplificadaCommand.setEstado(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO);
-			}
-			// Se anula las facturas
-			if (!compraSimplificadaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO) && !compraSimplificadaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !compraSimplificadaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) && !compraSimplificadaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
-				if (compraSimplificadaCommand.getReferenciaNumero() != null && compraSimplificadaCommand.getReferenciaNumero() != Constantes.EMPTY) {
-					CompraSimplificada compraSimplificadaAnular = findByConsecutivoAndEmpresa(compraSimplificadaCommand.getReferenciaNumero(), empresa);
-					compraSimplificadaAnular = compraSimplificadaAnular == null ? compraSimplificadaDao.findByConsecutivoAndEmpresa(compraSimplificadaCommand.getReferenciaNumero(), usuario.getEmpresa()) : compraSimplificadaAnular;
-					if (compraSimplificadaAnular != null) {
-						compraSimplificadaAnular.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
-						modificar(compraSimplificadaAnular);
-						compraSimplificadaCommand.setProveedorSimplificado(compraSimplificadaAnular.getProveedorSimplificado());
-					}
-				}
-			}
 			// Se forman los detalles command de las factura
 			ArrayList<DetalleCompraSimplificadaCommand> detallesFacturaCommand = this.formaDetallesCommand(compraSimplificadaCommand);
 			// --------------------------------------------- Se trabaja con el objeto a
@@ -135,7 +103,7 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 				if (compraSimplificadaCommand.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
 
 					compraSimplificada.setNumeroConsecutivo(empresaBo.generarConsecutivoCompraSimplificada(empresa, usuario));
-					
+
 					if (empresa.getNoFacturaElectronica() != null && empresa.getNoFacturaElectronica().equals(Constantes.SI_APLICA_FACTURA_ELECTRONICA)) {
 						compraSimplificada.setClave(empresaBo.generaClaveFacturaTributacion(empresa, compraSimplificada.getNumeroConsecutivo(), FacturaElectronicaUtils.COMPROBANTE_ELECTRONICO_NORMAL));
 
@@ -144,12 +112,12 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 				}
 				// Verifica si esta facturado para cambiar el estado firma y enviar a crear el
 				// xml en el proceso automatico
-					if (compraSimplificada.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
-						compraSimplificada.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
-					} else {
-						compraSimplificada.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_EN_PROCESOS);
-					}
-				
+				if (compraSimplificada.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO)) {
+					compraSimplificada.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE);
+				} else {
+					compraSimplificada.setEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_EN_PROCESOS);
+				}
+
 				// Se almacena la factura, se deja en estado en proceso para que no lo tome los
 				// procesos de hacienda
 				if (compraSimplificada.getId() == null) {
@@ -227,66 +195,12 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 							compraSimplificada.setTotalEfectivo(resultado);
 						}
 
-//						// Se agrega solo si no existe en la caja de usuario, casos de reintentos
-//						if (usuarioCajaFacturaDao.findByFacturaId(factura.getId()) == null) {
-//							UsuarioCajaFactura usuarioCajaFactura = new UsuarioCajaFactura();
-//							usuarioCajaFactura.setCreated_at(new Date());
-//							usuarioCajaFactura.setUpdated_at(new Date());
-//							usuarioCajaFactura.setFactura(factura);
-//							usuarioCajaFactura.setUsuarioCaja(usuarioCaja);
-//							usuarioCajaFacturaDao.agregar(usuarioCajaFactura);
-//						}
 					}
 				}
-				// Actualiza articulo y inventario
-//				this.actualizaArticulosInventario(factura, usuario);
-//
-//				// Crear Credito del cliente
-//				if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
-//					if (factura.getEstado().equals(Constantes.FACTURA_ESTADO_FACTURADO) || factura.getEstado().equals(Constantes.FACTURA_ESTADO_TIQUETE_USO_INTERNO)) {
-//						if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
-//							cuentaCobrarDao.crearCuentaXCobrar(factura);
-//						}
-//					}
-//				}
-
 			} catch (Exception e) {
 				throw e;
 			}
 
-//			// Anulacion de la factura anterior
-//			if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) || factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
-//				if (factura.getReferenciaNumero() != null) {
-//					if (factura.getReferenciaNumero() != Constantes.EMPTY) {
-//						Factura facturaAnterior = findByConsecutivoAndEmpresa(factura.getReferenciaNumero(), empresa);
-//						facturaAnterior = facturaAnterior == null ? facturaDao.findByClaveAndEmpresa(factura.getReferenciaNumero(), usuario.getEmpresa()) : facturaAnterior;
-//						if (facturaAnterior != null) {
-//							CuentaCobrar cuentaCobrar = cuentaCobrarDao.buscarPorConsecutivo(factura.getEmpresa(), facturaAnterior.getNumeroConsecutivo());
-//							if (cuentaCobrar != null) {
-//								// Eliminar la cuenta por cobrar si el tipo de anulacio es total
-//								if (factura.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
-//									cuentaCobrarDao.eliminar(cuentaCobrar);
-//								} else if (!factura.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
-//									cuentaCobrar.setTotal(Utils.roundFactura(factura.getTotalComprobante(), 2));
-//									cuentaCobrar.setTotalSaldo(Utils.roundFactura(factura.getTotalComprobante(), 2));
-//									cuentaCobrarDao.modificar(cuentaCobrar);
-//
-//								}
-//							}
-//
-//							facturaAnterior.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
-//							modificar(facturaAnterior);
-//							if (facturaAnterior.getClave() != null) {
-//								Hacienda hacienda = haciendaDao.findByEmpresaAndClave(empresa, facturaAnterior.getClave());
-//								if (hacienda != null) {
-//									hacienda.setEstado(Constantes.HACIENDA_ESTADO_ANULADA);
-//									haciendaDao.modificar(hacienda);
-//								}
-//							}
-//						}
-//					}
-//				}
-//			}
 			System.out.println(String.format("--Finaliza transaccion--> Thread=%d %s", id, "Fecha:" + new Date()));
 
 		} catch (Exception e) {
@@ -299,7 +213,6 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 		return compraSimplificada;
 	}
 
-	
 	private Double getTotalEfectivo(CompraSimplificadaCommand compraSimplificadaCommand) throws Exception {
 		Double resultado = Constantes.ZEROS_DOUBLE;
 		try {
@@ -321,404 +234,271 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 		return resultado;
 	}
 
+	private void asociaDetallesFactura(CompraSimplificada compraSimplificada, CompraSimplificadaCommand compraSimplificadaCommand, Usuario usuario, ArrayList<DetalleCompraSimplificadaCommand> detalleComprasSimplificadaCommand) throws Exception {
 
+		// Detalles, se forma el detalle de la factura, se contabiliza los totales para
+		// evitar problemas con el tema de los decimales en el front
 
-private void asociaDetallesFactura(CompraSimplificada compraSimplificada, CompraSimplificadaCommand compraSimplificadaCommand, Usuario usuario, ArrayList<DetalleCompraSimplificadaCommand> detalleComprasSimplificadaCommand) throws Exception {
+		// Se inicializan los totales
+		Double totalServGravados = Constantes.ZEROS_DOUBLE;
+		Double totalServExentos = Constantes.ZEROS_DOUBLE;
+		Double totalMercanciasGravadas = Constantes.ZEROS_DOUBLE;
+		Double totalMercanciasExentas = Constantes.ZEROS_DOUBLE;
+		Double totalGravado = Constantes.ZEROS_DOUBLE;
+		Double totalExento = Constantes.ZEROS_DOUBLE;
+		Double totalVenta = Constantes.ZEROS_DOUBLE;
+		Double totalDescuentos = Constantes.ZEROS_DOUBLE;
+		Double totalVentaNeta = Constantes.ZEROS_DOUBLE;
+		Double totalImpuesto = Constantes.ZEROS_DOUBLE;
+		Double totalComprobante = Constantes.ZEROS_DOUBLE;
+		Double subTotal = Constantes.ZEROS_DOUBLE;
+		Double totalImpServicios = Constantes.ZEROS_DOUBLE;
+		Double totalExonerado = Constantes.ZEROS_DOUBLE;
+		Double totalIVADevuelto = Constantes.ZEROS_DOUBLE;
+		String unidadMedida = Constantes.EMPTY;
+		// Agregar Lineas de Detalle
+		Integer numeroLinea = 1;
 
-	// Detalles, se forma el detalle de la factura, se contabiliza los totales para
-	// evitar problemas con el tema de los decimales en el front
-
-	// Se inicializan los totales
-	Double totalServGravados = Constantes.ZEROS_DOUBLE;
-	Double totalServExentos = Constantes.ZEROS_DOUBLE;
-	Double totalMercanciasGravadas = Constantes.ZEROS_DOUBLE;
-	Double totalMercanciasExentas = Constantes.ZEROS_DOUBLE;
-	Double totalGravado = Constantes.ZEROS_DOUBLE;
-	Double totalExento = Constantes.ZEROS_DOUBLE;
-	Double totalVenta = Constantes.ZEROS_DOUBLE;
-	Double totalDescuentos = Constantes.ZEROS_DOUBLE;
-	Double totalVentaNeta = Constantes.ZEROS_DOUBLE;
-	Double totalImpuesto = Constantes.ZEROS_DOUBLE;
-	Double totalComprobante = Constantes.ZEROS_DOUBLE;
-	Double subTotal = Constantes.ZEROS_DOUBLE;
-	Double totalImpServicios = Constantes.ZEROS_DOUBLE;
-	Double totalServExonerado = Constantes.ZEROS_DOUBLE;
-	Double totalMercExonerada = Constantes.ZEROS_DOUBLE;
-	Double totalExonerado = Constantes.ZEROS_DOUBLE;
-	Double totalIVADevuelto = Constantes.ZEROS_DOUBLE;
-	Double totalOtrosCargos = Constantes.ZEROS_DOUBLE;
-	String unidadMedida = Constantes.EMPTY;
-	// Agregar Lineas de Detalle
-	Integer numeroLinea = 1;
-	Double gananciaProducto = Constantes.ZEROS_DOUBLE;
-	Double costo = Constantes.ZEROS_DOUBLE;
-
-	Double montoTotalLinea = Constantes.ZEROS_DOUBLE;
-	for (Iterator<DetalleCompraSimplificadaCommand> iterator = detalleComprasSimplificadaCommand.iterator(); iterator.hasNext();) {
-		DetalleCompraSimplificadaCommand detalleCompraSimplificadaCommand = (DetalleCompraSimplificadaCommand) iterator.next();
-		unidadMedida = Constantes.UNIDAD_MEDIDA;
-		if (detalleCompraSimplificadaCommand.getUnidadMedida() != null) {
-			if (detalleCompraSimplificadaCommand.getUnidadMedida().equals(Constantes.EMPTY)) {
+		Double montoTotalLinea = Constantes.ZEROS_DOUBLE;
+		for (Iterator<DetalleCompraSimplificadaCommand> iterator = detalleComprasSimplificadaCommand.iterator(); iterator.hasNext();) {
+			DetalleCompraSimplificadaCommand detalleCompraSimplificadaCommand = (DetalleCompraSimplificadaCommand) iterator.next();
+			unidadMedida = Constantes.UNIDAD_MEDIDA;
+			if (detalleCompraSimplificadaCommand.getUnidadMedida() != null) {
+				if (detalleCompraSimplificadaCommand.getUnidadMedida().equals(Constantes.EMPTY)) {
+					detalleCompraSimplificadaCommand.setUnidadMedida(unidadMedida);
+				}
+			} else {
 				detalleCompraSimplificadaCommand.setUnidadMedida(unidadMedida);
 			}
-		} else {
-			detalleCompraSimplificadaCommand.setUnidadMedida(unidadMedida);
-		}
-		DetalleCompraSimplificada detalleCompraSimplificada = new DetalleCompraSimplificada(detalleCompraSimplificadaCommand);
-		detalleCompraSimplificada.setCosto(costo);
-		detalleCompraSimplificada.setGanancia(gananciaProducto);
-		detalleCompraSimplificada.setMontoGanancia(gananciaProducto);
-		detalleCompraSimplificada.setPorcentajeGanancia(getPorcentajeGananciaProducto(detalleCompraSimplificadaCommand.getPrecioUnitario(), detalleCompraSimplificadaCommand.getCosto() != null ? detalleCompraSimplificadaCommand.getCosto() : Constantes.ZEROS));
-		detalleCompraSimplificada.setUsuario(usuario);
-		detalleCompraSimplificadaCommand.setTipoImpuesto(detalleCompraSimplificadaCommand.getTipoImpuesto() != null ? detalleCompraSimplificadaCommand.getTipoImpuesto() : Constantes.EMPTY);
-		detalleCompraSimplificada.setImpuesto(detalleCompraSimplificadaCommand.getImpuesto() != null ? detalleCompraSimplificadaCommand.getImpuesto() : Constantes.ZEROS_DOUBLE);
-		detalleCompraSimplificada.setCodigoTarifa(detalleCompraSimplificadaCommand.getCodigoTarifa() != null ?detalleCompraSimplificadaCommand.getCodigoTarifa()  : Constantes.EMPTY);
-		detalleCompraSimplificada.setTipoImpuesto(!detalleCompraSimplificadaCommand.getTipoImpuesto().equals(Constantes.EMPTY) ? detalleCompraSimplificadaCommand.getTipoImpuesto() : Constantes.EMPTY);
-		detalleCompraSimplificada.setFechaEmisionExoneracion(detalleCompraSimplificadaCommand.getFechaEmisionExoneracion());
-		detalleCompraSimplificada.setNombreInstitucionExoneracion(detalleCompraSimplificadaCommand.getNombreInstitucionExoneracion() == null ? Constantes.EMPTY : detalleCompraSimplificadaCommand.getNombreInstitucionExoneracion());
-		detalleCompraSimplificada.setNumeroDocumentoExoneracion(detalleCompraSimplificadaCommand.getNumeroDocumentoExoneracion() == null ? Constantes.EMPTY : detalleCompraSimplificadaCommand.getNumeroDocumentoExoneracion());
-		detalleCompraSimplificada.setTipoDocumentoExoneracion(detalleCompraSimplificadaCommand.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : detalleCompraSimplificadaCommand.getTipoDocumentoExoneracion());
-		detalleCompraSimplificada.setPorcentajeExoneracion(detalleCompraSimplificadaCommand.getPorcentajeExoneracion() == null ? Constantes.ZEROS : detalleCompraSimplificadaCommand.getPorcentajeExoneracion());
+			DetalleCompraSimplificada detalleCompraSimplificada = new DetalleCompraSimplificada(detalleCompraSimplificadaCommand);
+			detalleCompraSimplificada.setBaseImponible(Constantes.ZEROS_DOUBLE);
+			detalleCompraSimplificada.setUsuario(usuario);
+			detalleCompraSimplificadaCommand.setTipoImpuesto(detalleCompraSimplificadaCommand.getTipoImpuesto() != null ? detalleCompraSimplificadaCommand.getTipoImpuesto() : Constantes.EMPTY);
+			detalleCompraSimplificada.setImpuesto(detalleCompraSimplificadaCommand.getImpuesto() != null ? detalleCompraSimplificadaCommand.getImpuesto() : Constantes.ZEROS_DOUBLE);
+			detalleCompraSimplificada.setCodigoTarifa(detalleCompraSimplificadaCommand.getCodigoTarifa() != null ? detalleCompraSimplificadaCommand.getCodigoTarifa() : Constantes.EMPTY);
+			detalleCompraSimplificada.setTipoImpuesto(!detalleCompraSimplificadaCommand.getTipoImpuesto().equals(Constantes.EMPTY) ? detalleCompraSimplificadaCommand.getTipoImpuesto() : Constantes.EMPTY);
 
-		detalleCompraSimplificada.setMontoTotal(getMontoTotal(detalleCompraSimplificadaCommand.getPrecioUnitario(), detalleCompraSimplificadaCommand.getCantidad()));
-		detalleCompraSimplificada.setMontoDescuento(getDescuento(detalleCompraSimplificadaCommand.getMontoTotal(), detalleCompraSimplificadaCommand.getPorcentajeDesc()));
-		detalleCompraSimplificada.setSubTotal(getSubtotal(detalleCompraSimplificadaCommand.getMontoTotal(), detalleCompraSimplificadaCommand.getMontoDescuento()));
-		detalleCompraSimplificada.setMontoExoneracion(getMontoExoneracion(detalleCompraSimplificadaCommand.getTipoDocumentoExoneracion(), detalleCompraSimplificadaCommand.getPorcentajeExoneracion(), detalleCompraSimplificada.getMontoImpuesto()));
+			detalleCompraSimplificada.setMontoTotal(getMontoTotal(detalleCompraSimplificadaCommand.getPrecioUnitario(), detalleCompraSimplificadaCommand.getCantidad()));
+			detalleCompraSimplificada.setMontoDescuento(getDescuento(detalleCompraSimplificada.getMontoTotal(), detalleCompraSimplificadaCommand.getPorcentajeDesc()));
+			detalleCompraSimplificada.setSubTotal(getSubtotal(detalleCompraSimplificada.getMontoTotal(), detalleCompraSimplificada.getMontoDescuento()));
 
-		detalleCompraSimplificada.setMontoImpuesto(getMontoImpuestoCon13(detalleCompraSimplificadaCommand.getSubTotal(),detalleCompraSimplificadaCommand.getMontoImpuesto(), detalleCompraSimplificadaCommand.getImpuesto()));
+			detalleCompraSimplificada.setMontoImpuesto(getMontoImpuestoCon13(detalleCompraSimplificada.getSubTotal(),  detalleCompraSimplificadaCommand.getImpuesto()));
 
-		detalleCompraSimplificada.setImpuestoNeto(getImpuestoNetoTotal(detalleCompraSimplificada.getTipoDocumentoExoneracion(), detalleCompraSimplificada.getPorcentajeExoneracion(), detalleCompraSimplificada.getMontoImpuesto(),  detalleCompraSimplificada.getMontoExoneracion()));
+			detalleCompraSimplificada.setImpuestoNeto(getImpuestoNetoTotal(detalleCompraSimplificada.getMontoImpuesto()));
 
-		detalleCompraSimplificada.setNaturalezaDescuento(detalleCompraSimplificadaCommand.getMontoDescuento() > Constantes.ZEROS_DOUBLE ? Constantes.FORMATO_NATURALEZA_DESCUENTO : Constantes.EMPTY);
-		detalleCompraSimplificada.setNumeroLinea(numeroLinea);
-		detalleCompraSimplificada.setCreated_at(new Date());
-		detalleCompraSimplificada.setUpdated_at(new Date());
-		detalleCompraSimplificada.setTipoCodigo(detalleCompraSimplificadaCommand.getTipoCodigo() != null ? detalleCompraSimplificadaCommand.getTipoCodigo() : Constantes.EMPTY);
-		detalleCompraSimplificada.setUnidadMedida(detalleCompraSimplificadaCommand.getUnidadMedida() != null ? detalleCompraSimplificadaCommand.getUnidadMedida() : Constantes.EMPTY);
+			detalleCompraSimplificada.setNaturalezaDescuento(detalleCompraSimplificada.getMontoDescuento() > Constantes.ZEROS_DOUBLE ? Constantes.FORMATO_NATURALEZA_DESCUENTO : Constantes.EMPTY);
+			detalleCompraSimplificada.setNumeroLinea(numeroLinea);
+			detalleCompraSimplificada.setCreated_at(new Date());
+			detalleCompraSimplificada.setUpdated_at(new Date());
+			detalleCompraSimplificada.setTipoCodigo(detalleCompraSimplificadaCommand.getTipoCodigo() != null ? detalleCompraSimplificadaCommand.getTipoCodigo() : Constantes.EMPTY);
+			detalleCompraSimplificada.setUnidadMedida(detalleCompraSimplificadaCommand.getUnidadMedida() != null ? detalleCompraSimplificadaCommand.getUnidadMedida() : Constantes.EMPTY);
 
-		// cambios de doble impuesto
+			// cambios de doble impuesto
 
-		totalServGravados = totalServGravados + getTotalServicioGravados(detalleCompraSimplificada.getTipoImpuesto(), detalleCompraSimplificada.getUnidadMedida(), detalleCompraSimplificada.getMontoTotal(), detalleCompraSimplificada.getMontoImpuesto());
-		totalServExonerado = totalServExonerado + getTotalServExonerado(detalleCompraSimplificada.getTipoImpuesto(), detalleCompraSimplificada.getUnidadMedida(), detalleCompraSimplificada.getMontoExoneracion());
-		totalMercExonerada = totalMercExonerada + getTotalMercExonerada(detalleCompraSimplificada.getTipoImpuesto(), detalleCompraSimplificada.getUnidadMedida(), detalleCompraSimplificada.getMontoTotal(), detalleCompraSimplificada.getPorcentajeExoneracion());
+			totalServGravados = totalServGravados + getTotalServicioGravados(detalleCompraSimplificada.getTipoImpuesto(), detalleCompraSimplificada.getUnidadMedida(), detalleCompraSimplificada.getMontoTotal(), detalleCompraSimplificada.getMontoImpuesto());
 
-		totalImpuesto = totalImpuesto + getTotalImpuesto(detalleCompraSimplificada.getMontoImpuesto(), detalleCompraSimplificada.getTipoDocumentoExoneracion(), detalleCompraSimplificada.getImpuestoNeto());
-		totalMercanciasGravadas = totalMercanciasGravadas + getTotalMercanciasGravadas(detalleCompraSimplificada.getTipoImpuesto(), detalleCompraSimplificada.getUnidadMedida(), detalleCompraSimplificada.getMontoImpuesto(), detalleCompraSimplificada.getMontoTotal(), detalleCompraSimplificada.getPorcentajeExoneracion());
-		totalMercanciasExentas = totalMercanciasExentas + getTotalMercanciasExentas(detalleCompraSimplificada.getTipoImpuesto(), detalleCompraSimplificada.getUnidadMedida(), detalleCompraSimplificada.getMontoImpuesto(),  detalleCompraSimplificada.getMontoTotal());
+			totalImpuesto = totalImpuesto + getTotalImpuesto(detalleCompraSimplificada.getMontoImpuesto(), detalleCompraSimplificada.getImpuestoNeto());
+			totalMercanciasGravadas = totalMercanciasGravadas + getTotalMercanciasGravadas(detalleCompraSimplificada.getTipoImpuesto(), detalleCompraSimplificada.getUnidadMedida(), detalleCompraSimplificada.getMontoImpuesto(), detalleCompraSimplificada.getMontoTotal());
+			totalMercanciasExentas = totalMercanciasExentas + getTotalMercanciasExentas(detalleCompraSimplificada.getTipoImpuesto(), detalleCompraSimplificada.getUnidadMedida(), detalleCompraSimplificada.getMontoImpuesto(), detalleCompraSimplificada.getMontoTotal());
 
-		totalServExentos = totalServExentos + getTotalServExentos(detalleCompraSimplificada.getTipoImpuesto(), detalleCompraSimplificada.getUnidadMedida(), detalleCompraSimplificada.getMontoImpuesto(), detalleCompraSimplificada.getMontoTotal());
+			totalServExentos = totalServExentos + getTotalServExentos(detalleCompraSimplificada.getTipoImpuesto(), detalleCompraSimplificada.getUnidadMedida(), detalleCompraSimplificada.getMontoImpuesto(), detalleCompraSimplificada.getMontoTotal());
 
-		totalExento = totalExento + getTotalExentos(detalleCompraSimplificada.getMontoImpuesto(),  detalleCompraSimplificada.getMontoTotal());
+			totalExento = totalExento + getTotalExentos(detalleCompraSimplificada.getMontoImpuesto(), detalleCompraSimplificada.getMontoTotal());
 
-		totalDescuentos = totalDescuentos + Utils.Maximo5Decimales(detalleCompraSimplificada.getMontoDescuento());
-		montoTotalLinea = getMontoTotalLinea(detalleCompraSimplificada.getSubTotal(), detalleCompraSimplificada.getMontoImpuesto(),  detalleCompraSimplificada.getImpuestoNeto(), detalleCompraSimplificada.getTipoDocumentoExoneracion());
-		totalComprobante = totalComprobante + montoTotalLinea;
+			totalDescuentos = totalDescuentos + Utils.Maximo5Decimales(detalleCompraSimplificada.getMontoDescuento());
+			montoTotalLinea = getMontoTotalLinea(detalleCompraSimplificada.getSubTotal(), detalleCompraSimplificada.getMontoImpuesto(), detalleCompraSimplificada.getImpuestoNeto());
+			totalComprobante = totalComprobante + montoTotalLinea;
 
-		detalleCompraSimplificada.setMontoTotalLinea(montoTotalLinea);
-		subTotal = subTotal + detalleCompraSimplificada.getSubTotal();
-		detalleCompraSimplificada.setNumeroLinea(numeroLinea);
-		numeroLinea += 1;
-		detalleCompraSimplificada.setCompraSimplificada(compraSimplificada);
-		detalleCompraSimplificadaDao.agregar(detalleCompraSimplificada);
-
-	}
-	totalExonerado = totalExonerado + getTotalExonerado(totalServExonerado, totalMercExonerada);
-	totalGravado = totalGravado + totalMercanciasGravadas + totalServGravados;
-	totalVenta = totalVenta + totalExento + totalGravado + totalExonerado;
-	if (compraSimplificada.getTotalOtrosCargos() == null)
-
-	{
-		compraSimplificada.setTotalOtrosCargos(Constantes.ZEROS_DOUBLE);
-		compraSimplificada.setTipoDocumentoOtroCargo(Constantes.EMPTY);
-		compraSimplificada.setDetalleOtroCargo(Constantes.EMPTY);
-	}
-
-	// Se actualoza el resumen de la factura con los detalles asociados
-	totalVentaNeta = totalVenta - totalDescuentos;
-
-	if (totalOtrosCargos > Constantes.ZEROS_DOUBLE) {
-		compraSimplificada.setTotalOtrosCargos(totalOtrosCargos);
-	} else {
-		if (compraSimplificada.getTotalOtrosCargos() != null) {
-			compraSimplificada.setTotalOtrosCargos(compraSimplificada.getTotalOtrosCargos());
-			totalImpServicios = totalImpServicios + compraSimplificada.getTotalOtrosCargos();
+			detalleCompraSimplificada.setMontoTotalLinea(montoTotalLinea);
+			subTotal = subTotal + detalleCompraSimplificada.getSubTotal();
+			detalleCompraSimplificada.setNumeroLinea(numeroLinea);
+			numeroLinea += 1;
+			detalleCompraSimplificada.setCompraSimplificada(compraSimplificada);
+			detalleCompraSimplificadaDao.agregar(detalleCompraSimplificada);
 
 		}
-	}
-	totalComprobante = compraSimplificada.getTotalOtrosCargos() + totalImpuesto + totalVentaNeta;
-	totalComprobante = totalComprobante - totalIVADevuelto;
+		totalExonerado = Constantes.ZEROS_DOUBLE;
+		totalGravado = totalGravado + totalMercanciasGravadas + totalServGravados;
+		totalVenta = totalVenta + totalExento + totalGravado + totalExonerado;
 
-	compraSimplificada.setTotalServExonerado(Utils.aplicarRedondeo(totalServExonerado) ? Utils.roundFactura(totalServExonerado, 5) : totalServExonerado);
-	compraSimplificada.setTotalMercExonerada(Utils.aplicarRedondeo(totalMercExonerada) ? Utils.roundFactura(totalMercExonerada, 5) : totalMercExonerada);
-	compraSimplificada.setTotalExonerado(Utils.aplicarRedondeo(totalExonerado) ? Utils.roundFactura(totalExonerado, 6) : totalExonerado);
-	compraSimplificada.setTotalIVADevuelto(Utils.aplicarRedondeo(totalIVADevuelto) ? Utils.roundFactura(totalIVADevuelto, 5) : totalIVADevuelto);
-	compraSimplificada.setTotalMercanciasGravadas(Utils.aplicarRedondeo(totalMercanciasGravadas) ? Utils.roundFactura(totalMercanciasGravadas, 5) : totalMercanciasGravadas);
-	compraSimplificada.setTotalMercanciasExentas(Utils.aplicarRedondeo(totalMercanciasExentas) ? Utils.roundFactura(totalMercanciasExentas, 5) : totalMercanciasExentas);
-	compraSimplificada.setTotalServExentos(Utils.aplicarRedondeo(totalServExentos) ? Utils.roundFactura(totalServExentos, 5) : totalServExentos);
-	compraSimplificada.setTotalServGravados(Utils.aplicarRedondeo(totalServGravados) ? Utils.roundFactura(totalServGravados, 5) : totalServGravados);
-	compraSimplificada.setTotalGravado(Utils.aplicarRedondeo(totalGravado) ? Utils.roundFactura(totalGravado, 5) : totalGravado);
-	compraSimplificada.setTotalExento(Utils.aplicarRedondeo(totalExento) ? Utils.roundFactura(totalExento, 5) : totalExento);
-	compraSimplificada.setTotalVenta(Utils.aplicarRedondeo(totalVenta) ? Utils.roundFactura(totalVenta, 5) : totalVenta);
-	compraSimplificada.setTotalVentaNeta(Utils.aplicarRedondeo(totalVentaNeta) ? Utils.roundFactura(totalVentaNeta, 5) : totalVentaNeta);
-	compraSimplificada.setTotalDescuentos(Utils.aplicarRedondeo(totalDescuentos) ? Utils.roundFactura(totalDescuentos, 5) : totalDescuentos);
-	compraSimplificada.setTotalImpuesto(Utils.aplicarRedondeo(totalImpuesto) ? Utils.roundFactura(totalImpuesto, 5) : totalImpuesto);
-	compraSimplificada.setTotalImpuestoServicio(Utils.aplicarRedondeo(totalImpServicios) ? Utils.roundFactura(totalImpServicios, 5) : totalImpServicios);
-	compraSimplificada.setTotalComprobante(Utils.aplicarRedondeo(totalComprobante) ? Utils.roundFactura(totalComprobante, 5) : totalComprobante);
+		// Se actualoza el resumen de la factura con los detalles asociados
+		totalVentaNeta = totalVenta - totalDescuentos;
 
-}
+		totalComprobante = totalImpuesto + totalVentaNeta;
+		totalComprobante = totalComprobante - totalIVADevuelto;
 
+		compraSimplificada.setTotalMercanciasGravadas(Utils.aplicarRedondeo(totalMercanciasGravadas) ? Utils.roundFactura(totalMercanciasGravadas, 5) : totalMercanciasGravadas);
+		compraSimplificada.setTotalMercanciasExentas(Utils.aplicarRedondeo(totalMercanciasExentas) ? Utils.roundFactura(totalMercanciasExentas, 5) : totalMercanciasExentas);
+		compraSimplificada.setTotalServExentos(Utils.aplicarRedondeo(totalServExentos) ? Utils.roundFactura(totalServExentos, 5) : totalServExentos);
+		compraSimplificada.setTotalServGravados(Utils.aplicarRedondeo(totalServGravados) ? Utils.roundFactura(totalServGravados, 5) : totalServGravados);
+		compraSimplificada.setTotalGravado(Utils.aplicarRedondeo(totalGravado) ? Utils.roundFactura(totalGravado, 5) : totalGravado);
+		compraSimplificada.setTotalExento(Utils.aplicarRedondeo(totalExento) ? Utils.roundFactura(totalExento, 5) : totalExento);
+		compraSimplificada.setTotalVenta(Utils.aplicarRedondeo(totalVenta) ? Utils.roundFactura(totalVenta, 5) : totalVenta);
+		compraSimplificada.setTotalVentaNeta(Utils.aplicarRedondeo(totalVentaNeta) ? Utils.roundFactura(totalVentaNeta, 5) : totalVentaNeta);
+		compraSimplificada.setTotalDescuentos(Utils.aplicarRedondeo(totalDescuentos) ? Utils.roundFactura(totalDescuentos, 5) : totalDescuentos);
+		compraSimplificada.setTotalImpuesto(Utils.aplicarRedondeo(totalImpuesto) ? Utils.roundFactura(totalImpuesto, 5) : totalImpuesto);
+		compraSimplificada.setTotalImpuestoServicio(Utils.aplicarRedondeo(totalImpServicios) ? Utils.roundFactura(totalImpServicios, 5) : totalImpServicios);
+		compraSimplificada.setTotalComprobante(Utils.aplicarRedondeo(totalComprobante) ? Utils.roundFactura(totalComprobante, 5) : totalComprobante);
 
-private Double getMontoTotalLinea(Double subTotal, Double montoImpuesto,  Double montoImpuestoNeto, String tipoDocumentoExoneracion) {
-	Double resultado = Constantes.ZEROS_DOUBLE;
-
-	if (!tipoDocumentoExoneracion.equals(Constantes.EMPTY)) {
-		resultado = Utils.Maximo5Decimales(subTotal) + Utils.Maximo5Decimales(montoImpuestoNeto);
-	} else {
-		resultado = Utils.Maximo5Decimales(subTotal) + Utils.Maximo5Decimales(montoImpuesto) ;
 	}
 
-	return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
-}
-
-private Double getTotalServExentos(String tipoImpuesto, String unidadMedida, Double montoImpuesto, Double subTotal) {
-	Double resultado = Constantes.ZEROS_DOUBLE;
-	Boolean esMercancia = Boolean.TRUE;
-
-	if (!unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) && !unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) && !unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) && !unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
-		esMercancia = Boolean.FALSE;
-	}
-	if (esMercancia) {
-
+	private Double getTotalServicioGravados(String tipoImpuesto, String unidadMedida, Double SubTotal, Double montoImpuesto) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
 		if (montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
-			resultado = subTotal;
+			return resultado;
 		}
 
-	}
-	return resultado;
-}
-
-/**
- * @param montoImpuesto
- * @param montoImpuesto1
- * @param subTotal
- * @return
- */
-private Double getTotalExentos(Double montoImpuesto,Double subTotal) {
-	Double resultado = Constantes.ZEROS_DOUBLE;
-	if (montoImpuesto.equals(Constantes.ZEROS_DOUBLE) ) {
-		resultado = subTotal;
-	}
-	return resultado;
-}
-
-/**
- * Total Mercancias Excentas
- * @param montoImpuesto
- * @param montoImpuesto1
- * @param subTotal
- * @return
- */
-private Double getTotalMercanciasExentas(String tipoImpuesto, String unidadMedida, Double montoImpuesto,  Double subTotal) {
-	Double resultado = Constantes.ZEROS_DOUBLE;
-	Boolean esMercancia = Boolean.TRUE;
-
-
-	if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
-		esMercancia = Boolean.FALSE;
-	}
-	if (esMercancia) {
-
-		if (montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
-			resultado = subTotal;
+		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
+			resultado = SubTotal;
 		}
 
-	}
-	return resultado;
-}
-
-private Double getTotalMercanciasGravadas(String tipoImpuesto, String unidadMedida, Double montoImpuesto, Double subTotal, Integer porcentajeExoneracion) {
-	Double resultado = Constantes.ZEROS_DOUBLE;
-	Boolean esMercancia = Boolean.TRUE;
-
-	if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
-		esMercancia = Boolean.FALSE;
-	}
-	if (esMercancia) {
-		if ( montoImpuesto > Constantes.ZEROS_DOUBLE) {
-			if (porcentajeExoneracion > Constantes.ZEROS) {
-				Double porcentaValor = porcentajeExoneracion / 100d;
-				porcentaValor = 1 - porcentaValor;
-				resultado = subTotal * porcentaValor;
-			} else {
-				resultado = subTotal;
-			}
-		}
-
-	}
-	return resultado;
-}
-
-private Double getTotalImpuesto(Double montoImpuesto, String tipoDocumentoExoneracion, Double montoImpuestoNeto) {
-	Double resultado = Constantes.ZEROS_DOUBLE;
-	if (!tipoDocumentoExoneracion.equals(Constantes.EMPTY)) {
-		resultado = montoImpuestoNeto;
-	} else {
-		resultado = Utils.Maximo5Decimales(montoImpuesto) ;
-	}
-
-	return resultado;
-}
-
-private Double getTotalExonerado(Double totalServExonerado, Double totalMercExonerada) {
-	Double resultado = totalServExonerado + totalMercExonerada;
-	return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
-}
-
-private Double getTotalMercExonerada(String tipoImpuesto, String unidadMedida, Double montoTotal, Integer porcentajeExoneracion) {
-	Double resultado = Constantes.ZEROS_DOUBLE;
-	Boolean esGravado = Boolean.TRUE;
-	if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
-		esGravado = Boolean.FALSE;
-	}
-	if (esGravado && porcentajeExoneracion > Constantes.ZEROS) {
-		Double porcentaValor = porcentajeExoneracion / 100d;
-		resultado = montoTotal * porcentaValor;
-
-	}
-	return resultado;
-}
-
-/**
- * @param tipoImpuesto
- * @param unidadMedida
- * @param montoExonerado
- * @return
- */
-private Double getTotalServExonerado(String tipoImpuesto, String unidadMedida, Double montoExonerado) {
-
-	Double resultado = Constantes.ZEROS_DOUBLE;
-
-	if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
-		resultado = montoExonerado;
-	}
-	return resultado;
-}
-
-private Double getTotalServicioGravados(String tipoImpuesto, String unidadMedida, Double SubTotal, Double montoImpuesto) {
-	Double resultado = Constantes.ZEROS_DOUBLE;
-	if (montoImpuesto.equals(Constantes.ZEROS_DOUBLE) ) {
 		return resultado;
 	}
 
-	if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
-		resultado = SubTotal;
+	private Double getMontoTotalLinea(Double subTotal, Double montoImpuesto, Double montoImpuestoNeto) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		resultado = Utils.Maximo5Decimales(subTotal) + Utils.Maximo5Decimales(montoImpuesto);
+
+		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
 	}
 
-	return resultado;
-}
+	private Double getTotalServExentos(String tipoImpuesto, String unidadMedida, Double montoImpuesto, Double subTotal) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		Boolean esMercancia = Boolean.TRUE;
 
-
-
-private Double getImpuestoNetoTotal(String tipoDocumentoExonerado, Integer porcentajeExonerado, Double montoImpuesto, Double montoExonerado) {
-	Double resultado = Constantes.ZEROS_DOUBLE;
-	if (!tipoDocumentoExonerado.equals(Constantes.EMPTY)) {
-		if (porcentajeExonerado < 100) {
-			resultado = Utils.Maximo5Decimales(montoImpuesto) ;
-			resultado = resultado - Utils.Maximo5Decimales(montoExonerado);
+		if (!unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) && !unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) && !unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) && !unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
+			esMercancia = Boolean.FALSE;
 		}
+		if (esMercancia) {
 
-	} else {
-		resultado = Utils.Maximo5Decimales(montoImpuesto) ;
+			if (montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
+				resultado = subTotal;
+			}
+
+		}
+		return resultado;
 	}
 
-	return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
-
-}
-
-/**
- * Monto de exonaracion = monto del impuesto * porcentaje de la exoneracion
- * @param tipodocumento
- * @param porcentajeExoneracion
- * @param montoImpuesto
- * @return
- */
-private Double getMontoExoneracion(String tipoDocumentoExonerado, Integer porcentajeExoneracion, Double montoImpuesto) {
-	if (tipoDocumentoExonerado.equals(Constantes.EMPTY)) {
-		return Constantes.ZEROS_DOUBLE;
-	}
-	Double porcentaje = Double.parseDouble(porcentajeExoneracion.toString()) / 100;
-	Double resultado = montoImpuesto * porcentaje;
-	return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
-}
-
-/**
- * Es la suma del subtotal + primer impuesto por la tarifa sacamos el impuesto 13
- * @param subTotal
- * @param montoPrimerImpuesto
- * @param tarifa
- * @return
- */
-private Double getMontoImpuestoCon13(Double subTotal, Double montoPrimerImpuesto, Double tarifa) {
-	Double valor = tarifa / 100d;
-	Double resultado = Constantes.ZEROS_DOUBLE;
-		resultado = subTotal + montoPrimerImpuesto;
-		resultado = resultado * valor;
-	return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
-}
-
-
-
-/**
- * SubTotal = Monto Total - Monto Descuento
- * @param montoDescuento
- * @param montoTotal
- * @return
- */
-private Double getSubtotal(Double montoTotal, Double montoDescuento) {
-
-	Double resultado = Utils.Maximo5Decimales(montoTotal) - Utils.Maximo5Decimales(montoDescuento);
-	return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
-
-}
-
-/**
- * Total Descuento de la linea
- * @param montoTotal
- * @param porcentajeDescuento
- * @return
- */
-private Double getDescuento(Double montoTotal, Double porcentajeDescuento) {
-	Double valor = porcentajeDescuento / 100d;
-	Double resultado = montoTotal * valor;
-	return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
-}
-
-/**
- * Monto Total
- * @param precioUnitario
- * @param cantidad
- * @return
- */
-private Double getMontoTotal(Double precioUnitario, Double cantidad) {
-	Double resultado = precioUnitario * cantidad;
-
-	return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
-}
-
-
-
-private Double getPorcentajeGananciaProducto(Double precioUnitario, Double costo) {
-	// si el costo supera al precio unitario el costo es cero
-	if (costo > precioUnitario) {
-		return 100d;
+	/**
+	 * @param montoImpuesto
+	 * @param montoImpuesto1
+	 * @param subTotal
+	 * @return
+	 */
+	private Double getTotalExentos(Double montoImpuesto, Double subTotal) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		if (montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
+			resultado = subTotal;
+		}
+		return resultado;
 	}
 
-	Double resultado = costo / precioUnitario;
-	resultado = 1 - resultado;
+	/**
+	 * Total Mercancias Excentas
+	 * @param montoImpuesto
+	 * @param montoImpuesto1
+	 * @param subTotal
+	 * @return
+	 */
+	private Double getTotalMercanciasExentas(String tipoImpuesto, String unidadMedida, Double montoImpuesto, Double subTotal) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		Boolean esMercancia = Boolean.TRUE;
 
-	return Utils.roundFactura(resultado * 100, 5);
-}
+		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
+			esMercancia = Boolean.FALSE;
+		}
+		if (esMercancia) {
 
+			if (montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
+				resultado = subTotal;
+			}
+
+		}
+		return resultado;
+	}
+
+	private Double getTotalMercanciasGravadas(String tipoImpuesto, String unidadMedida, Double montoImpuesto, Double subTotal) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		Boolean esMercancia = Boolean.TRUE;
+
+		if (unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SP) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_OS) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_SPE) || unidadMedida.equals(Constantes.UNIDAD_MEDIDA_SERVICIO_ST)) {
+			esMercancia = Boolean.FALSE;
+		}
+		if (esMercancia) {
+			if (montoImpuesto > Constantes.ZEROS_DOUBLE) {
+				resultado = subTotal;
+			}
+
+		}
+		return resultado;
+	}
+
+	private Double getTotalImpuesto(Double montoImpuesto, Double montoImpuestoNeto) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		resultado = Utils.Maximo5Decimales(montoImpuesto);
+
+		return resultado;
+	}
+
+	private Double getImpuestoNetoTotal(Double montoImpuesto) {
+		Double resultado = Constantes.ZEROS_DOUBLE;
+		resultado = Utils.Maximo5Decimales(montoImpuesto);
+
+		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
+
+	}
+
+	/**
+	 * Es la suma del subtotal + primer impuesto por la tarifa sacamos el impuesto 13
+	 * @param subTotal
+	 * @param montoPrimerImpuesto
+	 * @param tarifa
+	 * @return
+	 */
+	private Double getMontoImpuestoCon13(Double subTotal, Double tarifa) {
+		Double valor = tarifa / 100d;
+		Double resultadoImpuesto = Constantes.ZEROS_DOUBLE;
+		resultadoImpuesto = subTotal * valor;
+		
+		return Utils.aplicarRedondeo(resultadoImpuesto) ? Utils.roundFactura(resultadoImpuesto, 5) : resultadoImpuesto;
+	}
+
+	/**
+	 * SubTotal = Monto Total - Monto Descuento
+	 * @param montoDescuento
+	 * @param montoTotal
+	 * @return
+	 */
+	private Double getSubtotal(Double montoTotal, Double montoDescuento) {
+
+		Double resultado = Utils.Maximo5Decimales(montoTotal) - Utils.Maximo5Decimales(montoDescuento);
+		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
+
+	}
+
+	/**
+	 * Total Descuento de la linea
+	 * @param montoTotal
+	 * @param porcentajeDescuento
+	 * @return
+	 */
+	private Double getDescuento(Double montoTotal, Double porcentajeDescuento) {
+		Double valor = porcentajeDescuento / 100d;
+		Double resultado = montoTotal * valor;
+		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
+	}
+
+	/**
+	 * Monto Total
+	 * @param precioUnitario
+	 * @param cantidad
+	 * @return
+	 */
+	private Double getMontoTotal(Double precioUnitario, Double cantidad) {
+		Double resultado = precioUnitario * cantidad;
+
+		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
+	}
 
 	@Transactional
 	private CompraSimplificada formaFactura(CompraSimplificadaCommand compraSimplificadaCommand, Usuario usuario) throws Exception {
@@ -741,53 +521,14 @@ private Double getPorcentajeGananciaProducto(Double precioUnitario, Double costo
 				compraSimplificada.setFechaCredito(null);
 				compraSimplificada.setPlazoCredito(Constantes.ZEROS);
 			}
-			compraSimplificada.setTotalOtrosCargos(Constantes.ZEROS_DOUBLE);
-			compraSimplificada.setTipoDocumentoOtroCargo(Constantes.EMPTY);
-			compraSimplificada.setDetalleOtroCargo(Constantes.EMPTY);
 
 			compraSimplificada.setVersionEsquemaXML(Constantes.ESQUEMA_XML_4_3);
-			if (!compraSimplificadaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO) && !compraSimplificadaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA) && !compraSimplificadaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE) && !compraSimplificadaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
-				compraSimplificada.setReferenciaTipoDoc(compraSimplificadaCommand.getReferenciaTipoDoc());
-				compraSimplificada.setReferenciaNumero(compraSimplificadaCommand.getReferenciaNumero());
-				compraSimplificada.setReferenciaCodigo(compraSimplificadaCommand.getReferenciaCodigo());
-				compraSimplificada.setReferenciaRazon(compraSimplificadaCommand.getReferenciaRazon());
-				if (compraSimplificadaCommand.getReferenciaFechaEmision() != null) {
-					compraSimplificada.setReferenciaFechaEmision(Utils.parseDate2(compraSimplificadaCommand.getReferenciaFechaEmision()));
-				}
-				CompraSimplificada compraSimplificadaReferencia = compraSimplificadaDao.findByConsecutivoAndEmpresa(compraSimplificadaCommand.getReferenciaNumero(), usuario.getEmpresa());
-		
-				compraSimplificadaReferencia = compraSimplificadaReferencia == null ? compraSimplificadaDao.findByClaveAndEmpresa(compraSimplificadaCommand.getReferenciaNumero(), usuario.getEmpresa()) : compraSimplificadaReferencia;
-				// Si la factura se encuentra en el sistema se agregan los datos propios de ella
-				if (compraSimplificadaReferencia != null) {
-					compraSimplificada.setReferenciaNumero(compraSimplificadaReferencia.getClave());
-					compraSimplificada.setReferenciaTipoDoc(compraSimplificadaReferencia.getTipoDoc());
-					compraSimplificada.setReferenciaFechaEmision(compraSimplificadaReferencia.getFechaEmision());
-					compraSimplificada.setCodigoMoneda(compraSimplificadaReferencia.getCodigoMoneda());
-					compraSimplificada.setTipoCambio(compraSimplificadaReferencia.getTipoCambio());
-					compraSimplificada.setDetalleOtroCargo(compraSimplificadaReferencia.getDetalleOtroCargo() == null ? Constantes.EMPTY : compraSimplificadaReferencia.getDetalleOtroCargo());
-					compraSimplificada.setTotalOtrosCargos(compraSimplificadaReferencia.getTotalOtrosCargos() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaReferencia.getTotalOtrosCargos());
-					compraSimplificada.setTipoDocumentoOtroCargo(compraSimplificadaReferencia.getTipoDocumentoOtroCargo() == null ? Constantes.EMPTY : compraSimplificadaReferencia.getTipoDocumentoOtroCargo());
-
-					if (compraSimplificadaReferencia.getVersionEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2)) {
-						compraSimplificada.setVersionEsquemaXML(Constantes.ESQUEMA_XML_4_2);
-					}
-
-				}
-
-			} else {
-				compraSimplificada.setVersionEsquemaXML(Constantes.ESQUEMA_XML_4_3);
-				compraSimplificada.setReferenciaTipoDoc(Constantes.EMPTY);
-				compraSimplificada.setReferenciaNumero(Constantes.EMPTY);
-				compraSimplificada.setReferenciaCodigo(Constantes.EMPTY);
-				compraSimplificada.setReferenciaRazon(Constantes.EMPTY);
-				compraSimplificada.setFechaEmision(null);
-			}
+			compraSimplificada.setFechaEmision(null);
 			compraSimplificada.setUsuarioCreacion(usuario);
 			compraSimplificada.setEmpresa(usuario.getEmpresa());
 			compraSimplificada.setProveedorSimplificado(compraSimplificadaCommand.getProveedorSimplificado());
-			compraSimplificada.setFechaEmision(new Date());
+			compraSimplificada.setFechaEmision(compraSimplificadaCommand.getFechaEmision());
 			compraSimplificada.setMedioEfectivo(Constantes.EMPTY);
-			compraSimplificada.setNombreFactura(compraSimplificadaCommand.getNombreFactura());
 			compraSimplificada.setCodigoActividad(compraSimplificadaCommand.getCodigoActividad() == null ? usuario.getEmpresa().getCodigoActividad() : compraSimplificadaCommand.getCodigoActividad());
 			if (compraSimplificadaCommand.getTotalEfectivo() > Constantes.ZEROS_DOUBLE) {
 				compraSimplificada.setMedioEfectivo(Constantes.MEDIO_PAGO_EFECTIVO);
@@ -837,14 +578,14 @@ private Double getPorcentajeGananciaProducto(Double precioUnitario, Double costo
 			compraSimplificada.setEstado(compraSimplificadaCommand.getEstado());
 			compraSimplificada.setCreated_at(new Date());
 			// }
-			compraSimplificada.setFechaEmision(new Date());
+			compraSimplificada.setFechaEmision(compraSimplificadaCommand.getFechaEmision());
 
 		} catch (Exception e) {
 			throw e;
 		}
 		return compraSimplificada;
 	}
-	
+
 	private ArrayList<DetalleCompraSimplificadaCommand> formaDetallesCommand(CompraSimplificadaCommand compraSimplificadaCommand) throws Exception {
 		// Detalles, se forma el detalle de la factura, se contabiliza los totales para
 		// evitar problemas con el tema de los decimales en el front
@@ -868,10 +609,6 @@ private Double getPorcentajeGananciaProducto(Double precioUnitario, Double costo
 		}
 		return detallesFacturaCommand;
 	}
-
-
-
-	
 
 	/**
 	 * Modificar una compra
@@ -921,6 +658,9 @@ private Double getPorcentajeGananciaProducto(Double precioUnitario, Double costo
 		compraSimplificadaDao.eliminarDetalleComprasPorSP(compraSimplificad);
 	}
 
-	
+	@Override
+	public Collection<CompraSimplificada> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma) {
+		return compraSimplificadaDao.findByEstadoFirma(estadoFirma, reEstadoFirma);
+	}
 
 }

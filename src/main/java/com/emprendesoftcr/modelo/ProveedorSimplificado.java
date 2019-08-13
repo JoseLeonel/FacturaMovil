@@ -27,16 +27,16 @@ public class ProveedorSimplificado implements Serializable {
 	@Column(name = "id")
 	private Long							id;
 
-	@Column(name = "nombre_completo")
+	@Column(name = "nombre_completo", length = 160)
 	private String						nombreCompleto;
 
-	@Column(name = "nombre_comercial")
+	@Column(name = "nombre_comercial", length = 160)
 	private String						nombreComercial;
 
-	@Column(name = "tipo_cedula")
+	@Column(name = "tipo_cedula", length = 2)
 	private String						tipoCedula;
 
-	@Column(name = "cedula")
+	@Column(name = "cedula", length = 12)
 	private String						cedula;
 	@Column(name = "codigo_pais")
 	private Integer						codigoPais;
@@ -44,7 +44,7 @@ public class ProveedorSimplificado implements Serializable {
 	@Column(name = "telefono")
 	private Integer						telefono;
 
-	@Column(name = "identificacion_Extranjero")
+	@Column(name = "identificacion_Extranjero", length = 12)
 	private String						identificacionExtranjero;
 
 	@Column(name = "correo_electronico")
@@ -66,6 +66,15 @@ public class ProveedorSimplificado implements Serializable {
 	@Column(name = "cod_actividad", length = 6)
 	private String						codigoActividad;
 
+	@Column(name = "cod_prov",columnDefinition = "INT default '1'")
+	private Integer						codigoProvincia;
+
+	@Column(name = "cod_canton",columnDefinition = "INT default '1'")
+	private Integer						codigoCanton;
+
+	@Column(name = "cod_distri",columnDefinition = "INT default '1'")
+	private Integer						codigoDistrito;
+
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
 	private Empresa						empresa;
@@ -78,7 +87,7 @@ public class ProveedorSimplificado implements Serializable {
 		super();
 	}
 
-	public ProveedorSimplificado(Long id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, Integer codigoPais, Integer telefono, String identificacionExtranjero, String correoElectronico, Integer estado, Date created_at, Date updated_at, String codigoActividad, Empresa empresa, Usuario usuario) {
+	public ProveedorSimplificado(Long id, String nombreCompleto, String nombreComercial, String tipoCedula, String cedula, Integer codigoPais, Integer telefono, String identificacionExtranjero, String correoElectronico, Integer estado, Date created_at, Date updated_at, String codigoActividad, Integer codigoProvincia, Integer codigoCanton, Integer codigoDistrito, Empresa empresa, Usuario usuario) {
 		super();
 		this.id = id;
 		this.nombreCompleto = nombreCompleto;
@@ -93,6 +102,9 @@ public class ProveedorSimplificado implements Serializable {
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 		this.codigoActividad = codigoActividad;
+		this.codigoProvincia = codigoProvincia;
+		this.codigoCanton = codigoCanton;
+		this.codigoDistrito = codigoDistrito;
 		this.empresa = empresa;
 		this.usuario = usuario;
 	}
@@ -215,6 +227,30 @@ public class ProveedorSimplificado implements Serializable {
 
 	public void setCodigoActividad(String codigoActividad) {
 		this.codigoActividad = codigoActividad;
+	}
+
+	public Integer getCodigoProvincia() {
+		return codigoProvincia;
+	}
+
+	public void setCodigoProvincia(Integer codigoProvincia) {
+		this.codigoProvincia = codigoProvincia;
+	}
+
+	public Integer getCodigoCanton() {
+		return codigoCanton;
+	}
+
+	public void setCodigoCanton(Integer codigoCanton) {
+		this.codigoCanton = codigoCanton;
+	}
+
+	public Integer getCodigoDistrito() {
+		return codigoDistrito;
+	}
+
+	public void setCodigoDistrito(Integer codigoDistrito) {
+		this.codigoDistrito = codigoDistrito;
 	}
 
 }

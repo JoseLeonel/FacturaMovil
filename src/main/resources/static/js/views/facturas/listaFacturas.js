@@ -37,7 +37,8 @@ var _Init = function () {
         $("#fechaInicial").val(null);
         $("#fechaFinal").val(null);
     });
-    $("#filtros").validate(reglasDeValidacion());
+	$("#filtros").validate(reglasDeValidacion());
+	listaActividadEconomica();
 }
 
 /**
@@ -65,7 +66,7 @@ function __Inicializar_Table(nombreTabla){
         destroy: true,
         "language": idioma_espanol,
         "sDom": 'lrtip',
-        "order": [0, 'desc'],
+        "order": [1, 'desc'],
         "bPaginate": true,
         'responsive': true,
         "bAutoWidth": true,
@@ -73,6 +74,31 @@ function __Inicializar_Table(nombreTabla){
         
     });    
 }
+
+/**
+ * Listar las actividades economicas 
+ */
+function listaActividadEconomica(){
+	$.ajax({
+		 url: "ListaEmpresaActividadComercialPorPricipalAjax.do",
+		 datatype: "json",
+		 global: false,
+		 method:"GET",
+		 success: function (result) {
+				if(result.aaData.length > 0){
+					$.each(result.aaData, function( index, modeloTabla ) {
+						$('.selectActividadEconocimica').append('<option value="'+modeloTabla.codigo+'">'+modeloTabla.descripcion+ '</option>');
+					});
+				} 
+		 },
+		 error: function (xhr, status) {
+			  mensajeErrorServidor(xhr, status);
+			  console.log(xhr);
+		 }
+	})
+}
+
+
 /**
 *  Obtiene la lista de los clientes activos
 **/
@@ -103,6 +129,8 @@ var ListarFacturas = function(){
     var fechaFin = $('.fechaFinal').val();
 	var idCliente = $('#cliente').val();
 	var tipoDocumento=$('#tipoDocumento').val();
+	var actividadEconomica=$('.selectActividadEconocimica').val();
+	var estado =$('.selectEstado').val();
 	var table  =  $('#tableListar').DataTable( {
 	"responsive": true,
 	 "bAutoWidth" : true,
@@ -119,7 +147,7 @@ var ListarFacturas = function(){
 	"sort" : "position",
 	"lengthChange": true,
 	"ajax" : {
-			"url":"ListarFacturasActivasAndAnuladasAjax.do?fechaInicio=" + fechaInicio+"&"+"fechaFin="+fechaFin+"&"+"idCliente="+idCliente+"&"+"tipoDocumento="+tipoDocumento,
+			"url":"ListarFacturasActivasAndAnuladasAjax.do?fechaInicio=" + fechaInicio+"&"+"fechaFin="+fechaFin+"&"+"idCliente="+idCliente+"&"+"tipoDocumento="+tipoDocumento +"&actividadEconomica="+actividadEconomica+"&estado="+estado,
 			"deferRender": true,
 			"type":"GET",
 					"dataType": 'json',

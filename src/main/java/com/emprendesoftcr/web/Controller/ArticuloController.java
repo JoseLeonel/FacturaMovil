@@ -648,10 +648,10 @@ public class ArticuloController {
 			}
 
 			if (articulo.getTipoImpuesto() != null) {
-				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Sin impuesto") ? Constantes.EMPTY : articulo.getTipoImpuesto());
+				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Exento") ? Constantes.EMPTY : articulo.getTipoImpuesto());
 			}
 			if (articulo.getTipoImpuesto1() != null) {
-				articulo.setTipoImpuesto1(articulo.getTipoImpuesto1().equals("Sin impuesto") ? Constantes.EMPTY : articulo.getTipoImpuesto1());
+				articulo.setTipoImpuesto1(articulo.getTipoImpuesto1().equals("Exento") ? Constantes.EMPTY : articulo.getTipoImpuesto1());
 			}
 			if (!articulo.getCodigoTarifa().equals(Constantes.EMPTY)) {
 				TarifaIVAI tarifaIVAI = tarifaIVAIBo.findByCodigoTarifa(articulo.getCodigoTarifa());
@@ -808,10 +808,10 @@ public class ArticuloController {
 			articulo.setBaseImponible(articulo.getBaseImponible() == null ? Constantes.BASE_IMPONIBLE_INACTIVO : articulo.getBaseImponible());
 			Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 			if (articulo.getTipoImpuesto() != null) {
-				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Sin impuesto") ? Constantes.EMPTY : articulo.getTipoImpuesto());
+				articulo.setTipoImpuesto(articulo.getTipoImpuesto().equals("Exento") ? Constantes.EMPTY : articulo.getTipoImpuesto());
 			}
 			if (articulo.getTipoImpuesto1() != null) {
-				articulo.setTipoImpuesto1(articulo.getTipoImpuesto1().equals("Sin impuesto") ? Constantes.EMPTY : articulo.getTipoImpuesto1());
+				articulo.setTipoImpuesto1(articulo.getTipoImpuesto1().equals("Exento") ? Constantes.EMPTY : articulo.getTipoImpuesto1());
 			}
 			if (articulo.getTipoCodigo() == null) {
 				articulo.setTipoCodigo("04");

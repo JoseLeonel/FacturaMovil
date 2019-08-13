@@ -2,9 +2,6 @@
 package com.emprendesoftcr.pdf;
 
 import java.io.ByteArrayOutputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
@@ -272,7 +269,7 @@ public class ReportePdfView {
 
 		tabla_ultima.addCell(derecha_inferior_ultima);
 		document.add(tabla_ultima);
-		String text = "Emitida conforme lo establecido en la resolución de Facturación Electrónica, N° DGT-R-48-2016 del 7/10/16 08:00:00 , a las " + fac_electro.getFechaEmision();
+		String text = "Emitida conforme lo establecido en la resolución de Facturación Electrónica, N° DGT-R-033-2019 del 20-06-2019 , a las " + fac_electro.getFechaEmision();
 
 		if (!tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 			document.add(new Paragraph(text, UtilsPdf.font_cabezera_tabla));

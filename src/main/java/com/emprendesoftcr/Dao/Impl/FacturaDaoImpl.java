@@ -166,7 +166,7 @@ public class FacturaDaoImpl implements FacturaDao {
 	}
 	
 
-	public TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa) {
+	public TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa, Integer estado) {
 
 		StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_TOTAL_FACTURAS);
 
@@ -174,6 +174,9 @@ public class FacturaDaoImpl implements FacturaDao {
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_IN_FECHA_INICIO, Date.class, ParameterMode.IN);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_IN_FECHA_FIN, Date.class, ParameterMode.IN);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_IN_ID_EMPRESA, Integer.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_IN_ESTADO, Integer.class, ParameterMode.IN);
+		
+		
 
 		// set parametros salida
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL, Double.class, ParameterMode.OUT);
@@ -187,6 +190,7 @@ public class FacturaDaoImpl implements FacturaDao {
 		storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS_IN_FECHA_INICIO, fechaInicio);
 		storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS_IN_FECHA_FIN, fechaFinal);
 		storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS_IN_ID_EMPRESA, idEmpresa);
+		storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS_IN_ESTADO, estado);
 		storedProcedure.execute();
 
 		// Se toma la respuesta

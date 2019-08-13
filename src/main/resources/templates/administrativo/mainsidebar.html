@@ -66,19 +66,20 @@
             </ul>
         </li>
         
-        <li class="treeview"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante')">
-            <a href="#">
-                <i class="fa fa-folder"></i>
-                <span>Simplificado</span>
-                <i class="fa fa-angle-left pull-right"></i>
-            </a>
-            <ul class="treeview-menu">
-                <li><a href="/comprasSimplificadas"><i class="fa fa-circle-o"></i> Nueva</a></li>
+<!--         <li class="treeview"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','Administrador_Empresa','Administrador_Restaurante')"> -->
+<!--             <a href="#"> -->
+<!--                 <i class="fa fa-folder"></i> -->
+<!--                 <span>Simplificado</span> -->
+<!--                 <i class="fa fa-angle-left pull-right"></i> -->
+<!--             </a> -->
+<!--             <ul class="treeview-menu"> -->
+<!--                 <li><a href="/comprasSimplificadas.do"><i class="fa fa-circle-o"></i> Nueva</a></li> -->
                 
-                <li><a href="/ListarProveedorSimplificado.do"><i class="fa fa-circle-o"></i> Proveedores</a></li>
-                <li><a href="/ListaComprasAnular"><i class="fa fa-circle-o"></i> Anular Compra</a></li>
-            </ul>
-        </li>
+<!--                 <li><a href="/ListarProveedorSimplificado.do"><i class="fa fa-circle-o"></i> Proveedores</a></li> -->
+<!--                 <li><a href="/ListarComprasSimplificado" ><i class="fa fa-circle-o"></i> Anular</a></li> -->
+                
+<!--             </ul> -->
+<!--         </li> -->
         <li class="treeview" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Sistema','usuario_vendedor','Administrador_Cajero','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante','Usuario_Mesero')">
             <a href="#">
                 <i class="fa fa-shopping-cart"></i>
@@ -156,6 +157,8 @@
 			                <li><a href="/ListaRecepcionFacturas"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Compras aceptadas</a></li>
 			                <li><a href="totalesComprasAceptadas"  sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i>Totales Compras aceptadas</a></li>
 			                <li><a href="TotalImpuestoComprasMensuales"  sec:authorize="hasAnyAuthority('Administrador_Contador','Administrador_Restaurante','Usuario_Mesero')"><i class="fa fa-circle-o"></i>IVA Mensual</a></li>
+<!-- 			                <li><a href="/ListarConsultaComprasSimplificado" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')"><i class="fa fa-circle-o"></i> Simplificado</a></li> -->
+			                
 			            </ul>
 			        </li>
 			        <li class="treeview" sec:authorize="hasAnyAuthority('administrador_Cocodrillos','Administrador_Contador','Administrador_Sistema','Administrador_Empresa','Administrador_Servicios','Administrador_Restaurante')">

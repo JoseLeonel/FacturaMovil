@@ -1,0 +1,174 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sd="http://www.thymeleaf.org/spring-data" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="admin">
+<head>
+ 	<meta name="viewport" content="width=device-width,user-scalable=no, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- Meta -->
+	<meta http-equiv="Content-Type" content="text/html; UTF-8">
+    <title>Lista de compras simplificada</title>
+    
+    <!--        <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script> -->
+  <script th:src="@{/js/jquery-1.11.2.js}"></script>
+	<!-- jQuery UI 1.11.4 -->
+	<script src="/js/jquery-ui.min.js"></script>
+	<!-- JQUERY Properties-->
+	<script type="text/javascript" src="js/jquery.i18n.js"></script>
+	<script type="text/javascript" th:src="@{webjars/jquery-i18n-properties/1.10.2/jquery.i18n.properties.min.js}"></script>
+    <script type="text/javascript" src="/js/jquery.blockUI.js"></script>
+	<script type="text/javascript" src="/js/jquery.validate.min.js"></script>
+	 
+	 <!-- MASK -->
+	 <script type="text/javascript" src="js/jquery.mask.js"></script>
+	 <script type="text/javascript" src="/js/print.min.js"></script>
+	 
+	 <script th:src="@{/js/jsonPath.js}"></script>
+   <!-- SWEERT ALERT -->
+        <script type="text/javascript" src="/js/sweetalert2.min.js"></script>
+    <!-- RIOT -->
+	<script src="/riot/riot.js"></script>
+	<script src="/riot/riot-compiler.min.js"></script>
+	<script src="/riot/riot.csp.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/riot@3.7/riot+compiler.min.js"></script>
+		
+	
+	<!-- MANTENIMIENTO DE COMPRAS -->
+	<script type="text/javascript" src="/js/views/simplificado/listaConsultaComprasSimplificadas.js"></script>
+	<script type = "riot/tag"  src="/js/views/components/simplificado/consultaCompraSimplificada.tag" ></script>
+<style>
+   .tituloListado{
+   	font-size: 25px;
+    font-weight: 600;
+    color: black;
+   }
+   .mostrarListadoDeFacturas{
+   margin-bottom: 0.5%;
+   }
+</style>
+    
+</head>
+<body>
+
+<div layout:fragment="content">
+     <div  class="row "  >
+        <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8 tituloListado">
+             <i class="fa fa-calculator" th:text="#{compraSimplificada.titulo.listado}"></i >
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right"></div>
+     </div>
+    <!-- Inicio Filtros-->
+    <div class="mostrarListadoDeFacturas"  id="mostrarListadoDeFacturas">
+        <div class="row" >
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div  id = "filtrosAvanzados" class="advanced-search-grid text-left" style="padding-top : 5px; padding-bottom : 5px;">
+                    <form id="filtros" name="filtros">              
+                        <div class= "row">
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                <div class="form-group">
+                                    <label class="knob-label"  >Fecha Inicial <span class="requeridoDato">*</span></label>
+                                    <div  class="form-group input-group date datepickerFechaInicial" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                        <input type="text" class="form-control fechaInicial" id="fechaInicial"  name= "fechaInicial" readonly>
+                                        <div class="input-group-addon">
+                                            <span class="glyphicon glyphicon-th"></span>
+                                        </div>
+                                    </div>	                             
+                                </div>  
+                            </div>             
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label class="knob-label" >Fecha Final <span class="requeridoDato">*</span></label>
+                                        <div  class="form-group input-group date datepickerFechaFinal" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                            <input type="text" class="form-control fechaFinal" id="fechaFinal"  name= "fechaFinal" readonly>
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>	                             
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                <div class="form-group">
+                                    <label th:text="#{proveedor.titulo}"> </label>  
+                                    <select  class="form-control selectidProveedor" id= "idProveedor" name="idProveedor" data-live-search="true">
+                                        <option  data-tokens="Todos"   value="0"  >Todos</option>
+                                    </select>
+                                </div>  
+                             </div>    
+                             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">  
+                                <label th:text="#{factura.estado}"> </label>  
+                                <select  class="form-control estado" id="estado" name="estado" ></select>
+                             </div>
+                        </div>
+                        <div class= "row">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                              	<label > Descuentos </label>
+                                <input type="text" readonly="readonly" class="form-control totalDescuentos" >
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                              	<label > Impuestos </label>
+                                <input type="text" readonly="readonly" class="form-control totalImpuestos" >
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                              	<label > Total Comprobante </label>
+                                <input type="text" readonly="readonly" class="form-control totalComprobante" >
+                            </div>
+                        </div>    
+                    </form>  
+                </div>
+            </div>
+            <div class="col-xs-12 text-right">
+                 <button  type="button" class="btn btn-success enviarCorreo" title="Enviar corre " name="button" data-toggle="modal" data-target="ModalCorreoAlternativo"> Correo  <i class="fa fa-envelope"></i></button>
+                 <a   class=" btn btn-primary btn-bajar descargar"  target="_blank" title="Descargar " href="#"> Descargar</a>              
+                <button  id="bontonBusqueda" type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
+            	<button  class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
+            </div>
+        </div>
+    </div>
+ <!-- Listado  -->
+    <div class="row">
+       <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
+            <div class="box">
+                <div class="box-body">
+                    <div class="planel-body" >
+                        <div class="row" >        
+                            <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
+                                <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="97%">
+                                   <thead>
+                                            <tr>
+                                                <th style="width:6%" class = "table-header" th:text="#{compra.listado.proveedor}"></th>
+                                                <th style="width:4%" class = "table-header" th:text="#{compraSimplificada.documento}"></th>
+                                                <th style="width:6%" class = "table-header" th:text="#{compraSimplificada.fecha.emision}"></th>
+                                                <th style="width:5%" class = "table-header" th:text="#{compraSimplificada.linea.detalle.descuento}"></th>
+                                                <th style="width:5%" class = "table-header" th:text="#{compraSimplificada.linea.detalle.impuesto}"></th>
+                                                <th style="width:5%" class = "table-header" th:text="#{compra.listado.total}"></th>
+                                                <th class = "table-header" style="width:5%" >Usuario </th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot style="display: table-header-group;">
+                                            <tr>
+                                                <th th:text="#{compra.listado.proveedor}"></th>
+                                                <th th:text="#{compraSimplificada.documento}"></th>
+                                                <th th:text="#{compraSimplificada.fecha.emision}"></th>
+                                                <th th:text="#{compraSimplificada.linea.detalle.descuento}"></th>
+                                                <th th:text="#{compraSimplificada.linea.detalle.impuesto}"></th>
+                                                <th th:text="#{compra.listado.total}"></th>
+                                                <th>Usuario</th>            
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>   
+                            </div> 
+                        </div>    
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+  
+ <consulta-simpli></consulta-simpli>   
+  </div>
+  
+     
+
+</body>
+</html>

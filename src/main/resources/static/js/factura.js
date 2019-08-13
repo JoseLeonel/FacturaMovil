@@ -309,6 +309,9 @@ function __valorFloat(valor){
     return isNumber(valor)?parseFloat(valor):0.0 ;
 }
 function __valorEnterot(valor){
+	if (typeof valor == 'undefined') {
+	    return 0;
+	}
     return isNumber(valor)?parseInt(valor):0 ;
 }
 
@@ -829,6 +832,8 @@ function loadListar(table,idioma,formatoTabla,data){
 *  Listar la tabla a aplicar el mantenimiento
 **/
 function __InicializarTabla(nombreTabla){
+	$(nombreTabla).dataTable().fnClearTable();
+	$(nombreTabla).DataTable().destroy();
     $(nombreTabla).DataTable({
         destroy: true,
         "language": idioma_espanol,
@@ -839,7 +844,12 @@ function __InicializarTabla(nombreTabla){
         "bAutoWidth": true,
         "lengthChange": true,
         
-    });    
+    });
+	var table = $(nombreTabla).DataTable();
+ 	table
+    .clear()
+    .draw();
+
 }
 
 
@@ -1009,6 +1019,9 @@ function formatoFecha(fecha) {
 }
 
 function formatoFechaF(fecha) {
+    return fecha == null?"":moment(fecha).format('YYYY-MM-DD');
+}
+function formatoFechaYYYY(fecha) {
     return fecha == null?"":moment(fecha).format('YYYY-MM-DD');
 }
 
