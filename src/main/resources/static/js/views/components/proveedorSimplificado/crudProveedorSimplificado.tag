@@ -361,6 +361,7 @@ function getClienteHacienda(cedula){
         },
         404: function() {
             alert( "Cedula invalidad" )
+            __listadoTipoCedulas()
         }
     }
     }).done(function (response) {

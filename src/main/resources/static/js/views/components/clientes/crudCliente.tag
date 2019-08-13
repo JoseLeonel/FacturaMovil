@@ -34,10 +34,9 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                        <label  >{$.i18n.prop("cliente.nombreCompleto")}  <span class="requeridoDato">*</span></label>
-                                        <input type="text" class="form-control nombreCompleto" placeHolder ="{$.i18n.prop("cliente.nombreCompleto")}" id="nombreCompleto" name="nombreCompleto" value="{cliente.nombreCompleto}"  >
-
+                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
+                                        <label  >{$.i18n.prop("cliente.cedula")} <span class="requeridoDato">*</span></label>
+                                        <input type="text" class="form-control cedula" id="cedula" name="cedula" placeHolder ="{$.i18n.prop("cliente.cedula")}" value="{cliente.cedula}"  onkeypress = {__ConsultarHacienda} onBlur ={__ConsultarHaciendaBlur} >
                                     </div>
                                     <div class= "col-md-2 col-sx-12 col-sm-2 col-lg-2">
                                         <label  >{$.i18n.prop("cliente.tipoCedula")}  <span class="requeridoDato">*</span></label>
@@ -45,9 +44,11 @@
                                             <option  each={tipoCedulas.data}  value="{valor}" selected="{cliente.tipoCedula ==valor?true:false}"  >{descripcion}</option>
                                         </select>
                                     </div>                            
-                                    <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
-                                        <label  >{$.i18n.prop("cliente.cedula")} <span class="requeridoDato">*</span></label>
-                                        <input type="text" class="form-control cedula" id="cedula" name="cedula" placeHolder ="{$.i18n.prop("cliente.cedula")}" value="{cliente.cedula}"  >
+
+                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                        <label  >{$.i18n.prop("cliente.nombreCompleto")}  <span class="requeridoDato">*</span></label>
+                                        <input type="text" class="form-control nombreCompleto" placeHolder ="{$.i18n.prop("cliente.nombreCompleto")}" id="nombreCompleto" name="nombreCompleto" value="{cliente.nombreCompleto}"  >
+
                                     </div>
                                     <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                         <label  >{$.i18n.prop("cliente.nombreComercial")} </label>
@@ -275,6 +276,15 @@
             id:null
         }
     }
+     self.clienteHacienda= {
+        nombre:"",
+        tipoIdentificacion:"",
+        regimen:{
+            codigo:"",
+            descripcion:""
+        },
+        actividades:[]
+    }
 self.on('mount',function(){
     _incializarCampos()
     __Eventos()
@@ -451,28 +461,100 @@ function _incializarCampos(){
     
 }
 
+
+/**
+*Consulta hacienda
+**/
+__ConsultarHaciendaBlur(){
+    var cedula = $('#cedula').val()
+    getClienteHacienda(cedula)
+
+}
+__ConsultarHacienda(e){
+     if (e.keyCode != 13) {
+        return;
+    } 
+    var cedula = $('#cedula').val()
+    getClienteHacienda(cedula)
+}
+function getClienteHacienda(cedula){
+    self.clienteHacienda= {
+        nombre:"",
+        tipoIdentificacion:"",
+        regimen:{
+            codigo:"",
+            descripcion:""
+        },
+        actividades:[]
+    }
+    self.update()
+    $.ajax({
+    "url": "https://api.hacienda.go.cr/fe/ae?identificacion="+ cedula,
+    "method": "GET",
+    statusCode: {
+        
+        404: function() {
+            alert( "Cedula invalidad" )
+            __listadoTipoCedulas()
+        }
+    }
+    }).done(function (response) {
+        self.clienteHacienda = response
+        self.update()
+        __listadoTipoCedulas()
+         $('#nombreCompleto').val(self.clienteHacienda.nombre)
+    });
+}
+
 /**
 *  Mostrar listado datatable TipoCedulas
 **/
 function __listadoTipoCedulas(){
     self.tipoCedulas               = {data:[]}  // definir el data del datatable
     self.update()
-    self.tipoCedulas.data.push({
-        valor:"01",
-        descripcion:$.i18n.prop("tipo.cedula.fisica")
-    })
-   self.tipoCedulas.data.push({
-        valor:"02",
-        descripcion:$.i18n.prop("tipo.cedula.juridica")
-    })
-   self.tipoCedulas.data.push({
-        valor:"03",
-        descripcion:$.i18n.prop("tipo.cedula.dimex")
-    })
+    if(self.clienteHacienda.tipoIdentificacion == "01") {
+        self.tipoCedulas.data.push({
+            valor:"01",
+            descripcion:$.i18n.prop("tipo.cedula.fisica")
+        })
+    }
+    if(self.clienteHacienda.tipoIdentificacion == "02") {
+        self.tipoCedulas.data.push({
+            valor:"02",
+            descripcion:$.i18n.prop("tipo.cedula.juridica")
+        })
+    }
+    if(self.clienteHacienda.tipoIdentificacion == "03" ){
+        self.tipoCedulas.data.push({
+            valor:"03",
+            descripcion:$.i18n.prop("tipo.cedula.dimex")
+        })
+    }    
+    if(self.clienteHacienda.tipoIdentificacion == "04" ){
      self.tipoCedulas.data.push({
         valor:"04",
         descripcion:$.i18n.prop("tipo.cedula.nite")
     })
+    }
+    if(self.tipoCedulas.data.length == 0){
+        self.tipoCedulas.data.push({
+            valor:"01",
+            descripcion:$.i18n.prop("tipo.cedula.fisica")
+        })
+        self.tipoCedulas.data.push({
+            valor:"02",
+            descripcion:$.i18n.prop("tipo.cedula.juridica")
+        })
+         self.tipoCedulas.data.push({
+            valor:"03",
+            descripcion:$.i18n.prop("tipo.cedula.dimex")
+        })
+        self.tipoCedulas.data.push({
+          valor:"04",
+          descripcion:$.i18n.prop("tipo.cedula.nite")
+        })
+
+    }
     self.update()
 }
 /**
