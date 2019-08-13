@@ -12,7 +12,8 @@ import com.emprendesoftcr.Dao.ConsultasNativeDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.sqlNativo.BaseNativeQuery;
-import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
+import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
+import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
@@ -139,29 +140,32 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		return (Collection<FacturasSinNotaCreditoNative>) query.getResultList();
 		
 	}
-	@SuppressWarnings("unchecked")
-	@Override
-	public Collection<CompraSimplificadaNative> findComprasSimplificadasByFechaAndEstadoAndEmpresa(Empresa empresa, String fechaInicial , String fechaFinal,Long idProveedor,Integer estado,Integer idUsuario){
-		String queryStr = getQueryBase(CompraSimplificadaNative.class);
+	
+	public Collection<ConsultaIVANative> findByEmpresaAndEstadoAndFechasAndActividadComercial(Empresa empresa, String fechaInicial , String fechaFinal, Integer estado, Integer codigoActividadComercial){
+		
+		String queryStr = getQueryBase(ConsultaIVANative.class);
 		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
-		queryStr = queryStr.replaceAll(":Estado", estado.toString());
 		queryStr = queryStr.replaceAll(":FECHAINICIAL","'"+ fechaInicial+"'");
-		queryStr = queryStr.replaceAll(":FechaFinal","'"+ fechaFinal+"'");
-		if (idUsuario > Constantes.ZEROS) {
-			queryStr = queryStr.replaceAll("compra_simpli.usuario_id =" ," compra_simpli.usuario_id ='"+ idUsuario.toString() + "' ");	
-		}else {
-			queryStr = queryStr.replaceAll("and compra_simpli.usuario_id =" ," ");
-		}
-		if (idProveedor > Constantes.ZEROS_LONG) {
-			queryStr = queryStr.replaceAll("and compra_simpli.proveedorsimpl_id =" ," and compra_simpli.proveedorsimpl_id ='"+ idProveedor.toString() + "' ");	
-		}else {
-			queryStr = queryStr.replaceAll("and compra_simpli.proveedorsimpl_id = " ," ");
-		}
-		
-		Query query = entityManager.createNativeQuery(queryStr, CompraSimplificadaNative.class);
-		return (Collection<CompraSimplificadaNative>) query.getResultList();
-		
+		queryStr = queryStr.replaceAll(":FECHAFINAL","'"+ fechaFinal+"'");
+		queryStr = queryStr.replaceAll(":ESTADO", estado.toString());
+		queryStr = queryStr.replaceAll(":ACT_COMERCIAL", codigoActividadComercial.toString()); 
+		Query query = entityManager.createNativeQuery(queryStr, ConsultaIVANative.class);
+		return (Collection<ConsultaIVANative>) query.getResultList();
 	}
+	
+	
+	public Collection<ConsultaComprasIvaNative> findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(Empresa empresa, String fechaInicial , String fechaFinal, Integer estado, Integer codigoActividadComercial){
+		
+		String queryStr = getQueryBase(ConsultaComprasIvaNative.class);
+		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
+		queryStr = queryStr.replaceAll(":FECHAINICIAL","'"+ fechaInicial+"'");
+		queryStr = queryStr.replaceAll(":FECHAFINAL","'"+ fechaFinal+"'");
+		queryStr = queryStr.replaceAll(":ESTADO", estado.toString());
+		queryStr = queryStr.replaceAll(":ACT_COMERCIAL", codigoActividadComercial.toString()); 
+		Query query = entityManager.createNativeQuery(queryStr, ConsultaComprasIvaNative.class);
+		return (Collection<ConsultaComprasIvaNative>) query.getResultList();
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<HaciendaComprobarNative> findByComprabarDocumentoPendienteaceptar(){
@@ -173,5 +177,6 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 	private static <T> String getQueryBase(Class<T> claseObjecto) {
 		return ((claseObjecto).getDeclaredAnnotationsByType(BaseNativeQuery.class))[0].query();
 	}
+
 	
 }

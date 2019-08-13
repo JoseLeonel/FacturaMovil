@@ -77,6 +77,8 @@ import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.modelo.Vendedor;
+import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
+import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstado;
@@ -86,6 +88,8 @@ import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.pdf.ReportePdfView;
 import com.emprendesoftcr.service.ProcesoHaciendaService;
 import com.emprendesoftcr.validator.FacturaFormValidator;
+import com.emprendesoftcr.web.command.ConsultaComprasIvaCommand;
+import com.emprendesoftcr.web.command.ConsultaIvaCommand;
 import com.emprendesoftcr.web.command.FacturaAnulacionCommand;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaDiaCommand;
@@ -424,7 +428,17 @@ public class FacturasController {
 	public String totalFacturas(ModelMap model) {
 		return "views/facturas/totalFacturas";
 	}
-
+	
+	@RequestMapping(value = "/TotalImpuestoVentasMensuales", method = RequestMethod.GET)
+	public String totalImpuestoVentasMensuales(ModelMap model) {
+		return "views/facturas/totalImpuestoVentasMensuales";
+	}
+	
+	@RequestMapping(value = "/TotalImpuestoComprasMensuales", method = RequestMethod.GET)
+	public String totalImpuestoComprasMensuales(ModelMap model) {
+		return "views/facturas/totalImpuestoComprasMensuales";
+	}
+	
 	/**
 	 * Busca el total de facturas por rango de fechas
 	 * @param request
@@ -773,6 +787,8 @@ public class FacturasController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
+	
+	
 	/**
 	 * Lista de las Proformas activas
 	 * @param request
@@ -998,6 +1014,111 @@ public class FacturasController {
 
 //		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
+	
+	
+	
+	
+//---- rolo
+	
+	
+	/***
+	 * 
+	 * @param request
+	 * @param response
+	 * @param fechaInicio
+	 * @param fechaFin
+	 * @param estado
+	 * @param selectActividadComercial
+	 * @return
+	 */
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value = "/listarConsutaComprasIvaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarConsutaComprasIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado, Integer selectActividadComercial) {
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Date fechaInicioP = Utils.parseDate(fechaInicio);
+		Date fechaFinalP = Utils.parseDate(fechaFin);
+		if (!fechaInicio.equals(Constantes.EMPTY) && !fechaFin.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+			}
+		}
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		String inicio1 = dateFormat1.format(fechaInicioP);
+		String fin1 = dateFormat1.format(fechaFinalP);
+		Integer idUsuario = Constantes.ZEROS;
+		if (usuarioBo.isAdministrador_cajero(usuarioSesion) || usuarioBo.isAdministrador_empresa(usuarioSesion) || usuarioBo.isAdministrador_restaurante(usuarioSesion)) {
+			idUsuario = Constantes.ZEROS;
+		} else {
+			idUsuario = usuarioSesion.getId();
+		}
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		Collection<ConsultaComprasIvaNative> objetos = consultasNativeBo.findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(usuarioSesion.getEmpresa(), inicio1, fin1, estado, selectActividadComercial);
+		List<Object> solicitudList = new ArrayList<Object>();
+		if (objetos != null) {
+			for (ConsultaComprasIvaNative consultaComprasIvaNative : objetos) {
+				solicitudList.add(new ConsultaComprasIvaCommand(consultaComprasIvaNative));
+			}
+		}
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+	}
+	
+	
+	/**
+	 * Facturas sin notas de creditos de anulacion completa
+	 * @param request
+	 * @param response
+	 * @param fechaInicio
+	 * @param fechaFin
+	 * @param idCliente
+	 * @param tipoDocumento
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value = "/listarConsutaIvaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarConsutaIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado, Integer selectActividadComercial) {
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Date fechaInicioP = Utils.parseDate(fechaInicio);
+		Date fechaFinalP = Utils.parseDate(fechaFin);
+		if (!fechaInicio.equals(Constantes.EMPTY) && !fechaFin.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+			}
+		}
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+		String inicio1 = dateFormat1.format(fechaInicioP);
+		String fin1 = dateFormat1.format(fechaFinalP);
+		Integer idUsuario = Constantes.ZEROS;
+		if (usuarioBo.isAdministrador_cajero(usuarioSesion) || usuarioBo.isAdministrador_empresa(usuarioSesion) || usuarioBo.isAdministrador_restaurante(usuarioSesion)) {
+			idUsuario = Constantes.ZEROS;
+		} else {
+			idUsuario = usuarioSesion.getId();
+		}
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		Collection<ConsultaIVANative> objetos = consultasNativeBo.findByEmpresaAndEstadoAndFechasAndActividadComercial(usuarioSesion.getEmpresa(), inicio1, fin1, estado, selectActividadComercial);
+		List<Object> solicitudList = new ArrayList<Object>();
+		if (objetos != null) {
+			for (ConsultaIVANative consultaIVANative : objetos) {
+				solicitudList.add(new ConsultaIvaCommand(consultaIVANative));
+			}
+		}
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+	}
+	
 
 	/**
 	 * Recibir factura de otro emisor
