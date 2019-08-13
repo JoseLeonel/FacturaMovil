@@ -118,7 +118,7 @@
 					 <td><div>{totales.uno_iva_01.montoImpuestoUno08}</div></td>
 				  </tr>
 				  <tr>
-				     <td><p class="formatos">Total</p></td>
+				     <td><p class="formatos"><b>Total</b></p></td>
 					 <td><div>{totales.unoTotal.totalVentasUno}</div></td>
 					 <td><div>{totales.unoTotal.totalImpuestoUno}</div></td>
 				  </tr>
@@ -147,13 +147,13 @@
 					</tr>
 					<tr>
 						<td><p class="formatos">Otros</p></td>
-						<td><div>{totales.otros.selectivoConsumo.oImpuesto}</div></td>
 						<td><div>{totales.otros.selectivoConsumo.oVentas}</div></td>
+						<td><div>{totales.otros.selectivoConsumo.oImpuesto}</div></td>
 					</tr>
 					<tr>
-						<td><p class="formatos">Total</p></td>
-						<td><div>{totales.otros.selectivoConsumo.tImpuesto}</div></td>
+						<td><p class="formatos"><b>Total</b></p></td>
 						<td><div>{totales.otros.selectivoConsumo.tVentas}</div></td>
+						<td><div>{totales.otros.selectivoConsumo.tImpuesto}</div></td>
 					</tr>
 				</table>
 			</div>
@@ -209,7 +209,7 @@
 							<td><div>{totales.siete_iva_08.montoImpuestoSiete08}</div></td>
 						</tr>
 						<tr>
-							<td><p class="formatos">Total</p></td>
+							<td><p class="formatos"><b>Total</b></p></td>
 							<td><div>{totales.sieteTotal.totalVentasSiete}</div></td>
 							<td><div>{totales.sieteTotal.totalImpuestoSiete}</div></td>
 						</tr>
@@ -233,7 +233,7 @@
 				</div>
 				<div class="formulasRotuloFila3">
 					<div class="formulasRotuloFila3Col1"></div>
-					<div class="formulasRotuloFila3Col2"><p class="formatos">{parametros.titulo }s sin derecho a credito</p></div>
+					<div class="formulasRotuloFila3Col2"></div>
 					<div class="formulasRotuloFila3Col3"></div>
 				</div>
 			 </div>
@@ -242,7 +242,7 @@
 					<tr>
 						<td rowspan="2"><p class="formatos">Tarifa 0% (Exento)</p></td>
 						<td><div>{totales.estadistica.tarifaCeroP}</div></td>
-						<td rowspan="2"><div>{totales.estadistica.tarifaCeroImp}%</div></td>
+					<td rowspan="2"><div>{totales.estadistica.tarifaCeroImp}%</div></td>
 					</tr>
 					<tr>
 						<td><div>{totales.estadistica.totalVentasP}</div></td>
@@ -342,9 +342,35 @@
 						<td></td>
 						<td></td>
 						<td></td>
+					</tr>  
+					<tr>
+						<td rowspan="2"><p class="formatos">Otros</p></td>
+						<td>{totales.estadistica.otrosP}<div></div></td>
+						<td rowspan="2"><div>{totales.estadistica.otrosPImp}%</div></td>
+					</tr>
+					<tr>
+						<td><div>{totales.estadistica.totalVentasP}</div></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
 					</tr>    
 					<tr>
-						<td><p class="formatos">Total</p></td>
+						<td rowspan="2"><p class="formatos">Excentos</p></td>
+						<td>{totales.estadistica.excentosP}<div></div></td>
+						<td rowspan="2"><div>{totales.estadistica.excentosPImp}%</div></td>
+					</tr>
+					<tr>
+						<td><div>{totales.estadistica.totalVentasP}</div></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td><p class="formatos"><b>Total</b></p></td>
 						<td><div></div></td>
 						<td><div>{totales.estadistica.totalVentasImp}%</div></td>
 					</tr>
@@ -700,109 +726,123 @@
 		self.valorMarginBottom  = '0px'
 		self.mostrarDetalle        = false
 
-		self.totales ={
-			uno_iva_01:{
-				montoImpuestoUno01:"",
-				montoVentaUno01:""
+	self.totales ={
+		uno_iva_01:{
+			montoImpuestoUno01:"",
+			montoVentaUno01:""
+		},
+		uno_iva_02:{
+			montoImpuestoUno02:"",
+			montoVentaUno02:""
+		},
+		uno_iva_03:{
+			montoImpuestoUno03:"",
+			montoVentaUno03:""
+		},
+		uno_iva_04:{
+			montoImpuestoUno04:"",
+			montoVentaUno04:""
+		},
+		uno_iva_05:{
+			montoImpuestoUno05:"",
+			montoVentaUno05:""
+		},
+		uno_iva_06:{
+			montoImpuestoUno06:"",
+			montoVentaUno06:""
+		},
+		uno_iva_07:{
+			montoImpuestoUno07:"",
+			montoVentaUno07:""
+		},
+		uno_iva_08:{
+			montoImpuestoUno08:"",
+			montoVentaUno08:""
+		},
+		unoTotal:{
+			totalImpuestoUno:"",
+			totalVentasUno:""
+		},
+		siete_iva_01:{
+			montoImpuestoSiete01:"",
+			montoVentaSiete01:""
+		},
+		siete_iva_02:{
+			montoImpuestoSiete02:"",
+			montoVentaSiete02:""
+		},
+		siete_iva_03:{
+			montoImpuestoSiete03:"",
+			montoVentaSiete03:""
+		},
+		siete_iva_04:{
+			montoImpuestoSiete04:"",
+			montoVentaSiete04:""
+		},
+		siete_iva_05:{
+			montoImpuestoSiete05:"",
+			montoVentaSiete05:""
+		},
+		siete_iva_06:{
+			montoImpuestoSiete06:"",
+			montoVentaSiete06:""
+		},
+		siete_iva_07:{
+			montoImpuestoSiete07:"",
+			montoVentaSiete07:""
+		},
+		siete_iva_08:{
+			montoImpuestoSiete08:"",
+			montoVentaSiete08:""
+		},
+		sieteTotal:{
+			totalImpuestoSiete:"",
+			totalVentasSiete:""
+		},
+		otros:{
+			selectivoConsumo:{
+				scImpuesto:"",
+				scVentas:""
 			},
-			uno_iva_02:{
-				montoImpuestoUno02:"",
-				montoVentaUno02:""
+			cemento:{
+				cVentas:"",
+				cImpuesto:""
 			},
-			uno_iva_03:{
-				montoImpuestoUno03:"",
-				montoVentaUno03:""
+			otrosProductos:{
+				oImpuesto:"",
+				oVentas:""
 			},
-			uno_iva_04:{
-				montoImpuestoUno04:"",
-				montoVentaUno04:""
-			},
-			uno_iva_05:{
-				montoImpuestoUno05:"",
-				montoVentaUno05:""
-			},
-			uno_iva_06:{
-				montoImpuestoUno06:"",
-				montoVentaUno06:""
-			},
-			uno_iva_07:{
-				montoImpuestoUno07:"",
-				montoVentaUno07:""
-			},
-			uno_iva_08:{
-				montoImpuestoUno08:"",
-				montoVentaUno08:""
-			},
-			unoTotal:{
-				totalImpuestoUno:"",
-				totalVentasUno:""
-			},
-			siete_iva_01:{
-				montoImpuestoSiete01:"",
-				montoVentaSiete01:""
-			},
-			siete_iva_02:{
-				montoImpuestoSiete02:"",
-				montoVentaSiete02:""
-			},
-			siete_iva_03:{
-				montoImpuestoSiete03:"",
-				montoVentaSiete03:""
-			},
-			siete_iva_04:{
-				montoImpuestoSiete04:"",
-				montoVentaSiete04:""
-			},
-			siete_iva_05:{
-				montoImpuestoSiete05:"",
-				montoVentaSiete05:""
-			},
-			siete_iva_06:{
-				montoImpuestoSiete06:"",
-				montoVentaSiete06:""
-			},
-			siete_iva_07:{
-				montoImpuestoSiete07:"",
-				montoVentaSiete07:""
-			},
-			siete_iva_08:{
-				montoImpuestoSiete08:"",
-				montoVentaSiete08:""
-			},
-			sieteTotal:{
-				totalImpuestoSiete:"",
-				totalVentasSiete:""
-			},
-			otros:{
-				selectivoConsumo:{
-				   scImpuesto:"",
-				   scVentas:""
-				},
-				cemento:{
-				   cVentas:"",
-				   cImpuesto:""
-				},
-				otrosProductos:{
-				   oImpuesto:"",
-				   oVentas:""
-				},
-                total:{
-				   tImpuesto:"",
-				   tVentas:""
-				}	
-			},
-		    estadistica:{
-			   tarifaCeroP:"",
-			   tarifaReducidaUnoP:"",
-			   tarifaReducidaDosP:"",
-			   tarifareducidaCuatroP:"",
-			   transitorioCeroP:"",
-			   transitorioCuatroP:"",
-			   transitorioOchoP:"",
-			   tarifaGeneralP:"",
-			   totalVentasP:""
-		    }
+				total:{
+				tImpuesto:"",
+				tVentas:""
+			}	
+		},
+		estadistica:
+		{
+			tarifaCeroP:"",
+			tarifaReducidaUnoP:"",
+			tarifaReducidaDosP:"",
+			tarifareducidaCuatroP:"",
+			transitorioCeroP:"",
+			transitorioCuatroP:"",
+			transitorioOchoP:"",
+			tarifaGeneralP:"",
+			otrosP:"",
+			excentosP:"",
+			totalVentasP:"",
+			tarifaCeroImp:"",
+			tarifaReducidaUnoPImp:"",
+			tarifaReducidaDosPImp:"",
+			tarifareducidaCuatroPImp:"",
+			transitorioCeroPImp:"",
+			transitorioCuatroPImp:"",
+			transitorioOchoPImp:"",
+			tarifaGeneralPImp:"",
+			otrosPImp:"",
+			excentosPImp:"",
+			totalVentasImp:""
 		}
+	}
 /*-----------------------------------------------------------------------------------------*/
 
 		self.fechaInicio="";
@@ -907,6 +947,8 @@
             var sieteVentaTotal             = 0;
 			var ventasOtrosTotal            = 0;
 			var ImpuesOtrosTotal            = 0;
+			var excentosTotalVentas         = 0;
+			var excentosTotalimpuesto       = 0;
 			var tarifa_1                    = 0;
 			var tarifa_2                    = 0;
 			var tarifa_3                    = 0;
@@ -915,6 +957,8 @@
 			var tarifa_6                    = 0;
 			var tarifa_7                    = 0;
 			var tarifa_8                    = 0;
+			var tarifa_9                    = 0;
+			var tarifa_10                   = 0;
 			var tarifa_1_porCiento          = 0;
 			var tarifa_2_porCiento          = 0;
 			var tarifa_3_porCiento          = 0;
@@ -923,8 +967,11 @@
 			var tarifa_6_porCiento          = 0;
 			var tarifa_7_porCiento          = 0;
 			var tarifa_8_porCiento          = 0;
+			var tarifa_9_porCiento          = 0;
+			var tarifa_10_porCiento         = 0;
 			var totalPorCientos             = 0;
-
+			var bd                          = 0;
+			var __total                     = 0;
 		    self.fechaInicio = $('#fechaInicial').val();
 		    self.fechaFin = $('#fechaFinal').val();
 		    self.update();
@@ -933,8 +980,8 @@
 		        var parametros = {
 		        	fechaInicio:$('#fechaInicial').val(),
 		        	fechaFin:$('#fechaFinal').val(),
-					estado: 6,
-					selectActividadComercial: 7
+					    estado: $('#estado').val(),
+					    selectActividadComercial: $('#selectActividadComercial').val()
 		        };
 		        $.ajax({
 		            url: self.parametros.url,
@@ -943,19 +990,18 @@
 		            method:"GET",
 		            success: function (data) {
 						$.each(data.aaData, function( index, modeloTabla ) {
-							
+							if(bd==0){inicializaEsta();bd=1;}
 							montoImpuestoPivot = __valorNumerico(modeloTabla.totalImpuesto)
-							montoVentaPivot    = __valorNumerico(modeloTabla.totalVentas)
-                            
+							montoVentaPivot    = __valorNumerico(modeloTabla.totalVentas)         
 							/*----7----*/
 							if (modeloTabla.tipoImpuesto =='01') {
 								if(modeloTabla.codTarifa == '01'){
 									self.totales.uno_iva_01.montoImpuestoUno01  = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
 									self.totales.uno_iva_01.montoVentaUno01     = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
 									if(montoVentaPivot != 0){
-								       self.totales.estadistica.tarifaCeroP	    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
+								    self.totales.estadistica.tarifaCeroP	    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
 									}
-									tarifa_1                                    = montoVentaPivot
+									tarifa_1                                   += montoVentaPivot
 								}
 								if(modeloTabla.codTarifa == '02'){
 									self.totales.uno_iva_01.montoImpuestoUno02  = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
@@ -963,7 +1009,7 @@
 									if(montoVentaPivot != 0){
 									   self.totales.estadistica.tarifaReducidaUnoP = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
 									}
-									tarifa_2                                    = montoVentaPivot
+									tarifa_2                                      += montoVentaPivot
 								}
 								if(modeloTabla.codTarifa == '03'){
 									self.totales.uno_iva_01.montoImpuestoUno03  = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
@@ -971,7 +1017,7 @@
 									if(montoVentaPivot != 0){
 									   self.totales.estadistica.tarifaReducidaDosP = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5)
 									}
-									tarifa_3                                    = montoVentaPivot
+									tarifa_3                                       += montoVentaPivot
 								}
 								if(modeloTabla.codTarifa == '04'){
 									self.totales.uno_iva_01.montoImpuestoUno04     = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
@@ -979,7 +1025,7 @@
 									if(montoVentaPivot != 0){
 									   self.totales.estadistica.tarifareducidaCuatroP = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5)
 									}
-									tarifa_4                                       = montoVentaPivot
+									tarifa_4                                       += montoVentaPivot
 								}
 								if(modeloTabla.codTarifa == '05'){
 									self.totales.uno_iva_01.montoImpuestoUno05     = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
@@ -987,7 +1033,7 @@
 									if(montoVentaPivot != 0){
 									   self.totales.estadistica.transitorioCeroP   = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
 									}
-									tarifa_5                                       = montoVentaPivot
+									tarifa_5                                       += montoVentaPivot
 								}
 								if(modeloTabla.codTarifa == '06'){
 									self.totales.uno_iva_01.montoImpuestoUno06     = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
@@ -995,7 +1041,7 @@
 									if(montoVentaPivot != 0){
 									   self.totales.estadistica.transitorioCuatroP = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
 									}
-									tarifa_6                                       = montoVentaPivot
+									tarifa_6                                       += montoVentaPivot
 								}
 								if(modeloTabla.codTarifa == '07'){
 									self.totales.uno_iva_01.montoImpuestoUno07     = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
@@ -1003,7 +1049,7 @@
 									if(montoVentaPivot != 0){
 									   self.totales.estadistica.transitorioOchoP   = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
 									}
-									tarifa_7                                       = montoVentaPivot
+									tarifa_7                                       += montoVentaPivot
 								}
 								if(modeloTabla.codTarifa == '08'){
 									self.totales.uno_iva_01.montoImpuestoUno08     = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
@@ -1011,91 +1057,120 @@
 									if(montoVentaPivot != 0){
 									   self.totales.estadistica.tarifaGeneralP     = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
 									}
-									tarifa_8                                       = montoVentaPivot
+									tarifa_8                                       += montoVentaPivot
 								}
 								unoImpuestoTotal += montoImpuestoPivot
 								unoVentaTotal    += montoVentaPivot
 							}
 
 							/*----7----*/
-                            if (modeloTabla.tipoImpuesto =='07'){
+                           if (modeloTabla.tipoImpuesto =='07'){
 								if(modeloTabla.codTarifa == '01'){
 									self.totales.siete_iva_01.montoImpuestoSiete01 = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
 									self.totales.siete_iva_01.montoVentaSiete01    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
+									tarifa_1                                       += montoVentaPivot
 								}
 								if(modeloTabla.codTarifa == '02'){
-									self.totales.siete_iva_01.montoImpuestoSiete02 = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
-									self.totales.siete_iva_01.montoVentaSiete02    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
+									self.totales.siete_iva_02.montoImpuestoSiete02 = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
+									self.totales.siete_iva_02.montoVentaSiete02    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
+									tarifa_2                                       += montoVentaPivot
 								}
 								if(modeloTabla.codTarifa == '03'){
-									self.totales.siete_iva_02.montoImpuestoSiete03 = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
-									self.totales.siete_iva_02.montoVentaSiete03    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
+									self.totales.siete_iva_03.montoImpuestoSiete03 = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
+									self.totales.siete_iva_03.montoVentaSiete03    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
+									tarifa_3                                       += montoVentaPivot
 								}
 								if(modeloTabla.codTarifa == '04'){
-									self.totales.siete_iva_03.montoImpuestoSiete04 = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
-									self.totales.siete_iva_03.montoVentaSiete04    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
+									self.totales.siete_iva_04.montoImpuestoSiete04 = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
+									self.totales.siete_iva_04.montoVentaSiete04    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
+									tarifa_4                                       += montoVentaPivot 
 								}
 								if(modeloTabla.codTarifa == '05'){
-									self.totales.siete_iva_04.montoImpuestoSiete05 = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
-									self.totales.siete_iva_04.montoVentaSiete05    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
+									self.totales.siete_iva_05.montoImpuestoSiete05 = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
+									self.totales.siete_iva_05.montoVentaSiete05    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
+									tarifa_5                                       += montoVentaPivot
 								}
 								if(modeloTabla.codTarifa == '06'){
-									self.totales.siete_iva_05.montoImpuestoSiete06 = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
-									self.totales.siete_iva_05.montoVentaSiete06    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
+									self.totales.siete_iva_06.montoImpuestoSiete06 = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
+									self.totales.siete_iva_06.montoVentaSiete06    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
+									tarifa_6                                       += montoVentaPivot
 								}
 								if(modeloTabla.codTarifa == '07'){
-									self.totales.siete_iva_06.montoImpuestoSiete07 = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
-									self.totales.siete_iva_06.montoVentaSiete07    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
+									self.totales.siete_iva_07.montoImpuestoSiete07 = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
+									self.totales.siete_iva_07.montoVentaSiete07    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
+									tarifa_7                                       += montoVentaPivot
 								}
 								if(modeloTabla.codTarifa == '08'){
 									self.totales.siete_iva_08.montoImpuestoSiete08 = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
 									self.totales.siete_iva_08.montoVentaSiete08    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
+									tarifa_8                                       += montoVentaPivot
 								}
 								sieteImpuestoTotal += montoImpuestoPivot
 								sieteVentaTotal    += montoVentaPivot
                             }
 							/*----no tienen----*/
-							if(modeloTabla.tipoImpuesto =='02'){ //Selectivo de consumo
-                                self.totales.otros.selectivoConsumo.scImpuesto = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
-								self.totales.otros.selectivoConsumo.scVentas   = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
-                                ventasOtrosTotal += montoVentaPivot
-                                ImpuesOtrosTotal += montoImpuestoPivot
-							}else if(modeloTabla.tipoImpuesto =='12'){ //cemento
-                                self.totales.otros.selectivoConsumo.cVentas    = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
-								self.totales.otros.selectivoConsumo.cImpuesto  = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
-                                ventasOtrosTotal += montoVentaPivot
-                                ImpuesOtrosTotal += montoImpuestoPivot
-							}else if(modeloTabla.tipoImpuesto =='99'){ //otros
-                                self.totales.otros.selectivoConsumo.oImpuesto  = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
-								self.totales.otros.selectivoConsumo.oVentas    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 	
-                                ventasOtrosTotal += montoVentaPivot
-                                ImpuesOtrosTotal += montoImpuestoPivot
+							if(modeloTabla.codTarifa == ''){
+								if(modeloTabla.tipoImpuesto =='02'){ //Selectivo de consumo
+									self.totales.otros.selectivoConsumo.scImpuesto = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
+									self.totales.otros.selectivoConsumo.scVentas   = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
+									ventasOtrosTotal += montoVentaPivot
+									ImpuesOtrosTotal += montoImpuestoPivot
+									tarifa_9                                       += montoVentaPivot
+								}else if(modeloTabla.tipoImpuesto =='12'){ //cemento
+									self.totales.otros.selectivoConsumo.cVentas    = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
+									self.totales.otros.selectivoConsumo.cImpuesto  = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 
+									ventasOtrosTotal += montoVentaPivot
+									ImpuesOtrosTotal += montoImpuestoPivot
+									tarifa_9                                          += montoVentaPivot
+								}else if(modeloTabla.tipoImpuesto =='99'){ //otros
+									self.totales.otros.selectivoConsumo.oImpuesto  = formatoDecimales(redondeoDecimales(__valorNumerico(montoImpuestoPivot),5),5)
+									self.totales.otros.selectivoConsumo.oVentas    = formatoDecimales(redondeoDecimales(__valorNumerico(montoVentaPivot),5),5) 	
+									ventasOtrosTotal += montoVentaPivot
+									ImpuesOtrosTotal += montoImpuestoPivot
+									tarifa_9                                       += montoVentaPivot
+								}
+						    }
+							//exentos
+							if(modeloTabla.codTarifa == ''){
+								if(modeloTabla.tipoImpuesto ==''){
+									excentosTotalVentas += montoVentaPivot
+									excentosTotalimpuesto += montoImpuestoPivot
+									tarifa_10                                     += montoVentaPivot
+								}
 							}
 							montoImpuestoPivot = 0
 							montoVentaPivot    = 0
 							_ok = 1;
 						})
 						if(_ok == 1){
+
+							__total = unoVentaTotal    +
+							          sieteVentaTotal  +
+									  ventasOtrosTotal +
+									  excentosTotalVentas;
+							tarifa_1_porCiento                                = ((tarifa_1 * 100)  / __total);
+							tarifa_2_porCiento                                = ((tarifa_2 * 100)  / __total);
+							tarifa_3_porCiento                                = ((tarifa_3 * 100)  / __total);
+							tarifa_4_porCiento                                = ((tarifa_4 * 100)  / __total);
+							tarifa_5_porCiento                                = ((tarifa_5 * 100)  / __total);
+							tarifa_6_porCiento                                = ((tarifa_6 * 100)  / __total);
+							tarifa_7_porCiento                                = ((tarifa_7 * 100)  / __total);
+							tarifa_8_porCiento                                = ((tarifa_8 * 100)  / __total);
+							tarifa_9_porCiento                                = ((tarifa_9 * 100)  / __total);
+							tarifa_10_porCiento                               = ((tarifa_10 * 100) / __total);
+
+							totalPorCientos = tarifa_1_porCiento + tarifa_2_porCiento   + 
+											  tarifa_3_porCiento + tarifa_4_porCiento   +
+											  tarifa_5_porCiento + tarifa_6_porCiento   +
+											  tarifa_7_porCiento + tarifa_8_porCiento   +
+											  tarifa_9_porCiento + tarifa_10_porCiento;
+							self.totales.estadistica.totalVentasP             = formatoDecimales(redondeoDecimales(__valorNumerico(__total),5),5);
 							self.totales.unoTotal.totalImpuestoUno            = formatoDecimales(redondeoDecimales(__valorNumerico(unoImpuestoTotal),5),5);
 							self.totales.unoTotal.totalVentasUno              = formatoDecimales(redondeoDecimales(__valorNumerico(unoVentaTotal),5),5); 
 							self.totales.sieteTotal.totalImpuestoSiete        = formatoDecimales(redondeoDecimales(__valorNumerico(sieteImpuestoTotal),5),5);
 							self.totales.sieteTotal.totalVentasSiete          = formatoDecimales(redondeoDecimales(__valorNumerico(sieteVentaTotal),5),5); 
-							self.totales.estadistica.totalVentasP             = formatoDecimales(redondeoDecimales(__valorNumerico(unoVentaTotal),5),5);
-
-							tarifa_1_porCiento                                = ((tarifa_1 * 100) / unoVentaTotal);
-							tarifa_2_porCiento                                = ((tarifa_2 * 100) / unoVentaTotal);
-							tarifa_3_porCiento                                = ((tarifa_3 * 100) / unoVentaTotal);
-							tarifa_4_porCiento                                = ((tarifa_4 * 100) / unoVentaTotal);
-							tarifa_5_porCiento                                = ((tarifa_5 * 100) / unoVentaTotal);
-							tarifa_6_porCiento                                = ((tarifa_6 * 100) / unoVentaTotal);
-							tarifa_7_porCiento                                = ((tarifa_7 * 100) / unoVentaTotal);
-							tarifa_8_porCiento                                = ((tarifa_8 * 100) / unoVentaTotal);
-
-							totalPorCientos = tarifa_1_porCiento + tarifa_2_porCiento + 
-											tarifa_3_porCiento + tarifa_4_porCiento +
-											tarifa_5_porCiento + tarifa_6_porCiento +
-											tarifa_7_porCiento + tarifa_8_porCiento;
-					
+                            self.totales.otros.selectivoConsumo.tVentas      = formatoDecimales(redondeoDecimales(__valorNumerico(ventasOtrosTotal),5),5);
+							self.totales.otros.selectivoConsumo.tImpuesto     = formatoDecimales(redondeoDecimales(__valorNumerico(ImpuesOtrosTotal),5),5);
 							self.totales.estadistica.tarifaCeroImp            = formatoDecimales(redondeoDecimales(__valorNumerico(tarifa_1_porCiento),5),5);
 							self.totales.estadistica.tarifaReducidaUnoPImp    = formatoDecimales(redondeoDecimales(__valorNumerico(tarifa_2_porCiento),5),5);
 							self.totales.estadistica.tarifaReducidaDosPImp    = formatoDecimales(redondeoDecimales(__valorNumerico(tarifa_3_porCiento),5),5);
@@ -1104,29 +1179,14 @@
 							self.totales.estadistica.transitorioCuatroPImp    = formatoDecimales(redondeoDecimales(__valorNumerico(tarifa_6_porCiento),5),5);
 							self.totales.estadistica.transitorioOchoPImp      = formatoDecimales(redondeoDecimales(__valorNumerico(tarifa_7_porCiento),5),5);
 							self.totales.estadistica.tarifaGeneralPImp        = formatoDecimales(redondeoDecimales(__valorNumerico(tarifa_8_porCiento),5),5);
-							self.totales.estadistica.totalVentasImp           = formatoDecimales(redondeoDecimales(__valorNumerico(totalPorCientos),),5);
-
-							self.totales.otros.selectivoConsumo.tVentas      = formatoDecimales(redondeoDecimales(__valorNumerico(ventasOtrosTotal),5),5);
-							self.totales.otros.selectivoConsumo.tImpuesto     = formatoDecimales(redondeoDecimales(__valorNumerico(ImpuesOtrosTotal),),5);
-
-							unoImpuestoTotal   = 0; 
-							unoVentaTotal      = 0;
-							sieteImpuestoTotal = 0;
-							sieteVentaTotal    = 0;
-							tarifa_1           = 0;
-							tarifa_2           = 0;
-							tarifa_3           = 0;
-							tarifa_4           = 0;
-							tarifa_5           = 0;
-							tarifa_6           = 0;
-							tarifa_7           = 0;
-							tarifa_8           = 0;
-							ventasOtrosTotal   = 0;
-							ImpuesOtrosTotal   = 0;
-							_ok                = 0; 
+							self.totales.estadistica.totalVentasImp           = formatoDecimales(redondeoDecimales(__valorNumerico(totalPorCientos),5),5);
+							self.totales.estadistica.otrosPImp                = formatoDecimales(redondeoDecimales(__valorNumerico(tarifa_9_porCiento),5),5);
+							self.totales.estadistica.excentosPImp             = formatoDecimales(redondeoDecimales(__valorNumerico(tarifa_10_porCiento),5),5);
+							self.totales.estadistica.otrosP                   = formatoDecimales(redondeoDecimales(__valorNumerico(ventasOtrosTotal),5),5);
+							self.totales.estadistica.excentosP                = formatoDecimales(redondeoDecimales(__valorNumerico(excentosTotalVentas),5),5);
+                            inicializaVariables(); 
 						}
-                        self.update()
-						
+                        self.update()	
 			        },
 			        error: function (xhr, status) {
 			            console.log(xhr);
@@ -1136,6 +1196,99 @@
 		 	}		
 		}
 /*-----------------------------------------------------------------------------------------*/
+
+function inicializaVariables(){
+	unoImpuestoTotal      = 0; 
+	unoVentaTotal         = 0;
+	sieteImpuestoTotal    = 0;
+	sieteVentaTotal       = 0;
+	tarifa_1              = 0;
+	tarifa_2              = 0;
+	tarifa_3              = 0;
+	tarifa_4              = 0;
+	tarifa_5              = 0;
+	tarifa_6              = 0;
+	tarifa_7              = 0;
+	tarifa_8              = 0;
+	tarifa_7              = 0;
+	tarifa_8              = 0;
+	ventasOtrosTotal      = 0;
+	ImpuesOtrosTotal      = 0;
+	excentosTotalVentas   = 0;
+	excentosTotalimpuesto = 0;
+	_ok                = 0;
+}
+
+function inicializaEsta(){
+	self.totales.uno_iva_01.montoImpuestoUno01        = "0.00000";
+	self.totales.uno_iva_01.montoVentaUno02           = "0.00000";
+	self.totales.uno_iva_01.montoVentaUno01           = "0.00000";
+	self.totales.uno_iva_01.montoImpuestoUno02        = "0.00000";
+	self.totales.uno_iva_01.montoVentaUno03           = "0.00000";
+	self.totales.uno_iva_01.montoImpuestoUno03        = "0.00000";
+	self.totales.uno_iva_01.montoVentaUno04           = "0.00000";
+	self.totales.uno_iva_01.montoImpuestoUno04        = "0.00000";
+	self.totales.uno_iva_01.montoVentaUno05           = "0.00000";
+	self.totales.uno_iva_01.montoImpuestoUno05        = "0.00000";
+	self.totales.uno_iva_01.montoVentaUno06           = "0.00000";
+	self.totales.uno_iva_01.montoImpuestoUno06        = "0.00000";
+	self.totales.uno_iva_01.montoVentaUno07           = "0.00000";
+	self.totales.uno_iva_01.montoImpuestoUno07        = "0.00000";
+	self.totales.uno_iva_01.montoVentaUno08           = "0.00000";
+	self.totales.uno_iva_01.montoImpuestoUno08        = "0.00000";
+	self.totales.unoTotal.totalVentasUno              = "0.00000";
+	self.totales.unoTotal.totalImpuestoUno            = "0.00000";
+	self.totales.otros.selectivoConsumo.scVentas      = "0.00000";
+	self.totales.otros.selectivoConsumo.scImpuesto    = "0.00000";
+	self.totales.otros.selectivoConsumo.cVentas       = "0.00000";
+	self.totales.otros.selectivoConsumo.cImpuesto     = "0.00000";
+	self.totales.otros.selectivoConsumo.oVentas       = "0.00000";
+	self.totales.otros.selectivoConsumo.oImpuesto     = "0.00000";
+	self.totales.otros.selectivoConsumo.tVentas       = "0.00000";
+	self.totales.otros.selectivoConsumo.tImpuesto     = "0.00000";
+	self.totales.siete_iva_01.montoVentaSiete01       = "0.00000";
+	self.totales.siete_iva_01.montoImpuestoSiete01    = "0.00000";
+	self.totales.siete_iva_02.montoVentaSiete02       = "0.00000";
+	self.totales.siete_iva_02.montoImpuestoSiete02    = "0.00000";
+	self.totales.siete_iva_03.montoVentaSiete03       = "0.00000";
+	self.totales.siete_iva_03.montoImpuestoSiete03    = "0.00000";
+	self.totales.siete_iva_04.montoVentaSiete04       = "0.00000";
+	self.totales.siete_iva_04.montoImpuestoSiete04    = "0.00000";
+	self.totales.siete_iva_05.montoVentaSiete05       = "0.00000";
+	self.totales.siete_iva_05.montoImpuestoSiete05    = "0.00000";
+	self.totales.siete_iva_06.montoVentaSiete06       = "0.00000";
+	self.totales.siete_iva_06.montoImpuestoSiete06    = "0.00000";
+	self.totales.siete_iva_07.montoVentaSiete07       = "0.00000";
+	self.totales.siete_iva_07.montoImpuestoSiete07    = "0.00000";
+	self.totales.siete_iva_08.montoVentaSiete08       = "0.00000";
+	self.totales.siete_iva_08.montoImpuestoSiete08    = "0.00000";
+	self.totales.sieteTotal.totalVentasSiete          = "0.00000";
+	self.totales.sieteTotal.totalImpuestoSiete        = "0.00000";
+	self.totales.estadistica.tarifaCeroP              = "0.00000";
+	self.totales.estadistica.tarifaCeroImp            = "0.00000";
+	self.totales.estadistica.totalVentasP             = "0.00000";
+	self.totales.estadistica.tarifaReducidaUnoP       = "0.00000";
+	self.totales.estadistica.tarifaReducidaUnoPImp    = "0.00000";
+	self.totales.estadistica.tarifaReducidaDosP       = "0.00000";
+	self.totales.estadistica.tarifaReducidaDosPImp    = "0.00000";
+	self.totales.estadistica.tarifareducidaCuatroP    = "0.00000";
+	self.totales.estadistica.tarifareducidaCuatroPImp = "0.00000";
+	self.totales.estadistica.transitorioCeroP         = "0.00000";
+	self.totales.estadistica.transitorioCeroPImp      = "0.00000";
+	self.totales.estadistica.transitorioCuatroP       = "0.00000";
+	self.totales.estadistica.transitorioCuatroPImp    = "0.00000";
+	self.totales.estadistica.transitorioOchoP         = "0.00000";
+	self.totales.estadistica.transitorioOchoPImp      = "0.00000";
+	self.totales.estadistica.tarifaGeneralP           = "0.00000";
+	self.totales.estadistica.tarifaGeneralPImp        = "0.00000";
+	self.totales.estadistica.otrosP                   = "0.00000";
+	self.totales.estadistica.otrosPImp                = "0.00000";
+	self.totales.estadistica.excentosP                = "0.00000";
+	self.totales.estadistica.excentosPImp             = "0.00000";
+	self.totales.estadistica.totalVentasImp           = "0.00000";
+}
+
+/*----------------------------------------------------------------------------------------*/
 
 		__limpiarFiltros(){
 		    $('#fechaInicial').val(null)
@@ -1155,112 +1308,162 @@
 			
 		}
 
-		function _InicializarJson(){
-
-			self.totales ={
-				uno_iva_01:{
-					montoImpuestoUno01:"",
-					montoVentaUno01:""
-				},
-				uno_iva_02:{
-					montoImpuestoUno02:"",
-					montoVentaUno02:""
-				},
-				uno_iva_03:{
-					montoImpuestoUno03:"",
-					montoVentaUno03:""
-				},
-				uno_iva_04:{
-					montoImpuestoUno04:"",
-					montoVentaUno04:""
-				},
-				uno_iva_05:{
-					montoImpuestoUno05:"",
-					montoVentaUno05:""
-				},
-				uno_iva_06:{
-					montoImpuestoUno06:"",
-					montoVentaUno06:""
-				},
-				uno_iva_07:{
-					montoImpuestoUno07:"",
-					montoVentaUno07:""
-				},
-				uno_iva_08:{
-					montoImpuestoUno08:"",
-					montoVentaUno08:""
-				},
-				unoTotal:{
-					totalImpuestoUno:"",
-					totalVentasUno:""
-				},
-				siete_iva_01:{
-					montoImpuestoSiete01:"",
-					montoVentaSiete01:""
-				},
-				siete_iva_02:{
-					montoImpuestoSiete02:"",
-					montoVentaSiete02:""
-				},
-				siete_iva_03:{
-					montoImpuestoSiete03:"",
-					montoVentaSiete03:""
-				},
-				siete_iva_04:{
-					montoImpuestoSiete04:"",
-					montoVentaSiete04:""
-				},
-				siete_iva_05:{
-					montoImpuestoSiete05:"",
-					montoVentaSiete05:""
-				},
-				siete_iva_06:{
-					montoImpuestoSiete06:"",
-					montoVentaSiete06:""
-				},
-				siete_iva_07:{
-					montoImpuestoSiete07:"",
-					montoVentaSiete07:""
-				},
-				siete_iva_08:{
-					montoImpuestoSiete08:"",
-					montoVentaSiete08:""
-				},
-				sieteTotal:{
-					totalImpuestoSiete:"",
-					totalVentasSiete:""
-				},
-				otros:{
-					selectivoConsumo:{
-					scImpuesto:"",
-					scVentas:""
-					},
-					cemento:{
-					cVentas:"",
-					cImpuesto:""
-					},
-					otrosProductos:{
-					oImpuesto:"",
-					oVentas:""
-					},
-					total:{
-					tImpuesto:"",
-					tVentas:""
-					}	
-				},
-				estadistica:{
-				tarifaCeroP:"",
-				tarifaReducidaUnoP:"",
-				tarifaReducidaDosP:"",
-				tarifareducidaCuatroP:"",
-				transitorioCeroP:"",
-				transitorioCuatroP:"",
-				transitorioOchoP:"",
-				tarifaGeneralP:"",
-				totalVentasP:""
-				}
-			}
-		}  
+function _InicializarJson(){
+	self.totales ={
+		uno_iva_01:{
+			montoImpuestoUno01:"",
+			montoVentaUno01:""
+		},
+		uno_iva_02:{
+			montoImpuestoUno02:"",
+			montoVentaUno02:""
+		},
+		uno_iva_03:{
+			montoImpuestoUno03:"",
+			montoVentaUno03:""
+		},
+		uno_iva_04:{
+			montoImpuestoUno04:"",
+			montoVentaUno04:""
+		},
+		uno_iva_05:{
+			montoImpuestoUno05:"",
+			montoVentaUno05:""
+		},
+		uno_iva_06:{
+			montoImpuestoUno06:"",
+			montoVentaUno06:""
+		},
+		uno_iva_07:{
+			montoImpuestoUno07:"",
+			montoVentaUno07:""
+		},
+		uno_iva_08:{
+			montoImpuestoUno08:"",
+			montoVentaUno08:""
+		},
+		unoTotal:{
+			totalImpuestoUno:"",
+			totalVentasUno:""
+		},
+		siete_iva_01:{
+			montoImpuestoSiete01:"",
+			montoVentaSiete01:""
+		},
+		siete_iva_02:{
+			montoImpuestoSiete02:"",
+			montoVentaSiete02:""
+		},
+		siete_iva_03:{
+			montoImpuestoSiete03:"",
+			montoVentaSiete03:""
+		},
+		siete_iva_04:{
+			montoImpuestoSiete04:"",
+			montoVentaSiete04:""
+		},
+		siete_iva_05:{
+			montoImpuestoSiete05:"",
+			montoVentaSiete05:""
+		},
+		siete_iva_06:{
+			montoImpuestoSiete06:"",
+			montoVentaSiete06:""
+		},
+		siete_iva_07:{
+			montoImpuestoSiete07:"",
+			montoVentaSiete07:""
+		},
+		siete_iva_08:{
+			montoImpuestoSiete08:"",
+			montoVentaSiete08:""
+		},
+		sieteTotal:{
+			totalImpuestoSiete:"",
+			totalVentasSiete:""
+		},
+		otros:{
+			selectivoConsumo:{
+				scImpuesto:"",
+				scVentas:""
+			},
+			cemento:{
+				cVentas:"",
+				cImpuesto:""
+			},
+			otrosProductos:{
+				oImpuesto:"",
+				oVentas:""
+			},
+							total:{
+				tImpuesto:"",
+				tVentas:""
+			}	
+		},
+		estadistica:
+		{
+			tarifaCeroP:"",
+			tarifaReducidaUnoP:"",
+			tarifaReducidaDosP:"",
+			tarifareducidaCuatroP:"",
+			transitorioCeroP:"",
+			transitorioCuatroP:"",
+			transitorioOchoP:"",
+			tarifaGeneralP:"",
+			otrosP:"",
+			excentosP:"",
+			totalVentasP:"",
+			tarifaCeroImp:"",
+			tarifaReducidaUnoPImp:"",
+			tarifaReducidaDosPImp:"",
+			tarifareducidaCuatroPImp:"",
+			transitorioCeroPImp:"",
+			transitorioCuatroPImp:"",
+			transitorioOchoPImp:"",
+			tarifaGeneralPImp:"",
+			otrosPImp:"",
+			excentosPImp:"",
+			totalVentasImp:""
+		}
+	}
+} 
 		
+
 	</script>
 </consulta-iva>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
