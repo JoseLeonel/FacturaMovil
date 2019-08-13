@@ -2356,10 +2356,11 @@ function evaluarFactura(data){
                 self.update()
                 localStorage.setItem('facturaReimprimir', JSON.stringify(self.facturaReimprimir));
                 if(self.vueltoImprimir == 0 && self.empresa.imprimirSiempre == 0){
-                    var mensaje = self.facturaImprimir.numeroConsecutivo !=null ?"Cons# :"+   self.facturaImprimir.numeroConsecutivo:"Tiquete# :"+   self.facturaImprimir.id        
+                    /**llamada desde factura.js**/
+                    
                     swal({
                         type: 'success',
-                        title: mensaje,
+                        title: mostrarMensajeCreacionConsecutivo(self.facturaImprimir),
                         showConfirmButton: false,
                         timer: 1500
                      })
@@ -2372,9 +2373,11 @@ function evaluarFactura(data){
                       riot.mount('ptv-imprimir',{parametros:parametros});
                 }
         }else{
+             
+
                 swal({
                 type: 'success',
-                title:data.message,
+                title:mostrarMensajeCreacionConsecutivo(self.facturaImprimir),
                 showConfirmButton: false,
                 timer: 1000
                 })
@@ -2384,6 +2387,8 @@ function evaluarFactura(data){
           
     }
 }
+
+
 /**
 *  Lista de las facturas pendientes por el usuario
 **/

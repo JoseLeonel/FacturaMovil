@@ -2754,7 +2754,7 @@ function evaluarFactura(data){
                     swal({
                         position: 'top-end',
                         type: 'success',
-                        title: mensaje,
+                        title: mostrarMensajeCreacionConsecutivo(self.facturaImprimir),
                         showConfirmButton: false,
                         timer: 1500
                      })
@@ -2771,7 +2771,7 @@ function evaluarFactura(data){
                 swal({
                 position: 'top-end',
                 type: 'success',
-                title:data.message,
+                title:mostrarMensajeCreacionConsecutivo(self.facturaImprimir),
                 showConfirmButton: false,
                 timer: 1000
                 })
