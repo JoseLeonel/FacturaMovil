@@ -29,9 +29,9 @@ public interface  ConsultasNativeDao {
 	
 	Collection<ProformasByEmpresaAndFacturada> findByProformasByEmpresaFacturada(Empresa empresa);
 	
-	Collection<FacturasDelDiaNative> findByFacturasDelDia(Empresa empresa,Integer idusuario,Integer estado,String fecha);
+	Collection<FacturasDelDiaNative> findByFacturasDelDia(Empresa empresa,Integer idusuario,String estado,String fecha);
 
-	Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa,Integer idusuario,Integer estado,String fechaInicial,String fechaFinal,Long idCliente);
+	Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa,Integer idusuario,String estado,String fechaInicial,String fechaFinal,Long idCliente);
 	
 	Collection<HaciendaComprobarNative> findByComprabarDocumentoPendienteaceptar();
 	

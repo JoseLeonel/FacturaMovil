@@ -1884,6 +1884,10 @@ function __TipoDocumentos(numeroConsecutivo,row){
         return  "TiqueteInterno:"+row.id
         break;
 
+    case "86":
+        return  "NC.Interno:"+row.numeroConsecutivo
+        break;
+
     default:
         return  numeroConsecutivo
     }

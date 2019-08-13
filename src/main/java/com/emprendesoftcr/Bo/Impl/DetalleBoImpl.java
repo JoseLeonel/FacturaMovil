@@ -73,8 +73,8 @@ public class DetalleBoImpl implements DetalleBo {
 	}
 
 	@Override
-	public TotalDetallesCommand totalVentasPorDetalle(Empresa empresa, Date fechaInicio, Date FechaFinal, String tipoImpuesto) {
-		return detalleDao.totalVentasPorDetalle(empresa, fechaInicio, FechaFinal,tipoImpuesto);
+	public TotalDetallesCommand totalVentasPorDetalle(Empresa empresa, Date fechaInicio, Date FechaFinal, String tipoImpuesto,Integer estado) {
+		return detalleDao.totalVentasPorDetalle(empresa, fechaInicio, FechaFinal,tipoImpuesto,estado);
 	}
 
 	@Override

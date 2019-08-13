@@ -38,6 +38,8 @@ import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Bo.HaciendaBo;
+import com.emprendesoftcr.Bo.RecepcionFacturaBo;
+import com.emprendesoftcr.Bo.CompraSimplificadaBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
@@ -49,10 +51,12 @@ import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.FacturaElectronicaUtils;
 import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.fisco.RespuestaHaciendaXML;
+import com.emprendesoftcr.modelo.CompraSimplificada;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Hacienda;
+import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNativeByEmpresaAndFechaAndCliente;
@@ -229,6 +233,12 @@ public class HaciendasController {
 	private UsuarioBo																									usuarioBo;
 
 	@Autowired
+	private RecepcionFacturaBo																				recepcionFacturaBo;
+
+	@Autowired
+	private CompraSimplificadaBo																			compraSimplificadaBo;
+
+	@Autowired
 	private FechaPropertyEditor																				fechaPropertyEditor;
 
 	@Autowired
@@ -367,10 +377,9 @@ public class HaciendasController {
 						}
 
 					}
-					if(aplicarCambioEstadoFactura) {
-						cambiarEstado(hacienda);	
+					if (aplicarCambioEstadoFactura) {
+						cambiarEstado(hacienda);
 					}
-	
 
 				}
 			}
@@ -388,29 +397,39 @@ public class HaciendasController {
 		return respuestaServiceValidator;
 
 	}
-	
-	
+
 	private void cambiarEstado(Hacienda hacienda) throws Exception {
 		try {
 			if (hacienda != null) {
 				if (hacienda.getTipoDoc().equals(Constantes.HACIENDA_TIPODOC_COMPRAS)) {
-//          RecepcionFactura recepcionFactura = recepcionFacturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(),hacienda.getEmpresa());
-//          if (recepcionFactura != null) {
-//						if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
-//							recepcionFactura.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
-//						} else if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
-//							recepcionFactura.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
-//						}
-//						recepcionFacturaBo.modificar(recepcionFactura);
-//						}
+					RecepcionFactura recepcionFactura = recepcionFacturaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
+					if (recepcionFactura != null) {
+						if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+							recepcionFactura.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+						} else if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO)) {
+							recepcionFactura.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+						}
+						recepcionFacturaBo.modificar(recepcionFactura);
+					}
 
-					
+				} else if (hacienda.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_COMPRA_SIMPLIFICADA)) {
+					CompraSimplificada compraSimplificada = compraSimplificadaBo.findByConsecutivoAndEmpresa(hacienda.getConsecutivo(), hacienda.getEmpresa());
+					if (compraSimplificada != null) {
+						if (compraSimplificada != null) {
+							if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+								compraSimplificada.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
+							} else if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO)) {
+								compraSimplificada.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
+							}
+							compraSimplificadaBo.modificar(compraSimplificada);
+						}
+					}
 				} else {
 					Factura factura = facturaBo.findByClaveAndEmpresa(hacienda.getClave(), hacienda.getEmpresa());
 					if (factura != null) {
 						if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
 							factura.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA);
-						} else if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+						} else if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO)) {
 							factura.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
 						}
 						facturaBo.modificar(factura);

@@ -31,5 +31,5 @@ public interface EmpresaBo {
 	Collection<Empresa> findByEstado(String estado);
 	
 	String generarConsecutivoCompraSimplificada(Empresa empresa, Usuario usuario) throws Exception;
-
+	String generarConsecutivoNotaCreditoInterno(Empresa empresa, Usuario usuario) throws Exception;
 }

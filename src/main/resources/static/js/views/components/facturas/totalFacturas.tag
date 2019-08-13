@@ -84,11 +84,20 @@
                                     <select  class="form-control selectEstado estado" id= "estado" name="estado" >
                                      	<option  value="2"  >Facturada</option>
                                     	<option  value="5"  >Anulada</option>
-                                    	<option  value="6"  >Aceptada </option>
-                                    	<option  value="7"  >No Aceptada</option>
+	                                   	<option  value="6"  >Aceptada</option>
+                                       	<option  value="7"  >No Aceptada</option>
+
                                     </select>
                                 </div>  
-                            </div>                                                 
+                            </div> 
+							 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Actividad Economica </label>  
+                                    <select  onchange= {__AsignarActividad} class="form-control selectActividadEconocimica" id= "actividadEconomica" name="actividadEconomica" >
+										<option  each={empresaActividadComercial}  value="{codigo}"   >{descripcion}</option>
+                                    </select>
+                                </div>  
+                            </div>                                                    
                         </div>
                     </form>  
                 </div>
@@ -138,7 +147,7 @@
                 </div>
             </div>   
 	        <div class="col-md-12 col-lg-12 col-sm-12">
-				<a show ="{mostrarBotones == true?true:false}" class="fa fa-download" target="_blank" title="Descargar detalle transacciones" href="DescargarDetalleTotalFacturasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&estado={estado}"> Descargar</a>        
+				<a show ="{mostrarBotones == true?true:false}" class="fa fa-download" target="_blank" title="Descargar detalle transacciones" href="DescargarDetalleTotalFacturasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&estado={estado}&actividadEconomica={actividadEconomica}"> Descargar</a>        
 		        <button show ="{mostrarBotones == true?true:false}" onclick ={__EnviarCorreoEmpresa}   type="button" class="btn btn-success btnBusquedaAvanzada" title="Enviar corre de la empresa" name="button"> Empresa  <i class="fa fa-envelope"></i></button>
 		        <button show ="{mostrarBotones == true?true:false}" onclick ={__CorreoAlternativo} type="button" class="btn btn-success btnBusquedaAvanzada" title="Correo alternativo" name="button" >  Alternativo  <i class="fa fa-envelope"></i></button>
 	        </div>
@@ -165,6 +174,7 @@
 				totalVentasGravadas:"0",
 		}
 		self.mostrarBotones=false
+		self.actividadEconomica = ""
 		self.estado = 0
 		self.fechaInicio="";
 		self.fechaFin="";
@@ -173,7 +183,54 @@
 		    $("#filtros").validate(reglasDeValidacion());
 		    $("#formulario").validate(reglasDeValidacionCorreo());	
 		    limpiarFactura();
+			__ListaActividadesComercales()
 		})
+__AsignarActividad(e){
+    BuscarActividadComercial()
+}
+
+function BuscarActividadComercial(){
+    var codigo =$('.selectActividadEconocimica').val()
+    if(self.empresaActividadComercial == null){
+       return    
+    }
+    if(self.empresaActividadComercial.length == 0){
+       return    
+    }
+    $.each(self.empresaActividadComercial, function( index, modeloTabla ) {
+        if(modeloTabla.codigo == codigo  ){
+            self.actividadEconomica = codigo
+            self.update()
+        }
+
+    })
+}
+
+
+
+		/**
+*  Lista de los clientes
+**/
+function __ListaActividadesComercales(){
+    $.ajax({
+        url: 'ListaEmpresaActividadComercialPorPricipalAjax.do',
+        datatype: "json",
+         method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                self.empresaActividadComercial   = result.aaData
+                self.update()
+				BuscarActividadComercial()
+ 
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+    return
+}
 
 		/**
 		* Camps requeridos
@@ -235,7 +292,8 @@
 		        var parametros = {
 		        	fechaInicioParam:$('#fechaInicial').val(),
 		        	fechaFinParam:$('#fechaFinal').val(),
-					estado:$('.estado').val()
+					estado:$('.estado').val(),
+					actividadEconomica:$('.selectActividadEconocimica').val()
 		        };
 		        $.ajax({
 		            url: "TotalFacturasAjax.do",
@@ -269,7 +327,8 @@
 		        	correoAlternativo:$('#correoAlternativo').val(),		
 		        	fechaInicioParam:$('#fechaInicial').val(),
 		        	fechaFinParam:$('#fechaFinal').val(),
-					estado:$('.estado').val()
+					estado:$('.estado').val(),
+					actividadEconomica:$('.selectActividadEconocimica').val()
 		        };
 		        $.ajax({
 		            url: "EnvioDetalleTotalFacturasAjax.do",

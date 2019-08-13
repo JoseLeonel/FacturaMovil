@@ -124,7 +124,7 @@ public class CompraDaoImpl implements CompraDao {
 	}
 	
 	@Override
-	public TotalComprasAceptadasCommand sumarComprasAceptadas(Date fechaInicio, Date fechaFinal, Integer idEmpresa) {
+	public TotalComprasAceptadasCommand sumarComprasAceptadas(Date fechaInicio, Date fechaFinal, Integer idEmpresa,Integer estado) {
 		
 
 		StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS);
@@ -133,7 +133,9 @@ public class CompraDaoImpl implements CompraDao {
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_ACEPTADAS_IN_FECHA_INICIO, Date.class, ParameterMode.IN);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_ACEPTADAS_IN_FECHA_FIN, Date.class, ParameterMode.IN);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ID_EMPRESA, Integer.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ESTADO, Integer.class, ParameterMode.IN);
 
+		
 		// set parametros salida
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_OUT, Double.class, ParameterMode.OUT);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_IMPUESTOS_COMPRAS_ACEPTADAS_OUT, Double.class, ParameterMode.OUT);
@@ -142,6 +144,7 @@ public class CompraDaoImpl implements CompraDao {
 		storedProcedure.setParameter(Constantes.SP_TOTAL_ACEPTADAS_IN_FECHA_INICIO, fechaInicio);
 		storedProcedure.setParameter(Constantes.SP_TOTAL_ACEPTADAS_IN_FECHA_FIN, fechaFinal);
 		storedProcedure.setParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ID_EMPRESA, idEmpresa);
+		storedProcedure.setParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ESTADO, estado);
 		storedProcedure.execute();
 
 		// Se toma la respuesta

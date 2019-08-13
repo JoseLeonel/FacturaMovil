@@ -441,6 +441,7 @@ public class Constantes {
 	public static final String					FACTURA_TIPO_DOC_TIQUETE																		= "04";
 	public static final String					FACTURA_TIPO_DOC_COMPRA_SIMPLIFICADA												= "08";
 	public static final String					FACTURA_TIPO_DOC_PROFORMAS																	= "88";
+	public static final String					FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO												= "86";
 	public static final String					FACTURA_TIPO_DOC_TIQUETE_USO_INTERNO												= "87";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_ELECTRONICA												= "01";
 	public static final String					FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO												= "02";
@@ -496,7 +497,8 @@ public class Constantes {
 	// Nombres de procedimientos
 	public static final String					SP_TOTAL_FACTURAS																						= "SPTOTALFACTURAS";
 	public static final String					SP_TOTAL_FACTURAS_IN_FECHA_INICIO														= "FECHA_INICIO";
-	public static final String					SP_TOTAL_FACTURAS_IN_ESTADO														= "ESTADO";
+	public static final String					SP_TOTAL_FACTURAS_IN_ESTADO																	= "ESTADO";
+	public static final String					SP_TOTAL_FACTURAS_IN_ACTIVIDAD_ECONOMICA										= "act_econo";
 	public static final String					SP_TOTAL_FACTURAS_IN_FECHA_FIN															= "FECHA_FIN";
 	public static final String					SP_TOTAL_FACTURAS_IN_ID_EMPRESA															= "ID_EMPRESA";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL																	= "TOTAL";
@@ -511,6 +513,7 @@ public class Constantes {
 	public static final String					SP_TOTAL_ACEPTADAS_IN_ID_EMPRESA														= "ID_EMPRESA";
 	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS																	= "SPTOTALACEPTADAS";
 	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_ID_EMPRESA												= "ID_EMPRESA";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_ESTADO														= "estado";
 	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_OUT															= "TOTAL";
 	public static final String					SP_TOTAL_IMPUESTOS_COMPRAS_ACEPTADAS_OUT										= "TOTAL_IMPUESTOS";
 
@@ -552,6 +555,7 @@ public class Constantes {
 	public static final String					SP_VENTASXDETALLE_IN_ID_EMPRESA															= "e_empresa";
 	public static final String					SP_VENTASXDETALLE_IN_FECHA_INICIAL													= "fecha_inicio";
 	public static final String					SP_VENTASXDETALLE_IN_FECHA_FINAL														= "fecha_fin";
+	public static final String					SP_VENTASXDETALLE_IN_ESTADO																	= "e_estado";
 	public static final String					SP_VENTASXDETALLE_IN_TIPO_IMPUESTO													= "e_tipoImpuesto";
 	public static final String					SP_VENTASXDETALLE_OUT_TOTAL																	= "total";
 	public static final String					SP_VENTASXDETALLE_OUT_TOTAL_IMPUESTO												= "total_imp";

@@ -23,5 +23,5 @@ public interface RecepcionFacturaBo {
 	
 	Collection<RecepcionFactura> findByClave(String cedulaEmisor, String clave);
 
-	Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula);
+	Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula,Integer estado);
 }

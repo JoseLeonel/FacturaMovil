@@ -269,7 +269,7 @@ __cargaCantones(){
 function _ConsultarCantonesByProvincias(){
     var provincia = {
         id:null,
-        codigo:$('#provincia').val(),
+        codigo:$('#codigoProvincia').val(),
         descripcion:""
     }
     self.cantones  = {data:[]}
@@ -310,8 +310,8 @@ __cargaDistritos(){
 function _ConsultarDistritosByCanton(){
     var canton = {
         id:null,
-        codigo:$('#canton').val(),
-        codigo_provincia:$('#provincia').val(),
+        codigo:$('#codigoCanton').val(),
+        codigo_provincia:$('#codigoProvincia').val(),
         descripcion:""
     }
     self.distritos  = {data:[]}
@@ -361,6 +361,7 @@ function getClienteHacienda(cedula){
         },
         404: function() {
             alert( "Cedula invalidad" )
+            __listadoTipoCedulas()
         }
     }
     }).done(function (response) {

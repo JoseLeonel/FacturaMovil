@@ -19,7 +19,7 @@
                 <div  show={mostrarFiltros}  class="advanced-search-grid text-left " style="padding-top : 5px; padding-bottom : 5px;">
                     <form id="filtros" name="filtros">              
                         <div class= "row">
-                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                                 <div class="form-group">
                                     <label class="knob-label" >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
                                     <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
@@ -30,7 +30,7 @@
                                     </div>	                             
                                 </div>  
                             </div>             
-                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label class="knob-label" >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
@@ -43,12 +43,23 @@
                                     </div>
                                 </div>  
                             </div>
-                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                                 <div class="form-group">
                                     <label>{$.i18n.prop("emisor.cedula")} </label>  
 	                                <input type="text" class="form-control cedulaEmisor" id="cedulaEmisor" name="cedulaEmisor">
                                 </div>  
-                            </div>                      
+                            </div>    
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                <div class="form-group">
+                                    <label>Estado </label>  
+                                    <select  class="form-control selectEstado estado" id= "estado" name="estado" >
+                                    	<option  value="1"  >Pendiente Aceptar</option>
+	                                   	<option  value="6"  >Aceptada</option>
+                                       	<option  value="7"  >No Aceptada</option>
+
+                                    </select>
+                                </div>  
+                            </div>                            
                         </div>
                     </form>  
                 </div>
@@ -118,7 +129,7 @@
     <!-- Fin del Listado -->
 
 <style type="text/css">
-.clickable {
+    .clickable {
         cursor: pointer;
     }
     .btn-success {
@@ -296,11 +307,7 @@
     .tituloTotal{
         font-size:30px;
     }
-</style>
- 
 
-
-<style type ="text/css">
     .wrap{
         max-width:100%;
         width:100%;
@@ -426,7 +433,7 @@
         width:100%;
         margin :auto;
     }
-    .cabecera-izquierda {200
+    .cabecera-izquierda {
        margin-right:5%;
        width:85%;
     }
@@ -434,13 +441,13 @@
     .cabecera-derecha {
         width:25%;
     }
-    .contenedor-detalle  200
+    .contenedor-detalle  {
         display:flex;
         width:100%;
         margin :auto;
     }
 
-    .booking-details h1 {200
+    .booking-details h1 {
         font-size: 1.5em;
         color: #666;
         text-shadow: none;
@@ -538,6 +545,7 @@ __Busqueda(){
         	fechaInicioParam:inicial,
         	fechaFinParam:$('.fechaFinal').val(),
         	cedulaEmisor:$('#cedulaEmisor').val(),
+            estado:$('#estado').val(),
         };
         $("#tableListar").dataTable().fnClearTable(); 
         $.ajax({

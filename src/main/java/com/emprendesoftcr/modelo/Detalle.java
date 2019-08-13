@@ -18,6 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.web.command.DetalleFacturaCommand;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -275,6 +276,9 @@ public class Detalle implements Serializable {
 		this.codigoTarifa = codigoTarifa;
 	}
 
+	public String getCodigoTarifaSTR() {
+		return codigoTarifa !=null?MapEnums.ENUM_TARIFAS_IMPUESTOS.get(codigoTarifa):codigoTarifa;
+	}
 	public String getCodigoTarifa1() {
 		return codigoTarifa1;
 	}
@@ -290,6 +294,12 @@ public class Detalle implements Serializable {
 	public void setTipoImpuesto(String tipoImpuesto) {
 		this.tipoImpuesto = tipoImpuesto;
 	}
+	
+	
+	public String getTipoImpuestoSTR() {
+		return  tipoImpuesto !=null?MapEnums.ENUM_TIPOS_IMPUESTOS.get(tipoImpuesto):tipoImpuesto;
+	}
+
 
 	public String getDescripcion() {
 		return descripcion;

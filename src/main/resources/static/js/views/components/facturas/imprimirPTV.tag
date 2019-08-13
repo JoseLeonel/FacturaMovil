@@ -135,7 +135,7 @@
                                                 {$.i18n.prop("tikect.autorizado.parte.dos")}   
                                                     <br>{$.i18n.prop("tikect.autorizado.parte.tres")}
                                                     <br>{$.i18n.prop("tikect.autorizado.parte.cuatro")}</p>
-                                <p  align="left" show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 1}">{$.i18n.prop("tikect.autorizado.no.factura.elec.parte.uno")}  <br>
+                                <p  align="left" show = "{facturaImpresa.estado != 3 && facturaImpresa.estado != 4 && facturaImpresa.empresa.noFacturaElectronica == 1 && facturaImpresa.tipoDoc != '87'}">{$.i18n.prop("tikect.autorizado.no.factura.elec.parte.uno")}  <br>
                                                 {$.i18n.prop("tikect.autorizado.no.factura.elec.parte.dos")}   
                                                     <br>{$.i18n.prop("tikect.autorizado.no.factura.elec.parte.tres")}
                                                     <br>{$.i18n.prop("tikect.autorizado.no.factura.elec.parte.cuatro")}</p>
@@ -607,6 +607,8 @@ function _VersionTiquete(){
         self.documentoElectronico = self.facturaImpresa.versionEsquemaXML == 1 ?$.i18n.prop("documento.electronico.nota.credito"):$.i18n.prop("documento.electronico.nota.credito.version3");
     }else if(self.facturaImpresa.tipoDoc == "04"){
         self.documentoElectronico = self.facturaImpresa.versionEsquemaXML == 1 ?$.i18n.prop("documento.electronico.tiquete"):$.i18n.prop("documento.electronico.tiquete.version3");
+    }else if(self.facturaImpresa.tipoDoc == "86"){
+        self.documentoElectronico = self.facturaImpresa.versionEsquemaXML == 1 ?$.i18n.prop("documento.electronico.nota.credito.interna"):$.i18n.prop("documento.electronico.nota.credito.interna");
     }
     self.update()
 }

@@ -1,5 +1,6 @@
 package com.emprendesoftcr.web.command;
 
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.modelo.Empresa;
@@ -23,11 +24,13 @@ public class HaciendaNativeCommand {
 
 	private String	nombreReceptor;
 	
+	
+	
 
 	public HaciendaNativeCommand(HaciendaNative haciendaNative) {
 		super();
 		this.id = haciendaNative.getId();
-		this.fechaEmisor = Utils.getFechaGeneraHacienda(haciendaNative.getFechaEmisor());
+		this.fechaEmisor =! haciendaNative.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_COMPRA_SIMPLIFICADA)?  Utils.getFechaGeneraHacienda(haciendaNative.getFechaEmisor()):Utils.getFechaGeneraHacienda(haciendaNative.getCreated_at());
 		this.tipoDoc = MapEnums.ENUM_TIPO_DOC.get(haciendaNative.getTipoDoc());
 		this.totalReceptor = haciendaNative.getTotalReceptor();
 		this.consecutivo = haciendaNative.getConsecutivo();
