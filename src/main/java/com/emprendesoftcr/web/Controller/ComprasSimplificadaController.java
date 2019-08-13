@@ -99,17 +99,17 @@ public class ComprasSimplificadaController {
 
 	@RequestMapping(value = "/comprasSimplificadas.do", method = RequestMethod.GET)
 	public String crearCompras(ModelMap model) {
-		return "/views/simplificado/crearCompraSimplificado";
+		return "views/simplificado/crearsimplificado";
 	}
 
 	@RequestMapping(value = "/ListarComprasSimplificado", method = RequestMethod.GET)
 	public String listarComprasSimplificadas(ModelMap model) {
-		return "/views/simplificado/ListarComprasSimplificado";
+		return "views/simplificado/ListarComprasSimplificado";
 	}
 
 	@RequestMapping(value = "/ListarConsultaComprasSimplificado", method = RequestMethod.GET)
 	public String listarComprasConsultaSimplificadas(ModelMap model) {
-		return "/views/simplificado/ListarConsultaComprasSimplificado";
+		return "views/simplificado/ListarConsultaComprasSimplificado";
 	}
 
 	@RequestMapping(value = "/CrearCompraSimplificadaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -149,13 +149,13 @@ public class ComprasSimplificadaController {
 			compraSimplificadaCommand.setTotalTarjeta(compraSimplificadaCommand.getTotalTarjeta() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalTarjeta());
 			compraSimplificadaCommand.setTotalDescuentos(compraSimplificadaCommand.getTotalDescuentos() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalDescuentos());
 			compraSimplificadaCommand.setTotalExento(compraSimplificadaCommand.getTotalExento() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalExento());
-			compraSimplificadaCommand.setTotalGravado(compraSimplificadaCommand.getTotalGravado() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalGravado());
+			compraSimplificadaCommand.setTotalGravado(Constantes.ZEROS_DOUBLE);
 			compraSimplificadaCommand.setTotalCambioPagar(compraSimplificadaCommand.getTotalCambioPagar() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalCambioPagar());
 			compraSimplificadaCommand.setTotalMercanciasExentas(compraSimplificadaCommand.getTotalMercanciasExentas() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalMercanciasExentas());
-			compraSimplificadaCommand.setTotalMercanciasGravadas(compraSimplificadaCommand.getTotalMercanciasGravadas() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalMercanciasGravadas());
+			compraSimplificadaCommand.setTotalMercanciasGravadas(Constantes.ZEROS_DOUBLE);
 			compraSimplificadaCommand.setTotalCredito(compraSimplificadaCommand.getTotalCredito() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalCredito());
-			compraSimplificadaCommand.setTotalServExentos(compraSimplificadaCommand.getTotalServExentos() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalServExentos());
-			compraSimplificadaCommand.setTotalServGravados(compraSimplificadaCommand.getTotalServGravados() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalServGravados());
+			compraSimplificadaCommand.setTotalServExentos( Constantes.ZEROS_DOUBLE);
+			compraSimplificadaCommand.setTotalServGravados(Constantes.ZEROS_DOUBLE );
 			compraSimplificadaCommand.setTotalVenta(compraSimplificadaCommand.getTotalVenta() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalVenta());
 			compraSimplificadaCommand.setTotalVentaNeta(compraSimplificadaCommand.getTotalVentaNeta() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalVentaNeta());
 			compraSimplificadaCommand.setTipoDoc(compraSimplificadaCommand.getTipoDoc() != null ? compraSimplificadaCommand.getTipoDoc() : Constantes.EMPTY);

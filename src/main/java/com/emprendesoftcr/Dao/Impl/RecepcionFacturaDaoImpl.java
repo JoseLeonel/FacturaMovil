@@ -89,7 +89,7 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula) {
+	public Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula , Integer estado) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from RecepcionFactura obj");
 		hql.append(" where obj.empresa = :empresa ");
@@ -98,7 +98,7 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 				hql.append("and obj.receptorCedula = :cedula ");
 			}
 		}
-		hql.append("and obj.facturaFechaEmision >= :fechaInicio and obj.facturaFechaEmision <= :fechaFin ");
+		hql.append("and obj.facturaFechaEmision >= :fechaInicio and obj.facturaFechaEmision <= :fechaFin and obj.estado = :estado");
 		Query query = entityManager.createQuery(hql.toString());
 		if (cedula != null) {
 			if (!cedula.equals(Constantes.EMPTY)) {
@@ -106,6 +106,7 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 			}
 		}
 		query.setParameter("empresa", empresa);
+		query.setParameter("estado", estado);
 		query.setParameter("fechaInicio", fechaInicio);
 		query.setParameter("fechaFin", fechaFin);
 		return query.getResultList();

@@ -75,12 +75,21 @@
                                     </div>
                                 </div>  
                             </div>
+                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Estado </label>  
+                                    <select  class="form-control selectEstado estado" id= "estado" name="estado" >
+	                                   	<option  value="6"  >Aceptada</option>
+                                       	<option  value="7"  >No Aceptada</option>
+                                    </select>
+                                </div>  
+                            </div> 
                         </div>
                     </form>  
                 </div>
             </div>
             <div class="col-xs-12 text-right">
-                <a      show={hay_datos== true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar las compras aceptadas" href="DescargarComprasAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}"> Descargar</a>        
+                <a      show={hay_datos== true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar " href="DescargarComprasAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}&estado={estado}"> Descargar</a>        
                 <button  show={hay_datos== true} onclick ={__CorreoAlternativo} type="button" class="btn btn-primary btnBusquedaAvanzada" title="Correo alternativo" name="button" >  Alternativo  <i class="fa fa-envelope"></i></button>                        
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
             </div>
@@ -154,6 +163,7 @@
     self.hay_datos             = false   
     self.mostrarListado        = true
     self.fechaInicio =null
+    self.estado = 6;
     self.fechaFin =null
     self.on('mount',function(){
         $("#filtros").validate(reglasDeValidacion());
@@ -224,6 +234,7 @@ function __EnviarPorCorreo(){
       	correoAlternativo:$('#correoAlternativo').val(),		
        	fechaInicioParam:$('#fechaInicio').val(),
        	fechaFinParam:$('.fechaFin').val(),
+           estado:$(".selectEstado").val()
     };
     $.ajax({
         url: "CorreoTotalComprasAceptadasAjax.do",
@@ -270,6 +281,8 @@ __Busqueda(){
             success: function (result) {
                 if(result.total > 0){
                     TotalesGenerales(result)
+                    self.estado = $('.estado').val()
+                    self.update()
 
                 }           
             },

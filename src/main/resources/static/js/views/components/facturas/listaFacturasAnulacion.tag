@@ -417,10 +417,17 @@ function __eliminarFacturaListado() {
     }
     self.listaFacturas.data.splice(index, 1);
     self.update()
-    loadListar(".tableListar",idioma_espanol,self.formato_tabla,self.listaFacturas.data)
-    agregarInputsCombos();
-    ActivarEventoFiltro(".tableListar")
-    __AnularFactura()
+    if(self.listaFacturas.data.length > 0){
+       loadListar(".tableListar",idioma_espanol,self.formato_tabla,self.listaFacturas.data)
+        agregarInputsCombos();
+        ActivarEventoFiltro(".tableListar")
+        __AnularFactura()
+    
+    }else{
+        $("#tableListar").dataTable().fnClearTable(); 
+        __InicializarTabla('.tableListar') 
+        
+    }
  }
 /**
 * cargar los tipos de Documento de la factura

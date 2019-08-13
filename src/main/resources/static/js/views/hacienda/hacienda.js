@@ -288,20 +288,27 @@ function __Opciones(id,type,row){
 	}
 	
 	if(row.estado == "Aceptado"){
-		 menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Envio Correo al Cliente</a></li>'
+		if(row.tipoDoc.indexOf('Simplificado') == -1  || row.tipoDoc.indexOf('Compra') == -1 ){
+		  menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Envio Correo al Cliente</a></li>'
+		}
 		 menu += '<li><a href="#"  title="Bajar XML" class="  btnBajarXML" >XML Documentos</a></li>'
 		 menu += '<li><a href="#"  title="Bajar XML Respuesta de Triburacion" class="  btnRespuestaHacienda" >XML Respuesta</a></li>'
+		 if(row.tipoDoc.indexOf('Simplificado') == -1  || row.tipoDoc.indexOf('Compra') == -1 ){
 		 menu += '<li><a href="#"  title="Envio de correo Alternativo" class="  btnEnvioCorreoAlternativo" >Envio de correo Alternativo</a></li>'
+		 }	
 	}
 	if(row.estado == "Rechazado"){
 		 menu += '<li><a href="#"  title="Bajar XML" class="  btnBajarXML" >XML Documentos</a></li>'
 		 menu += '<li><a href="#"  title="Bajar XML Respuesta de Triburacion" class="  btnRespuestaHacienda" >XML Respuesta</a></li>'
 	}
 	if(row.estado == "Enviado"){
+		if(row.tipoDoc.indexOf('Simplificado') == -1  || row.tipoDoc.indexOf('Compra') == -1 ){
 		 menu += '<li><a href="#"  title="Aceptacion Manual a Tributacion" class="  btnAceptacionManual" >Aceptacion Manual</a></li>'
+		}
 	}
-	if(row.tipoDoc.indexOf('Factura') !== -1  || row.tipoDoc.indexOf('Nota') !== -1 || row.tipoDoc.indexOf('Tiquete') !== -1 ){
-		menu += '<li><a href="#"  title="Bajar PDF" class="  btnBajarPDF" >PDF Documentos</a></li>'
+	if(row.tipoDoc.indexOf('Simplificado') == -1  || row.tipoDoc.indexOf('Compra') == -1 ){
+			menu += '<li><a href="#"  title="Bajar PDF" class="  btnBajarPDF" >PDF Documentos</a></li>'   
+		
 	}
 	
 	menu += "</ul></div>"  

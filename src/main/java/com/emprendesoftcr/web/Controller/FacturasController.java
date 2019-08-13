@@ -433,25 +433,25 @@ public class FacturasController {
 	 */
 	@RequestMapping(value = "/TotalFacturasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public TotalFacturaCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam,@RequestParam Integer estado,String actividadEconomica) {
+	public TotalFacturaCommand totalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, String actividadEconomica) {
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		return facturaBo.sumarFacturas(fechaInicio, fechaFinal, usuario.getEmpresa().getId(),estado,actividadEconomica);
+		return facturaBo.sumarFacturas(fechaInicio, fechaFinal, usuario.getEmpresa().getId(), estado, actividadEconomica);
 	}
 
 	@RequestMapping(value = "/EnvioDetalleTotalFacturasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public void envioDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo,@RequestParam Integer estado,String actividadEconomica) {
+	public void envioDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo, @RequestParam Integer estado, String actividadEconomica) {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		// Se obtiene los totales
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		TotalFacturaCommand facturaCommand = facturaBo.sumarFacturas(fechaInicio, fechaFinal, usuario.getEmpresa().getId(),estado,actividadEconomica);
+		TotalFacturaCommand facturaCommand = facturaBo.sumarFacturas(fechaInicio, fechaFinal, usuario.getEmpresa().getId(), estado, actividadEconomica);
 
 		// Se buscan las facturas
-		Collection<Factura> facturas = facturaBo.facturasRangoEstado(estado, fechaInicio, fechaFinal, usuario.getEmpresa().getId(),actividadEconomica);
+		Collection<Factura> facturas = facturaBo.facturasRangoEstado(estado, fechaInicio, fechaFinal, usuario.getEmpresa().getId(), actividadEconomica);
 
 		// Se prepara el excell
 		ByteArrayOutputStream baos = createExcelFacturas(facturas);
@@ -473,16 +473,18 @@ public class FacturasController {
 			listaCorreos.add(usuario.getEmpresa().getCorreoElectronico());
 		}
 		String estadoDesc = Constantes.EMPTY;
-		if(estado == 2) {
+		if (estado == 2) {
 			estadoDesc = "Facturados";
-		}if(estado == 5) {
+		}
+		if (estado == 5) {
 			estadoDesc = "Anulados";
-		}if(estado == 6) {
+		}
+		if (estado == 6) {
 			estadoDesc = "Aceptados";
-		}if(estado == 7) {
+		}
+		if (estado == 7) {
 			estadoDesc = "Rechazados";
 		}
-		
 
 		Map<String, Object> modelEmail = new HashMap<>();
 		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
@@ -502,14 +504,14 @@ public class FacturasController {
 
 	// Descarga de manuales de usuario de acuerdo con su perfil
 	@RequestMapping(value = "/DescargarDetalleTotalFacturasAjax.do", method = RequestMethod.GET)
-	public void descargarDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam,@RequestParam Integer estado,@RequestParam String actividadEconomica) throws IOException, Exception {
+	public void descargarDetalleTotalFacturasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, @RequestParam String actividadEconomica) throws IOException, Exception {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		Collection<Factura> facturas = facturaBo.facturasRangoEstado(estado, fechaInicio, fechaFin, usuario.getEmpresa().getId(),actividadEconomica);
+		Collection<Factura> facturas = facturaBo.facturasRangoEstado(estado, fechaInicio, fechaFin, usuario.getEmpresa().getId(), actividadEconomica);
 
 		String nombreArchivo = "FacturasMensuales.xls";
 		response.setContentType("application/octet-stream");
@@ -904,10 +906,10 @@ public class FacturasController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/ListarFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam String tipoDocumento,String actividadEconomica,Integer estado) {
+	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam String tipoDocumento, String actividadEconomica, Integer estado) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Cliente cliente = clienteBo.buscar(idCliente);
-		DataTableDelimitador delimitadores = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cliente, usuarioSesion.getEmpresa(), usuarioBo, tipoDocumento,estado,actividadEconomica);
+		DataTableDelimitador delimitadores = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cliente, usuarioSesion.getEmpresa(), usuarioBo, tipoDocumento, estado, actividadEconomica);
 
 		if (!usuarioBo.isAdministrador_sistema(usuarioSesion)) {
 			String nombreUsuario = request.getUserPrincipal().getName();
@@ -975,7 +977,7 @@ public class FacturasController {
 		}
 
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-		Collection<FacturasSinNotaCreditoNative> objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario,"("+ Constantes.FACTURA_ESTADO_FACTURADO+","+Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO+","+Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA+")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG);
+		Collection<FacturasSinNotaCreditoNative> objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + Constantes.FACTURA_ESTADO_FACTURADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG);
 		List<Object> solicitudList = new ArrayList<Object>();
 		if (objetos != null) {
 			for (FacturasSinNotaCreditoNative facturasDelDia : objetos) {
@@ -1118,7 +1120,7 @@ public class FacturasController {
 			recepcionFactura.setFacturaTotalServExentos(recepcionFactura.getFacturaTotalServExentos() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalServExentos());
 			recepcionFactura.setFacturaTotalServExonerado(recepcionFactura.getFacturaTotalServExonerado() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalServExonerado());
 			recepcionFactura.setFacturaTotalServGravados(recepcionFactura.getFacturaTotalServGravados() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalServGravados());
-			
+
 			recepcionFactura.setTipoGasto(recepcionFactura.getTipoGasto() == null ? Constantes.TIPO_GASTO_ACEPTACION_COMPRAS_INVENTARIO : recepcionFactura.getTipoGasto());
 			recepcionFactura.setVersion_doc("4.3");
 
@@ -1164,7 +1166,7 @@ public class FacturasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarRecepcionFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarRecepcionFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor,@RequestParam Integer estado) {
+	public RespuestaServiceDataTable listarRecepcionFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam Integer estado) {
 
 		// Usuario de la session
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -1211,7 +1213,7 @@ public class FacturasController {
 		DateFormat df = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String reportDate = df.format(fechahoy);
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-		Collection<FacturasDelDiaNative> objetos = consultasNativeBo.findByFacturasDelDia(usuarioSesion.getEmpresa(), idUsuario,"("+ Constantes.FACTURA_ESTADO_FACTURADO+","+Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA+","+Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO+")", reportDate);
+		Collection<FacturasDelDiaNative> objetos = consultasNativeBo.findByFacturasDelDia(usuarioSesion.getEmpresa(), idUsuario, "(" + Constantes.FACTURA_ESTADO_FACTURADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO + ")", reportDate);
 		List<Object> solicitudList = new ArrayList<Object>();
 		if (objetos != null) {
 			for (FacturasDelDiaNative facturasDelDia : objetos) {
@@ -1296,8 +1298,10 @@ public class FacturasController {
 			facturaCommand.setTotalVenta(facturaCommand.getTotalVenta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalVenta());
 			facturaCommand.setTotalVentaNeta(facturaCommand.getTotalVentaNeta() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTotalVentaNeta());
 			facturaCommand.setTipoDoc(facturaCommand.getTipoDoc() != null ? facturaCommand.getTipoDoc() : Constantes.EMPTY);
+			facturaCommand.setCondicionVenta(facturaCommand.getCondicionVenta() == null?Constantes.EMPTY:facturaCommand.getCondicionVenta());
+			
 			UsuarioCaja usuarioCajaBd = null;
-			// Si esta en estado facturada en base de datos se retorna un mensaje que ya fue procesada
+			// Si esta en estado facturada en base de datos se retornae un mensaje que ya fue procesada
 			if (facturaCommand != null) {
 				if (facturaCommand.getId() != null) {
 					if (facturaCommand.getId() > Constantes.ZEROS_LONG) {
@@ -1314,6 +1318,19 @@ public class FacturasController {
 					}
 				}
 			}
+			if(facturaCommand.getCondicionVenta().equals(Constantes.EMPTY)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.condicion.venta.vacia", result.getAllErrors());
+			}
+			if(facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+				if(facturaCommand.getCliente() ==null) {
+					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.condicion.venta.credito.cliente.vacio", result.getAllErrors());
+				}else {
+					if(facturaCommand.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.condicion.venta.credito.cliente.frecuente", result.getAllErrors());		
+					}
+				}
+				
+			}
 			if (facturaCommand.getTipoDoc() == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.tipo.doc", result.getAllErrors());
 			}
@@ -1325,6 +1342,9 @@ public class FacturasController {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.tipo.doc", result.getAllErrors());
 			}
 
+			
+			
+			 
 			if (facturaCommand.getCodigoActividad() == null) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.factura.actividad.comercial.no.existe", result.getAllErrors());
 			} else if (facturaCommand.getCodigoActividad().equals(Constantes.EMPTY)) {
@@ -1413,8 +1433,22 @@ public class FacturasController {
 			if (facturaCommand.getReferenciaNumero() != null) {
 				if (!facturaCommand.getReferenciaNumero().equals(Constantes.EMPTY)) {
 					Factura facturaReferenciaValidar = facturaBo.findByConsecutivoAndEmpresa(facturaCommand.getReferenciaNumero(), usuario.getEmpresa());
-					if (facturaReferenciaValidar.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && facturaReferenciaValidar.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
-						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.nota.credito.con.anulacion.completa", result.getAllErrors());
+					if (facturaReferenciaValidar != null) {
+						if (facturaReferenciaValidar.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && facturaReferenciaValidar.getReferenciaCodigo().equals(Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO)) {
+							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.nota.credito.con.anulacion.completa", result.getAllErrors());
+						}
+						if(!facturaReferenciaValidar.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
+							Hacienda hacienda = haciendaBo.findByEmpresaAndClave(facturaReferenciaValidar.getEmpresa(), facturaReferenciaValidar.getClave());
+							if (hacienda != null) {
+								if (!hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA) && !hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO)) {
+									return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.pendiente.comprobacion.hacienda", result.getAllErrors());
+								}
+							}else {
+								return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.pendiente.comprobacion.hacienda", result.getAllErrors());
+							}
+		
+						}
+					
 					}
 					if (facturaReferenciaValidar == null) {
 						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.aplicar.nota.credito.o.debito.no.existe", result.getAllErrors());
@@ -1424,6 +1458,7 @@ public class FacturasController {
 					}
 				}
 			}
+
 			facturaCommand.setEmpresa(usuario.getEmpresa());
 			facturaFormValidator.validate(facturaCommand, result);
 			if (result.hasErrors()) {
@@ -1897,7 +1932,7 @@ public class FacturasController {
 
 	private static class DelimitadorBuilder {
 
-		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Cliente cliente, Empresa empresa, UsuarioBo usuarioBo, String tipoDocumento,Integer estado, String actividadEconomica) {
+		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Cliente cliente, Empresa empresa, UsuarioBo usuarioBo, String tipoDocumento, Integer estado, String actividadEconomica) {
 			// Consulta por fechas
 			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Factura");
 			Date fechaInicio = new Date();
@@ -1907,10 +1942,9 @@ public class FacturasController {
 			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PROFORMAS.toString() + "'", "!="));
 			delimitador.addFiltro(new JqGridFilter("tipoDoc", "'" + Constantes.FACTURA_TIPO_DOC_PROFORMAS.toString() + "'", "!="));
 //			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_ANULADA.toString() + "'", "<>"));
-			if(!estado.equals(Constantes.ZEROS)) {
-				delimitador.addFiltro(new JqGridFilter("estado", "'" + estado + "'", "="));	
+			if (!estado.equals(Constantes.ZEROS)) {
+				delimitador.addFiltro(new JqGridFilter("estado", "'" + estado + "'", "="));
 			}
-			
 
 			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
 			delimitador.addFiltro(new JqGridFilter("codigoActividad", "'" + actividadEconomica + "'", "="));

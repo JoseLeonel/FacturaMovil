@@ -136,24 +136,24 @@ public class ComprasController {
 
 	@RequestMapping(value = "/TotalComprasAceptadasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public TotalComprasAceptadasCommand totalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin) {
+	public TotalComprasAceptadasCommand totalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin,@RequestParam Integer estado) {
 		Date inicio = Utils.parseDate(fechaInicio);
 		Date finalDate = Utils.dateToDate(Utils.parseDate(fechaFin), true);
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		return compraBo.sumarComprasAceptadas(inicio, finalDate, usuario.getEmpresa().getId());
+		return compraBo.sumarComprasAceptadas(inicio, finalDate, usuario.getEmpresa().getId(),estado);
 	}
 
 	@RequestMapping(value = "/CorreoTotalComprasAceptadasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public void envioTotalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo) {
+	public void envioTotalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo,@RequestParam Integer estado) {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		// Se obtiene los totales
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		TotalComprasAceptadasCommand totalComprasAceptadasCommand = compraBo.sumarComprasAceptadas(fechaInicio, fechaFinal, usuario.getEmpresa().getId());
+		TotalComprasAceptadasCommand totalComprasAceptadasCommand = compraBo.sumarComprasAceptadas(fechaInicio, fechaFinal, usuario.getEmpresa().getId(),estado);
 
-		Collection<RecepcionFactura> recepcionFacturas = recepcionFacturaBo.findByFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFinal, usuario.getEmpresa(), Constantes.EMPTY);
+		Collection<RecepcionFactura> recepcionFacturas = recepcionFacturaBo.findByFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFinal, usuario.getEmpresa(), Constantes.EMPTY,estado);
 
 		// Se prepara el excell
 		ByteArrayOutputStream baos = createExcelRecepcionCompras(recepcionFacturas);
@@ -166,7 +166,7 @@ public class ComprasController {
 				from = usuario.getEmpresa().getAbreviaturaEmpresa() + "_ComprasEmitidas" + "_No_Reply@emprendesoftcr.com";
 			}
 		}
-		String subject = "Compras Aceptadas dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
+		String subject = "Compras dentro del rango de fechas: " + fechaInicioParam + " al " + fechaFinParam;
 
 		ArrayList<String> listaCorreos = new ArrayList<>();
 		if (correoAlternativo != null && correoAlternativo.length() > 0) {
@@ -177,6 +177,12 @@ public class ComprasController {
 
 		Map<String, Object> modelEmail = new HashMap<>();
 		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
+		if(estado.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+			modelEmail.put("estado", "Aceptadas");
+		}
+		if(estado.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO)) {
+			modelEmail.put("estado", "No Aceptadas");
+		}
 		modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
 		modelEmail.put("fechaFinal", Utils.getFechaStr(fechaFinal));
 		modelEmail.put("total", totalComprasAceptadasCommand.getTotal() != null ? totalComprasAceptadasCommand.getTotalSTR() : Constantes.ZEROS);
@@ -195,14 +201,14 @@ public class ComprasController {
 
 //Descarga de manuales de usuario de acuerdo con su perfil
 	@RequestMapping(value = "/DescargarComprasAceptadasAjax.do", method = RequestMethod.GET)
-	public void descargarComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor) throws IOException {
+	public void descargarComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor,Integer estado) throws IOException {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		Collection<RecepcionFactura> recepcionFacturas = recepcionFacturaBo.findByFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFin, usuario.getEmpresa(), cedulaEmisor);
+		Collection<RecepcionFactura> recepcionFacturas = recepcionFacturaBo.findByFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFin, usuario.getEmpresa(), cedulaEmisor,estado);
 
 		String nombreArchivo = "comprasAceptadas.xls";
 		response.setContentType("application/octet-stream");

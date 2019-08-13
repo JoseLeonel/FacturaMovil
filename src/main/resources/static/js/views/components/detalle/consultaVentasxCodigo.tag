@@ -666,6 +666,10 @@ function __Impuestos(){
      });
     self.impuestos.push({
         codigo: '98',
+        descripcion:"Otros antes IVA"
+     });
+     self.impuestos.push({
+        codigo: '99',
         descripcion:$.i18n.prop("tipo.impuesto.otros")
      });
    

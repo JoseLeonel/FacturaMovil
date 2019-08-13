@@ -513,6 +513,7 @@ public class Constantes {
 	public static final String					SP_TOTAL_ACEPTADAS_IN_ID_EMPRESA														= "ID_EMPRESA";
 	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS																	= "SPTOTALACEPTADAS";
 	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_ID_EMPRESA												= "ID_EMPRESA";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_ESTADO														= "estado";
 	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_OUT															= "TOTAL";
 	public static final String					SP_TOTAL_IMPUESTOS_COMPRAS_ACEPTADAS_OUT										= "TOTAL_IMPUESTOS";
 

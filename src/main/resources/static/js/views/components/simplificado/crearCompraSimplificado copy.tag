@@ -155,6 +155,7 @@
                             <div class="TotalesContainer" >
                                 <div class="elementoTotales">{$.i18n.prop("factura.resumen.subTotal")}   <span id="lblSubtotal"> {subTotalGeneral}   </span> </div> 
                                 <div class="elementoTotales">{$.i18n.prop("factura.resumen.descuento")}  <span id="lblSubtotal"> {totalDescuentos}   </span> </div> 
+                                <div class="elementoTotales">{$.i18n.prop("factura.resumen.impuesto")}  <span id="lblSubtotal"> {totalImpuesto}    </span> </div> 
                                 <div class="elementoTotales">{$.i18n.prop("factura.resumen.total")}     <span id="lblTotal">{totalComprobante}         </span> </div> 
                                 <div class="elementoTotales">{$.i18n.prop("factura.resumen.cambio")}    <span id="lblTotal">{totalCambioPagarSTR}</span> </div> 
                             </div>
@@ -215,6 +216,10 @@
                                   <div class="valorTotal">{totalDescuentos}</div>
                                 </div>  
                                 <div class="totalesContainer" >
+                                    <div class="tituloTotales">Impuestos:</div>
+                                    <div class="valorTotal">{totalImpuesto}</div>
+                                </div>    
+                                <div class="totalesContainer" >
                                    <div class="tituloTotales">Total   :</div> 
                                    <div class="valorTotal"><p> {totalComprobante}</p></div>
                                 </div>   
@@ -242,6 +247,8 @@
                             <th style="width:17%;"><div class="tituloFormat">Precio Unitario                        </div></th>
                             <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.descuento")}
                             <th style="width:8%;"><div class="tituloFormat">Desc                     </div></th>
+                            <th style="width:8%;"><div class="tituloFormat">%IVA                      </div></th>
+                            <th style="width:8%;"><div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.impuesto")}                      </div></th>
                             <th  style="width:8%;"> <div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.subTotal")}                        </div></th>
                             <th  style="width:8%;"> <div class="tituloFormat">{$.i18n.prop("compra.linea.detalle.total")}                        </div></th>
                         </tr>
@@ -265,6 +272,12 @@
                             </td>
                             <td class="text-right" style="width:14%;">
                                 <div class="formatDetalle">{montoDescuento.toFixed(2)} </div>
+                            </td>
+                            <td class="text-right" style="width:8%;">
+                                <div class="formatDetalle">{impuesto*100} </div>
+                            </td>
+                            <td class="text-right" style="width:14%;">
+                                <div class="formatDetalle">{montoImpuesto.toFixed(2)} </div>
                             </td>
                            <td class="text-right" style="width:14%;">
                                 <div class="formatDetalle">{subTotal.toFixed(2)} </div>
@@ -314,20 +327,46 @@
                             <label class="tamanoLetraSimplificadaDetalle"  >Precio Unitario </label>
                             <input type="number" step="any" class="form-control precioUnitario  tamanonumeros" id="precioUnitario" name="precioUnitario" onkeyup = {__CalculaMontoLinea} >
                         </div>
+
+                        <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                            <label class="tamanoLetraSimplificadaDetalle">{$.i18n.prop("articulo.tipoImpuesto")} </label>
+                            <select onchange= {__asignarImpuesto} class="form-control tipoImpuesto " id="tipoImpuesto" name="tipoImpuesto"  >
+                                <option  each={impuestos}  value="{codigo}"  >{descripcion}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                            <label class="tamanoLetraSimplificadaDetalle">{$.i18n.prop("articulo.codigoTarifa")}</label>
+                            <select  onchange= {__AsignarTarifa} class="form-control selectCodigoTarifa " id="codigoTarifa" name="codigoTarifa"  >
+                                <option  each={tarifas1.aaData}  value="{tarifaIVAI.codigoTarifa}"   >{tarifaIVAI.descripcion}</option>
+                            </select>
+                        </div>        
+                       
                         <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                             <label class="tamanoLetraSimplificadaDetalle"  >% Descuento </label>
                             <input type="number" step="any" class="form-control porcentajeDescuento  tamanonumeros" id="porcentajeDescuento" name="porcentajeDescuento"  onkeyup = {__CalculaMontoLinea}>
                         </div>
 
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                            <label class="tamanoLetraSimplificadaDetalle"  >%{$.i18n.prop("articulo.impuesto")}  </label>
+                            <input type="number" step="any" class="form-control impuesto  tamanonumeros" id="impuesto" name="impuesto" onkeyup = {__CalculaMontoLinea}>
+                        </div>
+
+
                     </div>
                     <div class="row">
-                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6 has-success">
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                             <label class="tamanoLetraSimplificadaDetalle"  >Descuento </label>
                             <input type="number" step="any" class="form-control montoDescuento tamanonumeros " id="montoDescuento" name="montoDescuento"  readonly>
                         </div>
 
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
+                            <label class="tamanoLetraSimplificadaDetalle"  >IVA  </label>
+                            <input type="number" step="any" class="form-control montoImpuesto tamanonumeros " id="montoImpuesto" name="montoImpuesto" readonly>
+                        </div>
                     
-                        <div class= "col-md-6 col-sx-6 col-sm-6 col-lg-6 has-success">
+                        <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4 has-success">
                             <label class="tamanoLetraSimplificadaDetalle"  >Total Linea </label>
                             <input type="number" step="any" class="form-control montoTotalLinea tamanonumeros " id="montoTotalLinea" name="montoTotalLinea" readonly >
                         </div>
@@ -448,7 +487,7 @@
     .tituloTotales{
         text-align: left;
         margin-right: 3%;
-        color: #30ed17 ;
+        color: yellow;
         margin-top: 2%;
         flex: 0.5;
     }
@@ -479,9 +518,9 @@
         display:flex;
         flex:1;
         flex-direction: column;
-        font-weight: 600 !important;
+        ont-weight: 600 !important;
         font-size: 14px !important;
-        color:#30ed17  !important;
+        color:yellow !important;
         text-shadow: 0px 0px 1px #ffffff;
         font-style: italic;
         border-collapse: separate;
@@ -886,12 +925,14 @@
     self.comboFormaPagos        = []
     self.totalComprobante  = 0
     self.comboTipoDocumentos   = []
+    self.impuestos =[]
     self.tarifas1    = {aaData:[]}
     self.compra                = {
         consecutivo:"",
         fechaCredito    : null,
         fechaCompra     : null,
         id : null,
+        totalImpuesto: 0,
         totalCompra:0,
         estado:0,
         tipoDocumento:0,
@@ -961,7 +1002,9 @@
          precioUnitario:0,
          cantidad:0,
          montoDescuento:0,
+         montoImpuesto:0,
          porcentajeDescuento:0,
+         impuesto:0,
          subTotal:0,
          montoTotalLinea:0
 
@@ -975,6 +1018,7 @@
         __comboCondicionPago()
         __ComboTipoDocumentos()
         __Teclas()
+        __Impuestos()
         __ListaDeProveedores()
         __tipoCodigo()
         __Eventos()
@@ -1158,23 +1202,30 @@ function aplicarMontos(){
     var porcentajeDescuento = __valorFloat(__valorNumerico($(".porcentajeDescuento").val()));
     porcentajeDescuento = porcentajeDescuento / 100
     var cantidad = __valorFloat(__valorNumerico($(".cantidad").val()));
+    var impuesto = __valorFloat(__valorNumerico($(".impuesto").val()));
+    impuesto = impuesto > 0 ? impuesto / 100 : 0
     var precioUnitario = __valorFloat(__valorNumerico($(".precioUnitario").val()));
     var subTotal = precioUnitario *  cantidad
     var montoDescuento = subTotal *  porcentajeDescuento
     subTotal = subTotal - montoDescuento
-    var montoTotalLinea = subTotal
-    $("#montoDescuento").val(redondeoDecimales(montoDescuento,2))
+    var montoImpuesto = subTotal * impuesto;
+    var montoTotalLinea = subTotal + montoImpuesto
+     $("#montoDescuento").val(redondeoDecimales(montoDescuento,2))
+    $("#montoImpuesto").val(redondeoDecimales(montoImpuesto,2))
     $("#montoTotalLinea").val(redondeoDecimales(montoTotalLinea,2))
     self.detalle.porcentajeDescuento = porcentajeDescuento
     self.detalle.descripcion = $("#descArticulo").val()
     self.detalle.codigo = $("#codigoArt").val()
     self.detalle.tipoCodigo = $(".tipoCodigo").val()
     self.detalle.codigoTarifa = $(".selectCodigoTarifa").val()
+    self.detalle.tipoImpuesto = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
     self.detalle.montoDescuento = montoDescuento
     self.detalle.precioUnitario = precioUnitario
+    self.detalle.impuesto = impuesto
     self.detalle.subTotal = subTotal
     self.detalle.cantidad = cantidad
     self.detalle.montoDescuento = montoDescuento
+    self.detalle.montoImpuesto = montoImpuesto
     self.detalle.montoTotalLinea = montoTotalLinea
     self.update()
 }
@@ -1185,12 +1236,27 @@ function __Eventos(){
     $("#formularioLineaDetalle").validate(reglasDeValidacionDetalleCompra());
     $("#descArticulo").attr("maxlength", 160);
     $("#codigoArt").attr("maxlength", 20);
- 
+    $('#impuesto').mask('00', {
+		'translation' : {
+			0 : {
+				pattern : /[0-9]/
+			}
+		}
+	});
 }
 __AplicarAgregarLineaDetalle(){
     $("#formularioLineaDetalle").validate(reglasDeValidacionDetalleCompra());
     if ($("#formularioLineaDetalle").valid()) {
-      
+         //aplicarMontos()
+         tipo = $('#tipoImpuesto').val() == "Sin impuesto"?"":$('#tipoImpuesto').val()
+        if(tipo !='01' &&  tipo !='07' && tipo.length > 0 ){
+           var monto = __valorFloat($(".impuesto").val())
+            if (monto == 0){
+               mensajeError("El tipo de impuesto requiere el porcentaje, por favor digitelo en la casilla IVA")
+               return 
+            }
+
+        }
          __nuevoArticuloAlDetalle()
     }
 }
@@ -1201,6 +1267,29 @@ __regresar(){
     $('#modalAgregarLineaEnCompra').modal('hide')
 }
 
+
+__AsignarTarifa(){
+    $(".impuesto").val(getMontoImpuesto($(".tipoImpuesto").val(),$('#codigoTarifa').val(),self.tarifas1.aaData))
+    aplicarMontos()
+}
+function getMontoTarifa(tipoImpuesto,codigoTarifa,array) {
+  return array.filter(
+    function(data) {
+      return data.tipoImpuesto == tipoImpuesto && data.tarifaIVAI.codigoTarifa == codigoTarifa?data.monto:0
+    }
+  );
+}
+function getMontoImpuesto(tipoImpuesto,codigoTarifa,array){
+    if(tipoImpuesto.length ==0){
+        return 0
+    }
+    if(tipoImpuesto ==null){
+        return 0
+    }
+    var valor = getMontoTarifa(tipoImpuesto,codigoTarifa,array);
+    valor = valor !=null?valor[0]:null
+    return valor == null?0:valor.monto
+}
 
 /**
 * Tipo codigo del producto/servicio del articulo
@@ -1228,6 +1317,85 @@ function __tipoCodigo(){
     self.tipoCodigos.push({
         codigo: '99',
         descripcion:$.i18n.prop("articulo.tipo.codigo.otros")
+     });
+   
+     self.update();
+}
+/**
+* Asigna el impuesto 13 cuando es valor igual 01
+**/
+__asignarImpuesto(){
+    $('.impuesto').val(null)
+     __listadoTarifasByTipoImpuesto($('#tipoImpuesto').val(),1)
+    self.tarifas1  = {aaData:[]}
+    self.update()
+    aplicarMontos()
+}
+/**
+*  Mostrar listado datatable Categorias Actimpuestos
+**/
+function __listadoTarifasByTipoImpuesto(tipoImpuesto,indicador){
+    if (typeof tipoImpuesto == 'undefined') {
+        return
+    }
+    if (tipoImpuesto == "" ){
+        return
+    }
+    if (tipoImpuesto == " ") {
+        return
+    }
+    var selector = ""
+    $.ajax({
+         url: "ListarTarifasByTipoImpuestoAjax.do",
+        datatype: "json",
+         data: {tipoImpuesto:tipoImpuesto},
+        method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                self.tarifas1 =  result
+                self.update()
+            }            
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+             mensajeErrorServidor(xhr, status);
+        }
+    })
+}
+/**
+* Combo para verificar si es contabilizado en el inventario o no
+**/
+function __Impuestos(){
+    self.impuestos =[]
+    self.update()
+     self.impuestos.push({
+        codigo: "",
+        descripcion:"Sin impuesto"
+     });
+     
+    self.impuestos.push({
+        codigo: '01',
+        descripcion:$.i18n.prop("tipo.impuesto.ventas")
+     });
+      self.impuestos.push({
+        codigo: '02',
+        descripcion:$.i18n.prop("tipo.impuesto.consumo")
+     });
+   // self.impuestos.push({
+   //     codigo: '07',
+   //     descripcion:$.i18n.prop("tipo.impuesto.servicio")
+   //  });
+ //    self.impuestos.push({
+ //       codigo: '06',
+ //       descripcion:$.i18n.prop("tipo.impuesto.tabaco")
+ //    });
+ //   self.impuestos.push({
+ //       codigo: '12',
+ //       descripcion:$.i18n.prop("tipo.impuesto.cemento")
+ //    });
+    self.impuestos.push({
+        codigo: '99',
+        descripcion:$.i18n.prop("tipo.impuesto.otros")
      });
    
      self.update();
@@ -1287,7 +1455,6 @@ var reglasDeValidacionCompra = function() {
  * Listar codigos  llamado del modal para presentar los articulos
  **/   
  __ListaDecodigos(){
-  __tipoCodigo()
   $('#modalAgregarLineaEnCompra').modal('show')      
  }
 
@@ -1404,6 +1571,16 @@ function crearFactura(estado){
     }
     self.transaccion = true 
     self.update()
+    //if($(".tipoDoc").val() !="01" &&  $(".tipoDoc").val() !="88"){
+    //    if(verificarSiClienteFrecuente()){
+    //    mensajeError($.i18n.prop("error.factura.tipo.documento.factura"))
+    //    return
+    //    }
+    //    if(validarSiTieneExoneracion()){
+    //        mensajeError($.i18n.prop("error.factura.exoneracion.libre.impuesto"))
+    //        return
+    //    }
+   // }
     
     self.detalleFactura.data =self.detail
     self.update() 
@@ -1671,12 +1848,16 @@ function __nuevoArticuloAlDetalle(){
        numeroLinea     : self.numeroLinea,
        pesoPrioridad   :self.pesoPrioridad,  
        codigo          :self.detalle.codigo,
+       codigoTarifa    :self.detalle.codigoTarifa,
+       tipoImpuesto    : self.detalle.tipoImpuesto,
        descripcion     : self.detalle.descripcion,
        tipoCodigo      : self.detalle.tipoCodigo,
        cantidad        : self.detalle.cantidad,
        costo           :0,
        precioUnitario  : self.detalle.precioUnitario,
+       montoImpuesto   : self.detalle.montoImpuesto,
        montoDescuento  : self.detalle.montoDescuento,
+       impuesto        : self.detalle.impuesto * 100,
        porcentajeDesc  : self.detalle.porcentajeDescuento,
        subTotal        : parseFloat(self.detalle.subTotal),
        montoTotalLinea : self.detalle.montoTotalLinea
@@ -1726,17 +1907,21 @@ function __calculate() {
     var totalVenta     = 0
     var subTotal       = 0
     var totalDescuento = 0
+    var totalImpuesto  = 0
     var totalComprobante        = 0
     self.detail.forEach(function(e){
         totalComprobante += e.montoTotalLinea
         subTotal         += e.subTotal >0?e.subTotal:0
         totalDescuento   += e.montoDescuento >0?e.montoDescuento:0
+        totalImpuesto    += __valorNumerico(e.montoImpuesto)
     });
     self.factura.totalDescuentos   = __valorNumerico(totalDescuento)
     self.factura.subTotal          = __valorNumerico(subTotal)
+    self.factura.totalImpuesto     = __valorNumerico(totalImpuesto) 
     self.factura.totalComprobante  = __valorNumerico(totalComprobante)
     self.totalComprobante          = formatoDecimales(self.factura.totalComprobante,2);
     self.totalDescuentos           = formatoDecimales(self.factura.totalDescuentos,2);
+    self.totalImpuesto             = formatoDecimales(self.factura.totalImpuesto,2);
     self.update(); 
     getSubTotalGeneral()
     $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
@@ -1753,6 +1938,8 @@ function getSubTotalGeneral(){
     var resultado = __valorNumerico(self.factura.subTotal) + __valorNumerico(self.factura.totalDescuentos)
     self.subTotalGeneral = formatoDecimales(resultado,2)
     self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2)
+    var resultadoTotalImpuesto = __valorNumerico(self.factura.totalImpuesto) + __valorNumerico(self.factura.totalImpuesto1)
+    self.totalImpuesto   = formatoDecimales(resultadoTotalImpuesto,2)
     self.update()
 }
 /**

@@ -1925,6 +1925,7 @@ function aplicarFactura(estado){
            mensajeError($.i18n.prop("factura.alert.plazoCredito"))
             return
         }
+        
     }else{
         // Si no es credito y el estado no es pendiente se debe verificar si ingresaron el monto a pagar
         if($("#tipoDoc").val() !="88"){
