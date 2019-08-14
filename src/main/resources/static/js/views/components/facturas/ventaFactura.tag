@@ -729,7 +729,6 @@
             </div>
             <div class="col-md-4 col-sm-4 col-lg-4 col-sx-12 ">
 		        <div class="box">
-				    <div class="box-header with-border"><h1 class="box-title">Detalles Facturacion</h1></div>
 				    <div class="box-body">
 				    <!--right sidebar-->
                         <aside class="right-sidebar">
@@ -766,6 +765,14 @@
                                         </div>
                                         
                                     </div>
+                                    <div class="pantallaBilletes">
+                                       <div class="billeteContainer">
+                                            <div class="billete" each={billetes}   onclick={_sumarBilletes}>
+                                              <img  alt="" class="img-responsive imagenesBilletes " src="{imagen}">
+                                            </div>
+                                       </div>
+                                    </div>
+
                                     
                             </article>
                         </aside>
@@ -774,22 +781,27 @@
 		    </div>
         </div>  
 </div>  
-<!--Fin Ventana de los billetes-->  
- <!--Ventana de los billetes-->
-            <div class="row" show={mostrarFormularioPago}>
-                <div   class="col-sx-12 col-sm-12 col-md-12 col-lg-12 " >
-                    <!--Seccion de Billetes-->
-                     <section  class="lista-articulos" >
-                        <div class="billetes1" each={billetes}   onclick={_sumarBilletes}>
-                            <img  alt="" class="sizeBilletes" src="{imagen}">
-                            <a href="#">{modena} {descripcion}</a>
-                        </div>
-                    </section>
-                   <!--Fin Seccion de Billetes-->
-                </div> 
-            </div>       
-        <!--Fin Ventana de los billetes-->  
+
 <style type="text/css">
+ .imagenesBilletes{
+      height: 90px;
+      width: 170px;
+    }
+   .pantallaBilletes{
+       display:flex;
+
+   }
+   .billeteContainer{
+       display:flex;
+       flex-flow: wrap;
+       flex-direction: row;
+   }
+   .billete{
+    cursor: pointer;
+    margin-right: 4%;
+    margin-top: 2%;
+
+   }
 .billetes1{
     margin-left: 1%;
     /* margin-bottom: 9px; */
@@ -801,7 +813,7 @@
 }
 .tituloTotal{
     font-weight: 600 !important;
-    font-size: 30px !important;
+    font-size: 25px !important;
     font-family: Roboto, sans-serif !important;
     color:#d3ed17 !important;
     text-shadow: 0px 0px 1px #ffffff;
@@ -820,7 +832,7 @@
 }
 .valorTotal{
     font-weight: 600 !important;
-    font-size: 30px !important;
+    font-size: 25px !important;
     font-family: Roboto, sans-serif !important;
     color: #30ed17 !important;
     text-shadow: 0px 0px 1px #ffffff;
@@ -852,6 +864,14 @@
 .elementoTotales{
     display: flex;
     justify-content: space-around;
+     font-weight: 600 !important;
+        font-size: 25px !important;
+        font-family: Roboto,sans-serif !important;
+        color: #30ed17 !important;
+        text-shadow: 0px 0px 1px #ffffff;
+        font-style: italic;
+        align-items: center;
+        text-align: left;
    
 }
 .sizeBilletes{
@@ -2674,11 +2694,7 @@ function cargarDetallesFacturaEnEspera(data){
     self.update()
     $(".nombreFactura").val(self.factura.nombreFactura)
     $(".correoAlternativo").val(self.factura.correoAlternativo)
-    $('#totalEfectivo').val(self.factura.totalComprobante)
-    $('#totalTarjeta').val(null)
-    $('#totalBanco').val(null)
-    $('#totalEfectivo').focus()
-    $('#totalEfectivo').select()
+   
    
     __aplicarExoneracionPorCliente()
 }
@@ -2754,7 +2770,7 @@ function evaluarFactura(data){
                     swal({
                         position: 'top-end',
                         type: 'success',
-                        title: mensaje,
+                        title: mostrarMensajeCreacionConsecutivo(self.facturaImprimir),
                         showConfirmButton: false,
                         timer: 1500
                      })
@@ -2771,7 +2787,7 @@ function evaluarFactura(data){
                 swal({
                 position: 'top-end',
                 type: 'success',
-                title:data.message,
+                title:mostrarMensajeCreacionConsecutivo(self.facturaImprimir),
                 showConfirmButton: false,
                 timer: 1000
                 })
@@ -3703,6 +3719,11 @@ function __seleccionarClientes() {
         
         
          $('#modalClientes').modal('hide') 
+         $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
+       $('#totalTarjeta').val(null)
+       $('#totalBanco').val(null)
+       $('#totalEfectivo').focus()
+       $('#totalEfectivo').select()
        
         
     });
@@ -3755,11 +3776,7 @@ function __aplicarExoneracionPorCliente(){
                     self.factura.totalBanco =0
                     self.factura.totalCambioPagar = self.factura.totalComprobante
                     self.update();
-                    $('#totalEfectivo').val(0)
-                    $('#totalTarjeta').val(null)
-                    $('#totalBanco').val(null)
-                    $('#totalEfectivo').focus()
-                    $('#totalEfectivo').select()
+                    
                     aplicaExo = true
                 }
                
@@ -3767,11 +3784,7 @@ function __aplicarExoneracionPorCliente(){
     }
     __calculate()
     if(aplicaExo == true){
-       $('#totalEfectivo').val(0)
-       $('#totalTarjeta').val(null)
-       $('#totalBanco').val(null)
-       $('#totalEfectivo').focus()
-       $('#totalEfectivo').select()
+     
        self.factura.totalCambioPagar = self.factura.totalComprobante
        self.factura.totalEfectivo =0
        self.factura.totalTarjeta =0
