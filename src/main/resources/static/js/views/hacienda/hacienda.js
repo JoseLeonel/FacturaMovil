@@ -207,6 +207,7 @@ function agregarInputsCombos(){
 
 			select.append( '<option value="'+$.i18n.prop("referencia.tipo.documento.nota.debito")+'">'+$.i18n.prop("referencia.tipo.documento.nota.debito")+'</option>' );       
 			select.append( '<option value="'+$.i18n.prop("compras.compras") +'">'+$.i18n.prop("compras.compras")+'</option>' );       
+			select.append( '<option value="'+$.i18n.prop("factura.tipo.documento.compras.simplificada") +'">'+$.i18n.prop("factura.tipo.documento.compras.simplificada")+'</option>' );       
 			$(this).html(select);
 		}
 	})

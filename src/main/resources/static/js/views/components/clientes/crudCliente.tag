@@ -162,7 +162,7 @@
                                         <input  type="text"  class="form-control numeroDocumentoExoneracion" id="numeroDocumentoExoneracion" name = "numeroDocumentoExoneracion" autofocus="autofocus"  value ="{cliente.numeroDocumentoExoneracion}">                    
                                     </div>
                                     <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                        <label >Fecha Exoneracion  </label> 
+                                        <label >Fecha Autorizacion  </label> 
                                         <input  type="text"  class="form-control fechaEmisionExoneracionSTR" id="fechaEmisionExoneracionSTR" name = "fechaEmisionExoneracionSTR" autofocus="autofocus"  value ="{cliente.fechaEmisionExoneracionSTR}">                    
                                     </div>
                                 </div>
