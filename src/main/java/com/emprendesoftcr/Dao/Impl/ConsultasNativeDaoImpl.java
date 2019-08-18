@@ -142,6 +142,9 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		
 	}
 	
+	/**
+	 * Consulta ventas
+	 */
 	public Collection<ConsultaIVANative> findByEmpresaAndEstadoAndFechasAndActividadComercial(Empresa empresa, String fechaInicial , String fechaFinal, Integer estado, Integer codigoActividadComercial){
 		
 		String queryStr = getQueryBase(ConsultaIVANative.class);
@@ -154,7 +157,9 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		return (Collection<ConsultaIVANative>) query.getResultList();
 	}
 	
-	
+	/**
+	 * Consulta compras
+	 */
 	public Collection<ConsultaComprasIvaNative> findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(Empresa empresa, String fechaInicial , String fechaFinal, Integer estado, Integer codigoActividadComercial){
 		
 		String queryStr = getQueryBase(ConsultaComprasIvaNative.class);
