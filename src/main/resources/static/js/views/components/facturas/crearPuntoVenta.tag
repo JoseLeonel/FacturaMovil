@@ -92,7 +92,13 @@
                                         <input type="text" class="campo nota" id="nota" name="nota" value="{factura.nota}">
                                     </div>
                                     <h3> <p class="text-primary">{$.i18n.prop("factura.emisor")}</p></h3>
+                                    <div class="input-group ">
+                                        <span onclick = {__CambiarNombreTiquete} title="AGREGAR CLIENTE NUEVO" class="input-group-addon btnClientes" id="add-new-client"> 
+                                        <small class="fa fa-plus" style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
+                                        <span class="fa fa-user" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"></span> 
+                                    </div>
                                     <div class="form-group ">
+                                        </span>
                                         <input   type="hidden" class="form-control" id="cliente" name="cliente" value="{cliente.id}">
                                         <label>{$.i18n.prop("factura.cliente")}</label> 
                                         <input onclick = {_EscogerClientes}  type="text" id="nombreCliente" name="nombreCliente" class="campo"  value="{cliente.nombreCompleto}" readonly>
@@ -136,7 +142,17 @@
                                     <div  class="form-group " show={empresa.pantChino == 0}>
                                         <label class="{labelTotales} ">{$.i18n.prop("factura.resumen.banco")} </label> 
                                         <input onclick={_SeleccionarBanco} onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number"  onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra}  totalBanco"  id="totalBanco" name="totalBanco"  value="{factura.totalBanco}" >
-                                    </div> 
+                                    </div>
+                                    <div class="botonesContainer">
+                                       <div class="boton">
+                                           <button onclick={_AtrasFacturaFinal} class="btn-dark-gray btn-back pull-left">  {$.i18n.prop("btn.volver")}</button>
+                                       </div> 
+                                       <div class="boton">
+                                           <button onclick={__AplicarYcrearFactura}  class="btn-green btn-add pull-right"> </i> {$.i18n.prop("btn.aplicar")}</button>
+                                       </div>
+                                       
+                                    </div>
+
                                 </div>
                             </div>
                             <input type="hidden" id='codigoActividad' name='codigoActividad'  value="{factura.codigoActividad}" >
@@ -162,16 +178,12 @@
                             <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
                         </form>   
                     </div>
-                    <div class="box-footer">
-                        <button onclick={_AtrasFacturaFinal} class="btn-dark-gray btn-back pull-left">  {$.i18n.prop("btn.volver")}</button>
-                        <button onclick={__AplicarYcrearFactura}  class="btn-green btn-add pull-right"> </i> {$.i18n.prop("btn.aplicar")}</button>
-                    </div>
+                  
                 </div>
                   
             </div>
             <div class="col-md-4 col-sm-4 col-lg-4 col-sx-12 ">
 		        <div class="box">
-				    <div class="box-header with-border"><h1 class="box-title">Detalles Facturacion</h1></div>
 				    <div class="box-body">
                         <aside class="right-sidebar">
                             <!--Booking details-->
@@ -193,7 +205,13 @@
                                 <div class="{claseCambioDinero}" show={mostrarCamposIngresoContado && soloParaChinos == true }>
                                     <p class="total label-totalesChinos" style="text-align:right;">{$.i18n.prop("factura.resumen.cambio")} <span id="lblTotal">{totalCambioPagarSTR}</span></p>    
                                 </div>
-
+                                <div class="pantallaBilletes">
+                                   <div class="billeteContainer">
+                                      <div class="billete" each={billetes}   onclick={_sumarBilletes}>
+                                          <img  alt="" class="img-responsive imagenesBilletes " src="{imagen}">
+                                      </div>
+                                   </div>
+                                </div>
                             </article>
                         </aside>
                     </div><!-- fin box-body-->
@@ -203,20 +221,6 @@
          
 </div>  
 <!--Fin Ventana de los billetes-->      
-    <!--Ventana de los billetes-->
-            <div class="row" show={mostrarFormularioPago}>
-                <div   class="col-sx-12 col-sm-12 col-md-12 col-lg-12 " >
-                    <!--Seccion de Billetes-->
-                    <section  class="lista-articulos" >
-                        <div class="product-item" each={billetes}   onclick={_sumarBilletes}>
-                            <img style = "height:110px;width:180px" alt="" class="img-responsive " src="{imagen}">
-                            <a href="#">{modena} {descripcion}</a>
-                        </div>
-                    </section>
-                   <!--Fin Seccion de Billetes-->
-                </div> 
-            </div>       
-        <!--Fin Ventana de los billetes--> 
  <div class="ventaEsperaSeleccionada" show={factura.id !=null && mostrarFormularioPago == false}>
        <div class="tituloVentaEspera"> 
            Venta en Espera: {factura.consecutivoProforma != null && factura.consecutivoProforma.length > 0  ?factura.consecutivoProforma :factura.id} 
@@ -599,6 +603,70 @@
 
 
 <style type="text/css"  >
+  .btn-dark-gray {
+    background-color: #3D3E42;
+    color: #FFF;
+    border-radius: 5px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 30px!important;
+    font-weight: bold;
+    margin-right: 15px;
+    border: none;
+    float: right;
+    cursor: pointer;
+   }
+   .btn-green {
+    background-color: #4cae4c;
+    color: #FFF;
+    border-radius: 5px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 30px !important;
+    font-weight: bold;
+    margin-right: 15px;
+    border: none;
+    float: right;
+    cursor: pointer;
+}
+    .botonesContainer{
+       display:flex;
+    }
+    .boton{
+       flex: 1;
+    }
+    .imagenesBilletes{
+      height: 90px;
+      width: 170px;
+    }
+   .pantallaBilletes{
+       display:flex;
+
+   }
+   .billeteContainer{
+       display:flex;
+       flex-flow: wrap;
+       flex-direction: row;
+   }
+   .billete{
+    cursor: pointer;
+    margin-right: 4%;
+    margin-top: 2%;
+
+   }
+.input-group {
+    position: relative;
+    display: flex;
+    border-collapse: separate;
+}
+     .input-group-addon.btnClientes {
+       color: #66b12f;
+        cursor: pointer;
+    }
     .elementoTotalesChino{
         font-weight: 600 !important;
         font-size: 32px !important;
@@ -618,10 +686,8 @@
         color: #30ed17 !important;
         text-shadow: 0px 0px 1px #ffffff;
         font-style: italic;
-        margin-left: 4%;
-        margin-bottom: 2%;
-        margin-top: 2%;
-        margin-right: 2%;
+        align-items: center;
+        text-align: left;
     }
     .TotalesContainer{
         display:flex;
@@ -1112,7 +1178,7 @@
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
              actualizaElPlazoDiasCredito();
-  //           disableF5(evento);
+             disableF5(evento);
         }, false );
 
       
@@ -1137,28 +1203,28 @@
 
 
     
- //   function disableF5(e) { 
-   //    // alert(e.keyCode)
-//        if ((e.which || e.keyCode) == 116) e.preventDefault(); 
-//        if ((e.which || e.keyCode) == 117) e.preventDefault(); 
-//        if(e.target.id != 'codigo' && e.target.id != 'precioVenta' && e.target.id != 'nota'
-//           && e.target.id != 'correoAlternativo' && e.target.id != 'nombreFactura' &&
-//           e.target.id != 'totalEfectivo' && e.target.id != 'totalTarjeta' &&
-//           e.target.id != 'totalBanco' && e.target.id != 'plazoCreditoL' && e.target.id != 'fechaCredito'
-//           && e.target.id != 'aplicarDescuento' && e.target.id != 'cambiarCantidadArticulo'){
-//           if ((e.which || e.keyCode) == 8) {
-//               $('.codigo').focus()
-//               e.preventDefault()
-//              
-//               }; 
-//           if ((e.which || e.keyCode) == 13) {
-//               $('.codigo').focus()
-//               e.preventDefault()
-//               
-//               }; 
-//        }
-//         
-//        }
+    function disableF5(e) { 
+       // alert(e.keyCode)
+        if ((e.which || e.keyCode) == 116) e.preventDefault(); 
+        if ((e.which || e.keyCode) == 117) e.preventDefault(); 
+        if(e.target.id != 'codigo' && e.target.id != 'precioVenta' && e.target.id != 'nota'
+           && e.target.id != 'correoAlternativo' && e.target.id != 'nombreFactura' &&
+           e.target.id != 'totalEfectivo' && e.target.id != 'totalTarjeta' &&
+           e.target.id != 'totalBanco' && e.target.id != 'plazoCreditoL' && e.target.id != 'fechaCredito'
+           && e.target.id != 'aplicarDescuento' && e.target.id != 'cambiarCantidadArticulo'){
+           if ((e.which || e.keyCode) == 8) {
+               $('.codigo').focus()
+               e.preventDefault()
+              
+               }; 
+           if ((e.which || e.keyCode) == 13) {
+               $('.codigo').focus()
+               e.preventDefault()
+               
+               }; 
+        }
+         
+        }
 
 
 
@@ -2356,10 +2422,11 @@ function evaluarFactura(data){
                 self.update()
                 localStorage.setItem('facturaReimprimir', JSON.stringify(self.facturaReimprimir));
                 if(self.vueltoImprimir == 0 && self.empresa.imprimirSiempre == 0){
-                    var mensaje = self.facturaImprimir.numeroConsecutivo !=null ?"Cons# :"+   self.facturaImprimir.numeroConsecutivo:"Tiquete# :"+   self.facturaImprimir.id        
+                    /**llamada desde factura.js**/
+                    
                     swal({
                         type: 'success',
-                        title: mensaje,
+                        title: mostrarMensajeCreacionConsecutivo(self.facturaImprimir),
                         showConfirmButton: false,
                         timer: 1500
                      })
@@ -2372,9 +2439,11 @@ function evaluarFactura(data){
                       riot.mount('ptv-imprimir',{parametros:parametros});
                 }
         }else{
+             
+
                 swal({
                 type: 'success',
-                title:data.message,
+                title:mostrarMensajeCreacionConsecutivo(self.facturaImprimir),
                 showConfirmButton: false,
                 timer: 1000
                 })
@@ -2384,6 +2453,8 @@ function evaluarFactura(data){
           
     }
 }
+
+
 /**
 *  Lista de las facturas pendientes por el usuario
 **/
@@ -3650,6 +3721,11 @@ function __seleccionarClientes() {
         }else{
             __ComboTipoDocumentos(0)
         }
+       $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
+       $('#totalTarjeta').val(null)
+       $('#totalBanco').val(null)
+       $('#totalEfectivo').focus()
+       $('#totalEfectivo').select()
     });
 }
 
@@ -3727,11 +3803,7 @@ function __aplicarExoneracionPorCliente(){
                     self.factura.totalBanco =0
                     self.factura.totalCambioPagar = self.factura.totalComprobante
                     self.update();
-                    $('#totalEfectivo').val(0)
-                    $('#totalTarjeta').val(null)
-                    $('#totalBanco').val(null)
-                    $('#totalEfectivo').focus()
-                    $('#totalEfectivo').select()
+                 
                     aplicaExo = true
                 }
                
@@ -3739,11 +3811,7 @@ function __aplicarExoneracionPorCliente(){
     }
     __calculate()
     if(aplicaExo == true){
-       $('#totalEfectivo').val(0)
-       $('#totalTarjeta').val(null)
-       $('#totalBanco').val(null)
-       $('#totalEfectivo').focus()
-       $('#totalEfectivo').select()
+      
        self.factura.totalCambioPagar = self.factura.totalComprobante
        self.factura.totalEfectivo =0
        self.factura.totalTarjeta =0
@@ -3753,6 +3821,7 @@ function __aplicarExoneracionPorCliente(){
        self.update();
 
     }
+    
 
 }
 

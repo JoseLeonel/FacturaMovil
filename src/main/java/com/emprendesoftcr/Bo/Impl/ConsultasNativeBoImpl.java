@@ -94,8 +94,8 @@ public class ConsultasNativeBoImpl implements ConsultasNativeBo {
 	public Collection<ConsultaComprasIvaNative> findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(Empresa empresa, 
 			String fechaInicial , String fechaFinal, Integer estado, Integer codigoActividadComercial){
 		return consultasNativeDao.findByComprasEmpresaAndEstadoAndFechasAndActividadComercial(empresa, fechaInicial, fechaFinal, estado, codigoActividadComercial);
-	}
-	
+			}
+	@Override
 	public Collection<CompraSimplificadaNative> findComprasSimplificadasByFechaAndEstadoAndEmpresa(Empresa empresa, String fechaInicial, String fechaFinal, Long idProveedor, Integer estado, Integer idUsuario) {
 		return consultasNativeDao.findComprasSimplificadasByFechaAndEstadoAndEmpresa(empresa, fechaInicial, fechaFinal, idProveedor, estado, idUsuario);
 	}

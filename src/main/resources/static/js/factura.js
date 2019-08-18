@@ -55,7 +55,24 @@ $(document)
 			    }
 			}
 
-
+/***
+ * Funcion llamaa de venta nueva post  y restaurante
+ * 
+ * **/
+	function mostrarMensajeCreacionConsecutivo(data){
+	    var mensaje = ""  
+	    if(data.tipoDoc == "01" && data.estado == 2 ){
+	        mensaje  = "Factura :" + data.numeroConsecutivo
+	    }else if(data.tipoDoc == "04" && data.estado == 2){
+	        mensaje  = "Tiquete :" + data.numeroConsecutivo
+	    }else  if(data.tipoDoc == "88" && data.estado == 3){
+	        mensaje  = "Proforma:" + data.consecutivoProforma
+	    }else {
+	        mensaje = "En Espera" + + data.id
+	    }
+	    return mensaje;
+	}
+	
 /** Funciones en ventas nueva , venta post , restaurante comunes **/
 	/**
 	* Monto de Total

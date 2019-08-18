@@ -4369,6 +4369,11 @@ function __seleccionarClientes() {
         
         
          $('#modalClientes').modal('hide') 
+        $('#totalEfectivo').val(self.factura.totalComprobante.toFixed(2))
+        $('#totalTarjeta').val(null)
+        $('#totalBanco').val(null)
+        $('#totalEfectivo').focus()
+        $('#totalEfectivo').select()
          
         
     });
@@ -4423,11 +4428,7 @@ function __aplicarExoneracionPorCliente(){
                     self.factura.totalBanco =0
                     self.factura.totalCambioPagar = self.factura.totalComprobante
                     self.update();
-                    $('#totalEfectivo').val(0)
-                    $('#totalTarjeta').val(null)
-                    $('#totalBanco').val(null)
-                    $('#totalEfectivo').focus()
-                    $('#totalEfectivo').select()
+                   
                     aplicaExo = true
                 }
                
@@ -4435,11 +4436,7 @@ function __aplicarExoneracionPorCliente(){
     }
     __calculate()
     if(aplicaExo == true){
-       $('#totalEfectivo').val(0)
-       $('#totalTarjeta').val(null)
-       $('#totalBanco').val(null)
-       $('#totalEfectivo').focus()
-       $('#totalEfectivo').select()
+      
        self.factura.totalCambioPagar = self.factura.totalComprobante
        self.factura.totalEfectivo =0
        self.factura.totalTarjeta =0
