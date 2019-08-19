@@ -7,7 +7,7 @@
 			<div class="encabezado1">
 			</div>
 			<div class="encabezado2">
-				<p class="titulo">Reporte mensual de IVA</p>	
+				<p class="titulo">Reporte mensual de {parametros.titulo } IVA</p>	
 			</div>
 			<div class="encabezado3">
 			</div>
