@@ -76,7 +76,7 @@ public class KardexCommand {
 		this.cantidadSolicitadaSTR = kardex.getCantidadSolicitadaSTR();
 		this.costoActualSTR = kardex.getCostoActualSTR();
 		this.costoNuevoSTR = kardex.getCostoNuevoSTR();
-		this.totalCostoActualSTR = kardex.getCostoActualSTR();
+		this.totalCostoActualSTR = kardex.getTotalCostoActualSTR();
 		this.totalCostoNuevoSTR = kardex.getTotalCostoNuevoSTR();
 		
 

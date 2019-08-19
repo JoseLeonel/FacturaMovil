@@ -117,4 +117,38 @@ public class KardexDaoImpl implements KardexDao {
 		}
 
 	}
+
+	@Override
+	public void entradaCosto(Articulo articulo, Double costoNuevo, Double cantidadNueva, String observacion, String consecutivo, String tipo, String motivo, Usuario usuarioSesion) throws Exception {
+		Double resultado = Utils.roundFactura(cantidadNueva + articulo.getCantidad(),3);
+		Double costoPromedio =articuloDao.costoPromedio(articulo.getCosto(), costoNuevo, articulo.getCantidad(), cantidadNueva); 
+		
+		Kardex kardex = new Kardex();
+		Double costoTotalNuevo = resultado * costoPromedio;
+		kardex.setCantidadSolicitada(cantidadNueva);
+		kardex.setCantidadActual(articulo.getCantidad());
+		kardex.setCostoActual(articulo.getCosto());
+		kardex.setTotalCostoActual(articulo.getCosto() !=null?articulo.getCosto() * articulo.getCantidad():Constantes.ZEROS_DOUBLE);
+		kardex.setCodigo(articulo.getCodigo());
+		kardex.setObservacion(observacion);
+		kardex.setCantidadNueva(resultado);
+		kardex.setCostoNuevo(costoNuevo);
+		kardex.setTotalCostoNuevo(costoTotalNuevo);
+		kardex.setConsecutivo(consecutivo);
+		kardex.setTipo(tipo);
+		kardex.setMotivo(motivo);
+		kardex.setCreated_at(new Date());
+		kardex.setUpdated_at(new Date());
+		kardex.setUsuario(usuarioSesion);
+		kardex.setArticulo(articulo);
+		articulo.setCantidad(resultado);
+		articulo.setCosto(costoPromedio);
+		articuloDao.modificar(articulo);
+		agregar(kardex);
+		
+	}
+
+	
+	
+	
 }

@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.emprendesoftcr.fisco.MapEnums;
+
 /**
  * Detalle de Recepcion de la factura, aceptacion de facturas de un emisor.
  * @author Jairo Cisneros.
@@ -302,6 +304,12 @@ public class RecepcionFacturaDetalle implements Serializable {
 		return impuestoTarifa;
 	}
 
+	public String getImpuestoCodigoSTR() {
+		return  impuestoCodigo !=null?MapEnums.ENUM_TIPOS_IMPUESTOS.get(impuestoCodigo):impuestoCodigo;
+	}
+	public String getImpuestoCodigoTarifaSTR() {
+		return impuestoCodigoTarifa !=null?MapEnums.ENUM_TARIFAS_IMPUESTOS.get(impuestoCodigoTarifa.toString()):impuestoCodigoTarifa.toString();
+	}
 
 	
 	public void setImpuestoTarifa(Double impuestoTarifa) {

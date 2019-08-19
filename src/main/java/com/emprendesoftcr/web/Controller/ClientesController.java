@@ -190,7 +190,21 @@ public class ClientesController {
 			clienteCommand.setCedula(clienteCommand.getCedula() == null ? Constantes.EMPTY : clienteCommand.getCedula());
 			clienteCommand.setNombreCompleto(clienteCommand.getNombreCompleto() == null ? Constantes.EMPTY : clienteCommand.getNombreCompleto());
 			clienteCommand.setCorreoElectronico(clienteCommand.getCorreoElectronico() == null ? Constantes.EMPTY : clienteCommand.getCorreoElectronico());
-
+			clienteCommand.setNombreComercial(clienteCommand.getNombreComercial() == null ? Constantes.EMPTY : clienteCommand.getNombreComercial());
+			clienteCommand.setOtraSena(clienteCommand.getOtraSena() == null ? Constantes.EMPTY : clienteCommand.getOtraSena());
+			clienteCommand.setDescuento(clienteCommand.getDescuento() == null ? Constantes.ZEROS : clienteCommand.getDescuento());
+			clienteCommand.setEstado(clienteCommand.getEstado() == null ? Constantes.ESTADO_ACTIVO : clienteCommand.getEstado());
+			clienteCommand.setIdentificacionExtranjero(clienteCommand.getIdentificacionExtranjero() == null ? Constantes.EMPTY : clienteCommand.getIdentificacionExtranjero());
+			clienteCommand.setCorreoElectronico1(clienteCommand.getCorreoElectronico1() == null ? Constantes.EMPTY : clienteCommand.getCorreoElectronico1());
+			clienteCommand.setCorreoElectronico2(clienteCommand.getCorreoElectronico2() == null ? Constantes.EMPTY : clienteCommand.getCorreoElectronico2());
+			clienteCommand.setCorreoElectronico3(clienteCommand.getCorreoElectronico3() == null ? Constantes.EMPTY : clienteCommand.getCorreoElectronico3());
+			clienteCommand.setObservacionVenta(clienteCommand.getObservacionVenta() == null ? Constantes.EMPTY : clienteCommand.getObservacionVenta());
+			clienteCommand.setNombreInstitucionExoneracion(clienteCommand.getNombreInstitucionExoneracion() == null ? Constantes.EMPTY : clienteCommand.getNombreInstitucionExoneracion());
+			clienteCommand.setNumeroDocumentoExoneracion(clienteCommand.getNumeroDocumentoExoneracion() == null ? Constantes.EMPTY : clienteCommand.getNumeroDocumentoExoneracion());
+			clienteCommand.setTipoDocumentoExoneracion(clienteCommand.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : clienteCommand.getTipoDocumentoExoneracion());
+			clienteCommand.setPorcentajeExoneracion(clienteCommand.getPorcentajeExoneracion() == null ? Constantes.ZEROS : clienteCommand.getPorcentajeExoneracion());
+			clienteCommand.setLibreImpuesto(clienteCommand.getLibreImpuesto() == null ? Constantes.LIBRE_IMPUESTOS_INACTIVO : clienteCommand.getLibreImpuesto());
+       
 			if (clienteCommand.getCedula().equals(Constantes.EMPTY)) {
 				result.rejectValue("cedula", Constantes.KEY_REQUERIDO);
 			}
@@ -231,7 +245,6 @@ public class ClientesController {
 							result.rejectValue("porcentajeExoneracion", "error.cliente.zeros.porcentajeExoneracion");
 						}
 					}
-					
 
 				}
 			}
@@ -270,6 +283,13 @@ public class ClientesController {
 					cliente.setTipoDocumentoExoneracion(clienteCommand.getTipoDocumentoExoneracion());
 					cliente.setPorcentajeExoneracion(clienteCommand.getPorcentajeExoneracion());
 
+				}else {
+					cliente.setFechaEmisionExoneracion(null);
+					cliente.setNombreInstitucionExoneracion(Constantes.EMPTY);
+					cliente.setNumeroDocumentoExoneracion(Constantes.EMPTY);
+					cliente.setTipoDocumentoExoneracion(Constantes.EMPTY);
+					cliente.setPorcentajeExoneracion(Constantes.ZEROS);
+					
 				}
 			}
 			cliente.setCodigoPais(clienteCommand.getCodigoPais());
@@ -283,7 +303,7 @@ public class ClientesController {
 			cliente.setCanton(Constantes.EMPTY);
 			cliente.setBarrio(Constantes.EMPTY);
 			cliente.setCelular(Constantes.ZEROS);
-			cliente.setTelefono(clienteCommand.getTelefono() == null?Constantes.ZEROS:clienteCommand.getTelefono());
+			cliente.setTelefono(clienteCommand.getTelefono() == null ? Constantes.ZEROS : clienteCommand.getTelefono());
 
 			cliente.setEmpresa(usuarioSesion.getEmpresa());
 			cliente.setCreated_at(new Date());

@@ -14,7 +14,6 @@ import com.emprendesoftcr.Bo.ArticuloBo;
 import com.emprendesoftcr.Dao.ArticuloDao;
 import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Categoria;
-import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.web.command.TotalInventarioCommand;
 

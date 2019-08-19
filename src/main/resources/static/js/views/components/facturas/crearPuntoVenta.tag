@@ -93,7 +93,7 @@
                                     </div>
                                     <h3> <p class="text-primary">{$.i18n.prop("factura.emisor")}</p></h3>
                                     <div class="input-group ">
-                                        <span onclick = {__CambiarNombreTiquete} title="AGREGAR CLIENTE NUEVO" class="input-group-addon btnClientes" id="add-new-client"> 
+                                        <span onclick = {__ClienteNuevo} title="AGREGAR CLIENTE NUEVO" class="input-group-addon btnClientes" id="add-new-client"> 
                                         <small class="fa fa-plus" style="margin-top:0px; position: absolute; left: 8px; top:8px"></small>
                                         <span class="fa fa-user" aria-hidden="true" style="margin-left:5px; margin-top: 3px;"></span> 
                                     </div>
@@ -430,7 +430,6 @@
                         <table id="tableListarFacturasDia" class="display table responsive table-hover nowrap table-condensed tableListarFacturasDia "   cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                
                                 <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}            </th>
                                 <th class = "table-header" >{$.i18n.prop("factura.documento")}                </th>
                                 <th class = "table-header" >{$.i18n.prop("factura.cliente")}                  </th>
@@ -442,7 +441,6 @@
                             </thead>
                                 <tfoot style="display: table-header-group;">
                                     <tr>
-                                        
                                         <th>{$.i18n.prop("factura.fecha.emision")}            </th>
                                         <th>{$.i18n.prop("factura.documento")}                </th>
                                         <th>{$.i18n.prop("factura.cliente")}                  </th>
@@ -599,10 +597,86 @@
 <!--Fin Cambiar Descuento-->
 
 
+<div id='modalAgregarClienteNuevo' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header with-border table-header" >
+                <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> Agregar Cliente Nuevo </h4>
+            </div>
+            <div class="modal-body">
+                <form id="formularioAgregarCliente" name ="formularioAgregarCliente" >
+                    <div class="row">
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.cedula")} <span class="requeridoDato">*</span></label>
+                            <input type="text" class="form-control tamanoClienteNuevo cedula" id="cedula" name="cedula"  onkeypress = {__ConsultarHacienda} onBlur ={__ConsultarHaciendaBlur} >
+                        </div>
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.tipoCedula")}  <span class="requeridoDato">*</span></label>
+                            <select  class="form-control tipoCedula  tamanoClienteNuevo" id="tipoCedula" name="tipoCedula" >
+                                <option  each={tipoCedulas.data}  value="{valor}"   >{descripcion}</option>
+                            </select>
+                        </div>                            
+                    </div>
+
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.nombreCompleto")}  <span class="requeridoDato">*</span></label>
+                            <input type="text" class="form-control nombreCompleto tamanoClienteNuevo"  id="nombreCompleto" name="nombreCompleto" >
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
+                            <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.correoElectronico")}</label>
+                            <input type="text" class="form-control correoElectronico tamanoClienteNuevo"  id="correoElectronico" name="correoElectronico"  >
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.codigoPais")} <span class="requeridoDato">*</span> </label>
+                            <input type="text" class="form-control codigoPais tamanoClienteNuevo"  id="codigoPais" name="codigoPais"  >
+                        </div>
+                        <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                            <label class="tituloClienteNuevo" >{$.i18n.prop("cliente.telefono")} </label>
+                            <input type="text" class="form-control telefono tamanoClienteNuevo"  id="telefono" name="telefono" >
+                        </div>
+                    </div>
+ 
+                </form>    
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                    <button onclick ={__regresarClienteNuevo}  type="button" class="btn-dark-gray btn-back  pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                        {$.i18n.prop("btn.volver")}
+                    </button>
+                </div>
+                <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" show="{mostrarBotonAgregarCliente == true?true:false}">
+                    <button  onclick={__AplicarAgregarCliente}   class=" btn-green pull-right" >  Agregar Cliente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
 <style type="text/css"  >
+  .tamanoClienteNuevo{
+    font-size: 30px;
+    font-weight: 600;
+    color: black;
+    height: 10%;
+
+  }
+  .tituloClienteNuevo{
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 30px;
+    font-weight: 600;
+    color: black;
+  }
   .btn-dark-gray {
     background-color: #3D3E42;
     color: #FFF;
@@ -1095,7 +1169,7 @@
     self.tamanoLetra = "tamanoLetraConBanco"
     self.labelTotales = "labelTotalesConBanco"
     self.campoTotales = "campoTotalesConBanco"
-
+    self.mostrarBotonAgregarCliente = false  
     self.actividadComercial = {
         codigo:"",
         descripcion:""
@@ -1204,6 +1278,7 @@
 
     
     function disableF5(e) { 
+   
        // alert(e.keyCode)
         if ((e.which || e.keyCode) == 116) e.preventDefault(); 
         if ((e.which || e.keyCode) == 117) e.preventDefault(); 
@@ -1211,7 +1286,10 @@
            && e.target.id != 'correoAlternativo' && e.target.id != 'nombreFactura' &&
            e.target.id != 'totalEfectivo' && e.target.id != 'totalTarjeta' &&
            e.target.id != 'totalBanco' && e.target.id != 'plazoCreditoL' && e.target.id != 'fechaCredito'
-           && e.target.id != 'aplicarDescuento' && e.target.id != 'cambiarCantidadArticulo'){
+           && e.target.id != 'aplicarDescuento' && e.target.id != 'cambiarCantidadArticulo'
+           && e.target.id != 'cedula' && e.target.id != 'nombreCompleto'
+           && e.target.id != 'correoElectronico' && e.target.id != 'codigoPais'
+           && e.target.id != 'telefono'){
            if ((e.which || e.keyCode) == 8) {
                $('.codigo').focus()
                e.preventDefault()
@@ -1225,6 +1303,266 @@
         }
          
         }
+
+
+/**
+*Consulta hacienda
+**/
+__ConsultarHaciendaBlur(){
+    var cedula = $('#cedula').val()
+    getClienteHacienda(cedula)
+
+}
+__ConsultarHacienda(e){
+     if (e.keyCode != 13) {
+        return;
+    } 
+    var cedula = $('#cedula').val()
+    getClienteHacienda(cedula)
+}
+function getClienteHacienda(cedula){
+    self.mostrarBotonAgregarCliente = false
+    self.clienteHacienda= {
+        nombre:"",
+        tipoIdentificacion:"",
+        regimen:{
+            codigo:"",
+            descripcion:""
+        },
+        actividades:[]
+    }
+    self.cliente               = {}
+    self.update()
+    $.ajax({
+    "url": "https://api.hacienda.go.cr/fe/ae?identificacion="+ cedula,
+    "method": "GET",
+    statusCode: {
+        
+        404: function() {
+            alert( "Cedula invalidad" )
+            __listadoTipoCedulas()
+        }
+    }
+    }).done(function (response) {
+        self.clienteHacienda = response
+        self.mostrarBotonAgregarCliente = true
+        self.update()
+        
+        __listadoTipoCedulas()
+         $('#nombreCompleto').val(self.clienteHacienda.nombre)
+    });
+}
+/**
+*  Mostrar listado datatable TipoCedulas
+**/
+function __listadoTipoCedulas(){
+    self.tipoCedulas               = {data:[]}  // definir el data del datatable
+    self.update()
+    if(self.clienteHacienda.tipoIdentificacion == "01") {
+        self.tipoCedulas.data.push({
+            valor:"01",
+            descripcion:$.i18n.prop("tipo.cedula.fisica")
+        })
+    }
+    if(self.clienteHacienda.tipoIdentificacion == "02") {
+        self.tipoCedulas.data.push({
+            valor:"02",
+            descripcion:$.i18n.prop("tipo.cedula.juridica")
+        })
+    }
+    if(self.clienteHacienda.tipoIdentificacion == "03" ){
+        self.tipoCedulas.data.push({
+            valor:"03",
+            descripcion:$.i18n.prop("tipo.cedula.dimex")
+        })
+    }    
+    if(self.clienteHacienda.tipoIdentificacion == "04" ){
+     self.tipoCedulas.data.push({
+        valor:"04",
+        descripcion:$.i18n.prop("tipo.cedula.nite")
+    })
+    }
+    if(self.tipoCedulas.data.length == 0){
+        self.tipoCedulas.data.push({
+            valor:"01",
+            descripcion:$.i18n.prop("tipo.cedula.fisica")
+        })
+        self.tipoCedulas.data.push({
+            valor:"02",
+            descripcion:$.i18n.prop("tipo.cedula.juridica")
+        })
+         self.tipoCedulas.data.push({
+            valor:"03",
+            descripcion:$.i18n.prop("tipo.cedula.dimex")
+        })
+        self.tipoCedulas.data.push({
+          valor:"04",
+          descripcion:$.i18n.prop("tipo.cedula.nite")
+        })
+
+    }
+    self.update()
+}
+
+
+__ClienteNuevo(){
+    $("#formularioAgregarCliente").validate(reglasDeValidacionClienteNuevo());
+    $("#nombreCompleto").attr("maxlength", 80);
+    $("#cedula").attr("maxlength", 20);
+    $("#correoElectronico").attr("maxlength", 80);
+    $("#telefono").attr("maxlength", 8);
+    $('#codigoPais').mask('000', {
+		'translation' : {
+			0 : {
+				pattern : /[0-9]/
+			}
+		}
+	});
+    $('#cedula').mask('000000000000', {
+		'translation' : {
+			0 : {
+				pattern : /[0-9]/
+			}
+		}
+	});
+    $('.telefono').mask('00000000', {
+            'translation' : {
+                0 : {
+                    pattern : /[0-9]/
+                }
+            }
+	})
+
+    $("#cedula").val(null)
+    $("#nombreCompleto").val(null)
+    $("#correoElectronico").val(null)
+    $("#codigoPais").val(506)
+    $("#telefono").val(null)
+   
+    $('#modalAgregarClienteNuevo').modal({backdrop: 'static', keyboard: true}) 
+    $('#modalAgregarClienteNuevo').modal('show')  
+    $('#cedula').select()
+    $("#cedula").focus()   
+}
+
+/**
+* Camps requeridos
+**/
+var reglasDeValidacionClienteNuevo = function() {
+	var validationOptions = $.extend({}, formValidationDefaults, {
+		rules : {
+			cedula : {
+				required : true,
+                maxlength:12,
+                minlength:9,
+			},
+
+			nombreCompleto : {
+				required : true,
+                maxlength:80,
+                minlength:1,
+                lettersOnly : true
+			},
+			correoElectronico : {
+                required : true,
+                maxlength:60,
+                minlength:1,
+                email:true
+			},
+            codigoPais : {
+                required : true,
+                minlength:3,
+
+			}                          
+		},
+		ignore : []
+
+	});
+	return validationOptions;
+};
+/**
+*  Regresar al listado
+**/
+__regresarClienteNuevo(){
+    $('#modalAgregarClienteNuevo').modal('hide')
+}
+
+/**
+*   Agregar 
+**/
+__AplicarAgregarCliente(){
+     if ($("#formularioAgregarCliente").valid()) {
+        aplicarCreacionClienteNuevo()
+    }else{
+        swal({
+  	        title: '',
+   	        text: "Error Faltan datos requeridos",
+   	        type: 'error',
+   	        showCancelButton: false,
+   	        confirmButtonText: 'Aceptar',
+        })
+        return true
+    }
+}
+
+function aplicarCreacionClienteNuevo(){
+    var formulario = $("#formularioAgregarCliente").serialize();
+    swal({
+        title: '',
+        text: $.i18n.prop("cliente.mensaje.alert.agregar"),
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: '#00539B',
+        cancelButtonColor: '#d33',
+        confirmButtonText:$.i18n.prop("confirmacion.si"),
+        cancelButtonText: $.i18n.prop("confirmacion.no"),
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+    }).then(function (isConfirm) {
+       if(isConfirm){
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            data : formulario,
+            url : 'AgregarClienteAjax.do',
+            success : function(data) {
+                if (data.status != 200) {
+                   	serverMessageJson(data);
+                    if (data.message != null && data.message.length > 0) {
+                      	swal({
+                           title: '',
+                           text: data.message,
+                           type: 'error',
+                           showCancelButton: false,
+                           confirmButtonText: 'Aceptar',
+                        })
+                    }
+                } else {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                       self.cliente = modeloTabla
+                       self.update()
+                    });
+                   	serverMessageJson(data);
+                    swal({
+                        title: '',
+                        text: data.message,
+                        type: 'success',
+                        showCancelButton: false,
+                        confirmButtonText: 'Aceptar',
+                    })
+                }
+            },
+            error : function(xhr, status) {
+                console.log(xhr);
+                mensajeErrorServidor(xhr, status);
+            }
+        });
+     }
+    })        
+
+}
+
+
 
 
 

@@ -74,7 +74,7 @@
                                                     
                                 <div class="row">    
                                     <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                        <label  >{$.i18n.prop("cliente.correoElectronico1")}</label>
+                                        <label >{$.i18n.prop("cliente.correoElectronico1")}</label>
                                         <input type="text" class="form-control correoElectronico1" placeHolder ="{$.i18n.prop("cliente.correoElectronico1")}" id="correoElectronico1" name="correoElectronico1" value="{cliente.correoElectronico1}"  >
                                     </div>
                                     <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">

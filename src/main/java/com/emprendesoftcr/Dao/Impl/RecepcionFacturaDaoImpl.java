@@ -112,5 +112,28 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 		return query.getResultList();
 	}
 
+	public Collection<RecepcionFacturaDetalle> findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula , Integer estado) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select obj from RecepcionFacturaDetalle obj ");
+		hql.append(" where obj.recepcionFactura.empresa = :empresa ");
+		if (cedula != null) {
+			if (!cedula.equals(Constantes.EMPTY)) {
+				hql.append("and obj.receptorCedula = :cedula ");
+			}
+		}
+		hql.append("and obj.recepcionFactura.facturaFechaEmision >= :fechaInicio and obj.recepcionFactura.facturaFechaEmision <= :fechaFin and obj.recepcionFactura.estado = :estado");
+		Query query = entityManager.createQuery(hql.toString());
+		if (cedula != null) {
+			if (!cedula.equals(Constantes.EMPTY)) {
+				query.setParameter("cedula", cedula);
+			}
+		}
+		query.setParameter("empresa", empresa);
+		query.setParameter("estado", estado);
+		query.setParameter("fechaInicio", fechaInicio);
+		query.setParameter("fechaFin", fechaFin);
+		return query.getResultList();
+	}
+	
 
 }

@@ -208,7 +208,7 @@ function BuscarActividadComercial(){
 
 
 
-		/**
+/**
 *  Lista de los clientes
 **/
 function __ListaActividadesComercales(){
