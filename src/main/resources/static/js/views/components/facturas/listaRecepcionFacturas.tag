@@ -59,7 +59,18 @@
 
                                     </select>
                                 </div>  
-                            </div>                            
+                            </div>   
+                                                     
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Actividad Economica </label>  
+                                    <select  onchange= {__AsignarActividad} class="form-control selectActividadEconocimica" id= "actividadEconomica" name="actividadEconomica" >
+										<option  each={empresaActividadComercial}  value="{codigo}"   >{descripcion}</option>
+                                    </select>
+                                </div>  
+                            </div>                             
                         </div>
                     </form>  
                 </div>
@@ -498,7 +509,54 @@ self.on('mount',function(){
     $("#filtros").validate(reglasDeValidacion());
     __InformacionDataTable()
      __InicializarTabla('.tableListar')
+     __ListaActividadesComercales()
 })
+
+/**
+*  Lista de los clientes
+**/
+function __ListaActividadesComercales(){
+    $.ajax({
+        url: 'ListaEmpresaActividadComercialPorPricipalAjax.do',
+        datatype: "json",
+         method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                self.empresaActividadComercial   = result.aaData
+                self.update()
+				BuscarActividadComercial()
+ 
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+    return
+}
+
+__AsignarActividad(e){
+    BuscarActividadComercial()
+}
+
+function BuscarActividadComercial(){
+    var codigo =$('.selectActividadEconocimica').val()
+    if(self.empresaActividadComercial == null){
+       return    
+    }
+    if(self.empresaActividadComercial.length == 0){
+       return    
+    }
+    $.each(self.empresaActividadComercial, function( index, modeloTabla ) {
+        if(modeloTabla.codigo == codigo  ){
+            self.actividadEconomica = codigo
+            self.update()
+        }
+
+    })
+}
+
 /**
 * limpiar los filtros
 **/
@@ -548,6 +606,7 @@ __Busqueda(){
         	fechaFinParam:$('.fechaFinal').val(),
         	cedulaEmisor:$('#cedulaEmisor').val(),
             estado:$('#estado').val(),
+            actividadEconomica:$('.selectActividadEconocimica').val()
         };
         $("#tableListar").dataTable().fnClearTable(); 
         $.ajax({

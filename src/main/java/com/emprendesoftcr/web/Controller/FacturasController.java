@@ -1315,7 +1315,7 @@ public class FacturasController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/ListarRecepcionFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarRecepcionFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam Integer estado) {
+	public RespuestaServiceDataTable listarRecepcionFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, @RequestParam Integer estado,@RequestParam String actividadEconomica) {
 
 		// Usuario de la session
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
@@ -1342,6 +1342,7 @@ public class FacturasController {
 			delimitador.addFiltro(new JqGridFilter("facturaFechaEmision", dateFormat.format(fechaInicio), "date>="));
 			delimitador.addFiltro(new JqGridFilter("facturaFechaEmision", dateFormat.format(fechaFinal), "dateFinal<="));
 			delimitador.addFiltro(new JqGridFilter("estado", estado.toString(), "="));
+			delimitador.addFiltro(new JqGridFilter("codigoActividad", actividadEconomica.toString(), "="));
 		}
 		return UtilsForControllers.process(request, dataTableBo, delimitador, TO_COMMAND_RECEPCION);
 	}

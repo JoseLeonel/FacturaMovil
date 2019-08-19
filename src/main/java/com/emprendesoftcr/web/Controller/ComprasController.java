@@ -565,24 +565,6 @@ public class ComprasController {
 	}
 
 
-	static class RESPONSES {
 
-		private static class OK {
-
-			private static class COMPRA {
-
-				private static final RespuestaServiceValidator	AGREGADO		= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.agregar.correctamente");
-				private static final RespuestaServiceValidator	MODIFICADO	= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.modificado.correctamente");
-			}
-		}
-
-		private static class ERROR {
-
-			private static class COMPRA {
-
-				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.categoria.noExiste");
-			}
-		}
-	}
 
 }
