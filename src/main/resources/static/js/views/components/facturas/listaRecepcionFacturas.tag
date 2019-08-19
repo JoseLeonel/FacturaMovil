@@ -65,7 +65,8 @@
                 </div>
             </div>
             <div class="col-xs-12 text-right">
-                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar detalle transacciones" href="DescargarComprasAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}"> Descargar</a>        
+                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar Resumen Compras" href="DescargarComprasAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}&estado={estado}"> Descargar</a>        
+                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar Resumen Compras por detalle" href="DescargarDetalladaAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}&estado={estado}"> Descargar</a>        
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
             	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
             </div>
@@ -492,6 +493,7 @@ self.fechaFin =null
 self.cedula =""
 self.totalGeneral = 0
 self.totalImpuestoGeneral = 0
+self.estado = 6
 self.on('mount',function(){
     $("#filtros").validate(reglasDeValidacion());
     __InformacionDataTable()
@@ -559,7 +561,7 @@ __Busqueda(){
                     loadListar(".tableListar",idioma_espanol,self.formato_tabla,result.aaData)
                     self.listaFacturas = result.aaData
                     self.hay_datos             = true
-
+                    self.estado = $('#estado').val(),
                     self.update()
                     TotalesGenerales(result.aaData)
                     agregarInputsCombos()

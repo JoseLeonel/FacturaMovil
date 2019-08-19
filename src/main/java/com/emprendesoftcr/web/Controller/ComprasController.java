@@ -37,7 +37,6 @@ import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.ProveedorBo;
 import com.emprendesoftcr.Bo.RecepcionFacturaBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
-import com.emprendesoftcr.Dao.KardexDao;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
 import com.emprendesoftcr.Utils.JqGridFilter;
@@ -51,6 +50,7 @@ import com.emprendesoftcr.modelo.DetalleCompra;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Proveedor;
 import com.emprendesoftcr.modelo.RecepcionFactura;
+import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.web.command.CompraCommand;
 import com.emprendesoftcr.web.command.CompraEsperaCommand;
@@ -199,7 +199,16 @@ public class ComprasController {
 		return new Attachment(name + ext, data);
 	}
 
-//Descarga de manuales de usuario de acuerdo con su perfil
+/**
+ * 
+ * @param request
+ * @param response
+ * @param fechaInicioParam
+ * @param fechaFinParam
+ * @param cedulaEmisor
+ * @param estado
+ * @throws IOException
+ */
 	@RequestMapping(value = "/DescargarComprasAceptadasAjax.do", method = RequestMethod.GET)
 	public void descargarComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor,Integer estado) throws IOException {
 
@@ -288,6 +297,42 @@ public class ComprasController {
 		return baos;
 	}
 
+	
+	@RequestMapping(value = "/DescargarDetalladaAceptadasAjax.do", method = RequestMethod.GET)
+	public void descargarDetalladasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor,Integer estado) throws IOException {
+
+		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
+
+		// Se buscan las facturas
+		Date fechaInicio = Utils.parseDate(fechaInicioParam);
+		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
+		Collection<RecepcionFacturaDetalle> recepcionFacturas = recepcionFacturaBo.findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFin, usuario.getEmpresa(), cedulaEmisor,estado);
+
+		String nombreArchivo = "comprasPorDetalleAceptadas.xls";
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
+
+		// Se prepara el excell
+		ByteArrayOutputStream baos = createExcelDetalleRecepcionCompras(recepcionFacturas);
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+
+		int BUFFER_SIZE = 4096;
+		byte[] buffer = new byte[BUFFER_SIZE];
+		int bytesRead = -1;
+		while ((bytesRead = inputStream.read(buffer)) != -1) {
+			response.getOutputStream().write(buffer, 0, bytesRead);
+		}
+	}
+	
+	
+	private ByteArrayOutputStream createExcelDetalleRecepcionCompras(Collection<RecepcionFacturaDetalle> recepcionFacturas) {
+		// Se prepara el excell
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		List<String> headers = Arrays.asList("Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "# Compra",  "Tipo Moneda", "Tipo Cambio", "Tipo Documento","IVA","Tarifa","Total Impuesto");
+		new SimpleExporter().gridExport(headers, recepcionFacturas, "recepcionFactura.created_atSTR,recepcionFactura.fechaEmisionSTR,recepcionFactura.facturaClave, recepcionFactura.numeroConsecutivoReceptor, recepcionFactura.emisorCedula, recepcionFactura.emisorNombre, recepcionFactura.facturaConsecutivo,recepcionFactura.facturaCodigoMoneda, recepcionFactura.facturaTipoCambio, recepcionFactura.tipoDocumentoStr,impuestoCodigoSTR,impuestoCodigoTarifaSTR,impuestoNeto", baos);
+		return baos;
+	}
+	
 	/**
 	 * Descargar Compras
 	 * @param request
@@ -520,24 +565,6 @@ public class ComprasController {
 	}
 
 
-	static class RESPONSES {
 
-		private static class OK {
-
-			private static class COMPRA {
-
-				private static final RespuestaServiceValidator	AGREGADO		= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.agregar.correctamente");
-				private static final RespuestaServiceValidator	MODIFICADO	= RespuestaServiceValidator.BUNDLE_MSG_SOURCE.OK("compra.modificado.correctamente");
-			}
-		}
-
-		private static class ERROR {
-
-			private static class COMPRA {
-
-				private static final RespuestaServiceValidator NO_EXISTE = RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("error.categoria.noExiste");
-			}
-		}
-	}
 
 }

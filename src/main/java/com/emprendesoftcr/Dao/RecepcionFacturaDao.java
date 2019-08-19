@@ -24,4 +24,5 @@ public interface RecepcionFacturaDao {
 	Collection<RecepcionFactura> findByClave(String cedulaEmisor, String clave);
 	
 	Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula,Integer estado);
+	Collection<RecepcionFacturaDetalle> findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula , Integer estado);
 }
