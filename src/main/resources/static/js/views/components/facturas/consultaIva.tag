@@ -42,7 +42,7 @@
 
 
 				<div class="consultarEstado">   
-					<label for="pago_tipoVentaL">{$.i18n.prop("factura.estado")} </label> 
+					<label for="pago_tipoVentaL">{$.i18n.prop("factura.estado.combo")} </label> 
 					<select class="form-control estado" id="estado" name="estado"  >
 						<option each={comboEstados} value="{estado}" selected="{factura.estado ==estado?true:false}" >{descripcion}</option>
 					</select>
