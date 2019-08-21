@@ -123,8 +123,7 @@
 			   </table>
 			 
 			</div>
-				<div class="espaciofechas">
-			</div>
+
 			<div class="otros">
 				<table id="tablaOtros">
 				<caption>Otros</caption>
@@ -155,8 +154,7 @@
 					</tr>
 				</table>
 			</div>
-			<div class="espaciofechas">
-			</div>
+
 			<div class="VentasSiete">
 				<div class="ventasInfoSiete">
 					<table id="tablaVentasSiete">
@@ -432,15 +430,15 @@
 	   }
 	   .ventasUno{
 		   display: flex;
-	       flex: 0.33; 
+	       flex: 0.30; 
 	   }
        .otros{
 		   display: flex;
-	       flex: 0.34; 
+	       flex: 0.30; 
 	   }
 	   .VentasSiete{
 		   display: flex;
-	       flex: 0.33; 
+	       flex: 0.30; 
 		   flex-direction: column;
 	   }
 	   .ventasInfoSiete{
@@ -526,38 +524,36 @@
 		}
         .consultarFecha{
          	display: flex;
-			flex: 0.60; 
+			flex: 0.30; 
 			flex-direction: row;
+			justify-content: space-between;
 		}
         .consultarEstado{
            	display: flex;
-			flex: 0.10; 
+			flex: 0.20; 
 			flex-direction: column;
 		}
         .actividadEconomica{
            	display: flex;
-			flex: 0.15; 
+			flex: 0.20; 
 			flex-direction: column;
 		}
 		.consultarBoton{
 			display: flex;
-			flex: 0.15; 
+			flex: 0.05; 
 			flex-direction: row-reverse;
 			justify-content: space-around;
 			align-items: center;
 		}
 		.fechaInicio{
 			display: flex;
-			flex: 0.45; 
+			flex: 0.40; 
 			flex-direction: column;
 		}
-		.espaciofechas{
-	        display: flex;
-			flex: 0.10; 	
-		}
+
         .fechaFinal{
 			display: flex;
-			flex: 0.45; 
+			flex: 0.40; 
 			flex-direction: column;
 		}
 
