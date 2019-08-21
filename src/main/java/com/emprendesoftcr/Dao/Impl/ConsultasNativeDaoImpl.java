@@ -152,7 +152,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		queryStr = queryStr.replaceAll(":FECHAINICIAL","'"+ fechaInicial+"'");
 		queryStr = queryStr.replaceAll(":FECHAFINAL","'"+ fechaFinal+"'");
 		queryStr = queryStr.replaceAll(":ESTADO", estado.toString());
-		queryStr = queryStr.replaceAll(":ACT_COMERCIAL", "CONVERT('"+ codigoActividadComercial.toString()+"'USING utf8)"); 
+		queryStr = queryStr.replaceAll(":ACT_COMERCIAL", " in ('"+ codigoActividadComercial.toString()+"')"); 
 		Query query = entityManager.createNativeQuery(queryStr, ConsultaIVANative.class);
 		return (Collection<ConsultaIVANative>) query.getResultList();
 	}
@@ -167,7 +167,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		queryStr = queryStr.replaceAll(":FECHAINICIAL","'"+ fechaInicial +"'");
 		queryStr = queryStr.replaceAll(":FECHAFINAL","'"+ fechaFinal +"'");
 		queryStr = queryStr.replaceAll(":ESTADO", estado.toString());
-		queryStr = queryStr.replaceAll(":ACT_COMERCIAL", "CONVERT('"+ codigoActividadComercial.toString()+"'USING utf8)"); 
+		queryStr = queryStr.replaceAll(":ACT_COMERCIAL", "in ('"+ codigoActividadComercial.toString()+"')"); 
 		Query query = entityManager.createNativeQuery(queryStr, ConsultaComprasIvaNative.class);
 		return (Collection<ConsultaComprasIvaNative>) query.getResultList();
 	}
