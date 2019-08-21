@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @BaseNativeQuery(name = "cons_vent_iva", 
-query = "( select @a\\:=@a+1 as id_consulta, 	d.tipo_impuesto, d.cod_tarifa, d.impuesto, i.descripcion, sum(d.imp_neto * f.tipo_cambio) as total_impuesto, sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "   
+query = "( select @a\\:=@a+1 as id_consulta COLLATE latin1_spanish_ci, 	d.tipo_impuesto, d.cod_tarifa, d.impuesto, i.descripcion, sum(d.imp_neto * f.tipo_cambio) as total_impuesto, sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "   
 		+ " from " 
 		+ " (select @a\\:=0) as a, "
 		+ " detalles d  inner join facturas f on f.id = d.factura_id " 
@@ -30,7 +30,7 @@ query = "( select @a\\:=@a+1 as id_consulta, 	d.tipo_impuesto, d.cod_tarifa, d.i
 		+ " ) "
 		+ " union "
 		+ " ( "
-		+ " select @b\\:=@b+1 as id_consulta, d.tipo_impuesto, d.cod_tarifa, d.impuesto, @txt as descripcion, sum(d.imp_neto * f.tipo_cambio) as total_impuesto, sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "
+		+ " select @b\\:=@b+1 as id_consulta COLLATE latin1_spanish_ci, d.tipo_impuesto, d.cod_tarifa, d.impuesto, @txt as descripcion, sum(d.imp_neto * f.tipo_cambio) as total_impuesto, sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "
 		+ " from "
 		+ " (select @b\\:=1000) as b, "
 		+ " (select @txt\\:=\'No tiene descripcion\') as txt, "
@@ -50,7 +50,7 @@ query = "( select @a\\:=@a+1 as id_consulta, 	d.tipo_impuesto, d.cod_tarifa, d.i
 		+ " ) "
 	    + " union "
 	    + " ( "
-	    + " select @c\\:=@c+1 as id_consulta, d.tipo_impuesto, d.cod_tarifa, d.impuesto, @txt as descripcion, sum(d.imp_neto * f.tipo_cambio) as total_impuesto, sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "   
+	    + " select @c\\:=@c+1 as id_consulta COLLATE latin1_spanish_ci, d.tipo_impuesto, d.cod_tarifa, d.impuesto, @txt as descripcion, sum(d.imp_neto * f.tipo_cambio) as total_impuesto, sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "   
 	    + " from "
 	    + " (select @c\\:=10000) as c, "
 	    + " (select @txt\\:=\'No tiene descripcion\') as txt, "
@@ -69,8 +69,6 @@ query = "( select @a\\:=@a+1 as id_consulta, 	d.tipo_impuesto, d.cod_tarifa, d.i
 	    	+ " id_consulta, d.tipo_impuesto "
 	    + " ) "	
 		)
-
-
 @Entity
 public class ConsultaIVANative implements Serializable {
 	
