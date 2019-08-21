@@ -18,6 +18,7 @@
 		<form id="filtros">
 		
 		<div class="consultas">
+
 				<div class="consultarFecha">
 					<div class="fechaInicio">
 						<label class="knob-label" >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
@@ -27,8 +28,6 @@
 								<span class="glyphicon glyphicon-th"></span>
 							</div>
 						</div>
-					</div>
-					<div class="espaciofechas">
 					</div>
 					<div class="fechaFinal">
 						<label class="knob-label" >{$.i18n.prop("fecha.final")}<span class="requeridoDato">*</span></label>
@@ -40,24 +39,24 @@
 						</div>	
 					</div>
 				</div>
-				<div class="espaciofechas">
-				</div>	
+
+
 				<div class="consultarEstado">   
 					<label for="pago_tipoVentaL">{$.i18n.prop("factura.estado")} </label> 
 					<select class="form-control estado" id="estado" name="estado"  >
 						<option each={comboEstados} value="{estado}" selected="{factura.estado ==estado?true:false}" >{descripcion}</option>
 					</select>
 				</div>
-				<div class="espaciofechas">
-				</div>
+
+
 				<div class="actividadEconomica">   
 				<label class="titleListaPrecio">Actividades Comerciales </label>  
 					<select class="form-control selectActividadComercial"  name="selectActividadComercial" id="selectActividadComercial" >
 						<option  each={empresaActividadComercial}  value="{codigo}"   >{descripcion}</option>
 					</select>
 				</div>
-				<div class="espaciofechas">
-				</div>
+
+
 				<div class="consultarBoton">	
 					<button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
 					<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
