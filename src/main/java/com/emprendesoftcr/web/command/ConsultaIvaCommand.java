@@ -1,8 +1,5 @@
 package com.emprendesoftcr.web.command;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
 
 public class ConsultaIvaCommand {
@@ -28,9 +25,20 @@ public class ConsultaIvaCommand {
 		this.tipoImpuesto = consultaIVANative.getTipoImpuesto();
 		this.codTarifa    = consultaIVANative.getCodTarifa();
 		this.impuesto     = consultaIVANative.getImpuesto();
-		this.descripcion  = consultaIVANative.getDescripcion();
 		this.totalImpuesto= consultaIVANative.getTotalImpuesto();
 		this.totalVentas  = consultaIVANative.getTotalVentas();
+	}
+
+
+	
+	public Long getId() {
+		return id;
+	}
+
+
+	
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 

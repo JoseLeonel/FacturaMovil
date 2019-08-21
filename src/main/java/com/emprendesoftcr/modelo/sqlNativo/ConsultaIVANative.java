@@ -7,11 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @BaseNativeQuery(name = "cons_vent_iva", 
-query = "( select sum(d.id) as id_consulta, d.tipo_impuesto, d.cod_tarifa, d.impuesto, i.descripcion, sum(d.imp_neto * f.tipo_cambio) as total_impuesto, sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "   
+query = "( select sum(d.id) as id_consulta, d.tipo_impuesto, d.cod_tarifa, d.impuesto, sum(d.imp_neto * f.tipo_cambio) as total_impuesto, sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "   
 		+ " from " 
 		+ " detalles d  inner join facturas f on f.id = d.factura_id " 
-		+ " inner join tarifa t on d.tipo_impuesto = t.tipo_imp " 
-		+ " inner join tarifaivai i on t.tarifa_id = i.cod_tarifa " 
 		+ " where " 
 			+ " f.ref_codigo    != '01'                             and " 
 			+ " f.empresa_id     = :ID_EMPRESA                      and " 
@@ -19,17 +17,15 @@ query = "( select sum(d.id) as id_consulta, d.tipo_impuesto, d.cod_tarifa, d.imp
 			+ " f.estado         = :ESTADO                          and "
             + " f.created_at BETWEEN :FECHAINICIAL  and :FECHAFINAL and "
 			+ " d.tipo_impuesto != ''                               and "
-			+ " d.cod_tarifa    != ''                               and "
-			+ " d.cod_tarifa     = i.cod_tarifa                     and "
-			+ " d.tipo_impuesto  = t.tipo_imp  "
-		+ " group by  "
-		+ " d.tipo_impuesto, d.cod_tarifa, d.impuesto, i.descripcion  "
+			+ " d.cod_tarifa    != ''                                "
+			+ " group by  "
+		+ " d.tipo_impuesto, d.cod_tarifa, d.impuesto  "
 		+ " order by  "
 		+ " id_consulta, d.tipo_impuesto "
 		+ " ) "
 		+ " union "
 		+ " ( "
-		+ " select sum(d.id+1000) as id_consulta, d.tipo_impuesto, d.cod_tarifa, d.impuesto, null as descripcion, sum(d.imp_neto * f.tipo_cambio) as total_impuesto, sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "
+		+ " select sum(d.id+1000) as id_consulta, d.tipo_impuesto, d.cod_tarifa, d.impuesto,  sum(d.imp_neto * f.tipo_cambio) as total_impuesto, sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "
 		+ " from "
 		+ " detalles d  inner join facturas f on f.id = d.factura_id " 
 		+ " where "
@@ -41,13 +37,13 @@ query = "( select sum(d.id) as id_consulta, d.tipo_impuesto, d.cod_tarifa, d.imp
 			+ " d.tipo_impuesto != ''                               and "
 			+ " d.cod_tarifa     = '' "
 		+ " group by " 
-	    + " d.tipo_impuesto, d.cod_tarifa, d.impuesto, descripcion "
+	    + " d.tipo_impuesto, d.cod_tarifa, d.impuesto "
 	    + " order by "
 		+ " id_consulta, d.tipo_impuesto "
 		+ " ) "
 	    + " union "
 	    + " ( "
-	    + " select sum(d.id+10000) as id_consulta, d.tipo_impuesto, d.cod_tarifa, d.impuesto, null as descripcion, sum(d.imp_neto * f.tipo_cambio) as total_impuesto, sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "   
+	    + " select sum(d.id+10000) as id_consulta, d.tipo_impuesto, d.cod_tarifa, d.impuesto, sum(d.imp_neto * f.tipo_cambio) as total_impuesto, sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "   
 	    + " from "
 	    + " detalles d  inner join facturas f on f.id = d.factura_id "
 	    + " where "
@@ -59,13 +55,11 @@ query = "( select sum(d.id) as id_consulta, d.tipo_impuesto, d.cod_tarifa, d.imp
 		    + " d.tipo_impuesto    = ''                             and "
 		    + " d.cod_tarifa       = '' " 
 	    + " group by "
-	    	+ " d.tipo_impuesto, d.cod_tarifa, d.impuesto, descripcion "
+	    	+ " d.tipo_impuesto, d.cod_tarifa, d.impuesto "
 	    + " order by "
 	    	+ " id_consulta, d.tipo_impuesto "
 	    + " ) "	
 		)
-
-
 @Entity
 public class ConsultaIVANative implements Serializable {
 	
@@ -87,8 +81,7 @@ public class ConsultaIVANative implements Serializable {
 	@Column(name = "impuesto")
 	private Double impuesto;
 	
-	@Column(name = "descripcion")
-	private String descripcion;
+	
 	
 	@Column(name = "total_impuesto")
 	private Double totalImpuesto;
@@ -128,13 +121,7 @@ public class ConsultaIVANative implements Serializable {
 		this.impuesto = impuesto;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
-	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
 
 	public Double getTotalImpuesto() {
 		return totalImpuesto;
@@ -161,7 +148,6 @@ public class ConsultaIVANative implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((codTarifa == null) ? 0 : codTarifa.hashCode());
-		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((impuesto == null) ? 0 : impuesto.hashCode());
 		result = prime * result + ((tipoImpuesto == null) ? 0 : tipoImpuesto.hashCode());
@@ -183,11 +169,6 @@ public class ConsultaIVANative implements Serializable {
 			if (other.codTarifa != null)
 				return false;
 		} else if (!codTarifa.equals(other.codTarifa))
-			return false;
-		if (descripcion == null) {
-			if (other.descripcion != null)
-				return false;
-		} else if (!descripcion.equals(other.descripcion))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -217,6 +198,7 @@ public class ConsultaIVANative implements Serializable {
 		return true;
 	}
 
+	
 
 
 	
