@@ -418,6 +418,7 @@
 		   display: flex;
 	       flex: 0.20; 
 		   flex-direction: row; 
+		   justify-content: space-between;
 	   }
 	   .reportes{
 		   display: flex;
@@ -523,43 +524,6 @@
 		.encabezado3{
 				display: flex;
 				flex: 0.20; 
-		}
-       .ventasFila1{
-			display: flex;
-			flex: 0.33; 
-			flex-direction: column;
-           justify-items: center;
-	   }
-       .ventasFila2{
-			display: flex;
-			flex: 0.33; 
-			flex-direction: column;
-           justify-items: center;
-	   }
-       .ventasFila3{
-			display: flex;
-			flex: 0.34; 
-			flex-direction: column;
-			    flex: 0.40;
-            justify-items: center;
-	   }
-	   	.comprasInfoFila1{
-			display: flex;
-			flex: 0.33; 
-			flex-direction: column;
-			justify-content: center;
-		   }
-		.comprasInfoFila2{
-			display: flex;
-			flex: 0.33; 
-			flex-direction: column;
-			justify-content: center;
-		}
-		.comprasInfoFila3{
-			display: flex;
-			flex: 0.34; 
-			flex-direction: column;
-			justify-content: center;
 		}
         .consultarFecha{
          	display: flex;
