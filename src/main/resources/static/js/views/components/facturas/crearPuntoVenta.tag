@@ -143,15 +143,7 @@
                                         <label class="{labelTotales} ">{$.i18n.prop("factura.resumen.banco")} </label> 
                                         <input onclick={_SeleccionarBanco} onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number"  onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra}  totalBanco"  id="totalBanco" name="totalBanco"  value="{factura.totalBanco}" >
                                     </div>
-                                    <div class="botonesContainer">
-                                       <div class="boton">
-                                           <button onclick={_AtrasFacturaFinal} class="btn-dark-gray btn-back pull-left">  {$.i18n.prop("btn.volver")}</button>
-                                       </div> 
-                                       <div class="boton">
-                                           <button onclick={__AplicarYcrearFactura}  class="btn-green btn-add pull-right"> </i> {$.i18n.prop("btn.aplicar")}</button>
-                                       </div>
-                                       
-                                    </div>
+                                
 
                                 </div>
                             </div>
@@ -177,6 +169,15 @@
                             <input type="hidden" id='totalCambioPagar'        name='totalCambioPagar'        value="{factura.totalCambioPagar}" >
                             <input type="hidden" id='detalleFactura'          name='detalleFactura'          value="{factura.detalleFactura}" >
                         </form>   
+                            <div class="botonesContainer">
+                                       <div class="boton">
+                                           <button onclick={_AtrasFacturaFinal} class="btn-dark-gray btn-back pull-left">  {$.i18n.prop("btn.volver")}</button>
+                                       </div> 
+                                       <div class="boton">
+                                           <button onclick={__AplicarYcrearFactura}  class="btn-green btn-add pull-right"> </i> {$.i18n.prop("btn.aplicar")}</button>
+                                       </div>
+                                       
+                                    </div>
                     </div>
                   
                 </div>
@@ -1045,6 +1046,7 @@
 
     self.comboCondicionPagos   = []
     self.comboTipoDocumentos   = []
+    self.tipoCedulas               = {data:[]}  // definir el data del datatable
     self.comboTipoDocumentoExonerados   = []
     self.subTotalGeneral       = 0
     self.codigoBarraFueraPantalla = ""
