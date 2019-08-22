@@ -1297,11 +1297,13 @@
                e.preventDefault()
               
                }; 
-           if ((e.which || e.keyCode) == 13) {
-               $('.codigo').focus()
-               e.preventDefault()
-               
-               }; 
+            if (self.mostrarFormularioPago == false ){
+               if ((e.which || e.keyCode) == 13) {
+                   $('.codigo').focus()
+                   e.preventDefault()
+                } 
+
+            }   
         }
          
         }
@@ -2913,7 +2915,8 @@ function mostrarPAgo(){
 Lectura de Codigos
 **/
 function lecturaCodigo(leerCodigo){
-    if ($('.codigo').val() == ""){
+    var valor = $('.codigo').val()
+    if (valor.length == 0){
         if(self.empresa.enterFacturar == 0){
             return
         }
@@ -2921,6 +2924,7 @@ function lecturaCodigo(leerCodigo){
             self.cantidadEnterFacturar = 0
             self.update() 
              __EnviarFacturar()  
+             return 
         }else{
             self.cantidadEnterFacturar = self.cantidadEnterFacturar + 1
             self.update()
@@ -4363,6 +4367,7 @@ function __Teclas(){
         var tecla = evento.keyCode; 
     if(tecla ==119){
         __EnviarFacturar()
+        return 
         
     } 
    // alert(tecla)  
