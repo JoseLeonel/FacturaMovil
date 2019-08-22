@@ -8,82 +8,78 @@ import javax.persistence.Id;
 
 @BaseNativeQuery(name = "cons_comp_iva", 
 query = "(select " 
-          + " sum(d.id+1) as id_consulta, "  
+          + " @a\\:=@a+1 as id_consulta, "  
 		  + " d.impuesto_codigo, "  
 		  + " d.impuesto_codigo_tarifa, " 
-		  + " d.impuesto_tarifa, "
-		  + " i.descripcion, " 
+		  + " d.impuesto_tarifa, " 
 		  + " sum((IF(d.impuesto_neto != 0 and d.impuesto_neto is not null, d.impuesto_neto, d.impuesto_monto)) * f.tipo_cambio) as total_impuesto, " 
 		  + " sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "
 		+ " from " 
+		+ " (select @a\\:=0) as a, " 
 		   + " recepcion_factura_detalle d inner join  recepcion_factura f on f.id = d.recepcion_factura_id "
-		   + " inner join tarifa t on d.impuesto_codigo = t.tipo_imp "
-		   + " inner join tarifaivai i on t.tarifa_id = i.cod_tarifa "
 		+ " where "
 		+ " f.tipo_doc                  != '03'            and "  
 		+ " f.tipo_doc                  != '02'            and "
 		   + " f.empresa_id              = :ID_EMPRESA     and "
-		   + " f.cod_actividad           = :ACT_COMERCIAL COLLATE and "
+		   + " f.cod_actividad           :ACT_COMERCIAL   and "
 		   + " f.estado                  = :ESTADO         and "
 		   + " f.created_at BETWEEN :FECHAINICIAL          and :FECHAFINAL and "
 		   + " d.impuesto_codigo_tarifa != ''              and "
-		   + " d.impuesto_codigo        != ''              and "
-		   + " d.impuesto_codigo_tarifa  = i.cod_tarifa    and "
-		   + " d.impuesto_codigo         = t.tipo_imp " 
+		   + " d.impuesto_codigo        != '' "
 		+ " group by "
-		   + " d.impuesto_codigo, d.impuesto_codigo_tarifa, d.impuesto_tarifa, i.descripcion "
+		   + " d.impuesto_codigo, d.impuesto_codigo_tarifa, d.impuesto_tarifa "
 		+ " order by "
 		   + " id_consulta, d.impuesto_codigo "
 		+ " ) "
 		+ " union "
 		+ " ( "
 		+ " select " 
-		  + " sum(d.id+1) as id_consulta, " 
+		  + " @b\\:=@b+1 as id_consulta, " 
 		  + " d.impuesto_codigo, "
 		  + " d.impuesto_codigo_tarifa, " 
 		  + " d.impuesto_tarifa, "
-		  + " null as descripcion, "
 		  + " sum((IF(d.impuesto_neto != 0 and d.impuesto_neto is not null, d.impuesto_neto, d.impuesto_monto)) * f.tipo_cambio) as total_impuesto, " 
 		  + " sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "
 		+ " from  "
+		+ " (select @b\\:=1000) as b, "
 		   + " recepcion_factura_detalle d inner join  recepcion_factura f on f.id = d.recepcion_factura_id "
 		+ " where "
 		+ " f.tipo_doc                  != '03'            and "  
 		+ " f.tipo_doc                  != '02'            and "
 		   + " f.empresa_id              = :ID_EMPRESA     and "
-		   + " f.cod_actividad           = :ACT_COMERCIAL COLLATE  and "
+		   + " f.cod_actividad            :ACT_COMERCIAL  and "
 		   + " f.estado                  = :ESTADO         and "
 		   + " f.created_at BETWEEN :FECHAINICIAL          and :FECHAFINAL and "
 		   + " d.impuesto_codigo_tarifa != ''              and "
 		   + " d.impuesto_codigo         = '' "          
 		+ " group by "
-		   + " d.impuesto_codigo, d.impuesto_codigo_tarifa, d.impuesto_tarifa, descripcion "
+		   + " d.impuesto_codigo, d.impuesto_codigo_tarifa, d.impuesto_tarifa "
 		+ " order by "
 		   + " id_consulta, d.impuesto_codigo "
 		+ " ) "
 		+ " union "
 		+ " ( "
 		+ " select " 
-		  + " sum(d.id+1) as id_consulta, " 
+		  + " @c\\:=@c+1 as id_consulta, " 
 		  + " d.impuesto_codigo, "
 		  + " d.impuesto_codigo_tarifa, " 
 		  + " d.impuesto_tarifa, "
-		  + " null as descripcion, "
 		  + " sum((IF(d.impuesto_neto != 0 and d.impuesto_neto is not null, d.impuesto_neto, d.impuesto_monto)) * f.tipo_cambio) as total_impuesto, " 
 		  + " sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "
 		+ " from "
+		+ " (select @c\\:=10000) as c, "
 		   + " recepcion_factura_detalle d inner join  recepcion_factura f on f.id = d.recepcion_factura_id "
 		+ " where "
 		+ " f.tipo_doc                  != '03'            and "  
 		+ " f.tipo_doc                  != '02'            and "
 		   + " f.empresa_id              = :ID_EMPRESA     and "
-		   + " f.cod_actividad           = :ACT_COMERCIAL COLLATE and "
+		   + " f.cod_actividad             :ACT_COMERCIAL  and "
 		   + " f.estado                  = :ESTADO         and "
 		   + " f.created_at BETWEEN :FECHAINICIAL          and :FECHAFINAL and "
 		   + " d.impuesto_codigo_tarifa = ''               and "
 		   + " d.impuesto_codigo        = '' "           
 		+ " group by "
-		   + " d.impuesto_codigo, d.impuesto_codigo_tarifa, d.impuesto_tarifa, descripcion "
+		   + " d.impuesto_codigo, d.impuesto_codigo_tarifa, d.impuesto_tarifa"
 		+ " order by "
 		   + " id_consulta, d.impuesto_codigo "
 		+ " )"
@@ -105,8 +101,6 @@ public class ConsultaComprasIvaNative implements Serializable {
 	@Column(name = "impuesto_tarifa")
 	private Double impuesto;
 	
-	@Column(name = "descripcion")
-	private String descripcion;
 	
 	@Column(name = "total_impuesto")
 	private Double totalImpuesto;
@@ -146,14 +140,6 @@ public class ConsultaComprasIvaNative implements Serializable {
 		this.impuesto = impuesto;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-
 	public Double getTotalImpuesto() {
 		return totalImpuesto;
 	}
@@ -175,7 +161,6 @@ public class ConsultaComprasIvaNative implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((codTarifa == null) ? 0 : codTarifa.hashCode());
-		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((impuesto == null) ? 0 : impuesto.hashCode());
 		result = prime * result + ((tipoImpuesto == null) ? 0 : tipoImpuesto.hashCode());
@@ -197,11 +182,6 @@ public class ConsultaComprasIvaNative implements Serializable {
 			if (other.codTarifa != null)
 				return false;
 		} else if (!codTarifa.equals(other.codTarifa))
-			return false;
-		if (descripcion == null) {
-			if (other.descripcion != null)
-				return false;
-		} else if (!descripcion.equals(other.descripcion))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -230,4 +210,7 @@ public class ConsultaComprasIvaNative implements Serializable {
 			return false;
 		return true;
 	}
+	
+	
+
 }

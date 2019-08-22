@@ -16,8 +16,6 @@ public class ConsultaComprasIvaCommand {
 			
 	private Double impuesto;
 
-	private String descripcion;
-
 	private Double totalImpuesto;
 
 	private Double totalVentas;
@@ -62,14 +60,6 @@ public class ConsultaComprasIvaCommand {
 
 	public void setImpuesto(Double impuesto) {
 		this.impuesto = impuesto;
-	}
-
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
 	}
 
 	public Double getTotalImpuesto() {
