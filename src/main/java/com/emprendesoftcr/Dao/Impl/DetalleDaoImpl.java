@@ -163,7 +163,7 @@ public class DetalleDaoImpl implements DetalleDao {
 		storedProcedure.setParameter(Constantes.SP_VENTASXDETALLE_IN_ESTADO, estado);
 		
 		if(!tipoImpuesto.equals(Constantes.COMBO_TODOS)&& !tipoImpuesto.equals(Constantes.EMPTY)) {
-			storedProcedure.setParameter(Constantes.SP_VENTASXDETALLE_IN_TIPO_IMPUESTO, tipoImpuesto);	
+			storedProcedure.setParameter(Constantes.SP_VENTASXDETALLE_IN_TIPO_IMPUESTO, tipoImpuesto );	
 		}
 		
 		storedProcedure.execute();

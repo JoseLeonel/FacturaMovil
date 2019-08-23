@@ -61,7 +61,7 @@ public class ReportePdfView {
 		// document.add(new Paragraph("\n", pequeFont));
 
 		PdfPTable tabla_tercera_tabla = new PdfPTable(9);
-		tabla_tercera_tabla.setWidthPercentage(100);
+		tabla_tercera_tabla.setWidthPercentage(60);
 		tabla_tercera_tabla.setTotalWidth(570f);
 		tabla_tercera_tabla.setLockedWidth(true);
 		float[] header_espacio_03 = { 23, 60, 135, 18, 28, 35, 17, 35, 40 };

@@ -168,7 +168,7 @@
                                 </div>
                                 <div class="row">
                                     <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                        <label >% Porcentaje Exoneracion  </label> 
+                                        <label >% Porcentaje Autorizacion  </label> 
                                         <input  type="number"  class="form-control porcentajeExoneracion" id="porcentajeExoneracion" name = "porcentajeExoneracion" autofocus="autofocus"  value ="{cliente.porcentajeExoneracion}">                    
                                     </div>
                                

@@ -139,6 +139,11 @@
                                 <input type="text" readonly="readonly" class="form-control totalDescuentos" placeHolder ="{$.i18n.prop("factura.totalDescuentos")}" id="totalDescuentos" name="totalDescuentos" value="{factura.totalDescuentosSTR}">
                             </div>
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.total.otros.cargos")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control totalOtrosCargos" placeHolder ="{$.i18n.prop("factura.total")}" id="totalOtrosCargos" name="totalOtrosCargos" value="{factura.totalOtrosCargosSTR}">
+                            </div>
+
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("factura.total")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" readonly="readonly" class="form-control totalDescuentos" placeHolder ="{$.i18n.prop("factura.total")}" id="total" name="total" value="{factura.totalSTR}">
                             </div>
@@ -260,6 +265,7 @@ function __ListaActividadesComercales(){
 					totalVentasNetas:"0",
 					totalVentasExentas:"0",
 					totalVentasGravadas:"0",
+					totalOtrosCargos:"0"
 			}			
 			self.update();
 			$('.datepickerFechaFinal').datepicker(

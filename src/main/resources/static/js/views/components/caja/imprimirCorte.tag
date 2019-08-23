@@ -15,7 +15,7 @@
                     <div class="ticket" > 
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.titulo")}     </strong><br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.created_at")}      </strong>{usuarioCaja.created_atSTR}<br></div>
-                        <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.updated_at")}      </strong>{usuarioCaja.updated_atSTR}<br></div>
+                        <div class="encabezado"><strong> {$.i18n.prop("usuarioCaja.updated_at")}      </strong>{usuarioCaja.updated_at}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.usuario")}       </strong>{usuarioCaja.usuario.nombre} {usuarioCaja.usuario.primerApellido} {usuarioCaja.usuario.segundoApellido}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.caja")}          </strong>{usuarioCaja.caja.descripcion}<br></div>
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.caja.fondoIncial")}  : </strong>{usuarioCaja.totalFondoInicialSTR}<br></div>                                                 
@@ -183,7 +183,7 @@ self.usuarioCaja   = opts.usuarioCaja;
 self.on('mount',function(){
     if(self.usuarioCaja.id > 0){
         self.usuarioCaja.created_at = displayDate_detail(self.usuarioCaja.created_at)
-        self.usuarioCaja.updated_at = displayDate_detail(self.usuarioCaja.updated_at)
+        self.usuarioCaja.updated_at = displayDate_detail(new Date())
         self.update()
        $('.imprimirModalCorte').modal('show'); 
     }

@@ -234,15 +234,20 @@ public class FacturaBoImpl implements FacturaBo {
 				factura.setFechaEmision(null);
 			}
 			factura.setCorreoAlternativo(facturaCommand.getCorreoAlternativo());
-			factura.setUsuarioCreacion(usuario);
+			
+			//No se cambia el usuario en la venta solo en la anulacion
+			if(factura.getId() == null) {
+				factura.setUsuarioCreacion(usuario);	
+			}
+			
 			factura.setEmpresa(usuario.getEmpresa());
 			factura.setVendedor(facturaCommand.getVendedor());
 			factura.setCliente(facturaCommand.getCliente());
 			factura.setFechaEmision(new Date());
 			factura.setMedioEfectivo(Constantes.EMPTY);
 			factura.setNombreFactura(facturaCommand.getNombreFactura());
-			factura.setCorreoAlternativo(facturaCommand.getCorreoAlternativo());
-			factura.setUsuarioCreacion(usuario);
+			
+			
 			factura.setEmpresa(usuario.getEmpresa());
 			factura.setVendedor(facturaCommand.getVendedor());
 			factura.setCliente(facturaCommand.getCliente());
@@ -852,7 +857,8 @@ public class FacturaBoImpl implements FacturaBo {
 			resultado = resultado * valor;
 		} else {
 			resultado = subTotal + montoPrimerImpuesto;
-			resultado = resultado * valor;
+			resultado = resultado * tarifa;
+			resultado = resultado / 100d;
 		}
 		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
 	}
@@ -891,8 +897,9 @@ public class FacturaBoImpl implements FacturaBo {
 	 * @return
 	 */
 	private Double getDescuento(Double montoTotal, Double porcentajeDescuento) {
-		Double valor = porcentajeDescuento / 100d;
-		Double resultado = montoTotal * valor;
+//		Double valor = porcentajeDescuento / 100d;
+		Double resultado = montoTotal * porcentajeDescuento;
+		resultado = resultado /100d;
 		return Utils.aplicarRedondeo(resultado) ? Utils.roundFactura(resultado, 5) : resultado;
 	}
 

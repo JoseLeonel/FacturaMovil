@@ -11,12 +11,13 @@ public class TotalFacturaCommand {
 	private Double	totalVentasNetas;
 	private Double	totalVentasExentas;
 	private Double	totalVentasGravadas;
+	private Double	totalOtrosCargos;
 
 	public TotalFacturaCommand() {
 		super();
 	}
 
-	public TotalFacturaCommand(Double total, Double totalDescuentos, Double totalImpuestos, Double totalVentasNetas, Double totalVentasExentas, Double totalVentasGravadas) {
+	public TotalFacturaCommand(Double total, Double totalDescuentos, Double totalImpuestos, Double totalVentasNetas, Double totalVentasExentas, Double totalVentasGravadas,Double totalOtrosCargos) {
 		super();
 		this.total = total;
 		this.totalDescuentos = totalDescuentos;
@@ -24,6 +25,7 @@ public class TotalFacturaCommand {
 		this.totalVentasNetas = totalVentasNetas;
 		this.totalVentasExentas = totalVentasExentas;
 		this.totalVentasGravadas = totalVentasGravadas;
+		this.totalOtrosCargos = totalOtrosCargos;
 	}
 
 	public Double getTotal() {
@@ -92,6 +94,20 @@ public class TotalFacturaCommand {
 
 	public void setTotalVentasGravadas(Double totalVentasGravadas) {
 		this.totalVentasGravadas = totalVentasGravadas;
+	}
+
+	
+	public Double getTotalOtrosCargos() {
+		return totalOtrosCargos;
+	}
+
+	public String getTotalOtrosCargosSTR() {
+		return Utils.formateadorMiles(totalOtrosCargos != null ? totalOtrosCargos : Constantes.ZEROS_DOUBLE);
+	}
+
+	
+	public void setTotalOtrosCargos(Double totalOtrosCargos) {
+		this.totalOtrosCargos = totalOtrosCargos;
 	}
 
 }

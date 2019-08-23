@@ -12,6 +12,7 @@ public class RespuestaServiceDataTable<T extends Object> implements Serializable
 	private int								draw;
 	private Long							recordsTotal;
 	private Long							recordsFiltered;
+	private Double            totalGeneral;
 
 	private Collection<T>			aaData;
 
@@ -46,6 +47,22 @@ public class RespuestaServiceDataTable<T extends Object> implements Serializable
 	public void setRecordsFiltered(Long recordsFiltered) {
 		this.recordsFiltered = recordsFiltered;
 	}
+	
+
+	
+	public Double getTotalGeneral() {
+		return totalGeneral;
+	}
+	
+	public String getTotalGeneralSTR() {
+		return Utils.formateadorMiles(totalGeneral);
+	}
+
+	
+	public void setTotalGeneral(Double totalGeneral) {
+		this.totalGeneral = totalGeneral;
+	}
+
 
 	public static class Builder<T extends Object> {
 

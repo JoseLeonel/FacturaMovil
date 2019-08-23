@@ -1565,13 +1565,6 @@ function aplicarCreacionClienteNuevo(){
     })        
 
 }
-
-
-
-
-
-
-
 __ActualizarPlazoCredito(){
     actualizaElPlazoDiasCredito();
 }
@@ -1644,7 +1637,6 @@ function __RolAdministrador(){
     });
 
 }
-
 /**
 * Validar seguridad de ruta autorizada
 **/ 
@@ -1729,7 +1721,6 @@ function __validarRolAdministrador(formulario,url){
     }
     
 }
-
 _SeleccionarEfectivo(){
     $('.totalEfectivo').select()
     $(".totalEfectivo").focus()

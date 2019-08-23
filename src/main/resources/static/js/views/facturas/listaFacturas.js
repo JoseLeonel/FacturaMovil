@@ -39,6 +39,7 @@ var _Init = function () {
     });
 	$("#filtros").validate(reglasDeValidacion());
 	listaActividadEconomica();
+	listaUsuarios();
 }
 
 /**
@@ -123,6 +124,29 @@ function listaClientesActivos(){
 	})
 }
 
+/**
+*  Obtiene la lista de los clientes activos
+**/
+function listaUsuarios(){
+	$.ajax({
+		 url: "ListarUsuariosByEmpresaAjax.do",
+		 datatype: "json",
+		 global: false,
+		 method:"GET",
+		 success: function (result) {
+				if(result.aaData.length > 0){
+					$.each(result.aaData, function( index, modeloTabla ) {
+						$('.selectUsuarios').append('<option value="'+modeloTabla.id+'">'+modeloTabla.nombreUsuario+ '</option>');
+					});
+					$('.selectUsuarios').selectpicker();
+				} 
+		 },
+		 error: function (xhr, status) {
+			  mensajeErrorServidor(xhr, status);
+			  console.log(xhr);
+		 }
+	})
+}
 
 var ListarFacturas = function(){
 	var fechaInicio=$('.fechaInicial').val();
@@ -131,6 +155,7 @@ var ListarFacturas = function(){
 	var tipoDocumento=$('#tipoDocumento').val();
 	var actividadEconomica=$('.selectActividadEconocimica').val();
 	var estado =$('.selectEstado').val();
+	var selectUsuarios = $('#usuario').val();
 	var table  =  $('#tableListar').DataTable( {
 	"responsive": true,
 	 "bAutoWidth" : true,
@@ -147,7 +172,7 @@ var ListarFacturas = function(){
 	"sort" : "position",
 	"lengthChange": true,
 	"ajax" : {
-			"url":"ListarFacturasActivasAndAnuladasAjax.do?fechaInicio=" + fechaInicio+"&"+"fechaFin="+fechaFin+"&"+"idCliente="+idCliente+"&"+"tipoDocumento="+tipoDocumento +"&actividadEconomica="+actividadEconomica+"&estado="+estado,
+			"url":"ListarFacturasActivasAndAnuladasAjax.do?fechaInicio=" + fechaInicio+"&"+"fechaFin="+fechaFin+"&"+"idCliente="+idCliente+"&"+"tipoDocumento="+tipoDocumento +"&actividadEconomica="+actividadEconomica+"&estado="+estado+"&idUsuario="+selectUsuarios,
 			"deferRender": true,
 			"type":"GET",
 					"dataType": 'json',
