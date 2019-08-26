@@ -3,7 +3,9 @@ package com.emprendesoftcr.web.command;
 import java.util.Date;
 
 import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
+import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
 
 public class FacturaAnulacionCommand {
 
@@ -38,6 +40,10 @@ public class FacturaAnulacionCommand {
 	private String	totalComprobanteSTR;
 
 	private String	nombreFactura;
+	private String tipoDocSTR;
+	private String tipoDoc;
+	private String condicionVentaSTR;
+	private Integer						noFacturaElectronica;
 
 	public FacturaAnulacionCommand(FacturasSinNotaCreditoNative facturasSinNotaCreditoNative) {
 		super();
@@ -67,6 +73,39 @@ public class FacturaAnulacionCommand {
 		this.nombreFactura = facturasSinNotaCreditoNative.getNombreFactura();
 		this.nombreUsuario = facturasSinNotaCreditoNative.getNombreUsuario();
 	}
+	
+	public FacturaAnulacionCommand(ListarFacturasNativa facturasSinNotaCreditoNative) {
+		super();
+		this.id = facturasSinNotaCreditoNative.getId();
+
+		this.numeroConsecutivo = facturasSinNotaCreditoNative.getNumeroConsecutivo();
+
+		this.totalComprobante = facturasSinNotaCreditoNative.getTotalComprobante();
+
+		this.codigoMoneda = facturasSinNotaCreditoNative.getCodigoMoneda();
+
+		this.estado = facturasSinNotaCreditoNative.getEstado();
+
+		this.totalDescuentos = facturasSinNotaCreditoNative.getTotalDescuentos();
+
+		this.totalImpuesto = facturasSinNotaCreditoNative.getTotalImpuesto();
+
+		this.nombreCompleto = facturasSinNotaCreditoNative.getNombreCompleto();
+
+		this.cedula = facturasSinNotaCreditoNative.getCedula();
+		this.fechaEmision = facturasSinNotaCreditoNative.getFechaEmision();
+		this.fechaEmisionSTR = Utils.getFechaGeneraHacienda(facturasSinNotaCreditoNative.getFechaEmision());
+		this.totalImpuestoSTR = Utils.formateadorMiles(facturasSinNotaCreditoNative.getTotalImpuesto());
+		this.totalDescuentosSTR = Utils.formateadorMiles(facturasSinNotaCreditoNative.getTotalDescuentos());
+		this.totalComprobanteSTR = Utils.formateadorMiles(facturasSinNotaCreditoNative.getTotalComprobante());
+		this.nombreFactura = facturasSinNotaCreditoNative.getNombreFactura();
+		this.nombreUsuario = facturasSinNotaCreditoNative.getNombreUsuario();
+		this.tipoDocSTR = MapEnums.ENUM_TIPO_DOC.get(facturasSinNotaCreditoNative.getTipoDoc());
+		this.tipoDoc = facturasSinNotaCreditoNative.getTipoDoc();
+		this.condicionVentaSTR =MapEnums.ENUM_CONDICION_VENTA.get(facturasSinNotaCreditoNative.getCondicionVenta());
+		this.noFacturaElectronica = facturasSinNotaCreditoNative.getNoFacturaElectronica();
+	}
+	
 
 	public Long getId() {
 		return id;
@@ -74,6 +113,37 @@ public class FacturaAnulacionCommand {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	
+	
+	public String getTipoDoc() {
+		return tipoDoc;
+	}
+
+	
+	public void setTipoDoc(String tipoDoc) {
+		this.tipoDoc = tipoDoc;
+	}
+
+	public String getTipoDocSTR() {
+		return tipoDocSTR;
+	}
+
+	
+	public void setTipoDocSTR(String tipoDocSTR) {
+		this.tipoDocSTR = tipoDocSTR;
+	}
+	
+
+	
+	public String getCondicionVentaSTR() {
+		return condicionVentaSTR;
+	}
+
+	
+	public void setCondicionVentaSTR(String condicionVentaSTR) {
+		this.condicionVentaSTR = condicionVentaSTR;
 	}
 
 	public String getNombreFactura() {
@@ -194,6 +264,16 @@ public class FacturaAnulacionCommand {
 
 	public void setNombreUsuario(String nombreUsuario) {
 		this.nombreUsuario = nombreUsuario;
+	}
+
+	
+	public Integer getNoFacturaElectronica() {
+		return noFacturaElectronica;
+	}
+
+	
+	public void setNoFacturaElectronica(Integer noFacturaElectronica) {
+		this.noFacturaElectronica = noFacturaElectronica;
 	}
 
 }

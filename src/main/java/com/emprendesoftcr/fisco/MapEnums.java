@@ -139,6 +139,8 @@ public class MapEnums {
             put("02", "Nota de debido electrónica").
             put("03", "Nota de crédito electrónica").
             put("04", "Tiquete electrónico").
+            put("86", "Nota de crédito interno").
+            put("87", "Tiquete").
             put("05", "Nota de despacho").
             put("06", "Contrato").
             put("07", "Procedimiento").

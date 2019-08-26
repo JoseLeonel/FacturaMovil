@@ -10,16 +10,18 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.ConsultasNativeDao;
 import com.emprendesoftcr.Utils.Constantes;
+import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.sqlNativo.BaseNativeQuery;
+import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
-import com.emprendesoftcr.modelo.sqlNativo.CompraSimplificadaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNativeByEmpresaAndFechaAndCliente;
+import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstado;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstadoAndUsuario;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndFacturada;
@@ -195,6 +197,9 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		return (Collection<CompraSimplificadaNative>) query.getResultList();
 		
 	}
+	
+	
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<HaciendaComprobarNative> findByComprabarDocumentoPendienteaceptar(){
@@ -206,6 +211,44 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 	private static <T> String getQueryBase(Class<T> claseObjecto) {
 		return ((claseObjecto).getDeclaredAnnotationsByType(BaseNativeQuery.class))[0].query();
 	}
+
+	@Override
+	public Collection<ListarFacturasNativa> findByFacturasAndFechaAndTipoDocAndUsuario(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, Cliente cliente, String tipoDocumento, String actividadComercial) {
+		String queryStr = getQueryBase(ListarFacturasNativa.class);
+		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
+		
+		queryStr = queryStr.replaceAll(":fechaInicial","'"+ fechaInicial+"'");
+		queryStr = queryStr.replaceAll(":fechaFinal","'"+ fechaFinal+"'");
+		queryStr = queryStr.replaceAll("and facturas.act_comercial" ," and facturas.act_comercial in ('"+ actividadComercial + "') ");	
+		if (idUsuario > Constantes.ZEROS) {
+			queryStr = queryStr.replaceAll("and facturas.usuario_id" ,"and facturas.usuario_id ='"+ idUsuario.toString() + "' ");	
+		}else {
+			queryStr = queryStr.replaceAll("and facturas.usuario_id" ," ");
+		}
+		if (cliente  != null) {
+			queryStr = queryStr.replaceAll("and facturas.cliente_id" ," and facturas.cliente_id ="+ cliente.getId().toString() + " ");	
+		}else {
+			queryStr = queryStr.replaceAll("and facturas.cliente_id " ," ");
+		}
+		if (!tipoDocumento.equals(Constantes.COMBO_TODOS)) {
+			queryStr = queryStr.replaceAll("and facturas.tipo_doc" ," and facturas.tipo_doc in ('"+ tipoDocumento + "') ");	
+		}else {
+			queryStr = queryStr.replaceAll("and facturas.tipo_doc " ,"and facturas.tipo_doc in ('04','86','87','01','03') ");
+		}
+		
+		
+		if (estado > Constantes.ZEROS) {
+			queryStr = queryStr.replaceAll("and facturas.estado" ," and facturas.estado in ("+ estado + ") ");	
+		}else {
+			queryStr = queryStr.replaceAll("and facturas.estado" ," and facturas.estado in ("+ "2,6,7,5" + ") ");
+		}
+		
+		Query query = entityManager.createNativeQuery(queryStr, ListarFacturasNativa.class);
+		return (Collection<ListarFacturasNativa>) query.getResultList();
+		
+	}
+
+
 
 	
 }

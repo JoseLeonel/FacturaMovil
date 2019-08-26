@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -81,6 +80,7 @@ import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
+import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstado;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndFacturada;
 import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
@@ -951,30 +951,37 @@ public class FacturasController {
 	@RequestMapping(value = "/ListarFacturasActivasAndAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam String tipoDocumento, String actividadEconomica, Integer estado,Integer idUsuario) {
-		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Cliente cliente = clienteBo.buscar(idCliente);
-		DataTableDelimitador delimitadores = DelimitadorBuilder.get(request, fechaInicio, fechaFin, cliente, usuarioSesion.getEmpresa(), usuarioBo, tipoDocumento, estado, actividadEconomica,idUsuario);
-
-//		if (!usuarioBo.isAdministrador_sistema(usuarioSesion)) {
-//			String nombreUsuario = request.getUserPrincipal().getName();
-//			JqGridFilter dataTableFilter = usuarioBo.filtroPorEmpresa(nombreUsuario);
-//			delimitadores.addFiltro(dataTableFilter);
-//		}
-		Long total = dataTableBo.contar(delimitadores);
-		
-		Collection<Object> objetos = dataTableBo.listar(delimitadores);
-		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-		List<Object> solicitudList = new ArrayList<Object>();
-		for (Iterator<Object> iterator = objetos.iterator(); iterator.hasNext();) {
-			Factura object = (Factura) iterator.next();
-			// no se carga el usuario del sistema el id -1
-			if (object.getId().longValue() > 0L) {
-				solicitudList.add(new FacturaEsperaCommand(object));
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		Date fechaInicioP = Utils.parseDate(fechaInicio);
+		Date fechaFinalP = Utils.parseDate(fechaFin);
+		if (!fechaInicio.equals(Constantes.EMPTY) && !fechaFin.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
 			}
+
 		}
 
-		respuestaService.setRecordsTotal(total);
-		respuestaService.setRecordsFiltered(total);
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+
+		String inicio1 = dateFormat1.format(fechaInicioP);
+		String fin1 = dateFormat1.format(fechaFinalP);
+
+
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		Collection<ListarFacturasNativa> objetos = consultasNativeBo.findByFacturasAndFechaAndTipoDocAndUsuario(usuarioSesion.getEmpresa(), idUsuario, estado, inicio1, fin1, cliente, tipoDocumento, actividadEconomica);
+		List<Object> solicitudList = new ArrayList<Object>();
+		if (objetos != null) {
+			for (ListarFacturasNativa facturasDelDia : objetos) {
+				if (facturasDelDia.getId().longValue() > 0L) {
+					solicitudList.add(new FacturaAnulacionCommand(facturasDelDia));
+				}
+			}
+
+		}
+
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
 		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
 			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
 		}

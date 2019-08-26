@@ -1,8 +1,5 @@
 package com.emprendesoftcr.web.command;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 
 public class ConsultaComprasIvaCommand {

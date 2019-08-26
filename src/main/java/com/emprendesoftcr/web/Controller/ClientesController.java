@@ -204,7 +204,7 @@ public class ClientesController {
 			clienteCommand.setTipoDocumentoExoneracion(clienteCommand.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : clienteCommand.getTipoDocumentoExoneracion());
 			clienteCommand.setPorcentajeExoneracion(clienteCommand.getPorcentajeExoneracion() == null ? Constantes.ZEROS : clienteCommand.getPorcentajeExoneracion());
 			clienteCommand.setLibreImpuesto(clienteCommand.getLibreImpuesto() == null ? Constantes.LIBRE_IMPUESTOS_INACTIVO : clienteCommand.getLibreImpuesto());
-       
+
 			if (clienteCommand.getCedula().equals(Constantes.EMPTY)) {
 				result.rejectValue("cedula", Constantes.KEY_REQUERIDO);
 			}
@@ -234,7 +234,13 @@ public class ClientesController {
 			}
 
 			if (clienteCommand.getFechaEmisionExoneracionSTR() != null) {
+
 				if (!clienteCommand.getFechaEmisionExoneracionSTR().equals(Constantes.EMPTY)) {
+					if (clienteCommand.getNombreInstitucionExoneracion() == null) {
+						result.rejectValue("nombreInstitucionExoneracion", "error.cliente.nombre.institucion.vacio");
+					} else if (clienteCommand.getNombreInstitucionExoneracion().equals(Constantes.EMPTY)) {
+						result.rejectValue("nombreInstitucionExoneracion", "error.cliente.nombre.institucion.vacio");
+					}
 					if (clienteCommand.getNumeroDocumentoExoneracion() != null) {
 						if (clienteCommand.getNumeroDocumentoExoneracion().equals(Constantes.EMPTY)) {
 							result.rejectValue("numeroDocumentoExoneracion", "error.cliente.empty.numeroDocumentoExoneracion");
@@ -278,18 +284,18 @@ public class ClientesController {
 				if (!clienteCommand.getFechaEmisionExoneracionSTR().equals(Constantes.EMPTY)) {
 					Date fechaInicio = Utils.parseDateImpuestoServicio(clienteCommand.getFechaEmisionExoneracionSTR());
 					cliente.setFechaEmisionExoneracion(fechaInicio);
-					cliente.setNombreInstitucionExoneracion(clienteCommand.getNombreCompleto());
+					cliente.setNombreInstitucionExoneracion(clienteCommand.getNombreInstitucionExoneracion());
 					cliente.setNumeroDocumentoExoneracion(clienteCommand.getNumeroDocumentoExoneracion());
 					cliente.setTipoDocumentoExoneracion(clienteCommand.getTipoDocumentoExoneracion());
 					cliente.setPorcentajeExoneracion(clienteCommand.getPorcentajeExoneracion());
 
-				}else {
+				} else {
 					cliente.setFechaEmisionExoneracion(null);
 					cliente.setNombreInstitucionExoneracion(Constantes.EMPTY);
 					cliente.setNumeroDocumentoExoneracion(Constantes.EMPTY);
 					cliente.setTipoDocumentoExoneracion(Constantes.EMPTY);
 					cliente.setPorcentajeExoneracion(Constantes.ZEROS);
-					
+
 				}
 			}
 			cliente.setCodigoPais(clienteCommand.getCodigoPais());
@@ -387,6 +393,12 @@ public class ClientesController {
 			}
 			if (clienteCommand.getFechaEmisionExoneracionSTR() != null) {
 				if (!clienteCommand.getFechaEmisionExoneracionSTR().equals(Constantes.EMPTY)) {
+					if (clienteCommand.getNombreInstitucionExoneracion() == null) {
+						result.rejectValue("nombreInstitucionExoneracion", "error.cliente.nombre.institucion.vacio");
+					} else if (clienteCommand.getNombreInstitucionExoneracion().equals(Constantes.EMPTY)) {
+						result.rejectValue("nombreInstitucionExoneracion", "error.cliente.nombre.institucion.vacio");
+					}
+
 					if (clienteCommand.getNumeroDocumentoExoneracion() != null) {
 						if (clienteCommand.getNumeroDocumentoExoneracion().equals(Constantes.EMPTY)) {
 							result.rejectValue("numeroDocumentoExoneracion", "error.cliente.empty.numeroDocumentoExoneracion");
@@ -420,7 +432,7 @@ public class ClientesController {
 				if (!clienteCommand.getFechaEmisionExoneracionSTR().equals(Constantes.EMPTY)) {
 					Date fechaInicio = Utils.parseDateImpuestoServicio(clienteCommand.getFechaEmisionExoneracionSTR());
 					clienteBD.setFechaEmisionExoneracion(fechaInicio);
-					clienteBD.setNombreInstitucionExoneracion(clienteCommand.getNombreCompleto());
+					clienteBD.setNombreInstitucionExoneracion(clienteCommand.getNombreInstitucionExoneracion());
 					clienteBD.setNumeroDocumentoExoneracion(clienteCommand.getNumeroDocumentoExoneracion());
 					clienteBD.setTipoDocumentoExoneracion(clienteCommand.getTipoDocumentoExoneracion());
 					clienteBD.setPorcentajeExoneracion(clienteCommand.getPorcentajeExoneracion());

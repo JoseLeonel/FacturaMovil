@@ -62,8 +62,6 @@ public class FacturaBoImpl implements FacturaBo {
 	@Autowired
 	private ArticuloDao						articuloDao;
 
-	@Autowired
-	private HaciendaDao						haciendaDao;
 
 	@Autowired
 	private KardexDao							kardexDao;
@@ -565,6 +563,9 @@ public class FacturaBoImpl implements FacturaBo {
 	private Boolean getLibreImpuesto(Cliente cliente) {
 		Boolean libreImpuesto = Boolean.FALSE;
 		if (cliente != null) {
+			if(cliente.getLibreImpuesto() == null) {
+				return libreImpuesto;
+			}
 			if (cliente.getLibreImpuesto().equals(Constantes.LIBRE_IMPUESTOS_ACTIVO)) {
 				libreImpuesto = true;
 			}

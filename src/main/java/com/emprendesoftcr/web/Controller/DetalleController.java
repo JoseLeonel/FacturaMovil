@@ -144,9 +144,9 @@ public class DetalleController {
 		return detalleBo.totalVentasPorDetalle(usuario.getEmpresa(), fechaInicial, fechaFinal, tipoImpuesto,estado);
 
 	}
-//	@Autowired
-//	private CertificadoBo																							certificadoBo;
-
+////	@Autowired
+////	private CertificadoBo																							certificadoBo;
+//
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarDetlleByFacturaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody

@@ -75,7 +75,6 @@ function __Inicializar_Table(nombreTabla){
         
     });    
 }
-
 /**
  * Listar las actividades economicas 
  */
@@ -98,8 +97,6 @@ function listaActividadEconomica(){
 		 }
 	})
 }
-
-
 /**
 *  Obtiene la lista de los clientes activos
 **/
@@ -148,7 +145,11 @@ function listaUsuarios(){
 	})
 }
 
-var ListarFacturas = function(){
+
+
+var facturas = {data:[]};
+
+function ListarFacturas(){
 	var fechaInicio=$('.fechaInicial').val();
     var fechaFin = $('.fechaFinal').val();
 	var idCliente = $('#cliente').val();
@@ -156,37 +157,79 @@ var ListarFacturas = function(){
 	var actividadEconomica=$('.selectActividadEconocimica').val();
 	var estado =$('.selectEstado').val();
 	var selectUsuarios = $('#usuario').val();
-	var table  =  $('#tableListar').DataTable( {
-	"responsive": true,
-	 "bAutoWidth" : true,
-	"destroy":true,
-	"order": [ 1, 'asc' ],
-			"bInfo": true,
-			"bPaginate": true,
-			"bFilter" : true,
-			"bDeferRender": true ,
-			"sDom": 'lrtip',
-			"searching":true,
-	"processing": false,
-	"serverSide": true,
-	"sort" : "position",
-	"lengthChange": true,
-	"ajax" : {
-			"url":"ListarFacturasActivasAndAnuladasAjax.do?fechaInicio=" + fechaInicio+"&"+"fechaFin="+fechaFin+"&"+"idCliente="+idCliente+"&"+"tipoDocumento="+tipoDocumento +"&actividadEconomica="+actividadEconomica+"&estado="+estado+"&idUsuario="+selectUsuarios,
-			"deferRender": true,
-			"type":"GET",
-					"dataType": 'json',
-					
-			  },
-	"columns" : formato_tabla,
-	"language" : idioma_espanol,
-} );//fin del table
-__BajarPDF()
-__imprimirPTV()
-__CorreoAlternativo()
-__VerDetalle()
-__EnviarCorreos()
-EventoFiltro()
+	var table = $('.tableListar').DataTable();
+ 	table
+    .clear()
+    .draw();
+	facturas = {data:[]}
+	var parametros = {
+		fechaInicio: fechaInicio,
+		fechaFin:fechaFin,
+		idCliente:idCliente,
+		tipoDocumento:tipoDocumento,
+		actividadEconomica:actividadEconomica,
+		estado:estado,
+		idUsuario:selectUsuarios
+	}
+	__Inicializar_Table('.tableListar')  
+	$.ajax({
+	   url: "ListarFacturasActivasAndAnuladasAjax.do",
+	   datatype: "json",
+	   data:parametros ,
+	   method:"GET",
+	   success: function (result) {
+		   if(result.aaData.length > 0){
+			   loadListar(".tableListar",idioma_espanol,informacion_tabla,result.aaData)
+			   facturas.data = result.aaData
+			    __BajarPDF();
+			    __imprimirPTV();
+                __CorreoAlternativo();
+                __VerDetalle();
+                __EnviarCorreos();
+				EventoFiltro();
+				suma(facturas.data);
+		   }else{
+			__Inicializar_Table('.tableListar');  
+		   }           
+	   },
+	   error: function (xhr, status) {
+		   mensajeErrorServidor(xhr, status);
+		   console.log(xhr);
+	   }
+	});
+}
+/**
+ * 
+ * suma de los tiquetes , facturas excluye notas de credito y debito y estados anulados 
+ */
+function suma(data){
+    var total =  0
+	$.each(data, function( index, modeloTabla ) {
+        if($('.tipoDocumento').val() =='0'){
+             if(modeloTabla.tipoDoc =='04' || modeloTabla.tipoDoc =='87' || modeloTabla.tipoDoc =='01'){
+                total = modeloTabla.totalComprobante + total;   
+			 }
+		} else{
+           total = __valorFloat(modeloTabla.totalComprobante) + total;  
+		} 
+	})
+	$('.total').val(formatoDecimales(total,2))   
+
+}
+/**
+*  inicializar el listado
+**/
+function __Inicializar_Table(nombreTabla){
+    $(nombreTabla).DataTable({
+        destroy: true,
+        "language": idioma_espanol,
+        "sDom": 'lrtip',
+        "order": [0, 'desc'],
+        "bPaginate": true,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+    });    
 }
 // traducciones del table
 var idioma_espanol = 
@@ -228,7 +271,6 @@ function __ComboTipoDocumentosPara(){
 	$('.tipoDocumento').append('<option value="'+"02"+'">'+$.i18n.prop("referencia.tipo.documento.nota.debito")+ '</option>');
 	$('.tipoDocumento').append('<option value="'+"03"+'">'+$.i18n.prop("referencia.tipo.documento.nota.credito")+ '</option>');
 	$('.tipoDocumento').append('<option value="'+"86"+'">'+$.i18n.prop("referencia.tipo.documento.nota.credito.interno")+ '</option>');
-    
 }
 
 function agregarInputsCombos(){
@@ -281,27 +323,23 @@ function EventoFiltro(){
 /**
 *Formato del listado 
 **/
-var formato_tabla = [ 
-                        {'data' :'usuarioCreacion.nombreUsuario'  ,"name":"usuarioCreacion.nombreUsuario"    ,"title" : "Usuario"         ,"autoWidth" :true },
+var informacion_tabla = [ 
+                        {'data' :'nombreUsuario'  ,"name":"nombreUsuario"    ,"title" : "Usuario"         ,"autoWidth" :true },
                         {'data' :'fechaEmisionSTR'                ,"name":"fechaEmision"                  ,"title" : "Fecha Emisi\u00F3n"   ,"autoWidth" :true },
-                        {'data' :'numeroConsecutivo'              ,"name":"numeroConsecutivo"                ,"title" : "No.Consecutivo"  ,"autoWidth" :true ,
-                            "render":function(numeroConsecutivo,type, row){
-							    return __TipoDocumentos(numeroConsecutivo,row)
-						    }
-                        },
-                        {'data' :'cliente' ,'data.display' :'cliente.nombreCompleto'                         ,"name":"cliente.nombreCompleto"                          ,"title" : "Cliente"   ,"autoWidth" :true ,
-                            "render":function(cliente,type, row){
-    						    return cliente ==null?"":cliente.nombreCompleto.length > 50?cliente.nombreCompleto.substring(0,50):cliente.nombreCompleto;
+                        {'data' :'numeroConsecutivo'              ,"name":"numeroConsecutivo"                ,"title" : "No.Consecutivo"  ,"autoWidth" :true },
+						{'data' :'tipoDocSTR'           ,"name":"tipoDocSTR"       ,"title" : "Tipo documento"    ,"autoWidth" :true  },
+						{'data' :'condicionVentaSTR'           ,"name":"condicionVentaSTR"       ,"title" : "Condicion Pago"    ,"autoWidth" :true  },
+                        {'data' :'nombreCompleto' ,"name":"nombreCompleto"  ,"title" : "Cliente"   ,"autoWidth" :true ,
+                            "render":function(nombreCompleto,type, row){
+    						    return nombreCompleto ==null?"":nombreCompleto.length > 40?nombreCompleto.substring(0,40)+"....":nombreCompleto;
 						    }
 						},
 						
                         {'data' :'nombreFactura'  ,"name":"nombreFactura"                          ,"title" : "A nombre"   ,"autoWidth" :true ,
                             "render":function(nombreFactura,type, row){
-    						    return nombreFactura ==null?"":nombreFactura.length > 50 ? nombreFactura.substring(0,50):nombreFactura;
+    						    return nombreFactura ==null?"":nombreFactura.length > 40 ? nombreFactura.substring(0,40)+"...":nombreFactura;
 						    }
                         },
-                        {'data' :'totalImpuestoSTR'           ,"name":"totalImpuesto"       ,"title" : "IVA"    ,"autoWidth" :true  },
-                        {'data' :'totalDescuentosSTR'         ,"name":"totalDescuentos"     ,"title" : "Descuento"   ,"autoWidth" :true },
                         {'data' :'codigoMoneda'               ,"name":"codigoMoneda"           ,"title" : "Moneda"      ,"autoWidth" :true },
                         {'data' :'totalComprobanteSTR'        ,"name":"totalComprobante"    ,"title" : "Total"       ,"autoWidth" :true },
                         {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
@@ -345,7 +383,7 @@ function __Opciones(id,type,row){
     menu += '<li><a href="#"  title="Mostrar" class="  btnMostrar" >Mostrar</a></li>'
     menu += '<li><a href="#"  title="Mostrar" class="  btnImprimir" >Imprimir</a></li>'
     menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
-    if(row.empresa.noFacturaElectronica == 0){
+    if(row.noFacturaElectronica == 0){
         menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Correo al Cliente</a></li>'
         menu += '<li><a href="#"  title="Envio de correo Alternativo" class="  btnEnvioCorreoAlternativo" >Correo Alternativo</a></li>'
     }

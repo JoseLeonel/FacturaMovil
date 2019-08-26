@@ -117,35 +117,9 @@
             <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="panel-group" id="accordion">
                     <div class="panel panel-default" >
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" >
-                            <div class="panel-heading" style="background: #3c8dbc; color: white;">
-                                <h4 class="panel-title"><span class="fa fa-bank  col-md-offset-5"></span> Exento de IVA,Extensiones articulo 8 de la ley 9635</h4>
-                            </div>
-                        </a>
-                        <div id="collapse3" class="panel-collapse collapse">
-                            <div class="panel-body">
-                                <div class="row">    
-                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                        <label  >Exento de IVA</label>
-                                        <select  class="form-control libreImpuest" id="libreImpuesto" name="libreImpuesto"   >
-                                            <option each={comboLibreImpuesto} value="{estado}" selected="{cliente.libreImpuesto ==estado?true:false}" >{descripcion}</option>
-                                        </select>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>                            
-        <div class="row" >  
-            <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="panel-group" id="accordion">
-                    <div class="panel panel-default" >
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" >
                             <div class="panel-heading" style="background: #3c8dbc; color: white;">
-                                <h4 class="panel-title"><span class="fa fa-bank  col-md-offset-5"></span> Exoneracion con afiliacion a Exonet</h4>
+                                <h4 class="panel-title"><span class="fa fa-bank  col-md-offset-5"></span> Exoneracion con afiliacion a Exonet/Exento de IVA,Extensiones articulo 8 de la ley 9635</h4>
                             </div>
                         </a>
                         <div id="collapse2" class="panel-collapse collapse">
@@ -158,7 +132,7 @@
                                         </select>
                                     </div>
                                     <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
-                                        <label >Numero Autorizacion Exonet </label> 
+                                        <label >Numero Documento Autorizacion </label> 
                                         <input  type="text"  class="form-control numeroDocumentoExoneracion" id="numeroDocumentoExoneracion" name = "numeroDocumentoExoneracion" autofocus="autofocus"  value ="{cliente.numeroDocumentoExoneracion}">                    
                                     </div>
                                     <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
@@ -167,6 +141,10 @@
                                     </div>
                                 </div>
                                 <div class="row">
+                                    <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                        <label >Nombre de la Institucion que autoriza  </label> 
+                                        <input type="text"  class="form-control nombreInstitucionExoneracion" id="nombreInstitucionExoneracion" name = "nombreInstitucionExoneracion" autofocus="autofocus"  value ="{cliente.nombreInstitucionExoneracion}">                    
+                                    </div>
                                     <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                         <label >% Porcentaje Autorizacion  </label> 
                                         <input  type="number"  class="form-control porcentajeExoneracion" id="porcentajeExoneracion" name = "porcentajeExoneracion" autofocus="autofocus"  value ="{cliente.porcentajeExoneracion}">                    
