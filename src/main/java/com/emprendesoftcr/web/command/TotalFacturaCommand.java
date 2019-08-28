@@ -16,12 +16,16 @@ public class TotalFacturaCommand {
 	private Double	totalTarjeta;
 	private Double	totalBanco;
 	private Double	totalPagos;
+	private Double	totalCredito;
+
+	
+
 
 	public TotalFacturaCommand() {
 		super();
 	}
 
-	public TotalFacturaCommand(Double total, Double totalDescuentos, Double totalImpuestos, Double totalVentasNetas, Double totalVentasExentas, Double totalVentasGravadas,Double totalOtrosCargos,Double totalEfectivo,Double totalTarjeta,Double totalBanco) {
+	public TotalFacturaCommand(Double total, Double totalDescuentos, Double totalImpuestos, Double totalVentasNetas, Double totalVentasExentas, Double totalVentasGravadas,Double totalOtrosCargos,Double totalEfectivo,Double totalTarjeta,Double totalBanco,Double totalCredito) {
 		super();
 		this.total = total;
 		this.totalDescuentos = totalDescuentos;
@@ -33,7 +37,9 @@ public class TotalFacturaCommand {
 		this.totalEfectivo = totalEfectivo;
 		this.totalBanco = totalBanco;
 		this.totalTarjeta = totalTarjeta;
-		this.totalPagos = this.totalBanco + this.totalEfectivo + this.totalTarjeta;
+		this.totalCredito = totalCredito;
+		this.totalPagos = this.totalBanco + this.totalEfectivo + this.totalTarjeta + this.totalCredito;
+		
 	}
 
 	public Double getTotal() {
@@ -47,7 +53,17 @@ public class TotalFacturaCommand {
 	public void setTotal(Double total) {
 		this.total = total;
 	}
+	public Double getTotalCredito() {
+		return totalCredito;
+	}
+	public String getTotalCreditoSTR() {
+		return Utils.formateadorMiles(totalCredito !=null?totalCredito:Constantes.ZEROS_DOUBLE);
+	}
 
+	
+	public void setTotalCredito(Double totalCredito) {
+		this.totalCredito = totalCredito;
+	}
 	public Double getTotalDescuentos() {
 		return totalDescuentos;
 	}

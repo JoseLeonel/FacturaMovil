@@ -2353,8 +2353,8 @@ function aplicarFactura(estado){
                     return
                 }
                 //Si el cliente esta pagando con tajeta, banco debe ser igual a la venta
-                var tarjeta = __valorNumerico(self.factura.totalTarjeta)
-                var banco = __valorNumerico(self.factura.totalBanco)
+                var tarjeta = __valorNumerico($('#totalTarjeta').val())
+                var banco = __valorNumerico($('#totalBanco').val())
                 if(tarjeta != 0 || banco !=0){
                     if(resultado != montoEntregado  ){
                         mensajeError($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
@@ -2362,6 +2362,7 @@ function aplicarFactura(estado){
                         
                     }
                 }
+                
 
             }
        }

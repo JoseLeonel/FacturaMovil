@@ -214,10 +214,14 @@ public class CompraBoImpl implements CompraBo {
 	 */
 	private void actualizarProveedor(DetalleCompra detalleCompra, Proveedor proveedor) {
 		try {
+			Double totalLinea = detalleCompra.getCosto() != null ? detalleCompra.getCosto() : Constantes.ZEROS_DOUBLE;
+			//	totalLinea = totalLinea > 0 ? totalLinea / detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
+				Double descuento = detalleCompra.getTotalDescuento() == null?Constantes.ZEROS_DOUBLE:detalleCompra.getTotalDescuento()/detalleCompra.getCantidad();
+				Double costo = totalLinea - descuento;
 			ProveedorArticulo proveedorArticulo = proveedorArticuloDao.findByCodigo(detalleCompra.getArticulo(), proveedor);
 			if (proveedorArticulo != null) {
 				proveedorArticulo.setUpdated_at(new Date());
-				proveedorArticulo.setCosto(detalleCompra.getCosto());
+				proveedorArticulo.setCosto(costo);
 				proveedorArticuloDao.modificar(proveedorArticulo);
 
 			} else {
@@ -226,7 +230,7 @@ public class CompraBoImpl implements CompraBo {
 				proveedorArticulo.setUpdated_at(new Date());
 				proveedorArticulo.setArticulo(detalleCompra.getArticulo());
 				proveedorArticulo.setCodigo(detalleCompra.getArticulo().getCodigo());
-				proveedorArticulo.setCosto(detalleCompra.getCosto());
+				proveedorArticulo.setCosto(costo);
 				proveedorArticulo.setProveedor(proveedor);
 				proveedorArticuloDao.agregar(proveedorArticulo);
 			}
@@ -247,13 +251,16 @@ public class CompraBoImpl implements CompraBo {
 	@Transactional
 	public void aplicarInventario(Compra compra, DetalleCompra detalleCompra, Articulo articulo) throws Exception {
 		try {
-			Double totalLinea = detalleCompra.getMontoTotalLinea() != null ? detalleCompra.getMontoTotalLinea() : Constantes.ZEROS_DOUBLE;
-			totalLinea = totalLinea > 0 ? totalLinea / detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
-			Double costo = totalLinea;
-			Double porcentajeGanancia =articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio());
+			Double totalLinea = detalleCompra.getCosto() != null ? detalleCompra.getCosto() : Constantes.ZEROS_DOUBLE;
+		//	totalLinea = totalLinea > 0 ? totalLinea / detalleCompra.getCantidad() : Constantes.ZEROS_DOUBLE;
+			Double descuento = detalleCompra.getTotalDescuento() == null?Constantes.ZEROS_DOUBLE:detalleCompra.getTotalDescuento()/detalleCompra.getCantidad();
+			Double costo = totalLinea - descuento;
+			
+		
 			String leyenda = Constantes.MOTIVO_INGRESO_INVENTARIO_COMPRA + compra.getProveedor().getNombreCompleto();
 			kardexDao.entradaCosto(articulo, costo, detalleCompra.getCantidad(), compra.getNota(), compra.getConsecutivo(), Constantes.KARDEX_TIPO_ENTRADA, leyenda, compra.getUsuarioCreacion());
 		//	articulo.setCosto(costoPromedio);
+			Double porcentajeGanancia =articuloDao.porcentanjeDeGanancia(articulo.getCosto(), articulo.getImpuesto(), detalleCompra.getPrecio());
 			articulo.setGananciaPrecioPublico(porcentajeGanancia);
 			articulo.setUpdated_at(new Date());
 			articulo.setUsuario(compra.getUsuarioCreacion());

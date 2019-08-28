@@ -82,11 +82,11 @@
                                 <div class="form-group">
                                     <label>Estado </label>  
                                     <select  class="form-control selectEstado estado" id= "estado" name="estado" >
-                                     	<option  value="2"  >Facturada</option>
-                                    	<option  value="5"  >Anulada</option>
-	                                   	<option  value="6"  >Aceptada</option>
-                                       	<option  value="7"  >Rechazada</option>
-
+                                        <option  value="6"  >Aceptada</option>
+                                        <option  value="2"  >Facturada</option>
+                                    	<option  value="7"  >Rechazadas</option>
+                                        <option  value="5"  >Anulada</option>                                    </select>
+                        
                                     </select>
                                 </div>  
                             </div> 
@@ -180,6 +180,10 @@
                                 <label> {$.i18n.prop("factura.resumen.banco")}  </label>
                                 <input type="text" readonly="readonly" class="form-control totalBanco" id="totalBanco" name="totalBanco" value="{factura.totalBancoSTR}">
                             </div>
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.resumen.total.credito")}  </label>
+                                <input type="text" readonly="readonly" class="form-control totalCredito" id="totalCredito" name="totalCredito" value="{factura.totalCreditoSTR}">
+                            </div>
                             
 
                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
@@ -217,7 +221,8 @@
 				totalEfectivo:"0",
 				totalTarjeta:"0",
 				totalBanco:"0",
-				totalPagos:"0"
+				totalPagos:"0",
+				totalCredito:"0"
 		}
 		self.mostrarBotones=false
 		self.actividadEconomica = ""
@@ -310,7 +315,8 @@ function __ListaActividadesComercales(){
 				totalEfectivo:"0",
 				totalTarjeta:"0",
 				totalBanco:"0",
-				totalPagos:"0"
+				totalPagos:"0",
+				totalCredito:"0"
 		    }		
 			self.update();
 			$('.datepickerFechaFinal').datepicker(

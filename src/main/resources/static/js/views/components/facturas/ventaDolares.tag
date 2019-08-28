@@ -610,6 +610,7 @@
 
         __comboCondicionPago()
         
+        
        __Teclas()
        __TipoCambio()
        cargaBilletes()

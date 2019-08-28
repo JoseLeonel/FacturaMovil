@@ -61,7 +61,7 @@
                 <div class="row">
                     <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
                         <div class="form-group has-success">
-                            <label class="knob-label" >{$.i18n.prop("inventario.cantidad")}</label>
+                            <label class="knob-label tituloDescuento" >{$.i18n.prop("inventario.cantidad")}</label>
                             <input  type="number" class="form-control cambiarCantidadArticulo" id="cambiarCantidadArticulo" name = "cambiarCantidadArticulo" autofocus="autofocus" min="0">
                         </div>
                     </div>
@@ -87,7 +87,7 @@
                 <div class="row">
                     <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
                         <div class="form-group has-success">
-                            <label class="knob-label" >{$.i18n.prop("inventario.cantidad")}</label>
+                            <label class="knob-label tituloDescuento" >{$.i18n.prop("articulo.descripcion")}</label>
                             <input  type="text" class="form-control cambiarDescripcionArticulo" id="cambiarDescripcionArticulo" name = "cambiarDescripcionArticulo" autofocus="autofocus">
                         </div>
                     </div>
@@ -886,16 +886,16 @@
 
 <!--Modal Cambiar precio-->
 <div id='modalCambiarPrecio' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog modal-lg">
        <div class="modal-content">
             <div class="modal-header with-border " >
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.precio")}</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
+                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
                         <div class="form-group has-success">
-                            <label >Precio:</label>
+                            <label class="tituloDescuento">Precio:</label>
                             <input  type="number" class="form-control cambiarprecioArticulo" id="cambiarprecioArticulo" name = "cambiarprecioArticulo" autofocus="autofocus" min="0">
                         </div>
                     </div>
@@ -913,7 +913,7 @@
 
 <!--Modal Cambiar Descuento-->
 <div id='modalCambiarDescuento' class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog modal-lg">
        <div class="modal-content">
             <div class="modal-header with-border " >
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i>&nbsp;{$.i18n.prop("titulo.cambiar.descuento")}</h4>
@@ -921,9 +921,9 @@
             <div class="modal-body">
                 <form id="formularioDescuento" name="formularioDescuento">
                 <div class="row">
-                    <div class="col-sx-6 col-md-6 col-lg-6 col-sm-6">
+                    <div class="col-sx-12 col-md-12 col-lg-12 col-sm-12">
                         <div class="form-group has-success">
-                            <label >{$.i18n.prop("factura.linea.detalle.descuento")}</label>
+                            <label class="tituloDescuento">%Descuento</label>
                             <input  type="number" class="form-control aplicarDescuento" id="aplicarDescuento" name = "aplicarDescuento" autofocus="autofocus" min="0">
                         </div>
                     </div>
@@ -1221,6 +1221,40 @@
             </div>       
         <!--Fin Ventana de los billetes--> 
 <style type="text/css">
+.tituloDescuento{
+    font-size: 50px;
+}
+.cambiarDescripcionArticulo{
+    font-size: 40px;
+    font-weight: 800;
+    color: black;
+    height: 3%;
+    text-align: center;
+
+}
+.cambiarCantidadArticulo{
+    font-size: 80px;
+    font-weight: 800;
+    color: black;
+    height: 3%;
+    text-align: center;
+
+}
+.cambiarprecioArticulo{
+    font-size: 40px;
+    font-weight: 800;
+    color: black;
+    height: 3%;
+    text-align: center;
+
+}
+.aplicarDescuento{
+    font-size: 40px;
+    font-weight: 800;
+    color: black;
+    height: 3%;
+    text-align: center;
+}
 .billetes1{
     margin-left: 1%;
     /* margin-bottom: 9px; */
@@ -2538,7 +2572,7 @@ __CambiarDescripcion(e){
    $("#cambiarDescripcionArticulo" ).focus()
    $("#cambiarDescripcionArticulo" ).val(self.item.descripcion)
    $('#modalCambiarDescripcion').modal()                      // initialized with defaults
-   $('#modalCambiarDescripcion').modal({ keyboard: false })   // initialized with no keyboard 
+   $('#modalCambiarDescripcion').modal({backdrop: 'static', keyboard: true})   // initialized with no keyboard 
    $('#modalCambiarDescripcion').modal('show')                // initializes and invokes show immediately
 }
 /**
@@ -2549,7 +2583,7 @@ __CambiarPrecio(e){
    self.update()
    $( "#cambiarprecioArticulo" ).focus()
    $( "#cambiarprecioArticulo" ).val( e.item.precioUnitario)
-   $('#modalCambiarPrecio').modal('show')      
+   $('#modalCambiarPrecio').modal({backdrop: 'static', keyboard: true})   
 }
 /**
 * Tipo Cambio de moneda
@@ -2909,10 +2943,13 @@ function aplicarFactura(estado, separarFactura){
                 return
             }
             //Si el cliente esta pagando con tajeta, banco debe ser igual a la venta
-            if(self.factura.totalTarjeta != 0 || self.factura.totalBanco !=0){
-                if(self.factura.totalComprobante != montoEntregado  ){
+            var tarjeta = __valorNumerico($('#totalTarjeta').val())
+            var banco = __valorNumerico($('#totalBanco').val())
+            if(tarjeta != 0 || banco !=0){
+                if(resultado != montoEntregado  ){
                     mensajeError($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
                     return
+                        
                 }
             }
         }

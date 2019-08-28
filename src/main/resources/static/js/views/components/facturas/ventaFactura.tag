@@ -2262,16 +2262,13 @@ __CargarFacturaEspera(e){
     if(self.factura.id !=null){
       if(self.seIncluyoUnArticulo !=null){
         aplicarFactura(1)  
-       
       }  
-      
     }else{
         if(self.detail.length != 0 ){
             $('#ModalAgregarNombreTiquete').modal('show') 
             $('.cambioNombreFactura').focus()
             return
          }
-       
     }
     
 __FacturaEnEspera(e.item)
@@ -2288,9 +2285,7 @@ __CambiarNombreTiquete(){
     $('.cambioNombreTiquete').val(self.factura.nombreFactura)
     $('#ModalCambiarNombreTiquete').modal({backdrop: 'static', keyboard: false})     // initialized with no keyboard
     $('#ModalCambiarNombreTiquete').modal('show') 
-    
 }
-
 /**
 *  Crear la factura temporal o espera
 **/
@@ -2422,7 +2417,9 @@ function aplicarFactura(estado){
                 return
             }
             //Si el cliente esta pagando con tajeta, banco debe ser igual a la venta
-            if(self.factura.totalTarjeta != 0 || self.factura.totalBanco !=0){
+            var tarjeta = __valorNumerico($('#totalTarjeta').val())
+            var banco = __valorNumerico($('#totalBanco').val())
+            if(tarjeta != 0 || banco !=0){
                 if(resultado != montoEntregado  ){
                     mensajeError($.i18n.prop("error.factura.monto.tarjeta.banco.igual.venta"))
                    return

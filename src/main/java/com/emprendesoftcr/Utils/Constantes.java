@@ -511,6 +511,7 @@ public class Constantes {
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_EFECTIVO						= "TOTAL_EFECTIVO";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_TARJETA						= "TOTAL_TARJETA";
 	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_BANCO							= "TOTAL_BANCO";
+	public static final String					SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_CREDITO						= "TOTAL_CREDITO";
 	// Totales de Compras Aceptadas
 	public static final String					SP_TOTAL_ACEPTADAS_IN_FECHA_INICIO													= "FECHA_INICIO";
 	public static final String					SP_TOTAL_ACEPTADAS_IN_FECHA_FIN															= "FECHA_FIN";
