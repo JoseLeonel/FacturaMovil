@@ -718,11 +718,11 @@ public class ArticuloController {
 				}
 			}
 			if (!articulo.getTipoImpuesto().equals(Constantes.EMPTY)) {
-				if (!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
-					if (articulo.getImpuesto().equals(Constantes.ZEROS_DOUBLE)) {
-						result.rejectValue("impuesto1", "error.articulo.tipoImpuesto1.cero");
-					}
-				}
+//				if (!articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_VENTA_IVA_CALCULO_ESPECIAL)) {
+//					if (articulo.getImpuesto().equals(Constantes.ZEROS_DOUBLE)) {
+//						result.rejectValue("impuesto1", "error.articulo.tipoImpuesto1.cero");
+//					}
+//				}
 				if (articulo.getTipoImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO)) {
 					if (!articulo.getImpuesto().equals(Constantes.TIPO_IMPUESTO_SELECTIVO_CONSUMO_ARTICULO_VALOR)) {
 						result.rejectValue("tipoImpuesto1", "error.articulo.tipoImpuesto1.selectivoConsumo");

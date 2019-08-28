@@ -3,6 +3,7 @@ package com.emprendesoftcr.web.command;
 import java.util.Date;
 
 import com.emprendesoftcr.Utils.Utils;
+import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 
 public class FacturaDiaCommand {
@@ -39,13 +40,13 @@ public class FacturaDiaCommand {
 	private Date		updated_at;
 
 	private String	cliente;
-	
-	private String fechaEmisionSTR;
-	private String cedula;
-	private String totalImpuestoSTR;
-	private String totalDescuentosSTR;
-	private String totalComprobanteSTR;
 
+	private String	fechaEmisionSTR;
+	private String	cedula;
+	private String	totalImpuestoSTR;
+	private String	totalDescuentosSTR;
+	private String	totalComprobanteSTR;
+	private String	condicionVentaSTR;
 
 	public FacturaDiaCommand(FacturasDelDiaNative facturasDelDia) {
 		super();
@@ -71,7 +72,8 @@ public class FacturaDiaCommand {
 		this.totalComprobanteSTR = Utils.formateadorMiles(facturasDelDia.getTotalComprobante());
 		this.totalImpuestoSTR = Utils.formateadorMiles(facturasDelDia.getTotalImpuesto());
 		this.totalDescuentosSTR = Utils.formateadorMiles(facturasDelDia.getTotalDescuentos());
-		
+		this.condicionVentaSTR =MapEnums.ENUM_CONDICION_VENTA.get(facturasDelDia.getCondicionVenta());
+
 	}
 
 	public Long getId() {
@@ -81,30 +83,27 @@ public class FacturaDiaCommand {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	
-	
-	
 
-	
-	
-	
-	
+	public String getCondicionVentaSTR() {
+		return condicionVentaSTR;
+	}
+
+	public void setCondicionVentaSTR(String condicionVentaSTR) {
+		this.condicionVentaSTR = condicionVentaSTR;
+	}
+
 	public String getTotalDescuentosSTR() {
 		return totalDescuentosSTR;
 	}
 
-	
 	public void setTotalDescuentosSTR(String totalDescuentosSTR) {
 		this.totalDescuentosSTR = totalDescuentosSTR;
 	}
 
-	
 	public String getTotalComprobanteSTR() {
 		return totalComprobanteSTR;
 	}
 
-	
 	public void setTotalComprobanteSTR(String totalComprobanteSTR) {
 		this.totalComprobanteSTR = totalComprobanteSTR;
 	}
@@ -113,7 +112,6 @@ public class FacturaDiaCommand {
 		return totalImpuestoSTR;
 	}
 
-	
 	public void setTotalImpuestoSTR(String totalImpuestoSTR) {
 		this.totalImpuestoSTR = totalImpuestoSTR;
 	}
@@ -122,7 +120,6 @@ public class FacturaDiaCommand {
 		return cedula;
 	}
 
-	
 	public void setCedula(String cedula) {
 		this.cedula = cedula;
 	}
@@ -131,7 +128,6 @@ public class FacturaDiaCommand {
 		return fechaEmisionSTR;
 	}
 
-	
 	public void setFechaEmisionSTR(String fechaEmisionSTR) {
 		this.fechaEmisionSTR = fechaEmisionSTR;
 	}

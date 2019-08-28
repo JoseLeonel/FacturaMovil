@@ -7,7 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @BaseNativeQuery(name = "cons_vent_iva", 
-query = "( select @a\\:=@a+1 as id_consulta, d.tipo_impuesto, d.cod_tarifa, d.impuesto, sum(d.imp_neto * f.tipo_cambio) as total_impuesto, sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "   
+query = "( select @a\\:=@a+1 as id_consulta, "
+		+ "d.tipo_impuesto, "
+		+ "d.cod_tarifa, "
+		+ "d.impuesto, "
+		+ "sum(IFNULL(d.monto_impuesto, 0) * f.tipo_cambio) as total_impuesto, "
+		+ "sum(IFNULL(d.monto_total_linea, 0) * f.tipo_cambio) as total_ventas, "   
+		+ "sum(IFNULL(d.mont_exone, 0) * f.tipo_cambio) as total_exoneraciones " 
 		+ " from " 
 		+ " (select @a\\:=0) as a, " 
 		+ " detalles d  inner join facturas f on f.id = d.factura_id " 
@@ -26,7 +32,13 @@ query = "( select @a\\:=@a+1 as id_consulta, d.tipo_impuesto, d.cod_tarifa, d.im
 		+ " ) "
 		+ " union "
 		+ " ( "
-		+ " select @b\\:=@b+1 as id_consulta, d.tipo_impuesto, d.cod_tarifa, d.impuesto,  sum(d.imp_neto * f.tipo_cambio) as total_impuesto, sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "
+		+ " select @b\\:=@b+1 as id_consulta, "
+		+ "d.tipo_impuesto, "
+		+ "d.cod_tarifa, "
+		+ "d.impuesto,  "
+		+ "sum(IFNULL(d.monto_impuesto, 0) * f.tipo_cambio) as total_impuesto, "
+		+ "sum(IFNULL(d.monto_total_linea, 0) * f.tipo_cambio) as total_ventas, "
+		+ "sum(IFNULL(d.mont_exone, 0) * f.tipo_cambio) as total_exoneraciones " 
 		+ " from "
 		+ " (select @b\\:=1000) as b, "
 		+ " detalles d  inner join facturas f on f.id = d.factura_id " 
@@ -45,14 +57,20 @@ query = "( select @a\\:=@a+1 as id_consulta, d.tipo_impuesto, d.cod_tarifa, d.im
 		+ " ) "
 	    + " union "
 	    + " ( "
-	    + " select @c\\:=@c+1 as id_consulta, d.tipo_impuesto, d.cod_tarifa, d.impuesto, sum(d.imp_neto * f.tipo_cambio) as total_impuesto, sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "   
+	    + " select @c\\:=@c+1 as id_consulta, "
+	    + " d.tipo_impuesto, "
+	    + " d.cod_tarifa, "
+	    + " d.impuesto, "
+	    + " sum(IFNULL(d.monto_impuesto, 0) * f.tipo_cambio) as total_impuesto, "
+	    + " sum(IFNULL(d.monto_total_linea, 0) * f.tipo_cambio) as total_ventas, "  
+		+ " sum(IFNULL(d.mont_exone, 0) * f.tipo_cambio) as total_exoneraciones " 
 	    + " from "
 	    + " (select @c\\:=10000) as c, "
 	    + " detalles d  inner join facturas f on f.id = d.factura_id "
 	    + " where "
 		    + " f.ref_codigo      != '01'                           and "
 		    + " f.empresa_id       = :ID_EMPRESA                    and "
-		    + " f.act_comercial     :ACT_COMERCIAL                 and "
+		    + " f.act_comercial     :ACT_COMERCIAL                  and "
 		    + " f.estado           = :ESTADO                        and "
             + " f.created_at BETWEEN :FECHAINICIAL  and :FECHAFINAL and "
 		    + " d.tipo_impuesto    = ''                             and "
@@ -84,13 +102,14 @@ public class ConsultaIVANative implements Serializable {
 	@Column(name = "impuesto")
 	private Double impuesto;
 	
-	
-	
 	@Column(name = "total_impuesto")
 	private Double totalImpuesto;
 	
 	@Column(name = "total_ventas")
 	private Double totalVentas;
+	
+	@Column(name = "total_exoneraciones")
+	private Double totalExoneraciones;
 
 	public Long getId() {
 		return id;
@@ -124,8 +143,6 @@ public class ConsultaIVANative implements Serializable {
 		this.impuesto = impuesto;
 	}
 
-
-
 	public Double getTotalImpuesto() {
 		return totalImpuesto;
 	}
@@ -142,6 +159,14 @@ public class ConsultaIVANative implements Serializable {
 		this.totalVentas = totalVentas;
 	}
 
+	public Double getTotalExoneraciones() {
+		return totalExoneraciones;
+	}
+
+	public void setTotalExoneraciones(Double totalExoneraciones) {
+		this.totalExoneraciones = totalExoneraciones;
+	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -154,6 +179,7 @@ public class ConsultaIVANative implements Serializable {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((impuesto == null) ? 0 : impuesto.hashCode());
 		result = prime * result + ((tipoImpuesto == null) ? 0 : tipoImpuesto.hashCode());
+		result = prime * result + ((totalExoneraciones == null) ? 0 : totalExoneraciones.hashCode());
 		result = prime * result + ((totalImpuesto == null) ? 0 : totalImpuesto.hashCode());
 		result = prime * result + ((totalVentas == null) ? 0 : totalVentas.hashCode());
 		return result;
@@ -188,6 +214,11 @@ public class ConsultaIVANative implements Serializable {
 				return false;
 		} else if (!tipoImpuesto.equals(other.tipoImpuesto))
 			return false;
+		if (totalExoneraciones == null) {
+			if (other.totalExoneraciones != null)
+				return false;
+		} else if (!totalExoneraciones.equals(other.totalExoneraciones))
+			return false;
 		if (totalImpuesto == null) {
 			if (other.totalImpuesto != null)
 				return false;
@@ -200,9 +231,6 @@ public class ConsultaIVANative implements Serializable {
 			return false;
 		return true;
 	}
-
-	
-
 
 	
 }

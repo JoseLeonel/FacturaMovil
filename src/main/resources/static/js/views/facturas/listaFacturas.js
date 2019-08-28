@@ -150,6 +150,7 @@ function listaUsuarios(){
 var facturas = {data:[]};
 
 function ListarFacturas(){
+	$('.total').val(0)   
 	var fechaInicio=$('.fechaInicial').val();
     var fechaFin = $('.fechaFinal').val();
 	var idCliente = $('#cliente').val();
@@ -207,7 +208,18 @@ function suma(data){
 	$.each(data, function( index, modeloTabla ) {
         if($('.tipoDocumento').val() =='0'){
              if(modeloTabla.tipoDoc =='04' || modeloTabla.tipoDoc =='87' || modeloTabla.tipoDoc =='01'){
-                total = modeloTabla.totalComprobante + total;   
+				var estado = $('.selectEstado').val()
+				if(estado =='0'){
+					if(modeloTabla.estado == 2 || modeloTabla.estado == 7 || modeloTabla.estado == 6){
+						total = modeloTabla.totalComprobante + total;
+					} 
+				}else{
+					
+				    if( estado ==modeloTabla.estado){
+						total = modeloTabla.totalComprobante + total;
+					}	
+				}
+                   
 			 }
 		} else{
            total = __valorFloat(modeloTabla.totalComprobante) + total;  
@@ -278,7 +290,7 @@ function agregarInputsCombos(){
   $('.tableListar tfoot th').each( function (e) {
 		var title = $('.tableListar thead th').eq($(this).index()).text();      
 		//No se toma en cuenta la columna de las acctiones(botones)
-		if ( $(this).index() != 9    ){
+		if ( $(this).index() != 10    ){
 			 $(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	  }
   })
@@ -328,7 +340,7 @@ var informacion_tabla = [
                         {'data' :'fechaEmisionSTR'                ,"name":"fechaEmision"                  ,"title" : "Fecha Emisi\u00F3n"   ,"autoWidth" :true },
                         {'data' :'numeroConsecutivo'              ,"name":"numeroConsecutivo"                ,"title" : "No.Consecutivo"  ,"autoWidth" :true },
 						{'data' :'tipoDocSTR'           ,"name":"tipoDocSTR"       ,"title" : "Tipo documento"    ,"autoWidth" :true  },
-						{'data' :'condicionVentaSTR'           ,"name":"condicionVentaSTR"       ,"title" : "Condicion Pago"    ,"autoWidth" :true  },
+						{'data' :'condicionVentaSTR'           ,"name":"condicionVentaSTR"       ,"title" : "Cond.Pago"    ,"autoWidth" :true  },
                         {'data' :'nombreCompleto' ,"name":"nombreCompleto"  ,"title" : "Cliente"   ,"autoWidth" :true ,
                             "render":function(nombreCompleto,type, row){
     						    return nombreCompleto ==null?"":nombreCompleto.length > 40?nombreCompleto.substring(0,40)+"....":nombreCompleto;
@@ -340,8 +352,9 @@ var informacion_tabla = [
     						    return nombreFactura ==null?"":nombreFactura.length > 40 ? nombreFactura.substring(0,40)+"...":nombreFactura;
 						    }
                         },
-                        {'data' :'codigoMoneda'               ,"name":"codigoMoneda"           ,"title" : "Moneda"      ,"autoWidth" :true },
-                        {'data' :'totalComprobanteSTR'        ,"name":"totalComprobante"    ,"title" : "Total"       ,"autoWidth" :true },
+						{'data' :'totalComprobanteSTR'        ,"name":"totalComprobante"    ,"title" : "Total"       ,"autoWidth" :true },
+						{'data' :'estadoSTR'               ,"name":"estadoSTR"           ,"title" : "Estado"      ,"autoWidth" :true },
+                       
                         {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                             "render":function(id,type, row){
                                 return __Opciones(id,type,row); 
@@ -416,12 +429,8 @@ function __imprimirPTV(){
 	       var data = table.row(this).data();
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
-	    }
-        var parametros = {
-                          factura:data,
-                          facturaDia:1
-                      }
-        riot.mount('ptv-imprimir',{parametros:parametros});   
+		}
+		__FacturaEnEspera(data);
 	});
 }
 
@@ -490,5 +499,47 @@ function cargaMantenimiento(tipoEjec,data) {
  */
 function __MostrarListado(){
 	$('.mostrarListadoDeFacturas').show();
+
+}
+
+
+/**
+*  Factura en espera ,cliente y sus  detalles desde back end  Facturas que se encuentran Pendientes de Facturar
+**/
+function __FacturaEnEspera(factura){
+    $.ajax({
+        url: "ListarDetlleByFacturaAjax.do", 
+        datatype: "json",
+        data: {idFactura:factura.id},
+        method:"POST",
+        success: function (data) {
+            if(data.aaData.length > 0){
+               cargarDetallesFacturaEnEspera(data.aaData)
+            }
+            
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+}
+
+
+/**
+*  Cargar detalles Factura en espera
+**/
+function cargarDetallesFacturaEnEspera(data){
+    var factura = null
+     $.each(data, function( index, modeloTabla ) {
+        if(factura == null){
+		   factura = modeloTabla.factura
+        }
+	})
+	var parametros = {
+		factura:factura,
+		facturaDia:1
+	}
+    riot.mount('ptv-imprimir',{parametros:parametros});   
 
 }

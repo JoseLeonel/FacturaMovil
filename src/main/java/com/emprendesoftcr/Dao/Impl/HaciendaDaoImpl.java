@@ -123,6 +123,7 @@ public class HaciendaDaoImpl implements HaciendaDao {
 		query.setParameter("estado", estado);
 		query.setParameter("fechaInicio", fechaInicial);
 		query.setParameter("fechaFin", FechaFinal);
+		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
 		return query.getResultList();
 	}
 

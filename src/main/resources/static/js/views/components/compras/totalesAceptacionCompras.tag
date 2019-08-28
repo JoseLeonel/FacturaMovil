@@ -80,7 +80,7 @@
                                     <label>Estado </label>  
                                     <select  class="form-control selectEstado estado" id= "estado" name="estado" >
 	                                   	<option  value="6"  >Aceptada</option>
-                                       	<option  value="7"  >No Aceptada</option>
+                                       	<option  value="7"  >Rechazadas</option>
                                     </select>
                                 </div>  
                             </div> 

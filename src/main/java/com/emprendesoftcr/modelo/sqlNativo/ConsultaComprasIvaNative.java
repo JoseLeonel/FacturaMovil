@@ -12,8 +12,9 @@ query = "(select "
 		  + " d.impuesto_codigo, "  
 		  + " d.impuesto_codigo_tarifa, " 
 		  + " d.impuesto_tarifa, " 
-		  + " sum((IF(d.impuesto_neto != 0 and d.impuesto_neto is not null, d.impuesto_neto, d.impuesto_monto)) * f.tipo_cambio) as total_impuesto, " 
-		  + " sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "
+		  + " sum(IFNULL(d.impuesto_monto, 0)   * f.tipo_cambio) as total_impuesto, " 
+		  + " sum(IFNULL(d.monto_total_linea, 0) * f.tipo_cambio) as total_ventas, "
+		  + " sum(IFNULL(d.imp_exo_monto, 0)     * f.tipo_cambio) as total_exoneraciones "
 		+ " from " 
 		+ " (select @a\\:=0) as a, " 
 		   + " recepcion_factura_detalle d inner join  recepcion_factura f on f.id = d.recepcion_factura_id "
@@ -34,12 +35,13 @@ query = "(select "
 		+ " union "
 		+ " ( "
 		+ " select " 
-		  + " @b\\:=@b+1 as id_consulta, " 
-		  + " d.impuesto_codigo, "
+        + " @a\\:=@a+1 as id_consulta, "  
+		  + " d.impuesto_codigo, "  
 		  + " d.impuesto_codigo_tarifa, " 
-		  + " d.impuesto_tarifa, "
-		  + " sum((IF(d.impuesto_neto != 0 and d.impuesto_neto is not null, d.impuesto_neto, d.impuesto_monto)) * f.tipo_cambio) as total_impuesto, " 
-		  + " sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "
+		  + " d.impuesto_tarifa, " 
+		  + " sum(IFNULL(d.impuesto_monto, 0)   * f.tipo_cambio) as total_impuesto, " 
+		  + " sum(IFNULL(d.monto_total_linea, 0) * f.tipo_cambio) as total_ventas, "
+		  + " sum(IFNULL(d.imp_exo_monto, 0)     * f.tipo_cambio) as total_exoneraciones "
 		+ " from  "
 		+ " (select @b\\:=1000) as b, "
 		   + " recepcion_factura_detalle d inner join  recepcion_factura f on f.id = d.recepcion_factura_id "
@@ -60,12 +62,13 @@ query = "(select "
 		+ " union "
 		+ " ( "
 		+ " select " 
-		  + " @c\\:=@c+1 as id_consulta, " 
-		  + " d.impuesto_codigo, "
+        + " @a\\:=@a+1 as id_consulta, "  
+		  + " d.impuesto_codigo, "  
 		  + " d.impuesto_codigo_tarifa, " 
-		  + " d.impuesto_tarifa, "
-		  + " sum((IF(d.impuesto_neto != 0 and d.impuesto_neto is not null, d.impuesto_neto, d.impuesto_monto)) * f.tipo_cambio) as total_impuesto, " 
-		  + " sum(d.monto_total_linea * f.tipo_cambio) as total_ventas "
+		  + " d.impuesto_tarifa, " 
+		  + " sum(IFNULL(d.impuesto_monto, 0)   * f.tipo_cambio) as total_impuesto, " 
+		  + " sum(IFNULL(d.monto_total_linea, 0) * f.tipo_cambio) as total_ventas, "
+		  + " sum(IFNULL(d.imp_exo_monto, 0)     * f.tipo_cambio) as total_exoneraciones "
 		+ " from "
 		+ " (select @c\\:=10000) as c, "
 		   + " recepcion_factura_detalle d inner join  recepcion_factura f on f.id = d.recepcion_factura_id "
@@ -107,6 +110,9 @@ public class ConsultaComprasIvaNative implements Serializable {
 	
 	@Column(name = "total_ventas")
 	private Double totalVentas;
+
+	@Column(name = "total_exoneraciones")
+	private Double totalExoneraciones;
 
 	public Long getId() {
 		return id;
@@ -156,6 +162,14 @@ public class ConsultaComprasIvaNative implements Serializable {
 		this.totalVentas = totalVentas;
 	}
 
+	public Double getTotalExoneraciones() {
+		return totalExoneraciones;
+	}
+
+	public void setTotalExoneraciones(Double totalExoneraciones) {
+		this.totalExoneraciones = totalExoneraciones;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -164,6 +178,7 @@ public class ConsultaComprasIvaNative implements Serializable {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((impuesto == null) ? 0 : impuesto.hashCode());
 		result = prime * result + ((tipoImpuesto == null) ? 0 : tipoImpuesto.hashCode());
+		result = prime * result + ((totalExoneraciones == null) ? 0 : totalExoneraciones.hashCode());
 		result = prime * result + ((totalImpuesto == null) ? 0 : totalImpuesto.hashCode());
 		result = prime * result + ((totalVentas == null) ? 0 : totalVentas.hashCode());
 		return result;
@@ -198,6 +213,11 @@ public class ConsultaComprasIvaNative implements Serializable {
 				return false;
 		} else if (!tipoImpuesto.equals(other.tipoImpuesto))
 			return false;
+		if (totalExoneraciones == null) {
+			if (other.totalExoneraciones != null)
+				return false;
+		} else if (!totalExoneraciones.equals(other.totalExoneraciones))
+			return false;
 		if (totalImpuesto == null) {
 			if (other.totalImpuesto != null)
 				return false;
@@ -210,7 +230,5 @@ public class ConsultaComprasIvaNative implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
 
 }

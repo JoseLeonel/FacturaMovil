@@ -85,7 +85,7 @@
                                      	<option  value="2"  >Facturada</option>
                                     	<option  value="5"  >Anulada</option>
 	                                   	<option  value="6"  >Aceptada</option>
-                                       	<option  value="7"  >No Aceptada</option>
+                                       	<option  value="7"  >Rechazada</option>
 
                                     </select>
                                 </div>  
@@ -103,6 +103,10 @@
                 </div>
             </div>
             <div class="col-xs-12 text-right">
+     			<a show ="{mostrarBotones == true?true:false}" class="fa fa-download" target="_blank" title="Descargar detalle transacciones" href="DescargarDetalleTotalFacturasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&estado={estado}&actividadEconomica={actividadEconomica}"> Descargar</a>        
+		        <button show ="{mostrarBotones == true?true:false}" onclick ={__EnviarCorreoEmpresa}   type="button" class="btn btn-success btnBusquedaAvanzada" title="Enviar corre de la empresa" name="button"> Empresa  <i class="fa fa-envelope"></i></button>
+		        <button show ="{mostrarBotones == true?true:false}" onclick ={__CorreoAlternativo} type="button" class="btn btn-success btnBusquedaAvanzada" title="Correo alternativo" name="button" >  Alternativo  <i class="fa fa-envelope"></i></button>
+
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
             	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
             </div>
@@ -152,13 +156,45 @@
                 </div>
             </div>   
 	        <div class="col-md-12 col-lg-12 col-sm-12">
-				<a show ="{mostrarBotones == true?true:false}" class="fa fa-download" target="_blank" title="Descargar detalle transacciones" href="DescargarDetalleTotalFacturasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&estado={estado}&actividadEconomica={actividadEconomica}"> Descargar</a>        
-		        <button show ="{mostrarBotones == true?true:false}" onclick ={__EnviarCorreoEmpresa}   type="button" class="btn btn-success btnBusquedaAvanzada" title="Enviar corre de la empresa" name="button"> Empresa  <i class="fa fa-envelope"></i></button>
-		        <button show ="{mostrarBotones == true?true:false}" onclick ={__CorreoAlternativo} type="button" class="btn btn-success btnBusquedaAvanzada" title="Correo alternativo" name="button" >  Alternativo  <i class="fa fa-envelope"></i></button>
-	        </div>
+		        </div>
         </div>
         <div class="col-md-2 col-lg-2 col-sm-2"></div>
     </div>
+
+<div id="formularioDetalle" class="row center" show={mostrarDetalle} >
+    	<div class="col-md-2 col-sx-12 col-lg-2 col-sm-2"></div>
+        <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12">
+            <div class="box box-solid box-primary">
+                <div class="box-body">
+                    <form id = "formularioDetalle" name="formularioDetalle" class="advanced-search-form">
+                        <div class="row">
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.resumen.efectivo")}  </label>
+                                <input type="text" readonly="readonly" class="form-control totalEfectivo"  id="totalEfectivo" name="totalEfectivo" value="{factura.totalEfectivoSTR}">
+                            </div>
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.resumen.tarjeta")}  </label>
+                                <input type="text" readonly="readonly" class="form-control totalTarjeta" id="totalTarjeta" name="totalTarjeta" value="{factura.totalTarjetaSTR}">
+                            </div>
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.resumen.banco")}  </label>
+                                <input type="text" readonly="readonly" class="form-control totalBanco" id="totalBanco" name="totalBanco" value="{factura.totalBancoSTR}">
+                            </div>
+                            
+
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("factura.total")}  </label>
+                                <input type="text" readonly="readonly" class="form-control totalPagos"   value="{factura.totalPagosSTR}">
+                            </div>
+                        </div>
+                	</form>
+                </div>
+            </div>   
+        </div>
+        <div class="col-md-2 col-lg-2 col-sm-2"></div>
+    </div>
+
+
 
 	<script>
 	
@@ -177,6 +213,11 @@
 				totalVentasNetas:"0",
 				totalVentasExentas:"0",
 				totalVentasGravadas:"0",
+				totalOtrosCargos:"0",
+				totalEfectivo:"0",
+				totalTarjeta:"0",
+				totalBanco:"0",
+				totalPagos:"0"
 		}
 		self.mostrarBotones=false
 		self.actividadEconomica = ""
@@ -259,14 +300,18 @@ function __ListaActividadesComercales(){
 		
 		function limpiarFactura(){
 			self.factura ={				
-					total:"0",
-					totalDescuentos:"0",
-					totalImpuestos:"0",
-					totalVentasNetas:"0",
-					totalVentasExentas:"0",
-					totalVentasGravadas:"0",
-					totalOtrosCargos:"0"
-			}			
+				total:"0",
+				totalDescuentos:"0",
+				totalImpuestos:"0",
+				totalVentasNetas:"0",
+				totalVentasExentas:"0",
+				totalVentasGravadas:"0",
+				totalOtrosCargos:"0",
+				totalEfectivo:"0",
+				totalTarjeta:"0",
+				totalBanco:"0",
+				totalPagos:"0"
+		    }		
 			self.update();
 			$('.datepickerFechaFinal').datepicker(
             	{
@@ -409,6 +454,7 @@ function __ListaActividadesComercales(){
 		__EnviarCorreoEmpresa(){
 		   	 __EnviarPorCorreo()
 		}
+		
 		
 		/**
 		*  Regresar al listado

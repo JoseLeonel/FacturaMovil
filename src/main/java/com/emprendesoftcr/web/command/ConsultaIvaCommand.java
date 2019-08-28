@@ -16,6 +16,8 @@ public class ConsultaIvaCommand {
 	
 	private Double totalVentas;
 	
+	private Double totalExoneraciones;
+	
 	
 	public ConsultaIvaCommand(ConsultaIVANative consultaIVANative) {
 		super();
@@ -25,16 +27,15 @@ public class ConsultaIvaCommand {
 		this.impuesto     = consultaIVANative.getImpuesto();
 		this.totalImpuesto= consultaIVANative.getTotalImpuesto();
 		this.totalVentas  = consultaIVANative.getTotalVentas();
+		this.totalExoneraciones=consultaIVANative.getTotalExoneraciones();
 	}
 
 
-	
 	public Long getId() {
 		return id;
 	}
 
 
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -69,6 +70,7 @@ public class ConsultaIvaCommand {
 		this.impuesto = impuesto;
 	}
 
+
 	public Double getTotalImpuesto() {
 		return totalImpuesto;
 	}
@@ -88,5 +90,13 @@ public class ConsultaIvaCommand {
 		this.totalVentas = totalVentas;
 	}
 
-		
+
+	public Double getTotalExoneraciones() {
+		return totalExoneraciones;
+	}
+
+
+	public void setTotalExoneraciones(Double totalExoneraciones) {
+		this.totalExoneraciones = totalExoneraciones;
+	}	
 }

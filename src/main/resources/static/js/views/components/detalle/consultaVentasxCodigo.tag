@@ -63,7 +63,7 @@
                                      	<option  value="2"  >Facturada</option>
                                     	<option  value="5"  >Anulada</option>
                                        	<option  value="6"  >Aceptada</option>
-                                    	<option  value="7"  >No Aceptada</option>
+                                    	<option  value="7"  >Rechazadas</option>
 
                                     	
                                     </select>

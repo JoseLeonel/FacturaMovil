@@ -425,16 +425,16 @@
             <div class="modal-header with-border table-header" >
                 <h4 class="modal-title" id="title-add-note"> <i class='fa fa-th '></i> {$.i18n.prop("factura.listar.dia")} </h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body facturaDiaContainer">
                 <div class="row">
                     <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                         <table id="tableListarFacturasDia" class="display table responsive table-hover nowrap table-condensed tableListarFacturasDia "   cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}            </th>
+                                <th class = "table-header" >{$.i18n.prop("factura.condicion.pago")}      
                                 <th class = "table-header" >{$.i18n.prop("factura.documento")}                </th>
                                 <th class = "table-header" >{$.i18n.prop("factura.cliente")}                  </th>
-                                <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
                                 <th class = "table-header" >{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
                                 <th class = "table-header" >{$.i18n.prop("factura.total")}                    </th>
                                 <th class = "table-header" >{$.i18n.prop("listado.acciones")}                 </th>
@@ -443,9 +443,9 @@
                                 <tfoot style="display: table-header-group;">
                                     <tr>
                                         <th>{$.i18n.prop("factura.fecha.emision")}            </th>
+                                        <th>{$.i18n.prop("factura.condicion.pago")}                </th>
                                         <th>{$.i18n.prop("factura.documento")}                </th>
                                         <th>{$.i18n.prop("factura.cliente")}                  </th>
-                                        <th>{$.i18n.prop("factura.linea.detalle.impuesto")}   </th>
                                         <th>{$.i18n.prop("factura.linea.detalle.descuento")}  </th>
                                         <th>{$.i18n.prop("factura.total")}                    </th>
                                         <th>                                                  </th>
@@ -662,6 +662,14 @@
 
 
 <style type="text/css"  >
+@media (min-width: 992px){
+.modal-lg {
+    width: 1024px !important;
+}
+}
+.facturaDiaContainer{
+  display:flex;
+}
   .tamanoClienteNuevo{
     font-size: 30px;
     font-weight: 600;
@@ -1254,7 +1262,7 @@
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
              actualizaElPlazoDiasCredito();
-             disableF5(evento);
+        //     disableF5(evento);
         }, false );
 
       
@@ -1912,6 +1920,7 @@ function __InformacionDataTableDia(){
                                {'data' :'fechaEmisionSTR'   ,"name":"fechaEmisionSTR"    ,"title" : $.i18n.prop("factura.fecha.emision")     ,"autoWidth" :true ,
                                },
                              
+                               {'data' :'condicionVentaSTR'                    ,"name":"condicionVentaSTR"                     ,"title" : "Pago"   ,"autoWidth" :true },
                                {'data' :'numeroConsecutivo'                    ,"name":"numeroConsecutivo"                     ,"title" : $.i18n.prop("factura.documento")   ,"autoWidth" :true ,
                                    "render":function(numeroConsecutivo,type, row){
 									    return __TipoDocumentos(numeroConsecutivo,row)
@@ -1922,7 +1931,6 @@ function __InformacionDataTableDia(){
 									    return cliente ==null?"":row.cedula != "999999999999"?cliente:row.nombreFactura;
 	 							    }
                                },
-                               {'data' :'totalImpuestoSTR'               ,"name":"totalImpuestoSTR"        ,"title" : $.i18n.prop("factura.linea.detalle.impuesto")     ,"autoWidth" :true },
                                {'data' :'totalDescuentosSTR'             ,"name":"totalDescuentosSTR"      ,"title" : $.i18n.prop("factura.linea.detalle.descuento")  ,"autoWidth" :true },
                                {'data' :'totalComprobanteSTR'            ,"name":"totalComprobanteSTR"     ,"title" : $.i18n.prop("factura.total") ,"autoWidth" :true },
                                {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
@@ -2625,16 +2633,12 @@ function crearFactura(estado){
     }
     self.transaccion = true 
     self.update()
-    //if($(".tipoDoc").val() !="01" &&  $(".tipoDoc").val() !="88"){
-    //    if(verificarSiClienteFrecuente()){
-    //    mensajeError($.i18n.prop("error.factura.tipo.documento.factura"))
-    //    return
-    //    }
-    //    if(validarSiTieneExoneracion()){
-    //        mensajeError($.i18n.prop("error.factura.exoneracion.libre.impuesto"))
-    //        return
-    //    }
-   // }
+  //  if($(".tipoDoc").val() =="04" ){
+  //      if(!verificarSiClienteFrecuente()){
+  //         mensajeError($.i18n.prop("error.factura.tipo.documento.tiquete.cliente"))
+  //         return
+  //      }
+  //  }
     
     self.detalleFactura.data =self.detail
     self.update() 

@@ -2,7 +2,7 @@
    <!-- Titulos -->
     <div  class="row "  >
         <div  class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <h1><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("compras.compras")} </h1>
+            <h1><i class="fa fa-calculator"></i>&nbsp Compras Ingresadas al Inventario </h1>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
         </div>
@@ -66,6 +66,8 @@
                             </div>
                         </div>    
                     </form>  
+
+
                 </div>
             </div>
             <div class="col-xs-12 text-right">
@@ -577,7 +579,7 @@ function __ComboEstados(){
     self.estados =[]
     self.update()
     self.estados.push({
-        codigo: 3,
+        codigo: 2,
         descripcion:$.i18n.prop("compra.estado.ingreso.inventario")
      });
     self.estados.push({

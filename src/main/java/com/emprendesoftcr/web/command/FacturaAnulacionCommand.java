@@ -42,6 +42,7 @@ public class FacturaAnulacionCommand {
 	private String	nombreFactura;
 	private String tipoDocSTR;
 	private String tipoDoc;
+	private String estadoSTR;
 	private String condicionVentaSTR;
 	private Integer						noFacturaElectronica;
 
@@ -104,6 +105,8 @@ public class FacturaAnulacionCommand {
 		this.tipoDoc = facturasSinNotaCreditoNative.getTipoDoc();
 		this.condicionVentaSTR =MapEnums.ENUM_CONDICION_VENTA.get(facturasSinNotaCreditoNative.getCondicionVenta());
 		this.noFacturaElectronica = facturasSinNotaCreditoNative.getNoFacturaElectronica();
+		this.estadoSTR =MapEnums.ENUM_ESTADO_FACTURA.get(facturasSinNotaCreditoNative.getEstado().toString());
+		
 	}
 	
 
@@ -117,6 +120,16 @@ public class FacturaAnulacionCommand {
 
 	
 	
+	
+	public String getEstadoSTR() {
+		return estadoSTR;
+	}
+
+	
+	public void setEstadoSTR(String estadoSTR) {
+		this.estadoSTR = estadoSTR;
+	}
+
 	public String getTipoDoc() {
 		return tipoDoc;
 	}

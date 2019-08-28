@@ -102,8 +102,8 @@ public class ReportePdfView {
 		for (DetalleFacturaElectronica item : fac_electro.getDetalleFacturaElectronica()) {
 			// Total Impuesto
 			if (!item.getNumeroDocumentoExoneracion().equals(Constantes.DOCUMENTO_LIBRE_IVA)) {
-				totalImpuesto = item.getImpuesto() > Constantes.ZEROS_DOUBLE ? totalImpuesto + item.getImpuesto() : totalImpuesto ;
-				totalExoneracion = item.getMontoExoneracion() != null ? totalExoneracion + item.getMontoExoneracion() : totalExoneracion ;
+				totalImpuesto = item.getImpuesto() > Constantes.ZEROS_DOUBLE ? totalImpuesto + item.getImpuesto() : totalImpuesto;
+				totalExoneracion = item.getMontoExoneracion() != null ? totalExoneracion + item.getMontoExoneracion() : totalExoneracion;
 			}
 
 			tabla_tercera_tabla.addCell(obtenerCeldaNormal(String.valueOf(item.getLinea()), font_cabezera_tabla, 1, false, Paragraph.ALIGN_CENTER, Rectangle.LEFT));

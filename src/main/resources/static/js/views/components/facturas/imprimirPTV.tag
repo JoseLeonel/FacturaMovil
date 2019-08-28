@@ -424,9 +424,7 @@ self.on('mount',function(){
       
                     
     }
-    if(self.parametro.factura.empresa.noFacturaElectronica == 0){
-        qr()    
-    }
+    
      
     
 })
@@ -567,6 +565,7 @@ function consultaFactura(idFactura){
                                 self.titulo = $.i18n.prop("factura.tipo.documento.factura.tiquete.uso.interno") + self.facturaImpresa.id
                             }
                             self.update()
+                            
                       }
                     });
                    self.montoExoneracionSTR = formatoDecimales(self.montoExoneracion,0);
@@ -581,8 +580,9 @@ function consultaFactura(idFactura){
          
                     if (self.facturaImpresa.empresa.imprimirDirecto == 0 || self.parametro.facturaDia ==1){
                         $('.imprimirModal').modal('show');   
-                    }else{
-                     //   __imprimir()
+                    }
+                    if(self.parametro.factura.empresa.noFacturaElectronica == 0){
+                      qr()    
                     }
                      if (self.parametro.factura.empresa.imprimirDirecto == 1 && self.parametro.facturaDia ==0 ){
                       __imprimir()

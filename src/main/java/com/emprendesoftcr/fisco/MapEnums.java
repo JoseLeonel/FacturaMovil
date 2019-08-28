@@ -61,6 +61,11 @@ public class MapEnums {
     		"01", "ACEPTADA",
         "02", "ACEPTADA PARCIALMENTE",
         "03", "RECHAZADA");
+    public static final Map<String, String> ENUM_ESTADO_FACTURA = ImmutableMap.of(
+    		"2", "FACTURADA",
+        "7", "RECHAZADA",
+        "5", "ANULADA",
+        "6", "ACEPTADA");
     
     public static final Map<String, String> ENUM_CONDICION_VENTA = ImmutableMap.<String, String>builder().put("01", "Contado").
             put("02", "Crédito").

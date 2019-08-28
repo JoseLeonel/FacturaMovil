@@ -236,7 +236,7 @@ public class ArticuloDaoImpl implements ArticuloDao {
 
 	@Override
 	public Collection<Articulo> articulosBy(Empresa empresa) {
-		Query query = entityManager.createQuery("select obj from Articulo obj where  obj.empresa = :empresa order by obj.codigo");
+		Query query = entityManager.createQuery("select obj from Articulo obj where  obj.empresa = :empresa order by obj.categoria.id,obj.descripcion");
 		query.setParameter("empresa", empresa);
 		return query.getResultList();
 	}

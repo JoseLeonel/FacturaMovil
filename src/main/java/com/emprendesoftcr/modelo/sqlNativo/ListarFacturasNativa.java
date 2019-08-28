@@ -370,7 +370,7 @@ public class ListarFacturasNativa implements Serializable {
 		return true;
 	}
 
-	
+		
 	
 
 }

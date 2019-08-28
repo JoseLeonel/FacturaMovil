@@ -296,6 +296,21 @@ a[x-apple-data-detectors=true] {
 			Total: $total
 		</span>
 	  </div>	
+     <div style="font-size:23px;line-height:18px;margin:2%;color:black;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
+	   	<span style="color: rgb(0, 0, 0); font-size:14px; line height:21px;">
+			Total Efectivo: $totalEfectivo
+		</span>
+	  </div>	
+     <div style="font-size:23px;line-height:18px;margin:2%;color:black;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
+	   	<span style="color: rgb(0, 0, 0); font-size:14px; line height:21px;">
+			Total Tarjeta: $totalTarjeta
+		</span>
+	  </div>	
+     <div style="font-size:23px;line-height:18px;margin:2%;color:black;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
+	   	<span style="color: rgb(0, 0, 0); font-size:14px; line height:21px;">
+			Total Banco: $totalBanco
+		</span>
+	  </div>	
         </div>
 
 <!--[if mso]></td></tr></table><![endif]-->

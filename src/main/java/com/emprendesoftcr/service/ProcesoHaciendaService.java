@@ -40,5 +40,7 @@ public interface ProcesoHaciendaService {
 	// void procesoCambiarConsecutivo() throws Exception;
 
 	Boolean verificaRecepcionFactura(Empresa empresa, String clave) throws Exception;
+	
+	void procesoCambiarConsecutivo() throws Exception;
 
 }

@@ -857,6 +857,7 @@ text-align: center;
     self.totalGeneralDescuento = 0;
     self.totalGeneralImpuesto  = 0;
     self.totalGeneralCompra    = 0; 
+    self.totalGeneralSubTotal = 0
     self.numeroLinea =0
      self.pesoPrioridad =  0
     self.on('mount',function(){
@@ -1013,6 +1014,7 @@ function __Init(){
     self.totalGeneralImpuesto  = 0;
     self.totalGeneralCompra    = 0; 
     self.totalSubTotalGeneral  = 0;
+    self.totalGeneralSubTotal  = 0;
 
     self.update();
     // Tipo de Pagos

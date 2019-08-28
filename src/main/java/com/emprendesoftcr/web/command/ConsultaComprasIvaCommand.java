@@ -17,6 +17,8 @@ public class ConsultaComprasIvaCommand {
 
 	private Double totalVentas;
 	
+	private Double totalExoneraciones;
+	
 	public ConsultaComprasIvaCommand(ConsultaComprasIvaNative consultaComprasIvaNative) {
 		super();
 		this.id=consultaComprasIvaNative.getId();
@@ -25,6 +27,7 @@ public class ConsultaComprasIvaCommand {
 		this.impuesto=consultaComprasIvaNative.getImpuesto();
 		this.totalImpuesto=consultaComprasIvaNative.getTotalImpuesto();
 		this.totalVentas=consultaComprasIvaNative.getTotalVentas();	
+		this.totalExoneraciones=consultaComprasIvaNative.getTotalExoneraciones();
 	}
 
 	public Long getId() {
@@ -74,5 +77,14 @@ public class ConsultaComprasIvaCommand {
 	public void setTotalVentas(Double totalVentas) {
 		this.totalVentas = totalVentas;
 	}
+
+	public Double getTotalExoneraciones() {
+		return totalExoneraciones;
+	}
+
+	public void setTotalExoneraciones(Double totalExoneraciones) {
+		this.totalExoneraciones = totalExoneraciones;
+	}
+
 
 }
