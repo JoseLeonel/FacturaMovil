@@ -55,7 +55,9 @@ $(document)
 			    }
 			}
 
-/***
+
+	
+	/***
  * Funcion llamaa de venta nueva post  y restaurante
  * 
  * **/
@@ -72,6 +74,12 @@ $(document)
 	    }
 	    return mensaje;
 	}
+function cambioColonesADolar(valor,venta){
+  var resultado = parseFloat(valor)/parseFloat(venta);
+  return resultado;
+	
+}
+	
 	
 /** Funciones en ventas nueva , venta post , restaurante comunes **/
 	/**

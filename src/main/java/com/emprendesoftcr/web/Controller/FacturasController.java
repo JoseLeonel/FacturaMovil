@@ -212,17 +212,16 @@ public class FacturasController {
 																																																					facturaElectronica.setClienteTelefono(Constantes.EMPTY);
 																																																				}
 																																																			}
-																																																			if(d.getCliente().getLibreImpuesto() !=null) {
+																																																			if (d.getCliente().getLibreImpuesto() != null) {
 																																																				if (d.getCliente().getLibreImpuesto().equals(Constantes.LIBRE_IMPUESTOS_ACTIVO)) {
 																																																					facturaElectronica.setNumeroDocumentoExoneracion(Constantes.DOCUMENTO_LIBRE_IVA);
 																																																				} else {
 																																																					facturaElectronica.setNumeroDocumentoExoneracion(Constantes.EMPTY);
 																																																				}
-												
-																																																			}else {
+
+																																																			} else {
 																																																				facturaElectronica.setNumeroDocumentoExoneracion(Constantes.EMPTY);
 																																																			}
-
 
 																																																			facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
 																																																			facturaElectronica.set_logo(d.getEmpresa().getLogo());
@@ -559,7 +558,7 @@ public class FacturasController {
 	private ByteArrayOutputStream createExcelFacturas(Collection<Factura> facturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Actividad Economica", "Fecha Emision", "# Documento", "#Proforma", "Cliente", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones","Total efectivo","Total Tarjeta ","Total Banco","Total Credito");
+		List<String> headers = Arrays.asList("Actividad Economica", "Fecha Emision", "# Documento", "#Proforma", "Cliente", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones", "Total efectivo", "Total Tarjeta ", "Total Banco", "Total Credito");
 		new SimpleExporter().gridExport(headers, facturas, "codigoActividad,fechaEmisionSTR, numeroConsecutivo,consecutivoProforma, nombreCliente, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos,totalOtrosCargos, totalComprobante,codigoMoneda, tipoCambio, totalColones,totalEfectivo,totalTarjeta,totalBanco,totalCredito", baos);
 		return baos;
 	}
@@ -826,7 +825,6 @@ public class FacturasController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
-	
 	@RequestMapping(value = "/ListaFacturasImpuestoServicioAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, String actividadEconomica) {
@@ -848,14 +846,13 @@ public class FacturasController {
 
 		Collection<ListarFacturasImpuestoServicioNativa> facturas = consultasNativeBo.findByFacturasImpuestoServicio(usuarioSesion.getEmpresa(), usuarioSesion.getId(), estado, inicio1, fin1, actividadEconomica);
 		List<Object> solicitudList = new ArrayList<Object>();
-				for (ListarFacturasImpuestoServicioNativa listarFacturasImpuestoServicioNativa : facturas) {
+		for (ListarFacturasImpuestoServicioNativa listarFacturasImpuestoServicioNativa : facturas) {
 
-					// no se carga el usuario del sistema el id -1
-					if (listarFacturasImpuestoServicioNativa.getId().longValue() > 0L) {
-						solicitudList.add(new FacturaImpuestoServicioCommand(listarFacturasImpuestoServicioNativa));
-					}
-				}
-
+			// no se carga el usuario del sistema el id -1
+			if (listarFacturasImpuestoServicioNativa.getId().longValue() > 0L) {
+				solicitudList.add(new FacturaImpuestoServicioCommand(listarFacturasImpuestoServicioNativa));
+			}
+		}
 
 		respuestaService.setRecordsTotal(0l);
 		respuestaService.setRecordsFiltered(0l);
@@ -865,7 +862,7 @@ public class FacturasController {
 		respuestaService.setAaData(solicitudList);
 		return respuestaService;
 	}
-	
+
 	/**
 	 * Lista de las Proformas activas
 	 * @param request
@@ -1476,7 +1473,7 @@ public class FacturasController {
 			if (facturaCommand.getCondicionVenta().equals(Constantes.EMPTY)) {
 				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.condicion.venta.vacia", result.getAllErrors());
 			}
-			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO) ) {
+			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO) && !facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO)) {
 				if (facturaCommand.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
 					if (facturaCommand.getCliente() == null) {
 						return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.condicion.venta.credito.cliente.vacio", result.getAllErrors());
@@ -1525,13 +1522,21 @@ public class FacturasController {
 				}
 			}
 			TipoCambio tipoCambio = null;
+			facturaCommand.setTipoCambioMoneda(facturaCommand.getTipoCambioMoneda() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTipoCambioMoneda());
+			facturaCommand.setCodigoMoneda(facturaCommand.getCodigoMoneda() == null?Constantes.CODIGO_MONEDA_COSTA_RICA:facturaCommand.getCodigoMoneda());
 			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
-				tipoCambio = tipoCambioBo.findByEstadoAndEmpresa(Constantes.ESTADO_ACTIVO, usuario.getEmpresa());
-				if (tipoCambio == null) {
-					return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.tipo.cambio.dolar.activo", result.getAllErrors());
+				if (!facturaCommand.getCodigoMoneda().equals(Constantes.CODIGO_MONEDA_COSTA_RICA)) {
+					if (facturaCommand.getTipoCambioMoneda() == Constantes.ZEROS_DOUBLE) {
+						tipoCambio = tipoCambioBo.findByEstadoAndEmpresa(Constantes.ESTADO_ACTIVO, usuario.getEmpresa());
+						if (tipoCambio == null) {
+							return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("factura.error.factura.no.hay.tipo.cambio.dolar.activo", result.getAllErrors());
+
+						}
+						facturaCommand.setTipoCambioMoneda(tipoCambio.getTotal());
+
+					}
 
 				}
-				facturaCommand.setTipoCambioMoneda(tipoCambio.getTotal());
 			}
 			if (!usuario.getEmpresa().getNoFacturaElectronica().equals(Constantes.NO_APLICA_FACTURA_ELECTRONICA)) {
 				if (facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {

@@ -149,7 +149,8 @@
                             </div>
                             <input type="hidden" id='codigoActividad' name='codigoActividad'  value="{factura.codigoActividad}" >
                             <input type="hidden" id='codigoMoneda'            name='codigoMoneda'            value="{factura.codigoMoneda}" >
-                            <input type="hidden" id='pesoTransporteTotal'     name='pesoTransporteTotal'      value="{totalPesoByFactura}" >
+                            <input type="hidden" id='tipoCambioMoneda'        name='tipoCambioMoneda'        value="{tipoCambio.total}" >
+                            <input type="hidden" id='pesoTransporteTotal'     name='pesoTransporteTotal'     value="{totalPesoByFactura}" >
                             <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
                             <input type="hidden" id='plazoCredito'            name='plazoCredito'            value="{factura.plazoCredito}" >
                             <input type="hidden" id='estado'                  name='estado'                  value="{factura.estado}" >
@@ -340,6 +341,7 @@
                                 <div class="formatoTituloGanancia">IG: {totalGananciaByProducto}</div>
                                 <div class="formatoTituloGanancia">PG: {totalPesoByFacturaSTR}</div>
                             </div>
+                            <br>
                             <div class="seleccionOtroPrecioVenta">
                                 <div class="opcionPrecioPublico">
                                     <label class="titleListaPrecio">Lista Precios </label>  
@@ -350,13 +352,19 @@
                                     </select>
                                 </div>
                             </div>
-
+                            <br>
                             <div class="seleccionOtroPrecioVenta">
                                 <div class="opcionPrecioPublico">
                                     <label class="titleListaPrecio">Actividades Economicas </label>  
                                     <select onchange= {__AsignarActividad} class="form-control selectActividadComercial"  name="selectActividadComercial" id="selectActividadComercial" >
                                         <option  each={empresaActividadComercial}  value="{codigo}"   >{codigo}-{descripcion}</option>
                                     </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="seleccionOtroPrecioVenta">
+                                <div class="opcionPrecioPublico">
+                                    <label class="tituloTipoCambio">Cambio ${tipoCambio.total} Banco Central </label>  
                                 </div>
                             </div>
 
@@ -662,6 +670,11 @@
 
 
 <style type="text/css"  >
+.tituloTipoCambio{
+    color: #1a7b4f;
+    font-size: 20px;
+    font-weight: 900;
+}
 @media (min-width: 992px){
 .modal-lg {
     width: 1024px !important;
@@ -811,7 +824,7 @@
     }
     .titleListaPrecio{
         color:blue;
-        text-decoration:underline;
+       
     }
     .tituloDetalle{
         text-align: center;
@@ -1199,7 +1212,7 @@
         __comboCondicionPago()
         __RolAdministrador()
        __Teclas()
-       __TipoCambio()
+      
        cargaBilletes()
        __InformacionDataTableDia()
        __ListaDeClientes()
@@ -1209,6 +1222,7 @@
        __agregarArticulos()
        _Empresa()
        __ComboTipoDocumentoExonerados()
+       getTipoCambioDolar()
        
         $('.codigo').select()
         $(".codigo").focus()
@@ -1332,6 +1346,27 @@ __ConsultarHacienda(e){
     var cedula = $('#cedula').val()
     getClienteHacienda(cedula)
 }
+/**
+*Tipo Cambio del Dolar 
+**/
+function getTipoCambioDolar(){
+    $.ajax({
+    "url": "https://api.hacienda.go.cr/indicadores/tc/dolar",
+    "method": "GET",
+    statusCode: {
+        
+        404: function() {
+             __TipoCambio()
+        }
+    }
+    }).done(function (response) {
+         self.tipoCambio.total = __valorNumerico(response.venta.valor)
+         self.update()
+    });
+}
+
+
+
 function getClienteHacienda(cedula){
     self.mostrarBotonAgregarCliente = false
     self.clienteHacienda= {
@@ -2657,6 +2692,7 @@ function crearFactura(estado){
     self.factura.detalleFactura =JSONDetalles
     self.factura.estado = estado
     self.factura.codigoMoneda = self.parametros.codigoMoneda
+    self.factura.tipoCambio = self.tipoCambio.total
     self.update();
     var dataTemporal = null
 
