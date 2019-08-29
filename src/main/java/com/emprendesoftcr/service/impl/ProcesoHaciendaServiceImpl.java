@@ -309,7 +309,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -471,13 +471,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 				// JacoDos
-				 recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 				// Jaco
 			//	 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 				// Inventario
-				// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				// Alajuela
 				// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
@@ -1201,11 +1201,11 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/8 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
-			// procesoFirmadoComprasSimplificadas();
+			 procesoFirmadoComprasSimplificadas();
 			log.info("Inicio el proceso de firmado  {}", new Date());
 
 			Collection<Factura> lista = facturaBo.findByEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE, Constantes.FACTURA_ESTADO_REFIRMAR_DOCUMENTO);

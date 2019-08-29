@@ -21,6 +21,7 @@ import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNativeByEmpresaAndFechaAndCliente;
+import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstado;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstadoAndUsuario;
@@ -245,6 +246,32 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 		
 		Query query = entityManager.createNativeQuery(queryStr, ListarFacturasNativa.class);
 		return (Collection<ListarFacturasNativa>) query.getResultList();
+		
+	}
+
+	@Override
+	public Collection<ListarFacturasImpuestoServicioNativa> findByFacturasImpuestoServicio(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal,   String actividadComercial) {
+		String queryStr = getQueryBase(ListarFacturasImpuestoServicioNativa.class);
+		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
+		
+		queryStr = queryStr.replaceAll(":fechaInicial","'"+ fechaInicial+"'");
+		queryStr = queryStr.replaceAll(":fechaFinal","'"+ fechaFinal+"'");
+		queryStr = queryStr.replaceAll("and facturas.act_comercial" ," and facturas.act_comercial in ('"+ actividadComercial + "') ");	
+		if (idUsuario > Constantes.ZEROS) {
+			queryStr = queryStr.replaceAll("and facturas.usuario_id" ,"and facturas.usuario_id ='"+ idUsuario.toString() + "' ");	
+		}else {
+			queryStr = queryStr.replaceAll("and facturas.usuario_id" ," ");
+		}
+		
+		
+		if (estado > Constantes.ZEROS) {
+			queryStr = queryStr.replaceAll("and facturas.estado" ," and facturas.estado in ("+ estado + ") ");	
+		}else {
+			queryStr = queryStr.replaceAll("and facturas.estado" ," and facturas.estado in ("+ "2,6,7,5" + ") ");
+		}
+		
+		Query query = entityManager.createNativeQuery(queryStr, ListarFacturasImpuestoServicioNativa.class);
+		return (Collection<ListarFacturasImpuestoServicioNativa>) query.getResultList();
 		
 	}
 

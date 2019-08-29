@@ -809,6 +809,9 @@ public class HaciendasController {
 			if (haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
 				fileName = "NotaDebitoXML_" + haciendaBD.getTipoDoc() + "-" + haciendaBD.getConsecutivo();
 			}
+			if (haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_COMPRA_SIMPLIFICADA)) {
+				fileName = "CompraSimplificadaXML_" + haciendaBD.getTipoDoc() + "-" + haciendaBD.getConsecutivo();
+			}
 
 			response.setContentType("text/plain");
 			response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xml");
@@ -837,7 +840,24 @@ public class HaciendasController {
 			Hacienda haciendaBD = haciendaBo.findById(idHacienda);
 			String fileName = haciendaBD.getTipoDoc() + "-" + haciendaBD.getConsecutivo();
 			fileName = "RespuestaXML_" + haciendaBD.getTipoDoc() + "-" + haciendaBD.getConsecutivo();
+			if (haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_TIQUETE)) {
+				fileName = "RespuestaXML_TiqueteXML_" + haciendaBD.getTipoDoc() + "-" + haciendaBD.getConsecutivo();
+			}
 
+			if (haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_ELECTRONICA)) {
+				fileName = "RespuestaXML_FacturaXML_" + haciendaBD.getTipoDoc() + "-" + haciendaBD.getConsecutivo();
+			}
+
+			if (haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
+				fileName = "RespuestaXML_Nota_CreditoXML_" + haciendaBD.getTipoDoc() + "-" + haciendaBD.getConsecutivo();
+			}
+			if (haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO)) {
+				fileName = "RespuestaXML_Nota_DebitoXML_" + haciendaBD.getTipoDoc() + "-" + haciendaBD.getConsecutivo();
+			}
+			if (haciendaBD.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_COMPRA_SIMPLIFICADA)) {
+				fileName = "RespuestaXML_Compra_SimplificadaXML_" + haciendaBD.getTipoDoc() + "-" + haciendaBD.getConsecutivo();
+			}
+			
 			response.setContentType("text/plain");
 			response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xml");
 			ServletOutputStream out = response.getOutputStream();

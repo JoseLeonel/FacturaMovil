@@ -12,6 +12,7 @@ import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNativeByEmpresaAndFechaAndCliente;
+import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstado;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstadoAndUsuario;
@@ -44,5 +45,7 @@ public interface ConsultasNativeBo {
 	
 	Collection<CompraSimplificadaNative> findComprasSimplificadasByFechaAndEstadoAndEmpresa(Empresa empresa, String fechaInicial , String fechaFinal,Long idProveedor,Integer estado,Integer idUsuario);
 	Collection<ListarFacturasNativa> findByFacturasAndFechaAndTipoDocAndUsuario(Empresa empresa,Integer idUsuario,Integer estado,String fechaInicial,String fechaFinal,Cliente cliente ,  String tipoDocumento,String actividadComercial);
-	
+	Collection<ListarFacturasImpuestoServicioNativa> findByFacturasImpuestoServicio(Empresa empresa, Integer idUsuario, Integer estado, String fechaInicial, String fechaFinal, String actividadComercial);
+
+
 }

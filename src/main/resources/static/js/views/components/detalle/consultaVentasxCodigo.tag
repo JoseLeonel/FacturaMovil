@@ -60,10 +60,11 @@
                                 <div class="form-group">
                                     <label>Estado </label>  
                                     <select  class="form-control selectEstado estado" id= "estado" name="estado" >
-                                         <option  value="6"  >Aceptada</option>
-                                         <option  value="2"  >Facturada</option>
-                                    	<option  value="7"  >Rechazadas</option>
-                                        <option  value="5"  >Anulada</option>                                    </select>
+                                         <option value="6">Aceptada</option>
+                                         <option value="2">Facturada</option>
+                                    	<option  value="7">Rechazadas</option>
+                                        <option  value="5">Anulada</option>                                    
+                                    </select>
                                 </div>  
                             </div>            
 

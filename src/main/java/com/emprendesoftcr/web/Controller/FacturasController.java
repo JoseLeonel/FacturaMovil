@@ -80,6 +80,7 @@ import com.emprendesoftcr.modelo.sqlNativo.ConsultaComprasIvaNative;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaIVANative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasSinNotaCreditoNative;
+import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasImpuestoServicioNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ListarFacturasNativa;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstado;
 import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndFacturada;
@@ -94,6 +95,7 @@ import com.emprendesoftcr.web.command.FacturaAnulacionCommand;
 import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaDiaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
+import com.emprendesoftcr.web.command.FacturaImpuestoServicioCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacionMesa;
 import com.emprendesoftcr.web.command.ProformasByEmpresaAndEstadoCommand;
 import com.emprendesoftcr.web.command.ProformasSQLNativeCommand;
@@ -518,6 +520,7 @@ public class FacturasController {
 		modelEmail.put("totalEfectivo", facturaCommand.getTotalEfectivo() != null ? facturaCommand.getTotalEfectivoSTR() : Constantes.ZEROS);
 		modelEmail.put("totalTarjeta", facturaCommand.getTotalTarjeta() != null ? facturaCommand.getTotalTarjetaSTR() : Constantes.ZEROS);
 		modelEmail.put("totalBanco", facturaCommand.getTotalBanco() != null ? facturaCommand.getTotalBancoSTR() : Constantes.ZEROS);
+		modelEmail.put("totalCredito", facturaCommand.getTotalCredito() != null ? facturaCommand.getTotalCreditoSTR() : Constantes.ZEROS);
 		modelEmail.put("totalImpuestos", facturaCommand.getTotalImpuestos() != null ? facturaCommand.getTotalImpuestosSTR() : Constantes.ZEROS);
 		modelEmail.put("totalVentasNetas", facturaCommand.getTotalVentasNetas() != null ? facturaCommand.getTotalVentasNetasSTR() : Constantes.ZEROS);
 		modelEmail.put("totalVentasExentas", facturaCommand.getTotalVentasExentas() != null ? facturaCommand.getTotalVentasExentasSTR() : Constantes.ZEROS);
@@ -556,8 +559,8 @@ public class FacturasController {
 	private ByteArrayOutputStream createExcelFacturas(Collection<Factura> facturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Actividad Economica", "Fecha Emision", "# Documento", "#Proforma", "Cliente", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones","Total efectivo","Total Tarjeta ","Total Banco");
-		new SimpleExporter().gridExport(headers, facturas, "codigoActividad,fechaEmisionSTR, numeroConsecutivo,consecutivoProforma, nombreCliente, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos,totalOtrosCargos, totalComprobante,codigoMoneda, tipoCambio, totalColones,totalEfectivo,totalTarjeta,totalBanco", baos);
+		List<String> headers = Arrays.asList("Actividad Economica", "Fecha Emision", "# Documento", "#Proforma", "Cliente", "Gravados", "Exentos", "Venta neta", "Impuesto", "Descuento", "Otros Cargos", "Total", "Tipo Moneda", "Tipo Cambio", "Total Colones","Total efectivo","Total Tarjeta ","Total Banco","Total Credito");
+		new SimpleExporter().gridExport(headers, facturas, "codigoActividad,fechaEmisionSTR, numeroConsecutivo,consecutivoProforma, nombreCliente, totalGravado, totalExento, totalVentaNeta, totalImpuesto, totalDescuentos,totalOtrosCargos, totalComprobante,codigoMoneda, tipoCambio, totalColones,totalEfectivo,totalTarjeta,totalBanco,totalCredito", baos);
 		return baos;
 	}
 
@@ -823,6 +826,46 @@ public class FacturasController {
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
 
+	
+	@RequestMapping(value = "/ListaFacturasImpuestoServicioAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam Integer estado, String actividadEconomica) {
+		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
+		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
+		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
+		Date fechaFinalP = Utils.parseDate(fechaFinParam);
+		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+			}
+
+		}
+
+		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
+
+		String inicio1 = dateFormat1.format(fechaInicioP);
+		String fin1 = dateFormat1.format(fechaFinalP);
+
+		Collection<ListarFacturasImpuestoServicioNativa> facturas = consultasNativeBo.findByFacturasImpuestoServicio(usuarioSesion.getEmpresa(), usuarioSesion.getId(), estado, inicio1, fin1, actividadEconomica);
+		List<Object> solicitudList = new ArrayList<Object>();
+				for (ListarFacturasImpuestoServicioNativa listarFacturasImpuestoServicioNativa : facturas) {
+
+					// no se carga el usuario del sistema el id -1
+					if (listarFacturasImpuestoServicioNativa.getId().longValue() > 0L) {
+						solicitudList.add(new FacturaImpuestoServicioCommand(listarFacturasImpuestoServicioNativa));
+					}
+				}
+
+
+		respuestaService.setRecordsTotal(0l);
+		respuestaService.setRecordsFiltered(0l);
+		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
+			respuestaService.setDraw(Integer.parseInt(request.getParameter("draw")));
+		}
+		respuestaService.setAaData(solicitudList);
+		return respuestaService;
+	}
+	
 	/**
 	 * Lista de las Proformas activas
 	 * @param request

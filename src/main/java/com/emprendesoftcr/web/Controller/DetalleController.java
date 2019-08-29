@@ -193,14 +193,7 @@ public class DetalleController {
 	 * @param fechaFin
 	 * @return
 	 */
-	@RequestMapping(value = "/ListaDetallesImpuestoServicioAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
-	@ResponseBody
-	public RespuestaServiceDataTable listarFacturasActivasAndAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin) {
-		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
-		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, usuarioSesion.getEmpresa());
-
-		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND_Factura);
-	}
+	
 
 	/**
 	 * Enviar Correo
