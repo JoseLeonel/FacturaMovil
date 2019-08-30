@@ -96,10 +96,12 @@ import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaDiaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
 import com.emprendesoftcr.web.command.FacturaImpuestoServicioCommand;
+import com.emprendesoftcr.web.command.ImpuestoCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacionMesa;
 import com.emprendesoftcr.web.command.ProformasByEmpresaAndEstadoCommand;
 import com.emprendesoftcr.web.command.ProformasSQLNativeCommand;
 import com.emprendesoftcr.web.command.RecepcionFacturaCommand;
+import com.emprendesoftcr.web.command.RecepcionFacturaDetalleCommand;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 import com.emprendesoftcr.web.command.TurismoCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
@@ -1205,36 +1207,44 @@ public class FacturasController {
 			// Agregar Lineas de Detalle
 			JSONArray jsonArrayDetalle = (JSONArray) json.get("data");
 			Gson gson = new Gson();
+			Gson gson1 = new Gson();
 
 			if (jsonArrayDetalle != null) {
 				for (int i = 0; i < jsonArrayDetalle.size(); i++) {
 					RecepcionFacturaDetalle detalle = gson.fromJson(jsonArrayDetalle.get(i).toString(), RecepcionFacturaDetalle.class);
-					detalle.setNumeroLinea(detalle.getNumeroLinea() == null ? Constantes.ZEROS : detalle.getNumeroLinea());
-					detalle.setCantidad(detalle.getCantidad() == null ? Constantes.ZEROS_DOUBLE : detalle.getCantidad());
-					detalle.setUnidadMedida(detalle.getUnidadMedida() == null ? Constantes.EMPTY : detalle.getUnidadMedida());
-					detalle.setDetalle(detalle.getDetalle() == null ? Constantes.EMPTY : detalle.getDetalle());
-					detalle.setPrecioUnitario(detalle.getPrecioUnitario() == null ? Constantes.ZEROS_DOUBLE : detalle.getPrecioUnitario());
-					detalle.setMontoTotal(detalle.getMontoTotal() == null ? Constantes.ZEROS_DOUBLE : detalle.getMontoTotal());
-					detalle.setSubTotal(detalle.getSubTotal() == null ? Constantes.ZEROS_DOUBLE : detalle.getSubTotal());
-					detalle.setMontoTotalLinea(detalle.getMontoTotalLinea() == null ? Constantes.ZEROS_DOUBLE : detalle.getMontoTotalLinea());
-					detalle.setImpuestoNeto(detalle.getImpuestoNeto() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoNeto());
-					detalle.setCodigoComercialTipo(detalle.getCodigoComercialTipo() == null ? Constantes.EMPTY : detalle.getCodigoComercialTipo());
-					detalle.setCodigoComercialCodigo(detalle.getCodigoComercialCodigo() == null ? Constantes.EMPTY : detalle.getCodigoComercialCodigo());
-					detalle.setDescuentoMonto(detalle.getDescuentoMonto() == null ? Constantes.ZEROS_DOUBLE : detalle.getDescuentoMonto());
-					detalle.setDescuentoNaturaleza(detalle.getDescuentoNaturaleza() == null ? Constantes.EMPTY : detalle.getDescuentoNaturaleza());
-					detalle.setImpuestoCodigo(detalle.getImpuestoCodigo() == null ? Constantes.EMPTY : detalle.getImpuestoCodigo());
-					detalle.setImpuestoCodigoTarifa(detalle.getImpuestoCodigoTarifa() == null ? Constantes.EMPTY : detalle.getImpuestoCodigoTarifa());
-					detalle.setImpuestoTarifa(detalle.getImpuestoTarifa() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoTarifa());
-					detalle.setImpuestoMonto(detalle.getImpuestoMonto() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoMonto());
-					detalle.setImpuestoExoneracionTipoDocumento(detalle.getImpuestoExoneracionTipoDocumento() == null ? Constantes.EMPTY : detalle.getImpuestoExoneracionTipoDocumento());
-					detalle.setImpuestoExoneracionNumeroDocumento(detalle.getImpuestoExoneracionNumeroDocumento() == null ? Constantes.EMPTY : detalle.getImpuestoExoneracionNumeroDocumento());
-					detalle.setImpuestoExoneracionNombreInstitucion(detalle.getImpuestoExoneracionNombreInstitucion() == null ? Constantes.EMPTY : detalle.getImpuestoExoneracionNombreInstitucion());
-					detalle.setImpuestoExoneracionFechaEmision(detalle.getImpuestoExoneracionFechaEmision() == null ? Constantes.EMPTY : detalle.getImpuestoExoneracionFechaEmision());
-					detalle.setImpuestoExoneracionPorcentaje(detalle.getImpuestoExoneracionPorcentaje() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoExoneracionPorcentaje());
-					detalle.setImpuestoExoneracionMonto(detalle.getImpuestoExoneracionMonto() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoExoneracionMonto());
-					detalle.setBaseImponible(detalle.getBaseImponible() == null ? Constantes.ZEROS_DOUBLE : detalle.getBaseImponible());
-					detalle.setRecepcionFactura(null);
-					detallesCompra.add(detalle);
+					RecepcionFacturaDetalle detalleNuevo = new RecepcionFacturaDetalle();
+
+					detalleNuevo.setNumeroLinea(detalle.getNumeroLinea() == null ? Constantes.ZEROS : detalle.getNumeroLinea());
+					detalleNuevo.setCantidad(detalle.getCantidad() == null ? Constantes.ZEROS_DOUBLE : detalle.getCantidad());
+					detalleNuevo.setUnidadMedida(detalle.getUnidadMedida() == null ? Constantes.EMPTY : detalle.getUnidadMedida());
+					detalleNuevo.setDetalle(detalle.getDetalle() == null ? Constantes.EMPTY : detalle.getDetalle());
+					detalleNuevo.setPrecioUnitario(detalle.getPrecioUnitario() == null ? Constantes.ZEROS_DOUBLE : detalle.getPrecioUnitario());
+					detalleNuevo.setMontoTotal(detalle.getMontoTotal() == null ? Constantes.ZEROS_DOUBLE : detalle.getMontoTotal());
+					detalleNuevo.setSubTotal(detalle.getSubTotal() == null ? Constantes.ZEROS_DOUBLE : detalle.getSubTotal());
+					detalleNuevo.setMontoTotalLinea(detalle.getMontoTotalLinea() == null ? Constantes.ZEROS_DOUBLE : detalle.getMontoTotalLinea());
+					detalleNuevo.setImpuestoNeto(detalle.getImpuestoNeto() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoNeto());
+					detalleNuevo.setCodigoComercialTipo(detalle.getCodigoComercialTipo() == null ? Constantes.EMPTY : detalle.getCodigoComercialTipo());
+					detalleNuevo.setCodigoComercialCodigo(detalle.getCodigoComercialCodigo() == null ? Constantes.EMPTY : detalle.getCodigoComercialCodigo());
+					detalleNuevo.setDescuentoMonto(detalle.getDescuentoMonto() == null ? Constantes.ZEROS_DOUBLE : detalle.getDescuentoMonto());
+					detalleNuevo.setDescuentoNaturaleza(detalle.getDescuentoNaturaleza() == null ? Constantes.EMPTY : detalle.getDescuentoNaturaleza());
+								detalleNuevo.setImpuestoExoneracionTipoDocumento(detalle.getImpuestoExoneracionTipoDocumento() == null ? Constantes.EMPTY : detalle.getImpuestoExoneracionTipoDocumento());
+					detalleNuevo.setImpuestoExoneracionNumeroDocumento(detalle.getImpuestoExoneracionNumeroDocumento() == null ? Constantes.EMPTY : detalle.getImpuestoExoneracionNumeroDocumento());
+					detalleNuevo.setImpuestoExoneracionNombreInstitucion(detalle.getImpuestoExoneracionNombreInstitucion() == null ? Constantes.EMPTY : detalle.getImpuestoExoneracionNombreInstitucion());
+					detalleNuevo.setImpuestoExoneracionFechaEmision(detalle.getImpuestoExoneracionFechaEmision() == null ? Constantes.EMPTY : detalle.getImpuestoExoneracionFechaEmision());
+					detalleNuevo.setImpuestoExoneracionPorcentaje(detalle.getImpuestoExoneracionPorcentaje() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoExoneracionPorcentaje());
+					detalleNuevo.setImpuestoExoneracionMonto(detalle.getImpuestoExoneracionMonto() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoExoneracionMonto());
+					detalleNuevo.setBaseImponible(detalle.getBaseImponible() == null ? Constantes.ZEROS_DOUBLE : detalle.getBaseImponible());
+					detalleNuevo.setRecepcionFactura(null);
+					detalleNuevo.setImpuestoCodigo(detalle.getImpuestoCodigo() == null ? Constantes.EMPTY : detalle.getImpuestoCodigo());
+					detalleNuevo.setImpuestoCodigoTarifa(detalle.getImpuestoCodigoTarifa() == null ? Constantes.EMPTY : detalle.getImpuestoCodigoTarifa());
+					detalleNuevo.setImpuestoTarifa(detalle.getImpuestoTarifa() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoTarifa());
+					detalleNuevo.setImpuestoMonto(detalle.getImpuestoMonto() == null ? Constantes.ZEROS_DOUBLE : detalle.getImpuestoMonto());
+						
+					detalleNuevo.setImpuestoCodigo1(detalle.getImpuestoCodigo1() == null ? Constantes.EMPTY : detalle.getImpuestoCodigo1());
+					detalleNuevo.setImpuestoCodigoTarifa1(detalle.getImpuestoCodigoTarifa1() ==null?Constantes.EMPTY:detalle.getImpuestoCodigoTarifa1());
+					detalleNuevo.setImpuestoTarifa1(detalle.getImpuestoTarifa1() ==null?  Constantes.ZEROS_DOUBLE:detalle.getImpuestoTarifa1());
+					detalleNuevo.setImpuestoMonto1(detalle.getImpuestoMonto1() ==null? Constantes.ZEROS_DOUBLE:detalle.getImpuestoMonto1());
+					detallesCompra.add(detalleNuevo);
 				}
 			}
 			if (result.hasErrors()) {
@@ -1297,6 +1307,10 @@ public class FacturasController {
 				recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa(recepcionFacturaDetalle.getImpuestoCodigoTarifa());
 				recepcionFacturaDetalleNueva.setImpuestoTarifa(recepcionFacturaDetalle.getImpuestoTarifa());
 				recepcionFacturaDetalleNueva.setImpuestoMonto(recepcionFacturaDetalle.getImpuestoMonto());
+				recepcionFacturaDetalleNueva.setImpuestoCodigo1(recepcionFacturaDetalle.getImpuestoCodigo1());
+				recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa1(recepcionFacturaDetalle.getImpuestoCodigoTarifa1());
+				recepcionFacturaDetalleNueva.setImpuestoTarifa1(recepcionFacturaDetalle.getImpuestoTarifa1());
+				recepcionFacturaDetalleNueva.setImpuestoMonto1(recepcionFacturaDetalle.getImpuestoMonto1());
 				recepcionFacturaDetalleNueva.setImpuestoExoneracionTipoDocumento(recepcionFacturaDetalle.getImpuestoExoneracionTipoDocumento());
 				recepcionFacturaDetalleNueva.setImpuestoExoneracionNumeroDocumento(recepcionFacturaDetalle.getImpuestoExoneracionNumeroDocumento());
 				recepcionFacturaDetalleNueva.setImpuestoExoneracionNombreInstitucion(recepcionFacturaDetalle.getImpuestoExoneracionNombreInstitucion());
@@ -1344,7 +1358,10 @@ public class FacturasController {
 			DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
 			delimitador.addFiltro(new JqGridFilter("facturaFechaEmision", dateFormat.format(fechaInicio), "date>="));
 			delimitador.addFiltro(new JqGridFilter("facturaFechaEmision", dateFormat.format(fechaFinal), "dateFinal<="));
-			delimitador.addFiltro(new JqGridFilter("estado", estado.toString(), "="));
+			if(estado.equals(Constantes.COMBO_TODOS)) {
+				delimitador.addFiltro(new JqGridFilter("estado", estado.toString(), "="));	
+			}
+			
 			delimitador.addFiltro(new JqGridFilter("codigoActividad", actividadEconomica.toString(), "="));
 		}
 		return UtilsForControllers.process(request, dataTableBo, delimitador, TO_COMMAND_RECEPCION);
@@ -1523,7 +1540,7 @@ public class FacturasController {
 			}
 			TipoCambio tipoCambio = null;
 			facturaCommand.setTipoCambioMoneda(facturaCommand.getTipoCambioMoneda() == null ? Constantes.ZEROS_DOUBLE : facturaCommand.getTipoCambioMoneda());
-			facturaCommand.setCodigoMoneda(facturaCommand.getCodigoMoneda() == null?Constantes.CODIGO_MONEDA_COSTA_RICA:facturaCommand.getCodigoMoneda());
+			facturaCommand.setCodigoMoneda(facturaCommand.getCodigoMoneda() == null ? Constantes.CODIGO_MONEDA_COSTA_RICA : facturaCommand.getCodigoMoneda());
 			if (!facturaCommand.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
 				if (!facturaCommand.getCodigoMoneda().equals(Constantes.CODIGO_MONEDA_COSTA_RICA)) {
 					if (facturaCommand.getTipoCambioMoneda() == Constantes.ZEROS_DOUBLE) {

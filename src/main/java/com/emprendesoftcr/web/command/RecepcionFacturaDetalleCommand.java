@@ -1,126 +1,71 @@
-package com.emprendesoftcr.modelo;
+package com.emprendesoftcr.web.command;
 
-import java.io.Serializable;
+import com.emprendesoftcr.modelo.RecepcionFactura;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
-import com.emprendesoftcr.fisco.MapEnums;
+public class RecepcionFacturaDetalleCommand {
 
-/**
- * Detalle de Recepcion de la factura, aceptacion de facturas de un emisor.
- * @author Jairo Cisneros.
- * @since 10 de julio del 2019
- */
-@Entity
-@Table(name = "recepcion_factura_detalle")
-public class RecepcionFacturaDetalle implements Serializable {
-
-	private static final long serialVersionUID = 544316204546771917L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "numero_linea")
 	private Integer numeroLinea;
 
-	@Column(name = "cantidad", precision = 18, scale = 5)
 	private Double cantidad;
 
-	@Column(name = "unidad_medida", length = 15)
 	private String unidadMedida;
 
-	@Column(name = "detalle", length = 180)
 	private String detalle;
 
-	@Column(name = "precio_unitario", precision = 18, scale = 5)
 	private Double precioUnitario;
 
-	@Column(name = "monto_total", precision = 18, scale = 5)
 	private Double montoTotal;
 
-	@Column(name = "sub_total", precision = 18, scale = 5)
 	private Double subTotal;
 
-	@Column(name = "monto_total_linea", precision = 18, scale = 5)
 	private Double montoTotalLinea;
 
-	@Column(name = "impuesto_neto", precision = 18, scale = 5)
 	private Double impuestoNeto;
 
-	@Column(name = "codigo_comercial_tipo", length = 2)
 	private String codigoComercialTipo;
 
-	@Column(name = "codigo_comercial_codigo", length = 25)
 	private String codigoComercialCodigo;
 
-	@Column(name = "descuento_monto", precision = 18, scale = 5)
 	private Double descuentoMonto;
 
-	@Column(name = "descuento_naturaleza", length = 180)
 	private String descuentoNaturaleza;
 
-	@Column(name = "impuesto_codigo", length = 2)
 	private String impuestoCodigo;
 
-	@Column(name = "impuesto_codigo_tarifa", length = 2)
 	private String impuestoCodigoTarifa;
 
-	@Column(name = "impuesto_tarifa", precision = 18, scale = 5)
 	private Double impuestoTarifa;
 
-	@Column(name = "impuesto_monto", precision = 18, scale = 5)
 	private Double impuestoMonto;
 
-	@Column(name = "imp_exo_tipo_docu", length = 2)
 	private String impuestoExoneracionTipoDocumento;
 
-	@Column(name = "imp_exo_numero_docu", length = 40)
 	private String impuestoExoneracionNumeroDocumento;
 
-	@Column(name = "imp_exo_nombre_institu", length = 160)
 	private String impuestoExoneracionNombreInstitucion;
 
-	@Column(name = "imp_exo_fecha_emision", length = 30)
 	private String impuestoExoneracionFechaEmision;
 
-	@Column(name = "imp_exo_porcentaje", precision = 18, scale = 5)
 	private Double impuestoExoneracionPorcentaje;
 
-	@Column(name = "imp_exo_monto", precision = 18, scale = 5)
 	private Double impuestoExoneracionMonto;
 
-	@Column(name = "base_imponible", precision = 18, scale = 5)
 	private Double baseImponible;
-	
-	@Column(name = "impuesto_codigo1", length = 2)
-	private String impuestoCodigo1;
 
-	@Column(name = "impuesto_codigo_tarifa1", length = 2)
-	private String impuestoCodigoTarifa1;
-
-	@Column(name = "impuesto_tarifa1", precision = 18, scale = 5)
-	private Double impuestoTarifa1;
-
-	@Column(name = "impuesto_monto1", precision = 18, scale = 5)
-	private Double impuestoMonto1;
-
-	@ManyToOne
-	@JoinColumn(name = "recepcion_factura_id")
 	private RecepcionFactura recepcionFactura;
+  private String detalleImpuestos;
+	
+	
+	
+	
+	public RecepcionFacturaDetalleCommand() {
+		super();
+	}
 
-	
-	
-	
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -316,13 +261,7 @@ public class RecepcionFacturaDetalle implements Serializable {
 		return impuestoTarifa;
 	}
 
-	public String getImpuestoCodigoSTR() {
-		return  impuestoCodigo !=null?MapEnums.ENUM_TIPOS_IMPUESTOS.get(impuestoCodigo):impuestoCodigo;
-	}
-	public String getImpuestoCodigoTarifaSTR() {
-		return impuestoCodigoTarifa !=null?MapEnums.ENUM_TARIFAS_IMPUESTOS.get(impuestoCodigoTarifa.toString()):impuestoCodigoTarifa.toString();
-	}
-
+	
 	
 	public void setImpuestoTarifa(Double impuestoTarifa) {
 		this.impuestoTarifa = impuestoTarifa;
@@ -438,50 +377,14 @@ public class RecepcionFacturaDetalle implements Serializable {
 
 
 	
-	public String getImpuestoCodigo1() {
-		return impuestoCodigo1;
+	public String getDetalleImpuestos() {
+		return detalleImpuestos;
 	}
 
 
 	
-	public void setImpuestoCodigo1(String impuestoCodigo1) {
-		this.impuestoCodigo1 = impuestoCodigo1;
-	}
-
-
-	
-	public String getImpuestoCodigoTarifa1() {
-		return impuestoCodigoTarifa1;
-	}
-
-
-	
-	public void setImpuestoCodigoTarifa1(String impuestoCodigoTarifa1) {
-		this.impuestoCodigoTarifa1 = impuestoCodigoTarifa1;
-	}
-
-
-	
-	public Double getImpuestoTarifa1() {
-		return impuestoTarifa1;
-	}
-
-
-	
-	public void setImpuestoTarifa1(Double impuestoTarifa1) {
-		this.impuestoTarifa1 = impuestoTarifa1;
-	}
-
-
-	
-	public Double getImpuestoMonto1() {
-		return impuestoMonto1;
-	}
-
-
-	
-	public void setImpuestoMonto1(Double impuestoMonto1) {
-		this.impuestoMonto1 = impuestoMonto1;
+	public void setDetalleImpuestos(String detalleImpuestos) {
+		this.detalleImpuestos = detalleImpuestos;
 	}
 
 	

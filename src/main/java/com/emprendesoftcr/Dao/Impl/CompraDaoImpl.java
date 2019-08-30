@@ -133,7 +133,7 @@ public class CompraDaoImpl implements CompraDao {
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_ACEPTADAS_IN_FECHA_INICIO, Date.class, ParameterMode.IN);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_ACEPTADAS_IN_FECHA_FIN, Date.class, ParameterMode.IN);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ID_EMPRESA, Integer.class, ParameterMode.IN);
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ESTADO, Integer.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ESTADO, String.class, ParameterMode.IN);
 
 		
 		// set parametros salida
@@ -144,7 +144,14 @@ public class CompraDaoImpl implements CompraDao {
 		storedProcedure.setParameter(Constantes.SP_TOTAL_ACEPTADAS_IN_FECHA_INICIO, fechaInicio);
 		storedProcedure.setParameter(Constantes.SP_TOTAL_ACEPTADAS_IN_FECHA_FIN, fechaFinal);
 		storedProcedure.setParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ID_EMPRESA, idEmpresa);
-		storedProcedure.setParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ESTADO, estado);
+		String estados = Constantes.EMPTY;
+		if(estado.equals(0)) {
+			estados = "2"+","+"6"+","+"7";
+			
+		}else {
+			estados = estado.toString();
+		}
+		storedProcedure.setParameter(Constantes.SP_TOTAL_COMPRAS_ACEPTADAS_ESTADO, estados);
 		storedProcedure.execute();
 
 		// Se toma la respuesta

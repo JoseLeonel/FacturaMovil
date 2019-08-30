@@ -79,6 +79,8 @@
                                 <div class="form-group">
                                     <label>Estado </label>  
                                     <select  class="form-control selectEstado estado" id= "estado" name="estado" >
+                                        <option value="0"  >Todos</option>
+                                        <option  value="2"  >Pendiente Aceptar</option>
 	                                   	<option  value="6"  >Aceptada</option>
                                        	<option  value="7"  >Rechazadas</option>
                                     </select>

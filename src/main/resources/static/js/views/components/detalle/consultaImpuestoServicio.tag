@@ -66,9 +66,6 @@
                                 <label>Total Imp.Serv(10%) </label>
                                 <input type="text" readonly="readonly" class="form-control "   value={totalImpuestoServicio}>
                             </div>
-
-
-
                         </div>
                     </form>  
                 </div>
@@ -311,11 +308,6 @@
     .tituloTotal{
         font-size:30px;
     }
-</style>
- 
-
-
-<style type ="text/css">
     .wrap{
         max-width:100%;
         width:100%;
@@ -491,14 +483,12 @@
 
 <script>
 self = this
-
 self.detail                = []
 self.listaFacturas = []
 self.totalDescuentos       = 0
 self.totalImpuestos        = 0
-self.totalImpuestoServicio        = 0
+self.totalImpuestoServicio = 0
 self.total                 = 0
-
 self.mostrarListado        = true
 self.on('mount',function(){
     $("#filtros").validate(reglasDeValidacion());
@@ -512,7 +502,6 @@ self.on('mount',function(){
     }, false );
 
 })
-
 /**
 *  Lista de los clientes
 **/
@@ -536,12 +525,15 @@ function __ListaActividadesComercales(){
     });
     return
 }
-
-
+/**
+* Asigna la actividad comercial
+**/
 __AsignarActividad(e){
     BuscarActividadComercial()
 }
-
+/**
+*Busca la actividad comercial
+**/
 function BuscarActividadComercial(){
     var codigo =$('.selectActividadEconocimica').val()
     if(self.empresaActividadComercial == null){
@@ -558,8 +550,6 @@ function BuscarActividadComercial(){
 
     })
 }
-
-
 /**
 * Camps requeridos
 **/
@@ -589,7 +579,6 @@ __limpiarFiltros(){
     $('#fechaInicial').val(null)
     $('#fechaFinal').val(null)
 }
-
 /**
 *  Busqueda de la informacion por rango de fechas
 **/
@@ -603,7 +592,6 @@ __Busqueda(){
             fechaFinParam:$('.fechaFinal').val(),
             estado:$('.selectEstado').val(),
             actividadEconomica:$('.selectActividadEconocimica').val(),
-          
         };
         $("#tableListar").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListar')  
@@ -625,7 +613,6 @@ __Busqueda(){
                 }else{
                     __InformacionDataTable();
                      agregarInputsCombos();
-
                 }           
             },
             error: function (xhr, status) {
@@ -635,8 +622,10 @@ __Busqueda(){
         });
 
      }
-
 }
+/**
+* sumar
+**/
 function sumar(){
     self.totalImpuestos = 0
     self.total = 0
@@ -669,9 +658,6 @@ function sumar(){
     }
     self.update();
 }
-
-
-
 /**$.i18n.prop("factura.tipoDocumento")
 *Formato del listado 
 **/
@@ -692,41 +678,13 @@ function __InformacionDataTable(){
 	      		            }];
     self.update();
    
-}
-
-function __TipoDocumentos(numeroConsecutivo,row){
-
-    switch(row.tipoDoc) {
-    case "04":
-          return  "Tiq:"+numeroConsecutivo
-        break;
-    case "01":
-        return  "Fact:"+numeroConsecutivo
-        break;
-    case "02":
-        return  "N.Debito:"+numeroConsecutivo
-        break;
-    case "03":
-        return  "N.Credito:"+numeroConsecutivo
-        break;
-
-    default:
-        return  numeroConsecutivo
-}
-}
-
-    
+}  
 /**
 * Opciones listado de los clientes
 */
 function __Opciones(id,type,row){
     return "";
 }
-
-
-
-
-
 function agregarInputsCombos(){
      // Agregar los input de busqueda 
     $('.tableListar tfoot th').each( function (e) {
@@ -736,8 +694,6 @@ function agregarInputsCombos(){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
     })
-} 
-
-
+}
 </script>
 </consulta-impuestoServicio>

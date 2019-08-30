@@ -20,7 +20,7 @@ import com.emprendesoftcr.modelo.RecepcionFacturaDetalle;
 public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 
 	@PersistenceContext
-	EntityManager		entityManager;
+	EntityManager entityManager;
 
 	@Override
 	public void agregar(RecepcionFactura recepcionFactura) {
@@ -49,7 +49,7 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 			return null;
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public RecepcionFactura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) throws Exception {
@@ -70,11 +70,11 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<RecepcionFactura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma){
+	public Collection<RecepcionFactura> findByEstadoFirma(Integer estadoFirma, Integer reEstadoFirma) {
 		Query query = entityManager.createQuery("select obj from RecepcionFactura obj where  obj.estadoFirma = :estadoFirma or  obj.estadoFirma = :reEstadoFirma");
 		query.setParameter("estadoFirma", estadoFirma);
 		query.setParameter("reEstadoFirma", reEstadoFirma);
-		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);		
+		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
 		return query.getResultList();
 	}
 
@@ -83,13 +83,13 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 		Query query = entityManager.createQuery("select obj from RecepcionFactura obj where  obj.facturaClave = :clave and obj.emisorCedula = :cedulaEmisor");
 		query.setParameter("clave", clave);
 		query.setParameter("cedulaEmisor", cedulaEmisor);
-		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);		
+		query.setMaxResults(Constantes.BLOQUES_DOCUMENTOS_A_PROCESAR);
 		return query.getResultList();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula , Integer estado) {
+	public Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa, String cedula, Integer estado) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from RecepcionFactura obj");
 		hql.append(" where obj.empresa = :empresa ");
@@ -98,7 +98,12 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 				hql.append("and obj.receptorCedula = :cedula ");
 			}
 		}
-		hql.append("and obj.facturaFechaEmision >= :fechaInicio and obj.facturaFechaEmision <= :fechaFin and obj.estado = :estado");
+		if (estado != null) {
+			if (!estado.equals(0)) {
+				hql.append("and obj.estado = :estado ");
+			}
+		}
+		hql.append("and obj.facturaFechaEmision >= :fechaInicio and obj.facturaFechaEmision <= :fechaFin ");
 		Query query = entityManager.createQuery(hql.toString());
 		if (cedula != null) {
 			if (!cedula.equals(Constantes.EMPTY)) {
@@ -106,13 +111,15 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 			}
 		}
 		query.setParameter("empresa", empresa);
-		query.setParameter("estado", estado);
+		if (!estado.equals(0)) {
+			query.setParameter("estado", estado);
+		}
 		query.setParameter("fechaInicio", fechaInicio);
 		query.setParameter("fechaFin", fechaFin);
 		return query.getResultList();
 	}
 
-	public Collection<RecepcionFacturaDetalle> findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula , Integer estado) {
+	public Collection<RecepcionFacturaDetalle> findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa, String cedula, Integer estado) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from RecepcionFacturaDetalle obj ");
 		hql.append(" where obj.recepcionFactura.empresa = :empresa ");
@@ -121,7 +128,13 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 				hql.append("and obj.receptorCedula = :cedula ");
 			}
 		}
-		hql.append("and obj.recepcionFactura.facturaFechaEmision >= :fechaInicio and obj.recepcionFactura.facturaFechaEmision <= :fechaFin and obj.recepcionFactura.estado = :estado");
+		if (estado != null) {
+			if (!estado.equals(0)) {
+				hql.append("and obj.estado = :estado ");
+			}
+		}
+
+		hql.append("and obj.recepcionFactura.facturaFechaEmision >= :fechaInicio and obj.recepcionFactura.facturaFechaEmision <= :fechaFin ");
 		Query query = entityManager.createQuery(hql.toString());
 		if (cedula != null) {
 			if (!cedula.equals(Constantes.EMPTY)) {
@@ -129,11 +142,15 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 			}
 		}
 		query.setParameter("empresa", empresa);
-		query.setParameter("estado", estado);
+		if (estado != null) {
+			if (!estado.equals(0)) {
+				query.setParameter("estado", estado);
+			}
+		}
+
 		query.setParameter("fechaInicio", fechaInicio);
 		query.setParameter("fechaFin", fechaFin);
 		return query.getResultList();
 	}
-	
 
 }

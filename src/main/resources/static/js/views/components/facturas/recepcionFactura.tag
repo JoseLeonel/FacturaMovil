@@ -810,13 +810,61 @@ function BuscarActividadComercial(){
 
 		                    self.archivo.facturaCodigoActividad = __valorString($(xmlDoc).find("CodigoActividad").first().text());
 		                    self.archivo.facturaPlazoCredito = __valorString($(xmlDoc).find("PlazoCredito").first().text());
+							
 		                    
 		                    //Se carga el detalle de la factura
 							$("#detalleFactura").find("tr:gt(0)").remove();
+						
 		                    var detallesServicioXml = $(xmlDoc).find("DetalleServicio");
 		                    $(detallesServicioXml).each(function () {
 								var valor = __valorString($(this).find("CodigoComercial").find("Codigo").text())
 		                    	$(this).children().each(function () {
+									var impuestosItems    = this.getElementsByTagName("Impuesto");
+									var impuestos ={
+										    codigo1 :'',
+											codigoTarifa1:'',
+											tarifa1:'',
+											monto1:0,
+										    codigo2 :'',
+											codigoTarifa2:'',
+											tarifa2:'',
+											monto2:0
+					
+										}
+									$.each(impuestosItems, function(i, impuesto){
+									    var codigo = ''
+										var codigoTarifa = ''
+										var tarifa = 0 
+										var monto = 0
+										$(this).children().each(function () {
+											var name = $(this).get(0).nodeName               
+											if(name.indexOf('Codigo') != -1){
+												codigo = $(this).text()
+											} 
+											if(name.indexOf('CodigoTarifa') != -1){
+												codigoTarifa = $(this).text()
+											} 
+											if(name.indexOf('Tarifa') != -1){
+												tarifa = $(this).text()
+											} 
+											if(name.indexOf('Monto') != -1){
+												monto = $(this).text()
+											} 
+										});
+										if(impuestos.codigo1.length ==0){
+											impuestos.codigo1 = codigo;
+											impuestos.codigoTarifa1 = codigoTarifa
+											impuestos.tarifa1 = tarifa
+											impuestos.monto1 = monto
+										} else if(impuestos.codigo2.length ==0){
+											impuestos.codigo2 = codigo;
+											impuestos.codigoTarifa2 = codigoTarifa
+											impuestos.tarifa2 = tarifa
+											impuestos.monto2 = monto
+										}       
+									    
+									});
+
 				                    var row = "<tr>" + 
 												  "<td>" + __valorFloat($(this).find("Cantidad").text()) + "</td>" + 
 					                    		  "<td>" + __valorString($(this).find("UnidadMedida").text()) + "</td>" + 
@@ -829,6 +877,7 @@ function BuscarActividadComercial(){
 				      	            $('#detalleFactura tr:last').after(row);
 				      	            
 				      	          	self.detalleServicio.data.push({
+										detalleImpuestos : impuestos,	
 					      	            numeroLinea     : 0,
 					      	            cantidad        : __valorFloat($(this).find("Cantidad").text()),
 					      	            unidadMedida    : __valorString($(this).find("UnidadMedida").text()),
@@ -843,10 +892,14 @@ function BuscarActividadComercial(){
 					      	            codigoComercialCodigo : "",
 					      	            descuentoMonto        : __valorFloat($(this).find("Descuento").find("MontoDescuento").text()),
 					      	            descuentoNaturaleza   : __valorString($(this).find("Descuento").find("NaturalezaDescuento").text()),
-					      	            impuestoCodigo        : __valorString($(this).find("Impuesto").find("Codigo").text()),
-					      	            impuestoCodigoTarifa  : __valorString($(this).find("Impuesto").find("CodigoTarifa").text()),
-					      	            impuestoTarifa        : __valorFloat($(this).find("Impuesto").find("Tarifa").text()),
-     				      	            impuestoMonto         : __valorFloat($(this).find("Impuesto").find("Monto").text()),
+					      	            impuestoCodigo        : __valorString(impuestos.codigo1),
+					      	            impuestoCodigoTarifa  : __valorString(impuestos.codigoTarifa1),
+					      	            impuestoTarifa        : __valorFloat(impuestos.tarifa1),
+     				      	            impuestoMonto         : __valorFloat(impuestos.monto1),
+					      	            impuestoCodigo1        : __valorString(impuestos.codigo2),
+					      	            impuestoCodigoTarifa1  : __valorString(impuestos.codigoTarifa2),
+					      	            impuestoTarifa1        : __valorFloat(impuestos.tarifa2),
+     				      	            impuestoMonto1         : __valorFloat(impuestos.monto2),
 					      	            impuestoExoneracionTipoDocumento         : __valorString($(this).find("Impuesto").find("Exoneracion").find("TipoDocumento").text()),
 					      	            impuestoExoneracionNumeroDocumento       : __valorString($(this).find("Impuesto").find("Exoneracion").find("NumeroDocumento").text()),
 					      	            impuestoExoneracionNombreInstitucion     : __valorString($(this).find("Impuesto").find("Exoneracion").find("NombreInstitucion").text()),

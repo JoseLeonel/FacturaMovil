@@ -136,24 +136,24 @@ public class ComprasController {
 
 	@RequestMapping(value = "/TotalComprasAceptadasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public TotalComprasAceptadasCommand totalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin,@RequestParam Integer estado) {
+	public TotalComprasAceptadasCommand totalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado) {
 		Date inicio = Utils.parseDate(fechaInicio);
 		Date finalDate = Utils.dateToDate(Utils.parseDate(fechaFin), true);
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
-		return compraBo.sumarComprasAceptadas(inicio, finalDate, usuario.getEmpresa().getId(),estado);
+		return compraBo.sumarComprasAceptadas(inicio, finalDate, usuario.getEmpresa().getId(), estado);
 	}
 
 	@RequestMapping(value = "/CorreoTotalComprasAceptadasAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public void envioTotalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo,@RequestParam Integer estado) {
+	public void envioTotalComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String correoAlternativo, @RequestParam Integer estado) {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 		// Se obtiene los totales
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFinal = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		TotalComprasAceptadasCommand totalComprasAceptadasCommand = compraBo.sumarComprasAceptadas(fechaInicio, fechaFinal, usuario.getEmpresa().getId(),estado);
+		TotalComprasAceptadasCommand totalComprasAceptadasCommand = compraBo.sumarComprasAceptadas(fechaInicio, fechaFinal, usuario.getEmpresa().getId(), estado);
 
-		Collection<RecepcionFactura> recepcionFacturas = recepcionFacturaBo.findByFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFinal, usuario.getEmpresa(), Constantes.EMPTY,estado);
+		Collection<RecepcionFactura> recepcionFacturas = recepcionFacturaBo.findByFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFinal, usuario.getEmpresa(), Constantes.EMPTY, estado);
 
 		// Se prepara el excell
 		ByteArrayOutputStream baos = createExcelRecepcionCompras(recepcionFacturas);
@@ -177,10 +177,10 @@ public class ComprasController {
 
 		Map<String, Object> modelEmail = new HashMap<>();
 		modelEmail.put("nombreEmpresa", usuario.getEmpresa().getNombre());
-		if(estado.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
+		if (estado.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA)) {
 			modelEmail.put("estado", "Aceptadas");
 		}
-		if(estado.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO)) {
+		if (estado.equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO)) {
 			modelEmail.put("estado", "No Aceptadas");
 		}
 		modelEmail.put("fechaInicial", Utils.getFechaStr(fechaInicio));
@@ -199,25 +199,24 @@ public class ComprasController {
 		return new Attachment(name + ext, data);
 	}
 
-/**
- * 
- * @param request
- * @param response
- * @param fechaInicioParam
- * @param fechaFinParam
- * @param cedulaEmisor
- * @param estado
- * @throws IOException
- */
+	/**
+	 * @param request
+	 * @param response
+	 * @param fechaInicioParam
+	 * @param fechaFinParam
+	 * @param cedulaEmisor
+	 * @param estado
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/DescargarComprasAceptadasAjax.do", method = RequestMethod.GET)
-	public void descargarComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor,Integer estado) throws IOException {
+	public void descargarComprasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, Integer estado) throws IOException {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		Collection<RecepcionFactura> recepcionFacturas = recepcionFacturaBo.findByFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFin, usuario.getEmpresa(), cedulaEmisor,estado);
+		Collection<RecepcionFactura> recepcionFacturas = recepcionFacturaBo.findByFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFin, usuario.getEmpresa(), cedulaEmisor, estado);
 
 		String nombreArchivo = "comprasAceptadas.xls";
 		response.setContentType("application/octet-stream");
@@ -297,16 +296,15 @@ public class ComprasController {
 		return baos;
 	}
 
-	
 	@RequestMapping(value = "/DescargarDetalladaAceptadasAjax.do", method = RequestMethod.GET)
-	public void descargarDetalladasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor,Integer estado) throws IOException {
+	public void descargarDetalladasAceptadasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicioParam, @RequestParam String fechaFinParam, @RequestParam String cedulaEmisor, Integer estado) throws IOException {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
 		// Se buscan las facturas
 		Date fechaInicio = Utils.parseDate(fechaInicioParam);
 		Date fechaFin = Utils.dateToDate(Utils.parseDate(fechaFinParam), true);
-		Collection<RecepcionFacturaDetalle> recepcionFacturas = recepcionFacturaBo.findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFin, usuario.getEmpresa(), cedulaEmisor,estado);
+		Collection<RecepcionFacturaDetalle> recepcionFacturas = recepcionFacturaBo.findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(fechaInicio, fechaFin, usuario.getEmpresa(), cedulaEmisor, estado);
 
 		String nombreArchivo = "comprasPorDetalleAceptadas.xls";
 		response.setContentType("application/octet-stream");
@@ -323,16 +321,15 @@ public class ComprasController {
 			response.getOutputStream().write(buffer, 0, bytesRead);
 		}
 	}
-	
-	
+
 	private ByteArrayOutputStream createExcelDetalleRecepcionCompras(Collection<RecepcionFacturaDetalle> recepcionFacturas) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "# Compra",  "Tipo Moneda", "Tipo Cambio", "Tipo Documento","IVA","Tarifa","Total Impuesto");
+		List<String> headers = Arrays.asList("Fecha Ingreso", "Fecha Emision", "Clave", "# Documento Receptor", "Cedula Emisor", "Nombre Emisor", "# Compra", "Tipo Moneda", "Tipo Cambio", "Tipo Documento", "IVA", "Tarifa", "Total Impuesto");
 		new SimpleExporter().gridExport(headers, recepcionFacturas, "recepcionFactura.created_atSTR,recepcionFactura.fechaEmisionSTR,recepcionFactura.facturaClave, recepcionFactura.numeroConsecutivoReceptor, recepcionFactura.emisorCedula, recepcionFactura.emisorNombre, recepcionFactura.facturaConsecutivo,recepcionFactura.facturaCodigoMoneda, recepcionFactura.facturaTipoCambio, recepcionFactura.tipoDocumentoStr,impuestoCodigoSTR,impuestoCodigoTarifaSTR,impuestoNeto", baos);
 		return baos;
 	}
-	
+
 	/**
 	 * Descargar Compras
 	 * @param request
@@ -411,15 +408,15 @@ public class ComprasController {
 	 */
 	@RequestMapping(value = "/ListarComprasAjax", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarComprasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idProveedor,@RequestParam String estado) {
+	public RespuestaServiceDataTable listarComprasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idProveedor, @RequestParam String estado) {
 
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Proveedor proveedor = proveedorBo.buscar(idProveedor);
-		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, proveedor, usuarioSesion.getEmpresa(),estado);
+		DataTableDelimitador query = DelimitadorBuilder.get(request, fechaInicio, fechaFin, proveedor, usuarioSesion.getEmpresa(), estado);
 
 		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
-	
+
 	@RequestMapping(value = "/ListarComprasNoAnuladasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
 	public RespuestaServiceDataTable listarComprasNoAnuladasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idProveedor) {
@@ -451,17 +448,18 @@ public class ComprasController {
 			return RespuestaServiceValidator.ERROR(e);
 		}
 	}
-/**
- * Anular un Compra
- * @param request
- * @param response
- * @param result
- * @param idCompra
- * @return
- */
+
+	/**
+	 * Anular un Compra
+	 * @param request
+	 * @param response
+	 * @param result
+	 * @param idCompra
+	 * @return
+	 */
 	@RequestMapping(value = "/AnularCompraAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceValidator anularCompra(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Articulo articulo, @RequestParam Long idCompra,BindingResult result ,SessionStatus status) {
+	public RespuestaServiceValidator anularCompra(HttpServletRequest request, HttpServletResponse response, ModelMap model, @ModelAttribute Articulo articulo, @RequestParam Long idCompra, BindingResult result, SessionStatus status) {
 		try {
 			Compra compra = compraBo.findById(idCompra);
 			if (compra == null) {
@@ -497,11 +495,11 @@ public class ComprasController {
 			Date fechaFinal = new Date();
 
 			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.COMPRA_ESTADO_PENDIENTE.toString() + "'", "<>"));
-			
-			if(!estado.equals(Constantes.COMBO_TODOS)) {
+
+			if (!estado.equals(Constantes.COMBO_TODOS)) {
 				delimitador.addFiltro(new JqGridFilter("estado", "'" + estado + "'", "="));
 			}
-			
+
 			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
 
 			if (proveedor != null) {
@@ -528,6 +526,7 @@ public class ComprasController {
 			return delimitador;
 		}
 	}
+
 	private static class DelimitadorBuilderAnuladas {
 
 		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Proveedor proveedor, Empresa empresa) {
@@ -563,8 +562,5 @@ public class ComprasController {
 			return delimitador;
 		}
 	}
-
-
-
 
 }

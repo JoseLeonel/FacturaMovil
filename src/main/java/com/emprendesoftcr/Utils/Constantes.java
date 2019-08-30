@@ -311,6 +311,7 @@ public class Constantes {
 	public static final Long						ZEROS_LONG																									= 0l;
 	public static final Float						ZEROS_FLOAT																									= 0F;
 	public static final Double					ZEROS_DOUBLE																								= 0D;
+	public static final Double					IMPUESTO_13																									= 13D;
 	public static final String					SEMI_COLON																									= ";";
 	public static final String					PUNTO																												= ".";
 
