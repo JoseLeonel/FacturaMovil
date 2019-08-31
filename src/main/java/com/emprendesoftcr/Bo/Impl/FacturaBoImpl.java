@@ -131,6 +131,19 @@ public class FacturaBoImpl implements FacturaBo {
 		}
 		return factura;
 	}
+	@Override
+	public Factura findByConsecutivoProformaAndEmpresa(String consecutivo, Empresa empresa) throws Exception {
+		Factura factura = null;
+		try {
+			factura = facturaDao.findByConsecutivoProformaAndEmpresa(consecutivo, empresa);
+		} catch (Exception e) {
+			log.info("** Error  findByConsecutivoProformaAndEmpresa: " + e.getMessage() + " fecha " + new Date());
+
+			throw e;
+		}
+		return factura;
+	}
+	
 
 	@Override
 	public Factura findByClaveAndEmpresa(String clave, Empresa empresa) throws Exception {

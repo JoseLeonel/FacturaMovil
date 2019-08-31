@@ -79,6 +79,9 @@ function cambioColonesADolar(valor,venta){
   return resultado;
 	
 }
+
+
+
 	
 	
 /** Funciones en ventas nueva , venta post , restaurante comunes **/

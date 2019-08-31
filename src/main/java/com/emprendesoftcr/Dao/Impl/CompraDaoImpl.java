@@ -91,10 +91,6 @@ public class CompraDaoImpl implements CompraDao {
 			Query query = entityManager.createQuery("Delete from DetalleCompra obj where obj.compra = :compra ");
 			query.setParameter("compra", compra);
 			int deletedCount = query.executeUpdate();
-//			StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_ELIMINAR_DETALLES_COMPRAS);
-//			storedProcedure.registerStoredProcedureParameter(0, Integer.class, ParameterMode.IN);
-//			storedProcedure.setParameter(0, compra.getId());
-//			storedProcedure.execute();
 
 			log.info("** Fin de la ejecucion del procedimiento almacendos eliminar detalles de compra : " + " fecha " + new Date());
 

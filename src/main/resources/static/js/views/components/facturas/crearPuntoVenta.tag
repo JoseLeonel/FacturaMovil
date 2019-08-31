@@ -2484,7 +2484,6 @@ function __Init(){
     self.articulo              = null;
     self.descripcionArticulo   = ""
     self.precioUltimo = ""
-    
     self.detalleFactura        ={data:[]}
     self.cliente               = {};
     self.vendedor              = {
@@ -2507,7 +2506,6 @@ function __Init(){
     self.totalComprobante              = 0
     self.totalCambioPagar              = 0
     self.totalCambioPagarSTR           = 0
-    
     self.update();
     $(".tableListarFacturasDia").dataTable().fnClearTable(); 
     __InicializarTabla('.tableListarFacturasDia')
@@ -2669,13 +2667,6 @@ function crearFactura(estado){
     }
     self.transaccion = true 
     self.update()
-  //  if($(".tipoDoc").val() =="04" ){
-  //      if(!verificarSiClienteFrecuente()){
-  //         mensajeError($.i18n.prop("error.factura.tipo.documento.tiquete.cliente"))
-  //         return
-  //      }
-  //  }
-    
     self.detalleFactura.data =self.detail
     self.update() 
     var fechaCreditoTemporal =condicionVenta.value == "02"?fechaCredito.value:new Date() 
@@ -2695,13 +2686,11 @@ function crearFactura(estado){
     self.factura.tipoCambio = self.tipoCambio.total
     self.update();
     var dataTemporal = null
-
     var formulario = $("#formularioFactura").serialize();
     $.ajax({
         type : "POST",
         dataType : "json",
         async: false,
-        
         data : formulario,
         url : "CrearFacturaAjax",
         success : function(data) {
@@ -2729,7 +2718,6 @@ function crearFactura(estado){
             self.update()
         }
     });
-    
 }
 /**
 *Si fue facturada o tiquete
@@ -2781,7 +2769,6 @@ function evaluarFactura(data){
             nombreCompleto:""
         }
     }                            
-   
     self.update()
    if (data.message != null && data.message.length > 0) {
         $.each(data.listaObjetos, function( index, modeloTabla ) {
@@ -2813,22 +2800,18 @@ function evaluarFactura(data){
                       riot.mount('ptv-imprimir',{parametros:parametros});
                 }
         }else{
-             
-
-                swal({
+            swal({
                 type: 'success',
                 title:mostrarMensajeCreacionConsecutivo(self.facturaImprimir),
                 showConfirmButton: false,
                 timer: 1000
-                })
-                __Init()
-                __ListaFacturasEnEspera()
+            })
+            __Init()
+            __ListaFacturasEnEspera()
         }
           
     }
 }
-
-
 /**
 *  Lista de las facturas pendientes por el usuario
 **/
@@ -3212,8 +3195,7 @@ function __ListaActividadesComercales(){
                 self.empresaActividadComercial   = result.aaData
                 self.update()
                 BuscarActividadComercial()
-
-            }
+           }
         },
         error: function (xhr, status) {
             console.log(xhr);
@@ -3253,11 +3235,6 @@ function __buscarcodigoPrecio(idArticulo,cantidad,precio){
     if(idArticulo.length ==0){
         return
     }
-  //  buscarCodigoUsoInterno(idArticulo)
-//    if(self.articulo !=null){
-//        actualizarArticuloPrecio(precio,cantidad)
-//        return
- //   }
     $.ajax({
         type: 'GET',
         url: 'findArticuloByCodigojax.do',
@@ -3314,7 +3291,6 @@ function actualizarArticuloPrecio(precio,cantidad){
     self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
     self.articulo.precioPublico = precio > 0 ?precio:self.articulo.precioPublico
     self.descripcionArticulo = self.articulo.descripcion
-   
     self.cantidadEnterFacturar = 0
     self.update()
     __agregarArticulo(cantidad)
@@ -3331,14 +3307,6 @@ function __buscarcodigo(idArticulo,cantidad,precio){
       if(idArticulo.length ==0){
         return
     }
- //   buscarCodigoUsoInterno(idArticulo)
- //   if(self.articulo !=null){
- //       $('#codigo').val(self.articulo.codigo)
- //       $('#precioVenta').val(self.articulo.precioPublico)
- //       $('#precioVenta').select()
- //       $("#precioVenta").focus()
- //      return        
- //  }
     $.ajax({
         type: 'GET',
         url: 'findArticuloByCodigojax.do',
@@ -3354,17 +3322,6 @@ function __buscarcodigo(idArticulo,cantidad,precio){
                 self.update()
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
-                        //Articulo no puede agregarse si no hay en el inventario
-                     //   if(modeloTabla.contable == "Si"){
-                     //       if(modeloTabla.cantidad < 0 || modeloTabla.cantidad == 0 ){
-                     //           mensajeError($.i18n.prop("error.articulo.sin.existencia.en.inventario"))
-                     //           return
-                     //       }
-                     //       if(modeloTabla.cantidad < cantidad ){
-                     //           mensajeError($.i18n.prop("error.articulo.tiene.menor.existencia.en.inventario.a.la.venta"))
-                     //           return
-                     //       }
-                     //   }
                         self.articulo  = modeloTabla
                         if(modeloTabla.estado  == "Inactivo"){
                             mensajeError($.i18n.prop("error.articulo.inactivo.inventario"))
@@ -3420,11 +3377,6 @@ function __agregarArticulo(cantidad){
         cantidad = 1
     }
     var encontrado = false;
-    //uso interno
-    //Determinar el precio a incluir
-   // var resultadoPrecio = getListaPrecio(self.articulo)
-   // self.precioUltimo =formatoDecimales(resultadoPrecio * cantidad,0)    
-   // self.update()
     if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
         __nuevoArticuloAlDetalle(cantidad);
         encontrado = true;
@@ -3520,7 +3472,6 @@ function __nuevoArticuloAlDetalle(cantidad){
     }
     //Determinar el precio a incluir
     var resultadoPrecio = getListaPrecio(self.articulo)
-      
     var resultaMontoImpuesto = parseFloat(self.articulo.impuesto)
     var precioUnitario  = getPrecioUnitario(resultadoPrecio,resultaMontoImpuesto)
     resultaMontoImpuesto = parseFloat(self.articulo.impuesto1) 
@@ -3572,7 +3523,6 @@ function __nuevoArticuloAlDetalle(cantidad){
        numeroDocumentoExoneracion:"",
        tipoDocumentoExoneracion:""
     });
-    
     self.detail.sort(function(a,b) {
     if ( a.pesoPrioridad > b.pesoPrioridad )
         return -1;
@@ -3581,7 +3531,6 @@ function __nuevoArticuloAlDetalle(cantidad){
     return 0;
     } );
     self.cantidadEnterFacturar = 0
-  //  self.totalGananciaByProducto += parseFloat(ganancia)
     self.update()
 }
 
@@ -3770,13 +3719,8 @@ function ActualizarLineaDEtalle(){
     self.item.montoTotalLinea  = montoTotalLinea
     self.item.ganancia         = __ObtenerGananciaProductoNuevoIngresado(montoDescuento,self.item.precioUnitario,self.item.costo ==null?0:parseFloat(self.item.costo),self.item.cantidad)
     self.item.montoGanancia    = self.item.ganancia 
-   // self.totalGananciaByProducto = formatoDecimales(parseFloat(self.item.ganancia),2)
     self.update()
 }
-
-
-
-
 /**
 * Agregar la cantidad de Venta
 **/
@@ -3934,7 +3878,6 @@ function getSubTotalGeneral(){
     self.totalDescuentos = formatoDecimales(self.factura.totalDescuentos,2)
     var resultadoTotalImpuesto = __valorNumerico(self.factura.totalImpuesto) + __valorNumerico(self.factura.totalImpuesto1)
     self.totalImpuesto   = formatoDecimales(resultadoTotalImpuesto,2)
-      
     self.update()
 }
 /**
@@ -4090,8 +4033,6 @@ function __seleccionarClientes() {
 
         }
         $('#modalClientes').modal('hide') 
-       
-        
         if(!verificarSiClienteFrecuente()){
            __ComboTipoDocumentos(1)
         }else{
@@ -4187,7 +4128,6 @@ function __aplicarExoneracionPorCliente(){
     }
     __calculate()
     if(aplicaExo == true){
-      
        self.factura.totalCambioPagar = self.factura.totalComprobante
        self.factura.totalEfectivo =0
        self.factura.totalTarjeta =0
@@ -4195,12 +4135,8 @@ function __aplicarExoneracionPorCliente(){
        self.totalCambioPagar = 0
        self.totalCambioPagarSTR = 0
        self.update();
-
     }
-    
-
 }
-
 /**
 * cargar los estados de la factura
 **/
@@ -4256,10 +4192,8 @@ function __ComboTipoDocumentoExonerados(){
         estado:"99",
         descripcion:$.i18n.prop("tipo.documento.exonerado.otros")
     })
-
-    self.update()
+   self.update()
 }
-
 /**
 * cargar los tipos de Documento de la factura
 **/
@@ -4285,10 +4219,7 @@ function __ComboTipoDocumentos(valor){
         self.update()
         return 
     }
-
-    // Tipo documento unicamente proforma y factura 
-    //Prioridad de orden
-    if(self.empresa.prioridadFacturar == 1 ){
+   if(self.empresa.prioridadFacturar == 1 ){
         self.comboTipoDocumentos.push({
             estado:"01",
             descripcion:$.i18n.prop("factura.tipo.documento.factura.electronica")
@@ -4323,7 +4254,6 @@ function __ComboTipoDocumentos(valor){
 *  Agregar los inpust  y select de las tablas
 **/
 function agregarInputsCombos_Articulo(){
-     // Agregar los input de busqueda 
     $('.tableListarArticulos tfoot th').each( function (e) {
         var title = $('.tableListarArticulos thead th').eq($(this).index()).text();      
         //No se toma en cuenta la columna de las acctiones(botones)

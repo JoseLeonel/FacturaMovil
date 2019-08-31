@@ -67,6 +67,14 @@ public class EmpresasController {
 		return "views/empresa/ListarEmpresas";
 	}
 
+
+	@RequestMapping(value = "/FormEmpresa", method = RequestMethod.GET)
+	public String formempresa(ModelMap model) {
+
+		return "views/empresa/FormEmpresa";
+	}
+
+	
 	/**
 	 * Metodo json para ser llamado de un ajax
 	 * @param request

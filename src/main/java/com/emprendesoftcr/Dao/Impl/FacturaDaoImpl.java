@@ -84,6 +84,19 @@ public class FacturaDaoImpl implements FacturaDao {
 		}
 
 	}
+	@Override
+	public Factura findByConsecutivoProformaAndEmpresa(String consecutivo, Empresa empresa) {
+		Query query = entityManager.createQuery("select obj from Factura obj where obj.consecutivoProforma = :consecutivo and obj.empresa = :empresa");
+		query.setParameter("consecutivo", consecutivo.toString());
+		query.setParameter("empresa", empresa);
+		List<Factura> results = query.getResultList();
+		if (!results.isEmpty()) {
+			return (Factura) results.get(0);
+		} else {
+			return null;
+		}
+
+	}
 
 	public Factura findByClaveAndEmpresa(String clave, Empresa empresa) throws Exception {
 		Query query = entityManager.createQuery("select obj from Factura obj where obj.clave = :clave and obj.empresa = :empresa");

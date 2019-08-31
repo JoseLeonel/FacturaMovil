@@ -96,12 +96,10 @@ import com.emprendesoftcr.web.command.FacturaCommand;
 import com.emprendesoftcr.web.command.FacturaDiaCommand;
 import com.emprendesoftcr.web.command.FacturaEsperaCommand;
 import com.emprendesoftcr.web.command.FacturaImpuestoServicioCommand;
-import com.emprendesoftcr.web.command.ImpuestoCommand;
 import com.emprendesoftcr.web.command.ParametrosPaginacionMesa;
 import com.emprendesoftcr.web.command.ProformasByEmpresaAndEstadoCommand;
 import com.emprendesoftcr.web.command.ProformasSQLNativeCommand;
 import com.emprendesoftcr.web.command.RecepcionFacturaCommand;
-import com.emprendesoftcr.web.command.RecepcionFacturaDetalleCommand;
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 import com.emprendesoftcr.web.command.TurismoCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
@@ -755,10 +753,6 @@ public class FacturasController {
 
 		dataTableFilter = new JqGridFilter("empresa.id", "'" + usuarioSesion.getEmpresa().getId().toString() + "'", "=");
 		delimitadores.addFiltro(dataTableFilter);
-//		if (usuarioBo.isAdministrador_vendedor(usuarioSesion)) {
-//			dataTableFilter = new JqGridFilter("usuarioCreacion.id", "'" + usuarioSesion.getId().toString() + "'", "=");
-//			delimitadores.addFiltro(dataTableFilter);
-//		}
 
 		return UtilsForControllers.process(request, dataTableBo, delimitadores, TO_COMMAND);
 	}
@@ -1358,7 +1352,7 @@ public class FacturasController {
 			DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
 			delimitador.addFiltro(new JqGridFilter("facturaFechaEmision", dateFormat.format(fechaInicio), "date>="));
 			delimitador.addFiltro(new JqGridFilter("facturaFechaEmision", dateFormat.format(fechaFinal), "dateFinal<="));
-			if(estado.equals(Constantes.COMBO_TODOS)) {
+			if(!estado.equals(0)) {
 				delimitador.addFiltro(new JqGridFilter("estado", estado.toString(), "="));	
 			}
 			

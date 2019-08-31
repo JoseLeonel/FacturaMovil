@@ -86,7 +86,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 	@Override
 	public Collection<ProformasByEmpresaAndEstado> findByProformasByEmpresaAndEstado(Empresa empresa, Integer estado){
 		String queryStr = getQueryBase(ProformasByEmpresaAndEstado.class);
-		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
+		queryStr = empresa != null ?queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString()):queryStr.replaceAll("facturas.empresa_id = :ID_EMPRESA and", "");
 		queryStr = queryStr.replaceAll(":ESTADO","'"+ estado+"'");
 		
 		Query query = entityManager.createNativeQuery(queryStr, ProformasByEmpresaAndEstado.class);

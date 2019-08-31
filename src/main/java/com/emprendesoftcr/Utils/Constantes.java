@@ -383,6 +383,8 @@ public class Constantes {
 	public static final String					DATE_FORMAT4																								= "yyyyMMdd";
 	public static final String					DATE_FORMAT7																								= "yyyy-MM-dd";
 
+	public static final String					ANULACION_AUTOMATICA_PROFORMAS															= "Se completo los 30 dias, se procedio anular";
+
 	public static final String					DATE_FORMAT_TIME																						= "HH:mm:ss";
 	public static final String					DATE_FORMAT_TIME2																						= "HH:mm";
 	public static final String					DATE_FORMAT_MIN																							= "00/00/0000 ";

@@ -20,6 +20,7 @@ public interface FacturaDao {
 	Factura findById(Long id);
 
 	Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa);
+	Factura findByConsecutivoProformaAndEmpresa(String consecutivo, Empresa empresa);
 	
 	Factura findByClaveAndEmpresa(String clave, Empresa empresa) throws Exception;
 	

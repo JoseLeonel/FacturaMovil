@@ -32,7 +32,7 @@ public interface ProcesoHaciendaService {
 	// Proceso de firmar las facturas y crear el registro de hacienda
 	void procesoFirmado() throws Exception;
 
-	void taskAnularProformas();
+	 void taskAnularProformas() throws Exception;
 
 	// Proceso para firmar las facturas recibidas y aceptadas en el sistema
 	void procesoFirmadoRecepcionFactura() throws Exception;

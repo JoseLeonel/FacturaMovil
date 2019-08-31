@@ -16,12 +16,15 @@
             <div class="box box-solid box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">{$.i18n.prop("factura.primer.paso")} </h3>
+                    <label class="box-title pull-right">Tipo Cambio Dolar $ {tipoCambio.total} Banco Central</label>
                 </div>
                 <div class="box-body">
                     <form id = "formulario" name ="formulario"   class="advanced-search-form formulario">
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 left">
                                 <label class="campos-requeridos-label">{$.i18n.prop("mensaje.campos.obligatorios")} </label>
+                                
+
                             </div>
                         </div>
                         <div class="row">
@@ -212,6 +215,7 @@
                             <input type="hidden" id='estado'                  name='estado'                  value="{factura.estado}" >
                             <input type="hidden" id='cliente'                 name='cliente'                 value="{factura.cliente.id}" >
                             <input type="hidden" id='codigoMoneda'            name='codigoMoneda'            value="{factura.codigoMoneda}" >
+                            <input type="hidden" id='tipoCambioMoneda'        name='tipoCambioMoneda'        value="{tipoCambio.total}" >
                             <input type="hidden" id='tipoDoc'                 name='tipoDoc'                 value="{factura.tipoDoc}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
                             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
@@ -292,10 +296,10 @@
 
 <!--fin del modal-->
 <STYLE TYPE="text/css" rel="stylesheet" type="text/css" media="all" >
-.titleListaPrecio{
-    color:blue;
-    text-decoration:underline;
-}
+        .titleListaPrecio{
+            color:blue;
+            text-decoration:underline;
+        }
 
         .formItem {
             color: #ffffff !important;
@@ -437,6 +441,10 @@
     }
     self.montoExoneracion     = 0
     self.montoExoneracion1    = 0    
+    self.tipoCambio = {
+        total:0,
+        id:null
+    }
 self.on('mount',function(){
     limpiar()
      $("#formulario").validate(reglasDeValidacion());
@@ -448,12 +456,65 @@ self.on('mount',function(){
     __comboCondicionPago()
     __ListaActividadesComercales()
     __combocodigosReferencia()
+    getTipoCambioDolar()
     window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
         }, false );
     
 })
 
+/**
+*Tipo Cambio del Dolar 
+**/
+function getTipoCambioDolar(){
+    $.ajax({
+    "url": "https://api.hacienda.go.cr/indicadores/tc/dolar",
+    "method": "GET",
+    statusCode: {
+        
+        404: function() {
+             __TipoCambio()
+        }
+    }
+    }).done(function (response) {
+         self.tipoCambio.total = __valorNumerico(response.venta.valor)
+         self.update()
+    });
+}
+/**
+* Tipo Cambio de moneda
+**/
+function __TipoCambio(){
+    self.tipoCambio = {
+        total:0,
+        id:null
+    }
+    self.update()
+    $.ajax({
+        url: "MostrarTipoCambioActivoAjax.do",
+        datatype: "json",
+        global: false,
+        method:"GET",
+        success: function (data) {
+            if (data.status != 200) {
+                if (data.message != null && data.message.length > 0) {
+                    sweetAlert("", data.message, "error");
+                }
+            }else{
+                if (data.message != null && data.message.length > 0) {
+                    $.each(data.listaObjetos, function( index, modeloTabla ) {
+                       self.tipoCambio = modeloTabla
+                       self.update()
+                    });
+                }
+            }
+        },
+        error: function (xhr, status) {
+            mensajeErrorServidor(xhr, status);
+            
+        }
+    });
+}
 
 /**
 *  Obtiene el valor de lo digitado en el campo de efectivo
@@ -812,6 +873,7 @@ function crearFactura(){
     self.factura.cliente = self.cliente
     self.factura.estado = 2
     self.factura.codigoMoneda = $('#codigoMoneda').val()
+    self.factura.tipoCambio = self.tipoCambio.total
     self.factura.tipoDoc = $('#tipoDoc').val()
     self.factura.condicionVenta = $('#condicionVenta').val()
     self.factura.fechaCredito =fechaCreditoTemporal.toString()
@@ -1336,11 +1398,6 @@ function __aplicarExoneracionPorCliente(){
                     self.factura.totalBanco =0
                     self.factura.totalCambioPagar = self.factura.totalComprobante
                     self.update();
-                    $('#totalEfectivo').val(0)
-                    $('#totalTarjeta').val(null)
-                    $('#totalBanco').val(null)
-                    $('#totalEfectivo').focus()
-                    $('#totalEfectivo').select()
                     aplicaExo = true
                 }
                
@@ -1348,11 +1405,6 @@ function __aplicarExoneracionPorCliente(){
     }
     __calculate()
     if(aplicaExo == true){
-       $('#totalEfectivo').val(0)
-       $('#totalTarjeta').val(null)
-       $('#totalBanco').val(null)
-       $('#totalEfectivo').focus()
-       $('#totalEfectivo').select()
        self.factura.totalCambioPagar = self.factura.totalComprobante
        self.factura.totalEfectivo =0
        self.factura.totalTarjeta =0
@@ -1362,6 +1414,11 @@ function __aplicarExoneracionPorCliente(){
        self.update();
 
     }
+    $('#totalEfectivo').val(__valorNumerico(redondeoDecimales(self.factura.totalComprobante,2)))
+    $('#totalTarjeta').val(null)
+    $('#totalBanco').val(null)
+    $('#totalEfectivo').focus()
+    $('#totalEfectivo').select()
 
 }
 

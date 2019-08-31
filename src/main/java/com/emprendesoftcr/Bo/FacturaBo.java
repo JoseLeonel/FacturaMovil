@@ -2,7 +2,6 @@ package com.emprendesoftcr.Bo;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Empresa;
@@ -11,7 +10,6 @@ import com.emprendesoftcr.modelo.TipoCambio;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.UsuarioCaja;
 import com.emprendesoftcr.web.command.FacturaCommand;
-
 import com.emprendesoftcr.web.command.TotalFacturaCommand;
 
 public interface FacturaBo {
@@ -25,6 +23,7 @@ public interface FacturaBo {
 	Factura findById(Long id);
 
 	Factura findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) throws Exception;
+	Factura findByConsecutivoProformaAndEmpresa(String consecutivo, Empresa empresa) throws Exception;
 	Factura findByClaveAndEmpresa(String clave, Empresa empresa) throws Exception;
 	
 	Factura crearFactura(FacturaCommand facturaCommand,Usuario usuario,UsuarioCaja usuarioCaja,TipoCambio tipoCambio) throws Exception;

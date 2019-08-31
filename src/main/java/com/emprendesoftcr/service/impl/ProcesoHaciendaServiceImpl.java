@@ -7,6 +7,8 @@ import static java.util.stream.Collectors.toList;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Blob;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -55,6 +57,7 @@ import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Hacienda;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaComprobarNative;
+import com.emprendesoftcr.modelo.sqlNativo.ProformasByEmpresaAndEstado;
 import com.emprendesoftcr.pdf.DetalleFacturaElectronica;
 import com.emprendesoftcr.pdf.FacturaElectronica;
 import com.emprendesoftcr.pdf.ReportePdfView;
@@ -154,17 +157,17 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																					facturaElectronica.setClienteTelefono(Constantes.EMPTY);
 																																																				}
 																																																			}
-																																																			if(d.getCliente().getLibreImpuesto() !=null) {
+																																																			if (d.getCliente().getLibreImpuesto() != null) {
 																																																				if (d.getCliente().getLibreImpuesto().equals(Constantes.LIBRE_IMPUESTOS_ACTIVO)) {
 																																																					facturaElectronica.setNumeroDocumentoExoneracion(Constantes.DOCUMENTO_LIBRE_IVA);
 																																																				} else {
 																																																					facturaElectronica.setNumeroDocumentoExoneracion(Constantes.EMPTY);
 																																																				}
-												
-																																																			}else {
+
+																																																			} else {
 																																																				facturaElectronica.setNumeroDocumentoExoneracion(Constantes.EMPTY);
 																																																			}
-																																								
+
 																																																			facturaElectronica.setFooterTotalDescuento(d.getTotalDescuentos());
 																																																			facturaElectronica.set_logo(d.getEmpresa().getLogo());
 																																																			facturaElectronica.set_clienteDireccion(d.getDireccion());
@@ -295,11 +298,36 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	}
 
-	// @Scheduled(cron = "0 0/4 * * * ?")
+	/**
+	 * Anulacion automatico de proformas mas o igual a 30 dias.
+	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskAnularProformas()
+	 */
+	@Scheduled(cron = "0 0/50 23 * * ?")
 	@Override
-	public synchronized void taskAnularProformas() {
+	public synchronized void taskAnularProformas() throws Exception {
 		try {
 			log.info("Inicio Proceso de Anulacion de Proformas de empresas con criterio de dias  {}", new Date());
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Collection<ProformasByEmpresaAndEstado> objetoFacturas = consultasNativeBo.findByProformasByEmpresaAndEstado(null, Constantes.FACTURA_ESTADO_PROFORMAS);
+			for (ProformasByEmpresaAndEstado proformasByEmpresaAndEstado : objetoFacturas) {
+				Factura factura = facturaBo.findById(proformasByEmpresaAndEstado.getId());
+				if (factura != null) {
+					DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT7);
+					Date fecha = new Date();
+					String inicio = dateFormat1.format(factura.getCreated_at());
+					String fin = dateFormat1.format(fecha);
+					Date fechaInicial = dateFormat.parse(inicio);
+					Date fechaFinal = dateFormat.parse(fin);
+					int dias = (int) ((fechaFinal.getTime() - fechaInicial.getTime()) / 86400000);
+					if (dias >= 30) {
+						factura.setEstado(Constantes.FACTURA_ESTADO_ANULADA_PROFORMA);
+						factura.setNota(Constantes.ANULACION_AUTOMATICA_PROFORMAS);
+						facturaBo.modificar(factura);
+					}
+				}
+				log.info("Fin Proceso de Anulacion de Proformas de empresas con criterio de dias  {}", new Date());
+
+			}
 		} catch (Exception e) {
 			log.error("** Error2  Proceso de anulacion de proformas: " + e.getMessage() + " fecha " + new Date());
 			throw e;
@@ -462,7 +490,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				recepcion.setComprobanteXml(base64);
 
 				// Ambiente de pruebas
-				//recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 				// San Ana
 				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
@@ -471,13 +499,13 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 				// JacoDos
-				 //recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 				// Jaco
-				 recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+				recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 				// Inventario
-				 	//recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				// Alajuela
 				// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
@@ -617,7 +645,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 //					}		
 //					log.info("** aceptarDocumento hacienda body: " + body + " fecha " + new Date() + " Empresa :" + hacienda.getEmpresa().getNombre());
 					if (body != null && body != "" && body != "{}" && !body.contains("El comprobante") && !body.contains("no ha sido recibido")) {
-						//log.info(body);
+						// log.info(body);
 						RespuestaHacienda respuestaHacienda = RespuestaHaciendaJson.from(body);
 
 						String status = getHaciendaStatus(respuestaHacienda.indEstado());
@@ -793,7 +821,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 							} else if (hacienda.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO)) {
 								compraSimplificada.setEstado(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO);
 							}
-							
+
 							compraSimplificadaBo.modificar(compraSimplificada);
 						}
 					}
@@ -1206,7 +1234,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {
-			 procesoFirmadoComprasSimplificadas();
+			procesoFirmadoComprasSimplificadas();
 			log.info("Inicio el proceso de firmado  {}", new Date());
 
 			Collection<Factura> lista = facturaBo.findByEstadoFirma(Constantes.FACTURA_ESTADO_FIRMA_PENDIENTE, Constantes.FACTURA_ESTADO_REFIRMAR_DOCUMENTO);
