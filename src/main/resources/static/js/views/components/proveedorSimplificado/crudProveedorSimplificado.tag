@@ -614,6 +614,7 @@ __Modificar(){
 }
 
 function validarRegimenModificar(ejecucion){
+ return false
    if(self.clienteHacienda.regimen.codigo == "1" && ejecucion == 1){
        sweetAlert("", $.i18n.prop("error.proveedorSimplificado.regimen.tradicional.modificar"), "error");
        return true

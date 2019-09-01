@@ -303,9 +303,7 @@ function __Opciones(id,type,row){
 		 menu += '<li><a href="#"  title="Bajar XML Respuesta de Triburacion" class="  btnRespuestaHacienda" >XML Respuesta</a></li>'
 	}
 	if(row.estado == "Enviado"){
-		if(row.tipoDoc.indexOf('Simplificada') == -1  || row.tipoDoc.indexOf('Compra') == -1 ){
 		 menu += '<li><a href="#"  title="Aceptacion Manual a Tributacion" class="  btnAceptacionManual" >Aceptacion Manual</a></li>'
-		}
 	}
 	if(row.tipoDoc.indexOf('Simplificada') == -1  || row.tipoDoc.indexOf('Compra') == -1 ){
 			menu += '<li><a href="#"  title="Bajar PDF" class="  btnBajarPDF" >PDF Documentos</a></li>'   

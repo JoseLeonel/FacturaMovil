@@ -212,8 +212,11 @@ function BajarExcel(){
 * Estados
 **/
 function __ComboEstado(){
+	$('.estado').append('<option value="'+"6"+'">'+"Aceptada"+ '</option>');
+	$('.estado').append('<option value="'+"7"+'">'+"Rechazada"+ '</option>');
 	$('.estado').append('<option value="'+"2"+'">'+"Facturado"+ '</option>');
 	$('.estado').append('<option value="'+"5"+'">'+"Anulado"+ '</option>');
+
     
 }
 
@@ -260,7 +263,11 @@ var informacion_tabla = [
 * Opciones listado de los clientes
 */
 function __Opciones(id,type,row){
-    var anular  = '<a href="#"  title="Anular Compra" class="btn btn-danger  btn-anular btnAnularCompra" role="button"> </a>';
+	var anular = "";
+	if(row.estado !="5"){
+		anular  = '<a href="#"  title="Anular Compra" class="btn btn-danger  btn-anular btnAnularCompra" role="button"> </a>';
+	}
+     
   return  anular ;        
 }
 

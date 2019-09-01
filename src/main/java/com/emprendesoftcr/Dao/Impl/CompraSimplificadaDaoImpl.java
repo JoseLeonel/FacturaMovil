@@ -64,7 +64,7 @@ public class CompraSimplificadaDaoImpl implements CompraSimplificadaDao {
 	 */
 	@Override
 	public CompraSimplificada findByConsecutivoAndEmpresa(String consecutivo, Empresa empresa) {
-		Query query = entityManager.createQuery("select obj from Compra obj where obj.consecutivo = :consecutivo and obj.empresa = :empresa");
+		Query query = entityManager.createQuery("select obj from CompraSimplificada obj where obj.numeroConsecutivo = :consecutivo and obj.empresa = :empresa");
 		query.setParameter("consecutivo", consecutivo);
 		query.setParameter("empresa", empresa);
 		List<CompraSimplificada> results = query.getResultList();

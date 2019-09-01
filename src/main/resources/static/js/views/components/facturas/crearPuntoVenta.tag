@@ -136,13 +136,14 @@
                                         <input onclick={_SeleccionarEfectivo}   onkeyup={ __TotalDeEfectivoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra} totalEfectivo " id="totalEfectivo" name="totalEfectivo" value="{factura.totalEfectivo}" >
                                     </div>
                                     <div  class="form-group ">
-                                        <label class="{labelTotales}">{$.i18n.prop("factura.resumen.tarjeta")} </label> 
+                                        <label class="{labelTotales}">{$.i18n.prop("factura.resumen.tarjeta")}<span class="teclashift">(Tecla =shift )</span>  </label> 
                                         <input onclick={_SeleccionarTarjeta} onkeyup={ __TotalDeTarjetaAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number" onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra} totalTarjeta" id="totalTarjeta" name="totalTarjeta"  value="{factura.totalTarjeta}" >
                                     </div> 
                                     <div  class="form-group " show={empresa.pantChino == 0}>
                                         <label class="{labelTotales} ">{$.i18n.prop("factura.resumen.banco")} </label> 
                                         <input onclick={_SeleccionarBanco} onkeyup={ __TotalDeBancoAPagar } onBlur = {__CalculaCambioAEntregarOnblur}  type="number"  onkeypress = {__CalculaCambioAEntregarKeyPress}  step="any"  class="{campoTotales} {tamanoLetra}  totalBanco"  id="totalBanco" name="totalBanco"  value="{factura.totalBanco}" >
                                     </div>
+                                    
                                 
 
                                 </div>
@@ -670,6 +671,16 @@
 
 
 <style type="text/css"  >
+.teclashift {
+    font-weight: 700;
+    font-size: 27px !important;
+    text-align: center;
+    color: red;
+
+}
+.teclaFuncion{
+
+}
 .tituloTipoCambio{
     color: #1a7b4f;
     font-size: 20px;
@@ -1276,6 +1287,8 @@
          window.addEventListener( "keydown", function(evento){
              $(".errorServerSideJgrid").remove();
              actualizaElPlazoDiasCredito();
+             __Teclas(evento.keyCode)
+  
         //     disableF5(evento);
         }, false );
 
@@ -4324,24 +4337,105 @@ function __EnviarFacturar(){
 /**
 *  teclas de la pantalla
 **/      
-function __Teclas(){
-    window.addEventListener( "keydown", function(evento){
-        var tecla = evento.keyCode; 
+function __Teclas(tecla){
+   
     if(tecla ==119){
         __EnviarFacturar()
         return 
         
     } 
-   // alert(tecla)  
+    //alert(tecla)   
     //F4
     if(tecla ==115){
      ListarCodigosArticulos()
       $('.descArticulo').select()
       $('.descArticulo').focus()
+      return 
+    }
+    if(tecla ==16){
+      var resultado = __valorNumerico($(".totalEfectivo").val())
+      if(resultado > 0){
+        self.factura.totalTarjeta = resultado
+        self.factura.totalEfectivo = 0
+        self.factura.totalBanco = 0
+        self.update()  
+        $(".totalEfectivo").val(null)
+        $(".totalTarjeta").val(self.factura.totalTarjeta) 
+        $('.totalTarjeta').select()
+        $('.totalTarjeta').focus()
+        return
+      } 
+      resultado = __valorNumerico($(".totalTarjeta").val())
+      if(resultado > 0){
+        self.factura.totalBanco = self.empresa.pantChino == 0?resultado:0
+        self.factura.totalEfectivo = self.empresa.pantChino == 1?resultado:0
+        self.factura.totalTarjeta = 0
+        self.update()  
+        if(self.empresa.pantChino == 0){
+            $(".totalEfectivo").val(null)
+            $(".totalTarjeta").val(null)
+            $(".totalBanco").val(self.factura.totalBanco) 
+            $('.totalBanco').select()
+            $('.totalBanco').focus()
+
+        }else{
+            $(".totalBanco").val(null)
+            $(".totalTarjeta").val(null)
+            $(".totalEfectivo").val(self.factura.totalEfectivo) 
+            $('.totalEfectivo').select()
+            $('.totalEfectivo').focus()
+
+        }
+        return
+      } 
+      if(self.empresa.pantChino == 0){
+        resultado = __valorNumerico($(".totalBanco").val())
+        if(resultado > 0){
+            self.factura.totalEfectivo = resultado
+            self.factura.totalBanco = 0
+            self.factura.totalTarjeta = 0
+            self.update()  
+            $(".totalBanco").val(null)
+            $(".totalTarjeta").val(null)
+            $(".totalEfectivo").val(self.factura.totalEfectivo) 
+            $('.totalEfectivo').select()
+            $('.totalEfectivo').focus()
+            return
+        }    
+      }else{
+        resultado = __valorNumerico($(".totalEfectivo").val())
+        if(resultado > 0){
+            self.factura.totalEfectivo = resultado
+            self.factura.totalBanco = 0
+            self.factura.totalTarjeta = 0
+            self.update()  
+            $(".totalBanco").val(null)
+            $(".totalTarjeta").val(null)
+            $(".totalEfectivo").val(self.factura.totalEfectivo) 
+            $('.totalEfectivo').select()
+            $('.totalEfectivo').focus()
+            return
+        }    
+
+       
+
+      }
+        self.factura.totalEfectivo = __valorNumerico(self.factura.totalComprobante)
+        self.factura.totalBanco = 0
+        self.factura.totalTarjeta = 0
+        self.update()  
+        $(".totalBanco").val(null)
+        $(".totalTarjeta").val(null)
+        $(".totalEfectivo").val(self.factura.totalEfectivo) 
+        $('.totalEfectivo').select()
+        $('.totalEfectivo').focus()
+  
+      return 
     }
     //Factura en espera
     if(tecla ==120){
-      aplicarFactura(1)   
+      aplicarFactura(1) 
+      return   
     }
      //Reimprimir Factura f6
     //if(tecla ==117){
@@ -4350,7 +4444,7 @@ function __Teclas(){
      //Reimprimir Factura End
     if(tecla ==35){
      reimprimirFacturaEnMomento()
-     
+     return 
     }
 
     //Limpiar F2
@@ -4359,6 +4453,7 @@ function __Teclas(){
       $('.codigo').val("")
       $('.codigo').select()
       $(".codigo").focus()
+      return 
     }
      //Insert = abrir Cajon
     if(tecla ==45){
@@ -4367,8 +4462,9 @@ function __Teclas(){
    if(tecla ==27){
       $('.codigo').select()
       $(".codigo").focus()
+      return 
     }
-    }, false );
+    
 }
 /**
 * refrescar una pagina

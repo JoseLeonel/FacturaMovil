@@ -71,8 +71,8 @@
                                     </div>
                                     <div  class="form-group ">
                                         <label >Fecha Emision</label> 
-                                        <div  class="form-group input-group date datepickerFechaEmision" data-provide="datepicker"  data-date-start-date="0d" data-date-format="yyyy-mm-dd">
-                                            <input  type="text" class="form-control fechaEmisionSTR selectFechaEmision" name="fechaEmisionSTR" id="fechaEmisionSTR"  >
+                                        <div  class="form-group input-group date datepickerFechaEmision" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
+                                            <input  type="text" class="form-control fechaEmisionSTR selectFechaEmision" name="fechaEmisionSTR" id="fechaEmisionSTR" data-date-end-date="-30d" >
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"></span>
                                             </div>
@@ -381,7 +381,7 @@
         text-align: center;
     }
     .tamanonumeros{
-       font-size: 34px;
+       font-size: 25px;
        font-weight: 600;
        color: black;
     }
@@ -978,12 +978,13 @@
         __ListaDeProveedores()
         __tipoCodigo()
         __Eventos()
-        $('.datepickerFechaCompra').datepicker(
-        {
-            format: 'yyyy-mm-dd',
-            todayHighlight:true,
-        }
-    );
+        $('.selectFechaEmision').datepicker(
+            {
+              format: 'yyyy-mm-dd',
+              startDate: '-30d',
+              todayHighlight:true,
+            }
+         );
     var retrievedObject = JSON.parse(localStorage.getItem('detallesComprasSimplificadaNueva'));
     self.detail = retrievedObject == null?self.detail = []:retrievedObject
     var compraObject = JSON.parse(localStorage.getItem('compraSimplificadaNueva'));
@@ -1538,7 +1539,7 @@ function evaluarFactura(data){
 function __Init(){
     $('.fechaCompra').val(null);
     $('.fechaCredito').val(null)
-     $('.datepickerFechaCompra').datepicker(
+     $('.selectFechaEmision').datepicker(
             {
               format: 'yyyy-mm-dd',
               startDate: '-90d',

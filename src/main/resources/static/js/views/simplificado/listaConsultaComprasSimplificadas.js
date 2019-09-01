@@ -212,6 +212,8 @@ function BajarExcel(){
 * Estados
 **/
 function __ComboEstado(){
+	$('.estado').append('<option value="'+"6"+'">'+"Aceptada"+ '</option>');
+	$('.estado').append('<option value="'+"7"+'">'+"Rechazada"+ '</option>');
 	$('.estado').append('<option value="'+"2"+'">'+"Facturado"+ '</option>');
 	$('.estado').append('<option value="'+"5"+'">'+"Anulado"+ '</option>');
     

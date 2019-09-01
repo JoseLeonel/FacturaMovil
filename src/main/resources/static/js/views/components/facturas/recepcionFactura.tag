@@ -25,6 +25,12 @@
                                 <label> {$.i18n.prop("archivo.factura")}  <span class="requeridoDato">*</span></label>
 					     		<input type="file" id="fileUpload" class="form-control fileUpload"/>
                             </div>
+							<div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" show={mostrarFormulario ==true}>
+								<button onclick={__crearFactura}   type="button" class="btn-green btn-add pull-left" id="btnAceptar" name ="btnAceptar">
+									{$.i18n.prop("btn.aceptar")}
+								</button>
+							</div>
+
                         </div>
 						<br>
 						<div class="row">
@@ -56,13 +62,18 @@
                     <form id="formularioAceptarForm" name="formularioAceptarForm" class="advanced-search-form">
 				        <input type="hidden" name="emisorTipoCedula" id="emisorTipoCedula" value="{recepcionFactura.emisorTipoCedula}">
                         <div class="row">                        
-                            <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
-                                <label> {$.i18n.prop("factura.clave")}  <span class="requeridoDato">*</span></label>
-                                <input type="text" readonly="readonly" class="form-control facturaClave" placeHolder ="{$.i18n.prop("factura.clave")}" id="facturaClave" name="facturaClave" value="{recepcionFactura.facturaClave}">
-                            </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label> {$.i18n.prop("emisor.cedula")}  <span class="requeridoDato">*</span></label>
                                 <input type="text" readonly="readonly" class="form-control emisorCedula" placeHolder ="{$.i18n.prop("emisor.cedula")}" id="emisorCedula" name="emisorCedula" value="{recepcionFactura.emisorCedula}">
+                            </div>
+                            <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
+                                <label> {$.i18n.prop("emisor.nombre")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control "  value="{recepcionFactura.emisorNombre}">
+                            </div>
+
+                            <div class= "col-md-5 col-sx-12 col-sm-5 col-lg-5">
+                                <label> {$.i18n.prop("factura.clave")}  <span class="requeridoDato">*</span></label>
+                                <input type="text" readonly="readonly" class="form-control facturaClave" placeHolder ="{$.i18n.prop("factura.clave")}" id="facturaClave" name="facturaClave" value="{recepcionFactura.facturaClave}">
                             </div>
                             <div class= "col-md-3 col-sx-12 col-sm-3 col-lg-3">
                                 <label> {$.i18n.prop("emisor.correoElectronico")}  <span class="requeridoDato">*</span></label>
@@ -129,11 +140,7 @@
 	                         	{$.i18n.prop("btn.detalle")}
 	                         </button>
 	                     </div>
-	                     <div class="col-md-6 col-sx-12 col-sm-6 col-lg-6">
-	                         <button onclick={__crearFactura}   type="button" class="btn-green btn-add pull-right" id="btnAceptar" name ="btnAceptar">
-	                         	 {$.i18n.prop("btn.aceptar")}
-	                        	</button>
-	                     </div>
+	                   
 	                 </div>    
 	            </div>    
 			</div>
@@ -391,7 +398,24 @@
         </div>
         <div class="col-md-2 col-lg-2 col-sm-2"></div>
     </div>
-
+<style type="text/css"  >
+.btn-green {
+    background-color: #4cae4c;
+    color: #FFF;
+    border-radius: 5px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 5%!important;
+    margin-right: 15px;
+    border: none;
+    float: right;
+    cursor: pointer;
+}
+</style>
 	<script>
 	
 		var self = this;
