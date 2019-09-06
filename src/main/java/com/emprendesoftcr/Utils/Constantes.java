@@ -484,6 +484,7 @@ public class Constantes {
 	public static final Integer					FACTURA_ESTADO_PENDIENTE																		= 1;
 	public static final Integer					FACTURA_ESTADO_PROFORMAS																		= 3;
 	public static final Integer					FACTURA_ESTADO_FACTURADO																		= 2;
+	public static final Integer					FACTURA_ESTADO_ACEPTADA																			= 6;
 	public static final Integer					FACTURA_ESTADO_TIQUETE_USO_INTERNO													= 4;
 	public static final Integer					FACTURA_ESTADO_ANULADA																			= 5;
 	public static final Integer					FACTURA_ESTADO_ANULADA_PROFORMA															= 11;
@@ -555,7 +556,12 @@ public class Constantes {
 	public static final String					SP_GENERAR_CONSECUTIVO_RECEPCION_IN_ID_USUARIO							= "ID_USUARIO";
 	public static final String					SP_GENERAR_CONSECUTIVO_RECEPCION_IN_TIPO_DOCUMENTO					= "TIPO_DOCUMENTO";
 	public static final String					SP_GENERAR_CONSECUTIVO_RECEPCION_OUT_CONSECUTIVO						= "CONSECUTIVO";
-
+// Procedimiento generar el consecutivo de la factura 
+	public static final String					SP_GENERAR_CONSECUTIVO_FACTURA															= "spGenerarConsecutivoFactura";
+	public static final String					SP_GENERAR_CONSECUTIVO_FACTURA_IN_ID_EMPRESA								= "idEmpresa";
+	public static final String					SP_GENERAR_CONSECUTIVO_FACTURA_IN_ID_USUARIO								= "idUsuario";
+	public static final String					SP_GENERAR_CONSECUTIVO_FACTURA_IN_TIPO_DOC									= "tipoDocumento";
+	public static final String					SP_GENERAR_CONSECUTIVO_FACTURA_OUT_CONSECUTIVO							= "consecutivo";
 //Procedimiento para generar totales por linea de datalles de la factura
 	public static final String					SP_VENTASXDETALLE																						= "ventasxdetalle";
 	public static final String					SP_VENTASXDETALLE_TIPO_IMPUESTO															= "ventasxdetaTodos";

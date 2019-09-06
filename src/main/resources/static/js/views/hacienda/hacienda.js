@@ -269,12 +269,16 @@ var informacion_tabla = [
 										return formatoDecimales(totalReceptor,2);
 									 }
 										},
-										{'data' :'estado'         ,"name":"estado"         ,"title" : "Estado"      ,"autoWidth" :true},
+										{'data' :'estado'         ,"name":"estado"         ,"title" : "Estado"      ,"autoWidth" :true,
+										"render":function(estado,type, row){
+								          return estados(estado,row);//factura.js
+							            }},
 										{'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
 										 "render":function(id,type, row){
 												 return __Opciones(id,type,row);
 										  }
 								  }];
+
 /**
 * Opciones listado de los clientes
 */
@@ -284,11 +288,11 @@ function __Opciones(id,type,row){
 	menu += '             <span class="glyphicon glyphicon-list"></span> <span class="caret"></span></button>' 
 	menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
 	
-	if(row.estado == 2){
+	if(row.estado == 'Firmado XML'){
 	  menu += '<li><a href="#"  title="Envio Manual a Tributacion" class="  btnEnvioManual" >Envio Manual</a></li>'
 	}
 	
-	if(row.estado == "Aceptado"){
+	if(row.estado == "Aceptada"){
 		if(row.tipoDoc.indexOf('Simplificada') == -1  || row.tipoDoc.indexOf('Compra') == -1 ){
 		  menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoCliente" >Envio Correo al Cliente</a></li>'
 		}
@@ -298,11 +302,11 @@ function __Opciones(id,type,row){
 		 menu += '<li><a href="#"  title="Envio de correo Alternativo" class="  btnEnvioCorreoAlternativo" >Envio de correo Alternativo</a></li>'
 		 }	
 	}
-	if(row.estado == "Rechazado"){
+	if(row.estado == "Rechazada"){
 		 menu += '<li><a href="#"  title="Bajar XML" class="  btnBajarXML" >XML Documentos</a></li>'
 		 menu += '<li><a href="#"  title="Bajar XML Respuesta de Triburacion" class="  btnRespuestaHacienda" >XML Respuesta</a></li>'
 	}
-	if(row.estado == "Enviado"){
+	if(row.estado == "Enviada"){
 		 menu += '<li><a href="#"  title="Aceptacion Manual a Tributacion" class="  btnAceptacionManual" >Aceptacion Manual</a></li>'
 	}
 	if(row.tipoDoc.indexOf('Simplificada') == -1  || row.tipoDoc.indexOf('Compra') == -1 ){

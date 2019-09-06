@@ -28,6 +28,8 @@ public interface EmpresaDao {
 
 	String generarConsecutivoFactura(Empresa empresa, Usuario usuario, Factura factura) throws Exception;
 	
+	String spGenerarConsecutivoFactura(Empresa empresa, Usuario usuario, String tipoDoc) throws Exception;
+	
 	String generarConsecutivoProforma(Empresa empresa, Usuario usuario) throws Exception;
 	
 	String generarConsecutivoNotaCreditoInterno(Empresa empresa, Usuario usuario) throws Exception;

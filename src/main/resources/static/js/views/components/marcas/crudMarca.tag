@@ -426,7 +426,10 @@ function __listado(){
 function __InformacionDataTable(){
     self.informacion_tabla = [ 
                                {'data' :'descripcion'    ,"name":"descripcion"     ,"title" : $.i18n.prop("marca.descripcion") ,"autoWidth" :true },
-                               {'data' : 'estado'        ,"name":"estado"          ,"title" : $.i18n.prop("marca.estado")      ,"autoWidth" :false},
+                               {'data' : 'estado'        ,"name":"estado"          ,"title" : $.i18n.prop("marca.estado")      ,"autoWidth" :false,
+                                "render":function(estado,type, row){
+                                 return estadosActivoInactivo(estado,row);//factura.js
+                                }},
                                {'data' : 'id'            ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                                 "render":function(id,type, row){
                                       return __Opciones(id,type,row);

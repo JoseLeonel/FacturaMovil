@@ -186,22 +186,22 @@ public class Factura implements Serializable {
 	@Column(name = "tiene_is")
 	private Integer						tieneIS;
 
-	@Column(name = "peso_transTotal", columnDefinition = "Decimal(10,5) default '0.00'")
+	@Column(name = "peso_transTotal",  precision = 18, scale = 5)
 	private Double						pesoTransporteTotal;
 
-	@Column(name = "total_serv_exo", columnDefinition = "Decimal(10,5) default '0.00'")
+	@Column(name = "total_serv_exo",  precision = 18, scale = 5)
 	private Double						totalServExonerado;
 
-	@Column(name = "total_merc_exo", columnDefinition = "Decimal(10,5) default '0.00'")
+	@Column(name = "total_merc_exo",  precision = 18, scale = 5)
 	private Double						totalMercExonerada;
 
-	@Column(name = "total_exo", columnDefinition = "Decimal(10,5) default '0.00'")
+	@Column(name = "total_exo",  precision = 18, scale = 5)
 	private Double						totalExonerado;
 
-	@Column(name = "total_iva_dev", columnDefinition = "Decimal(10,5) default '0.00'")
+	@Column(name = "total_iva_dev",  precision = 18, scale = 5)
 	private Double						totalIVADevuelto;
 
-	@Column(name = "total_otros_cargos", columnDefinition = "Decimal(10,5) default '0.00'")
+	@Column(name = "total_otros_cargos",  precision = 18, scale = 5)
 	private Double						totalOtrosCargos;
 
 	@Column(name = "tipo_otros_doc", columnDefinition = "varchar(2)", length = 2)

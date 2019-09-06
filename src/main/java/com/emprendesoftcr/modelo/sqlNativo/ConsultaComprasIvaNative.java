@@ -91,6 +91,11 @@ query = "(select "
 @Entity
 public class ConsultaComprasIvaNative implements Serializable {
 	
+	/**
+	 * Comentario para <code>serialVersionUID</code>
+	 */
+	private static final long serialVersionUID = -865132227659867968L;
+
 	@Id
 	@Column(name = "id_consulta")
 	private Long							id;

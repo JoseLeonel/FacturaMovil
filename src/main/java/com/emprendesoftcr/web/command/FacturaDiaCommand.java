@@ -2,6 +2,8 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.fisco.MapEnums;
 import com.emprendesoftcr.modelo.sqlNativo.FacturasDelDiaNative;
@@ -47,6 +49,21 @@ public class FacturaDiaCommand {
 	private String	totalDescuentosSTR;
 	private String	totalComprobanteSTR;
 	private String	condicionVentaSTR;
+	private Integer						noFacturaElectronica;
+	private Integer						imprimirDirecto;
+	private Integer						imprimirCelular;
+
+
+
+	
+	public Integer getImprimirDirecto() {
+		return imprimirDirecto;
+	}
+
+	
+	public void setImprimirDirecto(Integer imprimirDirecto) {
+		this.imprimirDirecto = imprimirDirecto;
+	}
 
 	public FacturaDiaCommand(FacturasDelDiaNative facturasDelDia) {
 		super();
@@ -73,7 +90,9 @@ public class FacturaDiaCommand {
 		this.totalImpuestoSTR = Utils.formateadorMiles(facturasDelDia.getTotalImpuesto());
 		this.totalDescuentosSTR = Utils.formateadorMiles(facturasDelDia.getTotalDescuentos());
 		this.condicionVentaSTR =MapEnums.ENUM_CONDICION_VENTA.get(facturasDelDia.getCondicionVenta());
-
+    this.noFacturaElectronica = facturasDelDia.getNoFacturaElectronica();
+    this.imprimirDirecto = facturasDelDia.getImprimirDirecto();
+    this.imprimirCelular = facturasDelDia.getImprimirCelular();
 	}
 
 	public Long getId() {
@@ -83,6 +102,18 @@ public class FacturaDiaCommand {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	
+	public Integer getImprimirCelular() {
+		return imprimirCelular;
+	}
+
+
+	
+	public void setImprimirCelular(Integer imprimirCelular) {
+		this.imprimirCelular = imprimirCelular;
+	}
+
 
 	public String getCondicionVentaSTR() {
 		return condicionVentaSTR;
@@ -259,5 +290,17 @@ public class FacturaDiaCommand {
 	public void setCliente(String cliente) {
 		this.cliente = cliente;
 	}
+
+	
+	public Integer getNoFacturaElectronica() {
+		return noFacturaElectronica;
+	}
+
+	
+	public void setNoFacturaElectronica(Integer noFacturaElectronica) {
+		this.noFacturaElectronica = noFacturaElectronica;
+	}
+	
+	
 
 }

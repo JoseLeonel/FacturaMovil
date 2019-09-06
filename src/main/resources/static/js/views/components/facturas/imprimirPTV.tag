@@ -424,9 +424,17 @@ self.on('mount',function(){
       
                     
     }
-    
+    if (typeof self.parametro.factura.empresa != 'undefined') {
+        if (self.parametro.factura.empresa.noFacturaElectronica ==0) {
+           qr()
+        }
+           
+     }else if (typeof self.parametro.factura.noFacturaElectronica != 'undefined') {
+        if (self.parametro.factura.noFacturaElectronica ==0) {
+           qr()
+        }
+     }
      
-    
 })
 
 
@@ -439,10 +447,17 @@ function qr(){
     if(self.parametro.factura.clave.length ==0){
         return false
     }
-    
+    var imprimirCelular = 0
+    if (typeof self.parametro.factura.empresa != 'undefined') {
+	    imprimirCelular = self.parametro.factura.empresa.imprimirCelular;
+	}
+    if (typeof self.parametro.factura.imprimirCelular != 'undefined') {
+	    imprimirCelular = self.parametro.factura.imprimirCelular;
+	}
+
      var options = {
         // render method: 'canvas', 'image' or 'div'
-        render: self.parametro.factura.empresa.imprimirCelular == 1?'image':'div',
+        render: imprimirCelular == 1?'image':'div',
         // version range somewhere in 1 .. 40
         minVersion: 1,
         maxVersion: 40,
@@ -581,10 +596,8 @@ function consultaFactura(idFactura){
                     if (self.facturaImpresa.empresa.imprimirDirecto == 0 || self.parametro.facturaDia ==1){
                         $('.imprimirModal').modal('show');   
                     }
-                    if(self.parametro.factura.empresa.noFacturaElectronica == 0){
-                      qr()    
-                    }
-                     if (self.parametro.factura.empresa.imprimirDirecto == 1 && self.parametro.facturaDia ==0 ){
+                   
+                     if (self.facturaImpresa.empresa.imprimirDirecto == 1 && self.parametro.facturaDia ==0 ){
                       __imprimir()
                      }
             }

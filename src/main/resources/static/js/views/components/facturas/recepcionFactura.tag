@@ -852,7 +852,29 @@ function BuscarActividadComercial(){
 										    codigo2 :'',
 											codigoTarifa2:'',
 											tarifa2:'',
-											monto2:0
+											monto2:0,
+										    codigo3 :'',
+											codigoTarifa3:'',
+											tarifa3:'',
+											monto3:0,
+										    codigo4 :'',
+											codigoTarifa4:'',
+											tarifa4:'',
+											monto4:0,
+										    codigo5 :'',
+											codigoTarifa5:'',
+											tarifa5:'',
+											monto5:0,
+										    codigo6 :'',
+											codigoTarifa6:'',
+											tarifa6:'',
+											monto6:0,
+					        			    codigo7 :'',
+											codigoTarifa7:'',
+											tarifa7:'',
+											monto7:0
+					
+					
 					
 										}
 									$.each(impuestosItems, function(i, impuesto){
@@ -885,6 +907,31 @@ function BuscarActividadComercial(){
 											impuestos.codigoTarifa2 = codigoTarifa
 											impuestos.tarifa2 = tarifa
 											impuestos.monto2 = monto
+										} else if(impuestos.codigo3.length ==0){
+											impuestos.codigo3 = codigo;
+											impuestos.codigoTarifa3 = codigoTarifa
+											impuestos.tarifa3 = tarifa
+											impuestos.monto3 = monto
+										} else if(impuestos.codigo4.length ==0){
+											impuestos.codigo4 = codigo;
+											impuestos.codigoTarifa4 = codigoTarifa
+											impuestos.tarifa4 = tarifa
+											impuestos.monto4 = monto
+										} else if(impuestos.codigo5.length ==0){
+											impuestos.codigo5 = codigo;
+											impuestos.codigoTarifa5 = codigoTarifa
+											impuestos.tarifa5 = tarifa
+											impuestos.monto5 = monto
+										} else if(impuestos.codigo6.length ==0){
+											impuestos.codigo6 = codigo;
+											impuestos.codigoTarifa6 = codigoTarifa
+											impuestos.tarifa6 = tarifa
+											impuestos.monto6 = monto
+										} else if(impuestos.codigo7.length ==0){
+											impuestos.codigo7 = codigo;
+											impuestos.codigoTarifa7 = codigoTarifa
+											impuestos.tarifa7 = tarifa
+											impuestos.monto7 = monto
 										}       
 									    
 									});
@@ -924,6 +971,27 @@ function BuscarActividadComercial(){
 					      	            impuestoCodigoTarifa1  : __valorString(impuestos.codigoTarifa2),
 					      	            impuestoTarifa1        : __valorFloat(impuestos.tarifa2),
      				      	            impuestoMonto1         : __valorFloat(impuestos.monto2),
+					      	            impuestoCodigo2        : __valorString(impuestos.codigo3),
+					      	            impuestoCodigoTarifa2  : __valorString(impuestos.codigoTarifa3),
+					      	            impuestoTarifa2        : __valorFloat(impuestos.tarifa3),
+     				      	            impuestoMonto2         : __valorFloat(impuestos.monto3),
+					      	            impuestoCodigo3        : __valorString(impuestos.codigo4),
+					      	            impuestoCodigoTarifa3  : __valorString(impuestos.codigoTarifa4),
+					      	            impuestoTarifa3        : __valorFloat(impuestos.tarifa4),
+     				      	            impuestoMonto3         : __valorFloat(impuestos.monto4),
+					      	            impuestoCodigo4        : __valorString(impuestos.codigo5),
+					      	            impuestoCodigoTarifa4  : __valorString(impuestos.codigoTarifa5),
+					      	            impuestoTarifa4        : __valorFloat(impuestos.tarifa5),
+     				      	            impuestoMonto4         : __valorFloat(impuestos.monto5),
+					      	            impuestoCodigo5        : __valorString(impuestos.codigo6),
+					      	            impuestoCodigoTarifa5  : __valorString(impuestos.codigoTarifa6),
+					      	            impuestoTarifa5        : __valorFloat(impuestos.tarifa6),
+     				      	            impuestoMonto5         : __valorFloat(impuestos.monto6),
+					      	            impuestoCodigo6        : __valorString(impuestos.codigo7),
+					      	            impuestoCodigoTarifa6  : __valorString(impuestos.codigoTarifa7),
+					      	            impuestoTarifa6        : __valorFloat(impuestos.tarifa7),
+     				      	            impuestoMonto6         : __valorFloat(impuestos.monto7),
+
 					      	            impuestoExoneracionTipoDocumento         : __valorString($(this).find("Impuesto").find("Exoneracion").find("TipoDocumento").text()),
 					      	            impuestoExoneracionNumeroDocumento       : __valorString($(this).find("Impuesto").find("Exoneracion").find("NumeroDocumento").text()),
 					      	            impuestoExoneracionNombreInstitucion     : __valorString($(this).find("Impuesto").find("Exoneracion").find("NombreInstitucion").text()),

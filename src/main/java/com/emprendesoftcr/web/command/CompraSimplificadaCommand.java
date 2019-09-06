@@ -2,6 +2,8 @@ package com.emprendesoftcr.web.command;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.ProveedorSimplificado;
 import com.emprendesoftcr.web.jsonDeserializer.ClienteDeserializer;
@@ -91,8 +93,14 @@ public class CompraSimplificadaCommand {
 
 	private Date									updated_at;
 	private Integer								versionEsquemaXML;
+	private String								referenciaTipoDoc;
 
-	@JsonDeserialize(using = ClienteDeserializer.class)
+	private String								referenciaNumero;
+
+	private String								referenciaCodigo;
+
+	private String								referenciaRazon;
+
 	private ProveedorSimplificado	proveedorSimplificado;
 
 	private String								detalleFactura;
@@ -481,6 +489,46 @@ public class CompraSimplificadaCommand {
 	
 	public void setFechaEmisionSTR(String fechaEmisionSTR) {
 		this.fechaEmisionSTR = fechaEmisionSTR;
+	}
+
+	
+	public String getReferenciaTipoDoc() {
+		return referenciaTipoDoc;
+	}
+
+	
+	public void setReferenciaTipoDoc(String referenciaTipoDoc) {
+		this.referenciaTipoDoc = referenciaTipoDoc;
+	}
+
+	
+	public String getReferenciaNumero() {
+		return referenciaNumero;
+	}
+
+	
+	public void setReferenciaNumero(String referenciaNumero) {
+		this.referenciaNumero = referenciaNumero;
+	}
+
+	
+	public String getReferenciaCodigo() {
+		return referenciaCodigo;
+	}
+
+	
+	public void setReferenciaCodigo(String referenciaCodigo) {
+		this.referenciaCodigo = referenciaCodigo;
+	}
+
+	
+	public String getReferenciaRazon() {
+		return referenciaRazon;
+	}
+
+	
+	public void setReferenciaRazon(String referenciaRazon) {
+		this.referenciaRazon = referenciaRazon;
 	}
 
 }

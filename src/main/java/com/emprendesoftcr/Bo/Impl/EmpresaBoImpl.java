@@ -127,4 +127,11 @@ public class EmpresaBoImpl implements EmpresaBo {
 		
 		return empresaDao.generarConsecutivoNotaCreditoInterno(empresa, usuario);
 	}
+
+	@Override
+	@Transactional
+	public String spGenerarConsecutivoFactura(Empresa empresa, Usuario usuario, String tipoDoc) throws Exception {
+		
+		return empresaDao.spGenerarConsecutivoFactura(empresa, usuario, tipoDoc);
+	}
 }

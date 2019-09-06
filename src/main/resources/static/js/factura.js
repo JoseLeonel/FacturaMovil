@@ -55,7 +55,40 @@ $(document)
 			    }
 			}
 
+	function estados(estado,row){
+		if(estado == "Firmado XML"){
+			return '<span class="aceptadoFirma">Firmado XML</span>';
+		}
+		if(estado == "Aceptada"){
+			return '<span class="aceptadoEstado">Aceptada</span>';
+		}
+		if(estado == "Facturada"){
+			return '<span class="aceptadoFirma">Facturada</span>';
+		}
+		if(estado == "Rechazada"){
+			return '<span class="aceptadoRechazado">Rechazado</span>';
+		}
+		if(estado == "Enviada"){
+			return '<span class="aceptadoEnviado">Enviado</span>';
+		}
+		if(estado == "Anulada"){
+			return '<span class="badge badge-warning">Anulado</span>';
+		}
+		return estado;
 
+	}
+	
+	function estadosActivoInactivo(estado,row){
+		
+		if(estado == "Activo"){
+			return '<span class="aceptadoEstado">Activo</span>';
+		}
+		if(estado == "Inactivo"){
+			return '<span class="aceptadoRechazado">Inactivo</span>';
+		}
+		return estado;
+
+	}
 	
 	/***
  * Funcion llamaa de venta nueva post  y restaurante

@@ -80,6 +80,11 @@
                                     </div>    
 
                                     <div class="form-group ">
+                                        <label >Digite el #Factura que viene en el papel impreso</label> 
+                                        <input type="text" class="form-control referenciaNumero" id="referenciaNumero" name="referenciaNumero" value="{factura.referenciaNumero}">
+                                    </div>
+         
+                                    <div class="form-group ">
                                         <label >{$.i18n.prop("factura.nota")}</label> 
                                         <input type="text" class="form-control nota" id="nota" name="nota" value="{factura.nota}">
                                     </div>
@@ -115,9 +120,13 @@
                                 </div>
 
                             </div>    
-                            <input type="hidden" id='codigoActividad' name='codigoActividad'  value="{factura.codigoActividad}" >
-                            <input type="hidden" id='codigoMoneda'            name='codigoMoneda'            value="{factura.codigoMoneda}" >
-                            <input type="hidden" id='pesoTransporteTotal'     name='pesoTransporteTotal'      value="{totalPesoByFactura}" >
+                            <input type="hidden" id='codigoActividad'         name='codigoActividad'        value="{factura.codigoActividad}" >
+                            <input type="hidden" id='referenciaTipoDoc'       name='referenciaTipoDoc'      value="{factura.referenciaTipoDoc}" >
+                            <input type="hidden" id='referenciaCodigo'        name='referenciaCodigo'       value="{factura.referenciaCodigo}" >
+                            <input type="hidden" id='referenciaRazon'         name='referenciaRazon'        value="Compra a proveedores Simplificados" >
+                            
+                            <input type="hidden" id='codigoMoneda'            name='codigoMoneda'           value="{factura.codigoMoneda}" >
+                            <input type="hidden" id='pesoTransporteTotal'     name='pesoTransporteTotal'    value="{totalPesoByFactura}" >
                             <input type="hidden" id='id'                      name='id'                      value="{factura.id}" >
                             <input type="hidden" id='plazoCredito'            name='plazoCredito'            value="{factura.plazoCredito}" >
                             <input type="hidden" id='estado'                  name='estado'                  value="{factura.estado}" >
@@ -231,7 +240,7 @@
             </div><!-- fin contenedor-compra-->
 
                     <div class="encabezadoContainer" style="overflow-x: scroll;overflow-y: scroll; height:100%;">
-<table class="table table-striped">
+                        <table class="table table-striped">
                         <thead>
                         <tr>
                             <th style="width:5%;">                                                      </div></th>
@@ -913,6 +922,8 @@
 	    nombreFactura:"",
 	    direccion:"",
 	    nota:"",
+        referenciaTipoDoc:'14',
+        referenciaCodigo:'04',
 	    comanda:"",
 	    subTotal:0,
 	    totalTransporte:0,
@@ -1186,6 +1197,8 @@ function __Eventos(){
     $("#formularioLineaDetalle").validate(reglasDeValidacionDetalleCompra());
     $("#descArticulo").attr("maxlength", 160);
     $("#codigoArt").attr("maxlength", 20);
+    $("#referenciaNumero").attr("maxlength", 20);
+    
  
 }
 __AplicarAgregarLineaDetalle(){
@@ -1478,6 +1491,8 @@ function evaluarFactura(data){
 	    nombreFactura:"",
 	    direccion:"",
 	    nota:"",
+        referenciaTipoDoc:'14',
+        referenciaCodigo:'04',
 	    comanda:"",
 	    subTotal:0,
 	    totalTransporte:0,

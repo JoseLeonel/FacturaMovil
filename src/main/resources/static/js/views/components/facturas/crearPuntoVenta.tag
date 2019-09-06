@@ -290,23 +290,24 @@
                                    <button  onclick={__removeProductFromDetail} class="btn btn-danger btn-xs btn-block">X</button>
                                    
                                 </td>
-                                <td style="width:5%;"><h2>{numeroLinea}</h2></td>
-                                <td><h2>{codigo}</h2></td>
-                                <td><h2>{descripcion}</h2></td>
+                                <td style="width:5%;"  class="campoLabel"><label >{numeroLinea}</label> </td>
+                                <td  style="width:4%" class="campoLabel"> <label >{codigo}</label></td>
+                                <td class="campoLabel"><label >{descripcion}</label></td>
                                 <td class="text-right" style="width:8%;">
-                                    <input onclick={__CambiarCantidad} id= "cantidadDetalle" class="campo " type="number" placeholder="Cantidad Detalle" value = {cantidad.toFixed(3)} readonly />
+                                    <input onclick={__CambiarCantidad} id= "cantidadDetalle" class="campoDetalle " type="number" placeholder="Cantidad Detalle" value = {cantidad.toFixed(3)} readonly />
                                 </td>
-                                <td class="text-right">
-                                    <input   class="campo" type="text"  value = "{precioUnitario.toFixed(2)}" readonly />
+                                <td class="campoLabel">
+                                    <label >{precioUnitario.toFixed(2)}</label>
+                                    
                                 </td>
-                                <td class="text-right" style="width:4%">
-                                    <input  onclick={__CambiarDescuento} class="campo" type="text"  value = "{porcentajeDesc.toFixed(2)}" readonly/>
+                                <td class="text-right" style="width:8%">
+                                    <input  onclick={__CambiarDescuento} class="campoDetalle" type="text"  value = "{porcentajeDesc.toFixed(2)}" readonly/>
                                 </td>
-                                <td class="text-right" style="width:4%">
-                                    <input  class="campo" type="text"  value = "{impuesto}" readonly/>
+                                <td  style="width:4%" class="campoLabel">
+                                     <label >{impuesto.toFixed(2)}</label>
                                 </td>
-                                <td class="text-right">
-                                    <input  class="campo" type="text"  value = "{montoTotalLinea.toFixed(2)}" readonly />
+                                <td class="campoLabel">
+                                    <label >{montoTotalLinea.toFixed(2)}</label>
                                 </td>
                             </tr>
                             </tbody>
@@ -671,6 +672,35 @@
 
 
 <style type="text/css"  >
+.campoDetalle {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 8px 18px;
+    font-size: 10px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    background-color: #fcfcfc;
+    border: 1px solid #ccc;
+    font: 20px verdana, arial, helvetica, sans-serif;
+    /* margin: 2px 0; */
+    padding: 1px 2px;
+    overflow: visible;
+}
+.campoLabel{
+    font-size: 20px;
+    font-weight: 900;
+    text-align: center;
+}
 .teclashift {
     font-weight: 700;
     font-size: 27px !important;
@@ -795,6 +825,7 @@
         font-style: italic;
         align-items: center;
         text-align: left;
+        margin-left: 2%;
     }
     .TotalesContainer{
         display:flex;
@@ -1208,6 +1239,31 @@
         codigo:"",
         descripcion:""
     }
+    self.facturaImpresa={
+        cliente:{
+            cedula:""
+        },
+        nombreFactura:"",
+        correoAlternativo:"",
+        correoElectronico:"",
+        nota:"",
+        referenciaNumero:"",
+        subTotalGeneralSTR:"",
+        totalDescuentos:0,
+        totalDescuentosSTR:"",
+        totalComprobanteSTR:"",
+        totalCambioPagarSTR:"",
+        tipoCambio:0,
+        tipoCambioSTR:"",
+        estado:0,
+        empresa:{
+            noFacturaElectronica:"",
+
+        },
+        tipoDoc:"",
+        consecutivoProforma:"",
+
+    }
     self.transaccion = false
     self.on('mount',function(){
 
@@ -1230,7 +1286,7 @@
        __ListaActividadesComercales()
        //__ListaArticulosUsoInterno()
        __ListaDeVendedores()
-       __agregarArticulos()
+  //     __agregarArticulos()
        _Empresa()
        __ComboTipoDocumentoExonerados()
        getTipoCambioDolar()
@@ -1289,7 +1345,7 @@
              actualizaElPlazoDiasCredito();
              __Teclas(evento.keyCode)
   
-        //     disableF5(evento);
+            disableF5(evento);
         }, false );
 
       
@@ -1307,17 +1363,32 @@
     }, false );
     window.addEventListener( "click", function(evento){  
         actualizaElPlazoDiasCredito();
+        teclamodal(evento);
       
     }, false );
      
     })
 
+function teclamodal(e){
+    if ($('#modalInventario').is(':visible')) {
+        $('.precioventa').focus()
+    } 
+    if(!$('#modalAgregarClienteNuevo').is(':visible')){
+        $('.totalEfectivo').select()
+        $('.totalEfectivo').focus()
+    }
+    if($('#modalFacturasDia').is(':visible')){
+        $('.codigo').select()
+        $('.codigo').focus()
+    }
+}
 
     
     function disableF5(e) { 
-   
-       // alert(e.keyCode)
+     //   alert(e.keyCode)
         if ((e.which || e.keyCode) == 116) e.preventDefault(); 
+        if ((e.which || e.keyCode) == 114) e.preventDefault(); //f3
+        if ((e.which || e.keyCode) == 112) e.preventDefault(); //f1
         if ((e.which || e.keyCode) == 117) e.preventDefault(); 
         if(e.target.id != 'codigo' && e.target.id != 'precioVenta' && e.target.id != 'nota'
            && e.target.id != 'correoAlternativo' && e.target.id != 'nombreFactura' &&
@@ -1325,17 +1396,19 @@
            e.target.id != 'totalBanco' && e.target.id != 'plazoCreditoL' && e.target.id != 'fechaCredito'
            && e.target.id != 'aplicarDescuento' && e.target.id != 'cambiarCantidadArticulo'
            && e.target.id != 'cedula' && e.target.id != 'nombreCompleto'
+           && e.target.id != 'codigoArt' && e.target.id != 'descArticulo'
            && e.target.id != 'correoElectronico' && e.target.id != 'codigoPais'
            && e.target.id != 'telefono'){
-           if ((e.which || e.keyCode) == 8) {
-               $('.codigo').focus()
-               e.preventDefault()
-              
-               }; 
             if (self.mostrarFormularioPago == false ){
                if ((e.which || e.keyCode) == 13) {
-                   $('.codigo').focus()
-                   e.preventDefault()
+                    if (!$('#modalFacturasDia').is(':visible') &&  !$('#modalClientes').is(':visible')
+                        &&  !$('#modalCambiarCantidad').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible') 
+                        &&  !$('#modalAgregarClienteNuevo').is(':visible') &&  !$('#modalCambiarDescuento').is(':visible')
+                        &&  !$('#modalInventario').is(':visible')  &&  !$('#modalAgregarClienteNuevo').is(':visible')
+                    ) {
+                        $('.codigo').focus() 
+                     } 
+                   
                 } 
 
             }   
@@ -1545,6 +1618,8 @@ var reglasDeValidacionClienteNuevo = function() {
 **/
 __regresarClienteNuevo(){
     $('#modalAgregarClienteNuevo').modal('hide')
+    $('.totalEfectivo').select()
+    $('.totalEfectivo').focus()
 }
 
 /**
@@ -1610,6 +1685,8 @@ function aplicarCreacionClienteNuevo(){
                         showCancelButton: false,
                         confirmButtonText: 'Aceptar',
                     })
+                    $('.totalEfectivo').select()
+                    $('.totalEfectivo').focus()
                 }
             },
             error : function(xhr, status) {
@@ -1948,7 +2025,7 @@ function loadListar(table,idioma,formatoTabla,data){
         $(table).DataTable({
         destroy: true,
         "language": idioma_espanol,
-        "sDom": 'lrtip',
+        "sDom": 'flrtip',
         "order": [0, 'desc'],
         "bPaginate": true,
         'responsive': true,
@@ -2016,6 +2093,14 @@ function __reimprimir(){
 * Consultar la factura
 **/
 function consultaFactura(data,tipoImpresion){
+    var parametros = {
+                          factura:data,
+                          facturaDia:tipoImpresion
+                      }
+                      console.log("consultaFactura")
+                      riot.mount('ptv-imprimir',{parametros:parametros});
+                   
+    return 
     self.contador = 0
     self.update()
     var modelo = null
@@ -2428,6 +2513,31 @@ __Limpiar(){
 *  Inicializar las variables de trabajos
 **/
 function __Init(){
+    self.facturaImpresa={
+        cliente:{
+            cedula:""
+        },
+        nombreFactura:"",
+        correoAlternativo:"",
+        correoElectronico:"",
+        nota:"",
+        referenciaNumero:"",
+        subTotalGeneralSTR:"",
+        totalDescuentos:0,
+        totalDescuentosSTR:"",
+        totalComprobanteSTR:"",
+        totalCambioPagarSTR:"",
+        tipoCambio:0,
+        tipoCambioSTR:"",
+        estado:0,
+        empresa:{
+            noFacturaElectronica:"",
+
+        },
+        tipoDoc:"",
+        consecutivoProforma:"",
+
+    }
     self.bloqueoFactura = 0;
     self.transaccion = false
     self.precioUltimo = ""
@@ -3114,6 +3224,8 @@ function __ListaDeArticulosPorDescripcion(){
                 loadListar(".tableListarArticulos",idioma_espanol,self.informacion_tabla_articulo,self.articulos.data)
                 agregarInputsCombos_Articulo()
                 ActivarEventoFiltro(".tableListarArticulos")
+                __agregarArticulos()
+                
             }
         },
         error: function (xhr, status) {
@@ -3328,7 +3440,13 @@ function __buscarcodigo(idArticulo,cantidad,precio){
         success: function(data){
             if (data.status != 200) {
                 if (data.message != null && data.message.length > 0) {
-                    swal('',data.message,'error');
+                   
+                    
+                     swal({
+                        title: 'Error Articulo',
+                        text: data.message,
+                        timer: 500
+                    })
                 }
             }else{
                 self.articulo  = null
@@ -3942,9 +4060,9 @@ function __agregarArticulos() {
             if(self.articulo.tipoCodigo =="04" || self.empresa.tieneLector !="Activo"){
                 $('#codigo').val(self.articulo.codigo)
                 $('.precioVenta').val(getListaPrecio(self.articulo))
-                $('.precioVenta').select()
-                $(".precioVenta").focus()
                  $('#modalInventario').modal('hide') 
+                $('.precioVenta').focus()
+                $('.precioVenta').select()
                 return
             }
         } 
@@ -3954,6 +4072,8 @@ function __agregarArticulos() {
             __agregarArticulo(1)
         }
         $('#modalInventario').modal('hide') 
+        
+        return
 	    
     });
 }
@@ -4353,6 +4473,9 @@ function __Teclas(tecla){
       return 
     }
     if(tecla ==16){
+        if($('#modalAgregarClienteNuevo').is(':visible')){
+           return
+        }
       var resultado = __valorNumerico($(".totalEfectivo").val())
       if(resultado > 0){
         self.factura.totalTarjeta = resultado

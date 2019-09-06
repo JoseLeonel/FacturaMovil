@@ -247,9 +247,9 @@ function __ListaProveedores(){
 var informacion_tabla = [ 
 	{'data' :'nombreProveedor'    ,"name":"nombreProveedor"    ,"title" : "Proveedor"  ,"autoWidth" :true },
 	{'data' :'numeroConsecutivo'  ,"name":"numeroConsecutivo"  ,"title" : "Consecutivo","autoWidth" :true },
+	{'data' :'referenciaNumero'   ,"name":"referenciaNumero"  ,"title" : "#Fact.Impresa","autoWidth" :true },
 	{'data' :'created_atSTR'      ,"name":"created_atSTR"      ,"title" : "Fecha Emision"  ,"autoWidth" :true },
 	{'data' :'totalDescuentoSTR'  ,"name":"totalDescuentoSTR"  ,"title" : "Descuento"  ,"autoWidth" :true },
-	{'data' :'totalImpuestoSTR'   ,"name":"totalImpuestoSTR"   ,"title" : "IVAI"       ,"autoWidth" :true },
 	{'data' :'totalComprobanteSTR',"name":"totalComprobanteSTR","title" : "Total"      ,"autoWidth" :true },
     {'data' :'nombreUsuario'      ,"name":"nombreUsuario"      ,"title" : "Usuario"    ,"autoWidth" :true }
   ];

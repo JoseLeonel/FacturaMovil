@@ -932,13 +932,14 @@
 		function __ComboEstados(){
 			self.comboEstados = []
 			self.comboEstados.push({
-				estado:2,
-				descripcion:$.i18n.prop("tipo.factura.facturado")
-			})
-			self.comboEstados.push({
 				estado:6,
 				descripcion:$.i18n.prop("tipo.factura.aceptadas")
 			})
+			self.comboEstados.push({
+				estado:2,
+				descripcion:$.i18n.prop("tipo.factura.facturado")
+			})
+			
 			self.comboEstados.push({
 				estado:7,
 				descripcion:$.i18n.prop("tipo.factura.noaceptadas")

@@ -99,7 +99,10 @@ var idioma_espanol =
 								{'data' :'nombreComercial'    ,"name":"nombreComercial"      ,"title" : "Nombre Comercial"    ,"autoWidth" :false },
 								{'data' : 'celular'           ,"name":"celular"              ,"title" : "Celular"             ,"autoWidth" :false},
 								{'data' : 'telefono'          ,"name":"telefono"             ,"title" : "Telefono"            ,"autoWidth" :false},
-								{'data' : 'estado'            ,"name":"estado"               ,"title" : "Estado"              ,"autoWidth" :false},
+								{'data' : 'estado'            ,"name":"estado"               ,"title" : "Estado"              ,"autoWidth" :false,
+								"render":function(estado,type, row){
+									return estadosActivoInactivo(estado,row);//factura.js
+								   }},
 								{'data' : 'id'                ,"name":"id" ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
 									"render":function(id,type, row){
 										  return __Opciones(id,type,row);

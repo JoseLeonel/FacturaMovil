@@ -1934,6 +1934,12 @@ function __reimprimir(){
 *Consulta la Reimprimir
 **/
 function consultaParaReimprimir(data,tipoImpresion){
+     var parametros = {
+                          factura:data,
+                          facturaDia:tipoImpresion
+                      }
+                       riot.mount('ptv-imprimir',{parametros:parametros});
+    return
      $.ajax({
         url: "MostrarFacturaAjax",
         datatype: "json",

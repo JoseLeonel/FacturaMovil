@@ -13,7 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 
-@BaseNativeQuery(name = "comprasimplificadas	", query = "Select compra_simpli.created_at,compra_simpli.clave,compra_simpli.numero_consecutivo,compra_simpli.total_descuentos,compra_simpli.total_impuesto,compra_simpli.total_comprobante,usuarios.nombre_usuario,"
+@BaseNativeQuery(name = "comprasimplificadas	", query = "Select ref_numero,compra_simpli.created_at,compra_simpli.clave,compra_simpli.numero_consecutivo,compra_simpli.total_descuentos,compra_simpli.total_impuesto,compra_simpli.total_comprobante,usuarios.nombre_usuario,"
 + "compra_simpli.fecha_emision, provee_simpli.nombre_completo,compra_simpli.total_descuentos, compra_simpli.act_comercial,compra_simpli.id,compra_simpli.empresa_id,compra_simpli.estado" 
 + " from compra_simpli" 
 + " inner join usuarios on usuarios.id = compra_simpli.usuario_id " 
@@ -62,6 +62,9 @@ public class CompraSimplificadaNative {
 
 	@Column(name = "act_comercial", length = 6)
 	private String	codigoActividad;
+	
+	@Column(name = "ref_numero", length = 20)
+	private String								referenciaNumero;
 
 	public Long getId() {
 		return id;
@@ -178,6 +181,18 @@ public class CompraSimplificadaNative {
 		return Utils.formateadorMiles(this.totalDescuentos);
 	}
 	
+	
+
+	
+	public String getReferenciaNumero() {
+		return referenciaNumero;
+	}
+
+	
+	public void setReferenciaNumero(String referenciaNumero) {
+		this.referenciaNumero = referenciaNumero;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -191,6 +206,7 @@ public class CompraSimplificadaNative {
 		result = prime * result + ((nombreProveedor == null) ? 0 : nombreProveedor.hashCode());
 		result = prime * result + ((nombreUsuario == null) ? 0 : nombreUsuario.hashCode());
 		result = prime * result + ((numeroConsecutivo == null) ? 0 : numeroConsecutivo.hashCode());
+		result = prime * result + ((referenciaNumero == null) ? 0 : referenciaNumero.hashCode());
 		result = prime * result + ((totalComprobante == null) ? 0 : totalComprobante.hashCode());
 		result = prime * result + ((totalDescuentos == null) ? 0 : totalDescuentos.hashCode());
 		result = prime * result + ((totalImpuesto == null) ? 0 : totalImpuesto.hashCode());
@@ -251,6 +267,11 @@ public class CompraSimplificadaNative {
 				return false;
 		} else if (!numeroConsecutivo.equals(other.numeroConsecutivo))
 			return false;
+		if (referenciaNumero == null) {
+			if (other.referenciaNumero != null)
+				return false;
+		} else if (!referenciaNumero.equals(other.referenciaNumero))
+			return false;
 		if (totalComprobante == null) {
 			if (other.totalComprobante != null)
 				return false;
@@ -268,7 +289,8 @@ public class CompraSimplificadaNative {
 			return false;
 		return true;
 	}
-
+	
+	
 	
 	
 	

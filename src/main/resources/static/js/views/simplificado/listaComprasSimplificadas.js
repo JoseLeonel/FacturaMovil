@@ -60,8 +60,7 @@ var _Init = function () {
 	   .clear()
 	   .draw();
 		$(".totalComprobante").val(null);
-		$(".totalImpuestos").val(null);
-		$(".totalImpuestos").val(null);
+		$(".totalDescuentos").val(null);
     });
     $("#filtros").validate(reglasDeValidacion());
 	__ListaProveedores();
@@ -74,7 +73,7 @@ function __EnviarCorreo(){
 	var idProveedor = $('#idProveedor').val();
 	var estado  = $('#estado').val();
 	var totalDescuentos  = $('.totalDescuentos').val();
-	var totalImpuesto  = $('.totalImpuestos').val();
+	var totalImpuesto  = 0;
 	var total  = $('.totalComprobante').val();
 var parametros = {
 	fechaInicio:fechaInicio,
@@ -135,8 +134,8 @@ function _consulta(){
 	$(".enviarCorreo").hide();
 	$(".descargar").hide();
 	$(".totalComprobante").val(null);
-	$(".totalImpuestos").val(null);
-	$(".totalImpuestos").val(null);
+	$(".totalDescuentos").val(null);
+	
 	var table = $('.tableListar').DataTable();
  	table
     .clear()
@@ -191,8 +190,8 @@ function _totales(data){
 	})
 
 	$(".totalComprobante").val(formatoDecimales(totalComprobante,2));
-	$(".totalImpuestos").val(formatoDecimales(totalImpuestos,2));
-	$(".totalImpuestos").val(formatoDecimales(totalDescuentos,2));
+	
+	$(".totalDescuentos").val(formatoDecimales(totalDescuentos,2));
 }
 
 /**
@@ -248,10 +247,9 @@ function __ListaProveedores(){
 var informacion_tabla = [ 
 	{'data' :'nombreProveedor'    ,"name":"nombreProveedor"    ,"title" : "Proveedor"  ,"autoWidth" :true },
 	{'data' :'numeroConsecutivo'  ,"name":"numeroConsecutivo"  ,"title" : "Consecutivo","autoWidth" :true },
+	{'data' :'referenciaNumero'   ,"name":"referenciaNumero"  ,"title" : "#Fact.Impresa","autoWidth" :true },
 	{'data' :'created_atSTR'      ,"name":"created_atSTR"      ,"title" : "Fecha Emision"  ,"autoWidth" :true },
-	{'data' :'totalDescuentoSTR'  ,"name":"totalDescuentoSTR"  ,"title" : "Descuento"  ,"autoWidth" :true },
-	{'data' :'totalImpuestoSTR'   ,"name":"totalImpuestoSTR"   ,"title" : "IVAI"       ,"autoWidth" :true },
-	{'data' :'totalComprobanteSTR',"name":"totalComprobanteSTR","title" : "Total"      ,"autoWidth" :true },
+	{'data' :'totalDescuentoSTR'  ,"name":"totalDescuentoSTR"  ,"title" : "Descuento"  ,"autoWidth" :true },	{'data' :'totalComprobanteSTR',"name":"totalComprobanteSTR","title" : "Total"      ,"autoWidth" :true },
     {'data' :'nombreUsuario'      ,"name":"nombreUsuario"      ,"title" : "Usuario"    ,"autoWidth" :true },
     {'data' : 'id'                ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
 	"render":function(id,type, row){

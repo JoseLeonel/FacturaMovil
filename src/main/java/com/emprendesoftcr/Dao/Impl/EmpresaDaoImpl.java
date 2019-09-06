@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Random;
 
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.StoredProcedureQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +22,7 @@ import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.Usuario;
+import com.emprendesoftcr.web.command.TotalDetallesCommand;
 
 /**
  * Empresa es todas las que facturan EmpresaDaoImpl.
@@ -170,14 +173,13 @@ public class EmpresaDaoImpl implements EmpresaDao {
 		return resultado;
 	}
 
-	
 	@Override
 	public String generarConsecutivoCompraSimplificada(Empresa empresa, Usuario usuario) throws Exception {
 		String resultado = Constantes.EMPTY;
 		try {
 			Integer consecutivo = Constantes.ZEROS;
-		  consecutivo = empresa.getConsecutivoCompraSimplificada();
-		  empresa.setConsecutivoCompraSimplificada(empresa.getConsecutivoCompraSimplificada()+1);
+			consecutivo = empresa.getConsecutivoCompraSimplificada();
+			empresa.setConsecutivoCompraSimplificada(empresa.getConsecutivoCompraSimplificada() + 1);
 
 			modificar(empresa);
 			// Casa matriz
@@ -198,7 +200,6 @@ public class EmpresaDaoImpl implements EmpresaDao {
 		return resultado;
 	}
 
-	
 	/**
 	 * Genera el consecutvio de la Factura de empresa
 	 * @see com.emprendesoftcr.Dao.EmpresaDao#generarConsecutivoFactura(com.emprendesoftcr.modelo.Empresa)
@@ -317,7 +318,7 @@ public class EmpresaDaoImpl implements EmpresaDao {
 	}
 
 	@Override
-	public String generarConsecutivoNotaCreditoInterno(Empresa empresa, Usuario usuario) throws Exception{
+	public String generarConsecutivoNotaCreditoInterno(Empresa empresa, Usuario usuario) throws Exception {
 		String resultado = Constantes.EMPTY;
 		try {
 			Integer consecutivo = Constantes.ZEROS;
@@ -340,7 +341,34 @@ public class EmpresaDaoImpl implements EmpresaDao {
 		}
 
 		return resultado;
-		
+
 	}
-	
+
+	/**
+	 * genera el consecutivo de la factura
+	 * @see com.emprendesoftcr.Dao.EmpresaDao#spGenerarConsecutivoFactura(com.emprendesoftcr.modelo.Empresa, com.emprendesoftcr.modelo.Usuario, java.lang.String)
+	 */
+	@Override
+	public String spGenerarConsecutivoFactura(Empresa empresa, Usuario usuario, String tipoDoc) throws Exception {
+		StoredProcedureQuery storedProcedure = null;
+		storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_GENERAR_CONSECUTIVO_FACTURA);
+
+		// set parametros entrada
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_GENERAR_CONSECUTIVO_FACTURA_IN_ID_EMPRESA, Integer.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_GENERAR_CONSECUTIVO_FACTURA_IN_ID_USUARIO, Integer.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_GENERAR_CONSECUTIVO_FACTURA_IN_TIPO_DOC, String.class, ParameterMode.IN);
+
+		// set parametros salida
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_GENERAR_CONSECUTIVO_FACTURA_OUT_CONSECUTIVO, String.class, ParameterMode.OUT);
+
+		// Valores de entrada
+		storedProcedure.setParameter(Constantes.SP_GENERAR_CONSECUTIVO_FACTURA_IN_ID_EMPRESA, empresa.getId());
+		storedProcedure.setParameter(Constantes.SP_GENERAR_CONSECUTIVO_FACTURA_IN_ID_USUARIO, usuario.getId());
+		storedProcedure.setParameter(Constantes.SP_GENERAR_CONSECUTIVO_FACTURA_IN_TIPO_DOC, tipoDoc);
+
+		storedProcedure.execute();
+
+		return (String) storedProcedure.getOutputParameterValue(Constantes.SP_GENERAR_CONSECUTIVO_FACTURA_OUT_CONSECUTIVO);
+	}
+
 }

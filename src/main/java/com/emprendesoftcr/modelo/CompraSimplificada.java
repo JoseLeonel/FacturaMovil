@@ -164,6 +164,17 @@ public class CompraSimplificada implements Serializable {
 
 	@Column(name = "act_comercial", length = 6)
 	private String								codigoActividad;
+	@Column(name = "ref_tipo_doc", length = 2)
+	private String								referenciaTipoDoc;
+
+	@Column(name = "ref_numero", length = 20)
+	private String								referenciaNumero;
+
+	@Column(name = "ref_codigo", length = 2)
+	private String								referenciaCodigo;
+
+	@Column(name = "ref_razon", length = 60)
+	private String								referenciaRazon;
 
 	public CompraSimplificada() {
 		super();
@@ -174,7 +185,7 @@ public class CompraSimplificada implements Serializable {
 	}
 
 	public CompraSimplificada(Long id, Date fechaCredito, String numeroConsecutivo, String clave, Date fechaEmision, String condicionVenta, Integer plazoCredito, String tipoDoc, String medioEfectivo, String medioTarjeta, String medioBanco, Double tipoCambio, Double subTotal, Double totalServGravados, Double totalServExentos, Double totalMercanciasGravadas, Double totalMercanciasExentas, Double totalGravado, Double totalExento, Double totalVenta, Double totalDescuentos, Double totalVentaNeta, Double totalImpuesto, Double totalComprobante, Double totalEfectivo, Double totalTarjeta, Double totalBanco, Double totalCredito, Double montoCambio, Double totalCambio, Double totalImpuestoServicio, Double totalCambioPagar, String codigoMoneda, Integer estado, Integer estadoFirma, Date created_at,
-			Date updated_at, Integer versionEsquemaXML, com.emprendesoftcr.modelo.ProveedorSimplificado proveedorSimplificado, Empresa empresa, Usuario usuarioCreacion, String codigoActividad) {
+			Date updated_at, Integer versionEsquemaXML, com.emprendesoftcr.modelo.ProveedorSimplificado proveedorSimplificado, Empresa empresa, Usuario usuarioCreacion, String codigoActividad, String referenciaTipoDoc, String referenciaNumero, String referenciaCodigo, String referenciaRazon) {
 		super();
 		this.id = id;
 		this.fechaCredito = fechaCredito;
@@ -218,6 +229,10 @@ public class CompraSimplificada implements Serializable {
 		this.empresa = empresa;
 		this.usuarioCreacion = usuarioCreacion;
 		this.codigoActividad = codigoActividad;
+		this.referenciaTipoDoc = referenciaTipoDoc;
+		this.referenciaNumero = referenciaNumero;
+		this.referenciaCodigo = referenciaCodigo;
+		this.referenciaRazon = referenciaRazon;
 	}
 
 	public Integer getVersionEsquemaXML() {
@@ -647,6 +662,38 @@ public class CompraSimplificada implements Serializable {
 
 	public void setCodigoActividad(String codigoActividad) {
 		this.codigoActividad = codigoActividad;
+	}
+
+	public String getReferenciaTipoDoc() {
+		return referenciaTipoDoc;
+	}
+
+	public void setReferenciaTipoDoc(String referenciaTipoDoc) {
+		this.referenciaTipoDoc = referenciaTipoDoc;
+	}
+
+	public String getReferenciaNumero() {
+		return referenciaNumero;
+	}
+
+	public void setReferenciaNumero(String referenciaNumero) {
+		this.referenciaNumero = referenciaNumero;
+	}
+
+	public String getReferenciaCodigo() {
+		return referenciaCodigo;
+	}
+
+	public void setReferenciaCodigo(String referenciaCodigo) {
+		this.referenciaCodigo = referenciaCodigo;
+	}
+
+	public String getReferenciaRazon() {
+		return referenciaRazon;
+	}
+
+	public void setReferenciaRazon(String referenciaRazon) {
+		this.referenciaRazon = referenciaRazon;
 	}
 
 }

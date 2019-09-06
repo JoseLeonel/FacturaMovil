@@ -1238,6 +1238,33 @@ public class FacturasController {
 					detalleNuevo.setImpuestoCodigoTarifa1(detalle.getImpuestoCodigoTarifa1() ==null?Constantes.EMPTY:detalle.getImpuestoCodigoTarifa1());
 					detalleNuevo.setImpuestoTarifa1(detalle.getImpuestoTarifa1() ==null?  Constantes.ZEROS_DOUBLE:detalle.getImpuestoTarifa1());
 					detalleNuevo.setImpuestoMonto1(detalle.getImpuestoMonto1() ==null? Constantes.ZEROS_DOUBLE:detalle.getImpuestoMonto1());
+				
+					detalleNuevo.setImpuestoCodigo2(detalle.getImpuestoCodigo2() == null ? Constantes.EMPTY : detalle.getImpuestoCodigo2());
+					detalleNuevo.setImpuestoCodigoTarifa2(detalle.getImpuestoCodigoTarifa2() ==null?Constantes.EMPTY:detalle.getImpuestoCodigoTarifa2());
+					detalleNuevo.setImpuestoTarifa2(detalle.getImpuestoTarifa2() ==null?  Constantes.ZEROS_DOUBLE:detalle.getImpuestoTarifa2());
+					detalleNuevo.setImpuestoMonto2(detalle.getImpuestoMonto2() ==null? Constantes.ZEROS_DOUBLE:detalle.getImpuestoMonto2());
+				
+					detalleNuevo.setImpuestoCodigo3(detalle.getImpuestoCodigo3() == null ? Constantes.EMPTY : detalle.getImpuestoCodigo3());
+					detalleNuevo.setImpuestoCodigoTarifa3(detalle.getImpuestoCodigoTarifa3() ==null?Constantes.EMPTY:detalle.getImpuestoCodigoTarifa3());
+					detalleNuevo.setImpuestoTarifa3(detalle.getImpuestoTarifa3() ==null?  Constantes.ZEROS_DOUBLE:detalle.getImpuestoTarifa3());
+					detalleNuevo.setImpuestoMonto3(detalle.getImpuestoMonto3() ==null? Constantes.ZEROS_DOUBLE:detalle.getImpuestoMonto3());
+					
+					detalleNuevo.setImpuestoCodigo4(detalle.getImpuestoCodigo4() == null ? Constantes.EMPTY : detalle.getImpuestoCodigo4());
+					detalleNuevo.setImpuestoCodigoTarifa4(detalle.getImpuestoCodigoTarifa4() ==null?Constantes.EMPTY:detalle.getImpuestoCodigoTarifa4());
+					detalleNuevo.setImpuestoTarifa4(detalle.getImpuestoTarifa4() ==null?  Constantes.ZEROS_DOUBLE:detalle.getImpuestoTarifa4());
+					detalleNuevo.setImpuestoMonto4(detalle.getImpuestoMonto4() ==null? Constantes.ZEROS_DOUBLE:detalle.getImpuestoMonto4());
+
+					detalleNuevo.setImpuestoCodigo5(detalle.getImpuestoCodigo5() == null ? Constantes.EMPTY : detalle.getImpuestoCodigo5());
+					detalleNuevo.setImpuestoCodigoTarifa5(detalle.getImpuestoCodigoTarifa5() ==null?Constantes.EMPTY:detalle.getImpuestoCodigoTarifa5());
+					detalleNuevo.setImpuestoTarifa5(detalle.getImpuestoTarifa5() ==null?  Constantes.ZEROS_DOUBLE:detalle.getImpuestoTarifa5());
+					detalleNuevo.setImpuestoMonto5(detalle.getImpuestoMonto5() ==null? Constantes.ZEROS_DOUBLE:detalle.getImpuestoMonto5());
+
+					detalleNuevo.setImpuestoCodigo6(detalle.getImpuestoCodigo6() == null ? Constantes.EMPTY : detalle.getImpuestoCodigo6());
+					detalleNuevo.setImpuestoCodigoTarifa6(detalle.getImpuestoCodigoTarifa6() ==null?Constantes.EMPTY:detalle.getImpuestoCodigoTarifa6());
+					detalleNuevo.setImpuestoTarifa6(detalle.getImpuestoTarifa6() ==null?  Constantes.ZEROS_DOUBLE:detalle.getImpuestoTarifa6());
+					detalleNuevo.setImpuestoMonto6(detalle.getImpuestoMonto6() ==null? Constantes.ZEROS_DOUBLE:detalle.getImpuestoMonto6());
+
+					
 					detallesCompra.add(detalleNuevo);
 				}
 			}
@@ -1301,10 +1328,38 @@ public class FacturasController {
 				recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa(recepcionFacturaDetalle.getImpuestoCodigoTarifa());
 				recepcionFacturaDetalleNueva.setImpuestoTarifa(recepcionFacturaDetalle.getImpuestoTarifa());
 				recepcionFacturaDetalleNueva.setImpuestoMonto(recepcionFacturaDetalle.getImpuestoMonto());
+
 				recepcionFacturaDetalleNueva.setImpuestoCodigo1(recepcionFacturaDetalle.getImpuestoCodigo1());
 				recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa1(recepcionFacturaDetalle.getImpuestoCodigoTarifa1());
 				recepcionFacturaDetalleNueva.setImpuestoTarifa1(recepcionFacturaDetalle.getImpuestoTarifa1());
 				recepcionFacturaDetalleNueva.setImpuestoMonto1(recepcionFacturaDetalle.getImpuestoMonto1());
+				
+				recepcionFacturaDetalleNueva.setImpuestoCodigo2(recepcionFacturaDetalle.getImpuestoCodigo2());
+				recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa2(recepcionFacturaDetalle.getImpuestoCodigoTarifa2());
+				recepcionFacturaDetalleNueva.setImpuestoTarifa2(recepcionFacturaDetalle.getImpuestoTarifa2());
+				recepcionFacturaDetalleNueva.setImpuestoMonto2(recepcionFacturaDetalle.getImpuestoMonto2());
+
+				recepcionFacturaDetalleNueva.setImpuestoCodigo3(recepcionFacturaDetalle.getImpuestoCodigo3());
+				recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa3(recepcionFacturaDetalle.getImpuestoCodigoTarifa3());
+				recepcionFacturaDetalleNueva.setImpuestoTarifa3(recepcionFacturaDetalle.getImpuestoTarifa3());
+				recepcionFacturaDetalleNueva.setImpuestoMonto3(recepcionFacturaDetalle.getImpuestoMonto3());
+
+				recepcionFacturaDetalleNueva.setImpuestoCodigo4(recepcionFacturaDetalle.getImpuestoCodigo4());
+				recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa4(recepcionFacturaDetalle.getImpuestoCodigoTarifa4());
+				recepcionFacturaDetalleNueva.setImpuestoTarifa4(recepcionFacturaDetalle.getImpuestoTarifa4());
+				recepcionFacturaDetalleNueva.setImpuestoMonto4(recepcionFacturaDetalle.getImpuestoMonto4());
+
+				recepcionFacturaDetalleNueva.setImpuestoCodigo5(recepcionFacturaDetalle.getImpuestoCodigo5());
+				recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa5(recepcionFacturaDetalle.getImpuestoCodigoTarifa5());
+				recepcionFacturaDetalleNueva.setImpuestoTarifa5(recepcionFacturaDetalle.getImpuestoTarifa5());
+				recepcionFacturaDetalleNueva.setImpuestoMonto5(recepcionFacturaDetalle.getImpuestoMonto5());
+
+				recepcionFacturaDetalleNueva.setImpuestoCodigo6(recepcionFacturaDetalle.getImpuestoCodigo6());
+				recepcionFacturaDetalleNueva.setImpuestoCodigoTarifa6(recepcionFacturaDetalle.getImpuestoCodigoTarifa6());
+				recepcionFacturaDetalleNueva.setImpuestoTarifa6(recepcionFacturaDetalle.getImpuestoTarifa6());
+				recepcionFacturaDetalleNueva.setImpuestoMonto6(recepcionFacturaDetalle.getImpuestoMonto6());
+
+				
 				recepcionFacturaDetalleNueva.setImpuestoExoneracionTipoDocumento(recepcionFacturaDetalle.getImpuestoExoneracionTipoDocumento());
 				recepcionFacturaDetalleNueva.setImpuestoExoneracionNumeroDocumento(recepcionFacturaDetalle.getImpuestoExoneracionNumeroDocumento());
 				recepcionFacturaDetalleNueva.setImpuestoExoneracionNombreInstitucion(recepcionFacturaDetalle.getImpuestoExoneracionNombreInstitucion());

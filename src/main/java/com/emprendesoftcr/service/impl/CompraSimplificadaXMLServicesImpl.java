@@ -70,6 +70,7 @@ public class CompraSimplificadaXMLServicesImpl implements CompraSimplificadaXMLS
 //				fecha = compraSimplificada.getCreated_at();
 //			}
 			String observacion = Constantes.EMPTY;
+			String datereferenciaEmision = FacturaElectronicaUtils.rfc3339(compraSimplificada.getFechaEmision());
 
 			String date = FacturaElectronicaUtils.rfc3339(compraSimplificada.getFechaEmision());
 			xml = "<FacturaElectronicaCompra xmlns=\"" + Constantes.DOCXMLS_COMPRA_SIMPLIFICADA_4_3 + "\" " + "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" 
@@ -112,6 +113,14 @@ public class CompraSimplificadaXMLServicesImpl implements CompraSimplificadaXMLS
 //								+ "<TotalOtrosCargos>" + FacturaElectronicaUtils.truncateDecimal(Constantes.ZEROS_DOUBLE, 5) + "</TotalOtrosCargos>" 
 								+ "<TotalComprobante>" + FacturaElectronicaUtils.truncateDecimal(compraSimplificada.getTotalComprobante(), 5) + "</TotalComprobante>" 
 						+ "</ResumenFactura>" +
+				     "<InformacionReferencia>" +
+	             "<TipoDoc>" + Utils.zeroPad(FacturaElectronicaUtils.procesarTexto(compraSimplificada.getReferenciaTipoDoc()),2) + "</TipoDoc>" +
+	             "<Numero>" + compraSimplificada.getReferenciaNumero() + "</Numero>" +
+	             "<FechaEmision>" + datereferenciaEmision + "</FechaEmision>" +
+	             "<Codigo>" + compraSimplificada.getReferenciaCodigo() + "</Codigo>" +
+	             "<Razon>" + FacturaElectronicaUtils.procesarTexto(compraSimplificada.getReferenciaRazon()) + "</Razon>" +
+	             "</InformacionReferencia>" +
+								
 					   "<Otros>" 
 						     + "<OtroTexto codigo=\"obs\">" + FacturaElectronicaUtils.procesarTexto(observacion) + "</OtroTexto>" 
 					       + Utils.oTroContenido() + "</Otros>" 

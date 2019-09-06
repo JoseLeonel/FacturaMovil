@@ -113,6 +113,70 @@ public class RecepcionFacturaDetalle implements Serializable {
 	@Column(name = "impuesto_monto1", precision = 18, scale = 5)
 	private Double impuestoMonto1;
 
+	@Column(name = "impuesto_codigo2", length = 2)
+	private String impuestoCodigo2;
+
+	@Column(name = "impuesto_codigo_tarifa2", length = 2)
+	private String impuestoCodigoTarifa2;
+
+	@Column(name = "impuesto_tarifa2", precision = 18, scale = 5)
+	private Double impuestoTarifa2;
+
+	@Column(name = "impuesto_monto2", precision = 18, scale = 5)
+	private Double impuestoMonto2;
+
+	@Column(name = "impuesto_codigo3", length = 2)
+	private String impuestoCodigo3;
+
+	@Column(name = "impuesto_codigo_tarifa3", length = 2)
+	private String impuestoCodigoTarifa3;
+
+	@Column(name = "impuesto_tarifa3", precision = 18, scale = 5)
+	private Double impuestoTarifa3;
+
+	@Column(name = "impuesto_monto3", precision = 18, scale = 5)
+	private Double impuestoMonto3;
+
+	@Column(name = "impuesto_codigo4", length = 2)
+	private String impuestoCodigo4;
+
+	@Column(name = "impuesto_codigo_tarifa4", length = 2)
+	private String impuestoCodigoTarifa4;
+
+	@Column(name = "impuesto_tarifa4", precision = 18, scale = 5)
+	private Double impuestoTarifa4;
+
+	@Column(name = "impuesto_monto4", precision = 18, scale = 5)
+	private Double impuestoMonto4;
+	
+	@Column(name = "impuesto_codigo5", length = 2)
+	private String impuestoCodigo5;
+
+	@Column(name = "impuesto_codigo_tarifa5", length = 2)
+	private String impuestoCodigoTarifa5;
+
+	@Column(name = "impuesto_tarifa5", precision = 18, scale = 5)
+	private Double impuestoTarifa5;
+
+	@Column(name = "impuesto_monto5", precision = 18, scale = 5)
+	private Double impuestoMonto5;
+
+	@Column(name = "impuesto_codigo6", length = 2)
+	private String impuestoCodigo6;
+
+	@Column(name = "impuesto_codigo_tarifa6", length = 2)
+	private String impuestoCodigoTarifa6;
+
+	@Column(name = "impuesto_tarifa6", precision = 18, scale = 5)
+	private Double impuestoTarifa6;
+
+	@Column(name = "impuesto_monto6", precision = 18, scale = 5)
+	private Double impuestoMonto6;
+
+	
+	
+	
+	
 	@ManyToOne
 	@JoinColumn(name = "recepcion_factura_id")
 	private RecepcionFactura recepcionFactura;
@@ -482,6 +546,246 @@ public class RecepcionFacturaDetalle implements Serializable {
 	
 	public void setImpuestoMonto1(Double impuestoMonto1) {
 		this.impuestoMonto1 = impuestoMonto1;
+	}
+
+
+	
+	public String getImpuestoCodigo2() {
+		return impuestoCodigo2;
+	}
+
+
+	
+	public void setImpuestoCodigo2(String impuestoCodigo2) {
+		this.impuestoCodigo2 = impuestoCodigo2;
+	}
+
+
+	
+	public String getImpuestoCodigoTarifa2() {
+		return impuestoCodigoTarifa2;
+	}
+
+
+	
+	public void setImpuestoCodigoTarifa2(String impuestoCodigoTarifa2) {
+		this.impuestoCodigoTarifa2 = impuestoCodigoTarifa2;
+	}
+
+
+	
+	public Double getImpuestoTarifa2() {
+		return impuestoTarifa2;
+	}
+
+
+	
+	public void setImpuestoTarifa2(Double impuestoTarifa2) {
+		this.impuestoTarifa2 = impuestoTarifa2;
+	}
+
+
+	
+	public Double getImpuestoMonto2() {
+		return impuestoMonto2;
+	}
+
+
+	
+	public void setImpuestoMonto2(Double impuestoMonto2) {
+		this.impuestoMonto2 = impuestoMonto2;
+	}
+
+
+	
+	public String getImpuestoCodigo3() {
+		return impuestoCodigo3;
+	}
+
+
+	
+	public void setImpuestoCodigo3(String impuestoCodigo3) {
+		this.impuestoCodigo3 = impuestoCodigo3;
+	}
+
+
+	
+	public String getImpuestoCodigoTarifa3() {
+		return impuestoCodigoTarifa3;
+	}
+
+
+	
+	public void setImpuestoCodigoTarifa3(String impuestoCodigoTarifa3) {
+		this.impuestoCodigoTarifa3 = impuestoCodigoTarifa3;
+	}
+
+
+	
+	public Double getImpuestoTarifa3() {
+		return impuestoTarifa3;
+	}
+
+
+	
+	public void setImpuestoTarifa3(Double impuestoTarifa3) {
+		this.impuestoTarifa3 = impuestoTarifa3;
+	}
+
+
+	
+	public Double getImpuestoMonto3() {
+		return impuestoMonto3;
+	}
+
+
+	
+	public void setImpuestoMonto3(Double impuestoMonto3) {
+		this.impuestoMonto3 = impuestoMonto3;
+	}
+
+
+	
+	public String getImpuestoCodigo4() {
+		return impuestoCodigo4;
+	}
+
+
+	
+	public void setImpuestoCodigo4(String impuestoCodigo4) {
+		this.impuestoCodigo4 = impuestoCodigo4;
+	}
+
+
+	
+	public String getImpuestoCodigoTarifa4() {
+		return impuestoCodigoTarifa4;
+	}
+
+
+	
+	public void setImpuestoCodigoTarifa4(String impuestoCodigoTarifa4) {
+		this.impuestoCodigoTarifa4 = impuestoCodigoTarifa4;
+	}
+
+
+	
+	public Double getImpuestoTarifa4() {
+		return impuestoTarifa4;
+	}
+
+
+	
+	public void setImpuestoTarifa4(Double impuestoTarifa4) {
+		this.impuestoTarifa4 = impuestoTarifa4;
+	}
+
+
+	
+	public Double getImpuestoMonto4() {
+		return impuestoMonto4;
+	}
+
+
+	
+	public void setImpuestoMonto4(Double impuestoMonto4) {
+		this.impuestoMonto4 = impuestoMonto4;
+	}
+
+
+	
+	public String getImpuestoCodigo5() {
+		return impuestoCodigo5;
+	}
+
+
+	
+	public void setImpuestoCodigo5(String impuestoCodigo5) {
+		this.impuestoCodigo5 = impuestoCodigo5;
+	}
+
+
+	
+	public String getImpuestoCodigoTarifa5() {
+		return impuestoCodigoTarifa5;
+	}
+
+
+	
+	public void setImpuestoCodigoTarifa5(String impuestoCodigoTarifa5) {
+		this.impuestoCodigoTarifa5 = impuestoCodigoTarifa5;
+	}
+
+
+	
+	public Double getImpuestoTarifa5() {
+		return impuestoTarifa5;
+	}
+
+
+	
+	public void setImpuestoTarifa5(Double impuestoTarifa5) {
+		this.impuestoTarifa5 = impuestoTarifa5;
+	}
+
+
+	
+	public Double getImpuestoMonto5() {
+		return impuestoMonto5;
+	}
+
+
+	
+	public void setImpuestoMonto5(Double impuestoMonto5) {
+		this.impuestoMonto5 = impuestoMonto5;
+	}
+
+
+	
+	public String getImpuestoCodigo6() {
+		return impuestoCodigo6;
+	}
+
+
+	
+	public void setImpuestoCodigo6(String impuestoCodigo6) {
+		this.impuestoCodigo6 = impuestoCodigo6;
+	}
+
+
+	
+	public String getImpuestoCodigoTarifa6() {
+		return impuestoCodigoTarifa6;
+	}
+
+
+	
+	public void setImpuestoCodigoTarifa6(String impuestoCodigoTarifa6) {
+		this.impuestoCodigoTarifa6 = impuestoCodigoTarifa6;
+	}
+
+
+	
+	public Double getImpuestoTarifa6() {
+		return impuestoTarifa6;
+	}
+
+
+	
+	public void setImpuestoTarifa6(Double impuestoTarifa6) {
+		this.impuestoTarifa6 = impuestoTarifa6;
+	}
+
+
+	
+	public Double getImpuestoMonto6() {
+		return impuestoMonto6;
+	}
+
+
+	
+	public void setImpuestoMonto6(Double impuestoMonto6) {
+		this.impuestoMonto6 = impuestoMonto6;
 	}
 
 	

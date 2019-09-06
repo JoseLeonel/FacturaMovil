@@ -260,18 +260,14 @@ a[x-apple-data-detectors=true] {
           <div style="font-size:12px;line-height:18px;color:#71777D;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><span style="color: rgb(0, 0, 0); font-size:14px; line-height:21px;">Sírvase encontrar adjunta el detalle de las facturas consultas para la empresa: $nombreEmpresa para las fechas de $fechaInicial a  $fechaFinal.</span>
 	  </div>
 	<br>  
-	<div style="font-size:16px;line-height:18px;color:#71777D;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
-	   	<span style="color: black; font-size:16px; line height:21px;">
+	<div style="margin: 2%;font-size:24px;line-height:18 px;color:black;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
+	   	<span style="color: black; font-size:24px; line height:21px;margin: 2%;">
 			Descuentos: $totalDescuentos
 		</span>
 	  </div>	
-	  <div style="font-size:16px;line-height:18px;color:#71777D;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
-	   	<span style="color: black; font-size:16px; line height:21px;">
-			IVA: $totalImpuestos
-		</span>
-	  </div>	
-	  <div style="font-size:16px;line-height:18px;color:#71777D;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
-	   	<span style="color: black; font-size:16px; line height:21px;">
+
+	  <div style="margin: 2%;font-size:24px;line-height:18px;color:black;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
+	   	<span style="margin: 2%;color: black; font-size:24px; line height:21px;">
 			Total: $total
 		</span>
 	  </div>	

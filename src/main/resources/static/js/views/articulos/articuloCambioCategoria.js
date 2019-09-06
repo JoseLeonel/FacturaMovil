@@ -198,7 +198,10 @@ var informacion_tabla = [ {'data' :'id'             ,"name":"id" ,"bSortable" : 
                                 },
                             },
                                {'data' :'contable'                ,"name":"contable"               ,"title" : "Contable"         ,"autoWidth" :false },
-                               {'data' : 'estado'                 ,"name":"estado"          ,"title" : "Estado"      ,"autoWidth" :false},
+                               {'data' : 'estado'                 ,"name":"estado"          ,"title" : "Estado"      ,"autoWidth" :false,
+                               "render":function(estado,type, row){
+                                 return estadosActivoInactivo(estado,row);//factura.js
+                                }},
                            ];
 /**
 check de cuentas por cobrar

@@ -12,12 +12,13 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @BaseNativeQuery(name = "facturasdia", 
-query = "Select clientes.cedula,clientes.nombre_completo,facturas.updated_at,facturas.created_at,facturas.estado,facturas.total_comprobante,facturas.total_impuesto,facturas.total_descuentos,facturas.sub_total," + 
+query = "Select empresas.print_cel,empresas.imprimir_direc,empresas.nofactura_elec,clientes.cedula,clientes.nombre_completo,facturas.updated_at,facturas.created_at,facturas.estado,facturas.total_comprobante,facturas.total_impuesto,facturas.total_descuentos,facturas.sub_total," + 
 		"facturas.nombre_factura,facturas.tipo_doc,facturas.plazo_credito,facturas.condicion_venta,facturas.fecha_emision,facturas.clave,facturas.consecutivo_proforma,facturas.numero_consecutivo," + 
 		"facturas.id,facturas.usuario_id," + 
 		"facturas.empresa_id" + 
 		" from facturas" 
 		+ " left join clientes on clientes.id = facturas.cliente_id " 
+		+ " left join empresas on empresas.id = facturas.empresa_id " 
 		+ " where facturas.empresa_id = :ID_EMPRESA and facturas.estado in :ESTADO and facturas.tipo_doc !='88'  and facturas.fecha_emision >= :FECHA and facturas.usuario_id = order by facturas.fecha_emision desc ")
 @Entity
 public class FacturasDelDiaNative  implements Serializable {
@@ -55,6 +56,8 @@ public class FacturasDelDiaNative  implements Serializable {
 
 	@Column(name = "tipo_doc")
 	private String	tipoDoc;
+	
+	
 
 	@Column(name = "nombre_factura")
 	private String	nombreFactura;
@@ -88,6 +91,14 @@ public class FacturasDelDiaNative  implements Serializable {
 
 	@Column(name = "cedula")
 	private String	cedula;
+	
+	@Column(name = "nofactura_elec")
+	private Integer						noFacturaElectronica;
+	@Column(name = "imprimir_direc")
+	private Integer						imprimirDirecto;
+	@Column(name = "print_cel")
+	private Integer						imprimirCelular;
+
 	
 	public Long getId() {
 		return id;
@@ -271,10 +282,47 @@ public class FacturasDelDiaNative  implements Serializable {
 	}
 
 
+	
+	public Integer getNoFacturaElectronica() {
+		return noFacturaElectronica;
+	}
+
+
+	
+	public void setNoFacturaElectronica(Integer noFacturaElectronica) {
+		this.noFacturaElectronica = noFacturaElectronica;
+	}
+
+
+	
+	public Integer getImprimirDirecto() {
+		return imprimirDirecto;
+	}
+
+
+	
+	public void setImprimirDirecto(Integer imprimirDirecto) {
+		this.imprimirDirecto = imprimirDirecto;
+	}
+
+
+	
+	public Integer getImprimirCelular() {
+		return imprimirCelular;
+	}
+
+
+	
+	public void setImprimirCelular(Integer imprimirCelular) {
+		this.imprimirCelular = imprimirCelular;
+	}
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((cedula == null) ? 0 : cedula.hashCode());
 		result = prime * result + ((clave == null) ? 0 : clave.hashCode());
 		result = prime * result + ((cliente == null) ? 0 : cliente.hashCode());
 		result = prime * result + ((condicionVenta == null) ? 0 : condicionVenta.hashCode());
@@ -283,6 +331,9 @@ public class FacturasDelDiaNative  implements Serializable {
 		result = prime * result + ((estado == null) ? 0 : estado.hashCode());
 		result = prime * result + ((fechaEmision == null) ? 0 : fechaEmision.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((imprimirCelular == null) ? 0 : imprimirCelular.hashCode());
+		result = prime * result + ((imprimirDirecto == null) ? 0 : imprimirDirecto.hashCode());
+		result = prime * result + ((noFacturaElectronica == null) ? 0 : noFacturaElectronica.hashCode());
 		result = prime * result + ((nombreFactura == null) ? 0 : nombreFactura.hashCode());
 		result = prime * result + ((numeroConsecutivo == null) ? 0 : numeroConsecutivo.hashCode());
 		result = prime * result + ((plazoCredito == null) ? 0 : plazoCredito.hashCode());
@@ -305,6 +356,11 @@ public class FacturasDelDiaNative  implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		FacturasDelDiaNative other = (FacturasDelDiaNative) obj;
+		if (cedula == null) {
+			if (other.cedula != null)
+				return false;
+		} else if (!cedula.equals(other.cedula))
+			return false;
 		if (clave == null) {
 			if (other.clave != null)
 				return false;
@@ -344,6 +400,21 @@ public class FacturasDelDiaNative  implements Serializable {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
+			return false;
+		if (imprimirCelular == null) {
+			if (other.imprimirCelular != null)
+				return false;
+		} else if (!imprimirCelular.equals(other.imprimirCelular))
+			return false;
+		if (imprimirDirecto == null) {
+			if (other.imprimirDirecto != null)
+				return false;
+		} else if (!imprimirDirecto.equals(other.imprimirDirecto))
+			return false;
+		if (noFacturaElectronica == null) {
+			if (other.noFacturaElectronica != null)
+				return false;
+		} else if (!noFacturaElectronica.equals(other.noFacturaElectronica))
 			return false;
 		if (nombreFactura == null) {
 			if (other.nombreFactura != null)
@@ -392,6 +463,13 @@ public class FacturasDelDiaNative  implements Serializable {
 			return false;
 		return true;
 	}
+
+
+	
+
+
+	
+
 
 
 	

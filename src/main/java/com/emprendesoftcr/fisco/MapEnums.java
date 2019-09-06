@@ -21,13 +21,13 @@ public class MapEnums {
    public static final Map<Integer, String> ENUM_ESTADO_HACIENTA = ImmutableMap.<Integer, String>builder()
   		.put(1, "Pendiente Firmar xml").
        put(2, "Firmado XML").
-       put(3, "Enviado").
+       put(3, "Enviada").
        put(4, "Enviado con Error").
        put(5, "Tope Envios").
-       put(6, "Aceptado").
-       put(7, "Rechazado").
+       put(6, "Aceptada").
+       put(7, "Rechazada").
        put(8, "Tope Aceptacion").
-       put(9, "Anulado").
+       put(9, "Anulada").
        put(10, "Con Error")
        .build();
 
@@ -62,10 +62,10 @@ public class MapEnums {
         "02", "ACEPTADA PARCIALMENTE",
         "03", "RECHAZADA");
     public static final Map<String, String> ENUM_ESTADO_FACTURA = ImmutableMap.of(
-    		"2", "FACTURADA",
-        "7", "RECHAZADA",
-        "5", "ANULADA",
-        "6", "ACEPTADA");
+    		"2", "Facturada",
+        "7", "Rechazada",
+        "5", "Anulada",
+        "6", "Aceptada");
     
     public static final Map<String, String> ENUM_CONDICION_VENTA = ImmutableMap.<String, String>builder().put("01", "Contado").
             put("02", "Crédito").

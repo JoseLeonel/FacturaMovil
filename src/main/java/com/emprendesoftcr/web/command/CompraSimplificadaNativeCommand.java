@@ -37,6 +37,8 @@ public class CompraSimplificadaNativeCommand {
 	private String	nombreUsuario;
 
 	private String	codigoActividad;
+	
+	private String								referenciaNumero;
 
 	public CompraSimplificadaNativeCommand() {
 		super();
@@ -61,6 +63,7 @@ public class CompraSimplificadaNativeCommand {
 		this.totalImpuestoSTR  = Utils.formateadorMiles(compraSimplificadaNative.getTotalImpuesto());
 		this.created_atSTR = Utils.getFechaGeneraHacienda(compraSimplificadaNative.getCreated_at());
 		this.fechaEmisionSTR = Utils.getFechaGeneraHacienda(compraSimplificadaNative.getFechaEmision());
+		this.referenciaNumero = compraSimplificadaNative.getReferenciaNumero();
 	}
 
 	public Long getId() {
@@ -209,6 +212,16 @@ public class CompraSimplificadaNativeCommand {
 	
 	public void setCreated_atSTR(String created_atSTR) {
 		this.created_atSTR = created_atSTR;
+	}
+
+	
+	public String getReferenciaNumero() {
+		return referenciaNumero;
+	}
+
+	
+	public void setReferenciaNumero(String referenciaNumero) {
+		this.referenciaNumero = referenciaNumero;
 	}
 
 	

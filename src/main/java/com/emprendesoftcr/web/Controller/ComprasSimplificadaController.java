@@ -143,6 +143,10 @@ public class ComprasSimplificadaController {
 		RespuestaServiceValidator respuestaServiceValidator = new RespuestaServiceValidator();
 		try {
 			compraSimplificadaCommand.setEstado(Constantes.FACTURA_ESTADO_FACTURADO);
+			compraSimplificadaCommand.setReferenciaNumero(compraSimplificadaCommand.getReferenciaNumero() == null?Constantes.EMPTY:compraSimplificadaCommand.getReferenciaNumero());
+			compraSimplificadaCommand.setReferenciaCodigo(compraSimplificadaCommand.getReferenciaCodigo() == null?Constantes.EMPTY:compraSimplificadaCommand.getReferenciaCodigo());
+			compraSimplificadaCommand.setReferenciaTipoDoc(compraSimplificadaCommand.getReferenciaTipoDoc() == null?Constantes.EMPTY:compraSimplificadaCommand.getReferenciaTipoDoc());
+			compraSimplificadaCommand.setReferenciaRazon(compraSimplificadaCommand.getReferenciaRazon() == null?Constantes.EMPTY:compraSimplificadaCommand.getReferenciaRazon());;
 			compraSimplificadaCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_COMPRA_SIMPLIFICADA);
 			compraSimplificadaCommand.setTotalBanco(compraSimplificadaCommand.getTotalBanco() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalBanco());
 			compraSimplificadaCommand.setTotalEfectivo(compraSimplificadaCommand.getTotalEfectivo() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalEfectivo());
@@ -160,6 +164,10 @@ public class ComprasSimplificadaController {
 			compraSimplificadaCommand.setTotalVentaNeta(compraSimplificadaCommand.getTotalVentaNeta() == null ? Constantes.ZEROS_DOUBLE : compraSimplificadaCommand.getTotalVentaNeta());
 			compraSimplificadaCommand.setTipoDoc(compraSimplificadaCommand.getTipoDoc() != null ? compraSimplificadaCommand.getTipoDoc() : Constantes.EMPTY);
 			compraSimplificadaCommand.setCodigoActividad(compraSimplificadaCommand.getProveedorSimplificado() != null ? compraSimplificadaCommand.getProveedorSimplificado().getCodigoActividad() : Constantes.EMPTY);
+
+			if (compraSimplificadaCommand.getReferenciaNumero().equals(Constantes.EMPTY)) {
+				return RespuestaServiceValidator.BUNDLE_MSG_SOURCE.ERROR("compraSimplificada.error.ref.numero", result.getAllErrors());
+			}
 
 			// Si esta en estado facturada en base de datos se retorna un mensaje que ya fue procesada
 			if (compraSimplificadaCommand != null) {
@@ -366,8 +374,8 @@ public class ComprasSimplificadaController {
 	private ByteArrayOutputStream createExcelFacturas(Collection<CompraSimplificadaNativeCommand> compraSimplificadaNative) {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		List<String> headers = Arrays.asList("Fecha Emision", "# Documento", "Clave", "Proveedor", "Total Descuento", "Total Impuesto", "Total");
-		new SimpleExporter().gridExport(headers, compraSimplificadaNative, "fechaEmisionSTR, numeroConsecutivo,clave, nombreProveedor,totalDescuentoSTR,totalImpuestoSTR, totalComprobanteSTR", baos);
+		List<String> headers = Arrays.asList("Fecha Emision", "# Documento", "Clave","#Factura Impresa", "Proveedor", "Total Descuento",  "Total");
+		new SimpleExporter().gridExport(headers, compraSimplificadaNative, "fechaEmisionSTR, numeroConsecutivo,clave,referenciaNumero, nombreProveedor,totalDescuentoSTR, totalComprobanteSTR", baos);
 		return baos;
 	}
 
@@ -428,8 +436,7 @@ public class ComprasSimplificadaController {
 			modelEmail.put("fechaFinal", fechaFin);
 			modelEmail.put("total", total != null ? total : Constantes.ZEROS);
 			modelEmail.put("totalDescuentos", totalDescuento == null ? Constantes.ZEROS : totalDescuento);
-			modelEmail.put("totalImpuestos", totalImpuesto != null ? totalImpuesto : Constantes.ZEROS);
-
+			
 			correosBo.enviarConAttach(attachments, listaCorreos, from, subject, Constantes.PLANTILLA_CORREO_RESUMEN_COMPRAS_SIMPPLIFICADA_RANGO_FECHA, modelEmail);
 			respuestaServiceValidator.setStatus(HttpStatus.OK.value());
 			respuestaServiceValidator.setMessage(Constantes.RESOURCE_BUNDLE.getString("hacienda.envio.correo.exitoso"));

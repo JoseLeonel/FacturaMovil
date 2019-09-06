@@ -32,4 +32,5 @@ public interface EmpresaBo {
 	
 	String generarConsecutivoCompraSimplificada(Empresa empresa, Usuario usuario) throws Exception;
 	String generarConsecutivoNotaCreditoInterno(Empresa empresa, Usuario usuario) throws Exception;
+	String spGenerarConsecutivoFactura(Empresa empresa, Usuario usuario, String tipoDoc) throws Exception;
 }

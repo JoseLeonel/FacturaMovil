@@ -528,6 +528,10 @@ public class CompraSimplificadaBoImpl implements CompraSimplificadaBo {
 			}
 
 			compraSimplificada.setVersionEsquemaXML(Constantes.ESQUEMA_XML_4_3);
+			compraSimplificada.setReferenciaCodigo(compraSimplificadaCommand.getReferenciaCodigo());
+			compraSimplificada.setReferenciaNumero(compraSimplificadaCommand.getReferenciaNumero());
+			compraSimplificada.setReferenciaRazon(compraSimplificadaCommand.getReferenciaRazon());
+			compraSimplificada.setReferenciaTipoDoc(compraSimplificadaCommand.getReferenciaTipoDoc());
 			compraSimplificada.setFechaEmision(null);
 			compraSimplificada.setUsuarioCreacion(usuario);
 			compraSimplificada.setEmpresa(usuario.getEmpresa());

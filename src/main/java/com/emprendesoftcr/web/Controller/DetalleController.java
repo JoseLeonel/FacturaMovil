@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
@@ -44,11 +43,9 @@ import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
-import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.Vendedor;
 import com.emprendesoftcr.web.command.DetalleFacturaCommand;
-import com.emprendesoftcr.web.command.FacturaEsperaCommand;
 import com.emprendesoftcr.web.command.TotalDetallesCommand;
 import com.emprendesoftcr.web.propertyEditor.ClientePropertyEditor;
 import com.emprendesoftcr.web.propertyEditor.EmpresaPropertyEditor;
@@ -65,14 +62,7 @@ import com.google.common.base.Function;
 @Controller
 public class DetalleController {
 
-	private static final Function<Object, FacturaEsperaCommand>		TO_COMMAND_Factura	= new Function<Object, FacturaEsperaCommand>() {
-
-																																											@Override
-																																											public FacturaEsperaCommand apply(Object f) {
-																																												return new FacturaEsperaCommand((Factura) f);
-																																											};
-																																										};
-
+	
 	private static final Function<Object, DetalleFacturaCommand>	TO_COMMAND_DETALLE	= new Function<Object, DetalleFacturaCommand>() {
 
 																																											@Override
@@ -144,8 +134,8 @@ public class DetalleController {
 		return detalleBo.totalVentasPorDetalle(usuario.getEmpresa(), fechaInicial, fechaFinal, tipoImpuesto,estado);
 
 	}
-////	@Autowired
-////	private CertificadoBo																							certificadoBo;
+//	@Autowired
+//	private CertificadoBo																							certificadoBo;
 //
 	@SuppressWarnings("all")
 	@RequestMapping(value = "/ListarDetlleByFacturaAjax.do", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -306,7 +296,7 @@ public class DetalleController {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		List<String> headers = Arrays.asList("Usuario", "Fecha Emision", "Codigo", "Descripcion", "Clave", "# Documento", "#Proforma", "Cedula", "Cliente", "Cantidad", "Precio Unitario", "Monto Total", "Descuento","IVA", "Tarifa", "%IVA", "Total IVA",  "Total", "Tipo Moneda", "Tipo Cambio");
-		new SimpleExporter().gridExport(headers, detalles, "factura.usuarioCreacion.nombreUsuario, factura.fechaEmisionSTR,codigo,descripcion,factura.clave, factura.numeroConsecutivo,factura.consecutivoProforma,factura.cliente.cedula, factura.nombreCliente, cantidadSTR, precioUnitarioSTR, montoTotalSTR, montoDescuentoSTR,tipoImpuestoSTR, codigoTarifaSTR,impuestoSTR, montoImpuestoSTR, montoTotalLinea,factura.codigoMoneda, factura.tipoCambio", baos);
+		new SimpleExporter().gridExport(headers, detalles, "factura.usuarioCreacion.nombreUsuario, factura.fechaEmisionSTR,codigo,descripcion,factura.clave, factura.numeroConsecutivo,factura.consecutivoProforma,factura.cliente.cedula, factura.nombreCliente, cantidadSTR, precioUnitarioSTR, montoTotal, montoDescuento,tipoImpuesto, codigoTarifaSTR,impuestoSTR, montoImpuesto, montoTotalLinea,factura.codigoMoneda, factura.tipoCambio", baos);
 		return baos;
 	}
 
@@ -328,10 +318,7 @@ public class DetalleController {
 			Date fechaInicio = new Date();
 			Date fechaFinal = new Date();
 			delimitador.addFiltro(new JqGridFilter("factura.estado", "'" + estado + "'", "="));
-			//delimitador.addFiltro(new JqGridFilter("factura.estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "!="));
-			//delimitador.addFiltro(new JqGridFilter("factura.estado", "'" + Constantes.FACTURA_ESTADO_PROFORMAS.toString() + "'", "!="));
-		//	delimitador.addFiltro(new JqGridFilter("factura.estado", "'" + Constantes.FACTURA_ESTADO_ANULADA.toString() + "'", "<>"));
-			delimitador.addFiltro(new JqGridFilter("factura.referenciaCodigo", "'" + Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO.toString() + "'", "<>"));
+					delimitador.addFiltro(new JqGridFilter("factura.referenciaCodigo", "'" + Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO.toString() + "'", "<>"));
 			delimitador.addFiltro(new JqGridFilter("factura.empresa.id", "'" + empresa.getId().toString() + "'", "="));
 			if (codigo != null) {
 				if (!codigo.equals(Constantes.EMPTY)) {
@@ -386,42 +373,7 @@ public class DetalleController {
 		}
 	}
 
-	private static class DelimitadorBuilder {
-
-		static DataTableDelimitador get(HttpServletRequest request, String inicio, String fin, Empresa empresa) {
-			// Consulta por fechas
-			DataTableDelimitador delimitador = new DataTableDelimitador(request, "Factura");
-			Date fechaInicio = new Date();
-			Date fechaFinal = new Date();
-
-			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PENDIENTE.toString() + "'", "<>"));
-			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_PROFORMAS.toString() + "'", "<>"));
-			delimitador.addFiltro(new JqGridFilter("estado", "'" + Constantes.FACTURA_ESTADO_ANULADA.toString() + "'", "<>"));
-			delimitador.addFiltro(new JqGridFilter("referenciaCodigo", "'" + Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO.toString() + "'", "<>"));
-			delimitador.addFiltro(new JqGridFilter("empresa.id", "'" + empresa.getId().toString() + "'", "="));
-			delimitador.addFiltro(new JqGridFilter("totalImpuestoServicio", "'" + Constantes.ZEROS_DOUBLE + "'", ">"));
-
-			if (!inicio.equals(Constantes.EMPTY) && !fin.equals(Constantes.EMPTY)) {
-				fechaInicio = Utils.parseDate(inicio);
-				fechaFinal = Utils.parseDate(fin);
-				if (fechaFinal == null) {
-					fechaFinal = new Date(System.currentTimeMillis());
-				}
-				if (fechaFinal != null && fechaFinal != null) {
-					fechaFinal = Utils.sumarDiasFecha(fechaFinal, 1);
-				}
-
-				DateFormat dateFormat = new SimpleDateFormat(Constantes.DATE_FORMAT7);
-
-				inicio = dateFormat.format(fechaInicio);
-				fin = dateFormat.format(fechaFinal);
-
-				delimitador.addFiltro(new JqGridFilter("fechaEmision", inicio, "date>="));
-				delimitador.addFiltro(new JqGridFilter("fechaEmision", fin, "dateFinal<="));
-			}
-			return delimitador;
-		}
-	}
+	
 
 	static class RESPONSES {
 

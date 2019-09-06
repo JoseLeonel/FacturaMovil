@@ -353,38 +353,17 @@ var informacion_tabla = [
 						    }
                         },
 						{'data' :'totalComprobanteSTR'        ,"name":"totalComprobante"    ,"title" : "Total"       ,"autoWidth" :true },
-						{'data' :'estadoSTR'               ,"name":"estadoSTR"           ,"title" : "Estado"      ,"autoWidth" :true },
+						{'data' :'estadoSTR'               ,"name":"estadoSTR"           ,"title" : "Estado"      ,"autoWidth" :true ,
+						"render":function(estadoSTR,type, row){
+						  return estados(estadoSTR,row); //factura.js
+						}},
                        
                         {'data' : 'id'                        ,"name":"id"                          ,"bSortable" : false, "bSearchable" : false, "autoWidth" : true,
                             "render":function(id,type, row){
                                 return __Opciones(id,type,row); 
                             }
    		            }];
-/**
-Tipo de documento
-**/
-function __TipoDocumentos(numeroConsecutivo,row){
-    switch(row.tipoDoc) {
-    case "04":
-          return  "Tiq:"+numeroConsecutivo
-        break;
-    case "01":
-        return  "Fact:"+numeroConsecutivo
-        break;
-    case "02":
-        return  "N.D:"+numeroConsecutivo
-        break;
-    case "03":
-		return  "N.C:"+numeroConsecutivo
-		break;
 
-	case "03":
-        return  "NC.Interna:"+numeroConsecutivo
-        break;
-    default:
-        return  numeroConsecutivo
-    }
-}
 /**
 * Opciones listado de los clientes
 */

@@ -33,7 +33,7 @@
             <input type="hidden" id='plazoCredito'            name='plazoCredito'            value="{factura.plazoCredito}" >
             <input type="hidden" id='fechaCredito'            name='fechaCredito'            value="{factura.fechaCredito}" >
             <input type="hidden" id='condicionVenta'          name='condicionVenta'          value="{factura.condicionVenta}" >
-            <input type="hidden" id='estado'                  name='estado'                  value="{factura.estado}" >
+            <input type="hidden" id='estado'                  name='estado'                  value="2" >
             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
             <input type="hidden" id='totalTransporte'         name='totalTransporte'         value="{factura.totalTransporte}" >
             <input type="hidden" id='subTotal'                name='subTotal'                value="{factura.subTotal}" >
