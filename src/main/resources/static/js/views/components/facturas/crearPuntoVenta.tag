@@ -1286,7 +1286,7 @@
        __ListaActividadesComercales()
        //__ListaArticulosUsoInterno()
        __ListaDeVendedores()
-  //     __agregarArticulos()
+       __agregarArticulos()
        _Empresa()
        __ComboTipoDocumentoExonerados()
        getTipoCambioDolar()
@@ -1373,10 +1373,6 @@ function teclamodal(e){
     if ($('#modalInventario').is(':visible')) {
         $('.precioventa').focus()
     } 
-    if(!$('#modalAgregarClienteNuevo').is(':visible')){
-        $('.totalEfectivo').select()
-        $('.totalEfectivo').focus()
-    }
     if($('#modalFacturasDia').is(':visible')){
         $('.codigo').select()
         $('.codigo').focus()
@@ -3224,8 +3220,7 @@ function __ListaDeArticulosPorDescripcion(){
                 loadListar(".tableListarArticulos",idioma_espanol,self.informacion_tabla_articulo,self.articulos.data)
                 agregarInputsCombos_Articulo()
                 ActivarEventoFiltro(".tableListarArticulos")
-                __agregarArticulos()
-                
+                 
             }
         },
         error: function (xhr, status) {
