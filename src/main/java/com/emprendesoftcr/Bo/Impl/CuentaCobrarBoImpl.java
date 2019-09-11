@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emprendesoftcr.Bo.CuentaCobrarBo;
 import com.emprendesoftcr.Dao.CuentaCobrarDao;
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Cliente;
 import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Empresa;
@@ -74,6 +75,12 @@ public class CuentaCobrarBoImpl implements CuentaCobrarBo {
 	public Collection<CuentaCobrar> cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado( Empresa empresa, Cliente cliente, String estado) {
 		return cuentaCobrarDao.cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(empresa, cliente, estado);
 
+	}
+
+	@Override
+	public Collection<CuentaCobrar> cuentasPorCobrarbyEstado(String estado) {
+		
+		return cuentaCobrarDao.cuentasPorCobrarbyEstado(Constantes.CUENTA_POR_COBRAR_ESTADO_PENDIENTE);
 	}
 
 }

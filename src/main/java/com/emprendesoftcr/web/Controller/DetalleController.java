@@ -296,7 +296,7 @@ public class DetalleController {
 		// Se prepara el excell
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		List<String> headers = Arrays.asList("Usuario", "Fecha Emision", "Codigo", "Descripcion", "Clave", "# Documento", "#Proforma", "Cedula", "Cliente", "Cantidad", "Precio Unitario", "Monto Total", "Descuento","IVA", "Tarifa", "%IVA", "Total IVA",  "Total", "Tipo Moneda", "Tipo Cambio");
-		new SimpleExporter().gridExport(headers, detalles, "factura.usuarioCreacion.nombreUsuario, factura.fechaEmisionSTR,codigo,descripcion,factura.clave, factura.numeroConsecutivo,factura.consecutivoProforma,factura.cliente.cedula, factura.nombreCliente, cantidadSTR, precioUnitarioSTR, montoTotal, montoDescuento,tipoImpuesto, codigoTarifaSTR,impuestoSTR, montoImpuesto, montoTotalLinea,factura.codigoMoneda, factura.tipoCambio", baos);
+		new SimpleExporter().gridExport(headers, detalles, "factura.usuarioCreacion.nombreUsuario, factura.fechaEmisionSTR,codigo,descripcion,factura.clave, factura.numeroConsecutivo,factura.consecutivoProforma,factura.cliente.cedula, factura.nombreCliente, cantidadSTR, precioUnitarioSTR, montoTotal, montoDescuento,tipoImpuesto, codigoTarifaSTR,impuesto, montoImpuesto, montoTotalLinea,factura.codigoMoneda, factura.tipoCambio", baos);
 		return baos;
 	}
 

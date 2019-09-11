@@ -192,6 +192,34 @@ public class FacturasController {
 																																																			facturaElectronica.setEmisorDireccion(d.getEmpresa().getOtraSenas());
 																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
 																																																			facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
+																																																			String correo = Constantes.EMPTY;
+																																																			if (d.getEmpresa().getCorreoPDF() != null) {
+																																																				if (!d.getEmpresa().getCorreoPDF().equals(Constantes.EMPTY)) {
+																																																					correo = d.getEmpresa().getCorreoPDF();
+																																																				}
+																																																			}
+																																																			if (d.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+																																																				if (d.getEmpresa().getCorreoCredito() != null) {
+																																																					if (!d.getEmpresa().getCorreoCredito().equals(Constantes.EMPTY)) {
+																																																						correo = d.getEmpresa().getCorreoCredito();
+																																																					}
+																																																				}
+																																																			}
+																																																			if (correo.equals(Constantes.EMPTY)) {
+																																																				facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
+																																																			} else {
+																																																				facturaElectronica.setEmisorCorreo(correo);
+																																																			}
+																																																			facturaElectronica.setCuenta1(d.getEmpresa().getCuenta1() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta1());
+																																																			facturaElectronica.setCuenta2(d.getEmpresa().getCuenta2() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta2());
+																																																			facturaElectronica.setCuenta3(d.getEmpresa().getCuenta3() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta3());
+																																																			facturaElectronica.setCuenta4(d.getEmpresa().getCuenta4() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta4());
+																																																			facturaElectronica.setCuenta5(d.getEmpresa().getCuenta5() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta5());
+																																																			facturaElectronica.setCuenta6(d.getEmpresa().getCuenta6() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta6());
+																																																			facturaElectronica.setCuenta7(d.getEmpresa().getCuenta7() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta7());
+																																																			facturaElectronica.setCuenta8(d.getEmpresa().getCuenta8() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta8());
+
+																																																			
 																																																			facturaElectronica.set_nota(d.getNota() == null ? Constantes.EMPTY : d.getNota());
 																																																			facturaElectronica.setClienteNombre(d.getCliente().getNombreCompleto());
 																																																			if (d.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_FRECUENTE)) {
@@ -1189,6 +1217,7 @@ public class FacturasController {
 				recepcionFactura.setFacturaTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
 //				result.rejectValue("facturaClave", "error.recepcionFactura.tipo.cambio.esta.ceros");
 			}
+	
 
 			List<RecepcionFacturaDetalle> detallesCompra = new ArrayList<RecepcionFacturaDetalle>();
 			JSONObject json = null;
@@ -1290,6 +1319,12 @@ public class FacturasController {
 					recepcionFactura.setFacturaTipoCambio(570d);
 				}
 			}
+			
+			if (recepcionFactura.getFacturaCodigoMoneda().equals(Constantes.CODIGO_MONEDA_COSTA_RICA)||recepcionFactura.getFacturaCodigoMoneda().equals(Constantes.EMPTY) ) {
+				recepcionFactura.setFacturaCodigoMoneda(Constantes.CODIGO_MONEDA_COSTA_RICA);
+				recepcionFactura.setFacturaTipoCambio(Constantes.CODIGO_MONEDA_COSTA_RICA_CAMBIO);
+				
+			}
 			recepcionFactura.setFacturaTotalDescuentos(recepcionFactura.getFacturaTotalDescuentos() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalDescuentos());
 			recepcionFactura.setFacturaTotalExento(recepcionFactura.getFacturaTotalExento() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalExento());
 			recepcionFactura.setFacturaTotalExonerado(recepcionFactura.getFacturaTotalExonerado() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalExonerado());
@@ -1304,6 +1339,8 @@ public class FacturasController {
 			recepcionFactura.setFacturaTotalServExonerado(recepcionFactura.getFacturaTotalServExonerado() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalServExonerado());
 			recepcionFactura.setFacturaTotalServGravados(recepcionFactura.getFacturaTotalServGravados() == null ? Constantes.ZEROS_DOUBLE : recepcionFactura.getFacturaTotalServGravados());
 
+			
+			
 			recepcionFactura.setTipoGasto(recepcionFactura.getTipoGasto() == null ? Constantes.TIPO_GASTO_ACEPTACION_COMPRAS_INVENTARIO : recepcionFactura.getTipoGasto());
 			recepcionFactura.setVersion_doc("4.3");
 

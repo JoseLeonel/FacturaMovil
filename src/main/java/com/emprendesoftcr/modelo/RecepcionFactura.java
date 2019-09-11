@@ -327,20 +327,20 @@ public class RecepcionFactura implements Serializable {
 		return Constantes.EMPTY;
 	}
 
-	public String getTotalImpuestosSTR() {
+	public Double getTotalImpuestosSTR() {
 		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.facturaTotalImpuestos != null ? Utils.formateadorMiles(this.facturaTotalImpuestos * -1) : Utils.formateadorMiles(this.facturaTotalImpuestos);
+			return this.facturaTotalImpuestos != null ? this.facturaTotalImpuestos * -1 : this.facturaTotalImpuestos;
 		} else {
-			return Utils.formateadorMiles(this.facturaTotalImpuestos);
+			return this.facturaTotalImpuestos;
 		}
 
 	}
 
-	public String getTotalFacturaSTR() {
+	public Double getTotalFacturaSTR() {
 		if (tipoDoc != null && tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			return this.facturaTotalComprobante != null ? Utils.formateadorMiles(this.facturaTotalComprobante * -1) : Utils.formateadorMiles(this.facturaTotalComprobante);
+			return this.facturaTotalComprobante != null ? this.facturaTotalComprobante * -1 : this.facturaTotalComprobante;
 		} else {
-			return Utils.formateadorMiles(this.facturaTotalComprobante);
+			return this.facturaTotalComprobante;
 		}
 	}
 

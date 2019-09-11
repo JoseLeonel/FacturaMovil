@@ -265,5 +265,22 @@ public class CuentaCobrarDaoImpl implements CuentaCobrarDao {
 		query.setParameter("empresa", empresa);
 		return query.getResultList();
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<CuentaCobrar> cuentasPorCobrarbyEstado( String estado) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select obj from CuentaCobrar obj");
+		hql.append(" where ");
+		if (estado != null) {
+			if (!estado.equals(Constantes.COMBO_TODOS)) {
+				hql.append(" obj.estado = :estado ");
+
+			}
+		}
+		Query query = entityManager.createQuery(hql.toString());
+		query.setParameter("estado", estado);
+		return query.getResultList();
+	}
 
 }

@@ -158,15 +158,44 @@ public class ReportePdfView {
 		izquierda_inferior_ultima.getDefaultCell().setCellEvent(new RoundRectangle());
 		String nota = Constantes.EMPTY;
 		if (tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_DEBITO) || tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
-			nota = fac_electro.getReferenciaRazon();
+			nota = fac_electro.get_nota() + " - " + fac_electro.getReferenciaRazon();
 		} else {
 			nota = fac_electro.get_nota();
 		}
+		
+//		String cuentas = Constantes.EMPTY;
+//		if (!tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+//
+//			if (!fac_electro.getCuenta1().equals(Constantes.EMPTY)) {
+//				cuentas = cuentas + fac_electro.getCuenta1();
+//			}
+//			if (!fac_electro.getCuenta2().equals(Constantes.EMPTY)) {
+//				cuentas = cuentas + fac_electro.getCuenta2();
+//			}
+//			if (!fac_electro.getCuenta3().equals(Constantes.EMPTY)) {
+//				cuentas = cuentas + fac_electro.getCuenta3();
+//			}
+//			if (!fac_electro.getCuenta4().equals(Constantes.EMPTY)) {
+//				cuentas = cuentas + fac_electro.getCuenta4();
+//			}
+//			if (!fac_electro.getCuenta5().equals(Constantes.EMPTY)) {
+//				cuentas = cuentas + fac_electro.getCuenta5();
+//
+//			}
+//			if (!fac_electro.getCuenta6().equals(Constantes.EMPTY)) {
+//				cuentas = cuentas + fac_electro.getCuenta6();
+//			}
+//			if (!fac_electro.getCuenta7().equals(Constantes.EMPTY)) {
+//				cuentas = cuentas + fac_electro.getCuenta7();
+//			}
+//			if (!fac_electro.getCuenta8().equals(Constantes.EMPTY)) {
+//				cuentas = cuentas + fac_electro.getCuenta8();
+//
+//			}
+//		}
 
-		izquierda_inferior_ultima.addCell(obtenerCeldaNormal("Nota: " + nota, font_cabezera_tabla, 1, true, Paragraph.ALIGN_LEFT, PdfPCell.NO_BORDER));
-
-		tabla_ultima.addCell(izquierda_inferior_ultima);
-
+		izquierda_inferior_ultima.addCell(obtenerCeldaNormal("Nota: " + nota , font_cabezera_tabla, 1, true, Paragraph.ALIGN_LEFT, PdfPCell.NO_BORDER));
+		tabla_ultima.addCell(izquierda_inferior_ultima); 
 		PdfPTable central_inferior_ultima = new PdfPTable(1);
 		central_inferior_ultima.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 		central_inferior_ultima.getDefaultCell().setCellEvent(new RoundRectangle());
@@ -270,8 +299,46 @@ public class ReportePdfView {
 		tabla_ultima.addCell(derecha_inferior_ultima);
 		document.add(tabla_ultima);
 		String text = "Emitida conforme lo establecido en la resolución de Facturación Electrónica, N° DGT-R-033-2019 del 20-06-2019 , a las " + fac_electro.getFechaEmision();
-
+		Integer contador = 1;
 		if (!tipoDoc.equals(Constantes.FACTURA_TIPO_DOC_PROFORMAS)) {
+
+			if (!fac_electro.getCuenta1().equals(Constantes.EMPTY)) {
+				document.add(new Paragraph(fac_electro.getCuenta1(), UtilsPdf.font_cabezera_tabla));
+				contador += 1;
+			}
+			if (!fac_electro.getCuenta2().equals(Constantes.EMPTY)) {
+				document.add(new Paragraph(fac_electro.getCuenta2(), UtilsPdf.font_cabezera_tabla));
+				contador += 1;
+			}
+			if (!fac_electro.getCuenta3().equals(Constantes.EMPTY)) {
+				document.add(new Paragraph(fac_electro.getCuenta3(), UtilsPdf.font_cabezera_tabla));
+				contador += 1;
+			}
+			if (!fac_electro.getCuenta4().equals(Constantes.EMPTY)) {
+				document.add(new Paragraph(fac_electro.getCuenta4(), UtilsPdf.font_cabezera_tabla));
+				contador += 1;
+			}
+			if (!fac_electro.getCuenta5().equals(Constantes.EMPTY)) {
+				document.add(new Paragraph(fac_electro.getCuenta5(), UtilsPdf.font_cabezera_tabla));
+				contador += 1;
+			}
+			if (!fac_electro.getCuenta6().equals(Constantes.EMPTY)) {
+				document.add(new Paragraph(fac_electro.getCuenta6(), UtilsPdf.font_cabezera_tabla));
+				contador += 1;
+			}
+			if (!fac_electro.getCuenta7().equals(Constantes.EMPTY)) {
+				document.add(new Paragraph(fac_electro.getCuenta7(), UtilsPdf.font_cabezera_tabla));
+				contador += 1;
+			}
+			if (!fac_electro.getCuenta8().equals(Constantes.EMPTY)) {
+				document.add(new Paragraph(fac_electro.getCuenta8(), UtilsPdf.font_cabezera_tabla));
+				contador += 1;
+			}
+			if (contador < 4) {
+				document.add(new Paragraph(" ", UtilsPdf.font_cabezera_tabla));
+				document.add(new Paragraph(" ", UtilsPdf.font_cabezera_tabla));
+
+			}
 			document.add(new Paragraph(text, UtilsPdf.font_cabezera_tabla));
 		}
 

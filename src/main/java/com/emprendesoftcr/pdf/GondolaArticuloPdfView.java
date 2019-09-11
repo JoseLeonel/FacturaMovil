@@ -3,6 +3,7 @@ package com.emprendesoftcr.pdf;
 
 import java.io.ByteArrayOutputStream;
 
+import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.modelo.Articulo;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -44,8 +45,13 @@ public class GondolaArticuloPdfView {
 		HeaderFooterGondola event = new HeaderFooterGondola(articulo);
 		writer.setPageEvent(event);
 		document.open();
-
-		document.add(new Paragraph("Cod:"+articulo.getCodigo().trim(),bigFont));
+    String codigo = Constantes.EMPTY;
+    if(articulo.getCodigo().length() >20) {
+    	codigo = articulo.getCodigo().substring(0, 19);
+    }else {
+    	codigo = articulo.getCodigo();
+    }
+		document.add(new Paragraph("Cod:"+codigo.trim(),bigFont));
 		document.close();
 
 		return stream;

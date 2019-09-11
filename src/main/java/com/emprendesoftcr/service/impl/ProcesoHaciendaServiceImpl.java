@@ -32,6 +32,7 @@ import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.CompraSimplificadaBo;
 import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.CorreosBo;
+import com.emprendesoftcr.Bo.CuentaCobrarBo;
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.EmpresaBo;
 import com.emprendesoftcr.Bo.FacturaBo;
@@ -51,6 +52,7 @@ import com.emprendesoftcr.fisco.ReceptorHacienda;
 import com.emprendesoftcr.fisco.RespuestaHaciendaXML;
 import com.emprendesoftcr.modelo.Attachment;
 import com.emprendesoftcr.modelo.CompraSimplificada;
+import com.emprendesoftcr.modelo.CuentaCobrar;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
@@ -136,7 +138,34 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 																																																			facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
 																																																			facturaElectronica.setEmisorDireccion(d.getEmpresa().getOtraSenas());
 																																																			facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
-																																																			facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
+																																																			String correo = Constantes.EMPTY;
+
+																																																			if (d.getEmpresa().getCorreoPDF() != null) {
+																																																				if (!d.getEmpresa().getCorreoPDF().equals(Constantes.EMPTY)) {
+																																																					correo = d.getEmpresa().getCorreoPDF();
+																																																				}
+																																																			}
+																																																			if (d.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+																																																				if (d.getEmpresa().getCorreoCredito() != null) {
+																																																					if (!d.getEmpresa().getCorreoCredito().equals(Constantes.EMPTY)) {
+																																																						correo = d.getEmpresa().getCorreoCredito();
+																																																					}
+																																																				}
+																																																			}
+																																																			if (correo.equals(Constantes.EMPTY)) {
+																																																				facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
+																																																			} else {
+																																																				facturaElectronica.setEmisorCorreo(correo);
+																																																			}
+																																																			facturaElectronica.setCuenta1(d.getEmpresa().getCuenta1() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta1());
+																																																			facturaElectronica.setCuenta2(d.getEmpresa().getCuenta2() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta2());
+																																																			facturaElectronica.setCuenta3(d.getEmpresa().getCuenta3() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta3());
+																																																			facturaElectronica.setCuenta4(d.getEmpresa().getCuenta4() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta4());
+																																																			facturaElectronica.setCuenta5(d.getEmpresa().getCuenta5() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta5());
+																																																			facturaElectronica.setCuenta6(d.getEmpresa().getCuenta6() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta6());
+																																																			facturaElectronica.setCuenta7(d.getEmpresa().getCuenta7() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta7());
+																																																			facturaElectronica.setCuenta8(d.getEmpresa().getCuenta8() == null ? Constantes.EMPTY : d.getEmpresa().getCuenta8());
+
 																																																			facturaElectronica.set_nota(d.getNota() == null ? Constantes.EMPTY : d.getNota());
 																																																			facturaElectronica.setClienteNombre(d.getCliente().getNombreCompleto());
 																																																			if (d.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_FRECUENTE)) {
@@ -239,6 +268,9 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	DetalleBo																													detalleBo;
 
 	@Autowired
+	CuentaCobrarBo																										cuentaCobrarBo;
+
+	@Autowired
 	ConsultasNativeBo																									consultasNativeBo;
 
 	@Autowired
@@ -298,6 +330,86 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	}
 
+	@Scheduled(cron = "0 0/50 05 * * ?")
+	@Override
+	public synchronized void taskCuentasPorCobrarVencidas() throws Exception {
+		try {
+			log.info("Inicio Proceso de cuentas por cobrar de empresas con criterio de dias  {}", new Date());
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Collection<CuentaCobrar> objetoCuentasPorCobrar = cuentaCobrarBo.cuentasPorCobrarbyEstado(Constantes.CUENTA_POR_COBRAR_ESTADO_PENDIENTE);
+			for (CuentaCobrar cuentaCobrar : objetoCuentasPorCobrar) {
+				DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT7);
+				Date fecha = new Date();
+				String inicio = dateFormat1.format(cuentaCobrar.getFechaPlazo());
+				String fin = dateFormat1.format(fecha);
+				Date fechaInicial = dateFormat.parse(inicio);
+				Date fechaFinal = dateFormat.parse(fin);
+				int dias = (int) ((fechaInicial.getTime() - fechaFinal.getTime()) / 86400000);
+				// dias = cuentaCobrar.getPlazoCredito() != null?cuentaCobrar.getPlazoCredito().intValue() - dias:0;
+				if (dias <= 0) {
+					if (!cuentaCobrar.getEmpresa().getCorreoCredito().equals(Constantes.EMPTY)) {
+						enviarCorreoCuentasPorCobrar(cuentaCobrar, dias);
+					}
+				}
+				log.info("Fin Proceso de cuentas por cobrar de la empresas con criterio de dias  {}", new Date());
+
+			}
+		} catch (Exception e) {
+			log.error("** Error2  Proceso cuentas por cobrar: " + e.getMessage() + " fecha " + new Date());
+			throw e;
+		}
+	}
+
+	private void enviarCorreoCuentasPorCobrar(CuentaCobrar cuentaCobrar, int dias) throws Exception {
+		try {
+
+			Map<String, Object> modelEmail = new HashMap<>();
+
+			modelEmail.put("nombreEmpresa", cuentaCobrar.getEmpresa().getNombreComercial().equals(Constantes.EMPTY) ? cuentaCobrar.getEmpresa().getNombre() : cuentaCobrar.getEmpresa().getNombreComercial());
+			modelEmail.put("correo", cuentaCobrar.getEmpresa().getCorreoElectronico());
+			modelEmail.put("telefono", cuentaCobrar.getEmpresa().getTelefono());
+			String from = cuentaCobrar.getEmpresa().getCorreoCredito();
+			if (cuentaCobrar.getEmpresa().getAbreviaturaEmpresa() != null) {
+				if (!cuentaCobrar.getEmpresa().getAbreviaturaEmpresa().equals(Constantes.EMPTY)) {
+					from = "Creditos_" +cuentaCobrar.getEmpresa().getAbreviaturaEmpresa() + "_" + "_No_Reply@emprendesoftcr.com";
+				}
+			}
+
+			ArrayList<String> listaCorreos = new ArrayList<String>();
+			Factura factura = facturaBo.findByConsecutivoAndEmpresa(cuentaCobrar.getFactura(), cuentaCobrar.getEmpresa());
+			String subject = "#Factura con el Credito vencido #: " + cuentaCobrar.getFactura().trim();
+			String plantillaEmail = "email/cuentasPorCobrarVendidas.vm";
+			modelEmail.put("totalSaldo", Utils.formateadorMiles(cuentaCobrar.getTotalSaldo()));
+			modelEmail.put("cliente", cuentaCobrar.getCliente().getNombreCompleto());
+			modelEmail.put("factura", cuentaCobrar.getFactura());
+			modelEmail.put("plazoDias", dias < 0 ? dias * -1 : dias);
+			modelEmail.put("fechaEmision", cuentaCobrar.getCreated_atSTR());
+			modelEmail.put("fechaPlazo", cuentaCobrar.getFechaPlazoSTR());
+			if (factura != null) {
+			
+				FacturaElectronica facturaElectronica = DOCUMENTO_TO_FACTURAELECTRONICA.apply(factura);
+				Collection<Detalle> detalles = detalleBo.findByFactura(factura);
+				List<DetalleFacturaElectronica> detallesFactura = detalles.stream().sorted(Comparator.comparingInt(Detalle::getNumeroLinea)).map(TO_DETALLE).collect(toList());
+				facturaElectronica.setDetalleFacturaElectronica(detallesFactura);
+				// ByteArrayOutputStream namePDF = App.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
+				ByteArrayOutputStream namePDF = ReportePdfView.main(factura.getNumeroConsecutivo(), factura.getTipoDoc(), facturaElectronica);
+				String clave = getConsecutivo(factura.getTipoDoc(), factura.getNumeroConsecutivo());
+				Collection<Attachment> attachments = createAttachments( PDF_Attach(clave, factura.getEmpresa().getCedula(), asPDF(namePDF), factura.getTipoDoc())) ;
+				if (cuentaCobrar.getEmpresa().getCorreoCredito() != null) {
+					if (!cuentaCobrar.getEmpresa().getCorreoCredito().equals(Constantes.EMPTY)) {
+						listaCorreos.add(cuentaCobrar.getEmpresa().getCorreoCredito());
+						correosBo.enviarConAttach(attachments, listaCorreos, from, subject, plantillaEmail, modelEmail);
+					}
+				}
+
+			}
+
+		} catch (Exception e) {
+			log.error("** Error  enviarCorreos: " + e.getMessage() + " fecha " + new Date() + " Empresa :" + cuentaCobrar.getEmpresa().getNombre() + " Consecutivo" + cuentaCobrar.getFactura());
+			throw e;
+		}
+	}
+
 	/**
 	 * Anulacion automatico de proformas mas o igual a 30 dias.
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskAnularProformas()
@@ -337,7 +449,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -493,19 +605,19 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// recepcion.setCallbackUrl(Constantes.URL_PRUEBAS_CALLBACK);
 
 				// San Ana
-				 //recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 				// Guanacaste
-				 recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+				recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 				// JacoDos
-				 //recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
 
 				// Jaco
-			//	recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 				// Inventario
-			//	 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				// Alajuela
 				// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
@@ -533,7 +645,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaComprobacionDocumentos()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/12 * * * ?")
 	@Override
 	public synchronized void taskHaciendaComprobacionDocumentos() throws Exception {
 		OpenIDConnectHacienda openIDConnectHacienda = null;
@@ -974,7 +1086,21 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 										listaCorreos.add(factura.getCliente().getCorreoElectronico3());
 									}
 								}
-								listaCorreos.add(factura.getEmpresa().getCorreoElectronico());
+								String correo = Constantes.EMPTY;
+
+								if (factura.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+									if (factura.getEmpresa().getCorreoCredito() != null) {
+										if (!factura.getEmpresa().getCorreoCredito().equals(Constantes.EMPTY)) {
+											correo = factura.getEmpresa().getCorreoCredito();
+										}
+									}
+								}
+								if (correo.equals(Constantes.EMPTY)) {
+									listaCorreos.add(factura.getEmpresa().getCorreoElectronico());
+								} else {
+									listaCorreos.add(correo);
+								}
+
 							} else {// Cuando un cliente quiere que le llegue un correo alternativo
 								haciendaBD.setNotificacion(Constantes.HACIENDA_NOTIFICAR_CLIENTE_FRECUENTE_NO_ENVIADO);
 								haciendaBo.modificar(haciendaBD);
@@ -1257,7 +1383,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 										// Crear XMl sin firma
 										comprobanteXML = tiqueteXMLService.getCrearXMLSinFirma(factura);
 
-										// firmar el documento
+										// firmar el documentoSELECT * FROM facturas WHERE facturas.estado_firma = 8
 										comprobanteXML = tiqueteXMLService.getFirmarXML(comprobanteXML, factura.getEmpresa(), factura.getFechaEmision());
 									} else if (factura.getTipoDoc().equals(Constantes.FACTURA_TIPO_DOC_FACTURA_NOTA_CREDITO)) {
 										if (factura.getVersionEsquemaXML().equals(Constantes.ESQUEMA_XML_4_2)) {

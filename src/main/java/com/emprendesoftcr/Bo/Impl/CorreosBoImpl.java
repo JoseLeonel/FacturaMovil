@@ -46,12 +46,14 @@ public class CorreosBoImpl implements CorreosBo {
 
 				message.setFrom(from);
 				message.setSubject(subjet);
+        if(attachments !=null) {
+  				for (Iterator<Attachment> iterator = attachments.iterator(); iterator.hasNext();) {
+  					Attachment attachment = iterator.next();
+  					message.addAttachment(attachment.getNombre(), attachment.getAttachment());
+  				}
 
-				for (Iterator<Attachment> iterator = attachments.iterator(); iterator.hasNext();) {
-					Attachment attachment = iterator.next();
-					message.addAttachment(attachment.getNombre(), attachment.getAttachment());
-				}
-
+        	
+        } 
 				String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, email, "UTF-8", model);
 				message.setText(text, true);
 			}

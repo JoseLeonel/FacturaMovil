@@ -86,22 +86,18 @@
     <br>
   	<!-- Listado  -->
     <div classs="contenedor-listar "  show={mostrarListado} >
-        <div class="row">
-            <div class="col-sx-12  col-lg-12  col-md-12 col-sm-12 " style="width:98.50%;">
                 <div class="box">
                     <div class="box-body">
                         <div class="planel-body" >
                            
                         
-                            <div class="row" >        
-                                <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12" >
+                            <div class="listaContainer" >        
                                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
                                        <thead>
                                             <tr>
                                                 <th class = "table-header" >Ingreso    </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.fecha.emision")}     </th>
                                                 <th class = "table-header" >{$.i18n.prop("emisor.cedula")}             </th>
-                                                <th class = "table-header" >{$.i18n.prop("factura.clave")}             </th>
                                                 <th class = "table-header" >Tipo Aceptacion         </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.totalImpuestos")}    </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.totalComprobante")}  </th>
@@ -115,7 +111,6 @@
                                                 <th>Ingreso</th>
                                                 <th>{$.i18n.prop("factura.fecha.emision")}</th>
                                                 <th>{$.i18n.prop("emisor.cedula")}</th>
-                                                <th>{$.i18n.prop("factura.clave")}</th>
                                                 <th>Tipo Aceptacion</th>
                                                 <th>{$.i18n.prop("factura.totalImpuestos")} </th>
                                                 <th>{$.i18n.prop("factura.totalComprobante")} </th>
@@ -125,20 +120,20 @@
                                             </tr>
                                         </tfoot>
                                     </table>
-                                </div>   
 
                             </div> 
   
                         </div>    
                     </div>
                 </div>
-            </div>
-            <div class="col-md-1 col-lg-1 "> </div>
-        </div>
+        
     </div>
     <!-- Fin del Listado -->
 
 <style type="text/css">
+    .listaContainer{
+        display:flex;
+    }
     .clickable {
         cursor: pointer;
     }
@@ -488,6 +483,10 @@
         margin-bottom: 5px;
         font-weight: 600;
     }
+    div.dataTables_wrapper {
+        width: 100%;
+        margin: 0 auto;
+    }
     
 </style>
 
@@ -654,6 +653,25 @@ function __InicializarTabla(nombreTabla){
     });    
 }
 
+function loadListar(table,idioma,formatoTabla,data){
+	$(table).DataTable().destroy();
+        $(table).DataTable({
+        destroy: true,
+        "language": idioma_espanol,
+        "sDom": 'lrtip',
+        "scrollCollapse": true,
+        "order": [0, 'desc'],
+        "bPaginate": true,
+        'responsive': true,
+        "bAutoWidth": true,
+        "lengthChange": true,
+       
+        "columns": formatoTabla,
+    });  
+    $(table).dataTable().fnClearTable();
+    $(table).dataTable().fnAddData(data);        
+}
+
 /**
 *  Suma de totales de cuenta por cobrar 
 **/
@@ -711,7 +729,6 @@ function __InformacionDataTable(){
 			},
 			
 			{'data' : 'cedulaEmisor'  ,"name":"cedulaEmisor"    ,"title" : $.i18n.prop("emisor.cedula")     , "autoWidth" : true},
-	        {'data' : 'clave'  ,"name":"clave"    ,"title" : $.i18n.prop("factura.clave")     , "autoWidth" : true},
     	    {'data' : 'mensaje'  ,"name":"mensaje"    ,"title" : "Tipo Aceptacion"     , "autoWidth" : true},
             {'data' :'totalImpuestos'       ,"name":"totalImpuestos"        ,"title" : $.i18n.prop("factura.totalImpuestos")     ,"autoWidth" :true,
                 "render":function(totalImpuestos,type, row){

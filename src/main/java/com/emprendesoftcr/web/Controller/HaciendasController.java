@@ -34,13 +34,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.emprendesoftcr.Bo.CompraSimplificadaBo;
+import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.DataTableBo;
 import com.emprendesoftcr.Bo.DetalleBo;
 import com.emprendesoftcr.Bo.FacturaBo;
 import com.emprendesoftcr.Bo.HaciendaBo;
 import com.emprendesoftcr.Bo.RecepcionFacturaBo;
-import com.emprendesoftcr.Bo.CompraSimplificadaBo;
-import com.emprendesoftcr.Bo.ConsultasNativeBo;
 import com.emprendesoftcr.Bo.UsuarioBo;
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.DataTableDelimitador;
@@ -56,7 +56,6 @@ import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
 import com.emprendesoftcr.modelo.Hacienda;
-import com.emprendesoftcr.modelo.RecepcionFactura;
 import com.emprendesoftcr.modelo.Usuario;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNative;
 import com.emprendesoftcr.modelo.sqlNativo.HaciendaNativeByEmpresaAndFechaAndCliente;
@@ -229,7 +228,33 @@ public class HaciendasController {
 																																																						facturaElectronica.setEmisorCedula(d.getEmpresa().getCedula());
 																																																						facturaElectronica.setEmisorDireccion(d.getEmpresa().getOtraSenas());
 																																																						facturaElectronica.setEmisorTelefono(d.getEmpresa().getCodigoPais() + "-" + d.getEmpresa().getTelefono().toString());
-																																																						facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
+																																																						String correo = Constantes.EMPTY;
+																																																						if (d.getEmpresa().getCorreoPDF() != null) {
+																																																							if (!d.getEmpresa().getCorreoPDF().equals(Constantes.EMPTY)) {
+																																																								correo = d.getEmpresa().getCorreoPDF();
+																																																							}
+																																																						}
+																																																						if (d.getCondicionVenta().equals(Constantes.FACTURA_CONDICION_VENTA_CREDITO)) {
+																																																							if (d.getEmpresa().getCorreoCredito() != null) {
+																																																								if (!d.getEmpresa().getCorreoCredito().equals(Constantes.EMPTY)) {
+																																																									correo = d.getEmpresa().getCorreoCredito();
+																																																								}
+																																																							}
+																																																						}
+																																																						if (correo.equals(Constantes.EMPTY)) {
+																																																							facturaElectronica.setEmisorCorreo(d.getEmpresa().getCorreoElectronico());
+																																																						} else {
+																																																							facturaElectronica.setEmisorCorreo(correo);
+																																																						}
+																																																						facturaElectronica.setCuenta1(d.getEmpresa().getCuenta1() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta1());
+																																																						facturaElectronica.setCuenta2(d.getEmpresa().getCuenta2() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta2());
+																																																						facturaElectronica.setCuenta3(d.getEmpresa().getCuenta3() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta3());
+																																																						facturaElectronica.setCuenta4(d.getEmpresa().getCuenta4() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta4());
+																																																						facturaElectronica.setCuenta5(d.getEmpresa().getCuenta5() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta5());
+																																																						facturaElectronica.setCuenta6(d.getEmpresa().getCuenta6() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta6());
+																																																						facturaElectronica.setCuenta7(d.getEmpresa().getCuenta7() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta7());
+																																																						facturaElectronica.setCuenta8(d.getEmpresa().getCuenta8() ==null?Constantes.EMPTY:d.getEmpresa().getCuenta8());
+
 																																																						facturaElectronica.set_nota(d.getNota() == null ? Constantes.EMPTY : d.getNota());
 																																																						facturaElectronica.setClienteNombre(d.getCliente().getNombreCompleto());
 																																																						if (d.getCliente().getNombreCompleto().equals(Constantes.NOMBRE_CLIENTE_FRECUENTE)) {

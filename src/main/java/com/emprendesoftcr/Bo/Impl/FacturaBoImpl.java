@@ -1024,6 +1024,7 @@ public class FacturaBoImpl implements FacturaBo {
 						if (facturaAnular.getEstado().equals(Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO)) {
 							facturaCommand.setTipoDoc(Constantes.FACTURA_TIPO_DOC_NOTA_CREDITO_INTERNO);
 						}
+						facturaCommand.setNota(Constantes.DOCUMENTO_ANULA_NOTA_CREDITO + facturaAnular.getNumeroConsecutivo().trim());
 						facturaAnular.setEstado(Constantes.FACTURA_ESTADO_ANULADA);
 						modificar(facturaAnular);
 						facturaCommand.setCliente(facturaAnular.getCliente());

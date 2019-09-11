@@ -1566,22 +1566,22 @@ function __Impuestos(){
         codigo: '01',
         descripcion:$.i18n.prop("tipo.impuesto.ventas")
      });
-      self.impuestos.push({
-        codigo: '02',
-        descripcion:$.i18n.prop("tipo.impuesto.consumo")
-     });
+  //    self.impuestos.push({
+  //      codigo: '02',
+  //      descripcion:$.i18n.prop("tipo.impuesto.consumo")
+  //   });
     self.impuestos.push({
         codigo: '07',
         descripcion:$.i18n.prop("tipo.impuesto.servicio")
      });
-     self.impuestos.push({
-        codigo: '06',
-        descripcion:$.i18n.prop("tipo.impuesto.tabaco")
-     });
-    self.impuestos.push({
-        codigo: '12',
-        descripcion:$.i18n.prop("tipo.impuesto.cemento")
-     });
+ //    self.impuestos.push({
+ //       codigo: '06',
+ //       descripcion:$.i18n.prop("tipo.impuesto.tabaco")
+ //    });
+ //   self.impuestos.push({
+//        codigo: '12',
+//        descripcion:$.i18n.prop("tipo.impuesto.cemento")
+//     });
     self.impuestos.push({
         codigo: '99',
         descripcion:$.i18n.prop("tipo.impuesto.otros")

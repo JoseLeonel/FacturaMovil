@@ -1,10 +1,6 @@
 package com.emprendesoftcr.pdf;
 
-import java.util.Date;
-
-import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.Articulo;
-import com.emprendesoftcr.pdf.UtilsPdf;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;

@@ -346,7 +346,7 @@
                             <br>
                             <div class="seleccionOtroPrecioVenta">
                                 <div class="opcionPrecioPublico">
-                                    <label class="titleListaPrecio">Lista Precios </label>  
+                                    <label class="titleListaPrecio">Lista de Precios </label>  
                                     <select  class="form-control selectListaPrecios" >
                                         <option    value="1"  >Precio Publico</option>
                                         <option    value="2"  >Precio Mayorista</option>
@@ -364,11 +364,21 @@
                                 </div>
                             </div>
                             <br>
-                            <div class="seleccionOtroPrecioVenta">
-                                <div class="opcionPrecioPublico">
-                                    <label class="tituloTipoCambio">Cambio ${tipoCambio.total} Banco Central </label>  
-                                </div>
-                            </div>
+                            <ul class="seleccionOtroPrecioVenta">
+                                <li class="opcionPrecioPublico">
+                                    <span class="ssCambioCentral">Tipo Cambio del Banco Central</span>
+                                    
+                                </li>
+                                <li class="opcionPrecioPublico">
+                                    <span class="ssCambio">Compra USD $ </span>
+                                    <label class="tituloTipoCambio">{tipoCambio.totalCompra} </label>  
+                                </li>
+                                <li class="opcionPrecioPublico">
+                                    <span class="ssCambio">Venta USD $ </span> 
+                                    <label class="tituloTipoCambio">{tipoCambio.total}  </label>  
+                                </li>
+
+                            </ul>
 
                         </article>
                     </aside>
@@ -697,8 +707,8 @@
     overflow: visible;
 }
 .campoLabel{
-    font-size: 20px;
-    font-weight: 900;
+    font-size: 18px;
+    font-weight: 600;
     text-align: center;
 }
 .teclashift {
@@ -711,10 +721,29 @@
 .teclaFuncion{
 
 }
+.opcionPrecioPublico{
+    display: flex;
+    flex-direction: column;
+}
 .tituloTipoCambio{
-    color: #1a7b4f;
-    font-size: 20px;
-    font-weight: 900;
+    color: #0c3f65 !important;
+    float: left !important;
+    font-size: 13px !important;
+    background-color: transparent !important;
+    font-weight: normal;
+    text-align: left;
+}
+.ssCambioCentral{
+    color: #0c3f65 !important;
+    display: block;
+    text-align: center;
+        font-weight: 900;
+
+}
+.ssCambio{
+    color: #0c3f65 !important;
+    display: block;
+    text-align: left;
 }
 @media (min-width: 992px){
 .modal-lg {
@@ -818,7 +847,7 @@
     }
     .elementoTotales{
         font-weight: 600 !important;
-        font-size: 25px !important;
+        font-size: 20px !important;
         font-family: Roboto,sans-serif !important;
         color: #30ed17 !important;
         text-shadow: 0px 0px 1px #ffffff;
@@ -865,7 +894,7 @@
         transition: background-color 100ms linear;
     }
     .titleListaPrecio{
-        color:blue;
+        color:#0c3f65;
        
     }
     .tituloDetalle{
@@ -1125,6 +1154,7 @@
     self.precioUltimo = ""
     self.tipoCambio = {
         total:0,
+        totalCompra:0,
         id:null
     }
     self.validarRolCommand = {
@@ -1443,6 +1473,7 @@ function getTipoCambioDolar(){
     }
     }).done(function (response) {
          self.tipoCambio.total = __valorNumerico(response.venta.valor)
+         self.tipoCambio.totalCompra = __valorNumerico(response.compra.valor)
          self.update()
     });
 }
@@ -2229,6 +2260,7 @@ __CambiarCantidad(e){
 function __TipoCambio(){
     self.tipoCambio = {
         total:0,
+        totalCompra:0,
         id:null
     }
     self.update()
@@ -2246,6 +2278,7 @@ function __TipoCambio(){
                 if (data.message != null && data.message.length > 0) {
                     $.each(data.listaObjetos, function( index, modeloTabla ) {
                        self.tipoCambio = modeloTabla
+                       self.tipoCambio.totalCompra = self.tipoCambio.total
                        self.update()
                     });
                 }
@@ -3892,7 +3925,7 @@ function _actualizarDesc(e){
     if(self.empresa.aplicaGanancia ==1){
         if(self.item.porcentajeGanancia < descuento ){
             swal('',"No se puede aplicar un descuento mayor a la ganancia",'error');
-            descuento  = self.item.porcentajeGanancia
+            descuento  = parseFloat(self.item.porcentajeGanancia)
         }
     } 
     var index     = self.detail.indexOf(self.item);

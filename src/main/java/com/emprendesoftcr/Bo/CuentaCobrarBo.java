@@ -23,6 +23,8 @@ public interface CuentaCobrarBo {
 	Collection<CuentaCobrar> cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(Date fechaInicio, Date fechaFin,Empresa empresa,Cliente cliente,String estado);	
 	
 	Collection<CuentaCobrar> cuentasPorCobrarbyFechasAndEmpresaAndClienteAndEstado(Empresa empresa,Cliente cliente,String estado);
+	
+	Collection<CuentaCobrar> cuentasPorCobrarbyEstado( String estado);
 
 
 }

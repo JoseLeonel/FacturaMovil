@@ -10,7 +10,7 @@ public class Constantes {
 	public static final Integer					ACTIVIDAD_COMERCIAL_NO_PRINCIPAL														= 0;
 	public static final Integer					ESQUEMA_XML_4_2																							= 1;
 	public static final Integer					ESQUEMA_XML_4_3																							= 2;
-
+	public static final String					DOCUMENTO_ANULA_NOTA_CREDITO  															= "Fact#:";
 	// unidad de medidas SP
 	public static final String					UNIDAD_MEDIDA_SERVICIO_SP																		= "Sp";
 	public static final String					UNIDAD_MEDIDA_SERVICIO_OS																		= "Os";

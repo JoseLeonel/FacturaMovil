@@ -83,6 +83,14 @@ public class FacturaElectronica {
 	private Double                           montoExoneracion;
 	private String                           numeroDocumentoExoneracion;
 	private String                           fechaExoneracion;
+	private String                           cuenta1;
+	private String                           cuenta2;
+	private String                           cuenta3;
+	private String                           cuenta4;
+	private String                           cuenta5;
+	private String                           cuenta6;
+	private String                           cuenta7;
+	private String                           cuenta8;
 	
 	private Empresa  empresa;
 
@@ -615,6 +623,86 @@ public class FacturaElectronica {
 	
 	public void setFechaExoneracion(String fechaExoneracion) {
 		this.fechaExoneracion = fechaExoneracion;
+	}
+
+	
+	public String getCuenta1() {
+		return cuenta1;
+	}
+
+	
+	public void setCuenta1(String cuenta1) {
+		this.cuenta1 = cuenta1;
+	}
+
+	
+	public String getCuenta2() {
+		return cuenta2;
+	}
+
+	
+	public void setCuenta2(String cuenta2) {
+		this.cuenta2 = cuenta2;
+	}
+
+	
+	public String getCuenta3() {
+		return cuenta3;
+	}
+
+	
+	public void setCuenta3(String cuenta3) {
+		this.cuenta3 = cuenta3;
+	}
+
+	
+	public String getCuenta4() {
+		return cuenta4;
+	}
+
+	
+	public void setCuenta4(String cuenta4) {
+		this.cuenta4 = cuenta4;
+	}
+
+	
+	public String getCuenta5() {
+		return cuenta5;
+	}
+
+	
+	public void setCuenta5(String cuenta5) {
+		this.cuenta5 = cuenta5;
+	}
+
+	
+	public String getCuenta6() {
+		return cuenta6;
+	}
+
+	
+	public void setCuenta6(String cuenta6) {
+		this.cuenta6 = cuenta6;
+	}
+
+	
+	public String getCuenta7() {
+		return cuenta7;
+	}
+
+	
+	public void setCuenta7(String cuenta7) {
+		this.cuenta7 = cuenta7;
+	}
+
+	
+	public String getCuenta8() {
+		return cuenta8;
+	}
+
+	
+	public void setCuenta8(String cuenta8) {
+		this.cuenta8 = cuenta8;
 	}
 
 	
