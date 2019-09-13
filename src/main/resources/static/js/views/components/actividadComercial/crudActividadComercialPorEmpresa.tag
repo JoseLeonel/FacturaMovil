@@ -248,7 +248,7 @@ function __listadoActividadComercial(){
             console.log(xhr);
              mensajeErrorServidor(xhr, status);
         }
-    })
+    }) 
 }
 
 function getActivas(actividades){
