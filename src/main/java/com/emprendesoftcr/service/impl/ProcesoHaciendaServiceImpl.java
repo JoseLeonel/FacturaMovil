@@ -330,7 +330,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 
 	}
 
-	@Scheduled(cron = "0 0/50 05 * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	@Override
 	public synchronized void taskCuentasPorCobrarVencidas() throws Exception {
 		try {
@@ -346,14 +346,15 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				Date fechaFinal = dateFormat.parse(fin);
 				int dias = (int) ((fechaInicial.getTime() - fechaFinal.getTime()) / 86400000);
 				// dias = cuentaCobrar.getPlazoCredito() != null?cuentaCobrar.getPlazoCredito().intValue() - dias:0;
-				if (dias <= 0) {
+				if (dias <= -64) {
 					if (!cuentaCobrar.getEmpresa().getCorreoCredito().equals(Constantes.EMPTY)) {
 						enviarCorreoCuentasPorCobrar(cuentaCobrar, dias);
 					}
 				}
-				log.info("Fin Proceso de cuentas por cobrar de la empresas con criterio de dias  {}", new Date());
+				
 
 			}
+			log.info("Fin Proceso de cuentas por cobrar de la empresas con criterio de dias  {}", new Date());
 		} catch (Exception e) {
 			log.error("** Error2  Proceso cuentas por cobrar: " + e.getMessage() + " fecha " + new Date());
 			throw e;
@@ -449,7 +450,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	/**
 	 * Proceso automatico para ejecutar el envio de los documentos de hacienda documentos xml ya firmados
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/10 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvio() throws Exception {
 
@@ -608,7 +609,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// recepcion.setCallbackUrl(Constantes.URL_SANTA_ANA_CALLBACK);
 
 				// Guanacaste
-				recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
+			//	recepcion.setCallbackUrl(Constantes.URL_GUANACASTE_CALLBACK);
 
 				// JacoDos
 				// recepcion.setCallbackUrl(Constantes.URL_JACODOS_CALLBACK);
@@ -617,7 +618,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 				// recepcion.setCallbackUrl(Constantes.URL_JACO_CALLBACK);
 
 				// Inventario
-				// recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
+				 recepcion.setCallbackUrl(Constantes.URL_INVENTARIO_CALLBACK);
 
 				// Alajuela
 				// recepcion.setCallbackUrl(Constantes.URL_ALAJUELA_CALLBACK);
@@ -1025,7 +1026,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Solo se van enviar correos a la empresa cuando es un cliente o correo alternativo los tiquetes de clientes frecuentes no lo vamos enviar para ver el comportamiento de rendimiento Enviar correos a los clientes que Tributacion acepto documento
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#taskHaciendaEnvioDeCorreos()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/8 * * * ?")
 	@Override
 	public synchronized void taskHaciendaEnvioDeCorreos() throws Exception {
 		try {
@@ -1356,7 +1357,7 @@ public class ProcesoHaciendaServiceImpl implements ProcesoHaciendaService {
 	 * Firmado de documentos
 	 * @see com.emprendesoftcr.service.ProcesoHaciendaService#procesoFirmado()
 	 */
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/12 * * * ?")
 	@Override
 	public synchronized void procesoFirmado() throws Exception {
 		try {

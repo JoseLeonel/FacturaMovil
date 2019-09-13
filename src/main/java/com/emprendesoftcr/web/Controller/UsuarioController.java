@@ -232,6 +232,7 @@ public class UsuarioController {
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Usuario");
 		delimitadores.addFiltro(new JqGridFilter("empresa.id", "'" + usuario.getEmpresa().getId().toString() + "'", "="));
+		delimitadores.addFiltro(new JqGridFilter("estado", "'" + Constantes.ESTADO_ACTIVO_PROVEEDOR_SIMPLIFICADO + "'", "="));
 		if (request.isUserInRole(Constantes.ROL_ADMINISTRADOR_CAJERO) || request.isUserInRole(Constantes.ROL_USUARIO_VENDEDOR)) {
 			delimitadores.addFiltro(new JqGridFilter("nombreUsuario", "'" + usuario.getNombreUsuario() + "'", "="));
 		}
