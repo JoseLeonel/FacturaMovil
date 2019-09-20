@@ -1,7 +1,7 @@
 <lista-facturas>
    
 
- <div class="box box-solid box-primary" show={mostrarDetalle}>
+ <div class="box box-solid box-primary" show={mostrarDetalleFactura}>
         <div class="box-body">
              <div class="box-header with-border">
                 <div class="row">
@@ -14,7 +14,7 @@
              </div>
             <div  class="contenedor-compra " >
                 <div class="cabecera-izquierda">
-                        <form id="formularioFactura">
+                        <form id="formularioFacturaFactura">
                             <div class="row">
                                 <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
                                     <div class="form-group ">
@@ -222,7 +222,7 @@
 	</div><!-- fin box -->
 
 <!-- Modal correo alternativo-->
-<div class="modal fade" id="ModalCorreoAlternativo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="ModalCorreoAlternativoFactura" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -231,11 +231,11 @@
           
       </div>
       <div class="modal-body">
-        <form id = "formulario" name ="formulario "   class="advanced-search-form">
+        <form id = "formularioFactura" name ="formularioFactura "   class="advanced-search-form">
             <div class="row">   
                 <div class= "col-md-12 col-sx-12 col-sm-12 col-lg-12">
                     <label class="knob-label" >{$.i18n.prop("hacienda.correo")}</label>
-                    <input type="email" class="form-control correoAlternativo" placeHolder ="{$.i18n.prop("hacienda.correo.ejemplo")}" id="correoAlternativo" name="correoAlternativo" value=""  >
+                    <input type="email" class="form-control correoAlternativoFactura" placeHolder ="{$.i18n.prop("hacienda.correo.ejemplo")}" id="correoAlternativoFactura" name="correoAlternativoFactura" value=""  >
                 </div>
             </div>
         </form>
@@ -607,20 +607,19 @@
     }
 </style>
 <script>
-self                       = this
-self.parametros            = opts.parametros;  
-self.detail                = []
-self.totalDescuentos       = 0
-self.totalImpuestos        = 0
-self.total                 = 0
-self.mostrarListado        = true
-self.mostrarDetalle        = false
+self                 = this
+self.parametros      = opts.parametros;  
+self.detail          = []
+self.totalDescuentos = 0
+self.totalImpuestos  = 0
+self.total           = 0
+self.mostrarListadoFactura  = true
+self.mostrarDetalleFactura  = false
 self.factura = {
     cliente:{
         nombreCompleto:"",
         correoElectronico:"",
         celular:"",
-
     },
     nombreFactura:"",
     nota:"",
@@ -633,8 +632,6 @@ self.factura = {
     tipoCambio:"",
     tipoCambioSTR:"",
     estado:""
-
-
 }
 self.on('mount',function(){
    //Enviar correo Alternativo
@@ -654,14 +651,13 @@ self.on('mount',function(){
        self.update()
        enviarCorreoAsociados();
     }
-    
 })
 /**
 * Mostrar Factura
 **/
 function __MostrarFactura(){
-    self.mostrarListado        = false
-    self.mostrarDetalle        = true
+    self.mostrarListadoFactura        = false
+    self.mostrarDetalleFactura        = true
     self.update()
      __FacturaEnEspera(self.factura)
 }
@@ -669,19 +665,18 @@ function __MostrarFactura(){
 * Enviar el correo alternativo
 **/
 function __correoAlternativo(){
-    $('.correoAlternativo').val(null)
-    $('#ModalCorreoAlternativo').modal({
+    $('.correoAlternativoFactura').val(null)
+    $('#ModalCorreoAlternativoFactura').modal({
         backdrop: 'static',
         keyboard: false
     })
-    $('#ModalCorreoAlternativo').modal('show')      
-
+    $('#ModalCorreoAlternativoFactura').modal('show')      
 }
 /**
 *  Regresar al listado
 **/
 __regresarAlListadoAlternativo(){
-    $('#ModalCorreoAlternativo').modal('hide')
+    $('#ModalCorreoAlternativoFactura').modal('hide')
 }
 /**
 * Camps requeridos
@@ -689,7 +684,7 @@ __regresarAlListadoAlternativo(){
 var reglasDeValidacionCorreo = function() {
 	var validationOptions = $.extend({}, formValidationDefaults, {
 		rules : {
-			correoAlternativo : {
+			correoAlternativoFactura : {
 				required : true,
                 email:true,
                 maxlength:240,
@@ -706,7 +701,7 @@ var reglasDeValidacionCorreo = function() {
 * Enviar el correo
 **/
 __Enviar(){
-     if ($("#formulario").valid()) {
+     if ($("#formularioFactura").valid()) {
          enviarCorreoAlternativo()
      }
 }
@@ -715,8 +710,8 @@ __Enviar(){
 **/
 __regresarAlListado(){
     self.detail                = []
-    self.mostrarListado        = true
-    self.mostrarDetalle        = false
+    self.mostrarListadoFactura        = true
+    self.mostrarDetalleFactura        = false
     self.update()
     __MostrarListado()
 
@@ -734,16 +729,12 @@ function __FacturaEnEspera(factura){
             if(data.aaData.length > 0){
                cargarDetallesFacturaEnEspera(data.aaData)
             }
-            
         },
         error: function (xhr, status) {
             mensajeErrorServidor(xhr, status);
-            
         }
     });
 }
-
-
 /**
 *Formato de la fecha con hora
 **/
@@ -797,7 +788,6 @@ function cargarDetallesFacturaEnEspera(data){
     self.update()
     __comboCondicionPago()
     __ComboEstados()
-    
 }
 /**
 * cargar los estados de la compra
@@ -850,7 +840,6 @@ function __TipoDocumentos(numeroConsecutivo,row){
     case "03":
         return  "N.Credito:"+numeroConsecutivo
         break;
-
     default:
         return  numeroConsecutivo
     }
@@ -859,10 +848,22 @@ function __TipoDocumentos(numeroConsecutivo,row){
 * Enviar correo
 **/
 function enviarCorreoAlternativo(){
+    var idFactura = 0;
+    var consecutivo = "";
+    if(typeof self.factura.id != 'undefined'){
+        if (self.factura.id){
+           idFactura = self.factura.id
+        }
+    }
+    if(typeof self.factura.consecutivo != 'undefined'){
+        if (self.factura.consecutivo.length > 0 ){
+           consecutivo = self.factura.consecutivo
+        }
+    }
     $.ajax({
         url: "EnviarCorreoAlternativoFacturaAjax.do",
         datatype: "json",
-        data: {idFactura:self.factura.id,correo:$('.correoAlternativo').val()},
+        data: {idFactura:idFactura,consecutivo:consecutivo,correo:$('.correoAlternativoFactura').val()},
         method:"GET",
         success: function (data) {
             if (data.status != 200) {
@@ -886,7 +887,7 @@ function enviarCorreoAsociados(){
     $.ajax({
         url: "EnviarCorreoClienteAsociadosFacturaAjax.do",
         datatype: "json",
-        data: {idFactura:self.factura.id,correo:$('.correoAlternativo').val()},
+        data: {idFactura:self.factura.id,consecutivo:self.factura.consecutivo,correo:$('.correoAlternativo').val()},
         method:"GET",
         success: function (data) {
             if (data.status != 200) {

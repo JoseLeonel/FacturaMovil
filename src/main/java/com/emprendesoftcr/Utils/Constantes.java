@@ -10,7 +10,7 @@ public class Constantes {
 	public static final Integer					ACTIVIDAD_COMERCIAL_NO_PRINCIPAL														= 0;
 	public static final Integer					ESQUEMA_XML_4_2																							= 1;
 	public static final Integer					ESQUEMA_XML_4_3																							= 2;
-	public static final String					DOCUMENTO_ANULA_NOTA_CREDITO  															= "Fact#:";
+	public static final String					DOCUMENTO_ANULA_NOTA_CREDITO																= "Fact#:";
 	// unidad de medidas SP
 	public static final String					UNIDAD_MEDIDA_SERVICIO_SP																		= "Sp";
 	public static final String					UNIDAD_MEDIDA_SERVICIO_OS																		= "Os";
@@ -187,6 +187,10 @@ public class Constantes {
 	// Cliente /VENDEDOR Frecuente de una empresa
 	public static final String					NOMBRE_CLIENTE_FRECUENTE																		= "CLIENTE_FRECUENTE";
 	public static final String					CEDULA_CLIENTE_FRECUENTE																		= "999999999999";
+	public static final String					NOMBRE_CLIENTE_CREDITO																			= "CLIENTE_CREDITO";
+	public static final String					CEDULA_CLIENTE_CREDITO																			= "888888888888";
+	public static final String					CEDULA_FERRETERIA_VINDAS																		= "888888888888";
+
 	public static final String					CORREO_CLIENTE_FRECUENTE																		= "CLIENTE_FRECUENTE@FRECUENTE.COM";
 	public static final String					NOMBRE_VENDEDOR_FRECUENTE																		= "VENDEDOR_FRECUENTE";
 	public static final String					CEDULA_VENDEDOR_FRECUENTE																		= "99999999999999";

@@ -100,6 +100,7 @@ public class HaciendasController {
 																																																						Double resultado = d.getMontoImpuesto() != null ? d.getMontoImpuesto() : Constantes.ZEROS_DOUBLE;
 																																																						resultado += d.getMontoImpuesto1() != null ? d.getMontoImpuesto1() : Constantes.ZEROS_DOUBLE;
 																																																						detalleFacturaElectronica.setImpuesto(resultado);
+																																																						detalleFacturaElectronica.setTipoImpuesto(d.getTipoImpuesto() == null?Constantes.EMPTY:d.getTipoImpuesto());
 																																																						detalleFacturaElectronica.setTotal(d.getMontoTotalLinea());
 																																																						detalleFacturaElectronica.setMontoExoneracion(d.getMontoExoneracion() != null ? d.getMontoExoneracion() : Constantes.ZEROS_DOUBLE);
 																																																						detalleFacturaElectronica.setTipoDocumentoExoneracion(d.getTipoDocumentoExoneracion() == null ? Constantes.EMPTY : d.getTipoDocumentoExoneracion());

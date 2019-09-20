@@ -40,7 +40,7 @@ public class App {
 		App app = new App();
 		String fontSansRegular = dir + "/data/fonts/OpenSans-Regular.ttf";
 		String fontSansBold = dir + "/data/fonts/OpenSans-Bold.ttf";
-		Document document = new Document(PageSize.TABLOID.rotate(), 10, 10, 10, 10);
+		Document document = new  Document(PageSize.A4);
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		PdfWriter writer = PdfWriter.getInstance(document, stream);
 

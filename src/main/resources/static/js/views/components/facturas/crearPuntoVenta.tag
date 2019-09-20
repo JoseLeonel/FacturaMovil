@@ -227,7 +227,7 @@
  <div class="ventaEsperaSeleccionada" show={factura.id !=null && mostrarFormularioPago == false}>
        <div class="tituloVentaEspera"> 
            Venta en Espera: {factura.consecutivoProforma != null && factura.consecutivoProforma.length > 0  ?factura.consecutivoProforma :factura.id} 
-            {factura.cliente.nombreCompleto === 'CLIENTE_FRECUENTE'? factura.nombreFactura.length > 0?"-Nombre:" +factura.nombreFactura:'Sin Cliente Asociado' :"-Nombre:"+factura.cliente.nombreCompleto} 
+            {factura.cliente.nombreCompleto === 'CLIENTE_FRECUENTE' || factura.cliente.nombreCompleto === 'CLIENTE_CREDITO'? factura.nombreFactura.length > 0?"-Nombre:" +factura.nombreFactura:'Sin Cliente Asociado' :"-Nombre:"+factura.cliente.nombreCompleto} 
         </div>
 </div>
  <div  class="contenedorFactura" show={mostarParaCrearNuevaFactura}>
@@ -4212,10 +4212,10 @@ function __seleccionarClientes() {
 * para que salga factura o proforma
 **/
 function verificarSiClienteFrecuente(){
-    if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE") != -1){
+    if(self.cliente.nombreCompleto.indexOf("CLIENTE_FRECUENTE") != -1 || self.cliente.nombreCompleto.indexOf("CLIENTE_CREDITO") != -1){
         return true
     }
-    if(self.cliente.cedula.indexOf("999999999999") != -1){
+    if(self.cliente.cedula.indexOf("999999999999") != -1 || self.cliente.cedula.indexOf("888888888888") != -1){
         return true
     }
     return false;

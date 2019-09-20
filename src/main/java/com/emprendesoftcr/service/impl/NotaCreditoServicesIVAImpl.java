@@ -290,8 +290,8 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
             getDescuento(detalle.getMontoDescuento())+
             "<SubTotal>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getSubTotal()) + "</SubTotal>" +
             xmlBaseImponible(detalle.getFactura().getId(),detalle.getBaseImponible())+  
-            xmlImpuestos(detalle.getFactura().getId(),detalle.getCodigoTarifa(),detalle.getTipoImpuesto(),detalle.getMontoImpuesto(),detalle.getImpuesto()) +
-            xmlImpuestos(detalle.getFactura().getId(),detalle.getCodigoTarifa1(),detalle.getTipoImpuesto1(),detalle.getMontoImpuesto1(),detalle.getImpuesto1()) +
+            xmlImpuestos(detalle.getFactura().getId(),detalle.getCodigoTarifa(),detalle.getTipoImpuesto(),detalle.getMontoImpuesto(),detalle.getImpuesto(),detalle) +
+            xmlImpuestos(detalle.getFactura().getId(),detalle.getCodigoTarifa1(),detalle.getTipoImpuesto1(),detalle.getMontoImpuesto1(),detalle.getImpuesto1(),detalle) +
             xmlImpuestosNeto(detalle.getFactura().getId() ,detalle.getMontoImpuesto() ==null?Constantes.ZEROS_DOUBLE:detalle.getMontoImpuesto(),detalle.getMontoImpuesto1() ==null?Constantes.ZEROS_DOUBLE:detalle.getMontoImpuesto(),detalle.getImpuestoNeto()) +
             "<MontoTotalLinea>" +  FacturaElectronicaUtils.getConvertirBigDecimal(detalle.getMontoTotalLinea()) + "</MontoTotalLinea>" +
             "</LineaDetalle>";
@@ -364,12 +364,13 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
 	}
   
   
-  private String xmlImpuestos(Long idFactura,String codigoTarifa,String tipoImpuesto,Double montoImpuesto,Double impuesto) throws Exception {
+  private String xmlImpuestos(Long idFactura,String codigoTarifa,String tipoImpuesto,Double montoImpuesto,Double impuesto, Detalle detalle) throws Exception {
   	String resultado = Constantes.EMPTY;
   	String nodoCodigoTarifa = Constantes.EMPTY;
   	String nodoTarifa = Constantes.EMPTY;
+  	tipoImpuesto = tipoImpuesto == null?Constantes.EMPTY:tipoImpuesto;
   	try {
-  		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE)) {
+  		if(montoImpuesto.equals(Constantes.ZEROS_DOUBLE) && tipoImpuesto.equals(Constantes.EMPTY)) {
   			return resultado;
   		}
   		if (codigoTarifa !=null) {
@@ -381,12 +382,13 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
   		}
   		nodoTarifa = "<Tarifa>" + FacturaElectronicaUtils.truncateDecimal(impuesto,2 ) + "</Tarifa>" ;
   		if(montoImpuesto != null && tipoImpuesto !=null) {
-	  		if(montoImpuesto > Constantes.ZEROS_DOUBLE) {
+  			if(montoImpuesto > Constantes.ZEROS_DOUBLE || !tipoImpuesto.equals(Constantes.EMPTY) ) {
 	        resultado = "<Impuesto>" +
 	            "<Codigo>" + Utils.zeroPad(FacturaElectronicaUtils.procesarTexto(tipoImpuesto), 2) + "</Codigo>" +
 	            nodoCodigoTarifa +
 	            nodoTarifa+
-	            "<Monto>" +  FacturaElectronicaUtils.truncateDecimal(montoImpuesto,2) + "</Monto>";
+	            "<Monto>" +  FacturaElectronicaUtils.truncateDecimal(montoImpuesto,2) + "</Monto>"
+	        +  xmlExoneracion(detalle.getTipoDocumentoExoneracion(),detalle.getFechaEmisionExoneracion(),detalle.getNumeroDocumentoExoneracion(),detalle.getNombreInstitucionExoneracion(),detalle.getPorcentajeExoneracion(),detalle.getMontoExoneracion());
 	        resultado += "</Impuesto>";
 	    	}
   		}
@@ -398,7 +400,24 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
     return resultado;
 }
  
-  
+  private String xmlExoneracion(String tipoDocumentoExoneracion,Date fechaEmisionExoneracion,String numeroDocumentoExoneracion,String nombreInstitucionExoneracion,Integer porcentajeExoneracion,Double montoExoneracion) {
+  	String resultado = Constantes.EMPTY;
+  	if(tipoDocumentoExoneracion == null) {
+  		return resultado;
+  	}else if(tipoDocumentoExoneracion.equals(Constantes.EMPTY)) {
+  		return resultado;
+  	}
+  	String date = FacturaElectronicaUtils.rfc3339( fechaEmisionExoneracion);
+  	 resultado = "<Exoneracion>" +
+				  "<TipoDocumento>" + FacturaElectronicaUtils.procesarTexto(Utils.zeroPad(tipoDocumentoExoneracion,2)) + "</TipoDocumento>" +
+	        "<NumeroDocumento>" + FacturaElectronicaUtils.procesarTexto(numeroDocumentoExoneracion) + "</NumeroDocumento>" +
+	        "<NombreInstitucion>" + FacturaElectronicaUtils.procesarTexto(nombreInstitucionExoneracion) + "</NombreInstitucion>" +
+	        "<FechaEmision>" + date+ "</FechaEmision>" +
+	        "<PorcentajeExoneracion>" + porcentajeExoneracion + "</PorcentajeExoneracion>" +
+	        "<MontoExoneracion>" + FacturaElectronicaUtils.truncateDecimal(montoExoneracion,5) + "</MontoExoneracion>" +
+	        "</Exoneracion>" ;
+  	return resultado;
+  }
   
  
 	/**
@@ -481,7 +500,7 @@ public class NotaCreditoServicesIVAImpl implements NotaCreditoXMLIVAServices {
   	String resultado = Constantes.EMPTY;
   	try {
       if (factura.getCliente() != null) {
-      	if(!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE)) {
+      	if(!factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_FRECUENTE) && !factura.getCliente().getCedula().equals(Constantes.CEDULA_CLIENTE_CREDITO)) {
       		String cedulaExtrangera = factura.getCliente().getIdentificacionExtranjero() !=null ?factura.getCliente().getIdentificacionExtranjero():Constantes.EMPTY;
        		
           if(cedulaExtrangera.equals(Constantes.EMPTY)) {

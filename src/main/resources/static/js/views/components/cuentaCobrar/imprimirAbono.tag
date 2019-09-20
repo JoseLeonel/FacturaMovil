@@ -1,5 +1,5 @@
 <imprimir-abono>
-<div class="modal fade imprimirModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade imprimirModalABono" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div  class= "wrap">
@@ -9,7 +9,7 @@
                 <a href="#" class="boton-imprimir"  onclick = {__Imprimir} ><i class="glyphicon glyphicon-print"></i>&nbsp;Imprimir(F8)</a>
                 <a href="#" class="boton-imprimir" id="boton-regresar" onclick = {__RegresarVentaImprimir}><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Regresar(Esc)</a>
             </div>
-            <section class="zona-impresion" id="imprimeme">
+            <section class="zona-impresion" id="imprimemeAbono">
                 <div class="forma-impresion">
                     <div class="ticket" > 
                         <div class="encabezado"><strong> {$.i18n.prop("imprimir.abono.titulo")}{abono.id}     </strong><br></div>
@@ -174,18 +174,37 @@
     
 
 </style>    
-
 <script>
-
 var self = this;
-self.abono   = opts.abono;  
+self.parametros   = opts.abono;  
+self.abono = {
+    id:null,
+    totalEfectivoSTR:0,
+    transferencia:'',
+    fechaPago:'',
+    totalTarjetaSTR:0,
+    totalBancoSTR:0,
+    updated_atSTR:0,
+    created_atSTR:0,
+    nota:'',
+    cuentaCobrar:{
+        id:null,
+        totalSTR:0,
+        totalSaldoSTR:0,
+        cliente:{
+            nombreCompleto:""
+        }
+
+    },
+}
 self.on('mount',function(){
+    //self.abono = self.parametros
+    self.update()
     if (typeof self.abono !== 'undefined'){
         if(self.abono.id > 0){
         consultaAbono()
         }
-
-    }
+   }
     __Teclas()
 })
 /**
@@ -213,7 +232,7 @@ function consultaAbono(){
                      
                         self.abono.fechaPago  = formatoFecha(self.abono.fechaPago)
                         self.update()
-                        $('.imprimirModal').modal('show'); 
+                        $('.imprimirModalABono').modal('show'); 
                     });
                 }
             }
@@ -233,7 +252,7 @@ function __Teclas(){
         var tecla = evento.keyCode; 
         if(tecla ==119){
             //Pantalla de imprimir F8 imprimir
-            var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
+            var objeto=document.getElementById('imprimemeAbono');  //obtenemos el objeto a imprimir
             var ventana=window.open('','_blank');  //abrimos una ventana vacía nueva
             ventana.document.write(objeto.innerHTML);  //imprimimos el HTML del objeto en la nueva ventana
             ventana.document.close();  //cerramos el documento
@@ -252,7 +271,7 @@ function displayDate_detail(fecha) {
 *Imprimir 
 **/    
 __Imprimir(){
-    var objeto=document.getElementById('imprimeme');  //obtenemos el objeto a imprimir
+    var objeto=document.getElementById('imprimemeAbono');  //obtenemos el objeto a imprimir
     var ventana=window.open('','_blank');  //abrimos una ventana vacía nueva
     ventana.document.write(objeto.innerHTML);  //imprimimos el HTML del objeto en la nueva ventana
     ventana.document.close();  //cerramos el documento

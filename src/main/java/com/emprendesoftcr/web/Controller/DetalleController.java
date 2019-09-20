@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.emprendesoftcr.Bo.CertificadoBo;
 import com.emprendesoftcr.Bo.ClienteBo;
 import com.emprendesoftcr.Bo.CorreosBo;
 import com.emprendesoftcr.Bo.DataTableBo;
@@ -110,7 +109,16 @@ public class DetalleController {
 		binder.registerCustomEditor(String.class, stringPropertyEditor);
 		binder.registerCustomEditor(Date.class, fechaPropertyEditor);
 	}
-
+	/**
+	 * Ganancia
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/ListaDetallesGanancia", method = RequestMethod.GET)
+	public String listaFacturaGanancia(ModelMap model) {
+		return "views/detalle/ListaGanancia";
+	}
+	
 	/**
 	 * Listado de facturas anuladas y facturadas
 	 * @param model
@@ -145,9 +153,9 @@ public class DetalleController {
 
 		Usuario usuario = usuarioBo.buscar(request.getUserPrincipal().getName());
 
-		// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
-		// criptografica desde linux
-//			 certificadoBo.agregar(usuario.getEmpresa(),"","");
+	// Se ejecuta este comando pero antes se ejecutan el comando para sacar la llave
+	// criptografica desde linux
+  // certificadoBo.agregar(usuario.getEmpresa(),"","");
 
 		DataTableDelimitador delimitadores = null;
 		delimitadores = new DataTableDelimitador(request, "Detalle");

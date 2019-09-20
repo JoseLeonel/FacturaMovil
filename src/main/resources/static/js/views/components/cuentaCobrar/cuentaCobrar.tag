@@ -154,8 +154,8 @@
             <div class="box box-solid box-primary">
                 <div class="box-header with-border">
                     <h1 class="box-title" show="{abono.id == null && abonoGlobal == false}" ><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.agregar")} {cuentaCobrar.id}  {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total}  {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo.toFixed(2)} </h1>
-                    <h1 class="box-title" show={abono.id != null abonoGlobal == false}><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.id")} {abono.id} {$.i18n.prop("abono.detalle.cuenta")} {cuentaCobrar.id} {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total.toFixed(2)} {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo.toFixed(2)}</h1>
-                    <h1 class="box-title" show={abonoGlobal == true}><i class="fa fa-calculator"></i>&nbsp  Total abonar:{cuentaCobrar.totalSaldo.toFixed(2)}</h1>
+                    <h1 class="box-title" show="{abono.id != null abonoGlobal == false}"><i class="fa fa-calculator"></i>&nbsp {$.i18n.prop("abono.detalle.id")} {abono.id} {$.i18n.prop("abono.detalle.cuenta")} {cuentaCobrar.id} {$.i18n.prop("cuentaCobrar.total")}:{cuentaCobrar.total.toFixed(2)} {$.i18n.prop("cuentaCobrar.totalSaldo")}:{cuentaCobrar.totalSaldo.toFixed(2)}</h1>
+                    <h1 class="box-title" show="{abonoGlobal == true}"><i class="fa fa-calculator"></i>&nbsp  Total abonar:{cuentaCobrar.totalSaldo.toFixed(2)}</h1>
                 </div>
                 <div class="box-body">
                     <form id = "formularioAbono" name ="formularioAbono " class="advanced-search-form">
@@ -167,7 +167,7 @@
                         <input type="hidden" name="idCuentaCobrar" id="idCuentaCobrar" value="{cuentaCobrar.id}">
                         <div class="row">
                             <div class="col-md-12 col-sx-12 col-sm-12 col-lg-12 left">
-                                <label class="campos-requeridos-label"  show={abono.id==0}>{$.i18n.prop("mensaje.campos.obligatorios")}</label>
+                                <label class="campos-requeridos-label"  show="{abono.id!=0}">{$.i18n.prop("mensaje.campos.obligatorios")}</label>
                                 
                             </div>
                             <div class="col-md-6  col-sm-6 col-lg-6"></div>
@@ -175,7 +175,7 @@
                         <div class="row">
                             <div class="col-md-6 col-sx-6 col-sm-6 col-lg-6">
                                 <label >{$.i18n.prop("cuentaCobrar.cliente")} </label>
-                                <input type="text" class="form-control" value="{cuentaCobrar.cliente.nombreCompleto}" readonly={cuentaCobrar.id > 0} >                        
+                                <input type="text" class="form-control" value="{cuentaCobrar.cliente.nombreCompleto}" readonly="{cuentaCobrar.id > 0}" >                        
                             </div>
                         </div>
                         <div class="row">
@@ -233,13 +233,13 @@
                     </form>    
                 </div>
                 <div class="box-footer">
-                    <button show = {abonoGlobal == false} onclick ={__regresarAlListadoAbono}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                    <button show = "{abonoGlobal == false}" onclick ={__regresarAlListadoAbono}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
                     {$.i18n.prop("btn.volver")}</buton>
-                    <button show = {abonoGlobal == true} onclick ={__RegresarListadoAbonoGlobal}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
+                    <button show = "{abonoGlobal == true}" onclick ={__RegresarListadoAbonoGlobal}  type="button" class="btn-dark-gray btn-back pull-left"  id= "btnCancelarEmpresa" name = "btnCancelarEmpresa">
                         {$.i18n.prop("btn.volver")}</buton>
-                    </button> <button show={botonAgregar ==true  && abonoGlobal == false } onclick={__agregarAbono}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
+                    </button> <button show="{botonAgregar ==true  && abonoGlobal == false }" onclick={__agregarAbono}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
                     
-                    </button> <button show = {abonoGlobal == true} onclick={__agregarAbonoGrupales}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
+                    </button> <button show = "{abonoGlobal == true}" onclick={__agregarAbonoGrupales}   class="btn-green btn-add pull-right" >&nbsp {$.i18n.prop("btn.agregar")}</button>
                   
                 </div>
             </div>   
@@ -681,17 +681,13 @@ var reglasDeValidacionAbono = function() {
 			},
             totalEfectivo: {
                 number:true,
-             
 			},            
             totalTarjeta: {
                 number:true,
-               
 			},            
             totalBanco: {
                 number:true,
-               
 			},            
-
             nota : {
                 maxlength:255,
                 minlength:1,
@@ -817,7 +813,6 @@ function __EnviarPorCorreo(){
 *  Busqueda de la informacion por rango de fechas
 **/
 __Busqueda(){
-  
 	$("#filtros").validate(reglasDeValidacion());
      if ($("#filtros").valid()) {
          listadoConsulta()
@@ -867,6 +862,9 @@ function listadoConsulta(){
                        __MantenimientoAgregarAbono()
                     }
                     __imprimirPTV()
+                    __BajarPDF()
+                    __CorreoAlternativoFactura()
+                    __EnviarCorreos()
                     TotalesGenerales(result.aaData)
                     self.hay_datos  = true
                     self.update()
@@ -1349,14 +1347,18 @@ function __Opciones(id,type,row){
     menu +=        '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> ';
     menu += '<li><a href="#"  title="Ver cuentas por cobrar" class="btnVer" >Mostrar</a></li>'
     menu += '<li><a href="#"  title="Ver/Crear abonos" class="btnVerAbono" >Abonos</a></li>'
+    menu += '<li><a href="#"  title="Imprimir Factura" class="btnPTVImprimirFactura" >Imprimir</a></li>'
+    menu += '<li><a href="#"  title="Bajar PDF" class="  btnPDF" >Bajar PDF</a></li>'
+    menu += '<li><a href="#"  title="Envio de correo Alternativo" class="  btnEnvioCorreoAlternativoFactura" >Correo Alternativo</a></li>'
+    menu += '<li><a href="#"  title="Envio del correo al cliente" class="  btnEnvioCorreoClienteFactura" >Correo al Cliente</a></li>'
     menu += "</ul></div>"  
      return menu;          
 }
 /**
-*  imprimir impresora punto de venta
+*  Enviar a correo alternativo de Los XMLS y PDF del cliente
 **/
-function __imprimirPTV(){
-	$('.tableListar').on('click','.btnImprimirFactura',function(e){
+function __CorreoAlternativoFactura(){
+	$('.tableListar').on('click','.btnEnvioCorreoAlternativoFactura',function(e){
 		var table = $('#tableListar').DataTable();
 		if(table.row(this).child.isShown()){
 			//cuando el datatable esta en modo responsive
@@ -1364,43 +1366,78 @@ function __imprimirPTV(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        consultaFactura(data.factura)
+        cargaMantenimiento(1,data);  
 	});
 }
 /**
-*Factura Consulta
+ * Envio del correo al emisor y receptor
+ */
+function __EnviarCorreos(){
+	$('.tableListar').on('click','.btnEnvioCorreoClienteFactura',function(e){
+		var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+        cargaMantenimiento(3,data)
+	});
+}
+/**
+ * LLamar al componente Riot 
+ * @returns
+ */
+function cargaMantenimiento(tipoEjec,data) {
+    var factura ={
+        id:null,
+        consecutivo: data.factura
+    }
+	riot.compile(function() {
+		var parametros = {
+			tipoEjecucion:tipoEjec,
+			factura:factura
+		};
+		 // here tags are compiled and riot.mount works synchronously
+		var tags = riot.mount('lista-facturas',{parametros:parametros});
+	});  
+}
+/**
+ * mostrar la abono
+ */
+function __BajarPDF(){
+	$('.tableListar').on('click','.btnPDF',function(e){
+		var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+        location.href = "generaFacturaPDF?consecutivo=" + data.factura
+	});
+}
+/**
+*  imprimir impresora punto de venta
 **/
-function consultaFactura(consecutivo){
-     self.factura = null
-     self.update()
-     $.ajax({
-        url: "MostrarFacturaPorConsecutivoAjax",
-        datatype: "json",
-        data: {consecutivo:consecutivo},
-        method:"POST",
-        success: function (data) {
-            if (data.status != 200) {
-                if (data.message != null && data.message.length > 0) {
-                    sweetAlert("", data.message, "error");
-                }
-            }else{
-                if (data.message != null && data.message.length > 0) {
-                    $.each(data.listaObjetos, function( index, modeloTabla ) {
-                        self.factura = modeloTabla
-                        self.update()
-                        if(self.factura !=null){
-           riot.mount('ptv-imprimir',{factura:self.factura});    
+function __imprimirPTV(){
+	$('.tableListar').on('click','.btnPTVImprimirFactura',function(e){
+		var table = $('#tableListar').DataTable();
+		if(table.row(this).child.isShown()){
+			//cuando el datatable esta en modo responsive
+	       var data = table.row(this).data();
+	    }else{	
+	       var data = table.row($(this).parents("tr")).data();
+	    }
+        var factura = {
+            consecutivo: data.factura
         }
-                    });
-                }
-            }
-        },
-        error: function (xhr, status) {
-            mensajeErrorServidor(xhr, status);
-            
+        var parametros = {
+            factura:factura,
+            facturaDia:1
         }
-    });
-     
+        riot.mount('ptv-imprimir',{parametros:parametros});
+	});
 }
 /**
 *  Mostrar listado de abonos
@@ -1499,7 +1536,6 @@ function __consultar(){
                     });
                 }
             }
-            
         },
         error: function (xhr, status) {
             mensajeErrorServidor(xhr, status);
@@ -1524,7 +1560,6 @@ function __ComboEstadosCuentaCobrar(){
         codigo: "Pendiente",
         descripcion:$.i18n.prop("cuentaCobrar.estado.pendiente")
      });
-  
     self.update();
 }
 /**
@@ -1562,14 +1597,11 @@ function listaAbonosPorCuentaPorCobrar(){
                 }
                 agregarInputsCombosAbonos();
                 ActivarEventoFiltro(".tableListaAbonos")
-
             }
             if(self.parametros ==1){
                __MantenimientoAgregarAbono()
                __Anular()
-               
             }
-            
             __verAbono()
             
             __imprimirAbono()
@@ -1605,7 +1637,9 @@ function __InformacionTabla_lista_Abonos(){
 							        }];
     self.update();
 }
-
+/**
+Opciones de menu
+**/
 function __OpcionesAbonos(id,type,row){
     var menu = '<div class="dropdown">' 
     menu += '       <button class="btn btn-info  btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' 
@@ -1637,11 +1671,13 @@ function __imprimirAbono(){
 	    }else{	
 	       var data = table.row($(this).parents("tr")).data();
 	    }
-        imprimirAbono(data)
+        imprimirAbonoPTV(data)
 	});
 }
-
-function imprimirAbono(data){
+/**
+Imprimir abonoPTV
+**/
+function imprimirAbonoPTV(data){
    riot.mount('imprimir-abono',{abono:data});  
 }
 /**
@@ -1772,7 +1808,6 @@ function agregarInputsCombosAbonos(){
         if ( $(this).index() != 8    ){
 	      	$(this).html( '<input id = "filtroCampos" type="text" class="form-control"  placeholder="'+title+'" />' );
 	    }
- 
     })
 }
 </script>    
