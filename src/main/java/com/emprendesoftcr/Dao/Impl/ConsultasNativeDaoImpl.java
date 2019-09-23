@@ -219,7 +219,14 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 
 		queryStr = queryStr.replaceAll(":fechaInicial", "'" + fechaInicial + "'");
 		queryStr = queryStr.replaceAll(":fechaFinal", "'" + fechaFinal + "'");
-		queryStr = queryStr.replaceAll("and facturas.act_comercial", " and facturas.act_comercial in ('" + actividadComercial + "') ");
+		
+		if (actividadComercial.equals(Constantes.COMBO_TODOS)) {
+			queryStr = queryStr.replaceAll("and facturas.act_comercial", "");
+				
+		}else {
+			queryStr = queryStr.replaceAll("and facturas.act_comercial", " and facturas.act_comercial in ('" + actividadComercial + "') ");
+		}
+		
 		if (idUsuario > Constantes.ZEROS) {
 			queryStr = queryStr.replaceAll("and facturas.usuario_id", "and facturas.usuario_id ='" + idUsuario.toString() + "' ");
 		} else {

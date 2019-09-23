@@ -56,14 +56,25 @@
                                     </select>
                                 </div>  
                             </div>
+                        </div>
+                        <div class="row">    
                              <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label>Estado </label>  
                                     <select  class="form-control selectEstado estado" id= "estado" name="estado" >
-                                         <option value="6">Aceptada</option>
-                                         <option value="2">Facturada</option>
-                                    	<option  value="7">Rechazadas</option>
-                                        <option  value="5">Anulada</option>                                    
+                                        <option value="6">{$.i18n.prop("estado.factura.aceptada")}</option>
+                                        <option value="2">{$.i18n.prop("estado.factura.facturada")}</option>
+                                    	<option  value="7">{$.i18n.prop("estado.factura.rechazada")}</option>
+                                        <option  value="5">{$.i18n.prop("estado.factura.anulada")}</option>                                    
+                                    </select>
+                                </div>  
+                            </div>     
+                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Actividad Economica </label>  
+                                    <select  onchange= {__AsignarActividad} class="form-control selectActividadEconocimica" id= "actividadEconomica" name="actividadEconomica" >
+										 <option    value="0"  >{$.i18n.prop("todos.select")}</option>
+										<option  each={empresaActividadComercial}  value="{codigo}"   >{descripcion}</option>
                                     </select>
                                 </div>  
                             </div>            
@@ -489,17 +500,64 @@ self.on('mount',function(){
             todayHighlight:true,
         }
         );
+        __ListaActividadesComercales()
       window.addEventListener( "keydown", function(evento){
                 $(".errorServerSideJgrid").remove();
             }, false );
    
 })
 
+__AsignarActividad(e){
+    BuscarActividadComercial()
+}
+
+function BuscarActividadComercial(){
+    var codigo =$('.selectActividadEconocimica').val()
+    if(self.empresaActividadComercial == null){
+       return    
+    }
+    if(self.empresaActividadComercial.length == 0){
+       return    
+    }
+    $.each(self.empresaActividadComercial, function( index, modeloTabla ) {
+        if(modeloTabla.codigo == codigo  ){
+            self.actividadEconomica = codigo
+            self.update()
+        }
+
+    })
+}
+/**
+*  Lista de los clientes
+**/
+function __ListaActividadesComercales(){
+    $.ajax({
+        url: 'ListaEmpresaActividadComercialPorPricipalAjax.do',
+        datatype: "json",
+         method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                self.empresaActividadComercial   = result.aaData
+                self.update()
+				BuscarActividadComercial()
+ 
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+    return
+}
+/**
+*descargar el excel
+**/
 __DescargarExcel(){
     if(_validarDiasAConsultar()){
         return true
     }
-    var url = "DescargarDetallexCodigoAjax.do?fechaInicialParam="+  $('#fechaInicial').val()+ "&fechaFinalParam=" + $('#fechaFinal').val()+"&tipoImpuesto=" + $('#tipoImpuesto').val()+"&estado="+$(".estado").val()
+    var url = "DescargarDetallexCodigoAjax.do?fechaInicialParam="+  $('#fechaInicial').val()+ "&fechaFinalParam=" + $('#fechaFinal').val()+"&tipoImpuesto=" + $('#tipoImpuesto').val()+"&estado="+$(".estado").val()+"&actividadEconomica="+$('.selectActividadEconocimica').val()
     location.href = url;
 }
 
@@ -563,6 +621,7 @@ __Busqueda(){
         	fechaFin:$('#fechaFinal').val(),
             tipoImpuesto:$('#tipoImpuesto').val(),
             estado:$('#estado').val(),
+            actividadEconomica:$('.selectActividadEconocimica').val()
         };
        if(_validarDiasAConsultar()){
            return true;

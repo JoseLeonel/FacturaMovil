@@ -21,16 +21,23 @@
 				<div class="box-body" >
                     <form id="formulario" name="formulario" class="advanced-search-form">
                         <div class="row">
-                             <div class= "col-md-6 col-sx-12 col-sm-6 col-lg-6">
+                             <div class= "col-md-4 col-sx-12 col-sm-4 col-lg-4">
                                 <label> {$.i18n.prop("archivo.factura")}  <span class="requeridoDato">*</span></label>
 					     		<input type="file" id="fileUpload" class="form-control fileUpload"/>
                             </div>
-							<div class="col-md-6 col-sx-12 col-sm-6 col-lg-6" show={mostrarFormulario ==true}>
+						
+                            <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                                <label> Tipo Gasto  <span class="requeridoDato">*</span></label>
+                                <select class="form-control tipoGasto" id="tipoGasto" name="tipoGasto" >
+                                    <option value="1">{$.i18n.prop("tipo.gasto.aceptacion.compra.inventario")}</option>
+                                    <option value="2">{$.i18n.prop("tipo.gasto.aceptacion.compra.gasto")}</option>  
+                                </select>
+                            </div>                            
+        	                <div class="col-md-4 col-sx-12 col-sm-4 col-lg-4" show={mostrarFormulario ==true}>
 								<button onclick={__crearFactura}   type="button" class="btn-green btn-add pull-left" id="btnAceptar" name ="btnAceptar">
 									{$.i18n.prop("btn.aceptar")}
 								</button>
 							</div>
-
                         </div>
 						<br>
 						<div class="row">
@@ -1403,7 +1410,7 @@ function BuscarActividadComercial(){
 			$(".errorServerSideJgrid").remove();
 			self.recepcionFactura.mensaje = $("#mensaje").val();
 			self.recepcionFactura.detalleMensaje = $("#detalleMensaje").val();
-			self.recepcionFactura.tipoGasto = 1
+			self.recepcionFactura.tipoGasto = $("#tipoGasto").val()
 			self.recepcionFactura.condicionImpuesto = $("#condicionImpuesto").val()
 			self.recepcionFactura.codigoActividad = $("#codigoActividad").val()
 		          

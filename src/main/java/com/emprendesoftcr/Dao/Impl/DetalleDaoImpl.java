@@ -16,7 +16,6 @@ import org.springframework.stereotype.Repository;
 
 import com.emprendesoftcr.Dao.DetalleDao;
 import com.emprendesoftcr.Utils.Constantes;
-import com.emprendesoftcr.modelo.Articulo;
 import com.emprendesoftcr.modelo.Detalle;
 import com.emprendesoftcr.modelo.Empresa;
 import com.emprendesoftcr.modelo.Factura;
@@ -86,7 +85,7 @@ public class DetalleDaoImpl implements DetalleDao {
 		return query.getResultList();
 	}
 	
-	public Collection<Detalle> facturasRango(Integer estado, Date fechaInicio, Date fechaFin,Empresa empresa,String tipoImpuesto){
+	public Collection<Detalle> facturasRango(Integer estado, Date fechaInicio, Date fechaFin,Empresa empresa,String tipoImpuesto,String actividadEconomica){
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from Detalle obj");
 		hql.append(" where obj.factura.estado = :estado ");
@@ -96,11 +95,17 @@ public class DetalleDaoImpl implements DetalleDao {
 		if(!tipoImpuesto.equals(Constantes.COMBO_TODOS)) {
 			hql.append("and obj.tipoImpuesto = :tipoImpuesto");
 		}
+		if(!actividadEconomica.equals(Constantes.COMBO_TODOS)) {
+			hql.append("and obj.factura.codigoActividad = :codigoActividad");
+		}
 		hql.append(" order by obj.tipoImpuesto,obj.codigoTarifa ");
 		Query query = entityManager.createQuery(hql.toString());
 		query.setParameter("estado", estado);
 		if(!tipoImpuesto.equals(Constantes.COMBO_TODOS)) {
 			query.setParameter("tipoImpuesto", tipoImpuesto);
+		}
+		if(!actividadEconomica.equals(Constantes.COMBO_TODOS)) {
+			query.setParameter("codigoActividad", actividadEconomica);
 		}
 
 		query.setParameter("referenciaCodigo", Constantes.FACTURA_CODIGO_REFERENCIA_ANULA_DOCUMENTO);
@@ -125,7 +130,7 @@ public class DetalleDaoImpl implements DetalleDao {
 	}
 
 	@Override
-	public TotalDetallesCommand totalVentasPorDetalle(Empresa empresa, Date fechaInicio, Date FechaFinal, String tipoImpuesto,Integer estado) {
+	public TotalDetallesCommand totalVentasPorDetalle(Empresa empresa, Date fechaInicio, Date FechaFinal, String tipoImpuesto,Integer estado,String actividadEconomica) {
 		StoredProcedureQuery storedProcedure =null;
 		if(tipoImpuesto.equals(Constantes.COMBO_TODOS)){
 			storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_VENTASXDETALLE_TIPO_IMPUESTO);	
@@ -142,6 +147,8 @@ public class DetalleDaoImpl implements DetalleDao {
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_IN_FECHA_FINAL, Date.class, ParameterMode.IN);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_IN_ID_EMPRESA, Integer.class, ParameterMode.IN);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_IN_ESTADO, Integer.class, ParameterMode.IN);
+		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_IN_ACTIVIDAD_ECONOMICA, String.class, ParameterMode.IN);
+		
 		if(!tipoImpuesto.equals(Constantes.COMBO_TODOS)&& !tipoImpuesto.equals(Constantes.EMPTY)) {
 			storedProcedure.registerStoredProcedureParameter(Constantes.SP_VENTASXDETALLE_IN_TIPO_IMPUESTO, String.class, ParameterMode.IN);	
 		}
@@ -161,6 +168,7 @@ public class DetalleDaoImpl implements DetalleDao {
 		storedProcedure.setParameter(Constantes.SP_VENTASXDETALLE_IN_FECHA_FINAL, FechaFinal);
 		storedProcedure.setParameter(Constantes.SP_VENTASXDETALLE_IN_ID_EMPRESA, empresa.getId());
 		storedProcedure.setParameter(Constantes.SP_VENTASXDETALLE_IN_ESTADO, estado);
+		storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS_IN_ACTIVIDAD_ECONOMICA, actividadEconomica);
 		
 		if(!tipoImpuesto.equals(Constantes.COMBO_TODOS)&& !tipoImpuesto.equals(Constantes.EMPTY)) {
 			storedProcedure.setParameter(Constantes.SP_VENTASXDETALLE_IN_TIPO_IMPUESTO, tipoImpuesto );	

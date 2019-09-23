@@ -84,6 +84,7 @@ public class FacturaDaoImpl implements FacturaDao {
 		}
 
 	}
+
 	@Override
 	public Factura findByConsecutivoProformaAndEmpresa(String consecutivo, Empresa empresa) {
 		Query query = entityManager.createQuery("select obj from Factura obj where obj.consecutivoProforma = :consecutivo and obj.empresa = :empresa");
@@ -171,26 +172,31 @@ public class FacturaDaoImpl implements FacturaDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Factura> facturasRangoEstado(Integer estado, Date fechaInicio, Date fechaFin, Integer idEmpresa, String actividadEconomica) {
-		Query query = entityManager.createQuery("select obj from Factura obj where obj.empresa.id = :idEmpresa and obj.referenciaCodigo != '01' and obj.estado = :estado and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin and obj.codigoActividad = :codigoActividad  order by obj.created_at asc  ");
+		String sql = "select obj from Factura obj where obj.empresa.id = :idEmpresa and obj.referenciaCodigo != '01' and obj.estado = :estado and obj.created_at >= :fechaInicio and obj.created_at <= :fechaFin and obj.codigoActividad = :codigoActividad  order by obj.created_at asc  ";
+		if (actividadEconomica.equals(Constantes.COMBO_TODOS)) {
+			sql = sql.replaceAll("and obj.codigoActividad = :codigoActividad","");
+		}
+		Query query = entityManager.createQuery(sql);
 		query.setParameter("idEmpresa", idEmpresa);
 		query.setParameter("estado", estado);
 		query.setParameter("fechaInicio", fechaInicio);
 		query.setParameter("fechaFin", fechaFin);
-		query.setParameter("codigoActividad", FacturaElectronicaUtils.replazarConZeros(actividadEconomica, Constantes.FORMATO_CODIGO_ACTIVIDAD));
+		if (!actividadEconomica.equals(Constantes.COMBO_TODOS)) {
+		   query.setParameter("codigoActividad", FacturaElectronicaUtils.replazarConZeros(actividadEconomica, Constantes.FORMATO_CODIGO_ACTIVIDAD));
+		}
 		return query.getResultList();
 	}
 
 	public TotalFacturaCommand sumarFacturas(Date fechaInicio, Date fechaFinal, Integer idEmpresa, Integer estado, String actividadEconomica) {
-
-		StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery(Constantes.SP_TOTAL_FACTURAS);
-
+		StoredProcedureQuery storedProcedure = actividadEconomica.equals(Constantes.COMBO_TODOS) ? entityManager.createStoredProcedureQuery(Constantes.SP_TOTAL_FACTURAS_TODAS_ACTIVIDADES_ECONOMICAS) : entityManager.createStoredProcedureQuery(Constantes.SP_TOTAL_FACTURAS);
 		// set parametros entrada
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_IN_FECHA_INICIO, Date.class, ParameterMode.IN);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_IN_FECHA_FIN, Date.class, ParameterMode.IN);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_IN_ID_EMPRESA, Integer.class, ParameterMode.IN);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_IN_ESTADO, Integer.class, ParameterMode.IN);
-		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_IN_ACTIVIDAD_ECONOMICA, String.class, ParameterMode.IN);
-
+		if (!actividadEconomica.equals(Constantes.COMBO_TODOS)) {
+			storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS, String.class, ParameterMode.IN);
+		}
 		// set parametros salida
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL, Double.class, ParameterMode.OUT);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO, Double.class, ParameterMode.OUT);
@@ -210,22 +216,15 @@ public class FacturaDaoImpl implements FacturaDao {
 		storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS_IN_FECHA_FIN, fechaFinal);
 		storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS_IN_ID_EMPRESA, idEmpresa);
 		storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS_IN_ESTADO, estado);
-		storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS_IN_ACTIVIDAD_ECONOMICA, FacturaElectronicaUtils.replazarConZeros(actividadEconomica, Constantes.FORMATO_CODIGO_ACTIVIDAD));
+		if (!actividadEconomica.equals(Constantes.COMBO_TODOS)) {
+			storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS, FacturaElectronicaUtils.replazarConZeros(actividadEconomica, Constantes.FORMATO_CODIGO_ACTIVIDAD));
+		}
 
 		storedProcedure.execute();
 
 		// Se toma la respuesta
-		return new TotalFacturaCommand((Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL), 
-				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO),
-				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS), 
-				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS), 
-				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS), 
-				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS),
-				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_OTROS_CARGOS),
-				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_EFECTIVO),
-				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_TARJETA),
-				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_BANCO),
-				                           (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_CREDITO));
+		return new TotalFacturaCommand((Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_DESCUENTO), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_IMPUESTOS), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_NETAS), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_EXENTAS), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_GRABADAS), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_OTROS_CARGOS),
+				(Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_EFECTIVO), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_TARJETA), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_BANCO), (Double) storedProcedure.getOutputParameterValue(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL_VENTAS_TOTAL_CREDITO));
 	}
 
 	/**

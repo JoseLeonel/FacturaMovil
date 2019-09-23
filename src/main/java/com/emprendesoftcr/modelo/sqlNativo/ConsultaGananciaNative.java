@@ -1,46 +1,42 @@
 package com.emprendesoftcr.modelo.sqlNativo;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-@BaseNativeQuery(name = "consultaganancia", query = "SELECT @a\\\\:=@a+1 as id_consulta,clientes.cedula,clientes.nombre_completo,categorias.descripcion as nomb_categ,detalles.codigo,detalles.descripcion as nomb_product, sum(IFNULL(detalles.costo,0)) as costo,sum(IFNULL(detalles.cantidad,0)) as cantidad ,sum(IFNULL(detalles.monto_total_linea,0)) as total,sum(IFNULL(detalles.monto_descuento,0)) as descuento,sum(IFNULL(detalles.monto_impuesto,0)) as impuesto FROM select @a\\\\:=0) as a,detalles"
-+ " inner join facturas on facturas.id =detalles.factura_id " + " inner join clientes on clientes.id =facturas.cliente_id " 
-+ " inner join articulos on articulos.codigo =detalles.codigo " + " inner join categorias on categorias.id = articulos.categoria_id "
-		+ " where facturas.empresa_id = :ID_EMPRESA facturas.estado in and facturas.tipo_doc !='88' and facturas.tipo_doc !='86' and facturas.tipo_doc !='03' and facturas.tipo_doc !='02' and facturas.fecha_emision >= :fechaInicial and facturas.fecha_emision <= :fechaFinal and categorias.id = and facturas.cliente_id and facturas.act_comercial  " + " GROUP by clientes.cedula,clientes.nombre_completo,categorias.descripcion,detalles.codigo,detalles.descripcion " + " ORDER BY clientes.nombre_completo,categorias.descripcion,detalles.descripcion ASC")
+@BaseNativeQuery(name = "cons_vent_gana", 
+query = "SELECT clientes.id,  clientes.cedula,clientes.nombre_completo," 
++ "categorias.descripcion as nomb_categ,detalles.codigo,detalles.descripcion as nomb_product,DATE_FORMAT(facturas.fecha_emision, \"%d-%c-%Y\") as fecha_emision," 
++ "sum(IFNULL(detalles.costo * detalles.cantidad,0)) as costo,sum(IFNULL(detalles.cantidad,0)) as cantidad ,sum(IFNULL(detalles.monto_total_linea -detalles.monto_impuesto-detalles.monto_impuesto1,0)) as total," 
++ "sum(IFNULL(detalles.monto_descuento,0)) as descuento,sum(IFNULL(detalles.monto_impuesto, 0)) as impuesto FROM detalles" 
++ " inner join facturas on facturas.id =detalles.factura_id " 
++ " inner join clientes on clientes.id =facturas.cliente_id " 
++ " inner join articulos on articulos.codigo =detalles.codigo " 
++ " inner join categorias on categorias.id = articulos.categoria_id "
++ " where facturas.empresa_id = :ID_EMPRESA facturas.estado in and facturas.tipo_doc !='88' and facturas.tipo_doc !='86' and facturas.tipo_doc !='03' and facturas.tipo_doc !='02' and facturas.fecha_emision >= :fechaInicial and facturas.fecha_emision <= :fechaFinal and categorias.id = and facturas.cliente_id and facturas.act_comercial  " + " GROUP by clientes.id,clientes.cedula,clientes.nombre_completo,categorias.descripcion,detalles.codigo,detalles.descripcion,DATE_FORMAT(facturas.fecha_emision, \"%d-%c-%Y\") " + " ORDER BY clientes.nombre_completo,categorias.descripcion,detalles.descripcion ASC")
 @Entity
 public class ConsultaGananciaNative implements Serializable {
 
 	private static final long	serialVersionUID	= 4020391061634341281L;
 
 	@Id
-	@Column(name = "id_consulta")
+	@Column(name = "id")
 	private Long							id;
-	
-	@Column(name = "estado")
-	private Integer						estado;
+
 
 	@Column(name = "codigo")
 	private String						codigo;
 
-	
 	@Column(name = "nombre_completo")
 	private String						nombreCompleto;
 
 	@Column(name = "cedula")
 	private String						cedula;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "dd/MM/YYYY HH:mm:ss")
 	@Column(name = "fecha_emision")
-	private Date							fechaEmision;
+	private String						fechaEmision;
 	@Column(name = "nomb_product")
 	private String						nombreArticulo;
 	@Column(name = "nomb_categ")
@@ -59,26 +55,15 @@ public class ConsultaGananciaNative implements Serializable {
 
 	@Column(name = "impuesto")
 	private Double						impuesto;
-	
-	
 
-	
 	public Long getId() {
 		return id;
 	}
 
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Integer getEstado() {
-		return estado;
-	}
-
-	public void setEstado(Integer estado) {
-		this.estado = estado;
-	}
 
 	public String getCodigo() {
 		return codigo;
@@ -88,7 +73,6 @@ public class ConsultaGananciaNative implements Serializable {
 		this.codigo = codigo;
 	}
 
-	
 	public String getNombreCompleto() {
 		return nombreCompleto;
 	}
@@ -105,11 +89,11 @@ public class ConsultaGananciaNative implements Serializable {
 		this.cedula = cedula;
 	}
 
-	public Date getFechaEmision() {
+	public String getFechaEmision() {
 		return fechaEmision;
 	}
 
-	public void setFechaEmision(Date fechaEmision) {
+	public void setFechaEmision(String fechaEmision) {
 		this.fechaEmision = fechaEmision;
 	}
 
@@ -178,7 +162,6 @@ public class ConsultaGananciaNative implements Serializable {
 		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
 		result = prime * result + ((costo == null) ? 0 : costo.hashCode());
 		result = prime * result + ((descuento == null) ? 0 : descuento.hashCode());
-		result = prime * result + ((estado == null) ? 0 : estado.hashCode());
 		result = prime * result + ((fechaEmision == null) ? 0 : fechaEmision.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((impuesto == null) ? 0 : impuesto.hashCode());
@@ -223,11 +206,6 @@ public class ConsultaGananciaNative implements Serializable {
 				return false;
 		} else if (!descuento.equals(other.descuento))
 			return false;
-		if (estado == null) {
-			if (other.estado != null)
-				return false;
-		} else if (!estado.equals(other.estado))
-			return false;
 		if (fechaEmision == null) {
 			if (other.fechaEmision != null)
 				return false;
@@ -265,8 +243,5 @@ public class ConsultaGananciaNative implements Serializable {
 			return false;
 		return true;
 	}
-
-		
-	
 
 }

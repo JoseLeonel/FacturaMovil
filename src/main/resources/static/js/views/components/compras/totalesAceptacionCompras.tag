@@ -87,6 +87,26 @@
                                 </div>  
                             </div> 
                         </div>
+                        <div class="row">
+                             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Actividad Economica </label>  
+                                    <select  onchange= {__AsignarActividad} class="form-control selectActividadEconocimica" id= "actividadEconomica" name="actividadEconomica" >
+                                        <option value="0"  >Todas</option>
+										<option  each={empresaActividadComercial}  value="{codigo}"   >{descripcion}</option>
+                                    </select>
+                                </div>  
+                            </div>              
+                            <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                                <label> Tipo Gasto  <span class="requeridoDato">*</span></label>
+                                <select class="form-control tipoGasto" id="tipoGasto" name="tipoGasto" >
+                                    <option value="0"  >Todos</option>
+                                    <option value="1">{$.i18n.prop("tipo.gasto.aceptacion.compra.inventario")}</option>
+                                    <option value="2">{$.i18n.prop("tipo.gasto.aceptacion.compra.gasto")}</option>  
+                                </select>
+                            </div>                     
+
+                        </div>
                     </form>  
                 </div>
             </div>
@@ -176,6 +196,7 @@
                 todayHighlight:true,
                 }
         );
+        __ListaActividadesComercales()
         $('.datepickerFechaInicio').datepicker(
                 {
                 format: 'yyyy-mm-dd',
@@ -184,6 +205,55 @@
         );
     })
  
+ /**
+*  Lista de los clientes
+**/
+function __ListaActividadesComercales(){
+    $.ajax({
+        url: 'ListaEmpresaActividadComercialPorPricipalAjax.do',
+        datatype: "json",
+         method:"GET",
+        success: function (result) {
+            if(result.aaData.length > 0){
+                self.empresaActividadComercial   = result.aaData
+                self.update()
+				BuscarActividadComercial()
+ 
+            }
+        },
+        error: function (xhr, status) {
+            console.log(xhr);
+            mensajeErrorServidor(xhr, status);
+        }
+    });
+    return
+}
+/**
+* Asigna la actividad comercial
+**/
+__AsignarActividad(e){
+    BuscarActividadComercial()
+}
+/**
+*Busca la actividad comercial
+**/
+function BuscarActividadComercial(){
+    var codigo =$('.selectActividadEconocimica').val()
+    if(self.empresaActividadComercial == null){
+       return    
+    }
+    if(self.empresaActividadComercial.length == 0){
+       return    
+    }
+    $.each(self.empresaActividadComercial, function( index, modeloTabla ) {
+        if(modeloTabla.codigo == codigo  ){
+            self.actividadEconomica = codigo
+            self.update()
+        }
+
+    })
+}
+
 /**
 * Camps requeridos
 **/

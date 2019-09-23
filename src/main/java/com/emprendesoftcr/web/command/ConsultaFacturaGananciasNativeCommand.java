@@ -1,23 +1,17 @@
 package com.emprendesoftcr.web.command;
 
-import java.util.Date;
-
 import com.emprendesoftcr.Utils.Constantes;
 import com.emprendesoftcr.Utils.Utils;
 import com.emprendesoftcr.modelo.sqlNativo.ConsultaGananciaNative;
 
 public class ConsultaFacturaGananciasNativeCommand {
 
-	private Integer	estado;
-
 	private String	codigo;
 
-	
 	private String	nombreCompleto;
 
 	private String	cedula;
 
-	private Date		fechaEmision;
 	private String	fechaEmisionSTR;
 	private String	nombreArticulo;
 	private String	nombreCategoria;
@@ -26,6 +20,8 @@ public class ConsultaFacturaGananciasNativeCommand {
 	private Double	total;
 	private Double	descuento;
 	private Double	impuesto;
+	private Double	ganancia;
+	private String	gananciaSTR;
 	private String	costoSTR;
 	private String	cantidadSTR;
 	private String	totalSTR;
@@ -33,29 +29,40 @@ public class ConsultaFacturaGananciasNativeCommand {
 	private String	impuestoSTR;
 
 	public ConsultaFacturaGananciasNativeCommand(ConsultaGananciaNative consultaGananciaNative) {
-		super();
-
-		this.estado = consultaGananciaNative.getEstado();
 		this.codigo = consultaGananciaNative.getCodigo();
-		this.nombreCompleto = consultaGananciaNative.getNombreCompleto();
+		this.nombreCompleto = consultaGananciaNative.getNombreCompleto().length() > 35 ? consultaGananciaNative.getNombreCompleto().substring(0, 35) + "..." : consultaGananciaNative.getNombreCompleto();
 		this.cedula = consultaGananciaNative.getCedula();
-		this.fechaEmision = consultaGananciaNative.getFechaEmision();
-		this.nombreArticulo = consultaGananciaNative.getNombreArticulo();
-		this.nombreCategoria = consultaGananciaNative.getNombreCategoria();
+		this.fechaEmisionSTR = consultaGananciaNative.getFechaEmision();
+		this.nombreArticulo = consultaGananciaNative.getNombreArticulo().length() > 35 ? consultaGananciaNative.getNombreArticulo().substring(0, 35) + "..." : consultaGananciaNative.getNombreArticulo();
+		this.nombreCategoria = consultaGananciaNative.getNombreCategoria().length() > 35 ? consultaGananciaNative.getNombreCategoria().substring(0, 35) + "..." : consultaGananciaNative.getNombreCategoria();
 		this.costo = consultaGananciaNative.getCosto() == null ? Constantes.ZEROS_DOUBLE : consultaGananciaNative.getCosto();
 		this.cantidad = consultaGananciaNative.getCantidad() == null ? Constantes.ZEROS_DOUBLE : consultaGananciaNative.getCantidad();
 		this.total = consultaGananciaNative.getTotal() == null ? Constantes.ZEROS_DOUBLE : consultaGananciaNative.getTotal();
-		this.total = this.total - this.impuesto;
-		this.total = this.total - this.descuento;
-		this.costo = this.costo * this.cantidad;
 		this.descuento = consultaGananciaNative.getDescuento() == null ? Constantes.ZEROS_DOUBLE : consultaGananciaNative.getDescuento();
 		this.impuesto = consultaGananciaNative.getImpuesto() == null ? Constantes.ZEROS_DOUBLE : consultaGananciaNative.getImpuesto();
-		this.fechaEmisionSTR = Utils.getFechaGeneraHacienda(consultaGananciaNative.getFechaEmision());
 		this.impuestoSTR = Utils.formateadorMiles(consultaGananciaNative.getImpuesto());
-		this.descuentoSTR = Utils.formateadorMiles(consultaGananciaNative.getDescuento());
-		this.totalSTR = Utils.formateadorMiles(this.total);
-		this.costoSTR = Utils.formateadorMiles(this.costo);
-		this.cantidadSTR = Utils.formateadorMiles(this.cantidad);
+		this.descuentoSTR = Utils.formateadorMiles(consultaGananciaNative.getDescuento() == null ? Constantes.ZEROS_DOUBLE : consultaGananciaNative.getDescuento());
+		this.totalSTR = Utils.formateadorMiles((consultaGananciaNative.getTotal() == null ? Constantes.ZEROS_DOUBLE : consultaGananciaNative.getTotal()));
+		this.costoSTR = Utils.formateadorMiles(consultaGananciaNative.getCosto() == null ? Constantes.ZEROS_DOUBLE : consultaGananciaNative.getCosto());
+		this.cantidadSTR = Utils.formateadorMiles(consultaGananciaNative.getCantidad() == null ? Constantes.ZEROS_DOUBLE : consultaGananciaNative.getCantidad());
+	}
+
+	public String getGananciaSTR() {
+		if (this.total != null && this.costo !=null) {
+      this.gananciaSTR =  Utils.formateadorMiles((this.total - this.costo));
+		}else {
+			this.gananciaSTR = Utils.formateadorMiles(Constantes.ZEROS_DOUBLE);
+		}
+		return gananciaSTR;
+	}
+
+	public void setGananciaSTR(String gananciaSTR) {
+		if (this.total != null && this.costo !=null) {
+       this.gananciaSTR =  Utils.formateadorMiles(this.total - this.costo);
+		}else {
+			this.gananciaSTR = Utils.formateadorMiles(Constantes.ZEROS_DOUBLE);
+		}
+		this.gananciaSTR = gananciaSTR;
 	}
 
 	public String getFechaEmisionSTR() {
@@ -106,14 +113,6 @@ public class ConsultaFacturaGananciasNativeCommand {
 		this.impuestoSTR = impuestoSTR;
 	}
 
-	public Integer getEstado() {
-		return estado;
-	}
-
-	public void setEstado(Integer estado) {
-		this.estado = estado;
-	}
-
 	public String getCodigo() {
 		return codigo;
 	}
@@ -122,7 +121,6 @@ public class ConsultaFacturaGananciasNativeCommand {
 		this.codigo = codigo;
 	}
 
-	
 	public String getNombreCompleto() {
 		return nombreCompleto;
 	}
@@ -137,14 +135,6 @@ public class ConsultaFacturaGananciasNativeCommand {
 
 	public void setCedula(String cedula) {
 		this.cedula = cedula;
-	}
-
-	public Date getFechaEmision() {
-		return fechaEmision;
-	}
-
-	public void setFechaEmision(Date fechaEmision) {
-		this.fechaEmision = fechaEmision;
 	}
 
 	public String getNombreArticulo() {
@@ -201,6 +191,24 @@ public class ConsultaFacturaGananciasNativeCommand {
 
 	public void setImpuesto(Double impuesto) {
 		this.impuesto = impuesto;
+	}
+
+	public Double getGanancia() {
+		if (this.total != null && this.costo !=null) {
+      this.ganancia =  this.total - this.costo;
+		}else {
+			this.ganancia = Constantes.ZEROS_DOUBLE;
+		}
+		return ganancia;
+	}
+
+	public void setGanancia(Double ganancia) {
+		if (this.total != null && this.costo !=null) {
+      this.ganancia =  this.total - this.costo;
+		}else {
+			this.ganancia = Constantes.ZEROS_DOUBLE;
+		}
+		
 	}
 
 }

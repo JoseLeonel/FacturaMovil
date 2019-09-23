@@ -89,7 +89,7 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa, String cedula, Integer estado) {
+	public Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa, String cedula, Integer estado,Integer tipoGasto) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from RecepcionFactura obj");
 		hql.append(" where obj.empresa = :empresa ");
@@ -103,6 +103,12 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 				hql.append("and obj.estado = :estado ");
 			}
 		}
+		if (tipoGasto != null) {
+			if (tipoGasto> Constantes.ZEROS) {
+				hql.append("and obj.tipoGasto = :tipoGasto ");
+			}
+		}
+	
 		hql.append("and obj.facturaFechaEmision >= :fechaInicio and obj.facturaFechaEmision <= :fechaFin ");
 		Query query = entityManager.createQuery(hql.toString());
 		if (cedula != null) {
@@ -114,12 +120,16 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 		if (!estado.equals(0)) {
 			query.setParameter("estado", estado);
 		}
+		if (tipoGasto> Constantes.ZEROS) { 
+			query.setParameter("tipoGasto", tipoGasto);
+		}
+	
 		query.setParameter("fechaInicio", fechaInicio);
 		query.setParameter("fechaFin", fechaFin);
 		return query.getResultList();
 	}
 
-	public Collection<RecepcionFacturaDetalle> findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa, String cedula, Integer estado) {
+	public Collection<RecepcionFacturaDetalle> findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa, String cedula, Integer estado,Integer tipoGasto) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from RecepcionFacturaDetalle obj ");
 		hql.append(" where obj.recepcionFactura.empresa = :empresa ");
@@ -131,6 +141,11 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 		if (estado != null) {
 			if (!estado.equals(0)) {
 				hql.append("and obj.estado = :estado ");
+			}
+		}
+		if (tipoGasto != null) {
+			if (!tipoGasto.equals(0)) {
+				hql.append("and obj.tipoGasto = :tipoGasto ");
 			}
 		}
 
@@ -145,6 +160,11 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 		if (estado != null) {
 			if (!estado.equals(0)) {
 				query.setParameter("estado", estado);
+			}
+		}
+		if (tipoGasto != null) {
+			if (!tipoGasto.equals(0)) {
+				query.setParameter("tipoGasto", tipoGasto);
 			}
 		}
 

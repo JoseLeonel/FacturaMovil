@@ -19,7 +19,7 @@
                 <div  show={mostrarFiltros}  class="advanced-search-grid text-left " style="padding-top : 5px; padding-bottom : 5px;">
                     <form id="filtros" name="filtros">              
                         <div class= "row">
-                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label class="knob-label" >{$.i18n.prop("fecha.inicial")} <span class="requeridoDato">*</span></label>
                                     <div  class="form-group input-group date" data-provide="datepicker"   data-date-format="yyyy-mm-dd">
@@ -30,7 +30,7 @@
                                     </div>	                             
                                 </div>  
                             </div>             
-                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label class="knob-label" >{$.i18n.prop("fecha.final")} <span class="requeridoDato">*</span></label>
@@ -43,18 +43,20 @@
                                     </div>
                                 </div>  
                             </div>
-                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label>{$.i18n.prop("emisor.cedula")} </label>  
 	                                <input type="text" class="form-control cedulaEmisor" id="cedulaEmisor" name="cedulaEmisor">
                                 </div>  
                             </div>    
-                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                        </div>
+                        <div class="row">    
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label>Estado </label>  
                                     <select  class="form-control selectEstado estado" id= "estado" name="estado" >
-                                         <option value="0"  >Todos</option>
-                                    	<option  value="2"  >Pendiente Aceptar</option>
+                                    	<option value="0"  >Todos</option>
+                                        <option  value="2"  >Pendiente Aceptar</option>
 	                                   	<option  value="6"  >Aceptada</option>
                                        	<option  value="7"  >Rechazadas</option>
 
@@ -65,17 +67,26 @@
                                 <div class="form-group">
                                     <label>Actividad Economica </label>  
                                     <select  onchange= {__AsignarActividad} class="form-control selectActividadEconocimica" id= "actividadEconomica" name="actividadEconomica" >
+                                        <option value="0"  >Todas</option>
 										<option  each={empresaActividadComercial}  value="{codigo}"   >{descripcion}</option>
                                     </select>
                                 </div>  
-                            </div>                                
+                            </div>              
+                            <div class= "col-md-4 col-sx-4 col-sm-4 col-lg-4">
+                                <label> Tipo Gasto  <span class="requeridoDato">*</span></label>
+                                <select class="form-control tipoGasto" id="tipoGasto" name="tipoGasto" >
+                                    <option value="0"  >Todos</option>
+                                    <option value="1">{$.i18n.prop("tipo.gasto.aceptacion.compra.inventario")}</option>
+                                    <option value="2">{$.i18n.prop("tipo.gasto.aceptacion.compra.gasto")}</option>  
+                                </select>
+                            </div>                     
                         </div>
                     </form>  
                 </div>
             </div>
             <div class="col-xs-12 text-right">
-                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar Resumen Compras" href="DescargarComprasAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}&estado={estado}"> Descargar</a>        
-                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar Resumen Compras por detalle" href="DescargarDetalladaAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}&estado={estado}"> Descargar</a>        
+                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar Resumen Compras" href="DescargarComprasAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}&estado={estado}&tipoGasto={tipoGasto}"> Descargar</a>        
+                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar Resumen Compras por detalle" href="DescargarDetalladaAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}&estado={estado}&tipoGasto={tipoGasto}"> Descargar</a>        
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
             	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
             </div>
@@ -502,6 +513,7 @@ self.cedula =""
 self.totalGeneral = 0
 self.totalImpuestoGeneral = 0
 self.estado = 6
+self.tipoGasto = 0
 self.on('mount',function(){
     $("#filtros").validate(reglasDeValidacion());
     __InformacionDataTable()
@@ -593,6 +605,8 @@ __Busqueda(){
     self.fechaInicio =$('.fechaInicial').val()
     self.fechaFin    =$('.fechaFinal').val()
     self.cedula      =$('#cedulaEmisor').val()
+    self.estado = $("#estado").val()
+    self.tipoGasto = $("#tipoGasto").val()
     self.totalGeneral = 0
     self.totalImpuestoGeneral = 0
     self.listaFacturas = []
@@ -605,7 +619,8 @@ __Busqueda(){
         	fechaFinParam:$('.fechaFinal').val(),
         	cedulaEmisor:$('#cedulaEmisor').val(),
             estado:$('#estado').val(),
-               actividadEconomica:$('.selectActividadEconocimica').val(),
+            actividadEconomica:$('.selectActividadEconocimica').val(),
+            tipoGasto:$('.tipoGasto').val(),
         };
         $("#tableListar").dataTable().fnClearTable(); 
         $.ajax({
@@ -620,6 +635,7 @@ __Busqueda(){
                     self.listaFacturas = result.aaData
                     self.hay_datos             = true
                     self.estado = $('#estado').val(),
+                    self.tipoGasto = $("#tipoGasto").val()
                     self.update()
                     TotalesGenerales(result.aaData)
                     agregarInputsCombos()

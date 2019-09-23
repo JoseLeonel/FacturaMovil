@@ -109,25 +109,27 @@
                                     <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
+                                                <th class = "table-header" >Fecha Emision</th>
                                                 <th class = "table-header" >Cliente</th>
                                                 <th class = "table-header" >Categoria</th>
                                                 <th class = "table-header" >Codigo</th>
                                                 <th class = "table-header" >Producto</th>
                                                 <th class = "table-header" >Cantidad</th>
                                                 <th class = "table-header" >Costo</th>
-                                                <th class = "table-header" >Total(-Desc-Imp)</th>
+                                                <th class = "table-header" >Total(-Imp)</th>
                                                 <th class = "table-header" >Ganancia</th>
                                             </tr>
                                         </thead>
                                         <tfoot style="display: table-header-group;">
                                             <tr>
+                                                <th>Fecha Emision</th>
                                                 <th>Cliente</th>
                                                 <th>Categoria</th>
                                                 <th>Codigo</th>
                                                 <th>Producto</th>
                                                 <th>Cantidad</th>
                                                 <th>Costo</th>
-                                                <th>Total(-Desc-Imp)</th>
+                                                <th>Total(-Imp)</th>
                                                 <th>Ganancia</th>
                                             </tr>
                                         </tfoot>
@@ -150,11 +152,11 @@
    	</div>
    	<div class="elementoTotales">
    	    <label> Total Impuesto </label>
-        <input type="text" readonly="readonly" class="form-control" value="{totalImpuesta}">
+        <input type="text" readonly="readonly" class="form-control" value="{totalImpuesto}">
    	</div>
    	<div class="elementoTotales">
    	    <label> Total Descuentos </label>
-        <input type="text" readonly="readonly" class="form-control" value="{totalImpuesta}">
+        <input type="text" readonly="readonly" class="form-control" value="{totalDescuento}">
    	</div>
    	<div class="elementoTotales">
    	    <label> Total Venta </label>
@@ -529,13 +531,13 @@
 
 <script>
 self = this
-self.detail                = []
 self.categorias        = {data:[]}
 self.listaFacturas         = []
-self.totalDescuentos       = 0
-self.totalImpuestos        = 0
-self.totalImpuestoServicio = 0
-self.total                 = 0
+self.totalDescuento = 0
+self.totalImpuesto  = 0
+self.totalCosto     = 0
+self.totalVenta     = 0
+self.totalGanancia  = 0
 self.mostrarListado        = true
 self.clientes                  = {data:[]}
 self.on('mount',function(){
@@ -679,6 +681,11 @@ __limpiarFiltros(){
 *  Busqueda de la informacion por rango de fechas
 **/
 __Busqueda(){
+    self.totalDescuento = 0
+    self.totalImpuesto  = 0
+    self.totalCosto     = 0
+    self.totalVenta     = 0
+    self.totalGanancia  = 0
     self.listaFacturas = []
     self.update()
     var inicial  =$('.fechaInicial').val()
@@ -725,22 +732,25 @@ __Busqueda(){
 * sumar
 **/
 function sumar(){
-    self.totalImpuestos = 0
-    self.total = 0
-    self.totalDescuentos = 0
-    self.totalImpuestoServicio = 0
+    self.totalDescuento = 0
+    self.totalImpuesto  = 0
+    self.totalCosto     = 0
+    self.totalVenta     = 0
+    self.totalGanancia  = 0
     self.update()
     $.each(self.listaFacturas, function( index, modeloTabla ) {
-          self.totalImpuestos += modeloTabla.totalImpuesto
-          self.totalImpuestoServicio += modeloTabla.impuestoServicio
-          self.total += modeloTabla.totalComprobante
-          self.totalDescuentos += modeloTabla.totalDescuentos
+          self.totalImpuesto += modeloTabla.impuesto
+          self.totalVenta += modeloTabla.total
+          self.totalDescuento += modeloTabla.descuento
+          self.totalCosto += modeloTabla.costo
+          self.totalGanancia += modeloTabla.ganancia
           self.update()
     })
-    self.totalImpuestoServicio = formatoDecimales(__valorNumerico(self.totalImpuestoServicio))
-    self.totalImpuestos  = redondearDecimales(self.totalImpuestos,2)
-    self.total           = redondearDecimales(self.total,2)
-    self.totalDescuentos = redondearDecimales(self.totalDescuentos,2)
+    self.totalImpuesto   = formatoDecimales(__valorNumerico(self.totalImpuesto))
+    self.totalVenta      = redondearDecimales(self.totalVenta,2)
+    self.totalDescuento  = redondearDecimales(self.totalDescuento,2)
+    self.totalCosto = redondearDecimales(self.totalCosto,2)
+    self.totalGanancia = redondearDecimales(self.totalGanancia,2)
     self.update()
 }
 /*
@@ -761,13 +771,14 @@ function sumar(){
 **/                         
 function __InformacionDataTable(){
     self.formato_tabla = [ 
+                               {'data' :'fechaEmisionSTR'  ,"name":"fechaEmisionSTR"  ,"title" : "Fecha Emision"    ,"autoWidth" :true },
                                {'data' :'nombreCompleto'  ,"name":"nombreCompleto"  ,"title" : "Cliente"    ,"autoWidth" :true },
                                {'data' :'nombreCategoria' ,"name":"nombreCategoria" ,"title" : "Categoria"  ,"autoWidth" :true },
                                {'data' :'codigo'          ,"name":"codigo"          ,"title" : "Codigo"     ,"autoWidth" :true },
                                {'data' :'nombreArticulo'  ,"name":"nombreArticulo"  ,"title" : "Articulo"   ,"autoWidth" :true },
                                {'data' :'cantidadSTR'     ,"name":"cantidadSTR"     ,"title" : "Cantidad"   ,"autoWidth" :true },
                                {'data' :'costoSTR'        ,"name":"costoSTR"        ,"title" : "Costo" ,"autoWidth" :true },
-                               {'data' :'totalSTR'        ,"name":"totalSTR"        ,"title" : "Total(-Desc-Imp)" ,"autoWidth" :true },
+                               {'data' :'totalSTR'        ,"name":"totalSTR"        ,"title" : "Total(-Imp)" ,"autoWidth" :true },
                                {'data' :'gananciaSTR'     ,"name":"gananciaSTR"     ,"title" : "Ganancia" ,"autoWidth" :true }
 	      		            ];
     self.update();

@@ -504,6 +504,7 @@ public class Constantes {
 
 	// Nombres de procedimientos
 	public static final String					SP_TOTAL_FACTURAS																						= "SPTOTALFACTURAS";
+	public static final String					SP_TOTAL_FACTURAS_TODAS_ACTIVIDADES_ECONOMICAS							= "SPFACTTODO";
 	public static final String					SP_TOTAL_FACTURAS_IN_FECHA_INICIO														= "FECHA_INICIO";
 	public static final String					SP_TOTAL_FACTURAS_IN_ESTADO																	= "ESTADO";
 	public static final String					SP_TOTAL_FACTURAS_IN_ACTIVIDAD_ECONOMICA										= "act_econo";
