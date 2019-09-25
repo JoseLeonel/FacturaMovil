@@ -195,7 +195,7 @@ public class FacturaDaoImpl implements FacturaDao {
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_IN_ID_EMPRESA, Integer.class, ParameterMode.IN);
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_IN_ESTADO, Integer.class, ParameterMode.IN);
 		if (!actividadEconomica.equals(Constantes.COMBO_TODOS)) {
-			storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS, String.class, ParameterMode.IN);
+			storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_IN_ACTIVIDAD_ECONOMICA, String.class, ParameterMode.IN);
 		}
 		// set parametros salida
 		storedProcedure.registerStoredProcedureParameter(Constantes.SP_TOTAL_FACTURAS_OUT_TOTAL, Double.class, ParameterMode.OUT);
@@ -217,7 +217,7 @@ public class FacturaDaoImpl implements FacturaDao {
 		storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS_IN_ID_EMPRESA, idEmpresa);
 		storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS_IN_ESTADO, estado);
 		if (!actividadEconomica.equals(Constantes.COMBO_TODOS)) {
-			storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS, FacturaElectronicaUtils.replazarConZeros(actividadEconomica, Constantes.FORMATO_CODIGO_ACTIVIDAD));
+			storedProcedure.setParameter(Constantes.SP_TOTAL_FACTURAS_IN_ACTIVIDAD_ECONOMICA, FacturaElectronicaUtils.replazarConZeros(actividadEconomica, Constantes.FORMATO_CODIGO_ACTIVIDAD));
 		}
 
 		storedProcedure.execute();

@@ -524,12 +524,17 @@ public class Constantes {
 	// Totales de Compras Aceptadas
 	public static final String					SP_TOTAL_ACEPTADAS_IN_FECHA_INICIO													= "FECHA_INICIO";
 	public static final String					SP_TOTAL_ACEPTADAS_IN_FECHA_FIN															= "FECHA_FIN";
-	public static final String					SP_TOTAL_ACEPTADAS_IN_ID_EMPRESA														= "ID_EMPRESA";
-	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS																	= "SPTOTALACEPTADAS";
-	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_ID_EMPRESA												= "ID_EMPRESA";
-	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_ESTADO														= "estado";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS																	= "SPACEPTCOMPRAS";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_ID_EMPRESA_IN										= "ID_EMPRESA";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_ESTADO_IN												= "ESTADO";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_TIPO_GASTO_IN										= "tipo_gast";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_ACTIVIDAD_ECONOMICA_IN						= "act_econo";
 	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_OUT															= "TOTAL";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_NOTAS_CREDITO_OUT								= "TOTAL_NOTA";
+	public static final String					SP_TOTAL_COMPRAS_ACEPTADAS_NOTAS_DEBITO_OUT 								= "TOTAL_DEBITO";
 	public static final String					SP_TOTAL_IMPUESTOS_COMPRAS_ACEPTADAS_OUT										= "TOTAL_IMPUESTOS";
+	public static final String					SP_TOTAL_IMPUESTOS_COMPRAS_NOTA_CREDITO_ACEPTADAS_OUT				= "IMPNOTA";
+	public static final String					SP_TOTAL_IMPUESTOS_COMPRAS_NOTA_DEBITO_ACEPTADAS_OUT				= "IMPDEBITO";
 
 	// Totales de inventarios
 	public static final String					SP_TOTAL_INVENTARIO																					= "SPTOTALINVENTARIOS";

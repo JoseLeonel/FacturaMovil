@@ -89,7 +89,7 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa, String cedula, Integer estado,Integer tipoGasto) {
+	public Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa, String cedula, Integer estado,String tipoGasto,String actividadEconocimica) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from RecepcionFactura obj");
 		hql.append(" where obj.empresa = :empresa ");
@@ -104,10 +104,15 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 			}
 		}
 		if (tipoGasto != null) {
-			if (tipoGasto> Constantes.ZEROS) {
-				hql.append("and obj.tipoGasto = :tipoGasto ");
+			if (!tipoGasto.equals(Constantes.COMBO_TODOS)) {
+				hql.append("and obj.tipoGasto in (:tipoGasto) ");
 			}
 		}
+		if(!actividadEconocimica.equals(Constantes.COMBO_TODOS)) {
+			hql.append("and obj.codigoActividad in (:actividadEconocimica)");
+		}
+		
+		
 	
 		hql.append("and obj.facturaFechaEmision >= :fechaInicio and obj.facturaFechaEmision <= :fechaFin ");
 		Query query = entityManager.createQuery(hql.toString());
@@ -116,11 +121,14 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 				query.setParameter("cedula", cedula);
 			}
 		}
+		if(!actividadEconocimica.equals(Constantes.COMBO_TODOS)) {
+			query.setParameter("codigoActividad", actividadEconocimica);
+		}
 		query.setParameter("empresa", empresa);
 		if (!estado.equals(0)) {
 			query.setParameter("estado", estado);
 		}
-		if (tipoGasto> Constantes.ZEROS) { 
+		if (!tipoGasto.equals(Constantes.COMBO_TODOS)) { 
 			query.setParameter("tipoGasto", tipoGasto);
 		}
 	
@@ -129,7 +137,7 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 		return query.getResultList();
 	}
 
-	public Collection<RecepcionFacturaDetalle> findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa, String cedula, Integer estado,Integer tipoGasto) {
+	public Collection<RecepcionFacturaDetalle> findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa, String cedula, Integer estado,String tipoGasto,String actividadEconocimica) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select obj from RecepcionFacturaDetalle obj ");
 		hql.append(" where obj.recepcionFactura.empresa = :empresa ");
@@ -138,13 +146,18 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 				hql.append("and obj.receptorCedula = :cedula ");
 			}
 		}
+		if(!actividadEconocimica.equals(Constantes.COMBO_TODOS)) {
+			hql.append("and obj.codigoActividad in (:codigoActividad) ");
+		}
+		
+		
 		if (estado != null) {
 			if (!estado.equals(0)) {
 				hql.append("and obj.estado = :estado ");
 			}
 		}
 		if (tipoGasto != null) {
-			if (!tipoGasto.equals(0)) {
+			if (!tipoGasto.equals(Constantes.COMBO_TODOS)) {
 				hql.append("and obj.tipoGasto = :tipoGasto ");
 			}
 		}
@@ -162,8 +175,11 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 				query.setParameter("estado", estado);
 			}
 		}
+		if(!actividadEconocimica.equals(Constantes.COMBO_TODOS)) {
+			query.setParameter("codigoActividad", actividadEconocimica);
+		}
 		if (tipoGasto != null) {
-			if (!tipoGasto.equals(0)) {
+			if (!tipoGasto.equals(Constantes.COMBO_TODOS)) {
 				query.setParameter("tipoGasto", tipoGasto);
 			}
 		}
@@ -172,5 +188,6 @@ public class RecepcionFacturaDaoImpl implements RecepcionFacturaDao {
 		query.setParameter("fechaFin", fechaFin);
 		return query.getResultList();
 	}
+
 
 }

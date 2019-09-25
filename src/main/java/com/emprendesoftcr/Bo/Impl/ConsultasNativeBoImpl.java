@@ -77,9 +77,9 @@ public class ConsultasNativeBoImpl implements ConsultasNativeBo {
 	}
 
 	@Override
-	public Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa, Integer idusuario, String estado, String fechaInicial, String fechaFinal, Long idCliente) {
+	public Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa, Integer idusuario, String estado, String fechaInicial, String fechaFinal, Long idCliente,String codigo) {
 
-		return consultasNativeDao.findByFacturasAnulacion(empresa, idusuario, estado, fechaInicial, fechaFinal, idCliente);
+		return consultasNativeDao.findByFacturasAnulacion(empresa, idusuario, estado, fechaInicial, fechaFinal, idCliente,codigo);
 	}
 
 	@Override

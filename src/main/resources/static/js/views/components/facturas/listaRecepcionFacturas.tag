@@ -85,25 +85,23 @@
                 </div>
             </div>
             <div class="col-xs-12 text-right">
-                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar Resumen Compras" href="DescargarComprasAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}&estado={estado}&tipoGasto={tipoGasto}"> Descargar</a>        
-                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar Resumen Compras por detalle" href="DescargarDetalladaAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}&estado={estado}&tipoGasto={tipoGasto}"> Descargar</a>        
+                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar Resumen Compras" href="DescargarComprasAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}&estado={estado}&tipoGasto={tipoGasto}&actividadEconomica={actividadEconomica}"> Descargar</a>        
+                <a   show={hay_datos==true} class=" btn btn-primary btn-bajar"  target="_blank" title="Descargar Resumen Compras por detalle" href="DescargarDetalladaAceptadasAjax.do?fechaInicioParam={fechaInicio}&fechaFinParam={fechaFin}&cedulaEmisor={cedula}&estado={estado}&tipoGasto={tipoGasto}&actividadEconomica={actividadEconomica}"> Descargar</a>        
                 <button onclick ={__Busqueda} type="button" class="btn btn-success btnBusquedaAvanzada" title ="Consultar" name="button" ><i class="fa fa-refresh"></i></button>
             	<button onclick ={__limpiarFiltros} show={mostrarFiltros} class="btn btn-warning btnLimpiarFiltros" title="LimpiarCampos" type="button"><i id="clear-filters" class="fa fa-eraser clear-filters"></i></button>            
             </div>
         </div>
     </div>    
 	<!-- Fin Filtros-->
-
     <br>
   	<!-- Listado  -->
     <div classs="contenedor-listar "  show={mostrarListado} >
                 <div class="box">
                     <div class="box-body">
                         <div class="planel-body" >
-                           
-                        
-                            <div class="listaContainer" >        
-                                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   cellspacing="0" width="100%">
+                            <div class="listaContainer" >    
+
+                                    <table id="tableListar" class="display table responsive table-hover nowrap table-condensed tableListar "   style="width:100%">
                                        <thead>
                                             <tr>
                                                 <th class = "table-header" >Ingreso    </th>
@@ -114,7 +112,6 @@
                                                 <th class = "table-header" >{$.i18n.prop("factura.totalComprobante")}  </th>
                                                 <th class = "table-header" >{$.i18n.prop("factura.documento")}         </th>
                                                 <th class = "table-header" >#Compra        </th>
-                                                
                                             </tr>
                                         </thead>
                                         <tfoot style="display: table-header-group;">
@@ -513,7 +510,8 @@ self.cedula =""
 self.totalGeneral = 0
 self.totalImpuestoGeneral = 0
 self.estado = 6
-self.tipoGasto = 0
+self.tipoGasto = ""
+self.actividadEconomica =""
 self.on('mount',function(){
     $("#filtros").validate(reglasDeValidacion());
     __InformacionDataTable()
@@ -607,6 +605,7 @@ __Busqueda(){
     self.cedula      =$('#cedulaEmisor').val()
     self.estado = $("#estado").val()
     self.tipoGasto = $("#tipoGasto").val()
+    self.actividadEconomica = $(".selectActividadEconocimica").val()
     self.totalGeneral = 0
     self.totalImpuestoGeneral = 0
     self.listaFacturas = []

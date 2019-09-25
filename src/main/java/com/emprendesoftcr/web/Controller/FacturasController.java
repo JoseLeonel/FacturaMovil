@@ -898,15 +898,14 @@ public class FacturasController {
 		idCategoria = idCategoria == null?Constantes.ZEROS:idCategoria;
 		Date fechaInicioP = Utils.parseDate(fechaInicioParam);
 		Date fechaFinalP = Utils.parseDate(fechaFinParam);
-//		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
-//			if (fechaFinalP != null) {
-//				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
-//			}
-//		}
+		if (!fechaInicioParam.equals(Constantes.EMPTY) && !fechaFinParam.equals(Constantes.EMPTY)) {
+			if (fechaFinalP != null) {
+				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
+			}
+		}
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
-    fin1 = fin1.replaceAll("00:00:00", "23:59:59");
 		Collection<ConsultaGananciaNative> facturas = consultasNativeBo.findByDetallesGanancia(usuarioSesion.getEmpresa(), cliente, estado, inicio1, fin1, actividadEconomica, idCategoria);
 		List<Object> solicitudList = new ArrayList<Object>();
 		for (ConsultaGananciaNative consultaGananciaNative : facturas) {
@@ -1062,7 +1061,7 @@ public class FacturasController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/listarFacturasActivasSinNotasCreditosCompletasAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarFacturasActivasSinNotasCreditosCompletasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam Integer estado) {
+	public RespuestaServiceDataTable listarFacturasActivasSinNotasCreditosCompletasAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Long idCliente, @RequestParam Integer estado, @RequestParam String codigo) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Cliente cliente = clienteBo.buscar(idCliente);
 		Date fechaInicioP = Utils.parseDate(fechaInicio);
@@ -1071,11 +1070,8 @@ public class FacturasController {
 			if (fechaFinalP != null) {
 				fechaFinalP = Utils.sumarDiasFecha(fechaFinalP, 1);
 			}
-
 		}
-
 		DateFormat dateFormat1 = new SimpleDateFormat(Constantes.DATE_FORMAT5);
-
 		String inicio1 = dateFormat1.format(fechaInicioP);
 		String fin1 = dateFormat1.format(fechaFinalP);
 
@@ -1085,14 +1081,12 @@ public class FacturasController {
 		} else {
 			idUsuario = usuarioSesion.getId();
 		}
-
 		RespuestaServiceDataTable respuestaService = new RespuestaServiceDataTable();
-
-		Collection<FacturasSinNotaCreditoNative> objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + Constantes.FACTURA_ESTADO_FACTURADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG);
+		Collection<FacturasSinNotaCreditoNative> objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + Constantes.FACTURA_ESTADO_FACTURADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG,codigo);
 		if (estado == Constantes.ZEROS) {
-			objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + Constantes.FACTURA_ESTADO_FACTURADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG);
+			objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + Constantes.FACTURA_ESTADO_FACTURADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_RECHAZADO + "," + Constantes.HACIENDA_ESTADO_ACEPTADO_HACIENDA + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG,codigo);
 		} else {
-			objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + estado + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG);
+			objetos = consultasNativeBo.findByFacturasAnulacion(usuarioSesion.getEmpresa(), idUsuario, "(" + estado + ")", inicio1, fin1, cliente != null ? cliente.getId() : Constantes.ZEROS_LONG,codigo);
 		}
 		List<Object> solicitudList = new ArrayList<Object>();
 		if (objetos != null) {
@@ -1103,7 +1097,6 @@ public class FacturasController {
 			}
 
 		}
-
 		respuestaService.setRecordsTotal(0l);
 		respuestaService.setRecordsFiltered(0l);
 		if (request.getParameter("draw") != null && !request.getParameter("draw").equals(" ")) {
@@ -1112,10 +1105,8 @@ public class FacturasController {
 		respuestaService.setAaData(solicitudList);
 		return respuestaService;
 
-//		return UtilsForControllers.process(request, dataTableBo, query, TO_COMMAND);
 	}
 
-//---- rolo
 
 	/***
 	 * @param request
@@ -1130,7 +1121,7 @@ public class FacturasController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/listarConsutaComprasIvaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarConsutaComprasIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado, Integer selectActividadComercial) {
+	public RespuestaServiceDataTable listarConsutaComprasIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado,@RequestParam Integer selectActividadComercial) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Date fechaInicioP = Utils.parseDate(fechaInicio);
 		Date fechaFinalP = Utils.parseDate(fechaFin);
@@ -1178,7 +1169,7 @@ public class FacturasController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/listarConsutaIvaAjax.do", method = RequestMethod.GET, headers = "Accept=application/json")
 	@ResponseBody
-	public RespuestaServiceDataTable listarConsutaIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado, Integer selectActividadComercial) {
+	public RespuestaServiceDataTable listarConsutaIvaAjax(HttpServletRequest request, HttpServletResponse response, @RequestParam String fechaInicio, @RequestParam String fechaFin, @RequestParam Integer estado,@RequestParam Integer selectActividadComercial) {
 		Usuario usuarioSesion = usuarioBo.buscar(request.getUserPrincipal().getName());
 		Date fechaInicioP = Utils.parseDate(fechaInicio);
 		Date fechaFinalP = Utils.parseDate(fechaFin);

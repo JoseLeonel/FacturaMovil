@@ -143,6 +143,12 @@
                                     	<option  value="7"  >Rechazadas</option>
                                     </select>
                                 </div>  
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                    <label>Codigo Articulo </label>
+                                    <input type="text" id="codigo" name="codigo" class="form-control campo codigo "   >   
+                                </div>  
                             </div>    
                         </div>   
                       
@@ -524,6 +530,7 @@ function _consulta(){
             fechaFin:$('.fechaFinal').val(),
             idCliente:$('#clienteParam').val(),
             estado:$('.selectEstado').val(),
+            codigo:$('.codigo').val(),
         };
         $("#tableListar").dataTable().fnClearTable(); 
         __InicializarTabla('.tableListar')  

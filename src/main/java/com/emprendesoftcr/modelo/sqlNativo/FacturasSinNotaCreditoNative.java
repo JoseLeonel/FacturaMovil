@@ -10,8 +10,11 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-@BaseNativeQuery(name = "facturasparaanulacion", query = "select facturas.nombre_factura,facturas.total_comprobante,facturas.codigo_moneda,facturas.total_descuentos,facturas.total_impuesto,clientes.nombre_completo,clientes.cedula,facturas.numero_consecutivo,facturas.fecha_emision,usuarios.nombre_usuario ,facturas.id,facturas.usuario_id,facturas.empresa_id,facturas.estado from facturas " + " left join clientes on clientes.id = facturas.cliente_id " + " left join usuarios on usuarios.id = facturas.usuario_id "
-		+ " where facturas.empresa_id = :ID_EMPRESA and facturas.estado in :ESTADO and facturas.tipo_doc !='03' and facturas.tipo_doc !='02' and facturas.tipo_doc !='88' and facturas.fecha_emision >= :FECHAINICIAL and facturas.fecha_emision <= :FECHAFINAL  and facturas.usuario_id = and facturas.cliente_id =  order by facturas.fecha_emision desc ")
+@BaseNativeQuery(name = "facturasparaanulacion", query = "select facturas.nombre_factura,facturas.total_comprobante,facturas.codigo_moneda,facturas.total_descuentos,facturas.total_impuesto,clientes.nombre_completo,clientes.cedula,facturas.numero_consecutivo,facturas.fecha_emision,usuarios.nombre_usuario ,facturas.id,facturas.usuario_id,facturas.empresa_id,facturas.estado from facturas " 
+    + " inner join clientes on clientes.id = facturas.cliente_id "
+    + " inner join detalles on detalles.factura_id = facturas.id "
+		+ " inner join usuarios on usuarios.id = facturas.usuario_id "
+		+ " where facturas.empresa_id = :ID_EMPRESA and facturas.estado in :ESTADO and facturas.tipo_doc !='03' and facturas.tipo_doc !='02' and facturas.tipo_doc !='88' and facturas.fecha_emision >= :FECHAINICIAL and facturas.fecha_emision <= :FECHAFINAL  and facturas.usuario_id = and facturas.cliente_id =  and detalles.codigo order by facturas.fecha_emision desc ")
 @Entity
 public class FacturasSinNotaCreditoNative {
 

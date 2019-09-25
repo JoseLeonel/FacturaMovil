@@ -23,7 +23,7 @@ public interface RecepcionFacturaBo {
 	
 	Collection<RecepcionFactura> findByClave(String cedulaEmisor, String clave);
 
-	Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula,Integer estado,Integer tipoGasto);
+	Collection<RecepcionFactura> findByFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula,Integer estado,String tipoGasto,String actividadEconocimica);
 	
-	Collection<RecepcionFacturaDetalle> findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula , Integer estado,Integer tipoGasto);
+	Collection<RecepcionFacturaDetalle> findByDetalleAndFechaInicioAndFechaFinalAndCedulaEmisor(Date fechaInicio, Date fechaFin, Empresa empresa,  String cedula , Integer estado,String tipoGasto,String actividadEconocimica);
 }

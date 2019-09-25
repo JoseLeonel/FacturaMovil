@@ -123,7 +123,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa, Integer idusuario, String estado, String fechaInicial, String fechaFinal, Long idCliente) {
+	public Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa, Integer idusuario, String estado, String fechaInicial, String fechaFinal, Long idCliente,String codigo) {
 		String queryStr = getQueryBase(FacturasSinNotaCreditoNative.class);
 		queryStr = queryStr.replaceAll(":ID_EMPRESA", empresa.getId().toString());
 		queryStr = queryStr.replaceAll(":ESTADO", estado.toString());
@@ -138,6 +138,15 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 			queryStr = queryStr.replaceAll("and facturas.cliente_id =", " and facturas.cliente_id ='" + idCliente.toString() + "' ");
 		} else {
 			queryStr = queryStr.replaceAll("and facturas.cliente_id = ", " ");
+		}
+		if(codigo != null) {
+			if(codigo.equals(Constantes.EMPTY)) {
+				queryStr = queryStr.replaceAll("and detalles.codigo ", " ");
+				queryStr = queryStr.replaceAll("inner join detalles on detalles.factura_id = facturas.id ", " ");
+				
+			}else {
+				queryStr = queryStr.replaceAll("and detalles.codigo =", codigo);
+			}
 		}
 
 		Query query = entityManager.createNativeQuery(queryStr, FacturasSinNotaCreditoNative.class);

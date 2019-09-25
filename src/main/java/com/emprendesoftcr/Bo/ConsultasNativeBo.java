@@ -36,7 +36,7 @@ public interface ConsultasNativeBo {
 
 	Collection<FacturasDelDiaNative> findByFacturasDelDia(Empresa empresa, Integer idusuario, String estado, String fecha);
 
-	Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa, Integer idusuario, String estado, String fechaInicial, String fechaFinal, Long idCliente);
+	Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa, Integer idusuario, String estado, String fechaInicial, String fechaFinal, Long idCliente,String codigo);
 
 	Collection<HaciendaComprobarNative> findByComprabarDocumentoPendienteaceptar();
 

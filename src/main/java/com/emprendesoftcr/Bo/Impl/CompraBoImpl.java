@@ -330,7 +330,7 @@ public class CompraBoImpl implements CompraBo {
 	}
 
 	@Override
-	public TotalComprasAceptadasCommand sumarComprasAceptadas(Date fechaInicio, Date fechaFinal, Integer idEmpresa,Integer estado,String actividadEconocimica,Integer tipoGasto) {
+	public TotalComprasAceptadasCommand sumarComprasAceptadas(Date fechaInicio, Date fechaFinal, Integer idEmpresa,Integer estado,String actividadEconocimica,String tipoGasto) {
 		return compraDao.sumarComprasAceptadas(fechaInicio, fechaFinal, idEmpresa,estado,actividadEconocimica,tipoGasto);
 	}
 

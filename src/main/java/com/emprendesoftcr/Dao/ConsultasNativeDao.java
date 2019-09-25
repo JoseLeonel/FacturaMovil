@@ -40,7 +40,7 @@ public interface  ConsultasNativeDao {
 	Collection<ListarFacturasNativa> findByFacturasAndFechaAndTipoDocAndUsuario(Empresa empresa,Integer idUsuario,Integer estado,String fechaInicial,String fechaFinal,Cliente cliente , String tipoDocumento,String actividadComercial);
 	
 
-	Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa,Integer idusuario,String estado,String fechaInicial,String fechaFinal,Long idCliente);
+	Collection<FacturasSinNotaCreditoNative> findByFacturasAnulacion(Empresa empresa,Integer idusuario,String estado,String fechaInicial,String fechaFinal,Long idCliente,String codigo);
 	
 	Collection<HaciendaComprobarNative> findByComprabarDocumentoPendienteaceptar();
 	

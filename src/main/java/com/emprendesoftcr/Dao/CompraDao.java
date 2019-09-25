@@ -25,7 +25,7 @@ public interface CompraDao {
 	
 	Collection<Compra> findByFechaInicioAndFechaFinalAndProveedor(Date fechaInicio, Date fechaFin, Empresa empresa,  Proveedor proveedor);
 	
-	TotalComprasAceptadasCommand sumarComprasAceptadas(Date fechaInicio, Date fechaFinal, Integer idEmpresa,Integer estado);
+	TotalComprasAceptadasCommand sumarComprasAceptadas(Date fechaInicio, Date fechaFinal, Integer idEmpresa,Integer estado,String actividadEconocimica,String tipoGasto);
 
 	
 
