@@ -145,7 +145,7 @@ public class ConsultasNativeDaoImpl implements ConsultasNativeDao {
 				queryStr = queryStr.replaceAll("inner join detalles on detalles.factura_id = facturas.id ", " ");
 				
 			}else {
-				queryStr = queryStr.replaceAll("and detalles.codigo =", codigo);
+				queryStr = queryStr.replaceAll("and detalles.codigo","and detalles.codigo ='" + codigo.toString() + "' ");
 			}
 		}
 
